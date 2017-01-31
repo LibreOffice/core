@@ -149,24 +149,6 @@ namespace sfx2
         virtual bool
                     hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) = 0;
 
-        /** shows a warning that the document's signature is broken
-
-            Here, a similar note applies as to getScriptingSignatureState: This method doesn't
-            really belong here. It's just there because SfxObjectShell_Impl::bSignatureErrorIsShown
-            is not accessible where the method is called.
-            So, once the signature handling has been oursourced from SfxObjectShell/_Impl, so it
-            is re-usable in non-SFX contexts as well, this method here is also unneeded, probably.
-
-            @param _rxInteraction
-                the interaction handler to use for showing the warning. It is exactly the same
-                as passed to DocumentMacroMode::adjustMacroMode, so it is <NULL/> if and
-                only if the instance passed to that method was <NULL/>.
-        */
-        virtual void
-                    showBrokenSignatureWarning(
-                        const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction
-                    ) const = 0;
-
     protected:
         ~IMacroDocumentAccess() {}
     };

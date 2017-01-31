@@ -230,10 +230,6 @@ namespace sfx2
                 SignatureState nSignatureState = m_xData->m_rDocumentAccess.getScriptingSignatureState();
                 if ( nSignatureState == SignatureState::BROKEN )
                 {
-                    // the signature is broken, no macro execution
-                    if ( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-                        m_xData->m_rDocumentAccess.showBrokenSignatureWarning( rxInteraction );
-
                     return disallowMacroExecution();
                 }
                 else if ( bHasTrustedMacroSignature )
