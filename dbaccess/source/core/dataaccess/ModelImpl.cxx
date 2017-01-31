@@ -1335,11 +1335,6 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature( bool /*bAllowUIToAddAutho
     return false;
 }
 
-void ODatabaseModelImpl::showBrokenSignatureWarning( const Reference< XInteractionHandler >& /*_rxInteraction*/ ) const
-{
-    OSL_FAIL( "ODatabaseModelImpl::showBrokenSignatureWarning: signatures can't be broken - we do not support them!" );
-}
-
 void ODatabaseModelImpl::storageIsModified()
 {
     setModified( true );

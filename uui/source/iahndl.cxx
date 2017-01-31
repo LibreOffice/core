@@ -1126,8 +1126,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
         ErrCode  nError   = static_cast< ErrCode >(nErrorCode);
         bool bWarning = !ERRCODE_TOERROR(nError);
 
-        if ( nError == ERRCODE_SFX_BROKENSIGNATURE
-             || nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
+        if ( nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
         {
             // the security warning box needs a special title
             OUString aErrorString;
@@ -1137,11 +1136,8 @@ UUIInteractionHelper::handleGenericErrorRequest(
                 ResMgr::CreateResMgr( "uui" ) );
             OUString aTitle( utl::ConfigManager::getProductName() );
 
-            OUString aErrTitle
-                  = ResId( nError == ERRCODE_SFX_BROKENSIGNATURE
-                                       ? STR_WARNING_BROKENSIGNATURE_TITLE
-                                       : STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE,
-                                   *xManager.get() ).toString();
+            OUString aErrTitle = ResId( STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE,
+                *xManager.get() ).toString();
 
             if ( !aTitle.isEmpty() && !aErrTitle.isEmpty() )
                 aTitle += " - " ;

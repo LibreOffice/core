@@ -152,7 +152,6 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
     virtual SignatureState getScriptingSignatureState() override;
 
     virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) override;
-    virtual void showBrokenSignatureWarning( const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction ) const override;
 };
 
 #endif

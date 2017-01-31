@@ -1178,6 +1178,18 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 SfxBindings& rBind = GetBindings();
                 rBind.Invalidate( SID_RELOAD );
                 rBind.Invalidate( SID_EDITDOC );
+
+                SignatureState nSignatureState = GetObjectShell()->GetDocumentSignatureState();
+                if (nSignatureState == SignatureState::BROKEN) {
+                    basegfx::BColor aBackgroundColor = basegfx::BColor(0.5, 0.0, 0.0);
+                    auto pInfoBar = AppendInfoBar("signature", SfxResId(STR_SIGNATURE_BROKEN), &aBackgroundColor);
+                    VclPtrInstance<PushButton> xBtn(&GetWindow());
+                    xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
+                    xBtn->SetSizePixel(xBtn->GetOptimalSize());
+                    xBtn->SetClickHdl(LINK(this, SfxViewFrame, SignDocumentHandler));
+                    pInfoBar->addButton(xBtn);
+                }
+
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
                 if ( !m_xObjSh->IsReadOnly() ||
