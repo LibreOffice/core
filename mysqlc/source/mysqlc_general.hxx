@@ -25,7 +25,14 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
 
+#if defined __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated"
+#endif
 #include <cppconn/exception.h>
+#if defined __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 namespace mysqlc_sdbc_driver
 {
