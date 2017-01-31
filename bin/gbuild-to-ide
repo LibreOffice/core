@@ -353,33 +353,36 @@ class testVS2013Ide(IdeIntegrationGenerator):
             nmake_rebuild_node = ET.SubElement(conf_node, '{%s}NMakeReBuildCommandLine' % ns)
             nmake_rebuild_node.text = cfg_targets['rebuild'] % nmake_params
             nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
-            nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.exe')
+            nmake_output_node.text = os.path.join('../..', 'program', 'soffice.exe')
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
             nmake_defs_node.text = ';'.join(list(target['DEFS']) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
-            include_path_node.text = ';'.join(target['include'] + ['$(IncludePath)'])
+            includes=[os.path.join('../..',elem) if elem[1] != ':'  else elem for elem in target['include'] ]
+            include_path_node.text = ';'.join(includes + ['$(IncludePath)'])
 
         ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns)
 
         cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
-            cxxabspath = os.path.join(self.gbuildparser.srcdir + '/' + target['module'], cxxobject)
-            cxxfile = cxxabspath
-            if os.path.isfile(cxxabspath):
-                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxabspath)
+            cxxrelpath= os.path.join('../..',target['location'].split('/')[-1], cxxobject)
+            cxxabspath = os.path.join(self.gbuildparser.srcdir,target['location'].split('/')[-1], cxxobject)
+            cxxfile = cxxabspath + '.cxx'
+            if os.path.isfile(cxxfile):
+                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxrelpath + '.cxx')
             else:
                 print('Source %s in project %s does not exist' % (cxxfile, target['target_name']))
 
         includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
-            include_abs_path = os.path.join(self.gbuildparser.srcdir + '/' + target['module'], cxxobject)
+            include_rel_path = os.path.join('../..',target['location'].split('/')[-1], cxxobject)
+            include_abs_path = os.path.join(self.gbuildparser.srcdir,target['location'].split('/')[-1], cxxobject)
             hxxfile = include_abs_path + '.hxx'
             if os.path.isfile(hxxfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hxxfile)
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path + '.hxx')
             # Few files have corresponding .h files
             hfile = include_abs_path + '.h'
             if os.path.isfile(hfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hfile)
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path + '.h')
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
         self.write_pretty_xml(proj_node, project_path)
@@ -826,33 +829,36 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_rebuild_node = ET.SubElement(conf_node, '{%s}NMakeReBuildCommandLine' % ns)
             nmake_rebuild_node.text = cfg_targets['rebuild'] % nmake_params
             nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
-            nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.exe')
+            nmake_output_node.text = os.path.join('../..', 'program', 'soffice.exe')
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
             nmake_defs_node.text = ';'.join(list(target['DEFS']) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
-            include_path_node.text = ';'.join(target['include'] + ['$(IncludePath)'])
+            includes = [os.path.join('../..', elem) if elem[1] != ':'  else elem for elem in target['include']]
+            include_path_node.text = ';'.join(includes + ['$(IncludePath)'])
 
         ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns)
 
         cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
-            cxxabspath = os.path.join(self.gbuildparser.srcdir + '/' + target['module'], cxxobject)
-            cxxfile = cxxabspath
+            cxxrelpath = os.path.join('../..', target['location'].split('/')[-1], cxxobject)
+            cxxabspath = os.path.join(self.gbuildparser.srcdir, target['location'].split('/')[-1], cxxobject)
+            cxxfile = cxxabspath + '.cxx'
             if os.path.isfile(cxxfile):
-                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include='../../' + cxxobject)
+                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxrelpath + '.cxx')
             else:
                 print('Source %s in project %s does not exist' % (cxxfile, target['target_name']))
 
         includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
-            include_abs_path = os.path.join(self.gbuildparser.srcdir + '/' + target['module'], cxxobject)
+            include_rel_path = os.path.join('../..',target['location'].split('/')[-1], cxxobject)
+            include_abs_path = os.path.join(self.gbuildparser.srcdir,target['location'].split('/')[-1], cxxobject)
             hxxfile = include_abs_path + '.hxx'
             if os.path.isfile(hxxfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include='../../' + cxxobject + '.hxx')
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path + '.hxx')
             # Few files have corresponding .h files
             hfile = include_abs_path + '.h'
             if os.path.isfile(hfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include='../../' + cxxobject + '.h')
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path + '.h')
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
         self.write_pretty_xml(proj_node, project_path)
