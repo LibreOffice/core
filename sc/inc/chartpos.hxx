@@ -90,12 +90,12 @@ public:
                                     }
 };
 
-enum ScChartGlue {
-    SC_CHARTGLUE_NA,
-    SC_CHARTGLUE_NONE,      // old mimic
-    SC_CHARTGLUE_COLS,      // old mimic
-    SC_CHARTGLUE_ROWS,
-    SC_CHARTGLUE_BOTH
+enum class ScChartGlue {
+    NA,
+    NONE,      // old mimic
+    Cols,      // old mimic
+    Rows,
+    Both
 };
 
 class ScDocument;
