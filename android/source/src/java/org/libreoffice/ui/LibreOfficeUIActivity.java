@@ -133,28 +133,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-            //make the navigation spinner
-            Context context = actionBar.getThemedContext();
-            AppCompatSpinner toolbarSpinner = (AppCompatSpinner) findViewById(R.id.toolbar_spinner);
-            ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context, R.array.file_view_modes, android.R.layout.simple_spinner_item);
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            toolbarSpinner.setAdapter(spinnerAdapter);
-            toolbarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-                    filterMode = pos -1; //bit of a hack, I know. -1 is ALL 0 Docs etc
-                    openDirectory(currentDirectory);// Uses filter mode
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-                    filterMode = FileUtilities.ALL;
-                    openDirectory(currentDirectory);
-                }
-            });
         }
 
         recentRecyclerView = (RecyclerView) findViewById(R.id.list_recent);
@@ -569,6 +548,31 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
                     openParentDirectory();
                 }
                 break;
+            case R.id.menu_filter_everything: {
+                filterMode = FileUtilities.ALL;
+                openDirectory(currentDirectory);
+            }
+            break;
+            case R.id.menu_filter_documents: {
+                filterMode = FileUtilities.DOC;
+                openDirectory(currentDirectory);
+            }
+            break;
+            case R.id.menu_filter_spreadsheets: {
+                filterMode = FileUtilities.CALC;
+                openDirectory(currentDirectory);
+            }
+            break;
+            case R.id.menu_filter_presentations: {
+                filterMode = FileUtilities.IMPRESS;
+                openDirectory(currentDirectory);
+            }
+            break;
+            case R.id.menu_filter_drawings: {
+                filterMode = FileUtilities.DRAWING;
+                openDirectory(currentDirectory);
+            }
+            break;
             case R.id.menu_view_toggle:
                 if (viewMode == GRID_VIEW){
                     viewMode = LIST_VIEW;
