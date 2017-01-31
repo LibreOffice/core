@@ -145,17 +145,6 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
         *//*-*****************************************************************************************************/
         Sequence< OUString > impl_GetPropertyNames( Sequence< OUString >& rItems );
 
-        /*-****************************************************************************************************
-            @short      expand the list for all well known properties to destination
-            @seealso    method impl_GetPropertyNames()
-
-            @param      "lSource"      ,   original list
-            @param      "lDestination" ,   destination of operation
-            @return     A list of configuration key names is returned.
-        *//*-*****************************************************************************************************/
-        static void impl_ExpandPropertyNames( const Sequence< OUString >& lSource,
-                                              Sequence< OUString >& lDestination );
-
     private:
         std::vector< SvtCompatibilityEntry > m_aOptions;
         SvtCompatibilityEntry                m_aDefOptions;
@@ -292,29 +281,29 @@ Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequen
 {
     // First get ALL names of current existing list items in configuration!
     rItems = GetNodeNames( SETNODE_ALLFILEFORMATS );
+
     // expand list to result list ...
     Sequence< OUString > lProperties( rItems.getLength() * ( SvtCompatibilityEntry::getElementCount() - 1 ) );
-    impl_ExpandPropertyNames( rItems, lProperties );
-    // Return result.
-    return lProperties;
-}
 
-void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
-    const Sequence< OUString >& lSource, Sequence< OUString >& lDestination )
-{
-    sal_Int32 nSourceCount = lSource.getLength();
+    sal_Int32 nSourceCount = rItems.getLength();
+    sal_Int32 nDestStep    = 0;
     // Copy entries to destination and expand every item with 2 supported sub properties.
     for ( sal_Int32 nSourceStep = 0; nSourceStep < nSourceCount; ++nSourceStep )
     {
         OUString sFixPath;
         sFixPath = SETNODE_ALLFILEFORMATS;
         sFixPath += PATHDELIMITER;
-        sFixPath += lSource[ nSourceStep ];
+        sFixPath += rItems[ nSourceStep ];
         sFixPath += PATHDELIMITER;
-
         for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
-            lDestination[ i - 1 ] = sFixPath + SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
+        {
+            lProperties[ nDestStep ] = sFixPath + SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
+            nDestStep++;
+        }
     }
+
+    // Return result.
+    return lProperties;
 }
 
 namespace
