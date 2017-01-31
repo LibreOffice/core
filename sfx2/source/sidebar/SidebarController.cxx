@@ -193,6 +193,7 @@ void SidebarController::unregisterSidebarForFrame(SidebarController* pController
 
 void SidebarController::disposeDecks()
 {
+    SolarMutexGuard aSolarMutexGuard;
     mpCurrentDeck.clear();
     maFocusManager.Clear();
     mpResourceManager->disposeDecks();
