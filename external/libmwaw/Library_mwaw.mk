@@ -162,6 +162,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,mwaw,\
 	UnpackedTarball/libmwaw/src/lib/NisusWrtText \
 	UnpackedTarball/libmwaw/src/lib/PixelPaintParser \
 	UnpackedTarball/libmwaw/src/lib/PowerPoint1Parser \
+	UnpackedTarball/libmwaw/src/lib/PowerPoint3OLE \
 	UnpackedTarball/libmwaw/src/lib/PowerPoint3Parser \
 	UnpackedTarball/libmwaw/src/lib/RagTime5Chart \
 	UnpackedTarball/libmwaw/src/lib/RagTime5ClusterManager \
