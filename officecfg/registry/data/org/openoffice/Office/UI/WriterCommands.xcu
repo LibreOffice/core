@@ -331,7 +331,7 @@
           <value xml:lang="en-US">~Comment...</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert ODF Track Change Comment</value>
+          <value xml:lang="en-US">Insert Track Change Comment</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
