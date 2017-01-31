@@ -57,7 +57,7 @@ sal_Int32 ScTableSheetsObj::nTest = 0;
 
 ScTableSheetsObj::ScTableSheetsObj():
             CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-            apitest::XNameContainer(OUString("Sheet2"))
+            apitest::XNameContainer("Sheet2")
 {
 
 }

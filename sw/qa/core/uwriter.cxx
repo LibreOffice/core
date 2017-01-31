@@ -701,7 +701,7 @@ void SwDocTest::testSwScanner()
 
         const sal_Int32 nNextPos = aPaM.GetPoint()->nContent.GetIndex();
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(nPos+1), nNextPos);
-        SwFormatRefMark aRef(OUString("refmark"));
+        SwFormatRefMark aRef("refmark");
         pTA = pTextNode->InsertItem(aRef, nNextPos, nNextPos);
         CPPUNIT_ASSERT(pTA);
 

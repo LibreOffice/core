@@ -1816,7 +1816,7 @@ void SwUiWriterTest::testTdf78742()
     //testing with service type and any .ods file
     OUString path = m_directories.getURLFromSrc(DATA_DIRECTORY) + "calc-data-source.ods";
     SfxMedium aMedium(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
-    SfxFilterMatcher aMatcher(OUString("com.sun.star.text.TextDocument"));
+    SfxFilterMatcher aMatcher("com.sun.star.text.TextDocument");
     std::shared_ptr<const SfxFilter> pFilter;
     sal_uInt32 filter = aMatcher.DetectFilter(aMedium, pFilter);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_IO_ABORT, filter);
@@ -1833,7 +1833,7 @@ void SwUiWriterTest::testTdf78742()
     //testing with service type and any .odt file
     OUString path2 = m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo69893.odt";
     SfxMedium aMedium3(path2, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
-    SfxFilterMatcher aMatcher3(OUString("com.sun.star.text.TextDocument"));
+    SfxFilterMatcher aMatcher3("com.sun.star.text.TextDocument");
     std::shared_ptr<const SfxFilter> pFilter3;
     sal_uInt32 filter3 = aMatcher3.DetectFilter(aMedium3, pFilter3);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_CLASS_NONE, filter3);

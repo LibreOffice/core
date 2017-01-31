@@ -706,7 +706,7 @@ bool SwGlossaryHdl::ImportGlossaries( const OUString& rName )
     {
         std::shared_ptr<const SfxFilter> pFilter;
         std::unique_ptr<SfxMedium> pMed(new SfxMedium( rName, StreamMode::READ, nullptr, nullptr ));
-        SfxFilterMatcher aMatcher( OUString("swriter") );
+        SfxFilterMatcher aMatcher( "swriter" );
         pMed->UseInteractionHandler( true );
         if (!aMatcher.GuessFilter(*pMed, pFilter, SfxFilterFlags::NONE))
         {

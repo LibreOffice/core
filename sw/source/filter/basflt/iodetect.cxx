@@ -63,8 +63,8 @@ const OUString SwIoSystem::GetSubStorageName( const SfxFilter& rFltr )
 std::shared_ptr<const SfxFilter> SwIoSystem::GetFilterOfFormat(const OUString& rFormatNm,
     const SfxFilterContainer* pCnt)
 {
-    SfxFilterContainer aCntSw( OUString(sSWRITER) );
-    SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
+    SfxFilterContainer aCntSw( sSWRITER );
+    SfxFilterContainer aCntSwWeb( sSWRITERWEB );
     const SfxFilterContainer* pFltCnt = pCnt ? pCnt : ( IsDocShellRegistered() ? &aCntSw : &aCntSwWeb );
 
     do {
@@ -143,8 +143,8 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
 // Returns the internal FilterName.
 std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFileName)
 {
-    SfxFilterContainer aCntSw( OUString(sSWRITER) );
-    SfxFilterContainer aCntSwWeb( OUString(sSWRITERWEB) );
+    SfxFilterContainer aCntSw( sSWRITER );
+    SfxFilterContainer aCntSwWeb( sSWRITERWEB );
     const SfxFilterContainer* pFCntnr = IsDocShellRegistered() ? &aCntSw : &aCntSwWeb;
 
     SfxFilterMatcher aMatcher( pFCntnr->GetName() );

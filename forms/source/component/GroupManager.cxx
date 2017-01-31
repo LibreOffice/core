@@ -193,7 +193,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 }
 
 OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
-    :m_pCompGroup( new OGroup( OUString("AllComponentGroup") ) )
+    :m_pCompGroup( new OGroup( "AllComponentGroup" ) )
     ,m_xContainer(_rxContainer)
 {
     osl_atomic_increment(&m_refCount);
