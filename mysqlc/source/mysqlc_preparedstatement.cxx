@@ -490,7 +490,11 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
             setDouble( _parameterIndex, nValue );
             break;
         }
+#if defined __GNUC__ && __GNUC__ >= 7
+        [[fallthrough]];
+#else
         BOOST_FALLTHROUGH;
+#endif
     }
 
     case DataType::CHAR:
@@ -517,7 +521,11 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo(sal_Int32 _parameterIndex, c
             setFloat(_parameterIndex,nValue);
             break;
         }
+#if defined __GNUC__ && __GNUC__ >= 7
+        [[fallthrough]];
+#else
         BOOST_FALLTHROUGH;
+#endif
     }
 
     case DataType::DOUBLE:
