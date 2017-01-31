@@ -49,6 +49,7 @@ public class GeckoLayerClient implements PanZoomTarget {
 
     private PanZoomController mPanZoomController;
     private LayerView mView;
+    private final DisplayPortCalculator mDisplayPortCalculator;
 
     public GeckoLayerClient(LibreOfficeMainActivity context) {
         // we can fill these in with dummy values because they are always written
@@ -56,6 +57,7 @@ public class GeckoLayerClient implements PanZoomTarget {
         mContext = context;
         mScreenSize = new IntSize(0, 0);
         mDisplayPort = new DisplayPortMetrics();
+        mDisplayPortCalculator = new DisplayPortCalculator(mContext);
 
         mForceRedraw = true;
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
@@ -112,7 +114,7 @@ public class GeckoLayerClient implements PanZoomTarget {
         if (!mPanZoomController.getRedrawHint()) {
             return false;
         }
-        return DisplayPortCalculator.aboutToCheckerboard(mViewportMetrics, mPanZoomController.getVelocityVector(), getDisplayPort());
+        return mDisplayPortCalculator.aboutToCheckerboard(mViewportMetrics, mPanZoomController.getVelocityVector(), getDisplayPort());
     }
 
     /**
@@ -175,7 +177,7 @@ public class GeckoLayerClient implements PanZoomTarget {
         ImmutableViewportMetrics clampedMetrics = metrics.clamp();
 
         if (displayPort == null) {
-            displayPort = DisplayPortCalculator.calculate(metrics, mPanZoomController.getVelocityVector());
+            displayPort = mDisplayPortCalculator.calculate(metrics, mPanZoomController.getVelocityVector());
         }
 
         mDisplayPort = displayPort;
@@ -258,7 +260,7 @@ public class GeckoLayerClient implements PanZoomTarget {
             // immediately request a draw of that area by setting the display port
             // accordingly. This way we should have the content pre-rendered by the
             // time the animation is done.
-            DisplayPortMetrics displayPort = DisplayPortCalculator.calculate(viewport, null);
+            DisplayPortMetrics displayPort = mDisplayPortCalculator.calculate(viewport, null);
             adjustViewport(displayPort);
         }
     }
