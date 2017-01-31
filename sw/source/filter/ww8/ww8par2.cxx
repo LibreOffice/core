@@ -3731,10 +3731,9 @@ void WW8RStyle::ImportSprms(std::size_t nPosFc, short nLen, bool bPap)
 
     if (checkSeek(*pStStrm, nPosFc))
     {
-        sal_uInt8 *pSprms = new sal_uInt8[nLen];
-        nLen = pStStrm->ReadBytes(pSprms, nLen);
-        ImportSprms(pSprms, nLen, bPap);
-        delete[] pSprms;
+        std::unique_ptr<sal_uInt8[]> pSprms( new sal_uInt8[nLen] );
+        nLen = pStStrm->ReadBytes(pSprms.get(), nLen);
+        ImportSprms(pSprms.get(), nLen, bPap);
     }
 }
 

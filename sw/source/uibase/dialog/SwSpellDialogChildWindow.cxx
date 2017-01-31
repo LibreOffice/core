@@ -775,9 +775,9 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     aTmpOutliner.SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     aTmpOutliner.SetSpeller( xSpell );
 
-                    OutlinerView* pOutlView = new OutlinerView( &aTmpOutliner, &(rView.GetEditWin()) );
+                    std::unique_ptr<OutlinerView> pOutlView( new OutlinerView( &aTmpOutliner, &(rView.GetEditWin()) ) );
                     pOutlView->GetOutliner()->SetRefDevice( rSh.getIDocumentDeviceAccess().getPrinter( false ) );
-                    aTmpOutliner.InsertView( pOutlView );
+                    aTmpOutliner.InsertView( pOutlView.get() );
                     Point aPt;
                     Size aSize(1,1);
                     Rectangle aRect( aPt, aSize );
@@ -785,8 +785,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     aTmpOutliner.SetText( *pParaObj );
                     aTmpOutliner.ClearModifyFlag();
                     bHasSpellError = EE_SPELL_OK != aTmpOutliner.HasSpellErrors();
-                    aTmpOutliner.RemoveView( pOutlView );
-                    delete pOutlView;
+                    aTmpOutliner.RemoveView( pOutlView.get() );
                 }
                 if(bHasSpellError)
                 {

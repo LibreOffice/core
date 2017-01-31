@@ -1936,9 +1936,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                 if ( !( (mpDoc->GetSdPage((sal_Int16) nPageNumber-1, PageKind::Standard))->IsExcluded() ) ||
                     (pPDFExtOutDevData && pPDFExtOutDevData->GetIsExportHiddenSlides()) )
                 {
-                    ::sd::ClientView* pView = new ::sd::ClientView( mpDocShell, pOut );
-                    Rectangle               aVisArea = Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
-                    vcl::Region                  aRegion( aVisArea );
+                    std::unique_ptr<::sd::ClientView> pView( new ::sd::ClientView( mpDocShell, pOut ) );
+                    Rectangle                         aVisArea = Rectangle( Point(), mpDoc->GetSdPage( (sal_uInt16)nPageNumber - 1, ePageKind )->GetSize() );
+                    vcl::Region                       aRegion( aVisArea );
 
                     ::sd::ViewShell* pOldViewSh = mpDocShell->GetViewShell();
                     ::sd::View* pOldSdView = pOldViewSh ? pOldViewSh->GetView() : nullptr;
@@ -2248,8 +2248,6 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             pView->DrawMarkedObj(*pOut);
                         }
                     }
-
-                    delete pView;
                 }
             }
         }

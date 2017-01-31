@@ -2087,9 +2087,9 @@ void addExceptionHandlers(
     if (node->present) {
         code->addException(start, end, handler, node->name.replace('.', '/'));
     } else {
-        for (codemaker::ExceptionTreeNode* p : node->children)
+        for (std::unique_ptr<codemaker::ExceptionTreeNode> const & p : node->children)
         {
-            addExceptionHandlers(p, start, end, handler, code);
+            addExceptionHandlers(p.get(), start, end, handler, code);
         }
     }
 }

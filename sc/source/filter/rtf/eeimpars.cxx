@@ -107,8 +107,8 @@ sal_uLong ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
 
 void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
-    ScProgress* pProgress = new ScProgress( mpDoc->GetDocumentShell(),
-        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->ListSize(), true );
+    std::unique_ptr<ScProgress> pProgress( new ScProgress( mpDoc->GetDocumentShell(),
+        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->ListSize(), true ) );
     sal_uLong nProgress = 0;
 
     SCCOL nStartCol, nEndCol;
@@ -439,7 +439,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 pProgress->SetState( ++nProgress );
             }
         }
-        DELETEZ( pProgress ); // SetOptimalHeight has its own ProgressBar
+        pProgress.reset(); // SetOptimalHeight has its own ProgressBar
         // Adjust line height, base is 100% zoom
         Fraction aZoom( 1, 1 );
         // Factor is printer to display ratio
@@ -476,7 +476,6 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             }
         }
     }
-    delete pProgress;
 }
 
 bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )

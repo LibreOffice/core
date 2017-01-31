@@ -3405,9 +3405,9 @@ void includeExceptions(
     if (node->present) {
         includes.add(node->name);
     } else {
-        for (codemaker::ExceptionTreeNode* pChild : node->children)
+        for (std::unique_ptr<codemaker::ExceptionTreeNode> const & pChild : node->children)
         {
-            includeExceptions(includes, pChild);
+            includeExceptions(includes, pChild.get());
         }
     }
 }
@@ -3759,9 +3759,9 @@ void ServiceType::dumpCatchClauses(
         out << indent() << "throw;\n";
         dec();
     } else {
-        for (codemaker::ExceptionTreeNode* pChild : node->children)
+        for (std::unique_ptr<codemaker::ExceptionTreeNode> const & pChild : node->children)
         {
-            dumpCatchClauses(out, pChild);
+            dumpCatchClauses(out, pChild.get());
         }
     }
 }

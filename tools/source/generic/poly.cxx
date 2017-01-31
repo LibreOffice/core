@@ -600,7 +600,7 @@ Polygon::Polygon( const Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVer
             const Point     aTR( aRect.Right() - nHorzRound, aRect.Top() + nVertRound );
             const Point     aBR( aRect.Right() - nHorzRound, aRect.Bottom() - nVertRound );
             const Point     aBL( aRect.Left() + nHorzRound, aRect.Bottom() - nVertRound );
-            tools::Polygon* pEllipsePoly = new tools::Polygon( Point(), nHorzRound, nVertRound );
+            std::unique_ptr<tools::Polygon> pEllipsePoly( new tools::Polygon( Point(), nHorzRound, nVertRound ) );
             sal_uInt16 i, nEnd, nSize4 = pEllipsePoly->GetSize() >> 2;
 
             mpImplPolygon = new ImplPolygon( pEllipsePoly->GetSize() + 1 );
@@ -621,7 +621,6 @@ Polygon::Polygon( const Rectangle& rRect, sal_uInt32 nHorzRound, sal_uInt32 nVer
                 ( pDstAry[ i ] = pSrcAry[ i ] ) += aBR;
 
             pDstAry[ nEnd ] = pDstAry[ 0 ];
-            delete pEllipsePoly;
         }
     }
 }

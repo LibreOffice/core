@@ -129,16 +129,15 @@ void ExSoundEntry::Write( SvStream& rSt, sal_uInt32 nId ) const
         SvStream* pSourceFile = ::utl::UcbStreamHelper::CreateStream( aSoundURL, StreamMode::READ );
         if ( pSourceFile )
         {
-            sal_uInt8* pBuf = new sal_uInt8[ 0x10000 ];   // 64 kB  Buffer
+            std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ 0x10000 ] );   // 64 kB  Buffer
             while ( nBytesLeft )
             {
                 sal_uInt32 nToDo = ( nBytesLeft > 0x10000 ) ? 0x10000 : nBytesLeft;
-                pSourceFile->ReadBytes(pBuf, nToDo);
-                rSt.WriteBytes(pBuf, nToDo);
+                pSourceFile->ReadBytes(pBuf.get(), nToDo);
+                rSt.WriteBytes(pBuf.get(), nToDo);
                 nBytesLeft -= nToDo;
             }
             delete pSourceFile;
-            delete[] pBuf;
         }
     }
     catch( css::uno::Exception& )

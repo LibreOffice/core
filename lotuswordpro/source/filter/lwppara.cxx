@@ -95,6 +95,7 @@
 
 #include "lwpdropcapmgr.hxx"
 #include "lwptable.hxx"
+#include <memory>
 
 LwpPara::LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
     : LwpDLVList(objHdr, pStrm)
@@ -194,10 +195,9 @@ void LwpPara::Read()
         {
             if (Notify)
             {
-                LwpForked3NotifyList* pNotifyList = new LwpForked3NotifyList();
+                std::unique_ptr<LwpForked3NotifyList> pNotifyList( new LwpForked3NotifyList );
                 pNotifyList->GetExtraList().Read(m_pObjStrm.get());
                 pNotifyList->Read(m_pObjStrm.get());
-                delete pNotifyList;
             }
         }
     }

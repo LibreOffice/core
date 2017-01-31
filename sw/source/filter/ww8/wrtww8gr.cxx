@@ -338,7 +338,7 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
             xOleDst->Commit();
 
             // Ouput the cPicLocation attribute
-            ww::bytes* pBuf = new ww::bytes();
+            std::unique_ptr<ww::bytes> pBuf( new ww::bytes );
             SwWW8Writer::InsUInt16( *pBuf, NS_sprm::LN_CPicLocation );
             SwWW8Writer::InsUInt32( *pBuf, rOleId.copy( 1 ).toInt32() );
 
@@ -352,7 +352,6 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
             pBuf->push_back( 1 );
 
             m_pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->size(), pBuf->data() );
-            delete pBuf;
         }
     }
 }

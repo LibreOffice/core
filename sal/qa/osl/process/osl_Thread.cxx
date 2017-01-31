@@ -28,17 +28,14 @@
 // include files
 
 #include <sal/types.h>
-
 #include <rtl/string.hxx>
-
 #include <rtl/strbuf.hxx>
-
 #include <osl/thread.hxx>
-
 #include <osl/mutex.hxx>
 #include <osl/time.h>
 
 #include <string.h>
+#include <memory>
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -1695,13 +1692,12 @@ public:
 private:
     void SAL_CALL run() override
         {
-            oslThreadIdentifier* pId = new oslThreadIdentifier;
+            std::unique_ptr<oslThreadIdentifier> pId( new oslThreadIdentifier );
             *pId = getIdentifier();
-            idData.setData(pId);
+            idData.setData(pId.get());
             oslThreadIdentifier* pIdData = static_cast<oslThreadIdentifier*>(idData.getData());
             //t_print("Thread %d has Data %d\n", getIdentifier(), *pIdData);
             m_Id = *pIdData;
-            delete pId;
         }
 
 public:

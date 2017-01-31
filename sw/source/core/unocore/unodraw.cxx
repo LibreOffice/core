@@ -1134,8 +1134,8 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     }
                     else
                     {
-                        SwUnoInternalPaM* pInternalPam =
-                                        new SwUnoInternalPaM( *(pFormat->GetDoc()) );
+                        std::unique_ptr<SwUnoInternalPaM> pInternalPam(
+                                        new SwUnoInternalPaM( *(pFormat->GetDoc()) ));
                         uno::Reference< text::XTextRange > xRg;
                         aValue >>= xRg;
                         if (::sw::XTextRangeToSwPaM(*pInternalPam, xRg) )
@@ -1180,7 +1180,6 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         {
                             throw uno::RuntimeException();
                         }
-                        delete pInternalPam;
                     }
                 }
                 else if (pEntry->nWID == FN_TEXT_BOX)

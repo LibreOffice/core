@@ -1076,11 +1076,10 @@ void OutlinerView::ApplyBulletsNumbering(
                                 const SvxNumberFormat* pNewFmt = aNewRule.Get(nLevel);
                                 if (pOldFmt && pNewFmt && (pOldFmt->GetFirstLineOffset() != pNewFmt->GetFirstLineOffset() || pOldFmt->GetAbsLSpace() != pNewFmt->GetAbsLSpace()))
                                 {
-                                    SvxNumberFormat* pNewFmtClone = new SvxNumberFormat(*pNewFmt);
+                                    std::unique_ptr<SvxNumberFormat> pNewFmtClone(new SvxNumberFormat(*pNewFmt));
                                     pNewFmtClone->SetFirstLineOffset(pOldFmt->GetFirstLineOffset());
                                     pNewFmtClone->SetAbsLSpace(pOldFmt->GetAbsLSpace());
-                                    aNewRule.SetLevel(nLevel, pNewFmtClone);
-                                    delete pNewFmtClone;
+                                    aNewRule.SetLevel(nLevel, pNewFmtClone.get());
                                 }
                             }
                         }

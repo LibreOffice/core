@@ -588,8 +588,8 @@ Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
     MovedData *pMD1, *pMD2;
     // Look for the differing lines
     {
-        sal_Char* pDiscard1 = new sal_Char[ rData1.GetLineCount() ];
-        sal_Char* pDiscard2 = new sal_Char[ rData2.GetLineCount() ];
+        std::unique_ptr<sal_Char[]> pDiscard1( new sal_Char[ rData1.GetLineCount() ] );
+        std::unique_ptr<sal_Char[]> pDiscard2( new sal_Char[ rData2.GetLineCount() ] );
 
         sal_uLong* pCount1 = new sal_uLong[ nDiff ];
         sal_uLong* pCount2 = new sal_uLong[ nDiff ];
@@ -602,20 +602,17 @@ Compare::Compare( sal_uLong nDiff, CompareData& rData1, CompareData& rData2 )
 
         // All which occur only once now have either been inserted or deleted.
         // All which are also contained in the other one have been moved.
-        SetDiscard( rData1, pDiscard1, pCount2 );
-        SetDiscard( rData2, pDiscard2, pCount1 );
+        SetDiscard( rData1, pDiscard1.get(), pCount2 );
+        SetDiscard( rData2, pDiscard2.get(), pCount1 );
 
         // forget the arrays again
         delete [] pCount1; delete [] pCount2;
 
-        CheckDiscard( rData1.GetLineCount(), pDiscard1 );
-        CheckDiscard( rData2.GetLineCount(), pDiscard2 );
+        CheckDiscard( rData1.GetLineCount(), pDiscard1.get() );
+        CheckDiscard( rData2.GetLineCount(), pDiscard2.get() );
 
-        pMD1 = new MovedData( rData1, pDiscard1 );
-        pMD2 = new MovedData( rData2, pDiscard2 );
-
-        // forget the arrays again
-        delete [] pDiscard1; delete [] pDiscard2;
+        pMD1 = new MovedData( rData1, pDiscard1.get() );
+        pMD2 = new MovedData( rData2, pDiscard2.get() );
     }
 
     {
