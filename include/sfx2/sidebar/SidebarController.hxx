@@ -39,16 +39,18 @@
 
 #include <boost/optional.hpp>
 #include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/compbase5.hxx>
 #include <cppuhelper/basemutex.hxx>
 
 
 namespace
 {
-    typedef ::cppu::WeakComponentImplHelper4 <
+    typedef ::cppu::WeakComponentImplHelper5 <
         css::ui::XContextChangeEventListener,
         css::beans::XPropertyChangeListener,
         css::ui::XSidebar,
-        css::frame::XStatusListener
+        css::frame::XStatusListener,
+        css::frame::XFrameActionListener
         > SidebarControllerInterfaceBase;
 }
 
@@ -104,6 +106,10 @@ public:
     // frame::XStatusListener
     virtual void SAL_CALL statusChanged (const css::frame::FeatureStateEvent& rEvent)
         throw(css::uno::RuntimeException, std::exception) override;
+
+    // frame::XFrameActionListener
+    virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent)
+        throw (com::sun::star::uno::RuntimeException, std::exception) override;
 
     // ui::XSidebar
     virtual void SAL_CALL requestLayout()
