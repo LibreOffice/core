@@ -937,7 +937,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 
 // Lighting
     Color aColor;
-    basegfx::B3DVector aVector;
     // Light 1 (Color)
     eState = rAttrs.GetItemState(SDRATTR_3DSCENE_LIGHTCOLOR_1);
     if( eState != SfxItemState::DONTCARE )
@@ -1848,7 +1847,6 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
 
     // Lighting
-    basegfx::B3DVector aVector;
     Color aColor;
     const SfxItemSet aLightItemSet(m_pCtlLightPreview->GetSvx3DLightControl().Get3DAttributes());
 

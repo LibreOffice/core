@@ -41,7 +41,7 @@ namespace basegfx
 
 namespace basegfx
 {
-    class BASEGFX_DLLPUBLIC B2DPolygon
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B2DPolygon
     {
     public:
         typedef o3tl::cow_wrapper< ImplB2DPolygon > ImplType;

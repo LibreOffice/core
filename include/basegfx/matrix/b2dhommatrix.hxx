@@ -29,7 +29,7 @@ namespace basegfx
     class B2DTuple;
     class Impl2DHomMatrix;
 
-    class BASEGFX_DLLPUBLIC B2DHomMatrix
+    class SAL_WARN_UNUSED BASEGFX_DLLPUBLIC B2DHomMatrix
     {
     public:
         typedef o3tl::cow_wrapper< Impl2DHomMatrix > ImplType;

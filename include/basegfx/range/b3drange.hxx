@@ -30,7 +30,7 @@ namespace basegfx
 {
     class B3DHomMatrix;
 
-    class B3DRange
+    class SAL_WARN_UNUSED B3DRange
     {
         typedef ::basegfx::BasicRange< double, DoubleTraits >   MyBasicRange;
 

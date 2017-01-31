@@ -161,7 +161,6 @@ OUString HelpOnStartup::its_getModuleIdFromEnv(const css::uno::Sequence< css::be
 {
     ::comphelper::SequenceAsHashMap lArgs        (lArguments);
     ::comphelper::SequenceAsHashMap lEnvironment = lArgs.getUnpackedValueOrDefault("Environment", css::uno::Sequence< css::beans::NamedValue >());
-    ::comphelper::SequenceAsHashMap lJobConfig   = lArgs.getUnpackedValueOrDefault("JobConfig", css::uno::Sequence< css::beans::NamedValue >());
 
     // check for right environment.
     // If it's not a DocumentEvent, which triggered this job,

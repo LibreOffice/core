@@ -589,8 +589,6 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
     const css::geometry::AffineMatrix2D& rViewTransform,
     const awt::Point& rOffset)
 {
-    ::basegfx::B2DRectangle aClipRectangle;
-
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(mxWindow);
     if (!pWindow)
         return ::basegfx::B2DRectangle();

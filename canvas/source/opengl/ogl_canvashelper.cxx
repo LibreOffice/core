@@ -886,7 +886,6 @@ namespace oglcanvas
 
         // setup overall transform only now. View clip above was
         // relative to view transform
-        ::basegfx::B2DHomMatrix aTransform;
         ::canvas::tools::mergeViewAndRenderTransform(o_action.maTransform,
                                                      viewState,
                                                      renderState);

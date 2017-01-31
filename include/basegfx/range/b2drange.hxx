@@ -50,7 +50,7 @@ namespace basegfx
 
         @see B1DRange
      */
-    class B2DRange
+    class SAL_WARN_UNUSED B2DRange
     {
     public:
         typedef double          ValueType;

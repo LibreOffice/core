@@ -195,14 +195,6 @@ namespace oglcanvas
                         ::basegfx::triangulator::triangulate(
                             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(mxClip)));
 
-                    basegfx::B2DPolygon rTriangleList(
-                        basegfx::tools::clipTriangleListOnRange(
-                            rTriangulatedPolygon,
-                            basegfx::B2DRange(
-                                0,0,
-                                aSpriteSizePixel.getX(),
-                                aSpriteSizePixel.getY())));
-
                     glBegin(GL_TRIANGLES);
                     for( sal_uInt32 i=0; i<rTriangulatedPolygon.count(); i++ )
                     {

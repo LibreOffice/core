@@ -47,7 +47,7 @@ struct SequenceAsHashMapBase : public std::unordered_map<
 {
 };
 
-class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
+class SAL_WARN_UNUSED COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
 {
 
     public:

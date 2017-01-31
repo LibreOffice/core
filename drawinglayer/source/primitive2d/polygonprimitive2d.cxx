@@ -602,8 +602,6 @@ namespace drawinglayer
 
         basegfx::B2DRange PolygonStrokeArrowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            basegfx::B2DRange aRetval;
-
             if(getStart().isActive() || getEnd().isActive())
             {
                 // use decomposition when line start/end is used
