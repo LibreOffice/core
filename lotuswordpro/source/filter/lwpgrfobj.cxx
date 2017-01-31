@@ -698,13 +698,12 @@ void LwpGraphicObject::XFConvertEquation(XFContentContainer * pCont)
         bOk &= nEnd >= nBegin;
         if (bOk)
         {
-            sal_uInt8* pEquData = new sal_uInt8[nEnd - nBegin + 1];
+            std::unique_ptr<sal_uInt8[]> pEquData( new sal_uInt8[nEnd - nBegin + 1] );
             for(sal_uInt32 nIndex = 0; nIndex < nEnd - nBegin +1 ; nIndex++)
             {
                 pEquData[nIndex] = pGrafData[nBegin + nIndex];
             }
-            pXFNotePara->Add(OUString(reinterpret_cast<char*>(pEquData), (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
-            delete [] pEquData;
+            pXFNotePara->Add(OUString(reinterpret_cast<char*>(pEquData.get()), (nEnd - nBegin + 1), osl_getThreadTextEncoding()));
         }
         pXFNote->Add(pXFNotePara);
 

@@ -3707,12 +3707,10 @@ void HwpReader::makeFormula(TxtBox * hbox)
     }
     mybuf[l] = '\0';
 
-    Formula *form = new Formula(mybuf);
+    std::unique_ptr<Formula> form( new Formula(mybuf) );
     form->setDocumentHandler(m_rxDocumentHandler);
     form->setAttributeListImpl(mxList.get());
     form->parse();
-
-    delete form;
 }
 
 /**

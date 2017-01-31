@@ -1922,15 +1922,12 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     SwPaM* pPaM( nullptr );
     {
         const SwTextNode* pTextNode( GetTextNode() );
-        SwPosition* pStartPos = new SwPosition( *pTextNode );
+        std::unique_ptr<SwPosition> pStartPos( new SwPosition( *pTextNode ) );
         pStartPos->nContent.Assign( const_cast<SwTextNode*>(pTextNode), nIndex );
-        SwPosition* pEndPos = new SwPosition( *pTextNode );
+        std::unique_ptr<SwPosition> pEndPos( new SwPosition( *pTextNode ) );
         pEndPos->nContent.Assign( const_cast<SwTextNode*>(pTextNode), nIndex+1 );
 
         pPaM = new SwPaM( *pStartPos, *pEndPos );
-
-        delete pStartPos;
-        delete pEndPos;
     }
 
     // retrieve character attributes for the created PaM <pPaM>

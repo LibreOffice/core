@@ -893,9 +893,7 @@ public:
         // Test interning lots of things
         int i;
         static const int nSequence = 4096;
-        rtl::OUString *pStrs;
-
-        pStrs = new rtl::OUString[nSequence];
+        std::unique_ptr<rtl::OUString[]> pStrs(new rtl::OUString[nSequence]);
         for (i = 0; i < nSequence; i++)
         {
             pStrs[i] = rtl::OUString::number( sqrt( static_cast<double>(i) ) ).intern();
@@ -906,7 +904,6 @@ public:
             CPPUNIT_ASSERT_EQUAL_MESSAGE("double intern failed",
                                    pStrs[i].pData, aNew.pData);
         }
-        delete [] pStrs;
     }
 
     CPPUNIT_TEST_SUITE(construction);
