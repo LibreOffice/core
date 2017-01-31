@@ -73,9 +73,21 @@ DEPLOYTOOL="$(OFFICE_PROGRAM_PATH)$(PS)unopkg" add -f
 SDK_JAVA="$(OO_SDK_JAVA_HOME)/$(JAVABIN)/java" $(JAVA_OPTIONS)
 SDK_JAVAC="$(OO_SDK_JAVA_HOME)/$(JAVABIN)/javac"
 SDK_JAR="$(OO_SDK_JAVA_HOME)/$(JAVABIN)/jar"
+ifneq "$(OO_SDK_ZIP_HOME)" ""
 SDK_ZIP="$(OO_SDK_ZIP_HOME)/zip"
+else
+SDK_ZIP=zip
+endif
+ifneq "$(OO_SDK_CAT_HOME)" ""
 SDK_CAT="$(OO_SDK_CAT_HOME)/cat"
+else
+SDK_CAT=cat
+endif
+ifneq "$(OO_SDK_SED_HOME)" ""
 SDK_SED="$(OO_SDK_SED_HOME)/sed"
+else
+SDK_SED=sed
+endif
 IDLC="$(OO_SDK_HOME)/bin/idlc"
 CPPUMAKER="$(OO_SDK_HOME)/bin/cppumaker"
 JAVAMAKER="$(OO_SDK_HOME)/bin/javamaker"
