@@ -377,7 +377,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_Spacing_beforeLines:
                 m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "beforeLines", OUString::number(nIntValue));
-                if (m_pImpl->GetTopContext())
+                // We would need to make sure that this doesn't overwrite any
+                // NS_ooxml::LN_CT_Spacing_before in parent styles before style
+                // sheet support can be enabled.
+                if (m_pImpl->GetTopContext() && !IsStyleSheetImport())
                     m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny(ConversionHelper::convertTwipToMM100(nIntValue * nSingleLineSpacing / 100)), false);
             break;
         case NS_ooxml::LN_CT_Spacing_after:
@@ -388,7 +391,10 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             break;
         case NS_ooxml::LN_CT_Spacing_afterLines:
             m_pImpl->appendGrabBag(m_pImpl->m_aSubInteropGrabBag, "afterLines", OUString::number(nIntValue));
-            if (m_pImpl->GetTopContext())
+            // We would need to make sure that this doesn't overwrite any
+            // NS_ooxml::LN_CT_Spacing_after in parent styles before style
+            // sheet support can be enabled.
+            if (m_pImpl->GetTopContext() && !IsStyleSheetImport())
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny(ConversionHelper::convertTwipToMM100(nIntValue * nSingleLineSpacing / 100)), false);
             break;
         case NS_ooxml::LN_CT_Spacing_line: //91434
