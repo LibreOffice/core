@@ -207,7 +207,7 @@
             </child>
             <child>
               <object class="GtkButton" id="closemasterslide">
-                <property name="label" translatable="yes">Close Master Slide</property>
+                <property name="label" translatable="yes">Close Master View</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
