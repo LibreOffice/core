@@ -1621,11 +1621,11 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
     }
     sal_Int16 nbOfCalendars = sal::static_int_cast<sal_Int16>( getNumberOfChildren() );
     OUString str;
-    sal_Int16 * nbOfDays = new sal_Int16[nbOfCalendars];
-    sal_Int16 * nbOfMonths = new sal_Int16[nbOfCalendars];
-    sal_Int16 * nbOfGenitiveMonths = new sal_Int16[nbOfCalendars];
-    sal_Int16 * nbOfPartitiveMonths = new sal_Int16[nbOfCalendars];
-    sal_Int16 * nbOfEras = new sal_Int16[nbOfCalendars];
+    std::unique_ptr<sal_Int16[]> nbOfDays( new sal_Int16[nbOfCalendars] );
+    std::unique_ptr<sal_Int16[]> nbOfMonths( new sal_Int16[nbOfCalendars] );
+    std::unique_ptr<sal_Int16[]> nbOfGenitiveMonths( new sal_Int16[nbOfCalendars] );
+    std::unique_ptr<sal_Int16[]> nbOfPartitiveMonths( new sal_Int16[nbOfCalendars] );
+    std::unique_ptr<sal_Int16[]> nbOfEras( new sal_Int16[nbOfCalendars] );
     sal_Int16 j;
     sal_Int16 i;
     bool bHasGregorian = false;
@@ -1914,12 +1914,6 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
 
     of.writeAsciiString("};\n\n");
     of.writeFunction("getAllCalendars_", "calendarsCount", "calendars");
-
-    delete []nbOfDays;
-    delete []nbOfMonths;
-    delete []nbOfGenitiveMonths;
-    delete []nbOfPartitiveMonths;
-    delete []nbOfEras;
 }
 
 bool isIso4217( const OUString& rStr )

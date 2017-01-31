@@ -275,10 +275,9 @@ void SwBasicEscherEx::WriteHyperlinkWithinFly( SvMemoryStream& rStrm, const SwFo
     sal_uInt32 const nLen = tmpStrm.remainingSize();
     if(nLen >0)
     {
-        sal_uInt8* pBuffer = new sal_uInt8[ nLen ];
-        tmpStrm.ReadBytes(pBuffer, nLen);
-        rStrm.WriteBytes(pBuffer, nLen);
-        delete[] pBuffer;
+        std::unique_ptr<sal_uInt8[]> pBuffer( new sal_uInt8[ nLen ] );
+        tmpStrm.ReadBytes(pBuffer.get(), nLen);
+        rStrm.WriteBytes(pBuffer.get(), nLen);
     }
 }
 void SwBasicEscherEx::PreWriteHyperlinkWithinFly(const SwFrameFormat& rFormat,EscherPropertyContainer& rPropOpt)

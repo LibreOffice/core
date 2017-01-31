@@ -104,13 +104,13 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
             {
                 try
                 {
-                    sal_Char* pString = new sal_Char[ nItemSize ];
+                    std::unique_ptr<sal_Char[]> pString( new sal_Char[ nItemSize ] );
                     if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
                     {
                         nItemSize >>= 1;
                         if ( nItemSize > 1 )
                         {
-                            sal_Unicode* pWString = reinterpret_cast<sal_Unicode*>(pString);
+                            sal_Unicode* pWString = reinterpret_cast<sal_Unicode*>(pString.get());
                             for (sal_uInt32 i = 0; i < nItemSize; ++i)
                                 ReadUtf16( pWString[ i ] );
                             rString = OUString(pWString, lcl_getMaxSafeStrLen(nItemSize));
@@ -121,17 +121,16 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
                     }
                     else
                     {
-                        SvMemoryStream::ReadBytes(pString, nItemSize);
+                        SvMemoryStream::ReadBytes(pString.get(), nItemSize);
                         if ( pString[ nItemSize - 1 ] == 0 )
                         {
                             if ( nItemSize > 1 )
-                                rString = OUString(pString, rtl_str_getLength(pString), mnTextEnc);
+                                rString = OUString(pString.get(), rtl_str_getLength(pString.get()), mnTextEnc);
                             else
                                 rString.clear();
                             bRetValue = true;
                         }
                     }
-                    delete[] pString;
                 }
                 catch( const std::bad_alloc& )
                 {
@@ -159,18 +158,17 @@ bool PropItem::Read( OUString& rString, sal_uInt32 nStringType, bool bAlign )
             {
                 try
                 {
-                    sal_Unicode* pString = new sal_Unicode[ nItemSize ];
+                    std::unique_ptr<sal_Unicode[]> pString( new sal_Unicode[ nItemSize ] );
                     for (sal_uInt32 i = 0; i < nItemSize; ++i)
                         ReadUtf16( pString[ i ] );
                     if ( pString[ nItemSize - 1 ] == 0 )
                     {
                         if ( (sal_uInt16)nItemSize > 1 )
-                            rString = OUString(pString, lcl_getMaxSafeStrLen(nItemSize));
+                            rString = OUString(pString.get(), lcl_getMaxSafeStrLen(nItemSize));
                         else
                             rString.clear();
                         bRetValue = true;
                     }
-                    delete[] pString;
                 }
                 catch( const std::bad_alloc& )
                 {
@@ -298,18 +296,16 @@ void Section::GetDictionary(Dictionary& rDict)
         {
             if ( mnTextEnc == RTL_TEXTENCODING_UCS2 )
             {
-                sal_Unicode* pWString = new sal_Unicode[nSize];
+                std::unique_ptr<sal_Unicode[]> pWString( new sal_Unicode[nSize] );
                 for (sal_uInt32 j = 0; j < nSize; ++j)
                     aStream.ReadUtf16(pWString[j]);
-                aString = OUString(pWString, lcl_getMaxSafeStrLen(nSize));
-                delete[] pWString;
+                aString = OUString(pWString.get(), lcl_getMaxSafeStrLen(nSize));
             }
             else
             {
-                sal_Char* pString = new sal_Char[nSize];
-                aStream.ReadBytes(pString, nSize);
-                aString = OUString(pString, lcl_getMaxSafeStrLen(nSize), mnTextEnc);
-                delete[] pString;
+                std::unique_ptr<sal_Char[]> pString( new sal_Char[nSize] );
+                aStream.ReadBytes(pString.get(), nSize);
+                aString = OUString(pString.get(), lcl_getMaxSafeStrLen(nSize), mnTextEnc);
             }
         }
         catch( const std::bad_alloc& )
@@ -456,10 +452,9 @@ void Section::Read( SotStorageStream *pStrm )
                 // make sure we don't overflow the section size
                 if( nPropSize > nSecSize - nSecOfs )
                     nPropSize = nSecSize - nSecOfs;
-                sal_uInt8* pBuf = new sal_uInt8[ nPropSize ];
-                nPropSize = pStrm->ReadBytes(pBuf, nPropSize);
-                AddProperty( nPropId, pBuf, nPropSize );
-                delete[] pBuf;
+                std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ nPropSize ] );
+                nPropSize = pStrm->ReadBytes(pBuf.get(), nPropSize);
+                AddProperty( nPropId, pBuf.get(), nPropSize );
             }
             if ( nPropId == 1 )
             {
@@ -517,10 +512,9 @@ void Section::Read( SotStorageStream *pStrm )
             {
                 break;
             }
-            sal_uInt8* pBuf = new sal_uInt8[ nSize ];
-            nSize = pStrm->ReadBytes(pBuf, nSize);
-            AddProperty( 0xffffffff, pBuf, nSize );
-            delete[] pBuf;
+            std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ nSize ] );
+            nSize = pStrm->ReadBytes(pBuf.get(), nSize);
+            AddProperty( 0xffffffff, pBuf.get(), nSize );
         }
         pStrm->Seek(nCurrent);
     }
@@ -581,7 +575,7 @@ void PropRead::Read()
         mpSvStream->ReadUInt16( mnByteOrder ).ReadUInt16( mnFormat ).ReadUInt16( mnVersionLo ).ReadUInt16( mnVersionHi );
         if ( mnByteOrder == 0xfffe )
         {
-            sal_uInt8*  pSectCLSID = new sal_uInt8[ 16 ];
+            std::unique_ptr<sal_uInt8[]> pSectCLSID( new sal_uInt8[ 16 ] );
             mpSvStream->ReadBytes(mApplicationCLSID, 16);
             mpSvStream->ReadUInt32( nSections );
             if ( nSections > 2 )                // sj: PowerPoint documents are containing max 2 sections
@@ -590,16 +584,15 @@ void PropRead::Read()
             }
             else for ( sal_uInt32 i = 0; i < nSections; i++ )
             {
-                mpSvStream->ReadBytes(pSectCLSID, 16);
+                mpSvStream->ReadBytes(pSectCLSID.get(), 16);
                 mpSvStream->ReadUInt32( nSectionOfs );
                 nCurrent = mpSvStream->Tell();
                 mpSvStream->Seek( nSectionOfs );
-                Section aSection( pSectCLSID );
+                Section aSection( pSectCLSID.get() );
                 aSection.Read( mpSvStream.get() );
                 maSections.push_back( o3tl::make_unique<Section>( aSection ) );
                 mpSvStream->Seek( nCurrent );
             }
-            delete[] pSectCLSID;
         }
     }
 }

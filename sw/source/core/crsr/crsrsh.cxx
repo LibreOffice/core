@@ -2585,7 +2585,7 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
     SwNode *pNode = &rIdx.GetNode();
 
     // create a new PaM
-    SwPaM * pNew = new SwPaM( *GetCursor()->GetPoint() );
+    std::unique_ptr<SwPaM> pNew( new SwPaM( *GetCursor()->GetPoint() ) );
     if( pNode->GetStartNode() )
     {
         if( ( pNode = pNode->StartOfSectionNode())->IsTableNode() )
@@ -2612,9 +2612,9 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
         {
             SwCursorShell* pSh = static_cast<SwCursorShell*>(&rTmp);
             if( pSh->m_pCursorStack )
-                pSh->ParkPams( pNew, &pSh->m_pCursorStack );
+                pSh->ParkPams( pNew.get(), &pSh->m_pCursorStack );
 
-            pSh->ParkPams( pNew, &pSh->m_pCurrentCursor );
+            pSh->ParkPams( pNew.get(), &pSh->m_pCurrentCursor );
             if( pSh->m_pTableCursor )
             {
                 // set table cursor always to 0 and the current one always to
@@ -2629,7 +2629,6 @@ void SwCursorShell::ParkCursor( const SwNodeIndex &rIdx )
             }
         }
     }
-    delete pNew;
 }
 
 /** Copy constructor

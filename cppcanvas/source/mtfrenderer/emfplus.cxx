@@ -1383,8 +1383,8 @@ namespace cppcanvas
                         SAL_INFO("cppcanvas.emf", "EMF+\tglyphs: " << glyphsCount);
 
                         if( ( optionFlags & 1 ) && glyphsCount > 0 ) {
-                            float *charsPosX = new float[glyphsCount];
-                            float *charsPosY = new float[glyphsCount];
+                            std::unique_ptr<float[]> charsPosX( new float[glyphsCount] );
+                            std::unique_ptr<float[]> charsPosY( new float[glyphsCount] );
 
                             OUString text = read_uInt16s_ToOUString(rMF, glyphsCount);
 
@@ -1435,9 +1435,6 @@ namespace cppcanvas
 
                                 rFactoryParms.mrCurrActionIndex += pTextAction->getActionCount()-1;
                             }
-
-                            delete[] charsPosX;
-                            delete[] charsPosY;
                         } else {
                             SAL_INFO("cppcanvas.emf", "EMF+\tTODO: fonts (non-unicode glyphs chars)");
                         }

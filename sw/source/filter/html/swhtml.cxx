@@ -2633,7 +2633,7 @@ SwViewShell *SwHTMLParser::CheckActionViewShell()
 void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                              HTMLAttrs *pPostIts )
 {
-    SwPaM* pAttrPam = new SwPaM( *m_pPam->GetPoint() );
+    std::unique_ptr<SwPaM> pAttrPam( new SwPaM( *m_pPam->GetPoint() ) );
     const SwNodeIndex& rEndIdx = m_pPam->GetPoint()->nNode;
     const sal_Int32 nEndCnt = m_pPam->GetPoint()->nContent.GetIndex();
     HTMLAttr* pAttr;
@@ -2970,8 +2970,6 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         aFields.pop_front();
         delete pAttr;
     }
-
-    delete pAttrPam;
 }
 
 void SwHTMLParser::NewAttr( HTMLAttr **ppAttr, const SfxPoolItem& rItem )

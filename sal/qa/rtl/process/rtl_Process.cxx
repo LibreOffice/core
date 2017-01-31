@@ -119,11 +119,11 @@ public:
         //     "osl_joinProcess returned with failure",
         //     osl_Process_E_None == osl_error
         // );
-    oslProcessInfo* pInfo = new oslProcessInfo;
+    std::unique_ptr<oslProcessInfo> pInfo( new oslProcessInfo );
     //please pay attention to initial the Size to sizeof(oslProcessInfo), or else
     //you will get unknown error when call osl_getProcessInfo
     pInfo->Size = sizeof(oslProcessInfo);
-    osl_error = osl_getProcessInfo( hProcess, osl_Process_EXITCODE, pInfo );
+    osl_error = osl_getProcessInfo( hProcess, osl_Process_EXITCODE, pInfo.get() );
     CPPUNIT_ASSERT_EQUAL_MESSAGE
         (
             "osl_getProcessInfo returned with failure",
@@ -132,7 +132,6 @@ public:
 
     printf("the exit code is %" SAL_PRIuUINT32 ".\n", pInfo->Code );
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rtl_getAppCommandArg or rtl_getAppCommandArgCount error.", static_cast<oslProcessExitCode>(2), pInfo->Code);
-    delete pInfo;
     }
 
     CPPUNIT_TEST_SUITE(getAppCommandArg);
