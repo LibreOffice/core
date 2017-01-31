@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_86c14c83",
+        "filename": "sot/source/base/formats.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-01-31T13:14:03Z",
+      "side": 1,
+      "message": "tried with much less white space changes but it still wouldn\u0027t print nice in diff view. sorry.\nchange simply removes #defines, tailing backslashes and decreases indent.",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 52
+      },
+      "revId": "90e73f12aae75d877c5860268d97e981f895671f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_a6be50fd",
+        "filename": "sot/source/base/formats.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1207,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-01-31T13:14:03Z",
+      "side": 1,
+      "message": "couldn\u0027t debug when this is initialized, maybe we have to use a getter for initialization on demand as before?",
+      "range": {
+        "startLine": 1207,
+        "startChar": 0,
+        "endLine": 1207,
+        "endChar": 52
+      },
+      "revId": "90e73f12aae75d877c5860268d97e981f895671f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
