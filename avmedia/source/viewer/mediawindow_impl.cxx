@@ -465,9 +465,9 @@ void MediaWindowImpl::onURLChanged()
         const Point aPoint;
         const Size aSize(mpChildWindow->GetSizePixel());
 
-        aArgs[0] = uno::makeAny(mpChildWindow->GetParentWindowHandle());
-        aArgs[1] = uno::makeAny(awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height()));
-        aArgs[2] = uno::makeAny(reinterpret_cast<sal_IntPtr>(mpChildWindow.get()));
+        aArgs[0] = uno::Any(mpChildWindow->GetParentWindowHandle());
+        aArgs[1] = uno::Any(awt::Rectangle(aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height()));
+        aArgs[2] = uno::Any(reinterpret_cast<sal_IntPtr>(mpChildWindow.get()));
 
         try
         {

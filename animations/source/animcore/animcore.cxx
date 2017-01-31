@@ -73,7 +73,7 @@ using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XWeak;
 using ::com::sun::star::uno::Type;
-using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::lang::NoSupportException;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::WrappedTargetException;
@@ -388,7 +388,7 @@ Any SAL_CALL TimeContainerEnumeration::nextElement()
     if( maIter == maChildren.end() )
         throw NoSuchElementException();
 
-    return makeAny( (*maIter++) );
+    return Any( *maIter++ );
 }
 
 
@@ -1972,7 +1972,7 @@ void AnimationNode::fireChangeListener()
     {
         Reference< XInterface > xSource( static_cast<OWeakObject*>(this), UNO_QUERY );
         Sequence< ElementChange > aChanges;
-        const ChangesEvent aEvent( xSource, makeAny( mxParent.get() ), aChanges );
+        const ChangesEvent aEvent( xSource, Any( mxParent.get() ), aChanges );
         while( aIterator.hasMoreElements() )
         {
             Reference< XChangesListener > xListener( aIterator.next(), UNO_QUERY );

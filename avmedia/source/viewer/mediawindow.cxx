@@ -266,7 +266,7 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window*,
         // for video link should be the default
         xCtrlAcc->setValue(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0,
-                uno::makeAny(true) );
+                uno::Any(true) );
         // disabled for now: TODO: preview?
         xCtrlAcc->enableControl(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW,

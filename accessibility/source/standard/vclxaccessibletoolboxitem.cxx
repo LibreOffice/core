@@ -215,8 +215,8 @@ void VCLXAccessibleToolBoxItem::SetChild( const Reference< XAccessible >& _xChil
 
 void VCLXAccessibleToolBoxItem::NotifyChildEvent( const Reference< XAccessible >& _xChild, bool _bShow )
 {
-    Any aOld = _bShow ? Any() : makeAny( _xChild );
-    Any aNew = _bShow ? makeAny( _xChild ) : Any();
+    Any aOld = _bShow ? Any() : Any( _xChild );
+    Any aNew = _bShow ? Any( _xChild ) : Any();
     NotifyAccessibleEvent( AccessibleEventId::CHILD, aOld, aNew );
 }
 
@@ -696,12 +696,12 @@ sal_Bool VCLXAccessibleToolBoxItem::setCurrentValue( const Any& aNumber )
 
 Any VCLXAccessibleToolBoxItem::getMaximumValue(  )
 {
-    return makeAny((sal_Int32)1);
+    return Any((sal_Int32)1);
 }
 
 Any VCLXAccessibleToolBoxItem::getMinimumValue(  )
 {
-    return makeAny((sal_Int32)0);
+    return Any((sal_Int32)0);
 }
 
 

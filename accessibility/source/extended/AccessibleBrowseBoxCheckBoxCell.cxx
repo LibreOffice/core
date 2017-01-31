@@ -83,7 +83,7 @@ namespace accessibility
                 nValue = 2;
                 break;
         }
-        return makeAny(nValue);
+        return Any(nValue);
     }
 
     sal_Bool SAL_CALL AccessibleCheckBoxCell::setCurrentValue( const Any& )
