@@ -1871,8 +1871,8 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                         REMOVE_LISTENER_METHOD,        // remove method of a listener interface
                         INVALID_METHOD                // method whose class is not considered, e.g. XPropertySet
                     };
-                    MethodType* pMethodTypes = new MethodType[ nSourceMethodCount ];
-                    sal_Int32* pLocalMethodConcepts = new sal_Int32[ nSourceMethodCount ];
+                    std::unique_ptr<MethodType[]> pMethodTypes( new MethodType[ nSourceMethodCount ] );
+                    std::unique_ptr<sal_Int32[]> pLocalMethodConcepts( new sal_Int32[ nSourceMethodCount ] );
                     for( i = 0 ; i < nSourceMethodCount ; i++ )
                     {
                         pMethodTypes[ i ] = STANDARD_METHOD;
@@ -2354,9 +2354,6 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
                     // ignore them in the future
                     if( bFoundXInterface )
                         bXInterfaceIsInvalid = true;
-
-                    delete[] pMethodTypes;
-                    delete[] pLocalMethodConcepts;
                 }
 
                 // Do superclasses exist? Then continue here

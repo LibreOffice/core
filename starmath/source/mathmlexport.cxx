@@ -611,8 +611,8 @@ void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
 {
     TG nGroup = pNode->GetToken().nGroup;
 
-    SvXMLElementExport* pRow = new SvXMLElementExport(*this,
-        XML_NAMESPACE_MATH, XML_MROW, true, true);
+    std::unique_ptr<SvXMLElementExport> pRow( new SvXMLElementExport(*this,
+        XML_NAMESPACE_MATH, XML_MROW, true, true) );
 
     // Unfold the binary tree structure as long as the nodes are SmBinHorNode
     // with the same nGroup. This will reduce the number of nested <mrow>
@@ -638,8 +638,6 @@ void SmXMLExport::ExportBinaryHorizontal(const SmNode *pNode, int nLevel)
         s.push(binNode->Symbol());
         s.push(binNode->LeftOperand());
     }
-
-    delete pRow;
 }
 
 void SmXMLExport::ExportUnaryHorizontal(const SmNode *pNode, int nLevel)
@@ -707,8 +705,8 @@ void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
     {
         // widebslash
         // We can not use <mfrac> to a backslash, so just use <mo>\</mo>
-        SvXMLElementExport *pRow = new SvXMLElementExport(*this,
-            XML_NAMESPACE_MATH, XML_MROW, true, true);
+        std::unique_ptr<SvXMLElementExport> pRow( new SvXMLElementExport(*this,
+            XML_NAMESPACE_MATH, XML_MROW, true, true) );
 
         ExportNodes(pNode->GetSubNode(0), nLevel);
 
@@ -720,8 +718,6 @@ void SmXMLExport::ExportBinaryDiagonal(const SmNode *pNode, int nLevel)
         }
 
         ExportNodes(pNode->GetSubNode(1), nLevel);
-
-        delete pRow;
     }
 }
 
