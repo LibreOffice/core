@@ -22,7 +22,7 @@
 #include <cassert>
 
 #include "helpid.hrc"
-#include "baside2.hrc"
+#include <basidesh.hrc>
 
 #include "baside2.hxx"
 #include "brkdlg.hxx"

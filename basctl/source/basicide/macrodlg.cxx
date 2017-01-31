@@ -21,7 +21,7 @@
 #include <macrodlg.hxx>
 #include <macrodlg.hrc>
 #include <basidesh.hxx>
-#include <baside2.hrc>
+#include <basidesh.hrc>
 
 #include <iderdll.hxx>
 #include <iderdll2.hxx>

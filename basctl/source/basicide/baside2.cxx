@@ -25,7 +25,7 @@
 #include "docsignature.hxx"
 
 #include "helpid.hrc"
-#include "baside2.hrc"
+#include <basidesh.hrc>
 
 #include <basic/basmgr.hxx>
 #include <basic/basrdll.hxx>

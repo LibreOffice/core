@@ -25,6 +25,11 @@
           <value xml:lang="en-US">Dialog</value>
         </prop>
       </node>
+      <node oor:name="private:resource/popupmenu/tabbar" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Tab Bar</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/toolbar/standardbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
           <value>0,0</value>

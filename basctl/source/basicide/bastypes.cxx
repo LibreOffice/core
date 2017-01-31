@@ -470,60 +470,8 @@ void TabBar::Command( const CommandEvent& rCEvt )
             MouseEvent aMouseEvent( aP, 1, MouseEventModifiers::SIMPLECLICK, MOUSE_LEFT );
             ::TabBar::MouseButtonDown( aMouseEvent ); // base class
         }
-
-        ScopedVclPtrInstance<PopupMenu> aPopup( IDEResId( RID_POPUP_TABBAR ) );
-        if ( GetPageCount() == 0 )
-        {
-            aPopup->EnableItem(SID_BASICIDE_DELETECURRENT, false);
-            aPopup->EnableItem(SID_BASICIDE_RENAMECURRENT, false);
-            aPopup->EnableItem(SID_BASICIDE_HIDECURPAGE, false);
-        }
-
-        if ( StarBASIC::IsRunning() )
-        {
-            aPopup->EnableItem(SID_BASICIDE_DELETECURRENT, false);
-            aPopup->EnableItem(SID_BASICIDE_RENAMECURRENT, false);
-            aPopup->EnableItem(SID_BASICIDE_MODULEDLG, false);
-        }
-
-        if (Shell* pShell = GetShell())
-        {
-            ScriptDocument aDocument( pShell->GetCurDocument() );
-            OUString       aOULibName( pShell->GetCurLibName() );
-            Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
-            Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
-            if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
-                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
-            {
-                aPopup->EnableItem(aPopup->GetItemId( 0 ), false);
-                aPopup->EnableItem(SID_BASICIDE_DELETECURRENT, false);
-                aPopup->EnableItem(SID_BASICIDE_RENAMECURRENT, false);
-                aPopup->RemoveDisabledEntries();
-            }
-             if ( aDocument.isInVBAMode() )
-            {
-                // disable to delete or remove object modules in IDE
-                if (BasicManager* pBasMgr = aDocument.getBasicManager())
-                {
-                    if (StarBASIC* pBasic = pBasMgr->GetLib(aOULibName))
-                    {
-                        Shell::WindowTable& aWindowTable = pShell->GetWindowTable();
-                        Shell::WindowTableIt it = aWindowTable.find( GetCurPageId() );
-                        if (it != aWindowTable.end() && dynamic_cast<ModulWindow*>(it->second.get()))
-                        {
-                            SbModule* pActiveModule = pBasic->FindModule( it->second->GetName() );
-                            if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
-                            {
-                                aPopup->EnableItem(SID_BASICIDE_DELETECURRENT, false);
-                                aPopup->EnableItem(SID_BASICIDE_RENAMECURRENT, false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
         if (SfxDispatcher* pDispatcher = GetDispatcher())
-            pDispatcher->Execute(aPopup->Execute(this, aPos));
+            pDispatcher->ExecutePopup("tabbar", this, &aPos);
     }
 }
 

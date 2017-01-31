@@ -69,6 +69,31 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:NewModule" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">BASIC Module</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:NewDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">BASIC Dialog</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DeleteCurrent" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Delete</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:RenameCurrent" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Rename</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:HideCurPage" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Hide</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups"/>
   </node>

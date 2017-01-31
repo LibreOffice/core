@@ -17,11 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <baside2.hrc>
+#include <basidesh.hrc>
 #include <helpid.hrc>
 #include "dlgresid.hrc"
-#include <sfx2/sfxcommands.h>
-#include <svx/svxcommands.h>
 
 String RID_STR_FILTER_ALLFILES
 {
@@ -324,64 +322,6 @@ String RID_STR_SHAREDIALOGS
 String RID_STR_SHAREMACROSDIALOGS
 {
     Text [ en-US ] = "%PRODUCTNAME Macros & Dialogs" ;
-};
-
-Menu RID_POPUP_TABBAR
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = RID_INSERT ;
-            Text [ en-US ] = "Insert" ;
-            Submenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        Identifier = SID_BASICIDE_NEWMODULE ;
-                        HelpId = CMD_SID_BASICIDE_NEWMODULE ;
-                        Text [ en-US ] = "BASIC Module" ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = SID_BASICIDE_NEWDIALOG ;
-                        HelpId = CMD_SID_BASICIDE_NEWDIALOG ;
-                        Text [ en-US ] = "BASIC Dialog" ;
-                    };
-                };
-            };
-        };
-        MenuItem
-        {
-            Identifier = SID_BASICIDE_DELETECURRENT ;
-            HelpId = CMD_SID_BASICIDE_DELETECURRENT ;
-            Text [ en-US ] = "Delete" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_BASICIDE_RENAMECURRENT ;
-            HelpId = CMD_SID_BASICIDE_RENAMECURRENT ;
-            Text [ en-US ] = "Rename" ;
-        };
-        MenuItem
-        {
-            Identifier = SID_BASICIDE_HIDECURPAGE ;
-            HelpId = CMD_SID_BASICIDE_HIDECURPAGE ;
-            Text [ en-US ] = "Hide" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = SID_BASICIDE_MODULEDLG ;
-            HelpId = CMD_SID_BASICIDE_MODULEDLG ;
-            Text [ en-US ] = "Modules..." ;
-        };
-    };
 };
 
 Bitmap RID_BMP_BRKENABLED

@@ -11,6 +11,7 @@ $(eval $(call gb_UIConfig_UIConfig,modules/BasicIDE))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/BasicIDE,\
 	basctl/uiconfig/basicide/popupmenu/dialog \
+	basctl/uiconfig/basicide/popupmenu/tabbar \
 ))
 
 $(eval $(call gb_UIConfig_add_menubarfiles,modules/BasicIDE,\

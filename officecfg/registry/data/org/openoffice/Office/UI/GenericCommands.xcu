@@ -1498,6 +1498,9 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Select Module</value>
         </prop>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Modules...</value>
+        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
         </prop>

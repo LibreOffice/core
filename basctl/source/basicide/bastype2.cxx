@@ -20,7 +20,7 @@
 
 #include <bastypes.hxx>
 #include <bastype2.hxx>
-#include <baside2.hrc>
+#include <basidesh.hrc>
 #include <iderid.hxx>
 #include <o3tl/make_unique.hxx>
 #include <tools/urlobj.hxx>

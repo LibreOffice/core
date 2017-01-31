@@ -20,7 +20,7 @@
 
 #include <moduldlg.hxx>
 #include <basidesh.hxx>
-#include <baside2.hrc>
+#include <basidesh.hrc>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
 #include <o3tl/make_unique.hxx>

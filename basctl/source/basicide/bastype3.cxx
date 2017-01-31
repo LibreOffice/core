@@ -20,7 +20,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <bastype2.hxx>
-#include <baside2.hrc>
+#include <basidesh.hrc>
 #include <bastypes.hxx>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>

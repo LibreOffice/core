@@ -22,18 +22,12 @@
 #define CMD_SID_BROWSE_BACKWARD                     ".uno:BrowseBackward"
 #define CMD_SID_BROWSE_FORWARD                      ".uno:BrowseForward"
 #define CMD_SID_COPY                                ".uno:Copy"
-#define CMD_SID_BASICIDE_DELETECURRENT              ".uno:DeleteCurrent"
 #define CMD_SID_EDITDOC                             ".uno:EditDoc"
 #define CMD_SID_WIN_FULLSCREEN                      ".uno:FullScreen"
-#define CMD_SID_BASICIDE_HIDECURPAGE                ".uno:HideCurPage"
-#define CMD_SID_BASICIDE_MODULEDLG                  ".uno:ModuleDialog"
-#define CMD_SID_BASICIDE_NEWDIALOG                  ".uno:NewDialog"
-#define CMD_SID_BASICIDE_NEWMODULE                  ".uno:NewModule"
 #define CMD_SID_OPENDOC                             ".uno:Open"
 #define CMD_SID_GALLERY_BG_BRUSH                    ".uno:BackgroundImage"
 #define CMD_SID_PASTE                               ".uno:Paste"
 #define CMD_SID_RELOAD                              ".uno:Reload"
-#define CMD_SID_BASICIDE_RENAMECURRENT              ".uno:RenameCurrent"
 
 #endif
 

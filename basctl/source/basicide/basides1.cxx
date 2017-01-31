@@ -30,6 +30,7 @@
 
 #include <basic/basmgr.hxx>
 #include <basic/sbmeth.hxx>
+#include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <sfx2/childwin.hxx>
@@ -943,6 +944,42 @@ void Shell::GetState(SfxItemSet &rSet)
                 }
                 break;
             }
+            case SID_BASICIDE_HIDECURPAGE:
+            {
+                if (pTabBar->GetPageCount() == 0)
+                    rSet.DisableItem(nWh);
+            }
+            break;
+            case SID_BASICIDE_DELETECURRENT:
+            case SID_BASICIDE_RENAMECURRENT:
+            {
+                if (pTabBar->GetPageCount() == 0 || StarBASIC::IsRunning())
+                    rSet.DisableItem(nWh);
+                else if (m_aCurDocument.isInVBAMode())
+                {
+                    // disable to delete or rename object modules in IDE
+                    BasicManager* pBasMgr = m_aCurDocument.getBasicManager();
+                    StarBASIC* pBasic = pBasMgr ? pBasMgr->GetLib(m_aCurLibName) : nullptr;
+                    if (pBasic && dynamic_cast<ModulWindow*>(pCurWin.get()))
+                    {
+                        SbModule* pActiveModule = pBasic->FindModule( pCurWin->GetName() );
+                        if ( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
+                            rSet.DisableItem(nWh);
+                    }
+                }
+            }
+            SAL_FALLTHROUGH;
+
+            case SID_BASICIDE_NEWMODULE:
+            case SID_BASICIDE_NEWDIALOG:
+            {
+                Reference< script::XLibraryContainer2 > xModLibContainer( m_aCurDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+                Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aCurDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
+                if ( ( xModLibContainer.is() && xModLibContainer->hasByName( m_aCurLibName ) && xModLibContainer->isLibraryReadOnly( m_aCurLibName ) ) ||
+                     ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( m_aCurLibName ) && xDlgLibContainer->isLibraryReadOnly( m_aCurLibName ) ) )
+                    rSet.DisableItem(nWh);
+            }
+            break;
             default:
                 if (pLayout)
                     pLayout->GetState(rSet, nWh);
