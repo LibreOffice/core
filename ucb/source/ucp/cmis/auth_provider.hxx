@@ -9,7 +9,7 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_AUTH_PROVIDER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_CMIS_AUTH_PROVIDER_HXX
 
-#if defined __GNUC__
+#if defined __GNUC__ && __GNUC__ >= 7
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated"
 #ifndef __clang__
@@ -17,7 +17,7 @@
 #endif
 #endif
 #include <libcmis/libcmis.hxx>
-#if defined __GNUC__
+#if defined __GNUC__ && __GNUC__ >= 7
 #pragma GCC diagnostic pop
 #endif
 
