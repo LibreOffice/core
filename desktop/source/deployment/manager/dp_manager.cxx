@@ -297,8 +297,6 @@ osl::FileBase::RC createDirectory(OUString const & url) {
     return osl::Directory::create(url);
 }
 
-// this overcomes previous rumors that the sal API is misleading
-// as to whether a directory is truly read-only or not
 bool isMacroURLReadOnly( const OUString &rMacro )
 {
     OUString aDirURL( rMacro );
