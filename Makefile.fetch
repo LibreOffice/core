@@ -90,6 +90,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,ODFGEN,ODFGEN_TARBALL) \
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
 		$(call fetch_Optional,VISIO,VISIO_TARBALL) \
+		$(call fetch_Optional,ZLIB,ZLIB_TARBALL) \
 	,$(call fetch_Download_item_special,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional,AFMS,$(AFMS_TARBALL)) \
@@ -172,7 +173,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,WPG,$(WPG_TARBALL)) \
 		$(call fetch_Optional,WPS,$(WPS_TARBALL)) \
 		$(call fetch_Optional,XSLTML,$(XSLTML_TARBALL)) \
-		$(call fetch_Optional,ZLIB,$(ZLIB_TARBALL)) \
 	,$(call fetch_Download_item,http://dev-www.libreoffice.org/src,$(item)))
 	$(foreach item, \
 		$(call fetch_Optional,DBGHELP,$(DBGHELP_DLL)) \
