@@ -56,4 +56,10 @@ $(eval $(call gb_Module_add_check_targets,odk,\
 	CustomTarget_check \
 ))
 
+ifeq ($(OS),LINUX)
+$(eval $(call gb_Module_add_subsequentcheck_targets,odk, \
+    CustomTarget_build-examples \
+))
+endif
+
 # vim: set noet sw=4 ts=4:
