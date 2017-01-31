@@ -2888,25 +2888,14 @@ public:
 
     void operator() (ScQueryEntry::Item& rItem)
     {
-        if (rItem.meType != ScQueryEntry::ByString && rItem.meType != ScQueryEntry::ByDate)
+        // Double-check if the query by date is really appropriate.
+
+        if (rItem.meType != ScQueryEntry::ByDate)
             return;
 
         sal_uInt32 nIndex = 0;
         bool bNumber = mrDoc.GetFormatTable()->
             IsNumberFormat(rItem.maString.getString(), nIndex, rItem.mfVal);
-
-        // Advanced Filter creates only ByString queries that need to be
-        // converted to ByValue if appropriate. rItem.mfVal now holds the value
-        // if bNumber==true.
-
-        if (rItem.meType == ScQueryEntry::ByString)
-        {
-            if (bNumber)
-                rItem.meType = ScQueryEntry::ByValue;
-            return;
-        }
-
-        // Double-check if the query by date is really appropriate.
 
         if (bNumber && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
         {
@@ -3272,12 +3261,22 @@ bool ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     if (!bValid)
         bValid = CreateExcelQuery(nCol1, nRow1, nCol2, nRow2, rQueryParam);
 
+    SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     nCount = rQueryParam.GetEntryCount();
+
     if (bValid)
     {
         //  bQueryByString must be set
         for (i=0; i < nCount; i++)
-            rQueryParam.GetEntry(i).GetQueryItem().meType = ScQueryEntry::ByString;
+        {
+            ScQueryEntry::Item& rItem = rQueryParam.GetEntry(i).GetQueryItem();
+
+            sal_uInt32 nIndex = 0;
+            bool bNumber = pFormatter->IsNumberFormat(
+                rItem.maString.getString(), nIndex, rItem.mfVal);
+
+            rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+        }
     }
     else
     {
