@@ -31,6 +31,8 @@
     <string name="menu_sort_modified">Sort by Date</string>
     <string name="menu_preferences">Preferences</string>
     <string name="file_icon_desc">fileicon</string>
+    <string name="title_recents">Recent files</string>
+    <string name="title_browser">All files</string>
     <!-- Pref keys as resources ; Not currently used -->
     <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
     <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
