@@ -851,14 +851,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             if (nHeight > pPict->remainingSize() / (sizeof(sal_uInt8) * nRowBytes))
                 return 0xffffffff;
         }
-        else if (nRowBytes > 250)
-        {
-            if (nHeight > pPict->remainingSize() / sizeof(sal_uInt16))
-                return 0xffffffff;
-        }
         else
         {
-            if (nHeight > pPict->remainingSize() / sizeof(sal_uInt8))
+            size_t nByteCountSize = nRowBytes > 250 ? sizeof(sal_uInt16) : sizeof(sal_uInt8);
+            if (nHeight > pPict->remainingSize() / nByteCountSize)
                 return 0xffffffff;
         }
 
@@ -941,7 +937,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         else
         {
             size_t nByteCountSize = nRowBytes > 250 ? sizeof(sal_uInt16) : sizeof(sal_uInt8);
-            if (nHeight > pPict->remainingSize() / ((nByteCountSize + sizeof(sal_uInt8)) * nWidth))
+            if (nHeight > pPict->remainingSize() / nByteCountSize)
                 return 0xffffffff;
         }
 
@@ -1085,6 +1081,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
                 if ( ( pAcc = initBitmap(aBitmap, aPalette) ) == nullptr )
+                    return 0xffffffff;
+
+                size_t nByteCountSize = nRowBytes > 250 ? sizeof(sal_uInt16) : sizeof(sal_uInt8);
+                if (nHeight > pPict->remainingSize() / nByteCountSize)
                     return 0xffffffff;
 
                 std::unique_ptr<sal_uInt8[]> pScanline(new sal_uInt8[static_cast<size_t>(nWidth) * nCmpCount]);
