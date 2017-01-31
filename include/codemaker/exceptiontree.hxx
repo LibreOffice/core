@@ -24,6 +24,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 
+#include <memory>
 #include <vector>
 
 class TypeManager;
@@ -34,7 +35,7 @@ namespace codemaker {
    Represents a node of the hierarchy from the ExceptionTree class.
  */
 struct ExceptionTreeNode {
-    typedef std::vector< ExceptionTreeNode * > Children;
+    typedef std::vector< std::unique_ptr<ExceptionTreeNode> > Children;
 
     // Internally used by ExceptionTree:
     ExceptionTreeNode(rtl::OString const & theName):

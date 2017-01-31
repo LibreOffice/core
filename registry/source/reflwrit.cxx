@@ -892,7 +892,7 @@ void TypeWriter::createBlop()
 
     if (m_methodCount)
     {
-        sal_uInt16* pMethodEntrySize = new sal_uInt16[m_methodCount];
+        std::unique_ptr<sal_uInt16[]> pMethodEntrySize( new sal_uInt16[m_methodCount] );
         sal_uInt16  cpIndexName = 0;
         sal_uInt16  cpIndexReturn = 0;
         sal_uInt16  cpIndexDoku2 = 0;
@@ -1000,8 +1000,6 @@ void TypeWriter::createBlop()
                 cpIndexName = 0;
             }
         }
-
-        delete[] pMethodEntrySize;
     }
 
     // reference blop

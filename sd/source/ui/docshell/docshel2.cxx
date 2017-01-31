@@ -52,7 +52,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
       // THUMBNAIL: here we may can set the draft mode
     }
 
-    ClientView* pView = new ClientView(this, pOut);
+    std::unique_ptr<ClientView> pView( new ClientView(this, pOut) );
 
     pView->SetHlplVisible(false);
     pView->SetGridVisible(false);
@@ -116,9 +116,6 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, sal_uInt16 nAspect)
             pOut->SetMapMode(aOldMapMode);
         }
     }
-
-    delete pView;
-
 }
 
 Rectangle DrawDocShell::GetVisArea(sal_uInt16 nAspect) const

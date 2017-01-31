@@ -358,7 +358,7 @@ void ScChartPositioner::CreatePositionMap()
     GlueState();
 
     const bool bNoGlue = (eGlue == ScChartGlue::NONE);
-    ColumnMap* pCols = new ColumnMap;
+    std::unique_ptr<ColumnMap> pCols( new ColumnMap );
     SCROW nNoGlueRow = 0;
     for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {
@@ -464,7 +464,6 @@ void ScChartPositioner::CreatePositionMap()
     {   // Only delete tables, not the ScAddress*!
         delete it->second;
     }
-    delete pCols;
 }
 
 void ScChartPositioner::InvalidateGlue()

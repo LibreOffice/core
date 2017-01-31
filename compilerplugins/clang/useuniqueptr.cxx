@@ -32,7 +32,8 @@ public:
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
     }
 
-    bool VisitCXXDestructorDecl(const CXXDestructorDecl* );
+    bool VisitCXXDestructorDecl(const CXXDestructorDecl * );
+    bool VisitCompoundStmt(const CompoundStmt * );
 };
 
 bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDecl)
@@ -127,6 +128,50 @@ bool UseUniquePtr::VisitCXXDestructorDecl(const CXXDestructorDecl* destructorDec
         "member is here",
         pFieldDecl->getLocStart())
         << pFieldDecl->getSourceRange();
+    return true;
+}
+
+bool UseUniquePtr::VisitCompoundStmt(const CompoundStmt* compoundStmt)
+{
+    if (ignoreLocation(compoundStmt))
+        return true;
+    if (isInUnoIncludeFile(compoundStmt->getLocStart()))
+        return true;
+    if (compoundStmt->size() == 0) {
+        return true;
+    }
+
+    const CXXDeleteExpr* deleteExpr = dyn_cast<CXXDeleteExpr>(compoundStmt->body_back());
+    if (deleteExpr == nullptr) {
+        return true;
+    }
+
+    const ImplicitCastExpr* pCastExpr = dyn_cast<ImplicitCastExpr>(deleteExpr->getArgument());
+    if (!pCastExpr)
+        return true;
+    const DeclRefExpr* declRefExpr = dyn_cast<DeclRefExpr>(pCastExpr->getSubExpr());
+    if (!declRefExpr)
+        return true;
+    const VarDecl* varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl());
+    if (!varDecl)
+        return true;
+    if (!varDecl->hasInit() || !dyn_cast<CXXNewExpr>(varDecl->getInit()))
+        return true;
+    // determine if the var is declared inside the same block as the delete.
+    // @TODO there should surely be a better way to do this
+    if (varDecl->getLocStart() < compoundStmt->getLocStart())
+        return true;
+
+    report(
+        DiagnosticsEngine::Warning,
+        "deleting a local variable at the end of a block, is a sure sign it should be using std::unique_ptr for that var",
+        deleteExpr->getLocStart())
+        << deleteExpr->getSourceRange();
+    report(
+        DiagnosticsEngine::Note,
+        "var is here",
+        varDecl->getLocStart())
+        << varDecl->getSourceRange();
     return true;
 }
 

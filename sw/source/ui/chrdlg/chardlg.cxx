@@ -168,7 +168,7 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
     ::FillCharStyleListBox(*m_pVisitedLB, pView->GetDocShell());
     ::FillCharStyleListBox(*m_pNotVisitedLB, pView->GetDocShell());
 
-    TargetList* pList = new TargetList;
+    std::unique_ptr<TargetList> pList( new TargetList );
     const SfxFrame& rFrame = pView->GetViewFrame()->GetFrame();
     rFrame.GetTargetList(*pList);
     if ( !pList->empty() )
@@ -180,7 +180,6 @@ SwCharURLPage::SwCharURLPage(vcl::Window* pParent, const SfxItemSet& rCoreSet)
             m_pTargetFrameLB->InsertEntry( pList->at( i ) );
         }
     }
-    delete pList;
 }
 
 SwCharURLPage::~SwCharURLPage()

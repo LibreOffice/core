@@ -748,8 +748,8 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
             {
                 for( long nY = 0; nY < nHeight ; nY++ )
                 {
-                    const sal_uInt16    nPalCount = pReadAcc->GetPaletteEntryCount();
-                    sal_uInt8*          pIndexMap = new sal_uInt8[ nPalCount ];
+                    const sal_uInt16             nPalCount = pReadAcc->GetPaletteEntryCount();
+                    std::unique_ptr<sal_uInt8[]> pIndexMap( new sal_uInt8[ nPalCount ] );
 
                     for( sal_uInt16 i = 0; i < nPalCount; i++ )
                         pIndexMap[ i ] = pReadAcc->GetPaletteColor( i ).GetLuminance();
@@ -759,8 +759,6 @@ bool Bitmap::ImplSepia( const BmpFilterParam* pFilterParam )
                         aCol.SetIndex( pIndexMap[ pReadAcc->GetPixel( nY, nX ).GetIndex() ] );
                         pWriteAcc->SetPixel( nY, nX, aCol );
                     }
-
-                    delete[] pIndexMap;
                 }
             }
             else

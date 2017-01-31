@@ -1174,7 +1174,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                 {
                     OUString aCode = static_cast<const SfxStringItem*>(pItem)->GetValue();
                     sal_uInt16 aLen = aCode.getLength();
-                    OUString* sFormat = new OUString[4];
+                    std::unique_ptr<OUString[]> sFormat( new OUString[4] );
                     OUString sTmpStr = "";
                     sal_uInt16 nCount(0);
                     sal_uInt16 nStrCount(0);
@@ -1213,7 +1213,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                         nPrecision,
                         nLeadZeroes);
                     pTabViewShell->SetNumFmtByStr(aCode);
-                    delete[] sFormat;
                 }
             }
             break;

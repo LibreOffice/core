@@ -341,14 +341,13 @@ void SwDoubleLinePortion::PaintBracket( SwTextPaintInfo &rInf,
     aBlank.Width( nChWidth );
     aBlank.Height( pBracket->nHeight );
     {
-        SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
+        std::unique_ptr<SwFont> pTmpFnt( new SwFont( *rInf.GetFont() ) );
         SwFontScript nAct = bOpen ? pBracket->nPreScript : pBracket->nPostScript;
         if( SW_SCRIPTS > nAct )
             pTmpFnt->SetActual( nAct );
         pTmpFnt->SetProportion( 100 );
-        SwFontSave aSave( rInf, pTmpFnt );
+        SwFontSave aSave( rInf, pTmpFnt.get() );
         aBlank.Paint( rInf );
-        delete pTmpFnt;
     }
     if( bOpen )
         rInf.X( rInf.X() + PreWidth() );

@@ -923,15 +923,13 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
     if( GRAPHIC_FORMAT_50 == nId )
     {
         // read new style header
-        VersionCompat* pCompat = new VersionCompat( rIStm, StreamMode::READ );
+        std::unique_ptr<VersionCompat> pCompat( new VersionCompat( rIStm, StreamMode::READ ) );
 
         rIStm.ReadInt32( nType );
         sal_Int32 nLen;
         rIStm.ReadInt32( nLen );
         ReadPair( rIStm, aSize );
         ReadMapMode( rIStm, aMapMode );
-
-        delete pCompat;
     }
     else
     {
@@ -1060,7 +1058,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             rOStm.WriteUInt32( GRAPHIC_FORMAT_50 );
 
             // write new style header
-            VersionCompat* pCompat = new VersionCompat( rOStm, StreamMode::WRITE, 1 );
+            std::unique_ptr<VersionCompat> pCompat( new VersionCompat( rOStm, StreamMode::WRITE, 1 ) );
 
             rOStm.WriteInt32( (sal_Int32)meType );
 
@@ -1070,8 +1068,6 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
 
             WritePair( rOStm, aSize );
             WriteMapMode( rOStm, aMapMode );
-
-            delete pCompat;
         }
         else
         {

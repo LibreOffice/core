@@ -82,6 +82,7 @@
 #include "xfilter/xffloatframe.hxx"
 #include "lwpframelayout.hxx"
 #include "xfilter/xfparastyle.hxx"
+#include <memory>
 
 LwpSuperTableLayout::LwpSuperTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpPlacableLayout(objHdr, pStrm)
@@ -560,7 +561,7 @@ void LwpTableLayout::RegisterColumns()
     sal_uInt16 nCols = m_nCols;
 
     m_pColumns = new LwpColumnLayout *[nCols];
-    sal_Bool * pWidthCalculated = new sal_Bool[nCols];
+    std::unique_ptr<bool[]> pWidthCalculated( new bool[nCols] );
     for(sal_uInt16 i=0;i<nCols; i++)
     {
         pWidthCalculated[i] = false;
@@ -581,7 +582,6 @@ void LwpTableLayout::RegisterColumns()
         auto nColId = pColumnLayout->GetColumnID();
         if (nColId >= nCols)
         {
-            delete [] pWidthCalculated;
             throw std::range_error("corrupt LwpTableLayout");
         }
         m_pColumns[nColId] = pColumnLayout;
@@ -642,7 +642,6 @@ void LwpTableLayout::RegisterColumns()
             }
         }
     }
-    delete [] pWidthCalculated;
 }
 /**
  * @short    register all row styles

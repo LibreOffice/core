@@ -22,6 +22,7 @@
 #include <cstddef>
 #include <fstream>
 #include <iterator>
+#include <memory>
 #include <string>
 
 #include "po.hxx"
@@ -196,9 +197,9 @@ bool LngParser::Merge(
         OString sID( sGroup );
         std::size_t nLastLangPos = 0;
 
-        ResData  *pResData = new ResData( sID, sSource );
+        std::unique_ptr<ResData> pResData( new ResData( sID, sSource ) );
         pResData->sResTyp = "LngText";
-        MergeEntrys *pEntrys = aMergeDataFile.GetMergeEntrys( pResData );
+        MergeEntrys *pEntrys = aMergeDataFile.GetMergeEntrys( pResData.get() );
         // read languages
         bGroup = false;
 
@@ -305,8 +306,6 @@ bool LngParser::Merge(
                 }
             }
         }
-
-        delete pResData;
     }
 
     for ( size_t i = 0; i < pLines->size(); ++i )

@@ -1484,12 +1484,11 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                     sal::static_int_cast< unsigned long >(valueSize));
                 fprintf(stdout, "%s       Data = ", indent);
 
-                sal_Unicode* value = new sal_Unicode[size];
-                readString(pBuffer, value, size);
+                std::unique_ptr<sal_Unicode[]> value(new sal_Unicode[size]);
+                readString(pBuffer, value.get(), size);
 
-                OString uStr = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
+                OString uStr = OUStringToOString(value.get(), RTL_TEXTENCODING_UTF8);
                 fprintf(stdout, "L\"%s\"\n", uStr.getStr());
-                delete[] value;
             }
             break;
         case RegValueType::BINARY:

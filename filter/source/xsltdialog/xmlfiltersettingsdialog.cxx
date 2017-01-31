@@ -1040,7 +1040,7 @@ void XMLFilterSettingsDialog::initFilterList()
 
         Sequence< PropertyValue > aValues;
 
-        filter_info_impl* pTempFilter = new filter_info_impl;
+        std::unique_ptr<filter_info_impl> pTempFilter( new filter_info_impl );
         Sequence< OUString > aUserData;
 
         for( nFilter = 0; nFilter < nCount; nFilter++, pFilterName++ )
@@ -1187,11 +1187,11 @@ void XMLFilterSettingsDialog::initFilterList()
                 }
 
                 // add entry to internal container and to ui filter list box
-                maFilterVector.push_back( pTempFilter );
-                m_pFilterListBox->addFilterEntry( pTempFilter );
+                maFilterVector.push_back( pTempFilter.get() );
+                m_pFilterListBox->addFilterEntry( pTempFilter.release() );
 
 
-                pTempFilter = new filter_info_impl;
+                pTempFilter.reset( new filter_info_impl );
             }
             catch( const Exception& )
             {
@@ -1199,8 +1199,6 @@ void XMLFilterSettingsDialog::initFilterList()
             }
 
         }
-
-        delete pTempFilter;
     }
 
     SvTreeListEntry* pEntry = m_pFilterListBox->GetEntry( 0 );

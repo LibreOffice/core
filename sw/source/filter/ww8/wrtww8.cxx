@@ -3730,12 +3730,10 @@ void WW8Export::RestoreMacroCmds()
             pFib->m_lcbCmds = pStream->Tell();
             pStream->Seek(0);
 
-            sal_uInt8 *pBuffer = new sal_uInt8[pFib->m_lcbCmds];
-            bool bReadOk = checkRead(*pStream, pBuffer, pFib->m_lcbCmds);
+            std::unique_ptr<sal_uInt8[]> pBuffer( new sal_uInt8[pFib->m_lcbCmds] );
+            bool bReadOk = checkRead(*pStream, pBuffer.get(), pFib->m_lcbCmds);
             if (bReadOk)
-                pTableStrm->WriteBytes(pBuffer, pFib->m_lcbCmds);
-            delete[] pBuffer;
-
+                pTableStrm->WriteBytes(pBuffer.get(), pFib->m_lcbCmds);
         }
 
         delete pStream;

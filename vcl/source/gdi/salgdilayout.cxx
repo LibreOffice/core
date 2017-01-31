@@ -419,7 +419,7 @@ void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, 
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (pOutDev && pOutDev->IsRTLEnabled()) )
     {
         // TODO: optimize, reduce new/delete calls
-        SalPoint **pPtAry2 = new SalPoint*[nPoly];
+        std::unique_ptr<SalPoint*[]> pPtAry2( new SalPoint*[nPoly] );
         sal_uLong i;
         for(i=0; i<nPoly; i++)
         {
@@ -428,11 +428,10 @@ void SalGraphics::DrawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, 
             mirror( nPoints, pPtAry[i], pPtAry2[i], pOutDev );
         }
 
-        drawPolyPolygon( nPoly, pPoints, const_cast<PCONSTSALPOINT*>(pPtAry2) );
+        drawPolyPolygon( nPoly, pPoints, const_cast<PCONSTSALPOINT*>(pPtAry2.get()) );
 
         for(i=0; i<nPoly; i++)
             delete [] pPtAry2[i];
-        delete [] pPtAry2;
     }
     else
         drawPolyPolygon( nPoly, pPoints, pPtAry );
@@ -486,7 +485,7 @@ bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i
     if( (m_nLayout & SalLayoutFlags::BiDiRtl) || (i_pOutDev && i_pOutDev->IsRTLEnabled()) )
     {
         // TODO: optimize, reduce new/delete calls
-        SalPoint **pPtAry2 = new SalPoint*[i_nPoly];
+        std::unique_ptr<SalPoint*[]> pPtAry2( new SalPoint*[i_nPoly] );
         sal_uLong i;
         for(i=0; i<i_nPoly; i++)
         {
@@ -495,11 +494,10 @@ bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt32* i
             mirror( nPoints, i_pPtAry[i], pPtAry2[i], i_pOutDev );
         }
 
-        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, const_cast<PCONSTSALPOINT const *>(pPtAry2), i_pFlgAry );
+        bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, const_cast<PCONSTSALPOINT const *>(pPtAry2.get()), i_pFlgAry );
 
         for(i=0; i<i_nPoly; i++)
             delete [] pPtAry2[i];
-        delete [] pPtAry2;
     }
     else
         bRet = drawPolyPolygonBezier( i_nPoly, i_pPoints, i_pPtAry, i_pFlgAry );

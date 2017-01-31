@@ -539,20 +539,16 @@ bool ScRangeStringConverter::GetRangeListFromString(
     sal_Int32 nOffset = 0;
     while( nOffset >= 0 )
     {
-        ScRange* pRange = new ScRange;
+        std::unique_ptr<ScRange> pRange( new ScRange );
         if (
              GetRangeFromString( *pRange, rRangeListStr, pDocument, eConv, nOffset, cSeparator, cQuote ) &&
              (nOffset >= 0)
            )
         {
-            rRangeList.push_back( pRange );
-            pRange = nullptr;
+            rRangeList.push_back( pRange.release() );
         }
         else if (nOffset > -1)
             bRet = false;
-        //if ownership transferred to rRangeList pRange was NULLed, otherwwise
-        //delete it
-        delete pRange;
     }
     return bRet;
 }

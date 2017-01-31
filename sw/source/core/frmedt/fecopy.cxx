@@ -1321,14 +1321,14 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
     StartUndo();
 
     SvtPathOptions aPathOpt;
-    FmFormModel* pModel = new FmFormModel( aPathOpt.GetPalettePath(),
-                                            nullptr, GetDoc()->GetDocShell() );
+    std::unique_ptr<FmFormModel> pModel( new FmFormModel( aPathOpt.GetPalettePath(),
+                                            nullptr, GetDoc()->GetDocShell() ) );
     pModel->GetItemPool().FreezeIdRanges();
 
     rStrm.Seek(0);
 
     uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rStrm ) );
-    SvxDrawingLayerImport( pModel, xInputStream );
+    SvxDrawingLayerImport( pModel.get(), xInputStream );
 
     if ( !Imp()->HasDrawView() )
         Imp()->MakeDrawView();
@@ -1500,7 +1500,7 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
 
         // #i50824#
         // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
-        lcl_ConvertSdrOle2ObjsToSdrGrafObjs( pModel );
+        lcl_ConvertSdrOle2ObjsToSdrGrafObjs( pModel.get() );
         pView->Paste(*pModel, aPos, nullptr, SdrInsertFlags::NONE);
 
         const size_t nCnt = pView->GetMarkedObjectList().GetMarkCount();
@@ -1534,7 +1534,6 @@ void SwFEShell::Paste( SvStream& rStrm, SwPasteSdr nAction, const Point* pPt )
     }
     EndUndo();
     EndAllAction();
-    delete pModel;
 }
 
 bool SwFEShell::Paste(const Graphic &rGrf, const OUString& rURL)
