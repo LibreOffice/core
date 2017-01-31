@@ -9,7 +9,15 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_CMIS_AUTH_PROVIDER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_CMIS_AUTH_PROVIDER_HXX
 
+#if defined __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated"
+#pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
+#endif
 #include <libcmis/libcmis.hxx>
+#if defined __GNUC__
+#pragma GCC diagnostic pop
+#endif
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <cppuhelper/weakref.hxx>
