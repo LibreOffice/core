@@ -140,4 +140,14 @@ String STR_READONLY_SIGN
     Text[ en-US ] = "Sign Document";
 };
 
+String STR_SIGNATURE_BROKEN
+{
+    Text[ en-US ] = "Document has an invalid signature.";
+};
+
+String STR_SIGNATURE_SHOW
+{
+    Text[ en-US ] = "Show signatures";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

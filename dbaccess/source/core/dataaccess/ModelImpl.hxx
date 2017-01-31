@@ -467,7 +467,6 @@ public:
     virtual css::uno::Reference< css::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const override;
     virtual SignatureState getScriptingSignatureState() override;
     virtual bool hasTrustedScriptingSignature( bool bAllowUIToAddAuthor ) override;
-    virtual void showBrokenSignatureWarning( const css::uno::Reference< css::task::XInteractionHandler >& _rxInteraction ) const override;
 
     // IModifiableDocument
     virtual void storageIsModified() override;

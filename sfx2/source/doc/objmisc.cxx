@@ -964,7 +964,7 @@ void SfxObjectShell::CheckSecurityOnLoading_Impl()
         xInteraction = GetMedium()->GetInteractionHandler();
 
     // check if there is a broken signature...
-    CheckForBrokenDocSignatures_Impl( xInteraction );
+    CheckForBrokenDocSignatures_Impl();
 
     CheckEncryption_Impl( xInteraction );
 
@@ -1012,14 +1012,12 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
 }
 
 
-void SfxObjectShell::CheckForBrokenDocSignatures_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
+void SfxObjectShell::CheckForBrokenDocSignatures_Impl()
 {
     SignatureState nSignatureState = GetDocumentSignatureState();
     bool bSignatureBroken = ( nSignatureState == SignatureState::BROKEN );
     if ( !bSignatureBroken )
         return;
-
-    pImpl->showBrokenSignatureWarning( xHandler );
 
     // broken signatures imply no macro execution at all
     pImpl->aMacroMode.disallowMacroExecution();
@@ -1610,7 +1608,7 @@ bool SfxObjectShell::AdjustMacroMode()
     if ( pMedium )
         xInteraction = pMedium->GetInteractionHandler();
 
-    CheckForBrokenDocSignatures_Impl( xInteraction );
+    CheckForBrokenDocSignatures_Impl();
 
     CheckEncryption_Impl( xInteraction );
 
@@ -1850,15 +1848,6 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
     {}
 
     return bResult;
-}
-
-void SfxObjectShell_Impl::showBrokenSignatureWarning( const uno::Reference< task::XInteractionHandler >& _rxInteraction ) const
-{
-    if  ( !bSignatureErrorIsShown )
-    {
-        SfxObjectShell::UseInteractionToHandleError( _rxInteraction, ERRCODE_SFX_BROKENSIGNATURE );
-        const_cast< SfxObjectShell_Impl* >( this )->bSignatureErrorIsShown = true;
-    }
 }
 
 void SfxObjectShell::AddLog( const OUString& aMessage )

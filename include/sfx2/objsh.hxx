@@ -684,7 +684,7 @@ public:
     SAL_DLLPRIVATE void InitOwnModel_Impl();
     SAL_DLLPRIVATE void BreakMacroSign_Impl( bool bBreakMacroSing );
     SAL_DLLPRIVATE void CheckSecurityOnLoading_Impl();
-    SAL_DLLPRIVATE void CheckForBrokenDocSignatures_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
+    SAL_DLLPRIVATE void CheckForBrokenDocSignatures_Impl();
     SAL_DLLPRIVATE static SignatureState ImplCheckSignaturesInformation(
                 const css::uno::Sequence< css::security::DocumentSignatureInformation >& aInfos );
     SAL_DLLPRIVATE void CheckEncryption_Impl( const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
