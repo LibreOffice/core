@@ -121,6 +121,7 @@ SidebarController::SidebarController (
     mpResourceManager = o3tl::make_unique<ResourceManager>();
 
     registerSidebarForFrame(this, mxFrame->getController());
+    rxFrame->addFrameActionListener(this);
     // Listen for window events.
     mpParentWindow->AddEventListener(LINK(this, SidebarController, WindowEventHandler));
 
@@ -187,6 +188,7 @@ void SidebarController::unregisterSidebarForFrame(SidebarController* pController
 
 void SidebarController::disposeDecks()
 {
+    SolarMutexGuard aSolarMutexGuard;
     mpCurrentDeck.clear();
     maFocusManager.Clear();
     mpResourceManager->disposeDecks();
@@ -231,6 +233,7 @@ void SAL_CALL SidebarController::disposing()
     if (!xController.is())
         xController = mxCurrentController;
 
+    mxFrame->removeFrameActionListener(this);
     unregisterSidebarForFrame(this, xController);
 
     if (mxReadOnlyModeDispatch.is())
@@ -1307,6 +1310,16 @@ void SidebarController::updateModel(const css::uno::Reference<css::frame::XModel
     mpResourceManager->UpdateModel(xModel);
 }
 
+void SidebarController::frameAction(const css::frame::FrameActionEvent& rEvent)
+{
+    if (rEvent.Frame == mxFrame)
+    {
+        if (rEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING)
+            unregisterSidebarForFrame(this, mxFrame->getController());
+        else if (rEvent.Action == css::frame::FrameAction_COMPONENT_REATTACHED)
+            registerSidebarForFrame(this, mxFrame->getController());
+    }
+}
 
 } } // end of namespace sfx2::sidebar
 

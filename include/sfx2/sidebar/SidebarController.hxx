@@ -48,7 +48,8 @@ namespace
         css::ui::XContextChangeEventListener,
         css::beans::XPropertyChangeListener,
         css::ui::XSidebar,
-        css::frame::XStatusListener
+        css::frame::XStatusListener,
+        css::frame::XFrameActionListener
         > SidebarControllerInterfaceBase;
 }
 
@@ -104,6 +105,9 @@ public:
     // frame::XStatusListener
     virtual void SAL_CALL statusChanged (const css::frame::FeatureStateEvent& rEvent)
         throw(css::uno::RuntimeException, std::exception) override;
+
+    // frame::XFrameActionListener
+    virtual void SAL_CALL frameAction (const css::frame::FrameActionEvent& rEvent) override;
 
     // ui::XSidebar
     virtual void SAL_CALL requestLayout()
