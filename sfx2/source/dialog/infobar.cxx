@@ -254,6 +254,24 @@ void SfxInfoBarWindow::Resize()
     m_pMessage->SetPosSizePixel(aMessagePosition, aMessageSize);
 }
 
+basegfx::BColor SfxInfoBarWindow::getSuccessColor()
+{
+    // Green
+    return basegfx::BColor(0.0, 0.5, 0.0);
+}
+
+basegfx::BColor SfxInfoBarWindow::getWarningColor()
+{
+    // Orange
+    return basegfx::BColor(1.0, 0.5, 0.0);
+}
+
+basegfx::BColor SfxInfoBarWindow::getDangerColor()
+{
+    // Red
+    return basegfx::BColor(0.5, 0.0, 0.0);
+}
+
 IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, Button*, void)
 {
     static_cast<SfxInfoBarContainerWindow*>(GetParent())->removeInfoBar(this);
