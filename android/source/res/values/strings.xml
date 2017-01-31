@@ -20,6 +20,8 @@
     <string name="menu_search">Search</string>
     <string name="list_view">List</string>
     <string name="grid_view">Grid</string>
+    <string name="filter">Filter by</string>
+    <string name="sort">Sort by</string>
     <string name="sort_smallest">Smallest first</string>
     <string name="sort_largest">Largest first</string>
     <string name="sort_az">A-Z</string>

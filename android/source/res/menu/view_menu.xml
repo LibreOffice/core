@@ -2,14 +2,29 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/menu_sort"
+        android:title="@string/sort"
+        android:icon="@drawable/ic_sort_black_24dp"
+        app:showAsAction="ifRoom">
+
+        <menu>
+
+            <item android:id="@+id/menu_sort_size"
+                android:title="@string/menu_sort_size" />
+            <item android:id="@+id/menu_sort_az"
+                android:title="@string/menu_sort_az"/>
+            <item android:id="@+id/menu_sort_modified"
+                android:title="@string/menu_sort_modified"/>
+
+
+        </menu>
+
+    </item>
+
     <item android:id="@+id/menu_view_toggle"
           android:title="@string/grid_view"/>
-    <item android:id="@+id/menu_sort_size"
-          android:title="@string/menu_sort_size"/>
-    <item android:id="@+id/menu_sort_az"
-          android:title="@string/menu_sort_az"/>
-    <item android:id="@+id/menu_sort_modified"
-          android:title="@string/menu_sort_modified"/>
+
     <item android:id="@+id/menu_storage_preferences"
           android:title="@string/storage_provider_settings"/>
     <item android:id="@+id/action_about"
