@@ -92,6 +92,20 @@ gb_DEBUGLEVEL := 1
 endif
 endif
 
+ifeq ($(gb_DEBUGLEVEL),2)
+gb_DEBUGGING := TRUE
+endif
+
+ifeq ($(ENABLE_SYMBOLS),SMALL)
+gb_DEBUGGING := TRUE
+else ifeq ($(ENABLE_SYMBOLS),TRUE)
+gb_DEBUGGING := TRUE
+endif
+
+ifeq ($(ENABLE_CRASHDUMP),TRUE)
+gb_DEBUGGING := TRUE
+endif
+
 ifneq ($(strip $(ENABLE_PCH)),)
 gb_ENABLE_PCH := $(true)
 else

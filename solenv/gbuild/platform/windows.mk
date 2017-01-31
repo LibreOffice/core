@@ -195,15 +195,17 @@ gb_LinkTarget_LDFLAGS := \
 
 gb_DEBUG_CFLAGS := -Zi
 
+ifeq ($(gb_DEBUGGING),TRUE)
+gb_LinkTarget_LDFLAGS += -DEBUG
+endif
+
 # this does not use CFLAGS so it is not overridable
 ifneq ($(ENABLE_CRASHDUMP),)
-gb_LinkTarget_LDFLAGS += -DEBUG
 gb_CFLAGS+=-Zi
 gb_CXXFLAGS+=-Zi
 endif
 
 ifeq ($(gb_DEBUGLEVEL),2)
-gb_LinkTarget_LDFLAGS += -DEBUG
 gb_COMPILEROPTFLAGS :=
 else
 gb_COMPILEROPTFLAGS := -Ob1 -Oxs -Oy-

@@ -30,19 +30,6 @@
 # LDFLAGS
 
 # CFLAGS from environment override debug/optimization flags
-ifeq ($(gb_DEBUGLEVEL),2)
-gb_DEBUGGING := TRUE
-endif
-
-ifeq ($(ENABLE_SYMBOLS),SMALL)
-gb_DEBUGGING := TRUE
-else ifeq ($(ENABLE_SYMBOLS),TRUE)
-gb_DEBUGGING := TRUE
-endif
-
-ifeq ($(ENABLE_CRASHDUMP),TRUE)
-gb_DEBUGGING := TRUE
-endif
 
 ifeq ($(gb_DEBUGGING),TRUE)
 CFLAGS ?= $(gb_COMPILEROPTFLAGS) $(gb_DEBUG_CFLAGS)
