@@ -14,11 +14,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -43,10 +47,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.design.widget.NavigationView;
 
 import org.libreoffice.AboutDialogFragment;
 import org.libreoffice.LibreOfficeMainActivity;
@@ -66,10 +68,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class LibreOfficeUIActivity extends AppCompatActivity {
-    private String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
+    private static final String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private int filterMode = FileUtilities.ALL;
     private int viewMode;
@@ -85,11 +89,12 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
     private int currentlySelectedFile;
 
     private static final String CURRENT_DIRECTORY_KEY = "CURRENT_DIRECTORY";
-    private static final String DOC_PROIVDER_KEY = "CURRENT_DOCUMENT_PROVIDER";
+    private static final String DOC_PROVIDER_KEY = "CURRENT_DOCUMENT_PROVIDER";
     private static final String FILTER_MODE_KEY = "FILTER_MODE";
     public static final String EXPLORER_VIEW_TYPE_KEY = "EXPLORER_VIEW_TYPE";
     public static final String EXPLORER_PREFS_KEY = "EXPLORER_PREFS";
     public static final String SORT_MODE_KEY = "SORT_MODE";
+    private static final String RECENT_DOCUMENTS_KEY = "RECENT_DOCUMENTS";
 
     public static final int GRID_VIEW = 0;
     public static final int LIST_VIEW = 1;
@@ -97,7 +102,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private NavigationView navigationDrawer;
     private ActionBarDrawerToggle drawerToggle;
-    RecyclerView fileRecyclerView;
+    private RecyclerView fileRecyclerView;
+    private RecyclerView recentRecyclerView;
 
     private boolean canQuit = false;
 
@@ -151,7 +157,25 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
             });
         }
 
+        recentRecyclerView = (RecyclerView) findViewById(R.id.list_recent);
+
+        Set<String> recentFileStrings = prefs.getStringSet(RECENT_DOCUMENTS_KEY, new HashSet<String>());
+
+        final ArrayList<IFile> recentFiles = new ArrayList<IFile>();
+        for (String recentFileString : recentFileStrings) {
+            try {
+                recentFiles.add(documentProvider.createFromUri(new URI(recentFileString)));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
+        recentRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recentRecyclerView.setAdapter(new RecentFilesAdapter(this, recentFiles));
+
         fileRecyclerView = (RecyclerView) findViewById(R.id.file_recycler_view);
+        //This should be tested because it possibly disables view recycling
+        fileRecyclerView.setNestedScrollingEnabled(false);
         openDirectory(currentDirectory);
         registerForContextMenu(fileRecyclerView);
 
@@ -341,6 +365,18 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
         if (dir == null)
             return;
 
+        //show recent files if in home directory
+        if (dir.equals(homeDirectory)) {
+            recentRecyclerView.setVisibility(View.VISIBLE);
+            findViewById(R.id.header_browser).setVisibility((View.VISIBLE));
+            findViewById(R.id.header_recents).setVisibility((View.VISIBLE));
+
+        } else {
+            recentRecyclerView.setVisibility(View.GONE);
+            findViewById(R.id.header_browser).setVisibility((View.GONE));
+            findViewById(R.id.header_recents).setVisibility((View.GONE));
+        }
+
         new AsyncTask<IFile, Void, Void>() {
             @Override
             protected Void doInBackground(IFile... dir) {
@@ -374,6 +410,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
     }
 
     public void open(final IFile document) {
+        addDocumentToRecents(document);
         new AsyncTask<IFile, Void, File>() {
             @Override
             protected File doInBackground(IFile... document) {
@@ -638,7 +675,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
         outState.putString(CURRENT_DIRECTORY_KEY, currentDirectory.getUri().toString());
         outState.putInt(FILTER_MODE_KEY, filterMode);
         outState.putInt(EXPLORER_VIEW_TYPE_KEY , viewMode);
-        outState.putInt(DOC_PROIVDER_KEY, documentProvider.getId());
+        outState.putInt(DOC_PROVIDER_KEY, documentProvider.getId());
 
         Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
         //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
@@ -655,7 +692,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
         if (documentProvider == null) {
             Log.d(LOGTAG, "onRestoreInstanceState - documentProvider is null");
             documentProvider = DocumentProviderFactory.getInstance()
-                    .getProvider(savedInstanceState.getInt(DOC_PROIVDER_KEY));
+                    .getProvider(savedInstanceState.getInt(DOC_PROVIDER_KEY));
         }
         try {
             currentDirectory = documentProvider.createFromUri(new URI(
@@ -707,6 +744,87 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
         final float scale = getApplicationContext().getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
+
+    private void addDocumentToRecents(IFile iFile) {
+        String newRecent = iFile.getUri().toString();
+        Set<String> recentsSet = prefs.getStringSet(RECENT_DOCUMENTS_KEY, new HashSet<String>());
+
+        //create array to work with
+        ArrayList<String> recentsArrayList = new ArrayList<String>(recentsSet);
+
+        //remove string if present, so that it doesn't appear multiple times
+        recentsSet.remove(newRecent);
+
+        //put the new value in the first place
+        recentsArrayList.add(0, newRecent);
+
+
+        /*
+         * 4 because the number of recommended items in App Shortcuts is 4, and also
+         * because it's a good number of recent items in general
+         */
+        final int RECENTS_SIZE = 4;
+
+        while (recentsArrayList.size() > RECENTS_SIZE) {
+            recentsArrayList.remove(RECENTS_SIZE);
+        }
+
+        //switch to Set, so that it could be inserted into prefs
+        recentsSet = new HashSet<String>(recentsArrayList);
+
+        prefs.edit().putStringSet(RECENT_DOCUMENTS_KEY, recentsSet).apply();
+
+
+        //update app shortcuts (7.0 and above)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N_MR1) {
+            ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+
+            //Remove all shortcuts, and apply new ones.
+            shortcutManager.removeAllDynamicShortcuts();
+
+            ArrayList<ShortcutInfo> shortcuts = new ArrayList<ShortcutInfo>();
+            for (String pathString : recentsArrayList) {
+
+                //find the appropriate drawable
+                int drawable = 0;
+                switch (FileUtilities.getType(pathString)) {
+                    case FileUtilities.DOC:
+                        drawable = R.drawable.writer;
+                        break;
+                    case FileUtilities.CALC:
+                        drawable = R.drawable.calc;
+                        break;
+                    case FileUtilities.DRAWING:
+                        drawable = R.drawable.draw;
+                        break;
+                    case FileUtilities.IMPRESS:
+                        drawable = R.drawable.impress;
+                        break;
+                }
+
+                File file = new File(pathString);
+
+                //for some reason, getName uses %20 instead of space
+                String filename = file.getName().replace("%20", " ");
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(file));
+                String packageName = this.getApplicationContext().getPackageName();
+                ComponentName componentName = new ComponentName(packageName, LibreOfficeMainActivity.class.getName());
+                intent.setComponent(componentName);
+
+                ShortcutInfo shortcut = new ShortcutInfo.Builder(this, filename)
+                        .setShortLabel(filename)
+                        .setLongLabel(filename)
+                        .setIcon(Icon.createWithResource(this, drawable))
+                        .setIntent(intent)
+                        .build();
+
+                shortcuts.add(shortcut);
+            }
+            shortcutManager.setDynamicShortcuts(shortcuts);
+        }
+    }
+
 
     class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHolder> {
 

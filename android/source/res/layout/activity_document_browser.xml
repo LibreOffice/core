@@ -22,23 +22,67 @@
         android:layout_height="match_parent">
 
         <!-- The content -->
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/file_recycler_view"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background_normal"
-            android:orientation="vertical" />
+            android:layout_height="match_parent">
 
-        <!-- The navigation drawer -->
-        <android.support.design.widget.NavigationView
-            android:id="@+id/navigation_drawer"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@color/background_normal"
-            app:menu="@menu/navigation_menu"
-            android:theme="@style/LibreOfficeTheme.NavigationView" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:divider="@color/doorhanger_divider_light"
+                android:showDividers="middle">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:id="@+id/header_recents"
+                    android:text="@string/title_recents"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:padding="16dp"
+                    android:textStyle="bold"/>
+
+                <!--Recent files-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_recent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:id="@+id/header_browser"
+                    android:text="@string/title_browser"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:padding="16dp"
+                    android:textStyle="bold" />
+
+
+                <!--Document browser-->
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/file_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/background_normal"
+                    android:orientation="vertical" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- The navigation drawer -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/background_normal"
+        app:menu="@menu/navigation_menu"
+        android:theme="@style/LibreOfficeTheme.NavigationView" />
 
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>
