@@ -30,6 +30,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/bootstrap.hxx>
 #include <sal/log.hxx>
+#include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 #include <osl/file.hxx>
 #include <osl/security.hxx>
@@ -278,14 +279,32 @@ void PackageManagerImpl::initRegistryBackends()
                          m_xComponentContext ) );
 }
 
+namespace {
+
+osl::FileBase::RC createDirectory(OUString const & url) {
+    auto e = osl::Directory::create(url);
+    if (e != osl::FileBase::E_NOENT) {
+        return e;
+    }
+    INetURLObject o(url);
+    if (!o.removeSegment()) {
+        return osl::FileBase::E_INVAL; // anything but E_None/E_EXIST
+    }
+    e = createDirectory(o.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+    if (e != osl::FileBase::E_None && e != osl::FileBase::E_EXIST) {
+        return e;
+    }
+    return osl::Directory::create(url);
+}
+
 // this overcomes previous rumors that the sal API is misleading
 // as to whether a directory is truly read-only or not
-static bool isMacroURLReadOnly( const OUString &rMacro )
+bool isMacroURLReadOnly( const OUString &rMacro )
 {
     OUString aDirURL( rMacro );
     ::rtl::Bootstrap::expandMacros( aDirURL );
 
-    ::osl::FileBase::RC aErr = ::osl::Directory::create( aDirURL );
+    ::osl::FileBase::RC aErr = createDirectory( aDirURL );
     if ( aErr == ::osl::FileBase::E_None )
         return false; // it will be writeable
     if ( aErr != ::osl::FileBase::E_EXIST )
@@ -313,6 +332,7 @@ static bool isMacroURLReadOnly( const OUString &rMacro )
     return bError;
 }
 
+}
 
 Reference<deployment::XPackageManager> PackageManagerImpl::create(
     Reference<XComponentContext> const & xComponentContext,
