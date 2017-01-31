@@ -132,7 +132,8 @@ namespace rtl_OStringBuffer
 
         void ctor_005() {
             rtl::OStringBuffer b1;
-            (void)b1.makeStringAndClear();
+            auto dummy = b1.makeStringAndClear();
+            (void)dummy;
             rtl::OStringBuffer b2(b1);
             (void)b2;
         }
