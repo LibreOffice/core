@@ -5180,6 +5180,8 @@ SNAKEWIPE_TRANSITION        = 13; // 30
 IRISWIPE_TRANSITION         = 14; // 12
 BARNDOORWIPE_TRANSITION     = 15; // 4
 VEEWIPE_TRANSITION          = 16; // 8
+ZIGZAGWIPE_TRANSITION       = 17; // 10
+BARNZIGZAGWIPE_TRANSITION   = 18; // 11
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5197,7 +5199,9 @@ aTransitionTypeInMap = {
     'dissolve'          : DISSOLVE_TRANSITION,
     'snakeWipe'         : SNAKEWIPE_TRANSITION,
     'irisWipe'          : IRISWIPE_TRANSITION,
-    'veeWipe'           : VEEWIPE_TRANSITION
+    'veeWipe'           : VEEWIPE_TRANSITION,
+    'zigZagWipe'        : ZIGZAGWIPE_TRANSITION,
+    'barnZigZagWipe'    : BARNZIGZAGWIPE_TRANSITION
 };
 
 /*
@@ -5482,6 +5486,50 @@ aTransitionInfoTable[IRISWIPE_TRANSITION][DIAMOND_TRANS_SUBTYPE] =
     'reverseMethod': REVERSEMETHOD_SUBTRACT_AND_INVERT,
     'outInvertsSweep': true,
     'scaleIsotropically': false
+};
+
+aTransitionInfoTable[ZIGZAGWIPE_TRANSITION] = {};
+aTransitionInfoTable[ZIGZAGWIPE_TRANSITION][LEFTTORIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[ZIGZAGWIPE_TRANSITION][TOPTOBOTTOM_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[BARNZIGZAGWIPE_TRANSITION] = {};
+aTransitionInfoTable[BARNZIGZAGWIPE_TRANSITION][VERTICAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[BARNZIGZAGWIPE_TRANSITION][HORIZONTAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_IGNORE,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
 };
 
 aTransitionInfoTable[BARWIPE_TRANSITION] = {};
@@ -9440,6 +9488,10 @@ function createClipPolyPolygon( nType, nSubtype )
             return new RandomWipePath( 128, true /* bars */ );
         case CHECKERBOARDWIPE_TRANSITION:
             return new CheckerBoardWipePath( 10 );
+        case ZIGZAGWIPE_TRANSITION:
+            return new ZigZagWipePath( 5 );
+        case BARNZIGZAGWIPE_TRANSITION:
+            return new BarnZigZagWipePath( 5 );
         case IRISWIPE_TRANSITION:
             switch(nSubtype)
             {
@@ -9818,6 +9870,64 @@ IrisWipePath.prototype.perform = function( nT ) {
     var aPath = this.aBasePath.cloneNode(true);
     aPath.matrixTransform(aTransform);
     return aPath;
+}
+
+/**
+ * Class ZigZagWipePath
+ *
+ * @param nZigs
+ *
+ */
+function ZigZagWipePath(nZigs) {
+    this.zigEdge = 1.0/nZigs;
+    const d = this.zigEdge;
+    const d2 = (d / 2.0);
+    this.aBasePath = 'M ' + (-1.0 - d) + ' ' + -d + ' ';
+    this.aBasePath += 'L ' + (-1.0 - d) + ' ' + (1.0 + d) + ' ';
+    this.aBasePath += 'L ' + -d + ' ' + (1.0 + d) + ' ';
+
+    for(var pos = (nZigs + 2); pos--; ) {
+        this.aBasePath += 'L ' + 0.0 + ' ' + ((pos - 1) * d + d2) + ' ';
+        this.aBasePath += 'L ' + -d + ' ' + (pos - 1) * d + ' ';
+    }
+    this.aBasePath += 'L ' + (-1.0 - d) + ' ' + -d + ' ';
+}
+
+ZigZagWipePath.prototype.perform = function( nT ) {
+    var res = document.createElementNS( NSS['svg'], 'path');
+    res.setAttribute('d', this.aBasePath);
+    res.matrixTransform(SVGIdentityMatrix.translate((1.0 + this.zigEdge) * nT, 0.0));
+    return res;
+}
+
+/*
+ * Class BarnZigZagWipePath
+ *
+ * @param nZigs
+ *
+ */
+function BarnZigZagWipePath( nZigs ) { ZigZagWipePath.call(this, nZigs); }
+
+BarnZigZagWipePath.prototype = Object.create(ZigZagWipePath);
+
+BarnZigZagWipePath.prototype.perform = function( nT ) {
+    var res = createEmptyPath();
+    var poly = document.createElementNS( NSS['svg'], 'path');
+    var aTransform = SVGIdentityMatrix.translate(
+        ((1.0 + this.zigEdge) * (1.0 - nT)) / 2.0, 0.0);
+    poly.setAttribute('d', this.aBasePath);
+    poly.changeOrientation();
+    poly.matrixTransform(aTransform);
+    res.appendPath(poly);
+
+    aTransform = SVGIdentityMatrix.scale(-1.0, 1.0);
+    aTransform.translate(1.0, this.zigEdge / 2.0);
+    poly = document.createElementNS( NSS['svg'], 'path');
+    poly.setAttribute('d', this.aBasePath);
+    poly.matrixTransform(aTransform);
+    res.appendPath(poly);
+
+    return res;
 }
 
 /** Class CheckerBoardWipePath
