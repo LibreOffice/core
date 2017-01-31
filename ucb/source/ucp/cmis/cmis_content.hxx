@@ -27,7 +27,9 @@
 #if defined __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated"
+#ifndef __clang__
 #pragma GCC diagnostic ignored "-Wunused-but-set-parameter"
+#endif
 #endif
 #include <libcmis/libcmis.hxx>
 #if defined __GNUC__
