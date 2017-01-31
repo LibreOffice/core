@@ -446,10 +446,26 @@ bool lcl_isViewCallbackType(const int type)
 
 int lcl_getViewId(const std::string& payload)
 {
-    boost::property_tree::ptree aTree;
-    std::stringstream aStream(payload);
-    boost::property_tree::read_json(aStream, aTree);
-    return aTree.get<int>("viewId");
+    // this is a cheap way how to get the viewId from a JSON message; proper
+    // parsing is terribly expensive, and we just need the viewId here
+    size_t viewIdPos = payload.find("viewId");
+    if (viewIdPos == std::string::npos)
+        return 0;
+
+    size_t numberPos = payload.find(":", viewIdPos + 6);
+    if (numberPos == std::string::npos)
+        return 0;
+
+    for (++numberPos; numberPos < payload.length(); ++numberPos)
+    {
+        if (payload[numberPos] == ',' || payload[numberPos] == '}' || (payload[numberPos] >= '0' && payload[numberPos] <= '9'))
+            break;
+    }
+
+    if (numberPos < payload.length() && payload[numberPos] >= '0' && payload[numberPos] <= '9')
+        return std::stoi(payload.substr(numberPos));
+
+    return 0;
 }
 
 }  // end anonymous namespace
