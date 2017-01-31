@@ -5168,6 +5168,7 @@ CHECKERBOARDWIPE_TRANSITION = 11; // 39
 DISSOLVE_TRANSITION         = 12; // 40
 SNAKEWIPE_TRANSITION        = 13; // 30
 IRISWIPE_TRANSITION         = 14; // 12
+VEEWIPE_TRANSITION          = 17; // 8
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5183,7 +5184,8 @@ aTransitionTypeInMap = {
     'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION,
     'dissolve'          : DISSOLVE_TRANSITION,
     'snakeWipe'         : SNAKEWIPE_TRANSITION,
-    'irisWipe'          : IRISWIPE_TRANSITION
+    'irisWipe'          : IRISWIPE_TRANSITION,
+    'veeWipe'           : VEEWIPE_TRANSITION
 };
 
 /*
@@ -5236,6 +5238,9 @@ TOPCENTER_TRANS_SUBTYPE             = 40; // 7
 RIGHTCENTER_TRANS_SUBTYPE           = 41; // 8
 BOTTOMCENTER_TRANS_SUBTYPE          = 42; // 9
 LEFTCENTER_TRANS_SUBTYPE            = 43; // 10
+LEFT_TRANS_SUBTYPE                  = 44; // 20
+UP_TRANS_SUBTYPE                    = 45; // 21
+RIGHT_TRANS_SUBTYPE                 = 46; // 22
 
 aTransitionSubtypeInMap = {
     'default'           : DEFAULT_TRANS_SUBTYPE,
@@ -5281,7 +5286,10 @@ aTransitionSubtypeInMap = {
     'topCenter'         : TOPCENTER_TRANS_SUBTYPE,
     'rightCenter'       : RIGHTCENTER_TRANS_SUBTYPE,
     'bottomCenter'      : BOTTOMCENTER_TRANS_SUBTYPE,
-    'leftCenter'        : LEFTCENTER_TRANS_SUBTYPE
+    'leftCenter'        : LEFTCENTER_TRANS_SUBTYPE,
+    'left'              : LEFT_TRANS_SUBTYPE,
+    'up'                : UP_TRANS_SUBTYPE,
+    'right'             : RIGHT_TRANS_SUBTYPE
 };
 
 // Transition Modes
@@ -5605,6 +5613,48 @@ aTransitionInfoTable[CLOCKWIPE_TRANSITION][CLOCKWISENINE_TRANS_SUBTYPE] =
     'scaleX' : 1.0,
     'scaleY' : 1.0,
     'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[VEEWIPE_TRANSITION] = {};
+aTransitionInfoTable[VEEWIPE_TRANSITION][DOWN_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[VEEWIPE_TRANSITION][LEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[VEEWIPE_TRANSITION][UP_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[VEEWIPE_TRANSITION][RIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
     'outInvertsSweep' : true,
     'scaleIsotropically' : false
 };
@@ -9343,6 +9393,8 @@ function createClipPolyPolygon( nType, nSubtype )
             }
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
+        case VEEWIPE_TRANSITION:
+            return new VeeWipePath();
         case SNAKEWIPE_TRANSITION:
             return new SnakeWipePath( 8 * 8, // diagonal
                                              nSubtype == TOPLEFTDIAGONAL_TRANS_SUBTYPE     ||
@@ -10003,6 +10055,24 @@ RandomWipePath.prototype.perform = function( nT )
     return this.aClipPath.cloneNode( true );
 };
 
+/** Class VeeWipePath
+  *
+  */
+function VeeWipePath() { }
+
+VeeWipePath.prototype.perform = function( nT ) {
+    const d = pruneScaleValue(2.0 * nT);
+    var polyPath = 'M ' + 0.0 + ' ' + -1.0 + ' ';
+    polyPath += 'L ' + 0.0 + ' ' + (d - 1.0) + ' ';
+    polyPath += 'L ' + 0.5 + ' ' + d + ' ';
+    polyPath += 'L ' + 1.0 + ' ' + (d - 1.0) + ' ';
+    polyPath += 'L ' + 1.0 + ' ' + -1.0 + ' ';
+    polyPath += 'L ' + 0.0 + ' ' + -1.0 + ' ';
+
+    var aPolyPolyPath = document.createElementNS( NSS['svg'], 'path');
+    aPolyPolyPath.setAttribute('d', polyPath);
+    return aPolyPolyPath;
+}
 
 
 /** Class AnimatedSlide
