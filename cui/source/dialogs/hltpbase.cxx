@@ -320,9 +320,9 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, void)
             aItem.SetMacroTable( *pMacroTbl );
 
         // create empty itemset for macro-dlg
-        SfxItemSet* pItemSet = new SfxItemSet(SfxGetpApp()->GetPool(),
+        std::unique_ptr<SfxItemSet> pItemSet( new SfxItemSet(SfxGetpApp()->GetPool(),
                                               SID_ATTR_MACROITEM,
-                                              SID_ATTR_MACROITEM );
+                                              SID_ATTR_MACROITEM ) );
         pItemSet->Put ( aItem );
 
         /*  disable HyperLinkDlg for input while the MacroAssignDlg is working
@@ -362,7 +362,6 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl, Button*, void)
                 pHyperlinkItem->SetMacroTable( static_cast<const SvxMacroItem*>(pItem)->GetMacroTable() );
             }
         }
-        delete pItemSet;
     }
 }
 

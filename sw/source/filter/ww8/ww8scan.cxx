@@ -5923,8 +5923,8 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
     bool bVer8 = 8 == m_nVersion;
 
     size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
-    sal_uInt8 *pDataPtr = new sal_uInt8[ nUnencryptedHdr ];
-    sal_uInt8 *pData = pDataPtr;
+    std::unique_ptr<sal_uInt8[]> pDataPtr( new sal_uInt8[ nUnencryptedHdr ] );
+    sal_uInt8 *pData = pDataPtr.get();
     memset( pData, 0, nUnencryptedHdr );
 
     const sal_uInt64 nPos = rStrm.Tell();
@@ -5999,8 +5999,7 @@ void WW8Fib::WriteHeader(SvStream& rStrm)
     // Marke: "rglw"  Beginning of the array of longs
     Set_UInt32( pData, m_cbMac );
 
-    rStrm.WriteBytes(pDataPtr, nUnencryptedHdr);
-    delete[] pDataPtr;
+    rStrm.WriteBytes(pDataPtr.get(), nUnencryptedHdr);
 }
 
 void WW8Fib::Write(SvStream& rStrm)
@@ -6011,8 +6010,8 @@ void WW8Fib::Write(SvStream& rStrm)
 
     size_t nUnencryptedHdr = bVer8 ? 0x44 : 0x24;
 
-    sal_uInt8 *pDataPtr = new sal_uInt8[ m_fcMin - nUnencryptedHdr ];
-    sal_uInt8 *pData = pDataPtr;
+    std::unique_ptr<sal_uInt8[]> pDataPtr( new sal_uInt8[ m_fcMin - nUnencryptedHdr ] );
+    sal_uInt8 *pData = pDataPtr.get();
     memset( pData, 0, m_fcMin - nUnencryptedHdr );
 
     const sal_uInt64 nPos = rStrm.Tell();
@@ -6243,8 +6242,7 @@ void WW8Fib::Write(SvStream& rStrm)
         Set_UInt32( pData, 0);
     }
 
-    rStrm.WriteBytes(pDataPtr, m_fcMin - nUnencryptedHdr);
-    delete[] pDataPtr;
+    rStrm.WriteBytes(pDataPtr.get(), m_fcMin - nUnencryptedHdr);
 }
 
 rtl_TextEncoding WW8Fib::GetFIBCharset(sal_uInt16 chs, sal_uInt16 nLidLocale)
@@ -6815,8 +6813,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     sal_Int32 nFFn = rFib.m_lcbSttbfffn - 2;
 
     // allocate Font Array
-    sal_uInt8* pA = new sal_uInt8[nFFn];
-    memset(pA, 0, nFFn);
+    std::unique_ptr<sal_uInt8[]> pA( new sal_uInt8[nFFn] );
+    memset(pA.get(), 0, nFFn);
 
     ww::WordVersion eVersion = rFib.GetFIBVersion();
 
@@ -6832,9 +6830,9 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     rSt.SeekRel( 2 );
 
     // read all font information
-    nFFn = rSt.ReadBytes(pA, nFFn);
-    sal_uInt8 * const pEnd = pA + nFFn;
-    const sal_uInt16 nCalcMax = calcMaxFonts(pA, nFFn);
+    nFFn = rSt.ReadBytes(pA.get(), nFFn);
+    sal_uInt8 * const pEnd = pA.get() + nFFn;
+    const sal_uInt16 nCalcMax = calcMaxFonts(pA.get(), nFFn);
 
     if (eVersion < ww::eWW8)
         nMax = nCalcMax;
@@ -6853,7 +6851,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
         if( eVersion <= ww::eWW2 )
         {
-            sal_uInt8 const * pVer2 = pA;
+            sal_uInt8 const * pVer2 = pA.get();
             sal_uInt16 i = 0;
             for(; i<nMax; ++i, ++p)
             {
@@ -6894,7 +6892,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
         }
         else if( eVersion < ww::eWW8 )
         {
-            sal_uInt8 const * pVer6 = pA;
+            sal_uInt8 const * pVer6 = pA.get();
             sal_uInt16 i = 0;
             for(; i<nMax; ++i, ++p)
             {
@@ -6976,7 +6974,7 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
             const sal_uInt8 cbMinFFNPayload = 41;
             sal_uInt16 nValidFonts = 0;
             sal_Int32 nRemainingFFn = nFFn;
-            sal_uInt8* pRaw = pA;
+            sal_uInt8* pRaw = pA.get();
             for (sal_uInt16 i=0; i < nMax && nRemainingFFn; ++i, ++p)
             {
                 //pRaw[0] is cbFfnM1, the alleged total length of FFN - 1
@@ -7047,7 +7045,6 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
             nMax = std::min(nMax, nValidFonts);
         }
     }
-    delete[] pA;
 }
 
 const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
@@ -7158,8 +7155,8 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
     fDontUseHTMLAutoSpacing = true; //default
     fAcetateShowAtn = true; //default
     const sal_uInt32 nMaxDopSize = 0x268;
-    sal_uInt8* pDataPtr = new sal_uInt8[ nMaxDopSize ];
-    sal_uInt8* pData = pDataPtr;
+    std::unique_ptr<sal_uInt8[]> pDataPtr( new sal_uInt8[ nMaxDopSize ] );
+    sal_uInt8* pData = pDataPtr.get();
 
     sal_uInt32 nRead = nMaxDopSize < nSize ? nMaxDopSize : nSize;
     if (nSize < 2 || !checkSeek(rSt, nPos) || nRead != rSt.ReadBytes(pData, nRead))
@@ -7367,7 +7364,6 @@ WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize)
             }
         }
     }
-    delete[] pDataPtr;
 }
 
 WW8Dop::WW8Dop()

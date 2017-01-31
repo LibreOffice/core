@@ -1511,7 +1511,7 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
     sal_Int32 iDefault = aIn.readInt16();
     (void)iDefault;
 
-    sal_Int32* pPositions = new sal_Int32[nLocaleCount + 1];
+    std::unique_ptr<sal_Int32[]> pPositions( new sal_Int32[nLocaleCount + 1] );
     for( sal_Int32 i = 0; i < nLocaleCount + 1; i++ )
         pPositions[i] = aIn.readInt32();
 
@@ -1542,8 +1542,6 @@ void StringResourcePersistenceImpl::importBinary( const Sequence< ::sal_Int8 >& 
 
     if( pUseAsDefaultItem != nullptr )
         setDefaultLocale( pUseAsDefaultItem->m_locale );
-
-    delete[] pPositions;
 }
 
 
@@ -2106,7 +2104,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
         sal_Int32 nTabSize = nMaxIndex - nMinIndex + 1;
 
         // Create sorted array of pointers to the id strings
-        const OUString** pIdPtrs = new const OUString*[nTabSize];
+        std::unique_ptr<const OUString*[]> pIdPtrs( new const OUString*[nTabSize] );
         for(sal_Int32 i = 0 ; i < nTabSize ; i++ )
             pIdPtrs[i] = nullptr;
         for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
@@ -2132,8 +2130,6 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
                 }
             }
         }
-
-        delete[] pIdPtrs;
     }
 
     bSuccess = true;

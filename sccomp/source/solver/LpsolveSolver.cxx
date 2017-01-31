@@ -218,7 +218,7 @@ void SAL_CALL LpsolveSolver::solve()
             table::CellAddress aLeftAddr = maConstraints[nConstrPos].Left;
 
             const std::vector<double>& rLeftCoeff = aCellsHash[aLeftAddr];
-            REAL* pValues = new REAL[nVariables+1];
+            std::unique_ptr<REAL[]> pValues(new REAL[nVariables+1] );
             pValues[0] = 0.0;                               // ignored?
             for (nVar=0; nVar<nVariables; nVar++)
                 pValues[nVar+1] = rLeftCoeff[nVar+1];
@@ -247,9 +247,7 @@ void SAL_CALL LpsolveSolver::solve()
                 default:
                     OSL_FAIL( "unexpected enum type" );
             }
-            add_constraint( lp, pValues, nConstrType, fRightValue );
-
-            delete[] pValues;
+            add_constraint( lp, pValues.get(), nConstrType, fRightValue );
         }
     }
 
