@@ -29,27 +29,26 @@
 #include "smmod.hxx"
 
 #include <cassert>
+#include <unordered_set>
 
-
-// '\0' terminated Array with symbol, which should be treat as letters in
-// StarMath Font, (to get a normal (non-clipped) SmRect in contrast to the
-// other operators and symbols).
-static sal_Unicode const aMathAlpha[] =
-{
-    MS_ALEPH,               MS_IM,                  MS_RE,
-    MS_WP,                  sal_Unicode(0xE070),    MS_EMPTYSET,
-    sal_Unicode(0x2113),    sal_Unicode(0xE0D6),    sal_Unicode(0x2107),
-    sal_Unicode(0x2127),    sal_Unicode(0x210A),    MS_HBAR,
-    MS_LAMBDABAR,           MS_SETN,                MS_SETZ,
-    MS_SETQ,                MS_SETR,                MS_SETC,
-    sal_Unicode(0x2373),    sal_Unicode(0xE0A5),    sal_Unicode(0x2112),
-    sal_Unicode(0x2130),    sal_Unicode(0x2131),
-    sal_Unicode('\0')
-};
 
 bool SmIsMathAlpha(const OUString &rText)
     // true iff symbol (from StarMath Font) should be treated as letter
 {
+    // Set of symbols, which should be treated as letters in StarMath Font
+    // (to get a normal (non-clipped) SmRect in contrast to the other operators
+    // and symbols).
+    static std::unordered_set<sal_Unicode> const aMathAlpha({
+        MS_ALEPH,               MS_IM,                  MS_RE,
+        MS_WP,                  sal_Unicode(0xE070),    MS_EMPTYSET,
+        sal_Unicode(0x2113),    sal_Unicode(0xE0D6),    sal_Unicode(0x2107),
+        sal_Unicode(0x2127),    sal_Unicode(0x210A),    MS_HBAR,
+        MS_LAMBDABAR,           MS_SETN,                MS_SETZ,
+        MS_SETQ,                MS_SETR,                MS_SETC,
+        sal_Unicode(0x2373),    sal_Unicode(0xE0A5),    sal_Unicode(0x2112),
+        sal_Unicode(0x2130),    sal_Unicode(0x2131)
+    });
+
     if (rText.isEmpty())
         return false;
 
@@ -59,14 +58,8 @@ bool SmIsMathAlpha(const OUString &rText)
     // is it a greek symbol?
     if (sal_Unicode(0xE0AC) <= cChar  &&  cChar <= sal_Unicode(0xE0D4))
         return true;
-    else
-    {
-        // appears it in 'aMathAlpha'?
-        const sal_Unicode *pChar = aMathAlpha;
-        while (*pChar  &&  *pChar != cChar)
-            pChar++;
-        return *pChar != '\0';
-    }
+    // or, does it appear in 'aMathAlpha'?
+    return aMathAlpha.find(cChar) != aMathAlpha.end();
 }
 
 
