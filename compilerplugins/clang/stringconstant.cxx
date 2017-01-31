@@ -66,6 +66,10 @@ bool hasOverloads(FunctionDecl const * decl, unsigned arguments) {
         if (f != nullptr && f->getMinRequiredArguments() <= arguments
             && f->getNumParams() >= arguments)
         {
+            auto consDecl = dyn_cast<CXXConstructorDecl>(f);
+            if (consDecl && consDecl->isCopyConstructor()) {
+                break;
+            }
             ++n;
             if (n == 2) {
                 return true;
@@ -1058,9 +1062,14 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         return true;
     }
 
-    std::string file(compiler.getSourceManager().getFilename(
+    StringRef file(compiler.getSourceManager().getFilename(
                         compiler.getSourceManager().getSpellingLoc(expr->getLocStart())));
     if (file == SRCDIR "/sal/qa/rtl/oustringbuffer/test_oustringbuffer_tostring.cxx")
+    {
+        return true;
+    }
+    // there is some template magic here I don't know how to work around
+    if (file.startswith(SRCDIR "/connectivity"))
     {
         return true;
     }

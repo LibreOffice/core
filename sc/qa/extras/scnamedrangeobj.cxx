@@ -58,7 +58,7 @@ uno::Reference< lang::XComponent > ScNamedRangeObj::mxComponent;
 
 ScNamedRangeObj::ScNamedRangeObj():
         CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-        apitest::XNamed(OUString("NamedRange")),
+        apitest::XNamed("NamedRange"),
         apitest::XCellRangeReferrer(table::CellRangeAddress(0,1,7,1,7))
 {
 }

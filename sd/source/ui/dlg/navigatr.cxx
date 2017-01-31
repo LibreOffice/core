@@ -499,7 +499,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
         if (aFileName != maDropFileName)
         {
             SfxMedium aMed(aFileName, (StreamMode::READ | StreamMode::SHARE_DENYNONE));
-            SfxFilterMatcher aMatch( OUString("simpress") );
+            SfxFilterMatcher aMatch( "simpress" );
             aMed.UseInteractionHandler( true );
             nErr = aMatch.GuessFilter(aMed, pFilter);
         }

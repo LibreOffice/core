@@ -18,6 +18,7 @@ extern void foo(OUString const &); // expected-error {{extern prototype in main 
 
 struct Foo {
     Foo(OUString const &, int) {}
+    Foo(OUString const &) {}
 };
 
 int main() {
@@ -57,6 +58,8 @@ int main() {
     foo(OUString("xxx")); // expected-error {{in call of 'foo', replace 'OUString' constructed from a string literal directly with the string literal [loplugin:stringconstant}}
     Foo aFoo(OUString("xxx"), 1); // expected-error {{in call of 'Foo::Foo', replace 'OUString' constructed from a string literal directly with the string literal}}
     (void)aFoo;
+    Foo aFoo2(OUString("xxx")); // expected-error {{in call of 'Foo::Foo', replace 'OUString' constructed from a string literal directly with the string literal}}
+    (void)aFoo2;
 }
 
 

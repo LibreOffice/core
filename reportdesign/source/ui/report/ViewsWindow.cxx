@@ -1014,7 +1014,7 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _
 
         if ( &rView != &_rSection )
         {
-            SdrObject *pNewObj = new SdrUnoObj(OUString("com.sun.star.form.component.FixedText"));
+            SdrObject *pNewObj = new SdrUnoObj("com.sun.star.form.component.FixedText");
             pNewObj->SetLogicRect(_aRect);
 
             pNewObj->Move(Size(0, aNewPos.Y()));

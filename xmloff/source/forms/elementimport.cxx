@@ -1488,7 +1488,7 @@ namespace xmloff
         PropertyValueArray::iterator aDefaultControlPropertyPos = ::std::find_if(
             m_aValues.begin(),
             m_aValues.end(),
-            EqualName( OUString( "DefaultControl"  ) )
+            EqualName( "DefaultControl" )
         );
         if ( aDefaultControlPropertyPos != m_aValues.end() )
         {
