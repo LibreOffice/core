@@ -948,21 +948,21 @@ Document::retrieveCharacterAttributes(
     //character font name
     aAttribs[i].Name = "CharFontName";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( aFont.GetFamilyName() );
+    aAttribs[i].Value = css::uno::Any( aFont.GetFamilyName() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character height
     aAttribs[i].Name = "CharHeight";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( (sal_Int16)aFont.GetFontHeight() );
+    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetFontHeight() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character posture
     aAttribs[i].Name = "CharPosture";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( (sal_Int16)aFont.GetItalic() );
+    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetItalic() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
@@ -970,7 +970,7 @@ Document::retrieveCharacterAttributes(
     /*
     aAttribs[i].Name = "CharRelief";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( (sal_Int16)aFont.GetRelief() );
+    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetRelief() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
     */
@@ -978,28 +978,28 @@ Document::retrieveCharacterAttributes(
     //character strikeout
     aAttribs[i].Name = "CharStrikeout";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( (sal_Int16)aFont.GetStrikeout() );
+    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetStrikeout() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character underline
     aAttribs[i].Name = "CharUnderline";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( (sal_Int16)aFont.GetUnderline() );
+    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetUnderline() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character weight
     aAttribs[i].Name = "CharWeight";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( (float)aFont.GetWeight() );
+    aAttribs[i].Value = css::uno::Any( (float)aFont.GetWeight() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character alignment
     aAttribs[i].Name = "ParaAdjust";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::makeAny( (sal_Int16)m_rEngine.GetTextAlign() );
+    aAttribs[i].Value = css::uno::Any( (sal_Int16)m_rEngine.GetTextAlign() );
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
@@ -1601,7 +1601,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                         css::accessibility::AccessibleEventId::
                         STATE_CHANGED,
                         css::uno::Any(),
-                        css::uno::makeAny(
+                        css::uno::Any(
                             css::accessibility::AccessibleStateType::
                             FOCUSED));
                 }
@@ -1614,7 +1614,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                         css::accessibility::AccessibleEventId::
                         STATE_CHANGED,
                         css::uno::Any(),
-                        css::uno::makeAny(
+                        css::uno::Any(
                             css::accessibility::AccessibleStateType::
                             FOCUSED));
             */
@@ -1636,7 +1636,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                     xParagraph->notifyEvent(
                         css::accessibility::AccessibleEventId::
                         STATE_CHANGED,
-                        css::uno::makeAny(
+                        css::uno::Any(
                             css::accessibility::AccessibleStateType::
                             FOCUSED),
                         css::uno::Any());
@@ -1651,7 +1651,7 @@ IMPL_LINK(Document, WindowEventHandler, ::VclWindowEvent&, rEvent, void)
                     xParagraph->notifyEvent(
                         css::accessibility::AccessibleEventId::
                         STATE_CHANGED,
-                        css::uno::makeAny(
+                        css::uno::Any(
                             css::accessibility::AccessibleStateType::
                             FOCUSED),
                         css::uno::Any());
@@ -1765,7 +1765,7 @@ void Document::notifyVisibleRangeChanges(
             NotifyAccessibleEvent(
                 css::accessibility::AccessibleEventId::
                 CHILD,
-                css::uno::makeAny(getAccessibleChild(aIt)),
+                css::uno::Any(getAccessibleChild(aIt)),
                 css::uno::Any());
     }
     for (Paragraphs::iterator aIt(m_aVisibleBegin); aIt != m_aVisibleEnd;
@@ -1777,7 +1777,7 @@ void Document::notifyVisibleRangeChanges(
                 css::accessibility::AccessibleEventId::
                 CHILD,
                 css::uno::Any(),
-                css::uno::makeAny(getAccessibleChild(aIt)));
+                css::uno::Any(getAccessibleChild(aIt)));
     }
 }
 
@@ -1868,7 +1868,7 @@ void Document::handleParagraphNotifications()
                         NotifyAccessibleEvent(
                             css::accessibility::AccessibleEventId::
                             CHILD,
-                            css::uno::makeAny(getAccessibleChild(aIt)),
+                            css::uno::Any(getAccessibleChild(aIt)),
                             css::uno::Any());
                     }
                     disposeParagraphs();
@@ -1956,7 +1956,7 @@ void Document::handleParagraphNotifications()
                         NotifyAccessibleEvent(
                             css::accessibility::AccessibleEventId::
                             CHILD,
-                            css::uno::makeAny(xStrong),
+                            css::uno::Any(xStrong),
                             css::uno::Any());
 
                     css::uno::Reference< css::lang::XComponent > xComponent(
@@ -2159,7 +2159,7 @@ void Document::handleSelectionChangeNotification()
             xParagraph->notifyEvent(
                 css::accessibility::AccessibleEventId::
                 STATE_CHANGED,
-                css::uno::makeAny(
+                css::uno::Any(
                     css::accessibility::AccessibleStateType::FOCUSED),
                 css::uno::Any());
     }
@@ -2182,7 +2182,7 @@ void Document::handleSelectionChangeNotification()
                     css::accessibility::AccessibleEventId::
                     STATE_CHANGED,
                     css::uno::Any(),
-                    css::uno::makeAny(
+                    css::uno::Any(
                         css::accessibility::AccessibleStateType::FOCUSED));
             if (nNewLastPara != m_nSelectionLastPara
                 || nNewLastPos != m_nSelectionLastPos)
@@ -2192,7 +2192,7 @@ void Document::handleSelectionChangeNotification()
                     css::uno::makeAny< ::sal_Int32 >(
                         nNewLastPara == m_nSelectionLastPara
                         ? m_nSelectionLastPos : 0),
-                    css::uno::makeAny(nNewLastPos));
+                    css::uno::Any(nNewLastPos));
         }
     }
     m_aFocused = aIt;
@@ -2388,7 +2388,7 @@ void Document::disposeParagraphs()
 // static
 css::uno::Any Document::mapFontColor(::Color const & rColor)
 {
-    return css::uno::makeAny(
+    return css::uno::Any(
         static_cast< ::sal_Int32 >(COLORDATA_RGB(rColor.GetColor())));
         // FIXME  keep transparency?
 }
@@ -2418,7 +2418,7 @@ css::uno::Any Document::mapFontWeight(::FontWeight nWeight)
             css::awt::FontWeight::BOLD, // WEIGHT_BOLD
             css::awt::FontWeight::ULTRABOLD, // WEIGHT_ULTRABOLD
             css::awt::FontWeight::BLACK }; // WEIGHT_BLACK
-    return css::uno::makeAny(aWeight[nWeight]);
+    return css::uno::Any(aWeight[nWeight]);
 }
 
 // static

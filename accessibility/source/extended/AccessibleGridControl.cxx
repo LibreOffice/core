@@ -330,7 +330,7 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
                 sal_Int32 nColumnCount = m_aTable.GetColumnCount();
                 xChild = m_xImpl->m_xTable->getAccessibleChild(nCurrentRow * nColumnCount + nCurrentCol);
             }
-            m_xImpl->m_xTable->commitEvent(_nEventId, makeAny(xChild),_rOldValue);
+            m_xImpl->m_xTable->commitEvent(_nEventId, Any(xChild),_rOldValue);
         }
         else if(_nEventId == AccessibleEventId::TABLE_MODEL_CHANGED)
         {

@@ -316,7 +316,7 @@ void VCLXAccessibleToolBox::implReleaseToolboxItem( ToolBoxItemsMap::iterator& _
 
     if ( _bNotifyRemoval )
     {
-        NotifyAccessibleEvent( AccessibleEventId::CHILD, makeAny( xItemAcc ), Any() );
+        NotifyAccessibleEvent( AccessibleEventId::CHILD, Any( xItemAcc ), Any() );
     }
 
     OToolBoxWindowItem* pWindowItem = nullptr;
@@ -378,7 +378,7 @@ void VCLXAccessibleToolBox::UpdateItem_Impl( sal_Int32 _nPos)
 
         // TODO: we should make this dependent on the existence of event listeners
         // with the current implementation, we always create accessible object
-        Any aNewChild = makeAny( getAccessibleChild( (sal_Int32)_nPos ) );
+        Any aNewChild = Any( getAccessibleChild( (sal_Int32)_nPos ) );
         NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), aNewChild );
     }
 }
@@ -633,7 +633,7 @@ void VCLXAccessibleToolBox::ProcessWindowChildEvent( const VclWindowEvent& rVclW
         {
             Reference< XAccessible > xReturn = GetItemWindowAccessible(rVclWindowEvent);
             if ( xReturn.is() )
-                NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), makeAny(xReturn) );
+                NotifyAccessibleEvent( AccessibleEventId::CHILD, Any(), Any(xReturn) );
             else
                 HandleSubToolBarEvent( rVclWindowEvent );
         }

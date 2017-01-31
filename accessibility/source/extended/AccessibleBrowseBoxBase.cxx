@@ -315,7 +315,7 @@ void AccessibleBrowseBoxBase::setAccessibleName( const OUString& rName )
 
     commitEvent(
         AccessibleEventId::NAME_CHANGED,
-        uno::makeAny( maName ),
+        uno::Any( maName ),
         aOld );
 }
 
@@ -330,7 +330,7 @@ void AccessibleBrowseBoxBase::setAccessibleDescription( const OUString& rDescrip
 
     commitEvent(
         AccessibleEventId::DESCRIPTION_CHANGED,
-        uno::makeAny( maDescription ),
+        uno::Any( maDescription ),
         aOld );
 }
 
