@@ -69,6 +69,11 @@ class SfxInfoBarWindow : public vcl::Window
          */
         void addButton(PushButton* pButton);
 
+        // Colors
+        static basegfx::BColor getSuccessColor();
+        static basegfx::BColor getDangerColor();
+        static basegfx::BColor getWarningColor();
+
     private:
         DECL_LINK( CloseHandler, Button*, void );
 };

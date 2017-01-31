@@ -1181,7 +1181,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 SignatureState nSignatureState = GetObjectShell()->GetDocumentSignatureState();
                 if (nSignatureState == SignatureState::BROKEN) {
-                    basegfx::BColor aBackgroundColor = basegfx::BColor(0.5, 0.0, 0.0);
+                    basegfx::BColor aBackgroundColor = SfxInfoBarWindow::getWarningColor();
                     auto pInfoBar = AppendInfoBar("signature", SfxResId(STR_SIGNATURE_BROKEN), &aBackgroundColor);
                     VclPtrInstance<PushButton> xBtn(&GetWindow());
                     xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
