@@ -9,8 +9,6 @@
 
 #include <sfx2/lokhelper.hxx>
 
-#include <boost/property_tree/json_parser.hpp>
-
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -112,14 +110,10 @@ bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
 
 void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell* pOtherView, int nType, const OString& rKey, const OString& rPayload)
 {
-    boost::property_tree::ptree aTree;
-    aTree.put("viewId", SfxLokHelper::getView(pThisView));
-    aTree.put(rKey.getStr(), rPayload.getStr());
-    aTree.put("part", pThisView->getPart());
-    aTree.put(rKey.getStr(), rPayload.getStr());
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-    OString aPayload = aStream.str().c_str();
+    OString aPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pThisView)) +
+        "\", \"part\": \"" + OString::number(pThisView->getPart()) +
+        "\", \"" + rKey + "\": \"" + rPayload + "\" }";
+
     pOtherView->libreOfficeKitViewCallback(nType, aPayload.getStr());
 }
 
