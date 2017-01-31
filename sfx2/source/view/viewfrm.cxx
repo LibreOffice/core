@@ -1181,6 +1181,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 SignatureState nSignatureState = GetObjectShell()->GetDocumentSignatureState();
                 basegfx::BColor aBackgroundColor;
+                basegfx::BColor aForegroundColor(1.0, 1.0, 1.0);
                 OUString sMessage("");
 
                 switch (nSignatureState)
@@ -1203,7 +1204,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 if (!sMessage.isEmpty())
                 {
-                    auto pInfoBar = AppendInfoBar("signature", sMessage, &aBackgroundColor);
+                    auto pInfoBar = AppendInfoBar("signature", sMessage, &aBackgroundColor, &aForegroundColor);
                     VclPtrInstance<PushButton> xBtn(&GetWindow());
                     xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
                     xBtn->SetSizePixel(xBtn->GetOptimalSize());
