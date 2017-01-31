@@ -145,6 +145,16 @@ String STR_SIGNATURE_BROKEN
     Text[ en-US ] = "Document has an invalid signature.";
 };
 
+String STR_SIGNATURE_NOTVALIDATED
+{
+    Text[ en-US ] = "Signature is ok, but the certificate could not be validated.";
+};
+
+String STR_SIGNATURE_PARTIAL_OK
+{
+    Text[ en-US ] = "Signature is ok, but the document is only partially signed.";
+};
+
 String STR_SIGNATURE_SHOW
 {
     Text[ en-US ] = "Show signatures";

@@ -1180,9 +1180,30 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_EDITDOC );
 
                 SignatureState nSignatureState = GetObjectShell()->GetDocumentSignatureState();
-                if (nSignatureState == SignatureState::BROKEN) {
-                    basegfx::BColor aBackgroundColor = SfxInfoBarWindow::getWarningColor();
-                    auto pInfoBar = AppendInfoBar("signature", SfxResId(STR_SIGNATURE_BROKEN), &aBackgroundColor);
+                basegfx::BColor aBackgroundColor;
+                OUString sMessage("");
+
+                switch (nSignatureState)
+                {
+                case SignatureState::BROKEN:
+                    sMessage = SfxResId(STR_SIGNATURE_BROKEN);
+                    aBackgroundColor = SfxInfoBarWindow::getDangerColor();
+                    break;
+                case SignatureState::NOTVALIDATED:
+                    sMessage = SfxResId(STR_SIGNATURE_NOTVALIDATED);
+                    aBackgroundColor = SfxInfoBarWindow::getWarningColor();
+                    break;
+                case SignatureState::PARTIAL_OK:
+                    sMessage = SfxResId(STR_SIGNATURE_PARTIAL_OK);
+                    aBackgroundColor = SfxInfoBarWindow::getWarningColor();
+                    break;
+                default:
+                    break;
+                }
+
+                if (!sMessage.isEmpty())
+                {
+                    auto pInfoBar = AppendInfoBar("signature", sMessage, &aBackgroundColor);
                     VclPtrInstance<PushButton> xBtn(&GetWindow());
                     xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
                     xBtn->SetSizePixel(xBtn->GetOptimalSize());
