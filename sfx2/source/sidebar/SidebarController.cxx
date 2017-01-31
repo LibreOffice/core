@@ -126,6 +126,7 @@ rtl::Reference<SidebarController> SidebarController::create(
         new SidebarController(pParentWindow, rxFrame));
 
     registerSidebarForFrame(instance.get(), rxFrame->getController());
+    rxFrame->addFrameActionListener(instance.get());
     // Listen for window events.
     instance->mpParentWindow->AddEventListener(LINK(instance.get(), SidebarController, WindowEventHandler));
 
@@ -236,6 +237,7 @@ void SAL_CALL SidebarController::disposing()
     if (!xController.is())
         xController = mxCurrentController;
 
+    mxFrame->removeFrameActionListener(this);
     unregisterSidebarForFrame(this, xController);
 
     if (mxReadOnlyModeDispatch.is())
@@ -1316,6 +1318,16 @@ void SidebarController::FadeIn()
         mpSplitWindow->FadeIn();
 }
 
+void SidebarController::frameAction(const css::frame::FrameActionEvent& rEvent)
+{
+    if (rEvent.Frame == mxFrame)
+    {
+        if (rEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING)
+            unregisterSidebarForFrame(this, mxFrame->getController());
+        else if (rEvent.Action == css::frame::FrameAction_COMPONENT_REATTACHED)
+            registerSidebarForFrame(this, mxFrame->getController());
+    }
+}
 
 } } // end of namespace sfx2::sidebar
 
