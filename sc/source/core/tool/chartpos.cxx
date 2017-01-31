@@ -45,7 +45,7 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP) :
         pDocument( pDoc ),
         pPositionMap( nullptr ),
-        eGlue( SC_CHARTGLUE_NA ),
+        eGlue( ScChartGlue::NA ),
         nStartCol(0),
         nStartRow(0),
         bColHeaders( false ),
@@ -60,7 +60,7 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rR
         aRangeListRef( rRangeList ),
         pDocument( pDoc ),
         pPositionMap( nullptr ),
-        eGlue( SC_CHARTGLUE_NA ),
+        eGlue( ScChartGlue::NA ),
         nStartCol(0),
         nStartRow(0),
         bColHeaders( false ),
@@ -97,7 +97,7 @@ void ScChartPositioner::SetRangeList( const ScRange& rRange )
 
 void ScChartPositioner::GlueState()
 {
-    if ( eGlue != SC_CHARTGLUE_NA )
+    if ( eGlue != ScChartGlue::NA )
         return;
     bDummyUpperLeft = false;
     ScRange* pR;
@@ -107,9 +107,9 @@ void ScChartPositioner::GlueState()
         {
             pR = aRangeListRef->front();
             if ( pR->aStart.Tab() == pR->aEnd.Tab() )
-                eGlue = SC_CHARTGLUE_NONE;
+                eGlue = ScChartGlue::NONE;
             else
-                eGlue = SC_CHARTGLUE_COLS;  // several tables column by column
+                eGlue = ScChartGlue::Cols;  // several tables column by column
             nStartCol = pR->aStart.Col();
             nStartRow = pR->aStart.Row();
         }
@@ -148,13 +148,13 @@ void ScChartPositioner::GlueState()
     SCCOL nC = nEndCol - nStartCol + 1;
     if ( nC == 1 )
     {
-        eGlue = SC_CHARTGLUE_ROWS;
+        eGlue = ScChartGlue::Rows;
         return;
     }
     SCROW nR = nEndRow - nStartRow + 1;
     if ( nR == 1 )
     {
-        eGlue = SC_CHARTGLUE_COLS;
+        eGlue = ScChartGlue::Cols;
         return;
     }
     sal_uLong nCR = (sal_uLong)nC * nR;
@@ -249,17 +249,17 @@ void ScChartPositioner::GlueState()
     if ( bGlue )
     {
         if ( bGlueCols && bGlueRows )
-            eGlue = SC_CHARTGLUE_BOTH;
+            eGlue = ScChartGlue::Both;
         else if ( bGlueRows )
-            eGlue = SC_CHARTGLUE_ROWS;
+            eGlue = ScChartGlue::Rows;
         else
-            eGlue = SC_CHARTGLUE_COLS;
+            eGlue = ScChartGlue::Cols;
         if ( pA[0] != CellState::Occupied )
             bDummyUpperLeft = true;
     }
     else
     {
-        eGlue = SC_CHARTGLUE_NONE;
+        eGlue = ScChartGlue::NONE;
     }
 }
 
@@ -293,7 +293,7 @@ void ScChartPositioner::CheckColRowHeaders()
     }
     else
     {
-        bool bVert = (eGlue == SC_CHARTGLUE_NONE || eGlue == SC_CHARTGLUE_ROWS);
+        bool bVert = (eGlue == ScChartGlue::NONE || eGlue == ScChartGlue::Rows);
         for ( size_t i = 0, nRanges = aRangeListRef->size();
               (i < nRanges) && (bColStrings || bRowStrings);
               ++i
@@ -335,7 +335,7 @@ const ScChartPositionMap* ScChartPositioner::GetPositionMap()
 
 void ScChartPositioner::CreatePositionMap()
 {
-    if ( eGlue == SC_CHARTGLUE_NA && pPositionMap )
+    if ( eGlue == ScChartGlue::NA && pPositionMap )
     {
         pPositionMap.reset();
     }
@@ -357,7 +357,7 @@ void ScChartPositioner::CreatePositionMap()
 
     GlueState();
 
-    const bool bNoGlue = (eGlue == SC_CHARTGLUE_NONE);
+    const bool bNoGlue = (eGlue == ScChartGlue::NONE);
     ColumnMap* pCols = new ColumnMap;
     SCROW nNoGlueRow = 0;
     for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
@@ -469,7 +469,7 @@ void ScChartPositioner::CreatePositionMap()
 
 void ScChartPositioner::InvalidateGlue()
 {
-    eGlue = SC_CHARTGLUE_NA;
+    eGlue = ScChartGlue::NA;
     pPositionMap.reset();
 }
 
