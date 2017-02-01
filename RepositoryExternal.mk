@@ -1474,6 +1474,8 @@ $(call gb_LinkTarget_add_libs,$(1),$(HARFBUZZ_LIBS))
 
 endef
 
+gb_ExternalProject__use_harfbuzz :=
+
 else # SYSTEM_HARFBUZZ != TRUE
 
 define gb_LinkTarget__use_harfbuzz
@@ -1483,6 +1485,11 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 $(call gb_LinkTarget_add_libs,$(1),$(HARFBUZZ_LIBS))
 $(call gb_LinkTarget_use_external_project,$(1),harfbuzz)
+
+endef
+
+define gb_ExternalProject__use_harfbuzz
+$(call gb_ExternalProject_use_external_project,$(1),harfbuzz)
 
 endef
 

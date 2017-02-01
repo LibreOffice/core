@@ -9,6 +9,10 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,freetype))
 
+$(eval $(call gb_ExternalProject_use_externals,freetype,\
+	harfbuzz \
+))
+
 $(eval $(call gb_ExternalProject_register_targets,freetype,\
 	build \
 ))
@@ -29,7 +33,6 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 			--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
 			CFLAGS="$(if $(debug),-g) $(gb_VISIBILITY_FLAGS)" \
-		&& chmod +x builds/unix/freetype-config \
 		&& $(MAKE) install \
 		&& touch $@	)
 endif

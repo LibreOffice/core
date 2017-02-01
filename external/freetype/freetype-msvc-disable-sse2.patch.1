@@ -1,26 +1,37 @@
---- freetype/builds/win32/vc2010/freetype.vcxproj.orig	2014-10-02 15:41:17.712900843 +0200
-+++ freetype/builds/win32/vc2010/freetype.vcxproj	2014-10-02 15:41:59.059897637 +0200
-@@ -105,6 +105,7 @@
-   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-     <ClCompile>
-       <Optimization>MaxSpeed</Optimization>
+diff -up freetype/builds/windows/vc2010/freetype.vcxproj.dt freetype/builds/windows/vc2010/freetype.vcxproj
+--- freetype/builds/windows/vc2010/freetype.vcxproj.dt	2017-02-01 22:49:01.394494374 +0100
++++ freetype/builds/windows/vc2010/freetype.vcxproj	2017-02-01 22:49:22.392286704 +0100
+@@ -392,7 +392,7 @@
+       <DisableSpecificWarnings>4001</DisableSpecificWarnings>
+       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+       <WholeProgramOptimization>false</WholeProgramOptimization>
+-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
 +      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
-       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-@@ -130,6 +131,7 @@
-   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Multithreaded|Win32'">
-     <ClCompile>
-       <Optimization>MaxSpeed</Optimization>
+       <FloatingPointExceptions>false</FloatingPointExceptions>
+       <CreateHotpatchableImage>false</CreateHotpatchableImage>
+       <CompileAsManaged>false</CompileAsManaged>
+@@ -472,7 +472,7 @@
+       <DisableSpecificWarnings>4001</DisableSpecificWarnings>
+       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+       <WholeProgramOptimization>false</WholeProgramOptimization>
+-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
 +      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
-       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-@@ -155,6 +157,7 @@
-   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Singlethreaded|Win32'">
-     <ClCompile>
-       <Optimization>MaxSpeed</Optimization>
+       <FloatingPointExceptions>false</FloatingPointExceptions>
+       <CreateHotpatchableImage>false</CreateHotpatchableImage>
+       <RuntimeTypeInfo>false</RuntimeTypeInfo>
+@@ -554,7 +554,7 @@
+       <DisableSpecificWarnings>4001</DisableSpecificWarnings>
+       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+       <WholeProgramOptimization>false</WholeProgramOptimization>
+-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
 +      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
-       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-       <AdditionalIncludeDirectories>..\..\..\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-       <PreprocessorDefinitions>NDEBUG;WIN32;_LIB;_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+       <FloatingPointExceptions>false</FloatingPointExceptions>
+       <CreateHotpatchableImage>false</CreateHotpatchableImage>
+       <CompileAsManaged>false</CompileAsManaged>
+@@ -1715,4 +1715,4 @@
+   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+   <ImportGroup Label="ExtensionTargets">
+   </ImportGroup>
+-</Project>
+\ No newline at end of file
++</Project>

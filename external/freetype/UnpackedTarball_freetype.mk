@@ -11,10 +11,8 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,freetype))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,freetype,$(FREETYPE_TARBALL),,freetype))
 
-$(eval $(call gb_UnpackedTarball_set_patchlevel,freetype,3))
-
 $(eval $(call gb_UnpackedTarball_add_patches,freetype,\
-	external/freetype/freetype-2.4.8.patch \
+	external/freetype/freetype-2.6.5.patch.1 \
 	external/freetype/freetype-msvc-disable-sse2.patch.1 \
 ))
 
