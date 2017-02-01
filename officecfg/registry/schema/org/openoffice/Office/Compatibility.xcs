@@ -104,6 +104,18 @@
         </info>
         <value>true</value>
       </prop>
+      <prop oor:name="ProtectForm" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Protect form</desc>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="MsWordCompTrailingBlanks" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>MS Word-compatible trailing blanks</desc>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </templates>
   <component>
