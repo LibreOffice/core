@@ -31,6 +31,85 @@
 #include <cassert>
 #include <unordered_set>
 
+namespace {
+
+bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
+                         const OUString &rText, Rectangle &rRect)
+    // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
+    // but with a string as argument.
+{
+    // handle special case first
+    if (rText.isEmpty())
+    {
+        rRect.SetEmpty();
+        return true;
+    }
+
+    // get a device where 'OutputDevice::GetTextBoundRect' will be successful
+    OutputDevice *pGlyphDev;
+    if (rDev.GetOutDevType() != OUTDEV_PRINTER)
+        pGlyphDev = const_cast<OutputDevice *>(&rDev);
+    else
+    {
+        // since we format for the printer (where GetTextBoundRect will fail)
+        // we need a virtual device here.
+        pGlyphDev = &SM_MOD()->GetDefaultVirtualDev();
+    }
+
+    const FontMetric  aDevFM (rDev.GetFontMetric());
+
+    pGlyphDev->Push(PushFlags::FONT | PushFlags::MAPMODE);
+    vcl::Font aFnt(rDev.GetFont());
+    aFnt.SetAlignment(ALIGN_TOP);
+
+    // use scale factor when calling GetTextBoundRect to counter
+    // negative effects from antialiasing which may otherwise result
+    // in significant incorrect bounding rectangles for some characters.
+    Size aFntSize = aFnt.GetFontSize();
+
+    // Workaround to avoid HUGE font sizes and resulting problems
+    long nScaleFactor = 1;
+    while( aFntSize.Height() > 2000 * nScaleFactor )
+        nScaleFactor *= 2;
+
+    aFnt.SetFontSize( Size( aFntSize.Width() / nScaleFactor, aFntSize.Height() / nScaleFactor ) );
+    pGlyphDev->SetFont(aFnt);
+
+    long nTextWidth = rDev.GetTextWidth(rText);
+    Point aPoint;
+    Rectangle   aResult (aPoint, Size(nTextWidth, rDev.GetTextHeight())),
+                aTmp;
+
+    bool bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText);
+    OSL_ENSURE( bSuccess, "GetTextBoundRect failed" );
+
+
+    if (!aTmp.IsEmpty())
+    {
+        aResult = Rectangle(aTmp.Left() * nScaleFactor, aTmp.Top() * nScaleFactor,
+                            aTmp.Right() * nScaleFactor, aTmp.Bottom() * nScaleFactor);
+        if (&rDev != pGlyphDev) /* only when rDev is a printer... */
+        {
+            long nGDTextWidth  = pGlyphDev->GetTextWidth(rText);
+            if (nGDTextWidth != 0  &&
+                nTextWidth != nGDTextWidth)
+            {
+                aResult.Right() *= nTextWidth;
+                aResult.Right() /= nGDTextWidth * nScaleFactor;
+            }
+        }
+    }
+
+    // move rectangle to match possibly different baselines
+    // (because of different devices)
+    long nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent() * nScaleFactor;
+    aResult.Move(0, nDelta);
+
+    pGlyphDev->Pop();
+
+    rRect = aResult;
+    return bSuccess;
+}
 
 bool SmIsMathAlpha(const OUString &rText)
     // true iff symbol (from StarMath Font) should be treated as letter
@@ -62,8 +141,7 @@ bool SmIsMathAlpha(const OUString &rText)
     return aMathAlpha.find(cChar) != aMathAlpha.end();
 }
 
-
-// SmRect members
+}
 
 
 SmRect::SmRect()
@@ -541,84 +619,5 @@ SmRect SmRect::AsGlyphRect() const
     aRect.SetBottom(nGlyphBottom);
     return aRect;
 }
-
-bool SmGetGlyphBoundRect(const vcl::RenderContext &rDev,
-                         const OUString &rText, Rectangle &rRect)
-    // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
-    // but with a string as argument.
-{
-    // handle special case first
-    if (rText.isEmpty())
-    {
-        rRect.SetEmpty();
-        return true;
-    }
-
-    // get a device where 'OutputDevice::GetTextBoundRect' will be successful
-    OutputDevice *pGlyphDev;
-    if (rDev.GetOutDevType() != OUTDEV_PRINTER)
-        pGlyphDev = const_cast<OutputDevice *>(&rDev);
-    else
-    {
-        // since we format for the printer (where GetTextBoundRect will fail)
-        // we need a virtual device here.
-        pGlyphDev = &SM_MOD()->GetDefaultVirtualDev();
-    }
-
-    const FontMetric  aDevFM (rDev.GetFontMetric());
-
-    pGlyphDev->Push(PushFlags::FONT | PushFlags::MAPMODE);
-    vcl::Font aFnt(rDev.GetFont());
-    aFnt.SetAlignment(ALIGN_TOP);
-
-    // use scale factor when calling GetTextBoundRect to counter
-    // negative effects from antialiasing which may otherwise result
-    // in significant incorrect bounding rectangles for some characters.
-    Size aFntSize = aFnt.GetFontSize();
-
-    // Workaround to avoid HUGE font sizes and resulting problems
-    long nScaleFactor = 1;
-    while( aFntSize.Height() > 2000 * nScaleFactor )
-        nScaleFactor *= 2;
-
-    aFnt.SetFontSize( Size( aFntSize.Width() / nScaleFactor, aFntSize.Height() / nScaleFactor ) );
-    pGlyphDev->SetFont(aFnt);
-
-    long nTextWidth = rDev.GetTextWidth(rText);
-    Point aPoint;
-    Rectangle   aResult (aPoint, Size(nTextWidth, rDev.GetTextHeight())),
-                aTmp;
-
-    bool bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText);
-    OSL_ENSURE( bSuccess, "GetTextBoundRect failed" );
-
-
-    if (!aTmp.IsEmpty())
-    {
-        aResult = Rectangle(aTmp.Left() * nScaleFactor, aTmp.Top() * nScaleFactor,
-                            aTmp.Right() * nScaleFactor, aTmp.Bottom() * nScaleFactor);
-        if (&rDev != pGlyphDev) /* only when rDev is a printer... */
-        {
-            long nGDTextWidth  = pGlyphDev->GetTextWidth(rText);
-            if (nGDTextWidth != 0  &&
-                nTextWidth != nGDTextWidth)
-            {
-                aResult.Right() *= nTextWidth;
-                aResult.Right() /= nGDTextWidth * nScaleFactor;
-            }
-        }
-    }
-
-    // move rectangle to match possibly different baselines
-    // (because of different devices)
-    long nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent() * nScaleFactor;
-    aResult.Move(0, nDelta);
-
-    pGlyphDev->Pop();
-
-    rRect = aResult;
-    return bSuccess;
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

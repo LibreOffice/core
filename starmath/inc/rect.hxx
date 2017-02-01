@@ -29,12 +29,6 @@
 #include "format.hxx"
 
 
-bool SmGetGlyphBoundRect(const OutputDevice &rDev,
-                         const OUString &rText, Rectangle &rRect);
-
-bool SmIsMathAlpha(const OUString &rText);
-
-
 inline long SmFromTo(long nFrom, long nTo, double fRelDist)
 {
     return nFrom + static_cast<long>(fRelDist * (nTo - nFrom));
