@@ -22,11 +22,14 @@
 #include <test/xmldiff.hxx>
 #include <test/xmltesttools.hxx>
 
+#include <cstdlib>
 #include <fstream>
 
 class Chart2XShapeTest : public ChartTest, public XmlTestTools
 {
 public:
+
+    void setUp() override;
 
     void testFdo75075();
     void testPropertyMappingBarChart();
@@ -69,6 +72,12 @@ bool checkDumpAgainstFile( const OUString& rDump, const OUString& aFilePath)
             static_cast<int>(rDump.getLength()), nullptr);
 }
 
+}
+
+void Chart2XShapeTest::setUp()
+{
+    ChartTest::setUp();
+    setenv("SAL_NO_FONT_LOOKUP", "1", true);
 }
 
 OUString Chart2XShapeTest::getXShapeDumpString()
