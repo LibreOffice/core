@@ -436,7 +436,6 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
  */
 IMPL_LINK_NOARG( SpellDialog, InitHdl, void*, void)
 {
-    m_pToolbar->Disable();
     SetUpdateMode( false );
     //show or hide AutoCorrect depending on the modules abilities
     m_pAutoCorrPB->Show(rParent.HasAutoCorrection());
@@ -1522,14 +1521,6 @@ bool SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
         }
         else
             bChange = false;
-    }
-    else if (rNEvt.GetType() == MouseNotifyEvent::GETFOCUS && m_xToolbar)
-    {
-        m_xToolbar->Enable();
-    }
-    else if(rNEvt.GetType() == MouseNotifyEvent::LOSEFOCUS && m_xToolbar)
-    {
-        m_xToolbar->Disable();
     }
     return bChange || VclMultiLineEdit::PreNotify(rNEvt);
 }
