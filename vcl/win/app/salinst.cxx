@@ -582,6 +582,8 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, b
     WinSalInstance *pInst = GetSalData()->mpInstance;
     WinSalTimer *const pTimer = static_cast<WinSalTimer*>( ImplGetSVData()->maSchedCtx.mpSalTimer );
 
+SAL_INFO("vcl.gdi.wndproc", "SalComWndProc(nMsg=" << nMsg << ", wParam=" << wParam << ", lParam=" << lParam << ")");
+
     switch ( nMsg )
     {
         case SAL_MSG_THREADYIELD:
