@@ -402,10 +402,10 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                IllegalArgumentException(
+                makeAny( IllegalArgumentException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -429,10 +429,10 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         {
             // Unsupported.
             ucbhelper::cancelCommandExecution(
-                UnsupportedOpenModeException(
+                makeAny( UnsupportedOpenModeException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
-                                sal_Int16( aOpenCommand.Mode ) ),
+                                sal_Int16( aOpenCommand.Mode ) ) ),
                 Environment );
                 // Unreachable
         }
@@ -446,10 +446,10 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         {
               OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                IllegalArgumentException(
+                makeAny( IllegalArgumentException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }

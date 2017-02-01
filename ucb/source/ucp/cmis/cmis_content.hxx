@@ -81,7 +81,7 @@ private:
     void setCmisProperty(const std::string& rName, const std::string& rValue,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
-    css::lang::IllegalArgumentException getBadArgExcept();
+    css::uno::Any getBadArgExcept();
 
     css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(

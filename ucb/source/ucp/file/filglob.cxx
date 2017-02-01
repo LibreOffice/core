@@ -245,11 +245,13 @@ namespace fileaccess {
         bool isHandled )
     {
         Reference<XCommandProcessor> xComProc(pContent);
+        Any aAny;
         IOErrorCode ioErrorCode;
 
         if( errorCode ==  TASKHANDLER_UNSUPPORTED_COMMAND )
         {
-            cancelCommandExecution( UnsupportedCommandException( OSL_LOG_PREFIX ), xEnv );
+            aAny <<= UnsupportedCommandException( OSL_LOG_PREFIX );
+            cancelCommandExecution( aAny,xEnv );
         }
         else if( errorCode == TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT ||
                  errorCode == TASKHANDLING_WRONG_GETPROPERTYVALUES_ARGUMENT ||
@@ -261,13 +263,13 @@ namespace fileaccess {
         {
             IllegalArgumentException excep;
             excep.ArgumentPosition = 0;
-            cancelCommandExecution(excep, xEnv);
+            cancelCommandExecution(Any(excep), xEnv);
         }
         else if( errorCode == TASKHANDLING_UNSUPPORTED_OPEN_MODE )
         {
             UnsupportedOpenModeException excep;
             excep.Mode = sal::static_int_cast< sal_Int16 >(minorCode);
-            cancelCommandExecution( excep,xEnv );
+            cancelCommandExecution( Any(excep),xEnv );
         }
         else if(errorCode == TASKHANDLING_DELETED_STATE_IN_OPEN_COMMAND  ||
                 errorCode == TASKHANDLING_INSERTED_STATE_IN_OPEN_COMMAND ||
@@ -503,12 +505,11 @@ namespace fileaccess {
                 OUString("Title")               :
                 OUString("ContentType");
 
-            cancelCommandExecution(
-                MissingPropertiesException(
-                    "a property is missing, necessary to create a content",
-                    xComProc,
-                    aSeq),
-                xEnv);
+            aAny <<= MissingPropertiesException(
+                "a property is missing, necessary to create a content",
+                xComProc,
+                aSeq);
+            cancelCommandExecution(aAny,xEnv);
         }
         else if( errorCode == TASKHANDLING_FILESIZE_FOR_WRITE )
         {
@@ -534,11 +535,11 @@ namespace fileaccess {
         }
         else if(errorCode == TASKHANDLING_INPUTSTREAM_FOR_WRITE)
         {
-            cancelCommandExecution(
+            aAny <<=
                 MissingInputStreamException(
                     "the inputstream is missing, necessary to create a content",
-                    xComProc),
-                xEnv);
+                    xComProc);
+            cancelCommandExecution(aAny,xEnv);
         }
         else if( errorCode == TASKHANDLING_NOREPLACE_FOR_WRITE )
             // Overwrite = false and file exists
@@ -548,7 +549,7 @@ namespace fileaccess {
             excep.Classification = InteractionClassification_ERROR;
             excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "file exists and overwrite forbidden";
-            cancelCommandExecution( excep, xEnv );
+            cancelCommandExecution( Any(excep), xEnv );
         }
         else if( errorCode == TASKHANDLING_INVALID_NAME_MKDIR )
         {
@@ -572,7 +573,7 @@ namespace fileaccess {
             if(isHandled)
                 throw excep;
             else {
-                cancelCommandExecution( excep, xEnv );
+                cancelCommandExecution( Any(excep), xEnv );
             }
 //              ioErrorCode = IOErrorCode_INVALID_CHARACTER;
 //              cancelCommandExecution(
@@ -592,7 +593,7 @@ namespace fileaccess {
             if(isHandled)
                 throw excep;
             else {
-                cancelCommandExecution( excep, xEnv );
+                cancelCommandExecution( Any(excep), xEnv );
             }
 //              ioErrorCode = IOErrorCode_ALREADY_EXISTING;
 //              cancelCommandExecution(
@@ -778,11 +779,10 @@ namespace fileaccess {
         }
         else if( errorCode == TASKHANDLING_TRANSFER_INVALIDSCHEME )
         {
-            cancelCommandExecution(
-                InteractiveBadTransferURLException(
+            aAny <<= InteractiveBadTransferURLException(
                         "bad transfer url",
-                        xComProc),
-                xEnv );
+                        xComProc);
+            cancelCommandExecution( aAny,xEnv );
         }
         else if( errorCode == TASKHANDLING_OVERWRITE_FOR_MOVE      ||
                  errorCode == TASKHANDLING_OVERWRITE_FOR_COPY      ||
@@ -845,7 +845,7 @@ namespace fileaccess {
             excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "name clash during copy or move";
 
-            cancelCommandExecution(excep, xEnv);
+            cancelCommandExecution(Any(excep), xEnv);
         }
         else if( errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_MOVE   ||
                  errorCode == TASKHANDLING_NAMECLASHSUPPORT_FOR_COPY )
@@ -855,7 +855,7 @@ namespace fileaccess {
             excep.Context = Reference<XInterface>( xComProc, UNO_QUERY );
             excep.Message = "name clash value not supported during copy or move";
 
-            cancelCommandExecution(excep, xEnv);
+            cancelCommandExecution(Any(excep), xEnv);
         }
         else
         {

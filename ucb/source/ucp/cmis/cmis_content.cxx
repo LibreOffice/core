@@ -592,11 +592,11 @@ namespace cmis
         return bIsFolder;
     }
 
-    lang::IllegalArgumentException Content::getBadArgExcept()
+    uno::Any Content::getBadArgExcept()
     {
-        return lang::IllegalArgumentException(
+        return uno::makeAny( lang::IllegalArgumentException(
             "Wrong argument type!",
-            static_cast< cppu::OWeakObject * >( this ), -1);
+            static_cast< cppu::OWeakObject * >( this ), -1) );
     }
 
     libcmis::ObjectPtr Content::updateProperties(
@@ -980,12 +980,13 @@ namespace cmis
         {
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
-
-            ucbhelper::cancelCommandExecution(
+            uno::Any aErr = uno::makeAny(
                 ucb::InteractiveAugmentedIOException(OUString(), static_cast< cppu::OWeakObject * >( this ),
                     task::InteractionClassification_ERROR,
-                    bIsFolder ? ucb::IOErrorCode_NOT_EXISTING_PATH : ucb::IOErrorCode_NOT_EXISTING, aArgs),
-                xEnv);
+                    bIsFolder ? ucb::IOErrorCode_NOT_EXISTING_PATH : ucb::IOErrorCode_NOT_EXISTING, aArgs)
+            );
+
+            ucbhelper::cancelCommandExecution(aErr, xEnv);
         }
 
         uno::Any aRet;
@@ -1010,9 +1011,9 @@ namespace cmis
                )
             {
                 ucbhelper::cancelCommandExecution(
-                    ucb::UnsupportedOpenModeException
+                    uno::makeAny ( ucb::UnsupportedOpenModeException
                         ( OUString(), static_cast< cppu::OWeakObject * >( this ),
-                          sal_Int16( rOpenCommand.Mode ) ),
+                          sal_Int16( rOpenCommand.Mode ) ) ),
                         xEnv );
             }
 
@@ -1024,9 +1025,9 @@ namespace cmis
                 SAL_INFO( "ucb.ucp.cmis", "Failed to copy data to sink" );
 
                 ucbhelper::cancelCommandExecution(
-                    ucb::UnsupportedDataSinkException
+                    uno::makeAny (ucb::UnsupportedDataSinkException
                         ( OUString(), static_cast< cppu::OWeakObject * >( this ),
-                          rOpenCommand.Sink ),
+                          rOpenCommand.Sink ) ),
                         xEnv );
             }
         }
@@ -1269,9 +1270,10 @@ namespace cmis
             if ( sSrcBindingUrl != m_aURL.getBindingUrl( ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    ucb::InteractiveBadTransferURLException(
+                    uno::makeAny(
+                        ucb::InteractiveBadTransferURLException(
                             "Unsupported URL scheme!",
-                            static_cast< cppu::OWeakObject * >( this ) ),
+                            static_cast< cppu::OWeakObject * >( this ) ) ),
                     xEnv );
             }
         }
@@ -1285,9 +1287,9 @@ namespace cmis
     {
         if ( !xInputStream.is() )
         {
-            ucbhelper::cancelCommandExecution(
-                ucb::MissingInputStreamException
-                  ( OUString(), static_cast< cppu::OWeakObject * >( this ) ),
+            ucbhelper::cancelCommandExecution( uno::makeAny
+                ( ucb::MissingInputStreamException
+                  ( OUString(), static_cast< cppu::OWeakObject * >( this ) ) ),
                 xEnv );
         }
 
@@ -1312,9 +1314,9 @@ namespace cmis
                 map< string, libcmis::PropertyPtr >::iterator it = m_pObjectProps.find( "cmis:name" );
                 if ( it == m_pObjectProps.end( ) )
                 {
-                    ucbhelper::cancelCommandExecution(
-                        uno::RuntimeException( "Missing name property",
-                            static_cast< cppu::OWeakObject * >( this ) ),
+                    ucbhelper::cancelCommandExecution( uno::makeAny
+                        ( uno::RuntimeException( "Missing name property",
+                            static_cast< cppu::OWeakObject * >( this ) ) ),
                         xEnv );
                 }
                 string newName = it->second->getStrings( ).front( );
@@ -1340,9 +1342,9 @@ namespace cmis
                     // Are the base type matching?
                     if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
                     {
-                        ucbhelper::cancelCommandExecution(
-                            uno::RuntimeException( "Can't change a folder into a document and vice-versa.",
-                                static_cast< cppu::OWeakObject * >( this ) ),
+                        ucbhelper::cancelCommandExecution( uno::makeAny
+                            ( uno::RuntimeException( "Can't change a folder into a document and vice-versa.",
+                                static_cast< cppu::OWeakObject * >( this ) ) ),
                             xEnv );
                     }
 
@@ -1359,9 +1361,9 @@ namespace cmis
                         }
                         catch ( const libcmis::Exception& )
                         {
-                            ucbhelper::cancelCommandExecution(
-                                uno::RuntimeException( "Error when setting document content",
-                                    static_cast< cppu::OWeakObject * >( this ) ),
+                            ucbhelper::cancelCommandExecution( uno::makeAny
+                                ( uno::RuntimeException( "Error when setting document content",
+                                    static_cast< cppu::OWeakObject * >( this ) ) ),
                                 xEnv );
                         }
                     }
@@ -1381,9 +1383,9 @@ namespace cmis
                         }
                         catch ( const libcmis::Exception& )
                         {
-                            ucbhelper::cancelCommandExecution(
-                                uno::RuntimeException( "Error when creating folder",
-                                    static_cast< cppu::OWeakObject * >( this ) ),
+                            ucbhelper::cancelCommandExecution( uno::makeAny
+                                ( uno::RuntimeException( "Error when creating folder",
+                                    static_cast< cppu::OWeakObject * >( this ) ) ),
                                 xEnv );
                         }
                     }
@@ -1399,9 +1401,9 @@ namespace cmis
                         }
                         catch ( const libcmis::Exception& )
                         {
-                            ucbhelper::cancelCommandExecution(
-                                uno::RuntimeException( "Error when creating document",
-                                    static_cast< cppu::OWeakObject * >( this ) ),
+                            ucbhelper::cancelCommandExecution( uno::makeAny
+                                ( uno::RuntimeException( "Error when creating document",
+                                    static_cast< cppu::OWeakObject * >( this ) ) ),
                                 xEnv );
                         }
                     }
@@ -1883,10 +1885,10 @@ namespace cmis
         {
             SAL_INFO( "ucb.ucp.cmis", "Unknown command to execute" );
 
-            ucbhelper::cancelCommandExecution(
-                ucb::UnsupportedCommandException
+            ucbhelper::cancelCommandExecution
+                ( uno::makeAny( ucb::UnsupportedCommandException
                   ( OUString(),
-                    static_cast< cppu::OWeakObject * >( this ) ),
+                    static_cast< cppu::OWeakObject * >( this ) ) ),
                   xEnv );
         }
 

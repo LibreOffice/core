@@ -883,10 +883,10 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     {
         // not supported
         ucbhelper::cancelCommandExecution(
-                UnsupportedOpenModeException(
+                makeAny( UnsupportedOpenModeException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
-                                sal_Int16( nOpenMode ) ),
+                                sal_Int16( nOpenMode ) ) ),
                 _rxEnvironment );
         // Unreachable
         OSL_FAIL( "unreachable" );
@@ -1018,10 +1018,10 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                IllegalArgumentException(
+                makeAny( IllegalArgumentException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -1044,10 +1044,10 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         {
             OSL_FAIL( "Wrong argument count!" );
             ucbhelper::cancelCommandExecution(
-                IllegalArgumentException(
+                makeAny( IllegalArgumentException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -1161,10 +1161,10 @@ void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Referenc
 
         Sequence<OUString> aProps { PROPERTY_URL };
         ucbhelper::cancelCommandExecution(
-            MissingPropertiesException(
+            makeAny( MissingPropertiesException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
-                                aProps ),
+                                aProps ) ),
             Environment );
         // Unreachable
     }

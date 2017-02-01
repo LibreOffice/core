@@ -53,7 +53,7 @@ namespace ucbhelper
 
     @throws css::uno::Exception
  */
-UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::uno::Exception & rException,
+UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::uno::Any & rException,
                              const css::uno::Reference<
                                 css::ucb::XCommandEnvironment > &
                                     xEnv );

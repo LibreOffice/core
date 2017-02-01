@@ -53,7 +53,7 @@ namespace gio
 #define GIO_FILE_TYPE   "application/vnd.sun.staroffice.gio-file"
 #define GIO_FOLDER_TYPE "application/vnd.sun.staroffice.gio-folder"
 
-std::unique_ptr<css::uno::Exception> convertToException(GError *pError,
+css::uno::Any convertToException(GError *pError,
     const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow=true);
 /// @throws css::io::IOException
 /// @throws css::uno::RuntimeException
@@ -73,8 +73,8 @@ private:
         GError **ppError=nullptr);
     bool isFolder(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
 
-    std::unique_ptr<css::uno::Exception> mapGIOError( GError *error );
-    css::lang::IllegalArgumentException getBadArgExcept();
+    css::uno::Any mapGIOError( GError *error );
+    css::uno::Any getBadArgExcept();
 
     css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(

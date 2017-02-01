@@ -505,11 +505,11 @@ Sequence< Any > Content::setPropertyValues(
     if ( rPropertyNames.getLength() != rValues.getLength() )
     {
         ucbhelper::cancelCommandExecution(
-            IllegalArgumentException(
+            makeAny( IllegalArgumentException(
                         "Length of property names sequence and value "
                         "sequence are unequal!",
                         get(),
-                        -1 ),
+                        -1 ) ),
             m_xImpl->getEnvironment() );
         // Unreachable
     }
@@ -1011,9 +1011,9 @@ bool Content::isFolder()
         return bFolder;
 
      ucbhelper::cancelCommandExecution(
-         UnknownPropertyException(
+         makeAny( UnknownPropertyException(
                     "Unable to retrieve value of property 'IsFolder'!",
-                    get() ),
+                    get() ) ),
          m_xImpl->getEnvironment() );
 
 #if !(defined(_MSC_VER) && defined(ENABLE_LTO))
@@ -1034,9 +1034,9 @@ bool Content::isDocument()
         return bDoc;
 
      ucbhelper::cancelCommandExecution(
-         UnknownPropertyException(
+         makeAny( UnknownPropertyException(
                     "Unable to retrieve value of property 'IsDocument'!",
-                    get() ),
+                    get() ) ),
          m_xImpl->getEnvironment() );
 
     // Unreachable - cancelCommandExecution always throws an exception,

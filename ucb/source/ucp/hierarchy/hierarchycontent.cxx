@@ -342,10 +342,10 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !( aCommand.Argument >>= Properties ) )
         {
             ucbhelper::cancelCommandExecution(
-                lang::IllegalArgumentException(
+                uno::makeAny( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -362,10 +362,10 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !( aCommand.Argument >>= aProperties ) )
         {
             ucbhelper::cancelCommandExecution(
-                lang::IllegalArgumentException(
+                uno::makeAny( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -373,10 +373,10 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !aProperties.getLength() )
         {
             ucbhelper::cancelCommandExecution(
-                lang::IllegalArgumentException(
+                uno::makeAny( lang::IllegalArgumentException(
                                     "No properties!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -409,10 +409,10 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
             ucbhelper::cancelCommandExecution(
-                lang::IllegalArgumentException(
+                uno::makeAny( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -432,10 +432,10 @@ uno::Any SAL_CALL HierarchyContent::execute(
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
-                lang::IllegalArgumentException(
+                uno::makeAny( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -491,10 +491,10 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                lang::IllegalArgumentException(
+                uno::makeAny( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -513,10 +513,10 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                lang::IllegalArgumentException(
+                uno::makeAny( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ),
+                                    -1 ) ),
                 Environment );
             // Unreachable
         }
@@ -530,9 +530,9 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
 
         ucbhelper::cancelCommandExecution(
-            ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 OUString(),
-                                static_cast< cppu::OWeakObject * >( this ) ),
+                                static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
         // Unreachable
     }
@@ -1357,9 +1357,9 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     if ( m_eKind == ROOT )
     {
         ucbhelper::cancelCommandExecution(
-            ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 "Not supported by root folder!",
-                                static_cast< cppu::OWeakObject * >( this ) ),
+                                static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
     }
@@ -1369,10 +1369,10 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     {
         uno::Sequence<OUString> aProps { "Title" };
         ucbhelper::cancelCommandExecution(
-            ucb::MissingPropertiesException(
+            uno::makeAny( ucb::MissingPropertiesException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
-                                aProps ),
+                                aProps ) ),
             xEnv );
         // Unreachable
     }
@@ -1391,11 +1391,12 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
             if ( hasData( xId ) )
             {
                 ucbhelper::cancelCommandExecution(
+                    uno::makeAny(
                         ucb::NameClashException(
                             OUString(),
                             static_cast< cppu::OWeakObject * >( this ),
                             task::InteractionClassification_ERROR,
-                            m_aProps.getTitle() ),
+                            m_aProps.getTitle() ) ),
                     xEnv );
                 // Unreachable
             }
@@ -1423,10 +1424,11 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                 if ( nTry == 1000 )
                 {
                     ucbhelper::cancelCommandExecution(
+                        uno::makeAny(
                             ucb::UnsupportedNameClashException(
                                 "Unable to resolve name clash!",
                                 static_cast< cppu::OWeakObject * >( this ),
-                                nNameClashResolve ),
+                                nNameClashResolve ) ),
                     xEnv );
                 // Unreachable
                 }
@@ -1446,10 +1448,11 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
             if ( hasData( xId ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    ucb::UnsupportedNameClashException(
+                    uno::makeAny(
+                        ucb::UnsupportedNameClashException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
-                                nNameClashResolve ),
+                                nNameClashResolve ) ),
                     xEnv );
                 // Unreachable
             }
@@ -1503,9 +1506,9 @@ void HierarchyContent::destroy( bool bDeletePhysical,
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 "Not persistent!",
-                                static_cast< cppu::OWeakObject * >( this ) ),
+                                static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
     }
@@ -1514,9 +1517,9 @@ void HierarchyContent::destroy( bool bDeletePhysical,
     if ( m_eKind == ROOT )
     {
         ucbhelper::cancelCommandExecution(
-            ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 "Not supported by root folder!",
-                                static_cast< cppu::OWeakObject * >( this ) ),
+                                static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
     }
@@ -1555,9 +1558,9 @@ void HierarchyContent::transfer(
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
-            ucb::UnsupportedCommandException(
+            uno::makeAny( ucb::UnsupportedCommandException(
                                 "Not persistent!",
-                                static_cast< cppu::OWeakObject * >( this ) ),
+                                static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
     }
@@ -1566,9 +1569,9 @@ void HierarchyContent::transfer(
     if ( !rInfo.SourceURL.startsWith( HIERARCHY_URL_SCHEME ":/" ) )
     {
         ucbhelper::cancelCommandExecution(
-            ucb::InteractiveBadTransferURLException(
+            uno::makeAny( ucb::InteractiveBadTransferURLException(
                             OUString(),
-                            static_cast< cppu::OWeakObject * >( this ) ),
+                            static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
     }

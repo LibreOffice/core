@@ -69,11 +69,11 @@ namespace cmis
     {
     }
 
-    lang::IllegalArgumentException RepoContent::getBadArgExcept()
+    uno::Any RepoContent::getBadArgExcept()
     {
-        return lang::IllegalArgumentException(
+        return uno::makeAny( lang::IllegalArgumentException(
             "Wrong argument type!",
-            static_cast< cppu::OWeakObject * >( this ), -1);
+            static_cast< cppu::OWeakObject * >( this ), -1) );
     }
 
     uno::Reference< sdbc::XRow > RepoContent::getPropertyValues(
