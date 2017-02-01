@@ -73,63 +73,66 @@
 
 namespace
 {
+extern "C" using Handler1 = void (*)(int);
+extern "C" using Handler2 = void (*)(int, siginfo_t *, void *);
 struct SignalAction
 {
     int Signal;
     int Action;
-    void (*Handler)(int);
+    Handler1 Handler;
+    bool siginfo; // Handler's type is Handler2
 } Signals[] =
 {
-    { SIGHUP,    ACT_HIDE, SIG_DFL },    /* hangup */
-    { SIGINT,    ACT_EXIT,   SIG_DFL },    /* interrupt (rubout) */
-    { SIGQUIT,   ACT_EXIT,  SIG_DFL },    /* quit (ASCII FS) */
-    { SIGILL,    ACT_SYSTEM,  SIG_DFL },    /* illegal instruction (not reset when caught) */
+    { SIGHUP,    ACT_HIDE, SIG_DFL, false }, /* hangup */
+    { SIGINT,    ACT_EXIT,   SIG_DFL, false }, /* interrupt (rubout) */
+    { SIGQUIT,   ACT_EXIT,  SIG_DFL, false }, /* quit (ASCII FS) */
+    { SIGILL,    ACT_SYSTEM,  SIG_DFL, false }, /* illegal instruction (not reset when caught) */
 /* changed from ACT_ABOUT to ACT_SYSTEM to try and get collector to run*/
-    { SIGTRAP,   ACT_ABORT,  SIG_DFL },    /* trace trap (not reset when caught) */
+    { SIGTRAP,   ACT_ABORT,  SIG_DFL, false }, /* trace trap (not reset when caught) */
 #if ( SIGIOT != SIGABRT )
-    { SIGIOT,    ACT_ABORT,  SIG_DFL },    /* IOT instruction */
+    { SIGIOT,    ACT_ABORT,  SIG_DFL, false }, /* IOT instruction */
 #endif
-    { SIGABRT,   ACT_ABORT,  SIG_DFL },    /* used by abort, replace SIGIOT in the future */
+    { SIGABRT,   ACT_ABORT,  SIG_DFL, false }, /* used by abort, replace SIGIOT in the future */
 #ifdef SIGEMT
-    { SIGEMT,    ACT_SYSTEM,  SIG_DFL },    /* EMT instruction */
+    { SIGEMT,    ACT_SYSTEM,  SIG_DFL, false }, /* EMT instruction */
 /* changed from ACT_ABORT to ACT_SYSTEM to remove handler*/
 /* SIGEMT may also be used by the profiler - so it is probably not a good
 plan to have the new handler use this signal*/
 #endif
-    { SIGFPE,    ACT_ABORT,  SIG_DFL },    /* floating point exception */
-    { SIGKILL,   ACT_SYSTEM, SIG_DFL },    /* kill (cannot be caught or ignored) */
-    { SIGBUS,    ACT_ABORT,  SIG_DFL },    /* bus error */
-    { SIGSEGV,   ACT_ABORT,  SIG_DFL },    /* segmentation violation */
+    { SIGFPE,    ACT_ABORT,  SIG_DFL, false }, /* floating point exception */
+    { SIGKILL,   ACT_SYSTEM, SIG_DFL, false }, /* kill (cannot be caught or ignored) */
+    { SIGBUS,    ACT_ABORT,  SIG_DFL, false }, /* bus error */
+    { SIGSEGV,   ACT_ABORT,  SIG_DFL, false }, /* segmentation violation */
 #ifdef SIGSYS
-    { SIGSYS,    ACT_ABORT,  SIG_DFL },    /* bad argument to system call */
+    { SIGSYS,    ACT_ABORT,  SIG_DFL, false }, /* bad argument to system call */
 #endif
-    { SIGPIPE,   ACT_HIDE,   SIG_DFL },    /* write on a pipe with no one to read it */
-    { SIGALRM,   ACT_EXIT,   SIG_DFL },    /* alarm clock */
-    { SIGTERM,   ACT_EXIT,   SIG_DFL },    /* software termination signal from kill */
-    { SIGUSR1,   ACT_SYSTEM, SIG_DFL },    /* user defined signal 1 */
-    { SIGUSR2,   ACT_SYSTEM, SIG_DFL },    /* user defined signal 2 */
-    { SIGCHLD,   ACT_SYSTEM, SIG_DFL },    /* child status change */
+    { SIGPIPE,   ACT_HIDE,   SIG_DFL, false }, /* write on a pipe with no one to read it */
+    { SIGALRM,   ACT_EXIT,   SIG_DFL, false }, /* alarm clock */
+    { SIGTERM,   ACT_EXIT,   SIG_DFL, false }, /* software termination signal from kill */
+    { SIGUSR1,   ACT_SYSTEM, SIG_DFL, false }, /* user defined signal 1 */
+    { SIGUSR2,   ACT_SYSTEM, SIG_DFL, false }, /* user defined signal 2 */
+    { SIGCHLD,   ACT_SYSTEM, SIG_DFL, false }, /* child status change */
 #ifdef SIGPWR
-    { SIGPWR,    ACT_IGNORE, SIG_DFL },    /* power-fail restart */
+    { SIGPWR,    ACT_IGNORE, SIG_DFL, false }, /* power-fail restart */
 #endif
-    { SIGWINCH,  ACT_IGNORE, SIG_DFL },    /* window size change */
-    { SIGURG,    ACT_EXIT,   SIG_DFL },    /* urgent socket condition */
+    { SIGWINCH,  ACT_IGNORE, SIG_DFL, false }, /* window size change */
+    { SIGURG,    ACT_EXIT,   SIG_DFL, false }, /* urgent socket condition */
 #ifdef SIGPOLL
-    { SIGPOLL,   ACT_EXIT,   SIG_DFL },    /* pollable event occurred */
+    { SIGPOLL,   ACT_EXIT,   SIG_DFL, false }, /* pollable event occurred */
 #endif
-    { SIGSTOP,   ACT_SYSTEM, SIG_DFL },    /* stop (cannot be caught or ignored) */
-    { SIGTSTP,   ACT_SYSTEM, SIG_DFL },    /* user stop requested from tty */
-    { SIGCONT,   ACT_SYSTEM, SIG_DFL },    /* stopped process has been continued */
-    { SIGTTIN,   ACT_SYSTEM, SIG_DFL },    /* background tty read attempted */
-    { SIGTTOU,   ACT_SYSTEM, SIG_DFL },    /* background tty write attempted */
-    { SIGVTALRM, ACT_EXIT,   SIG_DFL },    /* virtual timer expired */
-    { SIGPROF,   ACT_SYSTEM,   SIG_DFL },    /* profiling timer expired */
+    { SIGSTOP,   ACT_SYSTEM, SIG_DFL, false }, /* stop (cannot be caught or ignored) */
+    { SIGTSTP,   ACT_SYSTEM, SIG_DFL, false }, /* user stop requested from tty */
+    { SIGCONT,   ACT_SYSTEM, SIG_DFL, false }, /* stopped process has been continued */
+    { SIGTTIN,   ACT_SYSTEM, SIG_DFL, false }, /* background tty read attempted */
+    { SIGTTOU,   ACT_SYSTEM, SIG_DFL, false }, /* background tty write attempted */
+    { SIGVTALRM, ACT_EXIT,   SIG_DFL, false }, /* virtual timer expired */
+    { SIGPROF,   ACT_SYSTEM,   SIG_DFL, false }, /* profiling timer expired */
 /*Change from ACT_EXIT to ACT_SYSTEM for SIGPROF is so that profiling signals do
 not get taken by the new handler - the new handler does not pass on context
 information which causes 'collect' to crash. This is a way of avoiding
 what looks like a bug in the new handler*/
-    { SIGXCPU,   ACT_ABORT,  SIG_DFL },    /* exceeded cpu limit */
-    { SIGXFSZ,   ACT_ABORT,  SIG_DFL }     /* exceeded file size limit */
+    { SIGXCPU,   ACT_ABORT,  SIG_DFL, false }, /* exceeded cpu limit */
+    { SIGXFSZ,   ACT_ABORT,  SIG_DFL, false }  /* exceeded file size limit */
 };
 const int NoSignals = sizeof(Signals) / sizeof(struct SignalAction);
 
@@ -137,7 +140,7 @@ bool bSetSEGVHandler = false;
 bool bSetWINCHHandler = false;
 bool bSetILLHandler = false;
 
-void signalHandlerFunction(int);
+void signalHandlerFunction(int, siginfo_t *, void *);
 
 void getExecutableName_Impl (rtl_String ** ppstrProgName)
 {
@@ -202,8 +205,8 @@ bool onInitSignal()
 #endif
 
     struct sigaction act;
-    act.sa_handler = signalHandlerFunction;
-    act.sa_flags   = SA_RESTART;
+    act.sa_sigaction = signalHandlerFunction;
+    act.sa_flags = SA_RESTART | SA_SIGINFO;
 
     sigfillset(&(act.sa_mask));
 
@@ -231,18 +234,34 @@ bool onInitSignal()
                     sigemptyset(&ign.sa_mask);
 
                     struct sigaction oact;
-                    if (sigaction(rSignal.Signal, &ign, &oact) == 0)
-                        rSignal.Handler = oact.sa_handler;
-                    else
+                    if (sigaction(rSignal.Signal, &ign, &oact) == 0) {
+                        rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
+                        if (rSignal.siginfo) {
+                            rSignal.Handler = reinterpret_cast<Handler1>(
+                                oact.sa_sigaction);
+                        } else {
+                            rSignal.Handler = oact.sa_handler;
+                        }
+                    } else {
                         rSignal.Handler = SIG_DFL;
+                        rSignal.siginfo = false;
+                    }
                 }
                 else
                 {
                     struct sigaction oact;
-                    if (sigaction(rSignal.Signal, &act, &oact) == 0)
-                        rSignal.Handler = oact.sa_handler;
-                    else
+                    if (sigaction(rSignal.Signal, &act, &oact) == 0) {
+                        rSignal.siginfo = (oact.sa_flags & SA_SIGINFO) != 0;
+                        if (rSignal.siginfo) {
+                            rSignal.Handler = reinterpret_cast<Handler1>(
+                                oact.sa_sigaction);
+                        } else {
+                            rSignal.Handler = oact.sa_handler;
+                        }
+                    } else {
                         rSignal.Handler = SIG_DFL;
+                        rSignal.siginfo = false;
+                    }
                 }
             }
         }
@@ -266,14 +285,20 @@ bool onDeInitSignal()
 {
     struct sigaction act;
 
-    act.sa_flags   = 0;
     sigemptyset(&(act.sa_mask));
 
     /* Initialize the rest of the signals */
     for (int i = NoSignals - 1; i >= 0; i--)
         if (Signals[i].Action != ACT_SYSTEM)
         {
-            act.sa_handler = Signals[i].Handler;
+            if (Signals[i].siginfo) {
+                act.sa_sigaction = reinterpret_cast<Handler2>(
+                    Signals[i].Handler);
+                act.sa_flags = SA_SIGINFO;
+            } else {
+                act.sa_handler = Signals[i].Handler;
+                act.sa_flags = 0;
+            }
 
             sigaction(Signals[i].Signal, &act, nullptr);
         }
@@ -305,7 +330,7 @@ void printStack(int sig)
 #endif
 }
 
-void callSystemHandler(int signal)
+void callSystemHandler(int signal, siginfo_t * info, void * context)
 {
     int i;
 
@@ -345,8 +370,12 @@ void callSystemHandler(int signal)
                     OSL_ASSERT(false);
             }
         }
-        else
+        else if (Signals[i].siginfo) {
+            (*reinterpret_cast<Handler2>(Signals[i].Handler))(
+                signal, info, context);
+        } else {
             (*Signals[i].Handler)(signal);
+        }
     }
 }
 
@@ -370,7 +399,7 @@ void DUMPCURRENTALLOCS()
 }
 #endif
 
-void signalHandlerFunction(int signal)
+void signalHandlerFunction(int signal, siginfo_t * info, void * context)
 {
     oslSignalInfo Info;
 
@@ -419,7 +448,7 @@ void signalHandlerFunction(int signal)
     switch (callSignalHandler(&Info))
     {
     case osl_Signal_ActCallNextHdl:
-        callSystemHandler(signal);
+        callSystemHandler(signal, info, context);
         break;
 
     case osl_Signal_ActAbortApp:
