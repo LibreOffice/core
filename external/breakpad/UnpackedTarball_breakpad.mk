@@ -9,6 +9,8 @@
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,breakpad))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,breakpad,0))
+
 $(eval $(call gb_UnpackedTarball_set_tarball,breakpad,$(BREAKPAD_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
@@ -17,5 +19,13 @@ $(eval $(call gb_UnpackedTarball_add_patches,breakpad,\
 	external/breakpad/breakpad-wshadow2.patch.1 \
 	external/breakpad/breakpad-stackwalk.patch.1 \
 ))
+
+ifeq ($(COM_IS_CLANG),TRUE)
+ifneq ($(filter -fsanitize=%,$(CC)),)
+$(eval $(call gb_UnpackedTarball_add_patches,breakpad, \
+    external/breakpad/ubsan.patch \
+))
+endif
+endif
 
 # vim: set noet sw=4 ts=4:

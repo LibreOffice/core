@@ -1,0 +1,21 @@
+--- src/client/linux/minidump_writer/directory_reader.h
++++ src/client/linux/minidump_writer/directory_reader.h
+@@ -96,7 +96,7 @@
+   const int fd_;
+   bool hit_eof_;
+   unsigned buf_used_;
+-  uint8_t buf_[sizeof(struct kernel_dirent) + NAME_MAX + 1];
++  uint8_t buf_[sizeof(struct kernel_dirent) + NAME_MAX + 1] __attribute__ ((aligned (__BIGGEST_ALIGNMENT__)));
+ };
+ 
+ }  // namespace google_breakpad
+--- src/common/memory.h
++++ src/common/memory.h
+@@ -75,6 +75,7 @@
+     if (!bytes)
+       return NULL;
+ 
++    bytes = (bytes + (__BIGGEST_ALIGNMENT__ - 1)) & ~(__BIGGEST_ALIGNMENT__ - 1);
+     if (current_page_ && page_size_ - page_offset_ >= bytes) {
+       uint8_t *const ret = current_page_ + page_offset_;
+       page_offset_ += bytes;
