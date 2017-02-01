@@ -38,8 +38,6 @@ ifeq "$(DEBUG)" "yes"
 JAVAC_FLAGS+=-g
 endif
 
-JAVABIN=bin
-
 ###########################################################################
 #
 # Windows specific settings
@@ -368,7 +366,6 @@ endif
 ifeq "$(PLATFORM)" "macosx"
 
 UNOPKG_PLATFORM=MacOSX_x86_64
-JAVABIN=Commands
 
 OS=MACOSX
 PS=/

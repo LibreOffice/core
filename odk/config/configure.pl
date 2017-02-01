@@ -74,11 +74,6 @@ $main::cppVersion = "4.0.1";
 $main::OO_SDK_CPP_HOME_SUGGESTION = searchprog($main::cppName);
 
 $main::OO_SDK_JAVA_HOME = "";
-$main::OO_SDK_JAVA_BIN_DIR = "bin";
-if ( $main::operatingSystem =~ m/darwin/ )
-{
-    $main::OO_SDK_JAVA_BIN_DIR="Commands";
-}
 $main::OO_SDK_JAVA_HOME_SUGGESTION = searchprog("javac");
 $main::javaVersion = "1.5.0_01";
 
@@ -387,8 +382,8 @@ while ( (!$main::correctVersion) &&
 # prepare Java path
 $main::correctVersion = 0;
 
-# prepare Java suggestion (cut bin or Commands directory to be in the root of the Java SDK)
-$main::offset = rindex($main::OO_SDK_JAVA_HOME_SUGGESTION, "/$main::OO_SDK_JAVA_BIN_DIR");
+# prepare Java suggestion (cut bin directory to be in the root of the Java SDK)
+$main::offset = rindex($main::OO_SDK_JAVA_HOME_SUGGESTION, "/bin");
 if ( $main::offset != -1 )
 {
     $main::OO_SDK_JAVA_HOME_SUGGESTION = substr($main::OO_SDK_JAVA_HOME_SUGGESTION, 0, $main::offset);
@@ -396,7 +391,7 @@ if ( $main::offset != -1 )
 
 while ( (!$main::correctVersion) &&
         ((! -d "$main::OO_SDK_JAVA_HOME" ) ||
-         ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/$main::OO_SDK_JAVA_BIN_DIR/javac"))) )
+         ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/bin/javac"))) )
 {
     print " Enter Java SDK (1.5, recommendation is 1.6 or higher) installation directory  (optional) [$main::OO_SDK_JAVA_HOME_SUGGESTION]: ";
     $main::OO_SDK_JAVA_HOME = readStdIn();
@@ -408,9 +403,9 @@ while ( (!$main::correctVersion) &&
     if ( ! $main::OO_SDK_JAVA_HOME eq "" )
     {
         if ( (! -d "$main::OO_SDK_JAVA_HOME") ||
-             ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/$main::OO_SDK_JAVA_BIN_DIR/javac")) )
+             ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/bin/javac")) )
         {
-            print " Error: Could not find directory '$main::OO_SDK_JAVA_HOME' or '$main::OO_SDK_JAVA_HOME/$main::OO_SDK_JAVA_BIN_DIR/javac'.\n";
+            print " Error: Could not find directory '$main::OO_SDK_JAVA_HOME' or '$main::OO_SDK_JAVA_HOME/bin/javac'.\n";
             if ( skipChoice("JAVA SDK") == 1 )
             {
                 $main::correctVersion = 1;
@@ -419,10 +414,10 @@ while ( (!$main::correctVersion) &&
         } else
         {
             #check version
-            my $testVersion = `$main::OO_SDK_JAVA_HOME/$main::OO_SDK_JAVA_BIN_DIR/java -version 2>&1 | egrep "java version" | head -n 1 | sed -e 's#.*version "##' | sed -e 's#".*##'`;
+            my $testVersion = `$main::OO_SDK_JAVA_HOME/bin/java -version 2>&1 | egrep "java version" | head -n 1 | sed -e 's#.*version "##' | sed -e 's#".*##'`;
             $testVersion =~ s#([^\n]+)\n#$1#go;
 
-            $main::correctVersion = testVersion($main::javaVersion, $testVersion, "$main::OO_SDK_JAVA_HOME/$main::OO_SDK_JAVA_BIN_DIR/java", 1);
+            $main::correctVersion = testVersion($main::javaVersion, $testVersion, "$main::OO_SDK_JAVA_HOME/bin/java", 1);
             if ( !$main::correctVersion )
             {
                 if ( skipChoice("JAVA SDK") == 1 )
@@ -559,17 +554,17 @@ sub searchprog
         if ( $main::operatingSystem =~ m/darwin/ ) {
             $progDir = resolveLink("/System/Library/Frameworks/JavaVM.Framework/Versions", "CurrentJDK");
 
-            if ( -e "$progDir/$main::OO_SDK_JAVA_BIN_DIR/javac" )
+            if ( -e "$progDir/Home/bin/javac" )
             {
-                return "$progDir/$main::OO_SDK_JAVA_BIN_DIR";
+                return "$progDir/Home/bin";
             }
         }
 
         if ( $main::operatingSystem =~ m/solaris/ ) {
             $progDir = resolveLink("/usr/jdk", "latest");
-            if ( -e "$progDir/$main::OO_SDK_JAVA_BIN_DIR/javac" )
+            if ( -e "$progDir/bin/javac" )
             {
-                return "$progDir/$main::OO_SDK_JAVA_BIN_DIR";
+                return "$progDir/bin";
             }
         }
     }

@@ -81,12 +81,10 @@ sdk_platform=`/bin/sh ${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`
 
 # Set the directory name.
 programdir=program
-javadir=bin
 sdk_lo_java_dir=program/classes
 case ${sdk_platform} in
   darwin*)
     programdir="Contents/MacOS"
-    javadir=Commands
     sdk_lo_java_dir=Contents/Resources/java
     ;;
 esac
@@ -244,7 +242,7 @@ fi
 # Add directory of the Java tools to the path, if necessary.
 if [ -n "${OO_SDK_JAVA_HOME}" ]
 then
-    PATH=${OO_SDK_JAVA_HOME}/${javadir}:${PATH}
+    PATH=${OO_SDK_JAVA_HOME}/bin:${PATH}
 #    JAVA_HOME=${OO_SDK_JAVA_HOME}
 #    export JAVA_HOME
     export OO_SDK_JAVA_HOME
