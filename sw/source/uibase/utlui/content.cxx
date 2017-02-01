@@ -2631,86 +2631,81 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
                     m_pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
                 }
 
-                SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
+                SwContent* pCnt = dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData()));
 
-                switch(pCnt->GetParent()->GetType())
+                if (pCnt && pCnt->GetParent()->GetType() == ContentTypeId::DRAWOBJECT)
                 {
-                    case ContentTypeId::DRAWOBJECT:
+                    SdrView* pDrawView = m_pActiveShell->GetDrawView();
+                    if (pDrawView)
                     {
-                        SdrView* pDrawView = m_pActiveShell->GetDrawView();
-                        if (pDrawView)
+                        pDrawView->SdrEndTextEdit();//Change from "EndTextEdit" to "SdrEndTextEdit" for acc migration
+
+                        SwDrawModel* pDrawModel = m_pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
+                        SdrPage* pPage = pDrawModel->GetPage(0);
+                        const size_t nCount = pPage->GetObjCount();
+                        bool hasObjectMarked = false;
+
+                        SdrObject* pObject = nullptr;
+                        pObject = GetDrawingObjectsByContent( pCnt );
+                        if( pObject )
                         {
-                            pDrawView->SdrEndTextEdit();//Change from "EndTextEdit" to "SdrEndTextEdit" for acc migration
-
-                            SwDrawModel* pDrawModel = m_pActiveShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel();
-                            SdrPage* pPage = pDrawModel->GetPage(0);
-                            const size_t nCount = pPage->GetObjCount();
-                            bool hasObjectMarked = false;
-
-                            SdrObject* pObject = nullptr;
-                            pObject = GetDrawingObjectsByContent( pCnt );
-                            if( pObject )
+                            SdrPageView* pPV = pDrawView->GetSdrPageView/*GetPageViewPvNum*/(/*0*/);
+                            if( pPV )
                             {
-                                SdrPageView* pPV = pDrawView->GetSdrPageView/*GetPageViewPvNum*/(/*0*/);
-                                if( pPV )
-                                {
-                                    bool bUnMark = pDrawView->IsObjMarked(pObject);
-                                    pDrawView->MarkObj( pObject, pPV, bUnMark);
+                                bool bUnMark = pDrawView->IsObjMarked(pObject);
+                                pDrawView->MarkObj( pObject, pPV, bUnMark);
 
-                                }
-                            }
-                            for( size_t i=0; i<nCount; ++i )
-                            {
-                                SdrObject* pTemp = pPage->GetObj(i);
-                                bool bMark = pDrawView->IsObjMarked(pTemp);
-                                switch( pTemp->GetObjIdentifier() )
-                                {
-                                    case OBJ_GRUP:
-                                    case OBJ_TEXT:
-                                    case OBJ_TEXTEXT:
-                                    case OBJ_wegFITTEXT:
-                                    case OBJ_LINE:
-                                    case OBJ_RECT:
-                                    case OBJ_CIRC:
-                                    case OBJ_SECT:
-                                    case OBJ_CARC:
-                                    case OBJ_CCUT:
-                                    case OBJ_POLY:
-                                    case OBJ_PLIN:
-                                    case OBJ_PATHLINE:
-                                    case OBJ_PATHFILL:
-                                    case OBJ_FREELINE:
-                                    case OBJ_FREEFILL:
-                                    case OBJ_PATHPOLY:
-                                    case OBJ_PATHPLIN:
-                                    case OBJ_CAPTION:
-                                    case OBJ_CUSTOMSHAPE:
-                                        if( bMark )
-                                            hasObjectMarked = true;
-                                        break;
-                                    default:
-                                        if ( bMark )
-                                        {
-                                            SdrPageView* pPV = pDrawView->GetSdrPageView/*GetPageViewPvNum*/(/*0*/);
-                                            if (pPV)
-                                            {
-                                                pDrawView->MarkObj(pTemp, pPV, true);
-                                            }
-                                        }
-                                }
-                                //mod end
-                            }
-                            if ( !hasObjectMarked )
-                            {
-                                SwEditWin& rEditWindow = m_pActiveShell->GetView().GetEditWin();
-                                vcl::KeyCode tempKeycode( KEY_ESCAPE );
-                                KeyEvent rKEvt( 0 , tempKeycode );
-                                static_cast<vcl::Window*>(&rEditWindow)->KeyInput( rKEvt );
                             }
                         }
+                        for( size_t i=0; i<nCount; ++i )
+                        {
+                            SdrObject* pTemp = pPage->GetObj(i);
+                            bool bMark = pDrawView->IsObjMarked(pTemp);
+                            switch( pTemp->GetObjIdentifier() )
+                            {
+                                case OBJ_GRUP:
+                                case OBJ_TEXT:
+                                case OBJ_TEXTEXT:
+                                case OBJ_wegFITTEXT:
+                                case OBJ_LINE:
+                                case OBJ_RECT:
+                                case OBJ_CIRC:
+                                case OBJ_SECT:
+                                case OBJ_CARC:
+                                case OBJ_CCUT:
+                                case OBJ_POLY:
+                                case OBJ_PLIN:
+                                case OBJ_PATHLINE:
+                                case OBJ_PATHFILL:
+                                case OBJ_FREELINE:
+                                case OBJ_FREEFILL:
+                                case OBJ_PATHPOLY:
+                                case OBJ_PATHPLIN:
+                                case OBJ_CAPTION:
+                                case OBJ_CUSTOMSHAPE:
+                                    if( bMark )
+                                        hasObjectMarked = true;
+                                    break;
+                                default:
+                                    if ( bMark )
+                                    {
+                                        SdrPageView* pPV = pDrawView->GetSdrPageView/*GetPageViewPvNum*/(/*0*/);
+                                        if (pPV)
+                                        {
+                                            pDrawView->MarkObj(pTemp, pPV, true);
+                                        }
+                                    }
+                            }
+                            //mod end
+                        }
+                        if ( !hasObjectMarked )
+                        {
+                            SwEditWin& rEditWindow = m_pActiveShell->GetView().GetEditWin();
+                            vcl::KeyCode tempKeycode( KEY_ESCAPE );
+                            KeyEvent rKEvt( 0 , tempKeycode );
+                            static_cast<vcl::Window*>(&rEditWindow)->KeyInput( rKEvt );
+                        }
                     }
-                    break;
-                    default: break;
                 }
 
                 m_bViewHasChanged = true;
