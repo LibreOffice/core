@@ -985,6 +985,7 @@ void GtkSalFrame::InitCommon()
 {
     m_pSurface = nullptr;
     m_nGrabLevel = 0;
+    m_bSalObjectSetPosSize = false;
 
     m_aDamageHandler.handle = this;
     m_aDamageHandler.damaged = ::damaged;
@@ -2895,6 +2896,8 @@ void GtkSalFrame::sizeAllocated(GtkWidget*, GdkRectangle *pAllocation, gpointer 
     pThis->maGeometry.nHeight = pAllocation->height;
     pThis->AllocateFrame();
     pThis->CallCallbackExc( SalEvent::Resize, nullptr );
+    if (pThis->m_bSalObjectSetPosSize)
+        return;
     pThis->TriggerPaintEvent();
 }
 
@@ -4296,6 +4299,13 @@ long GtkSalFrame::CallCallbackExc(SalEvent nEvent, const void* pEvent) const
                 css::uno::RuntimeException("wrapped unknown exception")));
     }
     return nRet;
+}
+
+void GtkSalFrame::nopaint_container_resize_children(GtkContainer *pContainer)
+{
+    m_bSalObjectSetPosSize = true;
+    gtk_container_resize_children(pContainer);
+    m_bSalObjectSetPosSize = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
