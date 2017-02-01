@@ -29,6 +29,7 @@
 #include <unotools/datetime.hxx>
 #include <vcl/pdfwriter.hxx>
 #include <xmloff/xmluconv.hxx>
+#include <o3tl/make_unique.hxx>
 
 #ifdef XMLSEC_CRYPTO_NSS
 #include <cert.h>
@@ -71,10 +72,10 @@ public:
 class PDFNumberElement : public PDFElement
 {
     /// Input file start location.
-    sal_uInt64 m_nOffset;
+    sal_uInt64 m_nOffset = 0;
     /// Input file token length.
-    sal_uInt64 m_nLength;
-    double m_fValue;
+    sal_uInt64 m_nLength = 0;
+    double m_fValue = 0;
 
 public:
     PDFNumberElement();
@@ -92,7 +93,7 @@ class PDFDictionaryElement : public PDFElement
     /// Key-value pairs when the dictionary is a nested value.
     std::map<OString, PDFElement*> m_aItems;
     /// Offset after the '<<' token.
-    sal_uInt64 m_nLocation;
+    sal_uInt64 m_nLocation = 0;
     /// Position after the '/' token.
     std::map<OString, sal_uInt64> m_aDictionaryKeyOffset;
     /// Length of the dictionary key and value, till (before) the next token.
@@ -115,7 +116,7 @@ public:
 class PDFEndDictionaryElement : public PDFElement
 {
     /// Offset before the '>>' token.
-    sal_uInt64 m_nLocation;
+    sal_uInt64 m_nLocation = 0;
 public:
     PDFEndDictionaryElement();
     bool Read(SvStream& rStream) override;
@@ -170,7 +171,7 @@ public:
 class PDFArrayElement : public PDFElement
 {
     /// Location after the '[' token.
-    sal_uInt64 m_nOffset;
+    sal_uInt64 m_nOffset = 0;
     std::vector<PDFElement*> m_aElements;
 public:
     PDFArrayElement();
@@ -183,7 +184,7 @@ public:
 class PDFEndArrayElement : public PDFElement
 {
     /// Location before the ']' token.
-    sal_uInt64 m_nOffset;
+    sal_uInt64 m_nOffset = 0;
 public:
     PDFEndArrayElement();
     bool Read(SvStream& rStream) override;
@@ -1114,7 +1115,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
             if (isdigit(ch) || ch == '-')
             {
                 // Numbering object: an integer or a real.
-                PDFNumberElement* pNumberElement = new PDFNumberElement();
+                auto pNumberElement = new PDFNumberElement();
                 rElements.push_back(std::unique_ptr<PDFElement>(pNumberElement));
                 rStream.SeekRel(-1);
                 if (!pNumberElement->Read(rStream))
@@ -2110,7 +2111,7 @@ bad_data:
             }
             if (!num_bytes)
                 ++num_bytes;  /* use one byte for a zero value */
-            if (num_bytes + result_bytes > sizeof result)
+            if (static_cast<size_t>(num_bytes) + result_bytes > sizeof result)
                 goto bad_data;
             tmp = num_bytes;
             rp = result + result_bytes - 1;
@@ -2247,7 +2248,10 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
     bool bNonDetached = pSubFilter && pSubFilter->GetValue() == "adbe.pkcs7.sha1";
     if (!pSubFilter || (pSubFilter->GetValue() != "adbe.pkcs7.detached" && !bNonDetached && pSubFilter->GetValue() != "ETSI.CAdES.detached"))
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: unsupported sub-filter: '"<<pSubFilter->GetValue()<<"'");
+        if (!pSubFilter)
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: missing sub-filter");
+        else
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: unsupported sub-filter: '"<<pSubFilter->GetValue()<<"'");
         return false;
     }
 
@@ -2328,7 +2332,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         return false;
     }
     // 2 is the leading "<" and the trailing ">" around the hex string.
-    size_t nSignatureLength = pContents->GetValue().getLength() + 2;
+    size_t nSignatureLength = static_cast<size_t>(pContents->GetValue().getLength()) + 2;
     if (aByteRanges[1].first != (aByteRanges[0].second + nSignatureLength))
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: second range start is not the end of the signature");
@@ -2376,7 +2380,7 @@ bool PDFDocument::ValidateSignature(SvStream& rStream, PDFObjectElement* pSignat
         return false;
     }
 
-    NSSCMSSignedData* pCMSSignedData = static_cast<NSSCMSSignedData*>(NSS_CMSContentInfo_GetContent(pCMSContentInfo));
+    auto pCMSSignedData = static_cast<NSSCMSSignedData*>(NSS_CMSContentInfo_GetContent(pCMSContentInfo));
     if (!pCMSSignedData)
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ValidateSignature: NSS_CMSContentInfo_GetContent() failed");
@@ -2791,12 +2795,7 @@ bool PDFCommentElement::Read(SvStream& rStream)
     return false;
 }
 
-PDFNumberElement::PDFNumberElement()
-    : m_nOffset(0),
-      m_nLength(0),
-      m_fValue(0)
-{
-}
+PDFNumberElement::PDFNumberElement() = default;
 
 bool PDFNumberElement::Read(SvStream& rStream)
 {
@@ -2959,10 +2958,7 @@ bool PDFObjectElement::Read(SvStream& /*rStream*/)
     return true;
 }
 
-PDFDictionaryElement::PDFDictionaryElement()
-    : m_nLocation(0)
-{
-}
+PDFDictionaryElement::PDFDictionaryElement() = default;
 
 size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary)
 {
@@ -3313,14 +3309,20 @@ void PDFObjectElement::ParseStoredObjects()
     auto pType = dynamic_cast<PDFNameElement*>(Lookup("Type"));
     if (!pType || pType->GetValue() != "ObjStm")
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: missing or unexpected type: " << pType->GetValue());
+        if (!pType)
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: missing unexpected type");
+        else
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: unexpected type: " << pType->GetValue());
         return;
     }
 
     auto pFilter = dynamic_cast<PDFNameElement*>(Lookup("Filter"));
     if (!pFilter || pFilter->GetValue() != "FlateDecode")
     {
-        SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: missing or unexpected filter");
+        if (!pFilter)
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: missing filter");
+        else
+            SAL_WARN("xmlsecurity.pdfio", "PDFDocument::ReadXRefStream: unexpected filter: " << pFilter->GetValue());
         return;
     }
 
@@ -3406,7 +3408,7 @@ void PDFObjectElement::ParseStoredObjects()
         size_t nLen = aLengths[nObject];
 
         aStream.Seek(nOffset);
-        m_aStoredElements.push_back(std::unique_ptr<PDFObjectElement>(new PDFObjectElement(m_rDoc, nObjNum, 0)));
+        m_aStoredElements.push_back(o3tl::make_unique<PDFObjectElement>(m_rDoc, nObjNum, 0));
         PDFObjectElement* pStored = m_aStoredElements.back().get();
 
         aBuf.clear();
@@ -3574,10 +3576,7 @@ bool PDFDictionaryElement::Read(SvStream& rStream)
     return true;
 }
 
-PDFEndDictionaryElement::PDFEndDictionaryElement()
-    : m_nLocation(0)
-{
-}
+PDFEndDictionaryElement::PDFEndDictionaryElement() = default;
 
 sal_uInt64 PDFEndDictionaryElement::GetLocation() const
 {
@@ -3700,10 +3699,7 @@ bool PDFEndObjectElement::Read(SvStream& /*rStream*/)
     return true;
 }
 
-PDFArrayElement::PDFArrayElement()
-    : m_nOffset(0)
-{
-}
+PDFArrayElement::PDFArrayElement() = default;
 
 bool PDFArrayElement::Read(SvStream& rStream)
 {
@@ -3731,10 +3727,7 @@ const std::vector<PDFElement*>& PDFArrayElement::GetElements()
     return m_aElements;
 }
 
-PDFEndArrayElement::PDFEndArrayElement()
-    : m_nOffset(0)
-{
-}
+PDFEndArrayElement::PDFEndArrayElement() = default;
 
 bool PDFEndArrayElement::Read(SvStream& rStream)
 {
