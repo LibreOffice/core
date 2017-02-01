@@ -691,7 +691,7 @@ IMPL_LINK( SvxSuperContourDlg, PipetteClickHdl, ContourWindow&, rWnd, void )
             aMask = aBmp.CreateMask( rColor, nTol );
 
             if( aGraphic.IsTransparent() )
-                aMask.CombineSimple( aGraphic.GetBitmapEx().GetMask(), BMP_COMBINE_OR );
+                aMask.CombineSimple( aGraphic.GetBitmapEx().GetMask(), BmpCombine::Or );
 
             if( !!aMask )
             {

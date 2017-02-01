@@ -88,16 +88,9 @@ enum BmpConversion
     BMP_CONVERSION_GHOSTED = 10
 };
 
-enum BmpCombine
+enum class BmpCombine
 {
-    BMP_COMBINE_COPY = 0,
-    BMP_COMBINE_INVERT = 1,
-    BMP_COMBINE_AND = 2,
-    BMP_COMBINE_NAND = 3,
-    BMP_COMBINE_OR = 4,
-    BMP_COMBINE_NOR = 5,
-    BMP_COMBINE_XOR = 6,
-    BMP_COMBINE_NXOR = 7
+    Or, And
 };
 
 enum BmpReduce
