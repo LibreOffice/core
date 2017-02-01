@@ -463,7 +463,7 @@ int lcl_getViewId(const std::string& payload)
     }
 
     if (numberPos < payload.length() && payload[numberPos] >= '0' && payload[numberPos] <= '9')
-        return std::stoi(payload.substr(numberPos));
+        return strtol(payload.substr(numberPos).c_str(), nullptr, 10);
 
     return 0;
 }
