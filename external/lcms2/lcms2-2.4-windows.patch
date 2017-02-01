@@ -1,34 +1,10 @@
---- misc/lcms2-2.4/Projects/VC2010/lcms2_DLL/lcms2_DLL.vcproj	2012-09-10 18:01:51.000000000 +0200
-+++ misc/build/lcms2-2.4/Projects/VC2010/lcms2_DLL/lcms2_DLL.vcproj	2012-10-05 22:35:01.607191700 +0200
-@@ -205,6 +205,10 @@
- 				>
- 			</File>
- 			<File
-+				RelativePath="..\..\..\src\cmshalf.c"
-+				>
-+			</File>
-+			<File
- 				RelativePath="..\..\..\src\cmsintrp.c"
- 				>
- 			</File>
---- misc/lcms2-2.4/Projects/VC2010/lcms2_static/lcms2_static.vcproj	2012-09-10 18:01:51.000000000 +0200
-+++ misc/build/lcms2-2.4/Projects/VC2010/lcms2_static/lcms2_static.vcproj	2012-10-05 22:35:28.168963200 +0200
-@@ -175,6 +175,10 @@
- 				>
- 			</File>
- 			<File
-+				RelativePath="..\..\..\src\cmshalf.c"
-+				>
-+			</File>
-+			<File
- 				RelativePath="..\..\..\src\cmsintrp.c"
- 				>
- 			</File>
+TODO: Is this still needed?
+
 --- misc/lcms2-2.4/include/lcms2.h	2011-12-15 16:45:47.000000000 +0100
 +++ misc/build/lcms2-2.4/include/lcms2.h	2012-03-17 22:53:28.731585981 +0100
 @@ -192,6 +192,15 @@ typedef int                  cmsBool;
- # endif
- #endif
+ #endif  // CMS_USE_BIG_ENDIAN
+ 
  
 +// LibreOffice always builds this as DLL and with the stdcall calling
 +// convention, so make this usable from outside without having to
