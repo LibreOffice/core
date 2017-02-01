@@ -24,10 +24,10 @@ diff -ru jpeg-turbo.orig/Makefile.in jpeg-turbo/Makefile.in
  	$(srcdir)/jconfigint.h.in $(srcdir)/libjpeg.map.in \
 @@ -622,7 +622,7 @@
  	jidctflt.c jidctfst.c jidctint.c jidctred.c jquant1.c \
- 	jquant2.c jutils.c jmemmgr.c jmemnobs.c $(am__append_3) \
- 	$(am__append_4) $(am__append_5) $(am__append_10)
--SUBDIRS = java $(am__append_9) md5
-+SUBDIRS = java $(am__append_9)
+ 	jquant2.c jutils.c jmemmgr.c jmemnobs.c $(am__append_4) \
+ 	$(am__append_5) $(am__append_6) $(am__append_11)
+-SUBDIRS = java $(am__append_10) md5
++SUBDIRS = java $(am__append_10)
  @WITH_TURBOJPEG_TRUE@libturbojpeg_la_SOURCES = $(libjpeg_la_SOURCES) \
  @WITH_TURBOJPEG_TRUE@	turbojpeg.c turbojpeg.h transupp.c \
  @WITH_TURBOJPEG_TRUE@	transupp.h jdatadst-tj.c jdatasrc-tj.c \
