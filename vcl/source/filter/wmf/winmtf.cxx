@@ -1637,11 +1637,11 @@ void WinMtfOutput::ImplDrawBitmap( const Point& rPos, const Size& rSize, const B
 
                 if ( rBitmap.GetTransparentColor() == Color( COL_WHITE ) )
                 {
-                    aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_OR );
+                    aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::Or );
                 }
                 else
                 {
-                    aMask.CombineSimple( rBitmap.GetMask(), BMP_COMBINE_AND );
+                    aMask.CombineSimple( rBitmap.GetMask(), BmpCombine::And );
                 }
 
                 aBmpEx = BitmapEx( rBitmap.GetBitmap(), aMask );
