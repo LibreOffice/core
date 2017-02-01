@@ -94,7 +94,7 @@ class GbuildParser:
         # Relation between json object and file extension
         jsonSrc = {
                     'CXXOBJECTS': '.cxx', 'OBJCOBJECTS': '.m', 'OBJCXXOBJECTS': '.mm', 'COBJECTS': '.c',
-                    'LEXOBJECTS': '.l',   'YACCOBJECTS': '.y',
+                    'FLEXOBJECTS': '.l',   'YACCOBJECTS': '.y',
 
                     'GENCXXOBJECTS': '.cxx', # remark is in workdir/GenCxxObject
                     'ASMOBJECTS': '.s',      #not in json, due to Blacklist ?
@@ -368,9 +368,9 @@ class testVS2013Ide(IdeIntegrationGenerator):
         for cxxobject in target['CXXOBJECTS']:
             cxxrelpath= os.path.join('../..',target['location'].split('/')[-1], cxxobject)
             cxxabspath = os.path.join(self.gbuildparser.srcdir,target['location'].split('/')[-1], cxxobject)
-            cxxfile = cxxabspath + '.cxx'
+            cxxfile = cxxabspath
             if os.path.isfile(cxxfile):
-                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxrelpath + '.cxx')
+                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxrelpath)
             else:
                 print('Source %s in project %s does not exist' % (cxxfile, target['target_name']))
 
@@ -378,13 +378,13 @@ class testVS2013Ide(IdeIntegrationGenerator):
         for cxxobject in target['CXXOBJECTS']:
             include_rel_path = os.path.join('../..',target['location'].split('/')[-1], cxxobject)
             include_abs_path = os.path.join(self.gbuildparser.srcdir,target['location'].split('/')[-1], cxxobject)
-            hxxfile = include_abs_path + '.hxx'
+            hxxfile = include_abs_path
             if os.path.isfile(hxxfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path + '.hxx')
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path)
             # Few files have corresponding .h files
-            hfile = include_abs_path + '.h'
+            hfile = include_abs_path
             if os.path.isfile(hfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path + '.h')
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path)
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
         self.write_pretty_xml(proj_node, project_path)
@@ -844,9 +844,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         for cxxobject in target['CXXOBJECTS']:
             cxxrelpath = os.path.join('../..', target['location'].split('/')[-1], cxxobject)
             cxxabspath = os.path.join(self.gbuildparser.srcdir, target['location'].split('/')[-1], cxxobject)
-            cxxfile = cxxabspath + '.cxx'
+            cxxfile = cxxabspath
             if os.path.isfile(cxxfile):
-                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxrelpath + '.cxx')
+                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxrelpath)
             else:
                 print('Source %s in project %s does not exist' % (cxxfile, target['target_name']))
 
@@ -854,13 +854,13 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         for cxxobject in target['CXXOBJECTS']:
             include_rel_path = os.path.join('../..',target['location'].split('/')[-1], cxxobject)
             include_abs_path = os.path.join(self.gbuildparser.srcdir,target['location'].split('/')[-1], cxxobject)
-            hxxfile = include_abs_path + '.hxx'
+            hxxfile = include_abs_path
             if os.path.isfile(hxxfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path + '.hxx')
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path)
             # Few files have corresponding .h files
-            hfile = include_abs_path + '.h'
+            hfile = include_abs_path
             if os.path.isfile(hfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path + '.h')
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=include_rel_path)
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
         self.write_pretty_xml(proj_node, project_path)
