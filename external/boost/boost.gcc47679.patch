@@ -1,16 +1,16 @@
-diff -ru boost.orig/boost/optional/optional.hpp boost/boost/optional/optional.hpp
---- foo/misc/boost.orig/boost/optional/optional.hpp	2015-07-18 11:27:36.168127029 +0200
-+++ foo/misc/boost/boost/optional/optional.hpp	2015-07-18 20:36:13.777997833 +0200
-@@ -53,6 +53,8 @@
- 
- #include <boost/optional/optional_fwd.hpp>
+diff -ru boost.orig/boost/optional/detail/optional_aligned_storage.hpp boost/boost/optional/detail/optional_aligned_storage.hpp
+--- foo/misc/boost.orig/boost/optional/detail/optional_aligned_storage.hpp	2015-07-18 11:27:36.168127029 +0200
++++ foo/misc/boost/boost/optional/detail/optional_aligned_storage.hpp	2015-07-18 20:36:13.777997833 +0200
+@@ -14,6 +14,8 @@
+ #ifndef BOOST_OPTIONAL_OPTIONAL_DETAIL_OPTIONAL_ALIGNED_STORAGE_AJK_12FEB2016_HPP
+ #define BOOST_OPTIONAL_OPTIONAL_DETAIL_OPTIONAL_ALIGNED_STORAGE_AJK_12FEB2016_HPP
  
 +#include <string.h>
 +
- #if (defined BOOST_NO_CXX11_RVALUE_REFERENCES) || (defined BOOST_OPTIONAL_CONFIG_NO_RVALUE_REFERENCES)
- #define BOOST_OPTIONAL_DETAIL_NO_RVALUE_REFERENCES
- #endif
-@@ -134,6 +136,11 @@
+ namespace boost {
+ 
+ namespace optional_detail {
+@@ -39,6 +41,11 @@ class aligned_storage
  
    public:
  
