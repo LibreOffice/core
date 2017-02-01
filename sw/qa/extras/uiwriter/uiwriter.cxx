@@ -4277,7 +4277,9 @@ void SwUiWriterTest::testTdf105625()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     // Ensure correct initial setting
-    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext,
+        "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea",
+        css::uno::Any(false), comphelper::EConfigurationModes::Standard);
     // We should be able to edit at positions adjacent to fields.
     // Check if the start and the end of the 1st paragraph are not protected
     // (they are adjacent to FORMCHECKBOX)
@@ -4291,6 +4293,14 @@ void SwUiWriterTest::testTdf105625()
     pWrtShell->SttPara();
     pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
     CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
+    // Test deletion of whole field with single backspace
+    // Previously it only removed right boundary of FORMTEXT, or failed removal at all
+    const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+    sal_Int32 nMarksBefore = pMarksAccess->getAllMarksCount();
+    pWrtShell->EndPara();
+    pWrtShell->DelLeft();
+    sal_Int32 nMarksAfter = pMarksAccess->getAllMarksCount();
+    CPPUNIT_ASSERT_EQUAL(nMarksBefore, nMarksAfter + 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

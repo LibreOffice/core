@@ -210,7 +210,21 @@ long SwWrtShell::DelLeft()
     else
     {
         OpenMark();
-        SwCursorShell::Left(1,CRSR_SKIP_CHARS);
+
+        // If we are just to the right to a fieldmark, then remove it completely
+        SwPosition* aCurPos = GetCursor()->GetPoint();
+        SwPosition aPrevChar(*aCurPos);
+        --aPrevChar.nContent;
+        sw::mark::IFieldmark* pFm = getIDocumentMarkAccess()->getFieldmarkFor(aPrevChar);
+        if (pFm && pFm->GetMarkEnd() == *aCurPos)
+        {
+            *aCurPos = pFm->GetMarkStart();
+            getIDocumentMarkAccess()->deleteMark(pFm);
+        }
+        else
+        {
+            SwCursorShell::Left(1, CRSR_SKIP_CHARS);
+        }
     }
     long nRet = Delete();
     if( !nRet && bSwap )
@@ -332,7 +346,22 @@ long SwWrtShell::DelRight()
         }
 
         OpenMark();
-        SwCursorShell::Right(1,CRSR_SKIP_CELLS);
+
+        {
+            // If we are just ahead of a fieldmark, then remove it completely
+            SwPosition* aCurPos = GetCursor()->GetPoint();
+            sw::mark::IFieldmark* pFm = GetCurrentFieldmark();
+            if (pFm && pFm->GetMarkStart() == *aCurPos)
+            {
+                *aCurPos = pFm->GetMarkEnd();
+                getIDocumentMarkAccess()->deleteMark(pFm);
+            }
+            else
+            {
+                SwCursorShell::Right(1, CRSR_SKIP_CELLS);
+            }
+        }
+
         nRet = Delete();
         CloseMark( 0 != nRet );
         break;
