@@ -269,6 +269,8 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks, void*, void)
 {
     const Reference< uno::XInterface > xKeepAlive( mrAntiImpl );
 
+    SAL_INFO("toolkit.controls", "OnProcessCallbacks grabbing solarmutex");
+
     // work on a copy of the callback array
     CallbackArray aCallbacksCopy;
     {
@@ -287,6 +289,7 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks, void*, void)
     }
 
     {
+        SAL_INFO("toolkit.controls", "OnProcessCallbacks relinquished solarmutex");
         SolarMutexReleaser aReleaseSolar;
         for (   CallbackArray::const_iterator loop = aCallbacksCopy.begin();
                 loop != aCallbacksCopy.end();
