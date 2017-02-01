@@ -542,6 +542,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
                     SolarMutexGuard g;
                     if ( ! m_xMenuDispatcher.is() )
                     {
+                        SAL_INFO("fwk.dispatch", "setting MenuDispatcher");
                         MenuDispatcher* pDispatcher = new MenuDispatcher( m_xContext, xOwner );
                         m_xMenuDispatcher = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                     }
