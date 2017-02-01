@@ -32,8 +32,8 @@ diff -ru jpeg-turbo.orig/configure jpeg-turbo/configure
 +++ jpeg-turbo/jconfig.h.in	2016-11-02 22:45:01.905400000 +0100
 @@ -71,3 +71,21 @@
  
- /* The size of `size_t', as computed by sizeof. */
- #undef SIZEOF_SIZE_T
+ /* Define to `unsigned int' if <sys/types.h> does not define. */
+ #undef size_t
 +
 +#ifdef _MSC_VER
 +
