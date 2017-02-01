@@ -15,6 +15,7 @@
 #include "app.hxx"
 
 #include <config_version.h>
+#include <config_features.h>
 #include <config_folders.h>
 
 #include <rtl/bootstrap.hxx>
