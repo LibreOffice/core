@@ -1080,11 +1080,11 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             sal_uInt8 nFlagCounterByte;
             if ( ( nCmpCount == 3 ) || ( nCmpCount == 4 ) )
             {
-                if ( ( pAcc = initBitmap(aBitmap, aPalette) ) == nullptr )
-                    return 0xffffffff;
-
                 size_t nByteCountSize = nRowBytes > 250 ? sizeof(sal_uInt16) : sizeof(sal_uInt8);
                 if (nHeight > pPict->remainingSize() / nByteCountSize)
+                    return 0xffffffff;
+
+                if ( ( pAcc = initBitmap(aBitmap, aPalette) ) == nullptr )
                     return 0xffffffff;
 
                 std::unique_ptr<sal_uInt8[]> pScanline(new sal_uInt8[static_cast<size_t>(nWidth) * nCmpCount]);
