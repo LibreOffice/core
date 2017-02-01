@@ -2129,18 +2129,15 @@ void SchXMLExportHelper_Impl::exportDateScale( const Reference< beans::XProperty
         if( aIncrement.TimeResolution >>= nTimeResolution )
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_BASE_TIME_UNIT, lcl_getTimeUnitToken( nTimeResolution ) );
 
-        OUStringBuffer aValue;
         chart::TimeInterval aInterval;
         if( aIncrement.MajorTimeInterval >>= aInterval )
         {
-            ::sax::Converter::convertNumber( aValue, aInterval.Number );
-            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MAJOR_INTERVAL_VALUE, aValue.makeStringAndClear() );
+            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MAJOR_INTERVAL_VALUE, OUString::number(aInterval.Number) );
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MAJOR_INTERVAL_UNIT, lcl_getTimeUnitToken( aInterval.TimeUnit ) );
         }
         if( aIncrement.MinorTimeInterval >>= aInterval )
         {
-            ::sax::Converter::convertNumber( aValue, aInterval.Number );
-            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MINOR_INTERVAL_VALUE, aValue.makeStringAndClear() );
+            mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MINOR_INTERVAL_VALUE, OUString::number(aInterval.Number) );
             mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_MINOR_INTERVAL_UNIT, lcl_getTimeUnitToken( aInterval.TimeUnit ) );
         }
 

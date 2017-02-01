@@ -1475,9 +1475,7 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     std::vector<beans::PropertyValue> aVector;
 
     sal_uInt16 nViewID( GetViewFrame()->GetCurViewId());
-    OUStringBuffer sBuffer ( OUString( "view" ) );
-    ::sax::Converter::convertNumber(sBuffer, static_cast<sal_Int32>(nViewID));
-    aVector.push_back(comphelper::makePropertyValue("ViewId", sBuffer.makeStringAndClear()));
+    aVector.push_back(comphelper::makePropertyValue("ViewId", "View" + OUString::number(nViewID)));
 
     aVector.push_back(comphelper::makePropertyValue("ViewLeft", convertTwipToMm100 ( rRect.Left() )));
 

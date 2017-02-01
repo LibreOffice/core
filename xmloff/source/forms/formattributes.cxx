@@ -243,18 +243,14 @@ namespace xmloff
         const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Int16 _nAttributeDefault)
     {
-        OUStringBuffer aDefault;
-        ::sax::Converter::convertNumber(aDefault, (sal_Int32)_nAttributeDefault);
-        implAdd(_pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int16>::get(), aDefault.makeStringAndClear());
+        implAdd(_pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int16>::get(), OUString::number(_nAttributeDefault));
     }
 
     void OAttribute2Property::addInt32Property(
         const sal_Char* _pAttributeName, const OUString& _rPropertyName,
         const sal_Int32 _nAttributeDefault)
     {
-        OUStringBuffer aDefault;
-        ::sax::Converter::convertNumber( aDefault, _nAttributeDefault );
-        implAdd( _pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int32>::get(), aDefault.makeStringAndClear() );
+        implAdd( _pAttributeName, _rPropertyName, ::cppu::UnoType<sal_Int32>::get(), OUString::number( _nAttributeDefault ) );
     }
 
     void OAttribute2Property::addEnumProperty(

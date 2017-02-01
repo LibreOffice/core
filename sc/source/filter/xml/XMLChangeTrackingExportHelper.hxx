@@ -48,7 +48,7 @@ class ScChangeTrackingExportHelper
     OUString   sChangeIDPrefix;
     css::uno::Reference<css::text::XText> xText;
 
-    OUString GetChangeID(const sal_uInt32 nActionNumber);
+    static OUString GetChangeID(const sal_uInt32 nActionNumber);
     void GetAcceptanceState(const ScChangeAction* pAction);
 
     void WriteBigRange(const ScBigRange& rBigRange, xmloff::token::XMLTokenEnum aName);

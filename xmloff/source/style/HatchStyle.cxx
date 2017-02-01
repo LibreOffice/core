@@ -206,9 +206,7 @@ void XMLHatchStyleExport::exportXML(
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_HATCH_DISTANCE, aStrValue );
 
                 // Angle
-                ::sax::Converter::convertNumber(aOut, sal_Int32(aHatch.Angle));
-                aStrValue = aOut.makeStringAndClear();
-                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, aStrValue );
+                rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_ROTATION, OUString::number(aHatch.Angle) );
 
                 // Do Write
                 SvXMLElementExport rElem( rExport, XML_NAMESPACE_DRAW, XML_HATCH,

@@ -1323,9 +1323,7 @@ void ScXMLExport::WriteRowContent()
                     AddAttribute(XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION_NAME, pValidationsContainer->GetValidationName(nPrevValidationIndex));
                 if (nCols > 1)
                 {
-                    OUStringBuffer aBuf;
-                    ::sax::Converter::convertNumber(aBuf, nCols);
-                    AddAttribute(sAttrColumnsRepeated, aBuf.makeStringAndClear());
+                    AddAttribute(sAttrColumnsRepeated, OUString::number(nCols));
                 }
                 SvXMLElementExport aElemC(*this, sElemCell, true, true);
                 nIndex = aRange.nIndex;
@@ -1346,9 +1344,7 @@ void ScXMLExport::WriteRowContent()
             AddAttribute(XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION_NAME, pValidationsContainer->GetValidationName(nPrevValidationIndex));
         if (nCols > 1)
         {
-            OUStringBuffer aBuf;
-            ::sax::Converter::convertNumber(aBuf, nCols);
-            AddAttribute(sAttrColumnsRepeated, aBuf.makeStringAndClear());
+            AddAttribute(sAttrColumnsRepeated, OUString::number(nCols));
         }
         SvXMLElementExport aElemC(*this, sElemCell, true, true);
     }
@@ -1368,9 +1364,7 @@ void ScXMLExport::WriteRowStartTag(
     }
     if (nEqualRows > 1)
     {
-        OUStringBuffer aBuf;
-        ::sax::Converter::convertNumber(aBuf, nEqualRows);
-        AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED, aBuf.makeStringAndClear());
+        AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_REPEATED, OUString::number(nEqualRows));
     }
 
     StartElement( sElemRow, true);
@@ -3147,12 +3141,8 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
     {
         SCCOL nColumns( aCell.aMatrixRange.aEnd.Col() - aCell.aMatrixRange.aStart.Col() + 1 );
         SCROW nRows( aCell.aMatrixRange.aEnd.Row() - aCell.aMatrixRange.aStart.Row() + 1 );
-        OUStringBuffer sColumns;
-        OUStringBuffer sRows;
-        ::sax::Converter::convertNumber(sColumns, nColumns);
-        ::sax::Converter::convertNumber(sRows, nRows);
-        AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_COLUMNS_SPANNED, sColumns.makeStringAndClear());
-        AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_ROWS_SPANNED, sRows.makeStringAndClear());
+        AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_COLUMNS_SPANNED, OUString::number(nColumns));
+        AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_MATRIX_ROWS_SPANNED, OUString::number(nRows));
     }
     bool bIsEmpty(false);
     switch (aCell.nType)
@@ -3263,12 +3253,8 @@ void ScXMLExport::WriteCell(ScMyCell& aCell, sal_Int32 nEqualCellCount)
         {
             SCCOL nColumns( aCell.aMergeRange.aEnd.Col() - aCell.aMergeRange.aStart.Col() + 1 );
             SCROW nRows( aCell.aMergeRange.aEnd.Row() - aCell.aMergeRange.aStart.Row() + 1 );
-            OUStringBuffer sColumns;
-            OUStringBuffer sRows;
-            ::sax::Converter::convertNumber(sColumns, nColumns);
-            ::sax::Converter::convertNumber(sRows, nRows);
-            AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, sColumns.makeStringAndClear());
-            AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, sRows.makeStringAndClear());
+            AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_SPANNED, OUString::number(nColumns));
+            AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED, OUString::number(nRows));
         }
     }
     SvXMLElementExport aElemC(*this, *pCellString, true, true);
@@ -3386,9 +3372,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
         sal_Int32 nZOrder = 0;
         if (xShapeProps->getPropertyValue("ZOrder") >>= nZOrder)
         {
-            OUStringBuffer sBuffer;
-            ::sax::Converter::convertNumber(sBuffer, nZOrder);
-            AddAttribute(XML_NAMESPACE_DRAW, XML_ZINDEX, sBuffer.makeStringAndClear());
+            AddAttribute(XML_NAMESPACE_DRAW, XML_ZINDEX, OUString::number(nZOrder));
         }
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xShapeProps->getPropertySetInfo();
         if( xPropSetInfo->hasPropertyByName( sPropCLSID ) )
@@ -3583,10 +3567,8 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
         if( !rAreaLink.sFilterOptions.isEmpty() )
             AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, rAreaLink.sFilterOptions );
         OUStringBuffer sValue;
-        ::sax::Converter::convertNumber( sValue, rAreaLink.GetColCount() );
-        AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_COLUMN_SPANNED, sValue.makeStringAndClear() );
-        ::sax::Converter::convertNumber( sValue, rAreaLink.GetRowCount() );
-        AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_ROW_SPANNED, sValue.makeStringAndClear() );
+        AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_COLUMN_SPANNED, OUString::number(rAreaLink.GetColCount()) );
+        AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_ROW_SPANNED, OUString::number(rAreaLink.GetRowCount()) );
         if( rAreaLink.nRefresh )
         {
             ::sax::Converter::convertDuration( sValue,
@@ -3709,7 +3691,6 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
                 SvXMLElementExport aRangeElem( *this, XML_NAMESPACE_TABLE, XML_HIGHLIGHTED_RANGE, true, true );
                 ++aObjItr;
             }
-            OUStringBuffer aBuffer;
             ScMyDetectiveOpVec::const_iterator aOpItr(rOpVec.begin());
             ScMyDetectiveOpVec::const_iterator aEndOpItr(rOpVec.end());
             while(aOpItr != aEndOpItr)
@@ -3717,8 +3698,7 @@ void ScXMLExport::WriteDetective( const ScMyCell& rMyCell )
                 OUString sOpString;
                 ScXMLConverter::GetStringFromDetOpType( sOpString, aOpItr->eOpType );
                 AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, sOpString );
-                ::sax::Converter::convertNumber( aBuffer, aOpItr->nIndex );
-                AddAttribute( XML_NAMESPACE_TABLE, XML_INDEX, aBuffer.makeStringAndClear() );
+                AddAttribute( XML_NAMESPACE_TABLE, XML_INDEX, OUString::number(aOpItr->nIndex) );
                 SvXMLElementExport aRangeElem( *this, XML_NAMESPACE_TABLE, XML_OPERATION, true, true );
                 ++aOpItr;
             }
@@ -3852,9 +3832,7 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
                 AddAttribute(XML_NAMESPACE_TABLE, XML_USE_WILDCARDS, XML_TRUE);
             if (nYear2000 != 1930)
             {
-                OUStringBuffer sBuffer;
-                ::sax::Converter::convertNumber(sBuffer, nYear2000);
-                AddAttribute(XML_NAMESPACE_TABLE, XML_NULL_YEAR, sBuffer.makeStringAndClear());
+                AddAttribute(XML_NAMESPACE_TABLE, XML_NULL_YEAR, OUString::number(nYear2000));
             }
             SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, true, true);
             {
@@ -3872,9 +3850,7 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
                         AddAttribute(XML_NAMESPACE_TABLE, XML_STATUS, XML_ENABLE);
                     if (nIterationCount != 100)
                     {
-                        ::sax::Converter::convertNumber(sBuffer,
-                                nIterationCount);
-                        AddAttribute(XML_NAMESPACE_TABLE, XML_STEPS, sBuffer.makeStringAndClear());
+                        AddAttribute(XML_NAMESPACE_TABLE, XML_STEPS, OUString::number(nIterationCount));
                     }
                     if (!::rtl::math::approxEqual(fIterationEpsilon, 0.001))
                     {
