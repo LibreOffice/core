@@ -209,8 +209,19 @@ long SwWrtShell::DelLeft()
     }
     else
     {
+        // If we are just to the right to a fieldmark, then remove it completely
+        const SwPosition* aCurPos = GetCursor()->GetPoint();
+        SwPosition aPrevChar(*aCurPos);
+        --aPrevChar.nContent;
+        sw::mark::IFieldmark* pFm = getIDocumentMarkAccess()->getFieldmarkFor(aPrevChar);
+        if (pFm && pFm->GetMarkEnd() == *aCurPos)
+        {
+            getIDocumentMarkAccess()->deleteMark(pFm);
+            return 1;
+        }
+
         OpenMark();
-        SwCursorShell::Left(1,CRSR_SKIP_CHARS);
+        SwCursorShell::Left(1, CRSR_SKIP_CHARS);
     }
     long nRet = Delete();
     if( !nRet && bSwap )
@@ -329,10 +340,19 @@ long SwWrtShell::DelRight()
                 // restore cursor
                 SwCursorShell::Pop( false );
             }
+
+            // If we are just ahead of a fieldmark, then remove it completely
+            sw::mark::IFieldmark* pFm = GetCurrentFieldmark();
+            if (pFm && pFm->GetMarkStart() == *GetCursor()->GetPoint())
+            {
+                getIDocumentMarkAccess()->deleteMark(pFm);
+                nRet = 1;
+                break;
+            }
         }
 
         OpenMark();
-        SwCursorShell::Right(1,CRSR_SKIP_CELLS);
+        SwCursorShell::Right(1, CRSR_SKIP_CELLS);
         nRet = Delete();
         CloseMark( 0 != nRet );
         break;
