@@ -49,8 +49,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <opengl/zone.hxx>
 
-#include <config_features.h>
-
 // internal headers for OpenGLTests class.
 #if HAVE_FEATURE_OPENGL
 #include "salgdi.hxx"
