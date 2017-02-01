@@ -19,7 +19,9 @@
 
 #include <sal/config.h>
 
+#include <memory>
 #include <vector>
+#include <utility>
 
 #include "MacabRecords.hxx"
 #include "MacabRecord.hxx"
