@@ -19,5 +19,5 @@
 -		AS='$(CC)' ASFLAG='$(CFLAG) -c'			\
 +		AS='$(CC)' ASFLAG='$(CFLAG) -c -Wa,--noexecstack'       \
  		AR='$(AR)' NM='$(NM)' RANLIB='$(RANLIB)'	\
+ 		RC='$(RC)'              			\
  		CROSS_COMPILE='$(CROSS_COMPILE)'	\
- 		PERL='$(PERL)' ENGDIRS='$(ENGDIRS)'		\
