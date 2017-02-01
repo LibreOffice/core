@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_69251bc1",
+        "filename": "sd/source/ui/func/fupage.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-02-01T20:24:09Z",
+      "side": 0,
+      "message": "this should be .release() to pass ownership to UndoManager.\nthe next line can be removed, release() already sets pointer to nullptr.",
+      "range": {
+        "startLine": 624,
+        "startChar": 76,
+        "endLine": 624,
+        "endChar": 81
+      },
+      "revId": "f9d846e6adc29a9f5cc5166193219ddadc95955b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
