@@ -1180,23 +1180,22 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 rBind.Invalidate( SID_EDITDOC );
 
                 SignatureState nSignatureState = GetObjectShell()->GetDocumentSignatureState();
-                basegfx::BColor aBackgroundColor;
-                basegfx::BColor aForegroundColor(1.0, 1.0, 1.0);
+                InfoBarType aInfoBarType(InfoBarType::Info);
                 OUString sMessage("");
 
                 switch (nSignatureState)
                 {
                 case SignatureState::BROKEN:
                     sMessage = SfxResId(STR_SIGNATURE_BROKEN);
-                    aBackgroundColor = SfxInfoBarWindow::getDangerColor();
+                    aInfoBarType = InfoBarType::Danger;
                     break;
                 case SignatureState::NOTVALIDATED:
                     sMessage = SfxResId(STR_SIGNATURE_NOTVALIDATED);
-                    aBackgroundColor = SfxInfoBarWindow::getWarningColor();
+                    aInfoBarType = InfoBarType::Warning;
                     break;
                 case SignatureState::PARTIAL_OK:
                     sMessage = SfxResId(STR_SIGNATURE_PARTIAL_OK);
-                    aBackgroundColor = SfxInfoBarWindow::getWarningColor();
+                    aInfoBarType = InfoBarType::Warning;
                     break;
                 default:
                     break;
@@ -1204,7 +1203,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 if (!sMessage.isEmpty())
                 {
-                    auto pInfoBar = AppendInfoBar("signature", sMessage, &aBackgroundColor, &aForegroundColor);
+                    auto pInfoBar = AppendInfoBar("signature", sMessage, aInfoBarType);
                     VclPtrInstance<PushButton> xBtn(&GetWindow());
                     xBtn->SetText(SfxResId(STR_SIGNATURE_SHOW));
                     xBtn->SetSizePixel(xBtn->GetOptimalSize());
@@ -3098,6 +3097,21 @@ void SfxViewFrame::SetViewFrame( SfxViewFrame* pFrame )
     SfxGetpApp()->SetViewFrame_Impl( pFrame );
 }
 
+VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
+                                               const OUString& sMessage,
+                                               InfoBarType aInfoBarType,
+                                               WinBits nMessageStyle)
+{
+    SfxChildWindow* pChild = GetChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
+    if (!pChild)
+        return nullptr;
+
+    SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
+    auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, aInfoBarType, nMessageStyle);
+    ShowChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
+    return pInfoBar;
+}
+
 VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar( const OUString& sId,
                                                const OUString& sMessage,
                                                const basegfx::BColor* pBackgroundColor,
@@ -3105,21 +3119,14 @@ VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar( const OUString& sId,
                                                const basegfx::BColor* pMessageColor,
                                                WinBits nMessageStyle )
 {
-    const sal_uInt16 nId = SfxInfoBarContainerChild::GetChildWindowId();
+    SfxChildWindow* pChild = GetChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
+    if (!pChild)
+        return nullptr;
 
-    // Make sure the InfoBar container is visible
-    if (!HasChildWindow(nId))
-        ToggleChildWindow(nId);
-
-    SfxChildWindow* pChild = GetChildWindow(nId);
-    if (pChild)
-    {
-        SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
-        auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor, nMessageStyle);
-        ShowChildWindow(nId);
-        return pInfoBar;
-    }
-    return nullptr;
+    SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
+    auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor, nMessageStyle);
+    ShowChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
+    return pInfoBar;
 }
 
 void SfxViewFrame::RemoveInfoBar( const OUString& sId )

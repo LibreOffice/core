@@ -254,24 +254,6 @@ void SfxInfoBarWindow::Resize()
     m_pMessage->SetPosSizePixel(aMessagePosition, aMessageSize);
 }
 
-basegfx::BColor SfxInfoBarWindow::getSuccessColor()
-{
-    // Green
-    return basegfx::BColor(0.0, 0.5, 0.0);
-}
-
-basegfx::BColor SfxInfoBarWindow::getWarningColor()
-{
-    // Orange
-    return basegfx::BColor(1.0, 0.5, 0.0);
-}
-
-basegfx::BColor SfxInfoBarWindow::getDangerColor()
-{
-    // Red
-    return basegfx::BColor(0.5, 0.0, 0.0);
-}
-
 IMPL_LINK_NOARG(SfxInfoBarWindow, CloseHandler, Button*, void)
 {
     static_cast<SfxInfoBarContainerWindow*>(GetParent())->removeInfoBar(this);
@@ -295,6 +277,39 @@ void SfxInfoBarContainerWindow::dispose()
         it->disposeAndClear();
     m_pInfoBars.clear( );
     Window::dispose();
+}
+
+VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId,
+                                                           const OUString& sMessage,
+                                                           InfoBarType aInfoBarType,
+                                                           WinBits nMessageStyle)
+{
+    basegfx::BColor pBackgroundColor;
+    basegfx::BColor pForegroundColor;
+    basegfx::BColor pMessageColor;
+    switch (aInfoBarType)
+    {
+    case InfoBarType::Info: // yellow
+        pBackgroundColor = constLightColor;
+        // Use defaults for foreground & message color
+        break;
+    case InfoBarType::Success: // green
+        pBackgroundColor = basegfx::BColor(0.0, 0.5, 0.0);
+        pForegroundColor = basegfx::BColor(1.0, 1.0, 1.0);
+        pMessageColor = basegfx::BColor(1.0, 1.0, 01.0);
+        break;
+    case InfoBarType::Warning: // orange
+        pBackgroundColor = basegfx::BColor(1.0, 0.5, 0.0);
+        pForegroundColor = basegfx::BColor(1.0, 1.0, 1.0);
+        pMessageColor = basegfx::BColor(1.0, 1.0, 01.0);
+        break;
+    case InfoBarType::Danger: // red
+        pBackgroundColor = basegfx::BColor(0.5, 0.0, 0.0);
+        pForegroundColor = basegfx::BColor(1.0, 1.0, 1.0);
+        pMessageColor = basegfx::BColor(1.0, 1.0, 01.0);
+        break;
+    }
+    return appendInfoBar(sId, sMessage, &pBackgroundColor, &pForegroundColor, &pMessageColor, nMessageStyle);
 }
 
 VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::appendInfoBar(const OUString& sId,
