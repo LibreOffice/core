@@ -362,8 +362,8 @@ embed::VisualRepresentation SAL_CALL OleEmbeddedObject::getPreferredVisualRepres
                 changeState( embed::EmbedStates::RUNNING );
 
             datatransfer::DataFlavor aDataFlavor(
-                    OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
-                    OUString( "Windows Metafile" ),
+                    "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
+                    "Windows Metafile",
                     cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
             aVisualRepr.Data = m_pOleComponent->getTransferData( aDataFlavor );

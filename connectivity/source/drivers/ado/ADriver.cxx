@@ -156,22 +156,22 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
         aBooleanValues[1] = "true";
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("IgnoreDriverPrivileges")
-                ,OUString("Ignore the privileges from the database driver.")
+                "IgnoreDriverPrivileges"
+                ,"Ignore the privileges from the database driver."
                 ,false
-                ,OUString( "false" )
+                ,"false"
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("EscapeDateTime")
-                ,OUString("Escape date time format.")
+                "EscapeDateTime"
+                ,"Escape date time format."
                 ,false
-                ,OUString( "true" )
+                ,"true"
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("TypeInfoSettings")
-                ,OUString("Defines how the type info of the database metadata should be manipulated.")
+                "TypeInfoSettings"
+                ,"Defines how the type info of the database metadata should be manipulated."
                 ,false
                 ,OUString( )
                 ,Sequence< OUString > ())

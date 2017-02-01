@@ -185,28 +185,28 @@ struct OleComponentNative_Impl {
         m_aSupportedGraphFormats.realloc( 5 );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
-            OUString( "application/x-openoffice-emf;windows_formatname=\"Image EMF\"" ),
-            OUString( "Windows Enhanced Metafile" ),
+            "application/x-openoffice-emf;windows_formatname=\"Image EMF\"",
+            "Windows Enhanced Metafile",
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         m_aSupportedGraphFormats[1] = datatransfer::DataFlavor(
-            OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
-            OUString( "Windows Metafile" ),
+            "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
+            "Windows Metafile",
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         m_aSupportedGraphFormats[2] = datatransfer::DataFlavor(
-            OUString( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
-            OUString( "Bitmap" ),
+            "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"",
+            "Bitmap",
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         m_aSupportedGraphFormats[3] = datatransfer::DataFlavor(
-            OUString( "image/png" ),
-            OUString( "PNG" ),
+            "image/png",
+            "PNG",
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         m_aSupportedGraphFormats[0] = datatransfer::DataFlavor(
-            OUString( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
-            OUString( "GDIMetafile" ),
+            "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",
+            "GDIMetafile",
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
 

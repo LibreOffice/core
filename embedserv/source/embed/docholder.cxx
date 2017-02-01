@@ -115,19 +115,19 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
         uno::Sequence<beans::PropertyValue> aSeq( nLen );
 
         aSeq[0] = beans::PropertyValue(
-            OUString("Model"),
+            "Model",
             -1,
             uno::Any(uno::Reference<uno::XInterface>(m_xDocument, uno::UNO_QUERY)),
             beans::PropertyState_DIRECT_VALUE);
 
         aSeq[1] = beans::PropertyValue(
-            OUString("ReadOnly"),
+            "ReadOnly",
             -1,
             uno::Any(false),
             beans::PropertyState_DIRECT_VALUE);
 
         aSeq[2] = beans::PropertyValue(
-            OUString("NoAutoSave"),
+            "NoAutoSave",
             -1,
             uno::Any(true),
             beans::PropertyState_DIRECT_VALUE);
@@ -136,7 +136,7 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
         {
             aSeq.realloc( ++nLen );
             aSeq[nLen-1] = beans::PropertyValue(
-                OUString("PluginMode"),
+                "PluginMode",
                 -1,
                 uno::Any((sal_Int16) 3),
                 beans::PropertyState_DIRECT_VALUE);
@@ -144,13 +144,13 @@ void DocumentHolder::LoadDocInFrame( bool bPluginMode )
 
         aSeq.realloc( nLen+=2 );
         aSeq[nLen-2] = beans::PropertyValue(
-            OUString("InteractionHandler"),
+            "InteractionHandler",
             -1,
             uno::Any(xHandler),
             beans::PropertyState_DIRECT_VALUE);
 
         aSeq[nLen-1] = beans::PropertyValue(
-            OUString("MacroExecutionMode"),
+            "MacroExecutionMode",
             -1,
             uno::Any(m_nMacroExecMode),
             beans::PropertyState_DIRECT_VALUE);

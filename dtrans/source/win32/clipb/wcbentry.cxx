@@ -42,7 +42,7 @@ namespace
 
     Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
     {
-        return Reference< XInterface >( static_cast< XClipboard* >( new CWinClipboard( comphelper::getComponentContext(rServiceManager), OUString( "" ) ) ) );
+        return Reference< XInterface >( static_cast< XClipboard* >( new CWinClipboard( comphelper::getComponentContext(rServiceManager), "" ) ) );
     }
 }
 

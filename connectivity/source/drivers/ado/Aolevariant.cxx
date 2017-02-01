@@ -412,7 +412,7 @@ void OLEVariant::ChangeType(VARTYPE vartype, const OLEVariant* pSrc)
             throw css::sdbc::SQLException(
                 sError,
                 nullptr,
-                OUString( "S1000" ),
+                "S1000",
                 1000,
                 css::uno::Any()
             );
