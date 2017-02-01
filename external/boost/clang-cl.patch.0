@@ -101,39 +101,6 @@
        //For compilers supporting auto-tss cleanup
              //with Boost.Threads lib, use Boost.Threads lib
  #           define BOOST_THREAD_USE_LIB
---- boost/type_traits/has_nothrow_assign.hpp
-+++ boost/type_traits/has_nothrow_assign.hpp
-@@ -24,7 +24,7 @@
- #include <boost/type_traits/remove_reference.hpp>
- #endif
- #endif
--#if defined(__GNUC__) || defined(__SUNPRO_CC)
-+#if defined(__GNUC__) || defined(__SUNPRO_CC) || defined __clang__
- #include <boost/type_traits/is_const.hpp>
- #include <boost/type_traits/is_volatile.hpp>
- #include <boost/type_traits/is_assignable.hpp>
---- boost/type_traits/has_nothrow_constructor.hpp
-+++ boost/type_traits/has_nothrow_constructor.hpp
-@@ -17,7 +17,7 @@
- #if defined(BOOST_MSVC) || defined(BOOST_INTEL)
- #include <boost/type_traits/has_trivial_constructor.hpp>
- #endif
--#if defined(__GNUC__ ) || defined(__SUNPRO_CC)
-+#if defined(__GNUC__ ) || defined(__SUNPRO_CC) || defined __clang__
- #include <boost/type_traits/is_default_constructible.hpp>
- #endif
- 
---- boost/type_traits/has_trivial_destructor.hpp
-+++ boost/type_traits/has_trivial_destructor.hpp
-@@ -21,7 +21,7 @@
- #include <boost/type_traits/is_same.hpp>
- #endif
- 
--#if defined(__GNUC__) || defined(__clang) || defined(__SUNPRO_CC)
-+#if defined(__GNUC__) || defined(__clang__) || defined(__SUNPRO_CC)
- #include <boost/type_traits/is_destructible.hpp>
- #endif
- 
 --- boost/typeof/typeof.hpp
 +++ boost/typeof/typeof.hpp
 @@ -49,7 +49,7 @@

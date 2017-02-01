@@ -1,15 +1,14 @@
 aka MSVC warning C4715: not all control paths return a value
 
-diff -ru boost.org/boost/property_tree/detail/json_parser/standard_callbacks.hpp boost/boost/property_tree/detail/json_parser/standard_callbacks.hpp
---- foo/misc/boost.org/boost/property_tree/detail/json_parser/standard_callbacks.hpp	2015-07-07 14:20:48.000000000 +0200
-+++ foo/misc/boost/boost/property_tree/detail/json_parser/standard_callbacks.hpp	2015-07-22 08:35:07.764263463 +0200
+diff -ru boost.org/boost/property_tree/json_parser/detail/standard_callbacks.hpp boost/boost/property_tree/json_parser/detail/standard_callbacks.hpp
+--- foo/misc/boost.org/boost/property_tree/json_parser/detail/standard_callbacks.hpp	2015-07-07 14:20:48.000000000 +0200
++++ foo/misc/boost/boost/property_tree/json_parser/detail/standard_callbacks.hpp	2015-07-22 08:35:07.764263463 +0200
 @@ -128,7 +128,7 @@
-                 stack.pop_back();
-                 return new_tree();
              }
--            assert(false);
-+	    std::abort();
-         }
-         string& new_value() {
-             if (stack.empty()) return new_tree().data();
-
+             case object:
+             default:
+-                BOOST_ASSERT(false); // must start with string, i.e. call new_value
++                std::abort();
+             case key: {
+                 l.t->push_back(std::make_pair(key_buffer, Ptree()));
+                 l.k = object;
