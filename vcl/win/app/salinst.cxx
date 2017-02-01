@@ -672,6 +672,8 @@ LRESULT CALLBACK SalComWndProc( HWND, UINT nMsg, WPARAM wParam, LPARAM lParam, i
 {
     LRESULT nRet = 0;
 
+SAL_INFO("vcl.gdi.wndproc", "SalComWndProc(nMsg=" << nMsg << ", wParam=" << wParam << ", lParam=" << lParam << ")");
+
     switch ( nMsg )
     {
         case SAL_MSG_THREADYIELD:

@@ -5473,6 +5473,8 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     static int  bInWheelMsg = FALSE;
     static int  bInQueryEnd = FALSE;
 
+SAL_INFO("vcl.gdi.wndproc", "SalFrameWndProc(nMsg=" << nMsg << ", wParam=" << wParam << ", lParam=" << lParam << ")");
+
     // By WM_CRETAE we connect the frame with the window handle
     if ( nMsg == WM_CREATE )
     {
