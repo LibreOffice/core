@@ -1225,12 +1225,10 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
              {
                 if (aChangePath.bIsSinglePath)
                 {
-                    OUStringBuffer sMsg(256);
-                    sMsg.append("The path '"    );
-                    sMsg.append     (aChangePath.sPathName);
-                    sMsg.append("' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.");
-                    throw css::uno::Exception(sMsg.makeStringAndClear(),
-                                              static_cast< ::cppu::OWeakObject* >(this));
+                    throw css::uno::Exception(
+                        "The path '" + aChangePath.sPathName
+                        + "' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.",
+                        static_cast< ::cppu::OWeakObject* >(this));
                 }
 
                 css::uno::Sequence<OUString> lTmpList;
@@ -1246,12 +1244,10 @@ void PathSettings::impl_setPathValue(      sal_Int32      nID ,
              {
                 if (aChangePath.bIsSinglePath)
                 {
-                    OUStringBuffer sMsg(256);
-                    sMsg.append("The path '"    );
-                    sMsg.append     (aChangePath.sPathName);
-                    sMsg.append("' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.");
-                    throw css::uno::Exception(sMsg.makeStringAndClear(),
-                                              static_cast< ::cppu::OWeakObject* >(this));
+                    throw css::uno::Exception(
+                        "The path '" + aChangePath.sPathName
+                        + "' is defined as SINGLE_PATH. It's sub set of internal paths can't be set.",
+                        static_cast< ::cppu::OWeakObject* >(this));
                 }
 
                 css::uno::Sequence<OUString> lTmpList;

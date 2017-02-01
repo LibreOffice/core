@@ -195,12 +195,9 @@ namespace {
                 {
                     if ( i_rPaths[i][j] <= nPreviousPageID )
                     {
-                        OStringBuffer message;
-                        message.append( "Path " );
-                        message.append( i );
-                        message.append( ": invalid page ID sequence - each page ID must be greater than the previous one." );
                         throw IllegalArgumentException(
-                            OStringToOUString( message.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US ),
+                            "Path " + OUString::number(i)
+                            + ": invalid page ID sequence - each page ID must be greater than the previous one.",
                             i_rContext, 2 );
                     }
                     nPreviousPageID = i_rPaths[i][j];

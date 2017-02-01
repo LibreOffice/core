@@ -44,14 +44,11 @@ inline void extract(
             xErrorContext, static_cast<sal_Int16>(nArg) );
     }
     if (! fromAny(seq[nArg], &v)) {
-        OUStringBuffer buf;
-        buf.append( "Cannot extract ANY { " );
-        buf.append( seq[nArg].getValueType().getTypeName() );
-        buf.append( " } to " );
-        buf.append( ::cppu::UnoType<T>::get().getTypeName() );
-        buf.append( static_cast<sal_Unicode>('!') );
         throw ::com::sun::star::lang::IllegalArgumentException(
-            buf.makeStringAndClear(), xErrorContext,
+            "Cannot extract ANY { "
+            + seq[nArg].getValueType().getTypeName()
+            + " } to " + ::cppu::UnoType<T>::get().getTypeName(),
+            xErrorContext,
             static_cast<sal_Int16>(nArg) );
     }
 }

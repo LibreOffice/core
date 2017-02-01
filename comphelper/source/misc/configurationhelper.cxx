@@ -86,13 +86,8 @@ css::uno::Any ConfigurationHelper::readRelativeKey(const css::uno::Reference< cs
     xAccess->getByHierarchicalName(sRelPath) >>= xProps;
     if (!xProps.is())
     {
-        OUStringBuffer sMsg(256);
-        sMsg.append("The requested path \"");
-        sMsg.append     (sRelPath               );
-        sMsg.append("\" does not exists."  );
-
         throw css::container::NoSuchElementException(
-                    sMsg.makeStringAndClear());
+            "The requested path \"" + sRelPath + "\" does not exist.");
     }
     return xProps->getPropertyValue(sKey);
 }
@@ -109,13 +104,8 @@ void ConfigurationHelper::writeRelativeKey(const css::uno::Reference< css::uno::
     xAccess->getByHierarchicalName(sRelPath) >>= xProps;
     if (!xProps.is())
     {
-        OUStringBuffer sMsg(256);
-        sMsg.append("The requested path \"");
-        sMsg.append     (sRelPath               );
-        sMsg.append("\" does not exists."  );
-
         throw css::container::NoSuchElementException(
-                    sMsg.makeStringAndClear());
+            "The requested path \"" + sRelPath + "\" does not exist.");
     }
     xProps->setPropertyValue(sKey, aValue);
 }
@@ -130,13 +120,8 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
     xAccess->getByHierarchicalName(sRelPathToSet) >>= xSet;
     if (!xSet.is())
     {
-        OUStringBuffer sMsg(256);
-        sMsg.append("The requested path \"");
-        sMsg.append     (sRelPathToSet          );
-        sMsg.append("\" does not exists."  );
-
         throw css::container::NoSuchElementException(
-                    sMsg.makeStringAndClear());
+            "The requested path \"" + sRelPathToSet + "\" does not exist." );
     }
 
     css::uno::Reference< css::uno::XInterface > xNode;

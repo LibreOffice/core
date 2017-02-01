@@ -638,15 +638,9 @@ std::vector< Any > parseArray( const OUString & str )
             brackets --;
             if( brackets < 0 )
             {
-
-                OUStringBuffer buf;
-                buf.append( "error during array parsing, didn't expect a } at position " );
-                buf.append( (sal_Int32) i );
-                buf.append( " ('" );
-                buf.append( str );
-                buf.append( "')" );
                 throw SQLException(
-                    buf.makeStringAndClear(),
+                    "error during array parsing, didn't expect a } at position "
+                    + OUString::number(i) + " ('" + str + "')",
                     Reference< XInterface > (), OUString(), 1, Any() );
             }
             if( brackets == 0 )

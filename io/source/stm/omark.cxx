@@ -212,11 +212,9 @@ void OMarkableOutputStream::deleteMark(sal_Int32 Mark)
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
 
     if( ii == m_mapMarks.end() ) {
-        OUStringBuffer buf( 128 );
-        buf.append( "MarkableOutputStream::deleteMark unknown mark (" );
-        buf.append( Mark );
-        buf.append( ")");
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 0);
+        throw IllegalArgumentException(
+            "MarkableOutputStream::deleteMark unknown mark (" + OUString::number(Mark) + ")",
+            *this, 0);
     }
     else {
         m_mapMarks.erase( ii );
@@ -230,11 +228,9 @@ void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() ) {
-        OUStringBuffer buf( 128 );
-        buf.append( "MarkableOutputStream::jumpToMark unknown mark (" );
-        buf.append( nMark );
-        buf.append( ")");
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 0);
+        throw IllegalArgumentException(
+            "MarkableOutputStream::jumpToMark unknown mark (" + OUString::number(nMark) + ")",
+            *this, 0);
     }
     else {
         m_nCurrentPos = (*ii).second;
@@ -256,11 +252,9 @@ sal_Int32 OMarkableOutputStream::offsetToMark(sal_Int32 nMark)
 
     if( ii == m_mapMarks.end() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "MarkableOutputStream::offsetToMark unknown mark (" );
-        buf.append( nMark );
-        buf.append( ")");
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 0);
+        throw IllegalArgumentException(
+            "MarkableOutputStream::offsetToMark unknown mark (" + OUString::number(nMark) + ")",
+            *this, 0);
     }
     return m_nCurrentPos - (*ii).second;
 }
@@ -650,11 +644,9 @@ void OMarkableInputStream::deleteMark(sal_Int32 Mark)
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
 
     if( ii == m_mapMarks.end() ) {
-        OUStringBuffer buf( 128 );
-        buf.append( "MarkableInputStream::deleteMark unknown mark (" );
-        buf.append( Mark );
-        buf.append( ")");
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this , 0 );
+        throw IllegalArgumentException(
+            "MarkableInputStream::deleteMark unknown mark (" + OUString::number(Mark) + ")",
+            *this , 0 );
     }
     else {
         m_mapMarks.erase( ii );
@@ -669,11 +661,9 @@ void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
 
     if( ii == m_mapMarks.end() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "MarkableInputStream::jumpToMark unknown mark (" );
-        buf.append( nMark );
-        buf.append( ")");
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this , 0 );
+        throw IllegalArgumentException(
+            "MarkableInputStream::jumpToMark unknown mark (" + OUString::number(nMark) + ")",
+            *this , 0 );
     }
     else
     {
@@ -695,11 +685,9 @@ sal_Int32 OMarkableInputStream::offsetToMark(sal_Int32 nMark)
 
     if( ii == m_mapMarks.end() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "MarkableInputStream::offsetToMark unknown mark (" );
-        buf.append( nMark );
-        buf.append( ")");
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this , 0 );
+        throw IllegalArgumentException(
+            "MarkableInputStream::offsetToMark unknown mark (" + OUString::number(nMark) + ")",
+            *this, 0 );
     }
     return m_nCurrentPos - (*ii).second;
 }

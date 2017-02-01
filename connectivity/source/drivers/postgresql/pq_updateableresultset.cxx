@@ -348,11 +348,10 @@ void UpdateableResultSet::deleteRow(  )
 
     if( m_row < 0 || m_row >= m_rowCount )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "deleteRow cannot be called on invalid row (" );
-        buf.append( m_row );
-        buf.append( ")" );
-        throw SQLException( buf.makeStringAndClear() , *this, OUString(), 0, Any() );
+        throw SQLException(
+            "deleteRow cannot be called on invalid row ("
+            + OUString::number(m_row) + ")",
+            *this, OUString(), 0, Any() );
     }
 
     Reference< XStatement > stmt = extractConnectionFromStatement(m_owner)->createStatement();

@@ -150,13 +150,9 @@ Any Container::getByName( const OUString& aName )
     String2IntMap::const_iterator ii = m_name2index.find( aName );
     if( ii == m_name2index.end() )
     {
-        OUStringBuffer buf(128);
-        buf.append( "Element "  );
-        buf.append( aName );
-        buf.append( " unknown in " );
-        buf.append( m_type );
-        buf.append( "-Container" );
-        throw NoSuchElementException( buf.makeStringAndClear() , *this );
+        throw NoSuchElementException(
+            "Element " + aName + " unknown in " + m_type + "-Container",
+            *this );
     }
     OSL_ASSERT( ii->second >= 0 && ii->second < (int)m_values.size() );
     return m_values[ ii->second ];
@@ -195,14 +191,11 @@ Any Container::getByIndex( sal_Int32 Index )
 {
     if( Index < 0 || Index >= (sal_Int32)m_values.size() )
     {
-        OUStringBuffer buf(128);
-        buf.append( "Index " );
-        buf.append( Index );
-        buf.append(" out of range for " );
-        buf.append( m_type );
-        buf.append("-Container, expected 0 <= x <= " );
-        buf.append( (sal_Int32 ) (m_values.size() -1));
-        throw IndexOutOfBoundsException( buf.makeStringAndClear(), *this );
+        throw IndexOutOfBoundsException(
+            "Index " + OUString::number( Index )
+            + " out of range for " + m_type + "-Container, expected 0 <= x <= "
+            + OUString::number(m_values.size() -1),
+            *this );
     }
     return m_values[Index];
 }
@@ -292,18 +285,10 @@ void Container::dropByName( const OUString& elementName )
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
     if( ii == m_name2index.end() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "Column " );
-        buf.append( elementName );
-        buf.append( " is unknown in " );
-        buf.append( m_type );
-//         buf.appendAscii( " " );
-//         buf.append( m_schemaName );
-//         buf.appendAscii( "." );
-//         buf.append( m_tableName );
-        buf.append( " container, so it can't be dropped" );
         throw css::container::NoSuchElementException(
-            buf.makeStringAndClear(), *this );
+            "Column " + elementName + " is unknown in "
+            + m_type + " container, so it can't be dropped",
+            *this );
     }
     dropByIndex( ii->second );
 }
@@ -313,15 +298,12 @@ void Container::dropByIndex( sal_Int32 index )
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >=(sal_Int32)m_values.size() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "Index out of range (allowed 0 to " );
-        buf.append((sal_Int32)(m_values.size() -1) );
-        buf.append( ", got " );
-        buf.append( index );
-        buf.append( ") in " );
-        buf.append( m_type );
         throw css::lang::IndexOutOfBoundsException(
-            buf.makeStringAndClear(), *this );
+            "Index out of range (allowed 0 to "
+            + OUString::number(m_values.size() -1)
+            + ", got " + OUString::number( index )
+            + ") in " + m_type,
+            *this );
     }
 
     OUString name;
@@ -367,14 +349,9 @@ void Container::append(
 
     if( hasByName( name ) )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "a ");
-        buf.append( m_type );
-        buf.append( " with name " );
-        buf.append( name );
-        buf.append( " already exists in this container" );
         throw css::container::ElementExistException(
-            buf.makeStringAndClear() , *this );
+            "a " + m_type + " with name " + name + " already exists in this container",
+            *this );
     }
 
     int index = m_values.size();
