@@ -1424,13 +1424,17 @@ void ScDocument::GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, OUString
         rStr.clear();
 }
 
-bool ScDocument::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCTAB nTab, ScQueryParam& rQueryParam)
+bool ScDocument::CreateQueryParam( const ScRange& rRange, ScQueryParam& rQueryParam )
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->CreateQueryParam(nCol1, nRow1, nCol2, nRow2, rQueryParam);
+    ScTable* pTab = FetchTable(rRange.aStart.Tab());
+    if (!pTab)
+    {
+        OSL_FAIL("missing tab");
+        return false;
+    }
 
-    OSL_FAIL("missing tab");
-    return false;
+    return pTab->CreateQueryParam(
+        rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row(), rQueryParam);
 }
 
 bool ScDocument::HasAutoFilter( SCCOL nCurCol, SCROW nCurRow, SCTAB nCurTab )

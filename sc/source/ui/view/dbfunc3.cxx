@@ -2166,10 +2166,7 @@ void ScDBFunc::RepeatDB( bool bRecord )
             ScRange aAdvSource;
             if (pDBData->GetAdvancedQuerySource(aAdvSource))
             {
-                pDoc->CreateQueryParam(
-                    aAdvSource.aStart.Col(), aAdvSource.aStart.Row(),
-                    aAdvSource.aEnd.Col(), aAdvSource.aEnd.Row(),
-                    aAdvSource.aStart.Tab(), aQueryParam );
+                pDoc->CreateQueryParam(aAdvSource, aQueryParam);
                 Query( aQueryParam, &aAdvSource, false );
             }
             else
