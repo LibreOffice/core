@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
