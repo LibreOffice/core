@@ -314,10 +314,7 @@ namespace xmloff
         if (force || _nDefault != nCurrentValue)
         {
             // let the formatter of the export context build a string
-            OUStringBuffer sBuffer;
-            ::sax::Converter::convertNumber(sBuffer, (sal_Int32)nCurrentValue);
-
-            AddAttribute(_nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear());
+            AddAttribute(_nNamespaceKey, _pAttributeName, OUString::number(nCurrentValue));
         }
 
         // the property does not need to be handled anymore
@@ -337,10 +334,7 @@ namespace xmloff
         if ( _nDefault != nCurrentValue )
         {
             // let the formatter of the export context build a string
-            OUStringBuffer sBuffer;
-            ::sax::Converter::convertNumber( sBuffer, nCurrentValue );
-
-            AddAttribute( _nNamespaceKey, _pAttributeName, sBuffer.makeStringAndClear() );
+            AddAttribute( _nNamespaceKey, _pAttributeName, OUString::number(nCurrentValue) );
         }
 
         // the property does not need to be handled anymore
@@ -536,21 +530,21 @@ namespace xmloff
             case TypeClass_SHORT:
             case TypeClass_LONG:
                 // let the unit converter format is as string
-                ::sax::Converter::convertNumber(aBuffer, getINT32(_rValue));
+                aBuffer.append(getINT32(_rValue));
                 break;
             case TypeClass_UNSIGNED_LONG:
             case TypeClass_HYPER:
-                ::sax::Converter::convertNumber(aBuffer, getINT64(_rValue));
+                aBuffer.append(getINT64(_rValue));
                 break;
             case TypeClass_UNSIGNED_HYPER:
-                ::sax::Converter::convertNumber(aBuffer, _rValue.get<sal_uInt64>());
+                aBuffer.append(OUString::number(_rValue.get<sal_uInt64>()));
                 break;
             case TypeClass_ENUM:
             {
                 // convert it into an int32
                 sal_Int32 nValue = 0;
                 ::cppu::enum2int(nValue, _rValue);
-                ::sax::Converter::convertNumber(aBuffer, nValue);
+                aBuffer.append(nValue);
             }
             break;
             default:

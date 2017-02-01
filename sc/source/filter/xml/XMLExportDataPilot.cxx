@@ -391,9 +391,7 @@ void ScXMLExportDataPilot::WriteAutoShowInfo(ScDPSaveDimension* pDim)
         if (!sValueStr.isEmpty())
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DISPLAY_MEMBER_MODE, sValueStr);
 
-        OUStringBuffer sBuffer;
-        ::sax::Converter::convertNumber(sBuffer, pAutoInfo->ItemCount);
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_COUNT, sBuffer.makeStringAndClear());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_MEMBER_COUNT, OUString::number(pAutoInfo->ItemCount));
 
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_FIELD, pAutoInfo->DataField);
 
@@ -694,9 +692,7 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, sValueStr );
     if (pDim->GetUsedHierarchy() != 1)
     {
-        OUStringBuffer sBuffer;
-        ::sax::Converter::convertNumber(sBuffer, pDim->GetUsedHierarchy());
-        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USED_HIERARCHY, sBuffer.makeStringAndClear());
+        rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USED_HIERARCHY, OUString::number(pDim->GetUsedHierarchy()));
     }
     ScXMLConverter::GetStringFromFunction( sValueStr, static_cast<sal_Int16>(pDim->GetFunction()) );
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_FUNCTION, sValueStr);

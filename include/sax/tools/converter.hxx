@@ -102,10 +102,6 @@ public:
     static void convertColor( OUStringBuffer &rBuffer,
                               sal_Int32 nColor );
 
-    /** convert number to string */
-    static void convertNumber( OUStringBuffer& rBuffer,
-                               sal_Int32 nNumber );
-
     /** convert string to number with optional min and max values */
     static bool convertNumber( sal_Int32& rValue,
                                const OUString& rString,

@@ -308,9 +308,8 @@ void XMLTextParagraphExport::exportTextFootnoteConfigurationHelper(
     aAny = rFootnoteConfig->getPropertyValue(sStartAt);
     sal_Int16 nOffset = 0;
     aAny >>= nOffset;
-    ::sax::Converter::convertNumber(sBuffer, (sal_Int32)nOffset);
     GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_START_VALUE,
-                             sBuffer.makeStringAndClear());
+                             OUString::number(nOffset));
 
     // some properties are for footnotes only
     if (!bIsEndnote)

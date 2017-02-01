@@ -989,13 +989,11 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             sal_Int32 nIntervalMinorDivisor = static_cast< sal_Int32 >(
                 ::rtl::math::round( fIntervalMajor / fIntervalMinor ));
 
-            OUStringBuffer aBuf;
-            ::sax::Converter::convertNumber( aBuf, nIntervalMinorDivisor );
             pIntervalMinorDivisorContext->AddAttribute(
                 GetTransformer().GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_CHART,
                     GetXMLToken( XML_INTERVAL_MINOR_DIVISOR )),
-                aBuf.makeStringAndClear());
+                OUString::number( nIntervalMinorDivisor ));
         }
     }
 }

@@ -209,9 +209,7 @@ void XMLSettingsExportHelper::exportShort(const sal_Int16 nValue, const OUString
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_SHORT );
     m_rContext.StartElement( XML_CONFIG_ITEM );
-    OUStringBuffer sBuffer;
-    ::sax::Converter::convertNumber(sBuffer, sal_Int32(nValue));
-    m_rContext.Characters( sBuffer.makeStringAndClear() );
+    m_rContext.Characters( OUString::number(nValue) );
     m_rContext.EndElement( false );
 }
 
@@ -221,9 +219,7 @@ void XMLSettingsExportHelper::exportInt(const sal_Int32 nValue, const OUString& 
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_INT );
     m_rContext.StartElement( XML_CONFIG_ITEM );
-    OUStringBuffer sBuffer;
-    ::sax::Converter::convertNumber(sBuffer, nValue);
-    m_rContext.Characters( sBuffer.makeStringAndClear() );
+    m_rContext.Characters( OUString::number(nValue) );
     m_rContext.EndElement( false );
 }
 
@@ -233,8 +229,7 @@ void XMLSettingsExportHelper::exportLong(const sal_Int64 nValue, const OUString&
     m_rContext.AddAttribute( XML_NAME, rName );
     m_rContext.AddAttribute( XML_TYPE, XML_LONG );
     m_rContext.StartElement( XML_CONFIG_ITEM );
-    OUString sValue(OUString::number(nValue));
-    m_rContext.Characters( sValue );
+    m_rContext.Characters( OUString::number(nValue) );
     m_rContext.EndElement( false );
 }
 
