@@ -426,6 +426,7 @@ $(foreach ide,\
 	debug \
 	vs2013 \
 	vs2015 \
+	testIde \
 	xcode, \
 $(eval $(call gb_Top_GbuildToIdeIntegration,$(ide))))
 
