@@ -322,6 +322,7 @@ public:
     void testSheetMove();
     void testDataArea();
     void testAutofilter();
+    void testAdvancedFilter();
     void testCopyPaste();
     void testCopyPasteAsLink();
     void testCopyPasteTranspose();
@@ -624,6 +625,7 @@ public:
     CPPUNIT_TEST(testFunctionLists);
     CPPUNIT_TEST(testToggleRefFlag);
     CPPUNIT_TEST(testAutofilter);
+    CPPUNIT_TEST(testAdvancedFilter);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testCopyPasteAsLink);
     CPPUNIT_TEST(testCopyPasteTranspose);
