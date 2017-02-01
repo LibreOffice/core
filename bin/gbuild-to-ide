@@ -126,6 +126,8 @@ class GbuildParser:
                     for i in ['CXXFLAGS', 'CFLAGS', 'OBJCFLAGS', 'OBJCXXFLAGS']:
                         jsondata[i] = GbuildParser.__split_flags(jsondata[i], jsondata[i+'APPEND'])
                     for i in jsonSrc:
+                        if not i in jsondata:
+                            jsondata[i] = ''
                         jsondata[i] = GbuildParser.__split_objs(module, jsondata[i], jsonSrc[i])
 
                     if not module in moduleDict:
