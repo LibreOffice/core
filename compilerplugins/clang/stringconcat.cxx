@@ -28,8 +28,11 @@ Expr const * stripCtor(Expr const * expr) {
         return expr;
     }
     auto qt = loplugin::DeclCheck(e3->getConstructor());
-    if (!qt.Function("OString").Class("OString").Namespace("rtl").GlobalNamespace() &&
-        !qt.Function("OUString").Class("OUString").Namespace("rtl").GlobalNamespace()) {
+    if (!((qt.MemberFunction().Class("OString").Namespace("rtl")
+           .GlobalNamespace())
+          || (qt.MemberFunction().Class("OUString").Namespace("rtl")
+              .GlobalNamespace())))
+    {
         return expr;
     }
     if (e3->getNumArgs() != 2) {
