@@ -247,6 +247,7 @@ do
 	TARGET_NAME=$INSTALLDIRNAME"$(echo $(basename $i) | awk '
 	/epm_gid_Module_Optional_Gnome.lst/{print"basis5.1-gnome-integration"}
 	/epm_gid_Module_Optional_Grfflt.lst/{print"basis5.1-graphicfilter"}
+	/epm_gid_Module_Optional_Kde.lst/{print"basis5.1-kde-integration"}
 	/epm_gid_Module_Optional_OGLTrans.lst/{print"basis5.1-ogltrans"}
 	/epm_gid_Module_Optional_PostgresqlSdbc.lst/{print"basis5.1-postgresql-sdbc"}
 	/epm_gid_Module_Pdfimport.lst/{print"basis5.1-extension-pdf-import"}
