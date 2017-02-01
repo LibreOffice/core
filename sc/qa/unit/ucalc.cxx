@@ -3026,6 +3026,99 @@ void Test::testAutofilter()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testAdvancedFilter()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // cell contents (nullptr = empty cell)
+    std::vector<std::vector<const char*>> aData = {
+        { "Value", "Tag" }, // A1:B11
+        {  "1", "R" },
+        {  "2", "R" },
+        {  "3", "R" },
+        {  "4", "C" },
+        {  "5", "C" },
+        {  "6", "C" },
+        {  "7", "R" },
+        {  "8", "R" },
+        {  "9", "R" },
+        { "10", "C" },
+        { nullptr },
+        { "Value", "Tag" }, // A13:B14
+        { "> 5", "R" },
+    };
+
+    // Populate cells.
+    for (size_t nRow = 0; nRow < aData.size(); ++nRow)
+    {
+        const std::vector<const char*>& rRowData = aData[nRow];
+        for (size_t nCol = 0; nCol < rRowData.size(); ++nCol)
+        {
+            const char* pCell = rRowData[nCol];
+            if (pCell)
+                m_pDoc->SetString(nCol, nRow, 0, OUString::createFromAscii(pCell));
+        }
+    }
+
+    ScDBData* pDBData = new ScDBData(STR_DB_GLOBAL_NONAME, 0, 0, 0, 1, 10);
+    m_pDoc->SetAnonymousDBData(0, pDBData);
+
+    ScRange aDataRange(0,0,0,1,10,0);
+    ScRange aFilterRuleRange(0,12,0,1,13,0);
+
+    printRange(m_pDoc, aDataRange, "Data");
+    printRange(m_pDoc, aFilterRuleRange, "Filter Rule");
+
+    ScQueryParam aQueryParam;
+    aQueryParam.bHasHeader = true;
+    aQueryParam.nCol1 = aDataRange.aStart.Col();
+    aQueryParam.nRow1 = aDataRange.aStart.Row();
+    aQueryParam.nCol2 = aDataRange.aEnd.Col();
+    aQueryParam.nRow2 = aDataRange.aEnd.Row();
+    aQueryParam.nTab = aDataRange.aStart.Tab();
+
+    bool bGood = m_pDoc->CreateQueryParam(aFilterRuleRange, aQueryParam);
+    CPPUNIT_ASSERT_MESSAGE("failed to create query param.", bGood);
+
+    // First entry is for the 'Value' field, and is greater than 5.
+    ScQueryEntry aEntry = aQueryParam.GetEntry(0);
+    CPPUNIT_ASSERT(aEntry.bDoQuery);
+    CPPUNIT_ASSERT_EQUAL(SCCOLROW(0), aEntry.nField);
+    CPPUNIT_ASSERT_EQUAL(SC_GREATER, aEntry.eOp);
+
+    ScQueryEntry::QueryItemsType aItems = aEntry.GetQueryItems();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aItems.size());
+    CPPUNIT_ASSERT_EQUAL(ScQueryEntry::ByValue, aItems[0].meType);
+    CPPUNIT_ASSERT_EQUAL(5.0, aItems[0].mfVal);
+
+    // Second entry is for the 'Tag' field, and is == 'R'.
+    aEntry = aQueryParam.GetEntry(1);
+    CPPUNIT_ASSERT(aEntry.bDoQuery);
+    CPPUNIT_ASSERT_EQUAL(SCCOLROW(1), aEntry.nField);
+    CPPUNIT_ASSERT_EQUAL(SC_EQUAL, aEntry.eOp);
+
+    aItems = aEntry.GetQueryItems();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aItems.size());
+    CPPUNIT_ASSERT_EQUAL(ScQueryEntry::ByString, aItems[0].meType);
+    CPPUNIT_ASSERT_EQUAL(OUString("R"), aItems[0].maString.getString());
+
+    // perform the query.
+    m_pDoc->Query(0, aQueryParam, true);
+
+    // Only rows 1,8-10 should be visible.
+    bool bFiltered = m_pDoc->RowFiltered(0, 0);
+    CPPUNIT_ASSERT_MESSAGE("row 1 (header row) should be visible", !bFiltered);
+
+    SCROW nRow1 = -1, nRow2 = -1;
+    bFiltered = m_pDoc->RowFiltered(1, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 2-7 should be filtered out.", bFiltered && nRow1 == 1 && nRow2 == 6);
+
+    bFiltered = m_pDoc->RowFiltered(7, 0, &nRow1, &nRow2);
+    CPPUNIT_ASSERT_MESSAGE("rows 8-10 should be visible.", !bFiltered && nRow1 == 7 && nRow2 == 9);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCopyPaste()
 {
     m_pDoc->InsertTab(0, "Sheet1");
