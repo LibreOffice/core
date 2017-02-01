@@ -14,7 +14,7 @@ $(eval $(call gb_ExternalPackage_use_external_project,cairo,cairo))
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 ifneq ($(OS),ANDROID)
 
-$(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo.so.2,src/.libs/libcairo.so.2.11400.6))
+$(eval $(call gb_ExternalPackage_add_file,cairo,$(LIBO_LIB_FOLDER)/libcairo.so.2,src/.libs/libcairo.so.2.11400.8))
 
 endif
 endif
