@@ -798,8 +798,8 @@ namespace cairocanvas
 
                             double x1, y1, x2, y2;
                             cairo_path_extents(pCairo, &x1, &y1, &x2, &y2);
-                            aScaledTextureMatrix.x0 = -(x1 * aScaledTextureMatrix.xx);
-                            aScaledTextureMatrix.y0 = -(y1 * aScaledTextureMatrix.yy);
+                            aScaledTextureMatrix.x0 -= (x1 * aScaledTextureMatrix.xx);
+                            aScaledTextureMatrix.y0 -= (y1 * aScaledTextureMatrix.yy);
 
                             cairo_pattern_set_matrix( pPattern, &aScaledTextureMatrix );
 
