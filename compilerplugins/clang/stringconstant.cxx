@@ -1626,7 +1626,8 @@ void StringConstant::handleOUStringCtor(
     if (e3 == nullptr) {
         return;
     }
-    if (!loplugin::DeclCheck(e3->getConstructor()).Function("OUString").Class("OUString").Namespace("rtl").GlobalNamespace())
+    if (!loplugin::DeclCheck(e3->getConstructor()).MemberFunction()
+        .Class("OUString").Namespace("rtl").GlobalNamespace())
     {
         return;
     }
