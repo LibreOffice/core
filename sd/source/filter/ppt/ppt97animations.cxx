@@ -51,42 +51,13 @@ void Ppt97AnimationInfoAtom::ReadStream( SvStream& rIn )
     rIn.ReadUChar( nUnknown2 );
 }
 
-#define MEMBER_CONSTRUCTOR_LIST() \
-    m_aAtom() \
-    , m_aSoundFileUrl() \
-    , m_bDirtyCache(true) \
-    , m_aPresetId() \
-    , m_aSubType() \
-    , m_bHasSpecialDuration(false) \
-    , m_fDurationInSeconds(0.001)
-
 Ppt97Animation::Ppt97Animation( SvStream& rInputStream )
-    : MEMBER_CONSTRUCTOR_LIST()
+    : m_aAtom()
+    , m_bDirtyCache(true)
+    , m_bHasSpecialDuration(false)
+    , m_fDurationInSeconds(0.001)
 {
      m_aAtom.ReadStream( rInputStream );
-}
-
-Ppt97Animation::Ppt97Animation( const Ppt97Animation& rAnimation )
-    : MEMBER_CONSTRUCTOR_LIST()
-{
-    *this = rAnimation;
-}
-
-Ppt97Animation& Ppt97Animation::operator= ( const Ppt97Animation& rAnimation )
-{
-    m_aAtom = rAnimation.m_aAtom;
-    m_aSoundFileUrl = rAnimation.m_aSoundFileUrl;
-    m_bDirtyCache = rAnimation.m_bDirtyCache;
-    m_aPresetId = rAnimation.m_aPresetId;
-    m_aSubType = rAnimation.m_aSubType;
-    m_bHasSpecialDuration = rAnimation.m_bHasSpecialDuration;
-    m_fDurationInSeconds = rAnimation.m_fDurationInSeconds;
-
-    return *this;
-}
-
-Ppt97Animation::~Ppt97Animation()
-{
 }
 
 bool Ppt97Animation::operator < ( const Ppt97Animation& rAnimation ) const
