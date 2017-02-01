@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_6968bbbb",
+        "filename": "sc/inc/table.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 251,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2017-02-01T11:13:10Z",
+      "side": 1,
+      "message": "I think if aOldColSize !\u003d 0, then we should set bEmptyAttrArray argument of ScColumn::Init() to false, so the formatting stored in aNextColAttrArray is applied to the new columns. Please refer the commit message of https://gerrit.libreoffice.org/#/c/27828/",
+      "range": {
+        "startLine": 251,
+        "startChar": 16,
+        "endLine": 251,
+        "endChar": 57
+      },
+      "revId": "b43c22e3e83dd7609264bffce66a54bb205fbb97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
