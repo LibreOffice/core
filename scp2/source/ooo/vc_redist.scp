@@ -27,9 +27,21 @@ MergeModule gid_MergeModule_Microsoft_VC120_CRT_x86
 #endif
     Feature = gm_Root;
 #if defined WINDOWS_X64
+
+#if defined MSVC_USE_DEBUG_RUNTIME
+    Name = "Microsoft_VC120_DebugCRT_x64.msm";
+#else
     Name = "Microsoft_VC120_CRT_x64.msm";
+#endif
+
+#else
+
+#if defined MSVC_USE_DEBUG_RUNTIME
+    Name = "Microsoft_VC120_DebugCRT_x86.msm";
 #else
     Name = "Microsoft_VC120_CRT_x86.msm";
+#endif
+
 #endif
     RootDir = "TARGETDIR";
     ComponentCondition = "VC_REDIST=1";
@@ -46,9 +58,21 @@ MergeModule gid_MergeModule_Microsoft_VC140_CRT_x86
 #endif
     Feature = gm_Root;
 #if defined WINDOWS_X64
+
+#if defined MSVC_USE_DEBUG_RUNTIME
+    Name = "Microsoft_VC140_DebugCRT_x64.msm";
+#else
     Name = "Microsoft_VC140_CRT_x64.msm";
+#endif
+
+#else
+
+#if defined MSVC_USE_DEBUG_RUNTIME
+    Name = "Microsoft_VC140_DebugCRT_x86.msm";
 #else
     Name = "Microsoft_VC140_CRT_x86.msm";
+#endif
+
 #endif
     RootDir = "TARGETDIR";
     ComponentCondition = "VC_REDIST=1";

@@ -3834,6 +3834,7 @@ if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     # this is an extra var so it can have different default on different MSVC
     # versions (in case there are version specific problems with it)
     MSVC_USE_DEBUG_RUNTIME="TRUE"
+    SCPDEFS="$SCPDEFS -DMSVC_USE_DEBUG_RUNTIME"
 
     AC_MSG_RESULT([yes])
     # cppunit and graphite expose STL in public headers
