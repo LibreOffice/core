@@ -621,8 +621,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( mpBackgroundObjUndoAction )
     {
         // set merge flag, because a SdUndoGroupAction could have been inserted before
-        mpDocSh->GetUndoManager()->AddUndoAction( mpBackgroundObjUndoAction.get(), true );
-        mpBackgroundObjUndoAction = nullptr;
+        mpDocSh->GetUndoManager()->AddUndoAction( mpBackgroundObjUndoAction.release(), true );
     }
 
     // Objects can not be bigger than ViewSize
