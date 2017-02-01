@@ -1,0 +1,12 @@
+diff -up boost/boost/math/special_functions/fpclassify.hpp.dt boost/boost/math/special_functions/fpclassify.hpp
+--- boost/boost/math/special_functions/fpclassify.hpp.dt	2017-02-03 07:59:18.805415876 +0100
++++ boost/boost/math/special_functions/fpclassify.hpp	2017-02-03 08:00:45.046494362 +0100
+@@ -134,7 +134,7 @@ inline bool is_nan_helper(T, const boost
+ inline bool is_nan_helper(__float128 f, const boost::true_type&) { return ::isnanq(f); }
+ inline bool is_nan_helper(__float128 f, const boost::false_type&) { return ::isnanq(f); }
+ #elif defined(BOOST_GNU_STDLIB) && BOOST_GNU_STDLIB && \
+-      _GLIBCXX_USE_C99_MATH && !_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC
++      _GLIBCXX_USE_C99_MATH && (!defined(_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC) || !_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC)
+ inline bool is_nan_helper(__float128 f, const boost::true_type&) { return std::isnan(static_cast<double>(f)); }
+ inline bool is_nan_helper(__float128 f, const boost::false_type&) { return std::isnan(static_cast<double>(f)); }
+ #else

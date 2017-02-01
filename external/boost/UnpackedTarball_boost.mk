@@ -34,11 +34,8 @@ boost_patches += boost_1_59_0.property_tree.wreturn-type.patch
 
 boost_patches += clang-cl.patch.0
 
-# This patch was already applied upstream
-# https://github.com/boostorg/math/commit/74ff2db959c5fa75bec770c41ed2951a740fe936
-boost_patches += boost_1_60_0.quadmath.patch
 boost_patches += boost_1_60_0.undef.warning.patch
-boost_patches += boost_1_60_0.android.undef.warning.patch
+boost_patches += boost_1_63_0.undef.warning.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,boost))
 
