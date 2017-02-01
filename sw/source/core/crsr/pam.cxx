@@ -691,7 +691,9 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool /*bAnnotationMode*/ ) const
             bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
             bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());
 
-            if (pA != pB)
+            if ((pA == pB) && (bAtStartA != bAtStartB))
+                bRet = true;
+            else if (pA != pB)
             {
                 // If both points are either outside or at marks edges (i.e. selection either
                 // touches fields, or fully encloses it), then don't disable editing
