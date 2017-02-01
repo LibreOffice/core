@@ -159,6 +159,7 @@ void FuPage::DoExecute( SfxRequest& )
 
 FuPage::~FuPage()
 {
+    delete mpBackgroundObjUndoAction;
 }
 
 void FuPage::Activate()
@@ -385,8 +386,8 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
 
                 if( mbPageBckgrdDeleted )
                 {
-                    mpBackgroundObjUndoAction.reset( new SdBackgroundObjUndoAction(
-                        *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet()) );
+                    mpBackgroundObjUndoAction = new SdBackgroundObjUndoAction(
+                        *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet());
 
                     if(!mpPage->IsMasterPage())
                     {
@@ -608,8 +609,9 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
         if( !mbMasterPage && !mbPageBckgrdDeleted )
         {
             // Only this page
-            mpBackgroundObjUndoAction.reset( new SdBackgroundObjUndoAction(
-                *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet()) );
+            delete mpBackgroundObjUndoAction;
+            mpBackgroundObjUndoAction = new SdBackgroundObjUndoAction(
+                *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet());
             SfxItemSet aSet( *pArgs );
             sdr::properties::CleanupFillProperties(aSet);
             mpPage->getSdrPageProperties().ClearItem();
@@ -621,7 +623,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
     if( mpBackgroundObjUndoAction )
     {
         // set merge flag, because a SdUndoGroupAction could have been inserted before
-        mpDocSh->GetUndoManager()->AddUndoAction( mpBackgroundObjUndoAction.get(), true );
+        mpDocSh->GetUndoManager()->AddUndoAction( mpBackgroundObjUndoAction, true );
         mpBackgroundObjUndoAction = nullptr;
     }
 
