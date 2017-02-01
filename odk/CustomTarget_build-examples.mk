@@ -107,7 +107,7 @@ $(call gb_CustomTarget_get_workdir,odk/build-examples)/setsdkenv: \
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	sed -e 's!@OO_SDK_NAME@!sdk!' \
         -e 's!@OO_SDK_HOME@!$(INSTDIR)/$(SDKDIRNAME)!' \
-        -e 's!@OFFICE_HOME@!$(INSTDIR)!' -e 's!@OO_SDK_MAKE_HOME@!!' \
+        -e 's!@OFFICE_HOME@!$(INSTROOTBASE)!' -e 's!@OO_SDK_MAKE_HOME@!!' \
         -e 's!@OO_SDK_ZIP_HOME@!!' -e 's!@OO_SDK_CAT_HOME@!!' \
         -e 's!@OO_SDK_SED_HOME@!!' -e 's!@OO_SDK_CPP_HOME@!!' \
         -e 's!@OO_SDK_JAVA_HOME@!$(JAVA_HOME)!' \

@@ -56,7 +56,7 @@ $(eval $(call gb_Module_add_check_targets,odk,\
 	CustomTarget_check \
 ))
 
-ifeq ($(OS),LINUX)
+ifneq ($(filter $(OS),LINUX MACOSX),)
 $(eval $(call gb_Module_add_subsequentcheck_targets,odk, \
     CustomTarget_build-examples \
 ))
