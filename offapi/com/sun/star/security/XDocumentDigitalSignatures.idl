@@ -119,18 +119,17 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     void showCertificate( [in] com::sun::star::security::XCertificate Certificate );
 
 
-       /** manages trusted sources (Authors and paths )
+    /** manages trusted sources (Authors and paths )
      */
-
     void    manageTrustedSources();
     boolean isAuthorTrusted( [in] com::sun::star::security::XCertificate Author );
     boolean isLocationTrusted( [in] string Location );
 
-    // These method should raise confirmation dialog, so it can not used from bad macros...
+    // These methods should raise a confirmation dialog, so they can not be misused from bad macros.
     void    addAuthorToTrustedSources( [in] com::sun::star::security::XCertificate Author );
     void    addLocationToTrustedSources( [in] string Location );
 
-    /**  This method shows CertificateChooser dialog, used by document and PDF signing
+    /**  This method shows the CertificateChooser dialog, used by document and PDF signing
 
          @since LibreOffice 5.3
      */

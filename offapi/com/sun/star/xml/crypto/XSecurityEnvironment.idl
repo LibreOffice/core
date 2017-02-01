@@ -35,7 +35,7 @@ module com { module sun { module star { module xml { module crypto {
 interface XSecurityEnvironment : com::sun::star::uno::XInterface
 {
     /**
-     * Get personal certificate from the environment
+     * Get personal certificates from the environment
      */
     sequence< com::sun::star::security::XCertificate > getPersonalCertificates() raises( com::sun::star::uno::SecurityException ) ;
 
@@ -45,7 +45,7 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
     com::sun::star::security::XCertificate getCertificate( [in] string issuerName, [in] sequence< byte > serialNumber ) raises( com::sun::star::uno::SecurityException ) ;
 
     /**
-     * build certificate path from a certain certificate
+     * Build certificate path from a certain certificate
      */
     sequence< com::sun::star::security::XCertificate > buildCertificatePath( [in] com::sun::star::security::XCertificate beginCert ) raises( com::sun::star::uno::SecurityException ) ;
 
@@ -95,7 +95,7 @@ interface XSecurityEnvironment : com::sun::star::uno::XInterface
     long getCertificateCharacters( [in] com::sun::star::security::XCertificate xCertificate ) raises( com::sun::star::uno::SecurityException ) ;
 
     /**
-     * Get the Environment detail infos
+     * Get the Environment detail information
      */
     string getSecurityEnvironmentInformation ( );
 

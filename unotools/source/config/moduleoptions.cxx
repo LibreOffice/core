@@ -319,12 +319,12 @@ SvtModuleOptions_Impl::~SvtModuleOptions_Impl()
 
 /*-************************************************************************************************************
     @short      called for notify of configmanager
-    @descr      These method is called from the ConfigManager before application ends or from the
+    @descr      This method is called from the ConfigManager before application ends or from the
                 PropertyChangeListener if the sub tree broadcasts changes. You must update our
                 internal values.
 
     @attention  We are registered for pure set node names only. So we can use our internal method "impl_Read()" to
-                update our info list. Because - these method expand given name list to full qualified property list
+                update our info list. Because - this method expand given name list to full qualified property list
                 and use it to read the values. These values are filled into our internal member list m_lFactories
                 at right position.
 
@@ -340,7 +340,7 @@ void SvtModuleOptions_Impl::Notify( const css::uno::Sequence< OUString >& )
 
 /*-****************************************************************************************************
     @short      write changes to configuration
-    @descr      These method writes the changed values into the sub tree
+    @descr      This method writes the changed values into the sub tree
                 and should always called in our destructor to guarantee consistency of config data.
 
     @attention  We clear complete set in configuration first and write it completely new! So we don't must

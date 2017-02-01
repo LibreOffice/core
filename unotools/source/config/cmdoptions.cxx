@@ -96,7 +96,7 @@ class SvtCommandOptions_Impl : public ConfigItem
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
+            @descr      This method is called from the ConfigManager before the application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
@@ -123,9 +123,9 @@ class SvtCommandOptions_Impl : public ConfigItem
 
         /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent our module tree
-            @descr      These methods return the current list of key names! We need it to get needed values from our
+            @descr      This method returns the current list of key names! We need it to get needed values from our
                         configuration management and support dynamical menu item lists!
-            @param      "nDisabledCount"    ,   returns count of menu entries for "new"
+            @param      "nDisabledCount", returns count of menu entries for "new"
             @return     A list of configuration key names is returned.
         *//*-*****************************************************************************************************/
 
