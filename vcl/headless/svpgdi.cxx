@@ -1268,12 +1268,17 @@ cairo_surface_t* SvpSalGraphics::createCairoSurface(const BitmapBuffer *pBuffer)
     return target;
 }
 
-static cairo_t* createTmpCompatibleCairoContext(cairo_surface_t* pSurface)
+static cairo_t* createTmpCompatibleCairoContext(cairo_surface_t* pSurface, double fScale)
 {
     cairo_surface_t *target = cairo_image_surface_create(
                                 cairo_image_surface_get_format(pSurface),
                                 cairo_image_surface_get_width(pSurface),
                                 cairo_image_surface_get_height(pSurface));
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
+    cairo_surface_set_device_scale(target, fScale, fScale);
+#else
+    (void)fScale;
+#endif
     return cairo_create(target);
 }
 
@@ -1281,7 +1286,7 @@ cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
 {
     cairo_t* cr;
     if (m_ePaintMode == XOR && bXorModeAllowed)
-        cr = createTmpCompatibleCairoContext(m_pSurface);
+        cr = createTmpCompatibleCairoContext(m_pSurface, m_fScale);
     else
         cr = cairo_create(m_pSurface);
     cairo_set_line_width(cr, 1);
@@ -1334,13 +1339,17 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
         cairo_format_t nFormat = cairo_image_surface_get_format(m_pSurface);
         assert(nFormat == CAIRO_FORMAT_ARGB32 && "need to implement CAIRO_FORMAT_A1 after all here");
         sal_Int32 nStride = cairo_format_stride_for_width(nFormat, nWidth);
-        for (sal_Int32 y = nExtentsTop; y < nExtentsBottom; ++y)
+        sal_Int32 nUnscaledExtentsLeft = nExtentsLeft * m_fScale;
+        sal_Int32 nUnscaledExtentsRight = nExtentsRight * m_fScale;
+        sal_Int32 nUnscaledExtentsTop = nExtentsTop * m_fScale;
+        sal_Int32 nUnscaledExtentsBottom = nExtentsBottom * m_fScale;
+        for (sal_Int32 y = nUnscaledExtentsTop; y < nUnscaledExtentsBottom; ++y)
         {
             unsigned char *true_row = true_surface_data + (nStride*y);
             unsigned char *xor_row = xor_surface_data + (nStride*y);
-            unsigned char *true_data = true_row + (nExtentsLeft * 4);
-            unsigned char *xor_data = xor_row + (nExtentsLeft * 4);
-            for (sal_Int32 x = nExtentsLeft; x < nExtentsRight; ++x)
+            unsigned char *true_data = true_row + (nUnscaledExtentsLeft * 4);
+            unsigned char *xor_data = xor_row + (nUnscaledExtentsLeft * 4);
+            for (sal_Int32 x = nUnscaledExtentsLeft; x < nUnscaledExtentsRight; ++x)
             {
                 sal_uInt8 b = unpremultiply(true_data[SVP_CAIRO_BLUE], true_data[SVP_CAIRO_ALPHA]) ^
                               unpremultiply(xor_data[SVP_CAIRO_BLUE], xor_data[SVP_CAIRO_ALPHA]);
