@@ -33,7 +33,6 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <vcl/help.hxx>
-#include <vcl/commandinfoprovider.hxx>
 #include <dbaccess/IController.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -411,98 +410,6 @@ IMPL_LINK_NOARG( DBTreeListBox, ScrollDownHdl, LinkParamNone*, void )
 
 namespace
 {
-    void lcl_enableEntries( PopupMenu* _pPopup, IController& _rController )
-    {
-        if ( !_pPopup )
-            return;
-
-        sal_uInt16 nCount = _pPopup->GetItemCount();
-        for (sal_uInt16 i=0; i < nCount; ++i)
-        {
-            if ( _pPopup->GetItemType(i) != MenuItemType::SEPARATOR )
-            {
-                sal_uInt16 nId = _pPopup->GetItemId(i);
-                PopupMenu* pSubPopUp = _pPopup->GetPopupMenu(nId);
-                if ( pSubPopUp )
-                {
-                    lcl_enableEntries( pSubPopUp, _rController );
-                    _pPopup->EnableItem(nId,pSubPopUp->HasValidEntries());
-                }
-                else
-                {
-                    OUString sCommandURL( _pPopup->GetItemCommand( nId ) );
-                    bool bEnabled =  sCommandURL.isEmpty()
-                                  ? _rController.isCommandEnabled( nId )
-                                  : _rController.isCommandEnabled( sCommandURL );
-                    _pPopup->EnableItem( nId, bEnabled );
-                }
-            }
-        }
-
-        _pPopup->RemoveDisabledEntries();
-    }
-}
-
-namespace
-{
-    void lcl_adjustMenuItemIDs( Menu& _rMenu, IController& _rCommandController )
-    {
-        sal_uInt16 nCount = _rMenu.GetItemCount();
-        for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
-        {
-            // do not adjust separators
-            if ( _rMenu.GetItemType( pos ) == MenuItemType::SEPARATOR )
-                continue;
-
-            sal_uInt16 nId = _rMenu.GetItemId(pos);
-            OUString aCommand = _rMenu.GetItemCommand( nId );
-            PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
-            if ( pPopup )
-            {
-                lcl_adjustMenuItemIDs( *pPopup, _rCommandController );
-                continue;
-            }
-
-            const sal_uInt16 nCommandId = _rCommandController.registerCommandURL( aCommand );
-            _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
-                _rMenu.GetItemBits( nId ), OString(), pos );
-
-            // more things to preserve:
-            // - the help command
-            OUString sHelpURL = _rMenu.GetHelpCommand( nId );
-            if ( !sHelpURL.isEmpty() )
-                _rMenu.SetHelpCommand(  nCommandId, sHelpURL  );
-
-            // remove the "old" item
-            _rMenu.RemoveItem( pos+1 );
-        }
-    }
-    void lcl_insertMenuItemImages( Menu& _rMenu, IController& _rCommandController )
-    {
-        uno::Reference< frame::XController > xController = _rCommandController.getXController();
-        uno::Reference< frame::XFrame> xFrame;
-        if ( xController.is() )
-            xFrame = xController->getFrame();
-        sal_uInt16 nCount = _rMenu.GetItemCount();
-        for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
-        {
-            // do not adjust separators
-            if ( _rMenu.GetItemType( pos ) == MenuItemType::SEPARATOR )
-                continue;
-
-            sal_uInt16 nId = _rMenu.GetItemId(pos);
-            OUString aCommand = _rMenu.GetItemCommand( nId );
-            PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
-            if ( pPopup )
-            {
-                lcl_insertMenuItemImages( *pPopup, _rCommandController );
-                continue;
-            }
-
-            if ( xFrame.is() )
-                _rMenu.SetItemImage(nId, vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommand, xFrame));
-        }
-    }
     // SelectionSupplier
     typedef ::cppu::WeakImplHelper<   XSelectionSupplier
                                   >   SelectionSupplier_Base;
@@ -554,50 +461,36 @@ namespace
 
 VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
 {
-    VclPtr< PopupMenu > pContextMenu;
-
     if ( !m_pContextMenuProvider )
-        return pContextMenu;
+        return nullptr;
 
     OUString aResourceName( m_pContextMenuProvider->getContextMenuResourceName( *this ) );
-    OUString aMenuIdentifier;
-
     if ( aResourceName.isEmpty() )
-    {
-        // the basic context menu
-        pContextMenu.reset( m_pContextMenuProvider->getContextMenu( *this ) );
-        // disable what is not available currently
-        lcl_enableEntries( pContextMenu.get(), m_pContextMenuProvider->getCommandController() );
-        // set images
-        lcl_insertMenuItemImages( *pContextMenu, m_pContextMenuProvider->getCommandController() );
-    }
-    else
-    {
-        css::uno::Sequence< css::uno::Any > aArgs( 3 );
-        aArgs[0] <<= comphelper::makePropertyValue( "Value", aResourceName );
-        aArgs[1] <<= comphelper::makePropertyValue( "Frame", m_pContextMenuProvider->getCommandController().getXController()->getFrame() );
-        aArgs[2] <<= comphelper::makePropertyValue( "IsContextMenu", true );
+        return nullptr;
 
-        css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-        m_xMenuController.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext ), css::uno::UNO_QUERY );
+    css::uno::Sequence< css::uno::Any > aArgs( 3 );
+    aArgs[0] <<= comphelper::makePropertyValue( "Value", aResourceName );
+    aArgs[1] <<= comphelper::makePropertyValue( "Frame", m_pContextMenuProvider->getCommandController().getXController()->getFrame() );
+    aArgs[2] <<= comphelper::makePropertyValue( "IsContextMenu", true );
 
-        css::uno::Reference< css::awt::XPopupMenu > xPopupMenu( xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.awt.PopupMenu", xContext ), css::uno::UNO_QUERY );
+    css::uno::Reference< css::uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+    m_xMenuController.set( xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+        "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext ), css::uno::UNO_QUERY );
 
-        if ( !m_xMenuController.is() || !xPopupMenu.is() )
-            return pContextMenu;
+    if ( !m_xMenuController.is() )
+        return nullptr;
 
-        m_xMenuController->setPopupMenu( xPopupMenu );
-        pContextMenu.reset( static_cast< PopupMenu* >( VCLXMenu::GetImplementation( xPopupMenu )->GetMenu() ) );
-        pContextMenu->AddEventListener( LINK( this, DBTreeListBox, MenuEventListener ) );
-        aMenuIdentifier = "private:resource/popupmenu/" + aResourceName;
-    }
+    rtl::Reference<VCLXPopupMenu> xPopupMenu( new VCLXPopupMenu );
+    m_xMenuController->setPopupMenu( xPopupMenu.get() );
+    VclPtr<PopupMenu> pContextMenu( static_cast< PopupMenu* >( xPopupMenu->GetMenu() ) );
+    pContextMenu->AddEventListener( LINK( this, DBTreeListBox, MenuEventListener ) );
 
     // allow context menu interception
     ::comphelper::OInterfaceContainerHelper2* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
     if ( !pInterceptors || !pInterceptors->getLength() )
         return pContextMenu;
+
+    OUString aMenuIdentifier( "private:resource/popupmenu/" + aResourceName );
 
     ContextMenuExecuteEvent aEvent;
     aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
@@ -654,20 +547,13 @@ VclPtr<PopupMenu> DBTreeListBox::CreateContextMenu()
         ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
             pContextMenu, aEvent.ActionTriggerContainer );
         aEvent.ActionTriggerContainer.clear();
-
-        // the interceptors only know command URLs, but our menus primarily work
-        // with IDs -> we need to translate the commands to IDs
-        if ( aResourceName.isEmpty() )
-            lcl_adjustMenuItemIDs( *pContextMenu, m_pContextMenuProvider->getCommandController() );
     }
 
     return pContextMenu;
 }
 
-void DBTreeListBox::ExecuteContextMenuAction( sal_uInt16 _nSelectedPopupEntry )
+void DBTreeListBox::ExecuteContextMenuAction( sal_uInt16 )
 {
-    if ( !m_xMenuController.is() && m_pContextMenuProvider && _nSelectedPopupEntry )
-        m_pContextMenuProvider->getCommandController().executeChecked( _nSelectedPopupEntry, Sequence< PropertyValue >() );
 }
 
 IMPL_LINK( DBTreeListBox, MenuEventListener, VclMenuEvent&, rMenuEvent, void )

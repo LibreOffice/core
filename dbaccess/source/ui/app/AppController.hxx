@@ -497,8 +497,7 @@ namespace dbaui
 
         // IContextMenuProvider
         virtual OUString          getContextMenuResourceName( Control& _rControl ) const override;
-        virtual VclPtr<PopupMenu> getContextMenu( Control& _rControl ) const override;
-        virtual IController&    getCommandController() override;
+        virtual IController&      getCommandController() override;
         virtual ::comphelper::OInterfaceContainerHelper2*
                                 getContextMenuInterceptors() override;
         virtual css::uno::Any

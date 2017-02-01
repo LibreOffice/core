@@ -14,6 +14,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/dbbrowser,\
 ))
 
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/dbbrowser,\
+	dbaccess/uiconfig/dbbrowser/popupmenu/explorer \
 	dbaccess/uiconfig/dbbrowser/popupmenu/refreshdata \
 ))
 

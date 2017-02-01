@@ -2281,11 +2281,6 @@ OUString OApplicationController::getContextMenuResourceName( Control& /*_rContro
     return OUString("edit");
 }
 
-VclPtr<PopupMenu> OApplicationController::getContextMenu( Control& /*_rControl*/ ) const
-{
-    return nullptr;
-}
-
 IController& OApplicationController::getCommandController()
 {
     return *this;

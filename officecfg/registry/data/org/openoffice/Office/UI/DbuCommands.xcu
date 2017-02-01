@@ -536,6 +536,21 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:DSBEditDB" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Edit ~Database File...</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DSBCloseConnection" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Disco~nnect</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:DSBAdministrate" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Registered databases ...</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:DBDatabasePropertiesMenu" oor:op="replace">
