@@ -348,6 +348,7 @@ public:
     cairo_surface_t*                m_pSurface;
     DamageHandler                   m_aDamageHandler;
     int                             m_nGrabLevel;
+    bool                            m_bSalObjectSetPosSize;
 #endif
     GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
     GtkSalFrame( SystemParentData* pSysData );
@@ -425,6 +426,7 @@ public:
     void addGrabLevel();
     void removeGrabLevel();
 
+    void nopaint_container_resize_children(GtkContainer*);
 #endif
     virtual ~GtkSalFrame() override;
 
