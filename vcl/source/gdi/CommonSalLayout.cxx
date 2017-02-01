@@ -448,6 +448,11 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
     ParseFeatures(mrFontSelData.maTargetName);
 
+    if (getenv("SAL_NO_FONT_LOOKUP") != nullptr)
+    {
+        assert(mrFontSelData.maSearchName == "liberationsans");
+    }
+
     double nXScale = 0;
     double nYScale = 0;
     getScale(&nXScale, &nYScale);
