@@ -2762,10 +2762,9 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
                     m_pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
                 }
 
-                assert(dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData())));
-                SwContent* pCnt = static_cast<SwContent*>(pEntry->GetUserData());
+                SwContent* pCnt = dynamic_cast<SwContent*>(static_cast<SwTypeNumber*>(pEntry->GetUserData()));
 
-                if (pCnt->GetParent()->GetType() == ContentTypeId::DRAWOBJECT)
+                if (pCnt && pCnt->GetParent()->GetType() == ContentTypeId::DRAWOBJECT)
                 {
                     SdrView* pDrawView = m_pActiveShell->GetDrawView();
                     if (pDrawView)
