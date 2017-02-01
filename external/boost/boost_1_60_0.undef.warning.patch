@@ -1,33 +1,9 @@
-diff -ur boost.orig/boost/type_traits/is_constructible.hpp boost/boost/type_traits/is_constructible.hpp
---- a/b/boost.orig/boost/type_traits/is_constructible.hpp	2015-12-13 13:49:42.000000000 +0100
-+++ a/b/boost/boost/type_traits/is_constructible.hpp	2016-01-29 15:07:05.859781670 +0100
-@@ -12,7 +12,7 @@
- #include <boost/type_traits/integral_constant.hpp>
- #include <boost/detail/workaround.hpp>
- 
--#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_DECLTYPE) && !BOOST_WORKAROUND(BOOST_MSVC, < 1800) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
-+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_DECLTYPE) && !BOOST_WORKAROUND(BOOST_MSVC, < 1800)
- 
- #include <boost/type_traits/is_destructible.hpp>
- #include <boost/type_traits/is_default_constructible.hpp>
-diff -ur boost.orig/boost/type_traits/is_copy_constructible.hpp boost/boost/type_traits/is_copy_constructible.hpp
---- a/b/boost.orig/boost/type_traits/is_copy_constructible.hpp	2015-12-13 13:49:42.000000000 +0100
-+++ a/b/boost/boost/type_traits/is_copy_constructible.hpp	2016-01-29 15:06:48.839781861 +0100
-@@ -12,7 +12,7 @@
- #include <boost/config.hpp>
- #include <boost/detail/workaround.hpp>
- 
--#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_DECLTYPE) && !BOOST_WORKAROUND(BOOST_MSVC, < 1800) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40900)
-+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_DECLTYPE) && !BOOST_WORKAROUND(BOOST_MSVC, < 1800)
- 
- #include <boost/type_traits/is_constructible.hpp>
- 
 diff -ur boost.orig/boost/type_traits/is_default_constructible.hpp boost/boost/type_traits/is_default_constructible.hpp
 --- a/b/boost.orig/boost/type_traits/is_default_constructible.hpp	2015-12-13 13:49:42.000000000 +0100
 +++ a/b/boost/boost/type_traits/is_default_constructible.hpp	2016-01-29 15:07:43.427781248 +0100
 @@ -12,7 +12,7 @@
- #include <boost/type_traits/integral_constant.hpp>
- #include <boost/detail/workaround.hpp>
+ #include <boost/type_traits/is_abstract.hpp>
+ #endif
  
 -#if !defined(BOOST_NO_CXX11_DECLTYPE) && !BOOST_WORKAROUND(BOOST_MSVC, < 1800) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40500)
 +#if !defined(BOOST_NO_CXX11_DECLTYPE) && !BOOST_WORKAROUND(BOOST_MSVC, < 1800)
@@ -41,7 +17,7 @@ diff -ur boost.orig/boost/type_traits/is_nothrow_move_constructible.hpp boost/bo
  template <class T> struct is_nothrow_move_constructible<volatile T> : public ::boost::false_type {};
  template <class T> struct is_nothrow_move_constructible<const volatile T> : public ::boost::false_type{};
  
--#elif !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_SFINAE_EXPR) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40700)
+-#elif !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_SFINAE_EXPR) && !BOOST_WORKAROUND(BOOST_GCC_VERSION, < 40800)
 +#elif !defined(BOOST_NO_CXX11_NOEXCEPT) && !defined(BOOST_NO_SFINAE_EXPR)
  
  #include <boost/type_traits/declval.hpp>
