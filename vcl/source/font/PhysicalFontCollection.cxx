@@ -1003,6 +1003,17 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
     if( !Count() )
         return nullptr;
 
+    if (getenv("SAL_NO_FONT_LOOKUP") != nullptr)
+    {
+        // Hard code the use of Liberation Sans and skip font search.
+        sal_Int32 nIndex = 0;
+        rFSD.maTargetName = GetNextFontToken(rFSD.GetFamilyName(), nIndex);
+        rFSD.maSearchName = "liberationsans";
+        PhysicalFontFamily* pFont = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
+        assert(pFont);
+        return pFont;
+    }
+
     bool bMultiToken = false;
     sal_Int32 nTokenPos = 0;
     OUString& aSearchName = rFSD.maSearchName; // TODO: get rid of reference
