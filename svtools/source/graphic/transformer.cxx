@@ -98,7 +98,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL GraphicTransformer::colorChange(
             {
                 Bitmap aMask( aBitmapEx.GetMask() );
                 Bitmap aMask2( aBitmap.CreateMask( aColorFrom, nTolerance ) );
-                aMask.CombineSimple( aMask2, BMP_COMBINE_OR );
+                aMask.CombineSimple( aMask2, BmpCombine::Or );
                 aBitmap.Replace( aColorFrom, aColorTo, nTolerance );
                 aGraphic = ::Graphic( BitmapEx( aBitmap, aMask ) );
             }
