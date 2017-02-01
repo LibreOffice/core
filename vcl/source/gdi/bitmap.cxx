@@ -1735,31 +1735,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
 
         switch( eCombine )
         {
-            case BMP_COMBINE_COPY:
-            {
-                for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
-                {
-                    if( pMaskAcc->GetPixel( nY, nX ) == aMaskBlack )
-                        pAcc->SetPixel( nY, nX, aBlack );
-                    else
-                        pAcc->SetPixel( nY, nX, aWhite );
-                }
-            }
-            break;
-
-            case BMP_COMBINE_INVERT:
-            {
-                for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
-                {
-                    if( pAcc->GetPixel( nY, nX ) == aBlack )
-                        pAcc->SetPixel( nY, nX, aWhite );
-                    else
-                        pAcc->SetPixel( nY, nX, aBlack );
-                }
-            }
-            break;
-
-            case BMP_COMBINE_AND:
+            case BmpCombine::And:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -1771,19 +1747,7 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
 
-            case BMP_COMBINE_NAND:
-            {
-                for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
-                {
-                    if( pMaskAcc->GetPixel( nY, nX ) != aMaskBlack && pAcc->GetPixel( nY, nX ) != aBlack )
-                        pAcc->SetPixel( nY, nX, aBlack );
-                    else
-                        pAcc->SetPixel( nY, nX, aWhite );
-                }
-            }
-            break;
-
-            case BMP_COMBINE_OR:
+            case BmpCombine::Or:
             {
                 for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
                 {
@@ -1795,53 +1759,6 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
             }
             break;
 
-            case BMP_COMBINE_NOR:
-            {
-                for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
-                {
-                    if( pMaskAcc->GetPixel( nY, nX ) != aMaskBlack || pAcc->GetPixel( nY, nX ) != aBlack )
-                        pAcc->SetPixel( nY, nX, aBlack );
-                    else
-                        pAcc->SetPixel( nY, nX, aWhite );
-                }
-            }
-            break;
-
-            case BMP_COMBINE_XOR:
-            {
-                for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
-                {
-                    aPixel = pAcc->GetPixel( nY, nX );
-                    aMaskPixel = pMaskAcc->GetPixel( nY, nX );
-
-                    if( ( aMaskPixel != aMaskBlack && aPixel == aBlack ) ||
-                        ( aMaskPixel == aMaskBlack && aPixel != aBlack ) )
-                    {
-                        pAcc->SetPixel( nY, nX, aWhite );
-                    }
-                    else
-                        pAcc->SetPixel( nY, nX, aBlack );
-                }
-            }
-            break;
-
-            case BMP_COMBINE_NXOR:
-            {
-                for( long nY = 0L; nY < nHeight; nY++ ) for( long nX = 0L; nX < nWidth; nX++ )
-                {
-                    aPixel = pAcc->GetPixel( nY, nX );
-                    aMaskPixel = pMaskAcc->GetPixel( nY, nX );
-
-                    if( ( aMaskPixel != aMaskBlack && aPixel == aBlack ) ||
-                        ( aMaskPixel == aMaskBlack && aPixel != aBlack ) )
-                    {
-                        pAcc->SetPixel( nY, nX, aBlack );
-                    }
-                    else
-                        pAcc->SetPixel( nY, nX, aWhite );
-                }
-            }
-            break;
         }
 
         bRet = true;
