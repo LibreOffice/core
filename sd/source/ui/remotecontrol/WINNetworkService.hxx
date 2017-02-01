@@ -16,7 +16,6 @@ namespace sd{
     public:
         WINNetworkService(const std::string& aname = "", unsigned int aport = 1599)
             : ZeroconfService(aname, aport), client(nullptr) {}
-        virtual ~WINNetworkService() override {}
 
         void clear() override;
         void setup() override;

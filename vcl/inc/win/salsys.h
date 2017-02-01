@@ -40,7 +40,6 @@ public:
                           m_aArea( rArea )
         {
         }
-        ~DisplayMonitor() {}
     };
 private:
     std::vector<DisplayMonitor>             m_aMonitors;

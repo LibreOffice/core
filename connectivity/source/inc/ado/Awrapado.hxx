@@ -280,11 +280,6 @@ namespace connectivity
                 WpOLEBase<ADORecordset>::operator=(rhs);
                 return *this;
             }
-            ~WpADORecordset() override
-            {
-                //  if(pInterface && get_State() == adStateOpen)
-                    //  Close();
-            }
 
              void Create();
              bool Open(

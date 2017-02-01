@@ -189,7 +189,6 @@ class ExTextOutRenderer : public TextOutRenderer
 
 public:
     explicit ExTextOutRenderer() = default;
-    virtual ~ExTextOutRenderer() override = default;
 
     bool operator ()(SalLayout const &rLayout, HDC hDC,
         const Rectangle* pRectToErase,

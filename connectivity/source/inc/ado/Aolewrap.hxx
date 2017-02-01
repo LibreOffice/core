@@ -98,10 +98,6 @@ namespace connectivity
             {
             }
 
-            virtual ~WpOLEBase() override
-            {
-            }
-
             operator T*() const { return static_cast<T*>(pInterface); }
             void setWithOutAddRef(T* _pInterface)
             {
