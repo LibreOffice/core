@@ -69,13 +69,16 @@ class SfxInfoBarWindow : public vcl::Window
          */
         void addButton(PushButton* pButton);
 
-        // Colors
-        static basegfx::BColor getSuccessColor();
-        static basegfx::BColor getDangerColor();
-        static basegfx::BColor getWarningColor();
-
     private:
         DECL_LINK( CloseHandler, Button*, void );
+};
+
+
+enum class InfoBarType {
+    Info,
+    Success,
+    Warning,
+    Danger
 };
 
 class SfxInfoBarContainerWindow : public vcl::Window
@@ -89,6 +92,10 @@ class SfxInfoBarContainerWindow : public vcl::Window
         virtual ~SfxInfoBarContainerWindow( ) override;
         virtual void dispose() override;
 
+        VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId,
+                                        const OUString& sMessage,
+                                        InfoBarType aInfoBarType,
+                                        WinBits nMessageStyle);
         VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId,
                                         const OUString& sMessage,
                                         const basegfx::BColor* pBackgroundColor,

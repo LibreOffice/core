@@ -48,6 +48,7 @@ class Point;
 class Size;
 class SfxChildWindow;
 class SfxInfoBarWindow;
+enum class InfoBarType;
 
 namespace sfx2
 {
@@ -170,6 +171,10 @@ public:
         The buttons will be added from Right to Left at the right of the info bar. The parent, size
         and position of each button will be changed: only the width will remain unchanged.
       */
+    VclPtr<SfxInfoBarWindow> AppendInfoBar(const OUString& sId,
+                                    const OUString& sMessage,
+                                    InfoBarType aInfoBarType,
+                                    WinBits nMessageStyle = 0);
     VclPtr<SfxInfoBarWindow> AppendInfoBar(const OUString& sId,
                                     const OUString& sMessage,
                                     const basegfx::BColor* pBackgroundColor = nullptr,
