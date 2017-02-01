@@ -9014,6 +9014,29 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         }
     }
 
+    if (m_aCurrentPDFState.m_aFont.GetFillColor() != Color(COL_TRANSPARENT))
+    {
+        // PDF doesn't have a text fill color, so draw a rectangle before
+        // drawing the actual text.
+        push(PushFlags::FILLCOLOR | PushFlags::LINECOLOR);
+        setFillColor(m_aCurrentPDFState.m_aFont.GetFillColor());
+        // Avoid border around the rectangle for Writer shape text.
+        setLineColor(Color(COL_TRANSPARENT));
+
+        // The rectangle is the bounding box of the text, but also includes
+        // ascent / descent to match the on-screen rendering.
+        Rectangle aRectangle;
+        // This is the top left of the text without ascent / descent.
+        aRectangle.SetPos(m_pReferenceDevice->PixelToLogic(rLayout.GetDrawPosition()));
+        aRectangle.setY(aRectangle.getY() - aRefDevFontMetric.GetAscent());
+        aRectangle.SetSize(m_pReferenceDevice->PixelToLogic(Size(rLayout.GetTextWidth(), 0)));
+        // This includes ascent / descent.
+        aRectangle.setHeight(aRefDevFontMetric.GetLineHeight());
+        drawRectangle(aRectangle);
+
+        pop();
+    }
+
     Point aAlignOffset;
     if ( eAlign == ALIGN_BOTTOM )
         aAlignOffset.Y() -= aRefDevFontMetric.GetDescent();
