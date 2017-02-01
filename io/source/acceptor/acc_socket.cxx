@@ -307,34 +307,29 @@ namespace io_acceptor {
     {
         if( ! m_addr.setPort( m_nPort ) )
         {
-            OUStringBuffer message( 128 );
-            message.append( "acc_socket.cxx:SocketAcceptor::init - error - invalid tcp/ip port " );
-            message.append( (sal_Int32) m_nPort );
-            throw ConnectionSetupException( message.makeStringAndClear() );
+            throw ConnectionSetupException(
+                "acc_socket.cxx:SocketAcceptor::init - error - invalid tcp/ip port " +
+                OUString::number( m_nPort ));
         }
         if( ! m_addr.setHostname( m_sSocketName.pData ) )
         {
-            OUStringBuffer message( 128 );
-            message.append( "acc_socket.cxx:SocketAcceptor::init - error - invalid host " );
-            message.append( m_sSocketName );
-            throw ConnectionSetupException( message.makeStringAndClear() );
+            throw ConnectionSetupException(
+                "acc_socket.cxx:SocketAcceptor::init - error - invalid host " + m_sSocketName );
         }
         m_socket.setOption( osl_Socket_OptionReuseAddr, 1);
 
         if(! m_socket.bind(m_addr) )
         {
-            OUStringBuffer message( 128 );
-            message.append( "acc_socket.cxx:SocketAcceptor::init - error - couldn't bind on " );
-            message.append( m_sSocketName ).append( ":" ).append((sal_Int32)m_nPort);
-            throw ConnectionSetupException( message.makeStringAndClear() );
+            throw ConnectionSetupException(
+                "acc_socket.cxx:SocketAcceptor::init - error - couldn't bind on " +
+                m_sSocketName + ":" + OUString::number(m_nPort));
         }
 
         if(! m_socket.listen() )
         {
-            OUStringBuffer message( 128 );
-            message.append( "acc_socket.cxx:SocketAcceptor::init - error - can't listen on " );
-            message.append( m_sSocketName ).append( ":" ).append( (sal_Int32) m_nPort);
-            throw ConnectionSetupException( message.makeStringAndClear() );
+            throw ConnectionSetupException(
+                "acc_socket.cxx:SocketAcceptor::init - error - can't listen on " +
+                m_sSocketName  + ":" + OUString::number(m_nPort) );
         }
     }
 

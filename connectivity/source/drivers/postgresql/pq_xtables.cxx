@@ -313,10 +313,10 @@ void Tables::dropByIndex( sal_Int32 index )
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "TABLES: Index out of range (allowed 0 to " + OUString::number(m_values.size() -1) +
-                    ", got " + OUString::number( index ) + ")" );
-        throw css::lang::IndexOutOfBoundsException( buf.makeStringAndClear(), *this );
+        throw css::lang::IndexOutOfBoundsException(
+            "TABLES: Index out of range (allowed 0 to " + OUString::number(m_values.size() -1)
+            + ", got " + OUString::number( index ) + ")",
+            *this );
     }
 
     Reference< XPropertySet > set;

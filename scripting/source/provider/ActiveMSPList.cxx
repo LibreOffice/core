@@ -137,10 +137,10 @@ Reference< provider::XScriptProvider >
         xScripts.set( xContext->getScriptContainer() );
     if ( !xScripts.is() )
     {
-        OUStringBuffer buf;
-        buf.append( "Failed to create MasterScriptProvider for ScriptInvocationContext: " );
-        buf.append( "Component supporting XEmbeddScripts interface not found." );
-        throw lang::IllegalArgumentException( buf.makeStringAndClear(), nullptr, 1 );
+        throw lang::IllegalArgumentException(
+            "Failed to create MasterScriptProvider for ScriptInvocationContext: "
+            "Component supporting XEmbeddScripts interface not found.",
+            nullptr, 1 );
     }
 
     ::osl::MutexGuard guard( m_mutex );
@@ -175,11 +175,11 @@ Reference< provider::XScriptProvider >
             Reference< document::XScriptInvocationContext > xScriptsContext( xModel, UNO_QUERY );
             if ( !xScripts.is() && !xScriptsContext.is() )
             {
-                OUStringBuffer buf;
-                buf.append( "Failed to create MasterScriptProvider for '" );
-                buf.append     ( context );
-                buf.append( "': Either XEmbeddScripts or XScriptInvocationContext need to be supported by the document." );
-                throw lang::IllegalArgumentException( buf.makeStringAndClear(), nullptr, 1 );
+                throw lang::IllegalArgumentException(
+                    "Failed to create MasterScriptProvider for '"
+                    + context +
+                    "': Either XEmbeddScripts or XScriptInvocationContext need to be supported by the document.",
+                    nullptr, 1 );
             }
 
             ::osl::MutexGuard guard( m_mutex );
@@ -221,12 +221,10 @@ Reference< provider::XScriptProvider >
     }
     catch( const Exception& )
     {
-        OUStringBuffer aMessage;
-        aMessage.append( "Failed to create MasterScriptProvider for context '" );
-        aMessage.append     ( context );
-        aMessage.append( "'." );
         throw lang::WrappedTargetRuntimeException(
-            aMessage.makeStringAndClear(), *this, ::cppu::getCaughtException() );
+            "Failed to create MasterScriptProvider for context '"
+            + context + "'.",
+            *this, ::cppu::getCaughtException() );
     }
     return msp;
 }

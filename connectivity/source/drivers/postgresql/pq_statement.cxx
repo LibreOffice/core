@@ -917,11 +917,10 @@ sal_Bool Statement::convertFastPropertyValue(
     }
     default:
     {
-        OUStringBuffer buf(128);
-        buf.append( "pq_statement: Invalid property handle (" );
-        buf.append( nHandle );
-        buf.append( ")" );
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 2 );
+        throw IllegalArgumentException(
+            "pq_statement: Invalid property handle ("
+            + OUString::number( nHandle ) + ")",
+            *this, 2 );
     }
     }
     return bRet;

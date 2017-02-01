@@ -179,14 +179,11 @@ void SequenceResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
 {
     if( columnIndex < 1 || columnIndex > m_colCount )
     {
-        OUStringBuffer buf(128);
-
-        buf.append( "pq_sequenceresultsetmetadata: index out of range (expected 1 to " );
-        buf.append( m_colCount );
-        buf.append( ", got " );
-        buf.append( columnIndex );
         throw SQLException(
-            buf.makeStringAndClear(), *this, OUString(), 1, Any() );
+            "pq_sequenceresultsetmetadata: index out of range (expected 1 to "
+            + OUString::number( m_colCount )
+            + ", got " + OUString::number( columnIndex ),
+            *this, OUString(), 1, Any() );
     }
 }
 

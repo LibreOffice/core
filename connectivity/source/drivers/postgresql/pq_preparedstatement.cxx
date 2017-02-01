@@ -212,15 +212,13 @@ void PreparedStatement::checkColumnIndex( sal_Int32 parameterIndex )
 {
     if( parameterIndex < 1 || parameterIndex > (sal_Int32) m_vars.size() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "pq_preparedstatement: parameter index out of range (expected 1 to " );
-        buf.append( (sal_Int32 ) m_vars.size() );
-        buf.append( ", got " );
-        buf.append( parameterIndex );
-        buf.append( ", statement '" );
-        buf.append( OStringToOUString( m_stmt, ConnectionSettings::encoding ) );
-        buf.append( "')" );
-        throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
+        throw SQLException(
+            "pq_preparedstatement: parameter index out of range (expected 1 to "
+            + OUString::number( m_vars.size() )
+            + ", got " + OUString::number( parameterIndex )
+            + ", statement '" + OStringToOUString( m_stmt, ConnectionSettings::encoding )
+            + "')",
+            *this, OUString(), 1, Any () );
     }
 }
 void PreparedStatement::checkClosed()
@@ -580,10 +578,9 @@ void PreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
 {
     if( ! implSetObject( this, parameterIndex, x ))
     {
-        OUStringBuffer buf;
-        buf.append( "pq_preparedstatement::setObject: can't convert value of type " );
-        buf.append( x.getValueTypeName() );
-        throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
+        throw SQLException(
+            "pq_preparedstatement::setObject: can't convert value of type " + x.getValueTypeName(),
+            *this, OUString(), 1, Any () );
     }
 }
 
@@ -614,11 +611,10 @@ void PreparedStatement::setObjectWithInfo(
         }
         else
         {
-            OUStringBuffer buf;
-            buf.append( "pq_preparedstatement::setObjectWithInfo: can't convert value of type " );
-            buf.append( x.getValueTypeName() );
-            buf.append( " to type DECIMAL or NUMERIC" );
-            throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any () );
+            throw SQLException(
+                "pq_preparedstatement::setObjectWithInfo: can't convert value of type "
+                +  x.getValueTypeName() + " to type DECIMAL or NUMERIC",
+                *this, OUString(), 1, Any () );
         }
     }
     else
@@ -731,11 +727,10 @@ sal_Bool PreparedStatement::convertFastPropertyValue(
     }
     default:
     {
-        OUStringBuffer buf(128);
-        buf.append( "pq_statement: Invalid property handle (" );
-        buf.append( nHandle );
-        buf.append( ")" );
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 2 );
+        throw IllegalArgumentException(
+            "pq_statement: Invalid property handle ("
+            + OUString::number( nHandle ) +  ")",
+            *this, 2 );
     }
     }
     return bRet;

@@ -1143,17 +1143,11 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
 
                 if (!bConverted)
                 {
-                    OUStringBuffer aErrorMessage;
-                    aErrorMessage.append( "Unable to convert the given value for the property " );
-                    aErrorMessage.append     ( GetPropertyName( (sal_uInt16)nPropId ) );
-                    aErrorMessage.append( ".\n" );
-                    aErrorMessage.append( "Expected type: " );
-                    aErrorMessage.append     ( pDestType->getTypeName() );
-                    aErrorMessage.append( "\n" );
-                    aErrorMessage.append( "Found type: " );
-                    aErrorMessage.append     ( rValue.getValueType().getTypeName() );
                     throw css::lang::IllegalArgumentException(
-                        aErrorMessage.makeStringAndClear(),
+                        "Unable to convert the given value for the property "
+                        + GetPropertyName( (sal_uInt16)nPropId )
+                        + ".\nExpected type: " + pDestType->getTypeName()
+                        + "\nFound type: " + rValue.getValueType().getTypeName(),
                         static_cast< css::beans::XPropertySet* >(this),
                         1);
                 }

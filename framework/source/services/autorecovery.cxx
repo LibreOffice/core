@@ -3477,13 +3477,8 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         }
 
         // re-throw
-        OUStringBuffer sMsg(256);
-        sMsg.append("Recovery of \"");
-        sMsg.append     (sURL            );
-        sMsg.append("\" failed."    );
-
         throw css::lang::WrappedTargetException(
-            sMsg.makeStringAndClear(),
+            "Recovery of \"" + sURL + "\" failed.",
             static_cast< css::frame::XDispatch* >(this),
             aCaughtException
         );

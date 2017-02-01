@@ -148,10 +148,7 @@ void LdapConnection::initConnection()
 {
     if (mLdapDefinition.mServer.isEmpty())
     {
-        OUStringBuffer message ;
-
-        message.append("Cannot initialise connection to LDAP: No server specified.") ;
-        throw ldap::LdapConnectionException(message.makeStringAndClear()) ;
+        throw ldap::LdapConnectionException("Cannot initialise connection to LDAP: No server specified.");
     }
 
     if (mLdapDefinition.mPort == 0) mLdapDefinition.mPort = LDAP_PORT;
@@ -165,13 +162,9 @@ void LdapConnection::initConnection()
 #endif
     if (mConnection == nullptr)
     {
-        OUStringBuffer message ;
-
-        message.append("Cannot initialise connection to LDAP server ") ;
-        message.append(mLdapDefinition.mServer) ;
-        message.append(":") ;
-        message.append(mLdapDefinition.mPort) ;
-        throw ldap::LdapConnectionException(message.makeStringAndClear());
+        throw ldap::LdapConnectionException(
+            "Cannot initialise connection to LDAP server "
+            + mLdapDefinition.mServer + ":" + OUString::number(mLdapDefinition.mPort));
     }
 }
 

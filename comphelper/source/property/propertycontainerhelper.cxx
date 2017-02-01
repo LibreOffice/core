@@ -200,16 +200,13 @@ namespace
 {
     void lcl_throwIllegalPropertyValueTypeException( const PropertyDescription& _rProperty, const Any& _rValue )
     {
-        OUStringBuffer aErrorMessage;
-        aErrorMessage.append( "The given value cannot be converted to the required property type." );
-        aErrorMessage.append( "\n(property name \"" );
-        aErrorMessage.append( _rProperty.aProperty.Name );
-        aErrorMessage.append( "\", found value type \"" );
-        aErrorMessage.append( _rValue.getValueType().getTypeName() );
-        aErrorMessage.append( "\", required property type \"" );
-        aErrorMessage.append( _rProperty.aProperty.Type.getTypeName() );
-        aErrorMessage.append( "\")" );
-        throw IllegalArgumentException( aErrorMessage.makeStringAndClear(), nullptr, 4 );
+        throw IllegalArgumentException(
+            "The given value cannot be converted to the required property type."
+            " (property name \"" +  _rProperty.aProperty.Name
+            + "\", found value type \"" + _rValue.getValueType().getTypeName()
+            + "\", required property type \"" + _rProperty.aProperty.Type.getTypeName()
+            + "\")",
+            nullptr, 4 );
     }
 }
 

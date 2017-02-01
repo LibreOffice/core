@@ -489,18 +489,17 @@ void Connection::initialize( const Sequence< Any >& aArguments )
     }
     if( aArguments.getLength() != 2 )
     {
-        OUStringBuffer buf(128);
-        buf.append( "pq_driver: expected 2 arguments, got " );
-        buf.append( aArguments.getLength( ) );
-        throw IllegalArgumentException(buf.makeStringAndClear(), Reference< XInterface > () , 0 );
+        throw IllegalArgumentException(
+            "pq_driver: expected 2 arguments, got " + OUString::number( aArguments.getLength( ) ),
+            Reference< XInterface > () , 0 );
     }
 
     if( ! (aArguments[0] >>= url) )
     {
-        OUStringBuffer buf(128);
-        buf.append( "pq_driver: expected string as first argument, got " );
-        buf.append( aArguments[0].getValueType().getTypeName() );
-        throw IllegalArgumentException( buf.makeStringAndClear() , *this, 0 );
+        throw IllegalArgumentException(
+            "pq_driver: expected string as first argument, got "
+            + aArguments[0].getValueType().getTypeName(),
+            *this, 0 );
     }
 
     tc->convertTo( aArguments[1], cppu::UnoType<decltype(args)>::get() ) >>= args;
@@ -533,14 +532,11 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 }
                 else
                     errorMessage = "#no error message#";
-                OUStringBuffer buf( 128 );
-                buf.append( "Error in database URL '" );
-                buf.append( url );
-                buf.append( "':\n" );
-                buf.append( errorMessage );
                 // HY092 is "Invalid attribute/option identifier."
                 // Just the most likely error; the error might be  HY024 "Invalid attribute value".
-                throw SQLException( buf.makeStringAndClear(), *this, "HY092", 5, Any() );
+                throw SQLException(
+                    "Error in database URL '" + url + "':\n"  + errorMessage,
+                    *this, "HY092", 5, Any() );
             }
 
             for (  PQconninfoOption * opt = oOpts.get(); opt->keyword != nullptr; ++opt)
@@ -562,17 +558,14 @@ void Connection::initialize( const Sequence< Any >& aArguments )
         throw RuntimeException("pq_driver: out of memory" );
     if( PQstatus( m_settings.pConnection ) == CONNECTION_BAD )
     {
-        OUStringBuffer buf( 128 );
-
         const char * error = PQerrorMessage( m_settings.pConnection );
         OUString errorMessage( error, strlen( error) , RTL_TEXTENCODING_ASCII_US );
-        buf.append( "Couldn't establish database connection to '" );
-        buf.append( url );
-        buf.append( "'\n" );
-        buf.append( errorMessage );
         PQfinish( m_settings.pConnection );
         m_settings.pConnection = nullptr;
-        throw SQLException( buf.makeStringAndClear(), *this, errorMessage, CONNECTION_BAD, Any() );
+        throw SQLException(
+            "Couldn't establish database connection to '" + url + "'\n"
+            + errorMessage,
+            *this, errorMessage, CONNECTION_BAD, Any() );
     }
     PQsetClientEncoding( m_settings.pConnection, "UNICODE" );
     char *p = PQuser( m_settings.pConnection );

@@ -47,12 +47,8 @@ namespace framework{
  */
 #define THROW_PARSEEXCEPTION(COMMENT)                                   \
     {                                                                   \
-        OUStringBuffer sMessage(256);                            \
-        sMessage.append     (implts_getErrorLineString());              \
-        sMessage.append(COMMENT                    );              \
-                                                                        \
         throw css::xml::sax::SAXException(                              \
-                sMessage.makeStringAndClear(),                          \
+                implts_getErrorLineString() + COMMENT,                  \
                 static_cast< css::xml::sax::XDocumentHandler* >(this),  \
                 css::uno::Any());                                       \
     }

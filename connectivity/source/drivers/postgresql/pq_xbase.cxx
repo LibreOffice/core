@@ -99,12 +99,9 @@ void ReflectionBase::setPropertyValue_NoBroadcast_public(
     sal_Int32 nHandle = m_propsDesc.getHandleByName( name );
     if( -1 == nHandle  )
     {
-        OUStringBuffer buf(128);
-        buf.append( "Unknown property '" );
-        buf.append( name );
-        buf.append( "' in " );
-        buf.append( m_implName );
-        throw css::uno::RuntimeException( buf.makeStringAndClear() , *this );
+        throw css::uno::RuntimeException(
+            "Unknown property '" + name + "' in " + m_implName,
+            *this );
     }
     setFastPropertyValue_NoBroadcast( nHandle , value );
 }

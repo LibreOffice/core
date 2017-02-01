@@ -157,10 +157,11 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
 
                 OUStringBuffer buf;
                 buf.append( "MasterScriptProvider::initialize: caught " );
-                buf.append     ( aError.getValueTypeName() );
+                buf.append( aError.getValueTypeName() );
                 buf.append( ":" );
 
-                Exception aException; aError >>= aException;
+                Exception aException;
+                aError >>= aException;
                 buf.append     ( aException.Message );
                 throw lang::WrappedTargetException( buf.makeStringAndClear(), *this, aError );
             }

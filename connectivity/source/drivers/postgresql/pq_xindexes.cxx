@@ -243,14 +243,12 @@ void Indexes::dropByIndex( sal_Int32 index )
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "Indexes: Index out of range (allowed 0 to " );
-        buf.append( (sal_Int32) (m_values.size() -1) );
-        buf.append( ", got " );
-        buf.append( index );
-        buf.append( ")" );
         throw css::lang::IndexOutOfBoundsException(
-            buf.makeStringAndClear(), *this );
+            "Indexes: Index out of range (allowed 0 to "
+            + OUString::number( m_values.size() -1 )
+            + ", got " + OUString::number( index )
+            + ")",
+            *this );
     }
 
     Reference< XPropertySet > set;

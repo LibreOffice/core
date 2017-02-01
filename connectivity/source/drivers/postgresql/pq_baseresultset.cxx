@@ -590,11 +590,9 @@ sal_Bool BaseResultSet::convertFastPropertyValue(
     }
     default:
     {
-        OUStringBuffer buf(128);
-        buf.append( "pq_resultset: Invalid property handle (" );
-        buf.append( nHandle );
-        buf.append( ")" );
-        throw IllegalArgumentException( buf.makeStringAndClear(), *this, 2 );
+        throw IllegalArgumentException(
+            "pq_resultset: Invalid property handle (" + OUString::number( nHandle ) + ")",
+            *this, 2 );
     }
     }
     return bRet;
@@ -626,13 +624,12 @@ void BaseResultSet::checkColumnIndex(sal_Int32 index )
 {
     if( index < 1 || index > m_fieldCount )
     {
-        OUStringBuffer buf(128);
-        buf.append( "pq_resultset: index out of range (" );
-        buf.append( index );
-        buf.append( ", allowed range is 1 to " );
-        buf.append( m_fieldCount );
-        buf.append( ")" );
-        throw SQLException( buf.makeStringAndClear(), *this, OUString(), 1, Any() );
+        throw SQLException(
+            "pq_resultset: index out of range ("
+            + OUString::number( index )
+            + ", allowed range is 1 to " + OUString::number( m_fieldCount )
+            + ")",
+            *this, OUString(), 1, Any() );
     }
 
 }
@@ -641,13 +638,10 @@ void BaseResultSet::checkRowIndex()
 {
     if( m_row < 0 || m_row >= m_rowCount )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "pq_baseresultset: row index out of range, allowed is " );
-        buf.append( "0 to " );
-        buf.append( ((sal_Int32)(m_rowCount -1)) );
-        buf.append( ", got " );
-        buf.append( m_row );
-        throw SQLException( buf.makeStringAndClear(), *this, OUString(),1, Any() );
+        throw SQLException(
+            "pq_baseresultset: row index out of range, allowed is 0 to " + OUString::number( m_rowCount -1 )
+            + ", got " + OUString::number( m_row ),
+            *this, OUString(),1, Any() );
     }
 }
 

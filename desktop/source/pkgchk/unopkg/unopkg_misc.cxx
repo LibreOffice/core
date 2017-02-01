@@ -211,13 +211,9 @@ OUString makeAbsoluteFileUrl(
     if (osl_getAbsoluteFileURL(
             base_url.pData, file_url.pData, &abs.pData ) != osl_File_E_None)
     {
-        OUStringBuffer buf;
-        buf.append( "making absolute file url failed: \"" );
-        buf.append( base_url );
-        buf.append( "\" (base-url) and \"" );
-        buf.append( file_url );
-        buf.append( "\" (file-url)!" );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException(
+            "making absolute file url failed: \"" + base_url
+            + "\" (base-url) and \"" + file_url + "\" (file-url)!" );
     }
     return abs[ abs.getLength() -1 ] == '/'
         ? abs.copy( 0, abs.getLength() -1 ) : abs;

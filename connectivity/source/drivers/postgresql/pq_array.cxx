@@ -110,15 +110,12 @@ void Array::checkRange( sal_Int32 index, sal_Int32 count )
 {
     if( index >= 1 && index -1 + count <= (sal_Int32)m_data.size() )
         return;
-    OUStringBuffer buf;
-    buf.append( "Array::getArrayAtIndex(): allowed range for index + count " );
-    buf.append( (sal_Int32)m_data.size() );
-    buf.append( ", got " );
-    buf.append( index );
-    buf.append( " + " );
-    buf.append( count );
-
-    throw SQLException( buf.makeStringAndClear() , *this, OUString(), 1, Any());
+    throw SQLException(
+        "Array::getArrayAtIndex(): allowed range for index + count "
+        + OUString::number( m_data.size() )
+        + ", got " + OUString::number( index )
+        + " + " + OUString::number( count ),
+        *this, OUString(), 1, Any());
 
 }
 

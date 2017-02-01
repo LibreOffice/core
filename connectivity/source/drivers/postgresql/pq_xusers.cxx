@@ -136,12 +136,9 @@ void Users::dropByName( const OUString& elementName )
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
     if( ii == m_name2index.end() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "User " );
-        buf.append( elementName );
-        buf.append( " is unknown, so it can't be dropped" );
         throw css::container::NoSuchElementException(
-            buf.makeStringAndClear(), *this );
+            "User " + elementName + " is unknown, so it can't be dropped",
+            *this );
     }
     dropByIndex( ii->second );
 }
@@ -152,14 +149,12 @@ void Users::dropByIndex( sal_Int32 index )
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
     {
-        OUStringBuffer buf( 128 );
-        buf.append( "USERS: Index out of range (allowed 0 to " );
-        buf.append( (sal_Int32) (m_values.size() -1) );
-        buf.append( ", got " );
-        buf.append( index );
-        buf.append( ")" );
         throw css::lang::IndexOutOfBoundsException(
-            buf.makeStringAndClear(), *this );
+            "USERS: Index out of range (allowed 0 to "
+            + OUString::number( m_values.size() -1 )
+            +  ", got " + OUString::number( index )
+            + ")",
+            *this );
     }
 
     Reference< XPropertySet > set;
