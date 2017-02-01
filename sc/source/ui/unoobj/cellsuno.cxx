@@ -5660,11 +5660,7 @@ uno::Reference<sheet::XSheetFilterDescriptor> SAL_CALL ScCellRangeObj::createFil
         aParam.nTab  = aDataAddress.Sheet;
 
         ScDocument& rDoc = pDocSh->GetDocument();
-        bool bOk = rDoc.CreateQueryParam(
-                            aRange.aStart.Col(), aRange.aStart.Row(),
-                            aRange.aEnd.Col(), aRange.aEnd.Row(),
-                            aRange.aStart.Tab(), aParam );
-        if ( bOk )
+        if (rDoc.CreateQueryParam(aRange, aParam))
         {
             //  im FilterDescriptor sind die Fields innerhalb des Bereichs gezaehlt
             SCCOLROW nFieldStart = aParam.bByRow ?

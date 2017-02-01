@@ -365,13 +365,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
                 theOutParam.bDuplicate = !pBtnUnique->IsChecked();
                 theOutParam.bDestPers  = pBtnDestPers->IsChecked();
 
-                bQueryOk =
-                    pDoc->CreateQueryParam( rStart.Col(),
-                                            rStart.Row(),
-                                            rEnd.Col(),
-                                            rEnd.Row(),
-                                            rStart.Tab(),
-                                            theOutParam );
+                bQueryOk = pDoc->CreateQueryParam(ScRange(rStart,rEnd), theOutParam);
             }
         }
 
