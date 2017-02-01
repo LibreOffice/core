@@ -59,7 +59,7 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
 
         /** called for notify of configmanager
 
-            These method is called from the ConfigManager before application ends or from the
+            This method is called from the ConfigManager before the application ends or from the
             PropertyChangeListener if the sub tree broadcasts changes. You must update your
             internal values.
 
@@ -87,7 +87,7 @@ class SvtSlideSorterBarOptions_Impl : public ConfigItem
 
         /** return list of key names of our configuration management which represent our module tree
 
-            These methods return a static const list of key names. We need it to get needed values from our
+            This method returns a static const list of key names. We need it to get needed values from
             configuration management.
 
             \return A list of needed configuration keys is returned.

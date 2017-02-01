@@ -82,8 +82,8 @@ class SvtMenuOptions_Impl : public ConfigItem
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
-                         PropertyChangeListener if the sub tree broadcasts changes. You must update your
+            @descr      This method is called from the ConfigManager before application ends or from the
+                        PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
             @seealso    baseclass ConfigItem
@@ -98,7 +98,7 @@ class SvtMenuOptions_Impl : public ConfigItem
         /*-****************************************************************************************************
             @short      access method to get internal values
             @descr      These methods give us a chance to regulate access to our internal values.
-                        It's not used in the moment - but it's possible for the future!
+                        It's not used at the moment - but it's possible for the future!
         *//*-*****************************************************************************************************/
 
         bool        IsEntryHidingEnabled() const
@@ -132,7 +132,7 @@ class SvtMenuOptions_Impl : public ConfigItem
 
         /*-****************************************************************************************************
             @short      return list of fix key names of our configuration management which represent our module tree
-            @descr      These methods return a static const list of key names. We need it to get needed values from our
+            @descr      This method returns a static const list of key names. We need it to get needed values from our
                         configuration management.
             @return     A list of needed configuration keys is returned.
         *//*-*****************************************************************************************************/

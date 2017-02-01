@@ -105,8 +105,8 @@ public:
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
-            @descr      These method is called from the ConfigManager before application ends or from the
-                         PropertyChangeListener if the sub tree broadcasts changes. You must update your
+            @descr      This method is called from the ConfigManager before the application ends or from the
+                        PropertyChangeListener if the sub tree broadcasts changes. You must update your
                         internal values.
 
             @seealso    baseclass ConfigItem
