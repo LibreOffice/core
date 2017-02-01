@@ -3691,9 +3691,7 @@ void XMLShapeExport::export3DSceneAttributes( const css::uno::Reference< css::be
     aAny = xPropSet->getPropertyValue("D3DSceneShadowSlant");
     sal_Int16 nShadowSlant = 0;
     aAny >>= nShadowSlant;
-    ::sax::Converter::convertNumber(sStringBuffer, (sal_Int32)nShadowSlant);
-    aStr = sStringBuffer.makeStringAndClear();
-    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADOW_SLANT, aStr);
+    mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADOW_SLANT, OUString::number((sal_Int32)nShadowSlant));
 
     // shadeMode
     aAny = xPropSet->getPropertyValue("D3DSceneShadeMode");
@@ -4656,9 +4654,9 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         {
                                             if ( nIdx )
                                                 aStrBuffer.append(' ');
-                                            ::sax::Converter::convertNumber( aStrBuffer, aSubViewSizes[nIdx].Width );
+                                            aStrBuffer.append( aSubViewSizes[nIdx].Width );
                                             aStrBuffer.append(' ');
-                                            ::sax::Converter::convertNumber( aStrBuffer, aSubViewSizes[nIdx].Height );
+                                            aStrBuffer.append( aSubViewSizes[nIdx].Height );
                                         }
                                         aStr = aStrBuffer.makeStringAndClear();
                                         rExport.AddAttribute( XML_NAMESPACE_DRAW_EXT, XML_SUB_VIEW_SIZE, aStr );
@@ -4818,13 +4816,13 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                         else
                         {
                             rAdj.Value >>= nValue;
-                            ::sax::Converter::convertNumber(aStrBuffer, nValue);
+                            aStrBuffer.append(nValue);
                         }
                     }
                     else
                     {
                         // this should not be, but better than setting nothing
-                        ::sax::Converter::convertNumber( aStrBuffer, 0 );
+                        aStrBuffer.append("0");
                     }
                 }
                 aStr = aStrBuffer.makeStringAndClear();

@@ -801,7 +801,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                 {
                     if ( nEmptyCellColSpan > 0 )
                     {
-                        AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED,implConvertNumber(nEmptyCellColSpan) );
+                        AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED, OUString::number(nEmptyCellColSpan) );
                         bCoveredCell = true;
                         nColSpan = nEmptyCellColSpan - 1;
                         nEmptyCellColSpan = 0;
@@ -809,14 +809,14 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                     sal_Int32 nSpan = aColIter->nColSpan;
                     if ( nSpan > 1 )
                     {
-                        AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED,implConvertNumber(nSpan) );
+                        AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED, OUString::number(nSpan) );
                         nColSpan = nSpan - 1;
                         bCoveredCell = true;
                     }
                     nSpan = aColIter->nRowSpan;
                     if ( nSpan > 1 )
                     {
-                        AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_ROWS_SPANNED,implConvertNumber(nSpan) );
+                        AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_ROWS_SPANNED, OUString::number(nSpan) );
                         aRowSpan[nColIndex] = nSpan - 1;
                     }
                     if ( aColIter->xElement.is() )
@@ -951,7 +951,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
             if ( nEmptyCellColSpan )
             {
                 {
-                    AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED,implConvertNumber(nEmptyCellColSpan) );
+                    AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED, OUString::number(nEmptyCellColSpan) );
                     SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
                     if ( !bShapeHandled )
                     {
@@ -971,7 +971,7 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
             if ( nEmptyCellColSpan )
             {
                 {
-                    AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED,implConvertNumber(nEmptyCellColSpan) );
+                    AddAttribute( XML_NAMESPACE_TABLE,XML_NUMBER_COLUMNS_SPANNED, OUString::number(nEmptyCellColSpan) );
                     SvXMLElementExport aCell(*this,XML_NAMESPACE_TABLE, XML_TABLE_CELL, true, true);
                     if ( !bShapeHandled )
                     {
@@ -1363,14 +1363,6 @@ void ORptExport::ExportStyles_(bool bUsed)
     // write draw:style-name for object graphic-styles
     GetShapeExport()->ExportGraphicDefaults();
 }
-
-OUString ORptExport::implConvertNumber(sal_Int32 _nValue)
-{
-    OUStringBuffer aBuffer;
-    ::sax::Converter::convertNumber(aBuffer, _nValue);
-    return aBuffer.makeStringAndClear();
-}
-
 
 SvXMLAutoStylePoolP* ORptExport::CreateAutoStylePool()
 {

@@ -173,10 +173,8 @@ void XMLIndexMarkExport::ExportTOCMarkAttributes(
     sal_Int16 nLevel = 0;
     Any aAny = rPropSet->getPropertyValue(sLevel);
     aAny >>= nLevel;
-    OUStringBuffer sBuf;
-    ::sax::Converter::convertNumber(sBuf, static_cast<sal_Int32>(nLevel + 1));
     rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,
-                             sBuf.makeStringAndClear());
+                             OUString::number(nLevel + 1));
 }
 
 static void lcl_ExportPropertyString( SvXMLExport& rExport,

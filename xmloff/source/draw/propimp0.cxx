@@ -218,9 +218,8 @@ bool XMLTextAnimationStepPropertyHdl::exportXML(
 
         if( nVal < 0 )
         {
-            const OUString aPX( "px" );
-            ::sax::Converter::convertNumber( aOut, (sal_Int32)-nVal );
-            aOut.append( aPX );
+            aOut.append( (sal_Int32)-nVal );
+            aOut.append( "px" );
         }
         else
         {

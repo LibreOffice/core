@@ -66,9 +66,8 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     sal_Int32 nCount = aColumns.getLength();
 
     OUStringBuffer sValue;
-    ::sax::Converter::convertNumber( sValue, (nCount) ? nCount : 1 );
     GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLUMN_COUNT,
-                              sValue.makeStringAndClear() );
+                              OUString::number(nCount ? nCount : 1) );
 
     // handle 'automatic' columns
     Reference < XPropertySet > xPropSet( xColumns, UNO_QUERY );
@@ -169,10 +168,8 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     while( nCount-- )
     {
         // style:rel-width
-        ::sax::Converter::convertNumber( sValue, pColumns->Width );
-        sValue.append( '*' );
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
-                                  sValue.makeStringAndClear() );
+                                  OUString::number(pColumns->Width) + "*" );
 
         // fo:margin-left
         GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,

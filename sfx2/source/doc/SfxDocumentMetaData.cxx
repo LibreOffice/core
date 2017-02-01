@@ -1638,10 +1638,8 @@ SfxDocumentMetaData::setDocumentStatistics(
                 const css::uno::Any any = the_value[i].Value;
                 sal_Int32 val = 0;
                 if (any >>= val) {
-                    OUStringBuffer buf;
-                    ::sax::Converter::convertNumber(buf, val);
                     attributes.push_back(std::make_pair(s_stdStatAttrs[j],
-                                buf.makeStringAndClear()));
+                                OUString::number(val)));
                 } else {
                     SAL_WARN("sfx.doc", "Invalid statistic: " << name);
                 }
@@ -1675,9 +1673,7 @@ SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
         throw css::lang::IllegalArgumentException(
             "SfxDocumentMetaData::setEditingCycles: argument is negative",
             *this, 0);
-    OUStringBuffer buf;
-    ::sax::Converter::convertNumber(buf, the_value);
-    setMetaTextAndNotify("meta:editing-cycles", buf.makeStringAndClear());
+    setMetaTextAndNotify("meta:editing-cycles", OUString::number(the_value));
 }
 
 ::sal_Int32 SAL_CALL

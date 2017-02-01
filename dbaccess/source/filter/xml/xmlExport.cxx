@@ -1344,7 +1344,7 @@ OUString ODBExport::implConvertAny(const Any& _rValue)
         case TypeClass_SHORT:
         case TypeClass_LONG:
             // let the unit converter format is as string
-            ::sax::Converter::convertNumber(aBuffer, getINT32(_rValue));
+            aBuffer.append(getINT32(_rValue));
             break;
         default:
             OSL_FAIL("ODBExport::implConvertAny: Invalid type");

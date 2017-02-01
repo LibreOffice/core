@@ -1077,9 +1077,7 @@ bool XMLTextRotationAnglePropHdl_Impl::exportXML(
     bool bRet = ( rValue >>= nAngle );
     if( bRet )
     {
-        OUStringBuffer aOut;
-        ::sax::Converter::convertNumber( aOut, nAngle / 10 );
-        rStrExpValue = aOut.makeStringAndClear();
+        rStrExpValue = OUString::number( nAngle / 10 );
     }
     OSL_ENSURE( bRet, "illegal rotation angle" );
 
@@ -1123,9 +1121,7 @@ bool XMLNumber8OneBasedHdl::exportXML(
     bool bRet = ( rValue >>= nValue );
     if( bRet )
     {
-        OUStringBuffer aOut;
-        ::sax::Converter::convertNumber( aOut, nValue + 1 );
-        rStrExpValue = aOut.makeStringAndClear();
+        rStrExpValue = OUString::number( nValue + 1 );
     }
     return bRet;
 }

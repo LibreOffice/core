@@ -524,12 +524,6 @@ void Converter::convertColor( OUStringBuffer& rBuffer, sal_Int32 nColor )
     rBuffer.append( sal_Unicode( aHexTab[ nCol & 0xf ] ) );
 }
 
-/** convert number to string */
-void Converter::convertNumber( OUStringBuffer& rBuffer, sal_Int32 nNumber )
-{
-    rBuffer.append( nNumber );
-}
-
 /** convert string to number with optional min and max values */
 bool Converter::convertNumber(  sal_Int32& rValue,
                                 const OUString& rString,
@@ -651,7 +645,7 @@ void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle)
 {
 #if 1
     // wrong, but backward compatible with OOo/LO < 4.4
-    ::sax::Converter::convertNumber(rBuffer, nAngle);
+    rBuffer.append(nAngle);
 #else
     // maybe in the future... (see other convertAngle)
     double fAngle(double(nAngle) / 10.0);
@@ -2555,7 +2549,7 @@ bool Converter::convertAny(OUStringBuffer&    rsValue,
                 {
                     rsType.append("integer");
                     bConverted = true;
-                    ::sax::Converter::convertNumber(rsValue, nTempValue);
+                    rsValue.append(nTempValue);
                 }
             }
             break;

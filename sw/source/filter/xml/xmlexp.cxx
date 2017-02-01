@@ -472,9 +472,7 @@ void SwXMLExport::ExportContent_()
         aAny >>= nYear;
         if (nYear != 1930 )
         {
-            OUStringBuffer sBuffer;
-            ::sax::Converter::convertNumber(sBuffer, nYear);
-            AddAttribute(XML_NAMESPACE_TABLE, XML_NULL_YEAR, sBuffer.makeStringAndClear());
+            AddAttribute(XML_NAMESPACE_TABLE, XML_NULL_YEAR, OUString::number(nYear));
             SvXMLElementExport aCalcSettings(*this, XML_NAMESPACE_TABLE, XML_CALCULATION_SETTINGS, true, true);
         }
     }

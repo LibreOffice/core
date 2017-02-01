@@ -1554,9 +1554,7 @@ bool XmlScPropHdl_RotateAngle::exportXML(
 
     if(rValue >>= nVal)
     {
-        OUStringBuffer sValue;
-        ::sax::Converter::convertNumber(sValue, sal_Int32(nVal / 100));
-        rStrExpValue = sValue.makeStringAndClear();
+        rStrExpValue = OUString::number(nVal / 100);
         bRetval = true;
     }
 

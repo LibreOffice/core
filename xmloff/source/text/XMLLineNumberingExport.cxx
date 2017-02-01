@@ -153,11 +153,8 @@ void XMLLineNumberingExport::Export()
             aAny = xLineNumbering->getPropertyValue("Interval");
             sal_Int16 nLineInterval = 0;
             aAny >>= nLineInterval;
-            OUStringBuffer sBuf;
-            ::sax::Converter::convertNumber(sBuf,
-                                              (sal_Int32)nLineInterval);
             rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_INCREMENT,
-                                 sBuf.makeStringAndClear());
+                                 OUString::number(nLineInterval));
 
             SvXMLElementExport aConfigElem(rExport, XML_NAMESPACE_TEXT,
                                            XML_LINENUMBERING_CONFIGURATION,
@@ -174,10 +171,8 @@ void XMLLineNumberingExport::Export()
                 aAny = xLineNumbering->getPropertyValue("SeparatorInterval");
                 sal_Int16 nLineDistance = 0;
                 aAny >>= nLineDistance;
-                ::sax::Converter::convertNumber(sBuf,
-                                                  (sal_Int32)nLineDistance);
                 rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_INCREMENT,
-                                     sBuf.makeStringAndClear());
+                                     OUString::number(nLineDistance));
 
                 SvXMLElementExport aSeparatorElem(rExport, XML_NAMESPACE_TEXT,
                                                   XML_LINENUMBERING_SEPARATOR,

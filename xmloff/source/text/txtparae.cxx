@@ -2592,9 +2592,8 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         rPropSet->getPropertyValue( sAnchorPageNo ) >>= nPage;
         SAL_WARN_IF(nPage <= 0, "xmloff",
                 "ERROR: writing invalid anchor-page-number 0");
-        ::sax::Converter::convertNumber( sValue, (sal_Int32)nPage );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_PAGE_NUMBER,
-                                  sValue.makeStringAndClear() );
+                                  OUString::number( nPage ) );
     }
     else
     {
@@ -2752,9 +2751,8 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         rPropSet->getPropertyValue( sZOrder ) >>= nZIndex;
         if( -1 != nZIndex )
         {
-            ::sax::Converter::convertNumber( sValue, nZIndex );
             GetExport().AddAttribute( XML_NAMESPACE_DRAW, XML_ZINDEX,
-                                      sValue.makeStringAndClear() );
+                                      OUString::number( nZIndex ) );
         }
     }
 
@@ -3065,7 +3063,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         OUStringBuffer sRet( GetXMLToken(XML_ROTATE).getLength()+4 );
         sRet.append( GetXMLToken(XML_ROTATE));
         sRet.append( '(' );
-        ::sax::Converter::convertNumber( sRet, (sal_Int32)nVal );
+        sRet.append( nVal );
         sRet.append( ')' );
         GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_TRANSFORM,
                                   sRet.makeStringAndClear() );

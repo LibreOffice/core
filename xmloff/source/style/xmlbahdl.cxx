@@ -102,12 +102,10 @@ bool XMLNumberPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, con
 {
     bool bRet = false;
     sal_Int32 nValue;
-      OUStringBuffer aOut;
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
-        ::sax::Converter::convertNumber( aOut, nValue );
-        rStrExpValue = aOut.makeStringAndClear();
+        rStrExpValue = OUString::number( nValue );
 
         bRet = true;
     }
@@ -159,18 +157,14 @@ bool XMLNumberNonePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
 
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
-          OUStringBuffer aOut;
-
         if( nValue == 0 )
         {
-            aOut.append( sZeroStr );
+            rStrExpValue = sZeroStr;
         }
         else
         {
-            ::sax::Converter::convertNumber( aOut, nValue );
+            rStrExpValue = OUString::number( nValue );
         }
-
-        rStrExpValue = aOut.makeStringAndClear();
 
         bRet = true;
     }
@@ -842,9 +836,7 @@ bool XMLNumberWithoutZeroPropHdl::exportXML( OUString& rStrExpValue, const Any& 
 
     if( bRet )
     {
-          OUStringBuffer aBuffer;
-        ::sax::Converter::convertNumber( aBuffer, nValue );
-        rStrExpValue = aBuffer.makeStringAndClear();
+        rStrExpValue = OUString::number(nValue);
     }
 
     return bRet;
@@ -885,9 +877,7 @@ bool XMLNumberWithAutoInsteadZeroPropHdl::exportXML( OUString& rStrExpValue, con
         rStrExpValue = GetXMLToken( XML_AUTO );
     else
     {
-        OUStringBuffer aBuffer;
-        ::sax::Converter::convertNumber( aBuffer, nValue );
-        rStrExpValue = aBuffer.makeStringAndClear();
+        rStrExpValue = OUString::number(nValue);
     }
 
     return true;

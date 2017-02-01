@@ -138,8 +138,6 @@ private:
     void                    exportGroupsExpressionAsFunction(const Reference< XGroups>& _xGroups);
     static OUString  convertFormula(const OUString& _sFormula);
 
-    static OUString         implConvertNumber(sal_Int32 _nValue);
-
     virtual void                    SetBodyAttributes() override;
 
 protected:

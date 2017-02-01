@@ -610,15 +610,6 @@ void doTestStringToNumber(sal_Int32 nValue, char const*const pis, sal_Int32 nMin
     CPPUNIT_ASSERT_EQUAL(nValue, nTemp);
 }
 
-void doTestNumberToString(char const*const pis, sal_Int32 nValue)
-{
-    OUString const is(OUString::createFromAscii(pis));
-    OUStringBuffer buf;
-    Converter::convertNumber(buf, nValue);
-    SAL_INFO("sax.cppunit","" << buf.toString());
-    CPPUNIT_ASSERT_EQUAL(is, buf.makeStringAndClear());
-}
-
 void ConverterTest::testNumber()
 {
     doTestStringToNumber(30, "30", 1, 40);
@@ -626,11 +617,6 @@ void ConverterTest::testNumber()
     doTestStringToNumber(-30, "7", -100, -30);
     doTestStringToNumber(0, "-0", 0, 1);
     doTestStringToNumber(0, "666", -0, 0);
-    doTestNumberToString("333", 333);
-    doTestNumberToString("-1", -1);
-    doTestNumberToString("0", 0000);
-    doTestNumberToString("-1", -0001);
-    doTestNumberToString("0", -0);
 }
 
 void doTestEncodeBase64(char const*const pis, const uno::Sequence<sal_Int8>& aPass)

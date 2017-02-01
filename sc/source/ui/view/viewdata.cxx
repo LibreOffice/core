@@ -2742,10 +2742,7 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     {
         sal_uInt16 nViewID(pViewShell->GetViewFrame()->GetCurViewId());
         pSettings[SC_VIEW_ID].Name = SC_VIEWID;
-        OUStringBuffer sBuffer(SC_VIEW);
-        ::sax::Converter::convertNumber(sBuffer,
-                static_cast<sal_Int32>(nViewID));
-        pSettings[SC_VIEW_ID].Value <<= sBuffer.makeStringAndClear();
+        pSettings[SC_VIEW_ID].Value <<= SC_VIEW + OUString::number(nViewID);
 
         uno::Reference<container::XNameContainer> xNameContainer =
              document::NamedPropertyValues::create( comphelper::getProcessComponentContext() );

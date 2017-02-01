@@ -1019,7 +1019,7 @@ bool SvXMLExportItemMapper::QueryXMLValue(
                 {
                     // #i114163# positiveInteger only!
                     sal_Int32 const number(oNumOffset.get());
-                    ::sax::Converter::convertNumber(aOut, number);
+                    aOut.append(number);
                 }
                 else
                 {

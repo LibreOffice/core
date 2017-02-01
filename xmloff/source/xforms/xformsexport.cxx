@@ -132,7 +132,11 @@ void xforms_formatDate( OUStringBuffer& aBuffer, const util::Date& aDate );
 void xforms_formatTime( OUStringBuffer& aBuffer, const css::util::Time& aTime );
 void xforms_formatDateTime( OUStringBuffer& aBuffer, const util::DateTime& aDateTime );
 
-convert_t const xforms_int32    = &xforms_convert<sal_Int32,&::sax::Converter::convertNumber>;
+static void convertNumber(OUStringBuffer & b, sal_Int32 n) {
+    b.append(n);
+}
+
+convert_t const xforms_int32    = &xforms_convert<sal_Int32,&convertNumber>;
 convert_t const xforms_double   = &xforms_convert<double,&::sax::Converter::convertDouble>;
 convert_t const xforms_dateTime = &xforms_convertRef<util::DateTime,&xforms_formatDateTime>;
 convert_t const xforms_date     = &xforms_convertRef<util::Date,&xforms_formatDate>;

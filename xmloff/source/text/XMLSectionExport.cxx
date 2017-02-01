@@ -506,11 +506,9 @@ void XMLSectionExport::ExportTableOfContentStart(
         sal_Int16 nLevel = sal_Int16();
         if( rPropertySet->getPropertyValue("Level") >>= nLevel )
         {
-            OUStringBuffer sBuffer;
-            ::sax::Converter::convertNumber(sBuffer, (sal_Int32)nLevel);
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_OUTLINE_LEVEL,
-                                     sBuffer.makeStringAndClear());
+                                     OUString::number(nLevel));
         }
 
         // use outline level
@@ -1495,12 +1493,10 @@ void XMLSectionExport::ExportLevelParagraphStyles(
         if (nNamesCount > 0)
         {
             // level attribute; we count 1..10; API 0..9
-            OUStringBuffer sBuf;
             sal_Int32 nLevelPlusOne = nLevel + 1;
-            ::sax::Converter::convertNumber(sBuf, nLevelPlusOne);
             GetExport().AddAttribute(XML_NAMESPACE_TEXT,
                                      XML_OUTLINE_LEVEL,
-                                     sBuf.makeStringAndClear());
+                                     OUString::number(nLevelPlusOne));
 
             // source styles element
             SvXMLElementExport aParaStyles(GetExport(),
