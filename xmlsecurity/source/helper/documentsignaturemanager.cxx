@@ -32,6 +32,7 @@
 #include <sax/tools/converter.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <o3tl/make_unique.hxx>
 
 #include <certificate.hxx>
 
@@ -44,9 +45,7 @@ DocumentSignatureManager::DocumentSignatureManager(const uno::Reference<uno::XCo
 {
 }
 
-DocumentSignatureManager::~DocumentSignatureManager()
-{
-}
+DocumentSignatureManager::~DocumentSignatureManager() = default;
 
 bool DocumentSignatureManager::init()
 {
@@ -70,7 +69,7 @@ PDFSignatureHelper& DocumentSignatureManager::getPDFSignatureHelper()
     SAL_WARN_IF(!bInit, "xmlsecurity.comp", "Error initializing security context!");
 
     if (!mpPDFSignatureHelper)
-        mpPDFSignatureHelper.reset(new PDFSignatureHelper);
+        mpPDFSignatureHelper = o3tl::make_unique<PDFSignatureHelper>();
 
     return *mpPDFSignatureHelper;
 }
@@ -271,7 +270,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
     sax::Converter::encodeBase64(aStrBuffer, xCert->getEncoded());
 
     OUString aCertDigest;
-    if (xmlsecurity::Certificate* pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
+    if (auto pCertificate = dynamic_cast<xmlsecurity::Certificate*>(xCert.get()))
     {
         OUStringBuffer aBuffer;
         sax::Converter::encodeBase64(aBuffer, pCertificate->getSHA256Thumbprint());

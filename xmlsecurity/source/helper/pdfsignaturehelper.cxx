@@ -23,9 +23,7 @@
 
 using namespace ::com::sun::star;
 
-PDFSignatureHelper::PDFSignatureHelper()
-{
-}
+PDFSignatureHelper::PDFSignatureHelper() = default;
 
 bool PDFSignatureHelper::ReadAndVerifySignature(const uno::Reference<io::XInputStream>& xInputStream)
 {

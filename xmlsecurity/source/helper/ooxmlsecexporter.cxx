@@ -420,9 +420,7 @@ OOXMLSecExporter::OOXMLSecExporter(const uno::Reference<uno::XComponentContext>&
 {
 }
 
-OOXMLSecExporter::~OOXMLSecExporter()
-{
-}
+OOXMLSecExporter::~OOXMLSecExporter() = default;
 
 void OOXMLSecExporter::writeSignature()
 {
