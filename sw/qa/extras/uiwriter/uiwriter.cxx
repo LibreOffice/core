@@ -4273,18 +4273,24 @@ void SwUiWriterTest::testTdf105417()
 
 void SwUiWriterTest::testTdf105625()
 {
-    // We should be able to edit at positions adjacent to fields.
-    // Check if the start and the end of the only paragraph are not protected
-    // (they are adjacent to FORMCHECKBOX)
     SwDoc* pDoc = createDoc("tdf105625.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     // Ensure correct initial setting
     comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    // We should be able to edit at positions adjacent to fields.
+    // Check if the start and the end of the 1st paragraph are not protected
+    // (they are adjacent to FORMCHECKBOX)
     pWrtShell->SttPara();
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
     pWrtShell->EndPara();
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+    // 2nd paragraph - FORMTEXT
+    pWrtShell->Down(/*bSelect=*/false);
+    // Check selection across FORMTEXT field boundary - must be read-only
+    pWrtShell->SttPara();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);

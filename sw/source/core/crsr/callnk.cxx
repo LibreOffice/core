@@ -195,8 +195,8 @@ SwCallLink::~SwCallLink()
             {
                 const OUString rText = pCNd->GetTextNode()->GetText();
                 if( !nCmp ||
-                    g_pBreakIt->GetBreakIter()->getScriptType( rText, nCmp )
-                     != g_pBreakIt->GetBreakIter()->getScriptType( rText, nCmp - 1 ))
+                    g_pBreakIt->GetBreakIter()->getScriptType( rText, nContent )
+                    != g_pBreakIt->GetBreakIter()->getScriptType(rText, nAktContent))
                 {
                     rShell.CallChgLnk();
                     return;
