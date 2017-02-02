@@ -41,7 +41,6 @@ class TargetHelper
          */
         enum ESpecialTarget
         {
-            E_NOT_SPECIAL   ,
             E_SELF          ,
             E_PARENT        ,
             E_TOP           ,

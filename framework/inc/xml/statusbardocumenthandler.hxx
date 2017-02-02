@@ -57,8 +57,7 @@ class FWE_DLLPUBLIC OReadStatusBarDocumentHandler :
         enum StatusBar_XML_Namespace
         {
             SB_NS_STATUSBAR,
-            SB_NS_XLINK,
-            SB_XML_NAMESPACES_COUNT
+            SB_NS_XLINK
         };
 
         OReadStatusBarDocumentHandler( const css::uno::Reference< css::container::XIndexContainer >& aStatusBarItems );

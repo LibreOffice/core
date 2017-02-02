@@ -93,7 +93,6 @@ enum class PageType
     Color,
     Shadow,
     Transparence,
-    Unknown = 0xFFF
 };
 
 class SvxAreaTabDialog : public SfxTabDialog

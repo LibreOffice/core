@@ -57,8 +57,7 @@ class FWE_DLLPUBLIC OReadToolBoxDocumentHandler :
         enum ToolBox_XML_Namespace
         {
             TB_NS_TOOLBAR,
-            TB_NS_XLINK,
-            TB_XML_NAMESPACES_COUNT
+            TB_NS_XLINK
         };
 
         OReadToolBoxDocumentHandler( const css::uno::Reference< css::container::XIndexContainer >& rItemContainer );

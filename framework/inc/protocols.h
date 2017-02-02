@@ -62,7 +62,6 @@ class ProtocolCheck
      */
     enum EProtocol
     {
-        E_UNKNOWN_PROTOCOL  ,
         E_PRIVATE           ,
         E_PRIVATE_OBJECT    ,
         E_PRIVATE_STREAM    ,

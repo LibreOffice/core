@@ -123,7 +123,6 @@ class FilterCache : public BaseLock
          */
         enum EReadOption
         {
-            E_READ_NOTHING  = 0,
             E_READ_STANDARD = 1,
             E_READ_UPDATE   = 2,
             E_READ_ALL      = 3

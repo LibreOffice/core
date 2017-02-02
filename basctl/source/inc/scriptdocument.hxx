@@ -52,7 +52,6 @@ namespace basctl
 
     enum LibraryType
     {
-        LIBRARY_TYPE_UNKNOWN,
         LIBRARY_TYPE_MODULE,
         LIBRARY_TYPE_DIALOG,
         LIBRARY_TYPE_ALL
