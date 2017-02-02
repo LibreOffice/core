@@ -123,6 +123,7 @@ class GbuildParser:
                     jsondata['target_name'] = module + '_' + jsontype + '_' + match
                     jsondata['DEFS'] = GbuildParser.__split_defs(jsondata['DEFS'])
                     jsondata['LINKED_LIBS'] = jsondata['LINKED_LIBS'].strip().split(' ')
+                    jsondata['CXXFLAGS'] += ' -DLIBO_INTERNAL_ONLY'
                     for i in ['CXXFLAGS', 'CFLAGS', 'OBJCFLAGS', 'OBJCXXFLAGS']:
                         jsondata[i] = GbuildParser.__split_flags(jsondata[i], jsondata[i+'APPEND'])
                     for i in jsonSrc:
