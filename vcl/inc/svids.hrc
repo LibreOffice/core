@@ -132,6 +132,8 @@
 #define SV_BUTTONTEXT_FIND                          10129
 #define SV_BUTTONTEXT_STOP                          10130
 #define SV_BUTTONTEXT_CONNECT                       10131
+#define SV_BUTTONTEXT_SCREENSHOT_LABEL              10132
+#define SV_BUTTONTEXT_SCREENSHOT_HELP               10133
 
 #define SV_STDTEXT_FIRST                            SV_STDTEXT_SERVICENOTAVAILABLE
 #define SV_STDTEXT_SERVICENOTAVAILABLE              10210

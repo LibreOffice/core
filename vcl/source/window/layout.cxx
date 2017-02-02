@@ -20,6 +20,7 @@
 #include <boost/multi_array.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/abstdlg.hxx>
+#include <svids.hrc>
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WINDOW_CONTAINER)
@@ -261,10 +262,10 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                         aMenu->InsertItem(
                             nLocalID,
-                            "Screenshot");
+                            VclResId(SV_BUTTONTEXT_SCREENSHOT_LABEL).toString());
                         aMenu->SetHelpText(
                             nLocalID,
-                            "Go into interactive screenshot annotation mode");
+                            VclResId(SV_BUTTONTEXT_SCREENSHOT_HELP).toString());
                         aMenu->SetHelpId(
                             nLocalID,
                             "InteractiveScreenshotMode");
