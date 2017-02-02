@@ -103,9 +103,9 @@ class ImpSdrObjTextLinkUserData : public SdrObjUserData
     friend class                SdrTextObj;
     friend class                ImpSdrObjTextLink;
 
-    OUString                    aFileName;   // Name des referenzierten Dokuments
-    OUString                    aFilterName; // ggf. ein Filter
-    DateTime                    aFileDate0;  // Unnoetiges neuladen vermeiden
+    OUString                    aFileName;   // name of the referenced document
+    OUString                    aFilterName; // a filter, if need be
+    DateTime                    aFileDate0;  // avoiding unnecessary reload
     tools::SvRef<ImpSdrObjTextLink>
                                 pLink;
     rtl_TextEncoding            eCharSet;
@@ -171,14 +171,14 @@ private:
 
     friend class                ImpSdrObjTextLink;
     friend class                ImpSdrObjTextLinkUserData;
-    friend class                SdrPowerPointImport; // fuer PowerPointImport
-    friend class                SdrExchangeView; // fuer ImpGetDrawOutliner
-    friend class                SdrView;         // fuer ImpGetDrawOutliner
-    friend class                SdrObjEditView;  // fuer TextEdit
-    friend class                SdrMeasureObj;   // fuer ImpGetDrawOutliner
-    friend class                SvxMSDffManager; // fuer ImpGetDrawOutliner
-    friend class                SdrObjCustomShape;// fuer ImpGetDrawOutliner
-    friend class                SdrText;        // fuer ImpGetDrawOutliner
+    friend class                SdrPowerPointImport; // for PowerPointImport
+    friend class                SdrExchangeView;     // for ImpGetDrawOutliner
+    friend class                SdrView;             // for ImpGetDrawOutliner
+    friend class                SdrObjEditView;      // for TextEdit
+    friend class                SdrMeasureObj;       // for ImpGetDrawOutliner
+    friend class                SvxMSDffManager;     // for ImpGetDrawOutliner
+    friend class                SdrObjCustomShape;   // for ImpGetDrawOutliner
+    friend class                SdrText;             // for ImpGetDrawOutliner
 
 protected:
     // The "aRect" is also the rect of RectObj and CircObj.
