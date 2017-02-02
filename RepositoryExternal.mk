@@ -1266,12 +1266,6 @@ $(call gb_LinkTarget_set_include,$(1),\
 
 endef
 
-define gb_LinkTarget__use_freetype
-$(call gb_LinkTarget_use_external,$(1),freetype_headers)
-$(call gb_LinkTarget_add_libs,$(1),$(FREETYPE_LIBS))
-
-endef
-
 gb_ExternalProject__use_freetype :=
 
 else
@@ -1279,17 +1273,8 @@ else
 define gb_LinkTarget__use_freetype_headers
 $(call gb_LinkTarget_use_external_project,$(1),freetype)
 $(call gb_LinkTarget_set_include,$(1),\
-	-I$(call gb_UnpackedTarball_get_dir,freetype)/include \
+	$(FREETYPE_CFLAGS) \
 	$$(INCLUDE) \
-)
-
-endef
-
-define gb_LinkTarget__use_freetype
-$(call gb_LinkTarget_use_external,$(1),freetype_headers)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-    -L$(call gb_UnpackedTarball_get_dir,freetype)/instdir/lib -lfreetype \
 )
 
 endef
@@ -1300,6 +1285,12 @@ $(call gb_ExternalProject_use_external_project,$(1),freetype)
 endef
 
 endif # SYSTEM_FREETYPE
+
+define gb_LinkTarget__use_freetype
+$(call gb_LinkTarget_use_external,$(1),freetype_headers)
+$(call gb_LinkTarget_add_libs,$(1),$(FREETYPE_LIBS))
+
+endef
 
 ifneq ($(SYSTEM_FONTCONFIG),)
 
