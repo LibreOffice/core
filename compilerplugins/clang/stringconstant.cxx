@@ -67,7 +67,7 @@ bool hasOverloads(FunctionDecl const * decl, unsigned arguments) {
             && f->getNumParams() >= arguments)
         {
             auto consDecl = dyn_cast<CXXConstructorDecl>(f);
-            if (consDecl && consDecl->isCopyConstructor()) {
+            if (consDecl && consDecl->isCopyOrMoveConstructor()) {
                 continue;
             }
             ++n;
