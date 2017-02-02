@@ -116,14 +116,14 @@ IMPL_LINK( ScDocFunc, NotifyDrawUndo, SdrUndoAction*, pUndoAction, void )
             rDoc.SetStreamValid(nTab, false);
 }
 
-//  Zeile ueber dem Range painten (fuer Linien nach AdjustRowHeight)
+//  paint row above the range (because of lines after AdjustRowHeight)
 
 static void lcl_PaintAbove( ScDocShell& rDocShell, const ScRange& rRange )
 {
     SCROW nRow = rRange.aStart.Row();
     if ( nRow > 0 )
     {
-        SCTAB nTab = rRange.aStart.Tab();   //! alle?
+        SCTAB nTab = rRange.aStart.Tab();   //! all of them?
         --nRow;
         rDocShell.PostPaint( ScRange(0,nRow,nTab, MAXCOL,nRow,nTab), PaintPartFlags::Grid );
     }
@@ -455,13 +455,13 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
         if (bUndo)
             pModel->BeginCalcUndo(false);
 
-        //  Loeschen auf allen Tabellen
+        //  Delete in all sheets
 
         SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
             ScDetectiveFunc( &rDoc,nTab ).DeleteAll( SC_DET_ARROWS );    // don't remove circles
 
-        //  Wiederholen
+        //  repeat
 
         size_t nCount = pList->Count();
         for (size_t i=0; i < nCount; ++i)
@@ -489,7 +489,7 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
                     aFunc.ShowError( nCol, nRow );
                     break;
                 default:
-                    OSL_FAIL("falsche Op bei DetectiveRefresh");
+                    OSL_FAIL("wrong operation in DetectiveRefresh");
             }
         }
 
@@ -499,7 +499,7 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
             if (pUndo)
             {
                 pUndo->SetComment( ScGlobal::GetRscString( STR_UNDO_DETREFRESH ) );
-                //  wenn automatisch, an letzte Aktion anhaengen
+                // associate with the last action
                 rDocShell.GetUndoManager()->AddUndoAction(
                                                 new ScUndoDraw( pUndo, &rDocShell ),
                                                 bAutomatic );
@@ -594,11 +594,11 @@ bool ScDocFunc::DeleteContents(
     if ( nFlags & InsertDeleteFlags::ATTRIB )
         rDocShell.UpdatePaintExt( nExtFlags, aMarkRange );
 
-    //  Reihenfolge:
+    //  order of operations:
     //  1) BeginDrawUndo
-    //  2) Objekte loeschen (DrawUndo wird gefuellt)
-    //  3) Inhalte fuer Undo kopieren und Undo-Aktion anlegen
-    //  4) Inhalte loeschen
+    //  2) Delete objects (DrawUndo will be filled)
+    //  3) Copy content for undo and set up undo actions
+    //  4) Delete content
 
     bool bDrawUndo = bObjects || (nFlags & InsertDeleteFlags::NOTE);
     if (bRecord && bDrawUndo)
@@ -667,7 +667,7 @@ bool ScDocFunc::DeleteCell(
     if (nFlags & InsertDeleteFlags::ATTRIB)
         rDocShell.UpdatePaintExt(nExtFlags, rPos);
 
-    //  order op opeeration:
+    //  order of operations:
     //  1) BeginDrawUndo
     //  2) delete objects (DrawUndo is filled)
     //  3) copy contents for undo
@@ -807,7 +807,7 @@ bool ScDocFunc::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, con
 
     if (bUndo)
     {
-        //  wegen ChangeTracking darf UndoAction erst nach SetString angelegt werden
+        //  because of ChangeTracking, UndoAction can be created only after SetString was called
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoEnterData(&rDocShell, rPos, aOldValues, rText, nullptr));
     }
@@ -1061,7 +1061,7 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 
 void ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
 {
-    //  PutData ruft PutCell oder SetNormalString
+    //  PutData calls PutCell or SetNormalString
 
     bool bRet = false;
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -1192,7 +1192,7 @@ bool ScDocFunc::SetCellText(
                     ;
             }
         }
-        // sonst Null behalten -> SetString mit lokalen Formeln/Zahlformat
+        // otherwise keep Null -> SetString with local formulas/number formats
     }
     else if (!rText.isEmpty())
     {
@@ -1241,7 +1241,7 @@ void ScDocFunc::SetNoteText( const ScAddress& rPos, const OUString& rText, bool 
         return;
     }
 
-    OUString aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! ist das noetig ???
+    OUString aNewText = convertLineEnd(rText, GetSystemLineEnd()); //! is this necessary ???
 
     if( ScPostIt* pNote = (!aNewText.isEmpty()) ? rDoc.GetOrCreateNote( rPos ) : rDoc.GetNote(rPos) )
         pNote->SetText( rPos, aNewText );
@@ -1332,7 +1332,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
 
     ScDocShellModificator aModificator( rDocShell );
 
-    //! Umrandung
+    //! Border
 
     ScRange aMultiRange;
     bool bMulti = rMark.IsMultiMarked();
@@ -1366,7 +1366,7 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
     if (!AdjustRowHeight( aMultiRange ))
         rDocShell.PostPaint( aMultiRange, PaintPartFlags::Grid, nExtFlags );
     else if (nExtFlags & SC_PF_LINES)
-        lcl_PaintAbove( rDocShell, aMultiRange );   // fuer Linien ueber dem Bereich
+        lcl_PaintAbove( rDocShell, aMultiRange );   // because of lines above the range
 
     aModificator.SetDocumentModified();
 
@@ -2201,7 +2201,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         nUndoStartRow = 0;
         nUndoEndRow = MAXROW;
     }
-                    // Test Zellschutz
+                    // Test for cell protection
 
     SCCOL nEditTestEndX = nUndoEndCol;
     if ( eCmd==DEL_DELCOLS || eCmd==DEL_CELLSLEFT )
@@ -2223,7 +2223,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             rDocShell.ErrorMessage(STR_NO_INSERT_DELETE_OVER_PIVOT_TABLE);
         return false;
     }
-                    // Test zusammengefasste
+                    // Test for merged cells
 
     SCCOL nMergeTestEndCol = (eCmd==DEL_CELLSLEFT) ? MAXCOL : nUndoEndCol;
     SCROW nMergeTestEndRow = (eCmd==DEL_CELLSUP)   ? MAXROW : nUndoEndRow;
@@ -2385,9 +2385,9 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         rDocShell.GetUndoManager()->AddUndoAction( pUndoRemoveMerge.release());
     }
 
-    //      ausfuehren
+    //     do it
 
-    WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( ScDocShell::GetActiveDialogParent() );      // important because of TrackFormulas in UpdateReference
 
     ScDocument* pUndoDoc = nullptr;
     ScDocument* pRefUndoDoc = nullptr;
@@ -2456,7 +2456,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
             break;
     }
 
-    //! Test, ob Outline in Groesse geaendert
+    //! Test if the size of outline has changed
 
     if ( bRecord )
     {
@@ -2465,10 +2465,10 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         for (; itr != itrEnd && *itr < nTabCount; ++itr)
             pRefUndoDoc->DeleteAreaTab(nUndoStartCol,nUndoStartRow,nUndoEndCol,nUndoEndRow, *itr, InsertDeleteFlags::ALL);
 
-            //  alle Tabellen anlegen, damit Formeln kopiert werden koennen:
+            //  for all sheets, so that formulas can be copied
         pUndoDoc->AddUndoTab( 0, nTabCount-1 );
 
-            //  kopieren mit bColRowFlags=false (#54194#)
+            //  copy with bColRowFlags=false (#54194#)
         pRefUndoDoc->CopyToDocument(0,0,0,MAXCOL,MAXROW,MAXTAB,InsertDeleteFlags::FORMULA,false,*pUndoDoc,nullptr,false);
         delete pRefUndoDoc;
 
@@ -2596,7 +2596,7 @@ bool ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         for( SCTAB j = *itr+1; j<nTabCount && rDoc.IsScenario(j); j++ )
             nScenarioCount ++;
 
-        //  ganze Zeilen loeschen: nichts anpassen
+        //  delete entire rows: do not adjust
         if ( eCmd == DEL_DELROWS || !AdjustRowHeight(ScRange( 0, nPaintStartRow, *itr, MAXCOL, nPaintEndRow, *itr+nScenarioCount )) )
             rDocShell.PostPaint( nPaintStartCol, nPaintStartRow, *itr, nPaintEndCol, nPaintEndRow, *itr+nScenarioCount, nPaintFlags,  nExtFlags );
         else
@@ -2637,7 +2637,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         return false;
     }
 
-    //  zugehoerige Szenarien auch anpassen - nur wenn innerhalb einer Tabelle verschoben wird!
+    //  adjust related scenarios too - but only when moved within one sheet
     bool bScenariosAdded = false;
     ScDocument& rDoc = rDocShell.GetDocument();
     if (bRecord && !rDoc.IsUndoEnabled())
@@ -2659,7 +2659,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     ScMarkData aSourceMark;
     for (nTab=nStartTab; nTab<=nEndTab; nTab++)
-        aSourceMark.SelectTable( nTab, true );      // Source selektieren
+        aSourceMark.SelectTable( nTab, true );      // select source
     aSourceMark.SetMarkArea( rSource );
 
     ScDocShellRef aDragShellRef;
@@ -2691,7 +2691,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     SCCOL nDestEndCol = nDestCol + ( nOldEndCol-nStartCol );
     SCROW nDestEndRow = nDestRow + ( nOldEndRow-nStartRow );
 
-    SCCOL nUndoEndCol = nDestCol + ( nEndCol-nStartCol );       // erweitert im Zielblock
+    SCCOL nUndoEndCol = nDestCol + ( nEndCol-nStartCol );       // extended in destination block
     SCROW nUndoEndRow = nDestRow + ( nEndRow-nStartRow );
 
     bool bIncludeFiltered = bCut;
@@ -2715,7 +2715,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         return false;
     }
 
-    //  Test auf Zellschutz
+    //  Test for cell protection
 
     ScEditableTester aTester;
     for (nTab=nDestTab; nTab<=nDestEndTab; nTab++)
@@ -2732,12 +2732,12 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         return false;
     }
 
-    //  Test auf zusammengefasste - beim Verschieben erst nach dem Loeschen
+    //  Test for merged cells- when moving after delete
 
     if (bClipOver && !bCut)
         if (rDoc.HasAttrib( nDestCol,nDestRow,nDestTab, nUndoEndCol,nUndoEndRow,nDestEndTab,
                                 HasAttrFlags::Merged | HasAttrFlags::Overlapped ))
-        {       // "Zusammenfassen nicht verschachteln !"
+        {       // "Merge of already merged cells not possible"
             if (!bApi)
                 rDocShell.ErrorMessage(STR_MSSG_MOVEBLOCKTO_0);
             delete pClipDoc;
@@ -2751,7 +2751,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
     sal_uInt16 nDestExt = 0;
     rDocShell.UpdatePaintExt( nDestExt, nDestCol,nDestRow,nDestTab, nDestEndCol,nDestEndRow,nDestEndTab );
 
-    //  ausfuehren
+    //  do it
 
     ScDocument* pUndoDoc = nullptr;
 
@@ -2778,7 +2778,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         rDoc.BeginDrawUndo();
     }
 
-    bool bSourceHeight = false;     // Hoehen angepasst?
+    bool bSourceHeight = false;     // adjust heights?
     if (bCut)
     {
         ScMarkData aDelMark;    // only for tables
@@ -2789,7 +2789,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         }
         rDoc.DeleteObjectsInArea( nStartCol,nStartRow, nOldEndCol,nOldEndRow, aDelMark );
 
-        //  Test auf zusammengefasste
+        //  Test for merged cells
 
         if (bClipOver)
             if (rDoc.HasAttrib( nDestCol,nDestRow,nDestTab,
@@ -2804,8 +2804,8 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
                     rDoc.ExtendMerge( nStartCol, nStartRow, nTmpEndCol, nTmpEndRow, nTab, true );
                 }
 
-                //  Fehlermeldung erst nach dem Wiederherstellen des Inhalts
-                if (!bApi)      // "Zusammenfassen nicht verschachteln !"
+                // Report error only after restoring content
+                if (!bApi)      // "Merge of already merged cells not possible"
                     rDocShell.ErrorMessage(STR_MSSG_MOVEBLOCKTO_0);
 
                 delete pUndoDoc;
@@ -2820,7 +2820,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     ScMarkData aDestMark;
     for (nTab=nDestTab; nTab<=nDestEndTab; nTab++)
-        aDestMark.SelectTable( nTab, true );        // Destination selektieren
+        aDestMark.SelectTable( nTab, true );        // select destination
     aDestMark.SetMarkArea( aPasteDest );
 
     /*  Do not drawing objects here. While pasting, the
@@ -2872,7 +2872,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
     if (bPaint)
     {
-            //  Zielbereich:
+            //  destination range:
 
         SCCOL nPaintStartX = nDestCol;
         SCROW nPaintStartY = nDestRow;
@@ -2880,7 +2880,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
         SCROW nPaintEndY = nDestPaintEndRow;
         PaintPartFlags nFlags = PaintPartFlags::Grid;
 
-        if ( nStartRow==0 && nEndRow==MAXROW )      // Breiten mitkopiert?
+        if ( nStartRow==0 && nEndRow==MAXROW )      // copy widths too?
         {
             nPaintEndX = MAXCOL;
             nPaintStartY = 0;
@@ -2907,7 +2907,7 @@ bool ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 
         if ( bCut )
         {
-                //  Quellbereich:
+                //  source range:
 
             nPaintStartX = nStartCol;
             nPaintStartY = nStartRow;
@@ -3062,7 +3062,7 @@ bool ScDocFunc::InsertTable( SCTAB nTab, const OUString& rName, bool bRecord, bo
         bRecord = false;
 
     if (bRecord)
-        rDoc.BeginDrawUndo();                          //  InsertTab erzeugt ein SdrUndoNewPage
+        rDoc.BeginDrawUndo();                          //  InsertTab generates SdrUndoNewPage
 
     SCTAB nTabCount = rDoc.GetTableCount();
     bool bAppend = ( nTab >= nTabCount );
@@ -3115,8 +3115,8 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
         SCTAB nCount = rDoc.GetTableCount();
 
-        pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );     // nur nTab mit Flags
-        pUndoDoc->AddUndoTab( 0, nCount-1 );                    // alle Tabs fuer Referenzen
+        pUndoDoc->InitUndo( &rDoc, nTab, nTab, true, true );     // only nTab with Flags
+        pUndoDoc->AddUndoTab( 0, nCount-1 );                    // all sheets for references
 
         rDoc.CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, InsertDeleteFlags::ALL,false, *pUndoDoc );
         OUString aOldName;
@@ -3143,8 +3143,8 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
         pUndoDoc->SetTabBgColor( nTab, rDoc.GetTabBgColor(nTab) );
         pUndoDoc->SetSheetEvents( nTab, rDoc.GetSheetEvents( nTab ) );
 
-        //  Drawing-Layer muss sein Undo selbst in der Hand behalten !!!
-        rDoc.BeginDrawUndo();                          //  DeleteTab erzeugt ein SdrUndoDelPage
+        //  Drawing-Layer has to take care of its own undo!!!
+        rDoc.BeginDrawUndo();                          //  DeleteTab generates SdrUndoDelPage
 
         pUndoData = new ScRefUndoData( &rDoc );
     }
@@ -3171,7 +3171,7 @@ bool ScDocFunc::DeleteTable( SCTAB nTab, bool bRecord, bool /* bApi */ )
 
         if (bWasLinked)
         {
-            rDocShell.UpdateLinks();                // Link-Manager updaten
+            rDocShell.UpdateLinks();                // update Link-Manager
             SfxBindings* pBindings = rDocShell.GetViewBindings();
             if (pBindings)
                 pBindings->Invalidate(SID_LINKS);
@@ -3200,7 +3200,7 @@ void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
     ScDocument& rDoc = rDocShell.GetDocument();
     bool bUndo(rDoc.IsUndoEnabled());
     if ( rDoc.IsVisible( nTab ) == bVisible )
-        return;                                // nichts zu tun - ok
+        return;                                // nothing to do - ok
 
     if ( !rDoc.IsDocEditable() )
     {
@@ -3213,7 +3213,7 @@ void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
 
     if ( !bVisible && !rDoc.IsImportingXML() )     // #i57869# allow hiding in any order for loading
     {
-        //  nicht alle Tabellen ausblenden
+        // do not disable all sheets
 
         sal_uInt16 nVisCount = 0;
         SCTAB nCount = rDoc.GetTableCount();
@@ -3224,7 +3224,7 @@ void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
         if (nVisCount <= 1)
         {
             if (!bApi)
-                rDocShell.ErrorMessage(STR_PROTECTIONERR);  //! eigene Meldung?
+                rDocShell.ErrorMessage(STR_PROTECTIONERR);  //! separate error message?
             return;
         }
     }
@@ -3237,7 +3237,7 @@ void ScDocFunc::SetTableVisible( SCTAB nTab, bool bVisible, bool bApi )
         rDocShell.GetUndoManager()->AddUndoAction( new ScUndoShowHideTab( &rDocShell, undoTabs, bVisible ) );
     }
 
-    //  Views updaten:
+    //  update views
     if (!bVisible)
         rDocShell.Broadcast( ScTablesHint( SC_TAB_HIDDEN, nTab ) );
 
@@ -3409,10 +3409,10 @@ bool ScDocFunc::SetTabBgColor(
     return bSuccess;
 }
 
-//! SetWidthOrHeight - noch doppelt zu ViewFunc !!!!!!
-//! Probleme:
-//! - Optimale Hoehe fuer Edit-Zellen ist unterschiedlich zwischen Drucker und Bildschirm
-//! - Optimale Breite braucht Selektion, um evtl. nur selektierte Zellen zu beruecksichtigen
+//! SetWidthOrHeight - duplicated in ViewFunc !!!!!!
+//! Problems:
+//! - Optimal height of text cells is different for a printer and a screen
+//! - Optimal width needs a selection in order to take only selected cells into account
 
 static sal_uInt16 lcl_GetOptimalColWidth( ScDocShell& rDocShell, SCCOL nCol, SCTAB nTab, bool bFormula )
 {
@@ -3446,7 +3446,7 @@ bool ScDocFunc::SetWidthOrHeight(
     if ( !rDoc.IsChangeReadOnlyEnabled() && !rDocShell.IsEditable() )
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_PROTECTIONERR);      //! eigene Meldung?
+            rDocShell.ErrorMessage(STR_PROTECTIONERR);      //! separate error message?
         return false;
     }
 
@@ -3457,7 +3457,7 @@ bool ScDocFunc::SetWidthOrHeight(
     bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )
     {
-        //! Option "Formeln anzeigen" - woher nehmen?
+        //! Option "Show formulas" - but where to get them from?
     }
 
     ScDocument*     pUndoDoc = nullptr;
@@ -3495,15 +3495,15 @@ bool ScDocFunc::SetWidthOrHeight(
         SCCOLROW nStartNo = rRange.mnStart;
         SCCOLROW nEndNo   = rRange.mnEnd;
 
-        if ( !bWidth )                      // Hoehen immer blockweise
+        if ( !bWidth )                      // deal with heights always in blocks
         {
             if ( eMode==SC_SIZE_OPTIMAL || eMode==SC_SIZE_VISOPT )
             {
                 bool bAll = ( eMode==SC_SIZE_OPTIMAL );
                 if (!bAll)
                 {
-                    //  fuer alle eingeblendeten CRFlags::ManualSize loeschen,
-                    //  dann SetOptimalHeight mit bShrink = FALSE
+                    //  delete for all that have CRFlags::ManualSize enabled
+                    //  then SetOptimalHeight with bShrink = FALSE
                     for (SCROW nRow=nStartNo; nRow<=nEndNo; nRow++)
                     {
                         CRFlags nOld = rDoc.GetRowFlags(nRow,nTab);
@@ -3523,8 +3523,8 @@ bool ScDocFunc::SetWidthOrHeight(
                 if (bAll)
                     rDoc.ShowRows( nStartNo, nEndNo, nTab, true );
 
-                //  Manual-Flag wird bei bAll=sal_True schon in SetOptimalHeight gesetzt
-                //  (an bei Extra-Height, sonst aus).
+                //  Manual flag will be set already in SetOptimalHeight if bAll=true
+                //  (it is on when Extra-Height, otherwise off).
             }
             else if ( eMode==SC_SIZE_DIRECT || eMode==SC_SIZE_ORIGINAL )
             {
@@ -3541,7 +3541,7 @@ bool ScDocFunc::SetWidthOrHeight(
                 rDoc.ShowRows( nStartNo, nEndNo, nTab, true );
             }
         }
-        else                                // Spaltenbreiten
+        else                                // Column widths
         {
             for (SCCOL nCol=static_cast<SCCOL>(nStartNo); nCol<=static_cast<SCCOL>(nEndNo); nCol++)
             {
@@ -3612,7 +3612,7 @@ bool ScDocFunc::InsertPageBreak( bool bColumn, const ScAddress& rPos,
     SCCOLROW nPos = bColumn ? static_cast<SCCOLROW>(rPos.Col()) :
         static_cast<SCCOLROW>(rPos.Row());
     if (nPos == 0)
-        return false;                   // erste Spalte / Zeile
+        return false;                   // first column / row
 
     ScBreakType nBreak = bColumn ?
         rDoc.HasColBreak(static_cast<SCCOL>(nPos), nTab) :
@@ -3972,7 +3972,7 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
     SfxBindings* pBindings = rDocShell.GetViewBindings();
     if (pBindings)
     {
-        pBindings->Invalidate( SID_ALIGNLEFT );         // ChangeIndent setzt auf links
+        pBindings->Invalidate( SID_ALIGNLEFT );         // ChangeIndent aligns left
         pBindings->Invalidate( SID_ALIGNRIGHT );
         pBindings->Invalidate( SID_ALIGNBLOCK );
         pBindings->Invalidate( SID_ALIGNCENTERHOR );
@@ -4083,7 +4083,7 @@ bool ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
             }
         }
 
-        if ( bRecord )      // Draw-Undo erst jetzt verfuegbar
+        if ( bRecord )      // only now is Draw-Undo available
         {
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoAutoFormat( &rDocShell, rRange, pUndoDoc, aMark, bSize, nFormatNo ) );
@@ -4134,7 +4134,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
         const bool bUndo(rDoc.IsUndoEnabled());
         if (bUndo)
         {
-            //! auch bei Undo selektierte Tabellen beruecksichtigen
+            //! take selected sheets into account also when undoing
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab );
             rDoc.CopyToDocument( rRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc );
@@ -4169,12 +4169,12 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
 
         if (bUndo)
         {
-            //! auch bei Undo selektierte Tabellen beruecksichtigen
+            //! take selected sheets into account also when undoing
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoEnterMatrix( &rDocShell, rRange, pUndoDoc, rString ) );
         }
 
-        //  Err522 beim Paint von DDE-Formeln werden jetzt beim Interpretieren abgefangen
+        //  Err522 painting of DDE-Formulas will be intercepted during intepreting
         rDocShell.PostPaint( nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab, PaintPartFlags::Grid );
         aModificator.SetDocumentModified();
 
@@ -4219,7 +4219,7 @@ bool ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
         rDoc.SetDirty( rRange, false );
         if ( bRecord )
         {
-            //! auch bei Undo selektierte Tabellen beruecksichtigen
+            //! take selected sheets into account also when undoing
             ScDocument* pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
             pUndoDoc->InitUndo( &rDoc, nStartTab, nEndTab );
             rDoc.CopyToDocument( rRange, InsertDeleteFlags::ALL & ~InsertDeleteFlags::NOTE, false, *pUndoDoc );
@@ -4418,7 +4418,7 @@ bool ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
                 aMark, nCount, eDir, FILL_SIMPLE );
         AdjustRowHeight(aRange);
 
-        if ( bRecord )      // Draw-Undo erst jetzt verfuegbar
+        if ( bRecord )      // only now is Draw-Undo available
         {
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoAutoFill( &rDocShell, aDestArea, aSourceArea, pUndoDoc, aMark,
@@ -4478,7 +4478,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
                 aSourceArea.aEnd.Col(), aSourceArea.aEnd.Row(), aSourceArea.aEnd.Tab(),
                 DirFromFillDir(eDir) );
 
-        //  mindestens eine Zeile/Spalte als Quellbereich behalten:
+        //  keep at least one row/column as source range
         SCSIZE nTotLines = ( eDir == FILL_TO_BOTTOM || eDir == FILL_TO_TOP ) ?
             static_cast<SCSIZE>( aSourceArea.aEnd.Row() - aSourceArea.aStart.Row() + 1 ) :
             static_cast<SCSIZE>( aSourceArea.aEnd.Col() - aSourceArea.aStart.Col() + 1 );
@@ -4549,7 +4549,7 @@ bool ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
             aModificator.SetDocumentModified();
         }
 
-        if ( bRecord )      // Draw-Undo erst jetzt verfuegbar
+        if ( bRecord )      // only now is Draw-Undo available
         {
             rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoAutoFill( &rDocShell, aDestArea, aSourceArea, pUndoDoc, aMark,
@@ -4628,9 +4628,9 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
             break;
     }
 
-    //      Zellschutz testen
-    //!     Quellbereich darf geschuetzt sein !!!
-    //!     aber kein Matrixfragment enthalten !!!
+    //      Test for cell protection
+    //!     Source range can be protected !!!
+    //!     but can't contain matrix fragments !!!
 
     ScEditableTester aTester( &rDoc, aDestArea );
     if ( !aTester.IsEditable() )
@@ -4690,7 +4690,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
 
     AdjustRowHeight(aDestArea);
 
-    if ( bRecord )      // Draw-Undo erst jetzt verfuegbar
+    if ( bRecord )      // only now is Draw-Undo available
     {
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoAutoFill( &rDocShell, aDestArea, aSourceArea, pUndoDoc, aMark,
@@ -4700,7 +4700,7 @@ bool ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark, FillDir e
     rDocShell.PostPaintGridAll();
     aModificator.SetDocumentModified();
 
-    rRange = aDestArea;         // Zielbereich zurueckgeben (zum Markieren)
+    rRange = aDestArea;         // return destination range (for marking)
     return true;
 }
 
@@ -4716,7 +4716,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
     SCROW nEndRow = rOption.mnEndRow;
     if ((nStartCol == nEndCol && nStartRow == nEndRow) || rOption.maTabs.empty())
     {
-        // Nothing to do.  Bail out quick.
+        // Nothing to do.  Bail out quickly
         return true;
     }
 
@@ -4740,7 +4740,7 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
         if ( rDoc.HasAttrib( nStartCol, nStartRow, *itr, nEndCol, nEndRow, *itr,
                                 HasAttrFlags::Merged | HasAttrFlags::Overlapped ) )
         {
-            // "Zusammenfassen nicht verschachteln !"
+            // "Merge of already merged cells not possible"
             if (!bApi)
                 rDocShell.ErrorMessage(STR_MSSG_MERGECELLS_0);
             return false;
@@ -5077,7 +5077,7 @@ bool ScDocFunc::CreateNames( const ScRange& rRange, sal_uInt16 nFlags, bool bApi
             pNames = rDoc.GetRangeName();
 
         if (!pNames)
-            return false;   // soll nicht sein
+            return false;   // shouldn't happen
         ScRangeName aNewRanges( *pNames );
 
         bool bTop    = ( ( nFlags & NAME_TOP ) != 0 );
@@ -5180,7 +5180,7 @@ bool ScDocFunc::InsertNameList( const ScAddress& rStartPos, bool bApi )
                 rDoc.CopyToDocument(nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
                                     InsertDeleteFlags::ALL, false, *pUndoDoc);
 
-                rDoc.BeginDrawUndo();      // wegen Hoehenanpassung
+                rDoc.BeginDrawUndo();      // because of adjusting heights
             }
 
             std::unique_ptr<ScRangeData*[]> ppSortArray(new ScRangeData* [ nValidCount ]);
@@ -5277,7 +5277,7 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
             // GRAM_API for API compatibility.
             if (!EnterMatrix( aNewRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API ))
             {
-                //  versuchen, alten Zustand wiederherzustellen
+                // try to restore the previous state
                 EnterMatrix( rOldRange, &aMark, nullptr, aFormula, false/*bApi*/, false, EMPTY_OUSTRING, formula::FormulaGrammar::GRAM_API );
             }
         }
@@ -5350,7 +5350,7 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
     OUString aTmp = aFilterName;
     pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, rFile, &aTmp, &rSource );
 
-    //  Undo fuer den leeren Link
+    //  Undo for an empty link
 
     if (bUndo)
     {
@@ -5361,11 +5361,11 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
             rDocShell.GetUndoManager()->LeaveListAction();  // undo for link update is still separate
     }
 
-    //  Update hat sein eigenes Undo
+    //  Update has its own undo
     if (rDoc.IsExecuteLinkEnabled())
     {
-        pLink->SetDoInsert(bFitBlock);  // beim ersten Update ggf. nichts einfuegen
-        pLink->Update();                // kein SetInCreate -> Update ausfuehren
+        pLink->SetDoInsert(bFitBlock);  // if applicable, don't insert anything on first update
+        pLink->Update();                // no SetInCreate -> carry out update
     }
     pLink->SetDoInsert(true);       // Default = true
 
