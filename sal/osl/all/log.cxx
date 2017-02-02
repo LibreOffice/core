@@ -401,4 +401,9 @@ void sal_detail_logFormat(
     }
 }
 
+int sal_detail_log_report(sal_detail_LogLevel level, char const * area)
+{
+    return report(level, area);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
