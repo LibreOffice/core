@@ -104,6 +104,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <editeng/unolingu.hxx>
+#include <vcl/scheduler.hxx>
 #include <config_features.h>
 #include <sfx2/watermarkitem.hxx>
 

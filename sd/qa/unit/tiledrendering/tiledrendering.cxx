@@ -46,6 +46,7 @@
 #include <svx/svxids.hrc>
 #include <DrawViewShell.hxx>
 #include <pres.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <chrono>
 

@@ -31,6 +31,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <svx/svdpage.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <chrono>
 #include <cstddef>
