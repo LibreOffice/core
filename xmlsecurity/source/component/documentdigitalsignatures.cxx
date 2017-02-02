@@ -455,13 +455,16 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
 Reference< css::security::XCertificate > DocumentDigitalSignatures::chooseCertificate(OUString& rDescription)
 {
     Reference< css::xml::crypto::XSecurityEnvironment > xSecEnv;
+    Reference< css::xml::crypto::XSecurityEnvironment > xGpgSecEnv;
 
     DocumentSignatureMode eMode{};
     DocumentSignatureManager aSignatureManager(mxCtx, eMode);
-    if (aSignatureManager.init())
+    if (aSignatureManager.init()) {
         xSecEnv = aSignatureManager.getSecurityEnvironment();
+        xGpgSecEnv = aSignatureManager.getGpgSecurityEnvironment();
+    }
 
-    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecEnv);
+    ScopedVclPtrInstance< CertificateChooser > aChooser(nullptr, mxCtx, xSecEnv, xGpgSecEnv);
 
     if (aChooser->Execute() != RET_OK)
         return Reference< css::security::XCertificate >(nullptr);
