@@ -17,6 +17,7 @@ $(eval $(call gb_Module_add_targets,xmlsecurity,\
 	Library_xmlsecurity \
 	Library_xsec_fw \
 	Library_xsec_xmlsec \
+	Library_xsec_gpg \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,xmlsecurity,\
