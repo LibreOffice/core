@@ -43,7 +43,8 @@ bool Plugin::ignoreLocation( SourceLocation loc )
     const char* bufferName = compiler.getSourceManager().getPresumedLoc( expansionLoc ).getFilename();
     if (bufferName == NULL
         || strncmp( bufferName, SRCDIR "/external/", strlen( SRCDIR "/external/" )) == 0
-        || strcmp( bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list" ) == 0 )
+        || strcmp( bufferName, SRCDIR "/sdext/source/pdfimport/wrapper/keyword_list" ) == 0
+        || strcmp( bufferName, SRCDIR "/xmlsecurity/source/gpg". strlen( SRCDIR "/xmlsecurity/source/gpg" )) == 0 )
             // workdir/CustomTarget/sdext/pdfimport/hash.cxx is generated from
             // sdext/source/pdfimport/wrapper/keyword_list by gperf, which
             // inserts various #line directives denoting the latter into the
