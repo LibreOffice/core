@@ -45,7 +45,6 @@ class ScChangeTrackingExportHelper
     ScChangeTrack*  pChangeTrack;
     ScEditEngineTextObj* pEditTextObj;
     std::unique_ptr<ScChangeActionMap> pDependings;
-    OUString   sChangeIDPrefix;
     css::uno::Reference<css::text::XText> xText;
 
     static OUString GetChangeID(const sal_uInt32 nActionNumber);
