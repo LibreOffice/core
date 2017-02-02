@@ -13,6 +13,7 @@
 #include <stringutil.hxx>
 #include "address.hxx"
 #include "dataprovider.hxx"
+#include <vcl/scheduler.hxx>
 
 #include <memory>
 
