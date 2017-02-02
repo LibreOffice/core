@@ -13,6 +13,7 @@
 #include <o3tl/make_unique.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <set>
 #include <chrono>

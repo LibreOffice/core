@@ -17,44 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALTIMER_HXX
-#define INCLUDED_VCL_INC_SALTIMER_HXX
+#ifndef INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
+#define INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
 
-#include <sal/config.h>
-#include <vcl/dllapi.h>
 #include <salwtype.hxx>
-#include <iostream>
 
-/*
- * note: there will be only a single instance of SalTimer
- * SalTimer originally had only static methods, but
- * this needed to be virtualized for the sal plugin migration
- */
+class Task;
 
-class VCL_PLUGIN_PUBLIC SalTimer
+// Internal scheduler record holding intrusive linked list pieces
+struct ImplSchedulerData final
 {
-    SALTIMERPROC        m_pProc;
-public:
-    SalTimer() : m_pProc( nullptr ) {}
-    virtual ~SalTimer() COVERITY_NOEXCEPT_FALSE;
+    ImplSchedulerData* mpNext;        ///< Pointer to the next element in list
+    Task*              mpTask;        ///< Pointer to VCL Task instance
+    bool               mbDelete;      ///< Destroy this task?
+    bool               mbInScheduler; ///< Task currently processed?
+    sal_uInt64         mnUpdateTime;  ///< Last Update Time
 
-    // AutoRepeat and Restart
-    virtual void            Start( sal_uLong nMS ) = 0;
-    virtual void            Stop() = 0;
+    void Invoke();
 
-    // Callbacks (indepen in \sv\source\app\timer.cxx)
-    void            SetCallback( SALTIMERPROC pProc )
-    {
-        m_pProc = pProc;
-    }
-
-    void            CallCallback( bool idle )
-    {
-        if( m_pProc )
-            m_pProc( idle );
-    }
+    const char *GetDebugName() const;
 };
 
-#endif // INCLUDED_VCL_INC_SALTIMER_HXX
+#endif // INCLUDED_VCL_INC_SCHEDULERIMPL_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
