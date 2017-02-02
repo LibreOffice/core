@@ -443,7 +443,8 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
             if ( bAdjustBaseLine )
                 GetInfo().Y( GetInfo().GetPos().Y()
                            + AdjustBaseLine( *m_pCurr, &aEnd ) );
-            GetInfo().X( GetInfo().X() + GetCurr()->GetHangingMargin() );
+            GetInfo().X( GetInfo().X() +
+                    ( GetCurr()->IsHanging() ? GetCurr()->GetHangingMargin() : 0 ) );
             aEnd.Paint( GetInfo() );
             GetInfo().Y( nOldY );
         }
