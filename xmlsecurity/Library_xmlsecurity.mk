@@ -20,7 +20,7 @@ $(eval $(call gb_Library_add_defs,xmlsecurity,\
     -DXMLSECURITY_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_external,xmlsecurity,boost_headers))
+$(eval $(call gb_Library_use_externals,xmlsecurity,boost_headers))
 
 $(eval $(call gb_Library_set_precompiled_header,xmlsecurity,$(SRCDIR)/xmlsecurity/inc/pch/precompiled_xmlsecurity))
 
@@ -45,6 +45,12 @@ $(eval $(call gb_Library_use_libraries,xmlsecurity,\
 	xsec_xmlsec \
 	$(gb_UWINAPI) \
 ))
+
+ifneq ($(filter-out WNT MACOSX,$(OS)),)
+$(eval $(call gb_Library_use_libraries,xmlsecurity,\
+	xsec_gpg \
+))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/component/certificatecontainer \
