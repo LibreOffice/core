@@ -39,7 +39,6 @@ class ToggleButtonToolbarController : public ComplexToolbarController
     public:
         enum Style
         {
-            STYLE_TOGGLEBUTTON,
             STYLE_DROPDOWNBUTTON,
             STYLE_TOGGLE_DROPDOWNBUTTON
         };

@@ -50,7 +50,7 @@ namespace cppcanvas
             virtual void                             setTransformation( const ::basegfx::B2DHomMatrix& rMatrix ) override;
             virtual void                             setClip( const ::basegfx::B2DPolyPolygon& rClipPoly ) override;
             virtual void                             setClip() override;
-            virtual void                             setCompositeOp( CompositeOp aOp ) override;
+            virtual void                             setCompositeOp( sal_Int8 aOp ) override;
 
         protected:
             // for our clients

@@ -93,9 +93,9 @@ namespace cppcanvas
             return maRenderState;
         }
 
-        void CanvasGraphicHelper::setCompositeOp( CompositeOp aOp )
+        void CanvasGraphicHelper::setCompositeOp( sal_Int8 aOp )
         {
-            maRenderState.CompositeOperation = (sal_Int8)aOp;
+            maRenderState.CompositeOperation = aOp;
         }
 
     }

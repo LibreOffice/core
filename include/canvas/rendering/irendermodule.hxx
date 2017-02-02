@@ -56,7 +56,6 @@ namespace canvas
          */
         enum class PrimitiveType
         {
-            Unknown,
             Triangle,
             Quad
         };

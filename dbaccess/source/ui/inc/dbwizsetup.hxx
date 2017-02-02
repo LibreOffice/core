@@ -131,14 +131,7 @@ protected:
     virtual ::svt::IWizardPageController* getPageController( TabPage* _pCurrentPage ) const override;
     virtual bool        onFinish() override;
 
-protected:
     void resetPages(const css::uno::Reference< css::beans::XPropertySet >& _rxDatasource);
-
-    enum ApplyResult
-    {
-        AR_LEAVE_MODIFIED,      // something was modified and has successfully been committed
-        AR_KEEP                 // don't leave the page (e.g. because an error occurred)
-    };
 
 private:
     /** declares a path with or without authentication, as indicated by the database type

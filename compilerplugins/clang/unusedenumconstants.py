@@ -57,15 +57,40 @@ for k, definitions in sourceLocationToDefinitionMap.iteritems():
         for d in definitions:
             definitionSet.remove(d)
 
+def startswith_one_of( srcLoc, fileSet ):
+    for f in fileSet:
+        if srcLoc.startswith(f):
+            return True;
+    return False;
+
 untouchedSet = set()
 for d in definitionSet:
     if d in readSet or d in writeSet:
         continue
-    # this is all representations of on-disk data structures
-    if srcLoc.startswith("basic/source/inc/filefmt.hxx"):
-    "basic/source/sbx/sbxscan.cxx"
-        continue
     srcLoc = definitionToSourceLocationMap[d];
+    if startswith_one_of(srcLoc,
+        [
+        # this is all representations of on-disk data structures
+         "basic/source/inc/filefmt.hxx",
+         "basic/source/sbx/sbxscan.cxx",
+         "cppcanvas/source/mtfrenderer/emfpbrush.hxx",
+         "filter/source/graphicfilter/ipcd/ipcd.cxx",
+         "filter/source/t602/t602filter.hxx",
+         "include/filter/msfilter/escherex.hxx",
+         "include/filter/msfilter/svdfppt.hxx",
+        # unit test code
+         "cppu/source/uno/check.cxx",
+        # general weird nonsense going on
+         "framework/inc/helper/mischelper.hxx"
+        # windows only
+         "include/canvas/rendering/icolorbuffer.hxx",
+        # must match some other enum
+         "include/editeng/bulletitem.hxx",
+         "include/editeng/svxenum.hxx",
+         "include/formula/opcode.hxx",
+         ]):
+        continue
+
     untouchedSet.add((d[0] + " " + d[1], srcLoc))
 
 writeonlySet = set()

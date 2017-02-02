@@ -124,8 +124,7 @@ bool UnusedEnumConstants::VisitEnumConstantDecl( const EnumConstantDecl* enumCon
 
 bool UnusedEnumConstants::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
 {
-    const Decl* decl = declRefExpr->getDecl();
-    const EnumConstantDecl* enumConstantDecl = dyn_cast<EnumConstantDecl>(decl);
+    auto enumConstantDecl = dyn_cast<EnumConstantDecl>(declRefExpr->getDecl());
     if (!enumConstantDecl) {
         return true;
     }
@@ -146,7 +145,8 @@ try_again:
     bool bDump = false;
     if (!parent)
     {
-        // could do better here, sometimes this is a constructor-initialiser-expression
+        // Could probably do better here.
+        // Sometimes this is a constructor-initialiser-expression, so just make a pessimistic assumption.
         bWrite = true;
     } else if (isa<CallExpr>(parent) || isa<InitListExpr>(parent) || isa<ArraySubscriptExpr>(parent)
                 || isa<ReturnStmt>(parent) || isa<DeclStmt>(parent)
@@ -174,12 +174,14 @@ try_again:
         bDump = true;
     }
 
+    // to let me know if I missed something
     if (bDump) {
         parent->dump();
         report( DiagnosticsEngine::Warning,
-                "xxxxxx",
+                "unhandled clang AST node type",
                 parent->getLocStart());
     }
+
     if (bWrite) {
         writeSet.insert(niceName(enumConstantDecl));
     }
@@ -189,7 +191,7 @@ try_again:
     return true;
 }
 
-loplugin::Plugin::Registration< UnusedEnumConstants > X("unusedenumconstants", true);
+loplugin::Plugin::Registration< UnusedEnumConstants > X("unusedenumconstants", false);
 
 }
 
