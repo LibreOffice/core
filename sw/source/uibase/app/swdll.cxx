@@ -166,12 +166,6 @@ SwDLL::~SwDLL()
     ::FinitCore();
     // sign out Objekt-Factory
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
-#if 0
-    // the SwModule must be destroyed
-    SwModule** ppShlPtr = (SwModule**) GetAppData(SHL_WRITER);
-    delete (*ppShlPtr);
-    (*ppShlPtr) = NULL;
-#endif
 }
 
 sw::Filters & SwDLL::getFilters()
