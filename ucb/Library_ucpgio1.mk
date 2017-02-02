@@ -56,14 +56,14 @@ $(eval $(call gb_Library_add_libs,ucpgio1,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,ucpgio1,\
-	ucp/source/ucp/gio/gio_provider \
-	ucp/source/ucp/gio/gio_content \
-	ucp/source/ucp/gio/gio_resultset \
-	ucp/source/ucp/gio/gio_datasupplier \
-	ucp/source/ucp/gio/gio_seekable \
-	ucp/source/ucp/gio/gio_inputstream \
-	ucp/source/ucp/gio/gio_outputstream \
-	ucp/source/ucp/gio/gio_mount \
+	ucb/source/ucp/gio/gio_provider \
+	ucb/source/ucp/gio/gio_content \
+	ucb/source/ucp/gio/gio_resultset \
+	ucb/source/ucp/gio/gio_datasupplier \
+	ucb/source/ucp/gio/gio_seekable \
+	ucb/source/ucp/gio/gio_inputstream \
+	ucb/source/ucp/gio/gio_outputstream \
+	ucb/source/ucp/gio/gio_mount \
 ))
 
 # vim: set noet sw=4 ts=4:
