@@ -94,7 +94,7 @@ class GbuildParser:
         # Relation between json object and file extension
         jsonSrc = {
                     'CXXOBJECTS': '.cxx', 'OBJCOBJECTS': '.m', 'OBJCXXOBJECTS': '.mm', 'COBJECTS': '.c',
-                    'FLEXOBJECTS': '.l',   'YACCOBJECTS': '.y',
+                    'LEXOBJECTS': '.l',   'YACCOBJECTS': '.y',
 
                     'GENCXXOBJECTS': '.cxx', # remark is in workdir/GenCxxObject
                     'ASMOBJECTS': '.s',      #not in json, due to Blacklist ?
@@ -529,7 +529,7 @@ class testVS2013Ide(IdeIntegrationGenerator):
             filter_ext_node.text = '{%s}' % filter_value
         sources_node=ET.SubElement(proj_node,'{%s}ItemGroup' % ns)
         for cxxfile in target['CXXOBJECTS']:
-            cxx_file_name = cxxfile.split('/')[-1] + '.cxx'
+            cxx_file_name = cxxfile.split('/')[-1]
             clinclude_node=ET.SubElement(sources_node,'{%s}ClInclude' % ns, Include='%s' % cxx_file_name)
             header_filter=ET.SubElement(clinclude_node,'{%s}Filter' % ns)
             header_filter.text="sources"
