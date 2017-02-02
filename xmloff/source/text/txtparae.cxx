@@ -3063,7 +3063,7 @@ void XMLTextParagraphExport::_exportTextGraphic(
         OUStringBuffer sRet( GetXMLToken(XML_ROTATE).getLength()+4 );
         sRet.append( GetXMLToken(XML_ROTATE));
         sRet.append( '(' );
-        sRet.append( nVal );
+        sRet.append( (sal_Int32)nVal );
         sRet.append( ')' );
         GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_TRANSFORM,
                                   sRet.makeStringAndClear() );
