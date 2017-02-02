@@ -50,7 +50,6 @@ struct LocalFileHeader
         : min_version(0), general_flag(0), compression(0), lastmod_time(0), lastmod_date(0),
           crc32(0), compressed_size(0), uncompressed_size(0), filename_size(0), extra_field_size(0),
           filename(), extra_field() {}
-    ~LocalFileHeader() {}
 };
 
 struct CentralDirectoryEntry
@@ -79,7 +78,6 @@ struct CentralDirectoryEntry
           lastmod_date(0), crc32(0), compressed_size(0), uncompressed_size(0), filename_size(0),
           extra_field_size(0), file_comment_size(0), disk_num(0), internal_attr(0),
           external_attr(0), offset(0), filename(), extra_field(), file_comment() {}
-    ~CentralDirectoryEntry() {}
 };
 
 struct CentralDirectoryEnd
@@ -95,7 +93,6 @@ struct CentralDirectoryEnd
     CentralDirectoryEnd()
         : disk_num(0), cdir_disk(0), disk_entries(0), cdir_entries(0),
           cdir_size(0), cdir_offset(0), comment_size(0), comment() {}
-    ~CentralDirectoryEnd() {}
 };
 
 #define CDIR_ENTRY_SIG 0x02014b50
