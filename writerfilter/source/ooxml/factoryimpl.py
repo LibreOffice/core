@@ -105,17 +105,7 @@ def createFastChildContextFromStart(model):
 
 
 def fastTokenToId(model):
-    print("""namespace tokenmap {
-struct token { const char* name; Token_t nToken; };
-class Perfect_Hash
-{
-private:
-  static inline unsigned int hash (const char* str, unsigned int len);
-public:
-  static struct token* in_word_set (const char* str, unsigned int len);
-};
-}
-
+    print("""
 std::string fastTokenToId(sal_uInt32 nToken)
 {
 
