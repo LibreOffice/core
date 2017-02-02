@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_14abc68a",
+        "filename": "sc/source/ui/view/gridwin.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5738,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-02-02T10:28:08Z",
+      "side": 1,
+      "message": "I noted that this unit test fails: https://gerrit.libreoffice.org/#/c/19828/\n\nIndeed in the above code and in global.cxx I performed some changes in order to get the cell cursor correctly aligned with the grid.\n\nAnyway, it is not clear how the expected value has been deduced.",
+      "revId": "0832870c14d23cf2e2d3d43f391199a4d79ef241",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
