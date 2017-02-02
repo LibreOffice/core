@@ -1124,7 +1124,7 @@ void WW8AttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
 {
     m_rWW8Export.InsUInt16( NS_sprm::LN_CSfxText );
     // At the moment the only animated text effect we support is blinking
-    m_rWW8Export.InsUInt16( rBlink.GetValue() ? 2 : 0 );
+    m_rWW8Export.pO->push_back( rBlink.GetValue() ? 2 : 0 );
 }
 
 void WW8AttributeOutput::CharCrossedOut( const SvxCrossedOutItem& rCrossed )
