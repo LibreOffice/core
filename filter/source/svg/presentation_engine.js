@@ -9377,6 +9377,8 @@ function createClipPolyPolygon( nType, nSubtype )
                     return null;
             }
             return new PinWheelWipePath( nBlades );
+        case CLOCKWIPE_TRANSITION:
+            return new ClockWipePath();
         case RANDOMBARWIPE_TRANSITION:
             return new RandomWipePath( 128, true /* bars */ );
         case CHECKERBOARDWIPE_TRANSITION:
@@ -9619,7 +9621,19 @@ EllipseWipePath.prototype.perform = function( nT )
 };
 
 
+/**
+ * Class ClockWipePath
+ *
+ */
+function ClockWipePath() { }
 
+ClockWipePath.prototype.perform = function( nT ) {
+    const aTransform = SVGIdentityMatrix.scaleNonUniform(0.5, 0.5).translate(0.5, 0.5);
+    var aPolyPath = PinWheelWipePath.calcCenteredClock(nT, 1.0);
+    aPolyPath.matrixTransform( aTransform );
+
+    return aPolyPath;
+}
 
 /** Class PinWheelWipePath
  *  This class handles a parametric poly-path that is used for performing
