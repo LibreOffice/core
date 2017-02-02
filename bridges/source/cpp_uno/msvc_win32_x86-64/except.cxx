@@ -236,6 +236,9 @@ void
 
 #pragma warning( disable : 4237 )
 #include <sal/config.h>
+
+#include <memory>
+
 #include <malloc.h>
 #include <new.h>
 #include <typeinfo.h>
@@ -617,7 +620,7 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
     // 2.Pass: Get the total needed memory for class ExceptionType
     // (with embedded type_info) and keep the sizes for each instance
     // is stored in allocated int array
-    int *exceptionTypeSizeArray = new int[nLen];
+    auto exceptionTypeSizeArray = std::unique_ptr<int[]>(new int[nLen]);
 
     nLen = 0;
     for (pCompTD = reinterpret_cast<typelib_CompoundTypeDescription*>(pTD);
@@ -697,9 +700,6 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
     }
     // Final check: end of address calculation must be end of mem
     assert(etMem + etMemOffset == pCode + totalSize);
-
-    // remove array
-    delete[] exceptionTypeSizeArray;
 }
 
 #if !defined LEAK_STATIC_DATA

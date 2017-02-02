@@ -118,17 +118,17 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
 #ifdef _WIN32
     if ( pGDIMeta )
     {
-        SvMemoryStream* pStream = new SvMemoryStream( 65535, 65535 );
+        SvMemoryStream pStream( 65535, 65535 );
         Graphic aGraph( *pGDIMeta );
-        bool bFailed = GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::WMF );
-        pStream->Flush();
+        bool bFailed = GraphicConverter::Export( pStream, aGraph, ConvertDataFormat::WMF );
+        pStream.Flush();
         if ( !bFailed )
         {
-            sal_Int32 nLength = pStream->Seek( STREAM_SEEK_TO_END );
+            sal_Int32 nLength = pStream.Seek( STREAM_SEEK_TO_END );
             if ( nLength > 22 )
             {
                 HMETAFILE hMeta = SetMetaFileBitsEx( nLength - 22,
-                                ( static_cast< const unsigned char*>( pStream->GetData() ) ) + 22 );
+                                ( static_cast< const unsigned char*>( pStream.GetData() ) ) + 22 );
 
                 if ( hMeta )
                 {
@@ -166,8 +166,6 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
                 }
             }
         }
-
-        delete pStream;
     }
 #endif
 

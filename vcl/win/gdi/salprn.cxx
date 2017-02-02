@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
 #include <string.h>
 
 #include <svsys.h>
@@ -1220,11 +1223,10 @@ OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal
     DWORD nBins = ImplDeviceCaps( this, DC_BINNAMES, nullptr, pSetupData );
     if ( (nPaperBin < nBins) && (nBins != GDI_ERROR) )
     {
-        sal_Unicode* pBuffer = new sal_Unicode[nBins*24];
-        DWORD nRet = ImplDeviceCaps( this, DC_BINNAMES, reinterpret_cast<BYTE*>(pBuffer), pSetupData );
+        auto pBuffer = std::unique_ptr<sal_Unicode[]>(new sal_Unicode[nBins*24]);
+        DWORD nRet = ImplDeviceCaps( this, DC_BINNAMES, reinterpret_cast<BYTE*>(pBuffer.get()), pSetupData );
         if ( nRet && (nRet != GDI_ERROR) )
-            aPaperBinName = OUString( pBuffer + (nPaperBin*24) );
-        delete [] pBuffer;
+            aPaperBinName = OUString( pBuffer.get() + (nPaperBin*24) );
     }
 
     return aPaperBinName;

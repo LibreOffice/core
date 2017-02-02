@@ -419,7 +419,7 @@ RTLFUNC(CurDir)
             }
         }
     }
-    char* pBuffer = new char[ _MAX_PATH ];
+    char pBuffer[ _MAX_PATH ];
     if ( _getdcwd( nCurDir, pBuffer, _MAX_PATH ) != nullptr )
     {
         rPar.Get(0)->PutString( OUString::createFromAscii( pBuffer ) );
@@ -428,7 +428,6 @@ RTLFUNC(CurDir)
     {
         StarBASIC::Error( ERRCODE_BASIC_NO_DEVICE );
     }
-    delete [] pBuffer;
 
 #else
 

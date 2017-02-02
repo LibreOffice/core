@@ -9,6 +9,8 @@
  */
 
 #include <cwchar>
+#include <memory>
+
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #endif
@@ -103,8 +105,10 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
         else if(nValues)
         {
             // No more subkeys, we are at a leaf
-            wchar_t* pValueName = new wchar_t[nLongestValueNameLen + 1];
-            wchar_t* pValue = new wchar_t[nLongestValueLen + 1];
+            auto pValueName = std::unique_ptr<wchar_t[]>(
+                new wchar_t[nLongestValueNameLen + 1]);
+            auto pValue = std::unique_ptr<wchar_t[]>(
+                new wchar_t[nLongestValueLen + 1]);
 
             bool bFinal = false;
             OUString aValue;
@@ -114,13 +118,13 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
                 DWORD nValueNameLen = nLongestValueNameLen + 1;
                 DWORD nValueLen = nLongestValueLen + 1;
 
-                RegEnumValueW(hCurKey, i, pValueName, &nValueNameLen, nullptr, nullptr, reinterpret_cast<LPBYTE>(pValue), &nValueLen);
+                RegEnumValueW(hCurKey, i, pValueName.get(), &nValueNameLen, nullptr, nullptr, reinterpret_cast<LPBYTE>(pValue.get()), &nValueLen);
                 const wchar_t wsValue[] = L"Value";
                 const wchar_t wsFinal[] = L"Final";
 
-                if(!wcscmp(pValueName, wsValue))
-                    aValue = OUString(pValue);
-                if(!wcscmp(pValueName, wsFinal) && *reinterpret_cast<DWORD*>(pValue) == 1)
+                if(!wcscmp(pValueName.get(), wsValue))
+                    aValue = OUString(pValue.get());
+                if(!wcscmp(pValueName.get(), wsFinal) && *reinterpret_cast<DWORD*>(pValue.get()) == 1)
                     bFinal = true;
             }
             sal_Int32 aLastSeparator = aKeyName.lastIndexOf('\\');
@@ -177,8 +181,6 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString const & aKeyName, TempFile &aFil
             for(; nCloseNode > 0; nCloseNode--)
                 writeData(aFileHandle, "</node>");
             writeData(aFileHandle, "</item>\n");
-            delete[] pValueName;
-            delete[] pValue;
         }
         RegCloseKey(hCurKey);
     }

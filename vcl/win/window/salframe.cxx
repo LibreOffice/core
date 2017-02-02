@@ -26,6 +26,7 @@
 
 #include <officecfg/Office/Common.hxx>
 
+#include <memory>
 #include <string.h>
 #include <limits.h>
 
@@ -5010,10 +5011,9 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         LONG nTextLen = ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, nullptr, 0 ) / sizeof( WCHAR );
         if ( nTextLen >= 0 )
         {
-            WCHAR* pTextBuf = new WCHAR[nTextLen];
-            ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf), (sal_Int32)nTextLen );
-            delete [] pTextBuf;
+            auto pTextBuf = std::unique_ptr<WCHAR[]>(new WCHAR[nTextLen]);
+            ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf.get(), nTextLen*sizeof( WCHAR ) );
+            aEvt.maText = OUString( reinterpret_cast<const sal_Unicode*>(pTextBuf.get()), (sal_Int32)nTextLen );
         }
 
         aEvt.mnCursorPos = aEvt.maText.getLength();

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
@@ -170,13 +174,13 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
                 SUCCEEDED( pDet->GetBitmapBits( 0, &nSize, nullptr, nWidth, nHeight ) ) &&
                 ( nSize > 0  ) )
             {
-                char* pBuffer = new char[ nSize ];
+                auto pBuffer = std::unique_ptr<char[]>(new char[ nSize ]);
 
                 try
                 {
-                    if( SUCCEEDED( pDet->GetBitmapBits( fMediaTime, nullptr, pBuffer, nWidth, nHeight ) ) )
+                    if( SUCCEEDED( pDet->GetBitmapBits( fMediaTime, nullptr, pBuffer.get(), nWidth, nHeight ) ) )
                     {
-                        SvMemoryStream  aMemStm( pBuffer, nSize, StreamMode::READ | StreamMode::WRITE );
+                        SvMemoryStream  aMemStm( pBuffer.get(), nSize, StreamMode::READ | StreamMode::WRITE );
                         Bitmap          aBmp;
 
                         if( ReadDIB(aBmp, aMemStm, false ) && !aBmp.IsEmpty() )
@@ -189,8 +193,6 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
                 catch( ... )
                 {
                 }
-
-                delete [] pBuffer;
             }
         }
 

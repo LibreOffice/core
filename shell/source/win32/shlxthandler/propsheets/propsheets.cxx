@@ -36,6 +36,7 @@
 #pragma warning(pop)
 #endif
 
+#include <memory>
 #include <string>
 #include <vector>
 #include <utility>
@@ -139,12 +140,12 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
         UINT size = DragQueryFileW( static_cast<HDROP>(medium.hGlobal), 0, nullptr, 0 );
         if ( size != 0 )
         {
-            WCHAR * buffer = new WCHAR[ size + 1 ];
+            auto buffer = std::unique_ptr<WCHAR[]>(new WCHAR[ size + 1 ]);
             UINT result_size = DragQueryFileW( static_cast<HDROP>(medium.hGlobal),
-                                               0, buffer, size + 1 );
+                                               0, buffer.get(), size + 1 );
             if ( result_size != 0 )
             {
-                std::wstring fname = getShortPathName( buffer );
+                std::wstring fname = getShortPathName( buffer.get() );
                 std::string fnameA = WStringToString( fname );
                 ZeroMemory( m_szFileName, sizeof( m_szFileName ) );
                 strncpy( m_szFileName, fnameA.c_str(), ( sizeof( m_szFileName ) - 1 ) );
@@ -152,7 +153,6 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
             }
             else
                 hr = E_INVALIDARG;
-            delete [] buffer;
         }
         else
             hr = E_INVALIDARG;
