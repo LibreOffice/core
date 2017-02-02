@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_4f969795",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-02T21:52:30Z",
+      "side": 1,
+      "message": "typo \"ymbols\"",
+      "revId": "2fa576eae6003123814230320a620559703d3b4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_2f81534b",
+        "filename": "writerfilter/source/dmapper/NumberingManager.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-02T21:52:30Z",
+      "side": 1,
+      "message": "OUString is reference counted with copy-on-write, so this is really not a good idea.\n\nbetter use OUString::replace",
+      "revId": "2fa576eae6003123814230320a620559703d3b4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
