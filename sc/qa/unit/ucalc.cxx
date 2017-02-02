@@ -54,6 +54,7 @@
 #include "queryparam.hxx"
 #include "edittextiterator.hxx"
 #include "editutil.hxx"
+#include "cellform.hxx"
 #include <asciiopt.hxx>
 #include <impex.hxx>
 #include <columnspanset.hxx>
@@ -3022,6 +3023,55 @@ void Test::testAutofilter()
     CPPUNIT_ASSERT_MESSAGE("rows 4 & 5 should be hidden.", bHidden && nRow1 == 3 && nRow2 == 4);
     bHidden = m_pDoc->RowHidden(5, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 6 and down should be all visible.", !bHidden && nRow1 == 5 && nRow2 == MAXROW);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testAutoFilterTimeValue()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(ScAddress(0,0,0), "Hours");
+    m_pDoc->SetValue(ScAddress(0,1,0), 72.3604166666671);
+    m_pDoc->SetValue(ScAddress(0,2,0), 265);
+
+    ScDBData* pDBData = new ScDBData(STR_DB_GLOBAL_NONAME, 0, 0, 0, 0, 2);
+    m_pDoc->SetAnonymousDBData(0, pDBData);
+
+    // Apply the "hour:minute:second" format to A2:A3.
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_TIME_HH_MMSS, LANGUAGE_ENGLISH_US);
+    ScPatternAttr aNewAttrs(m_pDoc->GetPool());
+    SfxItemSet& rSet = aNewAttrs.GetItemSet();
+    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+
+    m_pDoc->ApplyPatternAreaTab(0, 1, 0, 2, 0, aNewAttrs); // apply it to A2:A3.
+
+    printRange(m_pDoc, ScRange(0,0,0,0,2,0), "Data"); // A1:A3
+
+    // Make sure the hour:minute:second format is really applied.
+    CPPUNIT_ASSERT_EQUAL(OUString("1736:39:00"), m_pDoc->GetString(ScAddress(0,1,0))); // A2
+    CPPUNIT_ASSERT_EQUAL(OUString("6360:00:00"), m_pDoc->GetString(ScAddress(0,2,0))); // A3
+
+    // Filter by the A2 value.  Only A1 and A2 shold be visible.
+    ScQueryParam aParam;
+    pDBData->GetQueryParam(aParam);
+    ScQueryEntry& rEntry = aParam.GetEntry(0);
+    rEntry.bDoQuery = true;
+    rEntry.nField = 0;
+    rEntry.eOp = SC_EQUAL;
+    rEntry.GetQueryItem().maString = m_pDoc->GetSharedStringPool().intern("1736:39:00");
+    rEntry.GetQueryItem().meType = ScQueryEntry::ByString;
+
+    pDBData->SetQueryParam(aParam);
+
+    // perform the query.
+    m_pDoc->Query(0, aParam, true);
+
+    // A1:A2 should be visible while A3 should be filtered out.
+    CPPUNIT_ASSERT_MESSAGE("A1 should be visible.", !m_pDoc->RowFiltered(0,0));
+    CPPUNIT_ASSERT_MESSAGE("A2 should be visible.", !m_pDoc->RowFiltered(1,0));
+    CPPUNIT_ASSERT_MESSAGE("A3 should be filtered out.", m_pDoc->RowFiltered(2,0));
 
     m_pDoc->DeleteTab(0);
 }
@@ -6377,7 +6427,9 @@ void Test::printRange(ScDocument* pDoc, const ScRange& rRange, const char* pCapt
     {
         for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         {
-            OUString aVal = pDoc->GetString(nCol, nRow, rRange.aStart.Tab());
+            ScAddress aPos(nCol, nRow, rRange.aStart.Tab());
+            ScRefCellValue aCell(*pDoc, aPos);
+            OUString aVal = ScCellFormat::GetOutputString(*pDoc, aPos, aCell);
             printer.set(nRow-nRow1, nCol-nCol1, aVal);
         }
     }
