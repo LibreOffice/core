@@ -7925,6 +7925,9 @@ if test  "$test_freetype" = "yes"; then
     FilterLibs "${FREETYPE_LIBS}"
     FREETYPE_LIBS="${filteredlibs}"
     SYSTEM_FREETYPE=TRUE
+else
+    FREETYPE_CFLAGS="${ISYSTEM}${WORKDIR}/UnpackedTarball/freetype/include"
+    FREETYPE_LIBS="-L${WORKDIR}/UnpackedTarball/freetype/instdir/lib -lfreetype"
 fi
 AC_SUBST(FREETYPE_CFLAGS)
 AC_SUBST(FREETYPE_LIBS)
