@@ -60,8 +60,7 @@ sal_Bool SAL_CALL CrashReportUI::supportsService(const OUString& sServiceName)
 
 css::uno::Sequence< OUString > SAL_CALL CrashReportUI::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lServiceNames { "com.sun.star.dialog.CrashReportUI" };
-    return lServiceNames;
+    return { "com.sun.star.dialog.CrashReportUI" };
 }
 
 css::uno::Any SAL_CALL CrashReportUI::dispatchWithReturnValue(const css::util::URL&,
