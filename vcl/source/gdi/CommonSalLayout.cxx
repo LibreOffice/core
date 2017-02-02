@@ -269,6 +269,7 @@ struct SubRun
     int32_t mnEnd;
     hb_script_t maScript;
     hb_direction_t maDirection;
+    bool mbIsTR;
 };
 
 namespace vcl {
@@ -489,11 +490,14 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 {
                     sal_Int32 nPrevIdx = nIdx;
                     sal_UCS4 aChar = rArgs.mrStr.iterateCodePoints(&nIdx);
+                    bool bIsTR = false;
                     switch (vcl::GetVerticalOrientation(aChar))
                     {
+                    case VerticalOrientation::TransformedRotated:
+                        bIsTR = true;
+                        // Fallthrough
                     case VerticalOrientation::Upright:
                     case VerticalOrientation::TransformedUpright:
-                    case VerticalOrientation::TransformedRotated:
                         aDirection = HB_DIRECTION_TTB;
                         break;
                     default:
@@ -501,8 +505,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                         break;
                     }
 
-                    if (aSubRuns.empty() || aSubRuns.back().maDirection != aDirection)
-                        aSubRuns.push_back({ nPrevIdx, nIdx, aScript, aDirection });
+                    if (aSubRuns.empty() || aSubRuns.back().maDirection != aDirection || bIsTR || aSubRuns.back().mbIsTR)
+                        aSubRuns.push_back({ nPrevIdx, nIdx, aScript, aDirection, bIsTR });
                     else
                         aSubRuns.back().mnEnd = nIdx;
                 }
@@ -523,6 +527,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
         for (const auto& aSubRun : aSubRuns)
         {
+            hb_direction_t aDirection = aSubRun.maDirection;
             hb_buffer_clear_contents(pHbBuffer);
 
             int nMinRunPos = aSubRun.mnMin;
@@ -567,6 +572,18 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
             hb_glyph_info_t *pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
             hb_glyph_position_t *pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, nullptr);
 
+
+            if (aDirection == HB_DIRECTION_TTB && aSubRun.mbIsTR
+                && !IsVerticalAlternate(pHbGlyphInfos[0].codepoint))
+            {
+                // Tr: Rotate when alternative transform is not available
+                // See http://unicode.org/reports/tr50/#vo
+                aDirection = HB_DIRECTION_LTR;
+                hb_buffer_set_direction(pHbBuffer, aDirection);
+                pHbGlyphInfos = hb_buffer_get_glyph_infos(pHbBuffer, nullptr);
+                pHbPositions = hb_buffer_get_glyph_positions(pHbBuffer, nullptr);
+            }
+
             for (int i = 0; i < nRunGlyphCount; ++i) {
                 int32_t nGlyphIndex = pHbGlyphInfos[i].codepoint;
                 int32_t nCharPos = pHbGlyphInfos[i].cluster;
@@ -609,7 +626,7 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 }
 
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
-                if (aSubRun.maDirection == HB_DIRECTION_TTB)
+                if (aDirection == HB_DIRECTION_TTB)
                 {
                     // Use IS_VERTICAL for alternative font.
                     nGlyphFlags |= GlyphItem::IS_VERTICAL;
