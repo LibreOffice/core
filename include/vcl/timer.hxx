@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_TIMER_HXX
 
 #include <tools/link.hxx>
-#include <vcl/scheduler.hxx>
+#include <vcl/task.hxx>
 
 class VCL_DLLPUBLIC Timer : public Task
 {

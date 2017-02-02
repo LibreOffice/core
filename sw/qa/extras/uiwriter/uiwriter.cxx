@@ -101,6 +101,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <editeng/unolingu.hxx>
+#include <vcl/scheduler.hxx>
 #include <config_features.h>
 
 static const char* const DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
