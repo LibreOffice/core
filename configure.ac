@@ -10648,6 +10648,8 @@ if test "$_os" = "Linux"; then
 
         GPGME_CFLAGS=`$GPGMECONFIG --cflags`
         GPGME_LIBS=`$GPGMECONFIG --libs`
+    else
+        AC_MSG_RESULT([none])
     fi
 fi
 AC_SUBST(SYSTEM_GPGME)
