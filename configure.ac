@@ -10640,22 +10640,14 @@ if test "$_os" = "Linux"; then
     dnl Check for system gpgme
     dnl ===================================================================
     AC_MSG_CHECKING([which gpgme to use])
-    if test "$with_system_gpgme" = "yes"; then
-        AC_MSG_RESULT([external])
-        SYSTEM_GPGME=TRUE
-
-        AC_PATH_PROG(GPGMECONFIG, gpgme-config)
-        if test -z "$GPGMECONFIG"; then
-            AC_MSG_ERROR([--with-system-gpgme requested, but gpgme programs not found])
-        fi
-
-        GPGME_CFLAGS=`$GPGMECONFIG --cflags`
-        GPGME_LIBS=`$GPGMECONFIG --libs`
-    else
-# This is work in progress, please DO NOT MODIFY OR REMOVE
-        AC_MSG_RESULT([internal])
-        BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGME"
-    fi
+    dnl if test "$with_system_gpgme" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_GPGME=TRUE
+    GPGME_CFLAGS=`$GPGMECONFIG --cflags`
+    GPGME_LIBS=`$GPGMECONFIG --libs`
+    dnl else
+    dnl     AC_MSG_RESULT([none])
+    dnl fi
 fi
 AC_SUBST(SYSTEM_GPGME)
 AC_SUBST(GPGME_CFLAGS)
