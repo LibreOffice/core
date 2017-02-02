@@ -519,9 +519,9 @@ void ScGlobal::Init()
 void ScGlobal::InitPPT()
 {
     OutputDevice* pDev = Application::GetDefaultDevice();
-    Point aPix1000 = pDev->LogicToPixel( Point(100000,100000), MapUnit::MapTwip );
-    nScreenPPTX = aPix1000.X() / 100000.0;
-    nScreenPPTY = aPix1000.Y() / 100000.0;
+
+    nScreenPPTX = double(pDev->GetDPIX()) / double(TWIPS_PER_INCH);
+    nScreenPPTY = double(pDev->GetDPIY()) / double(TWIPS_PER_INCH);
 }
 
 const OUString& ScGlobal::GetClipDocName()
