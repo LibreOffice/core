@@ -682,7 +682,7 @@ void DesktopLOKTest::testCellCursor()
     boost::property_tree::read_json(aStream, aTree);
 
     OString aRectangle(aTree.get<std::string>("commandValues").c_str());
-    CPPUNIT_ASSERT_EQUAL(aRectangle, OString("0, 0, 1278, 254"));
+    CPPUNIT_ASSERT_EQUAL(OString("0, 0, 1279, 255"), aRectangle);
 }
 
 void DesktopLOKTest::testCommandResult()
