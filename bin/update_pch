@@ -124,6 +124,7 @@ DEFAULTS = \
     'xmlsecurity.xmlsecurity'           : ( 6, EXCLUDE, INCLUDE, INCLUDE), #   5.1
     'xmlsecurity.xsec_fw'               : ( 2, EXCLUDE, INCLUDE, EXCLUDE), #   2.7
     'xmlsecurity.xsec_xmlsec'           : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   4.4
+    'xmlsecurity.xsec_gpg'              : ( 2, EXCLUDE, INCLUDE, INCLUDE), #   ?
 }
 
 def remove_rare(raw, min_use=-1):
