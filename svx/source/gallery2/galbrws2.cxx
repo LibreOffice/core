@@ -155,17 +155,17 @@ GalleryThemePopup::GalleryThemePopup(
     m_aCommandInfo.insert(
         CommandInfoMap::value_type(
             SID_GALLERY_ENABLE_ADDCOPY,
-            CommandInfo( OUString(CMD_SID_GALLERY_ENABLE_ADDCOPY ))));
+            CommandInfo( CMD_SID_GALLERY_ENABLE_ADDCOPY )));
     // SID_GALLERY_BG_BRUSH
     m_aCommandInfo.insert(
         CommandInfoMap::value_type(
             SID_GALLERY_BG_BRUSH,
-            CommandInfo(OUString(CMD_SID_GALLERY_BG_BRUSH ))));
+            CommandInfo( CMD_SID_GALLERY_BG_BRUSH )));
     // SID_GALLERY_FORMATS
     m_aCommandInfo.insert(
         CommandInfoMap::value_type(
             SID_GALLERY_FORMATS,
-            CommandInfo(OUString(CMD_SID_GALLERY_FORMATS ))));
+            CommandInfo( CMD_SID_GALLERY_FORMATS )));
 
 }
 
