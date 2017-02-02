@@ -60,7 +60,6 @@ class DlgEdHint: public SfxHint
 {
 public:
     enum Kind {
-        UNKNOWN,
         WINDOWSCROLLED,
         LAYERCHANGED,
         OBJORDERCHANGED,

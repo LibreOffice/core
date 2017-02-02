@@ -78,8 +78,6 @@ namespace framework
                           public  LayoutManager_PBase
     {
         public:
-            enum { DOCKINGAREAS_COUNT = 4 };
-
             LayoutManager( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~LayoutManager() override;
 

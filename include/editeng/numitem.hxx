@@ -232,8 +232,7 @@ enum class SvxNumRuleType
 {
     NUMBERING,
     OUTLINE_NUMBERING,
-    PRESENTATION_NUMBERING,
-    END
+    PRESENTATION_NUMBERING
 };
 
 class EDITENG_DLLPUBLIC SvxNumRule final

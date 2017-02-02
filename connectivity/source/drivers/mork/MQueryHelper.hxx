@@ -48,7 +48,6 @@ namespace connectivity
         class MQueryExpressionBase {
         public:
             typedef enum {
-                Unknown,
                 StringExpr,
                 Expr
             } node_type;

@@ -60,8 +60,7 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax:
         enum Image_XML_Namespace
         {
             IMG_NS_IMAGE,
-            IMG_NS_XLINK,
-            TBL_XML_NAMESPACES_COUNT
+            IMG_NS_XLINK
         };
 
         OReadImagesDocumentHandler( ImageListsDescriptor& aItems );
