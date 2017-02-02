@@ -1,4 +1,3 @@
-$HeadURL$
 
 Apache OpenOffice (AOO)
 =======================
@@ -58,3 +57,5 @@ Building Apache OpenOffice
     The default build will produce a setup version (e.g. setup program on windows, dmg on Mac OS, 
     rpm and deb packages on Linux, pkg packages on Solaris) and an archived version. The output
     can be found in the <output> directory in instsetoo_native/<output_dir>/Apache_OpenOffice/...
+
+$HeadURL$
