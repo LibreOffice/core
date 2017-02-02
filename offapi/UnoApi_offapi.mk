@@ -463,6 +463,13 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/crypto,\
 	SEInitializer \
 	XMLSecurityContext \
 ))
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/crypto/gpg,\
+	GpgSecurityEnvironment \
+	GpgSEInitializer \
+	GpgXMLEncryption \
+	GpgXMLSecurityContext \
+	GpgXMLSignature \
+))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/dom,\
 	DocumentBuilder \
 	SAXDocumentBuilder \
