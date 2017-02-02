@@ -446,15 +446,15 @@ private:
         Separate( );
     }
     void Append( const OUString &rText ) {
-        aCmdText.append( rText );
+        maCmdText.append( rText );
     }
     /** Append a blank for separation, if needed */
     inline void Separate( ){
-        if( aCmdText.isEmpty() || aCmdText[ aCmdText.getLength() - 1 ] != ' ' )
-            aCmdText.append(' ');
+        if( maCmdText.isEmpty() || maCmdText[ maCmdText.getLength() - 1 ] != ' ' )
+            maCmdText.append(' ');
     }
     /** Output text generated from the pNodes */
-    OUStringBuffer aCmdText;
+    OUStringBuffer maCmdText;
 };
 
 #endif // INCLUDED_STARMATH_INC_VISITORS_HXX

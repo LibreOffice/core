@@ -1918,7 +1918,7 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
 SmNodeToTextVisitor::SmNodeToTextVisitor( SmNode* pNode, OUString &rText )
 {
     pNode->Accept( this );
-    rText = aCmdText.makeStringAndClear();
+    rText = maCmdText.makeStringAndClear();
 }
 
 void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
