@@ -77,20 +77,6 @@ Module gid_Module_Optional_Extensions_CT2N
 End
 #endif
 
-/* ** Google Docs ** */
-
-#ifdef WITH_EXTENSION_GOOGLE_DOCS
-Module gid_Module_Optional_Extensions_Google_Docs
-    PackageInfo = "packinfo_extensions.txt";
-    MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_GOOGLE_DOCS);
-    ParentID = gid_Module_Optional_Extensions;
-    Files = (
-        gid_File_Oxt_Google_Docs );
-    Default = YES;
-    Styles = ( );
-End
-#endif
-
 /* ** NLPSolver ** */
 
 #ifdef WITH_EXTENSION_NLPSOLVER

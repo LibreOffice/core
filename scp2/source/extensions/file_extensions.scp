@@ -35,19 +35,6 @@ End
 
 #endif
 
-/* ** Google Docs ** */
-
-#ifdef WITH_EXTENSION_GOOGLE_DOCS
-
-File gid_File_Oxt_Google_Docs
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "gdocs.filelist";
-End
-
-#endif
-
 /* ** NLPSolver ** */
 
 #ifdef WITH_EXTENSION_NLPSOLVER

@@ -17,10 +17,6 @@ ifneq ($(DIAGRAM_EXTENSION_PACK),)
 $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,SmART,$(DIAGRAM_EXTENSION_PACK)))
 endif
 
-ifneq ($(GOOGLE_DOCS_EXTENSION_PACK),)
-$(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,gdocs,$(GOOGLE_DOCS_EXTENSION_PACK)))
-endif
-
 ifneq ($(HUNART_EXTENSION_PACK),)
 $(eval $(call gb_ExtensionPackageSet_add_extension,misc_extensions,hunart,$(HUNART_EXTENSION_PACK)))
 endif
