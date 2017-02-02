@@ -23,12 +23,6 @@
 #include <vector>
 #include <sal/types.h>
 
-// Only for internal use, oder some kind like hPara for the few
-// functions where you need it outside ( eg. moving paragraphs... )
-
-// Unfortunately NOT only local (formerly in outliner.hxx), but also
-// used in outlobj.hxx. Moved to own header
-
 class ParagraphData
 {
     friend class Paragraph;
@@ -45,10 +39,8 @@ public:
 
     ParagraphData& operator=( const ParagraphData& );
 
-    // compare operator
     bool operator==(const ParagraphData& rCandidate) const;
 
-    // data read access
     sal_Int16 getDepth() const { return nDepth; }
 };
 
