@@ -38,8 +38,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 
-#define SC_CHANGE_ID_PREFIX "ct"
-
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
@@ -47,8 +45,7 @@ ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExp
     : rExport(rTempExport),
     pChangeTrack(nullptr),
     pEditTextObj(nullptr),
-    pDependings(nullptr),
-    sChangeIDPrefix(SC_CHANGE_ID_PREFIX)
+    pDependings(nullptr)
 {
     pChangeTrack = rExport.GetDocument() ? rExport.GetDocument()->GetChangeTrack() : nullptr;
     pDependings.reset( new ScChangeActionMap );
