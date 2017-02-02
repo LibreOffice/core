@@ -12,3 +12,11 @@
    fi
  fi
  
+@@ -14481,6 +14481,7 @@
+ 
+     LIBXML_VERSION=`$PKG_CONFIG libxml-2.0 --modversion`
+     libxml_source="pkg-config"
++    XML_CONFIG="$PKG_CONFIG libxml-2.0"
+ 
+ fi
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libxml via pkg-config" >&5
