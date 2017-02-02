@@ -12,6 +12,8 @@
 
 #include <sal/types.h>
 
+#include <com/sun/star/uno/Sequence.hxx>
+
 namespace xmlsecurity
 {
 

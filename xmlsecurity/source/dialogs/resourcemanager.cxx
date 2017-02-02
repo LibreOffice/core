@@ -289,8 +289,22 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
     OUString GetContentPart( const OUString& _rRawString )
     {
         char const * aIDs[] = { "CN", "OU", "O", "E", nullptr };
-        OUString retVal;
+        bool shouldBeParsed = false;
         int i = 0;
+        while ( aIDs[i] )
+        {
+            if (_rRawString.startsWith(OUString::createFromAscii(aIDs[i++])))
+            {
+                shouldBeParsed = true;
+                break;
+            }
+        }
+
+        if (!shouldBeParsed)
+            return _rRawString;
+
+        OUString retVal;
+        i = 0;
         vector< pair< OUString, OUString > > vecAttrValueOfDN = parseDN(_rRawString);
         while ( aIDs[i] )
         {
