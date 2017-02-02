@@ -19,10 +19,13 @@
 
 #include <svdata.hxx>
 #include <tools/time.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/idle.hxx>
 #include <saltimer.hxx>
 #include <salinst.hxx>
 #include <comphelper/profilezone.hxx>
+#include <schedulerimpl.hxx>
+#include <svdata.hxx>
 
 namespace {
 const sal_uInt64 MaximumTimeoutMs = 1000 * 60; // 1 minute
@@ -71,7 +74,16 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return stream << static_cast<const Timer*>( &idle );
 }
 
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const ImplSchedulerData& data )
+{
+    stream << " i: " << data.mbInScheduler
+           << " d: " << data.mbDelete;
+    return stream;
 }
+
+} // end anonymous namespace
 
 void ImplSchedulerData::Invoke()
 {
@@ -304,12 +316,6 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
     }
 
     return nMinPeriod;
-}
-
-const char *ImplSchedulerData::GetDebugName() const
-{
-    return mpTask && mpTask->GetDebugName() ?
-        mpTask->GetDebugName() : "unknown";
 }
 
 void Task::StartTimer( sal_uInt64 nMS )
