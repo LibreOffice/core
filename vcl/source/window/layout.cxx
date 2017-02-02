@@ -261,10 +261,10 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                         aMenu->InsertItem(
                             nLocalID,
-                            "Screenshot");
+                            VclResId(SV_BUTTONTEXT_SCREENSHOT_LABEL).toString());
                         aMenu->SetHelpText(
                             nLocalID,
-                            "Go into interactive screenshot annotation mode");
+                            VclResId(SV_BUTTONTEXT_SCREENSHOT_HELP).toString());
                         aMenu->SetHelpId(
                             nLocalID,
                             "InteractiveScreenshotMode");
