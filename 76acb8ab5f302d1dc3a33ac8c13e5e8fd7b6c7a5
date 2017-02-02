@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_74925259",
+        "filename": "sd/uiconfig/simpress/ui/customanimationspanel.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 362,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2017-02-02T10:39:17Z",
+      "side": 1,
+      "message": "Please remove halign\u003dstart to align the control left and right",
+      "range": {
+        "startLine": 362,
+        "startChar": 20,
+        "endLine": 362,
+        "endChar": 60
+      },
+      "revId": "76acb8ab5f302d1dc3a33ac8c13e5e8fd7b6c7a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
