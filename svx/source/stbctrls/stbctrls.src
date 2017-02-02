@@ -100,7 +100,7 @@ String RID_SVXSTR_XMLSEC_SIG_CERT_OK_PARTIAL_SIG
 
 String RID_SVXSTR_DOC_MODIFIED_YES
 {
-    Text [ en-US ] = "The document has been modified. Double-click to save the document.";
+    Text [ en-US ] = "The document has been modified. Click to save the document.";
 };
 
 String RID_SVXSTR_DOC_MODIFIED_NO
