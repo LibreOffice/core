@@ -623,6 +623,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
 	xmlsecurity \
 	xsec_fw \
 	xsec_xmlsec \
+	$(if $(filter-out MACOSX,$(OS)),xsec_gpg) \
 	xstor \
 	$(if $(filter $(OS),MACOSX), \
 		macab1 \
