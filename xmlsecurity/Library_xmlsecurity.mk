@@ -20,7 +20,10 @@ $(eval $(call gb_Library_add_defs,xmlsecurity,\
     -DXMLSECURITY_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_external,xmlsecurity,boost_headers))
+$(eval $(call gb_Library_use_externals,xmlsecurity,\
+	boost_headers \
+	gpgme \
+))
 
 $(eval $(call gb_Library_set_precompiled_header,xmlsecurity,$(SRCDIR)/xmlsecurity/inc/pch/precompiled_xmlsecurity))
 
@@ -55,6 +58,15 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 	xmlsecurity/source/dialogs/digitalsignaturesdialog \
 	xmlsecurity/source/dialogs/macrosecurity \
 	xmlsecurity/source/dialogs/resourcemanager \
+	xmlsecurity/source/gpg/CertificateImpl \
+	xmlsecurity/source/gpg/CipherContext \
+	xmlsecurity/source/gpg/DigestContext \
+	xmlsecurity/source/gpg/GpgComponentFactory \
+	xmlsecurity/source/gpg/SecurityEnvironment \
+	xmlsecurity/source/gpg/SEInitializer \
+	xmlsecurity/source/gpg/XMLEncryption \
+	xmlsecurity/source/gpg/XMLSecurityContext \
+	xmlsecurity/source/gpg/XMLSignature \
 	xmlsecurity/source/helper/documentsignaturehelper \
 	xmlsecurity/source/helper/documentsignaturemanager \
 	xmlsecurity/source/helper/ooxmlsecparser \
