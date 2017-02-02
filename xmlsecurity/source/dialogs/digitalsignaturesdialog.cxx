@@ -383,9 +383,11 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
         return;
     try
     {
-        uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
+        std::vector<uno::Reference<xml::crypto::XSecurityEnvironment>> xSecEnvs;
+        xSecEnvs.push_back(maSignatureManager.getSecurityEnvironment());
+        xSecEnvs.push_back(maSignatureManager.getGpgSecurityEnvironment());
 
-        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnv );
+        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnvs );
         if ( aChooser->Execute() == RET_OK )
         {
             sal_Int32 nSecurityId;
