@@ -54,8 +54,7 @@ sal_Bool SAL_CALL SafeModeUI::supportsService(const OUString& sServiceName)
 
 css::uno::Sequence< OUString > SAL_CALL SafeModeUI::getSupportedServiceNames()
 {
-    css::uno::Sequence< OUString > lServiceNames { "com.sun.star.dialog.SafeModeUI" };
-    return lServiceNames;
+    return { "com.sun.star.dialog.SafeModeUI" };
 }
 
 css::uno::Any SAL_CALL SafeModeUI::dispatchWithReturnValue(const css::util::URL&,
