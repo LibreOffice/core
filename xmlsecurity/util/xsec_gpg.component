@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+
+<component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
+    prefix="xsec_gpg" xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.comp.security.SerialNumberAdapter">
+    <service name="com.sun.star.security.SerialNumberAdapter"/>
+  </implementation>
+  <implementation name="com.sun.star.xml.security.SEInitializer_Gpg">
+    <service name="com.sun.star.xml.crypto.SEInitializer"/>
+  </implementation>
+  <implementation name="com.sun.star.xml.security.SecurityEnvironment_Gpg">
+    <service name="com.sun.star.xml.crypto.SecurityEnvironment"/>
+  </implementation>
+  <!-- TODO Not implemented yet
+  <implementation name="com.sun.star.xml.security.XMLDocumentWrapper_Gpg">
+    <service name="com.sun.star.xml.wrapper.XMLDocumentWrapper"/>
+  </implementation>
+  <implementation name="com.sun.star.xml.security.XMLElementWrapper_Gpg">
+    <service name="com.sun.star.xml.wrapper.XMLElementWrapper"/>
+  </implementation>-->
+  <implementation name="com.sun.star.xml.security.XMLEncryption_Gpg">
+    <service name="com.sun.star.xml.crypto.XMLEncryption"/>
+  </implementation>
+  <implementation name="com.sun.star.xml.security.XMLSecurityContext_Gpg">
+    <service name="com.sun.star.xml.crypto.XMLSecurityContext"/>
+  </implementation>
+  <implementation name="com.sun.star.xml.security.XMLSignature_Gpg">
+    <service name="com.sun.star.xml.crypto.XMLSignature"/>
+  </implementation>
+</component>
+
