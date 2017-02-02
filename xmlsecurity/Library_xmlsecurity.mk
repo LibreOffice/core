@@ -20,7 +20,10 @@ $(eval $(call gb_Library_add_defs,xmlsecurity,\
     -DXMLSECURITY_DLLIMPLEMENTATION \
 ))
 
-$(eval $(call gb_Library_use_external,xmlsecurity,boost_headers))
+$(eval $(call gb_Library_use_externals,xmlsecurity,\
+	boost_headers \
+	gpgme \
+))
 
 $(eval $(call gb_Library_set_precompiled_header,xmlsecurity,$(SRCDIR)/xmlsecurity/inc/pch/precompiled_xmlsecurity))
 
