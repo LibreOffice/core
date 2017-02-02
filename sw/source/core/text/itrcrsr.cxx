@@ -1268,7 +1268,8 @@ sal_Int32 SwTextCursor::GetCursorOfst( SwPosition *pPos, const Point &rPoint,
     // x is the horizontal offset within the line.
     SwTwips x = rPoint.X();
     const SwTwips nLeftMargin  = GetLineStart();
-    SwTwips nRightMargin = GetLineEnd() + GetCurr()->GetHangingMargin();
+    SwTwips nRightMargin = GetLineEnd() +
+        ( GetCurr()->IsHanging() ? GetCurr()->GetHangingMargin() : 0 );
     if( nRightMargin == nLeftMargin )
         nRightMargin += 30;
 
