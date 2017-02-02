@@ -190,84 +190,6 @@ bool isDebug(sal_detail_LogLevel level) {
     return level == SAL_DETAIL_LOG_LEVEL_DEBUG;
 }
 
-bool report(sal_detail_LogLevel level, char const * area) {
-    if (isDebug(level))
-        return true;
-    assert(area != nullptr);
-    char const * env = getEnvironmentVariable();
-    if (env == nullptr) {
-        env = "+WARN";
-    }
-    std::size_t areaLen = std::strlen(area);
-    enum Sense { POSITIVE = 0, NEGATIVE = 1 };
-    std::size_t senseLen[2] = { 0, 1 };
-        // initial senseLen[POSITIVE] < senseLen[NEGATIVE], so that if there are
-        // no matching switches at all, the result will be negative (and
-        // initializing with 1 is safe as the length of a valid switch, even
-        // without the "+"/"-" prefix, will always be > 1)
-    bool seenWarn = false;
-    for (char const * p = env;;) {
-        Sense sense;
-        switch (*p++) {
-        case '\0':
-            if (level == SAL_DETAIL_LOG_LEVEL_WARN && !seenWarn)
-                return report(SAL_DETAIL_LOG_LEVEL_INFO, area);
-            return senseLen[POSITIVE] >= senseLen[NEGATIVE];
-                // if a specific item is both positive and negative
-                // (senseLen[POSITIVE] == senseLen[NEGATIVE]), default to
-                // positive
-        case '+':
-            sense = POSITIVE;
-            break;
-        case '-':
-            sense = NEGATIVE;
-            break;
-        default:
-            return true; // upon an illegal SAL_LOG value, enable everything
-        }
-        char const * p1 = p;
-        while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
-            ++p1;
-        }
-        bool match;
-        if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("INFO"))) {
-            match = level == SAL_DETAIL_LOG_LEVEL_INFO;
-        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("WARN")))
-        {
-            match = level == SAL_DETAIL_LOG_LEVEL_WARN;
-            seenWarn = true;
-        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")) ||
-                   equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
-        {
-            // handled later
-            match = false;
-        } else {
-            return true;
-                // upon an illegal SAL_LOG value, everything is considered
-                // positive
-        }
-        char const * p2 = p1;
-        while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
-            ++p2;
-        }
-        if (match) {
-            if (*p1 == '.') {
-                ++p1;
-                std::size_t n = p2 - p1;
-                if ((n == areaLen && equalStrings(p1, n, area, areaLen))
-                    || (n < areaLen && area[n] == '.'
-                        && equalStrings(p1, n, area, n)))
-                {
-                    senseLen[sense] = p2 - p;
-                }
-            } else {
-                senseLen[sense] = p1 - p;
-            }
-        }
-        p = p2;
-    }
-}
-
 void log(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * message)
@@ -367,7 +289,7 @@ void sal_detail_log(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * message)
 {
-    if (report(level, area)) {
+    if (sal_detail_log_report(level, area)) {
         log(level, area, where, message);
     }
 }
@@ -376,7 +298,7 @@ void sal_detail_log_backtrace(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * message, int maxNoStackFramesToDisplay)
 {
-    if (report(level, area)) {
+    if (sal_detail_log_report(level, area)) {
         log_backtrace(level, area, where, message, maxNoStackFramesToDisplay);
     }
 }
@@ -385,7 +307,7 @@ void sal_detail_logFormat(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
 {
-    if (report(level, area)) {
+    if (sal_detail_log_report(level, area)) {
         std::va_list args;
         va_start(args, format);
         char buf[1024];
@@ -398,6 +320,84 @@ void sal_detail_logFormat(
         }
         log(level, area, where, buf);
         va_end(args);
+    }
+}
+
+int sal_detail_log_report(enum sal_detail_LogLevel level, char const * area) {
+    if (isDebug(level))
+        return true;
+    assert(area != nullptr);
+    char const * env = getEnvironmentVariable();
+    if (env == nullptr) {
+        env = "+WARN";
+    }
+    std::size_t areaLen = std::strlen(area);
+    enum Sense { POSITIVE = 0, NEGATIVE = 1 };
+    std::size_t senseLen[2] = { 0, 1 };
+        // initial senseLen[POSITIVE] < senseLen[NEGATIVE], so that if there are
+        // no matching switches at all, the result will be negative (and
+        // initializing with 1 is safe as the length of a valid switch, even
+        // without the "+"/"-" prefix, will always be > 1)
+    bool seenWarn = false;
+    for (char const * p = env;;) {
+        Sense sense;
+        switch (*p++) {
+        case '\0':
+            if (level == SAL_DETAIL_LOG_LEVEL_WARN && !seenWarn)
+                return sal_detail_log_report(SAL_DETAIL_LOG_LEVEL_INFO, area);
+            return senseLen[POSITIVE] >= senseLen[NEGATIVE];
+                // if a specific item is both positive and negative
+                // (senseLen[POSITIVE] == senseLen[NEGATIVE]), default to
+                // positive
+        case '+':
+            sense = POSITIVE;
+            break;
+        case '-':
+            sense = NEGATIVE;
+            break;
+        default:
+            return true; // upon an illegal SAL_LOG value, enable everything
+        }
+        char const * p1 = p;
+        while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
+            ++p1;
+        }
+        bool match;
+        if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("INFO"))) {
+            match = level == SAL_DETAIL_LOG_LEVEL_INFO;
+        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("WARN")))
+        {
+            match = level == SAL_DETAIL_LOG_LEVEL_WARN;
+            seenWarn = true;
+        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")) ||
+                   equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
+        {
+            // handled later
+            match = false;
+        } else {
+            return true;
+                // upon an illegal SAL_LOG value, everything is considered
+                // positive
+        }
+        char const * p2 = p1;
+        while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
+            ++p2;
+        }
+        if (match) {
+            if (*p1 == '.') {
+                ++p1;
+                std::size_t n = p2 - p1;
+                if ((n == areaLen && equalStrings(p1, n, area, areaLen))
+                    || (n < areaLen && area[n] == '.'
+                        && equalStrings(p1, n, area, n)))
+                {
+                    senseLen[sense] = p2 - p;
+                }
+            } else {
+                senseLen[sense] = p1 - p;
+            }
+        }
+        p = p2;
     }
 }
 

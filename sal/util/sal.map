@@ -731,6 +731,7 @@ PRIVATE_1.2 { # LibreOffice 3.5
 PRIVATE_1.3 { # LibreOffice 5.4
     global:
         sal_detail_log_backtrace;
+        sal_detail_log_report;
 } PRIVATE_1.2;
 
 PRIVATE_textenc.1 { # LibreOffice 3.6
