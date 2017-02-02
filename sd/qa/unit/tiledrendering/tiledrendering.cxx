@@ -45,6 +45,7 @@
 #include <undo/undomanager.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
+#include <vcl/scheduler.hxx>
 
 #include <chrono>
 

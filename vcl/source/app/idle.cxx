@@ -18,6 +18,7 @@
  */
 
 #include <vcl/idle.hxx>
+#include <vcl/scheduler.hxx>
 #include "saltimer.hxx"
 
 Idle::Idle( bool bAuto, const sal_Char *pDebugName )
