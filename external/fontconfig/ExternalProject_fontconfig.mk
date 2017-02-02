@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			--with-expat-includes=$(call gb_UnpackedTarball_get_dir,expat)/lib \
 			--with-expat-lib=$(gb_StaticLibrary_WORKDIR) \
 			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-		&& $(MAKE) \
+		&& $(MAKE) -C src \
 	)
 
 # vim: set noet sw=4 ts=4:
