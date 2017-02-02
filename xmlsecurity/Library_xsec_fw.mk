@@ -44,7 +44,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_fw,\
 	xmlsecurity/source/framework/signatureverifierimpl \
 	xmlsecurity/source/framework/xmlencryptiontemplateimpl \
 	xmlsecurity/source/framework/xmlsignaturetemplateimpl \
-	xmlsecurity/source/framework/xsec_framework \
 ))
 
 # vim: set noet sw=4 ts=4:
