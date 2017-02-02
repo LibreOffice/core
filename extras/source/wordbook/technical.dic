@@ -9,12 +9,14 @@ Add-in
 Adobe
 ADSL
 Advanced
+AI
 AIX=
 Amiga=
 AMD
 Analogue
 Android
 ANSI
+API
 AppArmor
 AppConnect=
 Apple
@@ -22,6 +24,7 @@ AppWizard=
 AppXaminer=
 AppXNavigator=
 AppXRay=
+aptX
 Argus=
 Asus
 AutoVue=
@@ -33,6 +36,7 @@ Bitcoin
 Bluetooth
 Boolean
 BorderManager
+Broadwell
 Browser
 BSD=
 CADView=
@@ -42,6 +46,7 @@ Canon
 Canonical
 Capgemini
 Carefx
+CDMA
 CentOS=
 Chrome
 Cisco=
@@ -61,6 +66,7 @@ Debian
 debootstrap
 Dell
 Devices
+DNS
 DocLink
 Docuflex=
 Documaker=
@@ -101,13 +107,18 @@ GPS
 GroupWise
 GSoC
 Hardy
+HDMI
 Heron
+HEVC
 Hewlett-Packard
 Hi-Fi
 Hitachi
+Holoportation
 HP
 HP/UX=
 HTML
+HTTP
+HTTPS
 IBM
 iChain
 Identi.ca
@@ -118,6 +129,7 @@ Intel
 Internet
 Intranet
 iOS
+IoT
 iPrint
 ISP
 JavaScript
@@ -142,6 +154,7 @@ Malware
 ManageWise
 MasterCard
 Math=
+MATLAB
 Maverick
 Meerkat
 Megabyte
@@ -151,6 +164,8 @@ Microsoft=
 MicroStrategy=
 Modem
 Mono
+MOOC
+Moodle
 Motorola
 Mozilla
 MySQL
@@ -162,6 +177,7 @@ NetMail
 NetStorage
 NetWare
 NNTP
+Nixie
 Nokia
 Novell
 NRadius
@@ -179,6 +195,7 @@ OpenZorg=
 Opera
 Optronics
 Oracle=
+P2P
 Panasonic
 Pangolin
 PayPal
@@ -195,11 +212,13 @@ Processor
 Programming
 PPPoE
 Quanta
+ReactJS
 Resolution
 RHEL=
 Rosetta
 RosettaNet=
 rpm
+SaaS
 Salamander
 Samba
 Samsung
@@ -224,6 +243,7 @@ SPI
 Squeeze
 StarOffice
 StorageTek=
+SUHD
 Sun=
 SunHSI=
 SunOS=
@@ -246,6 +266,8 @@ Unity
 Unzip
 Utopic
 URL
+USB
+UX
 Virus
 Visa
 VoIP=
@@ -264,12 +286,14 @@ Writer=
 WYSIWYG
 Xen
 Ximian
+XML
 Xtensible
 XTier
 Xubuntu
 Yahoo
 YouTube
 ZENworks
+ZigBee
 Zip
 α
 β
