@@ -40,12 +40,6 @@ en-US = "Convert Text to Number"
 [STR_DESC_MODULE_OPTIONAL_EXTENSIONS_CT2N]
 en-US = "Convert Text to Number"
 
-[STR_NAME_MODULE_OPTIONAL_EXTENSIONS_GOOGLE_DOCS]
-en-US = "Google Docs & Zoho"
-
-[STR_DESC_MODULE_OPTIONAL_EXTENSIONS_GOOGLE_DOCS]
-en-US = "Google Docs & Zoho"
-
 [STR_NAME_MODULE_OPTIONAL_EXTENSIONS_NLPSOLVER]
 en-US = "Solver for Nonlinear Programming"
 
