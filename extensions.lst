@@ -39,7 +39,7 @@
 
 # English dictionary
 [ language=en.* || language=de || language=it ]
-    47edc7a64a9a1e1f7d6e5dfa82ae0c91 https://sourceforge.net/projects/aoo-extensions/files/17102/29/dict-en.oxt/download "dict-en.oxt"
+    7addf9efd0570ec439593988ce6f43f7 https://sourceforge.net/projects/aoo-extensions/files/17102/32/dict-en-20170101.oxt/download "dict-en-20170101.oxt"
 
 # English (USA, en_US) dictionary
 [ language==nl || language==ru ]
@@ -137,7 +137,7 @@
 
 # Portuguese (European).
 [ language=pt || language=pt_PT ]
-    57b12ab5d523711198c0f32dc37ecca6 https://sourceforge.net/projects/aoo-extensions/files/1196/38/oo3x-pt-pt-16.7.4.1.oxt/download "oo3x-pt-pt-16.7.4.1.oxt"
+    5f3e485ec61bbe1b9b0bfd6b782d973b https://sourceforge.net/projects/aoo-extensions/files/1196/40/oo3x-pt-pt-16.10.1.2.oxt/download "oo3x-pt-pt-16.10.1.2.oxt"
 
 # Catalan.
 [ language=ca ]
