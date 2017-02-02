@@ -320,7 +320,7 @@ SalYieldResult KDEXLib::processYield( bool bWait, bool )
         wasEvent = dispatcher->processEvents( QEventLoop::WaitForMoreEvents );
     else
         wasEvent = dispatcher->processEvents( QEventLoop::AllEvents );
-    m_blockIdleTimeout = false;
+    blockIdleTimeout = false;
     return wasEvent ? SalYieldResult::EVENT
                     : SalYieldResult::TIMEOUT;
 }

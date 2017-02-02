@@ -28,6 +28,7 @@
 #include <svl/srchitem.hxx>
 
 #include <comphelper/lok.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <tabvwsh.hxx>
 #include <docsh.hxx>

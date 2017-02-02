@@ -25,6 +25,7 @@
 #include <drawdoc.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
+#include <vcl/scheduler.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 

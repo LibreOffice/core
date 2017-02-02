@@ -65,6 +65,9 @@
 #include "accmgr.hxx"
 #include "idlemgr.hxx"
 #include "svids.hrc"
+#if OSL_DEBUG_LEVEL > 0
+#include "schedulerimpl.hxx"
+#endif
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/awt/XToolkit.hpp>

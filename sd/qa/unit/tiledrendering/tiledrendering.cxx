@@ -37,6 +37,7 @@
 #include <sdpage.hxx>
 #include <unomodel.hxx>
 #include <drawdoc.hxx>
+#include <vcl/scheduler.hxx>
 
 using namespace css;
 

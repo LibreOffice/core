@@ -30,6 +30,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/tempfile.hxx>
 #include <cairo.h>
+#include <vcl/scheduler.hxx>
 
 #include <lib/init.hxx>
 

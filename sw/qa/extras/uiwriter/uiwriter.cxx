@@ -92,6 +92,7 @@
 #include <sfx2/classificationhelper.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <editeng/unolingu.hxx>
+#include <vcl/scheduler.hxx>
 #include <config_features.h>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
