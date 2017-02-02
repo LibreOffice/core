@@ -49,6 +49,8 @@ public:
     css::uno::Reference<css::embed::XStorage> mxTempSignatureStorage;
     css::uno::Reference<css::xml::crypto::XSEInitializer> mxSEInitializer;
     css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxSecurityContext;
+    css::uno::Reference<css::xml::crypto::XSEInitializer> mxGpgSEInitializer;
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> mxGpgSecurityContext;
 
     DocumentSignatureManager(const css::uno::Reference<css::uno::XComponentContext>& xContext, DocumentSignatureMode eMode);
     ~DocumentSignatureManager();
@@ -76,6 +78,7 @@ public:
     bool init();
     /// Get the security environment.
     css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getSecurityEnvironment();
+    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> getGpgSecurityEnvironment();
 };
 
 #endif // INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX

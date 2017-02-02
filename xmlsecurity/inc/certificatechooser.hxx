@@ -45,6 +45,7 @@ class CertificateChooser : public ModalDialog
 private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
+    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxGpgSecurityEnvironment;
     css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
 
     VclPtr<SvSimpleTable>   m_pCertLB;
@@ -66,7 +67,10 @@ private:
     void HandleOneUsageBit(OUString& string, int& bits, int bit, const char *name);
 
 public:
-    CertificateChooser(vcl::Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
+    CertificateChooser(vcl::Window* pParent,
+                       css::uno::Reference< css::uno::XComponentContext>& rxCtx,
+                       css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment,
+                       css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxGpgSecurityEnvironment);
     virtual ~CertificateChooser() override;
     virtual void dispose() override;
 
