@@ -38,8 +38,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 
-#define SC_CHANGE_ID_PREFIX "ct"
-
 using namespace ::com::sun::star;
 using namespace xmloff::token;
 
@@ -59,7 +57,7 @@ ScChangeTrackingExportHelper::~ScChangeTrackingExportHelper()
 
 OUString ScChangeTrackingExportHelper::GetChangeID(const sal_uInt32 nActionNumber)
 {
-    return SC_CHANGE_ID_PREFIX + OUString::number(nActionNumber);
+    return "ct" + OUString::number(nActionNumber);
 }
 
 void ScChangeTrackingExportHelper::GetAcceptanceState(const ScChangeAction* pAction)
