@@ -25,6 +25,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/xml/crypto/gpg/GpgSEInitializer.hpp>
 
 #include <comphelper/storagehelper.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -36,7 +37,7 @@
 #include <certificate.hxx>
 #include <biginteger.hxx>
 
-using namespace com::sun::star;
+using namespace css;
 
 DocumentSignatureManager::DocumentSignatureManager(const uno::Reference<uno::XComponentContext>& xContext, DocumentSignatureMode eMode)
     : mxContext(xContext),
@@ -51,13 +52,18 @@ bool DocumentSignatureManager::init()
 {
     SAL_WARN_IF(mxSEInitializer.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxSEInitializer already set!");
     SAL_WARN_IF(mxSecurityContext.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxSecurityContext already set!");
+    SAL_WARN_IF(mxGpgSEInitializer.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxGpgSEInitializer already set!");
 
-    mxSEInitializer = css::xml::crypto::SEInitializer::create(mxContext);
+    mxSEInitializer = xml::crypto::SEInitializer::create(mxContext);
+    mxGpgSEInitializer = xml::crypto::gpg::GpgSEInitializer::create(mxContext);
 
     if (mxSEInitializer.is())
         mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 
-    return mxSecurityContext.is();
+    if (mxGpgSEInitializer.is())
+        mxGpgSecurityContext = mxGpgSEInitializer->createSecurityContext(OUString());
+
+    return mxSecurityContext.is() && mxGpgSecurityContext.is();
 }
 
 PDFSignatureHelper& DocumentSignatureManager::getPDFSignatureHelper()
@@ -502,6 +508,11 @@ void DocumentSignatureManager::write(bool bXAdESCompliantIfODF)
 uno::Reference<xml::crypto::XSecurityEnvironment> DocumentSignatureManager::getSecurityEnvironment()
 {
     return mxSecurityContext.is() ? mxSecurityContext->getSecurityEnvironment() : uno::Reference<xml::crypto::XSecurityEnvironment>();
+}
+
+uno::Reference<xml::crypto::XSecurityEnvironment> DocumentSignatureManager::getGpgSecurityEnvironment()
+{
+    return mxGpgSecurityContext.is() ? mxGpgSecurityContext->getSecurityEnvironment() : uno::Reference<xml::crypto::XSecurityEnvironment>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
