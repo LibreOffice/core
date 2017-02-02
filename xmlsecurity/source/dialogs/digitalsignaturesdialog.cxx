@@ -385,8 +385,9 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
     try
     {
         uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
+        uno::Reference<xml::crypto::XSecurityEnvironment> xGpgSecEnv = maSignatureManager.getGpgSecurityEnvironment();
 
-        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnv );
+        ScopedVclPtrInstance< CertificateChooser > aChooser( this, mxCtx, xSecEnv, xGpgSecEnv );
         if ( aChooser->Execute() == RET_OK )
         {
             sal_Int32 nSecurityId;

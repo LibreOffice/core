@@ -48,7 +48,10 @@ sal_uInt16 CertificateChooser::GetSelectedEntryPos() const
     return (sal_uInt16) nSel;
 }
 
-CertificateChooser::CertificateChooser(vcl::Window* _pParent, uno::Reference<uno::XComponentContext>& _rxCtx, uno::Reference<xml::crypto::XSecurityEnvironment>& _rxSecurityEnvironment)
+CertificateChooser::CertificateChooser(vcl::Window* _pParent,
+                                       uno::Reference<uno::XComponentContext>& _rxCtx,
+                                       uno::Reference<xml::crypto::XSecurityEnvironment>& _rxSecurityEnvironment,
+                                       uno::Reference<xml::crypto::XSecurityEnvironment>& _rxGpgSecurityEnvironment)
     : ModalDialog(_pParent, "SelectCertificateDialog", "xmlsec/ui/selectcertificatedialog.ui")
 {
     get(m_pOKBtn, "ok");
@@ -73,6 +76,7 @@ CertificateChooser::CertificateChooser(vcl::Window* _pParent, uno::Reference<uno
 
     mxCtx = _rxCtx;
     mxSecurityEnvironment = _rxSecurityEnvironment;
+    mxGpgSecurityEnvironment = _rxGpgSecurityEnvironment;
     mbInitialized = false;
 
     // disable buttons
@@ -162,6 +166,7 @@ void CertificateChooser::ImplInitialize()
 
     try
     {
+        mxGpgSecurityEnvironment->getPersonalCertificates();
         maCerts = mxSecurityEnvironment->getPersonalCertificates();
     }
     catch (security::NoPasswordException&)
