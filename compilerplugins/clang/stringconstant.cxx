@@ -68,7 +68,7 @@ bool hasOverloads(FunctionDecl const * decl, unsigned arguments) {
         {
             auto consDecl = dyn_cast<CXXConstructorDecl>(f);
             if (consDecl && consDecl->isCopyConstructor()) {
-                break;
+                continue;
             }
             ++n;
             if (n == 2) {
