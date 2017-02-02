@@ -126,6 +126,7 @@ public:
     inline void SetForcedLeftMargin() { m_bForcedLeftMargin = true; }
     inline bool HasForcedLeftMargin() const { return m_bForcedLeftMargin; }
     inline void SetHanging( const bool bNew = true ) { m_bHanging = bNew; }
+    inline bool IsHanging() const { return m_bHanging; }
     inline void SetUnderscore( const bool bNew = true ) { m_bUnderscore = bNew; }
     inline bool HasUnderscore() const { return m_bUnderscore; }
 
