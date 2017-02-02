@@ -645,7 +645,7 @@ void Converter::convertAngle(OUStringBuffer& rBuffer, sal_Int16 const nAngle)
 {
 #if 1
     // wrong, but backward compatible with OOo/LO < 4.4
-    rBuffer.append(nAngle);
+    rBuffer.append(static_cast<sal_Int32>(nAngle));
 #else
     // maybe in the future... (see other convertAngle)
     double fAngle(double(nAngle) / 10.0);
