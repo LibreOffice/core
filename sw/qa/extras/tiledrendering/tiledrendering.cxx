@@ -33,6 +33,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <redline.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <vcl/scheduler.hxx>
 
 static const char* const DATA_DIRECTORY = "/sw/qa/extras/tiledrendering/data/";
 

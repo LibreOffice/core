@@ -38,6 +38,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <cairo.h>
 #include <ostream>
+#include <vcl/scheduler.hxx>
 
 #include <lib/init.hxx>
 

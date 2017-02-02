@@ -10,6 +10,7 @@
 #include "uiobject_uno.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/idle.hxx>
+#include <vcl/scheduler.hxx>
 
 #include <set>
 #include <chrono>
