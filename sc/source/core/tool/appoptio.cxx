@@ -313,13 +313,13 @@ Sequence<OUString> ScAppCfg::GetCompatPropertyNames()
 }
 
 ScAppCfg::ScAppCfg() :
-    aLayoutItem( OUString( CFGPATH_LAYOUT ) ),
-    aInputItem( OUString( CFGPATH_INPUT ) ),
-    aRevisionItem( OUString( CFGPATH_REVISION ) ),
-    aContentItem( OUString( CFGPATH_CONTENT ) ),
-    aSortListItem( OUString( CFGPATH_SORTLIST ) ),
-    aMiscItem( OUString( CFGPATH_MISC ) ),
-    aCompatItem( OUString(CFGPATH_COMPAT ) )
+    aLayoutItem( CFGPATH_LAYOUT ),
+    aInputItem( CFGPATH_INPUT ),
+    aRevisionItem( CFGPATH_REVISION ),
+    aContentItem( CFGPATH_CONTENT ),
+    aSortListItem( CFGPATH_SORTLIST ),
+    aMiscItem( CFGPATH_MISC ),
+    aCompatItem( CFGPATH_COMPAT )
 {
     sal_Int32 nIntVal = 0;
 

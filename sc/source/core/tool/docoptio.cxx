@@ -216,8 +216,8 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 }
 
 ScDocCfg::ScDocCfg() :
-    aCalcItem( OUString( CFGPATH_CALC ) ),
-    aLayoutItem(OUString(CFGPATH_DOCLAYOUT))
+    aCalcItem( CFGPATH_CALC ),
+    aLayoutItem(CFGPATH_DOCLAYOUT)
 {
     sal_Int32 nIntVal = 0;
 

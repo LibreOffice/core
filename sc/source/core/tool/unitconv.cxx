@@ -60,7 +60,7 @@ ScUnitConverter::ScUnitConverter()
     // read from configuration - "convert.ini" is no longer used
     //TODO: config item as member to allow change of values
 
-    ScLinkConfigItem aConfigItem( OUString( CFGPATH_UNIT ) );
+    ScLinkConfigItem aConfigItem( CFGPATH_UNIT );
 
     // empty node name -> use the config item's path itself
     OUString aEmptyString;

@@ -311,9 +311,9 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 }
 
 ScViewCfg::ScViewCfg() :
-    aLayoutItem( OUString( CFGPATH_LAYOUT ) ),
-    aDisplayItem( OUString( CFGPATH_DISPLAY ) ),
-    aGridItem( OUString( CFGPATH_GRID ) )
+    aLayoutItem( CFGPATH_LAYOUT ),
+    aDisplayItem( CFGPATH_DISPLAY ),
+    aGridItem( CFGPATH_GRID )
 {
     sal_Int32 nIntVal = 0;
 
