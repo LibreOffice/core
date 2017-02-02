@@ -23,13 +23,13 @@
 #include <vcl/dllapi.h>
 
 class Task;
+struct TaskImpl;
 
-class VCL_DLLPUBLIC Scheduler
+class VCL_DLLPUBLIC Scheduler final
 {
     friend class Task;
     Scheduler() = delete;
 
-protected:
     static void ImplStartTimer ( sal_uInt64 nMS, bool bForce = false );
 
 public:
@@ -56,70 +56,6 @@ public:
     static void       SetDeterministicMode(bool bDeterministic);
     /// Return the current state of deterministic mode.
     static bool       GetDeterministicMode();
-};
-
-
-struct ImplSchedulerData;
-
-enum class TaskPriority
-{
-    HIGHEST      = 0,
-    HIGH         = 1,
-    RESIZE       = 2,
-    REPAINT      = 3,
-    MEDIUM       = 3,
-    POST_PAINT   = 4,
-    DEFAULT_IDLE = 5,
-    LOW          = 6,
-    LOWER        = 7,
-    LOWEST       = 8
-};
-
-class VCL_DLLPUBLIC Task
-{
-    friend class Scheduler;
-    friend struct ImplSchedulerData;
-
-    ImplSchedulerData *mpSchedulerData; /// Pointer to the element in scheduler list
-    const sal_Char    *mpDebugName;     /// Useful for debugging
-    TaskPriority       mePriority;      /// Task priority
-    bool               mbActive;        /// Currently in the scheduler
-
-protected:
-    static void StartTimer( sal_uInt64 nMS );
-
-    const ImplSchedulerData* GetSchedulerData() const { return mpSchedulerData; }
-
-    virtual void SetDeletionFlags();
-    /// Is this item ready to be dispatched at nTimeNow
-    virtual bool ReadyForSchedule( bool bIdle, sal_uInt64 nTimeNow ) const = 0;
-    /// Schedule only when other timers and events are processed
-    virtual bool IsIdle() const = 0;
-    /**
-     * Adjust nMinPeriod downwards if we want to be notified before
-     * then, nTimeNow is the current time.
-     */
-    virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const = 0;
-
-public:
-    Task( const sal_Char *pDebugName );
-    Task( const Task& rTask );
-    virtual ~Task() COVERITY_NOEXCEPT_FALSE;
-    Task& operator=( const Task& rTask );
-
-    void            SetPriority(TaskPriority ePriority) { mePriority = ePriority; }
-    TaskPriority    GetPriority() const { return mePriority; }
-
-    void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
-    const char     *GetDebugName() const { return mpDebugName; }
-
-    // Call handler
-    virtual void    Invoke() = 0;
-
-    virtual void    Start();
-    void            Stop();
-
-    bool            IsActive() const { return mbActive; }
 };
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX
