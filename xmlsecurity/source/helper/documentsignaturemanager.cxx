@@ -25,6 +25,7 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/xml/crypto/GpgSEInitializer.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <comphelper/storagehelper.hxx>
@@ -52,7 +53,7 @@ bool DocumentSignatureManager::init()
     SAL_WARN_IF(mxSEInitializer.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxSEInitializer already set!");
     SAL_WARN_IF(mxSecurityContext.is(), "xmlsecurity.helper", "DocumentSignatureManager::Init - mxSecurityContext already set!");
 
-    mxSEInitializer = css::xml::crypto::SEInitializer::create(mxContext);
+    mxSEInitializer = css::xml::crypto::GpgSEInitializer::create(mxContext);
 
     if (mxSEInitializer.is())
         mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
