@@ -40,12 +40,19 @@ namespace xml { namespace crypto {
 
 class HeaderBar;
 
+struct UserData
+{
+    css::uno::Reference<css::security::XCertificate> xCertificate;
+    css::uno::Reference<css::xml::crypto::XSecurityEnvironment> xSecurityEnvironment;
+};
+
 class CertificateChooser : public ModalDialog
 {
 private:
     css::uno::Reference< css::uno::XComponentContext > mxCtx;
-    css::uno::Reference< css::xml::crypto::XSecurityEnvironment > mxSecurityEnvironment;
+    std::vector< css::uno::Reference< css::xml::crypto::XSecurityEnvironment > > mxSecurityEnvironments;
     css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > maCerts;
+    std::vector<std::shared_ptr<UserData>> mvUserData;
 
     VclPtr<SvSimpleTable>   m_pCertLB;
     VclPtr<PushButton>      m_pViewBtn;
@@ -53,8 +60,6 @@ private:
     VclPtr<Edit> m_pDescriptionED;
 
     bool                    mbInitialized;
-
-    sal_uInt16              GetSelectedEntryPos() const;
 
     DECL_LINK(ViewButtonHdl, Button*, void);
     DECL_LINK(CertificateHighlightHdl, SvTreeListBox*, void );
@@ -66,7 +71,9 @@ private:
     void HandleOneUsageBit(OUString& string, int& bits, int bit, const char *name);
 
 public:
-    CertificateChooser(vcl::Window* pParent, css::uno::Reference< css::uno::XComponentContext>& rxCtx, css::uno::Reference< css::xml::crypto::XSecurityEnvironment >& rxSecurityEnvironment);
+    CertificateChooser(vcl::Window* pParent,
+                       css::uno::Reference< css::uno::XComponentContext>& rxCtx,
+                       std::vector< css::uno::Reference< css::xml::crypto::XSecurityEnvironment > >& rxSecurityEnvironments);
     virtual ~CertificateChooser() override;
     virtual void dispose() override;
 
