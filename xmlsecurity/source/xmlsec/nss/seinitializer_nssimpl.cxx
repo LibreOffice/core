@@ -54,6 +54,7 @@ using namespace com::sun::star;
 
 SEInitializer_NssImpl::SEInitializer_NssImpl( const css::uno::Reference< css::uno::XComponentContext > &rxContext )
 {
+    SAL_DEBUG("SEInitializer_NssImpl::SEInitializer_NssImpl");
     m_xContext = rxContext;
 }
 
@@ -65,6 +66,7 @@ SEInitializer_NssImpl::~SEInitializer_NssImpl()
 uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     SEInitializer_NssImpl::createSecurityContext( const OUString& )
 {
+    SAL_DEBUG("SEInitializer_NssImpl::createSecurityContext");
     CERTCertDBHandle    *pCertHandle = nullptr ;
 
     if( !initNSS( m_xContext ) )
