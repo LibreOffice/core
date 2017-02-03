@@ -66,7 +66,7 @@ void SAL_CALL SalGtkFolderPicker::setDisplayDirectory( const OUString& aDirector
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != nullptr );
+    assert( m_pDialog != nullptr );
 
     OString aTxt = unicodetouri( aDirectory );
     if( aTxt.isEmpty() ){
@@ -86,7 +86,7 @@ OUString SAL_CALL SalGtkFolderPicker::getDisplayDirectory()
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != nullptr );
+    assert( m_pDialog != nullptr );
 
     gchar* pCurrentFolder =
         gtk_file_chooser_get_current_folder_uri( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -100,7 +100,7 @@ OUString SAL_CALL SalGtkFolderPicker::getDirectory()
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != nullptr );
+    assert( m_pDialog != nullptr );
 
     gchar* pSelectedFolder =
         gtk_file_chooser_get_uri( GTK_FILE_CHOOSER( m_pDialog ) );
@@ -120,7 +120,7 @@ void SAL_CALL SalGtkFolderPicker::setTitle( const OUString& aTitle )
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != nullptr );
+    assert( m_pDialog != nullptr );
 
     OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
 
@@ -131,7 +131,7 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute()
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != nullptr );
+    assert( m_pDialog != nullptr );
 
     sal_Int16 retVal = 0;
 
@@ -170,7 +170,7 @@ void SAL_CALL SalGtkFolderPicker::cancel()
 {
     SolarMutexGuard g;
 
-    OSL_ASSERT( m_pDialog != nullptr );
+    assert( m_pDialog != nullptr );
 
     // TODO m_pImpl->cancel();
 }
