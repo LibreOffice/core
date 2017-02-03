@@ -92,6 +92,7 @@ public:
     VclPtr<sw::sidebarwindows::SwSidebarWin> pPostIt;
     bool bShow;
     bool bFocus;
+    bool bPendingLayout;
 
     SwPostItHelper::SwLayoutStatus mLayoutStatus;
     SwLayoutInfo maLayoutInfo;
@@ -100,6 +101,7 @@ public:
         : pPostIt(nullptr)
         , bShow(true)
         , bFocus(aFocus)
+        , bPendingLayout(false)
         , mLayoutStatus( SwPostItHelper::INVISIBLE )
         , maLayoutInfo()
     {
