@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_bac5835c",
+        "filename": "sc/source/core/data/documentimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-03T20:37:02Z",
+      "side": 1,
+      "message": "If we implement edge cases,\n\"if (nEndCol \u003d\u003d MAXCOL \u0026\u0026 nStartCol \u003c aCol.size()), then no need to create new cols, we just assign the style to [nStartCol, aCol.size()-1] and also to aNextColAttrArray.\"\n\nthen we don\u0027t need to modify such code, and just leave:\n\"pTab-\u003eApplyStyleArea(0, 0, MAXCOL, MAXROW, rStyle);\"\n\nI really like that idea, as it will be consistent with MAXROW notation, and the implementation details will be hidden under ScTable implementation.\n\nFrom Outside world the information how it is implemented will be hidden.\n\nI would revert that change if you don\u0027t mind.",
+      "parentUuid": "fa48f94a_5a4bb72b",
+      "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_3a46f323",
         "filename": "sc/source/core/data/table2.cxx",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2017-02-03T16:31:19Z",
       "side": 1,
       "message": "I think this is a little complicated due to following two edge cases :\n\nif (nEndCol \u003d\u003d MAXCOL \u0026\u0026 nStartCol \u003c aCol.size()), then no need to create new cols, we just assign the style to [nStartCol, aCol.size()-1] and also to aNextColAttrArray.\n\nif (nStartCol \u003e\u003d aCol.size() \u0026\u0026 nEndCol \u003d\u003d MAXCOL) then\nwe have to create cols till (nStartCol-1) and then assign style to aNextColAttrArray.",
+      "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_daa087a8",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-03T20:37:02Z",
+      "side": 1,
+      "message": "Brilliant idea. Thanks",
+      "parentUuid": "fa48f94a_3a46f323",
       "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
