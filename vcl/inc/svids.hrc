@@ -93,7 +93,7 @@
 #define SV_HELPTEXT_ROLLDOWN                        10004
 #define SV_HELPTEXT_ROLLUP                          10005
 #define SV_HELPTEXT_HELP                            10006
-//free
+#define SV_HELPTEXT_SCREENSHOT                      10007
 #define SV_HELPTEXT_FADEIN                          10008
 #define SV_HELPTEXT_FADEOUT                         10009
 #define SV_HELPTEXT_SPLITFLOATING                   10010
@@ -132,6 +132,7 @@
 #define SV_BUTTONTEXT_FIND                          10129
 #define SV_BUTTONTEXT_STOP                          10130
 #define SV_BUTTONTEXT_CONNECT                       10131
+#define SV_BUTTONTEXT_SCREENSHOT                    10132
 
 #define SV_STDTEXT_FIRST                            SV_STDTEXT_SERVICENOTAVAILABLE
 #define SV_STDTEXT_SERVICENOTAVAILABLE              10210

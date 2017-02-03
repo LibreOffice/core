@@ -21,6 +21,9 @@
 #include <officecfg/Office/Common.hxx>
 #include <vcl/abstdlg.hxx>
 
+#include "svdata.hxx"
+#include <svids.hrc>
+
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
     : Window(WINDOW_CONTAINER)
     , IPrioritable()
@@ -261,10 +264,10 @@ void VclContainer::Command(const CommandEvent& rCEvt)
 
                         aMenu->InsertItem(
                             nLocalID,
-                            "Screenshot");
+                            VclResId(SV_BUTTONTEXT_SCREENSHOT).toString());
                         aMenu->SetHelpText(
                             nLocalID,
-                            "Go into interactive screenshot annotation mode");
+                            VclResId(SV_HELPTEXT_SCREENSHOT).toString());
                         aMenu->SetHelpId(
                             nLocalID,
                             "InteractiveScreenshotMode");
