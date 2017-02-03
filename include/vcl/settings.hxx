@@ -227,7 +227,7 @@ namespace o3tl
 enum class ToolbarIconSize
 {
     Unknown      = 0,
-    Small        = 1,
+    Small        = 1, // unused
     Large        = 2,
     Size32       = 3,
 };

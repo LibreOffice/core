@@ -63,13 +63,15 @@ enum class PreeditStatus {
     StartPending
 };
 
-typedef struct {
+struct preedit_data_t {
     SalFrame*               pFrame;
     PreeditStatus           eState;
     preedit_text_t          aText;
     SalExtTextInputEvent    aInputEv;
     std::vector< ExtTextInputAttr >   aInputFlags;
-} preedit_data_t;
+
+    preedit_data_t() : eState(PreeditStatus::DontKnow) {}
+};
 
 #endif // INCLUDED_VCL_INC_UNX_I18N_CB_HXX
 

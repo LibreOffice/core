@@ -128,7 +128,6 @@ public:
 };
 
 enum class ImageType {
-    Invalid = 0,
     TrueColorImage,
     MonochromeImage,
     PaletteImage,

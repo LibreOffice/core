@@ -89,6 +89,7 @@ for d in definitionSet:
          "sw/source/filter/inc/wwstyles.hxx",
          "sw/source/filter/ww8/fields.hxx",
          "vcl/source/fontsubset/cff.cxx",
+         "include/vcl/settings.hxx", # stored in a setting, can't remove it without potentially triggering UBSAN
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -97,6 +98,7 @@ for d in definitionSet:
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
+         "vcl/inc/unx/gendata.hxx",
         # must match some other enum
          "include/editeng/bulletitem.hxx",
          "include/editeng/svxenum.hxx",
