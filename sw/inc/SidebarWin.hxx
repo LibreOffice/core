@@ -84,6 +84,7 @@ class SwSidebarWin : public vcl::Window
         inline const SwRect& GetAnchorRect() { return mAnchorRect; }
         inline const std::vector<basegfx::B2DRange>& GetAnnotationTextRanges() { return maAnnotationTextRanges; }
         SwEditWin& EditWin();
+        inline SwSidebarItem& GetSidebarItem() { return mrSidebarItem; }
 
         inline OutlinerView* GetOutlinerView() { return mpOutlinerView;}
         bool HasScrollbar() const;

@@ -355,17 +355,9 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (bEmpty && !mvPostItFields.empty())
                         PrepareView(true);
 
-                    // If LOK has disabled tiled annotations, emit annotation callbacks
-                    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
-                    {
-                        CalcRects();
-                        Show();
-
-                        if (pItem && pItem->pPostIt)
-                        {
-                            lcl_CommentNotification(mpView, CommentNotificationType::Add, pItem, 0);
-                        }
-                    }
+                    // True until the layout of this post it finishes
+                    if (pItem)
+                        pItem->bPendingLayout = true;
                 }
                 else
                 {
@@ -874,6 +866,19 @@ void SwPostItMgr::LayoutPostIts()
                     pPage->bScrollbar = false;
                     bUpdate = (bOldScrollbar != pPage->bScrollbar) || bUpdate;
                 }
+
+                for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
+                {
+                    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+                    {
+                        if ((*i)->GetSidebarItem().bPendingLayout)
+                            lcl_CommentNotification(mpView, CommentNotificationType::Add, &(*i)->GetSidebarItem(), 0);
+                    }
+
+                    // Layout for this post it finished now
+                    (*i)->GetSidebarItem().bPendingLayout = false;
+                }
+
                 aVisiblePostItList.clear();
             }
             else
