@@ -314,7 +314,7 @@ protected:
     Color maFillColor;              ///< Background color of the thumbnail view widget.
     Color maTextColor;              ///< Text color.
     Color maHighlightColor;         ///< Color of the highlight (background) of the hovered item.
-    Color maHighlightTextColor;     ///< Color of the text for the higlighted item.
+    Color maHighlightTextColor;     ///< Color of the text for the highlighted item.
     Color maSelectHighlightColor;   ///< Color of the highlight (background) of the selected and hovered item.
     Color maSelectHighlightTextColor;   ///< Color of the text of the selected and hovered item.
     double mfHighlightTransparence; ///< Transparence of the highlight.

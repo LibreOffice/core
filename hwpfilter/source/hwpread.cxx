@@ -726,7 +726,7 @@ bool MailMerge::Read(HWPFile & hwpf)
     return !hwpf.State();
 }
 
-// char compositon(23)
+// char composition(23)
 Compose::Compose()
     : HBox(CH_COMPOSE)
     , dummy(0)

@@ -2580,10 +2580,10 @@ Pointer SdXImpressDocument::getPointer()
 
 uno::Reference< i18n::XForbiddenCharacters > SdXImpressDocument::getForbiddenCharsTable()
 {
-    uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbidenCharacters);
+    uno::Reference< i18n::XForbiddenCharacters > xForb(mxForbiddenCharacters);
 
     if( !xForb.is() )
-        mxForbidenCharacters = xForb = new SdUnoForbiddenCharsTable( mpDoc );
+        mxForbiddenCharacters = xForb = new SdUnoForbiddenCharsTable( mpDoc );
 
     return xForb;
 }

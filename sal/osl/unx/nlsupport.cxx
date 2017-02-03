@@ -826,7 +826,7 @@ rtl_TextEncoding osl_getTextEncodingFromLocale( rtl_Locale * pLocale )
         /* use iso language code to determine the charset */
         if( nullptr == language )
         {
-            /* iso lang codes have 2 charaters */
+            /* iso lang codes have 2 characters */
             locale_buf[2] = '\0';
 
             language = pair_search( locale_buf, iso_language_list, SAL_N_ELEMENTS( iso_language_list ) );

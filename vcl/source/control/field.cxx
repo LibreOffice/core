@@ -184,7 +184,7 @@ bool ImplNumericGetValue( const OUString& rStr, sal_Int64& rValue,
             bNegative = true;
     }
 
-    // remove all unwanted charaters
+    // remove all unwanted characters
     // For whole number
     for (sal_Int32 i=0; i < aStr1.getLength(); )
     {

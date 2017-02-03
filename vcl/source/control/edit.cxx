@@ -549,8 +549,8 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
     {
         // save graphics state
         rRenderContext.Push();
-        // first calculate higlighted and non highlighted clip regions
-        vcl::Region aHiglightClipRegion;
+        // first calculate highlighted and non highlighted clip regions
+        vcl::Region aHighlightClipRegion;
         vcl::Region aNormalClipRegion;
         Selection aTmpSel(maSelection);
         aTmpSel.Justify();
@@ -573,7 +573,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
             }
 
             if (bHighlight)
-                aHiglightClipRegion.Union(aRect);
+                aHighlightClipRegion.Union(aRect);
             else
                 aNormalClipRegion.Union(aRect);
         }
@@ -601,7 +601,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
         rRenderContext.DrawText(aPos, aText, 0, nLen);
 
         // draw highlighted text
-        rRenderContext.SetClipRegion(aHiglightClipRegion);
+        rRenderContext.SetClipRegion(aHighlightClipRegion);
         rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
         rRenderContext.SetTextFillColor(rStyleSettings.GetHighlightColor());
         rRenderContext.DrawText(aPos, aText, 0, nLen);
@@ -625,7 +625,7 @@ void Edit::ImplRepaint(vcl::RenderContext& rRenderContext, const Rectangle& rRec
                 {
                     rRenderContext.SetTextColor(rStyleSettings.GetHighlightTextColor());
                     rRenderContext.SetTextFillColor(rStyleSettings.GetHighlightColor());
-                    aRegion = aHiglightClipRegion;
+                    aRegion = aHighlightClipRegion;
                 }
 
                 for(int i = 0; i < mpIMEInfos->nLen; )

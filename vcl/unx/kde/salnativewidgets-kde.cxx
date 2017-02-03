@@ -1956,7 +1956,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetMenuBarColor( aMenuBack );
         aStyleSettings.SetMenuHighlightColor( toColor ( qMenuCG.highlight() ) );
 
-        // Menu items higlight text color, theme specific
+        // Menu items highlight text color, theme specific
         if ( QApplication::style().inherits( "HighContrastStyle" ) ||
              QApplication::style().inherits( "KeramikStyle" ) ||
              QApplication::style().inherits( QWindowsStyle_String ) ||
@@ -1968,7 +1968,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
         else
             aStyleSettings.SetMenuHighlightTextColor( aMenuFore );
 
-        // set special menubar higlight text color
+        // set special menubar highlight text color
         if ( QApplication::style().inherits( "HighContrastStyle" ) )
             ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.highlightedText() );
         else

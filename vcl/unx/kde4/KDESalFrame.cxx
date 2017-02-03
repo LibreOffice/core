@@ -307,7 +307,7 @@ void KDESalFrame::UpdateSettings( AllSettings& rSettings )
     style.SetMenuHighlightColor( toColor ( qMenuCG.color( QPalette::Highlight ) ) );
     style.SetMenuHighlightTextColor( toColor ( qMenuCG.color( QPalette::HighlightedText ) ) );
 
-    // set special menubar higlight text color
+    // set special menubar highlight text color
     if ( QApplication::style()->inherits( "HighContrastStyle" ) )
         ImplGetSVData()->maNWFData.maMenuBarHighlightTextColor = toColor( qMenuCG.color( QPalette::HighlightedText ) );
     else

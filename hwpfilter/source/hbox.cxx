@@ -474,7 +474,7 @@ hchar_string MailMerge::GetString()
 }
 
 
-// character compositon(23)
+// character composition(23)
 // hyphen(24)
 // toc mark(25)
 // index mark(26)

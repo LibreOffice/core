@@ -915,7 +915,7 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
 }
 
 // In order to counteract the effects of rounding due to the nature of how the
-// grid positions are calcuated and drawn we calculate the offset needed at the
+// grid positions are calculated and drawn we calculate the offset needed at the
 // current zoom to be applied to an SrdObject when it is drawn in order to make
 // sure that it's position relative to the nearest cell anchor doesn't change.
 // Of course not all shape(s)/control(s) are cell anchored, if the

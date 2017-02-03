@@ -252,7 +252,7 @@ struct ImplSVNWFData
     int                     mnMenuFormatBorderX = 0;        // horizontal inner popup menu border
     int                     mnMenuFormatBorderY = 0;        // vertical inner popup menu border
     int                     mnMenuSeparatorBorderX = 0;     // gap at each side of separator
-    ::Color                 maMenuBarHighlightTextColor = Color( COL_TRANSPARENT ); // override higlight text color
+    ::Color                 maMenuBarHighlightTextColor = Color( COL_TRANSPARENT ); // override highlight text color
                                                             // in menubar if not transparent
     bool                    mbMenuBarDockingAreaCommonBG = false; // e.g. WinXP default theme
     bool                    mbDockingAreaSeparateTB = false; // individual toolbar backgrounds
