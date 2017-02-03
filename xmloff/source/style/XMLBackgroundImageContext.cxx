@@ -50,8 +50,7 @@ enum SvXMLTokenMapAttrs
     XML_TOK_BGIMG_POSITION,
     XML_TOK_BGIMG_REPEAT,
     XML_TOK_BGIMG_FILTER,
-    XML_TOK_BGIMG_OPACITY,
-    XML_TOK_NGIMG_END=XML_TOK_UNKNOWN
+    XML_TOK_BGIMG_OPACITY
 };
 static const SvXMLTokenMapEntry* lcl_getBGImgAttributesAttrTokenMap()
 {

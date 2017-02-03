@@ -48,10 +48,6 @@ namespace com { namespace sun { namespace star {
 
 enum SectionTypeEnum
 {
-    TEXT_SECTION_TYPE_SECTION,
-
-    // indices: keep index valued together and do not change order,
-    // because they are used to index into array
     TEXT_SECTION_TYPE_TOC,
     TEXT_SECTION_TYPE_TABLE,
     TEXT_SECTION_TYPE_ILLUSTRATION,
@@ -59,10 +55,6 @@ enum SectionTypeEnum
     TEXT_SECTION_TYPE_USER,
     TEXT_SECTION_TYPE_ALPHABETICAL,
     TEXT_SECTION_TYPE_BIBLIOGRAPHY,
-
-    // index header sections:
-    TEXT_SECTION_TYPE_HEADER,
-
     TEXT_SECTION_TYPE_UNKNOWN
 };
 
