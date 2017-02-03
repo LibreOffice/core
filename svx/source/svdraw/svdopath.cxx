@@ -879,7 +879,7 @@ bool ImpPathForDragAndCreate::endPathDrag(SdrDragStat& rDrag)
                 basegfx::B2DPolygon aCandidate(aTempPolyPolygon.getB2DPolygon(nPoly));
                 aCandidate.remove(nPnt);
 
-                if((IsClosed(meObjectKind) && aCandidate.count() < 3L) || aCandidate.count() < 2L)
+                if(aCandidate.count() < 2L)
                 {
                     aTempPolyPolygon.remove(nPoly);
                 }
