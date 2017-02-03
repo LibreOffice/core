@@ -22,7 +22,7 @@
 
 #include <sfx2/sfx.hrc>
 
-#define RID_GLOB_START                          RID_APP_START+750
+#define RID_GLOB_START                          RID_APP_START+1000
 
 #define STR_LAYER_BCKGRND                       RID_GLOB_START
 #define STR_LAYER_BCKGRNDOBJ                    RID_GLOB_START+1

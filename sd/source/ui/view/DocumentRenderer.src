@@ -18,178 +18,175 @@
  */
 
 #include "app.hrc"
-#include "DocumentRenderer.hrc"
+#include "strings.hrc"
 
-Resource STR_IMPRESS_PRINT_UI_OPTIONS
+String STR_IMPRESS_PRINT_UI_GROUP_NAME
 {
-    String STR_IMPRESS_PRINT_UI_GROUP_NAME
+    Text [en-US] = "%PRODUCTNAME %s";
+};
+String STR_IMPRESS_PRINT_UI_PRINT_CONTENT
+{
+    Text [ en-US ] = "Print content";
+};
+String STR_IMPRESS_PRINT_UI_PRINT_GROUP
+{
+    Text [ en-US ] = "Print";
+};
+String STR_IMPRESS_PRINT_UI_CONTENT
+{
+    Text [ en-US ] = "Document";
+};
+StringArray STR_IMPRESS_PRINT_UI_CONTENT_CHOICES
+{
+    ItemList [ en-US ] =
     {
-        Text [en-US] = "%PRODUCTNAME %s";
+        < "Slides" ; > ;
+        < "Handouts" ; > ;
+        < "Notes" ; > ;
+        < "Outline" ; > ;
     };
-    String STR_IMPRESS_PRINT_UI_PRINT_CONTENT
+};
+String STR_IMPRESS_PRINT_UI_SLIDESPERPAGE
+{
+    Text [ en-US ] = "Slides per page" ;
+};
+StringArray STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Print content";
+        < "According to layout" ; > ;
+        < "1" ; > ;
+        < "2" ; > ;
+        < "3" ; > ;
+        < "4" ; > ;
+        < "6" ; > ;
+        < "9" ; > ;
     };
-    String STR_IMPRESS_PRINT_UI_PRINT_GROUP
+};
+String STR_IMPRESS_PRINT_UI_ORDER
+{
+    Text [ en-US ] = "Order" ;
+};
+StringArray STR_IMPRESS_PRINT_UI_ORDER_CHOICES
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Print";
+        < "Left to right, then down" ; > ;
+        < "Top to bottom, then right" ; > ;
     };
-    String STR_IMPRESS_PRINT_UI_CONTENT
+};
+String STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT
+{
+    Text [ en-US ] = "~Contents";
+};
+String STR_IMPRESS_PRINT_UI_IS_PRINT_NAME
+{
+    Text [ en-US ] = "~Slide name";
+};
+String STR_DRAW_PRINT_UI_IS_PRINT_NAME
+{
+    Text [ en-US ] = "P~age name";
+};
+String STR_IMPRESS_PRINT_UI_IS_PRINT_DATE
+{
+    Text [ en-US ] = "~Date and time";
+};
+String STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN
+{
+    Text [ en-US ] = "Hidden pages";
+};
+String STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP
+{
+    Text [ en-US ] = "Output options";
+};
+String STR_IMPRESS_PRINT_UI_QUALITY
+{
+    Text [ en-US ] = "Color";
+};
+StringArray STR_IMPRESS_PRINT_UI_QUALITY_CHOICES
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Document";
+        < "Original colors" ; > ;
+        < "Grayscale" ; > ;
+        < "Black & white" ; > ;
     };
-    StringArray STR_IMPRESS_PRINT_UI_CONTENT_CHOICES
+};
+String STR_IMPRESS_PRINT_UI_PAGE_OPTIONS
+{
+    Text [ en-US ] = "~Size";
+};
+StringArray STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES
+{
+    ItemList [ en-US ] =
     {
-        ItemList [ en-US ] =
-        {
-            < "Slides" ; > ;
-            < "Handouts" ; > ;
-            < "Notes" ; > ;
-            < "Outline" ; > ;
-        };
+        < "Original size" ; > ;
+        < "Fit to printable page" ; > ;
+        < "Distribute on multiple sheets of paper" ; > ;
+        < "Tile sheet of paper with repeated slides" ; > ;
     };
-    String STR_IMPRESS_PRINT_UI_SLIDESPERPAGE
+};
+StringArray STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Slides per page" ;
+        < "Original size" ; > ;
+        < "Fit to printable page" ; > ;
+        < "Distribute on multiple sheets of paper" ; > ;
+        < "Tile sheet of paper with repeated pages" ; > ;
     };
-    StringArray STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES
+};
+String STR_IMPRESS_PRINT_UI_BROCHURE
+{
+    Text [en-US] = "Brochure";
+};
+String STR_IMPRESS_PRINT_UI_PAGE_SIDES
+{
+    Text [ en-US ] = "Page sides";
+};
+String STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE
+{
+    Text [ en-US ] = "Include";
+};
+StringArray STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST
+{
+    ItemList [ en-US ] =
     {
-        ItemList [ en-US ] =
-        {
-            < "According to layout" ; > ;
-            < "1" ; > ;
-            < "2" ; > ;
-            < "3" ; > ;
-            < "4" ; > ;
-            < "6" ; > ;
-            < "9" ; > ;
-        };
+        < "All pages" ; > ;
+        < "Front sides / right pages" ; > ;
+        < "Back sides / left pages" ; > ;
     };
-    String STR_IMPRESS_PRINT_UI_ORDER
-    {
-        Text [ en-US ] = "Order" ;
-    };
-    StringArray STR_IMPRESS_PRINT_UI_ORDER_CHOICES
-    {
-        ItemList [ en-US ] =
-        {
-            < "Left to right, then down" ; > ;
-            < "Top to bottom, then right" ; > ;
-        };
-    };
-    String STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT
-    {
-        Text [ en-US ] = "~Contents";
-    };
-    String STR_IMPRESS_PRINT_UI_IS_PRINT_NAME
-    {
-        Text [ en-US ] = "~Slide name";
-    };
-    String STR_DRAW_PRINT_UI_IS_PRINT_NAME
-    {
-        Text [ en-US ] = "P~age name";
-    };
-    String STR_IMPRESS_PRINT_UI_IS_PRINT_DATE
-    {
-        Text [ en-US ] = "~Date and time";
-    };
-    String STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN
-    {
-        Text [ en-US ] = "Hidden pages";
-    };
-    String STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP
-    {
-        Text [ en-US ] = "Output options";
-    };
-    String STR_IMPRESS_PRINT_UI_QUALITY
-    {
-        Text [ en-US ] = "Color";
-    };
-    StringArray STR_IMPRESS_PRINT_UI_QUALITY_CHOICES
-    {
-        ItemList [ en-US ] =
-        {
-            < "Original colors" ; > ;
-            < "Grayscale" ; > ;
-            < "Black & white" ; > ;
-        };
-    };
-    String STR_IMPRESS_PRINT_UI_PAGE_OPTIONS
-    {
-        Text [ en-US ] = "~Size";
-    };
-    StringArray STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES
-    {
-        ItemList [ en-US ] =
-        {
-            < "Original size" ; > ;
-            < "Fit to printable page" ; > ;
-            < "Distribute on multiple sheets of paper" ; > ;
-            < "Tile sheet of paper with repeated slides" ; > ;
-        };
-    };
-    StringArray STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW
-    {
-        ItemList [ en-US ] =
-        {
-            < "Original size" ; > ;
-            < "Fit to printable page" ; > ;
-            < "Distribute on multiple sheets of paper" ; > ;
-            < "Tile sheet of paper with repeated pages" ; > ;
-        };
-    };
-    String STR_IMPRESS_PRINT_UI_BROCHURE
-    {
-        Text [en-US] = "Brochure";
-    };
-    String STR_IMPRESS_PRINT_UI_PAGE_SIDES
-    {
-        Text [ en-US ] = "Page sides";
-    };
-    String STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE
-    {
-        Text [ en-US ] = "Include";
-    };
-    StringArray STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST
-    {
-        ItemList [ en-US ] =
-        {
-            < "All pages" ; > ;
-            < "Front sides / right pages" ; > ;
-            < "Back sides / left pages" ; > ;
-        };
-    };
+};
 
-    String STR_IMPRESS_PRINT_UI_PAPER_TRAY_GROUP
+String STR_IMPRESS_PRINT_UI_PAPER_TRAY_GROUP
+{
+    Text [ en-US ] = "Paper tray";
+};
+String STR_IMPRESS_PRINT_UI_PAPER_TRAY
+{
+    Text [ en-US ] = "~Use only paper tray from printer preferences";
+};
+String STR_IMPRESS_PRINT_UI_PAGE_RANGE
+{
+    Text [en-US] = "Print range";
+};
+StringArray STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Paper tray";
+        < "~All slides"; >;
+        < "~Slides"; >;
+        < "Se~lection"; >;
     };
-    String STR_IMPRESS_PRINT_UI_PAPER_TRAY
-    {
-        Text [ en-US ] = "~Use only paper tray from printer preferences";
-    };
-    String STR_IMPRESS_PRINT_UI_PAGE_RANGE
-    {
-        Text [en-US] = "Print range";
-    };
-    StringArray STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE
-    {
-        ItemList [ en-US ] =
-        {
-            < "~All slides"; >;
-            < "~Slides"; >;
-            < "Se~lection"; >;
-        };
-    };
+};
 
-    StringArray STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE
+StringArray STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE
+{
+    ItemList [ en-US ] =
     {
-        ItemList [ en-US ] =
-        {
-            < "~All pages"; >;
-            < "Pa~ges"; >;
-            < "Se~lection"; >;
-        };
+        < "~All pages"; >;
+        < "Pa~ges"; >;
+        < "Se~lection"; >;
     };
 };
 

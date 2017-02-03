@@ -20,7 +20,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "DocumentRenderer.hxx"
-#include "DocumentRenderer.hrc"
 
 #include "drawdoc.hxx"
 #include "optsitem.hxx"
@@ -329,15 +328,14 @@ namespace {
         rPrinter.SetFont(aOriginalFont);
     }
 
-    /** Read the resource file and process it into a sequence of properties
+    /** Read the resources and process then into a sequence of properties
         that can be passed to the printing dialog.
     */
-    class DialogCreator : public Resource
+    class DialogCreator
     {
     public:
         DialogCreator (ViewShellBase &rBase, bool bImpress, sal_Int32 nCurPage)
-            : Resource(SdResId(STR_IMPRESS_PRINT_UI_OPTIONS))
-            , mrBase(rBase)
+            : mrBase(rBase)
             , mbImpress(bImpress)
             , mnCurPage(nCurPage)
         {
@@ -622,8 +620,6 @@ namespace {
             AddDialogControl(vcl::PrinterOptionsHelper::setEditControlOpt("pagerange", "",
                                 ".HelpID:vcl:PrintDialog:PageRange:Edit", "PageRange",
                                 aPageRange, aPageRangeOpt));
-
-            FreeResource();
         }
 
         void AddDialogControl( const Any& i_rCtrl )
