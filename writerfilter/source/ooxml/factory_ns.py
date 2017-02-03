@@ -36,7 +36,7 @@ public:
     static Pointer_t getInstance();
 
     virtual const AttributeInfo* getAttributeInfoArray(Id nId);
-    virtual bool getElementId(Id nDefine, Id nId, ResourceType_t& rOutResource, Id& rOutElement);
+    virtual bool getElementId(Id nDefine, Id nId, ResourceType& rOutResource, Id& rOutElement);
     virtual bool getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue);
     virtual Id getResourceId(Id nDefine, sal_Int32 nToken);
 """ % nsToken)
