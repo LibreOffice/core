@@ -183,6 +183,7 @@ SwSidebarWin::SwSidebarWin(SwEditWin& rEditWin,
     , mPosSize()
     , mAnchorRect()
     , mPageBorder(0)
+    , mbAnchorRectChanged(false)
     , mbMouseOver(false)
     , mLayoutStatus(SwPostItHelper::INVISIBLE)
     , mbReadonly(false)
@@ -509,6 +510,8 @@ void SwSidebarWin::SetPosSizePixelRect(long nX, long nY, long nWidth, long nHeig
                                        const SwRect& aAnchorRect, const long aPageBorder)
 {
     mPosSize = Rectangle(Point(nX,nY),Size(nWidth,nHeight));
+    if (!mAnchorRect.IsEmpty() && mAnchorRect != aAnchorRect)
+        mbAnchorRectChanged = true;
     mAnchorRect = aAnchorRect;
     mPageBorder = aPageBorder;
 }
