@@ -41,8 +41,8 @@ void ScGridOptions::SetDefaults()
 {
     *this = ScGridOptions();
 
-    //  Raster-Defaults sind jetzt zwischen den Apps unterschiedlich
-    //  darum hier selber eintragen (alles in 1/100mm)
+    //  grid defaults differ now between the apps
+    //  therefore, enter here in its own right (all in 1/100mm)
 
     if ( ScOptionsUtil::IsMetricSystem() )
     {
@@ -191,7 +191,7 @@ SvxGridItem* ScViewOptions::CreateGridItem() const
     return pItem;
 }
 
-//      ScTpViewItem - Daten fuer die ViewOptions-TabPage
+//      ScTpViewItem - data for the ViewOptions TabPage
 
 ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP, const ScViewOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
