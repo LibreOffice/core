@@ -443,7 +443,7 @@ private:
                     Do such things in DEFINE_INIT_SERVICE() method, which is called automatically after your ctor!!!
                 b)  Baseclass OBroadcastHelper is a typedef in namespace cppu!
                     The microsoft compiler has some problems to handle it right BY using namespace explicitly ::cppu::OBroadcastHelper.
-                    If we write it without a namespace or expand the typedef to OBrodcastHelperVar<...> -> it will be OK!?
+                    If we write it without a namespace or expand the typedef to OBroadcastHelperVar<...> -> it will be OK!?
                     I don't know why! (other compiler not tested .. but it works!)
 
     @seealso    method DEFINE_INIT_SERVICE()

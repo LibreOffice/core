@@ -582,10 +582,10 @@
     </xsl:template>
     <!-- 
     **Template vmlpath2enhancedpath**
-    The template is resposible for converting the vml-path to enhanced-path, because the svg:path 
+    The template is responsible for converting the vml-path to enhanced-path, because the svg:path 
     cann't support command a now.(But heard that will be supported in OOo3.0)
     And  the 2nd reason of using an enhanced-path is that enhanced-path have a perfect mapping to 
-    vmlpath.(You will find out that often,we  even don't need to change the parameters).
+    vmlpath.(You will find out that often, we even don't need to change the parameters).
     -->
     <xsl:template name="vmlpath2enhancedpath">
         <xsl:param name="vml-path"/>

@@ -1369,7 +1369,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const css::lang::EventObject& _rS
                     // maybe update the UI
                     implCheckExternalSlot(nSlot);
 
-                    // continue, the same XDispatch may be resposible for more than one URL
+                    // continue, the same XDispatch may be responsible for more than one URL
                 }
             }
         }

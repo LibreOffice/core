@@ -68,7 +68,7 @@ public:
     SwKeepConversionDirectionStateContext()
     {
         //!! hack to transport the current conversion direction state settings
-        //!! into the next incarnation that iterates over the drawing objets
+        //!! into the next incarnation that iterates over the drawing objects
         //!! ( see SwHHCWrapper::~SwHHCWrapper() )
         editeng::HangulHanjaConversion::SetUseSavedConversionDirectionState( true );
     }

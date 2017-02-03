@@ -43,7 +43,7 @@ import lib.StatusException;
 *  <li> Test environment variable <code>'THRCNT'</code> : number
 *   of interface threads running concurrently. </li>
 * <ul> <p>
-* XNameComtainer needs n ObjectRelations "INSTANCEn" , where n=1, ..., THRCNT.
+* XNameContainer needs n ObjectRelations "INSTANCEn" , where n=1, ..., THRCNT.
 *
 * When this interface tested by different threads, it must use different
 * instances to insert/remove - one for each thread.
@@ -54,7 +54,7 @@ import lib.StatusException;
 * If you insert the same Object by insertByName() several times you
 * don't insert the Object several times. The first insertByName() inserts
 * the Object to the Container but all other insertByName() changes
-* the Name in the Continer because it's the same Object.
+* the Name in the Container because it's the same Object.
 * @see com.sun.star.container.XNameContainer
 */
 

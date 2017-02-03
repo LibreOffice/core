@@ -1975,7 +1975,7 @@ static void
 lcl_SelectParaAndReset( SwPaM &rPaM, SwDoc & rDoc,
                         std::set<sal_uInt16> const &rWhichIds )
 {
-    // if we are reseting paragraph attributes, we need to select the full paragraph first
+    // if we are resetting paragraph attributes, we need to select the full paragraph first
     SwPosition aStart = *rPaM.Start();
     SwPosition aEnd = *rPaM.End();
     auto pTemp ( rDoc.CreateUnoCursor(aStart) );

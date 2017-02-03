@@ -478,7 +478,7 @@ void XSecController::clearSAXChainConnector()
  ******************************************************************************/
 {
     /*
-     * before reseting, if the ElementStackKeeper has kept something, then
+     * before resetting, if the ElementStackKeeper has kept something, then
      * those kept key SAX events must be transferred to the SAXEventKeeper
      * first. This is to promise the next node to the SAXEventKeeper on the
      * SAX chain always receives a complete document.
