@@ -19,6 +19,41 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_5a4bb72b",
+        "filename": "sc/source/core/data/documentimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2017-02-03T16:31:19Z",
+      "side": 1,
+      "message": "Yes, that sounds great. But I am not sure if before this function is called, the document can contain contents/styles already (probably not because this is an import related function)? If so we need to set the style to existing columns too.",
+      "parentUuid": "fa48f94a_da81674f",
+      "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_3a46f323",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2522,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2017-02-03T16:31:19Z",
+      "side": 1,
+      "message": "I think this is a little complicated due to following two edge cases :\n\nif (nEndCol \u003d\u003d MAXCOL \u0026\u0026 nStartCol \u003c aCol.size()), then no need to create new cols, we just assign the style to [nStartCol, aCol.size()-1] and also to aNextColAttrArray.\n\nif (nStartCol \u003e\u003d aCol.size() \u0026\u0026 nEndCol \u003d\u003d MAXCOL) then\nwe have to create cols till (nStartCol-1) and then assign style to aNextColAttrArray.",
+      "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_fa862b64",
         "filename": "sc/source/core/data/table2.cxx",
         "patchSetId": 2
@@ -36,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_7ada3b7a",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2547,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2017-02-03T16:31:19Z",
+      "side": 1,
+      "message": "The style for aCol.size() to MAXCOL (both inclusive) is in aNextColAttrArray, so we could change this function as :\n\nif (!ValidColRow(nCol, nRow))\n    return nullptr;\nif ( nCol \u003c aCol.size() )\n    return aCol[nCol].GetStyle(nRow);\nelse\n    return aNextColAttrArray.GetPattern( nRow )-\u003eGetStyleSheet();  // Adapted from ScColumn::GetStyle()",
+      "parentUuid": "fa48f94a_fa862b64",
+      "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_1a7ccf71",
         "filename": "sc/source/core/data/table2.cxx",
         "patchSetId": 2
@@ -47,6 +100,24 @@
       "writtenOn": "2017-02-03T14:55:14Z",
       "side": 1,
       "message": "Same implementation here",
+      "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_bae4a33b",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2580,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2017-02-03T16:31:19Z",
+      "side": 1,
+      "message": "Here it is a little more complicated with following possibilities :\n1. [nCol1, nCol2] is in [aCol.size(), MAXCOL] // Easy case\n2. [nCol1, nCol2] is in [0, aCol.size()-1]    // Easy case- get from aNextColAttrArray\n3. 0 \u003c\u003d nCol1 \u003c aCol.size() \u003c\u003d nCol2 \u003c\u003d MAXCOL  // have to combine/intersect(?) the styles from [nCol1, aCol.size()-1] with that from aNextColAttrArray. May have to look into attrarray.cxx how that can be done.",
+      "parentUuid": "fa48f94a_1a7ccf71",
       "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
