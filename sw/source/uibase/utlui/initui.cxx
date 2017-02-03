@@ -290,18 +290,10 @@ ImpAutoFormatNameListLoader::ImpAutoFormatNameListLoader( std::vector<OUString>&
         OUString p(ResId(n + 1, *pSwResMgr));
         if(STR_AUTOFMTREDL_TYPO == n)
         {
-#ifdef _WIN32
-            // For Windows, a special treatment is necessary because MS has
-            // forgotten some characters in the dialog font here.
-            p = p.replaceFirst("%1", ",,");
-            p = p.replaceFirst("%2", "''");
-#else
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLclD = aSysLocale.GetLocaleData();
-            // With real operating systems it also works without special handling.
             p = p.replaceFirst("%1", rLclD.getDoubleQuotationMarkStart());
             p = p.replaceFirst("%2", rLclD.getDoubleQuotationMarkEnd());
-#endif
         }
         rLst.insert(rLst.begin() + n, p);
     }
