@@ -199,7 +199,8 @@ XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) 
     mxImpl( new XmlFilterBaseImpl( rxContext ) ),
     mnRelId( 1 ),
     mnMaxDocId( 0 ),
-    mbMSO2007(false)
+    mbMSO2007(false),
+    mbMissingExtDrawing(false)
 {
 }
 
@@ -906,6 +907,11 @@ StorageRef XmlFilterBase::implCreateStorage( const Reference< XStream >& rxOutSt
 bool XmlFilterBase::isMSO2007Document() const
 {
     return mbMSO2007;
+}
+
+void XmlFilterBase::setMissingExtDrawing()
+{
+    mbMissingExtDrawing = true;
 }
 
 OUString XmlFilterBase::getNamespaceURL(sal_Int32 nNSID) const

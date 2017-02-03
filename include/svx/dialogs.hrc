@@ -1008,9 +1008,10 @@
 #define RID_SVXSTR_ERR_REPEAT_PASSWD     (SVX_OOO_BUILD_START + 8) // 1238
 #define RID_SVXBMP_ZOOM_PAGE             (SVX_OOO_BUILD_START + 9) // 1239
 #define RID_SVXSTR_FIT_SLIDE             (SVX_OOO_BUILD_START + 10) // 1240
+#define RID_SVXSTR_WARN_MISSING_SMARTART (SVX_OOO_BUILD_START + 11) // 1241
 
 // sidebar-related resources
-#define RID_SVX_SIDEBAR_BEGIN            (RID_SVX_START + 1241)
+#define RID_SVX_SIDEBAR_BEGIN            (RID_SVX_START + 1242)
 #define BMP_SPACE3                       (RID_SVX_SIDEBAR_BEGIN +  0)
 #define BMP_INDENT_HANG                  (RID_SVX_SIDEBAR_BEGIN +  1)
 #define BMP_NONE_ICON                    (RID_SVX_SIDEBAR_BEGIN + 21)
