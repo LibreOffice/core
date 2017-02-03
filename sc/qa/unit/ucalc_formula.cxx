@@ -2028,7 +2028,7 @@ void Test::testFormulaRefUpdateInsertColumns()
     m_pDoc->SetString(ScAddress(2,3,0), "=SUM(EntireRow)");
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(ScAddress(2,3,0)));
 
-    // Inert columns over A:B.
+    // Insert columns over A:B.
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     ScDocFunc& rFunc = getDocShell().GetDocFunc();

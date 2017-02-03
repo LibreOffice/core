@@ -3228,7 +3228,7 @@ void ToolBox::ImplDrawItem(vcl::RenderContext& rRenderContext, sal_uInt16 nPos, 
                 long nArrowHeight = ( pItem->mnBits & ToolBoxItemBits::DROPDOWN )
                                         ? TB_DROPDOWNARROWWIDTH : 0;
 
-                // only if buton is a "dropdown only" type then is painted as a single button
+                // only if button is a "dropdown only" type then is painted as a single button
                 // and we need to move text above the arrow
                 if ( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate
                     && (pItem->mnBits & ToolBoxItemBits::DROPDOWNONLY) != ToolBoxItemBits::DROPDOWNONLY )

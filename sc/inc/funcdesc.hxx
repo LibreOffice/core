@@ -50,7 +50,7 @@ public:
     /**
       Clears the object
 
-      Deletes all objets referenced by the pointers in the class,
+      Deletes all objects referenced by the pointers in the class,
       sets pointers to NULL, and all numerical variables to 0
     */
     void Clear();

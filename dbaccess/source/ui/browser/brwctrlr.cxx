@@ -500,7 +500,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const c
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const css::lang::EventObject& /*Source*/)
 {
     // nothing to do
-    // we don't add ourself as listener to any broadcasters, so we are not resposible for removing us
+    // we don't add ourself as listener to any broadcasters, so we are not responsible for removing us
 }
 
 // SbaXDataBrowserController

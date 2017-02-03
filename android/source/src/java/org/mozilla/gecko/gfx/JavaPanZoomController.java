@@ -209,7 +209,7 @@ class JavaPanZoomController
         mSubscroller.cancel();
         if (waitingForTouchListeners && (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
             // this is the first touch point going down, so we enter the pending state
-            // seting the state will kill any animations in progress, possibly leaving
+            // setting the state will kill any animations in progress, possibly leaving
             // the page in overscroll
             setState(PanZoomState.WAITING_LISTENERS);
         }

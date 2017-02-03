@@ -19,7 +19,7 @@
 package com.sun.star.uno;
 
 /**
- * With a mapping objets can be mapped from one environment to another.
+ * With a mapping objects can be mapped from one environment to another.
  *
  * <p>This interface exists for compatibility with the binary UNO API.</p>
  *

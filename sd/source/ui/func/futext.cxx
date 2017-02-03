@@ -368,7 +368,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                         // thus it is necessary to reset it and to get it again.
 
                         // #i112855#
-                        // cl: I'm not sure why we checked here also for mxTextObj->GetOutlinerParaObjet
+                        // cl: I'm not sure why we checked here also for mxTextObj->GetOutlinerParaObject
                         // this caused SdrEndTextEdit() to be called also when not in text editing and
                         // this does not make sense and caused troubles. (see issue 112855)
 

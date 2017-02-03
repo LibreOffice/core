@@ -297,7 +297,7 @@ bool SwDocShell::Save()
         m_pView->GetEditWin().StopQuickHelp();
     SwWait aWait( *this, true );
 
-    CalcLayoutForOLEObjects();  // format for OLE objets
+    CalcLayoutForOLEObjects();  // format for OLE objects
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if (m_pWrtShell && m_pDoc &&
@@ -418,7 +418,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         }
     }
 
-    CalcLayoutForOLEObjects();  // format for OLE objets
+    CalcLayoutForOLEObjects();  // format for OLE objects
 
     bool bURLChanged = !GetMedium() || GetMedium()->GetURLObject() != rMedium.GetURLObject();
     if (!m_pDoc->GetDBManager()->getEmbeddedName().isEmpty() && bURLChanged)
@@ -609,7 +609,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     if ( !rMedium.IsSkipImages() )
         m_pDoc->getIDocumentStatistics().UpdateDocStat( false, true );
 
-    CalcLayoutForOLEObjects();  // format for OLE objets
+    CalcLayoutForOLEObjects();  // format for OLE objects
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
     if (m_pWrtShell &&
