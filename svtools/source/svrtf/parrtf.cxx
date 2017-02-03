@@ -60,7 +60,7 @@ int SvRTFParser::GetNextToken_()
         {
         case '\\':
             {
-                // control charaters
+                // control characters
                 nNextCh = GetNextChar();
                 switch( nNextCh )
                 {

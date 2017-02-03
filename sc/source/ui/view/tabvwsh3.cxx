@@ -1018,7 +1018,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
             break;
 
         case SID_CREATE_SW_DRAWVIEW:
-            //  is called by Forms, when the DrawView has to be crated with all
+            //  is called by Forms, when the DrawView has to be created with all
             //  the extras
             if (!GetScDrawView())
             {

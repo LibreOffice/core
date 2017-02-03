@@ -3093,7 +3093,7 @@ void ScFiltersTest::testMiscRowHeights()
     {
         /* Checks that a document saved to ods with default rows does indeed
            have default row heights ( there was a problem where the optimal
-           height was being calcuated after import if no hard height )
+           height was being calculated after import if no hard height )
         */
         { "alldefaultheights.", FORMAT_ODS, -1, SAL_N_ELEMENTS(DfltRowData), DfltRowData },
         /* Checks the imported height of some multiline input, additionally checks

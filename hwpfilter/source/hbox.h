@@ -844,7 +844,7 @@ struct MailMerge: public HBox
     virtual hchar_string GetString() override;
 };
 
-// char compositon(23)
+// char composition(23)
 /**
  * The compose struct displays characters at position. The maximum character count for composition is three.
  * @short Composition several characters

@@ -97,7 +97,7 @@ public abstract class ProblemEncoder {
     point.setObjectiveValue(tempResponseSet[0]);
   }
 
-  //calcuate each response, must be implemented
+  //calculate each response, must be implemented
   abstract protected double calcTargetAt(int index, double[] VX);
 
   // calculate all the responses VY[] based on given point VX[]

@@ -109,7 +109,7 @@ private:
     css::uno::WeakReference< css::container::XNameContainer > mxCustomPresentationAccess;
     css::uno::WeakReference< css::container::XNameAccess > mxStyleFamilies;
     css::uno::WeakReference< css::presentation::XPresentation > mxPresentation;
-    css::uno::WeakReference< css::i18n::XForbiddenCharacters > mxForbidenCharacters;
+    css::uno::WeakReference< css::i18n::XForbiddenCharacters > mxForbiddenCharacters;
     css::uno::Reference< css::container::XNameAccess > mxLinks;
 
     css::uno::Reference< css::uno::XInterface > mxDashTable;

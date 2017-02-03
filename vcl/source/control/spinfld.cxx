@@ -630,7 +630,7 @@ void SpinField::ImplCalcButtonAreas(OutputDevice* pDev, const Size& rOutSz, Rect
     else
         rDDArea.SetEmpty();
 
-    // calcuate sizes according to the height
+    // calculate sizes according to the height
     if (GetStyle() & WB_SPIN)
     {
         long nBottom1 = aSize.Height()/2;

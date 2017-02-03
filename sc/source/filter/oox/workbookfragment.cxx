@@ -395,7 +395,7 @@ void WorkbookFragment::finalizeImport()
             OSL_ENSURE( !aFragmentPath.isEmpty(), "WorkbookFragment::finalizeImport - cannot access sheet fragment" );
             if( !aFragmentPath.isEmpty() )
             {
-                // leave space for formula processing ( calcuate the segments as
+                // leave space for formula processing ( calculate the segments as
                 // if there is an extra sheet )
                 double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - ( nWorksheet - 1) );
                 ISegmentProgressBarRef xSheetSegment = getProgressBar().createSegment( fSegmentLength );

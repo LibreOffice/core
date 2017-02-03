@@ -732,7 +732,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
 
             // handling gtk like (aka mbOpenMenuOnF10)
             // do not highlight an item when opening a sub menu
-            // unless there already was a higlighted sub menu item
+            // unless there already was a highlighted sub menu item
             bool bWasHighlight = false;
             if( pActivePopup )
             {

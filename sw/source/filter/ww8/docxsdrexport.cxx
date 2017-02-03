@@ -477,7 +477,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
         m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_positionH, XML_relativeFrom, relativeFromH, FSEND);
         /**
         * Sizes of integral types
-        * climits header defines constants with the limits of integral types for the specific system and compiler implemetation used.
+        * climits header defines constants with the limits of integral types for the specific system and compiler implementation used.
         * Use of this might cause platform dependent problem like posOffset exceed the limit.
         **/
         const sal_Int64 MAX_INTEGER_VALUE = SAL_MAX_INT32;
