@@ -39,6 +39,7 @@
 #include <unotbl.hxx>
 #include <IMark.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <IDocumentSettingAccess.hxx>
 #include <pagedesc.hxx>
 #include <postithelper.hxx>
 #include <PostItMgr.hxx>
@@ -227,6 +228,7 @@ public:
     void testTdf104492();
     void testTdf105417();
     void testTdf105625();
+    void testMsWordCompTrailingBlanks();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -348,6 +350,7 @@ public:
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST(testTdf105625);
+    CPPUNIT_TEST(testMsWordCompTrailingBlanks);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4301,6 +4304,38 @@ void SwUiWriterTest::testTdf105625()
     pWrtShell->DelLeft();
     sal_Int32 nMarksAfter = pMarksAccess->getAllMarksCount();
     CPPUNIT_ASSERT_EQUAL(nMarksBefore, nMarksAfter + 1);
+}
+
+void SwUiWriterTest::testMsWordCompTrailingBlanks()
+{
+    // The option is true in settings.xml
+    SwDoc* pDoc = createDoc( "MsWordCompTrailingBlanksTrue.odt" );
+    CPPUNIT_ASSERT_EQUAL( true, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) );
+    calcLayout();
+    // Check that trailing spaces spans have no width if option is enabled
+
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), parseDump( "/root/page/body/txt[2]/Text[4]", "nWidth" ) );
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), parseDump( "/root/page/body/txt[2]/Text[5]", "nWidth" ) );
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), parseDump( "/root/page/body/txt[3]/Text[4]", "nWidth" ) );
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), parseDump( "/root/page/body/txt[3]/Text[5]", "nWidth" ) );
+
+    // The option is false in settings.xml
+    pDoc = createDoc( "MsWordCompTrailingBlanksFalse.odt" );
+    CPPUNIT_ASSERT_EQUAL( false, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) );
+    calcLayout();
+    // Check that trailing spaces spans have width if option is disabled
+    CPPUNIT_ASSERT( !parseDump( "/root/page/body/txt[2]/Text[4]", "nWidth" ).isEmpty() );
+    CPPUNIT_ASSERT( !parseDump( "/root/page/body/txt[2]/Text[5]", "nWidth" ).isEmpty() );
+    CPPUNIT_ASSERT( !parseDump( "/root/page/body/txt[3]/Text[4]", "nWidth" ).isEmpty() );
+    CPPUNIT_ASSERT( !parseDump( "/root/page/body/txt[3]/Text[5]", "nWidth" ).isEmpty() );
+
+    // MsWordCompTrailingBlanks option should be false by default in new documents
+    pDoc = createDoc();
+    CPPUNIT_ASSERT_EQUAL( false, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) );
+
+    // The option should be true if a .docx, .doc or .rtf document is opened
+    pDoc = createDoc( "MsWordCompTrailingBlanks.docx" );
+    CPPUNIT_ASSERT_EQUAL( true, pDoc->getIDocumentSettingAccess().get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS ) );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
