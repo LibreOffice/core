@@ -266,28 +266,28 @@ namespace
             [&rName] (IDocumentMarkAccess::pMark_t const& rpMark) { return rpMark->GetName() == rName; } );
     }
 
-    void lcl_DebugMarks(IDocumentMarkAccess::container_t vMarks)
+    void lcl_DebugMarks(IDocumentMarkAccess::container_t const& rMarks)
     {
 #if OSL_DEBUG_LEVEL > 0
-        SAL_INFO("sw.core", vMarks.size() << " Marks");
-        for(IDocumentMarkAccess::iterator_t ppMark = vMarks.begin();
-            ppMark != vMarks.end();
-            ppMark++)
+        SAL_INFO("sw.core", rMarks.size() << " Marks");
+        for (IDocumentMarkAccess::const_iterator_t ppMark = rMarks.begin();
+             ppMark != rMarks.end();
+             ++ppMark)
         {
             IMark* pMark = ppMark->get();
             const SwPosition* const pStPos = &pMark->GetMarkStart();
             const SwPosition* const pEndPos = &pMark->GetMarkEnd();
             SAL_INFO("sw.core",
-                typeid(*pMark).name() << " " <<
-                pMark->GetName() << " " <<
                 pStPos->nNode.GetIndex() << "," <<
                 pStPos->nContent.GetIndex() << " " <<
                 pEndPos->nNode.GetIndex() << "," <<
-                pEndPos->nContent.GetIndex());
+                pEndPos->nContent.GetIndex() << " " <<
+                typeid(*pMark).name() << " " <<
+                pMark->GetName());
         }
 #endif
-        assert(std::is_sorted(vMarks.begin(), vMarks.end(), lcl_MarkOrderingByStart));
-        (void) vMarks;
+        assert(std::is_sorted(rMarks.begin(), rMarks.end(), lcl_MarkOrderingByStart));
+        (void) rMarks;
     };
 }
 
