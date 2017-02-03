@@ -912,7 +912,17 @@ void SwSidebarWin::SetPosAndSize()
             }
             std::unique_ptr<SwShellCursor> pTmpCursorForAnnotationTextRange( pTmpCursor );
 
+            // For annotation text range rectangles to be calculated correctly,
+            // we need the map mode disabled
+            bool bDisableMapMode = comphelper::LibreOfficeKit::isActive() && EditWin().IsMapModeEnabled();
+            if (bDisableMapMode)
+                EditWin().EnableMapMode(false);
+
             pTmpCursorForAnnotationTextRange->FillRects();
+
+            if (bDisableMapMode)
+                EditWin().EnableMapMode();
+
             SwRects* pRects(pTmpCursorForAnnotationTextRange.get());
             std::vector<OString> aRects;
             for(SwRect & rNextRect : *pRects)
