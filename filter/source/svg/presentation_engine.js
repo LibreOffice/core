@@ -4578,6 +4578,13 @@ function flipOnYAxis( aPath )
     aPath.matrixTransform(aMatrix);
     return aPath;
 }
+
+function flipOnXAxis( aPath )
+{
+    var aMatrix = SVGIdentityMatrix.flipX();
+    aPath.matrixTransform(aMatrix.scaleNonUniform(-1.0, 1.0));
+    return aPath;
+}
 /** SVGPathElement.matrixTransform
  *  Apply the transformation defined by the passed matrix to the referenced
  *  svg <path> element.
@@ -5170,6 +5177,7 @@ SNAKEWIPE_TRANSITION        = 13; // 30
 IRISWIPE_TRANSITION         = 14; // 12
 BARNDOORWIPE_TRANSITION     = 15; // 4
 VEEWIPE_TRANSITION          = 16; // 8
+FANWIPE_TRANSITION          = 17; // 25
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5182,6 +5190,7 @@ aTransitionTypeInMap = {
     'pushWipe'          : PUSHWIPE_TRANSITION,
     'slideWipe'         : SLIDEWIPE_TRANSITION,
     'fade'              : FADE_TRANSITION,
+    'fanWipe'           : FANWIPE_TRANSITION,
     'randomBarWipe'     : RANDOMBARWIPE_TRANSITION,
     'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION,
     'dissolve'          : DISSOLVE_TRANSITION,
@@ -5245,6 +5254,12 @@ UP_TRANS_SUBTYPE                    = 45; // 21
 RIGHT_TRANS_SUBTYPE                 = 46; // 22
 DIAGONALBOTTOMLEFT_TRANS_SUBTYPE    = 47; // 15
 DIAGONALTOPLEFT_TRANS_SUBTYPE       = 48; // 16
+CENTERTOP_TRANS_SUBTYPE             = 49; // 48
+CENTERRIGHT_TRANS_SUBTYPE           = 50; // 49
+TOP_TRANS_SUBTYPE                   = 51; // 50
+RIGHT_TRANS_SUBTYPE                 = 52; // 22
+BOTTOM_TRANS_SUBTYPE                = 53; // 52
+LEFT_TRANS_SUBTYPE                  = 54; // 20
 
 aTransitionSubtypeInMap = {
     'default'           : DEFAULT_TRANS_SUBTYPE,
@@ -5253,6 +5268,12 @@ aTransitionSubtypeInMap = {
     'cornersIn'         : CORNERSIN_TRANS_SUBTYPE,
     'cornersOut'        : CORNERSOUT_TRANS_SUBTYPE,
     'vertical'          : VERTICAL_TRANS_SUBTYPE,
+    'centerTop'         : CENTERTOP_TRANS_SUBTYPE,
+    'centerRight'       : CENTERRIGHT_TRANS_SUBTYPE,
+    'top'               : TOP_TRANS_SUBTYPE,
+    'right'             : RIGHT_TRANS_SUBTYPE,
+    'bottom'            : BOTTOM_TRANS_SUBTYPE,
+    'left'              : LEFT_TRANS_SUBTYPE,
     'horizontal'        : HORIZONTAL_TRANS_SUBTYPE,
     'down'              : DOWN_TRANS_SUBTYPE,
     'circle'            : CIRCLE_TRANS_SUBTYPE,
@@ -5706,6 +5727,69 @@ aTransitionInfoTable[VEEWIPE_TRANSITION][RIGHT_TRANS_SUBTYPE] =
     'outInvertsSweep' : true,
     'scaleIsotropically' : false
 };
+
+aTransitionInfoTable[FANWIPE_TRANSITION] = {};
+aTransitionInfoTable[FANWIPE_TRANSITION][CENTERTOP_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[FANWIPE_TRANSITION][CENTERRIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[FANWIPE_TRANSITION][TOP_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[FANWIPE_TRANSITION][RIGHT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[FANWIPE_TRANSITION][BOTTOM_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_Y,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[FANWIPE_TRANSITION][LEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_FLIP_X,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+
 
 aTransitionInfoTable[PINWHEELWIPE_TRANSITION] = {};
 aTransitionInfoTable[PINWHEELWIPE_TRANSITION][ONEBLADE_TRANS_SUBTYPE] =
@@ -9396,6 +9480,9 @@ function createClipPolyPolygon( nType, nSubtype )
                                     nSubtype == BOTTOMCENTER_TRANS_SUBTYPE );
         case ELLIPSEWIPE_TRANSITION:
             return new EllipseWipePath( nSubtype );
+        case FANWIPE_TRANSITION:
+            return new FanWipePath(nSubtype == CENTERTOP_TRANS_SUBTYPE ||
+                                   nSubtype == CENTERRIGHT_TRANS_SUBTYPE, true, false);
         case PINWHEELWIPE_TRANSITION:
             var nBlades;
             switch( nSubtype )
@@ -9669,6 +9756,41 @@ EllipseWipePath.prototype.perform = function( nT )
     return aEllipse;
 };
 
+/*
+ * Class FanWipePath
+ *
+ */
+function FanWipePath(bIsCenter, bIsSingle, bIsFanIn) {
+    this.bCenter = bIsCenter;
+    this.bSingle = bIsSingle;
+    this.bFanIn  = bIsFanIn;
+    this.aBasePath = createUnitSquarePath();
+}
+
+FanWipePath.prototype.perform = function( nT ) {
+  var res = this.aBasePath.cloneNode(true);
+  var poly = PinWheelWipePath.calcCenteredClock(
+          nT / ((this.bCenter && this.bSingle) ? 2.0 : 4.0), 1.0);
+  res.appendPath(poly);
+  // flip on y-axis
+  var aTransform = SVGIdentityMatrix.flipY();
+  aTransform = aTransform.scaleNonUniform(-1.0, 1.0);
+  poly.matrixTransform(aTransform);
+  res.appendPath(poly);
+
+  if(this.bCenter) {
+      aTransform = SVGIdentityMatrix.scaleNonUniform(0.5, 0.5).translate(0.5, 0.5);
+      res.matrixTransform(aTransform);
+
+      if(!this.bSingle)
+          res.appendPath(flipOnXAxis(res));
+  }
+  else {
+      aTransform = SVGIdentityMatrix.scaleNonUniform(0.5, 1.0).translate(0.5, 1.0);
+      res.matrixTransform(aTransform);
+  }
+  return res;
+}
 
 /**
  * Class ClockWipePath
