@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_da81674f",
+        "filename": "sc/source/core/data/documentimport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-03T14:55:14Z",
+      "side": 1,
+      "message": "In this function we are applying the default style for the whole Tab. We we don\u0027t need to create all columns, but only set  aNextColAttrArray\nI\u0027m wondering how we could apply that.\nMaybe we should create function \"ApplyDefaultStyle\" which will set default style for whole tab (setting aNextColAttrArray).",
+      "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_fa862b64",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2547,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-03T14:55:14Z",
+      "side": 1,
+      "message": "In this function we should check if requested colspan has some\n intersection with the colrange(aCol.size() to MAXCOL) then use the formatting info stored in aNextColAttrArray to calculate the formatting of the input range.\n\nIs it good approach?\nHow we should retrieve style from aNextColAttrArray?",
+      "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_1a7ccf71",
+        "filename": "sc/source/core/data/table2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2580,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-03T14:55:14Z",
+      "side": 1,
+      "message": "Same implementation here",
+      "revId": "009ce1a30192d81d3a40d3b2a123d4ef3c016d01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
