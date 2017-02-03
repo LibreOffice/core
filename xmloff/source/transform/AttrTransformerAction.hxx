@@ -122,7 +122,6 @@ enum XMLAttrTransformerAction
     XML_ATACTION_OPACITY_FIX,            // converts transparency to opacity and back
     XML_ATACTION_SHAPEID,                // convert shape id
     XML_ATACTION_USER_DEFINED=0x40000000,// user defined actions start here
-    XML_ATACTION_END=XML_TACTION_END
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_ATTRTRANSFORMERACTION_HXX
