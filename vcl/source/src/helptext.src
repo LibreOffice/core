@@ -57,6 +57,11 @@ String SV_HELPTEXT_HELP
     Text [ en-US ] = "Help";
 };
 
+String SV_HELPTEXT_SCREENSHOT
+{
+    Text [ en-US ] = "Take and annotate a screenshot";
+};
+
 String SV_HELPTEXT_FADEIN
 {
     Text [ en-US ] = "Show";

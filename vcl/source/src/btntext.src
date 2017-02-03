@@ -186,4 +186,9 @@ String SV_BUTTONTEXT_CONNECT
     Text [ en-US ] = "C~onnect" ;
 };
 
+String SV_BUTTONTEXT_SCREENSHOT
+{
+    Text [ en-US ] = "~Screenshot" ;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
