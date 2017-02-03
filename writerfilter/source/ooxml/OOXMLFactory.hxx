@@ -32,34 +32,33 @@
 namespace writerfilter {
 namespace ooxml {
 
-enum ResourceType_t {
-    RT_NoResource,
-    RT_Table,
-    RT_Stream,
-    RT_StreamProperties,
-    RT_List,
-    RT_Integer,
-    RT_Properties,
-    RT_Hex,
-    RT_String,
-    RT_Shape,
-    RT_Boolean,
-    RT_HexValue,
-    RT_Value,
-    RT_XNote,
-    RT_TextTableCell,
-    RT_TextTableRow,
-    RT_TextTable,
-    RT_PropertyTable,
-    RT_Math,
-    RT_Any,
-    RT_UniversalMeasure
+enum class ResourceType {
+    NoResource,
+    Table,
+    Stream,
+    List,
+    Integer,
+    Properties,
+    Hex,
+    String,
+    Shape,
+    Boolean,
+    HexValue,
+    Value,
+    XNote,
+    TextTableCell,
+    TextTableRow,
+    TextTable,
+    PropertyTable,
+    Math,
+    Any,
+    UniversalMeasure
 };
 
 struct AttributeInfo
 {
     Token_t m_nToken;
-    ResourceType_t m_nResource;
+    ResourceType m_nResource;
     Id m_nRef;
 };
 
@@ -79,7 +78,7 @@ public:
     virtual bool getListValue(Id nId, const OUString& rValue, sal_uInt32& rOutValue) = 0;
     virtual Id getResourceId(Id nDefine, sal_Int32 nToken) = 0;
     virtual const AttributeInfo* getAttributeInfoArray(Id nId) = 0;
-    virtual bool getElementId(Id nDefine, Id nId, ResourceType_t& rOutResource, Id& rOutElement) = 0;
+    virtual bool getElementId(Id nDefine, Id nId, ResourceType& rOutResource, Id& rOutElement) = 0;
 };
 
 class OOXMLFactory

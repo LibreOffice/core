@@ -151,7 +151,7 @@ def collectAttributeToResource(nsNode, defineNode):
                 refName = refNode.getAttribute("name")
                 for define in [i for i in getChildrenByName(getChildByName(nsNode, "grammar"), "define") if i.getAttribute("name") == refName]:
                     refDefine = idForDefine(nsNode, define)
-            ret_dict[attrToken] = "RT_%s, %s" % (resourceName, refDefine)
+            ret_dict[attrToken] = "ResourceType::%s, %s" % (resourceName, refDefine)
             ret_order.append(attrToken)
 
     return [ret_dict, ret_order]
@@ -181,7 +181,7 @@ def factoryAttributeToResourceMap(nsNode):
             print("        {")
             print("            const static AttributeInfo info[] = {")
             print(inner)
-            print("                { -1, RT_NoResource, 0 }")
+            print("                { -1, ResourceType::NoResource, 0 }")
             print("            };")
             print("            return info;")
             print("        }")
@@ -339,7 +339,7 @@ def factoryCreateElementMapInner(files, nsNode, defineNode, resourceNamespaceNod
             if len(resource):
                 break
         if len(resource):
-            ret[fastToken(elementNode)] = "        case %s: rOutResource = RT_%s; rOutElement = %s; break;" % (fastToken(elementNode), resource, idForRef(nsNode, getChildByName(elementNode, "ref")))
+            ret[fastToken(elementNode)] = "        case %s: rOutResource = ResourceType::%s; rOutElement = %s; break;" % (fastToken(elementNode), resource, idForRef(nsNode, getChildByName(elementNode, "ref")))
 
     return ret
 
@@ -357,7 +357,7 @@ def factoryCreateElementMapFromStart(files, nsNode):
 
 
 def factoryCreateElementMap(files, nsNode):
-    print("""bool OOXMLFactory_%s::getElementId(Id nDefine, Id nId, ResourceType_t& rOutResource, Id& rOutElement)
+    print("""bool OOXMLFactory_%s::getElementId(Id nDefine, Id nId, ResourceType& rOutResource, Id& rOutElement)
 {
     (void) rOutResource;
     (void) rOutElement;
