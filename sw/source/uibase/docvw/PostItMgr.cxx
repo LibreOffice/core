@@ -866,11 +866,13 @@ void SwPostItMgr::LayoutPostIts()
                 else
                 {
                     for(SwSidebarWin_iterator i = aVisiblePostItList.begin(); i != aVisiblePostItList.end() ; ++i)
-                                                            (*i)->SetPosAndSize();
+                    {
+                        (*i)->SetPosAndSize();
+                    }
 
-                                                    bool bOldScrollbar = pPage->bScrollbar;
-                                                    pPage->bScrollbar = false;
-                                                    bUpdate = (bOldScrollbar != pPage->bScrollbar) || bUpdate;
+                    bool bOldScrollbar = pPage->bScrollbar;
+                    pPage->bScrollbar = false;
+                    bUpdate = (bOldScrollbar != pPage->bScrollbar) || bUpdate;
                 }
                 aVisiblePostItList.clear();
             }
