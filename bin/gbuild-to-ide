@@ -233,7 +233,8 @@ class testVS2013Ide(IdeIntegrationGenerator):
 
                     project_path = os.path.join(module_directory, '%s.vcxproj' % target['target_name'])
 
-                    project_guid = self.write_project(project_path, target)
+                    project_guid = self.twrite_project(project_path, target)
+                    #self.twrite_project(project_path,target)
                     p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
                     self.write_filters(project_path + '.filters',target,self.gbuildparser.modules[module]['headers'])
                     projects.append(p)
@@ -391,6 +392,121 @@ class testVS2013Ide(IdeIntegrationGenerator):
         self.write_pretty_xml(proj_node, project_path)
 
         return project_guid
+
+    def twrite_project(self, project_path, target):
+        folder = os.path.dirname(project_path)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        project_guid = str(uuid.uuid4()).upper()
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        ET.register_namespace('', ns)
+        proj_node = ET.Element('{%s}Project' % ns, DefaultTargets='Build', ToolsVersion='4.0')
+
+        proj_confs_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns, Label='ProjectConfigurations')
+        platform='Win32'
+        for configuration in self.configurations:
+            proj_conf_node = ET.SubElement(proj_confs_node,
+                                           '{%s}ProjectConfiguration' % ns,
+                                           Include='%s|%s' % (configuration, platform))
+            conf_node = ET.SubElement(proj_conf_node, '{%s}Configuration' % ns)
+            conf_node.text = configuration
+            platform_node = ET.SubElement(proj_conf_node, '{%s}Platform' % ns)
+            platform_node.text = platform
+            #globals
+            globals_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='Globals')
+            proj_guid_node = ET.SubElement(globals_node, '{%s}ProjectGuid' % ns)
+            proj_guid_node.text = '{%s}' % project_guid
+            proj_root_namespace=ET.SubElement(globals_node, '{%s}RootNamespace' % ns)
+            proj_root_namespace.text = target['target_name']
+
+
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
+        for configuration in self.configurations:
+            property_group_node=ET.SubElement(proj_node,'{%s}PropertyGroup' % ns, Label="Configuration", Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration,platform))
+            conf_type=ET.SubElement(property_group_node,'{%s}ConfigurationType' % ns)
+            conf_type.text='Application'
+            use_dbg_lib=ET.SubElement(property_group_node,'{%s}UseDebugLibraries' % ns)
+            use_dbg_lib.text='true'
+            platform_toolset_node = ET.SubElement(property_group_node, '{%s}PlatformToolset' % ns)
+            platform_toolset_node.text = self.toolset
+            char_set_node=ET.SubElement(property_group_node,'{%s}CharacterSet' %ns)
+            char_set_node.text='MultiByte'
+            #on debug there ist a whole programoptimization
+
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.props')
+        ET.SubElement(proj_node,'{%s}ImportGroup' % ns,Label='ExtensionSettings')
+        for configuration in self.configurations:
+            prop_sheets=ET.SubElement(proj_node,'{%s}ImportGroup' % ns, Label='PropertySheets',Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration,platform))
+            ET.SubElement(prop_sheets,'{%s}Import' % ns,Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props",Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",Label="LocalAppDataPlatform")
+        ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
+        for configuration in self.configurations:
+            item_def_group=ET.SubElement(proj_node,'{%s}ItemDefinitionGroup' % ns,Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration,platform))
+            #compiler options
+            cl_compile=ET.SubElement(item_def_group,'{%s}ClCompile' % ns)
+            warn_lvl=ET.SubElement(cl_compile,'{%s}WarningLevel' % ns)
+            warn_lvl.text='Level 4'
+            opt_node=ET.SubElement(cl_compile,'{%s}Optimization' % ns)
+            opt_node.text='Disabled'
+            sdl_check=ET.SubElement(cl_compile,'{%s}SDLCheck' % ns)
+            sdl_check.text='true'
+            add_incl_dir=ET.SubElement(cl_compile,'{%s}AdditionalIncludeDirectories' % ns)
+            add_incl_dir.text=self.get_include_dirs(target)
+            add_incl_def_flag=ET.SubElement(cl_compile,'{%s}AdditionalOptions' % ns)
+            add_incl_def_flag.text=self.get_flags_defs(target)
+            dgb_info_form=ET.SubElement(cl_compile,'{%s}DebugInformationFormat' % ns)
+            dgb_info_form.text='ProgramDatabase'
+            warn_as_error=ET.SubElement(cl_compile,'{%s}TreatWarningAsError' % ns)
+            warn_as_error.text='true'
+            run_libs=ET.SubElement(cl_compile,'{%s}RuntimeLibrary' % ns)
+            run_libs.text='MultiThreadedDLL'
+
+            #linker options
+            #linker_node=ET.SubElement(item_def_group,'{%s}Link' % ns)
+
+            #gen_dbg_info=ET.SubElement(linker_node,'{%s}GenerateDebugInformation}' % ns)
+            #gen_dbg_info.text='true'
+            #add_lib_dirs=ET.SubElement(linker_node,'{%s}AdditionalLibraryDirectories}' % ns)
+            #libname=target['ILIBTARGET'].split('/')[-1]
+            #libpath='../' + target['ILIBTARGET'][:-(len(libname)+1)]
+            #add_lib_dirs.text= libpath
+            #add_dep=ET.SubElement(linker_node,'{%s}AdditionalDependencies}' % ns)
+            #add_dep.text= libname +';kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)'
+
+            #proj_ref_node=ET.SubElement(item_def_group,'{%s}ProjectReference' % ns)
+            #use_lib_dep=ET.SubElement(proj_ref_node,'{%s}UseLibraryDependencyInputs}' % ns)
+            #use_lib_dep.text='true'
+
+        #cxx files
+        cxx_node=ET.SubElement(proj_node,'{%s}ItemGroup' % ns)
+        for cxx_elem in target['CXXOBJECTS']:
+            cxx_cl_node=ET.SubElement(cxx_node,'{%s}ClCompile' % ns,Include='../../' + cxx_elem)
+        #miss headers
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
+        ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
+        self.write_pretty_xml(proj_node, project_path)
+        return project_guid
+
+    def get_flags_defs(self,target):
+        flags=' '.join(target['CXXFLAGS']).replace('-','/')
+        mdefs=''
+        for elem_defs,elem_value in target['DEFS'].items():
+            mdefs += '/D' + elem_defs
+            if elem_value != None:
+                mdefs += '=' + elem_value
+            mdefs += ' '
+        return flags + ' ' + mdefs + '-arch:SSE -DEXCEPTIONS_ON -EHs -Od -FS -Zi -DLIBO_INTERNAL_ONLY -WX'
+
+    def get_include_dirs(self,target):
+        includes=''
+        for elem in target['include']:
+            if elem[1] == ':':
+                tmp_inc=elem
+            else:
+                tmp_inc ='../../' + elem
+            tmp_inc +=';'
+            includes +=tmp_inc
+        return includes[:-1]
+
 
     def write_pretty_xml(self, node, file_path):
         xml_str = ET.tostring(node, encoding='unicode')
