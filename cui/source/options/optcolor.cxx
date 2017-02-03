@@ -50,8 +50,6 @@ namespace
 // list of default groups
 enum Group
 {
-    Group_Unknown = -1,
-
     Group_General,
     Group_Writer,
     Group_Html,

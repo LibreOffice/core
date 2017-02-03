@@ -45,7 +45,6 @@ enum class BkMode
     NONE         = 0,
     Transparent  = 1,
     OPAQUE       = 2,
-    LAST         = 2
 };
 
 /* xform stuff */

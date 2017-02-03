@@ -71,7 +71,6 @@ enum HISTORY_HINT {
     HSTRY_CHGFLYANCHOR,
     HSTRY_CHGFLYCHAIN,
     HSTRY_CHGCHARFMT,
-    HSTRY_END
 };
 
 class SwHistoryHint

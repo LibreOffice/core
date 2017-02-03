@@ -198,7 +198,7 @@ namespace
             /*137 SotClipboardFormatId::STARCHART_8_TEMPLATE*/           { MIMETYPE_OASIS_OPENDOCUMENT_CHART_TEMPLATE_ASCII, "Chart 8 Template", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*138 SotClipboardFormatId::STARMATH_8_TEMPLATE*/            { MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII, "Math 8 Template", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*139 SotClipboardFormatId::STARBASE_8*/             { MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII, "StarBase 8", &cppu::UnoType<Sequence<sal_Int8>>::get() },
-            /*140 SotClipboardFormatId::GDIMETAFILE*/                  { "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"", "High Contrast GDIMetaFile", &cppu::UnoType<Sequence<sal_Int8>>::get() },
+            /*140 SotClipboardFormatId::HC_GDIMETAFILE*/         { "application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\"", "High Contrast GDIMetaFile", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*141 SotClipboardFormatId::PNG*/                    { "image/png", "PNG Bitmap", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*142 SotClipboardFormatId::STARWRITERGLOB_8_TEMPLATE*/      { MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_TEMPLATE_ASCII, "Writer/Global 8 Template", &cppu::UnoType<Sequence<sal_Int8>>::get() },
             /*143 SotClipboardFormatId::MATHML*/   { "application/mathml+xml", "MathML", &::cppu::UnoType<const Sequence< sal_Int8 >>::get() },

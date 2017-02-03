@@ -49,7 +49,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_BGIMG_POSITION,
     XML_TOK_BGIMG_REPEAT,
     XML_TOK_BGIMG_FILTER,
-    XML_TOK_NGIMG_END=XML_TOK_UNKNOWN
 };
 
 static SvXMLTokenMapEntry aBGImgAttributesAttrTokenMap[] =

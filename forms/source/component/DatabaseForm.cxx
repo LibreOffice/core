@@ -81,21 +81,6 @@
 #include <ctype.h>
 #include <unordered_map>
 
-// compatibility: DatabaseCursorType is dead, but for compatibility reasons we still have to write it ...
-namespace com {
-namespace sun {
-namespace star {
-namespace data {
-
-enum DatabaseCursorType
-{
-    DatabaseCursorType_FORWARD = 0,
-    DatabaseCursorType_KEYSET = 2,
-    DatabaseCursorType_MAKE_FIXED_SIZE = SAL_MAX_ENUM
-};
-
-} } } }
-
 using namespace ::dbtools;
 using namespace ::comphelper;
 using namespace ::com::sun::star::uno;
@@ -110,7 +95,6 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::data;
 using namespace ::com::sun::star::util;
 
 
@@ -3802,7 +3786,7 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     _rxOutStream->writeShort((sal_Int16)eTranslated); // former DataSelectionType
 
     // very old versions expect a CursorType here
-    _rxOutStream->writeShort(DatabaseCursorType_KEYSET);
+    _rxOutStream->writeShort(2); // DatabaseCursorType_KEYSET
 
     _rxOutStream->writeBoolean(m_eNavigation != NavigationBarMode_NONE);
 

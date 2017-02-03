@@ -280,7 +280,6 @@ enum PrepareHint
                             // height of zero in order to avoid too much noise. At formatting
                             // it checks whether it fits and if necessary changes its page again.
     PREP_ERGOSUM,           // Needed because of movement in FootnoteFrames. Check QuoVadis/ErgoSum.
-    PREP_END                // END.
 };
 
 enum FrameControlType

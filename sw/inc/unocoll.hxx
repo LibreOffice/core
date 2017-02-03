@@ -187,8 +187,6 @@ enum class SwServiceType {
     StyleTable                      = 114,
     StyleCell                       = 115,
 
-    LAST = StyleCell,
-
     Invalid                         = USHRT_MAX
 };
 
