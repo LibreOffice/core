@@ -984,6 +984,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         Sequence< PropertyValue >   aProp;
         OUString                    aCommandURL;
         OUString                    aLabel;
+        OUString                    aTooltip;
         sal_uInt16                  nType( css::ui::ItemType::DEFAULT );
         sal_uInt32                  nStyle( 0 );
 
@@ -1035,6 +1036,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     }
                     else if ( aProp[i].Name == "Label" )
                         aProp[i].Value >>= aLabel;
+                    else if ( aProp[i].Name == "Tooltip" )
+                        aProp[i].Value >>= aTooltip;
                     else if ( aProp[i].Name == "Type" )
                         aProp[i].Value >>= nType;
                     else if ( aProp[i].Name == ITEM_DESCRIPTOR_VISIBLE )
@@ -1061,9 +1064,10 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     }
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
-                    OUString sTooltip = vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommandURL, m_xFrame);
-                    if (!sTooltip.isEmpty())
-                        m_pToolBar->SetQuickHelpText( nId, sTooltip );
+                    if ( !aTooltip.isEmpty() )
+                        m_pToolBar->SetQuickHelpText( nId, aTooltip );
+                    else
+                        m_pToolBar->SetQuickHelpText( nId, vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommandURL, m_xFrame) );
 
                     if ( !aLabel.isEmpty() )
                     {
