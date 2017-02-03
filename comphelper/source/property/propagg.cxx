@@ -623,7 +623,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         {
             OPropertyArrayAggregationHelper::PropertyOrigin ePropOrg = rPH.classifyProperty( *pNames );
             if ( OPropertyArrayAggregationHelper::PropertyOrigin::Unknown == ePropOrg )
-                throw WrappedTargetException( OUString(), static_cast< XMultiPropertySet* >( this ), makeAny( UnknownPropertyException( ) ) );
+                throw WrappedTargetException( OUString(), static_cast< XMultiPropertySet* >( this ), Any( UnknownPropertyException( ) ) );
                 // due to a flaw in the API design, this method is not allowed to throw an UnknownPropertyException
                 // so we wrap it into a WrappedTargetException
 

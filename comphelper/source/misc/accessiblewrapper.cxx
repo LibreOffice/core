@@ -446,9 +446,9 @@ namespace comphelper
             m_xChildMapper->handleChildNotification( _rEvent );
 
             if ( aTranslatedEvent.NewValue == m_xInner )
-                aTranslatedEvent.NewValue = makeAny(aTranslatedEvent.Source);
+                aTranslatedEvent.NewValue <<= aTranslatedEvent.Source;
             if ( aTranslatedEvent.OldValue == m_xInner )
-                aTranslatedEvent.OldValue = makeAny(aTranslatedEvent.Source);
+                aTranslatedEvent.OldValue <<= aTranslatedEvent.Source;
         }
 
         notifyTranslatedEvent( aTranslatedEvent );

@@ -172,7 +172,7 @@ template< typename T > css::uno::Any parseSingleValue(
     if (!parseValue(text, &val)) {
         throw css::uno::RuntimeException("invalid value");
     }
-    return css::uno::makeAny(val);
+    return css::uno::Any(val);
 }
 
 template< typename T > css::uno::Any parseListValue(
@@ -203,7 +203,7 @@ template< typename T > css::uno::Any parseListValue(
             t.length -= i + sep.length;
         }
     }
-    return css::uno::makeAny(comphelper::containerToSequence(seq));
+    return css::uno::Any(comphelper::containerToSequence(seq));
 }
 
 css::uno::Any parseValue(
@@ -445,7 +445,7 @@ template< typename T > css::uno::Any ValueParser::convertItems() {
         assert(ok);
         (void) ok; // avoid warnings
     }
-    return css::uno::makeAny(seq);
+    return css::uno::Any(seq);
 }
 
 }

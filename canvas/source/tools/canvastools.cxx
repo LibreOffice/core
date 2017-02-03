@@ -1118,7 +1118,7 @@ namespace canvas
 
                     o_rxParams.realloc( 2 );
 
-                    o_rxParams[ 0 ] = uno::makeAny( xServiceInfo->getImplementationName() );
+                    o_rxParams[ 0 ] <<= xServiceInfo->getImplementationName();
                     o_rxParams[ 1 ] = xPropSet->getPropertyValue( "DeviceHandle" );
                 }
                 catch( const uno::Exception& )

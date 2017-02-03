@@ -348,13 +348,13 @@ namespace oglcanvas
 
     uno::Any SpriteDeviceHelper::isAccelerated() const
     {
-        return css::uno::makeAny(false);
+        return css::uno::Any(false);
     }
 
     uno::Any SpriteDeviceHelper::getDeviceHandle() const
     {
         const SystemChildWindow* pChildWindow = mxContext->getChildWindow();
-        return uno::makeAny( reinterpret_cast< sal_Int64 >(pChildWindow) );
+        return uno::Any( reinterpret_cast< sal_Int64 >(pChildWindow) );
     }
 
     uno::Any SpriteDeviceHelper::getSurfaceHandle() const

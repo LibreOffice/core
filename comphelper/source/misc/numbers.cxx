@@ -75,7 +75,7 @@ css::uno::Any getNumberFormatDecimals(const css::uno::Reference<css::util::XNumb
             SAL_WARN("comphelper", "getNumberFormatDecimals : invalid key! (may be created with another formatter ?)");
         }
     }
-    return css::uno::makeAny((sal_Int16)0);
+    return css::uno::Any((sal_Int16)0);
 }
 
 

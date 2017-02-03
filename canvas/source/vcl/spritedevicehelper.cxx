@@ -95,7 +95,7 @@ namespace vclcanvas
         if( !mpBackBuffer )
             return uno::Any();
 
-        return uno::makeAny(
+        return uno::Any(
             reinterpret_cast< sal_Int64 >(&mpBackBuffer->getOutDev()) );
     }
 
