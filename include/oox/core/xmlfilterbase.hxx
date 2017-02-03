@@ -233,6 +233,10 @@ public:
 
     bool isMSO2007Document() const;
 
+    /// Signal that an MSO 2007-created SmartArt was found, need to warn the
+    /// user about it.
+    void setMissingExtDrawing();
+
     void checkDocumentProperties(
             const css::uno::Reference<css::document::XDocumentProperties>& xDocProps);
 
@@ -256,6 +260,8 @@ private:
     sal_Int32 mnRelId;
     sal_Int32 mnMaxDocId;
     bool mbMSO2007;
+protected:
+    bool mbMissingExtDrawing;
 };
 
 } // namespace core
