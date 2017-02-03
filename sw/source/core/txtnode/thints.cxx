@@ -1059,19 +1059,18 @@ SwTextAttr* MakeTextAttr(
 
     case RES_TXTATR_FLYCNT:
         {
-            // erst hier wird das Frame-Format kopiert (mit Inhalt) !!
+            // finally, copy the frame format (with content)
             pNew = new SwTextFlyCnt( static_cast<SwFormatFlyCnt&>(rNew), nStt );
-            // Kopie von einem Text-Attribut
             if ( static_cast<const SwFormatFlyCnt &>(rAttr).GetTextFlyCnt() )
             {
-                // then the format must be copied
+                // if it has an existing attr then the format must be copied
                 static_cast<SwTextFlyCnt *>(pNew)->CopyFlyFormat( &rDoc );
             }
         }
         break;
     case RES_TXTATR_FTN:
         pNew = new SwTextFootnote( static_cast<SwFormatFootnote&>(rNew), nStt );
-        // ggfs. SeqNo kopieren
+        // copy note's SeqNo
         if( static_cast<SwFormatFootnote&>(rAttr).GetTextFootnote() )
             static_cast<SwTextFootnote*>(pNew)->SetSeqNo( static_cast<SwFormatFootnote&>(rAttr).GetTextFootnote()->GetSeqRefNo() );
         break;
@@ -1111,21 +1110,19 @@ SwTextAttr* MakeTextAttr( SwDoc & rDoc, const SfxItemSet& rSet,
     return pNew;
 }
 
-// loesche das Text-Attribut (muss beim Pool abgemeldet werden!)
+// delete the text attribute and unregister its item at the pool
 void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
 {
     if( pAttr )
     {
-        // einige Sachen muessen vorm Loeschen der "Format-Attribute" erfolgen
+        // some things need to be done before deleting the formatting attribute
         SwDoc* pDoc = GetDoc();
         switch( pAttr->Which() )
         {
         case RES_TXTATR_FLYCNT:
             {
-                // siehe auch die Anmerkung "Loeschen von Formaten
-                // zeichengebundener Frames" in fesh.cxx, SwFEShell::DelFormat()
                 SwFrameFormat* pFormat = pAttr->GetFlyCnt().GetFrameFormat();
-                if( pFormat )      // vom Undo auf 0 gesetzt ??
+                if( pFormat )      // set to 0 by Undo?
                     pDoc->getIDocumentLayoutAccess().DelLayoutFormat( pFormat );
             }
             break;
@@ -1145,19 +1142,18 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
             if( !pDoc->IsInDtor() )
             {
                 SwTextField *const pTextField(static_txtattr_cast<SwTextField*>(pAttr));
-                // Wenn wir ein HiddenParaField sind, dann muessen wir
-                // ggf. fuer eine Neuberechnung des Visible-Flags sorgen.
                 const SwField* pField = pAttr->GetFormatField().GetField();
 
-                //JP 06-08-95: DDE-Felder bilden eine Ausnahme
+                //JP 06-08-95: DDE-fields are an exception
                 OSL_ENSURE( RES_DDEFLD == pField->GetTyp()->Which() ||
                         this == pTextField->GetpTextNode(),
-                        "Wo steht denn dieses Feld?" );
+                        "field points to wrong node" );
 
-                // bestimmte Felder mussen am Doc das Calculations-Flag updaten
+                // certain fields must update the SwDoc's calculation flags
                 switch( pField->GetTyp()->Which() )
                 {
                 case RES_HIDDENPARAFLD:
+                // HiddenParaField must trigger recalculation of visible flag
                     SetCalcHiddenParaField();
                     SAL_FALLTHROUGH;
                 case RES_DBSETNUMBERFLD:
@@ -1269,12 +1265,11 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 SwFrameFormat* pFormat = pAttr->GetFlyCnt().GetFrameFormat();
                 if( !(SetAttrMode::NOTXTATRCHR & nInsMode) )
                 {
-                    // Wir muessen zuerst einfuegen, da in SetAnchor()
-                    // dem FlyFrame GetStart() uebermittelt wird.
-                    //JP 11.05.98: falls das Anker-Attribut schon richtig
-                    // gesetzt ist, dann korrigiere dieses nach dem Einfuegen
-                    // des Zeichens. Sonst muesste das immer  ausserhalb
-                    // erfolgen (Fehleranfaellig !)
+                    // Need to insert char first, because SetAnchor() reads
+                    // GetStart().
+                    //JP 11.05.98: if the anchor is already set correctly,
+                    // fix it after inserting the char, so that clients don't
+                    // have to worry about it.
                     const SwFormatAnchor* pAnchor = nullptr;
                     pFormat->GetItemState( RES_ANCHOR, false,
                         reinterpret_cast<const SfxPoolItem**>(&pAnchor) );
@@ -1304,12 +1299,12 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 }
                 pFly->SetAnchor( this );
 
-                // Format-Pointer kann sich im SetAnchor geaendert haben!
-                // (Kopieren in andere Docs!)
+                // format pointer could have changed in SetAnchor,
+                // when copying to other docs!
                 pFormat = pAttr->GetFlyCnt().GetFrameFormat();
                 SwDoc *pDoc = pFormat->GetDoc();
 
-                // OD 26.06.2003 #108784# - allow drawing objects in header/footer.
+                // OD 26.06.2003 - allow drawing objects in header/footer.
                 // But don't allow control objects in header/footer
                 if( RES_DRAWFRMFMT == pFormat->Which() &&
                     pDoc->IsInHeaderFooter( pFormat->GetAnchor().GetContentAnchor()->nNode ) )
@@ -1318,20 +1313,19 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     pFormat->CallSwClientNotify(sw::CheckDrawFrameFormatLayerHint(&bCheckControlLayer));
                     if( bCheckControlLayer )
                     {
-                        // das soll nicht meoglich sein; hier verhindern
-                        // Der Dtor des TextHints loescht nicht das Zeichen.
-                        // Wenn ein CH_TXTATR_.. vorliegt, dann muss man
-                        // dieses explizit loeschen
+                        // This should not be allowed, prevent it here.
+                        // The dtor of the SwTextAttr does not delete the
+                        // char, so delete it explicitly here.
                         if( SetAttrMode::NOTXTATRCHR & nInsMode )
                         {
-                            // loesche das Zeichen aus dem String !
+                            // delete the char from the string
                             OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
                                         m_Text[pAttr->GetStart()] ||
                                       CH_TXTATR_INWORD ==
                                         m_Text[pAttr->GetStart()]),
                                     "where is my attribute character?" );
                             m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, "");
-                            // Indizies Updaten
+                            // Update SwIndexes
                             SwIndex aTmpIdx( this, pAttr->GetStart() );
                             Update( aTmpIdx, 1, true );
                         }
@@ -1346,28 +1340,26 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
 
         case RES_TXTATR_FTN :
             {
-                // Fussnoten, man kommt an alles irgendwie heran.
-                // ContentNode erzeugen und in die Inserts-Section stellen
+                // Footnotes: create text node and put it into Inserts-section
                 SwDoc *pDoc = GetDoc();
                 SwNodes &rNodes = pDoc->GetNodes();
 
-                // FussNote in nicht Content-/Redline-Bereich einfuegen ??
+                // check that footnote is inserted into body or redline section
                 if( StartOfSectionIndex() < rNodes.GetEndOfAutotext().GetIndex() )
                 {
-                    // das soll nicht meoglich sein; hier verhindern
-                    // Der Dtor des TextHints loescht nicht das Zeichen.
-                    // Wenn ein CH_TXTATR_.. vorliegt, dann muss man
-                    // dieses explizit loeschen
+                    // This should not be allowed, prevent it here.
+                    // The dtor of the SwTextAttr does not delete the
+                    // char, so delete it explicitly here.
                     if( SetAttrMode::NOTXTATRCHR & nInsMode )
                     {
-                        // loesche das Zeichen aus dem String !
+                        // delete the char from the string
                         OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
                                       m_Text[pAttr->GetStart()] ||
                                   CH_TXTATR_INWORD ==
                                       m_Text[pAttr->GetStart()]),
                                 "where is my attribute character?" );
                         m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, "");
-                        // Indizies Updaten
+                        // Update SwIndexes
                         SwIndex aTmpIdx( this, pAttr->GetStart() );
                         Update( aTmpIdx, 1, true );
                     }
@@ -1375,7 +1367,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     return false;
                 }
 
-                // wird eine neue Fussnote eingefuegt ??
+                // is a new footnote being inserted?
                 bool bNewFootnote = nullptr == static_cast<SwTextFootnote*>(pAttr)->GetStartNode();
                 if( bNewFootnote )
                 {
@@ -1387,7 +1379,8 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 }
                 else if ( !GetpSwpHints() || !GetpSwpHints()->IsInSplitNode() )
                 {
-                    // loesche alle Frames der Section, auf die der StartNode zeigt
+                    // existing footnote: delete all layout frames of its
+                    // footnote section
                     sal_uLong nSttIdx =
                         static_cast<SwTextFootnote*>(pAttr)->GetStartNode()->GetIndex();
                     sal_uLong nEndIdx = rNodes[ nSttIdx++ ]->EndOfSectionIndex();
@@ -1401,9 +1394,9 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
 
                 if( !(SetAttrMode::NOTXTATRCHR & nInsMode) )
                 {
-                    // Wir muessen zuerst einfuegen, da sonst gleiche Indizes
-                    // entstehen koennen und das Attribut im _SortArr_ am
-                    // Dokument nicht eingetrage wird.
+                    // must insert first, to prevent identical indexes
+                    // that could later prevent insertion into SwDoc's
+                    // footnote array
                     SwIndex aNdIdx( this, pAttr->GetStart() );
                     const OUString c(GetCharOfTextAttr(*pAttr));
                     OUString const ins( InsertText(c, aNdIdx, nInsertFlags) );
@@ -1415,31 +1408,29 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     nInsMode |= SetAttrMode::NOTXTATRCHR;
                 }
 
-                // Wir tragen uns am FootnoteIdx-Array des Docs ein ...
+                // insert into SwDoc's footnote index array
                 SwTextFootnote* pTextFootnote = nullptr;
                 if( !bNewFootnote )
                 {
-                    // eine alte Footnote wird umgehaengt (z.B. SplitNode)
+                    // moving an existing footnote (e.g. SplitNode)
                     for( size_t n = 0; n < pDoc->GetFootnoteIdxs().size(); ++n )
                         if( pAttr == pDoc->GetFootnoteIdxs()[n] )
                         {
-                            // neuen Index zuweisen, dafuer aus dem SortArray
-                            // loeschen und neu eintragen
+                            // assign new index by removing and re-inserting
                             pTextFootnote = pDoc->GetFootnoteIdxs()[n];
                             pDoc->GetFootnoteIdxs().erase( pDoc->GetFootnoteIdxs().begin() + n );
                             break;
                         }
-                        // wenn ueber Undo der StartNode gesetzt wurde, kann
-                        // der Index noch gar nicht in der Verwaltung stehen !!
+                        // if the Undo set the StartNode, the Index isn't
+                        // in the doc's array yet!
                 }
                 if( !pTextFootnote )
                     pTextFootnote = static_cast<SwTextFootnote*>(pAttr);
 
-                // fuers Update der Nummern und zum Sortieren
-                // muss der Node gesetzt sein.
+                // to update the numbers and for sorting, the Node must be set
                 static_cast<SwTextFootnote*>(pAttr)->ChgTextNode( this );
 
-                // FussNote im Redline-Bereich NICHT ins FootnoteArray einfuegen!
+                // do not insert footnote in redline section into footnote array
                 if( StartOfSectionIndex() > rNodes.GetEndOfRedlines().GetIndex() )
                 {
                     const bool bSuccess = pDoc->GetFootnoteIdxs().insert(pTextFootnote).second;
@@ -1454,8 +1445,7 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
 
             case RES_TXTATR_FIELD:
                 {
-                    // fuer HiddenParaFields Benachrichtigungsmechanismus
-                    // anwerfen
+                    // trigger notification for HiddenParaFields
                     if( RES_HIDDENPARAFLD == pAttr->GetFormatField().GetField()->GetTyp()->Which() )
                     {
                         bHiddenPara = true;
@@ -1464,10 +1454,9 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                 break;
 
         }
-        // Fuer SwTextHints ohne Endindex werden CH_TXTATR_..
-        // eingefuegt, aStart muss danach um einen zurueckgesetzt werden.
-        // Wenn wir im SwTextNode::Copy stehen, so wurde das Zeichen bereits
-        // mitkopiert. In solchem Fall ist SETATTR_NOTXTATRCHR angegeben worden.
+        // CH_TXTATR_* are inserted for SwTextHints without EndIndex
+        // If the caller is SwTextNode::Copy, the char has already been copied,
+        // and SETATTR_NOTXTATRCHR prevents inserting it again here.
         if( !(SetAttrMode::NOTXTATRCHR & nInsMode) )
         {
             SwIndex aIdx( this, pAttr->GetStart() );
@@ -1580,7 +1569,6 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
         }
     }
 
-    // 4263: AttrInsert durch TextInsert => kein Adjust
     const bool bRet = bInsertHint
                       && m_pSwpHints->TryInsertHint( pAttr, *this, nMode );
 
@@ -1644,7 +1632,7 @@ void SwTextNode::DeleteAttribute( SwTextAttr * const pAttr )
 
     if ( pAttr->HasDummyChar() )
     {
-        // Unbedingt Copy-konstruieren!
+        // copy index!
         const SwIndex aIdx( this, pAttr->GetStart() );
         // erase the CH_TXTATR, which will also delete pAttr
         EraseText( aIdx, 1 );
@@ -1718,7 +1706,7 @@ void SwTextNode::DeleteAttributes(
 
             if ( pTextHt->HasDummyChar() )
             {
-                // Unbedingt Copy-konstruieren!
+                // copy index!
                 const SwIndex aIdx( this, nStart );
                 // erase the CH_TXTATR, which will also delete pTextHt
                 EraseText( aIdx, 1 );
@@ -1731,16 +1719,15 @@ void SwTextNode::DeleteAttributes(
             }
             else if( *pEndIdx == nEnd )
             {
-                // den MsgHint jetzt fuettern, weil gleich sind
-                // Start und End weg.
-                // Das CalcVisibleFlag bei HiddenParaFields entfaellt,
-                // da dies das Feld im Dtor selbst erledigt.
+                // Create MsgHint before Start and End are gone.
+                // For HiddenParaFields it's not necessary to call
+                // SetCalcHiddenParaField because the dtor does that.
                 SwUpdateAttr aHint(
                     nStart,
                     *pEndIdx,
                     nWhich);
 
-                m_pSwpHints->DeleteAtPos( nPos );    // gefunden, loeschen,
+                m_pSwpHints->DeleteAtPos( nPos );
                 SwTextAttr::Destroy( pTextHt, GetDoc()->GetAttrPool() );
                 NotifyClients( nullptr, &aHint );
             }
@@ -1836,8 +1823,8 @@ bool SwTextNode::TryCharSetExpandToNum(const SfxItemSet& aCharSet)
     return bRet;
 }
 
-// setze diese Attribute am TextNode. Wird der gesamte Bereich umspannt,
-// dann setze sie nur im AutoAttrSet (SwContentNode:: SetAttr)
+// Set these attributes on SwTextNode.  If they apply to the entire paragraph
+// text, set them in the SwTextNode's item set (SwContentNode::SetAttr).
 bool SwTextNode::SetAttr(
     const SfxItemSet& rSet,
     const sal_Int32 nStt,
@@ -1847,16 +1834,16 @@ bool SwTextNode::SetAttr(
     if( !rSet.Count() )
         return false;
 
-    // teil die Sets auf (fuer Selektion in Nodes)
+    // split sets (for selection in nodes)
     const SfxItemSet* pSet = &rSet;
     SfxItemSet aTextSet( *rSet.GetPool(), RES_TXTATR_BEGIN, RES_TXTATR_END-1 );
 
-    // gesamter Bereich
+    // entire paragraph
     if ( !nStt && (nEnd == m_Text.getLength()) &&
          !(nMode & SetAttrMode::NOFORMATATTR ) )
     {
-        // sind am Node schon Zeichenvorlagen gesetzt, muss man diese Attribute
-        // (rSet) immer als TextAttribute setzen, damit sie angezeigt werden.
+        // if the node already has CharFormat hints, the new attributes must
+        // be set as hints too to override those.
         bool bHasCharFormats = false;
         if ( HasHints() )
         {

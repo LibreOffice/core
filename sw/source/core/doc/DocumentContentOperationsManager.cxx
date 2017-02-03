@@ -200,7 +200,7 @@ namespace
         rChgPos.nNode = nNdOff + rCpyStt.nNode.GetIndex();
         if( !nNdOff )
         {
-            // dann nur den Content anpassen
+            // just adapt the content index
             if( nContentPos > rOrigStt.nContent.GetIndex() )
                 nContentPos -= rOrigStt.nContent.GetIndex();
             else
