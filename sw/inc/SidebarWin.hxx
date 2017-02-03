@@ -82,6 +82,8 @@ class SwSidebarWin : public vcl::Window
 
         inline Point GetAnchorPos() { return mAnchorRect.Pos(); }
         inline const SwRect& GetAnchorRect() { return mAnchorRect; }
+        inline bool IsAnchorRectChanged() { return mbAnchorRectChanged; }
+        inline void ResetAnchorRectChanged() { mbAnchorRectChanged = false; }
         inline const std::vector<basegfx::B2DRange>& GetAnnotationTextRanges() { return maAnnotationTextRanges; }
         SwEditWin& EditWin();
 
@@ -242,6 +244,7 @@ class SwSidebarWin : public vcl::Window
         Rectangle       mPosSize;
         SwRect          mAnchorRect;
         long            mPageBorder;
+        bool            mbAnchorRectChanged;
 
         std::vector<basegfx::B2DRange> maAnnotationTextRanges;
 

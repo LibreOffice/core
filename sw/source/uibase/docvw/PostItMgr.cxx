@@ -903,6 +903,11 @@ void SwPostItMgr::LayoutPostIts()
                     {
                         if ((*i)->bPendingLayout)
                             lcl_CommentNotification(mpView, CommentNotificationType::Add, *i, 0);
+                        else if ((*i)->pPostIt->IsAnchorRectChanged())
+                        {
+                            lcl_CommentNotification(mpView, CommentNotificationType::Modify, *i, 0);
+                            (*i)->pPostIt->ResetAnchorRectChanged();
+                        }
                     }
 
                     (*i)->bPendingLayout = false;
