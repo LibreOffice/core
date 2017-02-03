@@ -283,7 +283,7 @@ namespace osl
             will NOT block; <code>false</code> if it would block or if an error occurred.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
-            the specified amout of time.
+            the specified amount of time.
         */
         inline bool SAL_CALL isRecvReady(const TimeValue *pTimeout = NULL) const;
 
@@ -295,7 +295,7 @@ namespace osl
             will NOT block; <code>false</code> if it would block or if an error occurred.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
-            the specified amout of time.
+            the specified amount of time.
         */
         inline bool SAL_CALL isSendReady(const TimeValue *pTimeout = NULL) const;
 
@@ -310,7 +310,7 @@ namespace osl
             an error occurred.
 
             @param pTimeout if 0, the operation will block without a timeout. Otherwise
-            the specified amout of time.
+            the specified amount of time.
         */
         inline bool SAL_CALL isExceptionPending(const TimeValue *pTimeout = NULL) const;
 
