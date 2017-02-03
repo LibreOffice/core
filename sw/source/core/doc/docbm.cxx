@@ -90,9 +90,11 @@ namespace
         }
         auto *const pCRFirst (dynamic_cast<::sw::mark::CrossRefBookmark const*>(rpFirst.get()));
         auto *const pCRSecond(dynamic_cast<::sw::mark::CrossRefBookmark const*>(rpSecond.get()));
-        return ((pCRFirst == nullptr) == (pCRSecond == nullptr))
-                ? false // equal
-                : (pCRFirst != nullptr); // cross-ref sorts *before*
+        if ((pCRFirst == nullptr) == (pCRSecond == nullptr))
+        {
+            return false; // equal
+        }
+        return pCRFirst != nullptr; // cross-ref sorts *before*
     }
 
     bool lcl_MarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
