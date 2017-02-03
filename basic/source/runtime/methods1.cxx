@@ -2694,10 +2694,10 @@ RTLFUNC(SYD)
     // retrieve non-optional params
 
     Sequence< Any > aParams( 4 );
-    aParams[ 0 ] = makeAny( rPar.Get(1)->GetDouble() );
-    aParams[ 1 ] = makeAny( rPar.Get(2)->GetDouble() );
-    aParams[ 2 ] = makeAny( rPar.Get(3)->GetDouble() );
-    aParams[ 3 ] = makeAny( rPar.Get(4)->GetDouble() );
+    aParams[ 0 ] <<= rPar.Get(1)->GetDouble();
+    aParams[ 1 ] <<= rPar.Get(2)->GetDouble();
+    aParams[ 2 ] <<= rPar.Get(3)->GetDouble();
+    aParams[ 3 ] <<= rPar.Get(4)->GetDouble();
 
     CallFunctionAccessFunction( aParams, "SYD", rPar.Get( 0 ) );
 }
@@ -2718,9 +2718,9 @@ RTLFUNC(SLN)
     // retrieve non-optional params
 
     Sequence< Any > aParams( 3 );
-    aParams[ 0 ] = makeAny( rPar.Get(1)->GetDouble() );
-    aParams[ 1 ] = makeAny( rPar.Get(2)->GetDouble() );
-    aParams[ 2 ] = makeAny( rPar.Get(3)->GetDouble() );
+    aParams[ 0 ] <<= rPar.Get(1)->GetDouble();
+    aParams[ 1 ] <<= rPar.Get(2)->GetDouble();
+    aParams[ 2 ] <<= rPar.Get(3)->GetDouble();
 
     CallFunctionAccessFunction( aParams, "SLN", rPar.Get( 0 ) );
 }
@@ -2876,7 +2876,7 @@ RTLFUNC(NPV)
     }
 
     Sequence< Any > aParams( 2 );
-    aParams[ 0 ] = makeAny( rPar.Get(1)->GetDouble() );
+    aParams[ 0 ] <<= rPar.Get(1)->GetDouble();
     Any aValues = sbxToUnoValue( rPar.Get(2),
                 cppu::UnoType<Sequence<double>>::get() );
 
@@ -2960,8 +2960,8 @@ RTLFUNC(MIRR)
     aValues <<= sValues;
 
     aParams[ 0 ] = aValues;
-    aParams[ 1 ] = makeAny( rPar.Get(2)->GetDouble() );
-    aParams[ 2 ] = makeAny( rPar.Get(3)->GetDouble() );
+    aParams[ 1 ] <<= rPar.Get(2)->GetDouble();
+    aParams[ 2 ] <<= rPar.Get(3)->GetDouble();
 
     CallFunctionAccessFunction( aParams, "MIRR", rPar.Get( 0 ) );
 }

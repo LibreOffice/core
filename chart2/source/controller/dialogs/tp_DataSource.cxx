@@ -913,7 +913,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                     // "$Sheet1.$A$1"
                                     aRange = xNewSeq->getSourceRangeRepresentation();
                                     Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                    xProp->setPropertyValue( "Role" , uno::makeAny( lcl_aLabelRole ));
+                                    xProp->setPropertyValue( "Role" , uno::Any( lcl_aLabelRole ));
                                     xLabeledSeq->setLabel( xNewSeq );
                                 }
                             }
@@ -945,7 +945,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                 aRange = xNewSeq->getSourceRangeRepresentation();
 
                                 Reference< beans::XPropertySet > xProp( xNewSeq, uno::UNO_QUERY_THROW );
-                                xProp->setPropertyValue( "Role" , uno::makeAny( aSelectedRole ));
+                                xProp->setPropertyValue( "Role" , uno::Any( aSelectedRole ));
                                 if( !xLabeledSeq.is())
                                 {
                                     if( aSelectedRole == aSequenceNameForLabel )

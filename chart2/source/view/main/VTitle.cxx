@@ -96,7 +96,7 @@ void VTitle::changePosition( const awt::Point& rPos )
         ::basegfx::B2DHomMatrix aM;
         aM.rotate( -m_fRotationAngleDegree*F_PI/180.0 );//#i78696#->#i80521#
         aM.translate( m_nXPos, m_nYPos);
-        xShapeProp->setPropertyValue( "Transformation", uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
+        xShapeProp->setPropertyValue( "Transformation", uno::Any( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
     catch( const uno::Exception& e )
     {

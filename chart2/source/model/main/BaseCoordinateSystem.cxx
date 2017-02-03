@@ -148,9 +148,9 @@ BaseCoordinateSystem::BaseCoordinateSystem(
 
     m_aOrigin.realloc( m_nDimensionCount );
     for( sal_Int32 i = 0; i < m_nDimensionCount; ++i )
-        m_aOrigin[ i ] = uno::makeAny( double( 0.0 ) );
+        m_aOrigin[ i ] = uno::Any( double( 0.0 ) );
 
-    setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, uno::makeAny( false ));
+    setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, uno::Any( false ));
 }
 
 // explicit

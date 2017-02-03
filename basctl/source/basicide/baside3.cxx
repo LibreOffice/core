@@ -1280,7 +1280,7 @@ void DialogWindow::StoreData()
                     Reference< XComponentContext > xContext(
                         comphelper::getProcessComponentContext() );
                     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
-                    xLib->replaceByName( GetName(), makeAny( xISP ) );
+                    xLib->replaceByName( GetName(), Any( xISP ) );
                 }
             }
         }

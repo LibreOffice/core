@@ -149,13 +149,13 @@ ScatterChartType::ScatterChartType(
 {
     if( eCurveStyle != chart2::CurveStyle_LINES )
         setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_CURVE_STYLE,
-                                          uno::makeAny( eCurveStyle ));
+                                          uno::Any( eCurveStyle ));
     if( nResolution != 20 )
         setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_CURVE_RESOLUTION,
-                                          uno::makeAny( nResolution ));
+                                          uno::Any( nResolution ));
     if( nOrder != 3 )
         setFastPropertyValue_NoBroadcast( PROP_SCATTERCHARTTYPE_SPLINE_ORDER,
-                                          uno::makeAny( nOrder ));
+                                          uno::Any( nOrder ));
 }
 
 ScatterChartType::ScatterChartType( const ScatterChartType & rOther ) :

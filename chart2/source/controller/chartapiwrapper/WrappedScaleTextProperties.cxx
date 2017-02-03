@@ -70,7 +70,7 @@ void WrappedScaleTextProperty::setPropertyValue( const Any& rOuterValue, const R
             if( bNewValue )
             {
                 awt::Size aRefSize( m_spChart2ModelContact->GetPageSize() );
-                xInnerPropertySet->setPropertyValue( aRefSizeName, uno::makeAny( aRefSize ) );
+                xInnerPropertySet->setPropertyValue( aRefSizeName, uno::Any( aRefSize ) );
             }
             else
                 xInnerPropertySet->setPropertyValue( aRefSizeName, Any() );

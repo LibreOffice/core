@@ -350,7 +350,7 @@ Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
 {
     osl_atomic_increment(&m_refCount);
     setFastPropertyValue_NoBroadcast(
-        ::chart::LinePropertiesHelper::PROP_LINE_COLOR, uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
+        ::chart::LinePropertiesHelper::PROP_LINE_COLOR, uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
 
     if( m_xGrid.is())
         ModifyListenerHelper::addListener( m_xGrid, m_xModifyEventForwarder );

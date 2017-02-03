@@ -189,7 +189,7 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
         if( !bGeomAmbiguous )
         {
             setFastPropertyValue_NoBroadcast(
-                PROP_BAR_TEMPLATE_GEOMETRY3D, uno::makeAny( aCommonGeom ));
+                PROP_BAR_TEMPLATE_GEOMETRY3D, uno::Any( aCommonGeom ));
         }
     }
 
@@ -250,7 +250,7 @@ void SAL_CALL BarChartTypeTemplate::applyStyle(
     ::sal_Int32 nSeriesCount )
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
     if( getDimension() == 3 )
     {
         try
@@ -273,7 +273,7 @@ void SAL_CALL BarChartTypeTemplate::resetStyles(
     ChartTypeTemplate::resetStyles( xDiagram );
     ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-    uno::Any aLineStyleAny( uno::makeAny( drawing::LineStyle_NONE ));
+    uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
          aIt != aSeriesVec.end(); ++aIt )
     {

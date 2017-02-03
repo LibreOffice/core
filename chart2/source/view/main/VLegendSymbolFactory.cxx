@@ -72,7 +72,7 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
         // use legend entry height as upper limit for line width
         sal_Int32 nMaxLineWidthForLegend = aMaxSymbolExtent.Height;
         if( nLineWidth>nMaxLineWidthForLegend )
-            *pLineWidthAny = uno::makeAny( nMaxLineWidthForLegend );
+            *pLineWidthAny <<= nMaxLineWidthForLegend;
     }
 }
 

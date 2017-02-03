@@ -450,10 +450,10 @@ void RegressionCurveHelper::removeEquations(
                         uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties() ) ;
                         if( xEqProp.is())
                         {
-                            xEqProp->setPropertyValue( "ShowEquation", uno::makeAny( false ));
-                            xEqProp->setPropertyValue( "XName", uno::makeAny( OUString("x") ));
-                            xEqProp->setPropertyValue( "YName", uno::makeAny( OUString("f(x) ") ));
-                            xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( false ));
+                            xEqProp->setPropertyValue( "ShowEquation", uno::Any( false ));
+                            xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
+                            xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x) ") ));
+                            xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
                         }
                     }
                 }

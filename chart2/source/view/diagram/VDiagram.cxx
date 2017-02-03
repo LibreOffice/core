@@ -194,7 +194,7 @@ void VDiagram::createShapes_2d()
                 {
                     //CID for selection handling
                     OUString aWallCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_DIAGRAM_WALL, OUString() ) );//@todo read CID from model
-                    xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::makeAny( aWallCID ) );
+                    xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME, uno::Any( aWallCID ) );
                 }
             }
             catch( const uno::Exception& e )
@@ -440,7 +440,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
             E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
 
             m_xAspectRatio3D->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
-                , uno::makeAny(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
+                , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aResult )) );
         }
         catch( const uno::Exception& e )
         {
@@ -568,7 +568,7 @@ void VDiagram::createShapes_3d()
         {
             //ignore distance and focal length from file format and model completely
             //use vrp only to indicate the distance of the camera and thus influence the perspective
-            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_DISTANCE, uno::makeAny(
+            xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_DISTANCE, uno::Any(
                                         static_cast<sal_Int32>(ThreeDHelper::getCameraDistance( xSourceProp ))));
             xDestProp->setPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE,
                                         xSourceProp->getPropertyValue( UNO_NAME_3D_SCENE_PERSPECTIVE));
@@ -602,7 +602,7 @@ void VDiagram::createShapes_3d()
             //#i98497# 3D charts are rendered with wrong size
             E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
             xDestProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX,
-                    uno::makeAny( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
+                    uno::Any( BaseGFXHelper::B3DHomMatrixToHomogenMatrix( aEffectiveTranformation ) ) );
         }
     }
     catch( const uno::Exception & ex )
@@ -659,7 +659,7 @@ void VDiagram::createShapes_3d()
                 aM.scale( fXScale, fYScale, fZScale );
                 E3DModifySceneSnapRectUpdater aUpdater(lcl_getE3dScene( m_xOuterGroupShape ));
                 xShapeProp->setPropertyValue( UNO_NAME_3D_TRANSFORM_MATRIX
-                    , uno::makeAny(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
+                    , uno::Any(BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aM)) );
             }
             catch( const uno::Exception& e )
             {

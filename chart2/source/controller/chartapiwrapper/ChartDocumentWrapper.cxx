@@ -479,7 +479,7 @@ void WrappedHasLegendProperty::setPropertyValue( const Any& rOuterValue, const R
             Any aAOld = xLegendProp->getPropertyValue("Show");
             aAOld >>= bOldValue;
             if( bOldValue != bNewValue )
-                xLegendProp->setPropertyValue("Show", uno::makeAny( bNewValue ));
+                xLegendProp->setPropertyValue("Show", uno::Any( bNewValue ));
         }
     }
     catch (const uno::Exception& ex)
@@ -1277,10 +1277,8 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
                         m_xChartView = xViewInit;
 
                         Sequence< Any > aArguments(2);
-                        Reference<frame::XModel> xModel(this);
-                        aArguments[0]=uno::makeAny(xModel);
-                        bool bRefreshAddIn = true;
-                        aArguments[1]=uno::makeAny(bRefreshAddIn);
+                        aArguments[0] <<= Reference<frame::XModel>(this);
+                        aArguments[1] <<= true; // bRefreshAddIn
                         xViewInit->initialize(aArguments);
                     }
                     catch (const uno::Exception& ex)
@@ -1446,8 +1444,8 @@ const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedPropert
     aWrappedProperties.push_back( new WrappedAdditionalShapesProperty( *this ) );
     aWrappedProperties.push_back( new WrappedRefreshAddInAllowedProperty( *this ) );
     aWrappedProperties.push_back( new WrappedIgnoreProperty("NullDate",Any() ) ); // i99104
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableComplexChartTypes", uno::makeAny(true) ) );
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableDataTableDialog", uno::makeAny(true) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableComplexChartTypes", uno::Any(true) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("EnableDataTableDialog", uno::Any(true) ) );
 
     return aWrappedProperties;
 }

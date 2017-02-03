@@ -160,11 +160,11 @@ namespace
             try
             {
                 xSceneProperties->setPropertyValue( "D3DSceneLightColor" + aIndex,
-                                                    uno::makeAny( rLightSource.nDiffuseColor ));
+                                                    uno::Any( rLightSource.nDiffuseColor ));
                 xSceneProperties->setPropertyValue( "D3DSceneLightDirection" + aIndex,
-                                                    uno::makeAny( rLightSource.aDirection ));
+                                                    uno::Any( rLightSource.aDirection ));
                 xSceneProperties->setPropertyValue( "D3DSceneLightOn" + aIndex,
-                                                    uno::makeAny( rLightSource.bIsEnabled ));
+                                                    uno::Any( rLightSource.bIsEnabled ));
             }
             catch( const uno::Exception & ex )
             {
@@ -199,7 +199,7 @@ namespace
         try
         {
             xSceneProperties->setPropertyValue("D3DSceneAmbientColor",
-                                               uno::makeAny( rColor.GetColor()));
+                                               uno::Any( rColor.GetColor()));
         }
         catch( const uno::Exception & ex )
         {

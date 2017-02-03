@@ -1195,9 +1195,9 @@ bool DataBrowser::SaveModified()
             double fValue = 0.0;
             bChangeValid = false;
             if( isDateTimeString( aText, fValue ) )
-                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( fValue ) );
+                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::Any( fValue ) );
             if(!bChangeValid)
-                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( aText ) );
+                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::Any( aText ) );
         }
         break;
         case DataBrowserModel::TEXT:
@@ -1379,7 +1379,7 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit, voi
                     Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
                     if( xIndexReplace.is())
                         xIndexReplace->replaceByIndex(
-                            0, uno::makeAny( OUString( pEdit->GetText())));
+                            0, uno::Any( OUString( pEdit->GetText())));
                 }
             }
         }

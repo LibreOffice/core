@@ -156,7 +156,7 @@ GL3DBarChartTypeTemplate::getChartTypeForNewSeries( const uno::Sequence<uno::Ref
             new GL3DBarChartType(GetComponentContext()));
         bool bVal = false;
         getFastPropertyValue(PROP_GL3DCHARTTYPE_ROUNDED_EDGE) >>= bVal;
-        chart->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::makeAny(bVal));
+        chart->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::Any(bVal));
         xResult = chart.get();
     }
     catch (const uno::Exception & ex)

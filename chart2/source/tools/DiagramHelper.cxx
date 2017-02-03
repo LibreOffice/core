@@ -177,7 +177,7 @@ void DiagramHelper::setVertical(
                     else if( bVertical && nDimIndex == 0 )
                         fNewAngleDegree = 90.0;
 
-                    xTitleProps->setPropertyValue("TextRotation", uno::makeAny(fNewAngleDegree));
+                    xTitleProps->setPropertyValue("TextRotation", uno::Any(fNewAngleDegree));
                 }
             }
         }
@@ -248,7 +248,7 @@ void DiagramHelper::setStackMode(
         else if( eStackMode == StackMode_Z_STACKED )
             eNewDirection = StackingDirection_Z_STACKING;
 
-        uno::Any aNewDirection( uno::makeAny(eNewDirection) );
+        uno::Any aNewDirection( eNewDirection );
 
         bool bPercent = false;
         if( eStackMode == StackMode_Y_STACKED_PERCENT )
@@ -593,7 +593,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
     {
         try
         {
-            xProp->setPropertyValue( "AttachedAxisIndex", uno::makeAny( nNewAxisIndex ) );
+            xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
             bChanged = true;
         }
         catch( const uno::Exception & ex )
@@ -915,7 +915,7 @@ Reference< data::XLabeledDataSequence >
                     {
                         try
                         {
-                            xProp->setPropertyValue( "Role", uno::makeAny( OUString("categories") ) );
+                            xProp->setPropertyValue( "Role", uno::Any( OUString("categories") ) );
                         }
                         catch( const uno::Exception & ex )
                         {
@@ -1021,7 +1021,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                     Any& rAny = rCat[0];
                     if( !(rAny>>=fTest) )
                     {
-                        rAny = uno::makeAny(fNan);
+                        rAny <<= fNan;
                     }
                 }
             }
@@ -1058,7 +1058,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                     Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );
                     if( aKeySeq.getLength() )
                     {
-                        xAxisProps->setPropertyValue(CHART_UNONAME_NUMFMT, uno::makeAny(aKeySeq[0]));
+                        xAxisProps->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any(aKeySeq[0]));
                     }
                 }
             }
@@ -1557,7 +1557,7 @@ void DiagramHelper::setGeometry3D(
              aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
     {
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(
-            *aIt, "Geometry3D", uno::makeAny( nNewGeometry ));
+            *aIt, "Geometry3D", uno::Any( nNewGeometry ));
     }
 }
 
@@ -1653,8 +1653,8 @@ bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >
     if( (aNewPos.Secondary + aNewSize.Secondary) > 1.0 )
         aNewPos.Secondary = 1.0 - aNewSize.Secondary;
 
-    xDiaProps->setPropertyValue( "RelativePosition", uno::makeAny(aNewPos) );
-    xDiaProps->setPropertyValue( "RelativeSize", uno::makeAny(aNewSize) );
+    xDiaProps->setPropertyValue( "RelativePosition", uno::Any(aNewPos) );
+    xDiaProps->setPropertyValue( "RelativeSize", uno::Any(aNewSize) );
 
     bChanged = (aOldPos.Anchor!=aNewPos.Anchor) ||
         (aOldPos.Primary!=aNewPos.Primary) ||

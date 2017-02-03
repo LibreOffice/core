@@ -317,7 +317,7 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
     // straight ono the scene).  These defaults have been acquired from the old
     // chart implementation.
     setFastPropertyValue_NoBroadcast(
-        SceneProperties::PROP_SCENE_CAMERA_GEOMETRY, uno::makeAny(
+        SceneProperties::PROP_SCENE_CAMERA_GEOMETRY, uno::Any(
             ThreeDHelper::getDefaultCameraGeometry()));
 }
 
@@ -680,7 +680,7 @@ void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) co
     {
         sal_Int32 nPerspective = ::basegfx::fround( ThreeDHelper::CameraDistanceToPerspective(
             ThreeDHelper::getCameraDistance( const_cast< Diagram* >( this ) ) ) );
-        rValue = uno::makeAny(nPerspective);
+        rValue = uno::Any(nPerspective);
     }
     else if( PROP_DIAGRAM_ROTATION_HORIZONTAL == nHandle
         || PROP_DIAGRAM_ROTATION_VERTICAL == nHandle )
@@ -692,7 +692,7 @@ void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) co
             nAngleDegree = nHorizontal;
         else
             nAngleDegree = nVertical;
-        rValue = uno::makeAny(nAngleDegree);
+        rValue = uno::Any(nAngleDegree);
     }
     else
         ::property::OPropertySet::getFastPropertyValue( rValue,nHandle );

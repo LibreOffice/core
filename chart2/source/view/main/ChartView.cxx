@@ -519,7 +519,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
                         uno::Any aAny = xPropertySet->getPropertyValue( "3DRelativeHeight" );
                         aAny >>= n3DRelativeHeightOldValue;
                         if (n3DRelativeHeightOldValue != n3DRelativeHeight)
-                            xPropertySet->setPropertyValue( "3DRelativeHeight", uno::makeAny(n3DRelativeHeight) );
+                            xPropertySet->setPropertyValue( "3DRelativeHeight", uno::Any(n3DRelativeHeight) );
                     }
                     catch (const uno::Exception&) { }
                 }
@@ -1290,13 +1290,13 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
 
     //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
     aFilterData[4].Name = "ScaleXNumerator";
-    aFilterData[4].Value = uno::makeAny( m_nScaleXNumerator );
+    aFilterData[4].Value <<= m_nScaleXNumerator;
     aFilterData[5].Name = "ScaleXDenominator";
-    aFilterData[5].Value = uno::makeAny( m_nScaleXDenominator );
+    aFilterData[5].Value <<= m_nScaleXDenominator;
     aFilterData[6].Name = "ScaleYNumerator";
-    aFilterData[6].Value = uno::makeAny( m_nScaleYNumerator );
+    aFilterData[6].Value <<= m_nScaleYNumerator;
     aFilterData[7].Name = "ScaleYDenominator";
-    aFilterData[7].Value = uno::makeAny( m_nScaleYDenominator );
+    aFilterData[7].Value <<= m_nScaleYDenominator;
 
 
     aProps[2].Name = "FilterData";
@@ -2060,7 +2060,7 @@ sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
         }
 
         if (nFormat >= 0 && nOldFormat != nFormat)
-            xSeriesOrPointProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::makeAny(nFormat));
+            xSeriesOrPointProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any(nFormat));
     }
 
     if(nFormat<0)
@@ -2501,7 +2501,7 @@ void formatPage(
         PropertyMapper::getValueMap( aNameValueMap, PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xModelPage );
 
         OUString aCID( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) );
-        aNameValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( aCID ) ) ); //CID OUString
+        aNameValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::Any( aCID ) ) ); //CID OUString
 
         tNameSequence aNames;
         tAnySequence aValues;
@@ -2967,7 +2967,7 @@ Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
     Any aRet;
     if( rPropertyName == "Resolution" )
     {
-        aRet = uno::makeAny( m_aPageResolution );
+        aRet <<= m_aPageResolution;
     }
     else
         throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard", nullptr );

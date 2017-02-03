@@ -39,14 +39,14 @@ Reference< chart2::XLegend > LegendHelper::showLegend( ChartModel& rModel
     uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
     if( xProp.is())
     {
-        xProp->setPropertyValue( "Show", uno::makeAny(true) );
+        xProp->setPropertyValue( "Show", uno::Any(true) );
 
         chart2::RelativePosition aRelativePosition;
         if( !(xProp->getPropertyValue( "RelativePosition") >>=  aRelativePosition) )
         {
             chart2::LegendPosition ePos = chart2::LegendPosition_LINE_END;
             if( !(xProp->getPropertyValue( "AnchorPosition") >>= ePos ) )
-                xProp->setPropertyValue( "AnchorPosition", uno::makeAny( ePos ));
+                xProp->setPropertyValue( "AnchorPosition", uno::Any( ePos ));
 
             css::chart::ChartLegendExpansion eExpansion =
                     ( ePos == chart2::LegendPosition_LINE_END ||
@@ -54,7 +54,7 @@ Reference< chart2::XLegend > LegendHelper::showLegend( ChartModel& rModel
                     ? css::chart::ChartLegendExpansion_HIGH
                     : css::chart::ChartLegendExpansion_WIDE;
             if( !(xProp->getPropertyValue( "Expansion") >>= eExpansion ) )
-                xProp->setPropertyValue( "Expansion", uno::makeAny( eExpansion ));
+                xProp->setPropertyValue( "Expansion", uno::Any( eExpansion ));
 
             xProp->setPropertyValue( "RelativePosition", uno::Any());
         }
@@ -69,7 +69,7 @@ void LegendHelper::hideLegend( ChartModel& rModel )
     uno::Reference< beans::XPropertySet > xProp( xLegend, uno::UNO_QUERY );
     if( xProp.is())
     {
-        xProp->setPropertyValue( "Show", uno::makeAny(false) );
+        xProp->setPropertyValue( "Show", uno::Any(false) );
     }
 }
 

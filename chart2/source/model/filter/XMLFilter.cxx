@@ -115,7 +115,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
              ! ( xProp->getPropertyValue( "MediaType") >>= aMediaType ) ||
              ( aMediaType.isEmpty() ))
         {
-            xProp->setPropertyValue( "MediaType", uno::makeAny( _sMediaType ));
+            xProp->setPropertyValue( "MediaType", uno::Any( _sMediaType ));
         }
     }
     catch (const uno::Exception& ex)
@@ -352,10 +352,10 @@ sal_Int32 XMLFilter::impl_Import(
         // needed for relative URLs, but in clipboard copy/paste there may be none
         SAL_INFO_IF(aBaseUri.isEmpty(), "chart2", "chart::XMLFilter: no base URL");
         if( !aBaseUri.isEmpty() )
-            xImportInfo->setPropertyValue( "BaseURI", uno::makeAny( aBaseUri ) );
+            xImportInfo->setPropertyValue( "BaseURI", uno::Any( aBaseUri ) );
 
         if( !aHierarchName.isEmpty() )
-            xImportInfo->setPropertyValue( "StreamRelPath", uno::makeAny( aHierarchName ) );
+            xImportInfo->setPropertyValue( "StreamRelPath", uno::Any( aHierarchName ) );
 
         // import meta information
         if( bOasis )
@@ -418,7 +418,7 @@ sal_Int32 XMLFilter::impl_ImportStream(
         return 0;
 
     if( xImportInfo.is() )
-        xImportInfo->setPropertyValue( "StreamName", uno::makeAny( rStreamName ) );
+        xImportInfo->setPropertyValue( "StreamName", uno::Any( rStreamName ) );
 
     if( xStorage.is() &&
         xStorage->isStreamElement( rStreamName ) )
@@ -595,9 +595,9 @@ sal_Int32 XMLFilter::impl_Export(
         SvtSaveOptions aSaveOpt;
         OUString sUsePrettyPrinting( "UsePrettyPrinting" );
         bool bUsePrettyPrinting( aSaveOpt.IsPrettyPrinting() );
-        xInfoSet->setPropertyValue( sUsePrettyPrinting, uno::makeAny( bUsePrettyPrinting ) );
+        xInfoSet->setPropertyValue( sUsePrettyPrinting, uno::Any( bUsePrettyPrinting ) );
         if( ! bOasis )
-            xInfoSet->setPropertyValue( "ExportTableNumberList", uno::makeAny( true ));
+            xInfoSet->setPropertyValue( "ExportTableNumberList", uno::Any( true ));
 
         sal_Int32 nArgs = 2;
         if( xGraphicObjectResolver.is())
@@ -685,9 +685,9 @@ sal_Int32 XMLFilter::impl_ExportStream(
         uno::Reference< beans::XPropertySet > xStreamProp( xOutputStream, uno::UNO_QUERY );
         if(xStreamProp.is()) try
         {
-            xStreamProp->setPropertyValue( "MediaType", uno::makeAny( OUString("text/xml") ) );
-            xStreamProp->setPropertyValue( "Compressed", uno::makeAny( true ) );//@todo?
-            xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
+            xStreamProp->setPropertyValue( "MediaType", uno::Any( OUString("text/xml") ) );
+            xStreamProp->setPropertyValue( "Compressed", uno::Any( true ) );//@todo?
+            xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption", uno::Any( true ) );
         }
         catch (const uno::Exception& rEx)
         {
@@ -703,7 +703,7 @@ sal_Int32 XMLFilter::impl_ExportStream(
                 rFilterProperties.getConstArray()[0] >>= xInfoSet;
             OSL_ENSURE( xInfoSet.is(), "missing infoset for export" );
             if( xInfoSet.is() )
-                xInfoSet->setPropertyValue( "StreamName", uno::makeAny( rStreamName ) );
+                xInfoSet->setPropertyValue( "StreamName", uno::Any( rStreamName ) );
         }
 
         Reference< XExporter > xExporter( xServiceFactory->createInstanceWithArguments(

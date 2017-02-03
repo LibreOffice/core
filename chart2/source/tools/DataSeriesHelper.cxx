@@ -155,7 +155,7 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
                 aLabelAtSeries.ShowNumberInPercent = false;
                 aLabelAtSeries.ShowCategoryName = false;
             }
-            xSeriesProperties->setPropertyValue(CHART_UNONAME_LABEL, uno::makeAny(aLabelAtSeries));
+            xSeriesProperties->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabelAtSeries));
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
             if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
             {
@@ -172,7 +172,7 @@ void lcl_insertOrDeleteDataLabelsToSeriesAndAllPoints( const Reference< chart2::
                             aLabel.ShowNumberInPercent = false;
                             aLabel.ShowCategoryName = false;
                         }
-                        xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::makeAny(aLabel));
+                        xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
                     }
                 }
             }
@@ -390,7 +390,7 @@ void setStackModeAtSeries(
     if( eStackMode == StackMode_AMBIGUOUS )
         return;
 
-    const uno::Any aPropValue = uno::makeAny(
+    const uno::Any aPropValue(
         ( (eStackMode == StackMode_Y_STACKED) ||
           (eStackMode == StackMode_Y_STACKED_PERCENT) )
         ? chart2::StackingDirection_Y_STACKING
@@ -554,7 +554,7 @@ void switchSymbolsOnOrOff( const Reference< beans::XPropertySet > & xSeriesPrope
             aSymbProp.Style = chart2::SymbolStyle_STANDARD;
             aSymbProp.StandardSymbol = nSeriesIndex;
         }
-        xSeriesProperties->setPropertyValue( "Symbol", uno::makeAny( aSymbProp ));
+        xSeriesProperties->setPropertyValue( "Symbol", uno::Any( aSymbProp ));
     }
     //todo: check attributed data points
 }
@@ -571,11 +571,11 @@ void switchLinesOnOrOff( const Reference< beans::XPropertySet > & xSeriesPropert
         if( (xSeriesProperties->getPropertyValue( "LineStyle") >>= eLineStyle ) &&
             eLineStyle == drawing::LineStyle_NONE )
         {
-            xSeriesProperties->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ) );
+            xSeriesProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) );
         }
     }
     else
-        xSeriesProperties->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ) );
+        xSeriesProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ) );
 }
 
 void makeLinesThickOrThin( const Reference< beans::XPropertySet > & xSeriesProperties, bool bThick )
@@ -589,7 +589,7 @@ void makeLinesThickOrThin( const Reference< beans::XPropertySet > & xSeriesPrope
         nOldValue != nNewValue )
     {
         if( !(bThick && nOldValue>0))
-            xSeriesProperties->setPropertyValue( "LineWidth", uno::makeAny( nNewValue ) );
+            xSeriesProperties->setPropertyValue( "LineWidth", uno::Any( nNewValue ) );
     }
 }
 
@@ -863,7 +863,7 @@ void insertDataLabelToPoint( const Reference< beans::XPropertySet >& xPointProp 
             DataPointLabel aLabel;
             xPointProp->getPropertyValue(CHART_UNONAME_LABEL) >>= aLabel;
             aLabel.ShowNumber = true;
-            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::makeAny(aLabel));
+            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
         }
     }
     catch(const uno::Exception &e)
@@ -883,7 +883,7 @@ void deleteDataLabelsFromPoint( const Reference< beans::XPropertySet >& xPointPr
             aLabel.ShowNumber = false;
             aLabel.ShowNumberInPercent = false;
             aLabel.ShowCategoryName = false;
-            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::makeAny(aLabel));
+            xPointProp->setPropertyValue(CHART_UNONAME_LABEL, uno::Any(aLabel));
         }
     }
     catch(const uno::Exception &e)

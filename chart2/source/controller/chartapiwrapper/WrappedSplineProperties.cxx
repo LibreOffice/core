@@ -116,7 +116,7 @@ public:
                         css::uno::Reference< css::beans::XPropertySet > xChartTypePropertySet( aChartTypes[nN], css::uno::UNO_QUERY );
                         if( xChartTypePropertySet.is() )
                         {
-                            xChartTypePropertySet->setPropertyValue(m_aOwnInnerName,this->convertOuterToInnerValue(uno::makeAny(aNewValue)));
+                            xChartTypePropertySet->setPropertyValue(m_aOwnInnerName,this->convertOuterToInnerValue(uno::Any(aNewValue)));
                         }
                     }
                     catch( uno::Exception & ex )
@@ -207,15 +207,15 @@ void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty
     rList.push_back(
         new WrappedSplineProperty<sal_Int32>(
             CHART_UNONAME_SPLINE_ORDER, CHART_UNONAME_SPLINE_ORDER,
-            uno::makeAny(sal_Int32(3)), spChart2ModelContact));
+            uno::Any(sal_Int32(3)), spChart2ModelContact));
     rList.push_back(
         new WrappedSplineProperty<sal_Int32>(
             CHART_UNONAME_SPLINE_RESOLUTION, CHART_UNONAME_CURVE_RESOLUTION,
-            uno::makeAny(sal_Int32(20)), spChart2ModelContact));
+            uno::Any(sal_Int32(20)), spChart2ModelContact));
 }
 
 WrappedSplineTypeProperty::WrappedSplineTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
-    : WrappedSplineProperty<sal_Int32>(CHART_UNONAME_SPLINE_TYPE, CHART_UNONAME_CURVE_STYLE, uno::makeAny(sal_Int32(0)), spChart2ModelContact )
+    : WrappedSplineProperty<sal_Int32>(CHART_UNONAME_SPLINE_TYPE, CHART_UNONAME_CURVE_STYLE, uno::Any(sal_Int32(0)), spChart2ModelContact )
 {
 }
 
@@ -249,7 +249,7 @@ Any WrappedSplineTypeProperty::convertInnerToOuterValue( const Any& rInnerValue 
             nOuterValue = 0;
     }
 
-    return uno::makeAny(nOuterValue);
+    return uno::Any(nOuterValue);
 }
 Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
@@ -283,7 +283,7 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
             aInnerValue = chart2::CurveStyle_LINES;
     }
 
-    return uno::makeAny(aInnerValue);
+    return uno::Any(aInnerValue);
 }
 
 } //namespace wrapper

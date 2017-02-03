@@ -134,7 +134,7 @@ Sequence<beans::PropertyValue> SAL_CALL Renderable::getRenderer (
         aSize.Width  = aPageSize.Width();
         aSize.Height = aPageSize.Height();
         aVals = ::comphelper::InitPropertySequence({
-            { "PageSize", makeAny(aSize) }
+            { "PageSize", Any(aSize) }
         });
     }
 

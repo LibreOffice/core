@@ -110,7 +110,7 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
                 if( ! (GetPropertySet()->getPropertyValue( "Show" ) >>= bWasShown) ||
                     ( bWasShown != bShow ))
                 {
-                    GetPropertySet()->setPropertyValue( "Show" , uno::makeAny( bShow ));
+                    GetPropertySet()->setPropertyValue( "Show" , uno::Any( bShow ));
                     bChanged = true;
                 }
             }
@@ -145,8 +145,8 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
                     if( ! ( GetPropertySet()->getPropertyValue( "AnchorPosition" ) >>= eOldPos ) ||
                         ( eOldPos != eNewPos ))
                     {
-                        GetPropertySet()->setPropertyValue( "AnchorPosition" , uno::makeAny( eNewPos ));
-                        GetPropertySet()->setPropertyValue( "Expansion" , uno::makeAny( eExpansion ));
+                        GetPropertySet()->setPropertyValue( "AnchorPosition" , uno::Any( eNewPos ));
+                        GetPropertySet()->setPropertyValue( "Expansion" , uno::Any( eExpansion ));
                         GetPropertySet()->setPropertyValue( "RelativePosition" , uno::Any());
                         bChanged = true;
                     }

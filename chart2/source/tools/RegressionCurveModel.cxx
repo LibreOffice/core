@@ -185,7 +185,7 @@ RegressionCurveModel::RegressionCurveModel( tCurveType eCurveType ) :
     // set 0 line width (default) hard, so that it is always written to XML,
     // because the old implementation uses different defaults
     setFastPropertyValue_NoBroadcast(
-        LinePropertiesHelper::PROP_LINE_WIDTH, uno::makeAny( sal_Int32( 0 )));
+        LinePropertiesHelper::PROP_LINE_WIDTH, uno::Any( sal_Int32( 0 )));
     ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
 }
 

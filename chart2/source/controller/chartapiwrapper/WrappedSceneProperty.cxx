@@ -66,7 +66,7 @@ void WrappedD3DTransformMatrixProperty::setPropertyValue( const Any& rOuterValue
 
             aHM = BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aNewMatrix);
 
-            WrappedProperty::setPropertyValue( uno::makeAny(aHM), xInnerPropertySet );
+            WrappedProperty::setPropertyValue( uno::Any(aHM), xInnerPropertySet );
             return;
         }
     }
@@ -92,7 +92,7 @@ Any WrappedD3DTransformMatrixProperty::getPropertyValue( const Reference< beans:
 
             aHM = BaseGFXHelper::B3DHomMatrixToHomogenMatrix(aNewMatrix);
 
-            return uno::makeAny(aHM);
+            return uno::Any(aHM);
         }
     }
 

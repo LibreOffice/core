@@ -288,9 +288,9 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
             {
                 try
                 {
-                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_STYLE , uno::makeAny(rParameter.eCurveStyle) );
-                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_RESOLUTION , uno::makeAny(rParameter.nCurveResolution) );
-                    xTemplateProps->setPropertyValue( CHART_UNONAME_SPLINE_ORDER , uno::makeAny(rParameter.nSplineOrder) );
+                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_STYLE , uno::Any(rParameter.eCurveStyle) );
+                    xTemplateProps->setPropertyValue( CHART_UNONAME_CURVE_RESOLUTION , uno::Any(rParameter.nCurveResolution) );
+                    xTemplateProps->setPropertyValue( CHART_UNONAME_SPLINE_ORDER , uno::Any(rParameter.nSplineOrder) );
                 }
                 catch( uno::Exception & ex )
                 {
@@ -299,7 +299,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
                 }
                 try
                 {
-                    xTemplateProps->setPropertyValue( "Geometry3D" , uno::makeAny(rParameter.nGeometry3D) );
+                    xTemplateProps->setPropertyValue( "Geometry3D" , uno::Any(rParameter.nGeometry3D) );
                 }
                 catch( uno::Exception & ex )
                 {
@@ -309,7 +309,7 @@ uno::Reference< XChartTypeTemplate > ChartTypeDialogController::getCurrentTempla
 
                 try
                 {
-                    xTemplateProps->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::makeAny(rParameter.mbRoundedEdge));
+                    xTemplateProps->setPropertyValue(CHART_UNONAME_ROUNDED_EDGE, uno::Any(rParameter.mbRoundedEdge));
                 }
                 catch ( const uno::Exception& )
                 {
@@ -354,7 +354,7 @@ void ChartTypeDialogController::commitToModel( const ChartTypeParameter& rParame
         uno::Reference<beans::XPropertySet> xDiaProp(xDiagram, uno::UNO_QUERY);
         if (xDiaProp.is())
         {
-            xDiaProp->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::makeAny(rParameter.bSortByXValues));
+            xDiaProp->setPropertyValue(CHART_UNONAME_SORT_BY_XVALUES, uno::Any(rParameter.bSortByXValues));
         }
     }
 }
@@ -1229,7 +1229,7 @@ void CombiColumnLineChartDialogController::setTemplateProperties( const uno::Ref
     if( xTemplateProps.is() )
     {
         sal_Int32 nNumLines = static_cast< sal_Int32 >( m_pMF_NumberOfLines->GetValue());
-        xTemplateProps->setPropertyValue( "NumberOfLines" , uno::makeAny(nNumLines) );
+        xTemplateProps->setPropertyValue( "NumberOfLines" , uno::Any(nNumLines) );
     }
 }
 

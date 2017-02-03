@@ -137,7 +137,7 @@ void setDataLabelPlacement(const css::uno::Reference<css::frame::XModel>& xModel
         }
     }
 
-    xSeries->setPropertyValue("LabelPlacement", css::uno::makeAny(nApi));
+    xSeries->setPropertyValue("LabelPlacement", css::uno::Any(nApi));
 }
 
 bool isTrendlineVisible(const css::uno::Reference<css::frame::XModel>& xModel,
@@ -231,7 +231,7 @@ void setAttachedAxisType(const css::uno::Reference<css::frame::XModel>&
         return;
 
     sal_Int32 nIndex = bPrimary ? 0 : 1;
-    xSeries->setPropertyValue("AttachedAxisIndex", css::uno::makeAny(nIndex));
+    xSeries->setPropertyValue("AttachedAxisIndex", css::uno::Any(nIndex));
 }
 
 css::uno::Reference<css::chart2::XChartType> getChartType(

@@ -105,7 +105,7 @@ uno::Any NetChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPoi
     Symbol* pSymbolProperties = rSeries.getSymbolProperties( nPointIndex );
     if( pSymbolProperties )
     {
-        aRet = uno::makeAny(*pSymbolProperties);
+        aRet <<= *pSymbolProperties;
     }
 
     return aRet;

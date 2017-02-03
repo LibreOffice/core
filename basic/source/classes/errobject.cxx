@@ -78,7 +78,7 @@ ErrObject::setNumber( ::sal_Int32 _number )
 {
     GetSbData()->pInst->setErrorVB( _number, OUString() );
     OUString _description = GetSbData()->pInst->GetErrorMsg();
-    setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
+    setData( uno::Any( _number ), uno::Any(), uno::Any( _description ), uno::Any(), uno::Any() );
 }
 
 ::sal_Int32 SAL_CALL
@@ -192,7 +192,7 @@ SbxErrObject::getUnoErrObject()
 SbxVariableRef const &
 SbxErrObject::getErrObject()
 {
-    static SbxVariableRef pGlobErr = new SbxErrObject( "Err", uno::makeAny( uno::Reference< vba::XErrObject >( new ErrObject() ) ) );
+    static SbxVariableRef pGlobErr = new SbxErrObject( "Err", uno::Any( uno::Reference< vba::XErrObject >( new ErrObject() ) ) );
     return pGlobErr;
 }
 
@@ -200,7 +200,7 @@ void SbxErrObject::setNumberAndDescription( ::sal_Int32 _number, const OUString&
 {
     if( m_pErrObject != nullptr )
     {
-        m_pErrObject->setData( uno::makeAny( _number ), uno::Any(), uno::makeAny( _description ), uno::Any(), uno::Any() );
+        m_pErrObject->setData( uno::Any( _number ), uno::Any(), uno::Any( _description ), uno::Any(), uno::Any() );
     }
 }
 

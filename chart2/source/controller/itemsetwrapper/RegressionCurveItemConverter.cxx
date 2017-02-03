@@ -49,7 +49,7 @@ bool lclConvertToPropertySet(const SfxItemSet& rItemSet, sal_uInt16 nWhichId, co
         bool aSuccess = xProperties->getPropertyValue( aPropertyID ) >>= aOldValue;
         if (!aSuccess || aOldValue != aValue)
         {
-            xProperties->setPropertyValue( aPropertyID , uno::makeAny( aValue ));
+            xProperties->setPropertyValue( aPropertyID , uno::Any( aValue ));
             return true;
         }
     }

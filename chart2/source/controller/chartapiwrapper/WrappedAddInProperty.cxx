@@ -49,7 +49,7 @@ void WrappedAddInProperty::setPropertyValue( const Any& rOuterValue, const Refer
 
 Any WrappedAddInProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    return uno::makeAny( m_rChartDocumentWrapper.getAddIn() );
+    return uno::Any( m_rChartDocumentWrapper.getAddIn() );
 }
 
 WrappedBaseDiagramProperty::WrappedBaseDiagramProperty( ChartDocumentWrapper& rChartDocumentWrapper )
@@ -72,7 +72,7 @@ void WrappedBaseDiagramProperty::setPropertyValue( const Any& rOuterValue, const
 
 Any WrappedBaseDiagramProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    return uno::makeAny( m_rChartDocumentWrapper.getBaseDiagram() );
+    return uno::Any( m_rChartDocumentWrapper.getBaseDiagram() );
 }
 
 WrappedAdditionalShapesProperty::WrappedAdditionalShapesProperty( ChartDocumentWrapper& rChartDocumentWrapper )
@@ -91,7 +91,7 @@ void WrappedAdditionalShapesProperty::setPropertyValue( const Any& /*rOuterValue
 
 Any WrappedAdditionalShapesProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
 {
-    return uno::makeAny( m_rChartDocumentWrapper.getAdditionalShapes() );
+    return uno::Any( m_rChartDocumentWrapper.getAdditionalShapes() );
 }
 
 WrappedRefreshAddInAllowedProperty::WrappedRefreshAddInAllowedProperty( ChartDocumentWrapper& rChartDocumentWrapper )
@@ -114,7 +114,7 @@ void WrappedRefreshAddInAllowedProperty::setPropertyValue( const Any& rOuterValu
 
 Any WrappedRefreshAddInAllowedProperty::getPropertyValue( const Reference< beans::XPropertySet >& /* xInnerPropertySet */ ) const
 {
-    return uno::makeAny( m_rChartDocumentWrapper.getUpdateAddIn() );
+    return uno::Any( m_rChartDocumentWrapper.getUpdateAddIn() );
 }
 
 } //namespace wrapper

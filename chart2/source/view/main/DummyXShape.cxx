@@ -971,16 +971,16 @@ DummyChart* DummyChart::getRootShape()
 uno::Any SAL_CALL DummyXShapes::queryInterface( const uno::Type& rType )
 {
     if( rType == cppu::UnoType<drawing::XShapes>::get() )
-        return uno::makeAny(uno::Reference<drawing::XShapes>(this));
+        return uno::Any(uno::Reference<drawing::XShapes>(this));
     if( rType == cppu::UnoType<container::XIndexAccess>::get() )
-        return uno::makeAny(uno::Reference<container::XIndexAccess>(this));
+        return uno::Any(uno::Reference<container::XIndexAccess>(this));
     return DummyXShape::queryInterface(rType);
 }
 
 uno::Any SAL_CALL DummyXShapes::queryAggregation( const uno::Type & rType )
 {
     if( rType == cppu::UnoType<drawing::XShapes>::get() )
-        return uno::makeAny(uno::Reference< drawing::XShapes >(this));
+        return uno::Any(uno::Reference< drawing::XShapes >(this));
     else
         return DummyXShape::queryAggregation( rType );
 }

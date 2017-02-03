@@ -779,7 +779,7 @@ void Bridge::handleCommitChangeRequest(
             bCcMode = false;
             bExc = true;
             ret = mapCppToBinaryAny(
-                css::uno::makeAny(
+                css::uno::Any(
                     css::bridge::InvalidProtocolChangeException(
                         "InvalidProtocolChangeException",
                         css::uno::Reference< css::uno::XInterface >(), s[i],
@@ -941,7 +941,7 @@ void Bridge::sendCommitChangeRequest() {
     css::uno::Sequence< css::bridge::ProtocolProperty > s(1);
     s[0].Name = "CurrentContext";
     std::vector< BinaryAny > a;
-    a.push_back(mapCppToBinaryAny(css::uno::makeAny(s)));
+    a.push_back(mapCppToBinaryAny(css::uno::Any(s)));
     sendProtPropRequest(OutgoingRequest::KIND_COMMIT_CHANGE, a);
 }
 

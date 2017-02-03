@@ -2165,7 +2165,7 @@ SbObjModule::SbObjModule( const OUString& rName, const css::script::ModuleInfo& 
     }
     else if ( mInfo.ModuleObject.is() )
     {
-        SetUnoObject( uno::makeAny( mInfo.ModuleObject ) );
+        SetUnoObject( uno::Any( mInfo.ModuleObject ) );
     }
 }
 
@@ -2654,7 +2654,7 @@ void SbUserFormModule::InitObject()
             aArgs[ 1 ] <<= m_xDialog;
             aArgs[ 2 ] <<= m_xModel;
             aArgs[ 3 ] <<= OUString( GetParent()->GetName() );
-            pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( "ooo.vba.msforms.UserForm", aArgs  ) ) );
+            pDocObject = new SbUnoObject( GetName(), uno::Any( xVBAFactory->createInstanceWithArguments( "ooo.vba.msforms.UserForm", aArgs  ) ) );
 
             uno::Reference< lang::XComponent > xComponent( m_xDialog, uno::UNO_QUERY_THROW );
 

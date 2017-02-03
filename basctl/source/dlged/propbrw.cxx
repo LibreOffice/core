@@ -122,8 +122,8 @@ void PropBrw::ImplReCreateController()
         // a ComponentContext for the
         ::cppu::ContextEntry_Init aHandlerContextInfo[] =
         {
-            ::cppu::ContextEntry_Init( "DialogParentWindow", makeAny( VCLUnoHelper::GetInterface ( this ) ) ),
-            ::cppu::ContextEntry_Init( "ContextDocument", makeAny( m_xContextDocument ) )
+            ::cppu::ContextEntry_Init( "DialogParentWindow", Any( VCLUnoHelper::GetInterface ( this ) ) ),
+            ::cppu::ContextEntry_Init( "ContextDocument", Any( m_xContextDocument ) )
         };
         Reference< XComponentContext > xInspectorContext(
             ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ), xOwnContext ) );
@@ -296,7 +296,7 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     if ( m_xBrowserController.is() )
     {
         m_xBrowserController->setPropertyValue( "IntrospectedObject",
-            makeAny( _rxObject )
+            Any( _rxObject )
         );
 
         // set the new title according to the selected object

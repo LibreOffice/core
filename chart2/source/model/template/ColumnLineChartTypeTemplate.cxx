@@ -127,7 +127,7 @@ ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(
         ::property::OPropertySet( m_aMutex ),
         m_eStackMode( eStackMode )
 {
-    setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::makeAny( nNumberOfLines ));
+    setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::Any( nNumberOfLines ));
 }
 
 ColumnLineChartTypeTemplate::~ColumnLineChartTypeTemplate()
@@ -242,7 +242,7 @@ void SAL_CALL ColumnLineChartTypeTemplate::applyStyle(
 
     if( nChartTypeIndex==0 ) // columns
     {
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
     }
     else if( nChartTypeIndex==1 ) // lines
     {
@@ -332,7 +332,7 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
                     if( xSeriesContainer.is() )
                     {
                         sal_Int32 nNumberOfLines = xSeriesContainer->getDataSeries().getLength();
-                        setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::makeAny( nNumberOfLines ));
+                        setFastPropertyValue_NoBroadcast( PROP_COL_LINE_NUMBER_OF_LINES, uno::Any( nNumberOfLines ));
                     }
                 }
             }

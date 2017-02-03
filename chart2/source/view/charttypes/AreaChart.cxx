@@ -120,7 +120,7 @@ uno::Any AreaChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPo
     Symbol* pSymbolProperties = rSeries.getSymbolProperties( nPointIndex );
     if( pSymbolProperties )
     {
-        aRet = uno::makeAny(*pSymbolProperties);
+        aRet <<= *pSymbolProperties;
     }
 
     return aRet;

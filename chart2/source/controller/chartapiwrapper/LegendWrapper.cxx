@@ -79,7 +79,7 @@ Any WrappedLegendAlignmentProperty::getPropertyValue( const Reference< beans::XP
         xInnerPropertySet->getPropertyValue( "Show" ) >>= bShowLegend;
         if(!bShowLegend)
         {
-            aRet = uno::makeAny( css::chart::ChartLegendPosition_NONE );
+            aRet = uno::Any( css::chart::ChartLegendPosition_NONE );
         }
         else
         {
@@ -104,7 +104,7 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
         }
         if(bNewShowLegend!=bOldShowLegend)
         {
-            xInnerPropertySet->setPropertyValue( "Show", uno::makeAny(bNewShowLegend) );
+            xInnerPropertySet->setPropertyValue( "Show", uno::Any(bNewShowLegend) );
         }
         if(!bNewShowLegend)
             return;
@@ -128,7 +128,7 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
                 xInnerPropertySet->getPropertyValue( "Expansion" ) >>= eOldExpansion );
 
             if( !bExpansionWasSet || (eOldExpansion != eNewExpansion))
-                xInnerPropertySet->setPropertyValue( "Expansion", uno::makeAny( eNewExpansion ));
+                xInnerPropertySet->setPropertyValue( "Expansion", uno::Any( eNewExpansion ));
         }
 
         //correct RelativePosition
@@ -167,7 +167,7 @@ Any WrappedLegendAlignmentProperty::convertInnerToOuterValue( const Any& rInnerV
                 break;
         }
     }
-    return uno::makeAny( ePos );
+    return uno::Any( ePos );
 }
 Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
@@ -195,7 +195,7 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
         }
     }
 
-    return uno::makeAny( eNewPos );
+    return uno::Any( eNewPos );
 }
 }
 
@@ -291,7 +291,7 @@ void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = aPageSize.Width == 0 ? 0 : double(aPosition.X)/double(aPageSize.Width);
         aRelativePosition.Secondary = aPageSize.Height == 0 ? 0 : double(aPosition.Y)/double(aPageSize.Height);
-        xProp->setPropertyValue( "RelativePosition", uno::makeAny(aRelativePosition) );
+        xProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
     }
 }
 
@@ -351,7 +351,7 @@ void LegendWrapper::updateReferenceSize()
     if( xProp.is() )
     {
         if( xProp->getPropertyValue( "ReferencePageSize" ).hasValue() )
-            xProp->setPropertyValue( "ReferencePageSize", uno::makeAny(
+            xProp->setPropertyValue( "ReferencePageSize", uno::Any(
                 m_spChart2ModelContact->GetPageSize() ));
     }
 }

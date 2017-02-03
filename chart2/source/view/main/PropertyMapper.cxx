@@ -452,20 +452,20 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     PropertyMapper::getValueMap(aValueMap, aNameMap, xSourceProp);
 
     //some more shape properties apart from character properties, position-matrix and label string
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny(drawing::TextHorizontalAdjust_CENTER) ) ); // drawing::TextHorizontalAdjust - needs to be overwritten
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny(drawing::TextVerticalAdjust_CENTER) ) ); //drawing::TextVerticalAdjust - needs to be overwritten
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny(true) ) ); // sal_Bool
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny(true) ) ); // sal_Bool
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::Any(drawing::TextHorizontalAdjust_CENTER) ) ); // drawing::TextHorizontalAdjust - needs to be overwritten
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::Any(drawing::TextVerticalAdjust_CENTER) ) ); //drawing::TextVerticalAdjust - needs to be overwritten
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::Any(true) ) ); // sal_Bool
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::Any(true) ) ); // sal_Bool
     if( bName )
-        aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::makeAny( OUString() ) ) ); //CID OUString - needs to be overwritten for each point
+        aValueMap.insert( tPropertyNameValueMap::value_type( "Name", uno::Any( OUString() ) ) ); //CID OUString - needs to be overwritten for each point
 
     if( nLimitedSpace > 0 )
     {
         if(bLimitedHeight)
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameHeight", uno::makeAny(nLimitedSpace) ) ); //sal_Int32
+            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameHeight", uno::Any(nLimitedSpace) ) ); //sal_Int32
         else
-            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameWidth", uno::makeAny(nLimitedSpace) ) ); //sal_Int32
-        aValueMap.insert( tPropertyNameValueMap::value_type( "ParaIsHyphenation", uno::makeAny(true) ) );
+            aValueMap.insert( tPropertyNameValueMap::value_type( "TextMaximumFrameWidth", uno::Any(nLimitedSpace) ) ); //sal_Int32
+        aValueMap.insert( tPropertyNameValueMap::value_type( "ParaIsHyphenation", uno::Any(true) ) );
     }
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
@@ -482,18 +482,18 @@ void PropertyMapper::getPreparedTextShapePropertyLists(
             , xSourceProp );
 
     // auto-grow makes sure the shape has the correct size after setting text
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::makeAny( drawing::TextHorizontalAdjust_CENTER )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::makeAny( drawing::TextVerticalAdjust_CENTER )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::makeAny( true )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::makeAny( true )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowHeight", uno::Any( true )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextAutoGrowWidth", uno::Any( true )));
 
     // set some distance to the border, in case it is shown
     const sal_Int32 nWidthDist  = 250;
     const sal_Int32 nHeightDist = 125;
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextLeftDistance",  uno::makeAny( nWidthDist )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextRightDistance", uno::makeAny( nWidthDist )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextUpperDistance", uno::makeAny( nHeightDist )));
-    aValueMap.insert( tPropertyNameValueMap::value_type( "TextLowerDistance", uno::makeAny( nHeightDist )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextLeftDistance",  uno::Any( nWidthDist )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextRightDistance", uno::Any( nWidthDist )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextUpperDistance", uno::Any( nHeightDist )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( "TextLowerDistance", uno::Any( nHeightDist )));
 
     // use a line-joint showing the border of thick lines like two rectangles
     // filled in between.

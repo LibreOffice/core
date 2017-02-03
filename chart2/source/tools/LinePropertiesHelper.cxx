@@ -135,12 +135,12 @@ void LinePropertiesHelper::SetLineVisible( const css::uno::Reference<
             drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
             xLineProperties->getPropertyValue( "LineStyle" ) >>= aLineStyle;
             if( aLineStyle == drawing::LineStyle_NONE )
-                xLineProperties->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ) );
+                xLineProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) );
 
             sal_Int16 nLineTransparence=0;
             xLineProperties->getPropertyValue( "LineTransparence" ) >>= nLineTransparence;
             if(100==nLineTransparence)
-                xLineProperties->setPropertyValue( "LineTransparence", uno::makeAny( sal_Int16(0) ) );
+                xLineProperties->setPropertyValue( "LineTransparence", uno::Any( sal_Int16(0) ) );
         }
     }
     catch( const uno::Exception & ex )
@@ -159,7 +159,7 @@ void LinePropertiesHelper::SetLineInvisible( const css::uno::Reference<
             drawing::LineStyle aLineStyle(drawing::LineStyle_SOLID);
             xLineProperties->getPropertyValue( "LineStyle" ) >>= aLineStyle;
             if( aLineStyle != drawing::LineStyle_NONE )
-                xLineProperties->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ) );
+                xLineProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ) );
         }
     }
     catch( const uno::Exception & ex )
@@ -175,7 +175,7 @@ void LinePropertiesHelper::SetLineColor( const css::uno::Reference<
     {
         if( xLineProperties.is() )
         {
-            xLineProperties->setPropertyValue( "LineColor", uno::makeAny( nColor ) );
+            xLineProperties->setPropertyValue( "LineColor", uno::Any( nColor ) );
         }
     }
     catch( const uno::Exception & ex )

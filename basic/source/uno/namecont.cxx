@@ -530,7 +530,7 @@ void SAL_CALL SfxLibraryContainer::removeModifyListener( const Reference< XModif
 Any SAL_CALL SfxLibraryContainer::getRootLocation()
 {
     LibraryContainerMethodGuard aGuard( *this );
-    return makeAny( getRootStorage() );
+    return Any( getRootStorage() );
 }
 
 OUString SAL_CALL SfxLibraryContainer::getContainerLocationName()
@@ -1426,10 +1426,10 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
 
                 if ( xProps.is() )
                 {
-                    xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
+                    xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
 
                     // #87671 Allow encryption
-                    xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
+                    xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any( true ) );
 
                     Reference< XOutputStream > xOutput = xElementStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );
@@ -1565,10 +1565,10 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
             if ( xProps.is() )
             {
                 OUString aMime("text/xml");
-                xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
+                xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
 
                 // #87671 Allow encryption
-                xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
+                xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any( true ) );
 
                 xOut = xInfoStream->getOutputStream();
             }
@@ -2087,10 +2087,10 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 throw uno::RuntimeException();
             }
             OUString aMime( "text/xml" );
-            xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
+            xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
 
             // #87671 Allow encryption
-            xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
+            xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any( true ) );
 
             xOut = xInfoStream->getOutputStream();
         }
@@ -3075,7 +3075,7 @@ void SfxLibrary::impl_checkLoaded()
         throw WrappedTargetException(
             OUString(),
             *this,
-            makeAny( LibraryNotLoadedException(
+            Any( LibraryNotLoadedException(
                 OUString(),
                 *this
             ) )

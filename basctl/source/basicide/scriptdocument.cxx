@@ -75,7 +75,7 @@ namespace basctl
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::task::XStatusIndicator;
-    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::Any;
     using ::com::sun::star::script::XLibraryContainer2;
     using ::com::sun::star::uri::UriReferenceFactory;
     using ::com::sun::star::uri::XUriReferenceFactory;
@@ -628,7 +628,7 @@ namespace basctl
 
                 // set new name as property
                 Reference< XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY_THROW );
-                xDlgPSet->setPropertyValue( DLGED_PROP_NAME, makeAny( _rNewName ) );
+                xDlgPSet->setPropertyValue( DLGED_PROP_NAME, Any( _rNewName ) );
 
                 // export dialog model
                 xISP = ::xmlscript::exportDialogModel( xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );
@@ -680,7 +680,7 @@ namespace basctl
             }
 
             // insert module into library
-            xLib->insertByName( _rModName, makeAny( _out_rNewModuleCode ) );
+            xLib->insertByName( _rModName, Any( _out_rNewModuleCode ) );
         }
         catch( const Exception& )
         {
@@ -718,7 +718,7 @@ namespace basctl
             Reference< XNameContainer > xLib( getOrCreateLibrary( E_SCRIPTS, _rLibName ), UNO_QUERY_THROW );
             if ( !xLib->hasByName( _rModName ) )
                 return false;
-            xLib->replaceByName( _rModName, makeAny( _rModuleCode ) );
+            xLib->replaceByName( _rModName, Any( _rModuleCode ) );
             return true;
         }
         catch( const Exception& )
@@ -750,13 +750,13 @@ namespace basctl
 
             // set name property
             Reference< XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY_THROW );
-            xDlgPSet->setPropertyValue( DLGED_PROP_NAME, makeAny( _rDialogName ) );
+            xDlgPSet->setPropertyValue( DLGED_PROP_NAME, Any( _rDialogName ) );
 
             // export dialog model
             _out_rDialogProvider = ::xmlscript::exportDialogModel( xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );
 
             // insert dialog into library
-            xLib->insertByName( _rDialogName, makeAny( _out_rDialogProvider ) );
+            xLib->insertByName( _rDialogName, Any( _out_rDialogProvider ) );
         }
         catch( const Exception& )
         {
@@ -813,7 +813,7 @@ namespace basctl
         if ( _rxStatusIndicator.is() )
         {
             aArgs = ::comphelper::InitPropertySequence({
-                { "StatusIndicator", makeAny(_rxStatusIndicator) }
+                { "StatusIndicator", Any(_rxStatusIndicator) }
             });
         }
 
@@ -1376,7 +1376,7 @@ namespace basctl
 
     bool ScriptDocument::insertModule( const OUString& _rLibName, const OUString& _rModName, const OUString& _rModuleCode ) const
     {
-        return m_pImpl->insertModuleOrDialog( E_SCRIPTS, _rLibName, _rModName, makeAny( _rModuleCode ) );
+        return m_pImpl->insertModuleOrDialog( E_SCRIPTS, _rLibName, _rModName, Any( _rModuleCode ) );
     }
 
 
@@ -1426,7 +1426,7 @@ namespace basctl
 
     bool ScriptDocument::insertDialog( const OUString& _rLibName, const OUString& _rDialogName, const Reference< XInputStreamProvider >& _rxDialogProvider ) const
     {
-        return m_pImpl->insertModuleOrDialog( E_DIALOGS, _rLibName, _rDialogName, makeAny( _rxDialogProvider ) );
+        return m_pImpl->insertModuleOrDialog( E_DIALOGS, _rLibName, _rDialogName, Any( _rxDialogProvider ) );
     }
 
 

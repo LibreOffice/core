@@ -748,7 +748,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                               ? OUString( "TransparencyGradientName" )
                               : OUString( "FillTransparenceGradientName" );
                         GetPropertySet()->setPropertyValue(
-                            aTransGradPropName, uno::makeAny( OUString() ));
+                            aTransGradPropName, uno::Any( OUString() ));
 
                         bChanged = true;
                     }

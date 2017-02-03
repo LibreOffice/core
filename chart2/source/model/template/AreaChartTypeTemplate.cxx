@@ -122,7 +122,7 @@ AreaChartTypeTemplate::AreaChartTypeTemplate(
         ::property::OPropertySet( m_aMutex ),
         m_eStackMode( eStackMode )
 {
-    setFastPropertyValue_NoBroadcast( PROP_AREA_TEMPLATE_DIMENSION, uno::makeAny( nDim ));
+    setFastPropertyValue_NoBroadcast( PROP_AREA_TEMPLATE_DIMENSION, uno::Any( nDim ));
 }
 
 AreaChartTypeTemplate::~AreaChartTypeTemplate()
@@ -179,7 +179,7 @@ void SAL_CALL AreaChartTypeTemplate::applyStyle(
     ::sal_Int32 nSeriesCount )
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
-    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
+    DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 }
 
 void SAL_CALL AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
@@ -187,7 +187,7 @@ void SAL_CALL AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiag
     ChartTypeTemplate::resetStyles( xDiagram );
     ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-    uno::Any aLineStyleAny( uno::makeAny( drawing::LineStyle_NONE ));
+    uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
          aIt != aSeriesVec.end(); ++aIt )
     {

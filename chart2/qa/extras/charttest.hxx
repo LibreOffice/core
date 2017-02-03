@@ -122,7 +122,7 @@ std::shared_ptr<utl::TempFile> ChartTest::save(const OUString& rFilterName)
 {
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     auto aArgs(::comphelper::InitPropertySequence({
-        { "FilterName", makeAny(rFilterName) }
+        { "FilterName", Any(rFilterName) }
     }));
     std::shared_ptr<utl::TempFile> pTempFile = std::make_shared<utl::TempFile>();
     pTempFile->EnableKillingFile();

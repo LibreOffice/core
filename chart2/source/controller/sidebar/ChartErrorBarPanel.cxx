@@ -101,7 +101,7 @@ void setShowPositiveError(const css::uno::Reference<css::frame::XModel>& xModel,
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue("ShowPositiveError", css::uno::makeAny(bShow));
+    xPropSet->setPropertyValue("ShowPositiveError", css::uno::Any(bShow));
 }
 
 void setShowNegativeError(const css::uno::Reference<css::frame::XModel>& xModel,
@@ -113,7 +113,7 @@ void setShowNegativeError(const css::uno::Reference<css::frame::XModel>& xModel,
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue("ShowNegativeError", css::uno::makeAny(bShow));
+    xPropSet->setPropertyValue("ShowNegativeError", css::uno::Any(bShow));
 }
 
 struct ErrorBarTypeMap
@@ -174,7 +174,7 @@ void setTypePos(const css::uno::Reference<css::frame::XModel>& xModel,
             nApi = i.nApi;
     }
 
-    xPropSet->setPropertyValue("ErrorBarStyle", css::uno::makeAny(nApi));
+    xPropSet->setPropertyValue("ErrorBarStyle", css::uno::Any(nApi));
 }
 
 double getValue(const css::uno::Reference<css::frame::XModel>& xModel,
@@ -214,7 +214,7 @@ void setValue(const css::uno::Reference<css::frame::XModel>& xModel,
     if (eDir == ErrorBarDirection::NEGATIVE)
         aName = "NegativeError";
 
-    xPropSet->setPropertyValue(aName, css::uno::makeAny(nVal));
+    xPropSet->setPropertyValue(aName, css::uno::Any(nVal));
 }
 
 OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)

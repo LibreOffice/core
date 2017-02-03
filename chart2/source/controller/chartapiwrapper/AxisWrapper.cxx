@@ -585,7 +585,7 @@ void AxisWrapper::updateReferenceSize()
     if( xProp.is() )
     {
         if( xProp->getPropertyValue("ReferencePageSize").hasValue() )
-            xProp->setPropertyValue("ReferencePageSize", uno::makeAny(
+            xProp->setPropertyValue("ReferencePageSize", uno::Any(
             m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -618,7 +618,7 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
             xAxis = AxisHelper::createAxis( nDimensionIndex, bMainAxis, xDiagram, m_spChart2ModelContact->m_xContext );
             Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
             if( xProp.is() )
-                xProp->setPropertyValue("Show", uno::makeAny( false ) );
+                xProp->setPropertyValue("Show", uno::Any( false ) );
         }
     }
     catch( const uno::Exception & ex )

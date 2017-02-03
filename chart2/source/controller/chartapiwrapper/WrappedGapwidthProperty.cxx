@@ -39,7 +39,7 @@ WrappedBarPositionProperty_Base::WrappedBarPositionProperty_Base(
                 , const OUString& rInnerSequencePropertyName
                 , sal_Int32 nDefaultValue
                 , const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact )
-            : WrappedDefaultProperty( rOuterName, OUString(), uno::makeAny( nDefaultValue ) )
+            : WrappedDefaultProperty( rOuterName, OUString(), uno::Any( nDefaultValue ) )
             , m_nDimensionIndex(0)
             , m_nAxisIndex(0)
             , m_spChart2ModelContact( spChart2ModelContact )
@@ -94,7 +94,7 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
                     }
                     aBarPositionSequence[m_nAxisIndex] = nNewValue;
 
-                    xProp->setPropertyValue( m_InnerSequencePropertyName, uno::makeAny( aBarPositionSequence ) );
+                    xProp->setPropertyValue( m_InnerSequencePropertyName, uno::Any( aBarPositionSequence ) );
                 }
             }
             catch( uno::Exception& e )

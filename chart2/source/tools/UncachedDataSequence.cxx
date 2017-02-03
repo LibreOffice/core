@@ -79,7 +79,7 @@ UncachedDataSequence::UncachedDataSequence(
           m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     registerProperties();
-    setFastPropertyValue_NoBroadcast( PROP_PROPOSED_ROLE, uno::makeAny( rRole ));
+    setFastPropertyValue_NoBroadcast( PROP_PROPOSED_ROLE, uno::Any( rRole ));
 }
 
 UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource )

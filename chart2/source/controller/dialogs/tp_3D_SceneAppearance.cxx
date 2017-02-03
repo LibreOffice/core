@@ -68,7 +68,7 @@ void lcl_setShadeModeAtModel( uno::Reference< frame::XModel > & xModel, drawing:
     {
         uno::Reference< beans::XPropertySet > xDiaProp(
             ::chart::ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY_THROW );
-        xDiaProp->setPropertyValue( "D3DSceneShadeMode" , uno::makeAny( aShadeMode ));
+        xDiaProp->setPropertyValue( "D3DSceneShadeMode" , uno::Any( aShadeMode ));
     }
     catch( const uno::Exception & ex )
     {

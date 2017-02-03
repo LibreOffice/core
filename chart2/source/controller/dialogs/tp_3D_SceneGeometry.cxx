@@ -218,8 +218,8 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
 
     try
     {
-        m_xSceneProperties->setPropertyValue( "D3DScenePerspective" , uno::makeAny( aMode ));
-        m_xSceneProperties->setPropertyValue( "Perspective" , uno::makeAny( (sal_Int32)m_pMFPerspective->GetValue() ));
+        m_xSceneProperties->setPropertyValue( "D3DScenePerspective" , uno::Any( aMode ));
+        m_xSceneProperties->setPropertyValue( "Perspective" , uno::Any( (sal_Int32)m_pMFPerspective->GetValue() ));
     }
     catch( const uno::Exception & ex )
     {
