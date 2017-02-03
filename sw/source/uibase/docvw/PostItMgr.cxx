@@ -355,17 +355,9 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (bEmpty && !mvPostItFields.empty())
                         PrepareView(true);
 
-                    // If LOK has disabled tiled annotations, emit annotation callbacks
-                    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
-                    {
-                        CalcRects();
-                        Show();
-
-                        if (pItem && pItem->pPostIt)
-                        {
-                            lcl_CommentNotification(mpView, CommentNotificationType::Add, pItem, 0);
-                        }
-                    }
+                    // True until the layout of this post it finishes
+                    if (pItem)
+                        pItem->bPendingLayout = true;
                 }
                 else
                 {
@@ -905,6 +897,15 @@ void SwPostItMgr::LayoutPostIts()
                         SetActiveSidebarWin(nullptr);
                         (*i)->pPostIt->GrabFocusToDocument();
                     }
+
+                    // Emit LOK callbacks if tiled annotation is turned off
+                    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+                    {
+                        if ((*i)->bPendingLayout)
+                            lcl_CommentNotification(mpView, CommentNotificationType::Add, *i, 0);
+                    }
+
+                    (*i)->bPendingLayout = false;
                 }
             }
 
