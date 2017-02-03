@@ -21,7 +21,7 @@ struct splash* splash_create(rtl_uString* pAppPath, int argc, char** argv);
 
 void splash_destroy(struct splash* splash);
 
-void splash_draw_progress(struct splash* splash, int progess);
+void splash_draw_progress(struct splash* splash, int progress);
 
 #ifdef __cplusplus
 } // extern "C"

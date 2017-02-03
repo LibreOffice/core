@@ -77,7 +77,7 @@ struct ImplStatusItem
     OUString            maCommand;
 };
 
-inline long ImplCalcProgessWidth( sal_uInt16 nMax, long nSize )
+inline long ImplCalcProgressWidth( sal_uInt16 nMax, long nSize )
 {
     return ((nMax*(nSize+(nSize/2)))-(nSize/2)+(STATUSBAR_PRGS_OFFSET*2));
 }
@@ -600,13 +600,13 @@ void StatusBar::ImplCalcProgressRect()
     long nMaxWidth = mnDX-STATUSBAR_OFFSET-1;
 
     // make smaller if there are too many rects
-    while ( maPrgsFrameRect.Left()+ImplCalcProgessWidth( nMaxPercent, mnPrgsSize ) > nMaxWidth )
+    while ( maPrgsFrameRect.Left()+ImplCalcProgressWidth( nMaxPercent, mnPrgsSize ) > nMaxWidth )
     {
         nMaxPercent--;
         if ( nMaxPercent <= STATUSBAR_PRGS_MIN )
             break;
     }
-    maPrgsFrameRect.Right() = maPrgsFrameRect.Left() + ImplCalcProgessWidth( nMaxPercent, mnPrgsSize );
+    maPrgsFrameRect.Right() = maPrgsFrameRect.Left() + ImplCalcProgressWidth( nMaxPercent, mnPrgsSize );
 
     // save the divisor for later
     mnPercentCount = 10000 / nMaxPercent;

@@ -59,11 +59,11 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
 
-SearchThread::SearchThread( SearchProgress* pProgess,
+SearchThread::SearchThread( SearchProgress* pProgress,
                             TPGalleryThemeProperties* pBrowser,
                             const INetURLObject& rStartURL ) :
         Thread      ( "cuiSearchThread" ),
-        mpProgress  ( pProgess ),
+        mpProgress  ( pProgress ),
         mpBrowser   ( pBrowser ),
         maStartURL  ( rStartURL )
 {
@@ -255,12 +255,12 @@ void SearchProgress::StartExecuteModal( const Link<Dialog&,void>& rEndDialogHdl 
 
 
 TakeThread::TakeThread(
-    TakeProgress* pProgess,
+    TakeProgress* pProgress,
     TPGalleryThemeProperties* pBrowser,
     TokenList_impl& rTakenList
 ) :
     Thread      ( "cuiTakeThread" ),
-    mpProgress  ( pProgess ),
+    mpProgress  ( pProgress ),
     mpBrowser   ( pBrowser ),
     mrTakenList ( rTakenList )
 {
