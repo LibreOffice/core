@@ -787,7 +787,7 @@
           <value>10</value>
         </prop>
         <prop oor:name="VersionIdentifiers">
-          <value oor:separator=",">Libreoffice 3=libreoffice/3,Openofice.org 3=openoffice.org/3,OpenOffice.org 2=openoffice.org2,StarOffice 8=staroffice8,StarSuite 8=starsuite8</value>
+          <value oor:separator=",">Libreoffice 3=libreoffice/3,Openoffice.org 3=openoffice.org/3,OpenOffice.org 2=openoffice.org2,StarOffice 8=staroffice8,StarSuite 8=starsuite8</value>
         </prop>
         <node oor:name="MigrationSteps">
           <node oor:name="Datasources" oor:op="replace">
