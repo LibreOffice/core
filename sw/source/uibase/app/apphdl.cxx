@@ -359,11 +359,13 @@ class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
     SwView*                  m_pView;       // never owner
     SwView*                  m_pView2Close; // never owner
     VclPtr<AbstractMailMergeWizard> m_pWizard;     // always owner
+    VclPtr<AbstractMailMergeWizard> m_pWizardToDestroyInCallback;
+
     bool                     m_bDestroyMMToolbarOnCancel;
 
     DECL_LINK( EndDialogHdl, Dialog&, void );
     DECL_LINK( DestroyDialogHdl, void*, void );
-    DECL_STATIC_LINK( SwMailMergeWizardExecutor, DestroyWizardHdl, void*, void );
+    DECL_LINK( DestroyWizardHdl, void*, void );
     DECL_LINK( CancelHdl, void*, void );
     DECL_LINK( CloseFrameHdl, void*, void );
 
@@ -496,9 +498,11 @@ IMPL_LINK_NOARG( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
         {
             SwView* pNewView = lcl_LoadDoc(m_pView, m_pWizard->GetReloadDocument());
 
-            // destroy wizard asynchronously
+            // Destroy wizard asynchronously, since we are deep inside the wizard and dialog
+            // machinery code here
+            m_pWizardToDestroyInCallback = m_pWizard;
             Application::PostUserEvent(
-                LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
+                LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), nullptr );
 
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             std::shared_ptr<SwMailMergeConfigItem> xMMConfig = m_pView->GetMailMergeConfigItem();
@@ -528,8 +532,9 @@ IMPL_LINK_NOARG( SwMailMergeWizardExecutor, EndDialogHdl, Dialog&, void )
             if(pTargetView)
             {
                 // destroy wizard asynchronously
+                m_pWizardToDestroyInCallback = m_pWizard;
                 Application::PostUserEvent(
-                    LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
+                    LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), nullptr );
 
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 m_pWizard = pFact->CreateMailMergeWizard(*pTargetView, xMMConfig);
@@ -607,10 +612,9 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, DestroyDialogHdl, void*, void)
     release();
 }
 
-IMPL_STATIC_LINK(SwMailMergeWizardExecutor, DestroyWizardHdl, void*, pDialog, void )
+IMPL_LINK_NOARG(SwMailMergeWizardExecutor, DestroyWizardHdl, void*, void)
 {
-    VclPtr<AbstractMailMergeWizard> p = static_cast<AbstractMailMergeWizard*>(pDialog);
-    p.disposeAndClear();
+    m_pWizardToDestroyInCallback.disposeAndClear();
 }
 
 IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CancelHdl, void*, void)
