@@ -109,7 +109,7 @@ void setPropertyValueAny( tPropertyValueMap & rOutMap, tPropertyValueMapKey key,
 template< typename Value >
     void setPropertyValue( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
 {
-    setPropertyValueAny( rOutMap, key, css::uno::makeAny( value ));
+    setPropertyValueAny( rOutMap, key, css::uno::Any( value ));
 }
 
 template<>
@@ -123,7 +123,7 @@ OOO_DLLPUBLIC_CHARTTOOLS void setPropertyValueDefaultAny( tPropertyValueMap & rO
 template< typename Value >
     void setPropertyValueDefault( tPropertyValueMap & rOutMap, tPropertyValueMapKey key, const Value & value )
 {
-    setPropertyValueDefaultAny( rOutMap, key, css::uno::makeAny( value ));
+    setPropertyValueDefaultAny( rOutMap, key, css::uno::Any( value ));
 }
 
 /** Calls setPropertyValue() but asserts that the given property hasn't been set

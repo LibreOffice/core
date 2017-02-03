@@ -142,8 +142,8 @@ void VBATest::testMiscOLEStuff()
     OUString sPath = m_directories.getPathFromSrc("/basic/qa/vba_tests/data/ADODBdata.xls");
     sPath = sPath.replaceAll( "/", "\\" );
 
-    aArgs[ 0 ] = uno::makeAny( sPath );
-    aArgs[ 1 ] = uno::makeAny( OUString(pODBCDriverName) );
+    aArgs[ 0 ] <<= sPath;
+    aArgs[ 1 ] <<= OUString(pODBCDriverName);
 
     for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
     {

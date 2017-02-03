@@ -74,12 +74,12 @@ beans::PropertyState WrappedIgnoreProperty::getPropertyState( const Reference< b
 
 void WrappedIgnoreProperties::addIgnoreLineProperties( std::vector< WrappedProperty* >& rList )
 {
-    rList.push_back( new WrappedIgnoreProperty( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "LineDashName", uno::makeAny( OUString() ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "LineColor", uno::makeAny( sal_Int32(0) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "LineTransparence", uno::makeAny( sal_Int16(0) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "LineWidth", uno::makeAny( sal_Int32(0) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "LineJoint", uno::makeAny( drawing::LineJoint_ROUND ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "LineDashName", uno::Any( OUString() ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "LineColor", uno::Any( sal_Int32(0) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "LineTransparence", uno::Any( sal_Int16(0) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "LineWidth", uno::Any( sal_Int32(0) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "LineJoint", uno::Any( drawing::LineJoint_ROUND ) ) );
 }
 
 void WrappedIgnoreProperties::addIgnoreFillProperties( std::vector< WrappedProperty* >& rList )
@@ -90,32 +90,32 @@ void WrappedIgnoreProperties::addIgnoreFillProperties( std::vector< WrappedPrope
 
 void WrappedIgnoreProperties::addIgnoreFillProperties_without_BitmapProperties( ::std::vector< WrappedProperty* >& rList )
 {
-    rList.push_back( new WrappedIgnoreProperty( "FillStyle", uno::makeAny( drawing::FillStyle_SOLID ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillColor", uno::makeAny( sal_Int32(-1) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillTransparence", uno::makeAny( sal_Int16(0) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradientName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradient", uno::makeAny( awt::Gradient() ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillGradientName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillGradient", uno::makeAny( awt::Gradient() ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillHatchName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillHatch", uno::makeAny( drawing::Hatch() ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillBackground", uno::makeAny( false ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillStyle", uno::Any( drawing::FillStyle_SOLID ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillColor", uno::Any( sal_Int32(-1) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillTransparence", uno::Any( sal_Int16(0) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradientName", uno::Any( OUString() ) ) );
+//    rList.push_back( new WrappedIgnoreProperty( "FillTransparenceGradient", uno::Any( awt::Gradient() ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillGradientName", uno::Any( OUString() ) ) );
+//    rList.push_back( new WrappedIgnoreProperty( "FillGradient", uno::Any( awt::Gradient() ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillHatchName", uno::Any( OUString() ) ) );
+//    rList.push_back( new WrappedIgnoreProperty( "FillHatch", uno::Any( drawing::Hatch() ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillBackground", uno::Any( false ) ) );
 }
 
 void WrappedIgnoreProperties::addIgnoreFillProperties_only_BitmapProperties( ::std::vector< WrappedProperty* >& rList )
 {
-//     rList.push_back( new WrappedIgnoreProperty( "FillBitmapName", uno::makeAny( OUString() ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillBitmap", uno::makeAny( uno::Reference< awt::XBitmap > (0) ) ) );
-//    rList.push_back( new WrappedIgnoreProperty( "FillBitmapURL", uno::makeAny( OUString() ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapOffsetX", uno::makeAny( sal_Int16(0) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapOffsetY", uno::makeAny( sal_Int16(0) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapPositionOffsetX", uno::makeAny( sal_Int16(0) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapPositionOffsetY", uno::makeAny( sal_Int16(0) ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapRectanglePoint", uno::makeAny( drawing::RectanglePoint_LEFT_TOP ) ) );
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapLogicalSize", uno::makeAny( false ) ) );//todo correct default?
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapSizeX", uno::makeAny( sal_Int32(10) ) ) );//todo which default?
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapSizeY", uno::makeAny( sal_Int32(10) ) ) );//todo which default?
-    rList.push_back( new WrappedIgnoreProperty( "FillBitmapMode", uno::makeAny( drawing::BitmapMode_REPEAT ) ) );
+//     rList.push_back( new WrappedIgnoreProperty( "FillBitmapName", uno::Any( OUString() ) ) );
+//    rList.push_back( new WrappedIgnoreProperty( "FillBitmap", uno::Any( uno::Reference< awt::XBitmap > (0) ) ) );
+//    rList.push_back( new WrappedIgnoreProperty( "FillBitmapURL", uno::Any( OUString() ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapOffsetX", uno::Any( sal_Int16(0) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapOffsetY", uno::Any( sal_Int16(0) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapPositionOffsetX", uno::Any( sal_Int16(0) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapPositionOffsetY", uno::Any( sal_Int16(0) ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapRectanglePoint", uno::Any( drawing::RectanglePoint_LEFT_TOP ) ) );
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapLogicalSize", uno::Any( false ) ) );//todo correct default?
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapSizeX", uno::Any( sal_Int32(10) ) ) );//todo which default?
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapSizeY", uno::Any( sal_Int32(10) ) ) );//todo which default?
+    rList.push_back( new WrappedIgnoreProperty( "FillBitmapMode", uno::Any( drawing::BitmapMode_REPEAT ) ) );
 }
 
 } //namespace chart

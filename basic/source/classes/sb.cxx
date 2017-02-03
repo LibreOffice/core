@@ -454,7 +454,7 @@ SbxObject* SbiFactory::CreateObject( const OUString& rClass )
             Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), UNO_SET_THROW );
             OUString aServiceName("ooo.vba.FileSystemObject");
             Reference< XInterface > xInterface( xFactory->createInstance( aServiceName ), UNO_SET_THROW );
-            return new SbUnoObject( aServiceName, uno::makeAny( xInterface ) );
+            return new SbUnoObject( aServiceName, uno::Any( xInterface ) );
         }
         catch(const Exception& )
         {

@@ -251,7 +251,7 @@ public:
         vector< uno::Any > aRet( rVector );
         if( m_nLevel >= static_cast< sal_Int32 >(aRet.size()) )
             aRet.resize( m_nLevel+1 );
-        aRet[ m_nLevel ]=uno::makeAny(rNewValue);
+        aRet[ m_nLevel ] <<= rNewValue;
         return aRet;
     }
 
@@ -372,7 +372,7 @@ InternalDataProvider::InternalDataProvider(
                         for( sal_Int32 nN=0; nN<nLength; nN++)
                         {
                             vector< uno::Any > aVector(1);
-                            aVector[0] = uno::makeAny( aSimplecategories[nN] );
+                            aVector[0] <<= aSimplecategories[nN];
                             aNewCategories.push_back( aVector );
                         }
                     }
@@ -615,7 +615,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
 
         for (size_t i = 0; i < aRawElems.size(); ++i)
         {
-            std::vector<uno::Any> aLabels(1, uno::makeAny(aRawElems[i]));
+            std::vector<uno::Any> aLabels(1, uno::Any(aRawElems[i]));
             m_aInternalData.setComplexRowLabel(i, aLabels);
         }
 
@@ -629,7 +629,7 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, co
         sal_Int32 nColSize = m_aInternalData.getColumnCount();
         if (!aRawElems.empty() && nColSize)
         {
-            std::vector<uno::Any> aLabels(1, uno::makeAny(aRawElems[0]));
+            std::vector<uno::Any> aLabels(1, uno::Any(aRawElems[0]));
             m_aInternalData.setComplexColumnLabel(nColSize-1, aLabels);
 
             OUString aRangeRep = lcl_aLabelRangePrefix + OUString::number(nColSize-1);
@@ -769,19 +769,19 @@ Sequence< beans::PropertyValue > SAL_CALL InternalDataProvider::detectArguments(
 {
     Sequence< beans::PropertyValue > aArguments( 4 );
     aArguments[0] = beans::PropertyValue(
-        "CellRangeRepresentation", -1, uno::makeAny( OUString(lcl_aCompleteRange) ),
+        "CellRangeRepresentation", -1, uno::Any( OUString(lcl_aCompleteRange) ),
         beans::PropertyState_DIRECT_VALUE );
     aArguments[1] = beans::PropertyValue(
-        "DataRowSource", -1, uno::makeAny(
+        "DataRowSource", -1, uno::Any(
             m_bDataInColumns
             ? css::chart::ChartDataRowSource_COLUMNS
             : css::chart::ChartDataRowSource_ROWS ),
         beans::PropertyState_DIRECT_VALUE );
     // internal data always contains labels and categories
     aArguments[2] = beans::PropertyValue(
-        "FirstCellAsLabel", -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+        "FirstCellAsLabel", -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE );
     aArguments[3] = beans::PropertyValue(
-        "HasCategories", -1, uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
+        "HasCategories", -1, uno::Any( true ), beans::PropertyState_DIRECT_VALUE );
 
     // #i85913# Sequence Mapping is not needed for internal data, as it is
     // applied to the data when the data source is created.
@@ -1374,7 +1374,7 @@ void SAL_CALL InternalDataProvider::setDateCategories( const Sequence< double >&
 
     for(sal_Int32 nN=0; nN<nCount; ++nN )
     {
-        aSingleLabel[0]=uno::makeAny(rDates[nN]);
+        aSingleLabel[0] <<= rDates[nN];
         aNewCategories.push_back(aSingleLabel);
     }
 

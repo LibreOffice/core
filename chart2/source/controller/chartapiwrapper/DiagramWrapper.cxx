@@ -746,8 +746,8 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
             xProp->setPropertyValue( "RelativePosition", aEmpty );
             return;
         }
-        xProp->setPropertyValue( "RelativePosition", uno::makeAny(aRelativePosition) );
-        xProp->setPropertyValue( "PosSizeExcludeAxes", uno::makeAny(false) );
+        xProp->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
+        xProp->setPropertyValue( "PosSizeExcludeAxes", uno::Any(false) );
     }
 }
 
@@ -777,8 +777,8 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
             return;
         }
 
-        xProp->setPropertyValue( "RelativeSize", uno::makeAny(aRelativeSize) );
-        xProp->setPropertyValue( "PosSizeExcludeAxes", uno::makeAny(false) );
+        xProp->setPropertyValue( "RelativeSize", uno::Any(aRelativeSize) );
+        xProp->setPropertyValue( "PosSizeExcludeAxes", uno::Any(false) );
     }
 }
 
@@ -818,7 +818,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
-        xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::makeAny(true) );
+        xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::Any(true) );
 }
 sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning()
 {
@@ -846,7 +846,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectan
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
-        xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::makeAny(false) );
+        xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::Any(false) );
 }
 awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  )
 {
@@ -1525,7 +1525,7 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
         }
     }
     if(bHasDetectableInnerValue)
-        rInnerValue = uno::makeAny(nNumberOfLines);
+        rInnerValue = uno::Any(nNumberOfLines);
     return bHasDetectableInnerValue;
 }
 
@@ -1584,7 +1584,7 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
                 // locked controllers
                 ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 uno::Reference< beans::XPropertySet > xProp( xTemplate, uno::UNO_QUERY );
-                xProp->setPropertyValue( "NumberOfLines", uno::makeAny(nNewValue) );
+                xProp->setPropertyValue( "NumberOfLines", uno::Any(nNewValue) );
                 xTemplate->changeDiagram( xDiagram );
             }
             catch( const uno::Exception & ex )
@@ -1773,7 +1773,7 @@ Any WrappedSolidTypeProperty::getPropertyValue( const Reference< beans::XPropert
 
 Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    return uno::makeAny( css::chart::ChartSolidType::RECTANGULAR_SOLID );
+    return uno::Any( css::chart::ChartSolidType::RECTANGULAR_SOLID );
 }
 
 class WrappedAutomaticSizeProperty : public WrappedProperty

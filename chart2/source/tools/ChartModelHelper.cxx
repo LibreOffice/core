@@ -237,7 +237,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
 
             //set the property on all instances in all cases to get the different objects in sync!
 
-            uno::Any aNewValue = uno::makeAny(bIncludeHiddenCells);
+            uno::Any aNewValue(bIncludeHiddenCells);
 
             try
             {

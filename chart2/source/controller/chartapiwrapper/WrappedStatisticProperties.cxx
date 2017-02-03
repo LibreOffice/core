@@ -188,10 +188,10 @@ protected:
         {
             xErrorBarProperties = new ::chart::ErrorBar;
             //default in new and old api are different
-            xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::makeAny(false) );
-            xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::makeAny(false) );
-            xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::makeAny(css::chart::ErrorBarStyle::NONE) );
-            xSeriesPropertySet->setPropertyValue( CHART_UNONAME_ERRORBAR_Y , uno::makeAny( xErrorBarProperties ) );
+            xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::Any(false) );
+            xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::Any(false) );
+            xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::Any(css::chart::ErrorBarStyle::NONE) );
+            xSeriesPropertySet->setPropertyValue( CHART_UNONAME_ERRORBAR_Y , uno::Any( xErrorBarProperties ) );
         }
         return xErrorBarProperties;
     }
@@ -216,7 +216,7 @@ WrappedConstantErrorLowProperty::WrappedConstantErrorLowProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "ConstantErrorLow"
-            , uno::makeAny( double(0.0) ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -240,7 +240,7 @@ void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        m_aOuterValue = uno::makeAny( aNewValue );
+        m_aOuterValue = uno::Any( aNewValue );
         if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "NegativeError", m_aOuterValue );
@@ -266,7 +266,7 @@ WrappedConstantErrorHighProperty::WrappedConstantErrorHighProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "ConstantErrorHigh"
-            , uno::makeAny( double(0.0) ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -290,7 +290,7 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        m_aOuterValue = uno::makeAny( aNewValue );
+        m_aOuterValue = uno::Any( aNewValue );
         if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
@@ -312,7 +312,7 @@ public:
 WrappedMeanValueProperty::WrappedMeanValueProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
-        : WrappedStatisticProperty< bool >( "MeanValue", uno::makeAny( false ), spChart2ModelContact, ePropertyType  )
+        : WrappedStatisticProperty< bool >( "MeanValue", uno::Any( false ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -353,7 +353,7 @@ WrappedErrorCategoryProperty::WrappedErrorCategoryProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< css::chart::ChartErrorCategory >( "ErrorCategory"
-            , uno::makeAny( css::chart::ChartErrorCategory_NONE ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( css::chart::ChartErrorCategory_NONE ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -428,7 +428,7 @@ void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPr
             default:
                 break;
         }
-        xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::makeAny(nNewStyle) );
+        xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::Any(nNewStyle) );
     }
 }
 
@@ -450,7 +450,7 @@ WrappedPercentageErrorProperty::WrappedPercentageErrorProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "PercentageError"
-            , uno::makeAny( double(0.0) ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -473,7 +473,7 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        m_aOuterValue = uno::makeAny( aNewValue );
+        m_aOuterValue = uno::Any( aNewValue );
         if( css::chart::ErrorBarStyle::RELATIVE == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
@@ -500,7 +500,7 @@ WrappedErrorMarginProperty::WrappedErrorMarginProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "ErrorMargin"
-            , uno::makeAny( double(0.0) ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -523,7 +523,7 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        m_aOuterValue = uno::makeAny( aNewValue );
+        m_aOuterValue = uno::Any( aNewValue );
         if( css::chart::ErrorBarStyle::ERROR_MARGIN == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
@@ -547,7 +547,7 @@ WrappedErrorIndicatorProperty::WrappedErrorIndicatorProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< css::chart::ChartErrorIndicatorType >( "ErrorIndicator"
-            , uno::makeAny( css::chart::ChartErrorIndicatorType_NONE ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( css::chart::ChartErrorIndicatorType_NONE ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -595,8 +595,8 @@ void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XP
                 break;
         }
 
-        xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::makeAny(bPositive) );
-        xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::makeAny(bNegative) );
+        xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::Any(bPositive) );
+        xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::Any(bNegative) );
     }
 }
 
@@ -616,7 +616,7 @@ WrappedErrorBarStyleProperty::WrappedErrorBarStyleProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< sal_Int32 >( "ErrorBarStyle"
-            , uno::makeAny( css::chart::ErrorBarStyle::NONE ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( css::chart::ErrorBarStyle::NONE ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -639,7 +639,7 @@ void WrappedErrorBarStyleProperty::setValueToSeries( const Reference< beans::XPr
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::makeAny( nNewValue ));
+        xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::Any( nNewValue ));
     }
 }
 
@@ -661,7 +661,7 @@ WrappedErrorBarRangePositiveProperty::WrappedErrorBarRangePositiveProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< OUString >( "ErrorBarRangePositive"
-            , uno::makeAny( OUString() ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( OUString() ), spChart2ModelContact, ePropertyType  )
 {
 }
 
@@ -724,7 +724,7 @@ WrappedErrorBarRangeNegativeProperty::WrappedErrorBarRangeNegativeProperty(
     ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< OUString >( "ErrorBarRangeNegative"
-            , uno::makeAny( OUString() ), spChart2ModelContact, ePropertyType  )
+            , uno::Any( OUString() ), spChart2ModelContact, ePropertyType  )
 {
 }
 

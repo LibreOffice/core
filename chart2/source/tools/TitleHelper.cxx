@@ -181,7 +181,7 @@ uno::Reference< XTitle > TitleHelper::createOrShowTitle(
     if( xTitled.is())
     {
         css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
-        xProps->setPropertyValue("Visible",css::uno::makeAny(true));
+        xProps->setPropertyValue("Visible",css::uno::Any(true));
         return xTitled;
     }
     else
@@ -218,7 +218,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
         uno::Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
         if( xProps.is() )
         {
-            xProps->setPropertyValue( "Show", uno::makeAny( false ) );
+            xProps->setPropertyValue( "Show", uno::Any( false ) );
             xTitled = lcl_getTitleParent( eTitleType, xModel );
         }
     }
@@ -284,7 +284,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                             || (bIsVertical && eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE) )
                         {
                             double fNewAngleDegree = 90.0;
-                            xTitleProps->setPropertyValue( "TextRotation", uno::makeAny( fNewAngleDegree ));
+                            xTitleProps->setPropertyValue( "TextRotation", uno::Any( fNewAngleDegree ));
                         }
                     }
                 }
@@ -369,7 +369,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
         {
             try
             {
-                uno::Any aFontSize( uno::makeAny( *pDefaultCharHeight ));
+                uno::Any aFontSize( *pDefaultCharHeight );
                 xFormattedString->setPropertyValue( "CharHeight", aFontSize );
                 xFormattedString->setPropertyValue( "CharHeightAsian", aFontSize );
                 xFormattedString->setPropertyValue( "CharHeightComplex", aFontSize );
@@ -400,7 +400,7 @@ void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
     if( xTitled.is())
     {
         css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
-        xProps->setPropertyValue("Visible",css::uno::makeAny(false));
+        xProps->setPropertyValue("Visible",css::uno::Any(false));
     }
 }
 

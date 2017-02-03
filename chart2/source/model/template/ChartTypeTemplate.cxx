@@ -64,7 +64,7 @@ void lcl_applyDefaultStyle(
         if( xSeriesProp.is() && xColorScheme.is() )
             xSeriesProp->setPropertyValue(
                 "Color",
-                uno::makeAny( xColorScheme->getColorByIndex( nIndex )));
+                uno::Any( xColorScheme->getColorByIndex( nIndex )));
     }
 }
 
@@ -113,7 +113,7 @@ void lcl_ensureCorrectMissingValueTreatment( const Reference< chart2::XDiagram >
             ::chart::ChartTypeHelper::getSupportedMissingValueTreatments( xChartType ) );
 
         if( aAvailableMissingValueTreatment.getLength() )
-            xDiaProp->setPropertyValue( "MissingValueTreatment", uno::makeAny( aAvailableMissingValueTreatment[0] ) );
+            xDiaProp->setPropertyValue( "MissingValueTreatment", uno::Any( aAvailableMissingValueTreatment[0] ) );
         else
             xDiaProp->setPropertyValue( "MissingValueTreatment", uno::Any() );
     }
@@ -214,7 +214,7 @@ void SAL_CALL ChartTypeTemplate::changeDiagram( const uno::Reference< XDiagram >
             if( aData.Categories.is())
             {
                 aParam.realloc( 1 );
-                aParam[0] = beans::PropertyValue( "HasCategories", -1, uno::makeAny( true ),
+                aParam[0] = beans::PropertyValue( "HasCategories", -1, uno::Any( true ),
                                                   beans::PropertyState_DIRECT_VALUE );
             }
             aData = xInterpreter->interpretDataSource( xSource, aParam, aFlatSeriesSeq );
@@ -388,7 +388,7 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
         try
         {
             StackMode eStackMode = getStackMode( nChartTypeIndex );
-            const uno::Any aPropValue = uno::makeAny(
+            const uno::Any aPropValue = uno::Any(
                 ( (eStackMode == StackMode_Y_STACKED) ||
                   (eStackMode == StackMode_Y_STACKED_PERCENT) )
                 ? chart2::StackingDirection_Y_STACKING
@@ -447,7 +447,7 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
                 if( xAxisProp.is())
                 {
                     // set number format to source format
-                    xAxisProp->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::makeAny(true));
+                    xAxisProp->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
                     xAxisProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
                 }
             }
@@ -745,7 +745,7 @@ void ChartTypeTemplate::adaptAxes(
                             if( xAxisProp.is())
                             {
                                 // set number format to source format
-                                xAxisProp->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::makeAny(true));
+                                xAxisProp->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
                                 xAxisProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
                             }
                         }

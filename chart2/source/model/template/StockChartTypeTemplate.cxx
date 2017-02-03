@@ -163,15 +163,15 @@ StockChartTypeTemplate::StockChartTypeTemplate(
 {
     setFastPropertyValue_NoBroadcast(
         PROP_STOCKCHARTTYPE_TEMPLATE_OPEN,
-        uno::makeAny( ( eVariant == OPEN_LOW_HI_CLOSE ||
+        uno::Any( ( eVariant == OPEN_LOW_HI_CLOSE ||
                         eVariant == VOL_OPEN_LOW_HI_CLOSE )));
     setFastPropertyValue_NoBroadcast(
         PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME,
-        uno::makeAny( ( eVariant == VOL_LOW_HI_CLOSE ||
+        uno::Any( ( eVariant == VOL_LOW_HI_CLOSE ||
                         eVariant == VOL_OPEN_LOW_HI_CLOSE )));
     setFastPropertyValue_NoBroadcast(
         PROP_STOCKCHARTTYPE_TEMPLATE_JAPANESE,
-        uno::makeAny( bJapaneseStyle ));
+        uno::Any( bJapaneseStyle ));
 }
 
 StockChartTypeTemplate::~StockChartTypeTemplate()
@@ -234,12 +234,12 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
 
         Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
         if( xProp.is() )
-            xProp->setPropertyValue( "AttachedAxisIndex", uno::makeAny( nNewAxisIndex ) );
+            xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
 
         if( bHasVolume && nChartTypeIndex==0 )
         {
             //switch lines off for volume bars
-            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
+            DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
         }
         else
         {
@@ -249,7 +249,7 @@ void SAL_CALL StockChartTypeTemplate::applyStyle(
                 drawing::LineStyle eStyle = drawing::LineStyle_NONE;
                 xProp->getPropertyValue( "LineStyle" ) >>= eStyle;
                 if( eStyle == drawing::LineStyle_NONE )
-                    xProp->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ));
+                    xProp->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ));
             }
         }
 
@@ -273,7 +273,7 @@ void SAL_CALL StockChartTypeTemplate::resetStyles(
         {
             Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY );
             if( xProp.is() )
-                xProp->setPropertyValue( "AttachedAxisIndex", uno::makeAny( sal_Int32(0) ) );
+                xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( sal_Int32(0) ) );
         }
     }
 
@@ -360,9 +360,9 @@ void StockChartTypeTemplate::createChartTypes(
         Reference< beans::XPropertySet > xCTProp( xCT, uno::UNO_QUERY );
         if( xCTProp.is())
         {
-            xCTProp->setPropertyValue( "Japanese", uno::makeAny( bJapaneseStyle ));
-            xCTProp->setPropertyValue( "ShowFirst", uno::makeAny( bShowFirst ));
-            xCTProp->setPropertyValue( "ShowHighLow", uno::makeAny( bShowHighLow ));
+            xCTProp->setPropertyValue( "Japanese", uno::Any( bJapaneseStyle ));
+            xCTProp->setPropertyValue( "ShowFirst", uno::Any( bShowFirst ));
+            xCTProp->setPropertyValue( "ShowHighLow", uno::Any( bShowHighLow ));
         }
 
         if( aSeriesSeq.getLength() > nSeriesIndex &&

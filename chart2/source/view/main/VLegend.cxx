@@ -98,7 +98,7 @@ void lcl_getProperties(
         ::chart::tPropertyNameValueMap aLineFillValueMap;
         ::chart::PropertyMapper::getValueMap( aLineFillValueMap, ::chart::PropertyMapper::getPropertyNameMapForFillAndLineProperties(), xLegendProp );
 
-        aLineFillValueMap[ "LineJoint" ] = uno::makeAny( drawing::LineJoint_ROUND );
+        aLineFillValueMap[ "LineJoint" ] <<= drawing::LineJoint_ROUND;
 
         ::chart::PropertyMapper::getMultiPropertyListsFromValueMap(
             rOutLineFillProperties.first, rOutLineFillProperties.second, aLineFillValueMap );
@@ -108,10 +108,10 @@ void lcl_getProperties(
         ::chart::PropertyMapper::getValueMap( aTextValueMap, ::chart::PropertyMapper::getPropertyNameMapForCharacterProperties(), xLegendProp );
 
         drawing::TextHorizontalAdjust eHorizAdjust( drawing::TextHorizontalAdjust_LEFT );
-        aTextValueMap[ "TextAutoGrowHeight" ] = uno::makeAny( true );
-        aTextValueMap[ "TextAutoGrowWidth" ] = uno::makeAny( true );
-        aTextValueMap[ "TextHorizontalAdjust" ] = uno::makeAny( eHorizAdjust );
-        aTextValueMap[ "TextMaximumFrameWidth" ] = uno::makeAny( rReferenceSize.Width ); //needs to be overwritten by actual available space in the legend
+        aTextValueMap[ "TextAutoGrowHeight" ] <<= true;
+        aTextValueMap[ "TextAutoGrowWidth" ] <<= true;
+        aTextValueMap[ "TextHorizontalAdjust" ] <<= eHorizAdjust;
+        aTextValueMap[ "TextMaximumFrameWidth" ] <<= rReferenceSize.Width; //needs to be overwritten by actual available space in the legend
 
         // recalculate font size
         awt::Size aPropRefSize;
@@ -120,21 +120,21 @@ void lcl_getProperties(
             (aPropRefSize.Height > 0) &&
             (aTextValueMap[ "CharHeight" ] >>= fFontHeight) )
         {
-            aTextValueMap[ "CharHeight" ] = uno::makeAny(
+            aTextValueMap[ "CharHeight" ] <<=
                 static_cast< float >(
-                    ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize )));
+                    ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
 
             if( aTextValueMap[ "CharHeightAsian" ] >>= fFontHeight )
             {
-                aTextValueMap[ "CharHeightAsian" ] = uno::makeAny(
+                aTextValueMap[ "CharHeightAsian" ] <<=
                     static_cast< float >(
-                        ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize )));
+                        ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
             }
             if( aTextValueMap[ "CharHeightComplex" ] >>= fFontHeight )
             {
-                aTextValueMap[ "CharHeightComplex" ] = uno::makeAny(
+                aTextValueMap[ "CharHeightComplex" ] <<=
                     static_cast< float >(
-                        ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize )));
+                        ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize ));
             }
         }
 
@@ -288,7 +288,7 @@ awt::Size lcl_placeLegendEntries(
             // #i109336# Improve auto positioning in chart
             nMaxTextWidth = rAvailableSpace.Width * 3 / 10;
         }
-        *pFrameWidthAny = uno::makeAny(nMaxTextWidth);
+        *pFrameWidthAny <<= nMaxTextWidth;
     }
 
     ::std::vector< Reference< drawing::XShape > > aTextShapes;

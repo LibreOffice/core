@@ -122,8 +122,8 @@ void DlgEditor::ShowDialog()
             aDecorationAny >>= bDecoration;
             if( !bDecoration )
             {
-                xNewDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
-                xNewDlgModPropSet->setPropertyValue( "Title", makeAny( OUString() ) );
+                xNewDlgModPropSet->setPropertyValue( aDecorationPropName, Any( true ) );
+                xNewDlgModPropSet->setPropertyValue( "Title", Any( OUString() ) );
             }
         }
         catch(const UnknownPropertyException& )
@@ -792,7 +792,7 @@ void DlgEditor::Copy()
             memcpy( pCombinedData + 4, DialogModelBytes.getConstArray(), nDialogDataLen );
             memcpy( pCombinedData + nResOffset, aResData.getConstArray(), nResDataLen );
 
-            aSeqData[1] = Any(aCombinedData);
+            aSeqData[1] <<= aCombinedData;
 
             pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavorsResource, aSeqData );
         }

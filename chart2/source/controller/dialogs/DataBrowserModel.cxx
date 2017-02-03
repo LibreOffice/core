@@ -390,7 +390,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immediately
         Reference< beans::XPropertySet > xNewSeriesProps( xNewSeries, uno::UNO_QUERY );
         if( xNewSeriesProps.is() )
-            xNewSeriesProps->setPropertyValue(CHART_UNONAME_NUMFMT , uno::makeAny(nSeriesNumberFormat));
+            xNewSeriesProps->setPropertyValue(CHART_UNONAME_NUMFMT , uno::Any(nSeriesNumberFormat));
     }
 
     updateFromModel();
@@ -698,13 +698,13 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
 bool DataBrowserModel::setCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow, double fValue )
 {
     return (getCellType( nAtColumn, nAtRow ) == NUMBER) &&
-        setCellAny( nAtColumn, nAtRow, uno::makeAny( fValue ));
+        setCellAny( nAtColumn, nAtRow, uno::Any( fValue ));
 }
 
 bool DataBrowserModel::setCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow, const OUString & rText )
 {
     return (getCellType( nAtColumn, nAtRow ) == TEXT) &&
-        setCellAny( nAtColumn, nAtRow, uno::makeAny( rText ));
+        setCellAny( nAtColumn, nAtRow, uno::Any( rText ));
 }
 
 sal_Int32 DataBrowserModel::getColumnCount() const

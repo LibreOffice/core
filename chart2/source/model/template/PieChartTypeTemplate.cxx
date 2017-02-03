@@ -160,9 +160,9 @@ PieChartTypeTemplate::PieChartTypeTemplate(
         ChartTypeTemplate( xContext, rServiceName ),
         ::property::OPropertySet( m_aMutex )
 {
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_OFFSET_MODE,    uno::makeAny( eMode ));
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      uno::makeAny( nDim ));
-    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::makeAny( bRings ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_OFFSET_MODE,    uno::Any( eMode ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DIMENSION,      uno::Any( nDim ));
+    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_USE_RINGS,      uno::Any( bRings ));
 }
 
 PieChartTypeTemplate::~PieChartTypeTemplate()
@@ -359,7 +359,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
             {
                 eOffsetMode = chart2::PieChartOffsetMode_ALL_EXPLODED;
                 if( bAdaptProperties )
-                    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DEFAULT_OFFSET, uno::makeAny( fOffset ));
+                    setFastPropertyValue_NoBroadcast( PROP_PIE_TEMPLATE_DEFAULT_OFFSET, uno::Any( fOffset ));
             }
 
             bResult = ( eOffsetMode == ePieOffsetMode );
@@ -505,7 +505,7 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
             if( bSetOffset )
             {
                 // set the offset to the series and to the attributed data points
-                xProp->setPropertyValue( aOffsetPropName, uno::makeAny( fOffsetToSet ));
+                xProp->setPropertyValue( aOffsetPropName, uno::Any( fOffsetToSet ));
 
                 // remove hard attributes from data points
                 for( sal_Int32 nPtIdx=0; nPtIdx<aAttributedDataPointIndexList.getLength(); ++nPtIdx )
@@ -519,10 +519,10 @@ void SAL_CALL PieChartTypeTemplate::applyStyle(
         }
 
         // line style
-        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 
         // vary colors by point
-        xProp->setPropertyValue( "VaryColorsByPoint", uno::makeAny( true ));
+        xProp->setPropertyValue( "VaryColorsByPoint", uno::Any( true ));
     }
     catch( const uno::Exception & ex )
     {
@@ -574,7 +574,7 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
     // line style
     ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
-    uno::Any aLineStyleAny( uno::makeAny( drawing::LineStyle_NONE ));
+    uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
          aIt != aSeriesVec.end(); ++aIt )
     {

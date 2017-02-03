@@ -673,7 +673,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                         throw uno::RuntimeException();
                     }
                     OUString aMime( "text/xml" );
-                    xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
+                    xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
 
                     // Set encryption key
                     setStreamKey( xSourceStream, pLib->maPassword );
@@ -818,7 +818,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                         throw uno::RuntimeException();
                     }
                     OUString aMime( "text/xml" );
-                    xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
+                    xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
 
                     Reference< XOutputStream > xOut = xSourceStream->getOutputStream();
                     Reference< XNameContainer > xLib( pLib );

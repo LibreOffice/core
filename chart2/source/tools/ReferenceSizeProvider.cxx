@@ -144,7 +144,7 @@ void ReferenceSizeProvider::setValuesAtPropertySet(
         if( useAutoScale())
         {
             if( ! bHasOldRefSize )
-                xProp->setPropertyValue( aRefSizeName, uno::makeAny( aRefSize ));
+                xProp->setPropertyValue( aRefSizeName, uno::Any( aRefSize ));
         }
         else
         {

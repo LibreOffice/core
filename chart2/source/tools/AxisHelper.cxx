@@ -330,7 +330,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
         }
 
         if (nOldNumberFormat != nNumberFormatKey)
-            xProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::makeAny(nNumberFormatKey));
+            xProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any(nNumberFormatKey));
     }
 
     return nNumberFormatKey;
@@ -386,7 +386,7 @@ Reference< XAxis > AxisHelper::createAxis(
 
             Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
             if( xProp.is() )
-                xProp->setPropertyValue("CrossoverPosition", uno::makeAny(eNewAxisPos) );
+                xProp->setPropertyValue("CrossoverPosition", uno::Any(eNewAxisPos) );
         }
 
         Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
@@ -478,9 +478,9 @@ void AxisHelper::makeAxisVisible( const Reference< XAxis >& xAxis )
     Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
     if( xProps.is() )
     {
-        xProps->setPropertyValue( "Show", uno::makeAny( true ) );
+        xProps->setPropertyValue( "Show", uno::Any( true ) );
         LinePropertiesHelper::SetLineVisible( xProps );
-        xProps->setPropertyValue( "DisplayLabels", uno::makeAny( true ) );
+        xProps->setPropertyValue( "DisplayLabels", uno::Any( true ) );
     }
 }
 
@@ -488,7 +488,7 @@ void AxisHelper::makeGridVisible( const Reference< beans::XPropertySet >& xGridP
 {
     if( xGridProperties.is() )
     {
-        xGridProperties->setPropertyValue( "Show", uno::makeAny( true ) );
+        xGridProperties->setPropertyValue( "Show", uno::Any( true ) );
         LinePropertiesHelper::SetLineVisible( xGridProperties );
     }
 }
@@ -504,7 +504,7 @@ void AxisHelper::makeAxisInvisible( const Reference< XAxis >& xAxis )
     Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
     if( xProps.is() )
     {
-        xProps->setPropertyValue( "Show", uno::makeAny( false ) );
+        xProps->setPropertyValue( "Show", uno::Any( false ) );
     }
 }
 
@@ -555,7 +555,7 @@ void AxisHelper::makeGridInvisible( const Reference< beans::XPropertySet >& xGri
 {
     if( xGridProperties.is() )
     {
-        xGridProperties->setPropertyValue( "Show", uno::makeAny( false ) );
+        xGridProperties->setPropertyValue( "Show", uno::Any( false ) );
     }
 }
 

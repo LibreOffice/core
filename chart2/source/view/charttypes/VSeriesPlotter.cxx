@@ -578,9 +578,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
 
             Sequence< tAnySequence > aParaPropValues(3);
             aParaPropValues[1].realloc(1);
-            aParaPropValues[1][0] = uno::makeAny( style::ParagraphAdjust_CENTER );
+            aParaPropValues[1][0] <<= style::ParagraphAdjust_CENTER;
             aParaPropValues[2].realloc(1);
-            aParaPropValues[2][0] = uno::makeAny( style::ParagraphAdjust_CENTER );
+            aParaPropValues[2][0] <<= style::ParagraphAdjust_CENTER;
 
             //create text shape
             xTextShape = AbstractShapeFactory::getOrCreateShapeFactory(m_xShapeFactory)->
@@ -638,7 +638,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 sal_Int32 aTextLineHeight =  aTextSize.Height / nLineCountForSymbolsize;
 
                 // set maximum text width
-                uno::Any aTextMaximumFrameWidth = uno::makeAny( nTextWidth );
+                uno::Any aTextMaximumFrameWidth( nTextWidth );
                 xProp->setPropertyValue( "TextMaximumFrameWidth", aTextMaximumFrameWidth );
 
                 // compute the total lines of text
@@ -2421,7 +2421,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
 
             OSL_ASSERT( xPointSet.is());
             xPointSet->setPropertyValue(
-                "Color", uno::makeAny( m_xColorScheme->getColorByIndex( nPointIndex )));
+                "Color", uno::Any( m_xColorScheme->getColorByIndex( nPointIndex )));
         }
     }
 

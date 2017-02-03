@@ -1133,7 +1133,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent&
                 catch (container::NoSuchElementException const& e)
                 {
                     throw lang::WrappedTargetRuntimeException("", nullptr,
-                            uno::makeAny(e));
+                            uno::Any(e));
                 }
             }
         }

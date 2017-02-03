@@ -130,7 +130,7 @@ void WrappedGL3DProperties::addWrappedProperties(
 {
     rList.push_back(
         new WrappedGL3DProperty(
-            CHART_UNONAME_ROUNDED_EDGE, CHART_UNONAME_ROUNDED_EDGE, uno::makeAny(false), pChart2ModelContact));
+            CHART_UNONAME_ROUNDED_EDGE, CHART_UNONAME_ROUNDED_EDGE, uno::Any(false), pChart2ModelContact));
 }
 
 }}

@@ -533,10 +533,10 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
                 ActionDescriptionProvider::createDescription(
                     ActionDescriptionProvider::ActionType::Insert, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
                 m_xUndoManager );
-            xEqProp->setPropertyValue( "ShowEquation", uno::makeAny( true ));
-            xEqProp->setPropertyValue( "XName", uno::makeAny( OUString("x") ));
-            xEqProp->setPropertyValue( "YName", uno::makeAny( OUString("f(x)") ));
-            xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( bInsertR2 ));
+            xEqProp->setPropertyValue( "ShowEquation", uno::Any( true ));
+            xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
+            xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x)") ));
+            xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( bInsertR2 ));
             aUndoGuard.commit();
         }
     }
@@ -552,7 +552,7 @@ void ChartController::executeDispatch_InsertR2Value()
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::ActionType::Insert, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
             m_xUndoManager );
-        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( true ));
+        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( true ));
         aUndoGuard.commit();
     }
 }
@@ -567,7 +567,7 @@ void ChartController::executeDispatch_DeleteR2Value()
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::ActionType::Insert, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
             m_xUndoManager );
-        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( false ));
+        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
         aUndoGuard.commit();
     }
 }

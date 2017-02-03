@@ -38,13 +38,13 @@ private:
 void CommonFunctorsTest::testAnyToString()
 {
     std::vector<css::uno::Any> aInput;
-    aInput.push_back(css::uno::makeAny(2.0));
-    aInput.push_back(css::uno::makeAny(10.0));
-    aInput.push_back(css::uno::makeAny(12.0));
-    aInput.push_back(css::uno::makeAny(15.0));
-    aInput.push_back(css::uno::makeAny(25.234));
-    aInput.push_back(css::uno::makeAny(123.456));
-    aInput.push_back(css::uno::makeAny(0.123450));
+    aInput.push_back(css::uno::Any(2.0));
+    aInput.push_back(css::uno::Any(10.0));
+    aInput.push_back(css::uno::Any(12.0));
+    aInput.push_back(css::uno::Any(15.0));
+    aInput.push_back(css::uno::Any(25.234));
+    aInput.push_back(css::uno::Any(123.456));
+    aInput.push_back(css::uno::Any(0.123450));
 
     std::vector<OUString> aOutput;
     std::transform(aInput.begin(), aInput.end(),

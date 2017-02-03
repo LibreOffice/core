@@ -264,8 +264,8 @@ void setLegendPos(const css::uno::Reference<css::frame::XModel>& xModel, sal_Int
             assert(false);
     }
 
-    xLegendProp->setPropertyValue("AnchorPosition", css::uno::makeAny(eLegendPos));
-    xLegendProp->setPropertyValue("Expansion", css::uno::makeAny(eExpansion));
+    xLegendProp->setPropertyValue("AnchorPosition", css::uno::Any(eLegendPos));
+    xLegendProp->setPropertyValue("Expansion", css::uno::Any(eExpansion));
 
     if (eLegendPos != chart2::LegendPosition_CUSTOM)
     {

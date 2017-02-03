@@ -374,7 +374,7 @@ WrappedLineColorProperty::WrappedLineColorProperty(
                 DataSeriesPointWrapper* pDataSeriesPointWrapper )
                 : WrappedSeriesAreaOrLineProperty("LineColor","BorderColor","Color", pDataSeriesPointWrapper )
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
-                , m_aDefaultValue(uno::makeAny(sal_Int32( 0x0099ccff )))  // blue 8
+                , m_aDefaultValue(uno::Any(sal_Int32( 0x0099ccff )))  // blue 8
                 , m_aOuterValue(m_aDefaultValue)
 {
 }
@@ -422,7 +422,7 @@ WrappedLineStyleProperty::WrappedLineStyleProperty(
                 DataSeriesPointWrapper* pDataSeriesPointWrapper )
                 : WrappedSeriesAreaOrLineProperty("LineStyle","BorderStyle", "LineStyle", pDataSeriesPointWrapper )
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
-                , m_aDefaultValue(uno::makeAny(drawing::LineStyle_SOLID))
+                , m_aDefaultValue(uno::Any(drawing::LineStyle_SOLID))
                 , m_aOuterValue(m_aDefaultValue)
 {
 }
@@ -433,7 +433,7 @@ void WrappedLineStyleProperty::setPropertyValue( const Any& rOuterValue, const R
     if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
     {
         m_aOuterValue = rOuterValue;
-        aNewValue = uno::makeAny(drawing::LineStyle_NONE);
+        aNewValue = uno::Any(drawing::LineStyle_NONE);
     }
     WrappedSeriesAreaOrLineProperty::setPropertyValue( aNewValue, xInnerPropertySet );
 }
@@ -581,7 +581,7 @@ void DataSeriesPointWrapper::updateReferenceSize()
     if( xProp.is() )
     {
         if( xProp->getPropertyValue("ReferencePageSize").hasValue() )
-            xProp->setPropertyValue("ReferencePageSize", uno::makeAny(
+            xProp->setPropertyValue("ReferencePageSize", uno::Any(
                 m_spChart2ModelContact->GetPageSize() ));
     }
 }
@@ -747,7 +747,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     aWrappedProperties.push_back( new WrappedProperty("FillStyle","FillStyle" ) );
     aWrappedProperties.push_back( new WrappedProperty("FillTransparence","Transparency") );
 
-    aWrappedProperties.push_back( new WrappedIgnoreProperty("LineJoint", uno::makeAny( drawing::LineJoint_ROUND ) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty("LineJoint", uno::Any( drawing::LineJoint_ROUND ) ) );
     aWrappedProperties.push_back( new WrappedProperty("FillTransparenceGradientName","TransparencyGradientName") );
     aWrappedProperties.push_back( new WrappedProperty("FillGradientName","GradientName") );
     aWrappedProperties.push_back( new WrappedProperty("FillGradientStepCount","GradientStepCount") );
@@ -854,7 +854,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
                     {
                         Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme() );
                         if( xColorScheme.is() )
-                            return uno::makeAny( xColorScheme->getColorByIndex( m_nPointIndex ) );
+                            return uno::Any( xColorScheme->getColorByIndex( m_nPointIndex ) );
                     }
                 }
             }

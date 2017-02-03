@@ -185,7 +185,7 @@ void VCartesianGrid::fillLinePropertiesFromGridModel( ::std::vector<VLinePropert
     for( sal_Int32 nN=0; nN < rGridPropertiesList.getLength(); nN++ )
     {
         if(!AxisHelper::isGridVisible( rGridPropertiesList[nN] ))
-            aLineProperties.LineStyle = uno::makeAny( drawing::LineStyle_NONE );
+            aLineProperties.LineStyle <<= drawing::LineStyle_NONE;
         else
             aLineProperties.initFromPropertySet( rGridPropertiesList[nN] );
         rLinePropertiesList.push_back(aLineProperties);
@@ -270,7 +270,7 @@ void VCartesianGrid::createShapes()
 
             //create handle shape:
             VLineProperties aHandleLineProperties;
-            aHandleLineProperties.LineStyle    = uno::makeAny( drawing::LineStyle_NONE );
+            aHandleLineProperties.LineStyle    <<= drawing::LineStyle_NONE;
             Reference< drawing::XShape > xHandleShape =
                 m_pShapeFactory->createLine2D( xTarget, aHandlesPoints, &aHandleLineProperties );
             ::chart::AbstractShapeFactory::setShapeName( xHandleShape, "HandlesOnly" );

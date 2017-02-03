@@ -159,13 +159,13 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
 
     uno::Sequence< beans::PropertyValue > aArguments(3);
     aArguments[0] = beans::PropertyValue( "DataRowSource"
-        , -1, uno::makeAny( eRowSource )
+        , -1, uno::Any( eRowSource )
         , beans::PropertyState_DIRECT_VALUE );
     aArguments[1] = beans::PropertyValue( "FirstCellAsLabel"
-        , -1, uno::makeAny( bFirstCellAsLabel )
+        , -1, uno::Any( bFirstCellAsLabel )
         , beans::PropertyState_DIRECT_VALUE );
     aArguments[2] = beans::PropertyValue( "HasCategories"
-        , -1, uno::makeAny( bHasCategories )
+        , -1, uno::Any( bHasCategories )
         , beans::PropertyState_DIRECT_VALUE );
 
     return aArguments;
@@ -180,14 +180,14 @@ uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
     aArguments.realloc( aArguments.getLength() + 1 );
     aArguments[aArguments.getLength() - 1] =
         beans::PropertyValue( "CellRangeRepresentation"
-                              , -1, uno::makeAny( rRangeRepresentation )
+                              , -1, uno::Any( rRangeRepresentation )
                               , beans::PropertyState_DIRECT_VALUE );
     if( rSequenceMapping.getLength() )
     {
         aArguments.realloc( aArguments.getLength() + 1 );
         aArguments[aArguments.getLength() - 1] =
             beans::PropertyValue( "SequenceMapping"
-                                , -1, uno::makeAny( rSequenceMapping )
+                                , -1, uno::Any( rSequenceMapping )
                                 , beans::PropertyState_DIRECT_VALUE );
     }
     return aArguments;

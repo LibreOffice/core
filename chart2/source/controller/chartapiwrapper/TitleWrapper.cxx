@@ -94,7 +94,7 @@ Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPrope
 }
 Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    return uno::makeAny( OUString() );//default title is a empty String
+    return uno::Any( OUString() );//default title is a empty String
 }
 
 class WrappedStackedTextProperty : public WrappedProperty
@@ -214,7 +214,7 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
         aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
         aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
-        xPropertySet->setPropertyValue( "RelativePosition", uno::makeAny(aRelativePosition) );
+        xPropertySet->setPropertyValue( "RelativePosition", uno::Any(aRelativePosition) );
     }
 }
 
@@ -430,7 +430,7 @@ void TitleWrapper::updateReferenceSize()
     if( xProp.is() )
     {
         if( xProp->getPropertyValue( "ReferencePageSize" ).hasValue() )
-            xProp->setPropertyValue( "ReferencePageSize", uno::makeAny(
+            xProp->setPropertyValue( "ReferencePageSize", uno::Any(
                             m_spChart2ModelContact->GetPageSize() ));
     }
 }

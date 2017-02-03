@@ -262,7 +262,7 @@ void lcl_SetSequenceRole(
 {
     Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY );
     if( xProp.is())
-        xProp->setPropertyValue( "Role" , uno::makeAny( rRole ));
+        xProp->setPropertyValue( "Role" , uno::Any( rRole ));
 }
 
 Reference< XDataSeries > lcl_CreateNewSeries(
@@ -288,7 +288,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             // without setting it as hard attribute
             Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
             if( xColorScheme.is())
-                xResultProp->setPropertyValue( "Color" , uno::makeAny( xColorScheme->getColorByIndex( nNewSeriesIndex )));
+                xResultProp->setPropertyValue( "Color" , uno::Any( xColorScheme->getColorByIndex( nNewSeriesIndex )));
         }
         sal_Int32 nGroupIndex=0;
         if( xChartType.is())
@@ -816,7 +816,7 @@ void DialogModel::applyInterpretedData(
                             Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
                             if( xColorScheme.is())
                                 xSeriesProp->setPropertyValue( "Color" ,
-                                    uno::makeAny( xColorScheme->getColorByIndex( nSeriesCounter )));
+                                    uno::Any( xColorScheme->getColorByIndex( nSeriesCounter )));
                         }
                         m_xTemplate->applyStyle( aSeries[nSeries], nGroup, nNewSeriesIndex++, nSeriesInGroup );
                     }

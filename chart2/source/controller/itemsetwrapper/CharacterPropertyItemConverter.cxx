@@ -528,7 +528,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                         if (m_pRefSize && GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ).hasValue())
                         {
                             GetRefSizePropertySet()->setPropertyValue(
-                                m_aRefSizePropertyName, uno::makeAny(*m_pRefSize));
+                                m_aRefSizePropertyName, uno::Any(*m_pRefSize));
                         }
 
                         GetPropertySet()->setPropertyValue( "CharHeight" + aPostfix, aValue );

@@ -313,7 +313,7 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
         {
             Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
             awt::Point aPoint(aRect.Left(),aRect.Top());
-            aRet = uno::makeAny( aPoint );
+            aRet = uno::Any( aPoint );
         }
     }
     else if( rPropertyName == "Size" )
@@ -326,12 +326,12 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
         {
             Rectangle aRect( m_pDialog->GetWindowExtentsRelative( nullptr ) );
             awt::Size aSize(aRect.GetWidth(),aRect.GetHeight());
-            aRet = uno::makeAny( aSize );
+            aRet = uno::Any( aSize );
         }
     }
     else if( rPropertyName == "UnlockControllersOnExecute" )
     {
-        aRet = uno::makeAny( m_bUnlockControllersOnExecute );
+        aRet = uno::Any( m_bUnlockControllersOnExecute );
     }
     else
         throw beans::UnknownPropertyException( "unknown property was tried to get from chart wizard" , nullptr );

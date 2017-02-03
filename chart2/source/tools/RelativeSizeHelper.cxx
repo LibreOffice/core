@@ -28,7 +28,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::std;
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 
 namespace chart
@@ -73,7 +73,7 @@ void RelativeSizeHelper::adaptFontSizes(
             {
                 xTargetProperties->setPropertyValue(
                     *aIt,
-                    makeAny( static_cast< float >(
+                    Any( static_cast< float >(
                                  calculate( fFontHeight, rOldReferenceSize, rNewReferenceSize ))));
             }
         }

@@ -114,7 +114,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
     {
         throw css::lang::WrappedTargetRuntimeException(
             "ChartPanelFactory::createUIElement exception",
-            nullptr, css::uno::makeAny(e));
+            nullptr, css::uno::Any(e));
     }
 
     return xElement;

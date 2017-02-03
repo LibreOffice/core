@@ -98,7 +98,7 @@ void lcl_addStorageToMediaDescriptor(
 {
     rOutMD.realloc( rOutMD.getLength() + 1 );
     rOutMD[rOutMD.getLength() - 1] = beans::PropertyValue(
-        "Storage", -1, uno::makeAny( xStorage ), beans::PropertyState_DIRECT_VALUE );
+        "Storage", -1, uno::Any( xStorage ), beans::PropertyState_DIRECT_VALUE );
 }
 
 Reference< embed::XStorage > lcl_createStorage(
@@ -364,7 +364,7 @@ void ChartModel::impl_store(
         {
             xPropSet->setPropertyValue(
                 "SavedObject",
-                uno::makeAny( aMDHelper.HierarchicalDocumentName ) );
+                uno::Any( aMDHelper.HierarchicalDocumentName ) );
         }
         catch ( const uno::Exception& )
         {
@@ -391,7 +391,7 @@ void ChartModel::insertDefaultChart()
                 if( bSupportsCategories )
                 {
                     aParam.realloc( 1 );
-                    aParam[0] = beans::PropertyValue( "HasCategories", -1, uno::makeAny( true ),
+                    aParam[0] = beans::PropertyValue( "HasCategories", -1, uno::Any( true ),
                                                       beans::PropertyState_DIRECT_VALUE );
                 }
 
@@ -411,13 +411,13 @@ void ChartModel::insertDefaultChart()
                 Reference< beans::XPropertySet > xLegendProperties( xLegend, uno::UNO_QUERY );
                 if( xLegendProperties.is() )
                 {
-                    xLegendProperties->setPropertyValue( "FillStyle", uno::makeAny( drawing::FillStyle_NONE ));
-                    xLegendProperties->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ));
-                    xLegendProperties->setPropertyValue( "LineColor", uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
-                    xLegendProperties->setPropertyValue( "FillColor", uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+                    xLegendProperties->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ));
+                    xLegendProperties->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ));
+                    xLegendProperties->setPropertyValue( "LineColor", uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ));  // gray30
+                    xLegendProperties->setPropertyValue( "FillColor", uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
 
                     if( bIsRTL )
-                        xLegendProperties->setPropertyValue( "AnchorPosition", uno::makeAny( chart2::LegendPosition_LINE_START ));
+                        xLegendProperties->setPropertyValue( "AnchorPosition", uno::Any( chart2::LegendPosition_LINE_START ));
                 }
                 if(xDiagram.is())
                     xDiagram->setLegend( xLegend );
@@ -426,8 +426,8 @@ void ChartModel::insertDefaultChart()
                 Reference< beans::XPropertySet > xDiagramProperties( xDiagram, uno::UNO_QUERY );
                 if( xDiagramProperties.is() )
                 {
-                    xDiagramProperties->setPropertyValue( "RightAngledAxes", uno::makeAny( true ));
-                    xDiagramProperties->setPropertyValue( "D3DScenePerspective", uno::makeAny( drawing::ProjectionMode_PARALLEL ));
+                    xDiagramProperties->setPropertyValue( "RightAngledAxes", uno::Any( true ));
+                    xDiagramProperties->setPropertyValue( "D3DScenePerspective", uno::Any( drawing::ProjectionMode_PARALLEL ));
                     ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Realistic );
                 }
 
@@ -437,18 +437,18 @@ void ChartModel::insertDefaultChart()
                     Reference< beans::XPropertySet > xWall( xDiagram->getWall() );
                     if( xWall.is() )
                     {
-                        xWall->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ) );
-                        xWall->setPropertyValue( "FillStyle", uno::makeAny( drawing::FillStyle_NONE ) );
-                        xWall->setPropertyValue( "LineColor", uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
-                        xWall->setPropertyValue( "FillColor", uno::makeAny( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
+                        xWall->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ) );
+                        xWall->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ) );
+                        xWall->setPropertyValue( "LineColor", uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                        xWall->setPropertyValue( "FillColor", uno::Any( static_cast< sal_Int32 >( 0xe6e6e6 ) ) ); // gray10
                     }
                     Reference< beans::XPropertySet > xFloor( xDiagram->getFloor() );
                     if( xFloor.is() )
                     {
-                        xFloor->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ) );
-                        xFloor->setPropertyValue( "FillStyle", uno::makeAny( drawing::FillStyle_SOLID ) );
-                        xFloor->setPropertyValue( "LineColor", uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
-                        xFloor->setPropertyValue( "FillColor", uno::makeAny( static_cast< sal_Int32 >( 0xcccccc ) ) ); // gray20
+                        xFloor->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ) );
+                        xFloor->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_SOLID ) );
+                        xFloor->setPropertyValue( "LineColor", uno::Any( static_cast< sal_Int32 >( 0xb3b3b3 ) ) ); // gray30
+                        xFloor->setPropertyValue( "FillColor", uno::Any( static_cast< sal_Int32 >( 0xcccccc ) ) ); // gray20
                     }
 
                 }

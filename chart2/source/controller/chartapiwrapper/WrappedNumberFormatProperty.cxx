@@ -77,7 +77,7 @@ Any WrappedNumberFormatProperty::getPropertyValue( const Reference< beans::XProp
 
 Any WrappedNumberFormatProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    return uno::makeAny( sal_Int32( 0 ) );
+    return uno::Any( sal_Int32( 0 ) );
 }
 
 WrappedLinkNumberFormatProperty::WrappedLinkNumberFormatProperty() :
@@ -113,8 +113,7 @@ Any WrappedLinkNumberFormatProperty::getPropertyValue( const Reference< beans::X
 
 Any WrappedLinkNumberFormatProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
 {
-    bool bLink = true;
-    return uno::makeAny( bLink );
+    return uno::Any( true ); // bLink
 }
 
 } //namespace wrapper

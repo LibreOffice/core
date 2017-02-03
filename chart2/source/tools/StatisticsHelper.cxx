@@ -119,7 +119,7 @@ void lcl_setRole(
 {
     Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
     if( xSeqProp.is())
-        xSeqProp->setPropertyValue( "Role", uno::makeAny( rRole ));
+        xSeqProp->setPropertyValue( "Role", uno::Any( rRole ));
 }
 
 void lcl_addSequenceToDataSource(
@@ -153,7 +153,7 @@ void lcl_setXMLRangePropertyAtDataSequence(
         Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
-            xProp->setPropertyValue( aXMLRangePropName, uno::makeAny( rXMLRange ));
+            xProp->setPropertyValue( aXMLRangePropName, uno::Any( rXMLRange ));
     }
     catch( const uno::Exception & ex )
     {
@@ -316,10 +316,10 @@ Reference< beans::XPropertySet > StatisticsHelper::addErrorBars(
     OSL_ASSERT( xErrorBar.is());
     if( xErrorBar.is())
     {
-        xErrorBar->setPropertyValue( "ErrorBarStyle", uno::makeAny( nStyle ));
+        xErrorBar->setPropertyValue( "ErrorBarStyle", uno::Any( nStyle ));
     }
 
-    xSeriesProp->setPropertyValue( aPropName, uno::makeAny( xErrorBar ));
+    xSeriesProp->setPropertyValue( aPropName, uno::Any( xErrorBar ));
 
     return xErrorBar;
 }
@@ -357,7 +357,7 @@ void StatisticsHelper::removeErrorBars(
 {
     Reference< beans::XPropertySet > xErrorBar( getErrorBars( xDataSeries, bYError ));
     if ( xErrorBar.is())
-        xErrorBar->setPropertyValue( "ErrorBarStyle", uno::makeAny(
+        xErrorBar->setPropertyValue( "ErrorBarStyle", uno::Any(
                                          css::chart::ErrorBarStyle::NONE ));
 }
 

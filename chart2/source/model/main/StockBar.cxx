@@ -118,10 +118,10 @@ StockBar::StockBar( bool bRisingCourse ) :
     {
         setFastPropertyValue_NoBroadcast(
             ::chart::FillProperties::PROP_FILL_COLOR,
-            uno::makeAny( sal_Int32( 0x000000 ))); // black
+            uno::Any( sal_Int32( 0x000000 ))); // black
         setFastPropertyValue_NoBroadcast(
             ::chart::LinePropertiesHelper::PROP_LINE_COLOR,
-            uno::makeAny( sal_Int32( 0xb3b3b3 ))); // gray30
+            uno::Any( sal_Int32( 0xb3b3b3 ))); // gray30
     }
 }
 

@@ -29,10 +29,10 @@ using namespace ::com::sun::star;
 
 VLineProperties::VLineProperties()
 {
-    this->Color = uno::makeAny( sal_Int32(0x000000) ); //type sal_Int32 UNO_NAME_LINECOLOR
-    this->LineStyle = uno::makeAny( drawing::LineStyle_SOLID ); //type drawing::LineStyle for property UNO_NAME_LINESTYLE
-    this->Transparence = uno::makeAny( sal_Int16(0) );//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
-    this->Width = uno::makeAny( sal_Int32(0) );//type sal_Int32 for property UNO_NAME_LINEWIDTH
+    this->Color <<= sal_Int32(0x000000); //type sal_Int32 UNO_NAME_LINECOLOR
+    this->LineStyle <<= drawing::LineStyle_SOLID; //type drawing::LineStyle for property UNO_NAME_LINESTYLE
+    this->Transparence <<= sal_Int16(0);//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
+    this->Width <<= sal_Int32(0);//type sal_Int32 for property UNO_NAME_LINEWIDTH
 }
 
 void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp )
@@ -53,7 +53,7 @@ void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropert
         }
     }
     else
-        this->LineStyle = uno::makeAny( drawing::LineStyle_NONE );
+        this->LineStyle <<= drawing::LineStyle_NONE;
 }
 
 bool VLineProperties::isLineVisible() const

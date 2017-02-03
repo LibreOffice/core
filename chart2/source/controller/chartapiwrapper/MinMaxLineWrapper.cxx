@@ -120,7 +120,7 @@ namespace wrapper
 MinMaxLineWrapper::MinMaxLineWrapper(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact)
         : m_spChart2ModelContact( spChart2ModelContact )
         , m_aEventListenerContainer( m_aMutex )
-        , m_aWrappedLineJointProperty( "LineJoint", uno::makeAny( drawing::LineJoint_NONE ))
+        , m_aWrappedLineJointProperty( "LineJoint", uno::Any( drawing::LineJoint_NONE ))
 {
 }
 

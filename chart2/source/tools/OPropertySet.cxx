@@ -205,14 +205,14 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
             sal_Int32 n32Value = 0;
             if( rValue>>=n32Value )
             {
-                rConvertedValue = uno::makeAny( static_cast<sal_Int16>(n32Value) );
+                rConvertedValue <<= static_cast<sal_Int16>(n32Value);
                 return true;
             }
 
             sal_Int64 n64Value = 0;
             if( rValue>>=n64Value )
             {
-                rConvertedValue = uno::makeAny( static_cast<sal_Int16>(n64Value) );
+                rConvertedValue <<= static_cast<sal_Int16>(n64Value);
                 return true;
             }
         }

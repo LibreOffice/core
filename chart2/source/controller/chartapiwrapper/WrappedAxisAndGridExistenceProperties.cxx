@@ -360,7 +360,7 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
         //create axis if needed
         xProp.set( AxisHelper::createAxis( m_nDimensionIndex, m_bMain, xDiagram, m_spChart2ModelContact->m_xContext ), uno::UNO_QUERY );
         if( xProp.is() )
-            xProp->setPropertyValue( "Show", uno::makeAny( false ) );
+            xProp->setPropertyValue( "Show", uno::Any( false ) );
     }
     if( xProp.is() )
         xProp->setPropertyValue( "DisplayLabels", rOuterValue );

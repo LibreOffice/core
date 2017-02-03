@@ -550,12 +550,12 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     // toolbar commands
     m_aCommandAvailability[ ".uno:ToggleGridHorizontal" ] = bIsWritable;
-    m_aCommandArguments[ ".uno:ToggleGridHorizontal" ] = uno::makeAny( m_apModelState->bHasMainYGrid );
+    m_aCommandArguments[ ".uno:ToggleGridHorizontal" ] <<= m_apModelState->bHasMainYGrid;
     m_aCommandAvailability[ ".uno:ToggleGridVertical" ] = bIsWritable;
-    m_aCommandArguments[ ".uno:ToggleGridVertical" ] = uno::makeAny( m_apModelState->bHasMainXGrid );
+    m_aCommandArguments[ ".uno:ToggleGridVertical" ] <<= m_apModelState->bHasMainXGrid;
 
     m_aCommandAvailability[ ".uno:ToggleLegend" ] = bIsWritable;
-    m_aCommandArguments[ ".uno:ToggleLegend" ] = uno::makeAny( m_apModelState->bHasLegend );
+    m_aCommandArguments[ ".uno:ToggleLegend" ] <<= m_apModelState->bHasLegend;
 
     m_aCommandAvailability[ ".uno:NewArrangement" ] = bIsWritable;
     m_aCommandAvailability[ ".uno:Update" ] = bIsWritable;
@@ -628,7 +628,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     // text
     m_aCommandAvailability[ ".uno:ScaleText" ] = bIsWritable && bModelStateIsValid ;
-    m_aCommandArguments[ ".uno:ScaleText" ] = uno::makeAny( m_apModelState->bHasAutoScaledText );
+    m_aCommandArguments[ ".uno:ScaleText" ] <<= m_apModelState->bHasAutoScaledText;
 
     // axes
     m_aCommandAvailability[ ".uno:DiagramAxisX" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxis;
@@ -737,7 +737,7 @@ void ControllerCommandDispatch::fireStatusEvent(
     if( rURL.isEmpty() || rURL == ".uno:StatusBarVisible" )
     {
         bool bIsStatusBarVisible( lcl_isStatusBarVisible( m_xChartController.get() ));
-        fireStatusEventForURL( ".uno:StatusBarVisible", uno::makeAny( bIsStatusBarVisible ), true, xSingleListener );
+        fireStatusEventForURL( ".uno:StatusBarVisible", uno::Any( bIsStatusBarVisible ), true, xSingleListener );
     }
 }
 

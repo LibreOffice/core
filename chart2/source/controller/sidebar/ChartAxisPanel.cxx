@@ -68,7 +68,7 @@ void setLabelShown(const css::uno::Reference<css::frame::XModel>& xModel,
     if (!xAxis.is())
         return;
 
-    xAxis->setPropertyValue("DisplayLabels", css::uno::makeAny(bVisible));
+    xAxis->setPropertyValue("DisplayLabels", css::uno::Any(bVisible));
 }
 
 struct AxisLabelPosMap
@@ -124,7 +124,7 @@ void setLabelPosition(const css::uno::Reference<css::frame::XModel>& xModel,
             ePos = i.ePos;
     }
 
-    xAxis->setPropertyValue("LabelPosition", css::uno::makeAny(ePos));
+    xAxis->setPropertyValue("LabelPosition", css::uno::Any(ePos));
 }
 
 bool isReverse(const css::uno::Reference<css::frame::XModel>& xModel,
@@ -187,7 +187,7 @@ void setAxisRotation(const css::uno::Reference<css::frame::XModel>& xModel,
     if (!xAxis.is())
         return;
 
-    xAxis->setPropertyValue("TextRotation", css::uno::makeAny(nVal));
+    xAxis->setPropertyValue("TextRotation", css::uno::Any(nVal));
 }
 
 double getAxisRotation(const css::uno::Reference<css::frame::XModel>& xModel,

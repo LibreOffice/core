@@ -786,9 +786,9 @@ bool VCartesianAxis::createTextShapes(
             nExtraColor, bHasExtraColor);
 
         if(pColorAny)
-            *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
+            *pColorAny <<= bHasExtraColor?nExtraColor:nColor;
         if(pLimitedSpaceAny)
-            *pLimitedSpaceAny = uno::makeAny(sal_Int32(nLimitedSpaceForText*pTickInfo->nFactorForLimitedTextWidth));
+            *pLimitedSpaceAny <<= sal_Int32(nLimitedSpaceForText*pTickInfo->nFactorForLimitedTextWidth);
 
         B2DVector aTickScreenPos2D = pTickInfo->aTickScreenPosition;
         aTickScreenPos2D += aTextToTickDistance;
@@ -954,9 +954,9 @@ bool VCartesianAxis::createTextShapesSimple(
             nExtraColor, bHasExtraColor);
 
         if(pColorAny)
-            *pColorAny = uno::makeAny(bHasExtraColor?nExtraColor:nColor);
+            *pColorAny <<= bHasExtraColor?nExtraColor:nColor;
         if(pLimitedSpaceAny)
-            *pLimitedSpaceAny = uno::makeAny(sal_Int32(-1*pTickInfo->nFactorForLimitedTextWidth));
+            *pLimitedSpaceAny <<= sal_Int32(-1*pTickInfo->nFactorForLimitedTextWidth);
 
         B2DVector aTickScreenPos2D = pTickInfo->aTickScreenPosition;
         aTickScreenPos2D += aTextToTickDistance;

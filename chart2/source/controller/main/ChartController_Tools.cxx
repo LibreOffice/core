@@ -355,7 +355,7 @@ void ChartController::impl_PasteGraphic(
             m_aSelection.setSelection( xGraphicShape );
             m_aSelection.applySelection( m_pDrawViewWrapper );
         }
-        xGraphicShapeProp->setPropertyValue( "Graphic", uno::makeAny( xGraphic ));
+        xGraphicShapeProp->setPropertyValue( "Graphic", uno::Any( xGraphic ));
         uno::Reference< beans::XPropertySet > xGraphicProp( xGraphic, uno::UNO_QUERY );
 
         awt::Size aGraphicSize( 1000, 1000 );
@@ -450,14 +450,14 @@ void ChartController::impl_PasteStringAsTextShape( const OUString& rString, cons
 
                 float fCharHeight = 10.0;
                 Reference< beans::XPropertySet > xProperties( xTextShape, uno::UNO_QUERY_THROW );
-                xProperties->setPropertyValue( "TextAutoGrowHeight", uno::makeAny( true ) );
-                xProperties->setPropertyValue( "TextAutoGrowWidth", uno::makeAny( true ) );
-                xProperties->setPropertyValue( "CharHeight", uno::makeAny( fCharHeight ) );
-                xProperties->setPropertyValue( "CharHeightAsian", uno::makeAny( fCharHeight ) );
-                xProperties->setPropertyValue( "CharHeightComplex", uno::makeAny( fCharHeight ) );
-                xProperties->setPropertyValue( "TextVerticalAdjust", uno::makeAny( drawing::TextVerticalAdjust_CENTER ) );
-                xProperties->setPropertyValue( "TextHorizontalAdjust", uno::makeAny( drawing::TextHorizontalAdjust_CENTER ) );
-                xProperties->setPropertyValue( "CharFontName", uno::makeAny( OUString("Albany") ) );
+                xProperties->setPropertyValue( "TextAutoGrowHeight", uno::Any( true ) );
+                xProperties->setPropertyValue( "TextAutoGrowWidth", uno::Any( true ) );
+                xProperties->setPropertyValue( "CharHeight", uno::Any( fCharHeight ) );
+                xProperties->setPropertyValue( "CharHeightAsian", uno::Any( fCharHeight ) );
+                xProperties->setPropertyValue( "CharHeightComplex", uno::Any( fCharHeight ) );
+                xProperties->setPropertyValue( "TextVerticalAdjust", uno::Any( drawing::TextVerticalAdjust_CENTER ) );
+                xProperties->setPropertyValue( "TextHorizontalAdjust", uno::Any( drawing::TextHorizontalAdjust_CENTER ) );
+                xProperties->setPropertyValue( "CharFontName", uno::Any( OUString("Albany") ) );
 
                 xTextShape->setPosition( rPosition );
 
@@ -635,7 +635,7 @@ bool ChartController::executeDispatch_Delete()
                             ActionDescriptionProvider::createDescription(
                                 ActionDescriptionProvider::ActionType::Delete, SCH_RESSTR( STR_OBJECT_LEGEND )),
                             m_xUndoManager );
-                        xLegendProp->setPropertyValue( "Show", uno::makeAny( false ));
+                        xLegendProp->setPropertyValue( "Show", uno::Any( false ));
                         bReturn = true;
                         aUndoGuard.commit();
                     }
@@ -708,10 +708,10 @@ bool ChartController::executeDispatch_Delete()
                         m_xUndoManager );
                     {
                         ControllerLockGuardUNO aCtlLockGuard( xModel );
-                        xEqProp->setPropertyValue( "ShowEquation", uno::makeAny( false ));
-                        xEqProp->setPropertyValue( "XName", uno::makeAny( OUString("x") ));
-                        xEqProp->setPropertyValue( "YName", uno::makeAny( OUString("f(x)") ));
-                        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( false ));
+                        xEqProp->setPropertyValue( "ShowEquation", uno::Any( false ));
+                        xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
+                        xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x)") ));
+                        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
                     }
                     bReturn = true;
                     aUndoGuard.commit();
@@ -745,7 +745,7 @@ bool ChartController::executeDispatch_Delete()
                         ControllerLockGuardUNO aCtlLockGuard( xModel );
                         xErrorBarProp->setPropertyValue(
                             "ErrorBarStyle",
-                            uno::makeAny( css::chart::ErrorBarStyle::NONE ));
+                            uno::Any( css::chart::ErrorBarStyle::NONE ));
                     }
                     bReturn = true;
                     aUndoGuard.commit();
@@ -774,10 +774,10 @@ bool ChartController::executeDispatch_Delete()
                     if( aObjectType == OBJECTTYPE_DATA_LABELS )
                     {
                         uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, getModel() ));
-                        ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_LABEL, uno::makeAny(aLabel) );
+                        ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_LABEL, uno::Any(aLabel) );
                     }
                     else
-                        xObjectProperties->setPropertyValue( CHART_UNONAME_LABEL, uno::makeAny(aLabel) );
+                        xObjectProperties->setPropertyValue( CHART_UNONAME_LABEL, uno::Any(aLabel) );
                     bReturn = true;
                     aUndoGuard.commit();
                 }
@@ -839,7 +839,7 @@ void ChartController::executeDispatch_ToggleLegend()
             bool bShow = false;
             if( xLegendProp->getPropertyValue( "Show") >>= bShow )
             {
-                xLegendProp->setPropertyValue( "Show", uno::makeAny( ! bShow ));
+                xLegendProp->setPropertyValue( "Show", uno::Any( ! bShow ));
                 bChanged = true;
             }
         }

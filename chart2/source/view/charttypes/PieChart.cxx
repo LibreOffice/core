@@ -650,8 +650,8 @@ void PieChart::createShapes()
                 if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
                 {
                     apOverwritePropertiesMap.reset( new tPropertyNameValueMap() );
-                    (*apOverwritePropertiesMap)["FillColor"] = uno::makeAny(
-                        m_xColorScheme->getColorByIndex( nPointIndex ));
+                    (*apOverwritePropertiesMap)["FillColor"] <<=
+                        m_xColorScheme->getColorByIndex( nPointIndex );
                 }
 
                 ///create data point
@@ -666,7 +666,7 @@ void PieChart::createShapes()
                     if(!rtl::math::isNan(nPropVal))
                     {
                         uno::Reference< beans::XPropertySet > xProps( xPointShape, uno::UNO_QUERY_THROW );
-                        xProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>( nPropVal)));
+                        xProps->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
                     }
                 }
 
@@ -1182,7 +1182,7 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
                 sal_Int32 nColor = 0;
                 xProp->getPropertyValue("CharColor") >>= nColor;
                 if( nColor != -1 )//automatic font color does not work for lines -> fallback to black
-                    aVLineProperties.Color = uno::makeAny(nColor);
+                    aVLineProperties.Color <<= nColor;
             }
             m_pShapeFactory->createLine2D( rInfo.xTextTarget, aPoints, &aVLineProperties );
         }

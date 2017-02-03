@@ -159,9 +159,9 @@ CandleStickChartType::CandleStickChartType(
     ModifyListenerHelper::addListener( xBlackDayProps, m_xModifyEventForwarder );
 
     setFastPropertyValue_NoBroadcast(
-        PROP_CANDLESTICKCHARTTYPE_WHITE_DAY, uno::makeAny( xWhiteDayProps ));
+        PROP_CANDLESTICKCHARTTYPE_WHITE_DAY, uno::Any( xWhiteDayProps ));
     setFastPropertyValue_NoBroadcast(
-        PROP_CANDLESTICKCHARTTYPE_BLACK_DAY, uno::makeAny( xBlackDayProps ));
+        PROP_CANDLESTICKCHARTTYPE_BLACK_DAY, uno::Any( xBlackDayProps ));
 }
 
 CandleStickChartType::CandleStickChartType( const CandleStickChartType & rOther ) :

@@ -250,12 +250,12 @@ void SAL_CALL ChartController::setPosSize(
         if( xProp.is() )
         {
             auto aZoomFactors(::comphelper::InitPropertySequence({
-                { "ScaleXNumerator", uno::makeAny( nScaleXNumerator ) },
-                { "ScaleXDenominator", uno::makeAny( nScaleXDenominator ) },
-                { "ScaleYNumerator", uno::makeAny( nScaleYNumerator ) },
-                { "ScaleYDenominator", uno::makeAny( nScaleYDenominator ) }
+                { "ScaleXNumerator", uno::Any( nScaleXNumerator ) },
+                { "ScaleXDenominator", uno::Any( nScaleXDenominator ) },
+                { "ScaleYNumerator", uno::Any( nScaleYNumerator ) },
+                { "ScaleYDenominator", uno::Any( nScaleYDenominator ) }
             }));
-            xProp->setPropertyValue( "ZoomFactors", uno::makeAny( aZoomFactors ));
+            xProp->setPropertyValue( "ZoomFactors", uno::Any( aZoomFactors ));
         }
 
         //a correct work area is at least necessary for correct values in the position and  size dialog and for dragging area
@@ -461,7 +461,7 @@ void ChartController::execute_Paint(vcl::RenderContext& rRenderContext, const Re
                     aResolution.Height = m_pChartWindow->GetSizePixel().Height();
                 }
             }
-            xProp->setPropertyValue( "Resolution", uno::makeAny( aResolution ));
+            xProp->setPropertyValue( "Resolution", uno::Any( aResolution ));
         }
 
         uno::Reference< util::XUpdatable > xUpdatable( m_xChartView, uno::UNO_QUERY );
@@ -1601,12 +1601,12 @@ uno::Any SAL_CALL ChartController::getSelection()
         OUString aCID( m_aSelection.getSelectedCID() );
         if ( !aCID.isEmpty() )
         {
-            aReturn = uno::makeAny( aCID );
+            aReturn = uno::Any( aCID );
         }
         else
         {
             // #i12587# support for shapes in chart
-            aReturn = uno::makeAny( m_aSelection.getSelectedAdditionalShape() );
+            aReturn = uno::Any( m_aSelection.getSelectedAdditionalShape() );
         }
     }
     return aReturn;
@@ -1736,9 +1736,9 @@ bool ChartController::impl_moveOrResizeObject(
                     eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager );
             {
                 ControllerLockGuardUNO aCLGuard( xChartModel );
-                xObjProp->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
+                xObjProp->setPropertyValue( "RelativePosition", uno::Any( aRelPos ));
                 if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicit size at the diagram when an explicit position is set
-                    xObjProp->setPropertyValue( "RelativeSize", uno::makeAny( aRelSize ));
+                    xObjProp->setPropertyValue( "RelativeSize", uno::Any( aRelSize ));
             }
             aUndoGuard.commit();
         }
@@ -1770,7 +1770,7 @@ bool ChartController::impl_DragDataPoint( const OUString & rCID, double fAdditio
                     fOffset = 1.0;
                 else if( fOffset < 0.0 )
                     fOffset = 0.0;
-                xPointProp->setPropertyValue( "Offset", uno::makeAny( fOffset ));
+                xPointProp->setPropertyValue( "Offset", uno::Any( fOffset ));
                 bResult = true;
             }
         }

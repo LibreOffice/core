@@ -629,7 +629,7 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 
     // #i119999# Do not do this per default to allow the user to deselect the chart OLE with a single press to ESC
     // select chart area per default:
-    // select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
+    // select( uno::Any( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
 
     uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
     if( xFact.is())
@@ -1476,11 +1476,9 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
     if(xInit.is())
     {
         uno::Sequence< uno::Any > aArguments(5);
-        uno::Reference<view::XSelectionSupplier> xSelectionSupplier(this);
-        aArguments[0]=uno::makeAny(xSelectionSupplier);
-        uno::Reference<frame::XModel> xModel(getModel());
-        aArguments[1]=uno::makeAny(xModel);
-        aArguments[2]=uno::makeAny(m_xChartView);
+        aArguments[0] <<= uno::Reference<view::XSelectionSupplier>(this);
+        aArguments[1] <<= uno::Reference<frame::XModel>(getModel());
+        aArguments[2] <<= m_xChartView;
         uno::Reference< XAccessible > xParent;
         {
             SolarMutexGuard aGuard;
@@ -1491,8 +1489,8 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
                     xParent.set( pParentWin->GetAccessible());
             }
         }
-        aArguments[3]=uno::makeAny(xParent);
-        aArguments[4]=uno::makeAny(m_xViewWindow);
+        aArguments[3] <<= xParent;
+        aArguments[4] <<= m_xViewWindow;
 
         xInit->initialize(aArguments);
     }

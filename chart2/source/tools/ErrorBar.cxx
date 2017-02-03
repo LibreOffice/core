@@ -275,7 +275,7 @@ uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
     else if(rPropName == "LineWidth")
         aRet <<= mnLineWidth;
     else if(rPropName == "LineStyle")
-        aRet = uno::makeAny(meLineStyle);
+        aRet <<= meLineStyle;
     else if(rPropName == "LineColor")
         aRet <<= maLineColor;
     else if(rPropName == "LineTransparence")

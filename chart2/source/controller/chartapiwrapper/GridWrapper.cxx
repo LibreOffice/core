@@ -161,7 +161,7 @@ const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
-    aWrappedProperties.push_back( new WrappedDefaultProperty( "LineColor", "LineColor", uno::makeAny( sal_Int32( 0x000000) ) ) ); // black
+    aWrappedProperties.push_back( new WrappedDefaultProperty( "LineColor", "LineColor", uno::Any( sal_Int32( 0x000000) ) ) ); // black
 
     return aWrappedProperties;
 }

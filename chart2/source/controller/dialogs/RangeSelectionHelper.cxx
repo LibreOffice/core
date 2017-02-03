@@ -120,17 +120,17 @@ bool RangeSelectionHelper::chooseRange(
         {
             Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                "InitialValue", -1, uno::makeAny( aCurrentRange ),
+                "InitialValue", -1, uno::Any( aCurrentRange ),
                 beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
                 "Title", -1,
-                uno::makeAny( aUIString ),
+                uno::Any( aUIString ),
                 beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
-                "CloseOnMouseRelease", -1, uno::makeAny( true ),
+                "CloseOnMouseRelease", -1, uno::Any( true ),
                 beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
-                "MultiSelectionMode", -1, uno::makeAny( true ),
+                "MultiSelectionMode", -1, uno::Any( true ),
                 beans::PropertyState_DIRECT_VALUE );
 
             if( m_xRangeSelectionListener.is() )

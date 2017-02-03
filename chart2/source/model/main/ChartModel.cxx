@@ -732,7 +732,7 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
             //init internal dataprovider
             {
                 uno::Sequence< uno::Any > aArgs(1);
-                beans::NamedValue aParam( "CreateDefaultData" ,uno::makeAny(true) );
+                beans::NamedValue aParam( "CreateDefaultData" ,uno::Any(true) );
                 aArgs[0] <<= aParam;
                 xIni->initialize(aArgs);
             }
@@ -740,21 +740,21 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
             uno::Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
                 "CellRangeRepresentation", -1,
-                uno::makeAny( OUString("all") ), beans::PropertyState_DIRECT_VALUE );
+                uno::Any( OUString("all") ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
                 "HasCategories",
                 -1,
-                uno::makeAny( true ),
+                uno::Any( true ),
                 beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
                 "FirstCellAsLabel",
                 -1,
-                uno::makeAny( true ),
+                uno::Any( true ),
                 beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
                 "DataRowSource",
                 -1,
-                uno::makeAny( css::chart::ChartDataRowSource_COLUMNS ),
+                uno::Any( css::chart::ChartDataRowSource_COLUMNS ),
                 beans::PropertyState_DIRECT_VALUE );
             xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
         }
@@ -802,7 +802,7 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
             try
             {
                 bool bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( Reference< frame::XModel >(this) );
-                xProp->setPropertyValue("IncludeHiddenCells", uno::makeAny(bIncludeHiddenCells));
+                xProp->setPropertyValue("IncludeHiddenCells", uno::Any(bIncludeHiddenCells));
             }
             catch (const beans::UnknownPropertyException&)
             {
@@ -1317,7 +1317,7 @@ void ChartModel::setTimeBased(bool bTimeBased)
         if(xTimeBased.is())
         {
             uno::Reference< beans::XPropertySet > xPropSet(xTimeBased, uno::UNO_QUERY_THROW);
-            xPropSet->setPropertyValue("TimeBased", uno::makeAny(bTimeBased));
+            xPropSet->setPropertyValue("TimeBased", uno::Any(bTimeBased));
         }
     }
 }

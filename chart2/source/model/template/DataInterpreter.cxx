@@ -330,7 +330,7 @@ void DataInterpreter::SetRole( const Reference< data::XDataSequence > & xSeq, co
     try
     {
         Reference< beans::XPropertySet > xProp( xSeq, uno::UNO_QUERY_THROW );
-        xProp->setPropertyValue( "Role", uno::makeAny( rRole ));
+        xProp->setPropertyValue( "Role", uno::Any( rRole ));
     }
     catch( const uno::Exception & ex )
     {

@@ -154,8 +154,8 @@ void AbstractShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XS
     {
         try
         {
-            xShapeProp->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_NONE ));
-            xShapeProp->setPropertyValue( "FillStyle", uno::makeAny( drawing::FillStyle_NONE ));
+            xShapeProp->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_NONE ));
+            xShapeProp->setPropertyValue( "FillStyle", uno::Any( drawing::FillStyle_NONE ));
         }
         catch( const uno::Exception& e )
         {
@@ -178,7 +178,7 @@ void AbstractShapeFactory::setShapeName( const uno::Reference< drawing::XShape >
         try
         {
             xProp->setPropertyValue( UNO_NAME_MISC_OBJ_NAME
-                , uno::makeAny( rName ) );
+                , uno::Any( rName ) );
         }
         catch( const uno::Exception& e )
         {
@@ -216,7 +216,7 @@ uno::Any AbstractShapeFactory::makeTransformation( const awt::Point& rScreenPosi
     // aM.scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
     aM.rotate( fRotationAnglePi );
     aM.translate( rScreenPosition2D.X, rScreenPosition2D.Y );
-    uno::Any aATransformation = uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) );
+    uno::Any aATransformation( B2DHomMatrixToHomogenMatrix3(aM) );
     return aATransformation;
 }
 

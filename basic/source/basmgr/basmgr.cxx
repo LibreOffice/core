@@ -608,8 +608,8 @@ void BasicManager::SetLibraryContainerInfo( const LibraryContainerInfo& rInfo )
         }
     }
 
-    SetGlobalUNOConstant( "BasicLibraries", makeAny( mpImpl->maContainerInfo.mxScriptCont ) );
-    SetGlobalUNOConstant( "DialogLibraries", makeAny( mpImpl->maContainerInfo.mxDialogCont ) );
+    SetGlobalUNOConstant( "BasicLibraries", uno::Any( mpImpl->maContainerInfo.mxScriptCont ) );
+    SetGlobalUNOConstant( "DialogLibraries", uno::Any( mpImpl->maContainerInfo.mxDialogCont ) );
 }
 
 BasicManager::BasicManager( StarBASIC* pSLib, OUString* pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )

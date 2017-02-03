@@ -239,7 +239,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                         }
 
                         if ( xStatusIndicator.is() )
-                            rReq.AppendItem( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, uno::makeAny( xStatusIndicator ) ) );
+                            rReq.AppendItem( SfxUnoAnyItem( SID_PROGRESS_STATUSBAR_CONTROL, uno::Any( xStatusIndicator ) ) );
                     }
 
                     aDocument.saveDocument( xStatusIndicator );
