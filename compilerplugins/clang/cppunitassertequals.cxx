@@ -99,7 +99,7 @@ void CppunitAssertEquals::checkExpr(const Stmt* stmt)
       << stmt->getSourceRange();
 }
 
-loplugin::Plugin::Registration< CppunitAssertEquals > X("cppunitassertequals", false);
+loplugin::Plugin::Registration< CppunitAssertEquals > X("cppunitassertequals");
 
 }
 
