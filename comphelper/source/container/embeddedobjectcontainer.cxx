@@ -495,8 +495,8 @@ bool EmbeddedObjectContainer::StoreEmbeddedObject(
             if ( bCopy )
             {
                 auto aObjArgs(::comphelper::InitPropertySequence({
-                    { "SourceShellID", uno::makeAny(rSrcShellID) },
-                    { "DestinationShellID", uno::makeAny(rDestShellID) }
+                    { "SourceShellID", uno::Any(rSrcShellID) },
+                    { "DestinationShellID", uno::Any(rDestShellID) }
                 }));
                 xPersist->storeToEntry(pImpl->mxStorage, rName, aSeq, aObjArgs);
             }
@@ -567,7 +567,7 @@ uno::Reference < embed::XEmbeddedObject > EmbeddedObjectContainer::InsertEmbedde
             // Probably introducing of such an object must be restricted ( a storage must be used! ).
             uno::Reference< beans::XPropertySet > xProps( xNewStream, uno::UNO_QUERY_THROW );
             xProps->setPropertyValue("MediaType",
-                    uno::makeAny( OUString( "application/vnd.sun.star.oleobject" ) ) );
+                    uno::Any( OUString( "application/vnd.sun.star.oleobject" ) ) );
         }
         catch (uno::Exception const& e)
         {
@@ -996,7 +996,7 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
                     uno::Reference< beans::XPropertySet > xTargetStorProps(
                                                                 pImpl->mpTempObjectContainer->pImpl->mxStorage,
                                                                 uno::UNO_QUERY_THROW );
-                    xTargetStorProps->setPropertyValue( s_sMediaType,uno::makeAny( aOrigStorMediaType ) );
+                    xTargetStorProps->setPropertyValue( s_sMediaType,uno::Any( aOrigStorMediaType ) );
                 }
                 catch (const uno::Exception&)
                 {
@@ -1159,11 +1159,11 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < c
             throw uno::RuntimeException();
 
         xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
-                                    uno::makeAny( true ) );
+                                    uno::Any( true ) );
         xPropSet->setPropertyValue("MediaType", uno::Any(rMediaType) );
 
         xPropSet->setPropertyValue("Compressed",
-                                    uno::makeAny( true ) );
+                                    uno::Any( true ) );
     }
     catch (const uno::Exception&)
     {

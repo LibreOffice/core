@@ -43,21 +43,21 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::openConfig(cons
     // set root path
     aParam.Name    = "nodepath";
     aParam.Value <<= sPackage;
-    lParams.push_back(css::uno::makeAny(aParam));
+    lParams.push_back(css::uno::Any(aParam));
 
     // enable all locales mode
     if (eMode & EConfigurationModes::AllLocales)
     {
         aParam.Name    = "locale";
         aParam.Value <<= OUString("*");
-        lParams.push_back(css::uno::makeAny(aParam));
+        lParams.push_back(css::uno::Any(aParam));
     }
 
     // enable lazy writing
     bool bLazy(eMode & EConfigurationModes::LazyWrite);
     aParam.Name    = "lazywrite";
-    aParam.Value   = css::uno::makeAny(bLazy);
-    lParams.push_back(css::uno::makeAny(aParam));
+    aParam.Value   <<= bLazy;
+    lParams.push_back(css::uno::Any(aParam));
 
     // open it
     css::uno::Reference< css::uno::XInterface > xCFG;
@@ -132,7 +132,7 @@ css::uno::Reference< css::uno::XInterface > ConfigurationHelper::makeSureSetNode
         css::uno::Reference< css::lang::XSingleServiceFactory > xNodeFactory(xSet, css::uno::UNO_QUERY_THROW);
         xNode = xNodeFactory->createInstance();
         css::uno::Reference< css::container::XNameContainer > xSetReplace(xSet, css::uno::UNO_QUERY_THROW);
-        xSetReplace->insertByName(sSetNode, css::uno::makeAny(xNode));
+        xSetReplace->insertByName(sSetNode, css::uno::Any(xNode));
     }
 
     return xNode;

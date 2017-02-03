@@ -199,12 +199,12 @@ namespace cairocanvas
 
     uno::Any DeviceHelper::isAccelerated() const
     {
-        return css::uno::makeAny(false);
+        return css::uno::Any(false);
     }
 
     uno::Any DeviceHelper::getDeviceHandle() const
     {
-        return uno::makeAny( reinterpret_cast< sal_Int64 >(mpRefDevice.get()) );
+        return uno::Any( reinterpret_cast< sal_Int64 >(mpRefDevice.get()) );
     }
 
     uno::Any DeviceHelper::getSurfaceHandle() const

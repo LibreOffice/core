@@ -251,7 +251,7 @@ void Service::open(OUString const & rURL, sal_Bool bReadOnly, sal_Bool)
         doClose();
     }
     css::uno::Sequence< css::uno::Any > args(1);
-    args[0] <<= css::beans::NamedValue("nodepath", css::uno::makeAny(rURL));
+    args[0] <<= css::beans::NamedValue("nodepath", css::uno::Any(rURL));
     try {
         access_ = provider_->createInstanceWithArguments(
             (bReadOnly
@@ -294,7 +294,7 @@ css::uno::Reference< css::registry::XRegistryKey > Service::getRootKey()
 {
     osl::MutexGuard g(mutex_);
     checkValid();
-    return new RegistryKey(*this, css::uno::makeAny(access_));
+    return new RegistryKey(*this, css::uno::Any(access_));
 }
 
 sal_Bool Service::isReadOnly() {

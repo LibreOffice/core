@@ -130,9 +130,9 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
             configuration::theDefaultProvider::get( m_xContext ) );
 
         Any propValue(
-            makeAny( beans::PropertyValue(
+            Any( beans::PropertyValue(
                          "nodepath", -1,
-                         makeAny( OUString("/org.openoffice.Office.Canvas") ),
+                         Any( OUString("/org.openoffice.Office.Canvas") ),
                          beans::PropertyState_DIRECT_VALUE ) ) );
 
         m_xCanvasConfigNameAccess.set(
@@ -141,10 +141,10 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
                 Sequence<Any>( &propValue, 1 ) ),
             UNO_QUERY_THROW );
 
-        propValue = makeAny(
+        propValue = Any(
             beans::PropertyValue(
                 "nodepath", -1,
-                makeAny( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ),
+                Any( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ),
                 beans::PropertyState_DIRECT_VALUE ) );
 
         Reference<container::XNameAccess> xNameAccess(

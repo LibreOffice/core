@@ -1629,7 +1629,7 @@ void Access::initBroadcasterAndChanges(
                                     css::container::ContainerEvent(
                                         static_cast< cppu::OWeakObject * >(
                                             this),
-                                        css::uno::makeAny(i.first),
+                                        css::uno::Any(i.first),
                                         css::uno::Any(), css::uno::Any()));
                                 //TODO: non-void Element, ReplacedElement
                         }
@@ -1667,7 +1667,7 @@ void Access::initBroadcasterAndChanges(
                         if (allChanges != nullptr) {
                             allChanges->push_back(
                                 css::util::ElementChange(
-                                    css::uno::makeAny(
+                                    css::uno::Any(
                                         child->getRelativePathRepresentation()),
                                     css::uno::Any(), css::uno::Any()));
                                 //TODO: non-void Element, ReplacedElement
@@ -1693,14 +1693,14 @@ void Access::initBroadcasterAndChanges(
                         *j,
                         css::container::ContainerEvent(
                             static_cast< cppu::OWeakObject * >(this),
-                            css::uno::makeAny(i.first), child->asValue(),
+                            css::uno::Any(i.first), child->asValue(),
                             css::uno::Any()));
                         //TODO: distinguish add/modify; non-void ReplacedElement
                 }
                 if (allChanges != nullptr) {
                     allChanges->push_back(
                         css::util::ElementChange(
-                            css::uno::makeAny(
+                            css::uno::Any(
                                 child->getRelativePathRepresentation()),
                             child->asValue(), css::uno::Any()));
                         //TODO: non-void ReplacedElement
@@ -1717,7 +1717,7 @@ void Access::initBroadcasterAndChanges(
                             *j,
                             css::container::ContainerEvent(
                                 static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i.first), child->asValue(),
+                                css::uno::Any(i.first), child->asValue(),
                                 css::uno::Any()));
                             //TODO: distinguish add/remove/modify; non-void
                             // ReplacedElement
@@ -1754,7 +1754,7 @@ void Access::initBroadcasterAndChanges(
                     if (allChanges != nullptr) {
                         allChanges->push_back(
                             css::util::ElementChange(
-                                css::uno::makeAny(
+                                css::uno::Any(
                                     child->getRelativePathRepresentation()),
                                 child->asValue(), css::uno::Any()));
                             //TODO: non-void ReplacedElement
@@ -1782,13 +1782,13 @@ void Access::initBroadcasterAndChanges(
                                     css::container::ContainerEvent(
                                         static_cast< cppu::OWeakObject * >(
                                             this),
-                                        css::uno::makeAny(i.first),
+                                        css::uno::Any(i.first),
                                         child->asValue(), css::uno::Any()));
                         }
                         if (allChanges != nullptr) {
                             allChanges->push_back(
                                 css::util::ElementChange(
-                                    css::uno::makeAny(
+                                    css::uno::Any(
                                         child->getRelativePathRepresentation()),
                                     css::uno::Any(), css::uno::Any()));
                                 //TODO: non-void Element, ReplacedElement
@@ -1820,7 +1820,7 @@ void Access::initBroadcasterAndChanges(
                         *j,
                         css::container::ContainerEvent(
                             static_cast< cppu::OWeakObject * >(this),
-                            css::uno::makeAny(i.first), css::uno::Any(),
+                            css::uno::Any(i.first), css::uno::Any(),
                             css::uno::Any()));
                         //TODO: non-void ReplacedElement
                 }
@@ -1832,7 +1832,7 @@ void Access::initBroadcasterAndChanges(
                     path.append(Data::createSegment("*", i.first));
                     allChanges->push_back(
                         css::util::ElementChange(
-                            css::uno::makeAny(path.makeStringAndClear()),
+                            css::uno::Any(path.makeStringAndClear()),
                             css::uno::Any(), css::uno::Any()));
                         //TODO: non-void ReplacedElement
                 }
@@ -1849,7 +1849,7 @@ void Access::initBroadcasterAndChanges(
                             *j,
                             css::container::ContainerEvent(
                                 static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i.first), css::uno::Any(),
+                                css::uno::Any(i.first), css::uno::Any(),
                                 css::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
@@ -1891,7 +1891,7 @@ void Access::initBroadcasterAndChanges(
                         path.append(i.first);
                         allChanges->push_back(
                             css::util::ElementChange(
-                                css::uno::makeAny(path.makeStringAndClear()),
+                                css::uno::Any(path.makeStringAndClear()),
                                 css::uno::Any(), css::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
@@ -1915,7 +1915,7 @@ void Access::initBroadcasterAndChanges(
                             *j,
                             css::container::ContainerEvent(
                                 static_cast< cppu::OWeakObject * >(this),
-                                css::uno::makeAny(i.first),
+                                css::uno::Any(i.first),
                                 css::uno::Any(), css::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }
@@ -1928,7 +1928,7 @@ void Access::initBroadcasterAndChanges(
                         path.append(Data::createSegment("*", i.first));
                         allChanges->push_back(
                             css::util::ElementChange(
-                                css::uno::makeAny(path.makeStringAndClear()),
+                                css::uno::Any(path.makeStringAndClear()),
                                 css::uno::Any(), css::uno::Any()));
                             //TODO: non-void ReplacedElement
                     }

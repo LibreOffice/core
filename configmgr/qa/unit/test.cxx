@@ -198,7 +198,7 @@ void SimpleRecursiveTest::step() const
         "/org.openoffice.Office.UI.GenericCommands/UserInterface/Commands/"
                  ".uno:WebHtml",
         "Label",
-        css::uno::makeAny(OUString("step")));
+        css::uno::Any(OUString("step")));
 }
 
 void Test::setUp()
@@ -222,7 +222,7 @@ void Test::testKeySet()
     setKey(
         "/org.openoffice.System/L10N",
         "Locale",
-        css::uno::makeAny(OUString("com.sun.star.configuration.backend.LocaleBackend UILocale")));
+        css::uno::Any(OUString("com.sun.star.configuration.backend.LocaleBackend UILocale")));
     OUString s;
     CPPUNIT_ASSERT(
         getKey(
@@ -292,21 +292,21 @@ void Test::testInsertSetMember() {
         css::uno::Reference<css::lang::XSingleServiceFactory>(
             access, css::uno::UNO_QUERY_THROW)->createInstance());
     CPPUNIT_ASSERT(member.is());
-    access->insertByName("A", css::uno::makeAny(member));
+    access->insertByName("A", css::uno::Any(member));
     member.set(
         css::uno::Reference<css::lang::XSingleServiceFactory>(
             access, css::uno::UNO_QUERY_THROW)->createInstance());
     CPPUNIT_ASSERT(member.is());
     try {
-        access->insertByName("", css::uno::makeAny(member));
+        access->insertByName("", css::uno::Any(member));
         CPPUNIT_FAIL("expected IllegalArgumentException");
     } catch (css::lang::IllegalArgumentException &) {}
     try {
-        access->insertByName("\x01", css::uno::makeAny(member));
+        access->insertByName("\x01", css::uno::Any(member));
         CPPUNIT_FAIL("expected IllegalArgumentException");
     } catch (css::lang::IllegalArgumentException &) {}
     try {
-        access->insertByName("a/b", css::uno::makeAny(member));
+        access->insertByName("a/b", css::uno::Any(member));
     } catch (css::lang::IllegalArgumentException &) {
         CPPUNIT_FAIL("unexpected IllegalArgumentException");
     }
@@ -448,10 +448,9 @@ css::uno::Reference< css::uno::XInterface > Test::createViewAccess(
     OUString const & path) const
 {
     css::uno::Any arg(
-        css::uno::makeAny(
             css::beans::NamedValue(
                 "nodepath",
-                css::uno::makeAny(path))));
+                css::uno::Any(path)));
     return provider_->createInstanceWithArguments(
         "com.sun.star.configuration.ConfigurationAccess",
         css::uno::Sequence< css::uno::Any >(&arg, 1));
@@ -461,10 +460,9 @@ css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
     OUString const & path) const
 {
     css::uno::Any arg(
-        css::uno::makeAny(
             css::beans::NamedValue(
                 "nodepath",
-                css::uno::makeAny(path))));
+                css::uno::Any(path)));
     return provider_->createInstanceWithArguments(
         "com.sun.star.configuration.ConfigurationUpdateAccess",
         css::uno::Sequence< css::uno::Any >(&arg, 1));
@@ -585,7 +583,7 @@ bool WriterThread::iteration() {
         OUString("kippers"),
         OUString("bloaters") };
 
-    test_.setKey(path_, name_, css::uno::makeAny(options[index_]));
+    test_.setKey(path_, name_, css::uno::Any(options[index_]));
     index_ = (index_ + 1) % (sizeof options / sizeof (OUString));
     return true;
 }

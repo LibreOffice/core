@@ -229,7 +229,7 @@ OUString MimeConfigurationHelper::GetDocServiceNameFromMediaType( const OUString
         try
         {
             // make query for all types matching the properties
-            uno::Sequence < beans::NamedValue > aSeq { { "MediaType", css::uno::makeAny(aMediaType) } };
+            uno::Sequence < beans::NamedValue > aSeq { { "MediaType", css::uno::Any(aMediaType) } };
 
             uno::Reference < container::XEnumeration > xEnum = xTypeCFG->createSubSetEnumerationByProperties( aSeq );
             while ( xEnum->hasMoreElements() )
@@ -719,8 +719,8 @@ OUString MimeConfigurationHelper::GetDefaultFilterFromServiceName( const OUStrin
 
             uno::Sequence< beans::NamedValue > aSearchRequest
             {
-                { "DocumentService", css::uno::makeAny(aServiceName) },
-                { "FileFormatVersion", css::uno::makeAny(nVersion) }
+                { "DocumentService", css::uno::Any(aServiceName) },
+                { "FileFormatVersion", css::uno::Any(nVersion) }
             };
 
             uno::Reference< container::XEnumeration > xFilterEnum =
@@ -801,8 +801,8 @@ OUString MimeConfigurationHelper::GetExportFilterFromImportFilter( const OUStrin
                     {
                         uno::Sequence< beans::NamedValue > aSearchRequest
                         {
-                            { "Type", css::uno::makeAny(aTypeName) },
-                            { "DocumentService", css::uno::makeAny(aDocumentServiceName) }
+                            { "Type", css::uno::Any(aTypeName) },
+                            { "DocumentService", css::uno::Any(aDocumentServiceName) }
                         };
 
                         uno::Sequence< beans::PropertyValue > aExportFilterProps = SearchForFilter(

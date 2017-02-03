@@ -315,7 +315,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
                 {
                     throw css::lang::WrappedTargetRuntimeException(
                         "wrapped CannotConvertException " + e.Message,
-                        css::uno::Reference<css::uno::XInterface>(), makeAny(e));
+                        css::uno::Reference<css::uno::XInterface>(), Any(e));
                 }
             }
         }

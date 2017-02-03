@@ -158,7 +158,7 @@ namespace vclcanvas
 
     uno::Any DeviceHelper::isAccelerated() const
     {
-        return css::uno::makeAny(false);
+        return css::uno::Any(false);
     }
 
     uno::Any DeviceHelper::getDeviceHandle() const
@@ -166,7 +166,7 @@ namespace vclcanvas
         if( !mpOutDev )
             return uno::Any();
 
-        return uno::makeAny(
+        return uno::Any(
             reinterpret_cast< sal_Int64 >(&mpOutDev->getOutDev()) );
     }
 

@@ -268,9 +268,8 @@ css::uno::Any ChildAccess::asValue()
                 return child.is() ? child->asValue() : css::uno::Any();
             }
         }
-        value = css::uno::makeAny(
-                        css::uno::Reference< css::uno::XInterface >(
-                                static_cast< cppu::OWeakObject * >(this)));
+        value <<= css::uno::Reference< css::uno::XInterface >(
+                            static_cast< cppu::OWeakObject * >(this));
     }
     return value;
 }
