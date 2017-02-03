@@ -22,12 +22,14 @@ set -e
 # resolve installation directory
 sd_res="$0"
 while [ -h "$sd_res" ] ; do
-    cd "`dirname "$sd_res"`"
-    sd_basename=`basename "$sd_res"`
-    sd_res=`ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g"`
+    sd_dirname=$(dirname "$sd_res")
+    cd "$sd_dirname"
+    sd_basename=$(basename "$sd_res")
+    sd_res=$(ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g")
 done
-cd "`dirname "$sd_res"`"
-sd_prog=`pwd`
+sd_dirname=$(dirname "$sd_res")
+cd "$sd_dirname"
+sd_prog=$(pwd)
 
 case "$1" in
 c++)

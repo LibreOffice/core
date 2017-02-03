@@ -21,20 +21,29 @@
 SAL_ENABLE_FILE_LOCKING=1
 export SAL_ENABLE_FILE_LOCKING
 
+cd_or_exit() {
+    if ! cd "$1"; then
+        echo "Can't cd to $1"
+        exit 1
+    fi
+}
+
 # resolve installation directory
-sd_cwd=`pwd`
+sd_cwd=$(pwd)
 sd_res="$0"
 while [ -h "$sd_res" ] ; do
-    cd "`dirname "$sd_res"`"
-    sd_basename=`basename "$sd_res"`
-    sd_res=`ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g"`
+    sd_dirname=$(dirname "$sd_res")
+    cd_or_exit "$sd_dirname"
+    sd_basename=$(basename "$sd_res")
+    sd_res=$(ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g")
 done
-cd "`dirname "$sd_res"`"
-sd_prog=`pwd`
-cd "$sd_cwd"
+sd_dirname=$(dirname "$sd_res")
+cd_or_exit "$sd_dirname"
+sd_prog=$(pwd)
+cd_or_exit "$sd_cwd"
 
 # this is a temporary hack until we can live with the default search paths
-case "`uname -s`" in
+case "$(uname -s)" in
 NetBSD|OpenBSD|FreeBSD|DragonFly)
     LD_LIBRARY_PATH="$sd_prog${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
     JAVA_HOME=$(javaPathHelper -h libreoffice-java 2> /dev/null)
@@ -49,7 +58,7 @@ AIX)
     ;;
 esac
 
-for arg in $@
+for arg in "$@"
 do
   case "$arg" in
        #collect all bootstrap variables specified on the command line
@@ -63,10 +72,10 @@ done
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 if [ -x "${sd_prog}/javaldx" ] ; then
-    my_path=`"${sd_prog}/javaldx" $BOOTSTRAPVARS \
-        "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"`
+    my_path=$("${sd_prog}/javaldx" "$BOOTSTRAPVARS" \
+        "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc")
     if [ -n "$my_path" ] ; then
-        sd_platform=`uname -s`
+        sd_platform=$(uname -s)
         case "$sd_platform" in
           AIX)
             LIBPATH="$my_path${LIBPATH:+:$LIBPATH}"
@@ -91,4 +100,3 @@ unset XENVIRONMENT
 # execute binary
 exec "$sd_prog/unopkg.bin" "$@" \
     "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"
-
