@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_afc5435c",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-03T07:09:11Z",
+      "side": 1,
+      "message": "rather rename the report function and replace it\u0027s use in this file, than have such a simple forwarding function",
+      "revId": "c3164250d1b5d4310519b6b69c1ec7ffa459f057",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
