@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_4f7cd720",
+        "filename": "include/svtools/htmltokn.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-02-03T07:35:07Z",
+      "side": 1,
+      "message": "beginning (typo). maybe \"starting\" is better",
+      "revId": "a7ac6d20b5a8d919786a23046c622b9f5dffb2f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
