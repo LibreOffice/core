@@ -17,10 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <tools/debug.hxx>
 #include <tools/pstm.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 
 #define STOR_NO_OPTIMIZE
 
@@ -29,7 +29,10 @@ void SvClassManager::Register( sal_Int32 nClassId, SvCreateInstancePersist pFunc
 #ifdef DBG_UTIL
     SvCreateInstancePersist p;
     p = Get( nClassId );
-    DBG_ASSERT( !p || p == pFunc, "register class with same id" );
+    if(p || p != pFunc)
+        {
+            SAL_WARN("tools","register class with same id");
+        }
 #endif
     aAssocTable.insert(Map::value_type(nClassId, pFunc));
 }
@@ -57,7 +60,6 @@ SvPersistStream::SvPersistStream( SvClassManager & rMgr, SvStream * pStream )
     , aPUIdx( 1 )
     , nStartIdx( 1 )
 {
-    DBG_ASSERT( nStartIdx != 0, "zero index not allowed" );
     m_isWritable = true;
     if( pStm )
     {
@@ -80,13 +82,13 @@ SvPersistStream::~SvPersistStream()
 void SvPersistStream::ResetError()
 {
     SvStream::ResetError();
-    DBG_ASSERT( pStm, "stream not set" );
+    SAL_WARN_IF(!pStm,"tools","stream not set");
     pStm->ResetError();
 }
 
 std::size_t SvPersistStream::GetData( void* pData, std::size_t nSize )
 {
-    DBG_ASSERT( pStm, "stream not set" );
+    SAL_WARN_IF(!pStm,"tools","stream not set");
     std::size_t const nRet = pStm->ReadBytes( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
@@ -94,7 +96,7 @@ std::size_t SvPersistStream::GetData( void* pData, std::size_t nSize )
 
 std::size_t SvPersistStream::PutData( const void* pData, std::size_t nSize )
 {
-    DBG_ASSERT( pStm, "stream not set" );
+    SAL_WARN_IF(!pStm,"tools","stream not set");
     std::size_t const nRet = pStm->WriteBytes( pData, nSize );
     SetError( pStm->GetError() );
     return nRet;
@@ -102,7 +104,7 @@ std::size_t SvPersistStream::PutData( const void* pData, std::size_t nSize )
 
 sal_uInt64 SvPersistStream::SeekPos(sal_uInt64 const nPos)
 {
-    DBG_ASSERT( pStm, "stream not set" );
+    SAL_WARN_IF(!pStm,"tools","stream not set");
     sal_uInt64 nRet = pStm->Seek( nPos );
     SetError( pStm->GetError() );
     return nRet;
@@ -251,8 +253,8 @@ sal_uInt32 SvPersistStream::WriteDummyLen()
     WriteUInt32( n0 ); // Because of Sun sp
     // Don't assert on stream error
 #ifdef DBG_UTIL
-    DBG_ASSERT( GetError() != SVSTREAM_OK
-                  || (sizeof( sal_uInt32 ) == Tell() -nPos),
+    assert( GetError() != SVSTREAM_OK
+                  || (sizeof( sal_uInt32 ) == Tell() -nPos) &&
                 "No 4 byte as length parameter" );
 #endif
     return Tell();
@@ -456,8 +458,10 @@ void SvPersistStream::ReadObj
     {
         if( P_OBJ & nHdr )
         { // read object, nId only set for P_DBGUTIL
-            DBG_ASSERT( !(nHdr & P_DBGUTIL) || nullptr == aPUIdx.Get( nId ),
-                        "object already exist" );
+            if( (nHdr & P_DBGUTIL) || nullptr != aPUIdx.Get( nId ) )
+            {
+                SAL_WARN("tools","object already exist");
+            }
             SvCreateInstancePersist pFunc = rClassMgr.Get( nClassId );
 
             sal_uInt32 nObjLen(0), nObjPos(0);
@@ -484,8 +488,10 @@ void SvPersistStream::ReadObj
             const Index nNewId = aPUIdx.Insert( rpObj );
             // in order to restore state after saving
             aPTable[ rpObj ] = nNewId;
-            DBG_ASSERT( !(nHdr & P_DBGUTIL) || nId == nNewId,
-                        "read write id conflict: not the same" );
+            if( (nHdr & P_DBGUTIL) || nId != nNewId )
+            {
+                SAL_WARN("tools","read write id conflict: not the same");
+            }
             rpObj->Load( *this );
 #ifdef DBG_UTIL
             if( nObjLen + nObjPos != Tell() )
@@ -503,8 +509,8 @@ void SvPersistStream::ReadObj
         else
         {
             rpObj = GetObject( nId );
-            DBG_ASSERT( rpObj != nullptr, "object does not exist" );
-            DBG_ASSERT( rpObj->GetClassId() == nClassId, "class mismatch" );
+            SAL_WARN_IF(rpObj==nullptr,"tools","object does not exist");
+            SAL_WARN_IF( rpObj->GetClassId() != nClassId , "tools" , "class mismatch" );
         }
     }
 }
