@@ -73,7 +73,7 @@ private:
 
 public:
 
-                                SearchThread( SearchProgress* pProgess,
+                                SearchThread( SearchProgress* pProgress,
                                               TPGalleryThemeProperties* pBrowser,
                                               const INetURLObject& rStartURL );
 };
@@ -117,7 +117,7 @@ private:
 public:
 
                                 TakeThread(
-                                    TakeProgress* pProgess,
+                                    TakeProgress* pProgress,
                                     TPGalleryThemeProperties* pBrowser,
                                     TokenList_impl& rTakenList
                                 );

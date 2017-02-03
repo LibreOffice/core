@@ -211,7 +211,7 @@ void Page::endElement()
     ctx.finish();
 }
 
-// progessmeter
+// progressmeter
 Reference< xml::input::XElement > ProgressBarElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
