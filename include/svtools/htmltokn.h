@@ -39,7 +39,7 @@ int GetHTMLOption( const rtl::OUString& rName );
 // search the 24-bit color for a color name (not found = ULONG_MAX)
 SVT_DLLPUBLIC sal_uInt32 GetHTMLColor( const rtl::OUString& rName );
 
-// always beninning from 256 on, greater than a char
+// always starting from 256 on, greater than a char
 const int HTML_TOKEN_START      = 0x100;
 const int HTML_TOKEN_ONOFF      = 0x200;
 const int HTML_TOKEN_MICROSOFT  = 0x1000;
@@ -278,7 +278,7 @@ enum HTML_TOKEN_IDS
 
 // HTML attribute token (=Options)
 
-// always beninning from 256 on, greater than a char
+// always starting from 256 on, greater than a char
 const int HTML_OPTION_START = 0x100;
 
 enum HTML_OPTION_IDS
