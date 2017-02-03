@@ -593,14 +593,14 @@ public:
     }
 };
 
-class FindIntersetingTableByColumns : public std::unary_function<std::unique_ptr<ScDPObject>, bool>
+class FindIntersectingTableByColumns : public std::unary_function<std::unique_ptr<ScDPObject>, bool>
 {
     SCCOL mnCol1;
     SCCOL mnCol2;
     SCROW mnRow;
     SCTAB mnTab;
 public:
-    FindIntersetingTableByColumns(SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab) :
+    FindIntersectingTableByColumns(SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab) :
         mnCol1(nCol1), mnCol2(nCol2), mnRow(nRow), mnTab(nTab) {}
 
     bool operator() (const std::unique_ptr<ScDPObject>& rObj) const
@@ -3848,7 +3848,7 @@ ScRangeList ScDPCollection::GetAllTableRanges( SCTAB nTab ) const
 
 bool ScDPCollection::IntersectsTableByColumns( SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCTAB nTab ) const
 {
-    return std::any_of(maTables.begin(), maTables.end(), FindIntersetingTableByColumns(nCol1, nCol2, nRow, nTab));
+    return std::any_of(maTables.begin(), maTables.end(), FindIntersectingTableByColumns(nCol1, nCol2, nRow, nTab));
 }
 
 bool ScDPCollection::IntersectsTableByRows( SCCOL nCol, SCROW nRow1, SCROW nRow2, SCTAB nTab ) const
