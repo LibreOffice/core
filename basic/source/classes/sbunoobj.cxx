@@ -843,6 +843,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
         // map machine-dependent ones to long for consistency
         case SbxINT:        aRetType = ::cppu::UnoType<sal_Int32>::get(); break;
         case SbxUINT:       aRetType = ::cppu::UnoType<sal_uInt32>::get(); break;
+        case SbxSALUINT64:  aRetType = cppu::UnoType<sal_uInt64>::get(); break;
         default: break;
     }
     return aRetType;
