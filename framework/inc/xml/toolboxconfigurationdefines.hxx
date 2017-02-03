@@ -37,7 +37,6 @@
 #define ATTRIBUTE_TEXT              "text"
 #define ATTRIBUTE_URL               "href"
 #define ATTRIBUTE_VISIBLE           "visible"
-#define ATTRIBUTE_HELPID            "helpid"
 #define ATTRIBUTE_ITEMSTYLE         "style"
 
 #define ELEMENT_NS_TOOLBAR          "toolbar:toolbar"

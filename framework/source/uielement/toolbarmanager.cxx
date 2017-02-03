@@ -984,7 +984,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         Sequence< PropertyValue >   aProp;
         OUString                    aCommandURL;
         OUString                    aLabel;
-        OUString                    aHelpURL;
         sal_uInt16                  nType( css::ui::ItemType::DEFAULT );
         sal_uInt32                  nStyle( 0 );
 
@@ -1034,8 +1033,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                             }
                         }
                     }
-                    else if ( aProp[i].Name == "HelpURL" )
-                        aProp[i].Value >>= aHelpURL;
                     else if ( aProp[i].Name == "Label" )
                         aProp[i].Value >>= aLabel;
                     else if ( aProp[i].Name == "Type" )

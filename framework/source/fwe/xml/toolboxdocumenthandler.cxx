@@ -35,6 +35,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <comphelper/attributelist.hxx>
+#include <comphelper/propertysequence.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -48,7 +49,6 @@ namespace framework
 
 // Property names of a menu/menu item ItemDescriptor
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
-static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
 static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
@@ -57,7 +57,6 @@ static const char ITEM_DESCRIPTOR_VISIBLE[]     = "IsVisible";
 static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
                                       OUString&                        rCommandURL,
                                       OUString&                        rLabel,
-                                      OUString&                        rHelpURL,
                                       sal_Int16&                       rStyle,
                                       bool&                            rVisible,
                                       sal_Int16&                       rType )
@@ -69,8 +68,6 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue >& rProp,
             rProp[i].Value >>= rCommandURL;
             rCommandURL = rCommandURL.intern();
         }
-        else if ( rProp[i].Name == ITEM_DESCRIPTOR_HELPURL )
-            rProp[i].Value >>= rHelpURL;
         else if ( rProp[i].Name == ITEM_DESCRIPTOR_LABEL )
             rProp[i].Value >>= rLabel;
         else if ( rProp[i].Name == ITEM_DESCRIPTOR_TYPE )
@@ -117,7 +114,6 @@ ToolBarEntryProperty const ToolBoxEntries[OReadToolBoxDocumentHandler::TB_XML_EN
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_TEXT              },
     { OReadToolBoxDocumentHandler::TB_NS_XLINK,     ATTRIBUTE_URL               },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_VISIBLE           },
-    { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_HELPID            },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_ITEMSTYLE         },
     { OReadToolBoxDocumentHandler::TB_NS_TOOLBAR,   ATTRIBUTE_UINAME            },
 };
@@ -127,7 +123,6 @@ OReadToolBoxDocumentHandler::OReadToolBoxDocumentHandler( const Reference< XInde
     m_aType( ITEM_DESCRIPTOR_TYPE ),
     m_aLabel( ITEM_DESCRIPTOR_LABEL ),
     m_aStyle( ITEM_DESCRIPTOR_STYLE ),
-    m_aHelpURL( ITEM_DESCRIPTOR_HELPURL ),
     m_aIsVisible( ITEM_DESCRIPTOR_VISIBLE ),
     m_aCommandURL( ITEM_DESCRIPTOR_COMMANDURL )
  {
@@ -275,7 +270,6 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                 m_bToolBarItemStartFound = true;
                 OUString        aLabel;
                 OUString        aCommandURL;
-                OUString        aHelpURL;
                 sal_uInt16      nItemBits( 0 );
                 bool            bVisible( true );
 
@@ -311,12 +305,6 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                                     aErrorMessage += "Attribute toolbar:visible must have value 'true' or 'false'!";
                                     throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
                                 }
-                            }
-                            break;
-
-                            case TB_ATTRIBUTE_HELPID:
-                            {
-                                aHelpURL = xAttribs->getValueByIndex( n );
                             }
                             break;
 
@@ -369,14 +357,6 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
 
                 if ( !aCommandURL.isEmpty() )
                 {
-                    Sequence< PropertyValue > aToolbarItemProp( 6 );
-                    aToolbarItemProp[0].Name = m_aCommandURL;
-                    aToolbarItemProp[1].Name = m_aHelpURL;
-                    aToolbarItemProp[2].Name = m_aLabel;
-                    aToolbarItemProp[3].Name = m_aType;
-                    aToolbarItemProp[4].Name = m_aStyle;
-                    aToolbarItemProp[5].Name = m_aIsVisible;
-
                     //fix for fdo#39370
                     /// check whether RTL interface or not
                     if(AllSettings::GetLayoutRTL()){
@@ -394,12 +374,13 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                             aCommandURL = ".uno:AlignLeft";
                     }
 
-                    aToolbarItemProp[0].Value <<= aCommandURL;
-                    aToolbarItemProp[1].Value <<= aHelpURL;
-                    aToolbarItemProp[2].Value <<= aLabel;
-                    aToolbarItemProp[3].Value = makeAny( css::ui::ItemType::DEFAULT );
-                    aToolbarItemProp[4].Value <<= nItemBits;
-                    aToolbarItemProp[5].Value <<= bVisible;
+                    auto aToolbarItemProp( comphelper::InitPropertySequence( {
+                        { m_aCommandURL, css::uno::makeAny( aCommandURL ) },
+                        { m_aLabel, css::uno::makeAny( aLabel ) },
+                        { m_aType, css::uno::makeAny( css::ui::ItemType::DEFAULT ) },
+                        { m_aStyle, css::uno::makeAny( nItemBits ) },
+                        { m_aIsVisible, css::uno::makeAny( bVisible ) },
+                    } ) );
 
                     m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
                 }
@@ -678,14 +659,13 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
         {
             OUString    aCommandURL;
             OUString    aLabel;
-            OUString    aHelpURL;
             bool    bVisible( true );
             sal_Int16   nType( css::ui::ItemType::DEFAULT );
             sal_Int16   nStyle( 0 );
 
-            ExtractToolbarParameters( aProps, aCommandURL, aLabel, aHelpURL, nStyle, bVisible, nType );
+            ExtractToolbarParameters( aProps, aCommandURL, aLabel, nStyle, bVisible, nType );
             if ( nType == css::ui::ItemType::DEFAULT )
-                WriteToolBoxItem( aCommandURL, aLabel, aHelpURL, nStyle, bVisible );
+                WriteToolBoxItem( aCommandURL, aLabel, nStyle, bVisible );
             else if ( nType == css::ui::ItemType::SEPARATOR_SPACE )
                 WriteToolBoxSpace();
             else if ( nType == css::ui::ItemType::SEPARATOR_LINE )
@@ -706,7 +686,6 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxDocument()
 void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
     const OUString& rCommandURL,
     const OUString& rLabel,
-    const OUString& rHelpURL,
     sal_Int16       nStyle,
     bool        bVisible )
 {
@@ -733,13 +712,6 @@ void OWriteToolBoxDocumentHandler::WriteToolBoxItem(
         pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_VISIBLE,
                              m_aAttributeType,
                              ATTRIBUTE_BOOLEAN_FALSE );
-    }
-
-    if ( !rHelpURL.isEmpty() )
-    {
-        pList->AddAttribute( m_aXMLToolbarNS + ATTRIBUTE_HELPID,
-                             m_aAttributeType,
-                             rHelpURL );
     }
 
     if ( nStyle > 0 )

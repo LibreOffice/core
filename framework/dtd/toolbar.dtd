@@ -30,7 +30,6 @@
 	xlink:href CDATA #REQUIRED
 	toolbar:visible %boolean; "true"
 	toolbar:style CDATA #IMPLIED
-	toolbar:helpid CDATA #IMPLIED
 >
 <!ELEMENT toolbar:toolbarspace EMPTY>
 <!ELEMENT toolbar:toolbarbreak EMPTY>
