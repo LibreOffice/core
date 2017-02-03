@@ -78,7 +78,23 @@ namespace
     bool lcl_MarkOrderingByStart(const IDocumentMarkAccess::pMark_t& rpFirst,
         const IDocumentMarkAccess::pMark_t& rpSecond)
     {
-        return rpFirst->GetMarkStart() < rpSecond->GetMarkStart();
+        auto const& rFirstStart(rpFirst->GetMarkStart());
+        auto const& rSecondStart(rpSecond->GetMarkStart());
+        if (rFirstStart.nNode != rSecondStart.nNode)
+        {
+            return rFirstStart.nNode < rSecondStart.nNode;
+        }
+        if (rFirstStart.nContent != 0 || rSecondStart.nContent != 0)
+        {
+            return rFirstStart.nContent < rSecondStart.nContent;
+        }
+        auto *const pCRFirst (dynamic_cast<::sw::mark::CrossRefBookmark const*>(rpFirst.get()));
+        auto *const pCRSecond(dynamic_cast<::sw::mark::CrossRefBookmark const*>(rpSecond.get()));
+        if ((pCRFirst == nullptr) == (pCRSecond == nullptr))
+        {
+            return false; // equal
+        }
+        return pCRFirst != nullptr; // cross-ref sorts *before*
     }
 
     bool lcl_MarkOrderingByEnd(const IDocumentMarkAccess::pMark_t& rpFirst,
