@@ -98,7 +98,7 @@ public class _XControlInformation extends MultiMethodTest {
 
         supProperties = new String[supControls.length][];
         for (int i = 0; i < supControls.length; i++) {
-            log.println("Getting proeprties for control: " + supControls[i]);
+            log.println("Getting properties for control: " + supControls[i]);
             try {
                 supProperties[i] =
                     oObj.getSupportedControlProperties(supControls[i]);
@@ -141,7 +141,7 @@ public class _XControlInformation extends MultiMethodTest {
         boolean result = true;
 
         for (int i = 0; i < supControls.length; i++) {
-            log.println("Checking proeprties for control " + supControls[i]);
+            log.println("Checking properties for control " + supControls[i]);
             for (int j = 0; j < supProperties[i].length; j++) {
                 log.println("   " + supProperties[i][j]);
                 try {
