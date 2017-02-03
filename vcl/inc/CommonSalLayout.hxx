@@ -92,7 +92,6 @@ public:
 
 enum class VerticalOrientation {
     Upright            = 0,
-    Rotated            = 1,
     TransformedUpright = 2,
     TransformedRotated = 3
 };

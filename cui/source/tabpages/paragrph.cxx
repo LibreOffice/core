@@ -92,8 +92,7 @@ enum LineSpaceList
     LLINESPACE_PROP = 4,
     LLINESPACE_MIN  = 5,
     LLINESPACE_DURCH= 6,
-    LLINESPACE_FIX  = 7,
-    LLINESPACE_END
+    LLINESPACE_FIX  = 7
 };
 
 void SetLineSpace_Impl( SvxLineSpacingItem&, int, long lValue = 0 );

@@ -43,8 +43,7 @@ enum SvXMLTokenMapDropAttrs
     XML_TOK_DROP_LINES,
     XML_TOK_DROP_LENGTH,
     XML_TOK_DROP_DISTANCE,
-    XML_TOK_DROP_STYLE,
-    XML_TOK_DROP_END=XML_TOK_UNKNOWN
+    XML_TOK_DROP_STYLE
 };
 
 static const SvXMLTokenMapEntry aDropAttrTokenMap[] =

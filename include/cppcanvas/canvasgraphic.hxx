@@ -47,68 +47,6 @@ namespace cppcanvas
     {
     public:
 
-        /** These enums determine how the primitive color is combined
-            with the background. When performing this calculations, it
-            is assumed that all color values are premultiplied with
-            the corresponding alpha values (if no alpha is specified,
-            1.0 is assumed). Then, the following general compositing
-            operation is performed:
-
-            C = Ca * Fa + Cb * Fb
-
-            where C is the result color, Ca and Cb are the input
-            colors, premultiplied with alpha, and Fa and Fb are
-            described for the different composite modes (wherein Aa
-            and Ab denote source and destination alpha, respectively).
-        */
-        enum CompositeOp
-        {
-            /// Clear destination. Fa = Fb = 0.
-            CLEAR,
-
-            /// Copy source as-is to destination. Fa = 1, Fb = 0.
-            SOURCE,
-
-            /// Leave destination as-is.  Fa = 0, Fb = 1.
-            DESTINATION,
-
-            /// Copy source over destination. Fa = 1, Fb = 1-Aa.
-            OVER,
-
-            /// Copy source under destination. Fa = 1-Ab, Fb = 1.
-            UNDER,
-
-            /// Copy source to destination, but limited to where the destination is. Fa = Ab, Fb = 0.
-            INSIDE,
-
-            /// Leave destination as is, but only where source was. Fa = 0, Fb = Aa.
-            INSIDE_REVERSE,
-
-            /// Copy source to destination, but limited to where destination is not. Fa = 1-Ab, Fb = 0.
-            OUTSIDE,
-
-            /// Leave destination as is, but only where source has not been. Fa = 0, Fb = 1-Aa.
-            OUTSIDE_REVERSE,
-
-            /// Copy source over destination, but only where destination is. Keep destination. Fa = Ab, Fb = 1-Aa.
-            ATOP,
-
-            /// Copy destination over source, but only where source is. Keep source. Fa = 1-Ab, Fb = Aa.
-            ATOP_REVERSE,
-
-            /// Take only parts where either source or destination, but not both are. Fa = 1-Ab, Fb = 1-Aa.
-            XOR,
-
-            /** simply add contributions of both source and destination. The
-                resulting color values are limited to the permissible color
-                range, and clipped to the maximal value, if exceeded. Fa = 1, Fb = 1.
-            */
-            ADD,
-
-            /// Fa = min(1,(1-Ab)/Aa), Fb = 1
-            SATURATE
-        };
-
         virtual ~CanvasGraphic() {}
 
         /** Set object transformation matrix
@@ -123,8 +61,9 @@ namespace cppcanvas
         virtual void                             setClip() = 0;
 
         /** Set object composite mode
+         * @see css::rendering::CompositeOperation
          */
-        virtual void                             setCompositeOp( CompositeOp aOp ) = 0;
+        virtual void                             setCompositeOp( sal_Int8 aOp ) = 0;
 
         /** Render to parent canvas
 

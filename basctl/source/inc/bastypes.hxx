@@ -136,7 +136,6 @@ public:
 
 enum BasicWindowStatus
 {
-    BASWIN_OK           = 0x00,
     BASWIN_RUNNINGBASIC = 0x01,
     BASWIN_TOBEKILLED   = 0x02,
     BASWIN_SUSPENDED    = 0x04,

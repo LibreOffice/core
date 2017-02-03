@@ -55,7 +55,6 @@ enum REFERENCEMARK
     REF_NUMBER,              ///< "Number"
     REF_NUMBER_NO_CONTEXT,   ///< "Number (no context)"
     REF_NUMBER_FULL_CONTEXT, ///< "Number (full context)"
-    REF_END
 };
 
 /// Get reference.

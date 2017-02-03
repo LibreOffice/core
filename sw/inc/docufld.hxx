@@ -39,7 +39,6 @@ enum SwAuthorFormat
     AF_BEGIN,
     AF_NAME = AF_BEGIN,
     AF_SHORTCUT,
-    AF_END,
     AF_FIXED = 0x8000
 };
 
@@ -54,7 +53,6 @@ enum SwDocStatSubType
     DS_TBL,
     DS_GRF,
     DS_OLE,
-    DS_END
 };
 
 typedef sal_uInt16  SwDocInfoSubType;

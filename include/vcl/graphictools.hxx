@@ -71,11 +71,6 @@ public:
         /// Perform no join, leads to visible gaps between thick line segments
         joinNone
     };
-    enum
-    {
-        /// Width of stroke start/end arrow to exactly fit the joining stroke
-        normalizedArrowWidth=65536
-    };
     typedef ::std::vector< double > DashArray;
 
     SvtGraphicStroke();
