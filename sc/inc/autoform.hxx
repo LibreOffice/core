@@ -23,14 +23,8 @@
 /*************************************************************************
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    Die akt. Struktur der Autoformatierung darf nicht mehr veraendert werden.
-    Diese wird durch unterschiedlichen Code vom StartWriter und vom StarCalc
-    eingelesen/geschrieben.
-    Sollte sich doch mal eine Aenderung nicht vermeiden lassen, dann auf
-    jedenfall in beiden Applikationen aendern.
-
-    The structure of table auto formatting should not changed. It is used
-    by different code of Writer and Calc. If a change is necessary, the
+    The structure of auto formatting should not be changed. It is used
+    by various code of Writer and Calc. If a change is necessary, the
     source code of both applications must be changed!
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

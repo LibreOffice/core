@@ -24,7 +24,7 @@ namespace rtl {
   class OUString;
 };
 
-// suche die TokenID zu dem Token
+// search the TokenID for the token
 int GetRTFToken( const rtl::OUString& rSearch );
 
 enum RTF_TOKEN_RANGES {
@@ -43,10 +43,10 @@ enum RTF_TOKEN_RANGES {
     RTF_OBJECTS                     = 0x0D00,
     RTF_NUMBULLETS                  = 0x0E00,
 
-    // !!! kann hinein verodert werden (Border/Background) !!!!
+    // !!! can be mixed in using the "or" operator (border/background) !!!!
     RTF_TABLEDEF                    = 0x1000,
 
-    // !!! kann hinein verodert werden (Border/Tab) !!!!
+    // !!! can be mixed in using the "or" operator (border/tab) !!!!
     RTF_SWGDEFS                     = 0x4000
 };
 
@@ -179,7 +179,7 @@ enum RTF_TOKEN_IDS {
     RTF_BLIPUID,
     RTF_BLIPUPI,
 
-    RTF_FIELD,                      // Felder
+    RTF_FIELD,                      // Fields
     RTF_FLDDIRTY,
     RTF_FLDEDIT,
     RTF_FLDLOCK,
@@ -520,7 +520,7 @@ enum RTF_TOKEN_IDS {
     RTF_SECTSPECIFYCL,
     RTF_SECTSPECIFYL,
 
-    // Swg-Header/Footer-Tokens
+    // Swg header/footer tokens
     RTF_HEADER_YB   = (RTF_SECTFMT|RTF_SWGDEFS),
     RTF_HEADER_XL,
     RTF_HEADER_XR,
@@ -629,7 +629,7 @@ enum RTF_TOKEN_IDS {
     RTF_TLTH,
     RTF_TLEQ,
 
-    // Swg-TabStop-Tokens
+    // Swg TabStop tokens
     RTF_TLSWG = (RTF_TABSTOPDEF|RTF_SWGDEFS),
 
 /*  */
@@ -655,7 +655,7 @@ enum RTF_TOKEN_IDS {
     RTF_BRDROUTSET,
     RTF_BRDRFRAME,
 
-    // Swg-Border-Tokens
+    // Swg border tokens
     RTF_BRDBOX          = (RTF_BRDRDEF|RTF_SWGDEFS),
     RTF_BRDLINE_COL,
     RTF_BRDLINE_IN,
@@ -793,7 +793,7 @@ enum RTF_TOKEN_IDS {
     RTF_TWOINONE,
     RTF_HORZVERT,
 
-    // Swg-Border-Tokens
+    // Swg border tokens
     RTF_SWG_ESCPROP     = (RTF_CHRFMT|RTF_SWGDEFS),
     RTF_HYPHEN,
     RTF_HYPHLEAD,
@@ -882,7 +882,7 @@ enum RTF_TOKEN_IDS {
     RTF_FRMTXLRTBV,
     RTF_FRMTXTBRLV,
 
-    // Swg-Frame-Tokens
+    // Swg frame tokens
     RTF_FLYPRINT = (RTF_APOCTL|RTF_SWGDEFS),
     RTF_FLYOPAQUE,
     RTF_FLYPRTCTD,

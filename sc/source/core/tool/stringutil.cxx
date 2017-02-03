@@ -503,7 +503,7 @@ ScInputStringType ScStringUtil::parseInputString(
         aRet.maText = rStr.copy(1);
         aRet.meType = ScInputStringType::Text;
     }
-    else        // (nur) auf englisches Zahlformat testen
+    else        // test for English number format (only)
     {
         sal_uInt32 nNumFormat = rFormatter.GetStandardIndex(eLang);
 

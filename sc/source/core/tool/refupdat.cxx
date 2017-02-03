@@ -76,25 +76,25 @@ static bool lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
         return true;
     }
 
-    if ( nDelta > 0 )                   // nach hinten schieben
+    if ( nDelta > 0 )                   // move backward
     {
         if ( rRef >= nStart && rRef <= nEnd + nDelta )
         {
             if ( rRef <= nEnd )
                 rRef = sal::static_int_cast<R>( rRef + nDelta );    // in the moved range
             else
-                rRef -= nEnd - nStart + 1;      // nachruecken
+                rRef -= nEnd - nStart + 1;      // move up
             return true;
         }
     }
-    else                                // nach vorne schieben
+    else                                // move forward
     {
         if ( rRef >= nStart + nDelta && rRef <= nEnd )
         {
             if ( rRef >= nStart )
                 rRef = sal::static_int_cast<R>( rRef + nDelta );    // in the moved range
             else
-                rRef += nEnd - nStart + 1;      // nachruecken
+                rRef += nEnd - nStart + 1;      // move up
             return true;
         }
     }
@@ -135,11 +135,11 @@ bool IsExpand( R n1, R n2, U nStart, S nD )
 {   // before normal Move...
     return
         nD > 0          // Insert
-     && n1 < n2         // mindestens zwei Cols/Rows/Tabs in Ref
+     && n1 < n2         // at least two Cols/Rows/Tabs in Ref
      && (
-        (nStart <= n1 && n1 < nStart + nD)      // n1 innerhalb des Insert
-        || (n2 + 1 == nStart)                   // n2 direkt vor Insert
-        );      // n1 < nStart <= n2 wird sowieso expanded!
+        (nStart <= n1 && n1 < nStart + nD)      // n1 within the Insert
+        || (n2 + 1 == nStart)                   // n2 directly before Insert
+        );      // n1 < nStart <= n2 is expanded anyway!
 }
 
 template< typename R, typename S, typename U >
@@ -151,7 +151,7 @@ void Expand( R& n1, R& n2, U nStart, S nD )
         n2 = sal::static_int_cast<R>( n2 + nD );
         return;
     }
-    // am Anfang
+    // at the beginning
     n1 = sal::static_int_cast<R>( n1 - nD );
 }
 
@@ -340,7 +340,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     }
     else if (eUpdateRefMode == URM_REORDER)
     {
-        //  bisher nur fuer nDz (MoveTab)
+        //  so far only for nDz (MoveTab)
         OSL_ENSURE ( !nDx && !nDy, "URM_REORDER for x and y not yet implemented" );
 
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
@@ -367,9 +367,9 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     return eRet;
 }
 
-// simples UpdateReference fuer ScBigRange (ScChangeAction/ScChangeTrack)
-// Referenzen koennen auch ausserhalb des Dokuments liegen!
-// Ganze Spalten/Zeilen (nInt32Min..nInt32Max) bleiben immer solche!
+// simple UpdateReference for ScBigRange (ScChangeAction/ScChangeTrack)
+// References can also be located outside of the document!
+// Whole columns/rows (nInt32Min..nInt32Max) stay as such!
 ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
         const ScBigRange& rWhere, sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
         ScBigRange& rWhat )
@@ -519,7 +519,7 @@ void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
         rTab = nNewTab;
     }
     OSL_ENSURE( rCol>=rSource.aStart.Col() && rRow>=rSource.aStart.Row(),
-                "UpdateTranspose: Pos. falsch" );
+                "UpdateTranspose: pos. wrong" );
 
     SCsCOL nRelX = rCol - (SCsCOL)rSource.aStart.Col();
     SCsROW nRelY = rRow - (SCsROW)rSource.aStart.Row();
@@ -551,16 +551,16 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
     return eRet;
 }
 
-//  UpdateGrow - erweitert Referenzen, die genau auf den Bereich zeigen
-//  kommt ohne Dokument aus
+//  UpdateGrow - expands references which point exactly to the area
+//  gets by without document
 
 ScRefUpdateRes ScRefUpdate::UpdateGrow(
     const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY, ScRange& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
-    //  in Y-Richtung darf die Ref auch eine Zeile weiter unten anfangen,
-    //  falls ein Bereich Spaltenkoepfe enthaelt
+    //  in y-direction the Ref may also start one row further below,
+    //  if an area contains column heads
 
     bool bUpdateX = ( nGrowX &&
             rRef.aStart.Col() == rArea.aStart.Col() && rRef.aEnd.Col() == rArea.aEnd.Col() &&
