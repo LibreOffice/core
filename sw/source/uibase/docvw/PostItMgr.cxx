@@ -873,6 +873,11 @@ void SwPostItMgr::LayoutPostIts()
                     {
                         if ((*i)->GetSidebarItem().bPendingLayout)
                             lcl_CommentNotification(mpView, CommentNotificationType::Add, &(*i)->GetSidebarItem(), 0);
+                        else if ((*i)->IsAnchorRectChanged())
+                        {
+                            lcl_CommentNotification(mpView, CommentNotificationType::Modify, &(*i)->GetSidebarItem(), 0);
+                            (*i)->ResetAnchorRectChanged();
+                        }
                     }
 
                     // Layout for this post it finished now
