@@ -269,6 +269,11 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
                  << "," << mpShapePtr->getSize().Width
                  << "," << mpShapePtr->getSize().Height
                  <<")");
+
+        // No DrawingML fallback, need to warn the user at the end.
+        if (mpShapePtr->getExtDrawings().empty())
+            getFilter().setMissingExtDrawing();
+
         break;
     }
     default:

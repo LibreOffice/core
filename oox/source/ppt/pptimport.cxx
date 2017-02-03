@@ -22,6 +22,13 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <osl/diagnose.h>
+#include <vcl/msgbox.hxx>
+#include <vcl/svapp.hxx>
+#include <svtools/sfxecode.hxx>
+#include <svtools/ehdl.hxx>
+#include <svtools/svtools.hrc>
+#include <tools/urlobj.hxx>
+#include <svx/dialogs.hrc>
 #include "oox/ppt/pptimport.hxx"
 #include "oox/drawingml/chart/chartconverter.hxx"
 #include "oox/dump/pptxdumper.hxx"
@@ -89,7 +96,26 @@ bool PowerPointImport::importDocument()
     OUString aFragmentPath = getFragmentPathFromFirstTypeFromOfficeDoc( "officeDocument" );
     FragmentHandlerRef xPresentationFragmentHandler( new PresentationFragmentHandler( *this, aFragmentPath ) );
     maTableStyleListPath = xPresentationFragmentHandler->getFragmentPathFromFirstTypeFromOfficeDoc( "tableStyles" );
-    return importFragment( xPresentationFragmentHandler );
+    bool bRet = importFragment(xPresentationFragmentHandler);
+
+    if (mbMissingExtDrawing)
+    {
+        // Construct a warning message.
+        INetURLObject aURL(getFileUrl());
+        SfxErrorContext aContext(ERRCTX_SFX_OPENDOC, aURL.getName(INetURLObject::LAST_SEGMENT), nullptr, RID_ERRCTX);
+        OUString aWarning;
+        aContext.GetString(ERRCODE_WARNING_MASK, aWarning);
+        aWarning += ":\n";
+        static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
+        aWarning += ResId(RID_SVXSTR_WARN_MISSING_SMARTART, *pResMgr).toString();
+
+        // Show it.
+        WinBits eBits = WB_OK | WB_DEF_OK;
+        ScopedVclPtrInstance<WarningBox> pBox(nullptr, eBits, aWarning);
+        pBox->Execute();
+    }
+
+    return bRet;
 
 }
 
