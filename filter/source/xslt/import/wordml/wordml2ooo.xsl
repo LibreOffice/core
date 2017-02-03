@@ -233,7 +233,7 @@
                     <xsl:call-template name="default_seqence_declaration"/>
                     <xsl:apply-templates select="/w:wordDocument/w:body//w:instrText[substring(normalize-space(text()),1,3) = 'SEQ' ] | /w:wordDocument/w:body//w:fldSimple[substring(normalize-space(@w:instr),1,3) = 'SEQ' ]  " mode="sequence_declare"/>
                 </text:sequence-decls>
-                <!--  add the user field variables declare for Docpropety fields importing G.Y.-->
+                <!--  add the user field variables declare for Docproperty fields importing G.Y.-->
                 <text:user-field-decls>
                     <xsl:call-template name="user_fields_declare_docproperty"/>
                 </text:user-field-decls>
