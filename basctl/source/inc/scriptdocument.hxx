@@ -50,12 +50,11 @@ namespace basctl
         LIBRARY_LOCATION_DOCUMENT
     };
 
-    enum LibraryType
+    enum class LibraryType
     {
-        LIBRARY_TYPE_UNKNOWN,
-        LIBRARY_TYPE_MODULE,
-        LIBRARY_TYPE_DIALOG,
-        LIBRARY_TYPE_ALL
+        Module,
+        Dialog,
+        All
     };
 
     class ScriptDocument;
@@ -463,7 +462,7 @@ namespace basctl
                     getLibraryLocation( const OUString& _rLibName ) const;
 
         /// returns the title for the document
-        OUString    getTitle( LibraryLocation _eLocation, LibraryType _eType = LIBRARY_TYPE_ALL ) const;
+        OUString    getTitle( LibraryLocation _eLocation, LibraryType _eType = LibraryType::All ) const;
 
         /** returns the title of the document
 

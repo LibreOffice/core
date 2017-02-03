@@ -715,11 +715,11 @@ void TreeListBox::SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage
 
 LibraryType TreeListBox::GetLibraryType() const
 {
-    LibraryType eType = LIBRARY_TYPE_ALL;
+    LibraryType eType = LibraryType::All;
     if ( ( nMode & BROWSEMODE_MODULES ) && !( nMode & BROWSEMODE_DIALOGS ) )
-        eType = LIBRARY_TYPE_MODULE;
+        eType = LibraryType::Module;
     else if ( !( nMode & BROWSEMODE_MODULES ) && ( nMode & BROWSEMODE_DIALOGS ) )
-        eType = LIBRARY_TYPE_DIALOG;
+        eType = LibraryType::Dialog;
     return eType;
 }
 
