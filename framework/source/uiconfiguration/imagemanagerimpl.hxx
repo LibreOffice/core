@@ -152,13 +152,6 @@ namespace framework
                                         sal_Bool,
                                         OUStringHash > ImageNameMap;
 
-            enum Layer
-            {
-                LAYER_DEFAULT,
-                LAYER_USERDEFINED,
-                LAYER_COUNT
-            };
-
             enum NotifyOp
             {
                 NotifyOp_Remove,

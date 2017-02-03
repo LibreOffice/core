@@ -83,7 +83,6 @@ enum SwXMLTableElemTokens
     XML_TOK_TABLE_ROWS,
     XML_TOK_TABLE_ROW,
     XML_TOK_OFFICE_DDE_SOURCE,
-    XML_TOK_TABLE_ELEM_END=XML_TOK_UNKNOWN
 };
 
 enum SwXMLTableCellAttrTokens
@@ -101,7 +100,6 @@ enum SwXMLTableCellAttrTokens
     XML_TOK_TABLE_PROTECTED,
     XML_TOK_TABLE_STRING_VALUE,
     XML_TOK_TABLE_VALUE_TYPE,
-    XML_TOK_TABLE_CELL_ATTR_END=XML_TOK_UNKNOWN
 };
 
 static SvXMLTokenMapEntry aTableElemTokenMap[] =

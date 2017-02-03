@@ -87,8 +87,7 @@ enum XMLElemTransformerAction
     XML_ETACTION_MOVE_TO_ATTR_RNG2ISO_DATETIME, // turn elem into an attr and convert . to , in datetimes
                                         // - param1: namespace +
                                         //           token of local name
-    XML_ETACTION_USER_DEFINED=0x40000000,// user defined actions start here
-    XML_ETACTION_END=XML_TACTION_END
+    XML_ETACTION_USER_DEFINED=0x40000000// user defined actions start here
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_ELEMTRANSFORMERACTION_HXX

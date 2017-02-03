@@ -73,14 +73,13 @@ enum class GraphicsStateUpdateFlags {
     TextLineColor         = 0x0010,
     OverlineColor         = 0x0020,
     ClipRegion            = 0x0040,
-    AntiAlias             = 0x0080,
     LayoutMode            = 0x0100,
     TransparentPercent    = 0x0200,
     DigitLanguage         = 0x0400,
     All                   = 0x07ff
 };
 namespace o3tl {
-    template<> struct typed_flags<GraphicsStateUpdateFlags> : is_typed_flags<GraphicsStateUpdateFlags, 0x07ff> {};
+    template<> struct typed_flags<GraphicsStateUpdateFlags> : is_typed_flags<GraphicsStateUpdateFlags, 0x077f> {};
 }
 
 namespace vcl

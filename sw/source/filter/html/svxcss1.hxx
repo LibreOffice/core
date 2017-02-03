@@ -39,7 +39,6 @@ enum SvxCSS1Position
     SVX_CSS1_POS_STATIC,        // normal
     SVX_CSS1_POS_ABSOLUTE,      // absolut
     SVX_CSS1_POS_RELATIVE,      // relativ
-    SVX_CSS1_POS_END
 };
 
 enum SvxCSS1LengthType
@@ -48,7 +47,6 @@ enum SvxCSS1LengthType
     SVX_CSS1_LTYPE_AUTO,        // automatisch
     SVX_CSS1_LTYPE_TWIP,        // twip
     SVX_CSS1_LTYPE_PERCENTAGE,  // %-Angabe
-    SVX_CSS1_LTYPE_END
 };
 
 // Feature: PrintExt
@@ -59,7 +57,6 @@ enum SvxCSS1SizeType
     SVX_CSS1_STYPE_TWIP,        // twip
     SVX_CSS1_STYPE_LANDSCAPE,   // Landscape
     SVX_CSS1_STYPE_PORTRAIT,    // Landscape
-    SVX_CSS1_STYPE_END
 };
 
 enum SvxCSS1PageBreak
@@ -70,7 +67,6 @@ enum SvxCSS1PageBreak
     SVX_CSS1_PBREAK_AVOID,      // nie
     SVX_CSS1_PBREAK_LEFT,       // naechste Seite ist eine linke
     SVX_CSS1_PBREAK_RIGHT,      // naechste Seite ist eine rechte
-    SVX_CSS1_PBREAK_END
 };
 
 

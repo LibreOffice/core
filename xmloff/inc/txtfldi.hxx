@@ -104,8 +104,6 @@ enum XMLTextFieldAttrTokens
     XML_TOK_TEXTFIELD_TABLE_TYPE,
 
     XML_TOK_TEXTFIELD_NOTE_CLASS,
-
-    XML_TOK_TEXTFIELD_UNKNOWN
 };
 
 /// abstract class for text field import

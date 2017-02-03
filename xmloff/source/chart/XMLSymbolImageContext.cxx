@@ -35,7 +35,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_SYMBOL_IMAGE_TYPE,
     XML_TOK_SYMBOL_IMAGE_ACTUATE,
     XML_TOK_SYMBOL_IMAGE_SHOW,
-    XML_TOK_SYMBOL_IMAGE_END = XML_TOK_UNKNOWN
 };
 
 static const SvXMLTokenMapEntry aSymbolImageAttrTokenMap[] =

@@ -49,7 +49,6 @@ enum SvXMLTokenMapAttrs
     XML_TOK_DASH_DOTS2,
     XML_TOK_DASH_DOTS2LEN,
     XML_TOK_DASH_DISTANCE,
-    XML_TOK_DASH_END=XML_TOK_UNKNOWN
 };
 
 static SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =

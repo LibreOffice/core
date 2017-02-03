@@ -47,13 +47,12 @@ enum class TransferBufferType : sal_uInt16
         DocumentWord  = 0x0002,
         Graphic       = 0x0004,
         Table         = 0x0008,
-        DdeLink       = 0x0010,
         Ole           = 0x0020,
         InetField     = 0x0040,
         Drawing       = 0x0081,   // drawing is internal too!
 };
 namespace o3tl {
-    template<> struct typed_flags<TransferBufferType> : is_typed_flags<TransferBufferType, 0x00ff> {};
+    template<> struct typed_flags<TransferBufferType> : is_typed_flags<TransferBufferType, 0x00ef> {};
 }
 
 class SW_DLLPUBLIC SwTransferable : public TransferableHelper

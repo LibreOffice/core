@@ -31,11 +31,10 @@ class SvxMacroTableDtor;
 
 enum class SwXmlFlags {
     NONE         = 0x0000,
-    ConvBlock    = 0x0001,
     NoRootCommit = 0x0002,
 };
 namespace o3tl {
-    template<> struct typed_flags<SwXmlFlags> : is_typed_flags<SwXmlFlags, 0x0003> {};
+    template<> struct typed_flags<SwXmlFlags> : is_typed_flags<SwXmlFlags, 0x0002> {};
 }
 
 class SwXMLTextBlocks : public SwImpBlocks

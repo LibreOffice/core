@@ -46,17 +46,6 @@ using namespace basegfx::tools;
 using namespace drawinglayer::attribute;
 using namespace drawinglayer::primitive2d;
 
-enum
-{
-    ITEM_OFFSET = 4,
-    ITEM_OFFSET_DOUBLE = 6,
-    NAME_LINE_OFF_X = 2,
-    NAME_LINE_OFF_Y = 2,
-    NAME_LINE_HEIGHT = 2,
-    NAME_OFFSET = 2,
-    SCROLL_OFFSET = 4
-};
-
 ThumbnailView::ThumbnailView (vcl::Window *pParent, WinBits nWinStyle)
     : Control( pParent, nWinStyle )
     , mpItemAttrs(new ThumbnailItemAttributes)

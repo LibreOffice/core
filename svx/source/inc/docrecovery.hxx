@@ -83,14 +83,7 @@ enum EDocStates
 
     /// default state, if a document was new created or loaded
     E_UNKNOWN = 0,
-    /// modified against the original file
-    E_MODIFIED = 1,
-    /// an active document can be postponed to be saved later.
-    E_POSTPONED = 2,
-    /// was already handled during one AutoSave/Recovery session.
-    E_HANDLED = 4,
     /** an action was started (saving/loading) ... Can be interesting later if the process may be was interrupted by an exception. */
-    E_TRY_SAVE = 8,
     E_TRY_LOAD_BACKUP = 16,
     E_TRY_LOAD_ORIGINAL = 32,
 

@@ -97,7 +97,6 @@ enum SwXMLDocTokens
     XML_TOK_DOC_SCRIPT,
     XML_TOK_DOC_SETTINGS,
     XML_TOK_DOC_XFORMS,
-    XML_TOK_OFFICE_END=XML_TOK_UNKNOWN
 };
 
 static SvXMLTokenMapEntry aDocTokenMap[] =
