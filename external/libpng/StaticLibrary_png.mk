@@ -33,6 +33,9 @@ $(eval $(call gb_StaticLibrary_add_generated_cobjects,png,\
 	UnpackedTarball/png/pngwrite \
 	UnpackedTarball/png/pngwtran \
 	UnpackedTarball/png/pngwutil \
+	$(if $(filter ARM,$(CPUNAME)),\
+	    UnpackedTarball/png/arm/arm_init \
+	) \
 ))
 
 # vim: set noet sw=4 ts=4:
