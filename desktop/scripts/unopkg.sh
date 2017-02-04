@@ -58,7 +58,7 @@ AIX)
     ;;
 esac
 
-for arg in "$@"
+for arg in $@
 do
   case "$arg" in
        #collect all bootstrap variables specified on the command line
