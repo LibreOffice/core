@@ -25,9 +25,6 @@
 #include <svx/svxdllapi.h>
 
 
-//   Vorausdeklarationen
-
-
 class SdrDragMethod;
 class SdrPageView;
 
@@ -36,9 +33,7 @@ namespace sdr { namespace properties {
 }}
 
 
-//   Hilfsklasse SdrObjConnection
-
-
+/// Utility class SdrObjConnection
 class SdrObjConnection
 {
     friend class                SdrEdgeObj;
@@ -46,14 +41,14 @@ class SdrObjConnection
     friend class                SdrCreateView;
 
 protected:
-    Point                       aObjOfs;       // Wird beim Draggen eines Knotens gesetzt
-    SdrObject*                  pObj;          // Referenziertes Objekt
-    sal_uInt16                  nConId;        // Konnektornummer
+    Point                       aObjOfs;       // set during dragging of a node
+    SdrObject*                  pObj;          // referenced object
+    sal_uInt16                  nConId;        // connector number
 
-    bool                        bBestConn : 1;   // sal_True= es wird der guenstigste Konnektor gesucht
-    bool                        bBestVertex : 1; // sal_True= es wird der guenstigste Scheitelpunkt zum konnekten gesucht
-    bool                        bAutoVertex : 1; // AutoConnector am Scheitelpunkt nCon
-    bool                        bAutoCorner : 1; // AutoConnector am Eckpunkt nCon
+    bool                        bBestConn : 1;   // true -> the best-matching connector is searched for
+    bool                        bBestVertex : 1; // true -> the best-matching vertex to connect is searched for
+    bool                        bAutoVertex : 1; // autoConnector at apex nCon
+    bool                        bAutoCorner : 1; // autoConnector at corner nCon
 
 public:
     SdrObjConnection() { ResetVars(); }
@@ -74,30 +69,28 @@ public:
 };
 
 
-//   Hilfsklasse SdrEdgeInfoRec
-
-
 enum class SdrEdgeLineCode { Obj1Line2, Obj1Line3, Obj2Line2, Obj2Line3, MiddleLine };
 
+/// Utility class SdrEdgeInfoRec
 class SdrEdgeInfoRec
 {
 public:
-    // Die 5 Distanzen werden beim draggen bzw. per SetAttr gesetzt und von
-    // ImpCalcEdgeTrack ausgewertet. Per Get/SetAttr/Get/SetStyleSh werden
-    // jedoch nur 0-3 longs transportiert.
+    // The 5 distances are set on dragging or via SetAttr and are
+    // evaluated by ImpCalcEdgeTrack. Only 0-3 longs are transpeorted
+    // via Get/SetAttr/Get/SetStyleSh though.
     Point                       aObj1Line2;
     Point                       aObj1Line3;
     Point                       aObj2Line2;
     Point                       aObj2Line3;
     Point                       aMiddleLine;
 
-    // Nachfolgende Werte werden von ImpCalcEdgeTrack gesetzt
-    long                        nAngle1;           // Austrittswinkel am Obj1
-    long                        nAngle2;           // Austrittswinkel am Obj2
+    // Following values are set by ImpCalcEdgeTrack
+    long                        nAngle1;           // exit angle at Obj1
+    long                        nAngle2;           // exit angle at Obj2
     sal_uInt16                  nObj1Lines;        // 1..3
     sal_uInt16                  nObj2Lines;        // 1..3
-    sal_uInt16                  nMiddleLine;       // 0xFFFF=keine, sonst Punktnummer des Linienbeginns
-    char                        cOrthoForm;        // Form des Ortho-Verbindes, z.B. 'Z','U',I','L','S',...
+    sal_uInt16                  nMiddleLine;       // 0xFFFF=none, otherwiese point number of the beginning of the line
+    char                        cOrthoForm;        // form of the right-angled connector, e.g., 'Z','U',I','L','S',...
 
 public:
     SdrEdgeInfoRec()
@@ -117,16 +110,14 @@ public:
 };
 
 
-//   Hilfsklasse SdrEdgeObjGeoData
-
-
+/// Utility class SdrEdgeObjGeoData
 class SdrEdgeObjGeoData : public SdrTextObjGeoData
 {
 public:
-    SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
-    SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
+    SdrObjConnection            aCon1;  // connection status of the beginning of the line
+    SdrObjConnection            aCon2;  // connection status of the end of the line
     std::unique_ptr<XPolygon>   pEdgeTrack;
-    bool                        bEdgeTrackDirty;// sal_True=Verbindungsverlauf muss neu berechnet werden.
+    bool                        bEdgeTrackDirty; // true -> connector track needs to be recalculated
     bool                        bEdgeTrackUserDefined;
     SdrEdgeInfoRec              aEdgeInfo;
 
@@ -136,9 +127,7 @@ public:
 };
 
 
-//   Hilfsklasse SdrEdgeObj
-
-
+/// Utility class SdrEdgeObj
 class SVX_DLLPUBLIC SdrEdgeObj : public SdrTextObj
 {
 private:
@@ -152,24 +141,25 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
-    SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
-    SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
+    SdrObjConnection            aCon1;  // Connection status of the beginning of the line
+    SdrObjConnection            aCon2;  // Connection status of the end of the line
 
     XPolygon*                   pEdgeTrack;
-    sal_uInt16                  nNotifyingCount; // Verrieglung
+    sal_uInt16                  nNotifyingCount; // Locking
     SdrEdgeInfoRec              aEdgeInfo;
 
-    bool                        bEdgeTrackDirty : 1; // sal_True=Verbindungsverlauf muss neu berechnet werden.
+    bool                        bEdgeTrackDirty : 1; // true -> Connection track needs to be recalculated
     bool                        bEdgeTrackUserDefined : 1;
 
     // Bool to allow suppression of default connects at object
     // inside test (HitTest) and object center test (see ImpFindConnector())
     bool                        mbSuppressDefaultConnect : 1;
 
-    // Flag value for avoiding death loops when calculating BoundRects
-    // from circulary connected connectors. A coloring algorithm is used
-    // here. When the GetCurrentBoundRect() calculation of a SdrEdgeObj
-    // is running, the flag is set, else it is always sal_False.
+    // Flag value for avoiding infinite loops when calculating
+    // BoundRects from ring-connected connectors. A coloring algorithm
+    // is used here. When the GetCurrentBoundRect() calculation of a
+    // SdrEdgeObj is running, the flag is set, else it is always
+    // false.
     bool                        mbBoundRectCalculationRunning : 1;
 
     // #i123048# need to remember if layouting was suppressed before to get
@@ -185,7 +175,7 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
 
     static XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rCenter);
-    void ImpRecalcEdgeTrack();  // Neuberechnung des Verbindungsverlaufs
+    void ImpRecalcEdgeTrack();   // recalculation of the connection track
     XPolygon ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection& rCon1, SdrObjConnection& rCon2, SdrEdgeInfoRec* pInfo) const;
     XPolygon ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rectangle& rBoundRect1, const Rectangle& rBewareRect1,
         const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
@@ -193,10 +183,10 @@ protected:
     static bool ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=nullptr);
     static SdrEscapeDirection ImpCalcEscAngle(SdrObject* pObj, const Point& aPt2);
     void ImpSetTailPoint(bool bTail1, const Point& rPt);
-    void ImpUndirtyEdgeTrack();  // eventuelle Neuberechnung des Verbindungsverlaufs
-    void ImpDirtyEdgeTrack();   // invalidate connector path, so it will be recalculated next time
-    void ImpSetAttrToEdgeInfo(); // Werte vom Pool nach aEdgeInfo kopieren
-    void ImpSetEdgeInfoToAttr(); // Werte vom aEdgeInfo in den Pool kopieren
+    void ImpUndirtyEdgeTrack();  // potential recalculation of the connection track
+    void ImpDirtyEdgeTrack();    // invalidate connector path, so it will be recalculated next time
+    void ImpSetAttrToEdgeInfo(); // copying values from the pool to aEdgeInfo
+    void ImpSetEdgeInfoToAttr(); // copying values from the aEdgeInfo to the pool
 
 public:
 
@@ -214,8 +204,9 @@ public:
     virtual const SdrGluePointList* GetGluePointList() const override;
     virtual SdrGluePointList* ForceGluePointList() override;
 
-    // bTail1=TRUE: Linienanfang, sonst LinienEnde
-    // pObj=NULL: Disconnect
+    // * for all of the below: bTail1=true: beginning of the line,
+    //   otherwise end of the line
+    // * pObj=NULL: disconnect connector
     void SetEdgeTrackDirty() { bEdgeTrackDirty=true; }
     void ConnectToNode(bool bTail1, SdrObject* pObj) override;
     void DisconnectFromNode(bool bTail1) override;
@@ -301,117 +292,120 @@ public:
     basegfx::B2DPolygon ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const;
 };
 
-// Zur Bestimmung der Verlaufslinie werden folgende Item-Parameter des SdrItemPool verwendet:
-//
-//  sal_uInt16 EdgeFlowAngle       Default 9000 (=90.00 Deg), min 0, max 9000
-//      Verlauffreiheitswinkel.
-//      Der Winkel, in dem die Verbindungslinie verlaufen darf.
-//
-//  sal_uInt16 EdgeEscAngle        Default 9000 (=90.00 Deg), min 0, max 9000
-//      Objektaustrittswinkel.
-//      Der Winkel, in dem die Verbindungslinie aus dem Objekt austreten darf.
-//
-//  bool   EdgeEscAsRay        Default FALSE
-//      sal_True= die Verbindungslinie tritt aus dem Obj Strahlenfoermig aus.
-//      Also Winkelvorgabe durch die Strecke ObjMitte/Konnektor.
-//
-//  bool   EdgeEscUseObjAngle  Default FALSE
-//      Objektdrehwinkelberuecksichtigung.
-//      sal_True= Bei der Bestimmung des Objektaustrittswinkels wird der
-//      Drehwinkel des Objekts als Offset beruecksichtigt.
-//
-//  sal_uIntPtr  EdgeFlowDefDist     Default 0, min 0, max ?
-//      Das ist der Default-Mindestabstand der bei der Berechnung der
-//      Verbindungslinie zu den angedockten Objekten in logischen Einheiten.
-//      Dieser Abstand wird innerhalb des Objektes "ueberschrieben", sobald
-//      der User an den Linien dragged. Beim Andocken an ein neues Objekt wird
-//      dann jedoch wieder dieser Default verwendet.
-//
-//
-// Allgemeines zu Konnektoren:
-//
-// Es gibt Knoten und Kantenobjekte. Zwei Knoten koennen durch eine Kante
-// miteinander verbunden werden. Ist eine Kante nur an einem Ende an einen
-// Knoten geklebt, ist das andere Ende auf einer absoluten Position im Doc
-// fixiert. Ebenso ist es natuerlich auch moeglich, dass eine Kante an beiden
-// Enden "frei", also nicht mit einem Knotenobjekt verbunden ist.
-//
-// Ein Kantenobjekt kann theoretisch auch gleichzeitig Knotenobjekt sein. In
-// der ersten Version wird das jedoch noch nicht realisiert werden.
-//
-// Eine Verbindung zwischen Knoten und Kante kann hergestellt werden durch:
-// - Interaktives erzeugen eines neuen Kantenobjekts an der SdrView wobei
-//   Anfangs- bzw. Endpunkt der Kante auf ein Konnektor (Klebestelle) eines
-//   bereits vorhandenen Knotenobjekts gelegt wird.
-// - Interaktives draggen des Anfangs- bzw. Endpunkts eines bestehenden
-//   Kantenobjekts an der SdrView auf ein Konnektor (Klebestelle) eines
-//   bereits vorhandenen Knotenobjekts.
-// - Undo/Redo
-// Verschieben von Knotenobjekten stellt keine Verbindungen her. Ebenso auch
-// nicht das direkte Verschieben von Kantenendpunkten am SdrModel...
-// Verbindungen koennen auch hergestellt werden, wenn die Konnektoren an der
-// View nicht sichtbar geschaltet sind.
-//
-// Eine vorhandene Verbindung zwischen Knoten und Kante bleibt erhalten bei:
-// - Draggen (Move/Resize/Rotate/...) des Knotenobjekts
-// - Verschieben einer Konnektorposition im Knotemobjekt
-// - gleichzeitiges Draggen (Move/Resize/Rotate/...) von Knoten und Kante
-//
-// Eine Verbindung zwischen Knoten und Kante kann geloesst werden durch:
-// - Loeschen eines der Objekte
-// - Draggen des Kantenobjekts ohne gleichzeitiges Draggen des Knotens
-// - Loeschen des Konnektors am Knotenobjekt
-// - Undo/Redo/Repeat
-// Beim Draggen muss die Aufforderung zum loesen der Verbindung von ausserhalb
-// des Models befohlen werden (z.B. von der SdrView). SdrEdgeObj::Move() loesst
-// die Verbindung nicht selbsttaetig.
-//
-// Jedes Knotenobjekt kann Konnektoren, sog. Klebestellen besitzen. Das sind die
-// geometrischen Punkte, an denen das verbindende Kantenobjekt bei hergestellter
-// Verbindung endet. Defaultmaessig hat jedes Objekt keine Konnektoren. Trotzdem
-// kann man bei bestimmten View-Einstellungen eine Kante andocken, da dann z.B.
-// an den 4 Scheitelpunkten des Knotenobjekts bei Bedarf automatisch Konnektoren
-// generiert werden. Jedes Objekt liefert dafuer 2x4 sog. Default-Konnektorposi-
-// tionen, 4 an den Scheitelpunkten und 4 an den Eckpositionen. Im Normalfall
-// liegen diese an den 8 Handlepositionen; Ausnahmen bilden hier Ellipsen,
-// Parallelogramme, ... . Darueberhinaus koennen auch an jedem Knotenobjekt
-// anwenderspeziefische Konnektoren gesetzt werden.
-//
-// Dann gibt es noch die Moeglichkeit, ein Kante an einem Objekt mit dem
-// Attribut "bUseBestConnector" anzudocken. Es wird dann aus dem Angebot der
-// Konnektoren des Objekts oder/und der Scheitelpunkte, jeweils die fuer den
-// Verlauf der Verbindungslinie guenstigste Konnektorposition verwendet. Der
-// Anwender vergibt dieses Attribut, indem er den Knoten in seiner Mitte
-// andockt (siehe z.B. Visio).
-// 09-06-1996: bUseBestConnector verwendet nur Scheitelpunktklebepunkte.
-//
-// Und hier noch etwas Begriffsdefinition:
-//   Verbinder : Eben das Verbinderobjekt (Kantenobjekt)
-//   Knoten    : Ein beliebiges Objekt, an dem ein Verbinder drangeklebt
-//               werden kann, z.B. ein Rechteck, ...
-//   Klebepunkt: Der Punkt, an dem der Verbinder an das Knotenobjekt
-//               geklebt wird. Hierbei gibt es:
-//                 Scheitelpunktklebepunkte: Jedes Knotenobjekt hat diese
-//                     Klebepunkte von Natur aus. Moeglicherweise gibt es
-//                     im Draw bereits die Option "Automatisch ankleben an
-//                     Objektscheitelpunkte" (default an)
-//                 Eckpunktklebepunkte: Auch diese Klebepunkte sind den
-//                     Objekten von mir bereits mitgegeben. Wie die oben
-//                     erwaehnten gibt es fuer diese moeglicherweise
-//                     bereits auch eine Option im Draw. (default aus)
-//                 Scheitelpunktklebepunkte und Eckpunktklebepunkte sind
-//                     im Gegensatz zu Visio nicht optisch sichtbar; sie
-//                     sind eben einfach da (wenn Option eingeschaltet).
-//                 Benutzerdefinierte Klebepunkte: Gibt es an jedem
-//                     Knotenobjekt beliebig viele. Per Option koennen sie
-//                     sichtbar geschaltet werden (beim editieren immer
-//                     sichtbar). Zur Zeit sind die jedoch noch nicht ganz
-//                     fertigimplementiert.
-//                 Automatische Klebepunktwahl: Wird der Verbinder so an
-//                     das Knotenobjekt gedockt, dass der schwarke Rahmen
-//                     das gesamte Objekt umfasst, so versucht der
-//                     Verbinder von den 4 Scheitelpunktklebepunkten (und
-//                     zwar nur von denen) den guenstigsten herauszufinden.
+ // The following item parameters of the SdrItemPool are used to
+ // determine the actual connector line routing:
+ //
+ //  sal_uInt16 EdgeFlowAngle       default 9000 (= 90.00 deg), min 0, max 9000
+ //      Clearance angle.
+ //      The angle at which the connecting line may run.
+ //
+ //  sal_uInt16 EdgeEscAngle        default 9000 (= 90.00 Deg), min 0, max 9000
+ //      Object exit angle.
+ //      The angle at which the connection line may exit from the object.
+ //
+ //  bool EdgeEscAsRay              default false
+ //      true -> the connecting line emerges from the object radially.
+ //      Thus, angle specification by the line ObjCenter / connector.
+ //
+ //  bool EdgeEscUseObjAngle        default false
+ //      Object rotation angle is considered
+ //      true -> when determining the connector exit angle, angle for
+ //      object rotation is taken as an offset.
+ //
+ //  sal_uIntPtr EdgeFlowDefDist    default 0, min 0, max ?
+ //      This is the default minimum distance on calculation of the
+ //      connection Line to the docked objects is in logical units.
+ //      This distance is overridden within the object, as soon as the
+ //      user drags on the lines. When docking onto a new object,
+ //      however, this default is used again.
+ //
+ //
+ // General Information About Connectors:
+ //
+ // There are nodes and edge objects. Two nodes can be joined by an
+ // edge. If a connector is connected to a node only at one end, the
+ // other end is fixed to an absolute position in the document. It is
+ // of course also possible for a connector to be "free" at both ends,
+ // i.e. not connected to a node object on each side.
+ //
+ // A connector object can also theoretically be a node object at the
+ // same time. In the first version, however, this will not yet be
+ // realized.
+ //
+ // A connection between node and connector edge can be established by:
+ // - Interactive creation of a new edge object at the SdrView where
+ //   the beginning or end point of the edge is placed on a connector
+ //   (glueing point) of an already existing node object.
+ // - Interactive dragging of the beginning or end point of an
+ //   existing connector edge object on the SdrView to a connector
+ //   (glueing point) of an already existing node object.
+ // - Undo/Redo
+ //   Moving node objects does not make any connections. Also not the
+ //   direct shifting of edge endpoints on the SdrModel... Connections
+ //   can also be established, if the connectors are not configured to
+ //   be visible in the view.
+ //
+ // An existing connection between node and edge is retained for:
+ // - Dragging (Move/Resize/Rotate/...) of the node object
+ // - Moving a connector position in the node object
+ // - Simultaneous dragging (Move/Resize/Rotate/...) of the node and the
+ //   edge
+ //
+ // A connection between node and edge can be removed by:
+ // - Deleting one of the objects
+ // - Dragging the edge object without simultaneously dragging the node
+ // - Deleting the connector at the node object
+ // - Undo/Redo/Repeat
+ // When dragging, the request to remove the connection must be
+ // requested from outside of the model (for example, from the
+ // SdrView). SdrEdgeObj::Move() itself does not remove the
+ // connection.
+ //
+ // Each node object can have connectors, so-called glue points. These
+ // are the geometric points at which the connecting edge object ends
+ // when the connection is established. By default, each object has no
+ // connectors.  Nevertheless, one can dock an edge in certain view
+ // settings since then, e.g., connectors can be automatically
+ // generated at the 4 vertices of the node object when needed. Each
+ // object provides 2x4 so-called default connector positions, 4 at
+ // the vertices and 4 at the corner positions. In the normal case,
+ // these are located at the 8 handle positions; exceptions here are
+ // ellipses, parallelograms, ... .  In addition, user-specific
+ // connectors can be set for each node object.
+ //
+ // Then there is also the possibility to dock an edge on an object
+ // with the attribute "bUseBestConnector". The best-matching
+ // connector position for the routing of the connection line is then
+ // used from the offering of connectors of the object or/and of the
+ // vertices. The user assigns this attribute by docking the node in
+ // its center (see, e.g., Visio).
+ // 09-06-1996: bUseBestConnector uses vertex glue points only.
+ //
+ // And here is some terminology:
+ //   Connector : The connector object (edge object)
+ //   Node      : Any object to which a connector can be glued to, e.g., a rectangle,
+ //               etc.
+ //   Glue point: The point at which the connector is glued to the node object.
+ //               There are:
+ //                 Vertex glue points: Each node object presents these glue
+ //                     points inherently. Perhaps there is already the option
+ //                     "automatically glue to object vertex" in Draw (default is
+ //                     on).
+ //                 Corner glue points: These glue points, too, are already
+ //                     auto-enabled on objects. Similar to the ones above,
+ //                     there may already be an option for them in Draw (default is
+ //                     off).
+ //                 In contrast to Visio, vertex glue points and corner glue
+ //                     points are not displayed in the UI; they are simply there (if
+ //                     the option is activated).
+ //                 Custom glue points: Any number of them are present on each
+ //                     node object. They can be made visible using the option
+ //                     (always visible when editing). At the moment, however, they
+ //                     are not yet fully implemented.
+ //                 Automatic glue point selection: If the connector is docked
+ //                     to the node object so that the black frame encompasses the
+ //                     entire object, then the connector tries to find the most
+ //                     convenient of the 4 vertex glue points (and only of those).
 
 #endif // INCLUDED_SVX_SVDOEDGE_HXX
 
