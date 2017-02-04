@@ -16,6 +16,24 @@
       "revId": "e6a9dc22a4e58b565894f8cdb6a19755af7b14de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_da496790",
+        "filename": "desktop/scripts/soffice.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-04T15:35:42Z",
+      "side": 1,
+      "message": "Addressed that with 7ba0b28cc3ac82f5c5c6d7e2536cb89771041893 now, seeing that it kept soffice from starting on Linux.",
+      "parentUuid": "fa48f94a_9a819f92",
+      "revId": "e6a9dc22a4e58b565894f8cdb6a19755af7b14de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
