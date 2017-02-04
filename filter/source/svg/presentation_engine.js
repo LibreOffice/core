@@ -4574,7 +4574,7 @@ SVGPathElement.prototype.appendPath = function( aPath )
 
 function flipOnYAxis( aPath )
 {
-    var aMatrix = SVGIdentityMatrix.scaleNonUniform(-1, 1).translate(1, 0);
+    var aMatrix = SVGIdentityMatrix.flipY().scaleNonUniform(-1, 1);
     aPath.matrixTransform(aMatrix);
     return aPath;
 }
@@ -9793,24 +9793,18 @@ function SnakeWipePath(nElements, bDiagonal, bflipOnYAxis)
 SnakeWipePath.prototype.calcSnake = function(t)
 {
     var aPolyPath = createEmptyPath();
-    var res = this.aBasePath.cloneNode(true);
-    var area   = (t * this.sqrtElements * this.sqrtElements);
-    var line_  = Math.floor(area / this.sqrtElements);
-    var line   = pruneScaleValue(line_ / this.sqrtElements);
-    var col    = pruneScaleValue((area - (line_ * this.sqrtElements)) / this.sqrtElements);
-    var aTransform;
+    const area   = (t * this.sqrtElements * this.sqrtElements);
+    const line_  = Math.floor(area) / this.sqrtElements;
+    const line   = pruneScaleValue(line_ / this.sqrtElements);
+    const col    = pruneScaleValue((area - (line_ * this.sqrtElements)) / this.sqrtElements);
 
     if(line != 0) {
-        var aPoint = document.documentElement.createSVGPoint();
-        var aPath = 'M '+ aPoint.x + ' ' + aPoint.y + ' ';
-        aPoint.y = line;
-        aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
-        aPoint.x = 1.0;
-        aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
-        aPoint.y = 0.0;
-        aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
+        let aPath = 'M '+ 0.0 + ' ' + 0.0 + ' ';
+        aPath += 'L ' + 0.0 + ' ' + line + ' ';
+        aPath += 'L ' + 1.0 + ' ' + line + ' ';
+        aPath += 'L ' + 1.0 + ' ' + 0.0 + ' ';
         aPath += 'L 0 0 ';
-        var poly = document.createElementNS( NSS['svg'], 'path');
+        let poly = document.createElementNS( NSS['svg'], 'path');
         poly.setAttribute('d', aPath);
         aPolyPath.appendPath(poly);
     }
@@ -9820,19 +9814,12 @@ SnakeWipePath.prototype.calcSnake = function(t)
             // odd line: => right to left
             offset = (1.0 - col);
         }
-        var aPoint = document.documentElement.createSVGPoint();
-        aPoint.x = offset;
-        aPoint.y = line;
-        var aPath = 'M ' + aPoint.x + ' ' + aPoint.y + ' ';
-        aPoint.y += this.elementEdge;
-        aPath += 'L '+ aPoint.x + ' ' + aPoint.y + ' ';
-        aPoint.x = offset + col;
-        aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
-        aPoint.y = line;
-        aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
-        aPoint.x = offset;
-        aPath += 'L ' + aPoint.x + ' ' + aPoint.y + ' ';
-        var poly = document.createElementNS( NSS['svg'], 'path');
+        let aPath = 'M ' + offset + ' ' + line + ' ';
+        aPath += 'L '+ offset + ' ' + (line + this.elementEdge) + ' ';
+        aPath += 'L ' + (offset+col) + ' ' + (line + this.elementEdge) + ' ';
+        aPath += 'L ' + (offset+col) + ' ' + line + ' ';
+        aPath += 'L ' + offset + ' ' + line + ' ';
+        let poly = document.createElementNS( NSS['svg'], 'path');
         poly.setAttribute('d', aPath);
         aPolyPath.appendPath(poly);
     }
