@@ -81,7 +81,7 @@ test -n "$VALGRIND" && EXTRAOPT="--valgrind"
 # force the --record option if the RR variable is set
 test -n "$RR" && EXTRAOPT="--record"
 
-for arg in "$@" $EXTRAOPT ; do
+for arg in $@ $EXTRAOPT ; do
     case "$arg" in
         --record)
             if which rr >/dev/null 2>&1 ; then
