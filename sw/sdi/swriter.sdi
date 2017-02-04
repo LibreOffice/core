@@ -713,7 +713,7 @@ SfxVoidItem ConvertTableText FN_CONVERT_TEXT_TABLE
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
+    GroupId = GID_TABLE;
 ]
 
 SfxVoidItem CreateAbstract FN_ABSTRACT_NEWDOC
@@ -6965,7 +6965,7 @@ SfxVoidItem ConvertTableToText FN_CONVERT_TABLE_TO_TEXT
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
+    GroupId = GID_TABLE;
 ]
 
 SfxVoidItem ConvertTextToTable FN_CONVERT_TEXT_TO_TABLE
@@ -6990,7 +6990,7 @@ SfxVoidItem ConvertTextToTable FN_CONVERT_TEXT_TO_TABLE
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_OPTIONS;
+    GroupId = GID_TABLE;
 ]
 
 SfxVoidItem HeadingRowsRepeat FN_TABLE_HEADLINE_REPEAT
