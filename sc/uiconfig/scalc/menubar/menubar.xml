@@ -145,7 +145,6 @@
             <menu:menuitem menu:id=".uno:ShowImeStatusWindow"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ViewRowColumnHeaders"/>
-            <menu:menuitem menu:id=".uno:ToggleSheetGrid"/>
             <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>
             <menu:menuitem menu:id=".uno:ToggleFormula"/>
             <menu:menu menu:id=".uno:GridMenu">
@@ -156,6 +155,7 @@
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ToggleSheetGrid"/>
             <menu:menu menu:id=".uno:FreezeCellsMenu">
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:FreezePanes"/>
