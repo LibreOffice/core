@@ -12,6 +12,7 @@ $(eval $(call gb_ExternalProject_ExternalProject,cairo))
 $(eval $(call gb_ExternalProject_use_external_project,cairo,pixman))
 
 $(eval $(call gb_ExternalProject_use_externals,cairo,\
+	freetype \
 	png \
 	zlib \
 ))
