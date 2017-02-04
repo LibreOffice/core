@@ -24,6 +24,7 @@ fuzzer_externals = \
     libxslt \
     libxml2 \
     jpeg \
+    png \
     clew \
     openssl \
     expat \
