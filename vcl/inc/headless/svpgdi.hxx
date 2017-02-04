@@ -80,6 +80,7 @@ struct VCL_DLLPUBLIC DamageHandler
 class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 {
     cairo_surface_t*               m_pSurface;
+    basegfx::B2IVector             m_aFrameSize;
     double                         m_fScale;
     SalColor                       m_aLineColor;
     SalColor                       m_aFillColor;
@@ -87,7 +88,7 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 
 public:
     static GlyphCache& getPlatformGlyphCache();
-    void setSurface(cairo_surface_t* pSurface);
+    void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
     static cairo_user_data_key_t* getDamageKey();
 
 private:
@@ -114,6 +115,8 @@ protected:
         const SalBitmap& rSourceBitmap,
         const SalBitmap* pAlphaBitmap) override;
     virtual bool drawAlphaRect( long nX, long nY, long nWidth, long nHeight, sal_uInt8 nTransparency ) override;
+
+    cairo_t* createTmpCompatibleCairoContext() const;
 
 public:
     SvpSalGraphics();
