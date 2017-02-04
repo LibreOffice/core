@@ -38,7 +38,7 @@ SvpSalVirtualDevice::~SvpSalVirtualDevice()
 SalGraphics* SvpSalVirtualDevice::AcquireGraphics()
 {
     SvpSalGraphics* pGraphics = new SvpSalGraphics();
-    pGraphics->setSurface(m_pSurface);
+    pGraphics->setSurface(m_pSurface, m_aFrameSize);
     m_aGraphics.push_back( pGraphics );
     return pGraphics;
 }
@@ -62,12 +62,14 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
     if (nNewDY == 0)
         nNewDY = 1;
 
-    nNewDX *= m_fScale;
-    nNewDY *= m_fScale;
-
-    if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != nNewDX ||
-                       cairo_image_surface_get_height(m_pSurface) != nNewDY )
+    if (!m_pSurface || m_aFrameSize.getX() != nNewDX ||
+                       m_aFrameSize.getY() != nNewDY )
     {
+        m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
+
+        nNewDX *= m_fScale;
+        nNewDY *= m_fScale;
+
         if (m_pSurface)
         {
             cairo_surface_destroy(m_pSurface);
@@ -96,20 +98,19 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer( long nNewDX, long nNewDY,
         // update device in existing graphics
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
-            (*it)->setSurface(m_pSurface);
-
+            (*it)->setSurface(m_pSurface, m_aFrameSize);
     }
     return true;
 }
 
 long SvpSalVirtualDevice::GetWidth() const
 {
-    return m_pSurface ? cairo_image_surface_get_width(m_pSurface) : 0;
+    return m_pSurface ? m_aFrameSize.getX() : 0;
 }
 
 long SvpSalVirtualDevice::GetHeight() const
 {
-    return m_pSurface ? cairo_image_surface_get_height(m_pSurface) : 0;
+    return m_pSurface ? m_aFrameSize.getY() : 0;
 }
 
 #endif
