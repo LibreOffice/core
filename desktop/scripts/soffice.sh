@@ -168,7 +168,7 @@ LC_ALL="$LO_SAVE_LC_ALL"
 
 # run soffice.bin directly when you want to get the backtrace
 if [ -n "$GDBTRACECHECK" ] ; then
-    exec "$GDBTRACECHECK" "$sd_prog/soffice.bin" "$@"
+    exec $GDBTRACECHECK "$sd_prog/soffice.bin" "$@"
 fi
 
 # valgrind --log-file=valgrind.log does not work well with --trace-children=yes
@@ -178,4 +178,4 @@ if [ -n "$VALGRINDCHECK" ] && [ -z "$VALGRIND" ] ; then
 fi
 
 # oosplash does the rest: forcing pages in, javaldx etc. are
-exec "$RRCHECK" "$VALGRINDCHECK" "$STRACECHECK" "$sd_prog/oosplash" "$@"
+exec $RRCHECK $VALGRINDCHECK $STRACECHECK "$sd_prog/oosplash" "$@"
