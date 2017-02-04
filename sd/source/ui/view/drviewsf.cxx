@@ -690,11 +690,12 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         // changed from SfxItemState::DEFAULT (_ON) to SfxItemState::DISABLED
         if( mpDrawView->AreObjectsMarked() )
         {
-            SfxWhichIter aNewIter( *pSet, XATTR_LINE_FIRST, XATTR_FILL_LAST );
+            SfxWhichIter aNewIter( *pSet );
             nWhich = aNewIter.FirstWhich();
             while( nWhich )
             {
-                if( SfxItemState::DEFAULT == pSet->GetItemState( nWhich ) )
+                if (nWhich >= XATTR_LINE_FIRST && nWhich <= XATTR_LINE_LAST
+                    && SfxItemState::DEFAULT == pSet->GetItemState(nWhich) )
                 {
                     rSet.ClearItem( nWhich );
                     rSet.DisableItem( nWhich );

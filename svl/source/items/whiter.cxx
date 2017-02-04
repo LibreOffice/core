@@ -21,44 +21,33 @@
 #include <svl/whiter.hxx>
 #include <svl/itemset.hxx>
 
-SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet, sal_uInt16 nFromWh, sal_uInt16 nToWh ):
-    pRanges(rSet.GetRanges()),
+SfxWhichIter::SfxWhichIter( const SfxItemSet& rSet ):
     pStart(rSet.GetRanges()),
-    nOfst(0), nFrom(nFromWh), nTo(nToWh)
-{
-    if (nFrom > 0)
-        (void)FirstWhich();
-}
-
-SfxWhichIter::~SfxWhichIter()
+    pRanges(pStart),
+    nOffset(0)
 {
 }
 
 sal_uInt16 SfxWhichIter::NextWhich()
 {
-    while ( 0 != *pRanges )
+    if ( 0 == pRanges[0] )
+        return 0;
+
+    const sal_uInt16 nLastWhich = pRanges[0] + nOffset;
+    ++nOffset;
+    if (pRanges[1] == nLastWhich)
     {
-        const sal_uInt16 nLastWhich = *pRanges + nOfst;
-        ++nOfst;
-        if (*(pRanges+1) == nLastWhich)
-        {
-            pRanges += 2;
-            nOfst = 0;
-        }
-        sal_uInt16 nWhich = *pRanges + nOfst;
-        if ( 0 == nWhich || ( nWhich >= nFrom && nWhich <= nTo ) )
-            return nWhich;
+        pRanges += 2;
+        nOffset = 0;
     }
-    return 0;
+    return pRanges[0] + nOffset;
 }
 
 sal_uInt16 SfxWhichIter::FirstWhich()
 {
     pRanges = pStart;
-    nOfst = 0;
-    if ( *pRanges >= nFrom && *pRanges <= nTo )
-        return *pRanges;
-    return NextWhich();
+    nOffset = 0;
+    return pRanges[0];
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
