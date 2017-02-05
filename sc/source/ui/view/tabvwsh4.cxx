@@ -38,7 +38,6 @@
 #include <unotools/moduleoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
-#include <vcl/openglwin.hxx>
 #include <o3tl/make_unique.hxx>
 
 #include "tabvwsh.hxx"

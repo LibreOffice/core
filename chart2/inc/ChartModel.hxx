@@ -19,6 +19,8 @@
 #ifndef INCLUDED_CHART2_INC_CHARTMODEL_HXX
 #define INCLUDED_CHART2_INC_CHARTMODEL_HXX
 
+#include <config_features.h>
+
 #include "LifeTime.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -467,13 +469,17 @@ public:
     void getNextTimePoint();
     void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
 
+#if HAVE_FEATURE_OPENGL
     OpenGLWindow* getOpenGLWindow() { return mpOpenGLWindow;}
+#endif
 
 private:
     sal_Int32 mnStart;
     sal_Int32 mnEnd;
     bool bSet;
+#if HAVE_FEATURE_OPENGL
     VclPtr<OpenGLWindow> mpOpenGLWindow;
+#endif
 };
 
 }  // namespace chart

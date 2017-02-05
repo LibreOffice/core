@@ -31,7 +31,6 @@
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/syschild.hxx>
-#include <vcl/openglwin.hxx>
 #include <svl/urihelper.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/insdlg.hxx>

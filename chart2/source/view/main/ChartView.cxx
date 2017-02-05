@@ -1074,29 +1074,33 @@ public:
 
 #if HAVE_FEATURE_OPENGL
     const OpenGLWindow* getOpenGLWindow() const;
-#endif
     void updateOpenGLWindow();
+#endif
 private:
     ChartView* mpView;
     bool mbContextDestroyed;
+#if HAVE_FEATURE_OPENGL
     VclPtr<OpenGLWindow> mpWindow;
+#endif
 };
 
-GL2DRenderer::GL2DRenderer(ChartView* pView):
-    mpView(pView),
-    mbContextDestroyed(false),
-    mpWindow(mpView->mrChartModel.getOpenGLWindow())
+GL2DRenderer::GL2DRenderer(ChartView* pView)
+    : mpView(pView)
+    , mbContextDestroyed(false)
+#if HAVE_FEATURE_OPENGL
+    , mpWindow(mpView->mrChartModel.getOpenGLWindow())
+#endif
 {
 }
 
 GL2DRenderer::~GL2DRenderer()
 {
-    SolarMutexGuard g;
 #if HAVE_FEATURE_OPENGL
+    SolarMutexGuard g;
     if(!mbContextDestroyed && mpWindow)
         mpWindow->setRenderer(nullptr);
-#endif
     mpWindow.reset();
+#endif
 }
 
 void GL2DRenderer::update()
@@ -1129,15 +1133,12 @@ const OpenGLWindow* GL2DRenderer::getOpenGLWindow() const
     return mpWindow;
 }
 
-#endif
-
 void GL2DRenderer::updateOpenGLWindow()
 {
     if(mbContextDestroyed)
         return;
 
     OpenGLWindow* pWindow = mpView->mrChartModel.getOpenGLWindow();
-#if HAVE_FEATURE_OPENGL
     if(pWindow != mpWindow)
     {
         if(mpWindow)
@@ -1150,9 +1151,10 @@ void GL2DRenderer::updateOpenGLWindow()
             pWindow->setRenderer(this);
         }
     }
-#endif
     mpWindow = pWindow;
 }
+
+#endif
 
 const uno::Sequence<sal_Int8>& ExplicitValueProvider::getUnoTunnelId()
 {
@@ -3315,6 +3317,7 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
 
 void ChartView::createShapes3D()
 {
+#if HAVE_FEATURE_OPENGL
     OpenGLWindow* pWindow = mrChartModel.getOpenGLWindow();
     if(!pWindow)
         return;
@@ -3354,7 +3357,6 @@ void ChartView::createShapes3D()
 
     uno::Reference< XChartType > xChartType( aChartTypeList[0] );
 
-#if HAVE_FEATURE_OPENGL
     if (!m_pGL3DPlotter)
     {
         m_pGL3DPlotter.reset(new GL3DBarChart(xChartType, pWindow));
@@ -3365,7 +3367,6 @@ void ChartView::createShapes3D()
         if (pChart)
             pChart->setOpenGLWindow(pWindow);
     }
-#endif
 
     uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
     OSL_ASSERT( xDataSeriesContainer.is());
@@ -3385,18 +3386,21 @@ void ChartView::createShapes3D()
 
     std::unique_ptr<ExplicitCategoriesProvider> pCatProvider(new ExplicitCategoriesProvider(xCooSys, mrChartModel));
 
-#if HAVE_FEATURE_OPENGL
     m_pGL3DPlotter->create3DShapes(aDataSeries, *pCatProvider);
 
     m_pGL3DPlotter->render();
 #endif
 }
 
+#if HAVE_FEATURE_OPENGL
+
 void ChartView::updateOpenGLWindow()
 {
     if(!isReal3DChart())
         mp2DRenderer->updateOpenGLWindow();
 }
+
+#endif
 
 } //namespace chart
 
