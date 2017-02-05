@@ -113,11 +113,11 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
     {
         // Search for the empty document URL
 
-        for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
+        for ( sal_uInt16 i = 0; i < nCount; i++ )
         {
-            nId = pPopupMenu->GetItemId( sal_uInt16( i ));
-            if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MenuItemType::SEPARATOR )
+            if ( pPopupMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
             {
+                nId = pPopupMenu->GetItemId( i );
                 aCommand = pPopupMenu->GetItemCommand( nId );
                 if ( aCommand.startsWith( m_aEmptyDocURL ) )
                 {
@@ -135,11 +135,11 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
         OUString aDefaultModuleName( SvtModuleOptions().GetDefaultModuleName() );
         if ( !aDefaultModuleName.isEmpty() )
         {
-            for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
+            for ( sal_uInt16 i = 0; i < nCount; i++ )
             {
-                nId = pPopupMenu->GetItemId( sal_uInt16( i ));
-                if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MenuItemType::SEPARATOR )
+                if ( pPopupMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
                 {
+                    nId = pPopupMenu->GetItemId( i );
                     aCommand = pPopupMenu->GetItemCommand( nId );
                     if ( aCommand.indexOf( aDefaultModuleName ) >= 0 )
                     {
@@ -207,15 +207,15 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         }
 
         vcl::KeyCode                    aEmptyKeyCode;
-        sal_uInt32                      nItemCount( pPopupMenu->GetItemCount() );
+        sal_uInt16                      nItemCount( pPopupMenu->GetItemCount() );
         std::vector< vcl::KeyCode >     aMenuShortCuts;
         std::vector< OUString >    aCmds;
-        std::vector< sal_uInt32 >       aIds;
-        for ( sal_uInt32 i = 0; i < nItemCount; i++ )
+        std::vector< sal_uInt16 >       aIds;
+        for ( sal_uInt16 i = 0; i < nItemCount; i++ )
         {
-            sal_uInt16 nId( pPopupMenu->GetItemId( sal_uInt16( i )));
-            if ( nId && ( pPopupMenu->GetItemType( nId ) != MenuItemType::SEPARATOR ))
+            if ( pPopupMenu->GetItemType( i ) != MenuItemType::SEPARATOR )
             {
+                sal_uInt16 nId( pPopupMenu->GetItemId( i ));
                 aIds.push_back( nId );
                 aMenuShortCuts.push_back( aEmptyKeyCode );
                 aCmds.push_back( pPopupMenu->GetItemCommand( nId ));
@@ -249,7 +249,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
 
         const sal_uInt32 nCount2 = aIds.size();
         for ( sal_uInt32 i = 0; i < nCount2; i++ )
-            pPopupMenu->SetAccelKey( sal_uInt16( aIds[i] ), aMenuShortCuts[i] );
+            pPopupMenu->SetAccelKey( aIds[i], aMenuShortCuts[i] );
 
         // Special handling for "New" menu short-cut should be set at the
         // document which will be opened using it.
