@@ -750,22 +750,19 @@ void ToolBarManager::CreateControllers()
 
                     xController = xStatusListener;
                 }
+                else if ( aCommandURL.startsWith( "private:resource/menubar/" ) )
+                {
+                    xController.set( new MenuToolbarController );
+                }
                 else
                 {
-                    MenuDescriptionMap::iterator it = m_aMenuMap.find( nId );
-                    if ( it == m_aMenuMap.end() )
-                    {
-                        xController.set(
-                            new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
+                    xController.set(
+                        new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
 
-                        // Accessibility support: Set toggle button role for specific commands
-                        sal_Int32 nProps = vcl::CommandInfoProvider::Instance().GetPropertiesForCommand(aCommandURL, m_xFrame);
-                        if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
-                            m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
-                    }
-                    else
-                        xController.set(
-                            new MenuToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL, m_aModuleIdentifier, m_aMenuMap[ nId ] ));
+                    // Accessibility support: Set toggle button role for specific commands
+                    sal_Int32 nProps = vcl::CommandInfoProvider::Instance().GetPropertiesForCommand(aCommandURL, m_xFrame);
+                    if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
+                        m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
                 }
             }
             else if ( pController )
@@ -943,8 +940,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
             Reference< XUIConfigurationManagerSupplier > xSupplier( xModel, UNO_QUERY );
             if ( xSupplier.is() )
             {
-                m_xDocUICfgMgr.set( xSupplier->getUIConfigurationManager(), UNO_QUERY );
-                m_xDocImageManager.set( m_xDocUICfgMgr->getImageManager(), UNO_QUERY );
+                Reference< XUIConfigurationManager > xDocUICfgMgr( xSupplier->getUIConfigurationManager(), UNO_QUERY );
+                m_xDocImageManager.set( xDocUICfgMgr->getImageManager(), UNO_QUERY );
                 m_xDocImageManager->addConfigurationListener(
                                         Reference< XUIConfigurationListener >(
                                             static_cast< OWeakObject* >( this ), UNO_QUERY ));
@@ -964,8 +961,8 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     {
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
             theModuleUIConfigurationManagerSupplier::get( m_xContext );
-        m_xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
-        m_xModuleImageManager.set( m_xUICfgMgr->getImageManager(), UNO_QUERY );
+        Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
+        m_xModuleImageManager.set( xUICfgMgr->getImageManager(), UNO_QUERY );
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
                                                             static_cast< OWeakObject* >( this ), UNO_QUERY ));
     }
@@ -977,8 +974,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     m_aControllerMap.clear();
     m_aCommandMap.clear();
 
-    m_aMenuMap.clear();
-
     CommandInfo aCmdInfo;
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
@@ -989,7 +984,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         sal_uInt16                  nType( css::ui::ItemType::DEFAULT );
         sal_uInt32                  nStyle( 0 );
 
-        Reference< XIndexAccess >   aMenuDesc;
         try
         {
             if ( rItemContainer->getByIndex( n ) >>= aProp )
@@ -998,43 +992,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                 for ( int i = 0; i < aProp.getLength(); i++ )
                 {
                     if ( aProp[i].Name == ITEM_DESCRIPTOR_COMMANDURL )
-                    {
                         aProp[i].Value >>= aCommandURL;
-                        if ( aCommandURL.startsWith("private:resource/menubar/") )
-                        {
-                            try
-                            {
-                                Reference< XIndexAccess > xMenuContainer;
-                                if ( m_xDocUICfgMgr.is() &&
-                                     m_xDocUICfgMgr->hasSettings( aCommandURL ) )
-                                    xMenuContainer  = m_xDocUICfgMgr->getSettings( aCommandURL, false );
-                                if ( !xMenuContainer.is() &&
-                                     m_xUICfgMgr.is() &&
-                                     m_xUICfgMgr->hasSettings( aCommandURL ) )
-                                    xMenuContainer = m_xUICfgMgr->getSettings( aCommandURL, false );
-                                if ( xMenuContainer.is() && xMenuContainer->getCount() )
-                                {
-                                    Sequence< PropertyValue > aProps;
-                                    // drop down menu info is currently
-                                    // the first ( and only ) menu
-                                    // in the menusettings container
-                                    xMenuContainer->getByIndex(0) >>= aProps;
-                                    for ( sal_Int32 index=0; index<aProps.getLength(); ++index )
-                                    {
-                                        if ( aProps[ index ].Name == "ItemDescriptorContainer" )
-
-                                        {
-                                            aProps[ index ].Value >>= aMenuDesc;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            catch (const Exception&)
-                            {
-                            }
-                        }
-                    }
                     else if ( aProp[i].Name == "Label" )
                         aProp[i].Value >>= aLabel;
                     else if ( aProp[i].Name == "Tooltip" )
@@ -1058,11 +1016,6 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     OUString aString(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
-                    if ( aMenuDesc.is() )
-                    {
-                        m_aMenuMap[ nId ] = aMenuDesc;
-                        nItemBits |= ToolBoxItemBits::DROPDOWNONLY;
-                    }
                     m_pToolBar->InsertItem( nId, aString, nItemBits );
                     m_pToolBar->SetItemCommand( nId, aCommandURL );
                     if ( !aTooltip.isEmpty() )

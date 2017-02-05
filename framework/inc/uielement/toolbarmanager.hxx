@@ -37,7 +37,6 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -153,8 +152,6 @@ class ToolBarManager : public ToolbarManager_Base
         typedef ::std::vector< css::uno::Reference< css::frame::XSubToolbarController > >             SubToolBarControllerVector;
         typedef std::unordered_map<OUString, SubToolBarControllerVector, OUStringHash>                                                SubToolBarToSubToolBarControllerMap;
 
-        typedef std::unordered_map< sal_uInt16, css::uno::Reference< css::container::XIndexAccess > > MenuDescriptionMap;
-
         bool m_bDisposed : 1,
              m_bAddedToTaskPaneList : 1,
              m_bFrameActionRegistered : 1,
@@ -176,14 +173,11 @@ class ToolBarManager : public ToolbarManager_Base
         css::uno::Reference< css::frame::XUIControllerFactory >      m_xToolbarControllerFactory;
         css::uno::Reference< css::ui::XImageManager >                m_xModuleImageManager;
         css::uno::Reference< css::ui::XImageManager >                m_xDocImageManager;
-        css::uno::Reference< css::ui::XUIConfigurationManager >      m_xUICfgMgr;
-        css::uno::Reference< css::ui::XUIConfigurationManager >      m_xDocUICfgMgr;
 
         CommandToInfoMap                                             m_aCommandMap;
         SubToolBarToSubToolBarControllerMap                          m_aSubToolBarControllerMap;
         Timer                                                        m_aAsyncUpdateControllersTimer;
         OUString                                                     m_sIconTheme;
-        MenuDescriptionMap                                           m_aMenuMap;
 };
 
 }
