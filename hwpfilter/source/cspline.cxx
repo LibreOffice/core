@@ -119,7 +119,6 @@ void PeriodicSpline (int N, double* x, double* a, double*& b, double*& c,
   for (i = 0; i < N; i++)
     h[i] = x[i+1]-x[i];
 
-  mgcLinearSystemD sys;
   double** mat = mgcLinearSystemD::NewMatrix(N+1);  // guaranteed to be zeroed memory
   c = mgcLinearSystemD::NewVector(N+1);   // guaranteed to be zeroed memory
 

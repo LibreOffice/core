@@ -26,8 +26,6 @@ class InternalEditStatus : public EditStatus
 {
 
 public:
-            InternalEditStatus() { ; }
-
     void    TurnOnFlags( EEControlBits nFlags )
                 { nControlBits |= nFlags; }
 
