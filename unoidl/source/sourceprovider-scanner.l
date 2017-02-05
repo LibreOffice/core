@@ -45,7 +45,7 @@ namespace unoidl { namespace detail {
 static std::size_t sourceProviderScannerInput(
     SourceProviderScannerData * data, char * buffer, std::size_t size)
 {
-    assert(data != 0);
+    assert(data != nullptr);
     if (data->sourcePosition == data->sourceEnd) {
         return YY_NULL;
     }
@@ -67,10 +67,10 @@ int nonZeroIntegerLiteral(
     char const * text, std::size_t length, sal_Int16 radix, sal_uInt64 * value,
     unoidl::detail::SourceProviderScannerData * data)
 {
-    assert(text != 0);
+    assert(text != nullptr);
     assert(length != 0);
-    assert(value != 0);
-    assert(data != 0);
+    assert(value != nullptr);
+    assert(data != nullptr);
     std::size_t n = length;
     switch (text[length - 1]) {
     case 'L':
@@ -224,7 +224,7 @@ ALNUM {DIGIT}|{ALPHA}
 {DIGIT}*"."{DIGIT}+([Ee][+\-]?{DIGIT}+)?[Ff]? {
     rtl_math_ConversionStatus s;
     yylval->fval = rtl_math_stringToDouble(
-        yytext, yytext + yyleng, '.', 0, &s, 0);
+        yytext, yytext + yyleng, '.', 0, &s, nullptr);
     if (s == rtl_math_ConversionStatus_OutOfRange) {
         yyextra->errorMessage = "out-of-range floating-point literal "
             + OUString(yytext, yyleng, RTL_TEXTENCODING_ASCII_US);
