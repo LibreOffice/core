@@ -27,6 +27,8 @@
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <svtools/toolboxcontroller.hxx>
@@ -278,21 +280,7 @@ IMPL_STATIC_LINK( GenericToolbarController, ExecuteHdl_Impl, void*, p, void )
    delete pExecuteInfo;
 }
 
-MenuToolbarController::MenuToolbarController( const Reference< XComponentContext >& rxContext,
-                                              const Reference< XFrame >& rFrame,
-                                              ToolBox* pToolBar,
-                                              sal_uInt16   nID,
-                                              const OUString& aCommand,
-                                              const OUString& aModuleIdentifier,
-                                              const Reference< XIndexAccess >& xMenuDesc )
-    : GenericToolbarController( rxContext, rFrame, pToolBar, nID, aCommand ),
-      m_xMenuDesc( xMenuDesc ),
-      pMenu( nullptr ),
-      m_aModuleIdentifier( aModuleIdentifier )
-{
-}
-
-MenuToolbarController::~MenuToolbarController()
+void MenuToolbarController::dispose()
 {
     try
     {
@@ -300,39 +288,60 @@ MenuToolbarController::~MenuToolbarController()
             m_xMenuManager->dispose();
     }
     catch( const Exception& ) {}
-    if ( pMenu )
+
+    m_xMenuManager.clear();
+    m_xMenuDesc.clear();
+    pMenu.disposeAndClear();
+}
+
+void MenuToolbarController::initialize( const css::uno::Sequence< css::uno::Any >& rArgs )
+{
+    ToolboxController::initialize( rArgs );
+
+    css::uno::Reference< css::container::XIndexAccess > xMenuContainer;
+    try
     {
-        pMenu.disposeAndClear();
+        css::uno::Reference< css::frame::XController > xController( m_xFrame->getController() );
+        css::uno::Reference< css::ui::XUIConfigurationManagerSupplier > xSupplier( xController->getModel(), css::uno::UNO_QUERY_THROW );
+        css::uno::Reference< css::ui::XUIConfigurationManager > xConfigManager( xSupplier->getUIConfigurationManager() );
+        xMenuContainer.set( xConfigManager->getSettings( m_aCommandURL, false ) );
     }
-}
+    catch( const css::uno::Exception& )
+    {}
 
-class Toolbarmenu : public ::PopupMenu
-{
-    public:
-    Toolbarmenu();
-    virtual ~Toolbarmenu() override;
-    virtual void dispose() override;
-};
+    if ( !xMenuContainer.is() )
+    {
+        try
+        {
+            css::uno::Reference< css::ui::XModuleUIConfigurationManagerSupplier > xSupplier(
+                css::ui::theModuleUIConfigurationManagerSupplier::get( m_xContext ) );
+            css::uno::Reference< css::ui::XUIConfigurationManager > xConfigManager(
+                xSupplier->getUIConfigurationManager( m_sModuleName ) );
+            xMenuContainer.set( xConfigManager->getSettings( m_aCommandURL, false ) );
+        }
+        catch( const css::uno::Exception& )
+        {}
+    }
 
-Toolbarmenu::Toolbarmenu()
-{
-    SAL_INFO("fwk.uielement", "constructing Toolbarmenu " << this);
-}
+    if ( xMenuContainer.is() && xMenuContainer->getCount() )
+    {
+        Sequence< PropertyValue > aProps;
+        // drop down menu info is currently the first ( and only ) menu in the menusettings container
+        xMenuContainer->getByIndex(0) >>= aProps;
+        for ( const auto& aProp : aProps )
+        {
+            if ( aProp.Name == "ItemDescriptorContainer" )
+            {
+                aProp.Value >>= m_xMenuDesc;
+                break;
+            }
+        }
 
-Toolbarmenu::~Toolbarmenu()
-{
-    disposeOnce();
-}
-
-void Toolbarmenu::dispose()
-{
-    SAL_INFO("fwk.uielement", "destructing Toolbarmenu " << this);
-    ::PopupMenu::dispose();
-}
-
-void SAL_CALL MenuToolbarController::click()
-{
-    createPopupWindow();
+        ToolBox* pToolBox = nullptr;
+        sal_uInt16 nId = 0;
+        if ( getToolboxId( nId, &pToolBox ) )
+            pToolBox->SetItemBits( nId, pToolBox->GetItemBits( nId ) | ToolBoxItemBits::DROPDOWNONLY );
+    }
 }
 
 Reference< XWindow > SAL_CALL
@@ -340,24 +349,21 @@ MenuToolbarController::createPopupWindow()
 {
     if ( !pMenu )
     {
-        Reference< XDispatchProvider > xDispatch;
-        Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
-        pMenu = VclPtr<Toolbarmenu>::Create();
-        m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, xURLTransformer, xDispatch, m_aModuleIdentifier, pMenu, false, false ) );
-        if (m_xMenuManager.is())
-        {
-            MenuBarManager& rMgr = dynamic_cast<MenuBarManager&>(*m_xMenuManager.get());
-            rMgr.SetItemContainer(m_xMenuDesc);
-        }
+        pMenu = VclPtr<PopupMenu>::Create();
+        css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( m_xFrame, css::uno::UNO_QUERY );
+        sal_uInt16 m_nMenuId = 1;
+        MenuBarManager::FillMenu( m_nMenuId, pMenu, m_sModuleName, m_xMenuDesc, xDispatchProvider );
+        m_xMenuManager.set( new MenuBarManager( m_xContext, m_xFrame, m_xUrlTransformer, xDispatchProvider, m_sModuleName, pMenu, false, false ) );
     }
 
-    if ( !pMenu || !m_pToolbar )
+    ToolBox* pToolBox = nullptr;
+    sal_uInt16 nId = 0;
+    if ( !getToolboxId( nId, &pToolBox ) )
         return nullptr;
 
-    OSL_ENSURE ( pMenu->GetItemCount(), "Empty PopupMenu!" );
-
-    ::Rectangle aRect( m_pToolbar->GetItemRect( m_nID ) );
-    pMenu->Execute( m_pToolbar, aRect, PopupMenuFlags::ExecuteDown );
+    pToolBox->SetItemDown( m_nToolBoxId, true );
+    pMenu->Execute( pToolBox, pToolBox->GetItemRect( nId ), PopupMenuFlags::ExecuteDown );
+    pToolBox->SetItemDown( m_nToolBoxId, false );
 
     return nullptr;
 }
