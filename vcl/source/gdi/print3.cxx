@@ -880,7 +880,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         {
             sal_Int32 nBin = -1;
             i_rProps[ nProperty ].Value >>= nBin;
-            if( nBin >= 0 && nBin < mxPrinter->GetPaperBinCount() )
+            if( nBin >= 0 && nBin < static_cast<sal_Int32>(mxPrinter->GetPaperBinCount()) )
                 nPaperBin = nBin;
         }
     }

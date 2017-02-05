@@ -416,7 +416,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             OUString aTmp;
             if ( !( rProp.Value >>= aTmp ) )
                 throw css::lang::IllegalArgumentException();
-            sal_uInt16 nCount = pPrinter->GetPaperBinCount();
+            const sal_uInt16 nCount = pPrinter->GetPaperBinCount();
             for (sal_uInt16 nBin=0; nBin<nCount; nBin++)
             {
                 OUString aName( pPrinter->GetPaperBinName(nBin) );

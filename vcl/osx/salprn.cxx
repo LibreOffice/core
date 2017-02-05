@@ -259,12 +259,12 @@ bool AquaSalInfoPrinter::SetData( JobSetFlags i_nFlags, ImplJobSetup* io_pSetupD
     return mpPrintInfo != nil;
 }
 
-sal_uLong AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* )
+sal_uInt16 AquaSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* )
 {
     return 0;
 }
 
-OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uLong )
+OUString AquaSalInfoPrinter::GetPaperBinName( const ImplJobSetup*, sal_uInt16 )
 {
     return OUString();
 }

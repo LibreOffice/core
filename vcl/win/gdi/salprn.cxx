@@ -1207,7 +1207,7 @@ bool WinSalInfoPrinter::SetData( JobSetFlags nFlags, ImplJobSetup* pSetupData )
     return FALSE;
 }
 
-sal_uLong WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
+sal_uInt16 WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
 {
     DWORD nRet = ImplDeviceCaps( this, DC_BINS, nullptr, pSetupData );
     if ( nRet && (nRet != GDI_ERROR) )
@@ -1216,7 +1216,7 @@ sal_uLong WinSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pSetupData )
         return 0;
 }
 
-OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin )
+OUString WinSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pSetupData, sal_uInt16 nPaperBin )
 {
     OUString aPaperBinName;
 

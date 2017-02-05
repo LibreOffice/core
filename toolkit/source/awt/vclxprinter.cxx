@@ -211,7 +211,7 @@ css::uno::Sequence< OUString > VCLXPrinterPropertySet::getFormDescriptions(  )
 {
     ::osl::MutexGuard aGuard( Mutex );
 
-    sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
+    const sal_uInt16 nPaperBinCount = GetPrinter()->GetPaperBinCount();
     css::uno::Sequence< OUString > aDescriptions( nPaperBinCount );
     for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ )
     {

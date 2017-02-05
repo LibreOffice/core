@@ -1596,7 +1596,7 @@ sal_uInt16 Printer::GetPaperBinCount() const
     if ( IsDisplayPrinter() )
         return 0;
 
-    return (sal_uInt16)mpInfoPrinter->GetPaperBinCount( &maJobSetup.ImplGetConstData() );
+    return mpInfoPrinter->GetPaperBinCount( &maJobSetup.ImplGetConstData() );
 }
 
 OUString Printer::GetPaperBinName( sal_uInt16 nPaperBin ) const

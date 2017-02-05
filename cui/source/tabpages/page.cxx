@@ -928,7 +928,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl, Control&, void)
     m_pPaperTrayBox->SetEntryData( nEntryPos,
         reinterpret_cast<void*>((sal_uLong)PAPERBIN_PRINTER_SETTINGS) );
     OUString aPaperBin( EditResId( RID_SVXSTR_PAPERBIN ) );
-    sal_uInt16 nBinCount = mpDefPrinter->GetPaperBinCount();
+    const sal_uInt16 nBinCount = mpDefPrinter->GetPaperBinCount();
 
     for ( sal_uInt16 i = 0; i < nBinCount; ++i )
     {

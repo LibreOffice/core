@@ -75,8 +75,8 @@ public:
                                                  long& rPageOffX, long& rPageOffY,
                                                  long& rPageWidth, long& rPageHeight ) = 0;
     virtual sal_uInt32              GetCapabilities( const ImplJobSetup* pSetupData, PrinterCapType nType ) = 0;
-    virtual sal_uLong               GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
-    virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uLong nPaperBin ) = 0;
+    virtual sal_uInt16              GetPaperBinCount( const ImplJobSetup* pSetupData ) = 0;
+    virtual OUString                GetPaperBinName( const ImplJobSetup* pSetupData, sal_uInt16 nPaperBin ) = 0;
     // fills m_aPaperFormats and sets m_bPapersInit to true
     virtual void                    InitPaperFormats( const ImplJobSetup* pSetupData ) = 0;
     // returns angle that a landscape page will be turned counterclockwise wrt to portrait

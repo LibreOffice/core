@@ -1655,7 +1655,7 @@ void ScStyleObj::setPropertyValue_Impl( const OUString& rPropertyName, const Sfx
                                             Printer* pPrinter = pDocShell->GetPrinter();
                                             if (pPrinter)
                                             {
-                                                sal_uInt16 nCount = pPrinter->GetPaperBinCount();
+                                                const sal_uInt16 nCount = pPrinter->GetPaperBinCount();
                                                 for (sal_uInt16 i=0; i<nCount; i++)
                                                     if ( aName == pPrinter->GetPaperBinName(i) )
                                                     {
