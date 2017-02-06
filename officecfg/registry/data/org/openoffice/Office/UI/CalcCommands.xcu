@@ -1236,7 +1236,7 @@
       </node>
       <node oor:name=".uno:InsertSheetFromFile" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Shee~t From File...</value>
+          <value xml:lang="en-US">Insert Shee~t from File...</value>
         </prop>
       </node>
       <node oor:name=".uno:AddName" oor:op="replace">
@@ -1696,7 +1696,7 @@
       </node>
       <node oor:name=".uno:Add" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Sheet At End...</value>
+          <value xml:lang="en-US">Insert Sheet at End...</value>
         </prop>
       </node>
       <node oor:name=".uno:AlignLeft" oor:op="replace">
@@ -1898,7 +1898,7 @@
       </node>
       <node oor:name=".uno:InsertObjectStarImage" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert From Image Editor</value>
+          <value xml:lang="en-US">Insert from Image Editor</value>
         </prop>
       </node>
       <node oor:name=".uno:SheetRightToLeft" oor:op="replace">
@@ -2135,7 +2135,7 @@
       </node>
       <node oor:name=".uno:ExportAsGraphic" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Export as image</value>
+          <value xml:lang="en-US">Export as Image</value>
         </prop>
       </node>
       <node oor:name=".uno:EditShapeHyperlink" oor:op="replace">
