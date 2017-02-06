@@ -623,10 +623,10 @@ bool ToolBarMerger::RemoveItems(
         pResult = new DropdownToolbarController( rxContext, xFrame, pToolbar, nId, nWidth, rCommandURL );
     else if ( rControlType == TOOLBARCONTROLLER_DROPDOWNBTN )
         pResult = new ToggleButtonToolbarController( rxContext, xFrame, pToolbar, nId,
-                                                     ToggleButtonToolbarController::STYLE_DROPDOWNBUTTON, rCommandURL );
+                                                     ToggleButtonToolbarController::Style::DropDownButton, rCommandURL );
     else if ( rControlType == TOOLBARCONTROLLER_TOGGLEDDBTN )
         pResult = new ToggleButtonToolbarController( rxContext, xFrame, pToolbar, nId,
-                                                     ToggleButtonToolbarController::STYLE_TOGGLE_DROPDOWNBUTTON, rCommandURL );
+                                                     ToggleButtonToolbarController::Style::ToggleDropDownButton, rCommandURL );
     else
         pResult = new GenericToolbarController( rxContext, xFrame, pToolbar, nId, rCommandURL );
 

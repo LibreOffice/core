@@ -39,16 +39,15 @@ class TargetHelper
         /** @short  its used at the following interfaces to classify
                     target names.
          */
-        enum ESpecialTarget
+        enum class ESpecialTarget
         {
-            E_NOT_SPECIAL   ,
-            E_SELF          ,
-            E_PARENT        ,
-            E_TOP           ,
-            E_BLANK         ,
-            E_DEFAULT       ,
-            E_BEAMER        ,
-            E_HELPTASK
+            Self,
+            Parent,
+            Top,
+            Blank,
+            Default,
+            Beamer,
+            HelpTask
         };
 
     // interface
