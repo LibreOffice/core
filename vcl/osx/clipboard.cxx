@@ -22,6 +22,7 @@
 #include "DataFlavorMapping.hxx"
 #include "OSXTransferable.hxx"
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "comphelper/processfactory.hxx"
 #include <cppuhelper/supportsservice.hxx>
 

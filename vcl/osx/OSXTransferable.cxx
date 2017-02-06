@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sal/types.h>
 #include <osl/diagnose.h>
 
@@ -29,9 +33,7 @@ using namespace osl;
 using namespace cppu;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::datatransfer;
-using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::container;
 
 namespace
 {

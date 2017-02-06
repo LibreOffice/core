@@ -25,6 +25,7 @@
 #include "com/sun/star/datatransfer/UnsupportedFlavorException.hpp"
 #include "com/sun/star/datatransfer/XMimeContentType.hpp"
 #include "com/sun/star/datatransfer/MimeContentTypeFactory.hpp"
+#include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
 #include "comphelper/processfactory.hxx"
 

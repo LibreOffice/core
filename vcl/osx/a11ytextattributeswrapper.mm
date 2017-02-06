@@ -28,6 +28,8 @@
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 
