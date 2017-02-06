@@ -52,11 +52,10 @@ class XmlFilterBase;
 class OOX_DLLPUBLIC FragmentHandler2 : public FragmentHandler, public ContextHandler2Helper
 {
 protected:
-    enum MCE_STATE
+    enum class MCE_STATE
     {
-        MCE_UNUSED,
-        MCE_STARTED,
-        MCE_FOUND_CHOICE
+        Started,
+        FoundChoice
     };
     ::std::vector<MCE_STATE>           aMceState;
 

@@ -91,12 +91,15 @@ for d in definitionSet:
          "vcl/source/fontsubset/cff.cxx",
          "include/vcl/settings.hxx", # stored in a setting, can't remove it without potentially triggering UBSAN
          "basic/source/inc/opcodes.hxx", # can't touch this without breaking unit tests, not sure why
+         "include/unotools/securityoptions.hxx", # comes from the UI
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
          "framework/inc/helper/mischelper.hxx"
          "include/sfx2/shell.hxx",
          "framework/inc/helper/mischelper.hxx",
+         "include/svtools/htmltokn.h",
+         "include/sfx2/shell.hxx",
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
