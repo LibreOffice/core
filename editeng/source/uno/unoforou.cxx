@@ -478,7 +478,7 @@ bool SvxOutlinerForwarder::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
 
 //          const bool bOutlinerText = pSdrObject && (pSdrObject->GetObjInventor() == SdrInventor::Default) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
             if( bOutlinerText )
-                rOutliner.SetLevelDependendStyleSheet( nPara );
+                rOutliner.SetLevelDependentStyleSheet( nPara );
 
             return true;
         }

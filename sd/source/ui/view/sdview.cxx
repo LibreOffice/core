@@ -1208,7 +1208,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
     SdPage* pPage = static_cast< SdPage* >( pTextObj->GetPage() );
     const PresObjKind eKind = pPage->GetPresObjKind(pTextObj);
 
-    // outline kinds are taken care of in Outliner::ImplSetLevelDependendStyleSheet
+    // outline kinds are taken care of in Outliner::ImplSetLevelDependentStyleSheet
     if( eKind == PRESOBJ_OUTLINE )
         return;
 

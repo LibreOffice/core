@@ -286,7 +286,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
         pRelationSet = mpAccDoc->GetRelationSet(&maCellAddress);
     if (!pRelationSet)
         pRelationSet = new utl::AccessibleRelationSetHelper();
-    FillDependends(pRelationSet);
+    FillDependents(pRelationSet);
     FillPrecedents(pRelationSet);
     return pRelationSet;
 }
@@ -392,7 +392,7 @@ ScDocument* ScAccessibleCell::GetDocument(ScTabViewShell* pViewShell)
     return pEditSource;
 }
 
-void ScAccessibleCell::FillDependends(utl::AccessibleRelationSetHelper* pRelationSet)
+void ScAccessibleCell::FillDependents(utl::AccessibleRelationSetHelper* pRelationSet)
 {
     if (mpDoc)
     {

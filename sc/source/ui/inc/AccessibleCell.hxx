@@ -152,7 +152,7 @@ private:
 
     ::std::unique_ptr< SvxEditSource > CreateEditSource(ScTabViewShell* pViewShell, ScAddress aCell, ScSplitPos eSplitPos);
 
-    void FillDependends(utl::AccessibleRelationSetHelper* pRelationSet);
+    void FillDependents(utl::AccessibleRelationSetHelper* pRelationSet);
     void FillPrecedents(utl::AccessibleRelationSetHelper* pRelationSet);
     void AddRelation(const ScAddress& rCell,
         const sal_uInt16 aRelationType,

@@ -198,7 +198,7 @@ public class DocumentView extends    JFrame
 
     /**
      * Create the view frame for showing the office documents on demand.
-     * Dependend from given command line parameter we create
+     * Depending on given command line parameter we create
      * an office XFrame and initialize it with a window. This
      * window can be a pure toolkit window (means toolkit of office!)
      * or a plugged java canvas - office window combination.

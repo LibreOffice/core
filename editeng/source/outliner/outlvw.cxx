@@ -536,7 +536,7 @@ void OutlinerView::Indent( short nDiff )
             pOwner->ImplCalcBulletText( nPara, false, false );
 
             if ( pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
-                pOwner->ImplSetLevelDependendStyleSheet( nPara );
+                pOwner->ImplSetLevelDependentStyleSheet( nPara );
 
             // Notify App
             pOwner->DepthChangedHdl(pPara, nPrevFlags);
@@ -691,7 +691,7 @@ void OutlinerView::PasteSpecial()
             const sal_Int32 nParaCount = pOwner->pEditEngine->GetParagraphCount();
 
             for( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
-                pOwner->ImplSetLevelDependendStyleSheet( nPara );
+                pOwner->ImplSetLevelDependentStyleSheet( nPara );
         }
 
         pEditView->SetEditEngineUpdateMode( true );
@@ -1400,7 +1400,7 @@ sal_uLong OutlinerView::Read( SvStream& rInput, const OUString& rBaseURL, EEText
         }
 
         if ( pOwner->ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
-            pOwner->ImplSetLevelDependendStyleSheet( n );
+            pOwner->ImplSetLevelDependentStyleSheet( n );
     }
 
     if ( eFormat != EE_FORMAT_BIN )

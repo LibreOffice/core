@@ -256,7 +256,7 @@ void Outliner::SetDepth( Paragraph* pPara, sal_Int16 nNewDepth )
         ImplCalcBulletText( nPara, false, false );
 
         if ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject )
-            ImplSetLevelDependendStyleSheet( nPara );
+            ImplSetLevelDependentStyleSheet( nPara );
 
         DepthChangedHdl(pPara, nPrevFlags);
     }
@@ -685,10 +685,10 @@ void Outliner::ImplCheckNumBulletItem( sal_Int32 nPara )
         pPara->aBulSize.Width() = -1;
 }
 
-void Outliner::ImplSetLevelDependendStyleSheet( sal_Int32 nPara )
+void Outliner::ImplSetLevelDependentStyleSheet( sal_Int32 nPara )
 {
 
-    DBG_ASSERT( ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject ) || ( ImplGetOutlinerMode() == OutlinerMode::OutlineView ), "SetLevelDependendStyleSheet: Wrong Mode!" );
+    DBG_ASSERT( ( ImplGetOutlinerMode() == OutlinerMode::OutlineObject ) || ( ImplGetOutlinerMode() == OutlinerMode::OutlineView ), "SetLevelDependentStyleSheet: Wrong Mode!" );
 
     SfxStyleSheet* pStyle = GetStyleSheet( nPara );
 
@@ -1932,10 +1932,10 @@ OUString Outliner::ImplGetBulletText( sal_Int32 nPara )
 }
 
 // this is needed for StarOffice Api
-void Outliner::SetLevelDependendStyleSheet( sal_Int32 nPara )
+void Outliner::SetLevelDependentStyleSheet( sal_Int32 nPara )
 {
     SfxItemSet aOldAttrs( pEditEngine->GetParaAttribs( nPara ) );
-    ImplSetLevelDependendStyleSheet( nPara );
+    ImplSetLevelDependentStyleSheet( nPara );
     pEditEngine->SetParaAttribs( nPara, aOldAttrs );
 }
 

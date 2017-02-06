@@ -132,14 +132,14 @@ css::uno::Any SAL_CALL HelpOnStartup::execute(const css::uno::Sequence< css::bea
     if (bShowIt)
     {
         // retrieve the help URL for the detected application module
-        OUString sModuleDependendHelpURL = its_checkIfHelpEnabledAndGetURL(sModule);
-        if (!sModuleDependendHelpURL.isEmpty())
+        OUString sModuleDependentHelpURL = its_checkIfHelpEnabledAndGetURL(sModule);
+        if (!sModuleDependentHelpURL.isEmpty())
         {
             // Show this help page.
             // Note: The help window brings itself to front ...
             Help* pHelp = Application::GetHelp();
             if (pHelp)
-                pHelp->Start(sModuleDependendHelpURL, nullptr);
+                pHelp->Start(sModuleDependentHelpURL, nullptr);
         }
     }
 

@@ -28,10 +28,6 @@
 
 #include <toolkit/awt/vclxwindow.hxx>
 
-
-//  class VCLXSystemDependendtWindow
-
-
 class TOOLKIT_DLLPUBLIC VCLXSystemDependentWindow : public css::awt::XSystemDependentWindowPeer,
                                                     public VCLXWindow
 {
@@ -48,7 +44,7 @@ public:
     css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
     css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
-    // css::awt::XSystemDependendtWindowPeer
+    // css::awt::XSystemDependentWindowPeer
     css::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 };
 

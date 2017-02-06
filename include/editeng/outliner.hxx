@@ -641,7 +641,7 @@ private:
     OUString            ImplGetBulletText( sal_Int32 nPara );
     void                ImplCheckNumBulletItem( sal_Int32 nPara );
     void                ImplInitDepth( sal_Int32 nPara, sal_Int16 nDepth, bool bCreateUndo );
-    void                ImplSetLevelDependendStyleSheet( sal_Int32 nPara );
+    void                ImplSetLevelDependentStyleSheet( sal_Int32 nPara );
 
     void                ImplBlockInsertionCallbacks( bool b );
 
@@ -954,7 +954,7 @@ public:
     const EditEngine& GetEditEngine() const;
 
     // this is needed for StarOffice Api
-    void            SetLevelDependendStyleSheet( sal_Int32 nPara );
+    void            SetLevelDependentStyleSheet( sal_Int32 nPara );
 
     OutlinerMode    GetOutlinerMode() const { return nOutlinerMode; }
 
