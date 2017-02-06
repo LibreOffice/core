@@ -158,13 +158,6 @@ struct FontModel
     void                setBiffEscapement( sal_uInt16 nEscapement );
 };
 
-/** Enumerates different types of API font property sets. */
-enum FontPropertyType
-{
-    FONT_PROPTYPE_CELL,             /// Font properties in a spreadsheet cell (table::Cell service).
-    FONT_PROPTYPE_TEXT              /// Font properties in a text object (text::Text service).
-};
-
 /** Contains used flags for all API font attributes. */
 struct ApiFontUsedFlags
 {
@@ -254,12 +247,10 @@ public:
     void                fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkipPoolDefs = false ) const;
     /** Writes all font attributes to the passed property map. */
     void                writeToPropertyMap(
-                            PropertyMap& rPropMap,
-                            FontPropertyType ePropType ) const;
+                            PropertyMap& rPropMap ) const;
     /** Writes all font attributes to the passed property set. */
     void                writeToPropertySet(
-                            PropertySet& rPropSet,
-                            FontPropertyType ePropType ) const;
+                            PropertySet& rPropSet ) const;
 
 private:
     FontModel           maModel;

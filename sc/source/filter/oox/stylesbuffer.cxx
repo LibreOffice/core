@@ -967,7 +967,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkip
     }
 }
 
-void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType ) const
+void Font::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     // font name properties
     if( maUsedFlags.mbNameUsed )
@@ -1033,15 +1033,14 @@ void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType
     if( maUsedFlags.mbEscapementUsed )
     {
         rPropMap.setProperty( PROP_CharEscapement, maApiData.mnEscapement);
-        if( ePropType == FONT_PROPTYPE_TEXT )
-            rPropMap.setProperty( PROP_CharEscapementHeight, maApiData.mnEscapeHeight);
+        rPropMap.setProperty( PROP_CharEscapementHeight, maApiData.mnEscapeHeight);
     }
 }
 
-void Font::writeToPropertySet( PropertySet& rPropSet, FontPropertyType ePropType ) const
+void Font::writeToPropertySet( PropertySet& rPropSet ) const
 {
     PropertyMap aPropMap;
-    writeToPropertyMap( aPropMap, ePropType );
+    writeToPropertyMap( aPropMap );
     rPropSet.setProperties( aPropMap );
 }
 

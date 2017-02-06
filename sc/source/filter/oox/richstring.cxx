@@ -98,7 +98,7 @@ void RichStringPortion::convert( const Reference< XText >& rxText, bool bReplace
         if( mxFont.get() )
         {
             PropertySet aPropSet( xRange );
-            mxFont->writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
+            mxFont->writeToPropertySet( aPropSet );
         }
     }
 
@@ -145,7 +145,7 @@ void RichStringPortion::writeFontProperties( const Reference<XText>& rxText ) co
     PropertySet aPropSet(rxText);
 
     if (mxFont.get())
-        mxFont->writeToPropertySet(aPropSet, FONT_PROPTYPE_TEXT);
+        mxFont->writeToPropertySet(aPropSet);
 }
 
 void FontPortionModel::read( SequenceInputStream& rStrm )
