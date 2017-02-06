@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da4df55a_514bb459",
+        "filename": "sw/source/filter/html/htmlctxt.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-02-06T12:43:26Z",
+      "side": 1,
+      "message": "preserved (typo)",
+      "revId": "dd4e3f8d9a3d5917a22171a9f0bbe7446a172699",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
