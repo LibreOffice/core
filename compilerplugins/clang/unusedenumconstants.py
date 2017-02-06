@@ -100,6 +100,9 @@ for d in definitionSet:
          "framework/inc/helper/mischelper.hxx",
          "include/svtools/htmltokn.h",
          "include/sfx2/shell.hxx",
+         "sw/inc/iodetect.hxx",
+         "sw/inc/fmtfordr.hxx",
+         "sw/inc/flddat.hxx",
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
