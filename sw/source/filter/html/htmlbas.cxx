@@ -65,7 +65,7 @@ void SwHTMLParser::NewScript()
 
     if( !m_aScriptURL.isEmpty() )
     {
-        // Den Inhalt des Script-Tags ignorieren
+        // Ignore the script tag
         m_bIgnoreRawData = true;
     }
 }
@@ -88,8 +88,7 @@ void SwHTMLParser::EndScript()
     m_bIgnoreRawData = false;
     m_aScriptSource = convertLineEnd(m_aScriptSource, GetSystemLineEnd());
 
-    // Ausser StarBasic und unbenutzem JavaScript jedes Script oder den
-    // Modulnamen in einem Feld merken merken
+    // Except for StarBasic and unused JavaScript, save each script or module name in a field
     if( bInsSrcIntoField && !m_bIgnoreHTMLComments )
     {
         SwScriptFieldType *pType =
@@ -105,8 +104,8 @@ void SwHTMLParser::EndScript()
     if( !m_aScriptSource.isEmpty() && pDocSh &&
         bInsIntoBasic && IsNewDoc() )
     {
-    // Fuer JavaScript und StarBasic noch ein Basic-Modul anlegen
-        // Das Basic entfernt natuerlich weiterhin keine SGML-Kommentare
+        // Create a Basic module for javascript and StarBasic.
+        // This module does still not remove SGML comments
         RemoveSGMLComment( m_aScriptSource, true );
 
         // get library name
@@ -182,7 +181,7 @@ void SwHTMLParser::EndScript()
 
 void SwHTMLParser::AddScriptSource()
 {
-    // Hier merken wir und nur ein par Strings
+    // We'll just remember a few strings here
     if( aToken.getLength() > 2 &&
         (HTML_SL_STARBASIC==m_eScriptLang && aToken[ 0 ] == '\'') )
     {
@@ -218,14 +217,14 @@ void SwHTMLParser::AddScriptSource()
     }
     else if( !m_aScriptSource.isEmpty() || !aToken.isEmpty() )
     {
-        // Leerzeilen am Anfang werden ignoriert
+        // Empty lines are ignored on the beginning
         if( !m_aScriptSource.isEmpty() )
         {
             m_aScriptSource += "\n";
         }
         else
         {
-            // Wir stehen hinter dem CR/LF der Zeile davor
+            // We're after the CR/LF of the line before
             m_nScriptStartLineNr = GetLineNr() - 1;
         }
         m_aScriptSource += aToken;
@@ -262,15 +261,14 @@ void SwHTMLWriter::OutBasic()
 
     BasicManager *pBasicMan = pDoc->GetDocShell()->GetBasicManager();
     OSL_ENSURE( pBasicMan, "Wo ist der Basic-Manager?" );
-    // nur das DocumentBasic schreiben
+    // Only write DocumentBasic
     if( !pBasicMan || pBasicMan == SfxApplication::GetBasicManager() )
     {
         return;
     }
 
     bool bFirst=true;
-    // und jetzt alle StarBasic-Module und alle unbenutzen JavaSrript-Module
-    // ausgeben
+    // Now write all StarBasic and unused Javascript modules
     for( sal_uInt16 i=0; i<pBasicMan->GetLibCount(); i++ )
     {
         StarBASIC *pBasic = pBasicMan->GetLib( i  );
@@ -298,7 +296,7 @@ void SwHTMLWriter::OutBasic()
             }
 
             const OUString& rModName = pModule->GetName();
-            Strm().WriteCharPtr( SAL_NEWLINE_STRING );   // nicht einruecken!
+            Strm().WriteCharPtr( SAL_NEWLINE_STRING );   // don't indent!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource(),
                                      sLang, eType, aEmptyOUStr,
                                      &rLibName, &rModName,
