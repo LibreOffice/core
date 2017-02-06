@@ -92,6 +92,11 @@ for d in definitionSet:
          "include/vcl/settings.hxx", # stored in a setting, can't remove it without potentially triggering UBSAN
          "basic/source/inc/opcodes.hxx", # can't touch this without breaking unit tests, not sure why
          "include/unotools/securityoptions.hxx", # comes from the UI
+         "sot/source/sdstor/stgelem.hxx",
+         "sd/source/filter/eppt/epptbase.hxx",
+         "include/registry/refltype.hxx",
+         "include/registry/version.h",
+         "include/svtools/rtftoken.h",
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -115,6 +120,7 @@ for d in definitionSet:
          "include/oox/drawingml/shapepropertymap.hxx",
          "include/svl/nfkeytab.hx",
          "include/svl/zforlist.hxx",
+         "include/svtools/svtabbx.hxx",
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",

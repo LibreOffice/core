@@ -754,7 +754,7 @@ void HeaderFooterParser::setAttributes()
         Font aFont( *this, maFontModel );
         aFont.finalizeImport();
         PropertySet aPropSet( getEndPos() );
-        aFont.writeToPropertySet( aPropSet, FONT_PROPTYPE_TEXT );
+        aFont.writeToPropertySet( aPropSet );
         getStartPos()->gotoEnd( false );
         getEndPos()->gotoEnd( false );
     }
