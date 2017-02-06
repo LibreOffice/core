@@ -930,7 +930,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
 
         if (nRowBytes < 8 || nPackType == 1)
         {
-            if (nHeight > pPict->remainingSize() / (sizeof(sal_uInt16) * nWidth))
+            if (nWidth && nHeight > pPict->remainingSize() / (sizeof(sal_uInt16) * nWidth))
                 return 0xffffffff;
         }
         else
@@ -1030,10 +1030,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         if ( nRowBytes < 8 || nPackType == 1 )
         {
             const size_t nMaxPixels = pPict->remainingSize() / 4;
-            const size_t nMaxRows = nMaxPixels / nWidth;
+            const size_t nMaxRows = nWidth ? nMaxPixels / nWidth : SAL_MAX_UINT16;
             if (nHeight > nMaxRows)
                 return 0xffffffff;
-            const size_t nMaxCols = nMaxPixels / nHeight;
+            const size_t nMaxCols = nHeight ? nMaxPixels / nHeight : SAL_MAX_UINT16;
             if (nWidth > nMaxCols)
                 return 0xffffffff;
 
@@ -1053,10 +1053,10 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         else if ( nPackType == 2 )
         {
             const size_t nMaxPixels = pPict->remainingSize() / 3;
-            const size_t nMaxRows = nMaxPixels / nWidth;
+            const size_t nMaxRows = nWidth ? nMaxPixels / nWidth : SAL_MAX_UINT16;
             if (nHeight > nMaxRows)
                 return 0xffffffff;
-            const size_t nMaxCols = nMaxPixels / nHeight;
+            const size_t nMaxCols = nMaxPixels ? nMaxPixels / nHeight : SAL_MAX_UINT16;
             if (nWidth > nMaxCols)
                 return 0xffffffff;
 
