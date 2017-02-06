@@ -552,7 +552,7 @@ sal_Int32 SAL_CALL SwAccessibleContext::getAccessibleChildCount()
     CHECK_FOR_DEFUNC( XAccessibleContext )
     //Notify the frame is a document
     if (m_nRole == AccessibleRole::DOCUMENT_TEXT)
-        bIsAccDocUse = true;
+        m_bIsAccDocUse = true;
 
     return m_isDisposing ? 0 : GetChildCount( *(GetMap()) );
 }
@@ -566,7 +566,7 @@ uno::Reference< XAccessible> SAL_CALL
 
     //Notify the frame is a document
     if (m_nRole == AccessibleRole::DOCUMENT_TEXT)
-        bIsAccDocUse = true;
+        m_bIsAccDocUse = true;
 
     const SwAccessibleChild aChild( GetChild( *(GetMap()), nIndex ) );
     if( !aChild.IsValid() )
