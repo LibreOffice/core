@@ -76,7 +76,7 @@ enum class GraphicsStateUpdateFlags {
     LayoutMode            = 0x0100,
     TransparentPercent    = 0x0200,
     DigitLanguage         = 0x0400,
-    All                   = 0x07ff
+    All                   = 0x077f
 };
 namespace o3tl {
     template<> struct typed_flags<GraphicsStateUpdateFlags> : is_typed_flags<GraphicsStateUpdateFlags, 0x077f> {};
