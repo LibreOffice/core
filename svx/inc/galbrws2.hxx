@@ -44,13 +44,9 @@ enum GalleryBrowserMode
 };
 
 
-enum GalleryBrowserTravel
+enum class GalleryBrowserTravel
 {
-    GALLERYBROWSERTRAVEL_CURRENT = 0,
-    GALLERYBROWSERTRAVEL_FIRST = 1,
-    GALLERYBROWSERTRAVEL_LAST = 2,
-    GALLERYBROWSERTRAVEL_PREVIOUS = 3,
-    GALLERYBROWSERTRAVEL_NEXT = 4
+    First, Last, Previous, Next
 };
 
 enum class GalleryItemFlags {

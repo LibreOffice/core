@@ -170,21 +170,21 @@ void GalleryPreview::KeyInput(const KeyEvent& rKEvt)
             break;
 
             case KEY_HOME:
-                pBrowser->Travel( GALLERYBROWSERTRAVEL_FIRST );
+                pBrowser->Travel( GalleryBrowserTravel::First );
             break;
 
             case KEY_END:
-                pBrowser->Travel( GALLERYBROWSERTRAVEL_LAST );
+                pBrowser->Travel( GalleryBrowserTravel::Last );
             break;
 
             case KEY_LEFT:
             case KEY_UP:
-                pBrowser->Travel( GALLERYBROWSERTRAVEL_PREVIOUS );
+                pBrowser->Travel( GalleryBrowserTravel::Previous );
             break;
 
             case KEY_RIGHT:
             case KEY_DOWN:
-                pBrowser->Travel( GALLERYBROWSERTRAVEL_NEXT );
+                pBrowser->Travel( GalleryBrowserTravel::Next );
             break;
 
             default:
