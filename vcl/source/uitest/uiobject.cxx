@@ -26,8 +26,6 @@
 #include <iostream>
 #include <vector>
 
-#define DUMP_UITEST(x) SAL_INFO("vcl.uitest", x)
-
 UIObject::~UIObject()
 {
 }
@@ -61,12 +59,14 @@ std::set<OUString> UIObject::get_children() const
     return std::set<OUString>();
 }
 
-void UIObject::dumpState() const
+OUString UIObject::dumpState() const
 {
+    return OUString();
 }
 
-void UIObject::dumpHierarchy() const
+OUString UIObject::dumpHierarchy() const
 {
+    return OUString();
 }
 
 namespace {
@@ -425,34 +425,50 @@ OUString WindowUIObject::get_name() const
     return OUString("WindowUIObject");
 }
 
-void WindowUIObject::dumpState() const
+OUString WindowUIObject::dumpState() const
 {
-    DUMP_UITEST(get_name() << " " << mxWindow->get_id());
-    DUMP_UITEST("Implementation Name: " << typeid(*mxWindow.get()).name());
+    OUStringBuffer aStateString = "{\"name\":\"" + mxWindow->get_id() + "\"";
+    aStateString.append(", \"ImplementationName\":\"").appendAscii(typeid(*mxWindow.get()).name()).append("\"");
     StringMap aState = const_cast<WindowUIObject*>(this)->get_state();
     for (auto itr = aState.begin(), itrEnd = aState.end(); itr != itrEnd; ++itr)
     {
-        DUMP_UITEST("Property: " << itr->first << " with value: " << itr->second);
+        OUString property = ",\"" + itr->first + "\":\"" + itr->second + "\"";
+        aStateString.append(property);
     }
+
     size_t nCount = mxWindow->GetChildCount();
+
     if (nCount)
-        DUMP_UITEST("With " << nCount << " Children:");
+        aStateString.append(",\"children\":[");
 
     for (size_t i = 0; i < nCount; ++i)
     {
+        if (i != 0)
+        {
+            aStateString.append(",");
+        }
         vcl::Window* pChild = mxWindow->GetChild(i);
         std::unique_ptr<UIObject> pChildWrapper =
             pChild->GetUITestFactory()(pChild);
-        pChildWrapper->dumpState();
+        OUString children = pChildWrapper->dumpState();
+        aStateString.append(children);
     }
+
+    if (nCount)
+        aStateString.append("]");
+
+    aStateString.append("}");
+
+    OUString aString = aStateString.makeStringAndClear();
+    return aString.replaceAll("\n", "\\n");
 }
 
-void WindowUIObject::dumpHierarchy() const
+OUString WindowUIObject::dumpHierarchy() const
 {
     vcl::Window* pDialogParent = get_dialog_parent(mxWindow.get());
     std::unique_ptr<UIObject> pParentWrapper =
         pDialogParent->GetUITestFactory()(pDialogParent);
-    pParentWrapper->dumpState();
+    return pParentWrapper->dumpState();
 }
 
 std::unique_ptr<UIObject> WindowUIObject::create(vcl::Window* pWindow)

@@ -25,6 +25,8 @@ interface XUIObject
     string getType();
 
     sequence<string> getChildren();
+
+    string getHierarchy();
 };
 
 }; }; }; }; };
