@@ -93,13 +93,13 @@ public:
         ORowSetValueDecoratorRef aRet;
         switch(meFunct)
         {
-            case ENUM_FUNC_EQUATION:
+            case ExpressionFunct::Equation:
                 aRet = new ORowSetValueDecorator( mpFirstArg->evaluate(_aRow )->getValue() == mpSecondArg->evaluate(_aRow )->getValue() );
                 break;
-            case ENUM_FUNC_AND:
+            case ExpressionFunct::And:
                 aRet = new ORowSetValueDecorator( mpFirstArg->evaluate(_aRow )->getValue().getBool() && mpSecondArg->evaluate(_aRow )->getValue().getBool() );
                 break;
-            case ENUM_FUNC_OR:
+            case ExpressionFunct::Or:
                 aRet = new ORowSetValueDecorator( mpFirstArg->evaluate(_aRow )->getValue().getBool() || mpSecondArg->evaluate(_aRow )->getValue().getBool() );
                 break;
             default:
@@ -111,7 +111,7 @@ public:
     {
         switch(meFunct)
         {
-            case ENUM_FUNC_EQUATION:
+            case ExpressionFunct::Equation:
                 (*mpFirstArg->evaluate(_aRow )) = mpSecondArg->evaluate(_aRow )->getValue();
                 break;
             default:
@@ -334,18 +334,18 @@ public:
 
             assignment =
                     unaryFunction >> ch_p('=') >> argument
-                                [ BinaryFunctionFunctor( ENUM_FUNC_EQUATION,  self.getContext()) ]
+                                [ BinaryFunctionFunctor( ExpressionFunct::Equation,  self.getContext()) ]
                ;
 
             andExpression =
                     assignment
                 |   ( '(' >> orExpression >> ')' )
-                |   ( assignment >> AND_ >> assignment )  [ BinaryFunctionFunctor( ENUM_FUNC_AND,  self.getContext()) ]
+                |   ( assignment >> AND_ >> assignment )  [ BinaryFunctionFunctor( ExpressionFunct::And,  self.getContext()) ]
                 ;
 
             orExpression =
                     andExpression
-                |   ( orExpression >> OR_ >> andExpression ) [ BinaryFunctionFunctor( ENUM_FUNC_OR,  self.getContext()) ]
+                |   ( orExpression >> OR_ >> andExpression ) [ BinaryFunctionFunctor( ExpressionFunct::Or,  self.getContext()) ]
                 ;
 
             basicExpression =
