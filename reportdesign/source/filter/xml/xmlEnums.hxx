@@ -137,8 +137,6 @@ namespace rptxml
         ,XML_TOK_PROPERTIES
         ,XML_TOK_SIZE
         ,XML_TOK_IMAGE_DATA
-        ,XML_TOK_IMAGE_POSITION
-        ,XML_TOK_IMAGE_ALIGN
         ,XML_TOK_SCALE
         ,XML_TOK_LABEL
         ,XML_TOK_DATA_FORMULA
