@@ -151,21 +151,15 @@ UUIInteractionHelper::handleErrorHandlerRequest(
 
     OUString aMessage;
     {
-        enum Source { SOURCE_DEFAULT, SOURCE_CNT, SOURCE_SVX, SOURCE_UUI };
-        static char const * const aManager[4] = { "ofa", "cnt", "svx", "uui" };
-        static sal_uInt16 const aId[4]
+        enum Source { SOURCE_DEFAULT, SOURCE_SVX, SOURCE_UUI };
+        static char const * const aManager[3] = { "ofa", "svx", "uui" };
+        static sal_uInt16 const aId[3]
             = { RID_ERRHDL,
-                RID_CHAOS_START + 12,
-                // cf. chaos/source/inc/cntrids.hrc, where
-                // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
                 RID_SVXERRCODE,
                 RID_UUI_ERRHDL };
         ErrCode nErrorId = nErrorCode & ~ERRCODE_WARNING_MASK;
         Source eSource = nErrorId < ERRCODE_AREA_LIB1 ?
             SOURCE_DEFAULT :
-            nErrorId >= ERRCODE_AREA_CHAOS
-            && nErrorId < ERRCODE_AREA_CHAOS_END ?
-            SOURCE_CNT :
             nErrorId >= ERRCODE_AREA_SVX
             && nErrorId <= ERRCODE_AREA_SVX_END ?
             SOURCE_SVX :
