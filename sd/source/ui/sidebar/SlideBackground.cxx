@@ -719,7 +719,6 @@ void SlideBackground::NotifyItemUpdate(
                 mpDspMasterObjects->Check(pBoolItem->GetValue());
         }
         break;
-
         case SID_SELECT_BACKGROUND:
         {
             if(eState >= SfxItemState::DEFAULT)
@@ -793,7 +792,12 @@ IMPL_LINK_NOARG(SlideBackground, PaperSizeModifyHdl, ListBox&, void)
 
     mpPageItem->SetLandscape(mpPaperOrientation->GetSelectEntryPos() == 0);
     SvxSizeItem aSizeItem(SID_ATTR_PAGE_SIZE, aSize);
-    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get() });
+    // Page/slide properties dialog (FuPage::ExecuteDialog and ::ApplyItemSet) misuses
+    // SID_ATTR_PAGE_EXT1 to distinguish between Impress and Draw, so until that is
+    // handled somehow better, we do the same here
+    SfxBoolItem aFitObjs(SID_ATTR_PAGE_EXT1, IsImpress());
+
+    GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_SIZE, SfxCallMode::RECORD, { &aSizeItem, mpPageItem.get(), &aFitObjs});
 }
 
 IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
