@@ -1556,7 +1556,7 @@ void SvxIconChoiceCtrl_Impl::PaintItem(const Rectangle& rRect,
     IcnViewFieldType eItem, SvxIconChoiceCtrlEntry* pEntry, sal_uInt16 nPaintFlags,
     vcl::RenderContext& rRenderContext )
 {
-    if (eItem == IcnViewFieldTypeText)
+    if (eItem == IcnViewFieldType::Text)
     {
         OUString aText = SvtIconChoiceCtrl::GetEntryText(pEntry, false);
 
@@ -1651,9 +1651,9 @@ void SvxIconChoiceCtrl_Impl::PaintEntry(SvxIconChoiceCtrlEntry* pEntry, const Po
                                                   bActiveSelection ? 1 : 2, false, true, false);
 
 
-    PaintItem(aBmpRect, IcnViewFieldTypeImage, pEntry, nBmpPaintFlags, rRenderContext);
+    PaintItem(aBmpRect, IcnViewFieldType::Image, pEntry, nBmpPaintFlags, rRenderContext);
 
-    PaintItem(aTextRect, IcnViewFieldTypeText, pEntry, nTextPaintFlags, rRenderContext);
+    PaintItem(aTextRect, IcnViewFieldType::Text, pEntry, nTextPaintFlags, rRenderContext);
 
     // draw highlight frame
     if (pEntry == pCurHighlightFrame && !bNoEmphasis)
@@ -1856,7 +1856,7 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcTextRect( SvxIconChoiceCtrlEntry* pEntry,
 
 long SvxIconChoiceCtrl_Impl::CalcBoundingWidth( SvxIconChoiceCtrlEntry* pEntry ) const
 {
-    long nStringWidth = GetItemSize( pEntry, IcnViewFieldTypeText ).Width();
+    long nStringWidth = GetItemSize( pEntry, IcnViewFieldType::Text ).Width();
 //  nStringWidth += 2*LROFFS_TEXT;
     long nWidth = 0;
 
@@ -1878,7 +1878,7 @@ long SvxIconChoiceCtrl_Impl::CalcBoundingWidth( SvxIconChoiceCtrlEntry* pEntry )
 
 long SvxIconChoiceCtrl_Impl::CalcBoundingHeight( SvxIconChoiceCtrlEntry* pEntry ) const
 {
-    long nStringHeight = GetItemSize( pEntry, IcnViewFieldTypeText).Height();
+    long nStringHeight = GetItemSize( pEntry, IcnViewFieldType::Text).Height();
     long nHeight = 0;
 
     switch( nWinBits & (VIEWMODE_MASK) )
@@ -2437,9 +2437,9 @@ void SvxIconChoiceCtrl_Impl::Scroll( long nDeltaX, long nDeltaY )
 const Size& SvxIconChoiceCtrl_Impl::GetItemSize( SvxIconChoiceCtrlEntry*,
     IcnViewFieldType eItem ) const
 {
-    if (eItem == IcnViewFieldTypeText)
+    if (eItem == IcnViewFieldType::Text)
         return aDefaultTextSize;
-    return aImageSize;
+    return aImageSize; // IcnViewFieldType::Image
 }
 
 Rectangle SvxIconChoiceCtrl_Impl::CalcFocusRect( SvxIconChoiceCtrlEntry* pEntry )
