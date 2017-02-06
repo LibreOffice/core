@@ -87,7 +87,7 @@ public:
     SwXTextCursor(
             css::uno::Reference< css::text::XText > const& xParent,
             SwPaM const& rSourceCursor,
-            const enum CursorType eType = CURSOR_ALL);
+            const enum CursorType eType = CursorType::All);
 
     SwUnoCursor& GetCursor();
     bool IsAtEndOfMeta() const;

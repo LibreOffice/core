@@ -804,7 +804,7 @@ lcl_ForceIntoMeta(SwPaM & rCursor,
 
 bool SwXTextCursor::IsAtEndOfMeta() const
 {
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         auto pCursor( m_pImpl->m_pUnoCursor );
         SwXMeta const*const pXMeta(
@@ -934,7 +934,7 @@ SwXTextCursor::goLeft(sal_Int16 nCount, sal_Bool Expand)
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     bool bRet = rUnoCursor.Left( nCount);
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH)
@@ -952,7 +952,7 @@ SwXTextCursor::goRight(sal_Int16 nCount, sal_Bool Expand)
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
     bool bRet = rUnoCursor.Right(nCount);
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH)
@@ -969,7 +969,7 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    if (CURSOR_BODY == m_pImpl->m_eType)
+    if (CursorType::Body == m_pImpl->m_eType)
     {
         rUnoCursor.Move( fnMoveBackward, GoInDoc );
         //check, that the cursor is not in a table
@@ -1002,16 +1002,16 @@ SwXTextCursor::gotoStart(sal_Bool Expand)
             }
         }
     }
-    else if (   (CURSOR_FRAME   == m_pImpl->m_eType)
-            ||  (CURSOR_TBLTEXT == m_pImpl->m_eType)
-            ||  (CURSOR_HEADER  == m_pImpl->m_eType)
-            ||  (CURSOR_FOOTER  == m_pImpl->m_eType)
-            ||  (CURSOR_FOOTNOTE== m_pImpl->m_eType)
-            ||  (CURSOR_REDLINE == m_pImpl->m_eType))
+    else if (   (CursorType::Frame   == m_pImpl->m_eType)
+            ||  (CursorType::TableText == m_pImpl->m_eType)
+            ||  (CursorType::Header  == m_pImpl->m_eType)
+            ||  (CursorType::Footer  == m_pImpl->m_eType)
+            ||  (CursorType::Footnote== m_pImpl->m_eType)
+            ||  (CursorType::Redline == m_pImpl->m_eType))
     {
         rUnoCursor.MoveSection(GoCurrSection, fnSectionStart);
     }
-    else if (CURSOR_META == m_pImpl->m_eType)
+    else if (CursorType::Meta == m_pImpl->m_eType)
     {
         lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText, META_INIT_START);
     }
@@ -1025,20 +1025,20 @@ SwXTextCursor::gotoEnd(sal_Bool Expand)
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
     SwUnoCursorHelper::SelectPam(rUnoCursor, Expand);
-    if (CURSOR_BODY == m_pImpl->m_eType)
+    if (CursorType::Body == m_pImpl->m_eType)
     {
         rUnoCursor.Move( fnMoveForward, GoInDoc );
     }
-    else if (   (CURSOR_FRAME   == m_pImpl->m_eType)
-            ||  (CURSOR_TBLTEXT == m_pImpl->m_eType)
-            ||  (CURSOR_HEADER  == m_pImpl->m_eType)
-            ||  (CURSOR_FOOTER  == m_pImpl->m_eType)
-            ||  (CURSOR_FOOTNOTE== m_pImpl->m_eType)
-            ||  (CURSOR_REDLINE == m_pImpl->m_eType))
+    else if (   (CursorType::Frame   == m_pImpl->m_eType)
+            ||  (CursorType::TableText == m_pImpl->m_eType)
+            ||  (CursorType::Header  == m_pImpl->m_eType)
+            ||  (CursorType::Footer  == m_pImpl->m_eType)
+            ||  (CursorType::Footnote== m_pImpl->m_eType)
+            ||  (CursorType::Redline == m_pImpl->m_eType))
     {
         rUnoCursor.MoveSection( GoCurrSection, fnSectionEnd);
     }
-    else if (CURSOR_META == m_pImpl->m_eType)
+    else if (CursorType::Meta == m_pImpl->m_eType)
     {
         lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText, META_INIT_END);
     }
@@ -1095,13 +1095,13 @@ SwXTextCursor::gotoRange(
         SwStartNodeType eSearchNodeType = SwNormalStartNode;
         switch (m_pImpl->m_eType)
         {
-        case CURSOR_FRAME:      eSearchNodeType = SwFlyStartNode;       break;
-        case CURSOR_TBLTEXT:    eSearchNodeType = SwTableBoxStartNode;  break;
-        case CURSOR_FOOTNOTE:   eSearchNodeType = SwFootnoteStartNode;  break;
-        case CURSOR_HEADER:     eSearchNodeType = SwHeaderStartNode;    break;
-        case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
+        case CursorType::Frame:      eSearchNodeType = SwFlyStartNode;       break;
+        case CursorType::TableText:    eSearchNodeType = SwTableBoxStartNode;  break;
+        case CursorType::Footnote:   eSearchNodeType = SwFootnoteStartNode;  break;
+        case CursorType::Header:     eSearchNodeType = SwHeaderStartNode;    break;
+        case CursorType::Footer:     eSearchNodeType = SwFooterStartNode;    break;
             //case CURSOR_INVALID:
-            //case CURSOR_BODY:
+            //case CursorType::Body:
         default:
             ;
         }
@@ -1142,7 +1142,7 @@ SwXTextCursor::gotoRange(
         }
     }
 
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         SwPaM CopyPam(*pPam->GetMark(), *pPam->GetPoint());
         const bool bNotForced( lcl_ForceIntoMeta(
@@ -1249,7 +1249,7 @@ SwXTextCursor::gotoNextWord(sal_Bool Expand)
     // return true if cursor has moved
     bRet =  (&pPoint->nNode.GetNode() != pOldNode)  ||
             (pPoint->nContent.GetIndex() != nOldIndex);
-    if (bRet && (CURSOR_META == m_pImpl->m_eType))
+    if (bRet && (CursorType::Meta == m_pImpl->m_eType))
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH);
@@ -1289,7 +1289,7 @@ SwXTextCursor::gotoPreviousWord(sal_Bool Expand)
     // return true if cursor has moved
     bRet =  (&pPoint->nNode.GetNode() != pOldNode)  ||
             (pPoint->nContent.GetIndex() != nOldIndex);
-    if (bRet && (CURSOR_META == m_pImpl->m_eType))
+    if (bRet && (CursorType::Meta == m_pImpl->m_eType))
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH);
@@ -1325,7 +1325,7 @@ SwXTextCursor::gotoEndOfWord(sal_Bool Expand)
         pPoint->nNode       = rOldNode;
         pPoint->nContent    = nOldIndex;
     }
-    else if (CURSOR_META == m_pImpl->m_eType)
+    else if (CursorType::Meta == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH);
@@ -1361,7 +1361,7 @@ SwXTextCursor::gotoStartOfWord(sal_Bool Expand)
         pPoint->nNode       = rOldNode;
         pPoint->nContent    = nOldIndex;
     }
-    else if (CURSOR_META == m_pImpl->m_eType)
+    else if (CursorType::Meta == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH);
@@ -1443,7 +1443,7 @@ SwXTextCursor::gotoNextSentence(sal_Bool Expand)
             bRet = false;
         }
     }
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH)
@@ -1471,7 +1471,7 @@ SwXTextCursor::gotoPreviousSentence(sal_Bool Expand)
             rUnoCursor.GoSentence(SwCursor::PREV_SENT);
         }
     }
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH)
@@ -1494,7 +1494,7 @@ SwXTextCursor::gotoStartOfSentence(sal_Bool Expand)
     bool bRet = SwUnoCursorHelper::IsStartOfPara(rUnoCursor)
         || rUnoCursor.GoSentence(SwCursor::START_SENT)
         || SwUnoCursorHelper::IsStartOfPara(rUnoCursor);
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH)
@@ -1518,7 +1518,7 @@ SwXTextCursor::gotoEndOfSentence(sal_Bool Expand)
     bool bRet = !bAlreadyParaEnd
             &&  (rUnoCursor.GoSentence(SwCursor::END_SENT)
                  || rUnoCursor.MovePara(GoCurrPara, fnParaEnd));
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         bRet = lcl_ForceIntoMeta(rUnoCursor, m_pImpl->m_xParentText,
                     META_CHECK_BOTH)
@@ -1556,7 +1556,7 @@ SwXTextCursor::gotoStartOfParagraph(sal_Bool Expand)
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         return false;
     }
@@ -1581,7 +1581,7 @@ SwXTextCursor::gotoEndOfParagraph(sal_Bool Expand)
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         return false;
     }
@@ -1606,7 +1606,7 @@ SwXTextCursor::gotoNextParagraph(sal_Bool Expand)
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         return false;
     }
@@ -1622,7 +1622,7 @@ SwXTextCursor::gotoPreviousParagraph(sal_Bool Expand)
 
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
 
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         return false;
     }
@@ -1649,11 +1649,11 @@ SwXTextCursor::getStart()
     uno::Reference< text::XTextRange > xRet;
     SwPaM aPam(*rUnoCursor.Start());
     const uno::Reference< text::XText >  xParent = getText();
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         // return cursor to prevent modifying SwXTextRange for META
         SwXTextCursor * const pXCursor(
-            new SwXTextCursor(*rUnoCursor.GetDoc(), xParent, CURSOR_META,
+            new SwXTextCursor(*rUnoCursor.GetDoc(), xParent, CursorType::Meta,
                 *rUnoCursor.GetPoint()) );
         pXCursor->gotoStart(false);
         xRet = static_cast<text::XWordCursor*>(pXCursor);
@@ -1675,11 +1675,11 @@ SwXTextCursor::getEnd()
     uno::Reference< text::XTextRange >  xRet;
     SwPaM aPam(*rUnoCursor.End());
     const uno::Reference< text::XText >  xParent = getText();
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         // return cursor to prevent modifying SwXTextRange for META
         SwXTextCursor * const pXCursor(
-            new SwXTextCursor(*rUnoCursor.GetDoc(), xParent, CURSOR_META,
+            new SwXTextCursor(*rUnoCursor.GetDoc(), xParent, CursorType::Meta,
                 *rUnoCursor.GetPoint()) );
         pXCursor->gotoEnd(false);
         xRet = static_cast<text::XWordCursor*>(pXCursor);
@@ -1710,7 +1710,7 @@ SwXTextCursor::setString(const OUString& aString)
     SwUnoCursor & rUnoCursor( m_pImpl->GetCursorOrThrow() );
     (void) rUnoCursor; // just to check if valid
 
-    const bool bForceExpandHints( (CURSOR_META == m_pImpl->m_eType)
+    const bool bForceExpandHints( (CursorType::Meta == m_pImpl->m_eType)
         && dynamic_cast<SwXMeta*>(m_pImpl->m_xParentText.get())
                 ->CheckForOwnMemberMeta(*GetPaM(), true) );
     DeleteAndInsert(aString, bForceExpandHints);
@@ -2912,9 +2912,9 @@ SwXTextCursor::createEnumeration()
         pNewCursor->SetMark();
         *pNewCursor->GetMark() = *rUnoCursor.GetMark();
     }
-    const CursorType eSetType = (CURSOR_TBLTEXT == m_pImpl->m_eType)
-            ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
-    SwTableNode const*const pStartNode( (CURSOR_TBLTEXT == m_pImpl->m_eType)
+    const CursorType eSetType = (CursorType::TableText == m_pImpl->m_eType)
+            ? CursorType::SelectionInTable : CursorType::Selection;
+    SwTableNode const*const pStartNode( (CursorType::TableText == m_pImpl->m_eType)
             ? rUnoCursor.GetPoint()->nNode.GetNode().FindTableNode()
             : nullptr);
     SwTable const*const pTable(

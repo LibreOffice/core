@@ -541,7 +541,7 @@ public:
 };
 
 SwXMetaText::SwXMetaText(SwDoc & rDoc, SwXMeta & rMeta)
-    : SwXText(&rDoc, CURSOR_META)
+    : SwXText(&rDoc, CursorType::Meta)
     , m_rMeta(rMeta)
 {
 }
@@ -558,7 +558,7 @@ void SwXMetaText::PrepareForAttach( uno::Reference<text::XTextRange> & xRange,
 {
     // create a new cursor to prevent modifying SwXTextRange
     xRange = static_cast<text::XWordCursor*>(
-        new SwXTextCursor(*GetDoc(), &m_rMeta, CURSOR_META, *rPam.GetPoint(),
+        new SwXTextCursor(*GetDoc(), &m_rMeta, CursorType::Meta, *rPam.GetPoint(),
                 (rPam.HasMark()) ? rPam.GetMark() : nullptr));
 }
 
@@ -581,7 +581,7 @@ uno::Reference< text::XTextCursor > SwXMetaText::CreateCursor()
         {
             SwPosition aPos(*pTextNode, nMetaStart);
             xRet = static_cast<text::XWordCursor*>(
-                    new SwXTextCursor(*GetDoc(), &m_rMeta, CURSOR_META, aPos));
+                    new SwXTextCursor(*GetDoc(), &m_rMeta, CursorType::Meta, aPos));
         }
     }
     return xRet;
