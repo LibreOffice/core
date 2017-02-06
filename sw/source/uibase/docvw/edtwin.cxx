@@ -1560,8 +1560,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     bool bStopKeyInputTimer = true;
     OUString sFormulaEntry;
 
-    enum SW_KeyState { KS_Start,
-                       KS_CheckKey, KS_InsChar, KS_InsTab,
+    enum SW_KeyState { KS_CheckKey, KS_InsChar, KS_InsTab,
                        KS_NoNum, KS_NumOff, KS_NumOrNoNum, KS_NumDown, KS_NumUp,
                        KS_NumIndentInc, KS_NumIndentDec,
 
