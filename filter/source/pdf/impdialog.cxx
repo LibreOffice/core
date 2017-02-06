@@ -71,6 +71,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mnViewPageId(0),
     mnGeneralPageId(0),
     mbIsPresentation( false ),
+    mbIsSpreadsheet( false ),
     mbIsWriter( false ),
 
     mbSelectionPresent( false ),
@@ -164,7 +165,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
         }
     }
 
-    // check if source document is a presentation
+    // check if source document is a presentation or a spredsheet or a textdocument
     try
     {
         Reference< XServiceInfo > xInfo( rxDoc, UNO_QUERY );
@@ -172,6 +173,8 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
         {
             if ( xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
                 mbIsPresentation = true;
+            if ( xInfo->supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+                mbIsSpreadsheet = true;
             if ( xInfo->supportsService( "com.sun.star.text.GenericTextDocument" ) )
                 mbIsWriter = true;
         }
@@ -479,12 +482,14 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSe
     , mbTaggedPDFUserSelection(false)
     , mbExportFormFieldsUserSelection(false)
     , mbIsPresentation(false)
+    , mbIsSpreadsheet(false)
     , mbIsWriter(false)
     , mpaParent(nullptr)
 {
     get(mpRbAll, "all");
     get(mpRbRange, "range");
     get(mpRbSelection, "selection");
+    get(mpSelectedSheets, "selectedsheets");
     get(mpEdPages, "pages");
 
     get(mpRbLosslessCompression, "losslesscompress");
@@ -529,6 +534,7 @@ void ImpPDFTabGeneralPage::dispose()
     mpRbAll.clear();
     mpRbRange.clear();
     mpRbSelection.clear();
+    mpSelectedSheets.clear();
     mpEdPages.clear();
     mpRbLosslessCompression.clear();
     mpRbJPEGCompression.clear();
@@ -575,6 +581,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpRbSelection->SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleSelectionHdl ) );
     mbIsPresentation = paParent->mbIsPresentation;
     mbIsWriter = paParent->mbIsWriter;
+    mbIsSpreadsheet = paParent->mbIsSpreadsheet;
 
     mpCbExportEmptyPages->Enable( mbIsWriter );
     mpCbExportPlaceholders->Enable( mbIsWriter );
@@ -651,6 +658,12 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpCbExportHiddenSlides->Show(false);
         mpCbExportHiddenSlides->Check(false);
     }
+
+    if( mbIsSpreadsheet )
+    {
+        mpRbSelection->SetText(get<FixedText>("selectedsheets")->GetText());
+    }
+
     mpCbExportPlaceholders->Show(mbIsWriter);
     if( !mbIsWriter )
     {
