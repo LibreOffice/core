@@ -76,14 +76,14 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
 
     for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
-        sal_uInt16 nItemId = pPopupMenu->GetItemId( sal::static_int_cast<sal_uInt16>( i ));
+        sal_uInt16 nItemId = pPopupMenu->GetItemId( i );
         if ( nItemId != 0 )
         {
             if ( bSetImages )
             {
                 OUString aImageId;
                 OUString aCmd( pPopupMenu->GetItemCommand( nItemId ) );
-                sal_uLong nAttributePtr = pPopupMenu->GetUserValue(sal::static_int_cast<sal_uInt16>(i));
+                sal_uLong nAttributePtr = pPopupMenu->GetUserValue( nItemId );
                 MenuAttributes* pAttributes = reinterpret_cast<MenuAttributes *>(nAttributePtr);
                 if (pAttributes)
                     aImageId = pAttributes->aImageId;
