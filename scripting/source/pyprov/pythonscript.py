@@ -355,6 +355,11 @@ class ScriptContext(unohelper.Base):
 #        log.debug( "mapped " + url + " to " + str( entry.module ) )
 #    return entry.module
 
+# Add to this global set urls of scripts whose reload needs to be forced.
+# Typical use case: reload an *embedded* script modified after first execution
+# (see tdf#105609)
+g_forcedReloadUrls = set()
+
 class ProviderContext:
     def __init__( self, storageType, sfa, uriHelper, scriptContext ):
         self.storageType = storageType
@@ -473,10 +478,15 @@ class ProviderContext:
 
     def getModuleByUrl( self, url ):
         entry =  self.modules.get(url)
+        # print('getModuleByUrl( self, {} )'.format( url))
+        # print('entry: {}'.format( entry))
         load = True
         lastRead = self.sfa.getDateTimeModified( url )
         if entry:
-            if hasChanged( entry.lastRead, lastRead ):
+            if url in g_forcedReloadUrls:
+                log.debug( "forced reload requested for file: " + url )
+                g_forcedReloadUrls.discard(url)
+            elif hasChanged( entry.lastRead, lastRead ):
                 log.debug( "file " + url + " has changed, reloading" )
             else:
                 load = False
