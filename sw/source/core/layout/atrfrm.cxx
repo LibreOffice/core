@@ -3317,6 +3317,7 @@ namespace sw
     CollectTextObjectsHint::~CollectTextObjectsHint() {}
     GetZOrderHint::~GetZOrderHint() {}
     GetObjectConnectedHint::~GetObjectConnectedHint() {}
+    KillDrawHint::~KillDrawHint() {}
 }
 
 SwDrawFrameFormat::~SwDrawFrameFormat()

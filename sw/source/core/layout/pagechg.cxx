@@ -533,7 +533,7 @@ void SwPageFrame::SwClientNotify(const SwModify& rModify, const SfxHint& rHint)
         static_cast<SwRootFrame*>(GetUpper())->RemoveFootnotes(nullptr, false, true);
     }
     else
-        SwClient::SwClientNotify(rModify, rHint);
+        SwFrame::SwClientNotify(rModify, rHint);
 }
 
 void SwPageFrame::UpdateAttr_( const SfxPoolItem *pOld, const SfxPoolItem *pNew,

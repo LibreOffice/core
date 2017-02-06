@@ -2294,7 +2294,7 @@ void SwSectionFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 
 void SwSectionFrame::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
 {
-    SwClient::SwClientNotify(rMod, rHint);
+    SwFrame::SwClientNotify(rMod, rHint);
     // #i117863#
     const SwSectionFrameMoveAndDeleteHint* pHint =
                     dynamic_cast<const SwSectionFrameMoveAndDeleteHint*>(&rHint);

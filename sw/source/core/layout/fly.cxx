@@ -420,55 +420,46 @@ void SwFlyFrame::InitDrawObj()
 
 void SwFlyFrame::FinitDrawObj()
 {
-    if ( !GetVirtDrawObj() )
+    if(!GetVirtDrawObj() )
         return;
-
+    SwFormat* pFormat = GetFormat();
     // Deregister from SdrPageViews if the Objects is still selected there.
-    if ( !GetFormat()->GetDoc()->IsInDtor() )
+    if(!pFormat->GetDoc()->IsInDtor())
     {
-        SwViewShell *p1St = getRootFrame()->GetCurrShell();
-        if ( p1St )
+        SwViewShell* p1St = getRootFrame()->GetCurrShell();
+        if(p1St)
         {
             for(SwViewShell& rCurrentShell : p1St->GetRingContainer())
             {   // At the moment the Drawing can do just do an Unmark on everything,
                 // as the Object was already removed
-                if( rCurrentShell.HasDrawView() )
+                if(rCurrentShell.HasDrawView() )
                     rCurrentShell.Imp()->GetDrawView()->UnmarkAll();
             }
         }
     }
+    if(!pFormat)
+    {
+        GetVirtDrawObj()->SetUserCall(nullptr);
+        delete GetVirtDrawObj();
+        return;
+    }
+    bool bOtherFramesAround(false);
+    SwFlyDrawContact* pContact(nullptr);
+    pFormat->CallSwClientNotify(sw::KillDrawHint(this, bOtherFramesAround, pContact));
 
     // Take VirtObject to the grave.
     // If the last VirtObject is destroyed, the DrawObject and the DrawContact
     // also need to be destroyed.
-    SwFlyDrawContact *pMyContact = nullptr;
-    if ( GetFormat() )
-    {
-        bool bContinue = true;
-        SwIterator<SwFrame,SwFormat> aFrameIter( *GetFormat() );
-        for ( SwFrame* pFrame = aFrameIter.First(); pFrame; pFrame = aFrameIter.Next() )
-            if ( pFrame != this )
-            {
-                // don't delete Contact if there is still a Frame
-                bContinue = false;
-                break;
-            }
-
-        if ( bContinue )
-            // no Frame left, find Contact object to destroy
-            pMyContact = SwIterator<SwFlyDrawContact,SwFormat>( *GetFormat() ).First();
-    }
-
     // OD, OS 2004-03-31 #116203# - clear user call of Writer fly frame 'master'
     // <SdrObject> to assure, that a <SwXFrame::dispose()> doesn't delete the
     // Writer fly frame again.
-    if ( pMyContact )
-    {
-        pMyContact->GetMaster()->SetUserCall( nullptr );
-    }
-    GetVirtDrawObj()->SetUserCall( nullptr ); // Else calls delete of the ContactObj
+    if(bOtherFramesAround)
+        pContact = nullptr;
+    if(pContact)
+        pContact->GetMaster()->SetUserCall(nullptr);
+    GetVirtDrawObj()->SetUserCall(nullptr); // Else calls delete of the ContactObj
     delete GetVirtDrawObj();            // Deregisters itself at the Master
-    delete pMyContact;                  // Destroys the Master itself
+    delete pContact;                  // Destroys the Master itself
 }
 
 void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
@@ -675,11 +666,8 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 
 void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
-    {
-        Modify(pLegacyHint->m_pOld, pLegacyHint->m_pNew);
-    }
-    else if(auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
+    SwFrame::SwClientNotify(rMod, rHint);
+    if(auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
     {
         auto pFormat(dynamic_cast<const SwFrameFormat*>(&rMod));
         if(pFormat->Which() == RES_FLYFRMFMT && pFormat->getIDocumentLayoutAccess().GetCurrentViewShell()) // #i11176#
