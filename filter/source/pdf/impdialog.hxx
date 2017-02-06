@@ -93,6 +93,7 @@ private:
 protected:
     // the following data are the configuration used throughout the dialog and pages
     bool                        mbIsPresentation;
+    bool                        mbIsSpreadsheet;
     bool                        mbIsWriter;
     bool                        mbSelectionPresent;
     bool                        mbUseCTLFont;
@@ -198,6 +199,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     VclPtr<RadioButton>          mpRbRange;
     VclPtr<RadioButton>          mpRbSelection;
     VclPtr<Edit>                 mpEdPages;
+    VclPtr<FixedText>            mpSelectedSheets;
 
     VclPtr<RadioButton>          mpRbLosslessCompression;
     VclPtr<RadioButton>          mpRbJPEGCompression;
@@ -232,6 +234,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     VclPtr<Edit>                mpEdWatermark;
 
     bool                        mbIsPresentation;
+    bool                        mbIsSpreadsheet;
     bool                        mbIsWriter;
 
     VclPtr<ImpPDFTabDialog>     mpaParent;
