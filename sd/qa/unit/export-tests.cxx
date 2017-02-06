@@ -158,6 +158,7 @@ public:
     void testTdf80224();
     void testTdf92527();
     void testTdf99224();
+    void testTdf105739();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
     CPPUNIT_TEST(testFdo90607);
@@ -214,6 +215,7 @@ public:
     CPPUNIT_TEST(testExtFileField);
     CPPUNIT_TEST(testAuthorField);
     CPPUNIT_TEST(testTdf99224);
+    CPPUNIT_TEST(testTdf105739);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1743,6 +1745,39 @@ void SdExportTest::testTdf99224()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xPage->getCount());
     xShell->DoClose();
 }
+
+void SdExportTest::testTdf105739()
+{
+    // Gradient was lost during saving to ODP
+    sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/pptx/tdf105739.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xShell = saveAndReload(xShell.get(), ODP, &tempFile);
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);
+    uno::Reference<beans::XPropertySet> xPropSet(xPage, uno::UNO_QUERY);
+    uno::Any aAny = xPropSet->getPropertyValue("Background");
+    CPPUNIT_ASSERT(aAny.hasValue());
+    if (aAny.hasValue())
+    {
+        uno::Reference< beans::XPropertySet > aXBackgroundPropSet;
+        aAny >>= aXBackgroundPropSet;
+        aAny = aXBackgroundPropSet->getPropertyValue("FillBitmapName");
+
+        // Test fill type
+        drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
+        aXBackgroundPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
+        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, aFillStyle);
+
+        // Test gradient properties
+        com::sun::star::awt::Gradient aFillGradient;
+        aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aFillGradient;
+        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aFillGradient.Style);
+        CPPUNIT_ASSERT_EQUAL(util::Color(0xff0000), aFillGradient.StartColor);
+        CPPUNIT_ASSERT_EQUAL(util::Color(0x00b050), aFillGradient.EndColor);
+    }
+
+    xShell->DoClose();
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
 
