@@ -245,7 +245,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         if ( m_xModuleAcceleratorManager.is() )
             retrieveShortcutsFromConfiguration( xModuleAccelCfg, aSeq, aMenuShortCuts );
         if ( m_xDocAcceleratorManager.is() )
-            retrieveShortcutsFromConfiguration( xGlobalAccelCfg, aSeq, aMenuShortCuts );
+            retrieveShortcutsFromConfiguration( xDocAccelCfg, aSeq, aMenuShortCuts );
 
         const sal_uInt32 nCount2 = aIds.size();
         for ( sal_uInt32 i = 0; i < nCount2; i++ )
