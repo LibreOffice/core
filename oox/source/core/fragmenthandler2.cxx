@@ -58,12 +58,12 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
     switch( nElement )
     {
         case MCE_TOKEN( AlternateContent ):
-            aMceState.push_back( MCE_STARTED );
+            aMceState.push_back( MCE_STATE::Started );
             break;
 
         case MCE_TOKEN( Choice ):
             {
-                if (aMceState.empty() || aMceState.back() != MCE_STARTED)
+                if (aMceState.empty() || aMceState.back() != MCE_STATE::Started)
                     return false;
 
                 OUString aRequires = rAttribs.getString( (XML_Requires ), "none" );
@@ -80,14 +80,14 @@ bool FragmentHandler2::prepareMceContext( sal_Int32 nElement, const AttributeLis
                 };
 
                 if (std::find(aSupportedNS.begin(), aSupportedNS.end(), aRequires) != aSupportedNS.end())
-                    aMceState.back() = MCE_FOUND_CHOICE;
+                    aMceState.back() = MCE_STATE::FoundChoice;
                 else
                     return false;
             }
             break;
 
         case MCE_TOKEN( Fallback ):
-            if( !aMceState.empty() && aMceState.back() == MCE_STARTED )
+            if( !aMceState.empty() && aMceState.back() == MCE_STATE::Started )
                 break;
             return false;
         default:
