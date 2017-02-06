@@ -1088,12 +1088,12 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
             }
             OUString sPosition( ScAddress( nDocCol, nDocRow, nTab).GetColRowString());
             OUString sEncoding( SvxTextEncodingTable().GetTextString( eCharSet));
-            nErr = *new TwoStringErrorInfo( (bEncErr ? SCERR_EXPORT_ENCODING :
+            nErr = (new TwoStringErrorInfo( (bEncErr ? SCERR_EXPORT_ENCODING :
                         SCERR_EXPORT_FIELDWIDTH), sPosition, sEncoding,
-                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);
+                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR))->GetErrorCode();
         }
         else if ( !aException.Message.isEmpty() )
-            nErr = *new StringErrorInfo( (SCERR_EXPORT_SQLEXCEPTION), aException.Message, ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR);
+            nErr = (new StringErrorInfo( SCERR_EXPORT_SQLEXCEPTION, aException.Message, ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR))->GetErrorCode();
         else
             nErr = SCERR_EXPORT_DATA;
     }

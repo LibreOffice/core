@@ -226,8 +226,8 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
             + "," + OUString::number((sal_Int32)xParser->GetLinePos()));
 
         // den Stream als Fehlernummer Transporter benutzen
-        nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
-                                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
+        nRet = (new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+                                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode();
     }
 
     return nRet;
