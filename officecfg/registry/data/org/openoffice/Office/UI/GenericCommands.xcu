@@ -22,7 +22,7 @@
     <node oor:name="Commands">
       <node oor:name=".uno:Polygon" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Polygon, filled</value>
+          <value xml:lang="en-US">Polygon, Filled</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1062,7 +1062,7 @@
       </node>
       <node oor:name=".uno:StarShapes.concave-star6" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">6-Point Star, concave</value>
+          <value xml:lang="en-US">6-Point Star, Concave</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -1938,7 +1938,7 @@
           <value xml:lang="en-US">Optimal</value>
         </prop>
         <prop oor:name="ContextLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Optimal view</value>
+          <value xml:lang="en-US">Optimal View</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2037,7 +2037,7 @@
       </node>
       <node oor:name=".uno:GrafMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Image mode</value>
+          <value xml:lang="en-US">Image Mode</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3079,7 +3079,7 @@
       </node>
       <node oor:name=".uno:LeaveGroup" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">E~xit group</value>
+          <value xml:lang="en-US">E~xit Group</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -3708,7 +3708,7 @@
       </node>
       <node oor:name=".uno:SaveAsUrl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Save Document As URL</value>
+          <value xml:lang="en-US">Save Document as URL</value>
         </prop>
       </node>
       <node oor:name=".uno:ObjectForwardOne" oor:op="replace">
@@ -3803,7 +3803,7 @@
       </node>
       <node oor:name=".uno:InsertBusinessCard" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Insert business cards</value>
+          <value xml:lang="en-US">Insert Business Cards</value>
         </prop>
       </node>
       <node oor:name=".uno:BringToFront" oor:op="replace">
@@ -4783,7 +4783,7 @@
       </node>
       <node oor:name=".uno:RubyDialog" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Asian phonetic g~uide...</value>
+          <value xml:lang="en-US">Asian Phonetic G~uide...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>8</value>
@@ -4831,7 +4831,7 @@
       </node>
       <node oor:name=".uno:SendViaBluetooth" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Send Via ~Bluetooth...</value>
+          <value xml:lang="en-US">Send via ~Bluetooth...</value>
         </prop>
       </node>
       <node oor:name=".uno:ExportToPDF" oor:op="replace">
@@ -4904,7 +4904,7 @@
       </node>
       <node oor:name=".uno:QuestionAnswers" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">~Get help online...</value>
+          <value xml:lang="en-US">~Get Help Online...</value>
         </prop>
       </node>
       <node oor:name=".uno:Documentation" oor:op="replace">
@@ -6346,7 +6346,7 @@
       </node>
       <node oor:name=".uno:SetLanguageAllTextMenu" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">For all Text</value>
+          <value xml:lang="en-US">For All Text</value>
         </prop>
       </node>
       <node oor:name=".uno:MoreDictionaries" oor:op="replace">
