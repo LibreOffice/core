@@ -90,6 +90,7 @@ for d in definitionSet:
          "sw/source/filter/ww8/fields.hxx",
          "vcl/source/fontsubset/cff.cxx",
          "include/vcl/settings.hxx", # stored in a setting, can't remove it without potentially triggering UBSAN
+         "basic/source/inc/opcodes.hxx", # can't touch this without breaking unit tests, not sure why
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on

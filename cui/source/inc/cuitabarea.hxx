@@ -90,7 +90,6 @@ enum class PageType
     Gradient,
     Hatch,
     Bitmap,
-    Color,
     Shadow,
     Transparence,
 };

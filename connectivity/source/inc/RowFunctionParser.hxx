@@ -29,12 +29,11 @@
 namespace connectivity
 {
 
-enum ExpressionFunct
+enum class ExpressionFunct
 {
-    FUNC_CONST,
-    ENUM_FUNC_EQUATION,
-    ENUM_FUNC_AND,
-    ENUM_FUNC_OR
+    Equation,
+    And,
+    Or
 };
 
 #define EXPRESSION_FLAG_SUMANGLE_MODE 1
