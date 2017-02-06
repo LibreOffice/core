@@ -52,6 +52,8 @@ public:
     sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+
+    OUString SAL_CALL getHierarchy() override;
 };
 
 #endif

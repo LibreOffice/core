@@ -112,4 +112,13 @@ css::uno::Sequence<OUString> UIObjectUnoObj::getSupportedServiceNames()
     return aServiceNames;
 }
 
+OUString SAL_CALL UIObjectUnoObj::getHierarchy()
+{
+    if (!mpObj)
+        throw css::uno::RuntimeException();
+
+    SolarMutexGuard aGuard;
+    return mpObj->dumpHierarchy();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
