@@ -967,7 +967,7 @@ SwTextAttr* MakeRedlineTextAttr( SwDoc & rDoc, SfxPoolItem & rAttr )
         case RES_CHRATR_BACKGROUND:
             break;
         default:
-            OSL_FAIL("unsupported redline attribute");
+            assert(!"unsupported redline attribute");
             break;
     }
 
@@ -1145,9 +1145,8 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
                 const SwField* pField = pAttr->GetFormatField().GetField();
 
                 //JP 06-08-95: DDE-fields are an exception
-                OSL_ENSURE( RES_DDEFLD == pField->GetTyp()->Which() ||
-                        this == pTextField->GetpTextNode(),
-                        "field points to wrong node" );
+                assert(RES_DDEFLD == pField->GetTyp()->Which() ||
+                       this == pTextField->GetpTextNode());
 
                 // certain fields must update the SwDoc's calculation flags
                 switch( pField->GetTyp()->Which() )
@@ -1209,7 +1208,7 @@ SwTextAttr* SwTextNode::InsertItem(
     const SetAttrMode nMode )
 {
     // character attributes will be inserted as automatic styles:
-    OSL_ENSURE( !isCHRATR(rAttr.Which()), "AUTOSTYLES - "
+    assert( !isCHRATR(rAttr.Which()) && "AUTOSTYLES - "
         "SwTextNode::InsertItem should not be called with character attributes");
 
     SwTextAttr *const pNew =
@@ -1241,9 +1240,8 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
 {
     bool bHiddenPara = false;
 
-    OSL_ENSURE( pAttr && pAttr->GetStart() <= Len(), "StartIdx out of bounds!" );
-    OSL_ENSURE( !pAttr->GetEnd() || (*pAttr->GetEnd() <= Len()),
-            "EndIdx out of bounds!" );
+    assert(pAttr && pAttr->GetStart() <= Len());
+    assert(!pAttr->GetEnd() || (*pAttr->GetEnd() <= Len()));
 
     // translate from SetAttrMode to InsertMode (for hints with CH_TXTATR)
     const SwInsertFlags nInsertFlags =
@@ -1319,11 +1317,8 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                         if( SetAttrMode::NOTXTATRCHR & nInsMode )
                         {
                             // delete the char from the string
-                            OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
-                                        m_Text[pAttr->GetStart()] ||
-                                      CH_TXTATR_INWORD ==
-                                        m_Text[pAttr->GetStart()]),
-                                    "where is my attribute character?" );
+                            assert(CH_TXTATR_BREAKWORD == m_Text[pAttr->GetStart()]
+                                || CH_TXTATR_INWORD == m_Text[pAttr->GetStart()]);
                             m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, "");
                             // Update SwIndexes
                             SwIndex aTmpIdx( this, pAttr->GetStart() );
@@ -1353,11 +1348,8 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     if( SetAttrMode::NOTXTATRCHR & nInsMode )
                     {
                         // delete the char from the string
-                        OSL_ENSURE( ( CH_TXTATR_BREAKWORD ==
-                                      m_Text[pAttr->GetStart()] ||
-                                  CH_TXTATR_INWORD ==
-                                      m_Text[pAttr->GetStart()]),
-                                "where is my attribute character?" );
+                        assert(CH_TXTATR_BREAKWORD == m_Text[pAttr->GetStart()]
+                            || CH_TXTATR_INWORD == m_Text[pAttr->GetStart()]);
                         m_Text = m_Text.replaceAt(pAttr->GetStart(), 1, "");
                         // Update SwIndexes
                         SwIndex aTmpIdx( this, pAttr->GetStart() );
@@ -1581,9 +1573,8 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             // N.B. cannot insert the dummy character after inserting the hint,
             // because if the hint has no extent it will be moved in InsertText,
             // resulting in infinite recursion
-            OSL_ENSURE( ( CH_TXTATR_BREAKWORD == m_Text[nStart] ||
-                          CH_TXTATR_INWORD    == m_Text[nStart] ),
-                    "where is my attribute character?" );
+            assert((CH_TXTATR_BREAKWORD == m_Text[nStart] ||
+                    CH_TXTATR_INWORD    == m_Text[nStart] ));
             SwIndex aIdx( this, nStart );
             EraseText( aIdx, 1 );
         }
@@ -1680,7 +1671,7 @@ void SwTextNode::DeleteAttributes(
         {
             if ( nWhich == RES_CHRATR_HIDDEN  )
             {
-                OSL_FAIL("hey, that's a CHRATR! how did that get in?");
+                assert(!"hey, that's a CHRATR! how did that get in?");
                 SetCalcHiddenCharFlags();
             }
             else if ( nWhich == RES_TXTATR_CHARFMT )
@@ -3176,8 +3167,7 @@ bool SwpHints::TryInsertHint(
 
     if( *pHtEnd < nHtStart )
     {
-        OSL_ENSURE( *pHtEnd >= nHtStart,
-                    "+SwpHints::Insert: invalid hint, end < start" );
+        assert(*pHtEnd >= nHtStart);
 
         // just swap the nonsense:
         pHint->GetStart() = *pHtEnd;
@@ -3207,10 +3197,9 @@ bool SwpHints::TryInsertHint(
          ( RES_TXTATR_AUTOFMT == nWhich ||
            RES_TXTATR_CHARFMT == nWhich ) )
     {
-        OSL_ENSURE( nWhich != RES_TXTATR_AUTOFMT ||
+        assert( nWhich != RES_TXTATR_AUTOFMT ||
                 static_cast<const SwFormatAutoFormat&>(pHint->GetAttr()).GetStyleHandle()->GetPool() ==
-                &rNode.GetDoc()->GetAttrPool(),
-                "AUTOSTYLES - Pool mismatch" );
+                &rNode.GetDoc()->GetAttrPool());
 
         BuildPortions( rNode, *pHint, nMode );
 
@@ -3310,7 +3299,7 @@ void SwpHints::DeleteAtPos( const size_t nPos )
 void SwpHints::Delete( SwTextAttr* pTextHt )
 {
     const size_t nPos = GetIndexOf( pTextHt );
-    OSL_ENSURE( SAL_MAX_SIZE != nPos, "Attribute not in SwpHints-Array!" );
+    assert(SAL_MAX_SIZE != nPos);
     if( SAL_MAX_SIZE != nPos )
         DeleteAtPos( nPos );
 }
@@ -3439,7 +3428,7 @@ sal_Unicode GetCharOfTextAttr( const SwTextAttr& rAttr )
         break;
 
         default:
-            OSL_FAIL("GetCharOfTextAttr: unknown attr");
+            assert(!"GetCharOfTextAttr: unknown attr");
             break;
     }
     return cRet;
