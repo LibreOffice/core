@@ -37,11 +37,10 @@ class ToggleButtonToolbarController : public ComplexToolbarController
 
 {
     public:
-        enum Style
+        enum class Style
         {
-            STYLE_TOGGLEBUTTON,
-            STYLE_DROPDOWNBUTTON,
-            STYLE_TOGGLE_DROPDOWNBUTTON
+            DropDownButton,
+            ToggleDropDownButton
         };
 
         ToggleButtonToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -65,7 +64,6 @@ class ToggleButtonToolbarController : public ComplexToolbarController
     private:
         DECL_LINK( MenuSelectHdl, Menu *, bool);
 
-        Style                   m_eStyle;
         OUString                m_aCurrentSelection;
         std::vector< OUString > m_aDropdownMenuList;
 };

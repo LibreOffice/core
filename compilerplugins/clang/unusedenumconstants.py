@@ -95,6 +95,7 @@ for d in definitionSet:
         # general weird nonsense going on
          "framework/inc/helper/mischelper.hxx"
          "include/sfx2/shell.hxx",
+         "framework/inc/helper/mischelper.hxx",
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",

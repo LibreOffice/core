@@ -512,12 +512,12 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
 
     if(
         (sURL.isEmpty()                                          ) ||
-        (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_UNO    )) ||
-        (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_SLOT   )) ||
-        (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_MACRO  )) ||
-        (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_SERVICE)) ||
-        (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_MAILTO )) ||
-        (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_NEWS   ))
+        (ProtocolCheck::isProtocol(sURL,EProtocol::Uno    )) ||
+        (ProtocolCheck::isProtocol(sURL,EProtocol::Slot   )) ||
+        (ProtocolCheck::isProtocol(sURL,EProtocol::Macro  )) ||
+        (ProtocolCheck::isProtocol(sURL,EProtocol::Service)) ||
+        (ProtocolCheck::isProtocol(sURL,EProtocol::MailTo )) ||
+        (ProtocolCheck::isProtocol(sURL,EProtocol::News   ))
       )
     {
         return E_UNSUPPORTED_CONTENT;
@@ -539,13 +539,13 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     */
 
     // creation of new documents
-    if (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_PRIVATE_FACTORY))
+    if (ProtocolCheck::isProtocol(sURL,EProtocol::PrivateFactory))
         return E_CAN_BE_LOADED;
 
     // using of an existing input stream
     utl::MediaDescriptor                 stlMediaDescriptor(lMediaDescriptor);
     utl::MediaDescriptor::const_iterator pIt;
-    if (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_PRIVATE_STREAM))
+    if (ProtocolCheck::isProtocol(sURL,EProtocol::PrivateStream))
     {
         pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_INPUTSTREAM());
         css::uno::Reference< css::io::XInputStream > xStream;
@@ -558,7 +558,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     }
 
     // using of a full featured document
-    if (ProtocolCheck::isProtocol(sURL,ProtocolCheck::E_PRIVATE_OBJECT))
+    if (ProtocolCheck::isProtocol(sURL,EProtocol::PrivateObject))
     {
         pIt = stlMediaDescriptor.find(utl::MediaDescriptor::PROP_MODEL());
         css::uno::Reference< css::frame::XModel > xModel;
@@ -964,7 +964,7 @@ bool LoadEnv::impl_loadContent()
 
     // search or create right target frame
     OUString sTarget = m_sTarget;
-    if (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::E_DEFAULT))
+    if (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::ESpecialTarget::Default))
     {
         m_xTargetFrame = impl_searchAlreadyLoaded();
         if (m_xTargetFrame.is())
@@ -978,8 +978,8 @@ bool LoadEnv::impl_loadContent()
     if (! m_xTargetFrame.is())
     {
         if (
-            (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::E_BLANK  )) ||
-            (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::E_DEFAULT))
+            (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::ESpecialTarget::Blank  )) ||
+            (TargetHelper::matchSpecialTarget(sTarget, TargetHelper::ESpecialTarget::Default))
            )
         {
             if (! impl_furtherDocsAllowed())
@@ -1192,7 +1192,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // such search is allowed for special requests only ...
     // or better it's not allowed for some requests in general :-)
     if (
-        ( ! TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT)                                               ) ||
+        ( ! TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::ESpecialTarget::Default)                                               ) ||
         m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ASTEMPLATE() , false) ||
 //      (m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN()     , false) == sal_True) ||
         m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_OPENNEWVIEW(), false)
@@ -1205,8 +1205,8 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // May it's not useful to start expensive document search, if it
     // can fail only .. because we load from a stream or model directly!
     if (
-        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_STREAM )) ||
-        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_OBJECT ))
+        (ProtocolCheck::isProtocol(m_aURL.Complete, EProtocol::PrivateStream )) ||
+        (ProtocolCheck::isProtocol(m_aURL.Complete, EProtocol::PrivateObject ))
         /*TODO should be private:factory here tested too? */
        )
     {
@@ -1375,9 +1375,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
     // On the other side some special URLs will open a new frame every time (expecting
     // they can use the backing-mode frame!)
     if (
-        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_FACTORY )) ||
-        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_STREAM  )) ||
-        (ProtocolCheck::isProtocol(m_aURL.Complete, ProtocolCheck::E_PRIVATE_OBJECT  ))
+        (ProtocolCheck::isProtocol(m_aURL.Complete, EProtocol::PrivateFactory )) ||
+        (ProtocolCheck::isProtocol(m_aURL.Complete, EProtocol::PrivateStream  )) ||
+        (ProtocolCheck::isProtocol(m_aURL.Complete, EProtocol::PrivateObject  ))
        )
     {
         return css::uno::Reference< css::frame::XFrame >();

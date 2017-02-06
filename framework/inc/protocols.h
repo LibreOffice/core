@@ -53,27 +53,24 @@ namespace framework{
 // for sending news
 #define SPECIALPROTOCOL_NEWS              "news:"
 
+/** well known protocols */
+enum class EProtocol
+{
+    Private,
+    PrivateObject,
+    PrivateStream,
+    PrivateFactory,
+    Slot,
+    Uno,
+    Macro,
+    Service,
+    MailTo,
+    News
+};
+
 class ProtocolCheck
 {
     public:
-
-    /**
-        enums for well known protocols
-     */
-    enum EProtocol
-    {
-        E_UNKNOWN_PROTOCOL  ,
-        E_PRIVATE           ,
-        E_PRIVATE_OBJECT    ,
-        E_PRIVATE_STREAM    ,
-        E_PRIVATE_FACTORY   ,
-        E_SLOT              ,
-        E_UNO               ,
-        E_MACRO             ,
-        E_SERVICE           ,
-        E_MAILTO            ,
-        E_NEWS
-    };
 
     /**
         it checks if given URL match the required protocol only
@@ -85,34 +82,34 @@ class ProtocolCheck
         bool bRet = false;
         switch(eRequired)
         {
-            case E_PRIVATE:
+            case EProtocol::Private:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE);
                 break;
-            case E_PRIVATE_OBJECT:
+            case EProtocol::PrivateObject:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_OBJECT);
                 break;
-            case E_PRIVATE_STREAM:
+            case EProtocol::PrivateStream:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_STREAM);
                 break;
-            case E_PRIVATE_FACTORY:
+            case EProtocol::PrivateFactory:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_FACTORY);
                 break;
-            case E_SLOT:
+            case EProtocol::Slot:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_SLOT);
                 break;
-            case E_UNO:
+            case EProtocol::Uno:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_UNO);
                 break;
-            case E_MACRO:
+            case EProtocol::Macro:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_MACRO);
                 break;
-            case E_SERVICE:
+            case EProtocol::Service:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_SERVICE);
                 break;
-            case E_MAILTO:
+            case EProtocol::MailTo:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_MAILTO);
                 break;
-            case E_NEWS:
+            case EProtocol::News:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_NEWS);
                 break;
             default:

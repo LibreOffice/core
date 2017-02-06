@@ -65,8 +65,8 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const OUStrin
     try
     {
         if (
-            ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_BLANK  ) ) ||
-            ( TargetHelper::matchSpecialTarget(sName, TargetHelper::E_DEFAULT) )
+            ( TargetHelper::matchSpecialTarget(sName, TargetHelper::ESpecialTarget::Blank  ) ) ||
+            ( TargetHelper::matchSpecialTarget(sName, TargetHelper::ESpecialTarget::Default) )
            )
         {
 
