@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_5502a83f",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-06T08:24:06Z",
+      "side": 1,
+      "message": "* Beware, replacing A||B with A||B\u0026\u0026true obviously breaks the check.\n\n* For DBG_ASSERTs like this, it looks a bit hard to tell whether it checks an invariant that is known to hold (so \u0027assert\u0027 is appropriate) or whether it checks a condition that \"should not happen in normal circumstances\" (for which a \u0027SAL_WARN\u0027 or \u0027SAL_INFO\u0027 may be appropriate).  Did you reason about this?  Did you do a \u0027make check\u0027 to see whether none of these asserts fire at least for the test suite?",
+      "revId": "2edbb094c62832c47405530516177eae68b57efe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_75ffac34",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-06T08:24:06Z",
+      "side": 1,
+      "message": "given nStartIdx is assigned to 1 directly above, might make sense to drop this check completely",
+      "revId": "2edbb094c62832c47405530516177eae68b57efe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_95fc1040",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-06T08:24:06Z",
+      "side": 1,
+      "message": "this looks like it is making assumptions about data read in from an external file; we should never make any assumptions about the integrity of external data",
+      "revId": "2edbb094c62832c47405530516177eae68b57efe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
