@@ -120,6 +120,18 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkLabel" id="selectedsheets">
+                        <property name="can_focus">False</property>
+                        <property name="no_show_all">True</property>
+                        <property name="label" translatable="yes">_Selected sheet(s)</property>
+                        <property name="xalign">0</property>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <placeholder/>
                     </child>
                   </object>

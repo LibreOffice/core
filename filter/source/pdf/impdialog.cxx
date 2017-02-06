@@ -71,6 +71,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
     mnViewPageId(0),
     mnGeneralPageId(0),
     mbIsPresentation( false ),
+    mbIsSpreadsheet( false ),
     mbIsWriter( false ),
 
     mbSelectionPresent( false ),
@@ -172,6 +173,8 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
         {
             if ( xInfo->supportsService( "com.sun.star.presentation.PresentationDocument" ) )
                 mbIsPresentation = true;
+            if ( xInfo->supportsService( "com.sun.star.presentation.SpreadsheetDocument" ) )
+                mbIsSpreadsheet = true;
             if ( xInfo->supportsService( "com.sun.star.text.GenericTextDocument" ) )
                 mbIsWriter = true;
         }
@@ -479,6 +482,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(vcl::Window* pParent, const SfxItemSe
     , mbTaggedPDFUserSelection(false)
     , mbExportFormFieldsUserSelection(false)
     , mbIsPresentation(false)
+    , mbIsSpreadsheet(false)
     , mbIsWriter(false)
     , mpaParent(nullptr)
 {
@@ -650,6 +654,10 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( ImpPDFTabDialog* paParent )
         mpCbExportOnlyNotesPages->Check(false);
         mpCbExportHiddenSlides->Show(false);
         mpCbExportHiddenSlides->Check(false);
+    }
+    if( mbIsSpreadsheet )
+    {
+        mpRbSelection->SetText(get<FixedText>("selectedsheets")->GetText());
     }
     mpCbExportPlaceholders->Show(mbIsWriter);
     if( !mbIsWriter )
