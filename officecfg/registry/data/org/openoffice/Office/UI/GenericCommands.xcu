@@ -2261,19 +2261,19 @@
       </node>
       <node oor:name=".uno:CheckOut" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Check-Out</value>
+          <value xml:lang="en-US">Check Out</value>
           <value xml:lang="x-comment">This is the action to create a private working copy
             of the document on a server</value>
         </prop>
       </node>
       <node oor:name=".uno:CancelCheckOut" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Cancel Check-Out...</value>
+          <value xml:lang="en-US">Cancel Checkout...</value>
         </prop>
       </node>
       <node oor:name=".uno:CheckIn" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Check-In...</value>
+          <value xml:lang="en-US">Check In...</value>
           <value xml:lang="x-comment">This is the action to merge a private working copy
             of the document on a server. It shows a dialog to input some information on
             the new version to create on the server.</value>
