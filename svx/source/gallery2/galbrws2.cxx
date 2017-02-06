@@ -855,10 +855,10 @@ void GalleryBrowser2::Travel( GalleryBrowserTravel eTravel )
 
             switch( eTravel )
             {
-                case GALLERYBROWSERTRAVEL_FIRST:     nNewItemId = 1; break;
-                case GALLERYBROWSERTRAVEL_LAST:      nNewItemId = mpCurTheme->GetObjectCount(); break;
-                case GALLERYBROWSERTRAVEL_PREVIOUS:  nNewItemId--; break;
-                case GALLERYBROWSERTRAVEL_NEXT:      nNewItemId++; break;
+                case GalleryBrowserTravel::First:     nNewItemId = 1; break;
+                case GalleryBrowserTravel::Last:      nNewItemId = mpCurTheme->GetObjectCount(); break;
+                case GalleryBrowserTravel::Previous:  nNewItemId--; break;
+                case GalleryBrowserTravel::Next:      nNewItemId++; break;
                 default:
                     break;
             }
