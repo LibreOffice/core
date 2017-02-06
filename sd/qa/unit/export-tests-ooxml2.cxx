@@ -773,7 +773,6 @@ void SdOOXMLExportTest2::testTdf105739()
     {
         uno::Reference< beans::XPropertySet > aXBackgroundPropSet;
         aAny >>= aXBackgroundPropSet;
-        aAny = aXBackgroundPropSet->getPropertyValue("FillBitmapName");
 
         // Test fill type
         drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
