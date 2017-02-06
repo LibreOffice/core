@@ -168,7 +168,10 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
     {
         sal_Int32 nPhClr = mpBackgroundPropertiesPtr->getBestSolidColor().getColor( rFilterBase.getGraphicHelper() );
 
-        ::oox::drawingml::ShapePropertyMap aPropMap( rFilterBase.getModelObjectHelper() );
+        std::vector<sal_Int32> aPropertyIds = (oox::drawingml::ShapePropertyInfo::DEFAULT).maPropertyIds;
+        aPropertyIds[oox::drawingml::ShapePropertyId::SHAPEPROP_FillGradient] = PROP_FillGradientName;
+        oox::drawingml::ShapePropertyInfo aPropInfo( aPropertyIds.data(), true, false, true, false );
+        oox::drawingml::ShapePropertyMap aPropMap( rFilterBase.getModelObjectHelper(), aPropInfo );
         mpBackgroundPropertiesPtr->pushToPropMap( aPropMap, rFilterBase.getGraphicHelper(), 0, nPhClr );
         PropertySet( mxPage ).setProperty( PROP_Background, aPropMap.makePropertySet() );
     }
