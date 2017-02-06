@@ -2002,16 +2002,19 @@ static void lcl_MergeAttr_ExpandChrFormat( SfxItemSet& rSet, const SfxPoolItem& 
         }
     }
 
-    // aufnehmen als MergeWert (falls noch nicht gesetzt neu setzen!)
+/* If multiple attributes overlap, the last one wins!
+   Probably this can only happen between a RES_TXTATR_INETFMT and one of the
+   other hints, because BuildPortions ensures that CHARFMT/AUTOFMT don't
+   overlap.  But there may be multiple CHARFMT/AUTOFMT with exactly the same
+   start/end, sorted by BuildPortions, in which case the same logic applies.
 
-/* wenn mehrere Attribute ueberlappen gewinnt der letze !!
- z.B
             1234567890123456789
               |------------|        Font1
                  |------|           Font2
                     ^  ^
-                    |--|        Abfragebereich: -> Gueltig ist Font2
+                    |--|        query range: -> Font2
 */
+    // merge into set
     rSet.Put( rAttr );
 }
 
@@ -2051,23 +2054,22 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 {
     if( HasHints() )
     {
-        /* stelle erstmal fest, welche Text-Attribut in dem Bereich gueltig
-         * sind. Dabei gibt es folgende Faelle:
-         *  UnEindeutig wenn: (wenn != Format-Attribut)
-         *      - das Attribut liegt vollstaendig im Bereich
-         *      - das Attributende liegt im Bereich
-         *      - der Attributanfang liegt im Bereich:
-         * Eindeutig (im Set mergen):
-         *      - das Attrib umfasst den Bereich
-         * nichts tun:
-         *      das Attribut liegt ausserhalb des Bereiches
-         */
+        // First, check which text attributes are valid in the range.
+        // cases:
+        // Ambiguous, if
+        //  * the attribute is wholly contained in the range
+        //  * the attribute end is in the range
+        //  * the attribute start is in the range
+        // Unambiguous (merge into set), if
+        //  * the attribute wholly contains the range
+        // Ignored, if
+        //  * the attribute is wholly outside the range
 
         void (*fnMergeAttr)( SfxItemSet&, const SfxPoolItem& )
             = bGetFromChrFormat ? &lcl_MergeAttr_ExpandChrFormat
                              : &lcl_MergeAttr;
 
-        // dann besorge mal die Auto-(Format)Attribute
+        // get the node's automatic attributes
         SfxItemSet aFormatSet( *rSet.GetPool(), rSet.GetRanges() );
         if( !bOnlyTextAttr )
         {
@@ -2080,13 +2082,13 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
 
         const size_t nSize = m_pSwpHints->Count();
 
-        if( nStt == nEnd )             // kein Bereich:
+        if (nStt == nEnd)               // no range:
         {
             for (size_t n = 0; n < nSize; ++n)
             {
                 const SwTextAttr* pHt = m_pSwpHints->Get(n);
                 const sal_Int32 nAttrStart = pHt->GetStart();
-                if( nAttrStart > nEnd )         // ueber den Bereich hinaus
+                if (nAttrStart > nEnd)         // behind the range
                     break;
 
                 const sal_Int32* pAttrEnd = pHt->End();
@@ -2101,7 +2103,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                     (*fnMergeAttr)( rSet, pHt->GetAttr() );
             }
         }
-        else                            // es ist ein Bereich definiert
+        else                            // a query range is defined
         {
             // #i75299#
             std::unique_ptr< std::vector< SwPoolItemEndPair > > pAttrArr;
@@ -2112,7 +2114,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
             {
                 const SwTextAttr* pHt = m_pSwpHints->Get(n);
                 const sal_Int32 nAttrStart = pHt->GetStart();
-                if( nAttrStart > nEnd )         // ueber den Bereich hinaus
+                if (nAttrStart > nEnd)         // outside, behind
                     break;
 
                 const sal_Int32* pAttrEnd = pHt->End();
@@ -2120,25 +2122,25 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                     continue;
 
                 bool bChkInvalid = false;
-                if( nAttrStart <= nStt )       // vor oder genau Start
+                if (nAttrStart <= nStt)        // before or exactly Start
                 {
-                    if( *pAttrEnd <= nStt )    // liegt davor
+                    if (*pAttrEnd <= nStt)     // outside, before
                         continue;
 
-                    if( nEnd <= *pAttrEnd )     // hinter oder genau Ende
+                    if (nEnd <= *pAttrEnd)     // behind or exactly End
                         (*fnMergeAttr)( aFormatSet, pHt->GetAttr() );
                     else
 //                  else if( pHt->GetAttr() != aFormatSet.Get( pHt->Which() ) )
-                        // uneindeutig
+                        // ambiguous
                         bChkInvalid = true;
                 }
-                else if( nAttrStart < nEnd      // reicht in den Bereich
+                else if (nAttrStart < nEnd     // starts in the range
 )//                      && pHt->GetAttr() != aFormatSet.Get( pHt->Which() ) )
                     bChkInvalid = true;
 
                 if( bChkInvalid )
                 {
-                    // uneindeutig ?
+                    // ambiguous?
                     std::unique_ptr< SfxItemIter > pItemIter;
                     const SfxPoolItem* pItem = nullptr;
 
@@ -2229,13 +2231,13 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                         const sal_uInt16 nWh =
                             static_cast<sal_uInt16>(n + RES_CHRATR_BEGIN);
 
-                        if( nEnd <= rItemPair.mnEndPos ) // hinter oder genau Ende
+                        if (nEnd <= rItemPair.mnEndPos) // behind or exactly end
                         {
                             if( *rItemPair.mpItem != aFormatSet.Get( nWh ) )
                                 (*fnMergeAttr)( rSet, *rItemPair.mpItem );
                         }
                         else
-                            // uneindeutig
+                            // ambiguous
                             rSet.InvalidateItem( nWh );
                     }
                 }
@@ -2243,15 +2245,15 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
         }
         if( aFormatSet.Count() )
         {
-            // aus dem Format-Set alle entfernen, die im TextSet auch gesetzt sind
+            // remove all from the format-set that are also set in the text-set
             aFormatSet.Differentiate( rSet );
-            // jetzt alle zusammen "mergen"
+            // now "merge" everything
             rSet.Put( aFormatSet );
         }
     }
     else if( !bOnlyTextAttr )
     {
-        // dann besorge mal die Auto-(Format)Attribute
+        // get the node's automatic attributes
         SwContentNode::GetAttr( rSet );
         if ( bMergeIndentValuesOfNumRule )
         {
@@ -2937,12 +2939,6 @@ bool SwpHints::TryInsertHint(
         return false;
     }
 
-    // Felder bilden eine Ausnahme:
-    // 1) Sie koennen nie ueberlappen
-    // 2) Wenn zwei Felder genau aneinander liegen,
-    //    sollen sie nicht zu einem verschmolzen werden.
-    // Wir koennen also auf die while-Schleife verzichten
-
     sal_Int32 *pHtEnd = pHint->GetEnd();
     const sal_uInt16 nWhich = pHint->Which();
     std::vector<sal_uInt16> aWhichSublist;
@@ -3007,8 +3003,7 @@ bool SwpHints::TryInsertHint(
 
             if( !pDoc->getIDocumentFieldsAccess().IsNewFieldLst() )
             {
-                // was fuer ein Feld ist es denn ??
-                // bestimmte Felder mussen am Doc das Calculations-Flag updaten
+                // certain fields must update the SwDoc's calculation flags
                 switch( pField->GetTyp()->Which() )
                 {
                 case RES_DBFLD:
@@ -3031,7 +3026,7 @@ bool SwpHints::TryInsertHint(
                 }
             }
 
-            // gehts ins normale Nodes-Array?
+            // insert into real document's nodes-array?
             if( rNode.GetNodes().IsDocNodes() )
             {
                 bool bInsFieldType = false;
@@ -3041,8 +3036,8 @@ bool SwpHints::TryInsertHint(
                     bInsFieldType = static_cast<SwSetExpFieldType*>(pField->GetTyp())->IsDeleted();
                     if( nsSwGetSetExpType::GSE_SEQ & static_cast<SwSetExpFieldType*>(pField->GetTyp())->GetType() )
                     {
-                        // bevor die ReferenzNummer gesetzt wird, sollte
-                        // das Feld am richtigen FeldTypen haengen!
+                        // register the field at its FieldType before setting
+                        // the sequence reference number!
                         SwSetExpFieldType* pFieldType = static_cast<SwSetExpFieldType*>(
                                     pDoc->getIDocumentFieldsAccess().InsertFieldType( *pField->GetTyp() ) );
                         if( pFieldType != pField->GetTyp() )
@@ -3149,10 +3144,10 @@ bool SwpHints::TryInsertHint(
     if( SetAttrMode::DONTEXPAND & nMode )
         pHint->SetDontExpand( true );
 
-    // SwTextAttrs ohne Ende werden sonderbehandelt:
-    // Sie werden natuerlich in das Array insertet, aber sie werden nicht
-    // in die pPrev/Next/On/Off-Verkettung aufgenommen.
-    // Der Formatierer erkennt diese TextHints an dem CH_TXTATR_.. im Text !
+    // special handling for SwTextAttrs without end:
+    // 1) they cannot overlap
+    // 2) if two fields are adjacent, they must not be merged into one
+    // this is guaranteed by inserting a CH_TXTATR_* into the paragraph text!
     sal_Int32 nHtStart = pHint->GetStart();
     if( !pHtEnd )
     {
@@ -3163,7 +3158,7 @@ bool SwpHints::TryInsertHint(
         if( !rNode.GetDoc()->IsInReading() )
             CHECK;
 #endif
-        // ... und die Abhaengigen benachrichtigen
+        // ... and notify listeners
         if(rNode.HasWriterListeners())
         {
             SwUpdateAttr aHint(
@@ -3177,14 +3172,14 @@ bool SwpHints::TryInsertHint(
         return true;
     }
 
-    // Ab hier gibt es nur noch pHint mit einem EndIdx !!!
+    // from here on, pHint is known to have an end index!
 
     if( *pHtEnd < nHtStart )
     {
         OSL_ENSURE( *pHtEnd >= nHtStart,
                     "+SwpHints::Insert: invalid hint, end < start" );
 
-        // Wir drehen den Quatsch einfach um:
+        // just swap the nonsense:
         pHint->GetStart() = *pHtEnd;
         *pHtEnd = nHtStart;
         nHtStart = pHint->GetStart();
@@ -3247,7 +3242,7 @@ bool SwpHints::TryInsertHint(
         }
     }
 
-    // ... und die Abhaengigen benachrichtigen
+    // ... and notify listeners
     if ( rNode.HasWriterListeners() )
     {
         SwUpdateAttr aHint(
@@ -3310,14 +3305,12 @@ void SwpHints::DeleteAtPos( const size_t nPos )
     CHECK_NOTMERGED; // called from BuildPortions
 }
 
-// Ist der Hint schon bekannt, dann suche die Position und loesche ihn.
-// Ist er nicht im Array, so gibt es ein OSL_ENSURE(!!
-
+/// delete the hint
+/// precondition: pTextHt must be in this array
 void SwpHints::Delete( SwTextAttr* pTextHt )
 {
-    // Attr 2.0: SwpHintsArr::Delete( pTextHt );
     const size_t nPos = GetIndexOf( pTextHt );
-    OSL_ENSURE( SAL_MAX_SIZE != nPos, "Attribut nicht im Attribut-Array!" );
+    OSL_ENSURE( SAL_MAX_SIZE != nPos, "Attribute not in SwpHints-Array!" );
     if( SAL_MAX_SIZE != nPos )
         DeleteAtPos( nPos );
 }
@@ -3378,7 +3371,6 @@ sal_uInt16 SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
         const size_t nSize = m_pSwpHints->Count();
         for ( size_t i = 0; i < nSize; ++i )
         {
-            // ist der Attribut-Anfang schon groesser als der Idx ?
             const SwTextAttr *pHt = m_pSwpHints->Get(i);
             const sal_Int32 nAttrStart = pHt->GetStart();
             if( nEnd < nAttrStart )
@@ -3390,8 +3382,7 @@ sal_uInt16 SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                     ( ( pHt->IsCharFormatAttr() || RES_TXTATR_AUTOFMT == nWhich ) && CharFormat::IsItemIncluded( nWhichId, pHt ) ) )
             {
                 const sal_Int32 *pEndIdx = pHt->End();
-                // Ueberlappt das Attribut den Bereich?
-
+                // do the attribute and the range overlap?
                 if( !pEndIdx )
                     continue;
                 if( nLen )
@@ -3409,11 +3400,11 @@ sal_uInt16 SwTextNode::GetLang( const sal_Int32 nBegin, const sal_Int32 nLen,
                 const SfxPoolItem* pItem = CharFormat::GetItem( *pHt, nWhichId );
                 const sal_uInt16 nLng = static_cast<const SvxLanguageItem*>(pItem)->GetLanguage();
 
-                // Umfasst das Attribut den Bereich komplett?
+                // does the attribute completely cover the range?
                 if( nAttrStart <= nBegin && nEnd <= *pEndIdx )
                     nRet = nLng;
                 else if( LANGUAGE_DONTKNOW == nRet )
-                    nRet = nLng; // partielle Ueberlappung, der 1. gewinnt
+                    nRet = nLng; // partial overlap, the first one wins
             }
         }
     }
