@@ -307,7 +307,7 @@ static Methods aMethods[] = {
 { "GetPathSeparator",  SbxSTRING,     FUNCTION_,RTLNAME(GetPathSeparator),0 },
 { "GetProcessServiceManager", SbxOBJECT, 0 | FUNCTION_, RTLNAME(GetProcessServiceManager),0 },
 { "GetSolarVersion",  SbxLONG,     FUNCTION_,RTLNAME(GetSolarVersion),0     },
-{ "GetSystemTicks",   SbxSALUINT64,FUNCTION_,RTLNAME(GetSystemTicks),0      },
+{ "GetSystemTicks",  SbxLONG,      FUNCTION_,RTLNAME(GetSystemTicks),0      },
 { "GetSystemType",  SbxINTEGER,    FUNCTION_,RTLNAME(GetSystemType),0       },
 { "GlobalScope",    SbxOBJECT,     FUNCTION_,RTLNAME(GlobalScope),0         },
 { "Green",          SbxINTEGER,   1 | FUNCTION_ | NORMONLY_, RTLNAME(Green),0           },

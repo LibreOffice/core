@@ -1415,7 +1415,7 @@ RTLFUNC(GetSystemTicks)
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;
     }
-    rPar.Get(0)->PutUInt64( tools::Time::GetSystemTicks() );
+    rPar.Get(0)->PutLong( tools::Time::GetSystemTicks() );
 }
 
 RTLFUNC(GetPathSeparator)
