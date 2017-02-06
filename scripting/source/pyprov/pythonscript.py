@@ -429,10 +429,19 @@ class ProviderContext:
         load = True
         lastRead = self.sfa.getDateTimeModified( url )
         if entry:
-            if hasChanged( entry.lastRead, lastRead ):
-                log.debug( "file " + url + " has changed, reloading" )
+            if url.startswith( "file:" ):
+                if hasChanged( entry.lastRead, lastRead ):
+                    log.debug( "file " + url + " has changed, reloading" )
+                else:
+                    load = False
             else:
-                load = False
+                # hasChanged() is always False for embedded files,
+                # we need to check storage status
+                storage = self.scriptContext.doc.getDocumentStorage()
+                if storage.isModified():
+                    storage.commit()
+                else:
+                    load = False 
 
         if load:
             log.debug( "opening >" + url + "<" )
