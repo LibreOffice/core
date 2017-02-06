@@ -317,6 +317,11 @@ public:
      */
     void testPivotTableRepeatItemLabels();
 
+    /**
+     * Test DPCollection public methods
+     */
+    void testPivotTableDPCollection();
+
     void testCellCopy();
     void testSheetCopy();
     void testSheetMove();
@@ -614,6 +619,7 @@ public:
     CPPUNIT_TEST(testPivotTableFieldReference);
     CPPUNIT_TEST(testPivotTableDocFunc);
     CPPUNIT_TEST(testPivotTableRepeatItemLabels);
+    CPPUNIT_TEST(testPivotTableDPCollection);
     CPPUNIT_TEST(testCellCopy);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);

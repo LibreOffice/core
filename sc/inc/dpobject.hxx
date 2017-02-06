@@ -371,7 +371,7 @@ public:
     SC_DLLPUBLIC ScDPObject& operator[](size_t nIndex);
     SC_DLLPUBLIC const ScDPObject& operator[](size_t nIndex) const;
 
-    const ScDPObject* GetByName(const OUString& rName) const;
+    ScDPObject* GetByName(const OUString& rName) const;
 
     void DeleteOnTab( SCTAB nTab );
     void UpdateReference( UpdateRefMode eUpdateRefMode,

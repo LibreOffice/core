@@ -2401,5 +2401,93 @@ void Test::testPivotTableRepeatItemLabels()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testPivotTableDPCollection()
+{
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Software", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Version",  sheet::DataPilotFieldOrientation_COLUMN, 0, false },
+        { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, 0, false }
+    };
+
+    // Raw data
+    const char* aData[][3] = {
+        { "LibreOffice", "3.3.0", "30" },
+        { "LibreOffice", "3.3.1", "20" },
+        { "LibreOffice", "3.4.0", "45" },
+    };
+
+    size_t nFieldCount = SAL_N_ELEMENTS(aFields);
+    size_t nDataCount = SAL_N_ELEMENTS(aData);
+
+    ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
+    SCROW nRow1 = aSrcRange.aStart.Row(), nRow2 = aSrcRange.aEnd.Row();
+    SCCOL nCol1 = aSrcRange.aStart.Col(), nCol2 = aSrcRange.aEnd.Col();
+    ScRange aDataRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = false;
+
+    // Check at the beginning
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be no DP table", size_t(0), pDPs->GetCount());
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("DP1"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(""));
+
+    // Add 2 DP objects
+    ScDPObject* pDPObj = createDPFromRange(m_pDoc, aDataRange , aFields, nFieldCount, false);
+    bSuccess = pDPs->InsertNewTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new DP object into document", bSuccess);
+    pDPObj->SetName("DP1"); // set custom name
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.", size_t(1), pDPs->GetCount());
+
+    ScDPObject* pDPObj2 = createDPFromRange(m_pDoc, aDataRange, aFields, nFieldCount, false);
+    bSuccess = pDPs->InsertNewTable(pDPObj2);
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new DP object into document", bSuccess);
+    pDPObj2->SetName("DP2"); // set custom name
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be two DP tables", size_t(2), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return first DPObject",
+                                 pDPObj, pDPs->GetByName("DP1"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return second DPObject",
+                                 pDPObj2, pDPs->GetByName("DP2"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("empty string should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(""));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("non existent name should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("Non"));
+    // Remove first DP Object
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one DP table", size_t(1), pDPs->GetCount());
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("first DP object was deleted, should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("DP1"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("should return second DPObject",
+                                 pDPObj2, pDPs->GetByName("DP2"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("empty string should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(""));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("non existent name should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("Non"));
+
+    // Remove second DP Object
+    pDPs->FreeTable(pDPObj2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("first DP object was deleted, should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("DP1"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("second DP object was deleted, should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("DP2"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("empty string should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName(""));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("non existent name should return nullptr",
+                                 static_cast<ScDPObject*>(nullptr), pDPs->GetByName("Non"));
+
+    // Clean-up
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

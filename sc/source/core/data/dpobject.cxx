@@ -3733,12 +3733,13 @@ const ScDPObject& ScDPCollection::operator [](size_t nIndex) const
     return *maTables[nIndex].get();
 }
 
-const ScDPObject* ScDPCollection::GetByName(const OUString& rName) const
+ScDPObject* ScDPCollection::GetByName(const OUString& rName) const
 {
-    TablesType::const_iterator itr = maTables.begin(), itrEnd = maTables.end();
-    for (; itr != itrEnd; ++itr)
-        if ((*itr)->GetName() == rName)
-            return itr->get();
+    for (std::unique_ptr<ScDPObject> const & pObject : maTables)
+    {
+        if (pObject->GetName() == rName)
+            return pObject.get();
+    }
 
     return nullptr;
 }
@@ -3770,22 +3771,19 @@ OUString ScDPCollection::CreateNewName() const
     return OUString();                    // should not happen
 }
 
-void ScDPCollection::FreeTable(ScDPObject* pDPObj)
+void ScDPCollection::FreeTable(ScDPObject* pDPObject)
 {
-    const ScRange& rOutRange = pDPObj->GetOutRange();
+    const ScRange& rOutRange = pDPObject->GetOutRange();
     const ScAddress& s = rOutRange.aStart;
     const ScAddress& e = rOutRange.aEnd;
     mpDoc->RemoveFlagsTab(s.Col(), s.Row(), e.Col(), e.Row(), s.Tab(), ScMF::DpTable);
-    TablesType::iterator itr = maTables.begin(), itrEnd = maTables.end();
-    for (; itr != itrEnd; ++itr)
+
+    auto funcRemoveCondition = [pDPObject] (std::unique_ptr<ScDPObject> const & pCurrent)
     {
-        ScDPObject* p = itr->get();
-        if (p == pDPObj)
-        {
-            maTables.erase(itr);
-            break;
-        }
-    }
+        return pCurrent.get() == pDPObject;
+    };
+
+    maTables.erase(std::remove_if(maTables.begin(), maTables.end(), funcRemoveCondition), maTables.end());
 }
 
 bool ScDPCollection::InsertNewTable(ScDPObject* pDPObj)
