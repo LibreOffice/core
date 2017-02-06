@@ -53,7 +53,6 @@ class SfxStyleSheet;
 class SvxUnoDrawPagesAccess;
 
 enum class SdrInsertReasonKind {
-    Unknown,
     Streaming,  /// importing document
     Undo,       /// from Undo
     Copy,       /// something copied...
