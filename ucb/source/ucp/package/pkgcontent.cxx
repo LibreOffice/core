@@ -27,7 +27,9 @@
 #include "osl/doublecheckedlocking.h"
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
@@ -35,12 +37,15 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
@@ -49,6 +54,7 @@
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>

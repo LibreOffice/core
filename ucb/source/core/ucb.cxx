@@ -27,7 +27,9 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/ucb/DuplicateProviderException.hpp>
 #include <com/sun/star/ucb/GlobalTransferCommandArgument2.hpp>
+#include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XContentProviderSupplier.hpp>

@@ -25,6 +25,7 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/util/SortField.hpp>
 #include <com/sun/star/table/TableSortField.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

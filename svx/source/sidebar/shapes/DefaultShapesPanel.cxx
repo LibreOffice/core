@@ -18,6 +18,7 @@
  */
 #include "DefaultShapesPanel.hxx"
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sfx2/imagemgr.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <vcl/outdev.hxx>

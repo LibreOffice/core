@@ -29,6 +29,7 @@
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/Converter.hpp>
 
 #include "osl/diagnose.h"

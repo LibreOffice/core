@@ -21,6 +21,9 @@
 #include <PackageConstants.hxx>
 #include <string.h>
 
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::io;

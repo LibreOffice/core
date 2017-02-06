@@ -36,7 +36,6 @@ namespace xforms
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Exception;
-    using ::com::sun::star::util::VetoException;
     using ::com::sun::star::util::Date;
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;

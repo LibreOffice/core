@@ -20,6 +20,7 @@
 #include "KDE4FilePicker.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/supportsservice.hxx>

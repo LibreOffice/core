@@ -20,6 +20,8 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

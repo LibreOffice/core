@@ -25,6 +25,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/exc_hlp.hxx>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 
 #if OSL_DEBUG_LEVEL > 0

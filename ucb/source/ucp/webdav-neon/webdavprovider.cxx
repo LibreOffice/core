@@ -26,12 +26,9 @@
  *
  ************************************************************************/
 
+#include <sal/config.h>
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include "webdavprovider.hxx"

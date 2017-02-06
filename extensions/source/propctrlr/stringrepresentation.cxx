@@ -26,6 +26,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/inspection/XStringRepresentation.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
+#include "com/sun/star/script/CannotConvertException.hpp"
 #include "com/sun/star/script/XTypeConverter.hpp"
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/reflection/XConstantsTypeDescription.hpp>

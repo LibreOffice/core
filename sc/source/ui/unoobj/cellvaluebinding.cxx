@@ -20,6 +20,7 @@
 #include "cellvaluebinding.hxx"
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
+#include <com/sun/star/form/binding/IncompatibleTypesException.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeData.hpp>

@@ -30,6 +30,7 @@
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <stdio.h>
 

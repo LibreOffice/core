@@ -55,6 +55,7 @@
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>

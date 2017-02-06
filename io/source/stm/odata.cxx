@@ -27,6 +27,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/endian.h>
 
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XObjectInputStream.hpp>
 #include <com/sun/star/io/XObjectOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>

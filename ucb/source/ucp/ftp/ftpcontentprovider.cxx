@@ -17,13 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <comphelper/processfactory.hxx>
 #include <osl/socket.hxx>

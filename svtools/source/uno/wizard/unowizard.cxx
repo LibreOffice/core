@@ -20,6 +20,7 @@
 
 #include "wizardshell.hxx"
 
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -27,6 +28,7 @@
 #include <com/sun/star/ui/dialogs/XWizard.hpp>
 #include <com/sun/star/ui/dialogs/XWizardController.hpp>
 #include <com/sun/star/ui/dialogs/WizardButton.hpp>
+#include <com/sun/star/util/InvalidStateException.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <svtools/genericunodialog.hxx>

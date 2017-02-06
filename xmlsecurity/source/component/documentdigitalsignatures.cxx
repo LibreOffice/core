@@ -38,6 +38,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/Command.hpp>
+#include <com/sun/star/uno/SecurityException.hpp>
 #include <vcl/layout.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>

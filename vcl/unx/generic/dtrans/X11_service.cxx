@@ -20,6 +20,7 @@
 #include "unx/salinst.h"
 
 #include <X11_clipboard.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>

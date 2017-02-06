@@ -37,6 +37,8 @@
 #include <algorithm>
 #include <functional>
 
+#include <com/sun/star/form/binding/IncompatibleTypesException.hpp>
+#include <com/sun/star/form/binding/InvalidBindingStateException.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/XNode.hpp>
@@ -70,8 +72,6 @@ using com::sun::star::form::binding::InvalidBindingStateException;
 using com::sun::star::form::binding::XValueBinding;
 using com::sun::star::lang::EventObject;
 using com::sun::star::lang::IndexOutOfBoundsException;
-using com::sun::star::lang::NoSupportException;
-using com::sun::star::lang::NullPointerException;
 using com::sun::star::lang::XUnoTunnel;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Reference;

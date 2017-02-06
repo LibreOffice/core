@@ -20,6 +20,7 @@
 #include "scriptcont.hxx"
 #include <filefmt.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>

@@ -18,6 +18,8 @@
  */
 
 #include <com/sun/star/awt/tree/XMutableTreeDataModel.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

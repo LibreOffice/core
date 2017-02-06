@@ -24,6 +24,7 @@
 #include <framework/menuconfiguration.hxx>
 #include <framework/addonmenu.hxx>
 
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/ui/ItemType.hpp>

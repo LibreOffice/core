@@ -19,6 +19,7 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>

@@ -37,6 +37,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/WindowDescriptor.hpp>
@@ -53,6 +54,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>

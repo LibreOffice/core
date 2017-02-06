@@ -21,6 +21,7 @@
 #include "JoinTableView.hxx"
 #include "TableWindow.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include "JoinDesignView.hxx"
 #include "JoinController.hxx"
 #include "TableConnection.hxx"

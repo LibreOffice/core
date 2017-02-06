@@ -40,6 +40,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include "pq_xtable.hxx"
 #include "pq_xtables.hxx"
@@ -55,7 +56,6 @@ using osl::Mutex;
 
 using com::sun::star::container::XNameAccess;
 using com::sun::star::container::XIndexAccess;
-using com::sun::star::container::ElementExistException;
 using com::sun::star::container::NoSuchElementException;
 
 using com::sun::star::uno::Reference;
@@ -65,8 +65,6 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Type;
 using com::sun::star::uno::RuntimeException;
-
-using com::sun::star::lang::IndexOutOfBoundsException;
 
 using com::sun::star::beans::XPropertySet;
 

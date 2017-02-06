@@ -19,7 +19,9 @@
 
 #include <algorithm>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/io/XTruncate.hpp>

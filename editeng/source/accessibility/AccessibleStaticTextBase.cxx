@@ -30,6 +30,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/sequence.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

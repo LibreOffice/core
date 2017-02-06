@@ -44,6 +44,7 @@
 #include <com/sun/star/form/XSubmitListener.hpp>
 #include <com/sun/star/form/runtime/XFormController.hpp>
 #include <com/sun/star/form/runtime/FormOperations.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/ParametersRequest.hpp>

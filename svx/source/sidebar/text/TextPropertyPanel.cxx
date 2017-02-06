@@ -19,6 +19,7 @@
 
 #include "TextPropertyPanel.hxx"
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <vcl/toolbox.hxx>
 
 using namespace css;

@@ -33,6 +33,7 @@
 #include "handlerhelper.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>

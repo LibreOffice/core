@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>

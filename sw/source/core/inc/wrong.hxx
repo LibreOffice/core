@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_WRONG_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_WRONG_HXX
 
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XStringKeyMap.hpp>
 
 #include <com/sun/star/util/Color.hpp>

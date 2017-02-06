@@ -25,6 +25,7 @@
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/XControlAccess.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

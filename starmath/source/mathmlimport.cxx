@@ -31,6 +31,7 @@ one go*/
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

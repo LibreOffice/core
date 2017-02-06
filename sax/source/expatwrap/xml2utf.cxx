@@ -24,7 +24,7 @@
 
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
-
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 
 using namespace ::com::sun::star::uno;

@@ -19,6 +19,9 @@
 #ifndef INCLUDED_DBACCESS_SOURCE_UI_INC_DEXPORT_HXX
 #define INCLUDED_DBACCESS_SOURCE_UI_INC_DEXPORT_HXX
 
+#include <sal/config.h>
+
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/contentidentifier.hxx>

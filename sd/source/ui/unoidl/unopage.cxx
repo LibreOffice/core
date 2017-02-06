@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/presentation/AnimationEffect.hpp>

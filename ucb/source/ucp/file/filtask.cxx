@@ -19,7 +19,13 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/beans/NotRemoveableException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>

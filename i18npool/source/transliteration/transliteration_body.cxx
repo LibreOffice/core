@@ -21,7 +21,7 @@
 #include <rtl/ref.hxx>
 #include <i18nutil/casefolding.hxx>
 #include <i18nutil/unicode.hxx>
-
+#include <com/sun/star/i18n/MultipleCharsOutputException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <osl/diagnose.h>

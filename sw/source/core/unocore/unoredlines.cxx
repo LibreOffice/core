@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <osl/mutex.hxx>

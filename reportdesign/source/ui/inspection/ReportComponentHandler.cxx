@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include "ReportComponentHandler.hxx"
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include "uistrings.hrc"
 #include <comphelper/types.hxx>

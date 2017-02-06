@@ -20,6 +20,7 @@
 #include "standardcontrol.hxx"
 #include "pcrcommon.hxx"
 
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>

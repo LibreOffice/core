@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/theMacroExpander.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>

@@ -33,8 +33,12 @@
 #include <comphelper/unwrapargs.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <com/sun/star/deployment/InvalidRemovedParameterException.hpp>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/beans/StringPair.hpp>

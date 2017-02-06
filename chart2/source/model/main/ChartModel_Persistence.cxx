@@ -36,6 +36,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

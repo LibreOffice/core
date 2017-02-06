@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 
 #include <osl/mutex.hxx>

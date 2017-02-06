@@ -8,7 +8,7 @@
  */
 
 #include <sal/types.h>
-
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>

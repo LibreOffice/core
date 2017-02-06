@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include <string.h>

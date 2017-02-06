@@ -22,6 +22,8 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>

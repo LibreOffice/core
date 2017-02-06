@@ -19,6 +19,8 @@
 
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

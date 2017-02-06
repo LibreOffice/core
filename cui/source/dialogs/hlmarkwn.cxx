@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/XLinkTargetSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/io/IOException.hpp>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include "svtools/treelistentry.hxx"

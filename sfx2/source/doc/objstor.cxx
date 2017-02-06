@@ -61,6 +61,7 @@
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
 #include <com/sun/star/embed/XEncryptionProtectedStorage.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>

@@ -20,6 +20,7 @@
 
 #include <basdoc.hxx>
 #include <iderdll.hxx>
+#include <com/sun/star/io/IOException.hpp>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 

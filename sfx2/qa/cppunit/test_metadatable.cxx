@@ -24,7 +24,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 
 #include <rtl/ustrbuf.hxx>
-
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Duration.hpp>

@@ -44,6 +44,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/document/EventObject.hpp>
@@ -61,6 +62,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -80,6 +82,7 @@
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
 #include <com/sun/star/xml/AttributeData.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>

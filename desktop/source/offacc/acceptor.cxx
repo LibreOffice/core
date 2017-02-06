@@ -30,7 +30,6 @@
 
 using namespace css::bridge;
 using namespace css::connection;
-using namespace css::container;
 using namespace css::lang;
 using namespace css::uno;
 

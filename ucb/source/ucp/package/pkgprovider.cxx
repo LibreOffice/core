@@ -30,6 +30,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include "pkgprovider.hxx"
 #include "pkgcontent.hxx"
 #include "pkguri.hxx"

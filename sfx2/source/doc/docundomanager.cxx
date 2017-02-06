@@ -24,7 +24,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/bindings.hxx>
-
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/flagguard.hxx>
 #include <svl/undo.hxx>
@@ -42,15 +42,10 @@ namespace sfx2
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::util::InvalidStateException;
-    using ::com::sun::star::document::EmptyUndoStackException;
-    using ::com::sun::star::util::NotLockedException;
-    using ::com::sun::star::document::UndoContextNotClosedException;
     using ::com::sun::star::document::XUndoAction;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::lang::NotInitializedException;
     using ::com::sun::star::document::XUndoManagerListener;
-    using ::com::sun::star::document::UndoFailedException;
     using ::com::sun::star::document::XUndoManager;
     using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::frame::XModel;

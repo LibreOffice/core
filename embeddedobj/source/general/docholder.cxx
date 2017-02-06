@@ -19,11 +19,13 @@
 
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/frame/TaskCreator.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>

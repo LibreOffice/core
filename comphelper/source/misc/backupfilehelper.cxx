@@ -18,8 +18,11 @@
 #include <zlib.h>
 
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>

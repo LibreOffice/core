@@ -26,6 +26,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/ObjectSaveVetoException.hpp>
 #include <com/sun/star/embed/XEmbedPersist2.hpp>
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>

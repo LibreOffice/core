@@ -21,6 +21,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <comphelper/processfactory.hxx>

@@ -28,6 +28,7 @@
 
 #include <rtl/uri.hxx>
 #include "shellexec.hxx"
+#include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 
 #include <com/sun/star/util/theMacroExpander.hpp>

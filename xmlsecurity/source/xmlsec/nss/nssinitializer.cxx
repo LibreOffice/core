@@ -24,6 +24,7 @@
  */
 #undef DEBUG
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/mozilla/XMozillaBootstrap.hpp>
 #include <com/sun/star/xml/crypto/DigestID.hpp>
 #include <com/sun/star/xml/crypto/CipherID.hpp>

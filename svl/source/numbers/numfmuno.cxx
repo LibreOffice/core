@@ -25,6 +25,8 @@
 #include <rtl/ustring.hxx>
 
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/MalformedNumberFormatException.hpp>
+#include <com/sun/star/util/NotNumericException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>
 

@@ -25,6 +25,8 @@
  *************************************************************************/
 
 #include <vector>
+
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include "hierarchydatasupplier.hxx"
 #include "hierarchyprovider.hxx"

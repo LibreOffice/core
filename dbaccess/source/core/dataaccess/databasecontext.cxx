@@ -35,6 +35,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
@@ -45,6 +46,7 @@
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <basic/basmgr.hxx>

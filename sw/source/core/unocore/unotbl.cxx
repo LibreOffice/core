@@ -60,6 +60,7 @@
 #include <unoport.hxx>
 #include <unoprnms.hxx>
 #include <unocrsrhelper.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>

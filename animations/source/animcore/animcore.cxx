@@ -19,6 +19,7 @@
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>
@@ -41,6 +42,7 @@
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
@@ -74,7 +76,6 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::XWeak;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::lang::NoSupportException;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::lang::XServiceInfo;

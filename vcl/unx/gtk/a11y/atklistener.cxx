@@ -29,6 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include "atklistener.hxx"
 #include "atkwrapper.hxx"

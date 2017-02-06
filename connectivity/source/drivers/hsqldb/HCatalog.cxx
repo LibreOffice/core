@@ -21,6 +21,7 @@
 #include "hsqldb/HUsers.hxx"
 #include "hsqldb/HTables.hxx"
 #include "hsqldb/HViews.hxx"
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <comphelper/types.hxx>

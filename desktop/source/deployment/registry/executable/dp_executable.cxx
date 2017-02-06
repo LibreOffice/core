@@ -23,6 +23,7 @@
 #include "dp_services.hxx"
 #include "dp_ucb.h"
 #include "dp_interact.h"
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/string.hxx>
 #include <osl/file.hxx>
 #include <ucbhelper/content.hxx>

@@ -22,6 +22,7 @@
 #include "macros.hxx"
 
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
+#include <com/sun/star/document/UndoFailedException.hpp>
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <osl/mutex.hxx>

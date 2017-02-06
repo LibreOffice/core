@@ -26,7 +26,7 @@
 #include <com/sun/star/awt/WindowDescriptor.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
-
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>

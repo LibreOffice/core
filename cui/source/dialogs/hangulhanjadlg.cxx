@@ -30,6 +30,7 @@
 #include <vcl/decoview.hxx>
 #include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>

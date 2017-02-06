@@ -53,6 +53,7 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>

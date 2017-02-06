@@ -19,7 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <comphelper/servicehelper.hxx>
-
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 #include <com/sun/star/sheet/TableValidationVisibility.hpp>

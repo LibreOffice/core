@@ -23,6 +23,7 @@
 #endif
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include "hsqldb/HStorageMap.hxx"
 #include <osl/diagnose.h>
 

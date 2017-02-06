@@ -19,6 +19,7 @@
 
 #include <string.h>
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <uielement/rootitemcontainer.hxx>

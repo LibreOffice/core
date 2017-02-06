@@ -14,7 +14,7 @@
 #include <sfx2/sidebar/SidebarController.hxx>
 
 #include <sfx2/sidebar/UnoDecks.hxx>
-
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/ui/XPanel.hpp>
 #include <sfx2/sidebar/UnoPanel.hxx>
 

@@ -22,6 +22,7 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/rendering/FillRule.hpp>
 #include <com/sun/star/rendering/XLinePolyPolygon2D.hpp>

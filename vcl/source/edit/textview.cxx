@@ -40,6 +40,7 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>

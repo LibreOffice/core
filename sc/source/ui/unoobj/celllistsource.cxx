@@ -19,6 +19,8 @@
 
 #include "celllistsource.hxx"
 #include <tools/debug.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>

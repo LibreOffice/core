@@ -47,6 +47,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/XInteractionReplaceExistingData.hpp>
 #include <com/sun/star/ucb/NameClashResolveRequest.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -57,6 +58,8 @@
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
 #include <com/sun/star/packages/manifest/ManifestWriter.hpp>
 #include <com/sun/star/deployment/DependencyException.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <com/sun/star/deployment/LicenseException.hpp>
 #include <com/sun/star/deployment/PlatformException.hpp>
 #include <com/sun/star/deployment/Prerequisites.hpp>

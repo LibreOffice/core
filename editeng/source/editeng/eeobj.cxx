@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>

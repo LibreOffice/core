@@ -25,6 +25,7 @@
 #include <vcl/msgbox.hxx>
 #include <dbui.hrc>
 #include <com/sun/star/sdb/XColumn.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <helpid.h>

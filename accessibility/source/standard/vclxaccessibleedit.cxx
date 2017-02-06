@@ -31,6 +31,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/string.hxx>

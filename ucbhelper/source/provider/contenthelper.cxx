@@ -17,10 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/CommandInfoChange.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/beans/NotRemoveableException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/supportsservice.hxx>

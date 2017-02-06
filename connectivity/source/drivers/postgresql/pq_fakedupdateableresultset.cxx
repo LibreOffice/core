@@ -35,6 +35,7 @@
  ************************************************************************/
 
 #include "pq_fakedupdateableresultset.hxx"
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 

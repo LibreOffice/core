@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/framework/ResourceId.hpp>
 #include <com/sun/star/drawing/framework/XPane.hpp>
 #include <com/sun/star/drawing/framework/XView.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
 

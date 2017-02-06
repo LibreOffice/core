@@ -32,6 +32,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
 #include <com/sun/star/xml/input/XRoot.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>
 
 #include <vector>

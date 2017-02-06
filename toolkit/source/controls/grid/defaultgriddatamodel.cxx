@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/awt/grid/XMutableGridDataModel.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

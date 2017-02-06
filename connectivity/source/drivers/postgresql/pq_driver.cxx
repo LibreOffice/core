@@ -60,7 +60,6 @@ using com::sun::star::uno::Any;
 using com::sun::star::beans::PropertyValue;
 
 using com::sun::star::sdbc::XConnection;
-using com::sun::star::sdbc::SQLException;
 using com::sun::star::sdbc::DriverPropertyInfo;
 
 using com::sun::star::sdbcx::XTablesSupplier;

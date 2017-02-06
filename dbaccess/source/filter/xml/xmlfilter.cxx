@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <com/sun/star/util/MeasureUnit.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>

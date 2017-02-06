@@ -24,6 +24,8 @@
 #include "dp_identifier.hxx"
 #include "dp_descriptioninfoset.hxx"
 
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <osl/diagnose.h>
 #include <rtl/bootstrap.hxx>
 

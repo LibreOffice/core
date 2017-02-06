@@ -21,6 +21,7 @@
 
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
@@ -40,7 +41,6 @@ namespace pcr
     using ::com::sun::star::inspection::XObjectInspectorUI;
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::lang::NoSupportException;
     using ::com::sun::star::inspection::XPropertyControlObserver;
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;

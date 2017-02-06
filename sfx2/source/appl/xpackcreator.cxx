@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/embed/XPackageStructureCreator.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

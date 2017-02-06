@@ -19,6 +19,7 @@
 
 #include <X11_transferable.hxx>
 #include <X11/Xatom.h>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/io/IOException.hpp>
 
 using namespace com::sun::star::datatransfer;

@@ -23,6 +23,7 @@
 #include "pcrservices.hxx"
 
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 
 #define TEXTTYPE_SINGLELINE     0
 #define TEXTTYPE_MULTILINE      1

@@ -45,7 +45,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
-
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbc/XDataSource.hpp>

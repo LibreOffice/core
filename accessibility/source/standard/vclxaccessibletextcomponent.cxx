@@ -25,6 +25,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/window.hxx>

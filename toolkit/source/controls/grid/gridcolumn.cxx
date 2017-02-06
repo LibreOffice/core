@@ -19,6 +19,7 @@
 
 #include "gridcolumn.hxx"
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>

@@ -19,6 +19,7 @@
 
 
 #include "xsecparser.hxx"
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <string.h>

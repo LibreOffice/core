@@ -35,6 +35,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
 #include <com/sun/star/ucb/XWebDAVCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandProcessor2.hpp>
@@ -47,7 +48,7 @@
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
-
+#include <com/sun/star/xml/xpath/XPathException.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustrbuf.hxx>

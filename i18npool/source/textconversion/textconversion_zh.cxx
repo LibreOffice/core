@@ -22,6 +22,7 @@
 #include <textconversion.hxx>
 #include <com/sun/star/i18n/TextConversionType.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/linguistic2/ConversionDirection.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
 #include <com/sun/star/linguistic2/ConversionDictionaryList.hpp>

@@ -24,6 +24,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <com/sun/star/beans/MethodConcept.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
 
 #include <cppuhelper/typeprovider.hxx>
 

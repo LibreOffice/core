@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/WrappedTargetException.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/InstallException.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/deployment/LicenseException.hpp>

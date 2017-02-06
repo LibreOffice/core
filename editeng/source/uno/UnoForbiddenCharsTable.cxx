@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <osl/mutex.hxx>

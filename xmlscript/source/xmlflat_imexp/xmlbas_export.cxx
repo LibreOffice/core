@@ -29,6 +29,7 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

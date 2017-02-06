@@ -18,6 +18,7 @@
  */
 
 #include "dbase/DTable.hxx"
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -37,6 +38,7 @@
 #include <ucbhelper/content.hxx>
 #include <connectivity/dbexception.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/property.hxx>
 #include <comphelper/string.hxx>
 #include <unotools/tempfile.hxx>

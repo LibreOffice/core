@@ -23,6 +23,7 @@
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 
 #include <osl/time.h>

@@ -24,6 +24,7 @@
 
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>

@@ -33,6 +33,7 @@
 
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 
 #include "shapeuno.hxx"
 #include "miscuno.hxx"

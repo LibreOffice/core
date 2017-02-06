@@ -19,6 +19,7 @@
 
 #include "closepreventer.hxx"
 
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <osl/diagnose.h>
 
 void SAL_CALL OClosePreventer::queryClosing( const css::lang::EventObject&, sal_Bool  )

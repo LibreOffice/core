@@ -26,6 +26,7 @@
 #include "Axis.hxx"
 #include "AxisHelper.hxx"
 #include <com/sun/star/chart2/AxisType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <algorithm>
 #include <iterator>

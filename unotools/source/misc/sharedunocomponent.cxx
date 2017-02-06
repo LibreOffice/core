@@ -22,6 +22,7 @@
 
 #include <unotools/sharedunocomponent.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <tools/debug.hxx>

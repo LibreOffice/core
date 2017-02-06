@@ -58,6 +58,7 @@
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/presentation/XSlideShow.hpp>
 #include <com/sun/star/presentation/XSlideShowListener.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

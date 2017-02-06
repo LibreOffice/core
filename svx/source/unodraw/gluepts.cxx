@@ -20,6 +20,7 @@
 #include <com/sun/star/container/XIdentifierContainer.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/drawing/GluePoint2.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <cppuhelper/implbase.hxx>
 

@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sal/log.hxx>
 
 #include <std_inputstream.hxx>

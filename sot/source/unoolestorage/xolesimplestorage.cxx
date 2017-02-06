@@ -21,6 +21,8 @@
 
 #include <com/sun/star/embed/OLESimpleStorage.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

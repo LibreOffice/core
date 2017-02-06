@@ -25,7 +25,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <cppuhelper/typeprovider.hxx>

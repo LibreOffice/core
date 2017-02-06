@@ -36,6 +36,7 @@
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdbc/ResultSetType.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>

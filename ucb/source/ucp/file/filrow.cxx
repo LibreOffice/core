@@ -20,7 +20,9 @@
 #include "filrow.hxx"
 #include "filtask.hxx"
 #include "prov.hxx"
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/Converter.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <comphelper/processfactory.hxx>
 
 using namespace fileaccess;

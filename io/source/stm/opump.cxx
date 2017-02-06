@@ -22,6 +22,8 @@
 
 #include <sal/log.hxx>
 
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>

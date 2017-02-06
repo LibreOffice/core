@@ -25,6 +25,7 @@
 #include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/strbuf.hxx>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 
 namespace dbaui

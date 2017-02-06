@@ -8,6 +8,9 @@
  *
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <sfx2/sidebar/UnoDecks.hxx>
 #include <sfx2/sidebar/UnoDeck.hxx>
 

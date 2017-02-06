@@ -20,6 +20,7 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

@@ -20,7 +20,7 @@
 #include "sal/config.h"
 
 #include <cppuhelper/implbase.hxx>
-
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include "com/sun/star/office/XAnnotationEnumeration.hpp"
 
 #include "AnnotationEnumeration.hxx"

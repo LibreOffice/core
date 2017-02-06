@@ -21,6 +21,7 @@
 
 #include <xml/statusbardocumenthandler.hxx>
 
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ItemType.hpp>

@@ -40,6 +40,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include "pq_xview.hxx"
 #include "pq_xviews.hxx"
@@ -48,8 +49,6 @@
 
 using osl::MutexGuard;
 using osl::Mutex;
-
-using com::sun::star::container::ElementExistException;
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;

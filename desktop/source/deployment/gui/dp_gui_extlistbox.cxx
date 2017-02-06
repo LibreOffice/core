@@ -29,6 +29,7 @@
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <com/sun/star/deployment/DependencyException.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builderfactory.hxx>

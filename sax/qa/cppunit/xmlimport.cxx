@@ -25,6 +25,7 @@
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/Pair.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XFastAttributeList.hpp>

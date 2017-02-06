@@ -20,6 +20,7 @@
 #include <ZipPackageStream.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/packages/NoRawFormatException.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>

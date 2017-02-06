@@ -26,6 +26,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/implbase.hxx>
 
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/XInvocation.hpp>

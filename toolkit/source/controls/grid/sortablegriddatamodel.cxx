@@ -20,6 +20,7 @@
 #include <com/sun/star/i18n/Collator.hpp>
 #include <com/sun/star/i18n/XCollator.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/NotInitializedException.hpp>

@@ -48,6 +48,7 @@
 #include <com/sun/star/inspection/ObjectInspectorModel.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/inspection/DefaultHelpProvider.hpp>
+#include <com/sun/star/util/VetoException.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>

@@ -31,6 +31,7 @@
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/synchronousdispatch.hxx>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>

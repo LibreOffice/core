@@ -26,7 +26,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
-
+#include <com/sun/star/io/IOException.hpp>
 #include <cppuhelper/implbase.hxx>
 
 using namespace ::osl;

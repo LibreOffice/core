@@ -30,6 +30,7 @@
 #include <com/sun/star/sdb/application/XDatabaseDocumentUI.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/util/XModifiable.hpp>

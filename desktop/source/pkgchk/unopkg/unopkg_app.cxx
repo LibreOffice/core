@@ -35,9 +35,13 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/anytostring.hxx>
 #include <comphelper/sequence.hxx>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 
 #include <com/sun/star/deployment/ui/PackageManagerDialog.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <com/sun/star/bridge/BridgeFactory.hpp>

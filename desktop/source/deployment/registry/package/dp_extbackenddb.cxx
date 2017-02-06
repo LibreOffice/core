@@ -20,6 +20,7 @@
 
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>

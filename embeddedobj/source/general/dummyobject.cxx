@@ -20,6 +20,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
+#include <com/sun/star/embed/UnreachableStateException.hpp>
 #include <com/sun/star/embed/XEmbeddedClient.hpp>
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/embed/XWindowSupplier.hpp>
@@ -28,7 +29,10 @@
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 
 #include <dummyobject.hxx>
 

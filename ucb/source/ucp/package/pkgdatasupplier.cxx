@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
 #include "pkgdatasupplier.hxx"

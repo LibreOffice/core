@@ -63,6 +63,7 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/setup/UpdateCheck.hpp>

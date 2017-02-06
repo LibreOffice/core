@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>

@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>

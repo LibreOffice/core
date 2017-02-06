@@ -18,6 +18,7 @@
  */
 
 #include <assert.h>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <textconversionImpl.hxx>
 #include <localedata.hxx>

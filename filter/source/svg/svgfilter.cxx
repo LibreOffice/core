@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 #include <com/sun/star/container/XNamed.hpp>

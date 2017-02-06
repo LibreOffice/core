@@ -20,6 +20,7 @@
 #include <ucbhelper/registerucb.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/ucb/DuplicateProviderException.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 #include <com/sun/star/ucb/XParameterizedContentProvider.hpp>
 #include <com/sun/star/ucb/ContentProviderProxyFactory.hpp>

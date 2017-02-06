@@ -21,6 +21,7 @@
 #include <tools/debug.hxx>
 #include "core_resource.hxx"
 #include "core_resource.hrc"
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <comphelper/property.hxx>
 #include <algorithm>
 

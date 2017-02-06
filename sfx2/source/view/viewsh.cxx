@@ -30,6 +30,7 @@
 #include <svtools/ehdl.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>

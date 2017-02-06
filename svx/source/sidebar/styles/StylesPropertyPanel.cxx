@@ -1,3 +1,7 @@
+#include <sal/config.h>
+
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 #include "StylesPropertyPanel.hxx"
 
 using namespace css;

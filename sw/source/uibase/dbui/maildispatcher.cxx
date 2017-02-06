@@ -22,6 +22,7 @@
 
 #include <algorithm>
 
+#include <com/sun/star/mail/MailException.hpp>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;

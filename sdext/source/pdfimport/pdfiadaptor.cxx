@@ -33,6 +33,7 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>

@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "com/sun/star/connection/XConnection.hpp"
+#include "com/sun/star/io/IOException.hpp"
 #include "com/sun/star/lang/WrappedTargetRuntimeException.hpp"
 #include "com/sun/star/uno/XCurrentContext.hpp"
 #include "cppuhelper/exc_hlp.hxx"

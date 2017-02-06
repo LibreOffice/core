@@ -43,6 +43,7 @@
 #include "svx/svdpagv.hxx"
 #include "svx/xmlexchg.hxx"
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/form/XLoadable.hpp>

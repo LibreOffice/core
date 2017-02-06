@@ -20,12 +20,14 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
+#include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/embed/XLinkCreator.hpp>
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XOptimizedStorage.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>

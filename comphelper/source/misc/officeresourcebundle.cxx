@@ -19,6 +19,7 @@
 
 #include <comphelper/officeresourcebundle.hxx>
 
+#include <com/sun/star/resource/MissingResourceException.hpp>
 #include <com/sun/star/resource/XResourceBundle.hpp>
 #include <com/sun/star/resource/XResourceBundleLoader.hpp>
 #include <osl/mutex.hxx>

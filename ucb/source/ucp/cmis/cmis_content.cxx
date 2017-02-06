@@ -9,6 +9,7 @@
 
 #include <cstdio>
 
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
@@ -17,6 +18,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/task/InteractionClassification.hpp>
 #include <com/sun/star/ucb/ContentInfo.hpp>
@@ -28,6 +30,7 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
+#include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/UnsupportedOpenModeException.hpp>

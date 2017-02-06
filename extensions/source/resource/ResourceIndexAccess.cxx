@@ -11,6 +11,7 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <tools/rcid.h>

@@ -61,6 +61,7 @@
 #include <fmtruby.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/printer.hxx>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>

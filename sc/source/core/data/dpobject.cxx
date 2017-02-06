@@ -45,6 +45,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaData.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>

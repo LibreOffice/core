@@ -50,7 +50,8 @@
 #include "pq_resultsetmetadata.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
-
+#include <com/sun/star/script/CannotConvertException.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <connectivity/dbconversion.hxx>
 
 using osl::Mutex;

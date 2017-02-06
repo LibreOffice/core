@@ -18,6 +18,7 @@
  */
 
 #include <defaultnumberingprovider.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>

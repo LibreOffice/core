@@ -39,6 +39,7 @@
 #include <unotools/syslocale.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/resary.hxx>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/inspection/StringRepresentation.hpp>

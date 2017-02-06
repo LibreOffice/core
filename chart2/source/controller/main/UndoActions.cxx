@@ -41,7 +41,6 @@ namespace impl
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::lang::DisposedException;
-    using ::com::sun::star::document::UndoFailedException;
 
 UndoElement::UndoElement( const OUString& i_actionString, const Reference< XModel >& i_documentModel, const std::shared_ptr< ChartModelClone >& i_modelClone )
     :UndoElement_MBase()

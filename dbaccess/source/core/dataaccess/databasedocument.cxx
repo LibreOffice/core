@@ -52,6 +52,7 @@
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ui/UIConfigurationManager.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>

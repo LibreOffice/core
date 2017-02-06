@@ -25,6 +25,7 @@
 #include <unotools/streamwrap.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/FastParser.hpp>

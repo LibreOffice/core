@@ -31,6 +31,7 @@
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/compbase_ex.hxx"
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include "com/sun/star/uno/Any.hxx"

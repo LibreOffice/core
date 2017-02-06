@@ -26,6 +26,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/container/XContainerApproveBroadcaster.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdb/QueryDefinition.hpp>

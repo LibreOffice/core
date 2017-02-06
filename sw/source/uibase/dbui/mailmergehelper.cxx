@@ -25,6 +25,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

@@ -20,6 +20,7 @@
 #include <config_folders.h>
 
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathException.hpp>
 
 #include "updateprotocol.hxx"
 #include "updatecheckconfig.hxx"

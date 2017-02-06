@@ -22,6 +22,7 @@
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/embed/EmbedMisc.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 

@@ -27,6 +27,7 @@
 #include <vcl/builderfactory.hxx>
 #include <mmconfigitem.hxx>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdb/XColumn.hpp>
 #include <comphelper/string.hxx>

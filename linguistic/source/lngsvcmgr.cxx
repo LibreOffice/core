@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>

@@ -25,6 +25,7 @@
 #include <set>
 #include <string.h>
 
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>

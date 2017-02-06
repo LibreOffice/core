@@ -67,6 +67,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/PDFExportException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>

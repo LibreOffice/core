@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 

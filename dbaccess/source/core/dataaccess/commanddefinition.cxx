@@ -21,6 +21,7 @@
 #include "apitools.hxx"
 #include "dbastrings.hrc"
 
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 

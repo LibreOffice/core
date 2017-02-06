@@ -28,6 +28,8 @@
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/rdf/FileFormat.hpp>
+#include <com/sun/star/rdf/ParseException.hpp>
+#include <com/sun/star/rdf/RepositoryException.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/Literal.hpp>

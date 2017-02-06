@@ -60,6 +60,9 @@ extern "C" {
 #include "UCBDeadPropertyValue.hxx"
 
 #include <officecfg/Inet.hxx>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>

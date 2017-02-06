@@ -21,6 +21,7 @@
 #include <standard/vclxaccessiblestatusbaritem.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/status.hxx>
 
 

@@ -24,6 +24,7 @@
 #include "pcrservices.hxx"
 
 #include <com/sun/star/form/binding/XValueBinding.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <tools/debug.hxx>

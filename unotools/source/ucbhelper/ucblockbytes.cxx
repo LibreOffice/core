@@ -31,6 +31,7 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/ucb/DocumentHeaderField.hpp>

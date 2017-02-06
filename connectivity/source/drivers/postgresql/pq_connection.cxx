@@ -62,6 +62,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/script/Converter.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 using osl::MutexGuard;
 

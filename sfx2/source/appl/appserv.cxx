@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>

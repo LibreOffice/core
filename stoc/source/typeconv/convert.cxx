@@ -38,6 +38,7 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/container/XSet.hpp>

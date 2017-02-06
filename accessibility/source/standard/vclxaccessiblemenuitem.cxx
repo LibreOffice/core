@@ -29,6 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>

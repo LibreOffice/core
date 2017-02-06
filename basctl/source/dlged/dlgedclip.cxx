@@ -21,6 +21,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 
@@ -30,7 +31,6 @@ namespace basctl
 using namespace comphelper;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
 DlgEdTransferableImpl::DlgEdTransferableImpl( const Sequence< DataFlavor >& aSeqFlavors, const Sequence< Any >& aSeqData )

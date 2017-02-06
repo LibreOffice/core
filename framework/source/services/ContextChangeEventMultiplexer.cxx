@@ -18,7 +18,7 @@
  */
 
 #include <helper/mischelper.hxx>
-
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>

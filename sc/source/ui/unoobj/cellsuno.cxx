@@ -55,6 +55,7 @@
 #include <com/sun/star/sheet/CellFlags.hpp>
 #include <com/sun/star/sheet/FormulaResult.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/TolerantPropertySetResultType.hpp>
 #include <com/sun/star/beans/SetPropertyTolerantFailed.hpp>

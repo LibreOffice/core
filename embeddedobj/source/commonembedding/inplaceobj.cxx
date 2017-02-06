@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
 #include "commonembobj.hxx"

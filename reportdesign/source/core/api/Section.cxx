@@ -23,6 +23,7 @@
 #include <com/sun/star/report/XReportComponent.hpp>
 #include <com/sun/star/report/ForceNewPage.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "corestrings.hrc"
 #include "core_resource.hxx"

@@ -20,6 +20,7 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/style/XStyle.hpp>

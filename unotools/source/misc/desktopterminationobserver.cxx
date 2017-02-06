@@ -19,6 +19,7 @@
 
 #include <unotools/desktopterminationobserver.hxx>
 
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XTerminateListener.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <cppuhelper/implbase.hxx>

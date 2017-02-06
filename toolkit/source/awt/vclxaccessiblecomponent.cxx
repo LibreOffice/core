@@ -22,6 +22,7 @@
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
 #include <toolkit/helper/externallock.hxx>

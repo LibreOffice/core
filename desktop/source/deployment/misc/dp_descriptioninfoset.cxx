@@ -28,6 +28,7 @@
 #include <boost/optional.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/beans/Optional.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -43,6 +44,7 @@
 #include <com/sun/star/xml/dom/XNodeList.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathException.hpp>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>

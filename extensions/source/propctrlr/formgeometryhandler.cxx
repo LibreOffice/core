@@ -33,6 +33,7 @@
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/XColumnRowRange.hpp>

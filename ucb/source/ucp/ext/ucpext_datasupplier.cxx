@@ -23,7 +23,7 @@
 #include "ucpext_provider.hxx"
 
 #include <com/sun/star/deployment/PackageInformationProvider.hpp>
-
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/providerhelper.hxx>

@@ -26,6 +26,7 @@
 #include "managelang.hxx"
 
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <com/sun/star/resource/MissingResourceException.hpp>
 #include <com/sun/star/resource/XStringResourceSupplier.hpp>
 #include <sfx2/dispatch.hxx>
 

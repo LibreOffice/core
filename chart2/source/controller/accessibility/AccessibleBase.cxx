@@ -31,6 +31,7 @@
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>

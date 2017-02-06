@@ -39,6 +39,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/DockingArea.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/theToolbarControllerFactory.hpp>

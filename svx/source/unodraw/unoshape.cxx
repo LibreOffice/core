@@ -23,6 +23,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
 #include <vcl/fltcall.hxx>

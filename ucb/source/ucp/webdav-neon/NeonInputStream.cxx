@@ -28,6 +28,7 @@
 
 #include "NeonInputStream.hxx"
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppuhelper/queryinterface.hxx>
 
 #include <string.h>

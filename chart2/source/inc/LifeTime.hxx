@@ -23,6 +23,7 @@
 #include <osl/conditn.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

@@ -41,6 +41,7 @@
 #include <dputil.hxx>
 #include "globstr.hrc"
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XMembersSupplier.hpp>

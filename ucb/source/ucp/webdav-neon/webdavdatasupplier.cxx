@@ -35,6 +35,7 @@
 
 #include <osl/diagnose.h>
 #include <o3tl/make_unique.hxx>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>

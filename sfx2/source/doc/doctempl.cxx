@@ -45,6 +45,7 @@
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/DocumentTemplates.hpp>
 #include <com/sun/star/frame/XDocumentTemplates.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XPersist.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>

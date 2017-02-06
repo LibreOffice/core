@@ -23,7 +23,6 @@ namespace oox {
 namespace core {
 
 using namespace css::io;
-using namespace css::lang;
 using namespace css::uno;
 
 DocumentEncryption::DocumentEncryption(Reference<XStream> const & xDocumentStream,

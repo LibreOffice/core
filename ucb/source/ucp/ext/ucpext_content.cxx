@@ -29,6 +29,7 @@
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
+#include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
 #include <com/sun/star/deployment/PackageInformationProvider.hpp>
 

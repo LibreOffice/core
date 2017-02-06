@@ -23,6 +23,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include "excelvbahelper.hxx"
 
 using namespace ::com::sun::star;

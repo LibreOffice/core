@@ -38,10 +38,13 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/bootstrap.hxx>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/XPackage.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/LicenseException.hpp>

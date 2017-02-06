@@ -23,6 +23,7 @@
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/animations/AnimationRestart.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -46,11 +47,9 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::lang::NoSupportException;
 using ::com::sun::star::beans::NamedValue;
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::container::NoSuchElementException;
-using ::com::sun::star::container::ElementExistException;
 using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::container::XEnumerationAccess;

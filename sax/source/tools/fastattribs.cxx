@@ -19,6 +19,7 @@
 
 #include <algorithm>
 
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <sax/fastattribs.hxx>
 
 using namespace ::com::sun::star::uno;

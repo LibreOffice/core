@@ -36,6 +36,7 @@
 
 // Extensible help
 #include <com/sun/star/deployment/ExtensionManager.hpp>
+#include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>

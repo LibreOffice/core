@@ -30,7 +30,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xforms/XModel.hpp>

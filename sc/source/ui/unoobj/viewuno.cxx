@@ -19,8 +19,10 @@
 
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/drawing/ShapeCollection.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/util/VetoException.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 
 #include <editeng/outliner.hxx>

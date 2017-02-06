@@ -65,6 +65,7 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/ucb/UniversalContentBroker.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>

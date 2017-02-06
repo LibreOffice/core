@@ -22,6 +22,7 @@
 #include <toolkit/helper/property.hxx>
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/XAnimation.hpp>

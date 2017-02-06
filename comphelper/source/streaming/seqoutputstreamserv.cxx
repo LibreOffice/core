@@ -29,6 +29,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XSequenceOutputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

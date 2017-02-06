@@ -28,7 +28,9 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/seqstream.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>

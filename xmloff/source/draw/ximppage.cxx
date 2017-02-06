@@ -20,6 +20,7 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <sax/tools/converter.hxx>

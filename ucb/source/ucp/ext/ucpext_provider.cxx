@@ -20,6 +20,7 @@
 #include "ucpext_provider.hxx"
 #include "ucpext_content.hxx"
 
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <ucbhelper/contentidentifier.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>

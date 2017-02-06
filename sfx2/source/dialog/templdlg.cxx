@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <officecfg/Office/Common.hxx>
 

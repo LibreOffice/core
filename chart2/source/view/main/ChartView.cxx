@@ -98,6 +98,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

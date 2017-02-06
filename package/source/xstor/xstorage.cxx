@@ -23,8 +23,12 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/InvalidStorageException.hpp>
 #include <com/sun/star/embed/UseBackupException.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
+#include <com/sun/star/embed/StorageWrappedTargetException.hpp>
+#include <com/sun/star/packages/NoRawFormatException.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/logging/DocumentIOLogRing.hpp>

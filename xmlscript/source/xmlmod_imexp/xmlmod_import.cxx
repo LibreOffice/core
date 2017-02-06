@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <sal/log.hxx>
 
 #include "imp_share.hxx"

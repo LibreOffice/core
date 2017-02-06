@@ -48,6 +48,7 @@
 #include <com/sun/star/util/CellProtection.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <cppuhelper/supportsservice.hxx>

@@ -31,6 +31,7 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
 #include "com/sun/star/util/theMacroExpander.hpp"
+#include "com/sun/star/ucb/IllegalIdentifierException.hpp"
 #include "com/sun/star/ucb/XContentProvider.hpp"
 
 #define EXPAND_PROTOCOL "vnd.sun.star.expand"

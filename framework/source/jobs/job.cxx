@@ -22,8 +22,10 @@
 #include <services.h>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XAsyncJob.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>

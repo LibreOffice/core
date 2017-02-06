@@ -40,6 +40,7 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/deployment/XExtensionManager.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/XUpdateInformationProvider.hpp>

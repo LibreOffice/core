@@ -33,6 +33,7 @@
 #include <com/sun/star/awt/XActionListener.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/graphic/GraphicObject.hpp>
+#include <com/sun/star/util/VetoException.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>

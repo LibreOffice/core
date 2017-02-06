@@ -31,6 +31,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/pathoptions.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

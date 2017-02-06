@@ -24,6 +24,7 @@
 
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

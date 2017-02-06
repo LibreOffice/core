@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

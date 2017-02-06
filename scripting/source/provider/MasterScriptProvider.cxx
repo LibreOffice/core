@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/EventObject.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-
+#include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>

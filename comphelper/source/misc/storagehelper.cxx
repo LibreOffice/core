@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

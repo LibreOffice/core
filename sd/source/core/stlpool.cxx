@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>

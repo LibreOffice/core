@@ -31,6 +31,7 @@
 #include <simpleguesser.hxx>
 #include <guess.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #include <unotools/pathoptions.hxx>

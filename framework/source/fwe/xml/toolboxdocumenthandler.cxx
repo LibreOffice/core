@@ -22,6 +22,7 @@
 #include <xml/toolboxdocumenthandler.hxx>
 #include <xml/toolboxconfigurationdefines.hxx>
 
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>

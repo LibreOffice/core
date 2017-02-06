@@ -42,6 +42,7 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <comphelper/seqstream.hxx>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>

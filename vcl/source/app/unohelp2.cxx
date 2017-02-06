@@ -22,6 +22,7 @@
 #include <sot/formats.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
 #include <cppuhelper/queryinterface.hxx>

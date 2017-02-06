@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 

@@ -32,6 +32,7 @@
 #include "propertycomposer.hxx"
 
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>

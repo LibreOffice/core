@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -24,11 +27,13 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/logging/DocumentIOLogRing.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/StorageFormats.hpp>
+#include <com/sun/star/embed/StorageWrappedTargetException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>

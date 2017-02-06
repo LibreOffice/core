@@ -35,6 +35,7 @@
 #include <comphelper/sequence.hxx>
 #include <xmlscript/xml_helper.hxx>
 #include <svl/inettype.hxx>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XSet.hpp>

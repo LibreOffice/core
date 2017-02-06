@@ -19,6 +19,7 @@
 
 
 #include <oooresourceloader.hxx>
+#include <com/sun/star/resource/MissingResourceException.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <tools/simplerm.hxx>

@@ -28,6 +28,7 @@
 
 #include <typelib/typedescription.hxx>
 
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
 #include "pyuno_impl.hxx"

@@ -26,7 +26,11 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#include <com/sun/star/ucb/CommandFailedException.hpp>
 
 #include "dp_gui_dialog2.hxx"
 #include "dp_gui_extensioncmdqueue.hxx"

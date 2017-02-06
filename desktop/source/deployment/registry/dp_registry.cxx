@@ -35,6 +35,7 @@
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>

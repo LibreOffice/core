@@ -31,7 +31,10 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/beans/NotRemoveableException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>

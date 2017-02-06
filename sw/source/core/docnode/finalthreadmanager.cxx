@@ -25,6 +25,7 @@
 #include <swthreadjoiner.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

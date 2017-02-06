@@ -32,6 +32,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>

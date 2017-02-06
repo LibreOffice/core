@@ -35,6 +35,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>

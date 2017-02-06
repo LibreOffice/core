@@ -28,7 +28,10 @@
 #include "cppuhelper/unourl.hxx"
 #include "rtl/malformeduriexception.hxx"
 
+#include <com/sun/star/connection/AlreadyAcceptingException.hpp>
+#include <com/sun/star/connection/ConnectionSetupException.hpp>
 #include <com/sun/star/connection/XAcceptor.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include "services.hxx"

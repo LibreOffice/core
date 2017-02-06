@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/UnreachableStateException.hpp>
 #include <com/sun/star/embed/XVisualObject.hpp>
 #include <com/sun/star/embed/XEmbeddedClient.hpp>
 #include <com/sun/star/embed/XInplaceClient.hpp>

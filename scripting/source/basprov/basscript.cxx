@@ -26,6 +26,7 @@
 #include <basic/sbmeth.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/basmgr.hxx>
+#include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include "bcholder.hxx"
 #include <comphelper/proparrhlp.hxx>

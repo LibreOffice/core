@@ -19,7 +19,10 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/InvalidStorageException.hpp>
+#include <com/sun/star/embed/StorageWrappedTargetException.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
@@ -27,6 +30,7 @@
 
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 #include <com/sun/star/ucb/IOErrorCode.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>

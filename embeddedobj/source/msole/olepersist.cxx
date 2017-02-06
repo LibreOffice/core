@@ -22,6 +22,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
+#include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -36,6 +37,7 @@
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 
 #include <comphelper/processfactory.hxx>

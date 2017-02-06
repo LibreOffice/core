@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 #include "odbc/OPreparedStatement.hxx"
 #include "odbc/OBoundParam.hxx"
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include "odbc/OTools.hxx"
 #include "odbc/ODriver.hxx"

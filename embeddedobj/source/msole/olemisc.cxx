@@ -23,6 +23,8 @@
 
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/WrongStateException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 

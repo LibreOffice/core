@@ -24,9 +24,11 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/errinf.hxx>

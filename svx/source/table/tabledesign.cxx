@@ -19,6 +19,7 @@
 
 
 #include <com/sun/star/style/XStyle.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

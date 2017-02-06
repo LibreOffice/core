@@ -19,6 +19,7 @@
 
 #include <com/sun/star/awt/XTextArea.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/awt/PosSize.hpp>

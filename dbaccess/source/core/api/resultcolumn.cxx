@@ -19,6 +19,7 @@
 
 #include "resultcolumn.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>

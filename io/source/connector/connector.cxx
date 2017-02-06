@@ -30,6 +30,8 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/connection/ConnectionSetupException.hpp>
+#include <com/sun/star/connection/NoConnectException.hpp>
 #include <com/sun/star/connection/XConnector.hpp>
 
 #include "services.hxx"

@@ -37,6 +37,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/NativeObjectWrapper.hpp>
 
 #include <com/sun/star/uno/XComponentContext.hpp>

@@ -40,13 +40,16 @@
 #include "osl/doublecheckedlocking.h"
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/MissingPropertiesException.hpp>
@@ -54,6 +57,7 @@
 #include <com/sun/star/ucb/NameClashException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #include <com/sun/star/ucb/TransferInfo.hpp>
+#include <com/sun/star/ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/UnsupportedNameClashException.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>

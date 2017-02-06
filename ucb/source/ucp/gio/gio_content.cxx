@@ -25,11 +25,12 @@
 
 #include <osl/diagnose.h>
 #include <osl/doublecheckedlocking.h>
-
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>

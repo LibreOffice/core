@@ -44,6 +44,7 @@
 #include <salhelper/simplereferenceobject.hxx>
 
 #include <com/sun/star/uno/DeploymentException.hpp>
+#include <com/sun/star/lang/NoSuchMethodException.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>

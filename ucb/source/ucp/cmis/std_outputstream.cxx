@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/io/IOException.hpp>
 #include <sal/log.hxx>
 
 #include <std_outputstream.hxx>

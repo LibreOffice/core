@@ -28,6 +28,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/gallery/XGalleryTheme.hpp>
 #include <com/sun/star/gallery/XGalleryThemeProvider.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

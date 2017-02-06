@@ -22,6 +22,8 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/supportsservice.hxx>
 

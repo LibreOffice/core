@@ -19,6 +19,8 @@
 
 #include "XTempFile.hxx"
 #include <unotoolsservices.hxx>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>

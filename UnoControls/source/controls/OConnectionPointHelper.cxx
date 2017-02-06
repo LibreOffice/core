@@ -21,6 +21,7 @@
 
 #include "OConnectionPointContainerHelper.hxx"
 
+#include <com/sun/star/lang/InvalidListenerException.hpp>
 #include <cppuhelper/queryinterface.hxx>
 
 //  namespaces

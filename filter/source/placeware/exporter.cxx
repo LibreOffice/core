@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>

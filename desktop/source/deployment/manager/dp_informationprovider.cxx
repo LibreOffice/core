@@ -25,6 +25,7 @@
 #include <com/sun/star/deployment/XPackageInformationProvider.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/XUpdateInformationProvider.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/task/XAbortChannel.hpp>

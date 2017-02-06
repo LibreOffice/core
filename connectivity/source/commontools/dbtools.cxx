@@ -27,6 +27,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>

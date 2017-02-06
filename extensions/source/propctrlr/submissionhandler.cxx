@@ -30,6 +30,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/form/submission/XSubmissionSupplier.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 

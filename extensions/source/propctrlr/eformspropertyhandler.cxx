@@ -26,6 +26,7 @@
 #include "eformshelper.hxx"
 #include "handlerhelper.hxx"
 
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>

@@ -20,6 +20,7 @@
 
 #include <tools/urlobj.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>

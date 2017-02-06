@@ -26,8 +26,10 @@
 #include <comphelper/extract.hxx>
 
 #include <com/sun/star/container/XEnumerableMap.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ucb/AlreadyInitializedException.hpp>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/Pair.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

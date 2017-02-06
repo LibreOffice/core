@@ -28,9 +28,13 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/InvalidStorageException.hpp>
+#include <com/sun/star/embed/StorageWrappedTargetException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 

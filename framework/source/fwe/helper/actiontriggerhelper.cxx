@@ -22,6 +22,7 @@
 #include <classes/rootactiontriggercontainer.hxx>
 #include <classes/imagewrapper.hxx>
 #include <framework/addonsoptions.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>

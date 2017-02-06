@@ -25,10 +25,13 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/EventObject.hpp>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -36,6 +39,7 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XActiveDataControl.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XStream.hpp>
@@ -44,6 +48,7 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/xml/dom/XElement.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>

@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <localedata.hxx>

@@ -38,6 +38,7 @@
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/lang/NoSuchMethodException.hpp>
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>

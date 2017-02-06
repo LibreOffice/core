@@ -22,6 +22,7 @@
 #include "baslibnode.hxx"
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
+#include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>

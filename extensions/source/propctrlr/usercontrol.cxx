@@ -36,7 +36,6 @@ namespace pcr
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Type;
-    using ::com::sun::star::beans::IllegalTypeException;
     using ::com::sun::star::uno::RuntimeException;
 
     namespace PropertyControlType = ::com::sun::star::inspection::PropertyControlType;

@@ -34,12 +34,17 @@
 
 #include <redland.h>
 
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/rdf/ParseException.hpp>
+#include <com/sun/star/rdf/QueryException.hpp>
+#include <com/sun/star/rdf/RepositoryException.hpp>
 #include <com/sun/star/rdf/XDocumentRepository.hpp>
 #include <com/sun/star/rdf/XLiteral.hpp>
 #include <com/sun/star/rdf/FileFormat.hpp>

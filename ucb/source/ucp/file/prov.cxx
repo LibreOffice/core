@@ -23,6 +23,7 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/FileSystemNotation.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>

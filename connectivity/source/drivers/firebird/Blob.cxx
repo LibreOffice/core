@@ -11,6 +11,9 @@
 #include "Connection.hxx"
 #include "Util.hxx"
 
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <connectivity/dbexception.hxx>

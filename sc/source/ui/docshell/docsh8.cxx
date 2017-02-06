@@ -34,6 +34,7 @@
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>

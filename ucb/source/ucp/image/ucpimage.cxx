@@ -12,6 +12,7 @@
 #include <cassert>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>

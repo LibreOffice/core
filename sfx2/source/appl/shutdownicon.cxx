@@ -31,6 +31,7 @@
 #include <svtools/miscopt.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>

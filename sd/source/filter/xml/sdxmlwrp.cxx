@@ -43,6 +43,7 @@
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>

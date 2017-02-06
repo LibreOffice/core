@@ -29,6 +29,7 @@
 #include <com/sun/star/accessibility/AccessibleEventObject.hpp>
 #include <com/sun/star/awt/FocusEvent.hpp>
 #include <com/sun/star/awt/XFocusListener.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>

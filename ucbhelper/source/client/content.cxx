@@ -30,6 +30,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/ucb/CheckinArgument.hpp>
 #include <com/sun/star/ucb/ContentCreationError.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>

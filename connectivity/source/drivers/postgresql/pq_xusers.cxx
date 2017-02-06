@@ -35,7 +35,8 @@
  ************************************************************************/
 
 #include <rtl/ustrbuf.hxx>
-
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbcx/Privilege.hpp>
 

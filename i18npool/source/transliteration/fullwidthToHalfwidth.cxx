@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/i18n/MultipleCharsOutputException.hpp>
 #include <i18nutil/widthfolding.hxx>
 
 #include <transliteration_OneToOne.hxx>

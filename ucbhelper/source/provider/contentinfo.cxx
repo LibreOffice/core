@@ -23,6 +23,7 @@
 
  *************************************************************************/
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star//ucb/UnsupportedCommandException.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
 
 #include "osl/diagnose.h"

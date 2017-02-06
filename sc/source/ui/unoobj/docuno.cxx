@@ -51,6 +51,7 @@
 #include <ctype.h>
 #include <float.h>
 
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>

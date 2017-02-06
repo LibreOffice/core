@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/embed/XHatchWindowController.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include "hatchwindow.hxx"
 #include "ipwin.hxx"

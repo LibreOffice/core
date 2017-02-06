@@ -19,6 +19,9 @@
 
 #include <recording/dispatchrecorder.hxx>
 #include <com/sun/star/frame/DispatchStatement.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <o3tl/any.hxx>
 #include <services.h>

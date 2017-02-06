@@ -24,8 +24,10 @@
 #include <services.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>

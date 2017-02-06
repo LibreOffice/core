@@ -40,6 +40,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 
 #include "pq_xuser.hxx"
 #include "pq_tools.hxx"

@@ -25,6 +25,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <vcl/toolbox.hxx>
 #include <comphelper/accessiblewrapper.hxx>

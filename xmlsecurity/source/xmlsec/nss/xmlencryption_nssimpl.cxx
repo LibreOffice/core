@@ -18,6 +18,8 @@
  */
 
 #include <sal/config.h>
+
+#include <com/sun/star/xml/crypto/XMLEncryptionException.hpp>
 #include <rtl/uuid.h>
 #include "xmlencryption_nssimpl.hxx"
 

@@ -26,10 +26,13 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/resource/MissingResourceException.hpp>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 

@@ -22,7 +22,11 @@
 #include <osl/file.hxx>
 
 #include "osl/diagnose.h"
+#include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

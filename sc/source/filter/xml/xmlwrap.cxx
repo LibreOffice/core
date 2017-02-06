@@ -41,6 +41,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/genericpropertyset.hxx>
+#include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>

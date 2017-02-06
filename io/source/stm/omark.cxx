@@ -22,12 +22,14 @@
 #include <memory>
 #include <vector>
 
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XConnectable.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include <cppuhelper/factory.hxx>

@@ -30,6 +30,7 @@
 #include <rtl/textenc.h>
 #include <rtl/tencinfo.h>
 
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XTextOutputStream2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

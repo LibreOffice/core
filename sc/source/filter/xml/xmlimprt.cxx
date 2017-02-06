@@ -83,6 +83,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/util/MalformedNumberFormatException.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>

@@ -24,6 +24,7 @@
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <toolkit/controls/unocontrol.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

@@ -21,7 +21,7 @@
 
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/providerhelper.hxx>
-
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 
 #include "gio_datasupplier.hxx"

@@ -47,11 +47,17 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleauthenticationrequest.hxx>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/UnsupportedCommandException.hpp>
+#include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
 #include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XActiveDataStreamer.hpp>

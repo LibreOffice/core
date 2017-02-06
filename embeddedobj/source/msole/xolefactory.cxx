@@ -23,6 +23,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <com/sun/star/io/IOException.hpp>
 
 #include "xolefactory.hxx"
 #include "oleembobj.hxx"

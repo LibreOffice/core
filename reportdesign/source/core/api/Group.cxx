@@ -19,6 +19,7 @@
 #include "Group.hxx"
 #include "Section.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/report/KeepTogether.hpp>
 #include "corestrings.hrc"

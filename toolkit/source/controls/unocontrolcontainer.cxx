@@ -19,6 +19,7 @@
 
 #include <com/sun/star/awt/XVclContainerPeer.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/typeprovider.hxx>

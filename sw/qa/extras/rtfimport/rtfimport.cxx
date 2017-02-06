@@ -20,6 +20,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/CaseMap.hpp>

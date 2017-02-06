@@ -24,6 +24,7 @@
 
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/processfactory.hxx>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/util/DateTime.hpp>

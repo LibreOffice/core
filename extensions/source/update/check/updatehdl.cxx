@@ -55,11 +55,11 @@
 #include "com/sun/star/container/XNameContainer.hpp"
 
 #include "com/sun/star/frame/Desktop.hpp"
-
+#include "com/sun/star/frame/TerminationVetoException.hpp"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/task/InteractionHandler.hpp"
 #include "com/sun/star/task/InteractionRequestStringResolver.hpp"
-
+#include <com/sun/star/resource/MissingResourceException.hpp>
 #include <com/sun/star/resource/XResourceBundleLoader.hpp>
 
 #include "updatehdl.hrc"

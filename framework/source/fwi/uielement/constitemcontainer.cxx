@@ -24,6 +24,7 @@
 #include <uielement/itemcontainer.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/propertysetinfo.hxx>

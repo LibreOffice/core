@@ -43,6 +43,7 @@
 #include <com/sun/star/report/XReportDefinition.hpp>
 #include <com/sun/star/report/XReportEngine.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
+#include <com/sun/star/embed/WrongStateException.hpp>
 #include <com/sun/star/embed/XEmbedObjectFactory.hpp>
 #include <com/sun/star/embed/EmbeddedObjectCreator.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
@@ -58,6 +59,7 @@
 #include <com/sun/star/ucb/MissingPropertiesException.hpp>
 #include <com/sun/star/ucb/MissingInputStreamException.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/frame/XModule.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>

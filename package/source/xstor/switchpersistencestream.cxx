@@ -18,7 +18,8 @@
  */
 
 #include <osl/diagnose.h>
-
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>

@@ -27,6 +27,7 @@
 #include "cmdlineargs.hxx"
 #include "dispatchwatcher.hxx"
 #include <stdio.h>
+#include <com/sun/star/frame/TerminationVetoException.hpp>
 #include <osl/process.h>
 #include <sal/log.hxx>
 #include <unotools/bootstrap.hxx>

@@ -31,12 +31,14 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/MalformedNumberFormatException.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontEmphasisMark.hpp>
 #include <com/sun/star/awt/FontRelief.hpp>
 #include <com/sun/star/xml/input/XRoot.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>

@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/compbase.hxx>

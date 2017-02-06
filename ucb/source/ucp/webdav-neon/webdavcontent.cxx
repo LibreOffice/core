@@ -43,8 +43,10 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
-
+#include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/beans/NotRemoveableException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -55,6 +57,7 @@
 #include <com/sun/star/ucb/CommandEnvironment.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>

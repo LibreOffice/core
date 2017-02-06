@@ -27,6 +27,8 @@
 
  *************************************************************************/
 #include <com/sun/star/ucb/ListActionType.hpp>
+#include <com/sun/star/ucb/ListenerAlreadySetException.hpp>
+#include <com/sun/star/ucb/ServiceNotFoundException.hpp>
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>

@@ -37,6 +37,8 @@
 #include <helpcompiler/compilehelp.hxx>
 #include <helpcompiler/HelpIndexer.hxx>
 #endif
+#include <com/sun/star/deployment/DeploymentException.hpp>
+#include <com/sun/star/deployment/ExtensionRemovedException.hpp>
 #include <com/sun/star/ucb/SimpleFileAccess.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>

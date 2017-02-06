@@ -23,6 +23,7 @@
 #include <set>
 #include <stack>
 
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>

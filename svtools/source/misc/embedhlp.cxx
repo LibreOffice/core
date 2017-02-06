@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <tools/globname.hxx>
 #include <comphelper/classids.hxx>
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

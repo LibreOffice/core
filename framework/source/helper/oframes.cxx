@@ -21,7 +21,7 @@
 
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
-
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 
 namespace framework{

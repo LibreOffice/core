@@ -20,6 +20,7 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/FlagSequence.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>

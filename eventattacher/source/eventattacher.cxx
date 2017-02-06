@@ -17,13 +17,17 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <osl/diagnose.h>
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/beans/IntrospectionException.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
+#include <com/sun/star/script/CannotCreateAdapterException.hpp>
 #include <com/sun/star/script/XEventAttacher2.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XAllListener.hpp>

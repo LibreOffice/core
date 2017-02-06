@@ -11,6 +11,7 @@
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>

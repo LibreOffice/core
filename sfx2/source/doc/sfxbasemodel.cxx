@@ -21,6 +21,7 @@
 
 #include <sfx2/sfxbasemodel.hxx>
 
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/ErrorCodeIOException.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
@@ -28,6 +29,7 @@
 #include <com/sun/star/view/XPrintJobListener.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/IllegalArgumentIOException.hpp>
@@ -135,7 +137,6 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::document::XDocumentRecovery;
 using ::com::sun::star::document::XUndoManager;
 using ::com::sun::star::document::XUndoAction;
-using ::com::sun::star::document::UndoFailedException;
 using ::com::sun::star::frame::XModel;
 
 /** This Listener is used to get notified when the XDocumentProperties of the

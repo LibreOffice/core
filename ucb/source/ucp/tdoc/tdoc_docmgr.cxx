@@ -36,6 +36,7 @@
 #include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/document/XDocumentEventBroadcaster.hpp"
 #include "com/sun/star/document/XStorageBasedDocument.hpp"
+#include "com/sun/star/frame/UnknownModuleException.hpp"
 #include "com/sun/star/frame/theGlobalEventBroadcaster.hpp"
 #include "com/sun/star/frame/XStorable.hpp"
 #include "com/sun/star/frame/ModuleManager.hpp"

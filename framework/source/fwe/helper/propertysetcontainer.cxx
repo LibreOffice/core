@@ -19,6 +19,7 @@
 
 #include <helper/propertysetcontainer.hxx>
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <vcl/svapp.hxx>
 

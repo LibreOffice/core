@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFrame2.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/lang/XComponent.hpp>

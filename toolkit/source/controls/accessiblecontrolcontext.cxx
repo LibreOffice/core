@@ -21,6 +21,7 @@
 #include <unotools/accessiblestatesethelper.hxx>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

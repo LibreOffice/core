@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/xml/sax/FastShapeContextHandler.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <ooxml/QNameToString.hxx>
 #include <ooxml/resourceids.hxx>
 #include <oox/token/namespaces.hxx>

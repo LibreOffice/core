@@ -21,6 +21,7 @@
 #define INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYJOB_H
 
 #include <com/sun/star/task/XJob.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>

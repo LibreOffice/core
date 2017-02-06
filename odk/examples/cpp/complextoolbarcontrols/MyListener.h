@@ -20,6 +20,9 @@
 #ifndef INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYLISTENER_H
 #define INCLUDED_EXAMPLES_COMPLEXTOOLBARCONTROLS_MYLISTENER_H
 
+#include <sal/config.h>
+
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XJob.hpp>

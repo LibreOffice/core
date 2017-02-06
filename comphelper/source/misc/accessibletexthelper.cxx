@@ -24,6 +24,7 @@
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 

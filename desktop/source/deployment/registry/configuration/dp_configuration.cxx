@@ -43,6 +43,7 @@
 #include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <list>

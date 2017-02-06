@@ -19,6 +19,8 @@
 
 
 #include <algorithm>
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <connectivity/sdbcx/VCollection.hxx>
 #include <connectivity/sdbcx/VDescriptor.hxx>
 #include <connectivity/dbexception.hxx>

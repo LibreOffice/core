@@ -23,6 +23,7 @@
 #include "pcrservices.hxx"
 
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>

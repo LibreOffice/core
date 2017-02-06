@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <doc.hxx>

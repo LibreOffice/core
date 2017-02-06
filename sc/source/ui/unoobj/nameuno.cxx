@@ -19,7 +19,7 @@
 
 #include <svl/hint.hxx>
 #include <vcl/svapp.hxx>
-
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>

@@ -22,6 +22,7 @@
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/servicehelper.hxx>

@@ -28,8 +28,11 @@
 #include <osl/diagnose.h>
 
 #include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/embed/InvalidStorageException.hpp"
+#include "com/sun/star/embed/StorageWrappedTargetException.hpp"
 #include "com/sun/star/embed/XStorage.hpp"
-
+#include "com/sun/star/io/IOException.hpp"
+#include "com/sun/star/ucb/IllegalIdentifierException.hpp"
 #include "comphelper/processfactory.hxx"
 #include "ucbhelper/contentidentifier.hxx"
 

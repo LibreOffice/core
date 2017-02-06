@@ -19,6 +19,7 @@
 
 #include <unotools/closeveto.hxx>
 
+#include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <cppuhelper/implbase.hxx>

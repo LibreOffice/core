@@ -21,6 +21,7 @@
 
 #include <com/sun/star/document/EventObject.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <osl/mutex.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/classids.hxx>

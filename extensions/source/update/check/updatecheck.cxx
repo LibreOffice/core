@@ -30,6 +30,7 @@
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/office/Quickstart.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
+#include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/task/XJob.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>

@@ -77,7 +77,6 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::reflection;
 using namespace ::com::sun::star::script;
 using namespace ::cppu;
 using namespace ::osl;

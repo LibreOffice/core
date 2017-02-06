@@ -18,6 +18,7 @@
  */
 
 #include <ZipPackageEntry.hxx>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/packages/zip/ZipConstants.hpp>
 #include <osl/diagnose.h>
 

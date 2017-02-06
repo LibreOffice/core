@@ -21,6 +21,7 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/EmbedVerbs.hpp>
 #include <com/sun/star/embed/EntryInitModes.hpp>
+#include <com/sun/star/embed/UnreachableStateException.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>

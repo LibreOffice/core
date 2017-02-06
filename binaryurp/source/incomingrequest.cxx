@@ -24,6 +24,7 @@
 #include <vector>
 
 #include "com/sun/star/bridge/XInstanceProvider.hpp"
+#include "com/sun/star/container/NoSuchElementException.hpp"
 #include "cppuhelper/exc_hlp.hxx"
 #include "o3tl/runtimetooustring.hxx"
 #include "rtl/byteseq.hxx"

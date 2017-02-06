@@ -39,6 +39,8 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
+#include <com/sun/star/xml/xpath/XPathException.hpp>
+#include <com/sun/star/xml/dom/DOMException.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>

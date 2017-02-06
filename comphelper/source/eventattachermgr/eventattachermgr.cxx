@@ -37,6 +37,7 @@
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/reflection/XIdlMethod.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/Converter.hpp>
 #include <com/sun/star/script/XEngineListener.hpp>
 #include <com/sun/star/script/XEventAttacher2.hpp>

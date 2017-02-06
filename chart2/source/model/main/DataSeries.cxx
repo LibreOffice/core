@@ -29,6 +29,8 @@
 #include "CloneHelper.hxx"
 #include "ModifyListenerHelper.hxx"
 #include "EventListenerHelper.hxx"
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <algorithm>

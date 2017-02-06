@@ -21,7 +21,9 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyExistException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <osl/time.h>
 #include <osl/diagnose.h>

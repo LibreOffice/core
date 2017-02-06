@@ -30,7 +30,7 @@
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
-
+#include <com/sun/star/script/provider/ScriptFrameworkErrorException.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
 #include <com/sun/star/script/provider/theMasterScriptProviderFactory.hpp>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorType.hpp>

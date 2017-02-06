@@ -9,6 +9,7 @@
 
 #include <rtfdocumentimpl.hxx>
 
+#include <com/sun/star/io/WrongFormatException.hpp>
 #include <svl/lngmisc.hxx>
 
 #include <ooxml/resourceids.hxx>

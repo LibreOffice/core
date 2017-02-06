@@ -66,6 +66,7 @@
 #include <o3tl/make_unique.hxx>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/FileSystemStorageFactory.hpp>
+#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -75,6 +76,8 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/graphic/GraphicProvider.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ImageManager.hpp>

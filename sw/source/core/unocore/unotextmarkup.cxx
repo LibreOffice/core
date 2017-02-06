@@ -22,8 +22,10 @@
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <SwSmartTagMgr.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <com/sun/star/text/TextMarkupDescriptor.hpp>
+#include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/container/XStringKeyMap.hpp>
 #include <ndtxt.hxx>
 #include <SwGrammarMarkUp.hxx>

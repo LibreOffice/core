@@ -27,6 +27,7 @@
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 
 #include <com/sun/star/drawing/XDrawPage.hpp>

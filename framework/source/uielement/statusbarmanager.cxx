@@ -31,11 +31,11 @@
 #include "general.h"
 #include "properties.h"
 #include <helper/mischelper.hxx>
-
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/theStatusbarControllerFactory.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/ui/ItemType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

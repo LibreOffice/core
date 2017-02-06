@@ -25,6 +25,7 @@
 #include "myucp_datasupplier.hxx"
 #include "ContentHelper.hxx"
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <tools/debug.hxx>
 
 using namespace ::com::sun::star::uno;

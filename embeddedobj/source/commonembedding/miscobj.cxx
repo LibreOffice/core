@@ -24,6 +24,7 @@
 #include <com/sun/star/embed/EmbedUpdateModes.hpp>
 #include <com/sun/star/embed/XInplaceClient.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 
 #include <cppuhelper/typeprovider.hxx>

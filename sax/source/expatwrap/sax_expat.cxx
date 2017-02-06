@@ -29,6 +29,7 @@
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 

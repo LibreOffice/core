@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <com/sun/star/sdbc/SQLException.hpp>
+#include <com/sun/star/ucb/ListenerAlreadySetException.hpp>
+#include <com/sun/star/ucb/ServiceNotFoundException.hpp>
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
 #include "filid.hxx"
 #include "filtask.hxx"

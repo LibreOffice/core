@@ -34,6 +34,7 @@
 #include "querycomposer.hxx"
 #include "sdbcoretools.hxx"
 
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/tools/ConnectionTools.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>

@@ -24,6 +24,7 @@
 #include <svx/unomid.hxx>
 #include "unowids.hxx"
 #include <comphelper/servicehelper.hxx>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/ShadowLocation.hpp>

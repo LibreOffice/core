@@ -17,7 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
 
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/table/XMergeableCell.hpp>
 
 #include <algorithm>

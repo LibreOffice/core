@@ -25,6 +25,7 @@
 
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 

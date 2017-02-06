@@ -58,6 +58,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>

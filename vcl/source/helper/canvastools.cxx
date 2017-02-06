@@ -29,6 +29,7 @@
 
 #include <com/sun/star/rendering/ColorSpaceType.hpp>
 #include <com/sun/star/rendering/RenderingIntent.hpp>
+#include <com/sun/star/rendering/VolatileContentDestroyedException.hpp>
 #include <com/sun/star/rendering/XGraphicDevice.hpp>
 #include <com/sun/star/rendering/XBitmap.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>

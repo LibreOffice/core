@@ -11,6 +11,7 @@
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
 #include "cmis_content.hxx"
 #include "cmis_provider.hxx"

@@ -19,6 +19,7 @@
 
 #include "ocompinstream.hxx"
 #include <com/sun/star/embed/StorageFormats.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <osl/diagnose.h>

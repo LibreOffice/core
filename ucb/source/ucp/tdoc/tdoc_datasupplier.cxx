@@ -26,6 +26,7 @@
 
 #include <vector>
 
+#include "com/sun/star/ucb/IllegalIdentifierException.hpp"
 #include "osl/diagnose.h"
 #include "ucbhelper/contentidentifier.hxx"
 

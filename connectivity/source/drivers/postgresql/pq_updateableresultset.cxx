@@ -39,7 +39,7 @@
 
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XGeneratedResultSet.hpp>
 
 #include "pq_updateableresultset.hxx"

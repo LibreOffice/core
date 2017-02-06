@@ -28,6 +28,7 @@
 #include <com/sun/star/form/inspection/FormComponentPropertyHandler.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
 #include <com/sun/star/inspection/PropertyLineElement.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/FormattedString.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>

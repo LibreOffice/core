@@ -18,6 +18,7 @@
  */
 
 #include <com/sun/star/geometry/AffineMatrix2D.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/rendering/RenderState.hpp>
 #include <com/sun/star/rendering/ViewState.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>

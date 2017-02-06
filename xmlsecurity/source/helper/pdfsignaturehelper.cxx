@@ -13,6 +13,7 @@
 
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
+#include <com/sun/star/uno/SecurityException.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <comphelper/sequence.hxx>

@@ -25,6 +25,7 @@
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/XCompletedExecution.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>

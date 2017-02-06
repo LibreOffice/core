@@ -23,7 +23,9 @@
 #include <cassert>
 #include <exception>
 
+#include "com/sun/star/bridge/BridgeExistsException.hpp"
 #include "com/sun/star/connection/XConnection.hpp"
+#include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"

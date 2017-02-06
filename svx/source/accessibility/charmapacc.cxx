@@ -24,6 +24,7 @@
 #include "charmapacc.hxx"
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <toolkit/helper/externallock.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <osl/interlck.h>

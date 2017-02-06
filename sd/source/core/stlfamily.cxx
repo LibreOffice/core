@@ -19,6 +19,7 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 
 #include <osl/mutex.hxx>

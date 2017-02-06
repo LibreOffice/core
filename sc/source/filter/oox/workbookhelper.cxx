@@ -21,6 +21,7 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/sheet/XDatabaseRange.hpp>
 #include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>

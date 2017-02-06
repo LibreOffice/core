@@ -29,6 +29,8 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include <com/sun/star/io/XMarkableStream.hpp>
+#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
