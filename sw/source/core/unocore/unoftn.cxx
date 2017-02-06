@@ -120,13 +120,13 @@ void SwXFootnote::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 }
 
 SwXFootnote::SwXFootnote(const bool bEndnote)
-    : SwXText(nullptr, CURSOR_FOOTNOTE)
+    : SwXText(nullptr, CursorType::Footnote)
     , m_pImpl( new SwXFootnote::Impl(*this, nullptr, bEndnote) )
 {
 }
 
 SwXFootnote::SwXFootnote(SwDoc & rDoc, SwFormatFootnote & rFormat)
-    : SwXText(& rDoc, CURSOR_FOOTNOTE)
+    : SwXText(& rDoc, CursorType::Footnote)
     , m_pImpl( new SwXFootnote::Impl(*this, &rFormat, rFormat.IsEndNote()) )
 {
 }
@@ -428,7 +428,7 @@ SwXFootnote::createTextCursor()
     SwTextFootnote const*const pTextFootnote = rFormat.GetTextFootnote();
     SwPosition aPos( *pTextFootnote->GetStartNode() );
     SwXTextCursor *const pXCursor =
-        new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE, aPos);
+        new SwXTextCursor(*GetDoc(), this, CursorType::Footnote, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
     const uno::Reference< text::XTextCursor > xRet =
@@ -461,7 +461,7 @@ SwXFootnote::createTextCursorByRange(
 
     const uno::Reference< text::XTextCursor > xRet =
         static_cast<text::XWordCursor*>(
-                new SwXTextCursor(*GetDoc(), this, CURSOR_FOOTNOTE,
+                new SwXTextCursor(*GetDoc(), this, CursorType::Footnote,
                     *aPam.GetPoint(), aPam.GetMark()));
     return xRet;
 }
@@ -477,7 +477,7 @@ SwXFootnote::createEnumeration()
     SwPosition aPos( *pTextFootnote->GetStartNode() );
     auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
     pUnoCursor->Move(fnMoveForward, GoInNode);
-    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_FOOTNOTE);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Footnote);
 }
 
 uno::Type SAL_CALL SwXFootnote::getElementType()

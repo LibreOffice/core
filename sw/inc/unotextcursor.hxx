@@ -81,13 +81,13 @@ public:
     SwXTextCursor(
             SwDoc & rDoc,
             css::uno::Reference< css::text::XText > const& xParent,
-            const enum CursorType eType,
+            const CursorType eType,
             SwPosition const& rPos,
             SwPosition const*const pMark = nullptr);
     SwXTextCursor(
             css::uno::Reference< css::text::XText > const& xParent,
             SwPaM const& rSourceCursor,
-            const enum CursorType eType = CURSOR_ALL);
+            const CursorType eType = CursorType::All);
 
     SwUnoCursor& GetCursor();
     bool IsAtEndOfMeta() const;

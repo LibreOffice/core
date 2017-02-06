@@ -78,12 +78,12 @@ class SwXText::Impl
 public:
     SwXText &                   m_rThis;
     SfxItemPropertySet const&   m_rPropSet;
-    const enum CursorType       m_eType;
+    const CursorType            m_eType;
     SwDoc *                     m_pDoc;
     bool                        m_bIsValid;
 
     Impl(   SwXText & rThis,
-            SwDoc *const pDoc, const enum CursorType eType)
+            SwDoc *const pDoc, const CursorType eType)
         : m_rThis(rThis)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT))
         , m_eType(eType)
@@ -118,7 +118,7 @@ public:
 
 };
 
-SwXText::SwXText(SwDoc *const pDoc, const enum CursorType eType)
+SwXText::SwXText(SwDoc *const pDoc, const CursorType eType)
     : m_pImpl( new SwXText::Impl(*this, pDoc, eType) )
 {
 }
@@ -161,7 +161,7 @@ SwXText::PrepareForAttach(uno::Reference< text::XTextRange > &, const SwPaM &)
 
 bool SwXText::CheckForOwnMemberMeta(const SwPaM &, const bool)
 {
-    OSL_ENSURE(CURSOR_META != m_pImpl->m_eType, "should not be called!");
+    OSL_ENSURE(CursorType::Meta != m_pImpl->m_eType, "should not be called!");
     return false;
 }
 
@@ -334,7 +334,7 @@ SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     }
 
     bool bForceExpandHints( false );
-    if (CURSOR_META == m_pImpl->m_eType)
+    if (CursorType::Meta == m_pImpl->m_eType)
     {
         try
         {
@@ -532,13 +532,13 @@ SwXText::insertTextContent(
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
     switch (m_pImpl->m_eType)
     {
-        case CURSOR_FRAME:      eSearchNodeType = SwFlyStartNode;       break;
-        case CURSOR_TBLTEXT:    eSearchNodeType = SwTableBoxStartNode;  break;
-        case CURSOR_FOOTNOTE:   eSearchNodeType = SwFootnoteStartNode;  break;
-        case CURSOR_HEADER:     eSearchNodeType = SwHeaderStartNode;    break;
-        case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
+        case CursorType::Frame:      eSearchNodeType = SwFlyStartNode;       break;
+        case CursorType::TableText:    eSearchNodeType = SwTableBoxStartNode;  break;
+        case CursorType::Footnote:   eSearchNodeType = SwFootnoteStartNode;  break;
+        case CursorType::Header:     eSearchNodeType = SwHeaderStartNode;    break;
+        case CursorType::Footer:     eSearchNodeType = SwFooterStartNode;    break;
         //case CURSOR_INVALID:
-        //case CURSOR_BODY:
+        //case CursorType::Body:
         default:
             break;
     }
@@ -923,7 +923,7 @@ SwXText::setString(const OUString& rString)
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, nullptr);
     //insert an empty paragraph at the start and at the end to ensure that
     //all tables and sections can be removed by the selecting text::XTextCursor
-    if (CURSOR_META != m_pImpl->m_eType)
+    if (CursorType::Meta != m_pImpl->m_eType)
     {
         SwPosition aStartPos(*pStartNode);
         const SwEndNode* pEnd = pStartNode->EndOfSectionNode();
@@ -985,13 +985,13 @@ bool SwXText::Impl::CheckForOwnMember(
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
     switch (m_eType)
     {
-        case CURSOR_FRAME:      eSearchNodeType = SwFlyStartNode;       break;
-        case CURSOR_TBLTEXT:    eSearchNodeType = SwTableBoxStartNode;  break;
-        case CURSOR_FOOTNOTE:   eSearchNodeType = SwFootnoteStartNode;  break;
-        case CURSOR_HEADER:     eSearchNodeType = SwHeaderStartNode;    break;
-        case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
+        case CursorType::Frame:      eSearchNodeType = SwFlyStartNode;       break;
+        case CursorType::TableText:    eSearchNodeType = SwTableBoxStartNode;  break;
+        case CursorType::Footnote:   eSearchNodeType = SwFootnoteStartNode;  break;
+        case CursorType::Header:     eSearchNodeType = SwHeaderStartNode;    break;
+        case CursorType::Footer:     eSearchNodeType = SwFooterStartNode;    break;
         //case CURSOR_INVALID:
-        //case CURSOR_BODY:
+        //case CursorType::Body:
         default:
             ;
     }
@@ -2331,7 +2331,7 @@ SwXText::copyText(
 }
 
 SwXBodyText::SwXBodyText(SwDoc *const pDoc)
-    : SwXText(pDoc, CURSOR_BODY)
+    : SwXText(pDoc, CursorType::Body)
 {
 }
 
@@ -2439,7 +2439,7 @@ SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
             aPam.GetPoint()->nContent.Assign(pCont, 0);
         }
     }
-    return new SwXTextCursor(*GetDoc(), this, CURSOR_BODY, *aPam.GetPoint());
+    return new SwXTextCursor(*GetDoc(), this, CursorType::Body, *aPam.GetPoint());
 }
 
 uno::Reference< text::XTextCursor > SAL_CALL
@@ -2491,7 +2491,7 @@ SwXBodyText::createTextCursorByRange(
         if(p1 == p2)
         {
             aRef = static_cast<text::XWordCursor*>(
-                    new SwXTextCursor(*GetDoc(), this, CURSOR_BODY,
+                    new SwXTextCursor(*GetDoc(), this, CursorType::Body,
                         *aPam.GetPoint(), aPam.GetMark()));
         }
     }
@@ -2519,7 +2519,7 @@ SwXBodyText::createEnumeration()
     SwPosition aPos(rNode);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
     pUnoCursor->Move(fnMoveBackward, GoInDoc);
-    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_BODY);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Body);
 }
 
 uno::Type SAL_CALL
@@ -2606,7 +2606,7 @@ SwXHeadFootText::CreateXHeadFootText(
 
 SwXHeadFootText::SwXHeadFootText(SwFrameFormat & rHeadFootFormat, const bool bIsHeader)
     : SwXText(rHeadFootFormat.GetDoc(),
-            (bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER)
+            (bIsHeader) ? CursorType::Header : CursorType::Footer)
     , m_pImpl( new SwXHeadFootText::Impl(*this, rHeadFootFormat, bIsHeader) )
 {
 }
@@ -2695,7 +2695,7 @@ SwXHeadFootText::createTextCursor()
     const SwNode& rNode = rFlyContent.GetContentIdx()->GetNode();
     SwPosition aPos(rNode);
     SwXTextCursor *const pXCursor = new SwXTextCursor(*GetDoc(), this,
-            (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER, aPos);
+            (m_pImpl->m_bIsHeader) ? CursorType::Header : CursorType::Footer, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
 
@@ -2758,7 +2758,7 @@ SwXHeadFootText::createTextCursorByRange(
     {
         xRet = static_cast<text::XWordCursor*>(
                 new SwXTextCursor(*GetDoc(), this,
-                    (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER,
+                    (m_pImpl->m_bIsHeader) ? CursorType::Header : CursorType::Footer,
                     *aPam.GetPoint(), aPam.GetMark()));
     }
     return xRet;
@@ -2777,7 +2777,7 @@ SwXHeadFootText::createEnumeration()
     SwPosition aPos(rNode);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
     pUnoCursor->Move(fnMoveForward, GoInNode);
-    return SwXParagraphEnumeration::Create(this, pUnoCursor, (m_pImpl->m_bIsHeader) ? CURSOR_HEADER : CURSOR_FOOTER);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, (m_pImpl->m_bIsHeader) ? CursorType::Header : CursorType::Footer);
 }
 
 uno::Type SAL_CALL

@@ -49,7 +49,7 @@
 using namespace ::com::sun::star;
 
 SwXRedlineText::SwXRedlineText(SwDoc* _pDoc, SwNodeIndex aIndex) :
-    SwXText(_pDoc, CURSOR_REDLINE),
+    SwXText(_pDoc, CursorType::Redline),
     aNodeIndex(aIndex)
 {
 }
@@ -105,7 +105,7 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
 
     SwPosition aPos(aNodeIndex);
     SwXTextCursor *const pXCursor =
-        new SwXTextCursor(*GetDoc(), this, CURSOR_REDLINE, aPos);
+        new SwXTextCursor(*GetDoc(), this, CursorType::Redline, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
 
@@ -156,7 +156,7 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
     SwPaM aPam(aNodeIndex);
     aPam.Move(fnMoveForward, GoInNode);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(*aPam.Start()));
-    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_REDLINE);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Redline);
 }
 
 uno::Type SwXRedlineText::getElementType(  )
@@ -360,7 +360,7 @@ uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties
 }
 
 SwXRedline::SwXRedline(SwRangeRedline& rRedline, SwDoc& rDoc) :
-    SwXText(&rDoc, CURSOR_REDLINE),
+    SwXText(&rDoc, CursorType::Redline),
     pDoc(&rDoc),
     pRedline(&rRedline)
 {
@@ -530,7 +530,7 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration()
     SwPaM aPam(*pNodeIndex);
     aPam.Move(fnMoveForward, GoInNode);
     auto pUnoCursor(GetDoc()->CreateUnoCursor(*aPam.Start()));
-    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_REDLINE);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Redline);
 }
 
 uno::Type SwXRedline::getElementType(  )
@@ -557,7 +557,7 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor()
     {
         SwPosition aPos(*pNodeIndex);
         SwXTextCursor *const pXCursor =
-            new SwXTextCursor(*pDoc, this, CURSOR_REDLINE, aPos);
+            new SwXTextCursor(*pDoc, this, CursorType::Redline, aPos);
         auto& rUnoCursor(pXCursor->GetCursor());
         rUnoCursor.Move(fnMoveForward, GoInNode);
 
