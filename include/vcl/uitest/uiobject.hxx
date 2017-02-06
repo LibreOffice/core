@@ -83,7 +83,7 @@ public:
      * This method should not be exposed to the outside world.
      *
      */
-    virtual void dumpState() const;
+    virtual OUString dumpState() const;
 
     /**
      * Currently an internal method to dump the parent-child relationship starting from the current top focus window.
@@ -91,7 +91,7 @@ public:
      * This method should not be exposed to the outside world.
      *
      */
-    virtual void dumpHierarchy() const;
+    virtual OUString dumpHierarchy() const;
 };
 
 class UITEST_DLLPUBLIC WindowUIObject : public UIObject
@@ -113,9 +113,9 @@ public:
 
     virtual std::set<OUString> get_children() const override;
 
-    virtual void dumpState() const override;
+    virtual OUString dumpState() const override;
 
-    virtual void dumpHierarchy() const override;
+    virtual OUString dumpHierarchy() const override;
 
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
