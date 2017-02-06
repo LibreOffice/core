@@ -353,19 +353,19 @@ const char * dbg_out(const SwPosition & rPos)
 
 static OUString lcl_dbg_out(const SwPaM & rPam)
 {
-   OUString aStr("[ Pt: ");
+    OUString aStr("[ Pt: ");
 
-   aStr += lcl_dbg_out(*rPam.GetPoint());
+    aStr += lcl_dbg_out(*rPam.GetPoint());
 
-   if (rPam.HasMark())
-   {
-       aStr += ", Mk: ";
-       aStr += lcl_dbg_out(*rPam.GetMark());
-   }
+    if (rPam.HasMark())
+    {
+        aStr += ", Mk: ";
+        aStr += lcl_dbg_out(*rPam.GetMark());
+    }
 
-   aStr += " ]";
+    aStr += " ]";
 
-   return aStr;
+    return aStr;
 }
 
 const char * dbg_out(const SwPaM & rPam)

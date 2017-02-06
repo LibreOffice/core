@@ -111,8 +111,8 @@ bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
 void SfxLokHelper::notifyOtherView(SfxViewShell* pThisView, SfxViewShell* pOtherView, int nType, const OString& rKey, const OString& rPayload)
 {
     OString aPayload = OString("{ \"viewId\": \"") + OString::number(SfxLokHelper::getView(pThisView)) +
-        "\", \"part\": \"" + OString::number(pThisView->getPart()) +
-        "\", \"" + rKey + "\": \"" + rPayload + "\" }";
+                       "\", \"part\": \"" + OString::number(pThisView->getPart()) +
+                       "\", \"" + rKey + "\": \"" + rPayload + "\" }";
 
     pOtherView->libreOfficeKitViewCallback(nType, aPayload.getStr());
 }
