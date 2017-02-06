@@ -755,7 +755,7 @@ void sw_setValue( SwXCell &rCell, double nVal )
 
 
 SwXCell::SwXCell(SwFrameFormat* pTableFormat, SwTableBox* pBx, size_t const nPos) :
-    SwXText(pTableFormat->GetDoc(), CURSOR_TBLTEXT),
+    SwXText(pTableFormat->GetDoc(), CursorType::TableText),
     SwClient(pTableFormat),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
     pBox(pBx),
@@ -765,7 +765,7 @@ SwXCell::SwXCell(SwFrameFormat* pTableFormat, SwTableBox* pBx, size_t const nPos
 }
 
 SwXCell::SwXCell(SwFrameFormat* pTableFormat, const SwStartNode& rStartNode) :
-    SwXText(pTableFormat->GetDoc(), CURSOR_TBLTEXT),
+    SwXText(pTableFormat->GetDoc(), CursorType::TableText),
     SwClient(pTableFormat),
     m_pPropSet(aSwMapProvider.GetPropertySet(PROPERTY_MAP_TABLE_CELL)),
     pBox(nullptr),
@@ -979,7 +979,7 @@ uno::Reference<text::XTextCursor> SwXCell::createTextCursor()
     const SwStartNode* pSttNd = pStartNode ? pStartNode : pBox->GetSttNd();
     SwPosition aPos(*pSttNd);
     SwXTextCursor* const pXCursor =
-        new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT, aPos);
+        new SwXTextCursor(*GetDoc(), this, CursorType::TableText, aPos);
     auto& rUnoCursor(pXCursor->GetCursor());
     rUnoCursor.Move(fnMoveForward, GoInNode);
     return static_cast<text::XWordCursor*>(pXCursor);
@@ -999,7 +999,7 @@ uno::Reference<text::XTextCursor> SwXCell::createTextCursorByRange(const uno::Re
     if( p1 != pSttNd )
         return nullptr;
     return static_cast<text::XWordCursor*>(
-        new SwXTextCursor(*GetDoc(), this, CURSOR_TBLTEXT,
+        new SwXTextCursor(*GetDoc(), this, CursorType::TableText,
         *aPam.GetPoint(), aPam.GetMark()));
 }
 
@@ -1130,7 +1130,7 @@ uno::Reference<container::XEnumeration> SwXCell::createEnumeration()
     // remember table and start node for later travelling
     // (used in export of tables in tables)
     SwTable const*const pTable(&pSttNd->FindTableNode()->GetTable());
-    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_TBLTEXT, pSttNd, pTable);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::TableText, pSttNd, pTable);
 }
 
 uno::Type SAL_CALL SwXCell::getElementType()
