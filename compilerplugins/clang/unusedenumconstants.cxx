@@ -191,7 +191,7 @@ try_again:
     return true;
 }
 
-loplugin::Plugin::Registration< UnusedEnumConstants > X("unusedenumconstants", true);
+loplugin::Plugin::Registration< UnusedEnumConstants > X("unusedenumconstants", false);
 
 }
 
