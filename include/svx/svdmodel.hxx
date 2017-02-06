@@ -103,7 +103,6 @@ namespace o3tl
 
 enum class SdrHintKind
 {
-    Unknown,              // Unknown
     LayerChange,          // changed layer definition
     LayerOrderChange,     // order of layer changed (Insert/Remove/ChangePos)
     PageOrderChange,      // order of pages (object pages or master pages) changed (Insert/Remove/ChangePos)
