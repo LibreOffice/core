@@ -82,11 +82,10 @@ namespace o3tl {
 #define VIEWMODE_MASK   (WB_ICON | WB_SMALLICON | WB_DETAILS)
 
 
-enum IcnViewFieldType
+enum class IcnViewFieldType
 {
-    IcnViewFieldTypeDontknow = 0,
-    IcnViewFieldTypeImage = 1,
-    IcnViewFieldTypeText = 2
+    Image,
+    Text
 };
 
 
