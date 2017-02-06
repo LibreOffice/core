@@ -54,7 +54,7 @@
       </node>
       <node oor:name=".uno:Presentation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Start from ~first Slide</value>
+          <value xml:lang="en-US">Start from ~First Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -62,7 +62,7 @@
       </node>
       <node oor:name=".uno:PresentationCurrentSlide" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Start from c~urrent Slide</value>
+          <value xml:lang="en-US">Start from C~urrent Slide</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -70,7 +70,7 @@
       </node>
       <node oor:name=".uno:RestoreEditingView" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Jump to last edited Slide</value>
+          <value xml:lang="en-US">Jump to Last Edited Slide</value>
         </prop>
       </node>
       <node oor:name=".uno:Remote" oor:op="replace">
@@ -128,7 +128,7 @@
       </node>
       <node oor:name=".uno:PagesPerRow" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Slides Per Row</value>
+          <value xml:lang="en-US">Slides per Row</value>
         </prop>
       </node>
       <node oor:name=".uno:TextFitToSizeTool" oor:op="replace">

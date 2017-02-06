@@ -36,7 +36,7 @@
         </node>
         <node oor:name="Single" oor:op="replace">
           <prop oor:name="Label">
-            <value xml:lang="en-US">Single toolbar</value>
+            <value xml:lang="en-US">Single Toolbar</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>Single</value>
@@ -147,7 +147,7 @@
         </node>
         <node oor:name="Single" oor:op="replace">
           <prop oor:name="Label">
-            <value xml:lang="en-US">Single toolbar</value>
+            <value xml:lang="en-US">Single Toolbar</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>Single</value>
@@ -259,7 +259,7 @@
         </node>
         <node oor:name="Single" oor:op="replace">
           <prop oor:name="Label">
-            <value xml:lang="en-US">Single toolbar</value>
+            <value xml:lang="en-US">Single Toolbar</value>
           </prop>
           <prop oor:name="CommandArg">
             <value>Single</value>
