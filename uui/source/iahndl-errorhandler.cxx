@@ -28,6 +28,7 @@
 
 #include <tools/errinf.hxx>
 #include <svtools/svtools.hrc>
+#include <svx/dialogs.hrc>
 
 #include "ids.hrc"
 #include "getcontinuations.hxx"
@@ -157,7 +158,7 @@ UUIInteractionHelper::handleErrorHandlerRequest(
                 RID_CHAOS_START + 12,
                 // cf. chaos/source/inc/cntrids.hrc, where
                 // #define RID_CHAOS_ERRHDL (RID_CHAOS_START + 12)
-                RID_SVX_START + 350, // RID_SVXERRCODE
+                RID_SVXERRCODE,
                 RID_UUI_ERRHDL };
         ErrCode nErrorId = nErrorCode & ~ERRCODE_WARNING_MASK;
         Source eSource = nErrorId < ERRCODE_AREA_LIB1 ?
