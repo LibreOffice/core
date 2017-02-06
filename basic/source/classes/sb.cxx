@@ -1663,7 +1663,7 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
     // Implementation of the code for the string transport to SFX-Error
     if( !rMsg.isEmpty() )
     {
-        code = (SbError)*new StringErrorInfo( code, rMsg );
+        code = (SbError)(new StringErrorInfo( code, rMsg ))->GetErrorCode();
     }
     SetErrorData( code, l, c1, c2 );
     GetSbData()->bCompilerError = true;
@@ -1702,11 +1702,11 @@ bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_In
         {
             OUString aTmp = "\'" + OUString::number(SbxErrObject::getUnoErrObject()->getNumber()) +
                             "\'\n" + OUString(!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
-            code = (SbError)*new StringErrorInfo( code, aTmp );
+            code = (SbError)(new StringErrorInfo( code, aTmp ))->GetErrorCode();
         }
         else
         {
-            code = (SbError)*new StringErrorInfo( code, rMsg );
+            code = (SbError)(new StringErrorInfo( code, rMsg ))->GetErrorCode();
         }
     }
 

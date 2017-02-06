@@ -973,8 +973,8 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
                               &CUI_MGR() );
 
     ErrorHandler::HandleError(
-        *new StringErrorInfo( ERRCODE_SVX_GRAPHIC_NOTREADABLE,
-                              aBgdGraphicPath ) );
+        (new StringErrorInfo( ERRCODE_SVX_GRAPHIC_NOTREADABLE,
+                              aBgdGraphicPath ))->GetErrorCode() );
 }
 
 bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()

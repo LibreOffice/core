@@ -62,7 +62,7 @@ public:
                             DynamicErrorInfo(sal_uIntPtr lUserId, sal_uInt16 nMask);
     virtual                 ~DynamicErrorInfo() override;
 
-    operator                sal_uIntPtr() const;
+    sal_uIntPtr             GetErrorCode() const;
     sal_uInt16              GetDialogMask() const;
 };
 

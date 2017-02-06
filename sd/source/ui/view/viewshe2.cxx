@@ -864,7 +864,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
     if (aErrCode != 0 && !bAbort)
     {
-        ErrorHandler::HandleError(* new StringErrorInfo(aErrCode, OUString() ) );
+        ErrorHandler::HandleError( (new StringErrorInfo(aErrCode, ""))->GetErrorCode() );
     }
 
     return aErrCode == 0;
