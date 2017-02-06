@@ -39,21 +39,20 @@ typedef ::cppu::WeakImplHelper
 >
 SwSimpleEnumeration_Base;
 
-enum CursorType
+enum class CursorType
 {
-    CURSOR_INVALID,
-    CURSOR_BODY,
-    CURSOR_FRAME,
-    CURSOR_TBLTEXT,
-    CURSOR_FOOTNOTE,
-    CURSOR_HEADER,
-    CURSOR_FOOTER,
-    CURSOR_REDLINE,
-    CURSOR_ALL,         // for Search&Replace
-    CURSOR_SELECTION,   // create a paragraph enumeration from
+    Body,
+    Frame,
+    TableText,
+    Footnote,
+    Header,
+    Footer,
+    Redline,
+    All,         // for Search&Replace
+    Selection,   // create a paragraph enumeration from
                         // a text range or cursor
-    CURSOR_SELECTION_IN_TABLE,
-    CURSOR_META,         // meta/meta-field
+    SelectionInTable,
+    Meta,         // meta/meta-field
 };
 
 /*

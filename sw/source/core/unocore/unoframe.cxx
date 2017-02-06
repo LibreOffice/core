@@ -3107,13 +3107,13 @@ OUString SwXFrame::getShapeType()
 }
 
 SwXTextFrame::SwXTextFrame( SwDoc *_pDoc ) :
-    SwXText(nullptr, CURSOR_FRAME),
+    SwXText(nullptr, CursorType::Frame),
     SwXFrame(FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME), _pDoc )
 {
 }
 
 SwXTextFrame::SwXTextFrame(SwFrameFormat& rFormat) :
-    SwXText(rFormat.GetDoc(), CURSOR_FRAME),
+    SwXText(rFormat.GetDoc(), CursorType::Frame),
     SwXFrame(rFormat, FLYCNTTYPE_FRM, aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXT_FRAME))
 {
 
@@ -3240,7 +3240,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor()
         }
 
         SwXTextCursor *const pXCursor = new SwXTextCursor(
-                 *pFormat->GetDoc(), this, CURSOR_FRAME, *aPam.GetPoint());
+                 *pFormat->GetDoc(), this, CursorType::Frame, *aPam.GetPoint());
         aRef =  static_cast<text::XWordCursor*>(pXCursor);
     }
     else
@@ -3260,7 +3260,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
         if(aPam.GetNode().FindFlyStartNode() == rNode.FindFlyStartNode())
         {
             aRef = static_cast<text::XWordCursor*>(
-                    new SwXTextCursor(*pFormat->GetDoc(), this, CURSOR_FRAME,
+                    new SwXTextCursor(*pFormat->GetDoc(), this, CursorType::Frame,
                         *aPam.GetPoint(), aPam.GetMark()));
         }
     }
@@ -3278,7 +3278,7 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration()
     SwPosition aPos(pFormat->GetContent().GetContentIdx()->GetNode());
     auto pUnoCursor(GetDoc()->CreateUnoCursor(aPos));
     pUnoCursor->Move(fnMoveForward, GoInNode);
-    return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_FRAME);
+    return SwXParagraphEnumeration::Create(this, pUnoCursor, CursorType::Frame);
 }
 
 uno::Type  SwXTextFrame::getElementType()

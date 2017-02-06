@@ -470,13 +470,13 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
         , m_pCursor(pCursor)
     {
         OSL_ENSURE(m_xParentText.is(), "SwXParagraphEnumeration: no parent?");
-        OSL_ENSURE(   !((CURSOR_SELECTION_IN_TABLE == eType) ||
-                        (CURSOR_TBLTEXT == eType))
+        OSL_ENSURE(   !((CursorType::SelectionInTable == eType) ||
+                        (CursorType::TableText == eType))
                    || (m_pOwnTable && m_pOwnStartNode),
             "SwXParagraphEnumeration: table type but no start node or table?");
 
-        if ((CURSOR_SELECTION == m_eCursorType) ||
-            (CURSOR_SELECTION_IN_TABLE == m_eCursorType))
+        if ((CursorType::Selection == m_eCursorType) ||
+            (CursorType::SelectionInTable == m_eCursorType))
         {
             SwUnoCursor & rCursor = GetCursor();
             rCursor.Normalize();
@@ -572,14 +572,14 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
 
     // check for exceeding selections
     if (!m_bFirstParagraph &&
-        ((CURSOR_SELECTION == m_eCursorType) ||
-         (CURSOR_SELECTION_IN_TABLE == m_eCursorType)))
+        ((CursorType::Selection == m_eCursorType) ||
+         (CursorType::SelectionInTable == m_eCursorType)))
     {
         SwPosition* pStart = rUnoCursor.Start();
         auto aNewCursor(rUnoCursor.GetDoc()->CreateUnoCursor(*pStart));
         // one may also go into tables here
-        if ((CURSOR_TBLTEXT != m_eCursorType) &&
-            (CURSOR_SELECTION_IN_TABLE != m_eCursorType))
+        if ((CursorType::TableText != m_eCursorType) &&
+            (CursorType::SelectionInTable != m_eCursorType))
         {
             aNewCursor->SetRemainInSection( false );
         }
@@ -587,8 +587,8 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         // os 2005-01-14: This part is only necessary to detect movements out
         // of a selection; if there is no selection we don't have to care
         SwTableNode *const pTableNode = aNewCursor->GetNode().FindTableNode();
-        if (((CURSOR_TBLTEXT != m_eCursorType) &&
-            (CURSOR_SELECTION_IN_TABLE != m_eCursorType)) && pTableNode)
+        if (((CursorType::TableText != m_eCursorType) &&
+            (CursorType::SelectionInTable != m_eCursorType)) && pTableNode)
         {
             aNewCursor->GetPoint()->nNode = pTableNode->EndOfSectionIndex();
             aNewCursor->Move(fnMoveForward, GoInNode);
@@ -639,7 +639,7 @@ SwXParagraphEnumerationImpl::NextElement_Impl()
         // position in a table, or in a simple paragraph?
         SwTableNode * pTableNode = rUnoCursor.GetNode().FindTableNode();
         pTableNode = lcl_FindTopLevelTable( pTableNode, m_pOwnTable );
-        if (/*CURSOR_TBLTEXT != eCursorType && CURSOR_SELECTION_IN_TABLE != eCursorType && */
+        if (/*CursorType::TableText != eCursorType && CursorType::SelectionInTable != eCursorType && */
             pTableNode && (&pTableNode->GetTable() != m_pOwnTable))
         {
             // this is a foreign table
@@ -1276,7 +1276,7 @@ SwXTextRange::createEnumeration()
     }
 
     const CursorType eSetType = (RANGE_IN_CELL == m_pImpl->m_eRangePosition)
-            ? CURSOR_SELECTION_IN_TABLE : CURSOR_SELECTION;
+            ? CursorType::SelectionInTable : CursorType::Selection;
     return SwXParagraphEnumeration::Create(m_pImpl->m_xParentText, pNewCursor, eSetType);
 }
 

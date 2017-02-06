@@ -81,7 +81,7 @@ public: /*not protected because C++ is retarded*/
 
 public:
 
-    SwXText(SwDoc *const pDoc, const enum CursorType eType);
+    SwXText(SwDoc *const pDoc, const CursorType eType);
 
     const SwDoc*    GetDoc() const;
           SwDoc*    GetDoc();
