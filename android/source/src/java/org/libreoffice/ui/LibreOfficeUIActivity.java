@@ -537,10 +537,12 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
                     viewMode = LIST_VIEW;
                     item.setTitle(R.string.grid_view); // Button points to next view.
                     item.setIcon(R.drawable.light_view_as_grid);
+                    prefs.edit().putInt(EXPLORER_VIEW_TYPE_KEY, LIST_VIEW).apply();
                 } else {
                     viewMode = GRID_VIEW;
                     item.setTitle(R.string.list_view); // Button points to next view.
                     item.setIcon(R.drawable.light_view_as_list);
+                    prefs.edit().putInt(EXPLORER_VIEW_TYPE_KEY, GRID_VIEW).apply();
                 }
                 createUI();
                 break;
