@@ -97,6 +97,7 @@ for d in definitionSet:
          "include/registry/refltype.hxx",
          "include/registry/version.h",
          "include/svtools/rtftoken.h",
+         "sc/source/filter/inc/xltracer.hxx",
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
