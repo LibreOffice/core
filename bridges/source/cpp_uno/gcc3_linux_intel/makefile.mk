@@ -34,7 +34,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCLINUXIgcc3"
+.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA
@@ -50,7 +50,8 @@ SLOFILES= \
     $(SLO)$/except.obj		\
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj \
-    $(SLO)$/call.obj
+    $(SLO)$/call.obj \
+    $(SLO)$/abi.obj
 
 SHL1TARGET= $(TARGET)
 

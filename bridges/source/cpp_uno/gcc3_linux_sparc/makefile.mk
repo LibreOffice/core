@@ -33,7 +33,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXS"
+.IF "$(OS)$(CPU)" == "LINUXS"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA

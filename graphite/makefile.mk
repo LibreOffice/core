@@ -92,7 +92,7 @@ CFLAGS4MSC= $(CFLAGS2MSC:s/ -/ $(JUSTASLASH)/)
 BUILD_FLAGS+= "CFLAGS4MSC=$(CFLAGS4MSC)" /F makefile.vc$(VCNUM) lib_dll
 .ENDIF
 
-.IF "$(COM)"=="GCC" || "$(OS)"=="FREEBSD"
+.IF "$(COM)"=="GCC" || "$(COM)"=="CLANG"
 
 # Does linux want --disable-shared?
 .IF "x$(debug)"!="x"
@@ -137,7 +137,7 @@ OUT2LIB=engine$/release$/*.lib
 OUT2LIB=engine$/src$/.libs$/libgraphite*.a
 .ENDIF
 
-.IF "$(COM)"=="GCC" || "$(OS)"=="FREEBSD"
+.IF "$(COM)"=="GCC" || "$(COM)"=="CLANG"
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ENDIF
 

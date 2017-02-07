@@ -24,7 +24,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
-#include <malloc.h>
+#include <typeinfo>
+#include <exception>
+#include <cstddef>
+#include <cxxabi.h>
+#include <stdlib.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -305,7 +309,7 @@ static void cpp_call(
      catch (...)
      {
           // fill uno exception
-        fillUnoException( CPPU_CURRENT_NAMESPACE::__cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
+        CPPU_CURRENT_NAMESPACE::fillUnoException( CPPU_CURRENT_NAMESPACE::__INTERNAL__cxa_get_globals()->caughtExceptions, *ppUnoExc, pThis->getBridge()->getCpp2Uno() );
 
         // temporary params
         for ( ; nTempIndizes--; )

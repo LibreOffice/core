@@ -442,7 +442,7 @@ elsif ( $platform =~ m/linux/ )
 # General Linux settings:
       $CVER           = "C341";
       $BIG_SVX        = "TRUE";
-      $COM            = "GCC";
+      $COM            = "@COM_IS@";
       $COMPATH        = '@COMPATH@'; 
       $GLIBC          = "2REDHAT60";
       $GUI            = "UNX";

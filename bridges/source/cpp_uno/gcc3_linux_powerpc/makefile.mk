@@ -33,7 +33,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-.IF "$(COM)$(OS)$(CPU)$(COMNAME)$(CPUNAME)" == "GCCLINUXPgcc3POWERPC"
+.IF "$(OS)$(CPU)$(COMNAME)$(CPUNAME)" == "LINUXPgcc3POWERPC"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA

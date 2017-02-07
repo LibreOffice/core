@@ -75,39 +75,39 @@
 .INCLUDE : unxscoi.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXS"
+.IF "$(OS)$(CPU)" == "LINUXS"
 .INCLUDE : unxlngs.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXI"
+.IF "$(OS)$(CPU)" == "LINUXI"
 .INCLUDE : unxlngi.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXX"
+.IF "$(OS)$(CPU)" == "LINUXX"
 .INCLUDE : unxlngx.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUXPPOWERPC"
+.IF "$(OS)$(CPU)$(CPUNAME)" == "LINUXPPOWERPC"
 .INCLUDE : unxlngppc.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUXPPOWERPC64"
+.IF "$(OS)$(CPU)$(CPUNAME)" == "LINUXPPOWERPC64"
 .INCLUDE : unxlngppc64.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUX3S390"
+.IF "$(OS)$(CPU)$(CPUNAME)" == "LINUX3S390"
 .INCLUDE : unxlngs390.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUX3S390X"
+.IF "$(OS)$(CPU)$(CPUNAME)" == "LINUX3S390X"
 .INCLUDE : unxlngs390x.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXR"
+.IF "$(OS)$(CPU)" == "LINUXR"
 .INCLUDE : unxlngr.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXA"
+.IF "$(OS)$(CPU)" == "LINUXA"
 .INCLUDE : unxlnga.mk
 .ENDIF
 
@@ -160,19 +160,19 @@
 .INCLUDE : unxmaccx.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXM"
+.IF "$(OS)$(CPU)" == "LINUXM"
 .INCLUDE : unxlngmips.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUX6"
+.IF "$(OS)$(CPU)" == "LINUX6"
 .INCLUDE : unxlngm68k.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXH"
+.IF "$(OS)$(CPU)" == "LINUXH"
 .INCLUDE : unxlnghppa.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXL"
+.IF "$(OS)$(CPU)" == "LINUXL"
 .INCLUDE : unxlngaxp.mk
 .ENDIF
 

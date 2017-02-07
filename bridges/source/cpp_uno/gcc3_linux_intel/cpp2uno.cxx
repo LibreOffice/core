@@ -24,6 +24,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
+#include <typeinfo>
+#include <exception>
+#include <cstddef>
+#include <cxxabi.h>
+
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include <uno/data.h>
@@ -412,7 +417,8 @@ unsigned char * codeSnippet(
 struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
-bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block) {
+bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
+{
     return static_cast< Slot * >(block) + 2;
 }
 

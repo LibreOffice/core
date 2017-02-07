@@ -35,7 +35,7 @@ NO_BSYMBOLIC=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)$(COMNAME)" == "GCCLINUXRgcc3"
+.IF "$(OS)$(CPU)$(COMNAME)" == "LINUXRgcc3"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA

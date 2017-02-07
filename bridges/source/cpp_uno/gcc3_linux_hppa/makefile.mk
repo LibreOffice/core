@@ -35,7 +35,7 @@ NO_BSYMBOLIC=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXH"
+.IF "$(OS)$(CPU)" == "LINUXH"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA

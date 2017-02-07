@@ -34,7 +34,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(COM)$(OS)$(CPU)$(COMNAME)$(CPUNAME)" == "GCCLINUX3gcc3S390X"
+.IF "$(OS)$(CPU)$(COMNAME)$(CPUNAME)" == "LINUX3gcc3S390X"
 
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA

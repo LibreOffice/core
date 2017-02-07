@@ -61,9 +61,10 @@ extern "C" {
     #else
         #define SAL_MATH_FINITE(d) finite(d) // fall back to pre-C99 name
     #endif
-#elif defined(__STDC__)
+#elif defined(__STDC__) && !(defined(LINUX) && defined(__clang__))
     // isfinite() should be available in math.h according to C99,C++99,SUSv3,etc.
-    // unless GCC bug 14608 hits us where cmath undefines isfinite() as macro
+    // unless GCC bug 14608 hits us where cmath undefines isfinite() as macro.
+    // Clang on Linux runs into that bug too.
     #define SAL_MATH_FINITE(d) isfinite(d)
 #elif defined( WNT)
 #define SAL_MATH_FINITE(d) _finite(d)
