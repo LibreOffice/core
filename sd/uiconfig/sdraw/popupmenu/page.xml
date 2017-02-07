@@ -31,6 +31,7 @@
       <menu:menuitem menu:id=".uno:GridVisible"/>
       <menu:menuitem menu:id=".uno:GridUse"/>
       <menu:menuitem menu:id=".uno:GridFront"/>
+      <menu:menuitem menu:id=".uno:HelplinesMove"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:SnapLinesMenu">
