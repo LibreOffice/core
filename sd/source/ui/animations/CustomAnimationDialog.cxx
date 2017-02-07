@@ -117,6 +117,7 @@ PresetPropertyBox::PresetPropertyBox( sal_Int32 nControlType, vcl::Window* pPare
 : PropertySubControl( nControlType ), maModifyLink(rModifyHdl)
 {
     mpControl = VclPtr<ListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
+    mpControl->set_hexpand(true);
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( LINK(this, PresetPropertyBox, OnSelect) );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX );
@@ -200,6 +201,7 @@ ColorPropertyBox::ColorPropertyBox( sal_Int32 nControlType, vcl::Window* pParent
 {
     mpControl = VclPtr<ColorListBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
     mpControl->SetDropDownLineCount( 10 );
+    mpControl->set_hexpand(true);
     mpControl->SetSelectHdl( LINK(this, ColorPropertyBox, OnSelect) );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX );
 
@@ -279,6 +281,7 @@ FontPropertyBox::FontPropertyBox( sal_Int32 nControlType, vcl::Window* pParent, 
 : PropertySubControl( nControlType ), maModifyHdl(rModifyHdl)
 {
     mpControl = VclPtr<FontNameBox>::Create( pParent, WB_BORDER|WB_TABSTOP|WB_DROPDOWN );
+    mpControl->set_hexpand(true);
     mpControl->SetDropDownLineCount( 10 );
     mpControl->SetSelectHdl( LINK(this, FontPropertyBox, ControlSelectHdl) );
     mpControl->SetHelpId( HID_SD_CUSTOMANIMATIONPANE_FONTPROPERTYBOX );
@@ -366,6 +369,7 @@ DropdownMenuBox::DropdownMenuBox( vcl::Window* pParent, Edit* pSubControl, Popup
     mpDropdownButton->SetPopupMenu( pMenu );
 
     SetSubEdit( mpSubControl );
+    set_hexpand(true);
     mpSubControl->SetParent( this );
     mpSubControl->Show();
 }
