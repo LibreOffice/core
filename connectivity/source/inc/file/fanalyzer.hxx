@@ -30,7 +30,6 @@ namespace connectivity
         class OConnection;
         class OOO_DLLPUBLIC_FILE OSQLAnalyzer final
         {
-            typedef ::std::list<OEvaluateSet*>      OEvaluateSetList;
             typedef ::std::pair< ::rtl::Reference<OPredicateCompiler>,::rtl::Reference<OPredicateInterpreter> > TPredicates;
 
             ::std::vector< TPredicates >        m_aSelectionEvaluations;

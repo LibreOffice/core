@@ -38,8 +38,6 @@ namespace connectivity
 
         class OOperand;
         typedef ::std::stack<OOperand*> OCodeStack;
-        class OBoolOperator;
-        typedef ::std::map<sal_Int32,sal_Int32> OEvaluateSet;
 
         class OOO_DLLPUBLIC_FILE OCode
         {
