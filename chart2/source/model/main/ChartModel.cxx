@@ -32,6 +32,7 @@
 #include "NameContainer.hxx"
 #include "UndoManager.hxx"
 #include "ChartView.hxx"
+#include "PopupRequest.hxx"
 #include <svx/charthelper.hxx>
 
 #include <vcl/openglwin.hxx>
@@ -407,6 +408,7 @@ void SAL_CALL ChartModel::disconnectController( const uno::Reference< frame::XCo
         m_xCurrentController.clear();
 
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
+    DisposeHelper::DisposeAndClear(m_xPopupRequest);
 }
 
 void SAL_CALL ChartModel::lockControllers()
@@ -491,6 +493,7 @@ void SAL_CALL ChartModel::setCurrentController( const uno::Reference< frame::XCo
     m_xCurrentController = xController;
 
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
+    DisposeHelper::DisposeAndClear(m_xPopupRequest);
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection()
@@ -564,6 +567,7 @@ void SAL_CALL ChartModel::dispose()
     m_xCurrentController.clear();
 
     DisposeHelper::DisposeAndClear( m_xRangeHighlighter );
+    DisposeHelper::DisposeAndClear(m_xPopupRequest);
 
     if( m_xOldModelAgg.is())
         m_xOldModelAgg->setDelegator( nullptr );
@@ -902,6 +906,13 @@ Reference< chart2::data::XRangeHighlighter > SAL_CALL ChartModel::getRangeHighli
             m_xRangeHighlighter.set( ChartModelHelper::createRangeHighlighter( xSelSupp ));
     }
     return m_xRangeHighlighter;
+}
+
+Reference<chart2::data::XPopupRequest> SAL_CALL ChartModel::getPopupRequest()
+{
+    if (!m_xPopupRequest.is())
+        m_xPopupRequest.set(new PopupRequest);
+    return m_xPopupRequest;
 }
 
 Reference< chart2::XChartTypeTemplate > ChartModel::impl_createDefaultChartTypeTemplate()

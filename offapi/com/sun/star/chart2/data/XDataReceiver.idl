@@ -87,6 +87,8 @@ interface XDataReceiver : ::com::sun::star::uno::XInterface
         return an empty object.</p>
      */
     XRangeHighlighter getRangeHighlighter();
+
+    XPopupRequest getPopupRequest();
 };
 
 } ; // data
