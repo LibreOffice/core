@@ -150,7 +150,7 @@ SalGraphics* SvpSalFrame::AcquireGraphics()
 {
     SvpSalGraphics* pGraphics = new SvpSalGraphics();
 #ifndef IOS
-    pGraphics->setSurface( m_pSurface );
+    pGraphics->setSurface(m_pSurface, B2IVector(maGeometry.nWidth, maGeometry.nHeight));
 #endif
     m_aGraphics.push_back( pGraphics );
     return pGraphics;
@@ -281,7 +281,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
         {
-             (*it)->setSurface(m_pSurface);
+             (*it)->setSurface(m_pSurface, aFrameSize);
         }
     }
     if( m_bVisible )
