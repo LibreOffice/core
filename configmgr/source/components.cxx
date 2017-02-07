@@ -561,7 +561,8 @@ Components::Components(
             OUString aTempFileURL;
             if (dumpWindowsRegistry(&aTempFileURL, eType)) {
                 parseFileLeniently(&parseXcuFile, aTempFileURL, layer, 0, 0, 0);
-                osl::File::remove(aTempFileURL);
+                if (!getenv("SAL_CONFIG_WINREG_RETAIN_TMP"))
+                    osl::File::remove(aTempFileURL);
             }
             ++layer; //TODO: overflow
 #endif
