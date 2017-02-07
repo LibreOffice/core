@@ -2124,12 +2124,11 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     try
     {
         uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetStorageFromURL( sShareAutoCorrFile, embed::ElementModes::READ );
-        OUString aXMLWordListName( pXMLImplAutocorr_ListStr, strlen(pXMLImplAutocorr_ListStr), RTL_TEXTENCODING_MS_1252 );
-        uno::Reference < io::XStream > xStrm = xStg->openStreamElement( aXMLWordListName, embed::ElementModes::READ );
+        uno::Reference < io::XStream > xStrm = xStg->openStreamElement( pXMLImplAutocorr_ListStr, embed::ElementModes::READ );
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
         xml::sax::InputSource aParserInput;
-        aParserInput.sSystemId = aXMLWordListName;
+        aParserInput.sSystemId = pXMLImplAutocorr_ListStr;
         aParserInput.aInputStream = xStrm->getInputStream();
 
         // get parser
@@ -2436,11 +2435,10 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
 
 bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
 {
-    OUString sStrmName( pXMLImplAutocorr_ListStr, strlen(pXMLImplAutocorr_ListStr), RTL_TEXTENCODING_MS_1252 );
     bool bRet = true, bRemove = !pAutocorr_List || pAutocorr_List->empty();
     if( !bRemove )
     {
-        tools::SvRef<SotStorageStream> refList = rStg.OpenSotStream( sStrmName,
+        tools::SvRef<SotStorageStream> refList = rStg.OpenSotStream( pXMLImplAutocorr_ListStr,
                     ( StreamMode::READ | StreamMode::WRITE | StreamMode::SHARE_DENYWRITE ) );
         if( refList.is() )
         {
@@ -2458,7 +2456,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
             xWriter->setOutputStream(xOut);
 
             uno::Reference<xml::sax::XDocumentHandler> xHandler(xWriter, uno::UNO_QUERY);
-            rtl::Reference< SvXMLAutoCorrectExport > xExp( new SvXMLAutoCorrectExport( xContext, pAutocorr_List, sStrmName, xHandler ) );
+            rtl::Reference< SvXMLAutoCorrectExport > xExp( new SvXMLAutoCorrectExport( xContext, pAutocorr_List, pXMLImplAutocorr_ListStr, xHandler ) );
 
             xExp->exportDoc( XML_BLOCK_LIST );
 
@@ -2481,7 +2479,7 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
 
     if( bRemove )
     {
-        rStg.Remove( sStrmName );
+        rStg.Remove( pXMLImplAutocorr_ListStr );
         rStg.Commit();
     }
 

@@ -1389,7 +1389,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf101626, "tdf101626.docx")
         if (rProp.Name == "BulletChar")
         {
             // the bulletChar has to be 0x2d!
-            CPPUNIT_ASSERT_EQUAL(OUString("\x2d", 1, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            CPPUNIT_ASSERT_EQUAL(OUString("\x2d"), rProp.Value.get<OUString>());
             return;
         }
     }
