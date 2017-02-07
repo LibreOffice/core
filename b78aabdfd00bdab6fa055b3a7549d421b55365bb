@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5201f7_30daa879",
+        "filename": "sw/source/core/doc/docbm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-07T08:43:50Z",
+      "side": 1,
+      "message": "Nitpick: I think it\u0027s a good idea to spell out SwPosition here, since there is no cast in the same line that would make it obvious what \"auto\" is, it\u0027s not an iterator, either, etc.",
+      "revId": "b78aabdfd00bdab6fa055b3a7549d421b55365bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
