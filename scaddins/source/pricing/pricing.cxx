@@ -60,10 +60,10 @@ ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
 
 const ScaFuncDataBase pFuncDataArr[] =
 {
-   FUNCDATA( OptBarrier,       13, ScaCat_Finance,    UNIQUE,  STDPAR),
-   FUNCDATA( OptTouch,         11, ScaCat_Finance,    UNIQUE,  STDPAR),
-   FUNCDATA( OptProbHit,        6, ScaCat_Finance,    UNIQUE,  STDPAR),
-   FUNCDATA( OptProbInMoney,    8, ScaCat_Finance,    UNIQUE,  STDPAR)
+   FUNCDATA( OptBarrier,       13, ScaCategory::Finance,    UNIQUE,  STDPAR),
+   FUNCDATA( OptTouch,         11, ScaCategory::Finance,    UNIQUE,  STDPAR),
+   FUNCDATA( OptProbHit,        6, ScaCategory::Finance,    UNIQUE,  STDPAR),
+   FUNCDATA( OptProbInMoney,    8, ScaCategory::Finance,    UNIQUE,  STDPAR)
 };
 
 #undef FUNCDATA
@@ -371,15 +371,12 @@ OUString SAL_CALL ScaPricingAddIn::getProgrammaticCategoryName(
     {
         switch( fDataIt->GetCategory() )
         {
-            case ScaCat_DateTime:   aRet = STR_FROM_ANSI( "Date&Time" );    break;
-            case ScaCat_Text:       aRet = STR_FROM_ANSI( "Text" );         break;
-            case ScaCat_Finance:    aRet = STR_FROM_ANSI( "Financial" );    break;
-            case ScaCat_Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
-            case ScaCat_Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
-            case ScaCat_Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
-            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
-            default:
-                break;
+            case ScaCategory::DateTime:   aRet = STR_FROM_ANSI( "Date&Time" );    break;
+            case ScaCategory::Text:       aRet = STR_FROM_ANSI( "Text" );         break;
+            case ScaCategory::Finance:    aRet = STR_FROM_ANSI( "Financial" );    break;
+            case ScaCategory::Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
+            case ScaCategory::Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
+            case ScaCategory::Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
         }
     }
 
