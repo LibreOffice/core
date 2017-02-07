@@ -118,6 +118,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/view/main/VLineProperties \
     chart2/source/view/main/VPolarTransformation \
     chart2/source/view/main/VTitle \
+    chart2/source/view/main/VButton \
 ))
 ifeq ($(ENABLE_HEADLESS),)
 $(eval $(call gb_Library_add_exception_objects,chartcore,\
