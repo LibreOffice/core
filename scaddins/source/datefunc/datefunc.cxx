@@ -34,9 +34,6 @@ using namespace ::com::sun::star;
 #define MY_SERVICE              "com.sun.star.sheet.addin.DateFunctions"
 #define MY_IMPLNAME             "com.sun.star.sheet.addin.DateFunctionsImpl"
 
-#define STR_FROM_ANSI( s )      OUString( s, strlen( s ), RTL_TEXTENCODING_MS_1252 )
-
-
 ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
     ResId( nId, rResMgr )
 {
@@ -281,11 +278,11 @@ OUString SAL_CALL ScaDateAddIn::getDisplayFunctionName( const OUString& aProgram
     {
         aRet = ScaResStringLoader( RID_DATE_FUNCTION_NAMES, fDataIt->GetUINameID(), GetResMgr() ).GetString();
         if( fDataIt->IsDouble() )
-            aRet += STR_FROM_ANSI( "_ADD" );
+            aRet += "_ADD";
     }
     else
     {
-        aRet = STR_FROM_ANSI( "UNKNOWNFUNC_" );
+        aRet = "UNKNOWNFUNC_";
         aRet += aProgrammaticName;
     }
 
@@ -317,7 +314,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayArgumentName(
         if( nStr )
             aRet = GetFuncDescrStr( fDataIt->GetDescrID(), nStr );
         else
-            aRet = STR_FROM_ANSI( "internal" );
+            aRet = "internal";
     }
 
     return aRet;
@@ -336,7 +333,7 @@ OUString SAL_CALL ScaDateAddIn::getArgumentDescription(
         if( nStr )
             aRet = GetFuncDescrStr( fDataIt->GetDescrID(), nStr + 1 );
         else
-            aRet = STR_FROM_ANSI( "for internal use only" );
+            aRet = "for internal use only";
     }
 
     return aRet;
@@ -353,17 +350,17 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
     {
         switch( fDataIt->GetCategory() )
         {
-            case ScaCategory::DateTime:   aRet = STR_FROM_ANSI( "Date&Time" );    break;
-            case ScaCategory::Text:       aRet = STR_FROM_ANSI( "Text" );         break;
-            case ScaCategory::Finance:    aRet = STR_FROM_ANSI( "Financial" );    break;
-            case ScaCategory::Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
-            case ScaCategory::Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
-            case ScaCategory::Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
+            case ScaCategory::DateTime:   aRet = "Date&Time";    break;
+            case ScaCategory::Text:       aRet = "Text";         break;
+            case ScaCategory::Finance:    aRet = "Financial";    break;
+            case ScaCategory::Inf:        aRet = "Information";  break;
+            case ScaCategory::Math:       aRet = "Mathematical"; break;
+            case ScaCategory::Tech:       aRet = "Technical";    break;
         }
     }
 
     if( aRet.isEmpty() )
-        aRet = STR_FROM_ANSI( "Add-In" );
+        aRet = "Add-In";
     return aRet;
 }
 
