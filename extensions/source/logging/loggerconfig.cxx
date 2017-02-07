@@ -79,19 +79,8 @@ namespace logging
         {
             struct Variable
             {
-                const sal_Char*         pVariablePattern;
-                const sal_Int32         nPatternLength;
-                rtl_TextEncoding        eEncoding;
-                const OUString   sVariableValue;
-
-                Variable( const sal_Char* _pVariablePattern,  const sal_Int32 _nPatternLength, rtl_TextEncoding _eEncoding,
-                        const OUString& _rVariableValue )
-                    :pVariablePattern( _pVariablePattern )
-                    ,nPatternLength( _nPatternLength )
-                    ,eEncoding( _eEncoding )
-                    ,sVariableValue( _rVariableValue )
-                {
-                }
+                OUStringLiteral pVariablePattern;
+                OUString sVariableValue;
             };
 
             OUString sLoggerName;
@@ -132,22 +121,21 @@ namespace logging
                 aProcessId = info.Ident;
             rtl::OUString aPID = OUString::number( aProcessId );
 
-            Variable aVariables[] =
+            Variable const aVariables[] =
             {
-                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(loggername)" ), sLoggerName ),
-                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(date)" ), sDate ),
-                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(time)" ), sTime ),
-                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(datetime)" ), sDateTime ),
-                Variable( RTL_CONSTASCII_USTRINGPARAM( "$(pid)" ), aPID )
+                {"$(loggername)", sLoggerName},
+                {"$(date)", sDate},
+                {"$(time)", sTime},
+                {"$(datetime)", sDateTime},
+                {"$(pid)", aPID}
             };
 
-            for (Variable & aVariable : aVariables)
+            for (Variable const & aVariable : aVariables)
             {
-                OUString sPattern( aVariable.pVariablePattern, aVariable.nPatternLength, aVariable.eEncoding );
-                sal_Int32 nVariableIndex = _inout_rFileURL.indexOf( sPattern );
+                sal_Int32 nVariableIndex = _inout_rFileURL.indexOf( aVariable.pVariablePattern );
                 if  (nVariableIndex >= 0)
                 {
-                    _inout_rFileURL = _inout_rFileURL.replaceAt( nVariableIndex, sPattern.getLength(), aVariable.sVariableValue );
+                    _inout_rFileURL = _inout_rFileURL.replaceAt( nVariableIndex, aVariable.pVariablePattern.size, aVariable.sVariableValue );
                 }
             }
         }
