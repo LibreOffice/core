@@ -1610,10 +1610,8 @@ struct ScOUStringCollate
     }
 };
 
-void ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId )
+void ScDBFunc::DataPilotSort(ScDPObject* pDPObj, long nDimIndex, bool bAscending, sal_uInt16* pUserListId)
 {
-    ScDocument* pDoc = GetViewData().GetDocument();
-    ScDPObject* pDPObj = pDoc->GetDPAtCursor(rPos.Col(), rPos.Row(), rPos.Tab());
     if (!pDPObj)
         return;
 
@@ -1621,8 +1619,6 @@ void ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
     if ( pUserListId )
         pDPObj->BuildAllDimensionMembers();
 
-    sal_uInt16 nOrientation;
-    long nDimIndex = pDPObj->GetHeaderDim(rPos, nOrientation);
     if (nDimIndex < 0)
         // Invalid dimension index.  Bail out.
         return;
@@ -1748,6 +1744,22 @@ void ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
     ScDBDocFunc aFunc(*GetViewData().GetDocShell());
 
     aFunc.DataPilotUpdate(pDPObj, pNewObj.get(), true, false);
+}
+
+void ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16* pUserListId )
+{
+    ScDocument* pDoc = GetViewData().GetDocument();
+    ScDPObject* pDPObj = pDoc->GetDPAtCursor(rPos.Col(), rPos.Row(), rPos.Tab());
+    if (!pDPObj)
+        return;
+
+    sal_uInt16 nOrientation;
+    long nDimIndex = pDPObj->GetHeaderDim(rPos, nOrientation);
+    if (nDimIndex < 0)
+        // Invalid dimension index.  Bail out.
+        return;
+
+    DataPilotSort(pDPObj, nDimIndex, bAscending, pUserListId);
 }
 
 bool ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
