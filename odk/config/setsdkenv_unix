@@ -74,6 +74,3 @@ fi
 
 "$SHELL" "$@"
 echo  Shell terminated.
-
-TERMHEAD=$HOSTNAME
-echo "]2;$TERMHEAD"

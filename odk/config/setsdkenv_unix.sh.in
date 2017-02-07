@@ -298,5 +298,3 @@ echo " * SDK Output directory = $OO_SDK_OUT"
 echo " * Auto deployment = $SDK_AUTO_DEPLOYMENT"
 echo " *"
 echo " ************************************************************************"
-
-echo "]2;Shell prepared with the LibreOffice SDK environment"
