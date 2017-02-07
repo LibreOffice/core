@@ -54,6 +54,7 @@ import org.libreoffice.AboutDialogFragment;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.SettingsActivity;
+import org.libreoffice.SettingsListenerModel;
 import org.libreoffice.storage.DocumentProviderFactory;
 import org.libreoffice.storage.DocumentProviderSettingsActivity;
 import org.libreoffice.storage.IDocumentProvider;
@@ -72,8 +73,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class LibreOfficeUIActivity extends AppCompatActivity {
-    private static final String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
+public class LibreOfficeUIActivity extends AppCompatActivity implements SettingsListenerModel.OnSettingsPreferenceChangedListener{
+    private String LOGTAG = LibreOfficeUIActivity.class.getSimpleName();
     private SharedPreferences prefs;
     private int filterMode = FileUtilities.ALL;
     private int viewMode;
@@ -116,9 +117,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
         documentProviderFactory = DocumentProviderFactory.getInstance();
 
         PreferenceManager.setDefaultValues(this, R.xml.documentprovider_preferences, false);
-
         readPreferences();
-
+        SettingsListenerModel.getInstance().setListener(this);
         // init UI and populate with contents from the provider
         switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
         createUI();
@@ -523,16 +523,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
 
-        MenuItem item = menu.findItem(R.id.menu_view_toggle);
-        if (viewMode == GRID_VIEW) {
-            item.setTitle(R.string.list_view);
-            item.setIcon(R.drawable.light_view_as_list);
-        } else {
-            item.setTitle(R.string.grid_view);
-            item.setIcon(R.drawable.light_view_as_grid);
-        }
-
-        item = menu.findItem(R.id.menu_sort_size);
+        MenuItem item = menu.findItem(R.id.menu_sort_size);
         if (sortMode == FileUtilities.SORT_LARGEST) {
             item.setTitle(R.string.sort_smallest);
         } else {
@@ -568,20 +559,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
                 if (!currentDirectory.equals(homeDirectory)){
                     openParentDirectory();
                 }
-                break;
-            case R.id.menu_view_toggle:
-                if (viewMode == GRID_VIEW){
-                    viewMode = LIST_VIEW;
-                    item.setTitle(R.string.grid_view); // Button points to next view.
-                    item.setIcon(R.drawable.light_view_as_grid);
-                    prefs.edit().putInt(EXPLORER_VIEW_TYPE_KEY, LIST_VIEW).apply();
-                } else {
-                    viewMode = GRID_VIEW;
-                    item.setTitle(R.string.list_view); // Button points to next view.
-                    item.setIcon(R.drawable.light_view_as_list);
-                    prefs.edit().putInt(EXPLORER_VIEW_TYPE_KEY, GRID_VIEW).apply();
-                }
-                createUI();
                 break;
             case R.id.menu_sort_size:
             case R.id.menu_sort_az:
@@ -643,9 +620,9 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
 
     public void readPreferences(){
         prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
-        viewMode = prefs.getInt(EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
         sortMode = prefs.getInt(SORT_MODE_KEY, FileUtilities.SORT_AZ);
         SharedPreferences defaultPrefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        viewMode = Integer.valueOf(defaultPrefs.getString(EXPLORER_VIEW_TYPE_KEY, ""+ GRID_VIEW));
         filterMode = Integer.valueOf(defaultPrefs.getString(FILTER_MODE_KEY , "-1"));
 
         Intent i = this.getIntent();
@@ -668,6 +645,12 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
             viewMode = i.getIntExtra( EXPLORER_VIEW_TYPE_KEY, GRID_VIEW);
             Log.d(LOGTAG, EXPLORER_VIEW_TYPE_KEY);
         }
+    }
+
+    @Override
+    public void settingsPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        readPreferences();
+        refreshView();
     }
 
     @Override
@@ -711,7 +694,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        //prefs.edit().putInt(EXPLORER_VIEW_TYPE, viewType).commit();
         super.onPause();
         Log.d(LOGTAG, "onPause");
     }
