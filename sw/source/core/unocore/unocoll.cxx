@@ -857,24 +857,37 @@ sal_Int32 SwXTextTables::getCount()
     return nRet;
 }
 
-uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nIndex)
+uno::Any SAL_CALL SwXTextTables::getByIndex(sal_Int32 nInputIndex)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    if(IsValid())
+    if (IsValid())
     {
-        if(0 <= nIndex && GetDoc()->GetTableFrameFormatCount(true) > static_cast<size_t>(nIndex))
-        {
-            SwFrameFormat& rFormat = GetDoc()->GetTableFrameFormat(nIndex, true);
-            uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(rFormat);
-            aRet <<= xTable;
-        }
-        else
+        if (nInputIndex < 0)
             throw IndexOutOfBoundsException();
+
+        SwAutoFormatGetDocNode aGetHt( &GetDoc()->GetNodes() );
+        size_t nIndex = static_cast<size_t>(nInputIndex);
+        size_t nCurrentIndex = 0;
+
+        for (SwFrameFormat* const & pFormat : *GetDoc()->GetTableFrameFormats())
+        {
+            if (!pFormat->GetInfo(aGetHt))
+            {
+                if (nCurrentIndex == nIndex)
+                {
+                    uno::Reference<XTextTable> xTable = SwXTextTables::GetObject(*pFormat);
+                    aRet <<= xTable;
+                    return aRet;
+                }
+                else
+                    nCurrentIndex++;
+            }
+        }
+        throw IndexOutOfBoundsException();
     }
     else
         throw uno::RuntimeException();
-    return aRet;
 }
 
 uno::Any SwXTextTables::getByName(const OUString& rItemName)
