@@ -12,7 +12,6 @@
 #include <cppunit/TestAssert.h>
 #include "qahelper.hxx"
 
-#include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <test/xmltesttools.hxx>
@@ -23,6 +22,11 @@ xmlDocPtr XPathHelper::parseExport(ScDocShell* pShell, uno::Reference<lang::XMul
 {
     std::shared_ptr<utl::TempFile> pTempFile = ScBootstrapFixture::exportTo(pShell, nFormat);
 
+    return parseExport(pTempFile, xSFactory, rFile);
+}
+
+xmlDocPtr XPathHelper::parseExport(std::shared_ptr<utl::TempFile> const & pTempFile, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile)
+{
     // Read the XML stream we're interested in.
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(xSFactory), pTempFile->GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(rFile), uno::UNO_QUERY);
