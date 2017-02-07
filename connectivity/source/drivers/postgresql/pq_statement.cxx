@@ -777,9 +777,7 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
                             value = OStringToOUString(j->second, RTL_TEXTENCODING_ASCII_US );
                             // check, whether it is a sequence
 
-                            if( rtl_str_shortenedCompare_WithLength(
-                                    j->second.getStr(), j->second.getLength(),
-                                    RTL_CONSTASCII_STRINGPARAM( "nextval(" ), 8 ) == 0 )
+                            if( j->second.startsWith("nextval(") )
                             {
                                 // retrieve current sequence value:
                                 OUStringBuffer myBuf(128 );
