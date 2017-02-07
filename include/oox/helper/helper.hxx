@@ -42,11 +42,6 @@ namespace oox {
 #define STATIC_ARRAY_SELECT( array, index, def ) \
     ((static_cast<size_t>(index) < SAL_N_ELEMENTS(array)) ? ((array)[static_cast<size_t>(index)]) : (def))
 
-/** Expands to a temporary OString, created from a literal(!) character
-    array. */
-#define CREATE_OSTRING( ascii ) \
-    OString( RTL_CONSTASCII_STRINGPARAM( ascii ) )
-
 /** Convert an OUString to an ASCII C string. Use for debug purposes only. */
 #define OUSTRING_TO_CSTR( str ) \
     OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr()
