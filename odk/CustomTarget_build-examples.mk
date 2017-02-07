@@ -91,7 +91,8 @@ $(call gb_CustomTarget_get_target,odk/build-examples): \
         $(call gb_CustomTarget_get_workdir,odk/build-examples)/setsdkenv
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
 	(saved_library_path=$${$(gb_Helper_LIBRARY_PATH_VAR)} && . $< \
-		&& $(gb_Helper_LIBRARY_PATH_VAR)=$$saved_library_path \
+		$(if $(filter MACOSX,$(OS)),, \
+            && $(gb_Helper_LIBRARY_PATH_VAR)=$$saved_library_path) \
         && export \
             UserInstallation=$(call gb_Helper_make_url,$(call gb_CustomTarget_get_workdir,odk/build-examples)/user) \
         $(foreach my_dir,$(my_example_dirs), \
