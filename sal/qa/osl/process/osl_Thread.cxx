@@ -1088,62 +1088,62 @@ namespace osl_Thread
         void setPriority_003()
             {
                 // initial 5 threads with different priorities
-                OAddThread *pHighestThread = new OAddThread();
-                OAddThread *pAboveNormalThread = new OAddThread();
-                OAddThread *pNormalThread = new OAddThread();
-                OAddThread *pBelowNormalThread = new OAddThread();
-                OAddThread *pLowestThread = new OAddThread();
+                OAddThread pHighestThread;
+                OAddThread pAboveNormalThread;
+                OAddThread pNormalThread;
+                OAddThread pBelowNormalThread;
+                OAddThread pLowestThread;
 
                 //Create them and start running at the same time
-                pHighestThread->createSuspended();
-                pHighestThread->setPriority(osl_Thread_PriorityHighest);
+                pHighestThread.createSuspended();
+                pHighestThread.setPriority(osl_Thread_PriorityHighest);
 
-                pAboveNormalThread->createSuspended();
-                pAboveNormalThread->setPriority(osl_Thread_PriorityAboveNormal);
+                pAboveNormalThread.createSuspended();
+                pAboveNormalThread.setPriority(osl_Thread_PriorityAboveNormal);
 
-                pNormalThread->createSuspended();
-                pNormalThread->setPriority(osl_Thread_PriorityNormal);
+                pNormalThread.createSuspended();
+                pNormalThread.setPriority(osl_Thread_PriorityNormal);
 
-                pBelowNormalThread->createSuspended();
-                pBelowNormalThread->setPriority(osl_Thread_PriorityBelowNormal);
+                pBelowNormalThread.createSuspended();
+                pBelowNormalThread.setPriority(osl_Thread_PriorityBelowNormal);
 
-                pLowestThread->createSuspended();
-                pLowestThread->setPriority(osl_Thread_PriorityLowest);
+                pLowestThread.createSuspended();
+                pLowestThread.setPriority(osl_Thread_PriorityLowest);
 
-                pHighestThread->resume();
-                pAboveNormalThread->resume();
-                pNormalThread->resume();
-                pBelowNormalThread->resume();
-                pLowestThread->resume();
+                pHighestThread.resume();
+                pAboveNormalThread.resume();
+                pNormalThread.resume();
+                pBelowNormalThread.resume();
+                pLowestThread.resume();
 
                 ThreadHelper::thread_sleep_tenth_sec(5);
 
-                pHighestThread->suspend();
-                pAboveNormalThread->suspend();
-                pNormalThread->suspend();
-                pBelowNormalThread->suspend();
-                pLowestThread->suspend();
+                pHighestThread.suspend();
+                pAboveNormalThread.suspend();
+                pNormalThread.suspend();
+                pBelowNormalThread.suspend();
+                pLowestThread.suspend();
 
-                termAndJoinThread(pHighestThread);
-                termAndJoinThread(pAboveNormalThread);
-                termAndJoinThread(pNormalThread);
-                termAndJoinThread(pBelowNormalThread);
-                termAndJoinThread(pLowestThread);
+                termAndJoinThread(&pHighestThread);
+                termAndJoinThread(&pAboveNormalThread);
+                termAndJoinThread(&pNormalThread);
+                termAndJoinThread(&pBelowNormalThread);
+                termAndJoinThread(&pLowestThread);
 
                 sal_Int32 nValueHighest = 0;
-                nValueHighest = pHighestThread->getValue();
+                nValueHighest = pHighestThread.getValue();
 
                 sal_Int32 nValueAboveNormal = 0;
-                nValueAboveNormal = pAboveNormalThread->getValue();
+                nValueAboveNormal = pAboveNormalThread.getValue();
 
                 sal_Int32 nValueNormal = 0;
-                nValueNormal = pNormalThread->getValue();
+                nValueNormal = pNormalThread.getValue();
 
                 sal_Int32 nValueBelowNormal = 0;
-                nValueBelowNormal = pBelowNormalThread->getValue();
+                nValueBelowNormal = pBelowNormalThread.getValue();
 
                 sal_Int32 nValueLowest = 0;
-                nValueLowest = pLowestThread->getValue();
+                nValueLowest = pLowestThread.getValue();
 
                 t_print("After 10 tenth seconds\n");
                 t_print("nValue in Highest Prio Thread is     %d\n", (int) nValueHighest);
@@ -1151,12 +1151,6 @@ namespace osl_Thread
                 t_print("nValue in Normal Prio Thread is      %d\n", (int) nValueNormal);
                 t_print("nValue in BelowNormal Prio Thread is %d\n", (int) nValueBelowNormal);
                 t_print("nValue in Lowest Prio Thread is      %d\n", (int) nValueLowest);
-
-                delete pHighestThread;
-                delete pAboveNormalThread;
-                delete pNormalThread;
-                delete pBelowNormalThread;
-                delete pLowestThread;
 
 #ifndef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
@@ -1174,61 +1168,61 @@ namespace osl_Thread
             {
                 // initial 5 threads with different priorities
                 // OAddThread *pHighestThread = new OAddThread();
-                OAddThread *pAboveNormalThread = new OAddThread();
-                OAddThread *pNormalThread = new OAddThread();
-                OAddThread *pBelowNormalThread = new OAddThread();
-                OAddThread *pLowestThread = new OAddThread();
+                OAddThread pAboveNormalThread;
+                OAddThread pNormalThread;
+                OAddThread pBelowNormalThread;
+                OAddThread pLowestThread;
 
                 //Create them and start running at the same time
                 // pHighestThread->createSuspended();
                 // pHighestThread->setPriority(osl_Thread_PriorityHighest);
 
-                pAboveNormalThread->createSuspended();
-                pAboveNormalThread->setPriority(osl_Thread_PriorityAboveNormal);
+                pAboveNormalThread.createSuspended();
+                pAboveNormalThread.setPriority(osl_Thread_PriorityAboveNormal);
 
-                pNormalThread->createSuspended();
-                pNormalThread->setPriority(osl_Thread_PriorityNormal);
+                pNormalThread.createSuspended();
+                pNormalThread.setPriority(osl_Thread_PriorityNormal);
 
-                pBelowNormalThread->createSuspended();
-                pBelowNormalThread->setPriority(osl_Thread_PriorityBelowNormal);
+                pBelowNormalThread.createSuspended();
+                pBelowNormalThread.setPriority(osl_Thread_PriorityBelowNormal);
 
-                pLowestThread->createSuspended();
-                pLowestThread->setPriority(osl_Thread_PriorityLowest);
+                pLowestThread.createSuspended();
+                pLowestThread.setPriority(osl_Thread_PriorityLowest);
 
                 // pHighestThread->resume();
-                pAboveNormalThread->resume();
-                pNormalThread->resume();
-                pBelowNormalThread->resume();
-                pLowestThread->resume();
+                pAboveNormalThread.resume();
+                pNormalThread.resume();
+                pBelowNormalThread.resume();
+                pLowestThread.resume();
 
                 ThreadHelper::thread_sleep_tenth_sec(5);
 
                 // pHighestThread->suspend();
-                pAboveNormalThread->suspend();
-                pNormalThread->suspend();
-                pBelowNormalThread->suspend();
-                pLowestThread->suspend();
+                pAboveNormalThread.suspend();
+                pNormalThread.suspend();
+                pBelowNormalThread.suspend();
+                pLowestThread.suspend();
 
                 // termAndJoinThread(pHighestThread);
-                termAndJoinThread(pAboveNormalThread);
-                termAndJoinThread(pNormalThread);
-                termAndJoinThread(pBelowNormalThread);
-                termAndJoinThread(pLowestThread);
+                termAndJoinThread(&pAboveNormalThread);
+                termAndJoinThread(&pNormalThread);
+                termAndJoinThread(&pBelowNormalThread);
+                termAndJoinThread(&pLowestThread);
 
                 // sal_Int32 nValueHighest  = 0;
                 // nValueHighest =  pHighestThread->getValue();
 
                 sal_Int32 nValueAboveNormal = 0;
-                nValueAboveNormal = pAboveNormalThread->getValue();
+                nValueAboveNormal = pAboveNormalThread.getValue();
 
                 sal_Int32 nValueNormal = 0;
-                nValueNormal = pNormalThread->getValue();
+                nValueNormal = pNormalThread.getValue();
 
                 sal_Int32 nValueBelowNormal = 0;
-                nValueBelowNormal = pBelowNormalThread->getValue();
+                nValueBelowNormal = pBelowNormalThread.getValue();
 
                 sal_Int32 nValueLowest = 0;
-                nValueLowest = pLowestThread->getValue();
+                nValueLowest = pLowestThread.getValue();
 
                 t_print("After 5 tenth seconds\n");
                 t_print("nValue in AboveNormal Prio Thread is %d\n", (int) nValueAboveNormal);
@@ -1237,10 +1231,6 @@ namespace osl_Thread
                 t_print("nValue in Lowest Prio Thread is      %d\n", (int) nValueLowest);
 
                 // delete pHighestThread;
-                delete pAboveNormalThread;
-                delete pNormalThread;
-                delete pBelowNormalThread;
-                delete pLowestThread;
 
 #ifndef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
@@ -1258,9 +1248,9 @@ namespace osl_Thread
                 // initial 5 threads with different priorities
                 // OAddThread *pHighestThread = new OAddThread();
                 // OAddThread *pAboveNormalThread = new OAddThread();
-                OAddThread *pNormalThread = new OAddThread();
-                OAddThread *pBelowNormalThread = new OAddThread();
-                OAddThread *pLowestThread = new OAddThread();
+                OAddThread pNormalThread;
+                OAddThread pBelowNormalThread;
+                OAddThread pLowestThread;
 
                 //Create them and start running at the same time
                 // pHighestThread->createSuspended();
@@ -1269,34 +1259,34 @@ namespace osl_Thread
                 // pAboveNormalThread->createSuspended();
                 // pAboveNormalThread->setPriority(osl_Thread_PriorityAboveNormal);
 
-                pNormalThread->createSuspended();
-                pNormalThread->setPriority(osl_Thread_PriorityNormal);
+                pNormalThread.createSuspended();
+                pNormalThread.setPriority(osl_Thread_PriorityNormal);
 
-                pBelowNormalThread->createSuspended();
-                pBelowNormalThread->setPriority(osl_Thread_PriorityBelowNormal);
+                pBelowNormalThread.createSuspended();
+                pBelowNormalThread.setPriority(osl_Thread_PriorityBelowNormal);
 
-                pLowestThread->createSuspended();
-                pLowestThread->setPriority(osl_Thread_PriorityLowest);
+                pLowestThread.createSuspended();
+                pLowestThread.setPriority(osl_Thread_PriorityLowest);
 
                 // pHighestThread->resume();
                 // pAboveNormalThread->resume();
-                pNormalThread->resume();
-                pBelowNormalThread->resume();
-                pLowestThread->resume();
+                pNormalThread.resume();
+                pBelowNormalThread.resume();
+                pLowestThread.resume();
 
                 ThreadHelper::thread_sleep_tenth_sec(5);
 
                 // pHighestThread->suspend();
                 // pAboveNormalThread->suspend();
-                pNormalThread->suspend();
-                pBelowNormalThread->suspend();
-                pLowestThread->suspend();
+                pNormalThread.suspend();
+                pBelowNormalThread.suspend();
+                pLowestThread.suspend();
 
                 // termAndJoinThread(pHighestThread);
                 // termAndJoinThread(pAboveNormalThread);
-                termAndJoinThread(pNormalThread);
-                termAndJoinThread(pBelowNormalThread);
-                termAndJoinThread(pLowestThread);
+                termAndJoinThread(&pNormalThread);
+                termAndJoinThread(&pBelowNormalThread);
+                termAndJoinThread(&pLowestThread);
 
                 // sal_Int32 nValueHighest  = 0;
                 // nValueHighest =  pHighestThread->getValue();
@@ -1305,22 +1295,18 @@ namespace osl_Thread
                 // nValueAboveNormal = pAboveNormalThread->getValue();
 
                 sal_Int32 nValueNormal = 0;
-                nValueNormal = pNormalThread->getValue();
+                nValueNormal = pNormalThread.getValue();
 
                 sal_Int32 nValueBelowNormal = 0;
-                nValueBelowNormal = pBelowNormalThread->getValue();
+                nValueBelowNormal = pBelowNormalThread.getValue();
 
                 sal_Int32 nValueLowest = 0;
-                nValueLowest = pLowestThread->getValue();
+                nValueLowest = pLowestThread.getValue();
 
                 t_print("After 5 tenth seconds\n");
                 t_print("nValue in Normal Prio Thread is      %d\n", (int) nValueNormal);
                 t_print("nValue in BelowNormal Prio Thread is %d\n", (int) nValueBelowNormal);
                 t_print("nValue in Lowest Prio Thread is      %d\n", (int) nValueLowest);
-
-                delete pNormalThread;
-                delete pBelowNormalThread;
-                delete pLowestThread;
 
 #ifndef _WIN32
                 CPPUNIT_ASSERT_MESSAGE(
