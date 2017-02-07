@@ -731,11 +731,8 @@ bool XMLTextFieldExport::IsStringField(
 
     case FIELD_ID_SCRIPT:
     case FIELD_ID_ANNOTATION:
-       case FIELD_ID_DATABASE_NEXT:
+    case FIELD_ID_DATABASE_NEXT:
     case FIELD_ID_DATABASE_SELECT:
-    case FIELD_ID_VARIABLE_DECL:
-    case FIELD_ID_USER_DECL:
-    case FIELD_ID_SEQUENCE_DECL:
     case FIELD_ID_PLACEHOLDER:
     case FIELD_ID_UNKNOWN:
     case FIELD_ID_DRAW_HEADER:

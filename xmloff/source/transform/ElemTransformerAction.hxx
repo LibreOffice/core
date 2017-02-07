@@ -52,11 +52,6 @@ enum XMLElemTransformerAction
                                         //           token of local name
                                         // - param3: attr value (low)
                                         //           attr action map (high)
-    XML_ETACTION_RENAME_ELEM_COND,      // rename element if child of another:
-                                        // - param1: namespace +
-                                        //           token of new local name
-                                        // - param2: namespace +
-                                        //           token of parent element
     XML_ETACTION_RENAME_ELEM_PROC_ATTRS_COND,// rename element and proc attr
                                         // if child of another:
                                         // - param1: elem namespace +

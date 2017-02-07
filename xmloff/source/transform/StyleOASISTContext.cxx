@@ -430,17 +430,6 @@ void XMLPropertiesTContext_Impl::StartElement(
                     }
                     break;
 
-                case XML_OPTACTION_DRAW_WRITING_MODE:
-                    if( IsXMLToken( m_aStyleFamily, XML_GRAPHICS ) )
-                    {
-                        pAttrList->AddAttribute(
-                            GetTransformer().GetNamespaceMap().GetQNameByKey(
-                                    XML_NAMESPACE_DRAW,
-                                    GetXMLToken( XML_WRITING_MODE ) ), rAttrValue );
-                    }
-                    pAttrList->AddAttribute( rAttrName, rAttrValue );
-                    break;
-
                 case XML_ATACTION_CAPTION_ESCAPE_OASIS:
                     {
                         OUString aAttrValue( rAttrValue );

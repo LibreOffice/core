@@ -65,16 +65,13 @@ enum FieldIdEnum {
 
     FIELD_ID_PLACEHOLDER,   // placeholder field == jump edit field
 
-    FIELD_ID_VARIABLE_DECL, // field type for set variable
     FIELD_ID_VARIABLE_GET,  // get variable == get expression
     FIELD_ID_VARIABLE_SET,  // set variable == set expression
     FIELD_ID_VARIABLE_INPUT,    // input field (variable)
-    FIELD_ID_USER_DECL,     // field type for user field
     FIELD_ID_USER_GET,      // user field
     FIELD_ID_USER_INPUT,    // input field (user field)
     FIELD_ID_TEXT_INPUT,    // input field (text)
     FIELD_ID_EXPRESSION,    // expression field = formula field
-    FIELD_ID_SEQUENCE_DECL, // field type for sequence
     FIELD_ID_SEQUENCE,      // sequence field
 
     FIELD_ID_DATABASE_NEXT,     // select next row

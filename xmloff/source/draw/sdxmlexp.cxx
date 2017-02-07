@@ -1179,11 +1179,9 @@ void SdXMLExport::ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectan
         case XmlPlaceholderTitle: aStr = "title"; break;
         case XmlPlaceholderOutline: aStr = "outline"; break;
         case XmlPlaceholderSubtitle: aStr = "subtitle"; break;
-        case XmlPlaceholderText: aStr = "text"; break;
         case XmlPlaceholderGraphic: aStr = "graphic"; break;
         case XmlPlaceholderObject: aStr = "object"; break;
         case XmlPlaceholderChart: aStr = "chart"; break;
-        case XmlPlaceholderOrgchart: aStr = "orgchart"; break;
         case XmlPlaceholderTable: aStr = "table"; break;
         case XmlPlaceholderPage: aStr = "page"; break;
         case XmlPlaceholderNotes: aStr = "notes"; break;

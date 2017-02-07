@@ -244,9 +244,7 @@ enum SvXMLStyleAttrTokens
     XML_TOK_STYLE_ATTR_TRUNCATE_ON_OVERFLOW,
     XML_TOK_STYLE_ATTR_VOLATILE,
     XML_TOK_STYLE_ATTR_TRANSL_FORMAT,
-    XML_TOK_STYLE_ATTR_TRANSL_RFC_LANGUAGE_TAG,
     XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE,
-    XML_TOK_STYLE_ATTR_TRANSL_SCRIPT,
     XML_TOK_STYLE_ATTR_TRANSL_COUNTRY,
     XML_TOK_STYLE_ATTR_TRANSL_STYLE
 };
@@ -1452,14 +1450,8 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
             case XML_TOK_STYLE_ATTR_TRANSL_FORMAT:
                 aNatNumAttr.Format = sValue;
                 break;
-            case XML_TOK_STYLE_ATTR_TRANSL_RFC_LANGUAGE_TAG:
-                sNatNumAttrRfcLanguageTag = sValue;
-                break;
             case XML_TOK_STYLE_ATTR_TRANSL_LANGUAGE:
                 aNatNumAttr.Locale.Language = sValue;
-                break;
-            case XML_TOK_STYLE_ATTR_TRANSL_SCRIPT:
-                sNatNumAttrScript = sValue;
                 break;
             case XML_TOK_STYLE_ATTR_TRANSL_COUNTRY:
                 aNatNumAttr.Locale.Country = sValue;
