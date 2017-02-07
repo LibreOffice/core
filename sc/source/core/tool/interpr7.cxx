@@ -367,11 +367,11 @@ void ScInterpreter::ScDebugVar()
         PushDouble(fVal);
     }
     else if (aStrUpper == "DATASTREAM_IMPORT")
-        PushDouble( sc::datastream_get_time( 0 ) );
+        PushDouble( sc::datastream_get_time( sc::DebugTime::Import ) );
     else if (aStrUpper == "DATASTREAM_RECALC")
-        PushDouble( sc::datastream_get_time( 1 ) );
+        PushDouble( sc::datastream_get_time( sc::DebugTime::Recalc ) );
     else if (aStrUpper == "DATASTREAM_RENDER")
-        PushDouble( sc::datastream_get_time( 2 ) );
+        PushDouble( sc::datastream_get_time( sc::DebugTime::Render ) );
     else
         PushIllegalParameter();
 }

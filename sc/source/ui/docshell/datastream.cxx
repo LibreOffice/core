@@ -25,6 +25,7 @@
 #include <viewdata.hxx>
 #include <stringutil.hxx>
 #include <documentlinkmgr.hxx>
+#include <o3tl/enumarray.hxx>
 
 #include "officecfg/Office/Calc.hxx"
 
@@ -38,19 +39,10 @@
 
 namespace sc {
 
-enum {
-    DEBUG_TIME_IMPORT,
-    DEBUG_TIME_RECALC,
-    DEBUG_TIME_RENDER,
-    DEBUG_TIME_MAX
-};
+static o3tl::enumarray<DebugTime, double> fTimes { 0.0, 0.0, 0.0 };
 
-static double fTimes[DEBUG_TIME_MAX] = { 0.0, 0.0, 0.0 };
-
-double datastream_get_time(int nIdx)
+double datastream_get_time(DebugTime nIdx)
 {
-    if( nIdx < 0 || nIdx >= (int)SAL_N_ELEMENTS( fTimes ) )
-        return -1;
     return fTimes[ nIdx ];
 }
 
@@ -449,7 +441,7 @@ void DataStream::Refresh()
     mpDocShell->DoHardRecalc(true);
     mpDocShell->SetDocumentModified();
 
-    fTimes[ DEBUG_TIME_RECALC ] = getNow() - fStart;
+    fTimes[ DebugTime::Recalc ] = getNow() - fStart;
 
     mfLastRefreshTime = getNow();
     mnLinesSinceRefresh = 0;
@@ -531,7 +523,7 @@ void DataStream::Text2Doc()
         }
     }
 
-    fTimes[ DEBUG_TIME_IMPORT ] = getNow() - fStart;
+    fTimes[ DebugTime::Import ] = getNow() - fStart;
 
     if (meMove == NO_MOVE)
         return;

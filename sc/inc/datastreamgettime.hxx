@@ -24,7 +24,14 @@
 
 namespace sc {
 
-double datastream_get_time(int nIdx);
+enum class DebugTime {
+    Import,
+    Recalc,
+    Render,
+    LAST = Render
+};
+
+double datastream_get_time(DebugTime nIdx);
 
 }
 
