@@ -52,14 +52,14 @@ ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
 
 const ScaFuncDataBase pFuncDataArr[] =
 {
-    FUNCDATA( DiffWeeks,    3, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( DiffMonths,   3, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( DiffYears,    3, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( IsLeapYear,   1, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( DaysInMonth,  1, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( DaysInYear,   1, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( WeeksInYear,  1, ScaCat_DateTime, UNIQUE, INTPAR ),
-    FUNCDATA( Rot13,        1, ScaCat_Text,     UNIQUE, STDPAR )
+    FUNCDATA( DiffWeeks,    3, ScaCategory::DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( DiffMonths,   3, ScaCategory::DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( DiffYears,    3, ScaCategory::DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( IsLeapYear,   1, ScaCategory::DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( DaysInMonth,  1, ScaCategory::DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( DaysInYear,   1, ScaCategory::DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( WeeksInYear,  1, ScaCategory::DateTime, UNIQUE, INTPAR ),
+    FUNCDATA( Rot13,        1, ScaCategory::Text,     UNIQUE, STDPAR )
 };
 
 #undef FUNCDATA
@@ -353,15 +353,12 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
     {
         switch( fDataIt->GetCategory() )
         {
-            case ScaCat_DateTime:   aRet = STR_FROM_ANSI( "Date&Time" );    break;
-            case ScaCat_Text:       aRet = STR_FROM_ANSI( "Text" );         break;
-            case ScaCat_Finance:    aRet = STR_FROM_ANSI( "Financial" );    break;
-            case ScaCat_Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
-            case ScaCat_Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
-            case ScaCat_Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
-            // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
-            default:
-                break;
+            case ScaCategory::DateTime:   aRet = STR_FROM_ANSI( "Date&Time" );    break;
+            case ScaCategory::Text:       aRet = STR_FROM_ANSI( "Text" );         break;
+            case ScaCategory::Finance:    aRet = STR_FROM_ANSI( "Financial" );    break;
+            case ScaCategory::Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
+            case ScaCategory::Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
+            case ScaCategory::Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
         }
     }
 

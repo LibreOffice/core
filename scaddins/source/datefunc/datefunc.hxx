@@ -102,15 +102,14 @@ public:
 };
 
 
-enum ScaCategory
+enum class ScaCategory
 {
-    ScaCat_AddIn,
-    ScaCat_DateTime,
-    ScaCat_Text,
-    ScaCat_Finance,
-    ScaCat_Inf,
-    ScaCat_Math,
-    ScaCat_Tech
+    DateTime,
+    Text,
+    Finance,
+    Inf,
+    Math,
+    Tech
 };
 
 struct ScaFuncDataBase
@@ -121,8 +120,8 @@ struct ScaFuncDataBase
     sal_uInt16                  nCompListID;        // resource ID to list of valid names
     sal_uInt16                  nParamCount;        // number of named / described parameters
     ScaCategory                 eCat;               // function category
-    bool                    bDouble;            // name already exist in Calc
-    bool                    bWithOpt;           // first parameter is internal
+    bool                        bDouble;            // name already exist in Calc
+    bool                        bWithOpt;           // first parameter is internal
 };
 
 class ScaFuncData final
