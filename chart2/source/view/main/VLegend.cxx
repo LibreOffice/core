@@ -18,6 +18,7 @@
  */
 
 #include "VLegend.hxx"
+#include "VButton.hxx"
 #include "macros.hxx"
 #include "PropertyMapper.hxx"
 #include "CommonConverters.hxx"
@@ -263,12 +264,12 @@ awt::Size lcl_placeLegendEntries(
     tPropertyValues & rTextProperties,
     const Reference< drawing::XShapes > & xTarget,
     const Reference< lang::XMultiServiceFactory > & xShapeFactory,
-    const awt::Size & rAvailableSpace )
+    const awt::Rectangle& rRemainingSpace)
 {
     bool bIsCustomSize = (eExpansion == css::chart::ChartLegendExpansion_CUSTOM);
     awt::Size aResultingLegendSize(0,0);
     if( bIsCustomSize )
-        aResultingLegendSize = rAvailableSpace;
+        aResultingLegendSize = awt::Size(rRemainingSpace.Width, rRemainingSpace.Height);
 
     // #i109336# Improve auto positioning in chart
     sal_Int32 nXPadding = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.33 ) );
@@ -278,7 +279,7 @@ awt::Size lcl_placeLegendEntries(
 
     const sal_Int32 nSymbolToTextDistance = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.22 ) );//minimum 1mm
     const sal_Int32 nSymbolPlusDistanceWidth = rMaxSymbolExtent.Width + nSymbolToTextDistance;
-    sal_Int32 nMaxTextWidth = rAvailableSpace.Width - (2 * nXPadding) - nSymbolPlusDistanceWidth;
+    sal_Int32 nMaxTextWidth = rRemainingSpace.Width - (2 * nXPadding) - nSymbolPlusDistanceWidth;
     uno::Any* pFrameWidthAny = PropertyMapper::getValuePointer( rTextProperties.second, rTextProperties.first, "TextMaximumFrameWidth");
     if(pFrameWidthAny)
     {
@@ -286,7 +287,7 @@ awt::Size lcl_placeLegendEntries(
         {
             // limit the width of texts to 30% of the total available width
             // #i109336# Improve auto positioning in chart
-            nMaxTextWidth = rAvailableSpace.Width * 3 / 10;
+            nMaxTextWidth = rRemainingSpace.Width * 3 / 10;
         }
         *pFrameWidthAny = uno::makeAny(nMaxTextWidth);
     }
@@ -345,7 +346,7 @@ awt::Size lcl_placeLegendEntries(
                 for (sal_Int32 nColumn = 0; nColumn < nCurrentColumnCount; nColumn++)
                     nSumWidth += aColumnWidths[nColumn];
 
-                if( nSumWidth <= rAvailableSpace.Width || nCurrentColumnCount==1 )
+                if( nSumWidth <= rRemainingSpace.Width || nCurrentColumnCount==1 )
                 {
                     //all good proceed with next entry
                     continue;
@@ -378,7 +379,7 @@ awt::Size lcl_placeLegendEntries(
         sal_Int32 nSumHeight = 0;
         for (sal_Int32 nRow=0; nRow < nNumberOfRows; nRow++)
             nSumHeight += aRowHeights[nRow];
-        sal_Int32 nRemainingSpace = rAvailableSpace.Height - nSumHeight;
+        sal_Int32 nRemainingSpace = rRemainingSpace.Height - nSumHeight;
 
         if( nRemainingSpace < -100 ) // 1mm tolerance for OOXML interop tdf#90404
         {
@@ -402,7 +403,7 @@ awt::Size lcl_placeLegendEntries(
                 }
                 nSumHeight -= aRowHeights[nRow];
                 aRowHeights.pop_back();
-                nRemainingSpace = rAvailableSpace.Height - nSumHeight;
+                nRemainingSpace = rRemainingSpace.Height - nSumHeight;
                 if( nRemainingSpace>=0 )
                     break;
             }
@@ -429,7 +430,7 @@ awt::Size lcl_placeLegendEntries(
         sal_Int32 nSumWidth = 0;
         for (sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; nColumn++)
             nSumWidth += aColumnWidths[nColumn];
-        nRemainingSpace = rAvailableSpace.Width - nSumWidth;
+        nRemainingSpace = rRemainingSpace.Width - nSumWidth;
         if( nRemainingSpace>=0 )
         {
             sal_Int32 nNormalSpacingWidth = 2*nXPadding+(nNumberOfColumns-1)*nXOffset;
@@ -450,7 +451,7 @@ awt::Size lcl_placeLegendEntries(
     else if( eExpansion == css::chart::ChartLegendExpansion_HIGH )
     {
         sal_Int32 nMaxNumberOfRows = nMaxEntryHeight
-            ? (rAvailableSpace.Height - 2*nYPadding ) / nMaxEntryHeight
+            ? (rRemainingSpace.Height - 2*nYPadding ) / nMaxEntryHeight
             : 0;
 
         nNumberOfColumns = nMaxNumberOfRows
@@ -467,7 +468,7 @@ awt::Size lcl_placeLegendEntries(
     else if( eExpansion == css::chart::ChartLegendExpansion_WIDE )
     {
         sal_Int32 nMaxNumberOfColumns = nMaxEntryWidth
-            ? (rAvailableSpace.Width - 2*nXPadding ) / nMaxEntryWidth
+            ? (rRemainingSpace.Width - 2*nXPadding ) / nMaxEntryWidth
             : 0;
 
         nNumberOfRows = nMaxNumberOfColumns
@@ -513,7 +514,7 @@ awt::Size lcl_placeLegendEntries(
 
     for (sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; ++nColumn)
     {
-        sal_Int32 nCurrentYPos = nYPadding;
+        sal_Int32 nCurrentYPos = nYPadding + rRemainingSpace.Y;
         for (sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow)
         {
             sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
@@ -760,6 +761,42 @@ bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySe
     return bSymbolsLeftSide;
 }
 
+std::vector<std::shared_ptr<VButton>> lcl_createButtons(
+                       const uno::Reference< drawing::XShapes>& xLegendContainer,
+                       const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory,
+                       ChartModel& rModel, long& nUsedHeight)
+{
+// TODO: get this info from the Pivot Table
+    std::vector<OUString> aRowFields {
+//        "Service Months"
+    };
+
+    std::vector<std::shared_ptr<VButton>> aButtons;
+
+    if (aRowFields.empty())
+        return aButtons;
+
+    uno::Reference<beans::XPropertySet> xModelPage(rModel.getPageBackground());
+
+    int nCIDIndex = 0;
+    awt::Size aSize(2000, 700);
+
+    for (OUString const & sRowField : aRowFields)
+    {
+        std::shared_ptr<VButton> pButton(new VButton);
+        aButtons.push_back(pButton);
+        pButton->init(xLegendContainer, xShapeFactory);
+        awt::Point aNewPosition = awt::Point(100, 100);
+        pButton->setLabel(sRowField);
+        pButton->setCID("RowFieldButton." + OUString::number(nCIDIndex));
+        pButton->createShapes(aNewPosition, aSize, xModelPage);
+        nCIDIndex += 1;
+    }
+    nUsedHeight += aSize.Height + 100;
+
+    return aButtons;
+}
+
 } // anonymous namespace
 
 VLegend::VLegend(
@@ -825,6 +862,10 @@ void VLegend::createShapes(
         Reference< drawing::XShapes > xLegendContainer( m_xShape, uno::UNO_QUERY );
         if( xLegendContainer.is())
         {
+            long nUsedHeight = 0;
+            std::vector<std::shared_ptr<VButton>> aButtons;
+            aButtons = lcl_createButtons(xLegendContainer, m_xShapeFactory, mrModel, nUsedHeight);
+
             // for quickly setting properties
             tPropertyValues aLineFillProperties;
             tPropertyValues aTextProperties;
@@ -886,11 +927,18 @@ void VLegend::createShapes(
 
             bool bSymbolsLeftSide = lcl_shouldSymbolsBePlacedOnTheLeftSide( xLegendProp, m_nDefaultWritingMode );
 
-            if( !aViewEntries.empty() ) {
-                // place entries
-                aLegendSize = lcl_placeLegendEntries( aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize, aMaxSymbolExtent,
-                                                      aTextProperties, xLegendContainer, m_xShapeFactory, aLegendSize );
+            if (!aViewEntries.empty())
+            {
+                awt::Rectangle aRectangle(0, nUsedHeight, aLegendSize.Width, aLegendSize.Height - nUsedHeight);
 
+                // place entries
+                aLegendSize = lcl_placeLegendEntries(aViewEntries, eExpansion, bSymbolsLeftSide, fViewFontSize, aMaxSymbolExtent,
+                                                     aTextProperties, xLegendContainer, m_xShapeFactory, aRectangle);
+
+                for (std::shared_ptr<VButton> const & pButton : aButtons)
+                {
+                    pButton->setWidth(aLegendSize.Width - 200);
+                }
             }
 
             Reference< drawing::XShape > xBorder =
