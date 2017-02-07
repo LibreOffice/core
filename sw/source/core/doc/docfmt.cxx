@@ -771,34 +771,41 @@ SwDrawFrameFormat *SwDoc::MakeDrawFrameFormat( const OUString &rFormatName,
 
 size_t SwDoc::GetTableFrameFormatCount(bool bUsed) const
 {
-    size_t nCount = mpTableFrameFormatTable->size();
-    if(bUsed)
+    if (!bUsed)
     {
-        SwAutoFormatGetDocNode aGetHt( &GetNodes() );
-        for ( size_t i = nCount; i; )
-        {
-            if((*mpTableFrameFormatTable)[--i]->GetInfo( aGetHt ))
-                --nCount;
-        }
+        return mpTableFrameFormatTable->size();
+    }
+
+    SwAutoFormatGetDocNode aGetHt(&GetNodes());
+    size_t nCount = 0;
+    for (SwFrameFormat* const & pFormat : *mpTableFrameFormatTable)
+    {
+        if (!pFormat->GetInfo(aGetHt))
+            nCount++;
     }
     return nCount;
 }
 
-SwFrameFormat& SwDoc::GetTableFrameFormat(size_t nFormat, bool bUsed ) const
+SwFrameFormat& SwDoc::GetTableFrameFormat(size_t nFormat, bool bUsed) const
 {
-    size_t nRemoved = 0;
-    if(bUsed)
+    if (!bUsed)
     {
-        SwAutoFormatGetDocNode aGetHt( &GetNodes() );
-        for ( size_t i = 0; i <= nFormat; ++i )
+        return *((*mpTableFrameFormatTable)[nFormat]);
+    }
+
+    SwAutoFormatGetDocNode aGetHt(&GetNodes());
+    size_t index = 0;
+
+    for (SwFrameFormat* const & pFormat : *mpTableFrameFormatTable)
+    {
+        if (!pFormat->GetInfo(aGetHt))
         {
-            while ( (*mpTableFrameFormatTable)[ i + nRemoved]->GetInfo( aGetHt ))
-            {
-                nRemoved++;
-            }
+            if (index == nFormat)
+                return *pFormat;
+            else
+                index++;
         }
     }
-    return *((*mpTableFrameFormatTable)[nRemoved + nFormat]);
 }
 
 SwTableFormat* SwDoc::MakeTableFrameFormat( const OUString &rFormatName,
