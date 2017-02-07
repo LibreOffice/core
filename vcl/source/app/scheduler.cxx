@@ -173,17 +173,11 @@ bool Scheduler::GetDeterministicMode()
     return g_bDeterministicMode;
 }
 
-inline bool Scheduler::HasPendingTasks( const ImplSchedulerContext &rSchedCtx,
-                                        const sal_uInt64 nTime )
-{
-    return ( rSchedCtx.mbNeedsReschedule || ((rSchedCtx.mnTimerPeriod != InfiniteTimeoutMs)
-        && (nTime >= rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod )) );
-}
-
 bool Scheduler::HasPendingTasks()
 {
-    return HasPendingTasks( ImplGetSVData()->maSchedCtx,
-                            tools::Time::GetSystemTicks() );
+    const ImplSchedulerContext &rSchedCtx = ImplGetSVData()->maSchedCtx;
+    return ( rSchedCtx.mbNeedsReschedule || ((rSchedCtx.mnTimerPeriod != InfiniteTimeoutMs)
+        && (tools::Time::GetSystemTicks() >= rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod )) );
 }
 
 inline void Scheduler::UpdateMinPeriod( ImplSchedulerData * const pSchedulerData,
@@ -250,10 +244,19 @@ bool Scheduler::ProcessTaskScheduling()
 {
     ImplSVData *pSVData = ImplGetSVData();
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
-    sal_uInt64  nTime = tools::Time::GetSystemTicks();
-    if ( pSVData->mbDeInit || !HasPendingTasks( rSchedCtx, nTime ) )
+    sal_uInt64 nTime = tools::Time::GetSystemTicks();
+    if ( pSVData->mbDeInit || InfiniteTimeoutMs == rSchedCtx.mnTimerPeriod )
         return false;
     rSchedCtx.mbNeedsReschedule = false;
+
+    if ( nTime < rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod )
+    {
+        SAL_WARN( "vcl.schedule", "we're too early - restart the timer!" );
+        UpdateSystemTimer( rSchedCtx,
+                           rSchedCtx.mnTimerStart + rSchedCtx.mnTimerPeriod - nTime,
+                           true, nTime );
+        return false;
+    }
 
     ImplSchedulerData* pSchedulerData = nullptr;
     ImplSchedulerData* pPrevSchedulerData = nullptr;
