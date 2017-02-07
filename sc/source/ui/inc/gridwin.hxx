@@ -213,8 +213,8 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
      *         mouse event handling is necessary, false otherwise.
      */
     bool DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, const ScAddress& rDimPos, ScDPObject* pDPObj);
-    void            DPLaunchFieldPopupMenu(
-        const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj);
+
+    void DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj);
 
     void            RFMouseMove( const MouseEvent& rMEvt, bool bUp );
 
@@ -363,6 +363,9 @@ public:
     void            LaunchDPFieldMenu( SCCOL nCol, SCROW nRow );
 
     css::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
+
+    void DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
+                                long nDimIndex, ScDPObject* pDPObj);
 
     void DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev);
 
