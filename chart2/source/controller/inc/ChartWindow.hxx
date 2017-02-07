@@ -21,8 +21,6 @@
 
 #include <vcl/window.hxx>
 
-class OpenGLWindow;
-
 namespace chart
 {
 
@@ -72,7 +70,7 @@ public:
 private:
     ChartController* m_pWindowController;
     bool m_bInPaint;
-    VclPtr<OpenGLWindow> m_pOpenGLWindow;
+    VclPtr<vcl::Window> m_pOpenGLWindow;
 
     void adjustHighContrastMode();
 };
