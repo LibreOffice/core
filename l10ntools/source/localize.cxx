@@ -45,16 +45,11 @@ using namespace std;
 
 namespace {
 
-struct AsciiString {
-    char const * string;
-    sal_Int32 length;
-};
-
 bool matchList(
-    const OUString& rUrl, const AsciiString* pList, size_t nLength)
+    const OUString& rUrl, const OUStringLiteral* pList, size_t nLength)
 {
     for (size_t i = 0; i != nLength; ++i) {
-        if (rUrl.endsWithAsciiL(pList[i].string, pList[i].length)) {
+        if (rUrl.endsWith(pList[i])) {
             return true;
         }
     }
@@ -62,31 +57,24 @@ bool matchList(
 }
 
 bool passesNegativeList(const OUString& rUrl) {
-    static const AsciiString list[] = {
-        { RTL_CONSTASCII_STRINGPARAM("/dictionaries.xcu") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/dictionaries/da_DK/help/da/help.tree") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/dictionaries/da_DK/help/da/"
-            "org.openoffice.da.hunspell.dictionaries/page1.xhp") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/dictionaries/da_DK/help/da/"
-            "org.openoffice.da.hunspell.dictionaries/page2.xhp") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/dictionaries/hu_HU/help/hu/help.tree") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/dictionaries/hu_HU/help/hu/"
-            "org.openoffice.hu.hunspell.dictionaries/page1.xhp") },
-        { RTL_CONSTASCII_STRINGPARAM(
-            "/officecfg/registry/data/org/openoffice/Office/"
-            "Accelerators.xcu") }
+    static const OUStringLiteral list[] = {
+        "/dictionaries.xcu",
+        "/dictionaries/da_DK/help/da/help.tree",
+        ("/dictionaries/da_DK/help/da/"
+         "org.openoffice.da.hunspell.dictionaries/page1.xhp"),
+        ("/dictionaries/da_DK/help/da/"
+         "org.openoffice.da.hunspell.dictionaries/page2.xhp"),
+        "/dictionaries/hu_HU/help/hu/help.tree",
+        ("/dictionaries/hu_HU/help/hu/"
+         "org.openoffice.hu.hunspell.dictionaries/page1.xhp"),
+        "/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu"
     };
     return !matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
 
 bool passesPositiveList(const OUString& rUrl) {
-    static const AsciiString list[] = {
-        { RTL_CONSTASCII_STRINGPARAM("/description.xml") }
+    static const OUStringLiteral list[] = {
+        "/description.xml"
     };
     return matchList(rUrl, list, SAL_N_ELEMENTS(list));
 }
