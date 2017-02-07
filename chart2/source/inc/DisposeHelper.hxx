@@ -27,32 +27,32 @@ namespace chart
 namespace DisposeHelper
 {
 
-template< class T >
-    void Dispose( const T & xIntf )
+template<class T>
+void Dispose(const T & xInterface)
 {
-    css::uno::Reference< css::lang::XComponent > xComp( xIntf, css::uno::UNO_QUERY );
-    if( xComp.is())
-        xComp->dispose();
+    css::uno::Reference<css::lang::XComponent> xComponent(xInterface, css::uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
 }
 
-template< class Intf >
-    void DisposeAndClear( css::uno::Reference< Intf > & rIntf )
+template<class T>
+void DisposeAndClear(css::uno::Reference<T> & rInterface)
 {
-    Dispose< css::uno::Reference< Intf > >( rIntf );
-    rIntf.set( 0 );
+    Dispose<css::uno::Reference<T>>(rInterface);
+    rInterface.set(nullptr);
 }
 
-template< class Container >
-    void DisposeAllElements( Container & rContainer )
+template<class Container>
+void DisposeAllElements(Container & rContainer)
 {
-    for( const auto& rElem : rContainer )
-        Dispose< typename Container::value_type >( rElem );
+    for (const auto & rElement : rContainer)
+    {
+        Dispose<typename Container::value_type>(rElement);
+    }
 }
 
-} //  namespace DisposeHelper
-} //  namespace chart
+}} //  namespace chart::DisposeHelper
 
-// INCLUDED_CHART2_SOURCE_INC_DISPOSEHELPER_HXX
-#endif
+#endif // INCLUDED_CHART2_SOURCE_INC_DISPOSEHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
