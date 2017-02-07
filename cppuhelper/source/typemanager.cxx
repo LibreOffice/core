@@ -1811,30 +1811,27 @@ cppuhelper::TypeManager::TypeManager():
 css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
     //TODO: caching? (here or in unoidl::Manager?)
     struct Simple {
-        char const * name; sal_Int32 length;
+        OUStringLiteral name;
         css::uno::TypeClass typeClass;
     };
     static Simple const simple[] = {
-        { RTL_CONSTASCII_STRINGPARAM("void"), css::uno::TypeClass_VOID },
-        { RTL_CONSTASCII_STRINGPARAM("boolean"), css::uno::TypeClass_BOOLEAN },
-        { RTL_CONSTASCII_STRINGPARAM("byte"), css::uno::TypeClass_BYTE },
-        { RTL_CONSTASCII_STRINGPARAM("short"), css::uno::TypeClass_SHORT },
-        { RTL_CONSTASCII_STRINGPARAM("unsigned short"),
-          css::uno::TypeClass_UNSIGNED_SHORT },
-        { RTL_CONSTASCII_STRINGPARAM("long"), css::uno::TypeClass_LONG },
-        { RTL_CONSTASCII_STRINGPARAM("unsigned long"),
-          css::uno::TypeClass_UNSIGNED_LONG },
-        { RTL_CONSTASCII_STRINGPARAM("hyper"), css::uno::TypeClass_HYPER },
-        { RTL_CONSTASCII_STRINGPARAM("unsigned hyper"),
-          css::uno::TypeClass_UNSIGNED_HYPER },
-        { RTL_CONSTASCII_STRINGPARAM("float"), css::uno::TypeClass_FLOAT },
-        { RTL_CONSTASCII_STRINGPARAM("double"), css::uno::TypeClass_DOUBLE },
-        { RTL_CONSTASCII_STRINGPARAM("char"), css::uno::TypeClass_CHAR },
-        { RTL_CONSTASCII_STRINGPARAM("string"), css::uno::TypeClass_STRING },
-        { RTL_CONSTASCII_STRINGPARAM("type"), css::uno::TypeClass_TYPE },
-        { RTL_CONSTASCII_STRINGPARAM("any"), css::uno::TypeClass_ANY } };
+        { "void", css::uno::TypeClass_VOID },
+        { "boolean", css::uno::TypeClass_BOOLEAN },
+        { "byte", css::uno::TypeClass_BYTE },
+        { "short", css::uno::TypeClass_SHORT },
+        { "unsigned short", css::uno::TypeClass_UNSIGNED_SHORT },
+        { "long", css::uno::TypeClass_LONG },
+        { "unsigned long", css::uno::TypeClass_UNSIGNED_LONG },
+        { "hyper", css::uno::TypeClass_HYPER },
+        { "unsigned hyper", css::uno::TypeClass_UNSIGNED_HYPER },
+        { "float", css::uno::TypeClass_FLOAT },
+        { "double", css::uno::TypeClass_DOUBLE },
+        { "char", css::uno::TypeClass_CHAR },
+        { "string", css::uno::TypeClass_STRING },
+        { "type", css::uno::TypeClass_TYPE },
+        { "any", css::uno::TypeClass_ANY } };
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(simple); ++i) {
-        if (name.equalsAsciiL(simple[i].name, simple[i].length)) {
+        if (name == simple[i].name) {
             return css::uno::makeAny<
                 css::uno::Reference< css::reflection::XTypeDescription > >(
                     new SimpleTypeDescription(simple[i].typeClass, name));
