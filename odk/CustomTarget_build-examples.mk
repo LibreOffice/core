@@ -91,7 +91,7 @@ $(call gb_CustomTarget_get_target,odk/build-examples): \
         $(call gb_CustomTarget_get_workdir,odk/build-examples)/setsdkenv
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CHK,1)
 	(saved_library_path=$${$(gb_Helper_LIBRARY_PATH_VAR)} && . $< \
-		$(if $(filter MACOSX,$(OS)),, \
+        $(if $(filter MACOSX,$(OS)),, \
             && $(gb_Helper_LIBRARY_PATH_VAR)=$$saved_library_path) \
         && export \
             UserInstallation=$(call gb_Helper_make_url,$(call gb_CustomTarget_get_workdir,odk/build-examples)/user) \
@@ -105,7 +105,7 @@ $(call gb_CustomTarget_get_target,odk/build-examples): \
 
 $(call gb_CustomTarget_get_workdir,odk/build-examples)/setsdkenv: \
         $(SRCDIR)/odk/config/setsdkenv_unix.sh.in \
-		$(BUILDDIR)/config_$(gb_Side).mk | \
+        $(BUILDDIR)/config_$(gb_Side).mk | \
         $(call gb_CustomTarget_get_workdir,odk/build-examples)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 	sed -e 's!@OO_SDK_NAME@!sdk!' \
