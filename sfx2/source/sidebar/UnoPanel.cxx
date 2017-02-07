@@ -66,7 +66,7 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
     if (xPanelDescriptor)
     {
         xPanelDescriptor->msTitle = newTitle;
-        PanelTitleBar* pTitleBar = mpPanel->GetTitleBar();
+        VclPtr<PanelTitleBar> pTitleBar = mpPanel->GetTitleBar();
         if (pTitleBar)
             pTitleBar->SetTitle(newTitle);
     }
