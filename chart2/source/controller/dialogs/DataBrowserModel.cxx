@@ -958,16 +958,10 @@ void DataBrowserModel::addErrorBarRanges(
         if( xErrorLSequence.is())
             aSequences.push_back( xErrorLSequence );
 
-        for( ::std::vector< Reference< chart2::data::XLabeledDataSequence > >::const_iterator aIt( aSequences.begin());
-             aIt != aSequences.end(); ++aIt )
+        for (Reference<chart2::data::XLabeledDataSequence> const & rDataSequence : aSequences)
         {
-            m_aColumns.push_back(
-                tDataColumn(
-                    xDataSeries,
-                    lcl_getUIRoleName( *aIt ),
-                    *aIt,
-                    NUMBER,
-                    nNumberFormatKey ));
+            m_aColumns.push_back(tDataColumn(xDataSeries, lcl_getUIRoleName(rDataSequence),
+                                             rDataSequence, NUMBER, nNumberFormatKey));
             ++rInOutSequenceIndex;
             ++rInOutHeaderEnd;
         }
