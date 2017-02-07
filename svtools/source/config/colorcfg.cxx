@@ -108,59 +108,57 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
     OUString* pNames = aNames.getArray();
     struct ColorConfigEntryData_Impl
     {
-        const sal_Char* cName;
-        sal_Int32       nLength;
-        rtl_TextEncoding eEncoding;
+        OUStringLiteral cName;
         bool            bCanBeVisible;
     };
     static const ColorConfigEntryData_Impl cNames[] =
     {
-        { RTL_CONSTASCII_USTRINGPARAM("/DocColor")        ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/DocBoundaries")   ,true },
-        { RTL_CONSTASCII_USTRINGPARAM("/AppBackground")   ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/ObjectBoundaries"),true },
-        { RTL_CONSTASCII_USTRINGPARAM("/TableBoundaries") ,true },
-        { RTL_CONSTASCII_USTRINGPARAM("/FontColor")     ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/Links")           ,true },
-        { RTL_CONSTASCII_USTRINGPARAM("/LinksVisited")    ,true },
-        { RTL_CONSTASCII_USTRINGPARAM("/Spell")     ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/SmartTags")     ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/Shadow")        , true },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterTextGrid")  ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterFieldShadings"),true },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterIdxShadings")     ,true },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterDirectCursor")    ,true },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterScriptIndicator")    ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterSectionBoundaries")    ,true },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterHeaderFooterMark")    ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/WriterPageBreaks")    ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/HTMLSGML")        ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/HTMLComment")     ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/HTMLKeyword")     ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/HTMLUnknown")     ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcGrid")        ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreak"), false },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakManual"), false },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcPageBreakAutomatic"), false },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcDetective")   ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcDetectiveError")   ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcReference")   ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/CalcNotesBackground") ,false },
-        { RTL_CONSTASCII_USTRINGPARAM("/DrawGrid")        ,true },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICIdentifier"),  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICComment")   ,  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICNumber")    ,  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICString")    ,  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICOperator")  ,  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICKeyword")   ,  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/BASICError"),  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLIdentifier"),  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLNumber"),  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLString"),  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLOperator"),  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLKeyword"),  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLParameter"),  false },
-        { RTL_CONSTASCII_USTRINGPARAM("/SQLComment"),  false }
+        { "/DocColor"        ,false },
+        { "/DocBoundaries"   ,true },
+        { "/AppBackground"   ,false },
+        { "/ObjectBoundaries",true },
+        { "/TableBoundaries" ,true },
+        { "/FontColor"     ,false },
+        { "/Links"           ,true },
+        { "/LinksVisited"    ,true },
+        { "/Spell"     ,false },
+        { "/SmartTags"     ,false },
+        { "/Shadow"        , true },
+        { "/WriterTextGrid"  ,false },
+        { "/WriterFieldShadings",true },
+        { "/WriterIdxShadings"     ,true },
+        { "/WriterDirectCursor"    ,true },
+        { "/WriterScriptIndicator"    ,false },
+        { "/WriterSectionBoundaries"    ,true },
+        { "/WriterHeaderFooterMark"    ,false },
+        { "/WriterPageBreaks"    ,false },
+        { "/HTMLSGML"        ,false },
+        { "/HTMLComment"     ,false },
+        { "/HTMLKeyword"     ,false },
+        { "/HTMLUnknown"     ,false },
+        { "/CalcGrid"        ,false },
+        { "/CalcPageBreak", false },
+        { "/CalcPageBreakManual", false },
+        { "/CalcPageBreakAutomatic", false },
+        { "/CalcDetective"   ,false },
+        { "/CalcDetectiveError"   ,false },
+        { "/CalcReference"   ,false },
+        { "/CalcNotesBackground" ,false },
+        { "/DrawGrid"        ,true },
+        { "/BASICIdentifier",  false },
+        { "/BASICComment"   ,  false },
+        { "/BASICNumber"    ,  false },
+        { "/BASICString"    ,  false },
+        { "/BASICOperator"  ,  false },
+        { "/BASICKeyword"   ,  false },
+        { "/BASICError",  false },
+        { "/SQLIdentifier",  false },
+        { "/SQLNumber",  false },
+        { "/SQLString",  false },
+        { "/SQLOperator",  false },
+        { "/SQLKeyword",  false },
+        { "/SQLParameter",  false },
+        { "/SQLComment",  false }
     };
     int nIndex = 0;
     OUString sBase = "ColorSchemes/"
@@ -169,8 +167,7 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
     for(sal_Int32 i = 0; i < 4 * nCount; i+= 4)
     {
         sal_Int32 nPos = i / 4;
-        OUString sBaseName = sBase
-                           + OUString(cNames[nPos].cName, cNames[nPos].nLength, cNames[nPos].eEncoding);
+        OUString sBaseName = sBase + cNames[nPos].cName;
         pNames[nIndex] += sBaseName;
         pNames[nIndex++] += "/Color";
         if(cNames[nPos].bCanBeVisible)
