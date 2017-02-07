@@ -97,12 +97,10 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     assert( dynamic_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() ) != nullptr );
     pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-    const std::vector< sal_Int32 >& rAttrList = pAttribList->getFastAttributeTokens();
-    for ( size_t i = 0; i < rAttrList.size(); i++ )
+    for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
     {
-        sal_Int32 nToken = rAttrList[ i ];
-        const OUString sValue = OUString(pAttribList->getFastAttributeValue(i),
-                                    pAttribList->AttributeValueLength(i), RTL_TEXTENCODING_UTF8);
+        sal_Int32 nToken = it.getToken();
+        const OUString sValue = it.toString();
         if( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) == ( nToken & NMSP_MASK ) )
         {
             const sal_Int32 nLocalToken = nToken & TOKEN_MASK;

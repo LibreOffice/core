@@ -165,60 +165,57 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
         assert( dynamic_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() ) != nullptr );
         pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        const std::vector< sal_Int32 >& rAttrList = pAttribList->getFastAttributeTokens();
-        for ( size_t i = 0; i < rAttrList.size(); i++ )
+        for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
         {
-            sal_uInt16 nToken = rTokenMap.Get( rAttrList[ i ] );
-            const OUString sValue = OUString(pAttribList->getFastAttributeValue(i),
-                                    pAttribList->AttributeValueLength(i), RTL_TEXTENCODING_UTF8);
+            sal_uInt16 nToken = rTokenMap.Get( it.getToken() );
             switch ( nToken )
             {
                 case XML_TOK_TABLE_ROW_CELL_ATTR_STYLE_NAME:
-                    xStyleName.reset(new OUString(sValue));
+                    xStyleName.reset( new OUString( it.toString() ) );
                     mbHasStyle = true;
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_CONTENT_VALIDATION_NAME:
                     OSL_ENSURE(!maContentValidationName, "here should be only one Validation Name");
-                    if (!sValue.isEmpty())
-                        maContentValidationName.reset(sValue);
+                    if (!it.isEmpty())
+                        maContentValidationName.reset(it.toString());
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_ROWS:
                     bIsMerged = true;
-                    nMergedRows = static_cast<SCROW>(sValue.toInt32());
+                    nMergedRows = static_cast<SCROW>(it.toInt32());
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_COLS:
                     bIsMerged = true;
-                    nMergedCols = static_cast<SCCOL>(sValue.toInt32());
+                    nMergedCols = static_cast<SCCOL>(it.toInt32());
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_COLS:
                     bIsMatrix = true;
-                    nMatrixCols = static_cast<SCCOL>(sValue.toInt32());
+                    nMatrixCols = static_cast<SCCOL>(it.toInt32());
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_SPANNED_MATRIX_ROWS:
                     bIsMatrix = true;
-                    nMatrixRows = static_cast<SCROW>(sValue.toInt32());
+                    nMatrixRows = static_cast<SCROW>(it.toInt32());
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_REPEATED:
                     nColsRepeated = static_cast<SCCOL>(std::min<sal_Int32>( MAXCOLCOUNT,
-                                std::max( sValue.toInt32(), static_cast<sal_Int32>(1) ) ));
+                                std::max( it.toInt32(), static_cast<sal_Int32>(1) ) ));
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE_TYPE:
-                    nCellType = GetScImport().GetCellType(sValue);
+                    nCellType = GetScImport().GetCellType(it.toString());
                     bIsEmpty = false;
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_NEW_VALUE_TYPE:
-                    if(sValue == "error")
+                    if(it.isString( "error" ) )
                         mbErrorValue = true;
                     else
-                        nCellType = GetScImport().GetCellType(sValue);
+                        nCellType = GetScImport().GetCellType(it.toString());
                     bIsEmpty = false;
                     mbNewValueType = true;
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_VALUE:
                 {
-                    if (!sValue.isEmpty())
+                    if (!it.isEmpty())
                     {
-                        ::sax::Converter::convertDouble(fValue, sValue);
+                        ::sax::Converter::convertDouble(fValue, it.toString());
                         bIsEmpty = false;
 
                         //if office:value="0", let's get the text:p in case this is
@@ -231,36 +228,37 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_DATE_VALUE:
                 {
-                    if (!sValue.isEmpty() && rXMLImport.SetNullDateOnUnitConverter())
+                    if (!it.isEmpty() && rXMLImport.SetNullDateOnUnitConverter())
                     {
-                        rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, sValue);
+                        rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, it.toString());
                         bIsEmpty = false;
                     }
                 }
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_TIME_VALUE:
                 {
-                    if (!sValue.isEmpty())
+                    if (!it.isEmpty())
                     {
-                        ::sax::Converter::convertDuration(fValue, sValue);
+                        ::sax::Converter::convertDuration(fValue, it.toString());
                         bIsEmpty = false;
                     }
                 }
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_STRING_VALUE:
                 {
-                    if (!sValue.isEmpty())
+                    if (!it.isEmpty())
                     {
                         OSL_ENSURE(!maStringValue, "here should be only one string value");
-                        maStringValue.reset(sValue);
+                        maStringValue.reset(it.toString());
                         bIsEmpty = false;
                     }
                 }
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_BOOLEAN_VALUE:
                 {
-                    if (!sValue.isEmpty())
+                    if (!it.isEmpty())
                     {
+                        const OUString sValue = it.toString();
                         if ( IsXMLToken(sValue, XML_TRUE) )
                             fValue = 1.0;
                         else if ( IsXMLToken(sValue, XML_FALSE) )
@@ -273,17 +271,17 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_FORMULA:
                 {
-                    if (!sValue.isEmpty())
+                    if (!it.isEmpty())
                     {
                         OSL_ENSURE(!maFormula, "here should be only one formula");
                         OUString aFormula, aFormulaNmsp;
-                        rXMLImport.ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eGrammar, sValue );
+                        rXMLImport.ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eGrammar, it.toString() );
                         maFormula.reset( FormulaWithNamespace(aFormula, aFormulaNmsp) );
                     }
                 }
                 break;
                 case XML_TOK_TABLE_ROW_CELL_ATTR_CURRENCY:
-                    xCurrencySymbol.reset(new OUString(sValue));
+                    xCurrencySymbol.reset( new OUString( it.toString() ) );
                 break;
                 default:
                     ;
