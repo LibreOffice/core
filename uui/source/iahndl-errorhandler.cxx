@@ -40,7 +40,7 @@ using namespace com::sun::star;
 
 namespace {
 
-ErrorHandlerFlags
+sal_uInt16
 executeErrorDialog(
     vcl::Window * pParent,
     task::InteractionClassification eClassification,
@@ -101,29 +101,27 @@ executeErrorDialog(
         throw uno::RuntimeException("out of memory");
     }
 
-    sal_uInt16 aMessResult = xBox->Execute();
+    sal_uInt16 aResult = xBox->Execute();
 
     xBox.disposeAndClear();
 
-    ErrorHandlerFlags aResult = ErrorHandlerFlags::NONE;
-    switch( aMessResult )
+    switch( aResult )
     {
     case RET_OK:
-        aResult = ErrorHandlerFlags::ButtonsOk;
+        aResult = ERRCODE_BUTTON_OK;
         break;
     case RET_CANCEL:
-        aResult = ErrorHandlerFlags::ButtonsCancel;
+        aResult = ERRCODE_BUTTON_CANCEL;
         break;
     case RET_YES:
-        aResult = ErrorHandlerFlags::ButtonsYes;
+        aResult = ERRCODE_BUTTON_YES;
         break;
     case RET_NO:
-        aResult = ErrorHandlerFlags::ButtonsNo;
+        aResult = ERRCODE_BUTTON_NO;
         break;
     case RET_RETRY:
-        aResult = ErrorHandlerFlags::ButtonsRetry;
+        aResult = ERRCODE_BUTTON_RETRY;
         break;
-    default: assert(false);
     }
 
     return aResult;
@@ -259,12 +257,12 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             }
         }
 
-        ErrorHandlerFlags nResult = executeErrorDialog(
+        sal_uInt16 nResult = executeErrorDialog(
             getParentProperty(), eClassification, aContext, aMessage, nButtonMask );
 
         switch (nResult)
         {
-        case ErrorHandlerFlags::ButtonsOk:
+        case ERRCODE_BUTTON_OK:
             OSL_ENSURE(xApprove.is() || xAbort.is(), "unexpected situation");
             if (xApprove.is())
                 xApprove->select();
@@ -272,31 +270,29 @@ UUIInteractionHelper::handleErrorHandlerRequest(
                 xAbort->select();
             break;
 
-        case ErrorHandlerFlags::ButtonsCancel:
+        case ERRCODE_BUTTON_CANCEL:
             OSL_ENSURE(xAbort.is(), "unexpected situation");
             if (xAbort.is())
                 xAbort->select();
             break;
 
-        case ErrorHandlerFlags::ButtonsRetry:
+        case ERRCODE_BUTTON_RETRY:
             OSL_ENSURE(xRetry.is(), "unexpected situation");
             if (xRetry.is())
                 xRetry->select();
             break;
 
-        case ErrorHandlerFlags::ButtonsNo:
+        case ERRCODE_BUTTON_NO:
             OSL_ENSURE(xDisapprove.is(), "unexpected situation");
             if (xDisapprove.is())
                 xDisapprove->select();
             break;
 
-        case ErrorHandlerFlags::ButtonsYes:
+        case ERRCODE_BUTTON_YES:
             OSL_ENSURE(xApprove.is(), "unexpected situation");
             if (xApprove.is())
                 xApprove->select();
             break;
-
-        default: break;
         }
 
     }

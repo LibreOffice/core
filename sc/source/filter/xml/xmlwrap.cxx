@@ -220,13 +220,13 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
                                 (bMustBeSuccessfull ? SCERR_IMPORT_FILE_ROWCOL
                                                         : SCWARN_IMPORT_FILE_ROWCOL),
                                 sDocName, sErr,
-                                ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError ))->GetErrorCode();
+                                ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode();
             }
             else
             {
                 OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
                 nReturn = (new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
-                                 ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError ))->GetErrorCode();
+                                 ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode();
             }
         }
     }

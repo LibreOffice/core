@@ -338,6 +338,11 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated." ;
     };
+    String ERRCODE_SFXMSG_STYLEREPLACE
+    {
+        ExtraData = ERRCODE_MSG_ERROR | ERRCODE_BUTTON_OK_CANCEL ;
+        Text [ en-US ] = "Should the $(ARG1) Style be replaced?" ;
+    };
     String ERRCODE_SFX_NOFILTER
     {
         Text [ en-US ] = "A filter has not been found." ;

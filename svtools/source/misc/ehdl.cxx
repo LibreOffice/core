@@ -31,9 +31,9 @@
 #include <memory>
 
 
-static ErrorHandlerFlags aWndFunc(
+static sal_uInt16 aWndFunc(
     vcl::Window *pWin,            // Parent of the dialog
-    ErrorHandlerFlags nFlags,
+    sal_uInt16 nFlags,
     const OUString &rErr,      // error text
     const OUString &rAction)   // action text
 
@@ -52,35 +52,34 @@ static ErrorHandlerFlags aWndFunc(
 
     // determine necessary WinBits from the flags
     WinBits eBits=0;
-    if ( nFlags & (ErrorHandlerFlags::ButtonsCancel | ErrorHandlerFlags::ButtonsRetry) )
+    if ( (ERRCODE_BUTTON_CANCEL|ERRCODE_BUTTON_RETRY) == (nFlags & (ERRCODE_BUTTON_CANCEL|ERRCODE_BUTTON_RETRY)) )
         eBits = WB_RETRY_CANCEL;
-    else if ( nFlags & ErrorHandlerFlags::ButtonsOkCancel )
+    else if ( ERRCODE_BUTTON_OK_CANCEL == (nFlags & ERRCODE_BUTTON_OK_CANCEL) )
         eBits = WB_OK_CANCEL;
-    else if ( nFlags & ErrorHandlerFlags::ButtonsOk )
+    else if ( ERRCODE_BUTTON_OK == (nFlags & ERRCODE_BUTTON_OK) )
         eBits = WB_OK;
-    else if ( nFlags & ErrorHandlerFlags::ButtonsYesNoCancel )
+    else if ( ERRCODE_BUTTON_YES_NO_CANCEL == (nFlags & ERRCODE_BUTTON_YES_NO_CANCEL) )
         eBits = WB_YES_NO_CANCEL;
-    else if ( nFlags & ErrorHandlerFlags::ButtonsYesNo )
+    else if ( ERRCODE_BUTTON_YES_NO == (nFlags & ERRCODE_BUTTON_YES_NO) )
         eBits = WB_YES_NO;
 
-    switch(nFlags & ErrorHandlerFlags(0x0f00))
+    switch(nFlags & 0x0f00)
     {
-      case ErrorHandlerFlags::ButtonDefaultsOk:
+      case ERRCODE_BUTTON_DEF_OK:
             eBits |= WB_DEF_OK;
             break;
 
-      case ErrorHandlerFlags::ButtonDefaultsCancel:
+      case ERRCODE_BUTTON_DEF_CANCEL:
             eBits |= WB_DEF_CANCEL;
             break;
 
-      case ErrorHandlerFlags::ButtonDefaultsYes:
+      case ERRCODE_BUTTON_DEF_YES:
             eBits |= WB_DEF_YES;
             break;
 
-      case ErrorHandlerFlags::ButtonDefaultsNo:
+      case ERRCODE_BUTTON_DEF_NO:
             eBits |= WB_DEF_NO;
             break;
-      default: break;
     }
 
     OUString aErr(SvtResId(STR_ERR_HDLMESS).toString());
@@ -91,48 +90,48 @@ static ErrorHandlerFlags aWndFunc(
     aErr = aErr.replaceAll("$(ERROR)", rErr);
 
     VclPtr<MessBox> pBox;
-    switch ( nFlags & ErrorHandlerFlags(0xf000) )
+    switch ( nFlags & 0xf000 )
     {
-        case ErrorHandlerFlags::MessageError:
+        case ERRCODE_MSG_ERROR:
             pBox.reset(VclPtr<ErrorBox>::Create(pWin, eBits, aErr));
             break;
 
-        case ErrorHandlerFlags::MessageWarning:
+        case ERRCODE_MSG_WARNING:
             pBox.reset(VclPtr<WarningBox>::Create(pWin, eBits, aErr));
             break;
 
-        case ErrorHandlerFlags::MessageInfo:
+        case ERRCODE_MSG_INFO:
             pBox.reset(VclPtr<InfoBox>::Create(pWin, aErr));
             break;
 
-        case ErrorHandlerFlags::MessageQuery:
+        case ERRCODE_MSG_QUERY:
             pBox.reset(VclPtr<QueryBox>::Create(pWin, eBits, aErr));
             break;
 
         default:
         {
             SAL_WARN( "svtools.misc", "no MessBox type");
-            return ErrorHandlerFlags::ButtonsOk;
+            return ERRCODE_BUTTON_OK;
         }
     }
 
-    ErrorHandlerFlags nRet = ErrorHandlerFlags::NONE;
+    sal_uInt16 nRet = RET_CANCEL;
     switch ( pBox->Execute() )
     {
         case RET_OK:
-            nRet = ErrorHandlerFlags::ButtonsOk;
+            nRet = ERRCODE_BUTTON_OK;
             break;
         case RET_CANCEL:
-            nRet = ErrorHandlerFlags::ButtonsCancel;
+            nRet = ERRCODE_BUTTON_CANCEL;
             break;
         case RET_RETRY:
-            nRet = ErrorHandlerFlags::ButtonsRetry;
+            nRet = ERRCODE_BUTTON_RETRY;
             break;
         case RET_YES:
-            nRet = ErrorHandlerFlags::ButtonsYes;
+            nRet = ERRCODE_BUTTON_YES;
             break;
         case RET_NO:
-            nRet = ErrorHandlerFlags::ButtonsNo;
+            nRet = ERRCODE_BUTTON_NO;
             break;
         default:
             SAL_WARN( "svtools.misc", "Unknown MessBox return value" );
@@ -163,7 +162,7 @@ SfxErrorHandler::~SfxErrorHandler()
 
 
 bool SfxErrorHandler::CreateString(
-    const ErrorInfo *pErr, OUString &rStr, ErrorHandlerFlags& nFlags) const
+    const ErrorInfo *pErr, OUString &rStr, sal_uInt16& nFlags) const
 
 /*  [Description]
 
@@ -207,9 +206,9 @@ class ResString: public OUString
     */
 
 {
-    ErrorHandlerFlags nFlags;
+    sal_uInt16 nFlags;
   public:
-    ErrorHandlerFlags GetFlags() const {return nFlags;}
+    sal_uInt16 GetFlags() const {return nFlags;}
     const OUString & GetString() const {return *this;}
     explicit ResString( ResId &rId);
 };
@@ -217,12 +216,12 @@ class ResString: public OUString
 
 ResString::ResString(ResId & rId):
     OUString(rId.SetAutoRelease(false).toString()),
-    nFlags(ErrorHandlerFlags::NONE)
+    nFlags(0)
 {
     ResMgr * pResMgr = rId.GetResMgr();
      // String ctor temporarily sets global ResManager
     if (pResMgr->GetRemainSize())
-        nFlags = ErrorHandlerFlags(pResMgr->ReadShort());
+        nFlags = sal_uInt16(pResMgr->ReadShort());
     rId.SetAutoRelease(true);
     pResMgr->PopContext();
 }
@@ -274,7 +273,7 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
 
 
 bool SfxErrorHandler::GetErrorString(
-    sal_uLong lErrId, OUString &rStr, ErrorHandlerFlags &nFlags) const
+    sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 
 /*  [Description]
 
@@ -296,8 +295,8 @@ bool SfxErrorHandler::GetErrorString(
         {
             ResString aErrorString(aEr.GetResString());
 
-            ErrorHandlerFlags nResFlags = aErrorString.GetFlags();
-            if ( nResFlags != ErrorHandlerFlags::NONE )
+            sal_uInt16 nResFlags = aErrorString.GetFlags();
+            if ( nResFlags )
                 nFlags = nResFlags;
             rStr = rStr.replaceAll("$(ERROR)", aErrorString.GetString());
             bRet = true;

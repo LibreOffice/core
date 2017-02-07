@@ -2468,7 +2468,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 SetError((new StringErrorInfo(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
                     aImExport.GetNonConvertibleChars(),
-                    ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageInfo))->GetErrorCode(), OSL_LOG_PREFIX);
+                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO))->GetErrorCode(), OSL_LOG_PREFIX);
             }
         }
     }

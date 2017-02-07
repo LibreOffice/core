@@ -26,7 +26,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/errcode.hxx>
 #include <tools/toolsdllapi.h>
-#include <o3tl/typed_flags_set.hxx>
 #include <memory>
 
 // FIXME: horrible legacy dependency on VCL from tools.
@@ -34,35 +33,6 @@ namespace vcl { class Window; }
 
 class DynamicErrorInfo_Impl;
 class ErrorHandler_Impl;
-
-enum class ErrorHandlerFlags
-{
-    NONE                    = 0x0000,
-    ButtonsOk               = 0x0001,
-    ButtonsCancel           = 0x0002,
-    ButtonsRetry            = 0x0004,
-    ButtonsOkCancel         = 0x0003,
-    ButtonsNo               = 0x0008,
-    ButtonsYes              = 0x0010,
-    ButtonsYesNo            = 0x0018,
-    ButtonsYesNoCancel      = 0x001a,
-
-    ButtonDefaultsOk        = 0x0100,
-    ButtonDefaultsCancel    = 0x0200,
-    ButtonDefaultsYes       = 0x0300,
-    ButtonDefaultsNo        = 0x0400,
-
-    MessageError            = 0x1000,
-    MessageWarning          = 0x2000,
-    MessageInfo             = 0x3000,
-    MessageQuery            = 0x4000,
-
-    MAX                     = USHRT_MAX,
-};
-namespace o3tl
-{
-    template<> struct typed_flags<ErrorHandlerFlags> : is_typed_flags<ErrorHandlerFlags, 0xffff> {};
-}
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ErrorInfo
 {
@@ -89,11 +59,11 @@ private:
 
 public:
 
-                            DynamicErrorInfo(sal_uIntPtr lUserId, ErrorHandlerFlags nMask);
+                            DynamicErrorInfo(sal_uIntPtr lUserId, sal_uInt16 nMask);
     virtual                 ~DynamicErrorInfo() override;
 
     sal_uIntPtr             GetErrorCode() const;
-    ErrorHandlerFlags       GetDialogMask() const;
+    sal_uInt16              GetDialogMask() const;
 };
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
@@ -105,7 +75,7 @@ public:
 
                             StringErrorInfo( sal_uIntPtr lUserId,
                                             const OUString& aStringP,
-                                            ErrorHandlerFlags nMask = ErrorHandlerFlags::NONE);
+                                            sal_uInt16 nMask = 0);
     const OUString&         GetErrorString() const { return aString; }
 };
 
@@ -118,7 +88,7 @@ private:
 public:
 
     TwoStringErrorInfo(sal_uIntPtr nUserID, const OUString & rTheArg1,
-                       const OUString & rTheArg2, ErrorHandlerFlags nMask):
+                       const OUString & rTheArg2, sal_uInt16 nMask):
         DynamicErrorInfo(nUserID, nMask), aArg1(rTheArg1), aArg2(rTheArg2) {}
 
     const OUString& GetArg1() const { return aArg1; }
@@ -143,8 +113,8 @@ public:
     static ErrorContext*    GetContext();
 };
 
-typedef ErrorHandlerFlags WindowDisplayErrorFunc(
-    vcl::Window *, ErrorHandlerFlags nMask, const OUString &rErr, const OUString &rAction);
+typedef sal_uInt16 WindowDisplayErrorFunc(
+    vcl::Window *, sal_uInt16 nMask, const OUString &rErr, const OUString &rAction);
 
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);
@@ -154,19 +124,19 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ErrorHandler
     friend class ErrorHandler_Impl;
 
 private:
-    static ErrorHandlerFlags HandleError_Impl( sal_uIntPtr lId,
-                              ErrorHandlerFlags nFlags,
+    static sal_uInt16   HandleError_Impl( sal_uIntPtr lId,
+                              sal_uInt16 nFlags,
                               bool bJustCreateString,
                               OUString & rError);
 protected:
     virtual bool        CreateString( const ErrorInfo *,
-                              OUString &, ErrorHandlerFlags& nMask ) const = 0;
+                              OUString &, sal_uInt16& nMask ) const = 0;
 
 public:
                         ErrorHandler();
     virtual             ~ErrorHandler();
 
-    static ErrorHandlerFlags HandleError ( sal_uIntPtr lId, ErrorHandlerFlags nMask = ErrorHandlerFlags::MAX );
+    static sal_uInt16   HandleError ( sal_uIntPtr lId, sal_uInt16 nMask = USHRT_MAX );
     static bool         GetErrorString( sal_uIntPtr lId, OUString& rStr );
 
     static void         RegisterDisplay( BasicDisplayErrorFunc* );

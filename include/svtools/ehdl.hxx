@@ -54,7 +54,7 @@ public:
     virtual ~SfxErrorHandler() override;
 
 protected:
-    bool     GetErrorString(sal_uLong lErrId, OUString &, ErrorHandlerFlags&) const;
+    bool     GetErrorString(sal_uLong lErrId, OUString &, sal_uInt16&) const;
 
 private:
 
@@ -66,7 +66,7 @@ private:
                          pFreeMgr;
 
     SVT_DLLPRIVATE static void GetClassString(sal_uLong lErrId, OUString &);
-    virtual bool          CreateString( const ErrorInfo *, OUString &, ErrorHandlerFlags &) const override;
+    virtual bool          CreateString( const ErrorInfo *, OUString &, sal_uInt16 &) const override;
 };
 
 #endif
