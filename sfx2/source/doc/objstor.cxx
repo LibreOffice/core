@@ -2300,8 +2300,10 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                     e.Message, ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError ))->GetErrorCode(), "");
             }
         }
-        catch(...)
-        {}
+        catch (...)
+        {
+            std::abort(); // cannot happen
+        }
     }
 
     return false;
