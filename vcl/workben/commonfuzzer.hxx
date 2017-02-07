@@ -22,6 +22,7 @@
 #include <vcl/wmf.hxx>
 #include <unistd.h>
 #include <stdlib.h>
+#include "unx/fontmanager.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -85,6 +86,9 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
     comphelper::setProcessServiceFactory( xServiceManager );
     utl::ConfigManager::EnableAvoidConfig();
     InitVCL();
+
+    //we don't have a de-init, so get the font info here inside the leak disabled code
+    psp::PrintFontManager::get();
 
     if (__lsan_enable)
         __lsan_enable();
