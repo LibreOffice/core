@@ -22,7 +22,6 @@
 
 #include "rcid.hrc"
 
-#define RID_SW_SHELLRES             (RC_UTLUI_BEGIN + 1)
 #define RID_STR_SYSTEM              (RC_UTLUI_BEGIN + 2)
 
 // Strings in NumberFormatter-Listbox
@@ -70,7 +69,7 @@
 #define STR_CONTENT_TYPE_SINGLE_DRAWOBJECT      (STR_CONTENT_TYPE_SINGLE_FIRST + 11)
 #define STR_CONTENT_SINGLE_END                  STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
 
-#define FLD_DOCINFO_BEGIN   STR_CONTENT_SINGLE_END
+#define FLD_DOCINFO_BEGIN   (STR_CONTENT_SINGLE_END + 1)
 #define FLD_DOCINFO_TITEL   FLD_DOCINFO_BEGIN
 #define FLD_DOCINFO_THEMA   (FLD_DOCINFO_BEGIN + 1)
 #define FLD_DOCINFO_KEYS    (FLD_DOCINFO_BEGIN + 2)
@@ -190,7 +189,42 @@
 #define STR_IDXEXAMPLE_IDXTXT_IMAGE1            (STR_IDXEXAMPLE_IDXTXT_BEGIN + 8)
 #define STR_IDXEXAMPLE_IDXTXT_END               STR_IDXEXAMPLE_IDXTXT_IMAGE1
 
-#if STR_IDXEXAMPLE_IDXTXT_END > RC_IDXTXT_END
+#define RID_SW_SHELLRES_BEGIN                   (STR_IDXEXAMPLE_IDXTXT_IMAGE1 + 1)
+#define STR_POSTIT_PAGE                         (RID_SW_SHELLRES_BEGIN + 1)
+#define STR_POSTIT_AUTHOR                       (RID_SW_SHELLRES_BEGIN + 2)
+#define STR_CALC_SYNTAX                         (RID_SW_SHELLRES_BEGIN + 3)
+#define STR_CALC_ZERODIV                        (RID_SW_SHELLRES_BEGIN + 4)
+#define STR_CALC_BRACK                          (RID_SW_SHELLRES_BEGIN + 5)
+#define STR_CALC_POW                            (RID_SW_SHELLRES_BEGIN + 6)
+#define STR_CALC_VARNFND                        (RID_SW_SHELLRES_BEGIN + 7)
+#define STR_CALC_OVERFLOW                       (RID_SW_SHELLRES_BEGIN + 8)
+#define STR_CALC_WRONGTIME                      (RID_SW_SHELLRES_BEGIN + 9)
+#define STR_CALC_DEFAULT                        (RID_SW_SHELLRES_BEGIN + 10)
+#define STR_CALC_ERROR                          (RID_SW_SHELLRES_BEGIN + 11)
+#define STR_GETREFFLD_UP                        (RID_SW_SHELLRES_BEGIN + 12)
+#define STR_GETREFFLD_DOWN                      (RID_SW_SHELLRES_BEGIN + 13)
+#define STR_ALLPAGE_HEADFOOT                    (RID_SW_SHELLRES_BEGIN + 14)
+#define STR_TEMPLATE_NONE                       (RID_SW_SHELLRES_BEGIN + 15)
+#define STR_POSTIT_LINE                         (RID_SW_SHELLRES_BEGIN + 16)
+#define STR_FIELD_FIXED                         (RID_SW_SHELLRES_BEGIN + 17)
+#define STR_TOI                                 (RID_SW_SHELLRES_BEGIN + 18)
+#define STR_TOU                                 (RID_SW_SHELLRES_BEGIN + 19)
+#define STR_TOC                                 (RID_SW_SHELLRES_BEGIN + 20)
+#define STR_TOX_ILL                             (RID_SW_SHELLRES_BEGIN + 21)
+#define STR_TOX_OBJ                             (RID_SW_SHELLRES_BEGIN + 22)
+#define STR_TOX_TBL                             (RID_SW_SHELLRES_BEGIN + 23)
+#define STR_TOX_AUTH                            (RID_SW_SHELLRES_BEGIN + 24)
+#define STR_PAGEDESC_NAME                       (RID_SW_SHELLRES_BEGIN + 25)
+#define STR_PAGEDESC_FIRSTNAME                  (RID_SW_SHELLRES_BEGIN + 26)
+#define STR_PAGEDESC_FOLLOWNAME                 (RID_SW_SHELLRES_BEGIN + 27)
+#define STR_LINK_CTRL_CLICK                     (RID_SW_SHELLRES_BEGIN + 28)
+#define STR_LINK_CLICK                          (RID_SW_SHELLRES_BEGIN + 29)
+#define STR_GETREFFLD_REFITEMNOTFOUND           (RID_SW_SHELLRES_BEGIN + 30)
+#define STR_DURATION_FORMAT                     (RID_SW_SHELLRES_BEGIN + 31)
+#define STR_TOX_CITATION                        (RID_SW_SHELLRES_BEGIN + 32)
+#define RID_SW_SHELLRES_END                     STR_TOX_CITATION
+
+#if STR_IDXEXAMPLE_IDXTXT_END > RID_SW_SHELLRES_END
 #error Resource-Id Ueberlauf in #file, #line
 #endif
 

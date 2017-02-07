@@ -24,7 +24,7 @@
 #include <tools/rc.hxx>
 #include <vcl/bitmap.hxx>
 
-struct SW_DLLPUBLIC ShellResource : public Resource
+struct SW_DLLPUBLIC ShellResource
 {
     OUString        aPostItAuthor;
     OUString        aPostItPage;
@@ -80,7 +80,6 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     OUString GetPageDescName(sal_uInt16 nNo, PageNameMode eMode);
 
     ShellResource();
-    ~ShellResource();
 
 private:
     void GetAutoFormatNameLst_() const;

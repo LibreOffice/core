@@ -30,7 +30,6 @@
 #include <gloslst.hxx>
 
 #include <utlui.hrc>
-#include <initui.hrc>
 #include <comcore.hrc>
 #include <authfld.hxx>
 #include <dbmgr.hxx>
@@ -175,8 +174,7 @@ void InitUI()
 }
 
 ShellResource::ShellResource()
-    : Resource( SW_RES(RID_SW_SHELLRES) ),
-    aPostItAuthor( SW_RES( STR_POSTIT_AUTHOR ) ),
+    : aPostItAuthor( SW_RES( STR_POSTIT_AUTHOR ) ),
     aPostItPage( SW_RES( STR_POSTIT_PAGE ) ),
     aPostItLine( SW_RES( STR_POSTIT_LINE ) ),
 
@@ -222,12 +220,6 @@ ShellResource::ShellResource()
 
     for(sal_uInt16 i = 0; i < nCount; ++i)
         aDocInfoLst.push_back(OUString(SW_RESSTR(FLD_DOCINFO_BEGIN + i)));
-
-    FreeResource();
-}
-
-ShellResource::~ShellResource()
-{
 }
 
 OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)
