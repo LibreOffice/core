@@ -1101,5 +1101,9 @@
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <property name="ignore_hidden">True</property>
+    <widgets>
+      <widget name="label4"/>
+      <widget name="label5"/>
+    </widgets>
   </object>
 </interface>
