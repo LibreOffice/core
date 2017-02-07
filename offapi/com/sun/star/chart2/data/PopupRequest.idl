@@ -1,0 +1,44 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ */
+
+#ifndef com_sun_star_chart2_data_PopupRequest_idl
+#define com_sun_star_chart2_data_PopupRequest_idl
+
+#include <com/sun/star/chart2/data/XPopupRequest.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/**
+ */
+service PopupRequest
+{
+    /**
+     */
+    interface XPopupRequest;
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
