@@ -1302,10 +1302,14 @@ bool
 ErrorResource::getString(ErrCode nErrorCode, OUString &rString)
     const
 {
-    sal_uInt32 nIdx = m_aStringArray.FindIndex(nErrorCode & ERRCODE_RES_MASK);
-    if (nIdx == RESARRAY_INDEX_NOTFOUND)
+    ResId aResId(static_cast< sal_uInt16 >(nErrorCode & ERRCODE_RES_MASK),
+                 *m_pResMgr);
+    aResId.SetRT(RSC_STRING);
+    if (!IsAvailableRes(aResId))
         return false;
-    rString = m_aStringArray.GetString(nIdx);
+    aResId.SetAutoRelease(false);
+    rString = aResId.toString();
+    m_pResMgr->PopContext();
     return true;
 }
 

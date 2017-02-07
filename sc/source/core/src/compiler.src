@@ -20,21 +20,51 @@
 #include "sc.hrc"
 #include <formula/compiler.hrc>
 
-StringArray RID_FUNCTION_CATEGORIES
+Resource RID_FUNCTION_CATEGORIES
 {
-    ItemList [ en-US ] =
+    String 1
     {
-        < "Database" ; >;
-        < "Date&Time" ; >;
-        < "Financial" ; >;
-        < "Information" ; >;
-        < "Logical" ; >;
-        < "Mathematical" ; >;
-        < "Array" ; >;
-        < "Statistical" ; >;
-        < "Spreadsheet" ; >;
-        < "Text" ; >;
-        < "Add-in" ; >;
+        Text[ en-US ] =  "Database" ;
+    };
+    String 2
+    {
+        Text[ en-US ] =  "Date&Time" ;
+    };
+    String 3
+    {
+        Text[ en-US ] =  "Financial" ;
+    };
+    String 4
+    {
+        Text[ en-US ] =  "Information" ;
+    };
+    String 5
+    {
+        Text[ en-US ] =  "Logical" ;
+    };
+    String 6
+    {
+        Text[ en-US ] =  "Mathematical" ;
+    };
+    String 7
+    {
+        Text[ en-US ] =  "Array" ;
+    };
+    String 8
+    {
+        Text[ en-US ] =  "Statistical" ;
+    };
+    String 9
+    {
+        Text[ en-US ] =  "Spreadsheet" ;
+    };
+    String 10
+    {
+        Text[ en-US ] =  "Text" ;
+    };
+    String 11
+    {
+        Text[ en-US ] =  "Add-in" ;
     };
 };
 

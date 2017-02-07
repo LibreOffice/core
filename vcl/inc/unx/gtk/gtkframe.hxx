@@ -246,7 +246,6 @@ class GtkSalFrame : public SalFrame
 #endif
 #if GTK_CHECK_VERSION(3,0,0)
     static gboolean     signalDraw( GtkWidget*, cairo_t *cr, gpointer );
-    static void         signalRealize(GtkWidget*, gpointer frame);
     static void         sizeAllocated(GtkWidget*, GdkRectangle *pAllocation, gpointer frame);
     static gboolean     signalTooltipQuery(GtkWidget*, gint x, gint y,
                                      gboolean keyboard_mode, GtkTooltip *tooltip,
@@ -347,7 +346,6 @@ class GtkSalFrame : public SalFrame
 public:
 #if GTK_CHECK_VERSION(3,0,0)
     cairo_surface_t*                m_pSurface;
-    basegfx::B2IVector              m_aFrameSize;
     DamageHandler                   m_aDamageHandler;
     int                             m_nGrabLevel;
     bool                            m_bSalObjectSetPosSize;

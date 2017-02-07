@@ -20,181 +20,185 @@
 #include "globals.hrc"
 #include "utlui.hrc"
 #include "helpid.h"
+#include "initui.hrc"
 
 // Error calculator
 
-String STR_POSTIT_PAGE
+Resource RID_SW_SHELLRES
 {
-    Text [ en-US ] = "Page" ;
-};
-String STR_POSTIT_LINE
-{
-    Text [ en-US ] = "Line" ;
-};
-String STR_POSTIT_AUTHOR
-{
-    Text [ en-US ] = "Author" ;
-};
-String STR_CALC_SYNTAX
-{
-    Text [ en-US ] = "** Syntax Error **" ;
-};
-String STR_CALC_ZERODIV
-{
-    Text [ en-US ] = "** Division by zero **" ;
-};
-String STR_CALC_BRACK
-{
-    Text [ en-US ] = "** Wrong use of brackets **" ;
-};
-String STR_CALC_POW
-{
-    Text [ en-US ] = "** Square function overflow **" ;
-};
-String STR_CALC_VARNFND
-{
-    Text [ en-US ] = "** Variable not found **" ;
-};
-String STR_CALC_OVERFLOW
-{
-    Text [ en-US ] = "** Overflow **" ;
-};
-String STR_CALC_WRONGTIME
-{
-    Text [ en-US ] = "** Wrong time format **" ;
-};
-String STR_CALC_DEFAULT
-{
-    Text [ en-US ] = "** Error **" ;
-};
-String STR_CALC_ERROR
-{
-    Text [ en-US ] = "** Expression is faulty **" ;
-};
-String STR_GETREFFLD_UP
-{
-    Text [ en-US ] = "above" ;
-};
-String STR_GETREFFLD_DOWN
-{
-    Text [ en-US ] = "below" ;
-};
-String STR_GETREFFLD_REFITEMNOTFOUND
-{
-    Text [ en-US ] = "Error: Reference source not found" ;
-};
-String STR_ALLPAGE_HEADFOOT
-{
-    Text [ en-US ] = "All" ;
-};
-String STR_TEMPLATE_NONE
-{
-    Text [ en-US ] = "None" ;
-};
-String STR_FIELD_FIXED
-{
-    Text [ en-US ] = "(fixed)" ;
-};
-String STR_DURATION_FORMAT
-{
-    Text [en-US] = " Y: %1 M: %2 D: %3 H: %4 M: %5 S: %6";
-};
-String STR_TOI
-{
-    Text [ en-US ] = "Alphabetical Index" ;
-};
+    String STR_POSTIT_PAGE
+    {
+        Text [ en-US ] = "Page" ;
+    };
+    String STR_POSTIT_LINE
+    {
+        Text [ en-US ] = "Line" ;
+    };
+    String STR_POSTIT_AUTHOR
+    {
+        Text [ en-US ] = "Author" ;
+    };
+    String STR_CALC_SYNTAX
+    {
+        Text [ en-US ] = "** Syntax Error **" ;
+    };
+    String STR_CALC_ZERODIV
+    {
+        Text [ en-US ] = "** Division by zero **" ;
+    };
+    String STR_CALC_BRACK
+    {
+        Text [ en-US ] = "** Wrong use of brackets **" ;
+    };
+    String STR_CALC_POW
+    {
+        Text [ en-US ] = "** Square function overflow **" ;
+    };
+    String STR_CALC_VARNFND
+    {
+        Text [ en-US ] = "** Variable not found **" ;
+    };
+    String STR_CALC_OVERFLOW
+    {
+        Text [ en-US ] = "** Overflow **" ;
+    };
+    String STR_CALC_WRONGTIME
+    {
+        Text [ en-US ] = "** Wrong time format **" ;
+    };
+    String STR_CALC_DEFAULT
+    {
+        Text [ en-US ] = "** Error **" ;
+    };
+    String STR_CALC_ERROR
+    {
+        Text [ en-US ] = "** Expression is faulty **" ;
+    };
+    String STR_GETREFFLD_UP
+    {
+        Text [ en-US ] = "above" ;
+    };
+    String STR_GETREFFLD_DOWN
+    {
+        Text [ en-US ] = "below" ;
+    };
+    String STR_GETREFFLD_REFITEMNOTFOUND
+    {
+        Text [ en-US ] = "Error: Reference source not found" ;
+    };
+    String STR_ALLPAGE_HEADFOOT
+    {
+        Text [ en-US ] = "All" ;
+    };
+    String STR_TEMPLATE_NONE
+    {
+        Text [ en-US ] = "None" ;
+    };
+    String STR_FIELD_FIXED
+    {
+        Text [ en-US ] = "(fixed)" ;
+    };
+    String STR_DURATION_FORMAT
+    {
+        Text [en-US] = " Y: %1 M: %2 D: %3 H: %4 M: %5 S: %6";
+    };
+    String STR_TOI
+    {
+        Text [ en-US ] = "Alphabetical Index" ;
+    };
 
-String STR_TOU
-{
-    Text [ en-US ] = "User-Defined" ;
-};
+    String STR_TOU
+    {
+        Text [ en-US ] = "User-Defined" ;
+    };
 
-String STR_TOC
-{
-    Text [ en-US ] = "Table of Contents" ;
-};
+    String STR_TOC
+    {
+        Text [ en-US ] = "Table of Contents" ;
+    };
 
-String STR_TOX_AUTH
-{
-    Text [ en-US ] = "Bibliography";
-};
+    String STR_TOX_AUTH
+    {
+        Text [ en-US ] = "Bibliography";
+    };
 
-String STR_TOX_CITATION
-{
-    Text [ en-US ] = "Citation";
-};
+    String STR_TOX_CITATION
+    {
+        Text [ en-US ] = "Citation";
+    };
 
-String STR_TOX_TBL
-{
-    Text [ en-US ] = "Index of Tables";
-};
-String STR_TOX_OBJ
-{
-    Text [ en-US ] = "Table of Objects";
-};
-String STR_TOX_ILL
-{
-    Text [ en-US ] = "Illustration Index";
-};
-String STR_LINK_CTRL_CLICK
-{
-    Text [ en-US ] = "%s-Click to follow link";
-};
-String STR_LINK_CLICK
-{
-    Text [ en-US ] = "Click to follow link";
-};
+    String STR_TOX_TBL
+    {
+        Text [ en-US ] = "Index of Tables";
+    };
+    String STR_TOX_OBJ
+    {
+        Text [ en-US ] = "Table of Objects";
+    };
+    String STR_TOX_ILL
+    {
+        Text [ en-US ] = "Illustration Index";
+    };
+    String STR_LINK_CTRL_CLICK
+    {
+        Text [ en-US ] = "%s-Click to follow link";
+    };
+    String STR_LINK_CLICK
+    {
+        Text [ en-US ] = "Click to follow link";
+    };
 
- // SubType DocInfo
+     // SubType DocInfo
 
-String FLD_DOCINFO_TITEL
-{
-    Text [ en-US ] = "Title" ;
-};
-String FLD_DOCINFO_THEMA
-{
-    Text [ en-US ] = "Subject" ;
-};
-String FLD_DOCINFO_KEYS
-{
-    Text [ en-US ] = "Keywords" ;
-};
-String FLD_DOCINFO_COMMENT
-{
-    Text [ en-US ] = "Comments" ;
-};
-String FLD_DOCINFO_CREATE
-{
-    Text [ en-US ] = "Created" ;
-};
-String FLD_DOCINFO_CHANGE
-{
-    Text [ en-US ] = "Modified" ;
-};
-String FLD_DOCINFO_PRINT
-{
-    Text [ en-US ] = "Last printed" ;
-};
-String FLD_DOCINFO_DOCNO
-{
-    Text [ en-US ] = "Revision number" ;
-};
-String FLD_DOCINFO_EDIT
-{
-    Text [ en-US ] = "Total editing time" ;
-};
+    String FLD_DOCINFO_TITEL
+    {
+        Text [ en-US ] = "Title" ;
+    };
+    String FLD_DOCINFO_THEMA
+    {
+        Text [ en-US ] = "Subject" ;
+    };
+    String FLD_DOCINFO_KEYS
+    {
+        Text [ en-US ] = "Keywords" ;
+    };
+    String FLD_DOCINFO_COMMENT
+    {
+        Text [ en-US ] = "Comments" ;
+    };
+    String FLD_DOCINFO_CREATE
+    {
+        Text [ en-US ] = "Created" ;
+    };
+    String FLD_DOCINFO_CHANGE
+    {
+        Text [ en-US ] = "Modified" ;
+    };
+    String FLD_DOCINFO_PRINT
+    {
+        Text [ en-US ] = "Last printed" ;
+    };
+    String FLD_DOCINFO_DOCNO
+    {
+        Text [ en-US ] = "Revision number" ;
+    };
+    String FLD_DOCINFO_EDIT
+    {
+        Text [ en-US ] = "Total editing time" ;
+    };
 
-String STR_PAGEDESC_NAME
-{
-    Text [ en-US ] = "Convert $(ARG1)";
-};
-String STR_PAGEDESC_FIRSTNAME
-{
-    Text [ en-US ] = "First convert $(ARG1)";
-};
-String STR_PAGEDESC_FOLLOWNAME
-{
-    Text [ en-US ] = "Next convert $(ARG1)";
+    String STR_PAGEDESC_NAME
+    {
+        Text [ en-US ] = "Convert $(ARG1)";
+    };
+    String STR_PAGEDESC_FIRSTNAME
+    {
+        Text [ en-US ] = "First convert $(ARG1)";
+    };
+    String STR_PAGEDESC_FOLLOWNAME
+    {
+        Text [ en-US ] = "Next convert $(ARG1)";
+    };
 };
 
 String STR_AUTH_TYPE_ARTICLE

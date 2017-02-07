@@ -1039,7 +1039,6 @@ void GtkSalFrame::InitCommon()
     m_aMouseSignalIds.push_back(g_signal_connect( G_OBJECT(pEventWidget), "scroll-event", G_CALLBACK(signalScroll), this ));
 
     g_signal_connect( G_OBJECT(m_pFixedContainer), "draw", G_CALLBACK(signalDraw), this );
-    g_signal_connect( G_OBJECT(m_pFixedContainer), "realize", G_CALLBACK(signalRealize), this );
     g_signal_connect( G_OBJECT(m_pFixedContainer), "size-allocate", G_CALLBACK(sizeAllocated), this );
 #if GTK_CHECK_VERSION(3,14,0)
     GtkGesture *pSwipe = gtk_gesture_swipe_new(pEventWidget);
@@ -1336,7 +1335,7 @@ SalGraphics* GtkSalFrame::AcquireGraphics()
             AllocateFrame();
             TriggerPaintEvent();
         }
-        m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
+        m_pGraphics->setSurface(m_pSurface);
     }
     m_bGraphics = true;
     return m_pGraphics;
@@ -1563,11 +1562,13 @@ void GtkSalFrame::SetMinClientSize( long nWidth, long nHeight )
     }
 }
 
+// FIXME: we should really be an SvpSalFrame sub-class, and
+// share their AllocateFrame !
 void GtkSalFrame::AllocateFrame()
 {
     basegfx::B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
-    if (!m_pSurface || m_aFrameSize.getX() != aFrameSize.getX() ||
-                       m_aFrameSize.getY() != aFrameSize.getY() )
+    if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != aFrameSize.getX() ||
+                       cairo_image_surface_get_height(m_pSurface) != aFrameSize.getY() )
     {
         if( aFrameSize.getX() == 0 )
             aFrameSize.setX( 1 );
@@ -1577,17 +1578,30 @@ void GtkSalFrame::AllocateFrame()
         if (m_pSurface)
             cairo_surface_destroy(m_pSurface);
 
-        m_pSurface = gdk_window_create_similar_surface(widget_get_window(m_pWindow),
-                                                       CAIRO_CONTENT_COLOR_ALPHA,
-                                                       aFrameSize.getX(),
-                                                       aFrameSize.getY());
-        m_aFrameSize = aFrameSize;
-
+#if GTK_CHECK_VERSION(3,10,0)
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
+        int scale = gtk_widget_get_scale_factor(m_pWindow);
+#else
+        int scale = 1;
+#endif
+        m_pSurface = gdk_window_create_similar_image_surface(widget_get_window(m_pWindow),
+                                                             CAIRO_FORMAT_ARGB32,
+                                                             aFrameSize.getX() * scale,
+                                                             aFrameSize.getY() * scale,
+                                                             scale);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
+        cairo_surface_set_device_scale(m_pSurface, scale, scale);
+#endif
+#else
+        m_pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                                aFrameSize.getX(),
+                                                aFrameSize.getY());
+#endif
         cairo_surface_set_user_data(m_pSurface, SvpSalGraphics::getDamageKey(), &m_aDamageHandler, nullptr);
         SAL_INFO("vcl.gtk3", "allocated Frame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
 
         if (m_pGraphics)
-            m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
+            m_pGraphics->setSurface(m_pSurface);
     }
 }
 
@@ -2875,23 +2889,13 @@ gboolean GtkSalFrame::signalDraw(GtkWidget*, cairo_t *cr, gpointer frame)
     return false;
 }
 
-void GtkSalFrame::sizeAllocated(GtkWidget* pWidget, GdkRectangle *pAllocation, gpointer frame)
+void GtkSalFrame::sizeAllocated(GtkWidget*, GdkRectangle *pAllocation, gpointer frame)
 {
     GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     pThis->maGeometry.nWidth = pAllocation->width;
     pThis->maGeometry.nHeight = pAllocation->height;
-    bool bRealized = gtk_widget_get_realized(pWidget);
-    if (bRealized)
-        pThis->AllocateFrame();
-    pThis->CallCallbackExc( SalEvent::Resize, nullptr );
-    if (bRealized && !pThis->m_bSalObjectSetPosSize)
-        pThis->TriggerPaintEvent();
-}
-
-void GtkSalFrame::signalRealize(GtkWidget*, gpointer frame)
-{
-    GtkSalFrame* pThis = static_cast<GtkSalFrame*>(frame);
     pThis->AllocateFrame();
+    pThis->CallCallbackExc( SalEvent::Resize, nullptr );
     if (pThis->m_bSalObjectSetPosSize)
         return;
     pThis->TriggerPaintEvent();

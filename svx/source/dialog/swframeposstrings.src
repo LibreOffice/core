@@ -18,53 +18,220 @@
  */
 #include <svx/dialogs.hrc>
 
-//the following string have to match the (enum values) positions in svx/swframeposstrings.hxx!
-StringArray RID_SVXSW_FRAMEPOSITIONS
+//the following defines have to match the (enum values + 1) in svx/swframeposstrings.hxx!
+#define STR_LEFT                                1
+#define STR_RIGHT                               2
+#define STR_FROMLEFT                            3
+#define STR_MIR_LEFT                            4
+#define STR_MIR_RIGHT                           5
+#define STR_MIR_FROMLEFT                        6
+#define STR_FRAME                               7
+#define STR_PRTAREA                             8
+#define STR_REL_PG_LEFT                         9
+#define STR_REL_PG_RIGHT                        10
+#define STR_REL_FRM_LEFT                        11
+#define STR_REL_FRM_RIGHT                       12
+#define STR_MIR_REL_PG_LEFT                     13
+#define STR_MIR_REL_PG_RIGHT                    14
+#define STR_MIR_REL_FRM_LEFT                    15
+#define STR_MIR_REL_FRM_RIGHT                   16
+#define STR_REL_PG_FRAME                        17
+#define STR_REL_PG_PRTAREA                      18
+#define STR_REL_BASE                            19
+#define STR_REL_CHAR                            20
+#define STR_REL_ROW                             21
+#define STR_REL_BORDER                          22
+#define STR_REL_PRTAREA                         23
+#define STR_FLY_REL_PG_LEFT                     24
+#define STR_FLY_REL_PG_RIGHT                    25
+#define STR_FLY_REL_PG_FRAME                    26
+#define STR_FLY_REL_PG_PRTAREA                  27
+#define STR_FLY_MIR_REL_PG_LEFT                 28
+#define STR_FLY_MIR_REL_PG_RIGHT                29
+#define STR_TOP                                 30
+#define STR_BOTTOM                              31
+#define STR_CENTER_HORI                         32
+#define STR_CENTER_VERT                         33
+#define STR_FROMTOP                             34
+#define STR_FROMBOTTOM                          35
+#define STR_BELOW                               36
+#define STR_FROMRIGHT                           37
+#define STR_REL_PG_TOP                          38
+#define STR_REL_PG_BOTTOM                       39
+#define STR_REL_FRM_TOP                         40
+#define STR_REL_FRM_BOTTOM                      41
+#define STR_REL_LINE                            42
+
+Resource RID_SVXSW_FRAMEPOSITIONS
 {
-    ItemList [ en-US ] =
+    String STR_LEFT
     {
-        < "Left" ; > ;
-        < "Inside" ; > ;
-        < "Right" ; > ;
-        < "Outside" ; > ;
-        < "Center" ; > ;
-        < "From left" ; > ;
-        < "From inside" ; > ;
-        < "Paragraph area" ; > ;
-        < "Paragraph text area" ; > ;
-        < "Left page border" ; > ;
-        < "Inner page border" ; > ;
-        < "Right page border" ; > ;
-        < "Outer page border" ; > ;
-        < "Left paragraph border" ; > ;
-        < "Inner paragraph border" ; > ;
-        < "Right paragraph border" ; > ;
-        < "Outer paragraph border" ; > ;
-        < "Entire page" ; > ;
-        < "Page text area" ; > ;
-        < "Top" ; > ;
-        < "Bottom" ; > ;
-        < "Center" ; > ;
-        < "From top" ; > ;
-        < "From bottom" ; > ;
-        < "Below" ; > ;
-        < "From right" ; > ;
-        < "Top page border" ; > ;
-        < "Bottom page border" ; > ;
-        < "Top paragraph border" ; > ;
-        < "Bottom paragraph border" ; > ;
-        < "Margin" ; > ;
-        < "Paragraph text area" ; > ;
-        < "Left frame border" ; > ;
-        < "Inner frame border" ; > ;
-        < "Right frame border" ; > ;
-        < "Outer frame border" ; > ;
-        < "Entire frame" ; > ;
-        < "Frame text area" ; > ;
-        < "Base line" ; > ;
-        < "Character" ; > ;
-        < "Row" ; > ;
-        < "Line of text" ; > ;
+        Text [ en-US ] = "Left" ;
+    };
+    String STR_MIR_LEFT
+    {
+        Text [ en-US ] = "Inside" ;
+    };
+    String STR_RIGHT
+    {
+        Text [ en-US ] = "Right" ;
+    };
+    String STR_MIR_RIGHT
+    {
+        Text [ en-US ] = "Outside" ;
+    };
+    String STR_CENTER_VERT
+    {
+        Text [ en-US ] = "Center" ;
+    };
+    String STR_FROMLEFT
+    {
+        Text [ en-US ] = "From left" ;
+    };
+    String STR_MIR_FROMLEFT
+    {
+        Text [ en-US ] = "From inside" ;
+    };
+    String STR_FRAME
+    {
+        Text [ en-US ] = "Paragraph area" ;
+    };
+    String STR_PRTAREA
+    {
+        Text [ en-US ] = "Paragraph text area" ;
+    };
+    String STR_REL_PG_LEFT
+    {
+        Text [ en-US ] = "Left page border" ;
+    };
+    String STR_MIR_REL_PG_LEFT
+    {
+        Text [ en-US ] = "Inner page border" ;
+    };
+    String STR_REL_PG_RIGHT
+    {
+        Text [ en-US ] = "Right page border" ;
+    };
+    String STR_MIR_REL_PG_RIGHT
+    {
+        Text [ en-US ] = "Outer page border" ;
+    };
+    String STR_REL_FRM_LEFT
+    {
+        Text [ en-US ] = "Left paragraph border" ;
+    };
+    String STR_MIR_REL_FRM_LEFT
+    {
+        Text [ en-US ] = "Inner paragraph border" ;
+    };
+    String STR_REL_FRM_RIGHT
+    {
+        Text [ en-US ] = "Right paragraph border" ;
+    };
+    String STR_MIR_REL_FRM_RIGHT
+    {
+        Text [ en-US ] = "Outer paragraph border" ;
+    };
+    String STR_REL_PG_FRAME
+    {
+        Text [ en-US ] = "Entire page" ;
+    };
+    String STR_REL_PG_PRTAREA
+    {
+        Text [ en-US ] = "Page text area" ;
+    };
+    String STR_TOP
+    {
+        Text [ en-US ] = "Top" ;
+    };
+    String STR_BOTTOM
+    {
+        Text [ en-US ] = "Bottom" ;
+    };
+    String STR_CENTER_HORI
+    {
+        Text [ en-US ] = "Center" ;
+    };
+    String STR_FROMTOP
+    {
+        Text [ en-US ] = "From top" ;
+    };
+    String STR_FROMBOTTOM
+    {
+        Text [ en-US ] = "From bottom" ;
+    };
+    String STR_BELOW
+    {
+        Text [ en-US ] = "Below" ;
+    };
+    String STR_FROMRIGHT
+    {
+        Text [ en-US ] = "From right" ;
+    };
+    String STR_REL_PG_TOP
+    {
+        Text [ en-US ] = "Top page border" ;
+    };
+    String STR_REL_PG_BOTTOM
+    {
+        Text [ en-US ] = "Bottom page border" ;
+    };
+    String STR_REL_FRM_TOP
+    {
+        Text [ en-US ] = "Top paragraph border" ;
+    };
+    String STR_REL_FRM_BOTTOM
+    {
+        Text [ en-US ] = "Bottom paragraph border" ;
+    };
+    String STR_REL_BORDER
+    {
+        Text [ en-US ] = "Margin" ;
+    };
+    String STR_REL_PRTAREA
+    {
+        Text [ en-US ] = "Paragraph text area" ;
+    };
+    String STR_FLY_REL_PG_LEFT
+    {
+        Text [ en-US ] = "Left frame border" ;
+    };
+    String STR_FLY_MIR_REL_PG_LEFT
+    {
+        Text [ en-US ] = "Inner frame border" ;
+    };
+    String STR_FLY_REL_PG_RIGHT
+    {
+        Text [ en-US ] = "Right frame border" ;
+    };
+    String STR_FLY_MIR_REL_PG_RIGHT
+    {
+        Text [ en-US ] = "Outer frame border" ;
+    };
+    String STR_FLY_REL_PG_FRAME
+    {
+        Text [ en-US ] = "Entire frame" ;
+    };
+    String STR_FLY_REL_PG_PRTAREA
+    {
+        Text [ en-US ] = "Frame text area" ;
+    };
+    String STR_REL_BASE
+    {
+        Text [ en-US ] = "Base line" ;
+    };
+    String STR_REL_CHAR
+    {
+        Text [ en-US ] = "Character" ;
+    };
+    String STR_REL_ROW
+    {
+        Text [ en-US ] = "Row" ;
+    };
+    // #i22341#
+    String STR_REL_LINE
+    {
+        Text [ en-US ] = "Line of text" ;
     };
 };
 

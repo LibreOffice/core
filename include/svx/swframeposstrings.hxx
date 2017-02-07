@@ -27,7 +27,7 @@
     contains strings needed for positioning dialogs
     of frames and drawing in Writer
  */
-class ResStringArray;
+class SvxSwFramePosString_Impl;
 class SVX_DLLPUBLIC SvxSwFramePosString
 {
 public:
@@ -80,10 +80,10 @@ public:
 
         STR_MAX
     };
-    OUString GetString(StringId eId) const;
+    const OUString& GetString(StringId eId);
 
 private:
-    std::unique_ptr<ResStringArray> pImpl;
+    std::unique_ptr<SvxSwFramePosString_Impl> pImpl;
 };
 #endif
 

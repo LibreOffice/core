@@ -22,33 +22,99 @@
 #include "helpid.h"
 #include "comcore.hrc"
 
-StringArray RID_SHELLRES_AUTOFMTSTRS
+Resource RID_SHELLRES_AUTOFMTSTRS
 {
-    ItemList [ en-US ] =
+    String STR_AUTOFMTREDL_DEL_EMPTY_PARA+1
     {
-        < "Remove empty paragraphs" ; > ;
-        < "Use replacement table" ; > ;
-        < "Correct TWo INitial CApitals" ; > ;
-        < "Capitalize first letter of sentences" ; > ;
-        < "Replace \"standard\" quotes with %1 \bcustom%2 quotes" ; > ;
-        < "Replace Custom Styles" ; > ;
-        < "Bullets replaced"; > ;
-        < "Automatic _underline_"; > ;
-        < "Automatic *bold*"; > ;
-        < "Replace 1/2 ... with ½ ..." ; > ;
-        < "URL recognition" ; > ;
-        < "Replace dashes" ; > ;
-        < "Replace 1st... with 1^st..." ; > ;
-        < "Combine single line paragraphs"; > ;
-        < "Set \"Text body\" Style"; > ;
-        < "Set \"Text body indent\" Style"; > ;
-        < "Set \"Hanging indent\" Style"; > ;
-        < "Set \"Text body indent\" Style"; > ;
-        < "Set \"Heading $(ARG1)\" Style"; > ;
-        < "Set \"Bullet\" or \"Numbering\" Style"; > ;
-        < "Combine paragraphs"; > ;
-        < "Add non breaking space"; > ;
+        Text [ en-US ] = "Remove empty paragraphs" ;
     };
+    String STR_AUTOFMTREDL_USE_REPLACE+1
+    {
+        Text [ en-US ] = "Use replacement table" ;
+    };
+    String STR_AUTOFMTREDL_CPTL_STT_WORD+1
+    {
+        Text [ en-US ] = "Correct TWo INitial CApitals" ;
+    };
+    String STR_AUTOFMTREDL_CPTL_STT_SENT+1
+    {
+        Text [ en-US ] = "Capitalize first letter of sentences" ;
+    };
+    String STR_AUTOFMTREDL_TYPO+1
+    {
+        Text [ en-US ] = "Replace \"standard\" quotes with %1 \bcustom%2 quotes" ;
+    };
+    String STR_AUTOFMTREDL_USER_STYLE+1
+    {
+        Text [ en-US ] = "Replace Custom Styles" ;
+    };
+    String STR_AUTOFMTREDL_BULLET+1
+    {
+        Text [ en-US ] = "Bullets replaced";
+    };
+    String STR_AUTOFMTREDL_UNDER+1
+    {
+        Text [ en-US ] = "Automatic _underline_";
+    };
+    String STR_AUTOFMTREDL_BOLD+1
+    {
+        Text [ en-US ] = "Automatic *bold*";
+    };
+    String STR_AUTOFMTREDL_FRACTION+1
+    {
+        Text [ en-US ] = "Replace 1/2 ... with ½ ..." ;
+    };
+    String STR_AUTOFMTREDL_DETECT_URL+1
+    {
+        Text [ en-US ] = "URL recognition" ;
+    };
+    String STR_AUTOFMTREDL_DASH+1
+    {
+        Text [ en-US ] = "Replace dashes" ;
+    };
+    String STR_AUTOFMTREDL_ORDINAL+1
+    {
+        Text [ en-US ] = "Replace 1st... with 1^st..." ;
+    };
+    String STR_AUTOFMTREDL_RIGHT_MARGIN+1
+    {
+        Text [ en-US ] = "Combine single line paragraphs";
+    };
+
+    String STR_AUTOFMTREDL_SET_TMPL_TEXT +1
+    {
+        Text [ en-US ] = "Set \"Text body\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_INDENT  +1
+    {
+        Text [ en-US ] = "Set \"Text body indent\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT  +1
+    {
+        Text [ en-US ] = "Set \"Hanging indent\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT +1
+    {
+        Text [ en-US ] = "Set \"Text body indent\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_TMPL_HEADLINE +1
+    {
+        Text [ en-US ] = "Set \"Heading $(ARG1)\" Style";
+    };
+    String STR_AUTOFMTREDL_SET_NUMBULET +1
+    {
+        Text [ en-US ] = "Set \"Bullet\" or \"Numbering\" Style";
+    };
+
+    String STR_AUTOFMTREDL_DEL_MORELINES +1
+    {
+        Text [ en-US ] = "Combine paragraphs";
+    };
+    String STR_AUTOFMTREDL_NON_BREAK_SPACE +1
+    {
+        Text [ en-US ] = "Add non breaking space";
+    };
+
 };
 
 // Miscellaneous

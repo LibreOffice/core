@@ -32,7 +32,6 @@
 
 #include <tools/errcode.hxx>
 #include <tools/rc.hxx>
-#include <tools/resary.hxx>
 #include <tools/wintypes.hxx>
 
 #include <unordered_map>
@@ -248,11 +247,12 @@ private:
             css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > const & rContinuations );
 };
 
-class ErrorResource
+class ErrorResource: private Resource
 {
-    ResStringArray m_aStringArray;
 public:
-    explicit ErrorResource(ResId& rResId) : m_aStringArray(rResId) {}
+    explicit ErrorResource(ResId & rResId): Resource(rResId) {}
+
+    ~ErrorResource() { FreeResource(); }
 
     bool getString(ErrCode nErrorCode, OUString &rString) const;
 };

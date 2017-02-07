@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <tools/resary.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <viewsh.hxx>
 #include <initui.hxx>
@@ -30,6 +29,7 @@
 #include <gloslst.hxx>
 
 #include <utlui.hrc>
+#include <initui.hrc>
 #include <comcore.hrc>
 #include <authfld.hxx>
 #include <dbmgr.hxx>
@@ -174,7 +174,8 @@ void InitUI()
 }
 
 ShellResource::ShellResource()
-    : aPostItAuthor( SW_RES( STR_POSTIT_AUTHOR ) ),
+    : Resource( SW_RES(RID_SW_SHELLRES) ),
+    aPostItAuthor( SW_RES( STR_POSTIT_AUTHOR ) ),
     aPostItPage( SW_RES( STR_POSTIT_PAGE ) ),
     aPostItLine( SW_RES( STR_POSTIT_LINE ) ),
 
@@ -220,6 +221,12 @@ ShellResource::ShellResource()
 
     for(sal_uInt16 i = 0; i < nCount; ++i)
         aDocInfoLst.push_back(OUString(SW_RESSTR(FLD_DOCINFO_BEGIN + i)));
+
+    FreeResource();
+}
+
+ShellResource::~ShellResource()
+{
 }
 
 OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)
@@ -262,26 +269,35 @@ SwGlossaryList* GetGlossaryList()
     return pGlossaryList;
 }
 
+struct ImpAutoFormatNameListLoader : public Resource
+{
+    explicit ImpAutoFormatNameListLoader( std::vector<OUString>& rLst );
+};
+
 void ShellResource::GetAutoFormatNameLst_() const
 {
     assert(!pAutoFormatNameLst);
     pAutoFormatNameLst.reset( new std::vector<OUString> );
     pAutoFormatNameLst->reserve(STR_AUTOFMTREDL_END);
+    ImpAutoFormatNameListLoader aTmp(*pAutoFormatNameLst);
+}
 
-    ResStringArray aStringArray(ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr));
-    assert(aStringArray.Count() === STR_AUTOFMTREDL_END);
-    for (sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n)
+ImpAutoFormatNameListLoader::ImpAutoFormatNameListLoader( std::vector<OUString>& rLst )
+    : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr) )
+{
+    for( sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n )
     {
-        OUString p(aStringArray.GetString(n));
-        if (STR_AUTOFMTREDL_TYPO == n)
+        OUString p(ResId(n + 1, *pSwResMgr));
+        if(STR_AUTOFMTREDL_TYPO == n)
         {
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLclD = aSysLocale.GetLocaleData();
             p = p.replaceFirst("%1", rLclD.getDoubleQuotationMarkStart());
             p = p.replaceFirst("%2", rLclD.getDoubleQuotationMarkEnd());
         }
-        pAutoFormatNameLst->push_back(p);
+        rLst.insert(rLst.begin() + n, p);
     }
+    FreeResource();
 }
 
 OUString SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
