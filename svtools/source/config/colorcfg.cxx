@@ -164,13 +164,12 @@ uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
     OUString sBase = "ColorSchemes/"
                    + utl::wrapConfigurationElementName(rScheme);
     const int nCount = ColorConfigEntryCount;
-    for(sal_Int32 i = 0; i < 4 * nCount; i+= 4)
+    for(sal_Int32 i = 0; i < nCount; ++i)
     {
-        sal_Int32 nPos = i / 4;
-        OUString sBaseName = sBase + cNames[nPos].cName;
+        OUString sBaseName = sBase + cNames[i].cName;
         pNames[nIndex] += sBaseName;
         pNames[nIndex++] += "/Color";
-        if(cNames[nPos].bCanBeVisible)
+        if(cNames[i].bCanBeVisible)
         {
             pNames[nIndex] += sBaseName;
             pNames[nIndex++] += g_sIsVisible;
@@ -221,18 +220,18 @@ void ColorConfig_Impl::Load(const OUString& rScheme)
     const uno::Any* pColors = aColors.getConstArray();
     const OUString* pColorNames = aColorNames.getConstArray();
     sal_Int32 nIndex = 0;
-    for(int i = 0; i < 2 * ColorConfigEntryCount && aColors.getLength() > nIndex; i+= 2)
+    for(int i = 0; i < ColorConfigEntryCount && aColors.getLength() > nIndex; ++i)
     {
         if(pColors[nIndex].hasValue())
-            pColors[nIndex] >>= m_aConfigValues[i / 2].nColor;
+            pColors[nIndex] >>= m_aConfigValues[i].nColor;
         else
-            m_aConfigValues[i/2].nColor = COL_AUTO;
+            m_aConfigValues[i].nColor = COL_AUTO;
         nIndex++;
         if(nIndex >= aColors.getLength())
             break;
         //test for visibility property
         if(pColorNames[nIndex].endsWith(g_sIsVisible))
-             m_aConfigValues[i / 2].bIsVisible = Any2Bool(pColors[nIndex++]);
+             m_aConfigValues[i].bIsVisible = Any2Bool(pColors[nIndex++]);
     }
     // fdo#71511: check if we are running in a11y autodetect
     {
@@ -259,12 +258,12 @@ void ColorConfig_Impl::ImplCommit()
     beans::PropertyValue* pPropValues = aPropValues.getArray();
     const OUString* pColorNames = aColorNames.getConstArray();
     sal_Int32 nIndex = 0;
-    for(int i = 0; i < 2 * ColorConfigEntryCount && aColorNames.getLength() > nIndex; i+= 2)
+    for(int i = 0; i < ColorConfigEntryCount && aColorNames.getLength() > nIndex; ++i)
     {
         pPropValues[nIndex].Name = pColorNames[nIndex];
         //save automatic colors as void value
-        if(COL_AUTO != sal::static_int_cast<ColorData>(m_aConfigValues[i/2].nColor))
-            pPropValues[nIndex].Value <<= m_aConfigValues[i/2].nColor;
+        if(COL_AUTO != sal::static_int_cast<ColorData>(m_aConfigValues[i].nColor))
+            pPropValues[nIndex].Value <<= m_aConfigValues[i].nColor;
 
         nIndex++;
         if(nIndex >= aColorNames.getLength())
@@ -273,7 +272,7 @@ void ColorConfig_Impl::ImplCommit()
         if(pColorNames[nIndex].endsWith(g_sIsVisible))
         {
              pPropValues[nIndex].Name = pColorNames[nIndex];
-             pPropValues[nIndex].Value <<= m_aConfigValues[i/2].bIsVisible;
+             pPropValues[nIndex].Value <<= m_aConfigValues[i].bIsVisible;
              nIndex++;
         }
     }
