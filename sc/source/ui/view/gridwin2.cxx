@@ -401,21 +401,27 @@ class PopupSortAction : public ScMenuFloatingWindow::Action
 public:
     enum SortType { ASCENDING, DESCENDING, CUSTOM };
 
-    explicit PopupSortAction(const ScAddress& rPos, SortType eType, sal_uInt16 nUserListIndex, ScTabViewShell* pViewShell) :
-        maPos(rPos), meType(eType), mnUserListIndex(nUserListIndex), mpViewShell(pViewShell) {}
+    explicit PopupSortAction(ScDPObject* pDPObject, long nDimIndex, SortType eType,
+                             sal_uInt16 nUserListIndex, ScTabViewShell* pViewShell)
+        : mpDPObject(pDPObject)
+        , mnDimIndex(nDimIndex)
+        , meType(eType)
+        , mnUserListIndex(nUserListIndex)
+        , mpViewShell(pViewShell)
+    {}
 
     virtual void execute() override
     {
         switch (meType)
         {
             case ASCENDING:
-                mpViewShell->DataPilotSort(maPos, true);
+                mpViewShell->DataPilotSort(mpDPObject, mnDimIndex, true);
             break;
             case DESCENDING:
-                mpViewShell->DataPilotSort(maPos, false);
+                mpViewShell->DataPilotSort(mpDPObject, mnDimIndex, false);
             break;
             case CUSTOM:
-                mpViewShell->DataPilotSort(maPos, true, &mnUserListIndex);
+                mpViewShell->DataPilotSort(mpDPObject, mnDimIndex, true, &mnUserListIndex);
             break;
             default:
                 ;
@@ -423,7 +429,8 @@ public:
     }
 
 private:
-    ScAddress       maPos;
+    ScDPObject*     mpDPObject;
+    long            mnDimIndex;
     SortType        meType;
     sal_uInt16      mnUserListIndex;
     ScTabViewShell* mpViewShell;
@@ -431,12 +438,21 @@ private:
 
 }
 
-void ScGridWindow::DPLaunchFieldPopupMenu(
-    const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj)
+void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScreenPosition, const Size& rScreenSize,
+                                          const ScAddress& rAddress, ScDPObject* pDPObject)
+{
+    sal_uInt16 nOrient;
+    long nDimIndex = pDPObject->GetHeaderDim(rAddress, nOrient);
+
+    DPLaunchFieldPopupMenu(rScreenPosition, rScreenSize, nDimIndex, pDPObject);
+}
+
+void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScrPos, const Size& rScrSize,
+                                          long nDimIndex, ScDPObject* pDPObj)
 {
     std::unique_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
-    sal_uInt16 nOrient;
-    pDPData->mnDim = pDPObj->GetHeaderDim(rPos, nOrient);
+    pDPData->mnDim = nDimIndex;
+    pDPObj->GetSource();
 
     bool bIsDataLayout;
     OUString aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
@@ -494,10 +510,10 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         ScTabViewShell* pViewShell = pViewData->GetViewShell();
         mpDPFieldPopup->addMenuItem(
             SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_ASC),
-            new PopupSortAction(rPos, PopupSortAction::ASCENDING, 0, pViewShell));
+            new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::ASCENDING, 0, pViewShell));
         mpDPFieldPopup->addMenuItem(
             SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_DESC),
-            new PopupSortAction(rPos, PopupSortAction::DESCENDING, 0, pViewShell));
+            new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::DESCENDING, 0, pViewShell));
         ScMenuFloatingWindow* pSubMenu = mpDPFieldPopup->addSubMenuItem(
             SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
 
@@ -508,7 +524,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
             {
                 pSubMenu->addMenuItem(
                     aUserSortNames[i],
-                    new PopupSortAction(rPos, PopupSortAction::CUSTOM, static_cast<sal_uInt16>(i), pViewShell));
+                    new PopupSortAction(pDPObj, nDimIndex, PopupSortAction::CUSTOM, static_cast<sal_uInt16>(i), pViewShell));
             }
         }
     }

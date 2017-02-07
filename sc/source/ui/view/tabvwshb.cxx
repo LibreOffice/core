@@ -98,6 +98,30 @@ void ScTabViewShell::ConnectObject( SdrOle2Obj* pObj )
     }
 }
 
+class PopupCallback : public cppu::WeakImplHelper<css::awt::XCallback>
+{
+    ScTabViewShell* m_pViewShell;
+    SdrOle2Obj* m_pObject;
+
+public:
+    explicit PopupCallback(ScTabViewShell* pViewShell, SdrOle2Obj* pObject)
+        : m_pViewShell(pViewShell)
+        , m_pObject(pObject)
+    {}
+
+    // XCallback
+    virtual void SAL_CALL notify(const css::uno::Any& aData) override
+    {
+        Rectangle aRect = m_pObject->GetLogicRect();
+        m_pViewShell->DoDPFieldPopup(aRect.TopLeft(), aRect.GetSize());
+    }
+
+    virtual void SAL_CALL disposing()
+    {
+        m_pViewShell = nullptr;
+    }
+};
+
 void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
 {
     // Do not leave the hint message box on top of the object
@@ -183,11 +207,18 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
                             xSup->getComponent(), uno::UNO_QUERY_THROW );
                         uno::Reference< chart2::data::XRangeHighlighter > xRangeHightlighter(
                             xDataReceiver->getRangeHighlighter());
-                        if( xRangeHightlighter.is())
+                        if (xRangeHightlighter.is())
                         {
                             uno::Reference< view::XSelectionChangeListener > xListener(
                                 new ScChartRangeSelectionListener( this ));
                             xRangeHightlighter->addSelectionChangeListener( xListener );
+                        }
+                        uno::Reference<chart2::data::XPopupRequest> xPopupRequest(xDataReceiver->getPopupRequest());
+                        if (xPopupRequest.is())
+                        {
+                            uno::Reference<awt::XCallback> xCallback(new PopupCallback(this, pObj));
+                            uno::Any aAny;
+                            xPopupRequest->addCallback(xCallback, aAny);
                         }
                     }
                     catch( const uno::Exception & )
