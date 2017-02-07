@@ -266,8 +266,8 @@ sal_Int32 PlacePanels (
         nY += nDeckSeparatorHeight;
 
         // Place the title bar.
-        PanelTitleBar* pTitleBar = rPanel.GetTitleBar();
-        if (pTitleBar != nullptr)
+        VclPtr<PanelTitleBar> pTitleBar = rPanel.GetTitleBar();
+        if (pTitleBar)
         {
             const sal_Int32 nPanelTitleBarHeight (Theme::GetInteger(Theme::Int_PanelTitleBarHeight) * rPanel.GetDPIScaleFactor());
 

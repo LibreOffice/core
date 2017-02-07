@@ -70,6 +70,7 @@ Panel::Panel(const PanelDescriptor& rPanelDescriptor,
 Panel::~Panel()
 {
     disposeOnce();
+    assert(!mpTitleBar);
 }
 
 void Panel::ApplySettings(vcl::RenderContext& rRenderContext)
@@ -99,9 +100,9 @@ void Panel::dispose()
     vcl::Window::dispose();
 }
 
-PanelTitleBar* Panel::GetTitleBar() const
+VclPtr<PanelTitleBar> Panel::GetTitleBar() const
 {
-    return mpTitleBar.get();
+    return mpTitleBar;
 }
 
 void Panel::SetUIElement (const Reference<ui::XUIElement>& rxElement)

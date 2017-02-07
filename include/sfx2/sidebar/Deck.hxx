@@ -46,7 +46,7 @@ public:
 
     const OUString& GetId() const { return msId; }
 
-    DeckTitleBar* GetTitleBar() const;
+    VclPtr<DeckTitleBar> GetTitleBar() const;
     Rectangle GetContentArea() const;
     void ResetPanels (const SharedPanelContainer& rPanels);
     const SharedPanelContainer& GetPanels() const  { return maPanels; }
