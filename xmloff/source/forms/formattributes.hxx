@@ -141,11 +141,9 @@ namespace xmloff
     enum FormAttributes
     {
         faName,
-        faServiceName,
         faAction,
         faEnctype,
         faMethod,
-        faTargetFrame,
         faAllowDeletes,
         faAllowInserts,
         faAllowUpdates,
@@ -154,7 +152,6 @@ namespace xmloff
         faCommandType,
         faEscapeProcessing,
         faDatasource,
-        faConnectionResource,
         faDetailFiels,
         faFilter,
         faIgnoreResult,

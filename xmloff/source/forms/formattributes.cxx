@@ -86,11 +86,9 @@ namespace xmloff
         switch (_eAttrib)
         {
             case faName:                return "name";
-            case faServiceName:         return "service-name";
             case faAction:              return "href";      // the only special thing here: Action is represented by an xlink:href attribute
             case faEnctype:             return "enctype";
             case faMethod:              return "method";
-            case faTargetFrame:         return "target-frame";
             case faAllowDeletes:        return "allow-deletes";
             case faAllowInserts:        return "allow-inserts";
             case faAllowUpdates:        return "allow-updates";
@@ -99,7 +97,6 @@ namespace xmloff
             case faCommandType:         return "command-type";
             case faEscapeProcessing:    return "escape-processing";
             case faDatasource:          return "datasource";
-            case faConnectionResource:  return "connection-resource";
             case faDetailFiels:         return "detail-fields";
             case faFilter:              return "filter";
             case faIgnoreResult:        return "ignore-result";
@@ -117,9 +114,6 @@ namespace xmloff
     {
         if (faAction == _eAttrib)
             return XML_NAMESPACE_XLINK;
-
-        if (faTargetFrame == _eAttrib)
-            return XML_NAMESPACE_OFFICE;
 
         return XML_NAMESPACE_FORM;
     }

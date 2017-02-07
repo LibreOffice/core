@@ -1825,9 +1825,6 @@ XMLParaContext::XMLParaContext(
         case XML_TOK_TEXT_P_STYLE_NAME:
             sStyleName = rValue;
             break;
-        case XML_TOK_TEXT_P_CLASS_NAMES:
-            sClassNames = rValue;
-            break;
         case XML_TOK_TEXT_P_COND_STYLE_NAME:
             aCondStyleName = rValue;
             break;

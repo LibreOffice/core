@@ -123,17 +123,6 @@ XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
                     (*aIter).second.GetQNameTokenFromParam2(),
                        static_cast< XMLTokenEnum >(
                         (*aIter).second.m_nParam3 & 0xffff ) );
-        case XML_ETACTION_RENAME_ELEM_COND:
-            {
-                const XMLTransformerContext *pCurrent = GetCurrentContext();
-                if( pCurrent->HasQName(
-                            (*aIter).second.GetQNamePrefixFromParam2(),
-                            (*aIter).second.GetQNameTokenFromParam2() ) )
-                    return new XMLRenameElemTransformerContext( *this, rQName,
-                            (*aIter).second.GetQNamePrefixFromParam1(),
-                            (*aIter).second.GetQNameTokenFromParam1() );
-            }
-            break;
         case XML_ETACTION_RENAME_ELEM_PROC_ATTRS_COND:
             {
                 const XMLTransformerContext *pCurrent = GetCurrentContext();
