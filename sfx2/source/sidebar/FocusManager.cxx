@@ -70,7 +70,7 @@ void FocusManager::ClearPanels()
     for (auto iPanel(aPanels.begin()),iEnd(aPanels.end()); iPanel != iEnd; ++iPanel)
     {
         UnregisterWindow(**iPanel);
-        if ((*iPanel)->GetTitleBar() != nullptr)
+        if ((*iPanel)->GetTitleBar())
         {
             UnregisterWindow(*(*iPanel)->GetTitleBar());
             UnregisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
@@ -112,7 +112,7 @@ void FocusManager::SetPanels (const SharedPanelContainer& rPanels)
     for (auto iPanel = rPanels.begin(); iPanel != rPanels.end(); ++iPanel)
     {
         RegisterWindow(**iPanel);
-        if ((*iPanel)->GetTitleBar() != nullptr)
+        if ((*iPanel)->GetTitleBar())
         {
             RegisterWindow(*(*iPanel)->GetTitleBar());
             RegisterWindow((*iPanel)->GetTitleBar()->GetToolBox());
@@ -161,7 +161,7 @@ FocusManager::FocusLocation FocusManager::GetFocusLocation (const vcl::Window& r
     {
         if (maPanels[nIndex] == &rWindow)
             return FocusLocation(PC_PanelContent, nIndex);
-        TitleBar* pTitleBar = maPanels[nIndex]->GetTitleBar();
+        VclPtr<TitleBar> pTitleBar = maPanels[nIndex]->GetTitleBar();
         if (pTitleBar == &rWindow)
             return FocusLocation(PC_PanelTitle, nIndex);
         if (pTitleBar!=nullptr && &pTitleBar->GetToolBox()==&rWindow)
@@ -208,8 +208,8 @@ bool FocusManager::IsPanelTitleVisible (const sal_Int32 nPanelIndex) const
     if (nPanelIndex<0 || nPanelIndex>=static_cast<sal_Int32>(maPanels.size()))
         return false;
 
-    TitleBar* pTitleBar = maPanels[nPanelIndex]->GetTitleBar();
-    if (pTitleBar==nullptr)
+    VclPtr<TitleBar> pTitleBar = maPanels[nPanelIndex]->GetTitleBar();
+    if (!pTitleBar)
         return false;
     return pTitleBar->IsVisible();
 }
@@ -226,8 +226,8 @@ void FocusManager::FocusPanel (
     }
 
     Panel& rPanel (*maPanels[nPanelIndex]);
-    TitleBar* pTitleBar = rPanel.GetTitleBar();
-    if (pTitleBar!=nullptr && pTitleBar->IsVisible())
+    VclPtr<TitleBar> pTitleBar = rPanel.GetTitleBar();
+    if (pTitleBar && pTitleBar->IsVisible())
     {
         rPanel.SetExpanded(true);
         pTitleBar->GrabFocus();

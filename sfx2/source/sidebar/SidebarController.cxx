@@ -396,8 +396,8 @@ void SidebarController::NotifyResize()
     sal_Int32 nMinimalWidth = 0;
     if (mpCurrentDeck && !mpCurrentDeck->isDisposed())
     {
-        DeckTitleBar* pTitleBar = mpCurrentDeck->GetTitleBar();
-        if (pTitleBar != nullptr && pTitleBar->IsVisible())
+        VclPtr<DeckTitleBar> pTitleBar = mpCurrentDeck->GetTitleBar();
+        if (pTitleBar && pTitleBar->IsVisible())
             pTitleBar->SetCloserVisible(CanModifyChildWindowWidth());
         nMinimalWidth = mpCurrentDeck->GetMinimalWidth();
     }
@@ -635,8 +635,8 @@ void SidebarController::CreatePanels(const ::rtl::OUString& rDeckId, const Conte
 
                     // Depending on the context we have to change the command
                     // for the "more options" dialog.
-                    PanelTitleBar* pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
-                    if (pTitleBar != nullptr)
+                    VclPtr<PanelTitleBar> pTitleBar = aNewPanels[nWriteIndex]->GetTitleBar();
+                    if (pTitleBar)
                     {
                         pTitleBar->SetMoreOptionsCommand(
                             rPanelContexDescriptor.msMenuCommand,
@@ -718,8 +718,8 @@ void SidebarController::SwitchToDeck (
 
 #ifdef DEBUG
     // Show the context name in the deck title bar.
-    DeckTitleBar* pDebugTitleBar = mpCurrentDeck->GetTitleBar();
-    if (pDebugTitleBar != NULL)
+    VclPtr<DeckTitleBar> pDebugTitleBar = mpCurrentDeck->GetTitleBar();
+    if (pDebugTitleBar)
         pDebugTitleBar->SetTitle(rDeckDescriptor.msTitle + " (" + maCurrentContext.msContext + ")");
 #endif
 
@@ -1262,7 +1262,7 @@ void SidebarController::UpdateTitleBarIcons()
     {
         if ( ! *iPanel)
             continue;
-        if ((*iPanel)->GetTitleBar() == nullptr)
+        if (!(*iPanel)->GetTitleBar())
             continue;
         std::shared_ptr<PanelDescriptor> xPanelDescriptor = rResourceManager.GetPanelDescriptor((*iPanel)->GetId());
         if (!xPanelDescriptor)

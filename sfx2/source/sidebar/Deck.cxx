@@ -92,9 +92,9 @@ void Deck::dispose()
     vcl::Window::dispose();
 }
 
-DeckTitleBar* Deck::GetTitleBar() const
+VclPtr<DeckTitleBar> Deck::GetTitleBar() const
 {
-    return mpTitleBar.get();
+    return mpTitleBar;
 }
 
 Rectangle Deck::GetContentArea() const
@@ -244,7 +244,7 @@ void Deck::ShowPanel(const Panel& rPanel)
         sal_Int32 nPanelTop (rPanel.GetPosPixel().Y());
         const sal_Int32 nPanelBottom (nPanelTop + rPanel.GetSizePixel().Height() - 1);
         // Add the title bar into the extent.
-        if (rPanel.GetTitleBar() != nullptr && rPanel.GetTitleBar()->IsVisible())
+        if (rPanel.GetTitleBar() && rPanel.GetTitleBar()->IsVisible())
             nPanelTop = rPanel.GetTitleBar()->GetPosPixel().Y();
 
         // Determine what the new thumb position should be like.
