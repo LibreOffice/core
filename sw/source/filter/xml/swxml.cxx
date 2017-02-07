@@ -210,13 +210,13 @@ sal_Int32 ReadThroughComponent(
                             (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL
                                                     : WARN_FORMAT_FILE_ROWCOL),
                             rStreamName, sErr,
-                            ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode();
+                            ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError ))->GetErrorCode();
         }
         else
         {
             OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
             return (new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
-                             ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode();
+                             ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError ))->GetErrorCode();
         }
     }
     catch(const xml::sax::SAXException& r)

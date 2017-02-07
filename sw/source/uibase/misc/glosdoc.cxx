@@ -400,7 +400,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
 
                 ErrorHandler::HandleError( (new StringErrorInfo(
                                         ERR_AUTOPATH_ERROR, lcl_makePath(m_aInvalidPaths),
-                                        ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode());
+                                        ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError ))->GetErrorCode());
                 m_bError = true;
             }
             else
@@ -420,7 +420,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
 void SwGlossaries::ShowError()
 {
     sal_uInt32 nPathError = (new StringErrorInfo(ERR_AUTOPATH_ERROR,
-                                            lcl_makePath(m_aInvalidPaths), ERRCODE_BUTTON_OK ))->GetErrorCode();
+                                            lcl_makePath(m_aInvalidPaths), ErrorHandlerFlags::ButtonsOk ))->GetErrorCode();
     ErrorHandler::HandleError( nPathError );
 }
 
