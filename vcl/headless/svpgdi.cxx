@@ -1283,8 +1283,6 @@ cairo_t* SvpSalGraphics::createTmpCompatibleCairoContext() const
                                                          m_aFrameSize.getY() * m_fScale);
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 14, 0)
     cairo_surface_set_device_scale(target, m_fScale, m_fScale);
-#else
-    (void)fScale;
 #endif
 
     return cairo_create(target);
