@@ -330,7 +330,7 @@ public:
     virtual void SAL_CALL setValue( const css::uno::Any& aValue ) override;
 
 
-    // XListEntry Source
+    // XListEntrySource
 
 
     virtual sal_Int32 SAL_CALL getListEntryCount() override;
