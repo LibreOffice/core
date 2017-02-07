@@ -263,8 +263,8 @@ InputStream::InputStream( const Reference< XComponentContext >& rxContext, const
     mxTextStrm( TextInputStream::createXTextInputStream( rxContext, rxInStrm, RTL_TEXTENCODING_ISO_8859_1 ) ),
     maOpeningBracket( 1 ),
     maClosingBracket( 1 ),
-    maOpeningCData( CREATE_OSTRING( "<![CDATA[" ) ),
-    maClosingCData( CREATE_OSTRING( "]]>" ) ),
+    maOpeningCData( "<![CDATA[" ),
+    maClosingCData( "]]>" ),
     mnBufferPos( 0 )
 {
     if (!mxTextStrm.is())
