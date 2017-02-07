@@ -2778,6 +2778,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
             SAL_FALLTHROUGH;
 
         case SID_ATTR_CHAR_COLOR:
+        case SID_ATTR_CHAR_BACK_COLOR:
             m_bSplitButton = true;
             break;
 
