@@ -18,7 +18,7 @@
             android:entryValues="@array/ViewModeStringValues"
             android:title="Default File Explorer View"
             android:key="EXPLORER_VIEW_TYPE"
-            android:summary="View files as a grid or in a list. #not functional, yet."/>
+            android:summary="View files as a grid or in a list."/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_category_general"
