@@ -29,6 +29,7 @@
 #include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/text/RubyAdjust.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
 
 #include <vcl/svapp.hxx>
 
@@ -1156,6 +1157,27 @@ DECLARE_RTFEXPORT_TEST(testTdf104085, "tdf104085.rtf")
             return;
     }
     CPPUNIT_FAIL("no BulletChar property");
+}
+
+DECLARE_RTFEXPORT_TEST(testLeveljcCenter, "leveljc-center.rtf")
+{
+    // Tests that \leveljc1 is mapped to Adjust=Center for a numbering rule.
+    uno::Reference<text::XTextRange> xPara(getParagraph(1));
+    uno::Reference<beans::XPropertySet> properties(xPara, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(properties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        if (aProps[i].Name == "Adjust")
+        {
+            sal_Int16 nValue = 0;
+            CPPUNIT_ASSERT(aProps[i].Value >>= nValue);
+            CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER, nValue);
+            return;
+        }
+    }
+    CPPUNIT_FAIL("no Adjust property");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
