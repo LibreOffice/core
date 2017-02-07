@@ -145,13 +145,8 @@ namespace logging
             {
                 OUString sPattern( aVariable.pVariablePattern, aVariable.nPatternLength, aVariable.eEncoding );
                 sal_Int32 nVariableIndex = _inout_rFileURL.indexOf( sPattern );
-                if  (   ( nVariableIndex == 0 )
-                    ||  (   ( nVariableIndex > 0 )
-                        &&  ( sPattern[ nVariableIndex - 1 ] != '$' )
-                        )
-                    )
+                if  (nVariableIndex >= 0)
                 {
-                    // found an (unescaped) variable
                     _inout_rFileURL = _inout_rFileURL.replaceAt( nVariableIndex, sPattern.getLength(), aVariable.sVariableValue );
                 }
             }
