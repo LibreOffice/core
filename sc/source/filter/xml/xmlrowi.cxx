@@ -59,37 +59,34 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
         assert( dynamic_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() ) != nullptr );
         pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
-        const std::vector< sal_Int32 >& rAttrList = pAttribList->getFastAttributeTokens();
-        for ( size_t i = 0; i < rAttrList.size(); i++ )
+        for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
         {
-            const OUString sValue = OUString(pAttribList->getFastAttributeValue(i),
-                                    pAttribList->AttributeValueLength(i), RTL_TEXTENCODING_UTF8);
-            switch( rAttrTokenMap.Get( rAttrList[ i ] ) )
+            switch( rAttrTokenMap.Get( it.getToken() ) )
             {
                 case XML_TOK_TABLE_ROW_ATTR_STYLE_NAME:
                 {
-                    sStyleName = sValue;
+                    sStyleName = it.toString();
                 }
                 break;
                 case XML_TOK_TABLE_ROW_ATTR_VISIBILITY:
                 {
-                    sVisibility = sValue;
+                    sVisibility = it.toString();
                 }
                 break;
                 case XML_TOK_TABLE_ROW_ATTR_REPEATED:
                 {
-                    nRepeatedRows = std::max( sValue.toInt32(), (sal_Int32) 1 );
+                    nRepeatedRows = std::max( it.toInt32(), (sal_Int32) 1 );
                     nRepeatedRows = std::min( nRepeatedRows, MAXROWCOUNT );
                 }
                 break;
                 case XML_TOK_TABLE_ROW_ATTR_DEFAULT_CELL_STYLE_NAME:
                 {
-                    sCellStyleName = sValue;
+                    sCellStyleName = it.toString();
                 }
                 break;
                 /*case XML_TOK_TABLE_ROW_ATTR_USE_OPTIMAL_HEIGHT:
                 {
-                    sOptimalHeight = sValue;
+                    sOptimalHeight = it.toString();
                 }
                 break;*/
             }

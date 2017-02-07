@@ -151,37 +151,34 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
         pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
 
         const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetTableAttrTokenMap();
-        const std::vector< sal_Int32 >& rAttrList = pAttribList->getFastAttributeTokens();
-        for ( size_t i = 0; i < rAttrList.size(); i++ )
+        for ( auto it = pAttribList->begin(); it != pAttribList->end(); ++it)
         {
-            const OUString sValue = OUString(pAttribList->getFastAttributeValue(i),
-                                    pAttribList->AttributeValueLength(i), RTL_TEXTENCODING_UTF8);
-            switch( rAttrTokenMap.Get( rAttrList[ i ] ) )
+            switch( rAttrTokenMap.Get( it.getToken() ) )
             {
                 case XML_TOK_TABLE_NAME:
-                        sName = sValue;
+                        sName = it.toString();
                     break;
                 case XML_TOK_TABLE_STYLE_NAME:
-                        sStyleName = sValue;
+                        sStyleName = it.toString();
                     break;
                 case XML_TOK_TABLE_PROTECTED:
-                    aProtectData.mbProtected = IsXMLToken(sValue, XML_TRUE);
+                    aProtectData.mbProtected = IsXMLToken( it.toString(), XML_TRUE );
                 break;
                 case XML_TOK_TABLE_PRINT_RANGES:
-                        sPrintRanges = sValue;
+                        sPrintRanges = it.toString();
                     break;
                 case XML_TOK_TABLE_PASSWORD:
-                    aProtectData.maPassword = sValue;
+                    aProtectData.maPassword = it.toString();
                 break;
                 case XML_TOK_TABLE_PASSHASH:
-                    aProtectData.meHash1 = ScPassHashHelper::getHashTypeFromURI( sValue );
+                    aProtectData.meHash1 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
                 break;
                 case XML_TOK_TABLE_PASSHASH_2:
-                    aProtectData.meHash2 = ScPassHashHelper::getHashTypeFromURI( sValue );
+                    aProtectData.meHash2 = ScPassHashHelper::getHashTypeFromURI( it.toString() );
                 break;
                 case XML_TOK_TABLE_PRINT:
                     {
-                        if (IsXMLToken(sValue, XML_FALSE))
+                        if (IsXMLToken( it.toString(), XML_FALSE) )
                             bPrintEntireSheet = false;
                     }
                     break;
