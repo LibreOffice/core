@@ -355,13 +355,11 @@ OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aN
     {
         switch( it->GetCategory() )
         {
-            case FDCat_DateTime:    aRet = "Date&Time";         break;
-            case FDCat_Finance:     aRet = "Financial";         break;
-            case FDCat_Inf:         aRet = "Information";       break;
-            case FDCat_Math:        aRet = "Mathematical";      break;
-            case FDCat_Tech:        aRet = "Technical";         break;
-            default:
-                                    aRet = pDefCatName;         break;
+            case FDCategory::DateTime:    aRet = "Date&Time";         break;
+            case FDCategory::Finance:     aRet = "Financial";         break;
+            case FDCategory::Inf:         aRet = "Information";       break;
+            case FDCategory::Math:        aRet = "Mathematical";      break;
+            case FDCategory::Tech:        aRet = "Technical";         break;
         }
     }
     else
@@ -373,20 +371,17 @@ OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aN
 OUString SAL_CALL AnalysisAddIn::getDisplayCategoryName( const OUString& aProgrammaticFunctionName )
 {
     //  return translated strings, not used for predefined categories
-    //  return OUString( "Add-In" );
     auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aProgrammaticFunctionName ) );
     OUString              aRet;
     if( it != pFD->end() )
     {
         switch( it->GetCategory() )
         {
-            case FDCat_DateTime:    aRet = "Date&Time";         break;
-            case FDCat_Finance:     aRet = "Financial";         break;
-            case FDCat_Inf:         aRet = "Information";       break;
-            case FDCat_Math:        aRet = "Mathematical";      break;
-            case FDCat_Tech:        aRet = "Technical";         break;
-            default:
-                                    aRet = pDefCatName;         break;
+            case FDCategory::DateTime:    aRet = "Date&Time";         break;
+            case FDCategory::Finance:     aRet = "Financial";         break;
+            case FDCategory::Inf:         aRet = "Information";       break;
+            case FDCategory::Math:        aRet = "Mathematical";      break;
+            case FDCategory::Tech:        aRet = "Technical";         break;
         }
     }
     else

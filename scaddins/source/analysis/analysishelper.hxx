@@ -188,14 +188,13 @@ double              GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int
                                 sal_Int32 nBase );
 
 
-enum FDCategory
+enum class FDCategory
 {
-    FDCat_AddIn,
-    FDCat_DateTime,
-    FDCat_Finance,
-    FDCat_Inf,
-    FDCat_Math,
-    FDCat_Tech
+    DateTime,
+    Finance,
+    Inf,
+    Math,
+    Tech
 };
 
 
@@ -204,8 +203,8 @@ struct FuncDataBase
     const sal_Char*         pIntName;
     sal_uInt16              nUINameID;          // resource ID to UI name
     sal_uInt16              nDescrID;           // resource ID to description, parameter names and ~ description
-    bool                bDouble;            // name already exist in Calc
-    bool                bWithOpt;           // first parameter is internal
+    bool                    bDouble;            // name already exist in Calc
+    bool                    bWithOpt;           // first parameter is internal
     sal_uInt16              nCompListID;        // resource ID to list of valid names
     sal_uInt16              nNumOfParams;       // number of named / described parameters
     FDCategory              eCat;               // function category
@@ -216,15 +215,15 @@ struct FuncDataBase
 class FuncData final
 {
 private:
-    OUString         aIntName;
+    OUString                aIntName;
     sal_uInt16              nUINameID;
     sal_uInt16              nDescrID;           // leads also to parameter descriptions!
-    bool                bDouble;            // flag for names that already exist in Calc
-    bool                bWithOpt;           // has internal parameter on first position
+    bool                    bDouble;            // flag for names that already exist in Calc
+    bool                    bWithOpt;           // has internal parameter on first position
 
     sal_uInt16              nParam;             // num of parameters
     sal_uInt16              nCompID;
-    std::vector<OUString>  aCompList;          // list of all valid names
+    std::vector<OUString>   aCompList;          // list of all valid names
     FDCategory              eCat;               // function category
     OUString                aSuffix;            // if bDouble and not empty, append a suffix other than "_ADD" for UI
 
