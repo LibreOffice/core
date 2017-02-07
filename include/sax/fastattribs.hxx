@@ -102,6 +102,58 @@ public:
     virtual css::uno::Sequence< css::xml::Attribute > SAL_CALL getUnknownAttributes(  ) override;
     virtual css::uno::Sequence< css::xml::FastAttribute > SAL_CALL getFastAttributes() override;
 
+    /// Use for fast iteration and conversion of attributes
+    class FastAttributeIter {
+        const FastAttributeList &mrList;
+        size_t mnIdx;
+
+    public:
+        FastAttributeIter(const FastAttributeList &rList, size_t nIdx)
+            : mrList(rList), mnIdx(nIdx)
+        {
+        }
+
+        FastAttributeIter& operator++ ()
+        {
+            mnIdx++;
+            return *this;
+        }
+        bool operator!=( const FastAttributeIter& rhs ) const
+        {
+            return mnIdx != rhs.mnIdx;
+        }
+
+        sal_Int32 getToken()
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return mrList.maAttributeTokens[mnIdx];
+        }
+        bool isEmpty()
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return mrList.AttributeValueLength(mnIdx) < 1;
+        }
+        sal_Int32 toInt32()
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return rtl_str_toInt32(mrList.getFastAttributeValue(mnIdx), 10);
+        }
+        OUString toString()
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return OUString(mrList.getFastAttributeValue(mnIdx),
+                            mrList.AttributeValueLength(mnIdx),
+                            RTL_TEXTENCODING_UTF8);
+        }
+        bool isString(const char *str)
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return !strcmp(str, mrList.getFastAttributeValue(mnIdx));
+        }
+    };
+    const FastAttributeIter begin() const { return FastAttributeIter(*this, 0); }
+    const FastAttributeIter end() const { return FastAttributeIter(*this, maAttributeTokens.size()); }
+
 private:
     sal_Char *mpChunk; ///< buffer to store all attribute values - null terminated strings
     sal_Int32 mnChunkLength; ///< size of allocated memory for mpChunk
