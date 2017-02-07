@@ -4400,23 +4400,24 @@ sal_Bool SAL_CALL SwXTextTableStyle::isInUse()
     if (!m_bPhysical)
         return false;
 
-    uno::Reference<text::XTextTablesSupplier> xTablesSupp(m_pDocShell->GetModel(), uno::UNO_QUERY);
-    if (!xTablesSupp.is())
-        return false;
+    SwAutoFormatGetDocNode aGetHt( &m_pDocShell->GetDoc()->GetNodes() );
 
-    uno::Reference<container::XIndexAccess> xTables(xTablesSupp->getTextTables(), uno::UNO_QUERY);
-    if (!xTables.is())
-        return false;
-
-    const sal_Int32 nCount = xTables->getCount();
-    for (sal_Int32 i=0; i < nCount; ++i)
+    for (SwFrameFormat* const & pFormat : *m_pDocShell->GetDoc()->GetTableFrameFormats())
     {
-        uno::Reference<beans::XPropertySet> xTablePropertySet;
-        xTables->getByIndex(i) >>= xTablePropertySet;
-        OUString sTableTemplateName;
-        if (xTablePropertySet.is() && (xTablePropertySet->getPropertyValue("TableTemplateName") >>= sTableTemplateName)
-            && sTableTemplateName == m_pTableAutoFormat->GetName())
-            return true;
+        if (!pFormat->GetInfo(aGetHt))
+        {
+            uno::Reference<text::XTextTable> xTable = SwXTextTables::GetObject(*pFormat);
+            if (xTable.is())
+            {
+                uno::Reference<beans::XPropertySet> xTablePropertySet(xTable, uno::UNO_QUERY);
+                OUString sTableTemplateName;
+                if (xTablePropertySet.is() && (xTablePropertySet->getPropertyValue("TableTemplateName") >>= sTableTemplateName)
+                    && sTableTemplateName == m_pTableAutoFormat->GetName())
+                {
+                    return true;
+                }
+            }
+        }
     }
 
     return false;
