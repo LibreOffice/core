@@ -223,6 +223,7 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/ObjectIdentifier \
     chart2/source/tools/OPropertySet \
     chart2/source/tools/PolynomialRegressionCurveCalculator \
+    chart2/source/tools/PopupRequest \
     chart2/source/tools/PotentialRegressionCurveCalculator \
     chart2/source/tools/PropertyHelper \
     chart2/source/tools/RangeHighlighter \
