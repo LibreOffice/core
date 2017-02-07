@@ -18,6 +18,7 @@
  */
 
 #include <string>
+#include <typeinfo>
 #include <utility>
 
 #include <comphelper/propertysequence.hxx>
@@ -2767,7 +2768,7 @@ SvxColorToolBoxControl::SvxColorToolBoxControl(
     sal_uInt16 nId,
     ToolBox& rTbx ):
     ImplInheritanceHelper( nSlotId, nId, rTbx ),
-    m_bSplitButton(dynamic_cast< sfx2::sidebar::SidebarToolBox* >(&rTbx) == nullptr),
+    m_bSplitButton(typeid(rTbx) != typeid(sfx2::sidebar::SidebarToolBox)),
     m_aColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
     switch( nSlotId )
