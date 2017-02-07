@@ -482,6 +482,7 @@ public:
     void            ClearHighlightRanges();
 
     void            DoChartSelection( const css::uno::Sequence< css::chart2::data::HighlightedRange > & rHilightRanges );
+    void            DoDPFieldPopup(Point aPoint, Size aSize);
 
     long            GetGridWidth( ScHSplitPos eWhich );
     long            GetGridHeight( ScVSplitPos eWhich );
