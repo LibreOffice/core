@@ -816,8 +816,7 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
             XGradient aGradient;
             aGradient.SetStartColor(mpFillLB->GetSelectEntryColor());
             aGradient.SetEndColor(mpFillGrad->GetSelectEntryColor());
-
-            XFillGradientItem aItem(aGradient);
+            XFillGradientItem aItem(mpGradientItem->GetName(), aGradient);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
         }
         break;
