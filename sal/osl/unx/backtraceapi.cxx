@@ -9,16 +9,13 @@
 
 #include <sal/config.h>
 
-#include <rtl/ustrbuf.hxx>
-#include "misc.hxx"
+#include <rtl/ustring.hxx>
+#include "backtraceasstring.hxx"
 
 // FIXME: no-op for now; it needs implementing, cf. above.
-rtl_uString *osl_backtraceAsString(int /*maxNoStackFramesToDisplay*/)
+OUString osl::detail::backtraceAsString(int /*maxNoStackFramesToDisplay*/)
 {
-    OUStringBuffer aBuf;
-    OUString aStr = aBuf.makeStringAndClear();
-    rtl_uString_acquire( aStr.pData );
-    return aStr.pData;
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

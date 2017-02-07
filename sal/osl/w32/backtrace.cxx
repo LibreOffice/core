@@ -7,7 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "misc.hxx"
+#include <sal/config.h>
+
+#include "backtraceasstring.hxx"
 
 #include <windows.h>
 #include <process.h>
@@ -18,7 +20,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <memory>
 
-rtl_uString *osl_backtraceAsString(int maxNoStackFramesToDisplay)
+OUString osl::detail::backtraceAsString(int maxNoStackFramesToDisplay)
 {
     OUStringBuffer aBuf;
 
@@ -46,9 +48,7 @@ rtl_uString *osl_backtraceAsString(int maxNoStackFramesToDisplay)
 
     free( pSymbol );
 
-    OUString aStr = aBuf.makeStringAndClear();
-    rtl_uString_acquire( aStr.pData );
-    return aStr.pData;
+    return aBuf.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

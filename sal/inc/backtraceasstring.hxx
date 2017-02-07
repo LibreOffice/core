@@ -6,13 +6,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#ifndef INCLUDED_SAL_INC_INTERNAL_MISC_H
-#define INCLUDED_SAL_INC_INTERNAL_MISC_H
+
+#ifndef INCLUDED_SAL_INC_BACKTRACEASSTRING_HXX
+#define INCLUDED_SAL_INC_BACKTRACEASSTRING_HXX
+
+#include <sal/config.h>
 
 #include <rtl/ustring.hxx>
 
+namespace osl { namespace detail {
+
 /// Build a debugging backtrace from current PC location.
-rtl_uString *osl_backtraceAsString(int maxNoStackFramesToDisplay);
+OUString backtraceAsString(int maxNoStackFramesToDisplay);
+
+} }
 
 #endif // INCLUDED_SAL_INC_INTERNAL_MISC_H
 

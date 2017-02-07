@@ -26,7 +26,7 @@
 #include "sal/detail/log.h"
 #include "sal/log.hxx"
 #include "sal/types.h"
-#include "misc.hxx"
+#include "backtraceasstring.hxx"
 #include "salusesyslog.hxx"
 
 #if defined ANDROID
@@ -277,9 +277,8 @@ void log_backtrace(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * message, int maxNoStackFramesToDisplay)
 {
-    OUString buff = OUString::createFromAscii(message) +
-                    " at:\n" +
-                    OUString(osl_backtraceAsString(maxNoStackFramesToDisplay), SAL_NO_ACQUIRE);
+    OUString buff = OUString::createFromAscii(message) + " at:\n"
+        + osl::detail::backtraceAsString(maxNoStackFramesToDisplay);
     log(level, area, where, buff.toUtf8().getStr());
 }
 
