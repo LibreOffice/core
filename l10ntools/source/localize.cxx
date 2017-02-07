@@ -148,26 +148,24 @@ bool handleFile(
     const OString& rPotDir, bool bInitPoFile )
 {
     struct Command {
-        char const * extension;
-        sal_Int32 extensionLength;
+        OUString extension;
         OString executable;
         bool positive;
     };
     static Command const commands[] = {
-        { RTL_CONSTASCII_STRINGPARAM(".src"), "transex3", false },
-        { RTL_CONSTASCII_STRINGPARAM(".hrc"), "transex3", true },
-        { RTL_CONSTASCII_STRINGPARAM(".ulf"), "ulfex", false },
-        { RTL_CONSTASCII_STRINGPARAM(".xcu"), "cfgex", false },
-        { RTL_CONSTASCII_STRINGPARAM(".xrm"), "xrmex", false },
-        { RTL_CONSTASCII_STRINGPARAM("description.xml"), "xrmex", true },
-        { RTL_CONSTASCII_STRINGPARAM(".xhp"), "helpex", false },
-        { RTL_CONSTASCII_STRINGPARAM(".properties"), "propex", false },
-        { RTL_CONSTASCII_STRINGPARAM(".ui"), "uiex", false },
-        { RTL_CONSTASCII_STRINGPARAM(".tree"), "treex", false } };
+        { ".src", "transex3", false },
+        { ".hrc", "transex3", true },
+        { ".ulf", "ulfex", false },
+        { ".xcu", "cfgex", false },
+        { ".xrm", "xrmex", false },
+        { "description.xml", "xrmex", true },
+        { ".xhp", "helpex", false },
+        { ".properties", "propex", false },
+        { ".ui", "uiex", false },
+        { ".tree", "treex", false } };
     for (size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i)
     {
-        if (rUrl.endsWithAsciiL(
-                commands[i].extension, commands[i].extensionLength) &&
+        if (rUrl.endsWith(commands[i].extension) &&
             (commands[i].executable != "propex" || rUrl.indexOf("en_US") != -1))
         {
             if (commands[i].positive ? passesPositiveList(rUrl) : passesNegativeList(rUrl))
