@@ -171,10 +171,8 @@ bool isRepresentableInteger(double fAbsValue)
     return false;
 }
 
-// Solaris C++ 5.2 compiler has problems when "StringT ** pResult" is
-// "typename T::String ** pResult" instead:
-template< typename T, typename StringT >
-inline void doubleToString(StringT ** pResult,
+template< typename T >
+inline void doubleToString(typename T::String ** pResult,
                            sal_Int32 * pResultCapacity, sal_Int32 nResultOffset,
                            double fValue, rtl_math_StringFormat eFormat,
                            sal_Int32 nDecPlaces, typename T::Char cDecSeparator,
@@ -628,7 +626,7 @@ void SAL_CALL rtl_math_doubleToString(rtl_String ** pResult,
                                       sal_Bool bEraseTrailingDecZeros)
     SAL_THROW_EXTERN_C()
 {
-    doubleToString< StringTraits, StringTraits::String >(
+    doubleToString< StringTraits >(
         pResult, pResultCapacity, nResultOffset, fValue, eFormat, nDecPlaces,
         cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);
 }
@@ -644,7 +642,7 @@ void SAL_CALL rtl_math_doubleToUString(rtl_uString ** pResult,
                                        sal_Bool bEraseTrailingDecZeros)
     SAL_THROW_EXTERN_C()
 {
-    doubleToString< UStringTraits, UStringTraits::String >(
+    doubleToString< UStringTraits >(
         pResult, pResultCapacity, nResultOffset, fValue, eFormat, nDecPlaces,
         cDecSeparator, pGroups, cGroupSeparator, bEraseTrailingDecZeros);
 }
