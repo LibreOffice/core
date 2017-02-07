@@ -32,29 +32,6 @@ using namespace ::com::sun::star;
 
 SfxPoolItem* SvxDoubleItem::CreateDefault() { return new  SvxDoubleItem(0.0, 0);}
 
-SvxChartStyleItem::SvxChartStyleItem(SvxChartStyle eStyle, sal_uInt16 nId) :
-    SfxEnumItem(nId, (sal_uInt16)eStyle)
-{
-}
-
-
-SvxChartStyleItem::SvxChartStyleItem(SvStream& rIn, sal_uInt16 nId) :
-    SfxEnumItem(nId, rIn)
-{
-}
-
-
-SfxPoolItem* SvxChartStyleItem::Clone(SfxItemPool* /*pPool*/) const
-{
-    return new SvxChartStyleItem(*this);
-}
-
-
-SfxPoolItem* SvxChartStyleItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
-{
-    return new SvxChartStyleItem(rIn, Which());
-}
-
 SvxChartTextOrderItem::SvxChartTextOrderItem(SvxChartTextOrder eOrder,
                                              sal_uInt16 nId) :
     SfxEnumItem(nId, (sal_uInt16)eOrder)
