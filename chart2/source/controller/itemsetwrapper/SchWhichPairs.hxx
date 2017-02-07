@@ -212,7 +212,6 @@ const sal_uInt16 nLineAndFillPropertyWhichPairs[] =
 
 const sal_uInt16 nChartStyleWhichPairs[] =
 {
-    SCHATTR_DIAGRAM_STYLE,                SCHATTR_DIAGRAM_STYLE,
     SCHATTR_STYLE_SHAPE,                  SCHATTR_STYLE_SHAPE,
     SCHATTR_NUM_OF_LINES_FOR_BAR,         SCHATTR_NUM_OF_LINES_FOR_BAR,
     SCHATTR_SPLINE_ORDER,                 SCHATTR_SPLINE_ORDER,

@@ -22,15 +22,6 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 
-enum class SvxChartStyle
-{
-    Line2D,
-    Column2D,
-    AddIn
-};
-
-#define CHSTYLE_COUNT   ((sal_uInt16)SvxChartStyle::AddIn + 1)
-
 enum class SvxChartTextOrder
 {
     SideBySide,
@@ -79,20 +70,6 @@ enum class SvxChartRegress
 };
 
 #define CHREGRESS_COUNT ((sal_uInt16)SvxChartRegress::Unknown + 1)
-
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartStyleItem : public SfxEnumItem
-{
-public:
-    SvxChartStyleItem(SvxChartStyle eStyle /*= SvxChartStyle::Line2D*/,
-                      sal_uInt16 nId );
-    SvxChartStyleItem(SvStream& rIn, sal_uInt16 nId );
-
-    virtual SfxPoolItem* Clone(SfxItemPool* pPool = nullptr) const override;
-    virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
-
-    sal_uInt16 GetValueCount() const override { return CHSTYLE_COUNT; }
-};
-
 
 class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxChartRegressItem : public SfxEnumItem
 {
