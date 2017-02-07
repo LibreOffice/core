@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ba5201f7_d0579cc8",
+        "filename": "filter/source/pdf/impdialog.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 662,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-07T09:54:30Z",
+      "side": 1,
+      "message": "Since you\u0027ve already assigned a pointer to mpSelectedSheets variable in constructor, you can use it here:\nmpSelectedSheets-\u003eGetText()\n\nI\u0027ll just amend the patch and merge it as everything else\u0027s okay",
+      "revId": "1ef8313a6b31165f0bacfefafe1a141e82f2c063",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
