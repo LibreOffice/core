@@ -629,7 +629,7 @@ sal_uInt32 ScFunctionCategory::getCount() const
 OUString ScFunctionCategory::getName() const
 {
     if ( m_sName.isEmpty() )
-        m_sName = ScFunctionMgr::GetCategoryName(m_nCategory+1);
+        m_sName = ScFunctionMgr::GetCategoryName(m_nCategory);
     return m_sName;
 }
 
@@ -770,14 +770,14 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
 
 OUString ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
 {
-    if ( _nCategoryNumber > SC_FUNCGROUP_COUNT )
+    if (_nCategoryNumber >= SC_FUNCGROUP_COUNT)
     {
         OSL_FAIL("Invalid category number!");
         return OUString();
     }
 
-    std::unique_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
-    return SC_RESSTR(static_cast<sal_uInt16>(_nCategoryNumber));
+    ResStringArray aStringArray(ScResId(RID_FUNCTION_CATEGORIES));
+    return aStringArray.GetString(_nCategoryNumber);
 }
 
 sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const

@@ -18,44 +18,27 @@
  */
 
 #include <svx/swframeposstrings.hxx>
-#include <tools/rc.hxx>
+#include <tools/resary.hxx>
 #include <tools/debug.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 
-class SvxSwFramePosString_Impl : public Resource
-{
-    friend class SvxSwFramePosString;
-    OUString aStrings[SvxSwFramePosString::STR_MAX];
-public:
-    SvxSwFramePosString_Impl();
-};
-SvxSwFramePosString_Impl::SvxSwFramePosString_Impl() :
-    Resource(SVX_RES(RID_SVXSW_FRAMEPOSITIONS))
-{
-    for(sal_uInt16 i = 0; i < SvxSwFramePosString::STR_MAX; i++)
-    {
-        //string ids have to start at 1
-        aStrings[i] = SVX_RESSTR(i + 1);
-    }
-    FreeResource();
-}
-
 SvxSwFramePosString::SvxSwFramePosString() :
-    pImpl(new SvxSwFramePosString_Impl)
+    pImpl(new ResStringArray(SVX_RES(RID_SVXSW_FRAMEPOSITIONS)))
 {
+    assert(pImpl->Count() == SvxSwFramePosString::STR_MAX);
 }
 
 SvxSwFramePosString::~SvxSwFramePosString()
 {
 }
 
-const OUString& SvxSwFramePosString::GetString(StringId eId)
+OUString SvxSwFramePosString::GetString(StringId eId) const
 {
     DBG_ASSERT(eId >= 0 && eId < STR_MAX, "invalid StringId");
     if(!(eId >= 0 && eId < STR_MAX))
         eId = LEFT;
-    return pImpl->aStrings[eId];
+    return pImpl->GetString(eId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

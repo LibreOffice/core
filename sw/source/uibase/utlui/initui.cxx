@@ -19,6 +19,7 @@
 
 #include <config_features.h>
 
+#include <tools/resary.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <viewsh.hxx>
 #include <initui.hxx>
@@ -269,35 +270,26 @@ SwGlossaryList* GetGlossaryList()
     return pGlossaryList;
 }
 
-struct ImpAutoFormatNameListLoader : public Resource
-{
-    explicit ImpAutoFormatNameListLoader( std::vector<OUString>& rLst );
-};
-
 void ShellResource::GetAutoFormatNameLst_() const
 {
     assert(!pAutoFormatNameLst);
     pAutoFormatNameLst.reset( new std::vector<OUString> );
     pAutoFormatNameLst->reserve(STR_AUTOFMTREDL_END);
-    ImpAutoFormatNameListLoader aTmp(*pAutoFormatNameLst);
-}
 
-ImpAutoFormatNameListLoader::ImpAutoFormatNameListLoader( std::vector<OUString>& rLst )
-    : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr) )
-{
-    for( sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n )
+    ResStringArray aStringArray(ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr));
+    assert(aStringArray.Count() == STR_AUTOFMTREDL_END);
+    for (sal_uInt16 n = 0; n < STR_AUTOFMTREDL_END; ++n)
     {
-        OUString p(ResId(n + 1, *pSwResMgr));
-        if(STR_AUTOFMTREDL_TYPO == n)
+        OUString p(aStringArray.GetString(n));
+        if (STR_AUTOFMTREDL_TYPO == n)
         {
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLclD = aSysLocale.GetLocaleData();
             p = p.replaceFirst("%1", rLclD.getDoubleQuotationMarkStart());
             p = p.replaceFirst("%2", rLclD.getDoubleQuotationMarkEnd());
         }
-        rLst.insert(rLst.begin() + n, p);
+        pAutoFormatNameLst->push_back(p);
     }
-    FreeResource();
 }
 
 OUString SwAuthorityFieldType::GetAuthFieldName(ToxAuthorityField eType)
