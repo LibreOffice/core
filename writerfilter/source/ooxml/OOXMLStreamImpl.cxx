@@ -151,7 +151,6 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
     static const char sFooterType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer";
     static const char sHeaderType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header";
     static const char sOleObjectType[] = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject";
-    static const char sSignatureType[] = "http://schemas.openxmlformats.org/package/2006/relationships/digital-signature/origin";
     // OOXML strict
     static const char sDocumentTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/officeDocument";
     static const char sStylesTypeStrict[] = "http://purl.oclc.org/ooxml/officeDocument/relationships/styles";
@@ -259,9 +258,6 @@ bool OOXMLStreamImpl::lcl_getTarget(const uno::Reference<embed::XRelationshipAcc
             sStreamType = sHeaderType;
             sStreamTypeStrict = sHeaderTypeStrict;
           break;
-        case SIGNATURE:
-            sStreamType = sSignatureType;
-            break;
         default:
             break;
     }
