@@ -216,17 +216,17 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
 
             if( !sDocName.isEmpty() )
             {
-                nReturn = (new TwoStringErrorInfo(
+                nReturn = *new TwoStringErrorInfo(
                                 (bMustBeSuccessfull ? SCERR_IMPORT_FILE_ROWCOL
                                                         : SCWARN_IMPORT_FILE_ROWCOL),
                                 sDocName, sErr,
-                                ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode();
+                                ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
             }
             else
             {
                 OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
-                nReturn = (new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
-                                 ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode();
+                nReturn = *new StringErrorInfo( SCERR_IMPORT_FORMAT_ROWCOL, sErr,
+                                 ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
             }
         }
     }

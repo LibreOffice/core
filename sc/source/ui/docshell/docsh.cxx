@@ -2465,10 +2465,10 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
             bRet = aImExport.ExportStream(*pStream, rMed.GetBaseURL(true), SotClipboardFormatId::HTML);
             if (bRet && !aImExport.GetNonConvertibleChars().isEmpty())
             {
-                SetError((new StringErrorInfo(
+                SetError(*new StringErrorInfo(
                     SCWARN_EXPORT_NONCONVERTIBLE_CHARS,
                     aImExport.GetNonConvertibleChars(),
-                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO))->GetErrorCode(), OSL_LOG_PREFIX);
+                    ERRCODE_BUTTON_OK | ERRCODE_MSG_INFO), OSL_LOG_PREFIX);
             }
         }
     }

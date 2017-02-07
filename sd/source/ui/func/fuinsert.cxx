@@ -452,7 +452,8 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            ErrorHandler::HandleError( (new StringErrorInfo(ERRCODE_SFX_OLEGENERAL, ""))->GetErrorCode() );
+            ErrorHandler::HandleError(* new StringErrorInfo(ERRCODE_SFX_OLEGENERAL,
+                                        "" ) );
         }
     }
     else

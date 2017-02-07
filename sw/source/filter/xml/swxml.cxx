@@ -206,17 +206,17 @@ sal_Int32 ReadThroughComponent(
 
         if( !rStreamName.isEmpty() )
         {
-            return (new TwoStringErrorInfo(
+            return *new TwoStringErrorInfo(
                             (bMustBeSuccessfull ? ERR_FORMAT_FILE_ROWCOL
                                                     : WARN_FORMAT_FILE_ROWCOL),
                             rStreamName, sErr,
-                            ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode();
+                            ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
         }
         else
         {
             OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
-            return (new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
-                             ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR ))->GetErrorCode();
+            return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
+                             ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
         }
     }
     catch(const xml::sax::SAXException& r)
