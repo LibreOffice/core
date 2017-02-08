@@ -917,11 +917,9 @@ void WinSalInstance::DestroyObject( SalObject* pObject )
     SendMessageW( mhComWnd, SAL_MSG_DESTROYOBJECT, 0, reinterpret_cast<LPARAM>(pObject) );
 }
 
-void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
+OUString WinSalInstance::GetConnectionIdentifier()
 {
-    rReturnedBytes  = 1;
-    rReturnedType   = AsciiCString;
-    return const_cast<char *>("");
+    return OUString("");
 }
 
 /** Add a file to the system shells recent document list if there is any.
