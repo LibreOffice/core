@@ -18,7 +18,10 @@
  */
 
 #include <clipboardmanager.hxx>
+#include <com/sun/star/container/ElementExistException.hpp>
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 

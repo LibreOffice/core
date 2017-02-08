@@ -29,6 +29,8 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
+#include <com/sun/star/lang/NoSuchMethodException.hpp>
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/ParamInfo.hpp>

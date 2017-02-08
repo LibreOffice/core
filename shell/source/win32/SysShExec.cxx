@@ -23,7 +23,8 @@
 #include "SysShExec.hxx"
 #include <osl/file.hxx>
 #include <sal/macros.h>
-
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/system/SystemShellExecuteException.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>

@@ -26,6 +26,7 @@
 #include "osl/thread.h"
 
 #include <memory>
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <com/sun/star/script/FailReason.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>

@@ -29,7 +29,11 @@
 #include "MimeAttrib.hxx"
 #include "FmtFilter.hxx"
 #include "Fetc.hxx"
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
+#include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
+#include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <comphelper/processfactory.hxx>
 
 using namespace std;

@@ -23,6 +23,7 @@
 #include <com/sun/star/embed/OLEEmbeddedObjectFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 
 #include <osl/thread.h>

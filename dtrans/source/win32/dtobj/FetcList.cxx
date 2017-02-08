@@ -20,6 +20,7 @@
 #include <osl/diagnose.h>
 #include "FetcList.hxx"
 #include "Fetc.hxx"
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 

@@ -20,8 +20,10 @@
 #include <osl/diagnose.h>
 
 #include "ftransl.hxx"
+#include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
 #include <com/sun/star/datatransfer/MimeContentTypeFactory.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include "../misc/ImplHelper.hxx"

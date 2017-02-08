@@ -29,6 +29,7 @@
 #include "servprov.hxx"
 #include "unoobjw.hxx"
 #include "oleobjw.hxx"
+#include <com/sun/star/script/CannotConvertException.hpp>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
