@@ -393,7 +393,7 @@ SvpSalGraphics::SvpSalGraphics()
     , m_fScale(1.0)
     , m_aLineColor(MAKE_SALCOLOR(0x00, 0x00, 0x00))
     , m_aFillColor(MAKE_SALCOLOR(0xFF, 0xFF, 0XFF))
-    , m_ePaintMode(OVERPAINT)
+    , m_ePaintMode(PaintMode::Over)
     , m_aTextRenderImpl(*this)
 {
 }
@@ -462,7 +462,7 @@ void SvpSalGraphics::SetFillColor( SalColor nSalColor )
 
 void SvpSalGraphics::SetXORMode(bool bSet )
 {
-    m_ePaintMode = bSet ? XOR : OVERPAINT;
+    m_ePaintMode = bSet ? PaintMode::Xor : PaintMode::Over;
 }
 
 void SvpSalGraphics::SetROPLineColor( SalROPColor nROPColor )
@@ -1291,17 +1291,14 @@ cairo_t* SvpSalGraphics::createTmpCompatibleCairoContext() const
 cairo_t* SvpSalGraphics::getCairoContext(bool bXorModeAllowed) const
 {
     cairo_t* cr;
-    if (m_ePaintMode == XOR && bXorModeAllowed)
+    if (m_ePaintMode == PaintMode::Xor && bXorModeAllowed)
         cr = createTmpCompatibleCairoContext();
     else
         cr = cairo_create(m_pSurface);
     cairo_set_line_width(cr, 1);
     cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
     cairo_set_antialias(cr, getAntiAliasB2DDraw() ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
-    if (m_ePaintMode == INVERT)
-        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
-    else
-        cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
+    cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
     return cr;
 }
 
@@ -1335,7 +1332,7 @@ void SvpSalGraphics::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, cons
     //For the most part we avoid the use of XOR these days, but there
     //are some edge cases where legacy stuff still supports it, so
     //emulate it (slowly) here.
-    if (m_ePaintMode == XOR && bXorModeAllowed)
+    if (m_ePaintMode == PaintMode::Xor && bXorModeAllowed)
     {
         cairo_surface_t* target_surface = m_pSurface;
         if (cairo_surface_get_type(target_surface) != CAIRO_SURFACE_TYPE_IMAGE)
