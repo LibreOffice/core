@@ -1,0 +1,62 @@
+diff --git a/core/fpdfapi/parser/cpdf_hint_tables.cpp b/core/fpdfapi/parser/cpdf_hint_tables.cpp
+index e000188..39fd200 100644
+--- a/core/fpdfapi/parser/cpdf_hint_tables.cpp
++++ b/core/fpdfapi/parser/cpdf_hint_tables.cpp
+@@ -150,7 +150,8 @@ bool CPDF_HintTables::ReadPageHintTable(CFX_BitStream* hStream) {
+     safeDeltaObj += dwObjLeastNum;
+     if (!safeDeltaObj.IsValid())
+       return false;
+-    m_dwDeltaNObjsArray.push_back(safeDeltaObj.ValueOrDie());
++    uint32_t deltaObj = safeDeltaObj.ValueOrDie();
++    m_dwDeltaNObjsArray.push_back(deltaObj);
+   }
+   hStream->ByteAlign();
+ 
+@@ -166,7 +167,8 @@ bool CPDF_HintTables::ReadPageHintTable(CFX_BitStream* hStream) {
+     if (!safePageLen.IsValid())
+       return false;
+ 
+-    dwPageLenArray.push_back(safePageLen.ValueOrDie());
++    uint32_t pageLen = safePageLen.ValueOrDie();
++    dwPageLenArray.push_back(pageLen);
+   }
+ 
+   int nOffsetE = GetEndOfFirstPageOffset();
+@@ -325,13 +327,15 @@ bool CPDF_HintTables::ReadSharedObjHintTable(CFX_BitStream* hStream,
+       if (!safeObjNum.IsValid())
+         return false;
+ 
+-      m_dwSharedObjNumArray.push_back(safeObjNum.ValueOrDie());
++      uint32_t objNum = safeObjNum.ValueOrDie();
++      m_dwSharedObjNumArray.push_back(objNum);
+       if (i == m_nFirstPageSharedObjs) {
+         FX_SAFE_FILESIZE safeLoc = dwFirstSharedObjLoc;
+         if (!safeLoc.IsValid())
+           return false;
+ 
+-        m_szSharedObjOffsetArray.push_back(safeLoc.ValueOrDie());
++        FX_FILESIZE loc = safeLoc.ValueOrDie();
++        m_szSharedObjOffsetArray.push_back(loc);
+       }
+     }
+ 
+@@ -341,7 +345,8 @@ bool CPDF_HintTables::ReadSharedObjHintTable(CFX_BitStream* hStream,
+       if (!safeLoc.IsValid())
+         return false;
+ 
+-      m_szSharedObjOffsetArray.push_back(safeLoc.ValueOrDie());
++      FX_FILESIZE loc = safeLoc.ValueOrDie();
++      m_szSharedObjOffsetArray.push_back(loc);
+     }
+   }
+ 
+@@ -351,7 +356,8 @@ bool CPDF_HintTables::ReadSharedObjHintTable(CFX_BitStream* hStream,
+     if (!safeLoc.IsValid())
+       return false;
+ 
+-    m_szSharedObjOffsetArray.push_back(safeLoc.ValueOrDie());
++    FX_FILESIZE loc = safeLoc.ValueOrDie();
++    m_szSharedObjOffsetArray.push_back(loc);
+   }
+ 
+   hStream->ByteAlign();

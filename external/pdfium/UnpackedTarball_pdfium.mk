@@ -9,7 +9,10 @@
 
 pdfium_patches :=
 pdfium_patches += visibility.patch.1
+# To support MSVC 2013, upstream already moved to 2015.
 pdfium_patches += msvc.patch.1
+# To support macOS 10.9 baseline.
+pdfium_patches += macos.patch.1
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
