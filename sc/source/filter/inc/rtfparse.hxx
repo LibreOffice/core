@@ -54,7 +54,7 @@ private:
     DefaultList maDefaultList;
     size_t mnCurPos;
 
-    ScRTFColTwips*      pColTwips;
+    ScRTFColTwips       aColTwips;
     ScRTFCellDefault*   pInsDefault;
     ScRTFCellDefault*   pActDefault;
     ScRTFCellDefault*   pDefMerge;
