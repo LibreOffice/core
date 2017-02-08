@@ -175,7 +175,7 @@ void PlaceEditDialog::InitDetails( )
     unsigned int nPos = 0;
     for ( sal_Int32 i = 0; i < aTypesUrlsList.getLength( ) && aTypesNamesList.getLength( ); ++i )
     {
-        OUString sUrl = aTypesUrlsList[i];
+        OUString sUrl = aTypesUrlsList[i].replaceFirst("<host", "<" + SVT_RESSTR(STR_SVT_HOST)).replaceFirst("port>",  SVT_RESSTR(STR_SVT_PORT) + ">");
 
         if ((sUrl == GDRIVE_BASE_URL && bSkipGDrive) ||
             (sUrl.startsWith( ALFRESCO_CLOUD_BASE_URL) && bSkipAlfresco) ||
