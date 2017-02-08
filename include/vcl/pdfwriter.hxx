@@ -101,7 +101,7 @@ public:
         {}
     };
 
-    enum Orientation { Portrait, Landscape, Seascape, Inherit };
+    enum class Orientation { Portrait, Inherit };
 
     // in case the below enum is added PDF_1_6 PDF_1_7, please add them just after PDF_1_5
     enum class PDFVersion { PDF_1_2, PDF_1_3, PDF_1_4, PDF_1_5, PDF_A_1 };//i59651, PDF/A-1b & -1a, only -1b implemented for now
@@ -685,7 +685,7 @@ The following structure describes the permissions used in PDF security
         Colors and other state information MUST
         be set again or are undefined.
     */
-    void NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, Orientation eOrientation = Inherit );
+    void NewPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, Orientation eOrientation = Orientation::Inherit );
     /** Play a metafile like an outputdevice would do
     */
     struct PlayMetafileContext
