@@ -1127,8 +1127,7 @@ bool PrintFontManager::createFontSubset(
                                                      pEnc,
                                                      nGlyphs,
                                                      0,
-                                                     nullptr,
-                                                     0 ) );
+                                                     nullptr ) );
     CloseTTFont( pTTFont );
 
     return bSuccess;
