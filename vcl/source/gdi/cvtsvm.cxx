@@ -939,7 +939,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 // #106172# Add last DX array elem, if missing
                                 if( nAryLen != nStrLen )
                                 {
-                                    if( nAryLen+1 == nStrLen )
+                                    if( nAryLen+1 == nStrLen && nIndex >= 0)
                                     {
                                     boost::scoped_array<long> pTmpAry(new long[nStrLen]);
 
