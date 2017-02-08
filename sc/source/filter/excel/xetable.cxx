@@ -2375,18 +2375,31 @@ void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
 
 XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty )
 {
-    RowMap::iterator itr = maRowMap.begin();
-    ScDocument& rDoc = GetRoot().GetDoc();
-    SCTAB nScTab = GetRoot().GetCurrScTab();
-    for ( size_t nFrom = maRowMap.size(); nFrom <= nXclRow; ++nFrom )
+    RowMap::iterator itr = maRowMap.lower_bound( nXclRow );
+    const bool bFound = itr != maRowMap.end();
+    // bFoundHigher: nXclRow was identical to the previous entry, so not explicitly created earlier
+    const bool bFoundHigher = bFound && itr != maRowMap.find( nXclRow );
+    if( !bFound || bFoundHigher )
     {
-        itr = maRowMap.find(nFrom);
-        if ( itr == maRowMap.end() )
+        size_t nFrom = 0;
+        if( itr != maRowMap.begin() )
+        {
+            --itr;
+            if( bFoundHigher )
+                nFrom = nXclRow;
+            else
+                nFrom = itr->first + 1;
+        }
+
+        const ScDocument& rDoc = GetRoot().GetDoc();
+        const SCTAB nScTab = GetRoot().GetCurrScTab();
+        // create the missing rows first
+        while( nFrom <= nXclRow )
         {
             // only create RowMap entries if it is first row in spreadsheet,
             // if it is the desired row, for rows that height differ from previous,
             // if row is collapsed, has outline level (tdf#100347), or row is hidden (tdf#98106).
-            bool bHidden = rDoc.RowHidden(nFrom, nScTab);
+            const bool bHidden = rDoc.RowHidden(nFrom, nScTab);
             // Always get the actual row height even if the manual size flag is
             // not set, to correctly export the heights of rows with wrapped
             // texts.
@@ -2403,11 +2416,11 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
                 RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight));
                 maRowMap.insert(RowMap::value_type(nFrom, p));
             }
+            ++nFrom;
         }
     }
     itr = maRowMap.find(nXclRow);
     return *itr->second;
-
 }
 
 // Cell Table
