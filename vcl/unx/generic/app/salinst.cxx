@@ -174,13 +174,10 @@ SalYieldResult X11SalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
     return mpXLib->Yield( bWait, bHandleAllCurrentEvents );
 }
 
-void* X11SalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType,
-                                               int& rReturnedBytes )
+OUString X11SalInstance::GetConnectionIdentifier()
 {
     static const char* pDisplay = getenv( "DISPLAY" );
-    rReturnedType   = AsciiCString;
-    rReturnedBytes  = pDisplay ? strlen( pDisplay )+1 : 1;
-    return pDisplay ? const_cast<char *>(pDisplay) : const_cast<char *>("");
+    return pDisplay ? OUString::createFromAscii(pDisplay) : OUString("");
 }
 
 SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle )

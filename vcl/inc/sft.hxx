@@ -108,7 +108,7 @@ namespace vcl
         KT_MICROSOFT    = 2                 /**< Microsoft table                    */
     };
 
-/* Composite glyph flags definition */
+/** Composite glyph flags definition */
     enum CompositeFlags {
         ARG_1_AND_2_ARE_WORDS     = 1,
         ARGS_ARE_XY_VALUES        = 1<<1,
