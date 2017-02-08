@@ -939,7 +939,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 // #106172# Add last DX array elem, if missing
                                 if( nAryLen != nStrLen )
                                 {
-                                    if( nAryLen+1 == nStrLen )
+                                    if( nAryLen+1 == nStrLen && nIndex >= 0)
                                     {
                                         std::unique_ptr<long[]> pTmpAry(new long[nStrLen]);
 
