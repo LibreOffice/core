@@ -1302,14 +1302,11 @@ void WinSalGraphics::GetDevFontList( PhysicalFontCollection* pFontCollection )
         // since we are only interested in fonts that could not be
         // registered before because of missing administration rights
         // only the font path of the user installation is needed
-        OUString aPath;
-        osl_getExecutableFile( &aPath.pData );
-        aPath = aPath.copy( 0, aPath.lastIndexOf('/') );
-        OUString aFontDirUrl = aPath.copy( 0, aPath.lastIndexOf('/') );
-        aFontDirUrl += "/" LIBO_SHARE_FOLDER "/fonts/truetype";
+        OUString aPath("$BRAND_BASE_DIR");
+        rtl_bootstrap_expandMacros(&aPath.pData);
 
         // collect fonts in font path that could not be registered
-        osl::Directory aFontDir( aFontDirUrl );
+        osl::Directory aFontDir(aPath + "/" LIBO_SHARE_FOLDER "/fonts/truetype");
         osl::FileBase::RC rcOSL = aFontDir.open();
         if( rcOSL == osl::FileBase::E_None )
         {
