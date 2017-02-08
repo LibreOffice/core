@@ -32,9 +32,9 @@
 #include <memory>
 
 
-static sal_uInt16 aWndFunc(
+static ErrorHandlerFlags aWndFunc(
     vcl::Window *pWin,            // Parent of the dialog
-    sal_uInt16 nFlags,
+    ErrorHandlerFlags nFlags,
     const OUString &rErr,      // error text
     const OUString &rAction)   // action text
 
@@ -53,34 +53,35 @@ static sal_uInt16 aWndFunc(
 
     // determine necessary WinBits from the flags
     WinBits eBits=0;
-    if ( (ERRCODE_BUTTON_CANCEL|ERRCODE_BUTTON_RETRY) == (nFlags & (ERRCODE_BUTTON_CANCEL|ERRCODE_BUTTON_RETRY)) )
+    if ( nFlags & (ErrorHandlerFlags::ButtonsCancel | ErrorHandlerFlags::ButtonsRetry) )
         eBits = WB_RETRY_CANCEL;
-    else if ( ERRCODE_BUTTON_OK_CANCEL == (nFlags & ERRCODE_BUTTON_OK_CANCEL) )
+    else if ( nFlags & ErrorHandlerFlags::ButtonsOkCancel )
         eBits = WB_OK_CANCEL;
-    else if ( ERRCODE_BUTTON_OK == (nFlags & ERRCODE_BUTTON_OK) )
+    else if ( nFlags & ErrorHandlerFlags::ButtonsOk )
         eBits = WB_OK;
-    else if ( ERRCODE_BUTTON_YES_NO_CANCEL == (nFlags & ERRCODE_BUTTON_YES_NO_CANCEL) )
+    else if ( nFlags & ErrorHandlerFlags::ButtonsYesNoCancel )
         eBits = WB_YES_NO_CANCEL;
-    else if ( ERRCODE_BUTTON_YES_NO == (nFlags & ERRCODE_BUTTON_YES_NO) )
+    else if ( nFlags & ErrorHandlerFlags::ButtonsYesNo )
         eBits = WB_YES_NO;
 
-    switch(nFlags & 0x0f00)
+    switch(nFlags & ErrorHandlerFlags(0x0f00))
     {
-      case ERRCODE_BUTTON_DEF_OK:
+      case ErrorHandlerFlags::ButtonDefaultsOk:
             eBits |= WB_DEF_OK;
             break;
 
-      case ERRCODE_BUTTON_DEF_CANCEL:
+      case ErrorHandlerFlags::ButtonDefaultsCancel:
             eBits |= WB_DEF_CANCEL;
             break;
 
-      case ERRCODE_BUTTON_DEF_YES:
+      case ErrorHandlerFlags::ButtonDefaultsYes:
             eBits |= WB_DEF_YES;
             break;
 
-      case ERRCODE_BUTTON_DEF_NO:
+      case ErrorHandlerFlags::ButtonDefaultsNo:
             eBits |= WB_DEF_NO;
             break;
+      default: break;
     }
 
     OUString aErr(SvtResId(STR_ERR_HDLMESS).toString());
@@ -91,48 +92,48 @@ static sal_uInt16 aWndFunc(
     aErr = aErr.replaceAll("$(ERROR)", rErr);
 
     VclPtr<MessBox> pBox;
-    switch ( nFlags & 0xf000 )
+    switch ( nFlags & ErrorHandlerFlags(0xf000) )
     {
-        case ERRCODE_MSG_ERROR:
+        case ErrorHandlerFlags::MessageError:
             pBox.reset(VclPtr<ErrorBox>::Create(pWin, eBits, aErr));
             break;
 
-        case ERRCODE_MSG_WARNING:
+        case ErrorHandlerFlags::MessageWarning:
             pBox.reset(VclPtr<WarningBox>::Create(pWin, eBits, aErr));
             break;
 
-        case ERRCODE_MSG_INFO:
+        case ErrorHandlerFlags::MessageInfo:
             pBox.reset(VclPtr<InfoBox>::Create(pWin, aErr));
             break;
 
-        case ERRCODE_MSG_QUERY:
+        case ErrorHandlerFlags::MessageQuery:
             pBox.reset(VclPtr<QueryBox>::Create(pWin, eBits, aErr));
             break;
 
         default:
         {
             SAL_WARN( "svtools.misc", "no MessBox type");
-            return ERRCODE_BUTTON_OK;
+            return ErrorHandlerFlags::ButtonsOk;
         }
     }
 
-    sal_uInt16 nRet = RET_CANCEL;
+    ErrorHandlerFlags nRet = ErrorHandlerFlags::NONE;
     switch ( pBox->Execute() )
     {
         case RET_OK:
-            nRet = ERRCODE_BUTTON_OK;
+            nRet = ErrorHandlerFlags::ButtonsOk;
             break;
         case RET_CANCEL:
-            nRet = ERRCODE_BUTTON_CANCEL;
+            nRet = ErrorHandlerFlags::ButtonsCancel;
             break;
         case RET_RETRY:
-            nRet = ERRCODE_BUTTON_RETRY;
+            nRet = ErrorHandlerFlags::ButtonsRetry;
             break;
         case RET_YES:
-            nRet = ERRCODE_BUTTON_YES;
+            nRet = ErrorHandlerFlags::ButtonsYes;
             break;
         case RET_NO:
-            nRet = ERRCODE_BUTTON_NO;
+            nRet = ErrorHandlerFlags::ButtonsNo;
             break;
         default:
             SAL_WARN( "svtools.misc", "Unknown MessBox return value" );
