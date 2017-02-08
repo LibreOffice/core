@@ -133,28 +133,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         ActionBar actionBar = getSupportActionBar();
 
         if (actionBar != null) {
-            actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
-
-            //make the navigation spinner
-            Context context = actionBar.getThemedContext();
-            AppCompatSpinner toolbarSpinner = (AppCompatSpinner) findViewById(R.id.toolbar_spinner);
-            ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(context, R.array.file_view_modes, android.R.layout.simple_spinner_item);
-            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            toolbarSpinner.setAdapter(spinnerAdapter);
-            toolbarSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-                    filterMode = pos -1; //bit of a hack, I know. -1 is ALL 0 Docs etc
-                    openDirectory(currentDirectory);// Uses filter mode
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-                    filterMode = FileUtilities.ALL;
-                    openDirectory(currentDirectory);
-                }
-            });
         }
 
         recentRecyclerView = (RecyclerView) findViewById(R.id.list_recent);
@@ -544,6 +523,28 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             item.setTitle(R.string.sort_newest);
         }
 
+        switch (filterMode) {
+            case FileUtilities.ALL:
+                menu.findItem(R.id.menu_filter_everything).setChecked(true);
+                break;
+
+            case FileUtilities.DOC:
+                menu.findItem(R.id.menu_filter_documents).setChecked(true);
+                break;
+
+            case FileUtilities.CALC:
+                menu.findItem(R.id.menu_filter_presentations).setChecked(true);
+                break;
+
+            case FileUtilities.IMPRESS:
+                menu.findItem(R.id.menu_filter_presentations).setChecked(true);
+                break;
+
+            case FileUtilities.DRAWING:
+                menu.findItem(R.id.menu_filter_drawings).setChecked(true);
+                break;
+        }
+
         return true;
     }
 
@@ -560,6 +561,37 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                     openParentDirectory();
                 }
                 break;
+
+            case R.id.menu_filter_everything:
+                item.setChecked(true);
+                filterMode = FileUtilities.ALL;
+                openDirectory(currentDirectory);
+                break;
+
+            case R.id.menu_filter_documents:
+                item.setChecked(true);
+                filterMode = FileUtilities.DOC;
+                openDirectory(currentDirectory);
+                break;
+
+            case R.id.menu_filter_spreadsheets:
+                item.setChecked(true);
+                filterMode = FileUtilities.CALC;
+                openDirectory(currentDirectory);
+                break;
+
+            case R.id.menu_filter_presentations:
+                item.setChecked(true);
+                filterMode = FileUtilities.IMPRESS;
+                openDirectory(currentDirectory);
+                break;
+
+            case R.id.menu_filter_drawings:
+                item.setChecked(true);
+                filterMode = FileUtilities.DRAWING;
+                openDirectory(currentDirectory);
+                break;
+            
             case R.id.menu_sort_size:
             case R.id.menu_sort_az:
             case R.id.menu_sort_modified:
