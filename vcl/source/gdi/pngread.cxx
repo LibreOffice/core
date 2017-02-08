@@ -1628,7 +1628,7 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
     nX >>= mnPreviewShift;
 
     mxAcc->SetPixelIndex( nY, nX, nPalIndex );
-    mpMaskAcc->SetPixelIndex( nY, nX, ~nAlpha );
+    mpMaskAcc->SetPixel(nY, nX, BitmapColor(~nAlpha));
 }
 
 void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
@@ -1642,7 +1642,7 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
     mxAcc->SetPixel( nY, nX, rBitmapColor );
     if (!mpMaskAcc)
         return;
-    mpMaskAcc->SetPixelIndex( nY, nX, ~nAlpha );
+    mpMaskAcc->SetPixel(nY, nX, BitmapColor(~nAlpha));
 }
 
 sal_uInt32 PNGReaderImpl::ImplReadsal_uInt32()
