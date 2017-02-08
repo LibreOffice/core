@@ -1097,7 +1097,7 @@ void SbModule::Run( SbMethod* pMeth )
           // Empiric value, 900 = needed bytes/Basic call level
           // for Linux including 10% safety margin
           nMaxCallLevel = rl.rlim_cur / 900;
-#elif defined SOLARIS
+#elif defined __sun
           // Empiric value, 1650 = needed bytes/Basic call level
           // for Solaris including 10% safety margin
           nMaxCallLevel = rl.rlim_cur / 1650;
