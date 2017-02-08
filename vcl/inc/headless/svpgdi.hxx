@@ -65,7 +65,7 @@ typedef struct _cairo cairo_t;
 typedef struct _cairo_surface cairo_surface_t;
 typedef struct _cairo_user_data_key cairo_user_data_key_t;
 
-enum PaintMode { OVERPAINT, XOR, INVERT };
+enum class PaintMode { Over, Xor };
 
 typedef void (*damageHandler)(void* handle,
                               sal_Int32 nExtentsX, sal_Int32 nExtentsY,
