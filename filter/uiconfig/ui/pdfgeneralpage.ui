@@ -123,7 +123,7 @@
                       <object class="GtkLabel" id="selectedsheets">
                         <property name="can_focus">False</property>
                         <property name="no_show_all">True</property>
-                        <property name="label" translatable="yes">_Selected sheet(s)</property>
+                        <property name="label" translatable="yes">_Selection/Selected sheet(s)</property>
                         <property name="xalign">0</property>
                       </object>
                       <packing>
