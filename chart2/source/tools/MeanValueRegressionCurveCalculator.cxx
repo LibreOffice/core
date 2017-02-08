@@ -23,7 +23,6 @@
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <SpecialUnicodes.hxx>
 
 using namespace ::com::sun::star;
 
@@ -121,7 +120,7 @@ OUString MeanValueRegressionCurveCalculator::ImplGetRepresentation(
     {
         *pFormulaLength -= aBuf.getLength();
         if ( *pFormulaLength <= 0 )
-            return aHashString;
+            return OUString("###");
     }
     return ( aBuf + getFormattedString( xNumFormatter, nNumberFormatKey, m_fMeanValue, pFormulaLength ) );
 }

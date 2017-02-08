@@ -11,7 +11,6 @@
 #define INCLUDED_CHART2_INC_SPECIALUNICODES_HXX
 
 const sal_Unicode aMinusSign = 0x2212;
-const OUString aHashString ("###");
 const sal_Unicode aSuperscriptFigures[10]={ 0x2070, 0x00B9, 0x00B2, 0x00B3, 0x2074, 0x2075, 0x2076, 0x2077, 0x2078, 0x2079 };
 
 #endif

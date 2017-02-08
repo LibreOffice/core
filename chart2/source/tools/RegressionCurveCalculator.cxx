@@ -30,8 +30,6 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/extract.hxx>
 
-#include <SpecialUnicodes.hxx>
-
 using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
@@ -90,7 +88,7 @@ OUString RegressionCurveCalculator::getFormattedString(
     double fNumber, sal_Int32* pStringLength /* = nullptr */ )
 {
     if ( pStringLength && *pStringLength <= 0 )
-        return aHashString;
+        return OUString("###");
     OUString aResult;
 
     if( xNumFormatter.is() )
