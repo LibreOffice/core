@@ -397,7 +397,7 @@ class ExcEScenarioManager : public ExcRecord
 {
 private:
     sal_uInt16                      nActive;
-    std::vector<ExcEScenario*> aScenes;
+    std::vector<ExcEScenario>   aScenes;
 
     virtual void                SaveCont( XclExpStream& rStrm ) override;
 
