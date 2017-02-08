@@ -353,7 +353,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         if ( mbGrayScale )
         {
             BitmapEx aTempBitmapEx( rGraphic.GetBitmapEx() );
-            aTempBitmapEx.Convert( BMP_CONVERSION_8BIT_GREYS );
+            aTempBitmapEx.Convert( BmpConversion::N8BitGreys );
             nErrCode = GraphicConverter::Export( rTargetStream, aTempBitmapEx, ConvertDataFormat::TIF ) ;
         }
         else
@@ -487,7 +487,7 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
         Size aSizeBitmap( ( aSizePoint.Width() + 7 ) & ~7, aSizePoint.Height() );
         Bitmap aTmpBitmap( pPreview->GetBitmap() );
         aTmpBitmap.Scale( aSizeBitmap, BmpScaleFlag::BestQuality );
-        aTmpBitmap.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+        aTmpBitmap.Convert( BmpConversion::N1BitThreshold );
         BitmapReadAccess* pAcc = aTmpBitmap.AcquireReadAccess();
         if ( pAcc )
         {
@@ -795,7 +795,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 Bitmap aBitmap = static_cast<const MetaBmpAction*>(pMA)->GetBitmap();
                 if ( mbGrayScale )
-                    aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
+                    aBitmap.Convert( BmpConversion::N8BitGreys );
                 Point aPoint = static_cast<const MetaBmpAction*>(pMA)->GetPoint();
                 Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
                 ImplBmp( &aBitmap, nullptr, aPoint, aSize.Width(), aSize.Height() );
@@ -806,7 +806,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             {
                 Bitmap aBitmap = static_cast<const MetaBmpScaleAction*>(pMA)->GetBitmap();
                 if ( mbGrayScale )
-                    aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
+                    aBitmap.Convert( BmpConversion::N8BitGreys );
                 Point aPoint = static_cast<const MetaBmpScaleAction*>(pMA)->GetPoint();
                 Size aSize = static_cast<const MetaBmpScaleAction*>(pMA)->GetSize();
                 ImplBmp( &aBitmap, nullptr, aPoint, aSize.Width(), aSize.Height() );
@@ -819,7 +819,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 aBitmap.Crop( Rectangle( static_cast<const MetaBmpScalePartAction*>(pMA)->GetSrcPoint(),
                     static_cast<const MetaBmpScalePartAction*>(pMA)->GetSrcSize() ) );
                 if ( mbGrayScale )
-                    aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
+                    aBitmap.Convert( BmpConversion::N8BitGreys );
                 Point aPoint = static_cast<const MetaBmpScalePartAction*>(pMA)->GetDestPoint();
                 Size aSize = static_cast<const MetaBmpScalePartAction*>(pMA)->GetDestSize();
                 ImplBmp( &aBitmap, nullptr, aPoint, aSize.Width(), aSize.Height() );
@@ -831,7 +831,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 BitmapEx aBitmapEx( static_cast<MetaBmpExAction*>(pMA)->GetBitmapEx() );
                 Bitmap aBitmap( aBitmapEx.GetBitmap() );
                 if ( mbGrayScale )
-                    aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
+                    aBitmap.Convert( BmpConversion::N8BitGreys );
                 Bitmap aMask( aBitmapEx.GetMask() );
                 Point aPoint( static_cast<const MetaBmpExAction*>(pMA)->GetPoint() );
                 Size aSize( rVDev.PixelToLogic( aBitmap.GetSizePixel() ) );
@@ -844,7 +844,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 BitmapEx aBitmapEx( static_cast<MetaBmpExScaleAction*>(pMA)->GetBitmapEx() );
                 Bitmap aBitmap( aBitmapEx.GetBitmap() );
                 if ( mbGrayScale )
-                    aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
+                    aBitmap.Convert( BmpConversion::N8BitGreys );
                 Bitmap aMask( aBitmapEx.GetMask() );
                 Point aPoint = static_cast<const MetaBmpExScaleAction*>(pMA)->GetPoint();
                 Size aSize( static_cast<const MetaBmpExScaleAction*>(pMA)->GetSize() );
@@ -859,7 +859,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     static_cast<const MetaBmpExScalePartAction*>(pMA)->GetSrcSize() ) );
                 Bitmap      aBitmap( aBitmapEx.GetBitmap() );
                 if ( mbGrayScale )
-                    aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
+                    aBitmap.Convert( BmpConversion::N8BitGreys );
                 Bitmap      aMask( aBitmapEx.GetMask() );
                 Point aPoint = static_cast<const MetaBmpExScalePartAction*>(pMA)->GetDestPoint();
                 Size aSize = static_cast<const MetaBmpExScalePartAction*>(pMA)->GetDestSize();

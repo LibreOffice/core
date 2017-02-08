@@ -1900,10 +1900,10 @@ sal_uInt16 GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString
             if( aFilterName.equalsIgnoreAsciiCase( EXP_BMP ) )
             {
                 Bitmap aBmp( aGraphic.GetBitmap() );
-                sal_Int32 nColorRes = aConfigItem.ReadInt32( "Colors", 0 );
-                if ( nColorRes && ( nColorRes <= (sal_uInt16)BMP_CONVERSION_24BIT) )
+                BmpConversion nColorRes = (BmpConversion) aConfigItem.ReadInt32( "Colors", 0 );
+                if ( nColorRes != BmpConversion::NNONE && ( nColorRes <= BmpConversion::N24Bit) )
                 {
-                    if( !aBmp.Convert( (BmpConversion) nColorRes ) )
+                    if( !aBmp.Convert( nColorRes ) )
                         aBmp = aGraphic.GetBitmap();
                 }
                 bool    bRleCoding = aConfigItem.ReadBool( "RLE_Coding", true );

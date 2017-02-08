@@ -193,7 +193,7 @@ public:
     /// Creates an antialiased thumbnail, with maximum width or height of nMaximumExtent.
     bool            CreateThumbnail(BitmapEx& rBitmapEx,
                                     sal_uInt32 nMaximumExtent = 256,
-                                    BmpConversion nColorConversion = BMP_CONVERSION_24BIT,
+                                    BmpConversion nColorConversion = BmpConversion::N24Bit,
                                     BmpScaleFlag nScaleFlag = BmpScaleFlag::BestQuality) const;
 
     void            UseCanvas( bool _bUseCanvas );

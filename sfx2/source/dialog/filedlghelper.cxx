@@ -704,7 +704,7 @@ IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl, Timer *, void)
                     aBmp.Scale( nYRatio, nYRatio );
 
                 // Convert to true color, to allow CopyPixel
-                aBmp.Convert( BMP_CONVERSION_24BIT );
+                aBmp.Convert( BmpConversion::N24Bit );
 
                 // and copy it into the Any
                 SvMemoryStream aData;
