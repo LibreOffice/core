@@ -137,7 +137,7 @@ tools::PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                 aTransMap.SetOrigin( Point() );
                 pVDev->SetMapMode( aTransMap );
                 aBmp = pVDev->GetBitmap( Point(), rSizePix );
-                aBmp.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+                aBmp.Convert( BmpConversion::N1BitThreshold );
             }
         }
         else if( rGraphic.IsTransparent() )

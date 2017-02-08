@@ -170,7 +170,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
     // X11SalGraphics::drawAlphaBitmap()'s render acceleration
     // can handle the bitmap depth mismatch directly
     if( aBitmap.GetBitCount() < aMask.GetBitCount() )
-        aBitmap.Convert( BMP_CONVERSION_24BIT );
+        aBitmap.Convert( BmpConversion::N24Bit );
 }
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :

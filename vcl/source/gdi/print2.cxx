@@ -231,7 +231,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
             if( aActualColor.GetColorError( aBgColor ) )
             {
                 // no, create truecolor bitmap, then
-                aBmp.Convert( BMP_CONVERSION_24BIT );
+                aBmp.Convert( BmpConversion::N24Bit );
 
                 // fill masked out areas white
                 aBmp.Replace( aBmpEx.GetMask(), aBgColor );
@@ -245,7 +245,7 @@ void ImplConvertTransparentAction( GDIMetaFile&        o_rMtf,
         else
         {
             // blend with alpha channel
-            aBmp.Convert( BMP_CONVERSION_24BIT );
+            aBmp.Convert( BmpConversion::N24Bit );
             aBmp.Blend(aBmpEx.GetAlpha(),aBgColor);
         }
 

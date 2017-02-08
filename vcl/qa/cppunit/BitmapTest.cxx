@@ -70,7 +70,7 @@ void BitmapTest::testConvert()
         CPPUNIT_ASSERT_EQUAL(sal_Int32(255), sal_Int32(rColor.GetBlue()));
     }
 
-    aBitmap.Convert(BMP_CONVERSION_24BIT);
+    aBitmap.Convert(BmpConversion::N24Bit);
 
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(24), aBitmap.GetBitCount());
     {

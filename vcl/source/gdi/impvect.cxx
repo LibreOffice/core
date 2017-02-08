@@ -738,7 +738,7 @@ bool ImplVectorize( const Bitmap& rMonoBmp,
     bool                bRet = false;
 
     if( xBmp->GetBitCount() > 1 )
-        xBmp->Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+        xBmp->Convert( BmpConversion::N1BitThreshold );
 
     Bitmap::ScopedReadAccess pRAcc(*xBmp);
     std::unique_ptr <ImplVectMap> xMap(ImplExpand( pRAcc.get(), COL_BLACK ));

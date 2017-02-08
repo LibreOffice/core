@@ -983,7 +983,7 @@ extern "C" int SAL_CALL ImplPopArtCmpFnc( const void* p1, const void* p2 )
 bool Bitmap::ImplPopArt()
 {
     /* note: GetBitCount() after that is no more than 8 */
-    bool bRet = ( GetBitCount() <= 8 ) || Convert( BMP_CONVERSION_8BIT_COLORS );
+    bool bRet = ( GetBitCount() <= 8 ) || Convert( BmpConversion::N8BitColors );
 
     if( bRet )
     {

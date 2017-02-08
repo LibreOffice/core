@@ -122,7 +122,7 @@ void JpegReaderTest::testReadGray()
     CPPUNIT_ASSERT_EQUAL(12L, aSize.Width());
     CPPUNIT_ASSERT_EQUAL(12L, aSize.Height());
 
-    aBitmap.Convert(BmpConversion::BMP_CONVERSION_24BIT); // convert to 24bit so we don't need to deal with palette
+    aBitmap.Convert(BmpConversion::N24Bit); // convert to 24bit so we don't need to deal with palette
 
     int nMaxDelta = 1;
     CPPUNIT_ASSERT(checkRect(aBitmap, 0, 8, 8, Color(0xff, 0xff, 0xff), nMaxDelta));

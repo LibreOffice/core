@@ -1396,7 +1396,7 @@ public:
                     rDev.DrawBitmapEx(aBelow, aResult);
 
                     Bitmap aGrey = aSrc.GetBitmap();
-                    aGrey.Convert(BMP_CONVERSION_8BIT_GREYS);
+                    aGrey.Convert(BmpConversion::N8BitGreys);
                     rDev.DrawBitmap(aBelow, aGrey);
 
                     aBelow.Move(aGrey.GetSizePixel().Width(),0);

@@ -750,16 +750,16 @@ css::uno::Sequence<sal_Int8> x11::convertBitmapDepth(
     if (bm.GetBitCount() != depth) {
         switch (depth) {
         case 1:
-            bm.Convert(BMP_CONVERSION_1BIT_THRESHOLD);
+            bm.Convert(BmpConversion::N1BitThreshold);
             break;
         case 4:
-            bm.ReduceColors(BMP_CONVERSION_4BIT_COLORS);
+            bm.ReduceColors(1<<4);
             break;
         case 8:
-            bm.ReduceColors(BMP_CONVERSION_8BIT_COLORS);
+            bm.ReduceColors(1<<8);
             break;
         case 24:
-            bm.Convert(BMP_CONVERSION_24BIT);
+            bm.Convert(BmpConversion::N24Bit);
             break;
         }
     }

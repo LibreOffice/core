@@ -100,10 +100,10 @@ void OutputDevice::DrawBitmap( const Point& rDestPt, const Size& rDestSize,
         else if( !!aBmp )
         {
             if ( mnDrawMode & DrawModeFlags::GrayBitmap )
-                aBmp.Convert( BMP_CONVERSION_8BIT_GREYS );
+                aBmp.Convert( BmpConversion::N8BitGreys );
 
             if ( mnDrawMode & DrawModeFlags::GhostedBitmap )
-                aBmp.Convert( BMP_CONVERSION_GHOSTED );
+                aBmp.Convert( BmpConversion::Ghosted );
         }
     }
 
@@ -337,10 +337,10 @@ void OutputDevice::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
             else if( !!aBmpEx )
             {
                 if ( mnDrawMode & DrawModeFlags::GrayBitmap )
-                    aBmpEx.Convert( BMP_CONVERSION_8BIT_GREYS );
+                    aBmpEx.Convert( BmpConversion::N8BitGreys );
 
                 if ( mnDrawMode & DrawModeFlags::GhostedBitmap )
-                    aBmpEx.Convert( BMP_CONVERSION_GHOSTED );
+                    aBmpEx.Convert( BmpConversion::Ghosted );
             }
         }
 
@@ -486,7 +486,7 @@ BitmapEx OutputDevice::GetBitmapEx( const Point& rSrcPt, const Size& rSize ) con
 
         // ensure 8 bit alpha
         if( aAlphaBitmap.GetBitCount() > 8 )
-            aAlphaBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
+            aAlphaBitmap.Convert( BmpConversion::N8BitGreys );
 
         return BitmapEx(GetBitmap( rSrcPt, rSize ), AlphaMask( aAlphaBitmap ) );
     }
