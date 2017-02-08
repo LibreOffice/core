@@ -468,7 +468,6 @@ void CppuType::addDefaultHIncludes(codemaker::cppumaker::Includes & includes)
     if (m_typeMgr->getSort(name_)
         == codemaker::UnoType::Sort::Interface)
     {
-        includes.addException();
         includes.addReference();
     }
 }
@@ -481,7 +480,6 @@ void CppuType::addDefaultHxxIncludes(codemaker::cppumaker::Includes & includes)
     if (m_typeMgr->getSort(name_)
         == codemaker::UnoType::Sort::Interface)
     {
-        includes.addException();
         includes.addReference();
     }
 }
@@ -542,7 +540,9 @@ void CppuType::dumpHFileContent(
     addDefaultHIncludes(includes);
     dumpHeaderDefine(out, "HDL");
     out << "\n";
-    includes.dump(out, nullptr);
+    includes.dump(out, nullptr, false);
+        // 'exceptions = false' would be wrong for services/singletons, but
+        // those don't dump .hdl files anyway
     out << ("\nnamespace com { namespace sun { namespace star { namespace uno"
             " { class Type; } } } }\n\n");
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
@@ -1156,7 +1156,7 @@ void InterfaceType::dumpHppFile(
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
     out << "\n";
     addDefaultHxxIncludes(includes);
-    includes.dump(out, &name_);
+    includes.dump(out, &name_, !(m_cppuTypeLeak || m_cppuTypeDynamic));
     out << "\n";
     dumpGetCppuType(out);
     out << "\n::css::uno::Type const & "
@@ -1632,7 +1632,7 @@ void ConstantGroup::dumpHdlFile(
     OUString headerDefine(dumpHeaderDefine(out, "HDL"));
     out << "\n";
     addDefaultHIncludes(includes);
-    includes.dump(out, nullptr);
+    includes.dump(out, nullptr, true);
     out << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, true)) {
         out << "\n";
@@ -1845,7 +1845,7 @@ void PlainStructType::dumpHppFile(
 {
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
     out << "\n";
-    includes.dump(out, &name_);
+    includes.dump(out, &name_, true);
     out << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
         out << "\n";
@@ -2240,7 +2240,7 @@ void PolyStructType::dumpHppFile(
 {
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
     out << "\n";
-    includes.dump(out, &name_);
+    includes.dump(out, &name_, true);
     out << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
         out << "\n";
@@ -2732,7 +2732,7 @@ void ExceptionType::dumpHppFile(
     OUString headerDefine(dumpHeaderDefine(out, "HPP"));
     out << "\n";
     addDefaultHxxIncludes(includes);
-    includes.dump(out, &name_);
+    includes.dump(out, &name_, true);
     out << "\n";
     if (codemaker::cppumaker::dumpNamespaceOpen(out, name_, false)) {
         out << "\n";
@@ -3161,7 +3161,7 @@ void EnumType::dumpHppFile(
     o << "\n";
 
     addDefaultHxxIncludes(includes);
-    includes.dump(o, &name_);
+    includes.dump(o, &name_, true);
     o << "\n";
 
     dumpGetCppuType(o);
@@ -3295,7 +3295,7 @@ void Typedef::dumpHdlFile(
     o << "\n";
 
     addDefaultHIncludes(includes);
-    includes.dump(o, nullptr);
+    includes.dump(o, nullptr, true);
     o << "\n";
 
     if (codemaker::cppumaker::dumpNamespaceOpen(o, name_, false)) {
@@ -3325,7 +3325,7 @@ void Typedef::dumpHppFile(
     o << "\n";
 
     addDefaultHxxIncludes(includes);
-    includes.dump(o, &name_);
+    includes.dump(o, &name_, true);
     o << "\n";
 
     o << "\n#endif // "<< headerDefine << "\n";
@@ -3445,7 +3445,7 @@ void ServiceType::dumpHppFile(
             u2b(id_), "service", isGlobal()));
     OUString headerDefine(dumpHeaderDefine(o, "HPP"));
     o << "\n";
-    includes.dump(o, nullptr);
+    includes.dump(o, nullptr, true);
     if (!entity_->getConstructors().empty()) {
         o << ("\n#if defined ANDROID || defined IOS //TODO\n"
               "#include <com/sun/star/lang/XInitialization.hpp>\n"
@@ -3754,7 +3754,7 @@ void SingletonType::dumpHppFile(
     includes.addReference();
     includes.addRtlUstringH();
     includes.addRtlUstringHxx();
-    includes.dump(o, nullptr);
+    includes.dump(o, nullptr, true);
     o << ("\n#if defined ANDROID || defined IOS //TODO\n"
           "#include <com/sun/star/lang/XInitialization.hpp>\n"
           "#include <osl/detail/component-defines.h>\n#endif\n\n"

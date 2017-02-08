@@ -40,7 +40,6 @@ public:
 
     void add(OString const & entityName);
     void addCassert() { m_includeCassert = true; }
-    void addException() { m_includeException = true; }
     void addAny() { m_includeAny = true; }
     void addReference() { m_includeReference = true; }
     void addSequence() { m_includeSequence = true; }
@@ -59,7 +58,8 @@ public:
     void addTypelibTypeclassH() { m_includeTypelibTypeclassH = true; }
     void addTypelibTypedescriptionH()
         { m_includeTypelibTypedescriptionH = true; }
-    void dump(FileStream & out, OUString const * companionHdl);
+    void dump(
+        FileStream & out, OUString const * companionHdl, bool exceptions);
 
     static void dumpInclude(
         FileStream & out, OString const & entityName, bool hpp);
@@ -74,7 +74,6 @@ private:
     Dependencies::Map m_map;
     bool m_hpp;
     bool m_includeCassert;
-    bool m_includeException;
     bool m_includeAny;
     bool m_includeReference;
     bool m_includeSequence;
