@@ -2026,7 +2026,7 @@ void Edit::Command( const CommandEvent& rCEvt )
         {
             ImplSetSelection( Selection( 0, maText.getLength() ) );
         }
-        else if (sCommand == "specialchar")
+        else if (sCommand == "specialchar" && pImplFncGetSpecialChars)
         {
             OUString aChars = pImplFncGetSpecialChars( this, GetFont() );
             SetSelection( aSaveSel );
