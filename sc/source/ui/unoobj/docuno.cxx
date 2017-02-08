@@ -4092,11 +4092,9 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount()
     sal_Int32 nCount = 0;
     if (pDocShell)
     {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        const ScRangeList aRangeList( ScRange( 0, 0, nTab, MAXCOL, MAXROW, nTab) );
-        std::vector<sc::NoteEntry> rNotes;
-        rDoc.GetNotesInRange(aRangeList, rNotes);
-        nCount = rNotes.size();
+        const ScDocument& rDoc = pDocShell->GetDocument();
+        for (SCCOL nCol = 0; nCol <= MAXCOL; ++nCol)
+            nCount += rDoc.GetNoteCount(nTab, nCol);
     }
     return nCount;
 }
