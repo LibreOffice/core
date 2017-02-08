@@ -32,9 +32,9 @@ namespace oox
 namespace shape
 {
 
-WpsContext::WpsContext(ContextHandler2Helper& rParent, uno::Reference<drawing::XShape> const& xShape)
+WpsContext::WpsContext(ContextHandler2Helper& rParent, uno::Reference<drawing::XShape> xShape)
     : ContextHandler2(rParent),
-      mxShape(xShape)
+      mxShape(std::move(xShape))
 {
     mpShape.reset(new oox::drawingml::Shape("com.sun.star.drawing.CustomShape"));
     mpShape->setWps(true);
