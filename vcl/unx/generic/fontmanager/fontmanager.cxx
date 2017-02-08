@@ -1006,7 +1006,7 @@ bool PrintFontManager::createFontSubset(
     if( !pFont )
         return false;
 
-    rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
+    rInfo.m_nFontType = FontType::SFNT_TTF;
 
     // reshuffle array of requested glyphs to make sure glyph0==notdef
     sal_uInt8  pEnc[256];
@@ -1057,7 +1057,7 @@ bool PrintFontManager::createFontSubset(
     const sal_uInt8* pCffBytes = nullptr;
     if( GetSfntTable( pTTFont, O_CFF, &pCffBytes, &nCffLength ) )
     {
-        rInfo.LoadFont( FontSubsetInfo::CFF_FONT, pCffBytes, nCffLength );
+        rInfo.LoadFont( FontType::CFF_FONT, pCffBytes, nCffLength );
 #if 1 // TODO: remove 16bit->long conversion when related methods handle non-16bit glyphids
         sal_GlyphId aRequestedGlyphIds[256];
         for( int i = 0; i < nGlyphs; ++i )
@@ -1073,7 +1073,7 @@ bool PrintFontManager::createFontSubset(
         // create font subset
         const char* const pGlyphSetName = nullptr; // TODO: better name?
         const bool bOK = rInfo.CreateFontSubset(
-            FontSubsetInfo::TYPE1_PFB,
+            FontType::TYPE1_PFB,
             pOutFile, pGlyphSetName,
             aRequestedGlyphIds, pEnc, nGlyphs, pWidths );
         fclose( pOutFile );

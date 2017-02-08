@@ -217,9 +217,9 @@ static void CreatePSUploadableFont( TrueTypeFont* pSrcFont, FILE* pTmpFile,
 {
     // match the font-subset to the printer capabilities
      // TODO: allow CFF for capable printers
-    int nTargetMask = FontSubsetInfo::TYPE1_PFA | FontSubsetInfo::TYPE3_FONT;
+    FontType nTargetMask = FontType::TYPE1_PFA | FontType::TYPE3_FONT;
     if( bAllowType42 )
-        nTargetMask |= FontSubsetInfo::TYPE42_FONT;
+        nTargetMask |= FontType::TYPE42_FONT;
 
     std::vector< EncEntry > aSorted( nGlyphCount, EncEntry() );
     for( int i = 0; i < nGlyphCount; i++ )

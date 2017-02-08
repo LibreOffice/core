@@ -1658,8 +1658,8 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
         // provide a font subset from the CFF-table
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
-        rInfo.LoadFont( FontSubsetInfo::CFF_FONT, aRawCffData.get(), aRawCffData.size() );
-        bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, nullptr,
+        rInfo.LoadFont( FontType::CFF_FONT, aRawCffData.get(), aRawCffData.size() );
+        bool bRC = rInfo.CreateFontSubset( FontType::TYPE1_PFB, pOutFile, nullptr,
                 pGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
         fclose( pOutFile );
         return bRC;
@@ -1682,7 +1682,7 @@ bool WinSalGraphics::CreateFontSubset( const OUString& rToFile,
 
     TTGlobalFontInfo aTTInfo;
     ::GetTTGlobalFontInfo( aSftTTF.get(), &aTTInfo );
-    rInfo.m_nFontType   = FontSubsetInfo::SFNT_TTF;
+    rInfo.m_nFontType   = FontType::SFNT_TTF;
     rInfo.m_aPSName     = ImplSalGetUniString( aTTInfo.psname );
     rInfo.m_nAscent     = aTTInfo.winAscent;
     rInfo.m_nDescent    = aTTInfo.winDescent;

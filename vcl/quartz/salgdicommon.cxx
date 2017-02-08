@@ -208,13 +208,13 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     {
         // provide the raw-CFF data to the subsetter
         ByteCount nCffLen = aBuffer.size();
-        rInfo.LoadFont( FontSubsetInfo::CFF_FONT, &aBuffer[0], nCffLen );
+        rInfo.LoadFont( FontType::CFF_FONT, &aBuffer[0], nCffLen );
 
         // NOTE: assuming that all glyphids requested on Aqua are fully translated
 
         // make the subsetter provide the requested subset
         FILE* pOutFile = fopen( aToFile.getStr(), "wb" );
-        bool bRC = rInfo.CreateFontSubset( FontSubsetInfo::TYPE1_PFB, pOutFile, nullptr,
+        bool bRC = rInfo.CreateFontSubset( FontType::TYPE1_PFB, pOutFile, nullptr,
                                            pGlyphIds, pEncoding, nGlyphCount, pGlyphWidths );
         fclose( pOutFile );
         return bRC;
@@ -234,7 +234,7 @@ bool AquaSalGraphics::CreateFontSubset( const OUString& rToFile,
     // get details about the subsetted font
     TTGlobalFontInfo aTTInfo;
     ::GetTTGlobalFontInfo( pSftFont, &aTTInfo );
-    rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
+    rInfo.m_nFontType = FontType::SFNT_TTF;
     rInfo.m_aPSName = OUString( aTTInfo.psname, std::strlen(aTTInfo.psname),
                                 RTL_TEXTENCODING_UTF8 );
     rInfo.m_aFontBBox = Rectangle( Point( aTTInfo.xMin, aTTInfo.yMin ),

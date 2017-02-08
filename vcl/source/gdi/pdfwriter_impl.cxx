@@ -3228,12 +3228,12 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( const PhysicalFontFace* pFont, Font
         aLine.append( "/FontFile" );
         switch( rInfo.m_nFontType )
         {
-            case FontSubsetInfo::SFNT_TTF:
+            case FontType::SFNT_TTF:
                 aLine.append( '2' );
                 break;
-            case FontSubsetInfo::TYPE1_PFA:
-            case FontSubsetInfo::TYPE1_PFB:
-            case FontSubsetInfo::ANY_TYPE1:
+            case FontType::TYPE1_PFA:
+            case FontType::TYPE1_PFB:
+            case FontType::ANY_TYPE1:
                 break;
             default:
                 OSL_FAIL( "unknown fonttype in PDF font descriptor" );
@@ -3348,7 +3348,7 @@ bool PDFWriterImpl::emitFonts()
                                  "/Length1 " );
 
                 sal_uInt64 nStartPos = 0;
-                if( aSubsetInfo.m_nFontType == FontSubsetInfo::SFNT_TTF )
+                if( aSubsetInfo.m_nFontType == FontType::SFNT_TTF )
                 {
                     aLine.append( (sal_Int32)nLength1 );
 
@@ -3370,12 +3370,12 @@ bool PDFWriterImpl::emitFonts()
                         if ( osl::File::E_None != aFontFile.isEndOfFile(&bEOF) ) return false;
                     } while( ! bEOF );
                 }
-                else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::CFF_FONT) != 0 )
+                else if( aSubsetInfo.m_nFontType & FontType::CFF_FONT)
                 {
                     // TODO: implement
                     OSL_FAIL( "PDFWriterImpl does not support CFF-font subsets yet!" );
                 }
-                else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::TYPE1_PFB) != 0 ) // TODO: also support PFA?
+                else if( aSubsetInfo.m_nFontType & FontType::TYPE1_PFB) // TODO: also support PFA?
                 {
                     std::unique_ptr<unsigned char[]> xBuffer(new unsigned char[nLength1]);
 
@@ -3408,7 +3408,7 @@ bool PDFWriterImpl::emitFonts()
                 }
                 else
                 {
-                    SAL_INFO("vcl.pdfwriter", "PDF: CreateFontSubset result in not yet supported format=" << aSubsetInfo.m_nFontType);
+                    SAL_INFO("vcl.pdfwriter", "PDF: CreateFontSubset result in not yet supported format=" << (int)aSubsetInfo.m_nFontType);
                     aLine.append( "0 >>\nstream\n" );
                 }
 
@@ -3445,7 +3445,7 @@ bool PDFWriterImpl::emitFonts()
                 aLine.append( nFontObject );
 
                 aLine.append( " 0 obj\n" );
-                aLine.append( ((aSubsetInfo.m_nFontType & FontSubsetInfo::ANY_TYPE1) != 0) ?
+                aLine.append( (aSubsetInfo.m_nFontType & FontType::ANY_TYPE1) ?
                              "<</Type/Font/Subtype/Type1/BaseFont/" :
                              "<</Type/Font/Subtype/TrueType/BaseFont/" );
                 appendSubsetName( lit->m_nFontID, aSubsetInfo.m_aPSName, aLine );
