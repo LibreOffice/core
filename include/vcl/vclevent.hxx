@@ -45,7 +45,6 @@ enum class VclEventId
     ComboboxDoubleClick,
     ComboboxItemAdded,       // pData = itempos
     ComboboxItemRemoved,     // pData = itempos, -1=All
-    ComboboxScrolled,
     ComboboxSelect,
     ComboboxSetText,
     ControlGetFocus,
@@ -61,7 +60,6 @@ enum class VclEventId
     ItemExpanded,
     ListboxDoubleClick,
     ListboxFocus,
-    ListboxFocusItemChanged,
     ListboxItemAdded,        // pData = itempos
     ListboxItemRemoved,      // pData = itempos, -1=All
     ListboxScrolled,
@@ -69,7 +67,6 @@ enum class VclEventId
     ListboxStateUpdate,
     ListboxTreeFocus,
     ListboxTreeSelect,
-    MenuAccessibleNameChanged,
     MenuActivate,
     MenuDeactivate,
     MenuDehighlight,
@@ -107,7 +104,6 @@ enum class VclEventId
     StatusbarItemAdded,     // pData = itemid
     StatusbarItemRemoved,   // pData = itemid
     StatusbarNameChanged,   // pData = itemid
-    StatusbarShowAllItems,
     StatusbarShowItem,      // pData = itemid
     TabbarPageActivated,    // pData = pageid
     TabbarPageDeactivated,  // pData = pageid
@@ -170,11 +166,9 @@ enum class VclEventId
     WindowPaint,            // pData = Rectangle*
     WindowPrepareToggleFloating,   // pData = bool
     WindowResize,
-    WindowScroll,           // pData = ScrollEvent*
     WindowShow,
     WindowStartDocking,     // pData = DockingData
     WindowToggleFloating,
-    WindowZoom,             // pData = ZoomEvent*
 };
 
 class VCL_DLLPUBLIC VclSimpleEvent

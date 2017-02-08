@@ -391,8 +391,6 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
 
         case ScanlineFormat::N8BitTcMask:
 //            return ImplConvertToBitmap<ScanlineFormat::N8BitTcMask>( aSrcType, rDst, rSrc );
-        case ScanlineFormat::N24BitTcMask:
-//            return ImplConvertToBitmap<ScanlineFormat::N24BitTcMask>( aSrcType, rDst, rSrc );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplConvertToBitmap<ScanlineFormat::N32BitTcMask>( aSrcType, rDst, rSrc );
             break;
@@ -501,8 +499,6 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
 
         case ScanlineFormat::N8BitTcMask:
 //            return ImplConvertFromBitmap<ScanlineFormat::N8BitTcMask>( rDst, rSrc );
-        case ScanlineFormat::N24BitTcMask:
-//            return ImplConvertFromBitmap<ScanlineFormat::N24BitTcMask>( rDst, rSrc );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplConvertFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
             break;
@@ -630,8 +626,6 @@ bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const Bi
 
         case ScanlineFormat::N8BitTcMask:
 //            return ImplBlendToBitmap<ScanlineFormat::N8BitTcMask>( aSrcType, rDst, rSrc, rMsk );
-        case ScanlineFormat::N24BitTcMask:
-//            return ImplBlendToBitmap<ScanlineFormat::N24BitTcMask>( aSrcType, rDst, rSrc, rMsk );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplBlendToBitmap<ScanlineFormat::N32BitTcMask>( aSrcType, rDst, rSrc, rMsk );
             break;
@@ -747,8 +741,6 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
 
         case ScanlineFormat::N8BitTcMask:
 //            return ImplBlendFromBitmap<ScanlineFormat::N8BitTcMask>( rDst, rSrc );
-        case ScanlineFormat::N24BitTcMask:
-//            return ImplBlendFromBitmap<ScanlineFormat::N24BitTcMask>( rDst, rSrc );
         case ScanlineFormat::N32BitTcMask:
 //            return ImplBlendFromBitmap<ScanlineFormat::N32BitTcMask>( rDst, rSrc );
             break;
@@ -810,7 +802,6 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
             nFillByte = rColor.GetIndex();
             break;
 
-        case ScanlineFormat::N24BitTcMask:
         case ScanlineFormat::N24BitTcBgr:
         case ScanlineFormat::N24BitTcRgb:
             nFillByte = rColor.GetRed();

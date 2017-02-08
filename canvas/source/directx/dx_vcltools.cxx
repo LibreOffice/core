@@ -288,8 +288,6 @@ namespace dxcanvas
                                 // FALLTHROUGH intended
                             case ScanlineFormat::N24BitTcRgb:
                                 // FALLTHROUGH intended
-                            case ScanlineFormat::N24BitTcMask:
-                                // FALLTHROUGH intended
                             case ScanlineFormat::N16BitTcMsbMask:
                                 // FALLTHROUGH intended
                             case ScanlineFormat::N32BitTcAbgr:
@@ -439,8 +437,6 @@ namespace dxcanvas
                             case ScanlineFormat::N8BitTcMask:
                                 // FALLTHROUGH intended
                             case ScanlineFormat::N24BitTcRgb:
-                                // FALLTHROUGH intended
-                            case ScanlineFormat::N24BitTcMask:
                                 // FALLTHROUGH intended
                             case ScanlineFormat::N16BitTcMsbMask:
                                 // FALLTHROUGH intended

@@ -742,15 +742,7 @@ void TextView::MouseButtonUp( const MouseEvent& rMouseEvent )
     mpImpl->mbClickedInSelection = false;
     mpImpl->mnTravelXPos = TRAVEL_X_DONTKNOW;
     mpImpl->mpSelEngine->SelMouseButtonUp( rMouseEvent );
-    if ( rMouseEvent.IsMiddle() && !IsReadOnly() &&
-         ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
-    {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
-        Paste( aSelection );
-        if ( mpImpl->mpTextEngine->IsModified() )
-            mpImpl->mpTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
-    }
-    else if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
+    if ( rMouseEvent.IsLeft() && GetSelection().HasRange() )
     {
         css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(GetWindow()->GetPrimarySelection());
         Copy( aSelection );

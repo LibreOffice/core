@@ -124,8 +124,6 @@ SalPrinterBmp::SalPrinterBmp (BitmapBuffer* pBuffer)
             mpFncGetPixel = BitmapReadAccess::GetPixelForN24BitTcBgr;  break;
         case ScanlineFormat::N24BitTcRgb:
             mpFncGetPixel = BitmapReadAccess::GetPixelForN24BitTcRgb;  break;
-        case ScanlineFormat::N24BitTcMask:
-            mpFncGetPixel = BitmapReadAccess::GetPixelForN24BitTcMask; break;
         case ScanlineFormat::N32BitTcAbgr:
             mpFncGetPixel = BitmapReadAccess::GetPixelForN32BitTcAbgr; break;
         case ScanlineFormat::N32BitTcArgb:

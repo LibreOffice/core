@@ -50,7 +50,6 @@ enum class ScanlineFormat {
 
     N24BitTcBgr       = 0x00000100,
     N24BitTcRgb       = 0x00000200,
-    N24BitTcMask      = 0x00000400,
 
     N32BitTcAbgr      = 0x00000800,
     N32BitTcArgb      = 0x00001000,
@@ -61,7 +60,7 @@ enum class ScanlineFormat {
     TopDown           = 0x00010000 // scanline adjustment
 };
 namespace o3tl {
-    template<> struct typed_flags<ScanlineFormat> : is_typed_flags<ScanlineFormat, 0x0001ffff> {};
+    template<> struct typed_flags<ScanlineFormat> : is_typed_flags<ScanlineFormat, 0x0001fbff> {};
 }
 inline ScanlineFormat RemoveScanline(ScanlineFormat nFormat) { return nFormat & ~ScanlineFormat::TopDown; }
 

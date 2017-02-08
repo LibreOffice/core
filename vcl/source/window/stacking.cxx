@@ -1064,9 +1064,6 @@ vcl::Window* Window::GetWindow( GetWindowType nType ) const
         case GetWindowType::FirstOverlap:
             return mpWindowImpl->mpFirstOverlap;
 
-        case GetWindowType::LastOverlap:
-            return mpWindowImpl->mpLastOverlap;
-
         case GetWindowType::Overlap:
             if ( ImplIsOverlapWindow() )
                 return const_cast<vcl::Window*>(this);
@@ -1095,23 +1092,6 @@ vcl::Window* Window::GetWindow( GetWindowType nType ) const
 
         case GetWindowType::FirstTopWindowChild:
             return ImplGetWinData()->maTopWindowChildren.empty() ? nullptr : (*ImplGetWinData()->maTopWindowChildren.begin()).get();
-
-        case GetWindowType::LastTopWindowChild:
-            return ImplGetWinData()->maTopWindowChildren.empty() ? nullptr : (*ImplGetWinData()->maTopWindowChildren.rbegin()).get();
-
-        case GetWindowType::PrevTopWindowSibling:
-        {
-            if ( !mpWindowImpl->mpRealParent )
-                return nullptr;
-            const ::std::list< VclPtr<vcl::Window> >& rTopWindows( mpWindowImpl->mpRealParent->ImplGetWinData()->maTopWindowChildren );
-            ::std::list< VclPtr<vcl::Window> >::const_iterator myPos =
-                ::std::find( rTopWindows.begin(), rTopWindows.end(), this );
-            if ( myPos == rTopWindows.end() )
-                return nullptr;
-            if ( myPos == rTopWindows.begin() )
-                return nullptr;
-            return *--myPos;
-        }
 
         case GetWindowType::NextTopWindowSibling:
         {

@@ -265,7 +265,6 @@ void Control::StateChanged( StateChangedType nStateChange )
     if( nStateChange == StateChangedType::InitShow   ||
         nStateChange == StateChangedType::Visible    ||
         nStateChange == StateChangedType::Zoom       ||
-        nStateChange == StateChangedType::Border     ||
         nStateChange == StateChangedType::ControlFont
         )
     {

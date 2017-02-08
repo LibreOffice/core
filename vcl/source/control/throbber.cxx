@@ -70,7 +70,6 @@ namespace
     ::std::vector< Image > lcl_loadImageSet( const Throbber::ImageSet i_imageSet )
     {
         ::std::vector< Image > aImages;
-        ENSURE_OR_RETURN( i_imageSet != Throbber::ImageSet::NONE, "lcl_loadImageSet: illegal image set", aImages );
 
         const Reference< css::uno::XComponentContext > aContext( ::comphelper::getProcessComponentContext() );
         const Reference< XGraphicProvider > xGraphicProvider( css::graphic::GraphicProvider::create(aContext) );
@@ -104,9 +103,6 @@ void Throbber::Resize()
 
 void Throbber::initImages()
 {
-    if ( meImageSet == ImageSet::NONE )
-        return;
-
     try
     {
         ::std::vector< ::std::vector< Image > > aImageSets;
@@ -203,7 +199,6 @@ void Throbber::setImageList( ::std::vector< Image > const& i_images )
     case ImageSet::N16px:  index = 0;  break;
     case ImageSet::N32px:  index = 1;  break;
     case ImageSet::N64px:  index = 2;  break;
-    case ImageSet::NONE:
     case ImageSet::Auto:
         OSL_ENSURE( false, "Throbber::getDefaultImageURLs: illegal image set!" );
         return aImageURLs;

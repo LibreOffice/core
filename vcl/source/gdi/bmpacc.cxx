@@ -238,12 +238,6 @@ bool BitmapReadAccess::ImplSetAccessPointers( ScanlineFormat nFormat )
             mFncSetPixel = SetPixelForN24BitTcRgb;
         }
         break;
-        case ScanlineFormat::N24BitTcMask:
-        {
-            mFncGetPixel = GetPixelForN24BitTcMask;
-            mFncSetPixel = SetPixelForN24BitTcMask;
-        }
-        break;
         case ScanlineFormat::N32BitTcAbgr:
         {
             mFncGetPixel = GetPixelForN32BitTcAbgr;
@@ -438,7 +432,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
         {
             DBG_ASSERT( nFormat != ScanlineFormat::N8BitTcMask &&
                         nFormat != ScanlineFormat::N16BitTcMsbMask && nFormat != ScanlineFormat::N16BitTcLsbMask &&
-                        nFormat != ScanlineFormat::N24BitTcMask && nFormat != ScanlineFormat::N32BitTcMask,
+                        nFormat != ScanlineFormat::N32BitTcMask,
                         "No support for pixel formats with color masks yet!" );
 
             // TODO: use fastbmp infrastructure
@@ -456,7 +450,6 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                 case ScanlineFormat::N16BitTcLsbMask:   pFncGetPixel = GetPixelForN16BitTcLsbMask; break;
                 case ScanlineFormat::N24BitTcBgr:    pFncGetPixel = GetPixelForN24BitTcBgr; break;
                 case ScanlineFormat::N24BitTcRgb:    pFncGetPixel = GetPixelForN24BitTcRgb; break;
-                case ScanlineFormat::N24BitTcMask:   pFncGetPixel = GetPixelForN24BitTcMask; break;
                 case ScanlineFormat::N32BitTcAbgr:   pFncGetPixel = GetPixelForN32BitTcAbgr; break;
                 case ScanlineFormat::N32BitTcArgb:   pFncGetPixel = GetPixelForN32BitTcArgb; break;
                 case ScanlineFormat::N32BitTcBgra:   pFncGetPixel = GetPixelForN32BitTcBgra; break;

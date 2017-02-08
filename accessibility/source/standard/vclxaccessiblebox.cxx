@@ -113,7 +113,6 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
     {
         case VclEventId::DropdownSelect:
         case VclEventId::ListboxSelect:
-        case VclEventId::ListboxFocusItemChanged:
         {
             // Forward the call to the list child.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());
@@ -199,7 +198,6 @@ void VCLXAccessibleBox::ProcessWindowEvent (const VclWindowEvent& rVclWindowEven
         case VclEventId::ListboxItemRemoved:
         case VclEventId::ComboboxItemAdded:
         case VclEventId::ComboboxItemRemoved:
-        case VclEventId::ComboboxScrolled:
         {
             // Forward the call to the list child.
             VCLXAccessibleList* pList = static_cast<VCLXAccessibleList*>(m_xList.get());

@@ -1645,23 +1645,8 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
         case PointerStyle::Move:
             aCur = XCreateFontCursor( pDisp_, XC_fleur );
             break;
-        case PointerStyle::MoveData:
-            MAKE_CURSOR( movedata_ );
-            break;
         case PointerStyle::CopyData:
             MAKE_CURSOR( copydata_ );
-            break;
-        case PointerStyle::MoveFile:
-            MAKE_CURSOR( movefile_ );
-            break;
-        case PointerStyle::CopyFile:
-            MAKE_CURSOR( copyfile_ );
-            break;
-        case PointerStyle::MoveFiles:
-            MAKE_CURSOR( movefiles_ );
-            break;
-        case PointerStyle::CopyFiles:
-            MAKE_CURSOR( copyfiles_ );
             break;
         case PointerStyle::NotAllowed:
             MAKE_CURSOR( nodrop_ );
@@ -1726,30 +1711,11 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
         case PointerStyle::DrawCaption:
             MAKE_CURSOR( drawcaption_ );
             break;
-        case PointerStyle::Pen:       // Mouse Pointer is a pencil
-            aCur = XCreateFontCursor( pDisp_, XC_pencil );
-            SAL_WARN_IF( aCur == None, "vcl", "GetPointer: Could not define cursor" );
-            break;
         case PointerStyle::LinkData:
             MAKE_CURSOR( linkdata_ );
             break;
         case PointerStyle::MoveDataLink:
             MAKE_CURSOR( movedlnk_ );
-            break;
-        case PointerStyle::CopyDataLink:
-            MAKE_CURSOR( copydlnk_ );
-            break;
-        case PointerStyle::LinkFile:
-            MAKE_CURSOR( linkfile_ );
-            break;
-        case PointerStyle::MoveFileLink:
-            MAKE_CURSOR( moveflnk_ );
-            break;
-        case PointerStyle::CopyFileLink:
-            MAKE_CURSOR( copyflnk_ );
-            break;
-        case PointerStyle::Chart:
-            MAKE_CURSOR( chart_ );
             break;
         case PointerStyle::Detective:
             MAKE_CURSOR( detective_ );
@@ -1771,12 +1737,6 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
             break;
         case PointerStyle::ChainNotAllowed:
             MAKE_CURSOR( chainnot_ );
-            break;
-        case PointerStyle::TimeEventMove:
-            MAKE_CURSOR( timemove_ );
-            break;
-        case PointerStyle::TimeEventSize:
-            MAKE_CURSOR( timesize_ );
             break;
         case PointerStyle::AutoScrollN:
             MAKE_CURSOR(asn_ );
@@ -1811,9 +1771,6 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
         case PointerStyle::AutoScrollNSWE:
             MAKE_CURSOR( asnswe_ );
             break;
-        case PointerStyle::Airbrush:
-            MAKE_CURSOR( airbrush_ );
-            break;
         case PointerStyle::TextVertical:
             MAKE_CURSOR( vertcurs_ );
             break;
@@ -1833,11 +1790,6 @@ Cursor SalDisplay::GetPointer( PointerStyle ePointerStyle )
             break;
         case PointerStyle::TabSelectSW:
             MAKE_CURSOR( tblselsw_ );
-            break;
-
-        // #i20119# Paintbrush tool
-        case PointerStyle::Paintbrush:
-            MAKE_CURSOR( paintbrush_ );
             break;
 
         case PointerStyle::HideWhitespace:

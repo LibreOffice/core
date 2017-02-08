@@ -341,10 +341,6 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
             if ( !m_bDisableProcessEvent )
                 UpdateSelection_Impl_Acc(b_IsDropDownList);
             break;
-        case VclEventId::ListboxFocusItemChanged:
-            if ( !m_bDisableProcessEvent )
-                UpdateFocus_Impl_Acc((sal_uInt16)reinterpret_cast<sal_uIntPtr>(rVclWindowEvent.GetData()),b_IsDropDownList);
-            break;
         case VclEventId::WindowGetFocus:
             break;
         case VclEventId::ControlGetFocus:
@@ -397,7 +393,6 @@ void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEve
             notifyVisibleStates(false);
             break;
         case VclEventId::ListboxScrolled:
-        case VclEventId::ComboboxScrolled:
             UpdateEntryRange_Impl();
             break;
 
