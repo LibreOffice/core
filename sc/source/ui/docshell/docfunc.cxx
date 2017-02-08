@@ -19,6 +19,7 @@
 
 #include "scitems.hxx"
 
+#include <comphelper/lok.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/editobj.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -1211,7 +1212,9 @@ bool ScDocFunc::ShowNote( const ScAddress& rPos, bool bShow )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     ScPostIt* pNote = rDoc.GetNote( rPos );
-    if( !pNote || (bShow == pNote->IsCaptionShown()) ) return false;
+    if( !pNote || (bShow == pNote->IsCaptionShown()) ||
+        (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations()) )
+        return false;
 
     // move the caption to internal or hidden layer and create undo action
     pNote->ShowCaption( rPos, bShow );
