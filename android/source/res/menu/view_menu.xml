@@ -3,6 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_filter"
+        android:title="@string/filter"
+        android:icon="@drawable/ic_filter_list_black_24dp"
+        app:showAsAction="ifRoom">
+        <menu>
+            <group
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menu_filter_everything"
+                    android:title="@string/filter_everything" />
+                <item
+                    android:id="@+id/menu_filter_documents"
+                    android:title="@string/filter_documents" />
+                <item
+                    android:id="@+id/menu_filter_spreadsheets"
+                    android:title="@string/filter_spreadsheets" />
+                <item
+                    android:id="@+id/menu_filter_presentations"
+                    android:title="@string/filter_presentations" />
+                <item
+                    android:id="@+id/menu_filter_drawings"
+                    android:title="@string/filter_drawings" />
+            </group>
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/menu_sort"
         android:title="@string/sort"
         android:icon="@drawable/ic_sort_black_24dp"

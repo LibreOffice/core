@@ -9,12 +9,24 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <!-- The toolbar -->
-    <include layout="@layout/toolbar" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="3dp"
+        android:background="@color/toolbar_background"
+        app:theme="@style/LibreOfficeTheme.Toolbar"
+        tools:theme="@style/LibreOfficeTheme.Toolbar"
+        app:popupTheme="@style/LibreOfficeTheme">
+
+    </android.support.v7.widget.Toolbar>
+
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"

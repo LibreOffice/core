@@ -30,21 +30,12 @@
         <item >1</item>
     </string-array>
 
-    <!-- Preference Name Arrays
-         This has to be in sync with FileUtilities.java. -->
-    <string-array name="file_view_modes">
+    <string-array name="FilterTypeNames">
         <item>Everything</item>
         <item>Documents</item>
         <item>Spreadsheets</item>
         <item>Presentations</item>
         <item>Drawings</item>
-    </string-array>
-
-    <string-array name="FilterTypeNames">
-        <item >Everything</item>
-        <item >Documents</item>
-        <item >Spreadsheets</item>
-        <item >Presentations</item>
     </string-array>
     <string-array name="SortModeNames">
         <item >A-Z</item>
