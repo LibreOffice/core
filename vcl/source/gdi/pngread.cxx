@@ -1113,6 +1113,19 @@ void PNGReaderImpl::ImplApplyFilter()
 
 namespace
 {
+    sal_uInt8 SanitizePaletteIndex(sal_uInt8 nIndex, sal_uInt16 nPaletteEntryCount)
+    {
+        if (nIndex >= nPaletteEntryCount)
+        {
+            auto nSanitizedIndex = nIndex % nPaletteEntryCount;
+            SAL_WARN_IF(nIndex != nSanitizedIndex, "vcl", "invalid colormap index: "
+                        << static_cast<unsigned int>(nIndex) << ", colormap len is: "
+                        << nPaletteEntryCount);
+            nIndex = nSanitizedIndex;
+        }
+        return nIndex;
+    }
+
     void SanitizePaletteIndexes(sal_uInt8* pEntries, int nLen, const Bitmap::ScopedWriteAccess& rAcc)
     {
         sal_uInt16 nPaletteEntryCount = rAcc->GetPaletteEntryCount();
@@ -1601,7 +1614,7 @@ void PNGReaderImpl::ImplSetPixel( sal_uInt32 nY, sal_uInt32 nX, sal_uInt8 nPalIn
         return;
     nX >>= mnPreviewShift;
 
-    mxAcc->SetPixelIndex( nY, nX, nPalIndex );
+    mxAcc->SetPixelIndex(nY, nX, SanitizePaletteIndex(nPalIndex, mxAcc->GetPaletteEntryCount()));
 }
 
 void PNGReaderImpl::ImplSetTranspPixel( sal_uInt32 nY, sal_uInt32 nX, const BitmapColor& rBitmapColor, bool bTrans )
@@ -1627,7 +1640,7 @@ void PNGReaderImpl::ImplSetAlphaPixel( sal_uInt32 nY, sal_uInt32 nX,
         return;
     nX >>= mnPreviewShift;
 
-    mxAcc->SetPixelIndex( nY, nX, nPalIndex );
+    mxAcc->SetPixelIndex(nY, nX, SanitizePaletteIndex(nPalIndex, mxAcc->GetPaletteEntryCount()));
     mpMaskAcc->SetPixel(nY, nX, BitmapColor(~nAlpha));
 }
 
