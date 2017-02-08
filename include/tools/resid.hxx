@@ -87,15 +87,6 @@ public:
     ResMgr *        GetResMgr() const { return m_pResMgr; }
     void            ClearResMgr() const { m_pResMgr = nullptr; }
 
-    const ResId &  SetAutoRelease(bool bRelease) const
-    {
-        if( bRelease )
-            m_nResId &= ~RSC_DONTRELEASE;
-        else
-            m_nResId |= RSC_DONTRELEASE;
-        return *this;
-    }
-
     bool            IsAutoRelease()  const { return !(m_nResId & RSC_DONTRELEASE); }
 
     sal_uInt32      GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
