@@ -1462,7 +1462,7 @@ ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) 
 
     while( rDoc.IsScenario( nNewTab ) )
     {
-        aScenes.push_back( new ExcEScenario( rRoot, nNewTab ) );
+        aScenes.emplace_back( rRoot, nNewTab  );
 
         if( rDoc.IsActiveScenario( nNewTab ) )
             nActive = static_cast<sal_uInt16>(nNewTab - nFirstTab);
@@ -1472,9 +1472,6 @@ ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) 
 
 ExcEScenarioManager::~ExcEScenarioManager()
 {
-    std::vector<ExcEScenario*>::iterator pIter;
-    for( pIter = aScenes.begin(); pIter != aScenes.end(); ++pIter )
-        delete *pIter;
 }
 
 void ExcEScenarioManager::SaveCont( XclExpStream& rStrm )
@@ -1490,9 +1487,8 @@ void ExcEScenarioManager::Save( XclExpStream& rStrm )
     if( !aScenes.empty() )
         ExcRecord::Save( rStrm );
 
-    std::vector<ExcEScenario*>::iterator pIter;
-    for( pIter = aScenes.begin(); pIter != aScenes.end(); ++pIter )
-        (*pIter)->Save( rStrm );
+    for( ExcEScenario& rScenario : aScenes )
+        rScenario.Save( rStrm );
 }
 
 void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
@@ -1507,9 +1503,8 @@ void ExcEScenarioManager::SaveXml( XclExpXmlStream& rStrm )
             // OOXTODO: XML_sqref,
             FSEND );
 
-    std::vector<ExcEScenario*>::iterator pIter;
-    for( pIter = aScenes.begin(); pIter != aScenes.end(); ++pIter )
-        (*pIter)->SaveXml( rStrm );
+    for( ExcEScenario& rScenario : aScenes )
+        rScenario.SaveXml( rStrm );
 
     rWorkbook->endElement( XML_scenarios );
 }

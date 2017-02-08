@@ -137,20 +137,18 @@ XclExpUserBViewList::XclExpUserBViewList( const ScChangeTrack& rChangeTrack )
     for (; it != itEnd; ++it)
     {
         lcl_GenerateGUID( aGUID, bValidGUID );
-        aViews.push_back( new XclExpUserBView(*it, aGUID) );
+        aViews.emplace_back( *it, aGUID );
     }
 }
 
 XclExpUserBViewList::~XclExpUserBViewList()
 {
-    for( iterator iter = aViews.begin(); iter != aViews.end(); ++iter )
-        delete *iter;
 }
 
 void XclExpUserBViewList::Save( XclExpStream& rStrm )
 {
-   for( iterator iter = aViews.begin(); iter != aViews.end(); ++iter )
-        (*iter)->Save( rStrm );
+   for( XclExpUserBView& rView : aViews )
+       rView.Save( rStrm );
 }
 
 XclExpUsersViewBegin::XclExpUsersViewBegin( const sal_uInt8* pGUID, sal_uInt32 nTab ) :
