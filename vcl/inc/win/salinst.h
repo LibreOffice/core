@@ -71,7 +71,7 @@ public:
     virtual void                DestroyMenuItem( SalMenuItem* ) override;
     virtual SalSession*         CreateSalSession() override;
     virtual OpenGLContext*      CreateOpenGLContext() override;
-    virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) override;
+    virtual OUString            GetConnectionIdentifier() override;
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
 
     virtual OUString            getOSVersion() override;
