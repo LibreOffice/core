@@ -1963,8 +1963,11 @@ static bool ImplIsValidTimePortion( bool _bSkipInvalidCharacters, const OUString
 static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, bool _bSkipInvalidCharacters, short* _pPortion )
 {
     OUString sPortion(_rStr.getStr(), _nSepPos );
-    _rStr = _nSepPos < _rStr.getLength()
-        ? _rStr.copy( _nSepPos + 1 ) : OUStringBuffer();
+
+    if (_nSepPos < _rStr.getLength())
+        _rStr = _rStr.copy(_nSepPos + 1);
+    else
+        _rStr.truncate();
 
     if ( !ImplIsValidTimePortion( _bSkipInvalidCharacters, sPortion ) )
         return false;

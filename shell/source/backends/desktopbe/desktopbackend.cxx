@@ -198,7 +198,7 @@ OUString xdg_user_dir_lookup (const char *type)
                 continue;
             if (relative)
             {
-                aUserDirBuf = OUStringBuffer(aHomeDirURL + "/");
+                aUserDirBuf = aHomeDirURL + "/";
             }
             else
             {

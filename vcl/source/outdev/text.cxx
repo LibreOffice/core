@@ -1962,7 +1962,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
             sal_Int32 nEraseChars = std::max<sal_Int32>(4, aStr.getLength() - (nIndex*4)/3);
             while( nEraseChars < aStr.getLength() && _rLayout.GetTextWidth( aTmpStr.toString(), 0, aTmpStr.getLength() ) > nMaxWidth )
             {
-                aTmpStr = OUStringBuffer(aStr);
+                aTmpStr = aStr;
                 sal_Int32 i = (aTmpStr.getLength() - nEraseChars)/2;
                 aTmpStr.remove(i, nEraseChars++);
                 aTmpStr.insert(i, "...");

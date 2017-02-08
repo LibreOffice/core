@@ -1198,7 +1198,7 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
     //if U+ notation used, strip off all extra chars added not in U+ notation
     if( nUPlus != -1 )
     {
-        maInput = maInput.copy(nUPlus);
+        maInput.remove(0, nUPlus);
         sIn = maInput.copy(2).toString();
         nUPlus = sIn.indexOf("U+");
     }
