@@ -46,13 +46,22 @@ Bool IsControlCode(sal_Unicode nChar);
 
 } /* extern "C" */
 
-typedef struct {
-  sal_Unicode   *pUnicodeBuffer;
-  XIMFeedback   *pCharStyle;
-  unsigned int   nCursorPos;
-  unsigned int   nLength;
-  unsigned int   nSize;
-} preedit_text_t;
+struct preedit_text_t
+{
+    sal_Unicode   *pUnicodeBuffer;
+    XIMFeedback   *pCharStyle;
+    unsigned int   nCursorPos;
+    unsigned int   nLength;
+    unsigned int   nSize;
+    preedit_text_t()
+        : pUnicodeBuffer(nullptr)
+        , pCharStyle(nullptr)
+        , nCursorPos(0)
+        , nLength(0)
+        , nSize(0)
+    {
+    }
+};
 
 class SalFrame;
 
@@ -63,14 +72,18 @@ enum class PreeditStatus {
     StartPending
 };
 
-struct preedit_data_t {
+struct preedit_data_t
+{
     SalFrame*               pFrame;
     PreeditStatus           eState;
     preedit_text_t          aText;
     SalExtTextInputEvent    aInputEv;
     std::vector< ExtTextInputAttr >   aInputFlags;
-
-    preedit_data_t() : eState(PreeditStatus::DontKnow) {}
+    preedit_data_t()
+        : pFrame(nullptr)
+        , eState(PreeditStatus::DontKnow)
+    {
+    }
 };
 
 #endif // INCLUDED_VCL_INC_UNX_I18N_CB_HXX
