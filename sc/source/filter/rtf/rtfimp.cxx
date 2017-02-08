@@ -43,14 +43,7 @@ ScEEAbsImport *ScFormatFilterPluginImpl::CreateRTFImport( ScDocument* pDoc, cons
 ScRTFImport::ScRTFImport( ScDocument* pDocP, const ScRange& rRange ) :
     ScEEImport( pDocP, rRange )
 {
-    mpParser = new ScRTFParser( mpEngine.get() );
-}
-
-ScRTFImport::~ScRTFImport()
-{
-    // ordering is important; get error in some other Dtor otherwise!
-    // Is correct, as ScEEImport is Base Class
-    delete static_cast<ScRTFParser*>(mpParser);     // before EditEngine!
+    mpParser.reset(new ScRTFParser( mpEngine.get() ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

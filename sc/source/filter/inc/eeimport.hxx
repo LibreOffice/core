@@ -39,9 +39,10 @@ class ScEEImport : public ScEEAbsImport
 protected:
     ScRange             maRange;
     ScDocument*         mpDoc;
-    ScEEParser*         mpParser;
     std::unique_ptr<ScTabEditEngine>
                         mpEngine;
+    std::unique_ptr<ScEEParser>        // needs mpEngine
+                        mpParser;      // must reset before mpEngine resets
     RowHeightMap        maRowHeights;
 
     bool                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
