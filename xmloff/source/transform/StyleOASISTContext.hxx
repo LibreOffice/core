@@ -33,7 +33,6 @@ class XMLStyleOASISTContext : public XMLPersElemContentTContext
     bool m_bPersistent;
     bool m_bControlStyle;
 
-    OUString m_aStyleFamily;
 public:
     XMLStyleOASISTContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName,
