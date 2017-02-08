@@ -1022,22 +1022,14 @@ bool Printer::HasSupport( PrinterSupport eFeature ) const
     {
         case PrinterSupport::SetOrientation:
             return GetCapabilities( PrinterCapType::SetOrientation ) != 0;
-        case PrinterSupport::SetPaperBin:
-            return GetCapabilities( PrinterCapType::SetPaperBin ) != 0;
         case PrinterSupport::SetPaperSize:
             return GetCapabilities( PrinterCapType::SetPaperSize ) != 0;
         case PrinterSupport::SetPaper:
             return GetCapabilities( PrinterCapType::SetPaper ) != 0;
-        case PrinterSupport::Copy:
-            return (GetCapabilities( PrinterCapType::Copies ) != 0);
         case PrinterSupport::CollateCopy:
             return (GetCapabilities( PrinterCapType::CollateCopies ) != 0);
         case PrinterSupport::SetupDialog:
             return GetCapabilities( PrinterCapType::SupportDialog ) != 0;
-        case PrinterSupport::Fax:
-            return GetCapabilities( PrinterCapType::Fax ) != 0;
-        case PrinterSupport::Pdf:
-            return GetCapabilities( PrinterCapType::PDF ) != 0;
     }
 
     return true;
