@@ -562,10 +562,10 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             {
             default:
             case 0:
-                aContext.Version    = vcl::PDFWriter::PDF_1_4;
+                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_1_4;
                 break;
             case 1:
-                aContext.Version    = vcl::PDFWriter::PDF_A_1;
+                aContext.Version    = vcl::PDFWriter::PDFVersion::PDF_A_1;
                 mbUseTaggedPDF = true;          // force the tagged PDF as well
                 mbExportFormFields = false;     // force disabling of form conversion
                 mbRemoveTransparencies = true;  // PDF/A does not allow transparencies
@@ -642,7 +642,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
             aContext.FirstPageLeft = false;
 
             // check if PDF/A, which does not allow encryption
-            if( aContext.Version != vcl::PDFWriter::PDF_A_1 )
+            if( aContext.Version != vcl::PDFWriter::PDFVersion::PDF_A_1 )
             {
                 // set check for permission change password
                 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
@@ -759,7 +759,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
 
                 // check for Link Launch action, not allowed on PDF/A-1
                 // this code chunk checks when the filter is called from scripting
-                if( aContext.Version == vcl::PDFWriter::PDF_A_1 &&
+                if( aContext.Version == vcl::PDFWriter::PDFVersion::PDF_A_1 &&
                     aContext.DefaultLinkAction == vcl::PDFWriter::LaunchAction )
                 {
                     // force the similar allowed URI action
