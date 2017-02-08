@@ -922,18 +922,13 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
     //just use the fast scale rather than attempting to count unique colors in
     //the other converters and pass all the info down through
     //Bitmap::ImplMakeMono
-    if (nStartCount == 1 && nScaleFlag != BmpScaleFlag::NONE)
+    if (nStartCount == 1)
         nScaleFlag = BmpScaleFlag::Fast;
 
     bool bRetval(false);
 
     switch(nScaleFlag)
     {
-        case BmpScaleFlag::NONE :
-        {
-            bRetval = false;
-            break;
-        }
         case BmpScaleFlag::Fast :
         {
             bRetval = ImplScaleFast( rScaleX, rScaleY );
@@ -944,7 +939,6 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
             bRetval = ImplScaleInterpolate( rScaleX, rScaleY );
             break;
         }
-        case BmpScaleFlag::Super:
         case BmpScaleFlag::Default:
         {
             if (GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
@@ -975,12 +969,6 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, BmpScaleFlag n
         case BmpScaleFlag::BiLinear :
         {
             vcl::BitmapScaleConvolution aScaleConvolution(rScaleX, rScaleY, vcl::ConvolutionKernelType::BiLinear);
-            bRetval = aScaleConvolution.filter(*this);
-            break;
-        }
-        case BmpScaleFlag::Box :
-        {
-            vcl::BitmapScaleConvolution aScaleConvolution(rScaleX, rScaleY, vcl::ConvolutionKernelType::Box);
             bRetval = aScaleConvolution.filter(*this);
             break;
         }

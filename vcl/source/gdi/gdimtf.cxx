@@ -2190,17 +2190,13 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
 
 void GDIMetaFile::Convert( MtfConversion eConversion )
 {
-    // nothing to do? => return quickly
-    if( eConversion != MtfConversion::NONE )
-    {
-        ImplColConvertParam aColParam;
-        ImplBmpConvertParam aBmpParam;
+    ImplColConvertParam aColParam;
+    ImplBmpConvertParam aBmpParam;
 
-        aColParam.eConversion = eConversion;
-        aBmpParam.eConversion = ( MtfConversion::N1BitThreshold == eConversion ) ? BMP_CONVERSION_1BIT_THRESHOLD : BMP_CONVERSION_8BIT_GREYS;
+    aColParam.eConversion = eConversion;
+    aBmpParam.eConversion = ( MtfConversion::N1BitThreshold == eConversion ) ? BMP_CONVERSION_1BIT_THRESHOLD : BMP_CONVERSION_8BIT_GREYS;
 
-        ImplExchangeColors( ImplColConvertFnc, &aColParam, ImplBmpConvertFnc, &aBmpParam );
-    }
+    ImplExchangeColors( ImplColConvertFnc, &aColParam, ImplBmpConvertFnc, &aBmpParam );
 }
 
 void GDIMetaFile::ReplaceColors( const Color* pSearchColors, const Color* pReplaceColors, sal_uLong nColorCount )

@@ -5524,9 +5524,6 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             }
         }
         break;
-        case CommandEventId::HangulHanjaConversion :
-            GetView().GetViewFrame()->GetDispatcher()->Execute(SID_HANGUL_HANJA_CONVERSION);
-        break;
         case CommandEventId::InputLanguageChange :
             // i#42732 - update state of fontname if input language changes
             g_bInputLanguageSwitched = true;

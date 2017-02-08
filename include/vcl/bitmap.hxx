@@ -44,18 +44,15 @@ namespace o3tl
 
 enum class BmpScaleFlag
 {
-    NONE              = 0,
 // Try to preferably use these.
     Default           = 1,
-    Fast              = 2,
-    BestQuality       = 3,
+    Fast,
+    BestQuality,
 // Specific algorithms,  use only if you really need to.
-    Interpolate       = 4,
-    Super             = 5,
-    Lanczos           = 6,
-    BiCubic           = 7,
-    BiLinear          = 8,
-    Box               = 9,
+    Interpolate,
+    Lanczos,
+    BiCubic,
+    BiLinear
 };
 
 
