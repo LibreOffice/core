@@ -22,7 +22,7 @@ namespace shape
 class WpsContext : public oox::core::ContextHandler2
 {
 public:
-    WpsContext(oox::core::ContextHandler2Helper& rParent, css::uno::Reference<css::drawing::XShape> const& xShape);
+    WpsContext(oox::core::ContextHandler2Helper& rParent, css::uno::Reference<css::drawing::XShape> xShape);
     virtual ~WpsContext() override;
 
     virtual oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElementToken, const oox::AttributeList& rAttribs) override;
