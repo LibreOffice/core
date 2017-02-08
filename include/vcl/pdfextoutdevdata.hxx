@@ -226,7 +226,7 @@ public:
 
     /** provides detailed information about a destination range which previously has been registered using RegisterDest.
     */
-    void        DescribeRegisteredDest( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+    void        DescribeRegisteredDest( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType = PDFWriter::DestAreaType::XYZ );
 
 //<---i56629
 
@@ -246,7 +246,7 @@ public:
     the destination id (to be used in SetLinkDest) or
     -1 if page id does not exist
     */
-    sal_Int32 CreateDest( const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+    sal_Int32 CreateDest( const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::DestAreaType::XYZ );
     /** Create a new link on a page
 
     @param rRect

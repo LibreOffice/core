@@ -3714,7 +3714,7 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
 
     switch( rDest.m_eType )
     {
-        case PDFWriter::XYZ:
+        case PDFWriter::DestAreaType::XYZ:
         default:
             rBuffer.append( "/XYZ " );
             appendFixedInt( rDest.m_aRect.Left(), rBuffer );
@@ -3722,10 +3722,7 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
             appendFixedInt( rDest.m_aRect.Bottom(), rBuffer );
             rBuffer.append( " 0" );
             break;
-        case PDFWriter::Fit:
-            rBuffer.append( "/Fit" );
-            break;
-        case PDFWriter::FitRectangle:
+        case PDFWriter::DestAreaType::FitRectangle:
             rBuffer.append( "/FitR " );
             appendFixedInt( rDest.m_aRect.Left(), rBuffer );
             rBuffer.append( ' ' );
@@ -3734,25 +3731,6 @@ bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
             appendFixedInt( rDest.m_aRect.Right(), rBuffer );
             rBuffer.append( ' ' );
             appendFixedInt( rDest.m_aRect.Bottom(), rBuffer );
-            break;
-        case PDFWriter::FitHorizontal:
-            rBuffer.append( "/FitH " );
-            appendFixedInt( rDest.m_aRect.Bottom(), rBuffer );
-            break;
-        case PDFWriter::FitVertical:
-            rBuffer.append( "/FitV " );
-            appendFixedInt( rDest.m_aRect.Left(), rBuffer );
-            break;
-        case PDFWriter::FitPageBoundingBox:
-            rBuffer.append( "/FitB" );
-            break;
-        case PDFWriter::FitPageBoundingBoxHorizontal:
-            rBuffer.append( "/FitBH " );
-            appendFixedInt( rDest.m_aRect.Bottom(), rBuffer );
-            break;
-        case PDFWriter::FitPageBoundingBoxVertical:
-            rBuffer.append( "/FitBV " );
-            appendFixedInt( rDest.m_aRect.Left(), rBuffer );
             break;
     }
     rBuffer.append( ']' );
@@ -7477,7 +7455,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
 
             switch( rDest.m_eType )
             {
-            case PDFWriter::XYZ:
+            case PDFWriter::DestAreaType::XYZ:
             default:
                 aLine.append( "/XYZ " );
                 appendFixedInt( rDest.m_aRect.Left(), aLine );
@@ -7485,10 +7463,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
                 appendFixedInt( rDest.m_aRect.Bottom(), aLine );
                 aLine.append( " 0" );
                 break;
-            case PDFWriter::Fit:
-                aLine.append( "/Fit" );
-                break;
-            case PDFWriter::FitRectangle:
+            case PDFWriter::DestAreaType::FitRectangle:
                 aLine.append( "/FitR " );
                 appendFixedInt( rDest.m_aRect.Left(), aLine );
                 aLine.append( ' ' );
@@ -7497,25 +7472,6 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
                 appendFixedInt( rDest.m_aRect.Right(), aLine );
                 aLine.append( ' ' );
                 appendFixedInt( rDest.m_aRect.Bottom(), aLine );
-                break;
-            case PDFWriter::FitHorizontal:
-                aLine.append( "/FitH " );
-                appendFixedInt( rDest.m_aRect.Bottom(), aLine );
-                break;
-            case PDFWriter::FitVertical:
-                aLine.append( "/FitV " );
-                appendFixedInt( rDest.m_aRect.Left(), aLine );
-                break;
-            case PDFWriter::FitPageBoundingBox:
-                aLine.append( "/FitB" );
-                break;
-            case PDFWriter::FitPageBoundingBoxHorizontal:
-                aLine.append( "/FitBH " );
-                appendFixedInt( rDest.m_aRect.Bottom(), aLine );
-                break;
-            case PDFWriter::FitPageBoundingBoxVertical:
-                aLine.append( "/FitBV " );
-                appendFixedInt( rDest.m_aRect.Left(), aLine );
                 break;
             }
             aLine.append( "]\n" );
