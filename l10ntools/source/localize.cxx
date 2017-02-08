@@ -148,7 +148,7 @@ bool handleFile(
     const OString& rPotDir, bool bInitPoFile )
 {
     struct Command {
-        OUString extension;
+        OUStringLiteral extension;
         OString executable;
         bool positive;
     };
