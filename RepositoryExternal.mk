@@ -4058,4 +4058,15 @@ $(call gb_LinkTarget_set_include,$(1), \
 $(call gb_LinkTarget_use_libraries,$(1),clew)
 endef
 
+define gb_LinkTarget__use_pdfium
+$(call gb_LinkTarget_set_include,$(1),\
+       -I$(call gb_UnpackedTarball_get_dir,pdfium)/public \
+       $$(INCLUDE) \
+)
+$(call gb_LinkTarget_use_libraries,$(1),pdfium)
+endef
+$(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
+       pdfium \
+))
+
 # vim: set noet sw=4 ts=4:
