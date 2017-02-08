@@ -49,6 +49,14 @@ String STR_SVT_ESTIMATED_SIZE_VEC
 {
     Text [ en-US ] = "The file size is %1 KB.";
 };
+String STR_SVT_HOST
+{
+    Text [ en-US ] = "host";
+};
+String STR_SVT_PORT
+{
+    Text [ en-US ] = "port";
+};
 String STR_SVT_PRNDLG_READY
 {
     Text [ en-US ] = "Ready" ;
