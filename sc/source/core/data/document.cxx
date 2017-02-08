@@ -2691,7 +2691,7 @@ void ScDocument::CopyNonFilteredFromClip(
         {
             // look for more non-filtered rows following
             SCROW nLastRow = nSourceRow;
-            rCxt.getClipDoc()->RowFiltered(nSourceRow, nFlagTab, nullptr, &nLastRow);
+            (void)rCxt.getClipDoc()->RowFiltered(nSourceRow, nFlagTab, nullptr, &nLastRow);
             SCROW nFollow = nLastRow - nSourceRow;
 
             if (nFollow > nSourceEnd - nSourceRow)
