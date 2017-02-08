@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
 #include <stdio.h>
 #include <osl/diagnose.h>
 #include <osl/thread.h>
@@ -70,19 +73,17 @@ namespace /* private */
                     if ( m_nBufLen - 1 > MAX_PATH )
                     {
                         DWORD nNewLen = m_nBufLen + 8;
-                        wchar_t* pNewBuffer = new wchar_t[nNewLen];
+                        auto pNewBuffer = std::unique_ptr<wchar_t>(new wchar_t[nNewLen]);
                         if ( m_nBufLen > 3 && m_pBuffer[0] == (wchar_t)'\\' && m_pBuffer[1] == (wchar_t)'\\' )
                         {
                             if ( m_pBuffer[2] == (wchar_t)'?' )
-                                _snwprintf( pNewBuffer, nNewLen, L"%s", m_pBuffer );
+                                _snwprintf( pNewBuffer.get(), nNewLen, L"%s", m_pBuffer );
                             else
-                                _snwprintf( pNewBuffer, nNewLen, L"\\\\?\\UNC\\%s", m_pBuffer+2 );
+                                _snwprintf( pNewBuffer.get(), nNewLen, L"\\\\?\\UNC\\%s", m_pBuffer+2 );
                         }
                         else
-                            _snwprintf( pNewBuffer, nNewLen, L"\\\\?\\%s", m_pBuffer );
-                        bDirSet = SetCurrentDirectoryW( pNewBuffer );
-
-                        delete [] pNewBuffer;
+                            _snwprintf( pNewBuffer.get(), nNewLen, L"\\\\?\\%s", m_pBuffer );
+                        bDirSet = SetCurrentDirectoryW( pNewBuffer.get() );
                     }
                     else
                         bDirSet = SetCurrentDirectoryW( m_pBuffer );
