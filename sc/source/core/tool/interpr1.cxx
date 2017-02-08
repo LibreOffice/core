@@ -8263,15 +8263,8 @@ void ScInterpreter::ScSearch()
         double fAnz;
         if (nParamCount == 3)
         {
-            // This should use GetStringPositionArgument() but old versions up
-            // to LibreOffice 4.2.5 allowed and ignored 0 and negative values.
-            // It is unnecessary to break existing documents that "rely" on
-            // that behavior. Though ODFF constrains Start to be >=1.
-            /* TODO: fix this and possibly break those broken documents? */
-            fAnz = rtl::math::approxFloor( GetDouble());
-            if (fAnz < 1.0)
-                fAnz = 1.0;
-            else if (!CheckStringPositionArgument( fAnz))
+            fAnz = GetStringPositionArgument();
+            if( fAnz < 1 )
             {
                 PushIllegalArgument();
                 return;
