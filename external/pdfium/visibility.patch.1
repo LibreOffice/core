@@ -1,0 +1,30 @@
+diff --git a/public/fpdfview.h b/public/fpdfview.h
+index 7378d5f..6d37d9e 100644
+--- a/public/fpdfview.h
++++ b/public/fpdfview.h
+@@ -126,14 +126,20 @@ typedef struct _FS_RECTF_ {
+ // Const Pointer to FS_RECTF structure.
+ typedef const FS_RECTF* FS_LPCRECTF;
+ 
+-#if defined(_WIN32) && defined(FPDFSDK_EXPORTS)
+-// On Windows system, functions are exported in a DLL
++#if defined(PDFIUM_DLLIMPLEMENTATION)
++#ifdef _WIN32
+ #define DLLEXPORT __declspec(dllexport)
+-#define STDCALL __stdcall
+ #else
+-#define DLLEXPORT
+-#define STDCALL
++#define DLLEXPORT __attribute__ ((visibility("default")))
++#endif
++#else
++#ifdef _WIN32
++#define DLLEXPORT __declspec(dllimport)
++#else
++#define DLLEXPORT __attribute__ ((visibility("default")))
+ #endif
++#endif
++#define STDCALL
+ 
+ // Exported Functions
+ #ifdef __cplusplus
