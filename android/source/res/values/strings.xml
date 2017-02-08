@@ -50,6 +50,13 @@
     <string name="share">Share</string>
     <string name="share_via">Share via</string>
 
+    <!-- Document browser filters -->
+    <string name="filter_everything">Everything</string>
+    <string name="filter_documents">Documents</string>
+    <string name="filter_spreadsheets">Spreadsheets</string>
+    <string name="filter_presentations">Presentations</string>
+    <string name="filter_drawings">Drawings</string>
+
     <!-- Document provider names -->
     <string name="document_locations">Document locations</string>
     <string name="close_document_locations">Close document locations</string>
