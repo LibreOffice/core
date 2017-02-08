@@ -687,7 +687,7 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
        however we need a slightly different coding scheme than the normal
        name encoding for field names
     */
-    const OUString& rName = (m_aContext.Version > PDFWriter::PDF_1_2) ? i_rControl.Name : i_rControl.Text;
+    const OUString& rName = (m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2) ? i_rControl.Name : i_rControl.Text;
     OString aStr( OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ) );
     const sal_Char* pStr = aStr.getStr();
     int nLen = aStr.getLength();
@@ -1335,7 +1335,7 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
         }
         aLine.append( ">>\n" );
     }
-    if( m_pWriter->getVersion() > PDFWriter::PDF_1_3 && ! m_pWriter->m_bIsPDF_A1 )
+    if( m_pWriter->getVersion() > PDFWriter::PDFVersion::PDF_1_3 && ! m_pWriter->m_bIsPDF_A1 )
     {
         aLine.append( "/Group<</S/Transparency/CS/DeviceRGB/I true>>" );
     }
@@ -1810,12 +1810,12 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     aBuffer.append( "%PDF-" );
     switch( m_aContext.Version )
     {
-        case PDFWriter::PDF_1_2: aBuffer.append( "1.2" );break;
-        case PDFWriter::PDF_1_3: aBuffer.append( "1.3" );break;
-        case PDFWriter::PDF_A_1:
+        case PDFWriter::PDFVersion::PDF_1_2: aBuffer.append( "1.2" );break;
+        case PDFWriter::PDFVersion::PDF_1_3: aBuffer.append( "1.3" );break;
+        case PDFWriter::PDFVersion::PDF_A_1:
         default:
-        case PDFWriter::PDF_1_4: aBuffer.append( "1.4" );break;
-        case PDFWriter::PDF_1_5: aBuffer.append( "1.5" );break;
+        case PDFWriter::PDFVersion::PDF_1_4: aBuffer.append( "1.4" );break;
+        case PDFWriter::PDFVersion::PDF_1_5: aBuffer.append( "1.5" );break;
     }
     // append something binary as comment (suggested in PDF Reference)
     aBuffer.append( "\n%\303\244\303\274\303\266\303\237\n" );
@@ -1829,9 +1829,9 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
     // insert outline root
     m_aOutline.push_back( PDFOutlineEntry() );
 
-    m_bIsPDF_A1 = (m_aContext.Version == PDFWriter::PDF_A_1);
+    m_bIsPDF_A1 = (m_aContext.Version == PDFWriter::PDFVersion::PDF_A_1);
     if( m_bIsPDF_A1 )
-        m_aContext.Version = PDFWriter::PDF_1_4; //meaning we need PDF 1.4, PDF/A flavour
+        m_aContext.Version = PDFWriter::PDFVersion::PDF_1_4; //meaning we need PDF 1.4, PDF/A flavour
 }
 
 PDFWriterImpl::~PDFWriterImpl()
@@ -4801,7 +4801,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
             appendLiteralStringEncrypt( rWidget.m_aName, rWidget.m_nObject, aLine );
             aLine.append( "\n" );
         }
-        if( m_aContext.Version > PDFWriter::PDF_1_2 && !rWidget.m_aDescription.isEmpty() )
+        if( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2 && !rWidget.m_aDescription.isEmpty() )
         {
             // the alternate field name should be unicode able since it is
             // supposed to be used in UI
@@ -4888,11 +4888,11 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         nFlags |= 4;
                         break;
                     case PDFWriter::XML:
-                        if( m_aContext.Version > PDFWriter::PDF_1_3 )
+                        if( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
                             nFlags |= 32;
                         break;
                     case PDFWriter::PDF:
-                        if( m_aContext.Version > PDFWriter::PDF_1_3 )
+                        if( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
                             nFlags |= 256;
                         break;
                     case PDFWriter::FDF:
@@ -5166,7 +5166,7 @@ bool PDFWriterImpl::emitCatalog()
 
     // viewer preferences, if we had some, then emit
     if( m_aContext.HideViewerToolbar ||
-        ( m_aContext.Version > PDFWriter::PDF_1_3 && !m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle ) ||
+        ( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 && !m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle ) ||
         m_aContext.HideViewerMenubar ||
         m_aContext.HideViewerWindowControls || m_aContext.FitWindow ||
         m_aContext.CenterWindow || (m_aContext.FirstPageLeft  &&  m_aContext.PageLayout == PDFWriter::ContinuousFacing ) ||
@@ -5183,7 +5183,7 @@ bool PDFWriterImpl::emitCatalog()
             aLine.append( "/FitWindow true\n" );
         if( m_aContext.CenterWindow )
             aLine.append( "/CenterWindow true\n" );
-        if( m_aContext.Version > PDFWriter::PDF_1_3 && !m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle )
+        if( m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 && !m_aContext.DocumentInfo.Title.isEmpty() && m_aContext.DisplayPDFDocumentTitle )
             aLine.append( "/DisplayDocTitle true\n" );
         if( m_aContext.FirstPageLeft &&  m_aContext.PageLayout == PDFWriter::ContinuousFacing )
             aLine.append( "/Direction/R2L\n" );
@@ -5236,7 +5236,7 @@ bool PDFWriterImpl::emitCatalog()
             aLine.append( "\n" );
         }
     }
-    if( m_aContext.Tagged && m_aContext.Version > PDFWriter::PDF_1_3 )
+    if( m_aContext.Tagged && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
     {
         aLine.append( "/MarkInfo<</Marked true>>\n" );
     }
@@ -9672,7 +9672,7 @@ void PDFWriterImpl::drawTransparent( const tools::PolyPolygon& rPolyPoly, sal_uI
         m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
         return;
 
-    if( m_bIsPDF_A1 || m_aContext.Version < PDFWriter::PDF_1_4 )
+    if( m_bIsPDF_A1 || m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 )
     {
         m_aErrors.insert( m_bIsPDF_A1 ?
                           PDFWriter::Warning_Transparency_Omitted_PDFA :
@@ -9815,7 +9815,7 @@ SvStream* PDFWriterImpl::endRedirect()
 void PDFWriterImpl::beginTransparencyGroup()
 {
     updateGraphicsState();
-    if( m_aContext.Version >= PDFWriter::PDF_1_4 )
+    if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
         beginRedirect( new SvMemoryStream( 1024, 1024 ), Rectangle() );
 }
 
@@ -9824,7 +9824,7 @@ void PDFWriterImpl::endTransparencyGroup( const Rectangle& rBoundingBox, sal_uIn
     SAL_WARN_IF( nTransparentPercent > 100, "vcl.pdfwriter", "invalid alpha value" );
     nTransparentPercent = nTransparentPercent % 100;
 
-    if( m_aContext.Version >= PDFWriter::PDF_1_4 )
+    if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
     {
         // create XObject
         m_aTransparentObjects.push_back( TransparencyEmit() );
@@ -10777,14 +10777,14 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
     if( !!rObject.m_aMask )
     {
         if( rObject.m_aMask.GetBitCount() == 1 ||
-            ( rObject.m_aMask.GetBitCount() == 8 && m_aContext.Version >= PDFWriter::PDF_1_4 && !m_bIsPDF_A1 )//i59651
+            ( rObject.m_aMask.GetBitCount() == 8 && m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 && !m_bIsPDF_A1 )//i59651
             )
         {
             nMaskObject = createObject();
         }
         else if( m_bIsPDF_A1 )
             m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
-        else if( m_aContext.Version < PDFWriter::PDF_1_4 )
+        else if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 )
             m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDF13 );
 
     }
@@ -10877,7 +10877,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         aBitmap = getExportBitmap(rObject.m_aBitmap.GetBitmap());
         if( rObject.m_aBitmap.IsAlpha() )
         {
-            if( m_aContext.Version >= PDFWriter::PDF_1_4 )
+            if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 )
                 bWriteMask = true;
             // else draw without alpha channel
         }
@@ -10898,7 +10898,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     }
     else
     {
-        if( m_aContext.Version < PDFWriter::PDF_1_4 || ! rObject.m_aBitmap.IsAlpha() )
+        if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 || ! rObject.m_aBitmap.IsAlpha() )
         {
             aBitmap = getExportBitmap(rObject.m_aBitmap.GetMask());
             aBitmap.Convert( BmpConversion::N1BitThreshold );
@@ -11043,12 +11043,12 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         }
     }
 
-    if( ! bMask && m_aContext.Version > PDFWriter::PDF_1_2 && !m_bIsPDF_A1 )//i59651
+    if( ! bMask && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_2 && !m_bIsPDF_A1 )//i59651
     {
         if( bWriteMask )
         {
             nMaskObject = createObject();
-            if( rObject.m_aBitmap.IsAlpha() && m_aContext.Version > PDFWriter::PDF_1_3 )
+            if( rObject.m_aBitmap.IsAlpha() && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
                 aLine.append( "/SMask " );
             else
                 aLine.append( "/Mask " );
@@ -11386,7 +11386,7 @@ void PDFWriterImpl::drawGradient( const Rectangle& rRect, const Gradient& rGradi
 {
     MARK( "drawGradient (Rectangle)" );
 
-    if( m_aContext.Version == PDFWriter::PDF_1_2 )
+    if( m_aContext.Version == PDFWriter::PDFVersion::PDF_1_2 )
     {
         drawRectangle( rRect );
         return;
@@ -11708,7 +11708,7 @@ void PDFWriterImpl::updateGraphicsState(Mode const mode)
     if( (rNewState.m_nUpdateFlags & GraphicsStateUpdateFlags::TransparentPercent) )
     {
         rNewState.m_nUpdateFlags &= ~GraphicsStateUpdateFlags::TransparentPercent;
-        if( m_aContext.Version >= PDFWriter::PDF_1_4 && m_aCurrentPDFState.m_nTransparentPercent != rNewState.m_nTransparentPercent )
+        if( m_aContext.Version >= PDFWriter::PDFVersion::PDF_1_4 && m_aCurrentPDFState.m_nTransparentPercent != rNewState.m_nTransparentPercent )
         {
             // TODO: switch extended graphicsstate
         }
@@ -13057,7 +13057,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_aValue           = rLstBox.Text;
         if( rLstBox.DropDown )
             rNewWidget.m_nFlags |= 0x00020000;
-        if( rLstBox.MultiSelect && !rLstBox.DropDown && (int)m_aContext.Version > (int)PDFWriter::PDF_1_3 )
+        if( rLstBox.MultiSelect && !rLstBox.DropDown && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
             rNewWidget.m_nFlags |= 0x00200000;
 
         createDefaultListBoxAppearance( rNewWidget, rLstBox );
@@ -13103,7 +13103,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         }
         if( rEdit.Password )
             rNewWidget.m_nFlags |= 0x00002000;
-        if( rEdit.FileSelect && m_aContext.Version > PDFWriter::PDF_1_3 )
+        if( rEdit.FileSelect && m_aContext.Version > PDFWriter::PDFVersion::PDF_1_3 )
             rNewWidget.m_nFlags |= 0x00100000;
         rNewWidget.m_nMaxLen = rEdit.MaxLen;
         rNewWidget.m_aValue = rEdit.Text;

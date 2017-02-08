@@ -1047,7 +1047,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
 
     // setup PDFWriter context
     vcl::PDFWriter::PDFWriterContext aContext;
-    aContext.Version            = vcl::PDFWriter::PDF_1_4;
+    aContext.Version            = vcl::PDFWriter::PDFVersion::PDF_1_4;
     aContext.Tagged             = false;
     aContext.DocumentLocale     = Application::GetSettings().GetLanguageTag().getLocale();
     aContext.ColorMode          = i_rController.getPrinter()->GetPrinterOptions().IsConvertToGreyscales()
