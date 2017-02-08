@@ -49,8 +49,6 @@
 
 namespace basic
 {
-
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::frame::XModel;
@@ -83,7 +81,8 @@ namespace basic
         static ImplRepository& Instance();
 
         BasicManager*   getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel );
-        BasicManager*   getApplicationBasicManager( bool _bCreate );
+        BasicManager*   getOrCreateApplicationBasicManager();
+        BasicManager*   getApplicationBasicManager() const;
         void            setApplicationBasicManager( BasicManager* _pBasicManager );
         void    registerCreationListener( BasicManagerCreationListener& _rListener );
         void    revokeCreationListener( BasicManagerCreationListener& _rListener );
@@ -238,23 +237,28 @@ namespace basic
         return nullptr;
     }
 
-    BasicManager* ImplRepository::getApplicationBasicManager( bool _bCreate )
+    BasicManager* ImplRepository::getOrCreateApplicationBasicManager()
     {
         SolarMutexGuard g;
 
         BasicManager* pAppManager = GetSbData()->pAppBasMgr;
-        if ( ( pAppManager == nullptr ) && _bCreate )
+        if (pAppManager == nullptr)
             pAppManager = impl_createApplicationBasicManager();
-
         return pAppManager;
     }
 
+    BasicManager* ImplRepository::getApplicationBasicManager() const
+    {
+        SolarMutexGuard g;
+
+        return GetSbData()->pAppBasMgr;
+    }
 
     void ImplRepository::setApplicationBasicManager( BasicManager* _pBasicManager )
     {
         SolarMutexGuard g;
 
-        BasicManager* pPreviousManager = getApplicationBasicManager( false );
+        BasicManager* pPreviousManager = getApplicationBasicManager();
         delete pPreviousManager;
 
         GetSbData()->pAppBasMgr = _pBasicManager;
@@ -265,7 +269,7 @@ namespace basic
     {
         SolarMutexGuard g;
 
-        OSL_PRECOND( getApplicationBasicManager( false ) == nullptr, "ImplRepository::impl_createApplicationBasicManager: there already is one!" );
+        OSL_PRECOND(getApplicationBasicManager() == nullptr, "ImplRepository::impl_createApplicationBasicManager: there already is one!");
 
         // Determine Directory
         SvtPathOptions aPathCFG;
@@ -356,7 +360,7 @@ namespace basic
 
     StarBASIC* ImplRepository::impl_getDefaultAppBasicLibrary()
     {
-        BasicManager* pAppManager = getApplicationBasicManager( true );
+        BasicManager* pAppManager = getOrCreateApplicationBasicManager();
 
         StarBASIC* pAppBasic = pAppManager ? pAppManager->GetLib(0) : nullptr;
         DBG_ASSERT( pAppBasic != nullptr, "impl_getApplicationBasic: unable to determine the default application's Basic library!" );
@@ -601,36 +605,30 @@ namespace basic
         }
     }
 
-
     BasicManager* BasicManagerRepository::getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel )
     {
         return ImplRepository::Instance().getDocumentBasicManager( _rxDocumentModel );
     }
 
-
     BasicManager* BasicManagerRepository::getApplicationBasicManager()
     {
-        return ImplRepository::Instance().getApplicationBasicManager( true/*_bCreate*/ );
+        return ImplRepository::Instance().getOrCreateApplicationBasicManager();
     }
-
 
     void BasicManagerRepository::resetApplicationBasicManager()
     {
         ImplRepository::Instance().setApplicationBasicManager( nullptr );
     }
 
-
     void BasicManagerRepository::registerCreationListener( BasicManagerCreationListener& _rListener )
     {
         ImplRepository::Instance().registerCreationListener( _rListener );
     }
 
-
     void BasicManagerRepository::revokeCreationListener( BasicManagerCreationListener& _rListener )
     {
         ImplRepository::Instance().revokeCreationListener( _rListener );
     }
-
 
 } // namespace basic
 
