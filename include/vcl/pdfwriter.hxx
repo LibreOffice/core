@@ -177,7 +177,7 @@ public:
         Disc, Circle, Square, Decimal, UpperRoman, LowerRoman, UpperAlpha, LowerAlpha
     };
 
-    enum PageTransition
+    enum class PageTransition
     {
         Regular,
         SplitHorizontalInward, SplitHorizontalOutward,
@@ -185,8 +185,7 @@ public:
         BlindsHorizontal, BlindsVertical,
         BoxInward, BoxOutward,
         WipeLeftToRight, WipeBottomToTop, WipeRightToLeft, WipeTopToBottom,
-        Dissolve,
-        GlitterLeftToRight, GlitterTopToBottom, GlitterTopLeftToBottomRight
+        Dissolve
     };
 
     enum WidgetType
