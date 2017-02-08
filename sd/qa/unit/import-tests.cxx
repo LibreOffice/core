@@ -41,6 +41,8 @@
 #include <sax/tools/converter.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
+#include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
@@ -64,6 +66,7 @@
 
 #include <stlpool.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/bitmapaccess.hxx>
 
@@ -115,6 +118,7 @@ public:
     void testTdf93124();
     void testTdf93868();
     void testTdf103473();
+    void testTdf103567();
     void testTdf103792();
     void testTdf103876();
     void testTdf104015();
@@ -165,6 +169,7 @@ public:
     CPPUNIT_TEST(testTdf93124);
     CPPUNIT_TEST(testTdf93868);
     CPPUNIT_TEST(testTdf103473);
+    CPPUNIT_TEST(testTdf103567);
     CPPUNIT_TEST(testTdf103792);
     CPPUNIT_TEST(testTdf103876);
     CPPUNIT_TEST(testTdf104015);
@@ -1245,6 +1250,48 @@ void SdImportTest::testTdf93868()
     xDocShRef->DoClose();
 }
 
+
+void SdImportTest::testTdf103567()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(getURLFromSrc("/sd/qa/unit/data/odp/tdf103567.odp"), ODP);
+    for (int i = 0; i < 4; ++i)
+    {
+        uno::Reference<beans::XPropertySet> const xShape(getShapeFromPage(i, 0, xDocShRef));
+        uno::Reference<document::XEventsSupplier> const xEventsSupplier(xShape, uno::UNO_QUERY);
+        uno::Reference<container::XNameAccess> const xEvents(xEventsSupplier->getEvents());
+        OString const msg("shape " + OString::number(i) + ": ");
+
+        CPPUNIT_ASSERT(xEvents->hasByName("OnClick"));
+        uno::Sequence<beans::PropertyValue> props;
+        xEvents->getByName("OnClick") >>= props;
+        comphelper::SequenceAsHashMap const map(props);
+        {
+            auto iter(map.find("EventType"));
+            CPPUNIT_ASSERT_MESSAGE(OString(msg + "no EventType").getStr(), iter != map.end());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), OUString("Presentation"), iter->second.get<OUString>());
+        }
+        {
+            auto iter(map.find("ClickAction"));
+            CPPUNIT_ASSERT_MESSAGE(OString(msg + "no ClickAction").getStr(), iter != map.end());
+            if (i % 2 == 0)
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), css::presentation::ClickAction_DOCUMENT, iter->second.get<css::presentation::ClickAction>());
+            }
+            else
+            {
+                CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), css::presentation::ClickAction_NEXTPAGE, iter->second.get<css::presentation::ClickAction>());
+            }
+        }
+        if (i % 2 == 0)
+        {
+            auto iter(map.find("Bookmark"));
+            CPPUNIT_ASSERT_MESSAGE(OString(msg + "no Bookmark").getStr(), iter != map.end());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(msg.getStr(), OUString("http://example.com/"), iter->second.get<OUString>());
+        }
+    }
+
+    xDocShRef->DoClose();
+}
 
 void SdImportTest::testTdf103792()
 {
