@@ -46,25 +46,6 @@ Warning           ||   ||      |
                         Code
 */
 
-#define ERRCODE_BUTTON_OK                 0x01
-#define ERRCODE_BUTTON_CANCEL             0x02
-#define ERRCODE_BUTTON_RETRY              0x04
-#define ERRCODE_BUTTON_OK_CANCEL          0x03
-#define ERRCODE_BUTTON_NO                 0x08
-#define ERRCODE_BUTTON_YES                0x10
-#define ERRCODE_BUTTON_YES_NO             0x18
-#define ERRCODE_BUTTON_YES_NO_CANCEL      0x1a
-
-#define ERRCODE_BUTTON_DEF_OK             0x100
-#define ERRCODE_BUTTON_DEF_CANCEL         0x200
-#define ERRCODE_BUTTON_DEF_YES            0x300
-#define ERRCODE_BUTTON_DEF_NO             0x400
-
-#define ERRCODE_MSG_ERROR                 0x1000
-#define ERRCODE_MSG_WARNING               0x2000
-#define ERRCODE_MSG_INFO                  0x3000
-#define ERRCODE_MSG_QUERY                 0x4000
-
 #define ERRCODE_ERROR_MASK                0x3fffffffUL
 #define ERRCODE_WARNING_MASK              0x80000000UL
 #define ERRCODE_RES_MASK                  0x7fff
