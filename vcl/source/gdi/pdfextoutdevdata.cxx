@@ -616,7 +616,7 @@ sal_Int32 PDFExtOutDevData::CreateNamedDest(const OUString& sDestName,  const Re
     mpGlobalSyncData->mParaRects.push_back( rRect );
     mpGlobalSyncData->mParaMapModes.push_back( mrOutDev.GetMapMode() );
     mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
-    mpGlobalSyncData->mParaDestAreaTypes.push_back( PDFWriter::XYZ );
+    mpGlobalSyncData->mParaDestAreaTypes.push_back( PDFWriter::DestAreaType::XYZ );
 
     return mpGlobalSyncData->mCurId++;
 }

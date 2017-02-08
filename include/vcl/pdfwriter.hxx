@@ -107,10 +107,7 @@ public:
     enum PDFVersion { PDF_1_2, PDF_1_3, PDF_1_4, PDF_1_5, PDF_A_1 };//i59651, PDF/A-1b & -1a, only -1b implemented for now
     // for the meaning of DestAreaType please look at PDF Reference Manual
     // version 1.4 section 8.2.1, page 475
-    enum DestAreaType { XYZ, Fit, FitHorizontal, FitVertical,
-                        FitRectangle, FitPageBoundingBox, FitPageBoundingBoxHorizontal,
-                        FitPageBoundingBoxVertical
-    };
+    enum class DestAreaType { XYZ, FitRectangle };
 
     // for a definition of structural element types please refer to
     // PDF Reference, 3rd ed. section 9.7.4
