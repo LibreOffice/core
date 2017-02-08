@@ -478,7 +478,7 @@ send_args( int fd, rtl_uString *pCwdPath )
 
     if ( bResult )
     {
-        char resp[ strlen( "InternalIPC::ProcessingDone" ) ];
+        char resp[SAL_N_ELEMENTS("InternalIPC::ProcessingDone")];
         ssize_t n = read( fd, resp, SAL_N_ELEMENTS( resp ) );
         bResult = n == (ssize_t) SAL_N_ELEMENTS( resp )
             && (memcmp(
