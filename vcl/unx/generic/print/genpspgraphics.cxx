@@ -1083,7 +1083,7 @@ const void* GenPspGraphics::DoGetEmbedFontData( psp::fontID aFont, const sal_Ucs
     for (size_t i = 0; i < nLen; ++i)
         pWidths[i] = (aMetrics[i].width > 0 ? aMetrics[i].width : 0);
 
-    rInfo.m_nFontType = FontSubsetInfo::SFNT_TTF;
+    rInfo.m_nFontType = FontType::SFNT_TTF;
 
     return pFile;
 }
