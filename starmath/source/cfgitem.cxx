@@ -576,11 +576,7 @@ void SmMathConfig::LoadFontFormatList()
         SmFontFormat aFntFmt;
         ReadFontFormat( aFntFmt, pNode[i], FONT_FORMAT_LIST );
         if (!pFontFormatList->GetFontFormat( pNode[i] ))
-        {
-            OSL_ENSURE( nullptr == pFontFormatList->GetFontFormat( pNode[i] ),
-                    "FontFormat ID already exists" );
             pFontFormatList->AddFontFormat( pNode[i], aFntFmt );
-        }
     }
     pFontFormatList->SetModified( false );
 }
