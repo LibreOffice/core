@@ -987,7 +987,7 @@ UUIInteractionHelper::getInteractionHandler()
 
 namespace {
 
-sal_uInt16
+ErrorHandlerFlags
 executeMessageBox(
     vcl::Window * pParent,
     OUString const & rTitle,
@@ -998,24 +998,26 @@ executeMessageBox(
 
     ScopedVclPtrInstance< MessBox > xBox(pParent, nButtonMask, rTitle, rMessage);
 
-    sal_uInt16 aResult = xBox->Execute();
-    switch( aResult )
+    sal_uInt16 aMessResult = xBox->Execute();
+    ErrorHandlerFlags aResult = ErrorHandlerFlags::NONE;
+    switch( aMessResult )
     {
     case RET_OK:
-        aResult = ERRCODE_BUTTON_OK;
+        aResult = ErrorHandlerFlags::ButtonsOk;
         break;
     case RET_CANCEL:
-        aResult = ERRCODE_BUTTON_CANCEL;
+        aResult = ErrorHandlerFlags::ButtonsCancel;
         break;
     case RET_YES:
-        aResult = ERRCODE_BUTTON_YES;
+        aResult = ErrorHandlerFlags::ButtonsYes;
         break;
     case RET_NO:
-        aResult = ERRCODE_BUTTON_NO;
+        aResult = ErrorHandlerFlags::ButtonsNo;
         break;
     case RET_RETRY:
-        aResult = ERRCODE_BUTTON_RETRY;
+        aResult = ErrorHandlerFlags::ButtonsRetry;
         break;
+    default: assert(false);
     }
 
     return aResult;
@@ -1270,23 +1272,25 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     switch (
         executeMessageBox( getParentProperty(), title, aMessage, nButtonMask ) )
     {
-    case ERRCODE_BUTTON_OK:
+    case ErrorHandlerFlags::ButtonsOk:
         OSL_ENSURE( xAbort.is(), "unexpected situation" );
         if (xAbort.is())
             xAbort->select();
         break;
 
-    case ERRCODE_BUTTON_NO:
+    case ErrorHandlerFlags::ButtonsNo:
         OSL_ENSURE(xDisapprove.is(), "unexpected situation");
         if (xDisapprove.is())
             xDisapprove->select();
         break;
 
-    case ERRCODE_BUTTON_YES:
+    case ErrorHandlerFlags::ButtonsYes:
         OSL_ENSURE(xApprove.is(), "unexpected situation");
         if (xApprove.is())
             xApprove->select();
         break;
+
+    default: break;
     }
 }
 
