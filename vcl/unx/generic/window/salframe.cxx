@@ -713,18 +713,18 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
                 nDecoFlags |= WMAdaptor::decoration_Title;
         }
 
-        WMAdaptor::WMWindowType eType = WMAdaptor::windowType_Normal;
+        WMWindowType eType = WMWindowType::Normal;
         if( nStyle_ & SalFrameStyleFlags::INTRO )
-            eType = WMAdaptor::windowType_Splash;
+            eType = WMWindowType::Splash;
         if( (nStyle_ & SalFrameStyleFlags::DIALOG) && hPresentationWindow == None )
-            eType = WMAdaptor::windowType_ModelessDialogue;
+            eType = WMWindowType::ModelessDialogue;
         if( nStyle_ & SalFrameStyleFlags::TOOLWINDOW )
-            eType = WMAdaptor::windowType_Utility;
+            eType = WMWindowType::Utility;
         if( nStyle_ & SalFrameStyleFlags::OWNERDRAWDECORATION )
-            eType = WMAdaptor::windowType_Toolbar;
+            eType = WMWindowType::Toolbar;
         if(    (nStyle_ & SalFrameStyleFlags::PARTIAL_FULLSCREEN)
             && GetDisplay()->getWMAdaptor()->isLegacyPartialFullscreen() )
-            eType = WMAdaptor::windowType_Dock;
+            eType = WMWindowType::Dock;
 
         GetDisplay()->getWMAdaptor()->
             setFrameTypeAndDecoration( this,
@@ -811,7 +811,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
     maAlwaysOnTopRaiseTimer.SetTimeout( 100 );
     maAlwaysOnTopRaiseTimer.SetDebugName( "vcl::X11SalFrame maAlwaysOnTopRaiseTimer" );
 
-    meWindowType                = WMAdaptor::windowType_Normal;
+    meWindowType                = WMWindowType::Normal;
     mnDecorationFlags           = WMAdaptor::decoration_All;
     mbMaximizedVert             = false;
     mbMaximizedHorz             = false;

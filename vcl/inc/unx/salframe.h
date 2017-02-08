@@ -50,6 +50,17 @@ namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 #define SHOWSTATE_NORMAL        1
 #define SHOWSTATE_HIDDEN        2
 
+enum class WMWindowType
+{
+    Normal,
+    ModalDialogue,
+    ModelessDialogue,
+    Utility,
+    Splash,
+    Toolbar,
+    Dock
+};
+
 class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandleProvider
 {
     friend class vcl_sal::WMAdaptor;
@@ -103,7 +114,7 @@ class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame, public NativeWindowHandl
     Timer           maAlwaysOnTopRaiseTimer;
 
     // data for WMAdaptor
-    int             meWindowType;
+    WMWindowType    meWindowType;
     int             mnDecorationFlags;
     bool            mbMaximizedVert;
     bool            mbMaximizedHorz;

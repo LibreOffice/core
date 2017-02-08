@@ -1068,7 +1068,7 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
 
         // set NET_WM_STATE_MODAL
         if( m_aWMAtoms[ NET_WM_STATE_MODAL ]
-            && pFrame->meWindowType == windowType_ModalDialogue )
+            && pFrame->meWindowType == WMWindowType::ModalDialogue )
         {
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MODAL ];
             /*
@@ -1090,7 +1090,7 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SHADED ];
         if( pFrame->mbFullScreen && m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ] )
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_FULLSCREEN ];
-        if( pFrame->meWindowType == windowType_Utility && m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ] )
+        if( pFrame->meWindowType == WMWindowType::Utility && m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ] )
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ];
 
         if( nStateAtoms )
@@ -1325,7 +1325,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
         // evaluate window type
         switch( eType )
         {
-            case windowType_ModalDialogue:
+            case WMWindowType::ModalDialogue:
                 aHint.input_mode = 1;
                 break;
             default:
@@ -1383,24 +1383,23 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
         int nWindowTypes = 0;
         switch( eType )
         {
-            case windowType_Utility:
+            case WMWindowType::Utility:
                 aWindowTypes[nWindowTypes++] =
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_UTILITY ] ?
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_UTILITY ] :
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_DIALOG ];
                 break;
-            case windowType_ModelessDialogue:
-            case windowType_ModalDialogue:
+            case WMWindowType::ModelessDialogue:
                 aWindowTypes[nWindowTypes++] =
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_DIALOG ];
                 break;
-            case windowType_Splash:
+            case WMWindowType::Splash:
                 aWindowTypes[nWindowTypes++] =
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_SPLASH ] ?
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_SPLASH ] :
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL ];
                 break;
-            case windowType_Toolbar:
+            case WMWindowType::Toolbar:
                 if( m_aWMAtoms[ KDE_NET_WM_WINDOW_TYPE_OVERRIDE ] )
                     aWindowTypes[nWindowTypes++] = m_aWMAtoms[ KDE_NET_WM_WINDOW_TYPE_OVERRIDE ];
                 aWindowTypes[nWindowTypes++] =
@@ -1408,7 +1407,7 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_TOOLBAR ] :
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_NORMAL];
                 break;
-            case windowType_Dock:
+            case WMWindowType::Dock:
                 aWindowTypes[nWindowTypes++] =
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_DOCK ] ?
                     m_aWMAtoms[ NET_WM_WINDOW_TYPE_DOCK ] :
@@ -1427,8 +1426,7 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
                          reinterpret_cast<unsigned char*>(aWindowTypes),
                          nWindowTypes );
     }
-    if( ( eType == windowType_ModalDialogue ||
-          eType == windowType_ModelessDialogue )
+    if( ( eType == WMWindowType::ModelessDialogue )
         && ! pReferenceFrame )
     {
         XSetTransientForHint( m_pDisplay,
