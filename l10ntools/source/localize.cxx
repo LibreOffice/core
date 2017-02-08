@@ -153,16 +153,16 @@ bool handleFile(
         bool positive;
     };
     static Command const commands[] = {
-        { ".src", "transex3", false },
-        { ".hrc", "transex3", true },
-        { ".ulf", "ulfex", false },
-        { ".xcu", "cfgex", false },
-        { ".xrm", "xrmex", false },
-        { "description.xml", "xrmex", true },
-        { ".xhp", "helpex", false },
-        { ".properties", "propex", false },
-        { ".ui", "uiex", false },
-        { ".tree", "treex", false } };
+        { OUStringLiteral(".src"), "transex3", false },
+        { OUStringLiteral(".hrc"), "transex3", true },
+        { OUStringLiteral(".ulf"), "ulfex", false },
+        { OUStringLiteral(".xcu"), "cfgex", false },
+        { OUStringLiteral(".xrm"), "xrmex", false },
+        { OUStringLiteral("description.xml"), "xrmex", true },
+        { OUStringLiteral(".xhp"), "helpex", false },
+        { OUStringLiteral(".properties"), "propex", false },
+        { OUStringLiteral(".ui"), "uiex", false },
+        { OUStringLiteral(".tree"), "treex", false } };
     for (size_t i = 0; i != SAL_N_ELEMENTS(commands); ++i)
     {
         if (rUrl.endsWith(commands[i].extension) &&
