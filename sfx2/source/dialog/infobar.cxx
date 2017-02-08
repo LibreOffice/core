@@ -34,8 +34,9 @@ namespace
 
 const long INFO_BAR_BASE_HEIGHT = 40;
 
-const BColor constLightColor(1.0, 1.0, 191.0 / 255.0);
-const BColor constDarkColor(217.0 / 255.0, 217.0 / 255.0, 78.0 / 255.0);
+//see also https://bugs.documentfoundation.org/show_bug.cgi?id=102785
+const BColor constLightColor(0.741, 0.898, 0.973);
+const BColor constDarkColor(0.0, 0.322, 0.608);
 
 void lclDetermineLightDarkColor(BColor& rLightColor, BColor& rDarkColor)
 {
@@ -287,26 +288,31 @@ VclPtr<SfxInfoBarWindow> SfxInfoBarContainerWindow::appendInfoBar(const OUString
     basegfx::BColor pBackgroundColor;
     basegfx::BColor pForegroundColor;
     basegfx::BColor pMessageColor;
+    /*
+    htietze: sfx2/source/view/viewfrm.cxx, cca line 1183. Change implicit InfoBarType from InfoBarType::Info to ::Success
+    */
+    //rgb values taken from https://isabelcastillo.com/error-info-messages-css
     switch (aInfoBarType)
     {
-    case InfoBarType::Info: // yellow
-        pBackgroundColor = constLightColor;
-        // Use defaults for foreground & message color
+    case InfoBarType::Info: // blue; #00529B/0,82,155; #BDE5F8/189,229,248
+        pBackgroundColor = basegfx::BColor(0.0, 0.322, 0.608);
+        pForegroundColor = basegfx::BColor(0.741, 0.898, 0.973);
+        pMessageColor = basegfx::BColor(0.741, 0.898, 0.973);
         break;
-    case InfoBarType::Success: // green
-        pBackgroundColor = basegfx::BColor(0.0, 0.5, 0.0);
-        pForegroundColor = basegfx::BColor(1.0, 1.0, 1.0);
-        pMessageColor = basegfx::BColor(1.0, 1.0, 01.0);
+    case InfoBarType::Success: // green; #4F8A10/79,138,16; #DFF2BF/223,242,191
+        pBackgroundColor = basegfx::BColor(0.31,0.541,0.063);
+        pForegroundColor = basegfx::BColor(0.874,0.949,0.749);
+        pMessageColor = basegfx::BColor(0.874,0.949,0.749);
         break;
-    case InfoBarType::Warning: // orange
-        pBackgroundColor = basegfx::BColor(1.0, 0.5, 0.0);
-        pForegroundColor = basegfx::BColor(1.0, 1.0, 1.0);
-        pMessageColor = basegfx::BColor(1.0, 1.0, 01.0);
+    case InfoBarType::Warning: // orange; #9F6000/159,96,0; #FEEFB3/254,239,179
+        pBackgroundColor = basegfx::BColor(0.996,0.937,0.702);
+        pForegroundColor = basegfx::BColor(0.623,0.376,0.0);
+        pMessageColor = basegfx::BColor(0.623,0.376,0.0);
         break;
-    case InfoBarType::Danger: // red
-        pBackgroundColor = basegfx::BColor(0.5, 0.0, 0.0);
-        pForegroundColor = basegfx::BColor(1.0, 1.0, 1.0);
-        pMessageColor = basegfx::BColor(1.0, 1.0, 01.0);
+    case InfoBarType::Danger: // red; #D8000C/216,0,12; #FFBABA/255,186,186
+        pBackgroundColor = basegfx::BColor(1.0,0.729,0.729);
+        pForegroundColor = basegfx::BColor(0.847,0.0,0.047);
+        pMessageColor = basegfx::BColor(0.847,0.0,0.047);
         break;
     }
     return appendInfoBar(sId, sMessage, &pBackgroundColor, &pForegroundColor, &pMessageColor, nMessageStyle);
