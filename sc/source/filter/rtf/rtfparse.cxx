@@ -35,7 +35,6 @@
 ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
         ScEEParser( pEditP ),
         mnCurPos(0),
-        pColTwips( new ScRTFColTwips ),
         pActDefault( nullptr ),
         pDefMerge( nullptr ),
         nStartAdjust( (sal_uLong)~0 ),
@@ -52,7 +51,6 @@ ScRTFParser::ScRTFParser( EditEngine* pEditP ) :
 ScRTFParser::~ScRTFParser()
 {
     delete pInsDefault;
-    delete pColTwips;
     maDefaultList.clear();
 }
 
@@ -103,21 +101,21 @@ inline void ScRTFParser::NextRow()
 
 bool ScRTFParser::SeekTwips( sal_uInt16 nTwips, SCCOL* pCol )
 {
-    ScRTFColTwips::const_iterator it = pColTwips->find( nTwips );
-    bool bFound = it != pColTwips->end();
-    sal_uInt16 nPos = it - pColTwips->begin();
+    ScRTFColTwips::const_iterator it = aColTwips.find( nTwips );
+    bool bFound = it != aColTwips.end();
+    sal_uInt16 nPos = it - aColTwips.begin();
     *pCol = static_cast<SCCOL>(nPos);
     if ( bFound )
         return true;
-    sal_uInt16 nCount = pColTwips->size();
+    sal_uInt16 nCount = aColTwips.size();
     if ( !nCount )
         return false;
     SCCOL nCol = *pCol;
     // nCol is insertion position; the next one higher up is there (or not)
-    if ( nCol < static_cast<SCCOL>(nCount) && (((*pColTwips)[nCol] - SC_RTFTWIPTOL) <= nTwips) )
+    if ( nCol < static_cast<SCCOL>(nCount) && ((aColTwips[nCol] - SC_RTFTWIPTOL) <= nTwips) )
         return true;
     // Not smaller than everything else? Then compare with the next lower one
-    else if ( nCol != 0 && (((*pColTwips)[nCol-1] + SC_RTFTWIPTOL) >= nTwips) )
+    else if ( nCol != 0 && ((aColTwips[nCol-1] + SC_RTFTWIPTOL) >= nTwips) )
     {
         (*pCol)--;
         return true;
@@ -150,7 +148,7 @@ void ScRTFParser::ColAdjust()
                 nColMax = nCol;
         }
         nStartAdjust = (sal_uLong)~0;
-        pColTwips->clear();
+        aColTwips.clear();
     }
 }
 
@@ -227,7 +225,7 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
             const ScRTFCellDefault& rD = *pCellDefault.get();
             SCCOL nCol;
             if ( !SeekTwips(rD.nTwips, &nCol) )
-                pColTwips->insert( rD.nTwips );
+                aColTwips.insert( rD.nTwips );
         }
     }
     pDefMerge = nullptr;
