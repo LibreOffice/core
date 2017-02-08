@@ -104,6 +104,7 @@ for d in definitionSet:
          "vcl/source/filter/sgvmain.hxx",
          "vcl/source/filter/jpeg/transupp.h",
          "include/vcl/bitmapex.hxx", # TransparentType
+         "vcl/inc/sft.hxx", # CompositeFlags, WidthClass, WeightClass
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
