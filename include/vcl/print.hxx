@@ -52,10 +52,10 @@ namespace vcl {
 
 enum class PrinterSupport
 {
-    SetOrientation, SetPaperBin,
+    SetOrientation,
     SetPaperSize, SetPaper,
-    Copy, CollateCopy,
-    SetupDialog, Fax, Pdf
+    CollateCopy,
+    SetupDialog
 };
 
 

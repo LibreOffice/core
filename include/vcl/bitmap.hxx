@@ -44,7 +44,6 @@ namespace o3tl
 
 enum class BmpScaleFlag
 {
-    NONE              = 0,
 // Try to preferably use these.
     Default           = 1,
     Fast              = 2,
@@ -54,8 +53,7 @@ enum class BmpScaleFlag
     Super             = 5,
     Lanczos           = 6,
     BiCubic           = 7,
-    BiLinear          = 8,
-    Box               = 9,
+    BiLinear          = 8
 };
 
 

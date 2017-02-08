@@ -103,6 +103,7 @@ for d in definitionSet:
          "vcl/source/filter/wmf/winmtf.hxx",
          "vcl/source/filter/sgvmain.hxx",
          "vcl/source/filter/jpeg/transupp.h",
+         "include/vcl/bitmapex.hxx", # TransparentType
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -121,6 +122,7 @@ for d in definitionSet:
          "vcl/inc/salwtype.hxx",
          "include/vcl/svapp.hxx",
          "include/vcl/salbtype.hxx",
+         "include/vcl/commandevent.hxx", # CommandEvent, MediaCommand, ShowDialogId
         # must match some other enum
          "include/editeng/bulletitem.hxx",
          "include/editeng/svxenum.hxx",
@@ -130,6 +132,7 @@ for d in definitionSet:
          "include/svl/nfkeytab.hx",
          "include/svl/zforlist.hxx",
          "include/svtools/svtabbx.hxx",
+         "include/vcl/print.hxx", # NupOrderType, from UI combobox
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",
