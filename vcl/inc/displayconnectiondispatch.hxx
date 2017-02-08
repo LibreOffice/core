@@ -38,7 +38,7 @@ class DisplayConnectionDispatch :
                                     m_aHandlers;
     ::std::list< css::uno::Reference< css::awt::XEventHandler > >
                                     m_aErrorHandlers;
-    css::uno::Any                   m_aAny;
+    OUString                        m_ConnectionIdentifier;
 public:
     DisplayConnectionDispatch();
     ~DisplayConnectionDispatch() override;
