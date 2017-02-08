@@ -340,7 +340,6 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFXMSG_STYLEREPLACE
     {
-        ExtraData = ERRCODE_MSG_ERROR | ERRCODE_BUTTON_OK_CANCEL ;
         Text [ en-US ] = "Should the $(ARG1) Style be replaced?" ;
     };
     String ERRCODE_SFX_NOFILTER

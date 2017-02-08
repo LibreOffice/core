@@ -271,7 +271,6 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
     }
 }
 
-
 bool SfxErrorHandler::GetErrorString(
     sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
 
@@ -295,9 +294,9 @@ bool SfxErrorHandler::GetErrorString(
         {
             ResString aErrorString(aEr.GetResString());
 
-            sal_uInt16 nResFlags = aErrorString.GetFlags();
-            if ( nResFlags )
-                nFlags = nResFlags;
+            if (lErrId == ERRCODE_SFXMSG_STYLEREPLACE)
+                nFlags = ERRCODE_MSG_ERROR | ERRCODE_BUTTON_OK_CANCEL;
+
             rStr = rStr.replaceAll("$(ERROR)", aErrorString.GetString());
             bRet = true;
         }
@@ -317,7 +316,6 @@ bool SfxErrorHandler::GetErrorString(
 
     return bRet;
 }
-
 
 SfxErrorContext::SfxErrorContext(
     sal_uInt16 nCtxIdP, vcl::Window *pWindow, sal_uInt16 nResIdP, ResMgr *pMgrP)
