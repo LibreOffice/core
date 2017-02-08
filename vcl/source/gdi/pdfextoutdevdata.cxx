@@ -43,11 +43,7 @@ struct PDFExtOutDevDataSync
                     SetScreenStream,
                     RegisterDest,
                     CreateOutlineItem,
-                    SetOutlineItemParent,
-                    SetOutlineItemText,
-                    SetOutlineItemDest,
                     CreateNote,
-                    SetAutoAdvanceTime,
                     SetPageTransition,
 
                     BeginStructureElement,
@@ -60,7 +56,6 @@ struct PDFExtOutDevDataSync
                     SetAlternateText,
                     CreateControl,
                     BeginGroup,
-                    EndGroup,
                     EndGroupGfxLink
     };
 
@@ -248,27 +243,6 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 mParaOUStrings.pop_front();
             }
             break;
-            case PDFExtOutDevDataSync::SetOutlineItemParent :
-            {
-                sal_Int32 nItem = GetMappedId();
-                sal_Int32 nNewParent = GetMappedId();
-                rWriter.SetOutlineItemParent( nItem, nNewParent );
-            }
-            break;
-            case PDFExtOutDevDataSync::SetOutlineItemText :
-            {
-                sal_Int32 nItem = GetMappedId();
-                rWriter.SetOutlineItemText( nItem, mParaOUStrings.front() );
-                mParaOUStrings.pop_front();
-            }
-            break;
-            case PDFExtOutDevDataSync::SetOutlineItemDest :
-            {
-                sal_Int32 nItem = GetMappedId();
-                sal_Int32 nDestId = GetMappedId();
-                rWriter.SetOutlineItemDest( nItem, nDestId );
-            }
-            break;
             case PDFExtOutDevDataSync::CreateNote :
             {
                 rWriter.Push( PushFlags::MAPMODE );
@@ -277,13 +251,6 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 mParaMapModes.pop_front();
                 mParaRects.pop_front();
                 mParaPDFNotes.pop_front();
-                mParaInts.pop_front();
-            }
-            break;
-            case PDFExtOutDevDataSync::SetAutoAdvanceTime :
-            {
-                rWriter.SetAutoAdvanceTime( mParauInts.front(), mParaInts.front() );
-                mParauInts.pop_front();
                 mParaInts.pop_front();
             }
             break;
@@ -305,7 +272,6 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
             case PDFExtOutDevDataSync::SetAlternateText:
             case PDFExtOutDevDataSync::CreateControl:
             case PDFExtOutDevDataSync::BeginGroup:
-            case PDFExtOutDevDataSync::EndGroup:
             case PDFExtOutDevDataSync::EndGroupGfxLink:
                 break;
         }
@@ -430,11 +396,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                 std::deque< PDFExtOutDevDataSync >::iterator aEnd = mActions.end();
                 while ( aBeg != aEnd )
                 {
-                    if ( aBeg->eAct == PDFExtOutDevDataSync::EndGroup )
-                    {
-                        break;
-                    }
-                    else if ( aBeg->eAct == PDFExtOutDevDataSync::EndGroupGfxLink )
+                    if ( aBeg->eAct == PDFExtOutDevDataSync::EndGroupGfxLink )
                     {
                         Graphic& rGraphic = mGraphics.front();
                         if ( rGraphic.IsLink() )
@@ -458,11 +420,6 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                     }
                     ++aBeg;
                 }
-            }
-            break;
-            case PDFExtOutDevDataSync::EndGroup :
-            {
-                mbGroupIgnoreGDIMtfActions = false;
             }
             break;
             case PDFExtOutDevDataSync::EndGroupGfxLink :
@@ -529,11 +486,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
             case PDFExtOutDevDataSync::SetScreenStream:
             case PDFExtOutDevDataSync::RegisterDest:
             case PDFExtOutDevDataSync::CreateOutlineItem:
-            case PDFExtOutDevDataSync::SetOutlineItemParent:
-            case PDFExtOutDevDataSync::SetOutlineItemText:
-            case PDFExtOutDevDataSync::SetOutlineItemDest:
             case PDFExtOutDevDataSync::CreateNote:
-            case PDFExtOutDevDataSync::SetAutoAdvanceTime:
             case PDFExtOutDevDataSync::SetPageTransition:
                 break;
         }

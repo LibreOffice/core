@@ -279,7 +279,6 @@ BitmapBuffer* StretchAndConvert(
         IMPL_CASE_GET_FORMAT( N16BitTcLsbMask );
         IMPL_CASE_GET_FORMAT( N24BitTcBgr );
         IMPL_CASE_GET_FORMAT( N24BitTcRgb );
-        IMPL_CASE_GET_FORMAT( N24BitTcMask );
         IMPL_CASE_GET_FORMAT( N32BitTcAbgr );
         IMPL_CASE_GET_FORMAT( N32BitTcArgb );
         IMPL_CASE_GET_FORMAT( N32BitTcBgra );
@@ -309,7 +308,6 @@ BitmapBuffer* StretchAndConvert(
         IMPL_CASE_SET_FORMAT( N16BitTcLsbMask, 16 );
         IMPL_CASE_SET_FORMAT( N24BitTcBgr, 24 );
         IMPL_CASE_SET_FORMAT( N24BitTcRgb, 24 );
-        IMPL_CASE_SET_FORMAT( N24BitTcMask, 24 );
         IMPL_CASE_SET_FORMAT( N32BitTcAbgr, 32 );
         IMPL_CASE_SET_FORMAT( N32BitTcArgb, 32 );
         IMPL_CASE_SET_FORMAT( N32BitTcBgra, 32 );
@@ -361,7 +359,6 @@ BitmapBuffer* StretchAndConvert(
     else if( ( nDstScanlineFormat == ScanlineFormat::N8BitTcMask ) ||
              ( nDstScanlineFormat == ScanlineFormat::N16BitTcMsbMask ) ||
              ( nDstScanlineFormat == ScanlineFormat::N16BitTcLsbMask ) ||
-             ( nDstScanlineFormat == ScanlineFormat::N24BitTcMask ) ||
              ( nDstScanlineFormat == ScanlineFormat::N32BitTcMask ) )
     {
         assert(pDstMask && "destination buffer requires color mask");

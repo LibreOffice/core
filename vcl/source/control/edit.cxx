@@ -1371,13 +1371,6 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
         ImplSetCursorPos( nCharPos, false );
         mbClickedInSelection = false;
     }
-    else if ( rMEvt.IsMiddle() && !mbReadOnly &&
-              ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
-    {
-        css::uno::Reference<css::datatransfer::clipboard::XClipboard> aSelection(Window::GetPrimarySelection());
-        ImplPaste( aSelection );
-        ImplModified();
-    }
 }
 
 void Edit::Tracking( const TrackingEvent& rTEvt )

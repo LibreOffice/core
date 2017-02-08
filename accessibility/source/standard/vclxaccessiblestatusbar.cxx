@@ -197,12 +197,6 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
             }
         }
         break;
-        case VclEventId::StatusbarShowAllItems:
-        {
-            for ( size_t i = 0; i < m_aAccessibleChildren.size(); ++i )
-                UpdateShowing( i, rVclWindowEvent.GetId() == VclEventId::StatusbarShowAllItems );
-        }
-        break;
         case VclEventId::StatusbarNameChanged:
         {
             if ( m_pStatusBar )

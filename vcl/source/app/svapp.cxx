@@ -987,16 +987,6 @@ IMPL_STATIC_LINK( Application, PostEventHandler, void*, pCallData, void )
             pEventData = &pData->maKeyEvent;
         break;
 
-        case VclEventId::WindowZoom:
-            nEvent = SalEvent::ExternalZoom;
-            pEventData = &pData->maZoomEvent;
-        break;
-
-        case VclEventId::WindowScroll:
-            nEvent = SalEvent::ExternalScroll;
-            pEventData = &pData->maScrollEvent;
-        break;
-
         default:
             nEvent = SalEvent::NONE;
             pEventData = nullptr;

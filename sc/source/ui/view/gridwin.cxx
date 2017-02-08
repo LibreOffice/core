@@ -1997,16 +1997,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         SCROW       nEditRow;
         pViewData->GetEditView( eWhich, pEditView, nEditCol, nEditRow );
         pEditView->MouseButtonUp( rMEvt );
-
-        if ( rMEvt.IsMiddle() &&
-                 GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection )
-        {
-            //  EditView may have pasted from selection
-            pScMod->InputChanged( pEditView );
-        }
-        else
-            pScMod->InputSelection( pEditView );            // parentheses etc.
-
+        pScMod->InputSelection( pEditView );            // parentheses etc.
         pViewData->GetView()->InvalidateAttribs();
         rBindings.Invalidate( SID_HYPERLINK_GETLINK );
         bEEMouse = false;

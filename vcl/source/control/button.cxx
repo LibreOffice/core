@@ -1427,7 +1427,6 @@ void PushButton::StateChanged( StateChangedType nType )
 
     if ( (nType == StateChangedType::Enable) ||
          (nType == StateChangedType::Text) ||
-         (nType == StateChangedType::Image) ||
          (nType == StateChangedType::Data) ||
          (nType == StateChangedType::State) ||
          (nType == StateChangedType::UpdateMode) )
@@ -2538,7 +2537,6 @@ void RadioButton::StateChanged( StateChangedType nType )
     }
     else if ( (nType == StateChangedType::Enable) ||
               (nType == StateChangedType::Text) ||
-              (nType == StateChangedType::Image) ||
               (nType == StateChangedType::Data) ||
               (nType == StateChangedType::UpdateMode) )
     {
@@ -3461,7 +3459,6 @@ void CheckBox::StateChanged( StateChangedType nType )
     }
     else if ( (nType == StateChangedType::Enable) ||
               (nType == StateChangedType::Text) ||
-              (nType == StateChangedType::Image) ||
               (nType == StateChangedType::Data) ||
               (nType == StateChangedType::UpdateMode) )
     {

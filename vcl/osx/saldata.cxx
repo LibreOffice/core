@@ -142,7 +142,6 @@ curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 { nullptr, { 0, 0 } }, //PointerStyle::VSizeBar
 { nullptr, { 0, 0 } }, //PointerStyle::Hand
 { nullptr, { 0, 0 } }, //PointerStyle::RefHand
-{ "pen", { 3, 27 } }, //PointerStyle::Pen
 { "magnify", { 12, 13 } }, //PointerStyle::Magnify
 { "fill", { 10, 22 } }, //PointerStyle::Fill
 { "rotate", { 15, 15 } }, //PointerStyle::Rotate
@@ -153,18 +152,9 @@ curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 { "crop", { 9, 9 } }, //PointerStyle::Crop
 { "movept", { 0, 0 } }, //PointerStyle::MovePoint
 { "movebw", { 0, 0 } }, //PointerStyle::MoveBezierWeight
-{ "movedata", { 0, 0 } }, //PointerStyle::MoveData
 { "copydata", { 0, 0 } }, //PointerStyle::CopyData
 { "linkdata", { 0, 0 } }, //PointerStyle::LinkData
 { "movedlnk", { 0, 0 } }, //PointerStyle::MoveDataLink
-{ "copydlnk", { 0, 0 } }, //PointerStyle::CopyDataLink
-{ "movef", { 8, 8 } }, //PointerStyle::MoveFile
-{ "copyf", { 8, 8 } }, //PointerStyle::CopyFile
-{ "linkf", { 8, 8 } }, //PointerStyle::LinkFile
-{ "moveflnk", { 8, 8 } }, //PointerStyle::MoveFileLink
-{ "copyflnk", { 8, 8 } }, //PointerStyle::CopyFileLink
-{ "movef2", { 7, 8 } }, //PointerStyle::MoveFiles
-{ "copyf2", { 7, 8 } }, //PointerStyle::CopyFiles
 { "notallow", { 15, 15 } }, //PointerStyle::NotAllowed
 { "dline", { 8, 8 } }, //PointerStyle::DrawLine
 { "drect", { 8, 8 } }, //PointerStyle::DrawRect
@@ -178,15 +168,12 @@ curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 { "dconnect", { 8, 8 } }, //PointerStyle::DrawConnect
 { "dtext", { 8, 8 } }, //PointerStyle::DrawText
 { "dcapt", { 8, 8 } }, //PointerStyle::DrawCaption
-{ "chart", { 15, 16 } }, //PointerStyle::Chart
 { "detectiv", { 12, 13 } }, //PointerStyle::Detective
 { "pivotcol", { 7, 5 } }, //PointerStyle::PivotCol
 { "pivotrow", { 8, 7 } }, //PointerStyle::PivotRow
 { "pivotfld", { 8, 7 } }, //PointerStyle::PivotField
 { "chain", { 0, 2 } }, //PointerStyle::Chain
 { "chainnot", { 2, 2 } }, //PointerStyle::ChainNotAllowed
-{ "timemove", { 16, 16 } }, //PointerStyle::TimeEventMove
-{ "timesize", { 16, 17 } }, //PointerStyle::TimeEventSize
 { "asn", { 16, 12 } }, //PointerStyle::AutoScrollN
 { "ass", { 15, 19 } }, //PointerStyle::AutoScrollS
 { "asw", { 12, 15 } }, //PointerStyle::AutoScrollW
@@ -198,7 +185,6 @@ curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 { "asns", { 15, 15 } }, //PointerStyle::AutoScrollNS
 { "aswe", { 15, 15 } }, //PointerStyle::AutoScrollWE
 { "asnswe", { 15, 15 } }, //PointerStyle::AutoScrollNSWE
-{ "airbrush", { 5, 22 } }, //PointerStyle::Airbrush
 { "vtext", { 15, 15 } }, //PointerStyle::TextVertical
 { "pivotdel", { 18, 15 } }, //PointerStyle::PivotDelete
 { "tblsels", { 15, 30 } }, //PointerStyle::TabSelectS
@@ -206,7 +192,6 @@ curs_ent{ nullptr, { 0, 0 } }, //PointerStyle::Arrow
 { "tblselse", { 30, 30 } }, //PointerStyle::TabSelectSE
 { "tblselw", { 1, 16 } }, //PointerStyle::TabSelectW
 { "tblselsw", { 1, 30 } }, //PointerStyle::TabSelectSW
-{ "pntbrsh", { 9, 16 } }, //PointerStyle::Paintbrush
 { "wshide", { 16, 16 } }, //PointerStyle::HideWhitespace
 { "wsshow", { 16, 16 } } //PointerStyle::ShowWhitespace
 };

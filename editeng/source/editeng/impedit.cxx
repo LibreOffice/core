@@ -1240,13 +1240,7 @@ bool ImpEditView::MouseButtonUp( const MouseEvent& rMouseEvent )
     nExtraCursorFlags = GetCursorFlags::NONE;
     bClickedInSelection = false;
 
-    if ( rMouseEvent.IsMiddle() && !bReadOnly &&
-         ( GetWindow()->GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection ) )
-    {
-        Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
-        Paste( aClipBoard );
-    }
-    else if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
+    if ( rMouseEvent.IsLeft() && GetEditSelection().HasRange() )
     {
         Reference<css::datatransfer::clipboard::XClipboard> aClipBoard(GetWindow()->GetPrimarySelection());
         CutCopy( aClipBoard, false );

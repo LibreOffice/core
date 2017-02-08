@@ -99,6 +99,10 @@ for d in definitionSet:
          "include/svtools/rtftoken.h",
          "sc/source/filter/inc/xltracer.hxx",
          "writerfilter/source/dmapper/FieldTypes.hxx",
+         "vcl/source/fontsubset/cff.cxx",
+         "vcl/source/filter/wmf/winmtf.hxx",
+         "vcl/source/filter/sgvmain.hxx",
+         "vcl/source/filter/jpeg/transupp.h",
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -114,6 +118,9 @@ for d in definitionSet:
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
          "vcl/inc/unx/gendata.hxx",
+         "vcl/inc/salwtype.hxx",
+         "include/vcl/svapp.hxx",
+         "include/vcl/salbtype.hxx",
         # must match some other enum
          "include/editeng/bulletitem.hxx",
          "include/editeng/svxenum.hxx",
@@ -128,6 +135,7 @@ for d in definitionSet:
          "vcl/inc/sft.hxx",
          "vcl/inc/unx/XIM.h",
          "vcl/unx/gtk/xid_fullscreen_on_all_monitors.c",
+         "vcl/unx/gtk/salnativewidgets-gtk.cxx",
          ]):
         continue
 

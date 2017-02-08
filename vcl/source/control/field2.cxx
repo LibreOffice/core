@@ -2615,32 +2615,6 @@ void TimeField::SetExtFormat( ExtTimeFieldFormat eFormat )
             SetFormat( TimeFieldFormat::F_SEC );
         }
         break;
-        case ExtTimeFieldFormat::Short12H:
-        {
-            SetTimeFormat( TimeFormat::Hour12 );
-            SetDuration( false );
-            SetFormat( TimeFieldFormat::F_NONE );
-        }
-        break;
-        case ExtTimeFieldFormat::Long12H:
-        {
-            SetTimeFormat( TimeFormat::Hour12 );
-            SetDuration( false );
-            SetFormat( TimeFieldFormat::F_SEC );
-        }
-        break;
-        case ExtTimeFieldFormat::ShortDuration:
-        {
-            SetDuration( true );
-            SetFormat( TimeFieldFormat::F_NONE );
-        }
-        break;
-        case ExtTimeFieldFormat::LongDuration:
-        {
-            SetDuration( true );
-            SetFormat( TimeFieldFormat::F_SEC );
-        }
-        break;
         default:    OSL_FAIL( "ExtTimeFieldFormat unknown!" );
     }
 
