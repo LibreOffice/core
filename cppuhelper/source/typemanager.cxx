@@ -1815,21 +1815,23 @@ css::uno::Any cppuhelper::TypeManager::find(rtl::OUString const & name) {
         css::uno::TypeClass typeClass;
     };
     static Simple const simple[] = {
-        { "void", css::uno::TypeClass_VOID },
-        { "boolean", css::uno::TypeClass_BOOLEAN },
-        { "byte", css::uno::TypeClass_BYTE },
-        { "short", css::uno::TypeClass_SHORT },
-        { "unsigned short", css::uno::TypeClass_UNSIGNED_SHORT },
-        { "long", css::uno::TypeClass_LONG },
-        { "unsigned long", css::uno::TypeClass_UNSIGNED_LONG },
-        { "hyper", css::uno::TypeClass_HYPER },
-        { "unsigned hyper", css::uno::TypeClass_UNSIGNED_HYPER },
-        { "float", css::uno::TypeClass_FLOAT },
-        { "double", css::uno::TypeClass_DOUBLE },
-        { "char", css::uno::TypeClass_CHAR },
-        { "string", css::uno::TypeClass_STRING },
-        { "type", css::uno::TypeClass_TYPE },
-        { "any", css::uno::TypeClass_ANY } };
+        { OUStringLiteral("void"), css::uno::TypeClass_VOID },
+        { OUStringLiteral("boolean"), css::uno::TypeClass_BOOLEAN },
+        { OUStringLiteral("byte"), css::uno::TypeClass_BYTE },
+        { OUStringLiteral("short"), css::uno::TypeClass_SHORT },
+        { OUStringLiteral("unsigned short"),
+          css::uno::TypeClass_UNSIGNED_SHORT },
+        { OUStringLiteral("long"), css::uno::TypeClass_LONG },
+        { OUStringLiteral("unsigned long"), css::uno::TypeClass_UNSIGNED_LONG },
+        { OUStringLiteral("hyper"), css::uno::TypeClass_HYPER },
+        { OUStringLiteral("unsigned hyper"),
+          css::uno::TypeClass_UNSIGNED_HYPER },
+        { OUStringLiteral("float"), css::uno::TypeClass_FLOAT },
+        { OUStringLiteral("double"), css::uno::TypeClass_DOUBLE },
+        { OUStringLiteral("char"), css::uno::TypeClass_CHAR },
+        { OUStringLiteral("string"), css::uno::TypeClass_STRING },
+        { OUStringLiteral("type"), css::uno::TypeClass_TYPE },
+        { OUStringLiteral("any"), css::uno::TypeClass_ANY } };
     for (std::size_t i = 0; i != SAL_N_ELEMENTS(simple); ++i) {
         if (name == simple[i].name) {
             return css::uno::makeAny<

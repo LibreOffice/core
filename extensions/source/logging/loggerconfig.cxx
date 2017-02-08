@@ -123,11 +123,11 @@ namespace logging
 
             Variable const aVariables[] =
             {
-                {"$(loggername)", sLoggerName},
-                {"$(date)", sDate},
-                {"$(time)", sTime},
-                {"$(datetime)", sDateTime},
-                {"$(pid)", aPID}
+                {OUStringLiteral("$(loggername)"), sLoggerName},
+                {OUStringLiteral("$(date)"), sDate},
+                {OUStringLiteral("$(time)"), sTime},
+                {OUStringLiteral("$(datetime)"), sDateTime},
+                {OUStringLiteral("$(pid)"), aPID}
             };
 
             for (Variable const & aVariable : aVariables)
