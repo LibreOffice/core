@@ -195,30 +195,6 @@ bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
     return false;
 }
 
-class ResString: public OUString
-/*  [Description]
-
-    Helpclass to read a string and optional ExtraData from
-    a string Resource.
-
-    */
-{
-  public:
-    const OUString & GetString() const {return *this;}
-    explicit ResString( ResId &rId);
-};
-
-ResString::ResString(ResId & rId)
-    : OUString(rId.SetAutoRelease(false).toString())
-{
-    ResMgr * pResMgr = rId.GetResMgr();
-     // String ctor temporarily sets global ResManager
-    if (pResMgr->GetRemainSize())
-        (void)pResMgr->ReadShort();
-    rId.SetAutoRelease(true);
-    pResMgr->PopContext();
-}
-
 void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
 
 /*  [Description]
