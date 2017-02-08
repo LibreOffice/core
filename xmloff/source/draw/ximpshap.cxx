@@ -3559,12 +3559,22 @@ SvXMLImportContext *SdXMLFrameShapeContext::CreateChildContext( sal_uInt16 nPref
              (nPrefix == XML_NAMESPACE_DRAW && (IsXMLToken( rLocalName, XML_GLUE_POINT ) ||
                                                 IsXMLToken( rLocalName, XML_THUMBNAIL ) ) ) )
     {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            mxImplContext = solveMultipleImages();
+        }
         SvXMLImportContext *pImplContext = mxImplContext.get();
         pContext = dynamic_cast<SdXMLShapeContext&>(*pImplContext).CreateChildContext( nPrefix,
                                                                         rLocalName, xAttrList );
     }
     else if ( (XML_NAMESPACE_DRAW == nPrefix) && IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
     {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            mxImplContext = solveMultipleImages();
+        }
         SdXMLShapeContext *pSContext = dynamic_cast< SdXMLShapeContext* >( mxImplContext.get() );
         if( pSContext )
         {
