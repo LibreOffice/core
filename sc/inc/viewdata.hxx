@@ -431,6 +431,7 @@ public:
     void    SetHScrollMode  ( bool bNewMode )   { pOptions->SetOption( VOPT_HSCROLL, bNewMode ); }
     bool    IsOutlineMode   () const            { return pOptions->GetOption( VOPT_OUTLINER ); }
     void    SetOutlineMode  ( bool bNewMode )   { pOptions->SetOption( VOPT_OUTLINER, bNewMode ); }
+    void    SetNotesMode    ( bool bNewMode )   { pOptions->SetOption( VOPT_NOTES, bNewMode ); }
 
     /// Force page size for PgUp/PgDown to overwrite the computation based on m_aVisArea.
     void ForcePageUpDownOffset(long nTwips) { m_nLOKPageUpDownOffset = nTwips; }
