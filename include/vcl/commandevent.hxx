@@ -318,7 +318,6 @@ enum class CommandEventId
     CursorPos               = 11,
     PasteSelection          = 12,
     ModKeyChange            = 13,
-    HangulHanjaConversion   = 14,
     InputLanguageChange     = 15,
     ShowDialog              = 16,
     Media                   = 17,

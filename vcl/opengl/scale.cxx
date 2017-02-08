@@ -350,7 +350,7 @@ bool OpenGLSalBitmap::ImplScale( const double& rScaleX, const double& rScaleY, B
     {
         return ImplScaleFilter( xContext, rScaleX, rScaleY, GL_LINEAR );
     }
-    else if( nScaleFlag == BmpScaleFlag::Super || nScaleFlag == BmpScaleFlag::Default )
+    else if( nScaleFlag == BmpScaleFlag::Default )
     {
         const Lanczos3Kernel aKernel;
 
@@ -381,7 +381,6 @@ bool OpenGLSalBitmap::Scale( const double& rScaleX, const double& rScaleY, BmpSc
 
     if( nScaleFlag == BmpScaleFlag::Fast ||
         nScaleFlag == BmpScaleFlag::BiLinear ||
-        nScaleFlag == BmpScaleFlag::Super ||
         nScaleFlag == BmpScaleFlag::Lanczos ||
         nScaleFlag == BmpScaleFlag::Default ||
         nScaleFlag == BmpScaleFlag::BestQuality )

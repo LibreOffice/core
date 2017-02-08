@@ -45,9 +45,8 @@ class Gradient;
 
 enum class MtfConversion
 {
-    NONE = 0,
-    N1BitThreshold = 1,
-    N8BitGreys = 2
+    N1BitThreshold,
+    N8BitGreys
 };
 
 
