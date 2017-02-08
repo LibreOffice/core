@@ -1944,8 +1944,7 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                           sal_uInt8          *encoding,
                           int            nGlyphs,
                           int            nNameRecs,
-                          NameRecord    *nr,
-                          sal_uInt32        flags)
+                          NameRecord    *nr)
 {
     TrueTypeCreator *ttcr;
     TrueTypeTable *head=nullptr, *hhea=nullptr, *maxp=nullptr, *cvt=nullptr, *prep=nullptr, *glyf=nullptr, *fpgm=nullptr, *cmap=nullptr, *name=nullptr, *post = nullptr, *os2 = nullptr;
@@ -1956,42 +1955,13 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
 
     /**                       name                         **/
 
-    if (flags & TTCF_AutoName) {
-        /* not implemented yet
-           NameRecord *names;
-           NameRecord newname;
-           int n = GetTTNameRecords(ttf, &names);
-           int n1 = 0, n2 = 0, n3 = 0, n4 = 0, n5 = 0, n6 = 0;
-           sal_uInt8 *cp1;
-           sal_uInt8 suffix[32];
-           sal_uInt32 c1 = crc32(glyphArray, nGlyphs * 2);
-           sal_uInt32 c2 = crc32(encoding, nGlyphs);
-           int len;
-           snprintf(suffix, 31, "S%08X%08X-%d", c1, c2, nGlyphs);
-
-           name = TrueTypeTableNew_name(0, 0);
-           for (i = 0; i < n; i++) {
-           if (names[i].platformID == 1 && names[i].encodingID == 0 && names[i].languageID == 0 && names[i].nameID == 1) {
-
-           memcpy(newname, names+i, sizeof(NameRecord));
-           newname.slen = name[i].slen + strlen(suffix);
-        */
-        const sal_uInt8 ptr[] = {0,'T',0,'r',0,'u',0,'e',0,'T',0,'y',0,'p',0,'e',0,'S',0,'u',0,'b',0,'s',0,'e',0,'t'};
-        NameRecord n1 = {1, 0, 0, 6, 14, const_cast<sal_uInt8 *>(reinterpret_cast<sal_uInt8 const *>("TrueTypeSubset"))};
-        NameRecord n2 = {3, 1, 1033, 6, 28, nullptr};
-        n2.sptr = const_cast<sal_uInt8 *>(ptr);
-        name = TrueTypeTableNew_name(0, nullptr);
-        nameAdd(name, &n1);
-        nameAdd(name, &n2);
+    if (nNameRecs == 0) {
+        NameRecord *names;
+        int n = GetTTNameRecords(ttf, &names);
+        name = TrueTypeTableNew_name(n, names);
+        DisposeNameRecords(names, n);
     } else {
-        if (nNameRecs == 0) {
-            NameRecord *names;
-            int n = GetTTNameRecords(ttf, &names);
-            name = TrueTypeTableNew_name(n, names);
-            DisposeNameRecords(names, n);
-        } else {
-            name = TrueTypeTableNew_name(nNameRecs, nr);
-        }
+        name = TrueTypeTableNew_name(nNameRecs, nr);
     }
 
     /**                       maxp                         **/
@@ -2057,12 +2027,6 @@ int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                                      GetUInt16(p, 12));
     } else {
         post = TrueTypeTableNew_post(0x00030000, 0, 0, 0, 0);
-    }
-
-    if (flags & TTCF_IncludeOS2) {
-        if ((p = getTable(ttf, O_OS2)) != nullptr) {
-            os2 = TrueTypeTableNew(T_OS2, getTableSize(ttf, O_OS2), p);
-        }
     }
 
     AddTable(ttcr, name); AddTable(ttcr, maxp); AddTable(ttcr, hhea);

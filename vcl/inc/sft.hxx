@@ -122,22 +122,6 @@ namespace vcl
         OVERLAP_COMPOUND          = 1<<10
     };
 
-/** Flags for TrueType generation */
-    enum TTCreationFlags {
-        TTCF_AutoName = 1,                  /**< Automatically generate a compact 'name' table.
-                                               If this flag is not set, name table is generated
-                                               either from an array of NameRecord structs passed as
-                                               arguments or if the array is NULL, 'name' table
-                                               of the generated TrueType file will be a copy
-                                               of the name table of the original file.
-                                               If this flag is set the array of NameRecord structs
-                                               is ignored and a very compact 'name' table is automatically
-                                               generated. */
-
-        TTCF_IncludeOS2 = 2                 /** If this flag is set OS/2 table from the original font will be
-                                                copied to the subset */
-    };
-
 /** Structure used by GetTTSimpleGlyphMetrics() and GetTTSimpleCharMetrics() functions */
     typedef struct {
         sal_uInt16 adv;                         /**< advance width or height            */
@@ -390,12 +374,11 @@ namespace vcl
  */
     int  CreateTTFromTTGlyphs(TrueTypeFont  *ttf,
                               const char    *fname,
-                              sal_uInt16        *glyphArray,
-                              sal_uInt8          *encoding,
+                              sal_uInt16    *glyphArray,
+                              sal_uInt8     *encoding,
                               int            nGlyphs,
                               int            nNameRecs,
-                              NameRecord    *nr,
-                              sal_uInt32        flags);
+                              NameRecord    *nr);
 
 /**
  * Generates a new PostScript Type42 font and dumps it to <b>outf</b> file.
