@@ -1701,14 +1701,14 @@ void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xSh
                     case presentation::ClickAction_LASTPAGE :
                     {
                         sal_Int32 nCount = rDoc.GetSdPageCount( PageKind::Standard );
-                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nCount - 1, vcl::PDFWriter::FitRectangle );
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nCount - 1, vcl::PDFWriter::DestAreaType::FitRectangle );
                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
                     break;
                     case presentation::ClickAction_FIRSTPAGE :
                     {
-                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, 0, vcl::PDFWriter::FitRectangle );
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, 0, vcl::PDFWriter::DestAreaType::FitRectangle );
                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
@@ -1718,7 +1718,7 @@ void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xSh
                         sal_Int32 nDestPage = rPDFExtOutDevData.GetCurrentPageNumber();
                         if ( nDestPage )
                             nDestPage--;
-                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::FitRectangle );
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::DestAreaType::FitRectangle );
                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
@@ -1729,7 +1729,7 @@ void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xSh
                         sal_Int32 nLastPage = rDoc.GetSdPageCount( PageKind::Standard ) - 1;
                         if ( nDestPage > nLastPage )
                             nDestPage = nLastPage;
-                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::FitRectangle );
+                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nDestPage, vcl::PDFWriter::DestAreaType::FitRectangle );
                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                     }
@@ -1757,7 +1757,7 @@ void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape >& xSh
                                     sal_Int32 nPage = ImplPDFGetBookmarkPage( aBookmark, rDoc );
                                     if ( nPage != -1 )
                                     {
-                                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nPage, vcl::PDFWriter::FitRectangle );
+                                        sal_Int32 nDestId = rPDFExtOutDevData.CreateDest( aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle );
                                         sal_Int32 nLinkId = rPDFExtOutDevData.CreateLink( aLinkRect );
                                         rPDFExtOutDevData.SetLinkDest( nLinkId, nDestId );
                                     }
@@ -2171,9 +2171,9 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                     if ( nPage != -1 )
                                     {
                                         if ( aIBeg->nLinkId != -1 )
-                                            pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, pPDFExtOutDevData->CreateDest( aPageRect, nPage, vcl::PDFWriter::FitRectangle ) );
+                                            pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, pPDFExtOutDevData->CreateDest( aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle ) );
                                         else
-                                            pPDFExtOutDevData->DescribeRegisteredDest( aIBeg->nDestId, aPageRect, nPage, vcl::PDFWriter::FitRectangle );
+                                            pPDFExtOutDevData->DescribeRegisteredDest( aIBeg->nDestId, aPageRect, nPage, vcl::PDFWriter::DestAreaType::FitRectangle );
                                     }
                                     else
                                         pPDFExtOutDevData->SetLinkURL( aIBeg->nLinkId, aIBeg->aBookmark );
