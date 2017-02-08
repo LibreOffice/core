@@ -25,8 +25,10 @@ ifneq ($(origin AR),default)
 gb_AR := $(AR)
 endif
 
+# do not define SOLARIS - use #ifdef __sun instead
+#	-D$(OS) \
+
 gb_OSDEFS := \
-	-D$(OS) \
 	-DSYSV \
 	-DSUN \
 	-DSUN4 \
