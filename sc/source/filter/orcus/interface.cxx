@@ -306,7 +306,6 @@ ScOrcusConditionalFormat::ScOrcusConditionalFormat(SCTAB nTab, ScDocument& rDoc)
     mpCurrentFormat(new ScConditionalFormat(0, &mrDoc)),
     meEntryType(condformat::CONDITION)
 {
-    (void)mnTab;
 }
 
 ScOrcusConditionalFormat::~ScOrcusConditionalFormat()
