@@ -1404,11 +1404,11 @@ void GraphicManager::ImplAdjust( BitmapEx& rBmpEx, const GraphicAttr& rAttr, Gra
         switch( aAttr.GetDrawMode() )
         {
             case GRAPHICDRAWMODE_MONO:
-                rBmpEx.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+                rBmpEx.Convert( BmpConversion::N1BitThreshold );
             break;
 
             case GRAPHICDRAWMODE_GREYS:
-                rBmpEx.Convert( BMP_CONVERSION_8BIT_GREYS );
+                rBmpEx.Convert( BmpConversion::N8BitGreys );
             break;
 
             case GRAPHICDRAWMODE_WATERMARK:
@@ -1558,11 +1558,11 @@ void GraphicManager::ImplAdjust( Animation& rAnimation, const GraphicAttr& rAttr
         switch( aAttr.GetDrawMode() )
         {
             case GRAPHICDRAWMODE_MONO:
-                rAnimation.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+                rAnimation.Convert( BmpConversion::N1BitThreshold );
             break;
 
             case GRAPHICDRAWMODE_GREYS:
-                rAnimation.Convert( BMP_CONVERSION_8BIT_GREYS );
+                rAnimation.Convert( BmpConversion::N8BitGreys );
             break;
 
             case GRAPHICDRAWMODE_WATERMARK:

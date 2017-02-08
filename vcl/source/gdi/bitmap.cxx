@@ -785,15 +785,15 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                 int nNextIndex = 0;
 
                 if( ( nSrcBitCount == 24 ) && ( nDstBitCount < 24 ) )
-                    Convert( BMP_CONVERSION_24BIT );
+                    Convert( BmpConversion::N24Bit );
                 else if( ( nSrcBitCount == 8 ) && ( nDstBitCount < 8 ) )
                 {
-                    Convert( BMP_CONVERSION_8BIT_COLORS );
+                    Convert( BmpConversion::N8BitColors );
                     nNextIndex = 16;
                 }
                 else if( ( nSrcBitCount == 4 ) && ( nDstBitCount < 4 ) )
                 {
-                    Convert( BMP_CONVERSION_4BIT_COLORS );
+                    Convert( BmpConversion::N4BitColors );
                     nNextIndex = 2;
                 }
 
@@ -1531,7 +1531,7 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
     // Bitmaps with 1 bit color depth can cause problems
     // if they have other entries than black/white in their palette
     if( 1 == GetBitCount() )
-        Convert( BMP_CONVERSION_4BIT_COLORS );
+        Convert( BmpConversion::N4BitColors );
 
     ScopedWriteAccess   pAcc(*this);
     bool                bRet = false;
@@ -1593,7 +1593,7 @@ bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
     // Bitmaps with 1 bit color depth can cause problems
     // if they have other entries than black/white in their palette
     if( 1 == GetBitCount() )
-        Convert( BMP_CONVERSION_4BIT_COLORS );
+        Convert( BmpConversion::N4BitColors );
 
     ScopedWriteAccess   pAcc(*this);
     bool                bRet = false;
@@ -1760,7 +1760,7 @@ bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
     // Convert to a truecolor bitmap, if we're a paletted one. There's
     // room for tradeoff decision here, maybe later for an overload (or a flag)
     if( GetBitCount() <= 8 )
-        Convert( BMP_CONVERSION_24BIT );
+        Convert( BmpConversion::N24Bit );
 
     AlphaMask::ScopedReadAccess pAlphaAcc(const_cast<AlphaMask&>(rAlpha));
 

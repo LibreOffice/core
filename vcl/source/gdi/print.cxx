@@ -749,7 +749,7 @@ void Printer::DrawDeviceMask( const Bitmap& rMask, const Color& rMaskColor,
         BmpMirrorFlags nMirrFlags = BmpMirrorFlags::NONE;
 
         if( aMask.GetBitCount() > 1 )
-            aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+            aMask.Convert( BmpConversion::N1BitThreshold );
 
         // mirrored horizontically
         if( aDestSz.Width() < 0 )

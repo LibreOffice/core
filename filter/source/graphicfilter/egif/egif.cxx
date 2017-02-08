@@ -252,17 +252,17 @@ bool GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
 
         if( !!aMask )
         {
-            if( aAccBmp.Convert( BMP_CONVERSION_8BIT_TRANS ) )
+            if( aAccBmp.Convert( BmpConversion::N8BitTrans ) )
             {
-                aMask.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+                aMask.Convert( BmpConversion::N1BitThreshold );
                 aAccBmp.Replace( aMask, BMP_COL_TRANS );
                 bTransparent = true;
             }
             else
-                aAccBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+                aAccBmp.Convert( BmpConversion::N8BitColors );
         }
         else
-            aAccBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+            aAccBmp.Convert( BmpConversion::N8BitColors );
 
         m_pAcc = aAccBmp.AcquireReadAccess();
 

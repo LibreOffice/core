@@ -70,19 +70,17 @@ namespace o3tl
 
 #define BMP_COL_TRANS               Color( 252, 3, 251 )
 
-enum BmpConversion
+enum class BmpConversion
 {
-    BMP_CONVERSION_NONE = 0,
-    BMP_CONVERSION_1BIT_THRESHOLD = 1,
-    BMP_CONVERSION_1BIT_MATRIX = 2,
-    BMP_CONVERSION_4BIT_GREYS = 3,
-    BMP_CONVERSION_4BIT_COLORS = 4,
-    BMP_CONVERSION_8BIT_GREYS = 5,
-    BMP_CONVERSION_8BIT_COLORS = 6,
-    BMP_CONVERSION_24BIT = 7,
-    BMP_CONVERSION_4BIT_TRANS = 8,
-    BMP_CONVERSION_8BIT_TRANS = 9,
-    BMP_CONVERSION_GHOSTED = 10
+    NNONE,
+    N1BitThreshold,
+    N4BitGreys,
+    N4BitColors,
+    N8BitGreys,
+    N8BitColors,
+    N24Bit,
+    N8BitTrans,
+    Ghosted
 };
 
 enum class BmpCombine

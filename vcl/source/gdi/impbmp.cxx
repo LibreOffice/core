@@ -115,7 +115,7 @@ bool ImpBitmap::ImplReplace( const Color& rSearchColor, const Color& rReplaceCol
 bool ImpBitmap::ImplConvert( BmpConversion eConversion )
 {
     // avoid large chunk of obsolete and hopefully rarely used conversions.
-    if (eConversion != BMP_CONVERSION_8BIT_GREYS)
+    if (eConversion != BmpConversion::N8BitGreys)
         return false;
 
     // frequently used conversion for creating alpha masks

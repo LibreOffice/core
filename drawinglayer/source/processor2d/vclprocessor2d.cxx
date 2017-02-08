@@ -457,7 +457,7 @@ namespace drawinglayer
                                     // a bitmap in gray or Black/White (!)
                                     if(aBitmapEx.GetBitCount() < 24)
                                     {
-                                        aBitmapEx.Convert(BMP_CONVERSION_24BIT);
+                                        aBitmapEx.Convert(BmpConversion::N24Bit);
                                     }
 
                                     aBitmapEx.Scale(aNeededBitmapSizePixel, BmpScaleFlag::Interpolate);
