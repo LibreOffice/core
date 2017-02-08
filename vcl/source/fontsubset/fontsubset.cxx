@@ -128,9 +128,10 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
     // handle SFNT_TTF fonts
     // by forwarding the subset request to AG's sft subsetter
 #if 1 // TODO: remove conversion tp 16bit glyphids when sft-subsetter has been updated
-    sal_uInt16 aShortGlyphIds[256];
-    for( int i = 0; i < mnReqGlyphCount; ++i)
-        aShortGlyphIds[i] = (sal_uInt16)mpReqGlyphIds[i];
+    std::vector<sal_uInt16> aShortGlyphIds;
+    aShortGlyphIds.reserve(mnReqGlyphCount);
+    for (int i = 0; i < mnReqGlyphCount; ++i)
+        aShortGlyphIds.push_back((sal_uInt16)mpReqGlyphIds[i]);
     // remove const_cast when sft-subsetter is const-correct
     sal_uInt8* pEncArray = const_cast<sal_uInt8*>( mpReqEncodedIds );
 #endif
@@ -138,12 +139,12 @@ bool FontSubsetInfo::CreateFontSubsetFromSfnt( sal_Int32* pOutGlyphWidths )
     if( (mnReqFontTypeMask & TYPE42_FONT) != 0 )
     {
         nSFTErr = CreateT42FromTTGlyphs( mpSftTTFont, mpOutFile, mpReqFontName,
-            aShortGlyphIds, pEncArray, mnReqGlyphCount );
+            aShortGlyphIds.data(), pEncArray, mnReqGlyphCount );
     }
     else if( (mnReqFontTypeMask & TYPE3_FONT) != 0 )
     {
         nSFTErr = CreateT3FromTTGlyphs( mpSftTTFont, mpOutFile, mpReqFontName,
-            aShortGlyphIds, pEncArray, mnReqGlyphCount,
+            aShortGlyphIds.data(), pEncArray, mnReqGlyphCount,
                     0 /* 0 = horizontal, 1 = vertical */ );
     }
     else if( (mnReqFontTypeMask & SFNT_TTF) != 0 )
