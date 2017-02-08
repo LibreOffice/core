@@ -1381,7 +1381,7 @@
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkButton" id="ConditionalFormatMenu">
+                              <object class="svtlo-ManagedMenuButton" id="ConditionalFormatMenu">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
