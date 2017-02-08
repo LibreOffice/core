@@ -560,9 +560,9 @@ void ExcTable::FillAsTableBinary( SCTAB nCodeNameIdx )
     if( rR.pUserBViewList )
     {
         XclExpUserBViewList::const_iterator iter;
-        for ( iter = rR.pUserBViewList->begin(); iter != rR.pUserBViewList->end(); ++iter)
+        for ( iter = rR.pUserBViewList->cbegin(); iter != rR.pUserBViewList->cend(); ++iter)
         {
-            Add( new XclExpUsersViewBegin( (*iter)->GetGUID(), nExcTab ) );
+            Add( new XclExpUsersViewBegin( (*iter).GetGUID(), nExcTab ) );
             Add( new XclExpUsersViewEnd );
         }
     }

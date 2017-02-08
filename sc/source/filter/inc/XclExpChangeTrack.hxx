@@ -61,18 +61,17 @@ public:
 class XclExpUserBViewList : public ExcEmptyRec
 {
 private:
-    std::vector<XclExpUserBView*> aViews;
+    std::vector<XclExpUserBView> aViews;
 
 public:
 
-    typedef std::vector<XclExpUserBView*>::iterator iterator;
-    typedef std::vector<XclExpUserBView*>::const_iterator const_iterator;
+    typedef std::vector<XclExpUserBView>::const_iterator const_iterator;
 
                                 XclExpUserBViewList( const ScChangeTrack& rChangeTrack );
     virtual                     ~XclExpUserBViewList() override;
 
-    inline iterator begin () { return aViews.begin(); }
-    inline iterator end () { return aViews.end(); }
+    inline const_iterator cbegin () { return aViews.cbegin(); }
+    inline const_iterator cend () { return aViews.cend(); }
 
     virtual void                Save( XclExpStream& rStrm ) override;
 };
