@@ -24,7 +24,6 @@
 #include <vcl/builderfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/field.hxx>
-#include <vcl/helper.hxx>
 #include <vcl/settings.hxx>
 #include <sal/macros.h>
 #include <comphelper/processfactory.hxx>

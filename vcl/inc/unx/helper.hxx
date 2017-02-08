@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_HELPER_HXX
-#define INCLUDED_VCL_HELPER_HXX
+#ifndef INCLUDED_VCL_INC_UNX_HELPER_HXX
+#define INCLUDED_VCL_INC_UNX_HELPER_HXX
 
 #include <list>
 
@@ -34,27 +34,27 @@ namespace osl { class File; }
 namespace psp
 {
 
-void VCL_DLLPUBLIC getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir );
+void getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir );
 
 // note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
 // seems to be a bug in gcc, now we return an object instead of a reference
-VCL_DLLPUBLIC OUString const & getFontPath();
+OUString const & getFontPath();
 
 // normalized path (equivalent to realpath)
-void VCL_DLLPUBLIC normPath( OString& rPath );
+void normPath( OString& rPath );
 
 // splits rOrgPath into dirname and basename
 // rOrgPath will be subject to normPath
-void VCL_DLLPUBLIC splitPath( OString& rOrgPath, OString& rDir, OString& rBase );
+void splitPath( OString& rOrgPath, OString& rDir, OString& rBase );
 
 enum class whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
 // note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
 // seems to be a bug in gcc, now we return an object instead of a reference
-VCL_DLLPUBLIC OUString const & getOfficePath( whichOfficePath ePath );
+OUString const & getOfficePath( whichOfficePath ePath );
 
 } // namespace
 
 
-#endif // INCLUDED_VCL_HELPER_HXX
+#endif // INCLUDED_VCL_INC_UNX_HELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -24,9 +24,9 @@
 #include <unordered_map>
 
 #include <vcl/dllapi.h>
-#include <vcl/helper.hxx>
 #include <vcl/jobdata.hxx>
 #include <osl/file.hxx>
+#include <unx/helper.hxx>
 
 #include <cstdio>
 

@@ -24,7 +24,7 @@
 
 #include "unx/printergfx.hxx"
 #include "unx/fontmanager.hxx"
-#include <vcl/helper.hxx>
+#include <unx/helper.hxx>
 
 #include "osl/thread.h"
 

@@ -21,7 +21,7 @@
 #define INCLUDED_VCL_INC_FONTMANAGER_HXX
 
 #include <vcl/dllapi.h>
-#include <vcl/helper.hxx>
+#include <unx/helper.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/vclenum.hxx>
 #include <com/sun/star/lang/Locale.hpp>
