@@ -36,8 +36,6 @@ namespace psp
 
 void getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir );
 
-// note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
-// seems to be a bug in gcc, now we return an object instead of a reference
 OUString const & getFontPath();
 
 // normalized path (equivalent to realpath)
@@ -48,8 +46,7 @@ void normPath( OString& rPath );
 void splitPath( OString& rOrgPath, OString& rDir, OString& rBase );
 
 enum class whichOfficePath { InstallationRootPath, UserPath, ConfigPath };
-// note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here
-// seems to be a bug in gcc, now we return an object instead of a reference
+
 OUString const & getOfficePath( whichOfficePath ePath );
 
 } // namespace
