@@ -60,8 +60,7 @@
 
 ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
     maRange( rRange ),
-    mpDoc( pDocP ),
-    mpParser( nullptr )
+    mpDoc( pDocP )
 {
     const ScPatternAttr* pPattern = mpDoc->GetPattern(
         maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
