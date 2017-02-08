@@ -171,7 +171,7 @@ inline void _destructAny(
     case typelib_TypeClass_SEQUENCE:
     {
         destructSequence(
-            *(uno_Sequence **) &pAny->pReserved, pType, 0, release );
+            *(uno_Sequence **) pAny->pData, pType, 0, release );
         break;
     }
     case typelib_TypeClass_INTERFACE:

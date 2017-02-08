@@ -556,45 +556,46 @@ void Bridge::map_to_uno(
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_CHAR:
-                *(jchar *) &pAny->pReserved = jni->CallCharMethodA(
+                pAny->pData = &pAny->pReserved;
+                *(jchar *) pAny->pData = jni->CallCharMethodA(
                     java_data.l, m_jni_info->m_method_Character_charValue, 0 );
                 jni.ensure_no_exception();
                 pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_BOOLEAN:
-                *(jboolean *) &pAny->pReserved = jni->CallBooleanMethodA(
+                pAny->pData = &pAny->pReserved;
+                *(jboolean *) pAny->pData = jni->CallBooleanMethodA(
                     java_data.l, m_jni_info->m_method_Boolean_booleanValue, 0 );
                 jni.ensure_no_exception();
-                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_BYTE:
-                *(jbyte *) &pAny->pReserved = jni->CallByteMethodA(
+                pAny->pData = &pAny->pReserved;
+                *(jbyte *) pAny->pData = jni->CallByteMethodA(
                     java_data.l, m_jni_info->m_method_Byte_byteValue, 0 );
                 jni.ensure_no_exception();
-                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
-                *(jshort *) &pAny->pReserved = jni->CallShortMethodA(
+                pAny->pData = &pAny->pReserved;
+                *(jshort *) pAny->pData = jni->CallShortMethodA(
                     java_data.l, m_jni_info->m_method_Short_shortValue, 0 );
                 jni.ensure_no_exception();
-                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
-                *(jint *) &pAny->pReserved = jni->CallIntMethodA(
+                pAny->pData = &pAny->pReserved;
+                *(jint *) pAny->pData = jni->CallIntMethodA(
                     java_data.l, m_jni_info->m_method_Integer_intValue, 0 );
                 jni.ensure_no_exception();
-                pAny->pData = &pAny->pReserved;
                 break;
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
                 if (sizeof (sal_Int64) <= sizeof (void *))
                 {
-                    *(jlong *) &pAny->pReserved = jni->CallLongMethodA(
+                    pAny->pData = &pAny->pReserved;
+                    *(jlong *) pAny->pData = jni->CallLongMethodA(
                         java_data.l, m_jni_info->m_method_Long_longValue, 0 );
                     jni.ensure_no_exception();
-                    pAny->pData = &pAny->pReserved;
                 }
                 else
                 {
@@ -609,10 +610,10 @@ void Bridge::map_to_uno(
             case typelib_TypeClass_FLOAT:
                 if (sizeof (float) <= sizeof (void *))
                 {
-                    *(jfloat *) &pAny->pReserved = jni->CallFloatMethodA(
+                    pAny->pData = &pAny->pReserved;
+                    *(jfloat *) pAny->pData = jni->CallFloatMethodA(
                         java_data.l, m_jni_info->m_method_Float_floatValue, 0 );
                     jni.ensure_no_exception();
-                    pAny->pData = &pAny->pReserved;
                 }
                 else
                 {
@@ -627,12 +628,12 @@ void Bridge::map_to_uno(
             case typelib_TypeClass_DOUBLE:
                 if (sizeof (double) <= sizeof (void *))
                 {
-                    *(jdouble *) &pAny->pReserved =
+                    pAny->pData = &pAny->pReserved;
+                    *(jdouble *) pAny->pData =
                         jni->CallDoubleMethodA(
                             java_data.l,
                             m_jni_info->m_method_Double_doubleValue, 0 );
                     jni.ensure_no_exception();
-                    pAny->pData = &pAny->pReserved;
                 }
                 else
                 {
@@ -1653,7 +1654,7 @@ void Bridge::map_to_java(
             case typelib_TypeClass_UNSIGNED_SHORT:
             {
                 jvalue args[ 2 ];
-                args[ 0 ].s = *(jshort const *) &pAny->pReserved;
+                args[ 0 ].s = *(jshort const *) pAny->pData;
                 JLocalAutoRef jo_val(
                     jni, jni->NewObjectA(
                         m_jni_info->m_class_Short,
@@ -1672,7 +1673,7 @@ void Bridge::map_to_java(
             case typelib_TypeClass_UNSIGNED_LONG:
             {
                 jvalue args[ 2 ];
-                args[ 0 ].i = *(jint const *) &pAny->pReserved;
+                args[ 0 ].i = *(jint const *) pAny->pData;
                 JLocalAutoRef jo_val(
                     jni, jni->NewObjectA(
                         m_jni_info->m_class_Integer,

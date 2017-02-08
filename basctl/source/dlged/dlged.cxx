@@ -967,7 +967,7 @@ void DlgEditor::Paste()
                         uno::UNO_QUERY );
 
                 bool bSourceIsLocalized = false;
-                Sequence< sal_Int8 > DialogModelBytes;
+                rtl::ByteSequence DialogModelBytes;
                 Sequence< sal_Int8 > aResData;
                 if( bLocalized && xTransf->isDataFlavorSupported( m_ClipboardDataFlavorsResource[1] ) )
                 {
@@ -1001,7 +1001,9 @@ void DlgEditor::Paste()
                 else
                 {
                     Any aAny = xTransf->getTransferData( m_ClipboardDataFlavors[0] );
-                    aAny >>= DialogModelBytes;
+                    Sequence< sal_Int8 > aTmp;
+                    aAny >>= aTmp;
+                    DialogModelBytes = rtl::ByteSequence( aTmp.getArray(), aTmp.getLength() );
                 }
 
                 if ( xClipDialogModel.is() )
@@ -1010,7 +1012,7 @@ void DlgEditor::Paste()
                     Reference< beans::XPropertySet > xProps( xMSF, UNO_QUERY );
                     OSL_ASSERT( xProps.is() );
                     OSL_VERIFY( xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
-                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( *((::rtl::ByteSequence*)(&DialogModelBytes)) ) , xClipDialogModel, xContext );
+                    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( DialogModelBytes ) , xClipDialogModel, xContext );
                 }
 
                 // get control models from clipboard dialog model

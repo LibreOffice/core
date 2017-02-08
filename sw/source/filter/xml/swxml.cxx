@@ -1084,7 +1084,6 @@ sal_uInt16 XMLReader::GetSectionList( SfxMedium& rMedium,
             {
                 // get filter
                 // #110680#
-                // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
                 uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
 
                 // connect parser and filter

@@ -257,7 +257,7 @@ static void SAL_CALL defenv_registerInterface(
     rtl_uString * pOId, typelib_InterfaceTypeDescription * pTypeDescr )
 {
     OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr, "### null ptr!" );
-    OUString const & rOId = OUString::unacquired( &pOId );
+    OUString sOId( pOId );
 
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
@@ -265,10 +265,10 @@ static void SAL_CALL defenv_registerInterface(
 
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
-        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, 0 ) ) );
+        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( sOId, 0 ) ) );
     if (insertion.second)
     {
-        ObjectEntry * pOEntry = new ObjectEntry( rOId );
+        ObjectEntry * pOEntry = new ObjectEntry( sOId );
         insertion.first->second = pOEntry;
         ++pOEntry->nRef; // another register call on object
         pOEntry->append( that, *ppInterface, pTypeDescr, 0 );
@@ -305,7 +305,7 @@ static void SAL_CALL defenv_registerProxyInterface(
 {
     OSL_ENSURE( pEnv && ppInterface && pOId && pTypeDescr && freeProxy,
                 "### null ptr!" );
-    OUString const & rOId = OUString::unacquired( &pOId );
+    OUString sOId( pOId );
 
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
@@ -313,10 +313,10 @@ static void SAL_CALL defenv_registerProxyInterface(
 
     // try to insert dummy 0:
     std::pair<OId2ObjectMap::iterator, bool> const insertion(
-        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( rOId, 0 ) ) );
+        that->aOId2ObjectMap.insert( OId2ObjectMap::value_type( sOId, 0 ) ) );
     if (insertion.second)
     {
-        ObjectEntry * pOEntry = new ObjectEntry( rOId );
+        ObjectEntry * pOEntry = new ObjectEntry( sOId );
         insertion.first->second = pOEntry;
         ++pOEntry->nRef; // another register call on object
         pOEntry->append( that, *ppInterface, pTypeDescr, freeProxy );
@@ -494,13 +494,13 @@ static void SAL_CALL defenv_getRegisteredInterface(
         *ppInterface = 0;
     }
 
-    OUString const & rOId = OUString::unacquired( &pOId );
+    OUString sOId( pOId );
     uno_DefaultEnvironment * that =
         static_cast< uno_DefaultEnvironment * >( pEnv );
     ::osl::MutexGuard guard( that->mutex );
 
     OId2ObjectMap::const_iterator const iFind
-        ( that->aOId2ObjectMap.find( rOId ) );
+        ( that->aOId2ObjectMap.find( sOId ) );
     if (iFind != that->aOId2ObjectMap.end())
     {
         InterfaceEntry const * pIEntry = iFind->second->find( pTypeDescr );

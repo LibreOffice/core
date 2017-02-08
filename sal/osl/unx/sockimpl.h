@@ -55,7 +55,11 @@ struct oslSocketImpl {
 struct oslSocketAddrImpl
 {
     sal_Int32 m_nRefCount;
-    struct sockaddr m_sockaddr;
+    union
+    {
+        struct sockaddr m_sockaddr;
+        struct sockaddr_in m_sockaddr_in;
+    };
 };
 
 struct oslPipeImpl {

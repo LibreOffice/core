@@ -24,6 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
 #include <stdio.h>
+#include <string.h>
 
 #include <list>
 
@@ -47,10 +48,12 @@ using namespace ::cppu;
 
 static inline void createLocalId( sal_Sequence **ppThreadId )
 {
-    rtl_byte_sequence_constructNoDefault( ppThreadId , 4 + 16 );
-    *((sal_Int32*) ((*ppThreadId)->elements)) = osl_getThreadIdentifier(0);
+    rtl_byte_sequence_constructNoDefault( ppThreadId , sizeof(oslThreadIdentifier) + 16 );
 
-    rtl_getGlobalProcessId( (sal_uInt8 * ) &( (*ppThreadId)->elements[4]) );
+    oslThreadIdentifier hIdent = osl_getThreadIdentifier(0);
+    memcpy((*ppThreadId)->elements, &hIdent, sizeof(oslThreadIdentifier));
+
+    rtl_getGlobalProcessId( (sal_uInt8 * ) &( (*ppThreadId)->elements[sizeof(oslThreadIdentifier)]) );
 }
 
 

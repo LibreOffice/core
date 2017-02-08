@@ -179,32 +179,32 @@ inline void _copyConstructAnyFromData(
     {
     case typelib_TypeClass_CHAR:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Unicode *)&pDestAny->pReserved = *(sal_Unicode *)pSource;
+        *(sal_Unicode *)pDestAny->pData = *(sal_Unicode *)pSource;
         break;
     case typelib_TypeClass_BOOLEAN:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Bool *)&pDestAny->pReserved = (*(sal_Bool *)pSource != sal_False);
+        *(sal_Bool *)pDestAny->pData = (*(sal_Bool *)pSource != sal_False);
         break;
     case typelib_TypeClass_BYTE:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Int8 *)&pDestAny->pReserved = *(sal_Int8 *)pSource;
+        *(sal_Int8 *)pDestAny->pData = *(sal_Int8 *)pSource;
         break;
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Int16 *)&pDestAny->pReserved = *(sal_Int16 *)pSource;
+        *(sal_Int16 *)pDestAny->pData = *(sal_Int16 *)pSource;
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
         pDestAny->pData = &pDestAny->pReserved;
-        *(sal_Int32 *)&pDestAny->pReserved = *(sal_Int32 *)pSource;
+        *(sal_Int32 *)pDestAny->pData = *(sal_Int32 *)pSource;
         break;
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
         if (sizeof(void *) >= sizeof(sal_Int64))
         {
             pDestAny->pData = &pDestAny->pReserved;
-            *(sal_Int64 *)&pDestAny->pReserved = *(sal_Int64 *)pSource;
+            *(sal_Int64 *)pDestAny->pData = *(sal_Int64 *)pSource;
         }
         else
         {
@@ -216,7 +216,7 @@ inline void _copyConstructAnyFromData(
         if (sizeof(void *) >= sizeof(float))
         {
             pDestAny->pData = &pDestAny->pReserved;
-            *(float *)&pDestAny->pReserved = *(float *)pSource;
+            *(float *)pDestAny->pData = *(float *)pSource;
         }
         else
         {
@@ -228,7 +228,7 @@ inline void _copyConstructAnyFromData(
         if (sizeof(void *) >= sizeof(double))
         {
             pDestAny->pData = &pDestAny->pReserved;
-            *(double *)&pDestAny->pReserved = *(double *)pSource;
+            *(double *)pDestAny->pData = *(double *)pSource;
         }
         else
         {
@@ -239,12 +239,12 @@ inline void _copyConstructAnyFromData(
     case typelib_TypeClass_STRING:
         ::rtl_uString_acquire( *(rtl_uString **)pSource );
         pDestAny->pData = &pDestAny->pReserved;
-        *(rtl_uString **)&pDestAny->pReserved = *(rtl_uString **)pSource;
+        *(rtl_uString **)pDestAny->pData = *(rtl_uString **)pSource;
         break;
     case typelib_TypeClass_TYPE:
         TYPE_ACQUIRE( *(typelib_TypeDescriptionReference **)pSource );
         pDestAny->pData = &pDestAny->pReserved;
-        *(typelib_TypeDescriptionReference **)&pDestAny->pReserved = *(typelib_TypeDescriptionReference **)pSource;
+        *(typelib_TypeDescriptionReference **)pDestAny->pData = *(typelib_TypeDescriptionReference **)pSource;
         break;
     case typelib_TypeClass_ANY:
         OSL_ENSURE( 0, "### unexpected nested any!" );
@@ -252,7 +252,7 @@ inline void _copyConstructAnyFromData(
     case typelib_TypeClass_ENUM:
         pDestAny->pData = &pDestAny->pReserved;
         // enum is forced to 32bit long
-        *(sal_Int32 *)&pDestAny->pReserved = *(sal_Int32 *)pSource;
+        *(sal_Int32 *)pDestAny->pData = *(sal_Int32 *)pSource;
         break;
     case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_EXCEPTION:
@@ -313,7 +313,7 @@ inline void _copyConstructAnyFromData(
         pDestAny->pData = &pDestAny->pReserved;
         if (pTypeDescr)
         {
-            *(uno_Sequence **)&pDestAny->pReserved = copyConstructSequence(
+            *(uno_Sequence **)pDestAny->pData = copyConstructSequence(
                 *(uno_Sequence **)pSource,
                 ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                 acquire, mapping );
@@ -321,7 +321,7 @@ inline void _copyConstructAnyFromData(
         else
         {
             TYPELIB_DANGER_GET( &pTypeDescr, pType );
-            *(uno_Sequence **)&pDestAny->pReserved = copyConstructSequence(
+            *(uno_Sequence **)pDestAny->pData = copyConstructSequence(
                 *(uno_Sequence **)pSource,
                 ((typelib_IndirectTypeDescription *)pTypeDescr)->pType,
                 acquire, mapping );
@@ -388,32 +388,32 @@ inline void _copyConstructAny(
             {
             case typelib_TypeClass_CHAR:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Unicode *)&pDestAny->pReserved = '\0';
+                *(sal_Unicode *)pDestAny->pData = '\0';
                 break;
             case typelib_TypeClass_BOOLEAN:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Bool *)&pDestAny->pReserved = sal_False;
+                *(sal_Bool *)pDestAny->pData = sal_False;
                 break;
             case typelib_TypeClass_BYTE:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Int8 *)&pDestAny->pReserved = 0;
+                *(sal_Int8 *)pDestAny->pData = 0;
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_UNSIGNED_SHORT:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Int16 *)&pDestAny->pReserved = 0;
+                *(sal_Int16 *)pDestAny->pData = 0;
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(sal_Int32 *)&pDestAny->pReserved = 0;
+                *(sal_Int32 *)pDestAny->pData = 0;
                 break;
             case typelib_TypeClass_HYPER:
             case typelib_TypeClass_UNSIGNED_HYPER:
                 if (sizeof(void *) >= sizeof(sal_Int64))
                 {
                     pDestAny->pData = &pDestAny->pReserved;
-                    *(sal_Int64 *)&pDestAny->pReserved = 0;
+                    *(sal_Int64 *)pDestAny->pData = 0;
                 }
                 else
                 {
@@ -425,7 +425,7 @@ inline void _copyConstructAny(
                 if (sizeof(void *) >= sizeof(float))
                 {
                     pDestAny->pData = &pDestAny->pReserved;
-                    *(float *)&pDestAny->pReserved = 0.0;
+                    *(float *)pDestAny->pData = 0.0;
                 }
                 else
                 {
@@ -437,7 +437,7 @@ inline void _copyConstructAny(
                 if (sizeof(void *) >= sizeof(double))
                 {
                     pDestAny->pData = &pDestAny->pReserved;
-                    *(double *)&pDestAny->pReserved = 0.0;
+                    *(double *)pDestAny->pData = 0.0;
                 }
                 else
                 {
@@ -447,23 +447,23 @@ inline void _copyConstructAny(
                 break;
             case typelib_TypeClass_STRING:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(rtl_uString **)&pDestAny->pReserved = 0;
+                *(rtl_uString **)pDestAny->pData = 0;
                 ::rtl_uString_new( (rtl_uString **)&pDestAny->pReserved );
                 break;
             case typelib_TypeClass_TYPE:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(typelib_TypeDescriptionReference **)&pDestAny->pReserved = _getVoidType();
+                *(typelib_TypeDescriptionReference **)pDestAny->pData = _getVoidType();
                 break;
             case typelib_TypeClass_ENUM:
                 pDestAny->pData = &pDestAny->pReserved;
                 if (pTypeDescr)
                 {
-                    *(sal_Int32 *)&pDestAny->pReserved = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+                    *(sal_Int32 *)pDestAny->pData = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
                 }
                 else
                 {
                     TYPELIB_DANGER_GET( &pTypeDescr, pType );
-                    *(sal_Int32 *)&pDestAny->pReserved = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
+                    *(sal_Int32 *)pDestAny->pData = ((typelib_EnumTypeDescription *)pTypeDescr)->nDefaultEnumValue;
                     TYPELIB_DANGER_RELEASE( pTypeDescr );
                 }
                 break;
@@ -516,7 +516,7 @@ inline void _copyConstructAny(
                 break;
             case typelib_TypeClass_SEQUENCE:
                 pDestAny->pData = &pDestAny->pReserved;
-                *(uno_Sequence **)&pDestAny->pReserved = createEmptySequence();
+                *(uno_Sequence **)pDestAny->pData = createEmptySequence();
                 break;
             case typelib_TypeClass_INTERFACE:
                 pDestAny->pData = &pDestAny->pReserved;
