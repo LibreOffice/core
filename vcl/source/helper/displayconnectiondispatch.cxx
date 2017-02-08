@@ -30,18 +30,7 @@ using namespace com::sun::star::awt;
 
 DisplayConnectionDispatch::DisplayConnectionDispatch()
 {
-    SalInstance::ConnectionIdentifierType eType;
-    int nBytes;
-    void* pBytes = ImplGetSVData()->mpDefInst->GetConnectionIdentifier( eType, nBytes );
-    switch( eType )
-    {
-        case SalInstance::AsciiCString:
-            m_aAny <<= OUString::createFromAscii( static_cast<sal_Char*>(pBytes) );
-            break;
-        case SalInstance::Blob:
-            m_aAny <<= Sequence< sal_Int8 >( static_cast<sal_Int8*>(pBytes), nBytes );
-            break;
-    }
+    m_ConnectionIdentifier = ImplGetSVData()->mpDefInst->GetConnectionIdentifier();
 }
 
 DisplayConnectionDispatch::~DisplayConnectionDispatch()
@@ -103,7 +92,7 @@ void SAL_CALL DisplayConnectionDispatch::removeErrorHandler( const css::uno::Ref
 
 Any SAL_CALL DisplayConnectionDispatch::getIdentifier()
 {
-    return m_aAny;
+    return Any(m_ConnectionIdentifier);
 }
 
 bool DisplayConnectionDispatch::dispatchEvent( void* pData, int nBytes )

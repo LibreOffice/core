@@ -155,8 +155,7 @@ public:
 
     bool                    CallEventCallback( void* pEvent, int nBytes );
 
-    enum ConnectionIdentifierType { AsciiCString, Blob };
-    virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) = 0;
+    virtual OUString        GetConnectionIdentifier() = 0;
 
     // dtrans implementation
     virtual css::uno::Reference< css::uno::XInterface > CreateClipboard( const css::uno::Sequence< css::uno::Any >& i_rArguments );

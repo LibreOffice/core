@@ -415,11 +415,9 @@ SalSession* SvpSalInstance::CreateSalSession()
     return nullptr;
 }
 
-void* SvpSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
+OUString SvpSalInstance::GetConnectionIdentifier()
 {
-    rReturnedBytes  = 1;
-    rReturnedType   = AsciiCString;
-    return const_cast<char*>("");
+    return OUString("");
 }
 
 void SvpSalInstance::StopTimer()
