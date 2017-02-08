@@ -20,8 +20,6 @@
 #ifndef INCLUDED_VCL_SALBTYPE_HXX
 #define INCLUDED_VCL_SALBTYPE_HXX
 
-#include <string.h>
-#include <stdlib.h>
 #include <tools/debug.hxx>
 #include <vcl/checksum.hxx>
 #include <vcl/salgtype.hxx>
@@ -30,6 +28,7 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <o3tl/typed_flags_set.hxx>
+#include <vector>
 
 typedef sal_uInt8*        Scanline;
 typedef const sal_uInt8*  ConstScanline;
@@ -92,9 +91,6 @@ class VCL_DLLPUBLIC BitmapColor
 {
 private:
 
-// ATTENTION:
-//   Because the members of this class are accessed via memcpy,
-//   you MUST NOT CHANGE the order of the members or the size of this class!
     sal_uInt8               mcBlueOrIndex;
     sal_uInt8               mcGreen;
     sal_uInt8               mcRed;
@@ -153,38 +149,103 @@ class VCL_DLLPUBLIC BitmapPalette
 
 private:
 
-    BitmapColor*                mpBitmapColor;
-    sal_uInt16                  mnCount;
+    std::vector<BitmapColor> maBitmapColor;
 
 public:
 
-    SAL_DLLPRIVATE inline BitmapColor* ImplGetColorBuffer() const;
+    SAL_DLLPRIVATE const BitmapColor* ImplGetColorBuffer() const
+    {
+        return maBitmapColor.data();
+    }
+
+    SAL_DLLPRIVATE BitmapColor* ImplGetColorBuffer()
+    {
+        return maBitmapColor.data();
+    }
 
     BitmapChecksum GetChecksum() const
     {
-        return vcl_get_checksum(0, mpBitmapColor, mnCount * sizeof(BitmapColor));
+        return vcl_get_checksum(0, maBitmapColor.data(), maBitmapColor.size() * sizeof(BitmapColor));
     }
 
 public:
 
-    inline                      BitmapPalette();
-    inline                      BitmapPalette( const BitmapPalette& rBitmapPalette );
-    inline                      BitmapPalette( sal_uInt16 nCount );
-    inline                      ~BitmapPalette();
+    BitmapPalette()
+    {
+    }
 
-    inline BitmapPalette&       operator=( const BitmapPalette& rBitmapPalette );
-    inline bool                 operator==( const BitmapPalette& rBitmapPalette ) const;
-    inline bool                 operator!=( const BitmapPalette& rBitmapPalette ) const;
-    inline bool                 operator!();
+    BitmapPalette(sal_uInt16 nCount)
+        : maBitmapColor(nCount)
+    {
+    }
 
-    inline sal_uInt16           GetEntryCount() const;
-    inline void                 SetEntryCount( sal_uInt16 nCount );
+    bool operator==( const BitmapPalette& rBitmapPalette ) const
+    {
+        return maBitmapColor == rBitmapPalette.maBitmapColor;
+    }
 
-    inline const BitmapColor&   operator[]( sal_uInt16 nIndex ) const;
-    inline BitmapColor&         operator[]( sal_uInt16 nIndex );
+    bool operator!=(const BitmapPalette& rBitmapPalette) const
+    {
+        return !( *this == rBitmapPalette );
+    }
 
-    inline sal_uInt16           GetBestIndex( const BitmapColor& rCol ) const;
-    bool                        IsGreyPalette() const;
+    bool operator!()
+    {
+        return maBitmapColor.empty();
+    }
+
+    sal_uInt16 GetEntryCount() const
+    {
+        return maBitmapColor.size();
+    }
+
+    void SetEntryCount(sal_uInt16 nCount)
+    {
+        maBitmapColor.resize(nCount);
+    }
+
+    const BitmapColor& operator[](sal_uInt16 nIndex) const
+    {
+        assert(nIndex < maBitmapColor.size() && "Palette index is out of range");
+        return maBitmapColor[nIndex];
+    }
+
+    BitmapColor& operator[](sal_uInt16 nIndex)
+    {
+        assert(nIndex < maBitmapColor.size() && "Palette index is out of range");
+        return maBitmapColor[nIndex];
+    }
+
+    sal_uInt16 GetBestIndex(const BitmapColor& rCol) const
+    {
+        sal_uInt16 nRetIndex = 0;
+
+        if (!maBitmapColor.empty())
+        {
+            for (size_t j = 0; j < maBitmapColor.size(); ++j)
+            {
+                if (rCol == maBitmapColor[j])
+                {
+                    return j;
+                }
+            }
+
+            sal_uInt16 nLastErr = SAL_MAX_UINT16;
+            for (size_t i = 0; i < maBitmapColor.size(); ++i)
+            {
+                const sal_uInt16 nActErr = rCol.GetColorError(maBitmapColor[i]);
+                if ( nActErr < nLastErr )
+                {
+                    nLastErr = nActErr;
+                    nRetIndex = i;
+                }
+            }
+        }
+
+        return nRetIndex;
+    }
+
+    bool IsGreyPalette() const;
 };
 
 struct VCL_DLLPUBLIC ColorMaskElement
@@ -437,164 +498,6 @@ inline sal_uInt16 BitmapColor::GetColorError( const BitmapColor& rBitmapColor ) 
         abs( static_cast<int>(mcBlueOrIndex) - static_cast<int>(rBitmapColor.mcBlueOrIndex) ) +
         abs( static_cast<int>(mcGreen) - static_cast<int>(rBitmapColor.mcGreen) ) +
         abs( static_cast<int>(mcRed) - static_cast<int>(rBitmapColor.mcRed) ) );
-}
-
-inline BitmapPalette::BitmapPalette() :
-            mpBitmapColor   ( nullptr ),
-            mnCount         ( 0 )
-{
-}
-
-inline BitmapPalette::BitmapPalette( const BitmapPalette& rBitmapPalette ) :
-            mnCount( rBitmapPalette.mnCount )
-{
-    if( mnCount )
-    {
-        const size_t nSize = mnCount * sizeof( BitmapColor );
-        mpBitmapColor = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nSize ]);
-        memcpy( mpBitmapColor, rBitmapPalette.mpBitmapColor, nSize );
-    }
-    else
-        mpBitmapColor = nullptr;
-}
-
-inline BitmapPalette::BitmapPalette( sal_uInt16 nCount ) :
-            mnCount( nCount )
-{
-    if( mnCount )
-    {
-        const size_t nSize = mnCount * sizeof( BitmapColor );
-        mpBitmapColor = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nSize ]);
-        memset( mpBitmapColor, 0, nSize );
-    }
-    else
-        mpBitmapColor = nullptr;
-}
-
-inline BitmapPalette::~BitmapPalette()
-{
-    delete[] reinterpret_cast<sal_uInt8*>(mpBitmapColor);
-}
-
-inline BitmapPalette& BitmapPalette::operator=( const BitmapPalette& rBitmapPalette )
-{
-    delete[] reinterpret_cast<sal_uInt8*>(mpBitmapColor);
-    mnCount = rBitmapPalette.mnCount;
-
-    if( mnCount )
-    {
-        const size_t nSize = mnCount * sizeof( BitmapColor );
-        mpBitmapColor = reinterpret_cast<BitmapColor*>(new sal_uInt8[ nSize ]);
-        memcpy( mpBitmapColor, rBitmapPalette.mpBitmapColor, nSize );
-    }
-    else
-        mpBitmapColor = nullptr;
-
-    return *this;
-}
-
-inline bool BitmapPalette::operator==( const BitmapPalette& rBitmapPalette ) const
-{
-    bool bRet = false;
-
-    if( rBitmapPalette.mnCount == mnCount )
-    {
-        bRet = true;
-
-        for( sal_uInt16 i = 0; i < mnCount; i++ )
-        {
-            if( mpBitmapColor[ i ] != rBitmapPalette.mpBitmapColor[ i ] )
-            {
-                bRet = false;
-                break;
-            }
-        }
-    }
-
-    return bRet;
-}
-
-inline bool BitmapPalette::operator!=( const BitmapPalette& rBitmapPalette ) const
-{
-    return !( *this == rBitmapPalette );
-}
-
-inline bool BitmapPalette::operator!()
-{
-    return( !mnCount || !mpBitmapColor );
-}
-
-inline sal_uInt16 BitmapPalette::GetEntryCount() const
-{
-    return mnCount;
-}
-
-inline void BitmapPalette::SetEntryCount( sal_uInt16 nCount )
-{
-    if( !nCount )
-    {
-        delete[] reinterpret_cast<sal_uInt8*>(mpBitmapColor);
-        mpBitmapColor = nullptr;
-        mnCount = 0;
-    }
-    else if( nCount != mnCount )
-    {
-        const size_t nNewSize = nCount * sizeof( BitmapColor );
-        const size_t nMinSize = std::min( mnCount, nCount ) * sizeof( BitmapColor );
-        sal_uInt8*      pNewColor = new sal_uInt8[ nNewSize ];
-
-        if ( nMinSize && mpBitmapColor )
-            memcpy( pNewColor, mpBitmapColor, nMinSize );
-        delete[] reinterpret_cast<sal_uInt8*>(mpBitmapColor);
-        memset( pNewColor + nMinSize, 0, nNewSize - nMinSize );
-        mpBitmapColor = reinterpret_cast<BitmapColor*>(pNewColor);
-        mnCount = nCount;
-    }
-}
-
-inline const BitmapColor& BitmapPalette::operator[]( sal_uInt16 nIndex ) const
-{
-    assert( nIndex < mnCount && "Palette index is out of range" );
-    return mpBitmapColor[ nIndex ];
-}
-
-inline BitmapColor& BitmapPalette::operator[]( sal_uInt16 nIndex )
-{
-    assert( nIndex < mnCount && "Palette index is out of range" );
-    return mpBitmapColor[ nIndex ];
-}
-
-inline BitmapColor* BitmapPalette::ImplGetColorBuffer() const
-{
-    assert( mpBitmapColor && "No color buffer available" );
-    return mpBitmapColor;
-}
-
-inline sal_uInt16 BitmapPalette::GetBestIndex( const BitmapColor& rCol ) const
-{
-    sal_uInt16 nRetIndex = 0;
-
-    if( mpBitmapColor && mnCount )
-    {
-        for( sal_uInt16 j = 0; j < mnCount; ++j )
-            if( rCol == mpBitmapColor[ j ] )
-            {
-                return j;
-            }
-
-        sal_uInt16 nLastErr = SAL_MAX_UINT16;
-        for( sal_uInt16 i = 0; i < mnCount; ++i )
-        {
-            const sal_uInt16 nActErr = rCol.GetColorError( mpBitmapColor[ i ] );
-            if ( nActErr < nLastErr )
-            {
-                nLastErr = nActErr;
-                nRetIndex = i;
-            }
-        }
-    }
-
-    return nRetIndex;
 }
 
 inline sal_uInt32 ColorMask::GetRedMask() const
