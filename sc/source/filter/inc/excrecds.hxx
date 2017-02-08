@@ -424,8 +424,8 @@ private:
     typedef XclExpAutofilterList::RecordRefType     XclExpAutofilterRef;
 
     XclExpAutofilterList maFilterList;
-    XclExpFiltermode*   pFilterMode;
-    XclExpAutofilterinfo* pFilterInfo;
+    std::unique_ptr<XclExpFiltermode> m_xFilterMode;
+    std::unique_ptr<XclExpAutofilterinfo> m_xFilterInfo;
     ScRange                 maRef;
     bool mbAutoFilter;
 };
