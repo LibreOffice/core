@@ -34,8 +34,6 @@ namespace osl { class File; }
 namespace psp
 {
 
-typedef int fontID;
-
 void VCL_DLLPUBLIC getPrinterPathList( std::list< OUString >& rPathList, const char* pSubDir );
 
 // note: gcc 3.4.1 warns about visibility if we retunr a const OUString& here

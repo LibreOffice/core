@@ -48,6 +48,8 @@ class FontSelectPattern;
 namespace psp {
 class PPDParser;
 
+typedef int fontID;
+
 /*
  *  the difference between FastPrintFontInfo and PrintFontInfo
  *  is that the information in FastPrintFontInfo can usually
