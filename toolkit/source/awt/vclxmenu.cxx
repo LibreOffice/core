@@ -79,6 +79,12 @@ void VCLXMenu::ImplCreateMenu( bool bPopup )
     mpMenu->AddEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
 }
 
+void VCLXMenu::ImplAddListener()
+{
+    assert(mpMenu);
+    mpMenu->AddEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
+}
+
 IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 {
     DBG_ASSERT( rMenuEvent.GetMenu() && mpMenu, "Menu???" );
@@ -858,6 +864,7 @@ VCLXPopupMenu::VCLXPopupMenu()
 
 VCLXPopupMenu::VCLXPopupMenu( PopupMenu* pPopMenu ) : VCLXMenu( static_cast<Menu *>(pPopMenu) )
 {
+    ImplAddListener();
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL

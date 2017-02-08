@@ -2189,7 +2189,7 @@
       </node>
       <node oor:name=".uno:ColumnOperations" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Column Operations</value>
+          <value xml:lang="en-US">Column</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -2197,7 +2197,7 @@
       </node>
       <node oor:name=".uno:RowOperations" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Row Operations</value>
+          <value xml:lang="en-US">Row</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
