@@ -1,0 +1,1344 @@
+diff --git a/core/fpdfapi/font/ttgsubtable.cpp b/core/fpdfapi/font/ttgsubtable.cpp
+index 51e8e9c..4f4f696 100644
+--- a/core/fpdfapi/font/ttgsubtable.cpp
++++ b/core/fpdfapi/font/ttgsubtable.cpp
+@@ -94,29 +94,33 @@ bool CFX_CTTGSUBTable::GetVerticalGlyph(uint32_t glyphnum,
+           (uint8_t)'t',
+   };
+   if (!m_bFeautureMapLoad) {
+-    for (const auto& script : ScriptList.ScriptRecords) {
+-      for (const auto& record : script.Script.LangSysRecords) {
+-        for (const auto& index : record.LangSys.FeatureIndices) {
+-          if (FeatureList.FeatureRecords[index].FeatureTag == tag[0] ||
+-              FeatureList.FeatureRecords[index].FeatureTag == tag[1]) {
+-            m_featureSet.insert(index);
++    for (int i = 0; i < ScriptList.ScriptCount; i++) {
++      for (int j = 0; j < ScriptList.ScriptRecord[i].Script.LangSysCount; ++j) {
++        const auto& record = ScriptList.ScriptRecord[i].Script.LangSysRecord[j];
++        for (int k = 0; k < record.LangSys.FeatureCount; ++k) {
++          uint32_t index = record.LangSys.FeatureIndex[k];
++          if (FeatureList.FeatureRecord[index].FeatureTag == tag[0] ||
++              FeatureList.FeatureRecord[index].FeatureTag == tag[1]) {
++            if (!pdfium::ContainsKey(m_featureMap, index)) {
++              m_featureMap[index] = index;
++            }
+           }
+         }
+       }
+     }
+-    if (m_featureSet.empty()) {
+-      int i = 0;
+-      for (const auto& feature : FeatureList.FeatureRecords) {
+-        if (feature.FeatureTag == tag[0] || feature.FeatureTag == tag[1])
+-          m_featureSet.insert(i);
+-        ++i;
++    if (m_featureMap.empty()) {
++      for (int i = 0; i < FeatureList.FeatureCount; i++) {
++        if (FeatureList.FeatureRecord[i].FeatureTag == tag[0] ||
++            FeatureList.FeatureRecord[i].FeatureTag == tag[1]) {
++          m_featureMap[i] = i;
++        }
+       }
+     }
+     m_bFeautureMapLoad = true;
+   }
+-  for (const auto& item : m_featureSet) {
++  for (const auto& pair : m_featureMap) {
+     if (GetVerticalGlyphSub(glyphnum, vglyphnum,
+-                            &FeatureList.FeatureRecords[item].Feature)) {
++                            &FeatureList.FeatureRecord[pair.second].Feature)) {
+       return true;
+     }
+   }
+@@ -126,13 +130,16 @@ bool CFX_CTTGSUBTable::GetVerticalGlyph(uint32_t glyphnum,
+ bool CFX_CTTGSUBTable::GetVerticalGlyphSub(uint32_t glyphnum,
+                                            uint32_t* vglyphnum,
+                                            TFeature* Feature) {
+-  for (int index : Feature->LookupListIndices) {
+-    if (index < 0 || index >= pdfium::CollectionSize<int>(LookupList.Lookups))
++  for (int i = 0; i < Feature->LookupCount; i++) {
++    int index = Feature->LookupListIndex[i];
++    if (index < 0 || LookupList.LookupCount < index) {
+       continue;
+-
+-    if (LookupList.Lookups[index].LookupType == 1 &&
+-        GetVerticalGlyphSub2(glyphnum, vglyphnum, &LookupList.Lookups[index])) {
+-      return true;
++    }
++    if (LookupList.Lookup[index].LookupType == 1) {
++      if (GetVerticalGlyphSub2(glyphnum, vglyphnum,
++                               &LookupList.Lookup[index])) {
++        return true;
++      }
+     }
+   }
+   return false;
+@@ -141,10 +148,10 @@ bool CFX_CTTGSUBTable::GetVerticalGlyphSub(uint32_t glyphnum,
+ bool CFX_CTTGSUBTable::GetVerticalGlyphSub2(uint32_t glyphnum,
+                                             uint32_t* vglyphnum,
+                                             TLookup* Lookup) {
+-  for (const auto& subTable : Lookup->SubTables) {
+-    switch (subTable->SubstFormat) {
++  for (int i = 0; i < Lookup->SubTableCount; i++) {
++    switch (Lookup->SubTable[i]->SubstFormat) {
+       case 1: {
+-        auto tbl1 = static_cast<TSingleSubstFormat1*>(subTable.get());
++        TSingleSubstFormat1* tbl1 = (TSingleSubstFormat1*)Lookup->SubTable[i];
+         if (GetCoverageIndex(tbl1->Coverage.get(), glyphnum) >= 0) {
+           *vglyphnum = glyphnum + tbl1->DeltaGlyphID;
+           return true;
+@@ -152,11 +159,11 @@ bool CFX_CTTGSUBTable::GetVerticalGlyphSub2(uint32_t glyphnum,
+         break;
+       }
+       case 2: {
+-        auto tbl2 = static_cast<TSingleSubstFormat2*>(subTable.get());
+-        int index = GetCoverageIndex(tbl2->Coverage.get(), glyphnum);
+-        if (index >= 0 &&
+-            index < pdfium::CollectionSize<int>(tbl2->Substitutes)) {
+-          *vglyphnum = tbl2->Substitutes[index];
++        TSingleSubstFormat2* tbl2 = (TSingleSubstFormat2*)Lookup->SubTable[i];
++        int index = -1;
++        index = GetCoverageIndex(tbl2->Coverage.get(), glyphnum);
++        if (0 <= index && index < tbl2->GlyphCount) {
++          *vglyphnum = tbl2->Substitute[index];
+           return true;
+         }
+         break;
+@@ -168,28 +175,29 @@ bool CFX_CTTGSUBTable::GetVerticalGlyphSub2(uint32_t glyphnum,
+ 
+ int CFX_CTTGSUBTable::GetCoverageIndex(TCoverageFormatBase* Coverage,
+                                        uint32_t g) const {
+-  if (!Coverage)
++  int i = 0;
++  if (!Coverage) {
+     return -1;
+-
++  }
+   switch (Coverage->CoverageFormat) {
+     case 1: {
+-      int i = 0;
+       TCoverageFormat1* c1 = (TCoverageFormat1*)Coverage;
+-      for (const auto& glyph : c1->GlyphArray) {
+-        if (static_cast<uint32_t>(glyph) == g)
++      for (i = 0; i < c1->GlyphCount; i++) {
++        if ((uint32_t)c1->GlyphArray[i] == g) {
+           return i;
+-        ++i;
++        }
+       }
+       return -1;
+     }
+     case 2: {
+       TCoverageFormat2* c2 = (TCoverageFormat2*)Coverage;
+-      for (const auto& rangeRec : c2->RangeRecords) {
+-        uint32_t s = rangeRec.Start;
+-        uint32_t e = rangeRec.End;
+-        uint32_t si = rangeRec.StartCoverageIndex;
+-        if (s <= g && g <= e)
++      for (i = 0; i < c2->RangeCount; i++) {
++        uint32_t s = c2->RangeRecord[i].Start;
++        uint32_t e = c2->RangeRecord[i].End;
++        uint32_t si = c2->RangeRecord[i].StartCoverageIndex;
++        if (s <= g && g <= e) {
+           return si + g - s;
++        }
+       }
+       return -1;
+     }
+@@ -237,21 +245,33 @@ bool CFX_CTTGSUBTable::Parse(FT_Bytes scriptlist,
+ }
+ 
+ void CFX_CTTGSUBTable::ParseScriptList(FT_Bytes raw, TScriptList* rec) {
++  int i;
+   FT_Bytes sp = raw;
+-  rec->ScriptRecords = std::vector<TScriptRecord>(GetUInt16(sp));
+-  for (auto& scriptRec : rec->ScriptRecords) {
+-    scriptRec.ScriptTag = GetUInt32(sp);
+-    ParseScript(&raw[GetUInt16(sp)], &scriptRec.Script);
++  rec->ScriptCount = GetUInt16(sp);
++  if (rec->ScriptCount <= 0) {
++    return;
++  }
++  rec->ScriptRecord.reset(new TScriptRecord[rec->ScriptCount]);
++  for (i = 0; i < rec->ScriptCount; i++) {
++    rec->ScriptRecord[i].ScriptTag = GetUInt32(sp);
++    uint16_t offset = GetUInt16(sp);
++    ParseScript(&raw[offset], &rec->ScriptRecord[i].Script);
+   }
+ }
+ 
+ void CFX_CTTGSUBTable::ParseScript(FT_Bytes raw, TScript* rec) {
++  int i;
+   FT_Bytes sp = raw;
+   rec->DefaultLangSys = GetUInt16(sp);
+-  rec->LangSysRecords = std::vector<TLangSysRecord>(GetUInt16(sp));
+-  for (auto& sysRecord : rec->LangSysRecords) {
+-    sysRecord.LangSysTag = GetUInt32(sp);
+-    ParseLangSys(&raw[GetUInt16(sp)], &sysRecord.LangSys);
++  rec->LangSysCount = GetUInt16(sp);
++  if (rec->LangSysCount <= 0) {
++    return;
++  }
++  rec->LangSysRecord.reset(new TLangSysRecord[rec->LangSysCount]);
++  for (i = 0; i < rec->LangSysCount; i++) {
++    rec->LangSysRecord[i].LangSysTag = GetUInt32(sp);
++    uint16_t offset = GetUInt16(sp);
++    ParseLangSys(&raw[offset], &rec->LangSysRecord[i].LangSys);
+   }
+ }
+ 
+@@ -259,45 +279,81 @@ void CFX_CTTGSUBTable::ParseLangSys(FT_Bytes raw, TLangSys* rec) {
+   FT_Bytes sp = raw;
+   rec->LookupOrder = GetUInt16(sp);
+   rec->ReqFeatureIndex = GetUInt16(sp);
+-  rec->FeatureIndices = std::vector<uint16_t>(GetUInt16(sp));
+-  for (auto& element : rec->FeatureIndices)
+-    element = GetUInt16(sp);
++  rec->FeatureCount = GetUInt16(sp);
++  if (rec->FeatureCount <= 0) {
++    return;
++  }
++  rec->FeatureIndex.reset(new uint16_t[rec->FeatureCount]);
++  FXSYS_memset(rec->FeatureIndex.get(), 0,
++               sizeof(uint16_t) * rec->FeatureCount);
++  for (int i = 0; i < rec->FeatureCount; ++i) {
++    rec->FeatureIndex[i] = GetUInt16(sp);
++  }
+ }
+ 
+ void CFX_CTTGSUBTable::ParseFeatureList(FT_Bytes raw, TFeatureList* rec) {
++  int i;
+   FT_Bytes sp = raw;
+-  rec->FeatureRecords = std::vector<TFeatureRecord>(GetUInt16(sp));
+-  for (auto& featureRec : rec->FeatureRecords) {
+-    featureRec.FeatureTag = GetUInt32(sp);
+-    ParseFeature(&raw[GetUInt16(sp)], &featureRec.Feature);
++  rec->FeatureCount = GetUInt16(sp);
++  if (rec->FeatureCount <= 0) {
++    return;
++  }
++  rec->FeatureRecord.reset(new TFeatureRecord[rec->FeatureCount]);
++  for (i = 0; i < rec->FeatureCount; i++) {
++    rec->FeatureRecord[i].FeatureTag = GetUInt32(sp);
++    uint16_t offset = GetUInt16(sp);
++    ParseFeature(&raw[offset], &rec->FeatureRecord[i].Feature);
+   }
+ }
+ 
+ void CFX_CTTGSUBTable::ParseFeature(FT_Bytes raw, TFeature* rec) {
++  int i;
+   FT_Bytes sp = raw;
+   rec->FeatureParams = GetUInt16(sp);
+-  rec->LookupListIndices = std::vector<uint16_t>(GetUInt16(sp));
+-  for (auto& listIndex : rec->LookupListIndices)
+-    listIndex = GetUInt16(sp);
++  rec->LookupCount = GetUInt16(sp);
++  if (rec->LookupCount <= 0) {
++    return;
++  }
++  rec->LookupListIndex.reset(new uint16_t[rec->LookupCount]);
++  for (i = 0; i < rec->LookupCount; i++) {
++    rec->LookupListIndex[i] = GetUInt16(sp);
++  }
+ }
+ 
+ void CFX_CTTGSUBTable::ParseLookupList(FT_Bytes raw, TLookupList* rec) {
++  int i;
+   FT_Bytes sp = raw;
+-  rec->Lookups = std::vector<TLookup>(GetUInt16(sp));
+-  for (auto& lookup : rec->Lookups)
+-    ParseLookup(&raw[GetUInt16(sp)], &lookup);
++  rec->LookupCount = GetUInt16(sp);
++  if (rec->LookupCount <= 0) {
++    return;
++  }
++  rec->Lookup.reset(new TLookup[rec->LookupCount]);
++  for (i = 0; i < rec->LookupCount; i++) {
++    uint16_t offset = GetUInt16(sp);
++    ParseLookup(&raw[offset], &rec->Lookup[i]);
++  }
+ }
+ 
+ void CFX_CTTGSUBTable::ParseLookup(FT_Bytes raw, TLookup* rec) {
++  int i;
+   FT_Bytes sp = raw;
+   rec->LookupType = GetUInt16(sp);
+   rec->LookupFlag = GetUInt16(sp);
+-  rec->SubTables = std::vector<std::unique_ptr<TSubTableBase>>(GetUInt16(sp));
+-  if (rec->LookupType != 1)
++  rec->SubTableCount = GetUInt16(sp);
++  if (rec->SubTableCount <= 0) {
+     return;
+-
+-  for (auto& subTable : rec->SubTables)
+-    ParseSingleSubst(&raw[GetUInt16(sp)], &subTable);
++  }
++  rec->SubTable.reset(new TSubTableBase*[rec->SubTableCount]);
++  for (i = 0; i < rec->SubTableCount; i++) {
++    rec->SubTable[i] = nullptr;
++  }
++  if (rec->LookupType != 1) {
++    return;
++  }
++  for (i = 0; i < rec->SubTableCount; i++) {
++    uint16_t offset = GetUInt16(sp);
++    ParseSingleSubst(&raw[offset], &rec->SubTable[i]);
++  }
+ }
+ 
+ CFX_CTTGSUBTable::TCoverageFormatBase* CFX_CTTGSUBTable::ParseCoverage(
+@@ -317,39 +373,47 @@ CFX_CTTGSUBTable::TCoverageFormatBase* CFX_CTTGSUBTable::ParseCoverage(
+ 
+ void CFX_CTTGSUBTable::ParseCoverageFormat1(FT_Bytes raw,
+                                             TCoverageFormat1* rec) {
++  int i;
+   FT_Bytes sp = raw;
+-  (void)GetUInt16(sp);
+-  rec->GlyphArray = std::vector<uint16_t>(GetUInt16(sp));
+-  for (auto& glyph : rec->GlyphArray)
+-    glyph = GetUInt16(sp);
++  GetUInt16(sp);
++  rec->GlyphCount = GetUInt16(sp);
++  if (rec->GlyphCount <= 0) {
++    return;
++  }
++  rec->GlyphArray.reset(new uint16_t[rec->GlyphCount]);
++  for (i = 0; i < rec->GlyphCount; i++) {
++    rec->GlyphArray[i] = GetUInt16(sp);
++  }
+ }
+ 
+ void CFX_CTTGSUBTable::ParseCoverageFormat2(FT_Bytes raw,
+                                             TCoverageFormat2* rec) {
++  int i;
+   FT_Bytes sp = raw;
+-  (void)GetUInt16(sp);
+-  rec->RangeRecords = std::vector<TRangeRecord>(GetUInt16(sp));
+-  for (auto& rangeRec : rec->RangeRecords) {
+-    rangeRec.Start = GetUInt16(sp);
+-    rangeRec.End = GetUInt16(sp);
+-    rangeRec.StartCoverageIndex = GetUInt16(sp);
++  GetUInt16(sp);
++  rec->RangeCount = GetUInt16(sp);
++  if (rec->RangeCount <= 0) {
++    return;
++  }
++  rec->RangeRecord.reset(new TRangeRecord[rec->RangeCount]);
++  for (i = 0; i < rec->RangeCount; i++) {
++    rec->RangeRecord[i].Start = GetUInt16(sp);
++    rec->RangeRecord[i].End = GetUInt16(sp);
++    rec->RangeRecord[i].StartCoverageIndex = GetUInt16(sp);
+   }
+ }
+ 
+-void CFX_CTTGSUBTable::ParseSingleSubst(FT_Bytes raw,
+-                                        std::unique_ptr<TSubTableBase>* rec) {
++void CFX_CTTGSUBTable::ParseSingleSubst(FT_Bytes raw, TSubTableBase** rec) {
+   FT_Bytes sp = raw;
+   uint16_t Format = GetUInt16(sp);
+   switch (Format) {
+     case 1:
+-      *rec = pdfium::MakeUnique<TSingleSubstFormat1>();
+-      ParseSingleSubstFormat1(raw,
+-                              static_cast<TSingleSubstFormat1*>(rec->get()));
++      *rec = new TSingleSubstFormat1();
++      ParseSingleSubstFormat1(raw, (TSingleSubstFormat1*)*rec);
+       break;
+     case 2:
+-      *rec = pdfium::MakeUnique<TSingleSubstFormat2>();
+-      ParseSingleSubstFormat2(raw,
+-                              static_cast<TSingleSubstFormat2*>(rec->get()));
++      *rec = new TSingleSubstFormat2();
++      ParseSingleSubstFormat2(raw, (TSingleSubstFormat2*)*rec);
+       break;
+   }
+ }
+@@ -365,17 +429,23 @@ void CFX_CTTGSUBTable::ParseSingleSubstFormat1(FT_Bytes raw,
+ 
+ void CFX_CTTGSUBTable::ParseSingleSubstFormat2(FT_Bytes raw,
+                                                TSingleSubstFormat2* rec) {
++  int i;
+   FT_Bytes sp = raw;
+-  (void)GetUInt16(sp);
++  GetUInt16(sp);
+   uint16_t offset = GetUInt16(sp);
+   rec->Coverage.reset(ParseCoverage(&raw[offset]));
+-  rec->Substitutes = std::vector<uint16_t>(GetUInt16(sp));
+-  for (auto& substitute : rec->Substitutes)
+-    substitute = GetUInt16(sp);
++  rec->GlyphCount = GetUInt16(sp);
++  if (rec->GlyphCount <= 0) {
++    return;
++  }
++  rec->Substitute.reset(new uint16_t[rec->GlyphCount]);
++  for (i = 0; i < rec->GlyphCount; i++) {
++    rec->Substitute[i] = GetUInt16(sp);
++  }
+ }
+ 
+ CFX_CTTGSUBTable::TCoverageFormat1::TCoverageFormat1()
+-    : TCoverageFormatBase(1) {}
++    : TCoverageFormatBase(1), GlyphCount(0) {}
+ 
+ CFX_CTTGSUBTable::TCoverageFormat1::~TCoverageFormat1() {}
+ 
+@@ -383,7 +453,7 @@ CFX_CTTGSUBTable::TRangeRecord::TRangeRecord()
+     : Start(0), End(0), StartCoverageIndex(0) {}
+ 
+ CFX_CTTGSUBTable::TCoverageFormat2::TCoverageFormat2()
+-    : TCoverageFormatBase(2) {}
++    : TCoverageFormatBase(2), RangeCount(0) {}
+ 
+ CFX_CTTGSUBTable::TCoverageFormat2::~TCoverageFormat2() {}
+ 
+@@ -393,34 +463,41 @@ CFX_CTTGSUBTable::TSingleSubstFormat1::TSingleSubstFormat1()
+ CFX_CTTGSUBTable::TSingleSubstFormat1::~TSingleSubstFormat1() {}
+ 
+ CFX_CTTGSUBTable::TSingleSubstFormat2::TSingleSubstFormat2()
+-    : TSubTableBase(2) {}
++    : TSubTableBase(2), GlyphCount(0) {}
+ 
+ CFX_CTTGSUBTable::TSingleSubstFormat2::~TSingleSubstFormat2() {}
+ 
+-CFX_CTTGSUBTable::TLookup::TLookup() : LookupType(0), LookupFlag(0) {}
++CFX_CTTGSUBTable::TLookup::TLookup()
++    : LookupType(0), LookupFlag(0), SubTableCount(0) {}
+ 
+-CFX_CTTGSUBTable::TLookup::~TLookup() {}
++CFX_CTTGSUBTable::TLookup::~TLookup() {
++  if (SubTable) {
++    for (int i = 0; i < SubTableCount; ++i)
++      delete SubTable[i];
++  }
++}
+ 
+-CFX_CTTGSUBTable::TScript::TScript() : DefaultLangSys(0) {}
++CFX_CTTGSUBTable::TScript::TScript() : DefaultLangSys(0), LangSysCount(0) {}
+ 
+ CFX_CTTGSUBTable::TScript::~TScript() {}
+ 
+-CFX_CTTGSUBTable::TScriptList::TScriptList() {}
++CFX_CTTGSUBTable::TScriptList::TScriptList() : ScriptCount(0) {}
+ 
+ CFX_CTTGSUBTable::TScriptList::~TScriptList() {}
+ 
+-CFX_CTTGSUBTable::TFeature::TFeature() : FeatureParams(0) {}
++CFX_CTTGSUBTable::TFeature::TFeature() : FeatureParams(0), LookupCount(0) {}
+ 
+ CFX_CTTGSUBTable::TFeature::~TFeature() {}
+ 
+-CFX_CTTGSUBTable::TFeatureList::TFeatureList() {}
++CFX_CTTGSUBTable::TFeatureList::TFeatureList() : FeatureCount(0) {}
+ 
+ CFX_CTTGSUBTable::TFeatureList::~TFeatureList() {}
+ 
+-CFX_CTTGSUBTable::TLookupList::TLookupList() {}
++CFX_CTTGSUBTable::TLookupList::TLookupList() : LookupCount(0) {}
+ 
+ CFX_CTTGSUBTable::TLookupList::~TLookupList() {}
+ 
+-CFX_CTTGSUBTable::TLangSys::TLangSys() : LookupOrder(0), ReqFeatureIndex(0) {}
++CFX_CTTGSUBTable::TLangSys::TLangSys()
++    : LookupOrder(0), ReqFeatureIndex(0), FeatureCount(0) {}
+ 
+ CFX_CTTGSUBTable::TLangSys::~TLangSys() {}
+diff --git a/core/fpdfapi/font/ttgsubtable.h b/core/fpdfapi/font/ttgsubtable.h
+index f927269..59ee4ca 100644
+--- a/core/fpdfapi/font/ttgsubtable.h
++++ b/core/fpdfapi/font/ttgsubtable.h
+@@ -9,9 +9,8 @@
+ 
+ #include <stdint.h>
+ 
++#include <map>
+ #include <memory>
+-#include <set>
+-#include <vector>
+ 
+ #include "core/fxcrt/fx_basic.h"
+ #include "core/fxge/fx_font.h"
+@@ -53,7 +52,8 @@ class CFX_CTTGSUBTable {
+ 
+     uint16_t LookupOrder;
+     uint16_t ReqFeatureIndex;
+-    std::vector<uint16_t> FeatureIndices;
++    uint16_t FeatureCount;
++    std::unique_ptr<uint16_t[]> FeatureIndex;
+ 
+    private:
+     TLangSys(const TLangSys&) = delete;
+@@ -76,7 +76,8 @@ class CFX_CTTGSUBTable {
+     ~TScript();
+ 
+     uint16_t DefaultLangSys;
+-    std::vector<TLangSysRecord> LangSysRecords;
++    uint16_t LangSysCount;
++    std::unique_ptr<TLangSysRecord[]> LangSysRecord;
+ 
+    private:
+     TScript(const TScript&) = delete;
+@@ -98,7 +99,8 @@ class CFX_CTTGSUBTable {
+     TScriptList();
+     ~TScriptList();
+ 
+-    std::vector<TScriptRecord> ScriptRecords;
++    uint16_t ScriptCount;
++    std::unique_ptr<TScriptRecord[]> ScriptRecord;
+ 
+    private:
+     TScriptList(const TScriptList&) = delete;
+@@ -110,13 +112,13 @@ class CFX_CTTGSUBTable {
+     ~TFeature();
+ 
+     uint16_t FeatureParams;
+-    std::vector<uint16_t> LookupListIndices;
++    int LookupCount;
++    std::unique_ptr<uint16_t[]> LookupListIndex;
+ 
+    private:
+     TFeature(const TFeature&) = delete;
+     TFeature& operator=(const TFeature&) = delete;
+   };
+-
+   struct TFeatureRecord {
+     TFeatureRecord() : FeatureTag(0) {}
+ 
+@@ -132,7 +134,8 @@ class CFX_CTTGSUBTable {
+     TFeatureList();
+     ~TFeatureList();
+ 
+-    std::vector<TFeatureRecord> FeatureRecords;
++    int FeatureCount;
++    std::unique_ptr<TFeatureRecord[]> FeatureRecord;
+ 
+    private:
+     TFeatureList(const TFeatureList&) = delete;
+@@ -165,7 +168,8 @@ class CFX_CTTGSUBTable {
+     TCoverageFormat1();
+     ~TCoverageFormat1() override;
+ 
+-    std::vector<uint16_t> GlyphArray;
++    uint16_t GlyphCount;
++    std::unique_ptr<uint16_t[]> GlyphArray;
+ 
+    private:
+     TCoverageFormat1(const TCoverageFormat1&) = delete;
+@@ -191,7 +195,8 @@ class CFX_CTTGSUBTable {
+     TCoverageFormat2();
+     ~TCoverageFormat2() override;
+ 
+-    std::vector<TRangeRecord> RangeRecords;
++    uint16_t RangeCount;
++    std::unique_ptr<TRangeRecord[]> RangeRecord;
+ 
+    private:
+     TCoverageFormat2(const TCoverageFormat2&) = delete;
+@@ -239,7 +244,8 @@ class CFX_CTTGSUBTable {
+     ~TSingleSubstFormat2() override;
+ 
+     std::unique_ptr<TCoverageFormatBase> Coverage;
+-    std::vector<uint16_t> Substitutes;
++    uint16_t GlyphCount;
++    std::unique_ptr<uint16_t[]> Substitute;
+ 
+    private:
+     TSingleSubstFormat2(const TSingleSubstFormat2&) = delete;
+@@ -252,7 +258,8 @@ class CFX_CTTGSUBTable {
+ 
+     uint16_t LookupType;
+     uint16_t LookupFlag;
+-    std::vector<std::unique_ptr<TSubTableBase>> SubTables;
++    uint16_t SubTableCount;
++    std::unique_ptr<TSubTableBase* []> SubTable;
+ 
+    private:
+     TLookup(const TLookup&) = delete;
+@@ -263,7 +270,8 @@ class CFX_CTTGSUBTable {
+     TLookupList();
+     ~TLookupList();
+ 
+-    std::vector<TLookup> Lookups;
++    int LookupCount;
++    std::unique_ptr<TLookup[]> Lookup;
+ 
+    private:
+     TLookupList(const TLookupList&) = delete;
+@@ -281,7 +289,7 @@ class CFX_CTTGSUBTable {
+   TCoverageFormatBase* ParseCoverage(FT_Bytes raw);
+   void ParseCoverageFormat1(FT_Bytes raw, TCoverageFormat1* rec);
+   void ParseCoverageFormat2(FT_Bytes raw, TCoverageFormat2* rec);
+-  void ParseSingleSubst(FT_Bytes raw, std::unique_ptr<TSubTableBase>* rec);
++  void ParseSingleSubst(FT_Bytes raw, TSubTableBase** rec);
+   void ParseSingleSubstFormat1(FT_Bytes raw, TSingleSubstFormat1* rec);
+   void ParseSingleSubstFormat2(FT_Bytes raw, TSingleSubstFormat2* rec);
+ 
+@@ -299,7 +307,7 @@ class CFX_CTTGSUBTable {
+   int32_t GetInt32(FT_Bytes& p) const;
+   uint32_t GetUInt32(FT_Bytes& p) const;
+ 
+-  std::set<uint32_t> m_featureSet;
++  std::map<uint32_t, uint32_t> m_featureMap;
+   bool m_bFeautureMapLoad;
+   bool loaded;
+   tt_gsub_header header;
+diff --git a/core/fpdfapi/page/cpdf_contentmarkitem.h b/core/fpdfapi/page/cpdf_contentmarkitem.h
+index ed27371..2d08a8e 100644
+--- a/core/fpdfapi/page/cpdf_contentmarkitem.h
++++ b/core/fpdfapi/page/cpdf_contentmarkitem.h
+@@ -23,8 +23,6 @@ class CPDF_ContentMarkItem {
+   CPDF_ContentMarkItem(const CPDF_ContentMarkItem& that);
+   ~CPDF_ContentMarkItem();
+ 
+-  CPDF_ContentMarkItem& operator=(CPDF_ContentMarkItem&& other) = default;
+-
+   CFX_ByteString GetName() const { return m_MarkName; }
+   ParamType GetParamType() const { return m_ParamType; }
+   CPDF_Dictionary* GetParam() const;
+diff --git a/core/fpdfapi/page/cpdf_psengine.h b/core/fpdfapi/page/cpdf_psengine.h
+index 659ca82..0c94959 100644
+--- a/core/fpdfapi/page/cpdf_psengine.h
++++ b/core/fpdfapi/page/cpdf_psengine.h
+@@ -63,7 +63,7 @@ enum PDF_PSOP {
+   PSOP_CONST
+ };
+ 
+-constexpr uint32_t PSENGINE_STACKSIZE = 100;
++const uint32_t PSENGINE_STACKSIZE = 100;
+ 
+ class CPDF_PSProc {
+  public:
+diff --git a/core/fxge/ge/cfx_facecache.cpp b/core/fxge/ge/cfx_facecache.cpp
+index cbaa07e..95338c2 100644
+--- a/core/fxge/ge/cfx_facecache.cpp
++++ b/core/fxge/ge/cfx_facecache.cpp
+@@ -25,7 +25,7 @@
+ 
+ namespace {
+ 
+-constexpr uint32_t kInvalidGlyphIndex = static_cast<uint32_t>(-1);
++const uint32_t kInvalidGlyphIndex = static_cast<uint32_t>(-1);
+ 
+ void GammaAdjust(uint8_t* pData,
+                  int nHeight,
+diff --git a/third_party/base/numerics/safe_conversions.h b/third_party/base/numerics/safe_conversions.h
+index dc61d9c..ae25d70 100644
+--- a/third_party/base/numerics/safe_conversions.h
++++ b/third_party/base/numerics/safe_conversions.h
+@@ -51,7 +51,7 @@ namespace base {
+ // Convenience function that returns true if the supplied value is in range
+ // for the destination type.
+ template <typename Dst, typename Src>
+-constexpr bool IsValueInRangeForNumericType(Src value) {
++bool IsValueInRangeForNumericType(Src value) {
+   return internal::DstRangeRelationToSrcRange<Dst>(value).IsValid();
+ }
+ 
+@@ -72,7 +72,7 @@ struct CheckOnFailure {
+ // except that it CHECKs that the specified numeric conversion will not
+ // overflow or underflow. NaN source will always trigger a CHECK.
+ template <typename Dst, class CheckHandler = CheckOnFailure, typename Src>
+-constexpr Dst checked_cast(Src value) {
++Dst checked_cast(Src value) {
+   // This throws a compile-time error on evaluating the constexpr if it can be
+   // determined at compile-time as failing, otherwise it will CHECK at runtime.
+   using SrcType = typename internal::UnderlyingType<Src>::type;
+@@ -84,19 +84,19 @@ constexpr Dst checked_cast(Src value) {
+ // Default boundaries for integral/float: max/infinity, lowest/-infinity, 0/NaN.
+ template <typename T>
+ struct SaturationDefaultHandler {
+-  static constexpr T NaN() {
++  static T NaN() {
+     return std::numeric_limits<T>::has_quiet_NaN
+                ? std::numeric_limits<T>::quiet_NaN()
+                : T();
+   }
+-  static constexpr T max() { return std::numeric_limits<T>::max(); }
+-  static constexpr T Overflow() {
++  static T max() { return std::numeric_limits<T>::max(); }
++  static T Overflow() {
+     return std::numeric_limits<T>::has_infinity
+                ? std::numeric_limits<T>::infinity()
+                : std::numeric_limits<T>::max();
+   }
+-  static constexpr T lowest() { return std::numeric_limits<T>::lowest(); }
+-  static constexpr T Underflow() {
++  static T lowest() { return std::numeric_limits<T>::lowest(); }
++  static T Underflow() {
+     return std::numeric_limits<T>::has_infinity
+                ? std::numeric_limits<T>::infinity() * -1
+                : std::numeric_limits<T>::lowest();
+@@ -106,7 +106,7 @@ struct SaturationDefaultHandler {
+ namespace internal {
+ 
+ template <typename Dst, template <typename> class S, typename Src>
+-constexpr Dst saturated_cast_impl(Src value, RangeCheck constraint) {
++Dst saturated_cast_impl(Src value, RangeCheck constraint) {
+   // For some reason clang generates much better code when the branch is
+   // structured exactly this way, rather than a sequence of checks.
+   return !constraint.IsOverflowFlagSet()
+@@ -126,7 +126,7 @@ template <typename Dst,
+           template <typename>
+           class SaturationHandler = SaturationDefaultHandler,
+           typename Src>
+-constexpr Dst saturated_cast(Src value) {
++Dst saturated_cast(Src value) {
+   using SrcType = typename UnderlyingType<Src>::type;
+   return saturated_cast_impl<Dst, SaturationHandler, SrcType>(
+       value,
+@@ -137,7 +137,7 @@ constexpr Dst saturated_cast(Src value) {
+ // it will cause a compile failure if the destination type is not large enough
+ // to contain any value in the source type. It performs no runtime checking.
+ template <typename Dst, typename Src>
+-constexpr Dst strict_cast(Src value) {
++Dst strict_cast(Src value) {
+   using SrcType = typename UnderlyingType<Src>::type;
+   static_assert(UnderlyingType<Src>::is_numeric, "Argument must be numeric.");
+   static_assert(std::is_arithmetic<Dst>::value, "Result must be numeric.");
+@@ -187,17 +187,17 @@ class StrictNumeric {
+  public:
+   using type = T;
+ 
+-  constexpr StrictNumeric() : value_(0) {}
++  StrictNumeric() : value_(0) {}
+ 
+   // Copy constructor.
+   template <typename Src>
+-  constexpr StrictNumeric(const StrictNumeric<Src>& rhs)
++  StrictNumeric(const StrictNumeric<Src>& rhs)
+       : value_(strict_cast<T>(rhs.value_)) {}
+ 
+   // This is not an explicit constructor because we implicitly upgrade regular
+   // numerics to StrictNumerics to make them easier to use.
+   template <typename Src>
+-  constexpr StrictNumeric(Src value)  // NOLINT(runtime/explicit)
++  StrictNumeric(Src value)  // NOLINT(runtime/explicit)
+       : value_(strict_cast<T>(value)) {}
+ 
+   // If you got here from a compiler error, it's because you tried to assign
+@@ -215,7 +215,7 @@ class StrictNumeric {
+   template <typename Dst,
+             typename std::enable_if<
+                 IsNumericRangeContained<Dst, T>::value>::type* = nullptr>
+-  constexpr operator Dst() const {
++  operator Dst() const {
+     return static_cast<typename ArithmeticOrUnderlyingEnum<Dst>::type>(value_);
+   }
+ 
+@@ -225,7 +225,7 @@ class StrictNumeric {
+ 
+ // Convience wrapper returns a StrictNumeric from the provided arithmetic type.
+ template <typename T>
+-constexpr StrictNumeric<typename UnderlyingType<T>::type> MakeStrictNum(
++StrictNumeric<typename UnderlyingType<T>::type> MakeStrictNum(
+     const T value) {
+   return value;
+ }
+@@ -241,7 +241,7 @@ std::ostream& operator<<(std::ostream& os, const StrictNumeric<T>& value) {
+   template <typename L, typename R,                                  \
+             typename std::enable_if<                                 \
+                 internal::IsStrictOp<L, R>::value>::type* = nullptr> \
+-  constexpr bool operator OP(const L lhs, const R rhs) {             \
++  bool operator OP(const L lhs, const R rhs) {             \
+     return SafeCompare<NAME, typename UnderlyingType<L>::type,       \
+                        typename UnderlyingType<R>::type>(lhs, rhs);  \
+   }
+diff --git a/third_party/base/numerics/safe_conversions_impl.h b/third_party/base/numerics/safe_conversions_impl.h
+index 2a7ce14..4a1b386 100644
+--- a/third_party/base/numerics/safe_conversions_impl.h
++++ b/third_party/base/numerics/safe_conversions_impl.h
+@@ -42,14 +42,14 @@ struct PositionOfSignBit {
+ // warnings on: unsigned(value) < 0.
+ template <typename T,
+           typename std::enable_if<std::is_signed<T>::value>::type* = nullptr>
+-constexpr bool IsValueNegative(T value) {
++bool IsValueNegative(T value) {
+   static_assert(std::is_arithmetic<T>::value, "Argument must be numeric.");
+   return value < 0;
+ }
+ 
+ template <typename T,
+           typename std::enable_if<!std::is_signed<T>::value>::type* = nullptr>
+-constexpr bool IsValueNegative(T) {
++bool IsValueNegative(T) {
+   static_assert(std::is_arithmetic<T>::value, "Argument must be numeric.");
+   return false;
+ }
+@@ -58,7 +58,7 @@ constexpr bool IsValueNegative(T) {
+ // arguments, but probably doesn't do what you want for any unsigned value
+ // larger than max / 2 + 1 (i.e. signed min cast to unsigned).
+ template <typename T>
+-constexpr typename std::make_signed<T>::type ConditionalNegate(
++typename std::make_signed<T>::type ConditionalNegate(
+     T x,
+     bool is_negative) {
+   static_assert(std::is_integral<T>::value, "Type must be integral");
+@@ -70,7 +70,7 @@ constexpr typename std::make_signed<T>::type ConditionalNegate(
+ 
+ // This performs a safe, absolute value via unsigned overflow.
+ template <typename T>
+-constexpr typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
++typename std::make_unsigned<T>::type SafeUnsignedAbs(T value) {
+   static_assert(std::is_integral<T>::value, "Type must be integral");
+   using UnsignedT = typename std::make_unsigned<T>::type;
+   return IsValueNegative(value) ? 0 - static_cast<UnsignedT>(value)
+@@ -141,20 +141,20 @@ struct StaticDstRangeRelationToSrcRange<Dst,
+ // can identify constants and eliminate unused code paths.
+ class RangeCheck {
+  public:
+-  constexpr RangeCheck(bool is_in_lower_bound, bool is_in_upper_bound)
++  RangeCheck(bool is_in_lower_bound, bool is_in_upper_bound)
+       : is_underflow_(!is_in_lower_bound), is_overflow_(!is_in_upper_bound) {}
+-  constexpr RangeCheck() : is_underflow_(0), is_overflow_(0) {}
+-  constexpr bool IsValid() const { return !is_overflow_ && !is_underflow_; }
+-  constexpr bool IsInvalid() const { return is_overflow_ && is_underflow_; }
+-  constexpr bool IsOverflow() const { return is_overflow_ && !is_underflow_; }
+-  constexpr bool IsUnderflow() const { return !is_overflow_ && is_underflow_; }
+-  constexpr bool IsOverflowFlagSet() const { return is_overflow_; }
+-  constexpr bool IsUnderflowFlagSet() const { return is_underflow_; }
+-  constexpr bool operator==(const RangeCheck rhs) const {
++  RangeCheck() : is_underflow_(0), is_overflow_(0) {}
++  bool IsValid() const { return !is_overflow_ && !is_underflow_; }
++  bool IsInvalid() const { return is_overflow_ && is_underflow_; }
++  bool IsOverflow() const { return is_overflow_ && !is_underflow_; }
++  bool IsUnderflow() const { return !is_overflow_ && is_underflow_; }
++  bool IsOverflowFlagSet() const { return is_overflow_; }
++  bool IsUnderflowFlagSet() const { return is_underflow_; }
++  bool operator==(const RangeCheck rhs) const {
+     return is_underflow_ == rhs.is_underflow_ &&
+            is_overflow_ == rhs.is_overflow_;
+   }
+-  constexpr bool operator!=(const RangeCheck rhs) const {
++  bool operator!=(const RangeCheck rhs) const {
+     return !(*this == rhs);
+   }
+ 
+@@ -203,7 +203,7 @@ struct NarrowingRange {
+ 
+   // Masks out the integer bits that are beyond the precision of the
+   // intermediate type used for comparison.
+-  static constexpr T Adjust(T value) {
++  static T Adjust(T value) {
+     static_assert(std::is_same<T, Dst>::value, "");
+     static_assert(kShift < DstLimits::digits, "");
+     return static_cast<T>(
+@@ -214,14 +214,14 @@ struct NarrowingRange {
+   template <typename T,
+             typename std::enable_if<std::is_floating_point<T>::value>::type* =
+                 nullptr>
+-  static constexpr T Adjust(T value) {
++  static T Adjust(T value) {
+     static_assert(std::is_same<T, Dst>::value, "");
+     static_assert(kShift == 0, "");
+     return value;
+   }
+ 
+-  static constexpr Dst max() { return Adjust(Bounds<Dst>::max()); }
+-  static constexpr Dst lowest() { return Adjust(Bounds<Dst>::lowest()); }
++  static Dst max() { return Adjust(Bounds<Dst>::max()); }
++  static Dst lowest() { return Adjust(Bounds<Dst>::lowest()); }
+ };
+ 
+ template <typename Dst,
+@@ -253,7 +253,7 @@ struct DstRangeRelationToSrcRangeImpl<Dst,
+                                       DstSign,
+                                       SrcSign,
+                                       NUMERIC_RANGE_CONTAINED> {
+-  static constexpr RangeCheck Check(Src value) {
++  static RangeCheck Check(Src value) {
+     using SrcLimits = std::numeric_limits<Src>;
+     using DstLimits = NarrowingRange<Dst, Src, Bounds>;
+     return RangeCheck(
+@@ -273,7 +273,7 @@ struct DstRangeRelationToSrcRangeImpl<Dst,
+                                       INTEGER_REPRESENTATION_SIGNED,
+                                       INTEGER_REPRESENTATION_SIGNED,
+                                       NUMERIC_RANGE_NOT_CONTAINED> {
+-  static constexpr RangeCheck Check(Src value) {
++  static RangeCheck Check(Src value) {
+     using DstLimits = NarrowingRange<Dst, Src, Bounds>;
+     return RangeCheck(value >= DstLimits::lowest(), value <= DstLimits::max());
+   }
+@@ -288,7 +288,7 @@ struct DstRangeRelationToSrcRangeImpl<Dst,
+                                       INTEGER_REPRESENTATION_UNSIGNED,
+                                       INTEGER_REPRESENTATION_UNSIGNED,
+                                       NUMERIC_RANGE_NOT_CONTAINED> {
+-  static constexpr RangeCheck Check(Src value) {
++  static RangeCheck Check(Src value) {
+     using DstLimits = NarrowingRange<Dst, Src, Bounds>;
+     return RangeCheck(
+         DstLimits::lowest() == Dst(0) || value >= DstLimits::lowest(),
+@@ -304,7 +304,7 @@ struct DstRangeRelationToSrcRangeImpl<Dst,
+                                       INTEGER_REPRESENTATION_SIGNED,
+                                       INTEGER_REPRESENTATION_UNSIGNED,
+                                       NUMERIC_RANGE_NOT_CONTAINED> {
+-  static constexpr RangeCheck Check(Src value) {
++  static RangeCheck Check(Src value) {
+     using DstLimits = NarrowingRange<Dst, Src, Bounds>;
+     using Promotion = decltype(Src() + Dst());
+     return RangeCheck(DstLimits::lowest() <= Dst(0) ||
+@@ -324,7 +324,7 @@ struct DstRangeRelationToSrcRangeImpl<Dst,
+                                       INTEGER_REPRESENTATION_UNSIGNED,
+                                       INTEGER_REPRESENTATION_SIGNED,
+                                       NUMERIC_RANGE_NOT_CONTAINED> {
+-  static constexpr RangeCheck Check(Src value) {
++  static RangeCheck Check(Src value) {
+     using SrcLimits = std::numeric_limits<Src>;
+     using DstLimits = NarrowingRange<Dst, Src, Bounds>;
+     using Promotion = decltype(Src() + Dst());
+@@ -341,10 +341,9 @@ struct DstRangeRelationToSrcRangeImpl<Dst,
+ template <typename Dst,
+           template <typename> class Bounds = std::numeric_limits,
+           typename Src>
+-constexpr RangeCheck DstRangeRelationToSrcRange(Src value) {
++RangeCheck DstRangeRelationToSrcRange(Src value) {
+   static_assert(std::is_arithmetic<Src>::value, "Argument must be numeric.");
+   static_assert(std::is_arithmetic<Dst>::value, "Result must be numeric.");
+-  static_assert(Bounds<Dst>::lowest() < Bounds<Dst>::max(), "");
+   return DstRangeRelationToSrcRangeImpl<Dst, Src, Bounds>::Check(value);
+ }
+ 
+@@ -603,7 +602,7 @@ struct IsStrictOp {
+ };
+ 
+ template <typename L, typename R>
+-constexpr bool IsLessImpl(const L lhs,
++bool IsLessImpl(const L lhs,
+                           const R rhs,
+                           const RangeCheck l_range,
+                           const RangeCheck r_range) {
+@@ -617,14 +616,14 @@ template <typename L, typename R>
+ struct IsLess {
+   static_assert(std::is_arithmetic<L>::value && std::is_arithmetic<R>::value,
+                 "Types must be numeric.");
+-  static constexpr bool Test(const L lhs, const R rhs) {
++  static bool Test(const L lhs, const R rhs) {
+     return IsLessImpl(lhs, rhs, DstRangeRelationToSrcRange<R>(lhs),
+                       DstRangeRelationToSrcRange<L>(rhs));
+   }
+ };
+ 
+ template <typename L, typename R>
+-constexpr bool IsLessOrEqualImpl(const L lhs,
++bool IsLessOrEqualImpl(const L lhs,
+                                  const R rhs,
+                                  const RangeCheck l_range,
+                                  const RangeCheck r_range) {
+@@ -638,14 +637,14 @@ template <typename L, typename R>
+ struct IsLessOrEqual {
+   static_assert(std::is_arithmetic<L>::value && std::is_arithmetic<R>::value,
+                 "Types must be numeric.");
+-  static constexpr bool Test(const L lhs, const R rhs) {
++  static bool Test(const L lhs, const R rhs) {
+     return IsLessOrEqualImpl(lhs, rhs, DstRangeRelationToSrcRange<R>(lhs),
+                              DstRangeRelationToSrcRange<L>(rhs));
+   }
+ };
+ 
+ template <typename L, typename R>
+-constexpr bool IsGreaterImpl(const L lhs,
++bool IsGreaterImpl(const L lhs,
+                              const R rhs,
+                              const RangeCheck l_range,
+                              const RangeCheck r_range) {
+@@ -659,14 +658,14 @@ template <typename L, typename R>
+ struct IsGreater {
+   static_assert(std::is_arithmetic<L>::value && std::is_arithmetic<R>::value,
+                 "Types must be numeric.");
+-  static constexpr bool Test(const L lhs, const R rhs) {
++  static bool Test(const L lhs, const R rhs) {
+     return IsGreaterImpl(lhs, rhs, DstRangeRelationToSrcRange<R>(lhs),
+                          DstRangeRelationToSrcRange<L>(rhs));
+   }
+ };
+ 
+ template <typename L, typename R>
+-constexpr bool IsGreaterOrEqualImpl(const L lhs,
++bool IsGreaterOrEqualImpl(const L lhs,
+                                     const R rhs,
+                                     const RangeCheck l_range,
+                                     const RangeCheck r_range) {
+@@ -680,7 +679,7 @@ template <typename L, typename R>
+ struct IsGreaterOrEqual {
+   static_assert(std::is_arithmetic<L>::value && std::is_arithmetic<R>::value,
+                 "Types must be numeric.");
+-  static constexpr bool Test(const L lhs, const R rhs) {
++  static bool Test(const L lhs, const R rhs) {
+     return IsGreaterOrEqualImpl(lhs, rhs, DstRangeRelationToSrcRange<R>(lhs),
+                                 DstRangeRelationToSrcRange<L>(rhs));
+   }
+@@ -690,7 +689,7 @@ template <typename L, typename R>
+ struct IsEqual {
+   static_assert(std::is_arithmetic<L>::value && std::is_arithmetic<R>::value,
+                 "Types must be numeric.");
+-  static constexpr bool Test(const L lhs, const R rhs) {
++  static bool Test(const L lhs, const R rhs) {
+     return DstRangeRelationToSrcRange<R>(lhs) ==
+                DstRangeRelationToSrcRange<L>(rhs) &&
+            static_cast<decltype(lhs + rhs)>(lhs) ==
+@@ -702,7 +701,7 @@ template <typename L, typename R>
+ struct IsNotEqual {
+   static_assert(std::is_arithmetic<L>::value && std::is_arithmetic<R>::value,
+                 "Types must be numeric.");
+-  static constexpr bool Test(const L lhs, const R rhs) {
++  static bool Test(const L lhs, const R rhs) {
+     return DstRangeRelationToSrcRange<R>(lhs) !=
+                DstRangeRelationToSrcRange<L>(rhs) ||
+            static_cast<decltype(lhs + rhs)>(lhs) !=
+@@ -713,7 +712,7 @@ struct IsNotEqual {
+ // These perform the actual math operations on the CheckedNumerics.
+ // Binary arithmetic operations.
+ template <template <typename, typename> class C, typename L, typename R>
+-constexpr bool SafeCompare(const L lhs, const R rhs) {
++bool SafeCompare(const L lhs, const R rhs) {
+   static_assert(std::is_arithmetic<L>::value && std::is_arithmetic<R>::value,
+                 "Types must be numeric.");
+   using Promotion = BigEnoughPromotion<L, R>;
+diff --git a/third_party/base/numerics/safe_math.h b/third_party/base/numerics/safe_math.h
+index a0c41a4..590a5d8 100644
+--- a/third_party/base/numerics/safe_math.h
++++ b/third_party/base/numerics/safe_math.h
+@@ -100,11 +100,11 @@ class CheckedNumeric {
+  public:
+   using type = T;
+ 
+-  constexpr CheckedNumeric() {}
++  CheckedNumeric() {}
+ 
+   // Copy constructor.
+   template <typename Src>
+-  constexpr CheckedNumeric(const CheckedNumeric<Src>& rhs)
++  CheckedNumeric(const CheckedNumeric<Src>& rhs)
+       : state_(rhs.state_.value(), rhs.IsValid()) {}
+ 
+   template <typename Src>
+@@ -113,7 +113,7 @@ class CheckedNumeric {
+   // This is not an explicit constructor because we implicitly upgrade regular
+   // numerics to CheckedNumerics to make them easier to use.
+   template <typename Src>
+-  constexpr CheckedNumeric(Src value)  // NOLINT(runtime/explicit)
++  CheckedNumeric(Src value)  // NOLINT(runtime/explicit)
+       : state_(value) {
+     static_assert(std::is_arithmetic<Src>::value, "Argument must be numeric.");
+   }
+@@ -121,7 +121,7 @@ class CheckedNumeric {
+   // This is not an explicit constructor because we want a seamless conversion
+   // from StrictNumeric types.
+   template <typename Src>
+-  constexpr CheckedNumeric(
++  CheckedNumeric(
+       StrictNumeric<Src> value)  // NOLINT(runtime/explicit)
+       : state_(static_cast<Src>(value)) {}
+ 
+@@ -129,7 +129,7 @@ class CheckedNumeric {
+   // A range checked destination type can be supplied using the Dst template
+   // parameter.
+   template <typename Dst = T>
+-  constexpr bool IsValid() const {
++  bool IsValid() const {
+     return state_.is_valid() &&
+            IsValueInRangeForNumericType<Dst>(state_.value());
+   }
+@@ -138,7 +138,7 @@ class CheckedNumeric {
+   // and is within the range supported by the destination type. Returns true if
+   // successful and false otherwise.
+   template <typename Dst>
+-  constexpr bool AssignIfValid(Dst* result) const {
++  bool AssignIfValid(Dst* result) const {
+     return IsValid<Dst>() ? ((*result = static_cast<Dst>(state_.value())), true)
+                           : false;
+   }
+@@ -152,7 +152,7 @@ class CheckedNumeric {
+   // template parameter, for test code, etc. However, the handler cannot access
+   // the underlying value, and it is not available through other means.
+   template <typename Dst = T, class CheckHandler = CheckOnFailure>
+-  constexpr StrictNumeric<Dst> ValueOrDie() const {
++  StrictNumeric<Dst> ValueOrDie() const {
+     return IsValid<Dst>() ? static_cast<Dst>(state_.value())
+                           : CheckHandler::template HandleFailure<Dst>();
+   }
+@@ -164,7 +164,7 @@ class CheckedNumeric {
+   // parameter. WARNING: This function may fail to compile or CHECK at runtime
+   // if the supplied default_value is not within range of the destination type.
+   template <typename Dst = T, typename Src>
+-  constexpr StrictNumeric<Dst> ValueOrDefault(const Src default_value) const {
++  StrictNumeric<Dst> ValueOrDefault(const Src default_value) const {
+     return IsValid<Dst>() ? static_cast<Dst>(state_.value())
+                           : checked_cast<Dst>(default_value);
+   }
+@@ -173,7 +173,7 @@ class CheckedNumeric {
+   // CheckedNumeric. If the current state is invalid or the destination cannot
+   // represent the result then the returned CheckedNumeric will be invalid.
+   template <typename Dst>
+-  constexpr CheckedNumeric<typename UnderlyingType<Dst>::type> Cast() const {
++  CheckedNumeric<typename UnderlyingType<Dst>::type> Cast() const {
+     return *this;
+   }
+ 
+@@ -205,7 +205,7 @@ class CheckedNumeric {
+   template <typename Src>
+   CheckedNumeric& operator^=(const Src rhs);
+ 
+-  constexpr CheckedNumeric operator-() const {
++  CheckedNumeric operator-() const {
+     return CheckedNumeric<T>(
+         NegateWrapper(state_.value()),
+         IsValid() &&
+@@ -214,12 +214,12 @@ class CheckedNumeric {
+                  std::numeric_limits<T>::lowest()));
+   }
+ 
+-  constexpr CheckedNumeric operator~() const {
++  CheckedNumeric operator~() const {
+     return CheckedNumeric<decltype(InvertWrapper(T()))>(
+         InvertWrapper(state_.value()), IsValid());
+   }
+ 
+-  constexpr CheckedNumeric Abs() const {
++  CheckedNumeric Abs() const {
+     return CheckedNumeric<T>(
+         AbsWrapper(state_.value()),
+         IsValid() &&
+@@ -228,7 +228,7 @@ class CheckedNumeric {
+   }
+ 
+   template <typename U>
+-  constexpr CheckedNumeric<typename MathWrapper<CheckedMaxOp, T, U>::type> Max(
++  CheckedNumeric<typename MathWrapper<CheckedMaxOp, T, U>::type> Max(
+       const U rhs) const {
+     using R = typename UnderlyingType<U>::type;
+     using result_type = typename MathWrapper<CheckedMaxOp, T, U>::type;
+@@ -243,7 +243,7 @@ class CheckedNumeric {
+   }
+ 
+   template <typename U>
+-  constexpr CheckedNumeric<typename MathWrapper<CheckedMinOp, T, U>::type> Min(
++  CheckedNumeric<typename MathWrapper<CheckedMinOp, T, U>::type> Min(
+       const U rhs) const {
+     using R = typename UnderlyingType<U>::type;
+     using result_type = typename MathWrapper<CheckedMinOp, T, U>::type;
+@@ -260,7 +260,7 @@ class CheckedNumeric {
+   // This function is available only for integral types. It returns an unsigned
+   // integer of the same width as the source type, containing the absolute value
+   // of the source, and properly handling signed min.
+-  constexpr CheckedNumeric<typename UnsignedOrFloatForSize<T>::type>
++  CheckedNumeric<typename UnsignedOrFloatForSize<T>::type>
+   UnsignedAbs() const {
+     return CheckedNumeric<typename UnsignedOrFloatForSize<T>::type>(
+         SafeUnsignedAbs(state_.value()), state_.is_valid());
+@@ -317,31 +317,31 @@ class CheckedNumeric {
+   CheckedNumericState<T> state_;
+ 
+   template <typename Src>
+-  constexpr CheckedNumeric(Src value, bool is_valid)
++  CheckedNumeric(Src value, bool is_valid)
+       : state_(value, is_valid) {}
+ 
+   // These wrappers allow us to handle state the same way for both
+   // CheckedNumeric and POD arithmetic types.
+   template <typename Src>
+   struct Wrapper {
+-    static constexpr bool is_valid(Src) { return true; }
+-    static constexpr Src value(Src value) { return value; }
++    static bool is_valid(Src) { return true; }
++    static Src value(Src value) { return value; }
+   };
+ 
+   template <typename Src>
+   struct Wrapper<CheckedNumeric<Src>> {
+-    static constexpr bool is_valid(const CheckedNumeric<Src> v) {
++    static bool is_valid(const CheckedNumeric<Src> v) {
+       return v.IsValid();
+     }
+-    static constexpr Src value(const CheckedNumeric<Src> v) {
++    static Src value(const CheckedNumeric<Src> v) {
+       return v.state_.value();
+     }
+   };
+ 
+   template <typename Src>
+   struct Wrapper<StrictNumeric<Src>> {
+-    static constexpr bool is_valid(const StrictNumeric<Src>) { return true; }
+-    static constexpr Src value(const StrictNumeric<Src> v) {
++    static bool is_valid(const StrictNumeric<Src>) { return true; }
++    static Src value(const StrictNumeric<Src> v) {
+       return static_cast<Src>(v);
+     }
+   };
+@@ -349,18 +349,18 @@ class CheckedNumeric {
+ 
+ // Convenience functions to avoid the ugly template disambiguator syntax.
+ template <typename Dst, typename Src>
+-constexpr bool IsValidForType(const CheckedNumeric<Src> value) {
++bool IsValidForType(const CheckedNumeric<Src> value) {
+   return value.template IsValid<Dst>();
+ }
+ 
+ template <typename Dst, typename Src>
+-constexpr StrictNumeric<Dst> ValueOrDieForType(
++StrictNumeric<Dst> ValueOrDieForType(
+     const CheckedNumeric<Src> value) {
+   return value.template ValueOrDie<Dst>();
+ }
+ 
+ template <typename Dst, typename Src, typename Default>
+-constexpr StrictNumeric<Dst> ValueOrDefaultForType(
++StrictNumeric<Dst> ValueOrDefaultForType(
+     const CheckedNumeric<Src> value,
+     const Default default_value) {
+   return value.template ValueOrDefault<Dst>(default_value);
+@@ -393,7 +393,7 @@ struct ResultType {
+ // Convience wrapper to return a new CheckedNumeric from the provided arithmetic
+ // or CheckedNumericType.
+ template <typename T>
+-constexpr CheckedNumeric<typename UnderlyingType<T>::type> MakeCheckedNum(
++CheckedNumeric<typename UnderlyingType<T>::type> MakeCheckedNum(
+     const T value) {
+   return value;
+ }
+diff --git a/third_party/base/numerics/safe_math_impl.h b/third_party/base/numerics/safe_math_impl.h
+index 5ad79ce..76d6b0d 100644
+--- a/third_party/base/numerics/safe_math_impl.h
++++ b/third_party/base/numerics/safe_math_impl.h
+@@ -474,7 +474,7 @@ BASE_FLOAT_ARITHMETIC_OPS(Div, /)
+ 
+ template <typename T,
+           typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
+-constexpr T NegateWrapper(T value) {
++T NegateWrapper(T value) {
+   using UnsignedT = typename std::make_unsigned<T>::type;
+   // This will compile to a NEG on Intel, and is normal negation on ARM.
+   return static_cast<T>(UnsignedT(0) - static_cast<UnsignedT>(value));
+@@ -483,26 +483,26 @@ constexpr T NegateWrapper(T value) {
+ template <
+     typename T,
+     typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
+-constexpr T NegateWrapper(T value) {
++T NegateWrapper(T value) {
+   return -value;
+ }
+ 
+ template <typename T,
+           typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
+-constexpr typename std::make_unsigned<T>::type InvertWrapper(T value) {
++typename std::make_unsigned<T>::type InvertWrapper(T value) {
+   return ~value;
+ }
+ 
+ template <typename T,
+           typename std::enable_if<std::is_integral<T>::value>::type* = nullptr>
+-constexpr T AbsWrapper(T value) {
++T AbsWrapper(T value) {
+   return static_cast<T>(SafeUnsignedAbs(value));
+ }
+ 
+ template <
+     typename T,
+     typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
+-constexpr T AbsWrapper(T value) {
++T AbsWrapper(T value) {
+   return value < 0 ? -value : value;
+ }
+ 
+@@ -540,7 +540,7 @@ class CheckedNumericState<T, NUMERIC_INTEGER> {
+ 
+   // Ensures that a type conversion does not trigger undefined behavior.
+   template <typename Src>
+-  static constexpr T WellDefinedConversionOrZero(const Src value,
++  static T WellDefinedConversionOrZero(const Src value,
+                                                  const bool is_valid) {
+     using SrcType = typename internal::UnderlyingType<Src>::type;
+     return (std::is_integral<SrcType>::value || is_valid)
+@@ -552,10 +552,10 @@ class CheckedNumericState<T, NUMERIC_INTEGER> {
+   template <typename Src, NumericRepresentation type>
+   friend class CheckedNumericState;
+ 
+-  constexpr CheckedNumericState() : is_valid_(true), value_(0) {}
++  CheckedNumericState() : is_valid_(true), value_(0) {}
+ 
+   template <typename Src>
+-  constexpr CheckedNumericState(Src value, bool is_valid)
++  CheckedNumericState(Src value, bool is_valid)
+       : is_valid_(is_valid && IsValueInRangeForNumericType<T>(value)),
+         value_(WellDefinedConversionOrZero(value, is_valid_)) {
+     static_assert(std::is_arithmetic<Src>::value, "Argument must be numeric.");
+@@ -563,17 +563,17 @@ class CheckedNumericState<T, NUMERIC_INTEGER> {
+ 
+   // Copy constructor.
+   template <typename Src>
+-  constexpr CheckedNumericState(const CheckedNumericState<Src>& rhs)
++  CheckedNumericState(const CheckedNumericState<Src>& rhs)
+       : is_valid_(rhs.IsValid()),
+         value_(WellDefinedConversionOrZero(rhs.value(), is_valid_)) {}
+ 
+   template <typename Src>
+-  constexpr explicit CheckedNumericState(Src value)
++  explicit CheckedNumericState(Src value)
+       : is_valid_(IsValueInRangeForNumericType<T>(value)),
+         value_(WellDefinedConversionOrZero(value, is_valid_)) {}
+ 
+-  constexpr bool is_valid() const { return is_valid_; }
+-  constexpr T value() const { return value_; }
++  bool is_valid() const { return is_valid_; }
++  T value() const { return value_; }
+ };
+ 
+ // Floating points maintain their own validity, but need translation wrappers.
+@@ -584,7 +584,7 @@ class CheckedNumericState<T, NUMERIC_FLOATING> {
+ 
+   // Ensures that a type conversion does not trigger undefined behavior.
+   template <typename Src>
+-  static constexpr T WellDefinedConversionOrNaN(const Src value,
++  static T WellDefinedConversionOrNaN(const Src value,
+                                                 const bool is_valid) {
+     using SrcType = typename internal::UnderlyingType<Src>::type;
+     return (StaticDstRangeRelationToSrcRange<T, SrcType>::value ==
+@@ -598,32 +598,32 @@ class CheckedNumericState<T, NUMERIC_FLOATING> {
+   template <typename Src, NumericRepresentation type>
+   friend class CheckedNumericState;
+ 
+-  constexpr CheckedNumericState() : value_(0.0) {}
++  CheckedNumericState() : value_(0.0) {}
+ 
+   template <typename Src>
+-  constexpr CheckedNumericState(Src value, bool is_valid)
++  CheckedNumericState(Src value, bool is_valid)
+       : value_(WellDefinedConversionOrNaN(value, is_valid)) {}
+ 
+   template <typename Src>
+-  constexpr explicit CheckedNumericState(Src value)
++  explicit CheckedNumericState(Src value)
+       : value_(WellDefinedConversionOrNaN(
+             value,
+             IsValueInRangeForNumericType<T>(value))) {}
+ 
+   // Copy constructor.
+   template <typename Src>
+-  constexpr CheckedNumericState(const CheckedNumericState<Src>& rhs)
++  CheckedNumericState(const CheckedNumericState<Src>& rhs)
+       : value_(WellDefinedConversionOrNaN(
+             rhs.value(),
+             rhs.is_valid() && IsValueInRangeForNumericType<T>(rhs.value()))) {}
+ 
+-  constexpr bool is_valid() const {
++  bool is_valid() const {
+     // Written this way because std::isfinite is not reliably constexpr.
+     // TODO(jschuh): Fix this if the libraries ever get fixed.
+     return value_ <= std::numeric_limits<T>::max() &&
+            value_ >= std::numeric_limits<T>::lowest();
+   }
+-  constexpr T value() const { return value_; }
++  T value() const { return value_; }
+ };
+ 
+ template <template <typename, typename, typename> class M,
+diff --git a/third_party/base/stl_util.h b/third_party/base/stl_util.h
+index 795414b..cec9ea3 100644
+--- a/third_party/base/stl_util.h
++++ b/third_party/base/stl_util.h
+@@ -33,7 +33,6 @@ bool ContainsValue(const Collection& collection, const Value& value) {
+ template <class T>
+ class FakeUniquePtr : public std::unique_ptr<T> {
+  public:
+-  using std::unique_ptr<T>::unique_ptr;
+   ~FakeUniquePtr() { std::unique_ptr<T>::release(); }
+ };
+ 

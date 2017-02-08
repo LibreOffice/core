@@ -138,6 +138,7 @@ export OWNCLOUD_ANDROID_LIB_MD5SUM := 593f0aa47bf2efc0efda2d28fae063b2
 export OWNCLOUD_ANDROID_LIB_TARBALL := owncloud-android-library-0.9.4-no-binary-deps.tar.gz
 export PAGEMAKER_MD5SUM := 5c4985a68be0b79d3f809da5e12b143c
 export PAGEMAKER_TARBALL := libpagemaker-0.0.3.tar.bz2
+export PDFIUM_TARBALL := 9ac66c71463f9440e3ccc996c5e66556-pdfium-3004.tar.bz2
 export PIXMAN_TARBALL := e80ebae4da01e77f68744319f01d52a3-pixman-0.34.0.tar.gz
 export PNG_MD5SUM := 897ccec1ebfb0922e83c2bfaa1be8748
 export PNG_TARBALL := libpng-1.6.28.tar.gz
