@@ -30,7 +30,7 @@ AlphaMask::AlphaMask( const Bitmap& rBitmap ) :
     Bitmap( rBitmap )
 {
     if( !!rBitmap )
-        Convert( BMP_CONVERSION_8BIT_GREYS );
+        Convert( BmpConversion::N8BitGreys );
 }
 
 AlphaMask::AlphaMask( const AlphaMask& rAlphaMask ) :
@@ -59,7 +59,7 @@ AlphaMask& AlphaMask::operator=( const Bitmap& rBitmap )
     *static_cast<Bitmap*>(this) = rBitmap;
 
     if( !!rBitmap )
-        Convert( BMP_CONVERSION_8BIT_GREYS );
+        Convert( BmpConversion::N8BitGreys );
 
     return *this;
 }
@@ -154,7 +154,7 @@ void AlphaMask::ReleaseAccess( BitmapReadAccess* pAccess )
     if( pAccess )
     {
         Bitmap::ReleaseAccess( pAccess );
-        Convert( BMP_CONVERSION_8BIT_GREYS );
+        Convert( BmpConversion::N8BitGreys );
     }
 }
 

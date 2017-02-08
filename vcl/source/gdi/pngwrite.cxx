@@ -147,13 +147,13 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
         {
             if (mnBitsPerPixel <= 8 && rBmpEx.IsAlpha())
             {
-                aBmp.Convert( BMP_CONVERSION_24BIT );
+                aBmp.Convert( BmpConversion::N24Bit );
                 mnBitsPerPixel = 24;
             }
 
             if (mnBitsPerPixel <= 8) // transparent palette
             {
-                aBmp.Convert(BMP_CONVERSION_8BIT_TRANS);
+                aBmp.Convert(BmpConversion::N8BitTrans);
                 aBmp.Replace(rBmpEx.GetMask(), BMP_COL_TRANS);
                 mnBitsPerPixel = 8;
                 mpAccess = Bitmap::ScopedReadAccess(aBmp);

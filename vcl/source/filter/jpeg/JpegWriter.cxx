@@ -193,7 +193,7 @@ bool JPEGWriter::Write( const Graphic& rGraphic )
 
     if ( mbGreys )
     {
-        if ( !aGraphicBmp.Convert( BMP_CONVERSION_8BIT_GREYS ) )
+        if ( !aGraphicBmp.Convert( BmpConversion::N8BitGreys ) )
             aGraphicBmp = rGraphic.GetBitmap();
     }
 

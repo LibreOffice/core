@@ -400,7 +400,7 @@ void XclExpImgData::Save( XclExpStream& rStrm )
 {
     Bitmap aBmp = maGraphic.GetBitmap();
     if( aBmp.GetBitCount() != 24 )
-        aBmp.Convert( BMP_CONVERSION_24BIT );
+        aBmp.Convert( BmpConversion::N24Bit );
 
     if( BitmapReadAccess* pAccess = aBmp.AcquireReadAccess() )
     {

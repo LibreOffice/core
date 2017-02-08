@@ -125,7 +125,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
             if( ( aBmpSize.Width() <= S_THUMB ) && ( aBmpSize.Height() <= S_THUMB ) )
             {
-                aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+                aThumbBmp.Convert( BmpConversion::N8BitColors );
                 bRet = true;
             }
             else
@@ -138,7 +138,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
                     (double) aNewSize.Height() / aBmpSize.Height(),
                     BmpScaleFlag::BestQuality ) )
                 {
-                    aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+                    aThumbBmp.Convert( BmpConversion::N8BitColors );
                     bRet = true;
                 }
             }
@@ -159,7 +159,7 @@ bool SgaObject::CreateThumb( const Graphic& rGraphic )
 
         if( !aThumbBmp.IsEmpty() )
         {
-            aThumbBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
+            aThumbBmp.Convert( BmpConversion::N8BitColors );
             bRet = true;
         }
     }
@@ -508,7 +508,7 @@ bool SgaObjectSvDraw::CreateThumb( const FmFormModel& rModel )
                     if(!!aThumbBmp)
                     {
                         aThumbBmp.Scale(Size(nTargetSizeX, nTargetSizeY), BmpScaleFlag::BestQuality);
-                        aThumbBmp.Convert(BMP_CONVERSION_8BIT_COLORS);
+                        aThumbBmp.Convert(BmpConversion::N8BitColors);
                         bRet = true;
                     }
                 }
