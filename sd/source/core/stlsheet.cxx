@@ -54,6 +54,7 @@
 #include "ViewShellBase.hxx"
 #include <editeng/boxitem.hxx>
 
+#include <cstddef>
 #include <memory>
 
 using ::osl::MutexGuard;
@@ -624,44 +625,40 @@ void SdStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
     {
         static struct ApiNameMap
         {
-            const sal_Char* mpApiName;
-            sal_uInt32      mnApiNameLength;
+            OUStringLiteral mpApiName;
             sal_uInt32      mnHelpId;
         }
-        pApiNameMap[] =
+        const pApiNameMap[] =
         {
-            { RTL_CONSTASCII_STRINGPARAM( "title" ),            HID_PSEUDOSHEET_TITLE },
-            { RTL_CONSTASCII_STRINGPARAM( "subtitle" ),         HID_PSEUDOSHEET_SUBTITLE },
-            { RTL_CONSTASCII_STRINGPARAM( "background" ),       HID_PSEUDOSHEET_BACKGROUND },
-            { RTL_CONSTASCII_STRINGPARAM( "backgroundobjects" ),HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
-            { RTL_CONSTASCII_STRINGPARAM( "notes" ),            HID_PSEUDOSHEET_NOTES },
-            { RTL_CONSTASCII_STRINGPARAM( "standard" ),         HID_STANDARD_STYLESHEET_NAME },
-            { RTL_CONSTASCII_STRINGPARAM( "objectwitharrow" ),  HID_POOLSHEET_OBJWITHARROW },
-            { RTL_CONSTASCII_STRINGPARAM( "objectwithshadow" ), HID_POOLSHEET_OBJWITHSHADOW },
-            { RTL_CONSTASCII_STRINGPARAM( "objectwithoutfill" ),HID_POOLSHEET_OBJWITHOUTFILL },
-            { RTL_CONSTASCII_STRINGPARAM( "text" ),             HID_POOLSHEET_TEXT },
-            { RTL_CONSTASCII_STRINGPARAM( "textbody" ),         HID_POOLSHEET_TEXTBODY },
-            { RTL_CONSTASCII_STRINGPARAM( "textbodyjustfied" ), HID_POOLSHEET_TEXTBODY_JUSTIFY },
-            { RTL_CONSTASCII_STRINGPARAM( "textbodyindent" ),   HID_POOLSHEET_TEXTBODY_INDENT },
-            { RTL_CONSTASCII_STRINGPARAM( "title" ),            HID_POOLSHEET_TITLE },
-            { RTL_CONSTASCII_STRINGPARAM( "title1" ),           HID_POOLSHEET_TITLE1 },
-            { RTL_CONSTASCII_STRINGPARAM( "title2" ),           HID_POOLSHEET_TITLE2 },
-            { RTL_CONSTASCII_STRINGPARAM( "headline" ),         HID_POOLSHEET_HEADLINE },
-            { RTL_CONSTASCII_STRINGPARAM( "headline1" ),        HID_POOLSHEET_HEADLINE1 },
-            { RTL_CONSTASCII_STRINGPARAM( "headline2" ),        HID_POOLSHEET_HEADLINE2 },
-            { RTL_CONSTASCII_STRINGPARAM( "measure" ),          HID_POOLSHEET_MEASURE },
-            { nullptr, 0, 0 }
+            { "title",            HID_PSEUDOSHEET_TITLE },
+            { "subtitle",         HID_PSEUDOSHEET_SUBTITLE },
+            { "background",       HID_PSEUDOSHEET_BACKGROUND },
+            { "backgroundobjects",HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
+            { "notes",            HID_PSEUDOSHEET_NOTES },
+            { "standard",         HID_STANDARD_STYLESHEET_NAME },
+            { "objectwitharrow",  HID_POOLSHEET_OBJWITHARROW },
+            { "objectwithshadow", HID_POOLSHEET_OBJWITHSHADOW },
+            { "objectwithoutfill",HID_POOLSHEET_OBJWITHOUTFILL },
+            { "text",             HID_POOLSHEET_TEXT },
+            { "textbody",         HID_POOLSHEET_TEXTBODY },
+            { "textbodyjustfied", HID_POOLSHEET_TEXTBODY_JUSTIFY },
+            { "textbodyindent",   HID_POOLSHEET_TEXTBODY_INDENT },
+            { "title",            HID_POOLSHEET_TITLE },
+            { "title1",           HID_POOLSHEET_TITLE1 },
+            { "title2",           HID_POOLSHEET_TITLE2 },
+            { "headline",         HID_POOLSHEET_HEADLINE },
+            { "headline1",        HID_POOLSHEET_HEADLINE1 },
+            { "headline2",        HID_POOLSHEET_HEADLINE2 },
+            { "measure",          HID_POOLSHEET_MEASURE }
         };
 
-        ApiNameMap* p = pApiNameMap;
-        while( p->mpApiName )
+        for (std::size_t i = 0; i != SAL_N_ELEMENTS(pApiNameMap); ++i)
         {
-            if( nId == p->mnHelpId )
+            if( nId == pApiNameMap[i].mnHelpId )
             {
-                msApiName = OUString( p->mpApiName, p->mnApiNameLength, RTL_TEXTENCODING_ASCII_US );
+                msApiName = pApiNameMap[i].mpApiName;
                 break;
             }
-            p++;
         }
     }
 }
