@@ -147,7 +147,7 @@ StringErrorInfo::StringErrorInfo(
 class ErrorHandler_Impl
 {
 public:
-    static bool         CreateString(const ErrorInfo*, OUString&, sal_uInt16&);
+    static bool         CreateString(const ErrorInfo*, OUString&);
 };
 
 static void aDspFunc(const OUString &rErr, const OUString &rAction)
@@ -272,7 +272,7 @@ sal_uInt16 ErrorHandler::HandleError_Impl(
             nErrFlags = nDynFlags;
     }
 
-    if(ErrorHandler_Impl::CreateString(pInfo,aErr,nErrFlags))
+    if(ErrorHandler_Impl::CreateString(pInfo,aErr))
     {
         if (bJustCreateString)
         {
@@ -337,12 +337,11 @@ sal_uInt16 ErrorHandler::HandleError(sal_uIntPtr lId, sal_uInt16 nFlags)
     return HandleError_Impl( lId, nFlags, false, aDummy );
 }
 
-bool ErrorHandler_Impl::CreateString( const ErrorInfo* pInfo, OUString& pStr,
-                                    sal_uInt16 &rFlags)
+bool ErrorHandler_Impl::CreateString(const ErrorInfo* pInfo, OUString& rStr)
 {
     for(const ErrorHandler *pHdl : TheEDcrData::get().errorHandlers)
     {
-        if(pHdl->CreateString( pInfo, pStr, rFlags))
+        if(pHdl->CreateString(pInfo, rStr))
             return true;
     }
     return false;

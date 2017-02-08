@@ -161,8 +161,7 @@ SfxErrorHandler::~SfxErrorHandler()
 }
 
 
-bool SfxErrorHandler::CreateString(
-    const ErrorInfo *pErr, OUString &rStr, sal_uInt16& nFlags) const
+bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
 
 /*  [Description]
 
@@ -174,7 +173,7 @@ bool SfxErrorHandler::CreateString(
     sal_uLong nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
     if( nErrCode>=lEnd || nErrCode<=lStart )
         return false;
-    if(GetErrorString(nErrCode, rStr, nFlags))
+    if(GetErrorString(nErrCode, rStr))
     {
         const StringErrorInfo *pStringInfo = dynamic_cast<const StringErrorInfo *>(pErr);
         if(pStringInfo)
@@ -195,37 +194,29 @@ bool SfxErrorHandler::CreateString(
     return false;
 }
 
-
 class ResString: public OUString
-
 /*  [Description]
 
     Helpclass to read a string and optional ExtraData from
     a string Resource.
 
     */
-
 {
-    sal_uInt16 nFlags;
   public:
-    sal_uInt16 GetFlags() const {return nFlags;}
     const OUString & GetString() const {return *this;}
     explicit ResString( ResId &rId);
 };
 
-
-ResString::ResString(ResId & rId):
-    OUString(rId.SetAutoRelease(false).toString()),
-    nFlags(0)
+ResString::ResString(ResId & rId)
+    : OUString(rId.SetAutoRelease(false).toString())
 {
     ResMgr * pResMgr = rId.GetResMgr();
      // String ctor temporarily sets global ResManager
     if (pResMgr->GetRemainSize())
-        nFlags = sal_uInt16(pResMgr->ReadShort());
+        (void)pResMgr->ReadShort();
     rId.SetAutoRelease(true);
     pResMgr->PopContext();
 }
-
 
 struct ErrorResource_Impl : private Resource
 
@@ -235,7 +226,6 @@ struct ErrorResource_Impl : private Resource
     */
 
 {
-
     ResId aResId;
 
     ErrorResource_Impl(ResId& rErrIdP, sal_uInt16 nId)
@@ -247,7 +237,6 @@ struct ErrorResource_Impl : private Resource
     operator bool()          { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 
 };
-
 
 void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
 
@@ -271,8 +260,7 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
     }
 }
 
-bool SfxErrorHandler::GetErrorString(
-    sal_uLong lErrId, OUString &rStr, sal_uInt16 &nFlags) const
+bool SfxErrorHandler::GetErrorString(sal_uLong lErrId, OUString &rStr) const
 
 /*  [Description]
 
@@ -293,10 +281,6 @@ bool SfxErrorHandler::GetErrorString(
         if(aEr)
         {
             ResString aErrorString(aEr.GetResString());
-
-            if (lErrId == ERRCODE_SFXMSG_STYLEREPLACE)
-                nFlags = ERRCODE_MSG_ERROR | ERRCODE_BUTTON_OK_CANCEL;
-
             rStr = rStr.replaceAll("$(ERROR)", aErrorString.GetString());
             bRet = true;
         }

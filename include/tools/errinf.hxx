@@ -129,8 +129,7 @@ private:
                               bool bJustCreateString,
                               OUString & rError);
 protected:
-    virtual bool        CreateString( const ErrorInfo *,
-                              OUString &, sal_uInt16& nMask ) const = 0;
+    virtual bool        CreateString(const ErrorInfo *, OUString &) const = 0;
 
 public:
                         ErrorHandler();

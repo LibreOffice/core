@@ -278,10 +278,6 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "An object cannot be copied into itself." ;
     };
-    String ERRCODE_SFX_NOSTDTEMPLATE
-    {
-        Text [ en-US ] = "The default template could not be opened." ;
-    };
     String ERRCODE_SFX_TEMPLATENOTFOUND
     {
         Text [ en-US ] = "The specified template could not be found." ;
@@ -289,10 +285,6 @@ Resource RID_ERRHDL
     String ERRCODE_SFX_NOTATEMPLATE
     {
         Text [ en-US ] = "The file cannot be used as template." ;
-    };
-    String ERRCODE_SFX_CANTREADDOCINFO
-    {
-        Text [ en-US ] = "Document information could not be read from the file because\nthe document information format is unknown or because document information does not\nexist." ;
     };
     String ERRCODE_SFX_ALREADYOPEN
     {
@@ -338,81 +330,13 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated." ;
     };
-    String ERRCODE_SFXMSG_STYLEREPLACE
-    {
-        Text [ en-US ] = "Should the $(ARG1) Style be replaced?" ;
-    };
-    String ERRCODE_SFX_NOFILTER
-    {
-        Text [ en-US ] = "A filter has not been found." ;
-    };
-    String ERRCODE_SFX_CANTFINDORIGINAL
-    {
-        Text [ en-US ] = "The original could not be determined." ;
-    };
     String ERRCODE_SFX_CANTCREATECONTENT
     {
         Text [ en-US ] = "The contents could not be created." ;
     };
-    String ERRCODE_SFX_CANTCREATELINK
-    {
-        Text [ en-US ] = "The link could not be created." ;
-    };
-    String ERRCODE_SFX_WRONGBMKFORMAT
-    {
-        Text [ en-US ] = "The link format is invalid." ;
-    };
-    String ERRCODE_SFX_WRONGICONFILE
-    {
-        Text [ en-US ] = "The configuration of the icon display is invalid." ;
-    };
-    String ERRCODE_SFX_CANTWRITEICONFILE
-    {
-        Text [ en-US ] = "The configuration of the icon display can not be saved." ;
-    };
-    String ERRCODE_SFX_CANTDELICONFILE
-    {
-        Text [ en-US ] = "The configuration of the icon display could not be deleted." ;
-    };
-    String ERRCODE_SFX_CANTRENAMECONTENT
-    {
-        Text [ en-US ] = "Contents cannot be renamed." ;
-    };
-    String ERRCODE_SFX_INVALIDBMKPATH
-    {
-        Text [ en-US ] = "The bookmark folder is invalid." ;
-    };
-    String ERRCODE_SFX_CANTWRITEURLCFGFILE
-    {
-        Text [ en-US ] = "The configuration of the URLs to be saved locally could not be saved." ;
-    };
-    String ERRCODE_SFX_WRONGURLCFGFORMAT
-    {
-        Text [ en-US ] = "The configuration format of the URLs to be saved locally is invalid." ;
-    };
-    String ERRCODE_SFX_NODOCUMENT
-    {
-        Text [ en-US ] = "This action cannot be applied to a document that does not exist." ;
-    };
-    String ERRCODE_SFX_INVALIDLINK
-    {
-        Text [ en-US ] = "The link refers to an invalid target." ;
-    };
-    String ERRCODE_SFX_INVALIDTRASHPATH
-    {
-        Text [ en-US ] = "The Recycle Bin path is invalid." ;
-    };
-    String ERRCODE_SFX_NOTRESTORABLE
-    {
-        Text [ en-US ] = "The entry could not be restored." ;
-    };
     String ERRCODE_IO_NAMETOOLONG
     {
         Text [ en-US ] = "The file name is too long for the target file system." ;
-    };
-    String ERRCODE_SFX_CONSULTUSER
-    {
-        Text [ en-US ] = "The details for running the function are incomplete." ;
     };
     String ERRCODE_SFX_INVALIDSYNTAX
     {
@@ -422,29 +346,9 @@ Resource RID_ERRHDL
     {
         Text [ en-US ] = "The input syntax is invalid." ;
     };
-    String ERRCODE_SFX_CANTRENAMEFOLDER
-    {
-        Text [ en-US ] = "The input syntax is invalid." ;
-    };
-    String ERRCODE_SFX_WRONG_CDF_FORMAT
-    {
-        Text [ en-US ] = "The channel document has an invalid format." ;
-    };
-    String ERRCODE_SFX_EMPTY_SERVER
-    {
-        Text [ en-US ] = "The server must not be empty." ;
-    };
-    String ERRCODE_SFX_NO_ABOBOX
-    {
-        Text [ en-US ] = "A subscription folder is required to install a Channel." ;
-    };
     String ERRCODE_IO_NOTSTORABLEINBINARYFORMAT
     {
         Text [ en-US ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME %PRODUCTVERSION file format.";
-    };
-    String ERRCODE_SFX_TARGETFILECORRUPTED
-    {
-        Text [ en-US ] = "The file $(FILENAME) cannot be saved. Please check your system settings. You can find an automatically generated backup copy of this file in folder $(PATH) named $(BACKUPNAME).";
     };
     String ERRCODE_SFX_NOMOREDOCUMENTSALLOWED
     {
