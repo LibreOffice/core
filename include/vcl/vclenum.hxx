@@ -26,9 +26,7 @@
 
 enum class ExtTimeFieldFormat
 {
-    Short24H, Long24H,
-    Short12H, Long12H,
-    ShortDuration, LongDuration
+    Short24H, Long24H
 };
 
 enum class ExtDateFieldFormat

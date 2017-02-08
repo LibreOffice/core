@@ -2082,7 +2082,6 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { nullptr, IDC_SIZENS, 0 },                                 // POINTER_VSIZEBAR
     { nullptr, IDC_HAND, 0 },                                   // POINTER_HAND
     { nullptr, IDC_HAND, 0 },                                   // POINTER_REFHAND
-    { nullptr, IDC_PEN, 0 },                                    // POINTER_PEN
     { nullptr, nullptr, SAL_RESID_POINTER_MAGNIFY },            // POINTER_MAGNIFY
     { nullptr, nullptr, SAL_RESID_POINTER_FILL },               // POINTER_FILL
     { nullptr, nullptr, SAL_RESID_POINTER_ROTATE },             // POINTER_ROTATE
@@ -2093,18 +2092,9 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { nullptr, nullptr, SAL_RESID_POINTER_CROP },               // POINTER_CROP
     { nullptr, nullptr, SAL_RESID_POINTER_MOVEPOINT },          // POINTER_MOVEPOINT
     { nullptr, nullptr, SAL_RESID_POINTER_MOVEBEZIERWEIGHT },   // POINTER_MOVEBEZIERWEIGHT
-    { nullptr, nullptr, SAL_RESID_POINTER_MOVEDATA },           // POINTER_MOVEDATA
     { nullptr, nullptr, SAL_RESID_POINTER_COPYDATA },           // POINTER_COPYDATA
     { nullptr, nullptr, SAL_RESID_POINTER_LINKDATA },           // POINTER_LINKDATA
     { nullptr, nullptr, SAL_RESID_POINTER_MOVEDATALINK },       // POINTER_MOVEDATALINK
-    { nullptr, nullptr, SAL_RESID_POINTER_COPYDATALINK },       // POINTER_COPYDATALINK
-    { nullptr, nullptr, SAL_RESID_POINTER_MOVEFILE },           // POINTER_MOVEFILE
-    { nullptr, nullptr, SAL_RESID_POINTER_COPYFILE },           // POINTER_COPYFILE
-    { nullptr, nullptr, SAL_RESID_POINTER_LINKFILE },           // POINTER_LINKFILE
-    { nullptr, nullptr, SAL_RESID_POINTER_MOVEFILELINK },       // POINTER_MOVEFILELINK
-    { nullptr, nullptr, SAL_RESID_POINTER_COPYFILELINK },       // POINTER_COPYFILELINK
-    { nullptr, nullptr, SAL_RESID_POINTER_MOVEFILES },          // POINTER_MOVEFILES
-    { nullptr, nullptr, SAL_RESID_POINTER_COPYFILES },          // POINTER_COPYFILES
     { nullptr, IDC_NO, 0 },                                     // POINTER_NOTALLOWED
     { nullptr, nullptr, SAL_RESID_POINTER_DRAW_LINE },          // POINTER_DRAW_LINE
     { nullptr, nullptr, SAL_RESID_POINTER_DRAW_RECT },          // POINTER_DRAW_RECT
@@ -2118,15 +2108,12 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { nullptr, nullptr, SAL_RESID_POINTER_DRAW_CONNECT },       // POINTER_DRAW_CONNECT
     { nullptr, nullptr, SAL_RESID_POINTER_DRAW_TEXT },          // POINTER_DRAW_TEXT
     { nullptr, nullptr, SAL_RESID_POINTER_DRAW_CAPTION },       // POINTER_DRAW_CAPTION
-    { nullptr, nullptr, SAL_RESID_POINTER_CHART },              // POINTER_CHART
     { nullptr, nullptr, SAL_RESID_POINTER_DETECTIVE },          // POINTER_DETECTIVE
     { nullptr, nullptr, SAL_RESID_POINTER_PIVOT_COL },          // POINTER_PIVOT_COL
     { nullptr, nullptr, SAL_RESID_POINTER_PIVOT_ROW },          // POINTER_PIVOT_ROW
     { nullptr, nullptr, SAL_RESID_POINTER_PIVOT_FIELD },        // POINTER_PIVOT_FIELD
     { nullptr, nullptr, SAL_RESID_POINTER_CHAIN },              // POINTER_CHAIN
     { nullptr, nullptr, SAL_RESID_POINTER_CHAIN_NOTALLOWED },   // POINTER_CHAIN_NOTALLOWED
-    { nullptr, nullptr, SAL_RESID_POINTER_TIMEEVENT_MOVE },     // POINTER_TIMEEVENT_MOVE
-    { nullptr, nullptr, SAL_RESID_POINTER_TIMEEVENT_SIZE },     // POINTER_TIMEEVENT_SIZE
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_N },       // POINTER_AUTOSCROLL_N
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_S },       // POINTER_AUTOSCROLL_S
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_W },       // POINTER_AUTOSCROLL_W
@@ -2138,7 +2125,6 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_NS },      // POINTER_AUTOSCROLL_NS
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_WE },      // POINTER_AUTOSCROLL_WE
     { nullptr, nullptr, SAL_RESID_POINTER_AUTOSCROLL_NSWE },    // POINTER_AUTOSCROLL_NSWE
-    { nullptr, nullptr, SAL_RESID_POINTER_AIRBRUSH },           // POINTER_AIRBRUSH
     { nullptr, nullptr, SAL_RESID_POINTER_TEXT_VERTICAL },      // POINTER_TEXT_VERTICAL
     { nullptr, nullptr, SAL_RESID_POINTER_PIVOT_DELETE },       // POINTER_PIVOT_DELETE
 
@@ -2148,9 +2134,6 @@ void WinSalFrame::SetPointer( PointerStyle ePointerStyle )
     { nullptr, nullptr, SAL_RESID_POINTER_TAB_SELECT_SE },      // POINTER_TAB_SELECT_SE
     { nullptr, nullptr, SAL_RESID_POINTER_TAB_SELECT_W },       // POINTER_TAB_SELECT_W
     { nullptr, nullptr, SAL_RESID_POINTER_TAB_SELECT_SW },      // POINTER_TAB_SELECT_SW
-
-     // #i20119#
-    { nullptr, nullptr, SAL_RESID_POINTER_PAINTBRUSH },         // POINTER_PAINTBRUSH
 
     { nullptr, nullptr, SAL_RESID_POINTER_HIDEWHITESPACE },     // POINTER_HIDEWHITESPACE
     { nullptr, nullptr, SAL_RESID_POINTER_SHOWWHITESPACE }      // POINTER_UNHIDEWHITESPACE

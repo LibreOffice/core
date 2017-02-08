@@ -1333,14 +1333,7 @@ void ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
     if (mpEditView)
         if (mpEditView->MouseButtonUp( rMEvt ))
         {
-            if ( rMEvt.IsMiddle() &&
-                     GetSettings().GetMouseSettings().GetMiddleButtonAction() == MouseMiddleButtonAction::PasteSelection )
-            {
-                //  EditView may have pasted from selection
-                SC_MOD()->InputChanged( mpEditView.get() );
-            }
-            else
-                SC_MOD()->InputSelection( mpEditView.get() );
+            SC_MOD()->InputSelection( mpEditView.get() );
         }
 }
 
