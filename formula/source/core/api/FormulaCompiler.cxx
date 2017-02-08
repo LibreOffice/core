@@ -29,6 +29,7 @@
 #include <svl/zforlist.hxx>
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
+#include <tools/resary.hxx>
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.hpp>
 #include <com/sun/star/sheet/FormulaMapGroup.hpp>
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
@@ -141,7 +142,7 @@ void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVe
         lclPushOpCodeMapEntry( rVec, pTable, *pnOpCodes );
 }
 
-class OpCodeList : public Resource        // temp object for resource
+class OpCodeList
 {
 public:
 
@@ -154,12 +155,13 @@ private:
 
 private:
     FormulaCompiler::SeparatorType meSepType;
+    ResStringArray maStringList;
 };
 
 OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr xMap,
-        FormulaCompiler::SeparatorType eSepType ) :
-    Resource( ResId( nRID, *ResourceManager::getResManager()))
-    , meSepType( eSepType)
+        FormulaCompiler::SeparatorType eSepType )
+    : meSepType(eSepType)
+    , maStringList(ResId(nRID, *ResourceManager::getResManager()))
 {
     SvtSysLocale aSysLocale;
     const CharClass* pCharClass = (xMap->isEnglish() ? nullptr : aSysLocale.GetCharClassPtr());
@@ -181,8 +183,6 @@ OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr x
                 putDefaultOpCode( xMap, i, pCharClass);
         }
     }
-
-    FreeResource();
 }
 
 bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
@@ -239,10 +239,9 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
 void OpCodeList::putDefaultOpCode( const FormulaCompiler::NonConstOpCodeMapPtr& xMap, sal_uInt16 nOp,
         const CharClass* pCharClass )
 {
-    ResId aRes( nOp, *ResourceManager::getResManager());
-    aRes.SetRT( RSC_STRING);
-    if (IsAvailableRes( aRes))
-        xMap->putOpCode( aRes.toString(), OpCode( nOp), pCharClass);
+    sal_uInt32 nIndex = maStringList.FindIndex(nOp);
+    if (nIndex != RESARRAY_INDEX_NOTFOUND)
+        xMap->putOpCode(maStringList.GetString(nIndex), OpCode(nOp), pCharClass);
 }
 
 // static
