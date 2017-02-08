@@ -105,6 +105,7 @@ for d in definitionSet:
          "vcl/source/filter/jpeg/transupp.h",
          "include/vcl/bitmapex.hxx", # TransparentType
          "vcl/inc/sft.hxx", # CompositeFlags, WidthClass, WeightClass
+         "vcl/inc/CommonSalLayout.hxx", # VerticalOrientation
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
