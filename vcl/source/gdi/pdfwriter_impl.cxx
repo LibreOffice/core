@@ -1226,13 +1226,8 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
     }
     switch( m_eOrientation )
     {
-        case PDFWriter::Landscape: aLine.append( "/Rotate 90\n" );break;
-        case PDFWriter::Seascape:  aLine.append( "/Rotate -90\n" );break;
-        case PDFWriter::Portrait:  aLine.append( "/Rotate 0\n" );break;
-
-        case PDFWriter::Inherit:
-        default:
-            break;
+        case PDFWriter::Orientation::Portrait: aLine.append( "/Rotate 0\n" );break;
+        case PDFWriter::Orientation::Inherit:  break;
     }
     int nAnnots = m_aAnnotations.size();
     if( nAnnots > 0 )
