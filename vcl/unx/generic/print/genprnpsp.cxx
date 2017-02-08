@@ -1135,7 +1135,7 @@ bool PspSalPrinter::StartJob( const OUString* i_pFileName, const OUString& i_rJo
 
             xWriter->NewPage( TenMuToPt( aNewParm.maPageSize.Width() ),
                               TenMuToPt( aNewParm.maPageSize.Height() ),
-                              vcl::PDFWriter::Portrait );
+                              vcl::PDFWriter::Orientation::Portrait );
 
             xWriter->PlayMetafile( aPageFile, aMtfContext );
         }
