@@ -1068,11 +1068,6 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
     {
         return true;
     }
-    // there is some template magic here I don't know how to work around
-    if (file.startswith(SRCDIR "/connectivity"))
-    {
-        return true;
-    }
     if (isInUnoIncludeFile(expr->getLocStart())) {
         return true;
     }
