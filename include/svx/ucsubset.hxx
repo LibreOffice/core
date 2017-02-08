@@ -37,7 +37,7 @@ class FontCharMap;
 class Subset
 {
 public:
-    Subset( sal_UCS4 nMin, sal_UCS4 nMax, int resId );
+    Subset(sal_UCS4 nMin, sal_UCS4 nMax, const OUString& rName);
 
     sal_UCS4        GetRangeMin() const { return mnRangeMin;}
     sal_UCS4        GetRangeMax() const { return mnRangeMax;}
@@ -56,7 +56,7 @@ inline bool operator<(const Subset &rLHS, const Subset &rRHS)
 
 typedef ::std::list<Subset> SubsetList;
 
-class SVX_DLLPUBLIC SubsetMap : private Resource
+class SVX_DLLPUBLIC SubsetMap
 {
 public:
     SubsetMap( const FontCharMapRef& );

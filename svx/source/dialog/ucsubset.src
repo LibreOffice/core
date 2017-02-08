@@ -24,1104 +24,284 @@
  * (see the Unicode Standard & TrueType::OS2.ulUnicodeRange description)
  */
 
-Resource RID_SUBSETMAP
+StringArray RID_SUBSETMAP
 {
-    String RID_SUBSETSTR_BASIC_LATIN
-    {
-        Text [ en-US ] = "Basic Latin";
-    };
-    String RID_SUBSETSTR_LATIN_1
-    {
-        Text [ en-US ] = "Latin-1";
-    };
-    String RID_SUBSETSTR_LATIN_EXTENDED_A
-    {
-        Text [ en-US ] = "Latin Extended-A";
-    };
-    String RID_SUBSETSTR_LATIN_EXTENDED_B
-    {
-        Text [ en-US ] = "Latin Extended-B";
-    };
-    String RID_SUBSETSTR_IPA_EXTENSIONS
-    {
-        Text [ en-US ] = "IPA Extensions";
-    };
-    String RID_SUBSETSTR_SPACING_MODIFIERS
-    {
-        Text [ en-US ] = "Spacing Modifier Letters";
-    };
-    String RID_SUBSETSTR_COMB_DIACRITICAL
-    {
-        Text [ en-US ] = "Combining Diacritical Marks";
-    };
-    String RID_SUBSETSTR_BASIC_GREEK
-    {
-        Text [ en-US ] = "Basic Greek";
-    };
-    String RID_SUBSETSTR_GREEK_SYMS_COPTIC
-    {
-        Text [ en-US ] = "Greek Symbols And Coptic";
-    };
-    String RID_SUBSETSTR_CYRILLIC
-    {
-        Text [ en-US ] = "Cyrillic";
-    };
-    String RID_SUBSETSTR_ARMENIAN
-    {
-        Text [ en-US ] = "Armenian";
-    };
-    String RID_SUBSETSTR_BASIC_HEBREW
-    {
-        Text [ en-US ] = "Basic Hebrew";
-    };
-    String RID_SUBSETSTR_HEBREW_EXTENDED
-    {
-        Text [ en-US ] = "Hebrew Extended";
-    };
-    String RID_SUBSETSTR_BASIC_ARABIC
-    {
-        Text [ en-US ] = "Basic Arabic";
-    };
-    String RID_SUBSETSTR_ARABIC_EXTENDED
-    {
-        Text [ en-US ] = "Arabic Extended";
-
-    };
-    String RID_SUBSETSTR_DEVANAGARI
-    {
-        Text [ en-US ] = "Devanagari";
-    };
-    String RID_SUBSETSTR_BENGALI
-    {
-        Text [ en-US ] = "Bengali";
-    };
-    String RID_SUBSETSTR_GURMUKHI
-    {
-        Text [ en-US ] = "Gurmukhi";
-    };
-    String RID_SUBSETSTR_GUJARATI
-    {
-        Text [ en-US ] = "Gujarati";
-    };
-    String RID_SUBSETSTR_ODIA
-    {
-        Text [ en-US ] = "Odia";
-    };
-    String RID_SUBSETSTR_TAMIL
-    {
-        Text [ en-US ] = "Tamil";
-    };
-    String RID_SUBSETSTR_TELUGU
-    {
-        Text [ en-US ] = "Telugu";
-    };
-    String RID_SUBSETSTR_KANNADA
-    {
-        Text [ en-US ] = "Kannada";
-    };
-    String RID_SUBSETSTR_MALAYALAM
-    {
-        Text [ en-US ] = "Malayalam";
-    };
-    String RID_SUBSETSTR_THAI
-    {
-        Text [ en-US ] = "Thai";
-    };
-    String RID_SUBSETSTR_LAO
-    {
-        Text [ en-US ] = "Lao";
-    };
-    String RID_SUBSETSTR_BASIC_GEORGIAN
-    {
-        Text [ en-US ] = "Basic Georgian";
-    };
-    String RID_SUBSETSTR_GEORGIAN_EXTENDED
-    {
-        Text [ en-US ] = "Georgian Extended";
-    };
-    String RID_SUBSETSTR_HANGUL_JAMO
-    {
-        Text [ en-US ] = "Hangul Jamo";
-    };
-    String RID_SUBSETSTR_LATIN_EXTENDED_ADDS
-    {
-        Text [ en-US ] = "Latin Extended Additionals";
-    };
-    String RID_SUBSETSTR_GREEK_EXTENDED
-    {
-        Text [ en-US ] = "Greek Extended";
-    };
-    String RID_SUBSETSTR_GENERAL_PUNCTUATION
-    {
-        Text [ en-US ] = "General punctuation";
-    };
-    String RID_SUBSETSTR_SUB_SUPER_SCRIPTS
-    {
-        Text [ en-US ] = "Superscripts and Subscripts";
-    };
-    String RID_SUBSETSTR_CURRENCY_SYMBOLS
-    {
-        Text [ en-US ] = "Currency Symbols";
-    };
-    String RID_SUBSETSTR_COMB_DIACRITIC_SYMS
-    {
-        Text [ en-US ] = "Combining Diacritical Symbols";
-    };
-    String RID_SUBSETSTR_LETTERLIKE_SYMBOLS
-    {
-        Text [ en-US ] = "Letterlike Symbols";
-    };
-    String RID_SUBSETSTR_NUMBER_FORMS
-    {
-        Text [ en-US ] = "Number Forms";
-    };
-    String RID_SUBSETSTR_ARROWS
-    {
-        Text [ en-US ] = "Arrows";
-    };
-    String RID_SUBSETSTR_MATH_OPERATORS
-    {
-        Text [ en-US ] = "Mathematical Operators";
-    };
-    String RID_SUBSETSTR_MISC_TECHNICAL
-    {
-        Text [ en-US ] = "Miscellaneous Technical";
-    };
-    String RID_SUBSETSTR_CONTROL_PICTURES
-    {
-        Text [ en-US ] = "Control Pictures";
-    };
-    String RID_SUBSETSTR_OPTICAL_CHAR_REC
-    {
-        Text [ en-US ] = "Optical Character Recognition";
-    };
-    String RID_SUBSETSTR_ENCLOSED_ALPHANUM
-    {
-        Text [ en-US ] = "Enclosed Alphanumerics";
-    };
-    String RID_SUBSETSTR_BOX_DRAWING
-    {
-        Text [ en-US ] = "Box Drawing";
-    };
-    String RID_SUBSETSTR_BLOCK_ELEMENTS
-    {
-        Text [ en-US ] = "Block Elements";
-    };
-    String RID_SUBSETSTR_GEOMETRIC_SHAPES
-    {
-        Text [ en-US ] = "Geometric Shapes";
-    };
-    String RID_SUBSETSTR_MISC_DINGBATS
-    {
-        Text [ en-US ] = "Miscellaneous Symbols";
-    };
-    String RID_SUBSETSTR_DINGBATS
-    {
-        Text [ en-US ] = "Dingbats";
-    };
-    String RID_SUBSETSTR_CJK_SYMS_PUNCTUATION
-    {
-        Text [ en-US ] = "CJK Symbols And Punctuation";
-    };
-    String RID_SUBSETSTR_HIRAGANA
-    {
-        Text [ en-US ] = "Hiragana";
-    };
-    String RID_SUBSETSTR_KATAKANA
-    {
-        Text [ en-US ] = "Katakana";
-    };
-    String RID_SUBSETSTR_BOPOMOFO
-    {
-        Text [ en-US ] = "Bopomofo";
-    };
-    String RID_SUBSETSTR_HANGUL_COMPAT_JAMO
-    {
-        Text [ en-US ] = "Hangul Compatibility Jamo";
-    };
-    String RID_SUBSETSTR_CJK_MISC
-    {
-        Text [ en-US ] = "CJK Miscellaneous";
-    };
-    String RID_SUBSETSTR_ENCLOSED_CJK_LETTERS
-    {
-        Text [ en-US ] = "Enclosed CJK Letters And Months";
-    };
-    String RID_SUBSETSTR_CJK_COMPATIBILITY
-    {
-        Text [ en-US ] = "CJK Compatibility";
-    };
-    String RID_SUBSETSTR_HANGUL
-    {
-        Text [ en-US ] = "Hangul";
-    };
-    String RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH
-    {
-        Text [ en-US ] = "CJK Unified Ideographs";
-    };
-    String RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH
-    {
-        Text [ en-US ] = "CJK Unified Ideographs Extension A";
-    };
-    String RID_SUBSETSTR_PRIVATE_USE_AREA
-    {
-        Text [ en-US ] = "Private Use Area";
-    };
-    String RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS
-    {
-        Text [ en-US ] = "CJK Compatibility Ideographs";
-    };
-    String RID_SUBSETSTR_ALPHA_PRESENTATION
-    {
-        Text [ en-US ] = "Alphabetic Presentation Forms";
-    };
-    String RID_SUBSETSTR_ARABIC_PRESENT_A
-    {
-        Text [ en-US ] = "Arabic Presentation Forms-A";
-    };
-    String RID_SUBSETSTR_COMBINING_HALF_MARKS
-    {
-        Text [ en-US ] = "Combining Half Marks";
-    };
-    String RID_SUBSETSTR_CJK_COMPAT_FORMS
-    {
-        Text [ en-US ] = "CJK Compatibility Forms";
-    };
-    String RID_SUBSETSTR_SMALL_FORM_VARIANTS
-    {
-        Text [ en-US ] = "Small Form Variants";
-    };
-    String RID_SUBSETSTR_ARABIC_PRESENT_B
-    {
-        Text [ en-US ] = "Arabic Presentation Forms-B";
-    };
-    String RID_SUBSETSTR_HALFW_FULLW_FORMS
-    {
-        Text [ en-US ] = "Half-width and Full-width Forms";
-    };
-    String RID_SUBSETSTR_SPECIALS
-    {
-        Text [ en-US ] = "Specials";
-    };
-    String RID_SUBSETSTR_YI_SYLLABLES
-    {
-        Text [ en-US ] = "Yi Syllables";
-    };
-    String RID_SUBSETSTR_YI_RADICALS
-    {
-        Text [ en-US ] = "Yi Radicals";
-    };
-    String RID_SUBSETSTR_OLD_ITALIC
-    {
-        Text [ en-US ] = "Old Italic";
-    };
-    String RID_SUBSETSTR_GOTHIC
-    {
-        Text [ en-US ] = "Gothic";
-    };
-    String RID_SUBSETSTR_DESERET
-    {
-        Text [ en-US ] = "Deseret";
-    };
-    String RID_SUBSETSTR_BYZANTINE_MUSICAL_SYMBOLS
-    {
-        Text [ en-US ] = "Byzantine Musical Symbols";
-    };
-    String RID_SUBSETSTR_MUSICAL_SYMBOLS
-    {
-        Text [ en-US ] = "Musical Symbols";
-    };
-    String RID_SUBSETSTR_MATHEMATICAL_ALPHANUMERIC_SYMBOLS
-    {
-        Text [ en-US ] = "Mathematical Alphanumeric Symbols";
-    };
-    String RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B
-    {
-        Text [ en-US ] = "CJK Unified Ideographs Extension B";
-    };
-    String RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C
-    {
-        Text [ en-US ] = "CJK Unified Ideographs Extension C";
-    };
-    String RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D
-    {
-        Text [ en-US ] = "CJK Unified Ideographs Extension D";
-    };
-    String RID_SUBSETSTR_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT
-    {
-        Text [ en-US ] = "CJK Compatibility Ideographs Supplement";
-    };
-    String RID_SUBSETSTR_TAGS
-    {
-        Text [ en-US ] = "Tags";
-    };
-    String RID_SUBSETSTR_CYRILLIC_SUPPLEMENTARY
-    {
-        Text [ en-US ] = "Cyrillic Supplement";
-    };
-    String RID_SUBSETSTR_VARIATION_SELECTORS
-    {
-        Text [ en-US ] = "Variation Selectors";
-    };
-    String RID_SUBSETSTR_SUPPLEMENTARY_PRIVATE_USE_AREA_A
-    {
-        Text [ en-US ] = "Supplementary Private Use Area-A";
-    };
-    String RID_SUBSETSTR_SUPPLEMENTARY_PRIVATE_USE_AREA_B
-    {
-        Text [ en-US ] = "Supplementary Private Use Area-B";
-    };
-    String RID_SUBSETSTR_LIMBU
-    {
-        Text [ en-US ] = "Limbu";
-    };
-    String RID_SUBSETSTR_TAI_LE
-    {
-        Text [ en-US ] = "Tai Le";
-    };
-    String RID_SUBSETSTR_KHMER_SYMBOLS
-    {
-        Text [ en-US ] = "Khmer Symbols";
-    };
-    String RID_SUBSETSTR_PHONETIC_EXTENSIONS
-    {
-        Text [ en-US ] = "Phonetic Extensions";
-    };
-    String RID_SUBSETSTR_MISCELLANEOUS_SYMBOLS_AND_ARROWS
-    {
-        Text [ en-US ] = "Miscellaneous Symbols And Arrows";
-    };
-    String RID_SUBSETSTR_YIJING_HEXAGRAM_SYMBOLS
-    {
-        Text [ en-US ] = "Yijing Hexagram Symbols";
-    };
-    String RID_SUBSETSTR_LINEAR_B_SYLLABARY
-    {
-        Text [ en-US ] = "Linear B Syllabary";
-    };
-    String RID_SUBSETSTR_LINEAR_B_IDEOGRAMS
-    {
-        Text [ en-US ] = "Linear B Ideograms";
-    };
-    String RID_SUBSETSTR_AEGEAN_NUMBERS
-    {
-        Text [ en-US ] = "Aegean Numbers";
-    };
-    String RID_SUBSETSTR_UGARITIC
-    {
-        Text [ en-US ] = "Ugaritic";
-    };
-    String RID_SUBSETSTR_SHAVIAN
-    {
-        Text [ en-US ] = "Shavian";
-    };
-    String RID_SUBSETSTR_OSMANYA
-    {
-        Text [ en-US ] = "Osmanya";
-    };
-    String RID_SUBSETSTR_SINHALA
-    {
-        Text [ en-US ] = "Sinhala";
-    };
-    String RID_SUBSETSTR_TIBETAN
-    {
-        Text [ en-US ] = "Tibetan";
-    };
-    String RID_SUBSETSTR_MYANMAR
-    {
-        Text [ en-US ] = "Myanmar";
-    };
-    String RID_SUBSETSTR_KHMER
-    {
-        Text [ en-US ] = "Khmer";
-    };
-    String RID_SUBSETSTR_OGHAM
-    {
-        Text [ en-US ] = "Ogham";
-    };
-    String RID_SUBSETSTR_RUNIC
-    {
-        Text [ en-US ] = "Runic";
-    };
-    String RID_SUBSETSTR_SYRIAC
-    {
-        Text [ en-US ] = "Syriac";
-    };
-    String RID_SUBSETSTR_THAANA
-    {
-        Text [ en-US ] = "Thaana";
-    };
-    String RID_SUBSETSTR_ETHIOPIC
-    {
-        Text [ en-US ] = "Ethiopic";
-    };
-    String RID_SUBSETSTR_CHEROKEE
-    {
-        Text [ en-US ] = "Cherokee";
-    };
-    String RID_SUBSETSTR_CANADIAN_ABORIGINAL
-    {
-        Text [ en-US ] = "Canadian Aboriginal Syllables";
-    };
-    String RID_SUBSETSTR_MONGOLIAN
-    {
-        Text [ en-US ] = "Mongolian";
-    };
-    String RID_SUBSETSTR_MISC_MATH_SYMS_A
-    {
-        Text [ en-US ] = "Miscellaneous Mathematical Symbols-A";
-    };
-    String RID_SUBSETSTR_SUPPL_ARROWS_A
-    {
-        Text [ en-US ] = "Supplemental Arrows-A";
-    };
-    String RID_SUBSETSTR_BRAILLE_PATTERNS
-    {
-        Text [ en-US ] = "Braille Patterns";
-    };
-    String RID_SUBSETSTR_SUPPL_ARROWS_B
-    {
-        Text [ en-US ] = "Supplemental Arrows-B";
-    };
-    String RID_SUBSETSTR_MISC_MATH_SYMS_B
-    {
-        Text [ en-US ] = "Miscellaneous Mathematical Symbols-B";
-    };
-    String RID_SUBSETSTR_CJK_RADICAL_SUPPL
-    {
-        Text [ en-US ] = "CJK Radical Supplement";
-    };
-    String RID_SUBSETSTR_KANGXI_RADICALS
-    {
-        Text [ en-US ] = "Kangxi Radicals";
-    };
-    String RID_SUBSETSTR_IDEO_DESC_CHARS
-    {
-        Text [ en-US ] = "Ideographic Description Characters";
-    };
-    String RID_SUBSETSTR_TAGALOG
-    {
-        Text [ en-US ] = "Tagalog";
-    };
-    String RID_SUBSETSTR_HANUNOO
-    {
-        Text [ en-US ] = "Hanunoo";
-    };
-    String RID_SUBSETSTR_TAGBANWA
-    {
-        Text [ en-US ] = "Tagbanwa";
-    };
-    String RID_SUBSETSTR_BUHID
-    {
-        Text [ en-US ] = "Buhid";
-    };
-    String RID_SUBSETSTR_KANBUN
-    {
-        Text [ en-US ] = "Kanbun";
-    };
-    String RID_SUBSETSTR_BOPOMOFO_EXTENDED
-    {
-        Text [ en-US ] = "Bopomofo Extended";
-    };
-    String RID_SUBSETSTR_KATAKANA_PHONETIC
-    {
-        Text [ en-US ] = "Katakana Phonetics";
-    };
-    String RID_SUBSETSTR_CJK_STROKES
-    {
-        Text [ en-US ] = "CJK Strokes";
-    };
-    String RID_SUBSETSTR_CYPRIOT_SYLLABARY
-    {
-        Text [ en-US ] = "Cypriot Syllabary";
-    };
-    String RID_SUBSETSTR_TAI_XUAN_JING_SYMBOLS
-    {
-        Text [ en-US ] = "Tai Xuan Jing Symbols";
-    };
-    String RID_SUBSETSTR_VARIATION_SELECTORS_SUPPLEMENT
-    {
-        Text [ en-US ] = "Variation Selectors Supplement";
-    };
-    String RID_SUBSETSTR_ANCIENT_GREEK_MUSICAL_NOTATION
-    {
-        Text [ en-US ] = "Ancient Greek Musical Notation";
-    };
-    String RID_SUBSETSTR_ANCIENT_GREEK_NUMBERS
-    {
-        Text [ en-US ] = "Ancient Greek Numbers";
-    };
-    String RID_SUBSETSTR_ARABIC_SUPPLEMENT
-    {
-        Text [ en-US ] = "Arabic Supplement";
-    };
-    String RID_SUBSETSTR_BUGINESE
-    {
-        Text [ en-US ] = "Buginese";
-    };
-    String RID_SUBSETSTR_COMBINING_DIACRITICAL_MARKS_SUPPLEMENT
-    {
-        Text [ en-US ] = "Combining Diacritical Marks Supplement";
-    };
-    String RID_SUBSETSTR_COPTIC
-    {
-        Text [ en-US ] = "Coptic";
-    };
-    String RID_SUBSETSTR_ETHIOPIC_EXTENDED
-    {
-        Text [ en-US ] = "Ethiopic Extended";
-    };
-    String RID_SUBSETSTR_ETHIOPIC_SUPPLEMENT
-    {
-        Text [ en-US ] = "Ethiopic Supplement";
-    };
-    String RID_SUBSETSTR_GEORGIAN_SUPPLEMENT
-    {
-        Text [ en-US ] = "Georgian Supplement";
-    };
-    String RID_SUBSETSTR_GLAGOLITIC
-    {
-        Text [ en-US ] = "Glagolitic";
-    };
-    String RID_SUBSETSTR_KHAROSHTHI
-    {
-        Text [ en-US ] = "Kharoshthi";
-    };
-    String RID_SUBSETSTR_MODIFIER_TONE_LETTERS
-    {
-        Text [ en-US ] = "Modifier Tone Letters";
-    };
-    String RID_SUBSETSTR_NEW_TAI_LUE
-    {
-        Text [ en-US ] = "New Tai Lue";
-    };
-    String RID_SUBSETSTR_OLD_PERSIAN
-    {
-        Text [ en-US ] = "Old Persian";
-    };
-    String RID_SUBSETSTR_PHONETIC_EXTENSIONS_SUPPLEMENT
-    {
-        Text [ en-US ] = "Phonetic Extensions Supplement";
-    };
-    String RID_SUBSETSTR_SUPPLEMENTAL_PUNCTUATION
-    {
-        Text [ en-US ] = "Supplemental Punctuation";
-    };
-    String RID_SUBSETSTR_SYLOTI_NAGRI
-    {
-        Text [ en-US ] = "Syloti Nagri";
-    };
-    String RID_SUBSETSTR_TIFINAGH
-    {
-        Text [ en-US ] = "Tifinagh";
-    };
-    String RID_SUBSETSTR_VERTICAL_FORMS
-    {
-        Text [ en-US ] = "Vertical Forms";
-    };
-    String RID_SUBSETSTR_NKO
-    {
-        Text [ en-US ] = "Nko";
-    };
-    String RID_SUBSETSTR_BALINESE
-    {
-        Text [ en-US ] = "Balinese";
-    };
-    String RID_SUBSETSTR_LATIN_EXTENDED_C
-    {
-        Text [ en-US ] = "Latin Extended-C";
-    };
-    String RID_SUBSETSTR_LATIN_EXTENDED_D
-    {
-        Text [ en-US ] = "Latin Extended-D";
-    };
-    String RID_SUBSETSTR_PHAGS_PA
-    {
-        Text [ en-US ] = "Phags-Pa";
-    };
-    String RID_SUBSETSTR_PHOENICIAN
-    {
-        Text [ en-US ] = "Phoenician";
-    };
-    String RID_SUBSETSTR_CUNEIFORM
-    {
-        Text [ en-US ] = "Cuneiform";
-    };
-    String RID_SUBSETSTR_CUNEIFORM_NUMBERS_AND_PUNCTUATION
-    {
-        Text [ en-US ] = "Cuneiform Numbers And Punctuation";
-    };
-    String RID_SUBSETSTR_COUNTING_ROD_NUMERALS
-    {
-        Text [ en-US ] = "Counting Rod Numerals";
-    };
-    String RID_SUBSETSTR_SUNDANESE
-    {
-        Text [ en-US ] = "Sundanese";
-    };
-    String RID_SUBSETSTR_LEPCHA
-    {
-        Text [ en-US ] = "Lepcha";
-    };
-    String RID_SUBSETSTR_OL_CHIKI
-    {
-        Text [ en-US ] = "Ol Chiki";
-    };
-    String RID_SUBSETSTR_CYRILLIC_EXTENDED_A
-    {
-        Text [ en-US ] = "Cyrillic Extended-A";
-    };
-    String RID_SUBSETSTR_VAI
-    {
-        Text [ en-US ] = "Vai";
-    };
-    String RID_SUBSETSTR_CYRILLIC_EXTENDED_B
-    {
-        Text [ en-US ] = "Cyrillic Extended-B";
-    };
-    String RID_SUBSETSTR_SAURASHTRA
-    {
-        Text [ en-US ] = "Saurashtra";
-    };
-    String RID_SUBSETSTR_KAYAH_LI
-    {
-        Text [ en-US ] = "Kayah Li";
-    };
-    String RID_SUBSETSTR_REJANG
-    {
-        Text [ en-US ] = "Rejang";
-    };
-    String RID_SUBSETSTR_CHAM
-    {
-        Text [ en-US ] = "Cham";
-    };
-    String RID_SUBSETSTR_ANCIENT_SYMBOLS
-    {
-        Text [ en-US ] = "Ancient Symbols";
-    };
-    String RID_SUBSETSTR_PHAISTOS_DISC
-    {
-        Text [ en-US ] = "Phaistos Disc";
-    };
-    String RID_SUBSETSTR_LYCIAN
-    {
-        Text [ en-US ] = "Lycian";
-    };
-    String RID_SUBSETSTR_CARIAN
-    {
-        Text [ en-US ] = "Carian";
-    };
-    String RID_SUBSETSTR_LYDIAN
-    {
-        Text [ en-US ] = "Lydian";
-    };
-    String RID_SUBSETSTR_MAHJONG_TILES
-    {
-        Text [ en-US ] = "Mahjong Tiles";
-    };
-    String RID_SUBSETSTR_DOMINO_TILES
-    {
-        Text [ en-US ] = "Domino Tiles";
-    };
-    String RID_SUBSETSTR_SAMARITAN
-    {
-        Text [ en-US ] = "Samaritan";
-    };
-    String RID_SUBSETSTR_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED
-    {
-        Text [ en-US ] = "Canadian Aboriginal Syllabics Extended";
-    };
-    String RID_SUBSETSTR_TAI_THAM
-    {
-        Text [ en-US ] = "Tai Tham";
-    };
-    String RID_SUBSETSTR_VEDIC_EXTENSIONS
-    {
-        Text [ en-US ] = "Vedic Extensions";
-    };
-    String RID_SUBSETSTR_LISU
-    {
-        Text [ en-US ] = "Lisu";
-    };
-    String RID_SUBSETSTR_BAMUM
-    {
-        Text [ en-US ] = "Bamum";
-    };
-    String RID_SUBSETSTR_COMMON_INDIC_NUMBER_FORMS
-    {
-        Text [ en-US ] = "Common Indic Number Forms";
-    };
-    String RID_SUBSETSTR_DEVANAGARI_EXTENDED
-    {
-        Text [ en-US ] = "Devanagari Extended";
-    };
-    String RID_SUBSETSTR_HANGUL_JAMO_EXTENDED_A
-    {
-        Text [ en-US ] = "Hangul Jamo Extended-A";
-    };
-    String RID_SUBSETSTR_JAVANESE
-    {
-        Text [ en-US ] = "Javanese";
-    };
-    String RID_SUBSETSTR_MYANMAR_EXTENDED_A
-    {
-        Text [ en-US ] = "Myanmar Extended-A";
-    };
-    String RID_SUBSETSTR_TAI_VIET
-    {
-        Text [ en-US ] = "Tai Viet";
-    };
-    String RID_SUBSETSTR_MEETEI_MAYEK
-    {
-        Text [ en-US ] = "Meetei Mayek";
-    };
-    String RID_SUBSETSTR_HANGUL_JAMO_EXTENDED_B
-    {
-        Text [ en-US ] = "Hangul Jamo Extended-B";
-    };
-    String RID_SUBSETSTR_IMPERIAL_ARAMAIC
-    {
-        Text [ en-US ] = "Imperial Aramaic";
-    };
-    String RID_SUBSETSTR_OLD_SOUTH_ARABIAN
-    {
-        Text [ en-US ] = "Old South Arabian";
-    };
-    String RID_SUBSETSTR_AVESTAN
-    {
-        Text [ en-US ] = "Avestan";
-    };
-    String RID_SUBSETSTR_INSCRIPTIONAL_PARTHIAN
-    {
-        Text [ en-US ] = "Inscriptional Parthian";
-    };
-    String RID_SUBSETSTR_INSCRIPTIONAL_PAHLAVI
-    {
-        Text [ en-US ] = "Inscriptional Pahlavi";
-    };
-    String RID_SUBSETSTR_OLD_TURKIC
-    {
-        Text [ en-US ] = "Old Turkic";
-    };
-    String RID_SUBSETSTR_RUMI_NUMERAL_SYMBOLS
-    {
-        Text [ en-US ] = "Rumi Numeral Symbols";
-    };
-    String RID_SUBSETSTR_KAITHI
-    {
-        Text [ en-US ] = "Kaithi";
-    };
-    String RID_SUBSETSTR_EGYPTIAN_HIEROGLYPHS
-    {
-        Text [ en-US ] = "Egyptian Hieroglyphs";
-    };
-    String RID_SUBSETSTR_ENCLOSED_ALPHANUMERIC_SUPPLEMENT
-    {
-        Text [ en-US ] = "Enclosed Alphanumeric Supplement";
-    };
-    String RID_SUBSETSTR_ENCLOSED_IDEOGRAPHIC_SUPPLEMENT
-    {
-        Text [ en-US ] = "Enclosed Ideographic Supplement";
-    };
-    String RID_SUBSETSTR_MANDAIC
-    {
-        Text [ en-US ] = "Mandaic";
-    };
-    String RID_SUBSETSTR_BATAK
-    {
-        Text [ en-US ] = "Batak";
-    };
-    String RID_SUBSETSTR_ETHIOPIC_EXTENDED_A
-    {
-        Text [ en-US ] = "Ethiopic Extended-A";
-    };
-    String RID_SUBSETSTR_BRAHMI
-    {
-        Text [ en-US ] = "Brahmi";
-    };
-    String RID_SUBSETSTR_BAMUM_SUPPLEMENT
-    {
-        Text [ en-US ] = "Bamum Supplement";
-    };
-    String RID_SUBSETSTR_KANA_SUPPLEMENT
-    {
-        Text [ en-US ] = "Kana Supplement";
-    };
-    String RID_SUBSETSTR_PLAYING_CARDS
-    {
-        Text [ en-US ] = "Playing Cards";
-    };
-    String RID_SUBSETSTR_MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS
-    {
-        Text [ en-US ] = "Miscellaneous Symbols And Pictographs";
-    };
-    String RID_SUBSETSTR_EMOTICONS
-    {
-        Text [ en-US ] = "Emoticons";
-    };
-    String RID_SUBSETSTR_TRANSPORT_AND_MAP_SYMBOLS
-    {
-        Text [ en-US ] = "Transport And Map Symbols";
-    };
-    String RID_SUBSETSTR_ALCHEMICAL_SYMBOLS
-    {
-        Text [ en-US ] = "Alchemical Symbols";
-    };
-    String RID_SUBSETSTR_ARABIC_EXTENDED_A
-    {
-        Text [ en-US ] = "Arabic Extended-A";
-    };
-    String RID_SUBSETSTR_ARABIC_MATHEMATICAL_ALPHABETIC_SYMBOLS
-    {
-        Text [ en-US ] = "Arabic Mathematical Alphabetic Symbols";
-    };
-    String RID_SUBSETSTR_CHAKMA
-    {
-        Text [ en-US ] = "Chakma";
-    };
-    String RID_SUBSETSTR_MEETEI_MAYEK_EXTENSIONS
-    {
-        Text [ en-US ] = "Meetei Mayek Extensions";
-    };
-    String RID_SUBSETSTR_MEROITIC_CURSIVE
-    {
-        Text [ en-US ] = "Meroitic Cursive";
-    };
-    String RID_SUBSETSTR_MEROITIC_HIEROGLYPHS
-    {
-        Text [ en-US ] = "Meroitic Hieroglyphs";
-    };
-    String RID_SUBSETSTR_MIAO
-    {
-        Text [ en-US ] = "Miao";
-    };
-    String RID_SUBSETSTR_SHARADA
-    {
-        Text [ en-US ] = "Sharada";
-    };
-    String RID_SUBSETSTR_SORA_SOMPENG
-    {
-        Text [ en-US ] = "Sora Sompeng";
-    };
-    String RID_SUBSETSTR_SUNDANESE_SUPPLEMENT
-    {
-        Text [ en-US ] = "Sundanese Supplement";
-    };
-    String RID_SUBSETSTR_TAKRI
-    {
-        Text [ en-US ] = "Takri";
-    };
-    String RID_SUBSETSTR_BASSA_VAH
-    {
-        Text [ en-US ] = "Bassa Vah";
-    };
-    String RID_SUBSETSTR_CAUCASIAN_ALBANIAN
-    {
-        Text [ en-US ] = "Caucasian Albanian";
-    };
-    String RID_SUBSETSTR_COPTIC_EPACT_NUMBERS
-    {
-        Text [ en-US ] = "Coptic Epact Numbers";
-    };
-    String RID_SUBSETSTR_COMBINING_DIACRITICAL_MARKS_EXTENDED
-    {
-        Text [ en-US ] = "Combining Diacritical Marks Extended";
-    };
-    String RID_SUBSETSTR_DUPLOYAN
-    {
-        Text [ en-US ] = "Duployan";
-    };
-    String RID_SUBSETSTR_ELBASAN
-    {
-        Text [ en-US ] = "Elbasan";
-    };
-    String RID_SUBSETSTR_GEOMETRIC_SHAPES_EXTENDED
-    {
-        Text [ en-US ] = "Geometric Shapes Extended";
-    };
-    String RID_SUBSETSTR_GRANTHA
-    {
-        Text [ en-US ] = "Grantha";
-    };
-    String RID_SUBSETSTR_KHOJKI
-    {
-        Text [ en-US ] = "Khojki";
-    };
-    String RID_SUBSETSTR_KHUDAWADI
-    {
-        Text [ en-US ] = "Khudawadi";
-    };
-    String RID_SUBSETSTR_LATIN_EXTENDED_E
-    {
-        Text [ en-US ] = "Latin Extended-E";
-    };
-    String RID_SUBSETSTR_LINEAR_A
-    {
-        Text [ en-US ] = "Linear A";
-    };
-    String RID_SUBSETSTR_MAHAJANI
-    {
-        Text [ en-US ] = "Mahajani";
-    };
-    String RID_SUBSETSTR_MANICHAEAN
-    {
-        Text [ en-US ] = "Manichaean";
-    };
-    String RID_SUBSETSTR_MENDE_KIKAKUI
-    {
-        Text [ en-US ] = "Mende Kikakui";
-    };
-    String RID_SUBSETSTR_MODI
-    {
-        Text [ en-US ] = "Modi";
-    };
-    String RID_SUBSETSTR_MRO
-    {
-        Text [ en-US ] = "Mro";
-    };
-    String RID_SUBSETSTR_MYANMAR_EXTENDED_B
-    {
-        Text [ en-US ] = "Myanmar Extended-B";
-    };
-    String RID_SUBSETSTR_NABATAEAN
-    {
-        Text [ en-US ] = "Nabataean";
-    };
-    String RID_SUBSETSTR_OLD_NORTH_ARABIAN
-    {
-        Text [ en-US ] = "Old North Arabian";
-    };
-    String RID_SUBSETSTR_OLD_PERMIC
-    {
-        Text [ en-US ] = "Old Permic";
-    };
-    String RID_SUBSETSTR_ORNAMENTAL_DINGBATS
-    {
-        Text [ en-US ] = "Ornamental Dingbats";
-    };
-    String RID_SUBSETSTR_PAHAWH_HMONG
-    {
-        Text [ en-US ] = "Pahawh Hmong";
-    };
-    String RID_SUBSETSTR_PALMYRENE
-    {
-        Text [ en-US ] = "Palmyrene";
-    };
-    String RID_SUBSETSTR_PAU_CIN_HAU
-    {
-        Text [ en-US ] = "Pau Cin Hau";
-    };
-    String RID_SUBSETSTR_PSALTER_PAHLAVI
-    {
-        Text [ en-US ] = "Psalter Pahlavi";
-    };
-    String RID_SUBSETSTR_SHORTHAND_FORMAT_CONTROLS
-    {
-        Text [ en-US ] = "Shorthand Format Controls";
-    };
-    String RID_SUBSETSTR_SIDDHAM
-    {
-        Text [ en-US ] = "Siddham";
-    };
-    String RID_SUBSETSTR_SINHALA_ARCHAIC_NUMBERS
-    {
-        Text [ en-US ] = "Sinhala Archaic Numbers";
-    };
-    String RID_SUBSETSTR_SUPPLEMENTAL_ARROWS_C
-    {
-        Text [ en-US ] = "Supplemental Arrows-C";
-    };
-    String RID_SUBSETSTR_TIRHUTA
-    {
-        Text [ en-US ] = "Tirhuta";
-    };
-    String RID_SUBSETSTR_WARANG_CITI
-    {
-        Text [ en-US ] = "Warang Citi";
-    };
-    String RID_SUBSETSTR_AHOM
-    {
-        Text [ en-US ] = "Ahom";
-    };
-    String RID_SUBSETSTR_ANATOLIAN_HIEROGLYPHS
-    {
-        Text [ en-US ] = "Anatolian Hieroglyphs";
-    };
-    String RID_SUBSETSTR_CHEROKEE_SUPPLEMENT
-    {
-        Text [ en-US ] = "Cherokee Supplement";
-    };
-    String RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E
-    {
-        Text [ en-US ] = "CJK Unified Ideographs Extension E";
-    };
-    String RID_SUBSETSTR_EARLY_DYNASTIC_CUNEIFORM
-    {
-        Text [ en-US ] = "Early Dynastic Cuneiform";
-    };
-    String RID_SUBSETSTR_HATRAN
-    {
-        Text [ en-US ] = "Hatran";
-    };
-    String RID_SUBSETSTR_MULTANI
-    {
-        Text [ en-US ] = "Multani";
-    };
-    String RID_SUBSETSTR_OLD_HUNGARIAN
-    {
-        Text [ en-US ] = "Old Hungarian";
-    };
-    String RID_SUBSETSTR_SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS
-    {
-        Text [ en-US ] = "Supplemental Symbols And Pictographs";
-    };
-    String RID_SUBSETSTR_SUTTON_SIGNWRITING
-    {
-        Text [ en-US ] = "Sutton Signwriting";
-    };
-    String RID_SUBSETSTR_ADLAM
-    {
-        Text [ en-US ] = "Adlam";
-    };
-    String RID_SUBSETSTR_BHAIKSUKI
-    {
-        Text [ en-US ] = "Bhaiksuki";
-    };
-    String RID_SUBSETSTR_CYRILLIC_EXTENDED_C
-    {
-        Text [ en-US ] = "Cyrillic Extended-C";
-    };
-    String RID_SUBSETSTR_GLAGOLITIC_SUPPLEMENT
-    {
-        Text [ en-US ] = "Glagolitic Supplement";
-    };
-    String RID_SUBSETSTR_IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION
-    {
-        Text [ en-US ] = "Ideographic Symbols and Punctuation";
-    };
-    String RID_SUBSETSTR_MARCHEN
-    {
-        Text [ en-US ] = "Marchen";
-    };
-    String RID_SUBSETSTR_MONGOLIAN_SUPPLEMENT
-    {
-        Text [ en-US ] = "Mongolian Supplement";
-    };
-    String RID_SUBSETSTR_NEWA
-    {
-        Text [ en-US ] = "Newa";
-    };
-    String RID_SUBSETSTR_OSAGE
-    {
-        Text [ en-US ] = "Osage";
-    };
-    String RID_SUBSETSTR_TANGUT
-    {
-        Text [ en-US ] = "Tangut";
-    };
-    String RID_SUBSETSTR_TANGUT_COMPONENTS
-    {
-        Text [ en-US ] = "Tangut Components";
+    ItemList [ en-US ] =
+    {
+        < "Basic Latin"; RID_SUBSETSTR_BASIC_LATIN ; > ;
+        < "Latin-1"; RID_SUBSETSTR_LATIN_1 ; > ;
+        < "Latin Extended-A"; RID_SUBSETSTR_LATIN_EXTENDED_A ; > ;
+        < "Latin Extended-B"; RID_SUBSETSTR_LATIN_EXTENDED_B ; > ;
+        < "IPA Extensions"; RID_SUBSETSTR_IPA_EXTENSIONS ; > ;
+        < "Spacing Modifier Letters"; RID_SUBSETSTR_SPACING_MODIFIERS ; > ;
+        < "Combining Diacritical Marks"; RID_SUBSETSTR_COMB_DIACRITICAL ; > ;
+        < "Basic Greek"; RID_SUBSETSTR_BASIC_GREEK ; > ;
+        < "Greek Symbols And Coptic"; RID_SUBSETSTR_GREEK_SYMS_COPTIC ; > ;
+        < "Cyrillic"; RID_SUBSETSTR_CYRILLIC ; > ;
+        < "Armenian"; RID_SUBSETSTR_ARMENIAN ; > ;
+        < "Basic Hebrew"; RID_SUBSETSTR_BASIC_HEBREW ; > ;
+        < "Hebrew Extended"; RID_SUBSETSTR_HEBREW_EXTENDED ; > ;
+        < "Basic Arabic"; RID_SUBSETSTR_BASIC_ARABIC ; > ;
+        < "Arabic Extended"; RID_SUBSETSTR_ARABIC_EXTENDED ; > ;
+        < "Devanagari"; RID_SUBSETSTR_DEVANAGARI ; > ;
+        < "Bengali"; RID_SUBSETSTR_BENGALI ; > ;
+        < "Gurmukhi"; RID_SUBSETSTR_GURMUKHI ; > ;
+        < "Gujarati"; RID_SUBSETSTR_GUJARATI ; > ;
+        < "Odia"; RID_SUBSETSTR_ODIA ; > ;
+        < "Tamil"; RID_SUBSETSTR_TAMIL ; > ;
+        < "Telugu"; RID_SUBSETSTR_TELUGU ; > ;
+        < "Kannada"; RID_SUBSETSTR_KANNADA ; > ;
+        < "Malayalam"; RID_SUBSETSTR_MALAYALAM ; > ;
+        < "Thai"; RID_SUBSETSTR_THAI ; > ;
+        < "Lao"; RID_SUBSETSTR_LAO ; > ;
+        < "Basic Georgian"; RID_SUBSETSTR_BASIC_GEORGIAN ; > ;
+        < "Georgian Extended"; RID_SUBSETSTR_GEORGIAN_EXTENDED ; > ;
+        < "Hangul Jamo"; RID_SUBSETSTR_HANGUL_JAMO ; > ;
+        < "Latin Extended Additionals"; RID_SUBSETSTR_LATIN_EXTENDED_ADDS ; > ;
+        < "Greek Extended"; RID_SUBSETSTR_GREEK_EXTENDED ; > ;
+        < "General punctuation"; RID_SUBSETSTR_GENERAL_PUNCTUATION ; > ;
+        < "Superscripts and Subscripts"; RID_SUBSETSTR_SUB_SUPER_SCRIPTS ; > ;
+        < "Currency Symbols"; RID_SUBSETSTR_CURRENCY_SYMBOLS ; > ;
+        < "Combining Diacritical Symbols"; RID_SUBSETSTR_COMB_DIACRITIC_SYMS ; > ;
+        < "Letterlike Symbols"; RID_SUBSETSTR_LETTERLIKE_SYMBOLS ; > ;
+        < "Number Forms"; RID_SUBSETSTR_NUMBER_FORMS ; > ;
+        < "Arrows"; RID_SUBSETSTR_ARROWS ; > ;
+        < "Mathematical Operators"; RID_SUBSETSTR_MATH_OPERATORS ; > ;
+        < "Miscellaneous Technical"; RID_SUBSETSTR_MISC_TECHNICAL ; > ;
+        < "Control Pictures"; RID_SUBSETSTR_CONTROL_PICTURES ; > ;
+        < "Optical Character Recognition"; RID_SUBSETSTR_OPTICAL_CHAR_REC ; > ;
+        < "Enclosed Alphanumerics"; RID_SUBSETSTR_ENCLOSED_ALPHANUM ; > ;
+        < "Box Drawing"; RID_SUBSETSTR_BOX_DRAWING ; > ;
+        < "Block Elements"; RID_SUBSETSTR_BLOCK_ELEMENTS ; > ;
+        < "Geometric Shapes"; RID_SUBSETSTR_GEOMETRIC_SHAPES ; > ;
+        < "Miscellaneous Symbols"; RID_SUBSETSTR_MISC_DINGBATS ; > ;
+        < "Dingbats"; RID_SUBSETSTR_DINGBATS ; > ;
+        < "CJK Symbols And Punctuation"; RID_SUBSETSTR_CJK_SYMS_PUNCTUATION ; > ;
+        < "Hiragana"; RID_SUBSETSTR_HIRAGANA ; > ;
+        < "Katakana"; RID_SUBSETSTR_KATAKANA ; > ;
+        < "Bopomofo"; RID_SUBSETSTR_BOPOMOFO ; > ;
+        < "Hangul Compatibility Jamo"; RID_SUBSETSTR_HANGUL_COMPAT_JAMO ; > ;
+        < "CJK Miscellaneous"; RID_SUBSETSTR_CJK_MISC ; > ;
+        < "Enclosed CJK Letters And Months"; RID_SUBSETSTR_ENCLOSED_CJK_LETTERS ; > ;
+        < "CJK Compatibility"; RID_SUBSETSTR_CJK_COMPATIBILITY ; > ;
+        < "Hangul"; RID_SUBSETSTR_HANGUL ; > ;
+        < "CJK Unified Ideographs"; RID_SUBSETSTR_CJK_UNIFIED_IDGRAPH ; > ;
+        < "CJK Unified Ideographs Extension A"; RID_SUBSETSTR_CJK_EXT_A_UNIFIED_IDGRAPH ; > ;
+        < "Private Use Area"; RID_SUBSETSTR_PRIVATE_USE_AREA ; > ;
+        < "CJK Compatibility Ideographs"; RID_SUBSETSTR_CJK_COMPAT_IDGRAPHS ; > ;
+        < "Alphabetic Presentation Forms"; RID_SUBSETSTR_ALPHA_PRESENTATION ; > ;
+        < "Arabic Presentation Forms-A"; RID_SUBSETSTR_ARABIC_PRESENT_A ; > ;
+        < "Combining Half Marks"; RID_SUBSETSTR_COMBINING_HALF_MARKS ; > ;
+        < "CJK Compatibility Forms"; RID_SUBSETSTR_CJK_COMPAT_FORMS ; > ;
+        < "Small Form Variants"; RID_SUBSETSTR_SMALL_FORM_VARIANTS ; > ;
+        < "Arabic Presentation Forms-B"; RID_SUBSETSTR_ARABIC_PRESENT_B ; > ;
+        < "Half-width and Full-width Forms"; RID_SUBSETSTR_HALFW_FULLW_FORMS ; > ;
+        < "Specials"; RID_SUBSETSTR_SPECIALS ; > ;
+        < "Yi Syllables"; RID_SUBSETSTR_YI_SYLLABLES ; > ;
+        < "Yi Radicals"; RID_SUBSETSTR_YI_RADICALS ; > ;
+        < "Old Italic"; RID_SUBSETSTR_OLD_ITALIC ; > ;
+        < "Gothic"; RID_SUBSETSTR_GOTHIC ; > ;
+        < "Deseret"; RID_SUBSETSTR_DESERET ; > ;
+        < "Byzantine Musical Symbols"; RID_SUBSETSTR_BYZANTINE_MUSICAL_SYMBOLS ; > ;
+        < "Musical Symbols"; RID_SUBSETSTR_MUSICAL_SYMBOLS ; > ;
+        < "Mathematical Alphanumeric Symbols"; RID_SUBSETSTR_MATHEMATICAL_ALPHANUMERIC_SYMBOLS ; > ;
+        < "CJK Unified Ideographs Extension B"; RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B ; > ;
+        < "CJK Unified Ideographs Extension C"; RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C ; > ;
+        < "CJK Unified Ideographs Extension D"; RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D ; > ;
+        < "CJK Compatibility Ideographs Supplement"; RID_SUBSETSTR_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT ; > ;
+        < "Tags"; RID_SUBSETSTR_TAGS ; > ;
+        < "Cyrillic Supplement"; RID_SUBSETSTR_CYRILLIC_SUPPLEMENTARY ; > ;
+        < "Variation Selectors"; RID_SUBSETSTR_VARIATION_SELECTORS ; > ;
+        < "Supplementary Private Use Area-A"; RID_SUBSETSTR_SUPPLEMENTARY_PRIVATE_USE_AREA_A ; > ;
+        < "Supplementary Private Use Area-B"; RID_SUBSETSTR_SUPPLEMENTARY_PRIVATE_USE_AREA_B ; > ;
+        < "Limbu"; RID_SUBSETSTR_LIMBU ; > ;
+        < "Tai Le"; RID_SUBSETSTR_TAI_LE ; > ;
+        < "Khmer Symbols"; RID_SUBSETSTR_KHMER_SYMBOLS ; > ;
+        < "Phonetic Extensions"; RID_SUBSETSTR_PHONETIC_EXTENSIONS ; > ;
+        < "Miscellaneous Symbols And Arrows"; RID_SUBSETSTR_MISCELLANEOUS_SYMBOLS_AND_ARROWS ; > ;
+        < "Yijing Hexagram Symbols"; RID_SUBSETSTR_YIJING_HEXAGRAM_SYMBOLS ; > ;
+        < "Linear B Syllabary"; RID_SUBSETSTR_LINEAR_B_SYLLABARY ; > ;
+        < "Linear B Ideograms"; RID_SUBSETSTR_LINEAR_B_IDEOGRAMS ; > ;
+        < "Aegean Numbers"; RID_SUBSETSTR_AEGEAN_NUMBERS ; > ;
+        < "Ugaritic"; RID_SUBSETSTR_UGARITIC ; > ;
+        < "Shavian"; RID_SUBSETSTR_SHAVIAN ; > ;
+        < "Osmanya"; RID_SUBSETSTR_OSMANYA ; > ;
+        < "Sinhala"; RID_SUBSETSTR_SINHALA ; > ;
+        < "Tibetan"; RID_SUBSETSTR_TIBETAN ; > ;
+        < "Myanmar"; RID_SUBSETSTR_MYANMAR ; > ;
+        < "Khmer"; RID_SUBSETSTR_KHMER ; > ;
+        < "Ogham"; RID_SUBSETSTR_OGHAM ; > ;
+        < "Runic"; RID_SUBSETSTR_RUNIC ; > ;
+        < "Syriac"; RID_SUBSETSTR_SYRIAC ; > ;
+        < "Thaana"; RID_SUBSETSTR_THAANA ; > ;
+        < "Ethiopic"; RID_SUBSETSTR_ETHIOPIC ; > ;
+        < "Cherokee"; RID_SUBSETSTR_CHEROKEE ; > ;
+        < "Canadian Aboriginal Syllables"; RID_SUBSETSTR_CANADIAN_ABORIGINAL ; > ;
+        < "Mongolian"; RID_SUBSETSTR_MONGOLIAN ; > ;
+        < "Miscellaneous Mathematical Symbols-A"; RID_SUBSETSTR_MISC_MATH_SYMS_A ; > ;
+        < "Supplemental Arrows-A"; RID_SUBSETSTR_SUPPL_ARROWS_A ; > ;
+        < "Braille Patterns"; RID_SUBSETSTR_BRAILLE_PATTERNS ; > ;
+        < "Supplemental Arrows-B"; RID_SUBSETSTR_SUPPL_ARROWS_B ; > ;
+        < "Miscellaneous Mathematical Symbols-B"; RID_SUBSETSTR_MISC_MATH_SYMS_B ; > ;
+        < "CJK Radical Supplement"; RID_SUBSETSTR_CJK_RADICAL_SUPPL ; > ;
+        < "Kangxi Radicals"; RID_SUBSETSTR_KANGXI_RADICALS ; > ;
+        < "Ideographic Description Characters"; RID_SUBSETSTR_IDEO_DESC_CHARS ; > ;
+        < "Tagalog"; RID_SUBSETSTR_TAGALOG ; > ;
+        < "Hanunoo"; RID_SUBSETSTR_HANUNOO ; > ;
+        < "Tagbanwa"; RID_SUBSETSTR_TAGBANWA ; > ;
+        < "Buhid"; RID_SUBSETSTR_BUHID ; > ;
+        < "Kanbun"; RID_SUBSETSTR_KANBUN ; > ;
+        < "Bopomofo Extended"; RID_SUBSETSTR_BOPOMOFO_EXTENDED ; > ;
+        < "Katakana Phonetics"; RID_SUBSETSTR_KATAKANA_PHONETIC ; > ;
+        < "CJK Strokes"; RID_SUBSETSTR_CJK_STROKES ; > ;
+        < "Cypriot Syllabary"; RID_SUBSETSTR_CYPRIOT_SYLLABARY ; > ;
+        < "Tai Xuan Jing Symbols"; RID_SUBSETSTR_TAI_XUAN_JING_SYMBOLS ; > ;
+        < "Variation Selectors Supplement"; RID_SUBSETSTR_VARIATION_SELECTORS_SUPPLEMENT ; > ;
+        < "Ancient Greek Musical Notation"; RID_SUBSETSTR_ANCIENT_GREEK_MUSICAL_NOTATION ; > ;
+        < "Ancient Greek Numbers"; RID_SUBSETSTR_ANCIENT_GREEK_NUMBERS ; > ;
+        < "Arabic Supplement"; RID_SUBSETSTR_ARABIC_SUPPLEMENT ; > ;
+        < "Buginese"; RID_SUBSETSTR_BUGINESE ; > ;
+        < "Combining Diacritical Marks Supplement"; RID_SUBSETSTR_COMBINING_DIACRITICAL_MARKS_SUPPLEMENT ; > ;
+        < "Coptic"; RID_SUBSETSTR_COPTIC ; > ;
+        < "Ethiopic Extended"; RID_SUBSETSTR_ETHIOPIC_EXTENDED ; > ;
+        < "Ethiopic Supplement"; RID_SUBSETSTR_ETHIOPIC_SUPPLEMENT ; > ;
+        < "Georgian Supplement"; RID_SUBSETSTR_GEORGIAN_SUPPLEMENT ; > ;
+        < "Glagolitic"; RID_SUBSETSTR_GLAGOLITIC ; > ;
+        < "Kharoshthi"; RID_SUBSETSTR_KHAROSHTHI ; > ;
+        < "Modifier Tone Letters"; RID_SUBSETSTR_MODIFIER_TONE_LETTERS ; > ;
+        < "New Tai Lue"; RID_SUBSETSTR_NEW_TAI_LUE ; > ;
+        < "Old Persian"; RID_SUBSETSTR_OLD_PERSIAN ; > ;
+        < "Phonetic Extensions Supplement"; RID_SUBSETSTR_PHONETIC_EXTENSIONS_SUPPLEMENT ; > ;
+        < "Supplemental Punctuation"; RID_SUBSETSTR_SUPPLEMENTAL_PUNCTUATION ; > ;
+        < "Syloti Nagri"; RID_SUBSETSTR_SYLOTI_NAGRI ; > ;
+        < "Tifinagh"; RID_SUBSETSTR_TIFINAGH ; > ;
+        < "Vertical Forms"; RID_SUBSETSTR_VERTICAL_FORMS ; > ;
+        < "Nko"; RID_SUBSETSTR_NKO ; > ;
+        < "Balinese"; RID_SUBSETSTR_BALINESE ; > ;
+        < "Latin Extended-C"; RID_SUBSETSTR_LATIN_EXTENDED_C ; > ;
+        < "Latin Extended-D"; RID_SUBSETSTR_LATIN_EXTENDED_D ; > ;
+        < "Phags-Pa"; RID_SUBSETSTR_PHAGS_PA ; > ;
+        < "Phoenician"; RID_SUBSETSTR_PHOENICIAN ; > ;
+        < "Cuneiform"; RID_SUBSETSTR_CUNEIFORM ; > ;
+        < "Cuneiform Numbers And Punctuation"; RID_SUBSETSTR_CUNEIFORM_NUMBERS_AND_PUNCTUATION ; > ;
+        < "Counting Rod Numerals"; RID_SUBSETSTR_COUNTING_ROD_NUMERALS ; > ;
+        < "Sundanese"; RID_SUBSETSTR_SUNDANESE ; > ;
+        < "Lepcha"; RID_SUBSETSTR_LEPCHA ; > ;
+        < "Ol Chiki"; RID_SUBSETSTR_OL_CHIKI ; > ;
+        < "Cyrillic Extended-A"; RID_SUBSETSTR_CYRILLIC_EXTENDED_A ; > ;
+        < "Vai"; RID_SUBSETSTR_VAI ; > ;
+        < "Cyrillic Extended-B"; RID_SUBSETSTR_CYRILLIC_EXTENDED_B ; > ;
+        < "Saurashtra"; RID_SUBSETSTR_SAURASHTRA ; > ;
+        < "Kayah Li"; RID_SUBSETSTR_KAYAH_LI ; > ;
+        < "Rejang"; RID_SUBSETSTR_REJANG ; > ;
+        < "Cham"; RID_SUBSETSTR_CHAM ; > ;
+        < "Ancient Symbols"; RID_SUBSETSTR_ANCIENT_SYMBOLS ; > ;
+        < "Phaistos Disc"; RID_SUBSETSTR_PHAISTOS_DISC ; > ;
+        < "Lycian"; RID_SUBSETSTR_LYCIAN ; > ;
+        < "Carian"; RID_SUBSETSTR_CARIAN ; > ;
+        < "Lydian"; RID_SUBSETSTR_LYDIAN ; > ;
+        < "Mahjong Tiles"; RID_SUBSETSTR_MAHJONG_TILES ; > ;
+        < "Domino Tiles"; RID_SUBSETSTR_DOMINO_TILES ; > ;
+        < "Samaritan"; RID_SUBSETSTR_SAMARITAN ; > ;
+        < "Canadian Aboriginal Syllabics Extended"; RID_SUBSETSTR_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED ; > ;
+        < "Tai Tham"; RID_SUBSETSTR_TAI_THAM ; > ;
+        < "Vedic Extensions"; RID_SUBSETSTR_VEDIC_EXTENSIONS ; > ;
+        < "Lisu"; RID_SUBSETSTR_LISU ; > ;
+        < "Bamum"; RID_SUBSETSTR_BAMUM ; > ;
+        < "Common Indic Number Forms"; RID_SUBSETSTR_COMMON_INDIC_NUMBER_FORMS ; > ;
+        < "Devanagari Extended"; RID_SUBSETSTR_DEVANAGARI_EXTENDED ; > ;
+        < "Hangul Jamo Extended-A"; RID_SUBSETSTR_HANGUL_JAMO_EXTENDED_A ; > ;
+        < "Javanese"; RID_SUBSETSTR_JAVANESE ; > ;
+        < "Myanmar Extended-A"; RID_SUBSETSTR_MYANMAR_EXTENDED_A ; > ;
+        < "Tai Viet"; RID_SUBSETSTR_TAI_VIET ; > ;
+        < "Meetei Mayek"; RID_SUBSETSTR_MEETEI_MAYEK ; > ;
+        < "Hangul Jamo Extended-B"; RID_SUBSETSTR_HANGUL_JAMO_EXTENDED_B ; > ;
+        < "Imperial Aramaic"; RID_SUBSETSTR_IMPERIAL_ARAMAIC ; > ;
+        < "Old South Arabian"; RID_SUBSETSTR_OLD_SOUTH_ARABIAN ; > ;
+        < "Avestan"; RID_SUBSETSTR_AVESTAN ; > ;
+        < "Inscriptional Parthian"; RID_SUBSETSTR_INSCRIPTIONAL_PARTHIAN ; > ;
+        < "Inscriptional Pahlavi"; RID_SUBSETSTR_INSCRIPTIONAL_PAHLAVI ; > ;
+        < "Old Turkic"; RID_SUBSETSTR_OLD_TURKIC ; > ;
+        < "Rumi Numeral Symbols"; RID_SUBSETSTR_RUMI_NUMERAL_SYMBOLS ; > ;
+        < "Kaithi"; RID_SUBSETSTR_KAITHI ; > ;
+        < "Egyptian Hieroglyphs"; RID_SUBSETSTR_EGYPTIAN_HIEROGLYPHS ; > ;
+        < "Enclosed Alphanumeric Supplement"; RID_SUBSETSTR_ENCLOSED_ALPHANUMERIC_SUPPLEMENT ; > ;
+        < "Enclosed Ideographic Supplement"; RID_SUBSETSTR_ENCLOSED_IDEOGRAPHIC_SUPPLEMENT ; > ;
+        < "Mandaic"; RID_SUBSETSTR_MANDAIC ; > ;
+        < "Batak"; RID_SUBSETSTR_BATAK ; > ;
+        < "Ethiopic Extended-A"; RID_SUBSETSTR_ETHIOPIC_EXTENDED_A ; > ;
+        < "Brahmi"; RID_SUBSETSTR_BRAHMI ; > ;
+        < "Bamum Supplement"; RID_SUBSETSTR_BAMUM_SUPPLEMENT ; > ;
+        < "Kana Supplement"; RID_SUBSETSTR_KANA_SUPPLEMENT ; > ;
+        < "Playing Cards"; RID_SUBSETSTR_PLAYING_CARDS ; > ;
+        < "Miscellaneous Symbols And Pictographs"; RID_SUBSETSTR_MISCELLANEOUS_SYMBOLS_AND_PICTOGRAPHS ; > ;
+        < "Emoticons"; RID_SUBSETSTR_EMOTICONS ; > ;
+        < "Transport And Map Symbols"; RID_SUBSETSTR_TRANSPORT_AND_MAP_SYMBOLS ; > ;
+        < "Alchemical Symbols"; RID_SUBSETSTR_ALCHEMICAL_SYMBOLS ; > ;
+        < "Arabic Extended-A"; RID_SUBSETSTR_ARABIC_EXTENDED_A ; > ;
+        < "Arabic Mathematical Alphabetic Symbols"; RID_SUBSETSTR_ARABIC_MATHEMATICAL_ALPHABETIC_SYMBOLS ; > ;
+        < "Chakma"; RID_SUBSETSTR_CHAKMA ; > ;
+        < "Meetei Mayek Extensions"; RID_SUBSETSTR_MEETEI_MAYEK_EXTENSIONS ; > ;
+        < "Meroitic Cursive"; RID_SUBSETSTR_MEROITIC_CURSIVE ; > ;
+        < "Meroitic Hieroglyphs"; RID_SUBSETSTR_MEROITIC_HIEROGLYPHS ; > ;
+        < "Miao"; RID_SUBSETSTR_MIAO ; > ;
+        < "Sharada"; RID_SUBSETSTR_SHARADA ; > ;
+        < "Sora Sompeng"; RID_SUBSETSTR_SORA_SOMPENG ; > ;
+        < "Sundanese Supplement"; RID_SUBSETSTR_SUNDANESE_SUPPLEMENT ; > ;
+        < "Takri"; RID_SUBSETSTR_TAKRI ; > ;
+        < "Bassa Vah"; RID_SUBSETSTR_BASSA_VAH ; > ;
+        < "Caucasian Albanian"; RID_SUBSETSTR_CAUCASIAN_ALBANIAN ; > ;
+        < "Coptic Epact Numbers"; RID_SUBSETSTR_COPTIC_EPACT_NUMBERS ; > ;
+        < "Combining Diacritical Marks Extended"; RID_SUBSETSTR_COMBINING_DIACRITICAL_MARKS_EXTENDED ; > ;
+        < "Duployan"; RID_SUBSETSTR_DUPLOYAN ; > ;
+        < "Elbasan"; RID_SUBSETSTR_ELBASAN ; > ;
+        < "Geometric Shapes Extended"; RID_SUBSETSTR_GEOMETRIC_SHAPES_EXTENDED ; > ;
+        < "Grantha"; RID_SUBSETSTR_GRANTHA ; > ;
+        < "Khojki"; RID_SUBSETSTR_KHOJKI ; > ;
+        < "Khudawadi"; RID_SUBSETSTR_KHUDAWADI ; > ;
+        < "Latin Extended-E"; RID_SUBSETSTR_LATIN_EXTENDED_E ; > ;
+        < "Linear A"; RID_SUBSETSTR_LINEAR_A ; > ;
+        < "Mahajani"; RID_SUBSETSTR_MAHAJANI ; > ;
+        < "Manichaean"; RID_SUBSETSTR_MANICHAEAN ; > ;
+        < "Mende Kikakui"; RID_SUBSETSTR_MENDE_KIKAKUI ; > ;
+        < "Modi"; RID_SUBSETSTR_MODI ; > ;
+        < "Mro"; RID_SUBSETSTR_MRO ; > ;
+        < "Myanmar Extended-B"; RID_SUBSETSTR_MYANMAR_EXTENDED_B ; > ;
+        < "Nabataean"; RID_SUBSETSTR_NABATAEAN ; > ;
+        < "Old North Arabian"; RID_SUBSETSTR_OLD_NORTH_ARABIAN ; > ;
+        < "Old Permic"; RID_SUBSETSTR_OLD_PERMIC ; > ;
+        < "Ornamental Dingbats"; RID_SUBSETSTR_ORNAMENTAL_DINGBATS ; > ;
+        < "Pahawh Hmong"; RID_SUBSETSTR_PAHAWH_HMONG ; > ;
+        < "Palmyrene"; RID_SUBSETSTR_PALMYRENE ; > ;
+        < "Pau Cin Hau"; RID_SUBSETSTR_PAU_CIN_HAU ; > ;
+        < "Psalter Pahlavi"; RID_SUBSETSTR_PSALTER_PAHLAVI ; > ;
+        < "Shorthand Format Controls"; RID_SUBSETSTR_SHORTHAND_FORMAT_CONTROLS ; > ;
+        < "Siddham"; RID_SUBSETSTR_SIDDHAM ; > ;
+        < "Sinhala Archaic Numbers"; RID_SUBSETSTR_SINHALA_ARCHAIC_NUMBERS ; > ;
+        < "Supplemental Arrows-C"; RID_SUBSETSTR_SUPPLEMENTAL_ARROWS_C ; > ;
+        < "Tirhuta"; RID_SUBSETSTR_TIRHUTA ; > ;
+        < "Warang Citi"; RID_SUBSETSTR_WARANG_CITI ; > ;
+        < "Ahom"; RID_SUBSETSTR_AHOM ; > ;
+        < "Anatolian Hieroglyphs"; RID_SUBSETSTR_ANATOLIAN_HIEROGLYPHS ; > ;
+        < "Cherokee Supplement"; RID_SUBSETSTR_CHEROKEE_SUPPLEMENT ; > ;
+        < "CJK Unified Ideographs Extension E"; RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_E ; > ;
+        < "Early Dynastic Cuneiform"; RID_SUBSETSTR_EARLY_DYNASTIC_CUNEIFORM ; > ;
+        < "Hatran"; RID_SUBSETSTR_HATRAN ; > ;
+        < "Multani"; RID_SUBSETSTR_MULTANI ; > ;
+        < "Old Hungarian"; RID_SUBSETSTR_OLD_HUNGARIAN ; > ;
+        < "Supplemental Symbols And Pictographs"; RID_SUBSETSTR_SUPPLEMENTAL_SYMBOLS_AND_PICTOGRAPHS ; > ;
+        < "Sutton Signwriting"; RID_SUBSETSTR_SUTTON_SIGNWRITING ; > ;
+        < "Adlam"; RID_SUBSETSTR_ADLAM ; > ;
+        < "Bhaiksuki"; RID_SUBSETSTR_BHAIKSUKI ; > ;
+        < "Cyrillic Extended-C"; RID_SUBSETSTR_CYRILLIC_EXTENDED_C ; > ;
+        < "Glagolitic Supplement"; RID_SUBSETSTR_GLAGOLITIC_SUPPLEMENT ; > ;
+        < "Ideographic Symbols and Punctuation"; RID_SUBSETSTR_IDEOGRAPHIC_SYMBOLS_AND_PUNCTUATION ; > ;
+        < "Marchen"; RID_SUBSETSTR_MARCHEN ; > ;
+        < "Mongolian Supplement"; RID_SUBSETSTR_MONGOLIAN_SUPPLEMENT ; > ;
+        < "Newa"; RID_SUBSETSTR_NEWA ; > ;
+        < "Osage"; RID_SUBSETSTR_OSAGE ; > ;
+        < "Tangut"; RID_SUBSETSTR_TANGUT ; > ;
+        < "Tangut Components"; RID_SUBSETSTR_TANGUT_COMPONENTS ; > ;
     };
 };
 
