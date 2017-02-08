@@ -1214,7 +1214,7 @@ sal_Int32 lcl_getOUStringMaxLineLength ( OUStringBuffer& aString )
 
     for ( sal_Int32 i=0; i<nStringLength; i++ )
     {
-        sal_Int32 indexSep = aString.indexOf( aNewLine, i );
+        sal_Int32 indexSep = aString.indexOf( "\n", i );
         if ( indexSep < 0 )
             indexSep = nStringLength;
         sal_Int32 nLineLength = indexSep - i;
@@ -1281,7 +1281,7 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
                 if( bShowCorrCoeff )
                 {
-                    aFormula.append( aNewLine );
+                    aFormula.append( "\n" );
                 }
             }
             if( bShowCorrCoeff )

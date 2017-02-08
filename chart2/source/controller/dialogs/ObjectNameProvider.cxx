@@ -487,10 +487,8 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
     {
         if( bVerbose )
         {
-            OUString aNewLine( "\n" );
-
-            aRet= SCH_RESSTR(STR_TIP_DATAPOINT_INDEX) + aNewLine
-                + SCH_RESSTR(STR_TIP_DATASERIES) + aNewLine
+            aRet= SCH_RESSTR(STR_TIP_DATAPOINT_INDEX) + "\n"
+                + SCH_RESSTR(STR_TIP_DATASERIES) + "\n"
                 + SCH_RESSTR(STR_TIP_DATAPOINT_VALUES);
         }
         else

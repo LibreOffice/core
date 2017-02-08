@@ -200,7 +200,7 @@ void RegressionCurveCalculator::addStringToEquation(
 {
     if ( pMaxWidth && ( nLineLength + aAddString.getLength() > *pMaxWidth ) )
     {  // wrap line
-        aStrEquation.append( aNewLine + " " ); // start new line with a blank
+        aStrEquation.append( "\n " ); // start new line with a blank
         nLineLength = 1;
     }
     aStrEquation.append( aAddString );
