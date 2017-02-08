@@ -148,6 +148,7 @@
       <object class="GtkMenuItem" id="stylemenudefault">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Default&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Default</property>
         <property name="use_underline">True</property>
       </object>
@@ -162,6 +163,7 @@
       <object class="GtkMenuItem" id="stylemenuacc1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Accent%201&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Accent 1</property>
         <property name="use_underline">True</property>
       </object>
@@ -170,6 +172,7 @@
       <object class="GtkMenuItem" id="stylemenuacc2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Accent%202&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Accent 2</property>
         <property name="use_underline">True</property>
       </object>
@@ -178,6 +181,7 @@
       <object class="GtkMenuItem" id="stylemenuacc3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Accent%203&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Accent 3</property>
         <property name="use_underline">True</property>
       </object>
@@ -192,6 +196,7 @@
       <object class="GtkMenuItem" id="stylemenuhed1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading%201&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Heading 1</property>
         <property name="use_underline">True</property>
       </object>
@@ -200,6 +205,7 @@
       <object class="GtkMenuItem" id="stylemenuhed2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Heading%202&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Heading 2</property>
         <property name="use_underline">True</property>
       </object>
@@ -214,6 +220,7 @@
       <object class="GtkMenuItem" id="stylemenustatg">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Good&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Good</property>
         <property name="use_underline">True</property>
       </object>
@@ -222,6 +229,7 @@
       <object class="GtkMenuItem" id="stylemenustatn">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Neutral&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Neutral</property>
         <property name="use_underline">True</property>
       </object>
@@ -230,6 +238,7 @@
       <object class="GtkMenuItem" id="stylemenustatb">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Bad&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Bad</property>
         <property name="use_underline">True</property>
       </object>
@@ -238,6 +247,7 @@
       <object class="GtkMenuItem" id="stylemenustatw">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Warning&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Warning</property>
         <property name="use_underline">True</property>
       </object>
@@ -246,6 +256,7 @@
       <object class="GtkMenuItem" id="stylemenustate">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Error&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Error</property>
         <property name="use_underline">True</property>
       </object>
@@ -260,6 +271,7 @@
       <object class="GtkMenuItem" id="stylemenutxtn">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Note&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Note</property>
         <property name="use_underline">True</property>
       </object>
@@ -268,15 +280,11 @@
       <object class="GtkMenuItem" id="stylemenutxtf">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="action_name">.uno:StyleApply?Style:string=Footnote&amp;FamilyName:string=CellStyles</property>
         <property name="label" translatable="yes">Footnote</property>
         <property name="use_underline">True</property>
       </object>
     </child>
-  </object>
-  <object class="GtkImage" id="tablecolumnsi">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_entirecolumn.png</property>
   </object>
   <object class="GtkMenu" id="tablemenu">
     <property name="visible">True</property>
@@ -326,94 +334,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="label" translatable="yes">Style 4</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkImage" id="tablerowsi">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/lc_entirerow.png</property>
-  </object>
-  <object class="GtkMenu" id="tcolumnmenu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-  </object>
-  <object class="GtkMenu" id="trowmenu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="rowmenuaddup">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertRowsBefore</property>
-        <property name="label" translatable="yes">Insert Rows Above</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="rowmenuadddown">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:InsertRowsAfter</property>
-        <property name="label" translatable="yes">Insert Rows Below</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="rowmenusep1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="rowmenudel">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:DeleteRows</property>
-        <property name="label" translatable="yes">Delete Rows</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="rowmenuselect">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:EntireRow</property>
-        <property name="label" translatable="yes">Select Rows</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="rowmenusep2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="rowmenuheight">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:SetRowHeight</property>
-        <property name="label" translatable="yes">Row Height...</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="rowmenuoptimalrow">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:SetOptimalRowHeight</property>
-        <property name="label" translatable="yes">Optimal Row Height</property>
-        <property name="use_underline">True</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkMenuItem" id="rowmenudistribute">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="action_name">.uno:DistributeRows</property>
-        <property name="label" translatable="yes">Distribute Rows Evenly</property>
         <property name="use_underline">True</property>
       </object>
     </child>
@@ -805,7 +725,7 @@
                 <property name="can_focus">False</property>
                 <property name="spacing">3</property>
                 <child>
-                  <object class="GtkButton" id="paragraphstyleb:stylemenu">
+                  <object class="svtlo-ManagedMenuButton" id="paragraphstyleb:stylemenu">
                     <property name="label" translatable="yes">Style</property>
                     <property name="width_request">70</property>
                     <property name="visible">True</property>
@@ -1406,14 +1326,13 @@
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkButton" id="tablerowsb:trowmenu">
-                            <property name="label" translatable="yes">Row</property>
+                          <object class="svtlo-ManagedMenuButton" id="tablerowsb">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
-                            <property name="image">tablerowsi</property>
+                            <property name="action_name">.uno:RowOperations</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
                           </object>
@@ -1424,14 +1343,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="tablecolumnsb:tcolumnmenu">
-                            <property name="label" translatable="yes">Column</property>
+                          <object class="svtlo-ManagedMenuButton" id="tablecolumnsb">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="valign">center</property>
                             <property name="vexpand">True</property>
-                            <property name="image">tablecolumnsi</property>
+                            <property name="action_name">.uno:ColumnOperations</property>
                             <property name="relief">none</property>
                             <property name="xalign">0</property>
                           </object>
@@ -1535,7 +1453,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="conditionalb">
+                          <object class="svtlo-ManagedMenuButton" id="conditionalb">
                             <property name="label" translatable="yes">Conditional</property>
                             <property name="height_request">24</property>
                             <property name="visible">True</property>

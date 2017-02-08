@@ -1790,6 +1790,13 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
                 pFunction(xWindow, xParent, rMap);
                 if (xWindow->GetType() == WINDOW_PUSHBUTTON)
                     setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
+                else if (xWindow->GetType() == WINDOW_MENUBUTTON)
+                {
+                    OString sMenu = extractCustomProperty(rMap);
+                    if (!sMenu.isEmpty())
+                        m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
+                    setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
+                }
             }
         }
     }
@@ -2721,17 +2728,23 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
     if (rClass == "GtkMenuItem")
     {
         OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
+        OUString aCommand(OStringToOUString(extractActionName(rProps), RTL_TEXTENCODING_UTF8));
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::TEXT, rID);
+        pParent->SetItemCommand(nNewId, aCommand);
     }
     else if (rClass == "GtkCheckMenuItem")
     {
         OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
+        OUString aCommand(OStringToOUString(extractActionName(rProps), RTL_TEXTENCODING_UTF8));
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::CHECKABLE, rID);
+        pParent->SetItemCommand(nNewId, aCommand);
     }
     else if (rClass == "GtkRadioMenuItem")
     {
         OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
+        OUString aCommand(OStringToOUString(extractActionName(rProps), RTL_TEXTENCODING_UTF8));
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK, rID);
+        pParent->SetItemCommand(nNewId, aCommand);
     }
 
     else if (rClass == "GtkSeparatorMenuItem")
