@@ -1129,7 +1129,7 @@ PDFWriterImpl::PDFPage::PDFPage( PDFWriterImpl* pWriter, sal_Int32 nPageWidth, s
         m_nPageIndex( -1 ), // invalid index
         m_nStreamLengthObject( 0 ),
         m_nBeginStreamPos( 0 ),
-        m_eTransition( PDFWriter::Regular ),
+        m_eTransition( PDFWriter::PageTransition::Regular ),
         m_nTransTime( 0 ),
         m_nDuration( 0 ),
         m_bHasWidgets( false )
@@ -1270,7 +1270,7 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
         aLine.append( (sal_Int32)m_nDuration );
         aLine.append( "\n" );
     }
-    if( m_eTransition != PDFWriter::Regular && m_nTransTime > 0 )
+    if( m_eTransition != PDFWriter::PageTransition::Regular && m_nTransTime > 0 )
     {
         // transition duration
         aLine.append( "/Trans<</D " );
@@ -1279,39 +1279,33 @@ bool PDFWriterImpl::PDFPage::emit(sal_Int32 nParentObject )
         const char *pStyle = nullptr, *pDm = nullptr, *pM = nullptr, *pDi = nullptr;
         switch( m_eTransition )
         {
-            case PDFWriter::SplitHorizontalInward:
+            case PDFWriter::PageTransition::SplitHorizontalInward:
                 pStyle = "Split"; pDm = "H"; pM = "I"; break;
-            case PDFWriter::SplitHorizontalOutward:
+            case PDFWriter::PageTransition::SplitHorizontalOutward:
                 pStyle = "Split"; pDm = "H"; pM = "O"; break;
-            case PDFWriter::SplitVerticalInward:
+            case PDFWriter::PageTransition::SplitVerticalInward:
                 pStyle = "Split"; pDm = "V"; pM = "I"; break;
-            case PDFWriter::SplitVerticalOutward:
+            case PDFWriter::PageTransition::SplitVerticalOutward:
                 pStyle = "Split"; pDm = "V"; pM = "O"; break;
-            case PDFWriter::BlindsHorizontal:
+            case PDFWriter::PageTransition::BlindsHorizontal:
                 pStyle = "Blinds"; pDm = "H"; break;
-            case PDFWriter::BlindsVertical:
+            case PDFWriter::PageTransition::BlindsVertical:
                 pStyle = "Blinds"; pDm = "V"; break;
-            case PDFWriter::BoxInward:
+            case PDFWriter::PageTransition::BoxInward:
                 pStyle = "Box"; pM = "I"; break;
-            case PDFWriter::BoxOutward:
+            case PDFWriter::PageTransition::BoxOutward:
                 pStyle = "Box"; pM = "O"; break;
-            case PDFWriter::WipeLeftToRight:
+            case PDFWriter::PageTransition::WipeLeftToRight:
                 pStyle = "Wipe"; pDi = "0"; break;
-            case PDFWriter::WipeBottomToTop:
+            case PDFWriter::PageTransition::WipeBottomToTop:
                 pStyle = "Wipe"; pDi = "90"; break;
-            case PDFWriter::WipeRightToLeft:
+            case PDFWriter::PageTransition::WipeRightToLeft:
                 pStyle = "Wipe"; pDi = "180"; break;
-            case PDFWriter::WipeTopToBottom:
+            case PDFWriter::PageTransition::WipeTopToBottom:
                 pStyle = "Wipe"; pDi = "270"; break;
-            case PDFWriter::Dissolve:
+            case PDFWriter::PageTransition::Dissolve:
                 pStyle = "Dissolve"; break;
-            case PDFWriter::GlitterLeftToRight:
-                pStyle = "Glitter"; pDi = "0"; break;
-            case PDFWriter::GlitterTopToBottom:
-                pStyle = "Glitter"; pDi = "270"; break;
-            case PDFWriter::GlitterTopLeftToBottomRight:
-                pStyle = "Glitter"; pDi = "315"; break;
-            case PDFWriter::Regular:
+            case PDFWriter::PageTransition::Regular:
                 break;
         }
         // transition style
