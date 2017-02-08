@@ -210,8 +210,8 @@ bool BitmapPalette::IsGreyPalette() const
     // TODO: is it worth to compare the entries for the general case?
     if (nEntryCount == 2)
     {
-       const BitmapColor& rCol0(mpBitmapColor[0]);
-       const BitmapColor& rCol1(mpBitmapColor[1]);
+       const BitmapColor& rCol0(maBitmapColor[0]);
+       const BitmapColor& rCol1(maBitmapColor[1]);
        bRet = rCol0.GetRed() == rCol0.GetGreen() && rCol0.GetRed() == rCol0.GetBlue() &&
               rCol1.GetRed() == rCol1.GetGreen() && rCol1.GetRed() == rCol1.GetBlue();
     }
