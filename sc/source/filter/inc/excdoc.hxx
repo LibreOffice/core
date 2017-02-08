@@ -87,7 +87,7 @@ private:
     ExcTableList        maTableList;
     ExcBoundsheetList   maBoundsheetList;
 
-    XclExpChangeTrack*  pExpChangeTrack;
+    std::unique_ptr<XclExpChangeTrack> m_xExpChangeTrack;
 
 public:
     explicit                    ExcDocument( const XclExpRoot& rRoot );

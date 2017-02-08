@@ -732,15 +732,13 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
 
 ExcDocument::ExcDocument( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
-    aHeader( rRoot ),
-    pExpChangeTrack( nullptr )
+    aHeader( rRoot )
 {
 }
 
 ExcDocument::~ExcDocument()
 {
     maTableList.RemoveAllRecords();    // for the following assertion!
-    delete pExpChangeTrack;
 }
 
 void ExcDocument::ReadDoc()
@@ -787,7 +785,7 @@ void ExcDocument::ReadDoc()
 
         // change tracking
         if ( GetDoc().GetChangeTrack() )
-            pExpChangeTrack = new XclExpChangeTrack( GetRoot() );
+            m_xExpChangeTrack.reset(new XclExpChangeTrack( GetRoot() ));
     }
 }
 
@@ -818,8 +816,8 @@ void ExcDocument::Write( SvStream& rSvStrm )
         for( size_t nBSheet = 0, nBSheetCount = maBoundsheetList.GetSize(); nBSheet < nBSheetCount; ++nBSheet )
             maBoundsheetList.GetRecord( nBSheet )->UpdateStreamPos( aXclStrm );
     }
-    if( pExpChangeTrack )
-        pExpChangeTrack->Write();
+    if( m_xExpChangeTrack )
+        m_xExpChangeTrack->Write();
 }
 
 void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
@@ -858,8 +856,8 @@ void ExcDocument::WriteXml( XclExpXmlStream& rStrm )
         }
     }
 
-    if( pExpChangeTrack )
-        pExpChangeTrack->WriteXml( rStrm );
+    if( m_xExpChangeTrack )
+        m_xExpChangeTrack->WriteXml( rStrm );
 
     XclExpXmlPivotCaches& rCaches = GetXmlPivotTableManager().GetCaches();
     if (rCaches.HasCaches())
