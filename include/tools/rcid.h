@@ -30,7 +30,6 @@
 // Resource types
 // Minimum is 0x100 due to MS-Windows resource types
 // (RSC_NOTYPE=0x100) is defined in resid.hxx
-#define RSC_BYNAME              (RSC_NOTYPE + 0x01)
 #define RSC_VERSIONCONTROL      (RSC_NOTYPE + 0x02) // Version control
 
 #define RSC_RESOURCE            (RSC_NOTYPE + 0x10)
