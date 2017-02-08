@@ -152,10 +152,10 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         {
             if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
             {
-                BmpConversion eConv = BMP_CONVERSION_8BIT_GREYS;
+                BmpConversion eConv = BmpConversion::N8BitGreys;
                 int nDepth = aBitmapEx.GetBitmap().GetBitCount();
                 if( nDepth <= 4 )
-                    eConv = BMP_CONVERSION_4BIT_GREYS;
+                    eConv = BmpConversion::N4BitGreys;
                 if( nDepth > 1 )
                     aBitmapEx.Convert( eConv );
             }

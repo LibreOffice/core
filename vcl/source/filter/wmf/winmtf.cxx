@@ -1800,7 +1800,7 @@ void WinMtfOutput::ResolveBitmapActions( std::vector<std::unique_ptr<BSaveStruct
                             Bitmap  aMask( aBitmap );
                             if ( ( nUsed & 1 ) && ( nRasterOperation & 0xb0 ) == 0xb0 )     // pattern used
                             {
-                                aBitmap.Convert( BMP_CONVERSION_24BIT );
+                                aBitmap.Convert( BmpConversion::N24Bit );
                                 aBitmap.Erase( maFillStyle.aFillColor );
                             }
                             BitmapEx aBmpEx( aBitmap, aMask );

@@ -441,7 +441,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
     {
         Bitmap aWorkBmp( rBmp );
 
-        if( aWorkBmp.Convert( BMP_CONVERSION_8BIT_GREYS ) )
+        if( aWorkBmp.Convert( BmpConversion::N8BitGreys ) )
         {
             bool bRet = false;
 

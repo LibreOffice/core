@@ -2194,7 +2194,7 @@ void GDIMetaFile::Convert( MtfConversion eConversion )
     ImplBmpConvertParam aBmpParam;
 
     aColParam.eConversion = eConversion;
-    aBmpParam.eConversion = ( MtfConversion::N1BitThreshold == eConversion ) ? BMP_CONVERSION_1BIT_THRESHOLD : BMP_CONVERSION_8BIT_GREYS;
+    aBmpParam.eConversion = ( MtfConversion::N1BitThreshold == eConversion ) ? BmpConversion::N1BitThreshold : BmpConversion::N8BitGreys;
 
     ImplExchangeColors( ImplColConvertFnc, &aColParam, ImplBmpConvertFnc, &aBmpParam );
 }

@@ -263,19 +263,15 @@ bool Bitmap::Convert( BmpConversion eConversion )
 
     switch( eConversion )
     {
-        case BMP_CONVERSION_1BIT_THRESHOLD:
+        case BmpConversion::N1BitThreshold:
             bRet = ImplMakeMono( 128 );
         break;
 
-        case BMP_CONVERSION_1BIT_MATRIX:
-            bRet = ImplMakeMonoDither();
-        break;
-
-        case BMP_CONVERSION_4BIT_GREYS:
+        case BmpConversion::N4BitGreys:
             bRet = ImplMakeGreyscales( 16 );
         break;
 
-        case BMP_CONVERSION_4BIT_COLORS:
+        case BmpConversion::N4BitColors:
         {
             if( nBitCount < 4 )
                 bRet = ImplConvertUp( 4 );
@@ -286,22 +282,11 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case BMP_CONVERSION_4BIT_TRANS:
-        {
-            Color aTrans( BMP_COL_TRANS );
-
-            if( nBitCount < 4 )
-                bRet = ImplConvertUp( 4, &aTrans );
-            else
-                bRet = ImplConvertDown( 4, &aTrans );
-        }
-        break;
-
-        case BMP_CONVERSION_8BIT_GREYS:
+        case BmpConversion::N8BitGreys:
             bRet = ImplMakeGreyscales( 256 );
         break;
 
-        case BMP_CONVERSION_8BIT_COLORS:
+        case BmpConversion::N8BitColors:
         {
             if( nBitCount < 8 )
                 bRet = ImplConvertUp( 8 );
@@ -312,7 +297,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case BMP_CONVERSION_8BIT_TRANS:
+        case BmpConversion::N8BitTrans:
         {
             Color aTrans( BMP_COL_TRANS );
 
@@ -323,7 +308,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case BMP_CONVERSION_24BIT:
+        case BmpConversion::N24Bit:
         {
             if( nBitCount < 24 )
                 bRet = ImplConvertUp( 24 );
@@ -332,7 +317,7 @@ bool Bitmap::Convert( BmpConversion eConversion )
         }
         break;
 
-        case BMP_CONVERSION_GHOSTED:
+        case BmpConversion::Ghosted:
             bRet = ImplConvertGhosted();
         break;
 
@@ -1018,18 +1003,18 @@ void Bitmap::ImplAdaptBitCount(Bitmap& rNew) const
         {
             case 1:
             {
-                rNew.Convert(BMP_CONVERSION_1BIT_THRESHOLD);
+                rNew.Convert(BmpConversion::N1BitThreshold);
                 break;
             }
             case 4:
             {
                 if(HasGreyPalette())
                 {
-                    rNew.Convert(BMP_CONVERSION_4BIT_GREYS);
+                    rNew.Convert(BmpConversion::N4BitGreys);
                 }
                 else
                 {
-                    rNew.Convert(BMP_CONVERSION_4BIT_COLORS);
+                    rNew.Convert(BmpConversion::N4BitColors);
                 }
                 break;
             }
@@ -1037,17 +1022,17 @@ void Bitmap::ImplAdaptBitCount(Bitmap& rNew) const
             {
                 if(HasGreyPalette())
                 {
-                    rNew.Convert(BMP_CONVERSION_8BIT_GREYS);
+                    rNew.Convert(BmpConversion::N8BitGreys);
                 }
                 else
                 {
-                    rNew.Convert(BMP_CONVERSION_8BIT_COLORS);
+                    rNew.Convert(BmpConversion::N8BitColors);
                 }
                 break;
             }
             case 24:
             {
-                rNew.Convert(BMP_CONVERSION_24BIT);
+                rNew.Convert(BmpConversion::N24Bit);
                 break;
             }
             default:

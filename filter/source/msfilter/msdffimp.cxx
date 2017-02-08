@@ -3916,9 +3916,9 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                             if ( nBrightness || nContrast || ( nGamma != 0x10000 ) )
                                 aBitmapEx.Adjust( nBrightness, (sal_Int16)nContrast, 0, 0, 0, (double)nGamma / 0x10000, false, true );
                             if ( eDrawMode == GRAPHICDRAWMODE_GREYS )
-                                aBitmapEx.Convert( BMP_CONVERSION_8BIT_GREYS );
+                                aBitmapEx.Convert( BmpConversion::N8BitGreys );
                             else if ( eDrawMode == GRAPHICDRAWMODE_MONO )
-                                aBitmapEx.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+                                aBitmapEx.Convert( BmpConversion::N1BitThreshold );
                             aGraf = aBitmapEx;
 
                         }

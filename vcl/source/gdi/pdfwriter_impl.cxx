@@ -10896,13 +10896,13 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         if( m_aContext.Version < PDFWriter::PDFVersion::PDF_1_4 || ! rObject.m_aBitmap.IsAlpha() )
         {
             aBitmap = getExportBitmap(rObject.m_aBitmap.GetMask());
-            aBitmap.Convert( BMP_CONVERSION_1BIT_THRESHOLD );
+            aBitmap.Convert( BmpConversion::N1BitThreshold );
             SAL_WARN_IF( aBitmap.GetBitCount() != 1, "vcl.pdfwriter", "mask conversion failed" );
         }
         else if( aBitmap.GetBitCount() != 8 )
         {
             aBitmap = getExportBitmap(rObject.m_aBitmap.GetAlpha().GetBitmap());
-            aBitmap.Convert( BMP_CONVERSION_8BIT_GREYS );
+            aBitmap.Convert( BmpConversion::N8BitGreys );
             SAL_WARN_IF( aBitmap.GetBitCount() != 8, "vcl.pdfwriter", "alpha mask conversion failed" );
         }
     }
@@ -11273,10 +11273,10 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
     BitmapEx aBitmap( i_rBitmap );
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
     {
-        BmpConversion eConv = BMP_CONVERSION_8BIT_GREYS;
+        BmpConversion eConv = BmpConversion::N8BitGreys;
         int nDepth = aBitmap.GetBitmap().GetBitCount();
         if( nDepth <= 4 )
-            eConv = BMP_CONVERSION_4BIT_GREYS;
+            eConv = BmpConversion::N4BitGreys;
         if( nDepth > 1 )
             aBitmap.Convert( eConv );
     }
