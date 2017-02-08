@@ -2382,9 +2382,11 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
     if( !bFound || bFoundHigher )
     {
         size_t nFrom = 0;
+        RowRef pPrevEntry = nullptr;
         if( itr != maRowMap.begin() )
         {
             --itr;
+            pPrevEntry = itr->second;
             if( bFoundHigher )
                 nFrom = nXclRow;
             else
@@ -2404,10 +2406,10 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
             // not set, to correctly export the heights of rows with wrapped
             // texts.
             const sal_uInt16 nHeight = rDoc.GetRowHeight(nFrom, nScTab, false);
-            if ( !nFrom || ( nFrom == nXclRow ) || bHidden ||
+            if ( !pPrevEntry || ( nFrom == nXclRow ) || bHidden ||
                  ( maOutlineBfr.IsCollapsed() ) ||
                  ( maOutlineBfr.GetLevel() != 0 ) ||
-                 ( nHeight != rDoc.GetRowHeight(nFrom - 1, nScTab, false) ) )
+                 ( nHeight != pPrevEntry->GetHeight() ) )
             {
                 if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
                 {
@@ -2415,6 +2417,7 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
                 }
                 RowRef p(new XclExpRow(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight));
                 maRowMap.insert(RowMap::value_type(nFrom, p));
+                pPrevEntry = p;
             }
             ++nFrom;
         }
