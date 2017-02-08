@@ -874,9 +874,7 @@ void XclExpAutofilter::SaveXml( XclExpXmlStream& rStrm )
 
 ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const ScDBData* pDefinedData ) :
     XclExpRoot( rRoot ),
-    pFilterMode( nullptr ),
-    pFilterInfo( nullptr )
-    , mbAutoFilter (false)
+    mbAutoFilter (false)
 {
     XclExpNameManager& rNameMgr = GetNameManager();
 
@@ -920,7 +918,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
                     rNameMgr.InsertBuiltInName( EXC_BUILTIN_EXTRACT, aDestRange );
             }
 
-            pFilterMode = new XclExpFiltermode;
+            m_pFilterMode.reset(new XclExpFiltermode);
         }
         // AutoFilter
         else
@@ -963,8 +961,8 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
                 maFilterList.RemoveAllRecords();
 
             if( !maFilterList.IsEmpty() )
-                pFilterMode = new XclExpFiltermode;
-            pFilterInfo = new XclExpAutofilterinfo( aRange.aStart, nColCnt );
+                m_pFilterMode.reset(new XclExpFiltermode);
+            m_pFilterInfo.reset(new XclExpAutofilterinfo( aRange.aStart, nColCnt ));
 
             if (maFilterList.IsEmpty () && !bConflict)
                 mbAutoFilter = true;
@@ -974,8 +972,6 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab, const
 
 ExcAutoFilterRecs::~ExcAutoFilterRecs()
 {
-    delete pFilterMode;
-    delete pFilterInfo;
 }
 
 XclExpAutofilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
@@ -1002,10 +998,10 @@ bool ExcAutoFilterRecs::IsFiltered( SCCOL nCol )
 
 void ExcAutoFilterRecs::AddObjRecs()
 {
-    if( pFilterInfo )
+    if( m_pFilterInfo )
     {
-        ScAddress aAddr( pFilterInfo->GetStartPos() );
-        for( SCCOL nObj = 0, nCount = pFilterInfo->GetColCount(); nObj < nCount; nObj++ )
+        ScAddress aAddr( m_pFilterInfo->GetStartPos() );
+        for( SCCOL nObj = 0, nCount = m_pFilterInfo->GetColCount(); nObj < nCount; nObj++ )
         {
             XclObj* pObjRec = new XclObjDropDown( GetObjectManager(), aAddr, IsFiltered( nObj ) );
             GetObjectManager().AddObj( pObjRec );
@@ -1016,10 +1012,10 @@ void ExcAutoFilterRecs::AddObjRecs()
 
 void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
 {
-    if( pFilterMode )
-        pFilterMode->Save( rStrm );
-    if( pFilterInfo )
-        pFilterInfo->Save( rStrm );
+    if( m_pFilterMode )
+        m_pFilterMode->Save( rStrm );
+    if( m_pFilterInfo )
+        m_pFilterInfo->Save( rStrm );
     maFilterList.Save( rStrm );
 }
 
@@ -1040,7 +1036,7 @@ void ExcAutoFilterRecs::SaveXml( XclExpXmlStream& rStrm )
 
 bool ExcAutoFilterRecs::HasFilterMode() const
 {
-    return pFilterMode != nullptr;
+    return m_pFilterMode != nullptr;
 }
 
 XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :
