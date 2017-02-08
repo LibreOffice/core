@@ -71,6 +71,7 @@ protected:
     DECL_LINK( MenuEventListener, VclMenuEvent&, void );
 
     void ImplCreateMenu( bool bPopup );
+    void ImplAddListener();
 
 public:
     VCLXMenu();

@@ -850,5 +850,8 @@
     <glade-widget-class title="Vertical box hiding childs depending on context" name="sfxlo-ContextVBox"
                         generic-name="ContextVBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
+    <glade-widget-class title="Managed Menu Button" name="svtlo-ManagedMenuButton"
+                        generic-name="ManagedMenuButton" parent="GtkButton"
+                        icon-name="widget-gtk-button"/>
   </glade-widget-classes>
 </glade-catalog>
