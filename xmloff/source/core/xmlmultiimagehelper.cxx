@@ -129,6 +129,9 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
 
             removeGraphicFromImportContext(rCandidate);
         }
+        // re-insert it so that solveMultipleImages is idempotent
+        maImplContextVector.clear();
+        maImplContextVector.push_back(pContext);
     }
     else if (maImplContextVector.size() == 1)
     {
