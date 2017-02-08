@@ -630,26 +630,26 @@ void SdStyleSheet::SetHelpId( const OUString& r, sal_uLong nId )
         }
         const pApiNameMap[] =
         {
-            { "title",            HID_PSEUDOSHEET_TITLE },
-            { "subtitle",         HID_PSEUDOSHEET_SUBTITLE },
-            { "background",       HID_PSEUDOSHEET_BACKGROUND },
-            { "backgroundobjects",HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
-            { "notes",            HID_PSEUDOSHEET_NOTES },
-            { "standard",         HID_STANDARD_STYLESHEET_NAME },
-            { "objectwitharrow",  HID_POOLSHEET_OBJWITHARROW },
-            { "objectwithshadow", HID_POOLSHEET_OBJWITHSHADOW },
-            { "objectwithoutfill",HID_POOLSHEET_OBJWITHOUTFILL },
-            { "text",             HID_POOLSHEET_TEXT },
-            { "textbody",         HID_POOLSHEET_TEXTBODY },
-            { "textbodyjustfied", HID_POOLSHEET_TEXTBODY_JUSTIFY },
-            { "textbodyindent",   HID_POOLSHEET_TEXTBODY_INDENT },
-            { "title",            HID_POOLSHEET_TITLE },
-            { "title1",           HID_POOLSHEET_TITLE1 },
-            { "title2",           HID_POOLSHEET_TITLE2 },
-            { "headline",         HID_POOLSHEET_HEADLINE },
-            { "headline1",        HID_POOLSHEET_HEADLINE1 },
-            { "headline2",        HID_POOLSHEET_HEADLINE2 },
-            { "measure",          HID_POOLSHEET_MEASURE }
+            { OUStringLiteral("title"),            HID_PSEUDOSHEET_TITLE },
+            { OUStringLiteral("subtitle"),         HID_PSEUDOSHEET_SUBTITLE },
+            { OUStringLiteral("background"),       HID_PSEUDOSHEET_BACKGROUND },
+            { OUStringLiteral("backgroundobjects"),HID_PSEUDOSHEET_BACKGROUNDOBJECTS },
+            { OUStringLiteral("notes"),            HID_PSEUDOSHEET_NOTES },
+            { OUStringLiteral("standard"),         HID_STANDARD_STYLESHEET_NAME },
+            { OUStringLiteral("objectwitharrow"),  HID_POOLSHEET_OBJWITHARROW },
+            { OUStringLiteral("objectwithshadow"), HID_POOLSHEET_OBJWITHSHADOW },
+            { OUStringLiteral("objectwithoutfill"),HID_POOLSHEET_OBJWITHOUTFILL },
+            { OUStringLiteral("text"),             HID_POOLSHEET_TEXT },
+            { OUStringLiteral("textbody"),         HID_POOLSHEET_TEXTBODY },
+            { OUStringLiteral("textbodyjustfied"), HID_POOLSHEET_TEXTBODY_JUSTIFY },
+            { OUStringLiteral("textbodyindent"),   HID_POOLSHEET_TEXTBODY_INDENT },
+            { OUStringLiteral("title"),            HID_POOLSHEET_TITLE },
+            { OUStringLiteral("title1"),           HID_POOLSHEET_TITLE1 },
+            { OUStringLiteral("title2"),           HID_POOLSHEET_TITLE2 },
+            { OUStringLiteral("headline"),         HID_POOLSHEET_HEADLINE },
+            { OUStringLiteral("headline1"),        HID_POOLSHEET_HEADLINE1 },
+            { OUStringLiteral("headline2"),        HID_POOLSHEET_HEADLINE2 },
+            { OUStringLiteral("measure"),          HID_POOLSHEET_MEASURE }
         };
 
         for (std::size_t i = 0; i != SAL_N_ELEMENTS(pApiNameMap); ++i)
