@@ -22,152 +22,89 @@
 #include <svtools/soerr.hxx>
 #define S_MAX   0x7fff
 
-Resource RID_SO_ERROR_HANDLER
+StringArray RID_SO_ERROR_HANDLER
 {
-    String ERRCODE_SO_GENERALERROR&S_MAX
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "General OLE error." ;
-    };
-    String ERRCODE_SO_CANT_BINDTOSOURCE&S_MAX
-    {
-        Text [ en-US ] = "The connection to the object cannot be established." ;
-    };
-    String ERRCODE_SO_NOCACHE_UPDATED&S_MAX
-    {
-        Text [ en-US ] = "No cache files were updated." ;
-    };
-    String ERRCODE_SO_SOMECACHES_NOTUPDATED&S_MAX
-    {
-        Text [ en-US ] = "Some cache files were not updated." ;
-    };
-    String ERRCODE_SO_MK_UNAVAILABLE&S_MAX
-    {
-        Text [ en-US ] = "Status of object cannot be determined in a timely manner." ;
-    };
-    String ERRCODE_SO_E_CLASSDIFF&S_MAX
-    {
-        Text [ en-US ] = "Source of the OLE link has been converted." ;
-    };
-    String ERRCODE_SO_MK_NO_OBJECT&S_MAX
-    {
-        Text [ en-US ] = "The object could not be found." ;
-    };
-    String ERRCODE_SO_MK_EXCEEDED_DEADLINE&S_MAX
-    {
-        Text [ en-US ] = "The process could not be completed within the specified time period." ;
-    };
-    String ERRCODE_SO_MK_CONNECT_MANUALLY&S_MAX
-    {
-        Text [ en-US ] = "OLE could not connect to a network device (server)." ;
-    };
-    String ERRCODE_SO_MK_INTERMEDIATE_INTERFACE_NOT_SUPPORTED&S_MAX
-    {
-        Text [ en-US ] = "The object found does not support the interface required for the desired operation." ;
-    };
-    String ERRCODE_SO_NO_INTERFACE&S_MAX
-    {
-        Text [ en-US ] = "Interface not supported." ;
-    };
-    String ERRCODE_SO_OUT_OF_MEMORY&S_MAX
-    {
-        Text [ en-US ] = "Insufficient memory." ;
-    };
-    String ERRCODE_SO_MK_SYNTAX&S_MAX
-    {
-        Text [ en-US ] = "The connection name could not be processed." ;
-    };
-    String ERRCODE_SO_MK_REDUCED_TO_SELF&S_MAX
-    {
-        Text [ en-US ] = "The connection name could not be reduced further." ;
-    };
-    String ERRCODE_SO_MK_NO_INVERSE&S_MAX
-    {
-        Text [ en-US ] = "The connection name has no inverse." ;
-    };
-    String ERRCODE_SO_MK_NO_PREFIX&S_MAX
-    {
-        Text [ en-US ] = "No common prefix exists." ;
-    };
-    String ERRCODE_SO_MK_HIM&S_MAX
-    {
-        Text [ en-US ] = "The connection name is contained in the other one." ;
-    };
-    String ERRCODE_SO_MK_US&S_MAX
-    {
-        Text [ en-US ] = "The connection names (the receiver and the other moniker) are identical." ;
-    };
-    String ERRCODE_SO_MK_ME&S_MAX
-    {
-        Text [ en-US ] = "The connection name is contained in the other one." ;
-    };
-    String ERRCODE_SO_MK_NOT_BINDABLE&S_MAX
-    {
-        Text [ en-US ] = "The connection name cannot be connected. This is a relative name." ;
-    };
-    String ERRCODE_SO_NOT_IMPLEMENTED&S_MAX
-    {
-        Text [ en-US ] = "Operation not implemented." ;
-    };
-    String ERRCODE_SO_MK_NO_STORAGE&S_MAX
-    {
-        Text [ en-US ] = "No storage." ;
-    };
-    String ERRCODE_SO_FALSE&S_MAX
-    {
-        Text [ en-US ] = "False." ;
-    };
-    String ERRCODE_SO_MK_NEED_GENERIC&S_MAX
-    {
-        Text [ en-US ] = "Monikers must be composed generically." ;
-    };
-    String ERRCODE_SO_PENDING&S_MAX
-    {
-        Text [ en-US ] = "Data not available at this time." ;
-    };
-    String ERRCODE_SO_NOT_INPLACEACTIVE & S_MAX
-    {
-        Text [ en-US ] = "Object could not be activated InPlace." ;
-    };
-    String ERRCODE_SO_LINDEX & S_MAX
-    {
-        Text [ en-US ] = "Invalid index." ;
-    };
-    String ERRCODE_SO_CANNOT_DOVERB_NOW & S_MAX
-    {
-        Text [ en-US ] = "The action cannot be executed in the object's current state." ;
-    };
-    String ERRCODE_SO_OLEOBJ_INVALIDHWND & S_MAX
-    {
-        Text [ en-US ] = "An invalid window was passed when activated." ;
-    };
-    String ERRCODE_SO_NOVERBS & S_MAX
-    {
-        Text [ en-US ] = "The object does not support any actions." ;
-    };
-    String ERRCODE_SO_INVALIDVERB & S_MAX
-    {
-        Text [ en-US ] = "The action is not defined. The default action will be executed." ;
-    };
-    String ERRCODE_SO_MK_CONNECT & S_MAX
-    {
-        Text [ en-US ] = "A link to the network could not be re-established." ;
-    };
-    String ERRCODE_SO_NOTIMPL & S_MAX
-    {
-        Text [ en-US ] = "Object does not support this action." ;
-    };
-    String ERRCODE_SO_MK_CANTOPENFILE & S_MAX
-    {
-        Text [ en-US ] = "The specified file could not be opened." ;
+        < "General OLE error." ;
+          ERRCODE_SO_GENERALERROR&S_MAX ; >;
+        < "The connection to the object cannot be established." ;
+          ERRCODE_SO_CANT_BINDTOSOURCE&S_MAX ; >;
+        < "No cache files were updated." ;
+          ERRCODE_SO_NOCACHE_UPDATED&S_MAX ; >;
+        < "Some cache files were not updated." ;
+          ERRCODE_SO_SOMECACHES_NOTUPDATED&S_MAX ; >;
+        < "Status of object cannot be determined in a timely manner." ;
+          ERRCODE_SO_MK_UNAVAILABLE&S_MAX ; >;
+        < "Source of the OLE link has been converted." ;
+          ERRCODE_SO_E_CLASSDIFF&S_MAX ; >;
+        < "The object could not be found." ;
+          ERRCODE_SO_MK_NO_OBJECT&S_MAX ; >;
+        < "The process could not be completed within the specified time period." ;
+          ERRCODE_SO_MK_EXCEEDED_DEADLINE&S_MAX ; >;
+        < "OLE could not connect to a network device (server)." ;
+          ERRCODE_SO_MK_CONNECT_MANUALLY&S_MAX ; >;
+        < "The object found does not support the interface required for the desired operation." ;
+          ERRCODE_SO_MK_INTERMEDIATE_INTERFACE_NOT_SUPPORTED&S_MAX ; >;
+        < "Interface not supported." ;
+          ERRCODE_SO_NO_INTERFACE&S_MAX ; >;
+        < "Insufficient memory." ;
+          ERRCODE_SO_OUT_OF_MEMORY&S_MAX ; >;
+        < "The connection name could not be processed." ;
+          ERRCODE_SO_MK_SYNTAX&S_MAX ; >;
+        < "The connection name could not be reduced further." ;
+          ERRCODE_SO_MK_REDUCED_TO_SELF&S_MAX ; >;
+        < "The connection name has no inverse." ;
+          ERRCODE_SO_MK_NO_INVERSE&S_MAX ; >;
+        < "No common prefix exists." ;
+          ERRCODE_SO_MK_NO_PREFIX&S_MAX ; >;
+        < "The connection name is contained in the other one." ;
+          ERRCODE_SO_MK_HIM&S_MAX ; >;
+        < "The connection names (the receiver and the other moniker) are identical." ;
+          ERRCODE_SO_MK_US&S_MAX ; >;
+        < "The connection name is contained in the other one." ;
+          ERRCODE_SO_MK_ME&S_MAX ; >;
+        < "The connection name cannot be connected. This is a relative name." ;
+          ERRCODE_SO_MK_NOT_BINDABLE&S_MAX ; >;
+        < "Operation not implemented." ;
+          ERRCODE_SO_NOT_IMPLEMENTED&S_MAX ; >;
+        < "No storage." ;
+          ERRCODE_SO_MK_NO_STORAGE&S_MAX ; >;
+        < "False." ;
+          ERRCODE_SO_FALSE&S_MAX ; >;
+        < "Monikers must be composed generically." ;
+          ERRCODE_SO_MK_NEED_GENERIC&S_MAX ; >;
+        < "Data not available at this time." ;
+          ERRCODE_SO_PENDING&S_MAX ; >;
+        < "Object could not be activated InPlace." ;
+          ERRCODE_SO_NOT_INPLACEACTIVE & S_MAX ; >;
+        < "Invalid index." ;
+          ERRCODE_SO_LINDEX & S_MAX ; >;
+        < "The action cannot be executed in the object's current state." ;
+          ERRCODE_SO_CANNOT_DOVERB_NOW & S_MAX ; >;
+        < "An invalid window was passed when activated." ;
+          ERRCODE_SO_OLEOBJ_INVALIDHWND & S_MAX ; >;
+        < "The object does not support any actions." ;
+          ERRCODE_SO_NOVERBS & S_MAX ; >;
+        < "The action is not defined. The default action will be executed." ;
+          ERRCODE_SO_INVALIDVERB & S_MAX ; >;
+        < "A link to the network could not be re-established." ;
+          ERRCODE_SO_MK_CONNECT & S_MAX ; >;
+        < "Object does not support this action." ;
+          ERRCODE_SO_NOTIMPL & S_MAX ; >;
+        < "The specified file could not be opened." ;
+          ERRCODE_SO_MK_CANTOPENFILE & S_MAX ; >;
     };
 };
-Resource RID_SO_ERRCTX
+
+StringArray RID_SO_ERRCTX
 {
-    String ERRCTX_SO_DOVERB
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "$(ERR) activating object" ;
+        < "$(ERR) activating object" ; ERRCTX_SO_DOVERB ; >;
     };
 };
+
 String STR_ERROR_OBJNOCREATE
 {
     Text [ en-US ] = "Object % could not be inserted." ;

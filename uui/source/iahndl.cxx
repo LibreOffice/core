@@ -1298,14 +1298,10 @@ bool
 ErrorResource::getString(ErrCode nErrorCode, OUString &rString)
     const
 {
-    ResId aResId(static_cast< sal_uInt16 >(nErrorCode & ERRCODE_RES_MASK),
-                 *m_pResMgr);
-    aResId.SetRT(RSC_STRING);
-    if (!IsAvailableRes(aResId))
+    sal_uInt32 nIdx = m_aStringArray.FindIndex(nErrorCode & ERRCODE_RES_MASK);
+    if (nIdx == RESARRAY_INDEX_NOTFOUND)
         return false;
-    aResId.SetAutoRelease(false);
-    rString = aResId.toString();
-    m_pResMgr->PopContext();
+    rString = m_aStringArray.GetString(nIdx);
     return true;
 }
 

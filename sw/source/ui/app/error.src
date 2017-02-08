@@ -41,143 +41,47 @@ String STR_ERROR_CLPBRD_READ
 #define ERR_CODE( class, err )  (class | (err - ERROR_SW_BASE))
 #define WARN_CODE( class, err ) (class | ( err - WARN_SW_BASE))
 
-Resource RID_SW_ERRHDL
+StringArray RID_SW_ERRHDL
 {
-     // Import-Errors
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_FILE_FORMAT_ERROR )
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "File format error found." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR )
-    {
-        Text [ en-US ] = "Error reading file." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE )
-    {
-        Text [ en-US ] = "Input file error." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE )
-    {
-        Text [ en-US ] = "This is not a %PRODUCTNAME Writer file." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF )
-    {
-        Text [ en-US ] = "Unexpected end of file." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD )
-    {
-        Text [ en-US ] = "Password-protected files cannot be opened." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR )
-    {
-        Text [ en-US ] = "This is not a valid WinWord6 file." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR )
-    {
-        Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
-    {
-        Text [ en-US ] = "File format error found at $(ARG1)(row,col)." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION )
-    {
-        Text [ en-US ] = "File has been written in a newer version." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR )
-    {
-        Text [ en-US ] = "This is not a valid WinWord97 file.";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
-    {
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
-    };
-     // Export-Errors
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR )
-    {
-        Text [ en-US ] = "Error writing file." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY )
-    {
-        Text [ en-US ] = "Wrong AutoText document version." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE )
-    {
-        Text [ en-US ] = "Error in writing sub-document $(ARG1).";
-    };
-     // Import-/Export-Errors
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR )
-    {
-        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR )
-    {
-        Text [ en-US ] = "Internal error in %PRODUCTNAME Writer file format." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR )
-    {
-        Text [ en-US ] = "$(ARG1) has changed." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR )
-    {
-        Text [ en-US ] = "$(ARG1) does not exist." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR )
-    {
-        Text [ en-US ] = "Cells cannot be further split." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR )
-    {
-        Text [ en-US ] = "Additional columns cannot be inserted." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR )
-    {
-        Text [ en-US ] = "The structure of a linked table cannot be modified." ;
-    };
+        // Import-Errors
+        < "File format error found." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_FILE_FORMAT_ERROR ) ; >;
+        < "Error reading file." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_READ_ERROR ) ; >;
+        < "Input file error." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_INPUT_FILE ) ; >;
+        < "This is not a %PRODUCTNAME Writer file." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_NOWRITER_FILE ) ; >;
+        < "Unexpected end of file." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_UNEXPECTED_EOF ) ; >;
+        < "Password-protected files cannot be opened." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SW6_PASSWD ) ; >;
+        < "This is not a valid WinWord6 file." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_NO_WW6_FILE_ERR ) ; >;
+        < "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW6_FASTSAVE_ERR ) ; >;
+        < "File format error found at $(ARG1)(row,col)." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL ) ; >;
+        < "File has been written in a newer version." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_NEW_VERSION ) ; >;
+        < "This is not a valid WinWord97 file."; ERR_CODE ( ERRCODE_CLASS_READ , ERR_WW8_NO_WW8_FILE_ERR ) ; >;
+        < "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)."; ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL ) ; >;
+        // Export-Errors
+        < "Error writing file." ; ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_WRITE_ERROR ) ; >;
+        < "Wrong AutoText document version." ; ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_OLD_GLOSSARY ) ; >;
+        < "Error in writing sub-document $(ARG1)."; ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_WRITE_ERROR_FILE ) ; >;
+        // Import-/Export-Errors
+        < "Internal error in %PRODUCTNAME Writer file format." ; ERR_CODE ( ERRCODE_CLASS_READ , ERR_SWG_INTERNAL_ERROR ) ; >;
+        < "Internal error in %PRODUCTNAME Writer file format." ; ERR_CODE ( ERRCODE_CLASS_WRITE , ERR_SWG_INTERNAL_ERROR ) ; >;
+        < "$(ARG1) has changed." ; ERR_CODE ( ERRCODE_CLASS_LOCKING , ERR_TXTBLOCK_NEWFILE_ERROR ) ; >;
+        < "$(ARG1) does not exist." ; ERR_CODE ( ERRCODE_CLASS_PATH , ERR_AUTOPATH_ERROR ) ; >;
+        < "Cells cannot be further split." ; ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLSPLIT_ERROR ) ; >;
+        < "Additional columns cannot be inserted." ; ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLINSCOL_ERROR ) ; >;
+        < "The structure of a linked table cannot be modified." ; ERR_CODE ( ERRCODE_CLASS_NONE , ERR_TBLDDECHG_ERROR ) ; >;
 
-    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS )
-    {
-        Text [ en-US ] = "No drawings could be read." ;
-    };
-    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR )
-    {
-        Text [ en-US ] = "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ;
-    };
-    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST )
-    {
-        Text [ en-US ] = "Not all attributes could be read." ;
-    };
-    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST )
-    {
-        Text [ en-US ] = "Not all attributes could be recorded." ;
-    };
-    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE )
-    {
-        Text [ en-US ] = "Some OLE objects could only be loaded as images." ;
-    };
-    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE )
-    {
-        Text [ en-US ] = "Some OLE objects could only be saved as images." ;
-    };
-    String WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD )
-    {
-        Text [ en-US ] = "Document could not be completely loaded." ;
-    };
-    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD )
-    {
-        Text [ en-US ] = "Document could not be completely saved." ;
-    };
-    String WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS)
-    {
-        Text [ en-US ] = "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings.";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_WRITE_ERROR_FILE )
-    {
-        Text [ en-US ] = "Error in writing sub-document $(ARG1).";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL )
-    {
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
+        < "No drawings could be read." ; WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_NO_DRAWINGS ) ; >;
+        < "This file was saved with WinWord in 'Fast Save' mode. Please unmark the WinWord option 'Allow Fast Saves' and save the file again." ; WARN_CODE ( ERRCODE_CLASS_READ , WARN_WW6_FASTSAVE_ERR ) ; >;
+        < "Not all attributes could be read." ; WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_FEATURES_LOST ) ; >;
+        < "Not all attributes could be recorded." ; WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_FEATURES_LOST ) ; >;
+        < "Some OLE objects could only be loaded as images." ; WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_OLE ) ; >;
+        < "Some OLE objects could only be saved as images." ; WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_OLE ) ; >;
+        < "Document could not be completely loaded." ; WARN_CODE ( ERRCODE_CLASS_READ , WARN_SWG_POOR_LOAD ) ; >;
+        < "Document could not be completely saved." ; WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_POOR_LOAD ) ; >;
+        < "This HTML document contains %PRODUCTNAME Basic macros.\nThey were not saved with the current export settings."; WARN_CODE ( ERRCODE_CLASS_WRITE , WARN_SWG_HTML_NO_MACROS) ; >;
+        < "Error in writing sub-document $(ARG1)."; ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_WRITE_ERROR_FILE ) ; >;
+        < "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col)."; ERR_CODE ( ERRCODE_CLASS_WRITE , WARN_FORMAT_FILE_ROWCOL ) ; >;
     };
 };
 

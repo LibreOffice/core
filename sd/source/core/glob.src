@@ -348,19 +348,16 @@ String STR_SAVE_DOC
 #define ERR_CODE( class, err )  (class | (err - ERROR_SD_BASE))
 #define WARN_CODE( class, err ) (class | ( err - WARN_SD_BASE))
 
-Resource RID_SD_ERRHDL
+StringArray RID_SD_ERRHDL
 {
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL )
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "File format error found at $(ARG1)(row,col)." ;
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL )
-    {
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col).";
-    };
-    String ERR_CODE ( ERRCODE_CLASS_READ , WARN_FORMAT_FILE_ROWCOL )
-    {
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col).";
+        < "File format error found at $(ARG1)(row,col)." ;
+          ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_ROWCOL ) ; >;
+        < "Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col).";
+          ERR_CODE ( ERRCODE_CLASS_READ , ERR_FORMAT_FILE_ROWCOL ) ; >;
+        < "Format error discovered in the file in sub-document $(ARG1) at position $(ARG2)(row,col).";
+          ERR_CODE ( ERRCODE_CLASS_READ , WARN_FORMAT_FILE_ROWCOL ) ; >;
     };
 };
 

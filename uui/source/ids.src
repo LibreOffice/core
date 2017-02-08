@@ -41,362 +41,223 @@ String STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE
     Text [ en-US ] = "Non-Encrypted Streams" ;
 };
 
-Resource RID_UUI_ERRHDL
+StringArray RID_UUI_ERRHDL
 {
-    String (ERRCODE_UUI_IO_ABORT & ERRCODE_RES_MASK)
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The operation executed on $(ARG1) was aborted.";
-    };
+        < "The operation executed on $(ARG1) was aborted." ;
+          (ERRCODE_UUI_IO_ABORT & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_ACCESSDENIED & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Access to $(ARG1) was denied.";
-    };
+        < "Access to $(ARG1) was denied." ;
+          (ERRCODE_UUI_IO_ACCESSDENIED & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_ALREADYEXISTS & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) already exists.";
-    };
+        < "$(ARG1) already exists.";
+          (ERRCODE_UUI_IO_ALREADYEXISTS & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_TARGETALREADYEXISTS & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Target already exists.";
-    };
+        < "Target already exists." ;
+          (ERRCODE_UUI_IO_TARGETALREADYEXISTS & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_MODULESIZEEXCEEDED & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "You are about to save/export a password protected basic library containing module(s) \n$(ARG1)\nwhich are too large to store in binary format. If you wish users that don't have access to the library password to be able to run macros in those module(s) you must split those modules into a number of smaller modules. Do you wish to continue to save/export this library?" ;
-    };
+        < "You are about to save/export a password protected basic library containing module(s) \n$(ARG1)\nwhich are too large to store in binary format. If you wish users that don't have access to the library password to be able to run macros in those module(s) you must split those modules into a number of smaller modules. Do you wish to continue to save/export this library?"  ;
+          (ERRCODE_UUI_IO_MODULESIZEEXCEEDED & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The data from $(ARG1) has an incorrect checksum.";
-    };
+        < "The data from $(ARG1) has an incorrect checksum." ;
+          (ERRCODE_UUI_IO_BADCRC & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_CANTCREATE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The object $(ARG1) cannot be created in directory $(ARG2).";
-    };
+        < "The object $(ARG1) cannot be created in directory $(ARG2)." ;
+          (ERRCODE_UUI_IO_CANTCREATE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_CANTREAD & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Data of $(ARG1) could not be read.";
-    };
+        < "Data of $(ARG1) could not be read." ;
+          (ERRCODE_UUI_IO_CANTREAD & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_CANTSEEK & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The seek operation on $(ARG1) could not be performed.";
-    };
+        < "The seek operation on $(ARG1) could not be performed." ;
+          (ERRCODE_UUI_IO_CANTSEEK & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_CANTTELL & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The tell operation on $(ARG1) could not be performed.";
-    };
+        < "The tell operation on $(ARG1) could not be performed." ;
+          (ERRCODE_UUI_IO_CANTTELL & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_CANTWRITE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Data for $(ARG1) could not be written.";
-    };
+        < "Data for $(ARG1) could not be written." ;
+          (ERRCODE_UUI_IO_CANTWRITE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_CURRENTDIR & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Action impossible: $(ARG1) is the current directory.";
-    };
+        < "Action impossible: $(ARG1) is the current directory." ;
+          (ERRCODE_UUI_IO_CURRENTDIR & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTREADY & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) is not ready.";
-    };
+        < "$(ARG1) is not ready." ;
+          (ERRCODE_UUI_IO_NOTREADY & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTSAMEDEVICE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Action impossible: $(ARG1) and $(ARG2) are different devices (drives).";
-    };
+        < "Action impossible: $(ARG1) and $(ARG2) are different devices (drives)." ;
+          (ERRCODE_UUI_IO_NOTSAMEDEVICE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_GENERAL & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "General input/output error while accessing $(ARG1).";
-    };
+        < "General input/output error while accessing $(ARG1)." ;
+          (ERRCODE_UUI_IO_GENERAL & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_INVALIDACCESS & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "An attempt was made to access $(ARG1) in an invalid way.";
-    };
+        < "An attempt was made to access $(ARG1) in an invalid way." ;
+          (ERRCODE_UUI_IO_INVALIDACCESS & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_INVALIDCHAR & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) contains invalid characters.";
-    };
+        < "$(ARG1) contains invalid characters." ;
+          (ERRCODE_UUI_IO_INVALIDCHAR & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_INVALIDDEVICE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The device (drive) $(ARG1) is invalid.";
-    };
+        < "The device (drive) $(ARG1) is invalid." ;
+          (ERRCODE_UUI_IO_INVALIDDEVICE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_INVALIDLENGTH & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The data from $(ARG1) has an invalid length.";
-    };
+        < "The data from $(ARG1) has an invalid length." ;
+          (ERRCODE_UUI_IO_INVALIDLENGTH & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_INVALIDPARAMETER & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The operation on $(ARG1) was started with an invalid parameter.";
-    };
+        < "The operation on $(ARG1) was started with an invalid parameter." ;
+          (ERRCODE_UUI_IO_INVALIDPARAMETER & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_ISWILDCARD & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The operation cannot be performed because $(ARG1) contains wildcards.";
-    };
+        < "The operation cannot be performed because $(ARG1) contains wildcards." ;
+          (ERRCODE_UUI_IO_ISWILDCARD & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_LOCKVIOLATION & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Error during shared access to $(ARG1).";
-    };
+        < "Error during shared access to $(ARG1)." ;
+          (ERRCODE_UUI_IO_LOCKVIOLATION & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_MISPLACEDCHAR & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) contains misplaced characters.";
-    };
+        < "$(ARG1) contains misplaced characters." ;
+          (ERRCODE_UUI_IO_MISPLACEDCHAR & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NAMETOOLONG & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The name $(ARG1) contains too many characters.";
-    };
+        < "The name $(ARG1) contains too many characters." ;
+          (ERRCODE_UUI_IO_NAMETOOLONG & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTEXISTS & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) does not exist.";
-    };
+        < "$(ARG1) does not exist." ;
+          (ERRCODE_UUI_IO_NOTEXISTS & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTEXISTSPATH & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The path $(ARG1) does not exist.";
-    };
+        < "The path $(ARG1) does not exist." ;
+          (ERRCODE_UUI_IO_NOTEXISTSPATH & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTSUPPORTED & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The operation on $(ARG1) is not supported on this operating system.";
-    };
+        < "The operation on $(ARG1) is not supported on this operating system." ;
+          (ERRCODE_UUI_IO_NOTSUPPORTED & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTADIRECTORY & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) is not a directory.";
-    };
+        < "$(ARG1) is not a directory." ;
+          (ERRCODE_UUI_IO_NOTADIRECTORY & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTAFILE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) is not a file.";
-    };
+        < "$(ARG1) is not a file." ;
+          (ERRCODE_UUI_IO_NOTAFILE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_OUTOFSPACE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "There is no space left on device $(ARG1).";
-    };
+        < "There is no space left on device $(ARG1)." ;
+          (ERRCODE_UUI_IO_OUTOFSPACE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_TOOMANYOPENFILES & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The operation on $(ARG1) cannot be performed because too many files are already open.";
-    };
+        < "The operation on $(ARG1) cannot be performed because too many files are already open." ;
+          (ERRCODE_UUI_IO_TOOMANYOPENFILES & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_OUTOFMEMORY & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The operation on $(ARG1) cannot be performed because there is no more memory available.";
-    };
+        < "The operation on $(ARG1) cannot be performed because there is no more memory available." ;
+          (ERRCODE_UUI_IO_OUTOFMEMORY & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_PENDING & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The operation on $(ARG1) cannot continue because more data is pending.";
-    };
+        < "The operation on $(ARG1) cannot continue because more data is pending." ;
+          (ERRCODE_UUI_IO_PENDING & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_RECURSIVE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) cannot be copied into itself.";
-    };
+        < "$(ARG1) cannot be copied into itself." ;
+          (ERRCODE_UUI_IO_RECURSIVE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_UNKNOWN & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Unknown input/output error while accessing $(ARG1).";
-    };
+        < "Unknown input/output error while accessing $(ARG1)." ;
+          (ERRCODE_UUI_IO_UNKNOWN & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_WRITEPROTECTED & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) is write protected.";
-    };
+        < "$(ARG1) is write protected." ;
+          (ERRCODE_UUI_IO_WRITEPROTECTED & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_WRONGFORMAT & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) is not in the correct format.";
-    };
+        < "$(ARG1) is not in the correct format." ;
+          (ERRCODE_UUI_IO_WRONGFORMAT & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_WRONGVERSION & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The version of $(ARG1) is not correct.";
-    };
+        < "The version of $(ARG1) is not correct." ;
+          (ERRCODE_UUI_IO_WRONGVERSION & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTEXISTS_VOLUME & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Drive $(ARG1) does not exist.";
-    };
+        < "Drive $(ARG1) does not exist." ;
+          (ERRCODE_UUI_IO_NOTEXISTS_VOLUME & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTEXISTS_FOLDER & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Folder $(ARG1) does not exist.";
-    };
+        < "Folder $(ARG1) does not exist." ;
+          (ERRCODE_UUI_IO_NOTEXISTS_FOLDER & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_WRONGJAVA & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The installed Java version is not supported.";
-    };
+        < "The installed Java version is not supported." ;
+          (ERRCODE_UUI_WRONGJAVA & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_WRONGJAVA_VERSION & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The installed Java version $(ARG1) is not supported.";
-    };
-    String (ERRCODE_UUI_WRONGJAVA_MIN & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The installed Java version is not supported, at least version $(ARG1) is required.";
-    };
+        < "The installed Java version $(ARG1) is not supported." ;
+          (ERRCODE_UUI_WRONGJAVA_VERSION & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_WRONGJAVA_VERSION_MIN & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The installed Java version $(ARG1) is not supported, at least version $(ARG2) is required.";
-    };
+        < "The installed Java version is not supported, at least version $(ARG1) is required." ;
+          (ERRCODE_UUI_WRONGJAVA_MIN & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_BADPARTNERSHIP & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The data associated with the partnership is corrupted.";
-    };
+        < "The installed Java version $(ARG1) is not supported, at least version $(ARG2) is required." ;
+          (ERRCODE_UUI_WRONGJAVA_VERSION_MIN & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_BADPARTNERSHIP_NAME & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The data associated with the partnership $(ARG1) is corrupted.";
-    };
+        < "The data associated with the partnership is corrupted." ;
+          (ERRCODE_UUI_BADPARTNERSHIP & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTREADY_VOLUME & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Volume $(ARG1) is not ready.";
-    };
+        < "The data associated with the partnership $(ARG1) is corrupted." ;
+          (ERRCODE_UUI_BADPARTNERSHIP_NAME & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTREADY_REMOVABLE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "$(ARG1) is not ready; please insert a storage medium.";
-    };
+        < "Volume $(ARG1) is not ready." ;
+          (ERRCODE_UUI_IO_NOTREADY_VOLUME & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Volume $(ARG1) is not ready; please insert a storage medium.";
-    };
+        < "$(ARG1) is not ready; please insert a storage medium." ;
+          (ERRCODE_UUI_IO_NOTREADY_REMOVABLE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_WRONGMEDIUM & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Please insert disk $(ARG1).";
-    };
+        < "Volume $(ARG1) is not ready; please insert a storage medium." ;
+          (ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_CANTCREATE_NONAME & ERRCODE_RES_MASK)
-    {
-        Text[ en-US ] = "The object cannot be created in directory $(ARG1).";
-    };
+        < "Please insert disk $(ARG1)." ;
+          (ERRCODE_UUI_WRONGMEDIUM & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway?";
-    };
+        < "The object cannot be created in directory $(ARG1)." ;
+          (ERRCODE_UUI_IO_CANTCREATE_NONAME & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_BROKENPACKAGE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The file '$(ARG1)' is corrupt and therefore cannot be opened. %PRODUCTNAME can try to repair the file.\n\nThe corruption could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the repaired document.\nExecution of macros is disabled for this document.\n\nShould %PRODUCTNAME repair the file?\n";
-    };
+        < "%PRODUCTNAME cannot keep files from being overwritten when this transmission protocol is used. Do you want to continue anyway?" ;
+          (ERRCODE_UUI_IO_UNSUPPORTEDOVERWRITE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The file '$(ARG1)' could not be repaired and therefore cannot be opened.";
-    };
+        < "The file '$(ARG1)' is corrupt and therefore cannot be opened. %PRODUCTNAME can try to repair the file.\n\nThe corruption could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the repaired document.\nExecution of macros is disabled for this document.\n\nShould %PRODUCTNAME repair the file?\n" ;
+          (ERRCODE_UUI_IO_BROKENPACKAGE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_CONFIGURATION_BROKENDATA_NOREMOVE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Configuration data in '$(ARG1)' is corrupted. Without this data some functions may not operate correctly.\nDo you want to continue startup of %PRODUCTNAME without the corrupted configuration data?";
-    };
+        < "The file '$(ARG1)' could not be repaired and therefore cannot be opened." ;
+          (ERRCODE_UUI_IO_BROKENPACKAGE_CANTREPAIR & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_CONFIGURATION_BROKENDATA_WITHREMOVE & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The personal configuration file '$(ARG1)' is corrupted and must be deleted to continue. Some of your personal settings may be lost.\nDo you want to continue startup of %PRODUCTNAME without the corrupted configuration data?";
-    };
+        < "Configuration data in '$(ARG1)' is corrupted. Without this data some functions may not operate correctly.\nDo you want to continue startup of %PRODUCTNAME without the corrupted configuration data?" ;
+          (ERRCODE_UUI_CONFIGURATION_BROKENDATA_NOREMOVE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_CONFIGURATION_BACKENDMISSING & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The configuration data source '$(ARG1)' is unavailable. Without this data some functions may not operate correctly.";
-    };
+        < "The personal configuration file '$(ARG1)' is corrupted and must be deleted to continue. Some of your personal settings may be lost.\nDo you want to continue startup of %PRODUCTNAME without the corrupted configuration data?" ;
+          (ERRCODE_UUI_CONFIGURATION_BROKENDATA_WITHREMOVE & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_CONFIGURATION_BACKENDMISSING_WITHRECOVER & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The configuration data source '$(ARG1)' is unavailable. Without this data some functions may not operate correctly.\nDo you want to continue startup of %PRODUCTNAME without the missing configuration data?";
-    };
+        < "The configuration data source '$(ARG1)' is unavailable. Without this data some functions may not operate correctly." ;
+          (ERRCODE_UUI_CONFIGURATION_BACKENDMISSING & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_INVALID_XFORMS_SUBMISSION_DATA & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The form contains invalid data. Do you still want to continue?";
-    };
+        < "The configuration data source '$(ARG1)' is unavailable. Without this data some functions may not operate correctly.\nDo you want to continue startup of %PRODUCTNAME without the missing configuration data?" ;
+          (ERRCODE_UUI_CONFIGURATION_BACKENDMISSING_WITHRECOVER & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_LOCKING_LOCKED & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The file $(ARG1) is locked by another user. Currently, another write access to this file cannot be granted.";
+        < "The form contains invalid data. Do you still want to continue?" ;
+          (ERRCODE_UUI_INVALID_XFORMS_SUBMISSION_DATA & ERRCODE_RES_MASK) ; >;
 
-    };
+        < "The file $(ARG1) is locked by another user. Currently, another write access to this file cannot be granted." ;
+          (ERRCODE_UUI_LOCKING_LOCKED & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_LOCKING_LOCKED_SELF & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The file $(ARG1) is locked by yourself. Currently, another write access to this file cannot be granted.";
-    };
+        < "The file $(ARG1) is locked by yourself. Currently, another write access to this file cannot be granted." ;
+          (ERRCODE_UUI_LOCKING_LOCKED_SELF & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_LOCKING_NOT_LOCKED & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The file $(ARG1) is currently not locked by yourself.";
-    };
+        < "The file $(ARG1) is currently not locked by yourself." ;
+          (ERRCODE_UUI_LOCKING_NOT_LOCKED & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_LOCKING_LOCK_EXPIRED & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "The previously obtained lock for file $(ARG1) has expired.\nThis can happen due to problems on the server managing the file lock. It cannot be guaranteed that write operations on this file will not overwrite changes done by other users!";
-    };
+        < "The previously obtained lock for file $(ARG1) has expired.\nThis can happen due to problems on the server managing the file lock. It cannot be guaranteed that write operations on this file will not overwrite changes done by other users!" ;
+          (ERRCODE_UUI_LOCKING_LOCK_EXPIRED & ERRCODE_RES_MASK) ; >;
 
-    String (ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED)
-    {
-        Text [ en-US ] = "Unable to verify the identity of $(ARG1) site.\n\nBefore accepting this certificate, you should examine this site's certificate carefully. Are you willing to accept this certificate for the purpose of identifying the Web site $(ARG1)?";
-    };
+        < "Unable to verify the identity of $(ARG1) site.\n\nBefore accepting this certificate, you should examine this site's certificate carefully. Are you willing to accept this certificate for the purpose of identifying the Web site $(ARG1)?" ;
+          (ERRCODE_UUI_UNKNOWNAUTH_UNTRUSTED) ; >;
 
-    String (ERRCODE_UUI_SSLWARN_EXPIRED_1)
-    {
-        Text [ en-US ] = "$(ARG1) is a site that uses a security certificate to encrypt data during transmission, but its certificate expired on $(ARG2).\n\nYou should check to make sure that your computer's time is correct.";
-    };
+        < "$(ARG1) is a site that uses a security certificate to encrypt data during transmission, but its certificate expired on $(ARG2).\n\nYou should check to make sure that your computer's time is correct." ;
+          (ERRCODE_UUI_SSLWARN_EXPIRED_1) ; >;
 
-    String (ERRCODE_UUI_SSLWARN_DOMAINMISMATCH_1)
-    {
-        Text [ en-US ] = "You have attempted to establish a connection with $(ARG1). However, the security certificate presented belongs to $(ARG2). It is possible, though unlikely, that someone may be trying to intercept your communication with this web site.\n\nIf you suspect the certificate shown does not belong to $(ARG1), please cancel the connection and notify the site administrator.\n\nWould you like to continue anyway?";
-    };
+        < "You have attempted to establish a connection with $(ARG1). However, the security certificate presented belongs to $(ARG2). It is possible, though unlikely, that someone may be trying to intercept your communication with this web site.\n\nIf you suspect the certificate shown does not belong to $(ARG1), please cancel the connection and notify the site administrator.\n\nWould you like to continue anyway?" ;
+          (ERRCODE_UUI_SSLWARN_DOMAINMISMATCH_1) ; >;
 
-    String (ERRCODE_UUI_SSLWARN_INVALID_1)
-    {
-        Text [ en-US ] = "The certificate could not be validated. You should examine this site's certificate carefully.\n\nIf you suspect the certificate shown, please cancel the connection and notify the site administrator.";
-    };
-    String (TITLE_UUI_SSLWARN_DOMAINMISMATCH)
-    {
-        Text [ en-US ] = "Security Warning: Domain Name Mismatch";
-    };
+        < "The certificate could not be validated. You should examine this site's certificate carefully.\n\nIf you suspect the certificate shown, please cancel the connection and notify the site administrator." ;
+          (ERRCODE_UUI_SSLWARN_INVALID_1) ; >;
 
-    String (TITLE_UUI_SSLWARN_EXPIRED)
-    {
-        Text [ en-US ] = "Security Warning: Server Certificate Expired";
-    };
+        < "Security Warning: Domain Name Mismatch" ;
+          (TITLE_UUI_SSLWARN_DOMAINMISMATCH) ; >;
 
-    String (TITLE_UUI_SSLWARN_INVALID)
-    {
-        Text [ en-US ] = "Security Warning: Server Certificate Invalid";
-    };
+        < "Security Warning: Server Certificate Expired" ;
+          (TITLE_UUI_SSLWARN_EXPIRED) ; >;
 
-    String (ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY & ERRCODE_RES_MASK)
-    {
-        Text [ en-US ] = "Component cannot be loaded, possibly broken or incomplete installation.\nFull error message:\n\n $(ARG1).";
-    };
+        < "Security Warning: Server Certificate Invalid" ;
+          (TITLE_UUI_SSLWARN_INVALID) ; >;
 
+        < "Component cannot be loaded, possibly broken or incomplete installation.\nFull error message:\n\n $(ARG1)." ;
+          (ERRCODE_UUI_CANNOT_ACTIVATE_FACTORY & ERRCODE_RES_MASK) ; >;
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

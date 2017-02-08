@@ -21,391 +21,112 @@
 #include <svtools/svtools.hrc>
 #include <svtools/sfxecode.hxx>
 
-Resource RID_ERRCTX
+StringArray RID_ERRCTX
 {
-    String ERRCTX_ERROR
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Error" ;
-    };
-    String ERRCTX_WARNING
-    {
-        Text [ en-US ] = "Warning" ;
-    };
-    String ERRCTX_SFX_LOADTEMPLATE
-    {
-        Text [ en-US ] = "$(ERR) loading the template $(ARG1)" ;
-    };
-    String ERRCTX_SFX_SAVEDOC
-    {
-        Text [ en-US ] = "$(ERR) saving the document $(ARG1)";
-    };
-    String ERRCTX_SFX_SAVEASDOC
-    {
-        Text [ en-US ] = "$(ERR) saving the document $(ARG1)";
-    };
-    String ERRCTX_SFX_DOCINFO
-    {
-        Text [ en-US ] = "$(ERR) displaying doc. information for document $(ARG1)" ;
-    };
-    String ERRCTX_SFX_DOCTEMPLATE
-    {
-        Text [ en-US ] = "$(ERR) writing document $(ARG1) as template" ;
-    };
-    String ERRCTX_SFX_MOVEORCOPYCONTENTS
-    {
-        Text [ en-US ] = "$(ERR) copying or moving document contents" ;
-    };
-    String ERRCTX_SFX_DOCMANAGER
-    {
-        Text [ en-US ] = "$(ERR) starting the Document Manager" ;
-    };
-    String ERRCTX_SFX_OPENDOC
-    {
-        Text [ en-US ] = "$(ERR) loading document $(ARG1)" ;
-    };
-    String ERRCTX_SFX_NEWDOCDIRECT
-    {
-        Text [ en-US ] = "$(ERR) creating a new document" ;
-    };
-    String ERRCTX_SFX_NEWDOC
-    {
-        Text [ en-US ] = "$(ERR) creating a new document" ;
-    };
-    String ERRCTX_SFX_CREATEOBJSH
-    {
-        Text [ en-US ] = "$(ERR) expanding entry" ;
-    };
-    String ERRCTX_SFX_LOADBASIC
-    {
-        Text [ en-US ] = "$(ERR) loading BASIC of document $(ARG1)" ;
-    };
-    String ERRCTX_SFX_SEARCHADDRESS
-    {
-        Text [ en-US ] = "$(ERR) searching for an address";
+        < "Error" ; ERRCTX_ERROR ; >;
+        < "Warning" ; ERRCTX_WARNING ; >;
+        < "$(ERR) loading the template $(ARG1)" ; ERRCTX_SFX_LOADTEMPLATE ; >;
+        < "$(ERR) saving the document $(ARG1)"; ERRCTX_SFX_SAVEDOC ; >;
+        < "$(ERR) saving the document $(ARG1)"; ERRCTX_SFX_SAVEASDOC ; >;
+        < "$(ERR) displaying doc. information for document $(ARG1)" ; ERRCTX_SFX_DOCINFO ; >;
+        < "$(ERR) writing document $(ARG1) as template" ; ERRCTX_SFX_DOCTEMPLATE ; >;
+        < "$(ERR) copying or moving document contents" ; ERRCTX_SFX_MOVEORCOPYCONTENTS ; >;
+        < "$(ERR) starting the Document Manager" ; ERRCTX_SFX_DOCMANAGER ; >;
+        < "$(ERR) loading document $(ARG1)" ; ERRCTX_SFX_OPENDOC ; >;
+        < "$(ERR) creating a new document" ; ERRCTX_SFX_NEWDOCDIRECT ; >;
+        < "$(ERR) creating a new document" ; ERRCTX_SFX_NEWDOC ; >;
+        < "$(ERR) expanding entry" ; ERRCTX_SFX_CREATEOBJSH ; >;
+        < "$(ERR) loading BASIC of document $(ARG1)" ; ERRCTX_SFX_LOADBASIC ; >;
+        < "$(ERR) searching for an address"; ERRCTX_SFX_SEARCHADDRESS ; >;
     };
 };
-Resource RID_ERRHDL
-{
-    String ERRCODE_CLASS_ABORT
-    {
-        Text [ en-US ] = "Abort" ;
-    };
-    String ERRCODE_CLASS_NOTEXISTS
-    {
-        Text [ en-US ] = "Nonexistent object" ;
-    };
-    String ERRCODE_CLASS_ALREADYEXISTS
-    {
-        Text [ en-US ] = "Object already exists" ;
-    };
-    String ERRCODE_CLASS_ACCESS
-    {
-        Text [ en-US ] = "Object not accessible" ;
-    };
-    String ERRCODE_CLASS_PATH
-    {
-        Text [ en-US ] = "Inadmissible path" ;
-    };
-    String ERRCODE_CLASS_LOCKING
-    {
-        Text [ en-US ] = "Locking problem" ;
-    };
-    String ERRCODE_CLASS_PARAMETER
-    {
-        Text [ en-US ] = "Wrong parameter" ;
-    };
-    String ERRCODE_CLASS_SPACE
-    {
-        Text [ en-US ] = "Resource exhausted" ;
-    };
-    String ERRCODE_CLASS_NOTSUPPORTED
-    {
-        Text [ en-US ] = "Action not supported" ;
-    };
-    String ERRCODE_CLASS_READ
-    {
-        Text [ en-US ] = "Read Error" ;
-    };
-    String ERRCODE_CLASS_WRITE
-    {
-        Text [ en-US ] = "Write Error" ;
-    };
-    String ERRCODE_CLASS_UNKNOWN
-    {
-        Text [ en-US ] = "unknown" ;
-    };
-    String ERRCODE_CLASS_VERSION
-    {
-        Text [ en-US ] = "Version Incompatibility" ;
-    };
-    String ERRCODE_CLASS_GENERAL
-    {
-        Text [ en-US ] = "General Error" ;
-    };
-    String ERRCODE_CLASS_FORMAT
-    {
-        Text [ en-US ] = "Incorrect format" ;
-    };
-    String ERRCODE_CLASS_CREATE
-    {
-        Text [ en-US ] = "Error creating object" ;
-    };
-    String ERRCODE_CLASS_SBX
-    {
-        Text [ en-US ] = "Inadmissible value or data type" ;
-    };
-    String ERRCODE_CLASS_RUNTIME
-    {
-        Text [ en-US ] = "BASIC runtime error" ;
-    };
-    String ERRCODE_CLASS_COMPILER
-    {
-        Text [ en-US ] = "BASIC syntax error" ;
-    };
-    String 1
-    {
-        Text [ en-US ] = "General Error" ;
-    };
-    String ERRCODE_IO_GENERAL
-    {
-        Text [ en-US ] = "General input/output error." ;
-    };
-    String ERRCODE_IO_MISPLACEDCHAR
-    {
-        Text [ en-US ] = "Invalid file name." ;
-    };
-    String ERRCODE_IO_NOTEXISTS
-    {
-        Text [ en-US ] = "Nonexistent file." ;
-    };
-    String ERRCODE_IO_ALREADYEXISTS
-    {
-        Text [ en-US ] = "File already exists." ;
-    };
-    String ERRCODE_IO_NOTADIRECTORY
-    {
-        Text [ en-US ] = "The object is not a directory." ;
-    };
-    String ERRCODE_IO_NOTAFILE
-    {
-        Text [ en-US ] = "The object is not a file." ;
-    };
-    String ERRCODE_IO_INVALIDDEVICE
-    {
-        Text [ en-US ] = "The specified device is invalid." ;
-    };
-    String ERRCODE_IO_ACCESSDENIED
-    {
-        Text [ en-US ] = "The object cannot be accessed\ndue to insufficient user rights." ;
-    };
-    String ERRCODE_IO_LOCKVIOLATION
-    {
-        Text [ en-US ] = "Sharing violation while accessing the object." ;
-    };
-    String ERRCODE_IO_OUTOFSPACE
-    {
-        Text [ en-US ] = "No more space on device." ;
-    };
-    String ERRCODE_IO_ISWILDCARD
-    {
-        Text [ en-US ] = "This operation cannot be run on\nfiles containing wildcards." ;
-    };
-    String ERRCODE_IO_NOTSUPPORTED
-    {
-        Text [ en-US ] = "This operation is not supported on this operating system." ;
-    };
-    String ERRCODE_IO_TOOMANYOPENFILES
-    {
-        Text [ en-US ] = "There are too many files open." ;
-    };
-    String ERRCODE_IO_CANTREAD
-    {
-        Text [ en-US ] = "Data could not be read from the file." ;
-    };
-    String ERRCODE_IO_CANTWRITE
-    {
-        Text [ en-US ] = "The file could not be written." ;
-    };
-    String ERRCODE_IO_OUTOFMEMORY
-    {
-        Text [ en-US ] = "The operation could not be run due to insufficient memory." ;
-    };
-    String ERRCODE_IO_CANTSEEK
-    {
-        Text [ en-US ] = "The seek operation could not be run." ;
-    };
-    String ERRCODE_IO_CANTTELL
-    {
-        Text [ en-US ] = "The tell operation could not be run." ;
-    };
-    String ERRCODE_IO_WRONGVERSION
-    {
-        Text [ en-US ] = "Incorrect file version." ;
-    };
-    String ERRCODE_IO_WRONGFORMAT
-    {
-        Text [ en-US ] = "Incorrect file format." ;
-    };
-    String ERRCODE_IO_INVALIDCHAR
-    {
-        Text [ en-US ] = "The file name contains invalid characters." ;
-    };
-    String ERRCODE_IO_UNKNOWN
-    {
-        Text [ en-US ] = "An unknown I/O error has occurred." ;
-    };
-    String ERRCODE_IO_INVALIDACCESS
-    {
-        Text [ en-US ] = "An invalid attempt was made to access the file." ;
-    };
-    String ERRCODE_IO_CANTCREATE
-    {
-        Text [ en-US ] = "The file could not be created." ;
-    };
-    String ERRCODE_IO_INVALIDPARAMETER
-    {
-        Text [ en-US ] = "The operation was started under an invalid parameter." ;
-    };
-    String ERRCODE_IO_ABORT
-    {
-        Text [ en-US ] = "The operation on the file was aborted." ;
-    };
-    String ERRCODE_IO_NOTEXISTSPATH
-    {
-        Text [ en-US ] = "Path to the file does not exist." ;
-    };
-    String ERRCODE_IO_RECURSIVE
-    {
-        Text [ en-US ] = "An object cannot be copied into itself." ;
-    };
-    String ERRCODE_SFX_TEMPLATENOTFOUND
-    {
-        Text [ en-US ] = "The specified template could not be found." ;
-    };
-    String ERRCODE_SFX_NOTATEMPLATE
-    {
-        Text [ en-US ] = "The file cannot be used as template." ;
-    };
-    String ERRCODE_SFX_ALREADYOPEN
-    {
-        Text [ en-US ] = "This document has already been opened for editing." ;
-    };
-    String ERRCODE_SFX_WRONGPASSWORD
-    {
-        Text [ en-US ] = "The wrong password has been entered." ;
-    };
-    String ERRCODE_SFX_DOLOADFAILED
-    {
-        Text [ en-US ] = "Error reading file." ;
-    };
-    String ERRCODE_SFX_DOCUMENTREADONLY
-    {
-        Text [ en-US ] = "The document was opened as read-only." ;
-    };
-    String ERRCODE_SFX_OLEGENERAL
-    {
-        Text [ en-US ] = "General OLE Error." ;
-    };
-    String ERRCODE_INET_NAME_RESOLVE
-    {
-        Text [ en-US ] = "The host name $(ARG1) could not be resolved." ;
-    };
-    String ERRCODE_INET_CONNECT
-    {
-        Text [ en-US ] = "Could not establish Internet connection to $(ARG1)." ;
-    };
-    String ERRCODE_INET_READ
-    {
-        Text [ en-US ] = "Error reading data from the Internet.\nServer error message: $(ARG1)." ;
-    };
-    String ERRCODE_INET_WRITE
-    {
-        Text [ en-US ] = "Error transferring data to the Internet.\nServer error message: $(ARG1)." ;
-    };
-    String ERRCODE_INET_GENERAL
-    {
-        Text [ en-US ] = "General Internet error has occurred." ;
-    };
-    String ERRCODE_INET_OFFLINE
-    {
-        Text [ en-US ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated." ;
-    };
-    String ERRCODE_SFX_CANTCREATECONTENT
-    {
-        Text [ en-US ] = "The contents could not be created." ;
-    };
-    String ERRCODE_IO_NAMETOOLONG
-    {
-        Text [ en-US ] = "The file name is too long for the target file system." ;
-    };
-    String ERRCODE_SFX_INVALIDSYNTAX
-    {
-        Text [ en-US ] = "The input syntax is invalid." ;
-    };
-    String ERRCODE_SFX_CANTCREATEFOLDER
-    {
-        Text [ en-US ] = "The input syntax is invalid." ;
-    };
-    String ERRCODE_IO_NOTSTORABLEINBINARYFORMAT
-    {
-        Text [ en-US ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME %PRODUCTVERSION file format.";
-    };
-    String ERRCODE_SFX_NOMOREDOCUMENTSALLOWED
-    {
-        Text [ en-US ] = "The maximum number of documents that can be opened at the same time has been reached. You need to close one or more documents before you can open a new document.";
-    };
-    String ERRCODE_SFX_CANTCREATEBACKUP
-    {
-        Text [ en-US ] = "Could not create backup copy." ;
-    };
-    String ERRCODE_SFX_MACROS_SUPPORT_DISABLED
-    {
-        Text [ en-US ] = "An attempt was made to execute a macro.\nFor security reasons, macro support is disabled.";
-    };
-    String ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_MAC
-    {
-        Text [ en-US ] = "This document contains macros.\n\nMacros may contain viruses. Execution of macros is disabled due to the current macro security setting in %PRODUCTNAME - Preferences - %PRODUCTNAME - Security.\n\nTherefore, some functionality may not be available." ;
-    };
-    String ERRCODE_SFX_DOCUMENT_MACRO_DISABLED
-    {
-        Text [ en-US ] = "This document contains macros.\n\nMacros may contain viruses. Execution of macros is disabled due to the current macro security setting in Tools - Options - %PRODUCTNAME - Security.\n\nTherefore, some functionality may not be available." ;
-    };
-    String ERRCODE_SFX_INCOMPLETE_ENCRYPTION
-    {
-        Text [ en-US ] = "The encrypted document contains unexpected non-encrypted streams.\n\nThis could be the result of document manipulation.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n " ;
-    };
 
-    String ERRCODE_IO_INVALIDLENGTH
+StringArray RID_ERRHDL
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Invalid data length." ;
-    };
-    String ERRCODE_IO_CURRENTDIR
-    {
-        Text [ en-US ] = "Function not possible: path contains current directory." ;
-    };
-    String ERRCODE_IO_NOTSAMEDEVICE
-    {
-        Text [ en-US ] = "Function not possible: device (drive) not identical." ;
-    };
-    String ERRCODE_IO_DEVICENOTREADY
-    {
-        Text [ en-US ] = "Device (drive) not ready." ;
-    };
-    String ERRCODE_IO_BADCRC
-    {
-        Text [ en-US ] = "Wrong check amount." ;
-    };
-    String ERRCODE_IO_WRITEPROTECTED
-    {
-        Text [ en-US ] = "Function not possible: write protected." ;
-    };
-    String ERRCODE_SFX_SHARED_NOPASSWORDCHANGE
-    {
-        Text [ en-US ] = "The password of a shared spreadsheet cannot be set or changed.\nDeactivate sharing mode first.";
-    };
-    String ERRCODE_SFX_FORMAT_ROWCOL
-    {
-        Text [ en-US ] = "File format error found at $(ARG1)(row,col).";
+        < "Abort" ; ERRCODE_CLASS_ABORT ; >;
+        < "Nonexistent object" ; ERRCODE_CLASS_NOTEXISTS ; >;
+        < "Object already exists" ; ERRCODE_CLASS_ALREADYEXISTS ; >;
+        < "Object not accessible" ; ERRCODE_CLASS_ACCESS ; >;
+        < "Inadmissible path" ; ERRCODE_CLASS_PATH ; >;
+        < "Locking problem" ; ERRCODE_CLASS_LOCKING ; >;
+        < "Wrong parameter" ; ERRCODE_CLASS_PARAMETER ; >;
+        < "Resource exhausted" ; ERRCODE_CLASS_SPACE ; >;
+        < "Action not supported" ; ERRCODE_CLASS_NOTSUPPORTED ; >;
+        < "Read Error" ; ERRCODE_CLASS_READ ; >;
+        < "Write Error" ; ERRCODE_CLASS_WRITE ; >;
+        < "unknown" ; ERRCODE_CLASS_UNKNOWN ; >;
+        < "Version Incompatibility" ; ERRCODE_CLASS_VERSION ; >;
+        < "General Error" ; ERRCODE_CLASS_GENERAL ; >;
+        < "Incorrect format" ; ERRCODE_CLASS_FORMAT ; >;
+        < "Error creating object" ; ERRCODE_CLASS_CREATE ; >;
+        < "Inadmissible value or data type" ; ERRCODE_CLASS_SBX ; >;
+        < "BASIC runtime error" ; ERRCODE_CLASS_RUNTIME ; >;
+        < "BASIC syntax error" ; ERRCODE_CLASS_COMPILER ; >;
+        < "General Error" ; 1 ; >;
+        < "General input/output error." ; ERRCODE_IO_GENERAL ; >;
+        < "Invalid file name." ; ERRCODE_IO_MISPLACEDCHAR ; >;
+        < "Nonexistent file." ; ERRCODE_IO_NOTEXISTS ; >;
+        < "File already exists." ; ERRCODE_IO_ALREADYEXISTS ; >;
+        < "The object is not a directory." ; ERRCODE_IO_NOTADIRECTORY ; >;
+        < "The object is not a file." ; ERRCODE_IO_NOTAFILE ; >;
+        < "The specified device is invalid." ; ERRCODE_IO_INVALIDDEVICE ; >;
+        < "The object cannot be accessed\ndue to insufficient user rights." ; ERRCODE_IO_ACCESSDENIED ; >;
+        < "Sharing violation while accessing the object." ; ERRCODE_IO_LOCKVIOLATION ; >;
+        < "No more space on device." ; ERRCODE_IO_OUTOFSPACE ; >;
+        < "This operation cannot be run on\nfiles containing wildcards." ; ERRCODE_IO_ISWILDCARD ; >;
+        < "This operation is not supported on this operating system." ; ERRCODE_IO_NOTSUPPORTED ; >;
+        < "There are too many files open." ; ERRCODE_IO_TOOMANYOPENFILES ; >;
+        < "Data could not be read from the file." ; ERRCODE_IO_CANTREAD ; >;
+        < "The file could not be written." ; ERRCODE_IO_CANTWRITE ; >;
+        < "The operation could not be run due to insufficient memory." ; ERRCODE_IO_OUTOFMEMORY ; >;
+        < "The seek operation could not be run." ; ERRCODE_IO_CANTSEEK ; >;
+        < "The tell operation could not be run." ; ERRCODE_IO_CANTTELL ; >;
+        < "Incorrect file version." ; ERRCODE_IO_WRONGVERSION ; >;
+        < "Incorrect file format." ; ERRCODE_IO_WRONGFORMAT ; >;
+        < "The file name contains invalid characters." ; ERRCODE_IO_INVALIDCHAR ; >;
+        < "An unknown I/O error has occurred." ; ERRCODE_IO_UNKNOWN ; >;
+        < "An invalid attempt was made to access the file." ; ERRCODE_IO_INVALIDACCESS ; >;
+        < "The file could not be created." ; ERRCODE_IO_CANTCREATE ; >;
+        < "The operation was started under an invalid parameter." ; ERRCODE_IO_INVALIDPARAMETER ; >;
+        < "The operation on the file was aborted." ; ERRCODE_IO_ABORT ; >;
+        < "Path to the file does not exist." ; ERRCODE_IO_NOTEXISTSPATH ; >;
+        < "An object cannot be copied into itself." ; ERRCODE_IO_RECURSIVE ; >;
+        < "The specified template could not be found." ; ERRCODE_SFX_TEMPLATENOTFOUND ; >;
+        < "The file cannot be used as template." ; ERRCODE_SFX_NOTATEMPLATE ; >;
+        < "This document has already been opened for editing." ; ERRCODE_SFX_ALREADYOPEN ; >;
+        < "The wrong password has been entered." ; ERRCODE_SFX_WRONGPASSWORD ; >;
+        < "Error reading file." ; ERRCODE_SFX_DOLOADFAILED ; >;
+        < "The document was opened as read-only." ; ERRCODE_SFX_DOCUMENTREADONLY ; >;
+        < "General OLE Error." ; ERRCODE_SFX_OLEGENERAL ; >;
+        < "The host name $(ARG1) could not be resolved." ; ERRCODE_INET_NAME_RESOLVE ; >;
+        < "Could not establish Internet connection to $(ARG1)." ; ERRCODE_INET_CONNECT ; >;
+        < "Error reading data from the Internet.\nServer error message: $(ARG1)." ; ERRCODE_INET_READ ; >;
+        < "Error transferring data to the Internet.\nServer error message: $(ARG1)." ; ERRCODE_INET_WRITE ; >;
+        < "General Internet error has occurred." ; ERRCODE_INET_GENERAL ; >;
+        < "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated." ; ERRCODE_INET_OFFLINE ; >;
+        < "The contents could not be created." ; ERRCODE_SFX_CANTCREATECONTENT ; >;
+        < "The file name is too long for the target file system." ; ERRCODE_IO_NAMETOOLONG ; >;
+        < "The input syntax is invalid." ; ERRCODE_SFX_INVALIDSYNTAX ; >;
+        < "The input syntax is invalid." ; ERRCODE_SFX_CANTCREATEFOLDER ; >;
+        < "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME %PRODUCTVERSION file format."; ERRCODE_IO_NOTSTORABLEINBINARYFORMAT ; >;
+        < "The maximum number of documents that can be opened at the same time has been reached. You need to close one or more documents before you can open a new document."; ERRCODE_SFX_NOMOREDOCUMENTSALLOWED ; >;
+        < "Could not create backup copy." ; ERRCODE_SFX_CANTCREATEBACKUP ; >;
+        < "An attempt was made to execute a macro.\nFor security reasons, macro support is disabled."; ERRCODE_SFX_MACROS_SUPPORT_DISABLED ; >;
+        < "This document contains macros.\n\nMacros may contain viruses. Execution of macros is disabled due to the current macro security setting in %PRODUCTNAME - Preferences - %PRODUCTNAME - Security.\n\nTherefore, some functionality may not be available." ; ERRCODE_SFX_DOCUMENT_MACRO_DISABLED_MAC ; >;
+        < "This document contains macros.\n\nMacros may contain viruses. Execution of macros is disabled due to the current macro security setting in Tools - Options - %PRODUCTNAME - Security.\n\nTherefore, some functionality may not be available." ; ERRCODE_SFX_DOCUMENT_MACRO_DISABLED ; >;
+        < "The encrypted document contains unexpected non-encrypted streams.\n\nThis could be the result of document manipulation.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n " ; ERRCODE_SFX_INCOMPLETE_ENCRYPTION ; >;
+        < "Invalid data length." ; ERRCODE_IO_INVALIDLENGTH ; >;
+        < "Function not possible: path contains current directory." ; ERRCODE_IO_CURRENTDIR ; >;
+        < "Function not possible: device (drive) not identical." ; ERRCODE_IO_NOTSAMEDEVICE ; >;
+        < "Device (drive) not ready." ; ERRCODE_IO_DEVICENOTREADY ; >;
+        < "Wrong check amount." ; ERRCODE_IO_BADCRC ; >;
+        < "Function not possible: write protected." ; ERRCODE_IO_WRITEPROTECTED ; >;
+        < "The password of a shared spreadsheet cannot be set or changed.\nDeactivate sharing mode first."; ERRCODE_SFX_SHARED_NOPASSWORDCHANGE ; >;
+        < "File format error found at $(ARG1)(row,col)."; ERRCODE_SFX_FORMAT_ROWCOL ; >;
     };
 };
 

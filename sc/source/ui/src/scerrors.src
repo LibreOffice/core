@@ -20,159 +20,87 @@
 #include "scerrors.hxx"
 #include "sc.hrc"
 
-Resource RID_ERRHDLSC
+StringArray RID_ERRHDLSC
 {
+    ItemList [ en-US ] =
+    {
+        // ERRORS -----------------------------------------------------
+        < "Impossible to connect to the file." ;
+          SCERR_IMPORT_CONNECT & ERRCODE_RES_MASK ; >;
+        < "File could not be opened." ;
+          SCERR_IMPORT_OPEN & ERRCODE_RES_MASK ; >;
+        < "An unknown error has occurred." ;
+          SCERR_IMPORT_UNKNOWN & ERRCODE_RES_MASK ; >;
+        < "Not enough memory while importing." ;
+          SCERR_IMPORT_OUTOFMEM & ERRCODE_RES_MASK ; >;
+        < "Unknown Lotus1-2-3 file format." ;
+          SCERR_IMPORT_UNKNOWN_WK & ERRCODE_RES_MASK ; >;
+        < "Error in file structure while importing." ;
+          SCERR_IMPORT_FORMAT & ERRCODE_RES_MASK ; >;
+        < "There is no filter available for this file type." ;
+          SCERR_IMPORT_NI & ERRCODE_RES_MASK ; >;
+        < "Unknown or unsupported Excel file format." ;
+          SCERR_IMPORT_UNKNOWN_BIFF & ERRCODE_RES_MASK ; >;
+        < "Excel file format not yet implemented." ;
+          SCERR_IMPORT_NI_BIFF & ERRCODE_RES_MASK ; >;
+        < "This file is password-protected." ;
+          SCERR_IMPORT_FILEPASSWD & ERRCODE_RES_MASK ; >;
+        < "Internal import error." ;
+          SCERR_IMPORT_INTERNAL & ERRCODE_RES_MASK ; >;
+        < "The file contains data after row 8192 and therefore can not be read." ;
+          SCERR_IMPORT_8K_LIMIT & ERRCODE_RES_MASK ; >;
+        < "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
+          SCERR_IMPORT_FILE_ROWCOL & ERRCODE_RES_MASK ; >;
+        < "File format error found at $(ARG1)(row,col)." ;
+          SCERR_IMPORT_FORMAT_ROWCOL & ERRCODE_RES_MASK ; >;
 
-     // ERRORS -----------------------------------------------------
+        // Export ----------------------------------------------------
+        < "Connection to the file could not be established." ;
+          SCERR_EXPORT_CONNECT & ERRCODE_RES_MASK ; >;
+        < "Data could not be written." ;
+          SCERR_EXPORT_DATA & ERRCODE_RES_MASK ; >;
+        < "$(ARG1)" ;
+          SCERR_EXPORT_SQLEXCEPTION & ERRCODE_RES_MASK ; >;
+        < "Cell $(ARG1) contains characters that are not representable in the selected target character set \"$(ARG2)\"." ;
+          SCERR_EXPORT_ENCODING & ERRCODE_RES_MASK ; >;
+        < "Cell $(ARG1) contains a string that is longer in the selected target character set \"$(ARG2)\" than the given field width." ;
+          SCERR_EXPORT_FIELDWIDTH & ERRCODE_RES_MASK ; >;
 
-    String SCERR_IMPORT_CONNECT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Impossible to connect to the file." ;
-    };
-    String SCERR_IMPORT_OPEN & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "File could not be opened." ;
-    };
-    String SCERR_IMPORT_UNKNOWN & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "An unknown error has occurred." ;
-    };
-    String SCERR_IMPORT_OUTOFMEM & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Not enough memory while importing." ;
-    };
-    String SCERR_IMPORT_UNKNOWN_WK & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Unknown Lotus1-2-3 file format." ;
-    };
-    String SCERR_IMPORT_FORMAT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Error in file structure while importing." ;
-    };
-    String SCERR_IMPORT_NI & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "There is no filter available for this file type." ;
-    };
-    String SCERR_IMPORT_UNKNOWN_BIFF & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Unknown or unsupported Excel file format." ;
-    };
-    String SCERR_IMPORT_NI_BIFF & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Excel file format not yet implemented." ;
-    };
-    String SCERR_IMPORT_FILEPASSWD & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "This file is password-protected." ;
-    };
-    String SCERR_IMPORT_INTERNAL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Internal import error." ;
-    };
-    String SCERR_IMPORT_8K_LIMIT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The file contains data after row 8192 and therefore can not be read." ;
-    };
-    String SCERR_IMPORT_FILE_ROWCOL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
-    };
-    String SCERR_IMPORT_FORMAT_ROWCOL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "File format error found at $(ARG1)(row,col)." ;
-    };
-
-     // Export ----------------------------------------------------
-    String SCERR_EXPORT_CONNECT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Connection to the file could not be established." ;
-    };
-    String SCERR_EXPORT_DATA & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Data could not be written." ;
-    };
-    String SCERR_EXPORT_SQLEXCEPTION & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "$(ARG1)" ;
-    };
-    String SCERR_EXPORT_ENCODING & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Cell $(ARG1) contains characters that are not representable in the selected target character set \"$(ARG2)\"." ;
-    };
-    String SCERR_EXPORT_FIELDWIDTH & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Cell $(ARG1) contains a string that is longer in the selected target character set \"$(ARG2)\" than the given field width." ;
-    };
-
-     // WARNINGS ---------------------------------------------------
-
-    String SCWARN_EXPORT_ASCII & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Only the active sheet was saved." ;
-    };
-    String SCWARN_IMPORT_RANGE_OVERFLOW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The maximum number of rows has been exceeded. Excess rows were not imported!" ;
-    };
-    String SCWARN_IMPORT_ROW_OVERFLOW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The data could not be loaded completely because the maximum number of rows per sheet was exceeded." ;
-    };
-    String SCWARN_IMPORT_COLUMN_OVERFLOW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The data could not be loaded completely because the maximum number of columns per sheet was exceeded." ;
-    };
-    String SCWARN_IMPORT_SHEET_OVERFLOW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Not all sheets have been loaded because the maximum number of sheets was exceeded.\n\nPlease be warned that re-saving this document will permanently delete those sheets that have not been loaded!" ;
-    };
-    String SCWARN_IMPORT_CELL_OVERFLOW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The data could not be loaded completely because the maximum number of characters per cell was exceeded." ;
-    };
-    String SCWARN_IMPORT_OPEN_FM3 & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Corresponding FM3-File could not be opened." ;
-    };
-    String SCWARN_IMPORT_WRONG_FM3 & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Error in file structure of corresponding FM3-File." ;
-    };
-    String SCWARN_CORE_HARD_RECALC & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Document too complex for automatic calculation. Press F9 to recalculate." ;
-    };
-    String SCWARN_EXPORT_MAXROW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The document contains more rows than supported in the selected format.\nAdditional rows were not saved." ;
-    };
-    String SCWARN_EXPORT_MAXCOL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The document contains more columns than supported in the selected format.\nAdditional columns were not saved." ;
-    };
-    String SCWARN_EXPORT_MAXTAB & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The document contains more sheets than supported in the selected format.\nAdditional sheets were not saved." ;
-    };
-    String SCWARN_IMPORT_INFOLOST & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The document contains information not recognized by this program version.\nResaving the document will delete this information!" ;
-    };
-    String SCWARN_EXPORT_DATALOST & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Not all cell contents could be saved in the specified format." ;
-    };
-    String SCWARN_EXPORT_NONCONVERTIBLE_CHARS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
-    };
-    String SCWARN_IMPORT_FILE_ROWCOL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
-    };
-    String SCWARN_IMPORT_FEATURES_LOST & ERRCODE_RES_MASK
-    {
-        Text [ en-US] = "Not all attributes could be read." ;
+        // WARNINGS ---------------------------------------------------
+        < "Only the active sheet was saved." ;
+          SCWARN_EXPORT_ASCII & ERRCODE_RES_MASK ; >;
+        < "The maximum number of rows has been exceeded. Excess rows were not imported!" ;
+          SCWARN_IMPORT_RANGE_OVERFLOW & ERRCODE_RES_MASK ; >;
+        < "The data could not be loaded completely because the maximum number of rows per sheet was exceeded." ;
+          SCWARN_IMPORT_ROW_OVERFLOW & ERRCODE_RES_MASK ; >;
+        < "The data could not be loaded completely because the maximum number of columns per sheet was exceeded." ;
+          SCWARN_IMPORT_COLUMN_OVERFLOW & ERRCODE_RES_MASK ; >;
+        < "Not all sheets have been loaded because the maximum number of sheets was exceeded.\n\nPlease be warned that re-saving this document will permanently delete those sheets that have not been loaded!" ;
+          SCWARN_IMPORT_SHEET_OVERFLOW & ERRCODE_RES_MASK ; >;
+        < "The data could not be loaded completely because the maximum number of characters per cell was exceeded." ;
+          SCWARN_IMPORT_CELL_OVERFLOW & ERRCODE_RES_MASK ; >;
+        < "Corresponding FM3-File could not be opened." ;
+          SCWARN_IMPORT_OPEN_FM3 & ERRCODE_RES_MASK ; >;
+        < "Error in file structure of corresponding FM3-File." ;
+          SCWARN_IMPORT_WRONG_FM3 & ERRCODE_RES_MASK ; >;
+        < "Document too complex for automatic calculation. Press F9 to recalculate." ;
+          SCWARN_CORE_HARD_RECALC & ERRCODE_RES_MASK ; >;
+        < "The document contains more rows than supported in the selected format.\nAdditional rows were not saved." ;
+          SCWARN_EXPORT_MAXROW & ERRCODE_RES_MASK ; >;
+        < "The document contains more columns than supported in the selected format.\nAdditional columns were not saved." ;
+          SCWARN_EXPORT_MAXCOL & ERRCODE_RES_MASK ; >;
+        < "The document contains more sheets than supported in the selected format.\nAdditional sheets were not saved." ;
+          SCWARN_EXPORT_MAXTAB & ERRCODE_RES_MASK ; >;
+        < "The document contains information not recognized by this program version.\nResaving the document will delete this information!" ;
+          SCWARN_IMPORT_INFOLOST & ERRCODE_RES_MASK ; >;
+        < "Not all cell contents could be saved in the specified format." ;
+          SCWARN_EXPORT_DATALOST & ERRCODE_RES_MASK ; >;
+        < "The following characters could not be converted to the selected character set\nand were written as &#1234; surrogates:\n\n$(ARG1)";
+          SCWARN_EXPORT_NONCONVERTIBLE_CHARS & ERRCODE_RES_MASK ; >;
+        < "Format error discovered in the file in sub-document $(ARG1) at $(ARG2)(row,col).";
+          SCWARN_IMPORT_FILE_ROWCOL & ERRCODE_RES_MASK ; >;
+        < "Not all attributes could be read." ;
+          SCWARN_IMPORT_FEATURES_LOST & ERRCODE_RES_MASK ; >;
     };
 };
 

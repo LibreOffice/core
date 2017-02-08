@@ -19,6 +19,7 @@
 
 #include <osl/mutex.hxx>
 #include <tools/rcid.h>
+#include <tools/resary.hxx>
 #include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
@@ -218,26 +219,6 @@ ResString::ResString(ResId & rId)
     pResMgr->PopContext();
 }
 
-struct ErrorResource_Impl : private Resource
-
-/*  [Description]
-
-    Helpclass for access to string sub-resources of a resource
-    */
-
-{
-    ResId aResId;
-
-    ErrorResource_Impl(ResId& rErrIdP, sal_uInt16 nId)
-        : Resource(rErrIdP),aResId(nId,*rErrIdP.GetResMgr()){}
-
-    ~ErrorResource_Impl() { FreeResource(); }
-
-    ResString GetResString() { return ResString( aResId ); }
-    operator bool()          { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
-
-};
-
 void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
 
 /*  [Description]
@@ -251,11 +232,11 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
     std::unique_ptr<ResMgr> pResMgr(ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() ));
     if( pResMgr )
     {
-        ResId aId(RID_ERRHDL, *pResMgr );
-        ErrorResource_Impl aEr(aId, (sal_uInt16)lClassId);
-        if(aEr)
+        ResStringArray aEr(ResId(RID_ERRHDL, *pResMgr));
+        sal_uInt32 nErrIdx = aEr.FindIndex((sal_uInt16)lClassId);
+        if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
         {
-            rStr = aEr.GetResString().GetString();
+            rStr = aEr.GetString(nErrIdx);
         }
     }
 }
@@ -274,19 +255,16 @@ bool SfxErrorHandler::GetErrorString(sal_uLong lErrId, OUString &rStr) const
 
     bool bRet = false;
     rStr = SvtResId(RID_ERRHDL_CLASS).toString();
-    ResId aResId(nId, *pMgr);
 
+    ResStringArray aEr(ResId(nId, *pMgr));
+    sal_uInt32 nErrIdx = aEr.FindIndex((sal_uInt16)lErrId);
+    if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
     {
-        ErrorResource_Impl aEr(aResId, (sal_uInt16)lErrId);
-        if(aEr)
-        {
-            ResString aErrorString(aEr.GetResString());
-            rStr = rStr.replaceAll("$(ERROR)", aErrorString.GetString());
-            bRet = true;
-        }
-        else
-            bRet = false;
+        rStr = rStr.replaceAll("$(ERROR)", aEr.GetString(nErrIdx));
+        bRet = true;
     }
+    else
+        bRet = false;
 
     if( bRet )
     {
@@ -339,12 +317,11 @@ bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
     {
         SolarMutexGuard aGuard;
 
-        ResId aResId( nResId, *pMgr );
-
-        ErrorResource_Impl aTestEr( aResId, nCtxId );
-        if ( aTestEr )
+        ResStringArray aTestEr(ResId(nResId, *pMgr));
+        sal_uInt32 nErrIdx = aTestEr.FindIndex(nCtxId);
+        if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
         {
-            rStr = aTestEr.GetResString().GetString();
+            rStr = aTestEr.GetString(nErrIdx);
             rStr = rStr.replaceAll("$(ARG1)", aArg1);
             bRet = true;
         }
@@ -357,9 +334,8 @@ bool SfxErrorContext::GetString(sal_uLong nErrId, OUString &rStr)
         if ( bRet )
         {
             sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
-            ResId aSfxResId( RID_ERRCTX, *pMgr );
-            ErrorResource_Impl aEr( aSfxResId, nId );
-            rStr = rStr.replaceAll("$(ERR)", aEr.GetResString().GetString());
+            ResStringArray aEr(ResId(RID_ERRCTX, *pMgr));
+            rStr = rStr.replaceAll("$(ERR)", aEr.GetString(nId));
         }
     }
 

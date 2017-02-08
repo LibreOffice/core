@@ -21,522 +21,142 @@
 #include "sb.hrc"
 #include <basic/sberrors.hxx>
 
-Resource RID_BASIC_START
+StringArray RID_BASIC_START
 {
-    String ERRCODE_BASIC_SYNTAX & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Syntax error." ;
-    };
-    String ERRCODE_BASIC_NO_GOSUB & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Return without Gosub." ;
-    };
-    String ERRCODE_BASIC_REDO_FROM_START & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Incorrect entry; please retry." ;
-    };
-    String ERRCODE_BASIC_BAD_ARGUMENT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid procedure call." ;
-    };
-    String ERRCODE_BASIC_MATH_OVERFLOW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Overflow." ;
-    };
-    String ERRCODE_BASIC_NO_MEMORY & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Not enough memory." ;
-    };
-    String ERRCODE_BASIC_ALREADY_DIM & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Array already dimensioned." ;
-    };
-    String ERRCODE_BASIC_OUT_OF_RANGE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Index out of defined range." ;
-    };
-    String ERRCODE_BASIC_DUPLICATE_DEF & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Duplicate definition." ;
-    };
-    String ERRCODE_BASIC_ZERODIV & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Division by zero." ;
-    };
-    String ERRCODE_BASIC_VAR_UNDEFINED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Variable not defined." ;
-    };
-    String ERRCODE_BASIC_CONVERSION & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Data type mismatch." ;
-    };
-    String ERRCODE_BASIC_BAD_PARAMETER & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid parameter." ;
-    };
-    String ERRCODE_BASIC_USER_ABORT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Process interrupted by user." ;
-    };
-    String ERRCODE_BASIC_BAD_RESUME & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Resume without error." ;
-    };
-    String ERRCODE_BASIC_STACK_OVERFLOW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Not enough stack memory." ;
-    };
-    String ERRCODE_BASIC_PROC_UNDEFINED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Sub-procedure or function procedure not defined." ;
-    };
-    String ERRCODE_BASIC_BAD_DLL_LOAD & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Error loading DLL file." ;
-    };
-    String ERRCODE_BASIC_BAD_DLL_CALL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Wrong DLL call convention." ;
-    };
-    String ERRCODE_BASIC_INTERNAL_ERROR & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Internal error $(ARG1)." ;
-    };
-    String ERRCODE_BASIC_BAD_CHANNEL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid file name or file number." ;
-    };
-    String ERRCODE_BASIC_FILE_NOT_FOUND & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "File not found." ;
-    };
-    String ERRCODE_BASIC_BAD_FILE_MODE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Incorrect file mode." ;
-    };
-    String ERRCODE_BASIC_FILE_ALREADY_OPEN & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "File already open." ;
-    };
-    String ERRCODE_BASIC_IO_ERROR & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Device I/O error." ;
-    };
-    String ERRCODE_BASIC_FILE_EXISTS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "File already exists." ;
-    };
-    String ERRCODE_BASIC_BAD_RECORD_LENGTH & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Incorrect record length." ;
-    };
-    String ERRCODE_BASIC_DISK_FULL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Disk or hard drive full." ;
-    };
-    String ERRCODE_BASIC_READ_PAST_EOF & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Reading exceeds EOF." ;
-    };
-    String ERRCODE_BASIC_BAD_RECORD_NUMBER & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Incorrect record number." ;
-    };
-    String ERRCODE_BASIC_TOO_MANY_FILES & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Too many files." ;
-    };
-    String ERRCODE_BASIC_NO_DEVICE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Device not available." ;
-    };
-    String ERRCODE_BASIC_ACCESS_DENIED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Access denied." ;
-    };
-    String ERRCODE_BASIC_NOT_READY & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Disk not ready." ;
-    };
-    String ERRCODE_BASIC_NOT_IMPLEMENTED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Not implemented." ;
-    };
-    String ERRCODE_BASIC_DIFFERENT_DRIVE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Renaming on different drives impossible." ;
-    };
-    String ERRCODE_BASIC_ACCESS_ERROR & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Path/File access error." ;
-    };
-    String ERRCODE_BASIC_PATH_NOT_FOUND & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Path not found." ;
-    };
-    String ERRCODE_BASIC_NO_OBJECT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Object variable not set." ;
-    };
-    String ERRCODE_BASIC_BAD_PATTERN & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid string pattern." ;
-    };
-    String ERRCODE_BASIC_IS_NULL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Use of zero not permitted." ;
-    };
-    String ERRCODE_BASIC_DDE_ERROR & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "DDE Error." ;
-    };
-    String ERRCODE_BASIC_DDE_WAITINGACK & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Awaiting response to DDE connection." ;
-    };
-    String ERRCODE_BASIC_DDE_OUTOFCHANNELS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "No DDE channels available." ;
-    };
-    String ERRCODE_BASIC_DDE_NO_RESPONSE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "No application responded to DDE connect initiation." ;
-    };
-    String ERRCODE_BASIC_DDE_MULT_RESPONSES & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Too many applications responded to DDE connect initiation." ;
-    };
-    String ERRCODE_BASIC_DDE_CHANNEL_LOCKED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "DDE channel locked." ;
-    };
-    String ERRCODE_BASIC_DDE_NOTPROCESSED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "External application cannot execute DDE operation." ;
-    };
-    String ERRCODE_BASIC_DDE_TIMEOUT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Timeout while waiting for DDE response." ;
-    };
-    String ERRCODE_BASIC_DDE_USER_INTERRUPT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "User pressed ESCAPE during DDE operation." ;
-    };
-    String ERRCODE_BASIC_DDE_BUSY & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "External application busy." ;
-    };
-    String ERRCODE_BASIC_DDE_NO_DATA & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "DDE operation without data." ;
-    };
-    String ERRCODE_BASIC_DDE_WRONG_DATA_FORMAT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Data are in wrong format." ;
-    };
-    String ERRCODE_BASIC_DDE_PARTNER_QUIT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "External application has been terminated." ;
-    };
-    String ERRCODE_BASIC_DDE_CONV_CLOSED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "DDE connection interrupted or modified." ;
-    };
-    String ERRCODE_BASIC_DDE_NO_CHANNEL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "DDE method invoked with no channel open." ;
-    };
-    String ERRCODE_BASIC_DDE_INVALID_LINK & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid DDE link format." ;
-    };
-    String ERRCODE_BASIC_DDE_QUEUE_OVERFLOW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "DDE message has been lost." ;
-    };
-    String ERRCODE_BASIC_DDE_LINK_ALREADY_EST & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Paste link already performed." ;
-    };
-    String ERRCODE_BASIC_DDE_LINK_INV_TOPIC & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Link mode cannot be set due to invalid link topic." ;
-    };
-    String ERRCODE_BASIC_DDE_DLL_NOT_FOUND & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "DDE requires the DDEML.DLL file." ;
-    };
-    String ERRCODE_BASIC_CANNOT_LOAD & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Module cannot be loaded; invalid format." ;
-    };
-    String ERRCODE_BASIC_BAD_INDEX & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid object index." ;
-    };
-    String ERRCODE_BASIC_NO_ACTIVE_OBJECT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Object is not available." ;
-    };
-    String ERRCODE_BASIC_BAD_PROP_VALUE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Incorrect property value." ;
-    };
-    String ERRCODE_BASIC_PROP_READONLY & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "This property is read-only." ;
-    };
-    String ERRCODE_BASIC_PROP_WRITEONLY & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "This property is write only." ;
-    };
-    String ERRCODE_BASIC_INVALID_OBJECT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid object reference." ;
-    };
-    String ERRCODE_BASIC_NO_METHOD & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Property or method not found: $(ARG1)." ;
-    };
-    String ERRCODE_BASIC_NEEDS_OBJECT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Object required." ;
-    };
-    String ERRCODE_BASIC_INVALID_USAGE_OBJECT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid use of an object." ;
-    };
-    String ERRCODE_BASIC_NO_OLE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "OLE Automation is not supported by this object." ;
-    };
-    String ERRCODE_BASIC_BAD_METHOD & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "This property or method is not supported by the object." ;
-    };
-    String ERRCODE_BASIC_OLE_ERROR & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "OLE Automation Error." ;
-    };
-    String ERRCODE_BASIC_BAD_ACTION & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "This action is not supported by given object." ;
-    };
-    String ERRCODE_BASIC_NO_NAMED_ARGS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Named arguments are not supported by given object." ;
-    };
-    String ERRCODE_BASIC_BAD_LOCALE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "The current locale setting is not supported by the given object." ;
-    };
-    String ERRCODE_BASIC_NAMED_NOT_FOUND & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Named argument not found." ;
-    };
-    String ERRCODE_BASIC_NOT_OPTIONAL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Argument is not optional." ;
-    };
-    String ERRCODE_BASIC_WRONG_ARGS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid number of arguments." ;
-    };
-    String ERRCODE_BASIC_NOT_A_COLL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Object is not a list." ;
-    };
-    String ERRCODE_BASIC_BAD_ORDINAL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid ordinal number." ;
-    };
-    String ERRCODE_BASIC_DLLPROC_NOT_FOUND & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Specified DLL function not found." ;
-    };
-    String ERRCODE_BASIC_BAD_CLIPBD_FORMAT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid clipboard format." ;
-    };
-    String ERRCODE_BASIC_PROPERTY_NOT_FOUND & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Object does not have this property." ;
-    };
-    String ERRCODE_BASIC_METHOD_NOT_FOUND & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Object does not have this method." ;
-    };
-    String ERRCODE_BASIC_ARG_MISSING & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Required argument lacking." ;
-    };
-    String ERRCODE_BASIC_BAD_NUMBER_OF_ARGS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid number of arguments." ;
-    };
-    String ERRCODE_BASIC_METHOD_FAILED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Error executing a method." ;
-    };
-    String ERRCODE_BASIC_SETPROP_FAILED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Unable to set property." ;
-    };
-    String ERRCODE_BASIC_GETPROP_FAILED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Unable to determine property." ;
-    };
-     // Compiler errors. These are not runtime errors.
-    String ERRCODE_BASIC_UNEXPECTED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Unexpected symbol: $(ARG1)." ;
-    };
-    String ERRCODE_BASIC_EXPECTED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Expected: $(ARG1)." ;
-    };
-    String ERRCODE_BASIC_SYMBOL_EXPECTED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Symbol expected." ;
-    };
-    String ERRCODE_BASIC_VAR_EXPECTED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Variable expected." ;
-    };
-    String ERRCODE_BASIC_LABEL_EXPECTED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Label expected." ;
-    };
-    String ERRCODE_BASIC_LVALUE_EXPECTED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Value cannot be applied." ;
-    };
-    String ERRCODE_BASIC_VAR_DEFINED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Variable $(ARG1) already defined." ;
-    };
-    String ERRCODE_BASIC_PROC_DEFINED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Sub procedure or function procedure $(ARG1) already defined." ;
-    };
-    String ERRCODE_BASIC_LABEL_DEFINED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Label $(ARG1) already defined." ;
-    };
-    String ERRCODE_BASIC_UNDEF_VAR & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Variable $(ARG1) not found." ;
-    };
-    String ERRCODE_BASIC_UNDEF_ARRAY & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Array or procedure $(ARG1) not found." ;
-    };
-    String ERRCODE_BASIC_UNDEF_PROC & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Procedure $(ARG1) not found." ;
-    };
-    String ERRCODE_BASIC_UNDEF_LABEL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Label $(ARG1) undefined." ;
-    };
-    String ERRCODE_BASIC_UNDEF_TYPE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Unknown data type $(ARG1)." ;
-    };
-    String ERRCODE_BASIC_BAD_EXIT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Exit $(ARG1) expected." ;
-    };
-    String ERRCODE_BASIC_BAD_BLOCK & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Statement block still open: $(ARG1) missing." ;
-    };
-    String ERRCODE_BASIC_BAD_BRACKETS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Parentheses do not match." ;
-    };
-    String ERRCODE_BASIC_BAD_DECLARATION & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Symbol $(ARG1) already defined differently." ;
-    };
-    String ERRCODE_BASIC_BAD_PARAMETERS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Parameters do not correspond to procedure." ;
-    };
-    String ERRCODE_BASIC_BAD_CHAR_IN_NUMBER & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Invalid character in number." ;
-    };
-    String ERRCODE_BASIC_MUST_HAVE_DIMS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Array must be dimensioned." ;
-    };
-    String ERRCODE_BASIC_NO_IF & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Else/Endif without If." ;
-    };
-    String ERRCODE_BASIC_NOT_IN_SUBR & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "$(ARG1) not allowed within a procedure." ;
-    };
-    String ERRCODE_BASIC_NOT_IN_MAIN & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "$(ARG1) not allowed outside a procedure." ;
-    };
-    String ERRCODE_BASIC_WRONG_DIMS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Dimension specifications do not match." ;
-    };
-    String ERRCODE_BASIC_BAD_OPTION & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Unknown option: $(ARG1)." ;
-    };
-    String ERRCODE_BASIC_CONSTANT_REDECLARED & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Constant $(ARG1) redefined." ;
-    };
-    String ERRCODE_BASIC_PROG_TOO_LARGE & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Program too large." ;
-    };
-    String ERRCODE_BASIC_NO_STRINGS_ARRAYS & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Strings or arrays not permitted." ;
-    };
-    String ERRCODE_BASIC_EXCEPTION & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "An exception occurred $(ARG1)." ;
-    };
-    String ERRCODE_BASIC_ARRAY_FIX & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "This array is fixed or temporarily locked." ;
-    };
-    String ERRCODE_BASIC_STRING_OVERFLOW & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Out of string space." ;
-    };
-    String ERRCODE_BASIC_EXPR_TOO_COMPLEX & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Expression Too Complex." ;
-    };
-    String ERRCODE_BASIC_OPER_NOT_PERFORM & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Can't perform requested operation." ;
-    };
-    String ERRCODE_BASIC_TOO_MANY_DLL & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "Too many DLL application clients." ;
-    };
-    String ERRCODE_BASIC_LOOP_NOT_INIT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "For loop not initialized." ;
-    };
-    String ERRCODE_BASIC_COMPAT & ERRCODE_RES_MASK
-    {
-        Text [ en-US ] = "$(ARG1)" ;
+    ItemList [ en-US ] =
+    {
+        < "Syntax error." ; ERRCODE_BASIC_SYNTAX & ERRCODE_RES_MASK ; >;
+        < "Return without Gosub." ; ERRCODE_BASIC_NO_GOSUB & ERRCODE_RES_MASK ; >;
+        < "Incorrect entry; please retry." ; ERRCODE_BASIC_REDO_FROM_START & ERRCODE_RES_MASK ; >;
+        < "Invalid procedure call." ; ERRCODE_BASIC_BAD_ARGUMENT & ERRCODE_RES_MASK ; >;
+        < "Overflow." ; ERRCODE_BASIC_MATH_OVERFLOW & ERRCODE_RES_MASK ; >;
+        < "Not enough memory." ; ERRCODE_BASIC_NO_MEMORY & ERRCODE_RES_MASK ; >;
+        < "Array already dimensioned." ; ERRCODE_BASIC_ALREADY_DIM & ERRCODE_RES_MASK ; >;
+        < "Index out of defined range." ; ERRCODE_BASIC_OUT_OF_RANGE & ERRCODE_RES_MASK ; >;
+        < "Duplicate definition." ; ERRCODE_BASIC_DUPLICATE_DEF & ERRCODE_RES_MASK ; >;
+        < "Division by zero." ; ERRCODE_BASIC_ZERODIV & ERRCODE_RES_MASK ; >;
+        < "Variable not defined." ; ERRCODE_BASIC_VAR_UNDEFINED & ERRCODE_RES_MASK ; >;
+        < "Data type mismatch." ; ERRCODE_BASIC_CONVERSION & ERRCODE_RES_MASK ; >;
+        < "Invalid parameter." ; ERRCODE_BASIC_BAD_PARAMETER & ERRCODE_RES_MASK ; >;
+        < "Process interrupted by user." ; ERRCODE_BASIC_USER_ABORT & ERRCODE_RES_MASK ; >;
+        < "Resume without error." ; ERRCODE_BASIC_BAD_RESUME & ERRCODE_RES_MASK ; >;
+        < "Not enough stack memory." ; ERRCODE_BASIC_STACK_OVERFLOW & ERRCODE_RES_MASK ; >;
+        < "Sub-procedure or function procedure not defined." ; ERRCODE_BASIC_PROC_UNDEFINED & ERRCODE_RES_MASK ; >;
+        < "Error loading DLL file." ; ERRCODE_BASIC_BAD_DLL_LOAD & ERRCODE_RES_MASK ; >;
+        < "Wrong DLL call convention." ; ERRCODE_BASIC_BAD_DLL_CALL & ERRCODE_RES_MASK ; >;
+        < "Internal error $(ARG1)." ; ERRCODE_BASIC_INTERNAL_ERROR & ERRCODE_RES_MASK ; >;
+        < "Invalid file name or file number." ; ERRCODE_BASIC_BAD_CHANNEL & ERRCODE_RES_MASK ; >;
+        < "File not found." ; ERRCODE_BASIC_FILE_NOT_FOUND & ERRCODE_RES_MASK ; >;
+        < "Incorrect file mode." ; ERRCODE_BASIC_BAD_FILE_MODE & ERRCODE_RES_MASK ; >;
+        < "File already open." ; ERRCODE_BASIC_FILE_ALREADY_OPEN & ERRCODE_RES_MASK ; >;
+        < "Device I/O error." ; ERRCODE_BASIC_IO_ERROR & ERRCODE_RES_MASK ; >;
+        < "File already exists." ; ERRCODE_BASIC_FILE_EXISTS & ERRCODE_RES_MASK ; >;
+        < "Incorrect record length." ; ERRCODE_BASIC_BAD_RECORD_LENGTH & ERRCODE_RES_MASK ; >;
+        < "Disk or hard drive full." ; ERRCODE_BASIC_DISK_FULL & ERRCODE_RES_MASK ; >;
+        < "Reading exceeds EOF." ; ERRCODE_BASIC_READ_PAST_EOF & ERRCODE_RES_MASK ; >;
+        < "Incorrect record number." ; ERRCODE_BASIC_BAD_RECORD_NUMBER & ERRCODE_RES_MASK ; >;
+        < "Too many files." ; ERRCODE_BASIC_TOO_MANY_FILES & ERRCODE_RES_MASK ; >;
+        < "Device not available." ; ERRCODE_BASIC_NO_DEVICE & ERRCODE_RES_MASK ; >;
+        < "Access denied." ; ERRCODE_BASIC_ACCESS_DENIED & ERRCODE_RES_MASK ; >;
+        < "Disk not ready." ; ERRCODE_BASIC_NOT_READY & ERRCODE_RES_MASK ; >;
+        < "Not implemented." ; ERRCODE_BASIC_NOT_IMPLEMENTED & ERRCODE_RES_MASK ; >;
+        < "Renaming on different drives impossible." ; ERRCODE_BASIC_DIFFERENT_DRIVE & ERRCODE_RES_MASK ; >;
+        < "Path/File access error." ; ERRCODE_BASIC_ACCESS_ERROR & ERRCODE_RES_MASK ; >;
+        < "Path not found." ; ERRCODE_BASIC_PATH_NOT_FOUND & ERRCODE_RES_MASK ; >;
+        < "Object variable not set." ; ERRCODE_BASIC_NO_OBJECT & ERRCODE_RES_MASK ; >;
+        < "Invalid string pattern." ; ERRCODE_BASIC_BAD_PATTERN & ERRCODE_RES_MASK ; >;
+        < "Use of zero not permitted." ; ERRCODE_BASIC_IS_NULL & ERRCODE_RES_MASK ; >;
+        < "DDE Error." ; ERRCODE_BASIC_DDE_ERROR & ERRCODE_RES_MASK ; >;
+        < "Awaiting response to DDE connection." ; ERRCODE_BASIC_DDE_WAITINGACK & ERRCODE_RES_MASK ; >;
+        < "No DDE channels available." ; ERRCODE_BASIC_DDE_OUTOFCHANNELS & ERRCODE_RES_MASK ; >;
+        < "No application responded to DDE connect initiation." ; ERRCODE_BASIC_DDE_NO_RESPONSE & ERRCODE_RES_MASK ; >;
+        < "Too many applications responded to DDE connect initiation." ; ERRCODE_BASIC_DDE_MULT_RESPONSES & ERRCODE_RES_MASK ; >;
+        < "DDE channel locked." ; ERRCODE_BASIC_DDE_CHANNEL_LOCKED & ERRCODE_RES_MASK ; >;
+        < "External application cannot execute DDE operation." ; ERRCODE_BASIC_DDE_NOTPROCESSED & ERRCODE_RES_MASK ; >;
+        < "Timeout while waiting for DDE response." ; ERRCODE_BASIC_DDE_TIMEOUT & ERRCODE_RES_MASK ; >;
+        < "User pressed ESCAPE during DDE operation." ; ERRCODE_BASIC_DDE_USER_INTERRUPT & ERRCODE_RES_MASK ; >;
+        < "External application busy." ; ERRCODE_BASIC_DDE_BUSY & ERRCODE_RES_MASK ; >;
+        < "DDE operation without data." ; ERRCODE_BASIC_DDE_NO_DATA & ERRCODE_RES_MASK ; >;
+        < "Data are in wrong format." ; ERRCODE_BASIC_DDE_WRONG_DATA_FORMAT & ERRCODE_RES_MASK ; >;
+        < "External application has been terminated." ; ERRCODE_BASIC_DDE_PARTNER_QUIT & ERRCODE_RES_MASK ; >;
+        < "DDE connection interrupted or modified." ; ERRCODE_BASIC_DDE_CONV_CLOSED & ERRCODE_RES_MASK ; >;
+        < "DDE method invoked with no channel open." ; ERRCODE_BASIC_DDE_NO_CHANNEL & ERRCODE_RES_MASK ; >;
+        < "Invalid DDE link format." ; ERRCODE_BASIC_DDE_INVALID_LINK & ERRCODE_RES_MASK ; >;
+        < "DDE message has been lost." ; ERRCODE_BASIC_DDE_QUEUE_OVERFLOW & ERRCODE_RES_MASK ; >;
+        < "Paste link already performed." ; ERRCODE_BASIC_DDE_LINK_ALREADY_EST & ERRCODE_RES_MASK ; >;
+        < "Link mode cannot be set due to invalid link topic." ; ERRCODE_BASIC_DDE_LINK_INV_TOPIC & ERRCODE_RES_MASK ; >;
+        < "DDE requires the DDEML.DLL file." ; ERRCODE_BASIC_DDE_DLL_NOT_FOUND & ERRCODE_RES_MASK ; >;
+        < "Module cannot be loaded; invalid format." ; ERRCODE_BASIC_CANNOT_LOAD & ERRCODE_RES_MASK ; >;
+        < "Invalid object index." ; ERRCODE_BASIC_BAD_INDEX & ERRCODE_RES_MASK ; >;
+        < "Object is not available." ; ERRCODE_BASIC_NO_ACTIVE_OBJECT & ERRCODE_RES_MASK ; >;
+        < "Incorrect property value." ; ERRCODE_BASIC_BAD_PROP_VALUE & ERRCODE_RES_MASK ; >;
+        < "This property is read-only." ; ERRCODE_BASIC_PROP_READONLY & ERRCODE_RES_MASK ; >;
+        < "This property is write only." ; ERRCODE_BASIC_PROP_WRITEONLY & ERRCODE_RES_MASK ; >;
+        < "Invalid object reference." ; ERRCODE_BASIC_INVALID_OBJECT & ERRCODE_RES_MASK ; >;
+        < "Property or method not found: $(ARG1)." ; ERRCODE_BASIC_NO_METHOD & ERRCODE_RES_MASK ; >;
+        < "Object required." ; ERRCODE_BASIC_NEEDS_OBJECT & ERRCODE_RES_MASK ; >;
+        < "Invalid use of an object." ; ERRCODE_BASIC_INVALID_USAGE_OBJECT & ERRCODE_RES_MASK ; >;
+        < "OLE Automation is not supported by this object." ; ERRCODE_BASIC_NO_OLE & ERRCODE_RES_MASK ; >;
+        < "This property or method is not supported by the object." ; ERRCODE_BASIC_BAD_METHOD & ERRCODE_RES_MASK ; >;
+        < "OLE Automation Error." ; ERRCODE_BASIC_OLE_ERROR & ERRCODE_RES_MASK ; >;
+        < "This action is not supported by given object." ; ERRCODE_BASIC_BAD_ACTION & ERRCODE_RES_MASK ; >;
+        < "Named arguments are not supported by given object." ; ERRCODE_BASIC_NO_NAMED_ARGS & ERRCODE_RES_MASK ; >;
+        < "The current locale setting is not supported by the given object." ; ERRCODE_BASIC_BAD_LOCALE & ERRCODE_RES_MASK ; >;
+        < "Named argument not found." ; ERRCODE_BASIC_NAMED_NOT_FOUND & ERRCODE_RES_MASK ; >;
+        < "Argument is not optional." ; ERRCODE_BASIC_NOT_OPTIONAL & ERRCODE_RES_MASK ; >;
+        < "Invalid number of arguments." ; ERRCODE_BASIC_WRONG_ARGS & ERRCODE_RES_MASK ; >;
+        < "Object is not a list." ; ERRCODE_BASIC_NOT_A_COLL & ERRCODE_RES_MASK ; >;
+        < "Invalid ordinal number." ; ERRCODE_BASIC_BAD_ORDINAL & ERRCODE_RES_MASK ; >;
+        < "Specified DLL function not found." ; ERRCODE_BASIC_DLLPROC_NOT_FOUND & ERRCODE_RES_MASK ; >;
+        < "Invalid clipboard format." ; ERRCODE_BASIC_BAD_CLIPBD_FORMAT & ERRCODE_RES_MASK ; >;
+        < "Object does not have this property." ; ERRCODE_BASIC_PROPERTY_NOT_FOUND & ERRCODE_RES_MASK ; >;
+        < "Object does not have this method." ; ERRCODE_BASIC_METHOD_NOT_FOUND & ERRCODE_RES_MASK ; >;
+        < "Required argument lacking." ; ERRCODE_BASIC_ARG_MISSING & ERRCODE_RES_MASK ; >;
+        < "Invalid number of arguments." ; ERRCODE_BASIC_BAD_NUMBER_OF_ARGS & ERRCODE_RES_MASK ; >;
+        < "Error executing a method." ; ERRCODE_BASIC_METHOD_FAILED & ERRCODE_RES_MASK ; >;
+        < "Unable to set property." ; ERRCODE_BASIC_SETPROP_FAILED & ERRCODE_RES_MASK ; >;
+        < "Unable to determine property." ; ERRCODE_BASIC_GETPROP_FAILED & ERRCODE_RES_MASK ; >;
+         // Compiler errors. These are not runtime errors.
+        < "Unexpected symbol: $(ARG1)." ; ERRCODE_BASIC_UNEXPECTED & ERRCODE_RES_MASK ; >;
+        < "Expected: $(ARG1)." ; ERRCODE_BASIC_EXPECTED & ERRCODE_RES_MASK ; >;
+        < "Symbol expected." ; ERRCODE_BASIC_SYMBOL_EXPECTED & ERRCODE_RES_MASK ; >;
+        < "Variable expected." ; ERRCODE_BASIC_VAR_EXPECTED & ERRCODE_RES_MASK ; >;
+        < "Label expected." ; ERRCODE_BASIC_LABEL_EXPECTED & ERRCODE_RES_MASK ; >;
+        < "Value cannot be applied." ; ERRCODE_BASIC_LVALUE_EXPECTED & ERRCODE_RES_MASK ; >;
+        < "Variable $(ARG1) already defined." ; ERRCODE_BASIC_VAR_DEFINED & ERRCODE_RES_MASK ; >;
+        < "Sub procedure or function procedure $(ARG1) already defined." ; ERRCODE_BASIC_PROC_DEFINED & ERRCODE_RES_MASK ; >;
+        < "Label $(ARG1) already defined." ; ERRCODE_BASIC_LABEL_DEFINED & ERRCODE_RES_MASK ; >;
+        < "Variable $(ARG1) not found." ; ERRCODE_BASIC_UNDEF_VAR & ERRCODE_RES_MASK ; >;
+        < "Array or procedure $(ARG1) not found." ; ERRCODE_BASIC_UNDEF_ARRAY & ERRCODE_RES_MASK ; >;
+        < "Procedure $(ARG1) not found." ; ERRCODE_BASIC_UNDEF_PROC & ERRCODE_RES_MASK ; >;
+        < "Label $(ARG1) undefined." ; ERRCODE_BASIC_UNDEF_LABEL & ERRCODE_RES_MASK ; >;
+        < "Unknown data type $(ARG1)." ; ERRCODE_BASIC_UNDEF_TYPE & ERRCODE_RES_MASK ; >;
+        < "Exit $(ARG1) expected." ; ERRCODE_BASIC_BAD_EXIT & ERRCODE_RES_MASK ; >;
+        < "Statement block still open: $(ARG1) missing." ; ERRCODE_BASIC_BAD_BLOCK & ERRCODE_RES_MASK ; >;
+        < "Parentheses do not match." ; ERRCODE_BASIC_BAD_BRACKETS & ERRCODE_RES_MASK ; >;
+        < "Symbol $(ARG1) already defined differently." ; ERRCODE_BASIC_BAD_DECLARATION & ERRCODE_RES_MASK ; >;
+        < "Parameters do not correspond to procedure." ; ERRCODE_BASIC_BAD_PARAMETERS & ERRCODE_RES_MASK ; >;
+        < "Invalid character in number." ; ERRCODE_BASIC_BAD_CHAR_IN_NUMBER & ERRCODE_RES_MASK ; >;
+        < "Array must be dimensioned." ; ERRCODE_BASIC_MUST_HAVE_DIMS & ERRCODE_RES_MASK ; >;
+        < "Else/Endif without If." ; ERRCODE_BASIC_NO_IF & ERRCODE_RES_MASK ; >;
+        < "$(ARG1) not allowed within a procedure." ; ERRCODE_BASIC_NOT_IN_SUBR & ERRCODE_RES_MASK ; >;
+        < "$(ARG1) not allowed outside a procedure." ; ERRCODE_BASIC_NOT_IN_MAIN & ERRCODE_RES_MASK ; >;
+        < "Dimension specifications do not match." ; ERRCODE_BASIC_WRONG_DIMS & ERRCODE_RES_MASK ; >;
+        < "Unknown option: $(ARG1)." ; ERRCODE_BASIC_BAD_OPTION & ERRCODE_RES_MASK ; >;
+        < "Constant $(ARG1) redefined." ; ERRCODE_BASIC_CONSTANT_REDECLARED & ERRCODE_RES_MASK ; >;
+        < "Program too large." ; ERRCODE_BASIC_PROG_TOO_LARGE & ERRCODE_RES_MASK ; >;
+        < "Strings or arrays not permitted." ; ERRCODE_BASIC_NO_STRINGS_ARRAYS & ERRCODE_RES_MASK ; >;
+        < "An exception occurred $(ARG1)." ; ERRCODE_BASIC_EXCEPTION & ERRCODE_RES_MASK ; >;
+        < "This array is fixed or temporarily locked." ; ERRCODE_BASIC_ARRAY_FIX & ERRCODE_RES_MASK ; >;
+        < "Out of string space." ; ERRCODE_BASIC_STRING_OVERFLOW & ERRCODE_RES_MASK ; >;
+        < "Expression Too Complex." ; ERRCODE_BASIC_EXPR_TOO_COMPLEX & ERRCODE_RES_MASK ; >;
+        < "Can't perform requested operation." ; ERRCODE_BASIC_OPER_NOT_PERFORM & ERRCODE_RES_MASK ; >;
+        < "Too many DLL application clients." ; ERRCODE_BASIC_TOO_MANY_DLL & ERRCODE_RES_MASK ; >;
+        < "For loop not initialized." ; ERRCODE_BASIC_LOOP_NOT_INIT & ERRCODE_RES_MASK ; >;
+        < "$(ARG1)" ; ERRCODE_BASIC_COMPAT & ERRCODE_RES_MASK ; >;
     };
 };
+
  // Hinweis: IDS_SBERR_TERMINATED = IDS_SBERR_START+2000.
 String IDS_SBERR_TERMINATED
 {

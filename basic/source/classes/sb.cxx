@@ -19,6 +19,7 @@
 
 #include "sb.hxx"
 #include <tools/rcid.h>
+#include <tools/resary.hxx>
 #include <tools/stream.hxx>
 #include <tools/errinf.hxx>
 #include <comphelper/solarmutex.hxx>
@@ -1584,39 +1585,22 @@ void StarBASIC::SetErrorData( SbError nCode, sal_uInt16 nLine,
     aGlobals.nCol2 = nCol2;
 }
 
-
-// help class for access to string SubResource of a Resource.
-// Source: sfx2\source\doc\docfile.cxx (TLX)
-struct BasicStringList_Impl : private Resource
-{
-    ResId aResId;
-
-    BasicStringList_Impl( ResId& rErrIdP,  sal_uInt16 nId)
-        : Resource( rErrIdP ),aResId(nId, *rErrIdP.GetResMgr() ){}
-    ~BasicStringList_Impl() { FreeResource(); }
-
-    OUString GetString(){ return aResId.toString(); }
-    bool IsErrorTextAvailable()
-        { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
-};
-
-
 void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
 {
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
     // instantiate the help class
-    BasResId aId( RID_BASIC_START );
-    BasicStringList_Impl aMyStringList( aId, sal_uInt16(nId & ERRCODE_RES_MASK) );
-
-    if( aMyStringList.IsErrorTextAvailable() )
+    ResStringArray aMyStringList(BasResId(RID_BASIC_START));
+    sal_uInt32 nErrIdx = aMyStringList.FindIndex(sal_uInt16(nId & ERRCODE_RES_MASK));
+    if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
     {
         // merge message with additional text
-        OUStringBuffer aMsg1(aMyStringList.GetString());
+        OUString sError = aMyStringList.GetString(nErrIdx);
+        OUStringBuffer aMsg1(sError);
         // replace argument placeholder with %s
         OUString aSrgStr( "$(ARG1)" );
-        sal_Int32 nResult = aMyStringList.GetString().indexOf( aSrgStr );
+        sal_Int32 nResult = sError.indexOf(aSrgStr);
 
         if( nResult >= 0 )
         {
