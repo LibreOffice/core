@@ -104,7 +104,7 @@ public:
     enum Orientation { Portrait, Landscape, Seascape, Inherit };
 
     // in case the below enum is added PDF_1_6 PDF_1_7, please add them just after PDF_1_5
-    enum PDFVersion { PDF_1_2, PDF_1_3, PDF_1_4, PDF_1_5, PDF_A_1 };//i59651, PDF/A-1b & -1a, only -1b implemented for now
+    enum class PDFVersion { PDF_1_2, PDF_1_3, PDF_1_4, PDF_1_5, PDF_A_1 };//i59651, PDF/A-1b & -1a, only -1b implemented for now
     // for the meaning of DestAreaType please look at PDF Reference Manual
     // version 1.4 section 8.2.1, page 475
     enum class DestAreaType { XYZ, FitRectangle };
@@ -638,7 +638,7 @@ The following structure describes the permissions used in PDF security
                 DefaultLinkAction( PDFWriter::URIAction ),
                 ConvertOOoTargetToPDFTarget( false ),
                 ForcePDFAction( false ),
-                Version( PDFWriter::PDF_1_4 ),
+                Version( PDFWriter::PDFVersion::PDF_1_4 ),
                 Tagged( false ),
                 SubmitFormat( PDFWriter::FDF ),
                 AllowDuplicateFieldNames( false ),
