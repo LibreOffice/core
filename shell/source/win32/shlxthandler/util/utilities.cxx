@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "config.hxx"
 #include "utilities.hxx"
 
@@ -157,11 +161,10 @@ std::wstring getShortPathName( const std::wstring& aLongName )
 
     if ( length != 0 )
     {
-        WCHAR* buffer = new WCHAR[ length+1 ];
-        length = GetShortPathNameW( aLongName.c_str(), buffer, length );
+        auto buffer = std::unique_ptr<WCHAR[]>(new WCHAR[ length+1 ]);
+        length = GetShortPathNameW( aLongName.c_str(), buffer.get(), length );
         if ( length != 0 )
-            shortName = std::wstring( buffer );
-        delete [] buffer;
+            shortName = std::wstring( buffer.get() );
     }
     return shortName;
 }
