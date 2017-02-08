@@ -27,6 +27,7 @@
 #include <X11/Xutil.h>
 
 #include <vclpluginapi.h>
+#include "salframe.h"
 #include <vector>
 
 class SalDisplay;
@@ -123,20 +124,6 @@ public:
     static const int decoration_MaximizeBtn = 0x00000010;
     static const int decoration_CloseBtn        = 0x00000020;
     static const int decoration_All         = 0x10000000;
-
-    /*
-     *  window type
-     */
-    enum WMWindowType
-    {
-        windowType_Normal,
-        windowType_ModalDialogue,
-        windowType_ModelessDialogue,
-        windowType_Utility,
-        windowType_Splash,
-        windowType_Toolbar,
-        windowType_Dock
-    };
 
 protected:
     SalDisplay*             m_pSalDisplay;      // Display to use
