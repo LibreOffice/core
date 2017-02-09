@@ -17,8 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined (__sun) || defined (FREEBSD) || defined (NETBSD) || \
-    defined (OPENBSD) || defined (DRAGONFLY) || defined (MACOSX)
+#ifndef INCLUDED_SAL_OSL_UNX_BACKTRACE_H
+#define INCLUDED_SAL_OSL_UNX_BACKTRACE_H
+
+#if defined (LINUX)
+
+#include <execinfo.h>
+
+#else
 
 #ifdef __cplusplus
 extern "C" {
@@ -45,10 +51,8 @@ struct frame {
 } /* extern "C" */
 #endif
 
-#endif /* defined __sun || FREEBSD || NETBSD || OPENBSD */
+#endif
 
-#if defined (LINUX)
-#include <execinfo.h>
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

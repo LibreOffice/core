@@ -134,9 +134,8 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     }
 }
 
-#endif /* defined __sun */
+#elif defined FREEBSD || defined NETBSD || defined OPENBSD || defined(DRAGONFLY)
 
-#if defined FREEBSD || defined NETBSD || defined OPENBSD || defined(DRAGONFLY)
 #include <dlfcn.h>
 #include <pthread.h>
 #include <setjmp.h>
@@ -214,17 +213,14 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
         fclose( fp );
     }
 }
-#endif /* defined FREEBSD */
 
-#ifdef LINUX
+#elif defined LINUX
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
 
-#endif /* defined LINUX */
-
-#if defined( MACOSX )
+#elif defined( MACOSX )
 
 #include <dlfcn.h>
 #include <stdio.h>
@@ -292,9 +288,8 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     }
 }
 
-#endif /* defined MACOSX */
+#else
 
-#if defined(AIX)
 int backtrace( void **buffer, int max_frames )
 {
     return 0;
@@ -309,6 +304,7 @@ char ** backtrace_symbols(void * const * buffer, int size)
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
 }
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
