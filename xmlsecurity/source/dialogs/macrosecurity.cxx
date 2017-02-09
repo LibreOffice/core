@@ -129,7 +129,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP(vcl::Window* _pParent, MacroSecurity*
     m_pVeryHighRB->SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
 
     mnCurLevel = (sal_uInt16) mpDlg->maSecOptions.GetMacroSecurityLevel();
-    bool bReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL );
+    bool bReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::EOption::MacroSecLevel );
 
     RadioButton* pCheck = nullptr;
     FixedImage* pImage = nullptr;
@@ -394,14 +394,14 @@ MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP(vcl::Window* _pPare
     m_pRemoveLocPB->Disable();
 
     maTrustedAuthors = mpDlg->maSecOptions.GetTrustedAuthors();
-    mbAuthorsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS );
+    mbAuthorsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::EOption::MacroTrustedAuthors );
     m_pTrustCertROFI->Show( mbAuthorsReadonly );
     mbAuthorsReadonly ? m_pTrustCertLB->DisableTable() : m_pTrustCertLB->EnableTable();
 
     FillCertLB();
 
     css::uno::Sequence< OUString > aSecureURLs = mpDlg->maSecOptions.GetSecureURLs();
-    mbURLsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_SECUREURLS );
+    mbURLsReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::EOption::SecureUrls );
     m_pTrustFileROFI->Show( mbURLsReadonly );
     m_pTrustFileLocLB->Enable( !mbURLsReadonly );
     m_pAddLocPB->Enable( !mbURLsReadonly );

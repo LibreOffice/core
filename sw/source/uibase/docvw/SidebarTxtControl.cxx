@@ -310,7 +310,7 @@ void SidebarTextControl::MouseMove( const MouseEvent& rMEvt )
             {
                 OUString sURL( pURL->GetURL() );
                 SvtSecurityOptions aSecOpts;
-                if ( aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK) )
+                if ( aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink) )
                     sURL = SwViewShell::GetShellRes()->aLinkCtrlClick + ": " + sURL;
                 else
                     sURL = SwViewShell::GetShellRes()->aLinkClick + ": " + sURL;
@@ -325,7 +325,7 @@ void SidebarTextControl::MouseButtonDown( const MouseEvent& rMEvt )
     if ( GetTextView() )
     {
         SvtSecurityOptions aSecOpts;
-        bool bExecuteMod = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK);
+        bool bExecuteMod = aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink);
 
         if ( !bExecuteMod || (rMEvt.GetModifier() == KEY_MOD1))
         {

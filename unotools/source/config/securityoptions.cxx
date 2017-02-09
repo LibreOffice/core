@@ -506,35 +506,35 @@ bool SvtSecurityOptions_Impl::GetOption( SvtSecurityOptions::EOption eOption, bo
 {
     switch( eOption )
     {
-        case SvtSecurityOptions::E_DOCWARN_SAVEORSEND:
+        case SvtSecurityOptions::EOption::DocWarnSaveOrSend:
             rpValue = &m_bSaveOrSend;
             rpRO = &m_bROSaveOrSend;
             break;
-        case SvtSecurityOptions::E_DOCWARN_SIGNING:
+        case SvtSecurityOptions::EOption::DocWarnSigning:
             rpValue = &m_bSigning;
             rpRO = &m_bROSigning;
             break;
-        case SvtSecurityOptions::E_DOCWARN_PRINT:
+        case SvtSecurityOptions::EOption::DocWarnPrint:
             rpValue = &m_bPrint;
             rpRO = &m_bROPrint;
             break;
-        case SvtSecurityOptions::E_DOCWARN_CREATEPDF:
+        case SvtSecurityOptions::EOption::DocWarnCreatePdf:
             rpValue = &m_bCreatePDF;
             rpRO = &m_bROCreatePDF;
             break;
-        case SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO:
+        case SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo:
             rpValue = &m_bRemoveInfo;
             rpRO = &m_bRORemoveInfo;
             break;
-        case SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD:
+        case SvtSecurityOptions::EOption::DocWarnRecommendPassword:
             rpValue = &m_bRecommendPwd;
             rpRO = &m_bRORecommendPwd;
             break;
-        case SvtSecurityOptions::E_CTRLCLICK_HYPERLINK:
+        case SvtSecurityOptions::EOption::CtrlClickHyperlink:
             rpValue = &m_bCtrlClickHyperlink;
             rpRO = &m_bROCtrlClickHyperlink;
             break;
-        case SvtSecurityOptions::E_BLOCKUNTRUSTEDREFERERLINKS:
+        case SvtSecurityOptions::EOption::BlockUntrustedRefererLinks:
             rpValue = &m_bBlockUntrustedRefererLinks;
             rpRO = &m_bROBlockUntrustedRefererLinks;
             break;
@@ -760,54 +760,51 @@ bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOption ) 
     bool    bReadonly;
     switch(eOption)
     {
-        case SvtSecurityOptions::E_SECUREURLS :
+        case SvtSecurityOptions::EOption::SecureUrls :
             bReadonly = m_bROSecureURLs;
             break;
-        case SvtSecurityOptions::E_DOCWARN_SAVEORSEND:
+        case SvtSecurityOptions::EOption::DocWarnSaveOrSend:
             bReadonly = m_bROSaveOrSend;
             break;
-        case SvtSecurityOptions::E_DOCWARN_SIGNING:
+        case SvtSecurityOptions::EOption::DocWarnSigning:
             bReadonly = m_bROSigning;
             break;
-        case SvtSecurityOptions::E_DOCWARN_PRINT:
+        case SvtSecurityOptions::EOption::DocWarnPrint:
             bReadonly = m_bROPrint;
             break;
-        case SvtSecurityOptions::E_DOCWARN_CREATEPDF:
+        case SvtSecurityOptions::EOption::DocWarnCreatePdf:
             bReadonly = m_bROCreatePDF;
             break;
-        case SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO:
+        case SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo:
             bReadonly = m_bRORemoveInfo;
             break;
-        case SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD:
+        case SvtSecurityOptions::EOption::DocWarnRecommendPassword:
             bReadonly = m_bRORecommendPwd;
             break;
-        case SvtSecurityOptions::E_MACRO_SECLEVEL:
+        case SvtSecurityOptions::EOption::MacroSecLevel:
             bReadonly = m_bROSecLevel;
             break;
-        case SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS:
+        case SvtSecurityOptions::EOption::MacroTrustedAuthors:
             bReadonly = m_bROTrustedAuthors;
             break;
-        case SvtSecurityOptions::E_MACRO_DISABLE:
-            bReadonly = m_bRODisableMacros;
-            break;
-        case SvtSecurityOptions::E_CTRLCLICK_HYPERLINK:
+        case SvtSecurityOptions::EOption::CtrlClickHyperlink:
             bReadonly = m_bROCtrlClickHyperlink;
             break;
-        case SvtSecurityOptions::E_BLOCKUNTRUSTEDREFERERLINKS:
+        case SvtSecurityOptions::EOption::BlockUntrustedRefererLinks:
             bReadonly = m_bROBlockUntrustedRefererLinks;
             break;
 
         // xmlsec05 deprecated
-        case SvtSecurityOptions::E_BASICMODE:
+        case SvtSecurityOptions::EOption::BasicMode:
             bReadonly = m_bROBasicMode;
             break;
-        case SvtSecurityOptions::E_EXECUTEPLUGINS:
+        case SvtSecurityOptions::EOption::ExecutePlugins:
             bReadonly = m_bROExecutePlugins;
             break;
-        case SvtSecurityOptions::E_WARNING:
+        case SvtSecurityOptions::EOption::Warning:
             bReadonly = m_bROWarning;
             break;
-        case SvtSecurityOptions::E_CONFIRMATION:
+        case SvtSecurityOptions::EOption::Confirmation:
             bReadonly = m_bROConfirmation;
             break;
         // xmlsec05 deprecated
@@ -998,7 +995,7 @@ bool SvtSecurityOptions::isSecureMacroUri(
 
 bool SvtSecurityOptions::isUntrustedReferer(OUString const & referer) const {
     MutexGuard g(GetInitMutex());
-    return m_pImpl->IsOptionSet(E_BLOCKUNTRUSTEDREFERERLINKS)
+    return m_pImpl->IsOptionSet(EOption::BlockUntrustedRefererLinks)
         && !(referer.isEmpty() || referer.startsWithIgnoreAsciiCase("private:")
              || isTrustedLocationUri(referer));
 }

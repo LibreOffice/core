@@ -181,7 +181,7 @@ void SfxObjectShell::UpdateDocInfoForSave()
 
     // clear user data if recommend (see 'Tools - Options - Open/StarOffice - Security')
     if ( SvtSecurityOptions().IsOptionSet(
-            SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO ) )
+            SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo ) )
     {
         xDocProps->resetUserData( OUString() );
     }
