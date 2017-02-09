@@ -36,7 +36,6 @@ $(eval $(call gb_Library_add_exception_objects,xsec_fw,\
 	xmlsecurity/source/framework/elementcollector \
 	xmlsecurity/source/framework/elementmark \
 	xmlsecurity/source/framework/encryptionengine \
-	xmlsecurity/source/framework/encryptorimpl \
 	xmlsecurity/source/framework/saxeventkeeperimpl \
 	xmlsecurity/source/framework/securityengine \
 	xmlsecurity/source/framework/signaturecreatorimpl \
