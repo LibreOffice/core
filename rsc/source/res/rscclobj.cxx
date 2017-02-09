@@ -56,14 +56,14 @@ ObjNode * RefNode::GetObjNode( const RscId & rRscId )
     return nullptr;
 }
 
-ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, sal_uLong lKey )
+ObjNode::ObjNode( const RscId & rId, CLASS_DATA pData, RscFileTab::Index lKey )
     : aRscId(rId)
     , pRscObj(pData)
     , lFileKey(lKey)
 {
 }
 
-ObjNode * ObjNode::DelObjNode( RscTop * pClass, sal_uLong nFileKey )
+ObjNode * ObjNode::DelObjNode( RscTop * pClass, RscFileTab::Index nFileKey )
 {
     ObjNode * pRetNode = this;
 

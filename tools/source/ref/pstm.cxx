@@ -422,7 +422,7 @@ SvPersistStream& SvPersistStream::WritePointer
             aPTable[ pObj ] = nId;
             nP |= P_OBJ;
         }
-        WriteId( *this, nP, nId, pObj->GetClassId() );
+        WriteId( *this, nP, (sal_uInt32)nId, pObj->GetClassId() );
         if( nP & P_OBJ )
             WriteObj( nP, pObj );
     }

@@ -19,6 +19,8 @@
 
 #include <tools/unqidx.hxx>
 
+UniqueIndexImpl::Index const UniqueIndexImpl::IndexNotFound(SAL_MAX_UINT32);
+
 UniqueIndexImpl::Index UniqueIndexImpl::Insert( void* p )
 {
     // NULL-Pointer not allowed
