@@ -20,6 +20,7 @@
     <string name="menu_search">Search</string>
     <string name="list_view">List</string>
     <string name="grid_view">Grid</string>
+    <string name="GRID_VIEW_INTEGER">0</string>
     <string name="filter">Filter by</string>
     <string name="sort">Sort by</string>
     <string name="sort_smallest">Smallest first</string>
@@ -109,6 +110,7 @@
     <string name="save_document">SAVE</string>
     <string name="cancel_save_document">CANCEL</string>
     <string name="no_save_document">NO</string>
+
 
 
 </resources>
