@@ -598,7 +598,7 @@ IMPL_LINK_NOARG_TYPED(Dialog, ImplAsyncCloseHdl, void*, void)
 
 bool Dialog::ImplHandleCmdEvent( const CommandEvent& rCEvent )
 {
-    if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
+    if (rCEvent.GetCommand() == CommandEventId::ModKeyChange && ImplGetSVData()->maNWFData.mbAutoAccel)
     {
         const CommandModKeyData *pCData = rCEvent.GetModKeyData ();
         bool bShowAccel =  pCData && pCData->IsMod2();
