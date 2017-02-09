@@ -72,7 +72,7 @@ ScVbaChartObject::setShape()
     }
     catch (uno::Exception& )
     {
-        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
     }
     return nullptr;
 }
@@ -99,7 +99,7 @@ ScVbaChartObject::Delete()
     if (pChartObjectsImpl)
         pChartObjectsImpl->removeByName( getPersistName() );
     else
-        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, "Parent is not ChartObjects" );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), "Parent is not ChartObjects" );
 }
 
 void
@@ -116,7 +116,7 @@ ScVbaChartObject::Activate()
     }
     catch (uno::Exception& )
     {
-        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, "ChartObject Activate internal error" );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), "ChartObject Activate internal error" );
     }
 }
 

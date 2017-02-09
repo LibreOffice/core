@@ -848,7 +848,7 @@ ErrCode SfxInPlaceClient::DoVerb( long nVerb )
                 }
                 catch( const task::ErrorCodeIOException& aErrorEx )
                 {
-                    nError = (sal_uInt32)aErrorEx.ErrCode;
+                    nError = ErrCode(aErrorEx.ErrCode);
                 }
                 catch( uno::Exception& )
                 {

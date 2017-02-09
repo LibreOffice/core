@@ -4979,7 +4979,7 @@ void ScXMLExport::IncrementProgressBar(bool bFlush, sal_Int32 nInc)
     }
 }
 
-sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
+ErrCode ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
 {
     if( getExportFlags() & (SvXMLExportFlags::FONTDECLS|SvXMLExportFlags::STYLES|
                              SvXMLExportFlags::MASTERSTYLES|SvXMLExportFlags::CONTENT) )

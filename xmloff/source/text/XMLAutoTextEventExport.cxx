@@ -99,7 +99,7 @@ void XMLAutoTextEventExport::initialize(
 }
 
 
-sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
+ErrCode XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
 {
     if( !(getExportFlags() & SvXMLExportFlags::OASIS) )
     {
@@ -149,7 +149,7 @@ sal_uInt32 XMLAutoTextEventExport::exportDoc( enum XMLTokenEnum )
         GetDocHandler()->endDocument();
     }
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
 bool XMLAutoTextEventExport::hasEvents()
