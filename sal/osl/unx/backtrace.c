@@ -214,12 +214,6 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     }
 }
 
-#elif defined LINUX
-
-#ifndef _GNU_SOURCE
-#define _GNU_SOURCE
-#endif
-
 #elif defined( MACOSX )
 
 #include <dlfcn.h>
@@ -288,7 +282,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     }
 }
 
-#else
+#elif !defined LINUX
 
 int backtrace( void **buffer, int max_frames )
 {
