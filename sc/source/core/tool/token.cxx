@@ -3167,7 +3167,12 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         }
 
                         rRef.SetRange(aAbs, rNewPos);
-                        rRef.Ref1.SetFlag3D(aAbs.aStart.Tab() != rNewPos.Tab() || !rRef.Ref1.IsTabRel());
+                        // Absolute sheet reference => set 3D flag.
+                        // More than one sheet referenced => has to have both 3D flags.
+                        // If end part has 3D flag => start part must have it too.
+                        rRef.Ref2.SetFlag3D(aAbs.aStart.Tab() != aAbs.aEnd.Tab() || !rRef.Ref2.IsTabRel());
+                        rRef.Ref1.SetFlag3D(aAbs.aStart.Tab() != rNewPos.Tab() || !rRef.Ref1.IsTabRel() ||
+                                rRef.Ref2.IsFlag3D());
                     }
                     break;
                 case svExternalSingleRef:
