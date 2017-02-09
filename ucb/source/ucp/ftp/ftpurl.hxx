@@ -46,9 +46,7 @@ namespace ftp {
     class FTPContentProvider;
 
 
-    enum FTPErrors { FILE_EXIST_DURING_INSERT = CURL_LAST +1,
-                     FOLDER_EXIST_DURING_INSERT,
-                     FOLDER_MIGHT_EXIST_DURING_INSERT,
+    enum FTPErrors { FOLDER_MIGHT_EXIST_DURING_INSERT = CURL_LAST,
                      FILE_MIGHT_EXIST_DURING_INSERT };
 
     class malformed_exception : public std::exception { };

@@ -715,13 +715,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
         } else if(m_aInfo.Type == FTP_FOLDER)
             m_aFTPURL.mkdir(bReplace);
     } catch(const curl_exception& e) {
-        if(e.code() == FILE_EXIST_DURING_INSERT ||
-           e.code() == FOLDER_EXIST_DURING_INSERT) {
-            // Deprecated, not used anymore:
-            NameClashException excep;
-            excep.Name = m_aFTPURL.child();
-            ucbhelper::cancelCommandExecution(Any(excep), Env);
-        } else if(e.code() == FOLDER_MIGHT_EXIST_DURING_INSERT ||
+        if(e.code() == FOLDER_MIGHT_EXIST_DURING_INSERT ||
                   e.code() == FILE_MIGHT_EXIST_DURING_INSERT) {
             // Interact
             Reference<XInteractionHandler> xInt;
