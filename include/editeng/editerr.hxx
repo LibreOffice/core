@@ -21,9 +21,9 @@
 
 #include <vcl/errcode.hxx>
 
-#define ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS    (2UL | ERRCODE_AREA_SVX)
+#define ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS    ErrCode(2UL | ERRCODE_AREA_SVX)
 
-#define ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT   (8UL | ERRCODE_AREA_SVX | \
+#define ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT   ErrCode(8UL | ERRCODE_AREA_SVX | \
                                                 ERRCODE_CLASS_READ )
 #endif
 

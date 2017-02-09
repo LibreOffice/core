@@ -34,7 +34,7 @@
 
 
 SbxAppData::SbxAppData()
-    : eSbxError(ERRCODE_SBX_OK)
+    : eErrCode(ERRCODE_SBX_OK)
     , pBasicFormater(nullptr)
     , eBasicFormaterLangType(LANGUAGE_DONTKNOW)
 {
@@ -94,26 +94,26 @@ void SbxBase::SetModified( bool b )
         ResetFlag( SbxFlagBits::Modified );
 }
 
-SbxError SbxBase::GetError()
+ErrCode SbxBase::GetError()
 {
-    return GetSbxData_Impl().eSbxError;
+    return GetSbxData_Impl().eErrCode;
 }
 
-void SbxBase::SetError( SbxError e )
+void SbxBase::SetError( ErrCode e )
 {
     SbxAppData& r = GetSbxData_Impl();
-    if( e && r.eSbxError == ERRCODE_SBX_OK )
-        r.eSbxError = e;
+    if( e && r.eErrCode == ERRCODE_SBX_OK )
+        r.eErrCode = e;
 }
 
 bool SbxBase::IsError()
 {
-    return GetSbxData_Impl().eSbxError != ERRCODE_SBX_OK;
+    return GetSbxData_Impl().eErrCode != ERRCODE_SBX_OK;
 }
 
 void SbxBase::ResetError()
 {
-    GetSbxData_Impl().eSbxError = ERRCODE_SBX_OK;
+    GetSbxData_Impl().eErrCode = ERRCODE_SBX_OK;
 }
 
 void SbxBase::AddFactory( SbxFactory* pFac )

@@ -86,7 +86,7 @@ using namespace ::sfx2;
 class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task::XInteractionHandler >
 {
     css::uno::Reference< css::task::XInteractionHandler > m_xInter;
-    sal_uInt16 nFilterError;
+    ErrCode nFilterError;
 
     public:
 
@@ -95,7 +95,7 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task:
         nFilterError( ERRCODE_NONE )
         {}
 
-    sal_uInt16 GetErrorCode() const { return nFilterError; };
+    ErrCode GetErrorCode() const { return nFilterError; };
 
     virtual void SAL_CALL   handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
 };
@@ -107,7 +107,7 @@ void SdGRFFilter_ImplInteractionHdl::handle( const css::uno::Reference< css::tas
 
     css::drawing::GraphicFilterRequest aErr;
     if ( xRequest->getRequest() >>= aErr )
-        nFilterError = (sal_uInt16)aErr.ErrCode;
+        nFilterError = ErrCode(aErr.ErrCode);
     else
         m_xInter->handle( xRequest );
 }
@@ -122,40 +122,32 @@ SdGRFFilter::~SdGRFFilter()
 {
 }
 
-void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, sal_uLong nStreamError )
+void SdGRFFilter::HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStreamError )
 {
-    sal_uInt16 nId;
-
-    switch( nFilterError )
+    if( ERRCODE_NONE != nStreamError )
     {
-        case ERRCODE_GRFILTER_OPENERROR:
-            nId = STR_IMPORT_GRFILTER_OPENERROR;
-            break;
-        case ERRCODE_GRFILTER_IOERROR:
-            nId = STR_IMPORT_GRFILTER_IOERROR;
-            break;
-        case ERRCODE_GRFILTER_FORMATERROR:
-            nId = STR_IMPORT_GRFILTER_FORMATERROR;
-            break;
-        case ERRCODE_GRFILTER_VERSIONERROR:
-            nId = STR_IMPORT_GRFILTER_VERSIONERROR;
-            break;
-        case ERRCODE_GRFILTER_TOOBIG:
-            nId = STR_IMPORT_GRFILTER_TOOBIG;
-            break;
-        case 0 :
-            nId = 0;
-            break;
-
-        default:
-        case ERRCODE_GRFILTER_FILTERERROR:
-            nId = STR_IMPORT_GRFILTER_FILTERERROR;
-            break;
+        ErrorHandler::HandleError( nStreamError );
+        return;
     }
 
-    if( ERRCODE_NONE != nStreamError )
-        ErrorHandler::HandleError( nStreamError );
-    else if( STR_IMPORT_GRFILTER_IOERROR == nId )
+    sal_uInt16 nId;
+
+    if( nFilterError == ERRCODE_GRFILTER_OPENERROR )
+        nId = STR_IMPORT_GRFILTER_OPENERROR;
+    else if( nFilterError == ERRCODE_GRFILTER_IOERROR )
+        nId = STR_IMPORT_GRFILTER_IOERROR;
+    else if( nFilterError == ERRCODE_GRFILTER_FORMATERROR )
+        nId = STR_IMPORT_GRFILTER_FORMATERROR;
+    else if( nFilterError == ERRCODE_GRFILTER_VERSIONERROR )
+        nId = STR_IMPORT_GRFILTER_VERSIONERROR;
+    else if( nFilterError == ERRCODE_GRFILTER_TOOBIG )
+        nId = STR_IMPORT_GRFILTER_TOOBIG;
+    else if( nFilterError == ERRCODE_NONE )
+        nId = 0;
+    else
+        nId = STR_IMPORT_GRFILTER_FILTERERROR;
+
+    if( STR_IMPORT_GRFILTER_IOERROR == nId )
         ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
     else
     {
@@ -173,7 +165,7 @@ bool SdGRFFilter::Import()
     bool        bRet = false;
 
         SvStream*       pIStm = mrMedium.GetInStream();
-        sal_uInt16          nReturn = pIStm ? rGraphicFilter.ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : 1;
+        ErrCode         nReturn = pIStm ? rGraphicFilter.ImportGraphic( aGraphic, aFileName, *pIStm, nFilter ) : ErrCode(1);
 
         if( nReturn )
             HandleGraphicFilterError( nReturn, rGraphicFilter.GetLastError().nStreamError );

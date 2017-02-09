@@ -145,7 +145,7 @@ class SbiInstance
     DateOrder       meFormatterDateOrder;
     sal_uInt32      nStdDateIdx, nStdTimeIdx, nStdDateTimeIdx;
 
-    SbError         nErr;
+    ErrCode         nErr;
     OUString        aErrorMsg;      // last error message for $ARG
     sal_Int32       nErl;           // current error line
     bool        bReschedule;    // Flag: sal_True = Reschedule in main loop
@@ -164,16 +164,16 @@ public:
     SbiInstance( StarBASIC* );
    ~SbiInstance();
 
-    void Error( SbError );                      // trappable Error
-    void Error( SbError, const OUString& rMsg );  // trappable Error with message
+    void Error( ErrCode );                      // trappable Error
+    void Error( ErrCode, const OUString& rMsg );  // trappable Error with message
     void ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg );
     void setErrorVB( sal_Int32 nVBNumber );
-    void FatalError( SbError );                 // non-trappable Error
-    void FatalError( SbError, const OUString& );  // non-trappable Error
+    void FatalError( ErrCode );                 // non-trappable Error
+    void FatalError( ErrCode, const OUString& );  // non-trappable Error
     void Abort();                               // with current error code
 
     void    Stop();
-    SbError GetErr()                { return nErr; }
+    ErrCode GetErr()                { return nErr; }
     const OUString& GetErrorMsg()           { return aErrorMsg; }
     sal_Int32 GetErl()             { return nErl; }
     void    EnableReschedule( bool bEnable ) { bReschedule = bEnable; }
@@ -250,7 +250,7 @@ class SbiRuntime
     bool               bBlocked;         // true: blocked by next call level, #i48868
     bool               bVBAEnabled;
     BasicDebugFlags    nFlags;           // Debugging-Flags
-    SbError            nError;
+    ErrCode            nError;
     sal_uInt16         nOps;             // opcode counter
     sal_uInt32         m_nLastTime;
 
@@ -260,7 +260,7 @@ class SbiRuntime
 
 
     SbxVariable* FindElement
-    ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError, bool bLocal, bool bStatic = false );
+    ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, ErrCode, bool bLocal, bool bStatic = false );
     void SetupArgs( SbxVariable*, sal_uInt32 );
     SbxVariable* CheckArray( SbxVariable* );
 
@@ -331,7 +331,7 @@ class SbiRuntime
     // all opcodes with two operands
     void StepRTL( sal_uInt32, sal_uInt32 ),     StepPUBLIC( sal_uInt32, sal_uInt32 ),   StepPUBLIC_P( sal_uInt32, sal_uInt32 );
     void StepPUBLIC_Impl( sal_uInt32, sal_uInt32, bool bUsedForClassModule );
-    void StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError, bool bStatic = false );
+    void StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, ErrCode, bool bStatic = false );
     void StepFIND( sal_uInt32, sal_uInt32 ),    StepELEM( sal_uInt32, sal_uInt32 );
     void StepGLOBAL( sal_uInt32, sal_uInt32 ),  StepLOCAL( sal_uInt32, sal_uInt32 );
     void StepPARAM( sal_uInt32, sal_uInt32),    StepCREATE( sal_uInt32, sal_uInt32 );
@@ -355,11 +355,11 @@ public:
 
     SbiRuntime( SbModule*, SbMethod*, sal_uInt32 );
    ~SbiRuntime();
-    void Error( SbError, bool bVBATranslationAlreadyDone = false );     // set error if != 0
-    void Error( SbError, const OUString& );       // set error if != 0
-    void FatalError( SbError );                 // error handling = standard, set error
-    void FatalError( SbError, const OUString& );  // error handling = standard, set error
-    static sal_Int32 translateErrorToVba( SbError nError, OUString& rMsg );
+    void Error( ErrCode, bool bVBATranslationAlreadyDone = false );     // set error if != 0
+    void Error( ErrCode, const OUString& );       // set error if != 0
+    void FatalError( ErrCode );                 // error handling = standard, set error
+    void FatalError( ErrCode, const OUString& );  // error handling = standard, set error
+    static sal_Int32 translateErrorToVba( ErrCode nError, OUString& rMsg );
     bool Step();                    // single step (one opcode)
     void Stop()            { bRun = false;   }
     void block()     { bBlocked = true; }

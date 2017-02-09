@@ -221,7 +221,7 @@ executeSSLWarnDialog(
         {
             ResId aResId(RID_UUI_ERRHDL, *xManager.get());
             if (ErrorResource(aResId).getString(
-                    ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + DESCRIPTION_1,
+                    ErrCode(sal_uInt32(ERRCODE_AREA_UUI_UNKNOWNAUTH) + failure + DESCRIPTION_1),
                     aMessage_1))
             {
                 aMessage_1 = UUIInteractionHelper::replaceMessageWithArguments(
@@ -231,7 +231,7 @@ executeSSLWarnDialog(
 
             OUString aTitle;
             if (ErrorResource(aResId).getString(
-                ERRCODE_AREA_UUI_UNKNOWNAUTH + failure + TITLE, aTitle))
+                ErrCode(sal_uInt32(ERRCODE_AREA_UUI_UNKNOWNAUTH) + failure + TITLE), aTitle))
             {
                 xDialog->SetText(aTitle);
             }
