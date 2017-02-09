@@ -76,6 +76,7 @@ FileFormat aFileFormats[] =
     { "fodg",  "OpenDocument Drawing Flat XML", "Flat XML ODF Drawing", "", FODG_FORMAT_TYPE },
     { "fodp",  "OpenDocument Presentation Flat XML", "Flat XML ODF Presentation", "", FODP_FORMAT_TYPE },
     { "sxi",  "StarOffice XML (Impress)", "OpenOffice.org 1.0 Presentation", "", SXI_FORMAT_TYPE },
+    { "odg",  "draw8", "draw8", "", ODP_FORMAT_TYPE },
     { nullptr, nullptr, nullptr, nullptr, SfxFilterFlags::NONE }
 };
 
@@ -87,6 +88,7 @@ FileFormat aFileFormats[] =
 #define FODG 5
 #define FODP 6
 #define SXI 7
+#define ODG  8
 
 /// Base class for filter tests loading or roundtriping a document, and asserting the document model.
 class SdModelTestBase : public test::BootstrapFixture, public unotest::MacrosTest
@@ -204,7 +206,7 @@ protected:
             pTempFile = pNewTempFile.get();
         }
         save(pShell, pFormat, *pTempFile);
-        if(nExportType == ODP)
+        if (nExportType == ODP || nExportType == ODG)
         {
             // BootstrapFixture::validate(pTempFile->GetFileName(), test::ODF);
         }
