@@ -5,7 +5,7 @@
         android:key="PREF_CATEGORY_EXPLORER">
         <ListPreference
             android:title="Default File Filter"
-            android:summary="Set which files to show by default"
+            android:summary="Set which file filter should be used by default"
             android:entries="@array/FilterTypeNames"
             android:entryValues="@array/FilterTypeStringValues"
             android:key="FILTER_MODE"/>
@@ -16,9 +16,10 @@
         <ListPreference
             android:entries="@array/ViewModeNames"
             android:entryValues="@array/ViewModeStringValues"
-            android:title="Default File Explorer View"
+            android:title="File explorer layout"
             android:key="EXPLORER_VIEW_TYPE"
-            android:summary="View files as a grid or in a list."/>
+            android:summary="View files as a grid or in a list."
+            android:defaultValue="0"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_category_general"
