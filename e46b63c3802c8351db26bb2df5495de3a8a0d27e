@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_ef48418a",
+        "filename": "include/o3tl/strong_typedef.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-09T14:48:28Z",
+      "side": 1,
+      "message": "* the assumption appears to be that UNDERLYING_TYPE is an integer type; find a more suitable name than \"strong_typedef\"?\n\n* make this derivable from, so that the derived class can be used as PHANTOM_TYPE?",
+      "revId": "e46b63c3802c8351db26bb2df5495de3a8a0d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6f55311c",
+        "filename": "include/o3tl/strong_typedef.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-09T14:48:28Z",
+      "side": 1,
+      "message": "the \"\u003cUNDERLYING_TYPE, PHANTOM_TYPE\u003e\" part is redundant, and I don\u0027t see any immediate need for Self vs. just strong_typedef`",
+      "revId": "e46b63c3802c8351db26bb2df5495de3a8a0d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0f2585c1",
+        "filename": "include/tools/unqidx.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-09T14:48:28Z",
+      "side": 1,
+      "message": "another option might be to make Index a scoped enum with underyling type sal_uInt32, and introduce an o3tl::is_typed_integer similar to o3tl::is_typed_flags, providing the relevant operations",
+      "revId": "e46b63c3802c8351db26bb2df5495de3a8a0d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_af3559f8",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 425,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-09T14:48:28Z",
+      "side": 1,
+      "message": "any cast is better than C-style",
+      "revId": "e46b63c3802c8351db26bb2df5495de3a8a0d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
