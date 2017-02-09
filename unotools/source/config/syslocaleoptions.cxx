@@ -283,22 +283,17 @@ bool SvtSysLocaleOptions_Impl::IsReadOnly( SvtSysLocaleOptions::EOption eOption 
     bool bReadOnly = CFG_READONLY_DEFAULT;
     switch(eOption)
     {
-        case SvtSysLocaleOptions::E_LOCALE :
+        case SvtSysLocaleOptions::EOption::Locale :
             {
                 bReadOnly = m_bROLocale;
                 break;
             }
-        case SvtSysLocaleOptions::E_UILOCALE :
-            {
-                bReadOnly = m_bROUILocale;
-                break;
-            }
-        case SvtSysLocaleOptions::E_CURRENCY :
+        case SvtSysLocaleOptions::EOption::Currency :
             {
                 bReadOnly = m_bROCurrency;
                 break;
             }
-        case SvtSysLocaleOptions::E_DATEPATTERNS :
+        case SvtSysLocaleOptions::EOption::DatePatterns :
             {
                 bReadOnly = m_bRODatePatterns;
                 break;
