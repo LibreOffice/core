@@ -520,7 +520,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // at the end of the method
             aModelGuard.Init_Impl( uno::Reference< util::XCloseable >( GetModel(), uno::UNO_QUERY ) );
 
-            sal_uInt32 nErrorCode = ERRCODE_NONE;
+            ErrCode nErrorCode = ERRCODE_NONE;
 
             // by default versions should be preserved always except in case of an explicit
             // SaveAs via GUI, so the flag must be set accordingly
@@ -634,7 +634,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     // the user has decided not to store the document
                     throw task::ErrorCodeIOException(
                         "SfxObjectShell::ExecFile_Impl: ERRCODE_IO_ABORT",
-                        uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT);
+                        uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
                 }
 
                 // merge aDispatchArgs to the request
@@ -655,7 +655,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
             catch( const task::ErrorCodeIOException& aErrorEx )
             {
-                nErrorCode = (sal_uInt32)aErrorEx.ErrCode;
+                nErrorCode = ErrCode(aErrorEx.ErrCode);
             }
             catch( Exception& )
             {
@@ -665,7 +665,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             // by default versions should be preserved always except in case of an explicit
             // SaveAs via GUI, so the flag must be reset to guarantee this
             pImpl->bPreserveVersions = true;
-            sal_uIntPtr lErr=GetErrorCode();
+            ErrCode lErr=GetErrorCode();
 
             if ( !lErr && nErrorCode )
                 lErr = nErrorCode;
@@ -791,7 +791,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             }
 
             SetModified( false );
-            sal_uIntPtr lErr = GetErrorCode();
+            ErrCode lErr = GetErrorCode();
             ErrorHandler::HandleError(lErr);
 
             rReq.SetReturnValue( SfxBoolItem(0, true) );

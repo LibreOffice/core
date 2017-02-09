@@ -157,11 +157,11 @@ UUIInteractionHelper::handleErrorHandlerRequest(
             = { RID_ERRHDL,
                 RID_SVXERRCODE,
                 RID_UUI_ERRHDL };
-        ErrCode nErrorId = nErrorCode & ~ERRCODE_WARNING_MASK;
-        Source eSource = nErrorId < ERRCODE_AREA_LIB1 ?
+        ErrCode nErrorId = nErrorCode.IgnoreWarning();
+        Source eSource = nErrorId < ErrCode(ERRCODE_AREA_LIB1) ?
             SOURCE_DEFAULT :
-            nErrorId >= ERRCODE_AREA_SVX
-            && nErrorId <= ERRCODE_AREA_SVX_END ?
+            nErrorId >= ErrCode(ERRCODE_AREA_SVX)
+            && nErrorId <= ErrCode(ERRCODE_AREA_SVX_END) ?
             SOURCE_SVX :
             SOURCE_UUI;
 

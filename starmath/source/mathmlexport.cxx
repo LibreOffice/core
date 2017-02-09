@@ -422,7 +422,7 @@ Math_XMLContentExporter_get_implementation(css::uno::XComponentContext* context,
     return cppu::acquire(new SmXMLExport(context, "com.sun.star.comp.Math.XMLContentExporter", SvXMLExportFlags::OASIS|SvXMLExportFlags::CONTENT));
 }
 
-sal_uInt32 SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
+ErrCode SmXMLExport::exportDoc(enum XMLTokenEnum eClass)
 {
     if ( !(getExportFlags() & SvXMLExportFlags::CONTENT) )
     {

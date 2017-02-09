@@ -318,7 +318,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::Cont
     }
 }
 
-BasicError::BasicError( sal_uInt64 nId, BasicErrorReason nR )
+BasicError::BasicError( ErrCode nId, BasicErrorReason nR )
 {
     nErrorId    = nId;
     nReason     = nR;

@@ -369,10 +369,10 @@ static OUString lcl_MakeOldPageStyleFormatName( sal_uInt16 i )
     return aName;
 }
 
-template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStream& rStream )
+template < typename T > ErrCode insert_new( ScCollection* pCollection, SvStream& rStream )
 {
     std::unique_ptr<T> pData(new (::std::nothrow) T( rStream));
-    sal_uLong nError = rStream.GetError();
+    ErrCode nError = rStream.GetError();
     if (pData)
     {
         if (!nError)
@@ -947,7 +947,7 @@ Sc10Import::~Sc10Import()
         "*Sc10Import::Sc10Import(): Progressbar lebt noch!?" );
 }
 
-sal_uLong Sc10Import::Import()
+ErrCode Sc10Import::Import()
 {
     pPrgrsBar = new ScfStreamProgressBar( rStream, pDoc->GetDocumentShell() );
 
@@ -2403,7 +2403,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocum
 {
     rStream.Seek( 0UL );
     Sc10Import  aImport( rStream, pDocument );
-    return ( ErrCode ) aImport.Import();
+    return aImport.Import();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

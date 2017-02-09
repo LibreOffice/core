@@ -142,33 +142,23 @@ void SbiStream::MapError()
 {
     if( pStrm )
     {
-        switch( pStrm->GetError() )
-        {
-        case ERRCODE_NONE:
-            nError = 0;
-            break;
-        case SVSTREAM_FILE_NOT_FOUND:
+        ErrCode nEC = pStrm->GetError();
+        if (nEC == ERRCODE_NONE)
+            nError = ERRCODE_NONE;
+        else if (nEC == SVSTREAM_FILE_NOT_FOUND)
             nError = ERRCODE_BASIC_FILE_NOT_FOUND;
-            break;
-        case SVSTREAM_PATH_NOT_FOUND:
+        else if (nEC ==SVSTREAM_PATH_NOT_FOUND)
             nError = ERRCODE_BASIC_PATH_NOT_FOUND;
-            break;
-        case SVSTREAM_TOO_MANY_OPEN_FILES:
+        else if (nEC ==SVSTREAM_TOO_MANY_OPEN_FILES)
             nError = ERRCODE_BASIC_TOO_MANY_FILES;
-            break;
-        case SVSTREAM_ACCESS_DENIED:
+        else if (nEC ==SVSTREAM_ACCESS_DENIED)
             nError = ERRCODE_BASIC_ACCESS_DENIED;
-            break;
-        case SVSTREAM_INVALID_PARAMETER:
+        else if (nEC ==SVSTREAM_INVALID_PARAMETER)
             nError = ERRCODE_BASIC_BAD_ARGUMENT;
-            break;
-        case SVSTREAM_OUTOFMEMORY:
+        else if (nEC ==SVSTREAM_OUTOFMEMORY)
             nError = ERRCODE_BASIC_NO_MEMORY;
-            break;
-        default:
+        else
             nError = ERRCODE_BASIC_IO_ERROR;
-            break;
-        }
     }
 }
 
@@ -658,7 +648,7 @@ SbiIoSystem::SbiIoSystem()
         i = nullptr;
     }
     nChan  = 0;
-    nError = 0;
+    nError = ERRCODE_NONE;
 }
 
 SbiIoSystem::~SbiIoSystem()
@@ -668,13 +658,14 @@ SbiIoSystem::~SbiIoSystem()
 
 ErrCode SbiIoSystem::GetError()
 {
-    ErrCode n = nError; nError = 0;
+    ErrCode n = nError;
+    nError = ERRCODE_NONE;
     return n;
 }
 
 void SbiIoSystem::Open(short nCh, const OString& rName, StreamMode nMode, SbiStreamFlags nFlags, short nLen)
 {
-    nError = 0;
+    nError = ERRCODE_NONE;
     if( nCh >= CHANNELS || !nCh )
     {
         nError = ERRCODE_BASIC_BAD_CHANNEL;

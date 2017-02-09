@@ -297,7 +297,7 @@ bool ConvDicXMLExport::Export()
 }
 
 
-sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ )
+ErrCode ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ )
 {
     GetNamespaceMap_().Add( "tcd",
             XML_NAMESPACE_TCD_STRING, XML_NAMESPACE_TCD );

@@ -97,9 +97,9 @@ SmNode* popOrZero(SmNodeStack& rStack)
 
 }
 
-sal_uInt32 SmXMLImportWrapper::Import(SfxMedium &rMedium)
+ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
 {
-    sal_uInt32 nError = ERRCODE_SFX_DOLOADFAILED;
+    ErrCode nError = ERRCODE_SFX_DOLOADFAILED;
 
     uno::Reference<uno::XComponentContext> xContext( comphelper::getProcessComponentContext() );
 
@@ -251,7 +251,7 @@ sal_uInt32 SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
 
 /// read a component (file + filter version)
-sal_uInt32 SmXMLImportWrapper::ReadThroughComponent(
+ErrCode SmXMLImportWrapper::ReadThroughComponent(
     const Reference<io::XInputStream>& xInputStream,
     const Reference<XComponent>& xModelComponent,
     Reference<uno::XComponentContext> & rxContext,
@@ -259,7 +259,7 @@ sal_uInt32 SmXMLImportWrapper::ReadThroughComponent(
     const sal_Char* pFilterName,
     bool bEncrypted )
 {
-    sal_uInt32 nError = ERRCODE_SFX_DOLOADFAILED;
+    ErrCode nError = ERRCODE_SFX_DOLOADFAILED;
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
     OSL_ENSURE(rxContext.is(), "factory missing");
@@ -347,7 +347,7 @@ sal_uInt32 SmXMLImportWrapper::ReadThroughComponent(
 }
 
 
-sal_uInt32 SmXMLImportWrapper::ReadThroughComponent(
+ErrCode SmXMLImportWrapper::ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,

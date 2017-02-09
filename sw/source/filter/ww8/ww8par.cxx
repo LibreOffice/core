@@ -4870,9 +4870,9 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
     }
 }
 
-sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
+ErrCode SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
 {
-    sal_uLong nErrRet = 0;
+    ErrCode nErrRet = ERRCODE_NONE;
 
     m_rDoc.SetDocumentType( SwDoc::DOCTYPE_MSWORD );
     if (m_bNewDoc && m_pStg && !pGloss)
@@ -5382,10 +5382,10 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss)
     return nErrRet;
 }
 
-sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream,
+ErrCode SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream,
     tools::SvRef<SotStorageStream> &rDataStream)
 {
-    sal_uLong nErrRet = 0;
+    ErrCode nErrRet = ERRCODE_NONE;
     // 6 stands for "6 OR 7", 7 stands for "ONLY 7"
     switch (m_pWwFib->m_nVersion)
     {
@@ -5657,9 +5657,9 @@ static bool lclReadCryptoAPIHeader(msfilter::RC4EncryptionInfo &info, SvStream &
     return true;
 }
 
-sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
+ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
 {
-    sal_uLong nErrRet = 0;
+    ErrCode nErrRet = ERRCODE_NONE;
     if (pGloss)
         m_pWwFib = pGloss->GetFib();
     else
@@ -5727,7 +5727,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                     // if initialization has failed the EncryptionData should be empty
                     if ( aEncryptionData.getLength() && aCtx.VerifyKey( m_pWwFib->m_nKey, m_pWwFib->m_nHash ) )
                     {
-                        nErrRet = 0;
+                        nErrRet = ERRCODE_NONE;
                         pTempMain = MakeTemp(aDecryptMain);
 
                         m_pStrm->Seek(0);
@@ -5794,7 +5794,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                     if (aEncryptionData.getLength() && xCtx->VerifyKey(info.verifier.encryptedVerifier,
                                                                        info.verifier.encryptedVerifierHash))
                     {
-                        nErrRet = 0;
+                        nErrRet = ERRCODE_NONE;
 
                         pTempMain = MakeTemp(aDecryptMain);
 
@@ -5830,7 +5830,7 @@ sal_uLong SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
             }
         }
 
-        if (nErrRet == 0)
+        if (nErrRet == ERRCODE_NONE)
         {
             m_pStrm = &aDecryptMain;
 
@@ -6083,9 +6083,9 @@ void SwWW8ImplReader::GetSmartTagInfo(SwFltRDFMark& rMark)
     rMark.SetAttributes(aAttributes);
 }
 
-sal_uLong SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
+ErrCode SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
 {
-    sal_uLong nErrRet = 0;
+    ErrCode nErrRet = ERRCODE_NONE;
 
     {
         static const sal_Char* aNames[ 13 ] = {
@@ -6198,7 +6198,7 @@ bool SAL_CALL TestImportDOC(SvStream &rStream, const OUString &rFltName)
     SwPaM aPaM( aIdx );
     aPaM.GetPoint()->nContent.Assign(aIdx.GetNode().GetContentNode(), 0);
     pD->SetInReading(true);
-    bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == 0;
+    bool bRet = pReader->Read(*pD, OUString(), aPaM, OUString()) == ERRCODE_NONE;
     pD->SetInReading(false);
     delete pReader;
 
@@ -6222,9 +6222,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportWW2(SvStream &rStream)
     return TestImportDOC(rStream, "WW6");
 }
 
-sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize )
+ErrCode WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize )
 {
-    sal_uLong nRet = ERR_SWG_READ_ERROR;
+    ErrCode nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE( pStg.get(), "Where is my Storage?" );
     rRef = pStg->OpenSotStream( "WordDocument", StreamMode::READ | StreamMode::SHARE_DENYALL);
 
@@ -6235,7 +6235,7 @@ sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_u
             sal_uInt16 nOld = rRef->GetBufferSize();
             rRef->SetBufferSize( rBuffSize );
             rBuffSize = nOld;
-            nRet = 0;
+            nRet = ERRCODE_NONE;
         }
         else
             nRet = rRef->GetError();
@@ -6243,7 +6243,7 @@ sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_u
     return nRet;
 }
 
-sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & /* FileName */)
+ErrCode WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & /* FileName */)
 {
     sal_uInt16 nOldBuffSize = 32768;
     bool bNew = !bInsertMode; // New Doc (no inserting)
@@ -6251,7 +6251,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, co
     tools::SvRef<SotStorageStream> refStrm; // So that no one else can steal the Stream
     SvStream* pIn = pStrm;
 
-    sal_uLong nRet = 0;
+    ErrCode nRet = ERRCODE_NONE;
     sal_uInt8 nVersion = 8;
 
     const OUString sFltName = GetFltName();

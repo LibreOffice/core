@@ -95,11 +95,11 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
         if ( pStream )
         {
             Graphic aGraph( *pGDIMeta );
-            bool bFailed = GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::EMF );
+            ErrCode nFailed = GraphicConverter::Export( *pStream, aGraph, ConvertDataFormat::EMF );
             pStream->Flush();
             delete pStream;
 
-            if ( !bFailed )
+            if ( !nFailed )
                 pResult = GetEnhMetaFileA( aWinFile.getStr() );
         }
     }
@@ -121,9 +121,9 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
     {
         SvMemoryStream pStream( 65535, 65535 );
         Graphic aGraph( *pGDIMeta );
-        bool bFailed = GraphicConverter::Export( pStream, aGraph, ConvertDataFormat::WMF );
+        ErrCode nFailed = GraphicConverter::Export( pStream, aGraph, ConvertDataFormat::WMF );
         pStream.Flush();
-        if ( !bFailed )
+        if ( !nFailed )
         {
             sal_Int32 nLength = pStream.Seek( STREAM_SEEK_TO_END );
             if ( nLength > 22 )

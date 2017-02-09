@@ -481,7 +481,7 @@ void SbiInstance::ErrorVB( sal_Int32 nVBNumber, const OUString& rMsg )
         ErrCode n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
         if ( !n )
         {
-            n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
+            n = ErrCode(nVBNumber); // force orig number, probably should have a specific table of vb ( localized ) errors
         }
         aErrorMsg = rMsg;
         SbiRuntime::translateErrorToVba( n, aErrorMsg );
@@ -496,7 +496,7 @@ void SbiInstance::setErrorVB( sal_Int32 nVBNumber )
     ErrCode n = StarBASIC::GetSfxFromVBError( static_cast< sal_uInt16 >( nVBNumber ) );
     if( !n )
     {
-        n = nVBNumber; // force orig number, probably should have a specific table of vb ( localized ) errors
+        n = ErrCode(nVBNumber); // force orig number, probably should have a specific table of vb ( localized ) errors
     }
     aErrorMsg = OUString();
     SbiRuntime::translateErrorToVba( n, aErrorMsg );
@@ -775,7 +775,7 @@ bool SbiRuntime::Step()
         }
 
         ErrCode nErrCode = SbxBase::GetError();
-        Error( ERRCODE_TOERROR(nErrCode) );
+        Error( nErrCode.IgnoreWarning() );
 
         // from 13.2.1997, new error handling:
         // ATTENTION: nError can be set already even if !nErrCode
@@ -933,12 +933,6 @@ sal_Int32 SbiRuntime::translateErrorToVba( ErrCode nError, OUString& rMsg )
     // we really need a new vba compatible error list
     if ( rMsg.isEmpty() )
     {
-        // TEST, has to be vb here always
-#ifdef DBG_UTIL
-        ErrCode nTmp = StarBASIC::GetSfxFromVBError( (sal_uInt16)nError );
-        SAL_WARN_IF( nTmp == 0, "basic", "No VB error!" );
-#endif
-
         StarBASIC::MakeErrorText( nError, rMsg );
         rMsg = StarBASIC::GetErrorText();
         if ( rMsg.isEmpty() ) // no message for err no, need localized resource here
@@ -948,7 +942,7 @@ sal_Int32 SbiRuntime::translateErrorToVba( ErrCode nError, OUString& rMsg )
     }
     // no num? most likely then it *is* really a vba err
     sal_uInt16 nVBErrorCode = StarBASIC::GetVBErrorCode( nError );
-    sal_Int32 nVBAErrorNumber = ( nVBErrorCode == 0 ) ? nError : nVBErrorCode;
+    sal_Int32 nVBAErrorNumber = ( nVBErrorCode == 0 ) ? sal_uInt32(nError) : nVBErrorCode;
     return nVBAErrorNumber;
 }
 

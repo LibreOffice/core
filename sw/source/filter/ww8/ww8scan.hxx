@@ -1113,7 +1113,7 @@ public:
     /*
         error status
     */
-    sal_uLong m_nFibError;
+    ErrCode   m_nFibError;
     /*
         data read from FIB by Ctor
         (corresponds only approximately to the real structure
@@ -1599,7 +1599,7 @@ struct WW8Dop
 {
 public:
     /* Error Status */
-    sal_uLong nDopError;
+    ErrCode     nDopError;
     /*
     Corresponds only roughly to the actual structure of the Winword DOP,
     the winword FIB version matters to what exists.

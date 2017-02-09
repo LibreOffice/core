@@ -130,35 +130,35 @@ enum class SbxNameType {          // Type of the questioned name of a variable
 // New error codes per define
 #define ERRCODE_SBX_OK            ERRCODE_NONE    // processed
 
-#define ERRCODE_SBX_SYNTAX              (1UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_COMPILER)
-#define ERRCODE_SBX_NOTIMP              (2UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_NOTSUPPORTED)
-#define ERRCODE_SBX_OVERFLOW            (3UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)        // overflow
-#define ERRCODE_SBX_BOUNDS              (4UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)        // Invalid array index
-#define ERRCODE_SBX_ZERODIV             (5UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)        // Division by zero
-#define ERRCODE_SBX_CONVERSION          (6UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)        // wrong data type
-#define ERRCODE_SBX_BAD_PARAMETER       (7UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)    // invalid Parameter
-#define ERRCODE_SBX_PROC_UNDEFINED      (8UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)    // Sub or Func not def
-#define ERRCODE_SBX_ERROR               (9UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_UNKNOWN)    // generic object error
-#define ERRCODE_SBX_NO_OBJECT           (10UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Object var not object
-#define ERRCODE_SBX_CANNOT_LOAD         (11UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_CREATE)    // Object init/load fail
-#define ERRCODE_SBX_BAD_INDEX           (12UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)       // Invalid object index
-#define ERRCODE_SBX_NO_ACTIVE_OBJECT    (13UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)    // Object not active
-#define ERRCODE_SBX_BAD_PROP_VALUE      (14UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Bad property value
-#define ERRCODE_SBX_PROP_READONLY       (15UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_READ)      // Property is read only
-#define ERRCODE_SBX_PROP_WRITEONLY      (16UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_WRITE)     // Property is write only
-#define ERRCODE_SBX_INVALID_OBJECT      (17UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)    // Invalid object reference
-#define ERRCODE_SBX_NO_METHOD           (18UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Property or Method unknown
-#define ERRCODE_SBX_INVALID_USAGE_OBJECT (19UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)   // Invalid object usage
-#define ERRCODE_SBX_NO_OLE              (20UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)    // No OLE-Object
-#define ERRCODE_SBX_BAD_METHOD          (21UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Method not supported
-#define ERRCODE_SBX_OLE_ERROR           (22UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // OLE Automation Error
-#define ERRCODE_SBX_BAD_ACTION          (23UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_NOTSUPPORTED)  // Action not supported
-#define ERRCODE_SBX_NO_NAMED_ARGS       (24UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // No named arguments
-#define ERRCODE_SBX_BAD_LOCALE          (25UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_NOTSUPPORTED)  // Locale not supported
-#define ERRCODE_SBX_NAMED_NOT_FOUND     (26UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Unknown named argument
-#define ERRCODE_SBX_NOT_OPTIONAL        (27UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Argument not optional
-#define ERRCODE_SBX_WRONG_ARGS          (28UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)       // Invalid number of arguments
-#define ERRCODE_SBX_NOT_A_COLL          (29UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Object contains no elements
+#define ERRCODE_SBX_SYNTAX              ErrCode(1UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_COMPILER)
+#define ERRCODE_SBX_NOTIMP              ErrCode(2UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_NOTSUPPORTED)
+#define ERRCODE_SBX_OVERFLOW            ErrCode(3UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)        // overflow
+#define ERRCODE_SBX_BOUNDS              ErrCode(4UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)        // Invalid array index
+#define ERRCODE_SBX_ZERODIV             ErrCode(5UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)        // Division by zero
+#define ERRCODE_SBX_CONVERSION          ErrCode(6UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)        // wrong data type
+#define ERRCODE_SBX_BAD_PARAMETER       ErrCode(7UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)    // invalid Parameter
+#define ERRCODE_SBX_PROC_UNDEFINED      ErrCode(8UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)    // Sub or Func not def
+#define ERRCODE_SBX_ERROR               ErrCode(9UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_UNKNOWN)    // generic object error
+#define ERRCODE_SBX_NO_OBJECT           ErrCode(10UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Object var not object
+#define ERRCODE_SBX_CANNOT_LOAD         ErrCode(11UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_CREATE)    // Object init/load fail
+#define ERRCODE_SBX_BAD_INDEX           ErrCode(12UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)       // Invalid object index
+#define ERRCODE_SBX_NO_ACTIVE_OBJECT    ErrCode(13UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)    // Object not active
+#define ERRCODE_SBX_BAD_PROP_VALUE      ErrCode(14UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Bad property value
+#define ERRCODE_SBX_PROP_READONLY       ErrCode(15UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_READ)      // Property is read only
+#define ERRCODE_SBX_PROP_WRITEONLY      ErrCode(16UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_WRITE)     // Property is write only
+#define ERRCODE_SBX_INVALID_OBJECT      ErrCode(17UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)    // Invalid object reference
+#define ERRCODE_SBX_NO_METHOD           ErrCode(18UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Property or Method unknown
+#define ERRCODE_SBX_INVALID_USAGE_OBJECT ErrCode(19UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)   // Invalid object usage
+#define ERRCODE_SBX_NO_OLE              ErrCode(20UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_ACCESS)    // No OLE-Object
+#define ERRCODE_SBX_BAD_METHOD          ErrCode(21UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Method not supported
+#define ERRCODE_SBX_OLE_ERROR           ErrCode(22UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // OLE Automation Error
+#define ERRCODE_SBX_BAD_ACTION          ErrCode(23UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_NOTSUPPORTED)  // Action not supported
+#define ERRCODE_SBX_NO_NAMED_ARGS       ErrCode(24UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // No named arguments
+#define ERRCODE_SBX_BAD_LOCALE          ErrCode(25UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_NOTSUPPORTED)  // Locale not supported
+#define ERRCODE_SBX_NAMED_NOT_FOUND     ErrCode(26UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Unknown named argument
+#define ERRCODE_SBX_NOT_OPTIONAL        ErrCode(27UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Argument not optional
+#define ERRCODE_SBX_WRONG_ARGS          ErrCode(28UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_SBX)       // Invalid number of arguments
+#define ERRCODE_SBX_NOT_A_COLL          ErrCode(29UL | ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)   // Object contains no elements
 #define LAST_SBX_ERROR_ID                        29UL
 
 #ifndef __RSC

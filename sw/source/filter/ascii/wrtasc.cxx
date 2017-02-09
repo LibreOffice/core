@@ -83,7 +83,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
 
 SwASCWriter::~SwASCWriter() {}
 
-sal_uLong SwASCWriter::WriteStream()
+ErrCode SwASCWriter::WriteStream()
 {
     if( bASCII_ParaAsCR )           // If predefined
         m_sLineEnd = "\015";

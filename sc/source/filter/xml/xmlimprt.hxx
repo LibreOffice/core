@@ -1179,7 +1179,7 @@ public:
 
     sal_Int32 GetByteOffset();
 
-    void SetRangeOverflowType(sal_uInt32 nType);
+    void SetRangeOverflowType(ErrCode nType);
 
     static sal_Int32 GetRangeType(const OUString& sRangeType);
     void SetNamedRanges();

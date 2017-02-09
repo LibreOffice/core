@@ -349,7 +349,7 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         rTargetStream.WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 ).WriteUInt32( 0 )
            .WriteUInt32( nStreamPosition + 26 ).WriteUInt32( 0 ).WriteUInt16( 0xffff );
 
-        sal_uInt32 nErrCode;
+        ErrCode nErrCode;
         if ( mbGrayScale )
         {
             BitmapEx aTempBitmapEx( rGraphic.GetBitmapEx() );

@@ -204,7 +204,7 @@ IMPL_LINK_NOARG(AreaPropertyPanelBase, ClickImportBitmapHdl, Button*, void)
     {
         Graphic aGraphic;
         EnterWait();
-        int nError = aDlg.GetGraphic( aGraphic );
+        ErrCode nError = aDlg.GetGraphic( aGraphic );
         LeaveWait();
         if( nError == ERRCODE_NONE )
         {

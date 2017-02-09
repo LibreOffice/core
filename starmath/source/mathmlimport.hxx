@@ -48,9 +48,9 @@ public:
     explicit SmXMLImportWrapper(css::uno::Reference<css::frame::XModel> &rRef)
         : xModel(rRef) {}
 
-    sal_uInt32 Import(SfxMedium &rMedium);
+    ErrCode Import(SfxMedium &rMedium);
 
-    static sal_uInt32 ReadThroughComponent(
+    static ErrCode ReadThroughComponent(
         const css::uno::Reference< css::io::XInputStream >& xInputStream,
         const css::uno::Reference< css::lang::XComponent >& xModelComponent,
         css::uno::Reference< css::uno::XComponentContext > & rxContext,
@@ -58,7 +58,7 @@ public:
         const sal_Char* pFilterName,
         bool bEncrypted );
 
-    static sal_uInt32 ReadThroughComponent(
+    static ErrCode ReadThroughComponent(
         const css::uno::Reference< css::embed::XStorage >& xStorage,
         const css::uno::Reference< css::lang::XComponent >& xModelComponent,
         const sal_Char* pStreamName,

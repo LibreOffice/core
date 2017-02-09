@@ -60,7 +60,7 @@ class SwASCIIParser
     SvtScriptType nScript;
     bool bNewDoc;
 
-    sal_uLong ReadChars();
+    ErrCode ReadChars();
     void InsertText( const OUString& rStr );
 
     SwASCIIParser(const SwASCIIParser&) = delete;
@@ -71,11 +71,11 @@ public:
                             bool bReadNewDoc, const SwAsciiOptions& rOpts );
     ~SwASCIIParser();
 
-    sal_uLong CallParser();
+    ErrCode CallParser();
 };
 
 // Call for the general reader interface
-sal_uLong AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OUString & )
+ErrCode AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OUString & )
 {
     if( !pStrm )
     {
@@ -85,7 +85,7 @@ sal_uLong AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OU
 
     SwASCIIParser* pParser = new SwASCIIParser( &rDoc, rPam, *pStrm,
                                         !bInsertMode, aOpt.GetASCIIOpts() );
-    sal_uLong nRet = pParser->CallParser();
+    ErrCode nRet = pParser->CallParser();
 
     delete pParser;
     // after Read reset the options
@@ -139,7 +139,7 @@ SwASCIIParser::~SwASCIIParser()
 }
 
 // Calling the parser
-sal_uLong SwASCIIParser::CallParser()
+ErrCode SwASCIIParser::CallParser()
 {
     rInput.Seek(STREAM_SEEK_TO_END);
     rInput.ResetError();
@@ -170,7 +170,7 @@ sal_uLong SwASCIIParser::CallParser()
             pDoc->SetTextFormatColl(*pPam, pColl);
     }
 
-    sal_uLong nError = ReadChars();
+    ErrCode nError = ReadChars();
 
     if( pItemSet )
     {
@@ -250,7 +250,7 @@ sal_uLong SwASCIIParser::CallParser()
     return nError;
 }
 
-sal_uLong SwASCIIParser::ReadChars()
+ErrCode SwASCIIParser::ReadChars()
 {
     sal_Unicode *pStt = nullptr, *pEnd = nullptr, *pLastStt = nullptr;
     long nReadCnt = 0, nLineLen = 0;
@@ -292,7 +292,7 @@ sal_uLong SwASCIIParser::ReadChars()
         hConverter = rtl_createTextToUnicodeConverter( currentCharSet );
         OSL_ENSURE( hConverter, "no string convert available" );
         if (!hConverter)
-            return ERROR_SW_READ_BASE;
+            return ErrCode(ERROR_SW_READ_BASE);
         bSwapUnicode = false;
         hContext = rtl_createTextToUnicodeContext( hConverter );
     }

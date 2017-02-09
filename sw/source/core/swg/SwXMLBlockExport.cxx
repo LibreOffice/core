@@ -39,7 +39,7 @@ SwXMLBlockListExport::SwXMLBlockListExport(
                             XML_NAMESPACE_BLOCKLIST );
 }
 
-sal_uInt32 SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
+ErrCode SwXMLBlockListExport::exportDoc(enum XMLTokenEnum )
 {
     GetDocHandler()->startDocument();
 

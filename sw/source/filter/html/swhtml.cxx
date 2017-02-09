@@ -189,7 +189,7 @@ bool HTMLReader::SetStrmStgPtr()
 }
 
     // Aufruf fuer die allg. Reader-Schnittstelle
-sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & rName )
+ErrCode HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, const OUString & rName )
 {
     if( !pStrm )
     {
@@ -212,7 +212,7 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
 
     // so nobody steals the document!
     rDoc.acquire();
-    sal_uLong nRet = 0;
+    ErrCode nRet = ERRCODE_NONE;
     tools::SvRef<SwHTMLParser> xParser = new SwHTMLParser( &rDoc, rPam, *pStrm,
                                             rName, rBaseURL, !bInsertMode, pMedium,
                                             IsReadUTF8(),
