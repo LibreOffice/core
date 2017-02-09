@@ -740,7 +740,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     ScDocShell* pOtherDocSh = new ScDocShell;
                     SfxObjectShellLock aDocShTablesRef = pOtherDocSh;
                     pOtherDocSh->DoLoad( pMed );
-                    sal_uLong nErr = pOtherDocSh->GetErrorCode();
+                    ErrCode nErr = pOtherDocSh->GetErrorCode();
                     if (nErr)
                         ErrorHandler::HandleError( nErr );          // also warnings
 

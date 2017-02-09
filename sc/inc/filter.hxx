@@ -48,7 +48,7 @@ enum ExportFormatExcel { ExpBiff2, ExpBiff3, ExpBiff4, ExpBiff4W, ExpBiff5, ExpB
 class ScEEAbsImport {
   public:
     virtual ~ScEEAbsImport() {}
-    virtual sal_uLong   Read( SvStream& rStream, const OUString& rBaseURL ) = 0;
+    virtual ErrCode Read( SvStream& rStream, const OUString& rBaseURL ) = 0;
     virtual ScRange GetRange() = 0;
     virtual void    WriteToDocument(
         bool bSizeColsRows = false, double nOutputFactor = 1.0,

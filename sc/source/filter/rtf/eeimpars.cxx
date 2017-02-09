@@ -76,9 +76,9 @@ ScEEImport::~ScEEImport()
     // Is guaranteed as ScEEImport is base class
 }
 
-sal_uLong ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
+ErrCode ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )
 {
-    sal_uLong nErr = mpParser->Read( rStream, rBaseURL );
+    ErrCode nErr = mpParser->Read( rStream, rBaseURL );
 
     SCCOL nEndCol;
     SCROW nEndRow;

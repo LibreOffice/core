@@ -1273,7 +1273,7 @@ Image AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
     Image aImage;
 
     SvStream* pStream = UcbStreamHelper::CreateStream( aImageURL, StreamMode::STD_READ );
-    if ( pStream && ( pStream->GetErrorCode() == 0 ))
+    if ( pStream && ( pStream->GetErrorCode() == ERRCODE_NONE ))
     {
         // Use graphic class to also support more graphic formats (bmp,png,...)
         Graphic aGraphic;

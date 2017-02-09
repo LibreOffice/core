@@ -36,7 +36,7 @@ public:
     bool    Import();
     bool    Export() override;
 
-    static void HandleGraphicFilterError( ErrCode nFilterError, sal_uLong nStreamError );
+    static void HandleGraphicFilterError( ErrCode nFilterError, ErrCode nStreamError );
 };
 
 #endif // INCLUDED_SD_INC_SDGRFFILTER_HXX

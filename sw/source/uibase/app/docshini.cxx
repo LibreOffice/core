@@ -522,7 +522,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         }
 
         SwWait aWait( *this, true );
-        sal_uInt32 nErr = ERR_SWG_READ_ERROR;
+        ErrCode nErr = ERR_SWG_READ_ERROR;
         switch( GetCreateMode() )
         {
             case SfxObjectCreateMode::ORGANIZER:
@@ -582,7 +582,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
         InitDrawModelAndDocShell(this, m_pDoc ? m_pDoc->getIDocumentDrawModelAccess().GetDrawModel() : nullptr);
 
         SetError(nErr);
-        bRet = !IsError( nErr );
+        bRet = !nErr.IsError();
 
         if (bRet && !m_pDoc->IsInLoadAsynchron() &&
             GetCreateMode() == SfxObjectCreateMode::STANDARD)
@@ -606,7 +606,7 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
     AddLink();      // set Link and update Data!!
 
     do {        // middle check loop
-        sal_uInt32 nErr = ERR_SWG_READ_ERROR;
+        ErrCode nErr = ERR_SWG_READ_ERROR;
         OUString aStreamName = "styles.xml";
         uno::Reference < container::XNameAccess > xAccess( rMedium.GetStorage(), uno::UNO_QUERY );
         if ( xAccess->hasByName( aStreamName ) && rMedium.GetStorage()->isStreamElement( aStreamName ) )
@@ -631,7 +631,7 @@ bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
         }
 
         SetError(nErr);
-        bRet = !IsError( nErr );
+        bRet = !nErr.IsError();
 
     } while( false );
 

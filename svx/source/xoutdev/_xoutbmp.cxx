@@ -375,7 +375,7 @@ bool XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUString)
             aMimeType = "image/png";
             break;
     }
-    sal_uLong nErr = GraphicConverter::Export(aOStm,rGraphic,aCvtType);
+    ErrCode nErr = GraphicConverter::Export(aOStm,rGraphic,aCvtType);
     if ( nErr )
     {
         SAL_WARN("svx", "XOutBitmap::GraphicToBase64() invalid Graphic? error: " << nErr );

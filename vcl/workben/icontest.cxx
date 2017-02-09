@@ -94,7 +94,7 @@ void MyWorkWindow::LoadGraphic( const OUString& sImageFile )
 {
     SvFileStream aFileStream( sImageFile, StreamMode::READ );
     GraphicFilter aGraphicFilter(false);
-    if (aGraphicFilter.ImportGraphic(maGraphic, sImageFile, aFileStream) != 0)
+    if (aGraphicFilter.ImportGraphic(maGraphic, sImageFile, aFileStream) != ERRCODE_NONE)
     {
         SAL_WARN("vcl.icontest", "Could not import image '" << sImageFile << "'");
         return;

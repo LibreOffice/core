@@ -68,7 +68,7 @@ class ScXMLImportWrapper
 
     css::uno::Reference< css::task::XStatusIndicator> GetStatusIndicator();
 
-    sal_uInt32 ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
+    ErrCode ImportFromComponent(const css::uno::Reference<css::uno::XComponentContext>& xContext,
         css::uno::Reference<css::frame::XModel>& xModel,
         css::uno::Reference<css::xml::sax::XParser>& xParser,
         css::xml::sax::InputSource& aParserInput,

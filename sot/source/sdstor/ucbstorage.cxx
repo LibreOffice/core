@@ -1009,7 +1009,7 @@ void UCBStorageStream_Impl::SetError( ErrCode nErr )
 
 void  UCBStorageStream_Impl::ResetError()
 {
-    m_nError = 0;
+    m_nError = ERRCODE_NONE;
     SvStream::ResetError();
     if ( m_pAntiImpl )
         m_pAntiImpl->ResetError();
