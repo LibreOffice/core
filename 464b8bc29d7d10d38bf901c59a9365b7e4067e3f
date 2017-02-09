@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_4f4b0d5a",
+        "filename": "sc/source/filter/inc/excrecds.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-09T05:54:52Z",
+      "side": 1,
+      "message": "we normally use m_x for things like std::shared_ptr, uno::Reference and rtl::Reference",
+      "revId": "464b8bc29d7d10d38bf901c59a9365b7e4067e3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
