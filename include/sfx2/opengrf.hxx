@@ -31,12 +31,12 @@ public:
     SvxOpenGraphicDialog    ( const OUString& rTitle );
     ~SvxOpenGraphicDialog   ();
 
-    short                   Execute();
+    ErrCode                 Execute();
 
     void                    SetPath( const OUString& rPath, bool bLinkState );
     OUString                GetPath() const;
 
-    int                     GetGraphic(Graphic&) const;
+    ErrCode                 GetGraphic(Graphic&) const;
 
     void                    EnableLink(bool);
     void                    AsLink(bool);

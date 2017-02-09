@@ -1313,13 +1313,13 @@ Writer& OutHTML_FrameFormatOLENodeGrf( Writer& rWrt, const SwFrameFormat& rFrame
         if(pTempFileName)
             aGraphicURL = *pTempFileName;
 
-        sal_uInt16 nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
+        ErrCode nErr = XOutBitmap::WriteGraphic( aGraphic, aGraphicURL,
                                     "JPG",
                                     (XOutFlags::UseGifIfPossible |
                                      XOutFlags::UseNativeIfPossible) );
         if( nErr )              // error, don't write anything
         {
-            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+            rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
             return rWrt;
         }
         aGraphicURL = URIHelper::SmartRel2Abs(

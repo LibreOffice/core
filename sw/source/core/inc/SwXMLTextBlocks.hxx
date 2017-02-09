@@ -59,41 +59,41 @@ public:
     virtual void   AddName( const OUString&, const OUString&, bool bOnlyText = false ) override;
     static OUString GeneratePackageName ( const OUString& rShort );
     virtual ~SwXMLTextBlocks() override;
-    virtual sal_uLong Delete( sal_uInt16 ) override;
-    virtual sal_uLong Rename( sal_uInt16, const OUString&, const OUString& ) override;
-    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) override;
+    virtual ErrCode Delete( sal_uInt16 ) override;
+    virtual ErrCode Rename( sal_uInt16, const OUString&, const OUString& ) override;
+    virtual ErrCode CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) override;
     virtual void  ClearDoc() override;
-    virtual sal_uLong GetDoc( sal_uInt16 ) override;
-    virtual sal_uLong BeginPutDoc( const OUString&, const OUString& ) override;
-    virtual sal_uLong PutDoc() override;
-    virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) override;
-    virtual sal_uLong MakeBlockList() override;
+    virtual ErrCode GetDoc( sal_uInt16 ) override;
+    virtual ErrCode BeginPutDoc( const OUString&, const OUString& ) override;
+    virtual ErrCode PutDoc() override;
+    virtual ErrCode PutText( const OUString&, const OUString&, const OUString& ) override;
+    virtual ErrCode MakeBlockList() override;
 
     virtual FileType GetFileType() const override;
-    virtual sal_uLong OpenFile( bool bReadOnly = true ) override;
+    virtual ErrCode OpenFile( bool bReadOnly = true ) override;
     virtual void  CloseFile() override;
 
     static bool IsFileUCBStorage( const OUString & rFileName);
 
     // Methods for the new Autocorrecter
-    sal_uLong GetText( const OUString& rShort, OUString& );
+    ErrCode GetText( const OUString& rShort, OUString& );
 
     virtual bool IsOnlyTextBlock( const OUString& rShort ) const override;
     bool IsOnlyTextBlock( sal_uInt16 nIdx ) const;
     void SetIsTextOnly( const OUString& rShort, bool bNewValue );
 
-    virtual sal_uLong GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTable ) override;
-    virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
+    virtual ErrCode GetMacroTable( sal_uInt16, SvxMacroTableDtor& rMacroTable ) override;
+    virtual ErrCode SetMacroTable( sal_uInt16 nIdx,
                                  const SvxMacroTableDtor& rMacroTable ) override;
     virtual bool PutMuchEntries( bool bOn ) override;
 
 public:
     SwDoc* GetDoc() const { return m_pDoc; }
     //void  SetDoc( SwDoc * pNewDoc);
-    sal_uLong StartPutBlock( const OUString& rShort, const OUString& rPackageName );
-    sal_uLong PutBlock();
-    sal_uLong GetBlockText( const OUString& rShort, OUString& rText );
-    sal_uLong PutBlockText( const OUString& rShort, const OUString& rText, const OUString& rPackageName );
+    ErrCode StartPutBlock( const OUString& rShort, const OUString& rPackageName );
+    ErrCode PutBlock();
+    ErrCode GetBlockText( const OUString& rShort, OUString& rText );
+    ErrCode PutBlockText( const OUString& rShort, const OUString& rText, const OUString& rPackageName );
     void MakeBlockText( const OUString& rText );
 
 };

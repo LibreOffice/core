@@ -305,7 +305,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
             xWrt->SetAsciiOptions( aAsciiOpt );
             xWrt->bUCS2_WithStartChar = false;
 
-            if (!IsError(aWriter.Write(xWrt)))
+            if ( ! aWriter.Write(xWrt).IsError() )
             {
                 aStream.WriteUInt16( '\0' );
 

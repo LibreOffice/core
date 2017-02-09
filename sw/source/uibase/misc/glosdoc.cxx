@@ -293,7 +293,7 @@ SwTextBlocks* SwGlossaries::GetGlosDoc( const OUString &rName, bool bCreate ) co
             if( pTmp->GetError() )
             {
                 ErrorHandler::HandleError( pTmp->GetError() );
-                bOk = !IsError( pTmp->GetError() );
+                bOk = ! pTmp->GetError().IsError();
             }
 
             if( bOk && pTmp->GetName().isEmpty() )
@@ -419,7 +419,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
 
 void SwGlossaries::ShowError()
 {
-    sal_uInt32 nPathError = *new StringErrorInfo(ERR_AUTOPATH_ERROR,
+    ErrCode nPathError = *new StringErrorInfo(ERR_AUTOPATH_ERROR,
                                             lcl_makePath(m_aInvalidPaths), DialogMask::ButtonsOk );
     ErrorHandler::HandleError( nPathError );
 }

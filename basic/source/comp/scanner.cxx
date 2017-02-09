@@ -85,15 +85,14 @@ void SbiScanner::GenError( ErrCode code )
             // in case of EXPECTED or UNEXPECTED it always refers
             // to the last token, so take the Col1 over
             sal_Int32 nc = nColLock ? nSavedCol1 : nCol1;
-            switch( code )
+            if ( code.anyOf(
+                    ERRCODE_BASIC_EXPECTED,
+                    ERRCODE_BASIC_UNEXPECTED,
+                    ERRCODE_BASIC_SYMBOL_EXPECTED,
+                    ERRCODE_BASIC_LABEL_EXPECTED) )
             {
-                case ERRCODE_BASIC_EXPECTED:
-                case ERRCODE_BASIC_UNEXPECTED:
-                case ERRCODE_BASIC_SYMBOL_EXPECTED:
-                case ERRCODE_BASIC_LABEL_EXPECTED:
                     nc = nCol1;
                     if( nc > nCol2 ) nCol2 = nc;
-                    break;
             }
             bRes = pBasic->CError( code, aError, nLine, nc, nCol2 );
         }

@@ -112,7 +112,7 @@ void RptMLMasterStylesContext_Impl::EndElement()
 }
 
     /// read a component (file + filter version)
-sal_Int32 ReadThroughComponent(
+ErrCode ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* /*pStreamName*/,
@@ -134,7 +134,7 @@ sal_Int32 ReadThroughComponent(
     // get filter
     OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
     if( !_xFilter.is() )
-        return 1;
+        return ErrCode(1);
 
     // connect parser and filter
     xParser->setDocumentHandler( _xFilter );
@@ -161,11 +161,11 @@ sal_Int32 ReadThroughComponent(
 #else
         (void)r;
 #endif
-        return 1;
+        return ErrCode(1);
     }
     catch (const SAXException&)
     {
-        return 1;
+        return ErrCode(1);
     }
     catch (const packages::zip::ZipIOException&)
     {
@@ -173,19 +173,19 @@ sal_Int32 ReadThroughComponent(
     }
     catch (const IOException&)
     {
-        return 1;
+        return ErrCode(1);
     }
     catch (const Exception&)
     {
-        return 1;
+        return ErrCode(1);
     }
 
     // success!
-    return 0;
+    return ERRCODE_NONE;
 }
 
 /// read a component (storage version)
-sal_Int32 ReadThroughComponent(
+ErrCode ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const uno::Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,
@@ -215,12 +215,12 @@ sal_Int32 ReadThroughComponent(
 
                 // do we even have an alternative name?
                 if ( nullptr == pCompatibilityStreamName )
-                    return 0;
+                    return ERRCODE_NONE;
 
                 // if so, does the stream exist?
                 sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
                 if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
-                    return 0;
+                    return ERRCODE_NONE;
             }
 
             // get input stream
@@ -235,7 +235,7 @@ sal_Int32 ReadThroughComponent(
         }
         catch (const uno::Exception&)
         {
-            return 1; // TODO/LATER: error handling
+            return ErrCode(1); // TODO/LATER: error handling
         }
 
         sal_Int32 nArgs = 0;
@@ -270,7 +270,7 @@ sal_Int32 ReadThroughComponent(
     }
 
     // TODO/LATER: better error handling
-    return 1;
+    return ErrCode(1);
 }
 
 
@@ -510,7 +510,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         static const char s_sMeta[] = "meta.xml";
         static const char s_sStreamName[] = "StreamName";
         xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString(s_sMeta)));
-        sal_Int32 nRet = ReadThroughComponent( xStorage
+        ErrCode nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"meta.xml"
                                     ,"Meta.xml"
@@ -531,7 +531,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             xProp->setPropertyValue(s_sOld,uno::makeAny(true));
         }
 
-        if ( nRet == 0 )
+        if ( nRet == ERRCODE_NONE )
         {
             xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString("settings.xml")));
             nRet = ReadThroughComponent( xStorage
@@ -545,7 +545,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xProp
                                     );
         }
-        if ( nRet == 0 )
+        if ( nRet == ERRCODE_NONE )
         {
             xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString("styles.xml")));
             nRet = ReadThroughComponent(xStorage
@@ -559,7 +559,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                     ,xProp);
         }
 
-        if ( nRet == 0 )
+        if ( nRet == ERRCODE_NONE )
         {
             xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString("content.xml")));
             nRet = ReadThroughComponent( xStorage
@@ -575,7 +575,8 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         }
 
 
-        bRet = nRet == 0;
+        bRet = false;
+        nRet = ERRCODE_NONE;
 
         if ( bRet )
         {
@@ -583,22 +584,14 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         }
         else
         {
-            switch( nRet )
+            if( nRet == ERRCODE_IO_BROKENPACKAGE && xStorage.is() )
+                ; // TODO/LATER: no way to transport the error outside from the filter!
+            else
             {
-                case ERRCODE_IO_BROKENPACKAGE:
-                    if( xStorage.is() )
-                    {
-                        // TODO/LATER: no way to transport the error outside from the filter!
-                        break;
-                    }
-                    SAL_FALLTHROUGH;
-                default:
-                    {
-                        // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
-                        ErrorHandler::HandleError( nRet );
-                        if( nRet & ERRCODE_WARNING_MASK )
-                            bRet = true;
-                    }
+                // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
+                ErrorHandler::HandleError( nRet );
+                if( nRet.IsWarning() )
+                    bRet = true;
             }
         }
     }

@@ -312,7 +312,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
         if( aDlg.Execute() == ERRCODE_NONE )
         {
             Graphic     aGraphic;
-            int nError = aDlg.GetGraphic(aGraphic);
+            ErrCode nError = aDlg.GetGraphic(aGraphic);
             if( nError == ERRCODE_NONE )
             {
                 pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), svl::Items<XATTR_FILL_FIRST, XATTR_FILL_LAST>{}) );

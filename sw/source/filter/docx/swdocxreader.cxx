@@ -48,7 +48,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOCX()
     return new SwDOCXReader;
 }
 
-sal_uLong SwDOCXReader::Read( SwDoc& /* rDoc */, const OUString& /* rBaseURL */, SwPaM& /* rPaM */, const OUString& /* FileName */ )
+ErrCode SwDOCXReader::Read( SwDoc& /* rDoc */, const OUString& /* rBaseURL */, SwPaM& /* rPaM */, const OUString& /* FileName */ )
 {
     return ERR_SWG_READ_ERROR;
 }

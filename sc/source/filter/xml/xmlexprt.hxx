@@ -256,7 +256,7 @@ public:
     XMLNumberFormatAttributesExportHelper* GetNumberFormatAttributesExportHelper();
 
     // Export the document.
-    virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
+    virtual ErrCode exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
 
     // XExporter
     virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
