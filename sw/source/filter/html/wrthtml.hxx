@@ -271,7 +271,7 @@ class SwHTMLWriter : public Writer
     void CollectLinkTargets();
 
 protected:
-    sal_uLong WriteStream() override;
+    ErrCode WriteStream() override;
     void SetupFilterOptions(SfxMedium& rMedium) override;
 
 public:
@@ -302,7 +302,7 @@ public:
 
     sal_uInt32 m_aFontHeights[7];         // font heights 1-7
 
-    sal_uInt32 m_nWarn;                   // warning code
+    ErrCode m_nWarn;                      // warning code
     sal_uInt32 m_nLastLFPos;              // last position of LF
 
     HtmlTokenId m_nLastParaToken;         // to hold paragraphs together

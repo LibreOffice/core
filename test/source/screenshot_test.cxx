@@ -74,7 +74,7 @@ void ScreenshotTest::implSaveScreenshot(const Bitmap& rScreenshot, const OString
 
     OUString aFullPath = m_directories.getPathFromWorkdir(OUStringToOString(aDirname + "/" + aBasename + ".png",RTL_TEXTENCODING_UTF8).getStr());
     SvFileStream aNew(aFullPath, StreamMode::WRITE | StreamMode::TRUNC);
-    CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to open " + OUString::number(aNew.GetErrorCode()), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen());
+    CPPUNIT_ASSERT_MESSAGE(OUStringToOString("Failed to open " + OUString::number(sal_uInt32(aNew.GetErrorCode())), RTL_TEXTENCODING_UTF8).getStr(), aNew.IsOpen());
 
     vcl::PNGWriter aPNGWriter(rScreenshot);
     aPNGWriter.Write(aNew);

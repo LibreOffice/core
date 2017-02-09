@@ -103,22 +103,22 @@ public:
     const OUString&     GetBaseURL() const { return m_sBaseURL;}
     void                SetBaseURL( const OUString& rURL ) { m_sBaseURL = rURL; }
 
-    virtual sal_uLong Delete( sal_uInt16 ) = 0;
-    virtual sal_uLong Rename( sal_uInt16, const OUString&, const OUString& ) = 0;
-    virtual sal_uLong CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) = 0;
-    virtual sal_uLong GetDoc( sal_uInt16 ) = 0;
-    virtual sal_uLong BeginPutDoc( const OUString&, const OUString& ) = 0;
-    virtual sal_uLong PutDoc() = 0;
-    virtual sal_uLong PutText( const OUString&, const OUString&, const OUString& ) = 0;
-    virtual sal_uLong MakeBlockList() = 0;
+    virtual ErrCode Delete( sal_uInt16 ) = 0;
+    virtual ErrCode Rename( sal_uInt16, const OUString&, const OUString& ) = 0;
+    virtual ErrCode CopyBlock( SwImpBlocks& rImp, OUString& rShort, const OUString& rLong) = 0;
+    virtual ErrCode GetDoc( sal_uInt16 ) = 0;
+    virtual ErrCode BeginPutDoc( const OUString&, const OUString& ) = 0;
+    virtual ErrCode PutDoc() = 0;
+    virtual ErrCode PutText( const OUString&, const OUString&, const OUString& ) = 0;
+    virtual ErrCode MakeBlockList() = 0;
 
-    virtual sal_uLong OpenFile( bool bReadOnly = true ) = 0;
+    virtual ErrCode OpenFile( bool bReadOnly = true ) = 0;
     virtual void  CloseFile() = 0;
 
     virtual bool IsOnlyTextBlock( const OUString& rShort ) const;
 
-    virtual sal_uLong GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTable );
-    virtual sal_uLong SetMacroTable( sal_uInt16 nIdx,
+    virtual ErrCode GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTable );
+    virtual ErrCode SetMacroTable( sal_uInt16 nIdx,
                                  const SvxMacroTableDtor& rMacroTable );
     virtual bool PutMuchEntries( bool bOn );
 };

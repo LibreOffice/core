@@ -60,6 +60,7 @@
 #include <xmloff/ProgressBarHelper.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <tools/fldunit.hxx>
+#include <vcl/errcode.hxx>
 
 #include <list>
 #include <memory>
@@ -398,7 +399,7 @@ public:
     void addChaffWhenEncryptedStorage();
 
     // Export the document.
-    virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
+    virtual ErrCode exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID );
 
     virtual void addDataStyle(const sal_Int32 nNumberFormat, bool bTimeFormat = false );
     virtual void exportDataStyles();
