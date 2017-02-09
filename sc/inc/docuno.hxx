@@ -356,6 +356,9 @@ public:
 
     /// @see vcl::ITiledRenderable::setClientVisibleArea().
     virtual void setClientVisibleArea(const Rectangle& rRectangle) override;
+
+    /// @see vcl::ITiledRenderable::getPostIts().
+    OUString getPostIts() override;
 };
 
 class ScDrawPagesObj : public cppu::WeakImplHelper<

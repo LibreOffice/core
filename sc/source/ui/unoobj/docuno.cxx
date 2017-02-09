@@ -19,6 +19,8 @@
 
 #include <config_features.h>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include "scitems.hxx"
 #include <editeng/editview.hxx>
 #include <editeng/outliner.hxx>
@@ -975,6 +977,63 @@ void ScModelObj::setClientVisibleArea(const Rectangle& rRectangle)
     pViewData->ForcePageUpDownOffset(rRectangle.GetHeight());
 }
 
+OUString ScModelObj::getPostIts()
+{
+    if (!pDocShell)
+        return OUString();
+
+    const ScDocument& rDoc = pDocShell->GetDocument();
+    std::vector<sc::NoteEntry> aNotes;
+    rDoc.GetAllNoteEntries(aNotes);
+
+    boost::property_tree::ptree aAnnotations;
+    for (const sc::NoteEntry& aNote : aNotes)
+    {
+        boost::property_tree::ptree aAnnotation;
+        aAnnotation.put("id", aNote.maPos.hash());
+        aAnnotation.put("author", aNote.mpNote->GetAuthor());
+        aAnnotation.put("dateTime", aNote.mpNote->GetDate());
+        aAnnotation.put("text", aNote.mpNote->GetText());
+
+        // Calculating the cell cursor position
+        ScViewData* pViewData = ScDocShell::GetViewData();
+        ScGridWindow* pGridWindow = pViewData->GetActiveWin();
+        if (pGridWindow)
+        {
+            Fraction zoomX = Fraction(long(mnTilePixelWidth * TWIPS_PER_PIXEL), mnTileTwipWidth);
+            Fraction zoomY = Fraction(long(mnTilePixelHeight * TWIPS_PER_PIXEL), mnTileTwipHeight);
+
+            Fraction defaultZoomX = pViewData->GetZoomX();
+            Fraction defaultZoomY = pViewData->GetZoomY();
+            pViewData->SetZoom(zoomX, zoomY, true);
+
+            SCCOL nX = aNote.maPos.Col();
+            SCROW nY = aNote.maPos.Row();
+            Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
+            long nSizeXPix;
+            long nSizeYPix;
+            pViewData->GetMergeSizePixel(nX, nY, nSizeXPix, nSizeYPix);
+
+            double fPPTX = pViewData->GetPPTX();
+            double fPPTY = pViewData->GetPPTY();
+            Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
+                            Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
+
+            pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
+
+            aAnnotation.put("cellPos", aRect.toString());
+        }
+
+        aAnnotations.push_back(std::make_pair("", aAnnotation));
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("comments", aAnnotations);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+
+    return OUString::createFromAscii(aStream.str().c_str());
+}
 
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
