@@ -48,6 +48,9 @@
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#include <com/sun/star/drawing/GluePoint2.hpp>
+#include <com/sun/star/container/XIdentifierAccess.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
@@ -132,6 +135,7 @@ public:
     void testTdf99030();
     void testTdf49561();
     void testTdf103473();
+    void testAoo124143();
     void testTdf103567();
     void testTdf103792();
     void testTdf103876();
@@ -196,6 +200,7 @@ public:
     CPPUNIT_TEST(testTdf99030);
     CPPUNIT_TEST(testTdf49561);
     CPPUNIT_TEST(testTdf103473);
+    CPPUNIT_TEST(testAoo124143);
     CPPUNIT_TEST(testTdf103567);
     CPPUNIT_TEST(testTdf103792);
     CPPUNIT_TEST(testTdf103876);
@@ -1527,6 +1532,50 @@ void SdImportTest::testTdf103473()
     CPPUNIT_ASSERT_EQUAL(4431L, aRect.Top());
     CPPUNIT_ASSERT_EQUAL(8353L, aRect.Right());
     CPPUNIT_ASSERT_EQUAL(9155L, aRect.Bottom());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testAoo124143()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odg/ooo124143-1.odg"), ODG);
+
+    uno::Reference<beans::XPropertySet> const xImage(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<drawing::XGluePointsSupplier> const xGPS(xImage, uno::UNO_QUERY);
+    uno::Reference<container::XIdentifierAccess> const xGluePoints(xGPS->getGluePoints(), uno::UNO_QUERY);
+
+    uno::Sequence<sal_Int32> const ids(xGluePoints->getIdentifiers());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), ids.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ids[0]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), ids[1]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), ids[2]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), ids[3]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), ids[4]);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), ids[5]);
+
+    // interesting ones are custom 4, 5
+    drawing::GluePoint2 glue4;
+    xGluePoints->getByIdentifier(4) >>= glue4;
+    CPPUNIT_ASSERT_EQUAL( 2470, glue4.Position.X);
+    CPPUNIT_ASSERT_EQUAL(-1810, glue4.Position.Y);
+
+    drawing::GluePoint2 glue5;
+    xGluePoints->getByIdentifier(5) >>= glue5;
+    CPPUNIT_ASSERT_EQUAL(-2975, glue5.Position.X);
+    CPPUNIT_ASSERT_EQUAL(-2165, glue5.Position.Y);
+
+    // now check connectors
+    uno::Reference<beans::XPropertySet> const xEllipse(getShapeFromPage(1, 0, xDocShRef));
+    uno::Reference<beans::XPropertySet> const xConn1(getShapeFromPage(2, 0, xDocShRef));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xConn1->getPropertyValue("StartGluePointIndex").get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(xEllipse, xConn1->getPropertyValue("StartShape").get<uno::Reference<beans::XPropertySet>>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xConn1->getPropertyValue("EndGluePointIndex").get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(xImage, xConn1->getPropertyValue("EndShape").get<uno::Reference<beans::XPropertySet>>());
+    uno::Reference<beans::XPropertySet> const xConn2(getShapeFromPage(3, 0, xDocShRef));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xConn2->getPropertyValue("StartGluePointIndex").get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(xEllipse, xConn2->getPropertyValue("StartShape").get<uno::Reference<beans::XPropertySet>>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), xConn2->getPropertyValue("EndGluePointIndex").get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(xImage, xConn2->getPropertyValue("EndShape").get<uno::Reference<beans::XPropertySet>>());
 
     xDocShRef->DoClose();
 }
