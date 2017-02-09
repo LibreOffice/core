@@ -75,8 +75,6 @@ protected:
 public:
 #ifdef DBG_UTIL
     ~Resource() { TestRes(); }
-#else
-    ~Resource() {}
 #endif
 };
 
