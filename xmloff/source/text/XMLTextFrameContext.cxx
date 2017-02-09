@@ -1586,6 +1586,10 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             {
                 if( IsXMLToken( rLocalName, XML_TITLE ) )
                 {
+                    if (getSupportsMultipleContents())
+                    {   // tdf#103567 ensure props are set on surviving shape
+                        m_xImplContext = solveMultipleImages();
+                    }
                     pContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
                                                                         p_nPrefix,
                                                                         rLocalName,
@@ -1593,6 +1597,10 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                 }
                 else if ( IsXMLToken( rLocalName, XML_DESC ) )
                 {
+                    if (getSupportsMultipleContents())
+                    {   // tdf#103567 ensure props are set on surviving shape
+                        m_xImplContext = solveMultipleImages();
+                    }
                     pContext = new XMLTextFrameTitleOrDescContext_Impl( GetImport(),
                                                                         p_nPrefix,
                                                                         rLocalName,
@@ -1605,24 +1613,40 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
             Reference < XPropertySet > xPropSet;
             if( IsXMLToken( rLocalName, XML_CONTOUR_POLYGON ) )
             {
+                if (getSupportsMultipleContents())
+                {   // tdf#103567 ensure props are set on surviving shape
+                    m_xImplContext = solveMultipleImages();
+                }
                 if( CreateIfNotThere( xPropSet ) )
                     pContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
                                                   xAttrList, xPropSet, false );
             }
             else if( IsXMLToken( rLocalName, XML_CONTOUR_PATH ) )
             {
+                if (getSupportsMultipleContents())
+                {   // tdf#103567 ensure props are set on surviving shape
+                    m_xImplContext = solveMultipleImages();
+                }
                 if( CreateIfNotThere( xPropSet ) )
                     pContext = new XMLTextFrameContourContext_Impl( GetImport(), p_nPrefix, rLocalName,
                                                   xAttrList, xPropSet, true );
             }
             else if( IsXMLToken( rLocalName, XML_IMAGE_MAP ) )
             {
+                if (getSupportsMultipleContents())
+                {   // tdf#103567 ensure props are set on surviving shape
+                    m_xImplContext = solveMultipleImages();
+                }
                 if( CreateIfNotThere( xPropSet ) )
                     pContext = new XMLImageMapContext( GetImport(), p_nPrefix, rLocalName, xPropSet );
             }
         }
         else if( (XML_NAMESPACE_OFFICE == p_nPrefix) && IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
         {
+            if (getSupportsMultipleContents())
+            {   // tdf#103567 ensure props are set on surviving shape
+                m_xImplContext = solveMultipleImages();
+            }
             // do we still have the frame object?
             Reference < XPropertySet > xPropSet;
             if( CreateIfNotThere( xPropSet ) )
@@ -1641,6 +1665,11 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
     else if( p_nPrefix == XML_NAMESPACE_SVG &&  // #i68101#
                 (IsXMLToken( rLocalName, XML_TITLE ) || IsXMLToken( rLocalName, XML_DESC ) ) )
     {
+        if (getSupportsMultipleContents())
+        {   // tdf#103567 ensure props are set on surviving shape
+            // note: no more draw:image can be added once we get here
+            m_xImplContext = solveMultipleImages();
+        }
         pContext = m_xImplContext->CreateChildContext( p_nPrefix, rLocalName, xAttrList );
     }
     else
