@@ -2765,6 +2765,20 @@ DECLARE_RTFIMPORT_TEST(testTdf104744, "tdf104744.rtf")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
 
+DECLARE_RTFIMPORT_TEST(testTdf105852, "tdf105852.rtf")
+{
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xTables->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XTableRows> xTableRows(xTextTable->getRows(), uno::UNO_QUERY);
+    // All rows but last were merged -> there were only 2 rows
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), xTableRows->getCount());
+    // The first row must have 4 cells.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(0), "TableColumnSeparators").getLength());
+    // The third row must have 1 merged cell.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty< uno::Sequence<text::TableColumnSeparator> >(xTableRows->getByIndex(2), "TableColumnSeparators").getLength());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
