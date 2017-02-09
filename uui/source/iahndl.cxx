@@ -487,7 +487,7 @@ UUIInteractionHelper::handleRequest_impl(
         {
             std::vector< OUString > aArguments;
             handleErrorHandlerRequest( aAppException.Classification,
-                                       aAppException.Code,
+                                       ErrCode(aAppException.Code),
                                        aArguments,
                                        rRequest->getContinuations(),
                                        bObtainErrorStringOnly,
@@ -726,7 +726,7 @@ UUIInteractionHelper::handleRequest_impl(
         task::ErrorCodeRequest aErrorCodeRequest;
         if (aAnyRequest >>= aErrorCodeRequest)
         {
-            handleGenericErrorRequest( aErrorCodeRequest.ErrCode,
+            handleGenericErrorRequest( ErrCode(aErrorCodeRequest.ErrCode),
                     rRequest->getContinuations(),
                     bObtainErrorStringOnly,
                     bHasErrorString,
@@ -737,7 +737,7 @@ UUIInteractionHelper::handleRequest_impl(
         task::ErrorCodeIOException aErrorCodeIOException;
         if (aAnyRequest >>= aErrorCodeIOException)
         {
-            handleGenericErrorRequest( aErrorCodeIOException.ErrCode,
+            handleGenericErrorRequest( ErrCode(aErrorCodeIOException.ErrCode),
                                        rRequest->getContinuations(),
                                        bObtainErrorStringOnly,
                                        bHasErrorString,
@@ -1076,7 +1076,7 @@ UUIInteractionHelper::handleNameClashResolveRequest(
 
 void
 UUIInteractionHelper::handleGenericErrorRequest(
-    sal_Int32 nErrorCode,
+    ErrCode nErrorCode,
     uno::Sequence< uno::Reference<
         task::XInteractionContinuation > > const & rContinuations,
     bool bObtainErrorStringOnly,
@@ -1102,8 +1102,8 @@ UUIInteractionHelper::handleGenericErrorRequest(
         // Note: It's important to convert the transported long to the
         // required  unsigned long value. Otherwhise using as flag field
         // can fail ...
-        ErrCode  nError   = static_cast< ErrCode >(nErrorCode);
-        bool bWarning = !ERRCODE_TOERROR(nError);
+        ErrCode  nError(nErrorCode);
+        bool bWarning = !nError.IgnoreWarning();
 
         if ( nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
         {
@@ -1275,7 +1275,7 @@ bool
 ErrorResource::getString(ErrCode nErrorCode, OUString &rString)
     const
 {
-    sal_uInt32 nIdx = m_aStringArray.FindIndex(nErrorCode & ERRCODE_RES_MASK);
+    sal_uInt32 nIdx = m_aStringArray.FindIndex(nErrorCode.GetRest());
     if (nIdx == RESARRAY_INDEX_NOTFOUND)
         return false;
     rString = m_aStringArray.GetString(nIdx);

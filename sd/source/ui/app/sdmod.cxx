@@ -85,8 +85,8 @@ SdModule::SdModule(SfxObjectFactory* pFact1, SfxObjectFactory* pFact2 )
     StartListening( *SfxGetpApp() );
     SvxErrorHandler::ensure();
     mpErrorHdl = new SfxErrorHandler( RID_SD_ERRHDL,
-                                         ERRCODE_AREA_SD,
-                                         ERRCODE_AREA_SD_END,
+                                         ErrCode(ERRCODE_AREA_SD),
+                                         ErrCode(ERRCODE_AREA_SD_END),
                                          GetResMgr() );
 
     // Create a new ref device and (by calling SetReferenceDevice())

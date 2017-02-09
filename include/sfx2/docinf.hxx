@@ -22,6 +22,7 @@
 #include <sal/config.h>
 #include <sfx2/dllapi.h>
 #include <sal/types.h>
+#include <vcl/errcode.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
 
@@ -42,7 +43,7 @@ namespace sfx2 {
     @param  i_xDocProps     Document meta-data
     @param  i_pStorage      OLE Storage
  */
-sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
+ErrCode SFX2_DLLPUBLIC LoadOlePropertySet(
     const css::uno::Reference< css::document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage );
 

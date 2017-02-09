@@ -173,7 +173,7 @@ private:
 }
 
 
-sal_uInt32 CheckPasswd_Impl
+ErrCode CheckPasswd_Impl
 (
     SfxObjectShell*  pDoc,
     SfxMedium*       pFile      // the Medium and its Password shold be obtained
@@ -187,7 +187,7 @@ sal_uInt32 CheckPasswd_Impl
     If the set does not exist the it is created.
 */
 {
-    sal_uIntPtr nRet = ERRCODE_NONE;
+    ErrCode nRet = ERRCODE_NONE;
 
     if( ( !pFile->GetFilter() || pFile->IsStorage() ) )
     {
@@ -274,7 +274,7 @@ sal_uInt32 CheckPasswd_Impl
 }
 
 
-sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, SfxItemSet* pSet )
+ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &rFileName, SfxItemSet* pSet )
 {
     std::shared_ptr<const SfxFilter> pFilter;
     SfxMedium aMedium( rFileName,  ( StreamMode::READ | StreamMode::SHARE_DENYNONE ) );
@@ -289,8 +289,8 @@ sal_uIntPtr SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUStri
     }
 
     aMedium.UseInteractionHandler( true );
-    sal_uIntPtr nErr = GetFilterMatcher().GuessFilter( aMedium, pFilter, SfxFilterFlags::TEMPLATE, SfxFilterFlags::NONE );
-    if ( 0 != nErr)
+    ErrCode nErr = GetFilterMatcher().GuessFilter( aMedium, pFilter, SfxFilterFlags::TEMPLATE, SfxFilterFlags::NONE );
+    if ( ERRCODE_NONE != nErr)
     {
         delete pSet;
         return ERRCODE_SFX_NOTATEMPLATE;
@@ -491,7 +491,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
         }
     }
 
-    sal_uIntPtr lErr = 0;
+    ErrCode lErr = ERRCODE_NONE;
     SfxItemSet* pSet = new SfxAllItemSet( GetPool() );
     pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
     if ( !bDirect )
@@ -509,7 +509,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 
     if ( lErr != ERRCODE_NONE )
     {
-        sal_uIntPtr lFatalErr = ERRCODE_TOERROR(lErr);
+        ErrCode lFatalErr = lErr.IgnoreWarning();
         if ( lFatalErr )
             ErrorHandler::HandleError(lErr);
     }
@@ -642,7 +642,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
             pBlackListItem->GetStringList( aBlackList );
 
 
-        sal_uIntPtr nErr = sfx2::FileOpenDialog_Impl(
+        ErrCode nErr = sfx2::FileOpenDialog_Impl(
                 nDialogType,
                 eDialogFlags, OUString(), aURLList,
                 aFilter, pSet, &aPath, nDialog, sStandardDir, aBlackList );
@@ -719,9 +719,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                             css::task::ErrorCodeRequest aRequest;
                             if (aRule.m_xRequest->getRequest() >>= aRequest)
                             {
-                                if (aRequest.ErrCode ==
-                                    sal::static_int_cast< sal_Int32 >(
-                                        ERRCODE_SFX_NOMOREDOCUMENTSALLOWED))
+                                if (aRequest.ErrCode == sal_Int32(sal_uInt32(ERRCODE_SFX_NOMOREDOCUMENTSALLOWED)))
                                     break;
                             }
                         }

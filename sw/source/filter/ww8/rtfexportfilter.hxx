@@ -30,9 +30,9 @@
 class RtfWriter : public Writer
 {
 protected:
-    sal_uLong WriteStream() override
+    ErrCode WriteStream() override
     {
-        return 0;
+        return ERRCODE_NONE;
     }
 };
 

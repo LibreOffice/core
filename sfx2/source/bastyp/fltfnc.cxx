@@ -351,7 +351,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetAnyFilter( SfxFilterFlags 
 }
 
 
-sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
+ErrCode  SfxFilterMatcher::GuessFilterIgnoringContent(
     SfxMedium& rMedium,
     std::shared_ptr<const SfxFilter>& rpFilter ) const
 {
@@ -379,13 +379,13 @@ sal_uInt32  SfxFilterMatcher::GuessFilterIgnoringContent(
 }
 
 
-sal_uInt32  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& rpFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+ErrCode  SfxFilterMatcher::GuessFilter( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& rpFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     return GuessFilterControlDefaultUI( rMedium, rpFilter, nMust, nDont );
 }
 
 
-sal_uInt32  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& rpFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
+ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& rpFilter, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
     std::shared_ptr<const SfxFilter> pOldFilter = rpFilter;
 
@@ -512,7 +512,7 @@ bool SfxFilterMatcher::IsFilterInstalled_Impl( const std::shared_ptr<const SfxFi
 }
 
 
-sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& rpFilter ) const
+ErrCode SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, std::shared_ptr<const SfxFilter>& rpFilter ) const
 /*  [Description]
 
     Here the Filter selection box is pulled up. Otherwise GuessFilter

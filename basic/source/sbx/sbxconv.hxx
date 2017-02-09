@@ -26,7 +26,7 @@ class SbxArray;
 
 // SBXSCAN.CXX
 extern void ImpCvtNum( double nNum, short nPrec, OUString& rRes, bool bCoreString=false );
-extern SbxError ImpScan
+extern ErrCode ImpScan
     ( const OUString& rSrc, double& nVal, SbxDataType& rType, sal_uInt16* pLen,
       bool bAllowIntntl=false, bool bOnlyIntntl=false );
 

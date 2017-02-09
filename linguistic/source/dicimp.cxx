@@ -226,7 +226,7 @@ DictionaryNeo::~DictionaryNeo()
 {
 }
 
-sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
+ErrCode DictionaryNeo::loadEntries(const OUString &rMainURL)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -238,7 +238,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     bNeedEntries = false;
 
     if (rMainURL.isEmpty())
-        return 0;
+        return ERRCODE_NONE;
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
@@ -254,7 +254,7 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
         SAL_WARN( "linguistic", "failed to get input stream" );
     }
     if (!xStream.is())
-        return static_cast< sal_uLong >(-1);
+        return ErrCode(-1);
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
@@ -262,8 +262,8 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
     bool bNegativ;
     LanguageType nLang;
     nDicVersion = ReadDicVersion(pStream, nLang, bNegativ);
-    sal_uLong nErr = pStream->GetError();
-    if (0 != nErr)
+    ErrCode nErr = pStream->GetError();
+    if (nErr != ERRCODE_NONE)
         return nErr;
 
     nLanguage = nLang;
@@ -286,12 +286,12 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
         if (!pStream->IsEof())
         {
             pStream->ReadUInt16( nLen );
-            if (0 != (nErr = pStream->GetError()))
+            if (ERRCODE_NONE != (nErr = pStream->GetError()))
                 return nErr;
             if ( nLen < BUFSIZE )
             {
                 pStream->ReadBytes(aWordBuf, nLen);
-                if (0 != (nErr = pStream->GetError()))
+                if (ERRCODE_NONE != (nErr = pStream->GetError()))
                     return nErr;
                 *(aWordBuf + nLen) = 0;
             }
@@ -314,13 +314,13 @@ sal_uLong DictionaryNeo::loadEntries(const OUString &rMainURL)
             pStream->ReadUInt16( nLen );
             if (pStream->IsEof())
                 break;
-            if (0 != (nErr = pStream->GetError()))
+            if (ERRCODE_NONE != (nErr = pStream->GetError()))
                 return nErr;
 
             if (nLen < BUFSIZE)
             {
                 pStream->ReadBytes(aWordBuf, nLen);
-                if (0 != (nErr = pStream->GetError()))
+                if (ERRCODE_NONE != (nErr = pStream->GetError()))
                     return nErr;
             }
             else
@@ -367,12 +367,12 @@ static OString formatForSave(const uno::Reference< XDictionaryEntry > &xEntry,
    return aStr.makeStringAndClear();
 }
 
-sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
+ErrCode DictionaryNeo::saveEntries(const OUString &rURL)
 {
     MutexGuard aGuard( GetLinguMutex() );
 
     if (rURL.isEmpty())
-        return 0;
+        return ERRCODE_NONE;
     DBG_ASSERT(!INetURLObject( rURL ).HasError(), "lng : invalid URL");
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
@@ -388,7 +388,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
         DBG_ASSERT( false, "failed to get input stream" );
     }
     if (!xStream.is())
-        return static_cast< sal_uLong >(-1);
+        return ErrCode(-1);
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
@@ -396,8 +396,8 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
 
     rtl_TextEncoding eEnc = RTL_TEXTENCODING_UTF8;
     pStream->WriteLine(OString(pVerOOo7));
-    sal_uLong nErr = pStream->GetError();
-    if (0 != nErr)
+    ErrCode nErr = pStream->GetError();
+    if (nErr != ERRCODE_NONE)
         return nErr;
     /* XXX: the <none> case could be differentiated, is it absence or
      * undetermined or multiple? Earlier versions did not know about 'und' and
@@ -410,22 +410,22 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
         aLine.append(OUStringToOString(LanguageTag::convertToBcp47(nLanguage), eEnc));
         pStream->WriteLine(aLine.makeStringAndClear());
     }
-    if (0 != (nErr = pStream->GetError()))
+    if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;
     if (eDicType == DictionaryType_POSITIVE)
         pStream->WriteLine(OString("type: positive"));
     else
         pStream->WriteLine(OString("type: negative"));
-    if (0 != (nErr = pStream->GetError()))
+    if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;
     pStream->WriteLine(OString("---"));
-    if (0 != (nErr = pStream->GetError()))
+    if (ERRCODE_NONE != (nErr = pStream->GetError()))
         return nErr;
     for (Reference<XDictionaryEntry> & aEntrie : aEntries)
     {
         OString aOutStr = formatForSave(aEntrie, eEnc);
         pStream->WriteLine (aOutStr);
-        if (0 != (nErr = pStream->GetError()))
+        if (ERRCODE_NONE != (nErr = pStream->GetError()))
             return nErr;
     }
 
@@ -444,7 +444,7 @@ sal_uLong DictionaryNeo::saveEntries(const OUString &rURL)
     catch (const uno::Exception &)
     {
         DBG_ASSERT( false, "failed to write stream" );
-        return static_cast< sal_uLong >(-1);
+        return ErrCode(-1);
     }
 
     return nErr;

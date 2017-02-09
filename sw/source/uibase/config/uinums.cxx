@@ -61,7 +61,7 @@ void SwChapterNumRules::Save()
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE );
     SvStream* pStream = aMedium.GetOutStream();
-    bool bRet = (pStream && pStream->GetError() == 0);
+    bool bRet = (pStream && pStream->GetError() == ERRCODE_NONE);
     if (bRet)
     {
         sw::ExportStoredChapterNumberingRules(*this, *pStream,CHAPTER_FILENAME);

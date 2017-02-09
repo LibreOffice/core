@@ -585,7 +585,7 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
     if( GetCreateMode() == SfxObjectCreateMode::STANDARD )
         SfxObjectShell::SetVisArea( ::tools::Rectangle() );
 
-    sal_uInt32  nVBWarning = ERRCODE_NONE;
+    ErrCode nVBWarning = ERRCODE_NONE;
     bool    bRet = SfxObjectShell::SaveAs( rMedium );
 
     if( bRet )

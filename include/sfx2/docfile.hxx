@@ -141,12 +141,12 @@ public:
     void                Download( const Link<void*,void>& aLink = Link<void*,void>());
     void                SetDoneLink( const Link<void*,void>& rLink );
 
-    sal_uInt32          GetErrorCode() const;
-    sal_uInt32          GetError() const
-                        { return ERRCODE_TOERROR(GetErrorCode()); }
-    sal_uInt32          GetLastStorageCreationState();
+    ErrCode             GetErrorCode() const;
+    ErrCode             GetError() const
+                        { return GetErrorCode().IgnoreWarning(); }
+    ErrCode             GetLastStorageCreationState();
 
-    void                SetError(sal_uInt32 nError);
+    void                SetError(ErrCode nError);
 
     void                CloseInStream();
     bool                CloseOutStream();

@@ -1060,7 +1060,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
         lContinuations[0].set(static_cast< XInteractionContinuation* >(pApprove), UNO_QUERY);
 
         GraphicFilterRequest aErrorCode;
-        aErrorCode.ErrCode = nStatus;
+        aErrorCode.ErrCode = sal_uInt32(nStatus);
         aInteraction <<= aErrorCode;
         aSettings.mxInteractionHandler->handle( framework::InteractionRequest::CreateRequest( aInteraction, lContinuations ) );
     }

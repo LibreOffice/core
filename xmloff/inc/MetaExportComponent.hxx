@@ -38,7 +38,7 @@ public:
 
 protected:
     // export the events off all autotexts
-    virtual sal_uInt32 exportDoc(
+    virtual ErrCode exportDoc(
         enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) override;
 
     // accept XDocumentProperties in addition to XModel

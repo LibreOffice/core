@@ -3424,7 +3424,7 @@ sal_Int32 ScXMLImport::GetByteOffset()
     return nOffset;
 }
 
-void ScXMLImport::SetRangeOverflowType(sal_uInt32 nType)
+void ScXMLImport::SetRangeOverflowType(ErrCode nType)
 {
     //  #i31130# Overflow is stored in the document, because the ScXMLImport object
     //  isn't available in ScXMLImportWrapper::ImportFromComponent when using the

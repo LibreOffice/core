@@ -185,7 +185,7 @@ void ScHTMLExport::WriteImage( OUString& rLinkName, const Graphic& rGrf,
             // Save as a PNG
             OUString aGrfNm( aStreamPath );
             nXOutFlags |= XOutFlags::UseNativeIfPossible;
-            sal_uInt16 nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
+            ErrCode nErr = XOutBitmap::WriteGraphic( rGrf, aGrfNm,
                 "PNG", nXOutFlags );
 
             // If it worked, create a URL for the IMG tag
