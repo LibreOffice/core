@@ -30,6 +30,7 @@
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XWriter.hpp>
 #include <osl/mutex.hxx>
+#include <vcl/errcode.hxx>
 
 
 namespace com { namespace sun { namespace star {
@@ -95,10 +96,10 @@ private:
     // methods
 
     /// @return a warning code, or 0 for successful operation
-    sal_Int32 impl_Import( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
+    ErrCode impl_Import( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
                            const css::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
-    sal_Int32 impl_ImportStream(
+    ErrCode impl_ImportStream(
         const OUString & rStreamName,
         const OUString & rServiceName,
         const css::uno::Reference< css::embed::XStorage > & xStorage,
@@ -108,10 +109,10 @@ private:
         css::uno::Reference< css::beans::XPropertySet >& xPropSet );
 
     /// @return a warning code, or 0 for successful operation
-    sal_Int32 impl_Export( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
+    ErrCode impl_Export( const css::uno::Reference< css::lang::XComponent > & xDocumentComp,
                            const css::uno::Sequence< css::beans::PropertyValue > & aMediaDescriptor );
     /// @return a warning code, or 0 for successful operation
-    sal_Int32 impl_ExportStream(
+    ErrCode impl_ExportStream(
         const OUString & rStreamName,
         const OUString & rServiceName,
         const css::uno::Reference< css::embed::XStorage > & xStorage,

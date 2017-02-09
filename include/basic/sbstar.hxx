@@ -69,9 +69,9 @@ class BASIC_DLLPUBLIC StarBASIC : public SbxObject
     BASIC_DLLPRIVATE void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
 
 protected:
-    bool                                CError( SbError, const OUString&, sal_Int32, sal_Int32, sal_Int32 );
+    bool                                CError( ErrCode, const OUString&, sal_Int32, sal_Int32, sal_Int32 );
 private:
-    BASIC_DLLPRIVATE bool               RTError( SbError, const OUString& rMsg, sal_Int32, sal_Int32, sal_Int32 );
+    BASIC_DLLPRIVATE bool               RTError( ErrCode, const OUString& rMsg, sal_Int32, sal_Int32, sal_Int32 );
     BASIC_DLLPRIVATE BasicDebugFlags    BreakPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     BASIC_DLLPRIVATE BasicDebugFlags    StepPoint( sal_Int32 nLine, sal_Int32 nCol1, sal_Int32 nCol2 );
     virtual bool LoadData( SvStream&, sal_uInt16 ) override;
@@ -101,12 +101,12 @@ public:
     SbModule*       MakeModule( const OUString& rName, const OUString& rSrc );
     SbModule*       MakeModule( const OUString& rName, const css::script::ModuleInfo& mInfo, const OUString& rSrc );
     static void     Stop();
-    static void     Error( SbError );
-    static void     Error( SbError, const OUString& rMsg );
-    static void     FatalError( SbError );
-    static void     FatalError( SbError, const OUString& rMsg );
+    static void     Error( ErrCode );
+    static void     Error( ErrCode, const OUString& rMsg );
+    static void     FatalError( ErrCode );
+    static void     FatalError( ErrCode, const OUString& rMsg );
     static bool     IsRunning();
-    static SbError  GetErrBasic();
+    static ErrCode  GetErrBasic();
     // #66536 make additional message accessible by RTL function Error
     static OUString GetErrorMsg();
     static sal_Int32 GetErl();
@@ -126,15 +126,15 @@ public:
     static sal_uInt16 GetLine();
     static sal_uInt16 GetCol1();
     static sal_uInt16 GetCol2();
-    static void     SetErrorData( SbError nCode, sal_uInt16 nLine,
+    static void     SetErrorData( ErrCode nCode, sal_uInt16 nLine,
                                   sal_uInt16 nCol1, sal_uInt16 nCol2 );
 
     // Specific to error handler
-    static void     MakeErrorText( SbError, const OUString& aMsg );
+    static void     MakeErrorText( ErrCode, const OUString& aMsg );
     static const    OUString& GetErrorText();
-    static SbError  GetErrorCode();
-    static sal_uInt16 GetVBErrorCode( SbError nError );
-    static SbError  GetSfxFromVBError( sal_uInt16 nError );
+    static ErrCode  GetErrorCode();
+    static sal_uInt16 GetVBErrorCode( ErrCode nError );
+    static ErrCode  GetSfxFromVBError( sal_uInt16 nError );
     bool            IsBreak() const             { return bBreak; }
 
     static Link<StarBASIC*,bool> GetGlobalErrorHdl();

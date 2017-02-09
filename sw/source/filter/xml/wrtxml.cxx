@@ -69,7 +69,7 @@ SwXMLWriter::~SwXMLWriter()
 {
 }
 
-sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
+ErrCode SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >& xStatusIndicator,
                                 const OUString& aDocHierarchicalName )
 {
     // Get service factory
@@ -425,15 +425,15 @@ sal_uInt32 SwXMLWriter::Write_( const uno::Reference < task::XStatusIndicator >&
         return WARN_SWG_FEATURES_LOST;
     }
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
-sal_uLong SwXMLWriter::WriteStorage()
+ErrCode SwXMLWriter::WriteStorage()
 {
     return Write_( uno::Reference < task::XStatusIndicator >(), OUString() );
 }
 
-sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
+ErrCode SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
 {
     uno::Reference < task::XStatusIndicator > xStatusIndicator;
     OUString aName;
@@ -449,7 +449,7 @@ sal_uLong SwXMLWriter::WriteMedium( SfxMedium& aTargetMedium )
     return Write_( xStatusIndicator, aName );
 }
 
-sal_uLong SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
+ErrCode SwXMLWriter::Write( SwPaM& rPaM, SfxMedium& rMed,
                                const OUString* pFileName )
 {
     return IsStgWriter()

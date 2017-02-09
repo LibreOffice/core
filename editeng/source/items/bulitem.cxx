@@ -119,7 +119,7 @@ SvxBulletItem::SvxBulletItem( SvStream& rStrm, sal_uInt16 _nWhich )
         sal_uInt64 const nOldPos = rStrm.Tell();
         // Ignore Errorcode when reading Bitmap,
         // see comment in SvxBulletItem::Store()
-        bool bOldError = rStrm.GetError() != 0;
+        bool bOldError = rStrm.GetError() != ERRCODE_NONE;
         ReadDIB(aBmp, rStrm, true);
 
         if ( !bOldError && rStrm.GetError() )

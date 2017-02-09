@@ -551,7 +551,7 @@ void SbxDimArray::Clear()
 
 void SbxDimArray::AddDimImpl32( sal_Int32 lb, sal_Int32 ub, bool bAllowSize0 )
 {
-    SbxError eRes = ERRCODE_SBX_OK;
+    ErrCode eRes = ERRCODE_SBX_OK;
     if( ub < lb && !bAllowSize0 )
     {
         eRes = ERRCODE_SBX_BOUNDS;

@@ -158,7 +158,7 @@ void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
         if ( !pClient )
             pClient = new ScClient( this, pWin, GetSdrView()->GetModel(), pObj );
 
-        if ( !(nErr & ERRCODE_ERROR_MASK) && xObj.is() )
+        if ( !nErr.IgnoreWarning() && xObj.is() )
         {
             tools::Rectangle aRect = pObj->GetLogicRect();
 

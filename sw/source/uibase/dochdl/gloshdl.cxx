@@ -222,11 +222,11 @@ bool SwGlossaryHdl::CopyOrMove( const OUString& rSourceGroupName, OUString& rSou
     //The index must be determined here because rSourceShortName maybe changed in CopyBlock
     sal_uInt16 nDeleteIdx = pSourceGroup->GetIndex( rSourceShortName );
     OSL_ENSURE(USHRT_MAX != nDeleteIdx, "entry not found");
-    sal_uLong nRet = pSourceGroup->CopyBlock( *pDestGroup, rSourceShortName, rLongName );
+    ErrCode nRet = pSourceGroup->CopyBlock( *pDestGroup, rSourceShortName, rLongName );
     if(!nRet && bMove)
     {
         // the index must be existing
-        nRet = pSourceGroup->Delete( nDeleteIdx ) ? 0 : 1;
+        nRet = pSourceGroup->Delete( nDeleteIdx ) ? ERRCODE_NONE : ErrCode(1);
     }
     delete pSourceGroup;
     delete pDestGroup;
@@ -643,7 +643,7 @@ bool SwGlossaryHdl::Rename(const OUString& rOldShort, const OUString& rNewShortN
                     (nOldIdx == USHRT_MAX || nOldIdx == nIdx ))
         {
             pGlossary->Rename( nIdx, &rNewShortName, &rNewName );
-            bRet = pGlossary->GetError() == 0;
+            bRet = pGlossary->GetError() == ERRCODE_NONE;
         }
         if( !pCurGrp )
             delete pGlossary;

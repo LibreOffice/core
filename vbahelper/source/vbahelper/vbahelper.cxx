@@ -1043,13 +1043,13 @@ void ShapeHelper::setTop(double _fTop)
     xShape->setPosition(aPoint);
 }
 
-void DebugHelper::basicexception( const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ )
+void DebugHelper::basicexception( const css::uno::Exception& ex, ErrCode err, const OUString& /*additionalArgument*/ )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
-    throw css::script::BasicErrorException( ex.Message, css::uno::Reference< css::uno::XInterface >(), err, OUString() );
+    throw css::script::BasicErrorException( ex.Message, css::uno::Reference< css::uno::XInterface >(), sal_uInt32(err), OUString() );
 }
 
-void DebugHelper::basicexception( int err,  const OUString& additionalArgument )
+void DebugHelper::basicexception( ErrCode err,  const OUString& additionalArgument )
 {
     basicexception( css::uno::Exception(), err, additionalArgument );
 }
@@ -1059,10 +1059,10 @@ void DebugHelper::basicexception( const css::uno::Exception& ex )
     basicexception( ex, ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
 }
 
-void DebugHelper::runtimeexception( int err )
+void DebugHelper::runtimeexception( ErrCode err )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
-    throw css::uno::RuntimeException( css::uno::Exception().Message + " " + OUString::number(err),
+    throw css::uno::RuntimeException( css::uno::Exception().Message + " " + OUString::number(sal_uInt32(err)),
                                       css::uno::Reference< css::uno::XInterface >() );
 }
 
