@@ -228,14 +228,10 @@ public:
         const Command& rArg
     );
 
-    enum ResultType {
+    enum class ResultType {
         NORESULT,
 
         INTERACTIONREQUEST,    // reply expected
-
-        PROGRESSPUSH,
-        PROGRESSUPDATE,
-        PROGRESSPOP,
 
         INPUTSTREAM,
         STREAM,
@@ -261,7 +257,7 @@ public:
 
     protected:
         bool applies() const override {
-            return m_aModerator.m_aResultType != NORESULT;
+            return m_aModerator.m_aResultType != ResultType::NORESULT;
         }
 
     private:
@@ -460,7 +456,7 @@ Moderator::Moderator(
     : m_aMutex(),
 
       m_aRes(m_aMutex,*this),
-      m_aResultType(NORESULT),
+      m_aResultType(ResultType::NORESULT),
       m_nIOErrorCode(0),
       m_aResult(),
 
@@ -520,11 +516,11 @@ Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)
         ret.ioErrorCode = m_nIOErrorCode;
 
         // reset
-        m_aResultType = NORESULT;
+        m_aResultType = ResultType::NORESULT;
     }
     catch (const salhelper::ConditionWaiter::timedout&)
     {
-        ret.type = TIMEDOUT;
+        ret.type = ResultType::TIMEDOUT;
     }
 
     return ret;
@@ -543,7 +539,7 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
     do {
         {
             salhelper::ConditionModifier aMod(m_aRes);
-            m_aResultType = INTERACTIONREQUEST;
+            m_aResultType = ResultType::INTERACTIONREQUEST;
             m_aResult <<= Request;
         }
 
@@ -576,7 +572,7 @@ void Moderator::setStream(const Reference< XStream >& aStream)
 {
     {
         salhelper::ConditionModifier aMod(m_aRes);
-        m_aResultType = STREAM;
+        m_aResultType = ResultType::STREAM;
         m_aResult <<= aStream;
     }
     ReplyType aReplyType;
@@ -593,7 +589,7 @@ void Moderator::setInputStream(const Reference<XInputStream> &rxInputStream)
 {
     {
         salhelper::ConditionModifier aMod(m_aRes);
-        m_aResultType = INPUTSTREAM;
+        m_aResultType = ResultType::INPUTSTREAM;
         m_aResult <<= rxInputStream;
     }
     ReplyType aReplyType;
@@ -617,28 +613,28 @@ void SAL_CALL Moderator::run()
     try
     {
         aResult = m_aContent.executeCommand(m_aArg.Name,m_aArg.Argument);
-        aResultType = RESULT;
+        aResultType = ResultType::RESULT;
     }
     catch (const CommandAbortedException&)
     {
-        aResultType = COMMANDABORTED;
+        aResultType = ResultType::COMMANDABORTED;
     }
     catch (const CommandFailedException&)
     {
-        aResultType = COMMANDFAILED;
+        aResultType = ResultType::COMMANDFAILED;
     }
     catch (const InteractiveIOException& r)
     {
         nIOErrorCode = r.Code;
-        aResultType = INTERACTIVEIO;
+        aResultType = ResultType::INTERACTIVEIO;
     }
     catch (const UnsupportedDataSinkException &)
     {
-        aResultType = UNSUPPORTED;
+        aResultType = ResultType::UNSUPPORTED;
     }
     catch (const Exception&)
     {
-        aResultType = GENERAL;
+        aResultType = ResultType::GENERAL;
     }
 
     {
@@ -735,22 +731,7 @@ static bool UCBOpenContentSync(
         res = pMod->getResult(nTimeout);
 
         switch(res.type) {
-        case Moderator::PROGRESSPUSH:
-            {
-                pMod->setReply(Moderator::REQUESTHANDLED);
-                break;
-            }
-        case Moderator::PROGRESSUPDATE:
-            {
-                pMod->setReply(Moderator::REQUESTHANDLED);
-                break;
-            }
-        case Moderator::PROGRESSPOP:
-            {
-                pMod->setReply(Moderator::REQUESTHANDLED);
-                break;
-            }
-        case Moderator::STREAM:
+        case Moderator::ResultType::STREAM:
             {
                 Reference<XStream> result;
                 if(res.result >>= result) {
@@ -764,7 +745,7 @@ static bool UCBOpenContentSync(
                 pMod->setReply(Moderator::REQUESTHANDLED);
                 break;
             }
-        case Moderator::INPUTSTREAM:
+        case Moderator::ResultType::INPUTSTREAM:
             {
                 Reference<XInputStream> result;
                 res.result >>= result;
@@ -777,7 +758,7 @@ static bool UCBOpenContentSync(
                 pMod->setReply(Moderator::REQUESTHANDLED);
                 break;
             }
-        case Moderator::TIMEDOUT:
+        case Moderator::ResultType::TIMEDOUT:
             {
                 Reference<XInteractionRetry> xRet;
                 if(xInteract.is()) {
@@ -819,7 +800,7 @@ static bool UCBOpenContentSync(
 
                 break;
             }
-        case Moderator::INTERACTIONREQUEST:
+        case Moderator::ResultType::INTERACTIONREQUEST:
             {
                 Reference<XInteractionRequest> Request;
                 res.result >>= Request;
@@ -827,25 +808,25 @@ static bool UCBOpenContentSync(
                 pMod->setReply(Moderator::REQUESTHANDLED);
                 break;
             }
-        case Moderator::RESULT:
+        case Moderator::ResultType::RESULT:
             {
                 bResultAchieved = true;
                 aResult = res.result;
                 break;
             }
-        case Moderator::COMMANDABORTED:
+        case Moderator::ResultType::COMMANDABORTED:
             {
                 bAborted = true;
                 xLockBytes->SetError( ERRCODE_ABORT );
                 break;
             }
-        case Moderator::COMMANDFAILED:
+        case Moderator::ResultType::COMMANDFAILED:
             {
                 bAborted = true;
                 xLockBytes->SetError( ERRCODE_ABORT );
                 break;
             }
-        case Moderator::INTERACTIVEIO:
+        case Moderator::ResultType::INTERACTIVEIO:
             {
                 bException = true;
                 if ( res.ioErrorCode == IOErrorCode_ACCESS_DENIED ||
@@ -859,7 +840,7 @@ static bool UCBOpenContentSync(
                     xLockBytes->SetError( ERRCODE_IO_GENERAL );
                 break;
             }
-        case Moderator::UNSUPPORTED:
+        case Moderator::ResultType::UNSUPPORTED:
             {
                 bException = true;
                 xLockBytes->SetError( ERRCODE_IO_NOTSUPPORTED );
