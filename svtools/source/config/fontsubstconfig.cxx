@@ -59,7 +59,7 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
         bIsEnabled = *o3tl::doAccess<bool>(aValues.getConstArray()[0]);
 
     OUString sPropPrefix(cFontPairs);
-    Sequence<OUString> aNodeNames = GetNodeNames(sPropPrefix, CONFIG_NAME_LOCAL_PATH);
+    Sequence<OUString> aNodeNames = GetNodeNames(sPropPrefix, ConfigNameFormat::LocalPath);
     const OUString* pNodeNames = aNodeNames.getConstArray();
     Sequence<OUString> aPropNames(aNodeNames.getLength() * 4);
     OUString* pNames = aPropNames.getArray();

@@ -276,7 +276,7 @@ void SvtCommandOptions_Impl::EstablishFrameCallback(const css::uno::Reference< c
 Sequence< OUString > SvtCommandOptions_Impl::impl_GetPropertyNames()
 {
     // First get ALL names of current existing list items in configuration!
-    Sequence< OUString > lDisabledItems      = GetNodeNames( SETNODE_DISABLED, utl::CONFIG_NAME_LOCAL_PATH );
+    Sequence< OUString > lDisabledItems      = GetNodeNames( SETNODE_DISABLED, utl::ConfigNameFormat::LocalPath );
 
     // Expand all keys
     for (sal_Int32 i=0; i<lDisabledItems.getLength(); ++i )

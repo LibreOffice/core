@@ -575,37 +575,11 @@ static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFor
 {
     switch (_eFormat)
     {
-    case CONFIG_NAME_LOCAL_NAME:
+    case ConfigNameFormat::LocalNode:
         // unaltered - this is our input format
         break;
 
-    case CONFIG_NAME_FULL_PATH:
-        {
-            Reference<XHierarchicalName> xFormatter(_xParentNode, UNO_QUERY);
-            if (xFormatter.is())
-            {
-                OUString * pNames = _rNames.getArray();
-                for(int i = 0; i<_rNames.getLength(); ++i)
-                {
-                    try
-                    {
-                        pNames[i] = xFormatter->composeHierarchicalName(pNames[i]);
-                    }
-                    catch (css::uno::Exception & e)
-                    {
-                        SAL_WARN(
-                            "unotools.config",
-                            "Exception from composeHierarchicalName(): "
-                                << e.Message);
-                    }
-                }
-                break;
-            }
-        }
-        OSL_FAIL("Cannot create absolute paths: missing interface");
-        SAL_FALLTHROUGH; // make local paths instaed
-
-    case CONFIG_NAME_LOCAL_PATH:
+    case ConfigNameFormat::LocalPath:
         {
             Reference<XTemplateContainer> xTypeContainer(_xParentNode, UNO_QUERY);
             if (xTypeContainer.is())
@@ -634,33 +608,12 @@ static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFor
         }
         break;
 
-    case CONFIG_NAME_PLAINTEXT_NAME:
-        {
-            Reference<XStringEscape> xEscaper(_xParentNode, UNO_QUERY);
-            if (xEscaper.is())
-            {
-                OUString * pNames = _rNames.getArray();
-                for(int i = 0; i<_rNames.getLength(); ++i)
-                try
-                {
-                    pNames[i] = xEscaper->unescapeString(pNames[i]);
-                }
-                catch (css::uno::Exception & e)
-                {
-                    SAL_WARN(
-                        "unotools.config",
-                        "Exception from unescapeString(): " << e.Message);
-                }
-            }
-        }
-        break;
-
     }
 }
 
 Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
 {
-    ConfigNameFormat const eDefaultFormat = CONFIG_NAME_LOCAL_NAME; // CONFIG_NAME_DEFAULT;
+    ConfigNameFormat const eDefaultFormat = ConfigNameFormat::LocalNode; // CONFIG_NAME_DEFAULT;
 
     return GetNodeNames(rNode, eDefaultFormat);
 }

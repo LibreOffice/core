@@ -201,7 +201,7 @@ void GlobalEventConfig_Impl::ImplCommit()
 void GlobalEventConfig_Impl::initBindingInfo()
 {
     // Get ALL names of current existing list items in configuration!
-    Sequence< OUString > lEventNames      = GetNodeNames( SETNODE_BINDINGS, utl::CONFIG_NAME_LOCAL_PATH );
+    Sequence< OUString > lEventNames      = GetNodeNames( SETNODE_BINDINGS, utl::ConfigNameFormat::LocalPath );
 
     OUString aSetNode( SETNODE_BINDINGS );
     aSetNode += PATHDELIMITER;

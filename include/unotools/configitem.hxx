@@ -58,12 +58,10 @@ namespace o3tl
 namespace utl
 {
 
-    enum  ConfigNameFormat
+    enum class ConfigNameFormat
     {
-        CONFIG_NAME_PLAINTEXT_NAME, // unescaped local node name, for user display etc.
-        CONFIG_NAME_LOCAL_NAME,     // local node name, for use in XNameAccess etc. ("Item", "Q & A")
-        CONFIG_NAME_LOCAL_PATH,     // one-level relative path, for use when building paths etc.  ("Item", "Typ['Q &amp; A']")
-        CONFIG_NAME_FULL_PATH       // full absolute path. ("/org.openoffice.Sample/Group/Item", "/org.openoffice.Sample/Set/Typ['Q &amp; A']")
+        LocalNode,     // local node name, for use in XNameAccess etc. ("Item", "Q & A")
+        LocalPath,     // one-level relative path, for use when building paths etc.  ("Item", "Typ['Q &amp; A']")
     };
 
     class ConfigChangeListener_Impl;
