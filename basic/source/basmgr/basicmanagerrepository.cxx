@@ -82,8 +82,8 @@ namespace basic
 
         BasicManager*   getDocumentBasicManager( const Reference< XModel >& _rxDocumentModel );
         BasicManager*   getOrCreateApplicationBasicManager();
-        BasicManager*   getApplicationBasicManager() const;
-        void            setApplicationBasicManager( BasicManager* _pBasicManager );
+        static BasicManager* getApplicationBasicManager();
+        static void          setApplicationBasicManager( BasicManager* _pBasicManager );
         void    registerCreationListener( BasicManagerCreationListener& _rListener );
         void    revokeCreationListener( BasicManagerCreationListener& _rListener );
 
@@ -247,7 +247,7 @@ namespace basic
         return pAppManager;
     }
 
-    BasicManager* ImplRepository::getApplicationBasicManager() const
+    BasicManager* ImplRepository::getApplicationBasicManager()
     {
         SolarMutexGuard g;
 
@@ -617,7 +617,7 @@ namespace basic
 
     void BasicManagerRepository::resetApplicationBasicManager()
     {
-        ImplRepository::Instance().setApplicationBasicManager( nullptr );
+        ImplRepository::setApplicationBasicManager( nullptr );
     }
 
     void BasicManagerRepository::registerCreationListener( BasicManagerCreationListener& _rListener )
