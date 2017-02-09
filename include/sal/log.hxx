@@ -54,6 +54,14 @@ inline void SAL_CALL log(
     sal_detail_log(level, area, where, stream.str().c_str());
 }
 
+inline void SAL_CALL log_backtrace(
+    sal_detail_LogLevel level, char const * area, char const * where,
+    std::ostringstream const & stream, int maxNoStackFramesToDisplay)
+{
+    sal_detail_log_backtrace(
+        level, area, where, stream.str().c_str(), maxNoStackFramesToDisplay);
+}
+
 // Special handling of the common case where the message consists of just a
 // string literal, to produce smaller call-site code:
 
@@ -357,12 +365,14 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
             ::sal_detail_log_backtrace( \
                 ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, \
                 ::sal::detail::unwrapStream( \
-                    ::sal::detail::StreamStart() << stream)); \
+                    ::sal::detail::StreamStart() << stream), \
+                maxNoStackFramesToDisplay); \
         } else { \
             ::std::ostringstream sal_detail_stream; \
             sal_detail_stream << stream; \
-            ::sal::detail::log( \
-                ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, sal_detail_stream); \
+            ::sal::detail::log_backtrace( \
+                ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, sal_detail_stream, \
+                maxNoStackFramesToDisplay); \
         } \
     } while (false)
 

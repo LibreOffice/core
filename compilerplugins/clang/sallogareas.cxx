@@ -84,7 +84,7 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
                          loc = source.getImmediateExpansionRange( loc ).first )
                         {
                         StringRef inMacro = Lexer::getImmediateMacroName( loc, source, compiler.getLangOpts());
-                        if( inMacro == "SAL_DEBUG" )
+                        if( inMacro == "SAL_DEBUG" || inMacro == "SAL_DEBUG_BACKTRACE" )
                             return true; // ok
                         }
                     report( DiagnosticsEngine::Warning, "missing log area",
