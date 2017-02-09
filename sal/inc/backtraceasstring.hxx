@@ -13,11 +13,12 @@
 #include <sal/config.h>
 
 #include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 namespace osl { namespace detail {
 
 /// Build a debugging backtrace from current PC location.
-OUString backtraceAsString(int maxNoStackFramesToDisplay);
+OUString backtraceAsString(sal_uInt32 maxDepth);
 
 } }
 
