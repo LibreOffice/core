@@ -859,7 +859,7 @@ void ScGlobal::OpenURL(const OUString& rURL, const OUString& rTarget)
     // SvtSecurityOptions to access Libreoffice global security parameters
     SvtSecurityOptions aSecOpt;
     bool bCtrlClickHappened = (nScClickMouseModifier & KEY_MOD1);
-    bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+    bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
     if( bCtrlClickHappened && !( bCtrlClickSecOption ) )
     {
         // return since ctrl+click happened when the

@@ -300,7 +300,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_BASIC_ENABLED :
                     {
                         bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_BASICMODE))
+                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::BasicMode))
                         {
                             if ( !rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_BASIC_ENABLED ), sal::static_int_cast< sal_uInt16 >(aSecurityOptions.GetBasicMode()))))
                                 bRet = false;
@@ -310,7 +310,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_INET_EXE_PLUGIN  :
                     {
                         bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_EXECUTEPLUGINS))
+                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::ExecutePlugins))
                         {
                             if ( !rSet.Put( SfxBoolItem( SID_INET_EXE_PLUGIN, aSecurityOptions.IsExecutePlugins() ) ) )
                                 bRet = false;
@@ -320,7 +320,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_MACRO_WARNING :
                     {
                         bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_WARNING))
+                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::Warning))
                         {
                             if ( !rSet.Put( SfxBoolItem( SID_MACRO_WARNING, aSecurityOptions.IsWarningEnabled() ) ) )
                                 bRet = false;
@@ -330,7 +330,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_MACRO_CONFIRMATION :
                     {
                         bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_CONFIRMATION))
+                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::Confirmation))
                         {
                             if ( !rSet.Put( SfxBoolItem( SID_MACRO_CONFIRMATION, aSecurityOptions.IsConfirmationEnabled() ) ) )
                                 bRet = false;
@@ -340,7 +340,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_SECURE_URL :
                     {
                         bRet = true;
-                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::E_SECUREURLS))
+                        if (!aSecurityOptions.IsReadOnly(SvtSecurityOptions::EOption::SecureUrls))
                         {
                             css::uno::Sequence< OUString > seqURLs = aSecurityOptions.GetSecureURLs();
                             std::vector<OUString> aList;

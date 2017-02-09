@@ -1409,7 +1409,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
     {
         SvtSecurityOptions aSecOpt;
         mbPwdCheckBoxState = (
-            aSecOpt.IsOptionSet( SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD ) );
+            aSecOpt.IsOptionSet( SvtSecurityOptions::EOption::DocWarnRecommendPassword ) );
     }
 
     rpURLList.clear();
