@@ -1295,7 +1295,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
             bool bFound = false;
             if (!aParam.bInplace)
                 bDeleteOld = true;
-            if (aParam.eSearchType != utl::SearchParam::SRCH_NORMAL)
+            if (aParam.eSearchType != utl::SearchParam::SearchType::Normal)
                 bDeleteOld = true;
             SCSIZE nCount = aParam.GetEntryCount();
             for (SCSIZE i = 0; i < nCount && !bDeleteOld; ++i)    // current filter settings
@@ -1326,7 +1326,7 @@ void ScGridWindow::ExecFilter( sal_uLong nSel,
                     aParam.GetEntry(i).Clear();
                 nQueryPos = 0;
                 aParam.bInplace = true;
-                aParam.eSearchType = utl::SearchParam::SRCH_NORMAL;
+                aParam.eSearchType = utl::SearchParam::SearchType::Normal;
             }
 
             if ( nQueryPos < nCount || SC_AUTOFILTER_ALL == nSel )    // delete is always possible

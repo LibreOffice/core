@@ -47,9 +47,7 @@ namespace utl
 class UNOTOOLS_DLLPUBLIC SearchParam
 {
 public:
-    enum SearchType: int { SRCH_NORMAL, SRCH_REGEXP, SRCH_LEVDIST, SRCH_WILDCARD };
-        // fix underlying type (as int, arbitrarily), so that
-        // ScDocOptions::eSearchTypeUnknown = -1 does not cause -fsanitize=enum
+    enum class SearchType { Normal, Regexp, Wildcard, Unknown = -1 };
 
     /** Convert configuration and document boolean settings to SearchType.
         If bWildcard is true it takes precedence over rbRegExp.
@@ -63,9 +61,9 @@ public:
         {
             if (rbRegExp)
                 rbRegExp = false;
-            return SRCH_WILDCARD;
+            return SearchType::Wildcard;
         }
-        return rbRegExp ? SRCH_REGEXP : SRCH_NORMAL;
+        return rbRegExp ? SearchType::Regexp : SearchType::Normal;
     }
 
     /** Convert SearchType to configuration and document boolean settings.
@@ -74,16 +72,15 @@ public:
     {
         switch (eSearchType)
         {
-            case SRCH_WILDCARD:
+            case SearchType::Wildcard:
                 rbWildcard = true;
                 rbRegExp = false;
                 break;
-            case SRCH_REGEXP:
+            case SearchType::Regexp:
                 rbWildcard = false;
                 rbRegExp = true;
                 break;
             default:
-                // SRCH_LEVDIST is not a persistent setting.
                 rbWildcard = false;
                 rbRegExp = false;
                 break;

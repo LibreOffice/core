@@ -590,7 +590,7 @@ strings_vr MigrationImpl::applyPatterns(const strings_v& vSet, const strings_v& 
     while (i_pat != vPatterns.end()) {
         // find matches for this pattern in input set
         // and copy them to the result
-        SearchParam param(*i_pat, SearchParam::SRCH_REGEXP);
+        SearchParam param(*i_pat, SearchParam::SearchType::Regexp);
         TextSearch ts(param, LANGUAGE_DONTKNOW);
         i_set = vSet.begin();
         sal_Int32 start = 0;

@@ -205,7 +205,7 @@ public:
     void SetIsCaseSensitive(const bool bTemp) { bIsCaseSensitive = bTemp; }
     void SetSearchType(const utl::SearchParam::SearchType eTemp)
     {
-        if (eSearchType == utl::SearchParam::SRCH_NORMAL)
+        if (eSearchType == utl::SearchParam::SearchType::Normal)
             eSearchType = eTemp;
     }
 

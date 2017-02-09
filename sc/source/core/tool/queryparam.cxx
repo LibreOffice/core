@@ -64,7 +64,7 @@ ScQueryParamBase::const_iterator ScQueryParamBase::end() const
 }
 
 ScQueryParamBase::ScQueryParamBase() :
-    eSearchType(utl::SearchParam::SRCH_NORMAL),
+    eSearchType(utl::SearchParam::SearchType::Normal),
     bHasHeader(true),
     bByRow(true),
     bInplace(true),
@@ -299,7 +299,7 @@ void ScQueryParam::Clear()
     nCol1=nCol2 = 0;
     nRow1=nRow2 = 0;
     nTab = SCTAB_MAX;
-    eSearchType = utl::SearchParam::SRCH_NORMAL;
+    eSearchType = utl::SearchParam::SearchType::Normal;
     bHasHeader = bCaseSens = false;
     bInplace = bByRow = bDuplicate = true;
 

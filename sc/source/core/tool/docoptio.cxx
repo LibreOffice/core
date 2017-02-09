@@ -98,7 +98,7 @@ void ScDocOptions::ResetDocOptions()
     bLookUpColRowNames  = true;
     bFormulaRegexEnabled= false;
     bFormulaWildcardsEnabled= true;
-    eFormulaSearchType  = utl::SearchParam::SRCH_WILDCARD;
+    eFormulaSearchType  = utl::SearchParam::SearchType::Wildcard;
     bWriteCalcConfig    = true;
 }
 
@@ -108,14 +108,14 @@ void ScDocOptions::SetFormulaRegexEnabled( bool bVal )
     {
         bFormulaRegexEnabled = true;
         bFormulaWildcardsEnabled = false;
-        eFormulaSearchType = utl::SearchParam::SRCH_REGEXP;
+        eFormulaSearchType = utl::SearchParam::SearchType::Regexp;
     }
     else if (!bFormulaRegexEnabled)
         ;   // nothing changes for setting false to false
     else
     {
         bFormulaRegexEnabled = false;
-        eFormulaSearchType = eSearchTypeUnknown;
+        eFormulaSearchType = utl::SearchParam::SearchType::Unknown;
     }
 }
 
@@ -125,14 +125,14 @@ void ScDocOptions::SetFormulaWildcardsEnabled( bool bVal )
     {
         bFormulaRegexEnabled = false;
         bFormulaWildcardsEnabled = true;
-        eFormulaSearchType = utl::SearchParam::SRCH_WILDCARD;
+        eFormulaSearchType = utl::SearchParam::SearchType::Wildcard;
     }
     else if (!bFormulaWildcardsEnabled)
         ;   // nothing changes for setting false to false
     else
     {
         bFormulaWildcardsEnabled = false;
-        eFormulaSearchType = eSearchTypeUnknown;
+        eFormulaSearchType = utl::SearchParam::SearchType::Unknown;
     }
 }
 

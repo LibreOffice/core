@@ -649,7 +649,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     theParam.bByRow         = true;
     theParam.bDuplicate     = !pBtnUnique->IsChecked();
     theParam.bCaseSens      = pBtnCase->IsChecked();
-    theParam.eSearchType    = pBtnRegExp->IsChecked() ? utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL;
+    theParam.eSearchType    = pBtnRegExp->IsChecked() ? utl::SearchParam::SearchType::Regexp : utl::SearchParam::SearchType::Normal;
     theParam.bDestPers      = pBtnDestPers->IsChecked();
 
     // only set the three - reset everything else

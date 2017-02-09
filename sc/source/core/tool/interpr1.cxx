@@ -4469,7 +4469,7 @@ void ScInterpreter::ScMatch()
                 bool bIsVBAMode = pDok->IsInVBAMode();
 
                 if ( bIsVBAMode )
-                    rParam.eSearchType = utl::SearchParam::SRCH_WILDCARD;
+                    rParam.eSearchType = utl::SearchParam::SearchType::Wildcard;
                 else
                     rParam.eSearchType = DetectSearchType(rEntry.GetQueryItem().maString.getString(), pDok);
             }
@@ -6908,7 +6908,7 @@ std::unique_ptr<ScDBQueryParamBase> ScInterpreter::GetDBParams( bool& rMissingFi
                     aQueryStr, nIndex, rItem.mfVal);
                 rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
 
-                if (!bNumber && pParam->eSearchType == utl::SearchParam::SRCH_NORMAL)
+                if (!bNumber && pParam->eSearchType == utl::SearchParam::SearchType::Normal)
                     pParam->eSearchType = DetectSearchType(aQueryStr, pDok);
             }
             return pParam;
@@ -8671,19 +8671,19 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rS
     if (pDoc)
     {
         if (pDoc->GetDocOptions().IsFormulaWildcardsEnabled())
-            return MayBeWildcard( rStr ) ? utl::SearchParam::SRCH_WILDCARD : utl::SearchParam::SRCH_NORMAL;
+            return MayBeWildcard( rStr ) ? utl::SearchParam::SearchType::Wildcard : utl::SearchParam::SearchType::Normal;
         if (pDoc->GetDocOptions().IsFormulaRegexEnabled())
-            return MayBeRegExp( rStr ) ? utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL;
+            return MayBeRegExp( rStr ) ? utl::SearchParam::SearchType::Regexp : utl::SearchParam::SearchType::Normal;
     }
     else
     {
         /* TODO: obtain the global config for this rare case? */
         if (MayBeRegExp( rStr, true))
-            return utl::SearchParam::SRCH_REGEXP;
+            return utl::SearchParam::SearchType::Regexp;
         if (MayBeWildcard( rStr ))
-            return utl::SearchParam::SRCH_WILDCARD;
+            return utl::SearchParam::SearchType::Wildcard;
     }
-    return utl::SearchParam::SRCH_NORMAL;
+    return utl::SearchParam::SearchType::Normal;
 }
 
 static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc,

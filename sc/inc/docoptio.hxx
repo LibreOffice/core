@@ -51,8 +51,6 @@ class SC_DLLPUBLIC ScDocOptions
     mutable bool bFormulaWildcardsEnabled;///< wildcards in formulas enabled, only when reading settings
     bool       bWriteCalcConfig;        ///< (subset of) Calc config will be written to user's profile
 
-    static const utl::SearchParam::SearchType eSearchTypeUnknown = static_cast<utl::SearchParam::SearchType>(-1);
-
 public:
                 ScDocOptions();
                 ScDocOptions( const ScDocOptions& rCpy );
@@ -96,16 +94,16 @@ public:
 
     utl::SearchParam::SearchType GetFormulaSearchType() const
     {
-        if (eFormulaSearchType == eSearchTypeUnknown || (bFormulaRegexEnabled && bFormulaWildcardsEnabled))
+        if (eFormulaSearchType == utl::SearchParam::SearchType::Unknown || (bFormulaRegexEnabled && bFormulaWildcardsEnabled))
             eFormulaSearchType = utl::SearchParam::ConvertToSearchType( bFormulaWildcardsEnabled, bFormulaRegexEnabled);
         return eFormulaSearchType;
     }
 
     void    SetFormulaRegexEnabled( bool bVal );
-    bool    IsFormulaRegexEnabled() const       { return GetFormulaSearchType() == utl::SearchParam::SRCH_REGEXP; }
+    bool    IsFormulaRegexEnabled() const       { return GetFormulaSearchType() == utl::SearchParam::SearchType::Regexp; }
 
     void    SetFormulaWildcardsEnabled( bool bVal );
-    bool    IsFormulaWildcardsEnabled() const   { return GetFormulaSearchType() == utl::SearchParam::SRCH_WILDCARD; }
+    bool    IsFormulaWildcardsEnabled() const   { return GetFormulaSearchType() == utl::SearchParam::SearchType::Wildcard; }
 
     void    SetWriteCalcConfig( bool bVal ) { bWriteCalcConfig = bVal; }
     bool    IsWriteCalcConfig() const       { return bWriteCalcConfig; }

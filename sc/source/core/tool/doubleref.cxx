@@ -264,7 +264,7 @@ void ScDBRangeBase::fillQueryOptions(ScQueryParamBase* pParam)
     pParam->bByRow = true;
     pParam->bInplace = true;
     pParam->bCaseSens = false;
-    pParam->eSearchType = utl::SearchParam::SRCH_NORMAL;
+    pParam->eSearchType = utl::SearchParam::SearchType::Normal;
     pParam->bDuplicate = true;
 }
 
