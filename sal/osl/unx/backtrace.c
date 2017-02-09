@@ -94,7 +94,7 @@ int backtrace( void **buffer, int max_frames )
     return i;
 }
 
-char ** backtrace_symbols(void * const * buffer, int size)
+char ** backtrace_symbols(void * const *, int)
 {
     return NULL; /*TODO*/
 }
@@ -176,7 +176,7 @@ int backtrace( void **buffer, int max_frames )
     return i;
 }
 
-char ** backtrace_symbols(void * const * buffer, int size)
+char ** backtrace_symbols(void * const *, int)
 {
     return NULL; /*TODO*/
 }
@@ -249,7 +249,7 @@ int backtrace( void **buffer, int max_frames )
     return i;
 }
 
-char ** backtrace_symbols(void * const * buffer, int size)
+char ** backtrace_symbols(void * const *, int)
 {
     return NULL; /*TODO*/
 }
@@ -297,7 +297,7 @@ int backtrace( void **buffer, int max_frames )
     return 0;
 }
 
-char ** backtrace_symbols(void * const * buffer, int size)
+char ** backtrace_symbols(void * const *, int)
 {
     return NULL; /*TODO*/
 }
