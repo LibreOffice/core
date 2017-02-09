@@ -1472,6 +1472,8 @@ void SwPostItMgr::FormatAll(const SfxItemSet &rNewAttr)
         pOLV->SetAttribs(rNewAttr);
         //restore old selection
         pOLV->SetSelection(aOrigSel);
+        // tdf#91596 store updated formatting in SwField
+        (*i)->pPostIt->UpdateData();
     }
 
     mpWrtShell->EndUndo();
