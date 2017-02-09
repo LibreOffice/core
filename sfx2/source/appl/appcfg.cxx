@@ -158,7 +158,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_BACKUP :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_BACKUP))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::Backup))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BACKUP ),aSaveOptions.IsBackup())))
                                 bRet = false;
                     }
@@ -166,7 +166,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_PRETTYPRINTING:
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::DoPrettyPrinting))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), aSaveOptions.IsPrettyPrinting())))
                                 bRet = false;
                     }
@@ -174,7 +174,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_WARNALIENFORMAT:
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::WarnAlienFormat))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), aSaveOptions.IsWarnAlienFormat())))
                                 bRet = false;
                     }
@@ -182,7 +182,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_AUTOSAVE :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_AUTOSAVE))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::AutoSave))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_AUTOSAVE ), aSaveOptions.IsAutoSave())))
                                 bRet = false;
                     }
@@ -190,7 +190,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_AUTOSAVEPROMPT :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_AUTOSAVEPROMPT))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::AutoSavePrompt))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_AUTOSAVEPROMPT ), aSaveOptions.IsAutoSavePrompt())))
                                 bRet = false;
                     }
@@ -198,7 +198,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_AUTOSAVEMINUTE :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_AUTOSAVETIME))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::AutoSaveTime))
                             if (!rSet.Put( SfxUInt16Item( rPool.GetWhich( SID_ATTR_AUTOSAVEMINUTE ), (sal_uInt16)aSaveOptions.GetAutoSaveTime())))
                                 bRet = false;
                     }
@@ -206,7 +206,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_USERAUTOSAVE :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_USERAUTOSAVE))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::UserAutoSave))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_USERAUTOSAVE ), aSaveOptions.IsUserAutoSave())))
                                 bRet = false;
                     }
@@ -214,7 +214,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_DOCINFO :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_DOCINFSAVE))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::DocInfSave))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_DOCINFO ), aSaveOptions.IsDocInfoSave())))
                                 bRet = false;
                     }
@@ -222,7 +222,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_WORKINGSET :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEWORKINGSET))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::SaveWorkingSet))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_WORKINGSET ), aSaveOptions.IsSaveWorkingSet())))
                                 bRet = false;
                     }
@@ -230,7 +230,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_ATTR_SAVEDOCVIEW :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVEDOCVIEW))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::SaveDocView))
                             if (!rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_SAVEDOCVIEW ), aSaveOptions.IsSaveDocView())))
                                 bRet = false;
                     }
@@ -284,7 +284,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_SAVEREL_INET :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVERELINET))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::SaveRelInet))
                             if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_INET ), aSaveOptions.IsSaveRelINet() )))
                                 bRet = false;
                     }
@@ -292,7 +292,7 @@ void SfxApplication::GetOptions( SfxItemSet& rSet )
                 case SID_SAVEREL_FSYS :
                     {
                         bRet = true;
-                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::E_SAVERELFSYS))
+                        if (!aSaveOptions.IsReadOnly(SvtSaveOptions::EOption::SaveRelFsys))
                             if (!rSet.Put( SfxBoolItem ( rPool.GetWhich( SID_SAVEREL_FSYS ), aSaveOptions.IsSaveRelFSys() )))
                                 bRet = false;
                     }

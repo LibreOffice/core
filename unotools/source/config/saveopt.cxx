@@ -283,59 +283,50 @@ bool SvtSaveOptions_Impl::IsReadOnly( SvtSaveOptions::EOption eOption ) const
     bool bReadOnly = CFG_READONLY_DEFAULT;
     switch(eOption)
     {
-        case SvtSaveOptions::E_AUTOSAVETIME :
+        case SvtSaveOptions::EOption::AutoSaveTime :
             bReadOnly = bROAutoSaveTime;
             break;
-        case SvtSaveOptions::E_USEUSERDATA :
+        case SvtSaveOptions::EOption::UseUserData :
             bReadOnly = bROUseUserData;
             break;
-        case SvtSaveOptions::E_BACKUP :
+        case SvtSaveOptions::EOption::Backup :
             bReadOnly = bROBackup;
             break;
-        case SvtSaveOptions::E_AUTOSAVE :
+        case SvtSaveOptions::EOption::AutoSave :
             bReadOnly = bROAutoSave;
             break;
-        case SvtSaveOptions::E_AUTOSAVEPROMPT :
+        case SvtSaveOptions::EOption::AutoSavePrompt :
             bReadOnly = bROAutoSavePrompt;
             break;
-        case SvtSaveOptions::E_USERAUTOSAVE :
+        case SvtSaveOptions::EOption::UserAutoSave :
             bReadOnly = bROUserAutoSave;
             break;
-        case SvtSaveOptions::E_DOCINFSAVE :
+        case SvtSaveOptions::EOption::DocInfSave :
             bReadOnly = bRODocInfSave;
             break;
-        case SvtSaveOptions::E_SAVEWORKINGSET :
+        case SvtSaveOptions::EOption::SaveWorkingSet :
             bReadOnly = bROSaveWorkingSet;
             break;
-        case SvtSaveOptions::E_SAVEDOCVIEW :
+        case SvtSaveOptions::EOption::SaveDocView :
             bReadOnly = bROSaveDocView;
             break;
-        case SvtSaveOptions::E_SAVERELINET :
+        case SvtSaveOptions::EOption::SaveRelInet :
             bReadOnly = bROSaveRelINet;
             break;
-        case SvtSaveOptions::E_SAVERELFSYS :
+        case SvtSaveOptions::EOption::SaveRelFsys :
             bReadOnly = bROSaveRelFSys;
             break;
-        case SvtSaveOptions::E_SAVEUNPACKED :
-            bReadOnly = bROSaveUnpacked;
-            break;
-        case SvtSaveOptions::E_DOPRETTYPRINTING :
+        case SvtSaveOptions::EOption::DoPrettyPrinting :
             bReadOnly = bRODoPrettyPrinting;
             break;
-        case SvtSaveOptions::E_WARNALIENFORMAT :
+        case SvtSaveOptions::EOption::WarnAlienFormat :
             bReadOnly = bROWarnAlienFormat;
             break;
-        case SvtSaveOptions::E_LOADDOCPRINTER :
+        case SvtSaveOptions::EOption::LoadDocPrinter :
             bReadOnly = bROLoadDocPrinter;
             break;
-        case SvtSaveOptions::E_ODFDEFAULTVERSION :
+        case SvtSaveOptions::EOption::OdfDefaultVersion :
             bReadOnly = bROLoadDocPrinter;
-            break;
-        case SvtSaveOptions::E_USESHA1INODF12:
-            bReadOnly = bROUseSHA1InODF12;
-            break;
-        case SvtSaveOptions::E_USEBLOWFISHINODF12:
-            bReadOnly = bROUseBlowfishInODF12;
             break;
     }
     return bReadOnly;
