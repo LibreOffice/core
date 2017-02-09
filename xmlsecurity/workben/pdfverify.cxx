@@ -9,6 +9,15 @@
 
 #include <iostream>
 
+#ifdef WNT
+#include <prewin.h>
+#endif
+#include <fpdfview.h>
+#include <fpdf_edit.h>
+#ifdef WNT
+#include <postwin.h>
+#endif
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
@@ -17,6 +26,10 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <osl/file.hxx>
 #include <sal/main.h>
+#include <vcl/bitmap.hxx>
+#include <vcl/bitmapaccess.hxx>
+#include <vcl/pngwrite.hxx>
+#include <vcl/svapp.hxx>
 
 #include <pdfio/pdfdocument.hxx>
 
@@ -24,6 +37,73 @@ using namespace com::sun::star;
 
 namespace
 {
+/// Convert to inch, then assume 96 DPI.
+double pointToPixel(double fPoint)
+{
+    return fPoint / 72 * 96;
+}
+
+/// Does PDF to PNG conversion using pdfium.
+void generatePreview(const OString& rPdfPath, const OString& rPngPath)
+{
+    FPDF_LIBRARY_CONFIG aConfig;
+    aConfig.version = 2;
+    aConfig.m_pUserFontPaths = nullptr;
+    aConfig.m_pIsolate = nullptr;
+    aConfig.m_v8EmbedderSlot = 0;
+    FPDF_InitLibraryWithConfig(&aConfig);
+
+    // Read input into a buffer.
+    OUString aInURL;
+    osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(rPdfPath), aInURL);
+    SvFileStream aInStream(aInURL, StreamMode::READ);
+    SvMemoryStream aInBuffer;
+    aInBuffer.WriteStream(aInStream);
+
+    // Load the buffer using pdfium.
+    FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
+    if (!pPdfDocument)
+        return;
+
+    // Render the first page.
+    FPDF_PAGE pPdfPage = FPDF_LoadPage(pPdfDocument, /*page_index=*/0);
+    if (!pPdfPage)
+        return;
+
+    // Returned unit is points, convert that to pixel.
+    int nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage));
+    int nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage));
+    FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
+    if (!pPdfBitmap)
+        return;
+
+    FPDF_DWORD nColor = FPDFPage_HasTransparency(pPdfPage) ? 0x00000000 : 0xFFFFFFFF;
+    FPDFBitmap_FillRect(pPdfBitmap, 0, 0, nPageWidth, nPageHeight, nColor);
+    FPDF_RenderPageBitmap(pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth, nPageHeight, /*rotate=*/0, /*flags=*/0);
+
+    // Save the buffer as a PNG file.
+    Bitmap aBitmap(Size(nPageWidth, nPageHeight), 32);
+    {
+        Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+        const void* pPdfBuffer = FPDFBitmap_GetBuffer(pPdfBitmap);
+        std::memcpy(pWriteAccess->GetBuffer(), pPdfBuffer, nPageWidth * nPageHeight * 4);
+    }
+    BitmapEx aBitmapEx(aBitmap);
+#ifdef WNT
+    aBitmapEx.Mirror(BmpMirrorFlags::Vertical);
+#endif
+    vcl::PNGWriter aWriter(aBitmapEx);
+    OUString aOutURL;
+    osl::FileBase::getFileURLFromSystemPath(OUString::fromUtf8(rPngPath), aOutURL);
+    SvFileStream aOutStream(aOutURL, StreamMode::WRITE);
+    aWriter.Write(aOutStream);
+
+    FPDFBitmap_Destroy(pPdfBitmap);
+    FPDF_ClosePage(pPdfPage);
+    FPDF_CloseDocument(pPdfDocument);
+    FPDF_DestroyLibrary();
+}
+
 int pdfVerify(int nArgc, char** pArgv)
 {
     if (nArgc < 2)
@@ -46,6 +126,15 @@ int pdfVerify(int nArgc, char** pArgv)
     uno::Reference<lang::XMultiComponentFactory> xMultiComponentFactory = xComponentContext->getServiceManager();
     uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(xMultiComponentFactory, uno::UNO_QUERY);
     comphelper::setProcessServiceFactory(xMultiServiceFactory);
+
+    if (nArgc > 3 && OString(pArgv[3]) == "-p")
+    {
+        InitVCL();
+        generatePreview(pArgv[1], pArgv[2]);
+        DeInitVCL();
+        return 0;
+    }
+
     uno::Reference<xml::crypto::XSEInitializer> xSEInitializer;
     try
     {
