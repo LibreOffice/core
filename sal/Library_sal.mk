@@ -199,7 +199,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/osxlocale \
 ))
 endif
-ifneq ($(filter $(OS),SOLARIS FREEBSD NETBSD MACOSX AIX OPENBSD DRAGONFLY)$(filter $(OS)$(CPUNAME),LINUXSPARC),)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/backtrace \
 ))
