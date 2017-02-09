@@ -3125,8 +3125,6 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
         assert(!"can't move");
     }
 
-    bool b3DFlag = rOldPos.Tab() != rNewPos.Tab() || rCxt.mnTabDelta;
-
     TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
     for (size_t j=0; j<2; ++j)
     {
@@ -3153,8 +3151,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         }
 
                         rRef.SetAddress(aAbs, rNewPos);
-                        if (b3DFlag)
-                            rRef.SetFlag3D(b3DFlag);
+                        rRef.SetFlag3D(aAbs.Tab() != rNewPos.Tab());
                     }
                     break;
                 case svDoubleRef:
@@ -3170,8 +3167,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         }
 
                         rRef.SetRange(aAbs, rNewPos);
-                        if (b3DFlag)
-                            rRef.Ref1.SetFlag3D(true);
+                        rRef.Ref1.SetFlag3D(aAbs.aStart.Tab() != rNewPos.Tab());
                     }
                     break;
                 case svExternalSingleRef:
