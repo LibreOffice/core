@@ -32,6 +32,7 @@
 #include <vbahelper/vbadllapi.h>
 #include <vcl/pointr.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/errcode.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace awt { class XControl; }
@@ -262,16 +263,16 @@ class VBAHELPER_DLLPUBLIC DebugHelper
 {
 public:
     /// @throws css::script::BasicErrorException
-    static void basicexception( const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ );
+    static void basicexception( const css::uno::Exception& ex, ErrCode err, const OUString& /*additionalArgument*/ );
 
     /// @throws css::script::BasicErrorException
-    static void basicexception( int err,  const OUString& additionalArgument );
+    static void basicexception( ErrCode err,  const OUString& additionalArgument );
 
     /// @throws css::script::BasicErrorException
     static void basicexception( const css::uno::Exception& ex );
 
     /// @throws css::script::BasicErrorException
-    static void runtimeexception( int err );
+    static void runtimeexception( ErrCode err );
 };
 
     } // vba

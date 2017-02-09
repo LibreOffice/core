@@ -193,7 +193,7 @@ private:
     JobSetup                    maJobSetup;
     Point                       maPageOffset;
     Size                        maPaperSize;
-    sal_uLong                   mnError;
+    ErrCode                     mnError;
     sal_uInt16                  mnCurPage;
     sal_uInt16                  mnCurPrintPage;
     sal_uInt16                  mnPageQueueSize;
@@ -217,7 +217,7 @@ private:
 
     SAL_DLLPRIVATE bool         StartJob( const OUString& rJobName, std::shared_ptr<vcl::PrinterController>& );
 
-    static SAL_DLLPRIVATE sal_uLong
+    static SAL_DLLPRIVATE ErrCode
                                 ImplSalPrinterErrorCodeToVCL( sal_uLong nError );
 
 private:

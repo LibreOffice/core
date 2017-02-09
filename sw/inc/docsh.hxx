@@ -278,8 +278,8 @@ public:
 
     void ToggleLayoutMode(SwView* pView);
 
-    sal_uLong LoadStylesFromFile( const OUString& rURL, SwgReaderOption& rOpt,
-                                  bool bUnoCall );
+    ErrCode LoadStylesFromFile( const OUString& rURL, SwgReaderOption& rOpt,
+                                bool bUnoCall );
     void InvalidateModel();
     void ReactivateModel();
 

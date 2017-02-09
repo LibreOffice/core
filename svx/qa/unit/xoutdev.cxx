@@ -47,7 +47,7 @@ void XOutdevTest::testPdfGraphicExport()
     test::Directories aDirectories;
     OUString aURL = aDirectories.getURLFromSrc("svx/qa/unit/data/graphic.pdf");
     SvFileStream aStream(aURL, StreamMode::READ);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(ERRCODE_NONE), GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aURL, aStream));
 
     // Export it.
     utl::TempFile aTempFile;

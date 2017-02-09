@@ -386,7 +386,7 @@ private:
     ScMarkData          maPreviewSelection;
     sal_Int64           nUnoObjectId;                   // counted up for UNO objects
 
-    sal_uInt32          nRangeOverflowType;             // used in (xml) loading for overflow warnings
+    ErrCode             nRangeOverflowType;             // used in (xml) loading for overflow warnings
 
     ScRange             aEmbedRange;
     ScAddress           aCurTextWidthCalcPos;
@@ -1944,9 +1944,9 @@ public:
     bool            GetHasMacroFunc() const      { return bHasMacroFunc; }
     void            SetHasMacroFunc(bool bSet)   { bHasMacroFunc = bSet; }
 
-    void            SetRangeOverflowType(sal_uInt32 nType)  { nRangeOverflowType = nType; }
-    bool            HasRangeOverflow() const                { return nRangeOverflowType != 0; }
-    SC_DLLPUBLIC sal_uInt32      GetRangeOverflowType() const            { return nRangeOverflowType; }
+    void            SetRangeOverflowType(ErrCode nType)  { nRangeOverflowType = nType; }
+    bool            HasRangeOverflow() const             { return nRangeOverflowType != ERRCODE_NONE; }
+    SC_DLLPUBLIC ErrCode GetRangeOverflowType() const    { return nRangeOverflowType; }
 
     // for broadcasting/listening
     void            SetInsertingFromOtherDoc( bool bVal ) { bInsertingFromOtherDoc = bVal; }

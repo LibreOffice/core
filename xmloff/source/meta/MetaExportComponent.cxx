@@ -69,7 +69,7 @@ void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star:
     }
 }
 
-sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
+ErrCode XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
 {
     uno::Reference< xml::sax::XDocumentHandler > xDocHandler = GetDocHandler();
 
@@ -155,7 +155,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         ExportMeta_();
     }
     xDocHandler->endDocument();
-    return 0;
+    return ERRCODE_NONE;
 }
 
 void XMLMetaExportComponent::ExportMeta_()

@@ -1360,7 +1360,7 @@ Writer& OutHTML_Image( Writer& rWrt, const SwFrameFormat &rFrameFormat,
     OUString aGraphicInBase64;
     if ( !XOutBitmap::GraphicToBase64(rGraphic, aGraphicInBase64) )
     {
-        rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+        rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
     }
 
     OStringBuffer sBuffer;
@@ -1438,7 +1438,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
             {
                 if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
                 {
-                    rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+                    rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
                 }
             }
         }
@@ -1728,10 +1728,10 @@ static Writer & OutHTML_FrameFormatAsImage( Writer& rWrt, const SwFrameFormat& r
             XOutBitmap::WriteGraphic( aGraphic, GraphicURL,
                                       "JPG",
                                       (XOutFlags::UseGifIfPossible|
-                                       XOutFlags::UseNativeIfPossible) ) != 0 )
+                                       XOutFlags::UseNativeIfPossible) ) != ERRCODE_NONE )
         {
             // empty or incorrect, because there is nothing to output
-            rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+            rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
             return rWrt;
         }
 
@@ -1796,11 +1796,11 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             aMM100Size = OutputDevice::LogicToLogic( rSize.GetSize(),
                             MapMode( MapUnit::MapTwip ), MapMode( MapUnit::Map100thMM ));
 
-            sal_uInt16 nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGraphicURL,
+            ErrCode nErr = XOutBitmap::WriteGraphic( pGrfNd->GetGrf(), aGraphicURL,
                     "JPG", nFlags, &aMM100Size );
             if( nErr )
             {
-                rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+                rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
                 return rWrt;
             }
             aGraphicURL = URIHelper::SmartRel2Abs(
