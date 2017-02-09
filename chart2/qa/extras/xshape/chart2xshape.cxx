@@ -28,6 +28,9 @@ class Chart2XShapeTest : public ChartTest, public XmlTestTools
 {
 public:
 
+    void setUp() override;
+    void tearDown() override;
+
     void testFdo75075();
     void testPropertyMappingBarChart();
     void testPieChartLabels1();
@@ -69,6 +72,18 @@ bool checkDumpAgainstFile( const OUString& rDump, const OUString& aFilePath)
             static_cast<int>(rDump.getLength()), nullptr);
 }
 
+}
+
+void Chart2XShapeTest::setUp()
+{
+    ChartTest::setUp();
+    osl_setEnvironment(OUString("SAL_NO_FONT_LOOKUP").pData, OUString("1").pData);
+}
+
+void Chart2XShapeTest::tearDown()
+{
+    ChartTest::tearDown();
+    osl_clearEnvironment(OUString("SAL_NO_FONT_LOOKUP").pData);
 }
 
 OUString Chart2XShapeTest::getXShapeDumpString()
