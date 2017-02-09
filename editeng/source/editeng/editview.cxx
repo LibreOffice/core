@@ -539,7 +539,7 @@ void EditView::Redo()
     pImpEditView->pEditEngine->Redo( this );
 }
 
-sal_uInt32 EditView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
+ErrCode EditView::Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();

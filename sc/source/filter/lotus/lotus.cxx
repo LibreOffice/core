@@ -51,10 +51,10 @@ ErrCode ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocume
     if( bWithWK3 )
         eRet = aLotusImport.Read();
     else
-        eRet = 0xFFFFFFFF;  // force WK1 /WKS
+        eRet = ErrCode(0xFFFFFFFF);  // force WK1 /WKS
 
     // WARNING: QUICK-HACK for WK1 / WKS  <->  WK3 / WK4
-    if( eRet == 0xFFFFFFFF )
+    if( eRet == ErrCode(0xFFFFFFFF) )
     {
         pStream->Seek( 0UL );
 

@@ -47,7 +47,7 @@ ErrCode ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUStrin
         bool bConvertDate )
 {
     ScHTMLImport aImp( pDoc, rBaseURL, rRange, bCalcWidthHeight );
-    ErrCode nErr = (ErrCode) aImp.Read( rStream, rBaseURL );
+    ErrCode nErr = aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
     aImp.WriteToDocument( true, nOutputFactor, pFormatter, bConvertDate );

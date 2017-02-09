@@ -254,7 +254,7 @@ ScHTMLLayoutParser::~ScHTMLLayoutParser()
     }
 }
 
-sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
+ErrCode ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL )
 {
     Link<HtmlImportInfo&,void> aOldLink = pEdit->GetHtmlImportHdl();
     pEdit->SetHtmlImportHdl( LINK( this, ScHTMLLayoutParser, HTMLImportHdl ) );
@@ -282,7 +282,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const OUString& rBaseURL 
         }
     }
 
-    sal_uLong nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_HTML, pAttributes );
+    ErrCode nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_HTML, pAttributes );
 
     pEdit->SetHtmlImportHdl( aOldLink );
     // Create column width
@@ -2828,7 +2828,7 @@ ScHTMLQueryParser::~ScHTMLQueryParser()
 {
 }
 
-sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
+ErrCode ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
 {
     SvKeyValueIteratorRef xValues;
     SvKeyValueIterator* pAttributes = nullptr;
@@ -2856,7 +2856,7 @@ sal_uLong ScHTMLQueryParser::Read( SvStream& rStrm, const OUString& rBaseURL  )
 
     Link<HtmlImportInfo&,void> aOldLink = pEdit->GetHtmlImportHdl();
     pEdit->SetHtmlImportHdl( LINK( this, ScHTMLQueryParser, HTMLImportHdl ) );
-    sal_uLong nErr = pEdit->Read( rStrm, rBaseURL, EE_FORMAT_HTML, pAttributes );
+    ErrCode nErr = pEdit->Read( rStrm, rBaseURL, EE_FORMAT_HTML, pAttributes );
     pEdit->SetHtmlImportHdl( aOldLink );
 
     mxGlobTable->Recalc();
