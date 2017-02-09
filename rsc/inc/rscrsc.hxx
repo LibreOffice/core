@@ -88,8 +88,8 @@ public:
     ERRTYPE         Start();
 
                     // read include statements
-    ERRTYPE         IncludeParser( sal_uLong lFileKey );
-    ERRTYPE         ParseOneFile( sal_uLong lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
+    ERRTYPE         IncludeParser( RscFileTab::Index lFileKey );
+    ERRTYPE         ParseOneFile( RscFileTab::Index lFileKey, const RscCmdLine::OutputFile* pOutputFile, const WriteRcContext* pContext );
     ERRTYPE         Link();
     void            EndCompile();
 };

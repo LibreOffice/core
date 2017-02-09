@@ -239,7 +239,7 @@ private:
     ERRTYPE     aError;     // contains the first field
     RscTypCont* pTypCont;
     FILE *      fOutput;    // output file
-    sal_uLong   lFileKey;   // what source file
+    RscFileTab::Index lFileKey;   // what source file
     RscTop *    pClass;
 
     RscEnumerateObj(RscTypCont* pTC, FILE* pOutputFile)
@@ -358,7 +358,7 @@ public:
             pRoot->EnumNodes( LINK( this, RscEnumerateRef, CallBackWriteRc ) );
             return aEnumObj.aError;
         }
-    ERRTYPE const & WriteSrc( sal_uLong lFileKey )
+    ERRTYPE const & WriteSrc( RscFileTab::Index lFileKey )
         {
             aEnumObj.lFileKey = lFileKey;
 
@@ -424,14 +424,14 @@ void RscTypCont::WriteSrc( FILE * fOutput, RscFileTab::Index nFileKey )
 
 class RscDel
 {
-    sal_uLong lFileKey;
+    RscFileTab::Index lFileKey;
     DECL_LINK( Delete, const NameNode&, void );
 public:
-    RscDel( RscTop * pRoot, sal_uLong lKey );
+    RscDel( RscTop * pRoot, RscFileTab::Index lKey );
 };
 
 
-inline RscDel::RscDel( RscTop * pRoot, sal_uLong lKey )
+inline RscDel::RscDel( RscTop * pRoot, RscFileTab::Index lKey )
     : lFileKey(lKey)
 {
     pRoot->EnumNodes( LINK( this, RscDel, Delete ) );
