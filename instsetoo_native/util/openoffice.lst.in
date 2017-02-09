@@ -14,8 +14,6 @@ Globals
             BASISPACKAGEPREFIX libobasis
             UREPACKAGEPREFIX libreoffice
             SOLSUREPACKAGEPREFIX libreoffice
-            REGISTRATION_HOST https://registration.libreoffice.org/RegistrationWeb
-            REGISTRATIONURL http://survey.libreoffice.org/user/index.php
             PROGRESSBARCOLOR 0,0,0
             PROGRESSSIZE 444,8
             PROGRESSPOSITION 35,153
