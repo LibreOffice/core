@@ -153,8 +153,8 @@ public:
     /**
     * @param pArgs Takes ownership
     */
-    sal_uIntPtr                       LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, SfxItemSet* pArgs );
-    vcl::Window*                     GetTopWindow() const;
+    ErrCode                     LoadTemplate( SfxObjectShellLock& xDoc, const OUString& rFileName, SfxItemSet* pArgs );
+    vcl::Window*                GetTopWindow() const;
 
     // members
     SfxFilterMatcher&           GetFilterMatcher();

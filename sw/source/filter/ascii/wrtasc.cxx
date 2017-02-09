@@ -83,7 +83,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
 
 SwASCWriter::~SwASCWriter() {}
 
-sal_uLong SwASCWriter::WriteStream()
+ErrCode SwASCWriter::WriteStream()
 {
     if( bASCII_ParaAsCR )           // If predefined
         m_sLineEnd = "\015";
@@ -189,7 +189,7 @@ sal_uLong SwASCWriter::WriteStream()
     if( bShowProgress )
         ::EndProgress( pDoc->GetDocShell() );
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
 void GetASCWriter( const OUString& rFltNm, const OUString& /*rBaseURL*/, WriterRef& xRet )

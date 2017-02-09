@@ -374,7 +374,7 @@ bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
     aStacked.SetValue( aOrientation.IsStacked() );
     aRotateAngle.SetValue( aOrientation.GetRotation( aRotateAngle.GetValue() ) );
 
-    return (rStream.GetError() == 0);
+    return (rStream.GetError() == ERRCODE_NONE);
 }
 
 bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
@@ -426,7 +426,7 @@ bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
     // --- from 680/dr25 on: store strings as UTF-8
     aNumFormat.Save( rStream, RTL_TEXTENCODING_UTF8 );
 
-    return (rStream.GetError() == 0);
+    return (rStream.GetError() == ERRCODE_NONE);
 }
 
 ScAutoFormatData::ScAutoFormatData()
@@ -753,7 +753,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
 {
     sal_uInt16  nVer = 0;
     rStream.ReadUInt16( nVer );
-    bool bRet = 0 == rStream.GetError();
+    bool bRet = ERRCODE_NONE == rStream.GetError();
     if( bRet && (nVer == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVer && nVer <= AUTOFORMAT_DATA_ID)) )
     {
@@ -790,7 +790,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
         if (nVer >= AUTOFORMAT_DATA_ID_31005)
             rStream >> m_swFields;
 
-        bRet = 0 == rStream.GetError();
+        bRet = ERRCODE_NONE == rStream.GetError();
         for( sal_uInt16 i = 0; bRet && i < 16; ++i )
             bRet = GetField( i ).Load( rStream, rVersions, nVer );
     }
@@ -817,7 +817,7 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
     if (fileVersion >= SOFFICE_FILEFORMAT_50)
         WriteAutoFormatSwBlob( rStream, m_swFields );
 
-    bool bRet = 0 == rStream.GetError();
+    bool bRet = ERRCODE_NONE == rStream.GetError();
     for (sal_uInt16 i = 0; bRet && (i < 16); i++)
         bRet = GetField( i ).Save( rStream, fileVersion );
 
@@ -1007,14 +1007,14 @@ void ScAutoFormat::Load()
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::READ );
     SvStream* pStream = aMedium.GetInStream();
-    bool bRet = (pStream && pStream->GetError() == 0);
+    bool bRet = (pStream && pStream->GetError() == ERRCODE_NONE);
     if (bRet)
     {
         SvStream& rStream = *pStream;
         // Attention: A common header has to be read
         sal_uInt16 nVal = 0;
         rStream.ReadUInt16( nVal );
-        bRet = 0 == rStream.GetError();
+        bRet = ERRCODE_NONE == rStream.GetError();
 
         if (bRet)
         {
@@ -1042,7 +1042,7 @@ void ScAutoFormat::Load()
                 ScAutoFormatData* pData;
                 sal_uInt16 nAnz = 0;
                 rStream.ReadUInt16( nAnz );
-                bRet = (rStream.GetError() == 0);
+                bRet = (rStream.GetError() == ERRCODE_NONE);
                 for (sal_uInt16 i=0; bRet && (i < nAnz); i++)
                 {
                     pData = new ScAutoFormatData();
@@ -1065,7 +1065,7 @@ bool ScAutoFormat::Save()
 
     SfxMedium aMedium( aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), StreamMode::WRITE );
     SvStream* pStream = aMedium.GetOutStream();
-    bool bRet = (pStream && pStream->GetError() == 0);
+    bool bRet = (pStream && pStream->GetError() == ERRCODE_NONE);
     if (bRet)
     {
         const sal_uInt16 fileVersion = SOFFICE_FILEFORMAT_50;
@@ -1080,10 +1080,10 @@ bool ScAutoFormat::Save()
                     osl_getThreadTextEncoding() ) );
         m_aVersions.Write(rStream, fileVersion);
 
-        bRet &= (rStream.GetError() == 0);
+        bRet &= (rStream.GetError() == ERRCODE_NONE);
 
         rStream.WriteUInt16( m_Data.size() - 1 );
-        bRet &= (rStream.GetError() == 0);
+        bRet &= (rStream.GetError() == ERRCODE_NONE);
         MapType::iterator it = m_Data.begin(), itEnd = m_Data.end();
         if (it != itEnd)
         {

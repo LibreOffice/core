@@ -318,7 +318,7 @@ void SAL_CALL BasMgrContainerListenerImpl::elementRemoved( const container::Cont
     }
 }
 
-BasicError::BasicError( sal_uInt64 nId, BasicErrorReason nR )
+BasicError::BasicError( ErrCode nId, BasicErrorReason nR )
 {
     nErrorId    = nId;
     nReason     = nR;
@@ -1542,7 +1542,7 @@ bool BasicManager::HasMacro( OUString const& i_fullyQualifiedName ) const
 ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, SbxArray* i_arguments, SbxValue* i_retValue )
 {
     SbMethod* pMethod = lcl_queryMacro( this, i_fullyQualifiedName );
-    ErrCode nError = 0;
+    ErrCode nError = ERRCODE_NONE;
     if ( pMethod )
     {
         if ( i_arguments )

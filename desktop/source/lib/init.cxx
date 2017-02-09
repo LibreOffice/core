@@ -1346,7 +1346,7 @@ static bool lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
 
         if (aErr.Name == "ErrorCode")
         {
-            sal_uInt32 nErrCode = ERRCODE_NONE;
+            sal_uInt32 nErrCode = 0; // ERRCODE_NONE
             aErr.Value >>= nErrCode;
 
             pLib->maLastExceptionMsg = "An error occurred running macro (error code: " + OUString::number( nErrCode ) + ")";

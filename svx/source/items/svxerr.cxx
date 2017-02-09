@@ -26,7 +26,7 @@
 
 SvxErrorHandler::SvxErrorHandler() :
   SfxErrorHandler(
-      RID_SVXERRCODE, ERRCODE_AREA_SVX, ERRCODE_AREA_SVX_END, &DIALOG_MGR() )
+      RID_SVXERRCODE, ErrCode(ERRCODE_AREA_SVX), ErrCode(ERRCODE_AREA_SVX_END), &DIALOG_MGR() )
 {
 }
 

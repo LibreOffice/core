@@ -92,7 +92,7 @@ ErrCode ImportLotus::Read()
                 else
                 {
                     eAkt = S_END;                       // TODO: add here something for <= WK1!
-                    eRet = 0xFFFFFFFF;
+                    eRet = ErrCode(0xFFFFFFFF);
                 }
             }
             break;

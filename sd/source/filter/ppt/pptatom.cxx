@@ -42,13 +42,13 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
             sal_uInt64 const nStreamSize = mrStream.Tell();
             mrStream.Seek( nStreamPos );
 
-            while( (mrStream.GetError() == 0 )
+            while( (mrStream.GetError() == ERRCODE_NONE )
                 && ( mrStream.Tell() < nStreamSize )
                 && ( mrStream.Tell() < maRecordHeader.GetRecEndFilePos() ) )
             {
                 ReadDffRecordHeader( mrStream, aChildHeader );
 
-                if( mrStream.GetError() == 0 )
+                if( mrStream.GetError() == ERRCODE_NONE )
                 {
                     Atom* pAtom = new Atom( aChildHeader, mrStream );
 
@@ -82,7 +82,7 @@ Atom* Atom::import( const DffRecordHeader& rRootRecordHeader, SvStream& rStCtrl 
 {
     Atom* pRootAtom = new Atom( rRootRecordHeader, rStCtrl );
 
-    if( rStCtrl.GetError() == 0 )
+    if( rStCtrl.GetError() == ERRCODE_NONE )
     {
         return pRootAtom;
     }
