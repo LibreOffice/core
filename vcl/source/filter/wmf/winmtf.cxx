@@ -633,6 +633,8 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
                 maFont = font->aFont;
         }
     }
+    UpdateFillStyle();
+    UpdateLineStyle();
 }
 
 void WinMtfOutput::SetTextLayoutMode( ComplexTextLayoutFlags nTextLayoutMode )
@@ -973,6 +975,8 @@ WMFRasterOp WinMtfOutput::SetRasterOp( WMFRasterOp nRasterOp )
         {   // changing modes from WMFRasterOp::Nop so set pen and brush
             maFillStyle = m_NopFillStyle;
             maLineStyle = m_NopLineStyle;
+            UpdateFillStyle();
+            UpdateLineStyle();
             mbNopMode = false;
         }
         switch( nRasterOp )
@@ -994,6 +998,8 @@ WMFRasterOp WinMtfOutput::SetRasterOp( WMFRasterOp nRasterOp )
                     m_NopLineStyle = maLineStyle;
                     maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), true );
                     maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), true );
+                    UpdateFillStyle();
+                    UpdateLineStyle();
                     mbNopMode = true;
                 }
             }
