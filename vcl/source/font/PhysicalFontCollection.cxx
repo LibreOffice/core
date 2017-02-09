@@ -1010,7 +1010,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
         rFSD.maTargetName = GetNextFontToken(rFSD.GetFamilyName(), nIndex);
         rFSD.maSearchName = "liberationsans";
         PhysicalFontFamily* pFont = ImplFindFontFamilyBySearchName(rFSD.maSearchName);
-        assert(pFont);
+        SAL_WARN_IF(!pFont, "vcl.fonts", "Failed to load bundled font");
         return pFont;
     }
 
