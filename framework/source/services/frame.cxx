@@ -1828,7 +1828,18 @@ void SAL_CALL Frame::setLayoutManager(const css::uno::Reference<css::uno::XInter
 {
     checkDisposed();
     SolarMutexGuard g;
-    m_xLayoutManager.set(p1, css::uno::UNO_QUERY);
+
+    css::uno::Reference<css::frame::XLayoutManager2> xOldLayoutManager = m_xLayoutManager;
+    css::uno::Reference<css::frame::XLayoutManager2> xNewLayoutManager(p1, css::uno::UNO_QUERY);
+
+    if (xOldLayoutManager != xNewLayoutManager)
+    {
+        m_xLayoutManager = xNewLayoutManager;
+        if (xOldLayoutManager.is())
+            disableLayoutManager(xOldLayoutManager);
+        if (xNewLayoutManager.is())
+            lcl_enableLayoutManager(xNewLayoutManager, this);
+    }
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Frame::getPropertySetInfo()
