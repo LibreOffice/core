@@ -211,7 +211,7 @@ void SfxApplication::Initialize_Impl()
     Help::EnableExtHelp();
 
     pImpl->m_pToolsErrorHdl = new SfxErrorHandler(
-        RID_ERRHDL, ERRCODE_AREA_TOOLS, ERRCODE_AREA_LIB1);
+        RID_ERRHDL, ErrCode(ERRCODE_AREA_TOOLS), ErrCode(ERRCODE_AREA_LIB1));
 
 #if HAVE_FEATURE_SCRIPTING
     pImpl->pBasicResMgr = ResMgr::CreateResMgr("sb");
@@ -219,10 +219,10 @@ void SfxApplication::Initialize_Impl()
     pImpl->pSvtResMgr = ResMgr::CreateResMgr("svt");
 
     pImpl->m_pSoErrorHdl = new SfxErrorHandler(
-        RID_SO_ERROR_HANDLER, ERRCODE_AREA_SO, ERRCODE_AREA_SO_END, pImpl->pSvtResMgr );
+        RID_SO_ERROR_HANDLER, ErrCode(ERRCODE_AREA_SO), ErrCode(ERRCODE_AREA_SO_END), pImpl->pSvtResMgr );
 #if HAVE_FEATURE_SCRIPTING
     pImpl->m_pSbxErrorHdl = new SfxErrorHandler(
-        RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pImpl->pBasicResMgr );
+        RID_BASIC_START, ErrCode(ERRCODE_AREA_SBX), ErrCode(ERRCODE_AREA_SBX_END), pImpl->pBasicResMgr );
 #endif
 
     if (!utl::ConfigManager::IsAvoidConfig())

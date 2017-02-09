@@ -26,9 +26,9 @@
 #include <tools/solar.h>
 
 // Error numbers
-#define errUnknownFormat    1
-#define errUnknownID        2
-#define errOutOfMemory      3
+#define errUnknownFormat    ErrCode(1)
+#define errUnknownID        ErrCode(2)
+#define errOutOfMemory      ErrCode(3)
 
 // Identifiers in FileFormat
 #define ColWidthID          1
@@ -601,10 +601,10 @@ public:
 class Sc10FontCollection : public ScCollection
 {
 protected:
-    sal_uLong           nError;
+    ErrCode             nError;
 public:
                         Sc10FontCollection( SvStream& rStream );
-    sal_uLong           GetError() { return nError; }
+    ErrCode             GetError() { return nError; }
     Sc10FontData*       At(sal_uInt16 nIndex) { return static_cast<Sc10FontData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
@@ -635,10 +635,10 @@ public:
 class Sc10NameCollection : public ScCollection
 {
 protected:
-    sal_uLong           nError;
+    ErrCode             nError;
 public:
                         Sc10NameCollection(SvStream& rStream);
-    sal_uLong           GetError() { return nError; }
+    ErrCode             GetError() { return nError; }
     Sc10NameData*       At(sal_uInt16 nIndex) { return static_cast<Sc10NameData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
@@ -686,10 +686,10 @@ virtual ScDataObject*       Clone() const override { return new Sc10PatternData(
 class Sc10PatternCollection : public ScCollection
 {
 protected:
-    sal_uLong           nError;
+    ErrCode             nError;
 public:
                         Sc10PatternCollection(SvStream& rStream);
-    sal_uLong           GetError() { return nError; }
+    ErrCode             GetError() { return nError; }
     Sc10PatternData*    At(sal_uInt16 nIndex) { return static_cast<Sc10PatternData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
@@ -714,11 +714,11 @@ virtual ScDataObject*       Clone() const override { return new Sc10DataBaseData
 class Sc10DataBaseCollection : public ScCollection
 {
 protected:
-    sal_uLong           nError;
+    ErrCode             nError;
     sal_Char            ActName[32];
 public:
                         Sc10DataBaseCollection(SvStream& rStream);
-    sal_uLong           GetError() { return nError; }
+    ErrCode             GetError() { return nError; }
     Sc10DataBaseData*   At(sal_uInt16 nIndex) { return static_cast<Sc10DataBaseData*>(ScCollection::At(nIndex)); }
 private:
     using               ScCollection::At;
@@ -760,7 +760,7 @@ class Sc10Import
     Sc10NameCollection*     pNameCollection;
     Sc10PatternCollection*  pPatternCollection;
     Sc10DataBaseCollection* pDataBaseCollection;
-    sal_uLong               nError;
+    ErrCode                 nError;
     SCTAB                   nShowTab;
     ScViewOptions           aSc30ViewOpt;
     ScfStreamProgressBar*   pPrgrsBar;
@@ -769,7 +769,7 @@ public:
                               Sc10Import( SvStream& rStr, ScDocument* pDocument );
                               ~Sc10Import();
 
-    sal_uLong               Import();
+    ErrCode                 Import();
     void                    LoadFileHeader();
     void                    LoadFileInfo();
     void                    LoadEditStateInfo();

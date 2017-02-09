@@ -44,9 +44,9 @@ public:
                 }
 };
 
-static std::size_t GetSvError( DWORD nWntError )
+static ErrCode GetSvError( DWORD nWntError )
 {
-    static struct { DWORD wnt; std::size_t sv; } errArr[] =
+    static struct { DWORD wnt; ErrCode sv; } errArr[] =
     {
         { ERROR_SUCCESS,                ERRCODE_NONE },
         { ERROR_ACCESS_DENIED,          SVSTREAM_ACCESS_DENIED },
@@ -86,7 +86,7 @@ static std::size_t GetSvError( DWORD nWntError )
         { (DWORD)0xFFFFFFFF, SVSTREAM_GENERALERROR }
     };
 
-    std::size_t nRetVal = SVSTREAM_GENERALERROR;    // default error
+    ErrCode nRetVal = SVSTREAM_GENERALERROR;    // default error
     int i=0;
     do
     {
@@ -339,7 +339,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     if( (pInstanceData->hFile==INVALID_HANDLE_VALUE) &&
          (nAccessMode & GENERIC_WRITE))
     {
-        std::size_t nErr = ::GetSvError( GetLastError() );
+        ErrCode nErr = ::GetSvError( GetLastError() );
         if(nErr==SVSTREAM_ACCESS_DENIED || nErr==SVSTREAM_SHARING_VIOLATION)
         {
             nMode &= (~StreamMode::WRITE);

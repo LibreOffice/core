@@ -633,8 +633,8 @@ private:
     EditPaM             ReadXML( SvStream& rInput, EditSelection aSel );
     EditPaM             ReadHTML( SvStream& rInput, const OUString& rBaseURL, EditSelection aSel, SvKeyValueIterator* pHTTPHeaderAttrs );
     EditPaM             ReadBin( SvStream& rInput, EditSelection aSel );
-    sal_uInt32          WriteText( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
+    ErrCode             WriteText( SvStream& rOutput, EditSelection aSel );
+    ErrCode             WriteRTF( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteXML(SvStream& rOutput, const EditSelection& rSel);
     sal_uInt32          WriteBin(SvStream& rOutput, const EditSelection& rSel, bool bStoreUnicode = false);
 

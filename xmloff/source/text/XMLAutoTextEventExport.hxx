@@ -63,7 +63,7 @@ public:
 protected:
 
     /// export the events off all autotexts
-    virtual sal_uInt32 exportDoc(
+    virtual ErrCode exportDoc(
         enum ::xmloff::token::XMLTokenEnum eClass = xmloff::token::XML_TOKEN_INVALID ) override;
 
     /// does the document have any events ?

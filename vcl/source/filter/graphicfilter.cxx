@@ -1156,7 +1156,7 @@ void GraphicFilter::ImplInit()
     pErrorEx = new FilterErrorEx;
 }
 
-sal_uLong GraphicFilter::ImplSetError( sal_uLong nError, const SvStream* pStm )
+ErrCode GraphicFilter::ImplSetError( ErrCode nError, const SvStream* pStm )
 {
     pErrorEx->nStreamError = pStm ? pStm->GetError() : ERRCODE_NONE;
     return nError;
@@ -1279,11 +1279,11 @@ ErrCode GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
     return nRetValue;
 }
 
-sal_uInt16 GraphicFilter::CanImportGraphic( const OUString& rMainUrl, SvStream& rIStream,
+ErrCode GraphicFilter::CanImportGraphic( const OUString& rMainUrl, SvStream& rIStream,
                                         sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat )
 {
     sal_uLong nStreamPos = rIStream.Tell();
-    sal_uInt16 nRes = ImpTestOrFindFormat( rMainUrl, rIStream, nFormat );
+    ErrCode nRes = ImpTestOrFindFormat( rMainUrl, rIStream, nFormat );
 
     rIStream.Seek(nStreamPos);
 
@@ -1309,7 +1309,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rP
     return nRetValue;
 }
 
-sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
+ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags, WMF_EXTERNALHEADER *pExtHeader )
 {
     return ImportGraphic( rGraphic, rPath, rIStream, nFormat, pDeterminedFormat, nImportFlags, nullptr, pExtHeader );
@@ -1999,7 +1999,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 #ifndef DISABLE_DYNLOADING
     OUString aExternalFilterName(pConfig->GetExternalFilterName(nFormat, true));
 #endif
-    sal_uInt16      nStatus = ERRCODE_NONE;
+    ErrCode     nStatus = ERRCODE_NONE;
     GraphicType eType;
     Graphic     aGraphic( rGraphic );
 
@@ -2275,7 +2275,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& r
 
 void GraphicFilter::ResetLastError()
 {
-    pErrorEx->nStreamError = 0UL;
+    pErrorEx->nStreamError = ERRCODE_NONE;
 }
 
 const Link<ConvertData&,bool> GraphicFilter::GetFilterCallback() const
@@ -2311,13 +2311,13 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
     {
         // Import
         nFormat = GetImportFormatNumberForShortName( OStringToOUString( aShortName, RTL_TEXTENCODING_UTF8) );
-        bRet = ImportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
+        bRet = ImportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == ERRCODE_NONE;
     }
     else if( !aShortName.isEmpty() )
     {
         // Export
         nFormat = GetExportFormatNumberForShortName( OStringToOUString(aShortName, RTL_TEXTENCODING_UTF8) );
-        bRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == 0;
+        bRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == ERRCODE_NONE;
     }
 
     return bRet;
@@ -2343,7 +2343,7 @@ GraphicFilter& GraphicFilter::GetGraphicFilter()
     return theGraphicFilter::get().m_aFilter;
 }
 
-int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterName,
+ErrCode GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterName,
                  Graphic& rGraphic, GraphicFilter* pFilter,
                  sal_uInt16* pDeterminedFormat )
 {
@@ -2376,33 +2376,20 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
 #ifdef DBG_UTIL
     OUString aReturnString;
 
-    switch (nRes)
-    {
-        case ERRCODE_GRFILTER_OPENERROR:
+    if (nRes == ERRCODE_GRFILTER_OPENERROR)
             aReturnString="open error";
-            break;
-        case ERRCODE_GRFILTER_IOERROR:
+    else if (nRes == ERRCODE_GRFILTER_IOERROR)
             aReturnString="IO error";
-            break;
-        case ERRCODE_GRFILTER_FORMATERROR:
+    else if (nRes == ERRCODE_GRFILTER_FORMATERROR)
             aReturnString="format error";
-            break;
-        case ERRCODE_GRFILTER_VERSIONERROR:
+    else if (nRes == ERRCODE_GRFILTER_VERSIONERROR)
             aReturnString="version error";
-            break;
-        case ERRCODE_GRFILTER_FILTERERROR:
+    else if (nRes == ERRCODE_GRFILTER_FILTERERROR)
             aReturnString="filter error";
-            break;
-        case ERRCODE_GRFILTER_ABORT:
+    else if (nRes == ERRCODE_GRFILTER_ABORT)
             aReturnString="import aborted";
-            break;
-        case ERRCODE_GRFILTER_TOOBIG:
+    else if (nRes == ERRCODE_GRFILTER_TOOBIG)
             aReturnString="graphic is too big";
-            break;
-        default:
-            // nothing more to do
-            break;
-    }
 
     SAL_INFO_IF( nRes, "vcl.filter", "Problem importing graphic " << rPath << ". Reason: " << aReturnString );
 #endif
@@ -2410,7 +2397,7 @@ int GraphicFilter::LoadGraphic( const OUString &rPath, const OUString &rFilterNa
     return nRes;
 }
 
-sal_uInt16 GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream)
+ErrCode GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream)
 {
     css::uno::Sequence< css::beans::PropertyValue > aFilterData(1);
     aFilterData[0].Name = "Compression";

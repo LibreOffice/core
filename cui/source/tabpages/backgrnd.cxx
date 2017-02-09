@@ -1231,7 +1231,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
     pImportDlg->SetPath( aBgdGraphicPath, m_pBtnLink->IsChecked() );
 
     pPageImpl->bIsImportDlgInExecute = true;
-    short nErr = pImportDlg->Execute();
+    ErrCode nErr = pImportDlg->Execute();
     pPageImpl->bIsImportDlgInExecute = false;
 
     if( !nErr )
