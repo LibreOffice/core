@@ -121,16 +121,16 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
     // for some reason this property exists with 199 points if it wasn't
     // imported, that would be a fail
     CPPUNIT_ASSERT_EQUAL(5, pointss[0].getLength());
-    CPPUNIT_ASSERT_EQUAL(   0, pointss[0][0].X);
-    CPPUNIT_ASSERT_EQUAL(2672, pointss[0][0].Y);
-    CPPUNIT_ASSERT_EQUAL(   0, pointss[0][1].X);
-    CPPUNIT_ASSERT_EQUAL(1111, pointss[0][1].Y);
-    CPPUNIT_ASSERT_EQUAL(2672, pointss[0][2].X);
-    CPPUNIT_ASSERT_EQUAL(1111, pointss[0][2].Y);
-    CPPUNIT_ASSERT_EQUAL(2672, pointss[0][3].X);
-    CPPUNIT_ASSERT_EQUAL(2672, pointss[0][3].Y);
-    CPPUNIT_ASSERT_EQUAL(   0, pointss[0][4].X);
-    CPPUNIT_ASSERT_EQUAL(2672, pointss[0][4].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(   0), pointss[0][0].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2672), pointss[0][0].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(   0), pointss[0][1].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1111), pointss[0][1].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2672), pointss[0][2].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1111), pointss[0][2].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2672), pointss[0][3].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2672), pointss[0][3].Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(   0), pointss[0][4].X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2672), pointss[0][4].Y);
 
     // image map, one rectangle
     uno::Reference<container::XIndexContainer> const xImageMap(
@@ -139,11 +139,12 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
     uno::Reference<beans::XPropertySet> const xEntry(xImageMap->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("http://example.com/"), getProperty<OUString>(xEntry, "URL"));
     awt::Rectangle const rect(getProperty<awt::Rectangle>(xEntry, "Boundary"));
-    CPPUNIT_ASSERT_EQUAL( 726, rect.X);
-    CPPUNIT_ASSERT_EQUAL(1718, rect.Y);
-    CPPUNIT_ASSERT_EQUAL(1347, rect.Width);
-    CPPUNIT_ASSERT_EQUAL( 408, rect.Height);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( 726), rect.X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1718), rect.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1347), rect.Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( 408), rect.Height);
 }
+
 
 DECLARE_ODFEXPORT_TEST(testFramebackgrounds, "framebackgrounds.odt")
 {
