@@ -478,7 +478,7 @@ bool InternalResMgr::Create()
     bool bDone = false;
 
     pStm = new SvFileStream( aFileName, StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE );
-    if( pStm->GetError() == 0 )
+    if( pStm->GetError() == ERRCODE_NONE )
     {
         sal_Int32   lContLen = 0;
 

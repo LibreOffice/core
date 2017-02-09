@@ -80,8 +80,8 @@ public:
     bool            Store( SvStream& );
     virtual bool    LoadCompleted();
 
-    static SbxError GetError();
-    static void SetError( SbxError );
+    static ErrCode GetError();
+    static void SetError( ErrCode );
     static bool IsError();
     static void ResetError();
 

@@ -54,7 +54,7 @@ using ::xmloff::token::XML_BLOCK_LIST;
 using ::xmloff::token::XML_UNFORMATTED_TEXT;
 using ::xmloff::token::GetXMLToken;
 
-sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
+ErrCode SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 {
     OUString aFolderName ( GetPackageName ( nIdx ) );
 
@@ -145,7 +145,7 @@ sal_uLong SwXMLTextBlocks::GetDoc( sal_uInt16 nIdx )
 
         xRoot = nullptr;
     }
-    return 0;
+    return ERRCODE_NONE;
 }
 
 // event description for autotext events; this constant should really be
@@ -157,7 +157,7 @@ const struct SvEventDescription aAutotextEvents[] =
     { 0, nullptr }
 };
 
-sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
+ErrCode SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                                       SvxMacroTableDtor& rMacroTable )
 {
     // set current auto text
@@ -165,12 +165,12 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
     m_aLong = m_aNames[nIdx]->aLong;
     aPackageName = m_aNames[nIdx]->aPackageName;
 
-    sal_uLong nRet = 0;
+    ErrCode nRet = ERRCODE_NONE;
 
     // open stream in proper sub-storage
     CloseFile();
     nRet = OpenFile();
-    if ( 0 == nRet )
+    if ( ERRCODE_NONE == nRet )
     {
         try
         {
@@ -241,7 +241,7 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
                     }
 
                     // and finally, copy macro into table
-                    if (0 == nRet)
+                    if (ERRCODE_NONE == nRet)
                         pDescriptor->copyMacrosIntoTable(rMacroTable);
                 }
                 else
@@ -262,9 +262,9 @@ sal_uLong SwXMLTextBlocks::GetMacroTable( sal_uInt16 nIdx,
     return nRet;
 }
 
-sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
+ErrCode SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText )
 {
-    sal_uLong n = 0;
+    ErrCode n = ERRCODE_NONE;
     OUString aFolderName = GeneratePackageName ( rShort );
     OUString aStreamName = aFolderName + ".xml";
     rText.clear();
@@ -329,7 +329,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const OUString& rShort, OUString& rText
     return n;
 }
 
-sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort,
+ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
                                          const OUString& rText,  const OUString& rPackageName )
 {
     GetIndex ( rShort );
@@ -346,7 +346,7 @@ sal_uLong SwXMLTextBlocks::PutBlockText( const OUString& rShort,
         comphelper::getProcessComponentContext();
 
     uno::Reference < xml::sax::XWriter > xWriter = xml::sax::Writer::create(xContext);
-    sal_uLong nRes = 0;
+    ErrCode nRes = ERRCODE_NONE;
 
     try
     {
@@ -453,7 +453,7 @@ void SwXMLTextBlocks::ReadInfo()
 }
 void SwXMLTextBlocks::WriteInfo()
 {
-    if ( xBlkRoot.is() || 0 == OpenFile ( false ) )
+    if ( xBlkRoot.is() || ERRCODE_NONE == OpenFile ( false ) )
     {
         uno::Reference< uno::XComponentContext > xContext =
             comphelper::getProcessComponentContext();
@@ -500,7 +500,7 @@ void SwXMLTextBlocks::WriteInfo()
     }
 }
 
-sal_uLong SwXMLTextBlocks::SetMacroTable(
+ErrCode SwXMLTextBlocks::SetMacroTable(
     sal_uInt16 nIdx,
     const SvxMacroTableDtor& rMacroTable )
 {
@@ -510,7 +510,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     aPackageName = m_aNames[nIdx]->aPackageName;
 
     // start XML autotext event export
-    sal_uLong nRes = 0;
+    ErrCode nRes = ERRCODE_NONE;
 
     uno::Reference< uno::XComponentContext > xContext =
         comphelper::getProcessComponentContext();
@@ -526,7 +526,7 @@ sal_uLong SwXMLTextBlocks::SetMacroTable(
     CloseFile(); // close (it may be open in read-only-mode)
     nRes = OpenFile ( false );
 
-    if ( 0 == nRes )
+    if ( ERRCODE_NONE == nRes )
     {
         try
         {

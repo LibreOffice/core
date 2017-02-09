@@ -286,7 +286,7 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
                     (nOldIdx == USHRT_MAX || nOldIdx == nIdx ))
         {
             pGlosGroup->Rename( nIdx, &aNewShort, &aNewName );
-            if(pGlosGroup->GetError() != 0)
+            if(pGlosGroup->GetError() != ERRCODE_NONE)
                 throw io::IOException();
         }
     }

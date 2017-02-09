@@ -780,7 +780,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     if(bHtml && !bDocModified && pDocShell->HasName())
     {
         SvStream* pStream = pMedium->GetInStream();
-        if(pStream && 0 == pStream->GetError() )
+        if(pStream && ERRCODE_NONE == pStream->GetError() )
         {
             rtl_TextEncoding eHeaderEnc =
                 SfxHTMLParser::GetEncodingByHttpHeader(
@@ -825,7 +825,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             const OUString sWriteName = pDocShell->HasName()
                 ? pMedium->GetName()
                 : sFileURL;
-            sal_uLong nRes = aWriter.Write(xWriter, &sWriteName);
+            ErrCode nRes = aWriter.Write(xWriter, &sWriteName);
             if(nRes)
             {
                 ErrorHandler::HandleError(ErrCode(nRes));

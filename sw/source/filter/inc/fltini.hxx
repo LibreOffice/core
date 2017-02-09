@@ -33,7 +33,7 @@ class HTMLReader: public Reader
 {
     // we don't want to have the streams/storages open
     virtual bool SetStrmStgPtr() override;
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
+    virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
     virtual OUString GetTemplateName() const override;
 public:
     HTMLReader();
@@ -41,7 +41,7 @@ public:
 
 class XMLReader : public Reader
 {
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
+    virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
 public:
     virtual int GetReaderType() override;
 
