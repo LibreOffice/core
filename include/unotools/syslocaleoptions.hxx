@@ -42,12 +42,11 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSysLocaleOptions : public utl::detai
 
 public:
 
-    enum EOption
+    enum class EOption
     {
-        E_LOCALE,
-        E_UILOCALE,
-        E_CURRENCY,
-        E_DATEPATTERNS
+        Locale,
+        Currency,
+        DatePatterns
     };
                                 SvtSysLocaleOptions();
                                 virtual ~SvtSysLocaleOptions() override;
