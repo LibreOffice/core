@@ -170,8 +170,8 @@ SwModule::SwModule( SfxObjectFactory* pWebFact,
     pSwResMgr = GetResMgr();
     SvxErrorHandler::ensure();
     m_pErrorHandler = new SfxErrorHandler( RID_SW_ERRHDL,
-                                     ERRCODE_AREA_SW,
-                                     ERRCODE_AREA_SW_END,
+                                     ErrCode(ERRCODE_AREA_SW),
+                                     ErrCode(ERRCODE_AREA_SW_END),
                                      pSwResMgr );
 
     m_pModuleConfig = new SwModuleOptions;

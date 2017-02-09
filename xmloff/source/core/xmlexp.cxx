@@ -1249,7 +1249,7 @@ void SvXMLExport::addChaffWhenEncryptedStorage()
     }
 }
 
-sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
+ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
     bool bOwnGraphicResolver = false;
     bool bOwnEmbeddedResolver = false;
@@ -1451,7 +1451,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
         xComp->dispose();
     }
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
 void SvXMLExport::ResetNamespaceMap()

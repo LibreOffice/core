@@ -57,20 +57,16 @@ using namespace ::cppu;
 
 sal_uInt16  SvxOpenGrfErr2ResId( ErrCode err )
 {
-    switch( err )
-    {
-        case ERRCODE_GRFILTER_OPENERROR:
-            return RID_SVXSTR_GRFILTER_OPENERROR;
-        case ERRCODE_GRFILTER_IOERROR:
-            return RID_SVXSTR_GRFILTER_IOERROR;
-        case ERRCODE_GRFILTER_VERSIONERROR:
-            return RID_SVXSTR_GRFILTER_VERSIONERROR;
-        case ERRCODE_GRFILTER_FILTERERROR:
-            return RID_SVXSTR_GRFILTER_FILTERERROR;
-        case ERRCODE_GRFILTER_FORMATERROR:
-        default:
-            return RID_SVXSTR_GRFILTER_FORMATERROR;
-    }
+    if (err == ERRCODE_GRFILTER_OPENERROR)
+        return RID_SVXSTR_GRFILTER_OPENERROR;
+    else if (err == ERRCODE_GRFILTER_IOERROR)
+        return RID_SVXSTR_GRFILTER_IOERROR;
+    else if (err == ERRCODE_GRFILTER_VERSIONERROR)
+        return RID_SVXSTR_GRFILTER_VERSIONERROR;
+    else if (err == ERRCODE_GRFILTER_FILTERERROR)
+        return RID_SVXSTR_GRFILTER_FILTERERROR;
+    else
+        return RID_SVXSTR_GRFILTER_FORMATERROR;
 }
 
 
@@ -104,9 +100,9 @@ SvxOpenGraphicDialog::~SvxOpenGraphicDialog()
 }
 
 
-short SvxOpenGraphicDialog::Execute()
+ErrCode SvxOpenGraphicDialog::Execute()
 {
-    sal_uInt16  nImpRet;
+    ErrCode nImpRet;
     bool    bQuitLoop(false);
 
     while( !bQuitLoop &&
@@ -174,7 +170,7 @@ short SvxOpenGraphicDialog::Execute()
     }
 
     // cancel
-    return -1;
+    return ErrCode(-1);
 }
 
 
@@ -243,7 +239,7 @@ bool SvxOpenGraphicDialog::IsAsLink() const
 }
 
 
-int SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
+ErrCode SvxOpenGraphicDialog::GetGraphic(Graphic& rGraphic) const
 {
     return mpImpl->aFileDlg.GetGraphic(rGraphic);
 }

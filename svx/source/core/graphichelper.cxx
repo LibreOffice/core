@@ -172,11 +172,11 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
                     if( aOut.GetOutStream() && !aOut.GetOutStream()->GetError())
                     {
                         aOut.GetOutStream()->WriteStream( *aIn.GetInStream() );
-                        if ( 0 == aIn.GetError() )
+                        if ( ERRCODE_NONE == aIn.GetError() )
                         {
                             aOut.Close();
                             aOut.Commit();
-                            if ( 0 == aOut.GetError() )
+                            if ( ERRCODE_NONE == aOut.GetError() )
                                 return sPath;
                         }
                     }
