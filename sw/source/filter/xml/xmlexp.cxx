@@ -96,7 +96,7 @@ SwXMLExport::SwXMLExport(
     InitItemExport();
 }
 
-sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
+ErrCode SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 {
     if( !GetModel().is() )
         return ERR_SWG_WRITE_ERROR;
@@ -286,7 +286,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                  ( nRedlineFlags & RedlineFlags::ShowMask ) | RedlineFlags::ShowInsert );
     }
 
-    sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
+    ErrCode nRet = SvXMLExport::exportDoc( eClass );
 
     // now we can restore the redline mode (if we changed it previously)
     if( bSaveRedline )

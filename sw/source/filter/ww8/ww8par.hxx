@@ -130,8 +130,8 @@ struct WW8LFOInfo;
 
 class WW8Reader : public StgReader
 {
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
-    sal_uLong OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize );
+    virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
+    ErrCode OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_uInt16& rBuffSize );
 public:
     virtual int GetReaderType() override;
 
@@ -1513,9 +1513,9 @@ private:
     //This converts MS Asian Typography information into OOo's
     void ImportDopTypography(const WW8DopTypography &rTypo);
 
-    sal_uLong LoadThroughDecryption(WW8Glossary *pGloss);
-    sal_uLong SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream, tools::SvRef<SotStorageStream> &rDataStream);
-    sal_uLong CoreLoad(WW8Glossary *pGloss);
+    ErrCode LoadThroughDecryption(WW8Glossary *pGloss);
+    ErrCode SetSubStreams(tools::SvRef<SotStorageStream> &rTableStream, tools::SvRef<SotStorageStream> &rDataStream);
+    ErrCode CoreLoad(WW8Glossary *pGloss);
 
     void ReadDocVars();
 
@@ -1871,7 +1871,7 @@ public:     // really private, but can only be done public
 
     const OUString& GetBaseURL() const { return m_sBaseURL; }
     // load a complete doc file
-    sal_uLong LoadDoc(WW8Glossary *pGloss=nullptr);
+    ErrCode LoadDoc(WW8Glossary *pGloss=nullptr);
     rtl_TextEncoding GetCurrentCharSet();
     rtl_TextEncoding GetCurrentCJKCharSet();
     rtl_TextEncoding GetCharSetFromLanguage();

@@ -1468,7 +1468,7 @@ void EditEngine::SetText( const OUString& rText )
         pImpEditEngine->FormatAndUpdate();
 }
 
-sal_uLong EditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
+ErrCode EditEngine::Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs /* = NULL */ )
 {
     bool bUndoEnabled = pImpEditEngine->IsUndoEnabled();
     pImpEditEngine->EnableUndo( false );

@@ -62,7 +62,7 @@
 
 using namespace ::com::sun::star;
 
-sal_uLong SwReader::Read( const Reader& rOptions )
+ErrCode SwReader::Read( const Reader& rOptions )
 {
     // copy variables
     Reader* po = const_cast<Reader*>(&rOptions);
@@ -83,7 +83,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         return ERR_SWG_FILE_FORMAT_ERROR;
     }
 
-    sal_uLong nError = 0L;
+    ErrCode nError = ERRCODE_NONE;
 
     GetDoc();
 
@@ -181,7 +181,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         mxDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::Ignore );
 
-        if( !IsError( nError ))     // set the End position already
+        if( ! nError.IsError() )     // set the End position already
         {
             --aEndPos;
             pCNd = aEndPos.GetNode().GetContentNode();
@@ -727,7 +727,7 @@ SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDocument)
 {
 }
 
-sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
+ErrCode SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
 {
     // #i73788#
     SwPauseThreadStarting aPauseThreadStarting;
@@ -851,7 +851,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     const bool bOrigPurgeOle = pOutDoc->getIDocumentSettingAccess().get(DocumentSettingId::PURGE_OLE);
     pOutDoc->getIDocumentSettingAccess().set(DocumentSettingId::PURGE_OLE, false);
 
-    sal_uLong nError = 0;
+    ErrCode nError = ERRCODE_NONE;
     if( pMedium )
         nError = rxWriter->Write( *pPam, *pMedium, pRealFileName );
     else if( pStg.is() )
@@ -884,7 +884,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     {
         delete pPam;            // delete the created Pam
         // Everything was written successfully? Tell the document!
-        if ( !IsError( nError ) && !xDoc.is() )
+        if ( !nError.IsError() && !xDoc.is() )
         {
             rDoc.getIDocumentState().ResetModified();
             // #i38810# - reset also flag, that indicates updated links

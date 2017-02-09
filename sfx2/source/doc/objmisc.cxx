@@ -197,7 +197,7 @@ void SfxObjectShell::FlushDocInfo()
                  (delay > 0) || !url.isEmpty() );
 }
 
-void SfxObjectShell::SetError(sal_uInt32 lErr)
+void SfxObjectShell::SetError(ErrCode lErr)
 {
     if (pImpl->lErr==ERRCODE_NONE)
     {
@@ -205,14 +205,14 @@ void SfxObjectShell::SetError(sal_uInt32 lErr)
     }
 }
 
-sal_uInt32 SfxObjectShell::GetError() const
+ErrCode SfxObjectShell::GetError() const
 {
-    return ERRCODE_TOERROR(GetErrorCode());
+    return GetErrorCode().IgnoreWarning();
 }
 
-sal_uInt32 SfxObjectShell::GetErrorCode() const
+ErrCode SfxObjectShell::GetErrorCode() const
 {
-    sal_uInt32 lError=pImpl->lErr;
+    ErrCode lError=pImpl->lErr;
     if(!lError && GetMedium())
         lError=GetMedium()->GetErrorCode();
     return lError;
@@ -220,7 +220,7 @@ sal_uInt32 SfxObjectShell::GetErrorCode() const
 
 void SfxObjectShell::ResetError()
 {
-    pImpl->lErr=0;
+    pImpl->lErr=ERRCODE_NONE;
     SfxMedium * pMed = GetMedium();
     if( pMed )
         pMed->ResetError();
@@ -965,7 +965,7 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
             {
                 // this is an encrypted document with nonencrypted streams inside, show the warning
                 css::task::ErrorCodeRequest aErrorCode;
-                aErrorCode.ErrCode = ERRCODE_SFX_INCOMPLETE_ENCRYPTION;
+                aErrorCode.ErrCode = sal_uInt32(ERRCODE_SFX_INCOMPLETE_ENCRYPTION);
 
                 SfxMedium::CallApproveHandler( xHandler, uno::makeAny( aErrorCode ), false );
                 pImpl->m_bIncomplEncrWarnShown = true;
@@ -1656,7 +1656,7 @@ void SfxObjectShell::InPlaceActivate( bool )
 
 bool SfxObjectShell::UseInteractionToHandleError(
                     const uno::Reference< task::XInteractionHandler >& xHandler,
-                    sal_uInt32 nError )
+                    ErrCode nError )
 {
     bool bResult = false;
 
@@ -1672,7 +1672,7 @@ bool SfxObjectShell::UseInteractionToHandleError(
             lContinuations[1].set( static_cast< task::XInteractionContinuation* >( pApprove ), uno::UNO_QUERY );
 
             task::ErrorCodeRequest aErrorCode;
-            aErrorCode.ErrCode = nError;
+            aErrorCode.ErrCode = sal_uInt32(nError);
             aInteraction <<= aErrorCode;
             xHandler->handle(::framework::InteractionRequest::CreateRequest (aInteraction,lContinuations));
             bResult = pAbort->wasSelected();

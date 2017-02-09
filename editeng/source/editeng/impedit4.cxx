@@ -220,7 +220,7 @@ void ImpEditEngine::Write(SvStream& rOutput, EETextFormat eFormat, const EditSel
     }
 }
 
-sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
+ErrCode ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
 {
     sal_Int32 nStartNode, nEndNode;
     bool bRange = aSel.HasRange();
@@ -304,7 +304,7 @@ sal_uInt32 ImpEditEngine::WriteXML(SvStream& rOutput, const EditSelection& rSel)
     return 0;
 }
 
-sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
+ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 {
     DBG_ASSERT( GetUpdateMode(), "WriteRTF for UpdateMode = sal_False!" );
     CheckIdleFormatter();

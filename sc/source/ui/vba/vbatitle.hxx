@@ -70,7 +70,7 @@ public:
         }
         catch ( css::uno::Exception& )
         {
-            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
+            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }
     }
     OUString SAL_CALL getText(  ) SAL_OVERRIDE
@@ -82,7 +82,7 @@ public:
         }
         catch ( css::uno::Exception& )
         {
-            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
+            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }
         return sText;
     }
@@ -111,7 +111,7 @@ public:
         }
         catch (css::uno::Exception& )
         {
-            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
+            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }
     }
     ::sal_Int32 SAL_CALL getOrientation(  ) SAL_OVERRIDE
@@ -123,7 +123,7 @@ public:
         }
         catch (css::uno::Exception& )
         {
-            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
+            throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), sal_uInt32(ERRCODE_BASIC_METHOD_FAILED), OUString() );
         }
         return static_cast< sal_Int32 >(nSOOrientation / 100) ;
     }
