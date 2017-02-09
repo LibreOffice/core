@@ -3167,8 +3167,6 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
         assert(!"can't move");
     }
 
-    bool b3DFlag = rOldPos.Tab() != rNewPos.Tab() || rCxt.mnTabDelta;
-
     TokenPointers aPtrs( pCode, nLen, pRPN, nRPN);
     for (size_t j=0; j<2; ++j)
     {
@@ -3195,8 +3193,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         }
 
                         rRef.SetAddress(aAbs, rNewPos);
-                        if (b3DFlag)
-                            rRef.SetFlag3D(b3DFlag);
+                        rRef.SetFlag3D(aAbs.Tab() != rNewPos.Tab() || !rRef.IsTabRel());
                     }
                     break;
                 case svDoubleRef:
@@ -3212,8 +3209,12 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         }
 
                         rRef.SetRange(aAbs, rNewPos);
-                        if (b3DFlag)
-                            rRef.Ref1.SetFlag3D(true);
+                        // Absolute sheet reference => set 3D flag.
+                        // More than one sheet referenced => has to have both 3D flags.
+                        // If end part has 3D flag => start part must have it too.
+                        rRef.Ref2.SetFlag3D(aAbs.aStart.Tab() != aAbs.aEnd.Tab() || !rRef.Ref2.IsTabRel());
+                        rRef.Ref1.SetFlag3D(aAbs.aStart.Tab() != rNewPos.Tab() || !rRef.Ref1.IsTabRel() ||
+                                rRef.Ref2.IsFlag3D());
                     }
                     break;
                 case svExternalSingleRef:
