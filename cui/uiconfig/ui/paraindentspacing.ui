@@ -439,6 +439,7 @@
                             <property name="invisible_char">•</property>
                             <property name="invisible_char_set">True</property>
                             <property name="adjustment">adjustmentED_LINEDISTMETRIC</property>
+                            <property name="digits">1</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
