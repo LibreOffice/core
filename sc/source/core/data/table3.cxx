@@ -2268,7 +2268,7 @@ class QueryEvaluator
 
     bool isRealWildOrRegExp(const ScQueryEntry& rEntry) const
     {
-        if (mrParam.eSearchType == utl::SearchParam::SRCH_NORMAL)
+        if (mrParam.eSearchType == utl::SearchParam::SearchType::Normal)
             return false;
 
         return isTextMatchOp(rEntry);
@@ -2279,7 +2279,7 @@ class QueryEvaluator
         if (!mpTestEqualCondition)
             return false;
 
-        if (mrParam.eSearchType == utl::SearchParam::SRCH_NORMAL)
+        if (mrParam.eSearchType == utl::SearchParam::SearchType::Normal)
             return false;
 
         return (rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL);

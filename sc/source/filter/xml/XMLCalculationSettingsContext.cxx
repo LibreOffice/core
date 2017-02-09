@@ -39,7 +39,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
     fIterationEpsilon(0.001),
     nIterationCount(100),
     nYear2000(1930),
-    eSearchType(utl::SearchParam::SRCH_REGEXP),
+    eSearchType(utl::SearchParam::SearchType::Regexp),
     bIsIterationEnabled(false),
     bCalcAsShown(false),
     bIgnoreCase(false),
@@ -89,13 +89,13 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             else if (IsXMLToken(aLocalName, XML_USE_REGULAR_EXPRESSIONS))
             {
                 // Overwrite only the default (regex true) value, not wildcard.
-                if (eSearchType == utl::SearchParam::SRCH_REGEXP && IsXMLToken(sValue, XML_FALSE))
-                    eSearchType = utl::SearchParam::SRCH_NORMAL;
+                if (eSearchType == utl::SearchParam::SearchType::Regexp && IsXMLToken(sValue, XML_FALSE))
+                    eSearchType = utl::SearchParam::SearchType::Normal;
             }
             else if (IsXMLToken(aLocalName, XML_USE_WILDCARDS))
             {
                 if (IsXMLToken(sValue, XML_TRUE))
-                    eSearchType = utl::SearchParam::SRCH_WILDCARD;
+                    eSearchType = utl::SearchParam::SearchType::Wildcard;
             }
         }
     }

@@ -512,7 +512,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
         {   // by String
             OUString  aCellStr = pCellData->GetString();
 
-            bool bRealWildOrRegExp = (rParam.eSearchType != utl::SearchParam::SRCH_NORMAL &&
+            bool bRealWildOrRegExp = (rParam.eSearchType != utl::SearchParam::SearchType::Normal &&
                     ((rEntry.eOp == SC_EQUAL) || (rEntry.eOp == SC_NOT_EQUAL)));
             bool bTestWildOrRegExp = false;
             if (bRealWildOrRegExp || bTestWildOrRegExp)

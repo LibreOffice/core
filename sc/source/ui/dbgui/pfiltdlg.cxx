@@ -127,7 +127,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     m_pLbConnect2->SetSelectHdl( LINK( this, ScPivotFilterDlg, LbSelectHdl ) );
 
     m_pBtnCase->Check( theQueryData.bCaseSens );
-    m_pBtnRegExp->Check( theQueryData.eSearchType == utl::SearchParam::SRCH_REGEXP );
+    m_pBtnRegExp->Check( theQueryData.eSearchType == utl::SearchParam::SearchType::Regexp );
     m_pBtnUnique->Check( !theQueryData.bDuplicate );
 
     pViewData   = rQueryItem.GetViewData();
@@ -419,7 +419,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 
     theParam.bDuplicate     = !m_pBtnUnique->IsChecked();
     theParam.bCaseSens      = m_pBtnCase->IsChecked();
-    theParam.eSearchType    = m_pBtnRegExp->IsChecked() ? utl::SearchParam::SRCH_REGEXP : utl::SearchParam::SRCH_NORMAL;
+    theParam.eSearchType    = m_pBtnRegExp->IsChecked() ? utl::SearchParam::SearchType::Regexp : utl::SearchParam::SearchType::Normal;
 
     if ( pOutItem ) DELETEZ( pOutItem );
     pOutItem = new ScQueryItem( nWhichQuery, &theParam );

@@ -303,7 +303,7 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                 } else if (evStr->getCond() == MQueryOp::RegExp) {
                     SAL_INFO("connectivity.mork", "MQueryOp::RegExp; done");
                     utl::SearchParam param(
-                        searchedValue, utl::SearchParam::SRCH_REGEXP);
+                        searchedValue, utl::SearchParam::SearchType::Regexp);
                     utl::TextSearch ts(param, LANGUAGE_DONTKNOW);
                     sal_Int32 start = 0;
                     sal_Int32 end = currentValue.getLength();

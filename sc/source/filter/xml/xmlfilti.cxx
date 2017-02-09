@@ -380,15 +380,15 @@ SvXMLImportContext *ScXMLConditionContext::CreateChildContext( sal_uInt16 nPrefi
 void ScXMLConditionContext::GetOperator(
     const OUString& aOpStr, ScQueryParam& rParam, ScQueryEntry& rEntry)
 {
-    rParam.eSearchType = utl::SearchParam::SRCH_NORMAL;
+    rParam.eSearchType = utl::SearchParam::SearchType::Normal;
     if (IsXMLToken(aOpStr, XML_MATCH))
     {
-        rParam.eSearchType = utl::SearchParam::SRCH_REGEXP;
+        rParam.eSearchType = utl::SearchParam::SearchType::Regexp;
         rEntry.eOp = SC_EQUAL;
     }
     else if (IsXMLToken(aOpStr, XML_NOMATCH))
     {
-        rParam.eSearchType = utl::SearchParam::SRCH_REGEXP;
+        rParam.eSearchType = utl::SearchParam::SearchType::Regexp;
         rEntry.eOp = SC_NOT_EQUAL;
     }
     else if (aOpStr == "=")
@@ -522,7 +522,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
     ScXMLImportContext( rImport, nPrfx, rLName ),
     pDataPilotTable(pTempDataPilotTableContext),
     aFilterFields(),
-    eSearchType(utl::SearchParam::SRCH_NORMAL),
+    eSearchType(utl::SearchParam::SearchType::Normal),
     nFilterFieldCount(0),
     bSkipDuplicates(false),
     bCopyOutputData(false),
@@ -802,15 +802,15 @@ SvXMLImportContext *ScXMLDPConditionContext::CreateChildContext( sal_uInt16 nPre
 void ScXMLDPConditionContext::getOperatorXML(
     const OUString& sTempOperator, ScQueryOp& aFilterOperator, utl::SearchParam::SearchType& rSearchType)
 {
-    rSearchType = utl::SearchParam::SRCH_NORMAL;
+    rSearchType = utl::SearchParam::SearchType::Normal;
     if (IsXMLToken(sTempOperator, XML_MATCH))
     {
-        rSearchType = utl::SearchParam::SRCH_REGEXP;
+        rSearchType = utl::SearchParam::SearchType::Regexp;
         aFilterOperator = SC_EQUAL;
     }
     else if (IsXMLToken(sTempOperator, XML_NOMATCH))
     {
-        rSearchType = utl::SearchParam::SRCH_REGEXP;
+        rSearchType = utl::SearchParam::SearchType::Regexp;
         aFilterOperator = SC_NOT_EQUAL;
     }
     else if (sTempOperator == "=")
@@ -849,7 +849,7 @@ void ScXMLDPConditionContext::EndElement()
         aFilterField.SetQueryByNonEmpty();
     else
     {
-        utl::SearchParam::SearchType eSearchType = utl::SearchParam::SRCH_NORMAL;
+        utl::SearchParam::SearchType eSearchType = utl::SearchParam::SearchType::Normal;
         getOperatorXML(sOperator, aFilterField.eOp, eSearchType);
         pFilterContext->SetSearchType(eSearchType);
         aFilterField.nField = nField;
