@@ -3349,7 +3349,8 @@ void Test::testTokenArrayRefUpdateMove()
     std::vector<OUString> aTests = {
         "B1*C1",
         "SUM(B1:C1)",
-        "$Sheet1.B1"
+        "$Sheet1.B1",
+        "SUM(Sheet1.B1:Sheet2.B1)"
     };
 
     // Since C3 is not referenced in any of the above formulas, moving C3 from
