@@ -21,6 +21,7 @@
 
 #include <rsctools.hxx>
 #include <rscerror.h>
+#include <rscdef.hxx>
 #include <tools/solar.h>
 
 class RscTypCont;
@@ -33,8 +34,8 @@ class RscFileInst
     sal_uInt32          nErrorLine; // Zeile des ersten Fehlers
     sal_uInt32          nErrorPos;  // Position des ersten Fehlers
     sal_uInt32          nLineNo;    // Zeile in der Eingabedatei
-    sal_uLong           lFileIndex; // Index auf Eingabedatei
-    sal_uLong           lSrcIndex;  // Index auf Basisdatei
+    RscFileTab::Index   lFileIndex; // Index auf Eingabedatei
+    RscFileTab::Index   lSrcIndex;  // Index auf Basisdatei
     FILE *              fInputFile; // Eingabedatei
     char *              pInput;     // Lesepuffer
     static const sal_uInt32 nInputBufLen = READBUFFER_MAX; // Laenge des Lesepuffers
@@ -49,12 +50,12 @@ class RscFileInst
 public:
     RscTypCont *        pTypCont;
     void        Init();  // ctor initialisieren
-                RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
-                         sal_uLong lFileIndex, FILE * fFile );
+                RscFileInst( RscTypCont * pTC, RscFileTab::Index lIndexSrc,
+                         RscFileTab::Index lFileIndex, FILE * fFile );
                 ~RscFileInst();
     bool        IsEof() const { return bEof; }
-    void        SetFileIndex( sal_uLong lFIndex ) { lFileIndex = lFIndex;  }
-    sal_uLong   GetFileIndex()                { return lFileIndex;  }
+    void        SetFileIndex( RscFileTab::Index lFIndex ) { lFileIndex = lFIndex;  }
+    RscFileTab::Index GetFileIndex()                { return lFileIndex;  }
     void        SetLineNo( sal_uInt32 nLine ) { nLineNo = nLine;    }
     sal_uInt32  GetLineNo()                   { return nLineNo;     }
     sal_uInt32  GetScanPos()                  { return nScanPos;    }

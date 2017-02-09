@@ -113,66 +113,7 @@ public:
     bool    IsId() const { return !aExp.IsNothing(); }
 };
 
-/*********** R s c D e f i n e *******************************************/
-class RscDefine : public NameNode
-{
-friend class RscFileTab;
-friend class RscDefineList;
-friend class RscDefTree;
-friend class RscExpression;
-friend class RscId;
-
-    sal_uLong   lFileKey;   // file the define belongs to
-    sal_uInt32  nRefCount;  // reference count to this object
-    sal_Int32   lId;        // identifier
-    RscExpression * pExp;   // expression
-    OString     m_aName;
-
-    virtual COMPARE Compare( const NameNode * ) const override;
-    virtual COMPARE Compare( const void * ) const override;
-
-protected:
-
-    RscDefine( sal_uLong lFileKey, const OString& rDefName,
-                           sal_Int32 lDefId );
-    RscDefine( sal_uLong lFileKey, const OString& rDefName,
-                           RscExpression * pExpression );
-    virtual ~RscDefine() override;
-
-    void          IncRef() { nRefCount++; }
-    void          DecRef();
-    void          DefineToNumber();
-
-public:
-    sal_uLong      GetFileKey() const { return lFileKey; }
-    void           Evaluate();
-    sal_Int32      GetNumber() const  { return lId;      }
-    RscDefine*     Search( const char * ) const;
-    const OString& GetName() const { return m_aName; }
-};
-
 typedef ::std::vector< RscDefine* > RscSubDefList;
-
-class RscDefineList
-{
-friend class RscFile;
-friend class RscFileTab;
-private:
-    RscSubDefList   maList;
-                // pExpression always belongs to the list
-    RscDefine * New( sal_uLong lFileKey, const OString& rDefName,
-                     sal_Int32 lDefId, size_t lPos );
-    RscDefine * New( sal_uLong lFileKey, const OString& rDefName,
-                     RscExpression * pExpression, size_t lPos );
-    bool        Remove();
-    size_t      GetPos( RscDefine* item )
-                    {
-                        for ( size_t i = 0, n = maList.size(); i < n; ++i )
-                            if ( maList[ i ] == item )
-                                return i;
-                        return size_t(-1);
-                    }
-};
 
 /*********** R s c E x p r e s s i o n ***********************************/
 class RscExpression
@@ -190,36 +131,9 @@ public:
 };
 
 /********************** R S C F I L E ************************************/
-class RscDepend
-{
-    sal_uLong   lKey;
-public:
-                RscDepend( sal_uLong lIncKey ){ lKey = lIncKey; };
-    sal_uLong   GetFileKey(){ return lKey; }
-};
+class RscDepend;
 
 typedef ::std::vector< RscDepend* > RscDependList;
-
-// table containing al file names
-class RscFile
-{
-friend class RscFileTab;
-    bool            bIncFile;   // whether it is an include file
-public:
-    bool            bLoaded;    // whether the file is loaded
-    bool            bScanned;   // whether the file searches for include
-    OString         aFileName;  // file name
-    OString         aPathName;  // file path and name
-    RscDefineList   aDefLst;    // list of defines
-    RscDependList   aDepLst;    // list of depend
-
-                    RscFile();
-                    ~RscFile();
-    void            InsertDependFile( sal_uLong lDepFile );
-    bool            Depend( sal_uLong lDepend, sal_uLong lFree );
-    void            SetIncFlag(){ bIncFile = true; };
-    bool            IsIncFile(){  return bIncFile; };
-};
 
 class RscDefTree
 {
@@ -233,6 +147,8 @@ public:
     void        Insert( RscDefine * pDef );
     void        Remove( RscDefine * pDef );
 };
+
+class RscFile;
 
 class RscFileTab : public UniqueIndex<RscFile>
 {
@@ -270,6 +186,95 @@ public:
     Index       NewIncFile(const OString& rName, const OString& rPath);
     RscFile *   GetFile( Index lFileKey ){ return Get( lFileKey ); }
 };
+
+class RscDepend
+{
+    RscFileTab::Index   lKey;
+public:
+                RscDepend( RscFileTab::Index lIncKey ){ lKey = lIncKey; };
+    RscFileTab::Index   GetFileKey(){ return lKey; }
+};
+
+class RscDefineList
+{
+friend class RscFile;
+friend class RscFileTab;
+private:
+    RscSubDefList   maList;
+                // pExpression always belongs to the list
+    RscDefine * New( RscFileTab::Index lFileKey, const OString& rDefName,
+                     sal_Int32 lDefId, size_t lPos );
+    RscDefine * New( RscFileTab::Index lFileKey, const OString& rDefName,
+                     RscExpression * pExpression, size_t lPos );
+    bool        Remove();
+    size_t      GetPos( RscDefine* item )
+                    {
+                        for ( size_t i = 0, n = maList.size(); i < n; ++i )
+                            if ( maList[ i ] == item )
+                                return i;
+                        return size_t(-1);
+                    }
+};
+
+// table containing all file names
+class RscFile
+{
+friend class RscFileTab;
+    bool            bIncFile;   // whether it is an include file
+public:
+    bool            bLoaded;    // whether the file is loaded
+    bool            bScanned;   // whether the file searches for include
+    OString         aFileName;  // file name
+    OString         aPathName;  // file path and name
+    RscDefineList   aDefLst;    // list of defines
+    RscDependList   aDepLst;    // list of depend
+
+                    RscFile();
+                    ~RscFile();
+    void            InsertDependFile( RscFileTab::Index lDepFile );
+    bool            Depend( RscFileTab::Index lDepend, RscFileTab::Index lFree );
+    void            SetIncFlag(){ bIncFile = true; };
+    bool            IsIncFile(){  return bIncFile; };
+};
+
+/*********** R s c D e f i n e *******************************************/
+class RscDefine : public NameNode
+{
+friend class RscFileTab;
+friend class RscDefineList;
+friend class RscDefTree;
+friend class RscExpression;
+friend class RscId;
+
+    RscFileTab::Index lFileKey;   // file the define belongs to
+    sal_uInt32  nRefCount;  // reference count to this object
+    sal_Int32   lId;        // identifier
+    RscExpression * pExp;   // expression
+    OString     m_aName;
+
+    virtual COMPARE Compare( const NameNode * ) const override;
+    virtual COMPARE Compare( const void * ) const override;
+
+protected:
+
+    RscDefine( RscFileTab::Index lFileKey, const OString& rDefName,
+                           sal_Int32 lDefId );
+    RscDefine( RscFileTab::Index lFileKey, const OString& rDefName,
+                           RscExpression * pExpression );
+    virtual ~RscDefine() override;
+
+    void          IncRef() { nRefCount++; }
+    void          DecRef();
+    void          DefineToNumber();
+
+public:
+    RscFileTab::Index GetFileKey() const { return lFileKey; }
+    void           Evaluate();
+    sal_Int32      GetNumber() const  { return lId;      }
+    RscDefine*     Search( const char * ) const;
+    const OString& GetName() const { return m_aName; }
+};
+
 
 #endif // INCLUDED_RSC_INC_RSCDEF_HXX
 

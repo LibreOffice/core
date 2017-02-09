@@ -21,13 +21,15 @@
 
 #include <sal/types.h>
 #include <tools/toolsdllapi.h>
+#include <o3tl/strong_typedef.hxx>
 #include <map>
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC UniqueIndexImpl
 {
 public:
-    typedef sal_uInt32 Index;
-    static Index const IndexNotFound = SAL_MAX_UINT32;
+    struct IndexTagType {};
+    typedef o3tl::strong_typedef<sal_uInt32, IndexTagType> Index;
+    static Index const IndexNotFound;// = Index(SAL_MAX_UINT32);
 
 private:
     std::map<Index, void*> maMap;

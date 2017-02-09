@@ -32,8 +32,8 @@ void RscFileInst::Init()
     bEof = false;
 }
 
-RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
-                          sal_uLong lFIndex, FILE * fFile )
+RscFileInst::RscFileInst( RscTypCont * pTC, RscFileTab::Index lIndexSrc,
+                          RscFileTab::Index lFIndex, FILE * fFile )
     : nErrorLine(0)
     , nErrorPos(0)
 {
