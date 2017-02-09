@@ -129,19 +129,26 @@ void ImplWriteColor( SvStream& rOStm, const Color& rColor )
     rOStm.WriteInt16( nVal );
 }
 
-void ImplReadMapMode( SvStream& rIStm, MapMode& rMapMode )
+bool ImplReadMapMode(SvStream& rIStm, MapMode& rMapMode)
 {
-    Point   aOrg;
-    sal_Int32   nXNum;
-    sal_Int32   nXDenom;
-    sal_Int32   nYNum;
-    sal_Int32   nYDenom;
-    sal_Int16   nUnit;
+    sal_Int16 nUnit(0);
+    rIStm.ReadInt16(nUnit);
 
-    rIStm.ReadInt16( nUnit );
-    ReadPair( rIStm, aOrg );
-    rIStm.ReadInt32( nXNum ).ReadInt32( nXDenom ).ReadInt32( nYNum ).ReadInt32( nYDenom );
+    Point aOrg;
+    ReadPair(rIStm, aOrg);
+
+    sal_Int32 nXNum(0), nXDenom(0), nYNum(0), nYDenom(0);
+    rIStm.ReadInt32(nXNum).ReadInt32(nXDenom).ReadInt32(nYNum).ReadInt32(nYDenom);
+
+    if (!rIStm.good() || nXDenom == 0 || nYDenom == 0)
+    {
+        SAL_WARN("vcl.gdi", "Parsing error: invalid mapmode fraction");
+        return false;
+    }
+
     rMapMode = MapMode( (MapUnit) nUnit, aOrg, Fraction( nXNum, nXDenom ), Fraction( nYNum, nYDenom ) );
+
+    return true;
 }
 
 void ImplWriteMapMode( SvStream& rOStm, const MapMode& rMapMode )
@@ -506,7 +513,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     bool                bFatLine = false;
 
     // TODO: fix reindentation below if you can accept being blamed by the SCM
-        MapMode     aMapMode;
         tools::Polygon     aActionPoly;
         Rectangle   aRect;
         Point       aPt, aPt1;
@@ -516,7 +522,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         sal_uInt32  nUnicodeCommentStreamPos = 0;
         sal_Int32       nUnicodeCommentActionNumber = 0;
 
-        ImplReadMapMode( rIStm, aMapMode );             // MapMode
+        rMtf.SetPrefSize( aPrefSz );
+
+        MapMode aMapMode;
+        if (ImplReadMapMode(rIStm, aMapMode))           // MapMode
+            rMtf.SetPrefMapMode(aMapMode);
+
         sal_Int32 nActions(0);
         rIStm.ReadInt32( nActions );                    // Action count
         if (nActions < 0)
@@ -533,8 +544,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             nActions = nMaxPossibleActions;
         }
 
-        rMtf.SetPrefSize( aPrefSz );
-        rMtf.SetPrefMapMode( aMapMode );
         size_t nLastPolygonAction(0);
 
         for (sal_Int32 i = 0; i < nActions && rIStm.good(); ++i)
@@ -1060,11 +1069,13 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                 case GDI_MAPMODE_ACTION:
                 {
-                    ImplReadMapMode( rIStm, aMapMode );
-                    rMtf.AddAction( new MetaMapModeAction( aMapMode ) );
+                    if (ImplReadMapMode(rIStm, aMapMode))
+                    {
+                        rMtf.AddAction(new MetaMapModeAction(aMapMode));
 
-                    // #106172# Track font relevant data in shadow VDev
-                    aFontVDev->SetMapMode( aMapMode );
+                        // #106172# Track font relevant data in shadow VDev
+                        aFontVDev->SetMapMode(aMapMode);
+                    }
                 }
                 break;
 
