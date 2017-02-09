@@ -7,4 +7,10 @@
         <!--Items will be added programmatically in LibreOfficeUIActivity.java-->
 
     </group>
+
+    <group android:orderInCategory="100">
+        <item android:id="@+id/menu_storage_preferences"
+            android:title="@string/storage_provider_settings"
+            android:icon="@drawable/ic_settings_black_24dp"/>
+    </group>
 </menu>
