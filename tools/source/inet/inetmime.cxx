@@ -954,7 +954,7 @@ private:
     enum Coding { CODING_NONE, CODING_ENCODED, CODING_ENCODED_TERMINATED };
 
     enum EncodedWordState { STATE_INITIAL, STATE_FIRST_EQUALS,
-                            STATE_FIRST_QUESTION, STATE_CHARSET,
+                            STATE_CHARSET,
                             STATE_SECOND_QUESTION, STATE_ENCODING,
                             STATE_THIRD_QUESTION, STATE_ENCODED_TEXT,
                             STATE_FOURTH_QUESTION, STATE_SECOND_EQUALS,
@@ -1411,12 +1411,6 @@ INetMIMEEncodedWordOutputSink::WriteUInt32(sal_uInt32 nChar)
                     m_eEncodedWordState = STATE_BAD;
                 break;
 
-            case STATE_FIRST_QUESTION:
-                if (isEncodedWordTokenChar(nChar))
-                    m_eEncodedWordState = STATE_CHARSET;
-                else
-                    m_eEncodedWordState = STATE_BAD;
-                break;
 
             case STATE_CHARSET:
                 if (nChar == '?')

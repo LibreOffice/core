@@ -106,6 +106,7 @@ for d in definitionSet:
          "include/vcl/bitmapex.hxx", # TransparentType
          "vcl/inc/sft.hxx", # CompositeFlags, WidthClass, WeightClass
          "vcl/inc/CommonSalLayout.hxx", # VerticalOrientation
+         "include/tools/fontenum.hxx", # part of GDI file format
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
