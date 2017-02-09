@@ -192,7 +192,7 @@ bool isDebug(sal_detail_LogLevel level) {
 
 void log(
     sal_detail_LogLevel level, char const * area, char const * where,
-    char const * message)
+    char const * message, sal_uInt32 backtraceDepth)
 {
     std::ostringstream s;
 #if !defined ANDROID
@@ -218,6 +218,9 @@ void log(
     }
 
     s << message;
+    if (backtraceDepth != 0) {
+        s << " at:\n" << osl::detail::backtraceAsString(backtraceDepth);
+    }
     s << '\n';
 
 #if defined ANDROID
@@ -273,32 +276,14 @@ void log(
 #endif
 }
 
-void log_backtrace(
-    sal_detail_LogLevel level, char const * area, char const * where,
-    char const * message, int maxNoStackFramesToDisplay)
-{
-    OUString buff = OUString::createFromAscii(message) + " at:\n"
-        + osl::detail::backtraceAsString(maxNoStackFramesToDisplay);
-    log(level, area, where, buff.toUtf8().getStr());
-}
-
 }
 
 void sal_detail_log(
     sal_detail_LogLevel level, char const * area, char const * where,
-    char const * message)
+    char const * message, sal_uInt32 backtraceDepth)
 {
     if (sal_detail_log_report(level, area)) {
-        log(level, area, where, message);
-    }
-}
-
-void sal_detail_log_backtrace(
-    sal_detail_LogLevel level, char const * area, char const * where,
-    char const * message, int maxNoStackFramesToDisplay)
-{
-    if (sal_detail_log_report(level, area)) {
-        log_backtrace(level, area, where, message, maxNoStackFramesToDisplay);
+        log(level, area, where, message, backtraceDepth);
     }
 }
 
@@ -317,7 +302,7 @@ void sal_detail_logFormat(
         } else if (n >= len) {
             std::strcpy(buf + len - 1, "...");
         }
-        log(level, area, where, buf);
+        log(level, area, where, buf, 0);
         va_end(args);
     }
 }

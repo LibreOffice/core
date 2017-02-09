@@ -28,20 +28,16 @@
 
 extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log(
     enum sal_detail_LogLevel level, char const * area, char const * where,
-    char const * message);
-
-extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log_backtrace(
-    enum sal_detail_LogLevel level, char const * area, char const * where,
-    char const * message, int maxNoStackFramesToDisplay);
+    char const * message, sal_uInt32 backtraceDepth);
 
 extern "C" SAL_DLLPUBLIC int SAL_CALL sal_detail_log_report(
     enum sal_detail_LogLevel level, char const * area);
 
 namespace sal { namespace detail {
 
-inline void SAL_CALL log(
+inline void log(
     sal_detail_LogLevel level, char const * area, char const * where,
-    std::ostringstream const & stream)
+    std::ostringstream const & stream, sal_uInt32 backtraceDepth)
 {
     // An alternative would be to have sal_detail_log take a std::ostringstream
     // pointer (via a C void pointer); the advantage would be smaller client
@@ -51,15 +47,7 @@ inline void SAL_CALL log(
     // on the C++ ABI; as a compromise, the ".str().c_str()" part has been moved
     // to this inline function so that it is potentially only emitted once per
     // dynamic library:
-    sal_detail_log(level, area, where, stream.str().c_str());
-}
-
-inline void SAL_CALL log_backtrace(
-    sal_detail_LogLevel level, char const * area, char const * where,
-    std::ostringstream const & stream, int maxNoStackFramesToDisplay)
-{
-    sal_detail_log_backtrace(
-        level, area, where, stream.str().c_str(), maxNoStackFramesToDisplay);
+    sal_detail_log(level, area, where, stream.str().c_str(), backtraceDepth);
 }
 
 // Special handling of the common case where the message consists of just a
@@ -134,12 +122,13 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
                 ::sal_detail_log( \
                     (level), (area), (where), \
                     ::sal::detail::unwrapStream( \
-                        ::sal::detail::StreamStart() << stream)); \
+                        ::sal::detail::StreamStart() << stream), \
+                    0); \
             } else { \
                 ::std::ostringstream sal_detail_stream; \
                 sal_detail_stream << stream; \
                 ::sal::detail::log( \
-                    (level), (area), (where), sal_detail_stream); \
+                    (level), (area), (where), sal_detail_stream, 0); \
             } \
         } \
     } while (false)
@@ -351,28 +340,33 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
         SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, stream)
 
 /**
-  Produce temporary debugging output from stream along with a
-  stack trace of the calling location.  This macro is meant to
-  be used only while working on code and should never exist
-  in production code.
+  Produce temporary debugging output from stream along with a backtrace of the
+  calling location.
+
+  This macro is meant to be used only while working on code and should never
+  exist in production code.
+
+  @param backtraceDepth a sal_uInt32 value indicating the maximum backtrace
+  depth; zero means no backtrace
 
   See @ref sal_log "basic logging functionality" for details.
 */
-#define SAL_DEBUG_BACKTRACE(stream, maxNoStackFramesToDisplay) \
+#define SAL_DEBUG_BACKTRACE(stream, backtraceDepth) \
     do { \
-        if (sizeof ::sal::detail::getResult(::sal::detail::StreamStart() << stream) == 1) \
+        if (sizeof ::sal::detail::getResult( \
+                ::sal::detail::StreamStart() << stream) == 1) \
         { \
-            ::sal_detail_log_backtrace( \
+            ::sal_detail_log( \
                 ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, \
                 ::sal::detail::unwrapStream( \
                     ::sal::detail::StreamStart() << stream), \
-                maxNoStackFramesToDisplay); \
+                backtraceDepth); \
         } else { \
             ::std::ostringstream sal_detail_stream; \
             sal_detail_stream << stream; \
-            ::sal::detail::log_backtrace( \
+            ::sal::detail::log( \
                 ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, sal_detail_stream, \
-                maxNoStackFramesToDisplay); \
+                backtraceDepth); \
         } \
     } while (false)
 
