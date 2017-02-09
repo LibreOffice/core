@@ -23,6 +23,7 @@
 #include "docfunc.hxx"
 #include "paramisc.hxx"
 #include "tokenstringcontext.hxx"
+#include <refupdatecontext.hxx>
 #include "dbdata.hxx"
 #include "scmatrix.hxx"
 #include <validat.hxx>
@@ -3327,6 +3328,51 @@ void Test::testFormulaRefUpdateValidity()
     bGood = aCheck.checkList(aList);
     CPPUNIT_ASSERT_MESSAGE("List content is incorrect after undo of the move.", bGood);
 
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTokenArrayRefUpdateMove()
+{
+    m_pDoc->InsertTab(0, "Sheet1");
+    m_pDoc->InsertTab(1, "Sheet2");
+
+    ScAddress aPos(0,0,0); // A1
+
+    sc::TokenStringContext aCxt(m_pDoc, m_pDoc->GetGrammar());
+
+    // Emulate cell movement from Sheet1.C3 to Sheet2.C3.
+    sc::RefUpdateContext aRefCxt(*m_pDoc);
+    aRefCxt.meMode = URM_MOVE;
+    aRefCxt.maRange = ScAddress(2,2,1); // C3 on Sheet2.
+    aRefCxt.mnTabDelta = -1;
+
+    std::vector<OUString> aTests = {
+        "B1*C1",
+        "SUM(B1:C1)"
+    };
+
+    // Since C3 is not referenced in any of the above formulas, moving C3 from
+    // Sheet1 to Sheet2 should NOT change the displayed formula string at all.
+
+    for (const OUString& aTest : aTests)
+    {
+        ScCompiler aComp(m_pDoc, aPos);
+        aComp.SetGrammar(m_pDoc->GetGrammar());
+        std::unique_ptr<ScTokenArray> pArray(aComp.CompileString(aTest));
+
+        OUString aStr = pArray->CreateString(aCxt, aPos);
+
+        CPPUNIT_ASSERT_EQUAL(aTest, aStr);
+
+        // This formula cell isn't moving its position. The displayed formula
+        // string should not change.
+        pArray->AdjustReferenceOnMove(aRefCxt, aPos, aPos);
+
+        aStr = pArray->CreateString(aCxt, aPos);
+        CPPUNIT_ASSERT_EQUAL(aTest, aStr);
+    }
+
+    m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
 
