@@ -117,10 +117,10 @@ DECLARE_ODFEXPORT_TEST(testTdf103567, "tdf103567.odt")
     // contour wrap polygon
     css::drawing::PointSequenceSequence const pointss(
         getProperty<css::drawing::PointSequenceSequence>(xShape, "ContourPolyPolygon"));
-    CPPUNIT_ASSERT_EQUAL(1, pointss.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pointss.getLength());
     // for some reason this property exists with 199 points if it wasn't
     // imported, that would be a fail
-    CPPUNIT_ASSERT_EQUAL(5, pointss[0].getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), pointss[0].getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(   0), pointss[0][0].X);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2672), pointss[0][0].Y);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(   0), pointss[0][1].X);
