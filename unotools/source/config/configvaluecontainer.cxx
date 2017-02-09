@@ -34,18 +34,16 @@ namespace utl
 
     //= NodeValueAccessor
 
-    enum LocationType
+    enum class LocationType
     {
-        ltSimplyObjectInstance,
-        ltAnyInstance,
-
-        ltUnbound
+        SimplyObjectInstance,
+        Unbound
     };
 
     struct NodeValueAccessor
     {
     private:
-        OUString     sRelativePath;      // the relative path of the node
+        OUString            sRelativePath;      // the relative path of the node
         LocationType        eLocationType;      // the type of location where the value is stored
         void*               pLocation;          // the pointer to the location
         Type                aDataType;          // the type object pointed to by pLocation
@@ -55,7 +53,7 @@ namespace utl
 
         void bind( void* _pLocation, const Type& _rType );
 
-        bool                    isBound( ) const        { return ( ltUnbound != eLocationType ) && ( nullptr != pLocation ); }
+        bool                    isBound( ) const        { return ( LocationType::Unbound != eLocationType ) && ( nullptr != pLocation ); }
         const OUString&  getPath( ) const        { return sRelativePath; }
         LocationType            getLocType( ) const     { return eLocationType; }
         void*                   getLocation( ) const    { return pLocation; }
@@ -66,7 +64,7 @@ namespace utl
 
     NodeValueAccessor::NodeValueAccessor( const OUString& _rNodePath )
         :sRelativePath( _rNodePath )
-        ,eLocationType( ltUnbound )
+        ,eLocationType( LocationType::Unbound )
         ,pLocation( nullptr )
     {
     }
@@ -82,7 +80,7 @@ namespace utl
     {
         SAL_WARN_IF(isBound(), "unotools.config", "NodeValueAccessor::bind: already bound!");
 
-        eLocationType = ltSimplyObjectInstance;
+        eLocationType = LocationType::SimplyObjectInstance;
         pLocation = _pLocation;
         aDataType = _rType;
     }
@@ -97,7 +95,7 @@ namespace utl
         SAL_WARN_IF(!_rAccessor.isBound(), "unotools.config", "::utl::lcl_copyData: invalid accessor!");
         switch ( _rAccessor.getLocType() )
         {
-            case ltSimplyObjectInstance:
+            case LocationType::SimplyObjectInstance:
             {
                 if ( _rData.hasValue() )
                 {
@@ -115,10 +113,6 @@ namespace utl
                 }
             }
             break;
-            case ltAnyInstance:
-                // a simple assignment of an Any ...
-                *static_cast< Any* >( _rAccessor.getLocation() ) = _rData;
-                break;
             default:
                 break;
         }
@@ -134,15 +128,11 @@ namespace utl
         SAL_WARN_IF(!_rAccessor.isBound(), "unotools.config", "::utl::lcl_copyData: invalid accessor!" );
         switch ( _rAccessor.getLocType() )
         {
-            case ltSimplyObjectInstance:
+            case LocationType::SimplyObjectInstance:
                 // a simple setValue ....
                 _rData.setValue( _rAccessor.getLocation(), _rAccessor.getDataType() );
                 break;
 
-            case ltAnyInstance:
-                // a simple assignment of an Any ...
-                _rData = *static_cast< Any* >( _rAccessor.getLocation() );
-                break;
             default:
                 break;
         }
