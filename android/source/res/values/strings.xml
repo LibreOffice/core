@@ -20,7 +20,6 @@
     <string name="menu_search">Search</string>
     <string name="list_view">List</string>
     <string name="grid_view">Grid</string>
-    <string name="GRID_VIEW_INTEGER">0</string>
     <string name="filter">Filter by</string>
     <string name="sort">Sort by</string>
     <string name="sort_smallest">Smallest first</string>
@@ -39,7 +38,7 @@
     <!-- Pref keys as resources ; Not currently used -->
     <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
     <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
-    <string name="pref_category_explorer">Explorer View Defaults</string>
+    <string name="pref_category_explorer">File Explorer Settings</string>
     <string name="pref_category_general">General</string>
     <string name="pref_experimental_editing">Experimental Mode</string>
     <string name="pref_experimental_editing_summary">Enable the experimental editing mode. Use at your own risk.</string>
