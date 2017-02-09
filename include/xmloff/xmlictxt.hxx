@@ -113,11 +113,6 @@ public:
 
     virtual void SAL_CALL characters(const OUString & aChars) override;
 
-    // #i124143# allow to copy evtl. useful data from another temporary import context, e.g. used to
-    // support multiple images and to rescue evtl. GluePoints imported with one of the
-    // to be deprecated contents
-    virtual void onDemandRescueUsefulDataFromTemporary( const SvXMLImportContext& rCandidate );
-
     void AddFirstRef();
     void AddNextRef();
     void ReleaseRef();

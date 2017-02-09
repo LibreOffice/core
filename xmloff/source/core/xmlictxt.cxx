@@ -160,10 +160,6 @@ void SAL_CALL SvXMLImportContext::characters(const OUString &rChars)
     mrImport.Characters( rChars );
 }
 
-void SvXMLImportContext::onDemandRescueUsefulDataFromTemporary( const SvXMLImportContext& )
-{
-}
-
 void SvXMLImportContext::AddFirstRef()
 {
     acquire();

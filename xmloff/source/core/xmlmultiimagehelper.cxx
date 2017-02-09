@@ -120,13 +120,6 @@ SvXMLImportContextRef MultiImageImportHelper::solveMultipleImages()
         {
             SvXMLImportContext& rCandidate = *maImplContextVector[a].get();
 
-            if(pContext.is())
-            {
-                // #i124143# evtl. copy imported GluePoints before deprecating
-                // this graphic and context
-                pContext->onDemandRescueUsefulDataFromTemporary(rCandidate);
-            }
-
             removeGraphicFromImportContext(rCandidate);
         }
         // re-insert it so that solveMultipleImages is idempotent

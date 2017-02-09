@@ -119,9 +119,6 @@ public:
     // this is called from the parent group for each unparsed attribute in the attribute list
     virtual void processAttribute( sal_uInt16 nPrefix, const OUString& rLocalName, const OUString& rValue );
 
-    // allow to copy evtl. useful data from another temporary import context, e.g. used to
-    // support multiple images
-    virtual void onDemandRescueUsefulDataFromTemporary( const SvXMLImportContext& rCandidate ) override;
 };
 
 // draw:rect context
