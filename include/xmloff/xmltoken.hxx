@@ -3291,6 +3291,10 @@ namespace xmloff { namespace token {
     XMLOFF_DLLPUBLIC bool IsXMLToken(
         const OUString& rString,
         enum XMLTokenEnum eToken );
+
+    XMLOFF_DLLPUBLIC bool IsXMLToken(
+        const char* pCString,
+        enum XMLTokenEnum eToken );
 } }
 
 #endif

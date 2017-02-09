@@ -104,7 +104,7 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
         {
             const sal_Int32 nLocalToken = nToken & TOKEN_MASK;
             if( nLocalToken == XML_STRUCTURE_PROTECTED )
-                bProtected = IsXMLToken( it.toString(), XML_TRUE );
+                bProtected = IsXMLToken( it.toCString(), XML_TRUE );
             else if ( nLocalToken == XML_PROTECTION_KEY )
                 sPassword = it.toString();
             else if (  nLocalToken == XML_PROTECTION_KEY_DIGEST_ALGORITHM )

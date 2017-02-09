@@ -162,7 +162,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                         sStyleName = it.toString();
                     break;
                 case XML_TOK_TABLE_PROTECTED:
-                    aProtectData.mbProtected = IsXMLToken( it.toString(), XML_TRUE );
+                    aProtectData.mbProtected = IsXMLToken( it.toCString(), XML_TRUE );
                 break;
                 case XML_TOK_TABLE_PRINT_RANGES:
                         sPrintRanges = it.toString();
@@ -178,7 +178,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 break;
                 case XML_TOK_TABLE_PRINT:
                     {
-                        if (IsXMLToken( it.toString(), XML_FALSE) )
+                        if (IsXMLToken( it.toCString(), XML_FALSE) )
                             bPrintEntireSheet = false;
                     }
                     break;

@@ -145,6 +145,12 @@ public:
                             mrList.AttributeValueLength(mnIdx),
                             RTL_TEXTENCODING_UTF8);
         }
+
+        const char* toCString()
+        {
+            assert(mnIdx < mrList.maAttributeTokens.size());
+            return mrList.getFastAttributeValue(mnIdx);
+        }
         bool isString(const char *str)
         {
             assert(mnIdx < mrList.maAttributeTokens.size());
