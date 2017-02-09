@@ -918,7 +918,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                     std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
                     if ( !pStream || pStream->GetError() )
                     {
-                        sal_Int32 nError = pStream ? pStream->GetError() : ERRCODE_IO_GENERAL;
+                        sal_uInt32 nError = sal_uInt32(pStream ? pStream->GetError() : ERRCODE_IO_GENERAL);
                         throw task::ErrorCodeIOException(
                             ("utl::UcbStreamHelper::CreateStream failed for \""
                              + aCodeStreamName + "\": 0x"
@@ -1031,7 +1031,7 @@ bool SfxScriptLibraryContainer::implLoadPasswordLibrary
                             std::unique_ptr<SvStream> pStream(::utl::UcbStreamHelper::CreateStream( xCodeStream ));
                             if ( !pStream || pStream->GetError() )
                             {
-                                sal_Int32 nError = pStream ? pStream->GetError() : ERRCODE_IO_GENERAL;
+                                sal_uInt32 nError = sal_uInt32(pStream ? pStream->GetError() : ERRCODE_IO_GENERAL);
                                 throw task::ErrorCodeIOException(
                                     ("utl::UcbStreamHelper::CreateStream failed"
                                      " for code.bin: 0x"

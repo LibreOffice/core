@@ -373,7 +373,7 @@ void SvStream::ClearError()
     m_nError = ERRCODE_NONE;
 }
 
-void SvStream::SetError( sal_uInt32 nErrorCode )
+void SvStream::SetError( ErrCode nErrorCode )
 {
     if (m_nError == ERRCODE_NONE)
         m_nError = nErrorCode;
@@ -1552,7 +1552,7 @@ bool SvStream::SetStreamSize(sal_uInt64 const nSize)
 #ifdef DBG_UTIL
     DBG_ASSERT(Tell()==nFPos,"SetStreamSize failed");
 #endif
-    return (m_nError == 0);
+    return (m_nError == ERRCODE_NONE);
 }
 
 SvStream& endl( SvStream& rStr )

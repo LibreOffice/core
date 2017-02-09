@@ -42,7 +42,7 @@ private:
     rtl::Reference<SchXMLExportHelper> maExportHelper;
 
 protected:
-    virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
+    virtual ErrCode exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
 
     virtual void ExportAutoStyles_() override;
     virtual void ExportMasterStyles_() override;

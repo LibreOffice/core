@@ -36,7 +36,7 @@ public:
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
-    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID) override;
+    ErrCode exportDoc(enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID) override;
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_ () override {}
     void ExportContent_() override {}
@@ -55,7 +55,7 @@ public:
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler> &rHandler);
 
-    sal_uInt32 exportDoc(enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID) override;
+    ErrCode exportDoc(enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID) override;
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_ () override {}
     void ExportContent_() override {}
