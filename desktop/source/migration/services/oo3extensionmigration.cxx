@@ -229,7 +229,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
             // scan extension identifier and try to match with our black list entries
             for (OUString & i : m_aBlackList)
             {
-                utl::SearchParam param(i, utl::SearchParam::SRCH_REGEXP);
+                utl::SearchParam param(i, utl::SearchParam::SearchType::Regexp);
                 utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
 
                 sal_Int32 start = 0;
@@ -254,7 +254,7 @@ bool OO3ExtensionMigration::scanDescriptionXml( const OUString& sDescriptionXmlU
         // description.xml!
         for (OUString & i : m_aBlackList)
         {
-            utl::SearchParam param(i, utl::SearchParam::SRCH_REGEXP);
+            utl::SearchParam param(i, utl::SearchParam::SearchType::Regexp);
             utl::TextSearch  ts(param, LANGUAGE_DONTKNOW);
 
             sal_Int32 start = 0;

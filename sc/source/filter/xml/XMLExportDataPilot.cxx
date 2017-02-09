@@ -73,14 +73,14 @@ OUString ScXMLExportDataPilot::getDPOperatorXML(
     {
         case SC_EQUAL :
         {
-            if (eSearchType == utl::SearchParam::SRCH_REGEXP)
+            if (eSearchType == utl::SearchParam::SearchType::Regexp)
                 return GetXMLToken(XML_MATCH);
             else
                 return OUString("=");
         }
         case SC_NOT_EQUAL :
         {
-            if (eSearchType == utl::SearchParam::SRCH_REGEXP)
+            if (eSearchType == utl::SearchParam::SearchType::Regexp)
                 return GetXMLToken(XML_NOMATCH);
             else
                 return OUString("!=");

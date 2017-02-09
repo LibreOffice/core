@@ -199,7 +199,7 @@ void TextSearch::Init( const SearchParam & rParam,
 
     switch( rParam.GetSrchType() )
     {
-    case SearchParam::SRCH_WILDCARD:
+    case SearchParam::SearchType::Wildcard:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
         aSOpt.algorithmType = SearchAlgorithms_MAKE_FIXED_SIZE;    // no old enum for that
         aSOpt.WildcardEscapeCharacter = rParam.GetWildEscChar();
@@ -207,7 +207,7 @@ void TextSearch::Init( const SearchParam & rParam,
             aSOpt.searchFlag |= SearchFlags::WILD_MATCH_SELECTION;
         break;
 
-    case SearchParam::SRCH_REGEXP:
+    case SearchParam::SearchType::Regexp:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::REGEXP;
         aSOpt.algorithmType = SearchAlgorithms_REGEXP;
         if( rParam.IsSrchInSelection() )
@@ -215,17 +215,7 @@ void TextSearch::Init( const SearchParam & rParam,
                                 SearchFlags::REG_NOT_ENDOFLINE;
         break;
 
-    case SearchParam::SRCH_LEVDIST:
-        aSOpt.AlgorithmType2 = SearchAlgorithms2::APPROXIMATE;
-        aSOpt.algorithmType = SearchAlgorithms_APPROXIMATE;
-        aSOpt.changedChars = rParam.GetLEVOther();
-        aSOpt.deletedChars = rParam.GetLEVLonger();
-        aSOpt.insertedChars = rParam.GetLEVShorter();
-        if( rParam.IsSrchRelaxed() )
-            aSOpt.searchFlag |= SearchFlags::LEV_RELAXED;
-        break;
-
-    case SearchParam::SRCH_NORMAL:
+    case SearchParam::SearchType::Normal:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::ABSOLUTE;
         aSOpt.algorithmType = SearchAlgorithms_ABSOLUTE;
         if( rParam.IsSrchWordOnly() )

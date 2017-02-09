@@ -83,7 +83,7 @@ void ScFilterOptionsMgr::Init()
 
     pBtnCase   ->Check( rQueryData.bCaseSens );
     pBtnHeader ->Check( rQueryData.bHasHeader );
-    pBtnRegExp ->Check( rQueryData.eSearchType == utl::SearchParam::SRCH_REGEXP );
+    pBtnRegExp ->Check( rQueryData.eSearchType == utl::SearchParam::SearchType::Regexp );
     pBtnUnique ->Check( !rQueryData.bDuplicate );
 
     if ( pViewData && pDoc )

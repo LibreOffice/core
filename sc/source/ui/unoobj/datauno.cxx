@@ -1434,8 +1434,8 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
     else if (aPropertyName == SC_UNONAME_SKIPDUP)
         aParam.bDuplicate = !(ScUnoHelpFunctions::GetBoolFromAny( aValue ));
     else if (aPropertyName == SC_UNONAME_USEREGEX)
-        aParam.eSearchType = ScUnoHelpFunctions::GetBoolFromAny( aValue ) ? utl::SearchParam::SRCH_REGEXP :
-            utl::SearchParam::SRCH_NORMAL;
+        aParam.eSearchType = ScUnoHelpFunctions::GetBoolFromAny( aValue ) ? utl::SearchParam::SearchType::Regexp :
+            utl::SearchParam::SearchType::Normal;
 
     PutData(aParam);
 }
@@ -1475,7 +1475,7 @@ uno::Any SAL_CALL ScFilterDescriptorBase::getPropertyValue( const OUString& aPro
     else if (aPropertyName == SC_UNONAME_SKIPDUP )
         aRet <<= !(aParam.bDuplicate);
     else if (aPropertyName == SC_UNONAME_USEREGEX )
-        aRet <<= (aParam.eSearchType == utl::SearchParam::SRCH_REGEXP);
+        aRet <<= (aParam.eSearchType == utl::SearchParam::SearchType::Regexp);
 
     return aRet;
 }

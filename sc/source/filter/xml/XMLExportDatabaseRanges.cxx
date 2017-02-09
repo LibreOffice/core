@@ -391,7 +391,7 @@ private:
                 else if (rEntry.IsQueryByNonEmpty())
                     return GetXMLToken(XML_NOEMPTY);
 
-                if (eSearchType == utl::SearchParam::SRCH_REGEXP)
+                if (eSearchType == utl::SearchParam::SearchType::Regexp)
                     return GetXMLToken(XML_MATCH);
                 else
                     return OUString("=");
@@ -405,7 +405,7 @@ private:
             case SC_LESS_EQUAL:
                 return OUString("<=");
             case SC_NOT_EQUAL:
-                if (eSearchType == utl::SearchParam::SRCH_REGEXP)
+                if (eSearchType == utl::SearchParam::SearchType::Regexp)
                     return GetXMLToken(XML_NOMATCH);
                 else
                     return OUString("!=");

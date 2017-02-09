@@ -977,7 +977,7 @@ void SvxTPFilter::DeactivatePage()
             pRedlinTable->SetFilterComment(IsComment());
 
             utl::SearchParam aSearchParam( m_pEdComment->GetText(),
-                    utl::SearchParam::SRCH_REGEXP,false );
+                    utl::SearchParam::SearchType::Regexp,false );
 
             pRedlinTable->SetCommentParams(&aSearchParam);
 

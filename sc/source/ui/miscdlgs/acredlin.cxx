@@ -272,7 +272,7 @@ void ScAcceptChgDlg::Init()
         pTheView->SetFilterComment(pTPFilter->IsComment());
 
         utl::SearchParam aSearchParam( pTPFilter->GetComment(),
-                utl::SearchParam::SRCH_REGEXP,false );
+                utl::SearchParam::SearchType::Regexp,false );
 
         pTheView->SetCommentParams(&aSearchParam);
 
