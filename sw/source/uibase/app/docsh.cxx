@@ -154,9 +154,9 @@ bool SwDocShell::InsertGeneratedStream(SfxMedium & rMedium,
     Reader *const pRead = StartConvertFrom(rMedium, &pReader, nullptr, &aPam);
     if (!pRead)
         return false;
-    sal_uLong const nError = pReader->Read(*pRead);
+    ErrCode const nError = pReader->Read(*pRead);
     delete pReader;
-    return 0 == nError;
+    return ERRCODE_NONE == nError;
 }
 
 // Prepare loading
@@ -255,7 +255,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     // Restore the pool default if reading a saved document.
     m_pDoc->RemoveAllFormatLanguageDependencies();
 
-    sal_uLong nErr = pRdr->Read( *pRead );
+    ErrCode nErr = pRdr->Read( *pRead );
 
     // Maybe put away one old Doc
     if (m_pDoc != pRdr->GetDoc())
@@ -277,7 +277,7 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     SW_MOD()->SetEmbeddedLoadSave( false );
 
     SetError(nErr);
-    bool bOk = !IsError( nErr );
+    bool bOk = !nErr.IsError();
 
     if (bOk && !m_pDoc->IsInLoadAsynchron())
     {
@@ -307,13 +307,13 @@ bool SwDocShell::Save()
         m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
-    sal_uLong nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
+    ErrCode nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     if( SfxObjectShell::Save() )
     {
         switch( GetCreateMode() )
         {
         case SfxObjectCreateMode::INTERNAL:
-            nErr = 0;
+            nErr = ERRCODE_NONE;
             break;
 
         case SfxObjectCreateMode::ORGANIZER:
@@ -374,7 +374,7 @@ bool SwDocShell::Save()
     {
         pFrame->GetBindings().SetState(SfxBoolItem(SID_DOC_MODIFIED, false));
     }
-    return !IsError( nErr );
+    return !nErr.IsError();
 }
 
 // Save using the Defaultformat
@@ -446,7 +446,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
 
-    sal_uLong nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
+    ErrCode nErr = ERR_SWG_WRITE_ERROR, nVBWarning = ERRCODE_NONE;
     uno::Reference < embed::XStorage > xStor = rMedium.GetOutputStorage();
     if( SfxObjectShell::SaveAs( rMedium ) )
     {
@@ -514,7 +514,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
     }
     SetError(nErr ? nErr : nVBWarning);
 
-    return !IsError( nErr );
+    return !nErr.IsError();
 }
 
 // Save all Formats
@@ -552,7 +552,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         m_pView->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
     }
 
-    sal_uLong nVBWarning = 0;
+    ErrCode nVBWarning = ERRCODE_NONE;
 
     if (m_pDoc->ContainsMSVBasic())
     {
@@ -711,7 +711,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                             SfxObjectCreateMode::EMBEDDED == GetCreateMode());
 
     // Span Context in order to suppress the Selection's View
-    sal_uLong nErrno;
+    ErrCode nErrno;
     const OUString aFileName( rMedium.GetName() );
 
     // No View, so the whole Document!
@@ -741,7 +741,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
         if( pSrcView )
         {
             pSrcView->SaveContentTo(rMedium);
-            nErrno = 0;
+            nErrno = ERRCODE_NONE;
         }
         else
         {
@@ -755,7 +755,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     if( !rMedium.IsStorage() )
         rMedium.CloseOutStream();
 
-    return !IsError( nErrno );
+    return ! nErrno.IsError();
 }
 
 // Hands off

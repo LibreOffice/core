@@ -92,7 +92,7 @@ bool SwServerObject::GetData( uno::Any & rData,
             // Create stream
             SvMemoryStream aMemStm( 65535, 65535 );
             SwWriter aWrt( aMemStm, *pPam, false );
-            if( !IsError( aWrt.Write( xWrt )) )
+            if( !aWrt.Write( xWrt ).IsError() )
             {
                 aMemStm.WriteChar( '\0' );        // append a zero char
                 rData <<= uno::Sequence< sal_Int8 >(

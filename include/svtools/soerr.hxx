@@ -24,15 +24,15 @@
 // error codes
 #define RID_SO_ERROR_HANDLER    32000
 
-#define SO_ERR() (ERRCODE_AREA_SO | ERRCODE_CLASS_SO)
-#define SO_WRN() (ERRCODE_AREA_SO | ERRCODE_CLASS_SO | ERRCODE_WARNING_MASK)
+#define SO_ERR(x) ErrCode(ERRCODE_AREA_SO | ERRCODE_CLASS_SO | x)
+#define SO_WRN(x) ErrCode(ERRCODE_AREA_SO | ERRCODE_CLASS_SO | ERRCODE_WARNING_MASK | x)
 
-#define ERRCODE_SO_GENERALERROR             (SO_ERR() | 1)
-#define ERRCODE_SO_FALSE                    (SO_WRN() | 23)
-#define ERRCODE_SO_PENDING                  (SO_ERR() | 25)
-#define ERRCODE_SO_CANNOT_DOVERB_NOW        (SO_WRN() | 28)
-#define ERRCODE_SO_NOVERBS                  (SO_ERR() | 30)
-#define ERRCODE_SO_NOTIMPL                  (SO_ERR() | 33)
+#define ERRCODE_SO_GENERALERROR             SO_ERR(1)
+#define ERRCODE_SO_FALSE                    SO_WRN(23)
+#define ERRCODE_SO_PENDING                  SO_ERR(25)
+#define ERRCODE_SO_CANNOT_DOVERB_NOW        SO_WRN(28)
+#define ERRCODE_SO_NOVERBS                  SO_ERR(30)
+#define ERRCODE_SO_NOTIMPL                  SO_ERR(33)
 
 // error contexts
 #define RID_SO_ERRCTX           32001

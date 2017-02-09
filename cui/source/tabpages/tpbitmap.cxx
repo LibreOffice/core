@@ -768,7 +768,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
         Graphic         aGraphic;
 
         EnterWait();
-        int nError = aDlg.GetGraphic( aGraphic );
+        ErrCode nError = aDlg.GetGraphic( aGraphic );
         LeaveWait();
 
         if( !nError )
@@ -783,7 +783,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
             DBG_ASSERT(pFact, "Dialog creation failed!");
             ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog( GetParentDialog(), aURL.GetName().getToken( 0, '.' ), aDesc ));
             DBG_ASSERT(pDlg, "Dialog creation failed!");
-            nError = 1;
+            nError = ErrCode(1);
 
             while( pDlg->Execute() == RET_OK )
             {
@@ -796,7 +796,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, Button*, void)
                         bDifferent = false;
 
                 if( bDifferent ) {
-                    nError = 0;
+                    nError = ERRCODE_NONE;
                     break;
                 }
 

@@ -639,7 +639,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
     , m_pContent( nullptr )
     , m_pStream( nullptr )
     , m_nRepresentMode( RepresentMode::NONE )
-    , m_nError( 0 )
+    , m_nError( ERRCODE_NONE )
     , m_nMode( nMode )
     , m_bSourceRead( !( nMode & StreamMode::TRUNC ) )
     , m_bModified( false )
@@ -1009,7 +1009,7 @@ void UCBStorageStream_Impl::SetError( ErrCode nErr )
 
 void  UCBStorageStream_Impl::ResetError()
 {
-    m_nError = 0;
+    m_nError = ERRCODE_NONE;
     SvStream::ResetError();
     if ( m_pAntiImpl )
         m_pAntiImpl->ResetError();

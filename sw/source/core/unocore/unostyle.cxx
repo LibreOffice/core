@@ -542,7 +542,7 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
         else if(rProperty.Name == UNO_NAME_LOAD_TEXT_STYLES)
             aOpt.SetTextFormats(bValue);
     }
-    const sal_uLong nErr = m_pDocShell->LoadStylesFromFile( rURL, aOpt, true );
+    const ErrCode nErr = m_pDocShell->LoadStylesFromFile( rURL, aOpt, true );
     if(nErr)
         throw io::IOException();
 }
