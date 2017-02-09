@@ -2141,6 +2141,13 @@ VclPtr<PopupMenu> SfxCommonTemplateDialog_Impl::CreateContextMenu()
     pMenu->EnableItem( ID_HIDE, bCanHide );
     pMenu->EnableItem( ID_SHOW, bCanShow );
 
+    const SfxStyleFamilyItem* pItem = GetFamilyItem_Impl();
+    if (pItem && pItem->GetFamily() == SfxStyleFamily::Table) //tdf#101648, no ui for this yet
+    {
+        pMenu->EnableItem(ID_EDIT, false);
+        pMenu->EnableItem(ID_NEW, false);
+    }
+
     return pMenu;
 }
 
