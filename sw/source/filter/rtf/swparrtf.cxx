@@ -39,10 +39,10 @@ using namespace ::com::sun::star;
 /// Glue class to call RtfImport as an internal filter, needed by copy&paste support.
 class SwRTFReader : public Reader
 {
-    sal_uLong Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
+    ErrCode Read(SwDoc&, const OUString& rBaseURL, SwPaM&, const OUString&) override;
 };
 
-sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam, const OUString&)
+ErrCode SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rPam, const OUString&)
 {
     if (!pStrm)
         return ERR_SWG_READ_ERROR;
@@ -87,7 +87,7 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
     aDescriptor[1].Value <<= true;
     aDescriptor[2].Name = "TextInsertModeRange";
     aDescriptor[2].Value <<= xInsertTextRange;
-    sal_uLong ret(0);
+    ErrCode ret = ERRCODE_NONE;
     try
     {
         xFilter->filter(aDescriptor);

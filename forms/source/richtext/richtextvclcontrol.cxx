@@ -244,7 +244,7 @@ namespace frm
                             OUString::createFromAscii( aExportFormat.pExtension ) );
                     }
                     ErrCode nResult = aFP.Execute();
-                    if ( nResult == 0 )
+                    if ( nResult == ERRCODE_NONE )
                     {
                         OUString sFileName = aFP.GetPath();
                         SvStream* pStream = ::utl::UcbStreamHelper::CreateStream(

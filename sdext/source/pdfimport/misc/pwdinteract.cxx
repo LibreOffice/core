@@ -133,7 +133,7 @@ private:
         return uno::makeAny(
             task::ErrorCodeRequest(
                 OUString(), uno::Reference< uno::XInterface >(),
-                ERRCODE_IO_WRONGVERSION));
+                sal_uInt32(ERRCODE_IO_WRONGVERSION)));
             //TODO: should be something more informative than crudely reused
             // ERRCODE_IO_WRONGVERSION
     }

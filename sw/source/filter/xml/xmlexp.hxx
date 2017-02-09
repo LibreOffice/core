@@ -114,7 +114,7 @@ public:
 
     virtual ~SwXMLExport() override;
 
-    virtual sal_uInt32 exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
+    virtual ErrCode exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
 
     inline const SvXMLUnitConverter& GetTwipUnitConverter() const;
 

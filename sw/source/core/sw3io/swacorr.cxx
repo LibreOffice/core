@@ -36,10 +36,10 @@ using namespace ::com::sun::star;
  */
 bool SwAutoCorrect::GetLongText( const OUString& rShort, OUString& rLong )
 {
-    sal_uLong nRet = 0;
+    ErrCode nRet = ERRCODE_NONE;
     assert( m_pTextBlocks );
     nRet = m_pTextBlocks->GetText( rShort, rLong );
-    return !IsError( nRet ) && !rLong.isEmpty();
+    return !nRet.IsError() && !rLong.isEmpty();
 }
 
 void SwAutoCorrect::refreshBlockList( const uno::Reference< embed::XStorage >& rStg )
@@ -69,22 +69,22 @@ bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
         return false;
 
     SwDocShell& rDShell = static_cast<SwDocShell&>(rObjSh);
-    sal_uLong nRet = 0;
+    ErrCode nRet = ERRCODE_NONE;
 
     // mba: relative URLs don't make sense here
     SwXMLTextBlocks aBlk( rStg, rFileName );
     SwDoc* pDoc = aBlk.GetDoc();
 
     nRet = aBlk.BeginPutDoc( rShort, rShort );
-    if( !IsError( nRet ) )
+    if( ! nRet.IsError() )
     {
         rDShell.GetEditShell()->CopySelToDoc( pDoc );
         nRet = aBlk.PutDoc();
         aBlk.AddName ( rShort, rShort );
-        if( !IsError( nRet ) )
+        if( ! nRet.IsError() )
             nRet = aBlk.GetText( rShort, rLong );
     }
-    return !IsError( nRet );
+    return ! nRet.IsError();
 }
 
 SwAutoCorrect::SwAutoCorrect( const SvxAutoCorrect& rACorr )
