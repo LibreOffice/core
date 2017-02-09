@@ -115,7 +115,6 @@ public:
     void testColumnWidthResaveXLSX();
     void testColumnWidthExportFromODStoXLSX();
     void testOutlineExportXLSX();
-    void testHiddenEmptyRowsXLSX();
     void testLandscapeOrientationXLSX();
 
     void testInlineArrayXLS();
@@ -205,7 +204,6 @@ public:
     CPPUNIT_TEST(testColumnWidthResaveXLSX);
     CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX);
     CPPUNIT_TEST(testOutlineExportXLSX);
-    CPPUNIT_TEST(testHiddenEmptyRowsXLSX);
     CPPUNIT_TEST(testLandscapeOrientationXLSX);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
@@ -858,22 +856,6 @@ void ScExportTest::testOutlineExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 30);
 }
 
-
-void ScExportTest::testHiddenEmptyRowsXLSX()
-{
-    //tdf#98106 FILESAVE: Hidden and empty rows became visible when export to .XLSX
-    ScDocShellRef xShell = loadDoc("hidden-empty-rows.", FORMAT_ODS);
-    CPPUNIT_ASSERT(xShell.Is());
-
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xShell), FORMAT_XLSX);
-    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
-    CPPUNIT_ASSERT(pSheet);
-
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[1]", "hidden", "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[2]", "hidden", "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[3]", "hidden", "true");
-    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row[4]", "hidden", "false");
-}
 
 void ScExportTest::testLandscapeOrientationXLSX()
 {
