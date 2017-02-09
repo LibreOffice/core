@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -219,9 +220,15 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 item.setIcon(iconRes);
             }
         }
+
+        final Context context = this; //needed for anonymous method below
         navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public boolean onNavigationItemSelected(final MenuItem item) {
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.menu_storage_preferences) {
+                    startActivity(new Intent(context, DocumentProviderSettingsActivity.class));
+                    return true;
+                }
                 int position = providerNames.indexOf(item.getTitle());
                 switchToDocumentProvider(documentProviderFactory.getProvider(position));
                 return true;
@@ -573,9 +580,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             case R.id.action_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
                 return true;
-            case R.id.menu_storage_preferences:
-                startActivity(new Intent(this, DocumentProviderSettingsActivity.class));
-                break;
 
             default:
                 return super.onOptionsItemSelected(item);
