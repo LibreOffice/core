@@ -1726,14 +1726,15 @@ void ScInterpreter::ScFDist_LT()
     }
 }
 
-void ScInterpreter::ScChiDist()
+void ScInterpreter::ScChiDist( bool bODFF )
 {
     double fResult;
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
     double fDF  = ::rtl::math::approxFloor(GetDouble());
     double fChi = GetDouble();
-    if (fDF < 1.0) // x<=0 returns 1, see ODFF 6.17.10
+    if ( fDF < 1.0 // x<=0 returns 1, see ODFF1.2 16.18.11
+       || ( !bODFF && fChi < 0 ) ) // Excel does not accept negative fChi
     {
         PushIllegalArgument();
         return;
