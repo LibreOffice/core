@@ -52,7 +52,7 @@ class DynamicErrorInfo_Impl
 
     void                        RegisterEDcr(DynamicErrorInfo *);
     static void                 UnRegisterEDcr(DynamicErrorInfo const *);
-    static ErrorInfo           *GetDynamicErrorInfo(sal_uIntPtr lId);
+    static ErrorInfo           *GetDynamicErrorInfo(ErrCode lId);
 
 friend class DynamicErrorInfo;
 friend class ErrorInfo;
@@ -71,8 +71,8 @@ void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
 {
     // Register dynamic identifier
     EDcrData& rData = TheEDcrData::get();
-    lErrId = (((sal_uIntPtr)rData.nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
-             pDcr->GetErrorCode();
+    lErrId = ((rData.nNextDcr + 1) << ERRCODE_DYNAMIC_SHIFT) +
+             (sal_uInt32)pDcr->GetErrorCode();
 
     if(rData.ppDcr[rData.nNextDcr])
     {
@@ -86,7 +86,7 @@ void DynamicErrorInfo_Impl::RegisterEDcr(DynamicErrorInfo *pDcr)
 void DynamicErrorInfo_Impl::UnRegisterEDcr(DynamicErrorInfo const *pDcr)
 {
     DynamicErrorInfo **ppDcr = TheEDcrData::get().ppDcr;
-    sal_uIntPtr lIdx = (((sal_uIntPtr)(*pDcr) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
+    sal_uInt32 lIdx = ((((sal_uInt32)pDcr->GetErrorCode()) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
     DBG_ASSERT(ppDcr[lIdx]==pDcr,"ErrHdl: Error nicht gefunden");
     if(ppDcr[lIdx]==pDcr)
         ppDcr[lIdx]=nullptr;
@@ -97,15 +97,15 @@ ErrorInfo::~ErrorInfo()
 }
 
 
-ErrorInfo *ErrorInfo::GetErrorInfo(sal_uIntPtr lId)
+ErrorInfo *ErrorInfo::GetErrorInfo(ErrCode lId)
 {
-    if(lId & ERRCODE_DYNAMIC_MASK)
+    if((sal_uInt32)lId & ERRCODE_DYNAMIC_MASK)
         return DynamicErrorInfo_Impl::GetDynamicErrorInfo(lId);
     else
         return new ErrorInfo(lId);
 }
 
-DynamicErrorInfo::operator sal_uIntPtr() const
+DynamicErrorInfo::operator ErrCode() const
 {
     return pImpl->lErrId;
 }
@@ -123,14 +123,14 @@ DynamicErrorInfo::~DynamicErrorInfo()
     DynamicErrorInfo_Impl::UnRegisterEDcr(this);
 }
 
-ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(sal_uIntPtr lId)
+ErrorInfo* DynamicErrorInfo_Impl::GetDynamicErrorInfo(ErrCode nErrCode)
 {
-    sal_uIntPtr lIdx = ((lId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
+    sal_uIntPtr lIdx = (((sal_uInt32)nErrCode & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
     DynamicErrorInfo* pDcr = TheEDcrData::get().ppDcr[lIdx];
-    if(pDcr && (sal_uIntPtr)(*pDcr)==lId)
+    if(pDcr && static_cast<ErrCode>(*pDcr) == nErrCode)
         return pDcr;
     else
-        return new ErrorInfo(lId & ~ERRCODE_DYNAMIC_MASK);
+        return new ErrorInfo((sal_uInt32)nErrCode & ~ERRCODE_DYNAMIC_MASK);
 }
 
 ErrorHandlerFlags DynamicErrorInfo::GetDialogMask() const
@@ -236,7 +236,7 @@ void ErrorHandler::RegisterDisplay(BasicDisplayErrorFunc *aDsp)
     @return ???
 */
 ErrorHandlerFlags ErrorHandler::HandleError_Impl(
-    sal_uIntPtr nErrCodeId, ErrorHandlerFlags nFlags, bool bJustCreateString, OUString & rError)
+    ErrCode nErrCodeId, ErrorHandlerFlags nFlags, bool bJustCreateString, OUString & rError)
 {
     OUString aErr;
     OUString aAction;
@@ -257,7 +257,7 @@ ErrorHandlerFlags ErrorHandler::HandleError_Impl(
             }
     }
 
-    bool bWarning = ((nErrCodeId & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+    bool bWarning = nErrCodeId.IsWarning();
     ErrorHandlerFlags nErrFlags = ErrorHandlerFlags::ButtonDefaultsOk | ErrorHandlerFlags::ButtonsOk;
     if (bWarning)
         nErrFlags |= ErrorHandlerFlags::MessageWarning;

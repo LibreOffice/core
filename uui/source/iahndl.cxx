@@ -1126,7 +1126,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
         // required  unsigned long value. Otherwhise using as flag field
         // can fail ...
         ErrCode  nError   = static_cast< ErrCode >(nErrorCode);
-        bool bWarning = !ERRCODE_TOERROR(nError);
+        bool bWarning = !IgnoreWarning(nError);
 
         if ( nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
         {

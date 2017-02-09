@@ -161,7 +161,7 @@ private:
                                 ///< into the derived stream (cf. PutBack)
     bool            m_isSwap;
     bool            m_isEof;
-    sal_uInt32      m_nError;
+    ErrCode         m_nError;
     SvStreamEndian  m_nEndian;
     SvStreamCompressFlags m_nCompressMode;
     LineEnd         m_eLineDelimiter;
@@ -205,10 +205,9 @@ public:
 
     SvLockBytes*    GetLockBytes() const { return m_xLockBytes.get(); }
 
-    sal_uInt32      GetError() const { return ERRCODE_TOERROR(m_nError); }
-    sal_uInt32      GetErrorCode() const { return m_nError; }
-
-    void            SetError( sal_uInt32 nErrorCode );
+    ErrCode         GetError() const { return m_nError.IgnoreWarning(); }
+    ErrCode         GetErrorCode() const { return m_nError; }
+    void            SetError( ErrCode nErrorCode );
     virtual void    ResetError();
 
     void            SetEndian( SvStreamEndian SvStreamEndian );

@@ -142,7 +142,7 @@ public:
 
     sal_uInt32          GetErrorCode() const;
     sal_uInt32          GetError() const
-                        { return ERRCODE_TOERROR(GetErrorCode()); }
+                        { return IgnoreWarning(GetErrorCode()); }
     sal_uInt32          GetLastStorageCreationState();
 
     void                SetError( sal_uInt32 nError, const OUString& aLogMessage );

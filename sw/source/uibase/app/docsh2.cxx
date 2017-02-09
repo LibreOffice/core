@@ -713,7 +713,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pStrm->SetBufferSize( 16348 );
                     SwWriter aWrt( *pStrm, *pSmryDoc );
                     ErrCode eErr = aWrt.Write( xWrt );
-                    if( !ERRCODE_TOERROR( eErr ) )
+                    if( !IgnoreWarning( eErr ) )
                     {
                         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
@@ -774,7 +774,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SwWriter aWrt( *pStrm, *GetDoc() );
                 ErrCode eErr = aWrt.Write( xWrt );
                 EnableSetModified( bEnable );
-                if( !ERRCODE_TOERROR( eErr ) )
+                if( !IgnoreWarning( eErr ) )
                 {
                     pStrm->Seek( STREAM_SEEK_TO_END );
                     pStrm->WriteChar( '\0' );

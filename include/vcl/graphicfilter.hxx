@@ -217,10 +217,10 @@ public:
 /** Information about errors during the GraphicFilter operation. */
 struct FilterErrorEx
 {
-    sal_uLong   nFilterError;
-    sal_uLong   nStreamError;
+    ErrCode     nFilterError;
+    ErrCode     nStreamError;
 
-            FilterErrorEx() : nFilterError( 0UL ), nStreamError( 0UL ) {}
+            FilterErrorEx() : nFilterError( ERRCODE_NONE ), nStreamError( ERRCODE_NONE ) {}
 };
 
 /** Class to import and export graphic formats. */

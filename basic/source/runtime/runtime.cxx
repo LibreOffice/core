@@ -775,7 +775,7 @@ bool SbiRuntime::Step()
         }
 
         SbError nSbError = SbxBase::GetError();
-        Error( ERRCODE_TOERROR(nSbError) );
+        Error( IgnoreWarning(nSbError) );
 
         // from 13.2.1997, new error handling:
         // ATTENTION: nError can be set already even if !nSbError

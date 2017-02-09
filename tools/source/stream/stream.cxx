@@ -373,7 +373,7 @@ void SvStream::ClearError()
     m_nError = SVSTREAM_OK;
 }
 
-void SvStream::SetError( sal_uInt32 nErrorCode )
+void SvStream::SetError( ErrCode nErrorCode )
 {
     if (m_nError == SVSTREAM_OK)
         m_nError = nErrorCode;

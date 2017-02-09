@@ -1609,9 +1609,9 @@ bool Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
     return true;
 }
 
-sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
+ErrCode Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
 {
-    sal_uLong nVCLError;
+    ErrCode nVCLError;
     switch ( nError )
     {
         case 0:

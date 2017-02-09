@@ -105,7 +105,7 @@ public:
                             return m_nVersion;
                         }
 
-    ErrCode             GetError() const { return ERRCODE_TOERROR(m_nError); }
+    ErrCode             GetError() const { return m_nError.IgnoreWarning(); }
     void                SetError( ErrCode nErrorCode )
                         {
                             if( m_nError == SVSTREAM_OK )

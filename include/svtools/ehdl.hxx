@@ -38,7 +38,7 @@ public:
     SfxErrorContext(
             sal_uInt16 nCtxIdP, const OUString &aArg1, vcl::Window *pWin=nullptr,
             sal_uInt16 nResIdP=USHRT_MAX, ResMgr *pMgrP=nullptr);
-    bool GetString(sal_uLong nErrId, OUString &rStr) override;
+    bool GetString(ErrCode nErrId, OUString &rStr) override;
 
 private:
     sal_uInt16 nCtxId;
@@ -50,16 +50,16 @@ private:
 class SVT_DLLPUBLIC SfxErrorHandler : private ErrorHandler
 {
 public:
-    SfxErrorHandler(sal_uInt16 nId, sal_uLong lStart, sal_uLong lEnd, ResMgr *pMgr=nullptr);
+    SfxErrorHandler(sal_uInt16 nId, ErrCode lStart, ErrCode lEnd, ResMgr *pMgr=nullptr);
     virtual ~SfxErrorHandler() override;
 
 protected:
-    bool     GetErrorString(sal_uLong lErrId, OUString &) const;
+    bool     GetErrorString(ErrCode lErrId, OUString &) const;
 
 private:
 
-    sal_uLong            lStart;
-    sal_uLong            lEnd;
+    ErrCode              lStart;
+    ErrCode              lEnd;
     sal_uInt16           nId;
     ResMgr              *pMgr;
     std::unique_ptr<ResMgr>

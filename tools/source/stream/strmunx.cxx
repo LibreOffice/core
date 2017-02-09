@@ -177,9 +177,9 @@ public:
     StreamData() : rHandle( nullptr ) { }
 };
 
-static sal_uInt32 GetSvError( int nErrno )
+static ErrCode GetSvError( int nErrno )
 {
-    static struct { int nErr; sal_uInt32 sv; } errArr[] =
+    static struct { int nErr; ErrCode sv; } errArr[] =
     {
         { 0,            SVSTREAM_OK },
         { EACCES,       SVSTREAM_ACCESS_DENIED },
@@ -214,7 +214,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { (int)0xFFFF,  SVSTREAM_GENERALERROR }
     };
 
-    sal_uInt32 nRetVal = SVSTREAM_GENERALERROR; // default error
+    ErrCode nRetVal = SVSTREAM_GENERALERROR; // default error
     int i=0;
     do
     {
@@ -229,9 +229,9 @@ static sal_uInt32 GetSvError( int nErrno )
     return nRetVal;
 }
 
-static sal_uInt32 GetSvError( oslFileError nErrno )
+static ErrCode GetSvError( oslFileError nErrno )
 {
-    static struct { oslFileError nErr; sal_uInt32 sv; } errArr[] =
+    static struct { oslFileError nErr; ErrCode sv; } errArr[] =
     {
         { osl_File_E_None,        SVSTREAM_OK },
         { osl_File_E_ACCES,       SVSTREAM_ACCESS_DENIED },
@@ -254,7 +254,7 @@ static sal_uInt32 GetSvError( oslFileError nErrno )
         { (oslFileError)0xFFFF,   SVSTREAM_GENERALERROR }
     };
 
-    sal_uInt32 nRetVal = SVSTREAM_GENERALERROR; // default error
+    ErrCode nRetVal = SVSTREAM_GENERALERROR; // default error
     int i=0;
     do
     {

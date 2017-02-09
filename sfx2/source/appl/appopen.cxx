@@ -514,7 +514,7 @@ void SfxApplication::NewDocExec_Impl( SfxRequest& rReq )
 
     if ( lErr != ERRCODE_NONE )
     {
-        sal_uIntPtr lFatalErr = ERRCODE_TOERROR(lErr);
+        sal_uIntPtr lFatalErr = IgnoreWarning(lErr);
         if ( lFatalErr )
             ErrorHandler::HandleError(lErr);
     }

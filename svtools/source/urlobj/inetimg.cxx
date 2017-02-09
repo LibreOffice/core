@@ -125,7 +125,7 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
             else if( !aTargetURL.isEmpty() )
                 aTargetURL.clear();
 
-            bRet = 0 == rIStm.GetError();
+            bRet = ERRCODE_NONE == rIStm.GetError();
         }
         break;
     default: break;

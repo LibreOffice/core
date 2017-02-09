@@ -225,7 +225,7 @@ void SfxObjectShell::SetError( sal_uInt32 lErr, const OUString& aLogMessage )
 
 sal_uInt32 SfxObjectShell::GetError() const
 {
-    return ERRCODE_TOERROR(GetErrorCode());
+    return IgnoreWarning(GetErrorCode());
 }
 
 
