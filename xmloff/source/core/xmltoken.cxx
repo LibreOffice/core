@@ -3328,6 +3328,17 @@ namespace xmloff { namespace token {
         const XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
         return rString.equalsAsciiL( pToken->pChar, pToken->nLength );
     }
+
+    bool IsXMLToken(
+        const char* pCString,
+        enum XMLTokenEnum eToken )
+    {
+        assert(XML_TOKEN_INVALID < eToken);
+        assert(eToken < XML_TOKEN_END);
+
+        const XMLTokenEntry* pToken = &aTokenList[(sal_uInt16)eToken];
+        return !strcmp( pCString, pToken->pChar );
+    }
 }
 }
 
