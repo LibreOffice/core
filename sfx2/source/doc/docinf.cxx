@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 
 namespace sfx2 {
 
-sal_uInt32 LoadOlePropertySet(
+ErrCode LoadOlePropertySet(
     const uno::Reference< document::XDocumentProperties>& i_xDocProps,
     SotStorage* i_pStorage )
 {

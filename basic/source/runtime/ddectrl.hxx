@@ -30,7 +30,7 @@ class SbiDdeControl
 {
 private:
     DECL_LINK( Data, const DdeData*, void );
-    static SbError GetLastErr( DdeConnection* );
+    static ErrCode GetLastErr( DdeConnection* );
     size_t GetFreeChannel();
     std::vector<DdeConnection*> aConvList;
     OUString aData;
@@ -40,13 +40,13 @@ public:
     SbiDdeControl();
     ~SbiDdeControl();
 
-    SbError Initiate( const OUString& rService, const OUString& rTopic,
+    ErrCode Initiate( const OUString& rService, const OUString& rTopic,
                      size_t& rnHandle );
-    SbError Terminate( size_t nChannel );
-    SbError TerminateAll();
-    SbError Request( size_t nChannel, const OUString& rItem, OUString& rResult );
-    SbError Execute( size_t nChannel, const OUString& rCommand );
-    SbError Poke( size_t nChannel, const OUString& rItem, const OUString& rData );
+    ErrCode Terminate( size_t nChannel );
+    ErrCode TerminateAll();
+    ErrCode Request( size_t nChannel, const OUString& rItem, OUString& rResult );
+    ErrCode Execute( size_t nChannel, const OUString& rCommand );
+    ErrCode Poke( size_t nChannel, const OUString& rItem, const OUString& rData );
 };
 
 #endif

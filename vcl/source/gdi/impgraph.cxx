@@ -1027,7 +1027,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
         if( meType == GraphicType::Bitmap || meType == GraphicType::GdiMetafile )
         {
             ReadImpGraphic( rIStm, *this );
-            bRet = ( rIStm.GetError() == 0UL );
+            bRet = rIStm.GetError() == ERRCODE_NONE;
         }
         else if( sal::static_int_cast<sal_uLong>(meType) >= SYS_WINMETAFILE
                  && sal::static_int_cast<sal_uLong>(meType) <= SYS_MACMETAFILE )
@@ -1050,7 +1050,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm )
             if( nType && GraphicConverter::Import( rIStm, aSysGraphic, nCvtType ) == ERRCODE_NONE )
             {
                 *this = ImpGraphic( aSysGraphic.GetGDIMetaFile() );
-                bRet = ( rIStm.GetError() == 0UL );
+                bRet = rIStm.GetError() == ERRCODE_NONE;
             }
             else
                 meType = GraphicType::Default;
@@ -1509,7 +1509,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
         }
         else
         {
-            sal_uInt32 nOrigError = rIStm.GetErrorCode();
+            ErrCode nOrigError = rIStm.GetErrorCode();
             // try to stream in Svg defining data (length, byte array and evtl. path)
             // See below (operator<<) for more information
             const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));

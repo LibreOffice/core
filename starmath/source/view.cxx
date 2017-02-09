@@ -1340,7 +1340,7 @@ void SmViewShell::Insert( SfxMedium& rMedium )
             // is this a fabulous math package ?
             Reference<css::frame::XModel> xModel(pDoc->GetModel());
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
-            bRet = 0 == aEquation.Import(rMedium);
+            bRet = ERRCODE_NONE == aEquation.Import(rMedium);
         }
     }
 
@@ -1377,7 +1377,7 @@ void SmViewShell::InsertFrom(SfxMedium &rMedium)
         {
             Reference<css::frame::XModel> xModel(pDoc->GetModel());
             SmXMLImportWrapper aEquation(xModel);    //!! modifies the result of pDoc->GetText() !!
-            bSuccess = 0 == aEquation.Import(rMedium);
+            bSuccess = ERRCODE_NONE == aEquation.Import(rMedium);
         }
     }
 

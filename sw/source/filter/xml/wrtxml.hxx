@@ -39,20 +39,20 @@ namespace com { namespace sun { namespace star {
 
 class SwXMLWriter : public StgWriter
 {
-    sal_uInt32 Write_( const css::uno::Reference < css::task::XStatusIndicator>&, const OUString&  );
+    ErrCode Write_( const css::uno::Reference < css::task::XStatusIndicator>&, const OUString&  );
 
     using StgWriter::Write;
 
 protected:
-    virtual sal_uLong WriteStorage() override;
-    virtual sal_uLong WriteMedium( SfxMedium& aTargetMedium ) override;
+    virtual ErrCode WriteStorage() override;
+    virtual ErrCode WriteMedium( SfxMedium& aTargetMedium ) override;
 
 public:
 
     SwXMLWriter( const OUString& rBaseURL );
     virtual ~SwXMLWriter() override;
 
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* ) override;
+    virtual ErrCode Write( SwPaM&, SfxMedium&, const OUString* ) override;
 
 private:
 

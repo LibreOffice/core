@@ -469,7 +469,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                             return;
                         }
                         else
-                            nErr = 0;
+                            nErr = ERRCODE_NONE;
                     }
 
                     ErrorHandler::HandleError( nErr );

@@ -36,7 +36,7 @@ public:
 
     ~SbiDllMgr();
 
-    SbError Call(
+    ErrCode Call(
         OUString const & function, OUString const &  library,
         SbxArray * arguments, SbxVariable & result, bool cdeclConvention);
 

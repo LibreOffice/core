@@ -209,7 +209,7 @@ sal_Bool SAL_CALL XMLFilter::filter(
     {
         OSL_ENSURE( ! m_xTargetDoc.is(), "source doc is set -> target document should not be set" );
         if( impl_Export( m_xSourceDoc,
-                         aDescriptor ) == 0 )
+                         aDescriptor ) == ERRCODE_NONE )
         {
             m_xSourceDoc = nullptr;
             bResult = true;
@@ -218,7 +218,7 @@ sal_Bool SAL_CALL XMLFilter::filter(
     else if( m_xTargetDoc.is())
     {
         if( impl_Import( m_xTargetDoc,
-                         aDescriptor ) == 0 )
+                         aDescriptor ) == ERRCODE_NONE )
         {
             m_xTargetDoc = nullptr;
             bResult = true;
@@ -262,11 +262,11 @@ void SAL_CALL XMLFilter::setSourceDocument(
     m_xSourceDoc = Document;
 }
 
-sal_Int32 XMLFilter::impl_Import(
+ErrCode XMLFilter::impl_Import(
     const Reference< lang::XComponent > & xDocumentComp,
     const Sequence< beans::PropertyValue > & rMediaDescriptor )
 {
-    sal_Int32 nWarning = 0;
+    ErrCode nWarning = ERRCODE_NONE;
 
     OSL_ENSURE( xDocumentComp.is(), "Import: No Model" );
     OSL_ENSURE( m_xContext.is(), "Import: No ComponentContext" );
@@ -359,30 +359,31 @@ sal_Int32 XMLFilter::impl_Import(
 
         // import meta information
         if( bOasis )
-            nWarning |= impl_ImportStream(
+            nWarning = impl_ImportStream(
                 sXML_metaStreamName,
                 "com.sun.star.comp.Chart.XMLOasisMetaImporter",
                 xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
 
         // import styles
-        nWarning |= impl_ImportStream(
+        ErrCode nTmpErr = impl_ImportStream(
             sXML_styleStreamName,
             bOasis
             ? OUString("com.sun.star.comp.Chart.XMLOasisStylesImporter")
             : OUString("com.sun.star.comp.Chart.XMLStylesImporter"),
             xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
+        nWarning = nWarning != ERRCODE_NONE ? nWarning : nTmpErr;
 
         // import content
-        sal_Int32 nContentWarning = impl_ImportStream(
+        ErrCode nContentWarning = impl_ImportStream(
             sXML_contentStreamName,
             bOasis
             ? OUString("com.sun.star.comp.Chart.XMLOasisContentImporter")
             : OUString("com.sun.star.comp.Chart.XMLContentImporter"),
             xStorage, xSaxParser, xFactory, xGraphicObjectResolver, xImportInfo );
-        nWarning |= nContentWarning;
+        nWarning = nWarning != ERRCODE_NONE ? nWarning : nContentWarning;
 
         // import of "content.xml" didn't work - try old "Content.xml" stream
-        if( nContentWarning != 0 )
+        if( nContentWarning != ERRCODE_NONE )
         {
             nWarning = impl_ImportStream(
                 "Content.xml", // old content stream name
@@ -401,7 +402,7 @@ sal_Int32 XMLFilter::impl_Import(
     return nWarning;
 }
 
-sal_Int32 XMLFilter::impl_ImportStream(
+ErrCode XMLFilter::impl_ImportStream(
     const OUString & rStreamName,
     const OUString & rServiceName,
     const Reference< embed::XStorage > & xStorage,
@@ -410,12 +411,12 @@ sal_Int32 XMLFilter::impl_ImportStream(
     const Reference< document::XGraphicObjectResolver > & xGraphicObjectResolver,
     uno::Reference< beans::XPropertySet >& xImportInfo )
 {
-    sal_Int32 nWarning = ERRCODE_SFX_GENERAL;
+    ErrCode nWarning = ERRCODE_SFX_GENERAL;
 
     Reference< container::XNameAccess > xNameAcc( xStorage, uno::UNO_QUERY );
     if( ! (xNameAcc.is() &&
            xNameAcc->hasByName( rStreamName )))
-        return 0;
+        return ERRCODE_NONE;
 
     if( xImportInfo.is() )
         xImportInfo->setPropertyValue( "StreamName", uno::Any( rStreamName ) );
@@ -483,7 +484,7 @@ sal_Int32 XMLFilter::impl_ImportStream(
             }
 
             // load was successful
-            nWarning = 0;
+            nWarning = ERRCODE_NONE;
         }
         catch (const xml::sax::SAXParseException&)
         {
@@ -509,14 +510,14 @@ sal_Int32 XMLFilter::impl_ImportStream(
     return nWarning;
 }
 
-sal_Int32 XMLFilter::impl_Export(
+ErrCode XMLFilter::impl_Export(
     const Reference< lang::XComponent > & xDocumentComp,
     const Sequence< beans::PropertyValue > & rMediaDescriptor )
 {
     m_aMediaDescriptor = rMediaDescriptor;
     //save
 
-    sal_Int32 nWarning = 0;
+    ErrCode nWarning = ERRCODE_NONE;
 
     OSL_ENSURE( xDocumentComp.is(), "Export: No Model" );
     OSL_ENSURE( m_xContext.is(), "Export: No ComponentContext" );
@@ -614,27 +615,28 @@ sal_Int32 XMLFilter::impl_Export(
 
         // export meta information
         if( bOasis )
-            nWarning |= impl_ExportStream(
+            nWarning = impl_ExportStream(
                 sXML_metaStreamName,
                 "com.sun.star.comp.Chart.XMLOasisMetaExporter",
                 xStorage, xSaxWriter, xServiceFactory, aFilterProperties );
 
         // export styles
-        nWarning |= impl_ExportStream(
+        ErrCode nTmp = impl_ExportStream(
             sXML_styleStreamName,
             bOasis
             ? OUString("com.sun.star.comp.Chart.XMLOasisStylesExporter")
             : OUString("com.sun.star.comp.Chart.XMLStylesExporter"), // soffice 6/7
             xStorage, xSaxWriter, xServiceFactory, aFilterProperties );
+        nWarning = nWarning != ERRCODE_NONE ? nWarning : nTmp;
 
         // export content
-        sal_Int32 nContentWarning = impl_ExportStream(
+        ErrCode nContentWarning = impl_ExportStream(
             sXML_contentStreamName,
             bOasis
             ? OUString("com.sun.star.comp.Chart.XMLOasisContentExporter")
             : OUString("com.sun.star.comp.Chart.XMLContentExporter"),
             xStorage, xSaxWriter, xServiceFactory, aFilterProperties );
-        nWarning |= nContentWarning;
+        nWarning = nWarning != ERRCODE_NONE ? nWarning : nContentWarning;
 
         Reference< lang::XComponent > xComp( xGraphicObjectResolver, uno::UNO_QUERY );
         if( xComp.is())
@@ -655,7 +657,7 @@ sal_Int32 XMLFilter::impl_Export(
     return nWarning;
 }
 
-sal_Int32 XMLFilter::impl_ExportStream(
+ErrCode XMLFilter::impl_ExportStream(
     const OUString & rStreamName,
     const OUString & rServiceName,
     const Reference< embed::XStorage > & xStorage,
@@ -663,8 +665,6 @@ sal_Int32 XMLFilter::impl_ExportStream(
     const Reference< lang::XMultiServiceFactory >& xServiceFactory,
     const Sequence< uno::Any > & rFilterProperties )
 {
-    sal_Int32 nWarning = 0;
-
     try
     {
         if( !xServiceFactory.is() )
@@ -723,7 +723,7 @@ sal_Int32 XMLFilter::impl_ExportStream(
     {
         ASSERT_EXCEPTION( rEx );
     }
-    return nWarning;
+    return ERRCODE_NONE;
 }
 
 void XMLFilter::isOasisFormat(const Sequence< beans::PropertyValue >& _rMediaDescriptor, bool & rOutOASIS )
