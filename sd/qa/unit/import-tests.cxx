@@ -1556,13 +1556,13 @@ void SdImportTest::testAoo124143()
     // interesting ones are custom 4, 5
     drawing::GluePoint2 glue4;
     xGluePoints->getByIdentifier(4) >>= glue4;
-    CPPUNIT_ASSERT_EQUAL( 2470, glue4.Position.X);
-    CPPUNIT_ASSERT_EQUAL(-1810, glue4.Position.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32( 2470), glue4.Position.X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1810), glue4.Position.Y);
 
     drawing::GluePoint2 glue5;
     xGluePoints->getByIdentifier(5) >>= glue5;
-    CPPUNIT_ASSERT_EQUAL(-2975, glue5.Position.X);
-    CPPUNIT_ASSERT_EQUAL(-2165, glue5.Position.Y);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2975), glue5.Position.X);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2165), glue5.Position.Y);
 
     // now check connectors
     uno::Reference<beans::XPropertySet> const xEllipse(getShapeFromPage(1, 0, xDocShRef));
