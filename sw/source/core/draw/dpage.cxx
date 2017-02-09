@@ -227,7 +227,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView* pView,
                 if ( !bExecHyperlinks )
                 {
                     SvtSecurityOptions aSecOpts;
-                    bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+                    bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
 
                     if ( !bExecHyperlinks )
                         sText = SwViewShell::GetShellRes()->aLinkCtrlClick + ": " + sText;

@@ -422,7 +422,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     if ( !bExecHyperlinks )
     {
         SvtSecurityOptions aSecOpts;
-        const bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+        const bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
         if ( (  bSecureOption && nModifier == KEY_MOD1 ) ||
              ( !bSecureOption && nModifier != KEY_MOD1 ) )
             bExecHyperlinks = true;
@@ -3154,7 +3154,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         if ( !bExecHyperlinks )
         {
             SvtSecurityOptions aSecOpts;
-            const bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+            const bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
             if ( (  bSecureOption && rMEvt.GetModifier() == KEY_MOD1 ) ||
                  ( !bSecureOption && rMEvt.GetModifier() != KEY_MOD1 ) )
                 bExecHyperlinks = true;
@@ -4612,7 +4612,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         if ( !bExecHyperlinks )
                         {
                             SvtSecurityOptions aSecOpts;
-                            const bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+                            const bool bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
                             if ( (  bSecureOption && rMEvt.GetModifier() == KEY_MOD1 ) ||
                                  ( !bSecureOption && rMEvt.GetModifier() != KEY_MOD1 ) )
                                 bExecHyperlinks = true;

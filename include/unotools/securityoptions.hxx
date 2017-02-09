@@ -59,24 +59,23 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtSecurityOptions : public utl::detail
 {
     public:
 
-        enum EOption
+        enum class EOption
         {
-            E_SECUREURLS,
-            E_BASICMODE,                    // xmlsec05 deprecated
-            E_EXECUTEPLUGINS,               // xmlsec05 deprecated
-            E_WARNING,                      // xmlsec05 deprecated
-            E_CONFIRMATION,                 // xmlsec05 deprecated
-            E_DOCWARN_SAVEORSEND,
-            E_DOCWARN_SIGNING,
-            E_DOCWARN_PRINT,
-            E_DOCWARN_CREATEPDF,
-            E_DOCWARN_REMOVEPERSONALINFO,
-            E_DOCWARN_RECOMMENDPASSWORD,
-            E_MACRO_SECLEVEL,
-            E_MACRO_TRUSTEDAUTHORS,
-            E_MACRO_DISABLE,
-            E_CTRLCLICK_HYPERLINK,
-            E_BLOCKUNTRUSTEDREFERERLINKS
+            SecureUrls,
+            BasicMode,                    // xmlsec05 deprecated
+            ExecutePlugins,               // xmlsec05 deprecated
+            Warning,                      // xmlsec05 deprecated
+            Confirmation,                 // xmlsec05 deprecated
+            DocWarnSaveOrSend,
+            DocWarnSigning,
+            DocWarnPrint,
+            DocWarnCreatePdf,
+            DocWarnRemovePersonalInfo,
+            DocWarnRecommendPassword,
+            MacroSecLevel,
+            MacroTrustedAuthors,
+            CtrlClickHyperlink,
+            BlockUntrustedRefererLinks
         };
 
         typedef css::uno::Sequence< OUString > Certificate;

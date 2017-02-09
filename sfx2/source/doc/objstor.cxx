@@ -2914,25 +2914,25 @@ sal_Int16 SfxObjectShell::QueryHiddenInformation( HiddenWarningFact eFact, vcl::
         case HiddenWarningFact::WhenSaving :
         {
             nResId = STR_HIDDENINFO_CONTINUE_SAVING;
-            eOption = SvtSecurityOptions::E_DOCWARN_SAVEORSEND;
+            eOption = SvtSecurityOptions::EOption::DocWarnSaveOrSend;
             break;
         }
         case HiddenWarningFact::WhenPrinting :
         {
             nResId = STR_HIDDENINFO_CONTINUE_PRINTING;
-            eOption = SvtSecurityOptions::E_DOCWARN_PRINT;
+            eOption = SvtSecurityOptions::EOption::DocWarnPrint;
             break;
         }
         case HiddenWarningFact::WhenSigning :
         {
             nResId = STR_HIDDENINFO_CONTINUE_SIGNING;
-            eOption = SvtSecurityOptions::E_DOCWARN_SIGNING;
+            eOption = SvtSecurityOptions::EOption::DocWarnSigning;
             break;
         }
         case HiddenWarningFact::WhenCreatingPDF :
         {
             nResId = STR_HIDDENINFO_CONTINUE_CREATEPDF;
-            eOption = SvtSecurityOptions::E_DOCWARN_CREATEPDF;
+            eOption = SvtSecurityOptions::EOption::DocWarnCreatePdf;
             break;
         }
         default:
