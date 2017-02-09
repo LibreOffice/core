@@ -44,7 +44,6 @@
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:EditStyle"/>
   <menu:menuitem menu:id=".uno:EditCurrentRegion"/>
-  <menu:menuitem menu:id=".uno:CurrentFootnoteDialog"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:OpenHyperlinkOnCursor"/>
   <menu:menuitem menu:id=".uno:EditHyperlink"/>
@@ -52,4 +51,6 @@
   <menu:menuitem menu:id=".uno:RemoveHyperlink"/>
   <menu:menuitem menu:id=".uno:OpenSmartTagMenuOnCursor"/>
   <menu:menuitem menu:id=".uno:ThesaurusFromContext"/>
+  <menu:menuseparator/>
+  <menu:menuitem menu:id=".uno:CurrentFootnoteDialog"/>
 </menu:menupopup>
