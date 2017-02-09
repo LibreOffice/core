@@ -46,28 +46,28 @@ SecurityOptionsDialog::SecurityOptionsDialog(vcl::Window* pParent, SvtSecurityOp
 {
     DBG_ASSERT( pOptions, "SecurityOptionsDialog::SecurityOptionsDialog(): invalid SvtSecurityOptions" );
     get(m_pSaveOrSendDocsCB, "savesenddocs");
-    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, *m_pSaveOrSendDocsCB,
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnSaveOrSend, *m_pSaveOrSendDocsCB,
         *get<FixedImage>("locksavesenddocs"));
     get(m_pSignDocsCB, "whensigning");
-    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, *m_pSignDocsCB,
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnSigning, *m_pSignDocsCB,
         *get<FixedImage>("lockwhensigning"));
     get(m_pPrintDocsCB, "whenprinting");
-    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_PRINT, *m_pPrintDocsCB,
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnPrint, *m_pPrintDocsCB,
         *get<FixedImage>("lockwhenprinting"));
     get(m_pCreatePdfCB, "whenpdf");
-    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, *m_pCreatePdfCB,
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnCreatePdf, *m_pCreatePdfCB,
         *get<FixedImage>("lockwhenpdf"));
     get(m_pRemovePersInfoCB, "removepersonal");
-    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, *m_pRemovePersInfoCB,
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, *m_pRemovePersInfoCB,
         *get<FixedImage>("lockremovepersonal"));
     get(m_pRecommPasswdCB, "password");
-    enableAndSet(*pOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, *m_pRecommPasswdCB,
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::DocWarnRecommendPassword, *m_pRecommPasswdCB,
         *get<FixedImage>("lockpassword"));
     get(m_pCtrlHyperlinkCB, "ctrlclick");
-    enableAndSet(*pOptions, SvtSecurityOptions::E_CTRLCLICK_HYPERLINK, *m_pCtrlHyperlinkCB,
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::CtrlClickHyperlink, *m_pCtrlHyperlinkCB,
         *get<FixedImage>("lockctrlclick"));
     get(m_pBlockUntrustedRefererLinksCB, "blockuntrusted");
-    enableAndSet(*pOptions, SvtSecurityOptions::E_BLOCKUNTRUSTEDREFERERLINKS, *m_pBlockUntrustedRefererLinksCB,
+    enableAndSet(*pOptions, SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, *m_pBlockUntrustedRefererLinksCB,
         *get<FixedImage>("lockblockuntrusted"));
 }
 

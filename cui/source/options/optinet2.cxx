@@ -798,9 +798,9 @@ void SvxSecurityTabPage::InitControls()
     // @@@ Better would be to query the dialog whether it is 'useful' or not. Exposing
     //     macro security dialog implementations here, which is bad.
     if (    mpSecOptions->IsMacroDisabled()
-         || (    mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL )
-              && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_MACRO_TRUSTEDAUTHORS )
-              && mpSecOptions->IsReadOnly( SvtSecurityOptions::E_SECUREURLS ) ) )
+         || (    mpSecOptions->IsReadOnly( SvtSecurityOptions::EOption::MacroSecLevel )
+              && mpSecOptions->IsReadOnly( SvtSecurityOptions::EOption::MacroTrustedAuthors )
+              && mpSecOptions->IsReadOnly( SvtSecurityOptions::EOption::SecureUrls ) ) )
     {
         //Hide these
         m_pMacroSecFrame->Hide();
@@ -885,14 +885,14 @@ bool SvxSecurityTabPage::FillItemSet( SfxItemSet* )
 
     if ( mpSecOptDlg )
     {
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, mpSecOptDlg->IsSaveOrSendDocsChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, mpSecOptDlg->IsSignDocsChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_PRINT, mpSecOptDlg->IsPrintDocsChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, mpSecOptDlg->IsCreatePdfChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, mpSecOptDlg->IsRemovePersInfoChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, mpSecOptDlg->IsRecommPasswdChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_CTRLCLICK_HYPERLINK, mpSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
-        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_BLOCKUNTRUSTEDREFERERLINKS, mpSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnSaveOrSend, mpSecOptDlg->IsSaveOrSendDocsChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnSigning, mpSecOptDlg->IsSignDocsChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnPrint, mpSecOptDlg->IsPrintDocsChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnCreatePdf, mpSecOptDlg->IsCreatePdfChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo, mpSecOptDlg->IsRemovePersInfoChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::DocWarnRecommendPassword, mpSecOptDlg->IsRecommPasswdChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::CtrlClickHyperlink, mpSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::EOption::BlockUntrustedRefererLinks, mpSecOptDlg->IsBlockUntrustedRefererLinksChecked(), bModified );
     }
 
     return bModified;

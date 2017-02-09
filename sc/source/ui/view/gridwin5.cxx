@@ -241,7 +241,7 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
     //To know whether to prefix STR_CTRLCLICKHYERLINK or STR_CLICKHYPERLINK
     //to hyperlink tooltips/help text
     SvtSecurityOptions aSecOpt;
-    bool bCtrlClickHlink = aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+    bool bCtrlClickHlink = aSecOpt.IsOptionSet( SvtSecurityOptions::EOption::CtrlClickHyperlink );
     //Global string STR_CTRLCLICKHYPERLINK i.e,
     // "ctrl-click to follow link:" for not MacOS
     // "⌘-click to follow link:" for MacOs
