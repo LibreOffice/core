@@ -31,21 +31,12 @@
 #define WARN_SD_WRITE_BASE      (WARN_SD_BASE | ERRCODE_CLASS_WRITE )
 
 // Import errors
-#define ERR_FORMAT_ROWCOL               (ERROR_SD_READ_BASE | 1)
-#define ERR_FORMAT_FILE_ROWCOL          (ERROR_SD_READ_BASE | 2)
+#define ERR_FORMAT_ROWCOL               ErrCode(ERROR_SD_READ_BASE | 1)
+#define ERR_FORMAT_FILE_ROWCOL          ErrCode(ERROR_SD_READ_BASE | 2)
 
 // ----- Warnings ---------------------------
 
-#define WARN_FORMAT_FILE_ROWCOL         (WARN_SD_READ_BASE | 100)
-
-#ifndef __RSC
-
-inline bool IsWarning( sal_uLong nErr )
-{
-    return 0 != ( nErr & ERRCODE_WARNING_MASK );
-}
-
-#endif
+#define WARN_FORMAT_FILE_ROWCOL         ErrCode(WARN_SD_READ_BASE | 100)
 
 #endif
 

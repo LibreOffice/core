@@ -126,7 +126,7 @@ namespace
 {
 
 /// read a component (file + filter version)
-sal_Int32 ReadThroughComponent(
+ErrCode ReadThroughComponent(
     uno::Reference<io::XInputStream> const & xInputStream,
     uno::Reference<XComponent> const & xModelComponent,
     const OUString& rStreamName,
@@ -273,11 +273,11 @@ sal_Int32 ReadThroughComponent(
     }
 
     // success!
-    return 0;
+    return ERRCODE_NONE;
 }
 
 // read a component (storage version)
-sal_Int32 ReadThroughComponent(
+ErrCode ReadThroughComponent(
     uno::Reference<embed::XStorage> const & xStorage,
     uno::Reference<XComponent> const & xModelComponent,
     const sal_Char* pStreamName,
@@ -309,7 +309,7 @@ sal_Int32 ReadThroughComponent(
 
         // do we even have an alternative name?
         if ( nullptr == pCompatibilityStreamName )
-            return 0;
+            return ERRCODE_NONE;
 
         // if so, does the stream exist?
         sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
@@ -322,7 +322,7 @@ sal_Int32 ReadThroughComponent(
         }
 
         if (! bContainsStream )
-            return 0;
+            return ERRCODE_NONE;
     }
 
     // set Base URL
@@ -490,7 +490,7 @@ static void lcl_ConvertSdrOle2ObjsToSdrGrafObjs(SwDoc& _rDoc)
     }
 }
 
-sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & rName )
+ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, const OUString & rName )
 {
     // needed for relative URLs, but in clipboard copy/paste there may be none
     // and also there is the SwXMLTextBlocks special case
@@ -768,7 +768,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     }
 
     (void)rDoc.acquire(); // prevent deletion
-    sal_uInt32 nRet = 0;
+    ErrCode nRet = ERRCODE_NONE;
 
     // save redline mode into import info property set
     const OUString sShowChanges("ShowChanges");
@@ -799,7 +799,7 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
                 makeAny( bTextDocInOOoFileFormat ) );
     }
 
-    sal_uInt32 nWarnRDF = 0;
+    ErrCode nWarnRDF = ERRCODE_NONE;
     if ( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFormatsOnly() ||
            bInsertMode) )
     {
@@ -837,13 +837,13 @@ sal_uLong XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, c
     // read storage streams
 
     // #i103539#: always read meta.xml for generator
-    sal_uInt32 const nWarn = ReadThroughComponent(
+    ErrCode const nWarn = ReadThroughComponent(
         xStorage, xModelComp, "meta.xml", "Meta.xml", xContext,
         (bOASIS ? "com.sun.star.comp.Writer.XMLOasisMetaImporter"
                 : "com.sun.star.comp.Writer.XMLMetaImporter"),
         aEmptyArgs, rName, false );
 
-    sal_uInt32 nWarn2 = 0;
+    ErrCode nWarn2 = ERRCODE_NONE;
     if( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFormatsOnly() ||
           bInsertMode) )
     {

@@ -425,7 +425,7 @@ void ModulWindow::LoadBasic()
             GetEditorWindow().Update();
             GetEditorWindow().ForceSyntaxTimeout();
             GetEditorWindow().DestroyProgress();
-            sal_uLong nError = aMedium.GetError();
+            ErrCode nError = aMedium.GetError();
             if ( nError )
                 ErrorHandler::HandleError( nError );
         }
@@ -466,7 +466,7 @@ void ModulWindow::SaveBasicSource()
             GetEditEngine()->Write( *pStream );
             aMedium.Commit();
             LeaveWait();
-            sal_uLong nError = aMedium.GetError();
+            ErrCode nError = aMedium.GetError();
             if ( nError )
                 ErrorHandler::HandleError( nError );
         }

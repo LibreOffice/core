@@ -434,11 +434,11 @@ bool SbiParser::Parse()
                         eCurTok == SUB || eCurTok == FUNCTION )
                     aGen.Statement();
                 (this->*( p->Func ) )();
-                SbxError nSbxErr = SbxBase::GetError();
+                ErrCode nSbxErr = SbxBase::GetError();
                 if( nSbxErr )
                 {
                     SbxBase::ResetError();
-                    Error( (SbError)nSbxErr );
+                    Error( nSbxErr );
                 }
             }
         }

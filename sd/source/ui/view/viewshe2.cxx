@@ -716,7 +716,7 @@ void ViewShell::WriteFrameViewData()
 
 bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 {
-    ErrCode aErrCode = 0;
+    ErrCode aErrCode = ERRCODE_NONE;
 
     SfxErrorContext aEC(ERRCTX_SO_DOVERB, GetActiveWindow(), RID_SO_ERRCTX);
     bool bAbort = false;
@@ -814,7 +814,7 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         }
     }
 
-    if( aErrCode == 0 )
+    if( aErrCode == ERRCODE_NONE )
     {
         ::sd::View* pView = GetView();
 
@@ -872,12 +872,12 @@ bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
     GetDocSh()->SetWaitCursor( false );
 
-    if (aErrCode != 0 && !bAbort)
+    if (aErrCode != ERRCODE_NONE && !bAbort)
     {
         ErrorHandler::HandleError(* new StringErrorInfo(aErrCode, OUString() ) );
     }
 
-    return aErrCode == 0;
+    return aErrCode == ERRCODE_NONE;
 }
 
 /**

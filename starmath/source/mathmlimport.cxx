@@ -97,9 +97,9 @@ SmNode* popOrZero(SmNodeStack& rStack)
 
 }
 
-sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
+ErrCode SmXMLImportWrapper::Import(SfxMedium &rMedium)
 {
-    sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
+    ErrCode nError = ERRCODE_SFX_DOLOADFAILED;
 
     uno::Reference<uno::XComponentContext> xContext( comphelper::getProcessComponentContext() );
 
@@ -200,7 +200,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
 
-        sal_uLong nWarn = ReadThroughComponent(
+        ErrCode nWarn = ReadThroughComponent(
             rMedium.GetStorage(), xModelComp, "meta.xml", "Meta.xml",
             xContext, xInfoSet,
                 (bOASIS ? "com.sun.star.comp.Math.XMLOasisMetaImporter"
@@ -251,7 +251,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
 
 /// read a component (file + filter version)
-sal_uLong SmXMLImportWrapper::ReadThroughComponent(
+ErrCode SmXMLImportWrapper::ReadThroughComponent(
     const Reference<io::XInputStream>& xInputStream,
     const Reference<XComponent>& xModelComponent,
     Reference<uno::XComponentContext> & rxContext,
@@ -259,7 +259,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     const sal_Char* pFilterName,
     bool bEncrypted )
 {
-    sal_uLong nError = ERRCODE_SFX_DOLOADFAILED;
+    ErrCode nError = ERRCODE_SFX_DOLOADFAILED;
     OSL_ENSURE(xInputStream.is(), "input stream missing");
     OSL_ENSURE(xModelComponent.is(), "document missing");
     OSL_ENSURE(rxContext.is(), "factory missing");
@@ -301,7 +301,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
                 sal::static_int_cast< sal_uIntPtr >(
                 xFilterTunnel->getSomething( SmXMLImport::getUnoTunnelId() )));
         if ( pFilter && pFilter->GetSuccess() )
-            nError = 0;
+            nError = ERRCODE_NONE;
     }
     catch( xml::sax::SAXParseException& r )
     {
@@ -347,7 +347,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
 }
 
 
-sal_uLong SmXMLImportWrapper::ReadThroughComponent(
+ErrCode SmXMLImportWrapper::ReadThroughComponent(
     const uno::Reference< embed::XStorage >& xStorage,
     const Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,

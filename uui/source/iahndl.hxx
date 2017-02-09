@@ -200,7 +200,7 @@ private:
 
     void
     handleGenericErrorRequest(
-        sal_Int32 nErrorCode,
+        ErrCode nErrorCode,
         css::uno::Sequence<
             css::uno::Reference< css::task::XInteractionContinuation > > const &  rContinuations,
         bool bObtainErrorStringOnly,

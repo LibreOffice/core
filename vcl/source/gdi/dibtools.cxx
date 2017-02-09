@@ -313,7 +313,7 @@ bool ImplReadDIBPalette(SvStream& rIStm, BitmapPalette& rPal, bool bQuad)
         rPal[i] = aPalColor;
     }
 
-    return( rIStm.GetError() == 0UL );
+    return rIStm.GetError() == ERRCODE_NONE;
 }
 
 namespace
@@ -760,7 +760,7 @@ bool ImplReadDIBBits(SvStream& rIStm, DIBV5Header& rHeader, BitmapWriteAccess& r
         }
     }
 
-    return( rIStm.GetError() == 0UL );
+    return rIStm.GetError() == ERRCODE_NONE;
 }
 
 bool ImplReadDIBBody(SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_uLong nOffset, bool bIsMask, bool bMSOFormat)
@@ -1038,7 +1038,7 @@ bool ImplReadDIBFileHeader( SvStream& rIStm, sal_uLong& rOffset )
             rIStm.SeekRel( 8 );        // we are on bfSize member of BITMAPFILEHEADER, forward to bfOffBits
             rIStm.ReadUInt32( nTmp32 );            // read bfOffBits
             rOffset = nTmp32 - 14UL;    // adapt offset by sizeof(BITMAPFILEHEADER)
-            bRet = ( rIStm.GetError() == 0UL );
+            bRet = rIStm.GetError() == ERRCODE_NONE;
         }
 
         if ( rOffset >= nStreamLength )
@@ -1075,7 +1075,7 @@ bool ImplWriteDIBPalette( SvStream& rOStm, BitmapReadAccess& rAcc )
 
     rOStm.WriteBytes( pEntries.get(), nPalSize );
 
-    return( rOStm.GetError() == 0UL );
+    return rOStm.GetError() == ERRCODE_NONE;
 }
 
 bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
@@ -1188,7 +1188,7 @@ bool ImplWriteRLE( SvStream& rOStm, BitmapReadAccess& rAcc, bool bRLE4 )
     rOStm.WriteUChar( 0 );
     rOStm.WriteUChar( 1 );
 
-    return( rOStm.GetError() == 0UL );
+    return rOStm.GetError() == ERRCODE_NONE;
 }
 
 bool ImplWriteDIBBits(SvStream& rOStm, BitmapReadAccess& rAcc, BitmapReadAccess* pAccAlpha, sal_uLong nCompression, sal_uInt32& rImageSize)
@@ -1581,7 +1581,7 @@ bool ImplWriteDIBFileHeader(SvStream& rOStm, BitmapReadAccess& rAcc, bool bUseDI
     rOStm.WriteUInt16( 0 );
     rOStm.WriteUInt32( nOffset );
 
-    return( rOStm.GetError() == 0UL );
+    return rOStm.GetError() == ERRCODE_NONE;
 }
 
 bool ImplReadDIB(

@@ -745,7 +745,7 @@ void SwUiWriterTest::testImportRTF()
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCursor());
     Reader* pRTFReader = SwReaderWriter::GetRtfReader();
     CPPUNIT_ASSERT(pRTFReader != nullptr);
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(0), aReader.Read(*pRTFReader));
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aReader.Read(*pRTFReader));
 
     sal_uLong nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     CPPUNIT_ASSERT_EQUAL(OUString("fooHello world!"), pDoc->GetNodes()[nIndex - 1]->GetTextNode()->GetText());
@@ -1993,7 +1993,7 @@ void SwUiWriterTest::testTdf78742()
     SfxMedium aMedium(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher("com.sun.star.text.TextDocument");
     std::shared_ptr<const SfxFilter> pFilter;
-    sal_uInt32 filter = aMatcher.DetectFilter(aMedium, pFilter);
+    ErrCode filter = aMatcher.DetectFilter(aMedium, pFilter);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_IO_ABORT, filter);
     //it should not return any Filter
     CPPUNIT_ASSERT(!pFilter);
@@ -2001,8 +2001,8 @@ void SwUiWriterTest::testTdf78742()
     SfxMedium aMedium2(path, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher2;
     std::shared_ptr<const SfxFilter> pFilter2;
-    sal_uInt32 filter2 = aMatcher2.DetectFilter(aMedium2, pFilter2);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_CLASS_NONE, filter2);
+    ErrCode filter2 = aMatcher2.DetectFilter(aMedium2, pFilter2);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, filter2);
     //Filter should be returned with proper Name
     CPPUNIT_ASSERT_EQUAL(OUString("calc8"), pFilter2->GetFilterName());
     //testing with service type and any .odt file
@@ -2010,8 +2010,8 @@ void SwUiWriterTest::testTdf78742()
     SfxMedium aMedium3(path2, StreamMode::READ | StreamMode::SHARE_DENYWRITE);
     SfxFilterMatcher aMatcher3("com.sun.star.text.TextDocument");
     std::shared_ptr<const SfxFilter> pFilter3;
-    sal_uInt32 filter3 = aMatcher3.DetectFilter(aMedium3, pFilter3);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_CLASS_NONE, filter3);
+    ErrCode filter3 = aMatcher3.DetectFilter(aMedium3, pFilter3);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, filter3);
     //Filter should be returned with proper Name
     CPPUNIT_ASSERT_EQUAL(OUString("writer8"), pFilter3->GetFilterName());
 }

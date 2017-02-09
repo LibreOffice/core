@@ -706,7 +706,7 @@ namespace dbaui
             _aFileOpen.SetDisplayDirectory(sOldPath);
         else
             _aFileOpen.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
-        if (0 == _aFileOpen.Execute())
+        if (ERRCODE_NONE == _aFileOpen.Execute())
         {
             setURLNoPrefix(_aFileOpen.GetPath());
             SetRoadmapStateValue(checkTestConnection());

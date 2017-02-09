@@ -176,8 +176,8 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     // Between OfficeApplication::Init and ScGlobal::Init
     SvxErrorHandler::ensure();
     pErrorHdl    = new SfxErrorHandler( RID_ERRHDLSC,
-                                        ERRCODE_AREA_SC,
-                                        ERRCODE_AREA_APP2-1,
+                                        ErrCode(ERRCODE_AREA_SC),
+                                        ErrCode(ERRCODE_AREA_APP2-1),
                                         GetResMgr() );
 
     aSpellIdle.SetPriority(TaskPriority::LOWER);

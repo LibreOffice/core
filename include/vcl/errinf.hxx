@@ -131,8 +131,8 @@ public:
 
         @return what sort of dialog to use, with what buttons
     */
-    static DialogMask       HandleError(sal_uInt32 nId, DialogMask nMask = DialogMask::MAX);
-    static bool             GetErrorString(sal_uInt32 nId, OUString& rStr);
+    static DialogMask       HandleError(ErrCode nId, DialogMask nMask = DialogMask::MAX);
+    static bool             GetErrorString(ErrCode nId, OUString& rStr);
 
 protected:
     virtual bool            CreateString(const ErrorInfo*, OUString &) const = 0;
@@ -142,16 +142,16 @@ protected:
 class SAL_WARN_UNUSED VCL_DLLPUBLIC ErrorInfo
 {
 public:
-                            ErrorInfo(sal_uInt32 nArgUserId) :
+                            ErrorInfo(ErrCode nArgUserId) :
                                 nUserId(nArgUserId) {}
     virtual                 ~ErrorInfo();
 
-    sal_uInt32              GetErrorCode() const { return nUserId; }
+    ErrCode                 GetErrorCode() const { return nUserId; }
 
-    static ErrorInfo*       GetErrorInfo(sal_uInt32);
+    static ErrorInfo*       GetErrorInfo(ErrCode);
 
 private:
-    sal_uInt32              nUserId;
+    ErrCode                 nUserId;
 };
 
 class SAL_WARN_UNUSED VCL_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
@@ -159,10 +159,10 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
     friend class ImplDynamicErrorInfo;
 
 public:
-                            DynamicErrorInfo(sal_uInt32 nUserId, DialogMask nMask);
+                            DynamicErrorInfo(ErrCode nUserId, DialogMask nMask);
     virtual                 ~DynamicErrorInfo() override;
 
-    operator                sal_uInt32() const;
+    operator                ErrCode() const;
     DialogMask              GetDialogMask() const;
 
 private:
@@ -173,7 +173,7 @@ private:
 class SAL_WARN_UNUSED VCL_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
 {
 public:
-                            StringErrorInfo(sal_uInt32 nUserId,
+                            StringErrorInfo(ErrCode nUserId,
                                             const OUString& aStringP,
                                             DialogMask nMask = DialogMask::NONE);
 
@@ -187,7 +187,7 @@ private:
 class SAL_WARN_UNUSED VCL_DLLPUBLIC TwoStringErrorInfo: public DynamicErrorInfo
 {
 public:
-    TwoStringErrorInfo(sal_uInt32 nUserID, const OUString & rTheArg1,
+    TwoStringErrorInfo(ErrCode nUserID, const OUString & rTheArg1,
                        const OUString & rTheArg2, DialogMask nMask):
         DynamicErrorInfo(nUserID, nMask), aArg1(rTheArg1), aArg2(rTheArg2) {}
 
@@ -210,7 +210,7 @@ public:
                             ErrorContext(vcl::Window *pWin);
     virtual                 ~ErrorContext();
 
-    virtual bool            GetString(sal_uInt32 nErrId, OUString& rCtxStr) = 0;
+    virtual bool            GetString(ErrCode nErrId, OUString& rCtxStr) = 0;
     vcl::Window*            GetParent();
 
     static ErrorContext*    GetContext();

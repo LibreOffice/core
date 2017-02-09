@@ -48,14 +48,14 @@ enum class BasicErrorReason
 class BASIC_DLLPUBLIC BasicError
 {
 private:
-    sal_uInt64 nErrorId;
+    ErrCode nErrorId;
     BasicErrorReason  nReason;
 
 public:
             BasicError( const BasicError& rErr );
-            BasicError( sal_uInt64 nId, BasicErrorReason nR );
+            BasicError( ErrCode nId, BasicErrorReason nR );
 
-    sal_uInt64 GetErrorId() const                  { return nErrorId; }
+    ErrCode GetErrorId() const                  { return nErrorId; }
 };
 
 class ErrorManager;

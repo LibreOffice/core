@@ -166,7 +166,7 @@ sal_Int8 getStoreModeFromSlotName( const OUString& aSlotName )
         throw task::ErrorCodeIOException(
             ("getStoreModeFromSlotName(\"" + aSlotName
              + "): ERRCODE_IO_INVALIDPARAMETER"),
-            uno::Reference< uno::XInterface >(), ERRCODE_IO_INVALIDPARAMETER );
+            uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER) );
 
     return nResult;
 }
@@ -601,7 +601,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
                                     ("ModelData_Impl::ExecuteFilterDialog_Impl:"
                                      " ERRCODE_IO_ABORT"),
                                     uno::Reference< uno::XInterface >(),
-                                    ERRCODE_IO_ABORT);
+                                    sal_uInt32(ERRCODE_IO_ABORT));
                             }
                         }
                     }
@@ -617,7 +617,7 @@ bool ModelData_Impl::ExecuteFilterDialog_Impl( const OUString& aFilterName )
         throw task::ErrorCodeIOException(
             ("ModelData_Impl::ExecuteFilterDialog_Impl: NoSuchElementException"
              " \"" + e.Message + "\": ERRCODE_IO_ABORT"),
-            uno::Reference< uno::XInterface >(), ERRCODE_IO_INVALIDPARAMETER);
+            uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));
     }
     catch( const task::ErrorCodeIOException& )
     {
@@ -799,7 +799,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
            throw task::ErrorCodeIOException(
                "ModelData_Impl::OutputFileDialog: ERRCODE_IO_INVALIDPARAMETER",
                uno::Reference< uno::XInterface >(),
-               ERRCODE_IO_INVALIDPARAMETER);
+               sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));
 
     // no target file name is specified
     // we need to show the file dialog
@@ -967,7 +967,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     {
         throw task::ErrorCodeIOException(
             "ModelData_Impl::OutputFileDialog: ERRCODE_IO_ABORT",
-            uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT);
+            uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
     }
 
     // the following two arguments can not be converted in MediaDescriptor,
@@ -1302,7 +1302,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         if ( ( nStoreMode & SAVEAS_REQUESTED ) && aModelData.CheckSaveAcceptable( STATUS_SAVEAS ) == STATUS_NO_ACTION )
             throw task::ErrorCodeIOException(
                 "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_ABORT",
-                uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT);
+                uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
     }
     else if ( nStoreMode & SAVE_REQUESTED )
     {
@@ -1312,7 +1312,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         if ( nStatusSave == STATUS_NO_ACTION )
             throw task::ErrorCodeIOException(
                 "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_ABORT",
-                uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT);
+                uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
         else if ( nStatusSave == STATUS_SAVE )
         {
             // check whether it is possible to use save operation
@@ -1323,7 +1323,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         {
             throw task::ErrorCodeIOException(
                 "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_ABORT",
-                uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT);
+                uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
         }
         else if ( nStatusSave != STATUS_SAVE )
         {
@@ -1348,7 +1348,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
                 // the user has decided not to store the document
                 throw task::ErrorCodeIOException(
                     "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_ABORT",
-                    uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT);
+                    uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_ABORT));
             }
         }
     }
@@ -1387,7 +1387,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
     if ( !aFilterProps.getLength() )
         throw task::ErrorCodeIOException(
             "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_INVALIDPARAMETER",
-            uno::Reference< uno::XInterface >(), ERRCODE_IO_INVALIDPARAMETER);
+            uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));
 
     ::comphelper::SequenceAsHashMap aFilterPropsHM( aFilterProps );
     OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault( "Name", OUString() );
@@ -1537,7 +1537,7 @@ bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >& xMo
         SAL_WARN( "sfx.doc", "This code must be unreachable!" );
         throw task::ErrorCodeIOException(
             "SfxStoringHelper::GUIStoreModel: ERRCODE_IO_INVALIDPARAMETER",
-            uno::Reference< uno::XInterface >(), ERRCODE_IO_INVALIDPARAMETER);
+            uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_IO_INVALIDPARAMETER));
     }
 
     ::comphelper::SequenceAsHashMap::const_iterator aIter =

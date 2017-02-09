@@ -594,14 +594,14 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
         pValues[0].Value <<= sFilter;
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
-        sal_uInt32 nErrorCode = ERRCODE_NONE;
+        ErrCode nErrorCode = ERRCODE_NONE;
         try
         {
             xStore->storeToURL( sPath, aValues );
         }
         catch (const task::ErrorCodeIOException& rErrorEx)
         {
-            nErrorCode = (sal_uInt32)rErrorEx.ErrCode;
+            nErrorCode = ErrCode(rErrorEx.ErrCode);
         }
         catch (const Exception&)
         {
@@ -651,14 +651,14 @@ IMPL_LINK(SwMMResultSaveDialog, SaveOutputHdl_Impl, Button*, pButton, void)
         pValues[0].Value <<= pSfxFlt->GetFilterName();
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
-        sal_uInt32 nErrorCode = ERRCODE_NONE;
+        ErrCode nErrorCode = ERRCODE_NONE;
         try
         {
             xStore->storeToURL( sTargetTempURL, aValues );
         }
         catch (const task::ErrorCodeIOException& rErrorEx)
         {
-            nErrorCode = (sal_uInt32)rErrorEx.ErrCode;
+            nErrorCode = ErrCode(rErrorEx.ErrCode);
         }
         catch (const Exception&)
         {

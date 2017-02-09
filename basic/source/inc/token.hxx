@@ -124,9 +124,9 @@ public:
     SbiToken Next();                    // read a token
     bool MayBeLabel( bool= false );
 
-    void Error( SbError c ) { GenError( c ); }
-    void Error( SbError, SbiToken );
-    void Error( SbError, const OUString &);
+    void Error( ErrCode c ) { GenError( c ); }
+    void Error( ErrCode, SbiToken );
+    void Error( ErrCode, const OUString &);
 
     static bool IsEoln( SbiToken t )
         { return t == EOS || t == EOLN || t == REM; }

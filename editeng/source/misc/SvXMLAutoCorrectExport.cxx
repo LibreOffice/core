@@ -39,7 +39,7 @@ SvXMLAutoCorrectExport::SvXMLAutoCorrectExport(
                             XML_NAMESPACE_BLOCKLIST );
 }
 
-sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
+ErrCode SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 {
     GetDocHandler()->startDocument();
 
@@ -67,7 +67,7 @@ sal_uInt32 SvXMLAutoCorrectExport::exportDoc(enum XMLTokenEnum /*eClass*/)
         }
     }
     GetDocHandler()->endDocument();
-    return 0;
+    return ERRCODE_NONE;
 }
 
 SvXMLExceptionListExport::SvXMLExceptionListExport(
@@ -83,7 +83,7 @@ SvXMLExceptionListExport::SvXMLExceptionListExport(
                             XML_NAMESPACE_BLOCKLIST );
 }
 
-sal_uInt32 SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum /*eClass*/)
+ErrCode SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum /*eClass*/)
 {
     GetDocHandler()->startDocument();
 
@@ -104,7 +104,7 @@ sal_uInt32 SvXMLExceptionListExport::exportDoc(enum XMLTokenEnum /*eClass*/)
         }
     }
     GetDocHandler()->endDocument();
-    return 0;
+    return ERRCODE_NONE;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

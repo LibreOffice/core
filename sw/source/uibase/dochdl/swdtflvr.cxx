@@ -752,7 +752,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
 #endif
 
         SwWriter aWrt( *xStream, *pDoc );
-        if( !IsError( aWrt.Write( xWrt )) )
+        if( ! aWrt.Write( xWrt ).IsError() )
         {
             xStream->WriteChar( '\0' );               // terminate with a zero
             xStream->Commit();
@@ -1685,7 +1685,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
         const SwPosition& rInsPos = *rSh.GetCursor()->Start();
         SwReader aReader( *pStream, aEmptyOUStr, OUString(), *rSh.GetCursor() );
         rSh.SaveTableBoxContent( &rInsPos );
-        if( IsError( aReader.Read( *pRead )) )
+        if( aReader.Read( *pRead ).IsError() )
             nResId = STR_ERROR_CLPBRD_READ;
         else
         {
@@ -1777,7 +1777,7 @@ bool SwTransferable::PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
     {
         SwPaM &rPAM = *rSh.GetCursor();
         SwReader aReader( xStore, aEmptyOUStr, rPAM );
-        if( !IsError( aReader.Read( *pRead )) )
+        if( ! aReader.Read( *pRead ).IsError() )
             bRet = true;
         else if( bMsg )
             ScopedVclPtrInstance<MessageDialog>(nullptr, SwResId(STR_ERROR_CLPBRD_READ), VclMessageType::Info)->Execute();

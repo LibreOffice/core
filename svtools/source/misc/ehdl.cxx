@@ -140,7 +140,7 @@ static DialogMask aWndFunc(
 }
 
 
-SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong lEndP, ResMgr *pMgrP) :
+SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, ErrCode lStartP, ErrCode lEndP, ResMgr *pMgrP) :
 
     lStart(lStartP), lEnd(lEndP), nId(nIdP), pMgr(pMgrP), pFreeMgr( nullptr )
 
@@ -168,7 +168,7 @@ bool SfxErrorHandler::CreateString(const ErrorInfo *pErr, OUString &rStr) const
     */
 
 {
-    sal_uLong nErrCode = pErr->GetErrorCode() & ERRCODE_ERROR_MASK;
+    ErrCode nErrCode = pErr->GetErrorCode().IgnoreWarning();
     if( nErrCode>=lEnd || nErrCode<=lStart )
         return false;
     if(GetErrorString(nErrCode, rStr))
@@ -214,7 +214,7 @@ void SfxErrorHandler::GetClassString(sal_uLong lClassId, OUString &rStr)
     }
 }
 
-bool SfxErrorHandler::GetErrorString(sal_uLong lErrId, OUString &rStr) const
+bool SfxErrorHandler::GetErrorString(ErrCode lErrId, OUString &rStr) const
 
 /*  [Description]
 
@@ -230,7 +230,7 @@ bool SfxErrorHandler::GetErrorString(sal_uLong lErrId, OUString &rStr) const
     rStr = RID_ERRHDL_CLASS;
 
     ResStringArray aEr(ResId(nId, *pMgr));
-    sal_uInt32 nErrIdx = aEr.FindIndex((sal_uInt16)lErrId);
+    sal_uInt32 nErrIdx = aEr.FindIndex((sal_uInt16)(sal_uInt32)lErrId);
     if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
     {
         rStr = rStr.replaceAll("$(ERROR)", aEr.GetString(nErrIdx));
@@ -242,7 +242,7 @@ bool SfxErrorHandler::GetErrorString(sal_uLong lErrId, OUString &rStr) const
     if( bRet )
     {
         OUString aErrStr;
-        GetClassString(lErrId & ERRCODE_CLASS_MASK,
+        GetClassString((sal_uInt32)lErrId & ERRCODE_CLASS_MASK,
                        aErrStr);
         if(!aErrStr.isEmpty())
             aErrStr += ".\n";
@@ -272,7 +272,7 @@ SfxErrorContext::SfxErrorContext(
 }
 
 
-bool SfxErrorContext::GetString(sal_uInt32 nErrId, OUString &rStr)
+bool SfxErrorContext::GetString(ErrCode nErrId, OUString &rStr)
 
 /*  [Description]
 
@@ -306,7 +306,7 @@ bool SfxErrorContext::GetString(sal_uInt32 nErrId, OUString &rStr)
 
         if ( bRet )
         {
-            sal_uInt16 nId = ( nErrId & ERRCODE_WARNING_MASK ) ? ERRCTX_WARNING : ERRCTX_ERROR;
+            sal_uInt16 nId = nErrId.IsWarning() ? ERRCTX_WARNING : ERRCTX_ERROR;
             ResStringArray aEr(ResId(RID_ERRCTX, *pMgr));
             rStr = rStr.replaceAll("$(ERR)", aEr.GetString(nId));
         }

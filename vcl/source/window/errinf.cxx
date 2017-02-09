@@ -93,7 +93,7 @@ ErrorHandler::~ErrorHandler()
                           rErrorHandlers.end());
 }
 
-bool ErrorHandler::GetErrorString(sal_uInt32 nErrCodeId, OUString& rErrStr)
+bool ErrorHandler::GetErrorString(ErrCode nErrCodeId, OUString& rErrStr)
 {
     OUString aErr;
 
@@ -112,7 +112,7 @@ bool ErrorHandler::GetErrorString(sal_uInt32 nErrCodeId, OUString& rErrStr)
     return false;
 }
 
-DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
+DialogMask ErrorHandler::HandleError(ErrCode nErrCodeId, DialogMask nFlags)
 {
     if (nErrCodeId == ERRCODE_NONE || nErrCodeId == ERRCODE_ABORT)
         return DialogMask::NONE;
@@ -136,7 +136,7 @@ DialogMask ErrorHandler::HandleError(sal_uInt32 nErrCodeId, DialogMask nFlags)
         }
     }
 
-    bool bWarning = ((nErrCodeId & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+    bool bWarning = nErrCodeId.IsWarning();
     DialogMask nErrFlags = DialogMask::ButtonDefaultsOk | DialogMask::ButtonsOk;
     if (bWarning)
         nErrFlags |= DialogMask::MessageWarning;
@@ -229,7 +229,7 @@ class ImplDynamicErrorInfo
 private:
     void                        RegisterError(DynamicErrorInfo *);
     static void                 UnRegisterError(DynamicErrorInfo const *);
-    static ErrorInfo*           GetDynamicErrorInfo(sal_uInt32 nId);
+    static ErrorInfo*           GetDynamicErrorInfo(ErrCode nId);
 
     ErrCode                     nErrId;
     DialogMask                  nMask;
@@ -240,8 +240,8 @@ void ImplDynamicErrorInfo::RegisterError(DynamicErrorInfo *pDynErrInfo)
 {
     // Register dynamic identifier
     ErrorRegistry& rData = TheErrorRegistry::get();
-    nErrId = (((sal_uInt32)rData.nNextError + 1) << ERRCODE_DYNAMIC_SHIFT) +
-             pDynErrInfo->GetErrorCode();
+    nErrId = ErrCode(((sal_uInt32(rData.nNextError) + 1) << ERRCODE_DYNAMIC_SHIFT) +
+                     sal_uInt32(pDynErrInfo->GetErrorCode()));
 
     if(rData.ppDynErrInfo[rData.nNextError])
         delete rData.ppDynErrInfo[rData.nNextError];
@@ -255,27 +255,27 @@ void ImplDynamicErrorInfo::RegisterError(DynamicErrorInfo *pDynErrInfo)
 void ImplDynamicErrorInfo::UnRegisterError(DynamicErrorInfo const *pDynErrInfo)
 {
     DynamicErrorInfo **ppDynErrInfo = TheErrorRegistry::get().ppDynErrInfo;
-    sal_uInt32 nIdx = (((sal_uInt32)(*pDynErrInfo) & ERRCODE_DYNAMIC_MASK) >> ERRCODE_DYNAMIC_SHIFT) - 1;
+    sal_uInt32 nIdx = ErrCode(*pDynErrInfo).GetDynamic() - 1;
     DBG_ASSERT(ppDynErrInfo[nIdx] == pDynErrInfo, "ErrHdl: Error not found");
 
     if(ppDynErrInfo[nIdx]==pDynErrInfo)
         ppDynErrInfo[nIdx]=nullptr;
 }
 
-ErrorInfo* ImplDynamicErrorInfo::GetDynamicErrorInfo(sal_uInt32 nId)
+ErrorInfo* ImplDynamicErrorInfo::GetDynamicErrorInfo(ErrCode nId)
 {
-    sal_uInt32 nIdx = ((nId & ERRCODE_DYNAMIC_MASK)>>ERRCODE_DYNAMIC_SHIFT)-1;
+    sal_uInt32 nIdx = nId.GetDynamic() - 1;
     DynamicErrorInfo* pDynErrInfo = TheErrorRegistry::get().ppDynErrInfo[nIdx];
 
-    if(pDynErrInfo && (sal_uInt32)(*pDynErrInfo)==nId)
+    if(pDynErrInfo && ErrCode(*pDynErrInfo)==nId)
         return pDynErrInfo;
     else
-        return new ErrorInfo(nId & ~ERRCODE_DYNAMIC_MASK);
+        return new ErrorInfo(nId.StripDynamic());
 }
 
-ErrorInfo *ErrorInfo::GetErrorInfo(sal_uInt32 nId)
+ErrorInfo *ErrorInfo::GetErrorInfo(ErrCode nId)
 {
-    if(nId & ERRCODE_DYNAMIC_MASK)
+    if(nId.IsDynamic())
         return ImplDynamicErrorInfo::GetDynamicErrorInfo(nId);
     else
         return new ErrorInfo(nId);
@@ -285,7 +285,7 @@ ErrorInfo::~ErrorInfo()
 {
 }
 
-DynamicErrorInfo::DynamicErrorInfo(sal_uInt32 nArgUserId, DialogMask nMask)
+DynamicErrorInfo::DynamicErrorInfo(ErrCode nArgUserId, DialogMask nMask)
 : ErrorInfo(nArgUserId),
   pImpl(new ImplDynamicErrorInfo)
 {
@@ -298,7 +298,7 @@ DynamicErrorInfo::~DynamicErrorInfo()
     ImplDynamicErrorInfo::UnRegisterError(this);
 }
 
-DynamicErrorInfo::operator sal_uInt32() const
+DynamicErrorInfo::operator ErrCode() const
 {
     return pImpl->nErrId;
 }
@@ -309,7 +309,7 @@ DialogMask DynamicErrorInfo::GetDialogMask() const
 }
 
 StringErrorInfo::StringErrorInfo(
-    sal_uInt32 nArgUserId, const OUString& aStringP, DialogMask nMask)
+    ErrCode nArgUserId, const OUString& aStringP, DialogMask nMask)
 : DynamicErrorInfo(nArgUserId, nMask), aString(aStringP)
 {
 }

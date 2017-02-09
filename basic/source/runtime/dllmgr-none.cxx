@@ -39,7 +39,7 @@ struct SbiDllMgr::Impl {};
 namespace {
 
 // Overcome the mess of Currency vs. custom types etc.
-SbError returnInt64InOutArg(SbxArray *pArgs, SbxVariable &rRetVal,
+ErrCode returnInt64InOutArg(SbxArray *pArgs, SbxVariable &rRetVal,
                             sal_Int64 nValue)
 {
     if (!rRetVal.PutLong(1) && !rRetVal.PutInteger(1))
@@ -77,7 +77,7 @@ SbError returnInt64InOutArg(SbxArray *pArgs, SbxVariable &rRetVal,
     return ERRCODE_BASIC_BAD_ARGUMENT;
 }
 
-SbError builtin_kernel32(const OUString &aFuncName, SbxArray *pArgs,
+ErrCode builtin_kernel32(const OUString &aFuncName, SbxArray *pArgs,
                          SbxVariable &rRetVal)
 {
     sal_Int64 nNanoSecsPerSec = 1000.0*1000*1000;
@@ -96,7 +96,7 @@ SbError builtin_kernel32(const OUString &aFuncName, SbxArray *pArgs,
 
 };
 
-SbError SbiDllMgr::Call(
+ErrCode SbiDllMgr::Call(
     const OUString &aFuncName, const OUString &aDllName,
     SbxArray *pArgs, SbxVariable &rRetVal,
     SAL_UNUSED_PARAMETER bool /* bCDecl */)

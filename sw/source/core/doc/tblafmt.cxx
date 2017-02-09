@@ -496,7 +496,7 @@ bool SwBoxAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions, sa
     m_aStacked.SetValue( aOrientation.IsStacked() );
     m_aRotateAngle.SetValue( aOrientation.GetRotation( m_aRotateAngle.GetValue() ) );
 
-    return 0 == rStream.GetError();
+    return ERRCODE_NONE == rStream.GetError();
 }
 
 bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
@@ -549,7 +549,7 @@ bool SwBoxAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
         RTL_TEXTENCODING_UTF8);
     rStream.WriteUInt16( (sal_uInt16)m_eSysLanguage ).WriteUInt16( (sal_uInt16)m_eNumFormatLanguage );
 
-    return 0 == rStream.GetError();
+    return ERRCODE_NONE == rStream.GetError();
 }
 
 bool SwBoxAutoFormat::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion ) const
@@ -588,7 +588,7 @@ bool SwBoxAutoFormat::SaveVersionNo( SvStream& rStream, sal_uInt16 fileVersion )
 
     rStream.WriteUInt16( 0 );       // NumberFormat
 
-    return 0 == rStream.GetError();
+    return ERRCODE_NONE == rStream.GetError();
 }
 
 SwTableAutoFormat::SwTableAutoFormat( const OUString& rName )
@@ -966,7 +966,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
 {
     sal_uInt16  nVal = 0;
     rStream.ReadUInt16( nVal );
-    bool bRet = 0 == rStream.GetError();
+    bool bRet = ERRCODE_NONE == rStream.GetError();
 
     if( bRet && (nVal == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVal && nVal <= AUTOFORMAT_DATA_ID)) )
@@ -1008,7 +1008,7 @@ bool SwTableAutoFormat::Load( SvStream& rStream, const SwAfVersions& rVersions )
             READ(m_aShadow, SvxShadowItem, AUTOFORMAT_FILE_VERSION);
         }
 
-        bRet = 0 == rStream.GetError();
+        bRet = ERRCODE_NONE== rStream.GetError();
 
         for( sal_uInt8 i = 0; bRet && i < 16; ++i )
         {
@@ -1052,7 +1052,7 @@ bool SwTableAutoFormat::Save( SvStream& rStream, sal_uInt16 fileVersion ) const
         m_aShadow.Store(rStream, m_aShadow.GetVersion(fileVersion));
     }
 
-    bool bRet = 0 == rStream.GetError();
+    bool bRet = ERRCODE_NONE == rStream.GetError();
 
     for( int i = 0; bRet && i < 16; ++i )
     {
@@ -1314,13 +1314,13 @@ bool SwTableAutoFormatTable::Save() const
 
 bool SwTableAutoFormatTable::Load( SvStream& rStream )
 {
-    bool bRet = 0 == rStream.GetError();
+    bool bRet = ERRCODE_NONE == rStream.GetError();
     if (bRet)
     {
         // Attention: We need to read a general Header here
         sal_uInt16 nVal = 0;
         rStream.ReadUInt16( nVal );
-        bRet = 0 == rStream.GetError();
+        bRet = ERRCODE_NONE == rStream.GetError();
 
         if( bRet )
         {
@@ -1354,7 +1354,7 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
                 sal_uInt16 nCount = 0;
                 rStream.ReadUInt16( nCount );
 
-                bRet = 0 == rStream.GetError();
+                bRet = ERRCODE_NONE== rStream.GetError();
                 if (bRet)
                 {
                     const size_t nMinRecordSize = sizeof(sal_uInt16);
@@ -1392,7 +1392,7 @@ bool SwTableAutoFormatTable::Load( SvStream& rStream )
 
 bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
 {
-    bool bRet = 0 == rStream.GetError();
+    bool bRet = ERRCODE_NONE == rStream.GetError();
     if (bRet)
     {
         rStream.SetVersion(AUTOFORMAT_FILE_VERSION);
@@ -1403,7 +1403,7 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
                .WriteUChar( 2 ) // Character count of the Header including this value
                .WriteUChar( GetStoreCharSet( ::osl_getThreadTextEncoding() ) );
 
-        bRet = 0 == rStream.GetError();
+        bRet = ERRCODE_NONE == rStream.GetError();
         if (!bRet)
             return false;
 
@@ -1412,7 +1412,7 @@ bool SwTableAutoFormatTable::Save( SvStream& rStream ) const
                 rStream, AUTOFORMAT_FILE_VERSION);
 
         rStream.WriteUInt16( m_pImpl->m_AutoFormats.size() - 1 );
-        bRet = 0 == rStream.GetError();
+        bRet = ERRCODE_NONE == rStream.GetError();
 
         for (auto const & rFormat: m_pImpl->m_AutoFormats)
         {

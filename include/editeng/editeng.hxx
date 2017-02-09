@@ -39,6 +39,7 @@
 #include <editeng/eedata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <svl/languageoptions.hxx>
+#include <vcl/errcode.hxx>
 #include <functional>
 
 namespace com { namespace sun { namespace star {
@@ -364,8 +365,7 @@ public:
     void            Draw( OutputDevice* pOutDev, const tools::Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
 
-    //  sal_uInt32: Error code of the stream.
-    sal_uLong       Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
+    ErrCode         Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
     void            Write( SvStream& rOutput, EETextFormat );
 
     void            SetStatusEventHdl( const Link<EditStatus&,void>& rLink );

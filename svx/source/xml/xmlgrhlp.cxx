@@ -115,7 +115,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
             if( aGfxLink.GetDataSize() && aGfxLink.GetData() )
             {
                 pStm->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
-                bRet = ( pStm->GetError() == 0 );
+                bRet = ( pStm->GetError() == ERRCODE_NONE );
             }
             else
             {
@@ -129,14 +129,14 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
                     else
                         aFormat = "png";
 
-                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
+                    bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStm, rFilter.GetExportFormatNumberForShortName( aFormat ) ) == ERRCODE_NONE );
                 }
                 else if( aGraphic.GetType() == GraphicType::GdiMetafile )
                 {
                     pStm->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStm->SetCompressMode( SvStreamCompressFlags::ZBITMAP );
                     const_cast<GDIMetaFile&>( aGraphic.GetGDIMetaFile() ).Write( *pStm );
-                    bRet = ( pStm->GetError() == 0 );
+                    bRet = ( pStm->GetError() == ERRCODE_NONE );
                 }
             }
 
@@ -564,7 +564,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                     // higher PDF version, while aGfxLink still contains the
                     // original data provided by the user.
                     pStream->WriteBytes(rPdfData.getConstArray(), rPdfData.getLength());
-                    bRet = (pStream->GetError() == 0);
+                    bRet = (pStream->GetError() == ERRCODE_NONE);
                 }
                 else
                     pStream->WriteBytes(aGfxLink.GetData(), aGfxLink.GetDataSize());
@@ -582,7 +582,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                         aFormat = "png";
 
                     bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStream,
-                                                     rFilter.GetExportFormatNumberForShortName( aFormat ) ) == 0 );
+                                                     rFilter.GetExportFormatNumberForShortName( aFormat ) ) == ERRCODE_NONE );
                 }
                 else if( aGraphic.GetType() == GraphicType::GdiMetafile )
                 {
@@ -607,7 +607,7 @@ bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageName,
                     else
                         rMtf.Write( *pStream );
 
-                    bRet = ( pStream->GetError() == 0 );
+                    bRet = ( pStream->GetError() == ERRCODE_NONE );
                 }
             }
             uno::Reference < embed::XTransactedObject > xStorage(

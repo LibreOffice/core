@@ -275,7 +275,7 @@ SbxVariable* StarBASIC::VBAFind( const OUString& rName, SbxClassType t )
 struct SFX_VB_ErrorItem
 {
     sal_uInt16  nErrorVB;
-    SbError nErrorSFX;
+    ErrCode nErrorSFX;
 };
 
 const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
@@ -402,7 +402,7 @@ const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
     { 1005, ERRCODE_BASIC_SETPROP_FAILED },
     { 1006, ERRCODE_BASIC_GETPROP_FAILED },
     { 1007, ERRCODE_BASIC_COMPAT },
-    { 0xFFFF, 0xFFFFFFFFL }     // End mark
+    { 0xFFFF, ErrCode(0xFFFFFFFFUL) }     // End mark
 };
 
 // The StarBASIC factory is a hack. When a SbModule is created, its pointer
@@ -984,7 +984,7 @@ StarBASIC::~StarBASIC()
     }
     else if( bDocBasic )
     {
-        SbxError eOld = SbxBase::GetError();
+        ErrCode eOld = SbxBase::GetError();
 
         lclRemoveDocBasicItem( *this );
 
@@ -1358,11 +1358,11 @@ bool StarBASIC::Call( const OUString& rName, SbxArray* pParam )
     bool bRes = SbxObject::Call( rName, pParam );
     if( !bRes )
     {
-        SbxError eErr = SbxBase::GetError();
+        ErrCode eErr = SbxBase::GetError();
         SbxBase::ResetError();
         if( eErr != ERRCODE_SBX_OK )
         {
-            RTError( (SbError)eErr, OUString(), 0, 0, 0 );
+            RTError( eErr, OUString(), 0, 0, 0 );
         }
     }
     return bRes;
@@ -1432,7 +1432,7 @@ SbModule* StarBASIC::GetActiveModule()
 
 BasicDebugFlags StarBASIC::BreakPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
-    SetErrorData( 0, l, c1, c2 );
+    SetErrorData( ERRCODE_NONE, l, c1, c2 );
     bBreak = true;
     if( GetSbData()->aBreakHdl.IsSet() )
     {
@@ -1446,7 +1446,7 @@ BasicDebugFlags StarBASIC::BreakPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 
 BasicDebugFlags StarBASIC::StepPoint( sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
-    SetErrorData( 0, l, c1, c2 );
+    SetErrorData( ERRCODE_NONE, l, c1, c2 );
     bBreak = false;
     if( GetSbData()->aBreakHdl.IsSet() )
     {
@@ -1469,7 +1469,7 @@ sal_uInt16 StarBASIC::GetCol1()     { return GetSbData()->nCol1; }
 sal_uInt16 StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 
 // Specific to error handler
-SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
+ErrCode StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
 const OUString& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
 
 // From 1996-03-29:
@@ -1480,29 +1480,26 @@ const OUString& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
 // binary search by VB Error -> Error SFX.
 
 // Map back new error codes to old, Sbx-compatible
-sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
+sal_uInt16 StarBASIC::GetVBErrorCode( ErrCode nError )
 {
     sal_uInt16 nRet = 0;
 
     if( SbiRuntime::isVBAEnabled() )
     {
-        switch( nError )
-        {
-        case ERRCODE_BASIC_ARRAY_FIX:
+        if ( nError == ERRCODE_BASIC_ARRAY_FIX )
             return 10;
-        case ERRCODE_BASIC_STRING_OVERFLOW:
+        else if ( nError == ERRCODE_BASIC_STRING_OVERFLOW )
             return 14;
-        case ERRCODE_BASIC_EXPR_TOO_COMPLEX:
+        else if ( nError == ERRCODE_BASIC_EXPR_TOO_COMPLEX )
             return 16;
-        case ERRCODE_BASIC_OPER_NOT_PERFORM:
+        else if ( nError == ERRCODE_BASIC_OPER_NOT_PERFORM )
             return 17;
-        case ERRCODE_BASIC_TOO_MANY_DLL:
+        else if ( nError == ERRCODE_BASIC_TOO_MANY_DLL )
             return 47;
-        case ERRCODE_BASIC_LOOP_NOT_INIT:
+        else if ( nError == ERRCODE_BASIC_LOOP_NOT_INIT )
             return 92;
-        default:
+        else
             nRet = 0;
-        }
     }
 
     // search loop
@@ -1522,9 +1519,9 @@ sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
     return nRet;
 }
 
-SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
+ErrCode StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
 {
-    SbError nRet = 0;
+    ErrCode nRet = ERRCODE_NONE;
 
     if( SbiRuntime::isVBAEnabled() )
     {
@@ -1536,7 +1533,7 @@ SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
         case 8:
         case 12:
         case 73:
-            return 0;
+            return ERRCODE_NONE;
         case 10:
             return ERRCODE_BASIC_ARRAY_FIX;
         case 14:
@@ -1550,7 +1547,7 @@ SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
         case 92:
             return ERRCODE_BASIC_LOOP_NOT_INIT;
         default:
-            nRet = 0;
+            nRet = ERRCODE_NONE;
         }
     }
     const SFX_VB_ErrorItem* pErrItem;
@@ -1574,7 +1571,7 @@ SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
 }
 
 // set Error- / Break-data
-void StarBASIC::SetErrorData( SbError nCode, sal_uInt16 nLine,
+void StarBASIC::SetErrorData( ErrCode nCode, sal_uInt16 nLine,
                               sal_uInt16 nCol1, sal_uInt16 nCol2 )
 {
     SbiGlobals& aGlobals = *GetSbData();
@@ -1584,14 +1581,14 @@ void StarBASIC::SetErrorData( SbError nCode, sal_uInt16 nLine,
     aGlobals.nCol2 = nCol2;
 }
 
-void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
+void StarBASIC::MakeErrorText( ErrCode nId, const OUString& aMsg )
 {
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
     // instantiate the help class
     ResStringArray aMyStringList(BasResId(RID_BASIC_START));
-    sal_uInt32 nErrIdx = aMyStringList.FindIndex(sal_uInt16(nId & ERRCODE_RES_MASK));
+    sal_uInt32 nErrIdx = aMyStringList.FindIndex(nId.GetRest());
     if (nErrIdx != RESARRAY_INDEX_NOTFOUND)
     {
         // merge message with additional text
@@ -1620,7 +1617,7 @@ void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
     }
 }
 
-bool StarBASIC::CError( SbError code, const OUString& rMsg,
+bool StarBASIC::CError( ErrCode code, const OUString& rMsg,
                             sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SolarMutexGuard aSolarGuard;
@@ -1646,7 +1643,7 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
     // Implementation of the code for the string transport to SFX-Error
     if( !rMsg.isEmpty() )
     {
-        code = (SbError)*new StringErrorInfo( code, rMsg );
+        code = *new StringErrorInfo( code, rMsg );
     }
     SetErrorData( code, l, c1, c2 );
     GetSbData()->bCompilerError = true;
@@ -1663,14 +1660,14 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
     return bRet;
 }
 
-bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
+bool StarBASIC::RTError( ErrCode code, const OUString& rMsg, sal_Int32 l, sal_Int32 c1, sal_Int32 c2 )
 {
     SolarMutexGuard aSolarGuard;
 
-    SbError c = code;
-    if( (c & ERRCODE_CLASS_MASK) == ERRCODE_CLASS_COMPILER )
+    ErrCode c = code;
+    if( c.GetClass() == ERRCODE_CLASS_COMPILER )
     {
-        c = 0;
+        c = ERRCODE_NONE;
     }
     MakeErrorText( c, rMsg );
 
@@ -1685,11 +1682,11 @@ bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_In
         {
             OUString aTmp = "\'" + OUString::number(SbxErrObject::getUnoErrObject()->getNumber()) +
                             "\'\n" + (!GetSbData()->aErrMsg.isEmpty() ? GetSbData()->aErrMsg : rMsg);
-            code = (SbError)*new StringErrorInfo( code, aTmp );
+            code = *new StringErrorInfo( code, aTmp );
         }
         else
         {
-            code = (SbError)*new StringErrorInfo( code, rMsg );
+            code = *new StringErrorInfo( code, rMsg );
         }
     }
 
@@ -1704,12 +1701,12 @@ bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sal_In
     }
 }
 
-void StarBASIC::Error( SbError n )
+void StarBASIC::Error( ErrCode n )
 {
     Error( n, OUString() );
 }
 
-void StarBASIC::Error( SbError n, const OUString& rMsg )
+void StarBASIC::Error( ErrCode n, const OUString& rMsg )
 {
     if( GetSbData()->pInst )
     {
@@ -1717,7 +1714,7 @@ void StarBASIC::Error( SbError n, const OUString& rMsg )
     }
 }
 
-void StarBASIC::FatalError( SbError n )
+void StarBASIC::FatalError( ErrCode n )
 {
     if( GetSbData()->pInst )
     {
@@ -1725,7 +1722,7 @@ void StarBASIC::FatalError( SbError n )
     }
 }
 
-void StarBASIC::FatalError( SbError _errCode, const OUString& _details )
+void StarBASIC::FatalError( ErrCode _errCode, const OUString& _details )
 {
     if( GetSbData()->pInst )
     {
@@ -1733,7 +1730,7 @@ void StarBASIC::FatalError( SbError _errCode, const OUString& _details )
     }
 }
 
-SbError StarBASIC::GetErrBasic()
+ErrCode StarBASIC::GetErrBasic()
 {
     if( GetSbData()->pInst )
     {
@@ -1741,7 +1738,7 @@ SbError StarBASIC::GetErrBasic()
     }
     else
     {
-        return 0;
+        return ERRCODE_NONE;
     }
 }
 

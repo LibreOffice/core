@@ -147,7 +147,7 @@ bool PowerPointImport::importDocument()
         INetURLObject aURL(getFileUrl());
         SfxErrorContext aContext(ERRCTX_SFX_OPENDOC, aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset), nullptr, RID_ERRCTX);
         OUString aWarning;
-        aContext.GetString(ERRCODE_WARNING_MASK, aWarning);
+        aContext.GetString(ERRCODE_NONE.MakeWarning(), aWarning);
         aWarning += ":\n";
         static ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
         aWarning += ResId(RID_SVXSTR_WARN_MISSING_SMARTART, *pResMgr).toString();

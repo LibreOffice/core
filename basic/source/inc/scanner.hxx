@@ -63,7 +63,7 @@ protected:
     bool   bPrevLineExtentsComment;     // true: Previous line is comment and ends on "... _"
 
     bool   bInStatement;
-    void   GenError( SbError );
+    void   GenError( ErrCode );
 public:
     SbiScanner( const OUString&, StarBASIC* = nullptr );
    ~SbiScanner();

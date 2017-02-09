@@ -206,7 +206,7 @@ RTLFUNC(Error)
     else
     {
         OUString aErrorMsg;
-        SbError nErr = 0;
+        ErrCode nErr = ERRCODE_NONE;
         sal_Int32 nCode = 0;
         if( rPar.Count() == 1 )
         {
@@ -2635,7 +2635,7 @@ RTLFUNC(IsDate)
         }
         else if( eType == SbxSTRING )
         {
-            SbxError nPrevError = SbxBase::GetError();
+            ErrCode nPrevError = SbxBase::GetError();
             SbxBase::ResetError();
 
             // force conversion of the parameter to SbxDATE
@@ -4025,7 +4025,7 @@ RTLFUNC(DDEInitiate)
 
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     size_t nChannel;
-    SbError nDdeErr = pDDE->Initiate( rApp, rTopic, nChannel );
+    ErrCode nDdeErr = pDDE->Initiate( rApp, rTopic, nChannel );
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );
@@ -4050,7 +4050,7 @@ RTLFUNC(DDETerminate)
     }
     size_t nChannel = rPar.Get(1)->GetInteger();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
-    SbError nDdeErr = pDDE->Terminate( nChannel );
+    ErrCode nDdeErr = pDDE->Terminate( nChannel );
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );
@@ -4071,7 +4071,7 @@ RTLFUNC(DDETerminateAll)
     }
 
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
-    SbError nDdeErr = pDDE->TerminateAll();
+    ErrCode nDdeErr = pDDE->TerminateAll();
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );
@@ -4093,7 +4093,7 @@ RTLFUNC(DDERequest)
     const OUString& rItem = rPar.Get(2)->GetOUString();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
     OUString aResult;
-    SbError nDdeErr = pDDE->Request( nChannel, rItem, aResult );
+    ErrCode nDdeErr = pDDE->Request( nChannel, rItem, aResult );
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );
@@ -4119,7 +4119,7 @@ RTLFUNC(DDEExecute)
     size_t nChannel = rPar.Get(1)->GetInteger();
     const OUString& rCommand = rPar.Get(2)->GetOUString();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
-    SbError nDdeErr = pDDE->Execute( nChannel, rCommand );
+    ErrCode nDdeErr = pDDE->Execute( nChannel, rCommand );
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );
@@ -4142,7 +4142,7 @@ RTLFUNC(DDEPoke)
     const OUString& rItem = rPar.Get(2)->GetOUString();
     const OUString& rData = rPar.Get(3)->GetOUString();
     SbiDdeControl* pDDE = GetSbData()->pInst->GetDdeControl();
-    SbError nDdeErr = pDDE->Poke( nChannel, rItem, rData );
+    ErrCode nDdeErr = pDDE->Poke( nChannel, rItem, rData );
     if( nDdeErr )
     {
         StarBASIC::Error( nDdeErr );

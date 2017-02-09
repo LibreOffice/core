@@ -308,7 +308,7 @@ void ScGraphicShell::ExecuteChangePicture( SAL_UNUSED_PARAMETER SfxRequest& /*rR
             if( aDlg.Execute() == ERRCODE_NONE )
             {
                 Graphic aGraphic;
-                int nError = aDlg.GetGraphic(aGraphic);
+                ErrCode nError = aDlg.GetGraphic(aGraphic);
                 if( nError == ERRCODE_NONE )
                 {
                     SdrGrafObj* pNewObject = pGraphicObj->Clone();

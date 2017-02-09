@@ -65,7 +65,7 @@ SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDI
     {
         SvMemoryStream* pStream = new SvMemoryStream( 65535, 65535 );
         Graphic aGraph( *pGDIMeta );
-        if ( GraphicConverter::Export( *pStream, aGraph, nFormat ) == 0 )
+        if ( GraphicConverter::Export( *pStream, aGraph, nFormat ) == ERRCODE_NONE )
             pResult = pStream;
         else
             delete pStream;

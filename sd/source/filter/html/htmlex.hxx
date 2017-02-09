@@ -68,7 +68,7 @@ private:
 public:
                     explicit HtmlErrorContext();
 
-    virtual bool    GetString( sal_uInt32 nErrId, OUString& rCtxStr ) override;
+    virtual bool    GetString( ErrCode nErrId, OUString& rCtxStr ) override;
 
     void            SetContext( sal_uInt16 nResId, const OUString& rURL );
     void            SetContext( sal_uInt16 nResId, const OUString& rURL1, const OUString& rURL2 );

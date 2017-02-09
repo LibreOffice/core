@@ -499,7 +499,7 @@ bool SdNavigatorWin::InsertFile(const OUString& rFileName)
     {
         // show dragged-in document
         std::shared_ptr<const SfxFilter> pFilter;
-        ErrCode nErr = 0;
+        ErrCode nErr = ERRCODE_NONE;
 
         if (aFileName != maDropFileName)
         {

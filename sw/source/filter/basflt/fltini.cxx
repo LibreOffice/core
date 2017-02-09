@@ -647,7 +647,7 @@ extern "C" {
     Reader *ImportDOC();
     void ExportDOC( const OUString&, const OUString& rBaseURL, WriterRef& );
     Reader *ImportDOCX();
-    sal_uLong SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
+    ErrCode SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
     sal_uLong GetSaveWarningOfMSVBAStorage_ww8( SfxObjectShell& );
 }
 
@@ -725,10 +725,10 @@ Reader* GetDOCXReader()
 #endif
 }
 
-typedef sal_uLong ( SAL_CALL *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
-typedef sal_uLong ( SAL_CALL *GetSaveWarning )( SfxObjectShell& );
+typedef ErrCode ( SAL_CALL *SaveOrDel )( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
+typedef ErrCode ( SAL_CALL *GetSaveWarning )( SfxObjectShell& );
 
-sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, bool bSaveInto, const OUString& rStorageName )
+ErrCode SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, bool bSaveInto, const OUString& rStorageName )
 {
 #ifndef DISABLE_DYNLOADING
     SaveOrDel pFunction = reinterpret_cast<SaveOrDel>( SwGlobals::getFilters().GetMswordLibSymbol( "SaveOrDelMSVBAStorage_ww8" ) );
@@ -740,7 +740,7 @@ sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell& rDoc, SotStorage& rStor, bool b
 #endif
 }
 
-sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
+ErrCode GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS )
 {
 #ifndef DISABLE_DYNLOADING
     GetSaveWarning pFunction = reinterpret_cast<GetSaveWarning>( SwGlobals::getFilters().GetMswordLibSymbol( "GetSaveWarningOfMSVBAStorage_ww8" ) );

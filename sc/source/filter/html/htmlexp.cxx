@@ -586,7 +586,7 @@ void ScHTMLExport::WriteBody()
                     {
                         // Save graphic as (JPG) file
                         aGrfNm = aStreamPath;
-                        sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
+                        ErrCode nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
                             "JPG", XOutFlags::UseNativeIfPossible );
                         if( !nErr ) // Contains errors, as we have nothing to output
                         {
@@ -1305,7 +1305,7 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         aMedium.Close();
         aMedium.Commit();
 
-        bRet = 0 == aMedium.GetError();
+        bRet = ERRCODE_NONE == aMedium.GetError();
 
         if( bRet )
         {

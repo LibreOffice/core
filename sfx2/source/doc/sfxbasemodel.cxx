@@ -1543,8 +1543,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
 
         DELETEZ( pParams );
 
-        sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
-                                                                    : ERRCODE_IO_CANTWRITE;
+        ErrCode nErrCode = m_pData->m_pObjectShell->GetError() ? m_pData->m_pObjectShell->GetError()
+                                                               : ERRCODE_IO_CANTWRITE;
         m_pData->m_pObjectShell->ResetError();
 
         if ( bRet )
@@ -1559,8 +1559,8 @@ void SAL_CALL SfxBaseModel::storeSelf( const    Sequence< beans::PropertyValue >
             SfxGetpApp()->NotifyEvent( SfxEventHint( SfxEventHintId::SaveDocFailed, GlobalEventConfig::GetEventName(GlobalEventId::SAVEDOCFAILED), m_pData->m_pObjectShell.get() ) );
 
             throw task::ErrorCodeIOException(
-                "SfxBaseModel::storeSelf: 0x" + OUString::number(nErrCode, 16),
-                Reference< XInterface >(), nErrCode);
+                "SfxBaseModel::storeSelf: " + nErrCode.toHexString(),
+                Reference< XInterface >(), sal_uInt32(nErrCode));
         }
     }
 
@@ -1702,14 +1702,14 @@ void SAL_CALL SfxBaseModel::initNew()
             throw frame::DoubleInitializationException();
 
         bool bRes = m_pData->m_pObjectShell->DoInitNew();
-        sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetError() ?
-                                    m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTCREATE;
+        ErrCode nErrCode = m_pData->m_pObjectShell->GetError() ?
+                           m_pData->m_pObjectShell->GetError() : ERRCODE_IO_CANTCREATE;
         m_pData->m_pObjectShell->ResetError();
 
         if ( !bRes )
             throw task::ErrorCodeIOException(
-                "SfxBaseModel::initNew: 0x" + OUString::number(nErrCode, 16),
-                Reference< XInterface >(), nErrCode);
+                "SfxBaseModel::initNew: " + nErrCode.toHexString(),
+                Reference< XInterface >(), sal_uInt32(nErrCode));
     }
 }
 
@@ -1757,7 +1757,7 @@ void SAL_CALL SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqA
 
     SfxMedium* pMedium = new SfxMedium( seqArguments );
 
-    sal_uInt32 nError = ERRCODE_NONE;
+    ErrCode nError = ERRCODE_NONE;
     OUString aFilterProvider = getFilterProvider(*pMedium);
     if (!aFilterProvider.isEmpty())
     {
@@ -2583,7 +2583,7 @@ void SfxBaseModel::loadCmisProperties( )
     }
 }
 
-SfxMedium* SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium )
+SfxMedium* SfxBaseModel::handleLoadError( ErrCode nError, SfxMedium* pMedium )
 {
     if (!nError)
     {
@@ -2596,7 +2596,7 @@ SfxMedium* SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium 
     if( pSilentItem )
         bSilent = pSilentItem->GetValue();
 
-    bool bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+    bool bWarning = nError.IsWarning();
     if ( nError != ERRCODE_IO_BROKENPACKAGE && !bSilent )
     {
         // broken package was handled already
@@ -2619,8 +2619,8 @@ SfxMedium* SfxBaseModel::handleLoadError( sal_uInt32 nError, SfxMedium* pMedium 
     {
         nError = nError ? nError : ERRCODE_IO_CANTREAD;
         throw task::ErrorCodeIOException(
-            "SfxBaseModel::handleLoadError: 0x" + OUString::number(nError, 16),
-            Reference< XInterface >(), nError);
+            "SfxBaseModel::handleLoadError: 0x" + nError.toHexString(),
+            Reference< XInterface >(), sal_uInt32(nError));
     }
 
     return pMedium;
@@ -2901,7 +2901,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                 else
                                 {
                                     // if the password is changed a special error should be used in case of shared document
-                                    throw task::ErrorCodeIOException("Can not change password for shared document.", uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
+                                    throw task::ErrorCodeIOException("Can not change password for shared document.", uno::Reference< uno::XInterface >(), sal_uInt32(ERRCODE_SFX_SHARED_NOPASSWORDCHANGE) );
                                 }
                             }
 #endif
@@ -2981,7 +2981,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
 
         pItemSet.reset();
 
-        sal_uInt32 nErrCode = m_pData->m_pObjectShell->GetErrorCode();
+        ErrCode nErrCode = m_pData->m_pObjectShell->GetErrorCode();
         if ( !bRet && !nErrCode )
         {
             SAL_WARN("sfx.doc", "Storing has failed, no error is set!");
@@ -3000,7 +3000,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                     SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, m_pData->m_pObjectShell->GetTitle() );
 
                     task::ErrorCodeRequest aErrorCode;
-                    aErrorCode.ErrCode = nErrCode;
+                    aErrorCode.ErrCode = sal_uInt32(nErrCode);
                     SfxMedium::CallApproveHandler( xHandler, makeAny( aErrorCode ), false );
                 }
             }
@@ -3030,9 +3030,8 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
                                                     m_pData->m_pObjectShell.get() ) );
 
             throw task::ErrorCodeIOException(
-                ("SfxBaseModel::impl_store <" + sURL + "> failed: 0x"
-                 + OUString::number(nErrCode, 16)),
-                Reference< XInterface >(), nErrCode);
+                "SfxBaseModel::impl_store <" + sURL + "> failed: " + nErrCode.toHexString(),
+                Reference< XInterface >(), sal_uInt32(nErrCode));
         }
     }
 }
@@ -3611,11 +3610,11 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const Reference< embed::XStorage >&
     // load document
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
     {
-        sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
+        ErrCode nError = m_pData->m_pObjectShell->GetErrorCode();
         nError = nError ? nError : ERRCODE_IO_CANTREAD;
         throw task::ErrorCodeIOException(
-            "SfxBaseModel::loadFromStorage: 0x" + OUString::number(nError, 16),
-            Reference< XInterface >(), nError);
+            "SfxBaseModel::loadFromStorage: " + nError.toHexString(),
+            Reference< XInterface >(), sal_uInt32(nError));
     }
     loadCmisProperties( );
 }
@@ -3665,7 +3664,7 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
         }
     }
 
-    sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
+    ErrCode nError = m_pData->m_pObjectShell->GetErrorCode();
     m_pData->m_pObjectShell->ResetError();
 
     // the warnings are currently not transported
@@ -3673,8 +3672,8 @@ void SAL_CALL SfxBaseModel::storeToStorage( const Reference< embed::XStorage >& 
     {
         nError = nError ? nError : ERRCODE_IO_GENERAL;
         throw task::ErrorCodeIOException(
-            "SfxBaseModel::storeToStorage: 0x" + OUString::number(nError, 16),
-            Reference< XInterface >(), nError);
+            "SfxBaseModel::storeToStorage: " + nError.toHexString(),
+            Reference< XInterface >(), sal_uInt32(nError));
     }
 }
 
@@ -3690,12 +3689,11 @@ void SAL_CALL SfxBaseModel::switchToStorage( const Reference< embed::XStorage >&
     {
         if ( !m_pData->m_pObjectShell->SwitchPersistance( xStorage ) )
         {
-            sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
+            ErrCode nError = m_pData->m_pObjectShell->GetErrorCode();
             nError = nError ? nError : ERRCODE_IO_GENERAL;
             throw task::ErrorCodeIOException(
-                ("SfxBaseModel::switchToStorage: 0x"
-                 + OUString::number(nError, 16)),
-                Reference< XInterface >(), nError);
+                "SfxBaseModel::switchToStorage: " + nError.toHexString(),
+                Reference< XInterface >(), sal_uInt32(nError));
         }
         else
         {

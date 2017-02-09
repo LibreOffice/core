@@ -141,7 +141,7 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
         pSourceShell = aLoader.GetDocShell();
         if ( pSourceShell )
         {
-            sal_uLong nErr = pSourceShell->GetErrorCode();
+            ErrCode nErr = pSourceShell->GetErrorCode();
             if (nErr)
                 ErrorHandler::HandleError( nErr );      // including warnings
 
@@ -226,7 +226,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
         aSourceRef = pSourceShell;
         pSourceShell->DoLoad( pMed );
 
-        sal_uLong nErr = pSourceShell->GetErrorCode();
+        ErrCode nErr = pSourceShell->GetErrorCode();
         if (nErr)
             ErrorHandler::HandleError( nErr );              // including warnings
 

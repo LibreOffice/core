@@ -54,7 +54,7 @@ public:
     ScEEImport( ScDocument* pDoc, const ScRange& rRange );
     virtual ~ScEEImport() override;
 
-    virtual sal_uLong    Read( SvStream& rStream, const OUString& rBaseURL ) override;
+    virtual ErrCode  Read( SvStream& rStream, const OUString& rBaseURL ) override;
     virtual ScRange  GetRange() override { return maRange; }
     virtual void     WriteToDocument( bool bSizeColsRows = false,
                                       double nOutputFactor = 1.0,

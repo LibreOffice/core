@@ -83,13 +83,13 @@ namespace sfx2
     namespace
     {
 
-        void lcl_showGeneralSfxErrorOnce( const Reference< XInteractionHandler >& rxHandler, const sal_Int32 nSfxErrorCode, bool& rbAlreadyShown )
+        void lcl_showGeneralSfxErrorOnce( const Reference< XInteractionHandler >& rxHandler, ErrCode nSfxErrorCode, bool& rbAlreadyShown )
         {
             if ( rbAlreadyShown )
                 return;
 
             ErrorCodeRequest aErrorCodeRequest;
-            aErrorCodeRequest.ErrCode = nSfxErrorCode;
+            aErrorCodeRequest.ErrCode = sal_uInt32(nSfxErrorCode);
 
             SfxMedium::CallApproveHandler( rxHandler, makeAny( aErrorCodeRequest ), false );
             rbAlreadyShown = true;

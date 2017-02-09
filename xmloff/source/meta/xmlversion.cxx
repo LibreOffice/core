@@ -54,7 +54,7 @@ XMLVersionListExport::XMLVersionListExport(
                                    xmloff::token::GetXMLToken(xmloff::token::XML_N_VERSIONS_LIST), XML_NAMESPACE_FRAMEWORK );
 }
 
-sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
+ErrCode XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
 {
     GetDocHandler()->startDocument();
 
@@ -96,7 +96,7 @@ sal_uInt32 XMLVersionListExport::exportDoc( enum ::xmloff::token::XMLTokenEnum )
         }
     }
     GetDocHandler()->endDocument();
-    return 0;
+    return ERRCODE_NONE;
 }
 
 XMLVersionListImport::XMLVersionListImport(

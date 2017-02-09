@@ -482,7 +482,7 @@ void Printer::ImplInitData()
     mbDevOutput         = false;
     meOutDevType        = OUTDEV_PRINTER;
     mbDefPrinter        = false;
-    mnError             = 0;
+    mnError             = ERRCODE_NONE;
     mnCurPage           = 0;
     mnCurPrintPage      = 0;
     mnPageQueueSize     = 0;
@@ -1609,9 +1609,9 @@ bool Printer::SetCopyCount( sal_uInt16 nCopy, bool bCollate )
     return true;
 }
 
-sal_uLong Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
+ErrCode Printer::ImplSalPrinterErrorCodeToVCL( sal_uLong nError )
 {
-    sal_uLong nVCLError;
+    ErrCode nVCLError;
     switch ( nError )
     {
         case 0:
