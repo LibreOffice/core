@@ -94,6 +94,11 @@ int backtrace( void **buffer, int max_frames )
     return i;
 }
 
+char ** backtrace_symbols(void * const * buffer, int size)
+{
+    return NULL; /*TODO*/
+}
+
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
     FILE    *fp = fdopen( fd, "w" );
@@ -171,6 +176,11 @@ int backtrace( void **buffer, int max_frames )
     return i;
 }
 
+char ** backtrace_symbols(void * const * buffer, int size)
+{
+    return NULL; /*TODO*/
+}
+
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
     FILE    *fp = fdopen( fd, "w" );
@@ -239,6 +249,11 @@ int backtrace( void **buffer, int max_frames )
     return i;
 }
 
+char ** backtrace_symbols(void * const * buffer, int size)
+{
+    return NULL; /*TODO*/
+}
+
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
     FILE    *fp = fdopen( fd, "w" );
@@ -280,6 +295,11 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 int backtrace( void **buffer, int max_frames )
 {
     return 0;
+}
+
+char ** backtrace_symbols(void * const * buffer, int size)
+{
+    return NULL; /*TODO*/
 }
 
 void backtrace_symbols_fd( void **buffer, int size, int fd )

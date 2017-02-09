@@ -9,13 +9,50 @@
 
 #include <sal/config.h>
 
+#include <cassert>
+#include <cstdlib>
+#include <memory>
+
+#include <o3tl/runtimetooustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
+
+#include "backtrace.h"
 #include "backtraceasstring.hxx"
 
-// FIXME: no-op for now; it needs implementing, cf. above.
-OUString osl::detail::backtraceAsString(int /*maxNoStackFramesToDisplay*/)
+namespace {
+
+struct FreeGuard {
+    FreeGuard(char ** theBuffer): buffer(theBuffer) {}
+
+    ~FreeGuard() { std::free(buffer); }
+
+    char ** buffer;
+};
+
+}
+
+OUString osl::detail::backtraceAsString(int maxNoStackFramesToDisplay)
 {
-    return OUString();
+    assert(maxNoStackFramesToDisplay >= 0);
+    if (maxNoStackFramesToDisplay == 0) {
+        return OUString();
+    }
+    auto b1 = std::unique_ptr<void *[]>(new void *[maxNoStackFramesToDisplay]);
+    int n = backtrace(b1.get(), maxNoStackFramesToDisplay);
+    FreeGuard b2(backtrace_symbols(b1.get(), n));
+    b1.reset();
+    if (b2.buffer == nullptr) {
+        return OUString();
+    }
+    OUStringBuffer b3;
+    for (int i = 0; i != n; ++i) {
+        if (i != 0) {
+            b3.append("\n");
+        }
+        b3.append(o3tl::runtimeToOUString(b2.buffer[i]));
+    }
+    return b3.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

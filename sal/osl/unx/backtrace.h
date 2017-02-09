@@ -28,6 +28,8 @@ extern "C" {
 
 int backtrace( void **buffer, int max_frames );
 
+char ** backtrace_symbols(void * const * buffer, int size);
+
 void backtrace_symbols_fd( void **buffer, int size, int fd );
 
 /* no frame.h on FreeBSD */
