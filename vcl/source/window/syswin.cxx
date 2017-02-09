@@ -159,7 +159,7 @@ namespace
 
 bool Accelerator::ToggleMnemonicsOnHierarchy(const CommandEvent& rCEvent, vcl::Window *pWindow)
 {
-    if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
+    if (rCEvent.GetCommand() == CommandEventId::ModKeyChange && ImplGetSVData()->maNWFData.mbAutoAccel)
     {
         const CommandModKeyData *pCData = rCEvent.GetModKeyData();
         const bool bShowAccel = pCData && pCData->IsMod2();
