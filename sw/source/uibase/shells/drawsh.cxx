@@ -129,7 +129,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
         if(ERRCODE_NONE == aDlg.Execute())
         {
             Graphic aGraphic;
-            int nError(aDlg.GetGraphic(aGraphic));
+            ErrCode nError = aDlg.GetGraphic(aGraphic);
 
             if(ERRCODE_NONE == nError)
             {

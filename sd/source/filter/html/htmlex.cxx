@@ -138,7 +138,7 @@ public:
     EasyFile();
     ~EasyFile();
 
-    sal_uLong createStream( const OUString& rUrl, SvStream*& rpStr );
+    ErrCode   createStream( const OUString& rUrl, SvStream*& rpStr );
     void      createFileName(  const OUString& rUrl, OUString& rFileName );
     void      close();
 };
@@ -1158,7 +1158,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
     the given filename */
 bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const OUString& rHtmlData )
 {
-    sal_uLong nErr = 0;
+    ErrCode nErr = ERRCODE_NONE;
 
     OUString aFileName( rFileName );
     if( bAddExtension )
@@ -1169,7 +1169,7 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
     SvStream* pStr;
     OUString aFull(maExportPath + aFileName);
     nErr = aFile.createStream(aFull , pStr);
-    if(nErr == 0)
+    if(nErr == ERRCODE_NONE)
     {
         OString aStr(OUStringToOString(rHtmlData,
             RTL_TEXTENCODING_UTF8));
@@ -1177,10 +1177,10 @@ bool HtmlExport::WriteHtml( const OUString& rFileName, bool bAddExtension, const
         aFile.close();
     }
 
-    if( nErr != 0 )
+    if( nErr != ERRCODE_NONE )
         ErrorHandler::HandleError(nErr);
 
-    return nErr == 0;
+    return nErr == ERRCODE_NONE;
 }
 
 /** creates a outliner text for the title objects of a page
@@ -2868,7 +2868,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
 
     meEC.SetContext( STR_HTMLEXP_ERROR_OPEN_FILE, rSource );
 
-    sal_uLong       nErr = 0;
+    ErrCode     nErr = ERRCODE_NONE;
     SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), StreamMode::READ );
 
     if( pIStm )
@@ -2892,7 +2892,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
         delete pIStm;
     }
 
-    if( nErr != 0 )
+    if( nErr != ERRCODE_NONE )
     {
         ErrorHandler::HandleError( nErr );
         return (bool) nErr;
@@ -2913,7 +2913,7 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
         EasyFile aFile;
         SvStream* pStr;
         nErr = aFile.createStream(aDest, pStr);
-        if(nErr == 0)
+        if(nErr == ERRCODE_NONE)
         {
             OString aStr(OUStringToOString(aScript,
                 RTL_TEXTENCODING_UTF8));
@@ -2925,10 +2925,10 @@ bool HtmlExport::CopyScript( const OUString& rPath, const OUString& rSource, con
     if (mpProgress)
         mpProgress->SetState(++mnPagesWritten);
 
-    if( nErr != 0 )
+    if( nErr != ERRCODE_NONE )
         ErrorHandler::HandleError( nErr );
 
-    return nErr == 0;
+    return nErr == ERRCODE_NONE;
 }
 
 static const char * ASP_Scripts[] = { "common.inc", "webcast.asp", "show.asp", "savepic.asp", "poll.asp", "editpic.asp" };
@@ -2999,8 +2999,8 @@ bool HtmlExport::CreateImageNumberFile()
     meEC.SetContext( STR_HTMLEXP_ERROR_CREATE_FILE, aFileName );
     EasyFile aFile;
     SvStream* pStr;
-    sal_uLong nErr = aFile.createStream(aFull, pStr);
-    if(nErr == 0)
+    ErrCode nErr = aFile.createStream(aFull, pStr);
+    if(nErr == ERRCODE_NONE)
     {
         pStr->WriteCharPtr( "1" );
         aFile.close();
@@ -3009,10 +3009,10 @@ bool HtmlExport::CreateImageNumberFile()
     if (mpProgress)
         mpProgress->SetState(++mnPagesWritten);
 
-    if( nErr != 0 )
+    if( nErr != ERRCODE_NONE )
         ErrorHandler::HandleError( nErr );
 
-    return nErr == 0;
+    return nErr == ERRCODE_NONE;
 }
 
 OUString HtmlExport::InsertSound( const OUString& rSoundFile )
@@ -3040,7 +3040,7 @@ bool HtmlExport::CopyFile( const OUString& rSourceFile, const OUString& rDestFil
 
     if( Error != osl::FileBase::E_None )
     {
-        ErrorHandler::HandleError(Error);
+        ErrorHandler::HandleError(ErrCode(Error));
         return false;
     }
     else
@@ -3132,7 +3132,7 @@ EasyFile::~EasyFile()
         close();
 }
 
-sal_uLong EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
+ErrCode EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
 {
     if(bOpen)
         close();
@@ -3140,7 +3140,7 @@ sal_uLong EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
     OUString aFileName;
     createFileName( rUrl, aFileName );
 
-    sal_uLong nErr = 0;
+    ErrCode nErr = ERRCODE_NONE;
     pOStm = ::utl::UcbStreamHelper::CreateStream( aFileName, StreamMode::WRITE | StreamMode::TRUNC );
     if( pOStm )
     {
@@ -3152,7 +3152,7 @@ sal_uLong EasyFile::createStream(  const OUString& rUrl, SvStream* &rpStr )
         nErr = ERRCODE_SFX_CANTCREATECONTENT;
     }
 
-    if( nErr != 0 )
+    if( nErr != ERRCODE_NONE )
     {
         bOpen = false;
         delete pOStm;
@@ -3195,7 +3195,7 @@ HtmlErrorContext::HtmlErrorContext()
     mnResId = 0;
 }
 
-bool HtmlErrorContext::GetString( sal_uInt32, OUString& rCtxStr )
+bool HtmlErrorContext::GetString( ErrCode, OUString& rCtxStr )
 {
     DBG_ASSERT( mnResId != 0, "No error context set" );
     if( mnResId == 0 )

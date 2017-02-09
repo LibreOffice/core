@@ -104,7 +104,7 @@ using ::std::vector;
 
 namespace
 {
-    sal_uLong lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager2>& _rDrvMgr, uno::Reference<sdbc::XConnection>& _rConnection, OUString& _rTabName, const OUString& rFullFileName, rtl_TextEncoding eCharSet)
+    ErrCode lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager2>& _rDrvMgr, uno::Reference<sdbc::XConnection>& _rConnection, OUString& _rTabName, const OUString& rFullFileName, rtl_TextEncoding eCharSet)
     {
         INetURLObject aURL;
         aURL.SetSmartProtocol( INetProtocol::File );
@@ -147,7 +147,7 @@ namespace
             }));
 
         _rConnection = _rDrvMgr->getConnectionWithInfo( aConnUrl, aProps );
-        return 0L;
+        return ERRCODE_NONE;
     }
 }
 
@@ -287,7 +287,7 @@ static void lcl_setScalesToColumns(ScDocument& rDoc, const vector<long>& rScales
 
 #endif // HAVE_FEATURE_DBCONNECTIVITY
 
-sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
+ErrCode ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncoding eCharSet,
                                ScColWidthParam aColWidthParam[MAXCOLCOUNT], ScFlatBoolRowSegments& rRowHeightsRecalc )
 {
 #if !HAVE_FEATURE_DBCONNECTIVITY
@@ -299,7 +299,7 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
     return ERRCODE_IO_GENERAL;
 #else
 
-    sal_uLong nErr = ERRCODE_NONE;
+    ErrCode nErr = ERRCODE_NONE;
 
     // Try to get the Text Encoding from the driver
     if( eCharSet == RTL_TEXTENCODING_IBM_850 )
@@ -312,7 +312,7 @@ sal_uLong ScDocShell::DBaseImport( const OUString& rFullFileName, rtl_TextEncodi
         OUString aTabName;
         uno::Reference<sdbc::XDriverManager2> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
-        sal_uLong nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
+        ErrCode nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
         if ( !xConnection.is() || !xDrvMan.is() )
             return nRet;
         ::utl::DisposableComponent aConnectionHelper(xConnection);
@@ -755,7 +755,7 @@ inline void lcl_getLongVarCharString(
 
 #endif // HAVE_FEATURE_DBCONNECTIVITY
 
-sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo )
+ErrCode ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncoding eCharSet, bool& bHasMemo )
 {
 #if !HAVE_FEATURE_DBCONNECTIVITY
     (void) rFullFileName;
@@ -768,7 +768,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
     INetURLObject aDeleteObj( rFullFileName, INetProtocol::File );
     KillFile( aDeleteObj );
 
-    sal_uLong nErr = ERRCODE_NONE;
+    ErrCode nErr = ERRCODE_NONE;
 
     SCCOL nFirstCol, nLastCol;
     SCROW  nFirstRow, nLastRow;
@@ -811,7 +811,7 @@ sal_uLong ScDocShell::DBaseExport( const OUString& rFullFileName, rtl_TextEncodi
     {
         uno::Reference<sdbc::XDriverManager2> xDrvMan;
         uno::Reference<sdbc::XConnection> xConnection;
-        sal_uLong nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
+        ErrCode nRet = lcl_getDBaseConnection(xDrvMan,xConnection,aTabName,rFullFileName,eCharSet);
         if ( !xConnection.is() || !xDrvMan.is() )
             return nRet;
         ::utl::DisposableComponent aConnectionHelper(xConnection);

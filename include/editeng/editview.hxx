@@ -29,6 +29,7 @@
 #include <tools/gen.hxx>
 #include <tools/link.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/errcode.hxx>
 #include <editeng/editstat.hxx>
 #include <svl/languageoptions.hxx>
 #include <LibreOfficeKit/LibreOfficeKitTypes.h>
@@ -187,7 +188,7 @@ public:
     void                RemoveCharAttribs( sal_Int32 nPara, sal_uInt16 nWhich );
     void                RemoveAttribsKeepLanguages( bool bRemoveParaAttribs );
 
-    sal_uInt32          Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
+    ErrCode             Read( SvStream& rInput, EETextFormat eFormat, SvKeyValueIterator* pHTTPHeaderAttrs );
 
     void            SetBackgroundColor( const Color& rColor );
     Color           GetBackgroundColor() const;

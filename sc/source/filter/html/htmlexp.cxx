@@ -586,7 +586,7 @@ void ScHTMLExport::WriteBody()
                     {
                         // Save graphic as (JPG) file
                         aGrfNm = aStreamPath;
-                        sal_uInt16 nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
+                        ErrCode nErr = XOutBitmap::WriteGraphic( *pGrf, aGrfNm,
                             "JPG", XOutFlags::UseNativeIfPossible );
                         if( !nErr ) // Contains errors, as we have nothing to output
                         {

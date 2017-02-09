@@ -433,7 +433,7 @@ SfxFrame* SdModule::CreateFromTemplate( const OUString& rTemplatePath, const Ref
     SfxItemSet* pSet = new SfxAllItemSet( SfxGetpApp()->GetPool() );
     pSet->Put( SfxBoolItem( SID_TEMPLATE, true ) );
 
-    sal_uLong lErr = SfxGetpApp()->LoadTemplate( xDocShell, rTemplatePath, pSet );
+    ErrCode lErr = SfxGetpApp()->LoadTemplate( xDocShell, rTemplatePath, pSet );
 
     SfxObjectShell* pDocShell = xDocShell;
 
@@ -566,19 +566,17 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
 
             // Check the error code and stop copying the stream data when an
             // error has occurred.
-            switch (nErrorCode)
+            if (nErrorCode == ERRCODE_NONE)
             {
-                case ERRCODE_NONE:
-                    if (nReadByteCount == 0)
-                        bLoop = false;
-                    break;
-                case ERRCODE_IO_PENDING:
-                    break;
-
-                default:
+                if (nReadByteCount == 0)
                     bLoop = false;
-                    nReadByteCount = 0;
-                    break;
+            }
+            else if (nErrorCode == ERRCODE_IO_PENDING)
+                ;
+            else
+            {
+                bLoop = false;
+                nReadByteCount = 0;
             }
 
             // Append the read bytes to the end of the memory stream.
@@ -606,9 +604,7 @@ void OutlineToImpressFinalizer::operator() (bool)
         sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
         // mba: the stream can't contain any relative URLs, because we don't
         // have any information about a BaseURL!
-        if ( pOutlineShell->ReadRtf(*mpStream) == 0 )
-        {
-        }
+        pOutlineShell->ReadRtf(*mpStream);
 
         // Call UpdatePreview once for every slide to resync the
         // document with the outliner of the OutlineViewShell.
