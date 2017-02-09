@@ -468,27 +468,18 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
         }
 
         sal_uInt32 nResId(0);
-        switch( nError )
-        {
-            case ERRCODE_GRFILTER_OPENERROR:
-                nResId = STR_GRFILTER_OPENERROR;
-                break;
-            case ERRCODE_GRFILTER_IOERROR:
-                nResId = STR_GRFILTER_IOERROR;
-                break;
-            case ERRCODE_GRFILTER_FORMATERROR:
-                nResId = STR_GRFILTER_FORMATERROR;
-                break;
-            case ERRCODE_GRFILTER_VERSIONERROR:
-                nResId = STR_GRFILTER_VERSIONERROR;
-                break;
-            case ERRCODE_GRFILTER_FILTERERROR:
-                nResId = STR_GRFILTER_FILTERERROR;
-                break;
-            case ERRCODE_GRFILTER_TOOBIG:
-                nResId = STR_GRFILTER_TOOBIG;
-                break;
-        }
+        if( nError == ERRCODE_GRFILTER_OPENERROR )
+            nResId = STR_GRFILTER_OPENERROR;
+        else if( nError == ERRCODE_GRFILTER_IOERROR )
+            nResId = STR_GRFILTER_IOERROR;
+        else if( nError ==ERRCODE_GRFILTER_FORMATERROR )
+            nResId = STR_GRFILTER_FORMATERROR;
+        else if( nError ==ERRCODE_GRFILTER_VERSIONERROR )
+            nResId = STR_GRFILTER_VERSIONERROR;
+        else if( nError ==ERRCODE_GRFILTER_FILTERERROR )
+            nResId = STR_GRFILTER_FILTERERROR;
+        else if( nError ==ERRCODE_GRFILTER_TOOBIG )
+            nResId = STR_GRFILTER_TOOBIG;
 
         rSh.EndAction();
         rSh.UnlockPaint();
@@ -2156,7 +2147,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
 
         SfxObjectShellRef aRef( pDocSh );
 
-        sal_uInt32 nError = SfxObjectShell::HandleFilter( pMedium, pDocSh );
+        ErrCode nError = SfxObjectShell::HandleFilter( pMedium, pDocSh );
         // #i16722# aborted?
         if(nError != ERRCODE_NONE)
         {
@@ -2176,7 +2167,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                 SwDoc *pDoc = pDocSh->GetDoc();
                 if( pRead && pDocSh->GetDoc() )
                     nUndoCheck = lcl_PageDescWithHeader( *pDoc );
-                sal_uLong nErrno;
+                ErrCode nErrno;
                 {   //Scope for SwWait-Object, to be able to execute slots
                     //outside this scope.
                     SwWait aWait( *GetDocShell(), true );
@@ -2195,7 +2186,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                             SwXTextRange::CreateXTextRange(*pDoc,
                                 *m_pWrtShell->GetCursor()->GetPoint(), nullptr));
                         nErrno = pDocSh->ImportFrom(*pMedium, xInsertPosition)
-                                    ? 0 : ERR_SWG_READ_ERROR;
+                                    ? ERRCODE_NONE : ERR_SWG_READ_ERROR;
                     }
 
                 }
@@ -2221,7 +2212,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                 if( nErrno )
                 {
                     ErrorHandler::HandleError( nErrno );
-                    nFound = IsError( nErrno ) ? -1 : 0;
+                    nFound = nErrno.IsError() ? -1 : 0;
                 }
                 else
                     nFound = 0;

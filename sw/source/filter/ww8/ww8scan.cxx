@@ -2165,7 +2165,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
             rSt.ReadInt32( nFc );
             pPLCF_PosArray[i] = nFc;
 
-            failure = rSt.GetError();
+            failure = bool(rSt.GetError());
         }
     }
 
@@ -2191,7 +2191,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
             rSt.ReadInt32( nFc );
             pPLCF_PosArray[nIMax] = nFc;        // end of the last Fkp
 
-            failure = rSt.GetError();
+            failure = bool(rSt.GetError());
         } while(false);
     }
 

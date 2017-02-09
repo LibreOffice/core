@@ -118,7 +118,7 @@ public:
                         ScEEParser( EditEngine* );
     virtual             ~ScEEParser();
 
-    virtual sal_uLong       Read( SvStream&, const OUString& rBaseURL ) = 0;
+    virtual ErrCode         Read( SvStream&, const OUString& rBaseURL ) = 0;
 
     const ColWidthsMap&     GetColWidths() const { return maColWidths; }
     ColWidthsMap&           GetColWidths() { return maColWidths; }

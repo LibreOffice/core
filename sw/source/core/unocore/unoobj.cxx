@@ -187,7 +187,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
         const bool bOldShowProgress = xWrt->bShowProgress;
         xWrt->bShowProgress = false;
 
-        if( !IsError( aWriter.Write( xWrt ) ) )
+        if( ! aWriter.Write( xWrt ).IsError() )
         {
             const sal_uInt64 lUniLen = aStream.GetSize()/sizeof( sal_Unicode );
             if (lUniLen < static_cast<sal_uInt64>(SAL_MAX_INT32-1))

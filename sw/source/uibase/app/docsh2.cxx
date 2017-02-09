@@ -715,7 +715,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     pStrm->SetBufferSize( 16348 );
                     SwWriter aWrt( *pStrm, *pSmryDoc );
                     ErrCode eErr = aWrt.Write( xWrt );
-                    if( !ERRCODE_TOERROR( eErr ) )
+                    if( !eErr.IgnoreWarning() )
                     {
                         uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
                         uno::Reference< frame::XDispatchProvider > xProv = drawing::ModuleDispatcher::create( xContext );
@@ -776,7 +776,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SwWriter aWrt( *pStrm, *GetDoc() );
                 ErrCode eErr = aWrt.Write( xWrt );
                 EnableSetModified( bEnable );
-                if( !ERRCODE_TOERROR( eErr ) )
+                if( !eErr.IgnoreWarning() )
                 {
                     pStrm->Seek( STREAM_SEEK_TO_END );
                     pStrm->WriteChar( '\0' );
@@ -1434,10 +1434,10 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
         m_pDoc->getIDocumentState().ResetModified();
 }
 
-sal_uLong SwDocShell::LoadStylesFromFile( const OUString& rURL,
+ErrCode SwDocShell::LoadStylesFromFile( const OUString& rURL,
                     SwgReaderOption& rOpt, bool bUnoCall )
 {
-    sal_uLong nErr = 0;
+    ErrCode nErr = ERRCODE_NONE;
 
     // Set filter:
     SfxFilterMatcher aMatcher( SwDocShell::Factory().GetFactoryName() );

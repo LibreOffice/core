@@ -1752,9 +1752,9 @@ void OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
 /**
  * Fill Outliner from Stream
  */
-sal_uLong OutlineViewShell::ReadRtf(SvStream& rInput)
+ErrCode OutlineViewShell::ReadRtf(SvStream& rInput)
 {
-    sal_uLong bRet = 0;
+    ErrCode bRet = ERRCODE_NONE;
 
     ::Outliner& rOutl = pOlView->GetOutliner();
 

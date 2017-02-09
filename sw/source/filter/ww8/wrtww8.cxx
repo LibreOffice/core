@@ -3445,7 +3445,7 @@ void WW8Export::PrepareStorage()
     }
 }
 
-sal_uLong SwWW8Writer::WriteStorage()
+ErrCode SwWW8Writer::WriteStorage()
 {
     // #i34818# - update layout (if present), for SwWriteTable
     SwViewShell* pViewShell = pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
@@ -3473,19 +3473,19 @@ sal_uLong SwWW8Writer::WriteStorage()
     }
 
     ::EndProgress( pDoc->GetDocShell() );
-    return 0;
+    return ERRCODE_NONE;
 }
 
-sal_uLong SwWW8Writer::WriteMedium( SfxMedium& )
+ErrCode SwWW8Writer::WriteMedium( SfxMedium& )
 {
     return WriteStorage();
 }
 
-sal_uLong SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
+ErrCode SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
                           const OUString* pFileName )
 {
     mpMedium = &rMed;
-    sal_uLong nRet = StgWriter::Write( rPaM, rMed, pFileName );
+    ErrCode nRet = StgWriter::Write( rPaM, rMed, pFileName );
     mpMedium = nullptr;
     return nRet;
 }
@@ -3625,10 +3625,10 @@ SwWW8Writer::~SwWW8Writer()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_uLong SAL_CALL SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const OUString& rStorageName )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL SaveOrDelMSVBAStorage_ww8( SfxObjectShell& rDoc, SotStorage& rStor, sal_Bool bSaveInto, const OUString& rStorageName )
 {
     SvxImportMSVBasic aTmp( rDoc, rStor );
-    return aTmp.SaveOrDelMSVBAStorage( bSaveInto, rStorageName );
+    return sal_uInt32(aTmp.SaveOrDelMSVBAStorage( bSaveInto, rStorageName ));
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportDOC( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
@@ -3636,9 +3636,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportDOC( const OUString& rFltNam
     xRet = new SwWW8Writer( rFltName, rBaseURL );
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT sal_uLong SAL_CALL GetSaveWarningOfMSVBAStorage_ww8(  SfxObjectShell &rDocS )
+extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SAL_CALL GetSaveWarningOfMSVBAStorage_ww8(  SfxObjectShell &rDocS )
 {
-    return SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( rDocS );
+    return sal_uInt32(SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( rDocS ));
 }
 
 bool WW8_WrPlcFootnoteEdn::WriteText( WW8Export& rWrt )

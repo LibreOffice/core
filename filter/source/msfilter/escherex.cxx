@@ -1444,7 +1444,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
             {
                 Graphic         aGraphic;
                 SvMemoryStream  aTemp( const_cast<sal_Int8 *>(pAry), nAryLen, StreamMode::READ );
-                sal_uInt32 nErrCode = GraphicConverter::Import( aTemp, aGraphic, ConvertDataFormat::WMF );
+                ErrCode nErrCode = GraphicConverter::Import( aTemp, aGraphic, ConvertDataFormat::WMF );
                 if ( nErrCode == ERRCODE_NONE )
                 {
                     xGraphicObject.reset(new GraphicObject(aGraphic));
@@ -1584,7 +1584,7 @@ bool EscherPropertyContainer::CreateGraphicProperties(
                     if ( pIn )
                     {
                         Graphic aGraphic;
-                        sal_uInt32 nErrCode = GraphicConverter::Import( *pIn, aGraphic );
+                        ErrCode nErrCode = GraphicConverter::Import( *pIn, aGraphic );
 
                         if ( nErrCode == ERRCODE_NONE )
                         {
@@ -4265,7 +4265,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const OStrin
             GraphicType eGraphicType = aGraphic.GetType();
             if ( ( eGraphicType == GraphicType::Bitmap ) || ( eGraphicType == GraphicType::GdiMetafile ) )
             {
-                sal_uInt32 nErrCode;
+                ErrCode nErrCode;
                 if ( !aGraphic.IsAnimated() )
                     nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GraphicType::Bitmap ) ? ConvertDataFormat::PNG  : ConvertDataFormat::EMF );
                 else

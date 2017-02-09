@@ -825,7 +825,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             const OUString sWriteName = pDocShell->HasName()
                 ? pMedium->GetName()
                 : sFileURL;
-            sal_uLong nRes = aWriter.Write(xWriter, &sWriteName);
+            ErrCode nRes = aWriter.Write(xWriter, &sWriteName);
             if(nRes)
             {
                 ErrorHandler::HandleError(ErrCode(nRes));

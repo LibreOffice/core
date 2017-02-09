@@ -658,7 +658,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
     bool bHasStorage = IsPackageStorageFormat_Impl( *pMedium );
     if ( pMedium->GetFilter() )
     {
-        sal_uInt32 nError = HandleFilter( pMedium, this );
+        ErrCode nError = HandleFilter( pMedium, this );
         if ( nError != ERRCODE_NONE )
             SetError(nError);
 
@@ -868,9 +868,9 @@ bool SfxObjectShell::DoLoadExternal( SfxMedium *pMed )
     return LoadExternal(*pMedium);
 }
 
-sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc )
+ErrCode SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc )
 {
-    sal_uInt32 nError = ERRCODE_NONE;
+    ErrCode nError = ERRCODE_NONE;
     SfxItemSet* pSet = pMedium->GetItemSet();
     const SfxStringItem* pOptions = SfxItemSet::GetItem<SfxStringItem>(pSet, SID_FILE_FILTEROPTIONS, false);
     const SfxUnoAnyItem* pData = SfxItemSet::GetItem<SfxUnoAnyItem>(pSet, SID_FILTER_DATA, false);
