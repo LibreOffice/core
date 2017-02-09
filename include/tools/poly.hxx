@@ -192,9 +192,7 @@ private:
 
     enum class PolyClipOp {
         INTERSECT,
-        UNION,
-        DIFF,
-        XOR
+        UNION
     };
     TOOLS_DLLPRIVATE void  ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::PolyPolygon& rResult, PolyClipOp nOperation ) const;
 

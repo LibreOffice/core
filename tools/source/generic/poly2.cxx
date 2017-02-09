@@ -339,20 +339,6 @@ void PolyPolygon::ImplDoOperation( const tools::PolyPolygon& rPolyPoly, tools::P
             break;
         }
 
-        case PolyClipOp::DIFF:
-        {
-            // subtract B from A (DIFF)
-            aMergePolyPolygonA = basegfx::tools::solvePolygonOperationDiff(aMergePolyPolygonA, aMergePolyPolygonB);
-            break;
-        }
-
-        case PolyClipOp::XOR:
-        {
-            // compute XOR between poly A and B
-            aMergePolyPolygonA = basegfx::tools::solvePolygonOperationXor(aMergePolyPolygonA, aMergePolyPolygonB);
-            break;
-        }
-
         default:
         case PolyClipOp::INTERSECT:
         {
