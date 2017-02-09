@@ -2556,7 +2556,7 @@ bool MenuBar::ImplHandleCmdEvent( const CommandEvent& rCEvent )
     MenuBarWindow* pWin = static_cast<MenuBarWindow*>(ImplGetWindow());
     if ( pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && ! pWin->IsInModalMode() )
     {
-        if (rCEvent.GetCommand() == CommandEventId::ModKeyChange)
+        if (rCEvent.GetCommand() == CommandEventId::ModKeyChange && ImplGetSVData()->maNWFData.mbAutoAccel)
         {
             const CommandModKeyData* pCData = rCEvent.GetModKeyData ();
             if (pWin->nHighlightedItem == ITEMPOS_INVALID)
