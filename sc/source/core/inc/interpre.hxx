@@ -875,7 +875,7 @@ void ScTDist_MS();
 void ScTDist_T( int nTails );
 void ScFDist();
 void ScFDist_LT();
-void ScChiDist();   // for LEGACY.CHIDIST, returns right tail
+void ScChiDist( bool bODFF);   // for LEGACY.CHIDIST, returns right tail
 void ScChiSqDist(); // returns left tail or density
 void ScChiSqDist_MS();
 void ScChiSqInv(); //invers to CHISQDIST

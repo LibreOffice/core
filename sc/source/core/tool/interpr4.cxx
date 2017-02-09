@@ -4260,8 +4260,8 @@ StackVar ScInterpreter::Interpret()
                 case ocFDist            :
                 case ocFDist_RT         : ScFDist();                    break;
                 case ocFDist_LT         : ScFDist_LT();                 break;
-                case ocChiDist          :
-                case ocChiDist_MS       : ScChiDist();                  break;
+                case ocChiDist          : ScChiDist( true );            break;
+                case ocChiDist_MS       : ScChiDist( false );           break;
                 case ocChiSqDist        : ScChiSqDist();                break;
                 case ocChiSqDist_MS     : ScChiSqDist_MS();             break;
                 case ocStandard         : ScStandard();                 break;
