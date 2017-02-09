@@ -151,6 +151,7 @@ public:
     void testFormulaRefUpdateNameCopySheetCheckTab( SCTAB Tab, bool bCheckNames );
     void testFormulaRefUpdateNameDelete();
     void testFormulaRefUpdateValidity();
+    void testTokenArrayRefUpdateMove();
     void testMultipleOperations();
     void testFuncCOLUMN();
     void testFuncCOUNT();
@@ -528,6 +529,7 @@ public:
     CPPUNIT_TEST(testFormulaRefUpdateNameCopySheet);
     CPPUNIT_TEST(testFormulaRefUpdateNameDelete);
     CPPUNIT_TEST(testFormulaRefUpdateValidity);
+    CPPUNIT_TEST(testTokenArrayRefUpdateMove);
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);
     CPPUNIT_TEST(testFuncCOUNT);
