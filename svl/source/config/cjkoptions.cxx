@@ -389,7 +389,7 @@ SvtCJKOptions::SvtCJKOptions(bool bDontLoad)
     {
         pImpl = std::make_shared<SvtCJKOptions_Impl>();
         g_pCJKOptions = pImpl;
-        ItemHolder2::holdConfigItem(E_CJKOPTIONS);
+        ItemHolder2::holdConfigItem(EItem::CJKOptions);
     }
 
     if( !bDontLoad && !pImpl->IsLoaded())

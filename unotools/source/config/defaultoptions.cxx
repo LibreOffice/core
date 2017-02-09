@@ -335,7 +335,7 @@ SvtDefaultOptions::SvtDefaultOptions()
     {
         pImpl = std::make_shared<SvtDefaultOptions_Impl>();
         g_pOptions = pImpl;
-        ItemHolder1::holdConfigItem(E_DEFAULTOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::DefaultOptions);
     }
 }
 

@@ -754,7 +754,7 @@ SvtMiscOptions::SvtMiscOptions()
     {
         m_pImpl = std::make_shared<SvtMiscOptions_Impl>();
         g_pMiscOptions = m_pImpl;
-        svtools::ItemHolder2::holdConfigItem(E_MISCOPTIONS);
+        svtools::ItemHolder2::holdConfigItem(EItem::MiscOptions);
     }
 }
 

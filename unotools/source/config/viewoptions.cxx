@@ -589,7 +589,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     {
                                         //m_pDataContainer_Dialogs = new SvtViewDialogOptions_Impl( LIST_DIALOGS );
                                         m_pDataContainer_Dialogs = new SvtViewOptionsBase_Impl( LIST_DIALOGS );
-                                        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_DIALOG);
+                                        ItemHolder1::holdConfigItem(EItem::ViewOptionsDialog);
                                     }
                                 }
                                 break;
@@ -600,7 +600,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     if( m_nRefCount_TabDialogs == 1 )
                                     {
                                         m_pDataContainer_TabDialogs = new SvtViewOptionsBase_Impl( LIST_TABDIALOGS );
-                                        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_TABDIALOG);
+                                        ItemHolder1::holdConfigItem(EItem::ViewOptionsTabDialog);
                                     }
                                 }
                                 break;
@@ -611,7 +611,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     if( m_nRefCount_TabPages == 1 )
                                     {
                                         m_pDataContainer_TabPages = new SvtViewOptionsBase_Impl( LIST_TABPAGES );
-                                        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_TABPAGE);
+                                        ItemHolder1::holdConfigItem(EItem::ViewOptionsTabPage);
                                     }
                                 }
                                 break;
@@ -622,7 +622,7 @@ SvtViewOptions::SvtViewOptions(       EViewType        eType     ,
                                     if( m_nRefCount_Windows == 1 )
                                     {
                                         m_pDataContainer_Windows = new SvtViewOptionsBase_Impl( LIST_WINDOWS );
-                                        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_WINDOW);
+                                        ItemHolder1::holdConfigItem(EItem::ViewOptionsWindow);
                                     }
                                 }
                                 break;
@@ -1005,22 +1005,22 @@ void SvtViewOptions::AcquireOptions()
     if( ++m_nRefCount_Dialogs == 1 )
     {
         m_pDataContainer_Dialogs = new SvtViewOptionsBase_Impl( LIST_DIALOGS );
-        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_DIALOG);
+        ItemHolder1::holdConfigItem(EItem::ViewOptionsDialog);
     }
     if( ++m_nRefCount_TabDialogs == 1 )
     {
         m_pDataContainer_TabDialogs = new SvtViewOptionsBase_Impl( LIST_TABDIALOGS );
-        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_TABDIALOG);
+        ItemHolder1::holdConfigItem(EItem::ViewOptionsTabDialog);
     }
     if( ++m_nRefCount_TabPages == 1 )
     {
         m_pDataContainer_TabPages = new SvtViewOptionsBase_Impl( LIST_TABPAGES );
-        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_TABPAGE);
+        ItemHolder1::holdConfigItem(EItem::ViewOptionsTabPage);
     }
     if( ++m_nRefCount_Windows == 1 )
     {
         m_pDataContainer_Windows = new SvtViewOptionsBase_Impl( LIST_WINDOWS );
-        ItemHolder1::holdConfigItem(E_VIEWOPTIONS_WINDOW);
+        ItemHolder1::holdConfigItem(EItem::ViewOptionsWindow);
     }
 }
 

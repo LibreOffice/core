@@ -809,7 +809,7 @@ SvtLinguConfigItem & SvtLinguConfig::GetConfigItem()
     if (!pCfgItem)
     {
         pCfgItem = new SvtLinguConfigItem;
-        ItemHolder1::holdConfigItem(E_LINGUCFG);
+        ItemHolder1::holdConfigItem(EItem::LinguConfig);
     }
     return *pCfgItem;
 }

@@ -527,7 +527,7 @@ SvtHistoryOptions::SvtHistoryOptions()
     {
         m_pImpl = std::make_shared<SvtHistoryOptions_Impl>();
         g_pHistoryOptions = m_pImpl;
-        ItemHolder1::holdConfigItem(E_HISTORYOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::HistoryOptions);
     }
 }
 

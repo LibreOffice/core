@@ -233,7 +233,7 @@ SvtPrintWarningOptions::SvtPrintWarningOptions()
     {
         m_pImpl = std::make_shared<SvtPrintWarningOptions_Impl>();
         g_pPrintWarningOptions = m_pImpl;
-        ItemHolder1::holdConfigItem(E_PRINTWARNINGOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::PrintWarningOptions);
     }
 }
 

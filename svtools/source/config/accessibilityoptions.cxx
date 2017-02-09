@@ -363,7 +363,7 @@ SvtAccessibilityOptions::SvtAccessibilityOptions()
         if(!sm_pSingleImplConfig)
         {
             sm_pSingleImplConfig = new SvtAccessibilityOptions_Impl;
-            svtools::ItemHolder2::holdConfigItem(E_ACCESSIBILITYOPTIONS);
+            svtools::ItemHolder2::holdConfigItem(EItem::AccessibilityOptions);
         }
         ++sm_nAccessibilityRefCount;
     }

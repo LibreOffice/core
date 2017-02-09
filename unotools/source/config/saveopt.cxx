@@ -806,7 +806,7 @@ SvtSaveOptions::SvtSaveOptions()
         pOptions->pSaveOpt = new SvtSaveOptions_Impl;
         pOptions->pLoadOpt = new SvtLoadOptions_Impl;
 
-        ItemHolder1::holdConfigItem(E_SAVEOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::SaveOptions);
    }
    ++nRefCount;
     pImp = pOptions;

@@ -259,7 +259,7 @@ SvtFontOptions::SvtFontOptions()
     {
         m_pImpl = std::make_shared<SvtFontOptions_Impl>();
         g_pFontOptions = m_pImpl;
-        ItemHolder1::holdConfigItem(E_FONTOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::FontOptions);
     }
 }
 

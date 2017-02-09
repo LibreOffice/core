@@ -801,7 +801,7 @@ SvtModuleOptions::SvtModuleOptions()
     {
         m_pImpl = std::make_shared<SvtModuleOptions_Impl>();
         g_pModuleOptions = m_pImpl;
-        ItemHolder1::holdConfigItem(E_MODULEOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::ModuleOptions);
     }
 }
 

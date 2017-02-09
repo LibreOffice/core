@@ -328,7 +328,7 @@ GlobalEventConfig::GlobalEventConfig()
     if( m_pImpl == nullptr )
     {
         m_pImpl = new GlobalEventConfig_Impl;
-        ItemHolder1::holdConfigItem(E_EVENTCFG);
+        ItemHolder1::holdConfigItem(EItem::EventConfig);
     }
 }
 

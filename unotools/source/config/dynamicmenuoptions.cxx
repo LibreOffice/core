@@ -581,7 +581,7 @@ SvtDynamicMenuOptions::SvtDynamicMenuOptions()
     {
         m_pImpl = std::make_shared<SvtDynamicMenuOptions_Impl>();
         g_pDynamicMenuOptions = m_pImpl;
-        ItemHolder1::holdConfigItem(E_DYNAMICMENUOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::DynamicMenuOptions);
     }
 }
 

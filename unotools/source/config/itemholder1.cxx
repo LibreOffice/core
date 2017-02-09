@@ -133,99 +133,91 @@ void ItemHolder1::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
     {
-        case E_CMDOPTIONS :
+        case EItem::CmdOptions :
             rItem.pItem = new SvtCommandOptions();
             break;
 
-        case E_COMPATIBILITY :
+        case EItem::Compatibility :
             rItem.pItem = new SvtCompatibilityOptions();
             break;
 
-        case E_DEFAULTOPTIONS :
+        case EItem::DefaultOptions :
             rItem.pItem = new SvtDefaultOptions();
             break;
 
-        case E_DYNAMICMENUOPTIONS :
+        case EItem::DynamicMenuOptions :
             rItem.pItem = new SvtDynamicMenuOptions();
             break;
 
-        case E_EVENTCFG :
+        case EItem::EventConfig :
             //rItem.pItem = new GlobalEventConfig();
             break;
 
-        case E_EXTENDEDSECURITYOPTIONS :
+        case EItem::ExtendedSecurityOptions :
             rItem.pItem = new SvtExtendedSecurityOptions();
             break;
 
-        case E_FLTRCFG :
-// no ref count            rItem.pItem = new SvtFilterOptions();
-            break;
-
-        case E_FONTOPTIONS :
+        case EItem::FontOptions :
             rItem.pItem = new SvtFontOptions();
             break;
 
-        case E_HISTORYOPTIONS :
+        case EItem::HistoryOptions :
             rItem.pItem = new SvtHistoryOptions();
             break;
 
-        case E_LINGUCFG :
+        case EItem::LinguConfig :
             rItem.pItem = new SvtLinguConfig();
             break;
 
-        case E_MODULEOPTIONS :
+        case EItem::ModuleOptions :
             rItem.pItem = new SvtModuleOptions();
             break;
 
-        case E_OPTIONSDLGOPTIONS :
+        case EItem::OptionsDialogOptions :
             rItem.pItem = new SvtOptionsDialogOptions();
             break;
 
-        case E_PATHOPTIONS :
+        case EItem::PathOptions :
             rItem.pItem = new SvtPathOptions();
             break;
 
-        case E_PRINTWARNINGOPTIONS :
+        case EItem::PrintWarningOptions :
             rItem.pItem = new SvtPrintWarningOptions();
             break;
 
-        case E_MISCCFG :
+        case EItem::MiscConfig :
             rItem.pItem = new ::utl::MiscCfg();
             break;
 
-        case E_SAVEOPTIONS :
+        case EItem::SaveOptions :
             rItem.pItem = new SvtSaveOptions();
             break;
 
-        case E_SEARCHOPT :
-// no ref count            rItem.pItem = new SvtSearchOptions();
-            break;
-
-        case E_SECURITYOPTIONS :
+        case EItem::SecurityOptions :
             rItem.pItem = new SvtSecurityOptions();
             break;
 
-        case E_VIEWOPTIONS_DIALOG :
+        case EItem::ViewOptionsDialog :
             rItem.pItem = new SvtViewOptions(E_DIALOG, OUString());
             break;
 
-        case E_VIEWOPTIONS_TABDIALOG :
+        case EItem::ViewOptionsTabDialog :
             rItem.pItem = new SvtViewOptions(E_TABDIALOG, OUString());
             break;
 
-        case E_VIEWOPTIONS_TABPAGE :
+        case EItem::ViewOptionsTabPage :
             rItem.pItem = new SvtViewOptions(E_TABPAGE, OUString());
             break;
 
-        case E_VIEWOPTIONS_WINDOW :
+        case EItem::ViewOptionsWindow :
             rItem.pItem = new SvtViewOptions(E_WINDOW, OUString());
             break;
 
-        case E_USEROPTIONS :
+        case EItem::UserOptions :
             rItem.pItem = new SvtUserOptions();
             break;
 
-        case E_SYSLOCALEOPTIONS :
+        case EItem::SysLocaleOptions :
             rItem.pItem = new SvtSysLocaleOptions();
             break;
 

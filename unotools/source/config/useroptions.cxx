@@ -238,7 +238,7 @@ SvtUserOptions::SvtUserOptions ()
     {
         xImpl.reset(new Impl);
         xSharedImpl = xImpl;
-        ItemHolder1::holdConfigItem(E_USEROPTIONS);
+        ItemHolder1::holdConfigItem(EItem::UserOptions);
     }
     xImpl = xSharedImpl.lock();
     xImpl->AddListener(this);

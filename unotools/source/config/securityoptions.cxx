@@ -944,7 +944,7 @@ SvtSecurityOptions::SvtSecurityOptions()
         m_pImpl = std::make_shared<SvtSecurityOptions_Impl>();
         g_pSecurityOptions = m_pImpl;
 
-        ItemHolder1::holdConfigItem(E_SECURITYOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::SecurityOptions);
     }
 }
 

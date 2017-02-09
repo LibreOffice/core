@@ -194,7 +194,7 @@ MiscCfg::MiscCfg( )
     {
         m_pImpl = std::make_shared<SfxMiscCfg>();
         g_pOptions = m_pImpl;
-        ItemHolder1::holdConfigItem(E_MISCCFG);
+        ItemHolder1::holdConfigItem(EItem::MiscConfig);
     }
 
     m_pImpl->AddListener(this);

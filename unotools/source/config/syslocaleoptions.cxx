@@ -513,7 +513,7 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
         pImpl = std::make_shared<SvtSysLocaleOptions_Impl>();
         g_pSysLocaleOptions = pImpl;
         if (!utl::ConfigManager::IsAvoidConfig())
-            ItemHolder1::holdConfigItem(E_SYSLOCALEOPTIONS);
+            ItemHolder1::holdConfigItem(EItem::SysLocaleOptions);
     }
     pImpl->AddListener(this);
 }

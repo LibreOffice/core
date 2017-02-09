@@ -358,7 +358,7 @@ SvtMenuOptions::SvtMenuOptions()
     {
         m_pImpl = std::make_shared<SvtMenuOptions_Impl>();
         g_pMenuOptions = m_pImpl;
-        svtools::ItemHolder2::holdConfigItem(E_MENUOPTIONS);
+        svtools::ItemHolder2::holdConfigItem(EItem::MenuOptions);
     }
 }
 

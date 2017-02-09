@@ -459,7 +459,7 @@ SvtPathOptions::SvtPathOptions()
     {
         pImpl = std::make_shared<SvtPathOptions_Impl>();
         g_pOptions = pImpl;
-        ItemHolder1::holdConfigItem(E_PATHOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::PathOptions);
     }
 }
 

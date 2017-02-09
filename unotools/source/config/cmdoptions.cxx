@@ -305,7 +305,7 @@ SvtCommandOptions::SvtCommandOptions()
     {
         m_pImpl = std::make_shared<SvtCommandOptions_Impl>();
         g_pCommandOptions = m_pImpl;
-        ItemHolder1::holdConfigItem(E_CMDOPTIONS);
+        ItemHolder1::holdConfigItem(EItem::CmdOptions);
     }
 }
 

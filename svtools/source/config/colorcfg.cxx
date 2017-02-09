@@ -376,7 +376,7 @@ ColorConfig::ColorConfig()
     if ( !m_pImpl )
     {
         m_pImpl = new ColorConfig_Impl;
-        svtools::ItemHolder2::holdConfigItem(E_COLORCFG);
+        svtools::ItemHolder2::holdConfigItem(EItem::ColorConfig);
     }
     ++nColorRefCount_Impl;
     m_pImpl->AddListener(this);

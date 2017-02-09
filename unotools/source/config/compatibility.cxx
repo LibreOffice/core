@@ -321,7 +321,7 @@ SvtCompatibilityOptions::SvtCompatibilityOptions()
     {
         m_pImpl    = std::make_shared<SvtCompatibilityOptions_Impl>();
         theOptions = m_pImpl;
-        ItemHolder1::holdConfigItem( E_COMPATIBILITY );
+        ItemHolder1::holdConfigItem( EItem::Compatibility );
     }
 }
 

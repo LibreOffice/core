@@ -118,16 +118,12 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
     {
-        case E_CJKOPTIONS :
+        case EItem::CJKOptions :
             rItem.pItem = new SvtCJKOptions();
             break;
 
-        case E_CTLOPTIONS :
+        case EItem::CTLOptions :
             rItem.pItem = new SvtCTLOptions();
-            break;
-
-        case E_LANGUAGEOPTIONS :
-// capsulate CTL and CJL options !            rItem.pItem = new SvtLanguageOptions();
             break;
 
         default:

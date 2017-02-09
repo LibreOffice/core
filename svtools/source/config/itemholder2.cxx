@@ -133,39 +133,31 @@ void ItemHolder2::impl_newItem(TItemInfo& rItem)
 {
     switch(rItem.eItem)
     {
-        case E_ACCESSIBILITYOPTIONS :
+        case EItem::AccessibilityOptions :
             rItem.pItem = new SvtAccessibilityOptions();
             break;
 
-        case E_APEARCFG :
-// no ref count            rItem.pItem = new SvtTabAppearanceCfg();
-            break;
-
-        case E_COLORCFG :
+        case EItem::ColorConfig :
             rItem.pItem = new ::svtools::ColorConfig();
             break;
 
-        case E_FONTSUBSTCONFIG :
-// no ref count            rItem.pItem = new SvtFontSubstConfig();
-            break;
-
-        case E_HELPOPTIONS :
+        case EItem::HelpOptions :
             rItem.pItem = new SvtHelpOptions();
             break;
 
-        case E_MENUOPTIONS :
+        case EItem::MenuOptions :
             rItem.pItem = new SvtMenuOptions();
             break;
 
-        case E_PRINTOPTIONS :
+        case EItem::PrintOptions :
             rItem.pItem = new SvtPrinterOptions();
             break;
 
-        case E_PRINTFILEOPTIONS :
+        case EItem::PrintFileOptions :
             rItem.pItem = new SvtPrintFileOptions();
             break;
 
-        case E_MISCOPTIONS :
+        case EItem::MiscOptions :
             rItem.pItem = new SvtMiscOptions();
             break;
 

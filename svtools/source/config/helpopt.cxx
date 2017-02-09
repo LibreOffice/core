@@ -266,7 +266,7 @@ SvtHelpOptions::SvtHelpOptions()
     {
         pImpl = std::make_shared<SvtHelpOptions_Impl>();
         g_pHelpOptions = pImpl;
-        svtools::ItemHolder2::holdConfigItem(E_HELPOPTIONS);
+        svtools::ItemHolder2::holdConfigItem(EItem::HelpOptions);
     }
 }
 

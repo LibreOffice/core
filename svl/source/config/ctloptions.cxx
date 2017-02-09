@@ -354,7 +354,7 @@ SvtCTLOptions::SvtCTLOptions( bool bDontLoad )
     {
         m_pImpl = std::make_shared<SvtCTLOptions_Impl>();
         g_pCTLOptions = m_pImpl;
-        ItemHolder2::holdConfigItem(E_CTLOPTIONS);
+        ItemHolder2::holdConfigItem(EItem::CTLOptions);
     }
 
     if( !bDontLoad && !m_pImpl->IsLoaded() )
