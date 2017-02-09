@@ -550,7 +550,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
 
                     aTarget.transferContent(
                             aSource,
-                            ::ucbhelper::InsertOperation_COPY,
+                            ::ucbhelper::InsertOperation::Copy,
                             OUString(sFileName),
                             css::ucb::NameClash::OVERWRITE);
                 }

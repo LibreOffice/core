@@ -729,7 +729,7 @@ void SAL_CALL FSStorage::renameElement( const OUString& aElementName, const OUSt
         ::ucbhelper::Content aSourceContent( aOldURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xDummyEnv, comphelper::getProcessComponentContext() );
 
         if ( !GetContent()->transferContent( aSourceContent,
-                                            ::ucbhelper::InsertOperation_MOVE,
+                                            ::ucbhelper::InsertOperation::Move,
                                             aNewName,
                                             ucb::NameClash::ERROR ) )
             throw io::IOException(); // TODO: error handling

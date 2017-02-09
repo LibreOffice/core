@@ -263,8 +263,8 @@ void OFileAccess::transferImpl( const OUString& rSource,
     {
         (void)aDestPath.transferContent(aSrc,
                                         bMoveData
-                                         ? ucbhelper::InsertOperation_MOVE
-                                         : ucbhelper::InsertOperation_COPY,
+                                         ? ucbhelper::InsertOperation::Move
+                                         : ucbhelper::InsertOperation::Copy,
                                         aName,
                                         css::ucb::NameClash::OVERWRITE);
     }

@@ -76,12 +76,11 @@ enum ResultSetInclude
   * These are the possible values for the parameter eOperation of method
   * ucbhelper::Content::insertNewContent.
   */
-enum InsertOperation
+enum class InsertOperation
 {
-    InsertOperation_COPY, // copy source data
-    InsertOperation_MOVE, // move source data
-    InsertOperation_LINK,  // create a link to source
-    InsertOperation_CHECKIN  // check-in source data
+    Copy, // copy source data
+    Move, // move source data
+    Checkin  // check-in source data
 };
 
 

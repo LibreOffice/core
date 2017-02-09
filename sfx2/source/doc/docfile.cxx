@@ -2062,12 +2062,12 @@ void SfxMedium::Transfer_Impl()
                 try
                 {
                     OUString aMimeType = pImpl->getFilterMimeType();
-                    ::ucbhelper::InsertOperation eOperation = ::ucbhelper::InsertOperation_COPY;
+                    ::ucbhelper::InsertOperation eOperation = ::ucbhelper::InsertOperation::Copy;
                     bool bMajor = false;
                     OUString sComment;
                     if ( IsInCheckIn( ) )
                     {
-                        eOperation = ::ucbhelper::InsertOperation_CHECKIN;
+                        eOperation = ::ucbhelper::InsertOperation::Checkin;
                         const SfxBoolItem* pMajor = SfxItemSet::GetItem<SfxBoolItem>(GetItemSet(), SID_DOCINFO_MAJOR, false);
                         bMajor = pMajor && pMajor->GetValue( );
                         const SfxStringItem* pComments = SfxItemSet::GetItem<SfxStringItem>(GetItemSet(), SID_DOCINFO_COMMENTS, false);
@@ -2088,7 +2088,7 @@ void SfxMedium::Transfer_Impl()
                     {
                         if ( GetURLObject().isAnyKnownWebDAVScheme() &&
                              isTransferOK &&
-                             eOperation == ::ucbhelper::InsertOperation_COPY )
+                             eOperation == ::ucbhelper::InsertOperation::Copy )
                         {
                             // tdf#95272 try to re-issue a lock command when a new file is created.
                             // This may be needed because some WebDAV servers fail to implement the
@@ -2171,7 +2171,7 @@ void SfxMedium::DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalCont
         {
             OUString sMimeType = pImpl->getFilterMimeType();
             if( aBackupCont.transferContent( aOriginalContent,
-                                            ::ucbhelper::InsertOperation_COPY,
+                                            ::ucbhelper::InsertOperation::Copy,
                                             aBackupName,
                                             NameClash::OVERWRITE,
                                             sMimeType ) )
@@ -2260,7 +2260,7 @@ void SfxMedium::DoBackup_Impl()
                     // do the transfer ( copy source file to backup dir )
                     OUString sMimeType = pImpl->getFilterMimeType();
                     bSuccess = aContent.transferContent( aSourceContent,
-                                                        ::ucbhelper::InsertOperation_COPY,
+                                                        ::ucbhelper::InsertOperation::Copy,
                                                         aFileName,
                                                         NameClash::OVERWRITE,
                                                         sMimeType );
@@ -3407,7 +3407,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
                 {
                     ::ucbhelper::Content aTargetContent( aTmpURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
                     OUString sMimeType = pImpl->getFilterMimeType();
-                    if ( aTargetContent.transferContent( pImpl->aContent, ::ucbhelper::InsertOperation_COPY, aFileName, NameClash::OVERWRITE, sMimeType ) )
+                    if ( aTargetContent.transferContent( pImpl->aContent, ::ucbhelper::InsertOperation::Copy, aFileName, NameClash::OVERWRITE, sMimeType ) )
                     {
                         SetWritableForUserOnly( aTmpURL );
                         bTransferSuccess = true;
@@ -3698,7 +3698,7 @@ OUString SfxMedium::CreateTempCopyWithExt( const OUString& aURL )
                     ::ucbhelper::Content aTargetContent( aDest.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
                     ::ucbhelper::Content aSourceContent( aSource.GetMainURL( INetURLObject::DecodeMechanism::NONE ), xComEnv, comphelper::getProcessComponentContext() );
                     if ( aTargetContent.transferContent( aSourceContent,
-                                                        ::ucbhelper::InsertOperation_COPY,
+                                                        ::ucbhelper::InsertOperation::Copy,
                                                         aFileName,
                                                         NameClash::OVERWRITE ) )
                     {

@@ -545,7 +545,7 @@ void Package::exportTo(
     try
     {
         bOk = destFolder.transferContent(
-            sourceContent, ::ucbhelper::InsertOperation_COPY,
+            sourceContent, ::ucbhelper::InsertOperation::Copy,
             newTitle, nameClashAction);
     }
     catch (const css::ucb::ContentCreationException&)

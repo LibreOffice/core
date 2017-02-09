@@ -636,7 +636,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
             buf.makeStringAndClear(), xCmdEnv, m_xComponentContext );
     }
     if (! destFolderContent.transferContent(
-            sourceContent, ::ucbhelper::InsertOperation_COPY,
+            sourceContent, ::ucbhelper::InsertOperation::Copy,
             title, NameClash::OVERWRITE ))
         throw RuntimeException( "UCB transferContent() failed!", nullptr );
 
@@ -747,7 +747,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             create_folder( &docFolderContent, m_context, xCmdEnv );
             // copy into document, first:
             if (! docFolderContent.transferContent(
-                    sourceContent, ::ucbhelper::InsertOperation_COPY,
+                    sourceContent, ::ucbhelper::InsertOperation::Copy,
                     OUString(),
                     NameClash::ASK /* xxx todo: ASK not needed? */))
                 throw RuntimeException("UCB transferContent() failed!", nullptr );

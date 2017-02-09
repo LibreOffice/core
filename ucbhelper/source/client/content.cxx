@@ -956,19 +956,15 @@ bool Content::transferContent( const Content& rSourceContent,
     bool bCheckIn = false;
     switch ( eOperation )
     {
-        case InsertOperation_COPY:
+        case InsertOperation::Copy:
             eTransOp = TransferCommandOperation_COPY;
             break;
 
-        case InsertOperation_MOVE:
+        case InsertOperation::Move:
             eTransOp = TransferCommandOperation_MOVE;
             break;
 
-        case InsertOperation_LINK:
-            eTransOp = TransferCommandOperation_LINK;
-            break;
-
-        case InsertOperation_CHECKIN:
+        case InsertOperation::Checkin:
             eTransOp = TransferCommandOperation_COPY;
             sCommand = "checkin";
             bCheckIn = true;

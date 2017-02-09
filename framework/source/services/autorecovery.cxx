@@ -3939,7 +3939,7 @@ AutoRecovery::EFailureSafeResult AutoRecovery::implts_copyFile(const OUString& s
         bool bSuccess = ::ucbhelper::Content::create(sSource, xEnvironment, m_xContext, aSourceContent);
         if (!bSuccess)
             return AutoRecovery::E_ORIGINAL_FILE_MISSING;
-        aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation_COPY, sTargetName, nNameClash);
+        aTargetContent.transferContent(aSourceContent, ::ucbhelper::InsertOperation::Copy, sTargetName, nNameClash);
     }
     catch(const css::uno::Exception&)
     {

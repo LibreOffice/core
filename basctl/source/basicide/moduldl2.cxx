@@ -1239,7 +1239,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 
         ::ucbhelper::Content destFolderContent( destFolder, xCmdEnv, comphelper::getProcessComponentContext() );
         destFolderContent.transferContent(
-            sourceContent, ::ucbhelper::InsertOperation_COPY,
+            sourceContent, ::ucbhelper::InsertOperation::Copy,
             OUString(), NameClash::OVERWRITE );
 
         INetURLObject aMetaInfInetObj( aTmpPath );
@@ -1279,7 +1279,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
 
         ::ucbhelper::Content MetaInfContent( aMetaInfFolder, xCmdEnv, comphelper::getProcessComponentContext() );
         destFolderContent.transferContent(
-            MetaInfContent, ::ucbhelper::InsertOperation_COPY,
+            MetaInfContent, ::ucbhelper::InsertOperation::Copy,
             OUString(), NameClash::OVERWRITE );
 
         if( xSFA->exists( aSourcePath ) )

@@ -2221,7 +2221,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             xWriter = nullptr;
                             xOutputStream = nullptr;
                             pTempFile.reset();
-                            aNewSubFolder.transferContent( aSource, InsertOperation_MOVE, "manifest.xml", NameClash::OVERWRITE );
+                            aNewSubFolder.transferContent( aSource, InsertOperation::Move, "manifest.xml", NameClash::OVERWRITE );
                         }
                     }
                     else

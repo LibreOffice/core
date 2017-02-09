@@ -1340,7 +1340,7 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( const OUString& aUs
         Content aTargetContent( aUserPath, maCmdEnv, comphelper::getProcessComponentContext() );
         Content aSourceContent( aTempURL, maCmdEnv, comphelper::getProcessComponentContext() );
         aTargetContent.transferContent( aSourceContent,
-                                        InsertOperation_COPY,
+                                        InsertOperation::Copy,
                                         "groupuinames.xml",
                                         ucb::NameClash::OVERWRITE,
                                         "text/xml" );
@@ -1980,7 +1980,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
     try
     {
         if( ! aTargetGroup.transferContent( aSourceContent,
-                                                InsertOperation_COPY,
+                                                InsertOperation::Copy,
                                                 aNewTemplateTargetName,
                                                 NameClash::OVERWRITE,
                                                 aType ) )

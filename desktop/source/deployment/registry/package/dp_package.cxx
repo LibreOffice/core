@@ -1033,7 +1033,7 @@ void BackendImpl::PackageImpl::exportTo(
                     xResultSet, UNO_QUERY_THROW )->queryContent(),
                 xCmdEnv, getMyBackend()->getComponentContext() );
             if (! destFolderContent.transferContent(
-                    subContent, ::ucbhelper::InsertOperation_COPY,
+                    subContent, ::ucbhelper::InsertOperation::Copy,
                     OUString(), ucb::NameClash::OVERWRITE ))
                 throw RuntimeException( "UCB transferContent() failed!",
                                         static_cast<OWeakObject *>(this) );
@@ -1141,7 +1141,7 @@ void BackendImpl::PackageImpl::exportTo(
             }
 
             if (metainfFolderContent.transferContent(
-                  manifestContent, ::ucbhelper::InsertOperation_COPY,
+                  manifestContent, ::ucbhelper::InsertOperation::Copy,
                   OUString(), ucb::NameClash::OVERWRITE ))
             {
                 bSuccess = true;

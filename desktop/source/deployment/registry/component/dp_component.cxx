@@ -430,7 +430,7 @@ void BackendImpl::initServiceRdbFiles()
     if (oldRDB.get().is())
     {
         if (! cacheDir.transferContent(
-                oldRDB, ::ucbhelper::InsertOperation_COPY,
+                oldRDB, ::ucbhelper::InsertOperation::Copy,
                 m_commonRDB, NameClash::OVERWRITE ))
         {
 
@@ -451,7 +451,7 @@ void BackendImpl::initServiceRdbFiles()
     if (oldRDB.get().is())
     {
         if (! cacheDir.transferContent(
-                oldRDB, ::ucbhelper::InsertOperation_COPY,
+                oldRDB, ::ucbhelper::InsertOperation::Copy,
                 m_nativeRDB, NameClash::OVERWRITE ))
             throw RuntimeException( "UCB transferContent() failed!", nullptr );
     }
