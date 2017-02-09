@@ -232,7 +232,7 @@ void SfxHTMLParser::StartFileDownload(const OUString& rURL)
 
 bool SfxHTMLParser::FinishFileDownload( OUString& rStr )
 {
-    bool bOK = pDLMedium && pDLMedium->GetErrorCode()==0;
+    bool bOK = pDLMedium && pDLMedium->GetErrorCode() == ERRCODE_NONE;
     if( bOK )
     {
         SvStream* pStream = pDLMedium->GetInStream();

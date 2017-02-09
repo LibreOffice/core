@@ -1128,7 +1128,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 if (!GetError())
                     SetError(eError);
 
-                if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
+                if( eError.IsWarning() )
                     bRet = true;
             }
             else
@@ -1284,7 +1284,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             }
 
             ScDocRowHeightUpdater::TabRanges aRecalcRanges(0);
-            sal_uLong eError = DBaseImport( rMedium.GetPhysicalName(),
+            ErrCode eError = DBaseImport( rMedium.GetPhysicalName(),
                     ScGlobal::GetCharsetValue(sItStr), aColWidthParam, *aRecalcRanges.mpRanges );
             aRecalcRowRangesArray.push_back(aRecalcRanges);
 
@@ -1331,7 +1331,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     if (!GetError())
                         SetError(eError);
 
-                    if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
+                    if( eError.IsWarning() )
                         bRet = true;
                 }
                 else
@@ -1377,7 +1377,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             {
                 if (!GetError())
                     SetError(eError);
-                if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
+                if( eError.IsWarning() )
                     bRet = true;
             }
             else
@@ -1404,7 +1404,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                         if (!GetError())
                             SetError(eError);
 
-                        if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
+                        if( eError.IsWarning() )
                             bRet = true;
                     }
                     else
@@ -1456,7 +1456,7 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                         if (!GetError())
                             SetError(eError);
 
-                        if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
+                        if( eError.IsWarning() )
                             bRet = true;
                     }
                     else
@@ -2288,7 +2288,7 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
                 SetError(eError);
 
             // don't return false for warnings
-            bRet = ((eError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK) || (eError == ERRCODE_NONE);
+            bRet = eError.IsWarning() || (eError == ERRCODE_NONE);
         }
         else
         {
@@ -2353,10 +2353,10 @@ bool ScDocShell::ConvertTo( SfxMedium &rMed )
         rMed.CloseOutStream();
         bool bHasMemo = false;
 
-        sal_uLong eError = DBaseExport(
+        ErrCode eError = DBaseExport(
             rMed.GetPhysicalName(), ScGlobal::GetCharsetValue(sCharSet), bHasMemo);
 
-        if ( eError != ERRCODE_NONE && (eError & ERRCODE_WARNING_MASK) )
+        if ( eError != ERRCODE_NONE && eError.IsWarning() )
         {
             eError = ERRCODE_NONE;
         }

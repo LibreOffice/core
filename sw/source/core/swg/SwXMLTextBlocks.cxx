@@ -161,7 +161,7 @@ void SwXMLTextBlocks::AddName( const OUString& rShort, const OUString& rLong,
     m_bInfoChanged = true;
 }
 
-sal_uLong SwXMLTextBlocks::Delete( sal_uInt16 n )
+ErrCode SwXMLTextBlocks::Delete( sal_uInt16 n )
 {
     const OUString aPckName (m_aNames[n]->aPackageName);
     uno::Reference < container::XNameAccess > xAccess( xBlkRoot, uno::UNO_QUERY );
@@ -174,21 +174,21 @@ sal_uLong SwXMLTextBlocks::Delete( sal_uInt16 n )
             uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
             if ( xTrans.is() )
                 xTrans->commit();
-            return 0;
+            return ERRCODE_NONE;
         }
         catch (const uno::Exception&)
         {
             return ERR_SWG_WRITE_ERROR;
         }
     }
-    return 0;
+    return ERRCODE_NONE;
 }
 
-sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort, const OUString& )
+ErrCode SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort, const OUString& )
 {
     OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
-        return 0;
+        return ERRCODE_NONE;
     OUString aOldName (m_aNames[nIdx]->aPackageName);
     m_aShort = rNewShort;
     aPackageName = GeneratePackageName( m_aShort );
@@ -230,13 +230,13 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const OUString& rNewShort, c
         xTrans->commit();
     // No need to commit xBlkRoot here as SwTextBlocks::Rename calls
     // WriteInfo which does the commit
-    return 0;
+    return ERRCODE_NONE;
 }
 
-sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
+ErrCode SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
                                                     const OUString& rLong)
 {
-    sal_uLong nError = 0;
+    ErrCode nError = ERRCODE_NONE;
     OpenFile();
     rDestImp.OpenFile(false);
     const OUString aGroup( rShort );
@@ -285,11 +285,11 @@ sal_uLong SwXMLTextBlocks::CopyBlock( SwImpBlocks& rDestImp, OUString& rShort,
     return nError;
 }
 
-sal_uLong SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& rPackageName )
+ErrCode SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& rPackageName )
 {
     OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
-        return 0;
+        return ERRCODE_NONE;
     GetIndex ( rShort );
     try
     {
@@ -303,10 +303,10 @@ sal_uLong SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString
     catch (const uno::Exception&)
     {
     }
-    return 0;
+    return ERRCODE_NONE;
 }
 
-sal_uLong SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& rLong )
+ErrCode SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& rLong )
 {
     // Store in base class
     m_aShort = rShort;
@@ -316,9 +316,9 @@ sal_uLong SwXMLTextBlocks::BeginPutDoc( const OUString& rShort, const OUString& 
     return StartPutBlock (rShort, aPackageName);
 }
 
-sal_uLong SwXMLTextBlocks::PutBlock()
+ErrCode SwXMLTextBlocks::PutBlock()
 {
-    sal_uLong nRes = 0; // dead variable, this always returns 0
+    ErrCode nRes = ERRCODE_NONE; // dead variable, this always returns 0
     SwXmlFlags nCommitFlags = nFlags;
 
     WriterRef xWrt;
@@ -389,26 +389,26 @@ sal_uLong SwXMLTextBlocks::PutBlock()
     }
 
     //TODO/LATER: error handling
-    return 0;
+    return ERRCODE_NONE;
 }
 
-sal_uLong SwXMLTextBlocks::PutDoc()
+ErrCode SwXMLTextBlocks::PutDoc()
 {
     SwPaM* pPaM = MakePaM();
-    sal_uLong nErr = PutBlock();
+    ErrCode nErr = PutBlock();
     delete pPaM;
     return nErr;
 }
 
-sal_uLong SwXMLTextBlocks::GetText( const OUString& rShort, OUString& rText )
+ErrCode SwXMLTextBlocks::GetText( const OUString& rShort, OUString& rText )
 {
     return GetBlockText( rShort, rText );
 }
 
-sal_uLong SwXMLTextBlocks::MakeBlockList()
+ErrCode SwXMLTextBlocks::MakeBlockList()
 {
     WriteInfo();
-    return 0;
+    return ERRCODE_NONE;
 }
 
 bool SwXMLTextBlocks::PutMuchEntries( bool bOn )
@@ -422,7 +422,7 @@ bool SwXMLTextBlocks::PutMuchEntries( bool bOn )
         }
         else if( !IsFileChanged() )
         {
-            bRet = 0 == OpenFile( false );
+            bRet = ERRCODE_NONE == OpenFile( false );
             if( bRet )
             {
                 nFlags |= SwXmlFlags::NoRootCommit;
@@ -454,9 +454,9 @@ bool SwXMLTextBlocks::PutMuchEntries( bool bOn )
     return bRet;
 }
 
-sal_uLong SwXMLTextBlocks::OpenFile( bool bRdOnly )
+ErrCode SwXMLTextBlocks::OpenFile( bool bRdOnly )
 {
-    sal_uLong nRet = 0;
+    ErrCode nRet = ERRCODE_NONE;
     try
     {
         uno::Reference < embed::XStorage > refStg  = comphelper::OStorageHelper::GetStorageFromURL( m_aFile,
@@ -466,7 +466,7 @@ sal_uLong SwXMLTextBlocks::OpenFile( bool bRdOnly )
     catch (const uno::Exception&)
     {
         //TODO/LATER: error handling
-        nRet = 1;
+        nRet = ErrCode(1);
     }
 
     return nRet;
@@ -547,10 +547,10 @@ OUString SwXMLTextBlocks::GeneratePackageName ( const OUString& rShort )
     return aBuf.makeStringAndClear();
 }
 
-sal_uLong SwXMLTextBlocks::PutText( const OUString& rShort, const OUString& rName,
+ErrCode SwXMLTextBlocks::PutText( const OUString& rShort, const OUString& rName,
                                     const OUString& rText )
 {
-    sal_uLong nRes = 0;
+    ErrCode nRes = ERRCODE_NONE;
     m_aShort = rShort;
     m_aLong = rName;
     m_aCurrentText = rText;

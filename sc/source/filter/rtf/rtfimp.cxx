@@ -28,7 +28,7 @@
 ErrCode ScFormatFilterPluginImpl::ScImportRTF( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc, ScRange& rRange )
 {
     ScRTFImport aImp( pDoc, rRange );
-    ErrCode nErr = (ErrCode) aImp.Read( rStream, rBaseURL );
+    ErrCode nErr = aImp.Read( rStream, rBaseURL );
     ScRange aR = aImp.GetRange();
     rRange.aEnd = aR.aEnd;
     aImp.WriteToDocument();

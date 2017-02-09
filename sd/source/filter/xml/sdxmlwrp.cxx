@@ -78,7 +78,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::document;
 using namespace comphelper;
 
-#define SD_XML_READERROR 1234
+#define SD_XML_READERROR ErrCode(1234)
 
 char const sXML_export_impress_meta_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisMetaExporter";
 char const sXML_export_impress_styles_oasis_service[] = "com.sun.star.comp.Impress.XMLOasisStylesExporter";
@@ -166,7 +166,7 @@ SdXMLFilter::~SdXMLFilter()
 namespace
 {
 
-sal_Int32 ReadThroughComponent(
+ErrCode ReadThroughComponent(
     const Reference<io::XInputStream>& xInputStream,
     const Reference<XComponent>& xModelComponent,
     const OUString& rStreamName,
@@ -288,10 +288,10 @@ sal_Int32 ReadThroughComponent(
     }
 
     // success!
-    return 0;
+    return ERRCODE_NONE;
 }
 
-sal_Int32 ReadThroughComponent(
+ErrCode ReadThroughComponent(
     const uno::Reference < embed::XStorage >& xStorage,
     const Reference<XComponent>& xModelComponent,
     const sal_Char* pStreamName,
@@ -323,7 +323,7 @@ sal_Int32 ReadThroughComponent(
 
         // do we even have an alternative name?
         if ( nullptr == pCompatibilityStreamName )
-            return 0;
+            return ERRCODE_NONE;
 
         // if so, does the stream exist?
         sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
@@ -336,7 +336,7 @@ sal_Int32 ReadThroughComponent(
         }
 
         if (! bContainsStream )
-            return 0;
+            return ERRCODE_NONE;
     }
 
     // set Base URL
@@ -446,7 +446,7 @@ void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
 
 bool SdXMLFilter::Import( ErrCode& nError )
 {
-    sal_uInt32  nRet = 0;
+    ErrCode nRet = ERRCODE_NONE;
 
     // Get service factory
     Reference< uno::XComponentContext > rxContext =
@@ -549,7 +549,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     if( !xStorage.is() )
         nRet = SD_XML_READERROR;
 
-    if( 0 == nRet )
+    if( ERRCODE_NONE == nRet )
     {
         pGraphicHelper = SvXMLGraphicHelper::Create( xStorage,
                                                      SvXMLGraphicHelperMode::Read,
@@ -568,7 +568,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     SAL_INFO_IF(baseURI.isEmpty(), "sd.filter", "SdXMLFilter: no base URL");
     xInfoSet->setPropertyValue("BaseURI", makeAny(baseURI));
 
-    if( 0 == nRet && SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
+    if( ERRCODE_NONE == nRet && SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
     {
         OUString aName;
         if ( mrMedium.GetItemSet() )
@@ -588,7 +588,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     if (SDXMLMODE_Organizer == meFilterMode)
         xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(true));
 
-    if( 0 == nRet )
+    if( ERRCODE_NONE == nRet )
     {
 
         // prepare filter arguments
@@ -608,8 +608,8 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
         XML_SERVICES* pServices = getServices( true, IsDraw(), mnStoreVer );
 
-        sal_uInt32 nWarn = 0;
-        sal_uInt32 nWarn2 = 0;
+        ErrCode nWarn = ERRCODE_NONE;
+        ErrCode nWarn2 = ERRCODE_NONE;
         // read storage streams
         // #i103539#: always read meta.xml for generator
         nWarn = ReadThroughComponent(
@@ -658,27 +658,19 @@ bool SdXMLFilter::Import( ErrCode& nError )
     if( mxModel.is() )
         mxModel->unlockControllers();
 
-    if( nRet == 0 )
+    if( nRet == ERRCODE_NONE )
         pDoc->UpdateAllLinks();
 
-    switch( nRet )
+    if( nRet.anyOf( ERRCODE_NONE, SD_XML_READERROR ) )
+        ;
+    else if( nRet == ERRCODE_IO_BROKENPACKAGE && xStorage.is() )
+        nError = ERRCODE_IO_BROKENPACKAGE;
+    else
     {
-    case 0: break;
-    case SD_XML_READERROR: break;
-    case ERRCODE_IO_BROKENPACKAGE:
-        if( xStorage.is() )
-        {
-            nError = ERRCODE_IO_BROKENPACKAGE;
-            break;
-        }
-        SAL_FALLTHROUGH;
-    default:
-        {
-            // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly!
-            ErrorHandler::HandleError( nRet );
-            if( IsWarning( nRet ) )
-                nRet = 0;
-        }
+        // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly!
+        ErrorHandler::HandleError( nRet );
+        if( nRet.IsWarning() )
+            nRet = ERRCODE_NONE;
     }
 
     // clear unused named items from item pool
@@ -738,7 +730,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
             bool bTransform = false;
 
-            if( nRet == 0 )
+            if( nRet == ERRCODE_NONE )
             {
                 if( !sBuildId.isEmpty() )
                 {
@@ -782,7 +774,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
 
     pDoc->EnableUndo(true);
     mrDocShell.ClearUndoBuffer();
-    return nRet == 0;
+    return nRet == ERRCODE_NONE;
 }
 
 bool SdXMLFilter::Export()

@@ -36,13 +36,13 @@ class SvStream;
 struct WMF_EXTERNALHEADER;
 struct ConvertData;
 
-#define ERRCODE_GRFILTER_OPENERROR    (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 1)
-#define ERRCODE_GRFILTER_IOERROR      (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 2)
-#define ERRCODE_GRFILTER_FORMATERROR  (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 3)
-#define ERRCODE_GRFILTER_VERSIONERROR (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 4)
-#define ERRCODE_GRFILTER_FILTERERROR  (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 5)
-#define ERRCODE_GRFILTER_ABORT        (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 6)
-#define ERRCODE_GRFILTER_TOOBIG       (ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 7)
+#define ERRCODE_GRFILTER_OPENERROR    ErrCode(ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 1)
+#define ERRCODE_GRFILTER_IOERROR      ErrCode(ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 2)
+#define ERRCODE_GRFILTER_FORMATERROR  ErrCode(ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 3)
+#define ERRCODE_GRFILTER_VERSIONERROR ErrCode(ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 4)
+#define ERRCODE_GRFILTER_FILTERERROR  ErrCode(ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 5)
+#define ERRCODE_GRFILTER_ABORT        ErrCode(ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 6)
+#define ERRCODE_GRFILTER_TOOBIG       ErrCode(ERRCODE_AREA_VCL | ERRCODE_CLASS_GENERAL | 7)
 
 #define GRFILTER_OUTHINT_GREY       1
 
@@ -221,10 +221,10 @@ public:
 /** Information about errors during the GraphicFilter operation. */
 struct FilterErrorEx
 {
-    sal_uLong   nFilterError;
-    sal_uLong   nStreamError;
+    ErrCode     nFilterError;
+    ErrCode     nStreamError;
 
-            FilterErrorEx() : nFilterError( 0UL ), nStreamError( 0UL ) {}
+            FilterErrorEx() : nFilterError( ERRCODE_NONE ), nStreamError( ERRCODE_NONE ) {}
 };
 
 /** Class to import and export graphic formats. */
@@ -273,11 +273,11 @@ public:
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE );
 
-    sal_uInt16          CanImportGraphic( const OUString& rPath, SvStream& rStream,
+    ErrCode             CanImportGraphic( const OUString& rPath, SvStream& rStream,
                                       sal_uInt16 nFormat,
                                       sal_uInt16 * pDeterminedFormat);
 
-    sal_uInt16          ImportGraphic( Graphic& rGraphic, const OUString& rPath,
+    ErrCode             ImportGraphic( Graphic& rGraphic, const OUString& rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
@@ -300,12 +300,12 @@ public:
 
     const Link<ConvertData&,bool> GetFilterCallback() const;
     static GraphicFilter& GetGraphicFilter();
-    static int      LoadGraphic( const OUString& rPath, const OUString& rFilter,
+    static ErrCode  LoadGraphic( const OUString& rPath, const OUString& rFilter,
                      Graphic& rGraphic,
                      GraphicFilter* pFilter = nullptr,
                      sal_uInt16* pDeterminedFormat = nullptr );
 
-    sal_uInt16 compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream);
+    ErrCode         compressAsPNG(const Graphic& rGraphic, SvStream& rOutputStream);
 
 protected:
     OUString        aFilterPath;
@@ -313,7 +313,7 @@ protected:
 
 private:
     void            ImplInit();
-    sal_uLong       ImplSetError( sal_uLong nError, const SvStream* pStm = nullptr );
+    ErrCode         ImplSetError( ErrCode nError, const SvStream* pStm = nullptr );
     ErrCode         ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
 
                     DECL_LINK( FilterCallback, ConvertData&, bool );

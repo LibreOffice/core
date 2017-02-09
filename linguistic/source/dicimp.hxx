@@ -27,6 +27,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <tools/solar.h>
+#include <vcl/errcode.hxx>
 
 #include "defs.hxx"
 #include "linguistic/misc.hxx"
@@ -62,8 +63,8 @@ class DictionaryNeo :
     void                    launchEvent(sal_Int16 nEvent,
                                         const css::uno::Reference< css::linguistic2::XDictionaryEntry >& xEntry);
 
-    sal_uLong                   loadEntries(const OUString &rMainURL);
-    sal_uLong                   saveEntries(const OUString &rMainURL);
+    ErrCode                     loadEntries(const OUString &rMainURL);
+    ErrCode                     saveEntries(const OUString &rMainURL);
     static int                  cmpDicEntry(const OUString &rWord1,
                                         const OUString &rWord2,
                                         bool bSimilarOnly = false);

@@ -166,7 +166,7 @@ public:
     void fillAutomationDecimal( css::bridge::oleautomation::Decimal& rAutomationDec ) const;
     bool PutCurrency( sal_Int64 );
             // Interface for CDbl in Basic
-    static SbxError ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle = false );
+    static ErrCode ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle = false );
 
     bool PutObject( SbxBase* );
 

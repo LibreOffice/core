@@ -27,38 +27,38 @@
 #define DDE_FIRSTERR    0x4000
 #define DDE_LASTERR     0x4011
 
-static const SbError nDdeErrMap[] =
+static const ErrCode nDdeErrMap[] =
 {
-    /* DMLERR_ADVACKTIMEOUT       */  0x4000, ERRCODE_BASIC_DDE_TIMEOUT,
-    /* DMLERR_BUSY                */  0x4001, ERRCODE_BASIC_DDE_BUSY,
-    /* DMLERR_DATAACKTIMEOUT      */  0x4002, ERRCODE_BASIC_DDE_TIMEOUT,
-    /* DMLERR_DLL_NOT_INITIALIZED */  0x4003, ERRCODE_BASIC_DDE_ERROR,
-    /* DMLERR_DLL_USAGE           */  0x4004, ERRCODE_BASIC_DDE_ERROR,
-    /* DMLERR_EXECACKTIMEOUT      */  0x4005, ERRCODE_BASIC_DDE_TIMEOUT,
-    /* DMLERR_INVALIDPARAMETER    */  0x4006, ERRCODE_BASIC_DDE_ERROR,
-    /* DMLERR_LOW_MEMORY          */  0x4007, ERRCODE_BASIC_DDE_ERROR,
-    /* DMLERR_MEMORY_ERROR        */  0x4008, ERRCODE_BASIC_DDE_ERROR,
-    /* DMLERR_NOTPROCESSED        */  0x4009, ERRCODE_BASIC_DDE_NOTPROCESSED,
-    /* DMLERR_NO_CONV_ESTABLISHED */  0x400a, ERRCODE_BASIC_DDE_NO_CHANNEL,
-    /* DMLERR_POKEACKTIMEOUT      */  0x400b, ERRCODE_BASIC_DDE_TIMEOUT,
-    /* DMLERR_POSTMSG_FAILED      */  0x400c, ERRCODE_BASIC_DDE_QUEUE_OVERFLOW,
-    /* DMLERR_REENTRANCY          */  0x400d, ERRCODE_BASIC_DDE_ERROR,
-    /* DMLERR_SERVER_DIED         */  0x400e, ERRCODE_BASIC_DDE_PARTNER_QUIT,
-    /* DMLERR_SYS_ERROR           */  0x400f, ERRCODE_BASIC_DDE_ERROR,
-    /* DMLERR_UNADVACKTIMEOUT     */  0x4010, ERRCODE_BASIC_DDE_TIMEOUT,
-    /* DMLERR_UNFOUND_QUEUE_ID    */  0x4011, ERRCODE_BASIC_DDE_NO_CHANNEL
+    /* DMLERR_ADVACKTIMEOUT       */  ErrCode(0x4000), ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_BUSY                */  ErrCode(0x4001), ERRCODE_BASIC_DDE_BUSY,
+    /* DMLERR_DATAACKTIMEOUT      */  ErrCode(0x4002), ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_DLL_NOT_INITIALIZED */  ErrCode(0x4003), ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_DLL_USAGE           */  ErrCode(0x4004), ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_EXECACKTIMEOUT      */  ErrCode(0x4005), ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_INVALIDPARAMETER    */  ErrCode(0x4006), ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_LOW_MEMORY          */  ErrCode(0x4007), ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_MEMORY_ERROR        */  ErrCode(0x4008), ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_NOTPROCESSED        */  ErrCode(0x4009), ERRCODE_BASIC_DDE_NOTPROCESSED,
+    /* DMLERR_NO_CONV_ESTABLISHED */  ErrCode(0x400a), ERRCODE_BASIC_DDE_NO_CHANNEL,
+    /* DMLERR_POKEACKTIMEOUT      */  ErrCode(0x400b), ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_POSTMSG_FAILED      */  ErrCode(0x400c), ERRCODE_BASIC_DDE_QUEUE_OVERFLOW,
+    /* DMLERR_REENTRANCY          */  ErrCode(0x400d), ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_SERVER_DIED         */  ErrCode(0x400e), ERRCODE_BASIC_DDE_PARTNER_QUIT,
+    /* DMLERR_SYS_ERROR           */  ErrCode(0x400f), ERRCODE_BASIC_DDE_ERROR,
+    /* DMLERR_UNADVACKTIMEOUT     */  ErrCode(0x4010), ERRCODE_BASIC_DDE_TIMEOUT,
+    /* DMLERR_UNFOUND_QUEUE_ID    */  ErrCode(0x4011), ERRCODE_BASIC_DDE_NO_CHANNEL
 };
 
-SbError SbiDdeControl::GetLastErr( DdeConnection* pConv )
+ErrCode SbiDdeControl::GetLastErr( DdeConnection* pConv )
 {
     if( !pConv )
     {
-        return 0;
+        return ERRCODE_NONE;
     }
     long nErr = pConv->GetError();
     if( !nErr )
     {
-        return 0;
+        return ERRCODE_NONE;
     }
     if( nErr < DDE_FIRSTERR || nErr > DDE_LASTERR )
     {
@@ -98,10 +98,10 @@ size_t SbiDdeControl::GetFreeChannel()
     return nChannel+1;
 }
 
-SbError SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopic,
+ErrCode SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopic,
                                  size_t& rnHandle )
 {
-    SbError nErr;
+    ErrCode nErr;
     DdeConnection* pConv = new DdeConnection( rService, rTopic );
     nErr = GetLastErr( pConv );
     if( nErr )
@@ -115,10 +115,10 @@ SbError SbiDdeControl::Initiate( const OUString& rService, const OUString& rTopi
         aConvList[nChannel-1] = pConv;
         rnHandle = nChannel;
     }
-    return 0;
+    return ERRCODE_NONE;
 }
 
-SbError SbiDdeControl::Terminate( size_t nChannel )
+ErrCode SbiDdeControl::Terminate( size_t nChannel )
 {
     if (!nChannel || nChannel > aConvList.size())
     {
@@ -133,10 +133,10 @@ SbError SbiDdeControl::Terminate( size_t nChannel )
     delete pConv;
     aConvList[nChannel-1] = DDE_FREECHANNEL;
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
-SbError SbiDdeControl::TerminateAll()
+ErrCode SbiDdeControl::TerminateAll()
 {
     for (DdeConnection* conv : aConvList)
     {
@@ -148,10 +148,10 @@ SbError SbiDdeControl::TerminateAll()
 
     aConvList.clear();
 
-    return 0;
+    return ERRCODE_NONE;
 }
 
-SbError SbiDdeControl::Request( size_t nChannel, const OUString& rItem, OUString& rResult )
+ErrCode SbiDdeControl::Request( size_t nChannel, const OUString& rItem, OUString& rResult )
 {
     if (!nChannel || nChannel > aConvList.size())
     {
@@ -172,7 +172,7 @@ SbError SbiDdeControl::Request( size_t nChannel, const OUString& rItem, OUString
     return GetLastErr( pConv );
 }
 
-SbError SbiDdeControl::Execute( size_t nChannel, const OUString& rCommand )
+ErrCode SbiDdeControl::Execute( size_t nChannel, const OUString& rCommand )
 {
     if (!nChannel || nChannel > aConvList.size())
     {
@@ -190,7 +190,7 @@ SbError SbiDdeControl::Execute( size_t nChannel, const OUString& rCommand )
     return GetLastErr( pConv );
 }
 
-SbError SbiDdeControl::Poke( size_t nChannel, const OUString& rItem, const OUString& rData )
+ErrCode SbiDdeControl::Poke( size_t nChannel, const OUString& rItem, const OUString& rData )
 {
     if (!nChannel || nChannel > aConvList.size())
     {

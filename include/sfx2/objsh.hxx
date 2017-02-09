@@ -301,9 +301,9 @@ public:
     SAL_DLLPRIVATE void         SetMacroMode_Impl(bool bModal=true);
 
     void                        ResetError();
-    sal_uInt32                  GetError() const;
-    sal_uInt32                  GetErrorCode() const;
-    void                        SetError(sal_uInt32 rErr);
+    ErrCode                     GetError() const;
+    ErrCode                     GetErrorCode() const;
+    void                        SetError(ErrCode rErr);
 
     /**
      * Initialize bare minimum just enough for unit test runs.
@@ -425,7 +425,7 @@ public:
     const css::uno::Sequence< css::beans::PropertyValue >& GetModifyPasswordInfo() const;
     bool                        SetModifyPasswordInfo( const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
 
-    static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
+    static ErrCode              HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
     virtual bool                PrepareClose(bool bUI = true);
     virtual HiddenInformation   GetHiddenInformationState( HiddenInformation nStates );
@@ -690,7 +690,7 @@ public:
 
     SAL_DLLPRIVATE static bool UseInteractionToHandleError(
                     const css::uno::Reference< css::task::XInteractionHandler >& xHandler,
-                    sal_uInt32 nError );
+                    ErrCode nError );
     SAL_DLLPRIVATE const SfxObjectShell_Impl* Get_Impl() const { return pImpl.get(); }
 
     SAL_DLLPRIVATE void SetCreateMode_Impl( SfxObjectCreateMode nMode );

@@ -3163,7 +3163,7 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
         {
             if( !XOutBitmap::GraphicToBase64(*pGrf, aGraphicInBase64) )
             {
-                rHTMLWrt.m_nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
+                rHTMLWrt.m_nWarn = ErrCode(WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE);
             }
         }
         aLink.clear();

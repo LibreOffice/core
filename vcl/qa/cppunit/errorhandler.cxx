@@ -20,10 +20,10 @@ class MockErrorHandler : private ErrorHandler
 protected:
     virtual bool CreateString(const ErrorInfo *pErrInfo, OUString &rErrString) const override
     {
-        if (!(pErrInfo->GetErrorCode() & ERRCODE_DYNAMIC_MASK))
-            rErrString = "Non-dynamic error";
-        else
+        if (pErrInfo->GetErrorCode().IsDynamic())
             rErrString = "Dynamic error";
+        else
+            rErrString = "Non-dynamic error";
 
         return true;
     }

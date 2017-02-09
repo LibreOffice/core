@@ -268,7 +268,7 @@ SbxValue* SbxValue::TheRealValue( bool bObjInObjError ) const
 bool SbxValue::Get( SbxValues& rRes ) const
 {
     bool bRes = false;
-    SbxError eOld = GetError();
+    ErrCode eOld = GetError();
     if( eOld != ERRCODE_SBX_OK )
         ResetError();
     if( !CanRead() )
@@ -422,7 +422,7 @@ GET( GetDecimal,  SbxDECIMAL,    SbxDecimal*,   pDecimal )
 bool SbxValue::Put( const SbxValues& rVal )
 {
     bool bRes = false;
-    SbxError eOld = GetError();
+    ErrCode eOld = GetError();
     if( eOld != ERRCODE_SBX_OK )
         ResetError();
     if( !CanWrite() )
@@ -834,7 +834,7 @@ bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 #endif
     SbxDataType eThisType = GetType();
     SbxDataType eOpType = rOp.GetType();
-    SbxError eOld = GetError();
+    ErrCode eOld = GetError();
     if( eOld != ERRCODE_SBX_OK )
         ResetError();
     if( !CanWrite() )
@@ -1212,7 +1212,7 @@ bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 #endif
 
     bool bRes = false;
-    SbxError eOld = GetError();
+    ErrCode eOld = GetError();
     if( eOld != ERRCODE_SBX_OK )
         ResetError();
     if( !CanRead() || !rOp.CanRead() )

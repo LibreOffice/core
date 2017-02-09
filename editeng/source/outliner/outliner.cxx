@@ -1093,7 +1093,7 @@ void Outliner::InvalidateBullet(sal_Int32 nPara)
     }
 }
 
-sal_uLong Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
+ErrCode Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16 eFormat, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
 
     bool bOldUndo = pEditEngine->IsUndoEnabled();
@@ -1105,7 +1105,7 @@ sal_uLong Outliner::Read( SvStream& rInput, const OUString& rBaseURL, sal_uInt16
     Clear();
 
     ImplBlockInsertionCallbacks( true );
-    sal_uLong nRet = pEditEngine->Read( rInput, rBaseURL, (EETextFormat)eFormat, pHTTPHeaderAttrs );
+    ErrCode nRet = pEditEngine->Read( rInput, rBaseURL, (EETextFormat)eFormat, pHTTPHeaderAttrs );
 
     bFirstParaIsEmpty = false;
 

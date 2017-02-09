@@ -36,7 +36,7 @@ String STR_ERROR_CLPBRD_READ
     Text [ en-US ] = "Error reading from the clipboard." ;
 };
 
-#define ERR_CODE( class, err )  (class | (err - ERROR_SW_BASE))
+#define ERR_CODE( class, err )  (class | (err - ERRCODE_AREA_SW))
 #define WARN_CODE( class, err ) (class | ( err - WARN_SW_BASE))
 
 StringArray RID_SW_ERRHDL

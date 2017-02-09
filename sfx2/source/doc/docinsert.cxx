@@ -119,7 +119,7 @@ SfxMedium* DocumentInserter::CreateMedium(char const*const pFallbackHack)
             pMatcher.reset(new SfxFilterMatcher());
 
         std::shared_ptr<const SfxFilter> pFilter;
-        sal_uInt32 nError = pMatcher->DetectFilter( *pMedium, pFilter );
+        ErrCode nError = pMatcher->DetectFilter( *pMedium, pFilter );
         // tdf#101813 hack: check again if it's a global document
         if (ERRCODE_NONE != nError && pFallbackHack)
         {
@@ -153,7 +153,7 @@ SfxMediumList* DocumentInserter::CreateMediumList()
 
             SfxFilterMatcher aMatcher( m_sDocFactory );
             std::shared_ptr<const SfxFilter> pFilter;
-            sal_uInt32 nError = aMatcher.DetectFilter( *pMedium, pFilter );
+            ErrCode nError = aMatcher.DetectFilter( *pMedium, pFilter );
             if ( nError == ERRCODE_NONE && pFilter )
                 pMedium->SetFilter( pFilter );
             else

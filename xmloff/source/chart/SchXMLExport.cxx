@@ -3527,7 +3527,7 @@ SchXMLExport::~SchXMLExport()
     }
 }
 
-sal_uInt32 SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
+ErrCode SchXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 {
     maExportHelper->SetSourceShellID(GetSourceShellID());
     maExportHelper->SetDestinationShellID(GetDestinationShellID());

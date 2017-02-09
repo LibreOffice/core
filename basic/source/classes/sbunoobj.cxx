@@ -364,7 +364,7 @@ OUString implGetExceptionMsg( const EXCEPTION& e )
 
 void implHandleBasicErrorException( BasicErrorException& e )
 {
-    SbError nError = StarBASIC::GetSfxFromVBError( (sal_uInt16)e.ErrorCode );
+    ErrCode nError = StarBASIC::GetSfxFromVBError( (sal_uInt16)e.ErrorCode );
     StarBASIC::Error( nError, e.ErrorMessageArgument );
 }
 
@@ -380,7 +380,7 @@ void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
 
     BasicErrorException aBasicError;
 
-    SbError nError( ERRCODE_BASIC_EXCEPTION );
+    ErrCode nError( ERRCODE_BASIC_EXCEPTION );
     OUStringBuffer aMessageBuf;
 
     // strip any other WrappedTargetException instances, but this time preserve the error messages.

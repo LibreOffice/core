@@ -2343,7 +2343,7 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
     nPos=pOS2MET->Tell();
     nMaxPos=nPos+(sal_uLong)nFieldSize;
     pOS2MET->SeekRel(2); nPos+=2;
-    while (nPos<nMaxPos && pOS2MET->GetError()==0) {
+    while (nPos<nMaxPos && pOS2MET->GetError()==ERRCODE_NONE) {
         pOS2MET->ReadUChar( nByte );
         sal_uInt16 nLen = ((sal_uInt16)nByte) & 0x00ff;
         if (nLen == 0)
@@ -2431,7 +2431,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             nPos=pOS2MET->Tell();
             nMaxPos=nPos+(sal_uLong)nFieldSize;
             pOS2MET->SeekRel(3); nPos+=3;
-            while (nPos<nMaxPos && pOS2MET->GetError()==0) {
+            while (nPos<nMaxPos && pOS2MET->GetError()==ERRCODE_NONE) {
                 pOS2MET->ReadUChar( nbyte ); nElemLen=((sal_uInt16)nbyte) & 0x00ff;
                 if (nElemLen>11) {
                     pOS2MET->SeekRel(4);
@@ -2486,7 +2486,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
         case EndImgObjMagic: {
             // read temporary Windows BMP file:
             if (pBitmapList==nullptr || pBitmapList->pBMP==nullptr ||
-                pBitmapList->pBMP->GetError()!=0) {
+                pBitmapList->pBMP->GetError()!=ERRCODE_NONE) {
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=5;
                 return;
@@ -2495,7 +2495,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
 
             ReadDIB(pBitmapList->aBitmap, *(pBitmapList->pBMP), false);
 
-            if (pBitmapList->pBMP->GetError()!=0) {
+            if (pBitmapList->pBMP->GetError()!=ERRCODE_NONE) {
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=6;
             }
@@ -2518,7 +2518,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
 
             nPos=pOS2MET->Tell();
             nMaxPos=nPos+(sal_uLong)nFieldSize;
-            while (nPos<nMaxPos && pOS2MET->GetError()==0) {
+            while (nPos<nMaxPos && pOS2MET->GetError()==ERRCODE_NONE) {
                 pOS2MET->ReadUChar( nbyte ); nDataID=((sal_uInt16)nbyte)&0x00ff;
                 if (nDataID==0x00fe) {
                     pOS2MET->ReadUChar( nbyte );
@@ -2570,7 +2570,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             else pOS2MET->SeekRel(-1); // no header, go back one byte
 
             // loop through Order:
-            while (pOS2MET->Tell()<nMaxPos && pOS2MET->GetError()==0) {
+            while (pOS2MET->Tell()<nMaxPos && pOS2MET->GetError()==ERRCODE_NONE) {
                 pOS2MET->ReadUChar( nbyte ); nOrderID=((sal_uInt16)nbyte) & 0x00ff;
                 if (nOrderID==0x00fe) {
                     pOS2MET->ReadUChar( nbyte );
@@ -2614,7 +2614,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
             sal_uInt8 nbyte;
 
             nMaxPos=pOS2MET->Tell()+(sal_uLong)nFieldSize;
-            while (pOS2MET->Tell()<nMaxPos && pOS2MET->GetError()==0) {
+            while (pOS2MET->Tell()<nMaxPos && pOS2MET->GetError()==ERRCODE_NONE) {
                 pOS2MET->ReadUChar( nbyte ); nDscID =((sal_uInt16)nbyte) & 0x00ff;
                 pOS2MET->ReadUChar( nbyte ); nDscLen=((sal_uInt16)nbyte) & 0x00ff;
                 nPos=pOS2MET->Tell();

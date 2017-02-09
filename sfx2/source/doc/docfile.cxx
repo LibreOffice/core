@@ -167,7 +167,7 @@ class SfxMedium_Impl
 {
 public:
     StreamMode m_nStorOpenMode;
-    sal_uInt32 m_eError;
+    ErrCode    m_eError;
 
     ::ucbhelper::Content aContent;
     bool bUpdatePickList:1;
@@ -224,7 +224,7 @@ public:
     uno::Reference<io::XStream> m_xLockingStream;
     uno::Reference<task::XInteractionHandler> xInteraction;
 
-    sal_uInt32                  nLastStorageError;
+    ErrCode  nLastStorageError;
 
     OUString m_aBackupURL;
 
@@ -276,7 +276,7 @@ SfxMedium_Impl::SfxMedium_Impl() :
     pOrigFilter( nullptr ),
     aExpireTime( Date( Date::SYSTEM ) + 10, tools::Time( tools::Time::SYSTEM ) ),
     pTempFile( nullptr ),
-    nLastStorageError( 0 ),
+    nLastStorageError( ERRCODE_NONE ),
     m_nSignatureState( SignatureState::NOSIGNATURES )
 {
     aDoneLink.CreateMutex();
@@ -301,19 +301,19 @@ void SfxMedium::ResetError()
         pImpl->m_pOutStream->ResetError();
 }
 
-sal_uInt32 SfxMedium::GetLastStorageCreationState()
+ErrCode SfxMedium::GetLastStorageCreationState()
 {
     return pImpl->nLastStorageError;
 }
 
-void SfxMedium::SetError(sal_uInt32 nError)
+void SfxMedium::SetError(ErrCode nError)
 {
     pImpl->m_eError = nError;
 }
 
-sal_uInt32 SfxMedium::GetErrorCode() const
+ErrCode SfxMedium::GetErrorCode() const
 {
-    sal_uInt32 lError = pImpl->m_eError;
+    ErrCode lError = pImpl->m_eError;
     if(!lError && pImpl->m_pInStream)
         lError = pImpl->m_pInStream->GetErrorCode();
     if(!lError && pImpl->m_pOutStream)
@@ -1694,7 +1694,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
        pImpl->m_eError = ERRCODE_IO_GENERAL;
     }
 
-    if( !pImpl->m_eError || (pImpl->m_eError & ERRCODE_WARNING_MASK) )
+    if( !pImpl->m_eError || pImpl->m_eError.IsWarning() )
     {
         if ( pImpl->xStorage.is() )
             CloseStorage();
@@ -1859,7 +1859,7 @@ void SfxMedium::Transfer_Impl()
             SAL_WARN( "sfx.doc", "The medium name is not convertible!" );
     }
 
-    if ( !aNameURL.isEmpty() && ( !pImpl->m_eError || (pImpl->m_eError & ERRCODE_WARNING_MASK) ) )
+    if ( !aNameURL.isEmpty() && ( !pImpl->m_eError || pImpl->m_eError.IsWarning() ) )
     {
         SAL_INFO( "sfx.doc", "SfxMedium::Transfer_Impl, copying to target" );
 
@@ -2026,7 +2026,7 @@ void SfxMedium::Transfer_Impl()
                 pImpl->m_eError = ERRCODE_IO_GENERAL;
             }
 
-            if ( !pImpl->m_eError || (pImpl->m_eError & ERRCODE_WARNING_MASK) )
+            if ( !pImpl->m_eError || pImpl->m_eError.IsWarning() )
             {
                 // free resources, otherwise the transfer may fail
                 if ( pImpl->xStorage.is() )
@@ -2122,7 +2122,7 @@ void SfxMedium::Transfer_Impl()
             }
         }
 
-        if ( ( !pImpl->m_eError || (pImpl->m_eError & ERRCODE_WARNING_MASK) ) && !pImpl->pTempFile )
+        if ( ( !pImpl->m_eError || pImpl->m_eError.IsWarning() ) && !pImpl->pTempFile )
         {
             // without a TempFile the physical and logical name should be the same after successful transfer
             if (osl::FileBase::getSystemPathFromFileURL(
@@ -2464,8 +2464,8 @@ void SfxMedium::GetMedium_Impl()
 
         pImpl->bDownloadDone = true;
         pImpl->aDoneLink.ClearPendingCall();
-        sal_uIntPtr nError = GetError();
-        pImpl->aDoneLink.Call( reinterpret_cast<void*>(nError) );
+        ErrCode nError = GetError();
+        pImpl->aDoneLink.Call( reinterpret_cast<void*>(sal_uInt32(nError)) );
     }
 }
 
@@ -3430,7 +3430,7 @@ void SfxMedium::CreateTempFile( bool bReplace )
             if ( pImpl->m_pOutStream )
             {
                 char        *pBuf = new char [8192];
-                sal_uInt32   nErr = ERRCODE_NONE;
+                ErrCode      nErr = ERRCODE_NONE;
 
                 pImpl->m_pInStream->Seek(0);
                 pImpl->m_pOutStream->Seek(0);

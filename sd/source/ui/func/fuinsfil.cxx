@@ -456,7 +456,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         assert(pStream && "No InStream!");
         pStream->Seek( 0 );
 
-        sal_uLong nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
+        ErrCode nErr = pOutliner->Read( *pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes() );
 
         if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
         {
@@ -600,7 +600,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     DBG_ASSERT( pStream, "No InStream!" );
     pStream->Seek( 0 );
 
-    sal_uLong nErr = pOutliner->Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());
+    ErrCode nErr = pOutliner->Read(*pStream, pMedium->GetBaseURL(), nFormat, mpDocSh->GetHeaderAttributes());
 
     if (nErr || pOutliner->GetEditEngine().GetText().isEmpty())
     {

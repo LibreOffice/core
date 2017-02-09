@@ -949,7 +949,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
                                    css::uno::UNO_QUERY_THROW);
 
             css::task::ErrorCodeRequest aErrorCode;
-            aErrorCode.ErrCode = ERRCODE_SFX_NOMOREDOCUMENTSALLOWED;
+            aErrorCode.ErrCode = sal_uInt32(ERRCODE_SFX_NOMOREDOCUMENTSALLOWED);
             aInteraction <<= aErrorCode;
             xInteraction->handle( InteractionRequest::CreateRequest(aInteraction, lContinuations) );
         }

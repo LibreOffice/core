@@ -215,7 +215,7 @@ namespace dbp
             aFileDlg.AddFilter(pFilter->GetUIName(),pFilter->GetDefaultExtension());
         }
 
-        if (0 == aFileDlg.Execute())
+        if (ERRCODE_NONE == aFileDlg.Execute())
         {
             OUString sDataSourceName = aFileDlg.GetPath();
             ::svt::OFileNotation aFileNotation(sDataSourceName);

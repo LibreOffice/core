@@ -103,7 +103,7 @@ inline bool Atom::isContainer() const
 inline bool Atom::seekToContent() const
 {
     maRecordHeader.SeekToContent( mrStream );
-    return mrStream.GetError() == 0;
+    return mrStream.GetError() == ERRCODE_NONE;
 }
 
 inline sal_uInt16 Atom::getType() const

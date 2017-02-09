@@ -230,13 +230,13 @@ void SbiTokenizer::Push( SbiToken t )
     else ePush = t;
 }
 
-void SbiTokenizer::Error( SbError code, const OUString &aMsg )
+void SbiTokenizer::Error( ErrCode code, const OUString &aMsg )
 {
     aError = aMsg;
     Error( code );
 }
 
-void SbiTokenizer::Error( SbError code, SbiToken tok )
+void SbiTokenizer::Error( ErrCode code, SbiToken tok )
 {
     aError = Symbol( tok );
     Error( code );

@@ -1369,7 +1369,7 @@ private:
 public:
     SwRTFWriter(const OUString& rFilterName, const OUString& rBaseURL);
 
-    sal_uLong WriteStream() override;
+    ErrCode WriteStream() override;
 };
 
 SwRTFWriter::SwRTFWriter(const OUString& rFltName, const OUString& rBaseURL)
@@ -1379,12 +1379,12 @@ SwRTFWriter::SwRTFWriter(const OUString& rFltName, const OUString& rBaseURL)
     m_bOutOutlineOnly = rFltName.startsWith("O");
 }
 
-sal_uLong SwRTFWriter::WriteStream()
+ErrCode SwRTFWriter::WriteStream()
 {
     SwPaM aPam(*pCurPam->End(), *pCurPam->Start());
     RtfExport aExport(nullptr, pDoc, &aPam, pCurPam, this, m_bOutOutlineOnly);
     aExport.ExportDocument(true);
-    return 0;
+    return ERRCODE_NONE;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF(const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet)

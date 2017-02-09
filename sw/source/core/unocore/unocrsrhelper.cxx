@@ -1065,7 +1065,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
             SwNodeIndex aSave(  pUnoCursor->GetPoint()->nNode, -1 );
             sal_Int32 nContent = pUnoCursor->GetPoint()->nContent.GetIndex();
 
-            sal_uInt32 nErrno = pRdr->Read( *pRead );   // and paste the document
+            ErrCode nErrno = pRdr->Read( *pRead );   // and paste the document
 
             if(!nErrno)
             {

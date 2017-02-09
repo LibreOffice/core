@@ -261,7 +261,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
         {
             rStm.SeekRel( -2 );
 
-            sal_uInt32 nError( rStm.GetError() );
+            ErrCode nError( rStm.GetError() );
 
             bool bScanFailure = false;
             bool bScanFinished = false;

@@ -96,7 +96,7 @@ uno::Reference <task::XStatusIndicator> ScXMLImportWrapper::GetStatusIndicator()
     return xStatusIndicator;
 }
 
-sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XComponentContext>& xContext,
+ErrCode ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XComponentContext>& xContext,
     uno::Reference<frame::XModel>& xModel, uno::Reference<xml::sax::XParser>& xParser,
     xml::sax::InputSource& aParserInput,
     const OUString& sComponentName, const OUString& sDocName,
@@ -157,8 +157,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( sStream ) );
     }
 
-    sal_uInt32 nReturn = ERRCODE_NONE;
-    rDoc.SetRangeOverflowType(0);   // is modified by the importer if limits are exceeded
+    ErrCode nReturn = ERRCODE_NONE;
+    rDoc.SetRangeOverflowType(ERRCODE_NONE);   // is modified by the importer if limits are exceeded
 
     uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -414,7 +414,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     }
 
     // #i103539#: always read meta.xml for generator
-    sal_uInt32 nMetaRetval(0);
+    ErrCode nMetaRetval(ERRCODE_NONE);
     if (nMode & ImportFlags::Metadata)
     {
         uno::Sequence<uno::Any> aMetaArgs(1);
@@ -453,7 +453,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     pStylesArgs[2] <<= xStatusIndicator;
     pStylesArgs[3] <<= xObjectResolver;
 
-    sal_uInt32 nSettingsRetval(0);
+    ErrCode nSettingsRetval(ERRCODE_NONE);
     if (nMode & ImportFlags::Settings)
     {
         //  Settings must be loaded first because of the printer setting,
@@ -474,7 +474,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
         SAL_INFO( "sc.filter", "settings import end" );
     }
 
-    sal_uInt32 nStylesRetval(0);
+    ErrCode nStylesRetval(ERRCODE_NONE);
     if (nMode & ImportFlags::Styles)
     {
         SAL_INFO( "sc.filter", "styles import start" );
@@ -488,7 +488,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
         SAL_INFO( "sc.filter", "styles import end" );
     }
 
-    sal_uInt32 nDocRetval(0);
+    ErrCode nDocRetval(ERRCODE_NONE);
     if (nMode & ImportFlags::Content)
     {
         if (mrDocShell.GetCreateMode() == SfxObjectCreateMode::INTERNAL)

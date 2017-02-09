@@ -162,7 +162,7 @@ public:
     SwReader( const css::uno::Reference < css::embed::XStorage >&, const OUString& rFilename, SwPaM& );
 
     // The only export interface is SwReader::Read(...)!!!
-    sal_uLong Read( const Reader& );
+    ErrCode Read( const Reader& );
 
     // Ask for glossaries.
     bool HasGlossaries( const Reader& );
@@ -257,7 +257,7 @@ public:
     void setSotStorageRef(const tools::SvRef<SotStorage>& pStgRef) { pStg = pStgRef; };
 
 private:
-    virtual sal_uLong Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &)=0;
+    virtual ErrCode Read(SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &)=0;
 
     // Everyone who does not need the streams / storages open
     // has to override the method (W4W!!).
@@ -267,7 +267,7 @@ private:
 class AsciiReader: public Reader
 {
     friend class SwReader;
-    virtual sal_uLong Read( SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
+    virtual ErrCode Read( SwDoc &, const OUString& rBaseURL, SwPaM &, const OUString &) override;
 public:
     AsciiReader(): Reader() {}
 };
@@ -290,7 +290,7 @@ class SwImpBlocks;
 class SW_DLLPUBLIC SwTextBlocks
 {
     std::unique_ptr<SwImpBlocks> pImp;
-    sal_uLong        nErr;
+    ErrCode        nErr;
 
 public:
     SwTextBlocks( const OUString& );
@@ -300,7 +300,7 @@ public:
     void   ClearDoc();                  // Delete Doc-contents.
     OUString GetName();
     void   SetName( const OUString& );
-    sal_uLong GetError() const { return nErr; }
+    ErrCode GetError() const { return nErr; }
 
     OUString GetBaseURL() const;
     void   SetBaseURL( const OUString& rURL );
@@ -315,7 +315,7 @@ public:
 
     bool   Delete( sal_uInt16 );
     void   Rename( sal_uInt16, const OUString*, const OUString* );
-    sal_uLong  CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
+    ErrCode CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
                                     const OUString& rLong );
 
     bool   BeginGetDoc( sal_uInt16 );   // Read text modules.
@@ -379,7 +379,7 @@ protected:
     void PutNumFormatFontsInAttrPool();
     void PutEditEngFontsInAttrPool();
 
-    virtual sal_uLong WriteStream() = 0;
+    virtual ErrCode WriteStream() = 0;
     void                SetBaseURL( const OUString& rURL ) { sBaseURL = rURL; }
 
     IDocumentSettingAccess& getIDocumentSettingAccess();
@@ -407,10 +407,10 @@ public:
     Writer();
     virtual ~Writer() override;
 
-    virtual sal_uLong Write( SwPaM&, SfxMedium&, const OUString* );
-            sal_uLong Write( SwPaM&, SvStream&,  const OUString* );
-    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr );
-    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* );
+    virtual ErrCode Write( SwPaM&, SfxMedium&, const OUString* );
+            ErrCode Write( SwPaM&, SvStream&,  const OUString* );
+    virtual ErrCode Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr );
+    virtual ErrCode Write( SwPaM&, SotStorage&, const OUString* );
 
     virtual void SetupFilterOptions(SfxMedium& rMedium);
 
@@ -464,9 +464,9 @@ protected:
     css::uno::Reference < css::embed::XStorage > xStg;
 
     // Create error at call.
-    virtual sal_uLong WriteStream() override;
-    virtual sal_uLong WriteStorage() = 0;
-    virtual sal_uLong WriteMedium( SfxMedium& ) = 0;
+    virtual ErrCode WriteStream() override;
+    virtual ErrCode WriteStorage() = 0;
+    virtual ErrCode WriteMedium( SfxMedium& ) = 0;
 
     using Writer::Write;
 
@@ -475,8 +475,8 @@ public:
 
     virtual bool IsStgWriter() const override;
 
-    virtual sal_uLong Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr ) override;
-    virtual sal_uLong Write( SwPaM&, SotStorage&, const OUString* ) override;
+    virtual ErrCode Write( SwPaM&, const css::uno::Reference < css::embed::XStorage >&, const OUString*, SfxMedium* = nullptr ) override;
+    virtual ErrCode Write( SwPaM&, SotStorage&, const OUString* ) override;
 
     SotStorage& GetStorage() const       { return *pStg; }
 };
@@ -497,7 +497,7 @@ class SW_DLLPUBLIC SwWriter
     bool bWriteAll;
 
 public:
-    sal_uLong Write( WriterRef& rxWriter, const OUString* = nullptr);
+    ErrCode Write( WriterRef& rxWriter, const OUString* = nullptr);
 
     SwWriter( SvStream&, SwCursorShell &, bool bWriteAll = false );
     SwWriter( SvStream&, SwDoc & );
@@ -511,8 +511,8 @@ public:
 
 typedef Reader* (*FnGetReader)();
 typedef void (*FnGetWriter)(const OUString&, const OUString& rBaseURL, WriterRef&);
-sal_uLong SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, bool, const OUString& );
-sal_uLong GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
+ErrCode SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, bool, const OUString& );
+ErrCode GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
 struct SwReaderWriterEntry
 {

@@ -74,7 +74,7 @@ static Sequence<Any> *lcl_docbasic_convertArgs( SbxArray& rArgs )
 
 bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 {
-    ErrCode eErr = 0;
+    ErrCode eErr = ERRCODE_NONE;
     switch( rMacro.GetScriptType() )
     {
     case STARBASIC:
@@ -126,7 +126,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
         }
     }
 
-    return 0 == eErr;
+    return ERRCODE_NONE == eErr;
 }
 
 sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
@@ -210,7 +210,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             const SvxMacro& rMacro = *pTable->Get( nEvent );
             if( STARBASIC == rMacro.GetScriptType() )
             {
-                nRet += 0 == mpDocShell->CallBasic( rMacro.GetMacName(),
+                nRet += ERRCODE_NONE == mpDocShell->CallBasic( rMacro.GetMacName(),
                                     rMacro.GetLibName(), nullptr ) ? 1 : 0;
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
@@ -223,7 +223,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
 
                 SAL_INFO("sw", "SwDoc::CallEvent URL is " << rMacro.GetMacName() );
 
-                nRet += 0 == mpDocShell->CallXScript(
+                nRet += ERRCODE_NONE == mpDocShell->CallXScript(
                     rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
             }
             // JavaScript calls are ignored
