@@ -1573,7 +1573,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
         m_pLocaleSettingLB->SelectLanguage( LANGUAGE_USER_SYSTEM_CONFIG );
     else
         m_pLocaleSettingLB->SelectLanguage( aLanguageTag.makeFallback().getLanguageType());
-    bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_LOCALE);
+    bool bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::Locale);
     m_pLocaleSettingLB->Enable(!bReadonly);
     m_pLocaleSettingFT->Enable(!bReadonly);
 
@@ -1602,7 +1602,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     // if pCurr==NULL the SYSTEM entry is selected
     const sal_Int32 nPos = m_pCurrencyLB->GetEntryPos( static_cast<void const *>(pCurr) );
     m_pCurrencyLB->SelectEntryPos( nPos );
-    bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_CURRENCY);
+    bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::Currency);
     m_pCurrencyLB->Enable(!bReadonly);
     m_pCurrencyFT->Enable(!bReadonly);
 
@@ -1616,7 +1616,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     // Let's assume patterns are valid at this point.
     m_bDatePatternsValid = true;
     m_pDatePatternsED->SetText( aDatePatternsString);
-    bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_DATEPATTERNS);
+    bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::DatePatterns);
     m_pDatePatternsED->Enable(!bReadonly);
     m_pDatePatternsFT->Enable(!bReadonly);
     m_pDatePatternsED->SaveValue();
