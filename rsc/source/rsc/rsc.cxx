@@ -405,7 +405,7 @@ void RscCompiler::EndCompile()
     }
 }
 
-ERRTYPE RscCompiler::IncludeParser( sal_uLong lFileKey )
+ERRTYPE RscCompiler::IncludeParser( RscFileTab::Index lFileKey )
 {
     FILE            * finput;
     RscFile         * pFName;
@@ -448,7 +448,7 @@ ERRTYPE RscCompiler::IncludeParser( sal_uLong lFileKey )
     return aError;
 }
 
-ERRTYPE RscCompiler::ParseOneFile( sal_uLong lFileKey,
+ERRTYPE RscCompiler::ParseOneFile( RscFileTab::Index lFileKey,
                                      const RscCmdLine::OutputFile* pOutputFile,
                                      const WriteRcContext* pContext )
 {
