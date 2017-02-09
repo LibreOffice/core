@@ -217,14 +217,14 @@ bool SwImpBlocks::IsOnlyTextBlock( const OUString& ) const
     return false;
 }
 
-sal_uLong SwImpBlocks::GetMacroTable( sal_uInt16, SvxMacroTableDtor& )
+ErrCode SwImpBlocks::GetMacroTable( sal_uInt16, SvxMacroTableDtor& )
 {
-    return 0;
+    return ERRCODE_NONE;
 }
 
-sal_uLong SwImpBlocks::SetMacroTable( sal_uInt16 , const SvxMacroTableDtor& )
+ErrCode SwImpBlocks::SetMacroTable( sal_uInt16 , const SvxMacroTableDtor& )
 {
-    return 0;
+    return ERRCODE_NONE;
 }
 
 bool SwImpBlocks::PutMuchEntries( bool )
@@ -308,7 +308,7 @@ bool SwTextBlocks::Delete( sal_uInt16 n )
     {
         if( pImp->IsFileChanged() )
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
-        else if( 0 == (nErr = pImp->OpenFile( false ) ))
+        else if( ERRCODE_NONE == (nErr = pImp->OpenFile( false ) ))
         {
             nErr = pImp->Delete( n );
             if( !nErr )
@@ -324,7 +324,7 @@ bool SwTextBlocks::Delete( sal_uInt16 n )
         pImp->CloseFile();
         pImp->Touch();
 
-        return ( nErr == 0 );
+        return ( nErr == ERRCODE_NONE );
     }
     return false;
 }
@@ -349,7 +349,7 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
 
         if( pImp->IsFileChanged() )
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
-        else if( 0 == ( nErr = pImp->OpenFile( false )))
+        else if( ERRCODE_NONE == ( nErr = pImp->OpenFile( false )))
         {
             // Set the new entry in the list before we do that!
             aNew = GetAppCharClass().uppercase( aNew );
@@ -368,7 +368,7 @@ void SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString* l )
     }
 }
 
-sal_uLong SwTextBlocks::CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
+ErrCode SwTextBlocks::CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
                                 const OUString& rLong )
 {
     bool bIsOld = false;
@@ -393,7 +393,7 @@ bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
     {
         if( pImp->IsFileChanged() )
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
-        else if( 0 == ( nErr = pImp->OpenFile()))
+        else if( ERRCODE_NONE == ( nErr = pImp->OpenFile()))
         {
             pImp->ClearDoc();
             nErr = pImp->GetDoc( n );
@@ -402,7 +402,7 @@ bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
             else
                 pImp->m_nCurrentIndex = n;
         }
-        return ( nErr == 0 );
+        return ( nErr == ERRCODE_NONE );
     }
     return false;
 }
@@ -424,7 +424,7 @@ bool SwTextBlocks::BeginPutDoc( const OUString& s, const OUString& l )
                 nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
             else
                 nErr = pImp->OpenFile( false );
-            bOk = 0 == nErr;
+            bOk = ERRCODE_NONE == nErr;
         }
         if( bOk )
         {
@@ -434,7 +434,7 @@ bool SwTextBlocks::BeginPutDoc( const OUString& s, const OUString& l )
         if( nErr )
             pImp->CloseFile();
     }
-    return 0 == nErr;
+    return ERRCODE_NONE == nErr;
 }
 
 sal_uInt16 SwTextBlocks::PutDoc()
@@ -479,7 +479,7 @@ sal_uInt16 SwTextBlocks::PutText( const OUString& rShort, const OUString& rName,
                 nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
             else
                 nErr = pImp->OpenFile( false );
-            bOk = 0 == nErr;
+            bOk = ERRCODE_NONE == nErr;
         }
         if( bOk )
         {
@@ -571,7 +571,7 @@ bool SwTextBlocks::GetMacroTable( sal_uInt16 nIdx, SvxMacroTableDtor& rMacroTabl
 {
     bool bRet = true;
     if ( pImp && !pImp->m_bInPutMuchBlocks )
-        bRet = ( 0 == pImp->GetMacroTable( nIdx, rMacroTable ) );
+        bRet = ( ERRCODE_NONE == pImp->GetMacroTable( nIdx, rMacroTable ) );
     return bRet;
 }
 
@@ -579,7 +579,7 @@ bool SwTextBlocks::SetMacroTable( sal_uInt16 nIdx, const SvxMacroTableDtor& rMac
 {
     bool bRet = true;
     if ( pImp && !pImp->m_bInPutMuchBlocks )
-        bRet = ( 0 == pImp->SetMacroTable( nIdx, rMacroTable ) );
+        bRet = ( ERRCODE_NONE == pImp->SetMacroTable( nIdx, rMacroTable ) );
     return bRet;
 }
 

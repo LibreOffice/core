@@ -1949,15 +1949,14 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
     const bool bOk = aMedium.Commit();
     aMedium.Close();
     if ( !bOk ) {
-        sal_uInt32 nError = aMedium.GetError();
+        ErrCode nError = aMedium.GetError();
         if ( nError == ERRCODE_NONE ) {
             nError = ERRCODE_IO_GENERAL;
         }
 
         throw css::task::ErrorCodeIOException(
-            ("SfxDocumentMetaData::storeToMedium <" + URL + "> Commit failed: "
-             "0x" + OUString::number(nError, 16)),
-            css::uno::Reference< css::uno::XInterface >(), nError);
+            "SfxDocumentMetaData::storeToMedium <" + URL + "> Commit failed: " + nError.toHexString(),
+            css::uno::Reference< css::uno::XInterface >(), sal_uInt32(nError));
 
     }
 }

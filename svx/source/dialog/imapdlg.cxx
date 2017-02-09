@@ -475,7 +475,7 @@ void SvxIMapDlg::DoOpen()
 
             if( pIStm->GetError() )
             {
-                SfxErrorContext eEC(ERRCODE_SFX_GENERAL,this);
+                SfxErrorContext eEC(ERRCTX_ERROR, this);
                 ErrorHandler::HandleError( ERRCODE_IO_GENERAL );
             }
             else

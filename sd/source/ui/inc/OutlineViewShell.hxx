@@ -111,7 +111,7 @@ public:
     virtual bool KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin) override;
     virtual void MouseButtonUp(const MouseEvent& rMEvt, ::sd::Window* pWin) override;
 
-    sal_uLong   ReadRtf(SvStream& rInput);
+    ErrCode ReadRtf(SvStream& rInput);
 
     virtual void WriteUserDataSequence ( css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
     virtual void ReadUserDataSequence ( const css::uno::Sequence < css::beans::PropertyValue >&, bool bBrowse ) override;
