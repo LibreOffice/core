@@ -428,6 +428,13 @@ mimetypes = {
     'application/vnd.visio2013': 'vsdx',
     'application/vnd.visio.xml': 'vdx',
     'application/x-mspublisher': 'pub',
+#WPS Office
+    'application/wps-office.doc': 'doc',
+    'application/wps-office.docx': 'docx',
+    'application/wps-office.xls': 'xls',
+    'application/wps-office.xlsx': 'xlsx',
+    'application/wps-office.ppt': 'ppt',
+    'application/wps-office.pptx': 'pptx',
 # W3C
     'application/xhtml+xml': 'xhtml',
     'application/mathml+xml': 'mml',
