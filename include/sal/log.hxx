@@ -27,11 +27,11 @@
 /// @cond INTERNAL
 
 extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log(
-    enum sal_detail_LogLevel level, char const * area, char const * where,
+    sal_detail_LogLevel level, char const * area, char const * where,
     char const * message, sal_uInt32 backtraceDepth);
 
-extern "C" SAL_DLLPUBLIC int SAL_CALL sal_detail_log_report(
-    enum sal_detail_LogLevel level, char const * area);
+extern "C" SAL_DLLPUBLIC sal_Bool SAL_CALL sal_detail_log_report(
+    sal_detail_LogLevel level, char const * area);
 
 namespace sal { namespace detail {
 

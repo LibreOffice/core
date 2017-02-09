@@ -186,11 +186,9 @@ void maybeOutputTimestamp(std::ostringstream &s) {
 
 #endif
 
-bool isDebug(sal_detail_LogLevel level) {
-    return level == SAL_DETAIL_LOG_LEVEL_DEBUG;
 }
 
-void log(
+void sal_detail_log(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * message, sal_uInt32 backtraceDepth)
 {
@@ -202,13 +200,13 @@ void log(
         maybeOutputTimestamp(s);
         s << toString(level) << ':';
     }
-    if (!isDebug(level)) {
+    if (level != SAL_DETAIL_LOG_LEVEL_DEBUG) {
         s << area << ':';
     }
     s << OSL_DETAIL_GETPID << ':';
 #endif
     s << osl::Thread::getCurrentIdentifier() << ':';
-    if (isDebug(level)) {
+    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
         s << ' ';
     } else {
         const size_t nStrLen(std::strlen(SRCDIR "/"));
@@ -216,13 +214,11 @@ void log(
               + (std::strncmp(where, SRCDIR "/", nStrLen) == 0
                  ? nStrLen : 0));
     }
-
     s << message;
     if (backtraceDepth != 0) {
         s << " at:\n" << osl::detail::backtraceAsString(backtraceDepth);
     }
     s << '\n';
-
 #if defined ANDROID
     int android_log_level;
     switch (level) {
@@ -276,17 +272,6 @@ void log(
 #endif
 }
 
-}
-
-void sal_detail_log(
-    sal_detail_LogLevel level, char const * area, char const * where,
-    char const * message, sal_uInt32 backtraceDepth)
-{
-    if (sal_detail_log_report(level, area)) {
-        log(level, area, where, message, backtraceDepth);
-    }
-}
-
 void sal_detail_logFormat(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * format, ...)
@@ -302,14 +287,15 @@ void sal_detail_logFormat(
         } else if (n >= len) {
             std::strcpy(buf + len - 1, "...");
         }
-        log(level, area, where, buf, 0);
+        sal_detail_log(level, area, where, buf, 0);
         va_end(args);
     }
 }
 
-int sal_detail_log_report(enum sal_detail_LogLevel level, char const * area) {
-    if (isDebug(level))
+sal_Bool sal_detail_log_report(sal_detail_LogLevel level, char const * area) {
+    if (level == SAL_DETAIL_LOG_LEVEL_DEBUG) {
         return true;
+    }
     assert(area != nullptr);
     char const * env = getEnvironmentVariable();
     if (env == nullptr) {
