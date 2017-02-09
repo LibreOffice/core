@@ -3151,7 +3151,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         }
 
                         rRef.SetAddress(aAbs, rNewPos);
-                        rRef.SetFlag3D(aAbs.Tab() != rNewPos.Tab());
+                        rRef.SetFlag3D(aAbs.Tab() != rNewPos.Tab() || !rRef.IsTabRel());
                     }
                     break;
                 case svDoubleRef:
@@ -3167,7 +3167,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         }
 
                         rRef.SetRange(aAbs, rNewPos);
-                        rRef.Ref1.SetFlag3D(aAbs.aStart.Tab() != rNewPos.Tab());
+                        rRef.Ref1.SetFlag3D(aAbs.aStart.Tab() != rNewPos.Tab() || !rRef.Ref1.IsTabRel());
                     }
                     break;
                 case svExternalSingleRef:
