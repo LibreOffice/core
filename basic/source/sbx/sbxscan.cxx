@@ -82,7 +82,7 @@ bool ImpStrChr( const sal_Unicode* p, sal_Unicode c )
 // but exponent may also be a D, so data type is SbxDOUBLE
 // conversion error if data type is fixed and it doesn't fit
 
-SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
+ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
                   sal_uInt16* pLen, bool bAllowIntntl, bool bOnlyIntntl )
 {
     sal_Unicode cIntntlDecSep, cIntntlGrpSep;
@@ -272,11 +272,11 @@ SbxError ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
 }
 
 // port for CDbl in the Basic
-SbxError SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle )
+ErrCode SbxValue::ScanNumIntnl( const OUString& rSrc, double& nVal, bool bSingle )
 {
     SbxDataType t;
     sal_uInt16 nLen = 0;
-    SbxError nRetError = ImpScan( rSrc, nVal, t, &nLen,
+    ErrCode nRetError = ImpScan( rSrc, nVal, t, &nLen,
         /*bAllowIntntl*/false, /*bOnlyIntntl*/true );
     // read completely?
     if( nRetError == ERRCODE_SBX_OK && nLen != rSrc.getLength() )
@@ -550,7 +550,7 @@ static sal_uInt16 printfmtstr( const OUString& rStr, OUString& rRes, const OUStr
 
 bool SbxValue::Scan( const OUString& rSrc, sal_uInt16* pLen )
 {
-    SbxError eRes = ERRCODE_SBX_OK;
+    ErrCode eRes = ERRCODE_SBX_OK;
     if( !CanWrite() )
     {
         eRes = ERRCODE_SBX_PROP_READONLY;

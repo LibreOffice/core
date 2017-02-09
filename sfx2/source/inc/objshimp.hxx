@@ -97,7 +97,7 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
                         m_bConfigOptionsChecked:1; // whether or not the user options are checked after the Options dialog is closed.
 
     IndexBitSet         aBitSet;
-    sal_uInt32          lErr;
+    ErrCode             lErr;
     SfxEventHintId      nEventId;           // If Open/Create as to be sent
                                             // before Activate
     AutoReloadTimer_Impl *pReloadTimer;

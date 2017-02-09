@@ -333,7 +333,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             pDocShTables->DoLoad( pMed );
             SetPointer( aOldPtr );
 
-            sal_uLong nErr = pDocShTables->GetErrorCode();
+            ErrCode nErr = pDocShTables->GetErrorCode();
             if ( nErr )
                 ErrorHandler::HandleError( nErr );              // warnings, too
 

@@ -1408,7 +1408,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
         // TODO/MBA: it's impossible to set a BaseURL here!
         SwReader aTmpReader( aStrm, OUString(), pDoc->GetDocShell()->GetMedium()->GetBaseURL(), *pPam );
 
-        if( !IsError( aTmpReader.Read( *pRead ) ))
+        if( ! aTmpReader.Read( *pRead ).IsError() )
         {
             rSection.SetConnectFlag();
         }

@@ -240,11 +240,11 @@ SvStream& Writer::OutULong( SvStream& rStrm, sal_uLong nVal )
     return lcl_OutLongExt(rStrm, nVal, false);
 }
 
-sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
+ErrCode Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
 {
     if ( IsStgWriter() )
     {
-        sal_uLong nResult = ERRCODE_ABORT;
+        ErrCode nResult = ERRCODE_ABORT;
         try
         {
             tools::SvRef<SotStorage> aRef = new SotStorage( rStrm );
@@ -268,7 +268,7 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
     // for comparison secure to the current Pam
     pOrigPam = &rPaM;
 
-    sal_uLong nRet = WriteStream();
+    ErrCode nRet = WriteStream();
 
     ResetWriter();
 
@@ -278,7 +278,7 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
 void Writer::SetupFilterOptions(SfxMedium& /*rMedium*/)
 {}
 
-sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMedium, const OUString* pFileName )
+ErrCode Writer::Write( SwPaM& rPam, SfxMedium& rMedium, const OUString* pFileName )
 {
     SetupFilterOptions(rMedium);
     // This method must be overridden in SwXMLWriter a storage from medium will be used there.
@@ -286,13 +286,13 @@ sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMedium, const OUString* pFileN
     return Write( rPam, *rMedium.GetOutStream(), pFileName );
 }
 
-sal_uLong Writer::Write( SwPaM& /*rPam*/, SotStorage&, const OUString* )
+ErrCode Writer::Write( SwPaM& /*rPam*/, SotStorage&, const OUString* )
 {
     OSL_ENSURE( false, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
-sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const OUString*, SfxMedium* )
+ErrCode Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, const OUString*, SfxMedium* )
 {
     OSL_ENSURE( false, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
@@ -340,7 +340,7 @@ bool Writer::CopyLocalFileToINet( OUString& rFileNm )
     aSrcFile.Close();
     aDstFile.Commit();
 
-    bRet = 0 == aDstFile.GetError();
+    bRet = ERRCODE_NONE == aDstFile.GetError();
 
     if( bRet )
     {
@@ -487,13 +487,13 @@ bool Writer::GetBookmarks(const SwContentNode& rNd, sal_Int32 nStt,
 }
 
 // Storage-specific
-sal_uLong StgWriter::WriteStream()
+ErrCode StgWriter::WriteStream()
 {
     OSL_ENSURE( false, "Write in Storages on a stream?" );
     return ERR_SWG_WRITE_ERROR;
 }
 
-sal_uLong StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName )
+ErrCode StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFName )
 {
     SetStream(nullptr);
     pStg = &rStg;
@@ -505,7 +505,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFNam
     // for comparison secure to the current Pam
     pOrigPam = &rPaM;
 
-    sal_uLong nRet = WriteStorage();
+    ErrCode nRet = WriteStorage();
 
     pStg = nullptr;
     ResetWriter();
@@ -513,7 +513,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SotStorage& rStg, const OUString* pFNam
     return nRet;
 }
 
-sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const OUString* pFName, SfxMedium* pMedium )
+ErrCode StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage >& rStg, const OUString* pFName, SfxMedium* pMedium )
 {
     SetStream(nullptr);
     pStg = nullptr;
@@ -526,7 +526,7 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage 
     // for comparison secure to the current Pam
     pOrigPam = &rPaM;
 
-    sal_uLong nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
+    ErrCode nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();
 
     pStg = nullptr;
     ResetWriter();

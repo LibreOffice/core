@@ -523,7 +523,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     rSt.ReadInt32( aLVL.nStartAt );
     rSt.ReadUChar( aLVL.nNFC );
     rSt.ReadUChar( aBits1 );
-    if( 0 != rSt.GetError() ) return false;
+    if( ERRCODE_NONE != rSt.GetError() ) return false;
     aLVL.nAlign = (aBits1 & 0x03);
     if( aBits1 & 0x10 ) aLVL.bV6Prev    = sal_uInt8(true);
     if( aBits1 & 0x20 ) aLVL.bV6PrSp    = sal_uInt8(true);
@@ -532,7 +532,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     for(sal_uInt8 nLevelB = 0; nLevelB < nMaxLevel; ++nLevelB)
     {
         rSt.ReadUChar( aLVL.aOfsNumsXCH[ nLevelB ] );
-        if( 0 != rSt.GetError() )
+        if( ERRCODE_NONE != rSt.GetError() )
         {
             bLVLOkB = false;
             break;
@@ -549,7 +549,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, std::unique_ptr<SfxItemSet
     rSt.ReadUChar( aLVL.nLenGrpprlChpx );
     rSt.ReadUChar( aLVL.nLenGrpprlPapx );
     rSt.SeekRel( 2 );
-    if( 0 != rSt.GetError()) return false;
+    if( ERRCODE_NONE != rSt.GetError()) return false;
 
     // 2. read PAPx if needed and search for indent values
 

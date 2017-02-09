@@ -3392,8 +3392,7 @@ SvxBrushItem::SvxBrushItem(SvStream& rStream, sal_uInt16 nVersion, sal_uInt16 _n
             if( SVSTREAM_FILEFORMAT_ERROR == rStream.GetError() )
             {
                 rStream.ResetError();
-                rStream.SetError( ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT|
-                                  ERRCODE_WARNING_MASK  );
+                rStream.SetError( ERRCODE_SVX_GRAPHIC_WRONG_FILEFORMAT.MakeWarning() );
             }
         }
 
