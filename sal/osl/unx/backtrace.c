@@ -286,6 +286,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
 
 int backtrace( void **buffer, int max_frames )
 {
+    (void)buffer; (void)max_frames;
     return 0;
 }
 
@@ -297,6 +298,7 @@ char ** backtrace_symbols(void * const * buffer, int size)
 
 void backtrace_symbols_fd( void **buffer, int size, int fd )
 {
+    (void)buffer; (void)size; (void)fd;
 }
 
 #endif
