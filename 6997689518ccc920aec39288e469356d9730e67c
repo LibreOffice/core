@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_f513b00b",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-02-10T17:16:11Z",
+      "side": 1,
+      "message": "Good point.  That\u0027s a pretty essential component - will do.",
+      "parentUuid": "9a57fde8_356ff893",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_556c7c9c",
         "filename": "sc/qa/unit/subsequent_export-test.cxx",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2017-02-10T16:59:01Z",
       "side": 1,
       "message": "Please also check values of \"zeroHeight\" if it is set to \"false\"",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_15f914c9",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-02-10T17:16:11Z",
+      "side": 1,
+      "message": "OK - will do.",
+      "parentUuid": "9a57fde8_556c7c9c",
       "revId": "6997689518ccc920aec39288e469356d9730e67c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_35f618d8",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-02-10T17:16:11Z",
+      "side": 1,
+      "message": "OK - will do.",
+      "parentUuid": "9a57fde8_1572f47c",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_f55c90ef",
         "filename": "sc/source/filter/excel/xetable.cxx",
         "patchSetId": 1
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_b50928e0",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-02-10T17:16:11Z",
+      "side": 1,
+      "message": "This is updated.  As far as I can tell, if the current row is different from the previous row for ANY reason, a new row should be written.  Thus it is more clear to have a simple message than a complicated one.\n\nThat\u0027s why I deleted all specific comments.  The code itself is pretty clear what the difference for the reason is - the comment isn\u0027t providing any new information.",
+      "parentUuid": "9a57fde8_f55c90ef",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_d5578cc8",
         "filename": "sc/source/filter/excel/xetable.cxx",
         "patchSetId": 1
@@ -81,6 +153,24 @@
       "writtenOn": "2017-02-10T16:59:01Z",
       "side": 1,
       "message": "Generally for boolean values we should use function:\nXclXmlUtils::ToPsz( to produce \"true\" or \"false\".\nAlso all parameters should always exists.\nIn that case it will be: \"XclXmlUtils::ToPsz( rDefData.IsHidden() )\"",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d50eace4",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2716,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-02-10T17:16:11Z",
+      "side": 1,
+      "message": "zeroHeight does not exist in documents created by MS Excel though... That\u0027s why I chose to do this one differently from the others.\nIf you insist, I have no problems changing it.",
+      "parentUuid": "9a57fde8_d5578cc8",
       "revId": "6997689518ccc920aec39288e469356d9730e67c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
