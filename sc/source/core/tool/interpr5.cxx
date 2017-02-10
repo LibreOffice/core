@@ -187,24 +187,8 @@ void ScInterpreter::ScGCD()
                             SetError(FormulaError::IllegalArgument);
                         else
                         {
-                            for ( SCSIZE j = 0; j < nC; j++ )
-                            {
-                                for (SCSIZE k = 0; k < nR; ++k)
-                                {
-                                    if (!pMat->IsValue(j,k))
-                                    {
-                                        PushIllegalArgument();
-                                        return;
-                                    }
-                                    fx = ::rtl::math::approxFloor( pMat->GetDouble(j,k));
-                                    if (fx < 0.0)
-                                    {
-                                        PushIllegalArgument();
-                                        return;
-                                    }
-                                    fy = ScGetGCD(fx, fy);
-                                }
-                            }
+                         double nVal = pMat->GetGcd();
+                         fy = ScGetGCD(nVal,fy);
                         }
                     }
                 }
@@ -283,27 +267,8 @@ void ScInterpreter:: ScLCM()
                             SetError(FormulaError::IllegalArgument);
                         else
                         {
-                            for ( SCSIZE j = 0; j < nC; j++ )
-                            {
-                                for (SCSIZE k = 0; k < nR; ++k)
-                                {
-                                    if (!pMat->IsValue(j,k))
-                                    {
-                                        PushIllegalArgument();
-                                        return;
-                                    }
-                                    fx = ::rtl::math::approxFloor( pMat->GetDouble(j,k));
-                                    if (fx < 0.0)
-                                    {
-                                        PushIllegalArgument();
-                                        return;
-                                    }
-                                    if (fx == 0.0 || fy == 0.0)
-                                        fy = 0.0;
-                                    else
-                                        fy = fx * fy / ScGetGCD(fx, fy);
-                                }
-                            }
+                         double nVal = pMat->GetLcm();
+                         fy = (nVal * fy ) / ScGetGCD(nVal, fy);
                         }
                     }
                 }
