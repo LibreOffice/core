@@ -86,9 +86,8 @@ void AnchorPrimitive::create2DDecomposition(
     drawinglayer::primitive2d::Primitive2DContainer& rContainer,
     const drawinglayer::geometry::ViewInformation2D& /*rViewInformation*/) const
 {
-    if ( AS_TRI == maAnchorState ||
-         AS_ALL == maAnchorState ||
-         AS_START == maAnchorState )
+    if ( AnchorState::Tri == maAnchorState ||
+         AnchorState::All == maAnchorState )
     {
         // create triangle
         const drawinglayer::primitive2d::Primitive2DReference aTriangle(
@@ -104,8 +103,7 @@ void AnchorPrimitive::create2DDecomposition(
         getColor(),
         mfDiscreteLineWidth * getDiscreteUnit());
 
-    if ( AS_ALL == maAnchorState ||
-         AS_START == maAnchorState )
+    if ( AnchorState::All == maAnchorState )
     {
         // create line start
         if(getLineSolid())
@@ -140,8 +138,8 @@ void AnchorPrimitive::create2DDecomposition(
         }
     }
 
-    if ( AS_ALL == maAnchorState ||
-         AS_END == maAnchorState )
+    if ( AnchorState::All == maAnchorState ||
+         AnchorState::End == maAnchorState )
     {
         // LineTop has to be created, too, but uses no shadow, so add after
         // the other parts are created
@@ -241,7 +239,7 @@ AnchorOverlayObject::AnchorOverlayObject( const basegfx::B2DPoint& rBasePos,
     , maLine()
     , maLineTop()
     , mHeight(0)
-    , mAnchorState(AS_ALL)
+    , mAnchorState(AnchorState::All)
     , mbLineSolid(false)
 {
 }

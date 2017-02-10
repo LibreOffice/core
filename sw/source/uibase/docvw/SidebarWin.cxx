@@ -539,7 +539,7 @@ void SwSidebarWin::ShowAnchorOnly(const Point &aPoint)
     {
         mpAnchor->SetSixthPosition(basegfx::B2DPoint(aPoint.X(),aPoint.Y()));
         mpAnchor->SetSeventhPosition(basegfx::B2DPoint(aPoint.X(),aPoint.Y()));
-        mpAnchor->SetAnchorState(AS_ALL);
+        mpAnchor->SetAnchorState(AnchorState::All);
         mpAnchor->setVisible(true);
     }
     if (mpShadow)
@@ -818,7 +818,7 @@ void SwSidebarWin::SetPosAndSize()
                 {
                     mpAnchor->SetHeight(mAnchorRect.Height());
                     mpAnchor->setVisible(true);
-                    mpAnchor->SetAnchorState(AS_TRI);
+                    mpAnchor->SetAnchorState(AnchorState::Tri);
                     if (HasChildPathFocus())
                     {
                         mpAnchor->setLineSolid(true);
@@ -854,7 +854,7 @@ void SwSidebarWin::SetPosAndSize()
             // #i111964#
             if ( mpAnchor )
             {
-                mpAnchor->SetAnchorState(AS_END);
+                mpAnchor->SetAnchorState(AnchorState::End);
             }
         }
         else
@@ -862,13 +862,13 @@ void SwSidebarWin::SetPosAndSize()
             // #i111964#
             if ( mpAnchor )
             {
-                mpAnchor->SetAnchorState(AS_ALL);
+                mpAnchor->SetAnchorState(AnchorState::All);
             }
             SwSidebarWin* pWin = GetTopReplyNote();
             // #i111964#
             if ( pWin && pWin->Anchor() )
             {
-                pWin->Anchor()->SetAnchorState(AS_END);
+                pWin->Anchor()->SetAnchorState(AnchorState::End);
             }
         }
     }
@@ -1227,7 +1227,7 @@ void SwSidebarWin::HideNote()
     if (mpAnchor)
     {
         if (mrMgr.IsShowAnchor())
-            mpAnchor->SetAnchorState(AS_TRI);
+            mpAnchor->SetAnchorState(AnchorState::Tri);
         else
             mpAnchor->setVisible(false);
     }
@@ -1509,12 +1509,12 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
         {
             if (mpAnchor)
             {
-                mpAnchor->SetAnchorState(AS_ALL);
+                mpAnchor->SetAnchorState(AnchorState::All);
                 SwSidebarWin* pWin = GetTopReplyNote();
                 // #i111964#
                 if ( pWin && pWin->Anchor() )
                 {
-                    pWin->Anchor()->SetAnchorState(AS_END);
+                    pWin->Anchor()->SetAnchorState(AnchorState::End);
                 }
                 mpAnchor->setLineSolid(true);
                 if ( mpTextRangeOverlay != nullptr )
@@ -1548,7 +1548,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                 {
                     // if there is no visible parent note, we want to see the complete anchor ??
                     //if (IsAnyStackParentVisible())
-                    mpAnchor->SetAnchorState(AS_END);
+                    mpAnchor->SetAnchorState(AnchorState::End);
                     SwSidebarWin* pTopWinSelf = GetTopReplyNote();
                     SwSidebarWin* pTopWinActive = mrMgr.HasActiveSidebarWin()
                                                   ? mrMgr.GetActiveSidebarWin()->GetTopReplyNote()
@@ -1565,7 +1565,7 @@ void SwSidebarWin::SetViewState(ViewState bViewState)
                                 pTopWinSelf->TextRange()->HideSolidBorder();
                             }
                         }
-                        pTopWinSelf->Anchor()->SetAnchorState(AS_ALL);
+                        pTopWinSelf->Anchor()->SetAnchorState(AnchorState::All);
                     }
                 }
                 mpAnchor->setLineSolid(false);

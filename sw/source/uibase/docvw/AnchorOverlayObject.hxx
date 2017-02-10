@@ -30,12 +30,11 @@ class Point;
 
 namespace sw { namespace sidebarwindows {
 
-enum AnchorState
+enum class AnchorState
 {
-    AS_ALL,
-    AS_START,
-    AS_END,
-    AS_TRI
+    All,
+    End,
+    Tri
 };
 
 class AnchorOverlayObject: public sdr::overlay::OverlayObjectWithBasePosition
