@@ -1062,20 +1062,6 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         return true;
     }
 
-    StringRef file(compiler.getSourceManager().getFilename(
-                        compiler.getSourceManager().getSpellingLoc(expr->getLocStart())));
-    if (file == SRCDIR "/sal/qa/rtl/oustringbuffer/test_oustringbuffer_tostring.cxx")
-    {
-        return true;
-    }
-    // there is some template magic here I don't know how to work around
-    if (file.startswith(SRCDIR "/connectivity"))
-    {
-        return true;
-    }
-    if (isInUnoIncludeFile(expr->getLocStart())) {
-        return true;
-    }
     auto consDecl = expr->getConstructor();
     for (unsigned i = 0; i != consDecl->getNumParams(); ++i) {
         auto t = consDecl->getParamDecl(i)->getType();
