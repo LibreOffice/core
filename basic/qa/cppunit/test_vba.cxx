@@ -55,6 +55,7 @@ void VBATest::testMiscVBAFunctions()
         "format.vb",
         "replace.vb",
         "stringplusdouble.vb",
+        "chr.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
