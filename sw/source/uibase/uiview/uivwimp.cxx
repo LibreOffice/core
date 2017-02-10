@@ -55,7 +55,7 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 SwView_Impl::SwView_Impl(SwView* pShell)
     : mxXTextView()
     , pView(pShell)
-    , eShellMode(SHELL_MODE_TEXT)
+    , eShellMode(ShellMode::Text)
 #if HAVE_FEATURE_DBCONNECTIVITY
     , nMailMergeRestartPage(0)
 #endif
@@ -97,7 +97,7 @@ SwView_Impl::~SwView_Impl()
     delete m_pRequest;
 }
 
-void SwView_Impl::SetShellMode(ShellModes eSet)
+void SwView_Impl::SetShellMode(ShellMode eSet)
 {
     eShellMode = eSet;
 }

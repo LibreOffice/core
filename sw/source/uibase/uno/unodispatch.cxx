@@ -278,11 +278,11 @@ void SwXDispatch::addStatusListener(
 {
     if(!m_pView)
         throw uno::RuntimeException();
-    ShellModes eMode = m_pView->GetShellMode();
-    bool bEnable = SHELL_MODE_TEXT == eMode  ||
-                       SHELL_MODE_LIST_TEXT == eMode  ||
-                       SHELL_MODE_TABLE_TEXT == eMode  ||
-                       SHELL_MODE_TABLE_LIST_TEXT == eMode;
+    ShellMode eMode = m_pView->GetShellMode();
+    bool bEnable = ShellMode::Text == eMode  ||
+                       ShellMode::ListText == eMode  ||
+                       ShellMode::TableText == eMode  ||
+                       ShellMode::TableListText == eMode;
 
     m_bOldEnable = bEnable;
     frame::FeatureStateEvent aEvent;
@@ -345,11 +345,11 @@ void SwXDispatch::removeStatusListener(
 
 void SwXDispatch::selectionChanged( const lang::EventObject&  )
 {
-    ShellModes eMode = m_pView->GetShellMode();
-    bool bEnable = SHELL_MODE_TEXT == eMode  ||
-                       SHELL_MODE_LIST_TEXT == eMode  ||
-                       SHELL_MODE_TABLE_TEXT == eMode  ||
-                       SHELL_MODE_TABLE_LIST_TEXT == eMode;
+    ShellMode eMode = m_pView->GetShellMode();
+    bool bEnable = ShellMode::Text == eMode  ||
+                       ShellMode::ListText == eMode  ||
+                       ShellMode::TableText == eMode  ||
+                       ShellMode::TableListText == eMode;
     if(bEnable != m_bOldEnable)
     {
         m_bOldEnable = bEnable;

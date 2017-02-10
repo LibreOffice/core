@@ -95,24 +95,23 @@ const long nScrollY  =   30;
 
 #define MAX_MARKS 5
 
-enum ShellModes
+enum class ShellMode
 {
-    SHELL_MODE_TEXT,
-    SHELL_MODE_FRAME,
-    SHELL_MODE_GRAPHIC,
-    SHELL_MODE_OBJECT,
-    SHELL_MODE_DRAW,
-    SHELL_MODE_DRAW_CTRL,
-    SHELL_MODE_DRAW_FORM,
-    SHELL_MODE_DRAWTEXT,
-    SHELL_MODE_BEZIER,
-    SHELL_MODE_LIST_TEXT,
-    SHELL_MODE_TABLE_TEXT,
-    SHELL_MODE_TABLE_LIST_TEXT,
-    SHELL_MODE_MEDIA,
-    SHELL_MODE_EXTRUDED_CUSTOMSHAPE,
-    SHELL_MODE_FONTWORK,
-    SHELL_MODE_POSTIT
+    Text,
+    Frame,
+    Graphic,
+    Object,
+    Draw,
+    DrawForm,
+    DrawText,
+    Bezier,
+    ListText,
+    TableText,
+    TableListText,
+    Media,
+    ExtrudedCustomShape,
+    FontWork,
+    PostIt
 };
 
 // apply a template
@@ -379,9 +378,9 @@ public:
     virtual void            ShowCursor( bool bOn = true ) override;
     virtual ErrCode         DoVerb( long nVerb ) override;
 
-    virtual sal_uInt16          SetPrinter( SfxPrinter* pNew,
+    virtual sal_uInt16      SetPrinter( SfxPrinter* pNew,
                                         SfxPrinterChangeFlags nDiff = SFX_PRINTER_ALL) override;
-    ShellModes              GetShellMode();
+    ShellMode               GetShellMode();
 
     css::view::XSelectionSupplier*       GetUNOObject();
 

@@ -99,7 +99,7 @@ class SwView_Impl
                                 mxScanEvtLstnr;
     rtl::Reference<SwClipboardChangeListener>
                                 mxClipEvtLstnr;
-    ShellModes                  eShellMode;
+    ShellMode                   eShellMode;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
     std::shared_ptr<SwMailMergeConfigItem>
@@ -122,13 +122,13 @@ public:
     SwView_Impl(SwView* pShell);
     ~SwView_Impl();
 
-    void                            SetShellMode(ShellModes eSet);
+    void                            SetShellMode(ShellMode eSet);
 
     css::view::XSelectionSupplier* GetUNOObject();
     SwXTextView*                    GetUNOObject_Impl();
     void                            Invalidate();
 
-    ShellModes                      GetShellMode() {return eShellMode;}
+    ShellMode                       GetShellMode() {return eShellMode;}
 
     void                            ExecuteScan(SfxRequest& rReq);
     SwScannerEventListener&         GetScannerEventListener();

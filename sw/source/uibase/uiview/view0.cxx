@@ -118,7 +118,7 @@ void SwView::InitInterface_Impl()
 }
 
 
-ShellModes  SwView::GetShellMode()
+ShellMode SwView::GetShellMode()
 {
     return m_pViewImpl->GetShellMode();
 }

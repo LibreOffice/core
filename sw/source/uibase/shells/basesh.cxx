@@ -931,12 +931,11 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case SID_STYLE_NEW_BY_EXAMPLE:
         case SID_STYLE_APPLY:
         {
-            ShellModes eMode = GetView().GetShellMode();
-            if ( SHELL_MODE_DRAW != eMode &&
-                 SHELL_MODE_DRAW_CTRL != eMode &&
-                 SHELL_MODE_DRAW_FORM != eMode &&
-                 SHELL_MODE_DRAWTEXT != eMode &&
-                 SHELL_MODE_BEZIER != eMode )
+            ShellMode eMode = GetView().GetShellMode();
+            if ( ShellMode::Draw != eMode &&
+                 ShellMode::DrawForm != eMode &&
+                 ShellMode::DrawText != eMode &&
+                 ShellMode::Bezier != eMode )
             {
                 // oj #107754#
                 if ( SID_STYLE_WATERCAN == nSlot )
@@ -1836,14 +1835,13 @@ void SwBaseShell::StateDisableItems( SfxItemSet &rSet )
 void SwBaseShell::StateStyle( SfxItemSet &rSet )
 {
     bool bParentCntProt = GetShell().IsSelObjProtected( FlyProtectFlags::Content|FlyProtectFlags::Parent ) != FlyProtectFlags::NONE;
-    ShellModes eMode = GetView().GetShellMode();
+    ShellMode eMode = GetView().GetShellMode();
 
     if ( bParentCntProt ||
-         SHELL_MODE_DRAW == eMode ||
-         SHELL_MODE_DRAW_CTRL == eMode ||
-         SHELL_MODE_DRAW_FORM == eMode ||
-         SHELL_MODE_DRAWTEXT == eMode ||
-         SHELL_MODE_BEZIER == eMode )
+         ShellMode::Draw == eMode ||
+         ShellMode::DrawForm == eMode ||
+         ShellMode::DrawText == eMode ||
+         ShellMode::Bezier == eMode )
     {
         SfxWhichIter aIter( rSet );
         sal_uInt16 nWhich = aIter.FirstWhich();

@@ -326,10 +326,10 @@ uno::Any SwXTextView::getSelection()
         m_pView->StopShellTimer();
         //Generating an interface from the current selection.
         SwWrtShell& rSh = m_pView->GetWrtShell();
-        ShellModes  eSelMode = m_pView->GetShellMode();
+        ShellMode eSelMode = m_pView->GetShellMode();
         switch(eSelMode)
         {
-            case SHELL_MODE_TABLE_TEXT      :
+            case ShellMode::TableText      :
             {
                 if(rSh.GetTableCursor())
                 {
@@ -342,15 +342,15 @@ uno::Any SwXTextView::getSelection()
                 SAL_FALLTHROUGH;
                     // without a table selection the text will be delivered
             }
-            case SHELL_MODE_LIST_TEXT       :
-            case SHELL_MODE_TABLE_LIST_TEXT:
-            case SHELL_MODE_TEXT            :
+            case ShellMode::ListText       :
+            case ShellMode::TableListText:
+            case ShellMode::Text            :
             {
                 uno::Reference< container::XIndexAccess > xPos = SwXTextRanges::Create(rSh.GetCursor());
                 aRef.set(xPos, uno::UNO_QUERY);
             }
             break;
-            case SHELL_MODE_FRAME           :
+            case ShellMode::Frame           :
             {
                 SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
                 if (pFormat)
@@ -360,7 +360,7 @@ uno::Any SwXTextView::getSelection()
                 }
             }
             break;
-            case SHELL_MODE_GRAPHIC         :
+            case ShellMode::Graphic         :
             {
                 SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
                 if (pFormat)
@@ -370,7 +370,7 @@ uno::Any SwXTextView::getSelection()
                 }
             }
             break;
-            case SHELL_MODE_OBJECT          :
+            case ShellMode::Object          :
             {
                 SwFrameFormat *const pFormat = rSh.GetFlyFrameFormat();
                 if (pFormat)
@@ -380,11 +380,10 @@ uno::Any SwXTextView::getSelection()
                 }
             }
             break;
-            case SHELL_MODE_DRAW            :
-            case SHELL_MODE_DRAW_CTRL       :
-            case SHELL_MODE_DRAW_FORM       :
-            case SHELL_MODE_DRAWTEXT        :
-            case SHELL_MODE_BEZIER          :
+            case ShellMode::Draw            :
+            case ShellMode::DrawForm        :
+            case ShellMode::DrawText        :
+            case ShellMode::Bezier          :
             {
                 uno::Reference< drawing::XDrawPageSupplier >  xPageSupp;
                 uno::Reference< frame::XModel > xModel = m_pView->GetDocShell()->GetBaseModel();
@@ -520,11 +519,11 @@ Sequence< Sequence< PropertyValue > > SwXTextView::getRubyList( sal_Bool /*bAuto
     if(!GetView())
         throw RuntimeException();
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    ShellModes  eSelMode = m_pView->GetShellMode();
-    if (eSelMode != SHELL_MODE_LIST_TEXT      &&
-        eSelMode != SHELL_MODE_TABLE_LIST_TEXT &&
-        eSelMode != SHELL_MODE_TABLE_TEXT      &&
-        eSelMode != SHELL_MODE_TEXT           )
+    ShellMode  eSelMode = m_pView->GetShellMode();
+    if (eSelMode != ShellMode::ListText      &&
+        eSelMode != ShellMode::TableListText &&
+        eSelMode != ShellMode::TableText      &&
+        eSelMode != ShellMode::Text           )
         return Sequence< Sequence< PropertyValue > > ();
 
     SwRubyList aList;
@@ -565,11 +564,11 @@ void SAL_CALL SwXTextView::setRubyList(
     if(!GetView() || !rRubyList.getLength())
         throw RuntimeException();
     SwWrtShell& rSh = m_pView->GetWrtShell();
-    ShellModes  eSelMode = m_pView->GetShellMode();
-    if (eSelMode != SHELL_MODE_LIST_TEXT      &&
-        eSelMode != SHELL_MODE_TABLE_LIST_TEXT &&
-        eSelMode != SHELL_MODE_TABLE_TEXT      &&
-        eSelMode != SHELL_MODE_TEXT           )
+    ShellMode eSelMode = m_pView->GetShellMode();
+    if (eSelMode != ShellMode::ListText      &&
+        eSelMode != ShellMode::TableListText &&
+        eSelMode != ShellMode::TableText      &&
+        eSelMode != ShellMode::Text           )
         throw RuntimeException();
 
     SwRubyList aList;
@@ -1016,14 +1015,14 @@ void SwXTextViewCursor::gotoRange(
             throw uno::RuntimeException();
         }
 
-        ShellModes  eSelMode = m_pView->GetShellMode();
+        ShellMode   eSelMode = m_pView->GetShellMode();
         SwWrtShell& rSh = m_pView->GetWrtShell();
         // call EnterStdMode in non-text selections only
         if(!bExpand ||
-           (eSelMode != SHELL_MODE_TABLE_TEXT &&
-            eSelMode != SHELL_MODE_LIST_TEXT &&
-            eSelMode != SHELL_MODE_TABLE_LIST_TEXT &&
-            eSelMode != SHELL_MODE_TEXT ))
+           (eSelMode != ShellMode::TableText &&
+            eSelMode != ShellMode::ListText &&
+            eSelMode != ShellMode::TableListText &&
+            eSelMode != ShellMode::Text ))
                 rSh.EnterStdMode();
         SwPaM* pShellCursor = rSh.GetCursor();
         SwPaM aOwnPaM(*pShellCursor->GetPoint());
@@ -1096,10 +1095,10 @@ void SwXTextViewCursor::gotoRange(
         //with Expand only in the same environment
         if(bExpand &&
             (pOwnStartNode != pTmp ||
-            (eSelMode != SHELL_MODE_TABLE_TEXT &&
-                eSelMode != SHELL_MODE_LIST_TEXT &&
-                eSelMode != SHELL_MODE_TABLE_LIST_TEXT &&
-                eSelMode != SHELL_MODE_TEXT)))
+            (eSelMode != ShellMode::TableText &&
+                eSelMode != ShellMode::ListText &&
+                eSelMode != ShellMode::TableListText &&
+                eSelMode != ShellMode::Text)))
             throw uno::RuntimeException();
 
         //Now, the selection must be expanded.
@@ -1378,7 +1377,7 @@ OUString SwXTextViewCursor::getString()
         if (!IsTextSelection( false ))
             throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
 
-        ShellModes  eSelMode = m_pView->GetShellMode();
+        ShellMode eSelMode = m_pView->GetShellMode();
         switch(eSelMode)
         {
             //! since setString for SEL_TABLE_TEXT (with possible
@@ -1386,9 +1385,9 @@ OUString SwXTextViewCursor::getString()
             //! will ignore this case for both
             //! functions (setString AND getString) because of symmetrie.
 
-            case SHELL_MODE_LIST_TEXT       :
-            case SHELL_MODE_TABLE_LIST_TEXT:
-            case SHELL_MODE_TEXT            :
+            case ShellMode::ListText       :
+            case ShellMode::TableListText:
+            case ShellMode::Text            :
             {
                 SwWrtShell& rSh = m_pView->GetWrtShell();
                 SwPaM* pShellCursor = rSh.GetCursor();
@@ -1409,7 +1408,7 @@ void SwXTextViewCursor::setString(const OUString& aString)
         if (!IsTextSelection( false ))
             throw  uno::RuntimeException("no text selection", static_cast < cppu::OWeakObject * > ( this ) );
 
-        ShellModes  eSelMode = m_pView->GetShellMode();
+        ShellMode eSelMode = m_pView->GetShellMode();
         switch(eSelMode)
         {
             //! since setString for SEL_TABLE_TEXT (with possible
@@ -1417,9 +1416,9 @@ void SwXTextViewCursor::setString(const OUString& aString)
             //! will ignore this case for both
             //! functions (setString AND getString) because of symmetrie.
 
-            case SHELL_MODE_LIST_TEXT       :
-            case SHELL_MODE_TABLE_LIST_TEXT :
-            case SHELL_MODE_TEXT            :
+            case ShellMode::ListText       :
+            case ShellMode::TableListText :
+            case ShellMode::Text            :
             {
                 SwWrtShell& rSh = m_pView->GetWrtShell();
                 SwCursor* pShellCursor = rSh.GetSwCursor();
@@ -1721,7 +1720,7 @@ uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransfera
     //force immediat shell update
     GetView()->StopShellTimer();
     SwWrtShell& rSh = GetView()->GetWrtShell();
-    if ( GetView()->GetShellMode() == SHELL_MODE_DRAWTEXT )
+    if ( GetView()->GetShellMode() == ShellMode::DrawText )
     {
         SdrView *pSdrView = rSh.GetDrawView();
         OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
@@ -1745,7 +1744,7 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
     //force immediat shell update
     GetView()->StopShellTimer();
     SwWrtShell& rSh = GetView()->GetWrtShell();
-    if ( GetView()->GetShellMode() == SHELL_MODE_DRAWTEXT )
+    if ( GetView()->GetShellMode() == ShellMode::DrawText )
     {
         SdrView *pSdrView = rSh.GetDrawView();
         OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();

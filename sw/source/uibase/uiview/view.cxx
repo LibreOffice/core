@@ -296,7 +296,7 @@ void SwView::SelectShell()
 
         bool bSetExtInpCntxt = false;
         m_nSelectionType = nNewSelectionType;
-        ShellModes eShellMode;
+        ShellMode eShellMode;
 
         if ( !( m_nSelectionType & nsSelectionType::SEL_FOC_FRM_CTRL ) )
             rDispatcher.Push( *m_pFormShell );
@@ -306,59 +306,59 @@ void SwView::SelectShell()
 
         if ( m_nSelectionType & nsSelectionType::SEL_OLE )
         {
-            eShellMode = SHELL_MODE_OBJECT;
+            eShellMode = ShellMode::Object;
             m_pShell = new SwOleShell( *this );
             rDispatcher.Push( *m_pShell );
         }
         else if ( m_nSelectionType & nsSelectionType::SEL_FRM
             || m_nSelectionType & nsSelectionType::SEL_GRF)
         {
-            eShellMode = SHELL_MODE_FRAME;
+            eShellMode = ShellMode::Frame;
             m_pShell = new SwFrameShell( *this );
             rDispatcher.Push( *m_pShell );
             if(m_nSelectionType & nsSelectionType::SEL_GRF )
             {
-                eShellMode = SHELL_MODE_GRAPHIC;
+                eShellMode = ShellMode::Graphic;
                 m_pShell = new SwGrfShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
         }
         else if ( m_nSelectionType & nsSelectionType::SEL_DRW )
         {
-            eShellMode = SHELL_MODE_DRAW;
+            eShellMode = ShellMode::Draw;
             m_pShell = new SwDrawShell( *this );
             rDispatcher.Push( *m_pShell );
 
             if ( m_nSelectionType & nsSelectionType::SEL_BEZ )
             {
-                eShellMode = SHELL_MODE_BEZIER;
+                eShellMode = ShellMode::Bezier;
                 m_pShell = new SwBezierShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
 #if HAVE_FEATURE_AVMEDIA
             else if( m_nSelectionType & nsSelectionType::SEL_MEDIA )
             {
-                eShellMode = SHELL_MODE_MEDIA;
+                eShellMode = ShellMode::Media;
                 m_pShell = new SwMediaShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
 #endif
             if (m_nSelectionType & nsSelectionType::SEL_EXTRUDED_CUSTOMSHAPE)
             {
-                eShellMode = SHELL_MODE_EXTRUDED_CUSTOMSHAPE;
+                eShellMode = ShellMode::ExtrudedCustomShape;
                 m_pShell = new svx::ExtrusionBar(this);
                 rDispatcher.Push( *m_pShell );
             }
             if (m_nSelectionType & nsSelectionType::SEL_FONTWORK)
             {
-                eShellMode = SHELL_MODE_FONTWORK;
+                eShellMode = ShellMode::FontWork;
                 m_pShell = new svx::FontworkBar(this);
                 rDispatcher.Push( *m_pShell );
             }
         }
         else if ( m_nSelectionType & nsSelectionType::SEL_DRW_FORM )
         {
-            eShellMode = SHELL_MODE_DRAW_FORM;
+            eShellMode = ShellMode::DrawForm;
             m_pShell = new SwDrawFormShell( *this );
 
             rDispatcher.Push( *m_pShell );
@@ -366,25 +366,25 @@ void SwView::SelectShell()
         else if ( m_nSelectionType & nsSelectionType::SEL_DRW_TXT )
         {
             bSetExtInpCntxt = true;
-            eShellMode = SHELL_MODE_DRAWTEXT;
+            eShellMode = ShellMode::DrawText;
             rDispatcher.Push( *(new SwBaseShell( *this )) );
             m_pShell = new SwDrawTextShell( *this );
             rDispatcher.Push( *m_pShell );
         }
         else if ( m_nSelectionType & nsSelectionType::SEL_POSTIT )
         {
-            eShellMode = SHELL_MODE_POSTIT;
+            eShellMode = ShellMode::PostIt;
             m_pShell = new SwAnnotationShell( *this );
             rDispatcher.Push( *m_pShell );
         }
         else
         {
             bSetExtInpCntxt = true;
-            eShellMode = SHELL_MODE_TEXT;
+            eShellMode = ShellMode::Text;
             sal_uInt32 nHelpId = 0;
             if ( m_nSelectionType & nsSelectionType::SEL_NUM )
             {
-                eShellMode = SHELL_MODE_LIST_TEXT;
+                eShellMode = ShellMode::ListText;
                 m_pShell = new SwListShell( *this );
                 nHelpId = m_pShell->GetHelpId();
                 rDispatcher.Push( *m_pShell );
@@ -395,8 +395,8 @@ void SwView::SelectShell()
             rDispatcher.Push( *m_pShell );
             if ( m_nSelectionType & nsSelectionType::SEL_TBL )
             {
-                eShellMode = eShellMode == SHELL_MODE_LIST_TEXT ? SHELL_MODE_TABLE_LIST_TEXT
-                                                        : SHELL_MODE_TABLE_TEXT;
+                eShellMode = eShellMode == ShellMode::ListText ? ShellMode::TableListText
+                                                        : ShellMode::TableText;
                 m_pShell = new SwTableShell( *this );
                 rDispatcher.Push( *m_pShell );
             }
@@ -642,10 +642,10 @@ void SwView::CheckReadonlySelection()
         // the stack.
         switch( m_pViewImpl->GetShellMode() )
         {
-        case SHELL_MODE_TEXT:
-        case SHELL_MODE_LIST_TEXT:
-        case SHELL_MODE_TABLE_TEXT:
-        case SHELL_MODE_TABLE_LIST_TEXT:
+        case ShellMode::Text:
+        case ShellMode::ListText:
+        case ShellMode::TableText:
+        case ShellMode::TableListText:
             {
 // Temporary solution!!! Should set the font of the current insertion point
 //         at each cursor movement, so outside of this "if". But TH does not

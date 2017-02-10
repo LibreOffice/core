@@ -162,36 +162,36 @@ void SwWebView::SelectShell()
         bool bSetExtInpCntxt = false;
         _nSelectionType = nNewSelectionType;
         SetSelectionType( _nSelectionType );
-        ShellModes eShellMode;
+        ShellMode eShellMode;
 
         if ( _nSelectionType & nsSelectionType::SEL_OLE )
         {
-            eShellMode = SHELL_MODE_OBJECT;
+            eShellMode = ShellMode::Object;
             SetShell( new SwWebOleShell( *this ));
             rDispatcher.Push( *GetCurShell() );
         }
         else if ( _nSelectionType & nsSelectionType::SEL_FRM
             || _nSelectionType & nsSelectionType::SEL_GRF)
         {
-            eShellMode = SHELL_MODE_FRAME;
+            eShellMode = ShellMode::Frame;
             SetShell( new SwWebFrameShell( *this ));
             rDispatcher.Push( *GetCurShell() );
             if(_nSelectionType & nsSelectionType::SEL_GRF )
             {
-                eShellMode = SHELL_MODE_GRAPHIC;
+                eShellMode = ShellMode::Graphic;
                 SetShell( new SwWebGrfShell( *this ));
                 rDispatcher.Push( *GetCurShell() );
             }
         }
         else if ( _nSelectionType & nsSelectionType::SEL_FRM )
         {
-            eShellMode = SHELL_MODE_FRAME;
+            eShellMode = ShellMode::Frame;
             SetShell( new SwWebFrameShell( *this ));
             rDispatcher.Push( *GetCurShell() );
         }
         else if ( _nSelectionType & nsSelectionType::SEL_DRW )
         {
-            eShellMode = SHELL_MODE_DRAW;
+            eShellMode = ShellMode::Draw;
             SetShell( new svx::ExtrusionBar( this ) );
             rDispatcher.Push( *GetCurShell() );
 
@@ -202,7 +202,7 @@ void SwWebView::SelectShell()
             rDispatcher.Push( *GetCurShell() );
             if ( _nSelectionType & nsSelectionType::SEL_BEZ )
             {
-                eShellMode = SHELL_MODE_BEZIER;
+                eShellMode = ShellMode::Bezier;
                 SetShell( new SwBezierShell( *this ));
                 rDispatcher.Push( *GetCurShell() );
             }
@@ -210,31 +210,31 @@ void SwWebView::SelectShell()
         }
         else if ( _nSelectionType & nsSelectionType::SEL_DRW_FORM )
         {
-            eShellMode = SHELL_MODE_DRAW_FORM;
+            eShellMode = ShellMode::DrawForm;
             SetShell( new SwWebDrawFormShell( *this ));
 
             rDispatcher.Push( *GetCurShell() );
         }
         else if ( _nSelectionType & nsSelectionType::SEL_DRW_TXT )
         {
-            eShellMode = SHELL_MODE_DRAWTEXT;
+            eShellMode = ShellMode::DrawText;
             rDispatcher.Push( *(new SwBaseShell( *this )) );
             SetShell( new SwDrawTextShell( *this ));
             rDispatcher.Push( *GetCurShell() );
         }
         else if ( _nSelectionType & nsSelectionType::SEL_POSTIT )
         {
-            eShellMode = SHELL_MODE_POSTIT;
+            eShellMode = ShellMode::PostIt;
             SetShell( new SwAnnotationShell( *this ) );
             rDispatcher.Push( *GetCurShell() );
         }
         else
         {
             bSetExtInpCntxt = true;
-            eShellMode = SHELL_MODE_TEXT;
+            eShellMode = ShellMode::Text;
             if ( _nSelectionType & nsSelectionType::SEL_NUM )
             {
-                eShellMode = SHELL_MODE_LIST_TEXT;
+                eShellMode = ShellMode::ListText;
                 SetShell( new SwWebListShell( *this ));
                 rDispatcher.Push( *GetCurShell() );
             }
@@ -242,8 +242,8 @@ void SwWebView::SelectShell()
             rDispatcher.Push( *GetCurShell() );
             if ( _nSelectionType & nsSelectionType::SEL_TBL )
             {
-                eShellMode = eShellMode == SHELL_MODE_LIST_TEXT ? SHELL_MODE_TABLE_LIST_TEXT
-                                                        : SHELL_MODE_TABLE_TEXT;
+                eShellMode = eShellMode == ShellMode::ListText ? ShellMode::TableListText
+                                                        : ShellMode::TableText;
                 SetShell( new SwWebTableShell( *this ));
                 rDispatcher.Push( *GetCurShell() );
             }

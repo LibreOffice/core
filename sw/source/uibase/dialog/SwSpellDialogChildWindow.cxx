@@ -84,7 +84,7 @@ struct SpellState
     bool                m_bRestartDrawing; // the first selected drawing object is found again
 
     // lose/get focus information to decide if spelling can be continued
-    ShellModes          m_eSelMode;
+    ShellMode           m_eSelMode;
     const SwNode*       m_pPointNode;
     const SwNode*       m_pMarkNode;
     sal_Int32           m_nPointPos;
@@ -110,7 +110,7 @@ struct SpellState
         m_pStartDrawing(nullptr),
         m_bRestartDrawing(false),
 
-        m_eSelMode(SHELL_MODE_OBJECT), // initially invalid
+        m_eSelMode(ShellMode::Object), // initially invalid
         m_pPointNode(nullptr),
         m_pMarkNode(nullptr),
         m_nPointPos(0),
@@ -188,13 +188,13 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
             SwEditShell::MoveContinuationPosToEndOfCheckedSentence();
         }
 
-        ShellModes  eSelMode = pWrtShell->GetView().GetShellMode();
-        bool bDrawText = SHELL_MODE_DRAWTEXT == eSelMode;
+        ShellMode eSelMode = pWrtShell->GetView().GetShellMode();
+        bool bDrawText = ShellMode::DrawText == eSelMode;
         bool bNormalText =
-            SHELL_MODE_TABLE_TEXT == eSelMode ||
-            SHELL_MODE_LIST_TEXT == eSelMode ||
-            SHELL_MODE_TABLE_LIST_TEXT == eSelMode ||
-            SHELL_MODE_TEXT == eSelMode;
+            ShellMode::TableText == eSelMode ||
+            ShellMode::ListText == eSelMode ||
+            ShellMode::TableListText == eSelMode ||
+            ShellMode::Text == eSelMode;
         // Writer text outside of the body
         bool bOtherText = false;
 
@@ -434,13 +434,13 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
     OSL_ENSURE(!m_pSpellState->m_bInitialCall, "ApplyChangedSentence in initial call or after resume");
     if(pWrtShell && !m_pSpellState->m_bInitialCall)
     {
-        ShellModes  eSelMode = pWrtShell->GetView().GetShellMode();
-        bool bDrawText = SHELL_MODE_DRAWTEXT == eSelMode;
+        ShellMode eSelMode = pWrtShell->GetView().GetShellMode();
+        bool bDrawText = ShellMode::DrawText == eSelMode;
         bool bNormalText =
-            SHELL_MODE_TABLE_TEXT == eSelMode ||
-            SHELL_MODE_LIST_TEXT == eSelMode ||
-            SHELL_MODE_TABLE_LIST_TEXT == eSelMode ||
-            SHELL_MODE_TEXT == eSelMode;
+            ShellMode::TableText == eSelMode ||
+            ShellMode::ListText == eSelMode ||
+            ShellMode::TableListText == eSelMode ||
+            ShellMode::Text == eSelMode;
 
         // evaluate if the same sentence should be rechecked or not.
         // Sentences that got grammar checked should always be rechecked in order
@@ -492,13 +492,13 @@ void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     if(pWrtShell)
     {
-        ShellModes  eSelMode = pWrtShell->GetView().GetShellMode();
-        bool bDrawText = SHELL_MODE_DRAWTEXT == eSelMode;
+        ShellMode eSelMode = pWrtShell->GetView().GetShellMode();
+        bool bDrawText = ShellMode::DrawText == eSelMode;
         bool bNormalText =
-            SHELL_MODE_TABLE_TEXT == eSelMode ||
-            SHELL_MODE_LIST_TEXT == eSelMode ||
-            SHELL_MODE_TABLE_LIST_TEXT == eSelMode ||
-            SHELL_MODE_TEXT == eSelMode;
+            ShellMode::TableText == eSelMode ||
+            ShellMode::ListText == eSelMode ||
+            ShellMode::TableListText == eSelMode ||
+            ShellMode::Text == eSelMode;
         if( bNormalText )
             SwEditShell::PutSpellingToSentenceStart();
         else if( bDrawText )
@@ -522,7 +522,7 @@ void SwSpellDialogChildWindow::GetFocus()
     SwWrtShell* pWrtShell = GetWrtShell_Impl();
     if(pWrtShell && !m_pSpellState->m_bInitialCall)
     {
-        ShellModes  eSelMode = pWrtShell->GetView().GetShellMode();
+        ShellMode eSelMode = pWrtShell->GetView().GetShellMode();
         if(eSelMode != m_pSpellState->m_eSelMode)
         {
             // prevent initial invalidation
@@ -533,10 +533,10 @@ void SwSpellDialogChildWindow::GetFocus()
         {
             switch(m_pSpellState->m_eSelMode)
             {
-                case SHELL_MODE_TEXT:
-                case SHELL_MODE_LIST_TEXT:
-                case SHELL_MODE_TABLE_TEXT:
-                case SHELL_MODE_TABLE_LIST_TEXT:
+                case ShellMode::Text:
+                case ShellMode::ListText:
+                case ShellMode::TableText:
+                case ShellMode::TableListText:
                 {
                     SwPaM* pCursor = pWrtShell->GetCursor();
                     if(m_pSpellState->m_pPointNode != &pCursor->GetNode() ||
@@ -546,7 +546,7 @@ void SwSpellDialogChildWindow::GetFocus()
                             bInvalidate = true;
                 }
                 break;
-                case SHELL_MODE_DRAWTEXT:
+                case ShellMode::DrawText:
                 {
                     SdrView*     pSdrView = pWrtShell->GetDrawView();
                     SdrOutliner* pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : nullptr;
@@ -589,10 +589,10 @@ void SwSpellDialogChildWindow::LoseFocus()
 
         switch(m_pSpellState->m_eSelMode)
         {
-            case SHELL_MODE_TEXT:
-            case SHELL_MODE_LIST_TEXT:
-            case SHELL_MODE_TABLE_TEXT:
-            case SHELL_MODE_TABLE_LIST_TEXT:
+            case ShellMode::Text:
+            case ShellMode::ListText:
+            case ShellMode::TableText:
+            case ShellMode::TableListText:
             {
                 // store a node pointer and a pam-position to be able to check on next GetFocus();
                 SwPaM* pCursor = pWrtShell->GetCursor();
@@ -603,7 +603,7 @@ void SwSpellDialogChildWindow::LoseFocus()
 
             }
             break;
-            case SHELL_MODE_DRAWTEXT:
+            case ShellMode::DrawText:
             {
                 SdrView*     pSdrView = pWrtShell->GetDrawView();
                 SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
@@ -620,7 +620,7 @@ void SwSpellDialogChildWindow::LoseFocus()
         }
     }
     else
-        m_pSpellState->m_eSelMode = SHELL_MODE_OBJECT;
+        m_pSpellState->m_eSelMode = ShellMode::Object;
 }
 
 void SwSpellDialogChildWindow::InvalidateSpellDialog()
@@ -652,20 +652,20 @@ SwWrtShell* SwSpellDialogChildWindow::GetWrtShell_Impl()
 
 // set the cursor into the body text - necessary if any object is selected
 // on start of the spelling dialog
-bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellModes  eSelMode)
+bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellMode eSelMode)
 {
     SwView& rView = rShell.GetView();
     switch(eSelMode)
     {
-        case SHELL_MODE_TEXT:
-        case SHELL_MODE_LIST_TEXT:
-        case SHELL_MODE_TABLE_TEXT:
-        case SHELL_MODE_TABLE_LIST_TEXT:
-        case SHELL_MODE_DRAWTEXT:
+        case ShellMode::Text:
+        case ShellMode::ListText:
+        case ShellMode::TableText:
+        case ShellMode::TableListText:
+        case ShellMode::DrawText:
             OSL_FAIL("text already active in SwSpellDialogChildWindow::MakeTextSelection_Impl()");
         break;
 
-        case SHELL_MODE_FRAME:
+        case ShellMode::Frame:
         {
             rShell.UnSelectFrame();
             rShell.LeaveSelFrameMode();
@@ -673,18 +673,17 @@ bool SwSpellDialogChildWindow::MakeTextSelection_Impl(SwWrtShell& rShell, ShellM
         }
         break;
 
-        case SHELL_MODE_DRAW:
-        case SHELL_MODE_DRAW_CTRL:
-        case SHELL_MODE_DRAW_FORM:
-        case SHELL_MODE_BEZIER:
+        case ShellMode::Draw:
+        case ShellMode::DrawForm:
+        case ShellMode::Bezier:
             if(FindNextDrawTextError_Impl(rShell))
             {
                 rView.AttrChangedNotify(&rShell);
                 break;
             }
             SAL_FALLTHROUGH; // to deselect the object
-        case SHELL_MODE_GRAPHIC:
-        case SHELL_MODE_OBJECT:
+        case ShellMode::Graphic:
+        case ShellMode::Object:
         {
             if ( rShell.IsDrawCreate() )
             {
