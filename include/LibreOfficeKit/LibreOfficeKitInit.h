@@ -42,7 +42,10 @@ extern "C"
     #endif
     #define SEPARATOR         '/'
 
-    inline void *lok_loadlib(const char *pFN)
+#ifndef __OBJC__
+    inline
+#endif
+    void *lok_loadlib(const char *pFN)
     {
         return dlopen(pFN, RTLD_LAZY
 #if defined LOK_LOADLIB_GLOBAL
