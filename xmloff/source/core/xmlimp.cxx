@@ -803,10 +803,14 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
 
     if ( isFastContext )
     {
-        rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
-        maNamespaceHandler->addNSDeclAttributes( rAttrList );
+        if ( maNamespaceAttrList.is() )
+            maNamespaceAttrList->Clear();
+        else
+            maNamespaceAttrList = new comphelper::AttributeList;
+
+        maNamespaceHandler->addNSDeclAttributes( maNamespaceAttrList );
         std::unique_ptr<SvXMLNamespaceMap> pRewindMap(
-                processNSAttributes(rAttrList.get()));
+                processNSAttributes( maNamespaceAttrList.get() ));
         SvXMLImportContext *pContext = dynamic_cast<SvXMLImportContext*>( xContext.get() );
         if( pContext && pRewindMap )
             pContext->PutRewindMap(std::move(pRewindMap));

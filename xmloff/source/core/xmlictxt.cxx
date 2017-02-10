@@ -78,8 +78,14 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
     OUString elementName;
-    rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
-    mrImport.maNamespaceHandler->addNSDeclAttributes( rAttrList );
+
+    if ( mrImport.maAttrList.is() )
+        mrImport.maAttrList->Clear();
+    else
+        mrImport.maAttrList = new comphelper::AttributeList;
+
+    mrImport.maNamespaceHandler->addNSDeclAttributes( mrImport.maAttrList );
+
     if ( !rPrefix.isEmpty() )
         elementName =  rPrefix + ":" + rLocalName;
     else
@@ -102,7 +108,7 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
             if ( !rAttrNamespacePrefix.isEmpty() )
                 sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
 
-            rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
+            mrImport.maAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
         }
 
         uno::Sequence< xml::Attribute > unknownAttribs = Attribs->getUnknownAttributes();
@@ -115,11 +121,11 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
             if ( !rAttrNamespacePrefix.isEmpty() )
                 sAttrName = rAttrNamespacePrefix + ":" + sAttrName;
 
-            rAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
+            mrImport.maAttrList->AddAttribute( sAttrName, "CDATA", rAttrValue );
         }
     }
 
-    mrImport.startElement( elementName, rAttrList.get() );
+    mrImport.startElement( elementName, mrImport.maAttrList.get() );
 }
 
 void SAL_CALL SvXMLImportContext::endFastElement(sal_Int32 nElement)

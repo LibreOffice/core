@@ -193,6 +193,8 @@ class XMLOFF_DLLPUBLIC SvXMLImport : public cppu::WeakImplHelper<
     bool isFastContext;
     css::uno::Reference< css::xml::sax::XFastParser > mxParser;
     rtl::Reference< SvXMLImportFastNamespaceHandler > maNamespaceHandler;
+    rtl::Reference < comphelper::AttributeList > maAttrList;
+    rtl::Reference < comphelper::AttributeList > maNamespaceAttrList;
     css::uno::Reference< css::xml::sax::XFastDocumentHandler > mxFastDocumentHandler;
     css::uno::Reference< css::xml::sax::XFastTokenHandler > mxTokenHandler;
     std::unordered_map< sal_Int32, OUString > maNamespaceMap;
