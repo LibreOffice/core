@@ -8691,7 +8691,6 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             else if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
             {
                 int nChars = 1;
-                pUnicodesPerGlyph[i] = 1;
                 // try to handle ligatures and such
                 if( i < nGlyphs-1 )
                 {
