@@ -1056,7 +1056,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
             const size_t nMaxRows = nWidth ? nMaxPixels / nWidth : SAL_MAX_UINT16;
             if (nHeight > nMaxRows)
                 return 0xffffffff;
-            const size_t nMaxCols = nMaxPixels ? nMaxPixels / nHeight : SAL_MAX_UINT16;
+            const size_t nMaxCols = nHeight ? nMaxPixels / nHeight : SAL_MAX_UINT16;
             if (nWidth > nMaxCols)
                 return 0xffffffff;
 
