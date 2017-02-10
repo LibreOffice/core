@@ -275,6 +275,18 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
         // No DrawingML fallback, need to warn the user at the end.
         if (mpShapePtr->getExtDrawings().empty())
             getFilter().setMissingExtDrawing();
+        else
+        {
+            for (const auto& rRelId : mpShapePtr->getExtDrawings())
+            {
+                // An invalid fallback reference is as bad as a missing one.
+                if (getFragmentPathFromRelId(rRelId).isEmpty())
+                {
+                    getFilter().setMissingExtDrawing();
+                    break;
+                }
+            }
+        }
 
         break;
     }
