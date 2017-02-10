@@ -81,7 +81,7 @@ eF_ResT SwWW8ImplReader::Read_F_OCX( WW8FieldDesc*, OUString& )
     if( m_bObj && m_nPicLocFc )
         m_nObjLocFc = m_nPicLocFc;
     m_bEmbeddObj = true;
-    return FLD_TEXT;
+    return eF_ResT::TEXT;
 }
 
 eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
@@ -120,7 +120,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         aField.SetToolTip(aFormula.msToolTip);
 
         m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
-        return FLD_OK;
+        return eF_ResT::OK;
     }
     else
     {
@@ -153,7 +153,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
             if (aFormula.mnMaxLen)
                 m_aFieldStack.back().getParameters()["MaxLength"] = uno::makeAny(OUString::number(aFormula.mnMaxLen));
         }
-        return FLD_TEXT;
+        return eF_ResT::TEXT;
     }
 }
 
@@ -172,7 +172,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
     if (!bUseEnhFields)
     {
         m_pFormImpl->InsertFormula(aFormula);
-        return FLD_OK;
+        return eF_ResT::OK;
     }
 
     OUString aBookmarkName;
@@ -213,7 +213,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
             // set field data here...
         }
     }
-    return FLD_OK;
+    return eF_ResT::OK;
 }
 
 eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
@@ -242,7 +242,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
         }
 
         m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
-        return FLD_OK;
+        return eF_ResT::OK;
     }
     else
     {
@@ -285,7 +285,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             }
         }
 
-        return FLD_OK;
+        return eF_ResT::OK;
     }
 }
 
@@ -294,7 +294,7 @@ eF_ResT SwWW8ImplReader::Read_F_HTMLControl(WW8FieldDesc*, OUString&)
     if( m_bObj && m_nPicLocFc )
         m_nObjLocFc = m_nPicLocFc;
     m_bEmbeddObj = true;
-    return FLD_TEXT;
+    return eF_ResT::TEXT;
 }
 
 void SwWW8ImplReader::DeleteFormImpl()

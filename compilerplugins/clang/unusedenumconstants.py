@@ -118,6 +118,7 @@ for d in definitionSet:
          "sw/inc/iodetect.hxx",
          "sw/inc/fmtfordr.hxx",
          "sw/inc/flddat.hxx",
+         "sw/source/uibase/config/modcfg.cxx", # InsertConfigProp
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",

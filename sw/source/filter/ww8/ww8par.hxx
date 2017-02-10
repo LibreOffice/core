@@ -608,7 +608,7 @@ public:
     const SwPosition &GetStartPos() const { return maTmpPos; }
 };
 
-enum eF_ResT{ FLD_OK, FLD_TEXT, FLD_TAGIGN, FLD_TAGTXT, FLD_READ_FSPA };
+enum class eF_ResT { OK, TEXT, TAGIGN, READ_FSPA };
 
 class SwWW8Shade
 {
