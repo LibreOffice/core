@@ -16,6 +16,23 @@
       "revId": "a7aa7cb4bb720195b282b84f92b2086e004d7101",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_12d12afc",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2700,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-02-10T05:02:44Z",
+      "side": 1,
+      "message": "zeroHeight (Hidden By Default)\n\u0027True\u0027 if rows are hidden by default. This setting is an optimization used when most rows of the sheet are hidden. In this case, instead of writing out every row and specifying\nhidden, it is much shorter to only write out the rows that are not hidden, and specify here that rows are hidden by default, and only not hidden if specified.\n\nwhat is missing from the original implementation is setting the default value (row-\u003eIsHidden) to zeroHeight\u003d1",
+      "revId": "a7aa7cb4bb720195b282b84f92b2086e004d7101",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
