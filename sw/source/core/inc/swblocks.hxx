@@ -71,7 +71,6 @@ protected:
     enum class FileType {
         NoFile,  // Not present
         None,    // No TB file
-        SW2,     // SW2 file
         SW3,     // SW3 file
         XML      // XML Block List
     };

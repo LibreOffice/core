@@ -267,7 +267,7 @@ bool SwTextBlocks::IsOld() const
     if (pImp)
     {
         SwImpBlocks::FileType nType = pImp->GetFileType();
-        if (SwImpBlocks::FileType::SW3 == nType || SwImpBlocks::FileType::SW2 == nType )
+        if (SwImpBlocks::FileType::SW3 == nType)
             return true;
     }
     return false;
@@ -375,7 +375,7 @@ sal_uLong SwTextBlocks::CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
     if (rSource.pImp)
     {
         SwImpBlocks::FileType nType = rSource.pImp->GetFileType();
-        if (SwImpBlocks::FileType::SW2 == nType || SwImpBlocks::FileType::SW3 == nType )
+        if (SwImpBlocks::FileType::SW3 == nType)
             bIsOld = true;
     }
     if( bIsOld ) //rSource.IsOld() )
