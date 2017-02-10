@@ -95,7 +95,6 @@ PresStyleMap& SdStyleFamilyImpl::getStyleSheets()
 SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, SfxStyleFamily nFamily )
 : mnFamily( nFamily )
 , mxPool( xPool )
-, mpImpl( nullptr )
 {
 }
 
@@ -111,7 +110,6 @@ SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, 
 SdStyleFamily::~SdStyleFamily()
 {
     DBG_ASSERT( !mxPool.is(), "SdStyleFamily::~SdStyleFamily(), dispose me first!" );
-    delete mpImpl;
 }
 
 void SdStyleFamily::throwIfDisposed() const
@@ -462,11 +460,7 @@ void SAL_CALL SdStyleFamily::dispose(  )
     if( mxPool.is() )
         mxPool.clear();
 
-    if( mpImpl )
-    {
-        delete mpImpl;
-        mpImpl = nullptr;
-    }
+    mpImpl.reset();
 }
 
 void SAL_CALL SdStyleFamily::addEventListener( const Reference< XEventListener >&  )
