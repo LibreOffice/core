@@ -195,7 +195,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,ORCUS,ORCUS_TARBALL) \
 		$(call fetch_Optional,OWNCLOUD_ANDROID_LIB,OWNCLOUD_ANDROID_LIB_TARBALL) \
 		$(call fetch_Optional,PAGEMAKER,PAGEMAKER_TARBALL) \
-		PDFIUM_TARBALL \
+		$(call fetch_Optional,PDFIUM,PDFIUM_TARBALL) \
 		$(call fetch_Optional,POPPLER,POPPLER_TARBALL) \
 		$(call fetch_Optional,POSTGRESQL,POSTGRESQL_TARBALL) \
 		$(call fetch_Optional,PYTHON,PYTHON_TARBALL) \
