@@ -292,6 +292,8 @@ namespace frm
 #define PROPERTY_ID_CONTROL_TYPE_IN_MSO         ( PROPERTY_ID_START + 261 )
 #define PROPERTY_ID_OBJ_ID_IN_MSO           ( PROPERTY_ID_START + 262 )
 
+#define PROPERTY_ID_TYPEDITEMLIST               ( PROPERTY_ID_START + 263 ) // Sequence<Any>
+
 // start ID fuer aggregierte Properties
 #define PROPERTY_ID_AGGREGATE_ID        (PROPERTY_ID_START + 10000)
 

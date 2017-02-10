@@ -161,16 +161,64 @@ namespace calc
         return aAddress;
     }
 
-    OUString OCellListSource::getCellTextContent_noCheck( sal_Int32 _nRangeRelativeRow )
+    OUString OCellListSource::getCellTextContent_noCheck( sal_Int32 _nRangeRelativeRow, css::uno::Any* pAny )
     {
-        OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );
-        Reference< XTextRange > xCellText;
-        if ( m_xRange.is() )
-            xCellText.set(m_xRange->getCellByPosition( 0, _nRangeRelativeRow ), css::uno::UNO_QUERY);
-
         OUString sText;
-        if ( xCellText.is() )
-            sText = xCellText->getString();
+
+        OSL_PRECOND( m_xRange.is(), "OCellListSource::getRangeAddress: invalid range!" );
+
+        if (!m_xRange.is())
+            return sText;
+
+        Reference< XCell > xCell( m_xRange->getCellByPosition( 0, _nRangeRelativeRow ));
+        if (!xCell.is())
+        {
+            if (pAny)
+                *pAny <<= sText;
+            return sText;
+        }
+
+        Reference< XTextRange > xCellText;
+        xCellText.set( xCell, UNO_QUERY);
+
+        if (xCellText.is())
+            sText = xCellText->getString();     // formatted output string
+
+        if (pAny)
+        {
+            switch (xCell->getType())
+            {
+                case CellContentType_VALUE:
+                    *pAny <<= xCell->getValue();
+                break;
+                case CellContentType_TEXT:
+                    *pAny <<= sText;
+                break;
+                case CellContentType_FORMULA:
+                    if (xCell->getError())
+                        *pAny <<= sText;    // Err:... or #...!
+                    else
+                    {
+                        Reference< XPropertySet > xProp( xCell, UNO_QUERY);
+                        if (xProp.is())
+                        {
+                            CellContentType eResultType;
+                            if ((xProp->getPropertyValue("FormulaResultType") >>= eResultType) &&
+                                    eResultType == CellContentType_VALUE)
+                                *pAny <<= xCell->getValue();
+                            else
+                                *pAny <<= sText;
+                        }
+                    }
+                break;
+                case CellContentType_EMPTY:
+                    *pAny <<= OUString();
+                break;
+                default:
+                    ;   // nothing, if actually occurred it would result in #N/A being displayed if selected
+            }
+        }
+
         return sText;
     }
 
@@ -193,7 +241,7 @@ namespace calc
         if ( _nPosition >= getListEntryCount() )
             throw IndexOutOfBoundsException();
 
-        return getCellTextContent_noCheck( _nPosition );
+        return getCellTextContent_noCheck( _nPosition, nullptr );
     }
 
     Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  )
@@ -206,7 +254,26 @@ namespace calc
         OUString* pAllEntries = aAllEntries.getArray();
         for ( sal_Int32 i = 0; i < aAllEntries.getLength(); ++i )
         {
-            *pAllEntries++ = getCellTextContent_noCheck( i );
+            *pAllEntries++ = getCellTextContent_noCheck( i, nullptr );
+        }
+
+        return aAllEntries;
+    }
+
+    Sequence< OUString > SAL_CALL OCellListSource::getAllListEntriesTyped( Sequence< Any >& rDataValues )
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+        checkDisposed();
+        checkInitialized();
+
+        const sal_Int32 nCount = getListEntryCount();
+        Sequence< OUString > aAllEntries( nCount );
+        rDataValues = Sequence< Any >( nCount );
+        OUString* pAllEntries = aAllEntries.getArray();
+        Any* pDataValues = rDataValues.getArray();
+        for ( sal_Int32 i = 0; i < nCount; ++i )
+        {
+            *pAllEntries++ = getCellTextContent_noCheck( i, pDataValues++ );
         }
 
         return aAllEntries;

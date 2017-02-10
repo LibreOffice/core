@@ -2524,6 +2524,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/form/binding,\
 	XListEntryListener \
 	XListEntrySink \
 	XListEntrySource \
+	XListEntryTypedSource \
 	XValueBinding \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/form/runtime,\

@@ -186,6 +186,16 @@ published service UnoControlListBoxModel
         @since OOo 3.3
     */
     [optional, property, maybevoid] short ItemSeparatorPos;
+
+    /** specifies the list of raw typed (not stringized) items.
+
+        <p>This list corresponds with the StringItemList and if given
+        has to be of the same length, the elements' positions matching
+        those of their string representation in StringItemList.</p>
+
+        @since LibreOffice 5.4
+     */
+    [optional, property] sequence<any> TypedItemList;
 };
 
 

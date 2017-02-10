@@ -147,6 +147,7 @@ namespace frm
     void OListBoxModel::init()
     {
         startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
+        startAggregatePropertyListening( PROPERTY_TYPEDITEMLIST );
     }
 
 
@@ -286,6 +287,10 @@ namespace frm
             _rValue <<= comphelper::containerToSequence(getStringItemList());
             break;
 
+        case PROPERTY_ID_TYPEDITEMLIST:
+            _rValue <<= getTypedItemList();
+            break;
+
         default:
             OBoundControlModel::getFastPropertyValue(_rValue, _nHandle);
         }
@@ -382,6 +387,10 @@ namespace frm
         resetNoBroadcast();
         break;
 
+        case PROPERTY_ID_TYPEDITEMLIST:
+            /* TODO: anything? */
+        break;
+
         default:
             OBoundControlModel::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
         }
@@ -433,6 +442,10 @@ namespace frm
         case PROPERTY_ID_STRINGITEMLIST:
             bModified = convertNewListSourceProperty( _rConvertedValue, _rOldValue, _rValue );
             break;
+
+        case PROPERTY_ID_TYPEDITEMLIST:
+            /* TODO: anything? */
+        break;
 
         default:
             return OBoundControlModel::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
@@ -505,6 +518,7 @@ namespace frm
             // <----- SYNCHRONIZED
             return;
         }
+        // XXX NOTE: PROPERTY_TYPEDITEMLIST not handled, used only with external list source.
         OBoundControlModel::_propertyChanged( i_rEvent );
     }
 
@@ -515,6 +529,7 @@ namespace frm
 
         // superseded properties:
         RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
+        RemoveProperty( _rAggregateProps, PROPERTY_TYPEDITEMLIST );
     }
 
 
@@ -669,6 +684,7 @@ namespace frm
             )
         {
             setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
+            setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
         }
 
         if (nVersion > 3)
@@ -991,6 +1007,7 @@ namespace frm
         setBoundValues(aValueList);
 
         setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( lcl_convertToStringSequence( aDisplayList ) ) );
+        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
     }
 
 
@@ -1456,6 +1473,26 @@ namespace frm
         };
 
 
+        Any lcl_getSingleSelectedEntryTyped( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence<Any>& _rTypedList )
+        {
+            Any aReturn;
+
+            // by definition, multiple selected entries are transferred as NULL if the
+            // binding does not support lists
+            if ( _rSelectSequence.getLength() <= 1 )
+            {
+                if ( _rSelectSequence.getLength() == 1 )
+                {
+                    sal_Int32 nIndex = _rSelectSequence[0];
+                    if (0 <= nIndex && nIndex < _rTypedList.getLength())
+                        aReturn = _rTypedList[nIndex];
+                }
+            }
+
+            return aReturn;
+        }
+
+
         Any lcl_getSingleSelectedEntry( const Sequence< sal_Int16 >& _rSelectSequence, const std::vector< OUString >& _rStringList )
         {
             Any aReturn;
@@ -1586,7 +1623,14 @@ namespace frm
             break;
 
         case eEntry:
-            aReturn = lcl_getSingleSelectedEntry( aSelectSequence, getStringItemList() );
+            {
+                const std::vector<OUString>& rStrings = getStringItemList();
+                const Sequence<Any>& rValues = getTypedItemList();
+                if (rStrings.size() == static_cast<size_t>(rValues.getLength()))
+                    aReturn = lcl_getSingleSelectedEntryTyped( aSelectSequence, rValues );
+                else
+                    aReturn = lcl_getSingleSelectedEntry( aSelectSequence, rStrings );
+            }
             break;
         }
 
@@ -1689,6 +1733,7 @@ namespace frm
         try
         {
             m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( comphelper::containerToSequence(getStringItemList()) ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_TYPEDITEMLIST, makeAny( getTypedItemList() ) );
         }
         catch( const Exception& )
         {

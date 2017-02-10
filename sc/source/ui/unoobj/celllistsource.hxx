@@ -20,7 +20,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLLISTSOURCE_HXX
 #define INCLUDED_SC_SOURCE_UI_UNOOBJ_CELLLISTSOURCE_HXX
 
-#include <com/sun/star/form/binding/XListEntrySource.hpp>
+#include <com/sun/star/form/binding/XListEntryTypedSource.hpp>
 #include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <comphelper/interfacecontainer2.hxx>
@@ -42,7 +42,7 @@ namespace calc
 
     class OCellListSource;
     // the base for our interfaces
-    typedef ::cppu::WeakAggComponentImplHelper4 <   css::form::binding::XListEntrySource
+    typedef ::cppu::WeakAggComponentImplHelper4 <   css::form::binding::XListEntryTypedSource
                                                 ,   css::util::XModifyListener
                                                 ,   css::lang::XServiceInfo
                                                 ,   css::lang::XInitialization
@@ -91,6 +91,9 @@ namespace calc
         virtual void SAL_CALL addListEntryListener( const css::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
         virtual void SAL_CALL removeListEntryListener( const css::uno::Reference< css::form::binding::XListEntryListener >& Listener ) override;
 
+        // XListEntryTypedSource
+        virtual css::uno::Sequence< OUString > SAL_CALL getAllListEntriesTyped( css::uno::Sequence< css::uno::Any >& rDataValues ) override;
+
         // OComponentHelper/XComponent
         virtual void SAL_CALL disposing() override;
 
@@ -130,12 +133,15 @@ namespace calc
         /** retrievs the text of a cell within our range
             @param _nRangeRelativeRow
                 the relative row index of the cell within our range
+            @param pAny
+                if not <NULL/> then the underlying data value is returned in the Any
             @precond
                 our m_xRange is not <NULL/>
         */
         OUString
                 getCellTextContent_noCheck(
-                    sal_Int32 _nRangeRelativeRow
+                    sal_Int32 _nRangeRelativeRow,
+                    css::uno::Any* pAny
                 );
 
         void    notifyModified();

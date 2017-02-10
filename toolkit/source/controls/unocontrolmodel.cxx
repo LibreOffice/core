@@ -309,6 +309,13 @@ css::uno::Any UnoControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 
             }
             break;
+            case BASEPROPERTY_TYPEDITEMLIST:
+            {
+                css::uno::Sequence< css::uno::Any > aAnySeq;
+                aDefault <<= aAnySeq;
+
+            }
+            break;
             case BASEPROPERTY_SELECTEDITEMS:
             {
                 css::uno::Sequence<sal_Int16> aINT16Seq;
