@@ -444,7 +444,7 @@ class SC_DLLPUBLIC ScDocShellModificator
 
 public:
     explicit ScDocShellModificator( ScDocShell& );
-    ~ScDocShellModificator();
+    ~ScDocShellModificator() COVERITY_NOEXCEPT_FALSE;
     void            SetDocumentModified();
 };
 

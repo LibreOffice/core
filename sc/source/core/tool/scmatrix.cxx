@@ -232,7 +232,7 @@ public:
 
     ScMatrixImpl( size_t nC, size_t nR, const std::vector<double>& rInitVals );
 
-    ~ScMatrixImpl();
+    ~ScMatrixImpl() COVERITY_NOEXCEPT_FALSE;
 
     void Clear();
     void Resize(SCSIZE nC, SCSIZE nR);
@@ -346,7 +346,7 @@ ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, double fInitVal) :
 ScMatrixImpl::ScMatrixImpl( size_t nC, size_t nR, const std::vector<double>& rInitVals ) :
     maMat(nR, nC, rInitVals.begin(), rInitVals.end()), maMatFlag(nR, nC), pErrorInterpreter(nullptr) {}
 
-ScMatrixImpl::~ScMatrixImpl()
+ScMatrixImpl::~ScMatrixImpl() COVERITY_NOEXCEPT_FALSE
 {
     Clear();
 }

@@ -36,7 +36,7 @@ class ScColContainer
 
 public:
     ScColContainer( ScDocument* pDoc, const size_t nSize );
-    ~ScColContainer();
+    ~ScColContainer() COVERITY_NOEXCEPT_FALSE;
 
     const ScColumn& operator[] ( const size_t nIndex ) const
     {

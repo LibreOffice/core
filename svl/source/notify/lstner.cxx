@@ -50,7 +50,7 @@ SfxListener::SfxListener( const SfxListener &rListener ) : mpImpl(new Impl)
 
 // unregisters the SfxListener from its SfxBroadcasters
 
-SfxListener::~SfxListener()
+SfxListener::~SfxListener() COVERITY_NOEXCEPT_FALSE
 {
     // unregister at all remaining broadcasters
     for ( size_t nPos = 0; nPos < mpImpl->maBCs.size(); ++nPos )

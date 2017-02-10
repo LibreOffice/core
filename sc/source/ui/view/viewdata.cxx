@@ -492,7 +492,7 @@ ScDocument* ScViewData::GetDocument() const
     return nullptr;
 }
 
-ScViewData::~ScViewData()
+ScViewData::~ScViewData() COVERITY_NOEXCEPT_FALSE
 {
     KillEditView();
     delete pOptions;

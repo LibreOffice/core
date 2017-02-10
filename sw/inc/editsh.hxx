@@ -962,7 +962,7 @@ class SwActContext {
     SwEditShell & m_rShell;
 public:
     SwActContext(SwEditShell *pShell);
-    ~SwActContext();
+    ~SwActContext() COVERITY_NOEXCEPT_FALSE;
 };
 
  /// Class for automated call of Start- and EndCursorMove().
@@ -970,7 +970,7 @@ class SwMvContext {
     SwEditShell & m_rShell;
 public:
     SwMvContext(SwEditShell *pShell);
-    ~SwMvContext();
+    ~SwMvContext() COVERITY_NOEXCEPT_FALSE;
 };
 
 #endif

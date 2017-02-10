@@ -37,7 +37,7 @@ public:
 
                         SfxListener();
                         SfxListener( const SfxListener &rCopy );
-    virtual             ~SfxListener();
+    virtual             ~SfxListener() COVERITY_NOEXCEPT_FALSE;
 
     void                StartListening( SfxBroadcaster& rBroadcaster, bool bPreventDups = false );
     void                EndListening( SfxBroadcaster& rBroadcaster, bool bAllDups = false );

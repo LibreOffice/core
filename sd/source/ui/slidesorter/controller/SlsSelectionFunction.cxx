@@ -145,7 +145,7 @@ public:
         SlideSorter& rSlideSorter,
         SelectionFunction& rSelectionFunction,
         const bool bIsMouseOverIndicatorAllowed);
-    virtual ~ModeHandler();
+    virtual ~ModeHandler() COVERITY_NOEXCEPT_FALSE;
 
     virtual Mode GetMode() const = 0;
     virtual void Abort() = 0;
@@ -880,7 +880,7 @@ SelectionFunction::ModeHandler::ModeHandler (
 {
 }
 
-SelectionFunction::ModeHandler::~ModeHandler()
+SelectionFunction::ModeHandler::~ModeHandler() COVERITY_NOEXCEPT_FALSE
 {
 }
 

@@ -19,7 +19,7 @@
 
 #include <tools/ref.hxx>
 
-SvRefBase::~SvRefBase()
+SvRefBase::~SvRefBase() COVERITY_NOEXCEPT_FALSE
 {
 }
 

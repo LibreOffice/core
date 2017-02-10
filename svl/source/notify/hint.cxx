@@ -23,7 +23,7 @@
 
 // virtual dtor for the typical base-class Hint
 
-SfxHint::~SfxHint()
+SfxHint::~SfxHint() COVERITY_NOEXCEPT_FALSE
 {
 }
 

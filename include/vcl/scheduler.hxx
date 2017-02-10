@@ -104,7 +104,7 @@ protected:
 public:
     Task( const sal_Char *pDebugName );
     Task( const Task& rTask );
-    virtual ~Task();
+    virtual ~Task() COVERITY_NOEXCEPT_FALSE;
     Task& operator=( const Task& rTask );
 
     void            SetPriority(TaskPriority ePriority) { mePriority = ePriority; }

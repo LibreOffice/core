@@ -43,7 +43,7 @@ public:
         when provided, the pages in the transferable.
     */
     explicit DragAndDropContext (SlideSorter& rSlideSorter);
-    ~DragAndDropContext();
+    ~DragAndDropContext() COVERITY_NOEXCEPT_FALSE;
 
     /** Call this method (for example as reaction to ESC key press) to avoid
         processing (ie moving or inserting) the substition when the called

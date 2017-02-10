@@ -184,8 +184,8 @@ public:
         BROADCAST_BROADCASTERS      ///< broadcast only existing cell broadcasters => no AreaBroadcast of range!
     };
 
-                ScColumn();
-                ~ScColumn();
+    ScColumn();
+    ~ScColumn() COVERITY_NOEXCEPT_FALSE;
 
     void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyAttrArray = false);
 
