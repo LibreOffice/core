@@ -1035,6 +1035,11 @@ AC_ARG_ENABLE(pdfimport,
         [Disable building the PDF import feature.])
 )
 
+AC_ARG_ENABLE(pdfium,
+    AS_HELP_STRING([--disable-pdfium],
+        [Disable building PDFium.])
+)
+
 ###############################################################################
 
 dnl ---------- *** ----------
@@ -10677,6 +10682,18 @@ AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
+
+# pdf import?
+AC_MSG_CHECKING([whether to build PDFium])
+ENABLE_PDFIUM=
+if test -z "$enable_pdfium" -o "$enable_pdfium" = yes; then
+    AC_MSG_RESULT([yes])
+    ENABLE_PDFIUM=TRUE
+    BUILD_TYPE="$BUILD_TYPE PDFIUM"
+else
+    AC_MSG_RESULT([no])
+fi
+AC_SUBST(ENABLE_PDFIUM)
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
