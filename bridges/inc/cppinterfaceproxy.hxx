@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace uno {
     class XInterface;
 } } } }
 
-#if !defined __GNUG__ || defined __MINGW32__
+#if !defined __GNUG__
 void dso_init();
 void dso_exit();
 #endif

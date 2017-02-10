@@ -19,13 +19,8 @@
 
 #include <vector>
 
-#ifdef __MINGW32__
-#define INITGUID
-#include <initguid.h>
-#else
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
-#endif
 #include "servprov.hxx"
 #include "unoobjw.hxx"
 #include "oleobjw.hxx"

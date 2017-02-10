@@ -50,7 +50,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 ))
 endif
 
-ifeq ($(OS)-$(COM),WNT-MSC)
+ifeq ($(OS),WNT)
 ifneq ($(filter 120,$(VCVER)),)
 $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python33/python-vc2013.patch.1 \

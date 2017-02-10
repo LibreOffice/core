@@ -141,22 +141,12 @@ static int GenericMain()
     return dwExitCode;
 }
 
-
-#ifdef __MINGW32__
-int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
-#else
 int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
-#endif
 {
     return GenericMain();
 }
 
-
-#ifdef __MINGW32__
-int __cdecl main()
-#else
 int __cdecl _tmain()
-#endif
 {
     return GenericMain();
 }

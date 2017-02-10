@@ -30,10 +30,6 @@
 #include <connectivity/dbexception.hxx>
 #include "resource/ado_res.hrc"
 
-#if defined __MINGW32__
-#pragma GCC diagnostic warning "-Wwrite-strings"
-#endif
-
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace connectivity::ado;

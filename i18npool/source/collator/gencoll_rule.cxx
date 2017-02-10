@@ -112,7 +112,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     //UCollator *coll = ucol_openRules(Obuf.getStr(), Obuf.getLength(), UCOL_OFF,
     //        UCOL_DEFAULT_STRENGTH, &parseError, &status);
 
-    RuleBasedCollator *coll = new RuleBasedCollator(reinterpret_cast<const UChar *>(Obuf.getStr()), status);    // UChar != sal_Unicode in MinGW
+    RuleBasedCollator *coll = new RuleBasedCollator(reinterpret_cast<const UChar *>(Obuf.getStr()), status);
 
     if (U_SUCCESS(status)) {
         std::vector<uint8_t> data;

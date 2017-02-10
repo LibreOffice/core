@@ -34,12 +34,8 @@
 #include <tchar.h>
 
 // Allocate n number of t's on the stack return a pointer to it in p
-#ifdef __MINGW32__
-#define STACK_ALLOC(p, t, n) (p) = reinterpret_cast<t*>(_alloca((n)*sizeof(t)));
-#else
 #define STACK_ALLOC(p, t, n) __try {(p) = static_cast<t*>(_alloca((n)*sizeof(t)));} \
                              __except(EXCEPTION_EXECUTE_HANDLER) {(p) = nullptr;}
-#endif
 
 // Temp file functions
 

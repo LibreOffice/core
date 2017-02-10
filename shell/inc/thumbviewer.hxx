@@ -26,11 +26,6 @@
 #endif
 #include <objidl.h>
 #include <shlobj.h>
-#ifdef __MINGW32__
-#include <algorithm>
-using std::min;
-using std::max;
-#endif
 #ifndef DONT_HAVE_GDIPLUS
 #include <gdiplus.h>
 #endif

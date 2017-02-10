@@ -72,7 +72,7 @@ $(eval $(call gb_Library_add_exception_objects,xmlsecurity,\
 $(eval $(call gb_Library_use_externals,xmlsecurity,\
     libxml2 \
 ))
-ifeq ($(OS)-$(COM),WNT-MSC)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_defs,xmlsecurity,\
     -DXMLSEC_CRYPTO_MSCRYPTO \
 ))

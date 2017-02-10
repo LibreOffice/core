@@ -15,11 +15,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ure,\
 	ENABLE_MACOSX_SANDBOX \
 ))
 
-$(eval $(call gb_InstallModule_define_value_if_set,scp2/ure,\
-	MINGW_GCCDLL \
-	MINGW_GXXDLL \
-))
-
 $(eval $(call gb_InstallModule_add_scpfiles,scp2/ure,\
     scp2/source/ooo/ure \
 ))

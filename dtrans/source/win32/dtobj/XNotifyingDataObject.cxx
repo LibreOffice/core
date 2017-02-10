@@ -22,13 +22,6 @@
 #include "../clipb/WinClipbImpl.hxx"
 #include "../clipb/WinClipboard.hxx"
 
-#ifdef __MINGW32__
-#if defined __uuidof
-#undef __uuidof
-#endif
-#define __uuidof(I) IID_##I
-#endif
-
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
 using com::sun::star::uno::RuntimeException;

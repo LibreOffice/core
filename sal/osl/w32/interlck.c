@@ -22,10 +22,6 @@
 #include <osl/interlck.h>
 #include <osl/diagnose.h>
 
-#if defined __MINGW32__
-#pragma GCC diagnostic warning "-Wreturn-type"
-#endif
-
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     return (InterlockedIncrement(pCount));

@@ -59,47 +59,5 @@ File gid_File_Share_Registry_Pyuno_Xcd
     Name = "pyuno.xcd";
 End
 
-#ifdef MINGW_SYSTEM_PYTHON
-
-// python_wrapper.exe
-File gid_File_Py_Bin_Python
-    BIN_FILE_BODY;
-    Name = "python.exe";
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-End
-
-Directory gid_Dir_Py_PythonCore
-    ParentID = gid_Brand_Dir_Program;
-    HostName = STRING(CONCAT2(python-core-,PYVERSION));
-End
-
-Directory gid_Dir_Py_PythonCore_Lib
-    ParentID = gid_Dir_Py_PythonCore;
-    HostName = "lib";
-End
-
-File gid_File_Py_Python_Core
-    TXT_FILE_BODY;
-    Dir = FILELIST_DIR;
-    Name = "python-core.filelist";
-    Styles = (FILELIST);
-End
-
-Directory gid_Dir_Py_PythonCore_Bin
-    ParentID = gid_Dir_Py_PythonCore;
-    HostName = "bin";
-End
-
-File gid_File_Py_Python_Bin
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Py_PythonCore_Bin;
-    Name = "python.exe";
-    Styles = (PACKED);
-End
-
-
-#endif //MINGW_SYSTEM_PYTHON
-
 // DISABLE_PYUNO
 #endif

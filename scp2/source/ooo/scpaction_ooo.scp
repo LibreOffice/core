@@ -52,21 +52,6 @@ ScpAction scp_Copy_Install
 End
 #endif
 
-#if defined(WNT) && defined(_gcc3)
-#if defined(MINGW_GCCDLL)
-ScpAction SCP_COPY_MINGW_GCCS
-    Copy = MINGW_GCCDLL;
-    Name = MINGW_GCCDLL;
-End
-#endif
-#if defined(MINGW_GXXDLL)
-ScpAction SCP_COPY_MINGW_STDCPP
-    Copy = MINGW_GXXDLL;
-    Name = MINGW_GXXDLL;
-End
-#endif
-#endif
-
 #ifdef MACOSX
 ScpAction scp_Copy_Dmg_Background_Image
     Copy = "osxdndinstall.png";
