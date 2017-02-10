@@ -8,475 +8,471 @@
  *
  */
 
-#include "StatisticsDialogs.hrc"
+#include "sc.hrc"
 
-Resource RID_STATISTICS_DLGS
+/* MovingAverageDialog */
+
+String STR_MOVING_AVERAGE_UNDO_NAME
 {
+    Text [ en-US ] = "Moving Average";
+};
 
-    /* MovingAverageDialog */
+/* ExponentialSmoothingDialog */
 
-    String STR_MOVING_AVERAGE_UNDO_NAME
-    {
-        Text [ en-US ] = "Moving Average";
-    };
+String STR_EXPONENTIAL_SMOOTHING_UNDO_NAME
+{
+    Text [ en-US ] = "Exponential Smoothing";
+};
 
-    /* ExponentialSmoothingDialog */
+/* AnalysisOfVarianceDialog */
 
-    String STR_EXPONENTIAL_SMOOTHING_UNDO_NAME
-    {
-        Text [ en-US ] = "Exponential Smoothing";
-    };
+String STR_ANALYSIS_OF_VARIANCE_UNDO_NAME
+{
+    Text [ en-US ] = "Analysis of Variance";
+};
 
-    /* AnalysisOfVarianceDialog */
+String STR_ANOVA_SINGLE_FACTOR_LABEL
+{
+    Text [ en-US ] = "ANOVA - Single Factor";
+};
 
-    String STR_ANALYSIS_OF_VARIANCE_UNDO_NAME
-    {
-        Text [ en-US ] = "Analysis of Variance";
-    };
+String STR_ANOVA_TWO_FACTOR_LABEL
+{
+    Text [ en-US ] = "ANOVA - Two Factor";
+};
 
-    String STR_ANOVA_SINGLE_FACTOR_LABEL
-    {
-        Text [ en-US ] = "ANOVA - Single Factor";
-    };
+String STR_ANOVA_LABEL_GROUPS
+{
+    Text [ en-US ] = "Groups";
+};
 
-    String STR_ANOVA_TWO_FACTOR_LABEL
-    {
-        Text [ en-US ] = "ANOVA - Two Factor";
-    };
+String STR_ANOVA_LABEL_BETWEEN_GROUPS
+{
+    Text [ en-US ] = "Between Groups";
+};
 
-    String STR_ANOVA_LABEL_GROUPS
-    {
-        Text [ en-US ] = "Groups";
-    };
+String STR_ANOVA_LABEL_WITHIN_GROUPS
+{
+    Text [ en-US ] = "Within Groups";
+};
 
-    String STR_ANOVA_LABEL_BETWEEN_GROUPS
-    {
-        Text [ en-US ] = "Between Groups";
-    };
+String STR_ANOVA_LABEL_SOURCE_OF_VARIATION
+{
+    Text [ en-US ] = "Source of Variation";
+};
 
-    String STR_ANOVA_LABEL_WITHIN_GROUPS
-    {
-        Text [ en-US ] = "Within Groups";
-    };
+String STR_ANOVA_LABEL_SS
+{
+    Text [ en-US ] = "SS";
+};
 
-    String STR_ANOVA_LABEL_SOURCE_OF_VARIATION
-    {
-        Text [ en-US ] = "Source of Variation";
-    };
+String STR_ANOVA_LABEL_DF
+{
+    Text [ en-US ] = "df";
+};
 
-    String STR_ANOVA_LABEL_SS
-    {
-        Text [ en-US ] = "SS";
-    };
+String STR_ANOVA_LABEL_MS
+{
+    Text [ en-US ] = "MS";
+};
 
-    String STR_ANOVA_LABEL_DF
-    {
-        Text [ en-US ] = "df";
-    };
+String STR_ANOVA_LABEL_F
+{
+    Text [ en-US ] = "F";
+};
 
-    String STR_ANOVA_LABEL_MS
-    {
-        Text [ en-US ] = "MS";
-    };
+String STR_ANOVA_LABEL_P_VALUE
+{
+    Text [ en-US ] = "P-value";
+};
 
-    String STR_ANOVA_LABEL_F
-    {
-        Text [ en-US ] = "F";
-    };
+String STR_ANOVA_LABEL_F_CRITICAL
+{
+    Text [ en-US ] = "F critical";
+};
 
-    String STR_ANOVA_LABEL_P_VALUE
-    {
-        Text [ en-US ] = "P-value";
-    };
+String STR_ANOVA_LABEL_TOTAL
+{
+    Text [ en-US ] = "Total";
+};
 
-    String STR_ANOVA_LABEL_F_CRITICAL
-    {
-        Text [ en-US ] = "F critical";
-    };
+/* CorrelationDialog */
 
-    String STR_ANOVA_LABEL_TOTAL
-    {
-        Text [ en-US ] = "Total";
-    };
+String STR_CORRELATION_UNDO_NAME
+{
+    Text [ en-US ] = "Correlation";
+};
 
-    /* CorrelationDialog */
+String STR_CORRELATION_LABEL
+{
+    Text [ en-US ] = "Correlations";
+};
 
-    String STR_CORRELATION_UNDO_NAME
-    {
-        Text [ en-US ] = "Correlation";
-    };
+/* CovarianceDialog */
 
-    String STR_CORRELATION_LABEL
-    {
-        Text [ en-US ] = "Correlations";
-    };
+String STR_COVARIANCE_UNDO_NAME
+{
+    Text [ en-US ] = "Covariance";
+};
 
-    /* CovarianceDialog */
+String STR_COVARIANCE_LABEL
+{
+    Text [ en-US ] = "Covariances";
+};
 
-    String STR_COVARIANCE_UNDO_NAME
-    {
-        Text [ en-US ] = "Covariance";
-    };
+/* DescriptiveStatisticsDialog */
 
-    String STR_COVARIANCE_LABEL
-    {
-        Text [ en-US ] = "Covariances";
-    };
+String STR_DESCRIPTIVE_STATISTICS_UNDO_NAME
+{
+    Text [ en-US ] = "Descriptive Statistics";
+};
+String STRID_CALC_MEAN
+{
+    Text [ en-US ] = "Mean";
+};
+String STRID_CALC_STD_ERROR
+{
+    Text [ en-US ] = "Standard Error";
+};
+String STRID_CALC_MODE
+{
+    Text [ en-US ] = "Mode";
+};
+String STRID_CALC_MEDIAN
+{
+    Text [ en-US ] = "Median";
+};
+String STRID_CALC_VARIANCE
+{
+    Text [ en-US ] = "Variance";
+};
+String STRID_CALC_STD_DEVIATION
+{
+    Text [ en-US ] = "Standard Deviation";
+};
+String STRID_CALC_KURTOSIS
+{
+    Text [ en-US ] = "Kurtosis";
+};
+String STRID_CALC_SKEWNESS
+{
+    Text [ en-US ] = "Skewness";
+};
+String STRID_CALC_RANGE
+{
+    Text [ en-US ] = "Range";
+};
+String STRID_CALC_MIN
+{
+    Text [ en-US ] = "Minimum";
+};
+String STRID_CALC_MAX
+{
+    Text [ en-US ] = "Maximum";
+};
+String STRID_CALC_SUM
+{
+    Text [ en-US ] = "Sum";
+};
+String STRID_CALC_COUNT
+{
+    Text [ en-US ] = "Count";
+};
+String STRID_CALC_FIRST_QUARTILE
+{
+    Text [ en-US ] = "First Quartile ";
+};
+String STRID_CALC_THIRD_QUARTILE
+{
+    Text [ en-US ] = "Third Quartile";
+};
 
-    /* DescriptiveStatisticsDialog */
+/* RandomNumberGeneratorDialog */
 
-    String STR_DESCRIPTIVE_STATISTICS_UNDO_NAME
-    {
-        Text [ en-US ] = "Descriptive Statistics";
-    };
-    String STRID_CALC_MEAN
-    {
-        Text [ en-US ] = "Mean";
-    };
-    String STRID_CALC_STD_ERROR
-    {
-        Text [ en-US ] = "Standard Error";
-    };
-    String STRID_CALC_MODE
-    {
-        Text [ en-US ] = "Mode";
-    };
-    String STRID_CALC_MEDIAN
-    {
-        Text [ en-US ] = "Median";
-    };
-    String STRID_CALC_VARIANCE
-    {
-        Text [ en-US ] = "Variance";
-    };
-    String STRID_CALC_STD_DEVIATION
-    {
-        Text [ en-US ] = "Standard Deviation";
-    };
-    String STRID_CALC_KURTOSIS
-    {
-        Text [ en-US ] = "Kurtosis";
-    };
-    String STRID_CALC_SKEWNESS
-    {
-        Text [ en-US ] = "Skewness";
-    };
-    String STRID_CALC_RANGE
-    {
-        Text [ en-US ] = "Range";
-    };
-    String STRID_CALC_MIN
-    {
-        Text [ en-US ] = "Minimum";
-    };
-    String STRID_CALC_MAX
-    {
-        Text [ en-US ] = "Maximum";
-    };
-    String STRID_CALC_SUM
-    {
-        Text [ en-US ] = "Sum";
-    };
-    String STRID_CALC_COUNT
-    {
-        Text [ en-US ] = "Count";
-    };
-    String STRID_CALC_FIRST_QUARTILE
-    {
-        Text [ en-US ] = "First Quartile ";
-    };
-    String STRID_CALC_THIRD_QUARTILE
-    {
-        Text [ en-US ] = "Third Quartile";
-    };
+String STR_UNDO_DISTRIBUTION_TEMPLATE
+{
+    Text [ en-US ] = "Random ($(DISTRIBUTION))";
+};
+String STR_DISTRIBUTION_UNIFORM_REAL
+{
+    Text [ en-US ] = "Uniform";
+};
+String STR_DISTRIBUTION_UNIFORM_INTEGER
+{
+    Text [ en-US ] = "Uniform Integer";
+};
+String STR_DISTRIBUTION_NORMAL
+{
+    Text [ en-US ] = "Normal";
+};
+String STR_DISTRIBUTION_CAUCHY
+{
+    Text [ en-US ] = "Cauchy";
+};
+String STR_DISTRIBUTION_BERNOULLI
+{
+    Text [ en-US ] = "Bernoulli";
+};
+String STR_DISTRIBUTION_BINOMIAL
+{
+    Text [ en-US ] = "Binomial";
+};
+String STR_DISTRIBUTION_NEGATIVE_BINOMIAL
+{
+    Text [ en-US ] = "Negative Binomial";
+};
+String STR_DISTRIBUTION_CHI_SQUARED
+{
+    Text [ en-US ] = "Chi Squared";
+};
+String STR_DISTRIBUTION_GEOMETRIC
+{
+    Text [ en-US ] = "Geometric";
+};
+String STR_RNG_PARAMETER_MINIMUM
+{
+    Text [ en-US ] = "Minimum";
+};
+String STR_RNG_PARAMETER_MAXIMUM
+{
+    Text [ en-US ] = "Maximum";
+};
+String STR_RNG_PARAMETER_MEAN
+{
+    Text [ en-US ] = "Mean";
+};
+String STR_RNG_PARAMETER_STANDARD_DEVIATION
+{
+    Text [ en-US ] = "Standard Deviation";
+};
+String STR_RNG_PARAMETER_STANDARD_MEDIAN
+{
+    Text [ en-US ] = "Median";
+};
+String STR_RNG_PARAMETER_STANDARD_SIGMA
+{
+    Text [ en-US ] = "Sigma";
+};
+String STR_RNG_PARAMETER_STANDARD_PROBABILITY
+{
+    Text [ en-US ] = "p Value";
+};
+String STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS
+{
+    Text [ en-US ] = "Number of Trials";
+};
+String STR_RNG_PARAMETER_STANDARD_NU_VALUE
+{
+    Text [ en-US ] = "nu Value";
+};
 
-    /* RandomNumberGeneratorDialog */
+/* SamplingDialog */
 
-    String STR_UNDO_DISTRIBUTION_TEMPLATE
-    {
-        Text [ en-US ] = "Random ($(DISTRIBUTION))";
-    };
-    String STR_DISTRIBUTION_UNIFORM_REAL
-    {
-        Text [ en-US ] = "Uniform";
-    };
-    String STR_DISTRIBUTION_UNIFORM_INTEGER
-    {
-        Text [ en-US ] = "Uniform Integer";
-    };
-    String STR_DISTRIBUTION_NORMAL
-    {
-        Text [ en-US ] = "Normal";
-    };
-    String STR_DISTRIBUTION_CAUCHY
-    {
-        Text [ en-US ] = "Cauchy";
-    };
-    String STR_DISTRIBUTION_BERNOULLI
-    {
-        Text [ en-US ] = "Bernoulli";
-    };
-    String STR_DISTRIBUTION_BINOMIAL
-    {
-        Text [ en-US ] = "Binomial";
-    };
-    String STR_DISTRIBUTION_NEGATIVE_BINOMIAL
-    {
-        Text [ en-US ] = "Negative Binomial";
-    };
-    String STR_DISTRIBUTION_CHI_SQUARED
-    {
-        Text [ en-US ] = "Chi Squared";
-    };
-    String STR_DISTRIBUTION_GEOMETRIC
-    {
-        Text [ en-US ] = "Geometric";
-    };
-    String STR_RNG_PARAMETER_MINIMUM
-    {
-        Text [ en-US ] = "Minimum";
-    };
-    String STR_RNG_PARAMETER_MAXIMUM
-    {
-        Text [ en-US ] = "Maximum";
-    };
-    String STR_RNG_PARAMETER_MEAN
-    {
-        Text [ en-US ] = "Mean";
-    };
-    String STR_RNG_PARAMETER_STANDARD_DEVIATION
-    {
-        Text [ en-US ] = "Standard Deviation";
-    };
-    String STR_RNG_PARAMETER_STANDARD_MEDIAN
-    {
-        Text [ en-US ] = "Median";
-    };
-    String STR_RNG_PARAMETER_STANDARD_SIGMA
-    {
-        Text [ en-US ] = "Sigma";
-    };
-    String STR_RNG_PARAMETER_STANDARD_PROBABILITY
-    {
-        Text [ en-US ] = "p Value";
-    };
-    String STR_RNG_PARAMETER_STANDARD_NUMBER_OF_TRIALS
-    {
-        Text [ en-US ] = "Number of Trials";
-    };
-    String STR_RNG_PARAMETER_STANDARD_NU_VALUE
-    {
-        Text [ en-US ] = "nu Value";
-    };
+String STR_SAMPLING_UNDO_NAME
+{
+    Text [ en-US ] = "Sampling";
+};
 
-    /* SamplingDialog */
+/* Names of dialogs */
+String STR_FTEST
+{
+    Text [ en-US ] = "F-test";
+};
+String STR_FTEST_UNDO_NAME
+{
+    Text [ en-US ] = "F-test";
+};
+String STR_TTEST
+{
+    Text [ en-US ] = "t-test";
+};
+String STR_TTEST_UNDO_NAME
+{
+    Text [ en-US ] = "t-test";
+};
+String STR_ZTEST
+{
+    Text [ en-US ] = "z-test";
+};
+String STR_ZTEST_UNDO_NAME
+{
+    Text [ en-US ] = "z-test";
+};
+String STR_CHI_SQUARE_TEST
+{
+    Text [ en-US ] = "Test of Independence (Chi-Square)";
+};
+String STR_REGRESSION_UNDO_NAME
+{
+    Text [ en-US ] = "Regression";
+};
+String STR_REGRESSION
+{
+    Text [ en-US ] = "Regression";
+};
 
-    String STR_SAMPLING_UNDO_NAME
-    {
-        Text [ en-US ] = "Sampling";
-    };
+/* Common */
+String STR_COLUMN_LABEL_TEMPLATE
+{
+    Text [ en-US ] = "Column %NUMBER%";
+};
+String STR_ROW_LABEL_TEMPLATE
+{
+    Text [ en-US ] = "Row %NUMBER%";
+};
+String STR_LABEL_ALPHA
+{
+    Text [ en-US ] = "Alpha";
+};
+String STR_VARIABLE_1_LABEL
+{
+    Text [ en-US ] = "Variable 1";
+};
+String STR_VARIABLE_2_LABEL
+{
+    Text [ en-US ] = "Variable 2";
+};
+String STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL
+{
+    Text [ en-US ] = "Hypothesized Mean Difference";
+};
+String STR_OBSERVATIONS_LABEL
+{
+    Text [ en-US ] = "Observations";
+};
+String STR_OBSERVED_MEAN_DIFFERENCE_LABEL
+{
+    Text [ en-US ] = "Observed Mean Difference";
+};
+String STR_DEGREES_OF_FREEDOM_LABEL
+{
+    Text [ en-US ] = "df";
+};
+String STR_P_VALUE_LABEL
+{
+    Text [ en-US ] = "P-value";
+};
+String STR_CRITICAL_VALUE_LABEL
+{
+    Text [ en-US ] = "Critical Value";
+};
+String STR_TEST_STATISTIC_LABEL
+{
+    Text [ en-US ] = "Test Statistic";
+};
 
-    /* Names of dialogs */
-    String STR_FTEST
-    {
-        Text [ en-US ] = "F-test";
-    };
-    String STR_FTEST_UNDO_NAME
-    {
-        Text [ en-US ] = "F-test";
-    };
-    String STR_TTEST
-    {
-        Text [ en-US ] = "t-test";
-    };
-    String STR_TTEST_UNDO_NAME
-    {
-        Text [ en-US ] = "t-test";
-    };
-    String STR_ZTEST
-    {
-        Text [ en-US ] = "z-test";
-    };
-    String STR_ZTEST_UNDO_NAME
-    {
-        Text [ en-US ] = "z-test";
-    };
-    String STR_CHI_SQUARE_TEST
-    {
-        Text [ en-US ] = "Test of Independence (Chi-Square)";
-    };
-    String STR_REGRESSION_UNDO_NAME
-    {
-        Text [ en-US ] = "Regression";
-    };
-    String STR_REGRESSION
-    {
-        Text [ en-US ] = "Regression";
-    };
+/* RegressionDialog */
 
-    /* Common */
-    String STR_COLUMN_LABEL_TEMPLATE
-    {
-        Text [ en-US ] = "Column %NUMBER%";
-    };
-    String STR_ROW_LABEL_TEMPLATE
-    {
-        Text [ en-US ] = "Row %NUMBER%";
-    };
-    String STR_LABEL_ALPHA
-    {
-        Text [ en-US ] = "Alpha";
-    };
-    String STR_VARIABLE_1_LABEL
-    {
-        Text [ en-US ] = "Variable 1";
-    };
-    String STR_VARIABLE_2_LABEL
-    {
-        Text [ en-US ] = "Variable 2";
-    };
-    String STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL
-    {
-        Text [ en-US ] = "Hypothesized Mean Difference";
-    };
-    String STR_OBSERVATIONS_LABEL
-    {
-        Text [ en-US ] = "Observations";
-    };
-    String STR_OBSERVED_MEAN_DIFFERENCE_LABEL
-    {
-        Text [ en-US ] = "Observed Mean Difference";
-    };
-    String STR_DEGREES_OF_FREEDOM_LABEL
-    {
-        Text [ en-US ] = "df";
-    };
-    String STR_P_VALUE_LABEL
-    {
-        Text [ en-US ] = "P-value";
-    };
-    String STR_CRITICAL_VALUE_LABEL
-    {
-        Text [ en-US ] = "Critical Value";
-    };
-    String STR_TEST_STATISTIC_LABEL
-    {
-        Text [ en-US ] = "Test Statistic";
-    };
+String STR_LABEL_LINEAR
+{
+    Text [ en-US ] = "Linear";
+};
+String STR_LABEL_LOGARITHMIC
+{
+    Text [ en-US ] = "Logarithmic";
+};
+String STR_LABEL_POWER
+{
+    Text [ en-US ] = "Power";
+};
 
-    /* RegressionDialog */
+String STR_LABEL_REGRESSION_MODEL
+{
+    Text [ en-US ] = "Regression Model";
+};
+String STR_LABEL_RSQUARED
+{
+    Text [ en-US ] = "R^2";
+};
+String STR_LABEL_SLOPE
+{
+    Text [ en-US ] = "Slope";
+};
+String STR_LABEL_INTERCEPT
+{
+    Text [ en-US ] = "Intercept";
+};
 
-    String STR_LABEL_LINEAR
-    {
-        Text [ en-US ] = "Linear";
-    };
-    String STR_LABEL_LOGARITHMIC
-    {
-        Text [ en-US ] = "Logarithmic";
-    };
-    String STR_LABEL_POWER
-    {
-        Text [ en-US ] = "Power";
-    };
+/*F Test */
+String STR_FTEST_P_RIGHT_TAIL
+{
+    Text [ en-US ] = "P (F<=f) right-tail";
+};
+String STR_FTEST_F_CRITICAL_RIGHT_TAIL
+{
+    Text [ en-US ] = "F Critical right-tail";
+};
+String STR_FTEST_P_LEFT_TAIL
+{
+    Text [ en-US ] = "P (F<=f) left-tail";
+};
+String STR_FTEST_F_CRITICAL_LEFT_TAIL
+{
+    Text [ en-US ] = "F Critical left-tail";
+};
+String STR_FTEST_P_TWO_TAIL
+{
+    Text [ en-US ] = "P two-tail";
+};
+String STR_FTEST_F_CRITICAL_TWO_TAIL
+{
+    Text [ en-US ] = "F Critical two-tail";
+};
 
-    String STR_LABEL_REGRESSION_MODEL
-    {
-        Text [ en-US ] = "Regression Model";
-    };
-    String STR_LABEL_RSQUARED
-    {
-        Text [ en-US ] = "R^2";
-    };
-    String STR_LABEL_SLOPE
-    {
-        Text [ en-US ] = "Slope";
-    };
-    String STR_LABEL_INTERCEPT
-    {
-        Text [ en-US ] = "Intercept";
-    };
+/*t Test*/
+String STR_TTEST_PEARSON_CORRELATION
+{
+    Text [ en-US ] = "Pearson Correlation";
+};
+String STR_TTEST_VARIANCE_OF_THE_DIFFERENCES
+{
+    Text [ en-US ] = "Variance of the Differences";
+};
+String STR_TTEST_T_STAT
+{
+    Text [ en-US ] = "t Stat";
+};
+String STR_TTEST_P_ONE_TAIL
+{
+    Text [ en-US ] = "P (T<=t) one-tail";
+};
+String STR_TTEST_T_CRITICAL_ONE_TAIL
+{
+    Text [ en-US ] = "t Critical one-tail";
+};
+String STR_TTEST_P_TWO_TAIL
+{
+    Text [ en-US ] = "P (T<=t) two-tail";
+};
+String STR_TTEST_T_CRITICAL_TWO_TAIL
+{
+    Text [ en-US ] = "t Critical two-tail";
+};
 
-    /*F Test */
-    String STR_FTEST_P_RIGHT_TAIL
-    {
-        Text [ en-US ] = "P (F<=f) right-tail";
-    };
-    String STR_FTEST_F_CRITICAL_RIGHT_TAIL
-    {
-        Text [ en-US ] = "F Critical right-tail";
-    };
-    String STR_FTEST_P_LEFT_TAIL
-    {
-        Text [ en-US ] = "P (F<=f) left-tail";
-    };
-    String STR_FTEST_F_CRITICAL_LEFT_TAIL
-    {
-        Text [ en-US ] = "F Critical left-tail";
-    };
-    String STR_FTEST_P_TWO_TAIL
-    {
-        Text [ en-US ] = "P two-tail";
-    };
-    String STR_FTEST_F_CRITICAL_TWO_TAIL
-    {
-        Text [ en-US ] = "F Critical two-tail";
-    };
-
-    /*t Test*/
-    String STR_TTEST_PEARSON_CORRELATION
-    {
-        Text [ en-US ] = "Pearson Correlation";
-    };
-    String STR_TTEST_VARIANCE_OF_THE_DIFFERENCES
-    {
-        Text [ en-US ] = "Variance of the Differences";
-    };
-    String STR_TTEST_T_STAT
-    {
-        Text [ en-US ] = "t Stat";
-    };
-    String STR_TTEST_P_ONE_TAIL
-    {
-        Text [ en-US ] = "P (T<=t) one-tail";
-    };
-    String STR_TTEST_T_CRITICAL_ONE_TAIL
-    {
-        Text [ en-US ] = "t Critical one-tail";
-    };
-    String STR_TTEST_P_TWO_TAIL
-    {
-        Text [ en-US ] = "P (T<=t) two-tail";
-    };
-    String STR_TTEST_T_CRITICAL_TWO_TAIL
-    {
-        Text [ en-US ] = "t Critical two-tail";
-    };
-
-    /*Z Test*/
-    String STR_ZTEST_Z_VALUE
-    {
-        Text [ en-US ] = "z";
-    };
-    String STR_ZTEST_KNOWN_VARIANCE
-    {
-        Text [ en-US ] = "Known Variance";
-    };
-    String STR_ZTEST_P_ONE_TAIL
-    {
-        Text [ en-US ] = "P (Z<=z) one-tail";
-    };
-    String STR_ZTEST_Z_CRITICAL_ONE_TAIL
-    {
-        Text [ en-US ] = "z Critical one-tail";
-    };
-    String STR_ZTEST_P_TWO_TAIL
-    {
-        Text [ en-US ] = "P (Z<=z) two-tail";
-    };
-    String STR_ZTEST_Z_CRITICAL_TWO_TAIL
-    {
-        Text [ en-US ] = "z Critical two-tail";
-    };
+/*Z Test*/
+String STR_ZTEST_Z_VALUE
+{
+    Text [ en-US ] = "z";
+};
+String STR_ZTEST_KNOWN_VARIANCE
+{
+    Text [ en-US ] = "Known Variance";
+};
+String STR_ZTEST_P_ONE_TAIL
+{
+    Text [ en-US ] = "P (Z<=z) one-tail";
+};
+String STR_ZTEST_Z_CRITICAL_ONE_TAIL
+{
+    Text [ en-US ] = "z Critical one-tail";
+};
+String STR_ZTEST_P_TWO_TAIL
+{
+    Text [ en-US ] = "P (Z<=z) two-tail";
+};
+String STR_ZTEST_Z_CRITICAL_TWO_TAIL
+{
+    Text [ en-US ] = "z Critical two-tail";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

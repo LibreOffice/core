@@ -21,7 +21,6 @@
 #include "reffact.hxx"
 #include "strload.hxx"
 #include "docfunc.hxx"
-#include "StatisticsDialogs.hrc"
 #include "TableFillingAndNavigationTools.hxx"
 
 #include "ZTestDialog.hxx"
@@ -33,7 +32,7 @@ ScZTestDialog::ScZTestDialog(
             pSfxBindings, pChildWindow, pParent, pViewData,
             "ZTestDialog", "modules/scalc/ui/ztestdialog.ui" )
 {
-    SetText(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ZTEST));
+    SetText(SC_RESSTR(STR_ZTEST));
 }
 
 ScZTestDialog::~ScZTestDialog()
@@ -70,18 +69,18 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aTemplate.autoReplaceRange("%VARIABLE1_RANGE%", pVariable1Iterator->get());
     aTemplate.autoReplaceRange("%VARIABLE2_RANGE%", pVariable2Iterator->get());
 
-    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ZTEST));
+    aOutput.writeBoldString(SC_RESSTR(STR_ZTEST));
     aOutput.newLine();
 
     // Alpha
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_ALPHA));
+    aOutput.writeString(SC_RESSTR(STR_LABEL_ALPHA));
     aOutput.nextColumn();
     aOutput.writeValue(0.05);
     aTemplate.autoReplaceAddress("%ALPHA%", aOutput.current());
     aOutput.newLine();
 
     // Hypothesized mean difference
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL));
+    aOutput.writeString(SC_RESSTR(STR_HYPOTHESIZED_MEAN_DIFFERENCE_LABEL));
     aOutput.nextColumn();
     aOutput.writeValue(0);
     aTemplate.autoReplaceAddress("%HYPOTHESIZED_MEAN_DIFFERENCE%", aOutput.current());
@@ -89,13 +88,13 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
 
     // Variable Label
     aOutput.nextColumn();
-    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_VARIABLE_1_LABEL));
+    aOutput.writeBoldString(SC_RESSTR(STR_VARIABLE_1_LABEL));
     aOutput.nextColumn();
-    aOutput.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_VARIABLE_2_LABEL));
+    aOutput.writeBoldString(SC_RESSTR(STR_VARIABLE_2_LABEL));
     aOutput.newLine();
 
     // Known Variance
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ZTEST_KNOWN_VARIANCE));
+    aOutput.writeString(SC_RESSTR(STR_ZTEST_KNOWN_VARIANCE));
     aOutput.nextColumn();
     aOutput.writeValue(0);
     aTemplate.autoReplaceAddress("%KNOWN_VARIANCE_VARIABLE1%", aOutput.current());
@@ -105,7 +104,7 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.newLine();
 
     // Mean
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STRID_CALC_MEAN));
+    aOutput.writeString(SC_RESSTR(STRID_CALC_MEAN));
     aOutput.nextColumn();
     aTemplate.setTemplate("=AVERAGE(%VARIABLE1_RANGE%)");
     aTemplate.autoReplaceAddress("%MEAN_VARIABLE1%", aOutput.current());
@@ -117,7 +116,7 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.newLine();
 
     // Observations
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_OBSERVATIONS_LABEL));
+    aOutput.writeString(SC_RESSTR(STR_OBSERVATIONS_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=COUNT(%VARIABLE1_RANGE%)");
     aOutput.writeFormula(aTemplate.getTemplate());
@@ -129,7 +128,7 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.newLine();
 
     // Observed mean difference
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_OBSERVED_MEAN_DIFFERENCE_LABEL));
+    aOutput.writeString(SC_RESSTR(STR_OBSERVED_MEAN_DIFFERENCE_LABEL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=%MEAN_VARIABLE1% - %MEAN_VARIABLE2%");
     aOutput.writeMatrixFormula(aTemplate.getTemplate());
@@ -137,7 +136,7 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.newLine();
 
     // z
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ZTEST_Z_VALUE));
+    aOutput.writeString(SC_RESSTR(STR_ZTEST_Z_VALUE));
     aOutput.nextColumn();
     aTemplate.setTemplate("=(%OBSERVED_MEAN_DIFFERENCE% - %HYPOTHESIZED_MEAN_DIFFERENCE%) / SQRT( %KNOWN_VARIANCE_VARIABLE1% / %OBSERVATION_VARIABLE1% + %KNOWN_VARIANCE_VARIABLE2% / %OBSERVATION_VARIABLE2% )");
     aOutput.writeFormula(aTemplate.getTemplate());
@@ -145,28 +144,28 @@ ScRange ScZTestDialog::ApplyOutput(ScDocShell* pDocShell)
     aOutput.newLine();
 
     // P one-tail
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ZTEST_P_ONE_TAIL));
+    aOutput.writeString(SC_RESSTR(STR_ZTEST_P_ONE_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=1 - NORMSDIST(ABS(%Z_STAT%))");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
     // z critical one-tail
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ZTEST_Z_CRITICAL_ONE_TAIL));
+    aOutput.writeString(SC_RESSTR(STR_ZTEST_Z_CRITICAL_ONE_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=-NORMSINV(%ALPHA%)");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
     // P two-tail
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ZTEST_P_TWO_TAIL));
+    aOutput.writeString(SC_RESSTR(STR_ZTEST_P_TWO_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=2 * NORMSDIST(-ABS(%Z_STAT%))");
     aOutput.writeFormula(aTemplate.getTemplate());
     aOutput.newLine();
 
     // z critical two-tail
-    aOutput.writeString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ZTEST_Z_CRITICAL_TWO_TAIL));
+    aOutput.writeString(SC_RESSTR(STR_ZTEST_Z_CRITICAL_TWO_TAIL));
     aOutput.nextColumn();
     aTemplate.setTemplate("=-NORMSINV(%ALPHA%/2)");
     aOutput.writeFormula(aTemplate.getTemplate());

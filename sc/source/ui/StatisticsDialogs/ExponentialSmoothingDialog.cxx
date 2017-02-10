@@ -21,7 +21,6 @@
 #include "reffact.hxx"
 #include "strload.hxx"
 #include "docfunc.hxx"
-#include "StatisticsDialogs.hrc"
 #include "TableFillingAndNavigationTools.hxx"
 
 #include "ExponentialSmoothingDialog.hxx"
@@ -67,7 +66,7 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
     double aSmoothingFactor = mpSmoothingFactor->GetValue() / 100.0;
 
     // Alpha
-    output.writeBoldString(SC_STRLOAD(RID_STATISTICS_DLGS, STR_LABEL_ALPHA));
+    output.writeBoldString(SC_RESSTR(STR_LABEL_ALPHA));
     output.nextRow();
 
     // Alpha Value
@@ -92,9 +91,9 @@ ScRange ScExponentialSmoothingDialog::ApplyOutput(ScDocShell* pDocShell)
 
         // Write column label
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
+            aTemplate.setTemplate(SC_RESSTR(STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
+            aTemplate.setTemplate(SC_RESSTR(STR_ROW_LABEL_TEMPLATE));
         aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
         output.writeBoldString(aTemplate.getTemplate());
         output.nextRow();

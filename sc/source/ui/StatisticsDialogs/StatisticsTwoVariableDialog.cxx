@@ -323,7 +323,7 @@ IMPL_LINK_NOARG( ScStatisticsTwoVariableDialog, RefInputModifyHandler, Edit&, vo
 
 void ScStatisticsTwoVariableDialog::CalculateInputAndWriteToOutput()
 {
-    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, GetUndoNameId()));
+    OUString aUndo(SC_RESSTR(GetUndoNameId()));
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData->GetViewShell()->GetViewShellId() );

@@ -284,7 +284,7 @@ IMPL_LINK_NOARG( ScStatisticsInputOutputDialog, RefInputModifyHandler, Edit&, vo
 
 void ScStatisticsInputOutputDialog::CalculateInputAndWriteToOutput()
 {
-    OUString aUndo(SC_STRLOAD(RID_STATISTICS_DLGS, GetUndoNameId()));
+    OUString aUndo(SC_RESSTR(GetUndoNameId()));
     ScDocShell* pDocShell = mViewData->GetDocShell();
     svl::IUndoManager* pUndoManager = pDocShell->GetUndoManager();
     pUndoManager->EnterListAction( aUndo, aUndo, 0, mViewData->GetViewShell()->GetViewShellId() );

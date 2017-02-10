@@ -21,7 +21,6 @@
 #include "reffact.hxx"
 #include "strload.hxx"
 #include "docfunc.hxx"
-#include "StatisticsDialogs.hrc"
 #include "TableFillingAndNavigationTools.hxx"
 
 #include "DescriptiveStatisticsDialog.hxx"
@@ -98,9 +97,9 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
     for( ; pIterator->hasNext(); pIterator->next() )
     {
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
+            aTemplate.setTemplate(SC_RESSTR(STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
+            aTemplate.setTemplate(SC_RESSTR(STR_ROW_LABEL_TEMPLATE));
 
         aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
         aOutput.writeBoldString(aTemplate.getTemplate());
@@ -113,7 +112,7 @@ ScRange ScDescriptiveStatisticsDialog::ApplyOutput(ScDocShell* pDocShell)
     // Write calculation labels
     for(sal_Int32 i = 0; lclCalcDefinitions[i].aFormula != nullptr; i++)
     {
-        OUString aLabel(SC_STRLOAD(RID_STATISTICS_DLGS, lclCalcDefinitions[i].aCalculationNameId));
+        OUString aLabel(SC_RESSTR(lclCalcDefinitions[i].aCalculationNameId));
         aOutput.writeString(aLabel);
         aOutput.nextRow();
     }

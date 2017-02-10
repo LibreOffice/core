@@ -11,7 +11,6 @@
 #include "docsh.hxx"
 #include "reffact.hxx"
 #include "strload.hxx"
-#include "StatisticsDialogs.hrc"
 
 #include "CorrelationDialog.hxx"
 
@@ -30,7 +29,7 @@ bool ScCorrelationDialog::Close()
 
 const OUString ScCorrelationDialog::getLabel()
 {
-    return SC_STRLOAD(RID_STATISTICS_DLGS, STR_CORRELATION_LABEL);
+    return SC_RESSTR(STR_CORRELATION_LABEL);
 }
 
 const OUString ScCorrelationDialog::getTemplate()

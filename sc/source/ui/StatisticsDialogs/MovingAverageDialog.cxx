@@ -21,7 +21,6 @@
 #include "reffact.hxx"
 #include "strload.hxx"
 #include "docfunc.hxx"
-#include "StatisticsDialogs.hrc"
 #include "TableFillingAndNavigationTools.hxx"
 
 #include "MovingAverageDialog.hxx"
@@ -78,9 +77,9 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
 
         // Write label
         if (mGroupedBy == BY_COLUMN)
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
+            aTemplate.setTemplate(SC_RESSTR(STR_COLUMN_LABEL_TEMPLATE));
         else
-            aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_ROW_LABEL_TEMPLATE));
+            aTemplate.setTemplate(SC_RESSTR(STR_ROW_LABEL_TEMPLATE));
 
         aTemplate.applyNumber("%NUMBER%", pIterator->index() + 1);
         output.writeBoldString(aTemplate.getTemplate());
