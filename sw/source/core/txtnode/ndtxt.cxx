@@ -173,7 +173,7 @@ SwTextNode *SwNodes::MakeTextNode( const SwNodeIndex & rWhere,
                     if( !GoPrevSection( &aTmp, true, false ) ||
                         aTmp.GetNode().FindTableNode() !=
                             pNode->FindTableNode() )
-                        return pNode;       // schade, das wars
+                        return pNode;
                 }
                 else
                     aTmp = *pNd->StartOfSectionNode();
@@ -411,15 +411,15 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         LockModify();   // disable notifications
 
-        // werden FlyFrames mit verschoben, so muessen diese nicht ihre
-        // Frames zerstoeren. Im SwTextFly::SetAnchor wird es abgefragt!
+        // If fly frames are moved, they don't need to destroy their layout
+        // frames.  Set a flag that is checked in SwTextFlyCnt::SetAnchor.
         if ( HasHints() )
         {
             pNode->GetOrCreateSwpHints().SetInSplitNode(true);
         }
 
-        //Ersten Teil des Inhalts in den neuen Node uebertragen und
-        //im alten Node loeschen.
+        // Move the first part of the content to the new node and delete
+        // it in the old node.
         SwIndex aIdx( this );
         CutText( pNode, aIdx, nSplitPos );
 
@@ -455,10 +455,11 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
                 pNode->m_pSwpHints->SetInSplitNode(false);
             }
 
-            // alle zeichengebundenen Rahmen, die im neuen Absatz laden
-            // muessen aus den alten Frame entfernt werden:
-            // JP 01.10.96: alle leeren und nicht zu expandierenden
-            //              Attribute loeschen
+            // All fly frames anchored as char that are moved to the new
+            // node must have their layout frames deleted.
+            // This comment is sort of silly because we actually delete the
+            // layout frames of those which were not moved?
+            // JP 01.10.96: delete all empty and not-to-be-expanded attributes
             if ( HasHints() )
             {
                 for ( size_t j = m_pSwpHints->Count(); j; )
@@ -497,7 +498,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
             SetInCache( false );
         }
 
-        UnlockModify(); // Benachrichtigungen wieder freischalten
+        UnlockModify(); // enable notify again
 
         // If there is an accessible layout we must call modify even
         // with length zero, because we have to notify about the changed
@@ -507,7 +508,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
             ( (pRootFrame = pNode->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()) != nullptr &&
               pRootFrame->IsAnyShellAccessible() ) )
         {
-            // dann sage den Frames noch, das am Ende etwas "geloescht" wurde
+            // tell the frames that something was "deleted" at the end
             if( 1 == nTextLen - nSplitPos )
             {
                 SwDelChr aHint( nSplitPos );
@@ -523,7 +524,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         {
             MoveTextAttr_To_AttrSet();
         }
-        pNode->MakeFrames( *this );       // neue Frames anlegen.
+        pNode->MakeFrames( *this );
         lcl_ChangeFootnoteRef( *this );
     }
     else
@@ -545,8 +546,7 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
         SwIndex aIdx( this );
         CutText( pNode, aIdx, nSplitPos );
 
-        // JP 01.10.96: alle leeren und nicht zu expandierenden
-        //              Attribute loeschen
+        // JP 01.10.96: delete all empty and not-to-be-expanded attributes
         if ( HasHints() )
         {
             for ( size_t j = m_pSwpHints->Count(); j; )
@@ -583,16 +583,15 @@ SwContentNode *SwTextNode::SplitContentNode( const SwPosition &rPos )
 
         if ( HasWriterListeners() )
         {
-            MakeFrames( *pNode );     // neue Frames anlegen.
+            MakeFrames( *pNode );
         }
         lcl_ChangeFootnoteRef( *pNode );
     }
 
     {
-        //Hint fuer Pagedesc versenden. Das mueste eigntlich das Layout im
-        //Paste der Frames selbst erledigen, aber das fuehrt dann wiederum
-        //zu weiteren Folgefehlern, die mit Laufzeitkosten geloest werden
-        //muesten. #56977# #55001# #56135#
+        // Send Hint for PageDesc. This should be done in the Layout when
+        // pasting the frames, but that causes other problems that look
+        // expensive to solve.
         const SfxPoolItem *pItem;
         if( HasWriterListeners() && SfxItemState::SET == pNode->GetSwAttrSet().
             GetItemState( RES_PAGEDESC, true, &pItem ) )
@@ -701,16 +700,16 @@ SwContentNode *SwTextNode::JoinNext()
             }
         }
 
-        { // wg. SwIndex
+        { // scope for SwIndex
             pTextNode->CutText( this, SwIndex(pTextNode), pTextNode->Len() );
         }
-        // verschiebe noch alle Bookmarks/TOXMarks
+        // move all Bookmarks/TOXMarks
         if( !pContentStore->Empty())
             pContentStore->Restore( pDoc, GetIndex(), nOldLen );
 
         if( pTextNode->HasAnyIndex() )
         {
-            // alle Cursor/StackCursor/UnoCursor aus dem Loeschbereich verschieben
+            // move all ShellCursor/StackCursor/UnoCursor out of delete range
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, true );
         }
         rNds.Delete(aIdx);
@@ -795,16 +794,16 @@ void SwTextNode::JoinPrev()
             }
         }
 
-        { // wg. SwIndex
+        { // scope for SwIndex
             pTextNode->CutText( this, SwIndex(this), SwIndex(pTextNode), nLen );
         }
-        // verschiebe noch alle Bookmarks/TOXMarks
+        // move all Bookmarks/TOXMarks
         if( !pContentStore->Empty() )
             pContentStore->Restore( pDoc, GetIndex() );
 
         if( pTextNode->HasAnyIndex() )
         {
-            // alle Cursor/StackCursor/UnoCursor aus dem Loeschbereich verschieben
+            // move all ShellCursor/StackCursor/UnoCursor out of delete range
             pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, true );
         }
         rNds.Delete(aIdx);
@@ -818,7 +817,7 @@ void SwTextNode::JoinPrev()
     }
 }
 
-// erzeugt einen AttrSet mit Bereichen fuer Frame-/Para/Char-Attributen
+// create an AttrSet with ranges for Frame-/Para/Char-attributes
 void SwTextNode::NewAttrSet( SwAttrPool& rPool )
 {
     OSL_ENSURE( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
@@ -1216,8 +1215,7 @@ void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
 {
     SwDoc* pDoc = GetDoc();
     OSL_ENSURE( pDoc, "Kein Doc?" );
-    // erfrage die OutlineLevel und update gegebenenfalls das Nodes-Array,
-    // falls sich die Level geaendert haben !
+    // query the OutlineLevel and if it changed, notify the Nodes-Array!
     const int nOldLevel = pOldColl && pOldColl->IsAssignedToListLevelOfOutlineStyle() ?
                      pOldColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
     const int nNewLevel = pNewColl && pNewColl->IsAssignedToListLevelOfOutlineStyle() ?
@@ -1233,7 +1231,7 @@ void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
     }
 
     SwNodes& rNds = GetNodes();
-    // Update beim Level 0 noch die Fussnoten !!
+    // If Level 0 (Chapter), update the footnotes!
     if( ( !nNewLevel || !nOldLevel) && pDoc && !pDoc->GetFootnoteIdxs().empty() &&
         FTNNUM_CHAPTER == pDoc->GetFootnoteInfo().eNum &&
         rNds.IsDocNodes() )
@@ -1245,14 +1243,13 @@ void SwTextNode::ChgTextCollUpdateNum( const SwTextFormatColl *pOldColl,
 
     if( pNewColl && RES_CONDTXTFMTCOLL == pNewColl->Which() )
     {
-        // Erfrage die akt. Condition des TextNodes:
+        // check the condition of the text node again
         ChkCondColl();
     }
 }
 
-// Wenn man sich genau am Ende einer Text- bzw. INetvorlage befindet,
-// bekommt diese das DontExpand-Flag verpasst
-
+// If positioned exactly at the end of a CharStyle or Hyperlink,
+// set its DontExpand flag.
 bool SwTextNode::DontExpandFormat( const SwIndex& rIdx, bool bFlag,
                                 bool bFormatToTextAttributes )
 {
@@ -1336,8 +1333,8 @@ lcl_GetTextAttrs(
         sal_Int32 const*const pEndIdx = pHint->GetEnd();
         // cannot have hint with no end and no dummy char
         assert(pEndIdx || pHint->HasDummyChar());
-            // Wenn bExpand gesetzt ist, wird das Verhalten bei Eingabe
-            // simuliert, d.h. der Start wuede verschoben, das Ende expandiert,
+        // If EXPAND is set, simulate the text input behavior, i.e.
+        // move the start, and expand the end.
         bool const bContained( (pEndIdx)
             ? (*pMatchFunc)(nIndex, nHintStart, *pEndIdx)
             : (nHintStart == nIndex) );
@@ -1473,10 +1470,9 @@ void lcl_CopyHint(
             static_cast<const SwTextFootnote*>(pHt)->CopyFootnote( *static_cast<SwTextFootnote*>(pNewHt), *pDest);
             break;
 
-    // Beim Kopieren von Feldern in andere Dokumente
-    // muessen die Felder bei ihren neuen Feldtypen angemeldet werden.
+    // Fields that are copied into different SwDocs must be registered
+    // at their new FieldTypes.
 
-    // TabellenFormel muessen relativ kopiert werden.
     case RES_TXTATR_FIELD :
         {
             if( pOtherDoc != nullptr )
@@ -1485,12 +1481,12 @@ void lcl_CopyHint(
                         static_txtattr_cast<SwTextField*>(pNewHt));
             }
 
-            // Tabellenformel ??
+            // Table Formula must be copied relative.
             const SwFormatField& rField = pHt->GetFormatField();
             if( RES_TABLEFLD == rField.GetField()->GetTyp()->Which()
                 && static_cast<const SwTableField*>(rField.GetField())->IsIntrnlName())
             {
-                // wandel die interne in eine externe Formel um
+                // convert internal formula to external
                 const SwTableNode* const pDstTableNd =
                     static_txtattr_cast<const SwTextField*>(pHt)->GetTextNode().FindTableNode();
                 if( pDstTableNd )
@@ -1517,15 +1513,14 @@ void lcl_CopyHint(
         if( pOtherDoc && pDest && pDest->GetpSwpHints()
             && pDest->GetpSwpHints()->Contains( pNewHt ) )
         {
-            // Beim Kopieren von TOXMarks(Client) in andere Dokumente
-            // muss der Verzeichnis (Modify) ausgetauscht werden
+            // ToXMarks that are copied to different SwDocs must register
+            // at their new ToX (SwModify).
             static_txtattr_cast<SwTextTOXMark*>(pNewHt)->CopyTOXMark(pOtherDoc);
         }
         break;
 
     case RES_TXTATR_CHARFMT :
-        // Wenn wir es mit einer Zeichenvorlage zu tun haben,
-        // muessen wir natuerlich auch die Formate kopieren.
+        // For CharacterStyles, the format must be copied too.
         if( pDest && pDest->GetpSwpHints()
             && pDest->GetpSwpHints()->Contains( pNewHt ) )
         {
@@ -1541,8 +1536,7 @@ void lcl_CopyHint(
         break;
     case RES_TXTATR_INETFMT :
         {
-            // Wenn wir es mit benutzerdefinierten INet-Zeichenvorlagen
-            // zu tun haben, muessen wir natuerlich auch die Formate kopieren.
+            // For Hyperlinks, the format must be copied too.
             if( pOtherDoc && pDest && pDest->GetpSwpHints()
                 && pDest->GetpSwpHints()->Contains( pNewHt ) )
             {
@@ -1561,16 +1555,15 @@ void lcl_CopyHint(
                         pOtherDoc->CopyCharFormat( *pFormat );
                 }
             }
-            //JP 24.04.98: Bug 49753 - ein TextNode muss am Attribut
-            //              gesetzt sein, damit die Vorlagen erzeugt
-            //              werden koenne
+            //JP 24.04.98: The attribute must point to a text node, so that
+            //             the styles can be created.
             SwTextINetFormat *const pINetHt = static_txtattr_cast<SwTextINetFormat*>(pNewHt);
             if ( !pINetHt->GetpTextNode() )
             {
                 pINetHt->ChgTextNode( pDest );
             }
 
-            //JP 22.10.97: Bug 44875 - Verbindung zum Format herstellen
+            //JP 22.10.97: set up link to char style
             pINetHt->GetCharFormat();
             break;
         }
