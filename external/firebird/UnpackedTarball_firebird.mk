@@ -25,7 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 		external/firebird/0002-Backported-fix-for-CORE-5452-Segfault-when-engine-s-.patch.1 \
 ))
 
-ifeq ($(OS)-$(COM),WNT-MSC)
+ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
 	external/firebird/firebird-cygwin-msvc.patch \
 ))

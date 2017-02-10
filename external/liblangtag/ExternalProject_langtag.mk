@@ -30,12 +30,11 @@ $(call gb_ExternalProject_get_state_target,langtag,build):
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
 		$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) "ac_cv_va_copy=no") \
 		LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \
-		LIBXML2_LIBS="$(if $(filter WNTMSC,$(OS)$(COM)),-L$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc -llibxml2,$(LIBXML_LIBS))" \
+		LIBXML2_LIBS="$(if $(filter WNT,$(OS)),-L$(call gb_UnpackedTarball_get_dir,xml2)/win32/bin.msvc -llibxml2,$(LIBXML_LIBS))" \
 		$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
 		$(if $(filter-out LINUX FREEBSD,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath,\\"\$$\$$ORIGIN) \
 		$(if $(filter-out SOLARIS,$(OS)),,LDFLAGS="-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-R$(COMMA)\\"\$$\$$ORIGIN) \
-		$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2") \
-		&& $(if $(filter WNTMSC,$(OS)$(COM)),\
+		&& $(if $(filter WNT,$(OS)),\
 			REAL_CC="$(shell cygpath -w $(lastword $(filter-out -%,$(CC))))" \
 			REAL_CC_FLAGS="$(filter -%,$(CC))") \
 		   $(if $(verbose),V=1) \

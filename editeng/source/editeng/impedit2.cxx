@@ -927,7 +927,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         UBiDi* pBidi = ubidi_openSized( aLine.getLength(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, nullptr, &nError );   // UChar != sal_Unicode in MinGW
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, nullptr, &nError );
 
         sal_Int32 nVisPos = bStart ? 0 : aLine.getLength()-1;
         const sal_Int32 nLogPos = ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
@@ -1046,7 +1046,7 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
         UBiDi* pBidi = ubidi_openSized( aLine.getLength(), 0, &nError );
 
         const UBiDiLevel  nBidiLevel = IsRightToLeft( nPara ) ? 1 /*RTL*/ : 0 /*LTR*/;
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, nullptr, &nError );   // UChar != sal_Unicode in MinGW
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), aLine.getLength(), nBidiLevel, nullptr, &nError );
 
         if ( !pEditView->IsInsertMode() )
         {
@@ -1882,7 +1882,7 @@ void ImpEditEngine::InitWritingDirections( sal_Int32 nPara )
         UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nBidiLevel, nullptr, &nError ); // UChar != sal_Unicode in MinGW
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nBidiLevel, nullptr, &nError );
         nError = U_ZERO_ERROR;
 
         int32_t nCount = ubidi_countRuns( pBidi, &nError );

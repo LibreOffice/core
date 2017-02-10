@@ -56,11 +56,7 @@ static LPTSTR   *GetCommandArgs( int *pArgc )
 #endif
 }
 
-#ifdef __MINGW32__
-int WINAPI WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
-#else
 int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
-#endif
 {
     TCHAR               szTargetFileName[MAX_PATH] = TEXT("");
     TCHAR               szIniDirectory[MAX_PATH];

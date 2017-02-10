@@ -7,11 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-
-// Include this before stdio.h for the __MINGW32__ sake.
-// This header contains a define that modifies the way
-// formatting strings work for the mingw platforms.
-#include <sal/types.h>
+#include <sal/config.h>
 
 #include <stdio.h>
 #ifndef _WIN32
@@ -36,6 +32,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
+#include <sal/types.h>
 #include <vcl/svapp.hxx>
 
 #include <svx/galtheme.hxx>

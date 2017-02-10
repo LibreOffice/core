@@ -17,12 +17,9 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
 	external/nss/nss-3.13.5-zlib-werror.patch \
 	external/nss/nss_macosx.patch \
 	external/nss/nss-win32-make.patch.1 \
-	$(if $(filter WNTMSC,$(OS)$(COM)),external/nss/nss.windows.patch \
+	$(if $(filter WNT,$(OS)),external/nss/nss.windows.patch \
         external/nss/nss.nowerror.patch \
 		external/nss/nss.vs2015.patch) \
-	$(if $(filter WNTGCC,$(OS)$(COM)),external/nss/nspr-4.9-build.patch.3 \
-		external/nss/nss-3.13.3-build.patch.3 \
-		external/nss/nss.mingw.patch.3) \
     external/nss/ubsan.patch.0 \
     external/nss/clang-cl.patch.0 \
     external/nss/nss.windowbuild.patch.0 \
@@ -32,11 +29,11 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
         external/nss/nss-ios.patch) \
 	$(if $(filter MSC-INTEL,$(COM)-$(CPUNAME)), \
 		external/nss/nss.cygwin64.in32bit.patch) \
-	$(if $(filter WNTMSC,$(OS)$(COM)), \
+	$(if $(filter WNT,$(OS)), \
 		external/nss/nss.vs2015.pdb.patch) \
     $(if $(findstring 120_70,$(VCVER)_$(WINDOWS_SDK_VERSION)), \
         external/nss/nss-winXP-sdk.patch.1) \
-	$(if $(filter WNTMSC,$(OS)$(COM)), \
+	$(if $(filter WNT,$(OS)), \
     	external/nss/nss.utf8bom.patch.1) \
 ))
 

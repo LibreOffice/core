@@ -18,7 +18,6 @@ icu_CPPFLAGS:="-DHAVE_GCC_ATOMICS=$(if $(filter TRUE,$(GCC_HAVE_BUILTIN_ATOMIC))
 ifeq ($(OS),WNT)
 
 # Note: runConfigureICU ignores everything following the platform name!
-ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,icu,build) :
 	$(call gb_ExternalProject_run,build,\
 		export LIB="$(ILIB)" \
@@ -29,23 +28,6 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			Cygwin/MSVC \
 		&& $(MAKE) \
 	,source)
-else
-$(call gb_ExternalProject_get_state_target,icu,build) :
-	$(call gb_ExternalProject_run,build,\
-		CPPFLAGS=$(icu_CPPFLAGS) CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" \
-		LIBS="$(if $(MINGW_SHARED_GXXLIB),$(MINGW_SHARED_LIBSTDCPP))" \
-		LDFLAGS="-L$(COMPATH)/lib -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 \
-				$(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
-		./configure \
-			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-			--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source) \
-			--disable-layout --disable-static --enable-shared --disable-samples \
-		&& $(MAKE) \
-		&&  for lib in icudata icuin icuuc; do \
-			touch $$lib; \
-			done \
-	,source)
-endif
 
 else # $(OS)
 

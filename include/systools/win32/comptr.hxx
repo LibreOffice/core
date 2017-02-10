@@ -174,15 +174,11 @@ class ComPtr
             }
         }
 
-#ifndef __MINGW32__
-
         template< class T_QUERYINTERFACE >
         HRESULT query(T_QUERYINTERFACE** pQuery)
         {
             return m_pInterface->QueryInterface(__uuidof(T_QUERYINTERFACE), (void**)pQuery);
         }
-#endif
-
 
         HRESULT query(REFIID rIID  ,
                       void** pQuery)

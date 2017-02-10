@@ -38,11 +38,6 @@
 //You may derive a class from CComModule and use it if you want to override
 //something, but do not change the name of _Module
 extern CComModule _Module;
-#ifdef __MINGW32__
-#include <algorithm>
-using ::std::min;
-using ::std::max;
-#endif
 #include <atlcom.h>
 #include <atlctl.h>
 

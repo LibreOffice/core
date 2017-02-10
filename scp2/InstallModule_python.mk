@@ -24,14 +24,6 @@ $(eval $(call gb_InstallModule_add_defs,scp2/python,\
 	-DSYSTEM_PYTHON \
 ))
 
-# mingw: mix mode copy file from system python to installation set
-ifeq ($(OS)$(COM),WNTGCC)
-$(eval $(call gb_InstallModule_add_defs,scp2/python,\
-	-DPYVERSION=$(PYTHON_VERSION) \
-	-DMINGW_SYSTEM_PYTHON \
-))
-endif
-
 else
 
 $(eval $(call gb_InstallModule_define_if_set,scp2/python,\

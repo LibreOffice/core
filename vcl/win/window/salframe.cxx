@@ -77,10 +77,6 @@
 #include <multimon.h>
 #pragma warning(pop)
 #include <vector>
-#ifdef __MINGW32__
-#include <algorithm>
-using ::std::max;
-#endif
 
 #include <com/sun/star/uno/Exception.hpp>
 
@@ -91,10 +87,6 @@ using ::std::max;
 #endif
 
 #include <time.h>
-
-#if defined ( __MINGW32__ )
-#include <sehandler.hxx>
-#endif
 
 #include <windows.h>
 #include <shobjidl.h>
@@ -5886,25 +5878,13 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 {
     int bDef = TRUE;
     LRESULT nRet = 0;
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
     __try
     {
-#endif
         nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    han.Reset();
-#else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
-#endif
 
     if ( bDef )
         nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );

@@ -441,7 +441,7 @@ ImplLayoutArgs::ImplLayoutArgs(const OUString& rStr,
         UBiDi* pParaBidi = ubidi_openSized(nLength, 0, &rcI18n);
         if( !pParaBidi )
             return;
-        ubidi_setPara(pParaBidi, reinterpret_cast<const UChar *>(mrStr.getStr()), nLength, nLevel, nullptr, &rcI18n);    // UChar != sal_Unicode in MinGW
+        ubidi_setPara(pParaBidi, reinterpret_cast<const UChar *>(mrStr.getStr()), nLength, nLevel, nullptr, &rcI18n);
 
         UBiDi* pLineBidi = pParaBidi;
         int nSubLength = mnEndCharPos - mnMinCharPos;

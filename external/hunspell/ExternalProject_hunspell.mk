@@ -33,7 +33,6 @@ $(call gb_ExternalProject_get_state_target,hunspell,build):
 		$(SHELL) ./configure --disable-shared --disable-nls --with-pic \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 			$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
-			$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
 			CXXFLAGS="$(hunspell_CXXFLAGS)" \
 		&& cd src/hunspell && $(MAKE) \
 	)

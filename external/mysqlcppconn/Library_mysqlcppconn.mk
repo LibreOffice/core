@@ -16,7 +16,7 @@ $(eval $(call gb_Library_use_externals,mysqlcppconn, \
 	mariadb \
 ))
 
-ifneq ($(OS)$(COM),WNTMSC)
+ifneq ($(OS),WNT)
 
 $(eval $(call gb_Library_add_libs,mysqlcppconn,\
 	$(if $(filter-out MACOSX,$(OS)),-ldl) \

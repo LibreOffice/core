@@ -21,21 +21,6 @@ $(eval $(call gb_ExternalProject_register_targets,xmlsec,\
 
 ifeq ($(OS),WNT)
 
-ifeq ($(COM),GCC)
-$(call gb_ExternalProject_get_state_target,xmlsec,build) :
-	$(call gb_ExternalProject_run,build,\
-		autoreconf \
-		&& ./configure --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-			--without-libxslt --without-openssl --without-gnutls --disable-crypto-dl \
-			$(if $(SYSTEM_NSS),,--disable-pkgconfig) \
-			CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
-			LDFLAGS="-Wl$(COMMA)--no-undefined $(ILIB:;= -L)" \
-			LIBS="$(if $(MINGW_SHARED_GXXLIB),$(MINGW_SHARED__LIBSTDCPP))" \
-			lt_cv_deplibs_check_method=pass_all \
-		&& $(MAKE) \
-	)
-
-else
 $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 	$(call gb_ExternalProject_run,build,\
 		cscript /e:javascript configure.js crypto=mscrypto xslt=no iconv=no static=no \
@@ -44,7 +29,6 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		&& unset MAKEFLAGS \
 		&& LIB="$(ILIB)" nmake \
 	,win32)
-endif
 
 else
 

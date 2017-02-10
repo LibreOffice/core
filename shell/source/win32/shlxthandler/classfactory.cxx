@@ -22,9 +22,6 @@
 #include "infotips.hxx"
 #include "propsheets.hxx"
 #include "columninfo.hxx"
-#ifdef __MINGW32__
-#include <algorithm>
-#endif
 #include "thumbviewer.hxx"
 #include "shlxthdl.hxx"
 

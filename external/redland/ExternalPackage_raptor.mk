@@ -13,8 +13,6 @@ $(eval $(call gb_ExternalPackage_use_external_project,raptor,raptor))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2-lo.$(RAPTOR_MAJOR).dylib,src/.libs/libraptor2-lo.$(RAPTOR_MAJOR).dylib))
-else ifeq ($(OS)-$(COM),WNT-GCC)
-$(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2-$(RAPTOR_MAJOR).dll,src/.libs/libraptor2-$(RAPTOR_MAJOR).dll))
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,raptor,$(LIBO_LIB_FOLDER)/libraptor2.dll,src/.libs/libraptor2.dll))
 else ifeq ($(DISABLE_DYNLOADING),)

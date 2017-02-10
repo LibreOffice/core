@@ -29,12 +29,6 @@ $(eval $(call gb_Library_add_defs,dbu,\
     -DDBACCESS_DLLIMPLEMENTATION \
 ))
 
-ifeq ($(OS)$(COM),WNTGCC) # for adoint.h
-$(eval $(call gb_Library_add_cxxflags,dbu,\
-    -fpermissive \
-))
-endif
-
 $(eval $(call gb_Library_use_externals,dbu,\
 	boost_headers \
 	odbc_headers \
