@@ -37,7 +37,7 @@ class VCL_PLUGIN_PUBLIC SalTimer
     SALTIMERPROC        m_pProc;
 public:
     SalTimer() : m_pProc( nullptr ) {}
-    virtual ~SalTimer();
+    virtual ~SalTimer() COVERITY_NOEXCEPT_FALSE;
 
     // AutoRepeat and Restart
     virtual void            Start( sal_uLong nMS ) = 0;

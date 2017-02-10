@@ -46,7 +46,7 @@ public:
 
     SvtListener();
     SvtListener( const SvtListener &r );
-    virtual ~SvtListener();
+    virtual ~SvtListener() COVERITY_NOEXCEPT_FALSE;
 
     bool StartListening( SvtBroadcaster& rBroadcaster );
     bool EndListening( SvtBroadcaster& rBroadcaster );

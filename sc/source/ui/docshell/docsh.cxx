@@ -3117,7 +3117,7 @@ ScDocShellModificator::ScDocShellModificator( ScDocShell& rDS )
     rDoc.EnableIdle(false);
 }
 
-ScDocShellModificator::~ScDocShellModificator()
+ScDocShellModificator::~ScDocShellModificator() COVERITY_NOEXCEPT_FALSE
 {
     ScDocument& rDoc = rDocShell.GetDocument();
     rDoc.SetAutoCalcShellDisabled( bAutoCalcShellDisabled );

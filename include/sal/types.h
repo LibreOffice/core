@@ -351,6 +351,12 @@ typedef struct _sal_Sequence
 */
 #define SAL_THROW_EXTERN_C() throw ()
 
+#if defined(LIBO_INTERNAL_ONLY) && defined(__COVERITY__) && __cplusplus >= 201103L
+#   define COVERITY_NOEXCEPT_FALSE noexcept(false)
+#else
+#   define COVERITY_NOEXCEPT_FALSE
+#endif
+
 #else
 
 #define SAL_THROW_EXTERN_C()

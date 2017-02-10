@@ -87,7 +87,7 @@ class SwChartLockController_Helper
 
 public:
     SwChartLockController_Helper( SwDoc *pDocument );
-    ~SwChartLockController_Helper();
+    ~SwChartLockController_Helper() COVERITY_NOEXCEPT_FALSE;
 
     void StartOrContinueLocking();
     void Disconnect();

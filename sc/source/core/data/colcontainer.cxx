@@ -30,7 +30,7 @@ ScColContainer::ScColContainer( ScDocument* pDoc, const size_t nSize )
         aCols[nCol] = new ScColumn;
 }
 
-ScColContainer::~ScColContainer()
+ScColContainer::~ScColContainer() COVERITY_NOEXCEPT_FALSE
 {
     Clear();
 }

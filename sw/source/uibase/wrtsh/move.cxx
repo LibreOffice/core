@@ -48,7 +48,7 @@ public:
         ( pSh = pWrtSh )->MoveCursor( bSel );
         pWrtSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_HYPERLINK_GETLINK);
     }
-    ~ShellMoveCursor()
+    ~ShellMoveCursor() COVERITY_NOEXCEPT_FALSE
     {
         if( bAct )
         {

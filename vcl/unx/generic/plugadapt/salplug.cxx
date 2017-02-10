@@ -322,7 +322,7 @@ SalData::SalData() :
 {
 }
 
-SalData::~SalData()
+SalData::~SalData() COVERITY_NOEXCEPT_FALSE
 {
     psp::PrinterInfoManager::release();
 }

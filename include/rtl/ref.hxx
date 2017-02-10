@@ -84,7 +84,7 @@ public:
 
     /** Destructor...
      */
-    ~Reference()
+    ~Reference() COVERITY_NOEXCEPT_FALSE
     {
         if (m_pBody)
             m_pBody->release();

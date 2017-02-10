@@ -194,7 +194,7 @@ ScColorScaleEntry::ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& 
     }
 }
 
-ScColorScaleEntry::~ScColorScaleEntry()
+ScColorScaleEntry::~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE
 {
     if(mpCell)
         mpCell->EndListeningTo(mpCell->GetDocument());
