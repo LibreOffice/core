@@ -2598,29 +2598,29 @@ OUString SwDBManager::LoadAndRegisterDataSource(SwDocShell* pDocShell)
         uno::Any aURLAny;
         uno::Reference< beans::XPropertySet > aSettings;
         const OUString aURI( xFP->getSelectedFiles().getConstArray()[0] );
-        const DBConnURITypes type = GetDBunoURI( aURI, aURLAny );
+        const DBConnURIType type = GetDBunoURI( aURI, aURLAny );
 
-        if( DBCONN_FLAT == type )
+        if( DBConnURIType::Flat == type )
         {
             uno::Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext() );
             uno::Reference < sdb::XTextConnectionSettings > xSettingsDlg = sdb::TextConnectionSettings::create(xContext);
             if( xSettingsDlg->execute() )
                 aSettings.set( uno::Reference < beans::XPropertySet >( xSettingsDlg, uno::UNO_QUERY_THROW ) );
         }
-        sFind = LoadAndRegisterDataSource( type, aURLAny, DBCONN_FLAT == type ? &aSettings : nullptr, aURI, nullptr, nullptr, pDocShell );
+        sFind = LoadAndRegisterDataSource( type, aURLAny, DBConnURIType::Flat == type ? &aSettings : nullptr, aURI, nullptr, nullptr, pDocShell );
     }
     return sFind;
 }
 
-SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::Any &aURLAny)
+SwDBManager::DBConnURIType SwDBManager::GetDBunoURI(const OUString &rURI, uno::Any &aURLAny)
 {
     INetURLObject aURL( rURI );
     OUString sExt( aURL.GetExtension() );
-    DBConnURITypes type = DBCONN_UNKNOWN;
+    DBConnURIType type = DBConnURIType::Unknown;
 
     if(sExt == "odb")
     {
-        type = DBCONN_ODB;
+        type = DBConnURIType::Odb;
     }
     else if(sExt.equalsIgnoreAsciiCase("sxc")
         || sExt.equalsIgnoreAsciiCase("ods")
@@ -2629,7 +2629,7 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
         OUString sDBURL("sdbc:calc:");
         sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
-        type = DBCONN_CALC;
+        type = DBConnURIType::Calc;
     }
     else if(sExt.equalsIgnoreAsciiCase("dbf"))
     {
@@ -2638,7 +2638,7 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
         OUString sDBURL("sdbc:dbase:");
         sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
-        type = DBCONN_DBASE;
+        type = DBConnURIType::Dbase;
     }
     else if(sExt.equalsIgnoreAsciiCase("csv") || sExt.equalsIgnoreAsciiCase("txt"))
     {
@@ -2648,7 +2648,7 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
         //only the 'path' has to be added
         sDBURL += aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE);
         aURLAny <<= sDBURL;
-        type = DBCONN_FLAT;
+        type = DBConnURIType::Flat;
     }
 #ifdef _WIN32
     else if (sExt.equalsIgnoreAsciiCase("mdb") || sExt.equalsIgnoreAsciiCase("mde"))
@@ -2656,14 +2656,14 @@ SwDBManager::DBConnURITypes SwDBManager::GetDBunoURI(const OUString &rURI, uno::
         OUString sDBURL("sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=");
         sDBURL += aURL.PathToFileName();
         aURLAny <<= sDBURL;
-        type = DBCONN_MSJET;
+        type = DBConnURIType::MsJet;
     }
     else if (sExt.equalsIgnoreAsciiCase("accdb") || sExt.equalsIgnoreAsciiCase("accde"))
     {
         OUString sDBURL("sdbc:ado:PROVIDER=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=");
         sDBURL += aURL.PathToFileName();
         aURLAny <<= sDBURL;
-        type = DBCONN_MSACE;
+        type = DBConnURIType::MsAce;
     }
 #endif
     return type;
@@ -2682,7 +2682,7 @@ OUString lcl_getOwnURL(SwDocShell* pDocShell)
     return aRet;
 }
 
-OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const uno::Any &aURLAny, const uno::Reference< beans::XPropertySet > *pSettings,
+OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURIType type, const uno::Any &aURLAny, const uno::Reference< beans::XPropertySet > *pSettings,
                                                 const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir, SwDocShell* pDocShell)
 {
     INetURLObject aURL( rURI );
@@ -2695,21 +2695,17 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
     uno::Sequence<OUString> aFilters(1);
 
     switch (type) {
-    case DBCONN_UNKNOWN:
-    case DBCONN_CALC:
+    case DBConnURIType::Unknown:
+    case DBConnURIType::Calc:
         break;
-    case DBCONN_ODB:
+    case DBConnURIType::Odb:
         bStore = false;
         break;
-    case DBCONN_FLAT:
-    case DBCONN_DBASE:
+    case DBConnURIType::Flat:
+    case DBConnURIType::Dbase:
         //set the filter to the file name without extension
         aFilters[0] = aURL.getBase();
         aTableFilterAny <<= aFilters;
-        break;
-    case DBCONN_MSJET:
-    case DBCONN_MSACE:
-        aSuppressVersionsAny = uno::makeAny(true);
         break;
     }
 
@@ -2755,7 +2751,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const DBConnURITypes type, const
             if(aInfoAny.hasValue())
                 xDataProperties->setPropertyValue("Info", aInfoAny);
 
-            if( DBCONN_FLAT == type && pSettings )
+            if( DBConnURIType::Flat == type && pSettings )
             {
                     uno::Any aSettings = xDataProperties->getPropertyValue( "Settings" );
                     uno::Reference < beans::XPropertySet > xDSSettings;
@@ -2824,7 +2820,7 @@ OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUSt
                                                 const uno::Reference< beans::XPropertySet > *pSettings)
 {
     uno::Any aURLAny;
-    DBConnURITypes type = GetDBunoURI( rURI, aURLAny );
+    DBConnURIType type = GetDBunoURI( rURI, aURLAny );
     return LoadAndRegisterDataSource( type, aURLAny, pSettings, rURI, pPrefix, pDestDir );
 }
 
