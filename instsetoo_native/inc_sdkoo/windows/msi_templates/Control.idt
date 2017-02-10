@@ -34,7 +34,7 @@ AdminNetworkLocation	SetupPathEdit	PathEdit	21	102	330	17	3	TARGETDIR		Browse
 AdminWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_24	Next	
 AdminWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_25	Back	
 AdminWelcome	DlgLine	Line	0	234	326	0	1				
-AdminWelcome	Image	Bitmap	0	0	125	234	1		ImageBmp		
+AdminWelcome	Image	Bitmap	0	0	122	234	1		ImageBmp		
 AdminWelcome	Next	PushButton	230	243	66	17	3		OOO_CONTROL_26	Cancel	
 AdminWelcome	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_27		
 AdminWelcome	TextLine2	Text	135	55	228	45	65539		OOO_CONTROL_28		
@@ -182,7 +182,7 @@ InstallWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_122	Copyright
 InstallWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_123	Back	
 InstallWelcome	Copyright	Text	135	144	228	73	65539		OOO_CONTROL_124	Next	
 InstallWelcome	DlgLine	Line	0	234	374	0	1				
-InstallWelcome	Image	Bitmap	0	0	125	234	1		ImageBmp		
+InstallWelcome	Image	Bitmap	0	0	122	234	1		ImageBmp		
 InstallWelcome	Next	PushButton	230	243	66	17	3		OOO_CONTROL_125	Cancel	
 InstallWelcome	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_126		
 InstallWelcome	TextLine2	Text	135	55	228	45	65539		OOO_CONTROL_127		
@@ -218,7 +218,7 @@ MaintenanceType	Text3	Text	80	192	260	35	3		OOO_CONTROL_145
 MaintenanceWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_146	Next	
 MaintenanceWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_147	Back	
 MaintenanceWelcome	DlgLine	Line	0	234	374	0	1				
-MaintenanceWelcome	Image	Bitmap	0	0	125	234	1		ImageBmp		
+MaintenanceWelcome	Image	Bitmap	0	0	122	234	1		ImageBmp		
 MaintenanceWelcome	Next	PushButton	230	243	66	17	3		OOO_CONTROL_148	Cancel	
 MaintenanceWelcome	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_149		
 MaintenanceWelcome	TextLine2	Text	135	55	228	50	65539		OOO_CONTROL_150		
@@ -235,7 +235,7 @@ OutOfSpace	Resume	PushButton	301	243	66	17	3		OOO_CONTROL_157
 PatchWelcome	Back	PushButton	164	243	66	17	1		OOO_CONTROL_158	Next	
 PatchWelcome	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_159	Back	
 PatchWelcome	DlgLine	Line	0	234	374	0	1				
-PatchWelcome	Image	Bitmap	0	0	125	234	1		ImageBmp		
+PatchWelcome	Image	Bitmap	0	0	122	234	1		ImageBmp		
 PatchWelcome	Next	PushButton	230	243	66	17	3		OOO_CONTROL_160	Cancel	
 PatchWelcome	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_161		
 PatchWelcome	TextLine2	Text	135	54	228	45	65539		OOO_CONTROL_162		
@@ -272,7 +272,7 @@ SetupCompleteError	DlgLine	Line	0	234	374	0	1
 SetupCompleteError	Finish	PushButton	230	243	66	17	3		OOO_CONTROL_185	Cancel	
 SetupCompleteError	FinishText1	Text	135	80	228	50	65539		OOO_CONTROL_186		
 SetupCompleteError	FinishText2	Text	135	135	228	25	65539		OOO_CONTROL_187		
-SetupCompleteError	Image	Bitmap	0	0	125	234	1		ImageBmp		
+SetupCompleteError	Image	Bitmap	0	0	122	234	1		ImageBmp		
 SetupCompleteError	RestContText1	Text	135	80	228	50	65539		OOO_CONTROL_188		
 SetupCompleteError	RestContText2	Text	135	135	228	25	65539		OOO_CONTROL_189		
 SetupCompleteError	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_190		
@@ -284,7 +284,7 @@ SetupCompleteSuccess	CheckForUpdatesText	Text	152	162	190	30	65538		OOO_CONTROL_
 SetupCompleteSuccess	CheckLaunchProgram	CheckBox	151	114	10	9	2	LAUNCHPROGRAM			
 SetupCompleteSuccess	CheckLaunchReadme	CheckBox	151	148	10	9	2	LAUNCHREADME			
 SetupCompleteSuccess	DlgLine	Line	0	234	374	0	1				
-SetupCompleteSuccess	Image	Bitmap	0	0	125	234	1		ImageBmp	CheckBoxUpdates	
+SetupCompleteSuccess	Image	Bitmap	0	0	122	234	1		ImageBmp	CheckBoxUpdates	
 SetupCompleteSuccess	LaunchProgramText	Text	164	112	198	15	65538		OOO_CONTROL_195		
 SetupCompleteSuccess	LaunchReadmeText	Text	164	148	198	13	65538		OOO_CONTROL_196		
 SetupCompleteSuccess	OK	PushButton	230	243	66	17	3		OOO_CONTROL_197	Cancel	
@@ -308,7 +308,7 @@ SetupInitialization	ActionText	Text	135	109	220	36	65539
 SetupInitialization	Back	PushButton	164	243	66	17	1		OOO_CONTROL_214		
 SetupInitialization	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_215		
 SetupInitialization	DlgLine	Line	0	234	374	0	1				
-SetupInitialization	Image	Bitmap	0	0	125	234	1		ImageBmp		
+SetupInitialization	Image	Bitmap	0	0	122	234	1		ImageBmp		
 SetupInitialization	Next	PushButton	230	243	66	17	1		OOO_CONTROL_216		
 SetupInitialization	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_217		
 SetupInitialization	TextLine2	Text	135	55	228	30	65539		OOO_CONTROL_218		
@@ -318,7 +318,7 @@ SetupInterrupted	DlgLine	Line	0	234	374	0	1
 SetupInterrupted	Finish	PushButton	230	243	66	17	3		OOO_CONTROL_221		
 SetupInterrupted	FinishText1	Text	135	80	228	50	65539		OOO_CONTROL_222		
 SetupInterrupted	FinishText2	Text	135	135	228	25	65539		OOO_CONTROL_223		
-SetupInterrupted	Image	Bitmap	0	0	125	234	1		ImageBmp		
+SetupInterrupted	Image	Bitmap	0	0	122	234	1		ImageBmp		
 SetupInterrupted	RestContText1	Text	135	80	228	50	65539		OOO_CONTROL_224		
 SetupInterrupted	RestContText2	Text	135	135	228	25	65539		OOO_CONTROL_225		
 SetupInterrupted	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_226		
@@ -347,7 +347,7 @@ SetupProgress	TextTime	Text	59	139	96	12	2		OOO_CONTROL_244
 SetupResume	Back	PushButton	164	243	66	17	1		OOO_CONTROL_245	Next	
 SetupResume	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_246	Back	
 SetupResume	DlgLine	Line	0	234	374	0	1				
-SetupResume	Image	Bitmap	0	0	125	234	1		ImageBmp		
+SetupResume	Image	Bitmap	0	0	122	234	1		ImageBmp		
 SetupResume	Next	PushButton	230	243	66	17	3		OOO_CONTROL_247	Cancel	
 SetupResume	PreselectedText	Text	135	55	228	45	65539		OOO_CONTROL_248		
 SetupResume	ResumeText	Text	135	46	228	45	65539		OOO_CONTROL_249		
@@ -373,5 +373,5 @@ SplashBitmap	Branding1	Text	4	229	92	13	3		{&MSSWhiteSerif8}[ProductName]
 SplashBitmap	Branding2	Text	3	228	92	13	65537		[ProductName]		
 SplashBitmap	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_265	Back	
 SplashBitmap	DlgLine	Line	95	234	279	0	1				
-SplashBitmap	Image	Bitmap	13	12	113	211	1		ImageBmp		
+SplashBitmap	Image	Bitmap	13	12	114	211	1		ImageBmp		
 SplashBitmap	Next	PushButton	230	243	66	17	3		OOO_CONTROL_266	Cancel	
