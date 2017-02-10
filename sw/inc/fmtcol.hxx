@@ -155,37 +155,31 @@ public:
 
 // FEATURE::CONDCOLL
 /// Conditional styles.
-enum Master_CollConditions
+enum class Master_CollCondition
 {
-    PARA_IN_LIST        = 0x0001,
-    PARA_IN_OUTLINE     = 0x0002,
-    PARA_IN_FRAME       = 0x0004,
-    PARA_IN_TABLEHEAD   = 0x0008,
-    PARA_IN_TABLEBODY   = 0x0010,
-    PARA_IN_SECTION     = 0x0020,
-    PARA_IN_FOOTENOTE   = 0x0040,
-    PARA_IN_FOOTER      = 0x0080,
-    PARA_IN_HEADER      = 0x0100,
-    PARA_IN_ENDNOTE     = 0x0200,
-
-    USRFLD_EXPRESSION   = (int)0x8000
+    NONE,
+    PARA_IN_LIST,
+    PARA_IN_OUTLINE,
+    PARA_IN_FRAME,
+    PARA_IN_TABLEHEAD,
+    PARA_IN_TABLEBODY,
+    PARA_IN_SECTION,
+    PARA_IN_FOOTENOTE,
+    PARA_IN_FOOTER,
+    PARA_IN_HEADER,
+    PARA_IN_ENDNOTE
 };
 
 class SW_DLLPUBLIC SwCollCondition : public SwClient
 {
-    sal_uLong m_nCondition;
-    union
-    {
-        sal_uLong nSubCondition;
-        OUString* pFieldExpression;
-    } m_aSubCondition;
+    Master_CollCondition m_nCondition;
+    sal_uLong m_nSubCondition;
 
 public:
 
-    SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
+    SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond,
                     sal_uLong nSubCond );
-    SwCollCondition( SwTextFormatColl* pColl, sal_uLong nMasterCond,
-                    const OUString& rSubExp );
+    SwCollCondition( SwTextFormatColl* pColl, Master_CollCondition nMasterCond );
     virtual ~SwCollCondition() override;
 
     /// @@@ public copy ctor, but no copy assignment?
@@ -197,12 +191,10 @@ public:
 
     bool operator==( const SwCollCondition& rCmp ) const;
 
-    sal_uLong GetCondition() const      { return m_nCondition; }
-    sal_uLong GetSubCondition() const   { return m_aSubCondition.nSubCondition; }
-    const OUString* GetFieldExpression() const
-                                    { return m_aSubCondition.pFieldExpression; }
+    Master_CollCondition GetCondition() const      { return m_nCondition; }
+    sal_uLong GetSubCondition() const   { return m_nSubCondition; }
 
-    void SetCondition( sal_uLong nCond, sal_uLong nSubCond );
+    void SetCondition( Master_CollCondition nCond, sal_uLong nSubCond );
     SwTextFormatColl* GetTextFormatColl() const     { return const_cast<SwTextFormatColl*>(static_cast<const SwTextFormatColl*>(GetRegisteredIn())); }
     void RegisterToFormat( SwFormat& );
 };

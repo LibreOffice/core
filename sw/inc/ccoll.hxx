@@ -30,11 +30,13 @@
 #include "swdllapi.h"
 #include "cmdid.h"
 
+enum class Master_CollCondition;
+
 #define COND_COMMAND_COUNT 28
 
 struct CommandStruct
 {
-    sal_uLong nCnd;
+    Master_CollCondition nCnd;
     sal_uLong nSubCond;
 };
 

@@ -61,7 +61,7 @@ class SwXMLConditionParser_Impl
 {
     OUString sInput;
 
-    sal_uInt32 nCondition;
+    Master_CollCondition nCondition;
     sal_uInt32 nSubCondition;
 
     sal_Int32 nPos;
@@ -76,9 +76,9 @@ public:
 
     explicit SwXMLConditionParser_Impl( const OUString& rInp );
 
-    bool IsValid() const { return 0 != nCondition; }
+    bool IsValid() const { return Master_CollCondition::NONE != nCondition; }
 
-    sal_uInt32 GetCondition() const { return nCondition; }
+    Master_CollCondition GetCondition() const { return nCondition; }
     sal_uInt32 GetSubCondition() const { return nSubCondition; }
 };
 
@@ -131,7 +131,7 @@ inline bool SwXMLConditionParser_Impl::MatchNumber( sal_uInt32& rNumber )
 
 SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
     sInput( rInp ),
-    nCondition( 0 ),
+    nCondition( Master_CollCondition::NONE ),
     nSubCondition( 0 ),
     nPos( 0 ),
     nLength( rInp.getLength() )
@@ -152,47 +152,47 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
     if( bOK )
     {
         if( IsXMLToken( sFunc, XML_ENDNOTE ) && !bHasSub )
-            nCondition = PARA_IN_ENDNOTE;
+            nCondition = Master_CollCondition::PARA_IN_ENDNOTE;
         else if( IsXMLToken( sFunc, XML_FOOTER ) && !bHasSub )
-            nCondition = PARA_IN_FOOTER;
+            nCondition = Master_CollCondition::PARA_IN_FOOTER;
         else if( IsXMLToken( sFunc, XML_FOOTNOTE ) && !bHasSub )
-            nCondition = PARA_IN_FOOTENOTE;
+            nCondition = Master_CollCondition::PARA_IN_FOOTENOTE;
         else if( IsXMLToken( sFunc, XML_HEADER ) && !bHasSub )
-            nCondition = PARA_IN_HEADER;
+            nCondition = Master_CollCondition::PARA_IN_HEADER;
         else if( IsXMLToken( sFunc, XML_LIST_LEVEL) &&
                 nSub >=1 && nSub <= MAXLEVEL )
         {
-            nCondition = PARA_IN_LIST;
+            nCondition = Master_CollCondition::PARA_IN_LIST;
             nSubCondition = nSub-1;
         }
         else if( IsXMLToken( sFunc, XML_OUTLINE_LEVEL) &&
                  nSub >=1 && nSub <= MAXLEVEL )
         {
-            nCondition = PARA_IN_OUTLINE;
+            nCondition = Master_CollCondition::PARA_IN_OUTLINE;
             nSubCondition = nSub-1;
         }
         else if( IsXMLToken( sFunc, XML_SECTION ) && !bHasSub )
         {
-            nCondition = PARA_IN_SECTION;
+            nCondition = Master_CollCondition::PARA_IN_SECTION;
         }
         else if( IsXMLToken( sFunc, XML_TABLE ) && !bHasSub )
         {
-            nCondition = PARA_IN_TABLEBODY;
+            nCondition = Master_CollCondition::PARA_IN_TABLEBODY;
         }
         else if( IsXMLToken( sFunc, XML_TABLE_HEADER ) && !bHasSub )
         {
-            nCondition = PARA_IN_TABLEHEAD;
+            nCondition = Master_CollCondition::PARA_IN_TABLEHEAD;
         }
         else if( IsXMLToken( sFunc, XML_TEXT_BOX ) && !bHasSub )
         {
-            nCondition = PARA_IN_FRAME;
+            nCondition = Master_CollCondition::PARA_IN_FRAME;
         }
     }
 }
 
 class SwXMLConditionContext_Impl : public SvXMLImportContext
 {
-    sal_uInt32 nCondition;
+    Master_CollCondition nCondition;
     sal_uInt32 nSubCondition;
 
     OUString sApplyStyle;
@@ -204,7 +204,7 @@ public:
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList );
 
-    bool IsValid() const { return 0 != nCondition; }
+    bool IsValid() const { return Master_CollCondition::NONE != nCondition; }
 };
 
 SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
@@ -212,7 +212,7 @@ SwXMLConditionContext_Impl::SwXMLConditionContext_Impl(
             const OUString& rLName,
             const uno::Reference< xml::sax::XAttributeList > & xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    nCondition( 0 ),
+    nCondition( Master_CollCondition::NONE ),
     nSubCondition( 0 )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -945,12 +945,13 @@ void SwXMLImport::UpdateTextCollConditions( SwDoc *pDoc )
                 const SwCollCondition& rCond = *rConditions[j];
                 switch( rCond.GetCondition() )
                 {
-                case PARA_IN_TABLEHEAD:
-                case PARA_IN_TABLEBODY:
-                case PARA_IN_FOOTER:
-                case PARA_IN_HEADER:
+                case Master_CollCondition::PARA_IN_TABLEHEAD:
+                case Master_CollCondition::PARA_IN_TABLEBODY:
+                case Master_CollCondition::PARA_IN_FOOTER:
+                case Master_CollCondition::PARA_IN_HEADER:
                     bSendModify = true;
                     break;
+                default: break;
                 }
             }
             if( bSendModify )

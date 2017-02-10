@@ -1810,33 +1810,33 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
 {
     const SwNodes& rNds = GetNodes();
     {
-        int nCond = 0;
+        Master_CollCondition nCond = Master_CollCondition::NONE;
         const SwStartNode* pSttNd = StartOfSectionNode();
         while( pSttNd )
         {
             switch( pSttNd->GetNodeType() )
             {
-            case SwNodeType::Table:      nCond = PARA_IN_TABLEBODY; break;
-            case SwNodeType::Section:    nCond = PARA_IN_SECTION; break;
+            case SwNodeType::Table:      nCond = Master_CollCondition::PARA_IN_TABLEBODY; break;
+            case SwNodeType::Section:    nCond = Master_CollCondition::PARA_IN_SECTION; break;
 
             default:
                 switch( pSttNd->GetStartNodeType() )
                 {
                 case SwTableBoxStartNode:
                     {
-                        nCond = PARA_IN_TABLEBODY;
+                        nCond = Master_CollCondition::PARA_IN_TABLEBODY;
                         const SwTableNode* pTableNd = pSttNd->FindTableNode();
                         const SwTableBox* pBox;
                         if( pTableNd && nullptr != ( pBox = pTableNd->GetTable().
                             GetTableBox( pSttNd->GetIndex() ) ) && pBox &&
                             pBox->IsInHeadline( &pTableNd->GetTable() ) )
-                            nCond = PARA_IN_TABLEHEAD;
+                            nCond = Master_CollCondition::PARA_IN_TABLEHEAD;
                     }
                     break;
-                case SwFlyStartNode:        nCond = PARA_IN_FRAME; break;
+                case SwFlyStartNode:        nCond = Master_CollCondition::PARA_IN_FRAME; break;
                 case SwFootnoteStartNode:
                     {
-                        nCond = PARA_IN_FOOTENOTE;
+                        nCond = Master_CollCondition::PARA_IN_FOOTENOTE;
                         const SwFootnoteIdxs& rFootnoteArr = rNds.GetDoc()->GetFootnoteIdxs();
                         const SwTextFootnote* pTextFootnote;
                         const SwNode* pSrchNd = pSttNd;
@@ -1846,20 +1846,20 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
                                 pSrchNd == &pTextFootnote->GetStartNode()->GetNode() )
                             {
                                 if( pTextFootnote->GetFootnote().IsEndNote() )
-                                    nCond = PARA_IN_ENDNOTE;
+                                    nCond = Master_CollCondition::PARA_IN_ENDNOTE;
                                 break;
                             }
                     }
                     break;
-                case SwHeaderStartNode:     nCond = PARA_IN_HEADER; break;
-                case SwFooterStartNode:     nCond = PARA_IN_FOOTER; break;
+                case SwHeaderStartNode:     nCond = Master_CollCondition::PARA_IN_HEADER; break;
+                case SwFooterStartNode:     nCond = Master_CollCondition::PARA_IN_FOOTER; break;
                 case SwNormalStartNode:     break;
                 }
             }
 
-            if( nCond )
+            if( nCond != Master_CollCondition::NONE )
             {
-                rTmp.SetCondition( (Master_CollConditions)nCond, 0 );
+                rTmp.SetCondition( nCond, 0 );
                 return true;
             }
             pSttNd = pSttNd->GetIndex()
@@ -1882,7 +1882,7 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
 
                 if( pOutlNd->IsOutline())
                 {
-                    rTmp.SetCondition( PARA_IN_OUTLINE, pOutlNd->GetAttrOutlineLevel() - 1 );
+                    rTmp.SetCondition( Master_CollCondition::PARA_IN_OUTLINE, pOutlNd->GetAttrOutlineLevel() - 1 );
                     return true;
                 }
             }
@@ -1897,7 +1897,7 @@ void SwContentNode::ChkCondColl()
     // Check, just to be sure
     if( RES_CONDTXTFMTCOLL == GetFormatColl()->Which() )
     {
-        SwCollCondition aTmp( nullptr, 0, 0 );
+        SwCollCondition aTmp( nullptr, Master_CollCondition::NONE, 0 );
         const SwCollCondition* pCColl;
 
         bool bDone = false;
@@ -1919,7 +1919,7 @@ void SwContentNode::ChkCondColl()
             if( IsTextNode() && static_cast<SwTextNode*>(this)->GetNumRule())
             {
                 // Is at which Level in a list?
-                aTmp.SetCondition( PARA_IN_LIST,
+                aTmp.SetCondition( Master_CollCondition::PARA_IN_LIST,
                                 static_cast<SwTextNode*>(this)->GetActualListLevel() );
                 pCColl = static_cast<SwConditionTextFormatColl*>(GetFormatColl())->
                                 HasCondition( aTmp );
