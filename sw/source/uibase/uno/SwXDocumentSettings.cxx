@@ -242,7 +242,7 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
 , mpDoc ( nullptr )
 , mpPrinter( nullptr )
 {
-    registerSlave ( new SwXPrintSettings ( PRINT_SETTINGS_DOCUMENT, mpModel->GetDocShell()->GetDoc() ) );
+    registerSlave ( new SwXPrintSettings ( SwXPrintSettingsType::Document, mpModel->GetDocShell()->GetDoc() ) );
 }
 
 SwXDocumentSettings::~SwXDocumentSettings()

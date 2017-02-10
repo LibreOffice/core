@@ -220,7 +220,7 @@ Reference< XPropertySet >  SwXModule::getPrintSettings()
     if(!mxPrintSettings.is())
     {
         OSL_FAIL("Web or Text?");
-        mxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( PRINT_SETTINGS_MODULE ) );
+        mxPrintSettings = static_cast < HelperBaseNoState * > ( new SwXPrintSettings ( SwXPrintSettingsType::Module ) );
     }
     return mxPrintSettings;
 }
@@ -259,13 +259,10 @@ void SwXPrintSettings::_preSetValues ()
 {
     switch (meType)
     {
-        case PRINT_SETTINGS_MODULE:
+        case SwXPrintSettingsType::Module:
             mpPrtOpt = SW_MOD()->GetPrtOptions( false );
         break;
-        case PRINT_SETTINGS_WEB:
-            mpPrtOpt = SW_MOD()->GetPrtOptions( true );
-        break;
-        case PRINT_SETTINGS_DOCUMENT:
+        case SwXPrintSettingsType::Document:
         {
             if (!mpDoc)
                 throw IllegalArgumentException ();
@@ -411,13 +408,10 @@ void SwXPrintSettings::_preGetValues()
 {
     switch (meType)
     {
-        case PRINT_SETTINGS_MODULE:
+        case SwXPrintSettingsType::Module:
             mpPrtOpt = SW_MOD()->GetPrtOptions( false );
         break;
-        case PRINT_SETTINGS_WEB:
-            mpPrtOpt = SW_MOD()->GetPrtOptions( true );
-        break;
-        case PRINT_SETTINGS_DOCUMENT:
+        case SwXPrintSettingsType::Document:
         {
             if (!mpDoc)
                 throw IllegalArgumentException ();

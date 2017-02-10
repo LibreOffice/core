@@ -64,11 +64,10 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-enum SwXPrintSettingsType
+enum class SwXPrintSettingsType
 {
-    PRINT_SETTINGS_MODULE,
-    PRINT_SETTINGS_WEB,
-    PRINT_SETTINGS_DOCUMENT
+    Module,
+    Document
 };
 
 class SwXPrintSettings : public comphelper::ChainableHelperNoState
