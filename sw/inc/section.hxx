@@ -265,7 +265,7 @@ class SwSectionFrameMoveAndDeleteHint : public SfxHint
         const bool mbSaveContent;
 };
 
-enum SectionSort { SORTSECT_NOT, SORTSECT_NAME, SORTSECT_POS };
+enum class SectionSort { Not, Pos };
 
 class SW_DLLPUBLIC SwSectionFormat
     : public SwFrameFormat
@@ -305,7 +305,7 @@ public:
     //  - sorted according to name or position or unsorted
     //  - all of them or only those that are in the normal Nodes-array.
     void GetChildSections( SwSections& rArr,
-                            SectionSort eSort = SORTSECT_NOT,
+                            SectionSort eSort = SectionSort::Not,
                             bool bAllSections = true ) const;
 
     // Query whether section is in Nodes-array or in UndoNodes-array.

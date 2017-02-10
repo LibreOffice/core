@@ -254,7 +254,7 @@ SwXTextSection::getChildSections()
     SwSectionFormat & rSectionFormat( m_pImpl->GetSectionFormatOrThrow() );
 
     SwSections aChildren;
-    rSectionFormat.GetChildSections(aChildren, SORTSECT_NOT, false);
+    rSectionFormat.GetChildSections(aChildren, SectionSort::Not, false);
     uno::Sequence<uno::Reference<text::XTextSection> > aSeq(aChildren.size());
     uno::Reference< text::XTextSection > * pArray = aSeq.getArray();
     for (size_t i = 0; i < aChildren.size(); ++i)

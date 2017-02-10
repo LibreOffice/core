@@ -550,7 +550,7 @@ bool SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, bool bDelNodes )
         if( !bDelNodes )
         {
             SwSections aArr( 0 );
-            pFormat->GetChildSections( aArr, SORTSECT_NOT, false );
+            pFormat->GetChildSections( aArr, SectionSort::Not, false );
             for( const auto pSect : aArr )
             {
                 if( TOX_HEADER_SECTION == pSect->GetType() )

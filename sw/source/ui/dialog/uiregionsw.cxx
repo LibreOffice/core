@@ -105,7 +105,7 @@ static void lcl_FillList( SwWrtShell& rSh, ComboBox& rSubRegions, ComboBox* pAva
     else
     {
         SwSections aTmpArr;
-        pNewFormat->GetChildSections(aTmpArr, SORTSECT_POS);
+        pNewFormat->GetChildSections(aTmpArr, SectionSort::Pos);
         if( !aTmpArr.empty() )
         {
             SectionType eTmpType;
@@ -473,7 +473,7 @@ void SwEditRegionDlg::RecurseList( const SwSectionFormat* pFormat, SvTreeListEnt
     {
         SwSections aTmpArr;
         SvTreeListEntry* pNEntry;
-        pFormat->GetChildSections(aTmpArr, SORTSECT_POS);
+        pFormat->GetChildSections(aTmpArr, SectionSort::Pos);
         if( !aTmpArr.empty() )
         {
             for( const auto pSect : aTmpArr )

@@ -882,12 +882,6 @@ static bool lcl_SectionCmpPos( const SwSection *pFirst, const SwSection *pSecond
                   pSSectFormat->GetContent(false).GetContentIdx()->GetIndex();
 }
 
-static bool lcl_SectionCmpNm( const SwSection *pFSect, const SwSection *pSSect)
-{
-    OSL_ENSURE( pFSect && pSSect, "Invalid Sections" );
-    return pFSect->GetSectionName() < pSSect->GetSectionName();
-}
-
 // get all Sections that have been derived from this one
 void SwSectionFormat::GetChildSections( SwSections& rArr,
                                         SectionSort eSort,
@@ -912,14 +906,10 @@ void SwSectionFormat::GetChildSections( SwSections& rArr,
         if( 1 < rArr.size() )
             switch( eSort )
             {
-            case SORTSECT_NAME:
-                std::sort( rArr.begin(), rArr.end(), lcl_SectionCmpNm );
-                break;
-
-            case SORTSECT_POS:
+            case SectionSort::Pos:
                 std::sort( rArr.begin(), rArr.end(), lcl_SectionCmpPos );
                 break;
-            case SORTSECT_NOT: break;
+            case SectionSort::Not: break;
             }
     }
 }

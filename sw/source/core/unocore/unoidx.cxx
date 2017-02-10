@@ -919,7 +919,7 @@ SwXDocumentIndex::getPropertyValue(const OUString& rPropertyName)
                 {
                     SwSections aSectArr;
                     pSectionFormat->GetChildSections(aSectArr,
-                            SORTSECT_NOT, false);
+                            SectionSort::Not, false);
                     for(SwSection* pSect : aSectArr)
                     {
                         if(pSect->GetType() == TOX_HEADER_SECTION)
