@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_356ff893",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 904,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-10T16:59:01Z",
+      "side": 1,
+      "message": "Please also check the value of \"zeroHeight\", if it is set to \"true\"",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_556c7c9c",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 920,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-10T16:59:01Z",
+      "side": 1,
+      "message": "Please also check values of \"zeroHeight\" if it is set to \"false\"",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_1572f47c",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2280,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-10T16:59:01Z",
+      "side": 1,
+      "message": "Please update comment. Rows will be disabled also in case if hidden is equal to default.",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_f55c90ef",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-10T16:59:01Z",
+      "side": 1,
+      "message": "This comment needs to be updated.",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d5578cc8",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2716,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-10T16:59:01Z",
+      "side": 1,
+      "message": "Generally for boolean values we should use function:\nXclXmlUtils::ToPsz( to produce \"true\" or \"false\".\nAlso all parameters should always exists.\nIn that case it will be: \"XclXmlUtils::ToPsz( rDefData.IsHidden() )\"",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
