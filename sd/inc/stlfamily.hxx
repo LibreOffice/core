@@ -112,7 +112,7 @@ private:
 
     SfxStyleFamily mnFamily;
     rtl::Reference< SfxStyleSheetPool > mxPool;
-    SdStyleFamilyImpl*  mpImpl;
+    std::unique_ptr<SdStyleFamilyImpl>  mpImpl;
 };
 
 typedef rtl::Reference< SdStyleFamily > SdStyleFamilyRef;
