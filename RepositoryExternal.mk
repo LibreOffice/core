@@ -3410,16 +3410,16 @@ endef
 
 endif # ENABLE_BREAKPAD
 
-ifneq ($(SYSTEM_GPGME),)
+ifneq ($(SYSTEM_GPGMEPP),)
 
 define gb_LinkTarget__use_gpgme
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
-	$$(GPGME_CFLAGS) \
+	$$(GPGMEPP_CFLAGS) \
 )
 
 $(call gb_LinkTarget_add_libs,$(1),\
-    $(GPGME_LIBS) \
+    $(GPGMEPP_LIBS) \
 )
 
 endef
