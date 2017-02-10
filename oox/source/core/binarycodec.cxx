@@ -133,19 +133,18 @@ void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
     mnBaseKey = lclGetKey( pnPassData, 16 );
     mnHash = lclGetHash( pnPassData, 16 );
 
-     static const sal_uInt8 spnFillChars[] =
+    static const sal_uInt8 spnFillChars[] =
     {
         0xBB, 0xFF, 0xFF, 0xBA,
         0xFF, 0xFF, 0xB9, 0x80,
         0x00, 0xBE, 0x0F, 0x00,
-        0xBF, 0x0F, 0x00
+        0xBF, 0x0F, 0x00, 0x00
     };
 
     (void)memcpy( mpnKey, pnPassData, 16 );
-    sal_Int32 nIndex;
     sal_Int32 nLen = lclGetLen( pnPassData, 16 );
     const sal_uInt8* pnFillChar = spnFillChars;
-    for( nIndex = nLen; nIndex < static_cast< sal_Int32 >( sizeof( mpnKey ) ); ++nIndex, ++pnFillChar )
+    for (sal_Int32 nIndex = nLen; nIndex < static_cast<sal_Int32>(sizeof(mpnKey)); ++nIndex, ++pnFillChar )
         mpnKey[ nIndex ] = *pnFillChar;
 
     // rotation of key values is application dependent
@@ -162,7 +161,7 @@ void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
     pnBaseKeyLE[ 0 ] = static_cast< sal_uInt8 >( mnBaseKey );
     pnBaseKeyLE[ 1 ] = static_cast< sal_uInt8 >( mnBaseKey >> 8 );
     sal_uInt8* pnKeyChar = mpnKey;
-    for( nIndex = 0; nIndex < static_cast< sal_Int32 >( sizeof( mpnKey ) ); ++nIndex, ++pnKeyChar )
+    for (sal_Int32 nIndex = 0; nIndex < static_cast<sal_Int32>(sizeof(mpnKey)); ++nIndex, ++pnKeyChar )
     {
         *pnKeyChar ^= pnBaseKeyLE[ nIndex & 1 ];
         lclRotateLeft( *pnKeyChar, nRotateSize );

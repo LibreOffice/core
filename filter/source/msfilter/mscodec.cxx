@@ -145,16 +145,15 @@ void MSCodec_Xor95::InitKey( const sal_uInt8 pnPassData[ 16 ] )
         0xBF, 0x0F, 0x00, 0x00
     };
 
-    std::size_t nIndex;
     std::size_t nLen = lclGetLen( pnPassData, 16 );
     const sal_uInt8* pnFillChar = spnFillChars;
-    for( nIndex = nLen; nIndex < sizeof( mpnKey ); ++nIndex, ++pnFillChar )
+    for (std::size_t nIndex = nLen; nIndex < sizeof(mpnKey); ++nIndex, ++pnFillChar)
         mpnKey[ nIndex ] = *pnFillChar;
 
     SVBT16 pnOrigKey;
     ShortToSVBT16( mnKey, pnOrigKey );
     sal_uInt8* pnKeyChar = mpnKey;
-    for( nIndex = 0; nIndex < sizeof( mpnKey ); ++nIndex, ++pnKeyChar )
+    for (std::size_t nIndex = 0; nIndex < sizeof(mpnKey); ++nIndex, ++pnKeyChar)
     {
         *pnKeyChar ^= pnOrigKey[ nIndex & 0x01 ];
         lclRotateLeft( *pnKeyChar, mnRotateDistance );
