@@ -17,44 +17,41 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "checklistmenu.hrc"
+#include "sc.hrc"
 
-Resource RID_POPUP_FILTER
+String STR_MENU_SORT_ASC
 {
-    String STR_MENU_SORT_ASC
-    {
-        Text [ en-US ] = "Sort Ascending" ;
-    };
+    Text [ en-US ] = "Sort Ascending" ;
+};
 
-    String STR_MENU_SORT_DESC
-    {
-        Text [ en-US ] = "Sort Descending" ;
-    };
+String STR_MENU_SORT_DESC
+{
+    Text [ en-US ] = "Sort Descending" ;
+};
 
-    String STR_MENU_SORT_CUSTOM
-    {
-        Text [ en-US ] = "Custom Sort" ;
-    };
+String STR_MENU_SORT_CUSTOM
+{
+    Text [ en-US ] = "Custom Sort" ;
+};
 
-    String STR_BTN_TOGGLE_ALL
-    {
-        Text [ en-US ] = "All" ;
-    };
+String STR_BTN_TOGGLE_ALL
+{
+    Text [ en-US ] = "All" ;
+};
 
-    String STR_BTN_SELECT_CURRENT
-    {
-        Text [ en-US ] = "Show only the current item." ;
-    };
+String STR_BTN_SELECT_CURRENT
+{
+    Text [ en-US ] = "Show only the current item." ;
+};
 
-    String STR_BTN_UNSELECT_CURRENT
-    {
-        Text [ en-US ] = "Hide only the current item." ;
-    };
+String STR_BTN_UNSELECT_CURRENT
+{
+    Text [ en-US ] = "Hide only the current item." ;
+};
 
-    String STR_EDIT_SEARCH_ITEMS
-    {
-        Text [ en-US ] = "Search items..." ;
-    };
+String STR_EDIT_SEARCH_ITEMS
+{
+    Text [ en-US ] = "Search items..." ;
 };
 
 Bitmap RID_BMP_SELECT_CURRENT

@@ -39,7 +39,6 @@
 #include "dbdocfun.hxx"
 #include "checklistmenu.hxx"
 #include "dpcontrol.hxx"
-#include "checklistmenu.hrc"
 #include "strload.hxx"
 #include "userlist.hxx"
 #include "scabstdlg.hxx"
@@ -493,13 +492,13 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         // Populate the menus.
         ScTabViewShell* pViewShell = pViewData->GetViewShell();
         mpDPFieldPopup->addMenuItem(
-            SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_ASC),
+            SC_RESSTR(STR_MENU_SORT_ASC),
             new PopupSortAction(rPos, PopupSortAction::ASCENDING, 0, pViewShell));
         mpDPFieldPopup->addMenuItem(
-            SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_DESC),
+            SC_RESSTR(STR_MENU_SORT_DESC),
             new PopupSortAction(rPos, PopupSortAction::DESCENDING, 0, pViewShell));
         ScMenuFloatingWindow* pSubMenu = mpDPFieldPopup->addSubMenuItem(
-            SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
+            SC_RESSTR(STR_MENU_SORT_CUSTOM), !aUserSortNames.empty());
 
         if (pSubMenu && !aUserSortNames.empty())
         {

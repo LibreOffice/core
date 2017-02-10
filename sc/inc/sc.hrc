@@ -1105,7 +1105,15 @@
 #define STR_ZTEST_P_TWO_TAIL                        (STR_START + 546)
 #define STR_ZTEST_Z_CRITICAL_TWO_TAIL               (STR_START + 547)
 
-#define STR_END                 (STR_ZTEST_Z_CRITICAL_TWO_TAIL)
+#define STR_MENU_SORT_ASC           (STR_START + 548)
+#define STR_MENU_SORT_DESC          (STR_START + 549)
+#define STR_MENU_SORT_CUSTOM        (STR_START + 550)
+#define STR_BTN_TOGGLE_ALL          (STR_START + 551)
+#define STR_BTN_SELECT_CURRENT      (STR_START + 552)
+#define STR_BTN_UNSELECT_CURRENT    (STR_START + 553)
+#define STR_EDIT_SEARCH_ITEMS       (STR_START + 554)
+
+#define STR_END                 (STR_EDIT_SEARCH_ITEMS)
 
 #define BMP_START               (STR_END)
 
@@ -1221,8 +1229,6 @@
 #define RID_PAGESTYLEFAMILY             (SC_DIALOGS_START + 139)
 #define BMP_STYLES_FAMILY_CELL          (SC_DIALOGS_START + 140)
 #define BMP_STYLES_FAMILY_PAGE          (SC_DIALOGS_START + 141)
-
-#define RID_POPUP_FILTER                (SC_DIALOGS_START + 153)
 
 #define RID_SCDLG_COND_FORMAT_MANAGER   (SC_DIALOGS_START + 159)
 

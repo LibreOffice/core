@@ -123,7 +123,6 @@
 #include "cliputil.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
-#include "checklistmenu.hrc"
 #include "strload.hxx"
 #include "externalrefmgr.hxx"
 #include "dociter.hxx"
@@ -726,10 +725,10 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
 
     // Populate the menu.
     mpAutoFilterPopup->addMenuItem(
-        SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_ASC),
+        SC_RESSTR(STR_MENU_SORT_ASC),
         new AutoFilterAction(this, SortAscending));
     mpAutoFilterPopup->addMenuItem(
-        SC_STRLOAD(RID_POPUP_FILTER, STR_MENU_SORT_DESC),
+        SC_RESSTR(STR_MENU_SORT_DESC),
         new AutoFilterAction(this, SortDescending));
     mpAutoFilterPopup->addSeparator();
     mpAutoFilterPopup->addMenuItem(
