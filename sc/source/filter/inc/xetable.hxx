@@ -781,6 +781,7 @@ private:
     typedef XclExpColinfoList::RecordRefType    XclExpColinfoRef;
 
     XclExpColinfoList   maColInfos;         /// List of COLINFO records.
+    bool                bIsDefaultRowsIsHidden;
     XclExpDefcolwidth   maDefcolwidth;      /// The DEFCOLWIDTH record.
     XclExpColOutlineBuffer maOutlineBfr;    /// Buffer for column outline groups.
     sal_uInt8           mnHighestOutlineLevel; /// Highest number of outline levels for columns in sheet.

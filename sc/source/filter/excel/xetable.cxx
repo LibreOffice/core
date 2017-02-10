@@ -1716,10 +1716,16 @@ XclExpColinfoBuffer::XclExpColinfoBuffer( const XclExpRoot& rRoot ) :
 
 void XclExpColinfoBuffer::Initialize( SCROW nLastScRow )
 {
-
+    bIsDefaultRowsIsHidden = true;
+    ScDocument& rDoc = GetDoc();
+    SCTAB nScTab = GetCurrScTab();
     for( sal_uInt16 nScCol = 0, nLastScCol = GetMaxPos().Col(); nScCol <= nLastScCol; ++nScCol )
     {
         maColInfos.AppendNewRecord( new XclExpColinfo( GetRoot(), nScCol, nLastScRow, maOutlineBfr ) );
+        if ( !rDoc.ColHidden( nScCol, nScTab ) )
+        {
+            bIsDefaultRowsIsHidden = false;
+        }
         if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
         {
            mnHighestOutlineLevel = maOutlineBfr.GetLevel();
@@ -2385,13 +2391,14 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
         {
             // only create RowMap entries if it is first row in spreadsheet,
             // if it is the desired row, for rows that height differ from previous,
-            // if row is collapsed, has outline level (tdf#100347), or row is hidden (tdf#98106).
+            // if row is collapsed, has outline level (tdf#100347), or row hidden is differ than default (tdf#98106).
             bool bHidden = rDoc.RowHidden(nFrom, nScTab);
             // Always get the actual row height even if the manual size flag is
             // not set, to correctly export the heights of rows with wrapped
             // texts.
             const sal_uInt16 nHeight = rDoc.GetRowHeight(nFrom, nScTab, false);
-            if ( !nFrom || ( nFrom == nXclRow ) || bHidden ||
+            if ( !nFrom || ( nFrom == nXclRow ) ||
+                 ( bHidden ) ||
                  ( maOutlineBfr.IsCollapsed() ) ||
                  ( maOutlineBfr.GetLevel() != 0 ) ||
                  ( nHeight != rDoc.GetRowHeight(nFrom - 1, nScTab, false) ) )
