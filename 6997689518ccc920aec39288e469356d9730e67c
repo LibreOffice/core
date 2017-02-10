@@ -72,6 +72,23 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_b5be88d2",
+        "filename": "sc/qa/unit/subsequent_export-test.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-10T19:05:21Z",
+      "side": 1,
+      "message": "Here is an example of checking Boolean Value.\nGenerally:\n1 \u003d true,\n0 \u003d false.\n\nIt is explicitly distinguish between Boolean and Integer values. Theoretically it is easier to debug such OOXML documents.",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_1572f47c",
         "filename": "sc/source/filter/excel/xetable.cxx",
         "patchSetId": 1
