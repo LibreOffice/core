@@ -262,8 +262,8 @@ static const SfxItemPropertySet* lcl_GetCellsPropertySet()
     return &aCellsPropertySet;
 }
 
-//  CellRange enthaelt alle Eintraege von Cells, zusaetzlich eigene Eintraege
-//  mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
+//  CellRange contains all entries from Cells, plus its own entries
+//  with Which-ID 0 (those are needed only for getPropertySetInfo).
 
 static const SfxItemPropertySet* lcl_GetRangePropertySet()
 {
@@ -373,8 +373,8 @@ static const SfxItemPropertySet* lcl_GetRangePropertySet()
     return &aRangePropertySet;
 }
 
-//  Cell enthaelt alle Eintraege von CellRange, zusaetzlich eigene Eintraege
-//  mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
+//  Cell contains entries from CellRange, plus its own entries
+//  with Which-ID 0 (those are needed only for getPropertySetInfo).
 
 static const SfxItemPropertySet* lcl_GetCellPropertySet()
 {
@@ -488,8 +488,8 @@ static const SfxItemPropertySet* lcl_GetCellPropertySet()
     return &aCellPropertySet;
 }
 
-//  Column und Row enthalten alle Eintraege von CellRange, zusaetzlich eigene Eintraege
-//  mit Which-ID 0 (werden nur fuer getPropertySetInfo benoetigt).
+//  Column and Row contain all entries from CellRange, plus its own entries
+//  with Which-ID 0 (those are needed only for getPropertySetInfo).
 
 static const SfxItemPropertySet* lcl_GetColumnPropertySet()
 {
@@ -884,7 +884,7 @@ SC_SIMPLE_SERVICE_INFO( ScCellsObj, "ScCellsObj", "com.sun.star.sheet.Cells" )
 SC_SIMPLE_SERVICE_INFO( ScTableColumnObj, "ScTableColumnObj", "com.sun.star.table.TableColumn" )
 SC_SIMPLE_SERVICE_INFO( ScTableRowObj, "ScTableRowObj", "com.sun.star.table.TableRow" )
 
-//! ScLinkListener in anderes File verschieben !!!
+//! move ScLinkListener into another file !!!
 
 ScLinkListener::~ScLinkListener()
 {
@@ -918,7 +918,7 @@ static SCTAB lcl_FirstTab( const ScRangeList& rRanges )
     const ScRange* pFirst = rRanges[0];
     if (pFirst)
         return pFirst->aStart.Tab();
-    return 0;   // soll nicht sein
+    return 0;   // shouldn't happen
 }
 
 static bool lcl_WholeSheet( const ScRangeList& rRanges )
@@ -1045,7 +1045,7 @@ void ScHelperFunctions::AssignTableBorder2ToAny( uno::Any& rAny,
     rAny <<= aBorder;
 }
 
-//! lcl_ApplyBorder nach docfunc verschieben!
+//! move lcl_ApplyBorder to docfunc !
 
 void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& rRanges,
                         const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner )
@@ -1075,7 +1075,7 @@ void ScHelperFunctions::ApplyBorder( ScDocShell* pDocShell, const ScRangeList& r
         aMark.SelectTable( nTab, true );
 
         rDoc.ApplySelectionFrame( aMark, &rOuter, &rInner );
-        // RowHeight bei Umrandung alleine nicht noetig
+        // don't need RowHeight if there is only a border
     }
 
     if (bUndo)
@@ -1358,8 +1358,8 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
 
     if (eType == CELLTYPE_EDIT)
     {
-        //  GetString an der EditCell macht Leerzeichen aus Umbruechen,
-        //  hier werden die Umbrueche aber gebraucht
+        //  GetString on EditCell turns breaks into spaces,
+        //  but we need the breaks here
         const EditTextObject* pData = aCell.mpEditText;
         if (pData)
         {
@@ -1371,7 +1371,7 @@ static OUString lcl_GetInputString( ScDocument& rDoc, const ScAddress& rPos, boo
     else
         ScCellFormat::GetInputString(aCell, nNumFmt, aVal, *pFormatter, &rDoc);
 
-    //  ggf. ein ' davorhaengen wie in ScTabViewShell::UpdateInputHandler
+    //  if applicable, prepend ' like in ScTabViewShell::UpdateInputHandler
     if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
     {
         double fDummy;
@@ -1477,8 +1477,8 @@ ScCellRangesBase::~ScCellRangesBase()
 
     delete pValueListener;
 
-    //! XChartDataChangeEventListener abmelden ??
-    //! (ChartCollection haelt dann auch dieses Objekt fest!)
+    //! unregister XChartDataChangeEventListener ??
+    //! (ChartCollection will then hold this object as well!)
 }
 
 void ScCellRangesBase::ForgetCurrentAttrs()
@@ -1532,7 +1532,7 @@ SfxItemSet* ScCellRangesBase::GetCurrentDataSet(bool bNoDflt)
         const ScPatternAttr* pPattern = GetCurrentAttrsDeep();
         if ( pPattern )
         {
-            //  Dontcare durch Default ersetzen, damit man immer eine Reflection hat
+            //  replace Dontcare with Default,  so that we always have a reflection
             pCurrentDataSet = new SfxItemSet( pPattern->GetItemSet() );
             pNoDfltCurrentDataSet = new SfxItemSet( pPattern->GetItemSet() );
             pCurrentDataSet->ClearInvalidItems();
@@ -1713,7 +1713,7 @@ void ScCellRangesBase::InitInsertRange(ScDocShell* pDocSh, const ScRange& rR)
 
         pDocShell->GetDocument().AddUnoObject(*this);
 
-        RefChanged();   // Range im Range-Objekt anpassen
+        RefChanged();   // adjust range in range objekt
     }
 }
 
@@ -1825,9 +1825,9 @@ double SAL_CALL ScCellRangesBase::computeFunction( sheet::GeneralFunction nFunct
     ScMarkData aMark(*GetMarkData());
     aMark.MarkToSimple();
     if (!aMark.IsMarked())
-        aMark.SetMarkNegative(true);    // um Dummy Position angeben zu koennen
+        aMark.SetMarkNegative(true);    // so we can enter dummy position
 
-    ScAddress aDummy;                   // wenn nicht Marked, ignoriert wegen Negative
+    ScAddress aDummy;                   // if not marked, ignored if it is negative
     double fVal;
     ScSubTotalFunc eFunc = ScDPUtil::toSubTotalFunc(nFunction);
     ScDocument& rDoc = pDocShell->GetDocument();
@@ -1851,7 +1851,7 @@ void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags )
 
         pDocShell->GetDocFunc().DeleteContents( *GetMarkData(), nDelFlags, true, true );
     }
-    // sonst ist nichts zu tun
+    // otherwise nothing to do
 }
 
 // XPropertyState
@@ -1864,8 +1864,8 @@ const SfxItemPropertyMap& ScCellRangesBase::GetItemPropertyMap()
 static void lcl_GetPropertyWhich( const SfxItemPropertySimpleEntry* pEntry,
                                                 sal_uInt16& rItemWhich )
 {
-    //  Which-ID des betroffenen Items, auch wenn das Item die Property
-    //  nicht alleine behandeln kann
+    //  Which-ID of the affected items also when the item can't handle
+    //  the property by itself
     if ( pEntry )
     {
         if ( IsScItemWid( pEntry->nWID ) )
@@ -1983,11 +1983,11 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyN
         lcl_GetPropertyWhich( pEntry, nItemWhich );
         if ( nItemWhich )               // item wid (from map or special case)
         {
-            if ( !aRanges.empty() )     // leer = nichts zu tun
+            if ( !aRanges.empty() )     // empty = nothing to do
             {
-                //! Bei Items, die mehrere Properties enthalten (z.B. Hintergrund)
-                //! wird hier zuviel zurueckgesetzt
-                //! for ATTR_ROTATE_VALUE, also reset ATTR_ORIENTATION?
+                //! for items that have multiple properties (e.g. background)
+                //! too much will be reset
+                //! for ATTR_ROTATE_VALUE, reset ATTR_ORIENTATION as well?
 
                 sal_uInt16 aWIDs[3];
                 aWIDs[0] = nItemWhich;
@@ -2018,7 +2018,7 @@ void SAL_CALL ScCellRangesBase::setPropertyToDefault( const OUString& aPropertyN
 
 uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropertyName )
 {
-    //! mit getPropertyValue zusammenfassen
+    //! bundle with getPropertyValue
 
     SolarMutexGuard aGuard;
     uno::Any aAny;
@@ -2037,7 +2037,7 @@ uno::Any SAL_CALL ScCellRangesBase::getPropertyDefault( const OUString& aPropert
                 {
                     const SfxItemSet& rSet = pPattern->GetItemSet();
 
-                    switch ( pEntry->nWID )     // fuer Item-Spezial-Behandlungen
+                    switch ( pEntry->nWID )     // for item-specific handling
                     {
                         case ATTR_VALUE_FORMAT:
                             //  default has no language set
@@ -2262,16 +2262,16 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
     {
         if ( IsScItemWid( pEntry->nWID ) )
         {
-            if ( !aRanges.empty() )     // leer = nichts zu tun
+            if ( !aRanges.empty() )     // empty = nothing to do
             {
                 ScDocument& rDoc = pDocShell->GetDocument();
 
-                //  Fuer Teile von zusammengesetzten Items mit mehreren Properties (z.B. Hintergrund)
-                //  muss vorher das alte Item aus dem Dokument geholt werden
-                //! Das kann hier aber nicht erkannt werden
-                //! -> eigenes Flag im PropertyMap-Eintrag, oder was ???
-                //! Item direkt von einzelner Position im Bereich holen?
-                //  ClearInvalidItems, damit auf jeden Fall ein Item vom richtigen Typ da ist
+                //  For parts of compound items with multiple properties (e.g. background)
+                //  the old item has to be first fetched from the document.
+                //! But we can't recognize this case here
+                //! -> an extra flag in PropertyMap entry, or something like that???
+                //! fetch the item directly from its position in the range?
+                //  ClearInvalidItems, so that in any case we have an item with the correct type
 
                 ScPatternAttr aPattern( *GetCurrentAttrsDeep() );
                 SfxItemSet& rSet = aPattern.GetItemSet();
@@ -2376,7 +2376,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_CONDXML:
                     {
                         uno::Reference<sheet::XSheetConditionalEntries> xInterface(aValue, uno::UNO_QUERY);
-                        if ( !aRanges.empty() && xInterface.is() )  // leer = nichts zu tun
+                        if ( !aRanges.empty() && xInterface.is() )  // empty = nothing to do
                         {
                             ScTableConditionalFormat* pFormat =
                                     ScTableConditionalFormat::getImplementation( xInterface );
@@ -2404,7 +2404,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                                 // Then we can apply new conditional format if there is one
                                 if (pFormat->getCount())
                                 {
-                                    ScConditionalFormat* pNew = new ScConditionalFormat( 0, &rDoc );    // Index wird beim Einfuegen gesetzt
+                                    ScConditionalFormat* pNew = new ScConditionalFormat( 0, &rDoc );    // Index will be set on inserting
                                     pFormat->FillFormat( *pNew, &rDoc, eGrammar );
                                     pNew->SetRange( aRanges );
                                     pDocShell->GetDocFunc().ReplaceConditionalFormat( 0, pNew, nTab, aRanges );
@@ -2423,7 +2423,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
                 case SC_WID_UNO_VALIXML:
                     {
                         uno::Reference<beans::XPropertySet> xInterface(aValue, uno::UNO_QUERY);
-                        if ( !aRanges.empty() && xInterface.is() )  // leer = nichts zu tun
+                        if ( !aRanges.empty() && xInterface.is() )  // empty = nothing to do
                         {
                             ScTableValidationObj* pValidObj =
                                     ScTableValidationObj::getImplementation( xInterface );
@@ -3039,7 +3039,7 @@ ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
             xChartRanges = new ScRangeList(aRanges);
         ScChartArray aArr( &pDocShell->GetDocument(), xChartRanges, OUString() );
 
-        // RowAsHdr = ColHeaders und umgekehrt
+        // RowAsHdr = ColHeaders and vice versa
         aArr.SetHeaders( bChartRowAsHdr, bChartColAsHdr );
 
         return aArr.CreateMemChart();
@@ -3325,7 +3325,7 @@ void SAL_CALL ScCellRangesBase::addChartDataChangeEventListener( const uno::Refe
     SolarMutexGuard aGuard;
     if ( pDocShell && !aRanges.empty() )
     {
-        //! auf doppelte testen?
+        //! test for duplicates ?
 
         ScDocument& rDoc = pDocShell->GetDocument();
         ScRangeListRef aRangesRef( new ScRangeList(aRanges) );
@@ -3506,7 +3506,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryContentC
 
         ScMarkData aMarkData;
 
-        //  passende Zellen selektieren
+        //  select matching cells
         for ( size_t i = 0, nCount = aRanges.size(); i < nCount; ++i )
         {
             ScRange aRange = *aRanges[ i ];
@@ -3882,7 +3882,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
                         const uno::Reference<util::XSearchDescriptor>& xDesc )
 {
     SolarMutexGuard aGuard;
-    //  Wenn nichts gefunden wird, soll Null zurueckgegeben werden (?)
+    //  should we return Null if nothing is found(?)
     uno::Reference<container::XIndexAccess> xRet;
     if ( pDocShell && xDesc.is() )
     {
@@ -3894,7 +3894,7 @@ uno::Reference<container::XIndexAccess> SAL_CALL ScCellRangesBase::findAll(
             {
                 ScDocument& rDoc = pDocShell->GetDocument();
                 pSearchItem->SetCommand( SvxSearchCmd::FIND_ALL );
-                //  immer nur innerhalb dieses Objekts
+                //  always only within this object
                 pSearchItem->SetSelection( !lcl_WholeSheet(aRanges) );
 
                 ScMarkData aMark(*GetMarkData());
@@ -3944,7 +3944,7 @@ uno::Reference<uno::XInterface> ScCellRangesBase::Find_Impl(
                     pLastPos->GetVars( nCol, nRow, nTab );
                 else
                 {
-                    nTab = lcl_FirstTab(aRanges);   //! mehrere Tabellen?
+                    nTab = lcl_FirstTab(aRanges);   //! multiple sheets?
                     ScDocument::GetSearchAndReplaceStart( *pSearchItem, nCol, nRow );
                 }
 
@@ -4224,7 +4224,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScCellRangesObj::getRangeAddress
         return aSeq;
     }
 
-    return uno::Sequence<table::CellRangeAddress>(0);   // leer ist moeglich
+    return uno::Sequence<table::CellRangeAddress>(0);   // can be empty
 }
 
 uno::Reference<container::XEnumerationAccess> SAL_CALL ScCellRangesObj::getCells()
@@ -4897,7 +4897,7 @@ uno::Reference<table::XCellRange>  ScCellRangeObj::getCellRangeByName(
         ScRefFlags nParse = aCellRange.ParseAny( aName, &rDoc, rDetails );
         if ( nParse & ScRefFlags::VALID )
         {
-            if ( !(nParse & ScRefFlags::TAB_3D) )   // keine Tabelle angegeben -> auf dieser Tabelle
+            if ( !(nParse & ScRefFlags::TAB_3D) )   // no sheet specified -> this sheet
             {
                 aCellRange.aStart.SetTab(nTab);
                 aCellRange.aEnd.SetTab(nTab);
