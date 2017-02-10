@@ -29,6 +29,19 @@ bool isOverriding(FunctionDecl const * decl) {
         && m->begin_overridden_methods() != m->end_overridden_methods();
 }
 
+bool isDtorOrDealloc(FunctionDecl const * decl) {
+    if (isa<CXXDestructorDecl>(decl)) {
+        return true;
+    }
+    switch (decl->getOverloadedOperator()) {
+    case OO_Delete:
+    case OO_Array_Delete:
+        return true;
+    default:
+        return false;
+    }
+}
+
 class DynExcSpec:
     public RecursiveASTVisitor<DynExcSpec>, public loplugin::RewritePlugin
 {
@@ -75,13 +88,13 @@ public:
                 }
             }
         }
-        bool dtor = isa<CXXDestructorDecl>(decl);
+        bool dtorOrDealloc = isDtorOrDealloc(decl);
         SourceRange source;
 #if CLANG_VERSION >= 40000
         source = decl->getExceptionSpecSourceRange();
 #endif
         if (rewriter != nullptr && source.isValid()) {
-            if (dtor) {
+            if (dtorOrDealloc) {
                 if (replaceText(source, "noexcept(false)")) {
                     return true;
                 }
@@ -125,7 +138,7 @@ public:
         }
         report(
             DiagnosticsEngine::Warning,
-            (dtor
+            (dtorOrDealloc
              ? "replace dynamic exception specification with 'noexcept(false)'"
              : "remove dynamic exception specification"),
             source.isValid() ? source.getBegin() : decl->getLocation())
