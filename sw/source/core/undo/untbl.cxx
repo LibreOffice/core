@@ -2865,20 +2865,21 @@ void SwUndoCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwUndoSplitTable::SwUndoSplitTable( const SwTableNode& rTableNd,
-    SwSaveRowSpan* pRowSp, sal_uInt16 eMode, bool bNewSize )
+    SwSaveRowSpan* pRowSp, SplitTable_HeadlineOption eMode, bool bNewSize )
     : SwUndo( UNDO_SPLIT_TABLE, rTableNd.GetDoc() ),
     nTableNode( rTableNd.GetIndex() ), nOffset( 0 ), mpSaveRowSpan( pRowSp ), pSavTable( nullptr ),
     pHistory( nullptr ), nMode( eMode ), nFormulaEnd( 0 ), bCalcNewSize( bNewSize )
 {
     switch( nMode )
     {
-    case HEADLINE_BOXATRCOLLCOPY:
+    case SplitTable_HeadlineOption::BoxAttrAllCopy:
             pHistory = new SwHistory;
             SAL_FALLTHROUGH;
-    case HEADLINE_BORDERCOPY:
-    case HEADLINE_BOXATTRCOPY:
+    case SplitTable_HeadlineOption::BorderCopy:
+    case SplitTable_HeadlineOption::BoxAttrCopy:
         pSavTable = new SaveTable( rTableNd.GetTable(), 1, false );
         break;
+    default: break;
     }
 }
 
@@ -2922,19 +2923,19 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
 
     switch( nMode )
     {
-    case HEADLINE_BOXATRCOLLCOPY:
+    case SplitTable_HeadlineOption::BoxAttrAllCopy:
         if( pHistory )
             pHistory->TmpRollback( pDoc, nFormulaEnd );
         SAL_FALLTHROUGH;
-    case HEADLINE_BOXATTRCOPY:
-    case HEADLINE_BORDERCOPY:
+    case SplitTable_HeadlineOption::BoxAttrCopy:
+    case SplitTable_HeadlineOption::BorderCopy:
         {
             pSavTable->CreateNew( rTable, false );
             pSavTable->RestoreAttr( rTable );
         }
         break;
 
-    case HEADLINE_CNTNTCOPY:
+    case SplitTable_HeadlineOption::ContentCopy:
         // the created first line has to be removed again
         {
             SwSelBoxes aSelBoxes;
@@ -2946,6 +2947,7 @@ void SwUndoSplitTable::UndoImpl(::sw::UndoRedoContext & rContext)
             rTable.DeleteSel( pDoc, aSelBoxes, nullptr, nullptr, false, false );
         }
         break;
+    default: break;
     }
 
     pDoc->GetNodes().MergeTable( rIdx );

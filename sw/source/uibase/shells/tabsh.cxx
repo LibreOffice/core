@@ -1013,14 +1013,14 @@ void SwTableShell::Execute(SfxRequest &rReq)
             const SfxUInt16Item* pType = rReq.GetArg<SfxUInt16Item>(FN_PARAM_1);
             if( pType )
             {
-                switch( pType->GetValue() )
+                switch( (SplitTable_HeadlineOption)pType->GetValue() )
                 {
-                    case HEADLINE_NONE    :
-                    case HEADLINE_BORDERCOPY:
-                    case HEADLINE_CNTNTCOPY:
-                    case HEADLINE_BOXATTRCOPY:
-                    case HEADLINE_BOXATRCOLLCOPY:
-                        rSh.SplitTable(pType->GetValue()) ;
+                    case SplitTable_HeadlineOption::NONE    :
+                    case SplitTable_HeadlineOption::BorderCopy:
+                    case SplitTable_HeadlineOption::ContentCopy:
+                    case SplitTable_HeadlineOption::BoxAttrCopy:
+                    case SplitTable_HeadlineOption::BoxAttrAllCopy:
+                        rSh.SplitTable((SplitTable_HeadlineOption)pType->GetValue()) ;
                         break;
                     default: ;//wrong parameter, do nothing
                 }
@@ -1033,7 +1033,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 ScopedVclPtr<AbstractSplitTableDialog> pDlg(pFact->CreateSplitTableDialog( GetView().GetWindow(), rSh ));
                 OSL_ENSURE(pDlg, "Dialog creation failed!");
                 pDlg->Execute();
-                rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, pDlg->GetSplitMode() ) );
+                rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, (sal_uInt16)pDlg->GetSplitMode() ) );
                 bCallDone = true;
             }
             break;

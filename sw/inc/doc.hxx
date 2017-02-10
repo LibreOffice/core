@@ -48,6 +48,7 @@
 #include <charfmt.hxx>
 #include <docary.hxx>
 #include <pagedesc.hxx>
+#include "tblenum.hxx"
 
 #include <svtools/embedhlp.hxx>
 
@@ -1279,7 +1280,7 @@ public:
                               bool* pFullTableProtection );
 
     // Split table at baseline position, i.e. create a new table.
-    bool SplitTable( const SwPosition& rPos, sal_uInt16 eMode,
+    bool SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eMode,
                         bool bCalcNewSize );
 
     /** And vice versa: rPos must be in the table that remains. The flag indicates

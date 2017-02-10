@@ -3070,7 +3070,7 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
         const SwTableBox* pSrcBox = pSplPara->GetBoxOfPos( *pBox );
         SwFrameFormat* pFormat = pSrcBox->GetFrameFormat();
 
-        if( HEADLINE_BORDERCOPY == pSplPara->GetMode() )
+        if( SplitTable_HeadlineOption::BorderCopy == pSplPara->GetMode() )
         {
             const SvxBoxItem& rBoxItem = pBox->GetFrameFormat()->GetBox();
             if( !rBoxItem.GetTop() )
@@ -3096,7 +3096,7 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
             if( aTmpSet.Count() )
                 pBox->ClaimFrameFormat()->SetFormatAttr( aTmpSet );
 
-            if( HEADLINE_BOXATRCOLLCOPY == pSplPara->GetMode() )
+            if( SplitTable_HeadlineOption::BoxAttrAllCopy == pSplPara->GetMode() )
             {
                 SwNodeIndex aIdx( *pSrcBox->GetSttNd(), 1 );
                 SwContentNode* pCNd = aIdx.GetNode().GetContentNode();
@@ -3129,7 +3129,7 @@ void sw_BoxSetSplitBoxFormats( SwTableBox* pBox, SwCollectTableLineBoxes* pSplPa
  *                     Boxes' Max; but only if Size is using absolute
  *                     values (USHRT_MAX)
  */
-bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
+bool SwDoc::SplitTable( const SwPosition& rPos, SplitTable_HeadlineOption eHdlnMode,
                         bool bCalcNewSize )
 {
     SwNode* pNd = &rPos.nNode.GetNode();
@@ -3196,7 +3196,7 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
         {
         // Set the lower Border of the preceding Line to
         // the upper Border of the current one
-        case HEADLINE_BORDERCOPY:
+        case SplitTable_HeadlineOption::BorderCopy:
             {
                 SwCollectTableLineBoxes aPara( false, eHdlnMode );
                 SwTableLine* pLn = rTable.GetTabLines()[
@@ -3217,11 +3217,11 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
             break;
 
         // Take over the Attributes of the first Line to the new one
-        case HEADLINE_BOXATTRCOPY:
-        case HEADLINE_BOXATRCOLLCOPY:
+        case SplitTable_HeadlineOption::BoxAttrCopy:
+        case SplitTable_HeadlineOption::BoxAttrAllCopy:
             {
                 SwHistory* pHst = nullptr;
-                if( HEADLINE_BOXATRCOLLCOPY == eHdlnMode && pUndo )
+                if( SplitTable_HeadlineOption::BoxAttrAllCopy == eHdlnMode && pUndo )
                     pHst = pUndo->GetHistory();
 
                 SwCollectTableLineBoxes aPara( true, eHdlnMode, pHst );
@@ -3238,13 +3238,13 @@ bool SwDoc::SplitTable( const SwPosition& rPos, sal_uInt16 eHdlnMode,
             }
             break;
 
-        case HEADLINE_CNTNTCOPY:
+        case SplitTable_HeadlineOption::ContentCopy:
             rTable.CopyHeadlineIntoTable( *pNew );
             if( pUndo )
                 pUndo->SetTableNodeOffset( pNew->GetIndex() );
             break;
 
-        case HEADLINE_NONE:
+        case SplitTable_HeadlineOption::NONE:
             // Switch off repeating the Header
             pNew->GetTable().SetRowsToRepeat( 0 );
             break;

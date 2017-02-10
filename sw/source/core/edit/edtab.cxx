@@ -426,7 +426,7 @@ OUString SwEditShell::GetTableBoxText() const
     return sRet;
 }
 
-bool SwEditShell::SplitTable( sal_uInt16 eMode )
+bool SwEditShell::SplitTable( SplitTable_HeadlineOption eMode )
 {
     bool bRet = false;
     SwPaM *pCursor = GetCursor();

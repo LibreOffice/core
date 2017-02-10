@@ -108,7 +108,7 @@ class AbstractSwBreakDlg_Impl : public AbstractSwBreakDlg
 class AbstractSplitTableDialog_Impl : public AbstractSplitTableDialog // add for
 {
     DECL_ABSTDLG_BASE(AbstractSplitTableDialog_Impl, SwSplitTableDlg)
-    virtual sal_uInt16 GetSplitMode() override;
+    virtual SplitTable_HeadlineOption GetSplitMode() override;
 };
 
 class AbstractTabDialog_Impl : virtual public SfxAbstractTabDialog

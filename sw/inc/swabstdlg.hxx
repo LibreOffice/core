@@ -37,6 +37,7 @@
 #include <boost/optional.hpp>
 #include "dbmgr.hxx"
 #include <cnttab.hxx>
+#include <tblenum.hxx>
 
 class SfxViewFrame;
 class SfxBindings;
@@ -253,7 +254,7 @@ class AbstractSplitTableDialog : public VclAbstractDialog // add for
 protected:
     virtual ~AbstractSplitTableDialog() override = default;
 public:
-    virtual sal_uInt16 GetSplitMode() = 0;
+    virtual SplitTable_HeadlineOption GetSplitMode() = 0;
 };
 
 class AbstractSwConvertTableDlg :  public VclAbstractDialog

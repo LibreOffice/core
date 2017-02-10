@@ -1128,7 +1128,7 @@ void SAL_CALL SwVbaSelection::SplitTable()
         SwFEShell* pFEShell = pDocShell->GetFEShell();
         if( pFEShell )
         {
-            pFEShell->SplitTable( HEADLINE_CNTNTCOPY );
+            pFEShell->SplitTable( SplitTable_HeadlineOption::ContentCopy );
         }
     }
 }

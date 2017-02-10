@@ -66,12 +66,13 @@ class SwCollectTableLineBoxes
     std::vector<sal_uInt16> aPosArr;
     std::vector<SwTableBox*> m_Boxes;
     SwHistory* pHst;
-    sal_uInt16 nMode, nWidth;
+    SplitTable_HeadlineOption nMode;
+    sal_uInt16 nWidth;
     bool bGetFromTop : 1;
     bool bGetValues : 1;
 
 public:
-    SwCollectTableLineBoxes( bool bTop, sal_uInt16 nMd = 0, SwHistory* pHist=nullptr )
+    SwCollectTableLineBoxes( bool bTop, SplitTable_HeadlineOption nMd = SplitTable_HeadlineOption::NONE, SwHistory* pHist=nullptr )
         :
         pHst( pHist ), nMode( nMd ), nWidth( 0 ),
         bGetFromTop( bTop ), bGetValues( true )
@@ -95,7 +96,7 @@ public:
     bool IsGetFromTop() const           { return bGetFromTop; }
     bool IsGetValues() const            { return bGetValues; }
 
-    sal_uInt16 GetMode() const              { return nMode; }
+    SplitTable_HeadlineOption GetMode() const { return nMode; }
     void SetValues( bool bFlag )        { bGetValues = false; nWidth = 0;
                                           bGetFromTop = bFlag; }
     bool Resize( sal_uInt16 nOffset, sal_uInt16 nWidth );

@@ -25,6 +25,7 @@
 #include <set>
 #include <swtypes.hxx>
 #include <itabenum.hxx>
+#include <tblenum.hxx>
 #include <memory>
 #include <vector>
 
@@ -326,12 +327,13 @@ class SwUndoSplitTable : public SwUndo
     SwSaveRowSpan* mpSaveRowSpan; // stores row span values at the splitting row
     SaveTable* pSavTable;
     SwHistory* pHistory;
-    sal_uInt16 nMode, nFormulaEnd;
+    SplitTable_HeadlineOption nMode;
+    sal_uInt16 nFormulaEnd;
     bool bCalcNewSize;
 
 public:
     SwUndoSplitTable( const SwTableNode& rTableNd, SwSaveRowSpan* pRowSp,
-            sal_uInt16 nMode, bool bCalcNewSize );
+            SplitTable_HeadlineOption nMode, bool bCalcNewSize );
 
     virtual ~SwUndoSplitTable() override;
 

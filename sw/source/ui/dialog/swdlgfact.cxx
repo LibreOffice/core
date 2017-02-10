@@ -204,7 +204,7 @@ void AbstractSwAsciiFilterDlg_Impl::FillOptions( SwAsciiOptions& rOptions )
     pDlg->FillOptions(rOptions);
 }
 
-sal_uInt16 AbstractSplitTableDialog_Impl::GetSplitMode()
+SplitTable_HeadlineOption AbstractSplitTableDialog_Impl::GetSplitMode()
 {
     return pDlg->GetSplitMode();
 }

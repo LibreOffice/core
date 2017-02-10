@@ -711,7 +711,7 @@ public:
     void SetTableChgMode( TableChgMode eMode );
 
     /// Split table at cursor position.
-    bool SplitTable( sal_uInt16 eMode );
+    bool SplitTable( SplitTable_HeadlineOption eMode );
 
     /** Merge tables.
 

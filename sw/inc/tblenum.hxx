@@ -48,13 +48,13 @@ enum TableChgMode
     TBLVAR_CHGABS           // Table variable, change all neighbours.
 };
 
-enum SplitTable_HeadlineOption
+enum class SplitTable_HeadlineOption
 {
-    HEADLINE_NONE = 0,          // Leave everything in place.
-    HEADLINE_BORDERCOPY,        // Copy border of the previous line.
-    HEADLINE_CNTNTCOPY,         // Copy 1st line with all contents.
-    HEADLINE_BOXATTRCOPY,       // Copy box attributes of 1st line.
-    HEADLINE_BOXATRCOLLCOPY     // Copy box attributes and paragraph styles of 1st line.
+    NONE = 0,          // Leave everything in place.
+    BorderCopy,        // Copy border of the previous line.
+    ContentCopy,         // Copy 1st line with all contents.
+    BoxAttrCopy,       // Copy box attributes of 1st line.
+    BoxAttrAllCopy     // Copy box attributes and paragraph styles of 1st line.
 };
 
 enum TableMergeErr

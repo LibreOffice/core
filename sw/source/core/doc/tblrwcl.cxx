@@ -2142,7 +2142,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         if( USHRT_MAX != nLnPos && nLnPos )
         {
             // There is a Line before it
-            SwCollectTableLineBoxes aLnPara( false, HEADLINE_BORDERCOPY );
+            SwCollectTableLineBoxes aLnPara( false, SplitTable_HeadlineOption::BorderCopy );
 
             pLn = GetTabLines()[ nLnPos - 1 ];
             for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
@@ -2167,7 +2167,7 @@ bool SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
         if( nLnPos < GetTabLines().size() - 1 )
         {
             // There is a Line following it
-            SwCollectTableLineBoxes aLnPara( true, HEADLINE_BORDERCOPY );
+            SwCollectTableLineBoxes aLnPara( true, SplitTable_HeadlineOption::BorderCopy );
 
             pLn = GetTabLines()[ nLnPos + 1 ];
             for( SwTableBoxes::iterator it = pLn->GetTabBoxes().begin();
