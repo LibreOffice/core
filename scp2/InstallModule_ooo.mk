@@ -30,11 +30,6 @@ $(eval $(call gb_InstallModule_define_if_set,scp2/ooo,\
 	WITH_MYSPELL_DICTS \
 ))
 
-$(eval $(call gb_InstallModule_define_value_if_set,scp2/ooo,\
-	MINGW_GCCDLL \
-	MINGW_GXXDLL \
-))
-
 $(eval $(call gb_InstallModule_add_defs,scp2/ooo,\
 	$(if $(SYSTEM_HSQLDB),\
 		-DHSQLDB_JAR=\""$(call gb_Helper_make_path,$(HSQLDB_JAR))"\" \
@@ -75,9 +70,6 @@ $(eval $(call gb_InstallModule_add_scpfiles,scp2/ooo,\
     scp2/source/ooo/module_lang_template \
     scp2/source/ooo/profileitem_ooo \
     scp2/source/ooo/scpaction_ooo \
-    $(if $(filter WNTGCC,$(OS)$(COM)),\
-		scp2/source/ooo/mingw_dlls \
-	) \
     scp2/source/ooo/module_filter \
     $(if $(filter-out MACOSX WNT,$(OS)), \
 		scp2/source/ooo/module_libreofficekit \

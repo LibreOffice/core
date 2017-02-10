@@ -8,4 +8,3 @@ policy.1.0.cli_oootypes.dll
 policy.1.0.cli_ure.dll
 policy.1.0.cli_cppuhelper.dll
 policy.1.0.cli_basetypes.dll
-mingwm10.dll

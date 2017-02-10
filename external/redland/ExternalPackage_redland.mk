@@ -13,8 +13,6 @@ $(eval $(call gb_ExternalPackage_use_external_project,redland,redland))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,redland,$(LIBO_LIB_FOLDER)/librdf-lo.$(REDLAND_MAJOR).dylib,src/.libs/librdf-lo.$(REDLAND_MAJOR).dylib))
-else ifeq ($(OS)-$(COM),WNT-GCC)
-$(eval $(call gb_ExternalPackage_add_file,redland,$(LIBO_LIB_FOLDER)/librdf-$(REDLAND_MAJOR).dll,src/.libs/librdf-$(REDLAND_MAJOR).dll))
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,redland,$(LIBO_LIB_FOLDER)/librdf.dll,src/.libs/librdf.dll))
 else ifeq ($(DISABLE_DYNLOADING),)

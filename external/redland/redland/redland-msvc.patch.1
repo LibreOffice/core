@@ -86,17 +86,7 @@
  
  /* Define to 1 if you have the <openssl/crypto.h> header file. */
  /* #undef HAVE_OPENSSL_CRYPTO_H */
-@@ -178,6 +181,9 @@
- 
- /* Define to 1 if you have the <pthread.h> header file. */
- /* #undef HAVE_PTHREAD_H */
-+#ifdef __MINGW32__
-+#undef HAVE_PTHREAD_H
-+#endif
- 
- /* Define to 1 if you have the <stdint.h> header file. */
- #define HAVE_STDINT_H 1
-@@ -261,7 +270,7 @@
+@@ -261,7 +267,7 @@
  /*#undef STORAGE_POSTGRESQL*/
  
  /* Building SQLite storage */

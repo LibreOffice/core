@@ -353,8 +353,7 @@ void test::oustring::StringLiterals::checkOUStringLiteral1()
 }
 
 void test::oustring::StringLiterals::checkUtf16() {
-#if HAVE_CXX11_UTF16_STRING_LITERAL \
-        && (!defined SAL_W32 || defined __MINGW32__)
+#if HAVE_CXX11_UTF16_STRING_LITERAL && !defined SAL_W32
         // sal_Unicode is still wchar_t not char16_t even for MSVC 2015
     rtl::OUString s1(u"abc");
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("abc"), s1);

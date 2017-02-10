@@ -794,10 +794,6 @@ $(eval $(call gb_Helper_register_packages, \
 	$(if $(filter DESKTOP,$(BUILD_TYPE)),desktop_scripts_install) \
 	extras_fonts \
 	extras_wordbook \
-	$(if $(filter WNTGCC,$(OS)$(COM)), \
-		mingw_dlls \
-		mingw_gccdlls \
-	) \
 	$(if $(filter MSC,$(COM)),msvc_dlls) \
 	more_fonts_conf \
 	instsetoo_native_setup \

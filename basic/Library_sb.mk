@@ -144,6 +144,9 @@ ifeq ($(OS)$(CPUNAME),WNTINTEL)
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/dllmgr-x86 \
 ))
+$(eval $(call gb_Library_add_asmobjects,sb,\
+	basic/source/runtime/wnt-x86 \
+))
 else
 ifeq ($(OS)$(CPUNAME),WNTX86_64)
 $(eval $(call gb_Library_add_exception_objects,sb,\
@@ -154,16 +157,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/dllmgr-none \
 ))
 endif
-endif
-ifeq ($(OS)$(COM)$(CPUNAME),WNTMSCINTEL)
-$(eval $(call gb_Library_add_asmobjects,sb,\
-	basic/source/runtime/wnt-x86 \
-))
-endif
-ifeq ($(OS)$(COM)$(CPUNAME),WNTGCCINTEL)
-$(eval $(call gb_Library_add_asmobjects,sb,\
-	basic/source/runtime/wnt-mingw \
-))
 endif
 
 # Runtime dependency for unit-tests

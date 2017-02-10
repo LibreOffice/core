@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,python3,python3))
 
 $(eval $(call gb_ExternalPackage_use_external_project,python3,python3))
 
-ifeq ($(OS)-$(COM),WNT-MSC)
+ifeq ($(OS),WNT)
 ifeq ($(CPUNAME),X86_64)
 python_arch_subdir=amd64/
 endif
@@ -36,10 +36,6 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 	PCbuild/$(python_arch_subdir)unicodedata$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)winsound$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 ))
-else ifeq ($(OS),WNT) # MinGW
-# TODO how are C modules called on this platform?
-$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/bin/python.exe,python.exe))
-$(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python$(PYTHON_VERSION_MAJOR).dll,python$(PYTHON_VERSION_MAJOR).dll))
 else
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python.bin,python))
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/libpython$(PYTHON_VERSION_MAJOR).so,libpython$(PYTHON_VERSION_MAJOR).so))
@@ -116,7 +112,7 @@ endif
 # (+ toplevel for pyconfig.h)
 
 # that one is generated...
-ifneq ($(OS)-$(COM),WNT-MSC)
+ifneq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
 	LO_lib/_sysconfigdata.py \
 ))

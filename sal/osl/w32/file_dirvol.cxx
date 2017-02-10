@@ -37,9 +37,6 @@
 #include <rtl/character.hxx>
 
 #include <tchar.h>
-#ifdef __MINGW32__
-#include <ctype.h>
-#endif
 
 static const wchar_t UNC_PREFIX[] = L"\\\\";
 static const wchar_t BACKSLASH = '\\';

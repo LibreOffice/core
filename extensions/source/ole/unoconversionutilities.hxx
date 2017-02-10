@@ -57,10 +57,6 @@ typedef unsigned char   BYTE;
 using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
-#ifdef __MINGW32__
-using namespace com::sun::star::bridge;
-using namespace com::sun::star::bridge::ModelDependent;
-#endif
 using namespace com::sun::star::bridge::oleautomation;
 namespace ole_adapter
 {
@@ -85,10 +81,6 @@ typedef std::unordered_map<sal_uIntPtr, WeakReference<XInterface> >::const_itera
 extern std::unordered_map<sal_uIntPtr, WeakReference<XInterface> > UnoObjToWrapperMap;
 typedef std::unordered_map<sal_uIntPtr, WeakReference<XInterface> >::iterator IT_Uno;
 typedef std::unordered_map<sal_uIntPtr, WeakReference<XInterface> >::const_iterator CIT_Uno;
-#ifdef __MINGW32__
-inline void reduceRange( Any& any);
-#endif
-
 
 // createUnoObjectWrapper gets a wrapper instance by calling createUnoWrapperInstance
     // and initializes it via XInitialization. The wrapper object is required to implement
@@ -1523,11 +1515,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 case VT_DISPATCH:
                 {
                     //check if it is a UNO type
-#ifdef __MINGW32__
-                    CComQIPtr<IUnoTypeWrapper, &__uuidof(IUnoTypeWrapper)> spType((IUnknown*) var.byref);
-#else
                     CComQIPtr<IUnoTypeWrapper> spType(static_cast<IUnknown*>(var.byref));
-#endif
                     if (spType)
                     {
                         CComBSTR sName;
@@ -1669,21 +1657,13 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     {
         spUnknown = pVar->punkVal;
         if (spUnknown)
-#ifdef __MINGW32__
-            spUnknown->QueryInterface( IID_IDispatch, reinterpret_cast<LPVOID*>( & spDispatch.p));
-#else
             spUnknown.QueryInterface( & spDispatch.p);
-#endif
     }
     else if (pVar->vt == VT_DISPATCH && pVar->pdispVal != nullptr)
     {
         CComPtr<IDispatch> spDispatch2(pVar->pdispVal);
         if (spDispatch2)
-#ifdef __MINGW32__
-            spDispatch2->QueryInterface( IID_IUnknown, reinterpret_cast<LPVOID*>( & spUnknown.p));
-#else
             spDispatch2.QueryInterface( & spUnknown.p);
-#endif
     }
 
     static Type VOID_TYPE= Type();
@@ -1725,11 +1705,7 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     // Check if "spUnknown" is a UNO wrapper, that is an UNO object that has been
     // passed to COM. Then it supports IUnoObjectWrapper
     // and we extract the original UNO object.
-#ifdef __MINGW32__
-    CComQIPtr<IUnoObjectWrapper, &__uuidof(IUnoObjectWrapper)> spUno( spUnknown);
-#else
     CComQIPtr<IUnoObjectWrapper> spUno( spUnknown);
-#endif
     if( spUno)
     {   // it is a wrapper
          Reference<XInterface> xInt;

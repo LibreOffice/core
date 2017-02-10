@@ -31,7 +31,6 @@ $(call gb_ExternalProject_get_state_target,lcms2,build):
 			$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 			CPPFLAGS=" $(SOLARINC)" \
 			CFLAGS='$(CFLAGS) $(if $(debug),$(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS),$(gb_COMPILEROPTFLAGS))' \
-			$(if $(filter-out WNTGCC,$(OS)$(COM)),,CPPFLAGS=" -DCMS_DLL_BUILD") \
 			$(if $(DISABLE_DYNLOADING), \
 				--enable-static --disable-shared \
 			, \

@@ -174,15 +174,11 @@ class ComPtr
             }
         }
 
-#ifndef __MINGW32__
-
         template< class T_QUERYINTERFACE >
         HRESULT query(T_QUERYINTERFACE** pQuery)
         {
             return m_pInterface->QueryInterface(__uuidof(T_QUERYINTERFACE), reinterpret_cast<void**>(pQuery));
         }
-#endif
-
 
         bool equals(IUnknown* pCheck)
         {

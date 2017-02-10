@@ -779,8 +779,7 @@ public:
         return append( &c, 1 );
     }
 
-#if LIBO_INTERNAL_ONLY && \
-    (!defined SAL_W32 || defined __MINGW32__ || defined __clang__)
+#if LIBO_INTERNAL_ONLY && (!defined SAL_W32 || defined __clang__)
         // cf. sal/types.h sal_Unicode
     void append(sal_uInt16) = delete;
 #endif

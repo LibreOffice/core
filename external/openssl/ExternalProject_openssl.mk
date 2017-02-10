@@ -42,11 +42,7 @@ OPENSSL_PLATFORM := \
         ios-armv7\
       ,\
         $(if $(filter WNT,$(OS)),\
-          $(if $(filter GCC,$(COM)),\
-            mingw\
-          ,\
-            $(if $(filter INTEL,$(CPUNAME)),VC-WIN32,VC-WIN64A)\
-          )\
+          $(if $(filter INTEL,$(CPUNAME)),VC-WIN32,VC-WIN64A)\
         ,\
           $(if $(filter MACOSX,$(OS)),\
             $(if $(filter POWERPC,$(CPUNAME)),darwin-ppc-cc)\

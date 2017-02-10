@@ -27,9 +27,6 @@
 #if defined(UNX)
 #include <unistd.h>
 #endif
-#ifdef __MINGW32__
-#include <unistd.h>
-#endif
 
 #include <reflread.hxx>
 

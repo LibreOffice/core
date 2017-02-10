@@ -41,9 +41,6 @@ Module gid_Module_Pyuno
             gid_Dir_Py_PythonCore_Lib);
     Files = (auto_python_ALL,
              gid_File_Pyuno_Rdb,
-             gid_File_Py_Bin_Python,
-             gid_File_Py_Python_Core,
-             gid_File_Py_Python_Bin,
              gid_File_Lib_Python_So,
              gid_File_Lib_Python3_So,
              gid_File_Share_Registry_Pyuno_Xcd);

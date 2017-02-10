@@ -9,10 +9,6 @@
 
 $(eval $(call gb_Module_Module,external))
 
-ifeq ($(OS)$(COM),WNTGCC)
-$(eval $(call gb_Module_add_moduledir,external,mingw-externals))
-endif
-
 ifeq ($(COM),MSC)
 $(eval $(call gb_Module_add_moduledir,external,msc-externals))
 endif
