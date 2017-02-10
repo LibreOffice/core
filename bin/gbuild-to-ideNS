@@ -199,10 +199,6 @@ class GbuildParser:
                 if path not in self.target_by_path:
                     self.target_by_path[path] = set()
                 self.target_by_path[path] |= set([target])
-        for path in self.target_by_path:
-            if len(set(self.target_by_path[path])) > 1:
-                print('fdo#70422: multiple target use dir %s: %s' % (
-                    path, ', '.join([target.short_name() for target in set(self.target_by_path[path])])))
         for location in self.target_by_location:
             self.modulenamelist.append(os.path.split(location)[1])
         return self
