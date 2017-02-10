@@ -104,7 +104,7 @@ bool PowerPointImport::importDocument()
     {
         // Construct a warning message.
         INetURLObject aURL(getFileUrl());
-        SfxErrorContext aContext(ERRCTX_SFX_OPENDOC, aURL.getName(INetURLObject::LAST_SEGMENT), nullptr, RID_ERRCTX);
+        SfxErrorContext aContext(ERRCTX_SFX_OPENDOC, aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset), nullptr, RID_ERRCTX);
         OUString aWarning;
         aContext.GetString(ERRCODE_WARNING_MASK, aWarning);
         aWarning += ":\n";
