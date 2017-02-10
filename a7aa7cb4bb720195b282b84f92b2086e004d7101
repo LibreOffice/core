@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_72c1962e",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2402,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-10T01:48:19Z",
+      "side": 1,
+      "message": "We need to compare if hidden row is equal to default, like:\n( bHidden !\u003d bIsDefaultRowsIsHidden ) ||\nI need to think about it, how to get access to  bIsDefaultRowsIsHidden variable from there.",
+      "revId": "a7aa7cb4bb720195b282b84f92b2086e004d7101",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
