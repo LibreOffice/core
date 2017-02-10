@@ -10,6 +10,7 @@
 $(eval $(call gb_Module_Module,gpgme))
 
 $(eval $(call gb_Module_add_targets,gpgme,\
+	ExternalProject_gpgme \
 	UnpackedTarball_gpgme \
 ))
 
