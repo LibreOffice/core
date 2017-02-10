@@ -247,7 +247,7 @@ private:
 public:
                     ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
                     ScViewData( const ScViewData& rViewData );
-                    ~ScViewData();
+                    ~ScViewData() COVERITY_NOEXCEPT_FALSE;
 
     void            InitData( ScDocument* pDocument );
 

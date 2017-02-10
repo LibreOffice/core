@@ -50,7 +50,7 @@ class SVL_DLLPUBLIC SfxUndoAction
 {
 public:
                             SfxUndoAction();
-    virtual                 ~SfxUndoAction();
+    virtual                 ~SfxUndoAction() COVERITY_NOEXCEPT_FALSE;
 
     virtual void            Undo();
     virtual void            UndoWithContext( SfxUndoContext& i_context );

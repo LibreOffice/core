@@ -38,6 +38,10 @@ public:
         ,nHeight(sal_uInt16(rSize.Height()))
     {
     }
+    ~SwPosSize() COVERITY_NOEXCEPT_FALSE {}
+    SwPosSize(const SwPosSize&) = default;
+    SwPosSize(SwPosSize&&) = default;
+    SwPosSize& operator=(SwPosSize&&) = default;
     sal_uInt16 Height() const { return nHeight; }
     void Height( const sal_uInt16 nNew ) { nHeight = nNew; }
     sal_uInt16 Width() const { return nWidth; }

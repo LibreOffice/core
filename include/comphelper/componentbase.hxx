@@ -58,7 +58,7 @@ namespace comphelper
         {
         }
 
-        ~ComponentBase() {}
+        ~ComponentBase() COVERITY_NOEXCEPT_FALSE {}
 
         /** marks the instance as initialized
 

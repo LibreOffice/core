@@ -103,9 +103,8 @@ inline interface_type * Reference< interface_type >::iset_throw(
         NULL );
 }
 
-
 template< class interface_type >
-inline Reference< interface_type >::~Reference()
+inline Reference< interface_type >::~Reference() COVERITY_NOEXCEPT_FALSE
 {
     if (_pInterface)
         _pInterface->release();

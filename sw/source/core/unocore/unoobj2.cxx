@@ -248,7 +248,7 @@ UnoActionContext::UnoActionContext(SwDoc *const pDoc)
     }
 }
 
-UnoActionContext::~UnoActionContext()
+UnoActionContext::~UnoActionContext() COVERITY_NOEXCEPT_FALSE
 {
     // Doc may already have been removed here
     if (m_pDoc)

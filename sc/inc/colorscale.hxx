@@ -55,7 +55,7 @@ public:
     ScColorScaleEntry();
     ScColorScaleEntry(const ScColorScaleEntry& rEntry);
     ScColorScaleEntry(ScDocument* pDoc, const ScColorScaleEntry& rEntry);
-    ~ScColorScaleEntry();
+    ~ScColorScaleEntry() COVERITY_NOEXCEPT_FALSE;
 
     const Color& GetColor() const { return maColor;}
     void SetColor(const Color&);

@@ -761,7 +761,7 @@ SwOLEObj::SwOLEObj( const OUString &rString, sal_Int64 nAspect ) :
     xOLERef.SetViewAspect( nAspect );
 }
 
-SwOLEObj::~SwOLEObj()
+SwOLEObj::~SwOLEObj() COVERITY_NOEXCEPT_FALSE
 {
     if(m_pDeflateData)
     {

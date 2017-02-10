@@ -97,7 +97,7 @@ SalI18NImeStatus* SalInstance::CreateI18NImeStatus()
     return new SalI18NImeStatus;
 }
 
-SalTimer::~SalTimer()
+SalTimer::~SalTimer() COVERITY_NOEXCEPT_FALSE
 {
 }
 

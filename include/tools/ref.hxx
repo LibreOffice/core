@@ -126,7 +126,7 @@ class TOOLS_DLLPUBLIC SvRefBase
     unsigned int bNoDelete : 1;
 
 protected:
-    virtual         ~SvRefBase();
+    virtual         ~SvRefBase() COVERITY_NOEXCEPT_FALSE;
 
 public:
                     SvRefBase() : nRefCount(0), bNoDelete(1) {}
@@ -217,6 +217,7 @@ public:
     SvCompatWeakRef( ) {}
     SvCompatWeakRef( T* pObj )
                          {  if( pObj ) _xHdl = pObj->GetHdl(); }
+    ~SvCompatWeakRef() COVERITY_NOEXCEPT_FALSE {}
     SvCompatWeakRef& operator = ( T * pObj )
                          {  _xHdl = pObj ? pObj->GetHdl() : nullptr; return *this; }
     bool          is() const

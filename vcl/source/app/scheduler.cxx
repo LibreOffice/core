@@ -351,7 +351,7 @@ Task::Task( const Task& rTask )
         Start();
 }
 
-Task::~Task()
+Task::~Task() COVERITY_NOEXCEPT_FALSE
 {
     if ( mpSchedulerData )
     {

@@ -62,7 +62,7 @@ DragAndDropContext::DragAndDropContext (SlideSorter& rSlideSorter)
     rSlideSorter.GetController().GetInsertionIndicatorHandler()->UpdateIndicatorIcon(pTransferable);
 }
 
-DragAndDropContext::~DragAndDropContext()
+DragAndDropContext::~DragAndDropContext() COVERITY_NOEXCEPT_FALSE
 {
     SetTargetSlideSorter (Point(0,0));
 }

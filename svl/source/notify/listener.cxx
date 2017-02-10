@@ -33,7 +33,7 @@ SvtListener::SvtListener() {}
 SvtListener::SvtListener( const SvtListener &r ) :
     maBroadcasters(r.maBroadcasters) {}
 
-SvtListener::~SvtListener()
+SvtListener::~SvtListener() COVERITY_NOEXCEPT_FALSE
 {
     // Unregister itself from all broadcasters it's listening to.
     EndListeningAll();

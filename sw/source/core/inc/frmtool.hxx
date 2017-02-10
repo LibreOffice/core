@@ -184,7 +184,7 @@ protected:
 
 public:
     SwFrameNotify( SwFrame *pFrame );
-    ~SwFrameNotify();
+    ~SwFrameNotify() COVERITY_NOEXCEPT_FALSE;
 
     const SwRect &Frame() const { return maFrame; }
     void SetInvaKeep() { mbInvaKeep = true; }

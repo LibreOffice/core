@@ -93,7 +93,7 @@ class SwImplShellAction
     CurrShell* pCurrSh;
 public:
     explicit SwImplShellAction( SwDoc& rDoc );
-    ~SwImplShellAction();
+    ~SwImplShellAction() COVERITY_NOEXCEPT_FALSE;
     SwImplShellAction(const SwImplShellAction&) = delete;
     SwImplShellAction& operator=(const SwImplShellAction&) = delete;
 };
@@ -113,7 +113,7 @@ SwImplShellAction::SwImplShellAction( SwDoc& rDoc )
     }
 }
 
-SwImplShellAction::~SwImplShellAction()
+SwImplShellAction::~SwImplShellAction() COVERITY_NOEXCEPT_FALSE
 {
     if( pCurrSh )
     {
