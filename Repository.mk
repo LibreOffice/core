@@ -803,7 +803,6 @@ $(eval $(call gb_Helper_register_packages, \
 	oox_generated \
 	postprocess_images \
 	postprocess_registry \
-	python_zipcore \
 	readlicense_oo_readmes \
 	setup_native_misc \
 	share \
