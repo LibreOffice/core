@@ -560,19 +560,19 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
         else
         {
             // Even if we already have something, prefer URLs if possible.
-            SwContentAtPos aUrlPos(SwContentAtPos::SW_INETATTR);
+            SwContentAtPos aUrlPos(IsAttrAtPos::InetAttr);
             if (bCntAtPos || rSh.GetContentAtPos(rLPt, aUrlPos))
             {
                 SwContentAtPos aSwContentAtPos(
-                    SwContentAtPos::SW_FIELD |
-                    SwContentAtPos::SW_CLICKFIELD |
-                    SwContentAtPos::SW_INETATTR |
-                    SwContentAtPos::SW_FTN |
-                    SwContentAtPos::SW_SMARTTAG );
+                    IsAttrAtPos::Field |
+                    IsAttrAtPos::ClickField |
+                    IsAttrAtPos::InetAttr |
+                    IsAttrAtPos::Ftn |
+                    IsAttrAtPos::SmartTag );
                 if( rSh.GetContentAtPos( rLPt, aSwContentAtPos) )
                 {
                     // Is edit inline input field
-                    if (SwContentAtPos::SW_FIELD == aSwContentAtPos.eContentAtPos)
+                    if (IsAttrAtPos::Field == aSwContentAtPos.eContentAtPos)
                     {
                         if ( aSwContentAtPos.pFndTextAttr != nullptr
                             && aSwContentAtPos.pFndTextAttr->Which() == RES_TXTATR_INPUTFIELD)
@@ -584,11 +584,11 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
                     }
                     else
                     {
-                        const bool bClickToFollow = SwContentAtPos::SW_INETATTR == aSwContentAtPos.eContentAtPos ||
-                                                    SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eContentAtPos;
+                        const bool bClickToFollow = IsAttrAtPos::InetAttr == aSwContentAtPos.eContentAtPos ||
+                                                    IsAttrAtPos::SmartTag == aSwContentAtPos.eContentAtPos;
                         if( !bClickToFollow ||
-                            (SwContentAtPos::SW_INETATTR == aSwContentAtPos.eContentAtPos && bExecHyperlinks) ||
-                            (SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eContentAtPos && bExecSmarttags) )
+                            (IsAttrAtPos::InetAttr == aSwContentAtPos.eContentAtPos && bExecHyperlinks) ||
+                            (IsAttrAtPos::SmartTag == aSwContentAtPos.eContentAtPos && bExecSmarttags) )
                             eStyle = PointerStyle::RefHand;
                     }
                 }
@@ -2736,7 +2736,7 @@ void SwEditWin::RstMBDownFlags()
  */
 static bool lcl_urlOverBackground(SwWrtShell& rSh, const Point& rDocPos)
 {
-    SwContentAtPos aSwContentAtPos(SwContentAtPos::SW_INETATTR);
+    SwContentAtPos aSwContentAtPos(IsAttrAtPos::InetAttr);
     SdrObject* pSelectableObj = rSh.GetObjAt(rDocPos);
 
     return rSh.GetContentAtPos(rDocPos, aSwContentAtPos) && pSelectableObj->GetLayer() == rSh.GetDoc()->getIDocumentDrawModelAccess().GetHellId();
@@ -3598,8 +3598,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                                     if( bExecHyperlinks )
                                     {
                                         SwContentAtPos aContentAtPos(
-                                            SwContentAtPos::SW_FTN |
-                                            SwContentAtPos::SW_INETATTR );
+                                            IsAttrAtPos::Ftn |
+                                            IsAttrAtPos::InetAttr );
 
                                         if( rSh.GetContentAtPos( aDocPos, aContentAtPos ) )
                                         {
@@ -3625,8 +3625,8 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     default:
                         if( !rSh.IsViewLocked() )
                         {
-                            SwContentAtPos aContentAtPos( SwContentAtPos::SW_CLICKFIELD |
-                                                        SwContentAtPos::SW_INETATTR );
+                            SwContentAtPos aContentAtPos( IsAttrAtPos::ClickField |
+                                                        IsAttrAtPos::InetAttr );
                             if( rSh.GetContentAtPos( aDocPos, aContentAtPos ) &&
                                 !rSh.IsReadOnlyAvailable() &&
                                 aContentAtPos.IsInProtectSect() )
@@ -3640,7 +3640,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     rSh.ClearGCAttr();
                 }
 
-                SwContentAtPos aFieldAtPos(SwContentAtPos::SW_FIELD);
+                SwContentAtPos aFieldAtPos(IsAttrAtPos::Field);
                 bool bEditableFieldClicked = false;
 
                 // Are we clicking on a field?
@@ -3717,7 +3717,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
         && static_cast< sal_uInt8 >(rMEvt.GetClicks() % 4) == 1
         && !rSh.TestCurrPam( aDocPos ) )
     {
-        SwContentAtPos aFieldAtPos(SwContentAtPos::SW_FIELD);
+        SwContentAtPos aFieldAtPos(IsAttrAtPos::Field);
 
         // Are we clicking on a field?
         if (g_bValidCursorPos
@@ -4163,9 +4163,9 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 break;
             }
             // change ui if mouse is over SwPostItField
-            // TODO: do the same thing for redlines SW_REDLINE
+            // TODO: do the same thing for redlines IsAttrAtPos::Redline
             SwRect aFieldRect;
-            SwContentAtPos aContentAtPos( SwContentAtPos::SW_FIELD);
+            SwContentAtPos aContentAtPos( IsAttrAtPos::Field);
             if( rSh.GetContentAtPos( aDocPt, aContentAtPos, false, &aFieldRect ) )
             {
                 const SwField* pField = aContentAtPos.aFnd.pField;
@@ -4191,7 +4191,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
 
                 const SwFrameFormat* pFormat = nullptr;
                 const SwFormatINetFormat* pINet = nullptr;
-                SwContentAtPos aContentAtPos( SwContentAtPos::SW_INETATTR );
+                SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
                 if( rSh.GetContentAtPos( aDocPt, aContentAtPos ) )
                     pINet = static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr);
 
@@ -4556,7 +4556,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             }
             else
             {
-                SwContentAtPos aFieldAtPos ( SwContentAtPos::SW_FIELD );
+                SwContentAtPos aFieldAtPos ( IsAttrAtPos::Field );
                 if ( !rSh.IsInSelect() && rSh.TestCurrPam( aDocPt ) &&
                      !rSh.GetContentAtPos( aDocPt, aFieldAtPos ) )
                 {
@@ -4598,15 +4598,15 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         if(m_pApplyTempl)
                             bExecHyperlinks = false;
 
-                        SwContentAtPos aContentAtPos( SwContentAtPos::SW_FIELD |
-                                                    SwContentAtPos::SW_INETATTR |
-                                                    SwContentAtPos::SW_SMARTTAG  | SwContentAtPos::SW_FORMCTRL);
+                        SwContentAtPos aContentAtPos( IsAttrAtPos::Field |
+                                                    IsAttrAtPos::InetAttr |
+                                                    IsAttrAtPos::SmartTag  | IsAttrAtPos::FormControl);
 
                         if( rSh.GetContentAtPos( aDocPt, aContentAtPos ) )
                         {
                             // Do it again if we're not on a field/hyperlink to update the cursor accordingly
-                            if ( SwContentAtPos::SW_FIELD != aContentAtPos.eContentAtPos
-                                 && SwContentAtPos::SW_INETATTR != aContentAtPos.eContentAtPos )
+                            if ( IsAttrAtPos::Field != aContentAtPos.eContentAtPos
+                                 && IsAttrAtPos::InetAttr != aContentAtPos.eContentAtPos )
                                 rSh.GetContentAtPos( aDocPt, aContentAtPos, true );
 
                             bool bViewLocked = rSh.IsViewLocked();
@@ -4616,7 +4616,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                             ReleaseMouse();
 
-                            if( SwContentAtPos::SW_FIELD == aContentAtPos.eContentAtPos )
+                            if( IsAttrAtPos::Field == aContentAtPos.eContentAtPos )
                             {
                                 bool bAddMode(false);
                                 // AdditionalMode if applicable
@@ -4655,13 +4655,13 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     rSh.LeaveAddMode();
                                 }
                             }
-                            else if ( SwContentAtPos::SW_SMARTTAG == aContentAtPos.eContentAtPos )
+                            else if ( IsAttrAtPos::SmartTag == aContentAtPos.eContentAtPos )
                             {
                                     // execute smarttag menu
                                     if ( bExecSmarttags && SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                                         m_rView.ExecSmartTagPopup( aDocPt );
                             }
-                            else if ( SwContentAtPos::SW_FORMCTRL == aContentAtPos.eContentAtPos )
+                            else if ( IsAttrAtPos::FormControl == aContentAtPos.eContentAtPos )
                             {
                                 OSL_ENSURE( aContentAtPos.aFnd.pFieldmark != nullptr, "where is my field ptr???");
                                 if ( aContentAtPos.aFnd.pFieldmark != nullptr)
@@ -4682,7 +4682,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                     }
                                 }
                             }
-                            else if ( SwContentAtPos::SW_INETATTR == aContentAtPos.eContentAtPos )
+                            else if ( IsAttrAtPos::InetAttr == aContentAtPos.eContentAtPos )
                             {
                                 if ( bExecHyperlinks && aContentAtPos.aFnd.pAttr )
                                     rSh.ClickToINetAttr( *static_cast<const SwFormatINetFormat*>(aContentAtPos.aFnd.pAttr), nFilter );
@@ -4693,7 +4693,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         }
                         else
                         {
-                            aContentAtPos = SwContentAtPos( SwContentAtPos::SW_FTN );
+                            aContentAtPos = SwContentAtPos( IsAttrAtPos::Ftn );
                             if( !rSh.GetContentAtPos( aDocPt, aContentAtPos, true ) && bExecHyperlinks )
                             {
                                 SdrViewEvent aVEvt;

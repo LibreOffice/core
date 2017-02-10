@@ -24,6 +24,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/link.hxx>
 #include <vcl/keycod.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <IShellCursorSupplier.hxx>
 #include "swdllapi.h"
@@ -80,29 +81,34 @@ namespace com { namespace sun { namespace star { namespace container {
 
 // enum and struct to get information via the Doc-Position
 
+enum class IsAttrAtPos
+{
+    NONE             = 0x0000,
+    Field            = 0x0001,
+    ClickField       = 0x0002,
+    Ftn              = 0x0004,
+    InetAttr         = 0x0008,
+    TableBoxFml      = 0x0010,
+    Redline          = 0x0020,
+    Outline          = 0x0040,
+    ToxMark          = 0x0080,
+    RefMark          = 0x0100,
+    NumLabel         = 0x0200,
+    ContentCheck     = 0x0400,
+    SmartTag         = 0x0800,
+    FormControl      = 0x1000
+#ifdef DBG_UTIL
+    ,CurrAttrs       = 0x2000        ///< only for debugging
+    ,TableBoxValue   = 0x4000        ///< only for debugging
+#endif
+};
+namespace o3tl {
+    template<> struct typed_flags<IsAttrAtPos> : is_typed_flags<IsAttrAtPos, 0x7fff> {};
+}
+
 struct SwContentAtPos
 {
-    enum IsAttrAtPos
-    {
-        SW_NOTHING          = 0x0000,
-        SW_FIELD            = 0x0001,
-        SW_CLICKFIELD       = 0x0002,
-        SW_FTN              = 0x0004,
-        SW_INETATTR         = 0x0008,
-        SW_TABLEBOXFML      = 0x0010,
-        SW_REDLINE          = 0x0020,
-        SW_OUTLINE          = 0x0040,
-        SW_TOXMARK          = 0x0080,
-        SW_REFMARK          = 0x0100,
-        SW_NUMLABEL         = 0x0200,
-        SW_CONTENT_CHECK    = 0x0400,
-        SW_SMARTTAG         = 0x0800,
-        SW_FORMCTRL         = 0x1000
-#ifdef DBG_UTIL
-        ,SW_CURR_ATTRS      = 0x4000        ///< only for debugging
-        ,SW_TABLEBOXVALUE   = 0x8000        ///< only for debugging
-#endif
-    } eContentAtPos;
+    IsAttrAtPos eContentAtPos;
 
     union {
         const SwField* pField;
@@ -117,8 +123,8 @@ struct SwContentAtPos
     OUString sStr;
     const SwTextAttr* pFndTextAttr;
 
-    SwContentAtPos( int eGetAtPos )
-        : eContentAtPos( (IsAttrAtPos)eGetAtPos )
+    SwContentAtPos( IsAttrAtPos eGetAtPos )
+        : eContentAtPos( eGetAtPos )
     {
         aFnd.pField = nullptr;
         pFndTextAttr = nullptr;
@@ -126,7 +132,7 @@ struct SwContentAtPos
     }
 
     bool IsInProtectSect() const;
-    bool     IsInRTLText()const;
+    bool IsInRTLText() const;
 };
 
 // return values of SetCursor (can be combined via ||)

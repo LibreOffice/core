@@ -103,7 +103,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         }
         else
         {
-            SwContentAtPos aSwContentAtPos( SwContentAtPos::SW_INETATTR );
+            SwContentAtPos aSwContentAtPos( IsAttrAtPos::InetAttr );
             bStart = rSh.GetContentAtPos( aDocPos,
                         aSwContentAtPos );
         }
@@ -446,7 +446,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             SotExchangeDest::SWDOC_FREE_AREA == m_nDropDestination )
         {
             CleanupDropUserMarker();
-            SwContentAtPos aCont( SwContentAtPos::SW_CONTENT_CHECK );
+            SwContentAtPos aCont( IsAttrAtPos::ContentCheck );
             if(rSh.GetContentAtPos(aDocPt, aCont))
                 rSh.SwCursorShell::SetVisibleCursor( aDocPt );
         }

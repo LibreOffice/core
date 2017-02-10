@@ -1987,8 +1987,7 @@ SwTextNode * SwFEShell::GetNumRuleNodeAtPos( const Point &rPt)
 {
     SwTextNode * pResult = nullptr;
 
-    SwContentAtPos aContentAtPos
-        (SwContentAtPos::SW_NUMLABEL);
+    SwContentAtPos aContentAtPos(IsAttrAtPos::NumLabel);
 
     if( GetContentAtPos(rPt, aContentAtPos) && aContentAtPos.aFnd.pNode)
         pResult = aContentAtPos.aFnd.pNode->GetTextNode();
@@ -2000,8 +1999,7 @@ bool SwFEShell::IsNumLabel( const Point &rPt, int nMaxOffset )
 {
     bool bResult = false;
 
-    SwContentAtPos aContentAtPos
-        (SwContentAtPos::SW_NUMLABEL);
+    SwContentAtPos aContentAtPos(IsAttrAtPos::NumLabel);
 
     if( GetContentAtPos(rPt, aContentAtPos))
     {

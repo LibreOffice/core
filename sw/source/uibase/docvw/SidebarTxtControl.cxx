@@ -119,7 +119,7 @@ void SidebarTextControl::RequestHelp(const HelpEvent &rEvt)
         default: nResId = 0;
     }
 
-    SwContentAtPos aContentAtPos( SwContentAtPos::SW_REDLINE );
+    SwContentAtPos aContentAtPos( IsAttrAtPos::Redline );
     if ( nResId &&
          mrDocView.GetWrtShell().GetContentAtPos( mrSidebarWin.GetAnchorPos(), aContentAtPos ) )
     {

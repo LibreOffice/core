@@ -453,7 +453,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
         if( nSelectionType & nsSelectionType::SEL_TXT && !m_pWrtShell->HasMark() )
         {
-            SwContentAtPos aContentAtPos( SwContentAtPos::SW_INETATTR );
+            SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
 
             Point aPos( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY());
 
@@ -3115,7 +3115,7 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     else if( nSelection & nsSelectionType::SEL_TXT && !m_pWrtShell->HasMark() )
     {
         // is only one field - selected?
-        SwContentAtPos aContentAtPos( SwContentAtPos::SW_INETATTR );
+        SwContentAtPos aContentAtPos( IsAttrAtPos::InetAttr );
         Point aPos( SwEditWin::GetDDStartPosX(), SwEditWin::GetDDStartPosY());
 
         if( m_pWrtShell->GetContentAtPos( aPos, aContentAtPos ) )

@@ -721,7 +721,7 @@ IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
                     aRect.Bottom()  = aRect.Top();
 
                     OUString sPageStr( GetPageStr( nPhNum, nVirtNum, sDisplay ));
-                    SwContentAtPos aCnt( SwContentAtPos::SW_OUTLINE );
+                    SwContentAtPos aCnt( IsAttrAtPos::Outline );
                     bool bSuccess = m_pWrtShell->GetContentAtPos(aPos, aCnt);
                     if (bSuccess && !aCnt.sStr.isEmpty())
                     {

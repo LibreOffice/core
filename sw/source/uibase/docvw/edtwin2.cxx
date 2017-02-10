@@ -129,42 +129,42 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     if( bContinue && bQuickBalloon)
     {
         SwRect aFieldRect;
-        SwContentAtPos aContentAtPos( SwContentAtPos::SW_FIELD |
-                                    SwContentAtPos::SW_INETATTR |
-                                    SwContentAtPos::SW_FTN |
-                                    SwContentAtPos::SW_REDLINE |
-                                    SwContentAtPos::SW_TOXMARK |
-                                    SwContentAtPos::SW_REFMARK |
-                                    SwContentAtPos::SW_SMARTTAG |
+        SwContentAtPos aContentAtPos( IsAttrAtPos::Field |
+                                    IsAttrAtPos::InetAttr |
+                                    IsAttrAtPos::Ftn |
+                                    IsAttrAtPos::Redline |
+                                    IsAttrAtPos::ToxMark |
+                                    IsAttrAtPos::RefMark |
+                                    IsAttrAtPos::SmartTag |
 #ifdef DBG_UTIL
-                                    SwContentAtPos::SW_TABLEBOXVALUE |
-                        ( bBalloon ? SwContentAtPos::SW_CURR_ATTRS : 0) |
+                                    IsAttrAtPos::TableBoxValue |
+                                    ( bBalloon ? IsAttrAtPos::CurrAttrs : IsAttrAtPos::NONE) |
 #endif
-                                    SwContentAtPos::SW_TABLEBOXFML );
+                                    IsAttrAtPos::TableBoxFml );
 
         if( rSh.GetContentAtPos( aPos, aContentAtPos, false, &aFieldRect ) )
         {
             QuickHelpFlags nStyle = QuickHelpFlags::NONE; // style of quick help
             switch( aContentAtPos.eContentAtPos )
             {
-            case SwContentAtPos::SW_TABLEBOXFML:
+            case IsAttrAtPos::TableBoxFml:
                 sText = "= ";
                 sText += static_cast<const SwTableBoxFormula*>(aContentAtPos.aFnd.pAttr)->GetFormula();
                 break;
 #ifdef DBG_UTIL
-            case SwContentAtPos::SW_TABLEBOXVALUE:
+            case IsAttrAtPos::TableBoxValue:
             {
                 sText = OStringToOUString(OString::number(
                             static_cast<const SwTableBoxValue*>(aContentAtPos.aFnd.pAttr)->GetValue()),
                             osl_getThreadTextEncoding());
             }
             break;
-            case SwContentAtPos::SW_CURR_ATTRS:
+            case IsAttrAtPos::CurrAttrs:
                 sText = aContentAtPos.sStr;
                 break;
 #endif
 
-            case SwContentAtPos::SW_INETATTR:
+            case IsAttrAtPos::InetAttr:
             {
                 sText = static_cast<const SfxStringItem*>(aContentAtPos.aFnd.pAttr)->GetValue();
                 sText = URIHelper::removePassword( sText,
@@ -230,7 +230,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 }
                 break;
             }
-            case SwContentAtPos::SW_SMARTTAG:
+            case IsAttrAtPos::SmartTag:
             {
                 vcl::KeyCode aCode( KEY_SPACE );
                 vcl::KeyCode aModifiedCode( KEY_SPACE, KEY_MOD1 );
@@ -241,7 +241,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
             }
             break;
 
-            case SwContentAtPos::SW_FTN:
+            case IsAttrAtPos::Ftn:
                 if( aContentAtPos.pFndTextAttr && aContentAtPos.aFnd.pAttr )
                 {
                     const SwFormatFootnote* pFootnote = static_cast<const SwFormatFootnote*>(aContentAtPos.aFnd.pAttr);
@@ -255,11 +255,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 }
                 break;
 
-            case SwContentAtPos::SW_REDLINE:
+            case IsAttrAtPos::Redline:
                 sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon);
                 break;
 
-            case SwContentAtPos::SW_TOXMARK:
+            case IsAttrAtPos::ToxMark:
                 sText = aContentAtPos.sStr;
                 if( !sText.isEmpty() && aContentAtPos.pFndTextAttr )
                 {
@@ -272,7 +272,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     }
                 }
                 break;
-            case SwContentAtPos::SW_REFMARK:
+            case IsAttrAtPos::RefMark:
                 if(aContentAtPos.aFnd.pAttr)
                 {
                     sText = SW_RESSTR(STR_CONTENT_TYPE_SINGLE_REFERENCE);
@@ -356,7 +356,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                     if( sText.isEmpty() )
                     {
-                        aContentAtPos.eContentAtPos = SwContentAtPos::SW_REDLINE;
+                        aContentAtPos.eContentAtPos = IsAttrAtPos::Redline;
                         if( rSh.GetContentAtPos( aPos, aContentAtPos, false, &aFieldRect ) )
                             sText = lcl_GetRedlineHelp(*aContentAtPos.aFnd.pRedl, bBalloon);
                     }

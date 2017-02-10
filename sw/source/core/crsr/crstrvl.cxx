@@ -1132,12 +1132,12 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
         SwTextAttr* pTextAttr;
         SwCursorMoveState aTmpState;
         aTmpState.m_bFieldInfo = true;
-        aTmpState.m_bExactOnly = !( SwContentAtPos::SW_OUTLINE & rContentAtPos.eContentAtPos );
-        aTmpState.m_bContentCheck = (SwContentAtPos::SW_CONTENT_CHECK & rContentAtPos.eContentAtPos) != 0;
+        aTmpState.m_bExactOnly = !( IsAttrAtPos::Outline & rContentAtPos.eContentAtPos );
+        aTmpState.m_bContentCheck = bool(IsAttrAtPos::ContentCheck & rContentAtPos.eContentAtPos);
         aTmpState.m_bSetInReadOnly = IsReadOnlyAvailable();
 
         SwSpecialPos aSpecialPos;
-        aTmpState.m_pSpecialPos = ( SwContentAtPos::SW_SMARTTAG & rContentAtPos.eContentAtPos ) ?
+        aTmpState.m_pSpecialPos = ( IsAttrAtPos::SmartTag & rContentAtPos.eContentAtPos ) ?
                                 &aSpecialPos : nullptr;
 
         const bool bCursorFoundExact = GetLayout()->GetCursorOfst( &aPos, aPt, &aTmpState );
@@ -1145,24 +1145,24 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
         const SwNodes& rNds = GetDoc()->GetNodes();
         if( pTextNd
-            && SwContentAtPos::SW_OUTLINE & rContentAtPos.eContentAtPos
+            && IsAttrAtPos::Outline & rContentAtPos.eContentAtPos
             && !rNds.GetOutLineNds().empty() )
         {
             const SwTextNode* pONd = pTextNd->FindOutlineNodeOfLevel( MAXLEVEL-1);
             if( pONd )
             {
-                rContentAtPos.eContentAtPos = SwContentAtPos::SW_OUTLINE;
+                rContentAtPos.eContentAtPos = IsAttrAtPos::Outline;
                 rContentAtPos.sStr = pONd->GetExpandText( 0, -1, true, true );
                 bRet = true;
             }
         }
-        else if ( SwContentAtPos::SW_CONTENT_CHECK & rContentAtPos.eContentAtPos
+        else if ( IsAttrAtPos::ContentCheck & rContentAtPos.eContentAtPos
                   && bCursorFoundExact )
         {
             bRet = true;
         }
         else if( pTextNd
-                 && SwContentAtPos::SW_NUMLABEL & rContentAtPos.eContentAtPos)
+                 && IsAttrAtPos::NumLabel & rContentAtPos.eContentAtPos)
         {
             bRet = aTmpState.m_bInNumPortion;
             rContentAtPos.aFnd.pNode = pTextNd;
@@ -1176,7 +1176,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             if( !aTmpState.m_bPosCorr )
             {
                 if ( !bRet
-                     && SwContentAtPos::SW_SMARTTAG & rContentAtPos.eContentAtPos
+                     && IsAttrAtPos::SmartTag & rContentAtPos.eContentAtPos
                      && !aTmpState.m_bFootnoteNoInfo )
                 {
                     const SwWrongList* pSmartTagList = pTextNd->GetSmartTags();
@@ -1211,7 +1211,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         }
                         if( bRet )
                         {
-                            rContentAtPos.eContentAtPos = SwContentAtPos::SW_SMARTTAG;
+                            rContentAtPos.eContentAtPos = IsAttrAtPos::SmartTag;
 
                             if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
                                 pFrame->GetCharRect( *pFieldRect, aPos, &aTmpState );
@@ -1220,14 +1220,14 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 }
 
                 if ( !bRet
-                     && ( SwContentAtPos::SW_FIELD | SwContentAtPos::SW_CLICKFIELD ) & rContentAtPos.eContentAtPos
+                     && ( IsAttrAtPos::Field | IsAttrAtPos::ClickField ) & rContentAtPos.eContentAtPos
                      && !aTmpState.m_bFootnoteNoInfo )
                 {
                     pTextAttr = pTextNd->GetFieldTextAttrAt( aPos.nContent.GetIndex() );
                     const SwField* pField = pTextAttr != nullptr
                                           ? pTextAttr->GetFormatField().GetField()
                                           : nullptr;
-                    if ( SwContentAtPos::SW_CLICKFIELD & rContentAtPos.eContentAtPos
+                    if ( IsAttrAtPos::ClickField & rContentAtPos.eContentAtPos
                          && pField && !pField->HasClickHdl() )
                     {
                         pField = nullptr;
@@ -1248,7 +1248,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             {
                                 // allow click fields in protected sections
                                 // only placeholder is not possible
-                                if( SwContentAtPos::SW_FIELD & rContentAtPos.eContentAtPos
+                                if( IsAttrAtPos::Field & rContentAtPos.eContentAtPos
                                     || RES_JUMPEDITFLD == pField->Which() )
                                     pField = nullptr;
                             }
@@ -1270,23 +1270,23 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     {
                         rContentAtPos.aFnd.pField = pField;
                         rContentAtPos.pFndTextAttr = pTextAttr;
-                        rContentAtPos.eContentAtPos = SwContentAtPos::SW_FIELD;
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::Field;
                         bRet = true;
                     }
                 }
 
-                if( !bRet && SwContentAtPos::SW_FORMCTRL & rContentAtPos.eContentAtPos )
+                if( !bRet && IsAttrAtPos::FormControl & rContentAtPos.eContentAtPos )
                 {
                     IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
                     sw::mark::IFieldmark* pFieldBookmark = pMarksAccess->getFieldmarkFor( aPos );
                     if( bCursorFoundExact && pTextNd && pFieldBookmark) {
-                        rContentAtPos.eContentAtPos = SwContentAtPos::SW_FORMCTRL;
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::FormControl;
                         rContentAtPos.aFnd.pFieldmark = pFieldBookmark;
                         bRet=true;
                     }
                 }
 
-                if( !bRet && SwContentAtPos::SW_FTN & rContentAtPos.eContentAtPos )
+                if( !bRet && IsAttrAtPos::Ftn & rContentAtPos.eContentAtPos )
                 {
                     if( aTmpState.m_bFootnoteNoInfo )
                     {
@@ -1299,7 +1299,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                                 bRet = false;
                         }
                         if( bRet )
-                            rContentAtPos.eContentAtPos = SwContentAtPos::SW_FTN;
+                            rContentAtPos.eContentAtPos = IsAttrAtPos::Ftn;
                     }
                     else if ( nullptr != ( pTextAttr = pTextNd->GetTextAttrForCharAt(
                         aPos.nContent.GetIndex(), RES_TXTATR_FTN )) )
@@ -1329,7 +1329,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                         if( bRet )
                         {
-                            rContentAtPos.eContentAtPos = SwContentAtPos::SW_FTN;
+                            rContentAtPos.eContentAtPos = IsAttrAtPos::Ftn;
                             rContentAtPos.pFndTextAttr = pTextAttr;
                             rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
 
@@ -1340,11 +1340,11 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 }
 
                 if( !bRet
-                    && ( SwContentAtPos::SW_TOXMARK | SwContentAtPos::SW_REFMARK ) & rContentAtPos.eContentAtPos
+                    && ( IsAttrAtPos::ToxMark | IsAttrAtPos::RefMark ) & rContentAtPos.eContentAtPos
                     && !aTmpState.m_bFootnoteNoInfo )
                 {
                     pTextAttr = nullptr;
-                    if( SwContentAtPos::SW_TOXMARK & rContentAtPos.eContentAtPos )
+                    if( IsAttrAtPos::ToxMark & rContentAtPos.eContentAtPos )
                     {
                         std::vector<SwTextAttr *> const marks(
                             pTextNd->GetTextAttrsAt(
@@ -1356,7 +1356,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     }
 
                     if( !pTextAttr &&
-                        SwContentAtPos::SW_REFMARK & rContentAtPos.eContentAtPos )
+                        IsAttrAtPos::RefMark & rContentAtPos.eContentAtPos )
                     {
                         std::vector<SwTextAttr *> const marks(
                             pTextNd->GetTextAttrsAt(
@@ -1394,8 +1394,8 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
                             rContentAtPos.eContentAtPos =
                                 RES_TXTATR_TOXMARK == pTextAttr->Which()
-                                ? SwContentAtPos::SW_TOXMARK
-                                : SwContentAtPos::SW_REFMARK;
+                                ? IsAttrAtPos::ToxMark
+                                : IsAttrAtPos::RefMark;
                             rContentAtPos.pFndTextAttr = pTextAttr;
                             rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
 
@@ -1406,7 +1406,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 }
 
                 if ( !bRet
-                     && SwContentAtPos::SW_INETATTR & rContentAtPos.eContentAtPos
+                     && IsAttrAtPos::InetAttr & rContentAtPos.eContentAtPos
                      && !aTmpState.m_bFootnoteNoInfo )
                 {
                     pTextAttr = pTextNd->GetTextAttrAt(
@@ -1435,7 +1435,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                             rContentAtPos.sStr = pTextNd->GetExpandText(nSt, nEnd-nSt);
 
                             rContentAtPos.aFnd.pAttr = &pTextAttr->GetAttr();
-                            rContentAtPos.eContentAtPos = SwContentAtPos::SW_INETATTR;
+                            rContentAtPos.eContentAtPos = IsAttrAtPos::InetAttr;
                             rContentAtPos.pFndTextAttr = pTextAttr;
 
                             if( pFieldRect && nullptr != ( pFrame = pTextNd->getLayoutFrame( GetLayout(), &aPt ) ) )
@@ -1452,13 +1452,13 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     }
                 }
 
-                if( !bRet && SwContentAtPos::SW_REDLINE & rContentAtPos.eContentAtPos )
+                if( !bRet && IsAttrAtPos::Redline & rContentAtPos.eContentAtPos )
                 {
                     const SwRangeRedline* pRedl = GetDoc()->getIDocumentRedlineAccess().GetRedline(aPos, nullptr);
                     if( pRedl )
                     {
                         rContentAtPos.aFnd.pRedl = pRedl;
-                        rContentAtPos.eContentAtPos = SwContentAtPos::SW_REDLINE;
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::Redline;
                         rContentAtPos.pFndTextAttr = nullptr;
                         bRet = true;
 
@@ -1469,9 +1469,9 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             }
 
             if( !bRet
-                 && ( SwContentAtPos::SW_TABLEBOXFML & rContentAtPos.eContentAtPos
+                 && ( IsAttrAtPos::TableBoxFml & rContentAtPos.eContentAtPos
 #ifdef DBG_UTIL
-                      || SwContentAtPos::SW_TABLEBOXVALUE & rContentAtPos.eContentAtPos
+                      || IsAttrAtPos::TableBoxValue & rContentAtPos.eContentAtPos
 #endif
                 ) )
             {
@@ -1514,10 +1514,10 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     {
                         // create from internal (for CORE) the external
                         // (for UI) formula
-                        rContentAtPos.eContentAtPos = SwContentAtPos::SW_TABLEBOXFML;
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::TableBoxFml;
 #ifdef DBG_UTIL
                         if( RES_BOXATR_VALUE == pItem->Which() )
-                            rContentAtPos.eContentAtPos = SwContentAtPos::SW_TABLEBOXVALUE;
+                            rContentAtPos.eContentAtPos = IsAttrAtPos::TableBoxValue;
                         else
 #endif
                             const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->PtrToBoxNm( &pTableNd->GetTable() );
@@ -1550,7 +1550,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
             }
 
 #ifdef DBG_UTIL
-            if( !bRet && SwContentAtPos::SW_CURR_ATTRS & rContentAtPos.eContentAtPos )
+            if( !bRet && IsAttrAtPos::CurrAttrs & rContentAtPos.eContentAtPos )
             {
                 const sal_Int32 n = aPos.nContent.GetIndex();
                 SfxItemSet aSet( GetDoc()->GetAttrPool(), POOLATTR_BEGIN,
@@ -1627,7 +1627,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                     }
                 }
                 bRet = true;
-                rContentAtPos.eContentAtPos = SwContentAtPos::SW_CURR_ATTRS;
+                rContentAtPos.eContentAtPos = IsAttrAtPos::CurrAttrs;
             }
 #endif
         }
@@ -1635,7 +1635,7 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
 
     if( !bRet )
     {
-        rContentAtPos.eContentAtPos = SwContentAtPos::SW_NOTHING;
+        rContentAtPos.eContentAtPos = IsAttrAtPos::NONE;
         rContentAtPos.aFnd.pField = nullptr;
     }
     return bRet;
@@ -1672,16 +1672,16 @@ bool SwContentAtPos::IsInProtectSect() const
     {
         switch( eContentAtPos )
         {
-        case SW_FIELD:
-        case SW_CLICKFIELD:
+        case IsAttrAtPos::Field:
+        case IsAttrAtPos::ClickField:
             pNd = static_txtattr_cast<SwTextField const*>(pFndTextAttr)->GetpTextNode();
             break;
 
-        case SW_FTN:
+        case IsAttrAtPos::Ftn:
             pNd = &static_cast<const SwTextFootnote*>(pFndTextAttr)->GetTextNode();
             break;
 
-        case SW_INETATTR:
+        case IsAttrAtPos::InetAttr:
             pNd = static_txtattr_cast<SwTextINetFormat const*>(pFndTextAttr)->GetpTextNode();
             break;
 
@@ -1700,7 +1700,7 @@ bool SwContentAtPos::IsInRTLText()const
 {
     bool bRet = false;
     const SwTextNode* pNd = nullptr;
-    if (pFndTextAttr && (eContentAtPos == SW_FTN))
+    if (pFndTextAttr && (eContentAtPos == IsAttrAtPos::Ftn))
     {
         const SwTextFootnote* pTextFootnote = static_cast<const SwTextFootnote*>(pFndTextAttr);
         if(pTextFootnote->GetStartNode())
