@@ -44,9 +44,6 @@
 #include "AccessibilityHints.hxx"
 #include "appoptio.hxx"
 #include "attrib.hxx"
-#include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <sfx2/lokhelper.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
@@ -2310,273 +2307,82 @@ OUString ScTabView::getRowColumnHeaders(const Rectangle& rRectangle)
     if (!pDoc)
         return OUString();
 
-    if (rRectangle.IsEmpty())
-        return OUString();
-
-    rtl::OUStringBuffer aBuffer(256);
-    aBuffer.append("{ \"commandName\": \".uno:ViewRowColumnHeaders\",\n");
-
-    SCROW nStartRow = 0;
-    SCROW nEndRow = 0;
-    SCCOL nStartCol = 0;
     SCCOL nEndCol = 0;
+    SCROW nEndRow = 0;
+    pDoc->GetTiledRenderingArea(aViewData.GetTabNo(), nEndCol, nEndRow);
 
-    /// *** start collecting ROWS ***
+    rtl::OUStringBuffer aBuffer(256 + (50 * nEndRow) + (50 * nEndCol));
 
-    /// 1) compute start and end rows
-
-    long nTotalPixels = 0;
-    if (rRectangle.Top() < rRectangle.Bottom())
-    {
-        long nUpperBoundPx = rRectangle.Top() / TWIPS_PER_PIXEL;
-        long nLowerBoundPx = rRectangle.Bottom() / TWIPS_PER_PIXEL;
-        nEndRow = MAXTILEDROW;
-        for (SCROW nRow = 0; nRow <= MAXTILEDROW; ++nRow)
-        {
-            if (nTotalPixels > nLowerBoundPx)
-            {
-                nEndRow = nRow; // first row below the rectangle
-                break;
-            }
-
-            const sal_uInt16 nSize = pDoc->GetRowHeight(nRow, aViewData.GetTabNo());
-            const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
-
-            nTotalPixels += nSizePx;
-
-            if (nTotalPixels < nUpperBoundPx)
-            {
-                nStartRow = nRow; // last row above the rectangle
-                continue;
-            }
-        }
-
-        nStartRow -= 1;
-        nEndRow += 2;
-
-        if (nStartRow < 0) nStartRow = 0;
-        if (nEndRow > MAXTILEDROW) nEndRow = MAXTILEDROW;
-    }
-
-    aBuffer.ensureCapacity( aBuffer.getCapacity() + (50 * (nEndRow - nStartRow + 1)) );
-
-
-    long nVisibleRows = nEndRow - nStartRow;
-    if (nVisibleRows < 25)
-        nVisibleRows = 25;
-
-
-    /// 2) if we are approaching current max tiled row, signal a size changed event
-    ///    and invalidate the involved area
-
-    if (nEndRow > aViewData.GetMaxTiledRow() - nVisibleRows)
-    {
-        ScDocShell* pDocSh = aViewData.GetDocShell();
-        ScModelObj* pModelObj = pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : nullptr;
-        Size aOldSize(0, 0);
-        if (pModelObj)
-            aOldSize = pModelObj->getDocumentSize();
-
-        aViewData.SetMaxTiledRow(std::min(std::max(nEndRow, aViewData.GetMaxTiledRow()) + nVisibleRows, (long)(MAXTILEDROW)));
-
-        Size aNewSize(0, 0);
-        if (pModelObj)
-            aNewSize = pModelObj->getDocumentSize();
-
-        if (pDocSh)
-        {
-            // Provide size in the payload, so clients don't have to
-            // call lok::Document::getDocumentSize().
-            std::stringstream ss;
-            ss << aNewSize.Width() << ", " << aNewSize.Height();
-            OString sSize = ss.str().c_str();
-            aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sSize.getStr());
-
-            // New area extended to the bottom of the sheet after last row
-            // excluding overlapping area with aNewColArea
-            Rectangle aNewRowArea(0, aOldSize.getHeight(), aOldSize.getWidth(), aNewSize.getHeight());
-
-            // Only invalidate if spreadsheet extended to the bottom
-            if (aNewRowArea.getHeight())
-            {
-                SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewRowArea.toString());
-            }
-        }
-    }
-
-
-    /// 3) create string data for rows
-
+    aBuffer.append("{ \"commandName\": \".uno:ViewRowColumnHeaders\",\n");
     aBuffer.append("\"rows\": [\n");
 
+    long nTotal = 0;
+    long nTotalPixels = 0;
     bool bFirstRow = true;
-    if (nStartRow  == 0 && nStartRow != nEndRow)
-    {
-        aBuffer.append("{ \"text\": \"").append("0").append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(0)).append("\" }");
-        bFirstRow = false;
-    }
-
-    nTotalPixels = 0;
-    for (SCROW nRow = 0; nRow < nEndRow; ++nRow)
+    for (SCROW nRow = 0; nRow <= nEndRow; ++nRow)
     {
         // nSize will be 0 for hidden rows.
         const sal_uInt16 nSize = pDoc->GetRowHeight(nRow, aViewData.GetTabNo());
-        const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
-        nTotalPixels += nSizePx;
+        const long nSizePixels = ScViewData::ToPixel(nSize, aViewData.GetPPTY());
+        const OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
 
-        if (nRow < nStartRow)
-            continue;
-
-        OUString aText = pRowBar[SC_SPLIT_BOTTOM]->GetEntryText(nRow);
-
-        if (!bFirstRow)
+        bool bSkip = false;
+        if (!rRectangle.IsEmpty())
         {
-            aBuffer.append(", ");
+            long nTop = std::max(rRectangle.Top(), nTotal);
+            long nBottom = std::min(rRectangle.Bottom(), nTotal + nSize);
+            if (nBottom < nTop)
+                // They do not intersect.
+                bSkip = true;
         }
-        else
+        if (!bSkip)
         {
-            aText = OUString::number(nStartRow + 1);
-        }
+            if (!bFirstRow)
+                aBuffer.append(", ");
 
-        aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
-        bFirstRow = false;
+            aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
+            aBuffer.append("\"size\": \"").append(OUString::number((nTotalPixels + nSizePixels) / aViewData.GetPPTY())).append("\" }");
+            bFirstRow = false;
+        }
+        nTotal += nSize;
+        nTotalPixels += nSizePixels;
     }
 
-    aBuffer.append("]");
-    ///  end collecting ROWS
+    aBuffer.append("],\n\"columns\":\n[");
 
-
-    aBuffer.append(",\n");
-
-    /// *** start collecting COLS ***
-
-    /// 1) compute start and end columns
-
+    nTotal = 0;
     nTotalPixels = 0;
-    if (rRectangle.Left() < rRectangle.Right())
+    bFirstRow = true;
+    for (SCCOL nCol = 0; nCol <= nEndCol; ++nCol)
     {
-        long nLeftBoundPx = rRectangle.Left() / TWIPS_PER_PIXEL;
-        long nRightBoundPx = rRectangle.Right() / TWIPS_PER_PIXEL;
-        nEndCol = MAXCOL;
-        for (SCCOL nCol = 0; nCol <= MAXCOL; ++nCol)
-        {
-            if (nTotalPixels > nRightBoundPx)
-            {
-                nEndCol = nCol;
-                break;
-            }
-
-            const sal_uInt16 nSize = pDoc->GetColWidth(nCol, aViewData.GetTabNo());
-            const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
-            nTotalPixels += nSizePx;
-            if (nTotalPixels < nLeftBoundPx)
-            {
-                nStartCol = nCol;
-                continue;
-            }
-        }
-
-        nStartCol -= 1;
-        nEndCol += 2;
-
-        if (nStartCol < 0) nStartCol = 0;
-        if (nEndCol > MAXCOL) nEndCol = MAXCOL;
-    }
-
-    aBuffer.ensureCapacity( aBuffer.getCapacity() + (50 * (nEndCol - nStartCol + 1)) );
-
-    long nVisibleCols = nEndCol - nStartCol;
-    if (nVisibleCols < 10)
-        nVisibleCols = 10;
-
-
-    /// 2) if we are approaching current max tiled column, signal a size changed event
-    ///    and invalidate the involved area
-
-    if (nEndCol > aViewData.GetMaxTiledCol() - nVisibleCols)
-    {
-        ScDocShell* pDocSh = aViewData.GetDocShell();
-        ScModelObj* pModelObj = pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : nullptr;
-        Size aOldSize(0, 0);
-        if (pModelObj)
-            aOldSize = pModelObj->getDocumentSize();
-
-        aViewData.SetMaxTiledCol(std::min(std::max(nEndCol, aViewData.GetMaxTiledCol()) + nVisibleCols, (long)(MAXCOL)));
-
-        Size aNewSize(0, 0);
-        if (pModelObj)
-            aNewSize = pModelObj->getDocumentSize();
-
-        if (pDocSh)
-        {
-            // Provide size in the payload, so clients don't have to
-            // call lok::Document::getDocumentSize().
-            std::stringstream ss;
-            ss << aNewSize.Width() << ", " << aNewSize.Height();
-            OString sSize = ss.str().c_str();
-            aViewData.GetViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_DOCUMENT_SIZE_CHANGED, sSize.getStr());
-
-            // New area extended to the right of the sheet after last column
-            // including overlapping area with aNewRowArea
-            Rectangle aNewColArea(aOldSize.getWidth(), 0, aNewSize.getWidth(), aNewSize.getHeight());
-
-            // Only invalidate if spreadsheet extended to the bottom
-            if (aNewColArea.getWidth())
-            {
-                SfxLokHelper::notifyInvalidation(aViewData.GetViewShell(), aNewColArea.toString());
-            }
-        }
-    }
-
-
-    /// 3) create string data for columns
-
-    aBuffer.append("\"columns\": [\n");
-
-    bool bFirstCol = true;
-    if (nStartCol  == 0 && nStartCol != nEndCol )
-    {
-        aBuffer.append("{ \"text\": \"").append("0").append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(0)).append("\" }");
-        bFirstCol = false;
-    }
-
-    nTotalPixels = 0;
-    for (SCCOL nCol = 0; nCol < nEndCol; ++nCol)
-    {
-        // nSize will be 0 for hidden columns.
         const sal_uInt16 nSize = pDoc->GetColWidth(nCol, aViewData.GetTabNo());
-        const long nSizePx = ScViewData::ToPixel(nSize, 1.0 / TWIPS_PER_PIXEL);
-        nTotalPixels += nSizePx;
+        const long nSizePixels = ScViewData::ToPixel(nSize, aViewData.GetPPTX());
+        const OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
 
-        if (nCol < nStartCol)
-            continue;
-
-        OUString aText = pColBar[SC_SPLIT_LEFT]->GetEntryText(nCol);
-
-        if (!bFirstCol)
+        bool bSkip = false;
+        if (!rRectangle.IsEmpty())
         {
-            aBuffer.append(", ");
+            long nLeft = std::max(rRectangle.Left(), nTotal);
+            long nRight = std::min(rRectangle.Right(), nTotal + nSize);
+            if (nRight < nLeft)
+                // They do not intersect.
+                bSkip = true;
         }
-        else
+        if (!bSkip)
         {
-            aText = OUString::number(nStartCol + 1);
-        }
+            if (!bFirstRow)
+                aBuffer.append(", ");
 
-        aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
-        aBuffer.append("\"size\": \"").append(OUString::number(nTotalPixels * TWIPS_PER_PIXEL)).append("\" }");
-        bFirstCol = false;
+            aBuffer.append("{ \"text\": \"").append(aText).append("\", ");
+            aBuffer.append("\"size\": \"").append(OUString::number((nTotalPixels + nSizePixels) / aViewData.GetPPTX())).append("\" }");
+            bFirstRow = false;
+        }
+        nTotal += nSize;
+        nTotalPixels += nSizePixels;
     }
 
-    aBuffer.append("]");
-    ///  end collecting COLs
-
-    aBuffer.append("\n}");
-    OUString sRet = aBuffer.makeStringAndClear();
-
-    return sRet;
+    aBuffer.append("]\n}");
+    return aBuffer.makeStringAndClear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
