@@ -85,11 +85,28 @@ void generatePreview(const OString& rPdfPath, const OString& rPngPath)
     Bitmap aBitmap(Size(nPageWidth, nPageHeight), 32);
     {
         Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
-        const void* pPdfBuffer = FPDFBitmap_GetBuffer(pPdfBitmap);
+        const char* pPdfBuffer = reinterpret_cast<const char*>(FPDFBitmap_GetBuffer(pPdfBitmap));
+#ifndef MACOSX
         std::memcpy(pWriteAccess->GetBuffer(), pPdfBuffer, nPageWidth * nPageHeight * 4);
+#else
+        // ARGB -> BGRA
+        for (int nRow = 0; nRow < nPageHeight; ++nRow)
+        {
+            int nStride = FPDFBitmap_GetStride(pPdfBitmap);
+            const char* pPdfLine = pPdfBuffer + (nStride * nRow);
+            Scanline pRow = pWriteAccess->GetBuffer() + (nPageWidth * nRow * 4);
+            for (int nCol = 0; nCol < nPageWidth; ++nCol)
+            {
+                pRow[nCol * 4] = pPdfLine[(nCol * 4) + 3];
+                pRow[(nCol * 4) + 1] = pPdfLine[(nCol * 4) + 2];
+                pRow[(nCol * 4) + 2] = pPdfLine[(nCol * 4) + 1];
+                pRow[(nCol * 4) + 3] = pPdfLine[nCol * 4];
+            }
+        }
+#endif
     }
     BitmapEx aBitmapEx(aBitmap);
-#ifdef WNT
+#if defined(WNT) || defined(MACOSX)
     aBitmapEx.Mirror(BmpMirrorFlags::Vertical);
 #endif
     vcl::PNGWriter aWriter(aBitmapEx);
