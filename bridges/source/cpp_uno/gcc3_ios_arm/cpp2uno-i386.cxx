@@ -121,6 +121,7 @@ void cpp2uno_call(
             case typelib_TypeClass_UNSIGNED_HYPER:
             case typelib_TypeClass_DOUBLE:
                 pCppStack += sizeof(sal_Int32); // extra long
+                SAL_FALLTHROUGH;
             default:
                 break;
             }
@@ -344,6 +345,7 @@ extern "C" void cpp_vtable_call(
                 TYPELIB_DANGER_RELEASE( pTD );
             }
         } // else perform queryInterface()
+        SAL_FALLTHROUGH;
         default:
             cpp2uno_call(
                 pCppI, aMemberDescr.get(),
@@ -425,6 +427,7 @@ unsigned char * codeSnippet(
                 break;
             }
         }
+        SAL_FALLTHROUGH;
         case typelib_TypeClass_STRING:
         case typelib_TypeClass_TYPE:
         case typelib_TypeClass_SEQUENCE:
