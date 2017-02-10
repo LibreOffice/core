@@ -3055,8 +3055,8 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
                                               sal_Int32* pEncToUnicodeIndex,
                                               int nGlyphs )
 {
-    int nMapped = 0, n = 0;
-    for( n = 0; n < nGlyphs; n++ )
+    int nMapped = 0;
+    for (int n = 0; n < nGlyphs; ++n)
         if( pUnicodes[pEncToUnicodeIndex[n]] && pUnicodesPerGlyph[n] )
             nMapped++;
 
@@ -3083,7 +3083,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
                      "endcodespacerange\n"
                      );
     int nCount = 0;
-    for( n = 0; n < nGlyphs; n++ )
+    for (int n = 0; n < nGlyphs; ++n)
     {
         if( pUnicodes[pEncToUnicodeIndex[n]] && pUnicodesPerGlyph[n] )
         {
@@ -8545,8 +8545,9 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
     std::vector<sal_Ucs> aUnicodes;
-    aUnicodes.reserve( nMaxGlyphs );
-    sal_Int32 pUnicodesPerGlyph[nMaxGlyphs];
+    aUnicodes.reserve(nMaxGlyphs);
+    std::vector<sal_Int32> aUnicodesPerGlyph;
+    aUnicodes.reserve(nMaxGlyphs);
     int pCharPosAry[nMaxGlyphs];
     DeviceCoordinate nAdvanceWidths[nMaxGlyphs];
     const PhysicalFontFace* pFallbackFonts[nMaxGlyphs] = { nullptr };
@@ -8683,7 +8684,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         for( int i = 0; i < nGlyphs; i++ )
         {
             // default case: 1 glyph is one unicode
-            pUnicodesPerGlyph[i] = 1;
+            aUnicodesPerGlyph.push_back(1);
             if( (pGlyphs[i] & GF_ISCHAR) )
             {
                 aUnicodes.push_back( static_cast<sal_Ucs>(pGlyphs[i] & GF_IDXMASK) );
@@ -8705,7 +8706,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                     }
                     else if (nChars == 0)
                         nChars = 1;
-                    pUnicodesPerGlyph[i] = nChars;
+                    aUnicodesPerGlyph.back() = nChars;
                     for( int n = 0; n < nChars; n++ )
                         aUnicodes.push_back( rText[ start + n ] );
                 }
@@ -8732,7 +8733,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
             // mapping is possible
         }
 
-        registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, aUnicodes.data(), pUnicodesPerGlyph, pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
+        registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, aUnicodes.data(), aUnicodesPerGlyph.data(), pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
 
         for( int i = 0; i < nGlyphs; i++ )
         {
