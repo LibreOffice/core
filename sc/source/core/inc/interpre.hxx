@@ -234,6 +234,7 @@ bool IsTableOpInRange( const ScRange& );
 sal_uLong GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell );
 double ConvertStringToValue( const OUString& );
 public:
+static double ScGetGCD(double fx, double fy);
 /** For matrix back calls into the current interpreter.
     Uses rError instead of nGlobalError and rCurFmtType instead of nCurFmtType. */
 double ConvertStringToValue( const OUString&, FormulaError& rError, short& rCurFmtType );
@@ -779,7 +780,6 @@ void ScEffect();
 void ScNominal();
 void ScMod();
 void ScIntercept();
-static double ScGetGCD(double fx, double fy);
 void ScGCD();
 void ScLCM();
 
@@ -830,6 +830,7 @@ static SC_DLLPUBLIC double phi(double x);
 static SC_DLLPUBLIC double integralPhi(double x);
 static SC_DLLPUBLIC double gaussinv(double x);
 static SC_DLLPUBLIC double GetPercentile( ::std::vector<double> & rArray, double fPercentile );
+
 
 private:
 double GetBetaDist(double x, double alpha, double beta);  //cumulative distribution function

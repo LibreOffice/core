@@ -387,6 +387,7 @@ public:
 
     virtual double GetMaxValue( bool bTextAsZero ) const = 0;
     virtual double GetMinValue( bool bTextAsZero ) const = 0;
+    virtual double GetGcd() const = 0;
 
     virtual ScMatrixRef CompareMatrix(
         sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const = 0;
@@ -601,6 +602,7 @@ public:
 
     virtual double GetMaxValue( bool bTextAsZero ) const override;
     virtual double GetMinValue( bool bTextAsZero ) const override;
+    virtual double GetGcd() const override;
 
     virtual ScMatrixRef CompareMatrix(
         sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const override;
@@ -818,6 +820,7 @@ public:
 
     virtual double GetMaxValue(bool bTextAsZero) const override;
     virtual double GetMinValue(bool bTextAsZero) const override;
+    virtual double GetGcd() const override;
 
     virtual ScMatrixRef CompareMatrix(sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions) const override;
 
