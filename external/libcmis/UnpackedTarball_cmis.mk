@@ -21,7 +21,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,cmis, \
 						external/libcmis/libcmis-fix-error-handling.patch \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
+ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,cmis,external/libcmis/boost-win.patch))
 endif
 

@@ -54,11 +54,6 @@
   #include "OSXBluetoothWrapper.hxx"
 #endif
 
-#ifdef __MINGW32__
-// Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms738518%28v=vs.85%29.aspx
-#define NS_BTH 16
-#endif
-
 #include "Communicator.hxx"
 
 using namespace sd;

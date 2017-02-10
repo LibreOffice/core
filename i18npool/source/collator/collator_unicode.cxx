@@ -115,13 +115,13 @@ sal_Int32 SAL_CALL
 Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
     const OUString& str2, sal_Int32 off2, sal_Int32 len2)
 {
-    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2); // UChar != sal_Unicode in MinGW
+    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2);
 }
 
 sal_Int32 SAL_CALL
 Collator_Unicode::compareString( const OUString& str1, const OUString& str2)
 {
-    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));   // UChar != sal_Unicode in MinGW
+    return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));
 }
 
 #ifndef DISABLE_DYNLOADING
@@ -137,7 +137,7 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
         UErrorCode status = U_ZERO_ERROR;
         OUString rule = LocaleDataImpl::get()->getCollatorRuleByAlgorithm(rLocale, rAlgorithm);
         if (!rule.isEmpty()) {
-            collator = new RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);   // UChar != sal_Unicode in MinGW
+            collator = new RuleBasedCollator(reinterpret_cast<const UChar *>(rule.getStr()), status);
             if (! U_SUCCESS(status)) throw RuntimeException();
         }
         if (!collator && OUString(LOCAL_RULE_LANGS).indexOf(rLocale.Language) >= 0) {

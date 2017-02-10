@@ -1278,7 +1278,7 @@ void SwScriptInfo::UpdateBidiInfo( const OUString& rText )
     UBiDi* pBidi = ubidi_openSized( rText.getLength(), 0, &nError );
     nError = U_ZERO_ERROR;
 
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength(),    // UChar != sal_Unicode in MinGW
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rText.getStr()), rText.getLength(),
                    nDefaultDir, nullptr, &nError );
     nError = U_ZERO_ERROR;
     int nCount = ubidi_countRuns( pBidi, &nError );

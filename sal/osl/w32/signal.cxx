@@ -31,9 +31,7 @@
 
 #include <osl/diagnose.h>
 #include <osl/signal.h>
-#ifndef __MINGW32__
 #include <DbgHelp.h>
-#endif
 #include <errorrep.h>
 #include <systools/win32/uwinapi.h>
 #include <sal/macros.h>

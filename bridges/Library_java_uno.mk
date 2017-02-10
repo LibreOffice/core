@@ -9,14 +9,6 @@
 
 $(eval $(call gb_Library_Library,java_uno))
 
-ifeq ($(OS)$(COM),WNTGCC)
-ifeq ($(EXCEPTIONS),sjlj)
-$(eval $(call gb_Library_add_defs,java_uno,\
-	-DBROKEN_ALLOCA \
-))
-endif
-endif
-
 $(eval $(call gb_Library_use_internal_comprehensive_api,java_uno,\
 	udkapi \
 ))

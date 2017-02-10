@@ -14,14 +14,7 @@ $(eval $(call gb_Module_add_targets,expat,\
 	StaticLibrary_expat \
 ))
 
-# Actually it wasn't that clear if we should
-# run configure step on mingw or not:
-# CONFIGURATION_ACTION wasn't set, but
-# CROSS_COMPILE case was handled in original makefile
-
-# tested it on mingw and it doesn't hurt ;-)
-#ifneq ($(OS),WNT)
-ifneq ($(OS)$(COM),WNTMSC)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,expat,\
 	ExternalProject_expat \
 ))

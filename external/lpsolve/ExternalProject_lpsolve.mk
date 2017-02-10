@@ -14,21 +14,11 @@ $(eval $(call gb_ExternalProject_register_targets,lpsolve,\
 ))
 
 ifeq ($(OS),WNT)
-ifeq ($(COM),GCC)
-$(call gb_ExternalProject_get_state_target,lpsolve,build):
-	$(call gb_ExternalProject_run,build,\
-		$(if $(filter WNT,$(OS_FOR_BUILD)), \
-		$(if $(MINGW_SHARED_GCCLIB) lpsolve_LDFLAGS="-shared-libgcc") \
-		$(if $(MINGW_SHARED_GXXLIB) lpsolve_LIBS="$(MINGW_SHARED_LIBSTDCPP)") \
-		cmd /c cgcc.bat, sh ccc) \
-	,lpsolve55)
-else # $(COM)!=GCC
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	$(call gb_ExternalProject_run,build,\
 		LIB="$(ILIB)" RUNTIME_FLAG="$(if $(MSVC_USE_DEBUG_RUNTIME),/MDd,/MD)" \
 		cmd /c cvc6.bat \
 	,lpsolve55)
-endif # $(COM)
 else # $(OS)!=WNT
 $(call gb_ExternalProject_get_state_target,lpsolve,build):
 	$(call gb_ExternalProject_run,build,\

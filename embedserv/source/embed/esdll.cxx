@@ -22,10 +22,6 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#ifdef __MINGW32__
-#define _INIT_ATL_COMMON_VARS
-#endif
-
 #include "stdafx.h"
 
 #include <atlbase.h>

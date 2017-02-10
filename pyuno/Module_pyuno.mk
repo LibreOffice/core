@@ -26,12 +26,7 @@ $(eval $(call gb_Module_add_targets,pyuno,\
 ))
 endif
 
-#
 # Windows: only --enable-python=internal possible
-# mingw: both cases possible: internal && system
-# that why it makes sense to handle the next 3 targets
-# with SYSTEM_PYTHON=TRUE and SYSTEM_PYTHON=
-
 # python-core: pyuno/python.exe on Windows
 ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,pyuno,\
@@ -46,16 +41,6 @@ ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,pyuno,\
     CustomTarget_python_shell \
     Package_python_shell \
-))
-endif
-
-else # SYSTEM_PYTHON
-
-# these two targets have to be executed only with system-python on mingw
-# FIXME remove this
-ifeq ($(OS)$(COM),WNTGCC)
-$(eval $(call gb_Module_add_targets,pyuno,\
-    GeneratedPackage_python-core \
 ))
 endif
 

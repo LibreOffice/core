@@ -24,13 +24,10 @@
 #ifdef _WIN32
 #include <prewin.h>
 #include <postwin.h>
-
-#ifndef __MINGW32__
 #include <comutil.h>
-#endif
 #include <oleauto.h>
-
 #endif
+
 #endif
 
 #include <basic/sbx.hxx>

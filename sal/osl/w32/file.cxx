@@ -35,11 +35,6 @@
 #include <stdio.h>
 #include <tchar.h>
 
-#ifdef __MINGW32__
-#include <wchar.h>
-#include <ctype.h>
-#endif
-
 #include <algorithm>
 #include <limits>
 

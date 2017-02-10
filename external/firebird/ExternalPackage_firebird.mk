@@ -11,7 +11,7 @@ $(eval $(call gb_ExternalPackage_ExternalPackage,firebird,firebird))
 
 $(eval $(call gb_ExternalPackage_use_external_project,firebird,firebird))
 
-ifeq ($(OS)-$(COM),WNT-MSC)
+ifeq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/ifbclient.dll,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/bin/ifbclient.dll))
 $(eval $(call gb_ExternalPackage_add_file,firebird,$(LIBO_LIB_FOLDER)/Engine12.dll,gen/$(if $(ENABLE_DEBUG),Debug,Release)/firebird/plugins/Engine12.dll))
 else ifeq ($(OS),MACOSX)

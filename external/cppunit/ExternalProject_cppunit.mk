@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalProject_register_targets,cppunit,\
 	build \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
+ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_ExternalProject_run,build,\
 	    PROFILEFLAGS="$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release) \
@@ -32,10 +32,6 @@ ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX NETBSD OPENBSD,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
 cppunit_CXXFLAGS+=-D_GLIBCXX_DEBUG
 endif
-endif
-
-ifeq ($(OS)-$(COM),WNT-GCC)
-cppunit_CXXFLAGS+=-mthreads
 endif
 
 ifneq (,$(debug))

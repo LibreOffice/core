@@ -1080,7 +1080,7 @@ void SwTextFrame::PrepareVisualMove( sal_Int32& nPos, sal_uInt8& nCursorLevel,
 
     UErrorCode nError = U_ZERO_ERROR;
     UBiDi* pBidi = ubidi_openSized( nLen, 0, &nError );
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, nullptr, &nError ); // UChar != sal_Unicode in MinGW
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(pLineString), nLen, nDefaultDir, nullptr, &nError );
 
     sal_Int32 nTmpPos = 0;
     bool bOutOfBounds = false;
