@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_b21cde78",
+        "filename": "include/o3tl/strong_typedef.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-10T10:28:51Z",
+      "side": 1,
+      "message": "I\u0027m assuming that without knowing that the class cannot be extended, the compiler cannot fully elide it and just pass around a raw integer/underlying_type.\n\nIs that wrong?\n\nPerhaps that is too hopeful, I don\u0027t know of any C++ compilers that make much actual use of the final keyword in their optimisation phases.\n\nIn which case, this template is always going to incur some extra cost and we can just make it derivable.",
+      "parentUuid": "9a57fde8_12892acb",
+      "revId": "e46b63c3802c8351db26bb2df5495de3a8a0d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_6f55311c",
         "filename": "include/o3tl/strong_typedef.hxx",
         "patchSetId": 2
