@@ -483,7 +483,7 @@ public:
         mpStylePool->SetSearchMask(SfxStyleFamily::Page);
     }
 
-    ~IdleCalcTextWidthScope()
+    ~IdleCalcTextWidthScope() COVERITY_NOEXCEPT_FALSE
     {
         SfxPrinter* pDev = mrDoc.GetPrinter();
         if (pDev)

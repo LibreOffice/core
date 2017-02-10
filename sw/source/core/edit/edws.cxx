@@ -149,7 +149,7 @@ SwActContext::SwActContext(SwEditShell *pShell)
     m_rShell.StartAction();
 }
 
-SwActContext::~SwActContext()
+SwActContext::~SwActContext() COVERITY_NOEXCEPT_FALSE
 {
     m_rShell.EndAction();
 }
@@ -160,7 +160,7 @@ SwMvContext::SwMvContext(SwEditShell *pShell)
     m_rShell.SttCursorMove();
 }
 
-SwMvContext::~SwMvContext()
+SwMvContext::~SwMvContext() COVERITY_NOEXCEPT_FALSE
 {
     m_rShell.EndCursorMove();
 }

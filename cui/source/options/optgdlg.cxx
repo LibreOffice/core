@@ -120,7 +120,7 @@ private:
 
 public:
     OpenGLCfg();
-    ~OpenGLCfg();
+    ~OpenGLCfg() COVERITY_NOEXCEPT_FALSE;
 
     bool useOpenGL() const;
     bool forceOpenGL() const;
@@ -144,7 +144,7 @@ void OpenGLCfg::reset()
     mbModified = false;
 }
 
-OpenGLCfg::~OpenGLCfg()
+OpenGLCfg::~OpenGLCfg() COVERITY_NOEXCEPT_FALSE
 {
     if (mbModified)
     {

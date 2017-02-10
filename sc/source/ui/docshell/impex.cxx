@@ -177,7 +177,7 @@ ScImportExport::ScImportExport( ScDocument* p, const OUString& rPos )
         bAll = true;
 }
 
-ScImportExport::~ScImportExport()
+ScImportExport::~ScImportExport() COVERITY_NOEXCEPT_FALSE
 {
     delete pUndoDoc;
     delete pExtOptions;

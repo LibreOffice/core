@@ -233,7 +233,7 @@ friend class sc::FormulaGroupAreaListener;
 public:
                 ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
                          bool bColInfo = true, bool bRowInfo = true );
-                ~ScTable();
+                ~ScTable() COVERITY_NOEXCEPT_FALSE;
                 ScTable(const ScTable&) = delete;
     ScTable&    operator=(const ScTable&) = delete;
 

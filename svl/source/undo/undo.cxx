@@ -48,7 +48,7 @@ SfxUndoContext::~SfxUndoContext()
 }
 
 
-SfxUndoAction::~SfxUndoAction()
+SfxUndoAction::~SfxUndoAction() COVERITY_NOEXCEPT_FALSE
 {
 }
 

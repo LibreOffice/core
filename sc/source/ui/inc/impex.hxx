@@ -92,7 +92,7 @@ public:
     ScImportExport( ScDocument*, const OUString& );   // Range/cell input
     ScImportExport( ScDocument*, const ScAddress& );
     ScImportExport( ScDocument*, const ScRange& );
-   ~ScImportExport();
+   ~ScImportExport() COVERITY_NOEXCEPT_FALSE;
 
     void SetExtOptions( const ScAsciiOptions& rOpt );
     void SetFilterOptions( const OUString& rFilterOptions );

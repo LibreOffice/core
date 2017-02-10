@@ -546,7 +546,7 @@ public:
             m_rShell.Push(); // prevent modification of current cursor
         }
     }
-    ~CursorGuard()
+    ~CursorGuard() COVERITY_NOEXCEPT_FALSE
     {
         if (m_bSaveCursor)
         {

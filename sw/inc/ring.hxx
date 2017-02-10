@@ -42,7 +42,7 @@ namespace sw
             typedef typename std::add_const<value_type>::type const_value_type;
             typedef RingContainer<value_type> ring_container;
             typedef RingContainer<const_value_type> const_ring_container;
-            virtual ~Ring()
+            virtual ~Ring() COVERITY_NOEXCEPT_FALSE
                 { unlink(); };
             /** algo::unlink is buggy! don't call it directly! */
             void unlink()
