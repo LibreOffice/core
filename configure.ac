@@ -1728,10 +1728,10 @@ AC_ARG_WITH(system-poppler,
         [Use system poppler (only needed for PDF import).]),,
     [with_system_poppler="$with_system_libs"])
 
-AC_ARG_WITH(system-gpgme,
-    AS_HELP_STRING([--with-system-gpgme],
+AC_ARG_WITH(system-gpgmepp,
+    AS_HELP_STRING([--with-system-gpgmepp],
         [Use gpgme already on system]),,
-    [with_system_gpgme="$with_system_libs"])
+    [with_system_gpgmepp="$with_system_libs"])
 
 AC_ARG_WITH(system-apache-commons,
     AS_HELP_STRING([--with-system-apache-commons],
@@ -10651,32 +10651,31 @@ else
 fi
 AC_SUBST(ENABLE_PDFIUM)
 
-SYSTEM_GPGME=
+SYSTEM_GPGMEPP=
 if test "$_os" = "Linux"; then
     dnl ===================================================================
     dnl Check for system gpgme
     dnl ===================================================================
     AC_MSG_CHECKING([which gpgme to use])
-    if test "$with_system_gpgme" = "yes"; then
+    if test "$with_system_gpgmepp" = "yes"; then
         AC_MSG_RESULT([external])
-        SYSTEM_GPGME=TRUE
+        SYSTEM_GPGMEPP=TRUE
 
-        AC_PATH_PROG(GPGMECONFIG, gpgme-config)
-        if test -z "$GPGMECONFIG"; then
-            AC_MSG_ERROR([--with-system-gpgme requested, but gpgme programs not found])
-        fi
-
-        GPGME_CFLAGS=`$GPGMECONFIG --cflags`
-        GPGME_LIBS=`$GPGMECONFIG --libs`
+        # C++ library doesn't come with fancy gpgmepp-config, check for headers the old-fashioned way
+        AC_CHECK_HEADER(gpgme++/data.h, [],
+            [AC_MSG_ERROR(gpgme headers not found, install gpgmepp development package)], [])
+        # progress_callback is the only func with plain C linkage
+        AC_CHECK_LIB(gpgmepp, progress_callback, [ GPGMEPP_LIBS=-lgpgmepp ],
+            [AC_MSG_ERROR(gpgmepp not found or not functional)], [])
     else
 # This is work in progress, please DO NOT MODIFY OR REMOVE
         AC_MSG_RESULT([internal])
         BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGME"
     fi
 fi
-AC_SUBST(SYSTEM_GPGME)
-AC_SUBST(GPGME_CFLAGS)
-AC_SUBST(GPGME_LIBS)
+AC_SUBST(SYSTEM_GPGMEPP)
+AC_SUBST(GPGMEPP_CFLAGS)
+AC_SUBST(GPGMEPP_LIBS)
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
