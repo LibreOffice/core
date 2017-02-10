@@ -230,32 +230,6 @@ Unixlink gid_Unixlink_File_Dl_Libxml2
 End
 #endif
 
-#if defined(WNT) && defined( _gcc3 )
-
-#if defined(MINGW_GCCDLL)
-
-File gid_File_Lib_Mingw_GccS_Ure
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = MINGW_GCCDLL;
-    Styles = (PACKED);
-End
-
-#endif
-
-#if defined(MINGW_GXXDLL)
-
-File gid_File_Lib_Mingw_Stdcpp_Ure
-    LIB_FILE_BODY;
-    Dir = SCP2_URE_DL_DIR;
-    Name = MINGW_GXXDLL;
-    Styles = (PACKED);
-End
-
-#endif
-
-#endif
-
 // Public Miscellaneous Files:
 
 File gid_File_Misc_TypesRdb
@@ -313,8 +287,6 @@ Module gid_Module_Root_Ure_Hidden
             gid_Unixlink_File_Dl_PurpEnvHelper,
             gid_Unixlink_File_Dl_Sal,
             gid_Unixlink_File_Dl_Salhelper,
-            gid_File_Lib_Mingw_GccS_Ure,
-            gid_File_Lib_Mingw_Stdcpp_Ure,
             gid_File_Misc_TypesRdb,
             gid_File_Misc_ServicesRdb);
     Unixlinks = (gid_Unixlink_File_Dl_Sal,

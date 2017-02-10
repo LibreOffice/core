@@ -111,11 +111,7 @@ HWND initInstance( HINSTANCE _hAppInstance )
 }
 
 // main window function
-#ifdef __MINGW32__
-extern "C" int APIENTRY WinMain( HINSTANCE _hAppInstance, HINSTANCE, LPSTR, int )
-#else
 extern "C" int APIENTRY _tWinMain( HINSTANCE _hAppInstance, HINSTANCE, LPTSTR, int )
-#endif
 {
     if ( !registerWindowClass( _hAppInstance ) )
         return FALSE;

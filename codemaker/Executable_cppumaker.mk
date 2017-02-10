@@ -33,7 +33,7 @@ $(eval $(call gb_Executable_add_exception_objects,cppumaker,\
     codemaker/source/cppumaker/includes \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_cxxflags,cppumaker,\
 	-Ob0 \
 ))

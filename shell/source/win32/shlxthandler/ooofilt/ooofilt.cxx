@@ -61,10 +61,6 @@
 #include <objidl.h>
 #include <stdio.h>
 #include "propspec.hxx"
-#ifdef __MINGW32__
-#include <algorithm>
-using ::std::min;
-#endif
 
 #include "stream_helper.hxx"
 

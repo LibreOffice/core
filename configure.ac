@@ -679,7 +679,7 @@ gnu)
     _os=GNU
      ;;
 
-cygwin*|interix*|mingw32*)
+cygwin*|interix*)
 
     # When building on Windows normally with MSVC under Cygwin,
     # configure thinks that the host platform (the platform the
@@ -692,10 +692,6 @@ cygwin*|interix*|mingw32*)
     # look at $host etc that much, it mostly uses its own $_os
     # variable, set here in this case statement.
 
-    # When cross-compiling to Windows from Unix, the host platform
-    # is "mingw32" (because in that case it is the MinGW
-    # tool-chain that is used).
-
     test_cups=no
     test_dbus=no
     test_randr=no
@@ -706,24 +702,6 @@ cygwin*|interix*|mingw32*)
 
     DLLPOST=".dll"
     LINKFLAGSNOUNDEFS=
-
-    # If the host OS matches "mingw32*", that means we are using the
-    # MinGW cross-compiler, because we don't see the point in building
-    # LibreOffice using MinGW on Windows. If you want to build on
-    # Windows, use MSVC. If you want to use MinGW, surely you want to
-    # cross-compile (from Linux or some other Unix).
-
-    case "$host_os" in
-    mingw32*)
-        WITH_MINGW=yes
-        if test -z "$CC"; then
-            CC="$host_cpu-$host_vendor-$host_os-gcc"
-        fi
-        if test -z "$CXX"; then
-            CXX="$host_cpu-$host_vendor-$host_os-g++"
-        fi
-        ;;
-    esac
     ;;
 
 darwin*) # Mac OS X or iOS
@@ -930,14 +908,13 @@ fi
 
 AC_SUBST(SDKDIRNAME)
 
-AC_SUBST(WITH_MINGW)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
 dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
 dnl Needs to precede the AC_SEARCH_LIBS call below, which apparently calls
 dnl AC_PROG_CC internally.
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+if test "$_os" != "WINNT"; then
     # AC_PROG_CC sets CFLAGS to -g -O2 if not set, avoid that
     save_CFLAGS=$CFLAGS
     AC_PROG_CC
@@ -1442,12 +1419,6 @@ libo_FUZZ_ARG_ENABLE(firebird-sdbc,
     AS_HELP_STRING([--disable-firebird-sdbc],
         [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
 ,test "${enable_firebird_sdbc+set}" = set || enable_firebird_sdbc=yes)
-
-AC_ARG_ENABLE(winegcc,
-    AS_HELP_STRING([--enable-winegcc],
-        [Enable use of winegcc during the build, in order to create msi* tools
-         needed for MinGW cross-compilation.]),
-)
 
 libo_FUZZ_ARG_ENABLE(liblangtag,
     AS_HELP_STRING([--disable-liblangtag],
@@ -2300,7 +2271,7 @@ dnl ===================================================================
 dnl Test whether to sign Windows Build
 dnl ===================================================================
 AC_MSG_CHECKING([whether to sign windows build])
-if test "$enable_windows_build_signing" = "yes" -a "$_os" = "WINNT" -a "$WITH_MINGW" != "YES" ; then
+if test "$enable_windows_build_signing" = "yes" -a "$_os" = "WINNT"; then
     AC_MSG_RESULT([yes])
     WINDOWS_BUILD_SIGNING="TRUE"
 else
@@ -2587,7 +2558,7 @@ AC_SUBST(WITH_GALLERY_BUILD)
 dnl ===================================================================
 dnl  Checks if ccache is available
 dnl ===================================================================
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+if test "$_os" = "WINNT"; then
     # on windows/VC build do not use ccache
     CCACHE=""
 elif test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
@@ -2654,7 +2625,7 @@ dnl ===================================================================
 dnl  Checks for C compiler,
 dnl  The check for the C++ compiler is later on.
 dnl ===================================================================
-if test "$_os" != "WINNT" -a "$WITH_MINGW" != "yes"; then
+if test "$_os" != "WINNT"; then
     GCC_HOME_SET="true"
     AC_MSG_CHECKING([gcc home])
     if test -z "$with_gcc_home"; then
@@ -3229,7 +3200,7 @@ fi
 AC_SUBST(ISYSTEM)
 
 dnl ===================================================================
-dnl  Check which Visual Studio or MinGW compiler is used
+dnl  Check which Visual Studio compiler is used
 dnl ===================================================================
 
 map_vs_year_to_version()
@@ -3341,279 +3312,268 @@ SHOWINCLUDES_PREFIX=
 MSBUILD_PATH=
 DEVENV=
 if test "$_os" = "WINNT"; then
-    if test "$WITH_MINGW" != "yes"; then
-        AC_MSG_CHECKING([Visual C++])
+    AC_MSG_CHECKING([Visual C++])
 
-        find_msvc "$with_visual_studio"
-        if test -z "$vctest"; then
-            if test -n "$with_visual_studio"; then
-                AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
-            else
-                AC_MSG_ERROR([No Visual Studio 2013/2015 installation found])
-            fi
+    find_msvc "$with_visual_studio"
+    if test -z "$vctest"; then
+        if test -n "$with_visual_studio"; then
+            AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
+        else
+            AC_MSG_ERROR([No Visual Studio 2013/2015 installation found])
         fi
+    fi
 
-        if test "$BITNESS_OVERRIDE" = ""; then
-            if test -f "$vctest/bin/cl.exe"; then
+    if test "$BITNESS_OVERRIDE" = ""; then
+        if test -f "$vctest/bin/cl.exe"; then
+            VC_PRODUCT_DIR=$vctest
+        else
+            AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/cl.exe])
+        fi
+    else
+        if test -f "$vctest/bin/amd64/cl.exe"; then
+            VC_PRODUCT_DIR=$vctest
+        else
+            if test -f "$vctest/bin/x86_amd64/cl.exe" -a "$vcexpress" = "Express"; then
                 VC_PRODUCT_DIR=$vctest
             else
-                AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/cl.exe])
-            fi
-        else
-            if test -f "$vctest/bin/amd64/cl.exe"; then
-                VC_PRODUCT_DIR=$vctest
-            else
-                if test -f "$vctest/bin/x86_amd64/cl.exe" -a "$vcexpress" = "Express"; then
-                    VC_PRODUCT_DIR=$vctest
-                else
-                    AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/amd64/cl.exe or $vctest/bin/x86_amd64/cl.exe])
-                fi
+                AC_MSG_ERROR([No compiler (cl.exe) in $vctest/bin/amd64/cl.exe or $vctest/bin/x86_amd64/cl.exe])
             fi
         fi
+    fi
 
-        VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
-        AC_MSG_RESULT([$VC_PRODUCT_DIR])
+    VC_PRODUCT_DIR=`win_short_path_for_make "$VC_PRODUCT_DIR"`
+    AC_MSG_RESULT([$VC_PRODUCT_DIR])
 
-        AC_MSG_CHECKING([Is Visual C++ Express])
-        if test "$vcexpress" = "Express" ; then
-            AC_MSG_RESULT([Yes])
+    AC_MSG_CHECKING([Is Visual C++ Express])
+    if test "$vcexpress" = "Express" ; then
+        AC_MSG_RESULT([Yes])
+    else
+        AC_MSG_RESULT([No])
+    fi
+
+    UCRTSDKDIR=
+    UCRTVERSION=
+
+    AC_MSG_CHECKING([whether UCRT is needed for this compiler version])
+    if test "$vcnum" = "120"; then
+        AC_MSG_RESULT([No])
+    else
+        AC_MSG_RESULT([Yes])
+        AC_MSG_CHECKING([for UCRT location])
+        find_ucrt
+        if test -n "$UCRTSDKDIR"; then
+            AC_MSG_RESULT([found])
+            PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
+            ucrtincpath_formatted=$formatted_path
+            # SOLARINC is used for external modules and must be set too.
+            # And no, it's not sufficient to set SOLARINC only, as configure
+            # itself doesn't honour it.
+            SOLARINC="$SOLARINC -I$ucrtincpath_formatted"
+            CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
+            CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
+            CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
         else
-            AC_MSG_RESULT([No])
+            AC_MSG_ERROR([not found])
         fi
+    fi
+    AC_SUBST(UCRTSDKDIR)
+    AC_SUBST(UCRTVERSION)
 
-        UCRTSDKDIR=
-        UCRTVERSION=
+    # Find the proper version of MSBuild.exe to use based on the VS version
+    reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
+    if test -n "$regvalue" ; then
+        MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
+    fi
 
-        AC_MSG_CHECKING([whether UCRT is needed for this compiler version])
+    # Find the version of devenv.exe
+    DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
+    if test ! -e "$DEVENV" -a "$vcnum" = "120"; then
+        # for Visual Studio 2013 Express, fall back
+        DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/WDExpress.exe"
+    fi
+    if test ! -e "$DEVENV"; then
+        AC_MSG_ERROR([No devenv.exe found, Visual Studio installation broken?])
+    fi
+
+    dnl ===========================================================
+    dnl  Check for the corresponding mspdb*.dll
+    dnl ===========================================================
+
+    MSPDB_PATH=
+
+    if test "$BITNESS_OVERRIDE" = ""; then
         if test "$vcnum" = "120"; then
-            AC_MSG_RESULT([No])
+            MSPDB_PATH="$VC_PRODUCT_DIR/../VC/bin"
         else
-            AC_MSG_RESULT([Yes])
-            AC_MSG_CHECKING([for UCRT location])
-            find_ucrt
-            if test -n "$UCRTSDKDIR"; then
-                AC_MSG_RESULT([found])
-                PathFormat "${UCRTSDKDIR}Include/$UCRTVERSION/ucrt"
-                ucrtincpath_formatted=$formatted_path
-                # SOLARINC is used for external modules and must be set too.
-                # And no, it's not sufficient to set SOLARINC only, as configure
-                # itself doesn't honour it.
-                SOLARINC="$SOLARINC -I$ucrtincpath_formatted"
-                CFLAGS="$CFLAGS -I$ucrtincpath_formatted"
-                CXXFLAGS="$CXXFLAGS -I$ucrtincpath_formatted"
-                CPPFLAGS="$CPPFLAGS -I$ucrtincpath_formatted"
-            else
-                AC_MSG_ERROR([not found])
-            fi
+            MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
         fi
-        AC_SUBST(UCRTSDKDIR)
-        AC_SUBST(UCRTVERSION)
-
-        # Find the proper version of MSBuild.exe to use based on the VS version
-        reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MSBuild/$vcnumwithdot/MSBuildOverrideTasksPath
-        if test -n "$regvalue" ; then
-            MSBUILD_PATH=`win_short_path_for_make "$regvalue"`
+    else
+        if test "$vcexpress" = "Express"; then
+            MSPDB_PATH="$VC_PRODUCT_DIR/bin"
+        else
+            MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
         fi
+    fi
 
-        # Find the version of devenv.exe
-        DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
-        if test ! -e "$DEVENV" -a "$vcnum" = "120"; then
-            # for Visual Studio 2013 Express, fall back
-            DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/WDExpress.exe"
-        fi
-        if test ! -e "$DEVENV"; then
-            AC_MSG_ERROR([No devenv.exe found, Visual Studio installation broken?])
-        fi
+    mspdbnum=$vcnum
 
-        dnl ===========================================================
-        dnl  Check for the corresponding mspdb*.dll
-        dnl ===========================================================
+    if test ! -e "$MSPDB_PATH/mspdb${mspdbnum}.dll"; then
+        AC_MSG_ERROR([No mspdb${mspdbnum}.dll in $MSPDB_PATH, Visual Studio installation broken?])
+    fi
 
-        MSPDB_PATH=
+    MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
+    MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
 
+    dnl The path needs to be added before cl is called
+    PATH="$MSPDB_PATH:$PATH"
+
+    AC_MSG_CHECKING([cl.exe])
+
+    # Is there really ever a need to pass CC explicitly? Surely we can hope to get all the
+    # automagical niceness to work OK? If somebody has some unsupported compiler in some weird
+    # location, isn't it likely that lots of other things needs changes, too, and just setting CC
+    # is not enough?
+
+    if test -z "$CC"; then
         if test "$BITNESS_OVERRIDE" = ""; then
-            if test "$vcnum" = "120"; then
-                MSPDB_PATH="$VC_PRODUCT_DIR/../VC/bin"
-            else
-                MSPDB_PATH="$VC_PRODUCT_DIR/../Common7/IDE"
+            if test -f "$VC_PRODUCT_DIR/bin/cl.exe"; then
+                CC="$VC_PRODUCT_DIR/bin/cl.exe"
             fi
         else
             if test "$vcexpress" = "Express"; then
-                MSPDB_PATH="$VC_PRODUCT_DIR/bin"
+               if test -f "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"; then
+                    CC="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
+               fi
             else
-                MSPDB_PATH="$VC_PRODUCT_DIR/bin/amd64"
+               if test -f "$VC_PRODUCT_DIR/bin/amd64/cl.exe"; then
+                    CC="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
+               fi
             fi
         fi
 
-        mspdbnum=$vcnum
+        # This gives us a posix path with 8.3 filename restrictions
+        CC=`win_short_path_for_make "$CC"`
+    fi
 
-        if test ! -e "$MSPDB_PATH/mspdb${mspdbnum}.dll"; then
-            AC_MSG_ERROR([No mspdb${mspdbnum}.dll in $MSPDB_PATH, Visual Studio installation broken?])
-        fi
-
-        MSPDB_PATH=`cygpath -d "$MSPDB_PATH"`
-        MSPDB_PATH=`cygpath -u "$MSPDB_PATH"`
-
-        dnl The path needs to be added before cl is called
-        PATH="$MSPDB_PATH:$PATH"
-
-        AC_MSG_CHECKING([cl.exe])
-
-        # Is there really ever a need to pass CC explicitly? Surely we can hope to get all the
-        # automagical niceness to work OK? If somebody has some unsupported compiler in some weird
-        # location, isn't it likely that lots of other things needs changes, too, and just setting CC
-        # is not enough?
-
-        if test -z "$CC"; then
-            if test "$BITNESS_OVERRIDE" = ""; then
-                if test -f "$VC_PRODUCT_DIR/bin/cl.exe"; then
-                    CC="$VC_PRODUCT_DIR/bin/cl.exe"
-                fi
-            else
-                if test "$vcexpress" = "Express"; then
-                   if test -f "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"; then
-                        CC="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
-                   fi
-                else
-                   if test -f "$VC_PRODUCT_DIR/bin/amd64/cl.exe"; then
-                        CC="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
-                   fi
-                fi
-            fi
-
-            # This gives us a posix path with 8.3 filename restrictions
-            CC=`win_short_path_for_make "$CC"`
-        fi
-
-        if test -n "$CC"; then
-            # Remove /cl.exe from CC case insensitive
-            AC_MSG_RESULT([found Visual C++ $vcyear $vcexpress ($CC)])
-            if test "$BITNESS_OVERRIDE" = ""; then
-                COMPATH=`echo "$CC" | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
-            else
-                if test -n "$VC_PRODUCT_DIR"; then
-                    COMPATH=$VC_PRODUCT_DIR
-                fi
-            fi
-            if test "$BITNESS_OVERRIDE" = ""; then
-                dnl since MSVC 2012, default for x86 is -arch:SSE2:
-                CC="$CC -arch:SSE"
-            fi
-            export INCLUDE=`cygpath -d "$COMPATH/Include"`
-
-            PathFormat "$COMPATH"
-            COMPATH="$formatted_path"
-
-            VCVER=$vcnum
-            MSVSVER=$vcyear
-
-            # The WINDOWS_SDK_ACCEPTABLE_VERSIONS is mostly an educated guess...  Assuming newer ones
-            # are always "better", we list them in reverse chronological order.
-
-            case $vcnum in
-            120)
-                COMEX=15
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.1A 8.1 8.0 7.1A"
-                ;;
-            140)
-                COMEX=19
-                WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 10.0 8.1A 8.1 8.0 7.1A"
-                ;;
-            esac
-
-            # The expectation is that --with-windows-sdk should not need to be used
-            if test -n "$with_windows_sdk"; then
-                case " $WINDOWS_SDK_ACCEPTABLE_VERSIONS " in
-                *" "$with_windows_sdk" "*)
-                    WINDOWS_SDK_ACCEPTABLE_VERSIONS=$with_windows_sdk
-                    ;;
-                *)
-                    AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work with VS $MSVSVER])
-                    ;;
-                esac
-            fi
-
-            # Make AC_COMPILE_IFELSE etc. work (set by AC_PROG_C, which we don't use for MSVC)
-            ac_objext=obj
-            ac_exeext=exe
-
+    if test -n "$CC"; then
+        # Remove /cl.exe from CC case insensitive
+        AC_MSG_RESULT([found Visual C++ $vcyear $vcexpress ($CC)])
+        if test "$BITNESS_OVERRIDE" = ""; then
+            COMPATH=`echo "$CC" | $SED -e 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]].*@@' -e 's@^.* @@'`
         else
-            AC_MSG_ERROR([Visual C++ not found after all, huh])
+            if test -n "$VC_PRODUCT_DIR"; then
+                COMPATH=$VC_PRODUCT_DIR
+            fi
         fi
+        if test "$BITNESS_OVERRIDE" = ""; then
+            dnl since MSVC 2012, default for x86 is -arch:SSE2:
+            CC="$CC -arch:SSE"
+        fi
+        export INCLUDE=`cygpath -d "$COMPATH/Include"`
 
-        dnl We need to guess the prefix of the -showIncludes output, it can be
-        dnl localized
-        AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
-        echo "#include <stdlib.h>" > conftest.c
-        dnl Filter out -FIIntrin.h when CC points at clang-cl.exe and needs to
-        dnl explicitly state that argument:
-        my_CC=
-        for i in $CC; do
-            case $i in
-            -FIIntrin.h)
+        PathFormat "$COMPATH"
+        COMPATH="$formatted_path"
+
+        VCVER=$vcnum
+        MSVSVER=$vcyear
+
+        # The WINDOWS_SDK_ACCEPTABLE_VERSIONS is mostly an educated guess...  Assuming newer ones
+        # are always "better", we list them in reverse chronological order.
+
+        case $vcnum in
+        120)
+            COMEX=15
+            WINDOWS_SDK_ACCEPTABLE_VERSIONS="8.1A 8.1 8.0 7.1A"
+            ;;
+        140)
+            COMEX=19
+            WINDOWS_SDK_ACCEPTABLE_VERSIONS="10.0A 10.0 8.1A 8.1 8.0 7.1A"
+            ;;
+        esac
+
+        # The expectation is that --with-windows-sdk should not need to be used
+        if test -n "$with_windows_sdk"; then
+            case " $WINDOWS_SDK_ACCEPTABLE_VERSIONS " in
+            *" "$with_windows_sdk" "*)
+                WINDOWS_SDK_ACCEPTABLE_VERSIONS=$with_windows_sdk
                 ;;
             *)
-                my_CC="$my_CC $i"
+                AC_MSG_ERROR([Windows SDK $with_windows_sdk is not known to work with VS $MSVSVER])
                 ;;
             esac
-        done
-        SHOWINCLUDES_PREFIX=`$my_CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
-            grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
-        rm -f conftest.c conftest.obj
-        if test -z "$SHOWINCLUDES_PREFIX"; then
-            AC_MSG_ERROR([cannot determine the -showIncludes prefix])
-        else
-            AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
         fi
 
-        # Check for 64-bit (cross-)compiler to use to build the 64-bit
-        # version of the Explorer extension (and maybe other small
-        # bits, too) needed when installing a 32-bit LibreOffice on a
-        # 64-bit OS. The 64-bit Explorer extension is a feature that
-        # has been present since long in OOo. Don't confuse it with
-        # building LibreOffice itself as 64-bit code.
+        # Make AC_COMPILE_IFELSE etc. work (set by AC_PROG_C, which we don't use for MSVC)
+        ac_objext=obj
+        ac_exeext=exe
 
-        BUILD_X64=
-        CXX_X64_BINARY=
-        LINK_X64_BINARY=
-
-        if test "$BITNESS_OVERRIDE" = ""; then
-            AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
-            if test -f "$VC_PRODUCT_DIR/atlmfc/lib/amd64/atls.lib"; then
-                # Prefer native x64 compiler to cross-compiler, in case we are running
-                # the build on a 64-bit OS.
-                if "$VC_PRODUCT_DIR/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-                    BUILD_X64=TRUE
-                    CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
-                    LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/link.exe"
-                elif "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
-                    BUILD_X64=TRUE
-                    CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
-                    LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/link.exe"
-                fi
-            fi
-            if test "$BUILD_X64" = TRUE; then
-                AC_MSG_RESULT([found])
-            else
-                AC_MSG_RESULT([not found])
-                AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
-            fi
-        fi
-        AC_SUBST(BUILD_X64)
-
-        # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
-        AC_SUBST(CXX_X64_BINARY)
-        AC_SUBST(LINK_X64_BINARY)
     else
-        AC_MSG_CHECKING([the compiler is MinGW])
-        MACHINE_PREFIX=`$CC -dumpmachine`
-        if echo $MACHINE_PREFIX | $GREP -q mingw32; then
-            COMPATH=`echo "$COMPATH" | sed -e 's,/bin$,,'`
-            AC_MSG_RESULT([yes])
+        AC_MSG_ERROR([Visual C++ not found after all, huh])
+    fi
+
+    dnl We need to guess the prefix of the -showIncludes output, it can be
+    dnl localized
+    AC_MSG_CHECKING([the dependency generation prefix (cl.exe -showIncludes)])
+    echo "#include <stdlib.h>" > conftest.c
+    dnl Filter out -FIIntrin.h when CC points at clang-cl.exe and needs to
+    dnl explicitly state that argument:
+    my_CC=
+    for i in $CC; do
+        case $i in
+        -FIIntrin.h)
+            ;;
+        *)
+            my_CC="$my_CC $i"
+            ;;
+        esac
+    done
+    SHOWINCLUDES_PREFIX=`$my_CC $CFLAGS -c -showIncludes conftest.c 2>/dev/null | \
+        grep 'stdlib\.h' | head -n1 | sed 's/ [[[:alpha:]]]:.*//'`
+    rm -f conftest.c conftest.obj
+    if test -z "$SHOWINCLUDES_PREFIX"; then
+        AC_MSG_ERROR([cannot determine the -showIncludes prefix])
+    else
+        AC_MSG_RESULT(["$SHOWINCLUDES_PREFIX"])
+    fi
+
+    # Check for 64-bit (cross-)compiler to use to build the 64-bit
+    # version of the Explorer extension (and maybe other small
+    # bits, too) needed when installing a 32-bit LibreOffice on a
+    # 64-bit OS. The 64-bit Explorer extension is a feature that
+    # has been present since long in OOo. Don't confuse it with
+    # building LibreOffice itself as 64-bit code.
+
+    BUILD_X64=
+    CXX_X64_BINARY=
+    LINK_X64_BINARY=
+
+    if test "$BITNESS_OVERRIDE" = ""; then
+        AC_MSG_CHECKING([for a x64 compiler and libraries for 64-bit Explorer extensions])
+        if test -f "$VC_PRODUCT_DIR/atlmfc/lib/amd64/atls.lib"; then
+            # Prefer native x64 compiler to cross-compiler, in case we are running
+            # the build on a 64-bit OS.
+            if "$VC_PRODUCT_DIR/bin/amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+                BUILD_X64=TRUE
+                CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/cl.exe"
+                LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/amd64/link.exe"
+            elif "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe" -? </dev/null >/dev/null 2>&1; then
+                BUILD_X64=TRUE
+                CXX_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
+                LINK_X64_BINARY="$VC_PRODUCT_DIR/bin/x86_amd64/link.exe"
+            fi
+        fi
+        if test "$BUILD_X64" = TRUE; then
+            AC_MSG_RESULT([found])
         else
-            AC_MSG_ERROR([Compiler is not MinGW.])
+            AC_MSG_RESULT([not found])
+            AC_MSG_WARN([Installation set will not contain 64-bit Explorer extensions])
         fi
     fi
+    AC_SUBST(BUILD_X64)
+
+    # These are passed to the environment and then used in gbuild/platform/com_MSC_class.mk
+    AC_SUBST(CXX_X64_BINARY)
+    AC_SUBST(LINK_X64_BINARY)
 fi
 AC_SUBST(VCVER)
 AC_SUBST(DEVENV)
@@ -3621,7 +3581,7 @@ PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
 AC_SUBST(SHOWINCLUDES_PREFIX)
 
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != yes; then
+if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([whether to use DirectX])
     if test "$enable_directx" = "yes" -o "$enable_directx" = ""; then
         ENABLE_DIRECTX="TRUE"
@@ -4355,33 +4315,6 @@ emscripten*)
     PLATFORMID=linux_x86
     ;;
 
-mingw*)
-    COM=GCC
-    USING_X11=
-    OS=WNT
-    RTL_OS=Windows
-    P_SEP=:
-
-    case "$host_cpu" in
-    i*86|x86_64)
-        if test "$BITNESS_OVERRIDE" = 64; then
-            CPUNAME=X86_64
-            RTL_ARCH=X86_84
-            PLATFORMID=windows_x86_64
-            SOLARINC="$SOLARINC -I$SRC_ROOT/include/wntgccx"
-        else
-            CPUNAME=INTEL
-            RTL_ARCH=x86
-            PLATFORMID=windows_x86
-            SOLARINC="$SOLARINC -I$SRC_ROOT/include/wntgcci"
-        fi
-        ;;
-    *)
-        AC_MSG_ERROR([Unsupported host_cpu $host_cpu for host_os $host_os])
-        ;;
-    esac
-    ;;
-
 *netbsd*)
     COM=GCC
     USING_X11=TRUE
@@ -4597,17 +4530,6 @@ if test "$cross_compiling" = "yes"; then
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
     test -n "$TARFILE_LOCATION" && sub_conf_opts="$sub_conf_opts --with-external-tar=$TARFILE_LOCATION"
     test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
-    # we need the msi build tools on mingw if we are creating the
-    # installation set
-    if test "$WITH_MINGW" = "yes"; then
-        enable_winegcc_for_build=
-        for pkgformat in $PKGFORMAT; do
-            case "$pkgformat" in
-            msi|native) enable_winegcc_for_build=yes ;;
-            esac
-        done
-        test -n "$enable_winegcc_for_build" && sub_conf_opts="$sub_conf_opts --enable-winegcc"
-    fi
     sub_conf_opts="$sub_conf_opts $with_build_platform_configure_options"
     # Don't bother having configure look for stuff not needed for the build platform anyway
     ./configure \
@@ -4915,7 +4837,7 @@ fi
 
 AC_MSG_CHECKING([whether to enable pch feature])
 if test "$enable_pch" != "no"; then
-    if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+    if test "$_os" = "WINNT"; then
         ENABLE_PCH="TRUE"
         AC_MSG_RESULT([yes])
     elif test -n "$enable_pch" && test "$GCC" = "yes"; then
@@ -5123,11 +5045,11 @@ fi
 dnl ===================================================================
 dnl Check for pkg-config
 dnl ===================================================================
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+if test "$_os" != "WINNT"; then
     PKG_PROG_PKG_CONFIG
 fi
 
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+if test "$_os" != "WINNT"; then
 
     # If you use CC=/path/to/compiler/foo-gcc or even CC="ccache
     # /path/to/compiler/foo-gcc" you need to set the AR etc env vars
@@ -5464,7 +5386,7 @@ fi
 dnl ===================================================================
 dnl Check if stdc headers are available excluding MSVC.
 dnl ===================================================================
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+if test "$_os" != "WINNT"; then
     AC_HEADER_STDC
 fi
 
@@ -5472,7 +5394,7 @@ dnl ===================================================================
 dnl Testing for C++ compiler and version...
 dnl ===================================================================
 
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+if test "$_os" != "WINNT"; then
     # AC_PROG_CXX sets CXXFLAGS to -g -O2 if not set, avoid that
     save_CXXFLAGS=$CXXFLAGS
     AC_PROG_CXX
@@ -5544,7 +5466,7 @@ dnl ===================================================================
 dnl Find pre-processors.(should do that _after_ messing with CC/CXX)
 dnl ===================================================================
 
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+if test "$_os" != "WINNT"; then
     AC_PROG_CXXCPP
 
     dnl Check whether there's a C pre-processor.
@@ -5556,7 +5478,7 @@ dnl ===================================================================
 dnl Find integral type sizes and alignments
 dnl ===================================================================
 
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+if test "$_os" != "WINNT"; then
 
     AC_CHECK_SIZEOF(long)
     AC_CHECK_SIZEOF(short)
@@ -5740,112 +5662,6 @@ if test "$SDT_H_FOUND" = "TRUE"; then
     AC_LANG_POP([C++])
 fi
 AC_CONFIG_HEADERS([config_host/config_probes.h])
-
-dnl ===================================================================
-dnl Set the MinGW sys-root
-dnl ===================================================================
-if test "$WITH_MINGW" = "yes"; then
-    AC_MSG_CHECKING([for MinGW sysroot])
-    sysroot=`$CC -print-sysroot`
-    AS_IF([test -d "$sysroot"/mingw],
-          [MINGW_SYSROOT="$sysroot"/mingw
-           AC_MSG_RESULT([$MINGW_SYSROOT])],
-          [AC_MSG_RESULT([not found])
-           AC_MSG_ERROR([cannot determine MinGW sysroot])])
-fi
-AC_SUBST([MINGW_DLLS])
-AC_SUBST([MINGW_SYSROOT])
-
-dnl ===================================================================
-dnl Set the MinGW include directories
-dnl ===================================================================
-if test "$WITH_MINGW" = "yes"; then
-    AC_MSG_CHECKING([for MinGW include path])
-    cat >conftest.$ac_ext <<_ACEOF
-#include <stddef.h>
-#include <bits/c++config.h>
-_ACEOF
-    _mingw_lib_include_path=`$CXX -E -xc++ conftest.$ac_ext | $SED -n -e '/.*1*"\(.*\)\/stddef.h".*/s//\1/p' -e '/.*1*"\(.*\)\/bits\/c++config.h".*/s//\1/p' | sort -u | xargs echo`
-    rm conftest.$ac_ext
-    if test -z "$_mingw_lib_include_path"; then
-        _mingw_lib_include_path="NO_LIB_INCLUDE"
-        AC_MSG_RESULT([no MinGW include path])
-    else
-        AC_MSG_RESULT([$_mingw_lib_include_path])
-    fi
-    MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
-    AC_SUBST(MINGW_LIB_INCLUDE_PATH)
-
-    AC_LANG_PUSH([C++])
-
-    AC_MSG_CHECKING([for dynamic libgcc])
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-#include <iostream>
-using namespace std;
-]], [[ try { throw 42; } catch (int e) { cout << "Yep, " << e << endl; } ]])],[
-            MINGW_GCCDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libgcc' | $SED -e 's@.*DLL Name: @@'`
-            if test -n "$MINGW_GCCDLL"; then
-                MINGW_SHARED_GCCLIB=TRUE
-                AC_MSG_RESULT([ $MINGW_GCCDLL])
-            else
-                MINGW_SHARED_GCCLIB=
-                AC_MSG_RESULT([no])
-            fi
-       ],[ AC_MSG_RESULT([no])
-
-    ])
-
-    AC_MSG_CHECKING([for dynamic libstdc++])
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-#include <iostream>
-using namespace std;
-]], [[ cout << "Hello there." << endl; ]])],[
-            MINGW_GXXDLL=`$OBJDUMP -p conftest.exe | grep 'DLL Name: libstdc++' | $SED -e 's@.*DLL Name: @@'`
-            if test -n "$MINGW_GXXDLL"; then
-                mingw_gxxdll_root=${MINGW_GXXDLL%.dll}
-                mingw_gxxdll_root=${mingw_gxxdll_root#lib}
-                if test "$CROSS_COMPILING" = "TRUE"; then
-                    dnl m4 escaping!
-                    mingw_gxxdll_root=${mingw_gxxdll_root%-[[0-9]]}
-                fi
-                MINGW_SHARED_LIBSTDCPP=-l$mingw_gxxdll_root
-                MINGW_SHARED_GXXLIB=TRUE
-                AC_MSG_RESULT([$MINGW_GXXDLL])
-            else
-                MINGW_SHARED_GXXLIB=
-                AC_MSG_RESULT([no])
-            fi
-       ],[ AC_MSG_RESULT([no])
-
-    ])
-
-    AC_LANG_POP([C++])
-
-    AC_SUBST(MINGW_SHARED_GCCLIB)
-    AC_SUBST(MINGW_SHARED_GXXLIB)
-    AC_SUBST(MINGW_SHARED_LIBSTDCPP)
-    AC_SUBST(MINGW_GCCDLL)
-    AC_SUBST(MINGW_GXXDLL)
-fi
-
-dnl *************************************************************
-dnl Testing for exception handling - dwarf2 or sjlj exceptions...
-dnl *************************************************************
-if test "$WITH_MINGW" = "yes"; then
-    AC_MSG_CHECKING([exception type])
-    AC_LANG_PUSH([C++])
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <iostream>
-
-        extern "C" void _Unwind_SjLj_RaiseException(void) __attribute__ ((__noreturn__));
-
-        ]], [[_Unwind_SjLj_RaiseException() ]])],[exceptions_type="sjlj"],[exceptions_type="dwarf2"
-    ])
-    AC_MSG_RESULT($exceptions_type)
-    AC_LANG_POP([C++])
-fi
-
-EXCEPTIONS="$exceptions_type"
-AC_SUBST(EXCEPTIONS)
 
 dnl ===================================================================
 dnl thread-safe statics
@@ -6428,7 +6244,7 @@ AC_SUBST([HAVE_GCC_FNO_SIZED_DEALLOCATION])
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
-if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \); then
+if test "$_os" != "WINNT"; then
 
     AC_LANG_PUSH([C++])
 
@@ -6533,7 +6349,7 @@ _ACEOF
     else
         case "$host_cpu" in
         i?86|x86_64)
-            if test "$_os" = "Darwin" -o "$WITH_MINGW" = "yes"; then
+            if test "$_os" = "Darwin"; then
                 gccvisbroken=no
             else
                 if $EGREP -q '@PLT|@GOT' visibility.s || test "$ENABLE_LTO" = "TRUE"; then
@@ -6731,7 +6547,7 @@ fi
 AC_SUBST([JITC_PROCESSOR_TYPE])
 
 # Misc Windows Stuff
-if test $_os = "WINNT" -a "$WITH_MINGW" != yes; then
+if test $_os = "WINNT"; then
     find_msvc_x64_dlls
     find_msms
     MSVC_DLL_PATH="$msvcdllpath"
@@ -7092,14 +6908,8 @@ if test -z "$JAWTLIB" -a -n "$ENABLE_JAVA" -a "$_os" != Android -a \
 then
     AC_MSG_CHECKING([for JAWT lib])
     if test "$_os" = WINNT; then
-        if test "$WITH_MINGW" = yes; then
-            # The path is taken care of in gb_LinkTarget__use_jawt
-            # in RepositoryExternal.mk:
-            JAWTLIB=-ljawt
-        else
-            # The path to $JAVA_HOME/lib/$JAWTLIB is part of $ILIB:
-            JAWTLIB=jawt.lib
-        fi
+        # The path to $JAVA_HOME/lib/$JAWTLIB is part of $ILIB:
+        JAWTLIB=jawt.lib
     else
         case "$host_cpu" in
         arm*)
@@ -7184,10 +6994,6 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
         JAVAINC="-I$JAVA_HOME/include"
         JAVAINC="$JAVAINC -I$JAVA_HOME/include/linux"
         test -d "$JAVA_HOME/include/native_thread" && JAVAINC="$JAVAINC -I$JAVA_HOME/include/native_thread"
-        ;;
-
-    mingw*)
-        JAVAINC="-I$JAVA_HOME/include"
         ;;
 
     *netbsd*)
@@ -7472,31 +7278,6 @@ else
 fi
 AC_SUBST(EPM)
 
-dnl ===================================================================
-dnl We need winegcc when building MinGW build to be able to cross-build msi tools
-dnl ===================================================================
-WINEGCC=
-if test "$enable_winegcc" = "yes"; then
-    AC_PATH_PROG(WINEGCC, winegcc)
-    if test "$WINEGCC" = ""; then
-        AC_MSG_ERROR([winegcc was not found, please install wine-devel, or wine-devel-32bit])
-    fi
-    CC_save="$CC"
-    ac_exeext_save="$ac_exeext"
-    CC="$WINEGCC -m32"
-    ac_exeext=".exe"
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([
-#include <stdio.h>
-        ],[
-printf ("hello world\n");
-        ])],,
-        [AC_MSG_ERROR([winegcc cannot build 32bit binaries, please install glibc-devel-32bit and gcc-32bit])]
-    )
-    CC="$CC_save"
-    ac_exeext="$ac_exeext_save"
-fi
-AC_SUBST(WINEGCC)
-
 if test $_os = iOS; then
     enable_mpl_subset=yes
     enable_lotuswordpro=no
@@ -7684,7 +7465,6 @@ if test "$with_system_jpeg" = "yes"; then
         [AC_MSG_ERROR(jpeg.h not found. install libjpeg)], [])
     AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ LIBJPEG_LIBS="-ljpeg" ],
         [AC_MSG_ERROR(jpeg library not found or fuctional)], [])
-    libo_MINGW_CHECK_DLL([libjpeg])
 else
     SYSTEM_JPEG=
     if test "$with_jpeg_turbo" = "yes"; then
@@ -7794,7 +7574,7 @@ AC_SUBST(CLUCENE_LIBS)
 dnl ===================================================================
 dnl Check for system expat
 dnl ===================================================================
-dnl we should use libo_CHECK_SYSTEM_MODULE, but e.g. the mingw tinderbox has no
+dnl we should use libo_CHECK_SYSTEM_MODULE, but e.g. the mingw tinderbox had no
 dnl proper pkg-config for it. It should really be fixed on the tinderbox though.
 AC_MSG_CHECKING([which expat to use])
 if test "$with_system_expat" = "yes"; then
@@ -7804,7 +7584,6 @@ if test "$with_system_expat" = "yes"; then
         [AC_MSG_ERROR(expat.h not found. install expat)], [])
     AC_CHECK_LIB([expat], [XML_ParserCreate], [:],
         [AC_MSG_RESULT(expat library not found or functional.)], [])
-    libo_MINGW_CHECK_DLL([libexpat])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_EXPAT=
@@ -7888,9 +7667,7 @@ AC_SUBST(ENABLE_CMIS)
 dnl ===================================================================
 dnl Check for system lcms2
 dnl ===================================================================
-if test "$with_system_lcms2" = "yes"; then
-    libo_MINGW_CHECK_DLL([liblcms2])
-else
+if test "$with_system_lcms2" != "yes"; then
     SYSTEM_LCMS2=
 fi
 libo_CHECK_SYSTEM_MODULE([lcms2],[LCMS2],[lcms2],["-I${WORKDIR}/UnpackedTarball/lcms2/include"],["-L${WORKDIR}/UnpackedTarball/lcms2/src/.libs -llcms2"])
@@ -7980,10 +7757,6 @@ if test "$with_system_libxml" = "yes"; then
     if test "$XSLTPROC" = "no"; then
         AC_MSG_ERROR([xsltproc is required])
     fi
-
-    libo_MINGW_CHECK_DLL([libxslt])
-    libo_MINGW_CHECK_DLL([libexslt])
-    libo_MINGW_TRY_DLL([iconv])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXSLT=
@@ -8037,9 +7810,6 @@ if test "$with_system_libxml" = "yes"; then
     if test "$XMLLINT" = "no"; then
         AC_MSG_ERROR([xmllint is required])
     fi
-
-    libo_MINGW_CHECK_DLL([libxml2])
-    libo_MINGW_TRY_DLL([zlib1])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=
@@ -8100,10 +7870,6 @@ no|disable)
     elif test $build_os = cygwin; then
         dnl When building on Windows we don't attempt to use any installed
         dnl "system"  Python.
-        dnl
-        dnl (When cross-compiling to Windows from Linux using the mingw32-cross
-        dnl compiler from OBS, use mingw32-python from OBS, and ditto for other
-        dnl MinGW cross-compilation setups.)
         AC_MSG_RESULT([fully internal])
         enable_python=internal
     elif test "$cross_compiling" = yes; then
@@ -8186,25 +7952,6 @@ if test $enable_python = system; then
         PYTHON_LIBS="${filteredlibs}"
     else
         dnl How to find out the cross-compilation Python installation path?
-        dnl Let's hardocode what we know for different distributions for now...
-        for python_version in 2.6; do
-            if test -f ${MINGW_SYSROOT}/include/python${python_version}/Python.h; then
-                PYTHON_CFLAGS="-I${MINGW_SYSROOT}/include/python$python_version"
-                PYTHON_LIBS="-L${MINGW_SYSROOT}/lib -lpython$python_version $python_libs"
-                AC_MSG_CHECKING([for python.exe])
-                libo_MINGW_CHECK_DLL([libpython$python_version])
-                libo_MINGW_CHECK_DLL([libreadline6])
-                libo_MINGW_CHECK_DLL([libtermcap])
-                # could we somehow extract the really mingw python version from
-                # actual distro package?
-                # 2.6.2 currently on OpenSUSE 12.1?
-                # rpm -q mingw32-python => mingw32-python-2.6.2-17.17.noarch
-                PYTHON_VERSION=$python_version.2
-                PYTHON_VERSION_MAJOR=`echo $python_version | cut -d . -f 1`
-                PYTHON_VERSION_MINOR=`echo $python_version | cut -d . -f 2`
-                break
-            fi
-        done
         AC_MSG_CHECKING([for python version])
         AS_IF([test -n "$PYTHON_VERSION"],
               [AC_MSG_RESULT([$PYTHON_VERSION])],
@@ -8813,18 +8560,6 @@ if test "$with_system_curl" = "yes"; then
         esac
     fi
 
-    libo_MINGW_CHECK_DLL([libcurl])
-    libo_MINGW_TRY_DLL([libintl])
-    libo_MINGW_TRY_DLL([libidn])
-    libo_MINGW_TRY_DLL([libnspr4])
-    libo_MINGW_TRY_DLL([nssutil3])
-    libo_MINGW_TRY_DLL([libplc4])
-    libo_MINGW_TRY_DLL([libplds4])
-    libo_MINGW_TRY_DLL([nss3])
-    libo_MINGW_TRY_DLL([ssl3])
-    libo_MINGW_TRY_DLL([libgpg-error])
-    libo_MINGW_TRY_DLL([libgcrypt])
-    libo_MINGW_TRY_DLL([libssh2])
     ENABLE_CURL=TRUE
 elif test $_os = iOS; then
     # Let's see if we need curl, I think not?
@@ -8852,12 +8587,6 @@ if test "$with_system_boost" = "yes"; then
     AX_BOOST_DATE_TIME
     AX_BOOST_FILESYSTEM
     AX_BOOST_IOSTREAMS
-    mingw_boost_date_time_dll=`echo $BOOST_DATE_TIME_LIB | sed -e 's/^-l//' -e 's/\.dll$//'`
-    libo_MINGW_TRY_DLL([$mingw_boost_date_time_dll])
-    if test -z "$MINGW_BOOST_DATE_TIME_DLL"; then
-        # if not found, try again with 'lib' prefix
-        libo_MINGW_CHECK_DLL([lib$mingw_boost_date_time_dll])
-    fi
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
     CXXFLAGS="$CXXFLAGS $BOOST_CPPFLAGS $CXXFLAGS_CXX11"
@@ -8980,15 +8709,6 @@ if test $_os != iOS -a $_os != Android -a "$enable_fuzzers" != "yes"; then
 else
     with_tls=openssl
 fi
-if test "$with_system_nss" = "yes"; then
-    libo_MINGW_CHECK_DLL([libnspr4])
-    libo_MINGW_CHECK_DLL([libplc4])
-    libo_MINGW_CHECK_DLL([libplds4])
-    libo_MINGW_CHECK_DLL([nss3])
-    libo_MINGW_CHECK_DLL([nssutil3])
-    libo_MINGW_CHECK_DLL([smime3])
-    libo_MINGW_CHECK_DLL([ssl3])
-fi
 AC_SUBST(ENABLE_NSS)
 
 dnl ===================================================================
@@ -9062,12 +8782,8 @@ if test "$with_system_icu" = "yes"; then
     AC_PREPROC_IFELSE([AC_LANG_SOURCE([[unicode/rbbi.h]])],[AC_MSG_RESULT(checked.)],[AC_MSG_ERROR(icu headers not found.)])
     AC_LANG_POP([C++])
 
-    if test "$cross_compiling" != "yes" -o "$WITH_MINGW" = "yes"; then
-        ICUPATH="$PATH"
-        if test "$WITH_MINGW" = "yes"; then
-            ICUPATH=`$CC -print-sysroot`/mingw/bin:"$ICUPATH"
-        fi
-        AC_PATH_PROG(ICUCONFIG,icu-config,,[$ICUPATH])
+    if test "$cross_compiling" != "yes"; then
+        AC_PATH_PROG(ICUCONFIG,icu-config)
 
         AC_MSG_CHECKING([ICU version])
         ICU_VERSION=`$ICUCONFIG --noverify --version 2>/dev/null || $ICUCONFIG --version`
@@ -9130,10 +8846,6 @@ You can use --with-system-icu-for-build=force to use it anyway.])
             ICU_MINOR=""
         fi
     fi
-
-    libo_MINGW_CHECK_DLL([icudata][$ICU_MAJOR][$ICU_MINOR])
-    libo_MINGW_CHECK_DLL([icui18n][$ICU_MAJOR][$ICU_MINOR])
-    libo_MINGW_CHECK_DLL([icuuc][$ICU_MAJOR][$ICU_MINOR])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=
@@ -9396,9 +9108,6 @@ neon)
     libo_CHECK_SYSTEM_MODULE([neon],[NEON],[neon >= 0.26.0])
     if test "$with_system_neon" = "yes"; then
         NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
-        libo_MINGW_CHECK_DLL([libneon])
-        libo_MINGW_TRY_DLL([libtasn1])
-        libo_MINGW_TRY_DLL([libgnutls])
     else
         NEON_VERSION=0295
     fi
@@ -9474,8 +9183,6 @@ if test "$enable_openssl" = "yes"; then
         libo_CHECK_SYSTEM_MODULE([openssl],[OPENSSL],[openssl])
     fi
     if test "$with_system_openssl" = "yes"; then
-        libo_MINGW_CHECK_DLL([libssl])
-        libo_MINGW_CHECK_DLL([libcrypto])
         AC_MSG_CHECKING([whether openssl supports SHA512])
         AC_LANG_PUSH([C])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <openssl/sha.h>]],[[
@@ -9520,12 +9227,8 @@ dnl redland: versions before 1.0.8 write RDF/XML that is useless for ODF (@xml:b
 dnl raptor2: need at least 2.0.7 for CVE-2012-0037
 libo_CHECK_SYSTEM_MODULE([redland],[REDLAND],[redland >= 1.0.8 raptor2 >= 2.0.7])
 if test "$with_system_redland" = "yes"; then
-    libo_MINGW_CHECK_DLL([librdf])
     AC_CHECK_LIB([rdf], [librdf_world_set_raptor_init_handler], [:],
             [AC_MSG_ERROR(librdf too old. Need >= 1.0.16)], [])
-    libo_MINGW_TRY_DLL([libraptor])
-    libo_MINGW_TRY_DLL([librasqal])
-    libo_MINGW_TRY_DLL([libsqlite3])
 else
     RAPTOR_MAJOR="0"
     RASQAL_MAJOR="3"
@@ -9555,7 +9258,6 @@ if test "$with_system_hunspell" = "yes"; then
         HUNSPELL_LIBS=-lhunspell
     fi
     AC_LANG_POP([C++])
-    libo_MINGW_CHECK_DLL([libhunspell-1.6])
     HUNSPELL_CFLAGS=$(printf '%s' "$HUNSPELL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${HUNSPELL_LIBS}"
     HUNSPELL_LIBS="${filteredlibs}"
@@ -9596,7 +9298,6 @@ if test "$with_system_altlinuxhyph" = "yes"; then
         AC_CHECK_LIB(hnj, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhnj],
            [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
     fi
-    libo_MINGW_CHECK_DLL([libhyphen])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=
@@ -9633,7 +9334,6 @@ if test "$with_system_mythes" = "yes"; then
     fi
     fi
     AC_LANG_POP([C++])
-    libo_MINGW_CHECK_DLL([libmythes-1.2])
     MYTHES_CFLAGS=$(printf '%s' "$MYTHES_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${MYTHES_LIBS}"
     MYTHES_LIBS="${filteredlibs}"
@@ -9700,7 +9400,6 @@ if test "$ENABLE_LPSOLVE" = TRUE; then
         AC_CHECK_LIB([lpsolve55], [make_lp], [:],
             [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
         LIBS=$save_LIBS
-        libo_MINGW_CHECK_DLL([lpsolve55])
     else
         AC_MSG_RESULT([internal])
         SYSTEM_LPSOLVE=
@@ -9736,8 +9435,6 @@ fi
 dnl =========================================
 dnl Check for the Windows  SDK.
 dnl =========================================
-dnl FIXME: I don't know yet if the Windows SDK works with MinGW, keep it until I know better,
-dnl and add "-a \( "$WITH_MINGW" != "yes" \)" then
 if test "$_os" = "WINNT"; then
     AC_MSG_CHECKING([for Windows SDK])
     if test "$build_os" = "cygwin"; then
@@ -9864,16 +9561,9 @@ dnl =========================================
 dnl Check for uuidgen
 dnl =========================================
 if test "$_os" = "WINNT" -a "$cross_compiling" != "yes"; then
-    if test "$WITH_MINGW" = "yes"; then
-        AC_PATH_PROG([UUIDGEN], [uuid])
-        if test -z "$UUIDGEN"; then
-            AC_MSG_WARN([uuid is needed for building installation sets])
-        fi
-    else
-        # presence is already tested above in the WINDOWS_SDK_HOME check
-        UUIDGEN=uuidgen.exe
-        AC_SUBST(UUIDGEN)
-    fi
+    # presence is already tested above in the WINDOWS_SDK_HOME check
+    UUIDGEN=uuidgen.exe
+    AC_SUBST(UUIDGEN)
 else
     AC_PATH_PROG([UUIDGEN], [uuidgen])
     if test -z "$UUIDGEN"; then
@@ -9995,7 +9685,7 @@ dnl ***************************************
 dnl testing assembler path
 dnl ***************************************
 ML_EXE=""
-if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
+if test "$_os" = "WINNT"; then
     if test "$BITNESS_OVERRIDE" = ""; then
         assembler=ml.exe
         assembler_bin=bin
@@ -10614,7 +10304,6 @@ if test $_os != Android -a $_os != iOS -a \( -z "$enable_pdfimport" -o "$enable_
         CXXFLAGS=$save_CXXFLAGS
         CPPFLAGS=$save_CPPFLAGS
         AC_LANG_POP([C++])
-        libo_MINGW_CHECK_DLL([libpoppler])
         POPPLER_CFLAGS=$(printf '%s' "$POPPLER_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
 
         FilterLibs "${POPPLER_LIBS}"
@@ -11707,11 +11396,6 @@ if test "$test_cairo" = "yes"; then
 
             AC_LANG_POP([C])
         fi
-        libo_MINGW_CHECK_DLL([libcairo])
-        libo_MINGW_TRY_DLL([libfontconfig])
-        libo_MINGW_TRY_DLL([libfreetype])
-        libo_MINGW_TRY_DLL([libpixman])
-        libo_MINGW_TRY_DLL([libpng15])
     else
         SYSTEM_CAIRO=
         AC_MSG_RESULT([no])
@@ -11763,7 +11447,6 @@ if test "$enable_liblangtag" = "yes" -o \
         LIBLANGTAG_CFLAGS=$(printf '%s' "$LIBLANGTAG_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
         FilterLibs "${LIBLANGTAG_LIBS}"
         LIBLANGTAG_LIBS="${filteredlibs}"
-        libo_MINGW_CHECK_DLL([liblangtag])
     else
         SYSTEM_LIBLANGTAG=
         AC_MSG_RESULT([no])

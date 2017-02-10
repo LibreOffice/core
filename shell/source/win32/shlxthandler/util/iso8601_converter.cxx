@@ -147,30 +147,11 @@ std::wstring iso8601_duration_to_local_duration(const std::wstring& iso8601durat
         hours = buff;
     }
 
-#if defined(_MSC_VER) //&& defined(_M_X64)
     std::wostringstream oss;
     oss << std::setw(2) << std::setfill(wchar_t('0')) << hours   << L":" <<
            std::setw(2) << std::setfill(wchar_t('0')) << minutes << L":" <<
            std::setw(2) << std::setfill(wchar_t('0')) << seconds;
     return oss.str();
-#elif defined( __MINGW32__ )
-#define ADD_AS_PREFILLED( st, out ) \
-    if ( st.length() == 0 ) \
-        out += L"00"; \
-    else if ( st.length() == 1 ) \
-        out += L"0"; \
-    out += st;
-
-    std::wstring result;
-    ADD_AS_PREFILLED( hours, result )
-    result += L":";
-    ADD_AS_PREFILLED( minutes, result )
-    result += L":";
-    ADD_AS_PREFILLED( seconds, result )
-
-    return result;
-#undef ADD_AS_PREFILLED
-#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

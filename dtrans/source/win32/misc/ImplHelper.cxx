@@ -33,10 +33,6 @@
 
 #include <vector>
 
-#if defined ( __MINGW32__ )
-#include <sehandler.hxx>
-#endif
-
 #define FORMATETC_EXACT_MATCH    1
 #define FORMATETC_PARTIAL_MATCH -1
 #define FORMATETC_NO_MATCH       0
@@ -175,29 +171,14 @@ OUString SAL_CALL cptostr( sal_uInt32 codepage )
 //    SCODE  -  S_OK if successful
 void SAL_CALL DeleteTargetDevice( DVTARGETDEVICE* ptd )
 {
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
     __try
     {
-#endif
         CoTaskMemFree( ptd );
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    else
-#else
     __except( EXCEPTION_EXECUTE_HANDLER )
-#endif
     {
         OSL_FAIL( "Error DeleteTargetDevice" );
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    han.Reset();
-#endif
 }
 
 // OleStdCopyTargetDevice()
@@ -219,29 +200,17 @@ DVTARGETDEVICE* SAL_CALL CopyTargetDevice( DVTARGETDEVICE* ptdSrc )
 {
     DVTARGETDEVICE* ptdDest = nullptr;
 
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
     __try
     {
-#endif
         if ( nullptr != ptdSrc )
         {
             ptdDest = static_cast< DVTARGETDEVICE* >( CoTaskMemAlloc( ptdSrc->tdSize ) );
             memcpy( ptdDest, ptdSrc, static_cast< size_t >( ptdSrc->tdSize ) );
         }
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    han.Reset();
-#else
     __except( EXCEPTION_EXECUTE_HANDLER )
     {
     }
-#endif
 
     return ptdDest;
 }
@@ -273,16 +242,8 @@ bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
 {
     bool bRet = false;
 
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
     __try
     {
-#endif
         if ( petcDest != petcSrc )
         {
 
@@ -299,17 +260,10 @@ bool SAL_CALL CopyFormatEtc( LPFORMATETC petcDest, LPFORMATETC petcSrc )
         bRet = true;
         }
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    else
-#else
     __except( EXCEPTION_EXECUTE_HANDLER )
-#endif
     {
         OSL_FAIL( "Error CopyFormatEtc" );
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    han.Reset();
-#endif
 
     return bRet;
 }
@@ -324,16 +278,8 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
 {
     sal_Int32 nMatch = FORMATETC_EXACT_MATCH;
 
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
     __try
     {
-#endif
         if ( pFetcLhs != pFetcRhs )
         {
             if ( ( pFetcLhs->cfFormat != pFetcRhs->cfFormat ) ||
@@ -371,18 +317,11 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
             }
         }
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    else
-#else
     __except( EXCEPTION_EXECUTE_HANDLER )
-#endif
     {
         OSL_FAIL( "Error CompareFormatEtc" );
         nMatch = FORMATETC_NO_MATCH;
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    han.Reset();
-#endif
 
     return nMatch;
 }
@@ -391,16 +330,8 @@ bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdR
 {
     bool bRet = false;
 
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
     __try
     {
-#endif
         if ( ptdLeft == ptdRight )
         {
             // same address of td; must be same (handles NULL case)
@@ -415,18 +346,11 @@ bool SAL_CALL CompareTargetDevice( DVTARGETDEVICE* ptdLeft, DVTARGETDEVICE* ptdR
         if ( memcmp( ptdLeft, ptdRight, ptdLeft->tdSize ) == 0 )
             bRet = true;
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    else
-#else
     __except( EXCEPTION_EXECUTE_HANDLER )
-#endif
     {
         OSL_FAIL( "Error CompareTargetDevice" );
         bRet = false;
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    han.Reset();
-#endif
 
     return bRet;
 }

@@ -13,8 +13,7 @@ $(eval $(call gb_CustomTarget_register_targets,odk/check,\
 	checkbin \
 ))
 
-odk_PLATFORM := $(if $(filter WNT,$(OS)),\
-	$(if $(filter GCC,$(COM)),mingw,windows),\
+odk_PLATFORM := $(if $(filter WNT,$(OS)),windows,\
 	$(if $(filter SOLARIS,$(OS)),\
 		$(if $(filter SPARC,$(CPUNAME)),solsparc,\
 			$(if $(filter SPARC64,$(CPUNAME)),solsparc64,solintel)),\

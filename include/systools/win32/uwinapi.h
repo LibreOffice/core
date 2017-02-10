@@ -30,13 +30,6 @@
 #include "prewin.h"
 #include "postwin.h"
 
-#ifdef __MINGW32__
-#include <basetyps.h>
-#ifdef _UWINAPI_
-#define WINBASEAPI
-#endif
-#endif
-
 #ifdef __cplusplus
 
 inline bool IsValidHandle(HANDLE handle)

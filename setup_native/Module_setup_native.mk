@@ -21,7 +21,7 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 	) \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
+ifeq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,setup_native,\
 	Library_instooofiltmsi \
 	Library_qslnkmsi \
@@ -34,17 +34,6 @@ $(eval $(call gb_Module_add_targets,setup_native,\
 	StaticLibrary_quickstarter \
 	StaticLibrary_seterror \
 ))
-
-else
-
-ifneq ($(WINEGCC),)
-# this is supposed to be built on the _build_ platform, even though the
-# result is an .exe
-$(eval $(call gb_Module_add_targets,setup_native,\
-	CustomTarget_wintools \
-	Package_wintools \
-))
-endif
 
 endif
 

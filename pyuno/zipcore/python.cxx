@@ -24,13 +24,9 @@
 #include <wchar.h>
 
 #define WIN32_LEAN_AND_MEAN
-#if defined _MSC_VER
 #pragma warning(push, 1)
-#endif
 #include <windows.h>
-#if defined _MSC_VER
 #pragma warning(pop)
-#endif
 
 #include "tools/pathutils.hxx"
 
@@ -69,11 +65,7 @@ wchar_t * encode(wchar_t * buffer, wchar_t const * text) {
     return buffer;
 }
 
-#ifdef __MINGW32__
-int main(int argc, char ** argv, char **) {
-#else
 int wmain(int argc, wchar_t ** argv, wchar_t **) {
-#endif
     wchar_t path[MAX_PATH];
     DWORD n = GetModuleFileNameW(nullptr, path, MAX_PATH);
     if (n == 0 || n >= MAX_PATH) {
@@ -111,15 +103,6 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     if (pythonpath3End == nullptr) {
         exit(EXIT_FAILURE);
     }
-#ifdef __MINGW32__
-    wchar_t pythonpath4[MAX_PATH];
-    wchar_t * pythonpath4End = tools::buildPath(
-        pythonpath4, path, pathEnd,
-        MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING L"\\lib\\lib-dynload"));
-    if (pythonpath4End == NULL) {
-        exit(EXIT_FAILURE);
-    }
-#endif
     wchar_t pythonhome[MAX_PATH];
     wchar_t * pythonhomeEnd = tools::buildPath(
         pythonhome, path, pathEnd, MY_STRING(L"\\python-core-" PYTHON_VERSION_STRING));
@@ -138,27 +121,14 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
         // 4 * len: each char preceded by backslash, each trailing backslash
         // doubled
     for (int i = 1; i < argc; ++i) {
-#ifdef __MINGW32__
-        clSize += MY_LENGTH(L" \"") + 4 * strlen(argv[i]) +
-#else
-        clSize += MY_LENGTH(L" \"") + 4 * wcslen(argv[i]) +
-#endif
-            MY_LENGTH(L"\""); //TODO: overflow
+        clSize += MY_LENGTH(L" \"") + 4 * wcslen(argv[i]) + MY_LENGTH(L"\"");
+            //TODO: overflow
     }
     wchar_t * cl = new wchar_t[clSize];
     wchar_t * cp = encode(cl, pythonhome);
     for (int i = 1; i < argc; ++i) {
         *cp++ = L' ';
-#ifdef __MINGW32__
-        int nNeededWStrBuffSize = MultiByteToWideChar(CP_ACP, 0, argv[i], -1, NULL, 0);
-        WCHAR *buff = new WCHAR[nNeededWStrBuffSize+1];
-        MultiByteToWideChar(CP_ACP, 0, argv[i], -1, buff, nNeededWStrBuffSize);
-        buff[nNeededWStrBuffSize] = 0;
-        cp = encode(cp, buff);
-        delete [] buff;
-#else
         cp = encode(cp, argv[i]);
-#endif
     }
     *cp = L'\0';
     n = GetEnvironmentVariableW(L"PATH", nullptr, 0);
@@ -201,16 +171,6 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
             exit(EXIT_FAILURE);
         }
     }
-#ifdef __MINGW32__
-    len = (pathEnd - path) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
-        MY_LENGTH(L";") + (pythonpath4End - pythonpath4) +
-        MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
-        (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1; //TODO: overflow
-    value = new wchar_t[len];
-    _snwprintf(
-        value, len, L"%s;%s;%s;%s%s%s", path, pythonpath2, pythonpath4,
-        pythonpath3, n == 0 ? L"" : L";", orig);
-#else
     len = (pathEnd - path) + MY_LENGTH(L";") + (pythonpath2End - pythonpath2) +
         MY_LENGTH(L";") + (pythonpath3End - pythonpath3) +
         (n == 0 ? 0 : MY_LENGTH(L";") + (n - 1)) + 1; //TODO: overflow
@@ -218,7 +178,6 @@ int wmain(int argc, wchar_t ** argv, wchar_t **) {
     _snwprintf(
         value, len, L"%s;%s;%s%s%s", path, pythonpath2, pythonpath3,
         n == 0 ? L"" : L";", orig);
-#endif
     if (!SetEnvironmentVariableW(L"PYTHONPATH", value)) {
         exit(EXIT_FAILURE);
     }

@@ -274,16 +274,7 @@ BOOL WINAPI CtrlBreakHandler(
     return TRUE;
 }
 
-
-
-
-
-
-#ifdef __MINGW32__
-int main( int, char ** )
-#else
 int _tmain( int, _TCHAR ** )
-#endif
 {
     TCHAR               szTargetFileName[MAX_PATH] = TEXT("");
     STARTUPINFO         aStartupInfo;

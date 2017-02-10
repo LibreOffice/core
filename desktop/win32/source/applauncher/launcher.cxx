@@ -24,11 +24,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 
-#ifdef __MINGW32__
-extern "C" int APIENTRY WinMain( HINSTANCE, HINSTANCE, LPSTR, int )
-#else
 extern "C" int APIENTRY _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
-#endif
 {
     // Retrieve startup info
 

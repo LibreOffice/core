@@ -720,31 +720,12 @@ endif # SYSTEM_CMIS
 
 ifeq ($(ENABLE_JAVA),TRUE)
 
-ifeq ($(OS)$(COM),WNTGCC)
-
-define gb_LinkTarget__use_jawt
-$(call gb_LinkTarget_use_custom_headers,$(1),external/jawt)
-
-$(call gb_LinkTarget_add_ldflags,$(1),\
-	-L$(call gb_CustomTarget_get_workdir,external/jawt) \
-)
-
-$(call gb_LinkTarget_add_libs,$(1),\
-	$(JAWTLIB) \
-)
-
-endef
-
-else # $(OS)$(COM) != WNTGCC
-
 define gb_LinkTarget__use_jawt
 $(call gb_LinkTarget_add_libs,$(1),\
 	$(JAWTLIB) \
 )
 
 endef
-
-endif # $(OS)$(COM) = WNTGCC
 
 else # !ENABLE_JAVA
 
@@ -2986,7 +2967,7 @@ $(call gb_LinkTarget_add_libs,$(1),\
 	$(call gb_UnpackedTarball_get_dir,postgresql)/src/interfaces/libpq/libpq$(gb_StaticLibrary_PLAINEXT) \
 )
 
-ifeq ($(OS)$(COM),WNTMSC)
+ifeq ($(OS),WNT)
 $(call gb_LinkTarget_use_external,$(1),openssl)
 
 $(call gb_LinkTarget_use_system_win32_libs,$(1),\

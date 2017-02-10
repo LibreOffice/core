@@ -44,9 +44,6 @@
 #endif /* defined _MSC_VER */
 
 /* Provide ISO C99 compatible versions of snprint and vsnprintf */
-#ifdef __MINGW32__
-#define LO_SNPRINTF_DLLIMPORT
-#endif
 #ifndef _SNPRINTF_H
 #include <systools/win32/snprintf.h>
 #endif

@@ -81,11 +81,6 @@ else ifeq ($(COM),MSC)
 bridges_SELECTED_BRIDGE := msvc_win32_intel
 bridge_exception_objects := cpp2uno dllinit uno2cpp
 bridge_noopt_objects := except
-else ifeq ($(OS)$(COM),WNTGCC)
-bridges_SELECTED_BRIDGE := mingw_intel
-bridge_asm_objects := call
-bridge_noopt_objects := uno2cpp
-bridge_exception_objects := callvirtualmethod cpp2uno dllinit except smallstruct
 endif
 
 else ifeq ($(CPUNAME),M68K)
@@ -182,11 +177,6 @@ bridges_SELECTED_BRIDGE := msvc_win32_x86-64
 bridge_exception_objects := cpp2uno dllinit uno2cpp
 bridge_noopt_objects := except
 bridge_asm_objects := call
-else ifeq ($(OS)$(COM),WNTGCC)
-bridges_SELECTED_BRIDGE := mingw_x86-64
-bridge_asm_objects := call
-bridge_noncallexception_noopt_objects := callvirtualmethod
-bridge_exception_objects := abi cpp2uno except uno2cpp
 endif
 
 endif
@@ -207,13 +197,9 @@ $(eval $(call gb_Library_add_defs,$(gb_CPPU_ENV)_uno,\
 endif
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_defs,$(gb_CPPU_ENV)_uno,\
-	$(if $(filter GCC,$(COM)),\
-	$(if $(filter sjlj,$(EXCEPTIONS)),\
-		-DBROKEN_ALLOCA \
-	), \
 	$(if $(cppu_no_leak)$(bndchk),,\
 		-DLEAK_STATIC_DATA \
-	)) \
+	) \
 ))
 endif
 

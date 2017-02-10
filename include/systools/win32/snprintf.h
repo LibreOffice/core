@@ -66,9 +66,6 @@ extern "C" {
     even if the buffer wasn't large
     enough to hold the string. */
 
-
-#if !defined(__MINGW32__) || defined (__NO_ISOCEXT)
-
 /* VS 2015 and above support ISO C snprintf */
 #if _MSC_VER < 1900
 
@@ -77,8 +74,6 @@ LO_SNPRINTF_DLLIMPORT int __cdecl snwprintf( wchar_t *buffer, size_t count, cons
 
 /* SBCS and MBCS version */
 LO_SNPRINTF_DLLIMPORT int __cdecl snprintf( char *buffer, size_t count, const char *format, ... );
-
-#endif
 
 #endif
 

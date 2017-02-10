@@ -44,8 +44,7 @@ private:
         b2 = "1234567890123456";
         CPPUNIT_ASSERT_EQUAL(s3, b2.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(32), b2.getCapacity());
-#if HAVE_CXX11_UTF16_STRING_LITERAL \
-    && (!defined SAL_W32 || defined __MINGW32__)
+#if HAVE_CXX11_UTF16_STRING_LITERAL && !defined SAL_W32
     // sal_Unicode is still wchar_t not char16_t even for MSVC 2015
         OUStringBuffer b3;
         b3 = u"123456789012345";

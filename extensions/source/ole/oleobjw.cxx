@@ -949,11 +949,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                         if( SUCCEEDED( CComObject<JScriptOutParam>::CreateInstance( &pParamObject)))
                         {
                             CComPtr<IUnknown> pUnk(pParamObject->GetUnknown());
-#ifdef __MINGW32__
-                            CComQIPtr<IDispatch, &__uuidof(IDispatch)> pDisp( pUnk);
-#else
                             CComQIPtr<IDispatch> pDisp( pUnk);
-#endif
 
                             pVarParams[ parameterCount - i -1].vt= VT_DISPATCH;
                             pVarParams[ parameterCount - i -1].pdispVal= pDisp;
@@ -1178,11 +1174,7 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
     OSL_ASSERT(aArguments.getLength() == 3);
 
     m_spUnknown= *static_cast<IUnknown* const *>(aArguments[0].getValue());
-#ifdef __MINGW32__
-    m_spUnknown->QueryInterface(IID_IDispatch, reinterpret_cast<LPVOID*>( & m_spDispatch.p));
-#else
     m_spUnknown.QueryInterface( & m_spDispatch.p);
-#endif
 
     aArguments[1] >>= m_bOriginalDispatch;
     aArguments[2] >>= m_seqTypes;
