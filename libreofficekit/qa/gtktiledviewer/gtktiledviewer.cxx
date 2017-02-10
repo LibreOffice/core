@@ -291,11 +291,11 @@ static void editButtonClicked(GtkWidget* pWidget, gpointer userdata)
 
     userPromptDialog(rWindow.m_pDocView, "Edit comment", aEntries);
 
-    int *commentId = static_cast<int*>(g_object_get_data(G_OBJECT(userdata), "id"));
+    gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
     boost::property_tree::ptree aTree;
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "long");
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::to_string(*commentId));
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentId));
 
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
@@ -315,11 +315,11 @@ static void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
 
     userPromptDialog(rWindow.m_pDocView, "Reply comment", aEntries);
 
-    int *commentId = static_cast<int*>(g_object_get_data(G_OBJECT(userdata), "id"));
+    gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
     boost::property_tree::ptree aTree;
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "long");
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::to_string(*commentId));
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentId));
 
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
@@ -335,11 +335,11 @@ static void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
 
-    int *commentid = static_cast<int*>(g_object_get_data(G_OBJECT(userdata), "id"));
+    gchar *commentid = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
     boost::property_tree::ptree aTree;
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "long");
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::to_string(*commentid));
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentid));
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
@@ -351,12 +351,11 @@ static void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
 GtkWidget* CommentsSidebar::createCommentBox(const boost::property_tree::ptree& aComment)
 {
     GtkWidget* pCommentVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
-    int *id = g_new(int, 1);
-    *id =  aComment.get<int>("id");
+    gchar *id = g_strndup(aComment.get<std::string>("id").c_str(), 20);
     g_object_set_data_full(G_OBJECT(pCommentVBox), "id", id, g_free);
 
-    // Set left-margin if its a reply comment
-    if (aComment.get<int>("parent") > 0)
+    // Set background if its a reply comment
+    if (aComment.get("parent", -1) > 0)
     {
         GtkStyleContext* pStyleContext = gtk_widget_get_style_context(pCommentVBox);
         GtkCssProvider* pCssProvider = gtk_css_provider_get_default();
@@ -1603,13 +1602,13 @@ static void commentCallback(LOKDocView* pLOKDocView, gchar* pComment, gpointer /
     GtkWidget* pParent = nullptr;
     for (GList* l = pChildren; l != nullptr; l = l->next)
     {
-        int *id = static_cast<int*>(g_object_get_data(G_OBJECT(l->data), "id"));
+        gchar *id = static_cast<gchar*>(g_object_get_data(G_OBJECT(l->data), "id"));
 
-        if (*id == aComment.get<int>("id"))
+        if (g_strcmp0(id, aComment.get<std::string>("id").c_str()) == 0)
             pSelf = GTK_WIDGET(l->data);
 
         // There is no 'parent' in Remove callbacks
-        if (*id == aComment.get("parent", -1))
+        if (g_strcmp0(id, aComment.get("parent", std::string("0")).c_str()) == 0)
             pParent = GTK_WIDGET(l->data);
     }
 
