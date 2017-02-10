@@ -96,7 +96,7 @@ public:
     Implementation (
         ViewShellManager& rManager,
         ViewShellBase& rBase);
-    ~Implementation();
+    ~Implementation() COVERITY_NOEXCEPT_FALSE;
 
     void AddShellFactory (
         const SfxShell* pViewShell,
@@ -129,7 +129,7 @@ public:
     {
     public:
         explicit UpdateLock (Implementation& rImpl) : mrImpl(rImpl) {mrImpl.LockUpdate();}
-        ~UpdateLock() {mrImpl.UnlockUpdate();};
+        ~UpdateLock() COVERITY_NOEXCEPT_FALSE {mrImpl.UnlockUpdate();}
     private:
         Implementation& mrImpl;
     };
@@ -376,7 +376,7 @@ ViewShellManager::Implementation::Implementation (
     (void)rManager;
 }
 
-ViewShellManager::Implementation::~Implementation()
+ViewShellManager::Implementation::~Implementation() COVERITY_NOEXCEPT_FALSE
 {
     Shutdown();
 }

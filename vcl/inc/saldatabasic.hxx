@@ -45,7 +45,7 @@ public:
 #endif
 
     SalData();
-    virtual ~SalData();
+    virtual ~SalData() COVERITY_NOEXCEPT_FALSE;
 #ifdef IOS
     SystemFontList*               mpFontList;
     CGColorSpaceRef               mxRGBSpace;

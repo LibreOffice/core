@@ -32,7 +32,7 @@ public:
         SC_MOD()->SetInputOptions(aInputOptions);
         return bRet;
     }
-    virtual ~SortTypeSetter()
+    virtual ~SortTypeSetter() COVERITY_NOEXCEPT_FALSE
     {
         changeTo(mbSortRefUpdate);
     }

@@ -136,7 +136,7 @@ public:
 class EDITENG_DLLPUBLIC SvxTextForwarder
 {
 public:
-    virtual             ~SvxTextForwarder();
+    virtual             ~SvxTextForwarder() COVERITY_NOEXCEPT_FALSE;
 
     virtual sal_Int32   GetParagraphCount() const = 0;
     virtual sal_Int32   GetTextLen( sal_Int32 nParagraph ) const = 0;

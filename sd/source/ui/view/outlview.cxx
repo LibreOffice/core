@@ -1758,7 +1758,7 @@ OutlineViewModelChangeGuard::OutlineViewModelChangeGuard( OutlineView& rView )
     mrView.BeginModelChange();
 }
 
-OutlineViewModelChangeGuard::~OutlineViewModelChangeGuard()
+OutlineViewModelChangeGuard::~OutlineViewModelChangeGuard() COVERITY_NOEXCEPT_FALSE
 {
     mrView.EndModelChange();
 }

@@ -192,7 +192,7 @@ public:
             pSh->DelRight();
         pSh->StartAllAction();
     }
-    ~SwTrnsfrActionAndUndo()
+    ~SwTrnsfrActionAndUndo() COVERITY_NOEXCEPT_FALSE
     {
         pSh->EndUndo();
         pSh->EndAllAction();

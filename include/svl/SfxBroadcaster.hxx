@@ -43,7 +43,7 @@ public:
 
                             SfxBroadcaster();
                             SfxBroadcaster( const SfxBroadcaster &rBC );
-    virtual                 ~SfxBroadcaster();
+    virtual                 ~SfxBroadcaster() COVERITY_NOEXCEPT_FALSE;
 
     void                    Broadcast( const SfxHint &rHint );
     bool                    HasListeners() const;

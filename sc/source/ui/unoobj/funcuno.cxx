@@ -67,7 +67,7 @@ private:
 
 public:
     explicit ScTempDocSource( ScTempDocCache& rDocCache );
-    ~ScTempDocSource();
+    ~ScTempDocSource() COVERITY_NOEXCEPT_FALSE;
 
     ScDocument*     GetDocument();
 };
@@ -93,7 +93,7 @@ ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
     }
 }
 
-ScTempDocSource::~ScTempDocSource()
+ScTempDocSource::~ScTempDocSource() COVERITY_NOEXCEPT_FALSE
 {
     if ( pTempDoc )
         delete pTempDoc;

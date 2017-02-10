@@ -330,7 +330,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
         aCol[k].Init( k, nTab, pDocument, true );
 }
 
-ScTable::~ScTable()
+ScTable::~ScTable() COVERITY_NOEXCEPT_FALSE
 {
     if (!pDocument->IsInDtorClear())
     {
