@@ -162,7 +162,10 @@ namespace pcr
                 try
                 {
                     if ( !xSource.is() )
+                    {
                         setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( Sequence< OUString >() ) );
+                        setPropertyValue( PROPERTY_TYPEDITEMLIST, makeAny( Sequence< Any >() ) );
+                    }
                 }
                 catch( const Exception& )
                 {

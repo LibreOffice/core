@@ -326,6 +326,7 @@ namespace pcr
     #define PROPERTY_ID_SCROLL_HEIGHT               204
     #define PROPERTY_ID_SCROLL_TOP                  205
     #define PROPERTY_ID_SCROLL_LEFT                 206
+    #define PROPERTY_ID_TYPEDITEMLIST               207
 
 
 } // namespace pcr

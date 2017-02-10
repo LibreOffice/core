@@ -70,6 +70,7 @@ namespace frm
     #define PROPERTY_HIDDEN_VALUE             "HiddenValue"
     #define PROPERTY_BUTTONTYPE               "ButtonType"
     #define PROPERTY_STRINGITEMLIST           "StringItemList"
+    #define PROPERTY_TYPEDITEMLIST            "TypedItemList"
     #define PROPERTY_DEFAULT_TEXT             "DefaultText"
     #define PROPERTY_DEFAULT_STATE             "DefaultState"
     #define PROPERTY_FORMATKEY                "FormatKey"

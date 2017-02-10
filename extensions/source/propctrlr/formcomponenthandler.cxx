@@ -1547,11 +1547,13 @@ namespace pcr
                 // available list source values (tables or queries) might have changed
                 _rxInspectorUI->rebuildPropertyUI( PROPERTY_LISTSOURCE );
             aDependentProperties.push_back( PROPERTY_ID_STRINGITEMLIST );
+            aDependentProperties.push_back( PROPERTY_ID_TYPEDITEMLIST );
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
             SAL_FALLTHROUGH;
 
         // ----- StringItemList -----
         case PROPERTY_ID_STRINGITEMLIST:
+            aDependentProperties.push_back( PROPERTY_ID_TYPEDITEMLIST );
             aDependentProperties.push_back( PROPERTY_ID_SELECTEDITEMS );
             aDependentProperties.push_back( PROPERTY_ID_DEFAULT_SELECT_SEQ );
             break;
@@ -1559,6 +1561,7 @@ namespace pcr
         // ----- ListSource -----
         case PROPERTY_ID_LISTSOURCE:
             aDependentProperties.push_back( PROPERTY_ID_STRINGITEMLIST );
+            aDependentProperties.push_back( PROPERTY_ID_TYPEDITEMLIST );
             break;
 
         // ----- DataField -----
@@ -1807,6 +1810,13 @@ namespace pcr
                 _rxInspectorUI->enablePropertyUI( PROPERTY_STRINGITEMLIST, bIsEnabled );
             }
             break;  // case PROPERTY_ID_STRINGITEMLIST
+
+            // ----- TypedItemList -----
+            case PROPERTY_ID_TYPEDITEMLIST:
+            {
+                /* TODO: anything? */
+            }
+            break;  // case PROPERTY_ID_TYPEDITEMLIST
 
             // ----- BoundColumn -----
             case PROPERTY_ID_BOUNDCOLUMN:
