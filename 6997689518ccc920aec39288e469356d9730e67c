@@ -142,6 +142,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_d525cc5c",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2407,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-10T17:23:02Z",
+      "side": 1,
+      "message": "Ok. Your comment is much easier to understand.",
+      "parentUuid": "9a57fde8_b50928e0",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_d5578cc8",
         "filename": "sc/source/filter/excel/xetable.cxx",
         "patchSetId": 1
@@ -171,6 +189,24 @@
       "side": 1,
       "message": "zeroHeight does not exist in documents created by MS Excel though... That\u0027s why I chose to do this one differently from the others.\nIf you insist, I have no problems changing it.",
       "parentUuid": "9a57fde8_d5578cc8",
+      "revId": "6997689518ccc920aec39288e469356d9730e67c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b53048a0",
+        "filename": "sc/source/filter/excel/xetable.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2716,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2017-02-10T17:23:02Z",
+      "side": 1,
+      "message": "I would use \"XclXmlUtils::ToPsz\" to keep consistency. \nThe reason why all parameters are saved, (even if Excel don\u0027t save it), is to simplify debugging, and to avoid errors in MS Excel.",
+      "parentUuid": "9a57fde8_d50eace4",
       "revId": "6997689518ccc920aec39288e469356d9730e67c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
