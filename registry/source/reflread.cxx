@@ -1020,6 +1020,10 @@ RTParamMode MethodList::getMethodParamMode(sal_uInt16 index, sal_uInt16 paramInd
     return aMode;
 }
 
+#if defined(__COVERITY__)
+extern "C" void __coverity_tainted_data_sanitize__(void *);
+#endif
+
 sal_uInt16 MethodList::getMethodExcCount(sal_uInt16 index)
 {
     sal_uInt16 aCount = 0;
@@ -1028,6 +1032,9 @@ sal_uInt16 MethodList::getMethodExcCount(sal_uInt16 index)
     {
         try {
             aCount = readUINT16(m_pIndex[index] + calcMethodParamIndex(readUINT16(m_pIndex[index] + METHOD_OFFSET_PARAM_COUNT)));
+#if defined(__COVERITY__)
+            __coverity_tainted_data_sanitize__(&aCount);
+#endif
         } catch (BlopObject::BoundsError &) {
             SAL_WARN("registry", "bad data");
         }
