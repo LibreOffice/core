@@ -10,6 +10,7 @@
 $(eval $(call gb_Module_Module,libassuan))
 
 $(eval $(call gb_Module_add_targets,libassuan,\
+	ExternalProject_libassuan \
 	UnpackedTarball_libassuan \
 ))
 

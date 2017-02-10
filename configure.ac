@@ -10365,9 +10365,14 @@ if test "$_os" = "Linux"; then
 # This is work in progress, please DO NOT MODIFY OR REMOVE
         AC_MSG_RESULT([internal])
         BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGME"
+
+        GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
+        GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
     fi
 fi
 AC_SUBST(SYSTEM_GPGMEPP)
+AC_SUBST(GPG_ERROR_CFLAGS)
+AC_SUBST(GPG_ERROR_LIBS)
 AC_SUBST(GPGMEPP_CFLAGS)
 AC_SUBST(GPGMEPP_LIBS)
 
