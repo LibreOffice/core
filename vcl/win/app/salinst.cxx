@@ -59,13 +59,6 @@
 #pragma warning( disable: 4917 )
 #endif
 
-#ifdef __MINGW32__
-#ifdef GetObject
-#undef GetObject
-#endif
-#define GetObject GetObjectA
-#endif
-
 #include "prewin.h"
 
 #include <gdiplus.h>
@@ -76,18 +69,8 @@
 #endif
 #include "postwin.h"
 
-#ifdef __MINGW32__
-#ifdef GetObject
-#undef GetObject
-#endif
-#endif
-
 #if defined _MSC_VER
 #pragma warning(pop)
-#endif
-
-#ifdef __MINGW32__
-#include <sehandler.hxx>
 #endif
 
 void SalAbort( const OUString& rErrorText, bool )
@@ -756,25 +739,13 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 {
     int bDef = TRUE;
     LRESULT nRet = 0;
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
     __try
     {
-#endif
         nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    han.Reset();
-#else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
-#endif
     if ( bDef )
     {
         if ( !ImplHandleGlobalMsg( hWnd, nMsg, wParam, lParam, nRet ) )
@@ -1031,8 +1002,6 @@ SalSession* WinSalInstance::CreateSalSession()
     return nullptr;
 }
 
-#if !defined ( __MINGW32__ ) || defined ( _WIN64 )
-
 int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POINTERS pExceptionInfo)
 {
     // Decide if an exception is a c++ (mostly UNO) exception or a process violation.
@@ -1048,7 +1017,6 @@ int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POIN
 
     return UnhandledExceptionFilter( pExceptionInfo );
 }
-#endif
 
 OUString WinSalInstance::getOSVersion()
 {

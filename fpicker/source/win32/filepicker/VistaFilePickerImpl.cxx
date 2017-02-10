@@ -33,9 +33,6 @@
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/process.h>
-#ifdef __MINGW32__
-#include <limits.h>
-#endif
 #include "../misc/WinImplHelper.hxx"
 
 #include <shlguid.h>
@@ -64,14 +61,8 @@ bool createFolderItem(OUString const & url, ComPtr<IShellItem> & folder) {
     {
         return false;
     }
-#if defined __MINGW32__
-    HRESULT res = SHCreateItemFromParsingName(
-        reinterpret_cast<PCWSTR>(path.getStr()), NULL, IID_IShellItem,
-        reinterpret_cast<void **>(&folder));
-#else
     HRESULT res = SHCreateItemFromParsingName(
         path.getStr(), nullptr, IID_PPV_ARGS(&folder));
-#endif
     return SUCCEEDED(res);
 }
 
@@ -416,11 +407,7 @@ void VistaFilePickerImpl::impl_sta_CreateOpenDialog(const RequestRef& rRequest)
         return;
 
     TFileDialog iDialog;
-#ifdef __MINGW32__
-    m_iDialogOpen->QueryInterface(IID_IFileDialog, (void **)(&iDialog));
-#else
     m_iDialogOpen.query(&iDialog);
-#endif
 
     TFileDialogEvents iHandler = m_iEventHandler;
 
@@ -459,11 +446,7 @@ void VistaFilePickerImpl::impl_sta_CreateSaveDialog(const RequestRef& rRequest)
 
     TFileDialogEvents  iHandler = m_iEventHandler;
     TFileDialog        iDialog;
-#ifdef __MINGW32__
-    m_iDialogSave->QueryInterface(IID_IFileDialog, (void **)(&iDialog));
-#else
     m_iDialogSave.query(&iDialog);
-#endif
 
     aLock.clear();
     // <- SYNCHRONIZED
@@ -998,17 +981,9 @@ TFileDialog VistaFilePickerImpl::impl_getBaseDialogInterface()
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     if (m_iDialogOpen.is())
-#ifdef __MINGW32__
-        m_iDialogOpen->QueryInterface(IID_IFileDialog, (void**)(&iDialog));
-#else
         m_iDialogOpen.query(&iDialog);
-#endif
     if (m_iDialogSave.is())
-#ifdef __MINGW32__
-        m_iDialogSave->QueryInterface(IID_IFileDialog, (void**)(&iDialog));
-#else
         m_iDialogSave.query(&iDialog);
-#endif
 
     return iDialog;
 }
@@ -1022,17 +997,9 @@ TFileDialogCustomize VistaFilePickerImpl::impl_getCustomizeInterface()
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
     if (m_iDialogOpen.is())
-#ifdef __MINGW32__
-        m_iDialogOpen->QueryInterface(IID_IFileDialogCustomize, (void**)(&iCustom));
-#else
         m_iDialogOpen.query(&iCustom);
-#endif
     else if (m_iDialogSave.is())
-#ifdef __MINGW32__
-        m_iDialogSave->QueryInterface(IID_IFileDialogCustomize, (void**)(&iCustom));
-#else
         m_iDialogSave.query(&iCustom);
-#endif
 
     return iCustom;
 }

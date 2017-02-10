@@ -19,26 +19,6 @@ $(eval $(call gb_ExternalProject_register_targets,rasqal,\
 
 # note: this can intentionally only build against internal raptor (not system)
 
-ifeq ($(OS),WNT)
-$(call gb_ExternalProject_get_state_target,rasqal,build):
-	$(call gb_ExternalProject_run,build,\
-		CC="$(CC) -mthreads $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
-		LDFLAGS="-Wl$(COMMA)--no-undefined -Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols $(subst ;, -L$,$(ILIB))" \
-		OBJDUMP="$(HOST_PLATFORM)-objdump" \
-		PKG_CONFIG="" \
-		RAPTOR2_CFLAGS="-I$(call gb_UnpackedTarball_get_dir,raptor)/src" \
-		RAPTOR2_LIBS="-L$(call gb_UnpackedTarball_get_dir,raptor)/src/.libs -lraptor2" \
-		./configure --disable-static --enable-shared --disable-gtk-doc \
-			--disable-pcre \
-			--with-decimal=none \
-			--with-uuid-library=internal \
-			--with-digest-library=internal \
-			--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) \
-			lt_cv_cc_dll_switch="-shared" \
-			$(if $(SYSTEM_LIBXML),,--with-xml2-config=$(call gb_UnpackedTarball_get_dir,xml2)/xml2-config) \
-		&& $(MAKE) \
-	)
-else
 $(call gb_ExternalProject_get_state_target,rasqal,build):
 	$(call gb_ExternalProject_run,build,\
 		CFLAGS="$(CFLAGS) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden)" \
@@ -68,6 +48,5 @@ $(call gb_ExternalProject_get_state_target,rasqal,build):
 			$(SRCDIR)/solenv/bin/macosx-change-install-names.pl shl OOO \
 			$(gb_Package_SOURCEDIR_rasqal)/src/.libs/librasqal-lo.$(RASQAL_MAJOR).dylib) \
 	)
-endif
 
 # vim: set noet sw=4 ts=4:

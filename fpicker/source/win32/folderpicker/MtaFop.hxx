@@ -29,9 +29,6 @@
 #include <osl/mutex.hxx>
 
 #include <utility>
-#ifdef __MINGW32__
-#include <windows.h>
-#endif
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)

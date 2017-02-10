@@ -62,8 +62,8 @@ if (-d "$SdkDir") {
         }
     }
 
-    if ($OperatingSystem eq "windows" || $OperatingSystem eq "mingw") {
-        if ($OperatingSystem eq "windows" && !check_file("bin/climaker.exe")) {
+    if ($OperatingSystem eq "windows") {
+        if (!check_file("bin/climaker.exe")) {
         $return++;
         print "\nERROR: \"bin/climaker.exe\" is missing\n";
         } else {
@@ -110,7 +110,7 @@ if (-d "$SdkDir") {
 
     #check configure files
     print "check config files: ";
-    if ($OperatingSystem eq "windows" || $OperatingSystem eq "mingw") {
+    if ($OperatingSystem eq "windows") {
     if (!check_file("setsdkenv_windows.bat")) {
         print "\nERROR: \"setsdkenv_windows.bat\" is missing\n";
         $return++;

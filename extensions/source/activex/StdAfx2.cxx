@@ -21,9 +21,6 @@
 //  stdafx1.pch will be the pre-compiled header
 //  stdafx1.obj will contain the pre-compiled type information
 
-#ifdef __MINGW32__
-#define _INIT_ATL_COMMON_VARS
-#endif
 #include "StdAfx2.h"
 
 #ifdef _ATL_STATIC_REGISTRY

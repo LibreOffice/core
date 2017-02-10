@@ -13,7 +13,7 @@ $(eval $(call gb_ExternalProject_register_targets,freetype,\
 	build \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
+ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,freetype,build) :
 	$(call gb_ExternalProject_run,build,\
 		cd ../builds/win32/vc2010/ && \

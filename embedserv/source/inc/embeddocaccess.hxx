@@ -28,7 +28,6 @@
 #define OLESERV_DEACTIVATE      6
 
 #include <oleidl.h>
-#ifndef __MINGW32__
 #pragma warning(disable : 4265)
 #if defined __clang__
 #pragma clang diagnostic push
@@ -40,7 +39,6 @@
 #include <atldbcli.h>
 #if defined __clang__
 #pragma clang diagnostic pop
-#endif
 #endif
 #include <cppuhelper/weak.hxx>
 

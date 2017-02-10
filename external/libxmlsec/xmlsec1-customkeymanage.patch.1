@@ -3165,7 +3165,7 @@ new file mode 100644
 index 0000000..e27d1e4
 --- /dev/null
 +++ b/src/nss/tokens.c
-@@ -0,0 +1,548 @@
+@@ -0,0 +1,544 @@
 +/**
 + * XMLSec library
 + *
@@ -3517,11 +3517,7 @@ index 0000000..e27d1e4
 +/**
 + * Key Slot List
 + */
-+#ifdef __MINGW32__ // for runtime-pseudo-reloc
-+static struct _xmlSecPtrListKlass xmlSecNssKeySlotPtrListKlass = {
-+#else
 +static xmlSecPtrListKlass xmlSecNssKeySlotPtrListKlass = {
-+#endif
 +    BAD_CAST "mechanism-list",
 +    (xmlSecPtrDuplicateItemMethod)xmlSecNssKeySlotDuplicate,
 +    (xmlSecPtrDestroyItemMethod)xmlSecNssKeySlotDestroy,

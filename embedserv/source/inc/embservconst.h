@@ -26,38 +26,6 @@
 
 #define SUPPORTED_FACTORIES_NUM 10
 
-#if defined(__MINGW32__) && !defined(INITGUID)
-extern "C" const GUID DECLSPEC_SELECTANY OID_WriterTextServer;
-extern "C" const GUID DECLSPEC_SELECTANY OID_WriterOASISTextServer;
-
-extern "C" const GUID DECLSPEC_SELECTANY OID_CalcServer;
-extern "C" const GUID DECLSPEC_SELECTANY OID_CalcOASISServer;
-
-extern "C" const GUID DECLSPEC_SELECTANY OID_DrawingServer;
-extern "C" const GUID DECLSPEC_SELECTANY OID_DrawingOASISServer;
-
-extern "C" const GUID DECLSPEC_SELECTANY OID_PresentationServer;
-extern "C" const GUID DECLSPEC_SELECTANY OID_PresentationOASISServer;
-
-extern "C" const GUID DECLSPEC_SELECTANY OID_MathServer;
-extern "C" const GUID DECLSPEC_SELECTANY OID_MathOASISServer;
-#else
-extern "C" const GUID DECLSPEC_SELECTANY OID_WriterTextServer = { SO3_SW_OLE_EMBED_CLASSID_60 };
-extern "C" const GUID DECLSPEC_SELECTANY OID_WriterOASISTextServer = { SO3_SW_OLE_EMBED_CLASSID_8 };
-
-extern "C" const GUID DECLSPEC_SELECTANY OID_CalcServer = { SO3_SC_OLE_EMBED_CLASSID_60 };
-extern "C" const GUID DECLSPEC_SELECTANY OID_CalcOASISServer = { SO3_SC_OLE_EMBED_CLASSID_8 };
-
-extern "C" const GUID DECLSPEC_SELECTANY OID_DrawingServer = { SO3_SDRAW_OLE_EMBED_CLASSID_60 };
-extern "C" const GUID DECLSPEC_SELECTANY OID_DrawingOASISServer = { SO3_SDRAW_OLE_EMBED_CLASSID_8 };
-
-extern "C" const GUID DECLSPEC_SELECTANY OID_PresentationServer = { SO3_SIMPRESS_OLE_EMBED_CLASSID_60 };
-extern "C" const GUID DECLSPEC_SELECTANY OID_PresentationOASISServer = { SO3_SIMPRESS_OLE_EMBED_CLASSID_8 };
-
-extern "C" const GUID DECLSPEC_SELECTANY OID_MathServer = { SO3_SM_OLE_EMBED_CLASSID_60 };
-extern "C" const GUID DECLSPEC_SELECTANY OID_MathOASISServer = { SO3_SM_OLE_EMBED_CLASSID_8 };
-#endif
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

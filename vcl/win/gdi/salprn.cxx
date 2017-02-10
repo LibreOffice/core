@@ -49,25 +49,6 @@
 
 #include <malloc.h>
 
-#if defined ( __MINGW32__ )
-#include <sehandler.hxx>
-#endif
-
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-#define CATCH_DRIVER_EX_BEGIN                                               \
-    jmp_buf jmpbuf;                                                         \
-    __SEHandler han;                                                        \
-    if (__builtin_setjmp(jmpbuf) == 0)                                      \
-    {                                                                       \
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER)
-
-#define CATCH_DRIVER_EX_END(mes, p)                                         \
-    }                                                                       \
-    han.Reset()
-#define CATCH_DRIVER_EX_END_2(mes)                                            \
-    }                                                                       \
-    han.Reset()
-#else
 #define CATCH_DRIVER_EX_BEGIN                                               \
     __try                                                                   \
     {
@@ -84,7 +65,6 @@
     {                                                                       \
         OSL_FAIL( mes );                                                   \
     }
-#endif
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

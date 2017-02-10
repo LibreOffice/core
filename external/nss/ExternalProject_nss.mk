@@ -26,7 +26,6 @@ $(call gb_ExternalProject_get_state_target,nss,configure):
 	,,nss_configure.log)
 
 ifeq ($(OS),WNT)
-ifeq ($(COM),MSC)
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
@@ -38,26 +37,6 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 	,nss)
 
-
-else
-$(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
-	$(call gb_ExternalProject_run,build,\
-		$(MAKE) -j1 nss_build_all \
-			NS_USE_GCC=1 \
-			CC="$(CC) $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
-			CXX="$(CXX) $(if $(MINGW_SHARED_GCCLIB),-shared-libgcc)" \
-			OS_LIBS="-ladvapi32 -lws2_32 -lmswsock -lwinmm $(if $(MINGW_SHARED_GXXLIB),$(MINGW_SHARED_LIBSTDCPP))" \
-			LDFLAGS="" \
-			PATH="$(PATH)" \
-			RANLIB="$(RANLIB)" \
-			OS_TARGET=WINNT RC="$(WINDRES)" OS_RELEASE="5.0" \
-			IMPORT_LIB_SUFFIX=dll.a \
-			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM) --enable-shared --disable-static" \
-			NSINSTALL="$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py" \
-		&& rm -f $(call gb_UnpackedTarball_get_dir,nss)/mozilla/dist/out/lib/*.a \
-	,nss)
-
-endif
 else # OS!=WNT
 $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject_get_state_target,nss,configure) $(call gb_ExternalExecutable_get_dependencies,python)
 	$(call gb_ExternalProject_run,build,\

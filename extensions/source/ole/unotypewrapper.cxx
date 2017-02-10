@@ -32,17 +32,9 @@ bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
     {
         pObj->AddRef();
         pVar->vt= VT_DISPATCH;
-#ifdef __MINGW32__
-        pVar->pdispVal= CComQIPtr<IDispatch, &__uuidof(IDispatch)>(pObj->GetUnknown());
-#else
         pVar->pdispVal= CComQIPtr<IDispatch>(pObj->GetUnknown());
-#endif
         //now set the value, e.i. the name of the type
-#ifdef __MINGW32__
-        CComQIPtr<IUnoTypeWrapper, &__uuidof(IUnoTypeWrapper)> spType(pVar->pdispVal);
-#else
         CComQIPtr<IUnoTypeWrapper> spType(pVar->pdispVal);
-#endif
         OSL_ASSERT(spType);
         if (SUCCEEDED(spType->put_Name(sTypeName)))
         {

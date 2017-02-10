@@ -47,17 +47,6 @@
 extern CRITICAL_SECTION g_ThreadKeyListCS;
 extern oslMutex         g_Mutex;
 
-#ifdef __MINGW32__
-
-typedef void (*func_ptr) (void);
-extern func_ptr __CTOR_LIST__[];
-extern func_ptr __DTOR_LIST__[];
-
-static void do_startup(void);
-static void do_cleanup(void);
-
-#else
-
 /*
 This is needed because DllMain is called after static constructors. A DLL's
 startup and shutdown sequence looks like this:
@@ -75,73 +64,6 @@ _pRawDllMain()
 static BOOL WINAPI RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved );
 BOOL (WINAPI *_pRawDllMain)(HINSTANCE, DWORD, LPVOID) = RawDllMain;
 
-#endif
-
-#ifdef __MINGW32__
-
-void
-__do_global_dtors (void)
-{
-  static func_ptr *p = __DTOR_LIST__ + 1;
-
-  /*
-   * Call each destructor in the destructor list until a null pointer
-   * is encountered.
-   */
-  while (*p)
-    {
-      (*(p)) ();
-      p++;
-    }
-}
-
-void
-__do_global_ctors (void)
-{
-  sal_uIntPtr nptrs = (sal_uIntPtr) __CTOR_LIST__[0];
-  unsigned i;
-
-  /*
-   * If the first entry in the constructor list is -1 then the list
-   * is terminated with a null entry. Otherwise the first entry was
-   * the number of pointers in the list.
-   */
-  if (nptrs == (sal_uIntPtr)-1)
-    {
-      for (nptrs = 0; __CTOR_LIST__[nptrs + 1] != 0; nptrs++)
-    ;
-    }
-
-  /*
-   * Go through the list backwards calling constructors.
-   */
-  for (i = nptrs; i >= 1; i--)
-    {
-      __CTOR_LIST__[i] ();
-    }
-
-  /*
-   * Register the destructors for processing on exit.
-   */
-  atexit (__do_global_dtors);
-}
-
-static int initialized = 0;
-
-void
-__main (void)
-{
-  if (!initialized)
-    {
-      initialized = 1;
-      do_startup();
-      __do_global_ctors ();
-    }
-}
-
-static void do_startup( void )
-{
-#else
 static BOOL WINAPI RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
     (void)hinstDLL; /* avoid warnings */
@@ -166,7 +88,6 @@ static BOOL WINAPI RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
                     _set_error_mode(_OUT_TO_STDERR);
                 }
 #endif
-#endif
 
 #if OSL_DEBUG_LEVEL < 2
                 /* Suppress file error messages from system like "Floppy A: not inserted" */
@@ -185,19 +106,10 @@ static BOOL WINAPI RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
                 //We disable floating point exceptions. This is the usual state at program startup
                 //but on Windows 98 and ME this is not always the case.
                 _control87(_MCW_EM, _MCW_EM);
-#ifdef __MINGW32__
-        atexit(do_cleanup);
-}
-
-void do_cleanup( void )
-{
-#else
                 break;
             }
 
         case DLL_PROCESS_DETACH:
-#endif
-
             WSACleanup( );
 
             TlsFree( g_dwTLSTextEncodingIndex );
@@ -206,8 +118,6 @@ void do_cleanup( void )
             osl_destroyMutex( g_Mutex );
 
             osl_destroyMutex( g_CurrentDirectoryMutex );
-
-#ifndef __MINGW32__
 
             /*
 
@@ -243,7 +153,6 @@ void do_cleanup( void )
     }
 
     return TRUE;
-#endif
 }
 
 static DWORD GetParentProcessId()

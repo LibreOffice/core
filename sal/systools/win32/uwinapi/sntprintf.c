@@ -22,10 +22,6 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#ifdef __MINGW32__
-/* MinGW-w64 doesn't have a _tcsinc() inline or library function */
-#define _MB_MAP_DIRECT
-#endif
 #include <tchar.h>
 #include <systools/win32/snprintf.h>
 
@@ -33,33 +29,8 @@
 #pragma warning(disable:4273)       // inconsistent dll linkage
 #endif
 
-#if defined(__MINGW32_VERSION) && ((__MINGW32_MAJOR_VERSION < 3)||((__MINGW32_MAJOR_VERSION == 3)&&(__MINGW32_MINOR_VERSION < 18)))
-
-/*  The non-debug versions of _vscprintf/_scprintf are just calls
-    to _vsprintf/_sprintf with string buffer pointer set to NULL,
-    requires MSVCRT version 7.0 */
-#ifdef __MINGW32__
-static int __cdecl _vsctprintf( const TCHAR *format, va_list ap )
-#else
-static int __cdecl _vsctprintf( const _TXCHAR *format, va_list ap )
-#endif
-{
-    FILE    *fp = _tfopen( _T("NUL"), _T("wb") );
-
-    if ( fp )
-    {
-        int retval = _vftprintf( fp, format, ap );
-        fclose( fp );
-
-        return retval;
-    }
-
-    return -1;
-}
-#endif
-
 /* VS 2015 and above support ISO C snprintf */
-#if (defined(__MINGW32__) && !defined (__NO_ISOCEXT)) || (defined(_MSC_VER) && (_MSC_VER < 1900))
+#if _MSC_VER < 1900
 
 /*  This function retrieves the pointer to the last character of a buffer.
     That is the pointer to the last character of the buffer that fits

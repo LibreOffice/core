@@ -37,9 +37,6 @@
 #pragma clang diagnostic ignored "-Wnon-virtual-dtor"
 #endif
 
-#ifdef __MINGW32__
-#define _INIT_ATL_COMMON_VARS
-#endif
 #include <atlbase.h>
 static CComModule _Module;
 #include <atlcom.h>

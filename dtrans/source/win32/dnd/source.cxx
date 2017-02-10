@@ -36,13 +36,6 @@
 #include <winuser.h>
 #include <stdio.h>
 
-#ifdef __MINGW32__
-#if defined __uuidof
-#undef __uuidof
-#endif
-#define __uuidof(I) IID_##I
-#endif
-
 using namespace cppu;
 using namespace osl;
 using namespace com::sun::star::datatransfer;
