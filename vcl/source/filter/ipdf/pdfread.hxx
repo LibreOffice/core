@@ -13,8 +13,13 @@
 #include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 
+namespace vcl
+{
+
 /// Imports a PDF stream into rGraphic as a GDIMetaFile.
 VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic);
+
+}
 
 #endif // INCLUDED_VCL_SOURCE_FILTER_IPDF_PDFREAD_HXX
 

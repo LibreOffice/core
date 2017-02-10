@@ -67,7 +67,10 @@ uno::Reference<lang::XComponent> importIntoDraw(SvStream& rStream)
 
 }
 
-VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
+namespace vcl
+{
+
+bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 {
     uno::Reference<lang::XComponent> xComponent = importIntoDraw(rStream);
     if (!xComponent.is())
@@ -108,6 +111,8 @@ VCL_DLLPUBLIC bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
     rGraphic.setPdfData(aPdfData);
 
     return true;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

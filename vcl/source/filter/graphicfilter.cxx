@@ -1686,7 +1686,7 @@ sal_uInt16 GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPat
         }
         else if (aFilterName == IMP_PDF)
         {
-            if (!ImportPDF(rIStream, rGraphic))
+            if (!vcl::ImportPDF(rIStream, rGraphic))
                 nStatus = GRFILTER_FILTERERROR;
             else
                 eLinkType = GfxLinkType::NativePdf;
