@@ -1,0 +1,59 @@
+diff --git a/configure.ac b/configure.ac
+index f28480b..92a3e85 100644
+--- configure.ac
++++ configure.ac
+@@ -674,15 +674,34 @@ AC_CHECK_FUNCS(setlocale)
+ 
+ # Checking for libgpg-error.
+ have_gpg_error=no
+-AM_PATH_GPG_ERROR("$NEED_GPG_ERROR_VERSION",
+-                  have_gpg_error=yes, have_gpg_error=no)
++if test "x${GPG_ERROR_CFLAGS}" = x; then
++  AM_PATH_GPG_ERROR("$NEED_GPG_ERROR_VERSION",
++                have_gpg_error=yes, have_gpg_error=no)
++else
++  have_gpg_error=yes
++  GPG_ERROR_CFLAGS="$GPG_ERROR_CFLAGS"
++  GPG_ERROR_LIBS="$GPG_ERROR_LIBS"
++  AC_SUBST(GPG_ERROR_CFLAGS)
++  AC_SUBST(GPG_ERROR_LIBS)
++
++fi
++
+ AC_DEFINE(GPG_ERR_SOURCE_DEFAULT, GPG_ERR_SOURCE_GPGME,
+           [The default error source for GPGME.])
+ 
+ # And for libassuan.
+ have_libassuan=no
+-AM_PATH_LIBASSUAN("$NEED_LIBASSUAN_API:$NEED_LIBASSUAN_VERSION",
++if test "x${LIBASSUAN_CFLAGS}" = x; then
++  AM_PATH_LIBASSUAN("$NEED_LIBASSUAN_API:$NEED_LIBASSUAN_VERSION",
+                   have_libassuan=yes, have_libassuan=no)
++else
++  have_libassuan=yes
++  LIBASSUAN_CFLAGS="$LIBASSUAN_CFLAGS"
++  LIBASSUAN_LIBS="$LIBASSUAN_LIBS"
++  AC_SUBST(LIBASSUAN_CFLAGS)
++  AC_SUBST(LIBASSUAN_LIBS)
++fi
++
+ if test "$have_libassuan" = "yes"; then
+   AC_DEFINE_UNQUOTED(GPGME_LIBASSUAN_VERSION, "$libassuan_version",
+                      [version of the libassuan library])
+diff --git a/src/Makefile.am b/src/Makefile.am
+index ce6f1d4..6b1d835 100644
+--- src/Makefile.am
++++ src/Makefile.am
+@@ -97,10 +97,10 @@ endif
+ 
+ # We use a global CFLAGS setting for all library
+ # versions, because then every object file is only compiled once.
+-AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GLIB_CFLAGS@
++AM_CFLAGS = @LIBASSUAN_CFLAGS@ @GPG_ERROR_CFLAGS@ @GLIB_CFLAGS@
+ 
+ gpgme_tool_SOURCES = gpgme-tool.c argparse.c argparse.h
+-gpgme_tool_LDADD = libgpgme.la @LIBASSUAN_LIBS@
++gpgme_tool_LDADD = libgpgme.la @LIBASSUAN_LIBS@ @GPG_ERROR_LIBS@
+ 
+ 
+ if HAVE_W32_SYSTEM
