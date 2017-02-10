@@ -797,6 +797,8 @@ struct XclExpDefaultRowData
     explicit            XclExpDefaultRowData();
     explicit            XclExpDefaultRowData( const XclExpRow& rRow );
 
+    /** Returns true, if rows are hidden by default. */
+    inline bool         IsHidden() const { return ::get_flag( mnFlags, EXC_DEFROW_HIDDEN ); }
     /** Returns true, if the rows have a manually set height by default. */
     inline bool         IsUnsynced() const { return ::get_flag( mnFlags, EXC_DEFROW_UNSYNCED ); }
 };
