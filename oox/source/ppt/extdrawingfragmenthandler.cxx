@@ -11,6 +11,7 @@
 
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <oox/core/xmlfilterbase.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
@@ -35,7 +36,9 @@ ExtDrawingFragmentHandler::ExtDrawingFragmentHandler( XmlFilterBase& rFilter,
 
 ExtDrawingFragmentHandler::~ExtDrawingFragmentHandler( ) throw ()
 {
-
+    // Empty DrawingML fallback, need to warn the user at the end.
+    if (mpShapePtr && mpShapePtr->getChildren().empty())
+        getFilter().setMissingExtDrawing();
 }
 
 ContextHandlerRef
