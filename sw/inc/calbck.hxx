@@ -86,7 +86,7 @@ namespace sw
             WriterListener()
                 : m_pLeft(nullptr), m_pRight(nullptr)
             {}
-            virtual ~WriterListener() {};
+            virtual ~WriterListener() COVERITY_NOEXCEPT_FALSE {}
             virtual void SwClientNotify( const SwModify&, const SfxHint& rHint) =0;
         public:
             bool IsLast() const { return !m_pLeft && !m_pRight; }

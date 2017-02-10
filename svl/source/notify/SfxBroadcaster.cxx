@@ -52,7 +52,7 @@ void SfxBroadcaster::Broadcast( const SfxHint &rHint )
 
 // unregister all listeners
 
-SfxBroadcaster::~SfxBroadcaster()
+SfxBroadcaster::~SfxBroadcaster() COVERITY_NOEXCEPT_FALSE
 {
     Broadcast( SfxHint(SfxHintId::Dying) );
 

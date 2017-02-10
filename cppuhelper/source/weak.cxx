@@ -249,7 +249,7 @@ void OWeakObject::disposeWeakConnectionPoint()
     }
 }
 
-OWeakObject::~OWeakObject()
+OWeakObject::~OWeakObject() COVERITY_NOEXCEPT_FALSE
 {
 }
 

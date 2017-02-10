@@ -51,7 +51,7 @@ protected:
         Despite the fact that a RuntimeException is allowed to be thrown, you must not throw any
         exception upon destruction!
     */
-    virtual ~OWeakObject();
+    virtual ~OWeakObject() COVERITY_NOEXCEPT_FALSE;
 
     /** disposes and resets m_pWeakConnectionPoint
         @pre

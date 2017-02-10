@@ -62,7 +62,7 @@ public:
 
     Thread(): m_hThread(NULL){}
 
-    virtual  ~Thread()
+    virtual  ~Thread() COVERITY_NOEXCEPT_FALSE
     {
         osl_destroyThread( m_hThread);
     }

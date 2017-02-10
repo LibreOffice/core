@@ -228,7 +228,7 @@ class OutlineViewModelChangeGuard
 {
 public:
     OutlineViewModelChangeGuard( OutlineView& rView );
-    ~OutlineViewModelChangeGuard();
+    ~OutlineViewModelChangeGuard() COVERITY_NOEXCEPT_FALSE;
 private:
     OutlineView& mrView;
 };

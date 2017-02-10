@@ -89,7 +89,7 @@ public:
     static void operator delete(void * pPtr, std::nothrow_t const & rNothrow);
 
 protected:
-    virtual ~SimpleReferenceObject();
+    virtual ~SimpleReferenceObject() COVERITY_NOEXCEPT_FALSE;
 
 private:
     oslInterlockedCount m_nCount;

@@ -174,7 +174,7 @@ public:
     public:
         UpdateLock (const std::shared_ptr<ViewShellManager>& rpManager)
             : mpManager(rpManager) {mpManager->LockUpdate();}
-        ~UpdateLock() {mpManager->UnlockUpdate();};
+        ~UpdateLock() COVERITY_NOEXCEPT_FALSE {mpManager->UnlockUpdate();}
     private:
         std::shared_ptr<ViewShellManager> mpManager;
     };

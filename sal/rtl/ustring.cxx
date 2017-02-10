@@ -612,7 +612,11 @@ void rtl_uString_newConcatAsciiL(
     assert(right != nullptr);
     assert(rightLength >= 0);
     if (left->length > std::numeric_limits<sal_Int32>::max() - rightLength) {
+#if !defined(__COVERITY__)
         throw std::length_error("rtl_uString_newConcatAsciiL");
+#else
+        throw std::bad_alloc();
+#endif
     }
     sal_Int32 n = left->length + rightLength;
     rtl_uString_assign(newString, left);
@@ -634,7 +638,11 @@ void rtl_uString_newConcatUtf16L(
     assert(right != nullptr);
     assert(rightLength >= 0);
     if (left->length > std::numeric_limits<sal_Int32>::max() - rightLength) {
+#if !defined(__COVERITY__)
         throw std::length_error("rtl_uString_newConcatUtf16L");
+#else
+        throw std::bad_alloc();
+#endif
     }
     sal_Int32 n = left->length + rightLength;
     rtl_uString_assign(newString, left);

@@ -359,7 +359,7 @@ public:
         if (pBASM)
             pBASM->EnterBulkBroadcast();
     }
-    ~ScBulkBroadcast()
+    ~ScBulkBroadcast() COVERITY_NOEXCEPT_FALSE
     {
         if (pBASM)
             pBASM->LeaveBulkBroadcast( mnHintId );

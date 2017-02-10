@@ -66,7 +66,7 @@ private:
 
 public:
         UnoActionContext(SwDoc *const pDoc);
-        ~UnoActionContext();
+        ~UnoActionContext() COVERITY_NOEXCEPT_FALSE;
 };
 
 /*
