@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_52f2d29b",
+        "filename": "include/o3tl/strong_typedef.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-10T06:59:15Z",
+      "side": 1,
+      "message": "Done the first one.\n\nBut I deliberately made this final, hoping to make it virtually the same performance cost as a naked integer. Making it derivable would limit it\u0027s utility to places where we can pay that cost.",
+      "parentUuid": "9a57fde8_ef48418a",
+      "revId": "e46b63c3802c8351db26bb2df5495de3a8a0d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_6f55311c",
         "filename": "include/o3tl/strong_typedef.hxx",
         "patchSetId": 2
@@ -47,6 +65,24 @@
       "writtenOn": "2017-02-09T14:48:28Z",
       "side": 1,
       "message": "another option might be to make Index a scoped enum with underyling type sal_uInt32, and introduce an o3tl::is_typed_integer similar to o3tl::is_typed_flags, providing the relevant operations",
+      "revId": "e46b63c3802c8351db26bb2df5495de3a8a0d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d20b227c",
+        "filename": "include/tools/unqidx.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-10T06:59:15Z",
+      "side": 1,
+      "message": "I gave that a bash, and I can show you what I have, but I couldn\u0027t figure out how to implement operator++. Clang doesn\u0027t seem to be doing lookup for that on an enum type.",
+      "parentUuid": "9a57fde8_0f2585c1",
       "revId": "e46b63c3802c8351db26bb2df5495de3a8a0d27e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
