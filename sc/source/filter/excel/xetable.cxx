@@ -2047,7 +2047,7 @@ sal_uInt16 XclExpRow::GetFirstFreeXclCol() const
 
 bool XclExpRow::IsDefaultable() const
 {
-    const sal_uInt16 nFlagsAlwaysMarkedAsDefault = EXC_ROW_DEFAULTFLAGS | EXC_ROW_UNSYNCED;
+    const sal_uInt16 nFlagsAlwaysMarkedAsDefault = EXC_ROW_DEFAULTFLAGS | EXC_ROW_HIDDEN | EXC_ROW_UNSYNCED;
     return !::get_flag( mnFlags, static_cast< sal_uInt16 >( ~nFlagsAlwaysMarkedAsDefault ) ) &&
            IsEmpty();
 }
@@ -2056,6 +2056,7 @@ void XclExpRow::DisableIfDefault( const XclExpDefaultRowData& rDefRowData )
 {
     mbEnabled = !IsDefaultable() ||
         (mnHeight != rDefRowData.mnHeight) ||
+        (IsHidden() != rDefRowData.IsHidden()) ||
         (IsUnsynced() != rDefRowData.IsUnsynced());
 }
 
@@ -2279,8 +2280,12 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
     // default row height
     for ( XclRepeatedRows::iterator it = aRepeated.begin(), it_end = aRepeated.end(); it != it_end; ++it)
     {
-        if ( (*it)->GetXclRowRpt() > 1 && (*it)->GetHeight() == rDefRowData.mnHeight )
+        if ( (*it)->GetXclRowRpt() > 1
+             && (*it)->GetHeight() == rDefRowData.mnHeight
+             && (*it)->IsHidden() == rDefRowData.IsHidden() )
+        {
             (*it)->SetXclRowRpt( 1 );
+        }
     }
 
     // *** Disable unused ROW records, find used area *** ---------------------
@@ -2399,16 +2404,17 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
         while( nFrom <= nXclRow )
         {
             // only create RowMap entries if it is first row in spreadsheet,
-            // if it is the desired row, for rows that height differ from previous,
-            // if row is collapsed, has outline level (tdf#100347), or row is hidden (tdf#98106).
+            // if it is the desired row, or for rows that differ from previous.
             const bool bHidden = rDoc.RowHidden(nFrom, nScTab);
             // Always get the actual row height even if the manual size flag is
             // not set, to correctly export the heights of rows with wrapped
             // texts.
             const sal_uInt16 nHeight = rDoc.GetRowHeight(nFrom, nScTab, false);
-            if ( !pPrevEntry || ( nFrom == nXclRow ) || bHidden ||
+            if ( !pPrevEntry || ( nFrom == nXclRow ) ||
                  ( maOutlineBfr.IsCollapsed() ) ||
                  ( maOutlineBfr.GetLevel() != 0 ) ||
+                 ( bRowAlwaysEmpty && !pPrevEntry->IsEmpty() ) ||
+                 ( bHidden != pPrevEntry->IsHidden() ) ||
                  ( nHeight != pPrevEntry->GetHeight() ) )
             {
                 if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
@@ -2707,6 +2713,7 @@ void XclExpCellTable::SaveXml( XclExpXmlStream& rStrm )
         // OOXTODO: XML_thickTop
         // OOXTODO: XML_thickBottom
         XML_defaultRowHeight, OString::number( static_cast< double> ( rDefData.mnHeight ) / 20.0 ).getStr(),
+        XML_zeroHeight, rDefData.IsHidden() ? "1" : nullptr,
         XML_outlineLevelRow, OString::number( maRowBfr.GetHighestOutlineLevel() ).getStr(),
         XML_outlineLevelCol, OString::number( maColInfoBfr.GetHighestOutlineLevel() ).getStr(),
         FSEND );

@@ -116,6 +116,7 @@ public:
     void testColumnWidthExportFromODStoXLSX();
     void testOutlineExportXLSX();
     void testHiddenEmptyRowsXLSX();
+    void testAllRowsHiddenXLSX();
     void testLandscapeOrientationXLSX();
 
     void testInlineArrayXLS();
@@ -217,6 +218,7 @@ public:
     CPPUNIT_TEST(testColumnWidthExportFromODStoXLSX);
     CPPUNIT_TEST(testOutlineExportXLSX);
     CPPUNIT_TEST(testHiddenEmptyRowsXLSX);
+    CPPUNIT_TEST(testAllRowsHiddenXLSX);
     CPPUNIT_TEST(testLandscapeOrientationXLSX);
     CPPUNIT_TEST(testInlineArrayXLS);
     CPPUNIT_TEST(testEmbeddedChartXLS);
@@ -891,6 +893,16 @@ void ScExportTest::testOutlineExportXLSX()
     assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 30);
 }
 
+void ScExportTest::testAllRowsHiddenXLSX()
+{
+    ScDocShellRef xOrigDocSh = loadDoc("tdf105840_allRowsHidden.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xOrigDocSh.is());
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(&(*xOrigDocSh), FORMAT_XLSX);
+    xmlDocPtr pSheet = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pSheet);
+    assertXPath(pSheet, "/x:worksheet/x:sheetData/x:row", 0);
+}
 
 void ScExportTest::testHiddenEmptyRowsXLSX()
 {
