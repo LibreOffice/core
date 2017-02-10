@@ -9,6 +9,7 @@
 
 #include "extdrawingfragmenthandler.hxx"
 
+#include <oox/core/xmlfilterbase.hxx>
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
@@ -34,7 +35,9 @@ ExtDrawingFragmentHandler::ExtDrawingFragmentHandler( XmlFilterBase& rFilter,
 
 ExtDrawingFragmentHandler::~ExtDrawingFragmentHandler( ) throw ()
 {
-
+    // Empty DrawingML fallback, need to warn the user at the end.
+    if (mpShapePtr && mpShapePtr->getChildren().empty())
+        getFilter().setMissingExtDrawing();
 }
 
 ContextHandlerRef
