@@ -205,6 +205,7 @@ public:
     void testTdf104425();
     void testTdf104814();
     void testTdf105417();
+    void testTdf105625();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -309,6 +310,7 @@ public:
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf105417);
+    CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2626,20 +2628,21 @@ void SwUiWriterTest::testTdf88899()
 
 void SwUiWriterTest::testTdf90362()
 {
-    // First check if the end of the second paragraph is indeed protected.
     SwDoc* pDoc = createDoc("tdf90362.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    // Ensure correct initial setting
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    // First check if the end of the second paragraph is indeed protected.
     pWrtShell->EndPara();
     pWrtShell->Down(/*bSelect=*/false);
     CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
 
     // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
-    pWrtShell->Up(/*bSelect=*/false);
-    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
-    aViewOptions.SetIgnoreProtectedArea(true);
-    pWrtShell->ApplyViewOptions(aViewOptions);
-    pWrtShell->Down(/*bSelect=*/false);
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(true), comphelper::EConfigurationModes::Standard);
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+    // Clean up, otherwise following tests will have that option set
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
 }
 
 void SwUiWriterTest::testUndoCharAttribute()
@@ -3555,6 +3558,38 @@ void SwUiWriterTest::testTdf104814()
     // accept all redlines
     while(pEditShell->GetRedlineCount())
         pEditShell->AcceptRedline(0);
+}
+
+void SwUiWriterTest::testTdf105625()
+{
+    SwDoc* pDoc = createDoc("tdf105625.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    // Ensure correct initial setting
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext,
+        "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea",
+        css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    // We should be able to edit at positions adjacent to fields.
+    // Check if the start and the end of the 1st paragraph are not protected
+    // (they are adjacent to FORMCHECKBOX)
+    pWrtShell->SttPara();
+    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+    pWrtShell->EndPara();
+    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+    // 2nd paragraph - FORMTEXT
+    pWrtShell->Down(/*bSelect=*/false);
+    // Check selection across FORMTEXT field boundary - must be read-only
+    pWrtShell->SttPara();
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
+    // Test deletion of whole field with single backspace
+    // Previously it only removed right boundary of FORMTEXT, or failed removal at all
+    const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
+    sal_Int32 nMarksBefore = pMarksAccess->getAllMarksCount();
+    pWrtShell->EndPara();
+    pWrtShell->DelLeft();
+    sal_Int32 nMarksAfter = pMarksAccess->getAllMarksCount();
+    CPPUNIT_ASSERT_EQUAL(nMarksBefore, nMarksAfter + 1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
