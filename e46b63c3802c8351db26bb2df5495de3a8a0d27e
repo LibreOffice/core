@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_957344b4",
+        "filename": "include/o3tl/strong_typedef.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-10T13:29:14Z",
+      "side": 1,
+      "message": "\u0027final\u0027 doesn\u0027t make a difference there.  With any decent ABI, instances of the class will be passed around in registers, as it\u0027s size will be sufficiently small.  (And if a derived class added further data members, those would be sliced off when passing by value, anyway.)",
+      "parentUuid": "9a57fde8_b21cde78",
+      "revId": "e46b63c3802c8351db26bb2df5495de3a8a0d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_6f55311c",
         "filename": "include/o3tl/strong_typedef.hxx",
         "patchSetId": 2
