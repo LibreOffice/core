@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libassuan))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libassuan,$(LIBASSUAN_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libassuan,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,libassuan, \
+    external/libassuan/find-libgpg-error.patch \
+))
+
 # vim: set noet sw=4 ts=4:

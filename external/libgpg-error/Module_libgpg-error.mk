@@ -10,6 +10,7 @@
 $(eval $(call gb_Module_Module,libgpg-error))
 
 $(eval $(call gb_Module_add_targets,libgpg-error,\
+	ExternalProject_libgpg-error \
 	UnpackedTarball_libgpg-error \
 ))
 
