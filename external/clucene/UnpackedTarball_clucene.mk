@@ -50,15 +50,7 @@ endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/_clucene-config.h,external/clucene/configs/_clucene-config-MSVC.h))
-ifeq ($(COM),MSC)
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,external/clucene/configs/clucene-config-MSVC.h))
-else
-ifeq ($(HAVE_GCC_BUILTIN_ATOMIC),TRUE)
-$(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,external/clucene/configs/clucene-config-MINGW-atomic.h))
-else
-$(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,external/clucene/configs/clucene-config-MINGW.h))
-endif
-endif
 else # ! $(OS),WNT
 ifeq ($(HAVE_GCC_BUILTIN_ATOMIC),TRUE)
 $(eval $(call gb_UnpackedTarball_add_file,clucene,src/shared/CLucene/clucene-config.h,external/clucene/configs/clucene-config-GCC-atomic.h))

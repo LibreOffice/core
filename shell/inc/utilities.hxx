@@ -35,31 +35,12 @@
 
 #include <string>
 #define STRSAFE_NO_DEPRECATE
-#ifdef __MINGW32__
-
-// Work around lack of strsafe library in mingw-w64, do let their
-// strsafe.h provide inlines of StringCchVPrintfA etc, avoid linking
-// errors in a debug build.
-#ifdef __CRT__NO_INLINE
-#undef __CRT__NO_INLINE
-#define DID_UNDEFINE__CRT__NO_INLINE
-#endif
 
 extern "C" {
 
 #endif
 
 #include <strsafe.h>
-
-#ifdef __MINGW32__
-}
-
-#ifdef DID_UNDEFINE__CRT__NO_INLINE
-#define __CRT__NO_INLINE
-#endif
-
-#endif
-
 
 /** Convert a string to a wstring
     using CP_ACP

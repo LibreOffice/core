@@ -24,7 +24,7 @@ $(eval $(call gb_ExternalProject_register_targets,python3,\
 	) \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
+ifeq ($(OS),WNT)
 
 # TODO: using Debug configuration and related mangling of pyconfig.h
 
@@ -72,7 +72,6 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			--disable-ipv6 --with-threads OPT="-g0 -fwrapv -O3 -Wall", \
 			$(if $(gb_Module_CURRENTMODULE_DEBUG_ENABLED), \
 				OPT="$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CFLAGS)")) \
-		$(if $(filter WNT-GCC,$(OS)-$(COM)),--with-threads ac_cv_printf_zd_format=no) \
 		$(if $(filter MACOSX,$(OS)), \
 			$(if $(filter INTEL,$(CPUNAME)),--enable-universalsdk=$(MACOSX_SDK_PATH) \
                                 --with-universal-archs=intel \
@@ -93,8 +92,6 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(SYSTEM_EXPAT),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSTEM_ZLIB),,-L$(gb_StaticLibrary_WORKDIR)) \
 			$(if $(SYSBASE), -L$(SYSBASE)/usr/lib) \
-			$(if $(filter WNT-GCC,$(OS)-$(COM)), -shared-libgcc \
-				$(if $(MINGW_SHARED_GCCLIB),-Wl$(COMMA)--enable-runtime-pseudo-reloc-v2 -Wl$(COMMA)--export-all-symbols)) \
 			$(gb_LTOFLAGS) \
 			)" \
 		&& MAKEFLAGS= $(MAKE) \

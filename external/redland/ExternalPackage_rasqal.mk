@@ -13,8 +13,6 @@ $(eval $(call gb_ExternalPackage_use_external_project,rasqal,rasqal))
 
 ifeq ($(OS),MACOSX)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,$(LIBO_LIB_FOLDER)/librasqal-lo.$(RASQAL_MAJOR).dylib,src/.libs/librasqal-lo.$(RASQAL_MAJOR).dylib))
-else ifeq ($(OS)-$(COM),WNT-GCC)
-$(eval $(call gb_ExternalPackage_add_file,rasqal,$(LIBO_LIB_FOLDER)/librasqal-$(RASQAL_MAJOR).dll,src/.libs/librasqal-$(RASQAL_MAJOR).dll))
 else ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalPackage_add_file,rasqal,$(LIBO_LIB_FOLDER)/librasqal.dll,src/.libs/librasqal.dll))
 else ifeq ($(DISABLE_DYNLOADING),)

@@ -561,11 +561,7 @@ static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
         CComPtr<IDispatch> spDispDest(varDest.pdispVal);
 
         // special Handling for a JScriptValue object
-#ifdef __MINGW32__
-        CComQIPtr<IJScriptValueObject, &__uuidof(IJScriptValueObject)> spValueDest(spDispDest);
-#else
         CComQIPtr<IJScriptValueObject> spValueDest(spDispDest);
-#endif
         if (spValueDest)
         {
             VARIANT_BOOL varBool= VARIANT_FALSE;
@@ -584,11 +580,7 @@ static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
             // of a property if it does not exist already. This is convenient for
             // out parameters in JScript. Then the user must not specify propery "0"
             // explicitly
-#ifdef __MINGW32__
-            CComQIPtr<IDispatchEx, &__uuidof(IDispatchEx)> spDispEx( spDispDest);
-#else
             CComQIPtr<IDispatchEx> spDispEx( spDispDest);
-#endif
             if( spDispEx)
             {
                 CComBSTR nullProp(L"0");
@@ -1074,11 +1066,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             {
                 pValue->AddRef();
                 pvarResult->vt= VT_DISPATCH;
-#ifdef __MINGW32__
-                pvarResult->pdispVal= CComQIPtr<IDispatch, &__uuidof(IDispatch)>(pValue->GetUnknown());
-#else
                 pvarResult->pdispVal= CComQIPtr<IDispatch>(pValue->GetUnknown());
-#endif
                 ret= S_OK;
             }
             else

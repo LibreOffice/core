@@ -22,10 +22,6 @@
 #include <win/saltimer.h>
 #include <win/salinst.h>
 
-#if defined ( __MINGW32__ )
-#include <sehandler.hxx>
-#endif
-
 // maximum period
 #define MAX_SYSPERIOD     65533
 
@@ -119,17 +115,8 @@ at better resolution than 10ms.
 */
 void CALLBACK SalTimerProc(PVOID, BOOLEAN)
 {
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    jmp_buf jmpbuf;
-    __SEHandler han;
-    if (__builtin_setjmp(jmpbuf) == 0)
-    {
-        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
-#else
     __try
     {
-#endif
-
         SalData* pSalData = GetSalData();
 
         // always post message when the timer fires, we will remove the ones
@@ -140,16 +127,10 @@ void CALLBACK SalTimerProc(PVOID, BOOLEAN)
         if (0 == ret) // SEH prevents using SAL_WARN here?
             fputs("ERROR: PostMessage() failed!", stderr);
 #endif
-
-#if defined ( __MINGW32__ ) && !defined ( _WIN64 )
-    }
-    han.Reset();
-#else
     }
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
-#endif
 }
 
 /** Called in the main thread.

@@ -31,15 +31,6 @@
 extern "C" {
 #endif
 
-#if defined ( __MINGW32__ ) && !defined ( __USE_MINGW_ANSI_STDIO )
-/* Define to use the C99 formatting string for coherence reasons.
- * In mingw-w64 some functions are ported to the ms formatting string
- * some are not yet. This is the only way to make the formatting
- * strings work all the time
- */
-#define __USE_MINGW_ANSI_STDIO 1
-#endif
-
 /********************************************************************************/
 /* Data types
 */
@@ -141,11 +132,9 @@ typedef signed char sal_sChar;
 */
 typedef unsigned char sal_uChar;
 
-#if ( defined(SAL_W32) && !defined(__MINGW32__) )
+#if defined(SAL_W32)
     // http://msdn.microsoft.com/en-us/library/s3f49ktz%28v=vs.80%29.aspx
     // "By default wchar_t is a typedef for unsigned short."
-    // But MinGW has a native wchar_t, and on many places, we cannot deal with
-    // that, so sal_Unicode has to be explicitly typedef'd as sal_uInt16 there.
     typedef wchar_t sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
@@ -241,14 +230,10 @@ typedef void *                   sal_Handle;
 
 #define SAL_MAX_ENUM 0x7fffffff
 
-#if defined(_MSC_VER) || defined(__MINGW32__)
+#if defined(_MSC_VER)
 #   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
 #   define SAL_JNI_EXPORT          __declspec(dllexport)
-#if defined(_MSC_VER)
 #   define SAL_DLLPUBLIC_IMPORT    __declspec(dllimport)
-#else
-#   define SAL_DLLPUBLIC_IMPORT
-#endif // defined(_MSC_VER)
 #   define SAL_DLLPRIVATE
 #   define SAL_DLLPUBLIC_TEMPLATE
 #   define SAL_DLLPUBLIC_RTTI
@@ -299,7 +284,7 @@ typedef void *                   sal_Handle;
    These macros are used for inline declarations of exception classes, as in
    rtl/malformeduriexception.hxx.
 */
-#if defined(__GNUC__) && ! defined(__MINGW32__)
+#if defined(__GNUC__)
 #   if defined(DISABLE_DYNLOADING)
 #      define SAL_EXCEPTION_DLLPUBLIC_EXPORT __attribute__((visibility("default")))
 #    else

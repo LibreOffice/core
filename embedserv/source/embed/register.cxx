@@ -20,9 +20,6 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-#ifdef __MINGW32__
-#define INITGUID
-#endif
 #include "servprov.hxx"
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

@@ -95,17 +95,6 @@
  
  /* Set callbacks to provide credentials for server and proxy
   * authentication, using the default set of authentication protocols.
---- src/ne_defs.h	2010-01-11 23:57:34.000000000 +0100
-+++ src/ne_defs.h	2011-02-03 10:26:20.000000000 +0100
-@@ -41,7 +41,7 @@
- #endif
- 
- /* define ssize_t for Win32 */
--#if defined(WIN32) && !defined(ssize_t)
-+#if defined(WIN32) && !defined(ssize_t) && !defined(__MINGW32__)
- #define ssize_t int
- #endif
- 
 --- src/ne_locks.c	2007-02-05 11:09:27.000000000 +0100
 +++ src/ne_locks.c	2011-02-03 10:26:21.000000000 +0100
 @@ -579,6 +579,23 @@

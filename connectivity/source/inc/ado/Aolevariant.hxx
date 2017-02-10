@@ -20,9 +20,6 @@
 #define INCLUDED_CONNECTIVITY_SOURCE_INC_ADO_AOLEVARIANT_HXX
 
 #include <sal/types.h>
-#ifdef __MINGW32__
-#include <windows.h>
-#endif
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 

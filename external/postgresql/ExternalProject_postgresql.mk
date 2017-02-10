@@ -19,7 +19,7 @@ $(eval $(call gb_ExternalProject_register_targets,postgresql,\
 	build \
 ))
 
-ifeq ($(OS)$(COM),WNTMSC)
+ifeq ($(OS),WNT)
 
 $(call gb_ExternalProject_get_state_target,postgresql,build) :
 	$(call gb_ExternalProject_run,build,\

@@ -21,12 +21,6 @@
 #include <osl/diagnose.h>
 
 #include <systools/win32/comtools.hxx>
-#ifdef __MINGW32__
-#if defined __uuidof
-#undef __uuidof
-#endif
-#define __uuidof(I) IID_##I
-#endif
 
 #define FREE_HGLOB_ON_RELEASE   TRUE
 #define KEEP_HGLOB_ON_RELEASE   FALSE
