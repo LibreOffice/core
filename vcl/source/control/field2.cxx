@@ -1965,7 +1965,7 @@ static bool ImplCutTimePortion( OUStringBuffer& _rStr, sal_Int32 _nSepPos, bool 
     OUString sPortion(_rStr.getStr(), _nSepPos );
 
     if (_nSepPos < _rStr.getLength())
-        _rStr = _rStr.copy(_nSepPos + 1);
+        _rStr.remove(0, _nSepPos + 1);
     else
         _rStr.truncate();
 
