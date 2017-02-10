@@ -564,7 +564,8 @@ Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sa
         xContext = xChild->getAccessibleContext( );
     if ( xContext.is() )
         nChildIndex = xContext->getAccessibleIndexInParent( );
-    OSL_ENSURE( nChildIndex == i, "AccessibleControlShape::getAccessibleChild: index mismatch!" );
+    SAL_WARN_IF( nChildIndex != i, "svx", "AccessibleControlShape::getAccessibleChild: index mismatch,"
+            " nChildIndex=" << nChildIndex << " vs i=" << i );
 #endif
     return xChild;
 }
