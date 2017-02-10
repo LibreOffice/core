@@ -75,7 +75,7 @@ bool SwView::IsDocumentBorder()
 inline long GetLeftMargin( SwView &rView )
 {
     SvxZoomType eType = (SvxZoomType)rView.GetWrtShell().GetViewOptions()->GetZoomType();
-    long lRet = rView.GetWrtShell().GetAnyCurRect(RECT_PAGE_PRT).Left();
+    long lRet = rView.GetWrtShell().GetAnyCurRect(CurRectType::PagePrt).Left();
     return eType == SvxZoomType::PERCENT   ? lRet + DOCUMENTBORDER :
            eType == SvxZoomType::PAGEWIDTH || eType == SvxZoomType::PAGEWIDTH_NOBORDER ? 0 :
                                          lRet + DOCUMENTBORDER + nLeftOfst;

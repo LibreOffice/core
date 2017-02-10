@@ -248,7 +248,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
     const SwFormatFrameSize &rFrameSize = rDesc.GetMaster().GetFrameSize();
 
-    const SwRect& rPageRect = rSh.GetAnyCurRect(RECT_PAGE);
+    const SwRect& rPageRect = rSh.GetAnyCurRect(CurRectType::Page);
     const long nPageWidth  = bBrowse ? rPageRect.Width() : rFrameSize.GetWidth();
     const long nPageHeight = bBrowse ? rPageRect.Height() : rFrameSize.GetHeight();
 
@@ -267,7 +267,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             if ( !bSect && (bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY) )
             {
                 SwFrameFormat* pFormat = rSh.GetFlyFrameFormat();
-                const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
+                const SwRect &rRect = rSh.GetAnyCurRect(CurRectType::FlyEmbedded);
 
                 bool bVerticalFrame(false);
                 {
@@ -363,8 +363,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             {
                 //change the section indents and the columns if available
                 //at first determine the changes
-                SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT);
-                const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION);
+                SwRect aSectRect = rSh.GetAnyCurRect(CurRectType::SectionPrt);
+                const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section);
                 aSectRect.Pos() += aTmpRect.Pos();
                 long nLeftDiff = aLongLR.GetLeft() - (long)(aSectRect.Left() - rPageRect.Left() );
                 long nRightDiff = aLongLR.GetRight() - (long)( rPageRect.Right() - aSectRect.Right());
@@ -426,7 +426,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             if( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY )
             {
                 SwFrameFormat* pFormat = rSh.GetFlyFrameFormat();
-                const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED);
+                const SwRect &rRect = rSh.GetAnyCurRect(CurRectType::FlyEmbedded);
                 const long nDeltaY = rPageRect.Top() + aLongULSpace.GetUpper() - rRect.Top();
                 const long nHeight = nPageHeight - (aLongULSpace.GetUpper() + aLongULSpace.GetLower());
 
@@ -476,8 +476,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             {
                 //change the section indents and the columns if available
                 //at first determine the changes
-                SwRect aSectRect = rSh.GetAnyCurRect(RECT_SECTION_PRT);
-                const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION);
+                SwRect aSectRect = rSh.GetAnyCurRect(CurRectType::SectionPrt);
+                const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section);
                 aSectRect.Pos() += aTmpRect.Pos();
                 const long nLeftDiff = aLongULSpace.GetUpper() - (long)(aSectRect.Top() - rPageRect.Top());
                 const long nRightDiff = aLongULSpace.GetLower() - (long)(nPageHeight - aSectRect.Bottom() + rPageRect.Top());
@@ -879,7 +879,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                         bSect ?
                             pSectFormat->GetCol() :
                                 static_cast<const SwFormatCol&>(aSet.Get( RES_COL, false )));
-                    SwRect aCurRect = rSh.GetAnyCurRect(bSect ? RECT_SECTION_PRT : RECT_FLY_PRT_EMBEDDED);
+                    SwRect aCurRect = rSh.GetAnyCurRect(bSect ? CurRectType::SectionPrt : CurRectType::FlyEmbeddedPrt);
                     const long lWidth = bVerticalWriting ? aCurRect.Height() : aCurRect.Width();
                     ::lcl_ConvertToCols( aColItem, lWidth, aCols );
                     aSet.Put( aCols );
@@ -903,7 +903,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 else
                 {
                     SwFormatCol aCols( rDesc.GetMaster().GetCol() );
-                    const SwRect aPrtRect = rSh.GetAnyCurRect(RECT_PAGE_PRT);
+                    const SwRect aPrtRect = rSh.GetAnyCurRect(CurRectType::PagePrt);
                     ::lcl_ConvertToCols( aColItem,
                                     bVerticalWriting ? aPrtRect.Height() : aPrtRect.Width(),
                                     aCols );
@@ -1177,8 +1177,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     const bool  bFrameSelection = rSh.IsFrameSelected();
     const bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
     // PageOffset/limiter
-    const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, pPt );
-    const SwRect& rPagePrtRect = rSh.GetAnyCurRect( RECT_PAGE_PRT, pPt );
+    const SwRect& rPageRect = rSh.GetAnyCurRect( CurRectType::Page, pPt );
+    const SwRect& rPagePrtRect = rSh.GetAnyCurRect( CurRectType::PagePrt, pPt );
     const long nPageWidth  = rPageRect.Width();
     const long nPageHeight = rPageRect.Height();
 
@@ -1275,8 +1275,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                 rDesc.GetMaster().GetFooter().GetFooterFormat());
                 if( pFormat )// #i80890# if rDesc is not the one belonging to the current page is might crash
                 {
-                    SwRect aRect( rSh.GetAnyCurRect( RECT_HEADERFOOTER, pPt));
-                    aRect.Pos() -= rSh.GetAnyCurRect( RECT_PAGE, pPt ).Pos();
+                    SwRect aRect( rSh.GetAnyCurRect( CurRectType::HeaderFooter, pPt));
+                    aRect.Pos() -= rSh.GetAnyCurRect( CurRectType::Page, pPt ).Pos();
                     const SvxLRSpaceItem& aLR = pFormat->GetLRSpace();
                     aLongLR.SetLeft ( (long)aLR.GetLeft() + (long)aRect.Left() );
                     aLongLR.SetRight( (nPageWidth -
@@ -1288,13 +1288,13 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 SwRect aRect;
                 if( !bFrameSelection && ((nFrameType & FrameTypeFlags::COLSECT) || rSh.IsDirectlyInSection()) )
                 {
-                    aRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, pPt);
-                    const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, pPt);
+                    aRect = rSh.GetAnyCurRect(CurRectType::SectionPrt, pPt);
+                    const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section, pPt);
                     aRect.Pos() += aTmpRect.Pos();
                 }
 
                 else if ( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY )
-                    aRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
+                    aRect = rSh.GetAnyCurRect(CurRectType::FlyEmbedded, pPt);
                 else if( nFrameType & FrameTypeFlags::DRAWOBJ)
                     aRect = rSh.GetObjRect();
 
@@ -1341,14 +1341,14 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             if ( bFrameSelection || nFrameType & FrameTypeFlags::FLY_ANY )
             {
                 // Convert document coordinates into page coordinates.
-                const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
+                const SwRect &rRect = rSh.GetAnyCurRect(CurRectType::FlyEmbedded, pPt);
                 aLongUL.SetUpper(rRect.Top() - rPageRect.Top());
                 aLongUL.SetLower(rPageRect.Bottom() - rRect.Bottom());
             }
             else if ( nFrameType & FrameTypeFlags::HEADER || nFrameType & FrameTypeFlags::FOOTER )
             {
-                SwRect aRect( rSh.GetAnyCurRect( RECT_HEADERFOOTER, pPt));
-                aRect.Pos() -= rSh.GetAnyCurRect( RECT_PAGE, pPt ).Pos();
+                SwRect aRect( rSh.GetAnyCurRect( CurRectType::HeaderFooter, pPt));
+                aRect.Pos() -= rSh.GetAnyCurRect( CurRectType::Page, pPt ).Pos();
                 aLongUL.SetUpper( aRect.Top() );
                 aLongUL.SetLower( nPageHeight - aRect.Bottom() );
             }
@@ -1504,7 +1504,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 {
                     if( IsTabColFromDoc() )
                     {
-                        const SwRect& rFlyPrtRect = rSh.GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, pPt );
+                        const SwRect& rFlyPrtRect = rSh.GetAnyCurRect( CurRectType::FlyEmbeddedPrt, pPt );
                         aDistLR.SetLeft(rFlyPrtRect.Left());
                         aDistLR.SetRight(rFlyPrtRect.Left());
                     }
@@ -1739,8 +1739,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         else
                             --nNum;
                         SvxColumnItem aColItem(nNum);
-                        SwRect aRect = rSh.GetAnyCurRect(RECT_SECTION_PRT, pPt);
-                        const SwRect aTmpRect = rSh.GetAnyCurRect(RECT_SECTION, pPt);
+                        SwRect aRect = rSh.GetAnyCurRect(CurRectType::SectionPrt, pPt);
+                        const SwRect aTmpRect = rSh.GetAnyCurRect(CurRectType::Section, pPt);
 
                         ::lcl_FillSvxColumn(rCol, bVerticalWriting ? aRect.Height() : aRect.Width(), aColItem, 0);
 
@@ -1778,11 +1778,11 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         else
                             nNum--;
                         SvxColumnItem aColItem(nNum);
-                        const SwRect &rSizeRect = rSh.GetAnyCurRect(RECT_FLY_PRT_EMBEDDED, pPt);
+                        const SwRect &rSizeRect = rSh.GetAnyCurRect(CurRectType::FlyEmbeddedPrt, pPt);
 
                         bool bUseVertical = bFrameHasVerticalColumns || (!bFrameSelection && bVerticalWriting);
                         const long lWidth = bUseVertical ? rSizeRect.Height() : rSizeRect.Width();
-                        const SwRect &rRect = rSh.GetAnyCurRect(RECT_FLY_EMBEDDED, pPt);
+                        const SwRect &rRect = rSh.GetAnyCurRect(CurRectType::FlyEmbedded, pPt);
                         long nDist2 = ((bUseVertical ? rRect.Height() : rRect.Width()) - lWidth) /2;
                         ::lcl_FillSvxColumn(rCol, lWidth, aColItem, nDist2);
 
@@ -1818,7 +1818,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                         nNum--;
 
                     SvxColumnItem aColItem(nNum);
-                    const SwRect aPrtRect = rSh.GetAnyCurRect(RECT_PAGE_PRT, pPt);
+                    const SwRect aPrtRect = rSh.GetAnyCurRect(CurRectType::PagePrt, pPt);
                     const SvxBoxItem& rBox = static_cast<const SvxBoxItem&>(rMaster.GetFormatAttr(RES_BOX));
                     long nDist = rBox.GetSmallestDistance();
 
@@ -1999,11 +1999,11 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     sal_uInt16 nNum = rSh.GetCurOutColNum();
                     const sal_uInt16 nCount = std::min(sal_uInt16(nNum + 1), sal_uInt16(rCols.size()));
                     const SwRect aRect( rSh.GetAnyCurRect( pFormat
-                                                    ? RECT_FLY_PRT_EMBEDDED
-                                                    : RECT_PAGE_PRT, pPt ));
+                                                    ? CurRectType::FlyEmbeddedPrt
+                                                    : CurRectType::PagePrt, pPt ));
                     const SwRect aAbsRect( rSh.GetAnyCurRect( pFormat
-                                                    ? RECT_FLY_EMBEDDED
-                                                    : RECT_PAGE, pPt ));
+                                                    ? CurRectType::FlyEmbedded
+                                                    : CurRectType::Page, pPt ));
 
                     // The width of the frame or within the page margins.
                     const sal_uInt16 nTotalWidth = (sal_uInt16)aRect.Width();
@@ -2064,8 +2064,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     if( nFrameType & FrameTypeFlags::FLY_ANY && IsTabColFromDoc() )
                     {
                         SwRect aRect( rSh.GetAnyCurRect(
-                                            RECT_FLY_PRT_EMBEDDED, pPt ) );
-                        aRect.Pos() += rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,
+                                            CurRectType::FlyEmbeddedPrt, pPt ) );
+                        aRect.Pos() += rSh.GetAnyCurRect( CurRectType::FlyEmbedded,
                                                                 pPt ).Pos();
 
                         aRectangle.Left()  = aRect.Left() - rPageRect.Left();
@@ -2091,15 +2091,15 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                                                     : FrameTypeFlags::COLSECT )
                                                 );
                     //So you can also drag with the mouse, without being in the table.
-                    CurRectType eRecType = RECT_PAGE_PRT;
+                    CurRectType eRecType = CurRectType::PagePrt;
                     size_t nNum = IsTabColFromDoc() ?
                                 rSh.GetCurMouseColNum( m_aTabColFromDocPos ):
                                 rSh.GetCurOutColNum();
                     const SwFrameFormat* pFormat = nullptr;
                     if( bColSct )
                     {
-                        eRecType = bSectOutTable ? RECT_OUTTABSECTION
-                                               : RECT_SECTION;
+                        eRecType = bSectOutTable ? CurRectType::SectionOutsideTable
+                                               : CurRectType::Section;
                         const SwSection *pSect = rSh.GetAnySection( bSectOutTable, pPt );
                         OSL_ENSURE( pSect, "Which section?");
                         pFormat = pSect->GetFormat();
@@ -2107,7 +2107,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     else if( bFrame )
                     {
                         pFormat = rSh.GetFlyFrameFormat();
-                        eRecType = RECT_FLY_PRT_EMBEDDED;
+                        eRecType = CurRectType::FlyEmbeddedPrt;
                     }
 
                     const SwFormatCol* pCols = pFormat ? &pFormat->GetCol():
@@ -2121,8 +2121,8 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     // the absolute position must be added here
 
                     SwRect aRect( rSh.GetAnyCurRect( eRecType, pPt ) );
-                    if(RECT_FLY_PRT_EMBEDDED == eRecType)
-                        aRect.Pos() += rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,
+                    if(CurRectType::FlyEmbeddedPrt == eRecType)
+                        aRect.Pos() += rSh.GetAnyCurRect( CurRectType::FlyEmbedded,
                                                                 pPt ).Pos();
 
                     const sal_uInt16 nTotalWidth = (sal_uInt16)aRect.Width();

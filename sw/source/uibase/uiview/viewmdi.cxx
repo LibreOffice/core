@@ -92,8 +92,8 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
     {
         const bool bAutomaticViewLayout = 0 == pOpt->GetViewLayoutColumns();
 
-        const SwRect aPageRect( m_pWrtShell->GetAnyCurRect( RECT_PAGE_CALC ) );
-        const SwRect aRootRect( m_pWrtShell->GetAnyCurRect( RECT_PAGES_AREA ) );
+        const SwRect aPageRect( m_pWrtShell->GetAnyCurRect( CurRectType::PageCalc ) );
+        const SwRect aRootRect( m_pWrtShell->GetAnyCurRect( CurRectType::PagesArea ) );
         Size aPageSize( aPageRect.SSize() );
         Size aRootSize( aRootRect.SSize() );
 
@@ -166,7 +166,7 @@ void SwView::SetZoom_( const Size &rEditSize, SvxZoomType eZoomType,
             Point aPos;
 
             if ( eZoomType == SvxZoomType::WHOLEPAGE )
-                aPos.Y() = m_pWrtShell->GetAnyCurRect(RECT_PAGE).Top() - DOCUMENTBORDER;
+                aPos.Y() = m_pWrtShell->GetAnyCurRect(CurRectType::Page).Top() - DOCUMENTBORDER;
             else
             {
                 // Make sure that the cursor is in the visible range, so that

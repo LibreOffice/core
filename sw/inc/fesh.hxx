@@ -135,22 +135,19 @@ enum ObjCntType
 };
 
 //For GetAnyCurRect
-enum CurRectType
+enum class CurRectType
 {
-    RECT_PAGE,                  ///< Rect of current page.
-    RECT_PAGE_CALC,             ///< ... page will be formatted if required.
-    RECT_PAGE_PRT,              ///< Rect of current PrtArea of page.
-    RECT_FRM,                   ///< Rect of current frame.
-    RECT_FLY_EMBEDDED,          ///< Rect of current FlyFrame.
-    RECT_FLY_PRT_EMBEDDED,      ///< Rect of PrtArea of FlyFrame
-    RECT_SECTION,               ///< Rect of current section.
-    RECT_OUTTABSECTION,         ///< Rect of current section but outside of table.
-    RECT_SECTION_PRT,           ///< Rect of current PrtArea of section.
-    RECT_OUTTABSECTION_PRT,     ///< Rect of current PrtArea of section but outside table.
-    RECT_HEADERFOOTER,          ///< Rect of current header/footer
-    RECT_HEADERFOOTER_PRT,      ///< Rect of PrtArea of current headers/footers
-
-    RECT_PAGES_AREA             ///< Rect covering the pages area
+    Page,                 ///< Rect of current page.
+    PageCalc,             ///< ... page will be formatted if required.
+    PagePrt,              ///< Rect of current PrtArea of page.
+    Frame,                ///< Rect of current frame.
+    FlyEmbedded,          ///< Rect of current FlyFrame.
+    FlyEmbeddedPrt,       ///< Rect of PrtArea of FlyFrame
+    Section,              ///< Rect of current section.
+    SectionOutsideTable,  ///< Rect of current section but outside of table.
+    SectionPrt,           ///< Rect of current PrtArea of section.
+    HeaderFooter,         ///< Rect of current header/footer
+    PagesArea             ///< Rect covering the pages area
 };
 
 struct SwGetCurColNumPara

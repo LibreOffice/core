@@ -111,50 +111,52 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
     bool bFrame = true;
     switch ( eType )
     {
-        case RECT_PAGE_PRT:         bFrame = false;
+        case CurRectType::PagePrt: bFrame = false;
                                     SAL_FALLTHROUGH;
-        case RECT_PAGE :            pFrame = pFrame->FindPageFrame();
+        case CurRectType::Page :    pFrame = pFrame->FindPageFrame();
                                     break;
 
-        case RECT_PAGE_CALC:        pFrame->Calc(Imp()->GetShell()->GetOut());
+        case CurRectType::PageCalc:pFrame->Calc(Imp()->GetShell()->GetOut());
                                     pFrame = pFrame->FindPageFrame();
                                     pFrame->Calc(Imp()->GetShell()->GetOut());
                                     break;
 
-        case RECT_FLY_PRT_EMBEDDED: bFrame = false;
+        case CurRectType::FlyEmbeddedPrt:
+                                    bFrame = false;
                                     SAL_FALLTHROUGH;
-        case RECT_FLY_EMBEDDED:     pFrame = xObj.is() ? FindFlyFrame( xObj )
+        case CurRectType::FlyEmbedded:
+                                    pFrame = xObj.is() ? FindFlyFrame( xObj )
                                                 : pFrame->IsFlyFrame()
                                                     ? pFrame
                                                     : pFrame->FindFlyFrame();
                                     break;
 
-        case RECT_OUTTABSECTION_PRT:
-        case RECT_OUTTABSECTION :   if( pFrame->IsInTab() )
+        case CurRectType::SectionOutsideTable :
+                                    if( pFrame->IsInTab() )
                                         pFrame = pFrame->FindTabFrame();
                                     else {
                                         OSL_FAIL( "Missing Table" );
                                     }
                                     SAL_FALLTHROUGH;
-        case RECT_SECTION_PRT:
-        case RECT_SECTION:          if( pFrame->IsInSct() )
+        case CurRectType::SectionPrt:
+        case CurRectType::Section:
+                                    if( pFrame->IsInSct() )
                                         pFrame = pFrame->FindSctFrame();
                                     else {
                                         OSL_FAIL( "Missing section" );
                                     }
 
-                                    if( RECT_OUTTABSECTION_PRT == eType ||
-                                        RECT_SECTION_PRT == eType )
+                                    if( CurRectType::SectionPrt == eType )
                                         bFrame = false;
                                     break;
 
-        case RECT_HEADERFOOTER_PRT: bFrame = false;
-                                    SAL_FALLTHROUGH;
-        case RECT_HEADERFOOTER:     if( nullptr == (pFrame = pFrame->FindFooterOrHeader()) )
+        case CurRectType::HeaderFooter:
+                                    if( nullptr == (pFrame = pFrame->FindFooterOrHeader()) )
                                         return GetLayout()->Frame();
                                     break;
 
-        case RECT_PAGES_AREA:       return GetLayout()->GetPagesArea();
+        case CurRectType::PagesArea:
+                                    return GetLayout()->GetPagesArea();
 
         default:                    break;
     }

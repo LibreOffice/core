@@ -430,12 +430,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
                 }
 
-                const SwRect &rPg = rSh.GetAnyCurRect(RECT_PAGE);
+                const SwRect &rPg = rSh.GetAnyCurRect(CurRectType::Page);
                 SwFormatFrameSize aFrameSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
                 aFrameSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
                 aSet.Put(aFrameSize);
 
-                const SwRect &rPr = rSh.GetAnyCurRect(RECT_PAGE_PRT);
+                const SwRect &rPr = rSh.GetAnyCurRect(CurRectType::PagePrt);
                 SwFormatFrameSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
                 aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
                 aSet.Put(aPrtSize);
@@ -446,9 +446,9 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 // On % values initialize size
                 SwFormatFrameSize& rSize = const_cast<SwFormatFrameSize&>(static_cast<const SwFormatFrameSize&>(aSet.Get(RES_FRM_SIZE)));
                 if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrameSize::SYNCED)
-                    rSize.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
+                    rSize.SetWidth(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Width());
                 if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != SwFormatFrameSize::SYNCED)
-                    rSize.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
+                    rSize.SetHeight(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Height());
 
                 // disable vertical positioning for Math Objects anchored 'as char' if baseline alignment is activated
                 aSet.Put( SfxBoolItem( FN_MATH_BASELINE_ALIGNMENT,

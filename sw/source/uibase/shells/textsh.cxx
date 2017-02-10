@@ -442,7 +442,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         if(pArgs)
         {
             Size aSize(aMgr.GetSize());
-            aSize.Width() = GetShell().GetAnyCurRect(RECT_PAGE_PRT).Width();
+            aSize.Width() = GetShell().GetAnyCurRect(CurRectType::PagePrt).Width();
             Point aPos = aMgr.GetPos();
             RndStdIds eAnchor = FLY_AT_PARA;
             if(pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
@@ -861,12 +861,12 @@ SfxItemSet SwTextShell::CreateInsertFrameItemSet(SwFlyFrameAttrMgr& rMgr)
     // For the Area tab page.
     GetShell().GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->PutAreaListItems(aSet);
 
-    const SwRect &rPg = GetShell().GetAnyCurRect(RECT_PAGE);
+    const SwRect &rPg = GetShell().GetAnyCurRect(CurRectType::Page);
     SwFormatFrameSize aFrameSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
     aFrameSize.SetWhich(GetPool().GetWhich(SID_ATTR_PAGE_SIZE));
     aSet.Put(aFrameSize);
 
-    const SwRect &rPr = GetShell().GetAnyCurRect(RECT_PAGE_PRT);
+    const SwRect &rPr = GetShell().GetAnyCurRect(CurRectType::PagePrt);
     SwFormatFrameSize aPrtSize(ATT_VAR_SIZE, rPr.Width(), rPr.Height());
     aPrtSize.SetWhich(GetPool().GetWhich(FN_GET_PRINT_AREA));
     aSet.Put(aPrtSize);

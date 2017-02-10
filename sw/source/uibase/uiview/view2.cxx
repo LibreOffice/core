@@ -1430,8 +1430,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         // automatic mode: 1 Page, 2 Pages, 100%
                         // n Columns mode: n Pages, 100%
                         // n Columns book mode: nPages without gaps, 100%
-                        const SwRect aPageRect( m_pWrtShell->GetAnyCurRect( RECT_PAGE_CALC ) );
-                        const SwRect aRootRect( m_pWrtShell->GetAnyCurRect( RECT_PAGES_AREA ) ); // width of columns
+                        const SwRect aPageRect( m_pWrtShell->GetAnyCurRect( CurRectType::PageCalc ) );
+                        const SwRect aRootRect( m_pWrtShell->GetAnyCurRect( CurRectType::PagesArea ) ); // width of columns
                         Size aPageSize( aPageRect.SSize() );
                         aPageSize.Width() += pMgr->HasNotes() && pMgr->ShowNotes() ?
                                              pMgr->GetSidebarWidth() + pMgr->GetSidebarBorderWidth() :

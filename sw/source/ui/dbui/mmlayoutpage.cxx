@@ -420,7 +420,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 {
     //set the cursor to the desired position - if no text content is here then
     //new paragraphs are inserted
-    const SwRect& rPageRect = rShell.GetAnyCurRect(RECT_PAGE);
+    const SwRect& rPageRect = rShell.GetAnyCurRect(CurRectType::Page);
     const Point aGreetingPos( DEFAULT_LEFT_DISTANCE + rPageRect.Left(), GREETING_TOP_DISTANCE );
 
     const bool bRet = rShell.SetShadowCursorPos( aGreetingPos, FILL_SPACE );

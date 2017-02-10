@@ -552,7 +552,7 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
 {
     pWrtSh = pSh;
 
-    const SwTwips nWidth = pWrtSh->GetAnyCurRect(RECT_FRM).Width();
+    const SwTwips nWidth = pWrtSh->GetAnyCurRect(CurRectType::Frame).Width();
 
     m_pDistBorderMF->SetMax(m_pDistBorderMF->Normalize( nWidth ), FUNIT_TWIP );
     m_pDistNumMF->SetMax(m_pDistNumMF->Normalize( nWidth ), FUNIT_TWIP);
@@ -568,7 +568,7 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
     m_pAlignedAtMF->SetLast(m_pAlignedAtMF->Normalize( nLast2 ), FUNIT_TWIP );
     m_pIndentAtMF->SetLast(m_pIndentAtMF->Normalize( nLast2 ), FUNIT_TWIP );
 
-    const SwRect& rPrtRect = pWrtSh->GetAnyCurRect(RECT_PAGE);
+    const SwRect& rPrtRect = pWrtSh->GetAnyCurRect(CurRectType::Page);
     m_pPreviewWIN->SetPageWidth(rPrtRect.Width());
     FieldUnit eMetric = ::GetDfltMetric( dynamic_cast<SwWebView*>( &pWrtSh->GetView()) != nullptr  );
     if(eMetric == FUNIT_MM)

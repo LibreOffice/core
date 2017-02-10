@@ -763,11 +763,11 @@ SwTwips GetTableWidth( SwFrameFormat* pFormat, SwTabCols& rCols, sal_uInt16 *pPe
             {
                 if ( nullptr == pSh->GetFlyFrameFormat() )
                 {
-                    nWidth = pSh->GetAnyCurRect(RECT_PAGE_PRT).Width();
+                    nWidth = pSh->GetAnyCurRect(CurRectType::PagePrt).Width();
                 }
                 else
                 {
-                    nWidth = pSh->GetAnyCurRect(RECT_FLY_PRT_EMBEDDED).Width();
+                    nWidth = pSh->GetAnyCurRect(CurRectType::FlyEmbeddedPrt).Width();
                 }
             }
             else

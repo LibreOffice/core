@@ -186,7 +186,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     else if( nId == m_nParaStd )
     {
         aSet.Put(SfxUInt16Item(SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,
-                            static_cast< sal_uInt16 >(rSh.GetAnyCurRect(RECT_PAGE_PRT).Width()) ));
+                            static_cast< sal_uInt16 >(rSh.GetAnyCurRect(CurRectType::PagePrt).Width()) ));
 
         if (!bDrawParaDlg)
         {

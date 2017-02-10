@@ -149,8 +149,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             if( pGraphic )
             {
                 Size aSize (
-                    convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width()),
-                    convertTwipToMm100(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height()));
+                    convertTwipToMm100(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Width()),
+                    convertTwipToMm100(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Height()));
 
                 SfxItemSet aSet( rSh.GetAttrPool(), RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF );
                 rSh.GetCurAttr( aSet );
@@ -262,7 +262,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             FieldUnit eMetric = ::GetDfltMetric((0 != (nHtmlMode&HTMLMODE_ON)));
             SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< sal_uInt16 >(eMetric)) );
 
-            const SwRect* pRect = &rSh.GetAnyCurRect(RECT_PAGE);
+            const SwRect* pRect = &rSh.GetAnyCurRect(CurRectType::Page);
             SwFormatFrameSize aFrameSize( ATT_VAR_SIZE, pRect->Width(), pRect->Height());
             aFrameSize.SetWhich( GetPool().GetWhich( SID_ATTR_PAGE_SIZE ) );
             aSet.Put( aFrameSize );
@@ -274,7 +274,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
             }
 
-            pRect = &rSh.GetAnyCurRect(RECT_PAGE_PRT);
+            pRect = &rSh.GetAnyCurRect(CurRectType::PagePrt);
             aFrameSize.SetWidth( pRect->Width() );
             aFrameSize.SetHeight( pRect->Height() );
             aFrameSize.SetWhich( GetPool().GetWhich(FN_GET_PRINT_AREA) );
@@ -286,9 +286,9 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             // At percentage values initialize size
             SwFormatFrameSize aSizeCopy = static_cast<const SwFormatFrameSize&>(aSet.Get(RES_FRM_SIZE));
             if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != SwFormatFrameSize::SYNCED)
-                aSizeCopy.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
+                aSizeCopy.SetWidth(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Width());
             if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != SwFormatFrameSize::SYNCED)
-                aSizeCopy.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
+                aSizeCopy.SetHeight(rSh.GetAnyCurRect(CurRectType::FlyEmbedded).Height());
             // and now set the size for "external" tabpages
             {
                 SvxSizeItem aSzItm( SID_ATTR_GRAF_FRMSIZE, aSizeCopy.GetSize() );

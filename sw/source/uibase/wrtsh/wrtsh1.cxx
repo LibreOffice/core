@@ -410,8 +410,8 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
                 if ( xObj.GetViewAspect() == embed::Aspects::MSOLE_ICON )
                 {
-                    SwRect aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() );
-                    aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, nullptr, xObj.GetObject() ).Pos();
+                    SwRect aArea = GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() );
+                    aArea.Pos() += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
                     MapMode aMapMode( MapUnit::MapTwip );
                     Size aSize = xObj.GetSize( &aMapMode );
                     aArea.Width( aSize.Width() );
@@ -640,7 +640,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         {
             // TODO/MBA: testing
             SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
-                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() ));
+                        : GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() ));
             if( !aRect.IsEmpty() )
             {
                 // TODO/LEAN: getMapUnit can switch object to running state
@@ -761,7 +761,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         if ( pFlyPrtRect )
             aObjArea = pFlyPrtRect->SSize();
         else
-            aObjArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() ).SSize();
+            aObjArea = GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() ).SSize();
 
         // differ the aObjArea and _aVisArea by 1 Pixel then set new VisArea
         long nX, nY;
@@ -795,8 +795,8 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
     }
     else
     {
-        aArea = GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() );
-        aArea.Pos() += GetAnyCurRect( RECT_FLY_EMBEDDED, nullptr, xObj.GetObject() ).Pos();
+        aArea = GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() );
+        aArea.Pos() += GetAnyCurRect( CurRectType::FlyEmbedded, nullptr, xObj.GetObject() ).Pos();
     }
 
     if ( bUseObjectSize )
@@ -808,7 +808,7 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
         {
             const Point &rPoint = pFlyFrameFormat->GetLastFlyFramePrtRectPos();
             SwRect aRect( pFlyPrtRect ? *pFlyPrtRect
-                        : GetAnyCurRect( RECT_FLY_PRT_EMBEDDED, nullptr, xObj.GetObject() ));
+                        : GetAnyCurRect( CurRectType::FlyEmbeddedPrt, nullptr, xObj.GetObject() ));
             aArea += rPoint - aRect.Pos(); // adjust area by diff of printing area position in order to keep baseline alignment correct.
         }
         aArea.Width ( _aVisArea.Width() );

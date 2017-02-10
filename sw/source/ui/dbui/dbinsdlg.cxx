@@ -719,8 +719,8 @@ IMPL_LINK( SwInsertDBColAutoPilot, TableFormatHdl, Button*, pButton, void )
         else
             nWidth = rSh.GetAnyCurRect(
                                 (FrameTypeFlags::FLY_ANY & rSh.GetFrameType( nullptr, true ))
-                                              ? RECT_FLY_PRT_EMBEDDED
-                                              : RECT_PAGE_PRT ).Width();
+                                              ? CurRectType::FlyEmbeddedPrt
+                                              : CurRectType::PagePrt ).Width();
 
         SwTabCols aTabCols;
         aTabCols.SetRight( nWidth );
