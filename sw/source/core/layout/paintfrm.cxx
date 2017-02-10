@@ -5573,14 +5573,12 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
     SwTwips nX = aRectFnSet.GetPrtLeft(*this);
     switch ( rInf.GetAdj() )
     {
-        case FTNADJ_CENTER:
-            nX += nPrtWidth/2 - nWidth/2; break;
-        case FTNADJ_RIGHT:
+        case SwFootnoteAdj::Right:
             nX += nPrtWidth - nWidth; break;
-        case FTNADJ_LEFT:
+        case SwFootnoteAdj::Left:
             /* do nothing */; break;
         default:
-            OSL_ENSURE( false, "New adjustment for footnote lines?" );
+            assert(false);
     }
     SwTwips nLineWidth = rInf.GetLineWidth();
     const SwRect aLineRect = aRectFnSet.IsVert() ?

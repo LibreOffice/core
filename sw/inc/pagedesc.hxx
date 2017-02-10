@@ -43,11 +43,9 @@ class SwNode;
 class SwPageDescs;
 
 /// Separator line adjustment.
-enum SwFootnoteAdj
+enum class SwFootnoteAdj
 {
-    FTNADJ_LEFT,
-    FTNADJ_CENTER,
-    FTNADJ_RIGHT
+    Left, Right
 };
 
 /// Footnote information.
