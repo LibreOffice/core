@@ -119,7 +119,7 @@ private:
 public:
     SfxHint() : mnId(SfxHintId::NONE) {}
     explicit SfxHint( SfxHintId nId ) : mnId(nId) {}
-    virtual ~SfxHint();
+    virtual ~SfxHint() COVERITY_NOEXCEPT_FALSE;
     SfxHintId GetId() const { return mnId; }
 };
 

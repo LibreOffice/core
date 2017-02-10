@@ -290,7 +290,7 @@ public:
 
     /** Destructor: Releases interface if set.
     */
-    inline ~Reference();
+    inline ~Reference() COVERITY_NOEXCEPT_FALSE;
 
     /** Default Constructor: Sets null reference.
     */

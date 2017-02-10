@@ -351,6 +351,16 @@ typedef struct _sal_Sequence
 */
 #define SAL_THROW_EXTERN_C() throw ()
 
+/** To markup destructors that coverity warns might throw exceptions
+    which won't throw in practice, or where std::terminate is
+    an acceptable response if they do
+*/
+#if defined(LIBO_INTERNAL_ONLY) && defined(__COVERITY__)
+#   define COVERITY_NOEXCEPT_FALSE noexcept(false)
+#else
+#   define COVERITY_NOEXCEPT_FALSE
+#endif
+
 #else
 
 #define SAL_THROW_EXTERN_C()
