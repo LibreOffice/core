@@ -265,6 +265,15 @@ namespace
                 lcl_SetCpyPos(pMark->GetOtherMarkPos(), rStt, *pCpyStt, *aTmpPam.GetMark(), nDelCount);
             }
 
+            const IDocumentMarkAccess::MarkType aMarkType = IDocumentMarkAccess::GetType(*pMark);
+            if (aMarkType == IDocumentMarkAccess::MarkType::CHECKBOX_FIELDMARK)
+            {
+                // Node's CopyText() copies also dummy characters, which need to be removed
+                // (they will be added later in MarkBase::InitDoc inside IDocumentMarkAccess::makeMark)
+                // CHECKBOX_FIELDMARK doesn't contain any other data in its range, so just clear it
+                pDestDoc->getIDocumentContentOperations().DeleteRange(aTmpPam);
+            }
+
             ::sw::mark::IMark* const pNewMark = pDestDoc->getIDocumentMarkAccess()->makeMark(
                 aTmpPam,
                 pMark->GetName(),
