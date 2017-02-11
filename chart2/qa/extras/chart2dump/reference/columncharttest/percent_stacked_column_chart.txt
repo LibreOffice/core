@@ -1,0 +1,162 @@
+// nSeriesCount
+4
+/// Series 0 Columns
+// nColumnCountInSeries
+3
+// static_cast<sal_Int32>(aSeriesColumnFillStyle)
+1
+// static_cast<sal_Int32>(aSeriesColumnFillColor)
+16711807
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=2
+// aColumnPosition.X
+14878
+// aColumnPosition.Y
+5971
+// aColumnSize.Height
+1378
+// aColumnSize.Width
+1965
+// aColumnTransformation
+1965;0;148780;1378;59710;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=1
+// aColumnPosition.X
+9967
+// aColumnPosition.Y
+5139
+// aColumnSize.Height
+2210
+// aColumnSize.Width
+1964
+// aColumnTransformation
+1964;0;99670;2210;51390;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0
+// aColumnPosition.X
+5055
+// aColumnPosition.Y
+5082
+// aColumnSize.Height
+2267
+// aColumnSize.Width
+1965
+// aColumnTransformation
+1965;0;50550;2267;50820;0;1
+/// Series 1 Columns
+// nColumnCountInSeries
+3
+// static_cast<sal_Int32>(aSeriesColumnFillStyle)
+4
+// static_cast<sal_Int32>(aSeriesColumnFillColor)
+10079487
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=2
+// aColumnPosition.X
+14878
+// aColumnPosition.Y
+4421
+// aColumnSize.Height
+1550
+// aColumnSize.Width
+1965
+// aColumnTransformation
+1965;0;148780;1550;44210;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=1
+// aColumnPosition.X
+9967
+// aColumnPosition.Y
+3912
+// aColumnSize.Height
+1227
+// aColumnSize.Width
+1964
+// aColumnTransformation
+1964;0;99670;1227;39120;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=0
+// aColumnPosition.X
+5055
+// aColumnPosition.Y
+3459
+// aColumnSize.Height
+1623
+// aColumnSize.Width
+1965
+// aColumnTransformation
+1965;0;50550;1623;34590;0;1
+/// Series 2 Columns
+// nColumnCountInSeries
+3
+// static_cast<sal_Int32>(aSeriesColumnFillStyle)
+3
+// static_cast<sal_Int32>(aSeriesColumnFillColor)
+10079487
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=2
+// aColumnPosition.X
+14878
+// aColumnPosition.Y
+3502
+// aColumnSize.Height
+919
+// aColumnSize.Width
+1965
+// aColumnTransformation
+1965;0;148780;919;35020;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=1
+// aColumnPosition.X
+9967
+// aColumnPosition.Y
+2711
+// aColumnSize.Height
+1201
+// aColumnSize.Width
+1964
+// aColumnTransformation
+1964;0;99670;1201;27110;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=0
+// aColumnPosition.X
+5055
+// aColumnPosition.Y
+2635
+// aColumnSize.Height
+824
+// aColumnSize.Width
+1965
+// aColumnTransformation
+1965;0;50550;824;26350;0;1
+/// Series 3 Columns
+// nColumnCountInSeries
+3
+// static_cast<sal_Int32>(aSeriesColumnFillStyle)
+2
+// static_cast<sal_Int32>(aSeriesColumnFillColor)
+10079487
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=2
+// aColumnPosition.X
+14878
+// aColumnPosition.Y
+1345
+// aColumnSize.Height
+2157
+// aColumnSize.Width
+1965
+// aColumnTransformation
+1965;0;148780;2157;13450;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=1
+// aColumnPosition.X
+9967
+// aColumnPosition.Y
+1345
+// aColumnSize.Height
+1366
+// aColumnSize.Width
+1964
+// aColumnTransformation
+1964;0;99670;1366;13450;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=0
+// aColumnPosition.X
+5055
+// aColumnPosition.Y
+1345
+// aColumnSize.Height
+1290
+// aColumnSize.Width
+1965
+// aColumnTransformation
+1965;0;50550;1290;13450;0;1

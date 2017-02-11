@@ -317,7 +317,6 @@ Reference< chart2::data::XDataSequence > getDataSequenceFromDocByRole(
             return xLabelSeq;
     }
 
-    CPPUNIT_FAIL("no Label sequence found");
     return Reference< chart2::data::XDataSequence > ();
 }
 
