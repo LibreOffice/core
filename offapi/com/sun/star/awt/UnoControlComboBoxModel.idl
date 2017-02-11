@@ -192,19 +192,6 @@ published service UnoControlComboBoxModel
         #StringItemList property.
     */
     [optional] interface XItemList;
-
-    /** specifies the list of raw typed (not stringized) items.
-
-        <p>This list corresponds with the StringItemList and if given
-        has to be of the same length, the elements' positions matching
-        those of their string representation in StringItemList.</p>
-
-        <p>If a new value is entered via the ComboBox edit then this
-        list will be invalidated.</p>
-
-        @since LibreOffice 5.4
-     */
-    [optional, property] sequence<any> TypedItemList;
 };
 
 

@@ -63,7 +63,6 @@ namespace pcr
     #define PROPERTY_BUTTONTYPE             "ButtonType"
     #define PROPERTY_XFORMS_BUTTONTYPE      "XFormsButtonType"
     #define PROPERTY_STRINGITEMLIST         "StringItemList"
-    #define PROPERTY_TYPEDITEMLIST          "TypedItemList"
     #define PROPERTY_DEFAULT_TEXT           "DefaultText"
     #define PROPERTY_DEFAULT_STATE          "DefaultState"
     #define PROPERTY_FORMATKEY              "FormatKey"

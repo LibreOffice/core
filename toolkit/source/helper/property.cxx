@@ -221,7 +221,6 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_DEP_PROP_2 ( "State",                  STATE,                  sal_Int16,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "StrictFormat",           STRICTFORMAT,           bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "StringItemList",         STRINGITEMLIST,         Sequence< OUString >, BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "TypedItemList",          TYPEDITEMLIST,          Sequence< Any >, BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "VisualEffect",           VISUALEFFECT,           sal_Int16,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "SymbolColor",            SYMBOL_COLOR,           sal_Int32,      BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_3     ( "Tabstop",                TABSTOP,                bool,           BOUND, MAYBEDEFAULT, MAYBEVOID ),

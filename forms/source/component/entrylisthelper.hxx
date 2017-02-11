@@ -53,8 +53,6 @@ namespace frm
                         m_xListSource;      /// our external list source
         std::vector< OUString >
                         m_aStringItems;     /// "overridden" StringItemList property value
-        css::uno::Sequence< css::uno::Any >
-                        m_aTypedItems;      /// "overridden" TypedItemList property value
         ::comphelper::OInterfaceContainerHelper2
                         m_aRefreshListeners;
 
@@ -67,10 +65,6 @@ namespace frm
         /// returns the current string item list
         inline const std::vector< OUString >&
                     getStringItemList() const { return m_aStringItems; }
-
-        /// returns the current typed item list
-        inline const css::uno::Sequence< css::uno::Any >&
-                    getTypedItemList() const { return m_aTypedItems; }
 
         /// determines whether we actually have an external list source
         inline bool hasExternalListSource( ) const { return m_xListSource.is(); }
@@ -166,13 +160,6 @@ namespace frm
                         const css::uno::Reference< css::form::binding::XListEntrySource >& _rxSource,
                         ControlModelLock& _rInstanceLock
                     );
-
-        /** obtains list entries and possibly data values from list source
-
-            @precond
-                m_xListSource has to hold an external list source
-        */
-        void        obtainListSourceEntries( ControlModelLock& _rInstanceLock );
 
         /** refreshes our list entries
 

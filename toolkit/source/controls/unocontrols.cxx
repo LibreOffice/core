@@ -2277,8 +2277,6 @@ void UnoControlListBoxModel::ImplNormalizePropertySequence( const sal_Int32 _nCo
     // dependencies we know:
     // BASEPROPERTY_STRINGITEMLIST->BASEPROPERTY_SELECTEDITEMS
     ImplEnsureHandleOrder( _nCount, _pHandles, _pValues, BASEPROPERTY_STRINGITEMLIST, BASEPROPERTY_SELECTEDITEMS );
-    // BASEPROPERTY_STRINGITEMLIST->BASEPROPERTY_TYPEDITEMLIST
-    ImplEnsureHandleOrder( _nCount, _pHandles, _pValues, BASEPROPERTY_STRINGITEMLIST, BASEPROPERTY_TYPEDITEMLIST );
 
     UnoControlModel::ImplNormalizePropertySequence( _nCount, _pHandles, _pValues, _pValidHandles );
 }
