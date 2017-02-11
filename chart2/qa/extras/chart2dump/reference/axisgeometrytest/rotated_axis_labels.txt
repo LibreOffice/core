@@ -1,0 +1,38 @@
+/// CID/D=0:CS=0:Axis=0,0
+// aAxisPosition.X
+3510
+// aAxisPosition.Y
+7520
+// aAxisSize.Height
+1724
+// aAxisSize.Width
+14439
+// sAxisTransformation
+14440;0;35100;1725;75200;0;1
+// nAxisGeometriesCount
+4
+// sAxisLineDash
+0;1;201;20;20
+// static_cast<sal_Int32>(aAxisLineColor)
+0
+// nAxisLineWidth
+0
+/// CID/D=0:CS=0:Axis=1,0
+// aAxisPosition.X
+3360
+// aAxisPosition.Y
+1588
+// aAxisSize.Height
+5932
+// aAxisSize.Width
+150
+// sAxisTransformation
+151;0;33600;5933;15880;0;1
+// nAxisGeometriesCount
+2
+// sAxisLineDash
+0;1;201;20;20
+// static_cast<sal_Int32>(aAxisLineColor)
+0
+// nAxisLineWidth
+0
