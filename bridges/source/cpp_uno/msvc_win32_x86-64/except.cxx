@@ -320,9 +320,6 @@ public:
     type_info_descriptor * insert_new_type_info_descriptor(OUString const & rUNOname);
 
     RTTInfos() throw ();
-#if !defined LEAK_STATIC_DATA
-    ~RTTInfos() throw ();
-#endif
 };
 class type_info_
 {
@@ -428,22 +425,6 @@ int RTTInfos::getRTTI_len(OUString const & rUNOname) throw ()
 RTTInfos::RTTInfos() throw ()
 {
 }
-
-#if !defined LEAK_STATIC_DATA
-RTTInfos::~RTTInfos() throw ()
-{
-    SAL_INFO("bridges", "> freeing generated RTTI infos... <");
-
-    MutexGuard aGuard( _aMutex );
-    for ( t_string2PtrMap::const_iterator iPos( _allRTTI.begin() );
-          iPos != _allRTTI.end(); ++iPos )
-    {
-        type_info_ * pType = static_cast<type_info_ *>(iPos->second);
-        pType->~type_info_(); // obsolete, but good style...
-        ::rtl_freeMemory( pType );
-    }
-}
-#endif
 
 void * __cdecl copyConstruct(
     void * pExcThis,
@@ -556,9 +537,6 @@ public:
     static DWORD allocationGranularity;
 
     ExceptionInfos() throw ();
-#if !defined LEAK_STATIC_DATA
-    ~ExceptionInfos() throw ();
-#endif
 };
 
 DWORD ExceptionInfos::allocationGranularity = 0;
@@ -578,10 +556,6 @@ struct RaiseInfo
     sal_uInt64         _codeBase;
 
     explicit RaiseInfo(typelib_TypeDescription * pTD) throw ();
-
-#if !defined LEAK_STATIC_DATA
-    ~RaiseInfo() throw ();
-#endif
 };
 
 /* Rewrite of 32-Bit-Code to work under 64 Bit:
@@ -702,40 +676,9 @@ RaiseInfo::RaiseInfo(typelib_TypeDescription * pTD)throw ()
     assert(etMem + etMemOffset == pCode + totalSize);
 }
 
-#if !defined LEAK_STATIC_DATA
-RaiseInfo::~RaiseInfo() throw ()
-{
-    sal_uInt32 * pTypes = reinterpret_cast<sal_uInt32 *>(_codeBase + _types) + 1;
-
-    // Because of placement new we have to call D.-tor, not delete!
-    for ( int nTypes = *reinterpret_cast<sal_uInt32 *>(_codeBase + _types); nTypes--; )
-    {
-        ExceptionType *et = reinterpret_cast<ExceptionType *>(_codeBase + pTypes[nTypes]);
-        et->~ExceptionType();
-    }
-    // free our single block
-    ::rtl_freeMemory( _code );
-    ::typelib_typedescription_release( _pTD );
-}
-#endif
-
 ExceptionInfos::ExceptionInfos() throw ()
 {
 }
-
-#if !defined LEAK_STATIC_DATA
-ExceptionInfos::~ExceptionInfos() throw ()
-{
-    SAL_INFO("bridges", "> freeing exception infos... <");
-
-    MutexGuard aGuard( _aMutex );
-    for ( t_string2PtrMap::const_iterator iPos( _allRaiseInfos.begin() );
-          iPos != _allRaiseInfos.end(); ++iPos )
-    {
-        delete static_cast<RaiseInfo *>(iPos->second);
-    }
-}
-#endif
 
 RaiseInfo * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTD ) throw ()
 {
@@ -749,12 +692,7 @@ RaiseInfo * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTD ) throw 
             GetSystemInfo( &systemInfo );
             allocationGranularity = systemInfo.dwAllocationGranularity;
 
-#ifdef LEAK_STATIC_DATA
             s_pInfos = new ExceptionInfos();
-#else
-            static ExceptionInfos s_allExceptionInfos;
-            s_pInfos = &s_allExceptionInfos;
-#endif
         }
     }
 
@@ -795,12 +733,7 @@ type_info * mscx_getRTTI(
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if (! s_pRTTIs)
         {
-#ifdef LEAK_STATIC_DATA
             s_pRTTIs = new RTTInfos();
-#else
-            static RTTInfos s_aRTTIs;
-            s_pRTTIs = &s_aRTTIs;
-#endif
         }
     }
     return s_pRTTIs->getRTTI( rUNOname );
@@ -814,12 +747,7 @@ int mscx_getRTTI_len(
         MutexGuard aGuard(Mutex::getGlobalMutex());
         if (!s_pRTTIs)
         {
-#ifdef LEAK_STATIC_DATA
             s_pRTTIs = new RTTInfos();
-#else
-            static RTTInfos s_aRTTIs;
-            s_pRTTIs = &s_aRTTIs;
-#endif
         }
     }
     return s_pRTTIs->getRTTI_len(rUNOname);
