@@ -21,6 +21,7 @@
 #include <vcl/svapp.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include "format.hxx"
+#include <cassert>
 
 
 // Latin default-fonts
@@ -68,28 +69,20 @@ static const DefaultFontType aCTLDefFnts[FNT_END] =
 
 OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
 {
-    OSL_ENSURE( /*FNT_BEGIN <= nIdent  &&*/  nIdent <= FNT_END,
-            "index out opd range" );
-
-    if (FNT_MATH == nIdent)
-        return OUString(FNTNAME_MATH);
-    else
+    assert(nIdent < FNT_END);
+    const DefaultFontType *pTable;
+    switch ( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) )
     {
-        const DefaultFontType *pTable;
-        switch ( SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ) )
-        {
-            case SvtScriptType::LATIN :     pTable = aLatinDefFnts; break;
-            case SvtScriptType::ASIAN :     pTable = aCJKDefFnts; break;
-            case SvtScriptType::COMPLEX :   pTable = aCTLDefFnts; break;
-            default :
-                pTable = aLatinDefFnts;
-                SAL_WARN("starmath", "unknown script-type");
-        }
-
-        return OutputDevice::GetDefaultFont(
-                        pTable[ nIdent ], nLang,
-                        GetDefaultFontFlags::OnlyOne ).GetFamilyName();
+        case SvtScriptType::LATIN :     pTable = aLatinDefFnts; break;
+        case SvtScriptType::ASIAN :     pTable = aCJKDefFnts; break;
+        case SvtScriptType::COMPLEX :   pTable = aCTLDefFnts; break;
+        default :
+            pTable = aLatinDefFnts;
+            SAL_WARN("starmath", "unknown script-type");
     }
+
+    return OutputDevice::GetDefaultFont(pTable[ nIdent ], nLang,
+                                        GetDefaultFontFlags::OnlyOne ).GetFamilyName();
 }
 
 
