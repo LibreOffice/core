@@ -39,7 +39,7 @@
 
 /* Begin PBXFileReference section */
 		BE03BF9118F9648F00620DC7 /* udata.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = udata.cpp; path = ../../../workdir/UnpackedTarball/icu/source/common/udata.cpp; sourceTree = "<group>"; };
-		BE03BF9218F9A7CC00620DC7 /* icudt58l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt58l.dat; path = ../../../../workdir/UnpackedTarball/icu/source/data/in/icudt58l.dat; sourceTree = "<group>"; };
+		BE03BF9218F9A7CC00620DC7 /* icudt58l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt58l.dat; path = ../../../workdir/UnpackedTarball/icu/source/data/in/icudt58l.dat; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE03BF9518FC1A1C00620DC7 /* xdictionary.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = xdictionary.cxx; path = ../../../i18npool/source/breakiterator/xdictionary.cxx; sourceTree = "<group>"; };
 		BE0898E81860D42B0021A679 /* brand.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = brand.cxx; path = ../../../vcl/source/app/brand.cxx; sourceTree = "<group>"; };
 		BE0898E91860D42B0021A679 /* dbggui.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = dbggui.cxx; path = ../../../vcl/source/app/dbggui.cxx; sourceTree = "<group>"; };
