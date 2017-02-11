@@ -594,17 +594,6 @@ void SwFlyDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
     {
         pKillDrawHint->m_rpContact = this;
     }
-    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
-    {
-        switch(pDrawFrameFormatHint->m_eId)
-        {
-            case sw::DrawFrameFormatHintId::DYING_FLYFRAMEFORMAT:
-                dynamic_cast<SwFlyFrameFormat*>(const_cast<SwModify*>(&rMod))->ClearContact();
-                break;
-            default:
-                ;
-        }
-    }
 }
 
 // SwDrawContact
