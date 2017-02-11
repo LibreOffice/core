@@ -875,7 +875,7 @@ void ScUndoAutoFormat::Redo()
                     rDoc.SetRowFlags( nRow, nTab, nOld & ~CRFlags::ManualSize );
             }
 
-            rDoc.SetOptimalHeight(aCxt, nStartY, nEndY, nTab);
+            bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartY, nEndY, nTab);
 
             for (SCCOL nCol=nStartX; nCol<=nEndX; nCol++)
                 if (!rDoc.ColHidden(nCol, nTab))
@@ -886,6 +886,10 @@ void ScUndoAutoFormat::Redo()
                     rDoc.SetColWidth( nCol, nTab, nThisSize );
                     rDoc.ShowCol( nCol, nTab, true );
                 }
+
+            // tdf#76183: recalculate objects' positions
+            if (bChanged)
+                rDoc.SetDrawPageSize(nTab);
         }
 
         pDocShell->PostPaint( 0,      0,      nStartZ,

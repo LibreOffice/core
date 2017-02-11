@@ -148,7 +148,10 @@ bool ScViewFunc::AdjustBlockHeight( bool bPaint, ScMarkData* pMarkData )
                 bAnyChanged = bChanged = true;
             }
         }
-        if ( bPaint && bChanged )
+        // tdf#76183: recalculate objects' positions
+        if (bChanged)
+            rDoc.SetDrawPageSize(nTab);
+        if (bPaint && bChanged)
             pDocSh->PostPaint( 0, nPaintY, nTab, MAXCOL, MAXROW, nTab,
                                                 PaintPartFlags::Grid | PaintPartFlags::Left );
     }
@@ -182,7 +185,11 @@ bool ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow )
     sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
     bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);
 
-    if (bChanged && ( nStartRow == nEndRow ))
+    // tdf#76183: recalculate objects' positions
+    if (bChanged)
+        rDoc.SetDrawPageSize(nTab);
+
+    if (bChanged && (nStartRow == nEndRow))
     {
         sal_uInt16 nNewPixel = (sal_uInt16) (rDoc.GetRowHeight(nStartRow,nTab) * nPPTY);
         if ( nNewPixel == nOldPixel )

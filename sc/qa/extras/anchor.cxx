@@ -13,10 +13,16 @@
 #include <sfx2/dispatch.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <unonames.hxx>
 
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
+
+#include "svx/svdocirc.hxx"
+#include "scitems.hxx"
 
 #include "sc.hrc"
 
@@ -32,9 +38,11 @@ public:
     virtual void tearDown() override;
 
     void testUndoAnchor();
+    void testTdf76183();
 
     CPPUNIT_TEST_SUITE(ScAnchorTest);
     CPPUNIT_TEST(testUndoAnchor);
+    CPPUNIT_TEST(testTdf76183);
     CPPUNIT_TEST_SUITE_END();
 private:
 
@@ -146,6 +154,36 @@ void ScAnchorTest::testUndoAnchor()
     CPPUNIT_ASSERT_EQUAL(sal_uLong(864900), rGraphicObj.GetSizeBytes());
 
     xComponent->dispose();
+}
+
+void ScAnchorTest::testTdf76183()
+{
+    uno::Reference< lang::XComponent > xComponent = loadFromDesktop("private:factory/scalc");
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    ScDocShell* pDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    SdrPage *pPage = pDrawLayer->GetPage(0);
+
+    // Add a circle somewhere below first row.
+    const Rectangle aOrigRect = Rectangle(1000, 1000, 1200, 1200);
+    SdrCircObj* pObj = new SdrCircObj(OBJ_CIRC, aOrigRect);
+    pPage->InsertObject(pObj);
+    // Anchor to cell
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, rDoc, 0);
+    const Rectangle& rNewRect = pObj->GetLogicRect();
+
+    // Set word wrap to true
+    rDoc.ApplyAttr(0, 0, 0, SfxBoolItem(ATTR_LINEBREAK, true));
+    // Add multi-line text to cell to initiate optimal height change
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xText(xSheet->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xText->setString("first\nsecond\nthird");
+
+    // The resize of first row must have moved the object down after its anchor cell
+    CPPUNIT_ASSERT(aOrigRect.Top() < rNewRect.Top());
 }
 
 void ScAnchorTest::tearDown()

@@ -394,7 +394,12 @@ bool ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
     bool bChange = aDocument.SetOptimalHeight(aCxt, nStartRow,nEndRow, nTab);
 
     if (bChange)
+    {
+        // tdf#76183: recalculate objects' positions
+        aDocument.SetDrawPageSize(nTab);
+
         PostPaint( 0,nStartRow,nTab, MAXCOL,MAXROW,nTab, PaintPartFlags::Grid|PaintPartFlags::Left );
+    }
 
     return bChange;
 }
