@@ -1444,9 +1444,9 @@ bool ScTable::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, const ScMarkData& rMa
                     ++it;
                     if (it == rCells.end())
                     {
-                        // No more block.
+                        // No more block.  Move on to the next column.
                         rRow = MAXROW + 1;
-                        return false;
+                        continue;
                     }
                 }
 
