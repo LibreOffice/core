@@ -92,7 +92,10 @@ using ::com::sun::star::container::XIndexAccess;
 using ::sax_fastparser::FSHelperPtr;
 
 
-void dump_pset(Reference< XPropertySet > rXPropSet);
+#if OSL_DEBUG_LEVEL > 1
+void dump_pset(Reference< XPropertySet > const & rXPropSet);
+#endif
+
 #define IDS(x) OString(OStringLiteral(#x " ") + OString::number( mnShapeIdMax++ )).getStr()
 
 namespace oox {
@@ -1789,7 +1792,9 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
 
     Reference< beans::XPropertySet > xPropSet( xSlide, uno::UNO_QUERY );
     xPropSet->setPropertyValue( "Layout", makeAny( short( aLayoutInfo[ nOffset ].nType ) ) );
+#if OSL_DEBUG_LEVEL > 1
     dump_pset(xPropSet);
+#endif
     mXPagePropSet.set( xSlide, UNO_QUERY );
     mXShapes.set( xSlide, UNO_QUERY );
 
@@ -2334,7 +2339,8 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sdfilt_component_getFactory( const sal_Char*
 }
 #endif
 
-void dump_pset(Reference< XPropertySet > rXPropSet)
+#if OSL_DEBUG_LEVEL > 1
+void dump_pset(Reference< XPropertySet > const & rXPropSet)
 {
     Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
     Sequence< beans::Property > props = info->getProperties ();
@@ -2361,5 +2367,6 @@ void dump_pset(Reference< XPropertySet > rXPropSet)
             SAL_WARN("sd.eppt", "???          <unhandled type>");
     }
 }
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
