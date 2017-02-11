@@ -80,7 +80,7 @@ public:
 
     void                ClearWin();     // to be called when view is destroyed
     void                LaunchEvent(
-                            const sal_Int16 nAccesibleEventId,
+                            const sal_Int16 nAccessibleEventId,
                             const css::uno::Any &rOldVal,
                             const css::uno::Any &rNewVal);
 

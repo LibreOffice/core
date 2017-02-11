@@ -322,7 +322,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
     return SwAccessibleContext::getAccessibleAtPoint( aPoint );
 }
 
-// SwAccessibeDocument
+// SwAccessibleDocument
 
 void SwAccessibleDocument::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )

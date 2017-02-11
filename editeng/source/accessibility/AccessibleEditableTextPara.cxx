@@ -630,7 +630,7 @@ namespace accessibility
     {
         uno::Any aRet;
 
-        // must provide XAccesibleText by hand, since it comes publicly inherited by XAccessibleEditableText
+        // must provide XAccessibleText by hand, since it comes publicly inherited by XAccessibleEditableText
         if ( rType == cppu::UnoType<XAccessibleText>::get())
         {
             uno::Reference< XAccessibleText > aAccText = static_cast< XAccessibleEditableText * >(this);

@@ -825,7 +825,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
     }
     else
     {
-        // Prevent mutiple broadcasts during the series of changes.
+        // Prevent multiple broadcasts during the series of changes.
         SdrDelayBroadcastObjectChange aDelayBroadcastObjectChange(*pObj);
 
         bool bCanResize = bValid2 && !pObj->IsResizeProtect();
