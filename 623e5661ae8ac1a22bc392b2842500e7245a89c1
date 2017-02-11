@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_751d00bd",
+        "filename": "sd/source/core/stlfamily.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-11T07:31:57Z",
+      "side": 1,
+      "message": "no need for the \"if mpImpl\" check can just call mpImpl.reset() unconditionally",
+      "revId": "623e5661ae8ac1a22bc392b2842500e7245a89c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
