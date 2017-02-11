@@ -240,12 +240,8 @@ void raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
         MutexGuard guard( Mutex::getGlobalMutex() );
         if (! s_rtti)
         {
-#ifdef LEAK_STATIC_DATA
-            s_rtti = new RTTI();
-#else
             static RTTI rtti_data;
             s_rtti = &rtti_data;
-#endif
         }
     }
     rtti = (type_info *)s_rtti->getRTTI( (typelib_CompoundTypeDescription *) pTypeDescr );
