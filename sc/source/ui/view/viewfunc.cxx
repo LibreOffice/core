@@ -1871,8 +1871,8 @@ void ScViewFunc::SetWidthOrHeight(
         return;
     }
 
-    SCCOLROW nStart = rRanges[0].mnStart;
-    SCCOLROW nEnd = rRanges[0].mnEnd;
+    SCCOLROW nStart = rRanges.front().mnStart;
+    SCCOLROW nEnd = rRanges.back().mnEnd;
 
     bool bFormula = false;
     if ( eMode == SC_SIZE_OPTIMAL )
