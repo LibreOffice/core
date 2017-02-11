@@ -66,11 +66,10 @@ enum class ComplexTextLayoutFlags
     BiDiRtl           = 0x0001,
     BiDiStrong        = 0x0002,
     TextOriginLeft    = 0x0004,
-    TextOriginRight   = 0x0008,
-    LigaturesEnabled  = 0x0200
+    TextOriginRight   = 0x0008
 };
 namespace o3tl {
-    template<> struct typed_flags<ComplexTextLayoutFlags> : is_typed_flags<ComplexTextLayoutFlags, 0x020f> {};
+    template<> struct typed_flags<ComplexTextLayoutFlags> : is_typed_flags<ComplexTextLayoutFlags, 0x000f> {};
 }
 
 class OutDevState
