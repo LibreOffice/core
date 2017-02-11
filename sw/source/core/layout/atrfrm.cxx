@@ -2889,8 +2889,6 @@ SwFlyFrameFormat::~SwFlyFrameFormat()
         {
             SwFrame::DestroyFrame(pLast);
         } while( nullptr != ( pLast = aIter.Next() ));
-
-    CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::DYING_FLYFRAMEFORMAT));
 }
 
 /// Creates the Frames if the format describes a paragraph-bound frame.
