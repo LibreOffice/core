@@ -270,7 +270,7 @@ void SwAutoFormat::SetRedlineText_( sal_uInt16 nActionId )
         sText = SwViewShell::GetShellRes()->GetAutoFormatNameLst()[ nActionId ];
         switch( nActionId )
         {
-        case STR_AUTOFMTREDL_SET_NUMBULET:
+        case STR_AUTOFMTREDL_SET_NUMBULLET:
         case STR_AUTOFMTREDL_DEL_MORELINES:
 
         // AutoCorrect actions
@@ -1376,7 +1376,7 @@ void SwAutoFormat::BuildText()
 
 void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 {
-    SetRedlineText( STR_AUTOFMTREDL_SET_NUMBULET );
+    SetRedlineText( STR_AUTOFMTREDL_SET_NUMBULLET );
 
     bool bBreak = true;
 
