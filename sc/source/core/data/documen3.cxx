@@ -1977,10 +1977,12 @@ void ScDocument::SetClipOptions(const ScClipOptions& rClipOptions)
 void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                     SCCOL nEndCol, SCROW nEndRow )
 {
-    OUStringBuffer aTotal;
+    OUStringBuffer aTotal, aTotalNotes;
     OUString aCellStr;
     SCCOL nCol;
     SCROW nRow;
+    bool bNeedMergeNotes = false;
+    bool bFoundNote = false;
     for (nRow=nStartRow; nRow<=nEndRow; nRow++)
         for (nCol=nStartCol; nCol<=nEndCol; nCol++)
         {
@@ -1991,11 +1993,39 @@ void ScDocument::DoMergeContents( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                     aTotal.append(' ');
                 aTotal.append(aCellStr);
             }
+            if ( HasNote( nCol, nRow, nTab ) ) // tdf#56294 Check for Notes also
+            {
+                if ( !bFoundNote )
+                {
+                    ScPostIt * pFirstNote = GetNote(nCol, nRow, nTab);
+                    aCellStr = pFirstNote->GetText();
+                    if ( nCol != nStartCol || nRow != nStartRow )
+                    { // if first note is not in the first cell, clone it to first cell
+                        pFirstNote = pFirstNote->Clone( ScAddress( nCol, nRow, nTab), *this,
+                                                        ScAddress( nStartCol, nStartRow, nTab), true );
+                        SetNote( nStartCol, nStartRow, nTab, pFirstNote );
+                    }
+                    bFoundNote = true;
+                }
+                else
+                {
+                    aCellStr = GetNote(nCol, nRow, nTab)->GetText();
+                    aTotalNotes.append('\n'); // Merge Comment with new line
+                    bNeedMergeNotes = true;
+                }
+                if (!aCellStr.isEmpty())
+                {
+                    aTotalNotes.append(aCellStr);
+                }
+            }
             if (nCol != nStartCol || nRow != nStartRow)
                 SetString(nCol,nRow,nTab,"");
         }
 
     SetString(nStartCol,nStartRow,nTab,aTotal.makeStringAndClear());
+    if ( bNeedMergeNotes ) // All formating will be lost (text, area, line)
+        GetNote(nStartCol, nStartRow,  nTab)->SetText( ScAddress( nStartCol, nStartRow, nTab ),
+                                                       aTotalNotes.makeStringAndClear() );
 }
 
 void ScDocument::DoEmptyBlock( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
