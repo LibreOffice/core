@@ -210,9 +210,9 @@ private:
     // the following private methods are used to implement accSelect method
     HRESULT SelectChild(css::accessibility::XAccessible* pItem);
     HRESULT DeSelectChild(css::accessibility::XAccessible* pItem);
-    HRESULT SelectMutipleChidren(css::accessibility::XAccessible** pItem,
+    HRESULT SelectMultipleChidren(css::accessibility::XAccessible** pItem,
                 int size);
-    HRESULT DeSelectMutipleChildren(css::accessibility::XAccessible** pItem,
+    HRESULT DeSelectMultipleChildren(css::accessibility::XAccessible** pItem,
                 int size);
     static css::accessibility::XAccessibleContext* GetContextByXAcc(
             css::accessibility::XAccessible* pXAcc);
