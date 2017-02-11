@@ -195,13 +195,6 @@ $(eval $(call gb_Library_add_defs,$(gb_CPPU_ENV)_uno,\
 	-DHAVE_POSIX_FALLOCATE \
 ))
 endif
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_defs,$(gb_CPPU_ENV)_uno,\
-	$(if $(cppu_no_leak)$(bndchk),,\
-		-DLEAK_STATIC_DATA \
-	) \
-))
-endif
 
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources of this library.
