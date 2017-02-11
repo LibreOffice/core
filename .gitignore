@@ -127,7 +127,6 @@ xcuserdata
 *.xccheckout
 *.moved-aside
 DerivedData
-*.xcodeproj
 *.xcworkspace
 
 # MSVS specific
@@ -136,7 +135,6 @@ DerivedData
 *.sln
 *.v11*
 *.v12*
-*.vcxproj*
 *.opensdf
 !windows/*.sln
 !windows/*.vcxproj*
