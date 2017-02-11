@@ -262,7 +262,6 @@ namespace sw
 {
     enum class DrawFrameFormatHintId {
         DYING,
-        DYING_FLYFRAMEFORMAT, /* possibly can be merged with DYING, if all client handle it and handle it the same */
         PREPPASTING,
         PREP_INSERT_FLY,
         PREP_DELETE_FLY,
