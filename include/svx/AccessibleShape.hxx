@@ -319,7 +319,7 @@ public:
     virtual css::uno::Reference< css::accessibility::XAccessibleHyperlink >
         SAL_CALL getHyperLink( sal_Int32 nLinkIndex ) override;
     virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex ) override;
-    //=====  XAccesibleText  ==================================================
+    //=====  XAccessibleText  ==================================================
         virtual sal_Int32 SAL_CALL getCaretPosition(  ) override;
         virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
         virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;//Shen Zhen Jie changed sal_Unicode to sal_uInt32; change back to sal_Unicode

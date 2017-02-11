@@ -353,7 +353,7 @@ public:
     virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex ) override;
 
     // #i71360#
-    // XAccesibleTextMarkup
+    // XAccessibleTextMarkup
     virtual sal_Int32 SAL_CALL getTextMarkupCount( sal_Int32 nTextMarkupType ) override;
 
     virtual css::accessibility::TextSegment SAL_CALL
@@ -391,7 +391,7 @@ public:
     virtual sal_Int32 SAL_CALL getNumberOfLineWithCaret() override;
 
     // #i63870#
-    // XAccesibleTextAttributes
+    // XAccessibleTextAttributes
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getDefaultAttributes( const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
 };

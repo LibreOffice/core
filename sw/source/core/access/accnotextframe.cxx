@@ -249,7 +249,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
     return getSize().Width;
 }
 
-// XAccesibleText
+// XAccessibleText
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getCaretPosition(  ){return 0;}
 sal_Bool SAL_CALL SwAccessibleNoTextFrame::setCaretPosition( sal_Int32 ){return false;}
 sal_Unicode SAL_CALL SwAccessibleNoTextFrame::getCharacter( sal_Int32 ){return 0;}

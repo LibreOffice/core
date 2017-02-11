@@ -1405,7 +1405,7 @@ OUString AccessibleShape::getObjectLink( const uno::Any& )
     return aRet;
 }
 
-// XAccesibleHypertext
+// XAccessibleHypertext
 sal_Int32 SAL_CALL AccessibleShape::getHyperLinkCount()
 {
     // MT: Introduced with IA2 CWS, but SvxAccessibleHyperlink was redundant to svx::AccessibleHyperlink which we introduced meanwhile.
@@ -1440,7 +1440,7 @@ sal_Int32 SAL_CALL AccessibleShape::getHyperLinkIndex( sal_Int32 )
     sal_Int32 nRet = 0;
     return nRet;
 }
-// XAccesibleText
+// XAccessibleText
 sal_Int32 SAL_CALL AccessibleShape::getCaretPosition(  ){return 0;}
 sal_Bool SAL_CALL AccessibleShape::setCaretPosition( sal_Int32 ){return false;}
 sal_Unicode SAL_CALL AccessibleShape::getCharacter( sal_Int32 ){return 0;}

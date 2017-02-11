@@ -149,13 +149,13 @@ void SmGraphicAccessible::ClearWin()
 }
 
 void SmGraphicAccessible::LaunchEvent(
-        const sal_Int16 nAccesibleEventId,
+        const sal_Int16 nAccessibleEventId,
         const uno::Any &rOldVal,
         const uno::Any &rNewVal)
 {
     AccessibleEventObject aEvt;
     aEvt.Source     = static_cast<XAccessible *>(this);
-    aEvt.EventId    = nAccesibleEventId;
+    aEvt.EventId    = nAccessibleEventId;
     aEvt.OldValue   = rOldVal;
     aEvt.NewValue   = rNewVal ;
 

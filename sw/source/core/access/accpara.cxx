@@ -1261,7 +1261,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleParagraph::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-// XAccesibleText
+// XAccessibleText
 
 sal_Int32 SwAccessibleParagraph::getCaretPosition()
 {
@@ -2773,7 +2773,7 @@ sal_Bool SwAccessibleParagraph::copyText( sal_Int32 nStartIndex, sal_Int32 nEndI
     return true;
 }
 
-// XAccesibleEditableText
+// XAccessibleEditableText
 
 sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {

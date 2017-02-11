@@ -130,7 +130,7 @@ namespace comphelper
     /** Helper for wrapping an XAccessibleContext by aggregating a proxy for it.
 
         <p>This class does not have own ref counting. In addition, it does not implement
-        the XAccesibleContext interface, but provides all the methods from this interface
+        the XAccessibleContext interface, but provides all the methods from this interface
         which must be implemented using the inner context (such as getAccessibleChild*).</p>
 
         <p>Children of the aggregated XAccessibleContext are wrapped, too.</p>

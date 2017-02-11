@@ -38,9 +38,9 @@
 # cui/ui/thesaurus.ui <- problems under Linux
 
 # this is part 1. in order to help the build time when building all
-# lang, the list of ui is split in mutiple part to balance the run time
-# or all the tests, which improve the overal elapsed time
-# of make screenshoot on big machines
+# lang, the list of ui is split in multiple parts to balance the run time
+# or all the tests, which improve the overall elapsed time
+# of make screenshot on big machines
 # covering a to e
 
 
