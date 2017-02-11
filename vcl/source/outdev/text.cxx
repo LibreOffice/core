@@ -1186,9 +1186,6 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
     if( maFont.IsVertical() )
         nLayoutFlags |= SalLayoutFlags::Vertical;
 
-    if( mnTextLayoutMode & ComplexTextLayoutFlags::LigaturesEnabled )
-        nLayoutFlags |= SalLayoutFlags::EnableLigatures;
-
     if( meTextLanguage ) //TODO: (mnTextLayoutMode & ComplexTextLayoutFlags::SubstituteDigits)
     {
         // disable character localization when no digits used
