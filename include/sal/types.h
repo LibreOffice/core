@@ -133,8 +133,6 @@ typedef signed char sal_sChar;
 typedef unsigned char sal_uChar;
 
 #if defined(SAL_W32)
-    // http://msdn.microsoft.com/en-us/library/s3f49ktz%28v=vs.80%29.aspx
-    // "By default wchar_t is a typedef for unsigned short."
     typedef wchar_t sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
