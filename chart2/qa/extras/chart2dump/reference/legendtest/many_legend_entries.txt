@@ -1,0 +1,340 @@
+// aLegendPosition.X
+1474
+// aLegendPosition.Y
+185
+// aLegendSize.Width
+13039
+// aLegendSize.Height
+990
+// nLegendEntryCount
+15
+// aLegendEntryPosition.X
+1590
+// aLegendEntryPosition.Y
+352
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;15900;212;3520;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+43091
+// aLegendEntryPosition.X
+3200
+// aLegendEntryPosition.Y
+352
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;32000;212;3520;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+8388352
+// aLegendEntryPosition.X
+4810
+// aLegendEntryPosition.Y
+352
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;48100;212;3520;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16765728
+// aLegendEntryPosition.X
+6420
+// aLegendEntryPosition.Y
+352
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;64200;212;3520;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16711807
+// aLegendEntryPosition.X
+8030
+// aLegendEntryPosition.Y
+352
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;80300;212;3520;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+8257569
+// aLegendEntryPosition.X
+9746
+// aLegendEntryPosition.Y
+352
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;97460;212;3520;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+8637183
+// aLegendEntryPosition.X
+11356
+// aLegendEntryPosition.Y
+352
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;113560;212;3520;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+3227652
+// aLegendEntryPosition.X
+13019
+// aLegendEntryPosition.Y
+352
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;130190;212;3520;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+11456256
+// aLegendEntryPosition.X
+1590
+// aLegendEntryPosition.Y
+797
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;15900;212;7970;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+4923247
+// aLegendEntryPosition.X
+3200
+// aLegendEntryPosition.Y
+797
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;32000;212;7970;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16749838
+// aLegendEntryPosition.X
+4810
+// aLegendEntryPosition.Y
+797
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;48100;212;7970;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+12910603
+// aLegendEntryPosition.X
+6420
+// aLegendEntryPosition.Y
+797
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;64200;212;7970;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+34001
+// aLegendEntryPosition.X
+8030
+// aLegendEntryPosition.Y
+797
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;80300;212;7970;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+17798
+// aLegendEntryPosition.X
+9746
+// aLegendEntryPosition.Y
+797
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;97460;212;7970;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16728590
+// aLegendEntryPosition.X
+11356
+// aLegendEntryPosition.Y
+797
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;113560;212;7970;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16765728
+// xLegendEntryText->getString()
+AA
+// xLegendEntryText->getString()
+BB
+// xLegendEntryText->getString()
+CC
+// xLegendEntryText->getString()
+DD
+// xLegendEntryText->getString()
+EE
+// xLegendEntryText->getString()
+FF
+// xLegendEntryText->getString()
+GG
+// xLegendEntryText->getString()
+HH
+// xLegendEntryText->getString()
+II
+// xLegendEntryText->getString()
+JJ
+// xLegendEntryText->getString()
+KK
+// xLegendEntryText->getString()
+LL
+// xLegendEntryText->getString()
+MM
+// xLegendEntryText->getString()
+NN
+// xLegendEntryText->getString()
+OO
