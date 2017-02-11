@@ -92,7 +92,7 @@
 #define STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT     16
 #define STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT    17
 #define STR_AUTOFMTREDL_SET_TMPL_HEADLINE       18
-#define STR_AUTOFMTREDL_SET_NUMBULET            19
+#define STR_AUTOFMTREDL_SET_NUMBULLET           19
 #define STR_AUTOFMTREDL_DEL_MORELINES           20
 #define STR_AUTOFMTREDL_NON_BREAK_SPACE         21
 // !!!!!!!!!!!!!!!!!!!!!!!!!!  always set the correct end !!!!!!!!!!!!
