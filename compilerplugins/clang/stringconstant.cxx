@@ -318,10 +318,8 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         // u.equalsIgnoreAsciiCaseAscii("foo") ->
         // u.equalsIngoreAsciiCase("foo"):
-        std::string file(
-            compiler.getSourceManager().getFilename(
-                compiler.getSourceManager().getSpellingLoc(
-                    expr->getLocStart())));
+        auto file = compiler.getSourceManager().getFilename(
+            compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
         if (file == SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx") {
             return true;
         }
@@ -336,10 +334,8 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         // u.equalsIgnoreAsciiCaseAsciiL("foo", 3) ->
         // u.equalsIngoreAsciiCase("foo"):
-        std::string file(
-            compiler.getSourceManager().getFilename(
-                compiler.getSourceManager().getSpellingLoc(
-                    expr->getLocStart())));
+        auto file = compiler.getSourceManager().getFilename(
+            compiler.getSourceManager().getSpellingLoc(expr->getLocStart()));
         if (file == SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx") {
             return true;
         }
@@ -703,10 +699,9 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         case 2:
             {
                 // b.append("foo", 3) -> b.append("foo"):
-                std::string file(
-                    compiler.getSourceManager().getFilename(
-                        compiler.getSourceManager().getSpellingLoc(
-                            expr->getLocStart())));
+                auto file = compiler.getSourceManager().getFilename(
+                    compiler.getSourceManager().getSpellingLoc(
+                        expr->getLocStart()));
                 if (file
                     == SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx")
                 {
@@ -990,11 +985,11 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                 if (dc.Operator(OO_Plus).Namespace("rtl")
                                     .GlobalNamespace())
                                 {
-                                    std::string file(
+                                    auto file =
                                         compiler.getSourceManager().getFilename(
                                             compiler.getSourceManager()
                                             .getSpellingLoc(
-                                                expr->getLocStart())));
+                                                expr->getLocStart()));
                                     if (file
                                         == (SRCDIR
                                             "/sal/qa/rtl/strings/test_ostring_concat.cxx")
