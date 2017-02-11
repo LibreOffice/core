@@ -1176,6 +1176,8 @@ void ScUndoDragDrop::PaintArea( ScRange aRange, sal_uInt16 nExtFlags ) const
 
         if (rDoc.SetOptimalHeight(aCxt, aRange.aStart.Row(), aRange.aEnd.Row(), aRange.aStart.Tab()))
         {
+            // tdf#76183: recalculate objects' positions
+            rDoc.SetDrawPageSize(aRange.aStart.Tab());
             aRange.aStart.SetCol(0);
             aRange.aEnd.SetCol(MAXCOL);
             aRange.aEnd.SetRow(MAXROW);
