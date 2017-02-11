@@ -4416,6 +4416,38 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ en-US ] = "The number of places after the decimal point that are not to be truncated." ;
         };
     };
+     // -=*# Resource for function ROUNDSIG #*=-
+    Resource SC_OPCODE_ROUNDSIG
+    {
+        String 1 // Description
+        {
+            Text [ en-US ] = "Rounds a number to predefined significant digits." ;
+        };
+        ExtraData =
+        {
+            0;
+            ID_FUNCTION_GRP_MATH;
+            HID_FUNC_ROUNDSIG;
+            2;  0;  0;
+            0;
+        };
+        String 2 // Name of Parameter 1
+        {
+            Text [ en-US ] = "value" ;
+        };
+        String 3 // Description of Parameter 1
+        {
+            Text [ en-US ] = "The number to be rounded." ;
+        };
+        String 4 // Name of Parameter 2
+        {
+            Text [ en-US ] = "digits" ;
+        };
+        String 5 // Description of Parameter 2
+        {
+            Text [ en-US ] = "The number of significant digits to which value is to be rounded." ;
+        };
+    };
      // -=*# Resource for function ROUND #*=-
     Resource SC_OPCODE_ROUND
     {
