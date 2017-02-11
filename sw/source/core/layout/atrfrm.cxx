@@ -2866,6 +2866,20 @@ void SwFrameFormats::dumpAsXml(xmlTextWriterPtr pWriter, const char* pName) cons
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwFlyFrameFormat )
 
+SwFlyFrameFormat::SwFlyFrameFormat(SwAttrPool& rPool, const OUString& rFormatNm, SwFrameFormat* pDrvdFrame)
+    : SwFrameFormat(rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT)
+    , m_pContact(nullptr)
+{}
+
+void SwFlyFrameFormat::InitContact(SdrModel* pSdrModel)
+{
+    m_pContact = std::unique_ptr<SwFlyDrawContact>(new SwFlyDrawContact(this, pSdrModel));
+}
+void SwFlyFrameFormat::ClearContact()
+{
+    m_pContact.reset(nullptr);
+}
+
 SwFlyFrameFormat::~SwFlyFrameFormat()
 {
     SwIterator<SwFlyFrame,SwFormat> aIter( *this );

@@ -1360,23 +1360,20 @@ void SwXFrame::SetSelection(SwPaM& rCopySource)
 SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
 {
     SdrObject* pObject = rFormat.FindSdrObject();
-    if( !pObject )
+    if(!pObject)
     {
-        SwDoc *pDoc = rFormat.GetDoc();
+        SwDoc* pDoc = rFormat.GetDoc();
         // #i52858# - method name changed
         SwDrawModel* pDrawModel = pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        SwFlyDrawContact* pContactObject
-                    = new SwFlyDrawContact( &rFormat, pDrawModel );
-        pObject = pContactObject->GetMaster();
+        rFormat.InitContact(pDrawModel);
+        pObject = rFormat.GetContact()->GetMaster();
 
         const ::SwFormatSurround& rSurround = rFormat.GetSurround();
-        pObject->SetLayer(
-            ( SURROUND_THROUGHT == rSurround.GetSurround() &&
-              !rFormat.GetOpaque().GetValue() ) ? pDoc->getIDocumentDrawModelAccess().GetHellId()
-                                             : pDoc->getIDocumentDrawModelAccess().GetHeavenId() );
-        pDrawModel->GetPage(0)->InsertObject( pObject );
+        pObject->SetLayer((SURROUND_THROUGHT == rSurround.GetSurround() && !rFormat.GetOpaque().GetValue())
+                ? pDoc->getIDocumentDrawModelAccess().GetHellId()
+                : pDoc->getIDocumentDrawModelAccess().GetHeavenId());
+        pDrawModel->GetPage(0)->InsertObject(pObject);
     }
-
     return pObject;
 }
 
