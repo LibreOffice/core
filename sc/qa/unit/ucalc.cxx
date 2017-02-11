@@ -710,6 +710,58 @@ void Test::testSelectionFunction()
     m_pDoc->DeleteTab(0);
 }
 
+void Test::testMarkedCellIteration()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Insert cells to A1, A5, B2 and C3.
+    m_pDoc->SetString(ScAddress(0,0,0), "California");
+    m_pDoc->SetValue(ScAddress(0,4,0), 1.2);
+    m_pDoc->SetEditText(ScAddress(1,1,0), "Boston");
+    m_pDoc->SetFormula(ScAddress(2,2,0), "=SUM(1,2,3)", m_pDoc->GetGrammar());
+
+    // Select A1:C5.
+    ScMarkData aMarkData;
+    aMarkData.SetMarkArea(ScRange(0,0,0,2,4,0));
+    aMarkData.MarkToMulti(); // TODO : we shouldn't have to do this.
+
+    struct Check
+    {
+        SCCOL mnCol;
+        SCROW mnRow;
+    };
+
+    const std::vector<Check> aChecks = {
+        { 0, 0 }, // A1
+        { 0, 4 }, // A5
+        { 1, 1 }, // B2
+        { 2, 2 }, // C3
+    };
+
+    SCROW nRow = -1; // Start from the imaginary row before A1.
+    SCCOL nCol = 0;
+
+    for (const Check& rCheck : aChecks)
+    {
+        bool bFound = m_pDoc->GetNextMarkedCell(nCol, nRow, 0, aMarkData);
+        if (!bFound)
+        {
+            std::ostringstream os;
+            os << ScAddress(rCheck.mnCol, rCheck.mnRow, 0).GetColRowString() << " was expected, but not found.";
+            CPPUNIT_FAIL(os.str().data());
+        }
+
+        CPPUNIT_ASSERT_EQUAL(rCheck.mnRow, nRow);
+        CPPUNIT_ASSERT_EQUAL(rCheck.mnCol, nCol);
+    }
+
+    // No more marked cells on this sheet.
+    bool bFound = m_pDoc->GetNextMarkedCell(nCol, nRow, 0, aMarkData);
+    CPPUNIT_ASSERT(!bFound);
+
+    m_pDoc->DeleteTab(0);
+}
+
 void Test::testCopyToDocument()
 {
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet", m_pDoc->InsertTab (0, "src"));

@@ -123,6 +123,8 @@ public:
      */
     void testSelectionFunction();
 
+    void testMarkedCellIteration();
+
     void testFormulaCreateStringFromTokens();
     void testFormulaParseReference();
     void testFetchVectorRefArray();
@@ -502,6 +504,7 @@ public:
     CPPUNIT_TEST(testRowForHeight);
     CPPUNIT_TEST(testDataEntries);
     CPPUNIT_TEST(testSelectionFunction);
+    CPPUNIT_TEST(testMarkedCellIteration);
     CPPUNIT_TEST(testFormulaCreateStringFromTokens);
     CPPUNIT_TEST(testFormulaParseReference);
     CPPUNIT_TEST(testFetchVectorRefArray);
