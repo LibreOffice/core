@@ -1,0 +1,50 @@
+// sChartTitle
+Éves árbevétel
+// sChartType
+com.sun.star.chart2.ColumnChartType
+// sXAxisTitle
+Negyedév
+// nXAxisNumberFormat
+0
+// nXAxisNumberType
+16
+// sYAxisTitle
+Árbevétel (Ft)
+// nYAxisNumberFormat
+151
+// nYAxisNumberType
+17
+// aColumnLabels.getLength()
+4
+// sColumnLabels
+1. negyedév;2. negyedév;3. negyedév;4. negyedév;
+// aRowLabels.getLength()
+4
+// sRowLabels
+Tintasugaras;Lézer ;Többfunkciós ;Fénykép ;
+// aDataSeriesYValues.size()
+4
+// aYValuesOfSeries.size()
+4
+// sYValuesOfSeries
+4399120;8098380;4799040;6448710;
+// aYValuesOfSeries.size()
+4
+// sYValuesOfSeries
+3149650;4499500;5399400;7919120;
+// aYValuesOfSeries.size()
+4
+// sYValuesOfSeries
+1599800;4399450;3199600;7999000;
+// aYValuesOfSeries.size()
+4
+// sYValuesOfSeries
+2504850;5009700;7514550;10019400;
+// aYValuesSourceRange
+$Mo_példa_06_a.$E$11:$H$11
+// aYValuesSourceRange
+$Mo_példa_06_a.$E$12:$H$12
+// aYValuesSourceRange
+$Mo_példa_06_a.$E$13:$H$13
+// aYValuesSourceRange
+$Mo_példa_06_a.$E$14:$H$14

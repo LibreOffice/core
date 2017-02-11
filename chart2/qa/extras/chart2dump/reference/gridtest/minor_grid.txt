@@ -1,0 +1,68 @@
+/// CID/D=0:CS=0:Axis=1,0:Grid=0
+// aGridPosition.X
+3529
+// aGridPosition.Y
+1344
+// aGridSize.Height
+6005
+// aGridSize.Width
+14515
+// sGridTransformation
+14516;0;35290;6006;13440;0;1
+// sGridLineDash
+0;1;201;20;20
+// static_cast<sal_Int32>(aLineColor)
+0
+// nLineWidth
+0
+/// CID/D=0:CS=0:Axis=0,0:Grid=0
+// aGridPosition.X
+3529
+// aGridPosition.Y
+1344
+// aGridSize.Height
+6005
+// aGridSize.Width
+14515
+// sGridTransformation
+14516;0;35290;6006;13440;0;1
+// sGridLineDash
+0;1;201;20;20
+// static_cast<sal_Int32>(aLineColor)
+11776947
+// nLineWidth
+0
+/// CID/D=0:CS=0:Axis=1,0:Grid=0:SubGrid=0
+// aGridPosition.X
+3529
+// aGridPosition.Y
+1773
+// aGridSize.Height
+5147
+// aGridSize.Width
+14515
+// sGridTransformation
+14516;0;35290;5148;17730;0;1
+// sGridLineDash
+0;1;201;20;20
+// static_cast<sal_Int32>(aLineColor)
+14540253
+// nLineWidth
+0
+/// CID/D=0:CS=0:Axis=0,0:Grid=0:SubGrid=0
+// aGridPosition.X
+5343
+// aGridPosition.Y
+1344
+// aGridSize.Height
+6005
+// aGridSize.Width
+10886
+// sGridTransformation
+10887;0;53430;6006;13440;0;1
+// sGridLineDash
+0;1;201;20;20
+// static_cast<sal_Int32>(aLineColor)
+14540253
+// nLineWidth
+0
