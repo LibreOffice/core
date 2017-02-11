@@ -738,6 +738,7 @@ void ScBase();
 void ScDecimal();
 void ScConvertOOo();
 void ScEuroConvert();
+void ScSigDigits();
 
 // financial functions
 void ScNPV();

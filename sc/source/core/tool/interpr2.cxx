@@ -1005,6 +1005,35 @@ void ScInterpreter::ScRoundUp()
     RoundNumber( rtl_math_RoundingMode_Up );
 }
 
+// tdf#106931
+void ScInterpreter::ScSigDigits()
+{
+    if ( MustHaveParamCount( GetByte(), 2 ) )
+    {
+        double fDigits = ::rtl::math::approxFloor( GetDouble() );
+        double fX = GetDouble();
+        if ( nGlobalError != FormulaError::NONE || fDigits < 1.0 )
+        {
+            PushIllegalArgument();
+            return;
+        }
+
+        if ( fX == 0.0 )
+            PushDouble( 0.0 );
+        else
+        {
+            bool bNegVal = ( fX < 0 );
+            if ( bNegVal )
+                fX *= -1.0;
+            double fTemp = ::rtl::math::approxFloor( log10( fX ) ) + 1.0 - fDigits;
+            double fRes = ::rtl::math::round( pow(10.0, -fTemp ) * fX ) * pow( 10.0, fTemp );
+            if ( bNegVal )
+                fRes *= -1.0;
+            PushDouble( fRes );
+        }
+    }
+}
+
 /** tdf69552 ODFF1.2 function CEILING and Excel function CEILING.MATH
     In essence, the difference between the two is that ODFF-CEILING needs to
     have arguments value and significance of the same sign and with

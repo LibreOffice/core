@@ -2316,6 +2316,7 @@ void Test::testFunctionLists()
         "ROUNDUP",
         "SEC",
         "SECH",
+        "SIGDIGITS",
         "SIGN",
         "SIN",
         "SINH",

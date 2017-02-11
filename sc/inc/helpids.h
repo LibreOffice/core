@@ -596,5 +596,6 @@
 #define HID_FUNC_SWITCH_MS                                      "SC_HID_FUNC_SWITCH_MS"
 #define HID_FUNC_MINIFS_MS                                      "SC_HID_FUNC_MINIFS_MS"
 #define HID_FUNC_MAXIFS_MS                                      "SC_HID_FUNC_MAXIFS_MS"
+#define HID_FUNC_SIGDIGITS                                      "SC_HID_FUNC_SIGDIGITS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

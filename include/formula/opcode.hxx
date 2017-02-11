@@ -286,6 +286,7 @@ enum OpCode : sal_uInt16
         ocSwitch_MS         = SC_OPCODE_SWITCH_MS,
         ocMinIfs_MS         = SC_OPCODE_MINIFS_MS,
         ocMaxIfs_MS         = SC_OPCODE_MAXIFS_MS,
+        ocSigDigits         = SC_OPCODE_SIGDIGITS,
     // Database functions
         ocDBSum             = SC_OPCODE_DB_SUM,
         ocDBCount           = SC_OPCODE_DB_COUNT,
