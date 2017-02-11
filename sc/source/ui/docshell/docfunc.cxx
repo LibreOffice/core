@@ -151,6 +151,9 @@ bool ScDocFunc::AdjustRowHeight( const ScRange& rRange, bool bPaint )
 
     sc::RowHeightContext aCxt(aProv.GetPPTX(), aProv.GetPPTY(), aOne, aOne, aProv.GetDevice());
     bool bChanged = rDoc.SetOptimalHeight(aCxt, nStartRow, nEndRow, nTab);
+    // tdf#76183: recalculate objects' positions
+    if (bChanged)
+        rDoc.SetDrawPageSize(nTab);
 
     if ( bPaint && bChanged )
         rDocShell.PostPaint(ScRange(0, nStartRow, nTab, MAXCOL, MAXROW, nTab),
