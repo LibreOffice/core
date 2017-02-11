@@ -350,7 +350,15 @@ public:
 
     inline size_t hash() const;
 
-    /// "A1" or "$A$1" or R1C1 or R[1]C[1]
+    /**
+     * Create a human-readable string representation of the cell address.  You
+     * cannot specify precise formatting with this method; use Format() if you
+     * need to specify how the address needs to be formatted.
+     *
+     * The address string does not display sheet name.
+     *
+     * @return human-readable string representation of the cell address.
+     */
     OUString GetColRowString() const;
 };
 
