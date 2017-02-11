@@ -20,18 +20,7 @@
 #include "RangeSelectionHelper.hxx"
 #include "RangeSelectionListener.hxx"
 #include "macros.hxx"
-#include "ControllerLockGuard.hxx"
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <com/sun/star/embed/EmbedStates.hpp>
-#include <com/sun/star/embed/XComponentSupplier.hpp>
-#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XCellRangesAccess.hpp>
-#include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
-#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;
 
