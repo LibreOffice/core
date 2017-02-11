@@ -67,6 +67,8 @@
 #include <editable.hxx>
 #include <bcaslot.hxx>
 #include <sharedformula.hxx>
+#include "sizedev.hxx"
+#include <rowheightcontext.hxx>
 
 #include <formula/IFunctionDescription.hxx>
 
@@ -6375,6 +6377,45 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsActiveScenario(tab) );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasCalcNotification(tab) );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasManualBreaks(tab) );
+}
+
+void Test::testTdf76183()
+{
+    m_pDoc->InsertTab(0, "TestTab");
+    m_pDoc->InitDrawLayer();
+    ScDrawLayer *pDrawLayer = m_pDoc->GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(0);
+    // Add a circle somewhere below forst row.
+    const Rectangle aOrigRect = Rectangle(1000, 1000, 1200, 1200);
+    SdrCircObj* pObj = new SdrCircObj(OBJ_CIRC, aOrigRect);
+    pPage->InsertObject(pObj);
+    // Anchor to cell
+    ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
+    const Rectangle& rNewRect = pObj->GetLogicRect();
+
+    ScMarkData aMarkData;
+    aMarkData.SetMarkArea(ScRange(0, 0, 0));
+    aMarkData.GetMarkedRanges();
+
+    // Set word wrap to true
+    m_pDoc->ApplyAttr(0, 0, 0, SfxBoolItem(SID_ATTR_ALIGN_LINEBREAK, true));
+    // Add multi-line text to cell to initiate optimal height
+    m_pDoc->SetString(ScAddress(0, 0, 0), "first\nsecond\nthird");
+
+    ScSizeDeviceProvider aProv(&getDocShell());
+    double nPPTX = aProv.GetPPTX();
+    double nPPTY = aProv.GetPPTY();
+    Fraction aZoomX = Fraction(1, 1);
+    Fraction aZoomY = aZoomX;
+
+    sc::RowHeightContext aCxt(nPPTX, nPPTY, aZoomX, aZoomY, aProv.GetDevice());
+    // The test succeeds only with this (and value of 10 doesn't work), i.e. the multi-line text above doesn't do what I want:
+    aCxt.setExtraHeight(100);
+//    aCxt.setForceAutoSize(true);
+    // Do actual row resize
+    m_pDoc->SetOptimalHeight(aCxt, 0, 0, 0);
+
+    CPPUNIT_ASSERT(aOrigRect.Top() < rNewRect.Top());
 }
 
 ScDocShell* Test::findLoadedDocShellByName(const OUString& rName)

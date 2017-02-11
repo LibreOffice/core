@@ -505,6 +505,10 @@ bool ScTable::SetOptimalHeight(
     if ( pProgress != pOuterProgress )
         delete pProgress;
 
+    // tdf#76183: recalculate objects' positions
+    if (bChanged)
+        pDocument->SetDrawPageSize(nTab);
+
     return bChanged;
 }
 

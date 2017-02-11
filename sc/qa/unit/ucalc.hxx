@@ -490,6 +490,7 @@ public:
     void testTdf97587();
 
     void testEmptyCalcDocDefaults();
+    void testTdf76183();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
@@ -741,6 +742,7 @@ public:
     CPPUNIT_TEST(testTdf97369);
     CPPUNIT_TEST(testTdf97587);
     CPPUNIT_TEST(testEmptyCalcDocDefaults);
+    CPPUNIT_TEST(testTdf76183);
     CPPUNIT_TEST_SUITE_END();
 
 private:
