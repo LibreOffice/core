@@ -28,8 +28,6 @@
 #include <oleauto.h>
 #endif
 
-#endif
-
 #include <basic/sbx.hxx>
 
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
@@ -100,5 +98,7 @@ public:
     enum CmpResult { LT, EQ, GT };
     friend CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight );
 };
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
