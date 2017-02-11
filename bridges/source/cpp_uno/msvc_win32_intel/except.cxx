@@ -391,12 +391,7 @@ void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) thro
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if (! s_pInfos)
         {
-#ifdef LEAK_STATIC_DATA
             s_pInfos = new ExceptionInfos();
-#else
-            static ExceptionInfos s_allExceptionInfos;
-            s_pInfos = &s_allExceptionInfos;
-#endif
         }
     }
 
@@ -439,12 +434,7 @@ type_info * msci_getRTTI( OUString const & rUNOname )
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if (! s_pRTTIs)
         {
-#ifdef LEAK_STATIC_DATA
             s_pRTTIs = new RTTInfos();
-#else
-            static RTTInfos s_aRTTIs;
-            s_pRTTIs = &s_aRTTIs;
-#endif
         }
     }
     return s_pRTTIs->getRTTI( rUNOname );
