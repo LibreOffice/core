@@ -1650,13 +1650,17 @@ void ScInterpreter::ScTDist_T( int nTails )
     if ( !MustHaveParamCount( GetByte(), 2 ) )
         return;
     double fDF = ::rtl::math::approxFloor( GetDouble() );
-    double T   = GetDouble();
-    if ( fDF < 1.0 || T < 0.0 )
+    double fT  = GetDouble();
+    if ( fDF < 1.0 || ( nTails == 2 && fT < 0.0 ) )
     {
         PushIllegalArgument();
         return;
     }
-    PushDouble( GetTDist( T, fDF, nTails ) );
+    double fRes = GetTDist( fT, fDF, nTails );
+    if ( nTails == 1 && fT < 0.0 )
+        PushDouble( 1.0 - fRes ); // tdf#105937, right tail, negative X
+    else
+        PushDouble( fRes );
 }
 
 void ScInterpreter::ScTDist_MS()
