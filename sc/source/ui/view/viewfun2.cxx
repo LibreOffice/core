@@ -1123,6 +1123,35 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
                 // this range contains only one data cell.
                 if (nStartCol != aState.mnCol1 || nStartRow != aState.mnRow1)
                     rDoContents = true; // move the value to the top-left.
+                SAL_FALLTHROUGH;
+            }
+            case sc::MultiDataCellState::Empty:
+            {
+                // this range contains no data or data only in the first cell
+                // but may content cells with only comments
+                sal_Int32 nNotes = 0;
+                for ( SCCOL nCol = nStartCol ; nCol <= nEndCol ; nCol++ )
+                    for ( SCROW nRow = nStartRow + (nCol == nStartCol ? 1 : 0 ) ; nRow <= nEndRow ; nRow++ )
+                    {
+                        if( rDoc.HasNote( ScAddress ( nCol, nRow, i ) ) )
+                        {
+                            nNotes++;
+                            if ( nNotes >= 2 )
+                            {
+                                nCol = nEndCol;
+                                nRow = nEndRow;
+                            }
+                        }
+                    }
+                if ( nNotes == 1 )
+                {
+                    if ( (aState.meState == sc::MultiDataCellState::Empty) && !rDoc.HasNote( ScAddress ( nStartCol, nStartRow, i ) ) )
+                        rDoContents = true; // only 1 comment in whole range
+                    else
+                        bAskDialog = true;  // content in first cell + 1 comment
+                }
+                else if ( nNotes >= 2 )
+                    bAskDialog = true;
                 break;
             }
             default:

@@ -4833,11 +4833,11 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
     bool bNeedContentsUndo = false;
     for (set<SCTAB>::const_iterator itr = itrBeg; itr != itrEnd; ++itr)
     {
-        SCTAB nTab = *itr;
+        SCTAB nTab = *itr;  // tdf#56294 Check for Notes also
         bool bIsBlockEmpty = ( nStartRow == nEndRow )
-                             ? rDoc.IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true )
-                             : rDoc.IsBlockEmpty( nTab, nStartCol,nStartRow+1, nStartCol,nEndRow, true ) &&
-                               rDoc.IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, true );
+                             ? rDoc.IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, false )
+                             : rDoc.IsBlockEmpty( nTab, nStartCol,nStartRow+1, nStartCol,nEndRow, false ) &&
+                               rDoc.IsBlockEmpty( nTab, nStartCol+1,nStartRow, nEndCol,nEndRow, false );
         bool bNeedContents = bContents && !bIsBlockEmpty;
         bool bNeedEmpty = bEmptyMergedCells && !bIsBlockEmpty && !bNeedContents; // if DoMergeContents then cells are emptyed
 
@@ -4848,7 +4848,6 @@ bool ScDocFunc::MergeCells( const ScCellMergeOption& rOption, bool bContents, bo
             for( ScAddress aPos( nStartCol, nStartRow, nTab ); !bHasNotes && (aPos.Col() <= nEndCol); aPos.IncCol() )
                 for( aPos.SetRow( nStartRow ); !bHasNotes && (aPos.Row() <= nEndRow); aPos.IncRow() )
                     bHasNotes = ((aPos.Col() != nStartCol) || (aPos.Row() != nStartRow)) && (rDoc.HasNote(aPos));
-
             if (!pUndoDoc)
             {
                 pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
