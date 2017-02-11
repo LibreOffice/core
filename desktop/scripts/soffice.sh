@@ -39,26 +39,19 @@ export SAL_ENABLE_FILE_LOCKING
 
 #@JITC_PROCESSOR_TYPE_EXPORT@
 
-cd_or_exit() {
-    if ! cd "$1"; then
-        echo "Can't cd to $1"
-        exit 1
-    fi
-}
-
 # resolve installation directory
 sd_cwd=$(pwd)
 sd_res="$0"
 while [ -h "$sd_res" ] ; do
     sd_dirname=$(dirname "$sd_res")
-    cd_or_exit "$sd_dirname"
+    cd "$sd_dirname" || exit $?
     sd_basename=$(basename "$sd_res")
     sd_res=$(ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g")
 done
 sd_dirname=$(dirname "$sd_res")
-cd_or_exit "$sd_dirname"
+cd "$sd_dirname" || exit $?
 sd_prog=$(pwd)
-cd_or_exit "$sd_cwd"
+cd "$sd_cwd" || exit $?
 
 # linked build needs additional settings
 if [ -e "${sd_prog}/ooenv" ] ; then

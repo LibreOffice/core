@@ -21,26 +21,19 @@
 SAL_ENABLE_FILE_LOCKING=1
 export SAL_ENABLE_FILE_LOCKING
 
-cd_or_exit() {
-    if ! cd "$1"; then
-        echo "Can't cd to $1"
-        exit 1
-    fi
-}
-
 # resolve installation directory
 sd_cwd=$(pwd)
 sd_res="$0"
 while [ -h "$sd_res" ] ; do
     sd_dirname=$(dirname "$sd_res")
-    cd_or_exit "$sd_dirname"
+    cd "$sd_dirname" || exit $?
     sd_basename=$(basename "$sd_res")
     sd_res=$(ls -l "$sd_basename" | sed "s/.*$sd_basename -> //g")
 done
 sd_dirname=$(dirname "$sd_res")
-cd_or_exit "$sd_dirname"
+cd "$sd_dirname" || exit $?
 sd_prog=$(pwd)
-cd_or_exit "$sd_cwd"
+cd "$sd_cwd" || exit $?
 
 # this is a temporary hack until we can live with the default search paths
 case "$(uname -s)" in
