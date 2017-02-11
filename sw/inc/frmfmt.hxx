@@ -174,11 +174,15 @@ public:
 
 // The FlyFrame-Format
 
+class SdrModel;
+class SwFlyDrawContact;
+
 class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
 {
     friend class SwDoc;
     OUString msTitle;
     OUString msDesc;
+    std::unique_ptr<SwFlyDrawContact> m_pContact;
 
     /** Both not existent.
        it stores the previous position of Prt rectangle from RequestObjectResize
@@ -190,12 +194,13 @@ class SW_DLLPUBLIC SwFlyFrameFormat: public SwFrameFormat
     SwFlyFrameFormat &operator=( const SwFlyFrameFormat &rCpy ) = delete;
 
 protected:
-    SwFlyFrameFormat( SwAttrPool& rPool, const OUString &rFormatNm,
-                    SwFrameFormat *pDrvdFrame )
-        : SwFrameFormat( rPool, rFormatNm, pDrvdFrame, RES_FLYFRMFMT )
-    {}
+    SwFlyFrameFormat(SwAttrPool& rPool, const OUString& rFormatNm, SwFrameFormat* pDrvdFrame);
 
 public:
+    SwFlyDrawContact* GetContact()
+        { return m_pContact.get(); };
+    void InitContact(SdrModel* pSdrModel);
+    void ClearContact();
     virtual ~SwFlyFrameFormat() override;
 
     /// Creates the views.
