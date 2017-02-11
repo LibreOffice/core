@@ -21,11 +21,6 @@
 #define INCLUDED_SYSTOOLS_WIN32_UWINAPI_H
 
 #include <sal/macros.h>
-#ifdef _UWINAPI_
-#   define _KERNEL32_
-#   define _USER32_
-#   define _SHELL32_
-#endif
 
 #include "prewin.h"
 #include "postwin.h"
