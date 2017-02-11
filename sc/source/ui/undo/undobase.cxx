@@ -308,10 +308,14 @@ bool ScBlockUndo::AdjustHeight()
         aCxt, aBlockRange.aStart.Row(), aBlockRange.aEnd.Row(), aBlockRange.aStart.Tab());
 
     if (bRet)
+    {
+        // tdf#76183: recalculate objects' positions
+        rDoc.SetDrawPageSize(aBlockRange.aStart.Tab());
+
         pDocShell->PostPaint( 0,      aBlockRange.aStart.Row(), aBlockRange.aStart.Tab(),
                               MAXCOL, MAXROW,                   aBlockRange.aEnd.Tab(),
                               PAINT_GRID | PAINT_LEFT );
-
+    }
     return bRet;
 }
 
@@ -408,9 +412,14 @@ void ScMultiBlockUndo::AdjustHeight()
         bool bRet = rDoc.SetOptimalHeight(aCxt, r.aStart.Row(), r.aEnd.Row(), r.aStart.Tab());
 
         if (bRet)
+        {
+            // tdf#76183: recalculate objects' positions
+            rDoc.SetDrawPageSize(r.aStart.Tab());
+
             pDocShell->PostPaint(
                 0, r.aStart.Row(), r.aStart.Tab(), MAXCOL, MAXROW, r.aEnd.Tab(),
                 PAINT_GRID | PAINT_LEFT);
+        }
     }
 }
 
