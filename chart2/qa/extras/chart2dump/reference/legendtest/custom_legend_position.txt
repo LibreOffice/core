@@ -1,0 +1,98 @@
+// aLegendPosition.X
+1398
+// aLegendPosition.Y
+396
+// aLegendSize.Width
+2144
+// aLegendSize.Height
+2044
+// nLegendEntryCount
+4
+// aLegendEntryPosition.X
+1781
+// aLegendEntryPosition.Y
+595
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;17810;212;5950;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+43091
+// aLegendEntryPosition.X
+1781
+// aLegendEntryPosition.Y
+1072
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;17810;212;10720;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+8388352
+// aLegendEntryPosition.X
+1781
+// aLegendEntryPosition.Y
+1549
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;17810;212;15490;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16765728
+// aLegendEntryPosition.X
+1781
+// aLegendEntryPosition.Y
+2026
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+800
+// sLegendEntryTransformation
+801;0;17810;212;20260;0;1
+// xLegendEntryContainer->getCount()
+3
+// sEntryGeomShapeType
+com.sun.star.drawing.LineShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+7512015
+// sEntryGeomShapeType
+com.sun.star.drawing.PolyPolygonShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16711807
+// xLegendEntryText->getString()
+A
+// xLegendEntryText->getString()
+B
+// xLegendEntryText->getString()
+C
+// xLegendEntryText->getString()
+DD
