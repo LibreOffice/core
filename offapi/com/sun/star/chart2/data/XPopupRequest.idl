@@ -24,6 +24,9 @@ module chart2
 module data
 {
 
+/**
+    @since LibreOffice 5.4
+ */
 interface XPopupRequest : com::sun::star::awt::XRequestCallback
 {
 };
