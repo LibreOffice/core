@@ -817,7 +817,9 @@ IMPL_LINK_NOARG(SlideBackground, FillColorHdl, SvxColorListBox&, void)
             aGradient.SetStartColor(mpFillLB->GetSelectEntryColor());
             aGradient.SetEndColor(mpFillGrad->GetSelectEntryColor());
 
-            XFillGradientItem aItem(aGradient);
+            // the name doesn't really matter, it'll be converted to unique one eventually,
+            // but it has to be non-empty
+            XFillGradientItem aItem("gradient", aGradient);
             GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_PAGE_GRADIENT, SfxCallMode::RECORD, { &aItem });
         }
         break;

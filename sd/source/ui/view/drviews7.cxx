@@ -1675,8 +1675,8 @@ void DrawViewShell::GetPageProperties( SfxItemSet &rSet )
 
             case (drawing::FillStyle_GRADIENT):
             {
-                const XGradient& xGradient =  static_cast<const XFillGradientItem*>( rPageAttr.GetItem( XATTR_FILLGRADIENT ) )->GetGradientValue();
-                XFillGradientItem aFillGradientItem( OUString(), xGradient, SID_ATTR_PAGE_GRADIENT  );
+                const XFillGradientItem *pGradient =  static_cast<const XFillGradientItem*>( rPageAttr.GetItem( XATTR_FILLGRADIENT ) );
+                XFillGradientItem aFillGradientItem( pGradient->GetName(), pGradient->GetGradientValue(), SID_ATTR_PAGE_GRADIENT );
                 rSet.Put( aFillGradientItem );
             }
             break;
@@ -1716,6 +1716,9 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
         if ( ( nSlotId >= SID_ATTR_PAGE_COLOR ) && ( nSlotId <= SID_ATTR_PAGE_FILLSTYLE ) )
         {
             SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
+            const SfxItemSet &aPageItemSet = rPageProperties.GetItemSet();
+            SfxItemSet *pTempSet = aPageItemSet.Clone(false, &mpDrawView->GetModel()->GetItemPool());
+
             rPageProperties.ClearItem(XATTR_FILLSTYLE);
             rPageProperties.ClearItem(XATTR_FILLGRADIENT);
             rPageProperties.ClearItem(XATTR_FILLHATCH);
@@ -1744,8 +1747,14 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 case(SID_ATTR_PAGE_GRADIENT):
                 {
                     XFillGradientItem aGradientItem( static_cast<const XFillGradientItem&>(pArgs->Get( XATTR_FILLGRADIENT )) );
+
+                    // MigrateItemSet guarantees unique gradient names
+                    SfxItemSet aMigrateSet( mpDrawView->GetModel()->GetItemPool(), XATTR_FILLGRADIENT, XATTR_FILLGRADIENT );
+                    aMigrateSet.Put( aGradientItem );
+                    SdrModel::MigrateItemSet( &aMigrateSet, pTempSet, mpDrawView->GetModel() );
+
+                    rPageProperties.PutItemSet( *pTempSet );
                     rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
-                    rPageProperties.PutItem( XFillGradientItem( aGradientItem ) );
                 }
                 break;
 
@@ -1768,6 +1777,8 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 default:
                 break;
             }
+
+            delete pTempSet;
 
             rReq.Done();
         }
