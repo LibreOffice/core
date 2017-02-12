@@ -45,7 +45,7 @@ private:
     // shell of the current document
     SwWrtShell*             m_pWrtShell;
     // impl object
-    SwCompatibilityOptPage_Impl* m_pImpl;
+    std::unique_ptr<SwCompatibilityOptPage_Impl> m_pImpl;
     // saved options after "Reset"; used in "FillItemSet" for comparison
     sal_uLong                   m_nSavedOptions;
 
