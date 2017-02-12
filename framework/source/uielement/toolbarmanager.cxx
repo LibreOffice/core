@@ -180,9 +180,10 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, "CreateDialog"))
          nMenuType |= ToolBoxMenuType::Customize;
 
-    m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
     m_pToolBar->SetMenuType( nMenuType );
     m_pToolBar->SetMenuButtonHdl( LINK( this, ToolBarManager, MenuButton ) );
+    m_pToolBar->SetMenuExecuteHdl( LINK( this, ToolBarManager, MenuPreExecute ) );
+    m_pToolBar->GetMenu()->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
 
     // set name for testtool, the useful part is after the last '/'
     sal_Int32 idx = rResourceName.lastIndexOf('/');
@@ -243,7 +244,6 @@ void ToolBarManager::Destroy()
     m_pToolBar->SetDoubleClickHdl( Link<ToolBox *, void>() );
     m_pToolBar->SetStateChangedHdl( Link<StateChangedType const *, void>() );
     m_pToolBar->SetDataChangedHdl( Link<DataChangedEvent const *, void>() );
-    m_pToolBar->SetCommandHdl( Link<CommandEvent const *, void>() );
 
     m_pToolBar.clear();
 
@@ -493,7 +493,11 @@ void SAL_CALL ToolBarManager::dispose()
         }
         m_xModuleImageManager.clear();
 
-        ImplClearPopupMenu( m_pToolBar );
+        if ( m_aOverflowManager.is() )
+        {
+            m_aOverflowManager->dispose();
+            m_aOverflowManager.clear();
+        }
 
         // We have to destroy our toolbar instance now.
         Destroy();
@@ -919,18 +923,8 @@ ToolBoxItemBits ToolBarManager::ConvertStyleToToolboxItemBits( sal_Int32 nStyle 
     return nItemBits;
 }
 
-void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContainer )
+void ToolBarManager::InitImageManager()
 {
-    OString aTbxName = OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
-    SAL_INFO( "fwk.uielement", "framework (cd100003) ::ToolBarManager::FillToolbar " << aTbxName.getStr() );
-
-    SolarMutexGuard g;
-
-    if ( m_bDisposed )
-        return;
-
-    sal_uInt16    nId( 1 );
-
     Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
     if ( !m_xDocImageManager.is() )
     {
@@ -966,6 +960,19 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(
                                                             static_cast< OWeakObject* >( this ), UNO_QUERY ));
     }
+}
+
+void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContainer )
+{
+    OString aTbxName = OUStringToOString( m_aResourceName, RTL_TEXTENCODING_ASCII_US );
+    SAL_INFO( "fwk.uielement", "framework (cd100003) ::ToolBarManager::FillToolbar " << aTbxName.getStr() );
+
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        return;
+
+    InitImageManager();
 
     RemoveControllers();
 
@@ -974,6 +981,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     m_aControllerMap.clear();
     m_aCommandMap.clear();
 
+    sal_uInt16 nId( 1 );
     CommandInfo aCmdInfo;
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
@@ -1165,6 +1173,51 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
     }
 }
 
+void ToolBarManager::FillOverflowToolbar( ToolBox* pParent )
+{
+    CommandInfo aCmdInfo;
+    for ( sal_uInt16 i = 0; i < pParent->GetItemCount(); ++i )
+    {
+        sal_uInt16 nId = pParent->GetItemId( i );
+        if ( pParent->IsItemClipped( nId ) )
+        {
+            const OUString aCommandURL( pParent->GetItemCommand( nId ) );
+            m_pToolBar->InsertItem( nId, pParent->GetItemText( nId ) );
+            m_pToolBar->SetItemCommand( nId, aCommandURL );
+            m_pToolBar->SetQuickHelpText( nId, pParent->GetQuickHelpText( nId ) );
+
+            // Fill command map. It stores all our commands and from what
+            // image manager we got our image. So we can decide if we have to use an
+            // image from a notification message.
+            CommandToInfoMap::iterator pIter = m_aCommandMap.find( aCommandURL );
+            if ( pIter == m_aCommandMap.end())
+            {
+                aCmdInfo.nId = nId;
+                const CommandToInfoMap::value_type aValue( aCommandURL, aCmdInfo );
+                m_aCommandMap.insert( aValue );
+            }
+            else
+            {
+                pIter->second.aIds.push_back( nId );
+            }
+        }
+    }
+
+    InitImageManager();
+
+    // Request images for all toolbar items. Must be done before CreateControllers as
+    // some controllers need access to the image.
+    RequestImages();
+
+    // Create controllers after we set the images. There are controllers which needs
+    // an image at the toolbar at creation time!
+    CreateControllers();
+
+    // Notify controllers that they are now correctly initialized and can start listening
+    // toolbars that will open in popup mode will be updated immediately to avoid flickering
+    UpdateControllers();
+}
+
 void ToolBarManager::RequestImages()
 {
 
@@ -1297,39 +1350,6 @@ IMPL_LINK_NOARG(ToolBarManager, DoubleClick, ToolBox *, void)
     HandleClick(&XToolbarController::doubleClick);
 }
 
-void ToolBarManager::ImplClearPopupMenu( ToolBox *pToolBar )
-{
-    if ( m_bDisposed )
-        return;
-
-    ::PopupMenu *pMenu = pToolBar->GetMenu();
-    if (pMenu == nullptr) {
-        return;
-    }
-
-    // remove config entries from menu, so we have a clean menu to start with
-    // remove submenu first
-    pMenu->SetPopupMenu( 1, nullptr );
-
-    // remove all items that were not added by the toolbar itself
-    sal_uInt16 i;
-    for( i=0; i<pMenu->GetItemCount(); )
-    {
-        if( pMenu->GetItemId( i ) < TOOLBOX_MENUITEM_START
-            && pMenu->GetItemId( i ) != 0 ) // Don't remove separators (Id == 0)
-            pMenu->RemoveItem( i );
-        else
-            i++;
-    }
-}
-
-void ToolBarManager::MenuDeactivated()
-{
-    if (m_bDisposed)
-        return;
-    ImplClearPopupMenu(m_pToolBar);
-}
-
 Reference< XModel > ToolBarManager::GetModelFromFrame() const
 {
     Reference< XController > xController = m_xFrame->getController();
@@ -1363,14 +1383,10 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
     return true;
 }
 
-::PopupMenu * ToolBarManager::GetToolBarCustomMenu(ToolBox* pToolBar)
+void ToolBarManager::AddCustomizeMenuItems(ToolBox* pToolBar)
 {
-    // update the list of hidden tool items first
-    pToolBar->UpdateCustomMenu();
-
     ::PopupMenu *pMenu = pToolBar->GetMenu();
-    // remove all entries before inserting new ones
-    ImplClearPopupMenu( pToolBar );
+
     // No config menu entries if command ".uno:ConfigureDialog" is not enabled
     Reference< XDispatch > xDisp;
     css::util::URL aURL;
@@ -1383,7 +1399,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
             xDisp = xProv->queryDispatch( aURL, OUString(), 0 );
 
         if ( !xDisp.is() || IsPluginMode() )
-            return nullptr;
+            return;
     }
 
     // popup menu for quick customization
@@ -1485,47 +1501,6 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
 
     if ( bHideDisabledEntries )
         pMenu->RemoveDisabledEntries();
-
-    return pMenu;
-}
-
-IMPL_LINK( ToolBarManager, Command, CommandEvent const *, pCmdEvt, void )
-{
-    SolarMutexGuard g;
-
-    if ( m_bDisposed )
-        return;
-    if ( pCmdEvt->GetCommand() != CommandEventId::ContextMenu )
-        return;
-
-    ::PopupMenu * pMenu = GetToolBarCustomMenu(m_pToolBar);
-    if (pMenu)
-    {
-        // We only want to handle events for the context menu, but not events
-        // on the toolbars overflow menu, hence we should only receive events
-        // from the toolbox menu when we are actually showing it as our context
-        // menu (the same menu retrieved with  GetMenu() is reused for both the
-        // overflow and context menus). If we set these Hdls permanently rather
-        // than just when the context menu is showing, then events are duplicated
-        // when the menu is being used as an overflow menu.
-        Menu *pManagerMenu = m_pToolBar->GetMenu();
-        pManagerMenu->SetSelectHdl( LINK( this, ToolBarManager, MenuSelect ) );
-
-        // make sure all disabled entries will be shown
-        pMenu->SetMenuFlags( pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
-        ::Point aPoint( pCmdEvt->GetMousePosPixel() );
-        pMenu->Execute( m_pToolBar, aPoint );
-
-        //fdo#86820 We may have been disposed and so have a NULL m_pToolBar by
-        //executing a menu entry, e.g. inserting a chart replaces the toolbars
-        pManagerMenu = m_bDisposed ? nullptr : m_pToolBar->GetMenu();
-        if (pManagerMenu)
-        {
-            // Unlink our listeners again -- see above for why.
-            pManagerMenu->SetSelectHdl( Link<Menu*, bool>() );
-            MenuDeactivated();
-        }
-    }
 }
 
 IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
@@ -1535,10 +1510,48 @@ IMPL_LINK( ToolBarManager, MenuButton, ToolBox*, pToolBar, void )
     if ( m_bDisposed )
         return;
 
-    pToolBar->UpdateCustomMenu();
-    // remove all entries that do not come from the toolbar itself (fdo#38276)
-    ImplClearPopupMenu( pToolBar );
- }
+    assert( !m_aOverflowManager.is() );
+
+    VclPtrInstance<ToolBox> pOverflowToolBar( pToolBar, WB_LINESPACING | WB_BORDER | WB_SCROLL );
+    pOverflowToolBar->SetOutStyle( pToolBar->GetOutStyle() );
+    m_aOverflowManager.set( new ToolBarManager( m_xContext, m_xFrame, OUString(), pOverflowToolBar ) );
+    m_aOverflowManager->FillOverflowToolbar( pToolBar );
+    pOverflowToolBar->SetMenuType( ToolBoxMenuType::NONE );
+
+    ::Size aActSize( pOverflowToolBar->GetSizePixel() );
+    ::Size aSize( pOverflowToolBar->CalcWindowSizePixel() );
+    aSize.Width() = aActSize.Width();
+    pOverflowToolBar->SetOutputSizePixel( aSize );
+
+    aSize = pOverflowToolBar->CalcPopupWindowSizePixel();
+    pOverflowToolBar->SetSizePixel( aSize );
+
+    pOverflowToolBar->EnableDocking();
+    pOverflowToolBar->AddEventListener( LINK( this, ToolBarManager, OverflowEventListener ) );
+    vcl::Window::GetDockingManager()->StartPopupMode( pToolBar, pOverflowToolBar, FloatWinPopupFlags::AllMouseButtonClose );
+}
+
+IMPL_LINK( ToolBarManager, OverflowEventListener, VclWindowEvent&, rWindowEvent, void )
+{
+    if ( rWindowEvent.GetId() != VclEventId::WindowEndPopupMode )
+        return;
+
+    if ( m_aOverflowManager.is() )
+    {
+        m_aOverflowManager->dispose();
+        m_aOverflowManager.clear();
+    }
+}
+
+IMPL_LINK( ToolBarManager, MenuPreExecute, ToolBox*, pToolBar, void )
+{
+    SolarMutexGuard g;
+
+    if ( m_bDisposed )
+        return;
+
+    AddCustomizeMenuItems( pToolBar );
+}
 
 IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
 {
@@ -1700,21 +1713,9 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                         }
                     }
                 }
-                else
-                // The list of "hidden items", i.e. items which are disabled on
-                // the toolbar hence shown in the context menu for easier access,
-                // which are managed by the owning toolbar.
-                {
-                    m_pToolBar->TriggerItem( pMenu->GetCurItemId()
-                                             - TOOLBOX_MENUITEM_START );
-                }
                 break;
             }
         }
-
-        // remove all entries - deactivate is not reliable
-        // The method checks if we are already disposed and in that case does nothing!
-        ImplClearPopupMenu( m_pToolBar );
     }
 
     return true;

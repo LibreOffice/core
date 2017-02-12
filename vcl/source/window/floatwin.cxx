@@ -708,16 +708,16 @@ void FloatingWindow::StartPopupMode( const Rectangle& rRect, FloatWinPopupFlags 
 
 void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
 {
+    mpImplData->mpBox = pBox;
+
     // get selected button
     sal_uInt16 nItemId = pBox->GetDownItemId();
-    if ( !nItemId )
-        return;
 
-    mpImplData->mpBox = pBox;
-    pBox->ImplFloatControl( true, this );
+    if ( nItemId )
+        pBox->ImplFloatControl( true, this );
 
     // retrieve some data from the ToolBox
-    Rectangle aRect = pBox->GetItemRect( nItemId );
+    Rectangle aRect = nItemId ? pBox->GetItemRect( nItemId ) : pBox->GetOverflowRect();
     Point aPos;
     // convert to parent's screen coordinates
     aPos = GetParent()->OutputToScreenPixel( GetParent()->AbsoluteScreenToOutputPixel( pBox->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) ) );
@@ -793,6 +793,10 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
     if (mpImplData && mpImplData->mpBox)
     {
         mpImplData->mpBox->ImplFloatControl( false, this );
+        // if the parent ToolBox is in popup mode, it should be closed too.
+        if ( GetDockingManager()->IsInPopupMode( mpImplData->mpBox ) )
+            nFlags |= FloatWinPopupEndFlags::CloseAll;
+
         mpImplData->mpBox = nullptr;
     }
 

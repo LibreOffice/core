@@ -200,7 +200,13 @@ PopupMenuToolbarController::createPopupWindow()
 
     pToolBox->SetItemDown( m_nToolBoxId, true );
     WindowAlign eAlign( pToolBox->GetAlign() );
-    sal_uInt16 nId = m_xPopupMenu->execute(
+
+    // If the parent ToolBox is in popup mode (e.g. sub toolbar, overflow popup),
+    // its ToolBarManager can be disposed along with our controller, destroying
+    // m_xPopupMenu, while the latter still in execute. This should be fixed at a
+    // different level, for now just hold it here so it won't crash.
+    css::uno::Reference< css::awt::XPopupMenu > xPopupMenu ( m_xPopupMenu );
+    sal_uInt16 nId = xPopupMenu->execute(
         css::uno::Reference< css::awt::XWindowPeer >( getParent(), css::uno::UNO_QUERY ),
         VCLUnoHelper::ConvertToAWTRect( pToolBox->GetItemRect( m_nToolBoxId ) ),
         ( eAlign == WindowAlign::Top || eAlign == WindowAlign::Bottom ) ?
@@ -209,7 +215,7 @@ PopupMenuToolbarController::createPopupWindow()
     pToolBox->SetItemDown( m_nToolBoxId, false );
 
     if ( nId )
-        functionExecuted( m_xPopupMenu->getCommand( nId ) );
+        functionExecuted( xPopupMenu->getCommand( nId ) );
 
     return xRet;
 }

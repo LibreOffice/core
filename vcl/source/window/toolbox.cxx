@@ -3947,7 +3947,10 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
         // menu button hit ?
         if( mpData->maMenubuttonItem.maRect.IsInside( aMousePos ) && ImplHasClippedItems() )
         {
-            ExecuteCustomMenu();
+            if ( maMenuButtonHdl.IsSet() )
+                maMenuButtonHdl.Call( this );
+            else
+                ExecuteCustomMenu( mpData->maMenubuttonItem.maRect );
             return;
         }
 
@@ -4405,8 +4408,6 @@ bool ToolBox::EventNotify( NotifyEvent& rNEvt )
 
 void ToolBox::Command( const CommandEvent& rCEvt )
 {
-    maCommandHandler.Call( &rCEvt );
-
     // depict StartDrag on MouseButton/Left/Alt
     if ( (rCEvt.GetCommand() == CommandEventId::StartDrag) && rCEvt.IsMouseEvent() &&
          mbCustomize && !mbDragging && !mbDrag && !mbSelection &&
@@ -4461,6 +4462,11 @@ void ToolBox::Command( const CommandEvent& rCEvt )
                 return;
             }
         }
+    }
+    else if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
+    {
+        ExecuteCustomMenu( Rectangle( rCEvt.GetMousePosPixel(), rCEvt.GetMousePosPixel() ) );
+        return;
     }
 
     DockingWindow::Command( rCEvt );
@@ -5052,13 +5058,15 @@ bool ToolBox::ImplOpenItem( vcl::KeyCode aKeyCode )
       || ((nCode == KEY_UP   || nCode == KEY_DOWN)  && !IsHorizontal()) )
         return false;
 
-    if( IsMenuEnabled() && mpData->mbMenubuttonSelected )
+    if( mpData->mbMenubuttonSelected )
     {
         if( ImplCloseLastPopup( GetParent() ) )
             return bRet;
 
-        UpdateCustomMenu();
-        mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ), nullptr, true );
+        if ( maMenuButtonHdl.IsSet() )
+            maMenuButtonHdl.Call( this );
+        else
+            ExecuteCustomMenu( mpData->maMenubuttonItem.maRect );
     }
     else if( mnHighItemId &&  ImplGetItem( mnHighItemId ) &&
         (ImplGetItem( mnHighItemId )->mnBits & ToolBoxItemBits::DROPDOWN) )

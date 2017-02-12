@@ -82,7 +82,6 @@ AddonsToolBarManager::AddonsToolBarManager( const Reference< XComponentContext >
     m_pToolBar->SetSelectHdl( LINK( this, AddonsToolBarManager, Select) );
     m_pToolBar->SetClickHdl( LINK( this, AddonsToolBarManager, Click ) );
     m_pToolBar->SetDoubleClickHdl( LINK( this, AddonsToolBarManager, DoubleClick ) );
-    m_pToolBar->SetCommandHdl( LINK( this, AddonsToolBarManager, Command ) );
     m_pToolBar->SetStateChangedHdl( LINK( this, AddonsToolBarManager, StateChanged ) );
     m_pToolBar->SetDataChangedHdl( LINK( this, AddonsToolBarManager, DataChanged ) );
 }

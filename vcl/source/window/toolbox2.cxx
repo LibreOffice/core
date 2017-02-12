@@ -873,6 +873,11 @@ Rectangle ToolBox::GetItemPosRect( sal_uInt16 nPos ) const
         return Rectangle();
 }
 
+Rectangle ToolBox::GetOverflowRect() const
+{
+    return mpData->maMenubuttonItem.maRect;
+}
+
 bool ToolBox::ImplHasExternalMenubutton()
 {
     // check if the borderwindow (i.e. the decoration) provides the menu button
@@ -1317,6 +1322,16 @@ void ToolBox::ShowItem( sal_uInt16 nItemId, bool bVisible )
     }
 }
 
+bool ToolBox::IsItemClipped( sal_uInt16 nItemId ) const
+{
+    ImplToolItem* pItem = ImplGetItem( nItemId );
+
+    if ( pItem )
+        return pItem->IsClipped();
+    else
+        return false;
+}
+
 bool ToolBox::IsItemVisible( sal_uInt16 nItemId ) const
 {
     ImplToolItem* pItem = ImplGetItem( nItemId );
@@ -1564,7 +1579,7 @@ PopupMenu* ToolBox::GetMenu() const
     return mpData == nullptr ? nullptr : mpData->mpMenu;
 }
 
-void ToolBox::SetMenuButtonHdl( const Link<ToolBox *, void>& rLink )
+void ToolBox::SetMenuExecuteHdl( const Link<ToolBox *, void>& rLink )
 {
     mpData->maMenuButtonHdl = rLink;
 }
@@ -1604,19 +1619,7 @@ void ToolBox::UpdateCustomMenu()
         return;
 
     PopupMenu *pMenu = GetMenu();
-
-    sal_uInt16 i = 0;
-    // remove old entries
-    while( i < pMenu->GetItemCount() )
-    {
-        if( pMenu->GetItemId( i ) >= TOOLBOX_MENUITEM_START )
-        {
-            pMenu->RemoveItem( i );
-            i = 0;
-        }
-        else
-            i++;
-    }
+    pMenu->Clear();
 
     // add menu items: first the overflow items, then hidden items, both in the
     // order they would usually appear in the toolbar. Separators that would be
@@ -1680,13 +1683,6 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
             // call button handler to allow for menu customization
             mpData->maMenuButtonHdl.Call( this );
 
-        // We specifically only register this event listener when executing our
-        // overflow menu (and remove it directly afterwards), as the same menu
-        // is reused for both the overflow menu (as managed here in ToolBox),
-        // but also by ToolBarManager for its context menu. If we leave event
-        // listeners alive beyond when the menu is showing in the desired mode
-        // then duplicate events can happen as the context menu "duplicates"
-        // items from the overflow menu, which both listeners would then act on.
         GetMenu()->AddEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
 
         // make sure all disabled entries will be shown
@@ -1697,9 +1693,10 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
         bool bBorderDel = false;
 
         VclPtr<vcl::Window> pWin = this;
-        Rectangle aMenuRect = mpData->maMenubuttonItem.maRect;
+        Rectangle aMenuRect = mpData->maMenuRect;
+        mpData->maMenuRect.SetEmpty();
         VclPtr<ImplBorderWindow> pBorderWin;
-        if( IsFloatingMode() )
+        if( aMenuRect.IsEmpty() && IsFloatingMode() )
         {
             // custom menu is placed in the decoration
             pBorderWin = dynamic_cast<ImplBorderWindow*>( GetWindow( GetWindowType::Border ) );
@@ -1732,13 +1729,14 @@ IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu, void*, void)
     }
 }
 
-void ToolBox::ExecuteCustomMenu()
+void ToolBox::ExecuteCustomMenu( const Rectangle& rRect )
 {
     if( IsMenuEnabled() )
     {
+        UpdateCustomMenu();
         // handle custom menu asynchronously
         // to avoid problems if the toolbox is closed during menu execute
-        UpdateCustomMenu();
+        mpData->maMenuRect = rRect;
         mpData->mnEventId = Application::PostUserEvent( LINK( this, ToolBox, ImplCallExecuteCustomMenu ), nullptr, true );
     }
 }
