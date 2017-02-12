@@ -25,7 +25,7 @@
 #include <fstream>
 
 #define EPS         1E-12
-#define INT_EPS     1.1
+#define INT_EPS     2.1
 
 #define DECLARE_DUMP_TEST(TestName, BaseClass, DumpMode) \
     class TestName : public BaseClass { \
