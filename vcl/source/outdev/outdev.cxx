@@ -105,7 +105,6 @@ OutputDevice::OutputDevice() :
     mbInitTextColor                 = true;
     mbInitClipRegion                = true;
     mbClipRegionSet                 = false;
-    mbKerning                       = false;
     mbNewFont                       = true;
     mbTextLines                     = false;
     mbTextSpecial                   = false;

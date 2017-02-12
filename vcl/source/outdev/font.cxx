@@ -1106,19 +1106,6 @@ bool OutputDevice::ImplNewFont() const
         }
     }
 
-    // enable kerning array if requested
-    if ( maFont.GetKerning() & FontKerning::FontSpecific )
-    {
-        mbKerning = true;
-    }
-    else
-    {
-        mbKerning = false;
-    }
-
-    if ( maFont.GetKerning() & FontKerning::Asian )
-        mbKerning = true;
-
     // calculate EmphasisArea
     mnEmphasisAscent = 0;
     mnEmphasisDescent = 0;
