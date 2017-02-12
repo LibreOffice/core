@@ -24,7 +24,7 @@ Dim oWnd3 As Object
 Dim oDoc as Object
     
 Sub ShowInfoMain
-	prop() = GetShowInfoPropeties()
+	prop() = GetShowInfoProperties()
 	Init(prop(0).Value, prop(1).Value, prop(2).Value, prop(3).Value, prop(4).Value, prop(5).Value, prop(6).Value, prop(7).Value, prop(8).Value)		
 End Sub
 
@@ -103,7 +103,7 @@ Sub Init(tFieldText As String, windowX, windowY, windowWidth, windowHeight, tFie
 	
 End Sub
 
-Function GetShowInfoPropeties()
+Function GetShowInfoProperties()
 	stepText = GetStepTitle()
 	Dim Properties(8) As new com.sun.star.beans.NamedValue	
 	Properties(0).Name = &quot;ShowInfoDialogText&quot;
@@ -124,7 +124,7 @@ Function GetShowInfoPropeties()
 	Properties(7).Value = 190
 	Properties(8).Name = &quot;TFieldHeight&quot;
 	Properties(8).Value = 50
-	GetShowInfoPropeties = Properties()	
+	GetShowInfoProperties = Properties()
 End Function
 
 Sub setShowInfoText()

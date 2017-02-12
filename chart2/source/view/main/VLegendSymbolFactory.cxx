@@ -76,7 +76,7 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
     }
 }
 
-void lcl_setPropetiesToShape(
+void lcl_setPropertiesToShape(
     const Reference< beans::XPropertySet > & xProp,
     const Reference< drawing::XShape > & xShape,
     ::chart::VLegendSymbolFactory::tPropertyType ePropertyType,
@@ -130,7 +130,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                         awt::Point( 0, rEntryKeyAspectRatio.Height/2 ));
             if( xLine.is())
             {
-                lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType, rEntryKeyAspectRatio );
+                lcl_setPropertiesToShape( xLegendEntryProperties, xLine, ePropertyType, rEntryKeyAspectRatio );
             }
 
             Reference< drawing::XShape > xSymbol;
@@ -178,7 +178,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                         awt::Point( rEntryKeyAspectRatio.Width/2-nSize/2, rEntryKeyAspectRatio.Height/2-nSize/2 ));
             if( xShape.is() )
             {
-                lcl_setPropetiesToShape( xLegendEntryProperties, xShape, ePropertyType, awt::Size(0,0) ); // PROP_TYPE_FILLED_SERIES );
+                lcl_setPropertiesToShape( xLegendEntryProperties, xShape, ePropertyType, awt::Size(0,0) ); // PROP_TYPE_FILLED_SERIES );
             }
         }
         else // eStyle == LegendSymbolStyle_BOX

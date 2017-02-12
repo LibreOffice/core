@@ -97,7 +97,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     ,m_bIsCurrency(false)
     ,m_bHidden(false)
 {
-    OSL_ENSURE(xAffectedCol.is(),"PropetySet can not be null!");
+    OSL_ENSURE(xAffectedCol.is(),"PropertySet can not be null!");
     if ( xAffectedCol.is() )
     {
         if ( _bUseAsDest )
