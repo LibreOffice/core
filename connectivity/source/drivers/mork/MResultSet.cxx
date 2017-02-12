@@ -964,13 +964,13 @@ void OResultSet::fillRowData()
     OSL_ENSURE(m_xColumns.is(), "Need the Columns!!");
 
     OSQLColumns::Vector::const_iterator aIter = m_xColumns->get().begin();
-    const OUString sProprtyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
+    const OUString sPropertyName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
     OUString sName;
     m_aAttributeStrings.clear();
     m_aAttributeStrings.reserve(m_xColumns->get().size());
     for (sal_Int32 i = 1; aIter != m_xColumns->get().end();++aIter, i++)
     {
-        (*aIter)->getPropertyValue(sProprtyName) >>= sName;
+        (*aIter)->getPropertyValue(sPropertyName) >>= sName;
         SAL_INFO(
             "connectivity.mork", "Query Columns : (" << i << ") " << sName);
         m_aAttributeStrings.push_back( sName );
