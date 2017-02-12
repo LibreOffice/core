@@ -23,6 +23,8 @@
 
 #include <string.h>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 using namespace cppu;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
