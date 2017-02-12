@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_d80ee1e4",
+        "filename": "sw/uiconfig/swriter/ui/notebookbar_groups.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-12T09:37:53Z",
+      "side": 1,
+      "message": "if you change these, you need to change the places in the code that finds these objects by these ids",
+      "revId": "c9dfd531e8bd405ac08d233fc138edf3dbf9e9ac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
