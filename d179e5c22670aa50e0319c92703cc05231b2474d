@@ -16,6 +16,24 @@
       "revId": "d179e5c22670aa50e0319c92703cc05231b2474d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d8aa6185",
+        "filename": "android/source/src/java/org/libreoffice/ui/LibreOfficeUIActivity.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1001281
+      },
+      "writtenOn": "2017-02-12T10:46:55Z",
+      "side": 1,
+      "message": "Well, if log shows that RuntimeException is thrown, it couldn\u0027t be more specific than that?",
+      "parentUuid": "9a57fde8_b8091de0",
+      "revId": "d179e5c22670aa50e0319c92703cc05231b2474d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
