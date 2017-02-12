@@ -325,6 +325,11 @@ public:
      */
     void testPivotTableDPCollection();
 
+    /**
+    * Test pivot table median function
+    */
+    void testPivotTableMedianFunc();
+
     void testCellCopy();
     void testSheetCopy();
     void testSheetMove();
@@ -627,6 +632,7 @@ public:
     CPPUNIT_TEST(testPivotTableDocFunc);
     CPPUNIT_TEST(testPivotTableRepeatItemLabels);
     CPPUNIT_TEST(testPivotTableDPCollection);
+    CPPUNIT_TEST(testPivotTableMedianFunc);
     CPPUNIT_TEST(testCellCopy);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
