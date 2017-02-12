@@ -309,7 +309,6 @@ SCODE STDMETHODCALLTYPE COooFilter::GetChunk(STAT_CHUNK * pStat)
         {
         case FilteringContent:
         {
-            // Read Unicodes from buffer.
             if( m_ChunkPosition == m_pContentReader ->getChunkBuffer().size() )
             {
                 m_ulUnicodeBufferLen=0;

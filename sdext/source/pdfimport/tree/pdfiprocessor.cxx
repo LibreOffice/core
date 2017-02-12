@@ -609,12 +609,12 @@ void PDFIProcessor::startIndicator( const OUString& rText  )
     sal_Int32 nElements = m_nPages;
     if( m_xStatusIndicator.is() )
     {
-        sal_Int32 nUnicodes = rText.getLength();
-        OUStringBuffer aStr( nUnicodes*2 );
+        sal_Int32 nLength = rText.getLength();
+        OUStringBuffer aStr( nLength*2 );
         const sal_Unicode* pText = rText.getStr();
-        for( int i = 0; i < nUnicodes; i++ )
+        for( int i = 0; i < nLength; i++ )
         {
-            if( nUnicodes-i > 1&&
+            if( nLength-i > 1&&
                 pText[i]   == '%' &&
                 pText[i+1] == 'd'
             )

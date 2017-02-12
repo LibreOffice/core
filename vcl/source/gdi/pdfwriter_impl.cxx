@@ -3050,14 +3050,14 @@ static void appendSubsetName( int nSubsetID, const OUString& rPSName, OStringBuf
 }
 
 sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
-                                              sal_Ucs* pUnicodes,
-                                              sal_Int32* pUnicodesPerGlyph,
+                                              sal_Ucs* pCodeUnits,
+                                              sal_Int32* pCodeUnitsPerGlyph,
                                               sal_Int32* pEncToUnicodeIndex,
                                               int nGlyphs )
 {
     int nMapped = 0;
     for (int n = 0; n < nGlyphs; ++n)
-        if( pUnicodes[pEncToUnicodeIndex[n]] && pUnicodesPerGlyph[n] )
+        if( pCodeUnits[pEncToUnicodeIndex[n]] && pCodeUnitsPerGlyph[n] )
             nMapped++;
 
     if( nMapped == 0 )
@@ -3085,7 +3085,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
     int nCount = 0;
     for (int n = 0; n < nGlyphs; ++n)
     {
-        if( pUnicodes[pEncToUnicodeIndex[n]] && pUnicodesPerGlyph[n] )
+        if( pCodeUnits[pEncToUnicodeIndex[n]] && pCodeUnitsPerGlyph[n] )
         {
             if( (nCount % 100) == 0 )
             {
@@ -3099,10 +3099,10 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
             aContents.append( "> <" );
             // TODO: handle unicodes>U+FFFF
             sal_Int32 nIndex = pEncToUnicodeIndex[n];
-            for( sal_Int32 j = 0; j < pUnicodesPerGlyph[n]; j++ )
+            for( sal_Int32 j = 0; j < pCodeUnitsPerGlyph[n]; j++ )
             {
-                appendHex( (sal_Int8)(pUnicodes[nIndex + j] / 256), aContents );
-                appendHex( (sal_Int8)(pUnicodes[nIndex + j] & 255), aContents );
+                appendHex( (sal_Int8)(pCodeUnits[nIndex + j] / 256), aContents );
+                appendHex( (sal_Int8)(pCodeUnits[nIndex + j] & 255), aContents );
             }
             aContents.append( ">\n" );
             nCount++;
@@ -3272,16 +3272,16 @@ bool PDFWriterImpl::emitFonts()
             sal_Int32 pWidths[ 256 ];
             sal_uInt8 pEncoding[ 256 ];
             sal_Int32 pEncToUnicodeIndex[ 256 ];
-            sal_Int32 pUnicodesPerGlyph[ 256 ];
-            std::vector<sal_Ucs> aUnicodes;
-            aUnicodes.reserve( 256 );
+            sal_Int32 pCodeUnitsPerGlyph[ 256 ];
+            std::vector<sal_Ucs> aCodeUnits;
+            aCodeUnits.reserve( 256 );
             int nGlyphs = 1;
             // fill arrays and prepare encoding index map
             sal_Int32 nToUnicodeStream = 0;
 
             memset( aGlyphIds, 0, sizeof( aGlyphIds ) );
             memset( pEncoding, 0, sizeof( pEncoding ) );
-            memset( pUnicodesPerGlyph, 0, sizeof( pUnicodesPerGlyph ) );
+            memset( pCodeUnitsPerGlyph, 0, sizeof( pCodeUnitsPerGlyph ) );
             memset( pEncToUnicodeIndex, 0, sizeof( pEncToUnicodeIndex ) );
             for( FontEmitMapping::iterator fit = lit->m_aMapping.begin(); fit != lit->m_aMapping.end();++fit )
             {
@@ -3292,10 +3292,10 @@ bool PDFWriterImpl::emitFonts()
 
                 aGlyphIds[ nEnc ] = fit->first;
                 pEncoding[ nEnc ] = nEnc;
-                pEncToUnicodeIndex[ nEnc ] = static_cast<sal_Int32>(aUnicodes.size());
-                pUnicodesPerGlyph[ nEnc ] = fit->second.countCodes();
-                for( sal_Int32 n = 0; n < pUnicodesPerGlyph[ nEnc ]; n++ )
-                    aUnicodes.push_back( fit->second.getCode( n ) );
+                pEncToUnicodeIndex[ nEnc ] = static_cast<sal_Int32>(aCodeUnits.size());
+                pCodeUnitsPerGlyph[ nEnc ] = fit->second.countCodes();
+                for( sal_Int32 n = 0; n < pCodeUnitsPerGlyph[ nEnc ]; n++ )
+                    aCodeUnits.push_back( fit->second.getCode( n ) );
                 if( fit->second.getCode(0) )
                     nToUnicodeStream = 1;
                 if( nGlyphs < 256 )
@@ -3426,7 +3426,7 @@ bool PDFWriterImpl::emitFonts()
                 sal_Int32 nFontDescriptor = emitFontDescriptor( it->first, aSubsetInfo, lit->m_nFontID, nFontStream );
 
                 if( nToUnicodeStream )
-                    nToUnicodeStream = createToUnicodeCMap( pEncoding, &aUnicodes[0], pUnicodesPerGlyph, pEncToUnicodeIndex, nGlyphs );
+                    nToUnicodeStream = createToUnicodeCMap( pEncoding, &aCodeUnits[0], pCodeUnitsPerGlyph, pEncToUnicodeIndex, nGlyphs );
 
                 sal_Int32 nFontObject = createObject();
                 if ( !updateObject( nFontObject ) ) return false;
@@ -8177,8 +8177,8 @@ sal_Int32 PDFWriterImpl::getSystemFont( const vcl::Font& i_rFont )
 void PDFWriterImpl::registerGlyphs( int nGlyphs,
                                     const GlyphItem** pGlyphs,
                                     sal_Int32* pGlyphWidths,
-                                    sal_Ucs* pUnicodes,
-                                    sal_Int32* pUnicodesPerGlyph,
+                                    sal_Ucs* pCodeUnits,
+                                    sal_Int32* pCodeUnitsPerGlyph,
                                     sal_uInt8* pMappedGlyphs,
                                     sal_Int32* pMappedFontObjects,
                                     const PhysicalFontFace* pFallbackFonts[] )
@@ -8189,8 +8189,8 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
         return;
 
     const PhysicalFontFace* pDevFont = m_pReferenceDevice->mpFontInstance->maFontSelData.mpFontData;
-    sal_Ucs* pCurUnicode = pUnicodes;
-    for( int i = 0; i < nGlyphs; pCurUnicode += pUnicodesPerGlyph[i] , i++ )
+    sal_Ucs* pCurUnicode = pCodeUnits;
+    for( int i = 0; i < nGlyphs; pCurUnicode += pCodeUnitsPerGlyph[i] , i++ )
     {
         const int nFontGlyphId = pGlyphs[i]->maGlyphId;
         const PhysicalFontFace* pCurrentFont = pFallbackFonts[i] ? pFallbackFonts[i] : pDevFont;
@@ -8221,7 +8221,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
             // add new glyph to emitted font subset
             GlyphEmit& rNewGlyphEmit = rSubset.m_aSubsets.back().m_aMapping[ nFontGlyphId ];
             rNewGlyphEmit.setGlyphId( nNewId );
-            for( sal_Int32 n = 0; n < pUnicodesPerGlyph[i]; n++ )
+            for( sal_Int32 n = 0; n < pCodeUnitsPerGlyph[i]; n++ )
                 rNewGlyphEmit.addCode( pCurUnicode[n] );
 
             // add new glyph to font mapping
@@ -8508,10 +8508,10 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     sal_Int32 pGlyphWidths[nMaxGlyphs];
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
-    std::vector<sal_Ucs> aUnicodes;
-    aUnicodes.reserve(nMaxGlyphs);
-    std::vector<sal_Int32> aUnicodesPerGlyph;
-    aUnicodes.reserve(nMaxGlyphs);
+    std::vector<sal_Ucs> aCodeUnits;
+    aCodeUnits.reserve(nMaxGlyphs);
+    std::vector<sal_Int32> aCodeUnitsPerGlyph;
+    aCodeUnits.reserve(nMaxGlyphs);
     bool bVertical = m_aCurrentPDFState.m_aFont.IsVertical();
     int nGlyphs;
     int nIndex = 0;
@@ -8641,11 +8641,11 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
     Point aGNGlyphPos;
     while ((nGlyphs = rLayout.GetNextGlyphs(nTmpMaxGlyphs, pGlyphs, aGNGlyphPos, nIndex, pFallbackFonts)) != 0)
     {
-        aUnicodes.clear();
+        aCodeUnits.clear();
         for( int i = 0; i < nGlyphs; i++ )
         {
             // default case: 1 glyph is one unicode
-            aUnicodesPerGlyph.push_back(1);
+            aCodeUnitsPerGlyph.push_back(1);
             if (pGlyphs[i]->mnCharPos >= nMinCharPos && pGlyphs[i]->mnCharPos <= nMaxCharPos)
             {
                 int nChars = 1;
@@ -8663,22 +8663,22 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                     }
                     else if (nChars == 0)
                         nChars = 1;
-                    aUnicodesPerGlyph.back() = nChars;
+                    aCodeUnitsPerGlyph.back() = nChars;
                     for( int n = 0; n < nChars; n++ )
-                        aUnicodes.push_back( rText[ start + n ] );
+                        aCodeUnits.push_back( rText[ start + n ] );
                 }
                 else
-                    aUnicodes.push_back(rText[pGlyphs[i]->mnCharPos]);
+                    aCodeUnits.push_back(rText[pGlyphs[i]->mnCharPos]);
             }
             else
-                aUnicodes.push_back( 0 );
+                aCodeUnits.push_back( 0 );
             // note: in case of ctl one character may result
             // in multiple glyphs. The current SalLayout
             // implementations set -1 then to indicate that no direct
             // mapping is possible
         }
 
-        registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, aUnicodes.data(), aUnicodesPerGlyph.data(), pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
+        registerGlyphs( nGlyphs, pGlyphs, pGlyphWidths, aCodeUnits.data(), aCodeUnitsPerGlyph.data(), pMappedGlyphs, pMappedFontObjects, pFallbackFonts );
 
         for( int i = 0; i < nGlyphs; i++ )
         {

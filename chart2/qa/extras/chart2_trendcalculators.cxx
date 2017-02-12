@@ -10,7 +10,7 @@
 #include "charttest.hxx"
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
-#include <SpecialUnicodes.hxx>
+#include <SpecialCharacters.hxx>
 
 
 // Define the index of sheets in the test document

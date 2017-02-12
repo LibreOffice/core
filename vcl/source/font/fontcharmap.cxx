@@ -288,7 +288,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
     if( aConverter && aCvtContext )
     {
         // determine the set of supported unicodes from encoded ranges
-        std::set<sal_UCS4> aSupportedUnicodes;
+        std::set<sal_UCS4> aSupportedCodePoints;
 
         static const int NINSIZE = 64;
         static const int NOUTSIZE = 64;
@@ -320,7 +320,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
                     &nCvtInfo, &nSrcCvtBytes );
 
                 for( j = 0; j < nOutLen; ++j )
-                    aSupportedUnicodes.insert( cCharsOut[j] );
+                    aSupportedCodePoints.insert( cCharsOut[j] );
             }
         }
 
@@ -330,8 +330,8 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         // convert the set of supported unicodes to ranges
         std::vector<sal_UCS4> aSupportedRanges;
 
-        std::set<sal_UCS4>::const_iterator itChar = aSupportedUnicodes.begin();
-        for(; itChar != aSupportedUnicodes.end(); ++itChar )
+        std::set<sal_UCS4>::const_iterator itChar = aSupportedCodePoints.begin();
+        for(; itChar != aSupportedCodePoints.end(); ++itChar )
         {
             if( aSupportedRanges.empty()
             || (aSupportedRanges.back() != *itChar) )

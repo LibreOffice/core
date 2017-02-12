@@ -289,7 +289,7 @@ public:
     class GlyphEmit
     {
         // performance: actually this should probably a vector;
-        std::vector<sal_Ucs>            m_Unicodes;
+        std::vector<sal_Ucs>            m_CodeUnits;
         sal_uInt8                       m_nSubsetGlyphID;
 
     public:
@@ -302,14 +302,14 @@ public:
 
         void addCode( sal_Ucs i_cCode )
         {
-            m_Unicodes.push_back(i_cCode);
+            m_CodeUnits.push_back(i_cCode);
         }
-        sal_Int32 countCodes() const { return m_Unicodes.size(); }
+        sal_Int32 countCodes() const { return m_CodeUnits.size(); }
         sal_Ucs getCode( sal_Int32 i_nIndex ) const
         {
             sal_Ucs nRet = 0;
-            if (static_cast<size_t>(i_nIndex) < m_Unicodes.size())
-                nRet = m_Unicodes[i_nIndex];
+            if (static_cast<size_t>(i_nIndex) < m_CodeUnits.size())
+                nRet = m_CodeUnits[i_nIndex];
             return nRet;
         }
     };
@@ -775,7 +775,7 @@ i12626
     void appendLiteralStringEncrypt( OStringBuffer& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs(int nGlyphs, const GlyphItem** pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const PhysicalFontFace* pFallbackFonts[]);
+    void registerGlyphs(int nGlyphs, const GlyphItem** pGlyphs, sal_Int32* pGlpyhWidths, sal_Ucs* pCodeUnits, sal_Int32* pCodeUnitsPerGlyph, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, const PhysicalFontFace* pFallbackFonts[]);
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
@@ -824,7 +824,7 @@ i12626
     /* writes a font descriptor and returns its object id (or 0) */
     sal_Int32 emitFontDescriptor( const PhysicalFontFace*, FontSubsetInfo&, sal_Int32 nSubsetID, sal_Int32 nStream );
     /* writes a ToUnicode cmap, returns the corresponding stream object */
-    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pUnicodes, sal_Int32* pUnicodesPerGlyph, sal_Int32* pEncToUnicodeIndex, int nGlyphs );
+    sal_Int32 createToUnicodeCMap( sal_uInt8* pEncoding, sal_Ucs* pCodeUnits, sal_Int32* pCodeUnitsPerGlyph, sal_Int32* pEncToUnicodeIndex, int nGlyphs );
 
     /* get resource dict object number */
     sal_Int32 getResourceDictObj()
