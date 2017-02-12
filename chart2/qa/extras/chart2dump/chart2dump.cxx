@@ -639,7 +639,8 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
     {
         "default_formated_axis.ods",
         "rotated_axis_labels.ods",
-        "formated_axis_labels.ods"
+        "formated_axis_labels.ods",
+        "percent_stacked_column_chart.ods",
     };
 
     for (const OUString& sTestFile : aTestFiles)
