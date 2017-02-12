@@ -1,0 +1,46 @@
+// aLegendPosition.X
+14671
+// aLegendPosition.Y
+4000
+// aLegendSize.Width
+1127
+// aLegendSize.Height
+990
+// nLegendEntryCount
+2
+// aLegendEntryPosition.X
+14787
+// aLegendEntryPosition.Y
+4167
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+211
+// sLegendEntryTransformation
+212;0;147870;212;41670;0;1
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.RectangleShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+17798
+// aLegendEntryPosition.X
+14787
+// aLegendEntryPosition.Y
+4612
+// aLegendEntrySize.Height
+211
+// aLegendEntrySize.Width
+211
+// sLegendEntryTransformation
+212;0;147870;212;46120;0;1
+// xLegendEntryContainer->getCount()
+2
+// sEntryGeomShapeType
+com.sun.star.drawing.RectangleShape
+// static_cast<sal_Int32>(aEntryGeomColor)
+16728590
+// xLegendEntryText->getString()
+A
+// xLegendEntryText->getString()
+C-B
