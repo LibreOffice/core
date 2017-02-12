@@ -16,8 +16,6 @@
 #include <svtools/treelistentry.hxx>
 #include "scabstdlg.hxx"
 
-using namespace std;
-
 ScPivotLayoutTreeListBase::ScPivotLayoutTreeListBase(vcl::Window* pParent, WinBits nBits, SvPivotTreeListType eType)
     : SvTreeListBox(pParent, nBits)
     , meType(eType)

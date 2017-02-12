@@ -18,8 +18,6 @@
 #include "scabstdlg.hxx"
 #include "globstr.hrc"
 
-using namespace std;
-
 VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeListData,
                          WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN |
                          WB_FORCE_MAKEVISIBLE)
@@ -113,11 +111,8 @@ void ScPivotLayoutTreeListData::FillDataField(ScPivotFieldVector& rDataFields)
     Clear();
     maDataItemValues.clear();
 
-    ScPivotFieldVector::iterator it;
-    for (it = rDataFields.begin(); it != rDataFields.end(); ++it)
+    for (ScPivotField& rField : rDataFields)
     {
-        ScPivotField& rField = *it;
-
         if (rField.nCol == PIVOT_DATA_FIELD)
             continue;
 
@@ -144,7 +139,7 @@ void ScPivotLayoutTreeListData::FillDataField(ScPivotFieldVector& rDataFields)
     }
 }
 
-void ScPivotLayoutTreeListData::PushDataFieldNames(vector<ScDPName>& rDataFieldNames)
+void ScPivotLayoutTreeListData::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames)
 {
     SvTreeListEntry* pLoopEntry;
     for (pLoopEntry = First(); pLoopEntry != nullptr; pLoopEntry = Next(pLoopEntry))
@@ -174,7 +169,7 @@ void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(SvTreeListEntry* pSou
 {
     ScItemValue* pItemValue = static_cast<ScItemValue*>(pSource->GetUserData());
 
-    if(mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
+    if (mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
         return;
 
     if (HasEntry(pSource))
