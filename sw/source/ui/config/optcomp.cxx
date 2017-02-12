@@ -92,7 +92,7 @@ SwCompatibilityOptPage::~SwCompatibilityOptPage()
 
 void SwCompatibilityOptPage::dispose()
 {
-    delete m_pImpl;
+    m_pImpl.reset();
     m_pMain.clear();
     m_pFormattingLB.clear();
     m_pOptionsLB.clear();
