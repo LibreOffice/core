@@ -1377,7 +1377,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     rLayoutArgs.PrepareFallback();
     rLayoutArgs.mnFlags |= SalLayoutFlags::ForFallback;
 
-    // get list of unicodes that need glyph fallback
+    // get list of code units that need glyph fallback
     int nCharPos = -1;
     bool bRTL = false;
     OUStringBuffer aMissingCodeBuf;
@@ -1388,7 +1388,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
 
     FontSelectPattern aFontSelData = mpFontInstance->maFontSelData;
 
-    // try if fallback fonts support the missing unicodes
+    // try if fallback fonts support the missing code units
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
         // find a font family suited for glyph fallback

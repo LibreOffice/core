@@ -3097,7 +3097,7 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
             aContents.append( '<' );
             appendHex( (sal_Int8)pEncoding[n], aContents );
             aContents.append( "> <" );
-            // TODO: handle unicodes>U+FFFF
+            // TODO: handle code points>U+FFFF
             sal_Int32 nIndex = pEncToUnicodeIndex[n];
             for( sal_Int32 j = 0; j < pCodeUnitsPerGlyph[n]; j++ )
             {

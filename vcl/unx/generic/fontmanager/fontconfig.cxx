@@ -948,12 +948,12 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
     // Add required Unicode characters, if any
     if ( !rMissingCodes.isEmpty() )
     {
-        FcCharSet *unicodes = FcCharSetCreate();
+        FcCharSet *codePoints = FcCharSetCreate();
         for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
         {
             // also handle unicode surrogates
             const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );
-            FcCharSetAddChar( unicodes, nCode );
+            FcCharSetAddChar( codePoints, nCode );
             //if the codepoint is impossible for this lang tag, then clear it
             //and autodetect something useful
             if (!aLangAttrib.isEmpty() && isImpossibleCodePointForLang(aLangTag, nCode))
@@ -965,8 +965,8 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                 aLangAttrib = mapToFontConfigLangTag(aLangTag);
             }
         }
-        FcPatternAddCharSet(pPattern, FC_CHARSET, unicodes);
-        FcCharSetDestroy(unicodes);
+        FcPatternAddCharSet(pPattern, FC_CHARSET, codePoints);
+        FcCharSetDestroy(codePoints);
     }
 
     if (!aLangAttrib.isEmpty())
@@ -1065,19 +1065,19 @@ void PrintFontManager::Substitute( FontSelectPattern &rPattern, OUString& rMissi
                 }
             }
 
-            // update rMissingCodes by removing resolved unicodes
+            // update rMissingCodes by removing resolved code points
             if( !rMissingCodes.isEmpty() )
             {
                 std::unique_ptr<sal_uInt32[]> const pRemainingCodes(new sal_uInt32[rMissingCodes.getLength()]);
                 int nRemainingLen = 0;
-                FcCharSet* unicodes;
-                if (!FcPatternGetCharSet(pSet->fonts[0], FC_CHARSET, 0, &unicodes))
+                FcCharSet* codePoints;
+                if (!FcPatternGetCharSet(pSet->fonts[0], FC_CHARSET, 0, &codePoints))
                 {
                     for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
                     {
-                        // also handle unicode surrogates
+                        // also handle surrogates
                         const sal_uInt32 nCode = rMissingCodes.iterateCodePoints( &nStrIndex );
-                        if (FcCharSetHasChar(unicodes, nCode) != FcTrue)
+                        if (FcCharSetHasChar(codePoints, nCode) != FcTrue)
                             pRemainingCodes[ nRemainingLen++ ] = nCode;
                     }
                 }

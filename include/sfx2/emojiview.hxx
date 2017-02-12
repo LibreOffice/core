@@ -59,7 +59,7 @@ public:
 
     virtual ~EmojiView () override;
 
-    // Fill view with emoji unicodes
+    // Fill view with emojis
     void Populate ();
 
     void setInsertEmojiHdl (const Link<ThumbnailViewItem*, void> &rLink);

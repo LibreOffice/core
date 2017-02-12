@@ -287,7 +287,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
 
     if( aConverter && aCvtContext )
     {
-        // determine the set of supported unicodes from encoded ranges
+        // determine the set of supported code points from encoded ranges
         std::set<sal_UCS4> aSupportedCodePoints;
 
         static const int NINSIZE = 64;
@@ -327,7 +327,7 @@ bool ParseCMAP( const unsigned char* pCmap, int nLength, CmapResult& rResult )
         rtl_destroyTextToUnicodeConverter( aCvtContext );
         rtl_destroyTextToUnicodeConverter( aConverter );
 
-        // convert the set of supported unicodes to ranges
+        // convert the set of supported code points to ranges
         std::vector<sal_UCS4> aSupportedRanges;
 
         std::set<sal_UCS4>::const_iterator itChar = aSupportedCodePoints.begin();

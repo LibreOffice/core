@@ -1550,7 +1550,7 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
         }
         if( nKeyCode != 0 )
         {
-            // don't send unicodes in the private use area
+            // don't send code points in the private use area
             if( keyChar >= 0xf700 && keyChar < 0xf780 )
                 keyChar = 0;
             BOOL bRet = [self sendKeyToFrameDirect: nKeyCode character: keyChar modifiers: mpFrame->mnLastModifierFlags];
