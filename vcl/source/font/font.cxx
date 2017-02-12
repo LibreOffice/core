@@ -211,7 +211,7 @@ void Font::SetKerning( FontKerning eKerning )
 
 bool Font::IsKerning() const
 {
-    return bool(mpImplFont->meKerning & FontKerning::FontSpecific);
+    return !(mpImplFont->meKerning == FontKerning::NONE);
 }
 
 void Font::SetWeight( FontWeight eWeight )
@@ -729,7 +729,7 @@ ImplFont::ImplFont() :
     meStrikeout( STRIKEOUT_NONE ),
     meRelief( FontRelief::NONE ),
     meEmphasisMark( FontEmphasisMark::NONE ),
-    meKerning( FontKerning::NONE ),
+    meKerning( FontKerning::FontSpecific ),
     meCharSet( RTL_TEXTENCODING_DONTKNOW ),
     maLanguageTag( LANGUAGE_DONTKNOW ),
     maCJKLanguageTag( LANGUAGE_DONTKNOW ),
