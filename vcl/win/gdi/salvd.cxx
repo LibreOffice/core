@@ -90,14 +90,12 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
 
     HDC     hDC = nullptr;
     HBITMAP hBmp = nullptr;
-    bool    bOk = FALSE;
 
     if( pData )
     {
         hDC = (pData->hDC) ? pData->hDC : GetDC(pData->hWnd);
         hBmp = nullptr;
-        bOk = (hDC != nullptr);
-        if (bOk)
+        if (hDC)
         {
             nDX = GetDeviceCaps( hDC, HORZRES );
             nDY = GetDeviceCaps( hDC, VERTRES );
@@ -119,11 +117,9 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         // #124826# continue even if hBmp could not be created
         // if we would return a failure in this case, the process
         // would terminate which is not required
-
-        bOk = (hDC != nullptr);
     }
 
-    if ( bOk )
+    if (hDC)
     {
         WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice(hDC, hBmp, nBitCount, (pData != nullptr && pData->hDC != nullptr ), nDX, nDY);
         SalData*                pSalData = GetSalData();
@@ -143,8 +139,6 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     }
     else
     {
-        if ( hDC && !pData )
-            DeleteDC( hDC );
         if ( hBmp )
             DeleteBitmap( hBmp );
         return nullptr;
