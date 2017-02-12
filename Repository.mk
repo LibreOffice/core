@@ -799,8 +799,6 @@ $(eval $(call gb_Helper_register_packages, \
 	instsetoo_native_setup \
 	$(if $(ENABLE_OOENV),instsetoo_native_ooenv) \
 	odk_headers_generated \
-	oox_customshapes \
-	oox_generated \
 	postprocess_images \
 	postprocess_registry \
 	readlicense_oo_readmes \
@@ -896,6 +894,8 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	extras_tplwizstyles \
 	framework_dtd \
 	$(if $(filter $(OS),MACOSX),infoplist) \
+	oox_customshapes \
+	oox_generated \
 	package_dtd \
 	sd_web \
 	sfx2_emojiconfig \

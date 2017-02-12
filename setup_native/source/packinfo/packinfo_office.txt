@@ -1163,21 +1163,6 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Filter"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-filter-data"
-solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-filter-data"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-linuxpatchrequires = ""
-copyright = "2017 The Document Foundation"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "Filter data for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Reportbuilder"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-report-builder"
 solarisrequires = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
