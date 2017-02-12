@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_b8091de0",
+        "filename": "android/source/src/java/org/libreoffice/ui/LibreOfficeUIActivity.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-12T09:37:49Z",
+      "side": 1,
+      "message": "do you have to catch RuntimeException? Is there not a more specific exception you can catch?",
+      "revId": "d179e5c22670aa50e0319c92703cc05231b2474d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
