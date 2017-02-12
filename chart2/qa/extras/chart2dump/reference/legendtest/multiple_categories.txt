@@ -16,8 +16,8 @@
 190
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;25010;191;66620;0;1
+// aLegendEntryTransformation
+801;0;2501;0;191;6662;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -32,8 +32,8 @@ com.sun.star.drawing.LineShape
 190
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;42730;191;66620;0;1
+// aLegendEntryTransformation
+801;0;4273;0;191;6662;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -48,8 +48,8 @@ com.sun.star.drawing.LineShape
 190
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;63630;191;66620;0;1
+// aLegendEntryTransformation
+801;0;6363;0;191;6662;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -64,8 +64,8 @@ com.sun.star.drawing.LineShape
 190
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;84530;191;66620;0;1
+// aLegendEntryTransformation
+801;0;8453;0;191;6662;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -80,8 +80,8 @@ com.sun.star.drawing.LineShape
 190
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;25010;191;70810;0;1
+// aLegendEntryTransformation
+801;0;2501;0;191;7081;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -96,8 +96,8 @@ com.sun.star.drawing.LineShape
 190
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;42730;191;70810;0;1
+// aLegendEntryTransformation
+801;0;4273;0;191;7081;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -112,8 +112,8 @@ com.sun.star.drawing.LineShape
 190
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;63630;191;70810;0;1
+// aLegendEntryTransformation
+801;0;6363;0;191;7081;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -128,8 +128,8 @@ com.sun.star.drawing.LineShape
 190
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;84530;191;70810;0;1
+// aLegendEntryTransformation
+801;0;8453;0;191;7081;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
