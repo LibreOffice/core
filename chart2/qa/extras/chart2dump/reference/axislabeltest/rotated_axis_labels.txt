@@ -11,8 +11,8 @@
 345
 // aLabelSize.Width
 1881
-// sLabelTransformation
-1330.77496219308;244.658946290545;4527-1330.77496219308;244.658946290545;91000;0;1
+// aLabelTransformation
+1330.77496219308;244.658946290545;4527;-1330.77496219308;244.658946290545;9100;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -27,8 +27,8 @@
 345
 // aLabelSize.Width
 1881
-// sLabelTransformation
-1330.77496219308;244.658946290545;8137-1330.77496219308;244.658946290545;91000;0;1
+// aLabelTransformation
+1330.77496219308;244.658946290545;8137;-1330.77496219308;244.658946290545;9100;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -43,8 +43,8 @@
 345
 // aLabelSize.Width
 1881
-// sLabelTransformation
-1330.77496219308;244.658946290545;11747-1330.77496219308;244.658946290545;91000;0;1
+// aLabelTransformation
+1330.77496219308;244.658946290545;11747;-1330.77496219308;244.658946290545;9100;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -59,8 +59,8 @@
 345
 // aLabelSize.Width
 1881
-// sLabelTransformation
-1330.77496219308;244.658946290545;15357-1330.77496219308;244.658946290545;91000;0;1
+// aLabelTransformation
+1330.77496219308;244.658946290545;15357;-1330.77496219308;244.658946290545;9100;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -78,8 +78,8 @@
 345
 // aLabelSize.Width
 743
-// sLabelTransformation
-644.322900415622;-173;2616372;299.644789709416;70000;0;1
+// aLabelTransformation
+644.322900415622;-173;2616;372;299.644789709416;7000;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -94,8 +94,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2019.57124162531;-173;12411166;299.644789709416;47230;0;1
+// aLabelTransformation
+2019.57124162531;-173;1241;1166;299.644789709416;4723;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -110,8 +110,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2019.57124162531;-173;12411166;299.644789709416;32400;0;1
+// aLabelTransformation
+2019.57124162531;-173;1241;1166;299.644789709416;3240;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -126,8 +126,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2019.57124162531;-173;12411166;299.644789709416;17570;0;1
+// aLabelTransformation
+2019.57124162531;-173;1241;1166;299.644789709416;1757;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -142,8 +142,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2019.57124162531;-173;12411166;299.644789709416;2740;0;1
+// aLabelTransformation
+2019.57124162531;-173;1241;1166;299.644789709416;274;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight

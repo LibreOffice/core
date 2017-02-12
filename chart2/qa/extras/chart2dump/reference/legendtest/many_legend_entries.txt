@@ -16,8 +16,8 @@
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;15900;212;3520;0;1
+// aLegendEntryTransformation
+801;0;1590;0;212;352;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -36,8 +36,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;32000;212;3520;0;1
+// aLegendEntryTransformation
+801;0;3200;0;212;352;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -56,8 +56,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;48100;212;3520;0;1
+// aLegendEntryTransformation
+801;0;4810;0;212;352;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -76,8 +76,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;64200;212;3520;0;1
+// aLegendEntryTransformation
+801;0;6420;0;212;352;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -96,8 +96,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;80300;212;3520;0;1
+// aLegendEntryTransformation
+801;0;8030;0;212;352;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -116,8 +116,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;97460;212;3520;0;1
+// aLegendEntryTransformation
+801;0;9746;0;212;352;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -136,8 +136,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;113560;212;3520;0;1
+// aLegendEntryTransformation
+801;0;11356;0;212;352;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -156,8 +156,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;130190;212;3520;0;1
+// aLegendEntryTransformation
+801;0;13019;0;212;352;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -176,8 +176,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;15900;212;7970;0;1
+// aLegendEntryTransformation
+801;0;1590;0;212;797;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -196,8 +196,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;32000;212;7970;0;1
+// aLegendEntryTransformation
+801;0;3200;0;212;797;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -216,8 +216,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;48100;212;7970;0;1
+// aLegendEntryTransformation
+801;0;4810;0;212;797;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -236,8 +236,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;64200;212;7970;0;1
+// aLegendEntryTransformation
+801;0;6420;0;212;797;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -256,8 +256,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;80300;212;7970;0;1
+// aLegendEntryTransformation
+801;0;8030;0;212;797;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -276,8 +276,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;97460;212;7970;0;1
+// aLegendEntryTransformation
+801;0;9746;0;212;797;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -296,8 +296,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;113560;212;7970;0;1
+// aLegendEntryTransformation
+801;0;11356;0;212;797;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType

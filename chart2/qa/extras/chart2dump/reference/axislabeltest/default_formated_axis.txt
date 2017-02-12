@@ -11,8 +11,8 @@
 345
 // aLabelSize.Width
 1881
-// sLabelTransformation
-1882;0;43740;346;77700;0;1
+// aLabelTransformation
+1882;0;4374;0;346;7770;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -27,8 +27,8 @@
 345
 // aLabelSize.Width
 1881
-// sLabelTransformation
-1882;0;79840;346;77700;0;1
+// aLabelTransformation
+1882;0;7984;0;346;7770;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -43,8 +43,8 @@
 345
 // aLabelSize.Width
 1881
-// sLabelTransformation
-1882;0;115930;346;77700;0;1
+// aLabelTransformation
+1882;0;11593;0;346;7770;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -59,8 +59,8 @@
 345
 // aLabelSize.Width
 1881
-// sLabelTransformation
-1882;0;152030;346;77700;0;1
+// aLabelTransformation
+1882;0;15203;0;346;7770;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -78,8 +78,8 @@
 345
 // aLabelSize.Width
 743
-// sLabelTransformation
-744;0;25180;346;73480;0;1
+// aLabelTransformation
+744;0;2518;0;346;7348;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -94,8 +94,8 @@
 345
 // aLabelSize.Width
 2145
-// sLabelTransformation
-2146;0;11160;346;65000;0;1
+// aLabelTransformation
+2146;0;1116;0;346;6500;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -110,8 +110,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2332;0;9300;346;56530;0;1
+// aLabelTransformation
+2332;0;930;0;346;5653;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -126,8 +126,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2332;0;9300;346;48050;0;1
+// aLabelTransformation
+2332;0;930;0;346;4805;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -142,8 +142,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2332;0;9300;346;39580;0;1
+// aLabelTransformation
+2332;0;930;0;346;3958;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -158,8 +158,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2332;0;9300;346;31100;0;1
+// aLabelTransformation
+2332;0;930;0;346;3110;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -174,8 +174,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2332;0;9300;346;22630;0;1
+// aLabelTransformation
+2332;0;930;0;346;2263;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -190,8 +190,8 @@
 345
 // aLabelSize.Width
 2331
-// sLabelTransformation
-2332;0;9300;346;14160;0;1
+// aLabelTransformation
+2332;0;930;0;346;1416;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight

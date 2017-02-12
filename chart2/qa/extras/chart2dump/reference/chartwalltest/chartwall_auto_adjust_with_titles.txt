@@ -6,8 +6,8 @@
 5892
 // aChartWallSize.Width
 9284
-// sChartWallTransformation
-9285;0;37120;5893;14210;0;1
+// aChartWallTransformation
+9285;0;3712;0;5893;1421;0;0;1
 // static_cast<sal_Int32>(aChartWallFillStyle)
 2
 // static_cast<sal_Int32>(aChartWallFillColor)

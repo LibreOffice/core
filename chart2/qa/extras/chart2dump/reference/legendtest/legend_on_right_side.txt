@@ -16,8 +16,8 @@
 211
 // aLegendEntrySize.Width
 211
-// sLegendEntryTransformation
-212;0;147870;212;41670;0;1
+// aLegendEntryTransformation
+212;0;14787;0;212;4167;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -32,8 +32,8 @@ com.sun.star.drawing.RectangleShape
 211
 // aLegendEntrySize.Width
 211
-// sLegendEntryTransformation
-212;0;147870;212;46120;0;1
+// aLegendEntryTransformation
+212;0;14787;0;212;4612;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
