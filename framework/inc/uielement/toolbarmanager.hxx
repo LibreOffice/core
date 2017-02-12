@@ -94,6 +94,7 @@ class ToolBarManager : public ToolbarManager_Base
         void CheckAndUpdateImages();
         virtual void RefreshImages();
         void FillToolbar( const css::uno::Reference< css::container::XIndexAccess >& rToolBarData );
+        void FillOverflowToolbar( ToolBox* pParent );
         void notifyRegisteredControllers( const OUString& aUIElementName, const OUString& aCommand );
         void Destroy();
 
@@ -113,8 +114,6 @@ class ToolBarManager : public ToolbarManager_Base
         };
 
     protected:
-        DECL_LINK( Command, CommandEvent const *, void );
-        PopupMenu * GetToolBarCustomMenu(ToolBox* pToolBar);
         DECL_LINK(Click, ToolBox *, void);
         DECL_LINK(DropdownClick, ToolBox *, void);
         DECL_LINK(DoubleClick, ToolBox *, void);
@@ -124,13 +123,16 @@ class ToolBarManager : public ToolbarManager_Base
         DECL_LINK( MiscOptionsChanged, LinkParamNone*, void );
 
         DECL_LINK( MenuButton, ToolBox *, void );
+        DECL_LINK( MenuPreExecute, ToolBox *, void );
         DECL_LINK( MenuSelect, Menu *, bool );
-        void MenuDeactivated();
         DECL_LINK(AsyncUpdateControllersHdl, Timer *, void);
+        DECL_LINK( OverflowEventListener, VclWindowEvent&, void );
         DECL_STATIC_LINK( ToolBarManager, ExecuteHdl_Impl, void*, void );
 
         virtual bool MenuItemAllowed( sal_uInt16 ) const;
 
+        void AddCustomizeMenuItems(ToolBox* pToolBar);
+        void InitImageManager();
         void RemoveControllers();
         void CreateControllers();
         void UpdateControllers();
@@ -138,7 +140,6 @@ class ToolBarManager : public ToolbarManager_Base
         void UpdateController( const css::uno::Reference< css::frame::XToolbarController >& xController);
         //end
         void AddFrameActionListener();
-        void ImplClearPopupMenu( ToolBox *pToolBar );
         void RequestImages();
         ToolBoxItemBits ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         css::uno::Reference< css::frame::XModel > GetModelFromFrame() const;
@@ -178,6 +179,8 @@ class ToolBarManager : public ToolbarManager_Base
         SubToolBarToSubToolBarControllerMap                          m_aSubToolBarControllerMap;
         Timer                                                        m_aAsyncUpdateControllersTimer;
         OUString                                                     m_sIconTheme;
+
+        rtl::Reference< ToolBarManager >                             m_aOverflowManager;
 };
 
 }

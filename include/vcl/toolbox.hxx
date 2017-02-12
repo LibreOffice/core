@@ -160,7 +160,7 @@ private:
     Link<ToolBox *, void> maActivateHdl;
     Link<ToolBox *, void> maDeactivateHdl;
     Link<ToolBox *, void> maSelectHdl;
-    Link<CommandEvent const *, void> maCommandHandler;
+    Link<ToolBox *, void> maMenuButtonHdl;
     Link<StateChangedType const *, void> maStateChangedHandler;
     Link<DataChangedEvent const *, void> maDataChangedHandler;
     /** StatusListener. Notifies about rotated images etc */
@@ -354,6 +354,7 @@ public:
     sal_uInt16          GetItemId( const OUString& rCommand ) const;
     Rectangle           GetItemRect( sal_uInt16 nItemId ) const;
     Rectangle           GetItemPosRect( sal_uInt16 nPos ) const;
+    Rectangle           GetOverflowRect() const;
 
     /// Returns size of the bitmap / text that is inside this toolbox item.
     Size                GetItemContentSize( sal_uInt16 nItemId ) const;
@@ -402,6 +403,7 @@ public:
     /// Convenience method to hide items (via ShowItem).
     void                HideItem(sal_uInt16 nItemId) { ShowItem( nItemId, false ); }
 
+    bool                IsItemClipped( sal_uInt16 nItemId ) const;
     bool                IsItemVisible( sal_uInt16 nItemId ) const;
     bool                IsItemReallyVisible( sal_uInt16 nItemId ) const;
 
@@ -463,9 +465,9 @@ public:
     void                SetDeactivateHdl( const Link<ToolBox *, void>& rLink ) { maDeactivateHdl = rLink; }
     void                SetSelectHdl( const Link<ToolBox *, void>& rLink ) { maSelectHdl = rLink; }
     const Link<ToolBox *, void>& GetSelectHdl() const { return maSelectHdl; }
-    void                SetCommandHdl( const Link<CommandEvent const *, void>& aLink ) { maCommandHandler = aLink; }
     void                SetStateChangedHdl( const Link<StateChangedType const *, void>& aLink ) { maStateChangedHandler = aLink; }
     void                SetDataChangedHdl( const Link<DataChangedEvent const *, void>& aLink ) { maDataChangedHandler = aLink; }
+    void                SetMenuButtonHdl( const Link<ToolBox *, void>& rLink ) { maMenuButtonHdl = rLink; }
 
     // support for custom menu (eg for configuration)
     // note: this menu will also be used to display currently
@@ -479,10 +481,10 @@ public:
     bool                IsMenuEnabled() const;
     PopupMenu*          GetMenu() const;
     void                UpdateCustomMenu();
-    void                SetMenuButtonHdl( const Link<ToolBox *, void>& rLink );
+    void                SetMenuExecuteHdl( const Link<ToolBox *, void>& rLink );
 
     // open custommenu
-    void                ExecuteCustomMenu();
+    void                ExecuteCustomMenu( const Rectangle& rRect = Rectangle() );
 
     // allow Click Handler to distinguish between mouse and key input
     bool                IsKeyEvent() const { return mbIsKeyEvent; }
