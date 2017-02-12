@@ -78,7 +78,6 @@ if test "z$OOO_VENDOR" != "zDebian" ; then
     rm -f common_list.txt
     for module in gid_Module_Root gid_Module_Root_Brand \
         gid_Module_Root_Files_[0-9] \
-        gid_Module_Filter \
         gid_Module_Root_Hack \
         gid_Module_Oo_Linguistic \
         gid_Module_Root_Extension_Dictionary_* \
@@ -394,7 +393,6 @@ else
     create_package_directory gid_Module_Root_Files_Images           pkg/libreoffice-common
     create_package_directory gid_Module_Oo_Linguistic               pkg/libreoffice-common
     create_package_directory gid_Module_Optional_Xsltfiltersamples  pkg/libreoffice-common
-    create_package_directory gid_Module_Filter                      pkg/libreoffice-common
     create_package_directory gid_Module_Optional_Grfflt             pkg/libreoffice-draw
     create_package_directory gid_Module_Prg_Calc_Bin                pkg/libreoffice-calc
     create_package_directory gid_Module_Prg_Math_Bin                pkg/libreoffice-math
