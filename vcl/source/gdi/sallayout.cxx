@@ -68,7 +68,7 @@ std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
         TEST(BiDiRtl);
         TEST(BiDiStrong);
         TEST(RightAlign);
-        TEST(KerningPairs);
+        TEST(DisableKerning);
         TEST(KerningAsian);
         TEST(Vertical);
         TEST(EnableLigatures);

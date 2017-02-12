@@ -1179,8 +1179,8 @@ ImplLayoutArgs OutputDevice::ImplPrepareLayoutArgs( OUString& rStr,
             nLayoutFlags |= SalLayoutFlags::BiDiStrong;
     }
 
-    if( mbKerning )
-        nLayoutFlags |= SalLayoutFlags::KerningPairs;
+    if( !maFont.IsKerning() )
+        nLayoutFlags |= SalLayoutFlags::DisableKerning;
     if( maFont.GetKerning() & FontKerning::Asian )
         nLayoutFlags |= SalLayoutFlags::KerningAsian;
     if( maFont.IsVertical() )
