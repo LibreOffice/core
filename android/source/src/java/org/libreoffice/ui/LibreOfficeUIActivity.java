@@ -147,6 +147,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 recentFiles.add(documentProvider.createFromUri(new URI(recentFileString)));
             } catch (URISyntaxException e) {
                 e.printStackTrace();
+            } catch (RuntimeException e){
+                e.printStackTrace();
             }
         }
 
