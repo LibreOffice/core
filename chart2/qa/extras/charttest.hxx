@@ -113,7 +113,8 @@ void ChartTest::load( const OUString& aDir, const OUString& aName )
     {
         maServiceName = "com.sun.star.drawing.DrawingDocument";
     }
-
+    if (mxComponent.is())
+        mxComponent->dispose();
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aDir) + aName, maServiceName);
     CPPUNIT_ASSERT(mxComponent.is());
 }
@@ -317,7 +318,6 @@ Reference< chart2::data::XDataSequence > getDataSequenceFromDocByRole(
             return xLabelSeq;
     }
 
-    CPPUNIT_FAIL("no Label sequence found");
     return Reference< chart2::data::XDataSequence > ();
 }
 

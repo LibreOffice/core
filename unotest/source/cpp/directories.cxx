@@ -54,6 +54,11 @@ OUString test::Directories::getPathFromSrc( const char *pPath )
     return m_aSrcRootPath + OUString::createFromAscii( pPath );
 }
 
+OUString test::Directories::getPathFromSrc(const OUString& rPath)
+{
+    return m_aSrcRootPath + rPath;;
+}
+
 OUString test::Directories::getURLFromWorkdir( const char *pPath )
 {
     return m_aWorkdirRootURL + OUString::createFromAscii( pPath );
