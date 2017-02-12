@@ -8,7 +8,7 @@
     <style name="ListItemText">
         <item name="android:gravity">center</item>
         <item name="android:textColor">@android:color/black</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="LibreOfficeTheme.Toolbar" parent="Theme.AppCompat.Light.NoActionBar">

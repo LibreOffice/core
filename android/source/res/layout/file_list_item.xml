@@ -9,14 +9,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="48dp"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:layout_marginStart="@dimen/list_item_margin"
+    android:layout_marginLeft="@dimen/list_item_margin"
+    android:layout_marginEnd="@dimen/list_item_margin"
+    android:layout_marginRight="@dimen/list_item_margin">
     <ImageView
         android:id="@+id/file_list_item_icon"
         tools:src="@drawable/ic_folder_black_24dp"
         tools:tint="@color/text_color_secondary"
         android:layout_height="match_parent"
-        android:layout_width="32dp"
-        android:layout_margin="8dp"
+        android:layout_width="@dimen/file_icon_width"
+        android:layout_marginEnd="@dimen/file_icon_margin_end"
+        android:layout_marginRight="@dimen/file_icon_margin_end"
         android:layout_gravity="center"
         android:contentDescription="@string/file_icon_desc" />
     <LinearLayout
@@ -29,7 +34,9 @@
             style="@style/ListItemText"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:maxLines="1"/>
         <TextView
             android:id="@+id/file_list_item_size"
             tools:text="filesize"
@@ -43,6 +50,8 @@
             style="@style/ListItemText"
             android:layout_height="match_parent"
             android:layout_width="0dp"
-            android:layout_weight="2" />
+            android:layout_weight="2"
+            android:ellipsize="end"
+            android:maxLines="1"/>
     </LinearLayout>
 </LinearLayout>

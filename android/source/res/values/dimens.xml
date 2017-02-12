@@ -5,4 +5,7 @@
     <dimen name="text_selection_handle_width">30dp</dimen>
     <dimen name="text_selection_handle_height">44dp</dimen>
     <dimen name="text_selection_handle_shadow">2dp</dimen>
+    <dimen name="file_icon_margin_end">8dp</dimen>
+    <dimen name="list_item_margin">8dp</dimen>
+    <dimen name="file_icon_width">32dp</dimen>
 </resources>
