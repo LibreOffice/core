@@ -47,9 +47,7 @@ class SC_DLLPUBLIC ScDocumentPool: public SfxItemPool
 
 public:
             ScDocumentPool();
-protected:
             virtual ~ScDocumentPool() override;
-public:
 
     virtual SfxItemPool*        Clone() const override;
     virtual MapUnit             GetMetric( sal_uInt16 nWhich ) const override;

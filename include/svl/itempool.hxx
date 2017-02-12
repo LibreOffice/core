@@ -93,13 +93,9 @@ public:
                                                  const SfxItemInfo *pItemInfos,
                                                  std::vector<SfxPoolItem*> *pDefaults = nullptr,
                                                  bool bLoadRefCounts = true );
-
-protected:
     virtual                         ~SfxItemPool();
 
 public:
-    static void Free(SfxItemPool* pPool);
-
     SfxBroadcaster&                 BC();
 
     void                            SetPoolDefaultItem( const SfxPoolItem& );

@@ -205,7 +205,7 @@ namespace frm
             SolarMutexGuard g;
             SfxItemPool* pPool = m_pEngine->getPool();
             m_pEngine.reset();
-            SfxItemPool::Free(pPool);
+            delete pPool;
         }
 
 

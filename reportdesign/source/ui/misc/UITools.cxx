@@ -730,7 +730,7 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    SfxItemPool::Free(pPool);
+    delete pPool;
     for (SfxPoolItem* pDefault : pDefaults)
         delete pDefault;
 

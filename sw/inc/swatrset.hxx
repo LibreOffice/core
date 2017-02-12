@@ -159,9 +159,7 @@ private:
 
 public:
     SwAttrPool( SwDoc* pDoc );
-protected:
     virtual ~SwAttrPool() override;
-public:
 
           SwDoc* GetDoc()           { return m_pDoc; }
     const SwDoc* GetDoc() const     { return m_pDoc; }

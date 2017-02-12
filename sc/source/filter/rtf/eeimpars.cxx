@@ -633,8 +633,8 @@ ScEEParser::~ScEEParser()
 
     // Don't delete Pool until the lists have been deleted
     pPool->SetSecondaryPool( nullptr );
-    SfxItemPool::Free(pDocPool);
-    SfxItemPool::Free(pPool);
+    delete pDocPool;
+    delete pPool;
 }
 
 void ScEEParser::NewActEntry( ScEEParseEntry* pE )
