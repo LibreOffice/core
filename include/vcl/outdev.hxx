@@ -133,7 +133,7 @@ enum class SalLayoutFlags
     BiDiRtl                 = 0x0001,
     BiDiStrong              = 0x0002,
     RightAlign              = 0x0004,
-    KerningPairs            = 0x0010,
+    DisableKerning          = 0x0010,
     KerningAsian            = 0x0020,
     Vertical                = 0x0040,
     EnableLigatures         = 0x0200,

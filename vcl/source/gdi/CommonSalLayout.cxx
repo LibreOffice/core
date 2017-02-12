@@ -446,6 +446,12 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
     hb_buffer_set_unicode_funcs(pHbBuffer, pHbUnicodeFuncs);
 #endif
 
+    if (rArgs.mnFlags & SalLayoutFlags::DisableKerning)
+    {
+        SAL_INFO("vcl.harfbuzz", "Disabling kerning for font: " << mrFontSelData.maTargetName);
+        maFeatures.push_back({ HB_TAG('k','e','r','n'), 0, 0, static_cast<unsigned int>(-1) });
+    }
+
     ParseFeatures(mrFontSelData.maTargetName);
 
     double nXScale = 0;
