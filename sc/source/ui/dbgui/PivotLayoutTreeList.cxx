@@ -17,8 +17,6 @@
 #include "pivot.hxx"
 #include "scabstdlg.hxx"
 
-using namespace std;
-
 VCL_BUILDER_FACTORY_ARGS(ScPivotLayoutTreeList,
                          WB_BORDER | WB_TABSTOP | WB_CLIPCHILDREN |
                          WB_FORCE_MAKEVISIBLE)
@@ -53,7 +51,7 @@ bool ScPivotLayoutTreeList::DoubleClickHdl()
 
     ScAbstractDialogFactory* pFactory = ScAbstractDialogFactory::Create();
 
-    vector<ScDPName> aDataFieldNames;
+    std::vector<ScDPName> aDataFieldNames;
     mpParent->PushDataFieldNames(aDataFieldNames);
 
     ScopedVclPtr<AbstractScDPSubtotalDlg> pDialog(
@@ -73,10 +71,8 @@ void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)
     Clear();
     maItemValues.clear();
 
-    ScPivotFieldVector::iterator it;
-    for (it = rFieldVector.begin(); it != rFieldVector.end(); ++it)
+    for (ScPivotField& rField : rFieldVector)
     {
-        ScPivotField& rField = *it;
         OUString aLabel = mpParent->GetItem( rField.nCol )->maName;
         ScItemValue* pItemValue = new ScItemValue( aLabel, rField.nCol, rField.nFuncMask );
         maItemValues.push_back(std::unique_ptr<ScItemValue>(pItemValue));
