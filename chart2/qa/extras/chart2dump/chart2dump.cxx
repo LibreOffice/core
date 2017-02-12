@@ -713,7 +713,7 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
     }
 }
 
-DECLARE_DUMP_TEST(ColumnChartTest, Chart2DumpTest, false)
+DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
@@ -721,6 +721,9 @@ DECLARE_DUMP_TEST(ColumnChartTest, Chart2DumpTest, false)
         "stacked_column_chart.ods",
         "percent_stacked_column_chart.ods",
         "column_chart_small_spacing.ods",
+        "normal_bar_chart.ods",
+        "stacked_bar_chart.ods",
+        "percent_stacked_bar_chart.ods",
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -742,44 +745,44 @@ DECLARE_DUMP_TEST(ColumnChartTest, Chart2DumpTest, false)
 
         for (size_t nSeries = 0; nSeries < nSeriesCount; ++nSeries)
         {
-            uno::Reference<drawing::XShape> xSeriesColumns = getShapeByName(xShapes, "CID/D=0:CS=0:CT=0:Series=" + OUString::number(nSeries));
-            CPPUNIT_ASSERT(xSeriesColumns.is());
-            CPPUNIT_DUMP_ASSERT_NOTE("Series " + OUString::number(nSeries) + " Columns");
+            uno::Reference<drawing::XShape> xSeriesColumnsOrBars = getShapeByName(xShapes, "CID/D=0:CS=0:CT=0:Series=" + OUString::number(nSeries));
+            CPPUNIT_ASSERT(xSeriesColumnsOrBars.is());
+            CPPUNIT_DUMP_ASSERT_NOTE("Series " + OUString::number(nSeries) + " ColumnsOrBars");
 
-            // Check column count in the series
-            uno::Reference<container::XIndexAccess> xIndexAccess(xSeriesColumns, UNO_QUERY_THROW);
-            sal_Int32 nColumnCountInSeries = xIndexAccess->getCount();
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nColumnCountInSeries);
+            // Check column/bar count in the series
+            uno::Reference<container::XIndexAccess> xIndexAccess(xSeriesColumnsOrBars, UNO_QUERY_THROW);
+            sal_Int32 nColumnOrBarCountInSeries = xIndexAccess->getCount();
+            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nColumnOrBarCountInSeries);
 
-            // Check column fill style and color
-            Reference< beans::XPropertySet > xColumnPropSet(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
-            drawing::FillStyle aSeriesColumnFillStyle;
-            xColumnPropSet->getPropertyValue(UNO_NAME_FILLSTYLE) >>= aSeriesColumnFillStyle;
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aSeriesColumnFillStyle));
-            util::Color aSeriesColumnFillColor = 0;
-            xColumnPropSet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= aSeriesColumnFillColor;
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aSeriesColumnFillColor));
+            // Check column/bar fill style and color
+            Reference< beans::XPropertySet > xColumnOrBarPropSet(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
+            drawing::FillStyle aSeriesColumnOrBarFillStyle;
+            xColumnOrBarPropSet->getPropertyValue(UNO_NAME_FILLSTYLE) >>= aSeriesColumnOrBarFillStyle;
+            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aSeriesColumnOrBarFillStyle));
+            util::Color aSeriesColumnOrBarFillColor = 0;
+            xColumnOrBarPropSet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= aSeriesColumnOrBarFillColor;
+            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aSeriesColumnOrBarFillColor));
 
-            for (sal_Int32 nColumn = 0; nColumn < nColumnCountInSeries; ++nColumn)
+            for (sal_Int32 nColumnOrBar = 0; nColumnOrBar < nColumnOrBarCountInSeries; ++nColumnOrBar)
             {
-                uno::Reference<drawing::XShape> xColumn(xIndexAccess->getByIndex(nColumn), UNO_QUERY_THROW);
-                uno::Reference<container::XNamed> xNamedShape(xIndexAccess->getByIndex(nColumn), uno::UNO_QUERY);
+                uno::Reference<drawing::XShape> xColumnOrBar(xIndexAccess->getByIndex(nColumnOrBar), UNO_QUERY_THROW);
+                uno::Reference<container::XNamed> xNamedShape(xIndexAccess->getByIndex(nColumnOrBar), uno::UNO_QUERY);
                 CPPUNIT_DUMP_ASSERT_NOTE(xNamedShape->getName());
 
                 // Check size and position
-                awt::Point aColumnPosition = xColumn->getPosition();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnPosition.X, INT_EPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnPosition.Y, INT_EPS);
-                awt::Size aColumnSize = xColumn->getSize();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnSize.Height, INT_EPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnSize.Width, INT_EPS);
+                awt::Point aColumnOrBarPosition = xColumnOrBar->getPosition();
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnOrBarPosition.X, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnOrBarPosition.Y, INT_EPS);
+                awt::Size aColumnOrBarSize = xColumnOrBar->getSize();
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnOrBarSize.Height, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnOrBarSize.Width, INT_EPS);
 
                 // Check transformation
-                Reference< beans::XPropertySet > xPropSet(xColumn, UNO_QUERY_THROW);
+                Reference< beans::XPropertySet > xPropSet(xColumnOrBar, UNO_QUERY_THROW);
                 CPPUNIT_ASSERT(xPropSet.is());
-                drawing::HomogenMatrix3 aColumnTransformation;
-                xPropSet->getPropertyValue("Transformation") >>= aColumnTransformation;
-                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aColumnTransformation);
+                drawing::HomogenMatrix3 aColumnOrBarTransformation;
+                xPropSet->getPropertyValue("Transformation") >>= aColumnOrBarTransformation;
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aColumnOrBarTransformation);
             }
         }
     }

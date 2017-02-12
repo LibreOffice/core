@@ -1,0 +1,162 @@
+// nSeriesCount
+4
+/// Series 0 ColumnsOrBars
+// nColumnOrBarCountInSeries
+3
+// static_cast<sal_Int32>(aSeriesColumnOrBarFillStyle)
+1
+// static_cast<sal_Int32>(aSeriesColumnOrBarFillColor)
+16711807
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=2
+// aColumnOrBarPosition.X
+3582
+// aColumnOrBarPosition.Y
+1678
+// aColumnOrBarSize.Height
+1334
+// aColumnOrBarSize.Width
+3381
+// aColumnOrBarTransformation
+3381;0;3582;0;1334;1678;0;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=1
+// aColumnOrBarPosition.X
+3582
+// aColumnOrBarPosition.Y
+3679
+// aColumnOrBarSize.Height
+1335
+// aColumnOrBarSize.Width
+5422
+// aColumnOrBarTransformation
+5422;0;3582;0;1335;3679;0;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0
+// aColumnOrBarPosition.X
+3582
+// aColumnOrBarPosition.Y
+5681
+// aColumnOrBarSize.Height
+1334
+// aColumnOrBarSize.Width
+5562
+// aColumnOrBarTransformation
+5562;0;3582;0;1334;5681;0;0;1
+/// Series 1 ColumnsOrBars
+// nColumnOrBarCountInSeries
+3
+// static_cast<sal_Int32>(aSeriesColumnOrBarFillStyle)
+4
+// static_cast<sal_Int32>(aSeriesColumnOrBarFillColor)
+10079487
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=2
+// aColumnOrBarPosition.X
+6963
+// aColumnOrBarPosition.Y
+1678
+// aColumnOrBarSize.Height
+1334
+// aColumnOrBarSize.Width
+3804
+// aColumnOrBarTransformation
+3804;0;6963;0;1334;1678;0;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=1
+// aColumnOrBarPosition.X
+9004
+// aColumnOrBarPosition.Y
+3679
+// aColumnOrBarSize.Height
+1335
+// aColumnOrBarSize.Width
+3013
+// aColumnOrBarTransformation
+3013;0;9004;0;1335;3679;0;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=0
+// aColumnOrBarPosition.X
+9144
+// aColumnOrBarPosition.Y
+5681
+// aColumnOrBarSize.Height
+1334
+// aColumnOrBarSize.Width
+3982
+// aColumnOrBarTransformation
+3982;0;9144;0;1334;5681;0;0;1
+/// Series 2 ColumnsOrBars
+// nColumnOrBarCountInSeries
+3
+// static_cast<sal_Int32>(aSeriesColumnOrBarFillStyle)
+1
+// static_cast<sal_Int32>(aSeriesColumnOrBarFillColor)
+255
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=2
+// aColumnOrBarPosition.X
+10767
+// aColumnOrBarPosition.Y
+1678
+// aColumnOrBarSize.Height
+1334
+// aColumnOrBarSize.Width
+2255
+// aColumnOrBarTransformation
+2255;0;10767;0;1334;1678;0;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=1
+// aColumnOrBarPosition.X
+12017
+// aColumnOrBarPosition.Y
+3679
+// aColumnOrBarSize.Height
+1335
+// aColumnOrBarSize.Width
+2945
+// aColumnOrBarTransformation
+2945;0;12017;0;1335;3679;0;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=0
+// aColumnOrBarPosition.X
+13126
+// aColumnOrBarPosition.Y
+5681
+// aColumnOrBarSize.Height
+1334
+// aColumnOrBarSize.Width
+2023
+// aColumnOrBarTransformation
+2023;0;13126;0;1334;5681;0;0;1
+/// Series 3 ColumnsOrBars
+// nColumnOrBarCountInSeries
+3
+// static_cast<sal_Int32>(aSeriesColumnOrBarFillStyle)
+4
+// static_cast<sal_Int32>(aSeriesColumnOrBarFillColor)
+10079487
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=2
+// aColumnOrBarPosition.X
+13022
+// aColumnOrBarPosition.Y
+1678
+// aColumnOrBarSize.Height
+1334
+// aColumnOrBarSize.Width
+5295
+// aColumnOrBarTransformation
+5295;0;13022;0;1334;1678;0;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=1
+// aColumnOrBarPosition.X
+14962
+// aColumnOrBarPosition.Y
+3679
+// aColumnOrBarSize.Height
+1335
+// aColumnOrBarSize.Width
+3355
+// aColumnOrBarTransformation
+3355;0;14962;0;1335;3679;0;0;1
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=0
+// aColumnOrBarPosition.X
+15149
+// aColumnOrBarPosition.Y
+5681
+// aColumnOrBarSize.Height
+1334
+// aColumnOrBarSize.Width
+3168
+// aColumnOrBarTransformation
+3168;0;15149;0;1334;5681;0;0;1
