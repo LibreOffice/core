@@ -744,6 +744,72 @@ DECLARE_DUMP_TEST(ColumnChartTest, Chart2DumpTest, false)
     }
 }
 
+DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
+{
+    const std::vector<OUString> aTestFiles =
+    {
+        "chartwall_auto_adjust_with_titles.ods",
+        "chartwall_auto_adjust_without_titles.ods",
+        "chartwall_custom_positioning.ods"
+    };
+
+    for (const OUString& sTestFile : aTestFiles)
+    {
+        setTestFileName(sTestFile);
+        load(getTestFileDirName(), getTestFileName());
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShapes.is());
+
+        uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, "CID/DiagramWall=");
+        CPPUNIT_ASSERT(xChartWall.is());
+
+        // Check position and size
+        awt::Point aChartWallPosition = xChartWall->getPosition();
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aChartWallPosition.X);
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aChartWallPosition.Y);
+        awt::Size aChartWallSize = xChartWall->getSize();
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aChartWallSize.Height);
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aChartWallSize.Width);
+
+        // Check transformation
+        Reference< beans::XPropertySet > xPropSet(xChartWall, UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xPropSet.is());
+        drawing::HomogenMatrix3 aTransform;
+        xPropSet->getPropertyValue("Transformation") >>= aTransform;
+        OUString sChartWallTransformation = transformationToOneLineString(aTransform);
+        CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(sChartWallTransformation);
+
+        // Check fill properties
+        drawing::FillStyle aChartWallFillStyle;
+        xPropSet->getPropertyValue(UNO_NAME_FILLSTYLE) >>= aChartWallFillStyle;
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aChartWallFillStyle));
+        util::Color aChartWallFillColor = 0;
+        xPropSet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= aChartWallFillColor;
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aChartWallFillColor));
+
+        // Check line properties
+        // Line type
+        drawing::LineDash aLineDash;
+        xPropSet->getPropertyValue("LineDash") >>= aLineDash;
+        OUString sChartWallLineDash =
+            OUString::number(static_cast<sal_Int32>(aLineDash.Style)) + ";" + OUString::number(aLineDash.Dots) + ";" + OUString::number(aLineDash.DotLen) +
+            OUString::number(aLineDash.Dashes) + ";" + OUString::number(aLineDash.DashLen) + ";" + OUString::number(aLineDash.Distance);
+        CPPUNIT_DUMP_ASSERT_STRINGS_EQUAL(sChartWallLineDash);
+        // Line color
+        util::Color aChartWallLineColor = 0;
+        xPropSet->getPropertyValue("LineColor") >>= aChartWallLineColor;
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aChartWallLineColor));
+        // Line width
+        sal_Int32 nChartWallLineWidth = 0;
+        xPropSet->getPropertyValue("LineWidth") >>= nChartWallLineWidth;
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nChartWallLineWidth);
+
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
