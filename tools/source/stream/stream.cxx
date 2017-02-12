@@ -2002,7 +2002,7 @@ OString read_uInt8s_ToOString(SvStream& rStrm, std::size_t nLen)
     return pStr ? OString(pStr, SAL_NO_ACQUIRE) : OString();
 }
 
-//Create a OUString of nLen sal_Unicodes from rStream
+//Create a OUString of nLen sal_Unicode code units from rStream
 OUString read_uInt16s_ToOUString(SvStream& rStrm, std::size_t nLen)
 {
     rtl_uString *pStr = nullptr;

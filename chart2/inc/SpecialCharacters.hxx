@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_CHART2_INC_SPECIALUNICODES_HXX
-#define INCLUDED_CHART2_INC_SPECIALUNICODES_HXX
+#ifndef INCLUDED_CHART2_INC_SPECIALCHARACTERS_HXX
+#define INCLUDED_CHART2_INC_SPECIALCHARACTERS_HXX
 
 const sal_Unicode aMinusSign = 0x2212;
 const OUString aNewLine ("\n");

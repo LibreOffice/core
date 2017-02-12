@@ -30,7 +30,7 @@
 #include <comphelper/numbers.hxx>
 #include <comphelper/extract.hxx>
 
-#include <SpecialUnicodes.hxx>
+#include <SpecialCharacters.hxx>
 
 using namespace ::com::sun::star;
 

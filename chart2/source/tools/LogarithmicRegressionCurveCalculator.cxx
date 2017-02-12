@@ -20,7 +20,7 @@
 #include "LogarithmicRegressionCurveCalculator.hxx"
 #include "macros.hxx"
 #include "RegressionCalculationHelper.hxx"
-#include <SpecialUnicodes.hxx>
+#include <SpecialCharacters.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>

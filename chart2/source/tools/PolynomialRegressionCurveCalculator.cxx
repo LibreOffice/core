@@ -25,7 +25,7 @@
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <SpecialUnicodes.hxx>
+#include <SpecialCharacters.hxx>
 
 using namespace com::sun::star;
 

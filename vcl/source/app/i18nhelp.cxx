@@ -98,10 +98,10 @@ inline bool is_formatting_mark( sal_Unicode c )
 */
 OUString vcl::I18nHelper::filterFormattingChars( const OUString& rStr )
 {
-    sal_Int32 nUnicodes = rStr.getLength();
-    OUStringBuffer aBuf( nUnicodes );
+    sal_Int32 nLength = rStr.getLength();
+    OUStringBuffer aBuf( nLength );
     const sal_Unicode* pStr = rStr.getStr();
-    while( nUnicodes-- )
+    while( nLength-- )
     {
         if( ! is_formatting_mark( *pStr ) )
             aBuf.append( *pStr );

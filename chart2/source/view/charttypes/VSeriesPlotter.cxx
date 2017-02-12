@@ -52,7 +52,7 @@
 #include "BubbleChart.hxx"
 #include "NetChart.hxx"
 #include <unonames.hxx>
-#include <SpecialUnicodes.hxx>
+#include <SpecialCharacters.hxx>
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
