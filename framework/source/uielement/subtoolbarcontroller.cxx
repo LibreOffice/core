@@ -245,6 +245,7 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
                     // calc and set size for popup mode
                     Size aSize = pToolBar->CalcPopupWindowSizePixel();
                     pToolBar->SetSizePixel( aSize );
+                    pToolBar->SetMenuType( ToolBoxMenuType::NONE );
                     // open subtoolbox in popup mode
                     vcl::Window::GetDockingManager()->StartPopupMode( pToolBox, pToolBar );
                 }

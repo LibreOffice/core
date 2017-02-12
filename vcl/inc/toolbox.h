@@ -128,6 +128,7 @@ struct ImplToolBoxPrivateData
 
     // the optional custom menu
     VclPtr<PopupMenu>   mpMenu;
+    Rectangle       maMenuRect;
     ToolBoxMenuType maMenuType;
     ImplSVEvent *   mnEventId;
 
