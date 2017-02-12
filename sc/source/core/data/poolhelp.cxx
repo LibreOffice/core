@@ -40,11 +40,11 @@ ScPoolHelper::ScPoolHelper( ScDocument* pSourceDoc )
 
 ScPoolHelper::~ScPoolHelper()
 {
-    SfxItemPool::Free(pEnginePool);
-    SfxItemPool::Free(pEditPool);
+    delete pEnginePool;
+    delete pEditPool;
     delete pFormTable;
     mxStylePool.clear();
-    SfxItemPool::Free(pDocPool);
+    delete pDocPool;
 }
 SfxItemPool*        ScPoolHelper::GetEditPool() const
 {
