@@ -571,32 +571,27 @@ void ScPivotLayoutDialog::ApplySaveData(ScDPSaveData& rSaveData)
 
 void ScPivotLayoutDialog::ApplyLabelData(ScDPSaveData& rSaveData)
 {
-    ScDPLabelDataVector::const_iterator it;
     ScDPLabelDataVector& rLabelDataVector = GetLabelDataVector();
 
-    for (it = rLabelDataVector.begin(); it != rLabelDataVector.end(); ++it)
+    for (std::unique_ptr<ScDPLabelData> const & pLabelData : rLabelDataVector)
     {
-        const ScDPLabelData& rLabelData = *it->get();
-
-        OUString aUnoName = ScDPUtil::createDuplicateDimensionName(rLabelData.maName, rLabelData.mnDupCount);
+        OUString aUnoName = ScDPUtil::createDuplicateDimensionName(pLabelData->maName, pLabelData->mnDupCount);
         ScDPSaveDimension* pSaveDimensions = rSaveData.GetExistingDimensionByName(aUnoName);
 
         if (pSaveDimensions == nullptr)
             continue;
 
-        pSaveDimensions->SetUsedHierarchy(rLabelData.mnUsedHier);
-        pSaveDimensions->SetShowEmpty(rLabelData.mbShowAll);
-        pSaveDimensions->SetRepeatItemLabels(rLabelData.mbRepeatItemLabels);
-        pSaveDimensions->SetSortInfo(&rLabelData.maSortInfo);
-        pSaveDimensions->SetLayoutInfo(&rLabelData.maLayoutInfo);
-        pSaveDimensions->SetAutoShowInfo(&rLabelData.maShowInfo);
+        pSaveDimensions->SetUsedHierarchy(pLabelData->mnUsedHier);
+        pSaveDimensions->SetShowEmpty(pLabelData->mbShowAll);
+        pSaveDimensions->SetRepeatItemLabels(pLabelData->mbRepeatItemLabels);
+        pSaveDimensions->SetSortInfo(&pLabelData->maSortInfo);
+        pSaveDimensions->SetLayoutInfo(&pLabelData->maLayoutInfo);
+        pSaveDimensions->SetAutoShowInfo(&pLabelData->maShowInfo);
 
-        bool bManualSort = (rLabelData.maSortInfo.Mode == DataPilotFieldSortMode::MANUAL);
+        bool bManualSort = (pLabelData->maSortInfo.Mode == DataPilotFieldSortMode::MANUAL);
 
-        std::vector<ScDPLabelData::Member>::const_iterator itMember;
-        for (itMember = rLabelData.maMembers.begin(); itMember != rLabelData.maMembers.end(); ++itMember)
+        for (ScDPLabelData::Member const & rLabelMember : pLabelData->maMembers)
         {
-            const ScDPLabelData::Member& rLabelMember = *itMember;
             ScDPSaveMember* pMember = pSaveDimensions->GetMemberByName(rLabelMember.maName);
 
             if (bManualSort || !rLabelMember.mbVisible || !rLabelMember.mbShowDetails)
