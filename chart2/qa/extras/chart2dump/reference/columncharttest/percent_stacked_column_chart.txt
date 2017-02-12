@@ -17,7 +17,7 @@
 // aColumnSize.Width
 1965
 // aColumnTransformation
-1965;0;148780;1378;59710;0;1
+1965;0;14878;0;1378;5971;0;0;1
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=1
 // aColumnPosition.X
 9967
@@ -28,7 +28,7 @@
 // aColumnSize.Width
 1964
 // aColumnTransformation
-1964;0;99670;2210;51390;0;1
+1964;0;9967;0;2210;5139;0;0;1
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0
 // aColumnPosition.X
 5055
@@ -39,7 +39,7 @@
 // aColumnSize.Width
 1965
 // aColumnTransformation
-1965;0;50550;2267;50820;0;1
+1965;0;5055;0;2267;5082;0;0;1
 /// Series 1 Columns
 // nColumnCountInSeries
 3
@@ -57,7 +57,7 @@
 // aColumnSize.Width
 1965
 // aColumnTransformation
-1965;0;148780;1550;44210;0;1
+1965;0;14878;0;1550;4421;0;0;1
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=1
 // aColumnPosition.X
 9967
@@ -68,7 +68,7 @@
 // aColumnSize.Width
 1964
 // aColumnTransformation
-1964;0;99670;1227;39120;0;1
+1964;0;9967;0;1227;3912;0;0;1
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=0
 // aColumnPosition.X
 5055
@@ -79,7 +79,7 @@
 // aColumnSize.Width
 1965
 // aColumnTransformation
-1965;0;50550;1623;34590;0;1
+1965;0;5055;0;1623;3459;0;0;1
 /// Series 2 Columns
 // nColumnCountInSeries
 3
@@ -97,7 +97,7 @@
 // aColumnSize.Width
 1965
 // aColumnTransformation
-1965;0;148780;919;35020;0;1
+1965;0;14878;0;919;3502;0;0;1
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=1
 // aColumnPosition.X
 9967
@@ -108,7 +108,7 @@
 // aColumnSize.Width
 1964
 // aColumnTransformation
-1964;0;99670;1201;27110;0;1
+1964;0;9967;0;1201;2711;0;0;1
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=0
 // aColumnPosition.X
 5055
@@ -119,7 +119,7 @@
 // aColumnSize.Width
 1965
 // aColumnTransformation
-1965;0;50550;824;26350;0;1
+1965;0;5055;0;824;2635;0;0;1
 /// Series 3 Columns
 // nColumnCountInSeries
 3
@@ -137,7 +137,7 @@
 // aColumnSize.Width
 1965
 // aColumnTransformation
-1965;0;148780;2157;13450;0;1
+1965;0;14878;0;2157;1345;0;0;1
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=1
 // aColumnPosition.X
 9967
@@ -148,7 +148,7 @@
 // aColumnSize.Width
 1964
 // aColumnTransformation
-1964;0;99670;1366;13450;0;1
+1964;0;9967;0;1366;1345;0;0;1
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=0
 // aColumnPosition.X
 5055
@@ -159,4 +159,4 @@
 // aColumnSize.Width
 1965
 // aColumnTransformation
-1965;0;50550;1290;13450;0;1
+1965;0;5055;0;1290;1345;0;0;1

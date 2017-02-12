@@ -16,8 +16,8 @@
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;103040;212;84370;0;1
+// aLegendEntryTransformation
+801;0;10304;0;212;8437;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -36,8 +36,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;86940;212;84370;0;1
+// aLegendEntryTransformation
+801;0;8694;0;212;8437;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -56,8 +56,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;70840;212;84370;0;1
+// aLegendEntryTransformation
+801;0;7084;0;212;8437;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType
@@ -76,8 +76,8 @@ com.sun.star.drawing.PolyPolygonShape
 211
 // aLegendEntrySize.Width
 800
-// sLegendEntryTransformation
-801;0;54740;212;84370;0;1
+// aLegendEntryTransformation
+801;0;5474;0;212;8437;0;0;1
 // xLegendEntryContainer->getCount()
 3
 // sEntryGeomShapeType

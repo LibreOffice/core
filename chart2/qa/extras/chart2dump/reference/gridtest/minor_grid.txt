@@ -7,8 +7,8 @@
 6005
 // aGridSize.Width
 14515
-// sGridTransformation
-14516;0;35290;6006;13440;0;1
+// aGridTransformation
+14516;0;3529;0;6006;1344;0;0;1
 // sGridLineDash
 0;1;201;20;20
 // static_cast<sal_Int32>(aLineColor)
@@ -24,8 +24,8 @@
 6005
 // aGridSize.Width
 14515
-// sGridTransformation
-14516;0;35290;6006;13440;0;1
+// aGridTransformation
+14516;0;3529;0;6006;1344;0;0;1
 // sGridLineDash
 0;1;201;20;20
 // static_cast<sal_Int32>(aLineColor)
@@ -41,8 +41,8 @@
 5147
 // aGridSize.Width
 14515
-// sGridTransformation
-14516;0;35290;5148;17730;0;1
+// aGridTransformation
+14516;0;3529;0;5148;1773;0;0;1
 // sGridLineDash
 0;1;201;20;20
 // static_cast<sal_Int32>(aLineColor)
@@ -58,8 +58,8 @@
 6005
 // aGridSize.Width
 10886
-// sGridTransformation
-10887;0;53430;6006;13440;0;1
+// aGridTransformation
+10887;0;5343;0;6006;1344;0;0;1
 // sGridLineDash
 0;1;201;20;20
 // static_cast<sal_Int32>(aLineColor)

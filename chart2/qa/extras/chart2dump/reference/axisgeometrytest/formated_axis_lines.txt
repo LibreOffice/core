@@ -7,8 +7,8 @@
 495
 // aAxisSize.Width
 14439
-// sAxisTransformation
-14440;0;35100;496;75200;0;1
+// aAxisTransformation
+14440;0;3510;0;496;7520;0;0;1
 // nAxisGeometriesCount
 4
 // sAxisLineDash
@@ -26,8 +26,8 @@
 5932
 // aAxisSize.Width
 150
-// sAxisTransformation
-151;0;33600;5933;15880;0;1
+// aAxisTransformation
+151;0;3360;0;5933;1588;0;0;1
 // nAxisGeometriesCount
 2
 // sAxisLineDash
