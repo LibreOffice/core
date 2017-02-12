@@ -24,7 +24,8 @@
 
 #include <fstream>
 
-#define EPS 1E-12
+#define EPS         1E-12
+#define INT_EPS     1.1
 
 #define DECLARE_DUMP_TEST(TestName, BaseClass, DumpMode) \
     class TestName : public BaseClass { \
@@ -369,11 +370,11 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
         // Check legend position and size
         awt::Point aLegendPosition = xLegend->getPosition();
-        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLegendPosition.X);
-        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLegendPosition.Y);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.X, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.Y, INT_EPS);
         awt::Size aLegendSize = xLegend->getSize();
-        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLegendSize.Width);
-        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLegendSize.Height);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Width, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Height, INT_EPS);
 
         // Check legend entries
         uno::Reference< chart2::XChartDocument > xChartDoc2(xChartDoc, UNO_QUERY_THROW);
@@ -390,11 +391,11 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
             // Check position and size
             awt::Point aLegendEntryPosition = xLegendEntry->getPosition();
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLegendEntryPosition.X);
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLegendEntryPosition.Y);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.X, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.Y, INT_EPS);
             awt::Size aLegendEntrySize = xLegendEntry->getSize();
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLegendEntrySize.Height);
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLegendEntrySize.Width);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Height, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Width, INT_EPS);
 
             // Check transformation
             Reference< beans::XPropertySet > xLegendEntryPropSet(xLegendEntry, UNO_QUERY_THROW);
@@ -476,11 +477,11 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
                 CPPUNIT_DUMP_ASSERT_NOTE(sGridShapeName);
                 // Check position and size
                 awt::Point aGridPosition = xGrid->getPosition();
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aGridPosition.X);
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aGridPosition.Y);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aGridPosition.X, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aGridPosition.Y, INT_EPS);
                 awt::Size aGridSize = xGrid->getSize();
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aGridSize.Height);
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aGridSize.Width);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aGridSize.Height, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aGridSize.Width, INT_EPS);
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xGrid, UNO_QUERY_THROW);
@@ -549,11 +550,11 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
             CPPUNIT_DUMP_ASSERT_NOTE(sAxisShapeName);
             // Check position and size
             awt::Point aAxisPosition = xXAxis->getPosition();
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aAxisPosition.X);
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aAxisPosition.Y);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisPosition.X, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisPosition.Y, INT_EPS);
             awt::Size aAxisSize = xXAxis->getSize();
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aAxisSize.Height);
-            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aAxisSize.Width);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisSize.Height, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisSize.Width, INT_EPS);
 
             // Check transformation
             Reference< beans::XPropertySet > xPropSet(xXAxis, UNO_QUERY_THROW);
@@ -644,11 +645,11 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
                 // Check size and position
                 uno::Reference<drawing::XShape> xLabelShape(xLabel, uno::UNO_QUERY);
                 awt::Point aLabelPosition = xLabelShape->getPosition();
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLabelPosition.X);
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLabelPosition.Y);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.X, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.Y, INT_EPS);
                 awt::Size aLabelSize = xLabelShape->getSize();
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLabelSize.Height);
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aLabelSize.Width);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Height, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Width, INT_EPS);
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xLabelShape, UNO_QUERY_THROW);
@@ -725,11 +726,11 @@ DECLARE_DUMP_TEST(ColumnChartTest, Chart2DumpTest, false)
 
                 // Check size and position
                 awt::Point aColumnPosition = xColumn->getPosition();
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aColumnPosition.X);
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aColumnPosition.Y);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnPosition.X, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnPosition.Y, INT_EPS);
                 awt::Size aColumnSize = xColumn->getSize();
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aColumnSize.Height);
-                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(aColumnSize.Width);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnSize.Height, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aColumnSize.Width, INT_EPS);
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xColumn, UNO_QUERY_THROW);
