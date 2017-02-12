@@ -13,16 +13,12 @@ $(eval $(call gb_ExternalProject_register_targets,hunspell,\
 	build \
 ))
 
-hunspell_CXXFLAGS=$(CXXFLAGS)
+hunspell_CPPCLAGS=$(CPPFLAGS)
 
 ifneq (,$(filter ANDROID DRAGONFLY FREEBSD IOS LINUX NETBSD OPENBSD,$(OS)))
 ifneq (,$(gb_ENABLE_DBGUTIL))
-hunspell_CXXFLAGS+=-D_GLIBCXX_DEBUG
+hunspell_CPPFLAGS+=-D_GLIBCXX_DEBUG
 endif
-endif
-
-ifneq (,$(debug))
-hunspell_CXXFLAGS+=-g
 endif
 
 $(call gb_ExternalProject_get_state_target,hunspell,build):
@@ -34,7 +30,8 @@ $(call gb_ExternalProject_get_state_target,hunspell,build):
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
 			$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 			$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
-			CXXFLAGS="$(hunspell_CXXFLAGS)" \
+			$(if $(hunspell_CPPFLAGS),CPPFLAGS='$(hunspell_CPPFLAGS)') \
+			CXXFLAGS="$(CXXFLAGS) $(if $(debug),$(gb_COMPILERNOOPTFLAGS) $(gb_DEBUGINFO_FLAGS) $(gb_DEBUG_CXXFLAGS),$(gb_COMPILEROPTFLAGS))" \
 		&& cd src/hunspell && $(MAKE) \
 	)
 
