@@ -47,7 +47,7 @@ FadeEffectLB::~FadeEffectLB()
 
 void FadeEffectLB::dispose()
 {
-    delete mpImpl;
+    mpImpl.reset();
     ListBox::dispose();
 }
 

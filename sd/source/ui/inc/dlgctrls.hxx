@@ -26,6 +26,7 @@
 #include "sdresid.hxx"
 #include "fadedef.h"
 #include "sddllapi.h"
+#include <memory>
 
 /**
  * FadeEffectLB
@@ -39,7 +40,7 @@ public:
     virtual ~FadeEffectLB() override;
     virtual void dispose() override;
 
-    FadeEffectLBImpl*           mpImpl;
+    std::unique_ptr<FadeEffectLBImpl> mpImpl;
 };
 
 #endif // INCLUDED_SD_SOURCE_UI_INC_DLGCTRLS_HXX
