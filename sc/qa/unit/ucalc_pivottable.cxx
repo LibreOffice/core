@@ -26,6 +26,7 @@
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
+#include <com/sun/star/sheet/GeneralFunction2.hpp>
 
 namespace {
 
@@ -2486,6 +2487,83 @@ void Test::testPivotTableDPCollection()
                                  static_cast<ScDPObject*>(nullptr), pDPs->GetByName("Non"));
 
     // Clean-up
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableMedianFunc()
+{
+    m_pDoc->InsertTab(0, "Data");
+    m_pDoc->InsertTab(1, "Table");
+
+    // Raw data
+    const char* aData[][4] = {
+        { "Condition", "Day1Hit", "Day1Miss", "Day1FalseAlarm" },
+        { "False Memory", "7", "3", "0" },
+        { "Control", "10", "0", "1" },
+        { "False Memory", "9", "1", "0" },
+        { "Control", "9", "1", "2" },
+        { "False Memory", "7", "3", "3" },
+        { "Control", "10", "0", "0" },
+        { "False Memory", "9", "1", "1" },
+        { "Control", "6", "4", "2" },
+        { "False Memory", "8", "2", "1" },
+        { "Control", "7", "3", "3" },
+        { "False Memory", "9", "1", "1" },
+        { "Control", "10", "0", "0" },
+        { "False Memory", "10", "0", "0" },
+        { "Control", "10", "0", "0" },
+        { "False Memory", "10", "0", "0" },
+        { "Control", "9", "1", "1" },
+        { "False Memory", "10", "0", "0" },
+        { "Control", "10", "0", "0" },
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Condition", sheet::DataPilotFieldOrientation_ROW, 0, false },
+        { "Day1Hit", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction2::MEDIAN, false },
+        { "Day1Miss", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction2::MEDIAN, false },
+        { "Day1FalseAlarm", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction2::MEDIAN, false },
+    };
+
+    ScAddress aPos(1, 1, 0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("failed to insert range data at correct position", aPos, aDataRange.aStart);
+
+    std::unique_ptr<ScDPObject> pDPObj(createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false));
+    CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObj);
+
+    // Create a new pivot table output.
+    ScDBDocFunc aFunc(getDocShell());
+    bool bSuccess = aFunc.CreatePivotTable(*pDPObj, false, true);
+    CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table output via ScDBDocFunc.", bSuccess);
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    CPPUNIT_ASSERT_MESSAGE("Failed to get pivot table collection.", pDPs);
+    ScDPObject* pDPObject = &(*pDPs)[0];
+    ScRange aOutRange = pDPObject->GetOutRange();
+    {
+        // Expected output table content.  0 = empty cell
+       const char* aOutputCheck[][4] = {
+            { "Condition", "Data", nullptr },
+            { "Control", "Median - Day1Hit", "10" },
+            { nullptr, "Median - Day1Miss", "0" },
+            { nullptr, "Median - Day1FalseAlarm", "1", },
+            { "False Memory", "Median - Day1Hit", "9" },
+            { nullptr, "Median - Day1Miss", "1" },
+            { nullptr, "Median - Day1FalseAlarm", "0", "0" },
+            { "Total Median - Day1Hit", nullptr, "9", nullptr },
+            { "Total Median - Day1Miss", nullptr, "1", nullptr },
+            { "Total Median - Day1FalseAlarm", nullptr, "0.5", nullptr }
+        };
+
+        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "Pivot table created via ScDBDocFunc");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    bSuccess = aFunc.RemovePivotTable(*pDPObject, false, true);
+
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
