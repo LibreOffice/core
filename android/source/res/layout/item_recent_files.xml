@@ -12,23 +12,27 @@
     android:layout_height="48dp"
     android:orientation="horizontal"
     android:background="?android:attr/selectableItemBackground"
+    android:layout_marginStart="@dimen/list_item_margin"
+    android:layout_marginLeft="@dimen/list_item_margin"
+    android:layout_marginEnd="@dimen/list_item_margin"
+    android:layout_marginRight="@dimen/list_item_margin"
     tools:ignore="UseCompoundDrawables">
     <!--using compound drawables is ignored because more control over the drawable size is needed-->
 
     <ImageView
         android:layout_width="32dp"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginEnd="@dimen/file_icon_margin_end"
+        android:layout_marginRight="@dimen/file_icon_margin_end"
         android:adjustViewBounds="true"
         android:id="@+id/imageView"
         android:contentDescription="@string/file_icon_desc"/>
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/textView"
-        style="@style/ListItemText"/>
-
+        style="@style/ListItemText"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 </LinearLayout>
