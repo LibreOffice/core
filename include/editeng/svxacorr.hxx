@@ -73,7 +73,7 @@ const long ChgWordLstLoad   = 0x20000000;   // Replacement list loaded
 const long CplSttLstLoad    = 0x40000000;   // Exception list for Capital letters Start loaded
 const long WrdSttLstLoad    = 0x80000000;   // Exception list for Word Start loaded
 
-// TODO: handle unicodes > U+FFFF and check users of this class
+// TODO: handle code points > U+FFFF and check users of this class
 
 // only a mapping class
 class EDITENG_DLLPUBLIC SvxAutoCorrDoc
