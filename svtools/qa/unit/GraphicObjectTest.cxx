@@ -311,7 +311,7 @@ void GraphicObjectTest::testTdf88935()
 
 void GraphicObjectTest::testPdf()
 {
-#if HAVE_FEATURE_PDFIMPORT
+#if HAVE_FEATURE_PDFIUM
     uno::Reference<lang::XComponent> xComponent = loadFromDesktop(m_directories.getURLFromSrc("svtools/qa/unit/data/pdf.odt"), "com.sun.star.text.TextDocument");
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument*>(xComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);

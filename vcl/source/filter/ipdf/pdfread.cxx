@@ -9,60 +9,108 @@
 
 #include "pdfread.hxx"
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XFilter.hpp>
-#include <com/sun/star/document/XImporter.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <config_features.h>
 
-#include <comphelper/processfactory.hxx>
-#include <comphelper/propertyvalue.hxx>
-#include <comphelper/scopeguard.hxx>
-#include <unotools/streamwrap.hxx>
-#include <vcl/wmf.hxx>
+#if HAVE_FEATURE_PDFIUM
+#ifdef WNT
+#include <prewin.h>
+#endif
+#include <fpdfview.h>
+#include <fpdf_edit.h>
+#ifdef WNT
+#include <postwin.h>
+#endif
+#endif
+
+#include <vcl/bitmapaccess.hxx>
 
 using namespace com::sun::star;
 
 namespace
 {
 
-/// Imports a PDF stream into Draw.
-uno::Reference<lang::XComponent> importIntoDraw(SvStream& rStream)
+/// Convert to inch, then assume 96 DPI.
+double pointToPixel(double fPoint)
 {
-    // Create an empty Draw component.
-    uno::Reference<frame::XDesktop2> xDesktop = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-    uno::Reference<frame::XComponentLoader> xComponentLoader(xDesktop, uno::UNO_QUERY);
-    uno::Sequence<beans::PropertyValue> aLoadArguments =
-    {
-        comphelper::makePropertyValue("Hidden", true)
-    };
-    uno::Reference<lang::XComponent> xComponent = xComponentLoader->loadComponentFromURL("private:factory/sdraw", "_default", 0, aLoadArguments);
+    return fPoint / 72 * 96;
+}
 
-    // Import the PDF into it.
-    uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(comphelper::getProcessServiceFactory());
-    // Need to go via FilterFactory, otherwise XmlFilterAdaptor::initialize() is not called.
-    uno::Reference<lang::XMultiServiceFactory> xFilterFactory(xMultiServiceFactory->createInstance("com.sun.star.document.FilterFactory"), uno::UNO_QUERY);
-    uno::Reference<document::XFilter> xFilter(xFilterFactory->createInstanceWithArguments("draw_pdf_import", uno::Sequence<uno::Any>()), uno::UNO_QUERY);
-    uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY);
-    xImporter->setTargetDocument(xComponent);
+/// Does PDF to PNG conversion using pdfium.
+bool generatePreview(SvStream& rStream, Graphic& rGraphic)
+{
+#if HAVE_FEATURE_PDFIUM
+    FPDF_LIBRARY_CONFIG aConfig;
+    aConfig.version = 2;
+    aConfig.m_pUserFontPaths = nullptr;
+    aConfig.m_pIsolate = nullptr;
+    aConfig.m_v8EmbedderSlot = 0;
+    FPDF_InitLibraryWithConfig(&aConfig);
 
-    uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(rStream));
-    uno::Sequence<beans::PropertyValue> aImportArguments =
-    {
-        // XmlFilterAdaptor::importImpl() mandates URL, even if it's empty.
-        comphelper::makePropertyValue("URL", OUString()),
-        comphelper::makePropertyValue("InputStream", xStream),
-    };
+    // Read input into a buffer.
+    SvMemoryStream aInBuffer;
+    aInBuffer.WriteStream(rStream);
 
-    if (xFilter->filter(aImportArguments))
-        return xComponent;
-    else
+    // Load the buffer using pdfium.
+    FPDF_DOCUMENT pPdfDocument = FPDF_LoadMemDocument(aInBuffer.GetData(), aInBuffer.GetSize(), /*password=*/nullptr);
+    if (!pPdfDocument)
+        return false;
+
+    // Render the first page.
+    FPDF_PAGE pPdfPage = FPDF_LoadPage(pPdfDocument, /*page_index=*/0);
+    if (!pPdfPage)
+        return false;
+
+    // Returned unit is points, convert that to pixel.
+    int nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage));
+    int nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage));
+    FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
+    if (!pPdfBitmap)
+        return false;
+
+    FPDF_DWORD nColor = FPDFPage_HasTransparency(pPdfPage) ? 0x00000000 : 0xFFFFFFFF;
+    FPDFBitmap_FillRect(pPdfBitmap, 0, 0, nPageWidth, nPageHeight, nColor);
+    FPDF_RenderPageBitmap(pPdfBitmap, pPdfPage, /*start_x=*/0, /*start_y=*/0, nPageWidth, nPageHeight, /*rotate=*/0, /*flags=*/0);
+
+    // Save the buffer as a bitmap.
+    Bitmap aBitmap(Size(nPageWidth, nPageHeight), 32);
     {
-        xComponent->dispose();
-        return uno::Reference<lang::XComponent>();
+        Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
+        const char* pPdfBuffer = static_cast<const char*>(FPDFBitmap_GetBuffer(pPdfBitmap));
+#ifndef MACOSX
+        std::memcpy(pWriteAccess->GetBuffer(), pPdfBuffer, nPageWidth * nPageHeight * 4);
+#else
+        // ARGB -> BGRA
+        for (int nRow = 0; nRow < nPageHeight; ++nRow)
+        {
+            int nStride = FPDFBitmap_GetStride(pPdfBitmap);
+            const char* pPdfLine = pPdfBuffer + (nStride * nRow);
+            Scanline pRow = pWriteAccess->GetBuffer() + (nPageWidth * nRow * 4);
+            for (int nCol = 0; nCol < nPageWidth; ++nCol)
+            {
+                pRow[nCol * 4] = pPdfLine[(nCol * 4) + 3];
+                pRow[(nCol * 4) + 1] = pPdfLine[(nCol * 4) + 2];
+                pRow[(nCol * 4) + 2] = pPdfLine[(nCol * 4) + 1];
+                pRow[(nCol * 4) + 3] = pPdfLine[nCol * 4];
+            }
+        }
+#endif
     }
+    BitmapEx aBitmapEx(aBitmap);
+#if defined(WNT) || defined(MACOSX)
+    aBitmapEx.Mirror(BmpMirrorFlags::Vertical);
+#endif
+    rGraphic = aBitmapEx;
+
+    FPDFBitmap_Destroy(pPdfBitmap);
+    FPDF_ClosePage(pPdfPage);
+    FPDF_CloseDocument(pPdfDocument);
+    FPDF_DestroyLibrary();
+#else
+    (void)rStream;
+    (void)rGraphic;
+#endif
+
+    return true;
 }
 
 }
@@ -72,36 +120,9 @@ namespace vcl
 
 bool ImportPDF(SvStream& rStream, Graphic& rGraphic)
 {
-    uno::Reference<lang::XComponent> xComponent = importIntoDraw(rStream);
-    if (!xComponent.is())
-        return false;
-    comphelper::ScopeGuard aGuard([&xComponent]()
-    {
-        xComponent->dispose();
-    });
-
     // Get the preview of the first page.
-    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(xComponent, uno::UNO_QUERY);
-    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
-    if (xDrawPages->getCount() <= 0)
+    if (!generatePreview(rStream, rGraphic))
         return false;
-
-    uno::Reference<beans::XPropertySet> xFirstPage(xDrawPages->getByIndex(0), uno::UNO_QUERY);
-    uno::Sequence<sal_Int8> aSequence;
-    if (!(xFirstPage->getPropertyValue("PreviewMetafile") >>= aSequence))
-        return false;
-
-    if (!aSequence.hasElements())
-        return false;
-
-    // Convert it into a GDIMetaFile.
-    SvMemoryStream aPreviewStream(aSequence.getLength());
-    aPreviewStream.WriteBytes(aSequence.getArray(), aSequence.getLength());
-    aPreviewStream.Seek(0);
-    GDIMetaFile aMtf;
-    aMtf.Read(aPreviewStream);
-
-    rGraphic = aMtf;
 
     // Save the original PDF stream for later use.
     rStream.Seek(STREAM_SEEK_TO_END);

@@ -927,7 +927,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rMarkList.GetMarkCount() == 1 )
             {
                 const SdrGrafObj* pObj = dynamic_cast<const SdrGrafObj*>(rMarkList.GetMark(0)->GetMarkedSdrObj());
-                if (pObj && (pObj->GetGraphicType() == GraphicType::Bitmap || pObj->GetGraphicObject().GetGraphic().getPdfData().hasElements()))
+                if (pObj && pObj->GetGraphicType() == GraphicType::Bitmap)
                 {
                     GraphicObject aGraphicObject(pObj->GetGraphicObject());
                     {
