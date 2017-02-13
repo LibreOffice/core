@@ -44,7 +44,7 @@ RscTypCont::RscTypCont( RscError * pErrHdl,
     , aSearchPath( rSearchPath )
     , nUniqueId(256)
     , nFilePos( 0 )
-    , nPMId(RSC_VERSIONCONTROL +1) // at least one more
+    , nPMId(RSC_VERSIONCONTROL + RESOURCE_TYPE(1)) // at least one more
     , aBool( pHS->getID( "sal_Bool" ), RSC_NOTYPE )
     , aShort( pHS->getID( "short" ), RSC_NOTYPE )
     , aUShort( pHS->getID( "sal_uInt16" ), RSC_NOTYPE )
@@ -300,17 +300,17 @@ void RscEnumerateObj::WriteRcFile( RscWriteRc & rMem, FILE * fOut )
     /*
     struct RSHEADER_TYPE{
         sal_uInt32          nId;        // resource identifier
-        sal_uInt32          nRT;        // resource type
+        RESOURCE_TYPE       nRT;        // resource type
         sal_uInt32          nGlobOff;   // global offset
         sal_uInt32          nLocalOff;  // local offset
     } aHeader;
     */
 
     sal_uInt32 nId = rMem.GetLong( 0 );
-    sal_uInt32 nRT = rMem.GetLong( 4 );
+    RESOURCE_TYPE nRT(rMem.GetLong( 4 ));
 
     // table is filled with nId and nRT
-    pTypCont->PutTranslatorKey( (sal_uInt64(nRT) << 32) + sal_uInt64(nId) );
+    pTypCont->PutTranslatorKey( (sal_uInt64(sal_uInt32(nRT)) << 32) + sal_uInt64(nId) );
 
     if( nRT == RSC_VERSIONCONTROL )
     { // always comes last

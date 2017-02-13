@@ -34,7 +34,7 @@ class RscFlag : public RscConst
     };
     RSCINST         CreateBasic( RSCINST * pInst );
 public:
-                    RscFlag( Atom nId, sal_uInt32 nTypId );
+                    RscFlag( Atom nId, RESOURCE_TYPE nTypId );
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;
     RSCINST         CreateClient( RSCINST * pInst, const RSCINST & rDflt,
                                   bool bOwnClass, Atom nConsId );
@@ -67,7 +67,7 @@ class RscClient : public RscTop
     RscFlag *       pRefClass;  // class which is used as server
     Atom            nConstId;   // id of the value to set
 public:
-                    RscClient( Atom nId, sal_uInt32 nTypId, RscFlag * pClass,
+                    RscClient( Atom nId, RESOURCE_TYPE nTypId, RscFlag * pClass,
                                Atom nConstantId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDflt, bool bOwnClass = false ) override;

@@ -34,7 +34,7 @@ class RscString : public RscTop
         RscId   aRefId; // reference name
     };
 public:
-                    RscString( Atom nId, sal_uInt32 nTypId );
+                    RscString( Atom nId, RESOURCE_TYPE nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
 
     void            SetRefClass( RscTop * pClass ) { pRefClass = pClass; }

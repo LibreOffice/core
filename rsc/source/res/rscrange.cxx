@@ -24,7 +24,7 @@
 
 #include <rscrange.hxx>
 
-RscRange::RscRange( Atom nId, sal_uInt32 nTypeId )
+RscRange::RscRange( Atom nId, RESOURCE_TYPE nTypeId )
     : RscTop( nId, nTypeId )
     , nMin(0), nMax(0)
 {
@@ -135,7 +135,7 @@ ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     return ERR_OK;
 }
 
-RscLongRange::RscLongRange( Atom nId, sal_uInt32 nTypeId )
+RscLongRange::RscLongRange( Atom nId, RESOURCE_TYPE nTypeId )
     : RscTop( nId, nTypeId )
     , nMin(0), nMax(0)
 {
@@ -241,7 +241,7 @@ ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     return ERR_OK;
 }
 
-RscLongEnumRange::RscLongEnumRange( Atom nId, sal_uInt32 nTypeId )
+RscLongEnumRange::RscLongEnumRange( Atom nId, RESOURCE_TYPE nTypeId )
     : RscLongRange( nId, nTypeId )
 {
 }
@@ -252,7 +252,7 @@ ERRTYPE RscLongEnumRange::SetConst( const RSCINST & rInst, Atom /*nConst*/,
     return SetNumber( rInst, nValue );
 }
 
-RscIdRange::RscIdRange( Atom nId, sal_uInt32 nTypeId )
+RscIdRange::RscIdRange( Atom nId, RESOURCE_TYPE nTypeId )
     : RscTop( nId, nTypeId )
     , nMin(0), nMax(0)
 {
@@ -389,7 +389,7 @@ bool RscIdRange::IsConsistent( const RSCINST & rInst )
 
 }
 
-RscBool::RscBool( Atom nId, sal_uInt32 nTypeId )
+RscBool::RscBool( Atom nId, RESOURCE_TYPE nTypeId )
     : RscRange( nId, nTypeId )
 {
     RscRange::SetRange( 0, 1 );

@@ -26,7 +26,7 @@
 #include <rschash.hxx>
 #include <tools/resid.hxx>
 
-RscConst::RscConst( Atom nId, sal_uInt32 nTypeId )
+RscConst::RscConst( Atom nId, RESOURCE_TYPE nTypeId )
     : RscTop( nId, nTypeId )
     , pVarArray(nullptr), nEntries(0)
 {
@@ -98,7 +98,7 @@ sal_uInt32 RscConst::GetConstPos( Atom nConst )
     return nEntries;
 }
 
-RscEnum::RscEnum( Atom nId, sal_uInt32 nTypeId )
+RscEnum::RscEnum( Atom nId, RESOURCE_TYPE nTypeId )
     : RscConst( nId, nTypeId )
 {
 }

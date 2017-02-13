@@ -59,7 +59,7 @@ protected:
     void            WriteSrcArray( const RSCINST & rInst, FILE * fOutput,
                                    RscTypCont * pTC, sal_uInt32 nTab, const char * );
 public:
-                    RscArray( Atom nId, sal_uInt32 nTypId,
+                    RscArray( Atom nId, RESOURCE_TYPE nTypId,
                               RscTop * pSuper, RscEnum * pTypeClass );
                     virtual ~RscArray() override;
     virtual RSCCLASS_TYPE   GetClassType() const override;
@@ -94,7 +94,7 @@ public:
 class RscLangArray : public RscArray
 {
 public:
-                    RscLangArray( Atom nId, sal_uInt32 nTypId,
+                    RscLangArray( Atom nId, RESOURCE_TYPE nTypId,
                                   RscTop * pSuper, RscEnum * pTypeClass );
     virtual RSCCLASS_TYPE   GetClassType() const override;
 };

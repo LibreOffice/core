@@ -26,7 +26,7 @@
 #include <rscmgr.hxx>
 #include <rscdb.hxx>
 
-RscMgr::RscMgr( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
+RscMgr::RscMgr( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuperCl )
     : RscClass( nId, nTypeId, pSuperCl )
 {
 }

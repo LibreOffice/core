@@ -28,7 +28,7 @@
 #include <rtl/textcvt.h>
 #include <rtl/textenc.h>
 
-RscString::RscString( Atom nId, sal_uInt32 nTypeId )
+RscString::RscString( Atom nId, RESOURCE_TYPE nTypeId )
     : RscTop( nId, nTypeId )
     , pRefClass(nullptr)
 {
