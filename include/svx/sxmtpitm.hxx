@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 
 enum class SdrMeasureTextHPos { Auto, LeftOutside, Inside, RightOutside };
-enum class SdrMeasureTextVPos { Auto, Above, BreakedLine, Below, VerticalCentered };
+enum class SdrMeasureTextVPos { Auto, Above, Below, VerticalCentered };
 
 
 // class SdrMeasureTextHPosItem
