@@ -109,9 +109,6 @@ using namespace ::com::sun::star::beans;
 #ifndef WM_MOUSEHWHEEL
 # define WM_MOUSEHWHEEL 0x020E
 #endif
-#ifndef IDC_PEN
-# define IDC_PEN MAKEINTRESOURCE(32631)
-#endif
 
 const unsigned int WM_USER_SYSTEM_WINDOW_ACTIVATED = RegisterWindowMessageA("SYSTEM_WINDOW_ACTIVATED");
 
