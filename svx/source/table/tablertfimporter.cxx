@@ -50,10 +50,9 @@ namespace sdr { namespace table {
 struct RTFCellDefault
 {
     SfxItemSet          maItemSet;
-    sal_Int32           mnCol;
     sal_Int32           mnColSpan;   // MergeCell if >1, merged cells if 0
 
-    explicit RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnCol(0), mnColSpan(1) {}
+    explicit RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnColSpan(1) {}
 };
 
 typedef std::vector< std::shared_ptr< RTFCellDefault > > RTFCellDefaultVector;
@@ -106,7 +105,6 @@ private:
 
     sal_Int32       mnStartPara;
 
-    sal_Int32       mnColCnt;
     sal_Int32       mnRowCnt;
     sal_Int32       mnLastEdge;
 
@@ -132,7 +130,6 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 , mnLastToken( 0 )
 , mbNewDef( false )
 , mnStartPara( 0 )
-, mnColCnt( 0 )
 , mnRowCnt( 0 )
 , mpActDefault( nullptr )
 , mpDefMerge( nullptr )
@@ -206,7 +203,6 @@ void SdrTableRTFParser::NextRow()
 
 void SdrTableRTFParser::InsertCell( ImportInfo* pInfo )
 {
-    sal_Int32 nCol = mpActDefault->mnCol;
 
     RTFCellInfoPtr xCellInfo( new RTFCellInfo(mrItemPool) );
 
@@ -216,11 +212,7 @@ void SdrTableRTFParser::InsertCell( ImportInfo* pInfo )
     if( !maRows.empty() )
     {
         RTFColumnVectorPtr xColumn( maRows.back() );
-
-        if( xColumn->size() <= (size_t)nCol )
-            xColumn->resize( nCol+1 );
-
-        (*xColumn)[nCol] = xCellInfo;
+        xColumn->push_back( xCellInfo );
     }
 
     mnStartPara = pInfo->aSelection.nEndPara - 1;
@@ -342,7 +334,6 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
     {
         case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
         {
-            mnColCnt = 0;
             maDefaultList.clear();
             mpDefMerge = nullptr;
             mnLastToken = pInfo->nToken;
@@ -370,7 +361,6 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
         case RTF_CELLX:         // closes cell default
         {
             mbNewDef = true;
-            mpInsDefault->mnCol = mnColCnt;
             maDefaultList.push_back( std::shared_ptr< RTFCellDefault >( mpInsDefault ) );
 
 
@@ -379,7 +369,6 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
                 InsertColumnEdge( nSize );
 
             mpInsDefault = new RTFCellDefault( &mrItemPool );
-            mnColCnt++;
 
             mnLastToken = pInfo->nToken;
         }
