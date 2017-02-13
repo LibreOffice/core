@@ -498,7 +498,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
 
     uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
     uno::Reference< document::XStorageBasedDocument > xDoc( xDocument, uno::UNO_QUERY );
-    if ( !xDoc.is() && !xLoadable.is() ) ///BUG: This should be || instead of && ?
+    if ( !xDoc.is() && !xLoadable.is() )
         throw uno::RuntimeException();
 
     ::comphelper::NamedValueCollection aLoadArgs;
