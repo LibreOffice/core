@@ -59,7 +59,6 @@ SvxGradientTabPage::SvxGradientTabPage
 
     m_pnGradientListState ( nullptr ),
     m_pnColorListState    ( nullptr ),
-    m_pPos                ( nullptr ),
 
     m_aXFStyleItem        ( drawing::FillStyle_GRADIENT ),
     m_aXGradientItem      ( OUString(), XGradient( COL_BLACK, COL_WHITE ) ),
@@ -170,7 +169,7 @@ void SvxGradientTabPage::Construct()
     m_pGradientLB->FillPresetListBox( *m_pGradientList );
 }
 
-void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
+void SvxGradientTabPage::ActivatePage( const SfxItemSet& /*rSet*/ )
 {
     if( m_pColorList.is() )
     {
@@ -201,17 +200,9 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
         }
         else
             aString += aURL.getBase();
-
-        *m_pPos = SearchGradientList( ( &static_cast<const XFillGradientItem&>( rSet.Get(XATTR_FILLGRADIENT) ) )->GetName() );
-        if ( *m_pPos != LISTBOX_ENTRY_NOTFOUND )
-        {
-            sal_uInt16 nId = m_pGradientLB->GetItemId( static_cast<size_t>( *m_pPos ) );
-            m_pGradientLB->SelectItem( nId );
-        }
+      
         // colors could have been deleted
         ChangeGradientHdl_Impl();
-
-        *m_pPos = LISTBOX_ENTRY_NOTFOUND;
     }
 }
 
@@ -227,26 +218,16 @@ DeactivateRC SvxGradientTabPage::DeactivatePage( SfxItemSet* _pSet )
 bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
     std::unique_ptr<XGradient> pXGradient;
-    OUString      aString;
-    size_t        nPos = m_pGradientLB->GetSelectItemPos();
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-    {
-        pXGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
-        aString = m_pGradientLB->GetItemText( m_pGradientLB->GetSelectItemId() );
-    }
-    else
-    // gradient was passed (unidentified)
-    {
-        pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
-                    m_pLbColorTo->GetSelectEntryColor(),
-                    (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
-                    static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
-                    (sal_uInt16) m_pMtrCenterX->GetValue(),
-                    (sal_uInt16) m_pMtrCenterY->GetValue(),
-                    (sal_uInt16) m_pMtrBorder->GetValue(),
-                    (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                    (sal_uInt16) m_pMtrColorTo->GetValue() ));
-    }
+
+    pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
+        m_pLbColorTo->GetSelectEntryColor(),
+        (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+        static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+        (sal_uInt16) m_pMtrCenterX->GetValue(),
+        (sal_uInt16) m_pMtrCenterY->GetValue(),
+        (sal_uInt16) m_pMtrBorder->GetValue(),
+        (sal_uInt16) m_pMtrColorFrom->GetValue(),
+        (sal_uInt16) m_pMtrColorTo->GetValue() ));
 
     sal_uInt16 nValue = 0;
     if( !m_pCbIncrement->IsChecked() )
@@ -254,7 +235,7 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 
     assert( pXGradient && "XGradient could not be created" );
     rSet->Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
-    rSet->Put( XFillGradientItem( aString, *pXGradient ) );
+    rSet->Put( XFillGradientItem( "gradient", *pXGradient ) );
     rSet->Put( XGradientStepCountItem( nValue ) );
     return true;
 }
