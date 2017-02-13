@@ -860,6 +860,82 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
     }
 }
 
+DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
+{
+    const std::vector<OUString> aTestFiles =
+    {
+        "normal_pie_chart.ods",
+        "rotated_pie_chart.ods",
+        "exploded_pie_chart.ods",
+        "donut_chart.ods",
+        "pie_chart_many_slices.ods"
+    };
+
+    for (const OUString& sTestFile : aTestFiles)
+    {
+        setTestFileName(sTestFile);
+        load(getTestFileDirName(), getTestFileName());
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShapes.is());
+
+        uno::Reference< chart2::XChartDocument > xChartDoc2(xChartDoc, UNO_QUERY_THROW);
+        Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc2, 0);
+        CPPUNIT_ASSERT(xChartType.is());
+
+        std::vector<std::vector<double> > aDataSeriesYValues = getDataSeriesYValuesFromChartType(xChartType);
+        size_t nSeriesCount = aDataSeriesYValues.size();
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nSeriesCount);
+
+        for (size_t nSeries = 0; nSeries < nSeriesCount; ++nSeries)
+        {
+            uno::Reference<drawing::XShape> xSeriesSlices = getShapeByName(xShapes, "CID/D=0:CS=0:CT=0:Series=" + OUString::number(nSeries));
+            if (!xSeriesSlices.is())
+                break; // Normal pie chart displays only one series
+            CPPUNIT_DUMP_ASSERT_NOTE("Series " + OUString::number(nSeries) + " slices");
+
+            // Check slice count in the series
+            uno::Reference<container::XIndexAccess> xIndexAccess(xSeriesSlices, UNO_QUERY_THROW);
+            sal_Int32 nSlicesCountInSeries = xIndexAccess->getCount();
+            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nSlicesCountInSeries);
+
+            // Check slices properties
+            for (sal_Int32 nSlice = 0; nSlice < nSlicesCountInSeries; ++nSlice)
+            {
+                uno::Reference<drawing::XShape> xSlice(xIndexAccess->getByIndex(nSlice), UNO_QUERY_THROW);
+                uno::Reference<container::XNamed> xNamedShape(xIndexAccess->getByIndex(nSlice), uno::UNO_QUERY);
+                CPPUNIT_DUMP_ASSERT_NOTE(xNamedShape->getName());
+
+                // Check size and position
+                awt::Point aSlicePosition = xSlice->getPosition();
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aSlicePosition.X, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aSlicePosition.Y, INT_EPS);
+                awt::Size aSliceSize = xSlice->getSize();
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aSliceSize.Height, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aSliceSize.Width, INT_EPS);
+
+                // Check transformation
+                Reference< beans::XPropertySet > xPropSet(xSlice, UNO_QUERY_THROW);
+                CPPUNIT_ASSERT(xPropSet.is());
+                drawing::HomogenMatrix3 aSliceTransformation;
+                xPropSet->getPropertyValue("Transformation") >>= aSliceTransformation;
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aSliceTransformation);
+
+                // Check slice fill style and color
+                drawing::FillStyle aSliceFillStyle;
+                xPropSet->getPropertyValue(UNO_NAME_FILLSTYLE) >>= aSliceFillStyle;
+                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aSliceFillStyle));
+                util::Color aSliceFillColor = 0;
+                xPropSet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= aSliceFillColor;
+                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aSliceFillColor));
+            }
+        }
+    }
+}
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
