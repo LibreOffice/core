@@ -507,11 +507,6 @@ void SdrHdl::CreateB2dIAObject()
                 eKindOfMarker = BitmapMarkerKind::Glue;
                 break;
             }
-            case SdrHdlKind::GlueDeselected:
-            {
-                eKindOfMarker = BitmapMarkerKind::Glue_Deselected;
-                break;
-            }
             case SdrHdlKind::Anchor:
             {
                 eKindOfMarker = BitmapMarkerKind::Anchor;
@@ -1018,7 +1013,6 @@ Pointer SdrHdl::GetPointer() const
                 case SdrHdlKind::Ref2 : ePtr=PointerStyle::RefHand;   break;
                 case SdrHdlKind::BezierWeight : ePtr=PointerStyle::MoveBezierWeight; break;
                 case SdrHdlKind::Glue : ePtr=PointerStyle::MovePoint; break;
-                case SdrHdlKind::GlueDeselected : ePtr=PointerStyle::MovePoint; break;
                 case SdrHdlKind::CustomShape1 : ePtr=PointerStyle::Hand; break;
                 default:
                     break;
@@ -1055,7 +1049,6 @@ bool SdrHdl::IsFocusHdl() const
         case SdrHdlKind::Ref1:      // reference point 1, e. g. center of rotation
         case SdrHdlKind::Ref2:      // reference point 2, e. g. endpoint of reflection axis
         case SdrHdlKind::Glue:      // glue point
-        case SdrHdlKind::GlueDeselected:      // deselected glue point, used to be a little blue cross
 
         // for SJ and the CustomShapeHandles:
         case SdrHdlKind::CustomShape1:
@@ -1836,11 +1829,11 @@ static bool ImpSdrHdlListSorter(SdrHdl* const& lhs, SdrHdl* const& rhs)
     if (eKind1!=eKind2)
     {
         if (eKind1==SdrHdlKind::Ref1 || eKind1==SdrHdlKind::Ref2 || eKind1==SdrHdlKind::MirrorAxis) n1=5;
-        else if (eKind1==SdrHdlKind::Glue || eKind1==SdrHdlKind::GlueDeselected) n1=2;
+        else if (eKind1==SdrHdlKind::Glue) n1=2;
         else if (eKind1==SdrHdlKind::User) n1=3;
         else if (eKind1==SdrHdlKind::SmartTag) n1=0;
         if (eKind2==SdrHdlKind::Ref1 || eKind2==SdrHdlKind::Ref2 || eKind2==SdrHdlKind::MirrorAxis) n2=5;
-        else if (eKind2==SdrHdlKind::Glue || eKind2==SdrHdlKind::GlueDeselected) n2=2;
+        else if (eKind2==SdrHdlKind::Glue) n2=2;
         else if (eKind2==SdrHdlKind::User) n2=3;
         else if (eKind2==SdrHdlKind::SmartTag) n2=0;
     }
