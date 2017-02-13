@@ -141,6 +141,7 @@ for d in definitionSet:
          "include/vcl/print.hxx", # NupOrderType, from UI combobox
          "sw/source/uibase/inc/swcont.hxx", # RegionMode, from UI; ContentTypeId, from UI(registry)
          "sw/inc/toxe.hxx", # ToxAuthorityType (from UI)
+         "include/svx/sxekitm.hxx", # SdrEdgeKind (from UI)
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",
