@@ -28,7 +28,7 @@ class tdf105411(UITestCase):
         xCondFormatDlg = self.xUITest.getTopFocusWindow()
 
         xOkBtn = xCondFormatDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xOkBtn)
 
         self.ui_test.close_doc()
 
