@@ -789,7 +789,6 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
         case SdrEventKind::MoveAction: MovAction(aLogicPos); bRet=true; break;
         case SdrEventKind::EndAction: EndAction(); bRet=true; break;
         case SdrEventKind::BackAction: BckAction(); bRet=true; break;
-        case SdrEventKind::BrkAction: BrkAction(); bRet=true; break;
         case SdrEventKind::EndMark  : EndAction(); bRet=true; break;
         case SdrEventKind::BrkMark  : {
             BrkAction();
