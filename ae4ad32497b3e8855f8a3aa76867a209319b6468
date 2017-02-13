@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a57fde8_9ee8c118",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-13T20:46:54Z",
+      "side": 1,
+      "message": "i.e. this one. It is mostly pointless member variable, used only in this func and couple of lines below reset to NOTFOUND again",
+      "revId": "ae4ad32497b3e8855f8a3aa76867a209319b6468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_432206bb",
         "filename": "cui/source/tabpages/tpgradnt.cxx",
         "patchSetId": 1
@@ -31,6 +48,41 @@
       "side": 1,
       "message": "Hi bubli,\nwhich nPos do you mean?",
       "parentUuid": "9a57fde8_432206bb",
+      "revId": "ae4ad32497b3e8855f8a3aa76867a209319b6468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_beed8527",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-13T20:46:54Z",
+      "side": 1,
+      "message": "I said nPos, but I actually meant m_pPos (yes I\u0027m getting old)",
+      "parentUuid": "9a57fde8_c31c367a",
+      "revId": "ae4ad32497b3e8855f8a3aa76867a209319b6468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_def24906",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-13T20:46:54Z",
+      "side": 1,
+      "message": "Now aString remains empty. I\u0027ve recently fixed tdf#99908 where a gradient with empty name was causing trouble, so ...\n\n... please check that page gradient stays in place after saving to ODF and opening again, and if it does, please remove aString variable",
       "revId": "ae4ad32497b3e8855f8a3aa76867a209319b6468",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
