@@ -103,7 +103,7 @@
                         If the Controller ein SfxUInt16Item receives a
                         value != 0, paragraph mode will be switched on,
                         i.e. the last line will be hidden.
-                        A value == 0 switches again to Tabel mode.
+                        A value == 0 switches again to Table mode.
 
         SvxFrameLineStyleToolBoxControl
         -------------------------------

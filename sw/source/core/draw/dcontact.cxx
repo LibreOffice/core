@@ -1586,7 +1586,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     {
         if(*pCreatePortionHint->m_ppContact)
             return;
-        *pCreatePortionHint->m_ppContact = this; // This is kind of rediculous: the FrameFormat doesnt even hold a pointer to the contact itself,  but here we are leaking it out randomly
+        *pCreatePortionHint->m_ppContact = this; // This is kind of ridiculous: the FrameFormat doesnt even hold a pointer to the contact itself,  but here we are leaking it out randomly
         if(!GetAnchorFrame())
         {
             // No direct positioning needed any more

@@ -649,7 +649,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
             to the clipboard/undo document, and when copying cells from the
             clipboard/undo document. The former should always be called first,
             so if called in an clipboard/undo document, the caption should have
-            been created already. Hovever, for clipboard in case the
+            been created already. However, for clipboard in case the
             originating document was destructed a new caption has to be
             created. */
         OSL_ENSURE( !mrDoc.IsUndo() && (!mrDoc.IsClipboard() || !maNoteData.mpCaption),

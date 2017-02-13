@@ -401,7 +401,7 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
     WorkbookHelper( rHelper ),
     maSheetCellRanges( "com.sun.star.sheet.SheetCellRanges" ),
     mrMaxApiPos( rHelper.getAddressConverter().getMaxApiAddress() ),
-    maUsedArea( SCCOL_MAX, SCROW_MAX, nSheet, -1, -1, nSheet ), // Set start address to largest possible value, and End Addreess to smallest
+    maUsedArea( SCCOL_MAX, SCROW_MAX, nSheet, -1, -1, nSheet ), // Set start address to largest possible value, and end address to smallest
     maSheetData( *this ),
     maCondFormats( *this ),
     maComments( *this ),

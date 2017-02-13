@@ -76,7 +76,7 @@ class SdrEdgeInfoRec
 {
 public:
     // The 5 distances are set on dragging or via SetAttr and are
-    // evaluated by ImpCalcEdgeTrack. Only 0-3 longs are transpeorted
+    // evaluated by ImpCalcEdgeTrack. Only 0-3 longs are transported
     // via Get/SetAttr/Get/SetStyleSh though.
     Point                       aObj1Line2;
     Point                       aObj1Line3;

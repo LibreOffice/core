@@ -435,7 +435,7 @@ gboolean CommentsSidebar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigu
     TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
 
-    // whether tield rendering is turned on
+    // whether tiled rendering is turned on
     gboolean bTiledAnnotations;
     g_object_get(G_OBJECT(pDocView), "tiled-annotations", &bTiledAnnotations, nullptr);
 

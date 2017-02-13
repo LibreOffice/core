@@ -42,7 +42,7 @@ class HTMLAttrContext_SaveDoc
 {
     SwHTMLNumRuleInfo aNumRuleInfo; // Numbering for this environment
     SwPosition  *pPos;              // Jump back to here when leaving context
-    HTMLAttrTable *pAttrTab;        // Valid attributes for the envionment,
+    HTMLAttrTable *pAttrTab;        // Valid attributes for the environment,
                                     // if attributes shouldn't be preserved
 
     size_t nContextStMin;           // Stack lower bound for the environment
@@ -401,7 +401,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
     bool bRet = false;
 
     // A border is opened on the following conditions
-    // - the tag is absolute-positoned AND left/top are both known AND don't contain a % property
+    // - the tag is absolute-positioned AND left/top are both known AND don't contain a % property
     // OR
     // - the tag should be floating AND
     // - there's a given width

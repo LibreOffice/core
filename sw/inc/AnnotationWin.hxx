@@ -53,7 +53,7 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
 
         virtual sal_uInt32 MoveCaret() override;
 
-        /// Calculate parent postit id of currrent annotation window
+        /// Calculate parent postit id of current annotation window
         virtual sal_uInt32    CalcParent() override;
         void            InitAnswer(OutlinerParaObject* pText);
 

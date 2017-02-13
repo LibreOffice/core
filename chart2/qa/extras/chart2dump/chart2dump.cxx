@@ -618,7 +618,7 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
         for (const OUString& sAxisShapeName : aAxisShapeNames)
         {
             uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, sAxisShapeName,
-                // Axis occures twice in chart xshape representation so need to get the one related to labels
+                // Axis occurs twice in chart xshape representation so need to get the one related to labels
                 [](const uno::Reference<drawing::XShape>& rXShape) -> bool
                 {
                     uno::Reference<drawing::XShapes> xAxisShapes(rXShape, uno::UNO_QUERY);

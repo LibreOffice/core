@@ -511,7 +511,7 @@ namespace pcr
         typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUIFlagSetter )( const OUString&, sal_Bool );
 
 
-        // an implementaiton of the ->IStringKeyBooleanUIUpdate interface which calls
+        // an implementation of the ->IStringKeyBooleanUIUpdate interface which calls
         // am arbitrary ->XObjectInspectorUI method taking a string and a boolean flag
         class DefaultStringKeyBooleanUIUpdate : public IStringKeyBooleanUIUpdate
         {

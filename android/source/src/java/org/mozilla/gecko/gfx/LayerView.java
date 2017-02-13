@@ -56,7 +56,7 @@ public class LayerView extends FrameLayout {
 
     private Listener mListener;
     private OnInterceptTouchListener mTouchIntercepter;
-    //TODO static beacuse of registerCxxCompositor() function, should be fixed in the future
+    //TODO static because of registerCxxCompositor() function, should be fixed in the future
     private static LibreOfficeMainActivity mContext;
 
     /* Flags used to determine when to show the painted surface. The integer

@@ -1376,7 +1376,7 @@ DECLARE_OOXMLIMPORT_TEST(testTdf96218, "tdf96218.docx")
 
 DECLARE_OOXMLIMPORT_TEST(testTdf101626, "tdf101626.docx")
 {
-    // Transform soft-hyphen to hard-hyphen as list bulletChar to avoid missing ymbols in export
+    // Transform soft-hyphen to hard-hyphen as list bulletChar to avoid missing symbols in export
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;

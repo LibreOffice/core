@@ -581,7 +581,7 @@ OUString VBAToRegexp(const OUString &rIn)
                 sResult.append(*(++start));
                 start++;
                 break;
-                // dump the ~ and escape the next characture
+                // dump the ~ and escape the next character
             case ']':
                 sResult.append('\\');
                 sResult.append(*start++);
