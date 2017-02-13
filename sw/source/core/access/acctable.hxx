@@ -44,7 +44,7 @@ class SwAccessibleTable :
         public SwClient
 {
     SwAccessibleTableData_Impl *mpTableData;    // the table's data, prot by Sol-Mutex
-    OUString sDesc;
+    OUString m_sDesc;
     const SwSelBoxes *GetSelBoxes() const;
 
     void FireTableChangeEvent( const SwAccessibleTableData_Impl& rTableData );
@@ -66,7 +66,7 @@ protected:
     // #i77106#
     inline void SetDesc( const OUString& sNewDesc )
     {
-        sDesc = sNewDesc;
+        m_sDesc = sNewDesc;
     }
 
     virtual SwAccessibleTableData_Impl* CreateNewTableData(); // #i77106#
