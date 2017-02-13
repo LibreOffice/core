@@ -1947,6 +1947,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         const ScCondFormatDlgItem* pDlgItem = static_cast<const ScCondFormatDlgItem*>(pItem);
                         nIndex = pDlgItem->GetIndex();
+                        bManaged = true;
                         break;
                     }
                 }
