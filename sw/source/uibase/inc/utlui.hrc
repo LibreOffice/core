@@ -196,9 +196,9 @@
 #define STR_CALC_ZERODIV                        (RID_SW_SHELLRES_BEGIN + 4)
 #define STR_CALC_BRACK                          (RID_SW_SHELLRES_BEGIN + 5)
 #define STR_CALC_POW                            (RID_SW_SHELLRES_BEGIN + 6)
-#define STR_CALC_VARNFND                        (RID_SW_SHELLRES_BEGIN + 7)
+// empty
 #define STR_CALC_OVERFLOW                       (RID_SW_SHELLRES_BEGIN + 8)
-#define STR_CALC_WRONGTIME                      (RID_SW_SHELLRES_BEGIN + 9)
+// empty
 #define STR_CALC_DEFAULT                        (RID_SW_SHELLRES_BEGIN + 10)
 #define STR_CALC_ERROR                          (RID_SW_SHELLRES_BEGIN + 11)
 #define STR_GETREFFLD_UP                        (RID_SW_SHELLRES_BEGIN + 12)

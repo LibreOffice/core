@@ -736,7 +736,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         OSL_ENSURE(bResult,
                                 "the chained formula could no be calculated");
                     }
-                    pCalc->SetCalcError( CALC_NOERR );
+                    pCalc->SetCalcError( SwCalcError::NONE );
                 }
                 pFormatField->ModifyNotification( nullptr, pHt );
         }
@@ -815,7 +815,7 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         aTmp.Put( SwTableBoxNumFormat( 0 ));
                     pFormat->SetFormatAttr( aTmp );
 
-                    pCalc->SetCalcError( CALC_NOERR );
+                    pCalc->SetCalcError( SwCalcError::NONE );
                 }
             }
         }

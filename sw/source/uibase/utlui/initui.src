@@ -51,17 +51,9 @@ String STR_CALC_POW
 {
     Text [ en-US ] = "** Square function overflow **" ;
 };
-String STR_CALC_VARNFND
-{
-    Text [ en-US ] = "** Variable not found **" ;
-};
 String STR_CALC_OVERFLOW
 {
     Text [ en-US ] = "** Overflow **" ;
-};
-String STR_CALC_WRONGTIME
-{
-    Text [ en-US ] = "** Wrong time format **" ;
 };
 String STR_CALC_DEFAULT
 {

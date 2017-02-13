@@ -219,7 +219,7 @@ double SwUserFieldType::GetValue( SwCalc& rCalc )
 
     if(!rCalc.Push( this ))
     {
-        rCalc.SetCalcError( CALC_SYNTAX );
+        rCalc.SetCalcError( SwCalcError::Syntax );
         return 0;
     }
     nValue = rCalc.Calculate( aContent ).GetDouble();
