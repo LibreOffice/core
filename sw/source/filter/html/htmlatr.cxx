@@ -265,7 +265,7 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
 
             default:
                 // otherwise, the differences to the HTML-tag style of the
-                // original or the ones to the the current document, if it the
+                // original or the ones to the current document, if it the
                 // HTML-tag style is not available
                 if( pTemplate )
                     pReferenceFormat = SwHTMLWriter::GetTemplateFormat( nRefPoolId,

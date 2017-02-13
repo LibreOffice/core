@@ -4058,7 +4058,7 @@ void SwUiWriterTest::testRedlineTimestamp()
     pWrtShell->SttDoc();
     pWrtShell->Insert("aaa");
 
-    // Now assert that at least one of the the seconds are not 0.
+    // Now assert that at least one of the seconds are not 0.
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
     if (rTable.size() >= 2 && rTable[0]->GetRedlineData().GetTimeStamp().GetMin() != rTable[1]->GetRedlineData().GetTimeStamp().GetMin())
         // The relatively rare case when waiting for a second also changes the minute.
