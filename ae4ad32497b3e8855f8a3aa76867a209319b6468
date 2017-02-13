@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_432206bb",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-13T16:55:33Z",
+      "side": 1,
+      "message": "Imo with this nPos becomes unused, and can be removed, it serves no useful purpose anymore (it\u0027s just that GSoC student who was working on this code likes to copy\u0027n\u0027paste)",
+      "revId": "ae4ad32497b3e8855f8a3aa76867a209319b6468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
