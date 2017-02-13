@@ -238,7 +238,7 @@ css::uno::Reference< css::awt::XWindow > SubToolBarController::createPopupWindow
                 m_xUIElement = xUIElement;
 
                 VclPtr<vcl::Window> pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
-                if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
+                if ( pTbxWindow && pTbxWindow->GetType() == WindowType::TOOLBOX )
                 {
                     ToolBox* pToolBar = static_cast< ToolBox* >( pTbxWindow.get() );
                     pToolBar->SetParent( pToolBox );
@@ -369,7 +369,7 @@ void SubToolBarController::endPopupMode( const css::awt::EndPopupModeEvent& e )
                 try
                 {
                     VclPtr<vcl::Window> pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
-                    if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
+                    if ( pTbxWindow && pTbxWindow->GetType() == WindowType::TOOLBOX )
                     {
                         css::uno::Any a = xProp->getPropertyValue( aPersistentString );
                         xProp->setPropertyValue( aPersistentString, css::uno::makeAny( false ) );

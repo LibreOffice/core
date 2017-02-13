@@ -50,7 +50,7 @@ void Window::SetSettings( const AllSettings& rSettings, bool bChild )
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpBorderWindow->SetSettings( rSettings, false );
-        if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
+        if ( (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) &&
              static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->SetSettings( rSettings, true );
     }
@@ -85,7 +85,7 @@ void Window::UpdateSettings( const AllSettings& rSettings, bool bChild )
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpBorderWindow->UpdateSettings( rSettings );
-        if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
+        if ( (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) &&
              static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->UpdateSettings( rSettings, true );
     }

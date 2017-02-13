@@ -747,7 +747,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::TOOLBOXTOP:
             case SfxChildAlignment::LOWESTTOP:
                 aSize.Width() = aTmp.GetWidth();
-                if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
+                if ( pCli->pWin->GetType() == WindowType::SPLITWINDOW )
                     aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 bAllowHiding = false;
                 aBorder.Top() += aSize.Height();
@@ -762,7 +762,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::TOOLBOXBOTTOM:
             case SfxChildAlignment::HIGHESTBOTTOM:
                 aSize.Width() = aTmp.GetWidth();
-                if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
+                if ( pCli->pWin->GetType() == WindowType::SPLITWINDOW )
                     aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 aBorder.Bottom() += aSize.Height();
                 aPos = aTmp.BottomLeft();
@@ -777,7 +777,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::LASTLEFT:
             case SfxChildAlignment::TOOLBOXLEFT:
                 aSize.Height() = aTmp.GetHeight();
-                if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
+                if ( pCli->pWin->GetType() == WindowType::SPLITWINDOW )
                     aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 bAllowHiding = false;
                 aBorder.Left() += aSize.Width();
@@ -792,7 +792,7 @@ SvBorder SfxWorkWindow::Arrange_Impl()
             case SfxChildAlignment::LASTRIGHT:
             case SfxChildAlignment::TOOLBOXRIGHT:
                 aSize.Height() = aTmp.GetHeight();
-                if ( pCli->pWin->GetType() == WINDOW_SPLITWINDOW )
+                if ( pCli->pWin->GetType() == WindowType::SPLITWINDOW )
                     aSize = static_cast<SplitWindow *>(pCli->pWin.get())->CalcLayoutSizePixel( aSize );
                 aBorder.Right() += aSize.Width();
                 aPos = aTmp.TopRight();

@@ -635,7 +635,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
 
     // no flat borders for standard VCL controls (ie formcontrols that keep their classic look)
     // will not affect frame windows (like dropdowns)
-    if( bFlatBorders && pWin && pWin->GetType() == WINDOW_BORDERWINDOW && (pWin != pWin->ImplGetFrameWindow()) )
+    if( bFlatBorders && pWin && pWin->GetType() == WindowType::BORDERWINDOW && (pWin != pWin->ImplGetFrameWindow()) )
     {
         // check for formcontrol, i.e., a control without NWF enabled
         Control *const pControl = dynamic_cast< Control* >( pWin->GetWindow( GetWindowType::Client ) );
@@ -655,7 +655,7 @@ void ImplDrawFrame( OutputDevice *const pDev, Rectangle& rRect,
     {
         long nControlFlags = static_cast<long>(nStyle);
         nControlFlags |= static_cast<long>(nFlags);
-        nControlFlags |= static_cast<long>(pWin->GetType()==WINDOW_BORDERWINDOW ?
+        nControlFlags |= static_cast<long>(pWin->GetType() == WindowType::BORDERWINDOW ?
                                            DrawFrameFlags::BorderWindowBorder : DrawFrameFlags::NONE);
         ImplControlValue aControlValue( nControlFlags );
 

@@ -524,14 +524,14 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
     vcl::Window *pWindow = pEvent->GetWindow();
 
     // The menu bar is handled through VclEventId::MenuHighlightED
-    if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
+    if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WindowType::MENUBARWINDOW )
         return;
 
     // ToolBoxes are handled through VclEventId::ToolboxHighlight
-    if( pWindow->GetType() == WINDOW_TOOLBOX )
+    if( pWindow->GetType() == WindowType::TOOLBOX )
         return;
 
-    if( pWindow->GetType() == WINDOW_TABCONTROL )
+    if( pWindow->GetType() == WindowType::TABCONTROL )
     {
         handle_tabpage_activated( pWindow );
         return;
@@ -559,7 +559,7 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
  * need to add listeners to the children instead of re-using the tabpage stuff
  */
     if( xStateSet->contains(accessibility::AccessibleStateType::FOCUSED) &&
-        ( pWindow->GetType() != WINDOW_TREELISTBOX ) )
+        ( pWindow->GetType() != WindowType::TREELISTBOX ) )
     {
         atk_wrapper_focus_tracker_notify_when_idle( xAccessible );
     }

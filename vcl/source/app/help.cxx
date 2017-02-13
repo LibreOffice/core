@@ -254,7 +254,7 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
     FloatingWindow( pParent, WB_SYSTEMWINDOW|WB_TOOLTIPWIN ), // #105827# if we change the parent, mirroring will not work correctly when positioning this window
     maHelpText( rText )
 {
-    SetType( WINDOW_HELPTEXTWINDOW );
+    SetType( WindowType::HELPTEXTWINDOW );
     ImplSetMouseTransparent( true );
     mnHelpWinStyle = nHelpWinStyle;
     mnStyle = nStyle;

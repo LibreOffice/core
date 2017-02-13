@@ -356,7 +356,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                         if ( pItemWin )
                         {
                             WindowType nType = pItemWin->GetType();
-                            if ( nType == WINDOW_LISTBOX || nType == WINDOW_MULTILISTBOX || nType == WINDOW_COMBOBOX )
+                            if ( nType == WindowType::LISTBOX || nType == WindowType::MULTILISTBOX || nType == WindowType::COMBOBOX )
                                 pItemWin->SetAccessibleName( m_pToolBar->GetItemText( nId ) );
                             m_pToolBar->SetItemWindow( nId, pItemWin );
                         }

@@ -185,7 +185,7 @@ void VCLXContainer::setGroup( const css::uno::Sequence< css::uno::Reference< css
             vcl::Window* pSortBehind = pPrevWin;
             // #57096# Sort all radios consecutively
             bool bNewPrevWin = true;
-            if ( pWin->GetType() == WINDOW_RADIOBUTTON )
+            if ( pWin->GetType() == WindowType::RADIOBUTTON )
             {
                 if ( pPrevRadio )
                 {

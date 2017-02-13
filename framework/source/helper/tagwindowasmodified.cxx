@@ -90,7 +90,7 @@ void SAL_CALL TagWindowAsModified::modified(const css::lang::EventObject& aEvent
         return;
 
     bool bSystemWindow = pWindow->IsSystemWindow();
-    bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
+    bool bWorkWindow   = (pWindow->GetType() == WindowType::WORKWINDOW);
     if (!bSystemWindow && !bWorkWindow)
         return;
 

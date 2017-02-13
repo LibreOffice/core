@@ -114,7 +114,7 @@ void ScrollBar::ImplInitStyle( WinBits nStyle )
 }
 
 ScrollBar::ScrollBar( vcl::Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_SCROLLBAR )
+    Control( WindowType::SCROLLBAR )
 {
     ImplInit( pParent, nStyle );
 }
@@ -1450,7 +1450,7 @@ void ScrollBarBox::ImplInit(vcl::Window* pParent, WinBits nStyle)
 }
 
 ScrollBarBox::ScrollBarBox( vcl::Window* pParent, WinBits nStyle ) :
-    Window( WINDOW_SCROLLBARBOX )
+    Window( WindowType::SCROLLBARBOX )
 {
     ImplInit( pParent, nStyle );
 }

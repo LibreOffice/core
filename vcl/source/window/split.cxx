@@ -127,7 +127,7 @@ void Splitter::ImplDrawSplitter()
 }
 
 Splitter::Splitter( vcl::Window* pParent, WinBits nStyle ) :
-    Window( WINDOW_SPLITTER ),
+    Window( WindowType::SPLITTER ),
     mpRefWin( nullptr ),
     mnSplitPos( 0 ),
     mnLastSplitPos( 0 ),

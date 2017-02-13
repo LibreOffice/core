@@ -29,7 +29,7 @@ const char* ImplDbgCheckWindow( const void* pObj )
 
     const vcl::Window* pWindow = static_cast<vcl::Window const *>(pObj);
 
-    if ( (pWindow->GetType() < WINDOW_FIRST) || (pWindow->GetType() > WINDOW_LAST) )
+    if ( (pWindow->GetType() < WindowType::FIRST) || (pWindow->GetType() > WindowType::LAST) )
         return "Window data overwrite";
 
     // check window-chain

@@ -73,7 +73,7 @@ namespace {
 inline bool hasFloatingChild(vcl::Window *pWindow)
 {
     vcl::Window * pChild = pWindow->GetAccessibleChildWindow(0);
-    if( pChild && WINDOW_FLOATINGWINDOW == pChild->GetType() )
+    if( pChild && WindowType::FLOATINGWINDOW == pChild->GetType() )
         return true;
 
     return false;
@@ -293,13 +293,13 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
     {
         WindowType nType = pWindow->GetType();
 
-        if ( nType == WINDOW_MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
+        if ( nType == WindowType::MENUBARWINDOW || pWindow->IsMenuFloatingWindow() || pWindow->IsToolbarFloatingWindow() )
         {
             Reference< XAccessible > xAcc( pWindow->GetAccessible() );
             if ( xAcc.is() )
             {
                 Reference< XAccessibleContext > xCont( xAcc->getAccessibleContext() );
-                if ( pWindow->GetType() == WINDOW_MENUBARWINDOW ||
+                if ( pWindow->GetType() == WindowType::MENUBARWINDOW ||
                     ( xCont.is() && xCont->getAccessibleRole() == AccessibleRole::POPUP_MENU ) )
                 {
                     xContext = xCont;
@@ -307,27 +307,27 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
             }
         }
 
-        else if ( nType == WINDOW_STATUSBAR )
+        else if ( nType == WindowType::STATUSBAR )
         {
             xContext = static_cast<XAccessibleContext*>(new VCLXAccessibleStatusBar( _pXWindow ));
         }
 
-        else if ( nType == WINDOW_TABCONTROL )
+        else if ( nType == WindowType::TABCONTROL )
         {
             xContext = static_cast<XAccessibleContext*>(new VCLXAccessibleTabControl( _pXWindow ));
         }
 
-        else if ( nType == WINDOW_TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WINDOW_TABCONTROL )
+        else if ( nType == WindowType::TABPAGE && pWindow->GetAccessibleParentWindow() && pWindow->GetAccessibleParentWindow()->GetType() == WindowType::TABCONTROL )
         {
             xContext = new VCLXAccessibleTabPageWindow( _pXWindow );
         }
 
-        else if ( nType == WINDOW_FLOATINGWINDOW )
+        else if ( nType == WindowType::FLOATINGWINDOW )
         {
             xContext = new FloatingWindowAccessible( _pXWindow );
         }
 
-        else if ( nType == WINDOW_BORDERWINDOW && hasFloatingChild( pWindow ) )
+        else if ( nType == WindowType::BORDERWINDOW && hasFloatingChild( pWindow ) )
         {
             // The logic here has to match that of Window::GetAccessibleParentWindow in
             // vcl/source/window/window.cxx to avoid PopupMenuFloatingWindow
@@ -344,7 +344,7 @@ Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLX
                 xContext = new FloatingWindowAccessible( _pXWindow );
         }
 
-        else if ( ( nType == WINDOW_HELPTEXTWINDOW ) || ( nType == WINDOW_FIXEDLINE ) )
+        else if ( ( nType == WindowType::HELPTEXTWINDOW ) || ( nType == WindowType::FIXEDLINE ) )
         {
            xContext = static_cast<XAccessibleContext*>(new VCLXAccessibleFixedText( _pXWindow ));
         }

@@ -140,7 +140,7 @@ void StatusBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
 }
 
 StatusBar::StatusBar( vcl::Window* pParent, WinBits nStyle ) :
-    Window( WINDOW_STATUSBAR )
+    Window( WindowType::STATUSBAR )
 {
     ImplInit( pParent, nStyle );
 }

@@ -69,7 +69,7 @@ void MoreButton::ShowState()
 }
 
 MoreButton::MoreButton( vcl::Window* pParent, WinBits nStyle ) :
-    PushButton( WINDOW_MOREBUTTON )
+    PushButton( WindowType::MOREBUTTON )
 {
     ImplInit( pParent, nStyle );
 }

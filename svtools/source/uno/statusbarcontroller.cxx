@@ -279,7 +279,7 @@ void SAL_CALL StatusbarController::statusChanged( const FeatureStateEvent& Event
         return;
 
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
-    if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR && m_nID != 0 )
+    if ( pWindow && pWindow->GetType() == WindowType::STATUSBAR && m_nID != 0 )
     {
         OUString   aStrValue;
         StatusBar* pStatusBar = static_cast<StatusBar *>(pWindow.get());
@@ -503,7 +503,7 @@ void StatusbarController::bindListener()
         if ( m_xParentWindow.is() )
         {
             VclPtr< StatusBar > pStatusBar = dynamic_cast< StatusBar* >( VCLUnoHelper::GetWindow( m_xParentWindow ).get() );
-            if ( pStatusBar && pStatusBar->GetType() == WINDOW_STATUSBAR )
+            if ( pStatusBar && pStatusBar->GetType() == WindowType::STATUSBAR )
                 aRect = pStatusBar->GetItemRect( m_nID );
         }
     }

@@ -50,7 +50,7 @@ ButtonDialog::ButtonDialog( WindowType nType ) :
 }
 
 ButtonDialog::ButtonDialog( vcl::Window* pParent, WinBits nStyle ) :
-    Dialog( WINDOW_BUTTONDIALOG )
+    Dialog( WindowType::BUTTONDIALOG )
 {
     ImplInitButtonDialogData();
     ImplInit( pParent, nStyle );
@@ -300,9 +300,9 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
     pItem->mpPushButton = ImplCreatePushButton( nBtnFlags );
 
     // Standard-Buttons have the right text already
-    if ( !((eType == StandardButtonType::OK     && pItem->mpPushButton->GetType() == WINDOW_OKBUTTON) ||
-           (eType == StandardButtonType::Cancel && pItem->mpPushButton->GetType() == WINDOW_CANCELBUTTON) ||
-           (eType == StandardButtonType::Help   && pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )
+    if ( !((eType == StandardButtonType::OK     && pItem->mpPushButton->GetType() == WindowType::OKBUTTON) ||
+           (eType == StandardButtonType::Cancel && pItem->mpPushButton->GetType() == WindowType::CANCELBUTTON) ||
+           (eType == StandardButtonType::Help   && pItem->mpPushButton->GetType() == WindowType::HELPBUTTON)) )
     {
         pItem->mpPushButton->SetText( Button::GetStandardText( eType ) );
     }

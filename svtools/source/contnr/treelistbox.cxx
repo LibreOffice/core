@@ -357,7 +357,7 @@ SvTreeListBox::SvTreeListBox(vcl::Window* pParent, WinBits nWinStyle) :
     pEdCtrl = nullptr;
     eSelMode = SelectionMode::Single;
     nDragDropMode = DragDropMode::NONE;
-    SetType(WINDOW_TREELISTBOX);
+    SetType(WindowType::TREELISTBOX);
 
     InitTreeView();
 

@@ -50,7 +50,7 @@ ListBox::ListBox(WindowType nType)
     ImplInitListBoxData();
 }
 
-ListBox::ListBox( vcl::Window* pParent, WinBits nStyle ) : Control( WINDOW_LISTBOX )
+ListBox::ListBox( vcl::Window* pParent, WinBits nStyle ) : Control( WindowType::LISTBOX )
 {
     ImplInitListBoxData();
     ImplInit( pParent, nStyle );
@@ -1456,7 +1456,7 @@ FactoryFunction ListBox::GetUITestFactory() const
 }
 
 MultiListBox::MultiListBox( vcl::Window* pParent, WinBits nStyle ) :
-    ListBox( WINDOW_MULTILISTBOX )
+    ListBox( WindowType::MULTILISTBOX )
 {
     ImplInit( pParent, nStyle );
     EnableMultiSelection( true );

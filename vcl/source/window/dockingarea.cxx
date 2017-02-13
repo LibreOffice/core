@@ -40,7 +40,7 @@ DockingAreaWindow::ImplData::ImplData()
 }
 
 DockingAreaWindow::DockingAreaWindow( vcl::Window* pParent ) :
-    Window( WINDOW_DOCKINGAREA )
+    Window( WindowType::DOCKINGAREA )
 {
     ImplInit( pParent, WB_CLIPCHILDREN|WB_3DLOOK, nullptr );
 

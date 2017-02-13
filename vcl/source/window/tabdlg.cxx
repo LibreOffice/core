@@ -47,7 +47,7 @@ void TabDialog::ImplPosControls()
     {
         if ( pChild->IsVisible() && (pChild != mpViewWindow) )
         {
-            if (pChild->GetType() == WINDOW_TABCONTROL || isContainerWindow(*pChild))
+            if (pChild->GetType() == WindowType::TABCONTROL || isContainerWindow(*pChild))
                 pTabControl = pChild;
             else if ( pTabControl )
             {
@@ -208,14 +208,14 @@ void TabDialog::ImplPosControls()
 }
 
 TabDialog::TabDialog( vcl::Window* pParent, WinBits nStyle ) :
-    Dialog( WINDOW_TABDIALOG )
+    Dialog( WindowType::TABDIALOG )
 {
     ImplInitTabDialogData();
     ImplInit( pParent, nStyle );
 }
 
 TabDialog::TabDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
-    Dialog(pParent, rID, rUIXMLDescription, WINDOW_TABDIALOG)
+    Dialog(pParent, rID, rUIXMLDescription, WindowType::TABDIALOG)
 {
     ImplInitTabDialogData();
 }
@@ -250,7 +250,7 @@ vcl::Window* findTabControl(vcl::Window* pCurrent)
         return nullptr;
     }
 
-    if (pCurrent->GetType() == WINDOW_TABCONTROL)
+    if (pCurrent->GetType() == WindowType::TABCONTROL)
     {
         return pCurrent;
     }

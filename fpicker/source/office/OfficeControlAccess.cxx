@@ -373,7 +373,7 @@ namespace svt
                         }
                         else
                         {
-                            DBG_ASSERT( WINDOW_LISTBOX == pControl->GetType(), "OControlAccess::SetValue: implGetControl returned nonsense!" );
+                            DBG_ASSERT( WindowType::LISTBOX == pControl->GetType(), "OControlAccess::SetValue: implGetControl returned nonsense!" );
                             implDoListboxAction( static_cast< ListBox* >( pControl ), _nControlAction, _rValue );
                         }
                         break;
@@ -597,7 +597,7 @@ namespace svt
 
             case PropFlags::ListItems:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
+                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
                 Sequence< OUString > aItems;
@@ -627,7 +627,7 @@ namespace svt
 
             case PropFlags::SelectedItem:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
+                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
                 OUString sSelected;
@@ -644,7 +644,7 @@ namespace svt
 
             case PropFlags::SelectedItemIndex:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
+                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
                 sal_Int32 nPos = 0;
@@ -661,7 +661,7 @@ namespace svt
 
             case PropFlags::Checked:
             {
-                DBG_ASSERT( WINDOW_CHECKBOX == _pControl->GetType(),
+                DBG_ASSERT( WindowType::CHECKBOX == _pControl->GetType(),
                     "OControlAccess::implSetControlProperty: invalid control/property combination!" );
 
                 bool bChecked = false;
@@ -707,7 +707,7 @@ namespace svt
 
             case PropFlags::ListItems:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
+                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
                 Sequence< OUString > aItems( static_cast< ListBox* >( _pControl )->GetEntryCount() );
@@ -721,7 +721,7 @@ namespace svt
 
             case PropFlags::SelectedItem:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
+                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
                 sal_Int32 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
@@ -734,7 +734,7 @@ namespace svt
 
             case PropFlags::SelectedItemIndex:
             {
-                DBG_ASSERT( WINDOW_LISTBOX == _pControl->GetType(),
+                DBG_ASSERT( WindowType::LISTBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
                 sal_Int32 nSelected = static_cast< ListBox* >( _pControl )->GetSelectEntryPos();
@@ -746,7 +746,7 @@ namespace svt
             break;
 
             case PropFlags::Checked:
-                DBG_ASSERT( WINDOW_CHECKBOX == _pControl->GetType(),
+                DBG_ASSERT( WindowType::CHECKBOX == _pControl->GetType(),
                     "OControlAccess::implGetControlProperty: invalid control/property combination!" );
 
                 aReturn <<= static_cast< CheckBox* >( _pControl )->IsChecked( );

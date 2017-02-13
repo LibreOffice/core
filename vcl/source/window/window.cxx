@@ -93,7 +93,7 @@ Window::Window( WindowType nType ) :
 }
 
 Window::Window( vcl::Window* pParent, WinBits nStyle ) :
-    mpWindowImpl(new WindowImpl( WINDOW_WINDOW ))
+    mpWindowImpl(new WindowImpl( WindowType::WINDOW ))
 {
     meOutDevType = OUTDEV_WINDOW;
 
@@ -111,7 +111,7 @@ namespace
          // skip border windows, they do not carry information that
          // would help with diagnosing the problem
          const vcl::Window* pTempWin( pWindow );
-         while ( pTempWin && pTempWin->GetType() == WINDOW_BORDERWINDOW ) {
+         while ( pTempWin && pTempWin->GetType() == WindowType::BORDERWINDOW ) {
              pTempWin = pTempWin->GetWindow( GetWindowType::FirstChild );
          }
          // check if pTempWin is not null, otherwise use the
@@ -952,7 +952,7 @@ static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
 
 void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
-    SAL_WARN_IF( !mpWindowImpl->mbFrame && !pParent && GetType() != WINDOW_FIXEDIMAGE, "vcl.window",
+    SAL_WARN_IF( !mpWindowImpl->mbFrame && !pParent && GetType() != WindowType::FIXEDIMAGE, "vcl.window",
         "Window::Window(): pParent == NULL" );
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -1012,9 +1012,9 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         // check for undecorated floating window
         if( // 1. floating windows that are not moveable/sizeable (only closeable allowed)
             ( !(nFrameStyle & ~SalFrameStyleFlags::CLOSEABLE) &&
-            ( mpWindowImpl->mbFloatWin || ((GetType() == WINDOW_BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) ) ) ||
+            ( mpWindowImpl->mbFloatWin || ((GetType() == WindowType::BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow) || (nStyle & WB_SYSTEMFLOATWIN) ) ) ||
             // 2. borderwindows of floaters with ownerdraw decoration
-            ( ((GetType() == WINDOW_BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow && (nStyle & WB_OWNERDRAWDECORATION) ) ) )
+            ( ((GetType() == WindowType::BORDERWINDOW) && static_cast<ImplBorderWindow*>(this)->mbFloatWindow && (nStyle & WB_OWNERDRAWDECORATION) ) ) )
         {
             nFrameStyle = SalFrameStyleFlags::FLOAT;
             if( nStyle & WB_OWNERDRAWDECORATION )
@@ -1036,15 +1036,15 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
 
         switch (mpWindowImpl->mnType)
         {
-            case WINDOW_DIALOG:
-            case WINDOW_TABDIALOG:
-            case WINDOW_MODALDIALOG:
-            case WINDOW_MODELESSDIALOG:
-            case WINDOW_MESSBOX:
-            case WINDOW_INFOBOX:
-            case WINDOW_WARNINGBOX:
-            case WINDOW_ERRORBOX:
-            case WINDOW_QUERYBOX:
+            case WindowType::DIALOG:
+            case WindowType::TABDIALOG:
+            case WindowType::MODALDIALOG:
+            case WindowType::MODELESSDIALOG:
+            case WindowType::MESSBOX:
+            case WindowType::INFOBOX:
+            case WindowType::WARNINGBOX:
+            case WindowType::ERRORBOX:
+            case WindowType::QUERYBOX:
                 nFrameStyle |= SalFrameStyleFlags::DIALOG;
                 break;
             default:
@@ -2038,7 +2038,7 @@ void Window::SetBorderStyle( WindowBorderStyle nBorderStyle )
         }
         else
         {
-            if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
+            if ( mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW )
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetBorderStyle( nBorderStyle );
             else
                 mpWindowImpl->mpBorderWindow->SetBorderStyle( nBorderStyle );
@@ -2051,7 +2051,7 @@ WindowBorderStyle Window::GetBorderStyle() const
 
     if ( mpWindowImpl->mpBorderWindow )
     {
-        if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
+        if ( mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW )
             return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->GetBorderStyle();
         else
             return mpWindowImpl->mpBorderWindow->GetBorderStyle();
@@ -2065,7 +2065,7 @@ long Window::CalcTitleWidth() const
 
     if ( mpWindowImpl->mpBorderWindow )
     {
-        if ( mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW )
+        if ( mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW )
             return static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->CalcTitleWidth();
         else
             return mpWindowImpl->mpBorderWindow->CalcTitleWidth();
@@ -2448,7 +2448,7 @@ void Window::Enable( bool bEnable, bool bChild )
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpBorderWindow->Enable( bEnable, false );
-        if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
+        if ( (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) &&
              static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->Enable( bEnable );
     }
@@ -2510,7 +2510,7 @@ void Window::EnableInput( bool bEnable, bool bChild )
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpBorderWindow->EnableInput( bEnable, false );
-        if ( (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) &&
+        if ( (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) &&
              static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow )
             static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->mpMenuBarWindow->EnableInput( bEnable );
     }
@@ -2697,7 +2697,7 @@ void Window::SetActivateMode( ActivateModeFlags nMode )
         // possibly trigger Decativate/Activate
         if ( mpWindowImpl->mnActivateMode != ActivateModeFlags::NONE )
         {
-            if ( (mpWindowImpl->mbActive || (GetType() == WINDOW_BORDERWINDOW)) &&
+            if ( (mpWindowImpl->mbActive || (GetType() == WindowType::BORDERWINDOW)) &&
                  !HasChildPathFocus( true ) )
             {
                 mpWindowImpl->mbActive = false;
@@ -2706,7 +2706,7 @@ void Window::SetActivateMode( ActivateModeFlags nMode )
         }
         else
         {
-            if ( !mpWindowImpl->mbActive || (GetType() == WINDOW_BORDERWINDOW) )
+            if ( !mpWindowImpl->mbActive || (GetType() == WindowType::BORDERWINDOW) )
             {
                 mpWindowImpl->mbActive = true;
                 Activate();
@@ -2962,7 +2962,7 @@ Rectangle Window::ImplGetWindowExtentsRelative( vcl::Window *pRelativeWindow, bo
     aPos.Y() += g.nY;
     Size aSize ( pWin->GetSizePixel() );
     // #104088# do not add decoration to the workwindow to be compatible to java accessibility api
-    if( !bClientOnly && (mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame && GetType() != WINDOW_WORKWINDOW)) )
+    if( !bClientOnly && (mpWindowImpl->mbFrame || (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame && GetType() != WindowType::WORKWINDOW)) )
     {
         aPos.X() -= g.nLeftDecoration;
         aPos.Y() -= g.nTopDecoration;
@@ -3125,7 +3125,7 @@ const OUString& Window::GetHelpText() const
 
     if ( !mpWindowImpl->maHelpText.getLength() && bStrHelpId )
     {
-        if ( !IsDialog() && (mpWindowImpl->mnType != WINDOW_TABPAGE) && (mpWindowImpl->mnType != WINDOW_FLOATINGWINDOW) )
+        if ( !IsDialog() && (mpWindowImpl->mnType != WindowType::TABPAGE) && (mpWindowImpl->mnType != WindowType::FLOATINGWINDOW) )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
@@ -3422,7 +3422,7 @@ bool Window::IsScrollable() const
     VclPtr< vcl::Window > pChild = mpWindowImpl->mpFirstChild;
     while( pChild )
     {
-        if( pChild->GetType() == WINDOW_SCROLLBAR )
+        if( pChild->GetType() == WindowType::SCROLLBAR )
             return true;
         else
             pChild = pChild->mpWindowImpl->mpNext;

@@ -121,13 +121,13 @@ void SystemChildWindow::ImplInitSysChild( vcl::Window* pParent, WinBits nStyle, 
 }
 
 SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle ) :
-    Window( WINDOW_SYSTEMCHILDWINDOW )
+    Window( WindowType::SYSTEMCHILDWINDOW )
 {
     ImplInitSysChild( pParent, nStyle, nullptr );
 }
 
 SystemChildWindow::SystemChildWindow( vcl::Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow ) :
-    Window( WINDOW_SYSTEMCHILDWINDOW )
+    Window( WindowType::SYSTEMCHILDWINDOW )
 {
     ImplInitSysChild( pParent, nStyle, pData, bShow );
 }

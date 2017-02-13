@@ -105,7 +105,7 @@ const Color& FixedText::GetCanonicalTextColor( const StyleSettings& _rStyle ) co
 }
 
 FixedText::FixedText( vcl::Window* pParent, WinBits nStyle )
-    : Control(WINDOW_FIXEDTEXT)
+    : Control(WindowType::FIXEDTEXT)
     , m_nMaxWidthChars(-1)
     , m_nMinWidthChars(-1)
     , m_pMnemonicWindow(nullptr)
@@ -567,7 +567,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
 }
 
 FixedLine::FixedLine( vcl::Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_FIXEDLINE )
+    Control( WindowType::FIXEDLINE )
 {
     ImplInit( pParent, nStyle );
     SetSizePixel( Size( 2, 2 ) );
@@ -690,7 +690,7 @@ WinBits FixedBitmap::ImplInitStyle( WinBits nStyle )
 }
 
 FixedBitmap::FixedBitmap( vcl::Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_FIXEDBITMAP )
+    Control( WindowType::FIXEDBITMAP )
 {
     ImplInit( pParent, nStyle );
 }
@@ -827,7 +827,7 @@ WinBits FixedImage::ImplInitStyle( WinBits nStyle )
 }
 
 FixedImage::FixedImage( vcl::Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_FIXEDIMAGE )
+    Control( WindowType::FIXEDIMAGE )
 {
     ImplInit( pParent, nStyle );
 }

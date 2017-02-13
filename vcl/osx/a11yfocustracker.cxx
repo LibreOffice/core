@@ -132,9 +132,9 @@ void AquaA11yFocusTracker::toolbox_open_floater(vcl::Window *pWindow)
     bool bFloatingWindowFound = false;
     vcl::Window * pFloatingWindow = nullptr;
     while ( pWindow != nullptr ) {
-        if ( pWindow->GetType() == WINDOW_TOOLBOX ) {
+        if ( pWindow->GetType() == WindowType::TOOLBOX ) {
             bToolboxFound = true;
-        } else if ( pWindow->GetType() == WINDOW_FLOATINGWINDOW ) {
+        } else if ( pWindow->GetType() == WindowType::FLOATINGWINDOW ) {
             bFloatingWindowFound = true;
             pFloatingWindow = pWindow;
         }
@@ -210,14 +210,14 @@ void AquaA11yFocusTracker::menu_highlighted(const VclMenuEvent *pEvent)
 void AquaA11yFocusTracker::window_got_focus(vcl::Window *pWindow)
 {
     // The menu bar is handled through VclEventId::MenuHighlightED
-    if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
+    if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WindowType::MENUBARWINDOW )
         return;
 
     // ToolBoxes are handled through VclEventId::ToolboxHighlight
-    if( pWindow->GetType() == WINDOW_TOOLBOX )
+    if( pWindow->GetType() == WindowType::TOOLBOX )
         return;
 
-    if( pWindow->GetType() == WINDOW_TABCONTROL )
+    if( pWindow->GetType() == WindowType::TABCONTROL )
     {
         tabpage_activated( pWindow );
         return;
@@ -241,7 +241,7 @@ void AquaA11yFocusTracker::window_got_focus(vcl::Window *pWindow)
 /* the UNO ToolBox wrapper does not (yet?) support XAccessibleSelection, so we
  * need to add listeners to the children instead of re-using the tabpage stuff
  */
-    if( xStateSet->contains(AccessibleStateType::FOCUSED) && (pWindow->GetType() != WINDOW_TREELISTBOX) )
+    if( xStateSet->contains(AccessibleStateType::FOCUSED) && (pWindow->GetType() != WindowType::TREELISTBOX) )
     {
         setFocusedObject( xAccessible );
     }
