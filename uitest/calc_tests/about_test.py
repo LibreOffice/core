@@ -18,7 +18,7 @@ class AboutDlgTest(UITestCase):
         xAboutDlg = self.xUITest.getTopFocusWindow()
 
         xCloseBtn = xAboutDlg.getChild("close")
-        xCloseBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCloseBtn)
 
         self.ui_test.close_doc()
 

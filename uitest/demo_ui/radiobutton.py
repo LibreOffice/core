@@ -33,7 +33,7 @@ class RadioButtonTest(UITestCase):
         xNegativeNumRedCB.executeAction("CLICK",tuple())
 
         okBtn = xCellsDlg.getChild("ok")
-        okBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(okBtn)
 
         self.ui_test.close_doc()
 
