@@ -95,7 +95,6 @@ namespace sdr
                     aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_NEGATIVE;
                     break;
                 }
-                case SdrMeasureTextVPos::BreakedLine :
                 case SdrMeasureTextVPos::VerticalCentered :
                 {
                     aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_CENTERED;
