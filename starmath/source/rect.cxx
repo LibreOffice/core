@@ -480,11 +480,12 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
     if (!HasAlignInfo())
         CopyAlignInfo(rRect);
     else if (rRect.HasAlignInfo())
-    {   nAlignT = std::min(GetAlignT(), rRect.GetAlignT());
+    {
+        assert(HasAlignInfo());
+        nAlignT = std::min(GetAlignT(), rRect.GetAlignT());
         nAlignB = std::max(GetAlignB(), rRect.GetAlignB());
         nHiAttrFence = std::min(GetHiAttrFence(), rRect.GetHiAttrFence());
         nLoAttrFence = std::max(GetLoAttrFence(), rRect.GetLoAttrFence());
-        OSL_ENSURE(HasAlignInfo(), "Sm: ooops...");
 
         switch (eCopyMode)
         {   case RectCopyMBL::This:
