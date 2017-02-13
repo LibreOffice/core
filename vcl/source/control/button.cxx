@@ -674,10 +674,10 @@ WinBits PushButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyl
 
     if ( !(nStyle & WB_NOGROUP) &&
          (!pPrevWindow ||
-          ((pPrevWindow->GetType() != WINDOW_PUSHBUTTON  ) &&
-           (pPrevWindow->GetType() != WINDOW_OKBUTTON    ) &&
-           (pPrevWindow->GetType() != WINDOW_CANCELBUTTON) &&
-           (pPrevWindow->GetType() != WINDOW_HELPBUTTON  )) ) )
+          ((pPrevWindow->GetType() != WindowType::PUSHBUTTON  ) &&
+           (pPrevWindow->GetType() != WindowType::OKBUTTON    ) &&
+           (pPrevWindow->GetType() != WindowType::CANCELBUTTON) &&
+           (pPrevWindow->GetType() != WindowType::HELPBUTTON  )) ) )
         nStyle |= WB_GROUP;
     return nStyle;
 }
@@ -955,20 +955,20 @@ void PushButton::ImplDrawPushButton(vcl::RenderContext& rRenderContext)
     ControlType aCtrlType = ControlType::Generic;
     switch(GetParent()->GetType())
     {
-        case WINDOW_LISTBOX:
-        case WINDOW_MULTILISTBOX:
-        case WINDOW_TREELISTBOX:
+        case WindowType::LISTBOX:
+        case WindowType::MULTILISTBOX:
+        case WindowType::TREELISTBOX:
             aCtrlType = ControlType::Listbox;
             break;
 
-        case WINDOW_COMBOBOX:
-        case WINDOW_PATTERNBOX:
-        case WINDOW_NUMERICBOX:
-        case WINDOW_METRICBOX:
-        case WINDOW_CURRENCYBOX:
-        case WINDOW_DATEBOX:
-        case WINDOW_TIMEBOX:
-        case WINDOW_LONGCURRENCYBOX:
+        case WindowType::COMBOBOX:
+        case WindowType::PATTERNBOX:
+        case WindowType::NUMERICBOX:
+        case WindowType::METRICBOX:
+        case WindowType::CURRENCYBOX:
+        case WindowType::DATEBOX:
+        case WindowType::TIMEBOX:
+        case WindowType::LONGCURRENCYBOX:
             aCtrlType = ControlType::Combobox;
             break;
         default:
@@ -1199,7 +1199,7 @@ PushButton::PushButton( WindowType nType ) :
 }
 
 PushButton::PushButton( vcl::Window* pParent, WinBits nStyle ) :
-    Button( WINDOW_PUSHBUTTON )
+    Button( WindowType::PUSHBUTTON )
 {
     ImplInitPushButtonData();
     ImplInit( pParent, nStyle );
@@ -1496,20 +1496,20 @@ bool PushButton::PreNotify( NotifyEvent& rNEvt )
             ControlType aCtrlType = ControlType::Generic;
             switch( GetParent()->GetType() )
             {
-                case WINDOW_LISTBOX:
-                case WINDOW_MULTILISTBOX:
-                case WINDOW_TREELISTBOX:
+                case WindowType::LISTBOX:
+                case WindowType::MULTILISTBOX:
+                case WindowType::TREELISTBOX:
                     aCtrlType = ControlType::Listbox;
                     break;
 
-                case WINDOW_COMBOBOX:
-                case WINDOW_PATTERNBOX:
-                case WINDOW_NUMERICBOX:
-                case WINDOW_METRICBOX:
-                case WINDOW_CURRENCYBOX:
-                case WINDOW_DATEBOX:
-                case WINDOW_TIMEBOX:
-                case WINDOW_LONGCURRENCYBOX:
+                case WindowType::COMBOBOX:
+                case WindowType::PATTERNBOX:
+                case WindowType::NUMERICBOX:
+                case WindowType::METRICBOX:
+                case WindowType::CURRENCYBOX:
+                case WindowType::DATEBOX:
+                case WindowType::TIMEBOX:
+                case WindowType::LONGCURRENCYBOX:
                     aCtrlType = ControlType::Combobox;
                     break;
                 default:
@@ -1704,7 +1704,7 @@ void OKButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 }
 
 OKButton::OKButton( vcl::Window* pParent, WinBits nStyle ) :
-    PushButton( WINDOW_OKBUTTON )
+    PushButton( WindowType::OKBUTTON )
 {
     ImplInit( pParent, nStyle );
 }
@@ -1750,7 +1750,7 @@ void CancelButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 }
 
 CancelButton::CancelButton( vcl::Window* pParent, WinBits nStyle ) :
-    PushButton( WINDOW_CANCELBUTTON )
+    PushButton( WindowType::CANCELBUTTON )
 {
     ImplInit( pParent, nStyle );
 }
@@ -1802,7 +1802,7 @@ void HelpButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 }
 
 HelpButton::HelpButton( vcl::Window* pParent, WinBits nStyle ) :
-    PushButton( WINDOW_HELPBUTTON )
+    PushButton( WindowType::HELPBUTTON )
 {
     ImplInit( pParent, nStyle );
 }
@@ -1841,7 +1841,7 @@ void RadioButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 WinBits RadioButton::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle )
 {
     if ( !(nStyle & WB_NOGROUP) &&
-         (!pPrevWindow || (pPrevWindow->GetType() != WINDOW_RADIOBUTTON)) )
+         (!pPrevWindow || (pPrevWindow->GetType() != WindowType::RADIOBUTTON)) )
         nStyle |= WB_GROUP;
     if ( !(nStyle & WB_NOTABSTOP) )
     {
@@ -2240,7 +2240,7 @@ std::vector< VclPtr<RadioButton> > RadioButton::GetRadioButtonGroup(bool bInclud
     // insert radiobuttons up to next group
     do
     {
-        if( pFirst->GetType() == WINDOW_RADIOBUTTON )
+        if( pFirst->GetType() == WindowType::RADIOBUTTON )
         {
             if( pFirst != this || bIncludeThis )
                 aGroup.push_back( static_cast<RadioButton*>(pFirst) );
@@ -2299,7 +2299,7 @@ void RadioButton::ImplCallClick( bool bGrabFocus, GetFocusFlags nFocusFlags )
 }
 
 RadioButton::RadioButton( vcl::Window* pParent, WinBits nStyle ) :
-    Button( WINDOW_RADIOBUTTON ), mbLegacyNoTextAlign( false )
+    Button( WindowType::RADIOBUTTON ), mbLegacyNoTextAlign( false )
 {
     ImplInitRadioButtonData();
     ImplInit( pParent, nStyle );
@@ -2947,7 +2947,7 @@ WinBits CheckBox::ImplInitStyle( const vcl::Window* pPrevWindow, WinBits nStyle 
     if ( !(nStyle & WB_NOTABSTOP) )
         nStyle |= WB_TABSTOP;
     if ( !(nStyle & WB_NOGROUP) &&
-         (!pPrevWindow || (pPrevWindow->GetType() != WINDOW_CHECKBOX)) )
+         (!pPrevWindow || (pPrevWindow->GetType() != WindowType::CHECKBOX)) )
         nStyle |= WB_GROUP;
     return nStyle;
 }
@@ -3185,7 +3185,7 @@ void CheckBox::ImplCheck()
 }
 
 CheckBox::CheckBox( vcl::Window* pParent, WinBits nStyle ) :
-    Button( WINDOW_CHECKBOX ), mbLegacyNoTextAlign( false )
+    Button( WindowType::CHECKBOX ), mbLegacyNoTextAlign( false )
 {
     ImplInitCheckBoxData();
     ImplInit( pParent, nStyle );

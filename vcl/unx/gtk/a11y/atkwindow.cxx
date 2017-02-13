@@ -72,7 +72,7 @@ init_from_window( AtkObject *accessible, vcl::Window *pWindow )
          */
         case AccessibleRole::WINDOW:
         {
-            sal_uInt16 type = WINDOW_WINDOW;
+            WindowType type = WindowType::WINDOW;
             bool parentIsMenuFloatingWindow = false;
 
             vcl::Window *pParent = pWindow->GetParent();
@@ -81,8 +81,8 @@ init_from_window( AtkObject *accessible, vcl::Window *pWindow )
                 parentIsMenuFloatingWindow = pParent->IsMenuFloatingWindow();
             }
 
-            if( (WINDOW_LISTBOX != type) && (WINDOW_COMBOBOX != type) &&
-                (WINDOW_MENUBARWINDOW != type) && ! parentIsMenuFloatingWindow )
+            if( (WindowType::LISTBOX != type) && (WindowType::COMBOBOX != type) &&
+                (WindowType::MENUBARWINDOW != type) && ! parentIsMenuFloatingWindow )
             {
                 role = ATK_ROLE_WINDOW;
             }
@@ -94,13 +94,13 @@ init_from_window( AtkObject *accessible, vcl::Window *pWindow )
             vcl::Window *pChild = pWindow->GetWindow(GetWindowType::FirstChild);
             if( pChild )
             {
-                if( WINDOW_HELPTEXTWINDOW == pChild->GetType() )
+                if( WindowType::HELPTEXTWINDOW == pChild->GetType() )
                 {
                     role = ATK_ROLE_TOOL_TIP;
                     pChild->SetAccessibleRole( AccessibleRole::LABEL );
                     accessible->name = g_strdup( OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
                 }
-                else if ( pWindow->GetType() == WINDOW_BORDERWINDOW && pChild->GetType() == WINDOW_FLOATINGWINDOW )
+                else if ( pWindow->GetType() == WindowType::BORDERWINDOW && pChild->GetType() == WindowType::FLOATINGWINDOW )
                 {
                     PopupMenuFloatingWindow* p = dynamic_cast<PopupMenuFloatingWindow*>(pChild);
                     if (p && p->IsPopupMenu() && p->GetMenuStackLevel() == 0)
@@ -165,7 +165,7 @@ isChildPopupMenu(vcl::Window* pWindow)
     if (!pChild)
         return false;
 
-    if (WINDOW_FLOATINGWINDOW != pChild->GetType())
+    if (WindowType::FLOATINGWINDOW != pChild->GetType())
         return false;
 
     PopupMenuFloatingWindow* p = dynamic_cast<PopupMenuFloatingWindow*>(pChild);
@@ -194,7 +194,7 @@ ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
              * in the wrapper registry when atk traverses the hierarchy up on
              * focus events
              */
-            if( WINDOW_BORDERWINDOW == pWindow->GetType() )
+            if( WindowType::BORDERWINDOW == pWindow->GetType() )
             {
                 if ( isChildPopupMenu(pWindow) )
                 {

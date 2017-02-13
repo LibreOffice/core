@@ -38,7 +38,7 @@ void VCLXWindow::SetSystemParent_Impl( const css::uno::Any& rHandle )
 {
     // does only work for WorkWindows
     VclPtr<vcl::Window> pWindow = GetWindow();
-    if ( pWindow->GetType() != WINDOW_WORKWINDOW )
+    if ( pWindow->GetType() != WindowType::WORKWINDOW )
     {
         css::uno::RuntimeException aException;
         aException.Message = "not a work window";

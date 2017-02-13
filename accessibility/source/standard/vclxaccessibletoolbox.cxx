@@ -452,7 +452,7 @@ void VCLXAccessibleToolBox::HandleSubToolBarEvent( const VclWindowEvent& rVclWin
     if ( pChildWindow
         && pToolBox
         && pToolBox == pChildWindow->GetParent()
-        && pChildWindow->GetType() == WINDOW_TOOLBOX )
+        && pChildWindow->GetType() == WindowType::TOOLBOX )
     {
         sal_Int32 nIndex = pToolBox->GetItemPos( pToolBox->GetCurItemId() );
         Reference< XAccessible > xItem = getAccessibleChild( nIndex );
@@ -602,7 +602,7 @@ void VCLXAccessibleToolBox::ProcessWindowEvent( const VclWindowEvent& rVclWindow
             // if this toolbox is a subtoolbox, we have to release it from its parent
             VclPtr< vcl::Window > pWin = GetAs< vcl::Window >();
             if ( pWin && pWin->GetParent() &&
-                 pWin->GetParent()->GetType() == WINDOW_TOOLBOX )
+                 pWin->GetParent()->GetType() == WindowType::TOOLBOX )
             {
                 VCLXAccessibleToolBox* pParent = static_cast< VCLXAccessibleToolBox* >(
                     pWin->GetParent()->GetAccessible()->getAccessibleContext().get() );

@@ -267,7 +267,7 @@ void VCLXAccessibleTabControl::ProcessWindowChildEvent( const VclWindowEvent& rV
             if ( m_pTabControl )
             {
                 vcl::Window* pChild = static_cast< vcl::Window* >( rVclWindowEvent.GetData() );
-                if ( pChild && pChild->GetType() == WINDOW_TABPAGE )
+                if ( pChild && pChild->GetType() == WindowType::TABPAGE )
                 {
                     for ( sal_Int32 i = 0, nCount = m_pTabControl->GetPageCount(); i < nCount; ++i )
                     {

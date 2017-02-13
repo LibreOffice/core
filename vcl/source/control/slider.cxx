@@ -69,7 +69,7 @@ void Slider::ImplInit( vcl::Window* pParent, WinBits nStyle )
 }
 
 Slider::Slider( vcl::Window* pParent, WinBits nStyle ) :
-    Control(WINDOW_SLIDER)
+    Control(WindowType::SLIDER)
 {
     ImplInit( pParent, nStyle );
 }

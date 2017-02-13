@@ -614,7 +614,7 @@ void FmSearchDialog::EnableSearchUI(bool bEnable)
         if ( m_pPreSearchFocus )
         {
             m_pPreSearchFocus->GrabFocus();
-            if ( WINDOW_EDIT == m_pPreSearchFocus->GetType() )
+            if ( WindowType::EDIT == m_pPreSearchFocus->GetType() )
             {
                 Edit* pEdit = static_cast< Edit* >( m_pPreSearchFocus.get() );
                 pEdit->SetSelection( Selection( 0, pEdit->GetText().getLength() ) );

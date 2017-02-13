@@ -1713,8 +1713,8 @@ static void ImplActivateFloatingWindows( vcl::Window* pWindow, bool bActive )
     {
         if ( pTempWindow->GetActivateMode() == ActivateModeFlags::NONE )
         {
-            if ( (pTempWindow->GetType() == WINDOW_BORDERWINDOW) &&
-                 (pTempWindow->ImplGetWindow()->GetType() == WINDOW_FLOATINGWINDOW) )
+            if ( (pTempWindow->GetType() == WindowType::BORDERWINDOW) &&
+                 (pTempWindow->ImplGetWindow()->GetType() == WindowType::FLOATINGWINDOW) )
                 static_cast<ImplBorderWindow*>(pTempWindow)->SetDisplayActive( bActive );
         }
 
@@ -2178,7 +2178,7 @@ static bool ImplHandleShowDialog( vcl::Window* pWindow, ShowDialogId nDialogId )
     if( ! pWindow )
         return false;
 
-    if( pWindow->GetType() == WINDOW_BORDERWINDOW )
+    if( pWindow->GetType() == WindowType::BORDERWINDOW )
     {
         vcl::Window* pWrkWin = pWindow->GetWindow( GetWindowType::Client );
         if( pWrkWin )

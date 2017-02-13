@@ -110,7 +110,7 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
             if (pItemWindow != nullptr)
             {
                 WindowType nType = pItemWindow->GetType();
-                if (nType == WINDOW_LISTBOX || nType == WINDOW_MULTILISTBOX || nType == WINDOW_COMBOBOX)
+                if (nType == WindowType::LISTBOX || nType == WindowType::MULTILISTBOX || nType == WindowType::COMBOBOX)
                     pItemWindow->SetAccessibleName(pToolBox->GetItemText(nItemId));
                 if (nWidth > 0)
                     pItemWindow->SetSizePixel(Size(nWidth, pItemWindow->GetSizePixel().Height()));

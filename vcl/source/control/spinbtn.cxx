@@ -50,7 +50,7 @@ void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
 }
 
 SpinButton::SpinButton( vcl::Window* pParent, WinBits nStyle )
-    : Control(WINDOW_SPINBUTTON)
+    : Control(WindowType::SPINBUTTON)
     , mbUpperIsFocused(false)
 {
     ImplInit(pParent, nStyle);

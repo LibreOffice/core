@@ -91,14 +91,14 @@ WorkWindow::WorkWindow( WindowType nType ) :
 }
 
 WorkWindow::WorkWindow( vcl::Window* pParent, WinBits nStyle ) :
-    SystemWindow( WINDOW_WORKWINDOW )
+    SystemWindow( WindowType::WORKWINDOW )
 {
     ImplInitWorkWindowData();
     ImplInit( pParent, nStyle );
 }
 
 WorkWindow::WorkWindow( vcl::Window* pParent, const css::uno::Any& aSystemWorkWindowToken, WinBits nStyle ) :
-    SystemWindow( WINDOW_WORKWINDOW )
+    SystemWindow( WindowType::WORKWINDOW )
 {
     ImplInitWorkWindowData();
     mbSysChild = true;
@@ -106,7 +106,7 @@ WorkWindow::WorkWindow( vcl::Window* pParent, const css::uno::Any& aSystemWorkWi
 }
 
 WorkWindow::WorkWindow( SystemParentData* pParent ) :
-    SystemWindow( WINDOW_WORKWINDOW )
+    SystemWindow( WindowType::WORKWINDOW )
 {
     ImplInitWorkWindowData();
     mbSysChild = true;

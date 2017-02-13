@@ -25,7 +25,7 @@
 #include <svids.hrc>
 
 VclContainer::VclContainer(vcl::Window *pParent, WinBits nStyle)
-    : Window(WINDOW_CONTAINER)
+    : Window(WindowType::CONTAINER)
     , IPrioritable()
     , m_bLayoutDirty(true)
 {
@@ -1825,7 +1825,7 @@ VclScrolledWindow::VclScrolledWindow(vcl::Window *pParent)
     , m_pHScroll(VclPtr<ScrollBar>::Create(this, WB_HIDE | WB_HORZ))
     , m_aScrollBarBox(VclPtr<ScrollBarBox>::Create(this, WB_HIDE))
 {
-    SetType(WINDOW_SCROLLWINDOW);
+    SetType(WindowType::SCROLLWINDOW);
 
     Link<ScrollBar*,void> aLink( LINK( this, VclScrolledWindow, ScrollBarHdl ) );
     m_pVScroll->SetScrollHdl(aLink);
@@ -2185,7 +2185,7 @@ MessageDialog::MessageDialog(vcl::Window* pParent, WinBits nStyle)
     , m_pPrimaryMessage(nullptr)
     , m_pSecondaryMessage(nullptr)
 {
-    SetType(WINDOW_MESSBOX);
+    SetType(WindowType::MESSBOX);
 }
 
 MessageDialog::MessageDialog(vcl::Window* pParent,
@@ -2201,12 +2201,12 @@ MessageDialog::MessageDialog(vcl::Window* pParent,
     , m_pSecondaryMessage(nullptr)
     , m_sPrimaryString(rMessage)
 {
-    SetType(WINDOW_MESSBOX);
+    SetType(WindowType::MESSBOX);
     create_owned_areas();
 }
 
 MessageDialog::MessageDialog(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription)
-    : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WINDOW_MESSBOX)
+    : Dialog(pParent, OStringToOUString(rID, RTL_TEXTENCODING_UTF8), rUIXMLDescription, WindowType::MESSBOX)
     , m_eButtonsType(VclButtonsType::NONE)
     , m_eMessageType(VclMessageType::Info)
     , m_pOwnedContentArea(nullptr)
@@ -2267,7 +2267,7 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
     {
         switch (pChild->GetType())
         {
-            case WINDOW_PUSHBUTTON:
+            case WindowType::PUSHBUTTON:
             {
                 PushButton* pButton = static_cast<PushButton*>(pChild);
                 pButton->SetClickHdl(LINK(this, MessageDialog, ButtonHdl));
@@ -2275,13 +2275,13 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
             }
             //insist that the response ids match the default actions for those
             //widgets, and leave their default handlers in place
-            case WINDOW_OKBUTTON:
+            case WindowType::OKBUTTON:
                 assert(get_response(pChild) == RET_OK);
                 break;
-            case WINDOW_CANCELBUTTON:
+            case WindowType::CANCELBUTTON:
                 assert(get_response(pChild) == RET_CANCEL);
                 break;
-            case WINDOW_HELPBUTTON:
+            case WindowType::HELPBUTTON:
                 assert(get_response(pChild) == RET_HELP);
                 break;
             default:

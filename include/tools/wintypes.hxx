@@ -23,92 +23,97 @@
 
 // Window-Types
 
-typedef sal_uInt16 WindowType;
-#define WINDOW_BASE                 0x0100
-#define WINDOW_FIRST                (WINDOW_BASE + 0x30)
-#define WINDOW_MESSBOX              (WINDOW_FIRST)
-#define WINDOW_INFOBOX              (WINDOW_FIRST + 0x01)
-#define WINDOW_WARNINGBOX           (WINDOW_FIRST + 0x02)
-#define WINDOW_ERRORBOX             (WINDOW_FIRST + 0x03)
-#define WINDOW_QUERYBOX             (WINDOW_FIRST + 0x04)
-#define WINDOW_WINDOW               (WINDOW_FIRST + 0x05)
-#define WINDOW_SYSWINDOW            (WINDOW_FIRST + 0x06)
-#define WINDOW_WORKWINDOW           (WINDOW_FIRST + 0x07)
-#define WINDOW_CONTAINER            (WINDOW_FIRST + 0x08)
-#define WINDOW_FLOATINGWINDOW       (WINDOW_FIRST + 0x09)
-#define WINDOW_DIALOG               (WINDOW_FIRST + 0x0a)
-#define WINDOW_MODELESSDIALOG       (WINDOW_FIRST + 0x0b)
-#define WINDOW_MODALDIALOG          (WINDOW_FIRST + 0x0c)
-#define WINDOW_SYSTEMDIALOG         (WINDOW_FIRST + 0x0d)
-#define WINDOW_PATHDIALOG           (WINDOW_FIRST + 0x0e)
-#define WINDOW_FILEDIALOG           (WINDOW_FIRST + 0x0f)
-#define WINDOW_PRINTERSETUPDIALOG   (WINDOW_FIRST + 0x10)
-#define WINDOW_PRINTDIALOG          (WINDOW_FIRST + 0x11)
-#define WINDOW_COLORDIALOG          (WINDOW_FIRST + 0x12)
-#define WINDOW_FONTDIALOG           (WINDOW_FIRST + 0x13)
-#define WINDOW_CONTROL              (WINDOW_FIRST + 0x14)
-#define WINDOW_BUTTON               (WINDOW_FIRST + 0x15)
-#define WINDOW_PUSHBUTTON           (WINDOW_FIRST + 0x16)
-#define WINDOW_OKBUTTON             (WINDOW_FIRST + 0x17)
-#define WINDOW_CANCELBUTTON         (WINDOW_FIRST + 0x18)
-#define WINDOW_HELPBUTTON           (WINDOW_FIRST + 0x19)
-#define WINDOW_IMAGEBUTTON          (WINDOW_FIRST + 0x1a)
-#define WINDOW_MENUBUTTON           (WINDOW_FIRST + 0x1b)
-#define WINDOW_MOREBUTTON           (WINDOW_FIRST + 0x1c)
-#define WINDOW_SPINBUTTON           (WINDOW_FIRST + 0x1d)
-#define WINDOW_RADIOBUTTON          (WINDOW_FIRST + 0x1e)
-#define WINDOW_IMAGERADIOBUTTON     (WINDOW_FIRST + 0x1f)
-#define WINDOW_CHECKBOX             (WINDOW_FIRST + 0x20)
-#define WINDOW_TRISTATEBOX          (WINDOW_FIRST + 0x21)
-#define WINDOW_EDIT                 (WINDOW_FIRST + 0x22)
-#define WINDOW_MULTILINEEDIT        (WINDOW_FIRST + 0x23)
-#define WINDOW_COMBOBOX             (WINDOW_FIRST + 0x24)
-#define WINDOW_LISTBOX              (WINDOW_FIRST + 0x25)
-#define WINDOW_MULTILISTBOX         (WINDOW_FIRST + 0x26)
-#define WINDOW_FIXEDTEXT            (WINDOW_FIRST + 0x27)
-#define WINDOW_FIXEDLINE            (WINDOW_FIRST + 0x28)
-#define WINDOW_FIXEDBITMAP          (WINDOW_FIRST + 0x29)
-#define WINDOW_FIXEDIMAGE           (WINDOW_FIRST + 0x2a)
-#define WINDOW_GROUPBOX             (WINDOW_FIRST + 0x2c)
-#define WINDOW_SCROLLBAR            (WINDOW_FIRST + 0x2d)
-#define WINDOW_SCROLLBARBOX         (WINDOW_FIRST + 0x2e)
-#define WINDOW_SPLITTER             (WINDOW_FIRST + 0x2f)
-#define WINDOW_SPLITWINDOW          (WINDOW_FIRST + 0x30)
-#define WINDOW_SPINFIELD            (WINDOW_FIRST + 0x31)
-#define WINDOW_PATTERNFIELD         (WINDOW_FIRST + 0x32)
-#define WINDOW_NUMERICFIELD         (WINDOW_FIRST + 0x33)
-#define WINDOW_METRICFIELD          (WINDOW_FIRST + 0x34)
-#define WINDOW_CURRENCYFIELD        (WINDOW_FIRST + 0x35)
-#define WINDOW_DATEFIELD            (WINDOW_FIRST + 0x36)
-#define WINDOW_TIMEFIELD            (WINDOW_FIRST + 0x37)
-#define WINDOW_PATTERNBOX           (WINDOW_FIRST + 0x38)
-#define WINDOW_NUMERICBOX           (WINDOW_FIRST + 0x39)
-#define WINDOW_METRICBOX            (WINDOW_FIRST + 0x3a)
-#define WINDOW_CURRENCYBOX          (WINDOW_FIRST + 0x3b)
-#define WINDOW_DATEBOX              (WINDOW_FIRST + 0x3c)
-#define WINDOW_TIMEBOX              (WINDOW_FIRST + 0x3d)
-#define WINDOW_LONGCURRENCYFIELD    (WINDOW_FIRST + 0x3e)
-#define WINDOW_LONGCURRENCYBOX      (WINDOW_FIRST + 0x3f)
-#define WINDOW_SCROLLWINDOW         (WINDOW_FIRST + 0x40)
-#define WINDOW_TOOLBOX              (WINDOW_FIRST + 0x41)
-#define WINDOW_DOCKINGWINDOW        (WINDOW_FIRST + 0x42)
-#define WINDOW_STATUSBAR            (WINDOW_FIRST + 0x43)
-#define WINDOW_TABPAGE              (WINDOW_FIRST + 0x44)
-#define WINDOW_TABCONTROL           (WINDOW_FIRST + 0x45)
-#define WINDOW_TABDIALOG            (WINDOW_FIRST + 0x46)
-#define WINDOW_BORDERWINDOW         (WINDOW_FIRST + 0x47)
-#define WINDOW_BUTTONDIALOG         (WINDOW_FIRST + 0x48)
-#define WINDOW_SYSTEMCHILDWINDOW    (WINDOW_FIRST + 0x49)
-#define WINDOW_SLIDER               (WINDOW_FIRST + 0x4a)
-#define WINDOW_MENUBARWINDOW        (WINDOW_FIRST + 0x4b)
-#define WINDOW_TREELISTBOX          (WINDOW_FIRST + 0x4c)
-#define WINDOW_HELPTEXTWINDOW       (WINDOW_FIRST + 0x4d)
-#define WINDOW_INTROWINDOW          (WINDOW_FIRST + 0x4e)
-#define WINDOW_LISTBOXWINDOW        (WINDOW_FIRST + 0x4f)
-#define WINDOW_DOCKINGAREA          (WINDOW_FIRST + 0x50)
-#define WINDOW_RULER                (WINDOW_FIRST + 0x51)
-#define WINDOW_CALCINPUTLINE        (WINDOW_FIRST + 0x52)
-#define WINDOW_LAST                 (WINDOW_CALCINPUTLINE)
+enum class WindowType : sal_uInt16
+{
+    NONE                 = 0,
+    FIRST                = 0x0130,
+    MESSBOX              = FIRST,
+    INFOBOX              ,
+    WARNINGBOX           ,
+    ERRORBOX             ,
+    QUERYBOX             ,
+    WINDOW               ,
+    SYSWINDOW            ,
+    WORKWINDOW           ,
+    CONTAINER            ,
+    FLOATINGWINDOW       ,
+    DIALOG               ,
+    MODELESSDIALOG       ,
+    MODALDIALOG          ,
+    SYSTEMDIALOG         ,
+    PATHDIALOG           ,
+    FILEDIALOG           ,
+    PRINTERSETUPDIALOG   ,
+    PRINTDIALOG          ,
+    COLORDIALOG          ,
+    FONTDIALOG           ,
+    CONTROL              ,
+    BUTTON               ,
+    PUSHBUTTON           ,
+    OKBUTTON             ,
+    CANCELBUTTON         ,
+    HELPBUTTON           ,
+    IMAGEBUTTON          ,
+    MENUBUTTON           ,
+    MOREBUTTON           ,
+    SPINBUTTON           ,
+    RADIOBUTTON          ,
+    IMAGERADIOBUTTON     ,
+    CHECKBOX             ,
+    TRISTATEBOX          ,
+    EDIT                 ,
+    MULTILINEEDIT        ,
+    COMBOBOX             ,
+    LISTBOX              ,
+    MULTILISTBOX         ,
+    FIXEDTEXT            ,
+    FIXEDLINE            ,
+    FIXEDBITMAP          ,
+    FIXEDIMAGE           ,
+    GROUPBOX             ,
+    SCROLLBAR            ,
+    SCROLLBARBOX         ,
+    SPLITTER             ,
+    SPLITWINDOW          ,
+    SPINFIELD            ,
+    PATTERNFIELD         ,
+    NUMERICFIELD         ,
+    METRICFIELD          ,
+    CURRENCYFIELD        ,
+    DATEFIELD            ,
+    TIMEFIELD            ,
+    PATTERNBOX           ,
+    NUMERICBOX           ,
+    METRICBOX            ,
+    CURRENCYBOX          ,
+    DATEBOX              ,
+    TIMEBOX              ,
+    LONGCURRENCYFIELD    ,
+    LONGCURRENCYBOX      ,
+    SCROLLWINDOW         ,
+    TOOLBOX              ,
+    DOCKINGWINDOW        ,
+    STATUSBAR            ,
+    TABPAGE              ,
+    TABCONTROL           ,
+    TABDIALOG            ,
+    BORDERWINDOW         ,
+    BUTTONDIALOG         ,
+    SYSTEMCHILDWINDOW    ,
+    SLIDER               ,
+    MENUBARWINDOW        ,
+    TREELISTBOX          ,
+    HELPTEXTWINDOW       ,
+    INTROWINDOW          ,
+    LISTBOXWINDOW        ,
+    DOCKINGAREA          ,
+    RULER                ,
+    CALCINPUTLINE        ,
+    LAST                 = CALCINPUTLINE,
+    // only used in vclxtoolkit.cxx
+    TOOLKIT_FRAMEWINDOW        = 0x1000,
+    TOOLKIT_SYSTEMCHILDWINDOW  = 0x1001,
+};
 
 // Window-Bits
 

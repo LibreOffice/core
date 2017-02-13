@@ -156,7 +156,7 @@ Edit::Edit( WindowType nType )
 }
 
 Edit::Edit( vcl::Window* pParent, WinBits nStyle )
-    : Control( WINDOW_EDIT )
+    : Control( WindowType::EDIT )
 {
     ImplInitEditData();
     ImplInit( pParent, nStyle );
@@ -262,7 +262,7 @@ void Edit::dispose()
         mxDnDListener.clear();
     }
 
-    SetType(WINDOW_WINDOW);
+    SetType(WindowType::WINDOW);
 
     mpSubEdit.disposeAndClear();
     Control::dispose();
@@ -939,33 +939,33 @@ ControlType Edit::ImplGetNativeControlType() const
 
     switch (pControl->GetType())
     {
-        case WINDOW_COMBOBOX:
-        case WINDOW_PATTERNBOX:
-        case WINDOW_NUMERICBOX:
-        case WINDOW_METRICBOX:
-        case WINDOW_CURRENCYBOX:
-        case WINDOW_DATEBOX:
-        case WINDOW_TIMEBOX:
-        case WINDOW_LONGCURRENCYBOX:
+        case WindowType::COMBOBOX:
+        case WindowType::PATTERNBOX:
+        case WindowType::NUMERICBOX:
+        case WindowType::METRICBOX:
+        case WindowType::CURRENCYBOX:
+        case WindowType::DATEBOX:
+        case WindowType::TIMEBOX:
+        case WindowType::LONGCURRENCYBOX:
             nCtrl = ControlType::Combobox;
             break;
 
-        case WINDOW_MULTILINEEDIT:
+        case WindowType::MULTILINEEDIT:
             if ( GetWindow( GetWindowType::Border ) != this )
                 nCtrl = ControlType::MultilineEditbox;
             else
                 nCtrl = ControlType::EditboxNoBorder;
             break;
 
-        case WINDOW_EDIT:
-        case WINDOW_PATTERNFIELD:
-        case WINDOW_METRICFIELD:
-        case WINDOW_CURRENCYFIELD:
-        case WINDOW_DATEFIELD:
-        case WINDOW_TIMEFIELD:
-        case WINDOW_LONGCURRENCYFIELD:
-        case WINDOW_NUMERICFIELD:
-        case WINDOW_SPINFIELD:
+        case WindowType::EDIT:
+        case WindowType::PATTERNFIELD:
+        case WindowType::METRICFIELD:
+        case WindowType::CURRENCYFIELD:
+        case WindowType::DATEFIELD:
+        case WindowType::TIMEFIELD:
+        case WindowType::LONGCURRENCYFIELD:
+        case WindowType::NUMERICFIELD:
+        case WindowType::SPINFIELD:
             if (pControl->GetStyle() & WB_SPIN)
                 nCtrl = ControlType::Spinbox;
             else
@@ -2520,7 +2520,7 @@ void Edit::ImplSetSelection( const Selection& rSelection, bool bPaint )
                 }
 
                 // #103511# notify combobox listeners of deselection
-                if( !maSelection && GetParent() && GetParent()->GetType() == WINDOW_COMBOBOX )
+                if( !maSelection && GetParent() && GetParent()->GetType() == WindowType::COMBOBOX )
                     static_cast<Edit*>(GetParent())->CallEventListeners( VclEventId::ComboboxDeselect );
             }
         }

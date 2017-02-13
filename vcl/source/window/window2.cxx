@@ -1029,7 +1029,7 @@ WindowType Window::GetType() const
     if (mpWindowImpl)
         return mpWindowImpl->mnType;
     else
-        return 0;
+        return WindowType::NONE;
 }
 
 Dialog* Window::GetParentDialog() const
@@ -1341,7 +1341,7 @@ namespace
             {
                 bSomeoneCares = true;
             }
-            else if (pWindow->GetType() == WINDOW_TABCONTROL)
+            else if (pWindow->GetType() == WindowType::TABCONTROL)
             {
                 bSomeoneCares = true;
             }

@@ -270,7 +270,7 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
             SetActualRP( eRP );
 
             vcl::Window *pTabPage = getNonLayoutParent(this);
-            if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
+            if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
                 static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, eRP );
         }
     }
@@ -355,7 +355,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
             SetActualRP( eNewRP );
 
             vcl::Window *pTabPage = getNonLayoutParent(this);
-            if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
+            if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
                 static_cast<SvxTabPage*>(pTabPage)->PointChanged(this, eRP);
 
             SetFocusRect();
@@ -671,7 +671,7 @@ void SvxRectCtl::SetState( CTL_STATE nState )
     Invalidate();
 
     vcl::Window *pTabPage = getNonLayoutParent(this);
-    if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
+    if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
         static_cast<SvxTabPage*>(pTabPage)->PointChanged(this, eRP);
 }
 
@@ -792,7 +792,7 @@ long SvxPixelCtl::ShowPosition( const Point &pt)
     Invalidate(Rectangle(Point(0,0),aRectSize));
 
     vcl::Window *pTabPage = getNonLayoutParent(this);
-    if (pTabPage && WINDOW_TABPAGE == pTabPage->GetType())
+    if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
         static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, RectPoint::MM ); // RectPoint ist dummy
 
     return GetFocusPosIndex();

@@ -85,7 +85,7 @@ void PanelLayout::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, P
     bool bIsLayoutEnabled = isLayoutEnabled(this);
     vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
 
-    if (bIsLayoutEnabled && pChild->GetType() == WINDOW_SCROLLWINDOW)
+    if (bIsLayoutEnabled && pChild->GetType() == WindowType::SCROLLWINDOW)
     {
         WinBits nStyle = pChild->GetStyle();
         if (nStyle & (WB_AUTOHSCROLL | WB_HSCROLL))

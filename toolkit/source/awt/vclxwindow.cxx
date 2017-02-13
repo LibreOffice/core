@@ -1140,9 +1140,9 @@ void VCLXWindow::setBackground( sal_Int32 nColor )
         GetWindow()->SetControlBackground( aColor );
 
         WindowType eWinType = GetWindow()->GetType();
-        if ( ( eWinType == WINDOW_WINDOW ) ||
-             ( eWinType == WINDOW_WORKWINDOW ) ||
-             ( eWinType == WINDOW_FLOATINGWINDOW ) )
+        if ( ( eWinType == WindowType::WINDOW ) ||
+             ( eWinType == WindowType::WORKWINDOW ) ||
+             ( eWinType == WindowType::FLOATINGWINDOW ) )
         {
             GetWindow()->Invalidate();
         }
@@ -1487,9 +1487,9 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             {
                 switch (eWinType)
                 {
-                    case WINDOW_OKBUTTON:
-                    case WINDOW_CANCELBUTTON:
-                    case WINDOW_HELPBUTTON:
+                    case WindowType::OKBUTTON:
+                    case WindowType::CANCELBUTTON:
+                    case WindowType::HELPBUTTON:
                         // Standard Button: overwrite only if not empty.
                         if (!aText.isEmpty())
                             pWindow->SetText( aText );
@@ -1571,13 +1571,13 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                 switch ( eWinType )
                 {
                     // set dialog color for default
-                    case WINDOW_DIALOG:
-                    case WINDOW_MESSBOX:
-                    case WINDOW_INFOBOX:
-                    case WINDOW_WARNINGBOX:
-                    case WINDOW_ERRORBOX:
-                    case WINDOW_QUERYBOX:
-                    case WINDOW_TABPAGE:
+                    case WindowType::DIALOG:
+                    case WindowType::MESSBOX:
+                    case WindowType::INFOBOX:
+                    case WindowType::WARNINGBOX:
+                    case WindowType::ERRORBOX:
+                    case WindowType::QUERYBOX:
+                    case WindowType::TABPAGE:
                     {
                         Color aColor = pWindow->GetSettings().GetStyleSettings().GetDialogColor();
                         pWindow->SetBackground( aColor );
@@ -1585,11 +1585,11 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                         break;
                     }
 
-                    case WINDOW_FIXEDTEXT:
-                    case WINDOW_CHECKBOX:
-                    case WINDOW_RADIOBUTTON:
-                    case WINDOW_GROUPBOX:
-                    case WINDOW_FIXEDLINE:
+                    case WindowType::FIXEDTEXT:
+                    case WindowType::CHECKBOX:
+                    case WindowType::RADIOBUTTON:
+                    case WindowType::GROUPBOX:
+                    case WindowType::FIXEDLINE:
                     {
                         // support transparency only for special controls
                         pWindow->SetBackground();
@@ -1622,11 +1622,11 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                     switch ( eWinType )
                     {
                         // reset paint transparent mode
-                        case WINDOW_FIXEDTEXT:
-                        case WINDOW_CHECKBOX:
-                        case WINDOW_RADIOBUTTON:
-                        case WINDOW_GROUPBOX:
-                        case WINDOW_FIXEDLINE:
+                        case WindowType::FIXEDTEXT:
+                        case WindowType::CHECKBOX:
+                        case WindowType::RADIOBUTTON:
+                        case WindowType::GROUPBOX:
+                        case WindowType::FIXEDLINE:
                             pWindow->SetPaintTransparent( false );
                             break;
                         default:
@@ -1753,20 +1753,20 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             sal_Int16 nAlign = PROPERTY_ALIGN_LEFT;
             switch ( eWinType )
             {
-                case WINDOW_COMBOBOX:
-                case WINDOW_BUTTON:
-                case WINDOW_PUSHBUTTON:
-                case WINDOW_OKBUTTON:
-                case WINDOW_CANCELBUTTON:
-                case WINDOW_HELPBUTTON:
+                case WindowType::COMBOBOX:
+                case WindowType::BUTTON:
+                case WindowType::PUSHBUTTON:
+                case WindowType::OKBUTTON:
+                case WindowType::CANCELBUTTON:
+                case WindowType::HELPBUTTON:
                     nAlign = PROPERTY_ALIGN_CENTER;
                     SAL_FALLTHROUGH;
-                case WINDOW_FIXEDTEXT:
-                case WINDOW_EDIT:
-                case WINDOW_MULTILINEEDIT:
-                case WINDOW_CHECKBOX:
-                case WINDOW_RADIOBUTTON:
-                case WINDOW_LISTBOX:
+                case WindowType::FIXEDTEXT:
+                case WindowType::EDIT:
+                case WindowType::MULTILINEEDIT:
+                case WindowType::CHECKBOX:
+                case WindowType::RADIOBUTTON:
+                case WindowType::LISTBOX:
                 {
                     WinBits nStyle = pWindow->GetStyle();
                     nStyle &= ~(WB_LEFT|WB_CENTER|WB_RIGHT);
@@ -1781,19 +1781,20 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
                     pWindow->SetStyle( nStyle );
                 }
                 break;
+                default: break;
             }
         }
         break;
         case BASEPROPERTY_MULTILINE:
         {
-            if  (  ( eWinType == WINDOW_FIXEDTEXT )
-                || ( eWinType == WINDOW_CHECKBOX )
-                || ( eWinType == WINDOW_RADIOBUTTON )
-                || ( eWinType == WINDOW_BUTTON )
-                || ( eWinType == WINDOW_PUSHBUTTON )
-                || ( eWinType == WINDOW_OKBUTTON )
-                || ( eWinType == WINDOW_CANCELBUTTON )
-                || ( eWinType == WINDOW_HELPBUTTON )
+            if  (  ( eWinType == WindowType::FIXEDTEXT )
+                || ( eWinType == WindowType::CHECKBOX )
+                || ( eWinType == WindowType::RADIOBUTTON )
+                || ( eWinType == WindowType::BUTTON )
+                || ( eWinType == WindowType::PUSHBUTTON )
+                || ( eWinType == WindowType::OKBUTTON )
+                || ( eWinType == WindowType::CANCELBUTTON )
+                || ( eWinType == WindowType::HELPBUTTON )
                 )
             {
                 WinBits nStyle = pWindow->GetStyle();
@@ -1809,24 +1810,20 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
         break;
         case BASEPROPERTY_ORIENTATION:
         {
-            switch ( eWinType )
+            if ( eWinType == WindowType::FIXEDLINE)
             {
-                case WINDOW_FIXEDLINE:
+                sal_Int32 nOrientation = 0;
+                if ( Value >>= nOrientation )
                 {
-                    sal_Int32 nOrientation = 0;
-                    if ( Value >>= nOrientation )
-                    {
-                        WinBits nStyle = pWindow->GetStyle();
-                        nStyle &= ~(WB_HORZ|WB_VERT);
-                        if ( nOrientation == 0 )
-                            nStyle |= WB_HORZ;
-                        else
-                            nStyle |= WB_VERT;
+                    WinBits nStyle = pWindow->GetStyle();
+                    nStyle &= ~(WB_HORZ|WB_VERT);
+                    if ( nOrientation == 0 )
+                        nStyle |= WB_HORZ;
+                    else
+                        nStyle |= WB_VERT;
 
-                        pWindow->SetStyle( nStyle );
-                    }
+                    pWindow->SetStyle( nStyle );
                 }
-                break;
             }
         }
         break;
@@ -2053,18 +2050,18 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
             {
                 switch ( eWinType )
                 {
-                    case WINDOW_FIXEDTEXT:
-                    case WINDOW_EDIT:
-                    case WINDOW_MULTILINEEDIT:
-                    case WINDOW_CHECKBOX:
-                    case WINDOW_RADIOBUTTON:
-                    case WINDOW_LISTBOX:
-                    case WINDOW_COMBOBOX:
-                    case WINDOW_BUTTON:
-                    case WINDOW_PUSHBUTTON:
-                    case WINDOW_OKBUTTON:
-                    case WINDOW_CANCELBUTTON:
-                    case WINDOW_HELPBUTTON:
+                    case WindowType::FIXEDTEXT:
+                    case WindowType::EDIT:
+                    case WindowType::MULTILINEEDIT:
+                    case WindowType::CHECKBOX:
+                    case WindowType::RADIOBUTTON:
+                    case WindowType::LISTBOX:
+                    case WindowType::COMBOBOX:
+                    case WindowType::BUTTON:
+                    case WindowType::PUSHBUTTON:
+                    case WindowType::OKBUTTON:
+                    case WindowType::CANCELBUTTON:
+                    case WindowType::HELPBUTTON:
                     {
                         WinBits nStyle = GetWindow()->GetStyle();
                         if ( nStyle & WB_LEFT )
@@ -2075,19 +2072,20 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
                             aProp <<= (sal_Int16) PROPERTY_ALIGN_RIGHT;
                     }
                     break;
+                    default: break;
                 }
             }
             break;
             case BASEPROPERTY_MULTILINE:
             {
-                if  (  ( eWinType == WINDOW_FIXEDTEXT )
-                    || ( eWinType == WINDOW_CHECKBOX )
-                    || ( eWinType == WINDOW_RADIOBUTTON )
-                    || ( eWinType == WINDOW_BUTTON )
-                    || ( eWinType == WINDOW_PUSHBUTTON )
-                    || ( eWinType == WINDOW_OKBUTTON )
-                    || ( eWinType == WINDOW_CANCELBUTTON )
-                    || ( eWinType == WINDOW_HELPBUTTON )
+                if  (  ( eWinType == WindowType::FIXEDTEXT )
+                    || ( eWinType == WindowType::CHECKBOX )
+                    || ( eWinType == WindowType::RADIOBUTTON )
+                    || ( eWinType == WindowType::BUTTON )
+                    || ( eWinType == WindowType::PUSHBUTTON )
+                    || ( eWinType == WindowType::OKBUTTON )
+                    || ( eWinType == WindowType::CANCELBUTTON )
+                    || ( eWinType == WindowType::HELPBUTTON )
                     )
                     aProp <<= ( GetWindow()->GetStyle() & WB_WORDBREAK ) != 0;
             }
@@ -2149,22 +2147,22 @@ css::awt::Size VCLXWindow::getMinimumSize(  )
         WindowType nWinType = GetWindow()->GetType();
         switch ( nWinType )
         {
-            case WINDOW_CONTROL:
+            case WindowType::CONTROL:
                 aSz.Width() = GetWindow()->GetTextWidth( GetWindow()->GetText() )+2*12;
                 aSz.Height() = GetWindow()->GetTextHeight()+2*6;
             break;
 
-            case WINDOW_PATTERNBOX:
-            case WINDOW_NUMERICBOX:
-            case WINDOW_METRICBOX:
-            case WINDOW_CURRENCYBOX:
-            case WINDOW_DATEBOX:
-            case WINDOW_TIMEBOX:
-            case WINDOW_LONGCURRENCYBOX:
+            case WindowType::PATTERNBOX:
+            case WindowType::NUMERICBOX:
+            case WindowType::METRICBOX:
+            case WindowType::CURRENCYBOX:
+            case WindowType::DATEBOX:
+            case WindowType::TIMEBOX:
+            case WindowType::LONGCURRENCYBOX:
                 aSz.Width() = GetWindow()->GetTextWidth( GetWindow()->GetText() )+2*2;
                 aSz.Height() = GetWindow()->GetTextHeight()+2*2;
             break;
-            case WINDOW_SCROLLBARBOX:
+            case WindowType::SCROLLBARBOX:
                 return VCLXScrollBar::implGetMinimumSize( GetWindow() );
             default:
                 aSz = GetWindow()->get_preferred_size();

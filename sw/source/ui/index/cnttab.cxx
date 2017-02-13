@@ -2245,8 +2245,8 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, Button*, pButton, void)
     else
     {
         Control* pCtrl = m_pTokenWIN->GetActiveControl();
-        OSL_ENSURE(WINDOW_EDIT != pCtrl->GetType(), "Remove should be disabled");
-        if( WINDOW_EDIT != pCtrl->GetType() )
+        OSL_ENSURE(WindowType::EDIT != pCtrl->GetType(), "Remove should be disabled");
+        if( WindowType::EDIT != pCtrl->GetType() )
         {
             //fill it into the ListBox
             const SwFormToken& rToken = static_cast<SwTOXButton*>(pCtrl)->GetFormToken();
@@ -2544,7 +2544,7 @@ IMPL_LINK(SwTOXEntryTabPage, StyleSelectHdl, ListBox&, rBox, void)
     OSL_ENSURE(pCtrl, "no active control?");
     if(pCtrl)
     {
-        if(WINDOW_EDIT == pCtrl->GetType())
+        if(WindowType::EDIT == pCtrl->GetType())
             static_cast<SwTOXEdit*>(pCtrl)->SetCharStyleName(sEntry, nId);
         else
             static_cast<SwTOXButton*>(pCtrl)->SetCharStyleName(sEntry, nId);
@@ -2560,7 +2560,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox&, rBox, void)
     {
         Control* pCtrl = m_pTokenWIN->GetActiveControl();
         OSL_ENSURE(pCtrl, "no active control?");
-        if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
+        if(pCtrl && WindowType::EDIT != pCtrl->GetType())
             static_cast<SwTOXButton*>(pCtrl)->SetChapterInfo(nPos);
 
         ModifyHdl(nullptr);
@@ -2573,7 +2573,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, Edit&, rEdit, void)
 
     Control* pCtrl = m_pTokenWIN->GetActiveControl();
     OSL_ENSURE(pCtrl, "no active control?");
-    if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
+    if(pCtrl && WindowType::EDIT != pCtrl->GetType())
         static_cast<SwTOXButton*>(pCtrl)->SetOutlineLevel(nLevel);
 
     ModifyHdl(nullptr);
@@ -2587,7 +2587,7 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox&, rBox, void)
     {
         Control* pCtrl = m_pTokenWIN->GetActiveControl();
         OSL_ENSURE(pCtrl, "no active control?");
-        if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
+        if(pCtrl && WindowType::EDIT != pCtrl->GetType())
         {
            static_cast<SwTOXButton*>(pCtrl)->SetEntryNumberFormat(nPos);//i89791
         }
@@ -2599,10 +2599,10 @@ IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, Edit&, rEdit, void)
 {
     MetricField* pField = static_cast<MetricField*>(&rEdit);
     Control* pCtrl = m_pTokenWIN->GetActiveControl();
-    OSL_ENSURE(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
+    OSL_ENSURE(pCtrl && WindowType::EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == static_cast<SwTOXButton*>(pCtrl)->GetFormToken().eTokenType,
                 "no active style::TabStop control?");
-    if( pCtrl && WINDOW_EDIT != pCtrl->GetType() )
+    if( pCtrl && WindowType::EDIT != pCtrl->GetType() )
     {
         static_cast<SwTOXButton*>(pCtrl)->SetTabPosition( static_cast< SwTwips >(
                 pField->Denormalize( pField->GetValue( FUNIT_TWIP ))));
@@ -2613,10 +2613,10 @@ IMPL_LINK(SwTOXEntryTabPage, TabPosHdl, Edit&, rEdit, void)
 IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, Edit&, rBox, void)
 {
     Control* pCtrl = m_pTokenWIN->GetActiveControl();
-    OSL_ENSURE(pCtrl && WINDOW_EDIT != pCtrl->GetType() &&
+    OSL_ENSURE(pCtrl && WindowType::EDIT != pCtrl->GetType() &&
         TOKEN_TAB_STOP == static_cast<SwTOXButton*>(pCtrl)->GetFormToken().eTokenType,
                 "no active style::TabStop control?");
-    if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
+    if(pCtrl && WindowType::EDIT != pCtrl->GetType())
     {
         sal_Unicode cSet;
         if( !rBox.GetText().isEmpty() )
@@ -2632,7 +2632,7 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, Button*, pBox, void)
 {
     //the most right style::TabStop is usually right aligned
     Control* pCurCtrl = m_pTokenWIN->GetActiveControl();
-    OSL_ENSURE(WINDOW_EDIT != pCurCtrl->GetType() &&
+    OSL_ENSURE(WindowType::EDIT != pCurCtrl->GetType() &&
             static_cast<SwTOXButton*>(pCurCtrl)->GetFormToken().eTokenType == TOKEN_TAB_STOP,
             "no style::TabStop selected!");
 
@@ -2853,7 +2853,7 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
             pActiveCtrl->GrabFocus();
             //it must be a SwTOXEdit
             const SwFormToken* pFToken;
-            if( WINDOW_EDIT == pActiveCtrl->GetType() )
+            if( WindowType::EDIT == pActiveCtrl->GetType() )
                 pFToken = &static_cast<SwTOXEdit*>(pActiveCtrl.get())->GetFormToken();
             else
                 pFToken = &static_cast<SwTOXButton*>(pActiveCtrl.get())->GetFormToken();
@@ -2977,7 +2977,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         {
             pControl = *it;
 
-            if( WINDOW_EDIT != pControl->GetType())
+            if( WindowType::EDIT != pControl->GetType())
             {
                 const SwFormToken& rNewToken =
                                 static_cast<const SwTOXButton*>(pControl)->GetFormToken();
@@ -3009,7 +3009,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
                 pControl = *it;
 
                 if( pControl != pActiveCtrl &&
-                    WINDOW_EDIT != pControl->GetType())
+                    WindowType::EDIT != pControl->GetType())
                 {
                     const SwFormToken& rNewToken =
                                     static_cast<const SwTOXButton*>(pControl)->GetFormToken();
@@ -3073,7 +3073,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
 
     Size aControlSize(GetOutputSizePixel());
 
-    if( WINDOW_EDIT == pActiveCtrl->GetType())
+    if( WindowType::EDIT == pActiveCtrl->GetType())
     {
         ++iterActive;
 
@@ -3371,7 +3371,7 @@ OUString SwTokenWindow::GetPattern() const
     {
         const Control *pCtrl = *it;
 
-        const SwFormToken &rNewToken = pCtrl->GetType() == WINDOW_EDIT
+        const SwFormToken &rNewToken = pCtrl->GetType() == WindowType::EDIT
                 ? const_cast<SwTOXEdit*>(static_cast<const SwTOXEdit*>(pCtrl))->GetFormToken()
                 : static_cast<const SwTOXButton*>(pCtrl)->GetFormToken();
 
@@ -3391,7 +3391,7 @@ bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
     {
         const Control *pCtrl = *it;
 
-        const SwFormToken &rNewToken = pCtrl->GetType() == WINDOW_EDIT
+        const SwFormToken &rNewToken = pCtrl->GetType() == WindowType::EDIT
                 ? const_cast<SwTOXEdit*>(static_cast<const SwTOXEdit*>(pCtrl))->GetFormToken()
                 : static_cast<const SwTOXButton*>(pCtrl)->GetFormToken();
 
@@ -3480,7 +3480,7 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, Control&, rControl, void)
     SwTOXEdit* pEdit = static_cast<SwTOXEdit*>(&rControl);
     for (VclPtr<Control> const & pCtrl : aControlList)
     {
-        if (pCtrl && pCtrl->GetType() != WINDOW_EDIT)
+        if (pCtrl && pCtrl->GetType() != WindowType::EDIT)
             static_cast<SwTOXButton*>(pCtrl.get())->Check(false);
     }
 
@@ -3531,7 +3531,7 @@ IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, Control&, rControl, void )
     {
         Control *pControl = it->get();
 
-        if (pControl && WINDOW_EDIT != pControl->GetType())
+        if (pControl && WindowType::EDIT != pControl->GetType())
             static_cast<SwTOXButton*>(pControl)->Check(pBtn == pControl);
     }
 
@@ -3577,7 +3577,7 @@ sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
     for (ctrl_const_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
         const Control* pControl = *it;
-        const SwFormToken& rNewToken = WINDOW_EDIT == pControl->GetType()
+        const SwFormToken& rNewToken = WindowType::EDIT == pControl->GetType()
             ? const_cast<SwTOXEdit*>(static_cast<const SwTOXEdit*>(pControl))->GetFormToken()
             : static_cast<const SwTOXButton*>(pControl)->GetFormToken();
 

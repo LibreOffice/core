@@ -42,13 +42,13 @@ static vcl::Window* ImplGetLabelFor( vcl::Window* pFrameWindow, WindowType nMyTy
 {
     vcl::Window* pWindow = nullptr;
 
-    if( nMyType == WINDOW_FIXEDTEXT     ||
-        nMyType == WINDOW_FIXEDLINE     ||
-        nMyType == WINDOW_GROUPBOX )
+    if( nMyType == WindowType::FIXEDTEXT     ||
+        nMyType == WindowType::FIXEDLINE     ||
+        nMyType == WindowType::GROUPBOX )
     {
         // #i100833# MT 2010/02: Group box and fixed lines can also label a fixed text.
         // See tools/options/print for example.
-        bool bThisIsAGroupControl = (nMyType == WINDOW_GROUPBOX) || (nMyType == WINDOW_FIXEDLINE);
+        bool bThisIsAGroupControl = (nMyType == WindowType::GROUPBOX) || (nMyType == WindowType::FIXEDLINE);
         // get index, form start and form end
         sal_uInt16 nIndex=0, nFormStart=0, nFormEnd=0;
         ::ImplFindDlgCtrlWindow( pFrameWindow,
@@ -80,13 +80,13 @@ static vcl::Window* ImplGetLabelFor( vcl::Window* pFrameWindow, WindowType nMyTy
                 if( pSWindow && isVisibleInLayout(pSWindow) && ! (pSWindow->GetStyle() & WB_NOLABEL) )
                 {
                     WindowType nType = pSWindow->GetType();
-                    if( nType != WINDOW_FIXEDTEXT   &&
-                        nType != WINDOW_FIXEDLINE   &&
-                        nType != WINDOW_GROUPBOX )
+                    if( nType != WindowType::FIXEDTEXT   &&
+                        nType != WindowType::FIXEDLINE   &&
+                        nType != WindowType::GROUPBOX )
                     {
                         pWindow = pSWindow;
                     }
-                    else if( bThisIsAGroupControl && ( nType == WINDOW_FIXEDTEXT ) )
+                    else if( bThisIsAGroupControl && ( nType == WindowType::FIXEDTEXT ) )
                     {
                         pWindow = pSWindow;
                     }
@@ -129,7 +129,7 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabelFor() const
 static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Window* pLabeled )
 {
     Window* pWindow = nullptr;
-    if ( (nMyType != WINDOW_GROUPBOX) && (nMyType != WINDOW_FIXEDLINE) )
+    if ( (nMyType != WindowType::GROUPBOX) && (nMyType != WindowType::FIXEDLINE) )
     {
         // search for a control that labels this window
         // a label is considered the last fixed text, fixed line or group box
@@ -146,10 +146,10 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
                                                     nFormEnd );
         if( pSWindow && nIndex != nFormStart )
         {
-            if( nMyType == WINDOW_PUSHBUTTON        ||
-                nMyType == WINDOW_HELPBUTTON        ||
-                nMyType == WINDOW_OKBUTTON      ||
-                nMyType == WINDOW_CANCELBUTTON )
+            if( nMyType == WindowType::PUSHBUTTON        ||
+                nMyType == WindowType::HELPBUTTON        ||
+                nMyType == WindowType::OKBUTTON      ||
+                nMyType == WindowType::CANCELBUTTON )
             {
                 nFormStart = nIndex-1;
             }
@@ -163,12 +163,12 @@ static Window* ImplGetLabeledBy( Window* pFrameWindow, WindowType nMyType, Windo
                 if( pSWindow && isVisibleInLayout(pSWindow) && !(pSWindow->GetStyle() & WB_NOLABEL) )
                 {
                     WindowType nType = pSWindow->GetType();
-                    if ( ( nType == WINDOW_FIXEDTEXT    ||
-                          nType == WINDOW_FIXEDLINE ||
-                          nType == WINDOW_GROUPBOX ) )
+                    if ( ( nType == WindowType::FIXEDTEXT    ||
+                          nType == WindowType::FIXEDLINE ||
+                          nType == WindowType::GROUPBOX ) )
                     {
                         // a fixed text can't be labeld by a fixed text.
-                        if ( ( nMyType != WINDOW_FIXEDTEXT ) || ( nType != WINDOW_FIXEDTEXT ) )
+                        if ( ( nMyType != WindowType::FIXEDTEXT ) || ( nType != WindowType::FIXEDTEXT ) )
                             pWindow = pSWindow;
                         break;
                     }
@@ -195,12 +195,12 @@ Window* Window::getLegacyNonLayoutAccessibleRelationLabeledBy() const
     }
 
     // #i62723#, #104191# checkboxes and radiobuttons are not supposed to have labels
-    if( GetType() == WINDOW_CHECKBOX || GetType() == WINDOW_RADIOBUTTON )
+    if( GetType() == WindowType::CHECKBOX || GetType() == WindowType::RADIOBUTTON )
         return nullptr;
 
-//    if( ! ( GetType() == WINDOW_FIXEDTEXT     ||
-//            GetType() == WINDOW_FIXEDLINE     ||
-//            GetType() == WINDOW_GROUPBOX ) )
+//    if( ! ( GetType() == WindowType::FIXEDTEXT     ||
+//            GetType() == WindowType::FIXEDLINE     ||
+//            GetType() == WindowType::GROUPBOX ) )
     // #i100833# MT 2010/02: Group box and fixed lines can also label a fixed text.
     // See tools/options/print for example.
 
@@ -219,9 +219,9 @@ Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
     {
         pFrameWindow = ImplGetFrameWindow();
     }
-    // if( ! ( GetType() == WINDOW_FIXEDTEXT        ||
-    if( !( GetType() == WINDOW_FIXEDLINE ||
-        GetType() == WINDOW_GROUPBOX ) )
+    // if( ! ( GetType() == WindowType::FIXEDTEXT        ||
+    if( !( GetType() == WindowType::FIXEDLINE ||
+        GetType() == WindowType::GROUPBOX ) )
     {
         // search for a control that makes member of this window
         // it is considered the last fixed line or group box
@@ -237,10 +237,10 @@ Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
             nFormEnd );
         if( pSWindow && nIndex != nFormStart )
         {
-            if( GetType() == WINDOW_PUSHBUTTON      ||
-                GetType() == WINDOW_HELPBUTTON      ||
-                GetType() == WINDOW_OKBUTTON        ||
-                GetType() == WINDOW_CANCELBUTTON )
+            if( GetType() == WindowType::PUSHBUTTON      ||
+                GetType() == WindowType::HELPBUTTON      ||
+                GetType() == WindowType::OKBUTTON        ||
+                GetType() == WindowType::CANCELBUTTON )
             {
                 nFormStart = nIndex-1;
             }
@@ -252,8 +252,8 @@ Window* Window::getLegacyNonLayoutAccessibleRelationMemberOf() const
                     nFoundIndex,
                     false );
                 if( pSWindow && pSWindow->IsVisible() &&
-                    ( pSWindow->GetType() == WINDOW_FIXEDLINE   ||
-                    pSWindow->GetType() == WINDOW_GROUPBOX ) )
+                    ( pSWindow->GetType() == WindowType::FIXEDLINE   ||
+                    pSWindow->GetType() == WindowType::GROUPBOX ) )
                 {
                     pWindow = pSWindow;
                     break;

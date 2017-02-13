@@ -87,7 +87,7 @@ void GroupBox::ImplInitSettings( bool bFont,
 }
 
 GroupBox::GroupBox( vcl::Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_GROUPBOX )
+    Control( WindowType::GROUPBOX )
 {
     ImplInit( pParent, nStyle );
 }

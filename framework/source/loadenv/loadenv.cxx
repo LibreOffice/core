@@ -1646,7 +1646,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         return;
 
     bool bSystemWindow = pWindow->IsSystemWindow();
-    bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
+    bool bWorkWindow   = (pWindow->GetType() == WindowType::WORKWINDOW);
 
     if (!bSystemWindow && !bWorkWindow)
         return;

@@ -970,7 +970,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, FloatWin
         mpOldBorderWin = nullptr;  // no border window found
 
     bool bAllowTearOff = bool( nFlags & FloatWinPopupFlags::AllowTearOff );
-    bool bUseStdPopup = bAllowTearOff && GetWindow()->GetType() != WINDOW_TOOLBOX;
+    bool bUseStdPopup = bAllowTearOff && GetWindow()->GetType() != WindowType::TOOLBOX;
 
     // the new parent for popup mode
     VclPtr<FloatingWindow> pWin;

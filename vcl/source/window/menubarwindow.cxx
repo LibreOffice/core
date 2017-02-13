@@ -118,7 +118,7 @@ MenuBarWindow::MenuBarWindow( vcl::Window* pParent ) :
     aFloatBtn(VclPtr<PushButton>::Create(this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE)),
     aHideBtn(VclPtr<PushButton>::Create(this, WB_NOPOINTERFOCUS | WB_SMALLSTYLE | WB_RECTSTYLE))
 {
-    SetType(WINDOW_MENUBARWINDOW);
+    SetType(WindowType::MENUBARWINDOW);
     pMenu = nullptr;
     pActivePopup = nullptr;
     nHighlightedItem = ITEMPOS_INVALID;
@@ -536,7 +536,7 @@ static int ImplGetTopDockingAreaHeight( vcl::Window *pWindow )
                 while( pChildWin )
                 {
                     DockingAreaWindow *pDockingArea = nullptr;
-                    if ( pChildWin->GetType() == WINDOW_DOCKINGAREA )
+                    if ( pChildWin->GetType() == WindowType::DOCKINGAREA )
                         pDockingArea = static_cast< DockingAreaWindow* >( pChildWin );
 
                     if( pDockingArea && pDockingArea->GetAlign() == WindowAlign::Top &&

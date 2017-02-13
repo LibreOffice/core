@@ -124,7 +124,7 @@ void SvxColorValueSet::Resize()
 {
     vcl::Window *pParent = GetParent();
     //don't do this for the drop down color palettes
-    if (pParent && pParent->GetType() != WINDOW_FLOATINGWINDOW)
+    if (pParent && pParent->GetType() != WindowType::FLOATINGWINDOW)
         layoutToGivenHeight(GetOutputSizePixel().Height(), GetItemCount());
     ValueSet::Resize();
 }

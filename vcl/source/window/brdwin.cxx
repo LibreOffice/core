@@ -445,34 +445,34 @@ void ImplSmallBorderWindowView::Init( OutputDevice* pDev, long nWidth, long nHei
             {
                 switch( pCtrl->GetType() )
                 {
-                    case WINDOW_LISTBOX:
+                    case WindowType::LISTBOX:
                         if( pCtrl->GetStyle() & WB_DROPDOWN )
                         {
                             aCtrlType = ControlType::Listbox;
                             mbNWFBorder = true;
                         }
                         break;
-                    case WINDOW_COMBOBOX:
+                    case WindowType::COMBOBOX:
                         if( pCtrl->GetStyle() & WB_DROPDOWN )
                         {
                             aCtrlType = ControlType::Combobox;
                             mbNWFBorder = true;
                         }
                         break;
-                    case WINDOW_MULTILINEEDIT:
+                    case WindowType::MULTILINEEDIT:
                         aCtrlType = ControlType::MultilineEditbox;
                         mbNWFBorder = true;
                         break;
-                    case WINDOW_EDIT:
-                    case WINDOW_PATTERNFIELD:
-                    case WINDOW_METRICFIELD:
-                    case WINDOW_CURRENCYFIELD:
-                    case WINDOW_DATEFIELD:
-                    case WINDOW_TIMEFIELD:
-                    case WINDOW_LONGCURRENCYFIELD:
-                    case WINDOW_NUMERICFIELD:
-                    case WINDOW_SPINFIELD:
-                    case WINDOW_CALCINPUTLINE:
+                    case WindowType::EDIT:
+                    case WindowType::PATTERNFIELD:
+                    case WindowType::METRICFIELD:
+                    case WindowType::CURRENCYFIELD:
+                    case WindowType::DATEFIELD:
+                    case WindowType::TIMEFIELD:
+                    case WindowType::LONGCURRENCYFIELD:
+                    case WindowType::NUMERICFIELD:
+                    case WindowType::SPINFIELD:
+                    case WindowType::CALCINPUTLINE:
                         mbNWFBorder = true;
                         if (pCtrl->GetStyle() & WB_SPIN)
                             aCtrlType = ControlType::Spinbox;
@@ -601,28 +601,28 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
     {
         switch (pCtrl->GetType())
         {
-            case WINDOW_MULTILINEEDIT:
+            case WindowType::MULTILINEEDIT:
                 aCtrlType = ControlType::MultilineEditbox;
                 break;
-            case WINDOW_EDIT:
-            case WINDOW_PATTERNFIELD:
-            case WINDOW_METRICFIELD:
-            case WINDOW_CURRENCYFIELD:
-            case WINDOW_DATEFIELD:
-            case WINDOW_TIMEFIELD:
-            case WINDOW_LONGCURRENCYFIELD:
-            case WINDOW_NUMERICFIELD:
-            case WINDOW_SPINFIELD:
-            case WINDOW_CALCINPUTLINE:
+            case WindowType::EDIT:
+            case WindowType::PATTERNFIELD:
+            case WindowType::METRICFIELD:
+            case WindowType::CURRENCYFIELD:
+            case WindowType::DATEFIELD:
+            case WindowType::TIMEFIELD:
+            case WindowType::LONGCURRENCYFIELD:
+            case WindowType::NUMERICFIELD:
+            case WindowType::SPINFIELD:
+            case WindowType::CALCINPUTLINE:
                 if (pCtrl->GetStyle() & WB_SPIN)
                     aCtrlType = ControlType::Spinbox;
                 else
                     aCtrlType = ControlType::Editbox;
                 break;
 
-            case WINDOW_LISTBOX:
-            case WINDOW_MULTILISTBOX:
-            case WINDOW_TREELISTBOX:
+            case WindowType::LISTBOX:
+            case WindowType::MULTILISTBOX:
+            case WindowType::TREELISTBOX:
                 aCtrlType = ControlType::Listbox;
                 if (pCtrl->GetStyle() & WB_DROPDOWN)
                     aCtrlPart = ControlPart::Entire;
@@ -630,19 +630,19 @@ void ImplSmallBorderWindowView::DrawWindow(vcl::RenderContext& rRenderContext, c
                     aCtrlPart = ControlPart::ListboxWindow;
                 break;
 
-            case WINDOW_LISTBOXWINDOW:
+            case WindowType::LISTBOXWINDOW:
                 aCtrlType = ControlType::Listbox;
                 aCtrlPart = ControlPart::ListboxWindow;
                 break;
 
-            case WINDOW_COMBOBOX:
-            case WINDOW_PATTERNBOX:
-            case WINDOW_NUMERICBOX:
-            case WINDOW_METRICBOX:
-            case WINDOW_CURRENCYBOX:
-            case WINDOW_DATEBOX:
-            case WINDOW_TIMEBOX:
-            case WINDOW_LONGCURRENCYBOX:
+            case WindowType::COMBOBOX:
+            case WindowType::PATTERNBOX:
+            case WindowType::NUMERICBOX:
+            case WindowType::METRICBOX:
+            case WindowType::CURRENCYBOX:
+            case WindowType::DATEBOX:
+            case WindowType::TIMEBOX:
+            case WindowType::LONGCURRENCYBOX:
                 if (pCtrl->GetStyle() & WB_DROPDOWN)
                 {
                     aCtrlType = ControlType::Combobox;
@@ -1648,14 +1648,14 @@ void ImplBorderWindow::ImplInit( vcl::Window* pParent,
 ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent,
                                     SystemParentData* pSystemParentData,
                                     WinBits nStyle, BorderWindowStyle nTypeStyle
-                                    ) : Window( WINDOW_BORDERWINDOW )
+                                    ) : Window( WindowType::BORDERWINDOW )
 {
     ImplInit( pParent, nStyle, nTypeStyle, pSystemParentData );
 }
 
 ImplBorderWindow::ImplBorderWindow( vcl::Window* pParent, WinBits nStyle ,
                                     BorderWindowStyle nTypeStyle ) :
-    Window( WINDOW_BORDERWINDOW )
+    Window( WindowType::BORDERWINDOW )
 {
     ImplInit( pParent, nStyle, nTypeStyle, nullptr );
 }

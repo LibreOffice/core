@@ -119,7 +119,7 @@ css::uno::Reference< css::accessibility::XAccessible > Window::GetAccessible( bo
 {
     // do not optimize hierarchy for the top level border win (ie, when there is no parent)
     /* // do not optimize accessible hierarchy at all to better reflect real VCL hierarchy
-    if ( GetParent() && ( GetType() == WINDOW_BORDERWINDOW ) && ( GetChildCount() == 1 ) )
+    if ( GetParent() && ( GetType() == WindowType::BORDERWINDOW ) && ( GetChildCount() == 1 ) )
     //if( !ImplIsAccessibleCandidate() )
     {
         vcl::Window* pChild = GetAccessibleChildWindow( 0 );
@@ -178,7 +178,7 @@ vcl::Window* Window::GetAccessibleParentWindow() const
         return nullptr;
 
     vcl::Window* pParent = mpWindowImpl->mpParent;
-    if( GetType() == WINDOW_MENUBARWINDOW )
+    if( GetType() == WindowType::MENUBARWINDOW )
     {
         // report the menubar as a child of THE workwindow
         vcl::Window *pWorkWin = GetParent()->mpWindowImpl->mpFirstChild;
@@ -192,7 +192,7 @@ vcl::Window* Window::GetAccessibleParentWindow() const
     // The logic here has to match that of AccessibleFactory::createAccessibleContext in
     // accessibility/source/helper/acc_factory.cxx to avoid PopupMenuFloatingWindow
     // becoming a11y parents of themselves
-    else if( GetType() == WINDOW_FLOATINGWINDOW &&
+    else if( GetType() == WindowType::FLOATINGWINDOW &&
         mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame &&
         !PopupMenuFloatingWindow::isPopupMenu(this))
     {
@@ -217,7 +217,7 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
     }
 
     // report the menubarwindow as a child of THE workwindow
-    if( GetType() == WINDOW_BORDERWINDOW )
+    if( GetType() == WindowType::BORDERWINDOW )
     {
         ImplBorderWindow *pBorderWindow = static_cast<ImplBorderWindow*>(this);
         if( pBorderWindow->mpMenuBarWindow &&
@@ -225,7 +225,7 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
             )
             --nChildren;
     }
-    else if( GetType() == WINDOW_WORKWINDOW )
+    else if( GetType() == WindowType::WORKWINDOW )
     {
         WorkWindow *pWorkWindow = static_cast<WorkWindow*>(this);
         if( pWorkWindow->GetMenuBar() &&
@@ -241,7 +241,7 @@ sal_uInt16 Window::GetAccessibleChildWindowCount()
 vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
 {
     // report the menubarwindow as a the first child of THE workwindow
-    if( GetType() == WINDOW_WORKWINDOW && static_cast<WorkWindow *>(this)->GetMenuBar() )
+    if( GetType() == WindowType::WORKWINDOW && static_cast<WorkWindow *>(this)->GetMenuBar() )
     {
         if( n == 0 )
         {
@@ -267,13 +267,13 @@ vcl::Window* Window::GetAccessibleChildWindow( sal_uInt16 n )
         pChild = pChild->mpWindowImpl->mpNext;
     }
 
-    if( GetType() == WINDOW_BORDERWINDOW && pChild && pChild->GetType() == WINDOW_MENUBARWINDOW )
+    if( GetType() == WindowType::BORDERWINDOW && pChild && pChild->GetType() == WindowType::MENUBARWINDOW )
     {
         do pChild = pChild->mpWindowImpl->mpNext; while( pChild && ! pChild->IsVisible() );
         SAL_WARN_IF( !pChild, "vcl", "GetAccessibleChildWindow(): wrong index in border window");
     }
 
-    if ( pChild && ( pChild->GetType() == WINDOW_BORDERWINDOW ) && ( pChild->GetChildCount() == 1 ) )
+    if ( pChild && ( pChild->GetType() == WindowType::BORDERWINDOW ) && ( pChild->GetChildCount() == 1 ) )
     {
         pChild = pChild->GetChild( 0 );
     }
@@ -294,115 +294,115 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
     sal_uInt16 nRole = 0xFFFF;
     switch ( GetType() )
     {
-        case WINDOW_MESSBOX:    // MT: Would be nice to have special roles!
-        case WINDOW_INFOBOX:
-        case WINDOW_WARNINGBOX:
-        case WINDOW_ERRORBOX:
-        case WINDOW_QUERYBOX: nRole = accessibility::AccessibleRole::ALERT; break;
+        case WindowType::MESSBOX:    // MT: Would be nice to have special roles!
+        case WindowType::INFOBOX:
+        case WindowType::WARNINGBOX:
+        case WindowType::ERRORBOX:
+        case WindowType::QUERYBOX: nRole = accessibility::AccessibleRole::ALERT; break;
 
-        case WINDOW_MODELESSDIALOG:
-        case WINDOW_MODALDIALOG:
-        case WINDOW_SYSTEMDIALOG:
-        case WINDOW_PRINTERSETUPDIALOG:
-        case WINDOW_PRINTDIALOG:
-        case WINDOW_TABDIALOG:
-        case WINDOW_BUTTONDIALOG:
-        case WINDOW_DIALOG: nRole = accessibility::AccessibleRole::DIALOG; break;
+        case WindowType::MODELESSDIALOG:
+        case WindowType::MODALDIALOG:
+        case WindowType::SYSTEMDIALOG:
+        case WindowType::PRINTERSETUPDIALOG:
+        case WindowType::PRINTDIALOG:
+        case WindowType::TABDIALOG:
+        case WindowType::BUTTONDIALOG:
+        case WindowType::DIALOG: nRole = accessibility::AccessibleRole::DIALOG; break;
 
-        case WINDOW_PUSHBUTTON:
-        case WINDOW_OKBUTTON:
-        case WINDOW_CANCELBUTTON:
-        case WINDOW_HELPBUTTON:
-        case WINDOW_IMAGEBUTTON:
-        case WINDOW_MOREBUTTON:
-        case WINDOW_SPINBUTTON:
-        case WINDOW_BUTTON: nRole = accessibility::AccessibleRole::PUSH_BUTTON; break;
-        case WINDOW_MENUBUTTON: nRole = accessibility::AccessibleRole::BUTTON_MENU; break;
+        case WindowType::PUSHBUTTON:
+        case WindowType::OKBUTTON:
+        case WindowType::CANCELBUTTON:
+        case WindowType::HELPBUTTON:
+        case WindowType::IMAGEBUTTON:
+        case WindowType::MOREBUTTON:
+        case WindowType::SPINBUTTON:
+        case WindowType::BUTTON: nRole = accessibility::AccessibleRole::PUSH_BUTTON; break;
+        case WindowType::MENUBUTTON: nRole = accessibility::AccessibleRole::BUTTON_MENU; break;
 
-        case WINDOW_PATHDIALOG: nRole = accessibility::AccessibleRole::DIRECTORY_PANE; break;
-        case WINDOW_FILEDIALOG: nRole = accessibility::AccessibleRole::FILE_CHOOSER; break;
-        case WINDOW_COLORDIALOG: nRole = accessibility::AccessibleRole::COLOR_CHOOSER; break;
-        case WINDOW_FONTDIALOG: nRole = accessibility::AccessibleRole::FONT_CHOOSER; break;
+        case WindowType::PATHDIALOG: nRole = accessibility::AccessibleRole::DIRECTORY_PANE; break;
+        case WindowType::FILEDIALOG: nRole = accessibility::AccessibleRole::FILE_CHOOSER; break;
+        case WindowType::COLORDIALOG: nRole = accessibility::AccessibleRole::COLOR_CHOOSER; break;
+        case WindowType::FONTDIALOG: nRole = accessibility::AccessibleRole::FONT_CHOOSER; break;
 
-        case WINDOW_RADIOBUTTON: nRole = accessibility::AccessibleRole::RADIO_BUTTON; break;
-        case WINDOW_TRISTATEBOX:
-        case WINDOW_CHECKBOX: nRole = accessibility::AccessibleRole::CHECK_BOX; break;
+        case WindowType::RADIOBUTTON: nRole = accessibility::AccessibleRole::RADIO_BUTTON; break;
+        case WindowType::TRISTATEBOX:
+        case WindowType::CHECKBOX: nRole = accessibility::AccessibleRole::CHECK_BOX; break;
 
-        case WINDOW_MULTILINEEDIT: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
+        case WindowType::MULTILINEEDIT: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
 
-        case WINDOW_PATTERNFIELD:
-        case WINDOW_CALCINPUTLINE:
-        case WINDOW_EDIT: nRole = ( GetStyle() & WB_PASSWORD ) ? (accessibility::AccessibleRole::PASSWORD_TEXT) : (accessibility::AccessibleRole::TEXT); break;
+        case WindowType::PATTERNFIELD:
+        case WindowType::CALCINPUTLINE:
+        case WindowType::EDIT: nRole = ( GetStyle() & WB_PASSWORD ) ? (accessibility::AccessibleRole::PASSWORD_TEXT) : (accessibility::AccessibleRole::TEXT); break;
 
-        case WINDOW_PATTERNBOX:
-        case WINDOW_NUMERICBOX:
-        case WINDOW_METRICBOX:
-        case WINDOW_CURRENCYBOX:
-        case WINDOW_LONGCURRENCYBOX:
-        case WINDOW_COMBOBOX: nRole = accessibility::AccessibleRole::COMBO_BOX; break;
+        case WindowType::PATTERNBOX:
+        case WindowType::NUMERICBOX:
+        case WindowType::METRICBOX:
+        case WindowType::CURRENCYBOX:
+        case WindowType::LONGCURRENCYBOX:
+        case WindowType::COMBOBOX: nRole = accessibility::AccessibleRole::COMBO_BOX; break;
 
-        case WINDOW_LISTBOX:
-        case WINDOW_MULTILISTBOX: nRole = accessibility::AccessibleRole::LIST; break;
+        case WindowType::LISTBOX:
+        case WindowType::MULTILISTBOX: nRole = accessibility::AccessibleRole::LIST; break;
 
-        case WINDOW_TREELISTBOX: nRole = accessibility::AccessibleRole::TREE; break;
+        case WindowType::TREELISTBOX: nRole = accessibility::AccessibleRole::TREE; break;
 
-        case WINDOW_FIXEDTEXT: nRole = accessibility::AccessibleRole::LABEL; break;
-        case WINDOW_FIXEDLINE:
+        case WindowType::FIXEDTEXT: nRole = accessibility::AccessibleRole::LABEL; break;
+        case WindowType::FIXEDLINE:
             if( !GetText().isEmpty() )
                 nRole = accessibility::AccessibleRole::LABEL;
             else
                 nRole = accessibility::AccessibleRole::SEPARATOR;
             break;
 
-        case WINDOW_FIXEDBITMAP:
-        case WINDOW_FIXEDIMAGE: nRole = accessibility::AccessibleRole::ICON; break;
-        case WINDOW_GROUPBOX: nRole = accessibility::AccessibleRole::GROUP_BOX; break;
-        case WINDOW_SCROLLBAR: nRole = accessibility::AccessibleRole::SCROLL_BAR; break;
+        case WindowType::FIXEDBITMAP:
+        case WindowType::FIXEDIMAGE: nRole = accessibility::AccessibleRole::ICON; break;
+        case WindowType::GROUPBOX: nRole = accessibility::AccessibleRole::GROUP_BOX; break;
+        case WindowType::SCROLLBAR: nRole = accessibility::AccessibleRole::SCROLL_BAR; break;
 
-        case WINDOW_SLIDER:
-        case WINDOW_SPLITTER:
-        case WINDOW_SPLITWINDOW: nRole = accessibility::AccessibleRole::SPLIT_PANE; break;
+        case WindowType::SLIDER:
+        case WindowType::SPLITTER:
+        case WindowType::SPLITWINDOW: nRole = accessibility::AccessibleRole::SPLIT_PANE; break;
 
-        case WINDOW_DATEBOX:
-        case WINDOW_TIMEBOX:
-        case WINDOW_DATEFIELD:
-        case WINDOW_TIMEFIELD: nRole = accessibility::AccessibleRole::DATE_EDITOR; break;
+        case WindowType::DATEBOX:
+        case WindowType::TIMEBOX:
+        case WindowType::DATEFIELD:
+        case WindowType::TIMEFIELD: nRole = accessibility::AccessibleRole::DATE_EDITOR; break;
 
-        case WINDOW_NUMERICFIELD:
-        case WINDOW_METRICFIELD:
-        case WINDOW_CURRENCYFIELD:
-        case WINDOW_LONGCURRENCYFIELD:
-        case WINDOW_SPINFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
+        case WindowType::NUMERICFIELD:
+        case WindowType::METRICFIELD:
+        case WindowType::CURRENCYFIELD:
+        case WindowType::LONGCURRENCYFIELD:
+        case WindowType::SPINFIELD: nRole = accessibility::AccessibleRole::SPIN_BOX; break;
 
-        case WINDOW_TOOLBOX: nRole = accessibility::AccessibleRole::TOOL_BAR; break;
-        case WINDOW_STATUSBAR: nRole = accessibility::AccessibleRole::STATUS_BAR; break;
+        case WindowType::TOOLBOX: nRole = accessibility::AccessibleRole::TOOL_BAR; break;
+        case WindowType::STATUSBAR: nRole = accessibility::AccessibleRole::STATUS_BAR; break;
 
-        case WINDOW_TABPAGE: nRole = accessibility::AccessibleRole::PANEL; break;
-        case WINDOW_TABCONTROL: nRole = accessibility::AccessibleRole::PAGE_TAB_LIST; break;
+        case WindowType::TABPAGE: nRole = accessibility::AccessibleRole::PANEL; break;
+        case WindowType::TABCONTROL: nRole = accessibility::AccessibleRole::PAGE_TAB_LIST; break;
 
-        case WINDOW_DOCKINGWINDOW:
-        case WINDOW_SYSWINDOW:      nRole = (mpWindowImpl->mbFrame) ? accessibility::AccessibleRole::FRAME :
+        case WindowType::DOCKINGWINDOW:
+        case WindowType::SYSWINDOW:      nRole = (mpWindowImpl->mbFrame) ? accessibility::AccessibleRole::FRAME :
                                                                       accessibility::AccessibleRole::PANEL; break;
 
-        case WINDOW_FLOATINGWINDOW: nRole = ( mpWindowImpl->mbFrame ||
+        case WindowType::FLOATINGWINDOW: nRole = ( mpWindowImpl->mbFrame ||
                                              (mpWindowImpl->mpBorderWindow && mpWindowImpl->mpBorderWindow->mpWindowImpl->mbFrame) ||
                                              (GetStyle() & WB_OWNERDRAWDECORATION) ) ? accessibility::AccessibleRole::FRAME :
                                                                                        accessibility::AccessibleRole::WINDOW; break;
 
-        case WINDOW_WORKWINDOW: nRole = accessibility::AccessibleRole::ROOT_PANE; break;
+        case WindowType::WORKWINDOW: nRole = accessibility::AccessibleRole::ROOT_PANE; break;
 
-        case WINDOW_SCROLLBARBOX: nRole = accessibility::AccessibleRole::FILLER; break;
+        case WindowType::SCROLLBARBOX: nRole = accessibility::AccessibleRole::FILLER; break;
 
-        case WINDOW_HELPTEXTWINDOW: nRole = accessibility::AccessibleRole::TOOL_TIP; break;
+        case WindowType::HELPTEXTWINDOW: nRole = accessibility::AccessibleRole::TOOL_TIP; break;
 
-        case WINDOW_RULER: nRole = accessibility::AccessibleRole::RULER; break;
+        case WindowType::RULER: nRole = accessibility::AccessibleRole::RULER; break;
 
-        case WINDOW_SCROLLWINDOW: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
+        case WindowType::SCROLLWINDOW: nRole = accessibility::AccessibleRole::SCROLL_PANE; break;
 
-        case WINDOW_WINDOW:
-        case WINDOW_CONTROL:
-        case WINDOW_BORDERWINDOW:
-        case WINDOW_SYSTEMCHILDWINDOW:
+        case WindowType::WINDOW:
+        case WindowType::CONTROL:
+        case WindowType::BORDERWINDOW:
+        case WindowType::SYSTEMCHILDWINDOW:
         default:
             if (ImplIsAccessibleNativeFrame() )
                 nRole = accessibility::AccessibleRole::FRAME;
@@ -454,28 +454,28 @@ OUString Window::getDefaultAccessibleName() const
     OUString aAccessibleName;
     switch ( GetType() )
     {
-        case WINDOW_MULTILINEEDIT:
-        case WINDOW_PATTERNFIELD:
-        case WINDOW_NUMERICFIELD:
-        case WINDOW_METRICFIELD:
-        case WINDOW_CURRENCYFIELD:
-        case WINDOW_LONGCURRENCYFIELD:
-        case WINDOW_CALCINPUTLINE:
-        case WINDOW_EDIT:
+        case WindowType::MULTILINEEDIT:
+        case WindowType::PATTERNFIELD:
+        case WindowType::NUMERICFIELD:
+        case WindowType::METRICFIELD:
+        case WindowType::CURRENCYFIELD:
+        case WindowType::LONGCURRENCYFIELD:
+        case WindowType::CALCINPUTLINE:
+        case WindowType::EDIT:
 
-        case WINDOW_DATEBOX:
-        case WINDOW_TIMEBOX:
-        case WINDOW_CURRENCYBOX:
-        case WINDOW_LONGCURRENCYBOX:
-        case WINDOW_DATEFIELD:
-        case WINDOW_TIMEFIELD:
-        case WINDOW_SPINFIELD:
+        case WindowType::DATEBOX:
+        case WindowType::TIMEBOX:
+        case WindowType::CURRENCYBOX:
+        case WindowType::LONGCURRENCYBOX:
+        case WindowType::DATEFIELD:
+        case WindowType::TIMEFIELD:
+        case WindowType::SPINFIELD:
 
-        case WINDOW_COMBOBOX:
-        case WINDOW_LISTBOX:
-        case WINDOW_MULTILISTBOX:
-        case WINDOW_TREELISTBOX:
-        case WINDOW_METRICBOX:
+        case WindowType::COMBOBOX:
+        case WindowType::LISTBOX:
+        case WindowType::MULTILISTBOX:
+        case WindowType::TREELISTBOX:
+        case WindowType::METRICBOX:
         {
             vcl::Window *pLabel = GetAccessibleRelationLabeledBy();
             if ( pLabel && pLabel != this )
@@ -485,8 +485,8 @@ OUString Window::getDefaultAccessibleName() const
         }
         break;
 
-        case WINDOW_IMAGEBUTTON:
-        case WINDOW_PUSHBUTTON:
+        case WindowType::IMAGEBUTTON:
+        case WindowType::PUSHBUTTON:
             aAccessibleName = GetText();
             if (aAccessibleName.isEmpty())
             {
@@ -496,11 +496,11 @@ OUString Window::getDefaultAccessibleName() const
             }
         break;
 
-        case WINDOW_TOOLBOX:
+        case WindowType::TOOLBOX:
             aAccessibleName = GetText();
             break;
 
-        case WINDOW_MOREBUTTON:
+        case WindowType::MOREBUTTON:
             aAccessibleName = mpWindowImpl->maText;
             break;
 
@@ -534,7 +534,7 @@ OUString Window::GetAccessibleDescription() const
         // Special code for help text windows. ZT asks the border window for the
         // description so we have to forward this request to our inner window.
         const vcl::Window* pWin = const_cast<vcl::Window *>(this)->ImplGetWindow();
-        if ( pWin->GetType() == WINDOW_HELPTEXTWINDOW )
+        if ( pWin->GetType() == WindowType::HELPTEXTWINDOW )
             aAccessibleDescription = pWin->GetHelpText();
         else
             aAccessibleDescription = GetHelpText();

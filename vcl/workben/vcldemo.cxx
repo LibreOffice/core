@@ -1964,7 +1964,7 @@ class DemoPopup : public FloatingWindow
  public:
     DemoPopup() : FloatingWindow( nullptr, WB_SYSTEMWINDOW|WB_TOOLTIPWIN)
     {
-        SetType( WINDOW_HELPTEXTWINDOW );
+        SetType( WindowType::HELPTEXTWINDOW );
 
         SetOutputSizePixel( Size( 300, 30 ) );
         SetBackground(Wallpaper(COL_YELLOW));

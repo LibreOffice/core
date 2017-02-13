@@ -75,14 +75,14 @@ bool isDialogWindow(vcl::Window* pWindow)
 {
     WindowType nType = pWindow->GetType();
     // DIALOG to FONTDIALOG
-    if (nType >= 0x13a && nType <= 0x143)
+    if (nType >= WindowType::DIALOG && nType <= WindowType::FONTDIALOG)
         return true;
 
-    // MESSBOX, INFOBOX, QUERYBOX, WARNINGBOX, ERRORBOX
-    if (nType >= 0x130 && nType <= 0x134)
+    // MESSBOX, INFOBOX, WARNINGBOX, ERRORBOX, QUERYBOX
+    if (nType >= WindowType::MESSBOX && nType <= WindowType::QUERYBOX)
         return true;
 
-    if (nType == WINDOW_TABDIALOG)
+    if (nType == WindowType::TABDIALOG)
         return true;
 
     return false;
@@ -261,7 +261,7 @@ StringMap WindowUIObject::get_state()
     aMap["Visible"] = OUString::boolean(mxWindow->IsVisible());
     aMap["ReallyVisible"] = OUString::boolean(mxWindow->IsReallyVisible());
     aMap["Enabled"] = OUString::boolean(mxWindow->IsEnabled());
-    aMap["WindowType"] = OUString::number(mxWindow->GetType(), 16);
+    aMap["WindowType"] = OUString::number((sal_uInt16)mxWindow->GetType(), 16);
 
     Point aPos = mxWindow->GetPosPixel();
     aMap["RelPosition"] = to_string(aPos);

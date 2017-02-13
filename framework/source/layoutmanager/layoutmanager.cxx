@@ -980,7 +980,7 @@ void LayoutManager::implts_setStatusBarPosSize( const ::Point& rPos, const ::Siz
         SolarMutexGuard aGuard;
         VclPtr<vcl::Window> pParentWindow = VCLUnoHelper::GetWindow( xContainerWindow );
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-        if ( pParentWindow && ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR ))
+        if ( pParentWindow && ( pWindow && pWindow->GetType() == WindowType::STATUSBAR ))
         {
             vcl::Window* pOldParentWindow = pWindow->GetParent();
             if ( pParentWindow != pOldParentWindow )
@@ -1396,7 +1396,7 @@ uno::Reference< ui::XUIElement > LayoutManager::implts_createDockingWindow( cons
 IMPL_LINK( LayoutManager, WindowEventListener, VclWindowEvent&, rEvent, void )
 {
     vcl::Window* pWindow = rEvent.GetWindow();
-    if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+    if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
     {
         SolarMutexClearableGuard aReadLock;
         ToolbarLayoutManager* pToolbarManager( m_xToolbarManager.get() );

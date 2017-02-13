@@ -199,7 +199,7 @@ void ImplSalGetWorkArea( HWND hWnd, RECT *pRect, const RECT *pParentRect )
         vcl::Window *pWin = pFrame->GetWindow();
         while( pWin )
         {
-            WorkWindow *pWorkWin = (pWin->GetType() == WINDOW_WORKWINDOW) ? static_cast<WorkWindow *>(pWin) : nullptr;
+            WorkWindow *pWorkWin = (pWin->GetType() == WindowType::WORKWINDOW) ? static_cast<WorkWindow *>(pWin) : nullptr;
             if( pWorkWin && pWorkWin->ImplGetWindowImpl()->mbReallyVisible && pWorkWin->IsFullScreenMode() )
             {
                 bIgnoreTaskbar = true;

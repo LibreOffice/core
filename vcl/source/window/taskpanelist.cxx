@@ -289,7 +289,7 @@ vcl::Window* TaskPaneList::FindNextFloat( vcl::Window *pWindow, bool bForward )
                 /* #i83908# do not use the menubar if it is native and invisible
                 */
                 if( (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() &&
-                    ( (*p)->GetType() != WINDOW_MENUBARWINDOW || static_cast<MenuBarWindow*>(p->get())->CanGetFocus() ) )
+                    ( (*p)->GetType() != WindowType::MENUBARWINDOW || static_cast<MenuBarWindow*>(p->get())->CanGetFocus() ) )
                 {
                     pWindow = (*p).get();
                     break;
