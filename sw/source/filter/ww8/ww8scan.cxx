@@ -4509,6 +4509,7 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     else if (&rDesc == m_pSep)
     {
         // Sep Adjust if end Char-Attr == paragraph end ...
+SAL_WARN("DEBUG","::AdjustEnds rDesc is Chp["<<(&rDesc == m_pChp)<<"]/Sep["<< (&rDesc == m_pSep)<<"]/Pap["<< (&rDesc == m_pPap)<<"] startPos["<<rDesc.nStartPos<<"] endPos["<<rDesc.nEndPos<<"] lineEnd["<<m_nLineEnd<<"] Dirty["<<rDesc.pPLCFx->GetDirty()<<"]");
         if( (rDesc.nEndPos == m_nLineEnd) && (rDesc.nEndPos > rDesc.nStartPos) )
             rDesc.nEndPos--;            // ... then shorten by one character
     }
@@ -5033,7 +5034,16 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                     p->pPLCFx->SetDirty(true);
                 }
                 if (!p->pPLCFx->GetDirty() || m_pPcd)
+                {
                     GetNewSprms( *p );
+SAL_WARN("DEBUG","checking index["<<nIdx<<"] against size["<<sizeof(m_aD)<<"]");
+                    if(  p == m_pChp && nIdx < short(sizeof(m_aD)-1) && (m_aD[nIdx+1].nEndPos < p->nEndPos) )
+                    {
+SAL_WARN("DEBUG","THE FIX start["<<p->nStartPos<<"] myEnd["<<p->nEndPos<<"] nextEnd["<<m_aD[nIdx+1].nEndPos<<"] lineEnd["<<m_nLineEnd<<"] size["<<sizeof(m_aD)<<"]");
+                        if( (p->nEndPos == m_nLineEnd) && (p->nEndPos > p->nStartPos) )
+                            p->nEndPos--;            // ... then shorten by one character
+                    }
+                }
                 p->pPLCFx->SetDirty(false);
 
                 /*
