@@ -182,9 +182,7 @@ ShellResource::ShellResource()
     aCalc_ZeroDiv( SW_RES( STR_CALC_ZERODIV ) ),
     aCalc_Brack( SW_RES( STR_CALC_BRACK ) ),
     aCalc_Pow( SW_RES( STR_CALC_POW ) ),
-    aCalc_VarNFnd( SW_RES( STR_CALC_VARNFND ) ),
     aCalc_Overflow( SW_RES( STR_CALC_OVERFLOW ) ),
-    aCalc_WrongTime( SW_RES( STR_CALC_WRONGTIME ) ),
     aCalc_Default( SW_RES( STR_CALC_DEFAULT ) ),
     aCalc_Error( SW_RES( STR_CALC_ERROR ) ),
 

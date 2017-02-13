@@ -35,9 +35,7 @@ struct SW_DLLPUBLIC ShellResource
     OUString        aCalc_ZeroDiv;
     OUString        aCalc_Brack;
     OUString        aCalc_Pow;
-    OUString        aCalc_VarNFnd;
     OUString        aCalc_Overflow;
-    OUString        aCalc_WrongTime;
     OUString        aCalc_Default;
     OUString        aCalc_Error;
 

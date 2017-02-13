@@ -87,16 +87,14 @@ extern const sal_Char sCalc_Round[];
 extern const sal_Char sCalc_Date[];
 
 //  Calculate ErrorCodes
-enum SwCalcError
+enum class SwCalcError
 {
-    CALC_NOERR=0,
-    CALC_SYNTAX,        //  syntax error
-    CALC_ZERODIV,       //  division by zero
-    CALC_BRACK,         //  faulty brackets
-    CALC_POWERR,        //  overflow in power function
-    CALC_VARNFND,       //  variable was not found
-    CALC_OVERFLOW,      //  overflow
-    CALC_WRONGTIME      //  wrong time format
+    NONE=0,
+    Syntax,           //  syntax error
+    DivByZero,        //  division by zero
+    FaultyBrackets,   //  faulty brackets
+    OverflowInPower,  //  overflow in power function
+    Overflow,         //  overflow
 };
 
 class SwSbxValue : public SbxValue
@@ -196,7 +194,7 @@ public:
     void        Pop();
 
     void        SetCalcError( SwCalcError eErr )    { m_eError = eErr; }
-    bool        IsCalcError() const                 { return 0 != m_eError; }
+    bool        IsCalcError() const                 { return SwCalcError::NONE != m_eError; }
 
     static bool Str2Double( const OUString& rStr, sal_Int32& rPos,
                                 double& rVal );

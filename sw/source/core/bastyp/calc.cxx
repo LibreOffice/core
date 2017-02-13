@@ -237,7 +237,7 @@ SwCalc::SwCalc( SwDoc& rD )
     , m_nListPor( 0 )
     , m_eCurrOper( CALC_NAME )
     , m_eCurrListOper( CALC_NAME )
-    , m_eError( CALC_NOERR )
+    , m_eError( SwCalcError::NONE )
 {
     m_aErrExpr.aStr = "~C_ERR~";
     memset( m_aVarTable, 0, sizeof(m_aVarTable) );
@@ -374,7 +374,7 @@ SwCalc::~SwCalc()
 
 SwSbxValue SwCalc::Calculate( const OUString& rStr )
 {
-    m_eError = CALC_NOERR;
+    m_eError = SwCalcError::NONE;
     SwSbxValue nResult;
 
     if( rStr.isEmpty() )
@@ -386,10 +386,10 @@ SwSbxValue SwCalc::Calculate( const OUString& rStr )
     m_sCommand = rStr;
     m_nCommandPos = 0;
 
-    while( (m_eCurrOper = GetToken()) != CALC_ENDCALC && m_eError == CALC_NOERR )
+    while( (m_eCurrOper = GetToken()) != CALC_ENDCALC && m_eError == SwCalcError::NONE )
         nResult = Expr();
 
-    if( m_eError )
+    if( m_eError != SwCalcError::NONE)
         nResult.PutDouble( DBL_MAX );
 
     return nResult;
@@ -409,14 +409,12 @@ OUString SwCalc::GetStrResult( double nValue, bool )
     if( nValue >= DBL_MAX )
         switch( m_eError )
         {
-        case CALC_SYNTAX    :   return RESOURCE->aCalc_Syntax;
-        case CALC_ZERODIV   :   return RESOURCE->aCalc_ZeroDiv;
-        case CALC_BRACK     :   return RESOURCE->aCalc_Brack;
-        case CALC_POWERR    :   return RESOURCE->aCalc_Pow;
-        case CALC_VARNFND   :   return RESOURCE->aCalc_VarNFnd;
-        case CALC_OVERFLOW  :   return RESOURCE->aCalc_Overflow;
-        case CALC_WRONGTIME :   return RESOURCE->aCalc_WrongTime;
-        default             :   return RESOURCE->aCalc_Default;
+        case SwCalcError::Syntax          :   return RESOURCE->aCalc_Syntax;
+        case SwCalcError::DivByZero       :   return RESOURCE->aCalc_ZeroDiv;
+        case SwCalcError::FaultyBrackets  :   return RESOURCE->aCalc_Brack;
+        case SwCalcError::OverflowInPower :   return RESOURCE->aCalc_Pow;
+        case SwCalcError::Overflow        :   return RESOURCE->aCalc_Overflow;
+        default                           :   return RESOURCE->aCalc_Default;
         }
 
     const sal_Int32 nDecPlaces = 15;
@@ -839,7 +837,7 @@ SwCalcOper SwCalc::GetToken()
 
         if( bSetError )
         {
-            m_eError = CALC_SYNTAX;
+            m_eError = SwCalcError::Syntax;
             m_eCurrOper = CALC_PRINT;
         }
         m_nCommandPos = aRes.EndPos;
@@ -938,7 +936,7 @@ SwSbxValue SwCalc::Term()
                 sal_Int32 nDec = (sal_Int32) floor( e.GetDouble() );
                 if( nDec < -20 || nDec > 20 )
                 {
-                    m_eError = CALC_OVERFLOW;
+                    m_eError = SwCalcError::Overflow;
                     left.Clear();
                     return left;
                 }
@@ -1021,7 +1019,7 @@ SwSbxValue SwCalc::Term()
                 left.MakeDouble();
 
                 if( SbxDIV == eSbxOper && !aRight.GetDouble() )
-                    m_eError = CALC_ZERODIV;
+                    m_eError = SwCalcError::DivByZero;
                 else
                     left.Compute( eSbxOper, aRight );
             }
@@ -1037,7 +1035,7 @@ SwSbxValue SwCalc::StdFunc(pfCalc pFnc, bool bChkTrig)
     if( !bChkTrig || ( nVal > -1 && nVal < 1 ) )
         nErg.PutDouble( (*pFnc)( nVal ) );
     else
-        m_eError = CALC_OVERFLOW;
+        m_eError = SwCalcError::Overflow;
     return nErg;
 }
 
@@ -1104,7 +1102,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             }
             else if( m_eCurrOper == CALC_NAME )
             {
-                m_eError = CALC_SYNTAX;
+                m_eError = SwCalcError::Syntax;
             }
             else
             {
@@ -1131,7 +1129,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
                     // Explicitly disallow unknown function names (followed by "("),
                     // allow unknown variable names (equal to zero)
                     if (nErg.IsVoidValue() && (eOper == CALC_LP))
-                        m_eError = CALC_SYNTAX;
+                        m_eError = SwCalcError::Syntax;
                     else
                         rChkPow = true;
                     break;
@@ -1153,7 +1151,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             SwSbxValue nErg = Expr();
             if( m_eCurrOper != CALC_RP )
             {
-                m_eError = CALC_BRACK;
+                m_eError = SwCalcError::FaultyBrackets;
             }
             else
             {
@@ -1179,7 +1177,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             GetToken();
             SwSbxValue nErg = Prim();
             if( nErg.GetDouble() < 0 )
-                m_eError = CALC_OVERFLOW;
+                m_eError = SwCalcError::Overflow;
             else
                 nErg.PutDouble( sqrt( nErg.GetDouble() ));
             return nErg;
@@ -1203,7 +1201,7 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             break;
         }
         default:
-            m_eError = CALC_SYNTAX;
+            m_eError = SwCalcError::Syntax;
             break;
     }
 
@@ -1226,7 +1224,7 @@ SwSbxValue SwCalc::Prim()
         if( ( dleft < 0.0 && 0.0 != fraction ) ||
             ( 0.0 == dleft && right < 0.0 ) )
         {
-            m_eError = CALC_OVERFLOW;
+            m_eError = SwCalcError::Overflow;
             nErg.Clear();
         }
         else
@@ -1234,7 +1232,7 @@ SwSbxValue SwCalc::Prim()
             dleft = pow(dleft, right );
             if( dleft == HUGE_VAL )
             {
-                m_eError = CALC_POWERR;
+                m_eError = SwCalcError::OverflowInPower;
                 nErg.Clear();
             }
             else
