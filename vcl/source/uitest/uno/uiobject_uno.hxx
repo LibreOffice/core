@@ -19,8 +19,12 @@
 #include <com/sun/star/beans/PropertyValues.hpp>
 
 #include <memory>
+#include <condition_variable>
+#include <mutex>
 
 #include <vcl/uitest/uiobject.hxx>
+
+class Timer;
 
 typedef ::cppu::WeakComponentImplHelper <
     css::ui::test::XUIObject, css::lang::XServiceInfo
@@ -54,6 +58,21 @@ public:
     css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     OUString SAL_CALL getHierarchy() override;
+
+private:
+
+    DECL_LINK( ExecuteActionHdl, Timer*, void );
+    DECL_LINK( NotifyHdl, Timer*, void );
+
+    std::condition_variable cv;
+    std::condition_variable cv2;
+    std::mutex mutex;
+    std::mutex mutex2;
+    std::mutex mutex3;
+    bool mReady;
+
+    OUString mAction;
+    css::uno::Sequence<css::beans::PropertyValue> mPropValues;
 };
 
 #endif

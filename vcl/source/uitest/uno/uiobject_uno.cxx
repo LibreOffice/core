@@ -9,17 +9,24 @@
 
 #include "uiobject_uno.hxx"
 #include <vcl/svapp.hxx>
+#include <vcl/idle.hxx>
 
 #include <set>
 
 UIObjectUnoObj::UIObjectUnoObj(std::unique_ptr<UIObject> pObj):
     UIObjectBase(m_aMutex),
-    mpObj(std::move(pObj))
+    mpObj(std::move(pObj)),
+    mReady(true)
 {
 }
 
 UIObjectUnoObj::~UIObjectUnoObj()
 {
+    {
+        std::lock_guard<std::mutex> lk3(mutex3);
+        std::lock_guard<std::mutex> lk(mutex2);
+        std::lock_guard<std::mutex> lk2(mutex);
+    }
     SolarMutexGuard aGuard;
     mpObj.reset();
 }
@@ -34,22 +41,64 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
     return new UIObjectUnoObj(std::move(pObj));
 }
 
+IMPL_LINK_NOARG(UIObjectUnoObj, NotifyHdl, Timer*, void)
+{
+    std::lock_guard<std::mutex> lk(mutex2);
+    mReady = true;
+    cv2.notify_one();
+    cv.notify_one();
+}
+
+IMPL_LINK_NOARG(UIObjectUnoObj, ExecuteActionHdl, Timer*, void)
+{
+    std::lock_guard<std::mutex> lk3(mutex3);
+    Idle aIdle;
+    {
+        std::lock_guard<std::mutex> lk(mutex);
+        SolarMutexGuard aGuard;
+        StringMap aMap;
+        for (sal_Int32 i = 0, n = mPropValues.getLength(); i < n; ++i)
+        {
+            OUString aVal;
+            if (!(mPropValues[i].Value >>= aVal))
+                continue;
+
+            aMap[mPropValues[i].Name] = aVal;
+        }
+        mpObj->execute(mAction, aMap);
+        aIdle.SetDebugName("UI Test Idle Handler2");
+        aIdle.SetPriority(TaskPriority::LOWEST);
+        aIdle.SetInvokeHandler(LINK(this, UIObjectUnoObj, NotifyHdl));
+        aIdle.Start();
+    }
+    Scheduler::ProcessEventsToIdle();
+    std::unique_lock<std::mutex> lk(mutex);
+    cv2.wait(lk, [this]{return mReady;});
+}
+
 void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rPropValues)
 {
     if (!mpObj)
         throw css::uno::RuntimeException();
 
-    SolarMutexGuard aGuard;
-    StringMap aMap;
-    for (sal_Int32 i = 0, n = rPropValues.getLength(); i < n; ++i)
     {
-        OUString aVal;
-        if (!(rPropValues[i].Value >>= aVal))
-            continue;
-
-        aMap[rPropValues[i].Name] = aVal;
+        std::lock_guard<std::mutex> lock(mutex3);
     }
-    mpObj->execute(rAction, aMap);
+
+    mAction = rAction;
+    mPropValues = rPropValues;
+    mReady = false;
+    Idle aIdle;
+    aIdle.SetDebugName("UI Test Idle Handler");
+    aIdle.SetPriority(TaskPriority::HIGH);
+    aIdle.SetInvokeHandler(LINK(this, UIObjectUnoObj, ExecuteActionHdl));
+    std::unique_lock<std::mutex> lk(mutex);
+    {
+        SolarMutexGuard aGuard;
+        aIdle.Start();
+    }
+
+    cv.wait(lk, [this]{return mReady;});
 }
 
 css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
