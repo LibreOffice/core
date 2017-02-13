@@ -259,7 +259,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
         {
             switch (meDragMode)
             {
-                case SdrDragMode::Rotate: case SdrDragMode::Shear: case SdrDragMode::Distort:
+                case SdrDragMode::Rotate: case SdrDragMode::Shear:
                 {
                     switch (meDragHdl)
                     {
@@ -283,7 +283,7 @@ bool SdrDragView::BegDragObj(const Point& rPnt, OutputDevice* pOut, SdrHdl* pHdl
                         case SdrHdlKind::UpperLeft: case SdrHdlKind::UpperRight:
                         case SdrHdlKind::LowerLeft: case SdrHdlKind::LowerRight:
                         {
-                            if (meDragMode==SdrDragMode::Shear || meDragMode==SdrDragMode::Distort)
+                            if (meDragMode==SdrDragMode::Shear)
                             {
                                 if (!IsDistortAllowed(true) && !IsDistortAllowed()) return false;
                                 mpCurrentSdrDragMethod = new SdrDragDistort(*this);

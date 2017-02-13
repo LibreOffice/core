@@ -1075,7 +1075,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
                 if (bMov)
                     return Pointer(PointerStyle::Rotate);
             } break;
-            case SdrDragMode::Shear: case SdrDragMode::Distort: {
+            case SdrDragMode::Shear: {
                 if (bCorner) {
                     if (!IsDistortAllowed(true) && !IsDistortAllowed()) return Pointer(PointerStyle::NotAllowed);
                     else return Pointer(PointerStyle::RefHand);
