@@ -39,7 +39,7 @@ class CalcChartUIDemo(UITestCase):
         xChartDlg = self.xUITest.getTopFocusWindow()
 
         xCancelBtn = xChartDlg.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 
@@ -54,7 +54,7 @@ class CalcChartUIDemo(UITestCase):
         xChartDlg = self.xUITest.getTopFocusWindow()
 
         xOkBtn = xChartDlg.getChild("finish")
-        xOkBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xOkBtn)
 
         self.ui_test.close_doc()
 
@@ -78,7 +78,7 @@ class CalcChartUIDemo(UITestCase):
         xDataInCols.executeAction("CLICK", tuple())
 
         xCancelBtn = xChartDlg.getChild("finish")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 
@@ -95,7 +95,7 @@ class CalcChartUIDemo(UITestCase):
         xChartDlg = self.xUITest.getTopFocusWindow()
 
         xNextBtn = xChartDlg.getChild("finish")
-        xNextBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xNextBtn)
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
@@ -118,7 +118,7 @@ class CalcChartUIDemo(UITestCase):
         xChartDlg = self.xUITest.getTopFocusWindow()
 
         xNextBtn = xChartDlg.getChild("finish")
-        xNextBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xNextBtn)
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 
@@ -144,7 +144,7 @@ class CalcChartUIDemo(UITestCase):
         xChartDlg = self.xUITest.getTopFocusWindow()
 
         xNextBtn = xChartDlg.getChild("finish")
-        xNextBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xNextBtn)
 
         xGridWindow.executeAction("DESELECT", mkPropertyValues({"OBJECT": ""}))
 

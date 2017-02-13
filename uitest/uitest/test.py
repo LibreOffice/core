@@ -144,7 +144,7 @@ class UITest(object):
                 if event.hasExecuted("DialogExecute"):
                     xCloseDlg = self._xUITest.getTopFocusWindow()
                     xNoBtn = xCloseDlg.getChild("discard")
-                    xNoBtn.executeAction("CLICK", tuple())
+                    self.close_dialog_through_button(xNoBtn);
                     return
                 elif event.hasExecuted("OnViewClosed"):
                     return
