@@ -6,9 +6,9 @@
 // aAxisSize.Height
 495
 // aAxisSize.Width
-14438
+14439
 // aAxisTransformation
-14439;0;3510;0;496;7520;0;0;1
+14440;0;3510;0;496;7520;0;0;1
 // nAxisGeometriesCount
 4
 // sAxisLineDash
