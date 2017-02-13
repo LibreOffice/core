@@ -27,7 +27,6 @@ VButton::VButton()
     : m_xShapeFactory(nullptr)
     , m_xTarget(nullptr)
     , m_xShape(nullptr)
-    , m_rPosition(0, 0)
 {
 }
 

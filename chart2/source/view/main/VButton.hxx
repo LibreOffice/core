@@ -23,7 +23,6 @@ private:
     css::uno::Reference<css::lang::XMultiServiceFactory> m_xShapeFactory;
     css::uno::Reference<css::drawing::XShapes> m_xTarget;
     css::uno::Reference<css::drawing::XShape> m_xShape;
-    css::awt::Point m_rPosition;
     OUString m_sLabel;
     OUString m_sCID;
 
