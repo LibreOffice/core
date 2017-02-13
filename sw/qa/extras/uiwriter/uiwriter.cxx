@@ -93,6 +93,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/configurationhelper.hxx>
 #include <editeng/unolingu.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
@@ -2628,21 +2629,18 @@ void SwUiWriterTest::testTdf88899()
 
 void SwUiWriterTest::testTdf90362()
 {
+    // First check if the end of the second paragraph is indeed protected.
     SwDoc* pDoc = createDoc("tdf90362.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
-    // Ensure correct initial setting
-    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
-    // First check if the end of the second paragraph is indeed protected.
     pWrtShell->EndPara();
     pWrtShell->Down(/*bSelect=*/false);
     CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
 
     // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
-    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(true), comphelper::EConfigurationModes::Standard);
+    SwViewOption aViewOptions(*pWrtShell->GetViewOptions());
+    aViewOptions.SetIgnoreProtectedArea(true);
+    pWrtShell->ApplyViewOptions(aViewOptions);
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
-    // Clean up, otherwise following tests will have that option set
-    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
 }
 
 void SwUiWriterTest::testUndoCharAttribute()
@@ -3564,11 +3562,6 @@ void SwUiWriterTest::testTdf105625()
 {
     SwDoc* pDoc = createDoc("tdf105625.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
-    // Ensure correct initial setting
-    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext,
-        "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea",
-        css::uno::Any(false), comphelper::EConfigurationModes::Standard);
     // We should be able to edit at positions adjacent to fields.
     // Check if the start and the end of the 1st paragraph are not protected
     // (they are adjacent to FORMCHECKBOX)
