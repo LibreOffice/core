@@ -23,6 +23,7 @@
 #include <rscerror.h>
 #include <rschash.hxx>
 #include <rsctop.hxx>
+#include <tools/resid.hxx>
 
 class RscConst : public RscTop
 {
@@ -35,7 +36,7 @@ protected:
     VarEle *        pVarArray;  // pointer to the field with constant
     sal_uInt32      nEntries;   // number of entries in field
 public:
-                    RscConst( Atom nId, sal_uInt32 nTypId );
+                    RscConst( Atom nId, RESOURCE_TYPE nTypId );
                     virtual ~RscConst() override;
     virtual RSCCLASS_TYPE   GetClassType() const override;
                     // sets the allowed values
@@ -53,7 +54,7 @@ class RscEnum : public RscConst
         bool        bDflt;  // is default
     };
 public:
-                    RscEnum( Atom nId, sal_uInt32 nTypId );
+                    RscEnum( Atom nId, RESOURCE_TYPE nTypId );
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
     sal_uInt32      Size() const override { return ALIGNED_SIZE(sizeof(RscEnumInst)); }
 

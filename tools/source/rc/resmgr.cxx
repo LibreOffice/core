@@ -544,7 +544,7 @@ bool InternalResMgr::IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) cons
 {
     // Anfang der Strings suchen
     ImpContent aValue;
-    aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
+    aValue.nTypeAndId = ((sal_uInt64(sal_uInt32(nRT)) << 32) | nId);
     ImpContent * pFind = ::std::lower_bound(pContent,
                                             pContent + nEntries,
                                             aValue,
@@ -558,11 +558,11 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
 {
 #ifdef DBG_UTIL
     if( pResUseDump )
-        pResUseDump->erase( (sal_uInt64(nRT) << 32) | nId );
+        pResUseDump->erase( (sal_uInt64(sal_uInt32(nRT)) << 32) | nId );
 #endif
     // search beginning of string
     ImpContent aValue;
-    aValue.nTypeAndId = ((sal_uInt64(nRT) << 32) | nId);
+    aValue.nTypeAndId = ((sal_uInt64(sal_uInt32(nRT)) << 32) | nId);
     ImpContent* pEnd = (pContent + nEntries);
     ImpContent* pFind = ::std::lower_bound( pContent,
                                             pEnd,
@@ -578,9 +578,9 @@ void* InternalResMgr::LoadGlobalRes( RESOURCE_TYPE nRT, sal_uInt32 nId,
                 // search beginning of string
                 ImpContent * pFirst = pFind;
                 ImpContent * pLast = pFirst;
-                while( pFirst > pContent && ((pFirst -1)->nTypeAndId >> 32) == RSC_STRING )
+                while( pFirst > pContent && RESOURCE_TYPE((pFirst -1)->nTypeAndId >> 32) == RSC_STRING )
                     --pFirst;
-                while( pLast < pEnd && (pLast->nTypeAndId >> 32) == RSC_STRING )
+                while( pLast < pEnd && RESOURCE_TYPE(pLast->nTypeAndId >> 32) == RSC_STRING )
                     ++pLast;
                 nOffCorrection = pFirst->nOffset;
                 sal_uInt32 nSize;

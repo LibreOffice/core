@@ -44,7 +44,7 @@ sal_uInt32 RscInstNode::GetId() const
     return nTypeId;
 }
 
-RscArray::RscArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper, RscEnum * pTypeCl )
+RscArray::RscArray( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuper, RscEnum * pTypeCl )
     : RscTop( nId, nTypeId, pSuper )
     , pTypeClass(pTypeCl)
     , nOffInstData(RscTop::Size())
@@ -422,7 +422,7 @@ ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return aError;
 }
 
-RscLangArray::RscLangArray( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper,
+RscLangArray::RscLangArray( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuper,
                           RscEnum * pTypeCl )
     : RscArray( nId, nTypeId, pSuper, pTypeCl )
 {

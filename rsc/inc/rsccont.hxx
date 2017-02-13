@@ -54,7 +54,7 @@ protected:
     ERRTYPE         ContWriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                                  RscTypCont * pTC, sal_uInt32, bool bExtra );
 public:
-                    RscBaseCont( Atom nId, sal_uInt32 nTypId,
+                    RscBaseCont( Atom nId, RESOURCE_TYPE nTypId,
                                  bool bNoId );
                     virtual ~RscBaseCont() override;
     virtual RSCCLASS_TYPE   GetClassType() const override;
@@ -105,7 +105,7 @@ public:
 class RscContWriteSrc : public RscBaseCont
 {
 public:
-                    RscContWriteSrc( Atom nId, sal_uInt32 nTypId );
+                    RscContWriteSrc( Atom nId, RESOURCE_TYPE nTypId );
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
 };
@@ -113,7 +113,7 @@ public:
 class RscCont : public RscContWriteSrc
 {
 public:
-                    RscCont( Atom nId, sal_uInt32 nTypId );
+                    RscCont( Atom nId, RESOURCE_TYPE nTypId );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };
@@ -121,7 +121,7 @@ public:
 class RscContExtraData : public RscContWriteSrc
 {
 public:
-                    RscContExtraData( Atom nId, sal_uInt32 nTypId );
+                    RscContExtraData( Atom nId, RESOURCE_TYPE nTypId );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
 };

@@ -30,15 +30,15 @@
 // Resource types
 // Minimum is 0x100 due to MS-Windows resource types
 // (RSC_NOTYPE=0x100) is defined in resid.hxx
-#define RSC_VERSIONCONTROL      (RSC_NOTYPE + 0x02) // Version control
+#define RSC_VERSIONCONTROL      (RSC_NOTYPE + RESOURCE_TYPE(0x02)) // Version control
 
-#define RSC_RESOURCE            (RSC_NOTYPE + 0x10)
-#define RSC_STRING              (RSC_NOTYPE + 0x11)
-#define RSC_BITMAP              (RSC_NOTYPE + 0x13)
-#define RSC_MENU                (RSC_NOTYPE + 0x1c)
-#define RSC_MENUITEM            (RSC_NOTYPE + 0x1d) // only used internally
+#define RSC_RESOURCE            (RSC_NOTYPE + RESOURCE_TYPE(0x10))
+#define RSC_STRING              (RSC_NOTYPE + RESOURCE_TYPE(0x11))
+#define RSC_BITMAP              (RSC_NOTYPE + RESOURCE_TYPE(0x13))
+#define RSC_MENU                (RSC_NOTYPE + RESOURCE_TYPE(0x1c))
+#define RSC_MENUITEM            (RSC_NOTYPE + RESOURCE_TYPE(0x1d)) // only used internally
 
-#define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
+#define RSC_STRINGARRAY         (RSC_NOTYPE + RESOURCE_TYPE(0x79))
 
 // (RSC_NOTYPE + 0x200) - (RSC_NOTYPE + 0x300) reserved for Sfx
 

@@ -202,7 +202,7 @@ inline sal_uInt32 RSHEADER_TYPE::GetId()
 
 inline RESOURCE_TYPE RSHEADER_TYPE::GetRT()
 {
-    return (RESOURCE_TYPE)ResMgr::GetLong( &nRT );
+    return RESOURCE_TYPE(ResMgr::GetLong( &nRT ));
 }
 
 inline sal_uInt32 RSHEADER_TYPE::GetGlobOff()
