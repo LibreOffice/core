@@ -178,7 +178,6 @@ public:
         StretchX,
         StretchY,
         Equations,
-        Handles,
         TextFrames
     };
     bool IsDefaultGeometry( const DefaultType eDefaultType ) const;

@@ -1305,35 +1305,6 @@ bool SdrObjCustomShape::IsDefaultGeometry( const DefaultType eDefaultType ) cons
                 bIsDefaultGeometry = true;
         }
         break;
-
-        case DefaultType::Handles :
-        {
-            const OUString sHandles(  "Handles"  );
-            pAny = ((SdrCustomShapeGeometryItem&)aGeometryItem).GetPropertyValueByName( sHandles );
-            if ( pAny && pDefCustomShape && pDefCustomShape->nHandles && pDefCustomShape->pHandles )
-            {
-                css::uno::Sequence< css::beans::PropertyValues > seqHandles1, seqHandles2;
-                if ( *pAny >>= seqHandles1 )
-                {
-                    sal_Int32 i, nCount = pDefCustomShape->nHandles;
-                    const SvxMSDffHandle* pData = pDefCustomShape->pHandles;
-                    seqHandles2.realloc( nCount );
-                    for ( i = 0; i < nCount; i++, pData++ )
-                    {
-                        sal_Int32 nPropertiesNeeded;
-                        css::beans::PropertyValues& rPropValues = seqHandles2[ i ];
-                        nPropertiesNeeded = GetNumberOfProperties( pData );
-                        rPropValues.realloc( nPropertiesNeeded );
-                        lcl_ShapePropertiesFromDFF( pData, rPropValues );
-                    }
-                    if ( seqHandles1 == seqHandles2 )
-                        bIsDefaultGeometry = true;
-                }
-            }
-            else if ( pDefCustomShape && ( ( pDefCustomShape->nHandles == 0 ) || ( pDefCustomShape->pHandles == nullptr ) ) )
-                bIsDefaultGeometry = true;
-        }
-        break;
     }
     return bIsDefaultGeometry;
 }
