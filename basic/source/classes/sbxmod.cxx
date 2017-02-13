@@ -442,7 +442,7 @@ IMPL_STATIC_LINK_NOARG( AsyncQuitHandler, OnAsyncQuit, void*, void )
     QuitApplication();
 }
 
-// A Basic module has set EXTSEARCH, so that the elements, that the modul contains,
+// A Basic module has set EXTSEARCH, so that the elements, that the module contains,
 // could be found from other module.
 
 SbModule::SbModule( const OUString& rName, bool bVBACompat )

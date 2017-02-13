@@ -2405,7 +2405,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
 /*
     add new recorded dispatch macro script into the application global basic
     lib container. It generates a new unique id for it and insert the macro
-    by using this number as name for the modul
+    by using this number as name for the module
  */
 void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
 {
@@ -2550,7 +2550,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const OUString& sMacro )
         sRoutine.append(sMacro);
         sRoutine.append( "\nend sub\n" );
 
-        // create the modul inside the library and insert the macro routine
+        // create the module inside the library and insert the macro routine
         aTemp <<= sRoutine.makeStringAndClear();
         if ( bReplace )
         {
