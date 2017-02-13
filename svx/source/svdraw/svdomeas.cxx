@@ -411,8 +411,9 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
 
     rPol.eUsedTextHPos=rRec.eWantTextHPos;
     rPol.eUsedTextVPos=rRec.eWantTextVPos;
-    if (rPol.eUsedTextVPos==SdrMeasureTextVPos::Auto) rPol.eUsedTextVPos=SdrMeasureTextVPos::Above;
-    bool bBrkLine=rPol.eUsedTextVPos==SdrMeasureTextVPos::BreakedLine;
+    if (rPol.eUsedTextVPos==SdrMeasureTextVPos::Auto)
+        rPol.eUsedTextVPos=SdrMeasureTextVPos::Above;
+    bool bBrkLine=false;
     if (rPol.eUsedTextVPos==SdrMeasureTextVPos::VerticalCentered)
     {
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
@@ -675,7 +676,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
         }
         switch (eMV) {
             case SdrMeasureTextVPos::VerticalCentered:
-            case SdrMeasureTextVPos::BreakedLine: aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()/2; break;
+                aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()/2; break;
             case SdrMeasureTextVPos::Below: {
                 if (!bUpsideDown) aTextPos.Y()=aPt1b.Y()+nLWdt;
                 else aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()-nLWdt;
@@ -697,7 +698,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
         }
         switch (eMV) {
             case SdrMeasureTextVPos::VerticalCentered:
-            case SdrMeasureTextVPos::BreakedLine: aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()/2; break;
+                aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()/2; break;
             case SdrMeasureTextVPos::Below: {
                 if (!bBelowRefEdge) aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()+nLWdt;
                 else aTextPos.Y()=aPt1b.Y()-nLWdt;
@@ -1334,7 +1335,7 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
         // at eMH==SdrMeasureTextHPos::Inside we can anchor horizontally
         if (eMV==SdrMeasureTextVPos::Above) eTV=SDRTEXTVERTADJUST_BOTTOM;
         if (eMV==SdrMeasureTextVPos::Below) eTV=SDRTEXTVERTADJUST_TOP;
-        if (eMV==SdrMeasureTextVPos::BreakedLine || eMV==SdrMeasureTextVPos::VerticalCentered) eTV=SDRTEXTVERTADJUST_CENTER;
+        if (eMV==SdrMeasureTextVPos::VerticalCentered) eTV=SDRTEXTVERTADJUST_CENTER;
     } else {
         if (eMH==SdrMeasureTextHPos::LeftOutside) eTV=SDRTEXTVERTADJUST_BOTTOM;
         if (eMH==SdrMeasureTextHPos::RightOutside) eTV=SDRTEXTVERTADJUST_TOP;
@@ -1346,7 +1347,7 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
             if (eMV==SdrMeasureTextVPos::Above) eTH=SDRTEXTHORZADJUST_RIGHT;
             if (eMV==SdrMeasureTextVPos::Below) eTH=SDRTEXTHORZADJUST_LEFT;
         }
-        if (eMV==SdrMeasureTextVPos::BreakedLine || eMV==SdrMeasureTextVPos::VerticalCentered) eTH=SDRTEXTHORZADJUST_CENTER;
+        if (eMV==SdrMeasureTextVPos::VerticalCentered) eTH=SDRTEXTHORZADJUST_CENTER;
     }
 
     EVAnchorMode eRet=ANCHOR_BOTTOM_HCENTER;
