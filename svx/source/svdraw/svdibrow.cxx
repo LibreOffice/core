@@ -66,13 +66,13 @@ using namespace com::sun::star;
 
 #define ITEM_NOT_FOUND std::numeric_limits<std::size_t>::max()
 
-enum ItemType {
-    ITEM_DONTKNOW, ITEM_BYTE, ITEM_INT16, ITEM_UINT16, ITEM_INT32, ITEM_UINT32,
-    ITEM_ENUM, ITEM_BOOL, ITEM_FLAG, ITEM_STRING, ITEM_POINT, ITEM_RECT, ITEM_RANGE, ITEM_LRANGE,
-    ITEM_FRACTION,
-    ITEM_XCOLOR,
-    ITEM_COLOR,
-    ITEM_FONT, ITEM_FONTHEIGHT, ITEM_FONTWIDTH, ITEM_FIELD
+enum class ItemType {
+    DONTKNOW, BYTE, INT16, UINT16, INT32, UINT32,
+    ENUM, BOOL, FLAG, STRING, POINT, RECT, RANGE,
+    FRACTION,
+    XCOLOR,
+    COLOR,
+    FONT, FONTHEIGHT, FONTWIDTH, FIELD
 };
 
 
@@ -100,7 +100,7 @@ public:
     :   eState(SfxItemState::UNKNOWN),
         nWhichId(0),
         pType(nullptr),
-        eItemType(ITEM_DONTKNOW),
+        eItemType(ItemType::DONTKNOW),
         nVal(0),
         nMin(0),
         nMax(0),
@@ -118,26 +118,25 @@ OUString ImpItemListRow::GetItemTypeStr() const
 {
     switch(eItemType)
     {
-        case ITEM_BYTE      : return OUString("Byte");     break;
-        case ITEM_INT16     : return OUString("Int16");    break;
-        case ITEM_UINT16    : return OUString("UInt16");   break;
-        case ITEM_INT32     : return OUString("Int32");    break;
-        case ITEM_UINT32    : return OUString("UInt32");   break;
-        case ITEM_ENUM      : return OUString("Enum");     break;
-        case ITEM_BOOL      : return OUString("Bool");     break;
-        case ITEM_FLAG      : return OUString("Flag");     break;
-        case ITEM_STRING    : return OUString("String");   break;
-        case ITEM_POINT     : return OUString("Point");    break;
-        case ITEM_RECT      : return OUString("Rectangle");break;
-        case ITEM_RANGE     : return OUString("Range");    break;
-        case ITEM_LRANGE    : return OUString("LRange");   break;
-        case ITEM_FRACTION  : return OUString("Fraction"); break;
-        case ITEM_XCOLOR    : return OUString("XColor");   break;
-        case ITEM_COLOR     : return OUString("Color");    break;
-        case ITEM_FONT      : return OUString("Font");     break;
-        case ITEM_FONTHEIGHT: return OUString("FontHeight");break;
-        case ITEM_FONTWIDTH : return OUString("FontWidth"); break;
-        case ITEM_FIELD     : return OUString("Field");     break;
+        case ItemType::BYTE      : return OUString("Byte");     break;
+        case ItemType::INT16     : return OUString("Int16");    break;
+        case ItemType::UINT16    : return OUString("UInt16");   break;
+        case ItemType::INT32     : return OUString("Int32");    break;
+        case ItemType::UINT32    : return OUString("UInt32");   break;
+        case ItemType::ENUM      : return OUString("Enum");     break;
+        case ItemType::BOOL      : return OUString("Bool");     break;
+        case ItemType::FLAG      : return OUString("Flag");     break;
+        case ItemType::STRING    : return OUString("String");   break;
+        case ItemType::POINT     : return OUString("Point");    break;
+        case ItemType::RECT      : return OUString("Rectangle");break;
+        case ItemType::RANGE     : return OUString("Range");    break;
+        case ItemType::FRACTION  : return OUString("Fraction"); break;
+        case ItemType::XCOLOR    : return OUString("XColor");   break;
+        case ItemType::COLOR     : return OUString("Color");    break;
+        case ItemType::FONT      : return OUString("Font");     break;
+        case ItemType::FONTHEIGHT: return OUString("FontHeight");break;
+        case ItemType::FONTWIDTH : return OUString("FontWidth"); break;
+        case ItemType::FIELD     : return OUString("Field");     break;
         default: break;
     }
 
@@ -969,36 +968,36 @@ void SdrItemBrowserControl::SetAttributes(const SfxItemSet* pSet, const SfxItemS
                         aEntry.nMax=0x7FFFFFFF;
                         aEntry.nMin=-aEntry.nMax;
                         aEntry.nVal=-4711;
-                        if      (dynamic_cast<const SfxByteItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_BYTE;
-                        else if (dynamic_cast<const SfxInt16Item *>(&rItem) != nullptr) aEntry.eItemType=ITEM_INT16;
-                        else if (dynamic_cast<const SfxUInt16Item *>(&rItem) != nullptr) aEntry.eItemType=ITEM_UINT16;
-                        else if (dynamic_cast<const SfxInt32Item *>(&rItem) != nullptr) aEntry.eItemType=ITEM_INT32;
-                        else if (dynamic_cast<const SfxUInt32Item *>(&rItem) != nullptr) aEntry.eItemType=ITEM_UINT32;
-                        else if (dynamic_cast<const SfxEnumItemInterface *>(&rItem) != nullptr) aEntry.eItemType=ITEM_ENUM;
-                        else if (dynamic_cast<const SfxBoolItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_BOOL;
-                        else if (dynamic_cast<const SfxFlagItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FLAG;
-                        else if (dynamic_cast<const XColorItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_XCOLOR;
-                        else if (dynamic_cast<const SfxStringItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_STRING;
-                        else if (dynamic_cast<const SfxPointItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_POINT;
-                        else if (dynamic_cast<const SfxRectangleItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_RECT;
-                        else if (dynamic_cast<const SfxRangeItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_RANGE;
-                        else if (dynamic_cast<const SdrFractionItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FRACTION;
-                        else if (dynamic_cast<const SvxColorItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_COLOR;
-                        else if (dynamic_cast<const SvxFontItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FONT;
-                        else if (dynamic_cast<const SvxFontHeightItem *>(&rItem) != nullptr)aEntry.eItemType=ITEM_FONTHEIGHT;
-                        else if (dynamic_cast<const SvxCharScaleWidthItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FONTWIDTH;
-                        else if (dynamic_cast<const SvxFieldItem *>(&rItem) != nullptr) aEntry.eItemType=ITEM_FIELD;
+                        if      (dynamic_cast<const SfxByteItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::BYTE;
+                        else if (dynamic_cast<const SfxInt16Item *>(&rItem) != nullptr) aEntry.eItemType=ItemType::INT16;
+                        else if (dynamic_cast<const SfxUInt16Item *>(&rItem) != nullptr) aEntry.eItemType=ItemType::UINT16;
+                        else if (dynamic_cast<const SfxInt32Item *>(&rItem) != nullptr) aEntry.eItemType=ItemType::INT32;
+                        else if (dynamic_cast<const SfxUInt32Item *>(&rItem) != nullptr) aEntry.eItemType=ItemType::UINT32;
+                        else if (dynamic_cast<const SfxEnumItemInterface *>(&rItem) != nullptr) aEntry.eItemType=ItemType::ENUM;
+                        else if (dynamic_cast<const SfxBoolItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::BOOL;
+                        else if (dynamic_cast<const SfxFlagItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::FLAG;
+                        else if (dynamic_cast<const XColorItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::XCOLOR;
+                        else if (dynamic_cast<const SfxStringItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::STRING;
+                        else if (dynamic_cast<const SfxPointItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::POINT;
+                        else if (dynamic_cast<const SfxRectangleItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::RECT;
+                        else if (dynamic_cast<const SfxRangeItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::RANGE;
+                        else if (dynamic_cast<const SdrFractionItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::FRACTION;
+                        else if (dynamic_cast<const SvxColorItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::COLOR;
+                        else if (dynamic_cast<const SvxFontItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::FONT;
+                        else if (dynamic_cast<const SvxFontHeightItem *>(&rItem) != nullptr)aEntry.eItemType=ItemType::FONTHEIGHT;
+                        else if (dynamic_cast<const SvxCharScaleWidthItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::FONTWIDTH;
+                        else if (dynamic_cast<const SvxFieldItem *>(&rItem) != nullptr) aEntry.eItemType=ItemType::FIELD;
                         switch (aEntry.eItemType) {
-                            case ITEM_BYTE      : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxByteItem  &>(rItem).GetValue(); aEntry.nMin=0;      aEntry.nMax=255;   break;
-                            case ITEM_INT16     : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxInt16Item &>(rItem).GetValue(); aEntry.nMin=-32767; aEntry.nMax=32767; break;
-                            case ITEM_UINT16    : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxUInt16Item&>(rItem).GetValue(); aEntry.nMin=0;      aEntry.nMax=65535; break;
-                            case ITEM_INT32     : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxInt32Item &>(rItem).GetValue();                                        break;
-                            case ITEM_UINT32    : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxUInt32Item&>(rItem).GetValue(); aEntry.nMin=0; /*aEntry.nMax=0xFF...*/;break;
-                            case ITEM_ENUM      : aEntry.bCanNum = true; aEntry.nVal=static_cast<const SfxEnumItemInterface&>(rItem).GetEnumValue(); aEntry.nMin=0; aEntry.nMax=static_cast<const SfxEnumItemInterface&>(rItem).GetValueCount()-1; break;
-                            case ITEM_BOOL      : aEntry.bCanNum = true; aEntry.nVal=sal_Int32(static_cast<const SfxBoolItem  &>(rItem).GetValue()); aEntry.nMin=0; aEntry.nMax=1;          break;
-                            case ITEM_FLAG      : aEntry.bCanNum = true; aEntry.nVal=static_cast<const SfxFlagItem  &>(rItem).GetValue(); aEntry.nMin=0; aEntry.nMax=0xFFFF;     break;
-                            case ITEM_FONTHEIGHT: aEntry.bCanNum = true; aEntry.nVal=static_cast<const SvxFontHeightItem&>(rItem).GetHeight(); aEntry.nMin=0;                    break;
-                            case ITEM_FONTWIDTH : aEntry.bCanNum = true; aEntry.nVal=static_cast<const SvxCharScaleWidthItem&>(rItem).GetValue();    aEntry.nMin=0; aEntry.nMax=0xFFFF;break;
+                            case ItemType::BYTE      : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxByteItem  &>(rItem).GetValue(); aEntry.nMin=0;      aEntry.nMax=255;   break;
+                            case ItemType::INT16     : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxInt16Item &>(rItem).GetValue(); aEntry.nMin=-32767; aEntry.nMax=32767; break;
+                            case ItemType::UINT16    : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxUInt16Item&>(rItem).GetValue(); aEntry.nMin=0;      aEntry.nMax=65535; break;
+                            case ItemType::INT32     : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxInt32Item &>(rItem).GetValue();                                        break;
+                            case ItemType::UINT32    : aEntry.bIsNum = true;  aEntry.nVal=static_cast<const SfxUInt32Item&>(rItem).GetValue(); aEntry.nMin=0; /*aEntry.nMax=0xFF...*/;break;
+                            case ItemType::ENUM      : aEntry.bCanNum = true; aEntry.nVal=static_cast<const SfxEnumItemInterface&>(rItem).GetEnumValue(); aEntry.nMin=0; aEntry.nMax=static_cast<const SfxEnumItemInterface&>(rItem).GetValueCount()-1; break;
+                            case ItemType::BOOL      : aEntry.bCanNum = true; aEntry.nVal=sal_Int32(static_cast<const SfxBoolItem  &>(rItem).GetValue()); aEntry.nMin=0; aEntry.nMax=1;          break;
+                            case ItemType::FLAG      : aEntry.bCanNum = true; aEntry.nVal=static_cast<const SfxFlagItem  &>(rItem).GetValue(); aEntry.nMin=0; aEntry.nMax=0xFFFF;     break;
+                            case ItemType::FONTHEIGHT: aEntry.bCanNum = true; aEntry.nVal=static_cast<const SvxFontHeightItem&>(rItem).GetHeight(); aEntry.nMin=0;                    break;
+                            case ItemType::FONTWIDTH : aEntry.bCanNum = true; aEntry.nVal=static_cast<const SvxCharScaleWidthItem&>(rItem).GetValue();    aEntry.nMin=0; aEntry.nMax=0xFFFF;break;
                             default: break;
                         } // switch
                         if (aEntry.bIsNum) aEntry.bCanNum = true;
@@ -1173,10 +1172,10 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
                 nLongY = s.toInt32();
             }
             switch (pEntry->eItemType) {
-                case ITEM_BYTE  : static_cast<SfxByteItem  *>(pNewItem)->SetValue((sal_uInt8  )nLongVal); break;
-                case ITEM_INT16 : static_cast<SfxInt16Item *>(pNewItem)->SetValue((sal_Int16 )nLongVal); break;
-                case ITEM_UINT16: static_cast<SfxUInt16Item*>(pNewItem)->SetValue((sal_uInt16)nLongVal); break;
-                case ITEM_INT32: {
+                case ItemType::BYTE  : static_cast<SfxByteItem  *>(pNewItem)->SetValue((sal_uInt8  )nLongVal); break;
+                case ItemType::INT16 : static_cast<SfxInt16Item *>(pNewItem)->SetValue((sal_Int16 )nLongVal); break;
+                case ItemType::UINT16: static_cast<SfxUInt16Item*>(pNewItem)->SetValue((sal_uInt16)nLongVal); break;
+                case ItemType::INT32: {
                     if(dynamic_cast<const SdrAngleItem *>(pNewItem) != nullptr)
                     {
                         aNewText = aNewText.replace(',', '.');
@@ -1185,9 +1184,9 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
                     }
                     static_cast<SfxInt32Item *>(pNewItem)->SetValue(nLongVal);
                 } break;
-                case ITEM_UINT32: static_cast<SfxUInt32Item*>(pNewItem)->SetValue(aNewText.toInt32()); break;
-                case ITEM_ENUM  : static_cast<SfxEnumItemInterface*>(pNewItem)->SetEnumValue((sal_uInt16)nLongVal); break;
-                case ITEM_BOOL: {
+                case ItemType::UINT32: static_cast<SfxUInt32Item*>(pNewItem)->SetValue(aNewText.toInt32()); break;
+                case ItemType::ENUM  : static_cast<SfxEnumItemInterface*>(pNewItem)->SetEnumValue((sal_uInt16)nLongVal); break;
+                case ItemType::BOOL: {
                     aNewText = aNewText.toAsciiUpperCase();
                     if (aNewText == "TRUE") nLongVal=1;
                     if (aNewText == "JA") nLongVal=1;
@@ -1197,29 +1196,27 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
                     if (aNewText == "YES") nLongVal=1;
                     static_cast<SfxBoolItem*>(pNewItem)->SetValue(nLongVal == 1);
                 } break;
-                case ITEM_FLAG  : static_cast<SfxFlagItem  *>(pNewItem)->SetValue((sal_uInt16)nLongVal); break;
-                case ITEM_STRING: static_cast<SfxStringItem*>(pNewItem)->SetValue(aNewText); break;
-                case ITEM_POINT : static_cast<SfxPointItem*>(pNewItem)->SetValue(Point(nLongX,nLongY)); break;
-                case ITEM_RECT  : break;
-                case ITEM_RANGE : {
+                case ItemType::FLAG  : static_cast<SfxFlagItem  *>(pNewItem)->SetValue((sal_uInt16)nLongVal); break;
+                case ItemType::STRING: static_cast<SfxStringItem*>(pNewItem)->SetValue(aNewText); break;
+                case ItemType::POINT : static_cast<SfxPointItem*>(pNewItem)->SetValue(Point(nLongX,nLongY)); break;
+                case ItemType::RECT  : break;
+                case ItemType::RANGE : {
                     static_cast<SfxRangeItem*>(pNewItem)->From()=(sal_uInt16)nLongX;
                     static_cast<SfxRangeItem*>(pNewItem)->From()=(sal_uInt16)nLongY;
                 } break;
-                case ITEM_LRANGE : {
-                } break;
-                case ITEM_FRACTION: {
+                case ItemType::FRACTION: {
                     if (!bPairX) nLongX=1;
                     if (!bPairY) nLongY=1;
                     static_cast<SdrFractionItem*>(pNewItem)->SetValue(Fraction(nLongX,nLongY));
                 } break;
-                case ITEM_XCOLOR: break;
-                case ITEM_COLOR: break;
-                case ITEM_FONT: {
+                case ItemType::XCOLOR: break;
+                case ItemType::COLOR: break;
+                case ItemType::FONT: {
                     static_cast<SvxFontItem*>(pNewItem)->SetFamily( FAMILY_DONTKNOW );
                     static_cast<SvxFontItem*>(pNewItem)->SetFamilyName(aNewText);
                     static_cast<SvxFontItem*>(pNewItem)->SetStyleName(OUString());
                 } break;
-                case ITEM_FONTHEIGHT: {
+                case ItemType::FONTHEIGHT: {
                     sal_uInt32 nHgt=0;
                     sal_uInt16 nProp=100;
                     if (aNewText.indexOf('%') != -1) {
@@ -1229,14 +1226,14 @@ IMPL_LINK(SdrItemBrowser, ChangedHdl, SdrItemBrowserControl&, rBrowse, void)
                     }
                     static_cast<SvxFontHeightItem*>(pNewItem)->SetHeight(nHgt,nProp);
                 } break;
-                case ITEM_FONTWIDTH: {
+                case ItemType::FONTWIDTH: {
                     sal_uInt16 nProp=100;
                     if (aNewText.indexOf('%') != -1) {
                         nProp=(sal_uInt16)nLongVal;
                     }
                     static_cast<SvxCharScaleWidthItem*>(pNewItem)->SetValue(nProp);
                 } break;
-                case ITEM_FIELD: break;
+                case ItemType::FIELD: break;
                 default: break;
             } // switch
             aNewSet.Put(*pNewItem);
