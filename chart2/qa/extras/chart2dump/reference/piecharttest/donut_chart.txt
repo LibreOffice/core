@@ -1,0 +1,194 @@
+// nSeriesCount
+4
+/// Series 0 slices
+// nSlicesCountInSeries
+3
+/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,8663,1995,8860,1359/D=0:CS=0:CT=0:Series=0:Point=0
+// aSlicePosition.X
+6088
+// aSlicePosition.Y
+1846
+// aSliceSize.Height
+2118
+// aSliceSize.Width
+4554
+// aSliceTransformation
+4554;0;6088;0;2118;1846;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+17798
+/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,4613,6462,4000,6721/D=0:CS=0:CT=0:Series=0:Point=1
+// aSlicePosition.X
+4353
+// aSlicePosition.Y
+2250
+// aSliceSize.Height
+6248
+// aSliceSize.Width
+4304
+// aSliceTransformation
+4304;0;4353;0;6248;2250;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16728590
+/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=73,10741,6468,11354,6727/D=0:CS=0:CT=0:Series=0:Point=2
+// aSlicePosition.X
+8909
+// aSlicePosition.Y
+3851
+// aSliceSize.Height
+4688
+// aSliceSize.Width
+2543
+// aSliceTransformation
+2543;0;8909;0;4688;3851;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16765728
+/// Series 1 slices
+// nSlicesCountInSeries
+3
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=0
+// aSlicePosition.X
+6601
+// aSlicePosition.Y
+2511
+// aSliceSize.Height
+1755
+// aSliceSize.Width
+3448
+// aSliceTransformation
+3448;0;6601;0;1755;2511;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+17798
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=1
+// aSlicePosition.X
+5018
+// aSlicePosition.Y
+2739
+// aSliceSize.Height
+4690
+// aSliceSize.Width
+1852
+// aSliceTransformation
+1852;0;5018;0;4690;2739;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16728590
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=2
+// aSlicePosition.X
+6270
+// aSlicePosition.Y
+3964
+// aSliceSize.Height
+3868
+// aSliceSize.Width
+4069
+// aSliceTransformation
+4069;0;6270;0;3868;3964;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16765728
+/// Series 2 slices
+// nSlicesCountInSeries
+3
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=0
+// aSlicePosition.X
+7688
+// aSlicePosition.Y
+3176
+// aSliceSize.Height
+1392
+// aSliceSize.Width
+1769
+// aSliceTransformation
+1769;0;7688;0;1392;3176;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+17798
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=1
+// aSlicePosition.X
+5683
+// aSlicePosition.Y
+3176
+// aSliceSize.Height
+3971
+// aSliceSize.Width
+2009
+// aSliceTransformation
+2009;0;5683;0;3971;3176;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16728590
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=2
+// aSlicePosition.X
+7393
+// aSlicePosition.Y
+4266
+// aSliceSize.Height
+2901
+// aSliceSize.Width
+2281
+// aSliceTransformation
+2281;0;7393;0;2901;4266;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16765728
+/// Series 3 slices
+// nSlicesCountInSeries
+3
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=0
+// aSlicePosition.X
+7713
+// aSlicePosition.Y
+3843
+// aSliceSize.Height
+1027
+// aSliceSize.Width
+1151
+// aSliceTransformation
+1151;0;7713;0;1027;3843;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+17798
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=1
+// aSlicePosition.X
+6348
+// aSlicePosition.Y
+3841
+// aSliceSize.Height
+1934
+// aSliceSize.Width
+1400
+// aSliceTransformation
+1400;0;6348;0;1934;3841;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16728590
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=2
+// aSlicePosition.X
+6493
+// aSlicePosition.Y
+4568
+// aSliceSize.Height
+1934
+// aSliceSize.Width
+2516
+// aSliceTransformation
+2516;0;6493;0;1934;4568;0;0;1
+// static_cast<sal_Int32>(aSliceFillStyle)
+1
+// static_cast<sal_Int32>(aSliceFillColor)
+16765728
