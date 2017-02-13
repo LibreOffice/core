@@ -114,7 +114,6 @@ enum class SdrHintKind
     RefDeviceChange,      // RefDevice changed
     DefaultTabChange,     // Default tabulator width changed
     DefaultFontHeightChange,   // Default FontHeight changed
-    ModelSaved,            // Document was saved
     SwitchToPage,          // #94278# UNDO/REDO at an object evtl. on another page
     BeginEdit,             // Is called after the object has entered text edit mode
     EndEdit                // Is called after the object has left text edit mode
