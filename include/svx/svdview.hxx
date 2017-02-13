@@ -66,7 +66,6 @@ enum class SdrEventKind {
     MoveAction,
     EndAction,
     BackAction,
-    BrkAction,
     EndCreate,
     EndDrag,
     MarkObj,
