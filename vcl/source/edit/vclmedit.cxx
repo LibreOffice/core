@@ -946,7 +946,7 @@ void TextWindow::LoseFocus()
 VclMultiLineEdit::VclMultiLineEdit( vcl::Window* pParent, WinBits nWinStyle )
     : Edit( pParent, nWinStyle )
 {
-    SetType( WINDOW_MULTILINEEDIT );
+    SetType( WindowType::MULTILINEEDIT );
     pImpVclMEdit = new ImpVclMEdit( this, nWinStyle );
     ImplInitSettings( true, true, true );
     pUpdateDataTimer = nullptr;

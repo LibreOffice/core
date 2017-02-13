@@ -973,8 +973,8 @@ void Window::SetParent( vcl::Window* pNewParent )
     // also convert Activate-Status
     if ( bNewFrame )
     {
-        if ( (GetType() == WINDOW_BORDERWINDOW) &&
-             (ImplGetWindow()->GetType() == WINDOW_FLOATINGWINDOW) )
+        if ( (GetType() == WindowType::BORDERWINDOW) &&
+             (ImplGetWindow()->GetType() == WindowType::FLOATINGWINDOW) )
             static_cast<ImplBorderWindow*>(this)->SetDisplayActive( mpWindowImpl->mpFrameData->mbHasFocus );
     }
 

@@ -2115,7 +2115,7 @@ ImplListBox::ImplListBox( vcl::Window* pParent, WinBits nWinStyle ) :
     maLBWindow(VclPtr<ImplListBoxWindow>::Create( this, nWinStyle&(~WB_BORDER) ))
 {
     // for native widget rendering we must be able to detect this window type
-    SetType( WINDOW_LISTBOXWINDOW );
+    SetType( WindowType::LISTBOXWINDOW );
 
     mpVScrollBar    = VclPtr<ScrollBar>::Create( this, WB_VSCROLL | WB_DRAG );
     mpHScrollBar    = VclPtr<ScrollBar>::Create( this, WB_HSCROLL | WB_DRAG );

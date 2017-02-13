@@ -126,7 +126,7 @@ public:
             m_nNeededWidth += pChild->GetSizePixel().Width() + spacing;
 
             // Add only containers which have explicitly assigned priority.
-            IPrioritable* pPrioritable = pChild->GetType() == WINDOW_CONTAINER ?
+            IPrioritable* pPrioritable = pChild->GetType() == WindowType::CONTAINER ?
                 dynamic_cast<IPrioritable*>(pChild) : nullptr;
             if (pPrioritable && pPrioritable->GetPriority() != VCL_PRIORITY_DEFAULT)
                 m_aSortedChilds.push_back(pPrioritable);

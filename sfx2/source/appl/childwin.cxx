@@ -520,11 +520,11 @@ SfxChildWindowContext::~SfxChildWindowContext()
 
 FloatingWindow* SfxChildWindowContext::GetFloatingWindow(vcl::Window *pParent)
 {
-    if (pParent->GetType() == WINDOW_DOCKINGWINDOW || pParent->GetType() == WINDOW_TOOLBOX)
+    if (pParent->GetType() == WindowType::DOCKINGWINDOW || pParent->GetType() == WindowType::TOOLBOX)
     {
         return static_cast<DockingWindow*>(pParent)->GetFloatingWindow();
     }
-    if (pParent->GetType() == WINDOW_FLOATINGWINDOW)
+    if (pParent->GetType() == WindowType::FLOATINGWINDOW)
     {
         return static_cast<FloatingWindow*>(pParent);
     }

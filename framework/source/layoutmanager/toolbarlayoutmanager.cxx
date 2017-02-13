@@ -544,7 +544,7 @@ bool ToolbarLayoutManager::createToolbar( const OUString& rResourceURL )
 
             SolarMutexGuard aGuard;
             VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+            if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
             {
                 ToolBox* pToolbar = static_cast<ToolBox *>(pWindow.get());
                 ToolBoxMenuType nMenuType = pToolbar->GetMenuType();
@@ -829,7 +829,7 @@ bool ToolbarLayoutManager::dockToolbar( const OUString& rResourceURL, ui::Dockin
                     {
                         SolarMutexGuard aGuard;
                         pWindow = VCLUnoHelper::GetWindow( xWindow ).get();
-                        if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+                        if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
                         {
                             pToolBox = static_cast<ToolBox *>(pWindow);
 
@@ -1171,7 +1171,7 @@ void ToolbarLayoutManager::implts_createAddonsToolBars()
                     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
                     if ( pWindow->GetText().isEmpty() )
                         pWindow->SetText( aGenericAddonTitle );
-                    if ( pWindow->GetType() == WINDOW_TOOLBOX )
+                    if ( pWindow->GetType() == WindowType::TOOLBOX )
                     {
                         ToolBox* pToolbar = static_cast<ToolBox *>(pWindow.get());
                         pToolbar->SetMenuType();
@@ -1429,7 +1429,7 @@ void ToolbarLayoutManager::implts_setElementData( UIElement& rElement, const uno
                     pWindow->SetText( rElement.m_aUIName );
                 if ( rElement.m_bNoClose )
                     pWindow->SetStyle( pWindow->GetStyle() & ~WB_CLOSEABLE );
-                if ( pWindow->GetType() == WINDOW_TOOLBOX )
+                if ( pWindow->GetType() == WindowType::TOOLBOX )
                     pToolBox = static_cast<ToolBox *>(pWindow);
             }
             if ( pToolBox )
@@ -2480,7 +2480,7 @@ void ToolbarLayoutManager::implts_calcWindowPosSizeOnSingleRowColumn(
             {
                 uno::Reference< awt::XWindow > xWindow = rRowColumnWindowData.aRowColumnWindows[i];
                 VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-                if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+                if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
                     aMinSize = static_cast<ToolBox *>(pWindow.get())->CalcMinimumWindowSizePixel();
             }
 
@@ -2642,7 +2642,7 @@ void ToolbarLayoutManager::implts_calcDockingPosSize(
         SolarMutexGuard aGuard;
         pDockingAreaWindow = VCLUnoHelper::GetWindow( xDockingAreaWindow ).get();
         VclPtr<vcl::Window> pDockWindow = VCLUnoHelper::GetWindow( xWindow );
-        if ( pDockWindow && pDockWindow->GetType() == WINDOW_TOOLBOX )
+        if ( pDockWindow && pDockWindow->GetType() == WindowType::TOOLBOX )
             pToolBox = static_cast<ToolBox *>(pDockWindow.get());
 
         aDockingAreaRect = ::Rectangle( pDockingAreaWindow->GetPosPixel(), pDockingAreaWindow->GetSizePixel() );
@@ -3289,7 +3289,7 @@ void SAL_CALL ToolbarLayoutManager::startDocking( const awt::DockingEvent& e )
             SolarMutexGuard aGuard;
 
             VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-            if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+            if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
             {
                 ToolBox* pToolBox = static_cast<ToolBox *>(pWindow.get());
                 aUIElement.m_aFloatingData.m_nLines        = pToolBox->GetFloatingLines();
@@ -3382,7 +3382,7 @@ awt::DockingData SAL_CALL ToolbarLayoutManager::docking( const awt::DockingEvent
             // Determine if we have a toolbar and set alignment according to the docking area!
             VclPtr<vcl::Window>  pWindow = VCLUnoHelper::GetWindow( xWindow );
             ToolBox* pToolBox = nullptr;
-            if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+            if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
                 pToolBox = static_cast<ToolBox *>(pWindow.get());
 
             if ( eDockingArea != -1 )
@@ -3537,7 +3537,7 @@ void SAL_CALL ToolbarLayoutManager::endDocking( const awt::EndDockingEvent& e )
         SolarMutexGuard aGuard;
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( uno::Reference< awt::XWindow >( e.Source, uno::UNO_QUERY ));
         ToolBox* pToolBox = nullptr;
-        if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+        if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
             pToolBox = static_cast<ToolBox *>(pWindow.get());
 
         if ( pToolBox )
@@ -3596,7 +3596,7 @@ sal_Bool SAL_CALL ToolbarLayoutManager::prepareToggleFloatingMode( const lang::E
                 {
                     SolarMutexGuard aGuard;
                     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xWindow );
-                    if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+                    if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
                     {
                         ToolBox* pToolBox = static_cast< ToolBox *>( pWindow.get() );
                         aUIDockingElement.m_aFloatingData.m_aPos = AWTPoint(pToolBox->GetPosPixel());
@@ -3635,7 +3635,7 @@ void SAL_CALL ToolbarLayoutManager::toggleFloatingMode( const lang::EventObject&
         xWindow.set( e.Source, uno::UNO_QUERY );
         pWindow = VCLUnoHelper::GetWindow( xWindow ).get();
 
-        if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
+        if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
             pToolBox = static_cast<ToolBox *>(pWindow);
     }
 

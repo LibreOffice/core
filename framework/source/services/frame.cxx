@@ -3052,7 +3052,7 @@ void Frame::implts_setIconOnWindow()
             VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( xContainerWindow );
             if(
                 ( pWindow            != nullptr              ) &&
-                ( pWindow->GetType() == WINDOW_WORKWINDOW )
+                ( pWindow->GetType() == WindowType::WORKWINDOW )
                 )
             {
                 WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());

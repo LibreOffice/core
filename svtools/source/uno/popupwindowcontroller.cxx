@@ -196,7 +196,7 @@ Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
                                              FloatWinPopupFlags::NoMouseUpClose;
 
             WinBits nWinBits;
-            if ( pWin->GetType() == WINDOW_DOCKINGWINDOW )
+            if ( pWin->GetType() == WindowType::DOCKINGWINDOW )
                 nWinBits = static_cast< DockingWindow* >( pWin.get() )->GetFloatStyle();
             else
                 nWinBits = pWin->GetStyle();

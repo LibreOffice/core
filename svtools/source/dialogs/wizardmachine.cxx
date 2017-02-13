@@ -319,14 +319,14 @@ namespace svt
 
             // is it a button?
             WindowType eType = pChildLoop->GetType();
-            if  (   (WINDOW_BUTTON == eType)
-                ||  (WINDOW_PUSHBUTTON == eType)
-                ||  (WINDOW_OKBUTTON == eType)
-                ||  (WINDOW_CANCELBUTTON == eType)
-                ||  (WINDOW_HELPBUTTON == eType)
-                ||  (WINDOW_IMAGEBUTTON == eType)
-                ||  (WINDOW_MENUBUTTON == eType)
-                ||  (WINDOW_MOREBUTTON == eType)
+            if  (   (WindowType::BUTTON == eType)
+                ||  (WindowType::PUSHBUTTON == eType)
+                ||  (WindowType::OKBUTTON == eType)
+                ||  (WindowType::CANCELBUTTON == eType)
+                ||  (WindowType::HELPBUTTON == eType)
+                ||  (WindowType::IMAGEBUTTON == eType)
+                ||  (WindowType::MENUBUTTON == eType)
+                ||  (WindowType::MOREBUTTON == eType)
                 )
             {
                 pChildLoop->SetStyle(pChildLoop->GetStyle() & ~WB_DEFBUTTON);

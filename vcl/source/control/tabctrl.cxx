@@ -175,7 +175,7 @@ void TabControl::ImplFreeLayoutData()
 }
 
 TabControl::TabControl( vcl::Window* pParent, WinBits nStyle ) :
-    Control( WINDOW_TABCONTROL )
+    Control( WindowType::TABCONTROL )
 {
     ImplInit( pParent, nStyle );
     SAL_INFO( "vcl", "*** TABCONTROL no notabs? " << (( GetStyle() & WB_NOBORDER ) ? "true" : "false") );

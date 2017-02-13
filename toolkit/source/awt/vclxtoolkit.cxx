@@ -124,9 +124,6 @@
 
 #include "helper/unowrapper.hxx"
 
-#define VCLWINDOW_FRAMEWINDOW               0x1000
-#define VCLWINDOW_SYSTEMCHILDWINDOW         0x1001
-
 #if defined(_WIN32)
 #define SYSTEM_DEPENDENT_TYPE css::lang::SystemDependent::SYSTEM_WIN32
 #elif defined(MACOSX)
@@ -308,36 +305,36 @@ public:
 
 };
 
-WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
+WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, WindowType nCompType )
 {
     WinBits nWinBits = 0;
 
     bool bMessBox = false;
-    if ( ( nCompType == WINDOW_INFOBOX ) ||
-         ( nCompType == WINDOW_MESSBOX ) ||
-         ( nCompType == WINDOW_QUERYBOX ) ||
-         ( nCompType == WINDOW_WARNINGBOX ) ||
-         ( nCompType == WINDOW_ERRORBOX ) )
+    if ( ( nCompType == WindowType::INFOBOX ) ||
+         ( nCompType == WindowType::MESSBOX ) ||
+         ( nCompType == WindowType::QUERYBOX ) ||
+         ( nCompType == WindowType::WARNINGBOX ) ||
+         ( nCompType == WindowType::ERRORBOX ) )
     {
         bMessBox = true;
     }
 
     bool bDecoratedWindow = false;
     if  (   bMessBox
-        ||  ( nCompType == WINDOW_DIALOG )
-        ||  ( nCompType == WINDOW_MODELESSDIALOG )
-        ||  ( nCompType == WINDOW_MODALDIALOG )
-        ||  ( nCompType == WINDOW_SYSTEMDIALOG )
-        ||  ( nCompType == WINDOW_PATHDIALOG )
-        ||  ( nCompType == WINDOW_FILEDIALOG )
-        ||  ( nCompType == WINDOW_PRINTERSETUPDIALOG )
-        ||  ( nCompType == WINDOW_PRINTDIALOG )
-        ||  ( nCompType == WINDOW_COLORDIALOG )
-        ||  ( nCompType == WINDOW_FONTDIALOG )
-        ||  ( nCompType == WINDOW_DOCKINGWINDOW )
-        ||  ( nCompType == WINDOW_TABDIALOG )
-        ||  ( nCompType == WINDOW_BUTTONDIALOG )
-        ||  ( nCompType == WINDOW_SYSTEMCHILDWINDOW )
+        ||  ( nCompType == WindowType::DIALOG )
+        ||  ( nCompType == WindowType::MODELESSDIALOG )
+        ||  ( nCompType == WindowType::MODALDIALOG )
+        ||  ( nCompType == WindowType::SYSTEMDIALOG )
+        ||  ( nCompType == WindowType::PATHDIALOG )
+        ||  ( nCompType == WindowType::FILEDIALOG )
+        ||  ( nCompType == WindowType::PRINTERSETUPDIALOG )
+        ||  ( nCompType == WindowType::PRINTDIALOG )
+        ||  ( nCompType == WindowType::COLORDIALOG )
+        ||  ( nCompType == WindowType::FONTDIALOG )
+        ||  ( nCompType == WindowType::DOCKINGWINDOW )
+        ||  ( nCompType == WindowType::TABDIALOG )
+        ||  ( nCompType == WindowType::BUTTONDIALOG )
+        ||  ( nCompType == WindowType::SYSTEMCHILDWINDOW )
         )
     {
         bDecoratedWindow = true;
@@ -404,7 +401,7 @@ WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::DEF_NO )
             nWinBits |= WB_DEF_NO;
     }
-    if ( nCompType == WINDOW_MULTILINEEDIT || nCompType == WINDOW_DIALOG || nCompType == WINDOW_GROUPBOX )
+    if ( nCompType == WindowType::MULTILINEEDIT || nCompType == WindowType::DIALOG || nCompType == WindowType::GROUPBOX )
     {
         if( nComponentAttribs & css::awt::VclWindowPeerAttribute::AUTOHSCROLL )
             nWinBits |= WB_AUTOHSCROLL;
@@ -438,72 +435,72 @@ struct ComponentInfo
 
 static ComponentInfo aComponentInfos [] =
 {
-    { "buttondialog",       WINDOW_BUTTONDIALOG },
-    { "cancelbutton",       WINDOW_CANCELBUTTON },
-    { "checkbox",           WINDOW_CHECKBOX },
-    { "combobox",           WINDOW_COMBOBOX },
-    { "control",            WINDOW_CONTROL },
-    { "currencybox",        WINDOW_CURRENCYBOX },
-    { "currencyfield",      WINDOW_CURRENCYFIELD },
-    { "datebox",            WINDOW_DATEBOX },
-    { "datefield",          WINDOW_DATEFIELD },
-    { "dialog",             WINDOW_DIALOG },
-    { "dockingarea",        WINDOW_DOCKINGAREA },
-    { "dockingwindow",      WINDOW_DOCKINGWINDOW },
-    { "edit",               WINDOW_EDIT },
-    { "errorbox",           WINDOW_ERRORBOX },
-    { "fixedbitmap",        WINDOW_FIXEDBITMAP },
-    { "fixedimage",         WINDOW_FIXEDIMAGE },
-    { "fixedline",          WINDOW_FIXEDLINE },
-    { "fixedtext",          WINDOW_FIXEDTEXT },
-    { "floatingwindow",     WINDOW_FLOATINGWINDOW },
-    { "framewindow",        VCLWINDOW_FRAMEWINDOW },
-    { "groupbox",           WINDOW_GROUPBOX },
-    { "frame",          WINDOW_GROUPBOX },
-    { "helpbutton",         WINDOW_HELPBUTTON },
-    { "imagebutton",        WINDOW_IMAGEBUTTON },
-    { "infobox",            WINDOW_INFOBOX },
-    { "listbox",            WINDOW_LISTBOX },
-    { "longcurrencybox",    WINDOW_LONGCURRENCYBOX },
-    { "longcurrencyfield",  WINDOW_LONGCURRENCYFIELD },
-    { "menubutton",         WINDOW_MENUBUTTON },
-    { "messbox",            WINDOW_MESSBOX },
-    { "metricbox",          WINDOW_METRICBOX },
-    { "metricfield",        WINDOW_METRICFIELD },
-    { "modaldialog",        WINDOW_MODALDIALOG },
-    { "modelessdialog",     WINDOW_MODELESSDIALOG },
-    { "morebutton",         WINDOW_MOREBUTTON },
-    { "multilineedit",      WINDOW_MULTILINEEDIT },
-    { "multilistbox",       WINDOW_MULTILISTBOX },
-    { "numericbox",         WINDOW_NUMERICBOX },
-    { "numericfield",       WINDOW_NUMERICFIELD },
-    { "okbutton",           WINDOW_OKBUTTON },
-    { "patternbox",         WINDOW_PATTERNBOX },
-    { "patternfield",       WINDOW_PATTERNFIELD },
-    { "pushbutton",         WINDOW_PUSHBUTTON },
-    { "querybox",           WINDOW_QUERYBOX },
-    { "radiobutton",        WINDOW_RADIOBUTTON },
-    { "scrollbar",          WINDOW_SCROLLBAR },
-    { "scrollbarbox",       WINDOW_SCROLLBARBOX },
-    { "animatedimages",     WINDOW_CONTROL },
-    { "spinbutton",         WINDOW_SPINBUTTON },
-    { "spinfield",          WINDOW_SPINFIELD },
-    { "splitter",           WINDOW_SPLITTER },
-    { "splitwindow",        WINDOW_SPLITWINDOW },
-    { "statusbar",          WINDOW_STATUSBAR },
-    { "systemchildwindow",  VCLWINDOW_SYSTEMCHILDWINDOW },
-    { "tabcontrol",         WINDOW_TABCONTROL },
-    { "tabdialog",          WINDOW_TABDIALOG },
-    { "tabpage",            WINDOW_TABPAGE },
-    { "timebox",            WINDOW_TIMEBOX },
-    { "timefield",          WINDOW_TIMEFIELD },
-    { "toolbox",            WINDOW_TOOLBOX },
-    { "tristatebox",        WINDOW_TRISTATEBOX },
-    { "warningbox",         WINDOW_WARNINGBOX },
-    { "window",             WINDOW_WINDOW },
-    { "workwindow",         WINDOW_WORKWINDOW },
-    { "tabpagecontainer",   WINDOW_CONTROL },
-    { "tabpagemodel",       WINDOW_TABPAGE }
+    { "buttondialog",       WindowType::BUTTONDIALOG },
+    { "cancelbutton",       WindowType::CANCELBUTTON },
+    { "checkbox",           WindowType::CHECKBOX },
+    { "combobox",           WindowType::COMBOBOX },
+    { "control",            WindowType::CONTROL },
+    { "currencybox",        WindowType::CURRENCYBOX },
+    { "currencyfield",      WindowType::CURRENCYFIELD },
+    { "datebox",            WindowType::DATEBOX },
+    { "datefield",          WindowType::DATEFIELD },
+    { "dialog",             WindowType::DIALOG },
+    { "dockingarea",        WindowType::DOCKINGAREA },
+    { "dockingwindow",      WindowType::DOCKINGWINDOW },
+    { "edit",               WindowType::EDIT },
+    { "errorbox",           WindowType::ERRORBOX },
+    { "fixedbitmap",        WindowType::FIXEDBITMAP },
+    { "fixedimage",         WindowType::FIXEDIMAGE },
+    { "fixedline",          WindowType::FIXEDLINE },
+    { "fixedtext",          WindowType::FIXEDTEXT },
+    { "floatingwindow",     WindowType::FLOATINGWINDOW },
+    { "framewindow",        WindowType::TOOLKIT_FRAMEWINDOW },
+    { "groupbox",           WindowType::GROUPBOX },
+    { "frame",              WindowType::GROUPBOX },
+    { "helpbutton",         WindowType::HELPBUTTON },
+    { "imagebutton",        WindowType::IMAGEBUTTON },
+    { "infobox",            WindowType::INFOBOX },
+    { "listbox",            WindowType::LISTBOX },
+    { "longcurrencybox",    WindowType::LONGCURRENCYBOX },
+    { "longcurrencyfield",  WindowType::LONGCURRENCYFIELD },
+    { "menubutton",         WindowType::MENUBUTTON },
+    { "messbox",            WindowType::MESSBOX },
+    { "metricbox",          WindowType::METRICBOX },
+    { "metricfield",        WindowType::METRICFIELD },
+    { "modaldialog",        WindowType::MODALDIALOG },
+    { "modelessdialog",     WindowType::MODELESSDIALOG },
+    { "morebutton",         WindowType::MOREBUTTON },
+    { "multilineedit",      WindowType::MULTILINEEDIT },
+    { "multilistbox",       WindowType::MULTILISTBOX },
+    { "numericbox",         WindowType::NUMERICBOX },
+    { "numericfield",       WindowType::NUMERICFIELD },
+    { "okbutton",           WindowType::OKBUTTON },
+    { "patternbox",         WindowType::PATTERNBOX },
+    { "patternfield",       WindowType::PATTERNFIELD },
+    { "pushbutton",         WindowType::PUSHBUTTON },
+    { "querybox",           WindowType::QUERYBOX },
+    { "radiobutton",        WindowType::RADIOBUTTON },
+    { "scrollbar",          WindowType::SCROLLBAR },
+    { "scrollbarbox",       WindowType::SCROLLBARBOX },
+    { "animatedimages",     WindowType::CONTROL },
+    { "spinbutton",         WindowType::SPINBUTTON },
+    { "spinfield",          WindowType::SPINFIELD },
+    { "splitter",           WindowType::SPLITTER },
+    { "splitwindow",        WindowType::SPLITWINDOW },
+    { "statusbar",          WindowType::STATUSBAR },
+    { "systemchildwindow",  WindowType::TOOLKIT_SYSTEMCHILDWINDOW },
+    { "tabcontrol",         WindowType::TABCONTROL },
+    { "tabdialog",          WindowType::TABDIALOG },
+    { "tabpage",            WindowType::TABPAGE },
+    { "timebox",            WindowType::TIMEBOX },
+    { "timefield",          WindowType::TIMEFIELD },
+    { "toolbox",            WindowType::TOOLBOX },
+    { "tristatebox",        WindowType::TRISTATEBOX },
+    { "warningbox",         WindowType::WARNINGBOX },
+    { "window",             WindowType::WINDOW },
+    { "workwindow",         WindowType::WORKWINDOW },
+    { "tabpagecontainer",   WindowType::CONTROL },
+    { "tabpagemodel",       WindowType::TABPAGE }
 };
 
 extern "C"
@@ -515,7 +512,7 @@ static int SAL_CALL ComponentInfoCompare( const void* pFirst, const void* pSecon
 }
 }
 
-sal_uInt16 ImplGetComponentType( const OUString& rServiceName )
+WindowType ImplGetComponentType( const OUString& rServiceName )
 {
     static bool bSorted = false;
     if( !bSorted )
@@ -541,7 +538,7 @@ sal_uInt16 ImplGetComponentType( const OUString& rServiceName )
                         sizeof( ComponentInfo ),
                         ComponentInfoCompare ));
 
-    return pInf ? pInf->nWinType : 0;
+    return pInf ? pInf->nWinType : WindowType::NONE;
 }
 
 
@@ -800,7 +797,7 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     aServiceName = aServiceName.toAsciiLowerCase();
 
     VclPtr<vcl::Window> pNewWindow;
-    sal_uInt16 nType = ImplGetComponentType( aServiceName );
+    WindowType nType = ImplGetComponentType( aServiceName );
     bool bFrameControl = false;
     if ( aServiceName == "frame" )
         bFrameControl = true;
@@ -814,19 +811,19 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
         // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
         // spaeter mal css::uno::Exception...
         bool bException = true;
-        if  (   ( nType == WINDOW_DIALOG )
-            ||  ( nType == WINDOW_MODALDIALOG )
-            ||  ( nType == WINDOW_MODELESSDIALOG )
-            ||  ( nType == WINDOW_MESSBOX )
-            ||  ( nType == WINDOW_INFOBOX )
-            ||  ( nType == WINDOW_WARNINGBOX )
-            ||  ( nType == WINDOW_ERRORBOX )
-            ||  ( nType == WINDOW_QUERYBOX )
+        if  (   ( nType == WindowType::DIALOG )
+            ||  ( nType == WindowType::MODALDIALOG )
+            ||  ( nType == WindowType::MODELESSDIALOG )
+            ||  ( nType == WindowType::MESSBOX )
+            ||  ( nType == WindowType::INFOBOX )
+            ||  ( nType == WindowType::WARNINGBOX )
+            ||  ( nType == WindowType::ERRORBOX )
+            ||  ( nType == WindowType::QUERYBOX )
             )
             bException = false;
-        else if ( ( nType == WINDOW_WINDOW ) ||
-                  ( nType == WINDOW_WORKWINDOW ) ||
-                  ( nType == VCLWINDOW_FRAMEWINDOW ) )
+        else if ( ( nType == WindowType::WINDOW ) ||
+                  ( nType == WindowType::WORKWINDOW ) ||
+                  ( nType == WindowType::TOOLKIT_FRAMEWINDOW ) )
         {
             if ( rDescriptor.Type == css::awt::WindowClass_TOP )
                 bException = false;
@@ -839,72 +836,72 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
         }
     }
 
-    if ( nType )
+    if ( nType != WindowType::NONE )
     {
         SolarMutexGuard aVclGuard;
-        switch ( (WindowType)nType )
+        switch ( nType )
         {
-            case WINDOW_CANCELBUTTON:
+            case WindowType::CANCELBUTTON:
                 pNewWindow = VclPtr<CancelButton>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXButton;
             break;
-            case WINDOW_CHECKBOX:
+            case WindowType::CHECKBOX:
                  pNewWindow = VclPtr<CheckBox>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXCheckBox;
             break;
-            case WINDOW_COMBOBOX:
+            case WindowType::COMBOBOX:
                 pNewWindow = VclPtr<ComboBox>::Create( pParent, nWinBits|WB_AUTOHSCROLL );
                 static_cast<ComboBox*>(pNewWindow.get())->EnableAutoSize( false );
                 *ppNewComp = new VCLXComboBox;
             break;
-            case WINDOW_CURRENCYBOX:
+            case WindowType::CURRENCYBOX:
                 pNewWindow = VclPtr<CurrencyBox>::Create( pParent, nWinBits );
             break;
-            case WINDOW_CURRENCYFIELD:
+            case WindowType::CURRENCYFIELD:
                 pNewWindow = VclPtr<CurrencyField>::Create( pParent, nWinBits );
                 static_cast<CurrencyField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
                 static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<CurrencyField*>(pNewWindow.get())) );
             break;
-            case WINDOW_DATEBOX:
+            case WindowType::DATEBOX:
                 pNewWindow = VclPtr<DateBox>::Create( pParent, nWinBits );
             break;
-            case WINDOW_DATEFIELD:
+            case WindowType::DATEFIELD:
                 pNewWindow = VclPtr<DateField>::Create( pParent, nWinBits );
                 static_cast<DateField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXDateField;
                 static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<DateField*>(pNewWindow.get())) );
             break;
-            case WINDOW_DOCKINGAREA:
+            case WindowType::DOCKINGAREA:
                 pNewWindow = VclPtr<DockingAreaWindow>::Create( pParent );
             break;
-            case WINDOW_MULTILINEEDIT:
-            case WINDOW_EDIT:
+            case WindowType::MULTILINEEDIT:
+            case WindowType::EDIT:
                 pNewWindow = VclPtr<Edit>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXEdit;
             break;
-            case WINDOW_ERRORBOX:
+            case WindowType::ERRORBOX:
                 pNewWindow = VclPtr<ErrorBox>::Create( pParent, nWinBits, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
-            case WINDOW_FIXEDBITMAP:
+            case WindowType::FIXEDBITMAP:
                 pNewWindow = VclPtr<FixedBitmap>::Create( pParent, nWinBits );
             break;
-            case WINDOW_FIXEDIMAGE:
+            case WindowType::FIXEDIMAGE:
                 pNewWindow = VclPtr<ImageControl>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXImageControl;
             break;
-            case WINDOW_FIXEDLINE:
+            case WindowType::FIXEDLINE:
                 pNewWindow = VclPtr<FixedLine>::Create( pParent, nWinBits );
             break;
-            case WINDOW_FIXEDTEXT:
+            case WindowType::FIXEDTEXT:
                 pNewWindow = VclPtr<FixedText>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXFixedText;
             break;
-            case WINDOW_FLOATINGWINDOW:
+            case WindowType::FLOATINGWINDOW:
                 pNewWindow = VclPtr<FloatingWindow>::Create( pParent, nWinBits );
             break;
-            case WINDOW_GROUPBOX:
+            case WindowType::GROUPBOX:
                 pNewWindow = VclPtr<GroupBox>::Create( pParent, nWinBits );
                 if ( bFrameControl )
                 {
@@ -915,50 +912,50 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pGroupBox->SetMouseTransparent( false );
                 }
             break;
-            case WINDOW_HELPBUTTON:
+            case WindowType::HELPBUTTON:
                 pNewWindow = VclPtr<HelpButton>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXButton;
             break;
-            case WINDOW_IMAGEBUTTON:
+            case WindowType::IMAGEBUTTON:
                  pNewWindow = VclPtr<ImageButton>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXButton;
             break;
-            case WINDOW_INFOBOX:
+            case WindowType::INFOBOX:
                 pNewWindow = VclPtr<InfoBox>::Create( pParent, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
-            case WINDOW_LISTBOX:
+            case WindowType::LISTBOX:
                 pNewWindow = VclPtr<ListBox>::Create( pParent, nWinBits|WB_SIMPLEMODE|WB_AUTOHSCROLL );
                 static_cast<ListBox*>(pNewWindow.get())->EnableAutoSize( false );
                 *ppNewComp = new VCLXListBox;
             break;
-            case WINDOW_LONGCURRENCYBOX:
+            case WindowType::LONGCURRENCYBOX:
                 pNewWindow = VclPtr<LongCurrencyBox>::Create( pParent, nWinBits );
             break;
-            case WINDOW_LONGCURRENCYFIELD:
+            case WindowType::LONGCURRENCYFIELD:
                 pNewWindow = VclPtr<LongCurrencyField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXCurrencyField;
                 static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<LongCurrencyField*>(pNewWindow.get())) );
             break;
-            case WINDOW_MENUBUTTON:
+            case WindowType::MENUBUTTON:
                 pNewWindow = VclPtr<MenuButton>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXButton;
             break;
-            case WINDOW_MESSBOX:
+            case WindowType::MESSBOX:
                 pNewWindow = VclPtr<MessBox>::Create( pParent, nWinBits, OUString(), OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
-            case WINDOW_METRICBOX:
+            case WindowType::METRICBOX:
                 pNewWindow = VclPtr<MetricBox>::Create( pParent, nWinBits );
             break;
-            case WINDOW_METRICFIELD:
+            case WindowType::METRICFIELD:
                 pNewWindow = VclPtr<MetricField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXMetricField;
                 static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<MetricField*>(pNewWindow.get())) );
             break;
-            case WINDOW_DIALOG:
-            case WINDOW_MODALDIALOG:
-            case WINDOW_MODELESSDIALOG:
+            case WindowType::DIALOG:
+            case WindowType::MODALDIALOG:
+            case WindowType::MODELESSDIALOG:
             {
                 // Modal/Modeless nur durch Show/Execute
                 if ( (pParent == nullptr ) && ( rDescriptor.ParentIndex == -1 ) )
@@ -975,44 +972,44 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     *ppNewComp = new VCLXDialog;
             }
             break;
-            case WINDOW_MOREBUTTON:
+            case WindowType::MOREBUTTON:
                 pNewWindow = VclPtr<MoreButton>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXButton;
             break;
-            case WINDOW_MULTILISTBOX:
+            case WindowType::MULTILISTBOX:
                 pNewWindow = VclPtr<MultiListBox>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXListBox;
             break;
-            case WINDOW_NUMERICBOX:
+            case WindowType::NUMERICBOX:
                 pNewWindow = VclPtr<NumericBox>::Create( pParent, nWinBits );
             break;
-            case WINDOW_NUMERICFIELD:
+            case WindowType::NUMERICFIELD:
                 pNewWindow = VclPtr<NumericField>::Create( pParent, nWinBits );
                 static_cast<NumericField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXNumericField;
                 static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<NumericField*>(pNewWindow.get())) );
             break;
-            case WINDOW_OKBUTTON:
+            case WindowType::OKBUTTON:
                 pNewWindow = VclPtr<OKButton>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXButton;
             break;
-            case WINDOW_PATTERNBOX:
+            case WindowType::PATTERNBOX:
                 pNewWindow = VclPtr<PatternBox>::Create( pParent, nWinBits );
             break;
-            case WINDOW_PATTERNFIELD:
+            case WindowType::PATTERNFIELD:
                 pNewWindow = VclPtr<PatternField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXPatternField;
                 static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<PatternField*>(pNewWindow.get())) );
             break;
-            case WINDOW_PUSHBUTTON:
+            case WindowType::PUSHBUTTON:
                 pNewWindow = VclPtr<PushButton>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXButton;
             break;
-            case WINDOW_QUERYBOX:
+            case WindowType::QUERYBOX:
                 pNewWindow = VclPtr<QueryBox>::Create( pParent, nWinBits, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
-            case WINDOW_RADIOBUTTON:
+            case WindowType::RADIOBUTTON:
                 pNewWindow = VclPtr<RadioButton>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXRadioButton;
 
@@ -1027,74 +1024,74 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 // 07.08.2001 - #87254# - frank.schoenheit@sun.com
                 static_cast<RadioButton*>(pNewWindow.get())->EnableRadioCheck( false );
             break;
-            case WINDOW_SCROLLBAR:
+            case WindowType::SCROLLBAR:
                 pNewWindow = VclPtr<ScrollBar>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXScrollBar;
             break;
-            case WINDOW_SCROLLBARBOX:
+            case WindowType::SCROLLBARBOX:
                 pNewWindow = VclPtr<ScrollBarBox>::Create( pParent, nWinBits );
             break;
-            case WINDOW_SPINBUTTON:
+            case WindowType::SPINBUTTON:
                 pNewWindow = VclPtr<SpinButton>::Create( pParent, nWinBits );
                 *ppNewComp = new ::toolkit::VCLXSpinButton;
             break;
-            case WINDOW_SPINFIELD:
+            case WindowType::SPINFIELD:
                 pNewWindow = VclPtr<SpinField>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXNumericField;
             break;
-            case WINDOW_SPLITTER:
+            case WindowType::SPLITTER:
                 pNewWindow = VclPtr<Splitter>::Create( pParent, nWinBits );
             break;
-            case WINDOW_SPLITWINDOW:
+            case WindowType::SPLITWINDOW:
                 pNewWindow = VclPtr<SplitWindow>::Create( pParent, nWinBits );
             break;
-            case WINDOW_STATUSBAR:
+            case WindowType::STATUSBAR:
                 pNewWindow = VclPtr<StatusBar>::Create( pParent, nWinBits );
             break;
-            case VCLWINDOW_SYSTEMCHILDWINDOW:
+            case WindowType::TOOLKIT_SYSTEMCHILDWINDOW:
                 pNewWindow = VclPtr<SystemChildWindow>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXSystemDependentWindow();
             break;
-            case WINDOW_TABCONTROL:
+            case WindowType::TABCONTROL:
                 pNewWindow = VclPtr<TabControl>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXMultiPage;
             break;
-            case WINDOW_TABDIALOG:
+            case WindowType::TABDIALOG:
                 pNewWindow = VclPtr<TabDialog>::Create( pParent, nWinBits );
             break;
-            case WINDOW_TABPAGE:
+            case WindowType::TABPAGE:
                 {
                     pNewWindow = VclPtr<TabPage>::Create( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPage;
                 }
             break;
-            case WINDOW_TIMEBOX:
+            case WindowType::TIMEBOX:
                 pNewWindow = VclPtr<TimeBox>::Create( pParent, nWinBits );
             break;
-            case WINDOW_TIMEFIELD:
+            case WindowType::TIMEFIELD:
                 pNewWindow = VclPtr<TimeField>::Create( pParent, nWinBits );
                 static_cast<TimeField*>(pNewWindow.get())->EnableEmptyFieldValue( true );
                 *ppNewComp = new VCLXTimeField;
                 static_cast<VCLXFormattedSpinField*>(*ppNewComp)->SetFormatter( static_cast<FormatterBase*>(static_cast<TimeField*>(pNewWindow.get())) );
             break;
-            case WINDOW_TOOLBOX:
+            case WindowType::TOOLBOX:
                 pNewWindow = VclPtr<ToolBox>::Create( pParent, nWinBits );
                 *ppNewComp = new VCLXToolBox;
             break;
-            case WINDOW_TRISTATEBOX:
+            case WindowType::TRISTATEBOX:
                 pNewWindow = VclPtr<TriStateBox>::Create( pParent, nWinBits );
             break;
-            case WINDOW_WARNINGBOX:
+            case WindowType::WARNINGBOX:
                 pNewWindow = VclPtr<WarningBox>::Create( pParent, nWinBits, OUString() );
                 *ppNewComp = new VCLXMessageBox;
             break;
-            case WINDOW_WORKWINDOW:
-            case WINDOW_WINDOW:
-            case VCLWINDOW_FRAMEWINDOW:
-            case WINDOW_DOCKINGWINDOW:
+            case WindowType::WORKWINDOW:
+            case WindowType::WINDOW:
+            case WindowType::TOOLKIT_FRAMEWINDOW:
+            case WindowType::DOCKINGWINDOW:
                 if ( rDescriptor.Type == css::awt::WindowClass_TOP )
                 {
-                    if (nType == WINDOW_DOCKINGWINDOW )
+                    if (nType == WindowType::DOCKINGWINDOW )
                         pNewWindow = VclPtr<DockingWindow>::Create( pParent, nWinBits );
                     else
                     {
@@ -1163,11 +1160,11 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                             pNewWindow = VclPtr<WorkWindow>::Create( pParent, nWinBits );
                     }
 
-                    *ppNewComp = new VCLXTopWindow( pNewWindow->GetType() == WINDOW_WORKWINDOW );
+                    *ppNewComp = new VCLXTopWindow( pNewWindow->GetType() == WindowType::WORKWINDOW );
                 }
                 else if ( rDescriptor.Type == css::awt::WindowClass_CONTAINER )
                 {
-                    if (nType == WINDOW_DOCKINGWINDOW )
+                    if (nType == WindowType::DOCKINGWINDOW )
                         pNewWindow = VclPtr<DockingWindow>::Create( pParent, nWinBits );
                     else
                         pNewWindow = VclPtr<vcl::Window>::Create( pParent, nWinBits );
@@ -1175,14 +1172,14 @@ vcl::Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 }
                 else
                 {
-                    if (nType == WINDOW_DOCKINGWINDOW )
+                    if (nType == WindowType::DOCKINGWINDOW )
                         pNewWindow = VclPtr<DockingWindow>::Create( pParent, nWinBits );
                     else
                         pNewWindow = VclPtr<vcl::Window>::Create( pParent, nWinBits );
                     *ppNewComp = new VCLXWindow;
                 }
             break;
-            case WINDOW_CONTROL:
+            case WindowType::CONTROL:
                 if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
                         "tabpagecontainer" ) )
                 {

@@ -73,7 +73,7 @@ OString MenuButton::GetCurItemIdent() const
 }
 
 MenuButton::MenuButton( vcl::Window* pParent, WinBits nWinBits )
-    : PushButton(WINDOW_MENUBUTTON)
+    : PushButton(WindowType::MENUBUTTON)
     , mpMenuTimer(nullptr)
     , mnCurItemId(0)
     , mbDelayMenu(false)

@@ -167,16 +167,16 @@ void ImplDrawSpinButton(vcl::RenderContext& rRenderContext, vcl::Window* pWindow
         ControlType aControl = ControlType::SpinButtons;
         switch (pWindow->GetType())
         {
-            case WINDOW_EDIT:
-            case WINDOW_MULTILINEEDIT:
-            case WINDOW_PATTERNFIELD:
-            case WINDOW_METRICFIELD:
-            case WINDOW_CURRENCYFIELD:
-            case WINDOW_DATEFIELD:
-            case WINDOW_TIMEFIELD:
-            case WINDOW_LONGCURRENCYFIELD:
-            case WINDOW_NUMERICFIELD:
-            case WINDOW_SPINFIELD:
+            case WindowType::EDIT:
+            case WindowType::MULTILINEEDIT:
+            case WindowType::PATTERNFIELD:
+            case WindowType::METRICFIELD:
+            case WindowType::CURRENCYFIELD:
+            case WindowType::DATEFIELD:
+            case WindowType::TIMEFIELD:
+            case WindowType::LONGCURRENCYFIELD:
+            case WindowType::NUMERICFIELD:
+            case WindowType::SPINFIELD:
                 aControl = ControlType::Spinbox;
                 break;
             default:
@@ -339,7 +339,7 @@ void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
 }
 
 SpinField::SpinField(vcl::Window* pParent, WinBits nWinStyle) :
-    Edit(WINDOW_SPINFIELD)
+    Edit(WindowType::SPINFIELD)
 {
     ImplInitSpinFieldData();
     ImplInit(pParent, nWinStyle);

@@ -131,14 +131,14 @@ namespace
         vcl::Window* pChild = firstLogicalChildOfParent(pParent);
         while (pChild)
         {
-            if (pChild->GetType() == WINDOW_TABCONTROL)
+            if (pChild->GetType() == WindowType::TABCONTROL)
             {
                 // find currently shown tab page
                 TabControl* pTabControl = static_cast<TabControl*>(pChild);
                 TabPage* pTabPage = pTabControl->GetTabPage( pTabControl->GetCurPageId() );
                 processChildren(pTabPage, bShowAccel);
             }
-            else if (pChild->GetType() == WINDOW_TABPAGE)
+            else if (pChild->GetType() == WindowType::TABPAGE)
             {
                 // bare tabpage without tabcontrol parent (options dialog)
                 processChildren(pChild, bShowAccel);
@@ -179,7 +179,7 @@ bool SystemWindow::EventNotify( NotifyEvent& rNEvt )
         rNEvt.GetType() == MouseNotifyEvent::COMMAND)
     {
         MenuBar* pMBar = mpMenuBar;
-        if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
+        if ( !pMBar && ( GetType() == WindowType::FLOATINGWINDOW ) )
         {
             vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
             if( pWin && pWin->IsSystemWindow() )
@@ -216,7 +216,7 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
         else
         {
             TaskPaneList *pTList = mpImplData->mpTaskPaneList.get();
-            if( !pTList && ( GetType() == WINDOW_FLOATINGWINDOW ) )
+            if( !pTList && ( GetType() == WindowType::FLOATINGWINDOW ) )
             {
                 vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
                 if( pWin && pWin->IsSystemWindow() )
@@ -252,7 +252,7 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
     {
         mpImplData->mpTaskPaneList.reset( new TaskPaneList );
         MenuBar* pMBar = mpMenuBar;
-        if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
+        if ( !pMBar && ( GetType() == WindowType::FLOATINGWINDOW ) )
         {
             vcl::Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
             if ( pWin && pWin->IsSystemWindow() )
@@ -913,7 +913,7 @@ void SystemWindow::SetMenuBar(MenuBar* pMenuBar)
         VclPtr<vcl::Window> pNewWindow;
         mpMenuBar = pMenuBar;
 
-        if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
+        if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) )
         {
             if ( pOldMenuBar )
                 pOldWindow = pOldMenuBar->ImplGetWindow();
@@ -996,7 +996,7 @@ void SystemWindow::SetMenuBarMode( MenuBarMode nMode )
     if ( mnMenuBarMode != nMode )
     {
         mnMenuBarMode = nMode;
-        if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WINDOW_BORDERWINDOW) )
+        if ( mpWindowImpl->mpBorderWindow && (mpWindowImpl->mpBorderWindow->GetType() == WindowType::BORDERWINDOW) )
         {
             if ( nMode == MenuBarMode::Hide )
                 static_cast<ImplBorderWindow*>(mpWindowImpl->mpBorderWindow.get())->SetMenuBarMode( true );

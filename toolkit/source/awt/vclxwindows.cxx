@@ -252,9 +252,9 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const css::u
         case BASEPROPERTY_IMAGEALIGN:
         {
             WindowType eType = GetWindow()->GetType();
-            if (  ( eType == WINDOW_PUSHBUTTON )
-               || ( eType == WINDOW_RADIOBUTTON )
-               || ( eType == WINDOW_CHECKBOX )
+            if (  ( eType == WindowType::PUSHBUTTON )
+               || ( eType == WindowType::RADIOBUTTON )
+               || ( eType == WindowType::CHECKBOX )
                )
             {
                 sal_Int16 nAlignment = sal_Int16();
@@ -266,9 +266,9 @@ void VCLXGraphicControl::setProperty( const OUString& PropertyName, const css::u
         case BASEPROPERTY_IMAGEPOSITION:
         {
             WindowType eType = GetWindow()->GetType();
-            if (  ( eType == WINDOW_PUSHBUTTON )
-               || ( eType == WINDOW_RADIOBUTTON )
-               || ( eType == WINDOW_CHECKBOX )
+            if (  ( eType == WindowType::PUSHBUTTON )
+               || ( eType == WindowType::RADIOBUTTON )
+               || ( eType == WindowType::CHECKBOX )
                )
             {
                 sal_Int16 nImagePosition = 2;
@@ -300,9 +300,9 @@ css::uno::Any VCLXGraphicControl::getProperty( const OUString& PropertyName )
         case BASEPROPERTY_IMAGEALIGN:
         {
             WindowType eType = GetWindow()->GetType();
-            if  (  ( eType == WINDOW_PUSHBUTTON )
-                || ( eType == WINDOW_RADIOBUTTON )
-                || ( eType == WINDOW_CHECKBOX )
+            if  (  ( eType == WindowType::PUSHBUTTON )
+                || ( eType == WindowType::RADIOBUTTON )
+                || ( eType == WindowType::CHECKBOX )
                 )
             {
                  aProp <<= ::toolkit::getCompatibleImageAlign(
@@ -313,9 +313,9 @@ css::uno::Any VCLXGraphicControl::getProperty( const OUString& PropertyName )
         case BASEPROPERTY_IMAGEPOSITION:
         {
             WindowType eType = GetWindow()->GetType();
-            if  (  ( eType == WINDOW_PUSHBUTTON )
-                || ( eType == WINDOW_RADIOBUTTON )
-                || ( eType == WINDOW_CHECKBOX )
+            if  (  ( eType == WindowType::PUSHBUTTON )
+                || ( eType == WindowType::RADIOBUTTON )
+                || ( eType == WindowType::CHECKBOX )
                 )
             {
                 aProp <<= ::toolkit::translateImagePosition(
@@ -512,7 +512,7 @@ void VCLXButton::setProperty( const OUString& PropertyName, const css::uno::Any&
             break;
             case BASEPROPERTY_STATE:
             {
-                if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
+                if ( GetWindow()->GetType() == WindowType::PUSHBUTTON )
                 {
                     sal_Int16 n = sal_Int16();
                     if ( Value >>= n )
@@ -554,7 +554,7 @@ css::uno::Any VCLXButton::getProperty( const OUString& PropertyName )
             break;
             case BASEPROPERTY_STATE:
             {
-                if ( GetWindow()->GetType() == WINDOW_PUSHBUTTON )
+                if ( GetWindow()->GetType() == WindowType::PUSHBUTTON )
                 {
                      aProp <<= (sal_Int16)static_cast<PushButton*>(pButton.get())->GetState();
                 }
@@ -4754,7 +4754,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXDateField::Cre
     VclPtr< vcl::Window > pWindow = GetWindow();
     if ( pWindow )
     {
-        pWindow->SetType( WINDOW_DATEFIELD );
+        pWindow->SetType( WindowType::DATEFIELD );
     }
     return getAccessibleFactory().createAccessibleContext( this );
 }
@@ -5101,7 +5101,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXTimeField::Cre
     VclPtr< vcl::Window > pWindow = GetWindow();
     if ( pWindow )
     {
-        pWindow->SetType( WINDOW_TIMEFIELD );
+        pWindow->SetType( WindowType::TIMEFIELD );
     }
     return getAccessibleFactory().createAccessibleContext( this );
 }

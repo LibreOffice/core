@@ -83,7 +83,7 @@ OUString retrieveToolbarNameFromHelpURL( vcl::Window* pWindow )
 {
     OUString aToolbarName;
 
-    if ( pWindow->GetType() == WINDOW_TOOLBOX )
+    if ( pWindow->GetType() == WindowType::TOOLBOX )
     {
         ToolBox* pToolBox = dynamic_cast<ToolBox *>( pWindow );
         if ( pToolBox )
@@ -102,7 +102,7 @@ OUString retrieveToolbarNameFromHelpURL( vcl::Window* pWindow )
 ToolBox* getToolboxPtr( vcl::Window* pWindow )
 {
     ToolBox* pToolbox(nullptr);
-    if ( pWindow->GetType() == WINDOW_TOOLBOX )
+    if ( pWindow->GetType() == WindowType::TOOLBOX )
         pToolbox = dynamic_cast<ToolBox*>( pWindow );
     return pToolbox;
 }
@@ -151,7 +151,7 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
         _rPosSize = _xWindow->getPosSize();
 
         VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow( _xWindow );
-        if ( pWindow->GetType() == WINDOW_TOOLBOX )
+        if ( pWindow->GetType() == WindowType::TOOLBOX )
         {
             ::Size aSize = static_cast<ToolBox*>(pWindow.get())->CalcWindowSizePixel( 1 );
             _rPosSize.Width = aSize.Width();

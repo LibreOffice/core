@@ -168,7 +168,7 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
     VclPtr<vcl::Window> pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
-        ( pWindow->GetType() == WINDOW_WORKWINDOW )
+        ( pWindow->GetType() == WindowType::WORKWINDOW )
        )
     {
         WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
@@ -285,7 +285,7 @@ void TitleBarUpdate::impl_updateIcon(const css::uno::Reference< css::frame::XFra
     VclPtr<vcl::Window> pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
-        ( pWindow->GetType() == WINDOW_WORKWINDOW )
+        ( pWindow->GetType() == WindowType::WORKWINDOW )
        )
     {
         WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());
@@ -319,7 +319,7 @@ void TitleBarUpdate::impl_updateTitle(const css::uno::Reference< css::frame::XFr
     VclPtr<vcl::Window> pWindow = (VCLUnoHelper::GetWindow( xWindow ));
     if (
         ( pWindow                                 ) &&
-        ( pWindow->GetType() == WINDOW_WORKWINDOW )
+        ( pWindow->GetType() == WindowType::WORKWINDOW )
        )
     {
         WorkWindow* pWorkWindow = static_cast<WorkWindow*>(pWindow.get());

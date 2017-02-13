@@ -134,7 +134,7 @@ wrapper_factory_create_accessible( GObject *obj )
         vcl::Window* pWindow = pFrameWindow;
 
         // skip accessible objects already exposed by the frame objects
-        if( WINDOW_BORDERWINDOW == pWindow->GetType() )
+        if( WindowType::BORDERWINDOW == pWindow->GetType() )
             pWindow = pFrameWindow->GetAccessibleChildWindow(0);
 
         if( pWindow )

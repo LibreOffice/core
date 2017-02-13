@@ -436,7 +436,7 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         }
         //If a combobox or list's edit child isn't read-only,EDITABLE state
         //should be set.
-        if( pWindow && pWindow->GetType() == WINDOW_COMBOBOX )
+        if( pWindow && pWindow->GetType() == WindowType::COMBOBOX )
         {
             if( !( pWindow->GetStyle() & WB_READONLY) ||
                 !static_cast<Edit*>(pWindow.get())->IsReadOnly() )
@@ -448,14 +448,14 @@ void VCLXAccessibleComponent::FillAccessibleStateSet( utl::AccessibleStateSetHel
         while( pWindow && pChild )
         {
             VclPtr<vcl::Window> pWinTemp = pChild->GetWindow( GetWindowType::FirstChild );
-            if( pWinTemp && pWinTemp->GetType() == WINDOW_EDIT )
+            if( pWinTemp && pWinTemp->GetType() == WindowType::EDIT )
             {
                 if( !( pWinTemp->GetStyle() & WB_READONLY) ||
                     !static_cast<Edit*>(pWinTemp.get())->IsReadOnly() )
                     rStateSet.AddState( accessibility::AccessibleStateType::EDITABLE );
                 break;
             }
-            if( pChild->GetType() == WINDOW_EDIT )
+            if( pChild->GetType() == WindowType::EDIT )
             {
                 if( !( pChild->GetStyle() & WB_READONLY) ||
                     !static_cast<Edit*>(pChild.get())->IsReadOnly())

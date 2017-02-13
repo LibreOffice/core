@@ -124,7 +124,7 @@ namespace accessibility
                     if (pBox)
                     {
                         vcl::Window* pParent = static_cast<vcl::Window*>(pBox)->GetParent();
-                        if (pParent && pParent->GetType() == WINDOW_FLOATINGWINDOW)
+                        if (pParent && pParent->GetType() == WindowType::FLOATINGWINDOW)
                         {
                             // MT: ImplGetAppSVData shouldn't be exported from VCL.
                             // In which scenario is this needed?

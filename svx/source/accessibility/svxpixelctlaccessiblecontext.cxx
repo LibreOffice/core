@@ -90,7 +90,7 @@ uno::Reference< XAccessible > SvxPixelCtlAccessible::getAccessibleParent(  )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
     vcl::Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
-    if (!pTabPage || WINDOW_TABPAGE != pTabPage->GetType())
+    if (!pTabPage || WindowType::TABPAGE != pTabPage->GetType())
         return uno::Reference< XAccessible >();
     else
         return pTabPage->GetAccessible();
@@ -101,7 +101,7 @@ sal_Int32 SvxPixelCtlAccessible::getAccessibleIndexInParent(  )
     ::osl::MutexGuard   aGuard( m_aMutex );
     sal_uInt16 nIdx = 0;
     vcl::Window *pTabPage = getNonLayoutParent(&mrPixelCtl);
-    if (!pTabPage || WINDOW_TABPAGE != pTabPage->GetType())
+    if (!pTabPage || WindowType::TABPAGE != pTabPage->GetType())
         return -1;
     sal_uInt16 nChildren = pTabPage->GetChildCount();
     for(nIdx = 0; nIdx < nChildren; nIdx++)

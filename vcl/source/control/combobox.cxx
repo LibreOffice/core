@@ -102,7 +102,7 @@ static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, const
 }
 
 ComboBox::ComboBox(vcl::Window *const pParent, WinBits const nStyle)
-    : Edit( WINDOW_COMBOBOX )
+    : Edit( WindowType::COMBOBOX )
     , m_pImpl(new Impl(*this))
 {
     m_pImpl->ImplInitComboBoxData();

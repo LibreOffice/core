@@ -245,7 +245,7 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 
     // check for system and work window - its necessary to guarantee correct pointer cast!
     bool bSystemWindow = pWindow->IsSystemWindow();
-    bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
+    bool bWorkWindow   = (pWindow->GetType() == WindowType::WORKWINDOW);
 
     if (!bSystemWindow && !bWorkWindow)
         return;

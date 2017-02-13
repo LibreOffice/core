@@ -646,9 +646,9 @@ void ToolBox::ImplDrawBorder(vcl::RenderContext& rRenderContext)
 static bool ImplIsFixedControl( const ImplToolItem *pItem )
 {
     return ( pItem->mpWindow &&
-            (pItem->mpWindow->GetType() == WINDOW_FIXEDTEXT ||
-             pItem->mpWindow->GetType() == WINDOW_FIXEDLINE ||
-             pItem->mpWindow->GetType() == WINDOW_GROUPBOX) );
+            (pItem->mpWindow->GetType() == WindowType::FIXEDTEXT ||
+             pItem->mpWindow->GetType() == WindowType::FIXEDLINE ||
+             pItem->mpWindow->GetType() == WindowType::GROUPBOX) );
 }
 
 const ImplToolItem *ToolBox::ImplGetFirstClippedItem( const ToolBox* pThis )
@@ -1556,7 +1556,7 @@ void ToolBox::doDeferredInit(WinBits nBits)
 }
 
 ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
-    DockingWindow( WINDOW_TOOLBOX )
+    DockingWindow( WindowType::TOOLBOX )
 {
     ImplInitToolBoxData();
     ImplInit( pParent, nStyle );
@@ -1564,7 +1564,7 @@ ToolBox::ToolBox( vcl::Window* pParent, WinBits nStyle ) :
 
 ToolBox::ToolBox(vcl::Window* pParent, const OString& rID,
     const OUString& rUIXMLDescription, const css::uno::Reference<css::frame::XFrame> &rFrame)
-    : DockingWindow(WINDOW_TOOLBOX)
+    : DockingWindow(WindowType::TOOLBOX)
 {
     ImplInitToolBoxData();
 
@@ -2543,7 +2543,7 @@ void ToolBox::ImplFormat( bool bResize )
                             // equal to the LineSize when multibar has a single
                             // line size )
                             if ( it->maRect.Top() ||
-                                 (it->mpWindow && it->mpWindow->GetType() == WINDOW_CALCINPUTLINE) ) // tdf#83099
+                                 (it->mpWindow && it->mpWindow->GetType() == WindowType::CALCINPUTLINE) ) // tdf#83099
                             {
                                 it->maCalcRect.Top()  = it->maRect.Top();
                             }

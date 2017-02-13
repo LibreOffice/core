@@ -161,14 +161,14 @@ namespace
 {
     bool isButtonType(WindowType nType)
     {
-        return nType == WINDOW_PUSHBUTTON ||
-               nType == WINDOW_OKBUTTON ||
-               nType == WINDOW_CANCELBUTTON ||
-               nType == WINDOW_HELPBUTTON ||
-               nType == WINDOW_IMAGEBUTTON ||
-               nType == WINDOW_MENUBUTTON ||
-               nType == WINDOW_MOREBUTTON ||
-               nType == WINDOW_SPINBUTTON;
+        return nType == WindowType::PUSHBUTTON ||
+               nType == WindowType::OKBUTTON ||
+               nType == WindowType::CANCELBUTTON ||
+               nType == WindowType::HELPBUTTON ||
+               nType == WindowType::IMAGEBUTTON ||
+               nType == WindowType::MENUBUTTON ||
+               nType == WindowType::MOREBUTTON ||
+               nType == WindowType::SPINBUTTON;
     }
 }
 #endif
@@ -476,7 +476,7 @@ VclBuilder::VclBuilder(vcl::Window *pParent, const OUString& sUIDir, const OUStr
     {
         vcl::Window *pChild = pOne->get_child();
         vcl::Window* pLabel = pOne->GetWindow(GetWindowType::LastChild);
-        if (pLabel && pLabel != pChild && pLabel->GetType() == WINDOW_FIXEDTEXT)
+        if (pLabel && pLabel != pChild && pLabel->GetType() == WindowType::FIXEDTEXT)
         {
             FixedText *pLabelWidget = static_cast<FixedText*>(pLabel);
             pOne->set_label(pLabelWidget->GetText());
@@ -1248,7 +1248,7 @@ vcl::Window* VclBuilder::prepareWidgetOwnScrolling(vcl::Window *pParent, WinBits
     //For Widgets that manage their own scrolling, if one appears as a child of
     //a scrolling window shoehorn that scrolling settings to this widget and
     //return the real parent to use
-    if (pParent && pParent->GetType() == WINDOW_SCROLLWINDOW)
+    if (pParent && pParent->GetType() == WindowType::SCROLLWINDOW)
     {
         WinBits nScrollBits = pParent->GetStyle();
         nScrollBits &= (WB_AUTOHSCROLL|WB_HSCROLL|WB_AUTOVSCROLL|WB_VSCROLL);
@@ -1280,7 +1280,7 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
     bool bIsPlaceHolder = name.isEmpty();
     bool bVertical = false;
 
-    if (pParent && pParent->GetType() == WINDOW_TABCONTROL)
+    if (pParent && pParent->GetType() == WindowType::TABCONTROL)
     {
         //We have to add a page
 
@@ -1788,9 +1788,9 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
             {
                 VclPtr<vcl::Window> xParent(pParent);
                 pFunction(xWindow, xParent, rMap);
-                if (xWindow->GetType() == WINDOW_PUSHBUTTON)
+                if (xWindow->GetType() == WindowType::PUSHBUTTON)
                     setupFromActionName(static_cast<Button*>(xWindow.get()), rMap, m_xFrame);
-                else if (xWindow->GetType() == WINDOW_MENUBUTTON)
+                else if (xWindow->GetType() == WindowType::MENUBUTTON)
                 {
                     OString sMenu = extractCustomProperty(rMap);
                     if (!sMenu.isEmpty())
@@ -1821,7 +1821,7 @@ namespace
     //represented in the .ui format, i.e. only their children exist.
     bool isConsideredGtkPseudo(vcl::Window *pWindow)
     {
-        return pWindow->GetType() == WINDOW_TABPAGE;
+        return pWindow->GetType() == WindowType::TABPAGE;
     }
 }
 
@@ -2127,7 +2127,7 @@ void VclBuilder::handleChild(vcl::Window *pParent, xmlreader::XmlReader &reader)
                         pCurrentChild->Show();
 
                     //Select the first page if it's a notebook
-                    if (pCurrentChild->GetType() == WINDOW_TABCONTROL)
+                    if (pCurrentChild->GetType() == WindowType::TABCONTROL)
                     {
                         TabControl *pTabControl = static_cast<TabControl*>(pCurrentChild);
                         pTabControl->SetCurPageId(pTabControl->GetPageId(0));
@@ -2994,7 +2994,7 @@ void VclBuilder::applyPackingProperty(vcl::Window *pCurrent,
     xmlreader::Span name;
     int nsId;
 
-    if (pCurrent->GetType() == WINDOW_SCROLLWINDOW)
+    if (pCurrent->GetType() == WindowType::SCROLLWINDOW)
     {
         auto aFind = m_pParserState->m_aRedundantParentWidgets.find(VclPtr<vcl::Window>(pCurrent));
         if (aFind != m_pParserState->m_aRedundantParentWidgets.end())

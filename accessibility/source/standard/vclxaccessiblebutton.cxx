@@ -94,7 +94,7 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
             rStateSet.AddState( AccessibleStateType::PRESSED );
 
         // IA2 CWS: if the button has a popup menu, it should has the state EXPANDABLE
-        if( pButton->GetType() == WINDOW_MENUBUTTON )
+        if( pButton->GetType() == WindowType::MENUBUTTON )
         {
             rStateSet.AddState( AccessibleStateType::EXPANDABLE );
         }

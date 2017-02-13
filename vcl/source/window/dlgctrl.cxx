@@ -93,7 +93,7 @@ static vcl::Window* ImplGetSubChildWindow( vcl::Window* pParent, sal_uInt16 n, s
                 pFoundWindow = pWindow;
 
                 // for a TabControl, remember the current TabPage for later use
-                if ( pWindow->GetType() == WINDOW_TABCONTROL )
+                if ( pWindow->GetType() == WindowType::TABCONTROL )
                 {
                     TabControl* pTabControl = static_cast<TabControl*>(pWindow);
                     // Check if the TabPage is a Child of the TabControl and still exists (by
@@ -264,7 +264,7 @@ vcl::Window* Window::ImplGetDlgWindow( sal_uInt16 nIndex, GetDlgWindowType nType
         {
             if ( pWindow )
             {
-                if ( pWindow->GetType() == WINDOW_TABCONTROL )
+                if ( pWindow->GetType() == WindowType::TABCONTROL )
                 {
                     vcl::Window* pNextWindow = ImplGetDlgWindow( i, GetDlgWindowType::Next );
                     if ( pNextWindow )
@@ -413,7 +413,7 @@ vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_
             cCompareChar = xCharClass->toUpper( OUString(cCompareChar), 0, 1, rLocale )[0];
             if ( cCompareChar == cCharCode )
             {
-                if (pWindow->GetType() == WINDOW_FIXEDTEXT)
+                if (pWindow->GetType() == WindowType::FIXEDTEXT)
                 {
                     FixedText *pFixedText = static_cast<FixedText*>(pWindow);
                     vcl::Window *pMnemonicWidget = pFixedText->get_mnemonic_widget();
@@ -424,9 +424,9 @@ vcl::Window* ImplFindAccelWindow( vcl::Window* pParent, sal_uInt16& rIndex, sal_
                 }
 
                 // skip Static-Controls
-                if ( (pWindow->GetType() == WINDOW_FIXEDTEXT)   ||
-                     (pWindow->GetType() == WINDOW_FIXEDLINE)   ||
-                     (pWindow->GetType() == WINDOW_GROUPBOX) )
+                if ( (pWindow->GetType() == WindowType::FIXEDTEXT)   ||
+                     (pWindow->GetType() == WindowType::FIXEDLINE)   ||
+                     (pWindow->GetType() == WindowType::GROUPBOX) )
                     pWindow = pParent->ImplGetDlgWindow( i, GetDlgWindowType::Next );
                 rIndex = i;
                 return pWindow;
@@ -476,7 +476,7 @@ void Window::ImplControlFocus( GetFocusFlags nFlags )
 {
     if ( nFlags & GetFocusFlags::Mnemonic )
     {
-        if ( GetType() == WINDOW_RADIOBUTTON )
+        if ( GetType() == WindowType::RADIOBUTTON )
         {
             if ( !static_cast<RadioButton*>(this)->IsChecked() )
                 static_cast<RadioButton*>(this)->ImplCallClick( true, nFlags );
@@ -488,7 +488,7 @@ void Window::ImplControlFocus( GetFocusFlags nFlags )
             ImplGrabFocus( nFlags );
             if ( nFlags & GetFocusFlags::UniqueMnemonic )
             {
-                if ( GetType() == WINDOW_CHECKBOX )
+                if ( GetType() == WindowType::CHECKBOX )
                     static_cast<CheckBox*>(this)->ImplCheck();
                 else if ( mpWindowImpl->mbPushButton )
                 {
@@ -501,7 +501,7 @@ void Window::ImplControlFocus( GetFocusFlags nFlags )
     }
     else
     {
-        if ( GetType() == WINDOW_RADIOBUTTON )
+        if ( GetType() == WindowType::RADIOBUTTON )
         {
             if ( !static_cast<RadioButton*>(this)->IsChecked() )
                 static_cast<RadioButton*>(this)->ImplCallClick( true, nFlags );
@@ -523,8 +523,8 @@ namespace
                 isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() &&
                 //Pure window shouldn't get window after controls such as
                 //buttons.
-                (pWindow->GetType() != WINDOW_WINDOW && pWindow->GetType() != WINDOW_SYSWINDOW &&
-                  pWindow->GetType() != WINDOW_WORKWINDOW && pWindow->GetType() != WINDOW_CONTROL)
+                (pWindow->GetType() != WindowType::WINDOW && pWindow->GetType() != WindowType::SYSWINDOW &&
+                  pWindow->GetType() != WindowType::WORKWINDOW && pWindow->GetType() != WindowType::CONTROL)
                );
     }
 
@@ -704,7 +704,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         iButtonStart = iButton;
         while ( pButtonWindow )
         {
-            if ( pButtonWindow->GetType() == WINDOW_CANCELBUTTON )
+            if ( pButtonWindow->GetType() == WindowType::CANCELBUTTON )
                 break;
 
             pButtonWindow = ImplGetNextWindow( this, iButton, iButton, true );
@@ -848,7 +848,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         }
         else if ( (nKeyCode == KEY_LEFT) || (nKeyCode == KEY_UP) )
         {
-            if (pSWindow->GetType() == WINDOW_RADIOBUTTON)
+            if (pSWindow->GetType() == WindowType::RADIOBUTTON)
                 return nextInGroup(static_cast<RadioButton*>(pSWindow), true);
             else
             {
@@ -879,7 +879,7 @@ bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, bool bKeyInput )
         }
         else if ( (nKeyCode == KEY_RIGHT) || (nKeyCode == KEY_DOWN) )
         {
-            if (pSWindow->GetType() == WINDOW_RADIOBUTTON)
+            if (pSWindow->GetType() == WindowType::RADIOBUTTON)
                 return nextInGroup(static_cast<RadioButton*>(pSWindow), false);
             else
             {

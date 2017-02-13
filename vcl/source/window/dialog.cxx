@@ -83,13 +83,13 @@ static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
     if( ! pWindow->GetSettings().GetStyleSettings().GetAutoMnemonic() )
         return false;
 
-    if ( (pWindow->GetType() == WINDOW_RADIOBUTTON) ||
-         (pWindow->GetType() == WINDOW_CHECKBOX) ||
-         (pWindow->GetType() == WINDOW_TRISTATEBOX) ||
-         (pWindow->GetType() == WINDOW_PUSHBUTTON) )
+    if ( (pWindow->GetType() == WindowType::RADIOBUTTON) ||
+         (pWindow->GetType() == WindowType::CHECKBOX) ||
+         (pWindow->GetType() == WindowType::TRISTATEBOX) ||
+         (pWindow->GetType() == WindowType::PUSHBUTTON) )
         return true;
 
-    if ( pWindow->GetType() == WINDOW_FIXEDTEXT )
+    if ( pWindow->GetType() == WindowType::FIXEDTEXT )
     {
         FixedText *pText = static_cast<FixedText*>(pWindow);
         if (pText->get_mnemonic_widget())
@@ -103,12 +103,12 @@ static bool ImplIsMnemonicCtrl( vcl::Window* pWindow )
             return false;
         pNextWindow = pNextWindow->GetWindow( GetWindowType::Client );
         if ( !(pNextWindow->GetStyle() & WB_TABSTOP) ||
-             (pNextWindow->GetType() == WINDOW_FIXEDTEXT) ||
-             (pNextWindow->GetType() == WINDOW_GROUPBOX) ||
-             (pNextWindow->GetType() == WINDOW_RADIOBUTTON) ||
-             (pNextWindow->GetType() == WINDOW_CHECKBOX) ||
-             (pNextWindow->GetType() == WINDOW_TRISTATEBOX) ||
-             (pNextWindow->GetType() == WINDOW_PUSHBUTTON) )
+             (pNextWindow->GetType() == WindowType::FIXEDTEXT) ||
+             (pNextWindow->GetType() == WindowType::GROUPBOX) ||
+             (pNextWindow->GetType() == WindowType::RADIOBUTTON) ||
+             (pNextWindow->GetType() == WindowType::CHECKBOX) ||
+             (pNextWindow->GetType() == WindowType::TRISTATEBOX) ||
+             (pNextWindow->GetType() == WindowType::PUSHBUTTON) )
             return false;
 
         return true;
@@ -205,10 +205,10 @@ void Accelerator::GenerateAutoMnemonicsOnHierarchy(vcl::Window* pWindow)
     }
 
     // take the Controls of the dialog into account for TabPages
-    if ( pWindow->GetType() == WINDOW_TABPAGE )
+    if ( pWindow->GetType() == WindowType::TABPAGE )
     {
         vcl::Window* pParent = pWindow->GetParent();
-        if ( pParent->GetType() == WINDOW_TABCONTROL )
+        if ( pParent->GetType() == WindowType::TABCONTROL )
             pParent = pParent->GetParent();
 
         if ( (pParent->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL)) == WB_DIALOGCONTROL )
@@ -289,7 +289,7 @@ static PushButton* ImplGetOKButton( Dialog* pDialog )
     vcl::Window* pChild = getActionAreaButtonList(pDialog);
     while ( pChild )
     {
-        if ( pChild->GetType() == WINDOW_OKBUTTON )
+        if ( pChild->GetType() == WindowType::OKBUTTON )
             return static_cast<PushButton*>(pChild);
 
         pChild = pChild->GetWindow( GetWindowType::Next );
@@ -304,7 +304,7 @@ static PushButton* ImplGetCancelButton( Dialog* pDialog )
 
     while ( pChild )
     {
-        if ( pChild->GetType() == WINDOW_CANCELBUTTON )
+        if ( pChild->GetType() == WindowType::CANCELBUTTON )
             return static_cast<PushButton*>(pChild);
 
         pChild = pChild->GetWindow( GetWindowType::Next );
@@ -519,7 +519,7 @@ void Dialog::doDeferredInit(WinBits nBits)
 }
 
 Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription)
-    : SystemWindow(WINDOW_DIALOG)
+    : SystemWindow(WindowType::DIALOG)
     , mnInitFlag(InitFlag::Default)
 {
     ImplInitDialogData();
@@ -535,7 +535,7 @@ Dialog::Dialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXML
 }
 
 Dialog::Dialog(vcl::Window* pParent, WinBits nStyle, InitFlag eFlag)
-    : SystemWindow(WINDOW_DIALOG)
+    : SystemWindow(WindowType::DIALOG)
     , mnInitFlag(eFlag)
 {
     ImplInitDialogData();
@@ -1205,18 +1205,18 @@ VclBuilderContainer::~VclBuilderContainer()
 }
 
 ModelessDialog::ModelessDialog(vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription, InitFlag eFlag)
-    : Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODELESSDIALOG, eFlag)
+    : Dialog(pParent, rID, rUIXMLDescription, WindowType::MODELESSDIALOG, eFlag)
 {
 }
 
 ModalDialog::ModalDialog( vcl::Window* pParent, WinBits nStyle ) :
-    Dialog( WINDOW_MODALDIALOG )
+    Dialog( WindowType::MODALDIALOG )
 {
     ImplInit( pParent, nStyle );
 }
 
 ModalDialog::ModalDialog( vcl::Window* pParent, const OUString& rID, const OUString& rUIXMLDescription ) :
-    Dialog(pParent, rID, rUIXMLDescription, WINDOW_MODALDIALOG)
+    Dialog(pParent, rID, rUIXMLDescription, WindowType::MODALDIALOG)
 {
 }
 

@@ -1375,7 +1375,7 @@ void SplitWindow::ImplInitSettings()
 }
 
 SplitWindow::SplitWindow( vcl::Window* pParent, WinBits nStyle ) :
-    DockingWindow( WINDOW_SPLITWINDOW )
+    DockingWindow( WindowType::SPLITWINDOW )
 {
     ImplInit( pParent, nStyle );
     DockingWindow::SetIdleDebugName( "vcl::SplitWindow maLayoutIdle" );

@@ -130,7 +130,7 @@ void MessBox::ImplInitButtons()
 
 MessBox::MessBox( vcl::Window* pParent, WinBits nStyle,
                   const OUString& rTitle, const OUString& rMessage ) :
-    ButtonDialog( WINDOW_MESSBOX ),
+    ButtonDialog( WindowType::MESSBOX ),
     mbHelpBtn( false ),
     mbCheck( false ),
     maMessText( rMessage )

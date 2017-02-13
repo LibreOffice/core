@@ -46,7 +46,7 @@ public:
     {
         for (int nChild = 0; nChild < GetChildCount(); ++nChild)
         {
-            if ( GetChild( nChild )->GetType() == WINDOW_CONTAINER )
+            if ( GetChild( nChild )->GetType() == WindowType::CONTAINER )
             {
                 VclContainer* pChild = static_cast<VclContainer*>( GetChild( nChild ) );
 
