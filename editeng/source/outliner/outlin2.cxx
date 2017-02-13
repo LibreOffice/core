@@ -283,7 +283,7 @@ EEControlBits Outliner::GetControlWord() const
     return pEditEngine->GetControlWord();
 }
 
-void Outliner::SetAsianCompressionMode( sal_uInt16 n )
+void Outliner::SetAsianCompressionMode( CharCompressType n )
 {
     pEditEngine->SetAsianCompressionMode( n );
 }

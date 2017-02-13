@@ -35,7 +35,6 @@
 #include <flypos.hxx>
 #include <itabenum.hxx>
 #include <swdbdata.hxx>
-#include <chcmprse.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <sfx2/objsh.hxx>

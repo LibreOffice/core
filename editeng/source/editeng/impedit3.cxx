@@ -52,6 +52,7 @@
 
 #include <svtools/colorcfg.hxx>
 #include <svl/ctloptions.hxx>
+#include <svl/asiancfg.hxx>
 
 #include <editeng/forbiddencharacterstable.hxx>
 
@@ -1140,7 +1141,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 }
 
                 // And now check for Compression:
-                if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() )
+                if ( !bContinueLastPortion && nPortionLen && GetAsianCompressionMode() != CharCompressType::NONE )
                 {
                     EditLine::CharPosArrayType& rArray = pLine->GetCharPosArray();
                     long* pDXArray = rArray.data() + nTmpPos - pLine->GetStart();
@@ -4315,7 +4316,7 @@ bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
                                              long* pDXArray, sal_uInt16 n100thPercentFromMax,
                                              bool bManipulateDXArray)
 {
-    DBG_ASSERT( GetAsianCompressionMode(), "ImplCalcAsianCompression - Why?" );
+    DBG_ASSERT( GetAsianCompressionMode() != CharCompressType::NONE, "ImplCalcAsianCompression - Why?" );
     DBG_ASSERT( pTextPortion->GetLen(), "ImplCalcAsianCompression - Empty Portion?" );
 
     // Percent is 1/100 Percent...
@@ -4333,7 +4334,7 @@ bool ImpEditEngine::ImplCalcAsianCompression(ContentNode* pNode,
             AsianCompressionFlags nType = GetCharTypeForCompression( pNode->GetChar( n+nStartPos ) );
 
             bool bCompressPunctuation = ( nType == AsianCompressionFlags::PunctuationLeft ) || ( nType == AsianCompressionFlags::PunctuationRight );
-            bool bCompressKana = ( nType == AsianCompressionFlags::Kana ) && ( GetAsianCompressionMode() == text::CharacterCompressionType::PUNCTUATION_AND_KANA );
+            bool bCompressKana = ( nType == AsianCompressionFlags::Kana ) && ( GetAsianCompressionMode() == CharCompressType::PunctuationAndKana );
 
             // create Extra infos only if needed...
             if ( bCompressPunctuation || bCompressKana )

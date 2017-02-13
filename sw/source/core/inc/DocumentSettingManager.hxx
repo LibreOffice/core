@@ -32,7 +32,7 @@ class DocumentSettingManager :
     sal_uInt16  mnLinkUpdMode;       //< UpdateMode for links.
 
     SwFieldUpdateFlags    meFieldUpdMode;//< Automatically Update Mode for fields/charts.
-    SwCharCompressType meChrCmprType;//< for ASIAN: compress punctuation/kana
+    CharCompressType meChrCmprType;//< for ASIAN: compress punctuation/kana
 
     sal_uInt32  mn32DummyCompatibilityOptions1;
     sal_uInt32  mn32DummyCompatibilityOptions2;
@@ -171,8 +171,8 @@ public:
     virtual void setLinkUpdateMode( /*[in]*/ sal_uInt16 nMode ) override;
     virtual SwFieldUpdateFlags getFieldUpdateFlags( /*[in]*/bool bGlobalSettings ) const override;
     virtual void setFieldUpdateFlags( /*[in]*/ SwFieldUpdateFlags eMode ) override;
-    virtual SwCharCompressType getCharacterCompressionType() const override;
-    virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType ) override;
+    virtual CharCompressType getCharacterCompressionType() const override;
+    virtual void setCharacterCompressionType( /*[in]*/CharCompressType nType ) override;
 
 
 // Replace all compatibility options with those from rSource.

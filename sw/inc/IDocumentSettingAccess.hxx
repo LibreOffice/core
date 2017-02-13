@@ -22,11 +22,11 @@
 
 #include <tools/solar.h>
 #include <rtl/ref.hxx>
-#include <chcmprse.hxx>
 #include <fldupde.hxx>
 
 class SvxForbiddenCharactersTable;
 namespace com { namespace sun { namespace star { namespace i18n { struct ForbiddenCharacters; } } } }
+enum class CharCompressType;
 
 enum class DocumentSettingId
 {
@@ -204,14 +204,14 @@ enum class DocumentSettingId
        @returns
        the current character compression mode.
     */
-    virtual SwCharCompressType getCharacterCompressionType() const = 0;
+    virtual CharCompressType getCharacterCompressionType() const = 0;
 
     /** Set the character compression type for Asian characters.
 
        @param nMode
        [in] the new character compression type.
     */
-    virtual void setCharacterCompressionType( /*[in]*/SwCharCompressType nType ) = 0;
+    virtual void setCharacterCompressionType( /*[in]*/CharCompressType nType ) = 0;
 
     /** Get the n32DummyCompatabilityOptions1
     */

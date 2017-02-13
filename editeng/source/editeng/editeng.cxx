@@ -482,7 +482,7 @@ EditSelection EditEngine::TransliterateText(const EditSelection& rSelection, sal
     return pImpEditEngine->TransliterateText(rSelection, nTransliterationMode);
 }
 
-void EditEngine::SetAsianCompressionMode( sal_uInt16 n )
+void EditEngine::SetAsianCompressionMode( CharCompressType n )
 {
     pImpEditEngine->SetAsianCompressionMode( n );
 }

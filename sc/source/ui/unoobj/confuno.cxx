@@ -256,7 +256,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
         {
             // Int16 contains CharacterCompressionType values
             sal_Int16 nUno = ScUnoHelpFunctions::GetInt16FromAny( aValue );
-            rDoc.SetAsianCompression( (sal_uInt8) nUno );
+            rDoc.SetAsianCompression( (CharCompressType) nUno );
             bUpdateHeights = true;
         }
         else if ( aPropertyName == SC_UNO_ASIANKERN )

@@ -187,13 +187,14 @@ bool SvxAsianLayoutPage::FillItemSet( SfxItemSet* )
     if(m_pNoCompressionRB->IsValueChangedFromSaved() ||
        m_pPunctCompressionRB->IsValueChangedFromSaved())
     {
-        sal_Int16 nSet = m_pNoCompressionRB->IsChecked() ? 0 :
-                            m_pPunctCompressionRB->IsChecked() ? 1 : 2;
+        CharCompressType nSet = m_pNoCompressionRB->IsChecked() ? CharCompressType::NONE :
+                            m_pPunctCompressionRB->IsChecked() ? CharCompressType::PunctuationOnly :
+                            CharCompressType::PunctuationAndKana;
         pImpl->aConfig.SetCharDistanceCompression(nSet);
         OUString sCompress(cCharacterCompressionType);
         if(pImpl->xPrSetInfo.is() && pImpl->xPrSetInfo->hasPropertyByName(sCompress))
         {
-            pImpl->xPrSet->setPropertyValue(sCompress, Any(nSet));
+            pImpl->xPrSet->setPropertyValue(sCompress, Any((sal_uInt16)nSet));
         }
     }
     pImpl->aConfig.Commit();
@@ -238,7 +239,7 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
         pImpl->xPrSetInfo = pImpl->xPrSet->getPropertySetInfo();
     OUString sForbidden("ForbiddenCharacters");
     bool bKernWesternText = pImpl->aConfig.IsKerningWesternTextOnly();
-    sal_Int16 nCompress = pImpl->aConfig.GetCharDistanceCompression();
+    CharCompressType nCompress = pImpl->aConfig.GetCharDistanceCompression();
     if(pImpl->xPrSetInfo.is())
     {
         if(pImpl->xPrSetInfo->hasPropertyByName(sForbidden))
@@ -250,7 +251,9 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
         if(pImpl->xPrSetInfo->hasPropertyByName(sCompress))
         {
             Any aVal = pImpl->xPrSet->getPropertyValue(sCompress);
-            aVal >>= nCompress;
+            sal_uInt16 nTmp;
+            if (aVal >>= nTmp)
+                nCompress = (CharCompressType)nTmp;
         }
         OUString sPunct(cIsKernAsianPunctuation);
         if(pImpl->xPrSetInfo->hasPropertyByName(sPunct))
@@ -276,8 +279,8 @@ void SvxAsianLayoutPage::Reset( const SfxItemSet* )
         m_pCharPunctKerningRB->Check();
     switch(nCompress)
     {
-        case 0 : m_pNoCompressionRB->Check();        break;
-        case 1 : m_pPunctCompressionRB->Check();     break;
+        case CharCompressType::NONE : m_pNoCompressionRB->Check();        break;
+        case CharCompressType::PunctuationOnly : m_pPunctCompressionRB->Check();     break;
         default: m_pPunctKanaCompressionRB->Check();
     }
     m_pCharKerningRB->SaveValue();

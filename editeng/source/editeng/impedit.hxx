@@ -444,7 +444,7 @@ private:
     sal_uInt16          nStretchX;
     sal_uInt16          nStretchY;
 
-    sal_uInt16              nAsianCompressionMode;
+    CharCompressType    nAsianCompressionMode;
 
     EEHorizontalTextDirection eDefaultHorizontalTextDirection;
 
@@ -998,8 +998,8 @@ public:
     EditSelection       TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
     short               ReplaceTextOnly( ContentNode* pNode, sal_Int32 nCurrentStart, sal_Int32 nLen, const OUString& rText, const css::uno::Sequence< sal_Int32 >& rOffsets );
 
-    void                SetAsianCompressionMode( sal_uInt16 n );
-    sal_uInt16          GetAsianCompressionMode() const { return nAsianCompressionMode; }
+    void                SetAsianCompressionMode( CharCompressType n );
+    CharCompressType    GetAsianCompressionMode() const { return nAsianCompressionMode; }
 
     void                SetKernAsianPunctuation( bool b );
     bool                IsKernAsianPunctuation() const { return bKernAsianPunctuation; }

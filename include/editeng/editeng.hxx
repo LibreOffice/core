@@ -109,6 +109,7 @@ class Range;
 struct EPaM;
 class DeletedNodeInfo;
 class ParaPortionList;
+enum class CharCompressType;
 
 
 /** values for:
@@ -256,7 +257,7 @@ public:
     void            TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode );
     EditSelection   TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
 
-    void            SetAsianCompressionMode( sal_uInt16 nCompression );
+    void            SetAsianCompressionMode( CharCompressType nCompression );
 
     void            SetKernAsianPunctuation( bool bEnabled );
 

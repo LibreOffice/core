@@ -812,19 +812,19 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                 {
                     bOk = true;
 
-                    pDoc->SetCharCompressType( (sal_uInt16)nCharCompressType );
+                    pDoc->SetCharCompressType( (CharCompressType)nCharCompressType );
                     SdDrawDocument* pDocument = pDocSh->GetDoc();
                     SdrOutliner& rOutl = pDocument->GetDrawOutliner();
-                    rOutl.SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
+                    rOutl.SetAsianCompressionMode( (CharCompressType)nCharCompressType );
                     SdOutliner* pOutl = pDocument->GetOutliner( false );
                     if( pOutl )
                     {
-                        pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
+                        pOutl->SetAsianCompressionMode( (CharCompressType)nCharCompressType );
                     }
                     pOutl = pDocument->GetInternalOutliner( false );
                     if( pOutl )
                     {
-                        pOutl->SetAsianCompressionMode( (sal_uInt16)nCharCompressType );
+                        pOutl->SetAsianCompressionMode( (CharCompressType)nCharCompressType );
                     }
                 }
                 break;

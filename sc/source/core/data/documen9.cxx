@@ -26,6 +26,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/langitem.hxx>
 #include <osl/thread.h>
+#include <svl/asiancfg.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdocapt.hxx>
@@ -641,18 +642,18 @@ void ScDocument::SetForbiddenCharacters(const rtl::Reference<SvxForbiddenCharact
 
 bool ScDocument::IsValidAsianCompression() const
 {
-    return ( nAsianCompression != SC_ASIANCOMPRESSION_INVALID );
+    return nAsianCompression != CharCompressType::Invalid;
 }
 
-sal_uInt8 ScDocument::GetAsianCompression() const
+CharCompressType ScDocument::GetAsianCompression() const
 {
-    if ( nAsianCompression == SC_ASIANCOMPRESSION_INVALID )
-        return 0;
+    if ( nAsianCompression == CharCompressType::Invalid )
+        return CharCompressType::NONE;
     else
         return nAsianCompression;
 }
 
-void ScDocument::SetAsianCompression(sal_uInt8 nNew)
+void ScDocument::SetAsianCompression(CharCompressType nNew)
 {
     nAsianCompression = nNew;
     if ( pEditEngine )

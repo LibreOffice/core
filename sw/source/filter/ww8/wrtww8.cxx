@@ -763,7 +763,7 @@ void WW8Export::ExportDopTypography(WW8DopTypography &rTypo)
     const IDocumentSettingAccess& rIDocumentSettingAccess = GetWriter().getIDocumentSettingAccess();
 
     rTypo.fKerningPunct = sal_uInt16(rIDocumentSettingAccess.get(DocumentSettingId::KERN_ASIAN_PUNCTUATION));
-    rTypo.iJustification = m_pDoc->getIDocumentSettingAccess().getCharacterCompressionType();
+    rTypo.iJustification = sal_uInt16(m_pDoc->getIDocumentSettingAccess().getCharacterCompressionType());
 }
 
 // It can only be found something with this method, if it is used within

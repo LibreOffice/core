@@ -83,6 +83,7 @@ class SvxForbiddenCharactersTable;
 class OverflowingText;
 class NonOverflowingText;
 class OutlinerViewShell;
+enum class CharCompressType;
 
 namespace svl
 {
@@ -694,7 +695,7 @@ public:
 
     LanguageType    GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
 
-    void            SetAsianCompressionMode( sal_uInt16 nCompressionMode );
+    void            SetAsianCompressionMode( CharCompressType nCompressionMode );
 
     void            SetKernAsianPunctuation( bool bEnabled );
 

@@ -35,6 +35,7 @@
 #include <unotools/configmgr.hxx>
 
 #include <svl/whiter.hxx>
+#include <svl/asiancfg.hxx>
 #include <svx/xit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xlndsit.hxx>
@@ -165,11 +166,11 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     mbDisableTextEditUsesCommonUndoManager = false;
 
     if (!utl::ConfigManager::IsAvoidConfig())
-        mnCharCompressType =
+        mnCharCompressType = (CharCompressType)
             officecfg::Office::Common::AsianLayout::CompressCharacterDistance::
             get();
     else
-        mnCharCompressType = 0;
+        mnCharCompressType = CharCompressType::NONE;
 
 #ifdef OSL_LITENDIAN
     nStreamNumberFormat=SvStreamEndian::LITTLE;
@@ -1865,7 +1866,7 @@ void SdrModel::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharacte
 }
 
 
-void SdrModel::SetCharCompressType( sal_uInt16 nType )
+void SdrModel::SetCharCompressType( CharCompressType nType )
 {
     if( nType != mnCharCompressType )
     {

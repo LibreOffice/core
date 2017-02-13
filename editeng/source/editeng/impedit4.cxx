@@ -3064,7 +3064,7 @@ short ImpEditEngine::ReplaceTextOnly(
 }
 
 
-void ImpEditEngine::SetAsianCompressionMode( sal_uInt16 n )
+void ImpEditEngine::SetAsianCompressionMode( CharCompressType n )
 {
     if ( n != nAsianCompressionMode )
     {

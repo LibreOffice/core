@@ -78,6 +78,7 @@ class SdrOutlinerCache;
 class SdrUndoFactory;
 class ImageMap;
 class TextChain;
+enum class CharCompressType;
 namespace comphelper
 {
     class IEmbeddedHelper;
@@ -203,7 +204,7 @@ public:
     //get a vector of all the SdrOutliner belonging to the model
     std::vector<SdrOutliner*> GetActiveOutliners() const;
     std::unique_ptr<SdrModelImpl>       mpImpl;
-    sal_uInt16          mnCharCompressType;
+    CharCompressType    mnCharCompressType;
     sal_uInt16          mnHandoutPageCount;
     bool                mbModelLocked;
     bool                mbKernAsianPunctuation;
@@ -532,8 +533,8 @@ public:
     void            SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharactersTable>& xForbiddenChars );
     const rtl::Reference<SvxForbiddenCharactersTable>& GetForbiddenCharsTable() const { return mpForbiddenCharactersTable;}
 
-    void SetCharCompressType( sal_uInt16 nType );
-    sal_uInt16 GetCharCompressType() const { return mnCharCompressType; }
+    void SetCharCompressType( CharCompressType nType );
+    CharCompressType GetCharCompressType() const { return mnCharCompressType; }
 
     void SetKernAsianPunctuation( bool bEnabled );
     bool IsKernAsianPunctuation() const { return mbKernAsianPunctuation; }

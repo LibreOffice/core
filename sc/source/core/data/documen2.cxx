@@ -31,6 +31,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
+#include <svl/asiancfg.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <vcl/virdev.hxx>
@@ -201,7 +202,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         bExpandRefs( false ),
         bDetectiveDirty( false ),
         bHasMacroFunc( false ),
-        nAsianCompression(SC_ASIANCOMPRESSION_INVALID),
+        nAsianCompression(CharCompressType::Invalid),
         nAsianKerning(SC_ASIANKERNING_INVALID),
         bPastingDrawFromOtherDoc( false ),
         nInDdeLinkUpdate( 0 ),

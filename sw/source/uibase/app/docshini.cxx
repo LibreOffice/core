@@ -138,7 +138,7 @@ bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             }
             m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION,
                   !aAsian.IsKerningWesternTextOnly());
-            m_pDoc->getIDocumentSettingAccess().setCharacterCompressionType(static_cast<SwCharCompressType>(aAsian.GetCharDistanceCompression()));
+            m_pDoc->getIDocumentSettingAccess().setCharacterCompressionType(aAsian.GetCharDistanceCompression());
             m_pDoc->getIDocumentDeviceAccess().setPrintData(*SW_MOD()->GetPrtOptions(bWeb));
         }
 

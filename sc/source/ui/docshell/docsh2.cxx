@@ -144,7 +144,7 @@ void ScDocShell::InitItems()
         if ( !aDocument.IsValidAsianCompression() )
         {
             // set compression mode from configuration if not already set (e.g. XML import)
-            aDocument.SetAsianCompression( sal::static_int_cast<sal_uInt8>( aAsian.GetCharDistanceCompression() ) );
+            aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
         }
 
         if ( !aDocument.IsValidAsianKerning() )

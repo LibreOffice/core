@@ -14,6 +14,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/time.h>
+#include <svl/asiancfg.hxx>
 
 #include "scdll.hxx"
 #include "formulacell.hxx"
@@ -6364,7 +6365,7 @@ void Test::testEmptyCalcDocDefaults()
     CPPUNIT_ASSERT_EQUAL( (sal_uLong) 0, m_pDoc->GetCellCount() );
     CPPUNIT_ASSERT_EQUAL( (sal_uLong) 0, m_pDoc->GetFormulaGroupCount() );
     CPPUNIT_ASSERT_EQUAL( (sal_uLong) 0, m_pDoc->GetCodeCount() );
-    CPPUNIT_ASSERT_EQUAL( (sal_uInt8) 0, m_pDoc->GetAsianCompression() );
+    CPPUNIT_ASSERT_EQUAL( (int)CharCompressType::NONE, (int)m_pDoc->GetAsianCompression() );
 
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasPrintRange() );
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->IsInVBAMode() );

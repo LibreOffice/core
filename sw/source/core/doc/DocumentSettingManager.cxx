@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
+#include <svl/asiancfg.hxx>
 #include <unotools/compatibility.hxx>
 #include <unotools/configmgr.hxx>
 #include <drawdoc.hxx>
@@ -41,7 +42,7 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     :m_rDoc(rDoc),
     mnLinkUpdMode( GLOBALSETTING ),
     meFieldUpdMode( AUTOUPD_GLOBALSETTING ),
-    meChrCmprType( CHARCOMPRESS_NONE ),
+    meChrCmprType( CharCompressType::NONE ),
     mn32DummyCompatibilityOptions1(0),
     mn32DummyCompatibilityOptions2(0),
     mbHTMLMode(false),
@@ -495,12 +496,12 @@ void sw::DocumentSettingManager::setFieldUpdateFlags(/*[in]*/SwFieldUpdateFlags 
     meFieldUpdMode = eMode;
 }
 
-SwCharCompressType sw::DocumentSettingManager::getCharacterCompressionType() const
+CharCompressType sw::DocumentSettingManager::getCharacterCompressionType() const
 {
     return meChrCmprType;
 }
 
-void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharCompressType n )
+void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/CharCompressType n )
 {
     if( meChrCmprType != n )
     {
@@ -509,7 +510,7 @@ void sw::DocumentSettingManager::setCharacterCompressionType( /*[in]*/SwCharComp
         SdrModel *pDrawModel = m_rDoc.getIDocumentDrawModelAccess().GetDrawModel();
         if( pDrawModel )
         {
-            pDrawModel->SetCharCompressType( static_cast<sal_uInt16>(n) );
+            pDrawModel->SetCharCompressType( n );
             if( !m_rDoc.IsInReading() )
                 pDrawModel->ReformatAllTextObjects();
         }

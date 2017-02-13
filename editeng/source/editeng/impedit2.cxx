@@ -61,6 +61,7 @@
 
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
+#include <svl/asiancfg.hxx>
 #include <o3tl/make_unique.hxx>
 #include <comphelper/lok.hxx>
 
@@ -131,7 +132,7 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     eDefLanguage        = LANGUAGE_DONTKNOW;
     maBackgroundColor   = COL_AUTO;
 
-    nAsianCompressionMode = text::CharacterCompressionType::NONE;
+    nAsianCompressionMode = CharCompressType::NONE;
 
     eDefaultHorizontalTextDirection = EE_HTEXTDIR_DEFAULT;
 

@@ -96,8 +96,7 @@ SwDrawModel::SwDrawModel(SwDoc *const pDoc)
 
     SetForbiddenCharsTable(m_pDoc->GetDocumentSettingManager().getForbiddenCharacterTable());
     // Implementation for asian compression
-    SetCharCompressType( static_cast<sal_uInt16>(
-            m_pDoc->GetDocumentSettingManager().getCharacterCompressionType()));
+    SetCharCompressType( m_pDoc->GetDocumentSettingManager().getCharacterCompressionType() );
 }
 
 // Destructor

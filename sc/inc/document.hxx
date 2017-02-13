@@ -50,6 +50,7 @@
 enum class SvtScriptType;
 enum class ScMF;
 enum class FormulaError : sal_uInt16;
+enum class CharCompressType;
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
 namespace svl {
@@ -228,7 +229,6 @@ namespace com { namespace sun { namespace star {
 
 #define SC_MACROCALL_ALLOWED        0
 
-#define SC_ASIANCOMPRESSION_INVALID     0xff
 #define SC_ASIANKERNING_INVALID         0xff
 
 enum ScDocumentMode
@@ -452,12 +452,12 @@ private:
 
     bool                bHasMacroFunc;      // valid only after loading
 
-    sal_uInt8               nAsianCompression;
-    sal_uInt8               nAsianKerning;
+    CharCompressType    nAsianCompression;
+    sal_uInt8           nAsianKerning;
 
     bool                bPastingDrawFromOtherDoc;
 
-    sal_uInt8                nInDdeLinkUpdate;   // originating DDE links (stacked bool)
+    sal_uInt8           nInDdeLinkUpdate;   // originating DDE links (stacked bool)
 
     bool                bInUnoBroadcast;
     bool                bInUnoListenerCall;
@@ -1964,16 +1964,16 @@ public:
     const rtl::Reference<SvxForbiddenCharactersTable>& GetForbiddenCharacters();
     void            SetForbiddenCharacters(const rtl::Reference<SvxForbiddenCharactersTable>& rNew);
 
-    sal_uInt8           GetAsianCompression() const;        // CharacterCompressionType values
+    CharCompressType GetAsianCompression() const;
     bool            IsValidAsianCompression() const;
-    void            SetAsianCompression(sal_uInt8 nNew);
+    void            SetAsianCompression(CharCompressType nNew);
 
     bool            GetAsianKerning() const;
     bool            IsValidAsianKerning() const;
     void            SetAsianKerning(bool bNew);
     void            ApplyAsianEditSettings(ScEditEngineDefaulter& rEngine);
 
-    sal_uInt8           GetEditTextDirection(SCTAB nTab) const; // EEHorizontalTextDirection values
+    sal_uInt8       GetEditTextDirection(SCTAB nTab) const; // EEHorizontalTextDirection values
 
     SC_DLLPUBLIC ScLkUpdMode        GetLinkMode() const             { return eLinkMode ;}
     void            SetLinkMode( ScLkUpdMode nSet ) {   eLinkMode  = nSet;}

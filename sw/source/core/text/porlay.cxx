@@ -38,6 +38,7 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/charhiddenitem.hxx>
 #include <vcl/outdev.hxx>
+#include <svl/asiancfg.hxx>
 #include <editeng/blinkitem.hxx>
 #include <tools/multisel.hxx>
 #include <unotools/charclass.hxx>
@@ -739,7 +740,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
     sal_Int16 nScript = i18n::ScriptType::LATIN;
 
     // compression type
-    const SwCharCompressType aCompEnum = rNode.getIDocumentSettingAccess()->getCharacterCompressionType();
+    const CharCompressType aCompEnum = rNode.getIDocumentSettingAccess()->getCharacterCompressionType();
 
     // justification type
     const bool bAdjustBlock = SVX_ADJUST_BLOCK ==
@@ -763,7 +764,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                 break;
             }
         }
-        if( CHARCOMPRESS_NONE != aCompEnum )
+        if( CharCompressType::NONE != aCompEnum )
         {
             while( nCntComp < CountCompChg() )
             {
@@ -926,7 +927,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
 
         // if current script is asian, we search for compressable characters
         // in this range
-        if ( CHARCOMPRESS_NONE != aCompEnum &&
+        if ( CharCompressType::NONE != aCompEnum &&
              i18n::ScriptType::ASIAN == nScript )
         {
             CompType ePrevState = NONE;
@@ -966,7 +967,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
                     if ( ePrevState != NONE )
                     {
                         // insert start and type
-                        if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
+                        if ( CharCompressType::PunctuationAndKana == aCompEnum ||
                              ePrevState != KANA )
                         {
                             aCompressionChanges.push_back( CompressionChangeInfo(nPrevChg, nLastCompression - nPrevChg, ePrevState) );
@@ -984,7 +985,7 @@ void SwScriptInfo::InitScriptInfo( const SwTextNode& rNode, bool bRTL )
             if ( ePrevState != NONE )
             {
                 // insert start and type
-                if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
+                if ( CharCompressType::PunctuationAndKana == aCompEnum ||
                      ePrevState != KANA )
                 {
                     aCompressionChanges.push_back( CompressionChangeInfo(nPrevChg, nLastCompression - nPrevChg, ePrevState) );

@@ -2030,7 +2030,7 @@ void SwWW8ImplReader::ImportDopTypography(const WW8DopTypography &rTypo)
     }
 
     m_rDoc.getIDocumentSettingAccess().set(DocumentSettingId::KERN_ASIAN_PUNCTUATION, rTypo.fKerningPunct);
-    m_rDoc.getIDocumentSettingAccess().setCharacterCompressionType(static_cast<SwCharCompressType>(rTypo.iJustification));
+    m_rDoc.getIDocumentSettingAccess().setCharacterCompressionType((CharCompressType)rTypo.iJustification);
 }
 
 /**

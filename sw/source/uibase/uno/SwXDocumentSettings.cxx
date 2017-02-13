@@ -44,6 +44,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <unomod.hxx>
 #include <vcl/svapp.hxx>
+#include <svl/asiancfg.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include "swmodule.hxx"
@@ -449,16 +450,16 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         {
             sal_Int16 nMode = 0;
             rValue >>= nMode;
-            switch (nMode)
+            switch ((CharCompressType)nMode)
             {
-                case CHARCOMPRESS_NONE:
-                case CHARCOMPRESS_PUNCTUATION:
-                case CHARCOMPRESS_PUNCTUATION_KANA:
+                case CharCompressType::NONE:
+                case CharCompressType::PunctuationOnly:
+                case CharCompressType::PunctuationAndKana:
                     break;
                 default:
                     throw IllegalArgumentException();
             }
-            mpDoc->getIDocumentSettingAccess().setCharacterCompressionType(static_cast < SwCharCompressType > (nMode) );
+            mpDoc->getIDocumentSettingAccess().setCharacterCompressionType((CharCompressType)nMode);
         }
         break;
         case HANDLE_APPLY_USER_DATA:
