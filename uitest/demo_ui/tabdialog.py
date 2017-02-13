@@ -22,7 +22,7 @@ class TabDialogTest(UITestCase):
         select_pos(xCellsDlg, "1")
 
         xOkBtn = xCellsDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xOkBtn)
 
         self.ui_test.close_doc()
 
@@ -38,7 +38,7 @@ class TabDialogTest(UITestCase):
         xCellsDlg.executeAction("SELECT", propsUNO)
 
         xOkBtn = xCellsDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xOkBtn)
 
         self.ui_test.close_doc()
 

@@ -82,7 +82,7 @@ class ConditionalFormatDlgTest(UITestCase):
 
         # close the conditional format manager
         xCancelBtn = xCondFormatMgr.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 

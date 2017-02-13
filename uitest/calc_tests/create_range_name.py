@@ -24,7 +24,7 @@ class CreateRangeNameTest(UITestCase):
         type_text(xEdit, "simpleRangeName")
 
         xAddBtn = xAddNameDlg.getChild("add")
-        xAddBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xAddBtn)
 
         self.ui_test.close_doc()
 
@@ -43,7 +43,7 @@ class CreateRangeNameTest(UITestCase):
         select_pos(xScope, "1")
 
         xAddBtn = xAddNameDlg.getChild("add")
-        xAddBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xAddBtn)
 
         self.ui_test.close_doc()
 

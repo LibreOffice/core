@@ -22,7 +22,7 @@ class FunctionWizardTest(UITestCase):
         xArrayChkBox.executeAction("CLICK", tuple())
 
         xCancelBtn = xFunctionDlg.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 
