@@ -408,7 +408,7 @@ const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
 
 // The StarBASIC factory is a hack. When a SbModule is created, its pointer
 // is saved and given to the following SbProperties/SbMethods. This restores
-// the Modul-relationshop. But it works only when a modul is loaded.
+// the Module-relationship. But it works only when a module is loaded.
 // Can cause troubles with separately loaded properties!
 
 SbxBase* SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
@@ -1311,7 +1311,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
         {
             if( pModule->IsVisible() )
             {
-                // Remember modul fpr Main() call
+                // Remember module for Main() call
                 // or is the name equal?!?
                 if( pModule->GetName().equalsIgnoreAsciiCase( rName ) )
                 {

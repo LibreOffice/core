@@ -280,7 +280,7 @@ sal_Bool SAL_CALL OFrames::hasElements()
     return bHasElements;
 }
 
-//  proteced method
+//  protected method
 
 void OFrames::impl_resetObject()
 {

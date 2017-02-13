@@ -827,7 +827,7 @@ bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
         {
             // The position is the first glyphs, this would happen if we
             // changed the text styling in the middle of a word. Since we don’t
-            // do ligatures accross layout engine instances, thid can’t be a
+            // do ligatures across layout engine instances, this can’t be a
             // ligature so it should be fine.
             if (pIter == m_GlyphItems.begin())
                 return true;

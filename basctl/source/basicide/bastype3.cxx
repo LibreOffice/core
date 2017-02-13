@@ -221,7 +221,7 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
                 pVar = static_cast<StarBASIC*>(pVar)->FindModule( aName );
                 break;
             case OBJ_TYPE_METHOD:
-                DBG_ASSERT(dynamic_cast<SbxObject*>(pVar), "FindVariable: invalid modul/object");
+                DBG_ASSERT(dynamic_cast<SbxObject*>(pVar), "FindVariable: invalid module/object");
                 if(!pVar)
                 {
                     break;

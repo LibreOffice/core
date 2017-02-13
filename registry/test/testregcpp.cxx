@@ -57,67 +57,67 @@ void test_coreReflection()
 
         RTConstValue aConst;
 
-        writer.setDoku(OUString("Hallo ich bin ein Modul"));
+        writer.setDoku(OUString("Hello I am a module"));
         writer.setFileName(OUString("DummyFile"));
 
         aConst.m_type = RT_TYPE_BOOL;
         aConst.m_value.aBool = sal_True;
         writer.setFieldData(0, OUString("aConstBool"),
                             OUString("boolean"),
-                            OUString("ich bin ein boolean"),
+                            OUString("I am a boolean"),
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_BYTE;
         aConst.m_value.aByte = 127;
         writer.setFieldData(1, OUString("aConstByte"),
                             OUString("byte"),
-                            OUString("ich bin ein byte"),
+                            OUString("I am a byte"),
                             OUString("DummyFile"),  RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_INT16;
         aConst.m_value.aShort = -10;
         writer.setFieldData(2, OUString("aConstShort"),
                             OUString("short"),
-                            OUString("ich bin ein short"),
+                            OUString("I am a short"),
                             OUString("DummyFile"),  RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_UINT16;
         aConst.m_value.aUShort = 10;
         writer.setFieldData(3, OUString("aConstUShort"),
                             OUString("unsigned short"),
-                            OUString("ich bin ein unsigned short"),
+                            OUString("I am an unsigned short"),
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_INT32;
         aConst.m_value.aLong = -100000;
         writer.setFieldData(4, OUString("aConstLong"),
                             OUString("long"),
-                            OUString("ich bin ein long"),
+                            OUString("I am a long"),
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_UINT32;
         aConst.m_value.aULong = 100000;
         writer.setFieldData(5, OUString("aConstULong"),
                             OUString("unsigned long"),
-                            OUString("ich bin ein unsigned long"),
+                            OUString("I am an unsigned long"),
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_INT64;
         aConst.m_value.aHyper = -100000000;
         writer.setFieldData(6, OUString("aConstHyper"),
                             OUString("hyper"),
-                            OUString("ich bin ein hyper"),
+                            OUString("I am an hyper"),
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_UINT64;
         aConst.m_value.aUHyper = 100000000;
         writer.setFieldData(7, OUString("aConstULong"),
                             OUString("unsigned long"),
-                            OUString("ich bin ein unsigned long"),
+                            OUString("I am an unsigned long"),
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_FLOAT;
         aConst.m_value.aFloat = -2e-10f;
         writer.setFieldData(8, OUString("aConstFloat"),
                             OUString("float"),
-                            OUString("ich bin ein float"),
+                            OUString("I am a float"),
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_DOUBLE;
         aConst.m_value.aDouble = -2e-100; writer.setFieldData(9, OUString("aConstDouble"),
                                                               OUString("double"),
-                                                              OUString("ich bin ein double"),
+                                                              OUString("I am a double"),
                                                               OUString("DummyFile"), RTFieldAccess::CONST, aConst);
         aConst.m_type = RT_TYPE_STRING;
         OUString tmpStr("dies ist ein unicode string");
@@ -125,7 +125,7 @@ void test_coreReflection()
 
         writer.setFieldData(10, OUString("aConstString"),
                             OUString("string"),
-                            OUString("ich bin ein string"),
+                            OUString("I am a string"),
                             OUString("DummyFile"), RTFieldAccess::CONST, aConst);
 
         const sal_uInt8* pBlop = writer.getBlop();
@@ -152,7 +152,7 @@ void test_coreReflection()
 
             aReadConst = reader.getFieldConstValue(10);
             OString aConstStr = OUStringToOString(aConst.m_value.aString, RTL_TEXTENCODING_ASCII_US);
-            REG_ENSURE(aConstStr.equals("dies ist ein unicode string"), "testCoreReflection error 9b");
+            REG_ENSURE(aConstStr.equals("this is an unicode string"), "testCoreReflection error 9b");
         }
 
     }

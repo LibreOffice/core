@@ -105,8 +105,8 @@ void SwHTMLParser::EndScript()
     if( !m_aScriptSource.isEmpty() && pDocSh &&
         bInsIntoBasic && IsNewDoc() )
     {
-    // Fuer JavaScript und StarBasic noch ein Basic-Modul anlegen
-        // Das Basic entfernt natuerlich weiterhin keine SGML-Kommentare
+        // Create a basic module for JavaScript and StarBasic
+        // The Basic does not remove any SGML comments, of course
         RemoveSGMLComment( m_aScriptSource, true );
 
         // get library name
@@ -241,7 +241,7 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
         return;
 
     SwDocShell *pDocSh = m_xDoc->GetDocShell();
-    OSL_ENSURE( pDocSh, "Wo ist die DocShell?" );
+    OSL_ENSURE( pDocSh, "Where is the DocShell?" );
     if( !pDocSh )
         return;
 
