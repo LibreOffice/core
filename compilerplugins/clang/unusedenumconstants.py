@@ -107,6 +107,7 @@ for d in definitionSet:
          "vcl/inc/sft.hxx", # CompositeFlags, WidthClass, WeightClass
          "vcl/inc/CommonSalLayout.hxx", # VerticalOrientation
          "include/tools/fontenum.hxx", # part of GDI file format
+         "svx/inc/galobj.hxx", # GalSoundType
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
