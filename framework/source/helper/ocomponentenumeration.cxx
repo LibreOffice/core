@@ -93,7 +93,7 @@ Any SAL_CALL OComponentEnumeration::nextElement()
     return aComponent;
 }
 
-//  proteced method
+//  protected method
 
 void OComponentEnumeration::impl_resetObject()
 {

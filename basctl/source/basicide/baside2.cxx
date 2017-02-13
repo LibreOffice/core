@@ -318,7 +318,7 @@ void ModulWindow::BasicExecute()
 
         if ( !m_aStatus.bIsRunning )
         {
-            DBG_ASSERT( m_xModule.is(), "Kein Modul!" );
+            DBG_ASSERT( m_xModule.is(), "No Module!" );
             AddStatus( BASWIN_RUNNINGBASIC );
             sal_uInt16 nStart, nEnd;
             TextSelection aSel = GetEditView()->GetSelection();
@@ -525,7 +525,7 @@ void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
 
 void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
 {
-    DBG_ASSERT( XModule().is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().is(), "No Module!" );
 
     if ( XModule().is() )
     {
@@ -696,7 +696,7 @@ void ModulWindow::BasicAddWatch()
 
 void ModulWindow::EditMacro( const OUString& rMacroName )
 {
-    DBG_ASSERT( XModule().is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().is(), "No Module!" );
 
     if ( XModule().is() )
     {
@@ -757,7 +757,7 @@ bool ModulWindow::AllowUndo()
 
 void ModulWindow::UpdateData()
 {
-    DBG_ASSERT( XModule().is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().is(), "No Module!" );
     // UpdateData is called when the source has changed from outside
     // => interrupts undesired!
 

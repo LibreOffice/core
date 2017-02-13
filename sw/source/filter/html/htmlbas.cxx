@@ -241,7 +241,7 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
         return;
 
     SwDocShell *pDocSh = m_xDoc->GetDocShell();
-    OSL_ENSURE( pDocSh, "Wo ist die DocShell?" );
+    OSL_ENSURE( pDocSh, "Where is the DocShell?" );
     if( !pDocSh )
         return;
 

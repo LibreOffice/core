@@ -304,7 +304,7 @@ namespace {
 
 /**
  * Take out the number part of a fix point decimal without
- * the information of where is the fracional part from a
+ * the information of where is the fractional part from a
  * string representation of a number. (e.g. 54.654 -> 54654)
  */
 sal_Int64 toNumericWithoutDecimalPlace(const OUString& sSource)
