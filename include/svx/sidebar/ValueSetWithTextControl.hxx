@@ -38,19 +38,8 @@ namespace svx { namespace sidebar {
 class SVX_DLLPUBLIC ValueSetWithTextControl : public ValueSet
 {
 public:
-    // control type of specialized <ValueSet>:
-    // - image + text
-    // - text + text
-    enum class ControlType
-    {
-        ImageText,
-        TextText
-    };
-
     ValueSetWithTextControl(Window* pParent, WinBits nBits);
 
-    // add item for control type TEXT_TEXT
-    // if control type does not match TEXT_TEXT no item is added.
     void AddItem(
         const OUString& rItemText,
         const OUString& rItemText2 );
@@ -67,8 +56,6 @@ private:
     };
 
     typedef ::std::vector< ValueSetWithTextItem > tItemList;
-
-    const ControlType meControlType;
     tItemList maItems;
 };
 

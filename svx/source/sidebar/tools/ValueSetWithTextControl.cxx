@@ -32,7 +32,6 @@ namespace svx { namespace sidebar {
 
 ValueSetWithTextControl::ValueSetWithTextControl(Window* pParent, WinBits nBits)
     : ValueSet( pParent, nBits )
-    , meControlType( svx::sidebar::ValueSetWithTextControl::ControlType::TextText )
 {
     SetColCount();
 }
@@ -42,11 +41,6 @@ void ValueSetWithTextControl::AddItem(
     const OUString& rItemText,
     const OUString& rItemText2 )
 {
-    if ( meControlType != ControlType::TextText )
-    {
-        return;
-    }
-
     ValueSetWithTextItem aItem;
     aItem.maItemText = rItemText;
     aItem.maItemText2 = rItemText2;
@@ -65,7 +59,6 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
     const sal_uInt16 nItemId = rUDEvt.GetItemId();
 
     const long nRectHeight = aRect.GetHeight();
-    const Point aBLPos = aRect.TopLeft();
 
     vcl::Font aFont(OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, MsLangId::getSystemLanguage(), GetDefaultFontFlags::OnlyOne));
     {
@@ -91,49 +84,27 @@ void ValueSetWithTextControl::UserDraw( const UserDrawEvent& rUDEvt )
         }
 
         //draw image + text resp. text + text
-        Image* pImage = nullptr;
         if ( GetSelectItemId() == nItemId )
         {
             aFont.SetColor( sfx2::sidebar::Theme::GetColor( sfx2::sidebar::Theme::Color_HighlightText ) );
-            pImage = &maItems[nItemId-1].maSelectedItemImage;
         }
         else
         {
             aFont.SetColor( GetSettings().GetStyleSettings().GetFieldTextColor() );
-            pImage = &maItems[nItemId-1].maItemImage;
         }
 
         Rectangle aStrRect = aRect;
         aStrRect.Top() += nRectHeight/4;
         aStrRect.Bottom() -= nRectHeight/4;
 
-        switch ( meControlType )
-        {
-        case ControlType::ImageText:
-            {
-                Point aImgStart(
-                    aBLPos.X() + 4,
-                    aBLPos.Y() + ( ( nRectHeight - pImage->GetSizePixel().Height() ) / 2 ) );
-                pDev->DrawImage( aImgStart, *pImage );
-
-                aStrRect.Left() += pImage->GetSizePixel().Width() + 12;
-                pDev->SetFont(aFont);
-                pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText, DrawTextFlags::EndEllipsis);
-            }
-            break;
-        case ControlType::TextText:
-            {
-                const long nRectWidth = aRect.GetWidth();
-                aStrRect.Left() += 8;
-                aStrRect.Right() -= (nRectWidth*2)/3;
-                pDev->SetFont(aFont);
-                pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText, DrawTextFlags::EndEllipsis);
-                aStrRect.Left() += nRectWidth/3;
-                aStrRect.Right() += (nRectWidth*2)/3;
-                pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText2, DrawTextFlags::EndEllipsis);
-            }
-            break;
-        }
+        const long nRectWidth = aRect.GetWidth();
+        aStrRect.Left() += 8;
+        aStrRect.Right() -= (nRectWidth*2)/3;
+        pDev->SetFont(aFont);
+        pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText, DrawTextFlags::EndEllipsis);
+        aStrRect.Left() += nRectWidth/3;
+        aStrRect.Right() += (nRectWidth*2)/3;
+        pDev->DrawText(aStrRect, maItems[nItemId-1].maItemText2, DrawTextFlags::EndEllipsis);
     }
 
     Invalidate( aRect );
