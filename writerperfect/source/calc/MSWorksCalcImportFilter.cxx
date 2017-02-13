@@ -58,7 +58,7 @@ catch (...)
     return uno::Reference<sdbc::XResultSet>();
 }
 
-/** internal class used to create a structrured RVNGInputStream from a list of path and their short names
+/** internal class used to create a structured RVNGInputStream from a list of path and their short names
  */
 class FolderStream: public librevenge::RVNGInputStream
 {

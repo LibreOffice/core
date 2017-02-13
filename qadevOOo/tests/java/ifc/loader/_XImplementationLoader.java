@@ -152,7 +152,7 @@ public class _XImplementationLoader extends MultiMethodTest {
             if (factory == null) {
                 log.println("activate() returns null - FAILED.");
             } else {
-                log.println("Activated impementation doesn't support "+
+                log.println("Activated implementation doesn't support "+
                     "XServiceInfo - FAILED.");
             }
             ok = false ;

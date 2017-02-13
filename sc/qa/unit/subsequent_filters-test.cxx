@@ -3819,7 +3819,7 @@ void ScFiltersTest::testTdf100709XLSX()
 void ScFiltersTest::testTdf97598XLSX()
 {
     ScDocShellRef xDocSh = loadDoc("tdf97598_scenarios.", FORMAT_XLSX);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf97598_secenarios.xlsx", xDocSh.is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf97598_scenarios.xlsx", xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
     OUString aStr = rDoc.GetString(0, 0, 0); // A1

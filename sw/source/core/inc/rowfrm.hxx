@@ -105,7 +105,7 @@ public:
 
     // A row may only be split if the minimum height of the row frame
     // fits into the vertical space left.
-    // The minimum height is found as maxinum of two values: minimal
+    // The minimum height is found as maximum of two values: minimal
     // contents of the row (e.g., height of first line of text, or an
     // object, or lower table cell), and the minimum height setting.
     // As the minimum height setting should not prevent the row to

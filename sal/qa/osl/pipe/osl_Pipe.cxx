@@ -713,7 +713,7 @@ namespace osl_StreamPipe
     /** testing the methods:
         inline StreamPipe & SAL_CALL operator=(oslPipe Pipe);
         inline StreamPipe& SAL_CALL operator=(const Pipe& pipe);
-        mindy: not implementated in osl/pipe.hxx, so remove the cases
+        mindy: not implemented in osl/pipe.hxx, so remove the cases
     */
 
     /** wait _nSec seconds.

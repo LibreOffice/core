@@ -4174,7 +4174,7 @@ bool ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                 new ScUndoEnterMatrix( &rDocShell, rRange, pUndoDoc, rString ) );
         }
 
-        //  Err522 painting of DDE-Formulas will be intercepted during intepreting
+        //  Err522 painting of DDE-Formulas will be intercepted during interpreting
         rDocShell.PostPaint( nStartCol,nStartRow,nStartTab,nEndCol,nEndRow,nEndTab, PaintPartFlags::Grid );
         aModificator.SetDocumentModified();
 

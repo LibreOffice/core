@@ -355,7 +355,7 @@ String STR_QMSG_SEL_TEMPLATE_DELETE
 
 String STR_QMSG_ERROR_OPENING_FILE
 {
-    Text [ en-US ] = "An error occured during opening the file. This may be caused by incorrect file contents.\n";
+    Text [ en-US ] = "An error occurred during opening the file. This may be caused by incorrect file contents.\n";
 };
 
 String STR_QMSG_ERROR_OPENING_FILE_DETAILS

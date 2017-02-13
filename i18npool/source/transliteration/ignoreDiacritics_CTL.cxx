@@ -42,7 +42,7 @@ ignoreDiacritics_CTL::transliterateChar2Char(sal_Unicode nInChar)
         return 0xffff; // Skip this character.
 
     if (aChar.length() > 1)
-        return nInChar; // Don't know what to do here, return the otiginal.
+        return nInChar; // Don't know what to do here, return the original.
 
     return aChar[0];
 }

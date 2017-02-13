@@ -165,7 +165,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(vcl::Window* pParent, Sequence< PropertyValue >
         }
     }
 
-    // check if source document is a presentation or a spredsheet or a textdocument
+    // check if source document is a presentation or a spreadsheet or a textdocument
     try
     {
         Reference< XServiceInfo > xInfo( rxDoc, UNO_QUERY );

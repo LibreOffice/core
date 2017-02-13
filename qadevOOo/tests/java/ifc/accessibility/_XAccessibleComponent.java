@@ -477,7 +477,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
             if (!result) {
                 log.println( "potential race bounds " + bounds.Width + "x" + bounds.Height +
                              " vs. size " + size.Width + "x" + size.Height);
-                // Possibily we hit a race condition and it re-sized (?) ...
+                // Possibly we hit a race condition and it re-sized (?) ...
                 // One such race is described in
                 // <https://bugs.documentfoundation.org/show_bug.cgi?id=64587>
                 // "SvpSalInstance::CheckTimeout -> ScTable::SetRowHeightRange

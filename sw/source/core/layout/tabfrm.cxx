@@ -4001,7 +4001,7 @@ static SwTwips lcl_calcHeightOfRowBeforeThisFrame(const SwRowFrame& rRow)
             const SwTabFrame* pCurTab = pCurRow->FindTabFrame();
             if (pCurTab->IsAnFollow(pTab))
             {
-                // The found row frame belongs to a table frame that preceedes
+                // The found row frame belongs to a table frame that precedes
                 // (above) this one in chain. So, include it in the sum
                 nResult += aRectFnSet.GetHeight(pCurRow->Frame());
             }
