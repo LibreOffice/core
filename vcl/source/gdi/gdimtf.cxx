@@ -2666,71 +2666,69 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
 
 SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 {
-    if( !rIStm.GetError() )
+    if (rIStm.GetError())
     {
-        char    aId[ 7 ];
-        sal_uLong      nStmPos = rIStm.Tell();
-        SvStreamEndian nOldFormat = rIStm.GetEndian();
+        SAL_WARN("vcl.gdi", "Stream error: " << rIStm.GetError());
+        return rIStm;
+    }
 
-        rIStm.SetEndian( SvStreamEndian::LITTLE );
+    char    aId[ 7 ];
+    sal_uLong      nStmPos = rIStm.Tell();
+    SvStreamEndian nOldFormat = rIStm.GetEndian();
 
-        aId[ 0 ] = 0;
-        aId[ 6 ] = 0;
-        rIStm.ReadBytes( aId, 6 );
+    rIStm.SetEndian( SvStreamEndian::LITTLE );
 
-        if ( !strcmp( aId, "VCLMTF" ) )
+    aId[ 0 ] = 0;
+    aId[ 6 ] = 0;
+    rIStm.ReadBytes( aId, 6 );
+
+    if ( !strcmp( aId, "VCLMTF" ) )
+    {
+        // new format
+        sal_uInt32     nStmCompressMode = 0;
+        sal_uInt32     nCount = 0;
+        std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
+
+        rIStm.ReadUInt32( nStmCompressMode );
+        ReadMapMode( rIStm, rGDIMetaFile.m_aPrefMapMode );
+        ReadPair( rIStm, rGDIMetaFile.m_aPrefSize );
+        rIStm.ReadUInt32( nCount );
+
+        pCompat.reset(); // destructor writes stuff into the header
+
+        ImplMetaReadData aReadData;
+        aReadData.meActualCharSet = rIStm.GetStreamCharSet();
+
+        for( sal_uInt32 nAction = 0UL; ( nAction < nCount ) && !rIStm.IsEof(); nAction++ )
         {
-            // new format
-            sal_uInt32     nStmCompressMode = 0;
-            sal_uInt32     nCount = 0;
-            std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
-
-            rIStm.ReadUInt32( nStmCompressMode );
-            ReadMapMode( rIStm, rGDIMetaFile.m_aPrefMapMode );
-            ReadPair( rIStm, rGDIMetaFile.m_aPrefSize );
-            rIStm.ReadUInt32( nCount );
-
-            pCompat.reset(); // destructor writes stuff into the header
-
-            ImplMetaReadData aReadData;
-            aReadData.meActualCharSet = rIStm.GetStreamCharSet();
-
-            for( sal_uInt32 nAction = 0UL; ( nAction < nCount ) && !rIStm.IsEof(); nAction++ )
+            MetaAction* pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
+            if( pAction )
             {
-                MetaAction* pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
-                if( pAction )
+                if (pAction->GetType() == MetaActionType::COMMENT)
                 {
-                    if (pAction->GetType() == MetaActionType::COMMENT)
-                    {
-                        MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
-                        if ( pCommentAct->GetComment() == "EMF_PLUS" )
-                            rGDIMetaFile.UseCanvas( true );
-                    }
-                    rGDIMetaFile.AddAction( pAction );
+                    MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
+                    if ( pCommentAct->GetComment() == "EMF_PLUS" )
+                        rGDIMetaFile.UseCanvas( true );
                 }
+                rGDIMetaFile.AddAction( pAction );
             }
         }
-        else
-        {
-            // to avoid possible compiler optimizations => new/delete
-            rIStm.Seek( nStmPos );
-            delete( new SVMConverter( rIStm, rGDIMetaFile, CONVERT_FROM_SVM1 ) );
-        }
-
-        // check for errors
-        if( rIStm.GetError() )
-        {
-            rGDIMetaFile.Clear();
-            rIStm.Seek( nStmPos );
-        }
-
-        rIStm.SetEndian( nOldFormat );
     }
     else
     {
-        SAL_WARN("vcl.gdi", "Stream error: " << rIStm.GetError());
+        // to avoid possible compiler optimizations => new/delete
+        rIStm.Seek( nStmPos );
+        delete( new SVMConverter( rIStm, rGDIMetaFile, CONVERT_FROM_SVM1 ) );
     }
 
+    // check for errors
+    if( rIStm.GetError() )
+    {
+        rGDIMetaFile.Clear();
+        rIStm.Seek( nStmPos );
+    }
+
+    rIStm.SetEndian( nOldFormat );
     return rIStm;
 }
 
