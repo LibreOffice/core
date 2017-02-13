@@ -227,12 +227,6 @@ void SdrObjEditView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
             if (eKind==SdrHintKind::DefaultTabChange) {
                 pTextEditOutliner->SetDefTab(mpModel->GetDefaultTabulator());
             }
-            if (eKind==SdrHintKind::DefaultFontHeightChange) {
-
-            }
-            if (eKind==SdrHintKind::ModelSaved) {
-                pTextEditOutliner->ClearModifyFlag();
-            }
         }
     }
 }
