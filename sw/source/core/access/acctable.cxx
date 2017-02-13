@@ -777,7 +777,7 @@ SwAccessibleTable::SwAccessibleTable(
     const OUString sArg1( static_cast< const SwTabFrame * >( GetFrame() )->GetFormat()->GetName() );
     const OUString sArg2( GetFormattedPageNumber() );
 
-    sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
+    m_sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sArg1, &sArg2 );
     UpdateTableData();
 }
 
@@ -814,16 +814,16 @@ void SwAccessibleTable::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew
                 FireAccessibleEvent( aEvent );
             }
 
-            const OUString sOldDesc( sDesc );
+            const OUString sOldDesc( m_sDesc );
             const OUString sArg2( GetFormattedPageNumber() );
 
-            sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sNewTabName, &sArg2 );
-            if( sDesc != sOldDesc )
+            m_sDesc = GetResource( STR_ACCESS_TABLE_DESC, &sNewTabName, &sArg2 );
+            if( m_sDesc != sOldDesc )
             {
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::DESCRIPTION_CHANGED;
                 aEvent.OldValue <<= sOldDesc;
-                aEvent.NewValue <<= sDesc;
+                aEvent.NewValue <<= m_sDesc;
                 FireAccessibleEvent( aEvent );
             }
         }
@@ -913,7 +913,7 @@ OUString SAL_CALL SwAccessibleTable::getAccessibleDescription()
 
     CHECK_FOR_DEFUNC( XAccessibleContext )
 
-    return sDesc;
+    return m_sDesc;
 }
 
 sal_Int32 SAL_CALL SwAccessibleTable::getAccessibleRowCount()
