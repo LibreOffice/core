@@ -67,7 +67,6 @@ enum class SdrHdlKind
     Ref2,           // Reference point 2, e.g. endpoint of mirror axis
     MirrorAxis,     // Mirror axis
     Glue,           // GluePoint
-    GlueDeselected, // GluePoint
     Anchor,         // Anchor symbol (SD, SW)
     Transparence,   // Interactive transparence
     Gradient,       // Interactive gradient
