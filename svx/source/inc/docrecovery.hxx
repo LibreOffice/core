@@ -30,6 +30,7 @@
 #include <svtools/svlbitm.hxx>
 #include <svtools/svmedit2.hxx>
 #include <svtools/treelistbox.hxx>
+#include <o3tl/typed_flags_set.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/task/StatusIndicatorFactory.hpp>
@@ -73,29 +74,32 @@
 #define DLG_RET_OK_AUTOLUNCH                            101
 
 
-namespace svx{
-    namespace DocRecovery{
-
-
-enum EDocStates
+enum class EDocStates
 {
     /* TEMP STATES */
 
     /// default state, if a document was new created or loaded
-    E_UNKNOWN = 0,
+    Unknown           = 0x000,
     /** an action was started (saving/loading) ... Can be interesting later if the process may be was interrupted by an exception. */
-    E_TRY_LOAD_BACKUP = 16,
-    E_TRY_LOAD_ORIGINAL = 32,
+    TryLoadBackup     = 0x010,
+    TryLoadOriginal   = 0x020,
 
     /* FINAL STATES */
 
     /// the Auto/Emergency saved document isn't useable any longer
-    E_DAMAGED = 64,
+    Damaged           = 0x040,
     /// the Auto/Emergency saved document is not really up-to-date (some changes can be missing)
-    E_INCOMPLETE = 128,
+    Incomplete        = 0x080,
     /// the Auto/Emergency saved document was processed successfully
-    E_SUCCEDED = 512
+    Succeeded         = 0x200
 };
+namespace o3tl {
+    template<> struct typed_flags<EDocStates> : is_typed_flags<EDocStates, 0x2f0> {};
+}
+
+
+namespace svx{
+    namespace DocRecovery{
 
 
 enum ERecoveryState
@@ -134,7 +138,7 @@ struct TURLInfo
     OUString Module;
 
     /// state info as e.g. VALID, CORRUPTED, NON EXISTING ...
-    sal_Int32 DocState;
+    EDocStates DocState;
 
     /// ui representation for DocState!
     ERecoveryState RecoveryState;
@@ -146,7 +150,7 @@ struct TURLInfo
 
     TURLInfo()
         : ID           (-1                 )
-        , DocState     (E_UNKNOWN          )
+        , DocState     (EDocStates::Unknown)
         , RecoveryState(E_NOT_RECOVERED_YET)
     {}
 };
@@ -256,7 +260,7 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
 
 
         /** @short  TODO */
-        static ERecoveryState mapDocState2RecoverState(sal_Int32 eDocState);
+        static ERecoveryState mapDocState2RecoverState(EDocStates eDocState);
 
 
     // uno interface

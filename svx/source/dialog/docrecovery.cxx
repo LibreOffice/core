@@ -338,7 +338,7 @@ void RecoveryCore::doRecovery()
 }
 
 
-ERecoveryState RecoveryCore::mapDocState2RecoverState(sal_Int32 eDocState)
+ERecoveryState RecoveryCore::mapDocState2RecoverState(EDocStates eDocState)
 {
     // ???
     ERecoveryState eRecState = E_NOT_RECOVERED_YET;
@@ -352,18 +352,18 @@ ERecoveryState RecoveryCore::mapDocState2RecoverState(sal_Int32 eDocState)
 
     // running ...
     if (
-        ((eDocState & E_TRY_LOAD_BACKUP  ) == E_TRY_LOAD_BACKUP  ) ||
-        ((eDocState & E_TRY_LOAD_ORIGINAL) == E_TRY_LOAD_ORIGINAL)
+        (eDocState & EDocStates::TryLoadBackup  ) ||
+        (eDocState & EDocStates::TryLoadOriginal)
        )
         eRecState = E_RECOVERY_IS_IN_PROGRESS;
     // red
-    else if ((eDocState & E_DAMAGED) == E_DAMAGED)
+    else if (eDocState & EDocStates::Damaged)
         eRecState = E_RECOVERY_FAILED;
     // yellow
-    else if ((eDocState & E_INCOMPLETE) == E_INCOMPLETE)
+    else if (eDocState & EDocStates::Incomplete)
         eRecState = E_ORIGINAL_DOCUMENT_RECOVERED;
     // green
-    else if ((eDocState & E_SUCCEDED) == E_SUCCEDED)
+    else if (eDocState & EDocStates::Succeeded)
         eRecState = E_SUCCESSFULLY_RECOVERED;
 
     return eRecState;
@@ -398,7 +398,7 @@ void SAL_CALL RecoveryCore::statusChanged(const css::frame::FeatureStateEvent& a
     TURLInfo                        aNew;
 
     aNew.ID          = lInfo.getUnpackedValueOrDefault(STATEPROP_ID         , (sal_Int32)0     );
-    aNew.DocState    = lInfo.getUnpackedValueOrDefault(STATEPROP_STATE      , (sal_Int32)0     );
+    aNew.DocState    = (EDocStates)lInfo.getUnpackedValueOrDefault(STATEPROP_STATE      , (sal_Int32)0     );
     aNew.OrgURL      = lInfo.getUnpackedValueOrDefault(STATEPROP_ORGURL     , OUString());
     aNew.TempURL     = lInfo.getUnpackedValueOrDefault(STATEPROP_TEMPURL    , OUString());
     aNew.FactoryURL  = lInfo.getUnpackedValueOrDefault(STATEPROP_FACTORYURL , OUString());
