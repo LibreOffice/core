@@ -45,7 +45,6 @@ public:
         Master,
         Handout,
         Notes,
-        Outline
     };
     static vcl::EnumContext::Context GetContextForSelection_SD (
         const SdrMarkList& rMarkList,

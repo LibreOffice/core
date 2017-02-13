@@ -117,9 +117,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
                 case ViewType::Notes:
                     eContext = EnumContext::Context::NotesPage;
                     break;
-                case ViewType::Outline:
-                    eContext = EnumContext::Context::OutlineText;
-                    break;
             }
             break;
 
@@ -297,8 +294,6 @@ EnumContext::Context SelectionAnalyzer::GetContextForObjectId_SD (
                     return EnumContext::Context::HandoutPage;
                 case ViewType::Notes:
                     return EnumContext::Context::NotesPage;
-                case ViewType::Outline:
-                    return EnumContext::Context::OutlineText;
                 default:
                     return EnumContext::Context::Unknown;
             }
