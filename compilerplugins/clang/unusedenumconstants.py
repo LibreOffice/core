@@ -119,6 +119,7 @@ for d in definitionSet:
          "sw/inc/fmtfordr.hxx",
          "sw/inc/flddat.hxx",
          "sw/source/uibase/config/modcfg.cxx", # InsertConfigProp
+         "sw/inc/calc.hxx", # SwCalcOper
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
