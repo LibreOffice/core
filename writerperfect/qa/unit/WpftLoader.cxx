@@ -20,6 +20,7 @@
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -56,6 +57,23 @@ WpftLoader::WpftLoader(
     , m_xFilter(rxFilter)
     , m_xDesktop(rxDesktop)
     , m_xTypeMap(rxTypeMap)
+    , m_xContext(rxContext)
+{
+    if (!impl_load())
+        impl_dispose();
+}
+
+WpftLoader::WpftLoader(
+    const css::uno::Reference<css::io::XInputStream> &rxInputStream,
+    const css::uno::Reference<css::document::XFilter> &rxFilter,
+    const rtl::OUString &rFactoryURL,
+    const css::uno::Reference<css::frame::XDesktop2> &rxDesktop,
+    const css::uno::Reference<css::uno::XComponentContext> &rxContext
+)
+    : m_xInputStream(rxInputStream)
+    , m_aFactoryURL(rFactoryURL)
+    , m_xFilter(rxFilter)
+    , m_xDesktop(rxDesktop)
     , m_xContext(rxContext)
 {
     if (!impl_load())
@@ -117,14 +135,21 @@ bool WpftLoader::impl_load()
         xImporter->setTargetDocument(m_xDoc);
 
         uno::Sequence<beans::PropertyValue> aDescriptor(3);
-        ucbhelper::Content aContent(m_aURL, uno::Reference<ucb::XCommandEnvironment>(), m_xContext);
-
         aDescriptor[0].Name = "URL";
         aDescriptor[0].Value <<= m_aURL;
-        aDescriptor[1].Name = "InputStream";
-        aDescriptor[1].Value <<= aContent.openStream();
-        aDescriptor[2].Name = "UCBContent";
-        aDescriptor[2].Value <<= aContent.get();
+        if (m_xInputStream.is())
+        {
+            aDescriptor[1].Name = "InputStream";
+            aDescriptor[1].Value <<= m_xInputStream;
+        }
+        else
+        {
+            ucbhelper::Content aContent(m_aURL, uno::Reference<ucb::XCommandEnvironment>(), m_xContext);
+            aDescriptor[1].Name = "InputStream";
+            aDescriptor[1].Value <<= aContent.openStream();
+            aDescriptor[2].Name = "UCBContent";
+            aDescriptor[2].Value <<= aContent.get();
+        }
 
         const uno::Reference<document::XExtendedFilterDetection> xDetector(m_xFilter, uno::UNO_QUERY_THROW);
 
@@ -132,7 +157,8 @@ bool WpftLoader::impl_load()
         if (aTypeName.isEmpty())
             throw lang::IllegalArgumentException();
 
-        impl_detectFilterName(aDescriptor, aTypeName);
+        if (m_xTypeMap.is())
+            impl_detectFilterName(aDescriptor, aTypeName);
 
         xModel->lockControllers();
         const bool bLoaded = m_xFilter->filter(aDescriptor);

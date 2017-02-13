@@ -34,6 +34,7 @@ $(eval $(call gb_Module_add_l10n_targets,writerperfect,\
 
 $(eval $(call gb_Module_add_check_targets,writerperfect,\
 	CppunitTest_writerperfect_stream \
+	CppunitTest_writerperfect_wpftimport \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,writerperfect,\

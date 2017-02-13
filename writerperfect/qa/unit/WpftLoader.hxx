@@ -40,6 +40,10 @@ namespace frame
 class XDesktop2;
 class XFrame;
 }
+namespace io
+{
+class XInputStream;
+}
 namespace lang
 {
 class XComponent;
@@ -68,6 +72,13 @@ public:
         const css::uno::Reference<css::container::XNameAccess> &rxTypeMap,
         const css::uno::Reference<css::uno::XComponentContext> &rxContext
     );
+    WpftLoader(
+        const css::uno::Reference<css::io::XInputStream> &rxInputStream,
+        const css::uno::Reference<css::document::XFilter> &rxFilter,
+        const rtl::OUString &rFactoryURL,
+        const css::uno::Reference<css::frame::XDesktop2> &rxDesktop,
+        const css::uno::Reference<css::uno::XComponentContext> &rxContext
+    );
     ~WpftLoader();
 
     const css::uno::Reference<css::lang::XComponent> &getDocument() const;
@@ -80,6 +91,7 @@ private:
 
 private:
     const rtl::OUString m_aURL;
+    const css::uno::Reference<css::io::XInputStream> m_xInputStream;
     const rtl::OUString m_aFactoryURL;
     const css::uno::Reference<css::document::XFilter> m_xFilter;
     const css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
