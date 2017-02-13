@@ -87,6 +87,7 @@ public:
     void NewCellRow();
 
     void InsertCell( ImportInfo* pInfo );
+    void InsertColumnEdge( sal_Int32 nEdge );
 
     void FillTable();
 
@@ -107,9 +108,10 @@ private:
 
     sal_Int32       mnColCnt;
     sal_Int32       mnRowCnt;
-    sal_Int32       mnColMax;
+    sal_Int32       mnLastEdge;
 
     std::vector< sal_Int32 > maColumnEdges;
+    std::vector< sal_Int32 >::iterator maLastEdge;
     std::vector< RTFColumnVectorPtr > maRows;
 
     RTFCellDefault* mpInsDefault;
@@ -132,7 +134,6 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 , mnStartPara( 0 )
 , mnColCnt( 0 )
 , mnRowCnt( 0 )
-, mnColMax( 0 )
 , mpActDefault( nullptr )
 , mpDefMerge( nullptr )
 , mxTable( rTableObj.getTable() )
@@ -225,16 +226,27 @@ void SdrTableRTFParser::InsertCell( ImportInfo* pInfo )
     mnStartPara = pInfo->aSelection.nEndPara - 1;
 }
 
+void SdrTableRTFParser::InsertColumnEdge( sal_Int32 nEdge )
+{
+    auto aNextEdge = std::lower_bound( maLastEdge, maColumnEdges.end(), nEdge );
+
+    if ( aNextEdge == maColumnEdges.end() || nEdge != *aNextEdge )
+    {
+        maLastEdge = maColumnEdges.insert( aNextEdge , nEdge );
+        mnLastEdge = nEdge;
+    }
+}
+
 void SdrTableRTFParser::FillTable()
 {
     try
     {
         sal_Int32 nColCount = mxTable->getColumnCount();
         Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_QUERY_THROW );
-
-        if( nColCount < mnColMax )
+        sal_Int32 nColMax = maColumnEdges.size();
+        if( nColCount < nColMax )
         {
-            xCols->insertByIndex( nColCount, mnColMax - nColCount );
+            xCols->insertByIndex( nColCount, nColMax - nColCount );
             nColCount = mxTable->getColumnCount();
         }
 
@@ -334,6 +346,8 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
             maDefaultList.clear();
             mpDefMerge = nullptr;
             mnLastToken = pInfo->nToken;
+            maLastEdge = maColumnEdges.begin();
+            mnLastEdge = 0;
         }
         break;
         case RTF_CLMGF:         // The first cell of cells to be merged
@@ -359,15 +373,14 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
             mpInsDefault->mnCol = mnColCnt;
             maDefaultList.push_back( std::shared_ptr< RTFCellDefault >( mpInsDefault ) );
 
-            if( (sal_Int32)maColumnEdges.size() <= mnColCnt )
-                maColumnEdges.resize( mnColCnt + 1 );
 
             const sal_Int32 nSize = TwipsToHundMM( pInfo->nTokenValue );
-            maColumnEdges[mnColCnt] = std::max( maColumnEdges[mnColCnt], nSize );
+            if ( nSize > mnLastEdge )
+                InsertColumnEdge( nSize );
 
             mpInsDefault = new RTFCellDefault( &mrItemPool );
-            if ( ++mnColCnt > mnColMax )
-                mnColMax = mnColCnt;
+            mnColCnt++;
+
             mnLastToken = pInfo->nToken;
         }
         break;
