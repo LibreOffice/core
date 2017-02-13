@@ -540,7 +540,7 @@ void SdExportTest::testTdf62176()
 
 void SdExportTest::testEmbeddedPdf()
 {
-#if HAVE_FEATURE_PDFIMPORT
+#if HAVE_FEATURE_PDFIUM
     sd::DrawDocShellRef xShell = loadURL(m_directories.getURLFromSrc("/sd/qa/unit/data/odp/embedded-pdf.odp"), ODP);
     xShell = saveAndReload( xShell.get(), ODP );
     uno::Reference<drawing::XDrawPage> xPage = getPage(0, xShell);

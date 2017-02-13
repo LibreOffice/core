@@ -439,8 +439,8 @@ const GraphicObject* SdrGrafObj::GetReplacementGraphicObject() const
             const_cast< SdrGrafObj* >(this)->mpReplacementGraphic = new GraphicObject(rSvgDataPtr->getReplacement());
         }
         else if (pGraphic->GetGraphic().getPdfData().hasElements())
-            // Replacement graphic for metafile + PDF is just the metafile.
-            const_cast<SdrGrafObj*>(this)->mpReplacementGraphic = new GraphicObject(pGraphic->GetGraphic().GetGDIMetaFile());
+            // Replacement graphic for bitmap + PDF is just the bitmap.
+            const_cast<SdrGrafObj*>(this)->mpReplacementGraphic = new GraphicObject(pGraphic->GetGraphic().GetBitmapEx());
     }
 
     return mpReplacementGraphic;

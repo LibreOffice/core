@@ -848,7 +848,7 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
     getUserDefineAttribute(uno::makeAny(xCellC1), "proName", "v3");
 }
 
-#if HAVE_FEATURE_PDFIMPORT
+#if HAVE_FEATURE_PDFIUM
 DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);

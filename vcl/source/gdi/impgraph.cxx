@@ -1361,15 +1361,16 @@ BitmapChecksum ImpGraphic::ImplGetChecksum() const
                 {
                     nRet = maEx.GetChecksum();
                 }
+
+                if (maPdfData.hasElements())
+                    // Include the PDF data in the checksum, so a metafile with
+                    // and without PDF data is considered to be different.
+                    nRet = vcl_get_checksum(nRet, maPdfData.getConstArray(), maPdfData.getLength());
             }
             break;
 
             default:
                 nRet = maMetaFile.GetChecksum();
-                if (maPdfData.hasElements())
-                    // Include the PDF data in the checksum, so a metafile with
-                    // and without PDF data is considered to be different.
-                    nRet = vcl_get_checksum(nRet, maPdfData.getConstArray(), maPdfData.getLength());
             break;
         }
     }
@@ -1618,6 +1619,13 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
                     rOStm.WriteUniOrByteString(rImpGraphic.getSvgData()->getPath(),
                                                rOStm.GetStreamCharSet());
                 }
+                else if (rImpGraphic.maPdfData.hasElements())
+                {
+                    // Stream out PDF data.
+                    rOStm.WriteUInt32(nPdfMagic);
+                    rOStm.WriteUInt32(rImpGraphic.maPdfData.getLength());
+                    rOStm.WriteBytes(rImpGraphic.maPdfData.getConstArray(), rImpGraphic.maPdfData.getLength());
+                }
                 else if( rImpGraphic.ImplIsAnimated())
                 {
                     WriteAnimation( rOStm, *rImpGraphic.mpAnimation );
@@ -1631,13 +1639,6 @@ void WriteImpGraphic(SvStream& rOStm, const ImpGraphic& rImpGraphic)
 
             default:
             {
-                if (rImpGraphic.maPdfData.hasElements())
-                {
-                    // Stream out PDF data.
-                    rOStm.WriteUInt32(nPdfMagic);
-                    rOStm.WriteUInt32(rImpGraphic.maPdfData.getLength());
-                    rOStm.WriteBytes(rImpGraphic.maPdfData.getConstArray(), rImpGraphic.maPdfData.getLength());
-                }
                 if( rImpGraphic.ImplIsSupportedGraphic() )
                     WriteGDIMetaFile( rOStm, rImpGraphic.maMetaFile );
             }
