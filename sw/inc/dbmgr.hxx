@@ -285,12 +285,14 @@ public:
     SwDBManager(SwDoc* pDoc);
     ~SwDBManager();
 
-    enum class DBConnURIType {
-        Unknown,
-        Odb,
-        Calc,
-        Dbase,
-        Flat
+    enum DBConnURITypes {
+        DBCONN_UNKNOWN = 0,
+        DBCONN_ODB,
+        DBCONN_CALC,
+        DBCONN_DBASE,
+        DBCONN_FLAT,
+        DBCONN_MSJET,
+        DBCONN_MSACE
     };
 
     /// MailMergeEvent source
@@ -395,7 +397,7 @@ public:
 
     static css::uno::Sequence<OUString> GetExistingDatabaseNames();
 
-    static DBConnURIType GetDBunoURI(const OUString &rURI, css::uno::Any &aURLAny);
+    static DBConnURITypes GetDBunoURI(const OUString &rURI, css::uno::Any &aURLAny);
 
     /**
      Loads a data source from file and registers it.
@@ -412,7 +414,7 @@ public:
      In case of success it returns the registered name, otherwise an empty string.
      Optionally add a prefix to the registered DB name.
      */
-    static OUString            LoadAndRegisterDataSource(const DBConnURIType type, const css::uno::Any &rUnoURI,
+    static OUString            LoadAndRegisterDataSource(const DBConnURITypes type, const css::uno::Any &rUnoURI,
                                                          const css::uno::Reference < css::beans::XPropertySet > *pSettings,
                                                          const OUString &rURI, const OUString *pPrefix, const OUString *pDestDir,
                                                          SwDocShell* pDocShell = nullptr);
