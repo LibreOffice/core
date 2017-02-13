@@ -90,8 +90,14 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
 
     ImplReadHeader();
 
+    // sanity check there is enough data before trying allocation
+    if (bStatus && nBytesPerPlaneLin > m_rPCX.remainingSize() / nPlanes)
+    {
+        bStatus = false;
+    }
+
     // Write BMP header and conditionally (maybe invalid for now) color palette:
-    if ( bStatus )
+    if (bStatus)
     {
         aBmp = Bitmap( Size( nWidth, nHeight ), nDestBitsPerPixel );
         Bitmap::ScopedWriteAccess pAcc(aBmp);
@@ -108,6 +114,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
                 pAcc->SetPaletteColor( i, BitmapColor ( pPal[ 0 ], pPal[ 1 ], pPal[ 2 ] ) );
             }
         }
+
         // read bitmap data
         ImplReadBody(pAcc.get());
 
@@ -124,14 +131,8 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
                 pAcc->SetPaletteColor( i, BitmapColor ( pPal[ 0 ], pPal[ 1 ], pPal[ 2 ] ) );
             }
         }
-    /*
-        // set resolution:
-        if (nResX!=0 && nResY!=0) {
-            MapMode aMapMode(MapUnit::MapInch,Point(0,0),Fraction(1,nResX),Fraction(1,nResY));
-            rBitmap.SetPrefMapMode(aMapMode);
-            rBitmap.SetPrefSize(Size(nWidth,nHeight));
-        }
-    */  if ( bStatus )
+
+        if ( bStatus )
         {
             rGraphic = aBmp;
             return true;
@@ -205,13 +206,6 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
     sal_uLong   i, nx, ny, np, nCount, nPercent;
     sal_uLong   nLastPercent = 0;
     sal_uInt8   nDat = 0, nCol = 0;
-
-    //sanity check there is enough data before trying allocation
-    if (nBytesPerPlaneLin > m_rPCX.remainingSize() / nPlanes)
-    {
-        bStatus = false;
-        return;
-    }
 
     for( np = 0; np < nPlanes; np++ )
         pPlane[ np ] = new sal_uInt8[ nBytesPerPlaneLin ];
