@@ -16,6 +16,24 @@
       "revId": "ae4ad32497b3e8855f8a3aa76867a209319b6468",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c31c367a",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2017-02-13T17:00:58Z",
+      "side": 1,
+      "message": "Hi bubli,\nwhich nPos do you mean?",
+      "parentUuid": "9a57fde8_432206bb",
+      "revId": "ae4ad32497b3e8855f8a3aa76867a209319b6468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
