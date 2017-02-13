@@ -161,7 +161,6 @@ enum class SdrUserCallType {
     Resize,           // size and maybe position changed
     ChangeAttr,       // attribute changed. Eventually new size, because of line width
     Delete,           // object is going to be deleted soon, no attributes anymore
-    Copy,             // assign operator called, everything can be changed
     Inserted,         // inserted into an object list (e.g. Page)
     Removed,          // removed from an object list
     ChildMoveOnly,    // a child within a group has changed

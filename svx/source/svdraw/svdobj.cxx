@@ -2768,10 +2768,6 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const Rectangle& rBoundR
                     eChildUserType = SdrUserCallType::ChildDelete;
                 break;
 
-                case SdrUserCallType::Copy:
-                    eChildUserType = SdrUserCallType::ChildCopy;
-                break;
-
                 case SdrUserCallType::Inserted:
                     eChildUserType = SdrUserCallType::ChildInserted;
                 break;
