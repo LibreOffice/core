@@ -1275,7 +1275,6 @@ bool E3dView::BegDragObj(const Point& rPnt, OutputDevice* pOut,
                     // later on
                     case SdrDragMode::Mirror:
                     case SdrDragMode::Crook:
-                    case SdrDragMode::Distort:
                     case SdrDragMode::Transparence:
                     case SdrDragMode::Gradient:
                     default:

@@ -38,7 +38,6 @@ enum class SdrDragMode
     Mirror,
     Shear,
     Crook,
-    Distort,    // Free deform (transform Rect in arbitrary quad)
 
     // new modes for interactive transparence and gradient tools
     Transparence,

@@ -133,7 +133,7 @@ void FmFormPage::InsertObject(SdrObject* pObj, size_t nPos,
                               const SdrInsertReason* pReason)
 {
     SdrPage::InsertObject( pObj, nPos, pReason );
-    if (GetModel() && (!pReason || pReason->GetReason() != SdrInsertReasonKind::Streaming))
+    if (GetModel())
         static_cast<FmFormModel*>(GetModel())->GetUndoEnv().Inserted(pObj);
 }
 
