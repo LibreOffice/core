@@ -27,7 +27,6 @@
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sal/macros.h>
-#include <boost/math/special_functions/log1p.hpp>
 
 #include "attrib.hxx"
 #include "sc.hrc"
@@ -1855,7 +1854,7 @@ void ScInterpreter::ScPDuration()
         double nFuture = GetDouble();
         double nPresent = GetDouble();
         double nInterest = GetDouble();
-        PushDouble(log(nFuture / nPresent) / boost::math::log1p(nInterest));
+        PushDouble(log(nFuture / nPresent) / rtl::math::log1p(nInterest));
     }
 }
 
@@ -1972,9 +1971,9 @@ void ScInterpreter::ScNper()
         PushDouble(-(nBw + nZw)/nRmz);
     else if (bPayInAdvance)
         PushDouble(log(-(nInterest*nZw-nRmz*(1.0+nInterest))/(nInterest*nBw+nRmz*(1.0+nInterest)))
-                  /boost::math::log1p(nInterest));
+                  / rtl::math::log1p(nInterest));
     else
-        PushDouble(log(-(nInterest*nZw-nRmz)/(nInterest*nBw+nRmz))/boost::math::log1p(nInterest));
+        PushDouble(log(-(nInterest*nZw-nRmz)/(nInterest*nBw+nRmz)) / rtl::math::log1p(nInterest));
 }
 
 bool ScInterpreter::RateIteration( double fNper, double fPayment, double fPv,
