@@ -184,4 +184,9 @@
  */
 #define HAVE_FEATURE_NSS 0
 
+/*
+ * Whether pdfium is available
+ */
+#define HAVE_FEATURE_PDFIUM 0
+
 #endif

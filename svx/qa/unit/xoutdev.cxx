@@ -34,7 +34,7 @@ public:
 
 void XOutdevTest::testPdfGraphicExport()
 {
-#if HAVE_FEATURE_PDFIMPORT
+#if HAVE_FEATURE_PDFIUM
     // Import the graphic.
     Graphic aGraphic;
     test::Directories aDirectories;

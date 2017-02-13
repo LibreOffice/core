@@ -240,6 +240,8 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
                 else
                 {
                     mpBmpEx = new BitmapEx( rGraphic.GetBitmapEx() );
+                    if (rGraphic.getPdfData().hasElements())
+                        maPdfData = rGraphic.getPdfData();
                 }
             }
             break;
@@ -247,8 +249,6 @@ bool GraphicCacheEntry::ImplInit( const GraphicObject& rObj )
             case GraphicType::GdiMetafile:
             {
                 mpMtf = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
-                if (rGraphic.getPdfData().hasElements())
-                    maPdfData = rGraphic.getPdfData();
             }
             break;
 
@@ -287,6 +287,8 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     else if( mpBmpEx )
     {
         rSubstitute = *mpBmpEx;
+        if (maPdfData.hasElements())
+            rSubstitute.setPdfData(maPdfData);
     }
     else if( mpAnimation )
     {
@@ -295,8 +297,6 @@ void GraphicCacheEntry::ImplFillSubstitute( Graphic& rSubstitute )
     else if( mpMtf )
     {
         rSubstitute = *mpMtf;
-        if (maPdfData.hasElements())
-            rSubstitute.setPdfData(maPdfData);
     }
     else
     {
