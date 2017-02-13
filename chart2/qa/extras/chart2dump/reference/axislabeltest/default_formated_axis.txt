@@ -36,7 +36,7 @@
 // xLabel->getString()
 3. negyedév
 // aLabelPosition.X
-11593
+11594
 // aLabelPosition.Y
 7770
 // aLabelSize.Height
@@ -44,7 +44,7 @@
 // aLabelSize.Width
 1881
 // aLabelTransformation
-1882;0;11593;0;346;7770;0;0;1
+1882;0;11594;0;346;7770;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -52,7 +52,7 @@
 // xLabel->getString()
 4. negyedév
 // aLabelPosition.X
-15203
+15204
 // aLabelPosition.Y
 7770
 // aLabelSize.Height
@@ -60,7 +60,7 @@
 // aLabelSize.Width
 1881
 // aLabelTransformation
-1882;0;15203;0;346;7770;0;0;1
+1882;0;15204;0;346;7770;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight

@@ -560,6 +560,9 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
     }
 }
 
+#undef  INT_EPS
+#define INT_EPS     0.1
+
 DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
@@ -632,6 +635,9 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
         }
     }
 }
+
+#undef  INT_EPS
+#define INT_EPS     2.1
 
 DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 {
