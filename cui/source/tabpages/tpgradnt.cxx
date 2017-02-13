@@ -228,25 +228,16 @@ bool SvxGradientTabPage::FillItemSet( SfxItemSet* rSet )
 {
     std::unique_ptr<XGradient> pXGradient;
     OUString      aString;
-    size_t        nPos = m_pGradientLB->GetSelectItemPos();
-    if( nPos != VALUESET_ITEM_NOTFOUND )
-    {
-        pXGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>(nPos) )->GetGradient() ));
-        aString = m_pGradientLB->GetItemText( m_pGradientLB->GetSelectItemId() );
-    }
-    else
-    // gradient was passed (unidentified)
-    {
-        pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
-                    m_pLbColorTo->GetSelectEntryColor(),
-                    (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
-                    static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
-                    (sal_uInt16) m_pMtrCenterX->GetValue(),
-                    (sal_uInt16) m_pMtrCenterY->GetValue(),
-                    (sal_uInt16) m_pMtrBorder->GetValue(),
-                    (sal_uInt16) m_pMtrColorFrom->GetValue(),
-                    (sal_uInt16) m_pMtrColorTo->GetValue() ));
-    }
+
+    pXGradient.reset(new XGradient( m_pLbColorFrom->GetSelectEntryColor(),
+        m_pLbColorTo->GetSelectEntryColor(),
+        (css::awt::GradientStyle) m_pLbGradientType->GetSelectEntryPos(),
+        static_cast<long>(m_pMtrAngle->GetValue() * 10), // should be changed in resource
+        (sal_uInt16) m_pMtrCenterX->GetValue(),
+        (sal_uInt16) m_pMtrCenterY->GetValue(),
+        (sal_uInt16) m_pMtrBorder->GetValue(),
+        (sal_uInt16) m_pMtrColorFrom->GetValue(),
+        (sal_uInt16) m_pMtrColorTo->GetValue() ));
 
     sal_uInt16 nValue = 0;
     if( !m_pCbIncrement->IsChecked() )
