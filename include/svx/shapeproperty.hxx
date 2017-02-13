@@ -34,10 +34,7 @@ namespace svx
         // text doc shape properties
         TextDocAnchor,
         // spreadsheet doc shape properties
-        CalcDocAnchor,
-
-        // invalid, not to be used
-        Invalid
+        CalcDocAnchor
     };
 
 }
