@@ -2672,54 +2672,62 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
         return rIStm;
     }
 
-    char    aId[ 7 ];
     sal_uLong      nStmPos = rIStm.Tell();
     SvStreamEndian nOldFormat = rIStm.GetEndian();
 
     rIStm.SetEndian( SvStreamEndian::LITTLE );
 
-    aId[ 0 ] = 0;
-    aId[ 6 ] = 0;
-    rIStm.ReadBytes( aId, 6 );
-
-    if ( !strcmp( aId, "VCLMTF" ) )
+    try
     {
-        // new format
-        sal_uInt32     nStmCompressMode = 0;
-        sal_uInt32     nCount = 0;
-        std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
+        char aId[7];
+        aId[0] = 0;
+        aId[6] = 0;
+        rIStm.ReadBytes( aId, 6 );
 
-        rIStm.ReadUInt32( nStmCompressMode );
-        ReadMapMode( rIStm, rGDIMetaFile.m_aPrefMapMode );
-        ReadPair( rIStm, rGDIMetaFile.m_aPrefSize );
-        rIStm.ReadUInt32( nCount );
-
-        pCompat.reset(); // destructor writes stuff into the header
-
-        ImplMetaReadData aReadData;
-        aReadData.meActualCharSet = rIStm.GetStreamCharSet();
-
-        for( sal_uInt32 nAction = 0UL; ( nAction < nCount ) && !rIStm.IsEof(); nAction++ )
+        if ( !strcmp( aId, "VCLMTF" ) )
         {
-            MetaAction* pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
-            if( pAction )
+            // new format
+            sal_uInt32     nStmCompressMode = 0;
+            sal_uInt32     nCount = 0;
+            std::unique_ptr<VersionCompat> pCompat(new VersionCompat( rIStm, StreamMode::READ ));
+
+            rIStm.ReadUInt32( nStmCompressMode );
+            ReadMapMode( rIStm, rGDIMetaFile.m_aPrefMapMode );
+            ReadPair( rIStm, rGDIMetaFile.m_aPrefSize );
+            rIStm.ReadUInt32( nCount );
+
+            pCompat.reset(); // destructor writes stuff into the header
+
+            ImplMetaReadData aReadData;
+            aReadData.meActualCharSet = rIStm.GetStreamCharSet();
+
+            for( sal_uInt32 nAction = 0UL; ( nAction < nCount ) && !rIStm.IsEof(); nAction++ )
             {
-                if (pAction->GetType() == MetaActionType::COMMENT)
+                MetaAction* pAction = MetaAction::ReadMetaAction( rIStm, &aReadData );
+                if( pAction )
                 {
-                    MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
-                    if ( pCommentAct->GetComment() == "EMF_PLUS" )
-                        rGDIMetaFile.UseCanvas( true );
+                    if (pAction->GetType() == MetaActionType::COMMENT)
+                    {
+                        MetaCommentAction* pCommentAct = static_cast<MetaCommentAction*>(pAction);
+                        if ( pCommentAct->GetComment() == "EMF_PLUS" )
+                            rGDIMetaFile.UseCanvas( true );
+                    }
+                    rGDIMetaFile.AddAction( pAction );
                 }
-                rGDIMetaFile.AddAction( pAction );
             }
         }
+        else
+        {
+            // to avoid possible compiler optimizations => new/delete
+            rIStm.Seek( nStmPos );
+            delete( new SVMConverter( rIStm, rGDIMetaFile, CONVERT_FROM_SVM1 ) );
+        }
     }
-    else
+    catch (...)
     {
-        // to avoid possible compiler optimizations => new/delete
-        rIStm.Seek( nStmPos );
-        delete( new SVMConverter( rIStm, rGDIMetaFile, CONVERT_FROM_SVM1 ) );
-    }
+        SAL_WARN("vcl", "GDIMetaFile exception during load");
+        rIStm.SetError(SVSTREAM_FILEFORMAT_ERROR);
+    };
 
     // check for errors
     if( rIStm.GetError() )
