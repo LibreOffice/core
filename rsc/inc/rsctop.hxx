@@ -25,6 +25,7 @@
 #include <rscclobj.hxx>
 #include <rsc/rscsfx.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <tools/resid.hxx>
 
 enum class RSCVAR {
     NONE        = 0x0000,
@@ -47,7 +48,7 @@ class RscTop : public RefNode
     RscTop *        pRefClass;
 
 protected:
-                    RscTop( Atom nId, sal_uInt32 nTypIdent,
+                    RscTop( Atom nId, RESOURCE_TYPE nTypIdent,
                             RscTop * pSuperCl = nullptr );
 
 public:

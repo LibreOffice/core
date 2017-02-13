@@ -37,7 +37,7 @@ class RscMgr : public RscClass
     };
     ERRTYPE         IsToDeep( const RSCINST & rInst );
 public:
-                    RscMgr( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
+                    RscMgr( Atom nId, RESOURCE_TYPE nTypId, RscTop * pSuperCl );
 
     void            SetToDefault( const RSCINST & rInst ) override;
     bool            IsDefault( const RSCINST & rInst ) override;

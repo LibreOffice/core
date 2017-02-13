@@ -28,7 +28,7 @@
 #include <tools/rcid.h>
 #include <tools/rc.h>
 
-RscClass::RscClass( Atom nId, sal_uInt32 nTypeId, RscTop * pSuperCl )
+RscClass::RscClass( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuperCl )
     : RscTop( nId, nTypeId, pSuperCl )
     , nSuperSize(RscTop::Size())
     , nSize(nSuperSize + ALIGNED_SIZE(sizeof(RscClassInst )))
@@ -642,7 +642,7 @@ ERRTYPE RscClass::WriteRc( const RSCINST & rInst,
     return aError;
 }
 
-RscSysDepend::RscSysDepend( Atom nId, sal_uInt32 nTypeId, RscTop * pSuper )
+RscSysDepend::RscSysDepend( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuper )
             : RscClass( nId, nTypeId, pSuper )
 {
 }
@@ -693,7 +693,7 @@ ERRTYPE RscSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return aError;
 }
 
-RscTupel::RscTupel( Atom nId, sal_uInt32 nTypeId )
+RscTupel::RscTupel( Atom nId, RESOURCE_TYPE nTypeId )
     : RscClass( nId, nTypeId, nullptr )
 {
 }

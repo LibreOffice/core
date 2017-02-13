@@ -35,7 +35,7 @@ protected:
     sal_Int32       nMin;   // range minimum value
     sal_Int32       nMax;   // range maximum value
 public:
-                    RscRange( Atom nId, sal_uInt32 nTypId );
+                    RscRange( Atom nId, RESOURCE_TYPE nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
                     // sets the allowed range
@@ -72,7 +72,7 @@ protected:
     sal_Int32    nMin;   // range minimum value
     sal_Int32    nMax;   // range maximum value
 public:
-                    RscLongRange( Atom nId, sal_uInt32 nTypId );
+                    RscLongRange( Atom nId, RESOURCE_TYPE nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
     RSCINST         Create( RSCINST * pInst, const RSCINST & rDfltInst, bool bOwnClass = false ) override;
                     // sets the allowed range
@@ -102,7 +102,7 @@ public:
 class RscLongEnumRange : public RscLongRange
 {
 public:
-                    RscLongEnumRange( Atom nId, sal_uInt32 nTypId );
+                    RscLongEnumRange( Atom nId, RESOURCE_TYPE nTypId );
 
     ERRTYPE         SetConst( const RSCINST & rInst, Atom nValueId,
                               sal_Int32 nValue ) override;
@@ -114,7 +114,7 @@ protected:
     sal_Int32    nMin;   // range minimum value
     sal_Int32    nMax;   // range maximum value
 public:
-                    RscIdRange( Atom nId, sal_uInt32 nTypId );
+                    RscIdRange( Atom nId, RESOURCE_TYPE nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
                     // sets the allowed range
     void            SetRange( sal_Int32 nMinimum, sal_Int32 nMaximum )
@@ -150,7 +150,7 @@ public:
 class RscBool : public RscRange
 {
 public:
-                    RscBool( Atom nId, sal_uInt32 nTypId );
+                    RscBool( Atom nId, RESOURCE_TYPE nTypId );
     virtual RSCCLASS_TYPE   GetClassType() const override;
     ERRTYPE         SetBool( const RSCINST & rInst, bool b ) override
                         {

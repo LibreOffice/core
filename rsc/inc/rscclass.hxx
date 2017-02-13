@@ -54,7 +54,7 @@ protected:
     void                SetVarDflt( CLASS_DATA pData, sal_uInt32 nEle,
                                     bool bSet );
 public:
-                    RscClass( Atom nId, sal_uInt32 nTypId, RscTop * pSuperCl );
+                    RscClass( Atom nId, RESOURCE_TYPE nTypId, RscTop * pSuperCl );
                     virtual ~RscClass() override;
 
     virtual RSCCLASS_TYPE   GetClassType() const override;
@@ -95,7 +95,7 @@ public:
 class RscSysDepend : public RscClass
 {
 public:
-                    RscSysDepend( Atom nId, sal_uInt32 nTypId, RscTop * pSuper );
+                    RscSysDepend( Atom nId, RESOURCE_TYPE nTypId, RscTop * pSuper );
     ERRTYPE         WriteSysDependRc( const RSCINST &, RscWriteRc & aMem,
                                       RscTypCont * pTC, sal_uInt32, bool bExtra );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
@@ -105,7 +105,7 @@ public:
 class RscTupel : public RscClass
 {
 public:
-    RscTupel( Atom nId, sal_uInt32 nTypId );
+    RscTupel( Atom nId, RESOURCE_TYPE nTypId );
     RSCINST         GetTupelVar( const RSCINST & rInst, sal_uInt32 nPos,
                                  const RSCINST & rInitInst ) override;
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,

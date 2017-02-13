@@ -24,7 +24,7 @@
 
 #include <rscflag.hxx>
 
-RscFlag::RscFlag( Atom nId, sal_uInt32 nTypeId )
+RscFlag::RscFlag( Atom nId, RESOURCE_TYPE nTypeId )
     : RscConst( nId, nTypeId )
 {
 }
@@ -292,7 +292,7 @@ ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
     return ERR_OK;
 }
 
-RscClient::RscClient( Atom nId, sal_uInt32 nTypeId, RscFlag * pClass,
+RscClient::RscClient( Atom nId, RESOURCE_TYPE nTypeId, RscFlag * pClass,
                       Atom nConstantId )
     : RscTop(nId, nTypeId), pRefClass(pClass), nConstId(nConstantId)
 {

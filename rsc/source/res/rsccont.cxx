@@ -35,7 +35,7 @@ void ENTRY_STRUCT::Destroy()
     }
 }
 
-RscBaseCont::RscBaseCont( Atom nId, sal_uInt32 nTypeId,
+RscBaseCont::RscBaseCont( Atom nId, RESOURCE_TYPE nTypeId,
                           bool bNoIdent )
     : RscTop(nId, nTypeId, nullptr)
     , pTypeClass(nullptr), pTypeClass1(nullptr)
@@ -719,7 +719,7 @@ ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return aError;
 }
 
-RscContWriteSrc::RscContWriteSrc( Atom nId, sal_uInt32 nTypeId )
+RscContWriteSrc::RscContWriteSrc( Atom nId, RESOURCE_TYPE nTypeId )
     : RscBaseCont( nId, nTypeId, true )
 {
 }
@@ -746,7 +746,7 @@ void RscContWriteSrc::WriteSrc( const RSCINST & rInst, FILE * fOutput,
     fprintf( fOutput, "}" );
 }
 
-RscCont::RscCont( Atom nId, sal_uInt32 nTypeId )
+RscCont::RscCont( Atom nId, RESOURCE_TYPE nTypeId )
     : RscContWriteSrc( nId, nTypeId )
 {
 }
@@ -769,7 +769,7 @@ ERRTYPE RscCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     return aError;
 }
 
-RscContExtraData::RscContExtraData( Atom nId, sal_uInt32 nTypeId )
+RscContExtraData::RscContExtraData( Atom nId, RESOURCE_TYPE nTypeId )
     : RscContWriteSrc( nId, nTypeId )
 {
 }
