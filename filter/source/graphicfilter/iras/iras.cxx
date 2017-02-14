@@ -50,7 +50,6 @@ private:
     sal_Int32           mnDepth, mnImageDatSize, mnType;
     sal_Int32           mnColorMapType, mnColorMapSize;
     sal_uInt8           mnRepCount, mnRepVal;   // RLE Decoding
-    bool                mbPalette;
 
     bool                ImplReadBody(BitmapWriteAccess * pAcc);
     bool                ImplReadHeader();
@@ -77,7 +76,6 @@ RASReader::RASReader(SvStream &rRAS)
     , mnColorMapSize(0)
     , mnRepCount(0)
     , mnRepVal(0)
-    , mbPalette(false)
 {
 }
 
@@ -106,6 +104,8 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
 
     if ( mnDstBitsPerPix <= 8 )     // paletten bildchen
     {
+        bool bPalette(false);
+
         if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW Colormap wird geskipped
         {
             sal_uLong nCurPos = m_rRAS.Tell();
@@ -130,7 +130,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
                 {
                     pAcc->SetPaletteColor( i, BitmapColor( nRed[ i ], nGreen[ i ], nBlue[ i ] ) );
                 }
-                mbPalette = true;
+                bPalette = true;
             }
             else
                 return false;
@@ -139,7 +139,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
         else if ( mnColorMapType != RAS_COLOR_NO_MAP )  // alles andere ist kein standard
             return false;
 
-        if ( !mbPalette )
+        if ( !bPalette )
         {
             mnDstColors = 1 << mnDstBitsPerPix;
             pAcc->SetPaletteEntryCount( mnDstColors );
