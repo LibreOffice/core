@@ -43,7 +43,6 @@ private:
     SvStream&           m_rRAS;                 // Die einzulesende RAS-Datei
 
     bool                mbStatus;
-    Bitmap              maBmp;
     sal_Int32           mnWidth, mnHeight;      // Bildausmass in Pixeln
     sal_uInt16          mnDstBitsPerPix;
     sal_uInt16          mnDstColors;
@@ -97,8 +96,8 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     if ( !mbStatus )
         return false;
 
-    maBmp = Bitmap( Size( mnWidth, mnHeight ), mnDstBitsPerPix );
-    Bitmap::ScopedWriteAccess pAcc(maBmp);
+    Bitmap aBmp(Size(mnWidth, mnHeight), mnDstBitsPerPix);
+    Bitmap::ScopedWriteAccess pAcc(aBmp);
     if ( pAcc == nullptr )
         return false;
 
@@ -163,7 +162,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     mbStatus = ImplReadBody(pAcc.get());
 
     if ( mbStatus )
-        rGraphic = maBmp;
+        rGraphic = aBmp;
 
     return mbStatus;
 }
