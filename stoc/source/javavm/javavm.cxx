@@ -273,9 +273,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
             xCtx );
     if(!xConfRegistry.is()) throw css::uno::RuntimeException("javavm.cxx: couldn't get ConfigurationRegistry", nullptr);
 
-    css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, css::uno::UNO_QUERY);
-    if(!xConfRegistry_simple.is()) throw css::uno::RuntimeException("javavm.cxx: couldn't get ConfigurationRegistry", nullptr);
-
+    css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(xConfRegistry, css::uno::UNO_QUERY_THROW);
     xConfRegistry_simple->open("org.openoffice.Inet", true, false);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
@@ -358,11 +356,7 @@ void getDefaultLocaleFromConfig(
             "javavm.cxx: couldn't get ConfigurationRegistry", nullptr);
 
     css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(
-        xConfRegistry, css::uno::UNO_QUERY);
-    if(!xConfRegistry_simple.is())
-        throw css::uno::RuntimeException(
-            "javavm.cxx: couldn't get ConfigurationRegistry", nullptr);
-
+        xConfRegistry, css::uno::UNO_QUERY_THROW);
     xConfRegistry_simple->open("org.openoffice.Setup", true, false);
     css::uno::Reference<css::registry::XRegistryKey> xRegistryRootKey = xConfRegistry_simple->getRootKey();
 
@@ -464,11 +458,7 @@ void getJavaPropsFromSafetySettings(
             "javavm.cxx: couldn't get ConfigurationRegistry", nullptr);
 
     css::uno::Reference<css::registry::XSimpleRegistry> xConfRegistry_simple(
-        xConfRegistry, css::uno::UNO_QUERY);
-    if(!xConfRegistry_simple.is())
-        throw css::uno::RuntimeException(
-            "javavm.cxx: couldn't get ConfigurationRegistry", nullptr);
-
+        xConfRegistry, css::uno::UNO_QUERY_THROW);
     xConfRegistry_simple->open(
         "org.openoffice.Office.Java",
         true, false);
