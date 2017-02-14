@@ -149,9 +149,7 @@ uno::Reference< io::XInputStream > const & ZipPackageStream::GetOwnSeekStream()
         // is accessed before commit it MUST be wrapped.
         // Wrap the stream in case it is not seekable
         m_xStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xStream, m_xContext );
-        uno::Reference< io::XSeekable > xSeek( m_xStream, UNO_QUERY );
-        if ( !xSeek.is() )
-            throw RuntimeException( THROW_WHERE "The stream must support XSeekable!" );
+        uno::Reference< io::XSeekable > xSeek( m_xStream, UNO_QUERY_THROW );
 
         m_bHasSeekable = true;
     }
@@ -289,16 +287,11 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         pPackage->initialize( aArgs );
 
         // create a new package stream
-        uno::Reference< XDataSinkEncrSupport > xNewPackStream( xPackageAsFactory->createInstance(), UNO_QUERY );
-        if ( !xNewPackStream.is() )
-            throw RuntimeException(THROW_WHERE );
-
+        uno::Reference< XDataSinkEncrSupport > xNewPackStream( xPackageAsFactory->createInstance(), UNO_QUERY_THROW );
         xNewPackStream->setDataStream( static_cast< io::XInputStream* >(
                                                     new WrapStreamForShare( GetOwnSeekStream(), m_rZipPackage.GetSharedMutexRef() ) ) );
 
-        uno::Reference< XPropertySet > xNewPSProps( xNewPackStream, UNO_QUERY );
-        if ( !xNewPSProps.is() )
-            throw RuntimeException(THROW_WHERE );
+        uno::Reference< XPropertySet > xNewPSProps( xNewPackStream, UNO_QUERY_THROW );
 
         // copy all the properties of this stream to the new stream
         xNewPSProps->setPropertyValue("MediaType", makeAny( msMediaType ) );
@@ -313,9 +306,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         uno::Reference< XUnoTunnel > xTunnel;
         Any aRoot = pPackage->getByHierarchicalName("/");
         aRoot >>= xTunnel;
-        uno::Reference< container::XNameContainer > xRootNameContainer( xTunnel, UNO_QUERY );
-        if ( !xRootNameContainer.is() )
-            throw RuntimeException(THROW_WHERE );
+        uno::Reference< container::XNameContainer > xRootNameContainer( xTunnel, UNO_QUERY_THROW );
 
         uno::Reference< XUnoTunnel > xNPSTunnel( xNewPackStream, UNO_QUERY );
         xRootNameContainer->insertByName("dummy", makeAny( xNPSTunnel ) );
@@ -1107,10 +1098,7 @@ void SAL_CALL ZipPackageStream::setRawStream( const uno::Reference< io::XInputSt
 {
     // wrap the stream in case it is not seekable
     uno::Reference< io::XInputStream > xNewStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( aStream, m_xContext );
-    uno::Reference< io::XSeekable > xSeek( xNewStream, UNO_QUERY );
-    if ( !xSeek.is() )
-        throw RuntimeException(THROW_WHERE "The stream must support XSeekable!" );
-
+    uno::Reference< io::XSeekable > xSeek( xNewStream, UNO_QUERY_THROW );
     xSeek->seek( 0 );
     uno::Reference< io::XInputStream > xOldStream = m_xStream;
     m_xStream = xNewStream;

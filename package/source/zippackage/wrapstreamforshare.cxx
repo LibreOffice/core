@@ -38,12 +38,12 @@ WrapStreamForShare::WrapStreamForShare( const uno::Reference< io::XInputStream >
 , m_xInStream( xInStream )
 , m_nCurPos( 0 )
 {
-    m_xSeekable.set( m_xInStream, uno::UNO_QUERY );
-    if ( !m_rMutexRef.is() || !m_xInStream.is() || !m_xSeekable.is() )
+    if ( !m_rMutexRef.is() || !m_xInStream.is() )
     {
         OSL_FAIL( "Wrong initialization of wrapping stream!\n" );
         throw uno::RuntimeException(THROW_WHERE );
     }
+    m_xSeekable.set( m_xInStream, uno::UNO_QUERY_THROW );
 }
 
 WrapStreamForShare::~WrapStreamForShare()

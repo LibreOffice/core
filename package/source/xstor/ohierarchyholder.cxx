@@ -94,9 +94,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     uno::Reference< embed::XStorage > xOwnStor;
 
     xOwnStor = m_xOwnStorage.is() ? m_xOwnStorage
-                : uno::Reference< embed::XStorage >( m_xWeakOwnStorage.get(), uno::UNO_QUERY );
-    if ( !xOwnStor.is() )
-        throw uno::RuntimeException();
+                : uno::Reference< embed::XStorage >( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
 
     if ( aListPath.empty() )
     {
@@ -177,9 +175,7 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
     uno::Reference< embed::XStorage > xOwnStor;
 
     xOwnStor = m_xOwnStorage.is() ? m_xOwnStorage
-                : uno::Reference< embed::XStorage >( m_xWeakOwnStorage.get(), uno::UNO_QUERY );
-    if ( !xOwnStor.is() )
-        throw uno::RuntimeException();
+                : uno::Reference< embed::XStorage >( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
 
     if ( aListPath.empty() )
     {

@@ -705,11 +705,7 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
             {
                 // the stream must be seekable, if it is not it will be wrapped
                 m_xContentStream = ::comphelper::OSeekableInputWrapper::CheckSeekableCanWrap( m_xContentStream, m_xContext );
-                m_xContentSeek.set( m_xContentStream, UNO_QUERY );
-                if ( ! m_xContentSeek.is() )
-                    throw css::uno::Exception (THROW_WHERE "The package component _requires_ an XSeekable interface!",
-                            static_cast < ::cppu::OWeakObject * > ( this ) );
-
+                m_xContentSeek.set( m_xContentStream, UNO_QUERY_THROW );
                 if ( !m_xContentSeek->getLength() )
                     bHaveZipFile = false;
             }
@@ -1414,9 +1410,7 @@ void SAL_CALL ZipPackage::commitChanges()
             try
             {
                 xOutputStream = m_xStream->getOutputStream();
-                uno::Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY );
-                if ( !xTruncate.is() )
-                    throw uno::RuntimeException(THROW_WHERE );
+                uno::Reference < XTruncate > xTruncate ( xOutputStream, UNO_QUERY_THROW );
 
                 // after successful truncation the original file contents are already lost
                 xTruncate->truncate();
@@ -1495,10 +1489,7 @@ void SAL_CALL ZipPackage::commitChanges()
             {
                 try
                 {
-                    uno::Reference < XPropertySet > xPropSet ( xTempInStream, UNO_QUERY );
-                    OSL_ENSURE( xPropSet.is(), "This is a temporary file that must implement XPropertySet!\n" );
-                    if ( !xPropSet.is() )
-                        throw uno::RuntimeException(THROW_WHERE );
+                    uno::Reference < XPropertySet > xPropSet ( xTempInStream, UNO_QUERY_THROW );
 
                     OUString sTargetFolder = m_aURL.copy ( 0, m_aURL.lastIndexOf ( static_cast < sal_Unicode > ( '/' ) ) );
                     Content aContent(
