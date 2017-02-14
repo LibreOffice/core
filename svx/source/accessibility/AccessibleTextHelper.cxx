@@ -1566,10 +1566,7 @@ namespace accessibility
         if( !xFrontEndContext.is() )
             throw uno::RuntimeException("AccessibleTextHelper_Impl::getAccessibleAt: frontend invalid", mxFrontEnd );
 
-        uno::Reference< XAccessibleComponent > xFrontEndComponent( xFrontEndContext, uno::UNO_QUERY );
-
-        if( !xFrontEndComponent.is() )
-            throw uno::RuntimeException("AccessibleTextHelper_Impl::getAccessibleAt: frontend is no XAccessibleComponent", mxFrontEnd );
+        uno::Reference< XAccessibleComponent > xFrontEndComponent( xFrontEndContext, uno::UNO_QUERY_THROW );
 
         // #103862# No longer need to make given position relative
         Point aPoint( _aPoint.X, _aPoint.Y );

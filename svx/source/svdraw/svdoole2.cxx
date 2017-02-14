@@ -471,9 +471,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
     if ( !mpObj )
         throw uno::RuntimeException();
 
-    uno::Reference< embed::XInplaceObject > xInplace( mpObj->GetObjRef(), uno::UNO_QUERY );
-    if ( !xInplace.is() )
-        throw uno::RuntimeException();
+    uno::Reference< embed::XInplaceObject > xInplace( mpObj->GetObjRef(), uno::UNO_QUERY_THROW );
 
     // check if the change is at least one pixel in size
     awt::Rectangle aOldRect = getPlacement();
