@@ -28,6 +28,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Array;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
+import com.sun.star.uno.Type;
 
 public class ValueChanger {
 
@@ -938,35 +939,45 @@ public class ValueChanger {
         } else if (oldValue.getClass().isArray()) {
             // changer for arrays : changes all elements
             Class<?> arrType = oldValue.getClass().getComponentType();
-            newValue = Array.newInstance(arrType, Array.getLength(oldValue));
-            for (int i = 0; i < Array.getLength(newValue); i++) {
-                if (!arrType.isPrimitive()) {
-                    Object elem = changePValue(Array.get(oldValue, i));
-                    Array.set(newValue, i, elem);
-                } else {
-                    if (Boolean.TYPE.equals(arrType)) {
-                        Array.setBoolean(newValue, i,
-                                !Array.getBoolean(oldValue, i));
-                    } else if (Byte.TYPE.equals(arrType)) {
-                        Array.setByte(newValue, i,
-                                (byte) (Array.getByte(oldValue, i) + 1));
-                    } else if (Character.TYPE.equals(arrType)) {
-                        Array.setChar(newValue, i,
-                                (char) (Array.getChar(oldValue, i) + 1));
-                    } else if (Double.TYPE.equals(arrType)) {
-                        Array.setDouble(newValue, i,
-                                Array.getDouble(oldValue, i) + 1);
-                    } else if (Float.TYPE.equals(arrType)) {
-                        Array.setFloat(newValue, i,
-                                Array.getFloat(oldValue, i) + 1);
-                    } else if (Integer.TYPE.equals(arrType)) {
-                        Array.setInt(newValue, i, Array.getInt(oldValue, i) + 1);
-                    } else if (Long.TYPE.equals(arrType)) {
-                        Array.setLong(newValue, i,
-                                Array.getLong(oldValue, i) + 1);
-                    } else if (Short.TYPE.equals(arrType)) {
-                        Array.setShort(newValue, i,
-                                (short) (Array.getShort(oldValue, i) + 1));
+            int oldLen = Array.getLength(oldValue);
+            if (oldLen == 0 && "TypedItemList".equals(name) && !arrType.isPrimitive()) {
+                // This case is needed to make the Sequence<Any> property pass
+                // the addPropertyChangeListener tests, where the property has
+                // to be changed (and not stay empty ...)
+                newValue = Array.newInstance(arrType, 1);
+                Object elem = new Any(new Type(String.class), "_Any");
+                Array.set(newValue, 0, elem);
+            } else {
+                newValue = Array.newInstance(arrType, oldLen);
+                for (int i = 0; i < Array.getLength(newValue); i++) {
+                    if (!arrType.isPrimitive()) {
+                        Object elem = changePValue(Array.get(oldValue, i));
+                        Array.set(newValue, i, elem);
+                    } else {
+                        if (Boolean.TYPE.equals(arrType)) {
+                            Array.setBoolean(newValue, i,
+                                    !Array.getBoolean(oldValue, i));
+                        } else if (Byte.TYPE.equals(arrType)) {
+                            Array.setByte(newValue, i,
+                                    (byte) (Array.getByte(oldValue, i) + 1));
+                        } else if (Character.TYPE.equals(arrType)) {
+                            Array.setChar(newValue, i,
+                                    (char) (Array.getChar(oldValue, i) + 1));
+                        } else if (Double.TYPE.equals(arrType)) {
+                            Array.setDouble(newValue, i,
+                                    Array.getDouble(oldValue, i) + 1);
+                        } else if (Float.TYPE.equals(arrType)) {
+                            Array.setFloat(newValue, i,
+                                    Array.getFloat(oldValue, i) + 1);
+                        } else if (Integer.TYPE.equals(arrType)) {
+                            Array.setInt(newValue, i, Array.getInt(oldValue, i) + 1);
+                        } else if (Long.TYPE.equals(arrType)) {
+                            Array.setLong(newValue, i,
+                                    Array.getLong(oldValue, i) + 1);
+                        } else if (Short.TYPE.equals(arrType)) {
+                            Array.setShort(newValue, i,
+                                    (short) (Array.getShort(oldValue, i) + 1));
+                        }
                     }
                 }
             }
