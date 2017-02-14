@@ -704,41 +704,31 @@ void SAL_CALL UnoMultiPageControl::dispose()
 // css::awt::XSimpleTabController
 ::sal_Int32 SAL_CALL UnoMultiPageControl::insertTab()
 {
-    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
-    if ( !xMultiPage.is() )
-        throw RuntimeException();
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY_THROW );
     return xMultiPage->insertTab();
 }
 
 void SAL_CALL UnoMultiPageControl::removeTab( ::sal_Int32 ID )
 {
-    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
-    if ( !xMultiPage.is() )
-        throw RuntimeException();
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY_THROW );
     xMultiPage->removeTab( ID );
 }
 
 void SAL_CALL UnoMultiPageControl::setTabProps( ::sal_Int32 ID, const Sequence< NamedValue >& Properties )
 {
-    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
-    if ( !xMultiPage.is() )
-        throw RuntimeException();
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY_THROW );
     xMultiPage->setTabProps( ID, Properties );
 }
 
 Sequence< NamedValue > SAL_CALL UnoMultiPageControl::getTabProps( ::sal_Int32 ID )
 {
-    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
-    if ( !xMultiPage.is() )
-        throw RuntimeException();
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY_THROW );
     return xMultiPage->getTabProps( ID );
 }
 
 void SAL_CALL UnoMultiPageControl::activateTab( ::sal_Int32 ID )
 {
-    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
-    if ( !xMultiPage.is() )
-        throw RuntimeException();
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY_THROW );
     xMultiPage->activateTab( ID );
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), true );
 
@@ -746,9 +736,7 @@ void SAL_CALL UnoMultiPageControl::activateTab( ::sal_Int32 ID )
 
 ::sal_Int32 SAL_CALL UnoMultiPageControl::getActiveTabID()
 {
-    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY );
-    if ( !xMultiPage.is() )
-        throw RuntimeException();
+    Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY_THROW );
     return xMultiPage->getActiveTabID();
 }
 
