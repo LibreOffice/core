@@ -19,916 +19,912 @@
 
 #include "analysis.hrc"
 
-Resource RID_ANALYSIS_DEFFUNCTION_NAMES
+StringArray ANALYSIS_DEFFUNCNAME_Workday
 {
-
-    StringArray ANALYSIS_DEFFUNCNAME_Workday
+    ItemList =
     {
-        ItemList =
-        {
-            < "ARBEITSTAG"; >;
-            < "WORKDAY"; >;
-        };
+        < "ARBEITSTAG"; >;
+        < "WORKDAY"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Yearfrac
+StringArray ANALYSIS_DEFFUNCNAME_Yearfrac
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "BRTEILJAHRE"; >;
-            < "YEARFRAC"; >;
-        };
+        < "BRTEILJAHRE"; >;
+        < "YEARFRAC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Edate
+StringArray ANALYSIS_DEFFUNCNAME_Edate
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "EDATUM"; >;
-            < "EDATE"; >;
-        };
+        < "EDATUM"; >;
+        < "EDATE"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Weeknum
+StringArray ANALYSIS_DEFFUNCNAME_Weeknum
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "KALENDERWOCHE"; >;
-            < "WEEKNUM"; >;
-        };
+        < "KALENDERWOCHE"; >;
+        < "WEEKNUM"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Eomonth
+StringArray ANALYSIS_DEFFUNCNAME_Eomonth
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "MONATSENDE"; >;
-            < "EOMONTH"; >;
-        };
+        < "MONATSENDE"; >;
+        < "EOMONTH"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Networkdays
+StringArray ANALYSIS_DEFFUNCNAME_Networkdays
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "NETTOARBEITSTAGE"; >;
-            < "NETWORKDAYS"; >;
-        };
+        < "NETTOARBEITSTAGE"; >;
+        < "NETWORKDAYS"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Amordegrc
+StringArray ANALYSIS_DEFFUNCNAME_Amordegrc
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "AMORDEGRK"; >;
-            < "AMORDEGRC"; >;
-        };
+        < "AMORDEGRK"; >;
+        < "AMORDEGRC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Amorlinc
+StringArray ANALYSIS_DEFFUNCNAME_Amorlinc
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "AMORLINEARK"; >;
-            < "AMORLINC"; >;
-        };
+        < "AMORLINEARK"; >;
+        < "AMORLINC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Accrint
+StringArray ANALYSIS_DEFFUNCNAME_Accrint
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "AUFGELZINS"; >;
-            < "ACCRINT"; >;
-        };
+        < "AUFGELZINS"; >;
+        < "ACCRINT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Accrintm
+StringArray ANALYSIS_DEFFUNCNAME_Accrintm
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "AUFGELZINSF"; >;
-            < "ACCRINTM"; >;
-        };
+        < "AUFGELZINSF"; >;
+        < "ACCRINTM"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Received
+StringArray ANALYSIS_DEFFUNCNAME_Received
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "AUSZAHLUNG"; >;
-            < "RECEIVED"; >;
-        };
+        < "AUSZAHLUNG"; >;
+        < "RECEIVED"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Disc
+StringArray ANALYSIS_DEFFUNCNAME_Disc
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "DISAGIO"; >;
-            < "DISC"; >;
-        };
+        < "DISAGIO"; >;
+        < "DISC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Duration
+StringArray ANALYSIS_DEFFUNCNAME_Duration
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "DURATION"; >;
-            < "DURATION"; >;
-        };
+        < "DURATION"; >;
+        < "DURATION"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Effect
+StringArray ANALYSIS_DEFFUNCNAME_Effect
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "EFFEKTIV"; >;
-            < "EFFECT"; >;
-        };
+        < "EFFEKTIV"; >;
+        < "EFFECT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Cumprinc
+StringArray ANALYSIS_DEFFUNCNAME_Cumprinc
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "KUMKAPITAL"; >;
-            < "CUMPRINC"; >;
-        };
+        < "KUMKAPITAL"; >;
+        < "CUMPRINC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Cumipmt
+StringArray ANALYSIS_DEFFUNCNAME_Cumipmt
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "KUMZINSZ"; >;
-            < "CUMIPMT"; >;
-        };
+        < "KUMZINSZ"; >;
+        < "CUMIPMT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Price
+StringArray ANALYSIS_DEFFUNCNAME_Price
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "KURS"; >;
-            < "PRICE"; >;
-        };
+        < "KURS"; >;
+        < "PRICE"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Pricedisc
+StringArray ANALYSIS_DEFFUNCNAME_Pricedisc
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "KURSDISAGIO"; >;
-            < "PRICEDISC"; >;
-        };
+        < "KURSDISAGIO"; >;
+        < "PRICEDISC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Pricemat
+StringArray ANALYSIS_DEFFUNCNAME_Pricemat
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "KURSFÄLLIG"; >;
-            < "PRICEMAT"; >;
-        };
+        < "KURSFÄLLIG"; >;
+        < "PRICEMAT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Mduration
+StringArray ANALYSIS_DEFFUNCNAME_Mduration
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "MDURATION"; >;
-            < "MDURATION"; >;
-        };
+        < "MDURATION"; >;
+        < "MDURATION"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Nominal
+StringArray ANALYSIS_DEFFUNCNAME_Nominal
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "NOMINAL"; >;
-            < "NOMINAL"; >;
-        };
+        < "NOMINAL"; >;
+        < "NOMINAL"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Dollarfr
+StringArray ANALYSIS_DEFFUNCNAME_Dollarfr
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "NOTIERUNGBRU"; >;
-            < "DOLLARFR"; >;
-        };
+        < "NOTIERUNGBRU"; >;
+        < "DOLLARFR"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Dollarde
+StringArray ANALYSIS_DEFFUNCNAME_Dollarde
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "NOTIERUNGDEZ"; >;
-            < "DOLLARDE"; >;
-        };
+        < "NOTIERUNGDEZ"; >;
+        < "DOLLARDE"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Yield
+StringArray ANALYSIS_DEFFUNCNAME_Yield
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "RENDITE"; >;
-            < "YIELD"; >;
-        };
+        < "RENDITE"; >;
+        < "YIELD"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Yielddisc
+StringArray ANALYSIS_DEFFUNCNAME_Yielddisc
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "RENDITEDIS"; >;
-            < "YIELDDISC"; >;
-        };
+        < "RENDITEDIS"; >;
+        < "YIELDDISC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Yieldmat
+StringArray ANALYSIS_DEFFUNCNAME_Yieldmat
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "RENDITEFÄLL"; >;
-            < "YIELDMAT"; >;
-        };
+        < "RENDITEFÄLL"; >;
+        < "YIELDMAT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Tbilleq
+StringArray ANALYSIS_DEFFUNCNAME_Tbilleq
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "TBILLÄQUIV"; >;
-            < "TBILLEQ"; >;
-        };
+        < "TBILLÄQUIV"; >;
+        < "TBILLEQ"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Tbillprice
+StringArray ANALYSIS_DEFFUNCNAME_Tbillprice
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "TBILLKURS"; >;
-            < "TBILLPRICE"; >;
-        };
+        < "TBILLKURS"; >;
+        < "TBILLPRICE"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Tbillyield
+StringArray ANALYSIS_DEFFUNCNAME_Tbillyield
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "TBILLRENDITE"; >;
-            < "TBILLYIELD"; >;
-        };
+        < "TBILLRENDITE"; >;
+        < "TBILLYIELD"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Oddfprice
+StringArray ANALYSIS_DEFFUNCNAME_Oddfprice
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "UNREGER.KURS"; >;
-            < "ODDFPRICE"; >;
-        };
+        < "UNREGER.KURS"; >;
+        < "ODDFPRICE"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Oddfyield
+StringArray ANALYSIS_DEFFUNCNAME_Oddfyield
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "UNREGER.REND"; >;
-            < "ODDFYIELD"; >;
-        };
+        < "UNREGER.REND"; >;
+        < "ODDFYIELD"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Oddlprice
+StringArray ANALYSIS_DEFFUNCNAME_Oddlprice
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "UNREGLE.KURS"; >;
-            < "ODDLPRICE"; >;
-        };
+        < "UNREGLE.KURS"; >;
+        < "ODDLPRICE"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Oddlyield
+StringArray ANALYSIS_DEFFUNCNAME_Oddlyield
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "UNREGLE.REND"; >;
-            < "ODDLYIELD"; >;
-        };
+        < "UNREGLE.REND"; >;
+        < "ODDLYIELD"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Xirr
+StringArray ANALYSIS_DEFFUNCNAME_Xirr
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "XINTZINSFUSS"; >;
-            < "XIRR"; >;
-        };
+        < "XINTZINSFUSS"; >;
+        < "XIRR"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Xnpv
+StringArray ANALYSIS_DEFFUNCNAME_Xnpv
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "XKAPITALWERT"; >;
-            < "XNPV"; >;
-        };
+        < "XKAPITALWERT"; >;
+        < "XNPV"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Intrate
+StringArray ANALYSIS_DEFFUNCNAME_Intrate
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZINSSATZ"; >;
-            < "INTRATE"; >;
-        };
+        < "ZINSSATZ"; >;
+        < "INTRATE"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Coupncd
+StringArray ANALYSIS_DEFFUNCNAME_Coupncd
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZINSTERMNZ"; >;
-            < "COUPNCD"; >;
-        };
+        < "ZINSTERMNZ"; >;
+        < "COUPNCD"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Coupdays
+StringArray ANALYSIS_DEFFUNCNAME_Coupdays
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZINSTERMTAGE"; >;
-            < "COUPDAYS"; >;
-        };
+        < "ZINSTERMTAGE"; >;
+        < "COUPDAYS"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Coupdaysnc
+StringArray ANALYSIS_DEFFUNCNAME_Coupdaysnc
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZINSTERMTAGNZ"; >;
-            < "COUPDAYSNC"; >;
-        };
+        < "ZINSTERMTAGNZ"; >;
+        < "COUPDAYSNC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Coupdaybs
+StringArray ANALYSIS_DEFFUNCNAME_Coupdaybs
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZINSTERMTAGVA"; >;
-            < "COUPDAYBS"; >;
-        };
+        < "ZINSTERMTAGVA"; >;
+        < "COUPDAYBS"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Couppcd
+StringArray ANALYSIS_DEFFUNCNAME_Couppcd
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZINSTERMVZ"; >;
-            < "COUPPCD"; >;
-        };
+        < "ZINSTERMVZ"; >;
+        < "COUPPCD"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Coupnum
+StringArray ANALYSIS_DEFFUNCNAME_Coupnum
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZINSTERMZAHL"; >;
-            < "COUPNUM"; >;
-        };
+        < "ZINSTERMZAHL"; >;
+        < "COUPNUM"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Fvschedule
+StringArray ANALYSIS_DEFFUNCNAME_Fvschedule
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZW2"; >;
-            < "FVSCHEDULE"; >;
-        };
+        < "ZW2"; >;
+        < "FVSCHEDULE"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Iseven
+StringArray ANALYSIS_DEFFUNCNAME_Iseven
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ISTGERADE"; >;
-            < "ISEVEN"; >;
-        };
+        < "ISTGERADE"; >;
+        < "ISEVEN"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Isodd
+StringArray ANALYSIS_DEFFUNCNAME_Isodd
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ISTUNGERADE"; >;
-            < "ISODD"; >;
-        };
+        < "ISTUNGERADE"; >;
+        < "ISODD"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Gcd
+StringArray ANALYSIS_DEFFUNCNAME_Gcd
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "GGT"; >;
-            < "GCD"; >;
-        };
+        < "GGT"; >;
+        < "GCD"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Lcm
+StringArray ANALYSIS_DEFFUNCNAME_Lcm
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "KGV"; >;
-            < "LCM"; >;
-        };
+        < "KGV"; >;
+        < "LCM"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Multinomial
+StringArray ANALYSIS_DEFFUNCNAME_Multinomial
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "POLYNOMIAL"; >;
-            < "MULTINOMIAL"; >;
-        };
+        < "POLYNOMIAL"; >;
+        < "MULTINOMIAL"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Seriessum
+StringArray ANALYSIS_DEFFUNCNAME_Seriessum
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "POTENZREIHE"; >;
-            < "SERIESSUM"; >;
-        };
+        < "POTENZREIHE"; >;
+        < "SERIESSUM"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Quotient
+StringArray ANALYSIS_DEFFUNCNAME_Quotient
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "QUOTIENT"; >;
-            < "QUOTIENT"; >;
-        };
+        < "QUOTIENT"; >;
+        < "QUOTIENT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Mround
+StringArray ANALYSIS_DEFFUNCNAME_Mround
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "VRUNDEN"; >;
-            < "MROUND"; >;
-        };
+        < "VRUNDEN"; >;
+        < "MROUND"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Sqrtpi
+StringArray ANALYSIS_DEFFUNCNAME_Sqrtpi
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "WURZELPI"; >;
-            < "SQRTPI"; >;
-        };
+        < "WURZELPI"; >;
+        < "SQRTPI"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Randbetween
+StringArray ANALYSIS_DEFFUNCNAME_Randbetween
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZUFALLSBEREICH"; >;
-            < "RANDBETWEEN"; >;
-        };
+        < "ZUFALLSBEREICH"; >;
+        < "RANDBETWEEN"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Besseli
+StringArray ANALYSIS_DEFFUNCNAME_Besseli
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "BESSELI"; >;
-            < "BESSELI"; >;
-        };
+        < "BESSELI"; >;
+        < "BESSELI"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Besselj
+StringArray ANALYSIS_DEFFUNCNAME_Besselj
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "BESSELJ"; >;
-            < "BESSELJ"; >;
-        };
+        < "BESSELJ"; >;
+        < "BESSELJ"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Besselk
+StringArray ANALYSIS_DEFFUNCNAME_Besselk
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "BESSELK"; >;
-            < "BESSELK"; >;
-        };
+        < "BESSELK"; >;
+        < "BESSELK"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Bessely
+StringArray ANALYSIS_DEFFUNCNAME_Bessely
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "BESSELY"; >;
-            < "BESSELY"; >;
-        };
+        < "BESSELY"; >;
+        < "BESSELY"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Bin2Dec
+StringArray ANALYSIS_DEFFUNCNAME_Bin2Dec
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "BININDEZ"; >;
-            < "BIN2DEC"; >;
-        };
+        < "BININDEZ"; >;
+        < "BIN2DEC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Bin2Hex
+StringArray ANALYSIS_DEFFUNCNAME_Bin2Hex
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "BININHEX"; >;
-            < "BIN2HEX"; >;
-        };
+        < "BININHEX"; >;
+        < "BIN2HEX"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Bin2Oct
+StringArray ANALYSIS_DEFFUNCNAME_Bin2Oct
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "BININOKT"; >;
-            < "BIN2OCT"; >;
-        };
+        < "BININOKT"; >;
+        < "BIN2OCT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Delta
+StringArray ANALYSIS_DEFFUNCNAME_Delta
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "DELTA"; >;
-            < "DELTA"; >;
-        };
+        < "DELTA"; >;
+        < "DELTA"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Dec2Bin
+StringArray ANALYSIS_DEFFUNCNAME_Dec2Bin
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "DEZINBIN"; >;
-            < "DEC2BIN"; >;
-        };
+        < "DEZINBIN"; >;
+        < "DEC2BIN"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Dec2Hex
+StringArray ANALYSIS_DEFFUNCNAME_Dec2Hex
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "DEZINHEX"; >;
-            < "DEC2HEX"; >;
-        };
+        < "DEZINHEX"; >;
+        < "DEC2HEX"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Dec2Oct
+StringArray ANALYSIS_DEFFUNCNAME_Dec2Oct
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "DEZINOKT"; >;
-            < "DEC2OCT"; >;
-        };
+        < "DEZINOKT"; >;
+        < "DEC2OCT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Erf
+StringArray ANALYSIS_DEFFUNCNAME_Erf
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "GAUSSFEHLER"; >;
-            < "ERF"; >;
-        };
+        < "GAUSSFEHLER"; >;
+        < "ERF"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Erfc
+StringArray ANALYSIS_DEFFUNCNAME_Erfc
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "GAUSSFKOMPL"; >;
-            < "ERFC"; >;
-        };
+        < "GAUSSFKOMPL"; >;
+        < "ERFC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Gestep
+StringArray ANALYSIS_DEFFUNCNAME_Gestep
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "GGANZZAHL"; >;
-            < "GESTEP"; >;
-        };
+        < "GGANZZAHL"; >;
+        < "GESTEP"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Hex2Bin
+StringArray ANALYSIS_DEFFUNCNAME_Hex2Bin
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "HEXINBIN"; >;
-            < "HEX2BIN"; >;
-        };
+        < "HEXINBIN"; >;
+        < "HEX2BIN"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Hex2Dec
+StringArray ANALYSIS_DEFFUNCNAME_Hex2Dec
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "HEXINDEZ"; >;
-            < "HEX2DEC"; >;
-        };
+        < "HEXINDEZ"; >;
+        < "HEX2DEC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Hex2Oct
+StringArray ANALYSIS_DEFFUNCNAME_Hex2Oct
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "HEXINOKT"; >;
-            < "HEX2OCT"; >;
-        };
+        < "HEXINOKT"; >;
+        < "HEX2OCT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imabs
+StringArray ANALYSIS_DEFFUNCNAME_Imabs
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMABS"; >;
-            < "IMABS"; >;
-        };
+        < "IMABS"; >;
+        < "IMABS"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imaginary
+StringArray ANALYSIS_DEFFUNCNAME_Imaginary
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMAGINÄRTEIL"; >;
-            < "IMAGINARY"; >;
-        };
+        < "IMAGINÄRTEIL"; >;
+        < "IMAGINARY"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Impower
+StringArray ANALYSIS_DEFFUNCNAME_Impower
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMAPOTENZ"; >;
-            < "IMPOWER"; >;
-        };
+        < "IMAPOTENZ"; >;
+        < "IMPOWER"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imargument
+StringArray ANALYSIS_DEFFUNCNAME_Imargument
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMARGUMENT"; >;
-            < "IMARGUMENT"; >;
-        };
+        < "IMARGUMENT"; >;
+        < "IMARGUMENT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imcos
+StringArray ANALYSIS_DEFFUNCNAME_Imcos
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMCOS"; >;
-            < "IMCOS"; >;
-        };
+        < "IMCOS"; >;
+        < "IMCOS"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imdiv
+StringArray ANALYSIS_DEFFUNCNAME_Imdiv
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMDIV"; >;
-            < "IMDIV"; >;
-        };
+        < "IMDIV"; >;
+        < "IMDIV"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imexp
+StringArray ANALYSIS_DEFFUNCNAME_Imexp
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMEXP"; >;
-            < "IMEXP"; >;
-        };
+        < "IMEXP"; >;
+        < "IMEXP"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imconjugate
+StringArray ANALYSIS_DEFFUNCNAME_Imconjugate
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMKONJUGIERTE"; >;
-            < "IMCONJUGATE"; >;
-        };
+        < "IMKONJUGIERTE"; >;
+        < "IMCONJUGATE"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imln
+StringArray ANALYSIS_DEFFUNCNAME_Imln
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMLN"; >;
-            < "IMLN"; >;
-        };
+        < "IMLN"; >;
+        < "IMLN"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imlog10
+StringArray ANALYSIS_DEFFUNCNAME_Imlog10
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMLOG10"; >;
-            < "IMLOG10"; >;
-        };
+        < "IMLOG10"; >;
+        < "IMLOG10"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imlog2
+StringArray ANALYSIS_DEFFUNCNAME_Imlog2
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMLOG2"; >;
-            < "IMLOG2"; >;
-        };
+        < "IMLOG2"; >;
+        < "IMLOG2"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Improduct
+StringArray ANALYSIS_DEFFUNCNAME_Improduct
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMPRODUKT"; >;
-            < "IMPRODUCT"; >;
-        };
+        < "IMPRODUKT"; >;
+        < "IMPRODUCT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imreal
+StringArray ANALYSIS_DEFFUNCNAME_Imreal
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMREALTEIL"; >;
-            < "IMREAL"; >;
-        };
+        < "IMREALTEIL"; >;
+        < "IMREAL"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imsin
+StringArray ANALYSIS_DEFFUNCNAME_Imsin
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMSIN"; >;
-            < "IMSIN"; >;
-        };
+        < "IMSIN"; >;
+        < "IMSIN"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imsub
+StringArray ANALYSIS_DEFFUNCNAME_Imsub
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMSUB"; >;
-            < "IMSUB"; >;
-        };
+        < "IMSUB"; >;
+        < "IMSUB"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imsum
+StringArray ANALYSIS_DEFFUNCNAME_Imsum
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMSUMME"; >;
-            < "IMSUM"; >;
-        };
+        < "IMSUMME"; >;
+        < "IMSUM"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imsqrt
+StringArray ANALYSIS_DEFFUNCNAME_Imsqrt
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMWURZEL"; >;
-            < "IMSQRT"; >;
-        };
+        < "IMWURZEL"; >;
+        < "IMSQRT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imtan
+StringArray ANALYSIS_DEFFUNCNAME_Imtan
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMTAN"; >;
-            < "IMTAN"; >;
-        };
+        < "IMTAN"; >;
+        < "IMTAN"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imsec
+StringArray ANALYSIS_DEFFUNCNAME_Imsec
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMSEC"; >;
-            < "IMSEC"; >;
-        };
+        < "IMSEC"; >;
+        < "IMSEC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imcsc
+StringArray ANALYSIS_DEFFUNCNAME_Imcsc
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMCSC"; >;
-            < "IMCSC"; >;
-        };
+        < "IMCSC"; >;
+        < "IMCSC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imcot
+StringArray ANALYSIS_DEFFUNCNAME_Imcot
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMCOT"; >;
-            < "IMCOT"; >;
-        };
+        < "IMCOT"; >;
+        < "IMCOT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imsinh
+StringArray ANALYSIS_DEFFUNCNAME_Imsinh
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMSINH"; >;
-            < "IMSINH"; >;
-        };
+        < "IMSINH"; >;
+        < "IMSINH"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imcosh
+StringArray ANALYSIS_DEFFUNCNAME_Imcosh
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMCOSH"; >;
-            < "IMCOSH"; >;
-        };
+        < "IMCOSH"; >;
+        < "IMCOSH"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imsech
+StringArray ANALYSIS_DEFFUNCNAME_Imsech
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMSECH"; >;
-            < "IMSECH"; >;
-        };
+        < "IMSECH"; >;
+        < "IMSECH"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Imcsch
+StringArray ANALYSIS_DEFFUNCNAME_Imcsch
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "IMCSCH"; >;
-            < "IMCSCH"; >;
-        };
+        < "IMCSCH"; >;
+        < "IMCSCH"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Complex
+StringArray ANALYSIS_DEFFUNCNAME_Complex
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "KOMPLEXE"; >;
-            < "COMPLEX"; >;
-        };
+        < "KOMPLEXE"; >;
+        < "COMPLEX"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Oct2Bin
+StringArray ANALYSIS_DEFFUNCNAME_Oct2Bin
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "OKTINBIN"; >;
-            < "OCT2BIN"; >;
-        };
+        < "OKTINBIN"; >;
+        < "OCT2BIN"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Oct2Dec
+StringArray ANALYSIS_DEFFUNCNAME_Oct2Dec
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "OKTINDEZ"; >;
-            < "OCT2DEC"; >;
-        };
+        < "OKTINDEZ"; >;
+        < "OCT2DEC"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Oct2Hex
+StringArray ANALYSIS_DEFFUNCNAME_Oct2Hex
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "OKTINHEX"; >;
-            < "OCT2HEX"; >;
-        };
+        < "OKTINHEX"; >;
+        < "OCT2HEX"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Convert
+StringArray ANALYSIS_DEFFUNCNAME_Convert
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "UMWANDELN"; >;
-            < "CONVERT"; >;
-        };
+        < "UMWANDELN"; >;
+        < "CONVERT"; >;
     };
+};
 
-    StringArray ANALYSIS_DEFFUNCNAME_Factdouble
+StringArray ANALYSIS_DEFFUNCNAME_Factdouble
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ZWEIFAKULTÄT"; >;
-            < "FACTDOUBLE"; >;
-        };
+        < "ZWEIFAKULTÄT"; >;
+        < "FACTDOUBLE"; >;
     };
 };
 

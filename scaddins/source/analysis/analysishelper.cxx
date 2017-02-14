@@ -1372,22 +1372,6 @@ double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
     return static_cast< double >( nMonths * nFreq / 12 );
 }
 
-
-class AnalysisRscStrArrLoader : public Resource
-{
-private:
-    ResStringArray          aStrArray;
-public:
-                            AnalysisRscStrArrLoader( sal_uInt16 nRsc, sal_uInt16 nArrayId, ResMgr& rResMgr ) :
-                                Resource( AnalysisResId( nRsc, rResMgr ) ),
-                                aStrArray( AnalysisResId( nArrayId, rResMgr ) )
-                            {
-                                FreeResource();
-                            }
-
-    const ResStringArray&   GetStringArray() const { return aStrArray; }
-};
-
 FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
     aIntName( OUString::createFromAscii( r.pIntName ) ),
     nUINameID( r.nUINameID ),
@@ -1400,14 +1384,13 @@ FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
     if (r.pSuffix)
         aSuffix = OUString::createFromAscii( r.pSuffix);
 
-    AnalysisRscStrArrLoader aArrLoader(RID_ANALYSIS_DEFFUNCTION_NAMES, r.nCompListID, rResMgr);
-    const ResStringArray&   rArr = aArrLoader.GetStringArray();
+    ResStringArray aArr(AnalysisResId(r.nCompListID, rResMgr));
 
-    sal_uInt16              nCount = sal::static_int_cast<sal_uInt16>( rArr.Count() );
+    sal_uInt32 nCount = aArr.Count();
 
-    aCompList.resize( nCount );
-    for( sal_uInt16 n = 0 ; n < nCount ; n++ )
-        aCompList[n] = rArr.GetString( n );
+    aCompList.resize(nCount);
+    for(sal_uInt32 n = 0 ; n < nCount; ++n)
+        aCompList[n] = aArr.GetString( n );
 }
 
 FuncData::~FuncData()
