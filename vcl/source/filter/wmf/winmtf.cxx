@@ -605,6 +605,7 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
             default:
             break;
         }
+        UpdateFillStyle();
     }
     else
     {
@@ -626,6 +627,7 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
             {
                 maFillStyle = *brush;
                 mbFillStyleSelected = true;
+                UpdateFillStyle();
             }
 
             const auto font = dynamic_cast<WinMtfFontStyle*>(pGDIObj);
@@ -973,6 +975,7 @@ WMFRasterOp WinMtfOutput::SetRasterOp( WMFRasterOp nRasterOp )
         {   // changing modes from WMFRasterOp::Nop so set pen and brush
             maFillStyle = m_NopFillStyle;
             maLineStyle = m_NopLineStyle;
+            UpdateFillStyle();
             mbNopMode = false;
         }
         switch( nRasterOp )
@@ -994,6 +997,7 @@ WMFRasterOp WinMtfOutput::SetRasterOp( WMFRasterOp nRasterOp )
                     m_NopLineStyle = maLineStyle;
                     maFillStyle = WinMtfFillStyle( Color( COL_TRANSPARENT ), true );
                     maLineStyle = WinMtfLineStyle( Color( COL_TRANSPARENT ), true );
+                    UpdateFillStyle();
                     mbNopMode = true;
                 }
             }
