@@ -262,24 +262,6 @@ class AnalysisResId : public ResId
                     AnalysisResId( sal_uInt16 nId, ResMgr& rResMgr );
 };
 
-
-class AnalysisRscStrLoader : public Resource
-{
-private:
-    OUString        aStr;
-public:
-    AnalysisRscStrLoader( sal_uInt16 nRsc, sal_uInt16 nStrId, ResMgr& rResMgr ) :
-        Resource( AnalysisResId( nRsc, rResMgr ) ),
-        aStr( AnalysisResId( nStrId, rResMgr ) )
-    {
-        FreeResource();
-    }
-
-    const OUString& GetString() const { return aStr; }
-
-};
-
-
 /// sorted list with unique sal_Int32 values
 class SortedIndividualInt32List final
 {

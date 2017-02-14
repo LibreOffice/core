@@ -280,7 +280,7 @@ OUString SAL_CALL AnalysisAddIn::getDisplayFunctionName( const OUString& aProgra
     auto it = std::find_if(pFD->begin(), pFD->end(), FindFuncData( aProgrammaticName ) );
     if( it != pFD->end() )
     {
-        aRet = AnalysisRscStrLoader( RID_ANALYSIS_FUNCTION_NAMES, it->GetUINameID(), GetResMgr() ).GetString();
+        aRet = AnalysisResId(it->GetUINameID(), GetResMgr()).toString();
         if( it->IsDouble() )
         {
             const OUString& rSuffix = it->GetSuffix();
