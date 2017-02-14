@@ -695,18 +695,18 @@ namespace oox { namespace ppt {
                 // sd/source/filter/ppt/pptinanimations.cxx
                 if(attribs.hasAttribute( XML_by ) )
                 {
-                    sal_Int32 nBy = attribs.getInteger( XML_by, 0 );
-                    pNode->setBy( makeAny( (double) nBy ) );
+                    double fBy = attribs.getDouble( XML_by, 0.0 ) / 60000.; //1 PowerPoint-angle-unit = 1/60000 degree
+                    pNode->setBy( makeAny( fBy ) );
                 }
                 if(attribs.hasAttribute( XML_from ) )
                 {
-                    sal_Int32 nFrom = attribs.getInteger( XML_from, 0 );
-                    pNode->setFrom( makeAny( (double) nFrom ) );
+                    double fFrom = attribs.getDouble( XML_from, 0.0 ) / 60000.;
+                    pNode->setFrom( makeAny( fFrom ) );
                 }
                 if(attribs.hasAttribute( XML_to ) )
                 {
-                    sal_Int32 nTo = attribs.getInteger( XML_to, 0 );
-                    pNode->setTo( makeAny( (double) nTo ) );
+                    double fTo = attribs.getDouble( XML_to, 0.0 ) / 60000.;
+                    pNode->setTo( makeAny( fTo ) );
                 }
             }
 
