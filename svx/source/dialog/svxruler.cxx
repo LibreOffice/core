@@ -1717,9 +1717,6 @@ void SvxRuler::UpdateParaContents_Impl(
         case UpdateType::MoveRight:
             mpIndents[INDENT_RIGHT_MARGIN].nPos += lDifference;
             break;
-        case UpdateType::MoveAll:
-            mpIndents[INDENT_RIGHT_MARGIN].nPos += lDifference;
-            SAL_FALLTHROUGH;
         case UpdateType::MoveLeft:
         {
             mpIndents[INDENT_FIRST_LINE].nPos += lDifference;

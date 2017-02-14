@@ -219,7 +219,6 @@ class SVX_DLLPUBLIC SvxRuler: public Ruler, public SfxListener
 
     enum class UpdateType
     {
-        MoveAll,
         MoveLeft,
         MoveRight
     };
