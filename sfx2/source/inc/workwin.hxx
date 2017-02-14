@@ -133,7 +133,6 @@ struct SfxChildWin_Impl
 
 enum class SfxChildIdentifier
 {
-    OBJECTBAR,
     DOCKINGWINDOW,
     SPLITWINDOW
 };

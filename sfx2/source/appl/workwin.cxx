@@ -1524,9 +1524,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
     vcl::Window *pWin=nullptr;
     SfxChildWin_Impl *pCW = nullptr;
 
-    if ( eChild == SfxChildIdentifier::OBJECTBAR )
-        return;
-
     // configure direct childwindow
     for (SfxChildWin_Impl* i : aChildWins)
     {
