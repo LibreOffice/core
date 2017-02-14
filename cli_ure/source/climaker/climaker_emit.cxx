@@ -2266,10 +2266,7 @@ resolveInterfaceTypedef(
         return xIfaceTd;
 
     Reference<reflection::XIndirectTypeDescription> xIndTd(
-        type, UNO_QUERY);
-    if (xIndTd.is() == sal_False)
-        throw css::uno::Exception(
-            "resolveInterfaceTypedef was called with an invalid argument", 0);
+        type, UNO_QUERY_THROW);
 
     return resolveInterfaceTypedef(xIndTd->getReferencedType());
 }
