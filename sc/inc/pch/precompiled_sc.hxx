@@ -440,7 +440,6 @@
 #include <stlpool.hxx>
 #include <stlsheet.hxx>
 #include <stringutil.hxx>
-#include <strload.hxx>
 #include <svl/SfxBroadcaster.hxx>
 #include <svl/cenumitm.hxx>
 #include <svl/eitem.hxx>
