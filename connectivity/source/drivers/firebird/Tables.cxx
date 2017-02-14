@@ -51,9 +51,9 @@ ObjectType Tables::createObject(const OUString& rName)
     if (!xTables.is())
         throw RuntimeException();
 
-    uno::Reference< XRow > xRow(xTables,UNO_QUERY);
+    uno::Reference< XRow > xRow(xTables,UNO_QUERY_THROW);
 
-    if (!xRow.is() || !xTables->next())
+    if (!xTables->next())
         throw RuntimeException();
 
     ObjectType xRet(new Table(this,
