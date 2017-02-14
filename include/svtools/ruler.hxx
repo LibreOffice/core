@@ -517,7 +517,7 @@ struct RulerBorder
 };
 
 enum class RulerIndentStyle {
-    Top, Bottom, Border
+    Top, Bottom
 };
 
 struct RulerIndent

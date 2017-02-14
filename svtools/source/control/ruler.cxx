@@ -811,13 +811,7 @@ void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long 
 
         if ((n >= nMin) && (n <= nMax))
         {
-            if (nIndentStyle == RulerIndentStyle::Border)
-            {
-                const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-                rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-                ImplVDrawLine(rRenderContext, n, nVirTop + 1, n, nVirBottom - 1);
-            }
-            else if (nIndentStyle == RulerIndentStyle::Bottom)
+            if (nIndentStyle == RulerIndentStyle::Bottom)
             {
                 aPoly.SetPoint(Point(n + 0, nVirBottom - nIndentHeight), 0);
                 aPoly.SetPoint(Point(n - nIndentWidth2, nVirBottom - 3), 1);
@@ -844,19 +838,16 @@ void Ruler::ImplDrawIndents(vcl::RenderContext& rRenderContext, long nMin, long 
                     aPoly[i] = aSet;
                 }
             }
-            if (RulerIndentStyle::Border != nIndentStyle)
+            bool bIsHit = false;
+            if(mxCurrentHitTest.get() != nullptr && mxCurrentHitTest->eType == RulerType::Indent)
             {
-                bool bIsHit = false;
-                if(mxCurrentHitTest.get() != nullptr && mxCurrentHitTest->eType == RulerType::Indent)
-                {
-                    bIsHit = mxCurrentHitTest->nAryPos == j;
-                }
-                else if(mbDrag && meDragType == RulerType::Indent)
-                {
-                    bIsHit = mnDragAryPos == j;
-                }
-                ImplDrawIndent(rRenderContext, aPoly, bIsHit);
+                bIsHit = mxCurrentHitTest->nAryPos == j;
             }
+            else if(mbDrag && meDragType == RulerType::Indent)
+            {
+                bIsHit = mnDragAryPos == j;
+            }
+            ImplDrawIndent(rRenderContext, aPoly, bIsHit);
         }
     }
 }
