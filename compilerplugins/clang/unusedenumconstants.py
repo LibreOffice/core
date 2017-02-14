@@ -124,6 +124,7 @@ for d in definitionSet:
          "sw/source/uibase/config/modcfg.cxx", # InsertConfigProp
          "sw/inc/calc.hxx", # SwCalcOper
          "svtools/source/config/helpopt.cxx", # HelpProperty
+         "include/svtools/htmltokn.h",
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
