@@ -409,10 +409,10 @@
                       <object class="sfxlo-NotebookbarToolBox" id="pastebox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="toolbar_style">both</property>
-                        <property name="icon_size">3</property>
                         <property name="valign">center</property>
+                        <property name="toolbar_style">both</property>
                         <property name="show_arrow">False</property>
+                        <property name="icon_size">3</property>
                         <child>
                           <object class="GtkMenuToolButton" id="Paste">
                             <property name="use_action_appearance">False</property>
@@ -1880,10 +1880,10 @@
                   <object class="sfxlo-NotebookbarToolBox" id="tablebox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
                     <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
                     <child>
                       <object class="GtkMenuToolButton" id="InsertTable">
                         <property name="use_action_appearance">False</property>
@@ -2376,51 +2376,62 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Links</property>
                     <child>
-                      <object class="vcllo-SmallButton" id="hyperlinkdialog">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:HyperlinkDialog</property>
-                        <property name="image">HyperlinkDialogImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="vcllo-SmallButton" id="hyperlinkdialog">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:HyperlinkDialog</property>
+                            <property name="image">HyperlinkDialogImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="vcllo-SmallButton" id="bookmark">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:InsertBookmark</property>
+                            <property name="image">InsertBookmarkImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="vcllo-SmallButton" id="insertreferencefield">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:InsertReferenceField</property>
+                            <property name="image">InsertReferenceFieldImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="vcllo-SmallButton" id="bookmark">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:InsertBookmark</property>
-                        <property name="image">InsertBookmarkImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="vcllo-SmallButton" id="insertreferencefield">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:InsertReferenceField</property>
-                        <property name="image">InsertReferenceFieldImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
                       </packing>
                     </child>
                     <style>
@@ -2805,42 +2816,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-NotebookbarToolBox" id="sizebox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
-                    <property name="valign">center</property>
-                    <property name="show_arrow">False</property>
-                    <child>
-                      <object class="GtkMenuToolButton" id="Size">
-                        <property name="use_action_appearance">False</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="is_important">True</property>
-                        <property name="action_name">.uno:AttributePageSize</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="sfxlo-NotebookbarToolBox" id="columnbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
                     <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
                     <child>
                       <object class="GtkMenuToolButton" id="Columns">
                         <property name="use_action_appearance">False</property>
@@ -2863,13 +2845,42 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="sfxlo-NotebookbarToolBox" id="sizebox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
+                    <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
+                    <child>
+                      <object class="GtkMenuToolButton" id="Size">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="is_important">True</property>
+                        <property name="action_name">.uno:AttributePageSize</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="sfxlo-NotebookbarToolBox" id="orientationbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
                     <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
                     <child>
                       <object class="GtkMenuToolButton" id="Orientation">
                         <property name="use_action_appearance">False</property>
@@ -2895,10 +2906,10 @@
                   <object class="sfxlo-NotebookbarToolBox" id="marginbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
                     <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
                     <child>
                       <object class="GtkMenuToolButton" id="Margin">
                         <property name="use_action_appearance">False</property>
@@ -4036,57 +4047,84 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Zoom</property>
                     <child>
-                      <object class="vcllo-SmallButton" id="Zoom100Percent">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:Zoom100Percent</property>
-                        <property name="image">Zoom100PercentImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="vcllo-SmallButton" id="ZoomOptimal">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:ZoomOptimal</property>
-                        <property name="image">ZoomOptimalImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box85">
+                      <object class="GtkBox" id="box">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkBox" id="box117">
+                          <object class="vcllo-SmallButton" id="Zoom100Percent">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:Zoom100Percent</property>
+                            <property name="image">Zoom100PercentImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                            <property name="always_show_image">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="vcllo-SmallButton" id="ZoomOptimal">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:ZoomOptimal</property>
+                            <property name="image">ZoomOptimalImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                            <property name="always_show_image">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box85">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkButton" id="ZoomPage">
+                              <object class="GtkBox" id="box117">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="action_name">.uno:ZoomPage</property>
-                                <property name="relief">none</property>
-                                <property name="xalign">0</property>
-                                <property name="always_show_image">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkButton" id="ZoomPage">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="action_name">.uno:ZoomPage</property>
+                                    <property name="relief">none</property>
+                                    <property name="xalign">0</property>
+                                    <property name="always_show_image">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="ZoomPageWidth">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="action_name">.uno:ZoomPageWidth</property>
+                                    <property name="relief">none</property>
+                                    <property name="xalign">0</property>
+                                    <property name="always_show_image">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -4095,14 +4133,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="ZoomPageWidth">
+                              <object class="GtkSeparator" id="separator13">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="action_name">.uno:ZoomPageWidth</property>
-                                <property name="relief">none</property>
-                                <property name="xalign">0</property>
-                                <property name="always_show_image">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -4114,26 +4148,14 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator" id="separator13">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <style>
@@ -5370,7 +5392,7 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
-                         <child>
+                        <child>
                           <object class="sfxlo-NotebookbarToolBox" id="rotate2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
