@@ -455,7 +455,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
-                            <property name="action_name">.uno:InsertSlide</property>
+                            <property name="action_name">.uno:InsertPage</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                           </object>
@@ -1503,7 +1503,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <property name="action_name">.uno:InsertSlide</property>
+                    <property name="action_name">.uno:InsertPage</property>
                     <property name="image">InsertSlideImg</property>
                     <property name="relief">none</property>
                     <property name="image_position">top</property>
