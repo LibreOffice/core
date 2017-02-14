@@ -105,13 +105,6 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     if ( !mbStatus )
         return false;
 
-    if (mnDstBitsPerPix != 1 &&
-        mnDstBitsPerPix != 8 &&
-        mnDstBitsPerPix != 24)
-    {
-        return false;
-    }
-
     bool bPalette(false);
     BitmapPalette aPalette;
 
