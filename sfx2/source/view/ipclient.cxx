@@ -214,9 +214,7 @@ void SAL_CALL SfxInPlaceClient_Impl::saveObject()
         return;
 
     // the common persistence is supported by objects and links
-    uno::Reference< embed::XCommonEmbedPersist > xPersist( m_xObject, uno::UNO_QUERY );
-    if ( !xPersist.is() )
-        throw uno::RuntimeException();
+    uno::Reference< embed::XCommonEmbedPersist > xPersist( m_xObject, uno::UNO_QUERY_THROW );
 
     uno::Reference< frame::XFrame >              xFrame;
     uno::Reference< task::XStatusIndicator >     xStatusIndicator;
@@ -363,9 +361,7 @@ void SAL_CALL SfxInPlaceClient_Impl::deactivatedUI()
 
 uno::Reference< css::frame::XLayoutManager > SAL_CALL SfxInPlaceClient_Impl::getLayoutManager()
 {
-    uno::Reference < beans::XPropertySet > xFrame( GetFrame(), uno::UNO_QUERY );
-    if ( !xFrame.is() )
-        throw uno::RuntimeException();
+    uno::Reference < beans::XPropertySet > xFrame( GetFrame(), uno::UNO_QUERY_THROW );
 
     uno::Reference< css::frame::XLayoutManager > xMan;
     try
@@ -436,8 +432,8 @@ void SAL_CALL SfxInPlaceClient_Impl::scrollObject( const awt::Size& /*aOffset*/ 
 
 void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPosRect )
 {
-    uno::Reference< embed::XInplaceObject > xInplace( m_xObject, uno::UNO_QUERY );
-    if ( !xInplace.is() || !m_pClient || !m_pClient->GetEditWin() || !m_pClient->GetViewShell() )
+    uno::Reference< embed::XInplaceObject > xInplace( m_xObject, uno::UNO_QUERY_THROW );
+    if ( !m_pClient || !m_pClient->GetEditWin() || !m_pClient->GetViewShell() )
         throw uno::RuntimeException();
 
     // check if the change is at least one pixel in size
@@ -493,10 +489,7 @@ uno::Reference< util::XCloseable > SAL_CALL SfxInPlaceClient_Impl::getComponent(
         throw uno::RuntimeException();
 
     // all the components must implement XCloseable
-    uno::Reference< util::XCloseable > xComp( pDocShell->GetModel(), uno::UNO_QUERY );
-    if ( !xComp.is() )
-        throw uno::RuntimeException();
-
+    uno::Reference< util::XCloseable > xComp( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
     return xComp;
 }
 
@@ -526,9 +519,7 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
                 || m_xObject->getCurrentState() == embed::EmbedStates::UI_ACTIVE ) )
         {
             // only possible in active states
-            uno::Reference< embed::XInplaceObject > xInplace( m_xObject, uno::UNO_QUERY );
-            if ( !xInplace.is() )
-                throw uno::RuntimeException();
+            uno::Reference< embed::XInplaceObject > xInplace( m_xObject, uno::UNO_QUERY_THROW );
 
             if ( m_bResizeNoScale )
             {

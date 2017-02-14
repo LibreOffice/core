@@ -205,12 +205,7 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
                     xProvider->createInstanceWithArguments(
                         "com.sun.star.configuration.ConfigurationUpdateAccess",
                         aArgs),
-                    css::uno::UNO_QUERY);
-            if (!m_xConfig.is())
-                throw css::uno::RuntimeException(
-                    "null com.sun.star.configuration."
-                    "ConfigurationUpdateAccess",
-                    nullptr);
+                    css::uno::UNO_QUERY_THROW);
             bAdd = true;
         }
         xConfig = m_xConfig;

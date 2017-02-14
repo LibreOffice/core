@@ -395,9 +395,7 @@ uno::Reference< frame::XStorable > const & ModelData_Impl::GetStorable()
 {
     if ( !m_xStorable.is() )
     {
-        m_xStorable.set( m_xModel, uno::UNO_QUERY );
-        if ( !m_xStorable.is() )
-            throw uno::RuntimeException();
+        m_xStorable.set( m_xModel, uno::UNO_QUERY_THROW );
     }
 
     return m_xStorable;
@@ -408,9 +406,7 @@ uno::Reference< frame::XStorable2 > const & ModelData_Impl::GetStorable2()
 {
     if ( !m_xStorable2.is() )
     {
-        m_xStorable2.set( m_xModel, uno::UNO_QUERY );
-        if ( !m_xStorable2.is() )
-            throw uno::RuntimeException();
+        m_xStorable2.set( m_xModel, uno::UNO_QUERY_THROW );
     }
 
     return m_xStorable2;
@@ -1274,10 +1270,7 @@ uno::Reference< container::XNameAccess > const & SfxStoringHelper::GetFilterConf
     if ( !m_xFilterCFG.is() )
     {
         m_xFilterCFG.set( comphelper::getProcessServiceFactory()->createInstance("com.sun.star.document.FilterFactory"),
-                          uno::UNO_QUERY );
-
-        if ( !m_xFilterCFG.is() )
-            throw uno::RuntimeException();
+                          uno::UNO_QUERY_THROW );
     }
 
     return m_xFilterCFG;
@@ -1288,9 +1281,7 @@ uno::Reference< container::XContainerQuery > const & SfxStoringHelper::GetFilter
 {
     if ( !m_xFilterQuery.is() )
     {
-        m_xFilterQuery.set( GetFilterConfiguration(), uno::UNO_QUERY );
-        if ( !m_xFilterQuery.is() )
-            throw uno::RuntimeException();
+        m_xFilterQuery.set( GetFilterConfiguration(), uno::UNO_QUERY_THROW );
     }
 
     return m_xFilterQuery;

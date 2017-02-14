@@ -232,11 +232,7 @@ bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
             throw uno::RuntimeException();
 
         uno::Reference< io::XOutputStream > xOutStream = xVerStream->getOutputStream();
-        uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY );
-
-        DBG_ASSERT( xTrunc.is(), "The output stream must exist and implement XTruncate interface!\n" );
-        if ( !xTrunc.is() )
-            throw RuntimeException();
+        uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY_THROW );
 
         uno::Reference< io::XInputStream > xTmpInStream =
             ::comphelper::OStorageHelper::GetInputStreamFromURL(
@@ -1345,11 +1341,7 @@ bool SfxObjectShell::SaveTo_Impl
 
                 try
                 {
-                    uno::Reference< beans::XPropertySet > xProps( rMedium.GetStorage(), uno::UNO_QUERY );
-                    DBG_ASSERT( xProps.is(), "The storage implementation must implement XPropertySet!" );
-                    if ( !xProps.is() )
-                        throw uno::RuntimeException();
-
+                    uno::Reference< beans::XPropertySet > xProps( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
                     xProps->setPropertyValue("MediaType",
                                             uno::makeAny( aDataFlavor.MimeType ) );
                 }
