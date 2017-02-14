@@ -668,11 +668,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     uno::Reference< io::XStream > xSourceStream = xStorage->openStreamElement(
                             aSourceStreamName,
                             embed::ElementModes::READWRITE );
-                    uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY );
-                    if ( !xProps.is() )
-                    {
-                        throw uno::RuntimeException("xSourceStream doesn't implement XPropertySet");
-                    }
+                    uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY_THROW );
                     OUString aMime( "text/xml" );
                     xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
 
@@ -796,13 +792,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                             embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE );
 
                         // #87671 Allow encryption
-                        uno::Reference< embed::XEncryptionProtectedSource > xEncr( xSourceStream, uno::UNO_QUERY );
-                        OSL_ENSURE( xEncr.is(),
-                                    "StorageStream opened for writing must implement XEncryptionProtectedSource!\n" );
-                        if ( !xEncr.is() )
-                        {
-                            throw uno::RuntimeException("xSourceStream doesn't implement XEncryptionProtectedSource");
-                        }
+                        uno::Reference< embed::XEncryptionProtectedSource > xEncr( xSourceStream, uno::UNO_QUERY_THROW );
                         xEncr->setEncryptionPassword( pLib->maPassword );
                     }
                     catch(const css::packages::WrongPasswordException& )
@@ -813,11 +803,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                                 pLib->maPassword );
                     }
 
-                    uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY );
-                    if ( !xProps.is() )
-                    {
-                        throw uno::RuntimeException("xSourceStream doesn't implement XPropertySet");
-                    }
+                    uno::Reference< beans::XPropertySet > xProps( xSourceStream, uno::UNO_QUERY_THROW );
                     OUString aMime( "text/xml" );
                     xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
 
@@ -827,13 +813,7 @@ bool SfxScriptLibraryContainer::implStorePasswordLibrary( SfxLibrary* pLib, cons
                     // i50568: sax writer already closes stream
                     // xOut->closeOutput();
 
-                    uno::Reference< embed::XTransactedObject > xTransact( xElementRootStorage, uno::UNO_QUERY );
-                    OSL_ENSURE( xTransact.is(), "The storage must implement XTransactedObject!\n" );
-                    if ( !xTransact.is() )
-                    {
-                        throw uno::RuntimeException("xElementRootStorage doesn't implement XTransactedObject");
-                    }
-
+                    uno::Reference< embed::XTransactedObject > xTransact( xElementRootStorage, uno::UNO_QUERY_THROW );
                     xTransact->commit();
                 }
                 catch(const uno::Exception& )
