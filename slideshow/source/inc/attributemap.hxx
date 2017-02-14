@@ -33,36 +33,35 @@ namespace slideshow
             This enum describes the type of an animated
             attribute.
         */
-        enum AttributeType
+        enum class AttributeType
         {
-            ATTRIBUTE_INVALID,
-            ATTRIBUTE_CHAR_COLOR,
-            ATTRIBUTE_CHAR_FONT_NAME,
-            ATTRIBUTE_CHAR_HEIGHT,
-            ATTRIBUTE_CHAR_POSTURE,
-            ATTRIBUTE_CHAR_ROTATION,
-            ATTRIBUTE_CHAR_UNDERLINE,
-            ATTRIBUTE_CHAR_WEIGHT,
-            ATTRIBUTE_COLOR,
-            ATTRIBUTE_DIMCOLOR,
-            ATTRIBUTE_FILL_COLOR,
-            ATTRIBUTE_FILL_STYLE,
-            ATTRIBUTE_HEIGHT,
-            ATTRIBUTE_LINE_COLOR,
-            ATTRIBUTE_LINE_STYLE,
-            ATTRIBUTE_OPACITY,
-            ATTRIBUTE_ROTATE,
-            ATTRIBUTE_SKEW_X,
-            ATTRIBUTE_SKEW_Y,
-            ATTRIBUTE_VISIBILITY,
-            ATTRIBUTE_WIDTH,
-            ATTRIBUTE_POS_X,
-            ATTRIBUTE_POS_Y
+            Invalid,
+            CharColor,
+            CharFontName,
+            CharHeight,
+            CharPosture,
+            CharUnderline,
+            CharWeight,
+            Color,
+            DimColor,
+            FillColor,
+            FillStyle,
+            Height,
+            LineColor,
+            LineStyle,
+            Opacity,
+            Rotate,
+            SkewX,
+            SkewY,
+            Visibility,
+            Width,
+            PosX,
+            PosY
         };
 
         /** Map attribute name to AttributeType enum
 
-            @returns ATTRIBUTE_INVALID, if name was not found in the
+            @returns AttributeType::Invalid, if name was not found in the
             mapping table.
          */
         AttributeType mapAttributeName( const OUString& rAttrName );

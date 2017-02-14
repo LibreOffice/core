@@ -41,44 +41,44 @@ namespace slideshow
             */
             static const AnimateAttributeMap::MapEntry lcl_attributeMap[] =
                 {
-                    { "charcolor", ATTRIBUTE_CHAR_COLOR },
-                    { "charfontname", ATTRIBUTE_CHAR_FONT_NAME },
-                    { "charheight", ATTRIBUTE_CHAR_HEIGHT },
-                    { "charposture", ATTRIBUTE_CHAR_POSTURE },
+                    { "charcolor", AttributeType::CharColor },
+                    { "charfontname", AttributeType::CharFontName },
+                    { "charheight", AttributeType::CharHeight },
+                    { "charposture", AttributeType::CharPosture },
                     // TODO(Q1): This should prolly be changed in PPT import
-                    // { "charrotation", ATTRIBUTE_CHAR_ROTATION },
-                    { "charrotation", ATTRIBUTE_ROTATE },
-                    { "charunderline", ATTRIBUTE_CHAR_UNDERLINE },
-                    { "charweight", ATTRIBUTE_CHAR_WEIGHT },
-                    { "color", ATTRIBUTE_COLOR },
-                    { "dimcolor", ATTRIBUTE_DIMCOLOR },
-                    { "fillcolor", ATTRIBUTE_FILL_COLOR },
-                    { "fillstyle", ATTRIBUTE_FILL_STYLE },
-                    { "height", ATTRIBUTE_HEIGHT },
-                    { "linecolor", ATTRIBUTE_LINE_COLOR },
-                    { "linestyle", ATTRIBUTE_LINE_STYLE },
-                    { "opacity", ATTRIBUTE_OPACITY },
-                    { "rotate", ATTRIBUTE_ROTATE },
-                    { "skewx", ATTRIBUTE_SKEW_X },
-                    { "skewy", ATTRIBUTE_SKEW_Y },
-                    { "visibility", ATTRIBUTE_VISIBILITY },
-                    { "width", ATTRIBUTE_WIDTH },
-                    { "x", ATTRIBUTE_POS_X },
-                    { "y", ATTRIBUTE_POS_Y }
+                    // { "charrotation", AttributeType::CharRotation },
+                    { "charrotation", AttributeType::Rotate },
+                    { "charunderline", AttributeType::CharUnderline },
+                    { "charweight", AttributeType::CharWeight },
+                    { "color", AttributeType::Color },
+                    { "dimcolor", AttributeType::DimColor },
+                    { "fillcolor", AttributeType::FillColor },
+                    { "fillstyle", AttributeType::FillStyle },
+                    { "height", AttributeType::Height },
+                    { "linecolor", AttributeType::LineColor },
+                    { "linestyle", AttributeType::LineStyle },
+                    { "opacity", AttributeType::Opacity },
+                    { "rotate", AttributeType::Rotate },
+                    { "skewx", AttributeType::SkewX },
+                    { "skewy", AttributeType::SkewY },
+                    { "visibility", AttributeType::Visibility },
+                    { "width", AttributeType::Width },
+                    { "x", AttributeType::PosX },
+                    { "y", AttributeType::PosY }
                 };
 
             static const AnimateAttributeMap aMap( lcl_attributeMap,
                                              SAL_N_ELEMENTS(lcl_attributeMap),
                                              false );
 
-            AttributeType eAttributeType = ATTRIBUTE_INVALID;
+            AttributeType eAttributeType = AttributeType::Invalid;
 
             // determine the type from the attribute name
             if( !aMap.lookup( rAttrName,
                               eAttributeType ) )
             {
                 SAL_WARN("slideshow", "mapAttributeName(): attribute name not found in map: " << rAttrName);
-                return ATTRIBUTE_INVALID;
+                return AttributeType::Invalid;
             }
 
             return eAttributeType;
