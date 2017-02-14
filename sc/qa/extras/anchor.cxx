@@ -183,6 +183,8 @@ void ScAnchorTest::testTdf76183()
 
     // The resize of first row must have moved the object down after its anchor cell
     CPPUNIT_ASSERT(aOrigRect.Top() < rNewRect.Top());
+
+    pDocSh->DoClose();
 }
 
 void ScAnchorTest::tearDown()
