@@ -3,6 +3,40 @@
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <requires lib="LibreOffice" version="1.0"/>
+  <object class="GtkImage" id="image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_moveup.png</property>
+  </object>
+  <object class="GtkImage" id="image_add1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_moveup.png</property>
+    <property name="icon_size">2</property>
+  </object>
+  <object class="GtkImage" id="image_down">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_moveup.png</property>
+    <property name="icon_size">2</property>
+  </object>
+  <object class="GtkImage" id="image_play">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_moveup.png</property>
+  </object>
+  <object class="GtkImage" id="image_remove1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_moveup.png</property>
+    <property name="icon_size">2</property>
+  </object>
+  <object class="GtkImage" id="image_up">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/sc_moveup.png</property>
+    <property name="icon_size">2</property>
+  </object>
   <object class="GtkBox" id="CustomAnimationsPanel">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -257,6 +291,30 @@
                 <property name="top_attach">1</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkLabel" id="delay_label">
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Delay:</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="delay_value:0.0sec">
+                <property name="can_focus">True</property>
+                <property name="hexpand">True</property>
+                <property name="text" translatable="yes">0.0</property>
+                <property name="digits">1</property>
+              </object>
+              <packing>
+                <property name="left_attach">1</property>
+                <property name="top_attach">2</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -370,39 +428,5 @@
         <property name="position">0</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkImage" id="image1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sfx2/res/symphony/sidebar-property-small.png</property>
-  </object>
-  <object class="GtkImage" id="image_add1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">svtools/res/list_add.png</property>
-    <property name="icon_size">2</property>
-  </object>
-  <object class="GtkImage" id="image_down">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/sc_movedown.png</property>
-    <property name="icon_size">2</property>
-  </object>
-  <object class="GtkImage" id="image_play">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">sd/res/playblue_16.png</property>
-  </object>
-  <object class="GtkImage" id="image_remove1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">extensions/res/buttonminus.png</property>
-    <property name="icon_size">2</property>
-  </object>
-  <object class="GtkImage" id="image_up">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">cmd/sc_moveup.png</property>
-    <property name="icon_size">2</property>
   </object>
 </interface>

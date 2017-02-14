@@ -853,5 +853,8 @@
     <glade-widget-class title="Managed Menu Button" name="svtlo-ManagedMenuButton"
                         generic-name="ManagedMenuButton" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
+    <glade-widget-class title="Category ListBox" name="sdlo-CategoryListBox"
+                        generic-name="Category ListBox" parent="GtkTreeView"
+                        icon-name="widget-gtk-treeview"/>
   </glade-widget-classes>
 </glade-catalog>
