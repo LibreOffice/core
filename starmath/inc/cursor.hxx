@@ -43,27 +43,13 @@ enum SmFormulaElement{
 };
 
 /** Bracket types that can be inserted */
-enum SmBracketType {
-    /** None brackets, left command "none" */
-    NoneBrackets,
+enum class SmBracketType {
     /** Round brackets, left command "(" */
-    RoundBrackets,
+    Round,
     /**Square brackets, left command "[" */
-    SquareBrackets,
-    /** Double square brackets, left command "ldbracket" */
-    DoubleSquareBrackets,
-    /** Line brackets, left command "lline" */
-    LineBrackets,
-    /** Double line brackets, left command "ldline" */
-    DoubleLineBrackets,
+    Square,
     /** Curly brackets, left command "lbrace" */
-    CurlyBrackets,
-    /** Angle brackets, left command "langle" */
-    AngleBrackets,
-    /** Ceiling brackets, left command "lceil" */
-    CeilBrackets,
-    /** Floor brackets, left command "lfloor" */
-    FloorBrackets
+    Curly,
 };
 
 /** A list of nodes */

@@ -499,20 +499,20 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
             }else if(code == '^') {
                 rCursor.InsertSubSup(RSUP);
             }else if(code == '(') {
-                rCursor.InsertBrackets(RoundBrackets);
+                rCursor.InsertBrackets(SmBracketType::Round);
             }else if(code == '[') {
-                rCursor.InsertBrackets(SquareBrackets);
+                rCursor.InsertBrackets(SmBracketType::Square);
             }else if(code == '{') {
-                rCursor.InsertBrackets(CurlyBrackets);
+                rCursor.InsertBrackets(SmBracketType::Curly);
             }else if(code == '!') {
                 rCursor.InsertElement(FactorialElement);
             }else if(code == '%') {
                 rCursor.InsertElement(PercentElement);
-            }else if(code == ')' && rCursor.IsAtTailOfBracket(RoundBrackets, &pBraceNode)) {
+            }else if(code == ')' && rCursor.IsAtTailOfBracket(SmBracketType::Round, &pBraceNode)) {
                 rCursor.MoveAfterBracket(pBraceNode);
-            }else if(code == ']' && rCursor.IsAtTailOfBracket(SquareBrackets, &pBraceNode)) {
+            }else if(code == ']' && rCursor.IsAtTailOfBracket(SmBracketType::Square, &pBraceNode)) {
                 rCursor.MoveAfterBracket(pBraceNode);
-            }else if(code == '}' && rCursor.IsAtTailOfBracket(CurlyBrackets, &pBraceNode)) {
+            }else if(code == '}' && rCursor.IsAtTailOfBracket(SmBracketType::Curly, &pBraceNode)) {
                 rCursor.MoveAfterBracket(pBraceNode);
             }else{
                 if(code != 0){

@@ -716,68 +716,26 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
     SmToken aTok;
     if(bIsLeft){
         switch(eBracketType){
-            case NoneBrackets:
-                aTok = SmToken(TNONE, '\0', "none", TG::LBrace | TG::RBrace, 0);
-                break;
-            case RoundBrackets:
+            case SmBracketType::Round:
                 aTok = SmToken(TLPARENT, MS_LPARENT, "(", TG::LBrace, 5);
                 break;
-            case SquareBrackets:
+            case SmBracketType::Square:
                 aTok = SmToken(TLBRACKET, MS_LBRACKET, "[", TG::LBrace, 5);
                 break;
-            case DoubleSquareBrackets:
-                aTok = SmToken(TLDBRACKET, MS_LDBRACKET, "ldbracket", TG::LBrace, 5);
-                break;
-            case LineBrackets:
-                aTok = SmToken(TLLINE, MS_VERTLINE, "lline", TG::LBrace, 5);
-                break;
-            case DoubleLineBrackets:
-                aTok = SmToken(TLDLINE, MS_DVERTLINE, "ldline", TG::LBrace, 5);
-                break;
-            case CurlyBrackets:
+            case SmBracketType::Curly:
                 aTok = SmToken(TLBRACE, MS_LBRACE, "lbrace", TG::LBrace, 5);
-                break;
-            case AngleBrackets:
-                aTok = SmToken(TLANGLE, MS_LMATHANGLE, "langle", TG::LBrace, 5);
-                break;
-            case CeilBrackets:
-                aTok = SmToken(TLCEIL, MS_LCEIL, "lceil", TG::LBrace, 5);
-                break;
-            case FloorBrackets:
-                aTok = SmToken(TLFLOOR, MS_LFLOOR, "lfloor", TG::LBrace, 5);
                 break;
         }
     } else {
         switch(eBracketType) {
-            case NoneBrackets:
-                aTok = SmToken(TNONE, '\0', "none", TG::LBrace | TG::RBrace, 0);
-                break;
-            case RoundBrackets:
+            case SmBracketType::Round:
                 aTok = SmToken(TRPARENT, MS_RPARENT, ")", TG::RBrace, 5);
                 break;
-            case SquareBrackets:
+            case SmBracketType::Square:
                 aTok = SmToken(TRBRACKET, MS_RBRACKET, "]", TG::RBrace, 5);
                 break;
-            case DoubleSquareBrackets:
-                aTok = SmToken(TRDBRACKET, MS_RDBRACKET, "rdbracket", TG::RBrace, 5);
-                break;
-            case LineBrackets:
-                aTok = SmToken(TRLINE, MS_VERTLINE, "rline", TG::RBrace, 5);
-                break;
-            case DoubleLineBrackets:
-                aTok = SmToken(TRDLINE, MS_DVERTLINE, "rdline", TG::RBrace, 5);
-                break;
-            case CurlyBrackets:
+            case SmBracketType::Curly:
                 aTok = SmToken(TRBRACE, MS_RBRACE, "rbrace", TG::RBrace, 5);
-                break;
-            case AngleBrackets:
-                aTok = SmToken(TRANGLE, MS_RMATHANGLE, "rangle", TG::RBrace, 5);
-                break;
-            case CeilBrackets:
-                aTok = SmToken(TRCEIL, MS_RCEIL, "rceil", TG::RBrace, 5);
-                break;
-            case FloorBrackets:
-                aTok = SmToken(TRFLOOR, MS_RFLOOR, "rfloor", TG::RBrace, 5);
                 break;
         }
     }
@@ -1359,8 +1317,8 @@ void SmCursor::FinishEdit(SmNodeList* pLineList,
         SmToken aTok(TLEFT, '\0', "left", TG::NONE, 5);
         SmBraceNode *pBrace = new SmBraceNode(aTok);
         pBrace->SetScaleMode(SCALE_HEIGHT);
-        SmNode *pLeft  = CreateBracket(RoundBrackets, true),
-               *pRight = CreateBracket(RoundBrackets, false);
+        SmNode *pLeft  = CreateBracket(SmBracketType::Round, true),
+               *pRight = CreateBracket(SmBracketType::Round, false);
         SmBracebodyNode *pBody = new SmBracebodyNode(SmToken());
         pBody->SetSubNodes(pLine, nullptr);
         pBrace->SetSubNodes(pLeft, pBody, pRight);
@@ -1509,16 +1467,9 @@ bool SmCursor::IsAtTailOfBracket(SmBracketType eBracketType, SmBraceNode** ppBra
     // Check if the closing brace matches eBracketType.
     SmTokenType eClosingTokenType = pClosingNode->GetToken().eType;
     switch (eBracketType) {
-    case NoneBrackets:         if (eClosingTokenType != TNONE)      { return false; } break;
-    case RoundBrackets:        if (eClosingTokenType != TRPARENT)   { return false; } break;
-    case SquareBrackets:       if (eClosingTokenType != TRBRACKET)  { return false; } break;
-    case DoubleSquareBrackets: if (eClosingTokenType != TRDBRACKET) { return false; } break;
-    case LineBrackets:         if (eClosingTokenType != TRLINE)     { return false; } break;
-    case DoubleLineBrackets:   if (eClosingTokenType != TRDLINE)    { return false; } break;
-    case CurlyBrackets:        if (eClosingTokenType != TRBRACE)    { return false; } break;
-    case AngleBrackets:        if (eClosingTokenType != TRANGLE)    { return false; } break;
-    case CeilBrackets:         if (eClosingTokenType != TRCEIL)     { return false; } break;
-    case FloorBrackets:        if (eClosingTokenType != TRFLOOR)    { return false; } break;
+    case SmBracketType::Round:        if (eClosingTokenType != TRPARENT)   { return false; } break;
+    case SmBracketType::Square:       if (eClosingTokenType != TRBRACKET)  { return false; } break;
+    case SmBracketType::Curly:        if (eClosingTokenType != TRBRACE)    { return false; } break;
     default:
         return false;
     }

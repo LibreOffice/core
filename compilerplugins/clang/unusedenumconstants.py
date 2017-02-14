@@ -110,6 +110,7 @@ for d in definitionSet:
          "svx/inc/galobj.hxx", # GalSoundType
          "include/svx/msdffdef.hxx",
          "include/svtools/rtftoken.h", # RTF_TOKEN_IDS
+         "starmath/source/mathtype.hxx", # MathType::MTOKENS
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
