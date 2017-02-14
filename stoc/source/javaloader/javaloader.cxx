@@ -257,10 +257,7 @@ const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaL
         }
 
         // set the service manager at the javaloader
-        css::uno::Reference<XInitialization> javaLoader_XInitialization(m_javaLoader, UNO_QUERY);
-        if(!javaLoader_XInitialization.is())
-            throw RuntimeException(
-                "javaloader error - initialization of java javaloader failed, no XInitialization");
+        css::uno::Reference<XInitialization> javaLoader_XInitialization(m_javaLoader, UNO_QUERY_THROW);
 
         Any any;
         any <<= css::uno::Reference<XMultiComponentFactory>(
