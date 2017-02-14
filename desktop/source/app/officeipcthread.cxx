@@ -1316,8 +1316,7 @@ static void AddConversionsToDispatchList(
 
     if( !rParamOut.trim().isEmpty() )
     {
-        aParam += ";";
-        aParam += aOutDir;
+        aParam += ";" + aOutDir;
     }
     else
     {

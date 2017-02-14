@@ -336,9 +336,7 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
 
     if (!aDesc.isEmpty())
     {
-        aComment += " (";
-        aComment += aDesc;
-        aComment += ")";
+        aComment += " (" + aDesc + ")";
     }
 
     if (pTheView->IsValidEntry(aUser, aDateTime, aComment))
@@ -453,9 +451,7 @@ SvTreeListEntry* ScAcceptChgDlg::InsertChangeAction(
 
     if (!aDesc.isEmpty())
     {
-        aComment +=  " (";
-        aComment += aDesc;
-        aComment += ")";
+        aComment +=  " (" + aDesc + ")";
     }
 
     aBuf.append(aComment);
@@ -602,31 +598,27 @@ SvTreeListEntry* ScAcceptChgDlg::InsertFilteredAction(
 
         aString += "\t";
         pScChangeAction->GetRefString(aRefStr, pDoc, true);
-        aString += aRefStr;
-        aString += "\t";
+        aString += aRefStr + "\t";
 
         if(!bIsGenerated)
         {
-            aString += aUser;
-            aString += "\t";
-            aString += ScGlobal::pLocaleData->getDate(aDateTime);
-            aString += " ";
-            aString += ScGlobal::pLocaleData->getTime(aDateTime);
-            aString += "\t";
+            aString += aUser
+                    + "\t"
+                    + ScGlobal::pLocaleData->getDate(aDateTime)
+                    + " "
+                    + ScGlobal::pLocaleData->getTime(aDateTime)
+                    + "\t";
         }
         else
         {
-            aString += "\t";
-            aString += "\t";
+            aString += "\t\t";
         }
 
         OUString aComment = pScChangeAction->GetComment().replaceAll("\n", "");
 
         if (!aDesc.isEmpty())
         {
-            aComment += " (" ;
-            aComment += aDesc;
-            aComment += ")";
+            aComment += " (" + aDesc + ")";
         }
         if (pTheView->IsValidComment(aComment))
         {
@@ -1801,8 +1793,7 @@ void ScAcceptChgDlg::FillInfo(SfxChildWinInfo& rInfo) const
 
     sal_uInt16  nCount=pTheView->TabCount();
 
-    rInfo.aExtraString += OUString::number(nCount);
-    rInfo.aExtraString += ";";
+    rInfo.aExtraString += OUString::number(nCount) + ";";
     for(sal_uInt16 i=0;i<nCount;i++)
     {
         rInfo.aExtraString += OUString::number(pTheView->GetTab(i));

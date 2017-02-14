@@ -152,8 +152,7 @@ void Desktop::CheckOpenCLCompute(const Reference< XDesktop2 > &xDesktop)
     FileStatus aFileStatus( osl_FileStatus_Mask_ModifyTime );
     aItem.getFileStatus( aFileStatus );
     TimeValue aTimeVal = aFileStatus.getModifyTime();
-    aSelectedCLDeviceVersionID += "--";
-    aSelectedCLDeviceVersionID += OUString::number(aTimeVal.Seconds);
+    aSelectedCLDeviceVersionID += "--" + OUString::number(aTimeVal.Seconds);
 
     if (aSelectedCLDeviceVersionID != officecfg::Office::Common::Misc::SelectedOpenCLDeviceIdentifier::get())
     {
