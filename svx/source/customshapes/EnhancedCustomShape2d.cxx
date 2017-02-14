@@ -1828,7 +1828,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                                     << aStartPoint.Y() << " end: "
                                     << aEndPoint.X() << ", " << aEndPoint.Y()
                                     << " clockwise: " << int(bClockwise));
-                            basegfx::B2DPolygon aArc = CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise, aStartPoint == aEndPoint && fSwingAngle > F_PI);
+                            basegfx::B2DPolygon aArc = CreateArc( aRect, bClockwise ? aEndPoint : aStartPoint, bClockwise ? aStartPoint : aEndPoint, bClockwise, aStartPoint == aEndPoint && ((bClockwise && fSwingAngle > F_PI) || (!bClockwise && fSwingAngle < -F_PI)));
                             // Now that we have the arc, move it to aStartPointB2D.
                             basegfx::B2DHomMatrix aMatrix = basegfx::tools::createTranslateB2DHomMatrix(aStartPointB2D.getX(), aStartPointB2D.getY());
                             aArc.transform(aMatrix);
