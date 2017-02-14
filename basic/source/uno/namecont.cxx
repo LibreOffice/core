@@ -2076,14 +2076,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         try
         {
             xInfoStream = xTargetLibrariesStor->openStreamElement( aStreamName, embed::ElementModes::READWRITE );
-            uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY );
-            SAL_WARN_IF(
-                !xProps.is(), "basic",
-                "The stream must implement XPropertySet!");
-            if ( !xProps.is() )
-            {
-                throw uno::RuntimeException("InfoStream doesn't implement XPropertySet");
-            }
+            uno::Reference< beans::XPropertySet > xProps( xInfoStream, uno::UNO_QUERY_THROW );
             OUString aMime( "text/xml" );
             xProps->setPropertyValue("MediaType", uno::Any( aMime ) );
 
@@ -2134,14 +2127,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         xmlscript::exportLibraryContainer( xWriter, pLibArray.get() );
         if ( bStorage )
         {
-            uno::Reference< embed::XTransactedObject > xTransact( xTargetLibrariesStor, uno::UNO_QUERY );
-            SAL_WARN_IF(
-                !xTransact.is(), "basic",
-                "The storage must implement XTransactedObject!");
-            if ( !xTransact.is() )
-            {
-                throw uno::RuntimeException("xTargetLibrariesStor doesn't implement XTransactedObject");
-            }
+            uno::Reference< embed::XTransactedObject > xTransact( xTargetLibrariesStor, uno::UNO_QUERY_THROW );
             xTransact->commit();
         }
     }
