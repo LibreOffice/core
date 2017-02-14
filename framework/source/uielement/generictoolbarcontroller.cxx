@@ -216,21 +216,20 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
                 // Replacement for place holders
                 if ( aStrValue.startsWith("($1)") )
                 {
-                    OUString aTmp(FwkResId(STR_UPDATEDOC));
-                    aTmp += " ";
-                    aTmp += aStrValue.copy( 4 );
+                    OUString aTmp = FwkResId(STR_UPDATEDOC)
+                                    + " " + aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
                 else if ( aStrValue.startsWith("($2)") )
                 {
-                    OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
-                    aTmp += aStrValue.copy( 4 );
+                    OUString aTmp = FWK_RESSTR(STR_CLOSEDOC_ANDRETURN)
+                                    + aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
                 else if ( aStrValue.startsWith("($3)") )
                 {
-                    OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
-                    aTmp += aStrValue.copy( 4 );
+                    OUString aTmp = FWK_RESSTR(STR_SAVECOPYDOC)
+                                    + aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
                 m_pToolbar->SetItemText( m_nID, aStrValue );

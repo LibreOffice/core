@@ -460,10 +460,10 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                         OUString aTmp;
                         pDoc->GetName(nTab, aTmp);
-                        aBaseName = aTmp;
-                        aBaseName += "_";
-                        aBaseName += ScGlobal::GetRscString(STR_SCENARIO);
-                        aBaseName += "_";
+                        aBaseName = aTmp
+                                    + "_"
+                                    + ScGlobal::GetRscString(STR_SCENARIO)
+                                    + "_";
 
                         //  first test, if the prefix is recognised as valid,
                         //  else avoid only doubles

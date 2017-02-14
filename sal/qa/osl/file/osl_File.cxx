@@ -93,9 +93,9 @@ inline ::rtl::OString errorToString( const ::osl::FileBase::RC _nError )
 rtl::OString errorToStr( ::osl::FileBase::RC const& nError)
 {
     rtl::OString suBuf;
-    suBuf += "The returned error is: " ;
-    suBuf += errorToString(nError);
-    suBuf += "!\n";
+    suBuf += "The returned error is: "
+            + errorToString(nError)
+            + "!\n";
     return suBuf;
 }
 
@@ -911,9 +911,9 @@ namespace osl_FileBase
             bool bOk = compareFileName( aUStr, aUResultURL );
 
             ::rtl::OString sError("test for getSystemPathFromFileURL(' ");
-            sError += ::rtl::OUStringToOString( aUNormalURL, RTL_TEXTENCODING_ASCII_US );
-            sError += " ') function:use an absolute file URL, ";
-            sError += outputError(::rtl::OUStringToOString( aUStr, RTL_TEXTENCODING_ASCII_US ),
+            sError += ::rtl::OUStringToOString( aUNormalURL, RTL_TEXTENCODING_ASCII_US )
+                    + " ') function:use an absolute file URL, "
+                    + outputError(::rtl::OUStringToOString( aUStr, RTL_TEXTENCODING_ASCII_US ),
                                 ::rtl::OUStringToOString( aUResultURL, RTL_TEXTENCODING_ASCII_US ));
 
             CPPUNIT_ASSERT_MESSAGE(sError.getStr(), ( osl::FileBase::E_None == nError ) && bOk );
@@ -933,9 +933,9 @@ namespace osl_FileBase
             bool bOk = compareFileName( aUStr, aUResultURL );
 
             ::rtl::OString sError("test for getSystemPathFromFileURL(' ");
-            sError += ::rtl::OUStringToOString( aUNormalURL, RTL_TEXTENCODING_ASCII_US );
-            sError += " ') function:use a CJK coded absolute URL, ";
-            sError += outputError(::rtl::OUStringToOString( aUStr, RTL_TEXTENCODING_ASCII_US ),
+            sError += ::rtl::OUStringToOString( aUNormalURL, RTL_TEXTENCODING_ASCII_US )
+                    + " ') function:use a CJK coded absolute URL, "
+                    + outputError(::rtl::OUStringToOString( aUStr, RTL_TEXTENCODING_ASCII_US ),
                                 ::rtl::OUStringToOString( aUResultURL, RTL_TEXTENCODING_ASCII_US ));
             deleteTestDirectory( aTmpName10 );
 
@@ -4671,8 +4671,7 @@ namespace osl_Directory
 
             nError1 = ::osl::Directory::create(aTmpDir);
             ::rtl::OString sError("test for create function: create a directory '");
-            sError += ::rtl::OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US);
-            sError += "' and check its existence.";
+            sError += ::rtl::OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US) + "' and check its existence.";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_None, nError1);
             osl_setFileAttributes(aTmpDir.pData, 0); //no access allowed now
 
@@ -4687,8 +4686,7 @@ namespace osl_Directory
                 osl_File_Attribute_OwnExe);
             deleteTestDirectory(aTmpDir);
             sError = ::rtl::OString("test for create function: create a directory under '");
-            sError += ::rtl::OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US);
-            sError += "' for access test.";
+            sError += ::rtl::OUStringToOString(aTmpDir, RTL_TEXTENCODING_ASCII_US) + "' for access test.";
             CPPUNIT_ASSERT_EQUAL_MESSAGE(sError.getStr(), osl::FileBase::E_ACCES, nError1);
 #endif
         }

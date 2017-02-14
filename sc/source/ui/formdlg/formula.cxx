@@ -408,10 +408,7 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
 //           OUString aFileName = pObjSh->GetMedium()->GetName();
             OUString aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DecodeMechanism::Unambiguous );
 
-            aRefStr = "'";
-            aRefStr += aFileName;
-            aRefStr += "'#";
-            aRefStr += aTmp;
+            aRefStr = "'" + aFileName + "'#" + aTmp;
         }
         else
         {

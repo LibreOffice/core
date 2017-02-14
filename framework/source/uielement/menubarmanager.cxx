@@ -443,21 +443,20 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                         // Replacement for place holders
                         if ( aItemText.startsWith("($1)") )
                         {
-                            OUString aTmp(FWK_RESSTR(STR_UPDATEDOC));
-                            aTmp += " ";
-                            aTmp += aItemText.copy( 4 );
+                            OUString aTmp = FWK_RESSTR(STR_UPDATEDOC)
+                                            + " " + aItemText.copy( 4 );
                             aItemText = aTmp;
                         }
                         else if ( aItemText.startsWith("($2)") )
                         {
-                            OUString aTmp(FWK_RESSTR(STR_CLOSEDOC_ANDRETURN));
-                            aTmp += aItemText.copy( 4 );
+                            OUString aTmp = FWK_RESSTR(STR_CLOSEDOC_ANDRETURN)
+                                            + aItemText.copy( 4 );
                             aItemText = aTmp;
                         }
                         else if ( aItemText.startsWith("($3)") )
                         {
-                            OUString aTmp(FWK_RESSTR(STR_SAVECOPYDOC));
-                            aTmp += aItemText.copy( 4 );
+                            OUString aTmp = FWK_RESSTR(STR_SAVECOPYDOC)
+                                            + aItemText.copy( 4 );
                             aItemText = aTmp;
                         }
 

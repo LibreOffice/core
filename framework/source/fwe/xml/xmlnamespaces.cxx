@@ -102,9 +102,7 @@ OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const
     {
         if ( aName.getLength() > index+1 )
         {
-            OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) );
-            aAttributeName += "^";
-            aAttributeName += aName.copy( index+1 );
+            OUString aAttributeName = getNamespaceValue( aName.copy( 0, index ) ) + "^" + aName.copy( index+1 );
             return aAttributeName;
         }
         else
@@ -133,8 +131,7 @@ OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const
 
     if ( !aNamespace.isEmpty() )
     {
-        aElementName = aNamespace;
-        aElementName += "^";
+        aElementName = aNamespace + "^";
     }
     else
         return aName;

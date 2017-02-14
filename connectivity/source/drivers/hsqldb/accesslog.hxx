@@ -60,24 +60,20 @@ namespace connectivity { namespace hsqldb
 
         void logOperation( const sal_Char* _pOp, jlong _nLongArg )
         {
-            OString sLine( _pOp );
-            sLine += "( ";
-            sLine += OString::number( _nLongArg );
-            sLine += " )";
+            OString sLine =  _pOp
+                            + "( " + OString::number( _nLongArg ) + " )";
             writeString( sLine.getStr(), true );
         }
 
         void logReturn( jlong _nRetVal )
         {
-            OString sLine( " -> " );
-            sLine += OString::number( _nRetVal );
+            OString sLine = " -> " + OString::number( _nRetVal );
             writeString( sLine.getStr(), true );
         }
 
         void logReturn( jint _nRetVal )
         {
-            OString sLine( " -> " );
-            sLine += OString::number( _nRetVal );
+            OString sLine = " -> " + sLine += OString::number( _nRetVal );
             writeString( sLine.getStr(), true );
         }
 
