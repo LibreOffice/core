@@ -1,15 +1,15 @@
 // sChartTitle
-Éves árbevétel
+Annaul Revenue
 // sChartType
 com.sun.star.chart2.ColumnChartType
 // sXAxisTitle
-Negyedév
+Quarter
 // nXAxisNumberFormat
 0
 // nXAxisNumberType
 16
 // sYAxisTitle
-Árbevétel (Ft)
+Income (Ft)
 // nYAxisNumberFormat
 151
 // nYAxisNumberType
@@ -17,11 +17,11 @@ Negyedév
 // aColumnLabels.getLength()
 4
 // sColumnLabels
-1. negyedév;2. negyedév;3. negyedév;4. negyedév;
+1. quarter;2. quarter;3. quarter;4. quarter;
 // aRowLabels.getLength()
 4
 // sRowLabels
-Tintasugaras;Lézer ;Többfunkciós ;Fénykép ;
+Inkjet;Leser;Multifunction;Picture;
 // aDataSeriesYValues.size()
 4
 // aYValuesOfSeries.size()

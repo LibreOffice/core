@@ -3,47 +3,47 @@
 /// Series 0 slices
 // nSlicesCountInSeries
 3
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,8663,1995,8860,1359/D=0:CS=0:CT=0:Series=0:Point=0
+/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,8664,2676,8861,2040/D=0:CS=0:CT=0:Series=0:Point=0
 // aSlicePosition.X
-6088
+6089
 // aSlicePosition.Y
-1846
+2527
 // aSliceSize.Height
 2118
 // aSliceSize.Width
 4554
 // aSliceTransformation
-4554;0;6088;0;2118;1846;0;0;1
+4554;0;6089;0;2118;2527;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 17798
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,4613,6462,4000,6721/D=0:CS=0:CT=0:Series=0:Point=1
+/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,4613,7144,4000,7402/D=0:CS=0:CT=0:Series=0:Point=1
 // aSlicePosition.X
 4353
 // aSlicePosition.Y
-2250
+2931
 // aSliceSize.Height
-6248
+6249
 // aSliceSize.Width
-4304
+4305
 // aSliceTransformation
-4304;0;4353;0;6248;2250;0;0;1
+4305;0;4353;0;6249;2931;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 16728590
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=73,10741,6468,11354,6727/D=0:CS=0:CT=0:Series=0:Point=2
+/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=73,10742,7150,11355,7409/D=0:CS=0:CT=0:Series=0:Point=2
 // aSlicePosition.X
 8909
 // aSlicePosition.Y
-3851
+4532
 // aSliceSize.Height
-4688
+4689
 // aSliceSize.Width
-2543
+2544
 // aSliceTransformation
-2543;0;8909;0;4688;3851;0;0;1
+2544;0;8909;0;4689;4532;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
@@ -55,13 +55,13 @@
 // aSlicePosition.X
 6601
 // aSlicePosition.Y
-2511
+3192
 // aSliceSize.Height
 1755
 // aSliceSize.Width
-3448
+3449
 // aSliceTransformation
-3448;0;6601;0;1755;2511;0;0;1
+3449;0;6601;0;1755;3192;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
@@ -70,13 +70,13 @@
 // aSlicePosition.X
 5018
 // aSlicePosition.Y
-2739
+3420
 // aSliceSize.Height
-4690
+4691
 // aSliceSize.Width
 1852
 // aSliceTransformation
-1852;0;5018;0;4690;2739;0;0;1
+1852;0;5018;0;4691;3420;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
@@ -85,13 +85,13 @@
 // aSlicePosition.X
 6270
 // aSlicePosition.Y
-3964
+4645
 // aSliceSize.Height
-3868
+3869
 // aSliceSize.Width
-4069
+4070
 // aSliceTransformation
-4069;0;6270;0;3868;3964;0;0;1
+4070;0;6270;0;3869;4645;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
@@ -103,13 +103,13 @@
 // aSlicePosition.X
 7688
 // aSlicePosition.Y
-3176
+3857
 // aSliceSize.Height
 1392
 // aSliceSize.Width
 1769
 // aSliceTransformation
-1769;0;7688;0;1392;3176;0;0;1
+1769;0;7688;0;1392;3857;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
@@ -118,28 +118,28 @@
 // aSlicePosition.X
 5683
 // aSlicePosition.Y
-3176
+3857
 // aSliceSize.Height
 3971
 // aSliceSize.Width
-2009
+2010
 // aSliceTransformation
-2009;0;5683;0;3971;3176;0;0;1
+2010;0;5683;0;3971;3857;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 16728590
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=2
 // aSlicePosition.X
-7393
+7394
 // aSlicePosition.Y
-4266
+4947
 // aSliceSize.Height
-2901
+2902
 // aSliceSize.Width
 2281
 // aSliceTransformation
-2281;0;7393;0;2901;4266;0;0;1
+2281;0;7394;0;2902;4947;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
@@ -149,15 +149,15 @@
 3
 /// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=0
 // aSlicePosition.X
-7713
+7714
 // aSlicePosition.Y
-3843
+4524
 // aSliceSize.Height
 1027
 // aSliceSize.Width
 1151
 // aSliceTransformation
-1151;0;7713;0;1027;3843;0;0;1
+1151;0;7714;0;1027;4524;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
@@ -166,13 +166,13 @@
 // aSlicePosition.X
 6348
 // aSlicePosition.Y
-3841
+4522
 // aSliceSize.Height
-1934
+1935
 // aSliceSize.Width
-1400
+1401
 // aSliceTransformation
-1400;0;6348;0;1934;3841;0;0;1
+1401;0;6348;0;1935;4522;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)
@@ -181,13 +181,13 @@
 // aSlicePosition.X
 6493
 // aSlicePosition.Y
-4568
+5249
 // aSliceSize.Height
-1934
+1935
 // aSliceSize.Width
-2516
+2517
 // aSliceTransformation
-2516;0;6493;0;1934;4568;0;0;1
+2517;0;6493;0;1935;5249;0;0;1
 // static_cast<sal_Int32>(aSliceFillStyle)
 1
 // static_cast<sal_Int32>(aSliceFillColor)

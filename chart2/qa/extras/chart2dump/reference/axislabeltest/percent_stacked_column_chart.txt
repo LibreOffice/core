@@ -2,49 +2,49 @@
 // nAxisLabelsCount
 3
 // xLabel->getString()
-1. negyedév
+1. quarter
 // aLabelPosition.X
-5097
+5309
 // aLabelPosition.Y
 7599
 // aLabelSize.Height
 345
 // aLabelSize.Width
-1881
+1457
 // aLabelTransformation
-1882;0;5097;0;346;7599;0;0;1
+1458;0;5309;0;346;7599;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
 10
 // xLabel->getString()
-2. negyedév
+2. quarter
 // aLabelPosition.X
-10009
+10221
 // aLabelPosition.Y
 7599
 // aLabelSize.Height
 345
 // aLabelSize.Width
-1881
+1457
 // aLabelTransformation
-1882;0;10009;0;346;7599;0;0;1
+1458;0;10221;0;346;7599;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
 10
 // xLabel->getString()
-3. negyedév
+3. quarter
 // aLabelPosition.X
-14921
+15133
 // aLabelPosition.Y
 7599
 // aLabelSize.Height
 345
 // aLabelSize.Width
-1881
+1457
 // aLabelTransformation
-1882;0;14921;0;346;7599;0;0;1
+1458;0;15133;0;346;7599;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight

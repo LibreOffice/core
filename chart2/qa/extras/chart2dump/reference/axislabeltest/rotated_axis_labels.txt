@@ -2,65 +2,65 @@
 // nAxisLabelsCount
 4
 // xLabel->getString()
-1. negyedév
+1. quarter
 // aLabelPosition.X
-4527
+4677
 // aLabelPosition.Y
-9100
+8800
 // aLabelSize.Height
 345
 // aLabelSize.Width
-1881
+1457
 // aLabelTransformation
-1330.77496219308;244.658946290545;4527;-1330.77496219308;244.658946290545;9100;0;0;1
+1030.96168696999;244.658946290545;4677;-1030.96168696999;244.658946290545;8800;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
 10
 // xLabel->getString()
-2. negyedév
+2. quarter
 // aLabelPosition.X
-8137
+8287
 // aLabelPosition.Y
-9100
+8800
 // aLabelSize.Height
 345
 // aLabelSize.Width
-1881
+1457
 // aLabelTransformation
-1330.77496219308;244.658946290545;8137;-1330.77496219308;244.658946290545;9100;0;0;1
+1030.96168696999;244.658946290545;8287;-1030.96168696999;244.658946290545;8800;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
 10
 // xLabel->getString()
-3. negyedév
+3. quarter
 // aLabelPosition.X
-11747
+11897
 // aLabelPosition.Y
-9100
+8800
 // aLabelSize.Height
 345
 // aLabelSize.Width
-1881
+1457
 // aLabelTransformation
-1330.77496219308;244.658946290545;11747;-1330.77496219308;244.658946290545;9100;0;0;1
+1030.96168696999;244.658946290545;11897;-1030.96168696999;244.658946290545;8800;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
 10
 // xLabel->getString()
-4. negyedév
+4. quarter
 // aLabelPosition.X
-15357
+15507
 // aLabelPosition.Y
-9100
+8800
 // aLabelSize.Height
 345
 // aLabelSize.Width
-1881
+1457
 // aLabelTransformation
-1330.77496219308;244.658946290545;15357;-1330.77496219308;244.658946290545;9100;0;0;1
+1030.96168696999;244.658946290545;15507;-1030.96168696999;244.658946290545;8800;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
