@@ -384,12 +384,7 @@ xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const cssu::Reference< c
 
     if (xXMLElement.is())
     {
-        cssu::Reference< cssl::XUnoTunnel > xNodTunnel( xXMLElement, cssu::UNO_QUERY ) ;
-        if( !xNodTunnel.is() )
-        {
-            throw cssu::RuntimeException() ;
-        }
-
+        cssu::Reference< cssl::XUnoTunnel > xNodTunnel( xXMLElement, cssu::UNO_QUERY_THROW ) ;
         XMLElementWrapper_XmlSecImpl* pElement
             = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(

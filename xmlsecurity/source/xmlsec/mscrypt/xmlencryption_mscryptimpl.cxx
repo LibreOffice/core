@@ -74,11 +74,7 @@ SAL_CALL XMLEncryption_MSCryptImpl::encrypt(
         throw RuntimeException() ;
 
     //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
-    if( !xSecTunnel.is() ) {
-         throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
     SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
@@ -89,11 +85,7 @@ SAL_CALL XMLEncryption_MSCryptImpl::encrypt(
         throw RuntimeException() ;
     }
 
-    Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY ) ;
-    if( !xTplTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY_THROW ) ;
     XMLElementWrapper_XmlSecImpl* pTemplate = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ));
     if( pTemplate == nullptr ) {
         throw RuntimeException() ;
@@ -210,11 +202,7 @@ XMLEncryption_MSCryptImpl::decrypt(
     Reference< XSecurityEnvironment > xSecEnv
         = aSecurityCtx->getSecurityEnvironmentByIndex(
             aSecurityCtx->getDefaultSecurityEnvironmentIndex());
-    Reference< XUnoTunnel > xSecTunnel( xSecEnv , UNO_QUERY ) ;
-    if( !xSecTunnel.is() ) {
-         throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xSecTunnel( xSecEnv , UNO_QUERY_THROW ) ;
     SecurityEnvironment_MSCryptImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_MSCryptImpl*>(xSecTunnel->getSomething( SecurityEnvironment_MSCryptImpl::getUnoTunnelId() ));
     if( pSecEnv == nullptr )
         throw RuntimeException() ;
@@ -225,11 +213,7 @@ XMLEncryption_MSCryptImpl::decrypt(
         throw RuntimeException() ;
     }
 
-    Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY ) ;
-    if( !xTplTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY_THROW ) ;
     XMLElementWrapper_XmlSecImpl* pTemplate = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ));
     if( pTemplate == nullptr ) {
         throw RuntimeException() ;

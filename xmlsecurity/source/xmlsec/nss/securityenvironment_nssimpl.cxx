@@ -478,11 +478,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl::buildCertifi
     const CERTCertificate* cert ;
     CERTCertList* certChain ;
 
-    Reference< XUnoTunnel > xCertTunnel( begin, UNO_QUERY ) ;
-    if( !xCertTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xCertTunnel( begin, UNO_QUERY_THROW ) ;
     xcert = reinterpret_cast<X509Certificate_NssImpl*>(
         sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
     if( xcert == nullptr ) {
@@ -574,10 +570,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
     ::std::vector<CERTCertificate*> vecTmpNSSCertificates;
-    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
-    if( !xCertTunnel.is() ) {
-        throw RuntimeException() ;
-    }
+    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
 
     SAL_INFO("xmlsecurity.xmlsec", "Start verification of certificate: " << aCert->getSubjectName());
 
@@ -798,11 +791,7 @@ sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
     const X509Certificate_NssImpl* xcert ;
     const CERTCertificate* cert ;
 
-    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
-    if( !xCertTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
     xcert = reinterpret_cast<X509Certificate_NssImpl*>(
         sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
     if( xcert == nullptr ) {

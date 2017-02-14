@@ -638,11 +638,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl::buildCer
     chainPara.cbSize = sizeof( CERT_CHAIN_PARA ) ;
     chainPara.RequestedUsage = certUsage ;
 
-    Reference< XUnoTunnel > xCertTunnel( begin, UNO_QUERY ) ;
-    if( !xCertTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xCertTunnel( begin, UNO_QUERY_THROW ) ;
     xcert = reinterpret_cast<X509Certificate_MSCryptImpl*>(xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ));
     if( xcert == nullptr ) {
         throw RuntimeException() ;
@@ -814,10 +810,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
     PCCERT_CONTEXT pCertContext = nullptr;
     const X509Certificate_MSCryptImpl* xcert = nullptr;
 
-    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
-    if( !xCertTunnel.is() ) {
-        throw RuntimeException() ;
-    }
+    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
 
     SAL_INFO("xmlsecurity.xmlsec", "Start verification of certificate: " << aCert->getSubjectName());
 
@@ -981,11 +974,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::getCertificateCharacters( const css::
     PCCERT_CONTEXT pCertContext ;
     const X509Certificate_MSCryptImpl* xcert ;
 
-    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY ) ;
-    if( !xCertTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
     xcert = reinterpret_cast<X509Certificate_MSCryptImpl*>(xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ));
     if( xcert == nullptr ) {
         throw RuntimeException() ;

@@ -75,11 +75,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
         throw RuntimeException() ;
     }
 
-    Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY ) ;
-    if( !xNodTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY_THROW ) ;
     XMLElementWrapper_XmlSecImpl* pElement =
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
@@ -99,10 +95,7 @@ SAL_CALL XMLSignature_NssImpl::generate(
     }
 
     //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
-    if( !xSecTunnel.is() ) {
-         throw RuntimeException() ;
-    }
+    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
 
     // the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
 
@@ -177,11 +170,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
     if( !xElement.is() )
         throw RuntimeException() ;
 
-    Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY ) ;
-    if( !xNodTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xNodTunnel( xElement , UNO_QUERY_THROW ) ;
     XMLElementWrapper_XmlSecImpl* pElement =
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
@@ -209,11 +198,7 @@ SAL_CALL XMLSignature_NssImpl::validate(
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
         //Get Keys Manager
-        Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
-        if( !xSecTunnel.is() ) {
-             throw RuntimeException() ;
-        }
-
+        Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
         SecurityEnvironment_NssImpl* pSecEnv =
             reinterpret_cast<SecurityEnvironment_NssImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(

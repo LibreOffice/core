@@ -70,11 +70,7 @@ SAL_CALL XMLEncryption_NssImpl::encrypt(
         throw RuntimeException() ;
 
     //Get Keys Manager
-    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
-    if( !xSecTunnel.is() ) {
-         throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
             sal::static_int_cast<sal_uIntPtr>(xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
@@ -87,11 +83,7 @@ SAL_CALL XMLEncryption_NssImpl::encrypt(
         throw RuntimeException() ;
     }
 
-    Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY ) ;
-    if( !xTplTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY_THROW ) ;
     XMLElementWrapper_XmlSecImpl* pTemplate =
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
@@ -211,11 +203,7 @@ SAL_CALL XMLEncryption_NssImpl::decrypt(
         throw RuntimeException() ;
     }
 
-    Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY ) ;
-    if( !xTplTunnel.is() ) {
-        throw RuntimeException() ;
-    }
-
+    Reference< XUnoTunnel > xTplTunnel( xTemplate , UNO_QUERY_THROW ) ;
     XMLElementWrapper_XmlSecImpl* pTemplate =
         reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
             sal::static_int_cast<sal_uIntPtr>(
@@ -251,11 +239,7 @@ SAL_CALL XMLEncryption_NssImpl::decrypt(
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
         //Get Keys Manager
-        Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
-        if( !aEnvironment.is() ) {
-             throw RuntimeException() ;
-        }
-
+        Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY_THROW ) ;
         SecurityEnvironment_NssImpl* pSecEnv =
             reinterpret_cast<SecurityEnvironment_NssImpl*>(
                 sal::static_int_cast<sal_uIntPtr>(
