@@ -993,10 +993,7 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName)
         Reference<XInterface> xInterface = xConfigProvider->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess", aArgs);
 
-        xHierarchicalNameAccess.set(xInterface, UNO_QUERY);
-
-        if (! xHierarchicalNameAccess.is())
-            throw RuntimeException();
+        xHierarchicalNameAccess.set(xInterface, UNO_QUERY_THROW);
     }
 
     Any aEnabled = xHierarchicalNameAccess->getByHierarchicalName(aName);
