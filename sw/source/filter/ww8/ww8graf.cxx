@@ -2131,18 +2131,19 @@ SwWW8ImplReader::SetAttributesAtGrfNode(SvxMSDffImportRec const*const pRecord,
     }
 }
 
-SdrObject* SwWW8ImplReader::CreateContactObject(SwFrameFormat* pFormat)
+SdrObject* SwWW8ImplReader::CreateContactObject(SwFrameFormat* pFlyFormat)
 {
-    if(pFormat)
+    if (pFlyFormat)
     {
-        SdrObject* pNewObject = m_bNewDoc ? nullptr : pFormat->FindRealSdrObject();
+        SdrObject* pNewObject = m_bNewDoc ? nullptr : pFlyFormat->FindRealSdrObject();
         if (!pNewObject)
-            pNewObject = pFormat->FindSdrObject();
-        SwFlyFrameFormat* pFlyFormat(nullptr);
-        if (!pNewObject && (pFlyFormat = dynamic_cast<SwFlyFrameFormat*>(pFormat)))
+            pNewObject = pFlyFormat->FindSdrObject();
+        if (!pNewObject && dynamic_cast< const SwFlyFrameFormat *>( pFlyFormat ) !=  nullptr)
         {
-            pFlyFormat->InitContact(m_pDrawModel);
-            pNewObject = pFlyFormat->GetContact()->GetMaster();
+            SwFlyDrawContact* pContactObject
+                = new SwFlyDrawContact(static_cast<SwFlyFrameFormat*>(pFlyFormat),
+                m_pDrawModel);
+            pNewObject = pContactObject->GetMaster();
         }
         return pNewObject;
     }

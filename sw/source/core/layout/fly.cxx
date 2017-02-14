@@ -397,21 +397,25 @@ void SwFlyFrame::InitDrawObj()
     // need to create a new Ref, else we create the Contact now.
 
     IDocumentDrawModelAccess& rIDDMA = GetFormat()->getIDocumentDrawModelAccess();
-    if(!GetFormat()->GetContact())
+    SwFlyDrawContact *pContact = SwIterator<SwFlyDrawContact,SwFormat>( *GetFormat() ).First();
+    if ( !pContact )
     {
         // #i52858# - method name changed
-        GetFormat()->InitContact(rIDDMA.GetOrCreateDrawModel());
+        pContact = new SwFlyDrawContact( GetFormat(),
+                                          rIDDMA.GetOrCreateDrawModel() );
     }
-    OSL_ENSURE(GetFormat()->GetContact(), "InitDrawObj failed");
+    OSL_ENSURE( pContact, "InitDrawObj failed" );
     // OD 2004-03-22 #i26791#
-    SetDrawObj( *(CreateNewRef( GetFormat()->GetContact() )) );
+    SetDrawObj( *(CreateNewRef( pContact )) );
 
     // Set the right Layer
     // OD 2004-01-19 #110582#
+    SdrLayerID nHeavenId = rIDDMA.GetHeavenId();
+    SdrLayerID nHellId = rIDDMA.GetHellId();
     // OD 2004-03-22 #i26791#
-    GetVirtDrawObj()->SetLayer(GetFormat()->GetOpaque().GetValue()
-        ? rIDDMA.GetHeavenId()
-        : rIDDMA.GetHellId());
+    GetVirtDrawObj()->SetLayer( GetFormat()->GetOpaque().GetValue()
+                                ? nHeavenId
+                                : nHellId );
 }
 
 void SwFlyFrame::FinitDrawObj()
@@ -455,6 +459,7 @@ void SwFlyFrame::FinitDrawObj()
         pContact->GetMaster()->SetUserCall(nullptr);
     GetVirtDrawObj()->SetUserCall(nullptr); // Else calls delete of the ContactObj
     delete GetVirtDrawObj();            // Deregisters itself at the Master
+    delete pContact;                  // Destroys the Master itself
 }
 
 void SwFlyFrame::ChainFrames( SwFlyFrame *pMaster, SwFlyFrame *pFollow )
