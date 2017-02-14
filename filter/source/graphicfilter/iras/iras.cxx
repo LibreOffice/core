@@ -78,6 +78,15 @@ RASReader::RASReader(SvStream &rRAS)
 {
 }
 
+namespace
+{
+    bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
+    {
+        const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
+        return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
+    }
+}
+
 bool RASReader::ReadRAS(Graphic & rGraphic)
 {
     sal_uInt32 nMagicNumber;
@@ -99,12 +108,13 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     bool bPalette(false);
     BitmapPalette aPalette;
 
+    bool bOk = true;
     if ( mnDstBitsPerPix <= 8 )     // paletten bildchen
     {
         if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW Colormap wird geskipped
         {
             sal_uLong nCurPos = m_rRAS.Tell();
-            m_rRAS.Seek( nCurPos + mnColorMapSize );
+            bOk = checkSeek(m_rRAS, nCurPos + mnColorMapSize);
         }
         else if ( mnColorMapType == RAS_COLOR_RGB_MAP ) // RGB koennen wir auslesen
         {
@@ -151,9 +161,12 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
         if ( mnColorMapType != RAS_COLOR_NO_MAP )   // when graphic has more than 256 colors and a color map we skip
         {                                           // the colormap
             sal_uLong nCurPos = m_rRAS.Tell();
-            m_rRAS.Seek( nCurPos + mnColorMapSize );
+            bOk = checkSeek(m_rRAS, nCurPos + mnColorMapSize);
         }
     }
+
+    if (!bOk)
+        return false;
 
     Bitmap aBmp(Size(mnWidth, mnHeight), mnDstBitsPerPix);
     Bitmap::ScopedWriteAccess pAcc(aBmp);
