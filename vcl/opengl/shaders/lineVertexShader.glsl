@@ -20,7 +20,7 @@ uniform mat4 mvp;
 void main()
 {
    vec2 extrusion_vector = extrusion_vectors.xy;
-   // miter factor to additionally lenghten the distance of vertex (needed for miter)
+   // miter factor to additionally lengthen the distance of vertex (needed for miter)
    // if 1.0 - miter_factor has no effect
    float miter_factor = 1.0f / abs(extrusion_vectors.z);
    // fade factor is always -1.0 or 1.0 -> we transport that info together with length
