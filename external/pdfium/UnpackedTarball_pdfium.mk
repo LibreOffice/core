@@ -13,10 +13,13 @@ pdfium_patches += visibility.patch.1
 pdfium_patches += msvc.patch.1
 # To support macOS 10.9 baseline.
 pdfium_patches += macos.patch.1
+pdfium_patches += ubsan.patch
 
 $(eval $(call gb_UnpackedTarball_UnpackedTarball,pdfium))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,pdfium,$(PDFIUM_TARBALL)))
+
+$(eval $(call gb_UnpackedTarball_set_patchlevel,pdfium,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,pdfium,\
     $(foreach patch,$(pdfium_patches),external/pdfium/$(patch)) \
