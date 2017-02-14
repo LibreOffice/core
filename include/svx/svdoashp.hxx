@@ -35,19 +35,17 @@ namespace sdr
     namespace properties
     {
         class CustomShapeProperties;
-    } // end of namespace properties
-} // end of namespace sdr
+    }
+}
 
 class SdrAShapeObjGeoData : public SdrTextObjGeoData
 {
-    public:
-
+public:
     bool        bMirroredX;
     bool        bMirroredY;
     double      fObjectRotation;
 
-    css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue >
-                aAdjustmentSeq;
+    css::uno::Sequence< css::drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
 };
 
 enum class CustomShapeHandleModes
@@ -60,6 +58,7 @@ enum class CustomShapeHandleModes
     MOVE_SHAPE           = 16,
     ORTHO4               = 32,
 };
+
 namespace o3tl
 {
     template<> struct typed_flags<CustomShapeHandleModes> : is_typed_flags<CustomShapeHandleModes, 63> {};
@@ -67,14 +66,10 @@ namespace o3tl
 
 struct SdrCustomShapeInteraction
 {
-    css::uno::Reference< css::drawing::XCustomShapeHandle >   xInteraction;
-    css::awt::Point                                                      aPosition;
-    CustomShapeHandleModes                                                          nMode;
+    css::uno::Reference< css::drawing::XCustomShapeHandle > xInteraction;
+    css::awt::Point                                         aPosition;
+    CustomShapeHandleModes                                  nMode;
 };
-
-
-//   SdrObjCustomShape
-
 
 class SVX_DLLPUBLIC SdrObjCustomShape : public SdrTextObj
 {
@@ -97,7 +92,7 @@ public:
     mutable css::uno::Reference< css::drawing::XCustomShapeEngine > mxCustomShapeEngine;
 
     // #i37011# render geometry shadow
-    SdrObject*                                          mpLastShadowGeometry;
+    SdrObject* mpLastShadowGeometry;
 
     css::uno::Reference< css::drawing::XCustomShapeEngine > const & GetCustomShapeEngine() const;
 
@@ -137,10 +132,9 @@ protected:
     // and object sizes
     virtual void AdaptTextMinSize() override;
 
-    Size          m_aSuggestedTextFrameSize;
+    Size m_aSuggestedTextFrameSize;
 
 public:
-
     bool UseNoFillStyle() const;
 
     bool IsMirroredX() const;
@@ -239,8 +233,8 @@ public:
     virtual void SetPage( SdrPage* pNewPage ) override;
 
     virtual SdrObjGeoData *NewGeoData() const override;
-    virtual void          SaveGeoData(SdrObjGeoData &rGeo) const override;
-    virtual void          RestGeoData(const SdrObjGeoData &rGeo) override;
+    virtual void SaveGeoData(SdrObjGeoData &rGeo) const override;
+    virtual void RestGeoData(const SdrObjGeoData &rGeo) override;
 
     // need to take fObjectRotation instead of aGeo.nAngle, replace it temporary
     virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
