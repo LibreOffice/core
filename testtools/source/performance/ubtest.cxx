@@ -554,9 +554,7 @@ static void benchmark(
     TimingSheet & rSheet, const Reference< XInterface > & xInstance, sal_Int64 nLoop )
     throw (Exception)
 {
-    Reference< XPerformanceTest > xBench( xInstance, UNO_QUERY );
-    if (! xBench.is())
-        throw RuntimeException("illegal test object!" );
+    Reference< XPerformanceTest > xBench( xInstance, UNO_QUERY_THROW );
 
     sal_Int64 i;
     sal_uInt32 tStart, tEnd;

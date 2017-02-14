@@ -1155,11 +1155,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         {
             throw RuntimeException( "cannot get test object!" );
         }
-        Reference< XBridgeTest > xTest( xOriginal, UNO_QUERY );
-        if (! xTest.is())
-        {
-            throw RuntimeException( "test object does not implement XBridgeTest!" );
-        }
+        Reference< XBridgeTest > xTest( xOriginal, UNO_QUERY_THROW );
 
         Reference<XBridgeTest > xLBT;
         bRet = check( makeSurrogate( xLBT, xTest ), "makeSurrogate" );
