@@ -19,182 +19,179 @@
 
 #include "datefunc.hrc"
 
-Resource RID_DATE_FUNCTION_DESCRIPTIONS
+Resource DATE_FUNCDESC_DiffWeeks
 {
-    Resource DATE_FUNCDESC_DiffWeeks
+    String 1    // description              DiffWeeks
     {
-        String 1    // description              DiffWeeks
-        {
-            Text [ en-US ] = "Calculates the number of weeks in a specific period";
-        };
-        String 2 // name of parameter 1         DiffWeeks
-        {
-            Text [ en-US ] = "Start date";
-        };
-        String 3 // description of parameter 1  DiffWeeks
-        {
-            Text [ en-US ] = "First day of the period";
-        };
-        String 4 // name of parameter 2         DiffWeeks
-        {
-            Text [ en-US ] = "End date";
-        };
-        String 5 // description of parameter 2  DiffWeeks
-        {
-            Text [ en-US ] = "Last day of the period";
-        };
-        String 6 // name of parameter 3         DiffWeeks
-        {
-            Text [ en-US ] = "Type";
-        };
-        String 7 // description of parameter 3  DiffWeeks
-        {
-            Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar weeks.";
-        };
+        Text [ en-US ] = "Calculates the number of weeks in a specific period";
     };
-
-    Resource DATE_FUNCDESC_DiffMonths
+    String 2 // name of parameter 1         DiffWeeks
     {
-        String 1    // description              DiffMonths
-        {
-            Text [ en-US ] = "Determines the number of months in a specific period.";
-        };
-        String 2 // name of parameter 1         DiffMonths
-        {
-            Text [ en-US ] = "Start date";
-        };
-        String 3 // description of parameter 1  DiffMonths
-        {
-            Text [ en-US ] = "First day of the period.";
-        };
-        String 4 // name of parameter 2         DiffMonths
-        {
-            Text [ en-US ] = "End date";
-        };
-        String 5 // description of parameter 2  DiffMonths
-        {
-            Text [ en-US ] = "Last day of the period.";
-        };
-        String 6 // name of parameter 3         DiffMonths
-        {
-            Text [ en-US ] = "Type";
-        };
-        String 7 // description of parameter 3  DiffMonths
-        {
-            Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar months.";
-        };
+        Text [ en-US ] = "Start date";
     };
-
-    Resource DATE_FUNCDESC_DiffYears
+    String 3 // description of parameter 1  DiffWeeks
     {
-        String 1    // description              DiffYears
-        {
-            Text [ en-US ] = "Calculates the number of years in a specific period.";
-        };
-        String 2 // name of parameter 1         DiffYears
-        {
-            Text [ en-US ] = "Start date";
-        };
-        String 3 // description of parameter 1  DiffYears
-        {
-            Text [ en-US ] = "First day of the period";
-        };
-        String 4 // name of parameter 2         DiffYears
-        {
-            Text [ en-US ] = "End date";
-        };
-        String 5 // description of parameter 2  DiffYears
-        {
-            Text [ en-US ] = "Last day of the period";
-        };
-        String 6 // name of parameter 3         DiffYears
-        {
-            Text [ en-US ] = "Type";
-        };
-        String 7 // description of parameter 3  DiffYears
-        {
-            Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar years.";
-        };
+        Text [ en-US ] = "First day of the period";
     };
-
-    Resource DATE_FUNCDESC_IsLeapYear
+    String 4 // name of parameter 2         DiffWeeks
     {
-        String 1    // description              IsLeapYear
-        {
-            Text [ en-US ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
-        };
-        String 2 // name of parameter 1         IsLeapYear
-        {
-            Text [ en-US ] = "Date";
-        };
-        String 3 // description of parameter 1  IsLeapYear
-        {
-            Text [ en-US ] = "Any day in the desired year";
-        };
+        Text [ en-US ] = "End date";
     };
-
-    Resource DATE_FUNCDESC_DaysInMonth
+    String 5 // description of parameter 2  DiffWeeks
     {
-        String 1    // description              DaysInMonth
-        {
-            Text [ en-US ] = "Returns the number of days of the month in which the date entered occurs";
-        };
-        String 2 // name of parameter 1         DaysInMonth
-        {
-            Text [ en-US ] = "Date";
-        };
-        String 3 // description of parameter 1  DaysInMonth
-        {
-            Text [ en-US ] = "Any day in the desired month";
-        };
+        Text [ en-US ] = "Last day of the period";
     };
-
-    Resource DATE_FUNCDESC_DaysInYear
+    String 6 // name of parameter 3         DiffWeeks
     {
-        String 1    // description              DaysInYear
-        {
-            Text [ en-US ] = "Returns the number of days of the year in which the date entered occurs.";
-        };
-        String 2 // name of parameter 1         DaysInYear
-        {
-            Text [ en-US ] = "Date";
-        };
-        String 3 // description of parameter 1  DaysInYear
-        {
-            Text [ en-US ] = "Any day in the desired year";
-        };
+        Text [ en-US ] = "Type";
     };
-
-    Resource DATE_FUNCDESC_WeeksInYear
+    String 7 // description of parameter 3  DiffWeeks
     {
-        String 1    // description              WeeksInYear
-        {
-            Text [ en-US ] = "Returns the number of weeks of the year in which the date entered occurs";
-        };
-        String 2 // name of parameter 1         WeeksInYear
-        {
-            Text [ en-US ] = "Date";
-        };
-        String 3 // description of parameter 1  WeeksInYear
-        {
-            Text [ en-US ] = "Any day in the desired year";
-        };
+        Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar weeks.";
     };
+};
 
-    Resource DATE_FUNCDESC_Rot13
+Resource DATE_FUNCDESC_DiffMonths
+{
+    String 1    // description              DiffMonths
     {
-        String 1    // description              Rot13
-        {
-            Text [ en-US ] = "Encrypts or decrypts a text using the ROT13 algorithm";
-        };
-        String 2 // name of parameter 1         Rot13
-        {
-            Text [ en-US ] = "Text";
-        };
-        String 3 // description of parameter 1  Rot13
-        {
-            Text [ en-US ] = "Text to be encrypted or text already encrypted";
-        };
+        Text [ en-US ] = "Determines the number of months in a specific period.";
+    };
+    String 2 // name of parameter 1         DiffMonths
+    {
+        Text [ en-US ] = "Start date";
+    };
+    String 3 // description of parameter 1  DiffMonths
+    {
+        Text [ en-US ] = "First day of the period.";
+    };
+    String 4 // name of parameter 2         DiffMonths
+    {
+        Text [ en-US ] = "End date";
+    };
+    String 5 // description of parameter 2  DiffMonths
+    {
+        Text [ en-US ] = "Last day of the period.";
+    };
+    String 6 // name of parameter 3         DiffMonths
+    {
+        Text [ en-US ] = "Type";
+    };
+    String 7 // description of parameter 3  DiffMonths
+    {
+        Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar months.";
+    };
+};
+
+Resource DATE_FUNCDESC_DiffYears
+{
+    String 1    // description              DiffYears
+    {
+        Text [ en-US ] = "Calculates the number of years in a specific period.";
+    };
+    String 2 // name of parameter 1         DiffYears
+    {
+        Text [ en-US ] = "Start date";
+    };
+    String 3 // description of parameter 1  DiffYears
+    {
+        Text [ en-US ] = "First day of the period";
+    };
+    String 4 // name of parameter 2         DiffYears
+    {
+        Text [ en-US ] = "End date";
+    };
+    String 5 // description of parameter 2  DiffYears
+    {
+        Text [ en-US ] = "Last day of the period";
+    };
+    String 6 // name of parameter 3         DiffYears
+    {
+        Text [ en-US ] = "Type";
+    };
+    String 7 // description of parameter 3  DiffYears
+    {
+        Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar years.";
+    };
+};
+
+Resource DATE_FUNCDESC_IsLeapYear
+{
+    String 1    // description              IsLeapYear
+    {
+        Text [ en-US ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
+    };
+    String 2 // name of parameter 1         IsLeapYear
+    {
+        Text [ en-US ] = "Date";
+    };
+    String 3 // description of parameter 1  IsLeapYear
+    {
+        Text [ en-US ] = "Any day in the desired year";
+    };
+};
+
+Resource DATE_FUNCDESC_DaysInMonth
+{
+    String 1    // description              DaysInMonth
+    {
+        Text [ en-US ] = "Returns the number of days of the month in which the date entered occurs";
+    };
+    String 2 // name of parameter 1         DaysInMonth
+    {
+        Text [ en-US ] = "Date";
+    };
+    String 3 // description of parameter 1  DaysInMonth
+    {
+        Text [ en-US ] = "Any day in the desired month";
+    };
+};
+
+Resource DATE_FUNCDESC_DaysInYear
+{
+    String 1    // description              DaysInYear
+    {
+        Text [ en-US ] = "Returns the number of days of the year in which the date entered occurs.";
+    };
+    String 2 // name of parameter 1         DaysInYear
+    {
+        Text [ en-US ] = "Date";
+    };
+    String 3 // description of parameter 1  DaysInYear
+    {
+        Text [ en-US ] = "Any day in the desired year";
+    };
+};
+
+Resource DATE_FUNCDESC_WeeksInYear
+{
+    String 1    // description              WeeksInYear
+    {
+        Text [ en-US ] = "Returns the number of weeks of the year in which the date entered occurs";
+    };
+    String 2 // name of parameter 1         WeeksInYear
+    {
+        Text [ en-US ] = "Date";
+    };
+    String 3 // description of parameter 1  WeeksInYear
+    {
+        Text [ en-US ] = "Any day in the desired year";
+    };
+};
+
+Resource DATE_FUNCDESC_Rot13
+{
+    String 1    // description              Rot13
+    {
+        Text [ en-US ] = "Encrypts or decrypts a text using the ROT13 algorithm";
+    };
+    String 2 // name of parameter 1         Rot13
+    {
+        Text [ en-US ] = "Text";
+    };
+    String 3 // description of parameter 1  Rot13
+    {
+        Text [ en-US ] = "Text to be encrypted or text already encrypted";
     };
 };
 

@@ -198,14 +198,11 @@ OUString ScaDateAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex 
 {
     OUString aRet;
 
-    ScaResPublisher aResPubl( ScaResId( RID_DATE_FUNCTION_DESCRIPTIONS, GetResMgr() ) );
     ScaResId aResId( nResId, GetResMgr() );
     aResId.SetRT( RSC_RESOURCE );
 
-    if( aResPubl.IsAvailableRes( aResId ) )
-        ScaFuncRes aSubRes( aResId, GetResMgr(), nStrIndex, aRet );
+    ScaFuncRes aSubRes( aResId, GetResMgr(), nStrIndex, aRet );
 
-    aResPubl.FreeResource();
     return aRet;
 }
 
