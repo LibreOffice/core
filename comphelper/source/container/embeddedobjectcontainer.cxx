@@ -1156,9 +1156,7 @@ bool EmbeddedObjectContainer::InsertGraphicStream( const css::uno::Reference < c
         ::comphelper::OStorageHelper::CopyInputToOutput( rStream, xOutStream );
         xOutStream->flush();
 
-        uno::Reference< beans::XPropertySet > xPropSet( xGraphicStream, uno::UNO_QUERY );
-        if ( !xPropSet.is() )
-            throw uno::RuntimeException();
+        uno::Reference< beans::XPropertySet > xPropSet( xGraphicStream, uno::UNO_QUERY_THROW );
 
         xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
                                     uno::Any( true ) );

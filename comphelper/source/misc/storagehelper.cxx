@@ -74,10 +74,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorage(
             const uno::Reference< uno::XComponentContext >& rxContext )
 {
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstance(),
-                                                    uno::UNO_QUERY );
-    if ( !xTempStorage.is() )
-        throw uno::RuntimeException();
-
+                                                    uno::UNO_QUERY_THROW );
     return xTempStorage;
 }
 
@@ -92,10 +89,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
     aArgs[1] <<= nStorageMode;
 
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
-                                                    uno::UNO_QUERY );
-    if ( !xTempStorage.is() )
-        throw uno::RuntimeException();
-
+                                                    uno::UNO_QUERY_THROW );
     return xTempStorage;
 }
 
@@ -124,10 +118,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
     if (!xFact.is()) throw uno::RuntimeException();
 
     uno::Reference< embed::XStorage > xTempStorage(
-        xFact->createInstanceWithArguments( aArgs ), uno::UNO_QUERY );
-    if ( !xTempStorage.is() )
-        throw uno::RuntimeException();
-
+        xFact->createInstanceWithArguments( aArgs ), uno::UNO_QUERY_THROW );
     return xTempStorage;
 }
 
@@ -141,10 +132,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
     aArgs[1] <<= embed::ElementModes::READ;
 
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
-                                                    uno::UNO_QUERY );
-    if ( !xTempStorage.is() )
-        throw uno::RuntimeException();
-
+                                                    uno::UNO_QUERY_THROW );
     return xTempStorage;
 }
 
@@ -159,10 +147,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromStream(
     aArgs[1] <<= nStorageMode;
 
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
-                                                    uno::UNO_QUERY );
-    if ( !xTempStorage.is() )
-        throw uno::RuntimeException();
-
+                                                    uno::UNO_QUERY_THROW );
     return xTempStorage;
 }
 
@@ -294,10 +279,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
     aArgs[2] <<= aProps;
 
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
-                                                    uno::UNO_QUERY );
-    if ( !xTempStorage.is() )
-        throw uno::RuntimeException();
-
+                                                    uno::UNO_QUERY_THROW );
     return xTempStorage;
 }
 
@@ -335,10 +317,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
     aArgs[2] <<= aProps;
 
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
-                                                    uno::UNO_QUERY );
-    if ( !xTempStorage.is() )
-        throw uno::RuntimeException();
-
+                                                    uno::UNO_QUERY_THROW );
     return xTempStorage;
 }
 
@@ -377,10 +356,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
     aArgs[2] <<= aProps;
 
     uno::Reference< embed::XStorage > xTempStorage( GetStorageFactory( rxContext )->createInstanceWithArguments( aArgs ),
-                                                    uno::UNO_QUERY );
-    if ( !xTempStorage.is() )
-        throw uno::RuntimeException();
-
+                                                    uno::UNO_QUERY_THROW );
     return xTempStorage;
 }
 
