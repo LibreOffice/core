@@ -726,7 +726,12 @@
 
     <glade-widget-class title="Sidebar ToolBox" name="sfxlo-SidebarToolBox"
                         generic-name="Sidebar ToolBox" parent="GtkToolbar"
-                        icon-name="widget-gtk-toolbar"/>
+                        icon-name="widget-gtk-toolbar">
+        <properties>
+            <!-- Must override the default value of "icon-size", so "Large Toolbar" will be saved into .ui -->
+            <property id="icon-size" optional-default="False" optional="True" default="GTK_ICON_SIZE_BUTTON"/>
+        </properties>
+    </glade-widget-class>
 
     <glade-widget-class title="Writer Navigator ToolBox" name="swlo-SwNavHelpToolBox"
                         generic-name="Writer Navigator ToolBox" parent="GtkToolbar"
@@ -841,11 +846,8 @@
     <glade-widget-class title="Box which can move own content to the popup" name="sfxlo-DropdownBox"
                         generic-name="DropdownBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
-    <glade-widget-class title="Big ToolBox" name="sfxlo-BigToolBox"
-                        generic-name="Big ToolBox" parent="GtkToolbar"
-                        icon-name="widget-gtk-toolbar"/>
     <glade-widget-class title="Notebookbar ToolBox" name="sfxlo-NotebookbarToolBox"
-                        generic-name="Notebookbar ToolBox" parent="GtkToolbar"
+                        generic-name="Notebookbar ToolBox" parent="sfxlo-SidebarToolBox"
                         icon-name="widget-gtk-toolbar"/>
     <glade-widget-class title="Vertical box hiding childs depending on context" name="sfxlo-ContextVBox"
                         generic-name="ContextVBox" parent="GtkBox"

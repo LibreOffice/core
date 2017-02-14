@@ -406,9 +406,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="sfxlo-BigToolBox" id="pastebox">
+                      <object class="sfxlo-NotebookbarToolBox" id="pastebox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="toolbar_style">both</property>
+                        <property name="icon_size">3</property>
                         <property name="valign">center</property>
                         <property name="show_arrow">False</property>
                         <child>
@@ -1875,9 +1877,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-BigToolBox" id="tablebox">
+                  <object class="sfxlo-NotebookbarToolBox" id="tablebox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="toolbar_style">both</property>
+                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
                     <property name="show_arrow">False</property>
                     <child>
@@ -2801,9 +2805,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-BigToolBox" id="sizebox">
+                  <object class="sfxlo-NotebookbarToolBox" id="sizebox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="toolbar_style">both</property>
+                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
                     <property name="show_arrow">False</property>
                     <child>
@@ -2828,9 +2834,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-BigToolBox" id="columnbox">
+                  <object class="sfxlo-NotebookbarToolBox" id="columnbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="toolbar_style">both</property>
+                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
                     <property name="show_arrow">False</property>
                     <child>
@@ -2855,9 +2863,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-BigToolBox" id="orientationbox">
+                  <object class="sfxlo-NotebookbarToolBox" id="orientationbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="toolbar_style">both</property>
+                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
                     <property name="show_arrow">False</property>
                     <child>
@@ -2882,9 +2892,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-BigToolBox" id="marginbox">
+                  <object class="sfxlo-NotebookbarToolBox" id="marginbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="toolbar_style">both</property>
+                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
                     <property name="show_arrow">False</property>
                     <child>
