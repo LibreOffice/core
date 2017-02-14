@@ -88,8 +88,7 @@ int main (int argc, char **argv)
             OUString aDllName = OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
 #else
             OUString aDllName = "lib";
-            aDllName += OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US );
-            aDllName += ".so";
+            aDllName += OStringToOUString( argv[n] , RTL_TEXTENCODING_ASCII_US ) + ".so";
 #endif
             xReg->registerImplementation(
                 OUString("com.sun.star.loader.SharedLibrary"),
@@ -109,15 +108,13 @@ int main (int argc, char **argv)
     try
     {
         // Load dll for the test component
-        sTestName = "test";
-        sTestName += argv[2];
+        sTestName = "test" + argv[2];
 
 #ifdef SAL_W32
         OUString aDllName = OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
 #else
         OUString aDllName = "lib";
-        aDllName += OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US );
-        aDllName += ".so";
+        aDllName += OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US ) + ".so";
 #endif
 
         xReg->registerImplementation(
@@ -133,8 +130,7 @@ int main (int argc, char **argv)
 
 
     // Instantiate test service
-    sTestName = "test.";
-    sTestName += argv[1];
+    sTestName = "test." + argv[1];
 
     Reference < XInterface > xIntTest =
         xSMgr->createInstance( OStringToOUString( sTestName , RTL_TEXTENCODING_ASCII_US ) );

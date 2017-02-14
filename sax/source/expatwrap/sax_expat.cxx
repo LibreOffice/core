@@ -624,13 +624,7 @@ OUString getErrorMessage( XML_Error xmlE, const OUString& sSystemId , sal_Int32 
     }
 
     OUString str("[");
-    str += sSystemId;
-    str += " line ";
-    str += OUString::number( nLine );
-    str += "]: ";
-    str += Message;
-    str += "error";
-
+    str += sSystemId + " line " + OUString::number( nLine ) + "]: " + Message + "error";
     return str;
 }
 

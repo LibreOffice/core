@@ -74,13 +74,13 @@ namespace basprov
                 StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
                 if ( pBasic )
                 {
-                    m_sURI = "vnd.sun.star.script:";
-                    m_sURI += pBasic->GetName();
-                    m_sURI += ".";
-                    m_sURI += pModule->GetName();
-                    m_sURI += ".";
-                    m_sURI += m_pMethod->GetName();
-                    m_sURI += "?language=Basic&location=";
+                    m_sURI = "vnd.sun.star.script:"
+                            + pBasic->GetName()
+                            + "."
+                            + pModule->GetName()
+                            + "."
+                            + m_pMethod->GetName()
+                            + "?language=Basic&location=";
                     if ( m_bIsAppScript )
                         m_sURI += "application";
                     else

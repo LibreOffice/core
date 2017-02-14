@@ -49,8 +49,7 @@ sal_Bool SAL_CALL component_writeInfo(
         try
         {
             UString aImpl = L"/";
-            aImpl += ScTestAddIn::getImplementationName_Static();
-            aImpl += L"/UNO/SERVICES";
+            aImpl += ScTestAddIn::getImplementationName_Static() + L"/UNO/SERVICES";
 
             uno::Reference<registry::XRegistryKey> xNewKey(
                 reinterpret_cast<registry::XRegistryKey*>(pRegistryKey)->createKey(aImpl) );
@@ -349,11 +348,7 @@ OUString SAL_CALL ScTestAddIn::getDateString( const css::uno::Reference< css::be
             aNewDate += (long)(fValue+0.5);
 
             String aRet;
-            aRet += aNewDate.GetDay();
-            aRet += '.';
-            aRet += aNewDate.GetMonth();
-            aRet += '.';
-            aRet += aNewDate.GetYear();
+            aRet += aNewDate.GetDay() + '.' + aNewDate.GetMonth() + '.' + aNewDate.GetYear();
             return StringToOUString( aRet, CHARSET_SYSTEM );
         }
     }

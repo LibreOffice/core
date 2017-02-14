@@ -1403,17 +1403,11 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
             if ( pFound->GetType() == SC_CAT_DELETE_COLS )
                 bLeftEdge = true;
             DateTime aDT = pFound->GetDateTime();
-            aTrackText  = pFound->GetUser();
-            aTrackText += ", ";
-            aTrackText += ScGlobal::pLocaleData->getDate(aDT);
-            aTrackText += " ";
-            aTrackText += ScGlobal::pLocaleData->getTime(aDT);
-            aTrackText += ":\n";
+            aTrackText  = pFound->GetUser() + ", " + ScGlobal::pLocaleData->getDate(aDT) + " " + ScGlobal::pLocaleData->getTime(aDT) + ":\n";
             OUString aComStr = pFound->GetComment();
             if(!aComStr.isEmpty())
             {
-                aTrackText += aComStr;
-                aTrackText += "\n( ";
+                aTrackText += aComStr + "\n( ";
             }
             pFound->GetDescription( aTrackText, this );
             if (!aComStr.isEmpty())

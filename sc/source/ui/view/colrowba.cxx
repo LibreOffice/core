@@ -41,11 +41,7 @@ static OUString lcl_MetricString( long nTwips, const OUString& rText )
         sal_Int64 nUserVal = MetricField::ConvertValue( nTwips*100, 1, 2, FUNIT_TWIP, eUserMet );
 
         OUString aStr = rText;
-        aStr += " ";
-        aStr += ScGlobal::pLocaleData->getNum( nUserVal, 2 );
-        aStr += " ";
-        aStr += SdrFormatter::GetUnitStr(eUserMet);
-
+        aStr += " " + ScGlobal::pLocaleData->getNum( nUserVal, 2 ) + " " + SdrFormatter::GetUnitStr(eUserMet);
         return aStr;
     }
 }

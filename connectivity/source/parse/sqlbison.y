@@ -4794,8 +4794,7 @@ void OSQLParser::error(const sal_Char *fmt)
 			if(nPos2 != -1)
 			{
 				OUString sSecond = sStr.copy(nPos1+sSQL_TOKEN.getLength(),nPos2-nPos1-sSQL_TOKEN.getLength());
-				sFirst  += sSecond;
-				sFirst  += sStr.copy(nPos2+sSQL_TOKEN.getLength());
+				sFirst  += sSecond + sStr.copy(nPos2+sSQL_TOKEN.getLength()); 
 			}
 			else
 				sFirst += sStr.copy(nPos1+sSQL_TOKEN.getLength());
@@ -4808,8 +4807,7 @@ void OSQLParser::error(const sal_Char *fmt)
 		OUString aError = s_pScanner->getErrorMessage();
 		if(!aError.isEmpty())
 		{
-			m_sErrorMessage += ", ";
-			m_sErrorMessage += aError;
+			m_sErrorMessage += ", " + aError;
 		}
 	}
 }

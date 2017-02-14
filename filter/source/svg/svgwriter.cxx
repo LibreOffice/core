@@ -1177,8 +1177,7 @@ bool SVGTextWriter::nextTextPortion()
                                     if( ( xTextFieldPropSet->getPropertyValue( sFieldName ) ) >>= sURL )
                                     {
 #if OSL_DEBUG_LEVEL > 0
-                                        sInfo += "url: ";
-                                        sInfo += mrExport.GetRelativeReference( sURL );
+                                        sInfo += "url: " + mrExport.GetRelativeReference( sURL );
 #endif
                                         msUrl = mrExport.GetRelativeReference( sURL );
                                         if( !msUrl.isEmpty() )
@@ -1490,11 +1489,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
             {
                 // embedded bitmap id
                 nId = SVGActionWriter::GetChecksum( pAction );
-                sId = "embedded-bitmap(";
-                sId += msShapeId;
-                sId += ".";
-                sId += OUString::number( nId );
-                sId += ")";
+                sId = "embedded-bitmap(" + msShapeId + "." + OUString::number( nId ) + ")";
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "EmbeddedBitmap" );
 
@@ -1503,9 +1498,7 @@ void SVGTextWriter::implWriteEmbeddedBitmaps()
                 // <use x="?" y="?" xlink:ref="?" >
                 {
                     // referenced bitmap template
-                    sRefId = "#bitmap(";
-                    sRefId += OUString::number( nChecksum );
-                    sRefId += ")";
+                    sRefId = "#bitmap(" + OUString::number( nChecksum ) + ")";
 
                     Point aPoint;
                     Size  aSize;
@@ -1817,10 +1810,10 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
 
         if( nSize > 1 )
         {
-            aPathData += "M ";
-            aPathData += OUString::number( ( aPolyPoint = rPoly[ 0 ] ).X() );
-            aPathData += aComma;
-            aPathData += OUString::number( aPolyPoint.Y() );
+            aPathData += "M "
+                        + OUString::number( ( aPolyPoint = rPoly[ 0 ] ).X() )
+                        + aComma
+                        + OUString::number( aPolyPoint.Y() );
 
             sal_Char nCurrentMode = 0;
             const bool bClose(!bLine || rPoly[0] == rPoly[nSize - 1]);
@@ -1839,9 +1832,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                     {
                         if ( j )
                             aPathData += aBlank;
-                        aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() );
-                        aPathData += aComma;
-                        aPathData += OUString::number( aPolyPoint.Y() );
+                        aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() )
+                                    + aComma
+                                    + OUString::number( aPolyPoint.Y() );
                     }
                 }
                 else
@@ -1851,9 +1844,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                         nCurrentMode = 'L';
                         aPathData += "L ";
                     }
-                    aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() );
-                    aPathData += aComma;
-                    aPathData += OUString::number( aPolyPoint.Y() );
+                    aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() )
+                                + aComma
+                                + OUString::number( aPolyPoint.Y() );
                 }
             }
 

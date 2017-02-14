@@ -61,9 +61,7 @@ namespace connectivity { namespace hsqldb
         void logOperation( const sal_Char* _pOp, jlong _nLongArg )
         {
             OString sLine( _pOp );
-            sLine += "( ";
-            sLine += OString::number( _nLongArg );
-            sLine += " )";
+            sLine += "( " + OString::number( _nLongArg ) + " )";
             writeString( sLine.getStr(), true );
         }
 
