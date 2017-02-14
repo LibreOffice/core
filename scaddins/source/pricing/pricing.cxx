@@ -97,13 +97,6 @@ void sca::pricing::InitScaFuncDataList( ScaFuncDataList& rList, ResMgr& rResMgr 
         rList.push_back( ScaFuncData( nIndex, rResMgr ) ) ;
 }
 
-ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet ) :
-    Resource( rResId )
-{
-    rRet = ScaResId(nIndex, rResMgr).toString();
-    FreeResource();
-}
-
 // entry points for service registration / instantiation
 uno::Reference< uno::XInterface > SAL_CALL ScaPricingAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
@@ -213,14 +206,8 @@ void ScaPricingAddIn::InitData()
 
 OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex )
 {
-    OUString aRet;
-
-    ScaResId aResId( nResId, GetResMgr() );
-    aResId.SetRT( RSC_RESOURCE );
-
-    ScaFuncRes aSubRes( aResId, GetResMgr(), nStrIndex, aRet );
-
-    return aRet;
+    ResStringArray aArr(ScaResId(nResId, GetResMgr()));
+    return aArr.GetString(nStrIndex - 1);
 }
 
 OUString ScaPricingAddIn::getImplementationName_Static()
