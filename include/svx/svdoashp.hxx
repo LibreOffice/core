@@ -30,14 +30,6 @@
 #include <svx/svxdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 
-
-//   Initial Declarations
-
-
-class SdrObjList;
-class SdrObjListIter;
-class SfxItemSet;
-
 namespace sdr
 {
     namespace properties
