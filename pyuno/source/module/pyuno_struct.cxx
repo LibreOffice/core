@@ -368,10 +368,7 @@ PyRef PyUNOStruct_new (
     {
         PyThreadDetach antiguard;
         xInvocation.set(
-            ssf->createInstanceWithArguments( Sequence<Any>( &targetInterface, 1 ) ), UNO_QUERY );
-        OSL_ASSERT( xInvocation.is() );
-        if( !xInvocation.is() )
-            throw RuntimeException("XInvocation2 not implemented, cannot interact with object");
+            ssf->createInstanceWithArguments( Sequence<Any>( &targetInterface, 1 ) ), css::uno::UNO_QUERY_THROW );
     }
     if( !Py_IsInitialized() )
         throw RuntimeException();

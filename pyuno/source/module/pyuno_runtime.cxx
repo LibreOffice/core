@@ -267,9 +267,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
         ctx->getServiceManager()->createInstanceWithContext(
             "com.sun.star.script.Invocation",
             ctx ),
-        UNO_QUERY );
-    if( ! c->xInvocation.is() )
-        throw RuntimeException( "pyuno: couldn't instantiate invocation service" );
+        css::uno::UNO_QUERY_THROW );
 
     c->xTypeConverter = Converter::create(ctx);
     if( ! c->xTypeConverter.is() )
@@ -792,15 +790,8 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
         else if( PyObject_IsInstance( o, getPyUnoStructClass().get() ) )
         {
             PyUNO* o_pi = reinterpret_cast<PyUNO*>(o);
-            Reference<XMaterialHolder> my_mh (o_pi->members->xInvocation, UNO_QUERY);
-
-            if (!my_mh.is())
-            {
-                throw RuntimeException(
-                    "struct wrapper does not support XMaterialHolder" );
-            }
-            else
-                a = my_mh->getMaterial();
+            Reference<XMaterialHolder> my_mh (o_pi->members->xInvocation, css::uno::UNO_QUERY_THROW);
+            a = my_mh->getMaterial();
         }
         else if( PyObject_IsInstance( o, getCharClass( runtime ).get() ) )
         {
