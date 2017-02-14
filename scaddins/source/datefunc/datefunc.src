@@ -213,72 +213,68 @@ StringArray RID_DATE_FUNCTION_NAMES
     };
 };
 
-Resource RID_DATE_DEFFUNCTION_NAMES
+StringArray DATE_DEFFUNCNAME_DiffWeeks
 {
-
-    StringArray DATE_DEFFUNCNAME_DiffWeeks
+    ItemList =
     {
-        ItemList =
-        {
-            < "WOCHEN"; >;
-            < "WEEKS"; >;
-        };
+        < "WOCHEN"; >;
+        < "WEEKS"; >;
     };
-    StringArray DATE_DEFFUNCNAME_DiffMonths
+};
+StringArray DATE_DEFFUNCNAME_DiffMonths
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "MONATE"; >;
-            < "MONTHS"; >;
-        };
+        < "MONATE"; >;
+        < "MONTHS"; >;
     };
-    StringArray DATE_DEFFUNCNAME_DiffYears
+};
+StringArray DATE_DEFFUNCNAME_DiffYears
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "JAHRE"; >;
-            < "YEARS"; >;
-        };
+        < "JAHRE"; >;
+        < "YEARS"; >;
     };
-    StringArray DATE_DEFFUNCNAME_IsLeapYear
+};
+StringArray DATE_DEFFUNCNAME_IsLeapYear
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ISTSCHALTJAHR"; >;
-            < "ISLEAPYEAR"; >;
-        };
+        < "ISTSCHALTJAHR"; >;
+        < "ISLEAPYEAR"; >;
     };
-    StringArray DATE_DEFFUNCNAME_DaysInMonth
+};
+StringArray DATE_DEFFUNCNAME_DaysInMonth
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "TAGEIMMONAT"; >;
-            < "DAYSINMONTH"; >;
-        };
+        < "TAGEIMMONAT"; >;
+        < "DAYSINMONTH"; >;
     };
-    StringArray DATE_DEFFUNCNAME_DaysInYear
+};
+StringArray DATE_DEFFUNCNAME_DaysInYear
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "TAGEIMJAHR"; >;
-            < "DAYSINYEAR"; >;
-        };
+        < "TAGEIMJAHR"; >;
+        < "DAYSINYEAR"; >;
     };
-    StringArray DATE_DEFFUNCNAME_WeeksInYear
+};
+StringArray DATE_DEFFUNCNAME_WeeksInYear
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "WOCHENIMJAHR"; >;
-            < "WEEKSINYEAR"; >;
-        };
+        < "WOCHENIMJAHR"; >;
+        < "WEEKSINYEAR"; >;
     };
-    StringArray DATE_DEFFUNCNAME_Rot13
+};
+StringArray DATE_DEFFUNCNAME_Rot13
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "ROT13"; >;
-            < "ROT13"; >;
-        };
+        < "ROT13"; >;
+        < "ROT13"; >;
     };
 };
 

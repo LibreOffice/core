@@ -70,11 +70,9 @@ ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
     bDouble( rBaseData.bDouble ),
     bWithOpt( rBaseData.bWithOpt )
 {
-    ScaResStringArrLoader aArrLoader(RID_DATE_DEFFUNCTION_NAMES, rBaseData.nCompListID, rResMgr);
-    const ResStringArray& rArr = aArrLoader.GetStringArray();
-
-    for( sal_uInt32 nIndex = 0; nIndex < rArr.Count(); nIndex++ )
-        aCompList.push_back( rArr.GetString( nIndex ) );
+    ResStringArray aArr(ScaResId(rBaseData.nCompListID, rResMgr));
+    for (sal_uInt32 nIndex = 0; nIndex < aArr.Count(); ++nIndex)
+        aCompList.push_back(aArr.GetString(nIndex));
 }
 
 ScaFuncData::~ScaFuncData()

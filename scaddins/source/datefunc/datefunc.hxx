@@ -58,24 +58,6 @@ public:
     const OUString&      GetString() const   { return aStr; }
 };
 
-class ScaResStringArrLoader : public Resource
-{
-private:
-    ResStringArray              aStrArray;
-
-public:
-    inline                      ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt16 nArrayId, ResMgr& rResMgr );
-
-    inline const ResStringArray& GetStringArray() const { return aStrArray; }
-};
-
-inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt16 nArrayId, ResMgr& rResMgr ) :
-    Resource( ScaResId( nResId, rResMgr ) ),
-    aStrArray( ScaResId( nArrayId, rResMgr ) )
-{
-    FreeResource();
-}
-
 class ScaResPublisher : public Resource
 {
 public:
