@@ -210,11 +210,6 @@ bool CommonStylePreviewRenderer::render(const Rectangle& aRectangle, RenderAlign
         if (aRectangle.GetHeight() > aPixelSize.Height())
             aFontDrawPosition.Y() += (aRectangle.GetHeight() - aPixelSize.Height()) / 2;
     }
-    else if (eRenderAlign == RenderAlign::BOTTOM)
-    {
-        if (aRectangle.GetHeight() > aPixelSize.Height())
-            aFontDrawPosition.Y() += aRectangle.GetHeight() - aPixelSize.Height();
-    }
 
     mrOutputDev.DrawText(aFontDrawPosition, rText);
 

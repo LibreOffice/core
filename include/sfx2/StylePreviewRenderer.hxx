@@ -31,7 +31,7 @@ protected:
 public:
     enum class RenderAlign
     {
-        TOP, CENTER, BOTTOM
+        TOP, CENTER
     };
 
     StylePreviewRenderer(const SfxObjectShell& rShell,
