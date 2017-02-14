@@ -626,6 +626,7 @@ void WinMtfOutput::SelectObject( sal_Int32 nIndex )
             {
                 maFillStyle = *brush;
                 mbFillStyleSelected = true;
+                UpdateFillStyle(); // was this update missing? tdf#101639
             }
 
             const auto font = dynamic_cast<WinMtfFontStyle*>(pGDIObj);
