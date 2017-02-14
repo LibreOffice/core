@@ -115,7 +115,6 @@ namespace o3tl
 enum class SvTreeAccRoleType
 {
     NONE   = 0x00,
-    LIST   = 0x01,
     TREE   = 0x02
 };
 

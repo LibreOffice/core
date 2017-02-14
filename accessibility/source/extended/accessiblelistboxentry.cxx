@@ -403,9 +403,7 @@ namespace accessibility
         {
             SvTreeAccRoleType nType = pBox->GetAllEntriesAccessibleRoleType();
             if( nType == SvTreeAccRoleType::TREE)
-                    return AccessibleRole::TREE_ITEM;
-            else if( nType == SvTreeAccRoleType::LIST)
-                    return AccessibleRole::LIST_ITEM;
+                return AccessibleRole::TREE_ITEM;
 
             SvTreeFlags treeFlag = pBox->GetTreeFlags();
             if(treeFlag & SvTreeFlags::CHKBTN )

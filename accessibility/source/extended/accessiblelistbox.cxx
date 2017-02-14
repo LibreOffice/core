@@ -418,9 +418,7 @@ namespace accessibility
         {
             SvTreeAccRoleType nType = getListBox()->GetAllEntriesAccessibleRoleType();
             if( nType == SvTreeAccRoleType::TREE)
-                    return AccessibleRole::TREE;
-            else if( nType == SvTreeAccRoleType::LIST)
-                    return AccessibleRole::LIST;
+                return AccessibleRole::TREE;
         }
 
         //o is: return AccessibleRole::TREE;
