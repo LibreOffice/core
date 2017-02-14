@@ -89,6 +89,8 @@ interface XDataReceiver : ::com::sun::star::uno::XInterface
     XRangeHighlighter getRangeHighlighter();
 
     /** A callback object to execute a foreign popup menu window.
+
+        @since LibreOffice 5.4
     */
     XPopupRequest getPopupRequest();
 };
