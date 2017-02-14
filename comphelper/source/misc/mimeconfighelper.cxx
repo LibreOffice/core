@@ -579,10 +579,7 @@ OUString MimeConfigurationHelper::UpdateMediaDescriptorWithFilterName(
 
         uno::Reference< document::XTypeDetection > xTypeDetection(
                 m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", m_xContext),
-                uno::UNO_QUERY );
-
-        if ( !xTypeDetection.is() )
-            throw uno::RuntimeException(); // TODO
+                uno::UNO_QUERY_THROW );
 
         // typedetection can change the mode, add a stream and so on, thus a copy should be used
         uno::Sequence< beans::PropertyValue > aTempMD( aMediaDescr );
