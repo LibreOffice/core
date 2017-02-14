@@ -55,7 +55,6 @@ enum class SgaObjKind
     NONE = 0,   // abstract object
     Bitmap = 1,    // bitmap object
     Sound = 2,  // sound object
-    Video = 3,  // video object
     Animation = 4,   // animation object
     SvDraw = 5, // Svdraw object
     Inet = 6    // graphics from the internet

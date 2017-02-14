@@ -161,7 +161,6 @@ sal_Int8 SAL_CALL GalleryItem::getType()
         switch( implGetObject()->eObjKind )
         {
             case SgaObjKind::Sound:
-            case SgaObjKind::Video:
                 nRet = gallery::GalleryItemType::MEDIA;
             break;
 
