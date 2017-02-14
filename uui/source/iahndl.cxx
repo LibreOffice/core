@@ -894,11 +894,7 @@ UUIInteractionHelper::getInteractionHandlerList(
             throw uno::RuntimeException("unable to instanciate config access");
 
         uno::Reference< container::XNameAccess > xNameAccess(
-            xInterface, uno::UNO_QUERY );
-        if ( !xNameAccess.is() )
-            throw uno::RuntimeException(
-                    "config access does not implement XNameAccess");
-
+            xInterface, uno::UNO_QUERY_THROW );
         uno::Sequence< OUString > aElems = xNameAccess->getElementNames();
         const OUString* pElems = aElems.getConstArray();
         sal_Int32 nCount = aElems.getLength();
@@ -906,11 +902,7 @@ UUIInteractionHelper::getInteractionHandlerList(
         if ( nCount > 0 )
         {
             uno::Reference< container::XHierarchicalNameAccess >
-                                xHierNameAccess( xInterface, uno::UNO_QUERY );
-
-            if ( !xHierNameAccess.is() )
-                throw uno::RuntimeException(
-                    "config access does not implement XHierarchicalNameAccess");
+                                xHierNameAccess( xInterface, uno::UNO_QUERY_THROW );
 
             // Iterate over children.
             for ( sal_Int32 n = 0; n < nCount; ++n )
