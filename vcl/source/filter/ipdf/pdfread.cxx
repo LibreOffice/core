@@ -29,11 +29,15 @@ using namespace com::sun::star;
 namespace
 {
 
+#if HAVE_FEATURE_PDFIUM
+
 /// Convert to inch, then assume 96 DPI.
 double pointToPixel(double fPoint)
 {
     return fPoint / 72 * 96;
 }
+
+#endif
 
 /// Does PDF to PNG conversion using pdfium.
 bool generatePreview(SvStream& rStream, Graphic& rGraphic)
