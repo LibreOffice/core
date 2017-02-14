@@ -1715,7 +1715,7 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
         || 1 == m_xDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
-        eState = SVPAR_ERROR;
+        eState = SvParserState::Error;
         pStream = nullptr;
     }
 

@@ -114,7 +114,7 @@ SvParserState OHTMLReader::CallParser()
     rInput.ResetError();
     SvParserState  eParseState = HTMLParser::CallParser();
     SetColumnTypes(m_pColumnList,m_pInfoMap);
-    return m_bFoundTable ? eParseState : SVPAR_ERROR;
+    return m_bFoundTable ? eParseState : SvParserState::Error;
 }
 
 void OHTMLReader::NextToken( int nToken )

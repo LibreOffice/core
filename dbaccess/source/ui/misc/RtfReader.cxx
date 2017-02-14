@@ -92,7 +92,7 @@ SvParserState ORTFReader::CallParser()
     rInput.ResetError();
     SvParserState  eParseState = SvRTFParser::CallParser();
     SetColumnTypes(m_pColumnList,m_pInfoMap);
-    return m_bFoundTable ? eParseState : SVPAR_ERROR;
+    return m_bFoundTable ? eParseState : SvParserState::Error;
 }
 
 void ORTFReader::NextToken( int nToken )
@@ -122,11 +122,11 @@ void ORTFReader::NextToken( int nToken )
                             }
                             nTmpToken2 = GetNextToken();
                         }
-                        while(aToken[0] != ';' && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
+                        while(aToken[0] != ';' && eState != SvParserState::Error && eState != SvParserState::Accepted);
                         m_vecColor.push_back(aColor.GetRGBColor());
                         nTmpToken2 = GetNextToken();
                     }
-                    while(nTmpToken2 == RTF_RED && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
+                    while(nTmpToken2 == RTF_RED && eState != SvParserState::Error && eState != SvParserState::Accepted);
                     SkipToken();
                 }
                 break;
@@ -221,7 +221,7 @@ void ORTFReader::NextToken( int nToken )
                 {
                     do
                     {}
-                    while(GetNextToken() != RTF_ROW && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
+                    while(GetNextToken() != RTF_ROW && eState != SvParserState::Error && eState != SvParserState::Accepted);
                     m_bHead = false;
                 }
                 break;
@@ -302,7 +302,7 @@ bool ORTFReader::CreateTable(int nToken)
         }
         nToken = GetNextToken();
     }
-    while(nToken != RTF_TROWD && eState != SVPAR_ERROR && eState != SVPAR_ACCEPTED);
+    while(nToken != RTF_TROWD && eState != SvParserState::Error && eState != SvParserState::Accepted);
 
     bool bOk = !m_vDestVector.empty();
     if(bOk)

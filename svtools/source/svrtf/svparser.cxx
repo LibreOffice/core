@@ -67,7 +67,7 @@ SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     , pImplData( nullptr )
     , nTokenValue( 0 )
     , bTokenHasValue( false )
-    , eState( SVPAR_NOTSTARTED )
+    , eState( SvParserState::NotStarted )
     , eSrcEnc( RTL_TEXTENCODING_DONTKNOW )
     , nNextChPos(0)
     , nNextCh(0)
@@ -77,7 +77,7 @@ SvParser::SvParser( SvStream& rIn, sal_uInt8 nStackSize )
     , nTokenStackSize( nStackSize )
     , nTokenStackPos( 0 )
 {
-    eState = SVPAR_NOTSTARTED;
+    eState = SvParserState::NotStarted;
     if( nTokenStackSize < 3 )
         nTokenStackSize = 3;
     pTokenStack = new TokenStackType[ nTokenStackSize ];
@@ -397,7 +397,7 @@ sal_uInt32 SvParser::GetNextChar()
     {
         if( ERRCODE_IO_PENDING == rInput.GetError() )
         {
-            eState = SVPAR_PENDING;
+            eState = SvParserState::Pending;
             return c;
         }
         else
@@ -426,7 +426,7 @@ int SvParser::GetNextToken()
         bTokenHasValue = false;
 
         nRet = GetNextToken_();
-        if( SVPAR_PENDING == eState )
+        if( SvParserState::Pending == eState )
             return nRet;
     }
 
@@ -444,15 +444,15 @@ int SvParser::GetNextToken()
         nRet = pTokenStackPos->nTokenId;
     }
     // no, now push actual value on stack
-    else if( SVPAR_WORKING == eState )
+    else if( SvParserState::Working == eState )
     {
         pTokenStackPos->sToken = aToken;
         pTokenStackPos->nTokenValue = nTokenValue;
         pTokenStackPos->bTokenHasValue = bTokenHasValue;
         pTokenStackPos->nTokenId = nRet;
     }
-    else if( SVPAR_ACCEPTED != eState && SVPAR_PENDING != eState )
-        eState = SVPAR_ERROR;       // an error occurred
+    else if( SvParserState::Accepted != eState && SvParserState::Pending != eState )
+        eState = SvParserState::Error;       // an error occurred
 
     return nRet;
 }
@@ -618,8 +618,8 @@ IMPL_LINK_NOARG( SvParser, NewDataRead, LinkParamNone*, void )
 {
     switch( eState )
     {
-    case SVPAR_PENDING:
-        eState = SVPAR_WORKING;
+    case SvParserState::Pending:
+        eState = SvParserState::Working;
         RestoreState();
 
         Continue( pImplData->nToken );
@@ -627,16 +627,12 @@ IMPL_LINK_NOARG( SvParser, NewDataRead, LinkParamNone*, void )
         if( ERRCODE_IO_PENDING == rInput.GetError() )
             rInput.ResetError();
 
-        if( SVPAR_PENDING != eState )
+        if( SvParserState::Pending != eState )
             ReleaseRef();                    // ready otherwise!
         break;
 
-    case SVPAR_WAITFORDATA:
-        eState = SVPAR_WORKING;
-        break;
-
-    case SVPAR_NOTSTARTED:
-    case SVPAR_WORKING:
+    case SvParserState::NotStarted:
+    case SvParserState::Working:
         break;
 
     default:

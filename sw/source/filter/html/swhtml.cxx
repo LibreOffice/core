@@ -218,9 +218,9 @@ sal_uLong HTMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPam, 
 
     SvParserState eState = xParser->CallParser();
 
-    if( SVPAR_PENDING == eState )
+    if( SvParserState::Pending == eState )
         pStrm->ResetError();
-    else if( SVPAR_ACCEPTED != eState )
+    else if( SvParserState::Accepted != eState )
     {
         const OUString sErr(OUString::number((sal_Int32)xParser->GetLineNr())
             + "," + OUString::number((sal_Int32)xParser->GetLinePos()));
@@ -489,7 +489,7 @@ IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback, void*, void )
         || 1 == m_xDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
-        eState = SVPAR_ERROR;
+        eState = SvParserState::Error;
     }
 
     GetAsynchCallLink().Call(nullptr);
@@ -562,21 +562,21 @@ void SwHTMLParser::Continue( int nToken )
     // Wenn der Import (vom SFX) abgebrochen wurde, wird ein Fehler
     // gesetzt aber trotzdem noch weiter gemacht, damit vernuenftig
     // aufgeraeumt wird.
-    OSL_ENSURE( SVPAR_ERROR!=eState,
+    OSL_ENSURE( SvParserState::Error!=eState,
             "SwHTMLParser::Continue: bereits ein Fehler gesetzt" );
     if( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
-        eState = SVPAR_ERROR;
+        eState = SvParserState::Error;
 
     // Die SwViewShell vom Dokument holen, merken und als aktuelle setzen.
     SwViewShell *pInitVSh = CallStartAction();
 
-    if( SVPAR_ERROR != eState && GetMedium() && !m_bViewCreated )
+    if( SvParserState::Error != eState && GetMedium() && !m_bViewCreated )
     {
         // Beim ersten Aufruf erstmal returnen, Doc anzeigen
         // und auf Timer Callback warten.
         // An dieser Stelle wurde im CallParser gerade mal ein Zeichen
         // gelesen und ein SaveState(0) gerufen.
-        eState = SVPAR_PENDING;
+        eState = SvParserState::Pending;
         m_bViewCreated = true;
         m_xDoc->SetInLoadAsynchron( true );
 
@@ -609,7 +609,7 @@ void SwHTMLParser::Continue( int nToken )
     // Falls ein Pending-Stack existiert aber durch einen Aufruf
     // von NextToken dafuer sorgen, dass der Pending-Stack noch
     // beendet wird.
-    if( SVPAR_ERROR == eState )
+    if( SvParserState::Error == eState )
     {
         OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken,
                 "SwHTMLParser::Continue: Pending-Stack ohne Token" );
@@ -627,7 +627,7 @@ void SwHTMLParser::Continue( int nToken )
     EndProgress( m_xDoc->GetDocShell() );
 
     bool bLFStripped = false;
-    if( SVPAR_PENDING != GetStatus() )
+    if( SvParserState::Pending != GetStatus() )
     {
         // noch die letzten Attribute setzen
         {
@@ -724,7 +724,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
         }
     }
 
-    if( SVPAR_ACCEPTED == eState )
+    if( SvParserState::Accepted == eState )
     {
         if( m_nMissingImgMaps )
         {
@@ -850,7 +850,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
         }
     }
 
-    if( SVPAR_PENDING != GetStatus() )
+    if( SvParserState::Pending != GetStatus() )
     {
         delete m_pSttNdIdx;
         m_pSttNdIdx = nullptr;
@@ -942,7 +942,7 @@ void SwHTMLParser::NextToken( int nToken )
     {
         // Was the import cancelled by SFX? If a pending stack
         // exists, clean it.
-        eState = SVPAR_ERROR;
+        eState = SvParserState::Error;
         OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken,
                 "SwHTMLParser::NextToken: Pending-Stack without token" );
         if( 1 == m_xDoc->getReferenceCount() || !m_pPendStack )
@@ -1492,7 +1492,7 @@ void SwHTMLParser::NextToken( int nToken )
         // an error code
         if( 1 == m_xDoc->getReferenceCount() )
         {
-            eState = SVPAR_ERROR;
+            eState = SvParserState::Error;
         }
         break;
 
@@ -2473,7 +2473,7 @@ void SwHTMLParser::Show()
     // - die eiegen View-Shell wieder gesetzt
     // - und Start-Action gerufen
 
-    OSL_ENSURE( SVPAR_WORKING==eState, "Show nicht im Working-State - Das kann ins Auge gehen" );
+    OSL_ENSURE( SvParserState::Working==eState, "Show nicht im Working-State - Das kann ins Auge gehen" );
     SwViewShell *pOldVSh = CallEndAction();
 
     Application::Reschedule();
@@ -2482,7 +2482,7 @@ void SwHTMLParser::Show()
         || 1 == m_xDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
-        eState = SVPAR_ERROR;
+        eState = SvParserState::Error;
     }
 
     // Die SwViewShell nochmal holen, denn sie koennte im Reschedule
@@ -2505,7 +2505,7 @@ void SwHTMLParser::ShowStatline()
     // - die eiegen View-Shell wieder gesetzt
     // - ein Start/End-Action gerufen, wenn gescrollt wurde.
 
-    OSL_ENSURE( SVPAR_WORKING==eState, "ShowStatLine nicht im Working-State - Das kann ins Auge gehen" );
+    OSL_ENSURE( SvParserState::Working==eState, "ShowStatLine nicht im Working-State - Das kann ins Auge gehen" );
 
     // Laufbalkenanzeige
     if( !GetMedium() || !GetMedium()->IsRemote() )
@@ -2520,7 +2520,7 @@ void SwHTMLParser::ShowStatline()
         if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
             || 1 == m_xDoc->getReferenceCount() )
             // wurde der Import vom SFX abgebrochen?
-            eState = SVPAR_ERROR;
+            eState = SvParserState::Error;
 
         SwViewShell *pVSh = CheckActionViewShell();
         if( pVSh && pVSh->HasInvalidRect() )
@@ -2606,7 +2606,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
     // man hier abbrechen und einen Fehler setzen.
     if( 1 == m_xDoc->getReferenceCount() )
     {
-        eState = SVPAR_ERROR;
+        eState = SvParserState::Error;
     }
 
     SwViewShell *pVSh = m_pActionViewShell;

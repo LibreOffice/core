@@ -590,7 +590,7 @@ void ORTFImportExport::appendRow(OString* pHorzChar,sal_Int32 _nColumnCount,sal_
 bool ORTFImportExport::Read()
 {
     ODatabaseImportExport::Read();
-    SvParserState eState = SVPAR_ERROR;
+    SvParserState eState = SvParserState::Error;
     if ( m_pStream )
     {
         m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext);
@@ -602,7 +602,7 @@ bool ORTFImportExport::Read()
         m_pReader = nullptr;
     }
 
-    return eState != SVPAR_ERROR;
+    return eState != SvParserState::Error;
 }
 
 const sal_Int16 OHTMLImportExport::nDefaultFontSize[SBA_HTML_FONTSIZES] =
@@ -661,7 +661,7 @@ bool OHTMLImportExport::Write()
 bool OHTMLImportExport::Read()
 {
     ODatabaseImportExport::Read();
-    SvParserState eState = SVPAR_ERROR;
+    SvParserState eState = SvParserState::Error;
     if ( m_pStream )
     {
         m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xContext);
@@ -674,7 +674,7 @@ bool OHTMLImportExport::Read()
         m_pReader = nullptr;
     }
 
-    return eState != SVPAR_ERROR;
+    return eState != SvParserState::Error;
 }
 
 void OHTMLImportExport::WriteHeader()

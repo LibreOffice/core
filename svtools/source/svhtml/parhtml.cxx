@@ -273,7 +273,7 @@ HTMLParser::~HTMLParser()
 
 SvParserState HTMLParser::CallParser()
 {
-    eState = SVPAR_WORKING;
+    eState = SvParserState::Working;
     nNextCh = GetNextChar();
     SaveState( 0 );
 
@@ -282,7 +282,7 @@ SvParserState HTMLParser::CallParser()
 
     AddFirstRef();
     Continue( 0 );
-    if( SVPAR_PENDING != eState )
+    if( SvParserState::Pending != eState )
         ReleaseRef();       // Parser not needed anymore
 
     return eState;
@@ -607,7 +607,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     if( cChar )
                         sTmpBuffer.appendUtf32( cChar );
                 }
-                else if( SVPAR_PENDING==eState && '>'!=cBreak )
+                else if( SvParserState::Pending==eState && '>'!=cBreak )
                 {
                     // Restart with '&', the remainder is returned as
                     // text token.
@@ -1080,7 +1080,7 @@ int HTMLParser::GetNextToken_()
 
                     if( !IsParserWorking() )
                     {
-                        if( SVPAR_PENDING == eState )
+                        if( SvParserState::Pending == eState )
                             bReadNextChar = bReadNextCharSave;
                         break;
                     }
@@ -1188,7 +1188,7 @@ int HTMLParser::GetNextToken_()
                             break;
                         }
                     }
-                    if( SVPAR_PENDING == eState )
+                    if( SvParserState::Pending == eState )
                         bReadNextChar = bReadNextCharSave;
                 }
                 else
@@ -1212,7 +1212,7 @@ int HTMLParser::GetNextToken_()
                             bNextCh = false;
                             break;
                         }
-                        if( SVPAR_PENDING == eState )
+                        if( SvParserState::Pending == eState )
                             bReadNextChar = bReadNextCharSave;
                         aToken.clear();
                     }
@@ -1299,7 +1299,7 @@ int HTMLParser::GetNextToken_()
         case sal_Unicode(EOF):
             if( rInput.IsEof() )
             {
-                eState = SVPAR_ACCEPTED;
+                eState = SvParserState::Accepted;
                 nRet = nNextCh;
             }
             else
@@ -1346,28 +1346,28 @@ scan_text:
             bNextCh = 0 == aToken.getLength();
 
             // the text should be processed
-            if( !bNextCh && eState == SVPAR_PENDING )
+            if( !bNextCh && eState == SvParserState::Pending )
             {
-                eState = SVPAR_WORKING;
+                eState = SvParserState::Working;
                 bReadNextChar = true;
             }
 
             break;
         }
 
-        if( bNextCh && SVPAR_WORKING == eState )
+        if( bNextCh && SvParserState::Working == eState )
         {
             nNextCh = GetNextChar();
-            if( SVPAR_PENDING == eState && nRet && HTML_TEXTTOKEN != nRet )
+            if( SvParserState::Pending == eState && nRet && HTML_TEXTTOKEN != nRet )
             {
                 bReadNextChar = true;
-                eState = SVPAR_WORKING;
+                eState = SvParserState::Working;
             }
         }
 
-    } while( !nRet && SVPAR_WORKING == eState );
+    } while( !nRet && SvParserState::Working == eState );
 
-    if( SVPAR_PENDING == eState )
+    if( SvParserState::Pending == eState )
         nRet = -1;      // s.th. invalid
 
     return nRet;

@@ -3391,7 +3391,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
+        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
@@ -3873,7 +3873,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                                    bHead,
                                                    pSaveStruct->IsInSection(),
                                                    bHasToFly );
-                if( SVPAR_PENDING != GetStatus() )
+                if( SvParserState::Pending != GetStatus() )
                 {
                     // nur wenn die Tabelle wirklich zu Ende ist!
                     if( pSubTable )
@@ -3994,7 +3994,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             nToken = GetNextToken();
     }
 
-    if( SVPAR_PENDING == GetStatus() )
+    if( SvParserState::Pending == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( bHead ? HTML_TABLEHEADER_ON
                                                : HTML_TABLEDATA_ON, m_pPendStack );
@@ -4111,7 +4111,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
+        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
@@ -4223,7 +4223,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TABLEHEADER_ON:
         case HTML_TABLEDATA_ON:
             BuildTableCell( pCurTable, true, HTML_TABLEHEADER_ON==nToken );
-            if( SVPAR_PENDING != GetStatus() )
+            if( SvParserState::Pending != GetStatus() )
             {
                 pSaveStruct->bHasCells = true;
                 bDone = m_pTable->IsOverflowing();
@@ -4283,7 +4283,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
             nToken = GetNextToken();
     }
 
-    if( SVPAR_PENDING == GetStatus() )
+    if( SvParserState::Pending == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HTML_TABLEROW_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
@@ -4317,7 +4317,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
+        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
@@ -4445,7 +4445,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             nToken = GetNextToken();
     }
 
-    if( SVPAR_PENDING == GetStatus() )
+    if( SvParserState::Pending == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( bHead ? HTML_THEAD_ON
                                                : HTML_TBODY_ON, m_pPendStack );
@@ -4505,7 +4505,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
+        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
@@ -4662,7 +4662,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
             nToken = GetNextToken();
     }
 
-    if( SVPAR_PENDING == GetStatus() )
+    if( SvParserState::Pending == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HTML_COL_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
@@ -4808,7 +4808,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             {
                 BuildTable( SVX_ADJUST_END );
             }
-            if( SVPAR_PENDING != GetStatus() )
+            if( SvParserState::Pending != GetStatus() )
             {
                 m_pTable = pSaveStruct->m_pTable;
             }
@@ -4848,7 +4848,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             nToken = GetNextToken();
     }
 
-    if( SVPAR_PENDING==GetStatus() )
+    if( SvParserState::Pending==GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HTML_CAPTION_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
@@ -5103,7 +5103,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
+        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
@@ -5227,7 +5227,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             nToken = GetNextToken();
     }
 
-    if( SVPAR_PENDING == GetStatus() )
+    if( SvParserState::Pending == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HTML_TABLE_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
@@ -5338,7 +5338,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             // kein Show aufgerufen werden, weil sonst waehrend des
             // Reschedules der Parser zerstoert wird, wenn noch ein
             // DataAvailable-Link kommt. Deshalb: Nur im WORKING-State.
-            if( !m_nParaCnt && SVPAR_WORKING == GetStatus() )
+            if( !m_nParaCnt && SvParserState::Working == GetStatus() )
                 Show();
         }
     }

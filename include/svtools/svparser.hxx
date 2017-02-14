@@ -32,14 +32,13 @@
 struct SvParser_Impl;
 class SvStream;
 
-enum SvParserState
+enum class SvParserState
 {
-    SVPAR_ACCEPTED = 0,
-    SVPAR_NOTSTARTED,
-    SVPAR_WORKING,
-    SVPAR_PENDING,
-    SVPAR_WAITFORDATA,
-    SVPAR_ERROR
+    Accepted = 0,
+    NotStarted,
+    Working,
+    Pending,
+    Error
 };
 
 class SVT_DLLPUBLIC SvParser : public SvRefBase
@@ -123,7 +122,7 @@ public:
     sal_uInt32 GetNextChar();   // Return next Unicode codepoint in UTF32.
     void RereadLookahead();
 
-    inline bool IsParserWorking() const { return SVPAR_WORKING == eState; }
+    inline bool IsParserWorking() const { return SvParserState::Working == eState; }
 
     Link<LinkParamNone*,void> GetAsynchCallLink() const
         { return LINK( const_cast<SvParser*>(this), SvParser, NewDataRead ); }

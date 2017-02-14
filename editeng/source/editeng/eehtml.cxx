@@ -73,7 +73,7 @@ SvParserState EditHTMLParser::CallParser(EditEngine* pEE, const EditPaM& rPaM)
 {
     DBG_ASSERT(pEE, "CallParser: ImpEditEngine ?!");
     mpEditEngine = pEE;
-    SvParserState _eState = SVPAR_NOTSTARTED;
+    SvParserState _eState = SvParserState::NotStarted;
     if ( mpEditEngine )
     {
         // Build in wrap mimic in RTF import?

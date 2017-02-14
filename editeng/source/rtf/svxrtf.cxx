@@ -107,7 +107,7 @@ SvParserState SvxRTFParser::CallParser()
     DBG_ASSERT( pInsPos, "no insertion position");
 
     if( !pInsPos )
-        return SVPAR_ERROR;
+        return SvParserState::Error;
 
     if( !aColorTbl.empty() )
         ClearColorTbl();
@@ -134,7 +134,7 @@ void SvxRTFParser::Continue( int nToken )
 {
     SvRTFParser::Continue( nToken );
 
-    if( SVPAR_PENDING != GetStatus() )
+    if( SvParserState::Pending != GetStatus() )
     {
         SetAllAttrOfStk();
     //Regardless of what "color 0" is, word defaults to auto as the default colour.
@@ -328,7 +328,7 @@ void SvxRTFParser::ReadStyleTable()
                     ReadUnknownData();
                     nToken = GetNextToken();
                     if( '}' != nToken )
-                        eState = SVPAR_ERROR;
+                        eState = SvParserState::Error;
                     break;
                 }
                 ++_nOpenBrakets;
@@ -486,7 +486,7 @@ void SvxRTFParser::ReadFontTable()
                     ReadUnknownData();
                     nToken = GetNextToken();
                     if( '}' != nToken )
-                        eState = SVPAR_ERROR;
+                        eState = SvParserState::Error;
                     break;
                 }
                 ++_nOpenBrakets;
@@ -602,7 +602,7 @@ OUString& SvxRTFParser::GetTextToEndGroup( OUString& rStr )
                     ReadUnknownData();
                     int nToken = GetNextToken();
                     if( '}' != nToken )
-                        eState = SVPAR_ERROR;
+                        eState = SvParserState::Error;
                     break;
                 }
                 ++_nOpenBrakets;
@@ -666,7 +666,7 @@ void SvxRTFParser::ReadInfo()
                     ReadUnknownData();
                     nToken = GetNextToken();
                     if( '}' != nToken )
-                        eState = SVPAR_ERROR;
+                        eState = SvParserState::Error;
                     break;
                 }
                 ++_nOpenBrakets;

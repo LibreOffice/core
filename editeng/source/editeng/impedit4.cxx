@@ -164,7 +164,7 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
 
     EditRTFParserRef xPrsr = new EditRTFParser(rInput, aSel, *pPool, pEditEngine);
     SvParserState eState = xPrsr->CallParser();
-    if ( ( eState != SVPAR_ACCEPTED ) && ( !rInput.GetError() ) )
+    if ( ( eState != SvParserState::Accepted ) && ( !rInput.GetError() ) )
     {
         rInput.SetError( EE_READWRITE_WRONGFORMAT );
         return aSel.Min();
@@ -179,7 +179,7 @@ EditPaM ImpEditEngine::ReadHTML( SvStream& rInput, const OUString& rBaseURL, Edi
 
     EditHTMLParserRef xPrsr = new EditHTMLParser( rInput, rBaseURL, pHTTPHeaderAttrs );
     SvParserState eState = xPrsr->CallParser(pEditEngine, aSel.Max());
-    if ( ( eState != SVPAR_ACCEPTED ) && ( !rInput.GetError() ) )
+    if ( ( eState != SvParserState::Accepted ) && ( !rInput.GetError() ) )
     {
         rInput.SetError( EE_READWRITE_WRONGFORMAT );
         return aSel.Min();
