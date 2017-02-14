@@ -71,9 +71,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                             static_cast< ::cppu::OWeakObject* >(this),
                                             2 );
 
-    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
-    if ( !xNameAccess.is() )
-        throw uno::RuntimeException(); //TODO
+    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY_THROW );
 
     // detect entry existence
     if ( !xNameAccess->hasByName( sEntName ) )
@@ -86,9 +84,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         uno::Reference< embed::XStorage > xSubStorage =
                 xStorage->openStorageElement( sEntName, embed::ElementModes::READ );
 
-        uno::Reference< beans::XPropertySet > xPropSet( xSubStorage, uno::UNO_QUERY );
-        if ( !xPropSet.is() )
-            throw uno::RuntimeException();
+        uno::Reference< beans::XPropertySet > xPropSet( xSubStorage, uno::UNO_QUERY_THROW );
 
         OUString aMediaType;
         try {
@@ -129,10 +125,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         throw io::IOException(); // TODO:
     }
 
-    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
-
-    if ( !xPersist.is() )
-        throw uno::RuntimeException(); // TODO: the interface must be supported by own document objects
+    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY_THROW );
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
@@ -185,10 +178,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
         throw io::IOException(); // TODO:
     }
 
-    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
-
-    if ( !xPersist.is() )
-        throw uno::RuntimeException(); // TODO: the interface must be supported ( what about applets? )
+    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY_THROW );
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
@@ -228,10 +218,7 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                  uno::UNO_QUERY );
 
 
-    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
-
-    if ( !xPersist.is() )
-        throw uno::RuntimeException(); // TODO: the interface must be supported by own document objects
+    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY_THROW );
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
@@ -281,18 +268,12 @@ uno::Reference< uno::XInterface > SAL_CALL OOoEmbeddedObjectFactory::createInsta
                                                 aObject ) ),
                     uno::UNO_QUERY );
 
-    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
-    if ( xPersist.is() )
-    {
-        xPersist->setPersistentEntry( xStorage,
-                                    sEntName,
-                                    nEntryConnectionMode,
-                                    aTempMedDescr,
-                                    lObjArgs );
-
-    }
-    else
-        throw uno::RuntimeException(); // TODO:
+    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY_THROW );
+    xPersist->setPersistentEntry( xStorage,
+                                  sEntName,
+                                  nEntryConnectionMode,
+                                  aTempMedDescr,
+                                  lObjArgs );
 
     return xResult;
 }

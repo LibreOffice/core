@@ -184,9 +184,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
     }
     else
     {
-        uno::Reference< datatransfer::XTransferable > xTransferable( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
-        if (!xTransferable.is() )
-            throw uno::RuntimeException();
+        uno::Reference< datatransfer::XTransferable > xTransferable( m_xDocHolder->GetComponent(), uno::UNO_QUERY_THROW );
 
         datatransfer::DataFlavor aDataFlavor(
                 "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",

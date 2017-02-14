@@ -134,9 +134,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
     aArgs[0] <<= xTempStream;
     aArgs[1] <<= embed::ElementModes::READWRITE;
     uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
-                                                    uno::UNO_QUERY );
-    if ( !xTempStorage.is() )
-        throw uno::RuntimeException(); // TODO:
+                                                    uno::UNO_QUERY_THROW );
 
     try
     {
@@ -316,9 +314,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
                                                 m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
     uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY );
-    uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY );
-    if ( !xLoadable.is() )
-        throw uno::RuntimeException();
+    uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
 
     try
     {
@@ -375,9 +371,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
                                                 m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
-    uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
-    if ( !xLoadable.is() )
-        throw uno::RuntimeException();
+    uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
 
     sal_Int32 nLen = 2;
     uno::Sequence< beans::PropertyValue > aArgs( nLen );
@@ -576,10 +570,7 @@ uno::Reference< io::XInputStream > OCommonEmbeddedObject::StoreDocumentToTempStr
     uno::Reference < io::XOutputStream > xTempOut(
                 io::TempFile::create(m_xContext),
                 uno::UNO_QUERY_THROW );
-    uno::Reference< io::XInputStream > aResult( xTempOut, uno::UNO_QUERY );
-
-    if ( !aResult.is() )
-        throw uno::RuntimeException(); // TODO:
+    uno::Reference< io::XInputStream > aResult( xTempOut, uno::UNO_QUERY_THROW );
 
     uno::Reference< frame::XStorable > xStorable;
     {
@@ -811,9 +802,7 @@ void OCommonEmbeddedObject::StoreDocToStorage_Impl(
         uno::Sequence< uno::Any > aArgs(1);
         aArgs[0] <<= xTempIn;
         uno::Reference< embed::XStorage > xTempStorage( xStorageFactory->createInstanceWithArguments( aArgs ),
-                                                            uno::UNO_QUERY );
-        if ( !xTempStorage.is() )
-            throw uno::RuntimeException(); // TODO:
+                                                            uno::UNO_QUERY_THROW );
 
         // object storage must be committed automatically
         xTempStorage->copyToStorage( xStorage );
@@ -827,9 +816,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
     uno::Reference< util::XCloseable > xDocument( CreateDocument( m_xContext, GetDocumentServiceName(),
                                                 m_bEmbeddedScriptSupport, m_bDocumentRecoverySupport ) );
 
-    uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY );
-    if ( !xLoadable.is() )
-        throw uno::RuntimeException();
+    uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
 
     try
     {
@@ -998,9 +985,7 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
         return;
     }
 
-    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
-    if ( !xNameAccess.is() )
-        throw uno::RuntimeException(); //TODO
+    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY_THROW );
 
     // detect entry existence
     bool bElExists = xNameAccess->hasByName( sEntName );
@@ -1573,9 +1558,7 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
     if ( m_bIsLink )
     {
         // TODO: just store the document to its location
-        uno::Reference< frame::XStorable > xStorable( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
-        if ( !xStorable.is() )
-            throw uno::RuntimeException(); // TODO
+        uno::Reference< frame::XStorable > xStorable( m_xDocHolder->GetComponent(), uno::UNO_QUERY_THROW );
 
         // free the main mutex for the storing time
         aGuard.clear();
@@ -1820,9 +1803,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
                     "The object waits for saveCompleted() call!",
                     static_cast< ::cppu::OWeakObject* >(this) );
 
-    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
-    if ( !xNameAccess.is() )
-        throw uno::RuntimeException(); //TODO
+    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY_THROW );
 
     m_bReadOnly = false;
 
@@ -1835,9 +1816,7 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
     // TODO/LATER: handle the case when temp doc can not be created
     // the document is a new embedded object so it must be marked as modified
     uno::Reference< util::XCloseable > xDocument = CreateTempDocFromLink_Impl();
-    uno::Reference< util::XModifiable > xModif( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
-    if ( !xModif.is() )
-        throw uno::RuntimeException();
+    uno::Reference< util::XModifiable > xModif( m_xDocHolder->GetComponent(), uno::UNO_QUERY_THROW );
     try
     {
         xModif->setModified( true );

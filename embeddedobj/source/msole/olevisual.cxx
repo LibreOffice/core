@@ -45,9 +45,9 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
 
     // TODO: detect the format in the future for now use workaround
     uno::Reference< io::XInputStream > xInStream = xCachedVisRepr->getInputStream();
-    uno::Reference< io::XSeekable > xSeekable( xCachedVisRepr, uno::UNO_QUERY );
-    if ( !xInStream.is() || !xSeekable.is() )
+    if ( !xInStream.is() )
         throw uno::RuntimeException();
+    uno::Reference< io::XSeekable > xSeekable( xCachedVisRepr, uno::UNO_QUERY_THROW );
 
     uno::Sequence< sal_Int8 > aSeq( 2 );
     xInStream->readBytes( aSeq, 2 );

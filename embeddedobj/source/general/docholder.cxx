@@ -416,9 +416,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
                                                                       awt::Size( HATCH_BORDER_WIDTH, HATCH_BORDER_WIDTH ) );
 
             uno::Reference< awt::XWindowPeer > xHatchWinPeer( xHatchWindow, uno::UNO_QUERY );
-            xHWindow.set( xHatchWinPeer, uno::UNO_QUERY );
-            if ( !xHWindow.is() )
-                throw uno::RuntimeException(); // TODO: can not create own window
+            xHWindow.set( xHatchWinPeer, uno::UNO_QUERY_THROW );
 
             xHatchWindow->setController( uno::Reference< embed::XHatchWindowController >(
                                                 static_cast< embed::XHatchWindowController* >( this ) ) );
@@ -441,9 +439,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create(m_xContext);
 
         uno::Reference< awt::XWindowPeer > xNewWinPeer = xToolkit->createWindow( aOwnWinDescriptor );
-        uno::Reference< awt::XWindow > xOwnWindow( xNewWinPeer, uno::UNO_QUERY );
-        if ( !xOwnWindow.is() )
-            throw uno::RuntimeException(); // TODO: can not create own window
+        uno::Reference< awt::XWindow > xOwnWindow( xNewWinPeer, uno::UNO_QUERY_THROW );
 
         // create a frame based on the specified window
         uno::Reference< lang::XSingleServiceFactory > xFrameFact = frame::TaskCreator::create(m_xContext);

@@ -191,20 +191,14 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStora
 
 void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, const OUString& aMediaType )
 {
-    uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY );
-    if ( !xPropSet.is() )
-        throw uno::RuntimeException(); // TODO: all the storage streams must support XPropertySet
-
+    uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY_THROW );
     xPropSet->setPropertyValue("MediaType", uno::makeAny( aMediaType ) );
 }
 #endif
 
 void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >& xStream )
 {
-    uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY );
-    if ( !xPropSet.is() )
-        throw uno::RuntimeException(); // Only StorageStreams must be provided here, they must implement the interface
-
+    uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY_THROW );
     xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
                                 uno::makeAny( true ) );
 }
@@ -382,10 +376,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
             m_xFactory->createInstanceWithArguments(
                     "com.sun.star.embed.OLESimpleStorage",
                     aArgs ),
-            uno::UNO_QUERY );
-
-    if ( !xNameContainer.is() )
-        throw uno::RuntimeException();
+            uno::UNO_QUERY_THROW );
 
     uno::Reference< io::XSeekable > xCachedSeek( xCachedVisualRepresentation, uno::UNO_QUERY_THROW );
     if ( xCachedSeek.is() )
@@ -509,10 +500,7 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     else
         xNameContainer->insertByName( aCacheName, uno::makeAny( xTempFile ) );
 
-    uno::Reference< embed::XTransactedObject > xTransacted( xNameContainer, uno::UNO_QUERY );
-    if ( !xTransacted.is() )
-        throw uno::RuntimeException();
-
+    uno::Reference< embed::XTransactedObject > xTransacted( xNameContainer, uno::UNO_QUERY_THROW );
     xTransacted->commit();
 }
 
@@ -530,10 +518,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
             m_xFactory->createInstanceWithArguments(
                     "com.sun.star.embed.OLESimpleStorage",
                     aArgs ),
-            uno::UNO_QUERY );
-
-    if ( !xNameContainer.is() )
-        throw uno::RuntimeException();
+            uno::UNO_QUERY_THROW );
 
     for ( sal_uInt8 nInd = 0; nInd < 10; nInd++ )
     {
@@ -542,10 +527,7 @@ void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStrea
             xNameContainer->removeByName( aStreamName );
     }
 
-    uno::Reference< embed::XTransactedObject > xTransacted( xNameContainer, uno::UNO_QUERY );
-    if ( !xTransacted.is() )
-        throw uno::RuntimeException();
-
+    uno::Reference< embed::XTransactedObject > xTransacted( xNameContainer, uno::UNO_QUERY_THROW );
     xTransacted->commit();
 }
 
@@ -1014,10 +996,7 @@ uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
     if ( !xOutStream.is() )
         throw io::IOException(); //TODO: access denied
 
-    uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY );
-    if ( !xTruncate.is() )
-        throw uno::RuntimeException(); //TODO:
-
+    uno::Reference< io::XTruncate > xTruncate( xOutStream, uno::UNO_QUERY_THROW );
     xTruncate->truncate();
 
     return xOutStream;
@@ -1046,10 +1025,7 @@ void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream >
     if ( xTempInStream.is() )
     {
         // write all the contents to XOutStream
-        uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY );
-        if ( !xTrunc.is() )
-            throw uno::RuntimeException(); //TODO:
-
+        uno::Reference< io::XTruncate > xTrunc( xOutStream, uno::UNO_QUERY_THROW );
         xTrunc->truncate();
 
         ::comphelper::OStorageHelper::CopyInputToOutput( xTempInStream, xOutStream );
@@ -1336,9 +1312,7 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                         static_cast< ::cppu::OWeakObject* >(this) );
     }
 
-    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
-    if ( !xNameAccess.is() )
-        throw uno::RuntimeException(); //TODO
+    uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY_THROW );
 
     // detect entry existence
     bool bElExists = xNameAccess->hasByName( sEntName );
