@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_693449de",
+        "filename": "basic/qa/vba_tests/chr.vb",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-02-14T15:10:27Z",
+      "side": 1,
+      "message": "Whitespace errors.",
+      "revId": "e67bbd5aeb2e9fa192c94d22758f2bfa30f1cc7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
