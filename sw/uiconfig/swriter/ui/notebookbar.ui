@@ -2374,51 +2374,62 @@
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Links</property>
                     <child>
-                      <object class="vcllo-SmallButton" id="hyperlinkdialog">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:HyperlinkDialog</property>
-                        <property name="image">HyperlinkDialogImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="vcllo-SmallButton" id="hyperlinkdialog">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:HyperlinkDialog</property>
+                            <property name="image">HyperlinkDialogImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="vcllo-SmallButton" id="bookmark">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:InsertBookmark</property>
+                            <property name="image">InsertBookmarkImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="vcllo-SmallButton" id="insertreferencefield">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:InsertReferenceField</property>
+                            <property name="image">InsertReferenceFieldImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="vcllo-SmallButton" id="bookmark">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:InsertBookmark</property>
-                        <property name="image">InsertBookmarkImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="vcllo-SmallButton" id="insertreferencefield">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:InsertReferenceField</property>
-                        <property name="image">InsertReferenceFieldImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
                       </packing>
                     </child>
                     <style>
@@ -3874,6 +3885,9 @@
                         <property name="position">3</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -4026,6 +4040,9 @@
                         <property name="position">1</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -4040,57 +4057,84 @@
                     <property name="tooltip_text" translatable="yes">Zoom</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="vcllo-SmallButton" id="Zoom100Percent">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:Zoom100Percent</property>
-                        <property name="image">Zoom100PercentImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="vcllo-SmallButton" id="ZoomOptimal">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="action_name">.uno:ZoomOptimal</property>
-                        <property name="image">ZoomOptimalImg</property>
-                        <property name="relief">none</property>
-                        <property name="image_position">top</property>
-                        <property name="always_show_image">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="box85">
+                      <object class="GtkBox" id="box">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <child>
-                          <object class="GtkBox" id="box117">
+                          <object class="vcllo-SmallButton" id="Zoom100Percent">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:Zoom100Percent</property>
+                            <property name="image">Zoom100PercentImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                            <property name="always_show_image">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="vcllo-SmallButton" id="ZoomOptimal">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="action_name">.uno:ZoomOptimal</property>
+                            <property name="image">ZoomOptimalImg</property>
+                            <property name="relief">none</property>
+                            <property name="image_position">top</property>
+                            <property name="always_show_image">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box85">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
                             <child>
-                              <object class="GtkButton" id="ZoomPage">
+                              <object class="GtkBox" id="box117">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="action_name">.uno:ZoomPage</property>
-                                <property name="relief">none</property>
-                                <property name="xalign">0</property>
-                                <property name="always_show_image">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkButton" id="ZoomPage">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="action_name">.uno:ZoomPage</property>
+                                    <property name="relief">none</property>
+                                    <property name="xalign">0</property>
+                                    <property name="always_show_image">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">0</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="ZoomPageWidth">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">True</property>
+                                    <property name="action_name">.uno:ZoomPageWidth</property>
+                                    <property name="relief">none</property>
+                                    <property name="xalign">0</property>
+                                    <property name="always_show_image">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">True</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -4099,14 +4143,10 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="ZoomPageWidth">
+                              <object class="GtkSeparator" id="separator13">
                                 <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
-                                <property name="action_name">.uno:ZoomPageWidth</property>
-                                <property name="relief">none</property>
-                                <property name="xalign">0</property>
-                                <property name="always_show_image">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="orientation">vertical</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -4118,26 +4158,14 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator" id="separator13">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">0</property>
                       </packing>
                     </child>
                     <style>
@@ -4218,6 +4246,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -4455,6 +4486,9 @@
                         <property name="position">3</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -4521,6 +4555,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -4854,6 +4891,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -4885,6 +4925,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -4963,6 +5006,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -5134,6 +5180,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -5212,6 +5261,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -5300,6 +5352,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -5376,6 +5431,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -5452,6 +5510,9 @@
                         <property name="position">0</property>
                       </packing>
                     </child>
+                    <style>
+                      <class name="priority-3"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>

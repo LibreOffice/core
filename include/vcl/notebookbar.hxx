@@ -30,6 +30,7 @@ public:
     virtual bool PreNotify( NotifyEvent& rNEvt ) override;
     virtual Size GetOptimalSize() const SAL_OVERRIDE;
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
+    virtual void Resize() override;
 
     void SetIconClickHdl(Link<NotebookBar*, void> aHdl);
 

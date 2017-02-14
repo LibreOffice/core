@@ -2273,13 +2273,19 @@ void NotebookbarTabControl::SelectTabPage( sal_uInt16 nPageId )
     if ( nPageId == 1 )
         m_aIconClickHdl.Call( static_cast<NotebookBar*>(GetParent()) );
     else
+    {
         TabControl::SelectTabPage( nPageId );
+        setAllocation(Control::GetOutputSizePixel());
+    }
 }
 
 void NotebookbarTabControl::SetCurPageId( sal_uInt16 nPageId )
 {
     if ( nPageId != 1 )
+    {
         TabControl::SetCurPageId( nPageId );
+        setAllocation(Control::GetOutputSizePixel());
+    }
     if ( nPageId == GetPageCount() )
         ImplActivateTabPage( true );
 }
