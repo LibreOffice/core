@@ -187,10 +187,10 @@ namespace slideshow
                     // that subtract from it
                     maCurrentSubsets.push_back( DocTreeNode( 0,
                                                              mnMinSubsetActionIndex,
-                                                             DocTreeNode::NODETYPE_INVALID ) );
+                                                             DocTreeNode::NodeType::Invalid ) );
                     maCurrentSubsets.push_back( DocTreeNode( mnMaxSubsetActionIndex,
                                                              maActionClassVector.size(),
-                                                             DocTreeNode::NODETYPE_INVALID ) );
+                                                             DocTreeNode::NodeType::Invalid ) );
                 }
                 else
                 {
@@ -198,10 +198,10 @@ namespace slideshow
                     // subsets subtract content
                     maCurrentSubsets.push_back( DocTreeNode( maSubset.getStartIndex(),
                                                              mnMinSubsetActionIndex,
-                                                             DocTreeNode::NODETYPE_INVALID ) );
+                                                             DocTreeNode::NodeType::Invalid ) );
                     maCurrentSubsets.push_back( DocTreeNode( mnMaxSubsetActionIndex,
                                                              maSubset.getEndIndex(),
-                                                             DocTreeNode::NODETYPE_INVALID ) );
+                                                             DocTreeNode::NodeType::Invalid ) );
                 }
             }
             else
@@ -590,30 +590,19 @@ namespace slideshow
             {
                 switch( eNodeType )
                 {
-                    case DocTreeNode::NODETYPE_INVALID:
+                    case DocTreeNode::NodeType::Invalid:
                         // FALLTHROUGH intended
                     default:
                         SAL_WARN( "slideshow", "DrawShapeSubsetting::mapDocTreeNode(): unexpected node type");
                         return DrawShapeSubsetting::CLASS_NOOP;
 
-                    case DocTreeNode::NODETYPE_LOGICAL_SHAPE:
-                        // FALLTHROUGH intended
-                    case DocTreeNode::NODETYPE_FORMATTING_SHAPE:
-                        return DrawShapeSubsetting::CLASS_SHAPE_END;
-
-                    case DocTreeNode::NODETYPE_FORMATTING_LINE:
-                        return DrawShapeSubsetting::CLASS_LINE_END;
-
-                    case DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH:
+                    case DocTreeNode::NodeType::LogicalParagraph:
                         return DrawShapeSubsetting::CLASS_PARAGRAPH_END;
 
-                    case DocTreeNode::NODETYPE_LOGICAL_SENTENCE:
-                        return DrawShapeSubsetting::CLASS_SENTENCE_END;
-
-                    case DocTreeNode::NODETYPE_LOGICAL_WORD:
+                    case DocTreeNode::NodeType::LogicalWord:
                         return DrawShapeSubsetting::CLASS_WORD_END;
 
-                    case DocTreeNode::NODETYPE_LOGICAL_CHARACTER_CELL:
+                    case DocTreeNode::NodeType::LogicalCharacterCell:
                         return DrawShapeSubsetting::CLASS_CHARACTER_CELL_END;
                 };
             }

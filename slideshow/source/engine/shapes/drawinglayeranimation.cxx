@@ -738,17 +738,17 @@ ActivityImpl::ActivityImpl(
 {
     // get doctreenode:
     sal_Int32 const nNodes = pParentDrawShape->getNumberOfTreeNodes(
-        DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH );
+        DocTreeNode::NodeType::LogicalParagraph );
 
     DocTreeNode scrollTextNode(
         pParentDrawShape->getTreeNode(
-            0, DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ));
+            0, DocTreeNode::NodeType::LogicalParagraph ));
     // xxx todo: remove this hack
     if( nNodes > 1 )
         scrollTextNode.setEndIndex(
             pParentDrawShape->getTreeNode(
                 nNodes - 1,
-                DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ).getEndIndex());
+                DocTreeNode::NodeType::LogicalParagraph ).getEndIndex());
 
     // TODO(Q3): Doing this manually, instead of using
     // ShapeSubset. This is because of lifetime issues (ShapeSubset

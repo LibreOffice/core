@@ -905,7 +905,7 @@ void SlideImpl::applyShapeAttributes(
                 const DocTreeNodeSupplier& rNodeSupplier( pAttrShape->getTreeNodeSupplier() );
 
                 if( rNodeSupplier.getNumberOfTreeNodes(
-                        DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) <= nParaIndex )
+                        DocTreeNode::NodeType::LogicalParagraph ) <= nParaIndex )
                 {
                     OSL_FAIL( "SlideImpl::applyInitialShapeAttributes(): shape found does not "
                                 "provide a subset for requested paragraph index" );
@@ -915,7 +915,7 @@ void SlideImpl::applyShapeAttributes(
                 pAttrShape = pAttrShape->getSubset(
                     rNodeSupplier.getTreeNode(
                         nParaIndex,
-                        DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) );
+                        DocTreeNode::NodeType::LogicalParagraph ) );
 
                 if( !pAttrShape )
                 {

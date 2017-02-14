@@ -131,12 +131,12 @@ AnimationBaseNode::AnimationBaseNode(
             // provide the given paragraph?
             if( aTarget.Paragraph >= 0 &&
                 mpShape->getTreeNodeSupplier().getNumberOfTreeNodes(
-                    DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH) > aTarget.Paragraph )
+                    DocTreeNode::NodeType::LogicalParagraph) > aTarget.Paragraph )
             {
                 const DocTreeNode& rTreeNode(
                     mpShape->getTreeNodeSupplier().getTreeNode(
                         aTarget.Paragraph,
-                        DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) );
+                        DocTreeNode::NodeType::LogicalParagraph ) );
 
                 // CAUTION: the creation of the subset shape
                 // _must_ stay in the node constructor, since

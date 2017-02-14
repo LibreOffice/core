@@ -239,7 +239,7 @@ bool implCreateIteratedNodes(
         ENSURE_OR_RETURN_FALSE(
             aTarget.Paragraph >= 0 &&
             rTreeNodeSupplier.getNumberOfTreeNodes(
-                DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) > aTarget.Paragraph,
+                DocTreeNode::NodeType::LogicalParagraph ) > aTarget.Paragraph,
             "implCreateIteratedNodes(): paragraph index out of range" );
 
         pTargetSubset.reset(
@@ -249,7 +249,7 @@ bool implCreateIteratedNodes(
                 // type PARAGRAPH from this shape
                 rTreeNodeSupplier.getTreeNode(
                     aTarget.Paragraph,
-                    DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ),
+                    DocTreeNode::NodeType::LogicalParagraph ),
                 rContext.maContext.mpSubsettableShapeManager ) );
 
         // iterate target is not the whole shape, but only
@@ -325,20 +325,20 @@ bool implCreateIteratedNodes(
         // determine type of subitem iteration (logical
         // text unit to animate)
         DocTreeNode::NodeType eIterateNodeType(
-            DocTreeNode::NODETYPE_LOGICAL_CHARACTER_CELL );
+            DocTreeNode::NodeType::LogicalCharacterCell );
 
         switch( xIterNode->getIterateType() )
         {
         case presentation::TextAnimationType::BY_PARAGRAPH:
-            eIterateNodeType = DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH;
+            eIterateNodeType = DocTreeNode::NodeType::LogicalParagraph;
             break;
 
         case presentation::TextAnimationType::BY_WORD:
-            eIterateNodeType = DocTreeNode::NODETYPE_LOGICAL_WORD;
+            eIterateNodeType = DocTreeNode::NodeType::LogicalWord;
             break;
 
         case presentation::TextAnimationType::BY_LETTER:
-            eIterateNodeType = DocTreeNode::NODETYPE_LOGICAL_CHARACTER_CELL;
+            eIterateNodeType = DocTreeNode::NodeType::LogicalCharacterCell;
             break;
 
         default:
@@ -349,8 +349,8 @@ bool implCreateIteratedNodes(
         }
 
         if( bParagraphTarget &&
-            eIterateNodeType != DocTreeNode::NODETYPE_LOGICAL_WORD &&
-            eIterateNodeType != DocTreeNode::NODETYPE_LOGICAL_CHARACTER_CELL )
+            eIterateNodeType != DocTreeNode::NodeType::LogicalWord &&
+            eIterateNodeType != DocTreeNode::NodeType::LogicalCharacterCell )
         {
             // will not animate the whole paragraph, when
             // only the paragraph is animated at all.

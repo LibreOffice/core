@@ -527,7 +527,7 @@ namespace slideshow
             {
                 OSL_ASSERT( pShape->maAnimationFrames.empty() );
                 if( pShape->getNumberOfTreeNodes(
-                        DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH) > 0 )
+                        DocTreeNode::NodeType::LogicalParagraph) > 0 )
                 {
                     pShape->mpIntrinsicAnimationActivity =
                         createDrawingLayerAnimActivity(

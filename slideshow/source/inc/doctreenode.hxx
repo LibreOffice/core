@@ -47,25 +47,16 @@ namespace slideshow
         {
         public:
             /// Type of shape entity represented by this node
-            enum NodeType
+            enum class NodeType
             {
-                NODETYPE_INVALID=0,
+                Invalid=0,
 
-                /// This node represents a full shape
-                NODETYPE_FORMATTING_SHAPE=1,
-                /// This node represents a line
-                NODETYPE_FORMATTING_LINE=2,
-
-                /// This node represents a full shape
-                NODETYPE_LOGICAL_SHAPE=128,
                 /// This node represents a paragraph
-                NODETYPE_LOGICAL_PARAGRAPH=129,
-                /// This node represents a sentence
-                NODETYPE_LOGICAL_SENTENCE=130,
+                LogicalParagraph=129,
                 /// This node represents a word
-                NODETYPE_LOGICAL_WORD=131,
+                LogicalWord=131,
                 /// This node represents a character
-                NODETYPE_LOGICAL_CHARACTER_CELL=132
+                LogicalCharacterCell=132
             };
 
             /** Create empty tree node
@@ -73,7 +64,7 @@ namespace slideshow
             DocTreeNode() :
                 mnStartIndex(-1),
                 mnEndIndex(-1),
-                meType(NODETYPE_INVALID)
+                meType(NodeType::Invalid)
             {
             }
 
@@ -109,7 +100,7 @@ namespace slideshow
             {
                 mnStartIndex = -1;
                 mnEndIndex   = -1;
-                meType = NODETYPE_INVALID;
+                meType = NodeType::Invalid;
             }
 
         private:
