@@ -126,7 +126,7 @@ private:
         GotoLeftCell, GotoUpCell, GotoRightCell, GotoDownCell,
         GotoLastCell, GotoLastColumn, GotoLastRow,
         EditCell, StopTextEdit,
-        RemoveSelection, StartSelection,
+        RemoveSelection,
         HandledByView, Tab
     };
     SVX_DLLPRIVATE void ApplyBorderAttr( const SfxItemSet& rAttr );

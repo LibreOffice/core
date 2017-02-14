@@ -1718,10 +1718,6 @@ bool SvxTableController::executeAction(TblAction nAction, bool bSelect, vcl::Win
         RemoveSelection();
         break;
 
-    case TblAction::StartSelection:
-        StartSelection( getSelectionStart() );
-        break;
-
     case TblAction::Tab:
     {
         if( bSelect )
