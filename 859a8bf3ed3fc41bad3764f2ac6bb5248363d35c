@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0911fdac",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-14T22:57:17Z",
+      "side": 0,
+      "message": "So with this block removed, a corresponding gradient (if other than Tango Green on pos 0) will never get preselected on initial opening of the dialog\n\nTry assigning e.g. Tango Red gradient to a shape. Confirm with OK, shape gets red gradient fill. Open area dialog again and see 1st Tango Green selected \u003d\u003e regression\n\nI obviously failed to get my point across. When I said \"remove m_pPos variable\", I actually meant \"please make it non-member, it is only used in this function and nowhere else, so local variable will do the trick as well\"",
+      "revId": "859a8bf3ed3fc41bad3764f2ac6bb5248363d35c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2926c116",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-14T22:57:17Z",
+      "side": 0,
+      "message": "I guess we want to preserve this if-block, see comment on the right why\n\nIt seems to me the correct solution to this problem would involve remembering whether any of preset gradient attributes (colours,transparency,...) has changed. \n\nAnd when the change happens, either remove selection (SetNoSelection) from m_pGradientLB or have some boolean flag (m_bPresetHasChanged ) ...",
+      "revId": "859a8bf3ed3fc41bad3764f2ac6bb5248363d35c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_891dedbf",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-14T22:57:17Z",
+      "side": 0,
+      "message": "... and in that case, execute this block. The only thing I would change here is naming the gradient (aString \u003d \"gradient\" or somesuch)",
+      "revId": "859a8bf3ed3fc41bad3764f2ac6bb5248363d35c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}

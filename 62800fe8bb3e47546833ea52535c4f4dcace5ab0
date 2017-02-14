@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_e90bd97b",
+        "filename": "cui/source/tabpages/tpgradnt.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-14T22:57:17Z",
+      "side": 1,
+      "message": "With this, even preset named gradients (\"tango red\" etc.) will be unconditionally renamed to \"gradient\"  or variant thereof. I\u0027d rather not do that",
+      "revId": "62800fe8bb3e47546833ea52535c4f4dcace5ab0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
