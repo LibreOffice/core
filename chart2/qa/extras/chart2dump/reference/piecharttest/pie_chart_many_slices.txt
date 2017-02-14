@@ -3,7 +3,7 @@
 /// Series 0 slices
 // nSlicesCountInSeries
 18
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,10493,3869,10469,-234/D=0:CS=0:CT=0:Series=0:Point=0
+/// /D=0:CS=0:CT=0:Series=0:Point=0
 // aSlicePosition.X
 10469
 // aSlicePosition.Y
@@ -18,7 +18,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 17798
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=82,10415,3870,10312,-232/D=0:CS=0:CT=0:Series=0:Point=1
+/// /D=0:CS=0:CT=0:Series=0:Point=1
 // aSlicePosition.X
 10275
 // aSlicePosition.Y
@@ -33,7 +33,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 16728590
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,10292,3875,10067,-222/D=0:CS=0:CT=0:Series=0:Point=2
+/// /D=0:CS=0:CT=0:Series=0:Point=2
 // aSlicePosition.X
 10224
 // aSlicePosition.Y
@@ -48,7 +48,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 16765728
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,10137,3886,9756,-199/D=0:CS=0:CT=0:Series=0:Point=3
+/// /D=0:CS=0:CT=0:Series=0:Point=3
 // aSlicePosition.X
 10050
 // aSlicePosition.Y
@@ -63,7 +63,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 5741852
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,9891,3917,9265,-138/D=0:CS=0:CT=0:Series=0:Point=4
+/// /D=0:CS=0:CT=0:Series=0:Point=4
 // aSlicePosition.X
 9734
 // aSlicePosition.Y
@@ -78,7 +78,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 8257569
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,9605,3971,8693,-29/D=0:CS=0:CT=0:Series=0:Point=5
+/// /D=0:CS=0:CT=0:Series=0:Point=5
 // aSlicePosition.X
 9478
 // aSlicePosition.Y
@@ -93,7 +93,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 8637183
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,9330,4044,8143,116/D=0:CS=0:CT=0:Series=0:Point=6
+/// /D=0:CS=0:CT=0:Series=0:Point=6
 // aSlicePosition.X
 9184
 // aSlicePosition.Y
@@ -108,7 +108,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 3227652
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,9020,4152,7522,331/D=0:CS=0:CT=0:Series=0:Point=7
+/// /D=0:CS=0:CT=0:Series=0:Point=7
 // aSlicePosition.X
 8858
 // aSlicePosition.Y
@@ -123,7 +123,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 11456256
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,8680,4303,6842,633/D=0:CS=0:CT=0:Series=0:Point=8
+/// /D=0:CS=0:CT=0:Series=0:Point=8
 // aSlicePosition.X
 8506
 // aSlicePosition.Y
@@ -138,7 +138,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 4923247
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,8262,4544,6007,1115/D=0:CS=0:CT=0:Series=0:Point=9
+/// /D=0:CS=0:CT=0:Series=0:Point=9
 // aSlicePosition.X
 8030
 // aSlicePosition.Y
@@ -153,7 +153,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 16749838
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,7649,5037,4781,2102/D=0:CS=0:CT=0:Series=0:Point=10
+/// /D=0:CS=0:CT=0:Series=0:Point=10
 // aSlicePosition.X
 7311
 // aSlicePosition.Y
@@ -168,7 +168,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 12910603
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,6794,6247,3071,4521/D=0:CS=0:CT=0:Series=0:Point=11
+/// /D=0:CS=0:CT=0:Series=0:Point=11
 // aSlicePosition.X
 6490
 // aSlicePosition.Y
@@ -183,7 +183,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 34001
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,6468,8641,2419,9310/D=0:CS=0:CT=0:Series=0:Point=12
+/// /D=0:CS=0:CT=0:Series=0:Point=12
 // aSlicePosition.X
 6414
 // aSlicePosition.Y
@@ -198,7 +198,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 17798
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,8059,11259,5601,14545/D=0:CS=0:CT=0:Series=0:Point=13
+/// /D=0:CS=0:CT=0:Series=0:Point=13
 // aSlicePosition.X
 6959
 // aSlicePosition.Y
@@ -213,7 +213,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 16728590
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,11725,11895,12932,15817/D=0:CS=0:CT=0:Series=0:Point=14
+/// /D=0:CS=0:CT=0:Series=0:Point=14
 // aSlicePosition.X
 9562
 // aSlicePosition.Y
@@ -228,7 +228,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 16765728
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,14540,8786,18563,9599/D=0:CS=0:CT=0:Series=0:Point=15
+/// /D=0:CS=0:CT=0:Series=0:Point=15
 // aSlicePosition.X
 10518
 // aSlicePosition.Y
@@ -243,7 +243,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 5741852
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=0,13116,4796,15715,1619/D=0:CS=0:CT=0:Series=0:Point=16
+/// /D=0:CS=0:CT=0:Series=0:Point=16
 // aSlicePosition.X
 10518
 // aSlicePosition.Y
@@ -258,7 +258,7 @@
 1
 // static_cast<sal_Int32>(aSliceFillColor)
 8257569
-/// CID/MultiClick:DragMethod=PieSegmentDraging:DragParameter=49,10805,3879,11092,-214/D=0:CS=0:CT=0:Series=0:Point=17
+/// /D=0:CS=0:CT=0:Series=0:Point=17
 // aSlicePosition.X
 10658
 // aSlicePosition.Y

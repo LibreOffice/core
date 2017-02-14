@@ -900,7 +900,8 @@ DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
             {
                 uno::Reference<drawing::XShape> xSlice(xIndexAccess->getByIndex(nSlice), UNO_QUERY_THROW);
                 uno::Reference<container::XNamed> xNamedShape(xIndexAccess->getByIndex(nSlice), uno::UNO_QUERY);
-                CPPUNIT_DUMP_ASSERT_NOTE(xNamedShape->getName());
+                OUString sName = xNamedShape->getName();
+                CPPUNIT_DUMP_ASSERT_NOTE(sName.copy(sName.lastIndexOf("/D=0")));
 
                 // Check size and position
                 awt::Point aSlicePosition = xSlice->getPosition();
