@@ -83,9 +83,7 @@ private:
 
 void SAL_CALL LpsolveSolver::solve()
 {
-    uno::Reference<frame::XModel> xModel( mxDoc, uno::UNO_QUERY );
-    if ( !xModel.is() )
-        throw uno::RuntimeException();
+    uno::Reference<frame::XModel> xModel( mxDoc, uno::UNO_QUERY_THROW );
 
     maStatus.clear();
     mbSuccess = false;
