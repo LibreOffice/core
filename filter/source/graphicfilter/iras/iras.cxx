@@ -168,6 +168,14 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     if (!bOk)
         return false;
 
+    if (mnType != RAS_TYPE_BYTE_ENCODED) //simple raw format
+    {
+        if (m_rRAS.remainingSize() < static_cast<sal_uInt64>(mnHeight) * mnWidth * mnDepth / 8)
+        {
+            return false;
+        }
+    }
+
     Bitmap aBmp(Size(mnWidth, mnHeight), mnDstBitsPerPix);
     Bitmap::ScopedWriteAccess pAcc(aBmp);
     if (pAcc == nullptr)
@@ -177,6 +185,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     {
         pAcc->SetPalette(aPalette);
     }
+
 
     // Bitmap-Daten einlesen
     mbStatus = ImplReadBody(pAcc.get());
@@ -191,7 +200,7 @@ bool RASReader::ImplReadHeader()
 {
     m_rRAS.ReadInt32(mnWidth).ReadInt32(mnHeight).ReadInt32(mnDepth).ReadInt32(mnImageDatSize).ReadInt32(mnType).ReadInt32(mnColorMapType).ReadInt32(mnColorMapSize);
 
-    if (mnWidth <= 0 || mnHeight <= 0 || mnImageDatSize <= 0 || !m_rRAS.good())
+    if (!m_rRAS.good() || mnWidth <= 0 || mnHeight <= 0 || mnImageDatSize <= 0)
         mbStatus = false;
 
     switch ( mnDepth )
@@ -222,7 +231,6 @@ bool RASReader::ImplReadHeader()
     }
     return mbStatus;
 }
-
 
 bool RASReader::ImplReadBody(BitmapWriteAccess * pAcc)
 {
