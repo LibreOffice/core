@@ -116,11 +116,7 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
 
     Reference< XConnector > xConnector(
         _xSMgr->createInstanceWithContext( "com.sun.star.connection.Connector", _xCtx ),
-        UNO_QUERY );
-
-    if (! xConnector.is())
-        throw RuntimeException("no connector!" );
-
+        UNO_QUERY_THROW );
     Reference< XConnection > xConnection( xConnector->connect( aConnectDescr ) );
 
     // As soon as singletons are ready, switch to singleton !
