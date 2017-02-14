@@ -16,6 +16,24 @@
       "revId": "fa3f2b4755f94f1525a8b2a4e247d353feb49720",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_29c40191",
+        "filename": "sfx2/sdi/sfx.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 3145,
+      "author": {
+        "id": 1000549
+      },
+      "writtenOn": "2017-02-14T16:11:25Z",
+      "side": 1,
+      "message": "\u003e What you want to do instead is that you disable assigning kbd shortcut to it.\n\nAFAIK it\u0027s impossible right now (git grep SfxSlotMode::ACCELCONFIG - you\u0027ll be surprised...)",
+      "parentUuid": "9a57fde8_be1ca578",
+      "revId": "fa3f2b4755f94f1525a8b2a4e247d353feb49720",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
