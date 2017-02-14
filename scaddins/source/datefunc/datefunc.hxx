@@ -43,12 +43,6 @@ public:
     ScaResId(sal_uInt16 nResId, ResMgr& rResMgr);
 };
 
-class ScaFuncRes : public Resource
-{
-public:
-    ScaFuncRes(ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet);
-};
-
 enum class ScaCategory
 {
     DateTime,
