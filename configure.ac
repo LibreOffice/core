@@ -910,6 +910,75 @@ AC_SUBST(WITH_MINGW)
 AC_SUBST(PTHREAD_CFLAGS)
 AC_SUBST(PTHREAD_LIBS)
 
+# Check for explicit A/C/CXX/OBJC/OBJCXX/LDFLAGS.
+# By default use the ones specified by our build system,
+# but explicit override is possible.
+AC_MSG_CHECKING(for explicit AFLAGS)
+if test -n "$AFLAGS"; then
+    AC_MSG_RESULT([$AFLAGS])
+    x_AFLAGS=
+else
+    AC_MSG_RESULT(no)
+    x_AFLAGS=[\#]
+fi
+AC_MSG_CHECKING(for explicit CFLAGS)
+if test -n "$CFLAGS"; then
+    AC_MSG_RESULT([$CFLAGS])
+    x_CFLAGS=
+else
+    AC_MSG_RESULT(no)
+    x_CFLAGS=[\#]
+fi
+AC_MSG_CHECKING(for explicit CXXFLAGS)
+if test -n "$CXXFLAGS"; then
+    AC_MSG_RESULT([$CXXFLAGS])
+    x_CXXFLAGS=
+else
+    AC_MSG_RESULT(no)
+    x_CXXFLAGS=[\#]
+fi
+AC_MSG_CHECKING(for explicit OBJCFLAGS)
+if test -n "$OBJCFLAGS"; then
+    AC_MSG_RESULT([$OBJCFLAGS])
+    x_OBJCFLAGS=
+else
+    AC_MSG_RESULT(no)
+    x_OBJCFLAGS=[\#]
+fi
+AC_MSG_CHECKING(for explicit OBJCXXFLAGS)
+if test -n "$OBJCXXFLAGS"; then
+    AC_MSG_RESULT([$OBJCXXFLAGS])
+    x_OBJCXXFLAGS=
+else
+    AC_MSG_RESULT(no)
+    x_OBJCXXFLAGS=[\#]
+fi
+AC_MSG_CHECKING(for explicit LDFLAGS)
+if test -n "$LDFLAGS"; then
+    AC_MSG_RESULT([$LDFLAGS])
+    x_LDFLAGS=
+else
+    AC_MSG_RESULT(no)
+    x_LDFLAGS=[\#]
+fi
+AC_SUBST(AFLAGS)
+AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
+AC_SUBST(OBJCFLAGS)
+AC_SUBST(OBJCXXFLAGS)
+AC_SUBST(LDFLAGS)
+AC_SUBST(x_AFLAGS)
+AC_SUBST(x_CFLAGS)
+AC_SUBST(x_CXXFLAGS)
+AC_SUBST(x_OBJCFLAGS)
+AC_SUBST(x_OBJCXXFLAGS)
+AC_SUBST(x_LDFLAGS)
+
+dnl These are potentially set for MSVC, in the code checking for UCRT below:
+my_original_CFLAGS=$CFLAGS
+my_original_CXXFLAGS=$CXXFLAGS
+my_original_CPPFLAGS=$CPPFLAGS
+
 dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
 dnl Needs to precede the AC_SEARCH_LIBS call below, which apparently calls
 dnl AC_PROG_CC internally.
@@ -4008,70 +4077,6 @@ if test "$enable_release_build" != yes -a \( -n "$ENABLE_SYMBOLS" -o -n "$ENABLE
     XCODE_DEBUG_INFORMATION_FORMAT=dwarf
 fi
 AC_SUBST(XCODE_DEBUG_INFORMATION_FORMAT)
-
-# Check for explicit A/C/CXX/OBJC/OBJCXX/LDFLAGS.
-# By default use the ones specified by our build system,
-# but explicit override is possible.
-AC_MSG_CHECKING(for explicit AFLAGS)
-if test -n "$AFLAGS"; then
-    AC_MSG_RESULT([$AFLAGS])
-    x_AFLAGS=
-else
-    AC_MSG_RESULT(no)
-    x_AFLAGS=[\#]
-fi
-AC_MSG_CHECKING(for explicit CFLAGS)
-if test -n "$CFLAGS"; then
-    AC_MSG_RESULT([$CFLAGS])
-    x_CFLAGS=
-else
-    AC_MSG_RESULT(no)
-    x_CFLAGS=[\#]
-fi
-AC_MSG_CHECKING(for explicit CXXFLAGS)
-if test -n "$CXXFLAGS"; then
-    AC_MSG_RESULT([$CXXFLAGS])
-    x_CXXFLAGS=
-else
-    AC_MSG_RESULT(no)
-    x_CXXFLAGS=[\#]
-fi
-AC_MSG_CHECKING(for explicit OBJCFLAGS)
-if test -n "$OBJCFLAGS"; then
-    AC_MSG_RESULT([$OBJCFLAGS])
-    x_OBJCFLAGS=
-else
-    AC_MSG_RESULT(no)
-    x_OBJCFLAGS=[\#]
-fi
-AC_MSG_CHECKING(for explicit OBJCXXFLAGS)
-if test -n "$OBJCXXFLAGS"; then
-    AC_MSG_RESULT([$OBJCXXFLAGS])
-    x_OBJCXXFLAGS=
-else
-    AC_MSG_RESULT(no)
-    x_OBJCXXFLAGS=[\#]
-fi
-AC_MSG_CHECKING(for explicit LDFLAGS)
-if test -n "$LDFLAGS"; then
-    AC_MSG_RESULT([$LDFLAGS])
-    x_LDFLAGS=
-else
-    AC_MSG_RESULT(no)
-    x_LDFLAGS=[\#]
-fi
-AC_SUBST(AFLAGS)
-AC_SUBST(CFLAGS)
-AC_SUBST(CXXFLAGS)
-AC_SUBST(OBJCFLAGS)
-AC_SUBST(OBJCXXFLAGS)
-AC_SUBST(LDFLAGS)
-AC_SUBST(x_AFLAGS)
-AC_SUBST(x_CFLAGS)
-AC_SUBST(x_CXXFLAGS)
-AC_SUBST(x_OBJCFLAGS)
-AC_SUBST(x_OBJCXXFLAGS)
-AC_SUBST(x_LDFLAGS)
 
 #
 # determine CPUNAME, OS, ...
@@ -12940,6 +12945,10 @@ fi
 if test -f config_host_lang.mk; then
     config_lang_md5=`$MD5SUM config_host_lang.mk | sed "s/ .*//"`
 fi
+
+CFLAGS=$my_original_CFLAGS
+CXXFLAGS=$my_original_CXXFLAGS
+CPPFLAGS=$my_original_CPPFLAGS
 
 AC_CONFIG_FILES([config_host.mk
                  config_host_lang.mk
