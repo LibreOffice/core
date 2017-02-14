@@ -237,9 +237,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                 {
                     xInplaceClient->activatingInplace();
 
-                    uno::Reference< embed::XWindowSupplier > xClientWindowSupplier( xInplaceClient, uno::UNO_QUERY );
-                    if ( !xClientWindowSupplier.is() )
-                        throw uno::RuntimeException(); // TODO: the inplace client implementation must support XWinSupp
+                    uno::Reference< embed::XWindowSupplier > xClientWindowSupplier( xInplaceClient, uno::UNO_QUERY_THROW );
 
                     m_xClientWindow = xClientWindowSupplier->getWindow();
                     m_aOwnRectangle = xInplaceClient->getPlacement();
@@ -248,9 +246,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
                     // create own window based on the client window
                     // place and resize the window according to the rectangles
-                    uno::Reference< awt::XWindowPeer > xClientWindowPeer( m_xClientWindow, uno::UNO_QUERY );
-                    if ( !xClientWindowPeer.is() )
-                        throw uno::RuntimeException(); // TODO: the container window must support the interface
+                    uno::Reference< awt::XWindowPeer > xClientWindowPeer( m_xClientWindow, uno::UNO_QUERY_THROW );
 
                     // dispatch provider may not be provided
                     uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
@@ -287,9 +283,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
     {
         if ( nNextState == embed::EmbedStates::RUNNING )
         {
-            uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
-            if ( !xInplaceClient.is() )
-                throw uno::RuntimeException();
+            uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY_THROW );
 
             m_xClientSite->visibilityChanged( true );
 

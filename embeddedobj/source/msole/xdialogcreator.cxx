@@ -297,11 +297,7 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
                     static_cast< ::cppu::OWeakObject* > ( new OleEmbeddedObject( m_xFactory ) ),
                     uno::UNO_QUERY );
 
-    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
-
-    if ( !xPersist.is() )
-        throw uno::RuntimeException(); // TODO: the interface must be supported by own document objects
-
+    uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY_THROW );
     xPersist->setPersistentEntry( xStorage,
                                     sEntryName,
                                     embed::EntryInitModes::DEFAULT_INIT,
