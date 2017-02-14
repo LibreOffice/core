@@ -96,15 +96,11 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     if ( !mbStatus )
         return false;
 
-    Bitmap aBmp(Size(mnWidth, mnHeight), mnDstBitsPerPix);
-    Bitmap::ScopedWriteAccess pAcc(aBmp);
-    if ( pAcc == nullptr )
-        return false;
+    bool bPalette(false);
+    BitmapPalette aPalette;
 
     if ( mnDstBitsPerPix <= 8 )     // paletten bildchen
     {
-        bool bPalette(false);
-
         if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW Colormap wird geskipped
         {
             sal_uLong nCurPos = m_rRAS.Tell();
@@ -119,7 +115,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
 
             if ( ( mnDstColors >= 2 ) && ( ( mnColorMapSize % 3 ) == 0 ) )
             {
-                pAcc->SetPaletteEntryCount( mnDstColors );
+                aPalette.SetEntryCount(mnDstColors);
                 sal_uInt16  i;
                 sal_uInt8   nRed[256], nGreen[256], nBlue[256];
                 for ( i = 0; i < mnDstColors; i++ ) m_rRAS.ReadUChar( nRed[ i ] );
@@ -127,7 +123,7 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
                 for ( i = 0; i < mnDstColors; i++ ) m_rRAS.ReadUChar( nBlue[ i ] );
                 for ( i = 0; i < mnDstColors; i++ )
                 {
-                    pAcc->SetPaletteColor( i, BitmapColor( nRed[ i ], nGreen[ i ], nBlue[ i ] ) );
+                    aPalette[i] = BitmapColor(nRed[ i ], nGreen[ i ], nBlue[ i ]);
                 }
                 bPalette = true;
             }
@@ -138,15 +134,16 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
         else if ( mnColorMapType != RAS_COLOR_NO_MAP )  // alles andere ist kein standard
             return false;
 
-        if ( !bPalette )
+        if (!bPalette)
         {
             mnDstColors = 1 << mnDstBitsPerPix;
-            pAcc->SetPaletteEntryCount( mnDstColors );
+            aPalette.SetEntryCount(mnDstColors);
             for ( sal_uInt16 i = 0; i < mnDstColors; i++ )
             {
                 sal_uLong nCount = 255 - ( 255 * i / ( mnDstColors - 1 ) );
-                pAcc->SetPaletteColor( i, BitmapColor( (sal_uInt8)nCount, (sal_uInt8)nCount, (sal_uInt8)nCount ) );
+                aPalette[i] = BitmapColor((sal_uInt8)nCount, (sal_uInt8)nCount, (sal_uInt8)nCount);
             }
+            bPalette = true;
         }
     }
     else
@@ -156,6 +153,16 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
             sal_uLong nCurPos = m_rRAS.Tell();
             m_rRAS.Seek( nCurPos + mnColorMapSize );
         }
+    }
+
+    Bitmap aBmp(Size(mnWidth, mnHeight), mnDstBitsPerPix);
+    Bitmap::ScopedWriteAccess pAcc(aBmp);
+    if (pAcc == nullptr)
+        return false;
+
+    if (bPalette)
+    {
+        pAcc->SetPalette(aPalette);
     }
 
     // Bitmap-Daten einlesen
