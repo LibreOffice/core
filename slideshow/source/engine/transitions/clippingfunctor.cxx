@@ -65,8 +65,8 @@ namespace slideshow
             // perform general transformations _before_ the reverse
             // mode changes. This allows the Transition table to be
             // filled more consistently (otherwise, when e.g. rotating
-            // a clip 90 degrees, the REVERSEMETHOD_FLIP_X becomes
-            // REVERSEMETHOD_FLIP_Y instead)
+            // a clip 90 degrees, the ReverseMethod::FlipX becomes
+            // ReverseMethod::FlipY instead)
             if (rTransitionInfo.mnRotationAngle != 0.0 ||
                 rTransitionInfo.mnScaleX != 1.0 ||
                 rTransitionInfo.mnScaleY != 1.0)
@@ -101,34 +101,26 @@ namespace slideshow
                             "TransitionFactory::TransitionFactory(): Unexpected reverse method" );
                         break;
 
-                    case TransitionInfo::REVERSEMETHOD_IGNORE:
+                    case TransitionInfo::ReverseMethod::Ignore:
                         break;
 
-                    case TransitionInfo::REVERSEMETHOD_INVERT_SWEEP:
-                        mbForwardParameterSweep = !mbForwardParameterSweep;
-                        break;
-
-                    case TransitionInfo::REVERSEMETHOD_SUBTRACT_POLYGON:
-                        mbSubtractPolygon = !mbSubtractPolygon;
-                        break;
-
-                    case TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT:
+                    case TransitionInfo::ReverseMethod::SubtractAndInvert:
                         mbForwardParameterSweep = !mbForwardParameterSweep;
                         mbSubtractPolygon = !mbSubtractPolygon;
                         break;
 
-                    case TransitionInfo::REVERSEMETHOD_ROTATE_180:
+                    case TransitionInfo::ReverseMethod::Rotate180:
                         maStaticTransformation = basegfx::tools::createRotateAroundPoint(0.5, 0.5, M_PI)
                             * maStaticTransformation;
                         break;
 
-                    case TransitionInfo::REVERSEMETHOD_FLIP_X:
+                    case TransitionInfo::ReverseMethod::FlipX:
                         maStaticTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(-1.0, 1.0, 1.0, 0.0)
                             * maStaticTransformation;
                         mbFlip = true;
                         break;
 
-                    case TransitionInfo::REVERSEMETHOD_FLIP_Y:
+                    case TransitionInfo::ReverseMethod::FlipY:
                         maStaticTransformation = basegfx::tools::createScaleTranslateB2DHomMatrix(1.0, -1.0, 0.0, 1.0)
                             * maStaticTransformation;
                         mbFlip = true;
