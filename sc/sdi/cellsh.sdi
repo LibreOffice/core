@@ -170,7 +170,6 @@ interface CellSelection
     SID_COPY            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_PASTE           [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_PASTE_SPECIAL   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
-    SID_PASTE_ONLY   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_PASTE_ONLY_TEXT   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_PASTE_ONLY_FORMULA   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_PASTE_ONLY_VALUE   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
