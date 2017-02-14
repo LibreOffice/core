@@ -53,15 +53,6 @@ public:
     ScaResId( sal_uInt16 nResId, ResMgr& rResMgr );
 };
 
-class ScaResPublisher : public Resource
-{
-public:
-    explicit ScaResPublisher( const ScaResId& rResId ) : Resource( rResId ) {}
-
-    using Resource::IsAvailableRes;
-    using Resource::FreeResource;
-};
-
 class ScaFuncRes : public Resource
 {
 public:

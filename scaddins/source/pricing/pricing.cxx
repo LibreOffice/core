@@ -215,14 +215,11 @@ OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrInd
 {
     OUString aRet;
 
-    ScaResPublisher aResPubl( ScaResId( RID_PRICING_FUNCTION_DESCRIPTIONS, GetResMgr() ) );
     ScaResId aResId( nResId, GetResMgr() );
     aResId.SetRT( RSC_RESOURCE );
 
-    if( aResPubl.IsAvailableRes( aResId ) )
-        ScaFuncRes aSubRes( aResId, GetResMgr(), nStrIndex, aRet );
+    ScaFuncRes aSubRes( aResId, GetResMgr(), nStrIndex, aRet );
 
-    aResPubl.FreeResource();
     return aRet;
 }
 
