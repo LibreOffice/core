@@ -73,7 +73,6 @@ SvxRectCtl::SvxRectCtl(vcl::Window* pParent, RectPoint eRpt,
     , nBorderWidth(nBorder)
     , nRadius(nCircle)
     , eDefRP(eRpt)
-    , eCS(CTL_STYLE::Rect)
     , pBitmap(nullptr)
     , m_nState(CTL_STATE::NONE)
     , mbCompleteDisable(false)
@@ -89,7 +88,6 @@ void SvxRectCtl::SetControlSettings(RectPoint eRpt, sal_uInt16 nBorder, sal_uInt
     nBorderWidth = nBorder;
     nRadius = nCircle;
     eDefRP = eRpt;
-    eCS = CTL_STYLE::Rect;
     Resize_Impl();
 }
 
@@ -125,38 +123,18 @@ void SvxRectCtl::Resize_Impl()
 {
     aSize = GetOutputSize();
 
-    switch( eCS )
-    {
-        case CTL_STYLE::Rect:
-        case CTL_STYLE::Angle:
-        case CTL_STYLE::Shadow:
-            aPtLT = Point( 0 + nBorderWidth,  0 + nBorderWidth );
-            aPtMT = Point( aSize.Width() / 2, 0 + nBorderWidth );
-            aPtRT = Point( aSize.Width() - nBorderWidth, 0 + nBorderWidth );
+    aPtLT = Point( 0 + nBorderWidth,  0 + nBorderWidth );
+    aPtMT = Point( aSize.Width() / 2, 0 + nBorderWidth );
+    aPtRT = Point( aSize.Width() - nBorderWidth, 0 + nBorderWidth );
 
-            aPtLM = Point( 0 + nBorderWidth,  aSize.Height() / 2 );
-            aPtMM = Point( aSize.Width() / 2, aSize.Height() / 2 );
-            aPtRM = Point( aSize.Width() - nBorderWidth, aSize.Height() / 2 );
+    aPtLM = Point( 0 + nBorderWidth,  aSize.Height() / 2 );
+    aPtMM = Point( aSize.Width() / 2, aSize.Height() / 2 );
+    aPtRM = Point( aSize.Width() - nBorderWidth, aSize.Height() / 2 );
 
-            aPtLB = Point( 0 + nBorderWidth,    aSize.Height() - nBorderWidth );
-            aPtMB = Point( aSize.Width() / 2,   aSize.Height() - nBorderWidth );
-            aPtRB = Point( aSize.Width() - nBorderWidth, aSize.Height() - nBorderWidth );
-        break;
+    aPtLB = Point( 0 + nBorderWidth,    aSize.Height() - nBorderWidth );
+    aPtMB = Point( aSize.Width() / 2,   aSize.Height() - nBorderWidth );
+    aPtRB = Point( aSize.Width() - nBorderWidth, aSize.Height() - nBorderWidth );
 
-        case CTL_STYLE::Line:
-            aPtLT = Point( 0 + 3 * nBorderWidth,  0 + nBorderWidth );
-            aPtMT = Point( aSize.Width() / 2, 0 + nBorderWidth );
-            aPtRT = Point( aSize.Width() - 3 * nBorderWidth, 0 + nBorderWidth );
-
-            aPtLM = Point( 0 + 3 * nBorderWidth,  aSize.Height() / 2 );
-            aPtMM = Point( aSize.Width() / 2, aSize.Height() / 2 );
-            aPtRM = Point( aSize.Width() - 3 * nBorderWidth, aSize.Height() / 2 );
-
-            aPtLB = Point( 0 + 3 * nBorderWidth,    aSize.Height() - nBorderWidth );
-            aPtMB = Point( aSize.Width() / 2,   aSize.Height() - nBorderWidth );
-            aPtRB = Point( aSize.Width() - 3 * nBorderWidth, aSize.Height() - nBorderWidth );
-        break;
-    }
     Reset();
     MarkToResetSettings(true, true);
     Invalidate();
@@ -255,24 +233,17 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
         aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
 
-        if( aPtNew == aPtMM && ( eCS == CTL_STYLE::Shadow || eCS == CTL_STYLE::Angle ) )
-        {
-            aPtNew = aPtLast;
-        }
-        else
-        {
-            Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ),
-                                   aPtLast + Point( nRadius, nRadius ) ) );
-            Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ),
-                                   aPtNew + Point( nRadius, nRadius ) ) );
-            eRP = GetRPFromPoint( aPtNew );
+        Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ),
+                               aPtLast + Point( nRadius, nRadius ) ) );
+        Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ),
+                               aPtNew + Point( nRadius, nRadius ) ) );
+        eRP = GetRPFromPoint( aPtNew );
 
-            SetActualRP( eRP );
+        SetActualRP( eRP );
 
-            vcl::Window *pTabPage = getNonLayoutParent(this);
-            if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
-                static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, eRP );
-        }
+        vcl::Window *pTabPage = getNonLayoutParent(this);
+        if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
+            static_cast<SvxTabPage*>(pTabPage)->PointChanged( this, eRP );
     }
 }
 
@@ -282,7 +253,6 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
     if(!IsCompletelyDisabled())
     {
         RectPoint eNewRP = eRP;
-        bool bUseMM = (eCS != CTL_STYLE::Shadow) && (eCS != CTL_STYLE::Angle);
 
         switch( rKeyEvt.GetKeyCode().GetCode() )
         {
@@ -292,7 +262,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
                     switch( eNewRP )
                     {
                         case RectPoint::LT: eNewRP = RectPoint::LM; break;
-                        case RectPoint::MT: eNewRP = bUseMM ? RectPoint::MM : RectPoint::MB; break;
+                        case RectPoint::MT: eNewRP = RectPoint::MM; break;
                         case RectPoint::RT: eNewRP = RectPoint::RM; break;
                         case RectPoint::LM: eNewRP = RectPoint::LB; break;
                         case RectPoint::MM: eNewRP = RectPoint::MB; break;
@@ -310,7 +280,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
                         case RectPoint::MM: eNewRP = RectPoint::MT; break;
                         case RectPoint::RM: eNewRP = RectPoint::RT; break;
                         case RectPoint::LB: eNewRP = RectPoint::LM; break;
-                        case RectPoint::MB: eNewRP = bUseMM ? RectPoint::MM : RectPoint::MT; break;
+                        case RectPoint::MB: eNewRP = RectPoint::MM; break;
                         case RectPoint::RB: eNewRP = RectPoint::RM; break;
                         default: ; //prevent warning
                     }
@@ -324,7 +294,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
                         case RectPoint::MT: eNewRP = RectPoint::LT; break;
                         case RectPoint::RT: eNewRP = RectPoint::MT; break;
                         case RectPoint::MM: eNewRP = RectPoint::LM; break;
-                        case RectPoint::RM: eNewRP = bUseMM ? RectPoint::MM : RectPoint::LM; break;
+                        case RectPoint::RM: eNewRP = RectPoint::MM; break;
                         case RectPoint::MB: eNewRP = RectPoint::LB; break;
                         case RectPoint::RB: eNewRP = RectPoint::MB; break;
                         default: ; //prevent warning
@@ -338,7 +308,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
                     {
                         case RectPoint::LT: eNewRP = RectPoint::MT; break;
                         case RectPoint::MT: eNewRP = RectPoint::RT; break;
-                        case RectPoint::LM: eNewRP = bUseMM ? RectPoint::MM : RectPoint::RM; break;
+                        case RectPoint::LM: eNewRP = RectPoint::MM; break;
                         case RectPoint::MM: eNewRP = RectPoint::RM; break;
                         case RectPoint::LB: eNewRP = RectPoint::MB; break;
                         case RectPoint::MB: eNewRP = RectPoint::RB; break;
@@ -404,54 +374,15 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
 
     rRenderContext.SetFillColor();
 
-    switch (eCS)
+    if (!IsEnabled())
     {
-
-        case CTL_STYLE::Rect:
-        case CTL_STYLE::Shadow:
-            if (!IsEnabled())
-            {
-                Color aOldCol = rRenderContext.GetLineColor();
-                rRenderContext.SetLineColor(rStyles.GetLightColor());
-                rRenderContext.DrawRect(Rectangle(aPtLT + aPtDiff, aPtRB + aPtDiff));
-                rRenderContext.SetLineColor(aOldCol);
-            }
-            rRenderContext.DrawRect(Rectangle(aPtLT, aPtRB));
-        break;
-
-        case CTL_STYLE::Line:
-            if (!IsEnabled())
-            {
-                Color aOldCol = rRenderContext.GetLineColor();
-                rRenderContext.SetLineColor(rStyles.GetLightColor());
-                rRenderContext. DrawLine(aPtLM - Point(2 * nBorderWidth, 0) + aPtDiff,
-                                         aPtRM + Point(2 * nBorderWidth, 0) + aPtDiff);
-                SetLineColor( aOldCol );
-            }
-            rRenderContext.DrawLine(aPtLM - Point(2 * nBorderWidth, 0),
-                                    aPtRM + Point(2 * nBorderWidth, 0));
-        break;
-
-        case CTL_STYLE::Angle:
-            if (!IsEnabled())
-            {
-                Color aOldCol = rRenderContext.GetLineColor();
-                rRenderContext.SetLineColor(rStyles.GetLightColor());
-                rRenderContext.DrawLine(aPtLT + aPtDiff, aPtRB + aPtDiff);
-                rRenderContext.DrawLine(aPtLB + aPtDiff, aPtRT + aPtDiff);
-                rRenderContext.DrawLine(aPtLM + aPtDiff, aPtRM + aPtDiff);
-                rRenderContext.DrawLine(aPtMT + aPtDiff, aPtMB + aPtDiff);
-                rRenderContext.SetLineColor(aOldCol);
-            }
-            rRenderContext.DrawLine(aPtLT, aPtRB);
-            rRenderContext.DrawLine(aPtLB, aPtRT);
-            rRenderContext.DrawLine(aPtLM, aPtRM);
-            rRenderContext.DrawLine(aPtMT, aPtMB);
-        break;
-
-        default:
-            break;
+        Color aOldCol = rRenderContext.GetLineColor();
+        rRenderContext.SetLineColor(rStyles.GetLightColor());
+        rRenderContext.DrawRect(Rectangle(aPtLT + aPtDiff, aPtRB + aPtDiff));
+        rRenderContext.SetLineColor(aOldCol);
     }
+    rRenderContext.DrawRect(Rectangle(aPtLT, aPtRB));
+
     rRenderContext.SetFillColor(rRenderContext.GetBackground().GetColor());
 
     Size aBtnSize(11, 11);
@@ -473,8 +404,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         rRenderContext.DrawBitmap(aPtMT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtRT - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtLM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
-        if (eCS == CTL_STYLE::Rect || eCS == CTL_STYLE::Line)
-            rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtRM - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtLB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtMB - aToCenter, aDstBtnSize, aBtnPnt3, aBtnSize, rBitmap);
@@ -488,8 +418,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
         rRenderContext.DrawBitmap(aPtLM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
 
         // Center for rectangle and line
-        if (eCS == CTL_STYLE::Rect || eCS == CTL_STYLE::Line)
-            rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap);
+        rRenderContext.DrawBitmap(aPtMM - aToCenter, aDstBtnSize, aBtnPnt1, aBtnSize, rBitmap);
 
         rRenderContext.DrawBitmap(aPtRM - aToCenter, aDstBtnSize, bNoHorz?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
         rRenderContext.DrawBitmap(aPtLB - aToCenter, aDstBtnSize, (bNoHorz || bNoVert)?aBtnPnt3:aBtnPnt1, aBtnSize, rBitmap);
@@ -501,7 +430,7 @@ void SvxRectCtl::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
     // CompletelyDisabled() added to have a disabled state for SvxRectCtl
     if (!IsCompletelyDisabled())
     {
-        if (IsEnabled() && (eCS != CTL_STYLE::Angle || aPtNew != aPtMM))
+        if (IsEnabled())
         {
             Point aCenterPt(aPtNew);
             aCenterPt -= aToCenter;
@@ -673,11 +602,6 @@ void SvxRectCtl::SetState( CTL_STATE nState )
     vcl::Window *pTabPage = getNonLayoutParent(this);
     if (pTabPage && WindowType::TABPAGE == pTabPage->GetType())
         static_cast<SvxTabPage*>(pTabPage)->PointChanged(this, eRP);
-}
-
-sal_uInt8 SvxRectCtl::GetNumOfChildren() const
-{
-    return ( eCS == CTL_STYLE::Angle )? 8 : 9;
 }
 
 Rectangle SvxRectCtl::CalculateFocusRectangle() const

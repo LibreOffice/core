@@ -141,7 +141,7 @@ SvxRectCtlAccessibleContext::SvxRectCtlAccessibleContext(
     mpChildren( nullptr ),
     mnClientId( 0 ),
     mnSelectedChild( NOCHILDSELECTED ),
-    mbAngleMode( rRepr.GetNumOfChildren() == 8 )
+    mbAngleMode( false )
 {
     {
         ::SolarMutexGuard aSolarGuard;
@@ -237,7 +237,7 @@ sal_Int32 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChildCount()
 
     ThrowExceptionIfNotAlive();
 
-    return mpRepr->GetNumOfChildren();
+    return SvxRectCtl::NO_CHILDREN;
 }
 
 Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChild( sal_Int32 nIndex )

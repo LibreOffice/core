@@ -88,7 +88,6 @@ protected:
     Point aPtLB, aPtMB, aPtRB;
     Point aPtNew;
     RectPoint eRP, eDefRP;
-    CTL_STYLE eCS;
     Bitmap* pBitmap;
     CTL_STATE m_nState;
 
@@ -123,12 +122,12 @@ public:
     virtual Size        GetOptimalSize() const override;
 
     void                Reset();
-    RectPoint          GetActualRP() const { return eRP;}
+    RectPoint           GetActualRP() const { return eRP;}
     void                SetActualRP( RectPoint eNewRP );
 
     void                SetState( CTL_STATE nState );
 
-    sal_uInt8               GetNumOfChildren() const;   // returns number of usable radio buttons
+    static const sal_uInt8 NO_CHILDREN = 9;   // returns number of usable radio buttons
 
     Rectangle           CalculateFocusRectangle() const;
     Rectangle           CalculateFocusRectangle( RectPoint eRectPoint ) const;

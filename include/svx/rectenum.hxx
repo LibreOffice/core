@@ -32,14 +32,6 @@ enum class RectPoint
     RB  // bottom right
 };
 
-enum class CTL_STYLE
-{
-    Rect,
-    Line,
-    Angle,
-    Shadow
-};
-
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
