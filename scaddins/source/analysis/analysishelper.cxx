@@ -1388,7 +1388,6 @@ public:
     const ResStringArray&   GetStringArray() const { return aStrArray; }
 };
 
-
 FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
     aIntName( OUString::createFromAscii( r.pIntName ) ),
     nUINameID( r.nUINameID ),
@@ -1396,13 +1395,12 @@ FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
     bDouble( r.bDouble ),
     bWithOpt( r.bWithOpt ),
     nParam( r.nNumOfParams ),
-    nCompID( r.nCompListID ),
     eCat( r.eCat )
 {
     if (r.pSuffix)
         aSuffix = OUString::createFromAscii( r.pSuffix);
 
-    AnalysisRscStrArrLoader aArrLoader( RID_ANALYSIS_DEFFUNCTION_NAMES, nCompID, rResMgr );
+    AnalysisRscStrArrLoader aArrLoader(RID_ANALYSIS_DEFFUNCTION_NAMES, r.nCompListID, rResMgr);
     const ResStringArray&   rArr = aArrLoader.GetStringArray();
 
     sal_uInt16              nCount = sal::static_int_cast<sal_uInt16>( rArr.Count() );
@@ -1412,11 +1410,9 @@ FuncData::FuncData( const FuncDataBase& r, ResMgr& rResMgr ) :
         aCompList[n] = rArr.GetString( n );
 }
 
-
 FuncData::~FuncData()
 {
 }
-
 
 sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 {

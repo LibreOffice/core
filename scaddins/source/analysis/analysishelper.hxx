@@ -222,7 +222,6 @@ private:
     bool                    bWithOpt;           // has internal parameter on first position
 
     sal_uInt16              nParam;             // num of parameters
-    sal_uInt16              nCompID;
     std::vector<OUString>   aCompList;          // list of all valid names
     FDCategory              eCat;               // function category
     OUString                aSuffix;            // if bDouble and not empty, append a suffix other than "_ADD" for UI
