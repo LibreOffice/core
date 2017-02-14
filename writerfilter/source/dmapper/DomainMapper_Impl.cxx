@@ -3868,6 +3868,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         ::std::vector<OUString>::const_iterator aPartIt = aParts.begin();
 
                         OUString sURL;
+                        OUString sTarget;
 
                         while (aPartIt != aItEnd)
                         {
@@ -3889,6 +3890,8 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                                 if (aPartIt == aItEnd)
                                     break;
+
+                                sTarget = *aPartIt;
                             }
                             else
                             {
@@ -3916,6 +3919,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                             }
                             pContext->SetHyperlinkURL(sURL);
                         }
+
+                        if (!sTarget.isEmpty())
+                            pContext->SetHyperlinkTarget(sTarget);
                     }
                     break;
                     case FIELD_IF           : break;
@@ -4578,6 +4584,9 @@ void DomainMapper_Impl::PopFieldContext()
                             uno::Reference< beans::XPropertySet > xCrsrProperties( xCrsr, uno::UNO_QUERY_THROW );
                             xCrsrProperties->setPropertyValue(getPropertyName(PROP_HYPER_LINK_U_R_L), uno::
                                                               makeAny(pContext->GetHyperlinkURL()));
+
+                            if (!pContext->GetHyperlinkTarget().isEmpty())
+                                xCrsrProperties->setPropertyValue("HyperLinkTarget", uno::makeAny(pContext->GetHyperlinkTarget()));
 
                             if (m_bStartTOC) {
                                 OUString sDisplayName("Index Link");

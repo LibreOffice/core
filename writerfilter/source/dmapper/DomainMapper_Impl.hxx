@@ -150,6 +150,8 @@ class FieldContext
     css::uno::Reference<css::beans::XPropertySet> m_xTC; // TOX entry
     css::uno::Reference<css::beans::XPropertySet> m_xCustomField;
     OUString                                                                 m_sHyperlinkURL;
+    /// A frame for the the hyperlink when one exists.
+    OUString m_sHyperlinkTarget;
     FFDataHandler::Pointer_t                                                        m_pFFDataHandler;
     FormControlHelper::Pointer_t                                                    m_pFormControlHelper;
     /// (Character) properties of the field itself.
@@ -188,6 +190,8 @@ public:
 
     void    SetHyperlinkURL( const OUString& rURL ) { m_sHyperlinkURL = rURL; }
     const OUString&                                                      GetHyperlinkURL() { return m_sHyperlinkURL; }
+    void SetHyperlinkTarget(const OUString& rTarget) { m_sHyperlinkTarget = rTarget; }
+    const OUString& GetHyperlinkTarget() { return m_sHyperlinkTarget; }
 
     void setFFDataHandler(FFDataHandler::Pointer_t pFFDataHandler) { m_pFFDataHandler = pFFDataHandler; }
     const FFDataHandler::Pointer_t& getFFDataHandler() const { return m_pFFDataHandler; }
