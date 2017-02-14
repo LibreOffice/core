@@ -19,7 +19,6 @@
 #include "document.hxx"
 #include "uiitems.hxx"
 #include "reffact.hxx"
-#include "strload.hxx"
 #include "docfunc.hxx"
 #include "TableFillingAndNavigationTools.hxx"
 

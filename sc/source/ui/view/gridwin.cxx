@@ -123,7 +123,6 @@
 #include "cliputil.hxx"
 #include "queryentry.hxx"
 #include "markdata.hxx"
-#include "strload.hxx"
 #include "externalrefmgr.hxx"
 #include "dociter.hxx"
 #include "hints.hxx"

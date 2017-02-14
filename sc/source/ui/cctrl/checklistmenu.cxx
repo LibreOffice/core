@@ -18,8 +18,8 @@
  */
 
 #include "checklistmenu.hxx"
-#include "strload.hxx"
 #include "globstr.hrc"
+#include "scresid.hxx"
 #include "sc.hrc"
 
 #include <vcl/decoview.hxx>

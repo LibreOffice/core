@@ -39,7 +39,6 @@
 #include "dbdocfun.hxx"
 #include "checklistmenu.hxx"
 #include "dpcontrol.hxx"
-#include "strload.hxx"
 #include "userlist.hxx"
 #include "scabstdlg.hxx"
 #include "spellcheckcontext.hxx"

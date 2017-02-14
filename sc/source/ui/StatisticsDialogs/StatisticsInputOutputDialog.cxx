@@ -21,7 +21,6 @@
 #include "reffact.hxx"
 #include "scresid.hxx"
 #include "docfunc.hxx"
-#include "strload.hxx"
 
 #include "StatisticsInputOutputDialog.hxx"
 

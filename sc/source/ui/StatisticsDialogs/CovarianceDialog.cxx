@@ -10,7 +10,6 @@
 
 #include "docsh.hxx"
 #include "reffact.hxx"
-#include "strload.hxx"
 
 #include "CovarianceDialog.hxx"
 
