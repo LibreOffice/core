@@ -126,6 +126,7 @@ for d in definitionSet:
          "sw/inc/calc.hxx", # SwCalcOper
          "svtools/source/config/helpopt.cxx", # HelpProperty
          "include/svtools/htmltokn.h",
+         "include/sfx2/sidebar/Theme.hxx", # ThemeItem
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",

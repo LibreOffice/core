@@ -99,7 +99,6 @@ enum class SfxShellFeature
     NONE                    = 0x0000,
     // Writer only, class SwView
     SwChildWindowLabel      = 0x0001,
-    SwChildWindowMailmerge  = 0x0002,
     // Basic only, class Shell
     BasicShowBrowser        = 0x0004,
     // Forms only, class FmFormShell
@@ -115,13 +114,13 @@ enum class SfxShellFeature
     FormTBDesign            = 0x1000,
     FormShowDataNavigator   = 0x2000,
     // masks to make sure modules don't use flags from an other
-    SwMask                  = 0x0003,
+    SwMask                  = 0x0001,
     BasicMask               = 0x0004,
     FormMask                = 0x3ff8
 };
 namespace o3tl
 {
-    template<> struct typed_flags<SfxShellFeature> : is_typed_flags<SfxShellFeature, 0x3fff> {};
+    template<> struct typed_flags<SfxShellFeature> : is_typed_flags<SfxShellFeature, 0x3ffd> {};
 }
 
 typedef void (*SfxExecFunc)(SfxShell *, SfxRequest &rReq);

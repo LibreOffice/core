@@ -576,10 +576,6 @@ bool SwView::HasUIFeature(SfxShellFeature nFeature) const
     {
     case SfxShellFeature::SwChildWindowLabel:
         return m_pWrtShell->IsLabelDoc();
-#if HAVE_FEATURE_DBCONNECTIVITY
-    case SfxShellFeature::SwChildWindowMailmerge:
-        return (nullptr != GetMailMergeConfigItem());
-#endif
     default:
         return false;
     }
