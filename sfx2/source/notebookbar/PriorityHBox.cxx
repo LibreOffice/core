@@ -40,9 +40,6 @@ class SFX2_DLLPUBLIC PriorityHBox : public VclHBox
 {
 private:
     bool m_bInitialized;
-    long m_nNeededWidth;
-
-    ScopedVclPtr<SystemWindow> m_pSystemWindow;
 
     std::vector<IPrioritable*> m_aSortedChilds;
 
@@ -50,7 +47,6 @@ public:
     explicit PriorityHBox(vcl::Window *pParent)
         : VclHBox(pParent)
         , m_bInitialized(false)
-        , m_nNeededWidth(0)
     {
     }
 
@@ -59,36 +55,63 @@ public:
         disposeOnce();
     }
 
-    virtual void dispose() override
+    virtual Size calculateRequisition() const override
     {
-        if (m_pSystemWindow)
+        sal_uInt16 nVisibleChildren = 0;
+
+        Size aSize;
+        for (vcl::Window *pChild = GetWindow(GetWindowType::FirstChild); pChild; pChild = pChild->GetWindow(GetWindowType::Next))
         {
-            m_pSystemWindow->RemoveEventListener(LINK(this, PriorityHBox, WindowEventListener));
-            m_pSystemWindow.clear();
+            if (!pChild->IsVisible())
+                continue;
+            ++nVisibleChildren;
+            Size aChildSize = getLayoutRequisition(*pChild);
+
+            long nPrimaryDimension = getPrimaryDimension(aChildSize);
+            nPrimaryDimension += pChild->get_padding() * 2;
+            setPrimaryDimension(aChildSize, nPrimaryDimension);
+
+            accumulateMaxes(aChildSize, aSize);
         }
-        VclHBox::dispose();
+
+        // Override required width to allow allocation of less space than sum of children widths
+        aSize.Width() = 0;
+        return finalizeMaxes(aSize, nVisibleChildren);
     }
 
     virtual void Resize() override
     {
         long nWidth = GetSizePixel().Width();
-        long nCurrentWidth = m_nNeededWidth;
+        long nCurrentWidth = VclHBox::calculateRequisition().getWidth();
 
         // Hide lower priority controls
         auto pChild = m_aSortedChilds.begin();
         while (nCurrentWidth > nWidth && pChild != m_aSortedChilds.end())
         {
-            DropdownBox* pContainer = static_cast<DropdownBox*>(*pChild);
-            nCurrentWidth -= pContainer->GetSizePixel().Width() + get_spacing();
-            pContainer->HideContent();
-            nCurrentWidth += pContainer->GetSizePixel().Width() + get_spacing();
+            DropdownBox* pBox = static_cast<DropdownBox*>(*pChild);
+
+            nCurrentWidth -= pBox->GetOutputWidthPixel() + get_spacing();
+            pBox->HideContent();
+            nCurrentWidth += pBox->GetOutputWidthPixel() + get_spacing();
+
             pChild++;
         }
 
         // Show higher priority controls if we already have enough space
         while (pChild != m_aSortedChilds.end())
         {
-            static_cast<DropdownBox*>(*pChild)->ShowContent();
+            DropdownBox* pBox = static_cast<DropdownBox*>(*pChild);
+
+            nCurrentWidth -= pBox->GetOutputWidthPixel() + get_spacing();
+            pBox->ShowContent();
+            nCurrentWidth += getLayoutRequisition(*pBox).Width() + get_spacing();
+
+            if (nCurrentWidth > nWidth)
+            {
+                pBox->HideContent();
+                break;
+            }
+
             pChild++;
         }
 
@@ -101,14 +124,12 @@ public:
         {
             m_bInitialized = true;
 
-            m_pSystemWindow = SfxViewFrame::Current()->GetFrame().GetSystemWindow();
-            if (m_pSystemWindow)
+            GetChildrenWithPriorities();
+
+            SystemWindow* pSystemWindow = SfxViewFrame::Current()->GetFrame().GetSystemWindow();
+            if (pSystemWindow)
             {
-                m_pSystemWindow->AddEventListener(LINK(this, PriorityHBox, WindowEventListener));
-
-                CalcNeededWidth();
-
-                long nWidth = m_pSystemWindow->GetSizePixel().Width();
+                long nWidth = pSystemWindow->GetSizePixel().Width();
                 SetSizePixel(Size(nWidth, GetSizePixel().Height()));
             }
         }
@@ -116,14 +137,11 @@ public:
         VclHBox::Paint(rRenderContext, rRect);
     }
 
-    void CalcNeededWidth()
+    void GetChildrenWithPriorities()
     {
-        int spacing = get_spacing();
-
         for (sal_uInt16 i = 0; i < GetChildCount(); ++i)
         {
             vcl::Window* pChild = GetChild(i);
-            m_nNeededWidth += pChild->GetSizePixel().Width() + spacing;
 
             // Add only containers which have explicitly assigned priority.
             IPrioritable* pPrioritable = pChild->GetType() == WindowType::CONTAINER ?
@@ -134,23 +152,7 @@ public:
 
         std::sort(m_aSortedChilds.begin(), m_aSortedChilds.end(), lcl_comparePriority);
     }
-
-private:
-    DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 };
-
-IMPL_LINK( PriorityHBox, WindowEventListener, VclWindowEvent&, rEvent, void )
-{
-    if (rEvent.GetId() == VclEventId::WindowResize)
-    {
-        vcl::Window* pEventWindow = rEvent.GetWindow();
-
-        OSL_ENSURE(pEventWindow, "PriorityHBox::WindowEventListener: no window!");
-
-        long nWidth = pEventWindow->GetSizePixel().Width();
-        SetSizePixel(Size(nWidth, GetSizePixel().Height()));
-    }
-}
 
 VCL_BUILDER_FACTORY(PriorityHBox)
 

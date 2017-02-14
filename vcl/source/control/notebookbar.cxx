@@ -105,6 +105,18 @@ void NotebookBar::setPosSizePixel(long nX, long nY, long nWidth, long nHeight, P
         VclContainer::setLayoutAllocation(*pChild, Point(0, 0), Size(nWidth, nHeight));
 }
 
+void NotebookBar::Resize()
+{
+    if(m_pUIBuilder && m_pUIBuilder->get_widget_root())
+    {
+        vcl::Window* pWindow = m_pUIBuilder->get_widget_root()->GetChild(0);
+        Size aSize = pWindow->GetSizePixel();
+        aSize.Width() = GetSizePixel().Width();
+        pWindow->SetSizePixel(aSize);
+    }
+    Control::Resize();
+}
+
 void NotebookBar::SetIconClickHdl(Link<NotebookBar*, void> aHdl)
 {
     if (m_pContextContainer)
