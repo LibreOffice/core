@@ -1102,9 +1102,7 @@ bool GalleryTheme::InsertURL( const INetURLObject& rURL, sal_uIntPtr nInsertPos 
 
     if( nImportRet != GalleryGraphicImportRet::IMPORT_NONE )
     {
-        if ( GalleryGraphicImportRet::IMPORT_INET == nImportRet )
-            pNewObj.reset(static_cast<SgaObject*>(new SgaObjectINet( aGraphic, rURL, aFormat )));
-        else if ( aGraphic.IsAnimated() )
+        if ( aGraphic.IsAnimated() )
             pNewObj.reset(static_cast<SgaObject*>(new SgaObjectAnim( aGraphic, rURL, aFormat )));
         else
             pNewObj.reset(static_cast<SgaObject*>(new SgaObjectBmp( aGraphic, rURL, aFormat )));
