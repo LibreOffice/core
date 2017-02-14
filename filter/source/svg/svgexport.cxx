@@ -1227,7 +1227,7 @@ void SVGFilter::implEmbedBulletGlyphs()
 
 void SVGFilter::implEmbedBulletGlyph( sal_Unicode cBullet, const OUString & sPathData )
 {
-    OUString sId = "bullet-char-template(" + OUString::number( (sal_Int32)cBullet ) + ")";
+    OUString sId = "bullet-char-template-" + OUString::number( (sal_Int32)cBullet );
     mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", sId );
 
     double fFactor = 1.0 / 2048;

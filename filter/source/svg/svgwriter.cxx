@@ -1372,9 +1372,9 @@ void SVGTextWriter::implWriteBulletChars()
     {
         // <g id="?" > (used by animations)
         {
-            // As id we use the id of the text portion placeholder wrapped
-            // by bullet-char(*)
-            sId = "bullet-char(" + it->first+ ")";
+            // As id we use the id of the text portion placeholder with prefix
+            // bullet-char-*
+            sId = "bullet-char-" + it->first;
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "id", sId );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, "class", "BulletChar" );
             SvXMLElementExport aBulletCharElem( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
@@ -1401,9 +1401,8 @@ void SVGTextWriter::implWriteBulletChars()
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, "transform", sScaling );
 
                     // Add ref attribute
-                    sRefId = "#bullet-char-template(" +
-                             OUString::number( ( rInfo.cBulletChar ) ) +
-                             ")";
+                    sRefId = "#bullet-char-template-" +
+                             OUString::number( ( rInfo.cBulletChar ) );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
                     SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
