@@ -53,22 +53,6 @@ public:
     ScaResId( sal_uInt16 nResId, ResMgr& rResMgr );
 };
 
-class ScaResStringLoader
-{
-private:
-    OUString                    aStr;
-
-public:
-    ScaResStringLoader(sal_uInt16 nResId, sal_uInt16 nStrId, ResMgr& rResMgr)
-    {
-        ResStringArray aStrArray(ScaResId(nResId, rResMgr));
-        aStr = aStrArray.GetString(aStrArray.FindIndex(nStrId));
-    }
-
-    const OUString&      GetString() const   { return aStr; }
-
-};
-
 class ScaResPublisher : public Resource
 {
 public:

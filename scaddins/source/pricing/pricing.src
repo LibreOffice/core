@@ -399,15 +399,25 @@ Resource RID_PRICING_FUNCTION_DESCRIPTIONS
 };
 
 // function names as accessible from cells
-StringArray RID_PRICING_FUNCTION_NAMES
+
+String PRICING_FUNCNAME_OptBarrier
 {
-    ItemList [ en-US ] =
-    {
-        < "OPT_BARRIER"; PRICING_FUNCNAME_OptBarrier ; >;
-        < "OPT_TOUCH"; PRICING_FUNCNAME_OptTouch ; >;
-        < "OPT_PROB_HIT"; PRICING_FUNCNAME_OptProbHit ; >;
-        < "OPT_PROB_INMONEY"; PRICING_FUNCNAME_OptProbInMoney ; >;
-    };
+    Text [ en-US ] = "OPT_BARRIER";
+};
+
+String PRICING_FUNCNAME_OptTouch
+{
+    Text [ en-US ] = "OPT_TOUCH";
+};
+
+String PRICING_FUNCNAME_OptProbHit
+{
+    Text [ en-US ] = "OPT_PROB_HIT";
+};
+
+String PRICING_FUNCNAME_OptProbInMoney
+{
+    Text [ en-US ] = "OPT_PROB_INMONEY";
 };
 
 // These were originally meant to be able to load Excel documents that for
