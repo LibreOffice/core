@@ -43,12 +43,12 @@ private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, rtl::OUString &rTypeName) override;
     virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdtGenerator &rGenerator, utl::MediaDescriptor &rDescriptor) override;
 
-    void generate(librevenge::RVNGTextInterface &rDocument) const;
+    static void generate(librevenge::RVNGTextInterface &rDocument);
 };
 
 bool TextImportFilter::doImportDocument(librevenge::RVNGInputStream &, OdtGenerator &rGenerator, utl::MediaDescriptor &)
 {
-    generate(rGenerator);
+    TextImportFilter::generate(rGenerator);
     return true;
 }
 
@@ -74,7 +74,7 @@ uno::Sequence< rtl::OUString > SAL_CALL TextImportFilter::getSupportedServiceNam
     return {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
 }
 
-void TextImportFilter::generate(librevenge::RVNGTextInterface &rDocument) const
+void TextImportFilter::generate(librevenge::RVNGTextInterface &rDocument)
 {
     using namespace librevenge;
 
