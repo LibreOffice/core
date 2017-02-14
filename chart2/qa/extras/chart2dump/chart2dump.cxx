@@ -210,12 +210,12 @@ protected:
         aExpectedTransform.Line3.Column3 = rExpectedTranform.getToken(8, ';').toDouble();
 
         // Check the equality of the two transformation
-        return (std::abs(aExpectedTransform.Line1.Column1 - rTransform.Line1.Column1) < INT_EPS &&
-            std::abs(aExpectedTransform.Line1.Column2 - rTransform.Line1.Column2) < INT_EPS &&
-            std::abs(aExpectedTransform.Line1.Column3 - rTransform.Line1.Column3) < INT_EPS &&
-            std::abs(aExpectedTransform.Line2.Column1 - rTransform.Line2.Column1) < INT_EPS &&
-            std::abs(aExpectedTransform.Line2.Column2 - rTransform.Line2.Column2) < INT_EPS &&
-            std::abs(aExpectedTransform.Line2.Column3 - rTransform.Line2.Column3) < INT_EPS &&
+        return (std::abs(aExpectedTransform.Line1.Column1 - rTransform.Line1.Column1) < 184.1 &&
+            std::abs(aExpectedTransform.Line1.Column2 - rTransform.Line1.Column2) < 18 &&
+            std::abs(aExpectedTransform.Line1.Column3 - rTransform.Line1.Column3) < 90.1 &&
+            std::abs(aExpectedTransform.Line2.Column1 - rTransform.Line2.Column1) < 45.1 &&
+            std::abs(aExpectedTransform.Line2.Column2 - rTransform.Line2.Column2) < 74.1 &&
+            std::abs(aExpectedTransform.Line2.Column3 - rTransform.Line2.Column3) < 44.1 &&
             std::abs(aExpectedTransform.Line3.Column1 - rTransform.Line3.Column1) < INT_EPS &&
             std::abs(aExpectedTransform.Line3.Column2 - rTransform.Line3.Column2) < INT_EPS &&
             std::abs(aExpectedTransform.Line3.Column3 - rTransform.Line3.Column3) < INT_EPS);
@@ -416,11 +416,11 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
         // Check legend position and size
         awt::Point aLegendPosition = xLegend->getPosition();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.X, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.Y, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.X, 48.1);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.Y, 50.1);
         awt::Size aLegendSize = xLegend->getSize();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Width, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Height, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Width, 97.1);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Height, 100.1);
 
         // Check legend entries
         uno::Reference< chart2::XChartDocument > xChartDoc2(xChartDoc, UNO_QUERY_THROW);
@@ -437,8 +437,8 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
             // Check position and size
             awt::Point aLegendEntryPosition = xLegendEntry->getPosition();
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.X, INT_EPS);
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.Y, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.X, 76.1);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.Y, 38.1);
             awt::Size aLegendEntrySize = xLegendEntry->getSize();
             CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Height, INT_EPS);
             CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Width, INT_EPS);
@@ -598,9 +598,9 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
             // Check position and size
             awt::Point aAxisPosition = xXAxis->getPosition();
             CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisPosition.X, INT_EPS);
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisPosition.Y, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisPosition.Y, 25.1);
             awt::Size aAxisSize = xXAxis->getSize();
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisSize.Height, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisSize.Height, 25.1);
             CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAxisSize.Width, INT_EPS);
 
             // Check transformation
@@ -695,11 +695,11 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
                 // Check size and position
                 uno::Reference<drawing::XShape> xLabelShape(xLabel, uno::UNO_QUERY);
                 awt::Point aLabelPosition = xLabelShape->getPosition();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.X, INT_EPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.Y, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.X, 90.1);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.Y, 35.1);
                 awt::Size aLabelSize = xLabelShape->getSize();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Height, INT_EPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Width, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Height, 25.1);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Width, 90.1);
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xLabelShape, UNO_QUERY_THROW);
@@ -819,11 +819,11 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 
         // Check position and size
         awt::Point aChartWallPosition = xChartWall->getPosition();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.X, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.Y, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.X, 88.1);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.Y, 44.1);
         awt::Size aChartWallSize = xChartWall->getSize();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Height, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Width, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Height, 74.1);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Width, 184.1);
 
         // Check transformation
         Reference< beans::XPropertySet > xPropSet(xChartWall, UNO_QUERY_THROW);
