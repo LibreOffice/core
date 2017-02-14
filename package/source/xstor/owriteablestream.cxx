@@ -361,10 +361,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
     if ( m_bFlushed )
     {
         SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "An inserted stream is incomplete!\n" );
-        uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY );
-        if ( !xTunnel.is() )
-            throw uno::RuntimeException(); // TODO
-
+        uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY_THROW );
         xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
 
         m_bFlushed = false;
@@ -741,9 +738,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
     m_xPackageStream->setDataStream( xInStream );
 
     // copy properties to the package stream
-    uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
-    if ( !xPropertySet.is() )
-        throw uno::RuntimeException();
+    uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY_THROW );
 
     // The storage-package communication has a problem
     // the storage caches properties, thus if the package changes one of them itself
@@ -862,9 +857,7 @@ void OWriteStream_Impl::Commit()
     }
 
     // copy properties to the package stream
-    uno::Reference< beans::XPropertySet > xPropertySet( xNewPackageStream, uno::UNO_QUERY );
-    if ( !xPropertySet.is() )
-        throw uno::RuntimeException();
+    uno::Reference< beans::XPropertySet > xPropertySet( xNewPackageStream, uno::UNO_QUERY_THROW );
 
     for ( sal_Int32 nInd = 0; nInd < m_aProps.getLength(); nInd++ )
     {
@@ -1103,27 +1096,19 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
 
     // TODO: may be also raw stream should be marked
 
-    uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY );
-    if ( xPropSet.is() )
+    uno::Reference< beans::XPropertySet > xPropSet( m_xPackageStream, uno::UNO_QUERY_THROW );
+    for ( sal_Int32 nInd = 0; nInd < aResult.getLength(); nInd++ )
     {
-        for ( sal_Int32 nInd = 0; nInd < aResult.getLength(); nInd++ )
-        {
-            try {
-                aResult[nInd].Value = xPropSet->getPropertyValue( aResult[nInd].Name );
-            }
-            catch( const uno::Exception& rException )
-            {
-                AddLog( rException.Message );
-                AddLog( "Quiet exception" );
-
-                SAL_WARN( "package.xstor", "A property can't be retrieved!" );
-            }
+        try {
+            aResult[nInd].Value = xPropSet->getPropertyValue( aResult[nInd].Name );
         }
-    }
-    else
-    {
-        SAL_WARN( "package.xstor", "Can not get properties from a package stream!" );
-        throw uno::RuntimeException();
+        catch( const uno::Exception& rException )
+        {
+            AddLog( rException.Message );
+            AddLog( "Quiet exception" );
+
+            SAL_WARN( "package.xstor", "A property can't be retrieved!" );
+        }
     }
 
     return aResult;
@@ -1204,9 +1189,7 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream( sal_Int32 nStreamMod
 
     uno::Reference< io::XStream > xResultStream;
 
-    uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY );
-    if ( !xPropertySet.is() )
-        throw uno::RuntimeException();
+    uno::Reference< beans::XPropertySet > xPropertySet( m_xPackageStream, uno::UNO_QUERY_THROW );
 
     if ( m_bHasCachedEncryptionData )
     {
@@ -1450,9 +1433,7 @@ void OWriteStream_Impl::CreateReadonlyCopyBasedOnData( const uno::Reference< io:
     else
         xTempFile = xTargetStream;
 
-    uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY );
-    if ( !xTempSeek.is() )
-        throw uno::RuntimeException(); // TODO
+    uno::Reference < io::XSeekable > xTempSeek( xTempFile, uno::UNO_QUERY_THROW );
 
     uno::Reference < io::XOutputStream > xTempOut = xTempFile->getOutputStream();
     if ( !xTempOut.is() )
@@ -1533,9 +1514,7 @@ void OWriteStream_Impl::GetCopyOfLastCommit( uno::Reference< io::XStream >& xTar
         // that means "use common pass" also should be remembered on flash
         uno::Sequence< beans::NamedValue > aKey = aEncryptionData.getAsConstNamedValueList();
 
-        uno::Reference< beans::XPropertySet > xProps( m_xPackageStream, uno::UNO_QUERY );
-        if ( !xProps.is() )
-            throw uno::RuntimeException();
+        uno::Reference< beans::XPropertySet > xProps( m_xPackageStream, uno::UNO_QUERY_THROW );
 
         bool bEncr = false;
         xProps->getPropertyValue( "Encrypted" ) >>= bEncr;
@@ -1792,9 +1771,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
     if ( !m_xSeekable.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< beans::XPropertySet > xDestProps( xDest, uno::UNO_QUERY );
-    if ( !xDestProps.is() )
-        throw uno::RuntimeException(); //TODO
+    uno::Reference< beans::XPropertySet > xDestProps( xDest, uno::UNO_QUERY_THROW );
 
     uno::Reference< io::XOutputStream > xDestOutStream = xDest->getOutputStream();
     if ( !xDestOutStream.is() )
@@ -2380,14 +2357,7 @@ void SAL_CALL OWriteStream::truncate()
     if ( !m_xOutStream.is() )
         throw uno::RuntimeException();
 
-    uno::Reference< io::XTruncate > xTruncate( m_xOutStream, uno::UNO_QUERY );
-
-    if ( !xTruncate.is() )
-    {
-        SAL_WARN( "package.xstor", "The output stream must support XTruncate interface!" );
-        throw uno::RuntimeException();
-    }
-
+    uno::Reference< io::XTruncate > xTruncate( m_xOutStream, uno::UNO_QUERY_THROW );
     xTruncate->truncate();
 
     m_pImpl->m_bHasDataToFlush = true;

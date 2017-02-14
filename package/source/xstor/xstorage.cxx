@@ -105,10 +105,8 @@ void OStorage_Impl::completeStorageStreamCopy_Impl(
                             sal_Int32 nStorageType,
                             const uno::Sequence< uno::Sequence< beans::StringPair > >& aRelInfo )
 {
-        uno::Reference< beans::XPropertySet > xSourceProps( xSource, uno::UNO_QUERY );
-        uno::Reference< beans::XPropertySet > xDestProps( xDest, uno::UNO_QUERY );
-        if ( !xSourceProps.is() || !xDestProps.is() )
-            throw uno::RuntimeException( THROW_WHERE );
+        uno::Reference< beans::XPropertySet > xSourceProps( xSource, uno::UNO_QUERY_THROW );
+        uno::Reference< beans::XPropertySet > xDestProps( xDest, uno::UNO_QUERY_THROW );
 
         uno::Reference< io::XOutputStream > xDestOutStream = xDest->getOutputStream();
         if ( !xDestOutStream.is() )
@@ -603,10 +601,7 @@ void OStorage_Impl::ReadContents()
     if ( m_bIsRoot )
         OpenOwnPackage();
 
-    uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xPackageFolder, uno::UNO_QUERY );
-    if ( !xEnumAccess.is() )
-        throw uno::RuntimeException( THROW_WHERE );
-
+    uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xPackageFolder, uno::UNO_QUERY_THROW );
     uno::Reference< container::XEnumeration > xEnum = xEnumAccess->createEnumeration();
     if ( !xEnum.is() )
         throw uno::RuntimeException( THROW_WHERE );
@@ -771,10 +766,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    uno::Reference< container::XNameAccess > xDestAccess( xDest, uno::UNO_QUERY );
-    if ( !xDestAccess.is() )
-        throw uno::RuntimeException( THROW_WHERE );
-
+    uno::Reference< container::XNameAccess > xDestAccess( xDest, uno::UNO_QUERY_THROW );
     if ( xDestAccess->hasByName( aName )
       && !( pElement->m_bIsStorage && xDest->isStorageElement( aName ) ) )
         xDest->removeElement( aName );
@@ -1006,10 +998,7 @@ void OStorage_Impl::InsertIntoPackageFolder( const OUString& aName,
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
     SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "An inserted storage is incomplete!" );
-    uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageFolder, uno::UNO_QUERY );
-    if ( !xTunnel.is() )
-        throw uno::RuntimeException( THROW_WHERE );
-
+    uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageFolder, uno::UNO_QUERY_THROW );
     xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
 
     m_bCommited = false;
@@ -1217,10 +1206,7 @@ void OStorage_Impl::Commit()
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         // move properties to the destination package folder
-        uno::Reference< beans::XPropertySet > xProps( xNewPackageFolder, uno::UNO_QUERY );
-        if ( !xProps.is() )
-            throw uno::RuntimeException( THROW_WHERE );
-
+        uno::Reference< beans::XPropertySet > xProps( xNewPackageFolder, uno::UNO_QUERY_THROW );
         xProps->setPropertyValue( "MediaType", uno::makeAny( m_aMediaType ) );
         xProps->setPropertyValue( "Version", uno::makeAny( m_aVersion ) );
     }
@@ -1230,12 +1216,7 @@ void OStorage_Impl::Commit()
 
     if ( m_bIsRoot )
     {
-        uno::Reference< util::XChangesBatch > xChangesBatch( m_xPackage, uno::UNO_QUERY );
-
-        SAL_WARN_IF( !xChangesBatch.is(), "package.xstor", "Impossible to commit package!" );
-        if ( !xChangesBatch.is() )
-            throw uno::RuntimeException( THROW_WHERE );
-
+        uno::Reference< util::XChangesBatch > xChangesBatch( m_xPackage, uno::UNO_QUERY_THROW );
         try
         {
             xChangesBatch->commitChanges();
@@ -1383,9 +1364,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr 
     if ( !xNewElement.is() )
         throw io::IOException( THROW_WHERE );
 
-    uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xNewElement, uno::UNO_QUERY );
-    if ( !xPackageSubStream.is() )
-        throw uno::RuntimeException( THROW_WHERE );
+    uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xNewElement, uno::UNO_QUERY_THROW );
 
     OSL_ENSURE( m_nStorageType == embed::StorageFormats::PACKAGE || !bEncr, "Only package storage supports encryption!\n" );
     if ( m_nStorageType != embed::StorageFormats::PACKAGE && bEncr )
@@ -1425,10 +1404,7 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
     if ( !xNewElement.is() )
         throw io::IOException( THROW_WHERE );
 
-    uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xNewElement, uno::UNO_QUERY );
-    if ( !xPackageSubStream.is() )
-        throw uno::RuntimeException( THROW_WHERE );
-
+    uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xNewElement, uno::UNO_QUERY_THROW );
     xPackageSubStream->setRawStream( xInStrToInsert );
 
     // the mode is not needed for storage stream internal implementation
@@ -1457,10 +1433,7 @@ OStorage_Impl* OStorage_Impl::CreateNewStorageImpl( sal_Int32 nStorageMode )
     if ( !xNewElement.is() )
         throw io::IOException( THROW_WHERE );
 
-    uno::Reference< container::XNameContainer > xPackageSubFolder( xNewElement, uno::UNO_QUERY );
-    if ( !xPackageSubFolder.is() )
-        throw uno::RuntimeException( THROW_WHERE );
-
+    uno::Reference< container::XNameContainer > xPackageSubFolder( xNewElement, uno::UNO_QUERY_THROW );
     OStorage_Impl* pResult =
             new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType );
     pResult->m_bIsModified = true;
@@ -1533,13 +1506,7 @@ void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorag
         if ( !xTunnel.is() )
             throw container::NoSuchElementException( THROW_WHERE );
 
-        uno::Reference< container::XNameContainer > xPackageSubFolder( xTunnel, uno::UNO_QUERY );
-
-        SAL_WARN_IF( !xPackageSubFolder.is(), "package.xstor", "Can not get XNameContainer interface from folder!" );
-
-        if ( !xPackageSubFolder.is() )
-            throw uno::RuntimeException( THROW_WHERE );
-
+        uno::Reference< container::XNameContainer > xPackageSubFolder( xTunnel, uno::UNO_QUERY_THROW );
         pElement->m_pStorage = new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType );
     }
 }
@@ -1560,9 +1527,7 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
         if ( !xTunnel.is() )
             throw container::NoSuchElementException( THROW_WHERE );
 
-        uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xTunnel, uno::UNO_QUERY );
-        if ( !xPackageSubStream.is() )
-            throw uno::RuntimeException( THROW_WHERE );
+        uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xTunnel, uno::UNO_QUERY_THROW );
 
         // the stream can never be inserted here, because inserted stream element holds the stream till commit or destruction
         pElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, false, m_nStorageType, false, GetRelInfoStreamForName( pElement->m_aOriginalName ) );
@@ -2378,10 +2343,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
         if ( m_pData->m_bReadOnlyWrap )
         {
             // before the storage disposes the stream it must deregister itself as listener
-            uno::Reference< lang::XComponent > xStreamComponent( xResult, uno::UNO_QUERY );
-            if ( !xStreamComponent.is() )
-                throw uno::RuntimeException( THROW_WHERE );
-
+            uno::Reference< lang::XComponent > xStreamComponent( xResult, uno::UNO_QUERY_THROW );
             MakeLinkToSubComponent_Impl( xStreamComponent );
         }
     }
@@ -2540,10 +2502,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
             pElement->m_pStorage->SetReadOnlyWrap( *pResultStorage );
 
             // before the storage disposes the stream it must deregister itself as listener
-            uno::Reference< lang::XComponent > xStorageComponent( xResult, uno::UNO_QUERY );
-            if ( !xStorageComponent.is() )
-                throw uno::RuntimeException( THROW_WHERE );
-
+            uno::Reference< lang::XComponent > xStorageComponent( xResult, uno::UNO_QUERY_THROW );
             MakeLinkToSubComponent_Impl( xStorageComponent );
         }
     }
@@ -3149,10 +3108,7 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
         if ( !pElement )
             throw container::NoSuchElementException( THROW_WHERE );
 
-        uno::Reference< XNameAccess > xNameAccess( xDest, uno::UNO_QUERY );
-        if ( !xNameAccess.is() )
-            throw uno::RuntimeException( THROW_WHERE );
-
+        uno::Reference< XNameAccess > xNameAccess( xDest, uno::UNO_QUERY_THROW );
         if ( xNameAccess->hasByName( aNewName ) )
             throw container::ElementExistException( THROW_WHERE );
 
@@ -3243,10 +3199,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
         if ( !pElement )
             throw container::NoSuchElementException( THROW_WHERE ); //???
 
-        uno::Reference< XNameAccess > xNameAccess( xDest, uno::UNO_QUERY );
-        if ( !xNameAccess.is() )
-            throw uno::RuntimeException( THROW_WHERE );
-
+        uno::Reference< XNameAccess > xNameAccess( xDest, uno::UNO_QUERY_THROW );
         if ( xNameAccess->hasByName( aNewName ) )
             throw container::ElementExistException( THROW_WHERE );
 
@@ -3348,10 +3301,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
         if ( m_pData->m_bReadOnlyWrap )
         {
             // before the storage disposes the stream it must deregister itself as listener
-            uno::Reference< lang::XComponent > xStreamComponent( xResult, uno::UNO_QUERY );
-            if ( !xStreamComponent.is() )
-                throw uno::RuntimeException( THROW_WHERE );
-
+            uno::Reference< lang::XComponent > xStreamComponent( xResult, uno::UNO_QUERY_THROW );
             MakeLinkToSubComponent_Impl( xStreamComponent );
         }
     }
@@ -4724,10 +4674,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
         {
             try {
                 m_pImpl->ReadContents();
-                uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY );
-                if ( !xPackPropSet.is() )
-                    throw uno::RuntimeException( THROW_WHERE );
-
+                uno::Reference< beans::XPropertySet > xPackPropSet( m_pImpl->m_xPackage, uno::UNO_QUERY_THROW );
                 return xPackPropSet->getPropertyValue( aPropertyName );
             }
             catch ( const uno::RuntimeException& rRuntimeException )
@@ -5299,10 +5246,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
         if ( !pElement )
             throw container::NoSuchElementException( THROW_WHERE );
 
-        uno::Reference< XNameAccess > xNameAccess( xDest, uno::UNO_QUERY );
-        if ( !xNameAccess.is() )
-            throw uno::RuntimeException( THROW_WHERE );
-
+        uno::Reference< XNameAccess > xNameAccess( xDest, uno::UNO_QUERY_THROW );
         if ( xNameAccess->hasByName( aNewName ) )
             throw container::ElementExistException( THROW_WHERE );
 
