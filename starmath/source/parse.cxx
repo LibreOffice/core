@@ -1030,15 +1030,10 @@ void SmParser::DoExpression()
     bool bUseExtraSpaces = true;
     if (!m_aNodeStack.empty())
     {
-        auto pNode = std::move(m_aNodeStack.front());
-        m_aNodeStack.pop_front();
-        if (pNode->GetToken().eType == TNOSPACE)
-            bUseExtraSpaces = false;
-        else
+        if (m_aNodeStack.front()->GetToken().eType == TNOSPACE)
         {
-            // push the node from above again (now to be used as argument
-            // to this current 'nospace' node)
-            m_aNodeStack.push_front(std::move(pNode));
+            m_aNodeStack.pop_front();
+            bUseExtraSpaces = false;
         }
     }
 
