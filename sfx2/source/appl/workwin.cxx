@@ -1698,7 +1698,6 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
             break;
         }
 
-        case SfxDockingConfig::MOVEDOCKINGWINDOW :
         case SfxDockingConfig::ALIGNDOCKINGWINDOW :
         case SfxDockingConfig::TOGGLEFLOATMODE:
         {
@@ -1736,8 +1735,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                 SfxChildWindowFlags nFlags = pCW->aInfo.nFlags;
                 pCW->aInfo = pCW->pWin->GetInfo();
                 pCW->aInfo.nFlags |= nFlags;
-                if ( eConfig != SfxDockingConfig::MOVEDOCKINGWINDOW )
-                    SaveStatus_Impl( pCW->pWin, pCW->aInfo);
+                SaveStatus_Impl( pCW->pWin, pCW->aInfo);
             }
 
             break;
