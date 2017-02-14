@@ -79,14 +79,6 @@ ResMgr& AnalysisAddIn::GetResMgr()
     return *pResMgr;
 }
 
-class AnalysisResourcePublisher : public Resource
-{
-public:
-    explicit        AnalysisResourcePublisher( const AnalysisResId& rId ) : Resource( rId ) {}
-    using Resource::IsAvailableRes;
-    using Resource::FreeResource;
-};
-
 class AnalysisFuncRes : public Resource
 {
 public:
@@ -103,15 +95,9 @@ AnalysisFuncRes::AnalysisFuncRes( ResId& rRes, ResMgr& rResMgr, sal_uInt16 nInd,
 OUString AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex )
 {
     OUString                      aRet;
-    AnalysisResourcePublisher   aResPubl( AnalysisResId( RID_ANALYSIS_FUNCTION_DESCRIPTIONS, GetResMgr() ) );
     AnalysisResId               aRes( nResId, GetResMgr() );
     aRes.SetRT( RSC_RESOURCE );
-    if( aResPubl.IsAvailableRes( aRes ) )
-    {
-        AnalysisFuncRes         aSubRes( aRes, GetResMgr(), nStrIndex, aRet );
-    }
-
-    aResPubl.FreeResource();
+    AnalysisFuncRes aSubRes( aRes, GetResMgr(), nStrIndex, aRet );
 
     return aRet;
 }
