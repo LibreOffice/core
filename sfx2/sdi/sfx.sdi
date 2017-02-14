@@ -3142,7 +3142,7 @@ SfxInt16Item PasteSpecial SID_PASTE_SPECIAL
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
+    GroupId = ;
 ]
 
 SfxVoidItem PasteOnly SID_PASTE_ONLY
