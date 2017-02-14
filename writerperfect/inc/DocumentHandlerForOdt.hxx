@@ -5,8 +5,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_WRITERPERFECT_SOURCE_CALC_DOCUMENTHANDLERFORODS_HXX
-#define INCLUDED_WRITERPERFECT_SOURCE_CALC_DOCUMENTHANDLERFORODS_HXX
+#ifndef INCLUDED_WRITERPERFECT_INC_DOCUMENTHANDLERFORODT_HXX
+#define INCLUDED_WRITERPERFECT_INC_DOCUMENTHANDLERFORODT_HXX
 
 #include <libodfgen/libodfgen.hxx>
 
@@ -16,11 +16,11 @@ namespace writerperfect
 {
 
 template<>
-struct DocumentHandlerFor<OdsGenerator>
+struct DocumentHandlerFor<OdtGenerator>
 {
     static const rtl::OUString name()
     {
-        return rtl::OUString("com.sun.star.comp.Calc.XMLOasisImporter");
+        return rtl::OUString("com.sun.star.comp.Writer.XMLOasisImporter");
     }
 };
 

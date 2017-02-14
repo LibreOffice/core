@@ -11,7 +11,6 @@ $(eval $(call gb_CppunitTest_CppunitTest,writerperfect_wpftimport))
 
 $(eval $(call gb_CppunitTest_set_include,writerperfect_wpftimport,\
 	-I$(SRCDIR)/writerperfect/inc \
-	-I$(SRCDIR)/writerperfect/source/writer \
 	$$(INCLUDE) \
 ))
 
