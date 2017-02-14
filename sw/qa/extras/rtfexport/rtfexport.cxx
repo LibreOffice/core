@@ -1180,6 +1180,12 @@ DECLARE_RTFEXPORT_TEST(testLeveljcCenter, "leveljc-center.rtf")
     CPPUNIT_FAIL("no Adjust property");
 }
 
+DECLARE_RTFEXPORT_TEST(testHyperlinkTarget, "hyperlink-target.rtf")
+{
+    // This was empty, hyperlink target was lost on import.
+    CPPUNIT_ASSERT_EQUAL(OUString("_blank"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkTarget"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
