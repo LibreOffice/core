@@ -393,10 +393,9 @@ SvGlobalName GetClassId_Impl( SotClipboardFormatId nFormat )
 // All storage and streams are refcounted internally; outside of this classes they are only accessible through a handle
 // class, that uses the refcounted object as impl-class.
 
-enum RepresentModes {
-    nonset,
-    svstream,
-    xinputstream
+enum class RepresentMode {
+    NONE,
+    svstream
 };
 
 class UCBStorageStream_Impl : public SvRefBase, public SvStream
@@ -424,7 +423,7 @@ public:
     SvStream*                   m_pStream;      // the stream worked on; for readonly streams it is the original stream of the content
                                                 // for read/write streams it's a copy into a temporary file
     OUString                    m_aTempURL;     // URL of this temporary stream
-    RepresentModes              m_nRepresentMode; // should it be used as XInputStream or as SvStream
+    RepresentMode               m_nRepresentMode; // should it be used as XInputStream or as SvStream
     ErrCode                     m_nError;
     StreamMode                  m_nMode;        // open mode ( read/write/trunc/nocreate/sharing )
     bool                        m_bSourceRead;  // Source still contains useful information
@@ -638,7 +637,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const OUString& rName, StreamMode 
     , m_aURL( rName )
     , m_pContent( nullptr )
     , m_pStream( nullptr )
-    , m_nRepresentMode( nonset )
+    , m_nRepresentMode( RepresentMode::NONE )
     , m_nError( 0 )
     , m_nMode( nMode )
     , m_bSourceRead( !( nMode & StreamMode::TRUNC ) )
@@ -693,19 +692,12 @@ UCBStorageStream_Impl::~UCBStorageStream_Impl()
 
 bool UCBStorageStream_Impl::Init()
 {
-    if( m_nRepresentMode == xinputstream )
-    {
-        OSL_FAIL( "XInputStream misuse!" );
-        SetError( ERRCODE_IO_ACCESSDENIED );
-        return false;
-    }
-
     if( !m_pStream )
     {
         // no temporary stream was created
         // create one
 
-        m_nRepresentMode = svstream; // can not be used as XInputStream
+        m_nRepresentMode = RepresentMode::svstream; // can not be used as XInputStream
 
         if ( m_aTempURL.isEmpty() )
             m_aTempURL = ::utl::TempFile().GetURL();
@@ -1196,7 +1188,7 @@ void UCBStorageStream_Impl::Free()
     }
 #endif
 
-    m_nRepresentMode = nonset;
+    m_nRepresentMode = RepresentMode::NONE;
     m_rSource.clear();
     DELETEZ( m_pStream );
 }
