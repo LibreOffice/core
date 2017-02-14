@@ -20,14 +20,12 @@
 #define INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 
 #include <sfx2/dllapi.h>
-#include <sfx2/sidebar/SidebarToolBox.hxx>
 #include <vcl/toolbox.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <map>
-
 
 namespace sfx2 { namespace sidebar {
 
@@ -43,7 +41,7 @@ public:
     virtual ~SidebarToolBox() override;
     virtual void dispose() override;
 
-    virtual ToolBoxButtonSize GetIconSize() const;
+    virtual ToolBoxButtonSize GetDefaultButtonSize() const;
 
     using ToolBox::InsertItem;
     virtual void InsertItem(const OUString& rCommand,
@@ -59,10 +57,13 @@ public:
 
     css::uno::Reference<css::frame::XToolbarController> GetFirstController();
 
+    static void InitToolBox(SidebarToolBox* pToolBox, VclBuilder::stringmap& rMap);
+
 protected:
     typedef std::map<sal_uInt16, css::uno::Reference<css::frame::XToolbarController>> ControllerContainer;
     ControllerContainer maControllers;
     bool mbAreHandlersRegistered;
+    bool mbUseDefaultButtonSize;
 
     DECL_LINK(DropDownClickHandler, ToolBox*, void);
     DECL_LINK(ClickHandler, ToolBox*, void);
