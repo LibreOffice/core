@@ -108,6 +108,7 @@ for d in definitionSet:
          "vcl/inc/CommonSalLayout.hxx", # VerticalOrientation
          "include/tools/fontenum.hxx", # part of GDI file format
          "svx/inc/galobj.hxx", # GalSoundType
+         "include/svx/msdffdef.hxx",
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -142,6 +143,7 @@ for d in definitionSet:
          "sw/source/uibase/inc/swcont.hxx", # RegionMode, from UI; ContentTypeId, from UI(registry)
          "sw/inc/toxe.hxx", # ToxAuthorityType (from UI)
          "include/svx/sxekitm.hxx", # SdrEdgeKind (from UI)
+         "include/svx/paraprev.hxx", # SvxPrevLineSpace (from UI)
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",

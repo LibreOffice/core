@@ -31,7 +31,7 @@ SvxParaPrevWindow::SvxParaPrevWindow( vcl::Window* pParent,  WinBits nBits) :
     nLower          ( 0 ),
     eAdjust         ( SVX_ADJUST_LEFT ),
     eLastLine       ( SVX_ADJUST_LEFT ),
-    eLine           ( SVX_PREV_LINESPACE_1 ),
+    eLine           ( SvxPrevLineSpace::N1 ),
     nLineVal        ( 0 )
 
 {
@@ -118,17 +118,17 @@ void SvxParaPrevWindow::DrawParagraph(vcl::RenderContext& rRenderContext)
         {
             switch (eLine)
             {
-                case SVX_PREV_LINESPACE_1:
+                case SvxPrevLineSpace::N1:
                     break;
-                case SVX_PREV_LINESPACE_15:
+                case SvxPrevLineSpace::N15:
                     aPnt.Y() += nH / 2;
                     break;
-                case SVX_PREV_LINESPACE_2:
+                case SvxPrevLineSpace::N2:
                     aPnt.Y() += nH;
                     break;
-                case SVX_PREV_LINESPACE_PROP:
-                case SVX_PREV_LINESPACE_MIN:
-                case SVX_PREV_LINESPACE_DURCH:
+                case SvxPrevLineSpace::Prop:
+                case SvxPrevLineSpace::Min:
+                case SvxPrevLineSpace::Leading:
                     break;
             }
         }
