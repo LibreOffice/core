@@ -41,7 +41,7 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const OUString& rText,
     , nPos(0)
     , pblink(nullptr)
     , pflink(nullptr)
-    , eTextMode(IcnShowTextShort)
+    , eTextMode(SvxIconChoiceCtrlTextMode::Short)
     , nX(0)
     , nY(0)
     , nFlags(SvxIconViewFlags::NONE)

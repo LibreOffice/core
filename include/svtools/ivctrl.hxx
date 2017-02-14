@@ -49,11 +49,10 @@ namespace o3tl
     template<> struct typed_flags<SvxIconViewFlags> : is_typed_flags<SvxIconViewFlags, 0x04f7> {};
 }
 
-enum SvxIconChoiceCtrlTextMode
+enum class SvxIconChoiceCtrlTextMode
 {
-    IcnShowTextFull = 1,        //  Enlarge BoundRect southwards
-    IcnShowTextShort,           // Shorten with "..."
-    IcnShowTextDontKnow         // Settings of the View
+    Full = 1,        //  Enlarge BoundRect southwards
+    Short            // Shorten with "..."
 };
 
 enum class SvxIconChoiceCtrlPositionMode

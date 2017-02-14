@@ -461,7 +461,6 @@ public:
                                 return aEntries[ nPos ];
                             }
     SvxIconChoiceCtrlEntry* GetFirstSelectedEntry() const;
-    SvxIconChoiceCtrlTextMode GetEntryTextModeSmart( const SvxIconChoiceCtrlEntry* pEntry ) const;
     void                SetSelectionMode( SelectionMode eMode ) { eSelectionMode=eMode; }
     sal_Int32           GetEntryListPos( SvxIconChoiceCtrlEntry* ) const;
     void                InitSettings();

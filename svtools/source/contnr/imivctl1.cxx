@@ -129,7 +129,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     pDDDev = nullptr;
     pDDBufDev = nullptr;
     pDDTempDev = nullptr;
-    eTextMode = IcnShowTextShort;
+    eTextMode = SvxIconChoiceCtrlTextMode::Short;
     pImpCursor = new IcnCursor_Impl( this );
     pGridMap = new IcnGridMap_Impl( this );
 
@@ -1149,12 +1149,12 @@ bool SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
             if( rKEvt.GetKeyCode().IsShift() )
             {
                 if( pCursor )
-                    pView->SetEntryTextMode( IcnShowTextFull, pCursor );
+                    pView->SetEntryTextMode( SvxIconChoiceCtrlTextMode::Full, pCursor );
             }
             if( rKEvt.GetKeyCode().IsMod1() )
             {
                 if( pCursor )
-                    pView->SetEntryTextMode( IcnShowTextShort, pCursor );
+                    pView->SetEntryTextMode( SvxIconChoiceCtrlTextMode::Short, pCursor );
             }
             break;
 #endif
@@ -2331,7 +2331,7 @@ void SvxIconChoiceCtrl_Impl::SetGrid( const Size& rSize )
 }
 
 // Calculates the maximum size that the text rectangle may use within its
-// bounding rectangle. In WB_ICON mode with IcnShowTextFull, Bottom is set to
+// bounding rectangle. In WB_ICON mode with SvxIconChoiceCtrlTextMode::Full, Bottom is set to
 // LONG_MAX.
 
 Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const
@@ -2357,7 +2357,7 @@ Rectangle SvxIconChoiceCtrl_Impl::CalcMaxTextRect( const SvxIconChoiceCtrlEntry*
         aBoundRect.Right()--;
         if( aBoundRect.Left() > aBoundRect.Right())
             aBoundRect.Left() = aBoundRect.Right();
-        if( GetEntryTextModeSmart( pEntry ) == IcnShowTextFull )
+        if( pEntry->GetTextMode() == SvxIconChoiceCtrlTextMode::Full )
             aBoundRect.Bottom() = LONG_MAX;
     }
     else
@@ -2777,8 +2777,6 @@ void SvxIconChoiceCtrl_Impl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, 
     {
         if( eTextMode != eMode )
         {
-            if( eTextMode == IcnShowTextDontKnow )
-                eTextMode = IcnShowTextShort;
             eTextMode = eMode;
             Arrange( true, 0, 0 );
         }
@@ -2795,16 +2793,6 @@ void SvxIconChoiceCtrl_Impl::SetEntryTextMode( SvxIconChoiceCtrlTextMode eMode, 
     }
 }
 #endif
-
-SvxIconChoiceCtrlTextMode SvxIconChoiceCtrl_Impl::GetEntryTextModeSmart( const SvxIconChoiceCtrlEntry* pEntry ) const
-{
-    DBG_ASSERT(pEntry,"GetEntryTextModeSmart: Entry not set");
-    SvxIconChoiceCtrlTextMode eMode = pEntry->GetTextMode();
-    if( eMode == IcnShowTextDontKnow )
-        return eTextMode;
-    return eMode;
-}
-
 
 // Draw my own focusrect, because the focusrect of the outputdevice has got the inverted color
 // of the background. But what will we see, if the backgroundcolor is gray ? - We will see
