@@ -29,14 +29,10 @@
 
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
-#include <typeinfo>
 #define BOOST_SPIRIT_DEBUG
 #endif
 #include <boost/spirit/include/classic_core.hpp>
 
-#if (OSL_DEBUG_LEVEL > 0)
-#include <iostream>
-#endif
 #include <functional>
 #include <algorithm>
 #include <stack>
@@ -224,29 +220,8 @@ public:
     }
     virtual double operator()() const override
     {
-#if OSL_DEBUG_LEVEL > 0
-        const char *funcName;
-
-        switch (meFunct) {
-            case ExpressionFunct::EnumPi :         funcName = "pi"; break;
-            case ExpressionFunct::EnumLeft :       funcName = "left"; break;
-            case ExpressionFunct::EnumTop :        funcName = "top"; break;
-            case ExpressionFunct::EnumRight :      funcName = "right"; break;
-            case ExpressionFunct::EnumBottom :     funcName = "bottom"; break;
-            case ExpressionFunct::EnumXStretch :   funcName = "xstretch"; break;
-            case ExpressionFunct::EnumYStretch :   funcName = "ystretch"; break;
-            case ExpressionFunct::EnumHasStroke :  funcName = "hasstroke"; break;
-            case ExpressionFunct::EnumHasFill :    funcName = "hasfill"; break;
-            case ExpressionFunct::EnumWidth :      funcName = "width"; break;
-            case ExpressionFunct::EnumHeight :     funcName = "height"; break;
-            case ExpressionFunct::EnumLogWidth :   funcName = "logwidth"; break;
-            case ExpressionFunct::EnumLogHeight :  funcName = "logheight"; break;
-            default:                    funcName = "???"; break;
-        }
-
-        SAL_INFO("svx", funcName << " --> " << mrCustoShape.GetEnumFunc(meFunct) << "(angle: " <<
+        SAL_INFO("svx", meFunct << " --> " << mrCustoShape.GetEnumFunc(meFunct) << "(angle: " <<
                  180.0 * mrCustoShape.GetEnumFunc(meFunct) / 10800000.0 << ")");
-#endif
 
         return mrCustoShape.GetEnumFunc( meFunct );
     }
@@ -1160,10 +1135,6 @@ std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& r
                                     aExpressionGrammer >> ::boost::spirit::end_p,
                                     ::boost::spirit::space_p ) );
 
-#if (OSL_DEBUG_LEVEL > 0)
-    ::std::cout.flush(); // needed to keep stdout and cout in sync
-#endif
-
     // input fully congested by the parser?
     if( !aParseInfo.full )
         throw ParseError( "EnhancedCustomShapeFunctionParser::parseFunction(): string not fully parseable" );
@@ -1176,7 +1147,6 @@ std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& r
 
     return pContext->maOperandStack.top();
 }
-
 
 }
 

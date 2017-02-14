@@ -854,15 +854,11 @@ double EnhancedCustomShape2d::GetAdjustValueAsDouble( const sal_Int32 nIndex ) c
 double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex ) const
 {
     double fNumber = 0.0;
-#if OSL_DEBUG_LEVEL > 0
     static sal_uInt32 nLevel = 0;
-#endif
     if ( nIndex < (sal_Int32)vNodesSharedPtr.size() )
     {
         if ( vNodesSharedPtr[ nIndex ].get() ) {
-#if OSL_DEBUG_LEVEL > 0
             nLevel ++;
-#endif
             try
             {
                 if ( vEquationResults[ nIndex ].bReady )
@@ -877,19 +873,15 @@ double EnhancedCustomShape2d::GetEquationValueAsDouble( const sal_Int32 nIndex )
 
                     if ( !rtl::math::isFinite( fNumber ) )
                         fNumber = 0.0;
-#if OSL_DEBUG_LEVEL > 0
                     SAL_INFO("svx", "equation " << nLevel << " (level: " << seqEquations[nIndex] << "): "
                              << fNumber << " --> " << 180.0*fNumber/10800000.0);
-#endif
                 }
             }
             catch ( ... )
             {
                 SAL_WARN("svx", "EnhancedCustomShape2d::GetEquationValueAsDouble failed");
             }
-#if OSL_DEBUG_LEVEL > 0
         nLevel --;
-#endif
         }
         SAL_INFO(
             "svx",
