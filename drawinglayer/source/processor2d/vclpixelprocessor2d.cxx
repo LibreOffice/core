@@ -165,6 +165,27 @@ namespace drawinglayer
                 return true;
             }
 
+            //Resolves: tdf#105998 if we are a hairline along the very right/bottom edge
+            //of the canvas then distory the polygon inwards one pixel right/bottom so that
+            //the hairline falls inside the paintable area and becomes visible
+            Size aSize = mpOutputDevice->GetOutputSize();
+            basegfx::B2DRange aRange = aLocalPolygon.getB2DRange();
+            basegfx::B2DRange aOutputRange = aRange;
+            aOutputRange.transform(maCurrentTransformation);
+            if (std::round(aOutputRange.getMaxX()) == aSize.Width() || std::round(aOutputRange.getMaxY()) == aSize.Height())
+            {
+                basegfx::B2DRange aOnePixel(0, 0, 1, 1);
+                aOnePixel.transform(maCurrentTransformation);
+                double fXOnePixel = 1.0 / aOnePixel.getMaxX();
+                double fYOnePixel = 1.0 / aOnePixel.getMaxY();
+
+                basegfx::B2DPoint aTopLeft(aRange.getMinX(), aRange.getMinY());
+                basegfx::B2DPoint aTopRight(aRange.getMaxX() - fXOnePixel, aRange.getMinY());
+                basegfx::B2DPoint aBottomLeft(aRange.getMinX(), aRange.getMaxY() - fYOnePixel);
+                basegfx::B2DPoint aBottomRight(aRange.getMaxX() - fXOnePixel, aRange.getMaxY() - fYOnePixel);
+                aLocalPolygon = basegfx::tools::distort(aLocalPolygon, aRange, aTopLeft, aTopRight, aBottomLeft, aBottomRight);
+            }
+
             const basegfx::BColor aLineColor(maBColorModifierStack.getModifiedColor(rSource.getBColor()));
 
             mpOutputDevice->SetFillColor();
