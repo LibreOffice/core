@@ -177,7 +177,9 @@ bool ExtTreeListBox::NotifyAcceptDrop( SvTreeListEntry* pEntry )
 
     // don't drop in the same library
     SvTreeListEntry* pSelected = FirstSelected();
-    if ( ( nDepth == 1 ) && ( pEntry == GetParent( pSelected ) ) )
+    if (!pSelected)
+        bValid = false;
+    else if ( ( nDepth == 1 ) && ( pEntry == GetParent( pSelected ) ) )
         bValid = false;
     else if ( ( nDepth == 2 ) && ( GetParent( pEntry ) == GetParent( pSelected ) ) )
         bValid = false;
