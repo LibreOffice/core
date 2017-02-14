@@ -62,7 +62,7 @@ void FolderTree::FillTreeEntry( SvTreeListEntry* pEntry )
             EnumerationResult eResult =
                 xContentEnumerator->enumerateFolderContentSync( aFolder, m_aBlackList );
 
-            if ( SUCCESS == eResult )
+            if ( EnumerationResult::SUCCESS == eResult )
             {
                 for(SortingData_Impl* i : aContent)
                 {

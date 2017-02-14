@@ -144,6 +144,7 @@ for d in definitionSet:
          "sw/inc/toxe.hxx", # ToxAuthorityType (from UI)
          "include/svx/sxekitm.hxx", # SdrEdgeKind (from UI)
          "include/svx/paraprev.hxx", # SvxPrevLineSpace (from UI)
+         "include/svx/ctredlin.hxx", # SvxRedlinDateMode (from UI)
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",

@@ -127,11 +127,10 @@ namespace svt
 
     //= EnumerationResult
 
-    enum EnumerationResult
+    enum class EnumerationResult
     {
         SUCCESS,    /// the enumeration was successful
         ERROR,      /// the enumeration was unsuccessful
-        RUNNING     /// the enumeration is still running, and the maximum wait time has passed
     };
 
 

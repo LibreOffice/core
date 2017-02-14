@@ -1449,7 +1449,7 @@ const OUString* NameTranslator_Impl::GetTransTableFileName() const
 SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > const & xEnv, FileViewFlags nFlags, bool bOnlyFolder )
 
     :mpAntiImpl                 ( pAntiImpl )
-    ,m_eAsyncActionResult       ( ::svt::ERROR )
+    ,m_eAsyncActionResult       ( ::svt::EnumerationResult::ERROR )
     ,m_bRunningAsyncAction      ( false )
     ,m_bAsyncActionCancelled    ( false )
     ,m_eViewMode                ( eDetailedList )
@@ -1535,7 +1535,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     if ( !pAsyncDescriptor )
     {
         ::svt::EnumerationResult eResult = m_xContentEnumerator->enumerateFolderContentSync( _rFolder, rBlackList );
-        if ( ::svt::SUCCESS == eResult )
+        if ( ::svt::EnumerationResult::SUCCESS == eResult )
         {
             implEnumerationSuccess();
             m_xContentEnumerator.clear();
@@ -1547,7 +1547,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
     m_bRunningAsyncAction = true;
     m_bAsyncActionCancelled = false;
-    m_eAsyncActionResult = ::svt::ERROR;
+    m_eAsyncActionResult = ::svt::EnumerationResult::ERROR;
     m_aAsyncActionFinished.reset();
 
     // don't (yet) set m_aCurrentAsyncActionHandler to pTimeout->aFinishHandler.
@@ -1606,14 +1606,11 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     m_bRunningAsyncAction = false;
     switch ( m_eAsyncActionResult )
     {
-    case ::svt::SUCCESS:
+    case ::svt::EnumerationResult::SUCCESS:
         return eSuccess;
 
-    case ::svt::ERROR:
+    case ::svt::EnumerationResult::ERROR:
         return eFailure;
-
-    case ::svt::RUNNING:
-        return eStillRunning;
     }
 
     SAL_WARN( "svtools.contnr", "SvtFileView_Impl::GetFolderContent_Impl: unreachable!" );
@@ -1849,7 +1846,7 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
 
     m_aAsyncActionFinished.set();
 
-    if ( svt::SUCCESS == eResult )
+    if ( svt::EnumerationResult::SUCCESS == eResult )
         implEnumerationSuccess();
 
     if ( m_aCurrentAsyncActionHandler.IsSet() )
