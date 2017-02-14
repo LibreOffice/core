@@ -35,6 +35,7 @@
 // But watch out, the parser might have
 // state not visible to this code!
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
+
 #if defined(DBG_UTIL)
 #include <typeinfo>
 #define BOOST_SPIRIT_DEBUG
@@ -511,7 +512,6 @@ namespace slideshow
                 ParserContextSharedPtr  mpParserContext; // might get modified during parsing
             };
 
-#ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
             const ParserContextSharedPtr& getParserContext()
             {
                 static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
@@ -523,7 +523,6 @@ namespace slideshow
 
                 return lcl_parserContext;
             }
-#endif
         }
 
         std::shared_ptr<ExpressionNode> SmilFunctionParser::parseSmilValue( const OUString&          rSmilValue,
@@ -540,13 +539,9 @@ namespace slideshow
 
             ParserContextSharedPtr pContext;
 
-#ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
             // static parser context, because the actual
             // Spirit parser is also a static object
             pContext = getParserContext();
-#else
-            pContext.reset( new ParserContext() );
-#endif
 
             pContext->maShapeBounds = rRelativeShapeBounds;
             pContext->mbParseAnimationFunction = false; // parse with '$' disabled
@@ -589,13 +584,9 @@ namespace slideshow
 
             ParserContextSharedPtr pContext;
 
-#ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
             // static parser context, because the actual
             // Spirit parser is also a static object
             pContext = getParserContext();
-#else
-            pContext.reset( new ParserContext() );
-#endif
 
             pContext->maShapeBounds = rRelativeShapeBounds;
             pContext->mbParseAnimationFunction = true; // parse with '$' enabled

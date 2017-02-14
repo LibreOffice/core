@@ -28,6 +28,7 @@
 // state not visible to this code!
 
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
+
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
 #define BOOST_SPIRIT_DEBUG
 #endif
@@ -1087,7 +1088,6 @@ private:
     ParserContextSharedPtr          mpParserContext; // might get modified during parsing
 };
 
-#ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
 const ParserContextSharedPtr& getParserContext()
 {
     static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
@@ -1099,7 +1099,6 @@ const ParserContextSharedPtr& getParserContext()
 
     return lcl_parserContext;
 }
-#endif
 
 }
 
@@ -1119,13 +1118,9 @@ std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& r
 
     ParserContextSharedPtr pContext;
 
-#ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
     // static parser context, because the actual
     // Spirit parser is also a static object
     pContext = getParserContext();
-#else
-    pContext.reset( new ParserContext() );
-#endif
     pContext->mpCustoShape = &rCustoShape;
 
     ExpressionGrammar aExpressionGrammer( pContext );
