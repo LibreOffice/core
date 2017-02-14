@@ -407,7 +407,6 @@
 // default-ids for macros
 #define SID_RECORDING_FLOATWINDOW           (SID_SFX_START + 800)
 #define SID_RECORDMACRO                     (SID_SFX_START + 1669)
-#define SID_PASTE_ONLY                      (SID_SFX_START + 801)
 #define SID_PASTE_ONLY_TEXT                 (SID_SFX_START + 802)
 #define SID_PASTE_ONLY_FORMULA              (SID_SFX_START + 803)
 #define SID_PASTE_ONLY_VALUE                (SID_SFX_START + 804)

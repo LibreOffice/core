@@ -3145,23 +3145,6 @@ SfxInt16Item PasteSpecial SID_PASTE_SPECIAL
     GroupId = GID_EDIT;
 ]
 
-SfxVoidItem PasteOnly SID_PASTE_ONLY
-()
-[
-    AutoUpdate = FALSE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
-]
-
 SfxVoidItem PasteOnlyText SID_PASTE_ONLY_TEXT
 
 [
