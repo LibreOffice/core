@@ -50,30 +50,24 @@ namespace pricing {
 class ScaResId : public ResId
 {
 public:
-                                ScaResId( sal_uInt16 nResId, ResMgr& rResMgr );
+    ScaResId( sal_uInt16 nResId, ResMgr& rResMgr );
 };
 
-
-class ScaResStringLoader : public Resource
+class ScaResStringLoader
 {
 private:
     OUString                    aStr;
 
 public:
-    inline                      ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nStrId, ResMgr& rResMgr );
+    ScaResStringLoader(sal_uInt16 nResId, sal_uInt16 nStrId, ResMgr& rResMgr)
+    {
+        ResStringArray aStrArray(ScaResId(nResId, rResMgr));
+        aStr = aStrArray.GetString(aStrArray.FindIndex(nStrId));
+    }
 
-    inline const OUString&      GetString() const   { return aStr; }
+    const OUString&      GetString() const   { return aStr; }
 
 };
-
-
-inline ScaResStringLoader::ScaResStringLoader( sal_uInt16 nResId, sal_uInt16 nStrId, ResMgr& rResMgr ) :
-    Resource( ScaResId( nResId, rResMgr ) ),
-    aStr( ScaResId( nStrId, rResMgr ) )
-{
-    FreeResource();
-}
-
 
 class ScaResStringArrLoader : public Resource
 {
@@ -93,7 +87,6 @@ inline ScaResStringArrLoader::ScaResStringArrLoader( sal_uInt16 nResId, sal_uInt
     FreeResource();
 }
 
-
 class ScaResPublisher : public Resource
 {
 public:
@@ -103,13 +96,11 @@ public:
     using Resource::FreeResource;
 };
 
-
 class ScaFuncRes : public Resource
 {
 public:
-                                ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet );
+    ScaFuncRes(ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUString& rRet);
 };
-
 
 enum class ScaCategory
 {
