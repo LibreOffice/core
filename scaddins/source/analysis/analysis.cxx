@@ -30,6 +30,7 @@
 #include <rtl/math.hxx>
 #include <sal/macros.h>
 #include <string.h>
+#include <tools/resary.hxx>
 #include <tools/resmgr.hxx>
 #include <tools/rcid.h>
 #include <algorithm>
@@ -79,27 +80,10 @@ ResMgr& AnalysisAddIn::GetResMgr()
     return *pResMgr;
 }
 
-class AnalysisFuncRes : public Resource
-{
-public:
-    AnalysisFuncRes( ResId& rRes, ResMgr& rResMgr, sal_uInt16 nInd, OUString& rRet );
-};
-
-AnalysisFuncRes::AnalysisFuncRes( ResId& rRes, ResMgr& rResMgr, sal_uInt16 nInd, OUString& rRet ) : Resource( rRes )
-{
-    rRet = AnalysisResId(nInd, rResMgr).toString();
-
-    FreeResource();
-}
-
 OUString AnalysisAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex )
 {
-    OUString                      aRet;
-    AnalysisResId               aRes( nResId, GetResMgr() );
-    aRes.SetRT( RSC_RESOURCE );
-    AnalysisFuncRes aSubRes( aRes, GetResMgr(), nStrIndex, aRet );
-
-    return aRet;
+    ResStringArray aArr(AnalysisResId(nResId, GetResMgr()));
+    return aArr.GetString(nStrIndex - 1);
 }
 
 void AnalysisAddIn::InitData()

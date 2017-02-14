@@ -19,3682 +19,1385 @@
 
 #include "analysis.hrc"
 
-Resource ANALYSIS_Workday
+StringArray ANALYSIS_Workday
 {
-    String 1    // description Workday
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the serial number of the date before or after a specified number of workdays";
+        < "Returns the serial number of the date before or after a specified number of workdays"; > ;
+        < "Start date"; > ;
+        < "The start date"; > ;
+        < "Days"; > ;
+        < "The number of workdays before or after the start date"; > ;
+        < "Holidays"; > ;
+        < "List of date values of days off (vacation, holidays, etc.)"; > ;
     };
-
-    String 2 // name of parameter 1         Workday
-    {
-        Text [ en-US ] = "Start date";
-    };
-
-    String 3 // description of parameter 1  Workday
-    {
-        Text [ en-US ] = "The start date";
-    };
-
-    String 4 // name of parameter 2         Workday
-    {
-        Text [ en-US ] = "Days";
-    };
-
-    String 5 // description of parameter 2  Workday
-    {
-        Text [ en-US ] = "The number of workdays before or after the start date";
-    };
-
-    String 6 // name of parameter 3         Workday
-    {
-        Text [ en-US ] = "Holidays";
-    };
-
-    String 7 // description of parameter 3  Workday
-    {
-        Text [ en-US ] = "List of date values of days off (vacation, holidays, etc.)";
-    };
 };
 
-Resource ANALYSIS_Yearfrac
+StringArray ANALYSIS_Yearfrac
 {
-    String 1    // description Yearfrac
-    {
-        Text [ en-US ] = "Returns the number of years (including fractional part) between two dates";
-    };
-
-    String 2 // name of parameter 1         Yearfrac
-    {
-        Text [ en-US ] = "Start date";
-    };
-
-    String 3 // description of parameter 1  Yearfrac
-    {
-        Text [ en-US ] = "The start date";
-    };
-
-    String 4 // name of parameter 2         Yearfrac
-    {
-        Text [ en-US ] = "End date";
-    };
-
-    String 5 // description of parameter 2  Yearfrac
-    {
-        Text [ en-US ] = "The end date";
-    };
-
-    String 6 // name of parameter 3         Yearfrac
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 7 // description of parameter 3  Yearfrac
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Basis indicates the day-count convention to use in the calculation";
+        < "Returns the number of years (including fractional part) between two dates"; > ;
+        < "Start date"; > ;
+        < "The start date"; > ;
+        < "End date"; > ;
+        < "The end date"; > ;
+        < "Basis"; > ;
+        < "Basis indicates the day-count convention to use in the calculation"; > ;
     };
 };
 
-Resource ANALYSIS_Edate
+StringArray ANALYSIS_Edate
 {
-    String 1    // description Edate
-    {
-        Text [ en-US ] = "Returns the serial number of the date that is a specified number of months before or after the start date";
-    };
-
-    String 2 // name of parameter 1         Edate
-    {
-        Text [ en-US ] = "Start date";
-    };
-
-    String 3 // description of parameter 1  Edate
-    {
-        Text [ en-US ] = "The start date";
-    };
-
-    String 4 // name of parameter 2         Edate
-    {
-        Text [ en-US ] = "Months";
-    };
-
-    String 5 // description of parameter 2  Edate
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number of months before or after the start date";
+        < "Returns the serial number of the date that is a specified number of months before or after the start date"; > ;
+        < "Start date"; > ;
+        < "The start date"; > ;
+        < "Months"; > ;
+        < "Number of months before or after the start date"; > ;
     };
 };
 
-Resource ANALYSIS_Weeknum
+StringArray ANALYSIS_Weeknum
 {
-    String 1    // description Weeknum_Excel2003
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the number of the calendar week in which the specified date occurs.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use WEEKNUM instead.";
+        < "Returns the number of the calendar week in which the specified date occurs.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use WEEKNUM instead."; > ;
+        < "Date"; > ;
+        < "The date or date serial number"; > ;
+        < "Return type"; > ;
+        < "Indicates the first day of the week (1 = Sunday, 2 = Monday)"; > ;
     };
-
-    String 2 // name of parameter 1         Weeknum_Excel2003
-    {
-        Text [ en-US ] = "Date";
-    };
-
-    String 3 // description of parameter 1  Weeknum_Excel2003
-    {
-        Text [ en-US ] = "The date or date serial number";
-    };
-
-    String 4 // name of parameter 2         Weeknum_Excel2003
-    {
-        Text [ en-US ] = "Return type";
-    };
-
-    String 5 // description of parameter 2  Weeknum_Excel2003
-    {
-        Text [ en-US ] = "Indicates the first day of the week (1 = Sunday, 2 = Monday)";
-    };
 };
 
-Resource ANALYSIS_Eomonth
+StringArray ANALYSIS_Eomonth
 {
-    String 1    // description EoMonth
-    {
-        Text[ en-US ] = "Returns the serial number of the last day of the month that comes a certain number of months before or after the start date";
-    };
-
-    String 2 // name of parameter 1         EoMonth
-    {
-        Text [ en-US ] = "Start date";
-    };
-
-    String 3 // description of parameter 1  EoMonth
-    {
-        Text [ en-US ] = "The start date";
-    };
-
-    String 4 // name of parameter 2         EoMonth
-    {
-        Text [ en-US ] = "Months";
-    };
-
-    String 5 // description of parameter 2  EoMonth
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number of months before or after the start date";
+        < "Returns the serial number of the last day of the month that comes a certain number of months before or after the start date"; > ;
+        < "Start date"; > ;
+        < "The start date"; > ;
+        < "Months"; > ;
+        < "Number of months before or after the start date"; > ;
     };
 };
 
-Resource ANALYSIS_Networkdays
+StringArray ANALYSIS_Networkdays
 {
-    String 1    // description Networkdays_Excel2003
-    {
-        Text [ en-US ] = "Returns the number of workdays between two dates.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use NETWORKDAYS instead.";
-    };
-
-    String 2 // name of parameter 1         Networkdays_Excel2003
-    {
-        Text [ en-US ] = "Start date";
-    };
-
-    String 3 // description of parameter 1  Networkdays_Excel2003
-    {
-        Text [ en-US ] = "The start date";
-    };
-
-    String 4 // name of parameter 2         Networkdays_Excel2003
-    {
-        Text [ en-US ] = "End date";
-    };
-
-    String 5 // description of parameter 2  Networkdays_Excel2003
-    {
-        Text [ en-US ] = "The end date";
-    };
-
-    String 6 // name of parameter 3         Networkdays_Excel2003
-    {
-        Text [ en-US ] = "Holidays";
-    };
-
-    String 7 // description of parameter 3  Networkdays_Excel2003
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "List of date values representing days off (vacation, holidays, etc.)";
+        < "Returns the number of workdays between two dates.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use NETWORKDAYS instead."; > ;
+        < "Start date"; > ;
+        < "The start date"; > ;
+        < "End date"; > ;
+        < "The end date"; > ;
+        < "Holidays"; > ;
+        < "List of date values representing days off (vacation, holidays, etc.)"; > ;
     };
 };
 
-Resource ANALYSIS_Iseven
+StringArray ANALYSIS_Iseven
 {
-    String 1    // description Iseven_add
-    {
-        Text [ en-US ] = "Returns the value 'true' if the number is even";
-    };
-
-    String 2 // name of parameter 1         Iseven_add
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 3 // description of parameter 1  Iseven_add
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The number";
+        < "Returns the value 'true' if the number is even"; > ;
+        < "Number"; > ;
+        < "The number"; > ;
     };
 };
 
-Resource ANALYSIS_Isodd
+StringArray ANALYSIS_Isodd
 {
-    String 1    // description Isodd_add
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the value 'true' if the number is odd";
+        < "Returns the value 'true' if the number is odd"; > ;
+        < "Number"; > ;
+        < "The number"; > ;
     };
-
-    String 2 // name of parameter 1         Isodd_add
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 3 // description of parameter 1  Isodd_add
-    {
-        Text [ en-US ] = "The number";
-    };
 };
 
-Resource ANALYSIS_Multinomial
+StringArray ANALYSIS_Multinomial
 {
-    String 1    // description Multinomial
-    {
-        Text [ en-US ] = "Returns the multinomial coefficient of a set of numbers";
-    };
-
-    String 2 // name of parameter 1         Multinomial
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 3 // description of parameter 1  Multinomial
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number or list of numbers for which you want the multinomial coefficient";
+        < "Returns the multinomial coefficient of a set of numbers"; > ;
+        < "Number"; > ;
+        < "Number or list of numbers for which you want the multinomial coefficient"; > ;
     };
 };
 
-Resource ANALYSIS_Seriessum
+StringArray ANALYSIS_Seriessum
 {
-    String 1    // description Seriessum
-    {
-        Text [ en-US ] = "Returns the sum of a power series";
-    };
-
-    String 2 // name of parameter 1         Seriessum
-    {
-        Text [ en-US ] = "X";
-    };
-
-    String 3 // description of parameter 1  Seriessum
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The independent variable of the power series";
+        < "Returns the sum of a power series"; > ;
+        < "X"; > ;
+        < "The independent variable of the power series"; > ;
+        < "N"; > ;
+        < "The initial power to which x is to be raised"; > ;
+        < "M"; > ;
+        < "The increment by which to increase n for each term in the series"; > ;
+        < "Coefficients"; > ;
+        < "Set of coefficients by which each successive power of the variable x is multiplied"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Seriessum
+StringArray ANALYSIS_Quotient
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "N";
+        < "Returns the integer portion of a division"; > ;
+        < "Numerator"; > ;
+        < "The dividend"; > ;
+        < "Denominator"; > ;
+        < "The divisor"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Seriessum
+StringArray ANALYSIS_Mround
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The initial power to which x is to be raised";
+        < "Returns a number rounded to a specified multiple"; > ;
+        < "Number"; > ;
+        < "The number to round off"; > ;
+        < "Multiple"; > ;
+        < "The multiple to which you want to round number"; > ;
     };
+};
 
-    String 6 // name of parameter 3         Seriessum
+StringArray ANALYSIS_Sqrtpi
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "M";
+        < "Returns the square root of a number which has been multiplied by pi"; > ;
+        < "Number"; > ;
+        < "The number by which pi is multiplied"; > ;
     };
+};
 
-    String 7 // description of parameter 3  Seriessum
+StringArray ANALYSIS_Randbetween
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The increment by which to increase n for each term in the series";
+        < "Returns a random integer between the numbers you specify"; > ;
+        < "Bottom"; > ;
+        < "The smallest integer returned"; > ;
+        < "Top"; > ;
+        < "The largest integer returned"; > ;
     };
+};
 
-    String 8 // name of parameter 4         Seriessum
+StringArray ANALYSIS_Gcd
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Coefficients";
+        < "Returns the greatest common divisor.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use GCD instead."; > ;
+        < "Number"; > ;
+        < "Number or list of numbers"; > ;
     };
+};
 
-    String 9 // description of parameter 4  Seriessum
+StringArray ANALYSIS_Lcm
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Set of coefficients by which each successive power of the variable x is multiplied";
+        < "Returns the least common multiple.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use LCM instead."; > ;
+        < "Number"; > ;
+        < "Number or list of numbers"; > ;
     };
 };
 
-Resource ANALYSIS_Quotient
+StringArray ANALYSIS_Besseli
 {
-    String 1    // description Quotient
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the integer portion of a division";
+        < "Returns the modified Bessel function In(x)"; > ;
+        < "X"; > ;
+        < "The value at which the function is to be evaluated"; > ;
+        < "N"; > ;
+        < "The order of the Bessel function"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Quotient
+StringArray ANALYSIS_Besselj
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Numerator";
+        < "Returns the Bessel function Jn(x)"; > ;
+        < "X"; > ;
+        < "The value at which the function is to be evaluated"; > ;
+        < "N"; > ;
+        < "The order of the Bessel function"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Quotient
+StringArray ANALYSIS_Besselk
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The dividend";
+        < "Returns the Bessel function Kn(x)"; > ;
+        < "X"; > ;
+        < "The value at which the function is to be evaluated"; > ;
+        < "N"; > ;
+        < "The order of the Bessel function"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Quotient
+StringArray ANALYSIS_Bessely
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Denominator";
+        < "Returns the Bessel function Yn(x)"; > ;
+        < "X"; > ;
+        < "The value at which the function is to be evaluated"; > ;
+        < "N"; > ;
+        < "The order of the Bessel function"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Quotient
+StringArray ANALYSIS_Bin2Oct
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The divisor";
+        < "Converts a binary number to an octal number"; > ;
+        < "Number"; > ;
+        < "The binary number to be converted (as text)"; > ;
+        < "Places"; > ;
+        < "Number of places used"; > ;
     };
 };
 
-Resource ANALYSIS_Mround
+StringArray ANALYSIS_Bin2Dec
 {
-    String 1    // description Mround
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns a number rounded to a specified multiple";
+        < "Converts a binary number to a decimal number"; > ;
+        < "Number"; > ;
+        < "The binary number to be converted (as text)"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Mround
+StringArray ANALYSIS_Bin2Hex
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Converts a binary number to a hexadecimal number"; > ;
+        < "Number"; > ;
+        < "The binary number to be converted (as text)"; > ;
+        < "Places"; > ;
+        < "Number of places used."; > ;
     };
+};
 
-    String 3 // description of parameter 1  Mround
+StringArray ANALYSIS_Oct2Bin
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The number to round off";
+        < "Converts an octal number to a binary number"; > ;
+        < "Number"; > ;
+        < "The octal number to be converted (as text)"; > ;
+        < "Places"; > ;
+        < "Number of places used"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Mround
+StringArray ANALYSIS_Oct2Dec
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Multiple";
+        < "Converts an octal number to a decimal number"; > ;
+        < "Number"; > ;
+        < "The octal number to be converted (as text)"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Mround
+StringArray ANALYSIS_Oct2Hex
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The multiple to which you want to round number";
+        < "Converts an octal number to a hexadecimal number"; > ;
+        < "Number"; > ;
+        < "The octal number to be converted (as text)"; > ;
+        < "Places"; > ;
+        < "Number of places used"; > ;
     };
 };
 
-Resource ANALYSIS_Sqrtpi
+StringArray ANALYSIS_Dec2Bin
 {
-    String 1    // description SqrtPI
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the square root of a number which has been multiplied by pi";
+        < "Converts a decimal number to a binary number"; > ;
+        < "Number"; > ;
+        < "The decimal integer to be converted"; > ;
+        < "Places"; > ;
+        < "Number of places used"; > ;
     };
+};
 
-    String 2 // name of parameter 1         SqrtPI
+StringArray ANALYSIS_Dec2Hex
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Converts a decimal number to a hexadecimal number"; > ;
+        < "Number"; > ;
+        < "The decimal integer to be converted"; > ;
+        < "Places"; > ;
+        < "Number of places used"; > ;
     };
+};
 
-    String 3 // description of parameter 1  SqrtPI
+StringArray ANALYSIS_Dec2Oct
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The number by which pi is multiplied";
+        < "Converts a decimal number into an octal number"; > ;
+        < "Number"; > ;
+        < "The decimal number"; > ;
+        < "Places"; > ;
+        < "Number of places used"; > ;
     };
 };
 
-Resource ANALYSIS_Randbetween
+StringArray ANALYSIS_Hex2Bin
 {
-    String 1    // description Randbetween
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns a random integer between the numbers you specify";
+        < "Converts a hexadecimal number to a binary number"; > ;
+        < "Number"; > ;
+        < "The hexadecimal number to be converted (as text)"; > ;
+        < "Places"; > ;
+        < "Number of places used"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Randbetween
+StringArray ANALYSIS_Hex2Dec
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Bottom";
+        < "Converts a hexadecimal number to a decimal number"; > ;
+        < "Number"; > ;
+        < "The hexadecimal number to be converted (as text)"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Randbetween
+StringArray ANALYSIS_Hex2Oct
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The smallest integer returned";
+        < "Converts a hexadecimal number to an octal number"; > ;
+        < "Number"; > ;
+        < "The hexadecimal number to be converted (as text)"; > ;
+        < "Places"; > ;
+        < "Number of places used"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Randbetween
+StringArray ANALYSIS_Delta
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Top";
+        < "Tests whether two values are equal"; > ;
+        < "Number 1"; > ;
+        < "The first number"; > ;
+        < "Number 2"; > ;
+        < "The second number"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Randbetween
+StringArray ANALYSIS_Erf
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The largest integer returned";
+        < "Returns the error function"; > ;
+        < "Lower limit"; > ;
+        < "The lower limit for integration"; > ;
+        < "Upper limit"; > ;
+        < "The upper limit for integration"; > ;
     };
 };
 
-Resource ANALYSIS_Gcd
+StringArray ANALYSIS_Erfc
 {
-    String 1    // description Gcd_Excel2003
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the greatest common divisor.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use GCD instead.";
+        < "Returns the complementary error function"; > ;
+        < "Lower limit"; > ;
+        < "The lower limit for integration"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Gcd_Excel2003
+StringArray ANALYSIS_Gestep
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Tests whether a number is greater than a threshold value"; > ;
+        < "Number"; > ;
+        < "The value to test against step"; > ;
+        < "Step"; > ;
+        < "The threshold value"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Gcd_Excel2003
+StringArray ANALYSIS_Factdouble
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number or list of numbers";
+        < "Returns the double factorial of Number"; > ;
+        < "Number"; > ;
+        < "The number"; > ;
     };
 };
 
-Resource ANALYSIS_Lcm
+StringArray ANALYSIS_Imabs
 {
-    String 1    // description Lcm_Excel2003
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the least common multiple.\nThis function exists for interoperability with older Microsoft Excel documents, for new documents use LCM instead.";
+        < "Returns the absolute value (modulus) of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Lcm_Excel2003
+StringArray ANALYSIS_Imaginary
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Returns the imaginary coefficient of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Lcm_Excel2003
+StringArray ANALYSIS_Impower
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number or list of numbers";
+        < "Returns a complex number raised to a real power"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
+        < "Number"; > ;
+        < "Power to which the complex number is raised"; > ;
     };
 };
 
-Resource ANALYSIS_Besseli
+StringArray ANALYSIS_Imargument
 {
-    String 1    // description BesselI
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the modified Bessel function In(x)";
+        < "Returns the argument theta, an angle expressed in radians"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
+};
 
-    String 2 // name of parameter 1         BesselI
+StringArray ANALYSIS_Imcos
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "X";
+        < "Returns the cosine of a complex number"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
+};
 
-    String 3 // description of parameter 1  BesselI
+StringArray ANALYSIS_Imdiv
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The value at which the function is to be evaluated";
+        < "Returns the quotient of two complex numbers"; > ;
+        < "Numerator"; > ;
+        < "The dividend"; > ;
+        < "Denominator"; > ;
+        < "The divisor"; > ;
     };
+};
 
-    String 4 // name of parameter 2         BesselI
+StringArray ANALYSIS_Imexp
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "N";
+        < "Returns the algebraic form of the exponential of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
+};
 
-    String 5 // description of parameter 2  BesselI
+StringArray ANALYSIS_Imconjugate
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The order of the Bessel function";
+        < "Returns the complex conjugate of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
 };
 
-Resource ANALYSIS_Besselj
+StringArray ANALYSIS_Imln
 {
-    String 1    // description BesselJ
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the Bessel function Jn(x)";
+        < "Returns the natural logarithm of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
+};
 
-    String 2 // name of parameter 1         BesselJ
+StringArray ANALYSIS_Imlog10
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "X";
+        < "Returns the base-10 logarithm of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
+};
 
-    String 3 // description of parameter 1  BesselJ
+StringArray ANALYSIS_Imlog2
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The value at which the function is to be evaluated";
+        < "Returns the base-2 logarithm of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
+};
 
-    String 4 // name of parameter 2         BesselJ
+StringArray ANALYSIS_Improduct
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "N";
+        < "Returns the product of several complex numbers"; > ;
+        < "Complex number"; > ;
+        < "The first complex number"; > ;
+        < "Complex number"; > ;
+        < "Another complex number"; > ;
     };
+};
 
-    String 5 // description of parameter 2  BesselJ
+StringArray ANALYSIS_Imreal
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The order of the Bessel function";
+        < "Returns the real coefficient of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
 };
 
-Resource ANALYSIS_Besselk
+StringArray ANALYSIS_Imsin
 {
-    String 1    // description BesselK
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the Bessel function Kn(x)";
+        < "Returns the sine of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
+};
 
-    String 2 // name of parameter 1         BesselK
+StringArray ANALYSIS_Imsub
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "X";
+        < "Returns the difference of two complex numbers"; > ;
+        < "Complex number 1"; > ;
+        < "Complex number 1"; > ;
+        < "Complex number 2"; > ;
+        < "Complex number 2"; > ;
     };
+};
 
-    String 3 // description of parameter 1  BesselK
+StringArray ANALYSIS_Imsqrt
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The value at which the function is to be evaluated";
+        < "Returns the square root of a complex number"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
+};
 
-    String 4 // name of parameter 2         BesselK
+StringArray ANALYSIS_Imsum
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "N";
+        < "Returns the sum of complex numbers"; > ;
+        < "Complex number"; > ;
+        < "The complex number"; > ;
     };
+};
 
-    String 5 // description of parameter 2  BesselK
+StringArray ANALYSIS_Imtan
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The order of the Bessel function";
+        < "Returns the tangent of a complex number"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
 };
 
-Resource ANALYSIS_Bessely
+StringArray ANALYSIS_Imsec
 {
-    String 1    // description BesselY
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Returns the Bessel function Yn(x)";
+        < "Returns the secant of a complex number"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
+};
 
-    String 2 // name of parameter 1         BesselY
+StringArray ANALYSIS_Imcsc
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "X";
+        < "Returns the cosecant of a complex number"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
+};
 
-    String 3 // description of parameter 1  BesselY
+StringArray ANALYSIS_Imcot
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The value at which the function is to be evaluated";
+        < "Returns the cotangent of a complex number"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
+};
 
-    String 4 // name of parameter 2         BesselY
+StringArray ANALYSIS_Imsinh
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "N";
+        < "Returns the hyperbolic sine of a complex number"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
+};
 
-    String 5 // description of parameter 2  BesselY
+StringArray ANALYSIS_Imcosh
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The order of the Bessel function";
+        < "Returns the hyperbolic cosine of a complex number"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
 };
 
-Resource ANALYSIS_Bin2Oct
+StringArray ANALYSIS_Imsech
 {
-    String 1    // description Bin2Oct
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Converts a binary number to an octal number";
+        < "Returns the hyperbolic secant of a complex number"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Bin2Oct
+StringArray ANALYSIS_Imcsch
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Returns the hyperbolic cosecant of a complex number"; > ;
+        < "Complex number"; > ;
+        < "A complex number"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Bin2Oct
+StringArray ANALYSIS_Complex
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The binary number to be converted (as text)";
+        < "Converts real and imaginary coefficients into a complex number"; > ;
+        < "Real num"; > ;
+        < "The real coefficient"; > ;
+        < "I num"; > ;
+        < "The imaginary coefficient"; > ;
+        < "Suffix"; > ;
+        < "The suffix"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Bin2Oct
+StringArray ANALYSIS_Convert
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Places";
+        < "Converts a number from one measurement system to another"; > ;
+        < "Number"; > ;
+        < "The number"; > ;
+        < "From unit"; > ;
+        < "Unit of measure for number"; > ;
+        < "To unit"; > ;
+        < "Unit of measure for the result"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Bin2Oct
+StringArray ANALYSIS_Amordegrc
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number of places used";
+        < "Returns the prorated linear depreciation of an asset for each accounting period"; > ;
+        < "Cost"; > ;
+        < "Cost of the asset"; > ;
+        < "Date purchased"; > ;
+        < "Purchase date of the asset"; > ;
+        < "First period"; > ;
+        < "Date the first period ends"; > ;
+        < "Salvage"; > ;
+        < "Salvage value of an asset at the end of its life"; > ;
+        < "Period"; > ;
+        < "The period"; > ;
+        < "Rate"; > ;
+        < "The rate of depreciation"; > ;
+        < "Basis"; > ;
+        < "The year basis to be used"; > ;
     };
 };
 
-Resource ANALYSIS_Bin2Dec
+StringArray ANALYSIS_Amorlinc
 {
-    String 1    // description Bin2Dec
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Converts a binary number to a decimal number";
+        < "Returns the prorated linear depreciation of an asset for each accounting period"; > ;
+        < "Cost"; > ;
+        < "Cost of the asset"; > ;
+        < "Date purchased"; > ;
+        < "Purchase date of the asset"; > ;
+        < "First period"; > ;
+        < "The date the first period ends"; > ;
+        < "Salvage"; > ;
+        < "The salvage value of an asset at the end of its life"; > ;
+        < "Period"; > ;
+        < "The period"; > ;
+        < "Rate"; > ;
+        < "The rate of depreciation"; > ;
+        < "Basis"; > ;
+        < "The year basis to be used"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Bin2Dec
+StringArray ANALYSIS_Accrint
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Returns the accrued interest for a security that pays periodic interest"; > ;
+        < "Issue"; > ;
+        < "Issue date of the security"; > ;
+        < "First interest"; > ;
+        < "First interest date of the security"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Par"; > ;
+        < "The par value"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Bin2Dec
+StringArray ANALYSIS_Accrintm
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The binary number to be converted (as text)";
+        < "Returns the accrued interest for a security that pays interest at maturity"; > ;
+        < "Issue"; > ;
+        < "The issue date"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Par"; > ;
+        < "The par value"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
 };
 
-Resource ANALYSIS_Bin2Hex
+StringArray ANALYSIS_Received
 {
-    String 1    // description Bin2Hex
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Converts a binary number to a hexadecimal number";
+        < "Returns the amount paid out at maturity for a fully invested security"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Investment"; > ;
+        < "The investment"; > ;
+        < "Discount"; > ;
+        < "The discount"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Bin2Hex
+StringArray ANALYSIS_Disc
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Returns the discount rate for a security"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Price"; > ;
+        < "The price"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Bin2Hex
+StringArray ANALYSIS_Duration
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The binary number to be converted (as text)";
+        < "Returns the annual Macaulay duration of a security with periodic interest payments"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Coupon"; > ;
+        < "The coupon rate"; > ;
+        < "Yield"; > ;
+        < "The yield"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Bin2Hex
+StringArray ANALYSIS_Effect
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Places";
+        < "Returns the effective annual interest rate"; > ;
+        < "Nominal rate"; > ;
+        < "The nominal rate"; > ;
+        < "Npery"; > ;
+        < "The periods"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Bin2Hex
+StringArray ANALYSIS_Cumprinc
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number of places used.";
+        < "Returns the cumulative principal on a loan to be paid between two periods"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Nper"; > ;
+        < "Number of payment periods"; > ;
+        < "Pv"; > ;
+        < "The present value"; > ;
+        < "Start period"; > ;
+        < "The start period"; > ;
+        < "End period"; > ;
+        < "The end period"; > ;
+        < "Type"; > ;
+        < "The type of maturity"; > ;
     };
 };
 
-Resource ANALYSIS_Oct2Bin
+StringArray ANALYSIS_Cumipmt
 {
-    String 1    // description Oct2Bin
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Converts an octal number to a binary number";
+        < "Returns the cumulative interest to be paid between two periods"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Nper"; > ;
+        < "Number of payment periods"; > ;
+        < "Pv"; > ;
+        < "The present value"; > ;
+        < "Start period"; > ;
+        < "The start period"; > ;
+        < "End period"; > ;
+        < "The end period"; > ;
+        < "Type"; > ;
+        < "The type of maturity"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Oct2Bin
+StringArray ANALYSIS_Price
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Returns the price per 100 currency units face value of a security that pays periodic interest"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Yield"; > ;
+        < "The yield"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Oct2Bin
+StringArray ANALYSIS_Pricedisc
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The octal number to be converted (as text)";
+        < "Returns the price per 100 currency units face value of a discounted security"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Discount"; > ;
+        < "The discount"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Oct2Bin
+StringArray ANALYSIS_Pricemat
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Places";
+        < "Returns the price per 100 currency units face value of a security that pays interest at maturity"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Issue"; > ;
+        < "The issue date"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Yield"; > ;
+        < "The yield"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Oct2Bin
+StringArray ANALYSIS_Mduration
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number of places used";
+        < "Returns the Macaulay modified duration for a security with an assumed par value of 100 currency units"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Coupon"; > ;
+        < "The coupon rate"; > ;
+        < "Yield"; > ;
+        < "The yield"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
 };
 
-Resource ANALYSIS_Oct2Dec
+StringArray ANALYSIS_Nominal
 {
-    String 1    // description Oct2Dec
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Converts an octal number to a decimal number";
+        < "Returns the annual nominal interest rate"; > ;
+        < "Effective rate"; > ;
+        < "The effective interest rate"; > ;
+        < "Npery"; > ;
+        < "The periods"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Oct2Dec
+StringArray ANALYSIS_Dollarfr
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Converts a price expressed as a decimal into a price expressed as a fraction"; > ;
+        < "Decimal dollar"; > ;
+        < "The decimal number"; > ;
+        < "Fraction"; > ;
+        < "The divisor"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Oct2Dec
+StringArray ANALYSIS_Dollarde
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The octal number to be converted (as text)";
+        < "Converts a price expressed as a fraction into a price expressed as a decimal"; > ;
+        < "Fractional dollar"; > ;
+        < "The number as a fraction"; > ;
+        < "Fraction"; > ;
+        < "The divisor"; > ;
     };
 };
 
-Resource ANALYSIS_Oct2Hex
+StringArray ANALYSIS_Yield
 {
-    String 1    // description Oct2Hex
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Converts an octal number to a hexadecimal number";
+        < "Returns the yield on a security that pays periodic interest"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Price"; > ;
+        < "The price"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Oct2Hex
+StringArray ANALYSIS_Yielddisc
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Returns the annual yield for a discounted security"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Price"; > ;
+        < "The price"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Oct2Hex
+StringArray ANALYSIS_Yieldmat
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The octal number to be converted (as text)";
+        < "Returns the annual yield of a security that pays interest at maturity"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Issue"; > ;
+        < "The issue date"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Price"; > ;
+        < "The price"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Oct2Hex
+StringArray ANALYSIS_Tbilleq
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Places";
+        < "Returns the bond-equivalent yield for a treasury bill"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Discount"; > ;
+        < "The discount rate"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Oct2Hex
+StringArray ANALYSIS_Tbillprice
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number of places used";
+        < "Returns the price of 100 currency units face value for a treasury bill"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Discount"; > ;
+        < "The discount rate"; > ;
     };
 };
 
-Resource ANALYSIS_Dec2Bin
+StringArray ANALYSIS_Tbillyield
 {
-    String 1    // description Dec2Bin
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Converts a decimal number to a binary number";
+        < "Returns the yield for a treasury bill"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Price"; > ;
+        < "The price"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Dec2Bin
+StringArray ANALYSIS_Oddfprice
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Returns the price per $100 face value of a security with an odd first period"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Issue"; > ;
+        < "The issue date"; > ;
+        < "First coupon"; > ;
+        < "The first coupon date"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Yield"; > ;
+        < "The yield"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Dec2Bin
+StringArray ANALYSIS_Oddfyield
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The decimal integer to be converted";
+        < "Returns the yield of a security with an odd first period"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Issue"; > ;
+        < "The issue date"; > ;
+        < "First coupon"; > ;
+        < "The first coupon date"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Price"; > ;
+        < "The price"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Dec2Bin
+StringArray ANALYSIS_Oddlprice
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Places";
+        < "Returns the price per $100 face value of a security with an odd last period"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Last interest"; > ;
+        < "The last interest date"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Yield"; > ;
+        < "The yield"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Dec2Bin
+StringArray ANALYSIS_Oddlyield
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number of places used";
+        < "Returns the yield of a security with an odd last period"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Last interest"; > ;
+        < "The last interest date"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Price"; > ;
+        < "The price"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
 };
 
-Resource ANALYSIS_Dec2Hex
+StringArray ANALYSIS_Xirr
 {
-    String 1    // description Dec2Hex
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Converts a decimal number to a hexadecimal number";
+        < "Returns the internal rate of return for a non-periodic schedule of payments"; > ;
+        < "Values"; > ;
+        < "The values"; > ;
+        < "Dates"; > ;
+        < "The dates"; > ;
+        < "Guess"; > ;
+        < "The guess"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Dec2Hex
+StringArray ANALYSIS_Xnpv
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Returns the net present value for a non-periodic schedule of payments"; > ;
+        < "Rate"; > ;
+        < "The rate"; > ;
+        < "Values"; > ;
+        < "The values"; > ;
+        < "Dates"; > ;
+        < "The dates"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Dec2Hex
+StringArray ANALYSIS_Intrate
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The decimal integer to be converted";
+        < "Returns the interest rate for a fully invested security"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Investment"; > ;
+        < "The investment"; > ;
+        < "Redemption"; > ;
+        < "The redemption value"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Dec2Hex
+StringArray ANALYSIS_Coupncd
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Places";
+        < "Returns the first coupon date after the settlement date"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Dec2Hex
+StringArray ANALYSIS_Coupdays
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number of places used";
+        < "Returns the number of days in the coupon period containing the settlement date"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
 };
 
-Resource ANALYSIS_Dec2Oct
+StringArray ANALYSIS_Coupdaysnc
 {
-    String 1    // description Dec2Oct
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Converts a decimal number into an octal number";
+        < "Returns the number of days from the settlement date to the next coupon date"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 2 // name of parameter 1         Dec2Oct
+StringArray ANALYSIS_Coupdaybs
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Number";
+        < "Returns the number of days from the beginning of the coupon period to the settlement date"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 3 // description of parameter 1  Dec2Oct
+StringArray ANALYSIS_Couppcd
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The decimal number";
+        < "Returns the last coupon date preceding the settlement date"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 4 // name of parameter 2         Dec2Oct
+StringArray ANALYSIS_Coupnum
+{
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "Places";
+        < "Returns the number of coupons payable between the settlement and maturity dates"; > ;
+        < "Settlement"; > ;
+        < "The settlement"; > ;
+        < "Maturity"; > ;
+        < "The maturity"; > ;
+        < "Frequency"; > ;
+        < "The frequency"; > ;
+        < "Basis"; > ;
+        < "The basis"; > ;
     };
+};
 
-    String 5 // description of parameter 2  Dec2Oct
-    {
-        Text [ en-US ] = "Number of places used";
-    };
-};
-
-Resource ANALYSIS_Hex2Bin
-{
-    String 1    // description Hex2Bin
-    {
-        Text [ en-US ] = "Converts a hexadecimal number to a binary number";
-    };
-
-    String 2 // name of parameter 1         Hex2Bin
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 3 // description of parameter 1  Hex2Bin
-    {
-        Text [ en-US ] = "The hexadecimal number to be converted (as text)";
-    };
-
-    String 4 // name of parameter 2         Hex2Bin
-    {
-        Text [ en-US ] = "Places";
-    };
-
-    String 5 // description of parameter 2  Hex2Bin
-    {
-        Text [ en-US ] = "Number of places used";
-    };
-};
-
-Resource ANALYSIS_Hex2Dec
-{
-    String 1    // description Hex2Dec
-    {
-        Text [ en-US ] = "Converts a hexadecimal number to a decimal number";
-    };
-
-    String 2 // name of parameter 1         Hex2Dec
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 3 // description of parameter 1  Hex2Dec
-    {
-        Text [ en-US ] = "The hexadecimal number to be converted (as text)";
-    };
-};
-
-Resource ANALYSIS_Hex2Oct
-{
-    String 1    // description Hex2Oct
-    {
-        Text [ en-US ] = "Converts a hexadecimal number to an octal number";
-    };
-
-    String 2 // name of parameter 1         Hex2Oct
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 3 // description of parameter 1  Hex2Oct
-    {
-        Text [ en-US ] = "The hexadecimal number to be converted (as text)";
-    };
-
-    String 4 // name of parameter 2         Hex2Oct
-    {
-        Text [ en-US ] = "Places";
-    };
-
-    String 5 // description of parameter 2  Hex2Oct
-    {
-        Text [ en-US ] = "Number of places used";
-    };
-};
-
-Resource ANALYSIS_Delta
-{
-    String 1    // description Delta
-    {
-        Text [ en-US ] = "Tests whether two values are equal";
-    };
-
-    String 2 // name of parameter 1         Delta
-    {
-        Text [ en-US ] = "Number 1";
-    };
-
-    String 3 // description of parameter 1  Delta
-    {
-        Text [ en-US ] = "The first number";
-    };
-
-    String 4 // name of parameter 2         Delta
-    {
-        Text [ en-US ] = "Number 2";
-    };
-
-    String 5 // description of parameter 2  Delta
-    {
-        Text [ en-US ] = "The second number";
-    };
-};
-
-Resource ANALYSIS_Erf
-{
-    String 1    // description Erf
-    {
-        Text [ en-US ] = "Returns the error function";
-    };
-
-    String 2 // name of parameter 1         Erf
-    {
-        Text [ en-US ] = "Lower limit";
-    };
-
-    String 3 // description of parameter 1  Erf
-    {
-        Text [ en-US ] = "The lower limit for integration";
-    };
-
-    String 4 // name of parameter 2         Erf
-    {
-        Text [ en-US ] = "Upper limit";
-    };
-
-    String 5 // description of parameter 2  Erf
-    {
-        Text [ en-US ] = "The upper limit for integration";
-    };
-};
-
-Resource ANALYSIS_Erfc
-{
-    String 1    // description Erfc
-    {
-        Text [ en-US ] = "Returns the complementary error function";
-    };
-
-    String 2 // name of parameter 1         Erfc
-    {
-        Text [ en-US ] = "Lower limit";
-    };
-
-    String 3 // description of parameter 1  Erfc
-    {
-        Text [ en-US ] = "The lower limit for integration";
-    };
-};
-
-Resource ANALYSIS_Gestep
-{
-    String 1    // description GeStep
-    {
-        Text [ en-US ] = "Tests whether a number is greater than a threshold value";
-    };
-
-    String 2 // name of parameter 1         GeStep
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 3 // description of parameter 1  GeStep
-    {
-        Text [ en-US ] = "The value to test against step";
-    };
-
-    String 4 // name of parameter 2         GeStep
-    {
-        Text [ en-US ] = "Step";
-    };
-
-    String 5 // description of parameter 2  GeStep
-    {
-        Text [ en-US ] = "The threshold value";
-    };
-};
-
-Resource ANALYSIS_Factdouble
-{
-    String 1    // description Factdouble
-    {
-        Text [ en-US ] = "Returns the double factorial of Number";
-    };
-
-    String 2 // name of parameter 1         Factdouble
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 3 // description of parameter 1  Factdouble
-    {
-        Text [ en-US ] = "The number";
-    };
-};
-
-Resource ANALYSIS_Imabs
-{
-    String 1    // description Imabs
-    {
-        Text [ en-US ] = "Returns the absolute value (modulus) of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imabs
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imabs
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Imaginary
-{
-    String 1    // description Imaginary
-    {
-        Text [ en-US ] = "Returns the imaginary coefficient of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imaginary
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imaginary
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Impower
-{
-    String 1    // description Impower
-    {
-        Text [ en-US ] = "Returns a complex number raised to a real power";
-    };
-
-    String 2 // name of parameter 1         Impower
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Impower
-    {
-        Text [ en-US ] = "The complex number";
-    };
-
-    String 4 // name of parameter 2         Impower
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 5 // description of parameter 2  Impower
-    {
-        Text [ en-US ] = "Power to which the complex number is raised";
-    };
-};
-
-Resource ANALYSIS_Imargument
-{
-    String 1    // description Imargument
-    {
-        Text [ en-US ] = "Returns the argument theta, an angle expressed in radians";
-    };
-
-    String 2 // name of parameter 1         Imargument
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imargument
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Imcos
-{
-    String 1    // description Imcos
-    {
-        Text [ en-US ] = "Returns the cosine of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imcos
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imcos
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Imdiv
-{
-    String 1    // description Imdiv
-    {
-        Text [ en-US ] = "Returns the quotient of two complex numbers";
-    };
-
-    String 2 // name of parameter 1         Imdiv
-    {
-        Text [ en-US ] = "Numerator";
-    };
-
-    String 3 // description of parameter 1  Imdiv
-    {
-        Text [ en-US ] = "The dividend";
-    };
-
-    String 4 // name of parameter 2         Imdiv
-    {
-        Text [ en-US ] = "Denominator";
-    };
-
-    String 5 // description of parameter 2  Imdiv
-    {
-        Text [ en-US ] = "The divisor";
-    };
-};
-
-Resource ANALYSIS_Imexp
-{
-    String 1    // description Imexp
-    {
-        Text [ en-US ] = "Returns the algebraic form of the exponential of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imexp
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imexp
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Imconjugate
-{
-    String 1    // description Imconjugate
-    {
-        Text [ en-US ] = "Returns the complex conjugate of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imconjugate
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imconjugate
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Imln
-{
-    String 1    // description Imln
-    {
-        Text [ en-US ] = "Returns the natural logarithm of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imln
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imln
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Imlog10
-{
-    String 1    // description Imlog10
-    {
-        Text [ en-US ] = "Returns the base-10 logarithm of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imlog10
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imlog10
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Imlog2
-{
-    String 1    // description Imlog2
-    {
-        Text [ en-US ] = "Returns the base-2 logarithm of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imlog2
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imlog2
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Improduct
-{
-    String 1    // description Improduct
-    {
-        Text [ en-US ] = "Returns the product of several complex numbers";
-    };
-
-    String 2 // name of parameter 1         Improduct
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Improduct
-    {
-        Text [ en-US ] = "The first complex number";
-    };
-
-    String 4 // name of parameter 2         Improduct
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 5 // description of parameter 2  Improduct
-    {
-        Text [ en-US ] = "Another complex number";
-    };
-};
-
-Resource ANALYSIS_Imreal
-{
-    String 1    // description Imreal
-    {
-        Text [ en-US ] = "Returns the real coefficient of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imreal
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imreal
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Imsin
-{
-    String 1    // description Imsin
-    {
-        Text [ en-US ] = "Returns the sine of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imsin
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imsin
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Imsub
-{
-    String 1    // description Imsub
-    {
-        Text [ en-US ] = "Returns the difference of two complex numbers";
-    };
-
-    String 2 // name of parameter 1         Imsub
-    {
-        Text [ en-US ] = "Complex number 1";
-    };
-
-    String 3 // description of parameter 1  Imsub
-    {
-        Text [ en-US ] = "Complex number 1";
-    };
-
-    String 4 // name of parameter 2         Imsub
-    {
-        Text [ en-US ] = "Complex number 2";
-    };
-
-    String 5 // description of parameter 2  Imsub
-    {
-        Text [ en-US ] = "Complex number 2";
-    };
-};
-
-Resource ANALYSIS_Imsqrt
-{
-    String 1    // description Imsqrt
-    {
-        Text [ en-US ] = "Returns the square root of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imsqrt
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imsqrt
-    {
-        Text [ en-US ] = "The complex number";
-    };
-};
-
-Resource ANALYSIS_Imsum
-{
-    String 1    // description Imsum
-    {
-        Text [ en-US ] = "Returns the sum of complex numbers";
-    };
-
-    String 2 // name of parameter 1         Imsum
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imsum
-    {
-        Text [ en-US ] = "The complex number";
-    };
-
-};
-
-Resource ANALYSIS_Imtan
-{
-    String 1    // description Imtan
-    {
-        Text [ en-US ] = "Returns the tangent of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imtan
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imtan
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Imsec
-{
-    String 1    // description Imsec
-    {
-        Text [ en-US ] = "Returns the secant of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imsec
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imsec
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Imcsc
-{
-    String 1    // description Imcsc
-    {
-        Text [ en-US ] = "Returns the cosecant of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imcsc
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imcsc
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Imcot
-{
-    String 1    // description Imcot
-    {
-        Text [ en-US ] = "Returns the cotangent of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imcot
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imcot
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Imsinh
-{
-    String 1    // description Imsinh
-    {
-        Text [ en-US ] = "Returns the hyperbolic sine of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imsinh
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imsinh
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Imcosh
-{
-    String 1    // description Imcosh
-    {
-        Text [ en-US ] = "Returns the hyperbolic cosine of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imcosh
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imcosh
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Imsech
-{
-    String 1    // description Imsech
-    {
-        Text [ en-US ] = "Returns the hyperbolic secant of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imsech
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imsech
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Imcsch
-{
-    String 1    // description Imcsch
-    {
-        Text [ en-US ] = "Returns the hyperbolic cosecant of a complex number";
-    };
-
-    String 2 // name of parameter 1         Imcsch
-    {
-        Text [ en-US ] = "Complex number";
-    };
-
-    String 3 // description of parameter 1  Imcsch
-    {
-        Text [ en-US ] = "A complex number";
-    };
-};
-
-Resource ANALYSIS_Complex
-{
-    String 1    // description Complex
-    {
-        Text [ en-US ] = "Converts real and imaginary coefficients into a complex number";
-    };
-
-    String 2 // name of parameter 1         Complex
-    {
-        Text [ en-US ] = "Real num";
-    };
-
-    String 3 // description of parameter 1  Complex
-    {
-        Text [ en-US ] = "The real coefficient";
-    };
-
-    String 4 // name of parameter 2         Complex
-    {
-        Text [ en-US ] = "I num";
-    };
-
-    String 5 // description of parameter 2  Complex
-    {
-        Text [ en-US ] = "The imaginary coefficient";
-    };
-
-    String 6 // name of parameter 3         Complex
-    {
-        Text [ en-US ] = "Suffix";
-    };
-
-    String 7 // description of parameter 3  Complex
-    {
-        Text [ en-US ] = "The suffix";
-    };
-};
-
-Resource ANALYSIS_Convert
-{
-    String 1    // description Convert_add
-    {
-        Text [ en-US ] = "Converts a number from one measurement system to another";
-    };
-
-    String 2 // name of parameter 1         Convert_add
-    {
-        Text [ en-US ] = "Number";
-    };
-
-    String 3 // description of parameter 1  Convert_add
-    {
-        Text [ en-US ] = "The number";
-    };
-
-    String 4 // name of parameter 2         Convert_add
-    {
-        Text [ en-US ] = "From unit";
-    };
-
-    String 5 // description of parameter 2  Convert_add
-    {
-        Text [ en-US ] = "Unit of measure for number";
-    };
-
-    String 6 // name of parameter 3         Convert_add
-    {
-        Text [ en-US ] = "To unit";
-    };
-
-    String 7 // description of parameter 3  Convert_add
-    {
-        Text [ en-US ] = "Unit of measure for the result";
-    };
-};
-
-Resource ANALYSIS_Amordegrc
-{
-    String 1    // description Amordegrc
-    {
-        Text [ en-US ] = "Returns the prorated linear depreciation of an asset for each accounting period";
-    };
-
-    String 2 // name of parameter 1         Amordegrc
-    {
-        Text [ en-US ] = "Cost";
-    };
-
-    String 3 // description of parameter 1  Amordegrc
-    {
-        Text [ en-US ] = "Cost of the asset";
-    };
-
-    String 4 // name of parameter 2         Amordegrc
-    {
-        Text [ en-US ] = "Date purchased";
-    };
-
-    String 5 // description of parameter 2  Amordegrc
-    {
-        Text [ en-US ] = "Purchase date of the asset";
-    };
-
-    String 6 // name of parameter 3         Amordegrc
-    {
-        Text [ en-US ] = "First period";
-    };
-
-    String 7 // description of parameter 3  Amordegrc
-    {
-        Text [ en-US ] = "Date the first period ends";
-    };
-
-    String 8 // name of parameter 4         Amordegrc
-    {
-        Text [ en-US ] = "Salvage";
-    };
-
-    String 9 // description of parameter 4  Amordegrc
-    {
-        Text [ en-US ] = "Salvage value of an asset at the end of its life";
-    };
-
-    String 10 // name of parameter 5        Amordegrc
-    {
-        Text [ en-US ] = "Period";
-    };
-
-    String 11 // description of parameter 5 Amordegrc
-    {
-        Text [ en-US ] = "The period";
-    };
-
-    String 12 // name of parameter 6        Amordegrc
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 13 // description of parameter 6 Amordegrc
-    {
-        Text [ en-US ] = "The rate of depreciation";
-    };
-
-    String 14 // name of parameter 7        Amordegrc
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 15 // description of parameter 7 Amordegrc
-    {
-        Text [ en-US ] = "The year basis to be used";
-    };
-};
-
-Resource ANALYSIS_Amorlinc
-{
-    String 1    // description Amorlinc
-    {
-        Text [ en-US ] = "Returns the prorated linear depreciation of an asset for each accounting period";
-    };
-
-    String 2 // name of parameter 1         Amorlinc
-    {
-        Text [ en-US ] = "Cost";
-    };
-
-    String 3 // description of parameter 1  Amorlinc
-    {
-        Text [ en-US ] = "Cost of the asset";
-    };
-
-    String 4 // name of parameter 2         Amorlinc
-    {
-        Text [ en-US ] = "Date purchased";
-    };
-
-    String 5 // description of parameter 2  Amorlinc
-    {
-        Text [ en-US ] = "Purchase date of the asset";
-    };
-
-    String 6 // name of parameter 3         Amorlinc
-    {
-        Text [ en-US ] = "First period";
-    };
-
-    String 7 // description of parameter 3  Amorlinc
-    {
-        Text [ en-US ] = "The date the first period ends";
-    };
-
-    String 8 // name of parameter 4         Amorlinc
-    {
-        Text [ en-US ] = "Salvage";
-    };
-
-    String 9 // description of parameter 4  Amorlinc
-    {
-        Text [ en-US ] = "The salvage value of an asset at the end of its life";
-    };
-
-    String 10 // name of parameter 5        Amorlinc
-    {
-        Text [ en-US ] = "Period";
-    };
-
-    String 11 // description of parameter 5 Amorlinc
-    {
-        Text [ en-US ] = "The period";
-    };
-
-    String 12 // name of parameter 6        Amorlinc
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 13 // description of parameter 6 Amorlinc
-    {
-        Text [ en-US ] = "The rate of depreciation";
-    };
-
-    String 14 // name of parameter 7        Amorlinc
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 15 // description of parameter 7 Amorlinc
-    {
-        Text [ en-US ] = "The year basis to be used";
-    };
-};
-
-Resource ANALYSIS_Accrint
-{
-    String 1    // description Accrint
-    {
-        Text [ en-US ] = "Returns the accrued interest for a security that pays periodic interest";
-    };
-
-    String 2 // name of parameter 1         Accrint
-    {
-        Text [ en-US ] = "Issue";
-    };
-
-    String 3 // description of parameter 1  Accrint
-    {
-        Text [ en-US ] = "Issue date of the security";
-    };
-
-    String 4 // name of parameter 2         Accrint
-    {
-        Text [ en-US ] = "First interest";
-    };
-
-    String 5 // description of parameter 2  Accrint
-    {
-        Text [ en-US ] = "First interest date of the security";
-    };
-
-    String 6 // name of parameter 3         Accrint
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 7 // description of parameter 3  Accrint
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 8 // name of parameter 4         Accrint
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 9 // description of parameter 4  Accrint
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 10 // name of parameter 5        Accrint
-    {
-        Text [ en-US ] = "Par";
-    };
-
-    String 11 // description of parameter 5 Accrint
-    {
-        Text [ en-US ] = "The par value";
-    };
-
-    String 12 // name of parameter 6        Accrint
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 13 // description of parameter 6 Accrint
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 14 // name of parameter 7        Accrint
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 15 // description of parameter 7 Accrint
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Accrintm
-{
-    String 1    // description Accrintm
-    {
-        Text [ en-US ] = "Returns the accrued interest for a security that pays interest at maturity";
-    };
-
-    String 2 // name of parameter 1         Accrintm
-    {
-        Text [ en-US ] = "Issue";
-    };
-
-    String 3 // description of parameter 1  Accrintm
-    {
-        Text [ en-US ] = "The issue date";
-    };
-
-    String 4 // name of parameter 2         Accrintm
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 5 // description of parameter 2  Accrintm
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 6 // name of parameter 3         Accrintm
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 7 // description of parameter 3  Accrintm
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 8 // name of parameter 4         Accrintm
-    {
-        Text [ en-US ] = "Par";
-    };
-
-    String 9 // description of parameter 4  Accrintm
-    {
-        Text [ en-US ] = "The par value";
-    };
-
-    String 10 // name of parameter 5        Accrintm
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 11 // description of parameter 5 Accrintm
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Received
-{
-    String 1    // description Received
-    {
-        Text [ en-US ] = "Returns the amount paid out at maturity for a fully invested security";
-    };
-
-    String 2 // name of parameter 1         Received
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Received
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Received
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Received
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Received
-    {
-        Text [ en-US ] = "Investment";
-    };
-
-    String 7 // description of parameter 3  Received
-    {
-        Text [ en-US ] = "The investment";
-    };
-
-    String 8 // name of parameter 4         Received
-    {
-        Text [ en-US ] = "Discount";
-    };
-
-    String 9 // description of parameter 4  Received
-    {
-        Text [ en-US ] = "The discount";
-    };
-
-    String 10 // name of parameter 5        Received
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 11 // description of parameter 5 Received
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Disc
-{
-    String 1    // description Disc
-    {
-        Text [ en-US ] = "Returns the discount rate for a security";
-    };
-
-    String 2 // name of parameter 1         Disc
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Disc
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Disc
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Disc
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Disc
-    {
-        Text [ en-US ] = "Price";
-    };
-
-    String 7 // description of parameter 3  Disc
-    {
-        Text [ en-US ] = "The price";
-    };
-
-    String 8 // name of parameter 4         Disc
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 9 // description of parameter 4  Disc
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 10 // name of parameter 5        Disc
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 11 // description of parameter 5 Disc
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Duration
-{
-    String 1    // description Duration
-    {
-        Text [ en-US ] = "Returns the annual Macaulay duration of a security with periodic interest payments";
-    };
-
-    String 2 // name of parameter 1         Duration
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Duration
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Duration
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Duration
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Duration
-    {
-        Text [ en-US ] = "Coupon";
-    };
-
-    String 7 // description of parameter 3  Duration
-    {
-        Text [ en-US ] = "The coupon rate";
-    };
-
-    String 8 // name of parameter 4         Duration
-    {
-        Text [ en-US ] = "Yield";
-    };
-
-    String 9 // description of parameter 4  Duration
-    {
-        Text [ en-US ] = "The yield";
-    };
-
-    String 10 // name of parameter 5        Duration
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 11 // description of parameter 5 Duration
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 12 // name of parameter 6        Duration
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 13 // description of parameter 6 Duration
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Effect
-{
-    String 1    // description Effect_add
-    {
-        Text [ en-US ] = "Returns the effective annual interest rate";
-    };
-
-    String 2 // name of parameter 1         Effect_add
-    {
-        Text [ en-US ] = "Nominal rate";
-    };
-
-    String 3 // description of parameter 1  Effect_add
-    {
-        Text [ en-US ] = "The nominal rate";
-    };
-
-    String 4 // name of parameter 2         Effect_add
-    {
-        Text [ en-US ] = "Npery";
-    };
-
-    String 5 // description of parameter 2  Effect_add
-    {
-        Text [ en-US ] = "The periods";
-    };
-};
-
-Resource ANALYSIS_Cumprinc
-{
-    String 1    // description Cumprinc_add
-    {
-        Text [ en-US ] = "Returns the cumulative principal on a loan to be paid between two periods";
-    };
-
-    String 2 // name of parameter 1         Cumprinc_add
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 3 // description of parameter 1  Cumprinc_add
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 4 // name of parameter 2         Cumprinc_add
-    {
-        Text [ en-US ] = "Nper";
-    };
-
-    String 5 // description of parameter 2  Cumprinc_add
-    {
-        Text [ en-US ] = "Number of payment periods";
-    };
-
-    String 6 // name of parameter 3         Cumprinc_add
-    {
-        Text [ en-US ] = "Pv";
-    };
-
-    String 7 // description of parameter 3  Cumprinc_add
-    {
-        Text [ en-US ] = "The present value";
-    };
-
-    String 8 // name of parameter 4         Cumprinc_add
-    {
-        Text [ en-US ] = "Start period";
-    };
-
-    String 9 // description of parameter 4  Cumprinc_add
-    {
-        Text [ en-US ] = "The start period";
-    };
-
-    String 10 // name of parameter 5        Cumprinc_add
-    {
-        Text [ en-US ] = "End period";
-    };
-
-    String 11 // description of parameter 5 Cumprinc_add
-    {
-        Text [ en-US ] = "The end period";
-    };
-
-    String 12 // name of parameter 6        Cumprinc_add
-    {
-        Text [ en-US ] = "Type";
-    };
-
-    String 13 // description of parameter 6 Cumprinc_add
-    {
-        Text [ en-US ] = "The type of maturity";
-    };
-};
-
-Resource ANALYSIS_Cumipmt
-{
-    String 1    // description Cumipmt_add
-    {
-        Text [ en-US ] = "Returns the cumulative interest to be paid between two periods";
-    };
-
-    String 2 // name of parameter 1         Cumipmt_add
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 3 // description of parameter 1  Cumipmt_add
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 4 // name of parameter 2         Cumipmt_add
-    {
-        Text [ en-US ] = "Nper";
-    };
-
-    String 5 // description of parameter 2  Cumipmt_add
-    {
-        Text [ en-US ] = "Number of payment periods";
-    };
-
-    String 6 // name of parameter 3         Cumipmt_add
-    {
-        Text [ en-US ] = "Pv";
-    };
-
-    String 7 // description of parameter 3  Cumipmt_add
-    {
-        Text [ en-US ] = "The present value";
-    };
-
-    String 8 // name of parameter 4         Cumipmt_add
-    {
-        Text [ en-US ] = "Start period";
-    };
-
-    String 9 // description of parameter 4  Cumipmt_add
-    {
-        Text [ en-US ] = "The start period";
-    };
-
-    String 10 // name of parameter 5        Cumipmt_add
-    {
-        Text [ en-US ] = "End period";
-    };
-
-    String 11 // description of parameter 5 Cumipmt_add
-    {
-        Text [ en-US ] = "The end period";
-    };
-
-    String 12 // name of parameter 6        Cumipmt_add
-    {
-        Text [ en-US ] = "Type";
-    };
-
-    String 13 // description of parameter 6 Cumipmt_add
-    {
-        Text [ en-US ] = "The type of maturity";
-    };
-};
-
-Resource ANALYSIS_Price
-{
-    String 1    // description Price
-    {
-        Text [ en-US ] = "Returns the price per 100 currency units face value of a security that pays periodic interest";
-    };
-
-    String 2 // name of parameter 1         Price
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Price
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Price
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Price
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Price
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 7 // description of parameter 3  Price
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 8 // name of parameter 4         Price
-    {
-        Text [ en-US ] = "Yield";
-    };
-
-    String 9 // description of parameter 4  Price
-    {
-        Text [ en-US ] = "The yield";
-    };
-
-    String 10 // name of parameter 5        Price
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 11 // description of parameter 5 Price
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 12 // name of parameter 6        Price
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 13 // description of parameter 6 Price
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 14 // name of parameter 7        Price
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 15 // description of parameter 7 Price
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Pricedisc
-{
-    String 1    // description Pricedisc
-    {
-        Text [ en-US ] = "Returns the price per 100 currency units face value of a discounted security";
-    };
-
-    String 2 // name of parameter 1         Pricedisc
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Pricedisc
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Pricedisc
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Pricedisc
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Pricedisc
-    {
-        Text [ en-US ] = "Discount";
-    };
-
-    String 7 // description of parameter 3  Pricedisc
-    {
-        Text [ en-US ] = "The discount";
-    };
-
-    String 8 // name of parameter 4         Pricedisc
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 9 // description of parameter 4  Pricedisc
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 10 // name of parameter 5        Pricedisc
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 11 // description of parameter 5 Pricedisc
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Pricemat
-{
-    String 1    // description Pricemat
-    {
-        Text [ en-US ] = "Returns the price per 100 currency units face value of a security that pays interest at maturity";
-    };
-
-    String 2 // name of parameter 1         Pricemat
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Pricemat
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Pricemat
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Pricemat
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Pricemat
-    {
-        Text [ en-US ] = "Issue";
-    };
-
-    String 7 // description of parameter 3  Pricemat
-    {
-        Text [ en-US ] = "The issue date";
-    };
-
-    String 8 // name of parameter 4         Pricemat
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 9 // description of parameter 4  Pricemat
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 10 // name of parameter 5        Pricemat
-    {
-        Text [ en-US ] = "Yield";
-    };
-
-    String 11 // description of parameter 5 Pricemat
-    {
-        Text [ en-US ] = "The yield";
-    };
-
-    String 12 // name of parameter 6        Pricemat
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 13 // description of parameter 6 Pricemat
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Mduration
-{
-    String 1    // description Mduration
-    {
-        Text [ en-US ] = "Returns the Macaulay modified duration for a security with an assumed par value of 100 currency units";
-    };
-
-    String 2 // name of parameter 1         Mduration
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Mduration
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Mduration
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Mduration
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Mduration
-    {
-        Text [ en-US ] = "Coupon";
-    };
-
-    String 7 // description of parameter 3  Mduration
-    {
-        Text [ en-US ] = "The coupon rate";
-    };
-
-    String 8 // name of parameter 4         Mduration
-    {
-        Text [ en-US ] = "Yield";
-    };
-
-    String 9 // description of parameter 4  Mduration
-    {
-        Text [ en-US ] = "The yield";
-    };
-
-    String 10 // name of parameter 5        Mduration
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 11 // description of parameter 5 Mduration
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 12 // name of parameter 6        Mduration
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 13 // description of parameter 6 Mduration
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Nominal
-{
-    String 1    // description Nominal_add
-    {
-        Text [ en-US ] = "Returns the annual nominal interest rate";
-    };
-
-    String 2 // name of parameter 1         Nominal_add
-    {
-        Text [ en-US ] = "Effective rate";
-    };
-
-    String 3 // description of parameter 1  Nominal_add
-    {
-        Text [ en-US ] = "The effective interest rate";
-    };
-
-    String 4 // name of parameter 2         Nominal_add
-    {
-        Text [ en-US ] = "Npery";
-    };
-
-    String 5 // description of parameter 2  Nominal_add
-    {
-        Text [ en-US ] = "The periods";
-    };
-};
-
-Resource ANALYSIS_Dollarfr
-{
-    String 1    // description Dollarfr
-    {
-        Text [ en-US ] = "Converts a price expressed as a decimal into a price expressed as a fraction";
-    };
-
-    String 2 // name of parameter 1         Dollarfr
-    {
-        Text [ en-US ] = "Decimal dollar";
-    };
-
-    String 3 // description of parameter 1  Dollarfr
-    {
-        Text [ en-US ] = "The decimal number";
-    };
-
-    String 4 // name of parameter 2         Dollarfr
-    {
-        Text [ en-US ] = "Fraction";
-    };
-
-    String 5 // description of parameter 2  Dollarfr
-    {
-        Text [ en-US ] = "The divisor";
-    };
-};
-
-Resource ANALYSIS_Dollarde
-{
-    String 1    // description Dollarde
-    {
-        Text [ en-US ] = "Converts a price expressed as a fraction into a price expressed as a decimal";
-    };
-
-    String 2 // name of parameter 1         Dollarde
-    {
-        Text [ en-US ] = "Fractional dollar";
-    };
-
-    String 3 // description of parameter 1  Dollarde
-    {
-        Text [ en-US ] = "The number as a fraction";
-    };
-
-    String 4 // name of parameter 2         Dollarde
-    {
-        Text [ en-US ] = "Fraction";
-    };
-
-    String 5 // description of parameter 2  Dollarde
-    {
-        Text [ en-US ] = "The divisor";
-    };
-};
-
-Resource ANALYSIS_Yield
-{
-    String 1    // description Yield
-    {
-        Text [ en-US ] = "Returns the yield on a security that pays periodic interest";
-    };
-
-    String 2 // name of parameter 1         Yield
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Yield
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Yield
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Yield
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Yield
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 7 // description of parameter 3  Yield
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 8 // name of parameter 4         Yield
-    {
-        Text [ en-US ] = "Price";
-    };
-
-    String 9 // description of parameter 4  Yield
-    {
-        Text [ en-US ] = "The price";
-    };
-
-    String 10 // name of parameter 5        Yield
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 11 // description of parameter 5 Yield
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 12 // name of parameter 6        Yield
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 13 // description of parameter 6 Yield
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 14 // name of parameter 7        Yield
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 15 // description of parameter 7 Yield
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Yielddisc
-{
-    String 1    // description Yielddisc
-    {
-        Text [ en-US ] = "Returns the annual yield for a discounted security";
-    };
-
-    String 2 // name of parameter 1         Yielddisc
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Yielddisc
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Yielddisc
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Yielddisc
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Yielddisc
-    {
-        Text [ en-US ] = "Price";
-    };
-
-    String 7 // description of parameter 3  Yielddisc
-    {
-        Text [ en-US ] = "The price";
-    };
-
-    String 8 // name of parameter 4         Yielddisc
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 9 // description of parameter 4  Yielddisc
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 10 // name of parameter 5        Yielddisc
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 11 // description of parameter 5 Yielddisc
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Yieldmat
-{
-    String 1    // description Yieldmat
-    {
-        Text [ en-US ] = "Returns the annual yield of a security that pays interest at maturity";
-    };
-
-    String 2 // name of parameter 1         Yieldmat
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Yieldmat
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Yieldmat
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Yieldmat
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Yieldmat
-    {
-        Text [ en-US ] = "Issue";
-    };
-
-    String 7 // description of parameter 3  Yieldmat
-    {
-        Text [ en-US ] = "The issue date";
-    };
-
-    String 8 // name of parameter 4         Yieldmat
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 9 // description of parameter 4  Yieldmat
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 10 // name of parameter 5        Yieldmat
-    {
-        Text [ en-US ] = "Price";
-    };
-
-    String 11 // description of parameter 5 Yieldmat
-    {
-        Text [ en-US ] = "The price";
-    };
-
-    String 12 // name of parameter 6        Yieldmat
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 13 // description of parameter 6 Yieldmat
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Tbilleq
-{
-    String 1    // description Tbilleq
-    {
-        Text [ en-US ] = "Returns the bond-equivalent yield for a treasury bill";
-    };
-
-    String 2 // name of parameter 1         Tbilleq
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Tbilleq
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Tbilleq
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Tbilleq
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Tbilleq
-    {
-        Text [ en-US ] = "Discount";
-    };
-
-    String 7 // description of parameter 3  Tbilleq
-    {
-        Text [ en-US ] = "The discount rate";
-    };
-};
-
-Resource ANALYSIS_Tbillprice
-{
-    String 1    // description Tbillprice
-    {
-        Text [ en-US ] = "Returns the price of 100 currency units face value for a treasury bill";
-    };
-
-    String 2 // name of parameter 1         Tbillprice
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Tbillprice
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Tbillprice
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Tbillprice
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Tbillprice
-    {
-        Text [ en-US ] = "Discount";
-    };
-
-    String 7 // description of parameter 3  Tbillprice
-    {
-        Text [ en-US ] = "The discount rate";
-    };
-};
-
-Resource ANALYSIS_Tbillyield
-{
-    String 1    // description Tbillyield
-    {
-        Text [ en-US ] = "Returns the yield for a treasury bill";
-    };
-
-    String 2 // name of parameter 1         Tbillyield
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Tbillyield
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Tbillyield
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Tbillyield
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Tbillyield
-    {
-        Text [ en-US ] = "Price";
-    };
-
-    String 7 // description of parameter 3  Tbillyield
-    {
-        Text [ en-US ] = "The price";
-    };
-};
-
-Resource ANALYSIS_Oddfprice
-{
-    String 1    // description Oddfprice
-    {
-        Text [ en-US ] = "Returns the price per $100 face value of a security with an odd first period";
-    };
-
-    String 2 // name of parameter 1         Oddfprice
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Oddfprice
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Oddfprice
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Oddfprice
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Oddfprice
-    {
-        Text [ en-US ] = "Issue";
-    };
-
-    String 7 // description of parameter 3  Oddfprice
-    {
-        Text [ en-US ] = "The issue date";
-    };
-
-    String 8 // name of parameter 4         Oddfprice
-    {
-        Text [ en-US ] = "First coupon";
-    };
-
-    String 9 // description of parameter 4  Oddfprice
-    {
-        Text [ en-US ] = "The first coupon date";
-    };
-
-    String 10 // name of parameter 5        Oddfprice
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 11 // description of parameter 5 Oddfprice
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 12 // name of parameter 6        Oddfprice
-    {
-        Text [ en-US ] = "Yield";
-    };
-
-    String 13 // description of parameter 6 Oddfprice
-    {
-        Text [ en-US ] = "The yield";
-    };
-
-    String 14 // name of parameter 7        Oddfprice
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 15 // description of parameter 7 Oddfprice
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 16 // name of parameter 8        Oddfprice
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 17 // description of parameter 8 Oddfprice
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 18 // name of parameter 9        Oddfprice
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 19 // description of parameter 9 Oddfprice
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Oddfyield
-{
-    String 1    // description Oddfyield
-    {
-        Text [ en-US ] = "Returns the yield of a security with an odd first period";
-    };
-
-    String 2 // name of parameter 1         Oddfyield
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Oddfyield
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Oddfyield
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Oddfyield
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Oddfyield
-    {
-        Text [ en-US ] = "Issue";
-    };
-
-    String 7 // description of parameter 3  Oddfyield
-    {
-        Text [ en-US ] = "The issue date";
-    };
-
-    String 8 // name of parameter 4         Oddfyield
-    {
-        Text [ en-US ] = "First coupon";
-    };
-
-    String 9 // description of parameter 4  Oddfyield
-    {
-        Text [ en-US ] = "The first coupon date";
-    };
-
-    String 10 // name of parameter 5        Oddfyield
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 11 // description of parameter 5 Oddfyield
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 12 // name of parameter 6        Oddfyield
-    {
-        Text [ en-US ] = "Price";
-    };
-
-    String 13 // description of parameter 6 Oddfyield
-    {
-        Text [ en-US ] = "The price";
-    };
-
-    String 14 // name of parameter 7        Oddfyield
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 15 // description of parameter 7 Oddfyield
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 16 // name of parameter 8        Oddfyield
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 17 // description of parameter 8 Oddfyield
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 18 // name of parameter 9        Oddfyield
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 19 // description of parameter 9 Oddfyield
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Oddlprice
-{
-    String 1    // description Oddlprice
-    {
-        Text [ en-US ] = "Returns the price per $100 face value of a security with an odd last period";
-    };
-
-    String 2 // name of parameter 1         Oddlprice
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Oddlprice
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Oddlprice
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Oddlprice
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Oddlprice
-    {
-        Text [ en-US ] = "Last interest";
-    };
-
-    String 7 // description of parameter 3  Oddlprice
-    {
-        Text [ en-US ] = "The last interest date";
-    };
-
-    String 8 // name of parameter 4         Oddlprice
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 9 // description of parameter 4  Oddlprice
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 10 // name of parameter 5        Oddlprice
-    {
-        Text [ en-US ] = "Yield";
-    };
-
-    String 11 // description of parameter 5 Oddlprice
-    {
-        Text [ en-US ] = "The yield";
-    };
-
-    String 12 // name of parameter 6        Oddlprice
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 13 // description of parameter 6 Oddlprice
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 14 // name of parameter 7        Oddlprice
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 15 // description of parameter 7 Oddlprice
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 16 // name of parameter 8        Oddlprice
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 17 // description of parameter 8 Oddlprice
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Oddlyield
-{
-    String 1    // description Oddlyield
-    {
-        Text [ en-US ] = "Returns the yield of a security with an odd last period";
-    };
-
-    String 2 // name of parameter 1         Oddlyield
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Oddlyield
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Oddlyield
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Oddlyield
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Oddlyield
-    {
-        Text [ en-US ] = "Last interest";
-    };
-
-    String 7 // description of parameter 3  Oddlyield
-    {
-        Text [ en-US ] = "The last interest date";
-    };
-
-    String 8 // name of parameter 4         Oddlyield
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 9 // description of parameter 4  Oddlyield
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 10 // name of parameter 5        Oddlyield
-    {
-        Text [ en-US ] = "Price";
-    };
-
-    String 11 // description of parameter 5 Oddlyield
-    {
-        Text [ en-US ] = "The price";
-    };
-
-    String 12 // name of parameter 6        Oddlyield
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 13 // description of parameter 6 Oddlyield
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 14 // name of parameter 7        Oddlyield
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 15 // description of parameter 7 Oddlyield
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 16 // name of parameter 8        Oddlyield
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 17 // description of parameter 8 Oddlyield
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Xirr
-{
-    String 1    // description Xirr
-    {
-        Text [ en-US ] = "Returns the internal rate of return for a non-periodic schedule of payments";
-    };
-
-    String 2 // name of parameter 1         Xirr
-    {
-        Text [ en-US ] = "Values";
-    };
-
-    String 3 // description of parameter 1  Xirr
-    {
-        Text [ en-US ] = "The values";
-    };
-
-    String 4 // name of parameter 2         Xirr
-    {
-        Text [ en-US ] = "Dates";
-    };
-
-    String 5 // description of parameter 2  Xirr
-    {
-        Text [ en-US ] = "The dates";
-    };
-
-    String 6 // name of parameter 3         Xirr
-    {
-        Text [ en-US ] = "Guess";
-    };
-
-    String 7 // description of parameter 3  Xirr
-    {
-        Text [ en-US ] = "The guess";
-    };
-};
-
-Resource ANALYSIS_Xnpv
-{
-    String 1    // description Xnpv
-    {
-        Text [ en-US ] = "Returns the net present value for a non-periodic schedule of payments";
-    };
-
-    String 2 // name of parameter 1         Xnpv
-    {
-        Text [ en-US ] = "Rate";
-    };
-
-    String 3 // description of parameter 1  Xnpv
-    {
-        Text [ en-US ] = "The rate";
-    };
-
-    String 4 // name of parameter 2         Xnpv
-    {
-        Text [ en-US ] = "Values";
-    };
-
-    String 5 // description of parameter 2  Xnpv
-    {
-        Text [ en-US ] = "The values";
-    };
-
-    String 6 // name of parameter 3         Xnpv
-    {
-        Text [ en-US ] = "Dates";
-    };
-
-    String 7 // description of parameter 3  Xnpv
-    {
-        Text [ en-US ] = "The dates";
-    };
-};
-
-Resource ANALYSIS_Intrate
-{
-    String 1    // description Intrate
-    {
-        Text [ en-US ] = "Returns the interest rate for a fully invested security";
-    };
-
-    String 2 // name of parameter 1         Intrate
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Intrate
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Intrate
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Intrate
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Intrate
-    {
-        Text [ en-US ] = "Investment";
-    };
-
-    String 7 // description of parameter 3  Intrate
-    {
-        Text [ en-US ] = "The investment";
-    };
-
-    String 8 // name of parameter 4         Intrate
-    {
-        Text [ en-US ] = "Redemption";
-    };
-
-    String 9 // description of parameter 4  Intrate
-    {
-        Text [ en-US ] = "The redemption value";
-    };
-
-    String 10 // name of parameter 5        Intrate
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 11 // description of parameter 5 Intrate
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Coupncd
-{
-    String 1    // description Coupncd
-    {
-        Text [ en-US ] = "Returns the first coupon date after the settlement date";
-    };
-
-    String 2 // name of parameter 1         Coupncd
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Coupncd
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Coupncd
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Coupncd
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Coupncd
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 7 // description of parameter 3  Coupncd
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 8 // name of parameter 4         Coupncd
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 9 // description of parameter 4  Coupncd
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Coupdays
-{
-    String 1    // description Coupdays
-    {
-        Text [ en-US ] = "Returns the number of days in the coupon period containing the settlement date";
-    };
-
-    String 2 // name of parameter 1         Coupdays
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Coupdays
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Coupdays
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Coupdays
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Coupdays
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 7 // description of parameter 3  Coupdays
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 8 // name of parameter 4         Coupdays
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 9 // description of parameter 4  Coupdays
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Coupdaysnc
-{
-    String 1    // description Coupdaysnc
-    {
-        Text [ en-US ] = "Returns the number of days from the settlement date to the next coupon date";
-    };
-
-    String 2 // name of parameter 1         Coupdaysnc
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Coupdaysnc
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Coupdaysnc
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Coupdaysnc
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Coupdaysnc
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 7 // description of parameter 3  Coupdaysnc
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 8 // name of parameter 4         Coupdaysnc
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 9 // description of parameter 4  Coupdaysnc
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Coupdaybs
-{
-    String 1    // description Coupdaybs
-    {
-        Text [ en-US ] = "Returns the number of days from the beginning of the coupon period to the settlement date";
-    };
-
-    String 2 // name of parameter 1         Coupdaybs
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Coupdaybs
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Coupdaybs
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Coupdaybs
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Coupdaybs
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 7 // description of parameter 3  Coupdaybs
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 8 // name of parameter 4         Coupdaybs
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 9 // description of parameter 4  Coupdaybs
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Couppcd
-{
-    String 1    // description Couppcd
-    {
-        Text [ en-US ] = "Returns the last coupon date preceding the settlement date";
-    };
-
-    String 2 // name of parameter 1         Couppcd
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Couppcd
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Couppcd
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Couppcd
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Couppcd
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 7 // description of parameter 3  Couppcd
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 8 // name of parameter 4         Couppcd
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 9 // description of parameter 4  Couppcd
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Coupnum
-{
-    String 1    // description Coupnum
-    {
-        Text [ en-US ] = "Returns the number of coupons payable between the settlement and maturity dates";
-    };
-
-    String 2 // name of parameter 1         Coupnum
-    {
-        Text [ en-US ] = "Settlement";
-    };
-
-    String 3 // description of parameter 1  Coupnum
-    {
-        Text [ en-US ] = "The settlement";
-    };
-
-    String 4 // name of parameter 2         Coupnum
-    {
-        Text [ en-US ] = "Maturity";
-    };
-
-    String 5 // description of parameter 2  Coupnum
-    {
-        Text [ en-US ] = "The maturity";
-    };
-
-    String 6 // name of parameter 3         Coupnum
-    {
-        Text [ en-US ] = "Frequency";
-    };
-
-    String 7 // description of parameter 3  Coupnum
-    {
-        Text [ en-US ] = "The frequency";
-    };
-
-    String 8 // name of parameter 4         Coupnum
-    {
-        Text [ en-US ] = "Basis";
-    };
-
-    String 9 // description of parameter 4  Coupnum
-    {
-        Text [ en-US ] = "The basis";
-    };
-};
-
-Resource ANALYSIS_Fvschedule
+StringArray ANALYSIS_Fvschedule
 {
-    String 1    // description Fvschedule
-    {
-        Text [ en-US ] = "Returns the future value of the initial principal after a series of compound interest rates are applied";
-    };
-
-    String 2 // name of parameter 1         Fvschedule
-    {
-        Text [ en-US ] = "Principal";
-    };
-
-    String 3 // description of parameter 1  Fvschedule
-    {
-        Text [ en-US ] = "The principal";
-    };
-
-    String 4 // name of parameter 2         Fvschedule
-    {
-        Text [ en-US ] = "Schedule";
-    };
-
-    String 5 // description of parameter 2  Fvschedule
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "The schedule";
+        < "Returns the future value of the initial principal after a series of compound interest rates are applied"; > ;
+        < "Principal"; > ;
+        < "The principal"; > ;
+        < "Schedule"; > ;
+        < "The schedule"; > ;
     };
 };
 
