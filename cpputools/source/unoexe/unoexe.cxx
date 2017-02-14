@@ -155,15 +155,7 @@ void createInstance(
         throw RuntimeException( "cannot get service instance \"" + rServiceName + "\"!" );
     }
 
-    rxOut.set( x, UNO_QUERY );
-    if (! rxOut.is())
-    {
-        const Type & rType = cppu::UnoType<T>::get();
-        throw RuntimeException(
-            "service instance \"" + rServiceName +
-            "\" does not support demanded interface \"" +
-            rType.getTypeName() + "\"!" );
-    }
+    rxOut.set( x, UNO_QUERY_THROW );
 }
 
 /// @throws Exception
@@ -490,9 +482,7 @@ SAL_IMPLEMENT_MAIN()
 
                 if (bSingleAccept)
                 {
-                    Reference< XComponent > xComp( xBridge, UNO_QUERY );
-                    if (! xComp.is())
-                        throw RuntimeException( "bridge factory does not export interface \"com.sun.star.lang.XComponent\"!" );
+                    Reference< XComponent > xComp( xBridge, UNO_QUERY_THROW );
                     ODisposingListener::waitFor( xComp );
                     xComp->dispose();
                         // explicitly dispose the remote bridge so that it joins
