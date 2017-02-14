@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_be1ca578",
+        "filename": "sfx2/sdi/sfx.sdi",
+        "patchSetId": 1
+      },
+      "lineNbr": 3145,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-14T13:52:00Z",
+      "side": 1,
+      "message": "So this will make the command completely unavailable in Tools \u003e Customize, you can\u0027t insert it into any menu, for example.\n\nWhat you want to do instead is that you disable assigning kbd shortcut to it. This has nothing to do with groups",
+      "revId": "fa3f2b4755f94f1525a8b2a4e247d353feb49720",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
