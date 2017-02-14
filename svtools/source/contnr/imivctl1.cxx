@@ -118,7 +118,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     eSelectionMode = SelectionMode::Multiple;
     pView = pCurView;
     pZOrderList = new SvxIconChoiceCtrlEntryList_impl();
-    ePositionMode = IcnViewPositionModeFree;
+    ePositionMode = SvxIconChoiceCtrlPositionMode::Free;
     SetStyle( nWinStyle );
     nFlags = IconChoiceFlags::NONE;
     nUserEventAdjustScrBars = nullptr;
@@ -3232,7 +3232,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
     ePositionMode = eMode;
     size_t nCount = aEntries.size();
 
-    if( eOldMode == IcnViewPositionModeAutoArrange )
+    if( eOldMode == SvxIconChoiceCtrlPositionMode::AutoArrange )
     {
         // when positioning moved entries "hard", there are problems with
         // unwanted overlaps, as these entries aren't taken into account in
@@ -3242,7 +3242,7 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
         return;
     }
 
-    if( ePositionMode == IcnViewPositionModeAutoArrange )
+    if( ePositionMode == SvxIconChoiceCtrlPositionMode::AutoArrange )
     {
         for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
@@ -3253,10 +3253,6 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
 
         if( aEntries.size() )
             aAutoArrangeIdle.Start();
-    }
-    else if( ePositionMode == IcnViewPositionModeAutoAdjust )
-    {
-        AdjustEntryAtGrid();
     }
 }
 

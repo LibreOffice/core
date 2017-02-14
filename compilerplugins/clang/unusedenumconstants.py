@@ -109,6 +109,7 @@ for d in definitionSet:
          "include/tools/fontenum.hxx", # part of GDI file format
          "svx/inc/galobj.hxx", # GalSoundType
          "include/svx/msdffdef.hxx",
+         "include/svtools/rtftoken.h", # RTF_TOKEN_IDS
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on

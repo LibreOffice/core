@@ -75,7 +75,7 @@ SvtIconChoiceCtrl::SvtIconChoiceCtrl( vcl::Window* pParent, WinBits nWinStyle ) 
 {
     SetLineColor();
     _pImpl->InitSettings();
-    _pImpl->SetPositionMode( IcnViewPositionModeAutoArrange );
+    _pImpl->SetPositionMode( SvxIconChoiceCtrlPositionMode::AutoArrange );
 }
 
 SvtIconChoiceCtrl::~SvtIconChoiceCtrl()

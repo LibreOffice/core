@@ -294,7 +294,7 @@ class SvxIconChoiceCtrl_Impl
     void                SetDefaultTextSize();
     bool                IsAutoArrange() const
                         {
-                            return (ePositionMode == IcnViewPositionModeAutoArrange);
+                            return (ePositionMode == SvxIconChoiceCtrlPositionMode::AutoArrange);
                         }
     void                DocRectChanged() { aDocRectChangedIdle.Start(); }
     void                VisRectChanged() { aVisRectChangedIdle.Start(); }
