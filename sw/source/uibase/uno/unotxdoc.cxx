@@ -737,8 +737,8 @@ SwUnoCursor* SwXTextDocument::CreateCursorForSearch(Reference< XTextCursor > & x
 sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor > & xDesc)
 {
     SolarMutexGuard aGuard;
-    Reference< XUnoTunnel > xDescTunnel(xDesc, UNO_QUERY);
-    if(!IsValid() || !xDescTunnel.is() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
+    Reference< XUnoTunnel > xDescTunnel(xDesc, UNO_QUERY_THROW);
+    if(!IsValid() || !xDescTunnel->getSomething(SwXTextSearch::getUnoTunnelId()))
         throw RuntimeException();
 
     Reference< XTextCursor >  xCursor;

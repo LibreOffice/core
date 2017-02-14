@@ -803,11 +803,7 @@ SwVbaSelection::Tables( const uno::Any& aIndex )
     }
 
     // if the current selection is a XTextTableCursor and the index is 1 then we can service this request, otherwise we just have to throw
-    uno::Reference< text::XTextTableCursor > xTextTableCursor( mxModel->getCurrentSelection(), uno::UNO_QUERY );
-
-    if ( !xTextTableCursor.is() )
-       throw uno::RuntimeException();
-
+    uno::Reference< text::XTextTableCursor > xTextTableCursor( mxModel->getCurrentSelection(), uno::UNO_QUERY_THROW );
     SwXTextTableCursor* pTTCursor = dynamic_cast< SwXTextTableCursor* >( xTextTableCursor.get() );
     if ( pTTCursor )
     {
