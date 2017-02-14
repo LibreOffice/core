@@ -473,12 +473,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
     {
         if ( m_xMSPPkg.is() )
         {
-            Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY );
-            if ( !xCont.is() )
-            {
-                throw RuntimeException(
-                    "PackageMasterScriptProvider doesn't implement XNameContainer" );
-            }
+            Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
             xCont->insertByName( aName, aElement );
         }
         else
@@ -552,12 +547,7 @@ MasterScriptProvider::removeByName( const OUString& Name )
     {
         if ( m_xMSPPkg.is() )
         {
-            Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY );
-            if ( !xCont.is() )
-            {
-                throw RuntimeException(
-                    "PackageMasterScriptProvider doesn't implement XNameContainer" );
-            }
+            Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
             xCont->removeByName( Name );
         }
         else
@@ -651,13 +641,7 @@ MasterScriptProvider::hasByName( const OUString& aName )
     {
         if ( m_xMSPPkg.is() )
         {
-            Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY );
-            if ( !xCont.is() )
-            {
-                throw RuntimeException(
-                    "PackageMasterScriptProvider doesn't implement XNameContainer" );
-            }
-
+            Reference< container::XNameContainer > xCont( m_xMSPPkg, UNO_QUERY_THROW );
             result = xCont->hasByName( aName );
         }
         // If this is a document provider then we shouldn't
