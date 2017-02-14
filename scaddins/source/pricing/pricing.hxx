@@ -130,7 +130,6 @@ private:
     OUString             aIntName;           // internal name (get***)
     sal_uInt16                  nUINameID;          // resource ID to UI name
     sal_uInt16                  nDescrID;           // leads also to parameter descriptions!
-    sal_uInt16                  nCompListID;        // resource ID to list of valid names
     sal_uInt16                  nParamCount;        // num of parameters
     std::vector<OUString>       aCompList;          // list of all valid names
     ScaCategory                 eCat;               // function category

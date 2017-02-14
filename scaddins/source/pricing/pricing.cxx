@@ -70,13 +70,12 @@ ScaFuncData::ScaFuncData( const ScaFuncDataBase& rBaseData, ResMgr& rResMgr ) :
     aIntName( OUString::createFromAscii( rBaseData.pIntName ) ),
     nUINameID( rBaseData.nUINameID ),
     nDescrID( rBaseData.nDescrID ),
-    nCompListID( rBaseData.nCompListID ),
     nParamCount( rBaseData.nParamCount ),
     eCat( rBaseData.eCat ),
     bDouble( rBaseData.bDouble ),
     bWithOpt( rBaseData.bWithOpt )
 {
-    ScaResStringArrLoader aArrLoader( RID_PRICING_DEFFUNCTION_NAMES, nCompListID, rResMgr );
+    ScaResStringArrLoader aArrLoader(RID_PRICING_DEFFUNCTION_NAMES, rBaseData.nCompListID, rResMgr);
     const ResStringArray& rArr = aArrLoader.GetStringArray();
 
     for( sal_uInt32 nIndex = 0; nIndex < rArr.Count(); nIndex++ )
