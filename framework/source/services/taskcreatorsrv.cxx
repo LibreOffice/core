@@ -250,10 +250,7 @@ css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContai
 
     // create a new blank container window and get access to parent container to append new created task.
     css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
-    css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
-    if ( ! xWindow.is())
-        throw css::uno::Exception("TaskCreator service was not able to create suitable frame window.",
-                                  static_cast< ::cppu::OWeakObject* >(this));
+    css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY_THROW );
 
     sal_Int32 nBackground = 0xffffffff;
 
