@@ -40,12 +40,9 @@
 #include <vector>
 
 class Color;
-class SdrModel;
 class SdrObject;
+class SdrPathObj;
 class SfxItemSet;
-struct SvxMSDffVertPair;
-struct SvxMSDffCalculationData;
-struct SvxMSDffTextRectangles;
 
 enum class HandleFlags
 {
@@ -73,8 +70,6 @@ namespace o3tl
 // MSDFF_HANDLE_FLAGS_RANGE_Y seems to be not defined in
 // escher, but we are using it internally in to differentiate
 // between X_RANGE and Y_RANGE
-
-class SdrPathObj;
 
 class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
 {
