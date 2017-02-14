@@ -198,39 +198,18 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     };
 };
 
-Resource RID_DATE_FUNCTION_NAMES
+StringArray RID_DATE_FUNCTION_NAMES
 {
-    String DATE_FUNCNAME_DiffWeeks
+    ItemList [ en-US ] =
     {
-        Text [ en-US ] = "WEEKS";
-    };
-    String DATE_FUNCNAME_DiffMonths
-    {
-        Text [ en-US ] = "MONTHS";
-    };
-    String DATE_FUNCNAME_DiffYears
-    {
-        Text [ en-US ] = "YEARS";
-    };
-    String DATE_FUNCNAME_IsLeapYear
-    {
-        Text [ en-US ] = "ISLEAPYEAR";
-    };
-    String DATE_FUNCNAME_DaysInMonth
-    {
-        Text [ en-US ] = "DAYSINMONTH";
-    };
-    String DATE_FUNCNAME_DaysInYear
-    {
-        Text [ en-US ] = "DAYSINYEAR";
-    };
-    String DATE_FUNCNAME_WeeksInYear
-    {
-        Text [ en-US ] = "WEEKSINYEAR";
-    };
-    String DATE_FUNCNAME_Rot13
-    {
-        Text [ en-US ] = "ROT13";
+        < "WEEKS" ; DATE_FUNCNAME_DiffWeeks ; >;
+        < "MONTHS" ; DATE_FUNCNAME_DiffMonths ; >;
+        < "YEARS" ; DATE_FUNCNAME_DiffYears ; >;
+        < "ISLEAPYEAR" ; DATE_FUNCNAME_IsLeapYear ; >;
+        < "DAYSINMONTH" ; DATE_FUNCNAME_DaysInMonth ; >;
+        < "DAYSINYEAR" ; DATE_FUNCNAME_DaysInYear ; >;
+        < "WEEKSINYEAR" ; DATE_FUNCNAME_WeeksInYear ; >;
+        < "ROT13" ; DATE_FUNCNAME_Rot13 ; >;
     };
 };
 
