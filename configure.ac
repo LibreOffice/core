@@ -10364,6 +10364,8 @@ if test "$_os" = "Linux"; then
 
         GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
         GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
+        LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
+        LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
     fi
 fi
 AC_SUBST(SYSTEM_GPGME)
