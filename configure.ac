@@ -10368,11 +10368,15 @@ if test "$_os" = "Linux"; then
 
         GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
         GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
+        LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
+        LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
     fi
 fi
 AC_SUBST(SYSTEM_GPGMEPP)
 AC_SUBST(GPG_ERROR_CFLAGS)
 AC_SUBST(GPG_ERROR_LIBS)
+AC_SUBST(LIBASSUAN_CFLAGS)
+AC_SUBST(LIBASSUAN_LIBS)
 AC_SUBST(GPGMEPP_CFLAGS)
 AC_SUBST(GPGMEPP_LIBS)
 
