@@ -355,10 +355,7 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     {
         static const char s_sDatabaseDataProvider[] = "com.sun.star.chart2.data.DatabaseDataProvider";
         m_xDatabaseDataProvider.set(m_xContext->getServiceManager()->createInstanceWithContext(s_sDatabaseDataProvider
-            ,m_xContext),uno::UNO_QUERY);
-        if ( !m_xDatabaseDataProvider.is() )
-            throw uno::Exception();
-
+            ,m_xContext),uno::UNO_QUERY_THROW);
         m_xDatabaseDataProvider->setRowLimit(10);
 
         uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
