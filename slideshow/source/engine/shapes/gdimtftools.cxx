@@ -264,7 +264,6 @@ sal_Int32 getNextActionOffset( MetaAction * pCurrAct )
 
 bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
                               ::std::size_t&                o_rLoopCount,
-                              CycleMode&                    o_eCycleMode,
                               const Graphic&                rGraphic )
 {
     o_rFrames.clear();
@@ -291,7 +290,6 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
     pVDevMask->EnableMapMode( false );
 
     o_rLoopCount = aAnimation.GetLoopCount();
-    o_eCycleMode = CYCLE_LOOP;
 
     for( sal_uInt16 i=0, nCount=aAnimation.Count(); i<nCount; ++i )
     {

@@ -105,17 +105,6 @@ namespace slideshow
 {
     namespace internal
     {
-        /** Cycle mode of intrinsic animations
-         */
-        enum CycleMode
-        {
-            /// loop the animation back to back
-            CYCLE_LOOP,
-            /// loop, but play backwards from end to start
-            CYCLE_PINGPONGLOOP
-        };
-
-
         // Value extraction from Any
         // =========================
 

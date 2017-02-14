@@ -383,7 +383,6 @@ namespace slideshow
             maSubsetting(),
             mnIsAnimatedCount(0),
             mnAnimationLoopCount(0),
-            meCycleMode(CYCLE_LOOP),
             mbIsVisible( true ),
             mbForceUpdate( false ),
             mbAttributeLayerRevoked( false ),
@@ -443,7 +442,6 @@ namespace slideshow
             maSubsetting(),
             mnIsAnimatedCount(0),
             mnAnimationLoopCount(0),
-            meCycleMode(CYCLE_LOOP),
             mbIsVisible( true ),
             mbForceUpdate( false ),
             mbAttributeLayerRevoked( false ),
@@ -454,7 +452,6 @@ namespace slideshow
 
             getAnimationFromGraphic( maAnimationFrames,
                                      mnAnimationLoopCount,
-                                     meCycleMode,
                                      rGraphic );
 
             ENSURE_OR_THROW( !maAnimationFrames.empty() &&
@@ -495,7 +492,6 @@ namespace slideshow
             maSubsetting( rTreeNode, mpCurrMtf ),
             mnIsAnimatedCount(0),
             mnAnimationLoopCount(0),
-            meCycleMode(CYCLE_LOOP),
             mbIsVisible( rSrc.mbIsVisible ),
             mbForceUpdate( false ),
             mbAttributeLayerRevoked( false ),
@@ -580,8 +576,7 @@ namespace slideshow
                         pShape,
                         pWakeupEvent,
                         aTimeout,
-                        pShape->mnAnimationLoopCount,
-                        pShape->meCycleMode);
+                        pShape->mnAnimationLoopCount);
 
                 pWakeupEvent->setActivity( pActivity );
                 pShape->mpIntrinsicAnimationActivity = pActivity;

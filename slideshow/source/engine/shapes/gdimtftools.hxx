@@ -109,15 +109,11 @@ namespace slideshow
             @param o_rLoopCount
             Number of times the bitmap animation shall be repeated
 
-            @param o_eCycleMode
-            Repeat mode (normal, or ping-pong mode)
-
             @param rGraphic
             Input graphic object, to extract animations from
          */
         bool getAnimationFromGraphic( VectorOfMtfAnimationFrames& o_rFrames,
                                       ::std::size_t&              o_rLoopCount,
-                                      CycleMode&                  o_eCycleMode,
                                       const Graphic&              rGraphic );
 
         /** Retrieve scroll text animation rectangles from given metafile

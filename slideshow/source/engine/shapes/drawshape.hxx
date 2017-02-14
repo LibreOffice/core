@@ -339,9 +339,6 @@ namespace slideshow
             /// Number of times the bitmap animation shall loop
             ::std::size_t                                                           mnAnimationLoopCount;
 
-            /// Cycle mode for bitmap animation
-            CycleMode                                                               meCycleMode;
-
             /// Whether shape is visible (without attribute layers)
             bool                                                                    mbIsVisible;
 
