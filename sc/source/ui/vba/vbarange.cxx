@@ -3174,9 +3174,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
             // After must be a single cell in the range
             if( xAfterRange->getCount() > 1 )
                 throw uno::RuntimeException("After must be a single cell." );
-            uno::Reference< excel::XRange > xCell( Cells( uno::makeAny( xAfterRange->getRow() ), uno::makeAny( xAfterRange->getColumn() ) ), uno::UNO_QUERY );
-            if( !xCell.is() )
-                throw uno::RuntimeException("After must be in range." );
+            uno::Reference< excel::XRange > xCell( Cells( uno::makeAny( xAfterRange->getRow() ), uno::makeAny( xAfterRange->getColumn() ) ), uno::UNO_QUERY_THROW );
             xStartCell.set( xAfterRange->getCellRange(), uno::UNO_QUERY_THROW );
         }
 

@@ -72,13 +72,8 @@ ScVbaGlobals::getExcel()
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook()
 {
-    uno::Reference< excel::XWorkbook > xWorkbook( getApplication()->getActiveWorkbook(), uno::UNO_QUERY);
-    if ( xWorkbook.is() )
-    {
-        return xWorkbook;
-    }
-// FIXME check if this is correct/desired behavior
-    throw uno::RuntimeException( "No activeWorkbook available" );
+    uno::Reference< excel::XWorkbook > xWorkbook( getApplication()->getActiveWorkbook(), uno::UNO_QUERY_THROW);
+    return xWorkbook;
 }
 
 uno::Reference< excel::XWindow > SAL_CALL
