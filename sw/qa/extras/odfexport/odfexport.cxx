@@ -852,8 +852,26 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
 DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    // This failed, pdf+svm replacement graphics pair didn't survive an ODT roundtrip.
+    // This failed, pdf+png replacement graphics pair didn't survive an ODT roundtrip.
     CPPUNIT_ASSERT(!getProperty<OUString>(xShape, "ReplacementGraphicURL").isEmpty());
+
+    if (mbExported)
+    {
+        uno::Sequence<uno::Any> aArgs(1);
+        aArgs[0] <<= maTempFile.GetURL();
+        uno::Reference<container::XNameAccess> xNameAccess(m_xSFactory->createInstanceWithArguments("com.sun.star.packages.zip.ZipFileAccess", aArgs), uno::UNO_QUERY);
+        bool bHasBitmap = false;
+        for (const auto& rElementName : xNameAccess->getElementNames())
+        {
+            if (rElementName.startsWith("Pictures") && rElementName.endsWith("png"))
+            {
+                bHasBitmap = true;
+                break;
+            }
+        }
+        // This failed, replacement was an svm file.
+        CPPUNIT_ASSERT(bHasBitmap);
+    }
 }
 #endif
 
