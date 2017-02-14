@@ -500,7 +500,7 @@ namespace svt { namespace table
             if ( !m_bUpdatingColWidths )
             {
                 impl_ni_relayout( i_column );
-                invalidate( TableAreaAll );
+                invalidate( TableArea::All );
             }
 
             nGroup &= ~ColumnAttributeGroup::WIDTH;
@@ -1055,7 +1055,7 @@ namespace svt { namespace table
 
         // if the column widths changed, ensure everything is repainted
         if ( anyColumnWidthChanged )
-            invalidate( TableAreaAll );
+            invalidate( TableArea::All );
 
         // if the column resizing happened to leave some space at the right, but there are columns
         // scrolled out to the left, scroll them in
@@ -1788,19 +1788,15 @@ namespace svt { namespace table
     {
         switch ( i_what )
         {
-        case TableAreaColumnHeaders:
+        case TableArea::ColumnHeaders:
             m_pDataWindow->Invalidate( calcHeaderRect( true ) );
             break;
 
-        case TableAreaRowHeaders:
+        case TableArea::RowHeaders:
             m_pDataWindow->Invalidate( calcHeaderRect( false ) );
             break;
 
-        case TableAreaDataArea:
-            m_pDataWindow->Invalidate( impl_getAllVisibleDataCellArea() );
-            break;
-
-        case TableAreaAll:
+        case TableArea::All:
             m_pDataWindow->Invalidate();
             m_pDataWindow->GetParent()->Invalidate( InvalidateFlags::Transparent );
             break;

@@ -142,12 +142,11 @@ namespace svt { namespace table
 
     //= TableArea
 
-    enum TableArea
+    enum class TableArea
     {
-        TableAreaColumnHeaders,
-        TableAreaRowHeaders,
-        TableAreaDataArea,
-        TableAreaAll
+        ColumnHeaders,
+        RowHeaders,
+        All
     };
 
 

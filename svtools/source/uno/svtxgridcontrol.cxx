@@ -625,7 +625,7 @@ void SAL_CALL SVTXGridControl::dataChanged( const GridDataEvent& i_event )
     // So, just in case, invalidate the column header area, too.
     VclPtr< TableControl > pTable = GetAsDynamic< TableControl >();
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::dataChanged: no control (anymore)!" );
-    pTable->getTableControlInterface().invalidate( TableAreaColumnHeaders );
+    pTable->getTableControlInterface().invalidate( TableArea::ColumnHeaders );
 }
 
 
@@ -637,7 +637,7 @@ void SAL_CALL SVTXGridControl::rowHeadingChanged( const GridDataEvent& )
     ENSURE_OR_RETURN_VOID( pTable, "SVTXGridControl::rowHeadingChanged: no control (anymore)!" );
 
     // TODO: we could do better than this - invalidate the header area only
-    pTable->getTableControlInterface().invalidate( TableAreaRowHeaders );
+    pTable->getTableControlInterface().invalidate( TableArea::RowHeaders );
 }
 
 
