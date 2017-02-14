@@ -415,38 +415,35 @@ StringArray RID_PRICING_FUNCTION_NAMES
 // This is not relevant to this add-in, so we only supply the same
 // (English) function names again.
 // see also: GetExcelName() or GetCompNames() or getCompatibilityNames()
-Resource RID_PRICING_DEFFUNCTION_NAMES
+StringArray PRICING_DEFFUNCNAME_OptBarrier
 {
-    StringArray PRICING_DEFFUNCNAME_OptBarrier
+    ItemList =
     {
-        ItemList =
-        {
-            < "OPT_BARRIER"; >;
-        };
+        < "OPT_BARRIER"; >;
     };
+};
 
-    StringArray PRICING_DEFFUNCNAME_OptTouch
+StringArray PRICING_DEFFUNCNAME_OptTouch
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "OPT_TOUCH"; >;
-        };
+        < "OPT_TOUCH"; >;
     };
+};
 
-    StringArray PRICING_DEFFUNCNAME_OptProbHit
+StringArray PRICING_DEFFUNCNAME_OptProbHit
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "OPT_PROB_HIT"; >;
-        };
+        < "OPT_PROB_HIT"; >;
     };
+};
 
-    StringArray PRICING_DEFFUNCNAME_OptProbInMoney
+StringArray PRICING_DEFFUNCNAME_OptProbInMoney
+{
+    ItemList =
     {
-        ItemList =
-        {
-            < "OPT_PROB_INMONEY"; >;
-        };
+        < "OPT_PROB_INMONEY"; >;
     };
 };
 
