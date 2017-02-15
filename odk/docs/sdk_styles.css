@@ -20,12 +20,12 @@
  *************************************************************/
 
 a { text-decoration: none; }
-a:link { color: #0e85cd; }
+a:link { color: #107EC0; }
 a:visited { color: #638093; }
 a:active { color: #4dadea; }
 
 .sdkbody { background-color: #FFFFFF;
-	   color: #000000;
+	   color: #333333;
 	   margin-top: 0;
 	   margin-bottom: 0;
 	   margin-left: 0;
@@ -109,7 +109,7 @@ a:active { color: #4dadea; }
 	   border: 0; }
 
 .line { width: 100%;
-        height: 5;
+        height: 2px;
 	border: 0; 
 	vertical-align: middle; }
 
@@ -145,7 +145,6 @@ a:active { color: #4dadea; }
 .content80 { width: 80%; }
 .content87 { width: 87%; }
 
-.centertext {align:center; text-align:center; font-size: 12;}
-.apachelogo {vertical-align:middle;}
-
+.centertext { padding-left:20px; padding-bottom:5px; text-align:left; font-size: 12px; line-height:10pt; }
+.apachelogo { float: right; text-align: left; padding-bottom: 12px; padding-right: 8px; width: 188px; height: 76px; }
 
