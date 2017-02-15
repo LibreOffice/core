@@ -333,7 +333,6 @@ bool SwDocShell::Save()
             SAL_FALLTHROUGH;
 
         case SfxObjectCreateMode::STANDARD:
-        case SfxObjectCreateMode::PREVIEW:
         default:
             {
                 if (m_pDoc->ContainsMSVBasic())

@@ -177,7 +177,6 @@ enum class SfxObjectCreateMode
 {
     EMBEDDED,
     STANDARD,
-    PREVIEW,
     ORGANIZER,
     INTERNAL
 };

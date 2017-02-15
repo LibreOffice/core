@@ -547,7 +547,6 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
                 SAL_FALLTHROUGH;
 
             case SfxObjectCreateMode::STANDARD:
-            case SfxObjectCreateMode::PREVIEW:
                 {
                     Reader *pReader = ReadXML;
                     if( pReader )

@@ -299,7 +299,6 @@ SfxObjectShell::SfxObjectShell( const SfxModelFlags i_nCreationFlags )
     @param eMode Purpose, to which the SfxObjectShell is created:
                  SfxObjectCreateMode::EMBEDDED (default) as SO-Server from within another Document
                  SfxObjectCreateMode::STANDARD, as a normal Document open stand-alone
-                 SfxObjectCreateMode::PREVIEW to enable a Preview, if possible are only little information is needed
                  SfxObjectCreateMode::ORGANIZER to be displayed in the Organizer, here nothing of the contents is used
 */
 SfxObjectShell::SfxObjectShell(SfxObjectCreateMode eMode)

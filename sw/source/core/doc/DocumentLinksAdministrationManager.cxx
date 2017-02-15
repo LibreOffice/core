@@ -206,8 +206,6 @@ void DocumentLinksAdministrationManager::UpdateLinks()
         return;
     if (eMode == SfxObjectCreateMode::ORGANIZER)
         return;
-    if (eMode == SfxObjectCreateMode::PREVIEW)
-        return;
     if (m_rDoc.GetDocShell()->IsPreview())
         return;
     if (GetLinkManager().GetLinks().empty())
