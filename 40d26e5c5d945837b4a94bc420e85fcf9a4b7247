@@ -16,6 +16,24 @@
       "revId": "40d26e5c5d945837b4a94bc420e85fcf9a4b7247",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_243fc826",
+        "filename": "configure.ac",
+        "patchSetId": 12
+      },
+      "lineNbr": 3536,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-15T15:30:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa48f94a_cdb53ad1",
+      "revId": "40d26e5c5d945837b4a94bc420e85fcf9a4b7247",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
