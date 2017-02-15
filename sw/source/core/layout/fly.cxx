@@ -667,19 +667,19 @@ bool SwFlyFrame::FrameSizeChg( const SwFormatFrameSize &rFrameSize )
 void SwFlyFrame::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
     SwFrame::SwClientNotify(rMod, rHint);
-    if(auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
+    if (auto pGetZOrdnerHint = dynamic_cast<const sw::GetZOrderHint*>(&rHint))
     {
-        auto pFormat(dynamic_cast<const SwFrameFormat*>(&rMod));
-        if(pFormat->Which() == RES_FLYFRMFMT && pFormat->getIDocumentLayoutAccess().GetCurrentViewShell()) // #i11176#
+        const auto& rFormat(dynamic_cast<const SwFrameFormat&>(rMod));
+        if (rFormat.Which() == RES_FLYFRMFMT && rFormat.getIDocumentLayoutAccess().GetCurrentViewShell()) // #i11176#
             pGetZOrdnerHint->m_rnZOrder = GetVirtDrawObj()->GetOrdNum();
     }
-    else if(auto pConnectedHint = dynamic_cast<const sw::GetObjectConnectedHint*>(&rHint))
+    else if (auto pConnectedHint = dynamic_cast<const sw::GetObjectConnectedHint*>(&rHint))
     {
-        auto pFormat(dynamic_cast<const SwFrameFormat*>(&rMod));
-        if(!pConnectedHint->m_risConnected && pFormat->Which() == RES_FLYFRMFMT && (!pConnectedHint->m_pRoot || pConnectedHint->m_pRoot == getRootFrame()))
+        const auto& rFormat(dynamic_cast<const SwFrameFormat&>(rMod));
+        if (!pConnectedHint->m_risConnected && rFormat.Which() == RES_FLYFRMFMT && (!pConnectedHint->m_pRoot || pConnectedHint->m_pRoot == getRootFrame()))
             pConnectedHint->m_risConnected = true;
     }
-};
+}
 
 void SwFlyFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
