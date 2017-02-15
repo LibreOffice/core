@@ -1269,7 +1269,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 WaitObject aWait( GetViewData()->GetDialogParent() );
                 pTabViewShell->CopyToClip( nullptr, false, false, true );
                 rReq.Done();
-                GetViewData()->SetPasteMode( (ScPasteFlags) (SC_PASTE_MODE | SC_PASTE_BORDER) );
+                GetViewData()->SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
                 pTabViewShell->ShowCursor();
                 pTabViewShell->UpdateCopySourceOverlay();
             }
@@ -1280,7 +1280,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 WaitObject aWait( GetViewData()->GetDialogParent() );
                 pTabViewShell->CutToClip();
                 rReq.Done();
-                GetViewData()->SetPasteMode( (ScPasteFlags)(SC_PASTE_MODE | SC_PASTE_BORDER));
+                GetViewData()->SetPasteMode( ScPasteFlags::Mode | ScPasteFlags::Border );
                 pTabViewShell->ShowCursor();
                 pTabViewShell->UpdateCopySourceOverlay();
             }

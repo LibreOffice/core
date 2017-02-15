@@ -1739,7 +1739,7 @@ void ScViewFunc::DeleteMulti( bool bRows )
 void ScViewFunc::DeleteContents( InsertDeleteFlags nFlags )
 {
     ScViewData& rViewData = GetViewData();
-    rViewData.SetPasteMode( SC_PASTE_NONE );
+    rViewData.SetPasteMode( ScPasteFlags::NONE );
     rViewData.GetViewShell()->UpdateCopySourceOverlay();
 
     // not editable because of matrix only? attribute OK nonetheless

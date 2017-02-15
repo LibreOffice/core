@@ -3299,7 +3299,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
         }
 
         // hide the border around the copy source
-        pViewData->SetPasteMode( SC_PASTE_NONE );
+        pViewData->SetPasteMode( ScPasteFlags::NONE );
         // Clear CopySourceOverlay in each window of a split/frozen tabview
         pViewData->GetView()->UpdateCopySourceOverlay();
         return;
@@ -3309,7 +3309,7 @@ void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
     {
         if (rKeyCode.GetCode() == KEY_ESCAPE)
         {
-            pViewData->SetPasteMode( SC_PASTE_NONE );
+            pViewData->SetPasteMode( ScPasteFlags::NONE );
             // Clear CopySourceOverlay in each window of a split/frozen tabview
             pViewData->GetView()->UpdateCopySourceOverlay();
         }

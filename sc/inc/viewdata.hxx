@@ -78,12 +78,15 @@ enum ScMarkType
 #endif
 };
 
-enum ScPasteFlags
+enum class ScPasteFlags
 {
-    SC_PASTE_NONE   = 0,    // No flags specified
-    SC_PASTE_MODE   = 1,    // Enable paste-mode
-    SC_PASTE_BORDER = 2,    // Show a border around the source cells
+    NONE   = 0,    // No flags specified
+    Mode   = 1,    // Enable paste-mode
+    Border = 2,    // Show a border around the source cells
 };
+namespace o3tl {
+    template<> struct typed_flags<ScPasteFlags> : is_typed_flags<ScPasteFlags, 0x03> {};
+}
 
 // for internal Drag&Drop:
 enum class ScDragSrc{
@@ -307,8 +310,8 @@ public:
     SCROW           GetMaxTiledRow() const                  { return pThisTab->nMaxTiledRow; }
 
     bool            IsPagebreakMode() const                 { return bPagebreak; }
-    bool            IsPasteMode() const                     { return (nPasteFlags & SC_PASTE_MODE) != 0; }
-    bool            ShowPasteSource() const                 { return (nPasteFlags & SC_PASTE_BORDER) != 0; }
+    bool            IsPasteMode() const                     { return bool(nPasteFlags & ScPasteFlags::Mode); }
+    bool            ShowPasteSource() const                 { return bool(nPasteFlags & ScPasteFlags::Border); }
 
     void            SetPosX( ScHSplitPos eWhich, SCCOL nNewPosX );
     void            SetPosY( ScVSplitPos eWhich, SCROW nNewPosY );

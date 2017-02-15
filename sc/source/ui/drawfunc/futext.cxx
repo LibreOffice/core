@@ -677,7 +677,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                     //  Toggle out of paste mode if we are in it, otherwise
                     //  pressing return in this object will instead go to the
                     //  sheet and be considered an overwrite-cell instruction
-                    pViewShell->GetViewData().SetPasteMode(SC_PASTE_NONE);
+                    pViewShell->GetViewData().SetPasteMode(ScPasteFlags::NONE);
                     pViewShell->UpdateCopySourceOverlay();
 
                     //  EditEngine-UndoManager anmelden

@@ -2260,7 +2260,7 @@ IMPL_LINK_NOARG(ScInputHandler, ModifyHdl, LinkParamNone*, void)
 bool ScInputHandler::DataChanging( sal_Unicode cTyped, bool bFromCommand )
 {
     if (pActiveViewSh)
-        pActiveViewSh->GetViewData().SetPasteMode( SC_PASTE_NONE );
+        pActiveViewSh->GetViewData().SetPasteMode( ScPasteFlags::NONE );
     bInOwnChange = true; // disable ModifyHdl (reset in DataChanged)
 
     if ( eMode == SC_INPUT_NONE )
@@ -2498,7 +2498,7 @@ void ScInputHandler::SetMode( ScInputMode eNewMode, const OUString* pInitText )
 
     if (eNewMode != SC_INPUT_NONE && pActiveViewSh)
         // Disable paste mode when edit mode starts.
-        pActiveViewSh->GetViewData().SetPasteMode( SC_PASTE_NONE );
+        pActiveViewSh->GetViewData().SetPasteMode( ScPasteFlags::NONE );
 
     bInOwnChange = true; // disable ModifyHdl (reset below)
 
