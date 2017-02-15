@@ -983,7 +983,7 @@ OUString ScModelObj::getPostIts()
     if (!pDocShell)
         return OUString();
 
-    const ScDocument& rDoc = pDocShell->GetDocument();
+    ScDocument& rDoc = pDocShell->GetDocument();
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
 
@@ -991,7 +991,11 @@ OUString ScModelObj::getPostIts()
     for (const sc::NoteEntry& aNote : aNotes)
     {
         boost::property_tree::ptree aAnnotation;
-        aAnnotation.put("id", aNote.maPos.hash());
+        OStringBuffer aBuf;
+        aNote.maPos.Format(aBuf, ScRefFlags::VALID | ScRefFlags::TAB_3D, &rDoc,
+                           ScAddress::Details(formula::FormulaGrammar::AddressConvention::CONV_ODF, aNote.maPos));
+
+        aAnnotation.put("id", aBuf.toString());
         aAnnotation.put("author", aNote.mpNote->GetAuthor());
         aAnnotation.put("dateTime", aNote.mpNote->GetDate());
         aAnnotation.put("text", aNote.mpNote->GetText());
