@@ -30,8 +30,9 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <grfatr.hxx>
-#include <fmtflcnt.hxx>
 #include <fmtanchr.hxx>
+#include <fmtcntnt.hxx>
+#include <fmtflcnt.hxx>
 #include <frmfmt.hxx>
 #include <fltshell.hxx>
 #include <pam.hxx>
@@ -454,6 +455,19 @@ void SwWW8ImplReader::PicRead(SvStream *pDataStream, WW8_PIC *pPic,
         pDataStream->SeekRel(2);  //cProps
 }
 
+namespace
+{
+    sal_uInt8 GetNodeType(SwFrameFormat &rSource)
+    {
+        const SwNodeIndex* pNodeIndex = rSource.GetContent().GetContentIdx();
+        if (!pNodeIndex)
+            return 0;
+        const SwNode& rCSttNd = pNodeIndex->GetNode();
+        SwNodeRange aRg(rCSttNd, 1, *rCSttNd.EndOfSectionNode());
+        return aRg.aStart.GetNode().GetNodeType();
+    }
+}
+
 SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
     SwFrameFormat* pOldFlyFormat)
 {
@@ -670,12 +684,11 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                     if (pRecord)
                         SetAttributesAtGrfNode(pRecord, pRet, nullptr);
 
-                    // #i68101#
-                    // removed pObject->HasSetName() usage since always returned
-                    // true, also removed else-part and wrote an informing mail
-                    // to Henning Brinkmann about this to clarify.
-                    pRet->SetName(pObject->GetName());
-
+                    OUString aObjectName(pObject->GetName());
+                    if (aObjectName.isEmpty() || !m_rDoc.FindFlyByName(aObjectName, GetNodeType(*pRet)))
+                        pRet->SetName(aObjectName);
+                    else
+                        m_aGrfNameGenerator.SetUniqueGraphName(pRet, aObjectName);
 
                     // determine the pointer to the new object and update
                     // Z-order-list accordingly (or delete entry)
