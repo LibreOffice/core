@@ -57,8 +57,6 @@ public:
     static GtkWidget* createCommentBox(const boost::property_tree::ptree& aComment);
     /// Click even handler for m_pViewAnnotationsButton
     static void unoViewAnnotations(GtkWidget* pWidget, gpointer userdata);
-    /// Configure event handler for window
-    static gboolean docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
 };
 
 
@@ -433,41 +431,6 @@ void CommentsSidebar::unoViewAnnotations(GtkWidget* pWidget, gpointer /*userdata
     }
 }
 
-gboolean CommentsSidebar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigure* /*pEvent*/, gpointer /*userdata*/)
-{
-    TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
-
-    // whether tiled rendering is turned on
-    gboolean bTiledAnnotations;
-    g_object_get(G_OBJECT(pDocView), "tiled-annotations", &bTiledAnnotations, nullptr);
-
-    if (!bTiledAnnotations && pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_TEXT)
-    {
-        if (!rWindow.m_pCommentsSidebar)
-        {
-            rWindow.m_pCommentsSidebar.reset(new CommentsSidebar());
-            rWindow.m_pCommentsSidebar->m_pMainVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
-            gtk_container_add(GTK_CONTAINER(rWindow.m_pMainHBox), rWindow.m_pCommentsSidebar->m_pMainVBox);
-
-            rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton = gtk_button_new_with_label(".uno:ViewAnnotations");
-#if GTK_CHECK_VERSION(3,12,0)
-            // Hack to make sidebar grid wide enough to not need any horizontal scrollbar
-            gtk_widget_set_margin_start(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
-            gtk_widget_set_margin_end(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
-#endif
-            gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton);
-            g_signal_connect(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, "clicked", G_CALLBACK(CommentsSidebar::unoViewAnnotations), nullptr);
-
-            gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pMainVBox);
-
-            gtk_button_clicked(GTK_BUTTON(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton));
-        }
-    }
-
-    return TRUE;
-}
-
 TiledRowColumnBar::TiledRowColumnBar(TiledBarType eType)
     : m_pDrawingArea(gtk_drawing_area_new()),
     m_nSizePixel(0),
@@ -631,7 +594,7 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         gtk_widget_hide(GTK_WIDGET(rWindow.m_pJustifypara));
     }
 
-    return FALSE;
+    return TRUE;
 }
 
 TiledCornerButton::TiledCornerButton()
@@ -1150,6 +1113,46 @@ static void initWindow(TiledWindow& rWindow)
     gtk_widget_hide(rWindow.m_pProgressBar);
 
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(rWindow.m_pEnableEditing), TRUE);
+
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(rWindow.m_pDocView));
+    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
+    {
+        // Align to top left corner, so the tiles are in sync with the
+        // row/column bar, even when zooming out enough that not all space is
+        // used.
+        gtk_widget_set_halign(GTK_WIDGET(rWindow.m_pDocView), GTK_ALIGN_START);
+        gtk_widget_set_valign(GTK_WIDGET(rWindow.m_pDocView), GTK_ALIGN_START);
+    }
+
+    // Fill our comments sidebar
+    gboolean bTiledAnnotations;
+    g_object_get(G_OBJECT(rWindow.m_pDocView), "tiled-annotations", &bTiledAnnotations, nullptr);
+
+    // comments api implemented only for writer, calc as of now
+    if (!bTiledAnnotations && pDocument &&
+        (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_TEXT ||
+         pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET))
+    {
+        if (!rWindow.m_pCommentsSidebar)
+        {
+            rWindow.m_pCommentsSidebar.reset(new CommentsSidebar());
+            rWindow.m_pCommentsSidebar->m_pMainVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+            gtk_container_add(GTK_CONTAINER(rWindow.m_pMainHBox), rWindow.m_pCommentsSidebar->m_pMainVBox);
+
+            rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton = gtk_button_new_with_label(".uno:ViewAnnotations");
+#if GTK_CHECK_VERSION(3,12,0)
+            // Hack to make sidebar grid wide enough to not need any horizontal scrollbar
+            gtk_widget_set_margin_start(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
+            gtk_widget_set_margin_end(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
+#endif
+            gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton);
+            g_signal_connect(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, "clicked", G_CALLBACK(CommentsSidebar::unoViewAnnotations), nullptr);
+
+            gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pMainVBox);
+
+            gtk_button_clicked(GTK_BUTTON(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton));
+        }
+    }
 }
 
 /// Creates a new view, i.e. no LOK init or document load.
@@ -1791,16 +1794,6 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
         return;
     }
 
-    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(pDocView);
-    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
-    {
-        // Align to top left corner, so the tiles are in sync with the
-        // row/column bar, even when zooming out enough that not all space is
-        // used.
-        gtk_widget_set_halign(GTK_WIDGET(pDocView), GTK_ALIGN_START);
-        gtk_widget_set_valign(GTK_WIDGET(pDocView), GTK_ALIGN_START);
-    }
-
     initWindow(rWindow);
 }
 
@@ -2182,7 +2175,6 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     g_aWindows[pWindow] = rWindow;
 
     g_signal_connect(rWindow.m_pDocView, "configure-event", G_CALLBACK(TiledRowColumnBar::docConfigureEvent), 0);
-    g_signal_connect(rWindow.m_pDocView, "configure-event", G_CALLBACK(CommentsSidebar::docConfigureEvent), 0);
     return pWindow;
 }
 
