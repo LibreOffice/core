@@ -2198,20 +2198,17 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_INSERT_POSTIT:
         case SID_EDIT_POSTIT:
             {
-                const SfxPoolItem* pAuthor;
-                const SfxPoolItem* pDate;
                 const SfxPoolItem* pText;
-
-                if ( pReqArgs && pReqArgs->HasItem( SID_ATTR_POSTIT_AUTHOR, &pAuthor ) &&
-                                 pReqArgs->HasItem( SID_ATTR_POSTIT_DATE, &pDate) &&
-                                 pReqArgs->HasItem( SID_ATTR_POSTIT_TEXT, &pText) )
+                if ( pReqArgs && pReqArgs->HasItem( SID_ATTR_POSTIT_TEXT, &pText) )
                 {
-                    const SvxPostItAuthorItem*  pAuthorItem = static_cast<const SvxPostItAuthorItem*>( pAuthor );
-                    const SvxPostItDateItem*    pDateItem   = static_cast<const SvxPostItDateItem*>( pDate );
                     const SvxPostItTextItem*    pTextItem   = static_cast<const SvxPostItTextItem*>( pText );
+                    const SvxPostItAuthorItem*  pAuthorItem = static_cast<const SvxPostItAuthorItem*>( pReqArgs->GetItem( SID_ATTR_POSTIT_AUTHOR) );
+                    const SvxPostItDateItem*    pDateItem   = static_cast<const SvxPostItDateItem*>( pReqArgs->GetItem( SID_ATTR_POSTIT_DATE ) );
 
                     ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-                    pTabViewShell->ReplaceNote( aPos, pTextItem->GetValue(), &pAuthorItem->GetValue(), &pDateItem->GetValue() );
+                    pTabViewShell->ReplaceNote( aPos, pTextItem->GetValue(),
+                                                pAuthorItem ? &pAuthorItem->GetValue() : nullptr,
+                                                pDateItem ? &pDateItem->GetValue() : nullptr );
                 }
                 else if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
                 {
