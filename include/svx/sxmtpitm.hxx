@@ -22,8 +22,8 @@
 #include <svx/svddef.hxx>
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
+#include <com/sun/star/drawing/MeasureTextHorzPos.hpp>
 
-enum class SdrMeasureTextHPos { Auto, LeftOutside, Inside, RightOutside };
 enum class SdrMeasureTextVPos { Auto, Above, Below, VerticalCentered };
 
 
@@ -31,12 +31,15 @@ enum class SdrMeasureTextVPos { Auto, Above, Below, VerticalCentered };
 
 class SVX_DLLPUBLIC SdrMeasureTextHPosItem: public SfxEnumItem {
 public:
-    SdrMeasureTextHPosItem(SdrMeasureTextHPos ePos=SdrMeasureTextHPos::Auto): SfxEnumItem(SDRATTR_MEASURETEXTHPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
+    SdrMeasureTextHPosItem(css::drawing::MeasureTextHorzPos ePos = css::drawing::MeasureTextHorzPos::MeasureTextHorzPos_AUTO)
+        : SfxEnumItem(SDRATTR_MEASURETEXTHPOS,sal::static_int_cast< sal_uInt16 >(ePos))
+    {
+    }
     SdrMeasureTextHPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTHPOS,rIn)    {}
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16         GetValueCount() const override; // { return 4; }
-            SdrMeasureTextHPos GetValue() const { return (SdrMeasureTextHPos)SfxEnumItem::GetValue(); }
+    css::drawing::MeasureTextHorzPos GetValue() const { return (css::drawing::MeasureTextHorzPos)SfxEnumItem::GetValue(); }
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
