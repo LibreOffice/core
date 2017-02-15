@@ -194,12 +194,15 @@ public:
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0 );
 
     void WriteText( const css::uno::Reference< css::uno::XInterface >& rXIface, const OUString& presetWarp, bool bBodyPr = true, bool bText = true, sal_Int32 nXmlNamespace = 0);
-    void WriteParagraph( const css::uno::Reference< css::text::XTextContent >& rParagraph );
+    void WriteParagraph( const css::uno::Reference< css::text::XTextContent >& rParagraph,
+                         bool& rbOverridingCharHeight, sal_Int32& rnCharHeight );
     void WriteParagraphProperties( const css::uno::Reference< css::text::XTextContent >& rParagraph );
     void WriteParagraphNumbering( const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,
                                   sal_Int16 nLevel );
-    void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun );
-    void WriteRunProperties( const css::uno::Reference< css::beans::XPropertySet >& rRun, bool bIsField, sal_Int32 nElement = XML_rPr ,bool bCheckDirect = true);
+    void WriteRun( const css::uno::Reference< css::text::XTextRange >& rRun,
+                   bool& rbOverridingCharHeight, sal_Int32& rnCharHeight );
+    void WriteRunProperties( const css::uno::Reference< css::beans::XPropertySet >& rRun, bool bIsField, sal_Int32 nElement, bool bCheckDirect,
+                             bool& rbOverridingCharHeight, sal_Int32& rnCharHeight );
 
     void WritePresetShape( const char* pShape );
     void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const css::beans::PropertyValue& rProp );
