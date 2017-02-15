@@ -110,11 +110,10 @@ private:
 private:
 
     /** Specifies how cell positions from CellAnchorModel have to be processed. */
-    enum CellAnchorType
+    enum class CellAnchorType
     {
-        CELLANCHOR_EMU,             /// Offsets are given in EMUs.
-        CELLANCHOR_PIXEL,           /// Offsets are given in screen pixels.
-        CELLANCHOR_COLROW           /// Offsets are given in fractions of column width or row height.
+        Emu,             /// Offsets are given in EMUs.
+        Pixel,           /// Offsets are given in screen pixels.
     };
 
     AnchorType          meAnchorType;       /// Type of this shape anchor.
