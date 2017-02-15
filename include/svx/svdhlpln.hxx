@@ -32,10 +32,10 @@ class OutputDevice;
 
 enum class SdrHelpLineKind { Point, Vertical, Horizontal };
 
-#define SDRHELPLINE_POINT_PIXELSIZE 15 /* Tatsaechliche Groesse= PIXELSIZE*2+1 */
+#define SDRHELPLINE_POINT_PIXELSIZE 15 /* actual size = PIXELSIZE*2+1 */
 
 class SdrHelpLine {
-    Point            aPos; // je nach Wert von eKind ist X oder Y evtl. belanglos
+    Point            aPos; // X or Y may be unimportant, depending on the value of eKind
     SdrHelpLineKind  eKind;
 
 public:
@@ -51,7 +51,7 @@ public:
 
     Pointer         GetPointer() const;
     bool            IsHit(const Point& rPnt, sal_uInt16 nTolLog, const OutputDevice& rOut) const;
-    // OutputDevice wird benoetigt, da Fangpunkte eine feste Pixelgroesse haben
+    // OutputDevice is required because capture points have a fixed pixel size
     Rectangle       GetBoundRect(const OutputDevice& rOut) const;
 };
 
