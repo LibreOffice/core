@@ -1948,6 +1948,12 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
     GET( nParaLeftMargin, ParaLeftMargin );
     GET( nParaFirstLineIndent,ParaFirstLineIndent);
 
+    sal_Int32 nParaTopMargin = 0;
+    sal_Int32 nParaBottomMargin = 0;
+
+    GET( nParaTopMargin, ParaTopMargin );
+    GET( nParaBottomMargin, ParaBottomMargin );
+
     sal_Int32 nLeftMargin =  getBulletMarginIndentation ( rXPropSet, nLevel,"LeftMargin");
     sal_Int32 nLineIndentation = getBulletMarginIndentation ( rXPropSet, nLevel,"FirstLineOffset");
 
@@ -1978,6 +1984,28 @@ void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rPara
             mpFS->startElementNS( XML_a, XML_lnSpc, FSEND );
             WriteLinespacing( aLineSpacing );
             mpFS->endElementNS( XML_a, XML_lnSpc );
+        }
+
+        if( nParaTopMargin != 0 )
+        {
+            mpFS->startElementNS( XML_a, XML_spcBef, FSEND );
+            {
+                mpFS->singleElementNS( XML_a, XML_spcPts,
+                                       XML_val, I32S( std::lround( nParaTopMargin / 25.4 * 72 ) ),
+                                       FSEND );
+            }
+            mpFS->endElementNS( XML_a, XML_spcBef );
+        }
+
+        if( nParaBottomMargin != 0 )
+        {
+            mpFS->startElementNS( XML_a, XML_spcAft, FSEND );
+            {
+                mpFS->singleElementNS( XML_a, XML_spcPts,
+                                       XML_val, I32S( std::lround( nParaBottomMargin / 25.4 * 72 ) ),
+                                       FSEND );
+            }
+            mpFS->endElementNS( XML_a, XML_spcAft );
         }
 
         WriteParagraphNumbering( rXPropSet, nLevel );
