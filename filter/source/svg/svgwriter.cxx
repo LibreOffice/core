@@ -1817,10 +1817,10 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
 
         if( nSize > 1 )
         {
-            aPathData += "M ";
-            aPathData += OUString::number( ( aPolyPoint = rPoly[ 0 ] ).X() );
-            aPathData += aComma;
-            aPathData += OUString::number( aPolyPoint.Y() );
+            aPathData += "M "
+                        + OUString::number( ( aPolyPoint = rPoly[ 0 ] ).X() )
+                        + aComma
+                        + OUString::number( aPolyPoint.Y() );
 
             sal_Char nCurrentMode = 0;
             const bool bClose(!bLine || rPoly[0] == rPoly[nSize - 1]);
@@ -1839,9 +1839,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                     {
                         if ( j )
                             aPathData += aBlank;
-                        aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() );
-                        aPathData += aComma;
-                        aPathData += OUString::number( aPolyPoint.Y() );
+                        aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() )
+                                    + aComma
+                                    + OUString::number( aPolyPoint.Y() );
                     }
                 }
                 else
@@ -1851,9 +1851,9 @@ OUString SVGActionWriter::GetPathString( const tools::PolyPolygon& rPolyPoly, bo
                         nCurrentMode = 'L';
                         aPathData += "L ";
                     }
-                    aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() );
-                    aPathData += aComma;
-                    aPathData += OUString::number( aPolyPoint.Y() );
+                    aPathData += OUString::number( ( aPolyPoint = rPoly[ n++ ] ).X() )
+                                + aComma
+                                + OUString::number( aPolyPoint.Y() );
                 }
             }
 
