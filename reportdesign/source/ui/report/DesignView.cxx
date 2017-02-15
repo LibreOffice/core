@@ -94,7 +94,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     ,m_pAddField(nullptr)
     ,m_pCurrentView(nullptr)
     ,m_pReportExplorer(nullptr)
-    ,m_eMode( RPTUI_SELECT )
+    ,m_eMode( DlgEdMode::Select )
     ,m_eActObj( OBJ_NONE )
     ,m_aGridSizeCoarse( 1000, 1000 )    // #i93595# 100TH_MM changed to grid using coarse 1 cm grid
     ,m_aGridSizeFine( 250, 250 )        // and a 0,25 cm subdivision for better visualisation
@@ -284,7 +284,7 @@ IMPL_LINK_NOARG(ODesignView, MarkTimeout, Timer *, void)
 void ODesignView::SetMode( DlgEdMode _eNewMode )
 {
     m_eMode = _eNewMode;
-    if ( m_eMode == RPTUI_SELECT )
+    if ( m_eMode == DlgEdMode::Select )
         m_eActObj = OBJ_NONE;
 
     m_aScrollWindow->SetMode(_eNewMode);

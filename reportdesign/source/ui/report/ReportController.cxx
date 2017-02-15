@@ -536,7 +536,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = getCurrentSectionView() != nullptr;
             break;
         case SID_ESCAPE:
-            aReturn.bEnabled = getDesignView()->GetMode() == RPTUI_INSERT;
+            aReturn.bEnabled = getDesignView()->GetMode() == DlgEdMode::Insert;
             break;
         case SID_TERMINATE_INPLACEACTIVATION:
             aReturn.bEnabled = true;
@@ -592,7 +592,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
             break;
         case SID_OBJECT_SELECT:
             aReturn.bEnabled = true;
-            aReturn.bChecked = getDesignView()->GetMode() == RPTUI_SELECT;
+            aReturn.bChecked = getDesignView()->GetMode() == DlgEdMode::Select;
             break;
         case SID_INSERT_DIAGRAM:
             aReturn.bEnabled = isEditable();
@@ -1103,7 +1103,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             }
             break;
         case SID_ESCAPE:
-            getDesignView()->SetMode(RPTUI_SELECT);
+            getDesignView()->SetMode(DlgEdMode::Select);
             InvalidateFeature( SID_OBJECT_SELECT );
             break;
         case SID_SELECT_ALL_EDITS:
@@ -1176,41 +1176,41 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             getDesignView()->showRuler(m_bShowRuler = !m_bShowRuler);
             break;
         case SID_OBJECT_SELECT:
-            getDesignView()->SetMode(RPTUI_SELECT);
+            getDesignView()->SetMode(DlgEdMode::Select);
             InvalidateAll();
             break;
         case SID_INSERT_DIAGRAM:
-            getDesignView()->SetMode( RPTUI_INSERT );
+            getDesignView()->SetMode( DlgEdMode::Insert );
             getDesignView()->SetInsertObj( OBJ_OLE2);
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_FM_FIXEDTEXT:
-            getDesignView()->SetMode( RPTUI_INSERT );
+            getDesignView()->SetMode( DlgEdMode::Insert );
             getDesignView()->SetInsertObj( OBJ_DLG_FIXEDTEXT );
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_INSERT_HFIXEDLINE:
-            getDesignView()->SetMode( RPTUI_INSERT );
+            getDesignView()->SetMode( DlgEdMode::Insert );
             getDesignView()->SetInsertObj( OBJ_DLG_HFIXEDLINE );
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_INSERT_VFIXEDLINE:
-            getDesignView()->SetMode( RPTUI_INSERT );
+            getDesignView()->SetMode( DlgEdMode::Insert );
             getDesignView()->SetInsertObj( OBJ_DLG_VFIXEDLINE );
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_FM_EDIT:
-            getDesignView()->SetMode( RPTUI_INSERT );
+            getDesignView()->SetMode( DlgEdMode::Insert );
             getDesignView()->SetInsertObj( OBJ_DLG_FORMATTEDFIELD );
             createDefaultControl(aArgs);
             InvalidateAll();
             break;
         case SID_FM_IMAGECONTROL:
-            getDesignView()->SetMode( RPTUI_INSERT );
+            getDesignView()->SetMode( DlgEdMode::Insert );
             getDesignView()->SetInsertObj( OBJ_DLG_IMAGECONTROL );
             createDefaultControl(aArgs);
             InvalidateAll();
@@ -1334,7 +1334,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_DRAWTBX_CS_FLOWCHART:
         case SID_DRAWTBX_CS_CALLOUT:
         case SID_DRAWTBX_CS_STAR:
-            getDesignView()->SetMode( RPTUI_INSERT );
+            getDesignView()->SetMode( DlgEdMode::Insert );
             {
                 URL aUrl = getURLForId(_nId);
                 sal_Int32 nIndex = 1;
@@ -3044,7 +3044,7 @@ sal_Bool SAL_CALL OReportController::select( const Any& aSelection )
     if ( getDesignView() )
     {
         getDesignView()->unmarkAllObjects();
-        getDesignView()->SetMode(RPTUI_SELECT);
+        getDesignView()->SetMode(DlgEdMode::Select);
 
         uno::Sequence< uno::Reference<report::XReportComponent> > aElements;
         if ( aSelection >>= aElements )

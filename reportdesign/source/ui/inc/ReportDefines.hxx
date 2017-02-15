@@ -21,7 +21,7 @@
 
 namespace rptui
 {
-    enum DlgEdMode { RPTUI_INSERT, RPTUI_SELECT, RPTUI_TEST, RPTUI_READONLY };
+    enum class DlgEdMode { Insert, Select, Test };
 
 #define REPORT_STARTMARKER_WIDTH    120
 #define REPORT_ENDMARKER_WIDTH       10

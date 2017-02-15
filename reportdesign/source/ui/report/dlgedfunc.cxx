@@ -170,20 +170,17 @@ bool DlgEdFunc::MouseButtonDown( const MouseEvent& rMEvt )
         if ( rMEvt.GetClicks() > 1 )
         {
             // show property browser
-            if ( m_pParent->GetMode() != RPTUI_READONLY )
-            {
-                uno::Sequence<beans::PropertyValue> aArgs(1);
-                aArgs[0].Name = "ShowProperties";
-                aArgs[0].Value <<= true;
-                m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_SHOW_PROPERTYBROWSER,aArgs);
-                m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
-                // TODO character in shapes
-                //    SdrViewEvent aVEvt;
-                // m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-                //    if ( aVEvt.pRootObj && aVEvt.pRootObj->ISA(SdrTextObj) )
-                //        SetInEditMode(static_cast<SdrTextObj *>(aVEvt.pRootObj),rMEvt, sal_False);
-                bHandled = true;
-            }
+            uno::Sequence<beans::PropertyValue> aArgs(1);
+            aArgs[0].Name = "ShowProperties";
+            aArgs[0].Value <<= true;
+            m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->getController().executeUnChecked(SID_SHOW_PROPERTYBROWSER,aArgs);
+            m_pParent->getSectionWindow()->getViewsWindow()->getView()->getReportView()->UpdatePropertyBrowserDelayed(m_rView);
+            // TODO character in shapes
+            //    SdrViewEvent aVEvt;
+            // m_rView.PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
+            //    if ( aVEvt.pRootObj && aVEvt.pRootObj->ISA(SdrTextObj) )
+            //        SetInEditMode(static_cast<SdrTextObj *>(aVEvt.pRootObj),rMEvt, sal_False);
+            bHandled = true;
         }
         else
         {

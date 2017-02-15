@@ -86,7 +86,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
     , m_pReportListener(nullptr)
     , m_xSection(_xSection)
     , m_nPaintEntranceCount(0)
-    , m_eMode(RPTUI_SELECT)
+    , m_eMode(DlgEdMode::Select)
 {
     //EnableChildTransparentMode();
     SetHelpId(HID_REPORTSECTION);
@@ -313,7 +313,7 @@ void OReportSection::SetMode( DlgEdMode eNewMode )
 {
     if ( eNewMode != m_eMode )
     {
-        if ( eNewMode == RPTUI_INSERT )
+        if ( eNewMode == DlgEdMode::Insert )
         {
             m_pFunc.reset(new DlgEdFuncInsert( this ));
         }
@@ -322,7 +322,7 @@ void OReportSection::SetMode( DlgEdMode eNewMode )
             m_pFunc.reset(new DlgEdFuncSelect( this ));
         }
         m_pFunc->setOverlappedControlColor(lcl_getOverlappedControlColor( ) );
-        m_pModel->SetReadOnly(eNewMode == RPTUI_READONLY);
+        m_pModel->SetReadOnly(false);
         m_eMode = eNewMode;
     }
 }
