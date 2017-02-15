@@ -153,12 +153,10 @@ using namespace css::uno;
 #define SC_AUTOFILTER_EMPTY     3
 #define SC_AUTOFILTER_NOTEMPTY  4
 
-enum ScFilterBoxMode
+enum class ScFilterBoxMode
 {
-    SC_FILTERBOX_FILTER,
-    SC_FILTERBOX_DATASELECT,
-    SC_FILTERBOX_SCENARIO,
-    SC_FILTERBOX_PAGEFIELD
+    DataSelect,
+    Scenario
 };
 
 struct ScGridWindow::MouseEventState
@@ -206,7 +204,7 @@ private:
     bool            bInit;
     bool            bCancelled;
     bool            bInSelect;
-    sal_uLong           nSel;
+    sal_uLong       nSel;
     ScFilterBoxMode eMode;
 
 protected:
@@ -961,7 +959,7 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
     mpFilterFloat->SetPopupModeEndHdl( LINK( this, ScGridWindow, PopupModeEndHdl ) );
-    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, SC_FILTERBOX_SCENARIO));
+    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::Scenario));
     if (bLayoutRTL)
         mpFilterBox->EnableMirroring();
 
@@ -1085,8 +1083,7 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
 
     mpFilterFloat.reset(VclPtr<ScFilterFloatingWindow>::Create(this, WinBits(WB_BORDER)));
     mpFilterFloat->SetPopupModeEndHdl(LINK( this, ScGridWindow, PopupModeEndHdl));
-    ScFilterBoxMode eFilterMode = SC_FILTERBOX_DATASELECT;
-    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, eFilterMode));
+    mpFilterBox.reset(VclPtr<ScFilterListBox>::Create(mpFilterFloat.get(), this, nCol, nRow, ScFilterBoxMode::DataSelect));
     // Fix for bug fdo#44925
     if (AllSettings::GetLayoutRTL() != bLayoutRTL)
         mpFilterBox->EnableMirroring();
@@ -1225,18 +1222,11 @@ void ScGridWindow::FilterSelect( sal_uLong nSel )
     SCROW nRow = mpFilterBox->GetRow();
     switch (mpFilterBox->GetMode())
     {
-        case SC_FILTERBOX_DATASELECT:
+        case ScFilterBoxMode::DataSelect:
             ExecDataSelect(nCol, nRow, aString);
             break;
-        case SC_FILTERBOX_FILTER:
-            ExecFilter(nSel, nCol, nRow, aString);
-            break;
-        case SC_FILTERBOX_SCENARIO:
+        case ScFilterBoxMode::Scenario:
             pViewData->GetView()->UseScenario(aString);
-            break;
-        case SC_FILTERBOX_PAGEFIELD:
-            // first entry is "all"
-            ExecPageFieldSelect( nCol, nRow, (nSel != 0), aString );
             break;
     }
 
