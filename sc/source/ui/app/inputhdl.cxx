@@ -3082,15 +3082,11 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
              case formula::FormulaGrammar::CONV_XL_A1 :
              case formula::FormulaGrammar::CONV_XL_OOX :
              case formula::FormulaGrammar::CONV_XL_R1C1 :
-                         aRefStr = "[\'";
-                         aRefStr += aFileName;
-                         aRefStr += "']";
+                         aRefStr = "[\'" + aFileName + "']";
                          break;
              case formula::FormulaGrammar::CONV_OOO :
              default:
-                         aRefStr = "\'";
-                         aRefStr += aFileName;
-                         aRefStr += "'#";
+                         aRefStr = "\'" + aFileName + "'#";
                          break;
         }
         aRefStr += aTmp;
