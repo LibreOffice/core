@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_04f804e5",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitInit.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-15T13:27:30Z",
+      "side": 1,
+      "message": "For objective-C this would introduce an ODR violation if LibreOfficeKitInit.h gets included in multiple object files.",
+      "revId": "7eacdc94d0f885af74c5235c40dda3bd1d4dd538",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
