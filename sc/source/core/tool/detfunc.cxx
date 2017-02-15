@@ -1243,20 +1243,17 @@ bool ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
             if ( pObject->GetLayer() == SC_LAYER_INTERN )
             {
                 bool bDoThis = true;
-                if ( eWhat != SC_DET_ALL )
+                bool bCircle = ( dynamic_cast<const SdrCircObj*>( pObject) !=  nullptr );
+                bool bCaption = ScDrawLayer::IsNoteCaption( pObject );
+                if ( eWhat == ScDetectiveDelete::Detective )      // detective, from menu
+                    bDoThis = !bCaption;                          // also circles
+                else if ( eWhat == ScDetectiveDelete::Circles )   // circles, if new created
+                    bDoThis = bCircle;
+                else if ( eWhat == ScDetectiveDelete::Arrows )    // DetectiveRefresh
+                    bDoThis = !bCaption && !bCircle;              // don't include circles
+                else
                 {
-                    bool bCircle = ( dynamic_cast<const SdrCircObj*>( pObject) !=  nullptr );
-                    bool bCaption = ScDrawLayer::IsNoteCaption( pObject );
-                    if ( eWhat == SC_DET_DETECTIVE )        // detektive, from menue
-                        bDoThis = !bCaption;                // also circles
-                    else if ( eWhat == SC_DET_CIRCLES )     // circles, if new created
-                        bDoThis = bCircle;
-                    else if ( eWhat == SC_DET_ARROWS )      // DetectiveRefresh
-                        bDoThis = !bCaption && !bCircle;    // don't include circles
-                    else
-                    {
-                        OSL_FAIL("what?");
-                    }
+                    OSL_FAIL("what?");
                 }
                 if ( bDoThis )
                     ppObj[nDelCount++] = pObject;
@@ -1286,7 +1283,7 @@ bool ScDetectiveFunc::MarkInvalid(bool& rOverflow)
     if (!pModel)
         return false;
 
-    bool bDeleted = DeleteAll( SC_DET_CIRCLES );        // just circles
+    bool bDeleted = DeleteAll( ScDetectiveDelete::Circles );        // just circles
 
     ScDetectiveData aData( pModel );
     long nInsCount = 0;

@@ -416,7 +416,7 @@ bool ScDocFunc::DetectiveDelAll(SCTAB nTab)
 
     if (bUndo)
         pModel->BeginCalcUndo(false);
-    bool bDone = ScDetectiveFunc( &rDoc,nTab ).DeleteAll( SC_DET_DETECTIVE );
+    bool bDone = ScDetectiveFunc( &rDoc,nTab ).DeleteAll( ScDetectiveDelete::Detective );
     SdrUndoGroup* pUndo = nullptr;
     if (bUndo)
         pUndo = pModel->GetCalcUndo();
@@ -463,7 +463,7 @@ bool ScDocFunc::DetectiveRefresh( bool bAutomatic )
 
         SCTAB nTabCount = rDoc.GetTableCount();
         for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-            ScDetectiveFunc( &rDoc,nTab ).DeleteAll( SC_DET_ARROWS );    // don't remove circles
+            ScDetectiveFunc( &rDoc,nTab ).DeleteAll( ScDetectiveDelete::Arrows );    // don't remove circles
 
         //  repeat
 

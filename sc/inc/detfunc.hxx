@@ -37,7 +37,7 @@ class ScRange;
 
 #define SC_DET_MAXCIRCLE    1000
 
-enum ScDetectiveDelete { SC_DET_ALL, SC_DET_DETECTIVE, SC_DET_CIRCLES, SC_DET_ARROWS };
+enum class ScDetectiveDelete { Detective, Circles, Arrows };
 
 enum ScDetectiveObjType
 {
