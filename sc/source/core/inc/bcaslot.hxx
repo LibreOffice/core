@@ -340,7 +340,7 @@ public:
 
     std::vector<sc::AreaListener> GetAllListeners(
         const ScRange& rRange, sc::AreaOverlapType eType,
-        sc::ListenerGroupType eGroup = sc::ListenerBoth );
+        sc::ListenerGroupType eGroup = sc::ListenerGroupType::Both );
 
 #if DEBUG_AREA_BROADCASTER
     void Dump() const;

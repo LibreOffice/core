@@ -106,11 +106,11 @@ enum AreaOverlapType
     OneColumnInsideArea
 };
 
-enum ListenerGroupType
+enum class ListenerGroupType
 {
-    ListenerSingle,
-    ListenerGroup,
-    ListenerBoth
+    Single,
+    Group,
+    Both
 };
 
 enum StartListeningType

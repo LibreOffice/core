@@ -1207,7 +1207,7 @@ void ScTable::SortReorderByRowRefUpdate(
         ScBroadcastAreaSlotMachine* pBASM = pDocument->GetBASM();
         std::vector<sc::AreaListener> aGrpListeners =
             pBASM->GetAllListeners(
-                aMoveRange, sc::AreaInsideOrOverlap, sc::ListenerGroup);
+                aMoveRange, sc::AreaInsideOrOverlap, sc::ListenerGroupType::Group);
 
         {
             std::vector<sc::AreaListener>::iterator it = aGrpListeners.begin(), itEnd = aGrpListeners.end();
