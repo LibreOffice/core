@@ -6,7 +6,7 @@
     </style>
 
     <style name="ListItemText">
-        <item name="android:gravity">center</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">14sp</item>
     </style>
