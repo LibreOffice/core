@@ -154,6 +154,7 @@ for d in definitionSet:
          "sd/source/ui/inc/animobjs.hxx", # BitmapAdjustment (from UI)
          "sd/source/ui/dlg/PhotoAlbumDialog.hxx", # SlideImageLayout (from UI)
          "sd/inc/pres.hxx", # AutoLayout (from UI)
+         "sc/source/ui/inc/scuitphfedit.hxx", # ScHFEntryId (from UI)
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",

@@ -630,19 +630,16 @@ static bool lcl_appendLineData( OUString& rField, const sal_Unicode* p1, const s
     }
 }
 
-enum DoubledQuoteMode
+enum class DoubledQuoteMode
 {
-    DQM_KEEP_ALL,   // both are taken, additionally start and end quote are included in string
-    DQM_KEEP,       // both are taken
-    DQM_ESCAPE,     // escaped quote, one is taken, one ignored
-    DQM_CONCAT,     // first is end, next is start, both ignored => strings combined
-    DQM_SEPARATE    // end one string and begin next
+    KEEP_ALL,   // both are taken, additionally start and end quote are included in string
+    ESCAPE,     // escaped quote, one is taken, one ignored
 };
 
 static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rString,
             const sal_Unicode* pSeps, sal_Unicode cStr, DoubledQuoteMode eMode, bool& rbOverflowCell )
 {
-    if (eMode != DQM_KEEP_ALL)
+    if (eMode != DoubledQuoteMode::KEEP_ALL)
         p++;    //! jump over opening quote
     bool bCont;
     do
@@ -658,7 +655,7 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
                 if ( *++p != cStr )
                 {
                     // break or continue for loop
-                    if (eMode == DQM_ESCAPE)
+                    if (eMode == DoubledQuoteMode::ESCAPE)
                     {
                         if (lcl_isFieldEndQuote( p-1, pSeps) == FIELDEND_QUOTE)
                             break;
@@ -671,28 +668,15 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
                 // doubled quote char
                 switch ( eMode )
                 {
-                    case DQM_KEEP_ALL :
-                    case DQM_KEEP :
+                    case DoubledQuoteMode::KEEP_ALL :
                         p++;            // both for us (not breaking for-loop)
                     break;
-                    case DQM_ESCAPE :
+                    case DoubledQuoteMode::ESCAPE :
                         p++;            // one for us (breaking for-loop)
                         bCont = true;   // and more
                     break;
-                    case DQM_CONCAT :
-                        if ( p0+1 < p )
-                        {
-                            // first part
-                            if (!lcl_appendLineData( rString, p0, p-1))
-                                rbOverflowCell = true;
-                        }
-                        p0 = ++p;       // text of next part starts here
-                    break;
-                    case DQM_SEPARATE :
-                                        // positioned on next opening quote
-                    break;
                 }
-                if ( eMode == DQM_ESCAPE || eMode == DQM_SEPARATE )
+                if ( eMode == DoubledQuoteMode::ESCAPE )
                     break;
             }
             else
@@ -700,7 +684,7 @@ static const sal_Unicode* lcl_ScanString( const sal_Unicode* p, OUString& rStrin
         }
         if ( p0 < p )
         {
-            if (!lcl_appendLineData( rString, p0, ((eMode != DQM_KEEP_ALL && (*p || *(p-1) == cStr)) ? p-1 : p)))
+            if (!lcl_appendLineData( rString, p0, ((eMode != DoubledQuoteMode::KEEP_ALL && (*p || *(p-1) == cStr)) ? p-1 : p)))
                 rbOverflowCell = true;
         }
     } while ( bCont );
@@ -893,7 +877,7 @@ bool ScImportExport::Text2Doc( SvStream& rStrm )
                 {
                     // Always look for a pairing quote and ignore separator in between.
                     while (*p && *p == cStr)
-                        q = p = lcl_ScanString( p, aCell, pSeps, cStr, DQM_KEEP_ALL, bOverflowCell );
+                        q = p = lcl_ScanString( p, aCell, pSeps, cStr, DoubledQuoteMode::KEEP_ALL, bOverflowCell );
                     // All until next separator or quote.
                     while (*p && *p != cSep && *p != cStr)
                         ++p;
@@ -1548,7 +1532,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     {
         rbIsQuoted = true;
         const sal_Unicode* p1;
-        p1 = p = lcl_ScanString( p, rField, pSeps, cStr, DQM_ESCAPE, rbOverflowCell );
+        p1 = p = lcl_ScanString( p, rField, pSeps, cStr, DoubledQuoteMode::ESCAPE, rbOverflowCell );
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
         // Append remaining unquoted and undelimited data (dirty, dirty) to
