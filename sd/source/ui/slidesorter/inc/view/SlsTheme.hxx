@@ -85,12 +85,11 @@ public:
         Gradient_FocusedPage,
         GradientColorType_Size_
     };
-    enum GradientColorClass {
+    enum class GradientColorClass {
         Border1,
         Border2,
         Fill1,
-        Fill2,
-        Base
+        Fill2
     };
     ColorData GetGradientColor (
         const GradientColorType eType,

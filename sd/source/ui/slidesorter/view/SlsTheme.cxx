@@ -177,12 +177,10 @@ ColorData Theme::GetGradientColor (
 
     switch (eClass)
     {
-        case Border1: return rDescriptor.maBorderColor1;
-        case Border2: return rDescriptor.maBorderColor2;
-        case Fill1: return rDescriptor.maFillColor1;
-        case Fill2: return rDescriptor.maFillColor2;
-        default: OSL_ASSERT(false); SAL_FALLTHROUGH;
-        case Base: return rDescriptor.maBaseColor;
+        case GradientColorClass::Border1: return rDescriptor.maBorderColor1;
+        case GradientColorClass::Border2: return rDescriptor.maBorderColor2;
+        case GradientColorClass::Fill1: return rDescriptor.maFillColor1;
+        case GradientColorClass::Fill2: return rDescriptor.maFillColor2;
     }
 }
 

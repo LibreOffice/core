@@ -382,8 +382,8 @@ void PageObjectPainter::PaintBackgroundDetail (
 
     // Paint the slide area with a linear gradient that starts some pixels
     // below the top and ends some pixels above the bottom.
-    const Color aTopColor(mpTheme->GetGradientColor(eColorType, Theme::Fill1));
-    const Color aBottomColor(mpTheme->GetGradientColor(eColorType, Theme::Fill2));
+    const Color aTopColor(mpTheme->GetGradientColor(eColorType, Theme::GradientColorClass::Fill1));
+    const Color aBottomColor(mpTheme->GetGradientColor(eColorType, Theme::GradientColorClass::Fill2));
     if (aTopColor != aBottomColor)
     {
         const sal_Int32 nHeight (aPageObjectBox.GetHeight());
@@ -446,7 +446,7 @@ void PageObjectPainter::PaintBorder (
     for (int nIndex=0; nIndex<nBorderWidth; ++nIndex)
     {
         const int nDelta (nIndex);
-        rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border2));
+        rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::GradientColorClass::Border2));
         rDevice.DrawLine(
             Point(rBox.Left()-nDelta, rBox.Top()-nDelta),
             Point(rBox.Left()-nDelta, rBox.Bottom()+nDelta));
@@ -457,7 +457,7 @@ void PageObjectPainter::PaintBorder (
             Point(rBox.Right()+nDelta, rBox.Bottom()+nDelta),
             Point(rBox.Right()+nDelta, rBox.Top()-nDelta));
 
-        rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::Border1));
+        rDevice.SetLineColor(mpTheme->GetGradientColor(eColorType, Theme::GradientColorClass::Border1));
         rDevice.DrawLine(
             Point(rBox.Left()-nDelta, rBox.Top()-nDelta),
             Point(rBox.Right()+nDelta, rBox.Top()-nDelta));
