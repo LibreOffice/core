@@ -254,11 +254,11 @@ void SdOOXMLExportTest1::testN828390_4()
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
         CPPUNIT_ASSERT( pTxtObj );
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
-        aEdit.GetCharAttribs(1, rLst);
+        aEdit.GetCharAttribs(0, rLst);
         for( std::vector<EECharAttrib>::reverse_iterator it = rLst.rbegin(); it!=rLst.rend(); ++it)
         {
             const SvxFontHeightItem * pFontHeight = dynamic_cast<const SvxFontHeightItem *>((*it).pAttr);
-            if( pFontHeight )
+            if( pFontHeight && (*it).nStart == 18 )
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font height is wrong", static_cast<sal_uInt32>(1129), pFontHeight->GetHeight() );
             const SvxFontItem *pFont = dynamic_cast<const SvxFontItem *>((*it).pAttr);
             if( pFont )
@@ -267,7 +267,7 @@ void SdOOXMLExportTest1::testN828390_4()
                 bPassed = true;
             }
             const SvxWeightItem *pWeight = dynamic_cast<const SvxWeightItem *>((*it).pAttr);
-            if( pWeight )
+            if( pWeight && (*it).nStart == 18 )
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( "Font Weight is wrong", WEIGHT_BOLD, pWeight->GetWeight() );
         }
     }
