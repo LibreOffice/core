@@ -326,7 +326,7 @@ namespace accessibility
             {   // we have a entry as parent -> get its accessible
 
                 // shorten our access path by one
-                ::std::deque< sal_Int32 > aParentPath( m_aEntryPath );
+                std::deque< sal_Int32 > aParentPath( m_aEntryPath );
                 aParentPath.pop_back();
 
                 // get the entry for this shortened access path

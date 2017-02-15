@@ -46,7 +46,7 @@ uno::Reference< frame::XModuleManager2 > lclCreateModuleManager()
     return frame::ModuleManager::create(xContext);
 }
 
-typedef ::std::vector<uno::Reference<frame::XModel>> ModelVector;
+typedef std::vector<uno::Reference<frame::XModel>> ModelVector;
 
 ModelVector CreateDocumentsEnumeration(
         const uno::Reference< frame::XModel >& rxModel)
@@ -144,7 +144,7 @@ void lclIterateDocuments( ModifyDocumentFunc pModifyDocumentFunc, const uno::Ref
 struct CurrDirPool
 {
     ::osl::Mutex maMutex;
-    ::std::map< OUString, OUString > maCurrDirs;
+    std::map< OUString, OUString > maCurrDirs;
 };
 
 struct StaticCurrDirPool : public ::rtl::Static< CurrDirPool, StaticCurrDirPool > {};

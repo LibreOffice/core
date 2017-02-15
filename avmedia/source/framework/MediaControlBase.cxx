@@ -64,7 +64,7 @@ void MediaControlBase::UpdateVolumeSlider( MediaItem aMediaItem )
     {
         mpVolumeSlider->Enable();
         const sal_Int32 nVolumeDB = aMediaItem.getVolumeDB();
-        mpVolumeSlider->SetThumbPos( ::std::min( ::std::max( nVolumeDB, static_cast< sal_Int32 >( AVMEDIA_DB_RANGE ) ),
+        mpVolumeSlider->SetThumbPos( std::min( std::max( nVolumeDB, static_cast< sal_Int32 >( AVMEDIA_DB_RANGE ) ),
                                                 static_cast< sal_Int32 >( 0 ) ) );
     }
 }
@@ -81,7 +81,7 @@ void MediaControlBase::UpdateTimeSlider( MediaItem aMediaItem )
 
         if( fDuration > 0.0 )
         {
-            const double fTime = ::std::min( aMediaItem.getTime(), fDuration );
+            const double fTime = std::min( aMediaItem.getTime(), fDuration );
 
             if( !mpTimeSlider->GetLineSize() )
                 mpTimeSlider->SetLineSize( static_cast< sal_uInt32 >( AVMEDIA_TIME_RANGE * AVMEDIA_LINEINCREMENT / fDuration ) );

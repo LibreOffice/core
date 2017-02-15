@@ -41,7 +41,7 @@
 namespace basctl
 {
 
-using ::std::map;
+using std::map;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

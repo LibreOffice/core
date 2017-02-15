@@ -62,17 +62,17 @@ namespace basegfx
 
             // sort global entries by Y, X once. After this, the vector
             // is seen as frozen. Pointers to its entries will be used in the following code.
-            ::std::sort(maLineEntries.begin(), maLineEntries.end());
+            std::sort(maLineEntries.begin(), maLineEntries.end());
 
             // local parameters
-            ::std::vector< RasterConversionLineEntry3D >::iterator aCurrentEntry(maLineEntries.begin());
-            ::std::vector< RasterConversionLineEntry3D* > aCurrentLine;
-            ::std::vector< RasterConversionLineEntry3D* > aNextLine;
-            ::std::vector< RasterConversionLineEntry3D* >::iterator aRasterConversionLineEntry3D;
+            std::vector< RasterConversionLineEntry3D >::iterator aCurrentEntry(maLineEntries.begin());
+            std::vector< RasterConversionLineEntry3D* > aCurrentLine;
+            std::vector< RasterConversionLineEntry3D* > aNextLine;
+            std::vector< RasterConversionLineEntry3D* >::iterator aRasterConversionLineEntry3D;
             sal_uInt32 nPairCount(0);
 
             // get scanlines first LineNumber as start
-            sal_Int32 nLineNumber(::std::max(aCurrentEntry->getY(), nStartLine));
+            sal_Int32 nLineNumber(std::max(aCurrentEntry->getY(), nStartLine));
 
             while((aCurrentLine.size() || aCurrentEntry != maLineEntries.end()) && (nLineNumber < nStopLine))
             {
@@ -112,7 +112,7 @@ namespace basegfx
                 // since all entries are already in one processed line. This needs to be done
                 // every time since not only new spans may have benn added or old removed,
                 // but incrementing may also have changed the order
-                ::std::sort(aCurrentLine.begin(), aCurrentLine.end(), lineComparator());
+                std::sort(aCurrentLine.begin(), aCurrentLine.end(), lineComparator());
 
                 // process current scanline
                 aRasterConversionLineEntry3D = aCurrentLine.begin();
@@ -161,9 +161,9 @@ namespace basegfx
         {
             if(nYStart > nYEnd)
             {
-                ::std::swap(aStart, aEnd);
-                ::std::swap(nYStart, nYEnd);
-                ::std::swap(a, b);
+                std::swap(aStart, aEnd);
+                std::swap(nYStart, nYEnd);
+                std::swap(a, b);
             }
 
             const sal_uInt32 nYDelta(nYEnd - nYStart);
@@ -278,8 +278,8 @@ namespace basegfx
 
                 if(nYStart > nYEnd)
                 {
-                    ::std::swap(aStart, aEnd);
-                    ::std::swap(nYStart, nYEnd);
+                    std::swap(aStart, aEnd);
+                    std::swap(nYStart, nYEnd);
                 }
 
                 const sal_uInt32 nYDelta(static_cast<sal_uInt32>(nYEnd - nYStart));

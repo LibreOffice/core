@@ -29,7 +29,7 @@
 
 class ImplB3DPolyPolygon
 {
-    typedef ::std::vector< ::basegfx::B3DPolygon >  PolygonVector;
+    typedef std::vector< ::basegfx::B3DPolygon >  PolygonVector;
 
     PolygonVector                                   maPolygons;
 

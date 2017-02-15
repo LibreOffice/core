@@ -106,13 +106,13 @@ void Impl_calcFatLine( FatLine& line, const Bezier& c )
     // worth the overhead)
     if( dP2 * dP3 > 0.0 )
     {
-        line.dMin = 3.0/4.0 * ::std::min(0.0, ::std::min(dP2, dP3));
-        line.dMax = 3.0/4.0 * ::std::max(0.0, ::std::max(dP2, dP3));
+        line.dMin = 3.0/4.0 * std::min(0.0, std::min(dP2, dP3));
+        line.dMax = 3.0/4.0 * std::max(0.0, std::max(dP2, dP3));
     }
     else
     {
-        line.dMin = 4.0/9.0 * ::std::min(0.0, ::std::min(dP2, dP3));
-        line.dMax = 4.0/9.0 * ::std::max(0.0, ::std::max(dP2, dP3));
+        line.dMin = 4.0/9.0 * std::min(0.0, std::min(dP2, dP3));
+        line.dMax = 4.0/9.0 * std::max(0.0, std::max(dP2, dP3));
     }
 }
 
@@ -120,10 +120,10 @@ void Impl_calcBounds( Point2D&          leftTop,
                       Point2D&          rightBottom,
                       const Bezier&     c1          )
 {
-    leftTop.x = ::std::min( c1.p0.x, ::std::min( c1.p1.x, ::std::min( c1.p2.x, c1.p3.x ) ) );
-    leftTop.y = ::std::min( c1.p0.y, ::std::min( c1.p1.y, ::std::min( c1.p2.y, c1.p3.y ) ) );
-    rightBottom.x = ::std::max( c1.p0.x, ::std::max( c1.p1.x, ::std::max( c1.p2.x, c1.p3.x ) ) );
-    rightBottom.y = ::std::max( c1.p0.y, ::std::max( c1.p1.y, ::std::max( c1.p2.y, c1.p3.y ) ) );
+    leftTop.x = std::min( c1.p0.x, std::min( c1.p1.x, std::min( c1.p2.x, c1.p3.x ) ) );
+    leftTop.y = std::min( c1.p0.y, std::min( c1.p1.y, std::min( c1.p2.y, c1.p3.y ) ) );
+    rightBottom.x = std::max( c1.p0.x, std::max( c1.p1.x, std::max( c1.p2.x, c1.p3.x ) ) );
+    rightBottom.y = std::max( c1.p0.y, std::max( c1.p1.y, std::max( c1.p2.y, c1.p3.y ) ) );
 }
 
 bool Impl_doBBoxIntersect( const Bezier& c1,
@@ -138,8 +138,8 @@ bool Impl_doBBoxIntersect( const Bezier& c1,
     Impl_calcBounds( lt1, rb1, c1 );
     Impl_calcBounds( lt2, rb2, c2 );
 
-    if( ::std::min(rb1.x, rb2.x) < ::std::max(lt1.x, lt2.x) ||
-        ::std::min(rb1.y, rb2.y) < ::std::max(lt1.y, lt2.y) )
+    if( std::min(rb1.x, rb2.x) < std::max(lt1.x, lt2.x) ||
+        std::min(rb1.y, rb2.y) < std::max(lt1.y, lt2.y) )
     {
         return false;
     }
@@ -220,8 +220,8 @@ bool Impl_calcSafeParams( double&           t1,
                     tolEqual(p0.y, upperYBound) )
                 {
                     // yes, simulate intersection then
-                    currLowerT = ::std::min(currLowerT, ::std::min(p0.x, p1.x));
-                    currHigherT = ::std::max(currHigherT, ::std::max(p0.x, p1.x));
+                    currLowerT = std::min(currLowerT, std::min(p0.x, p1.x));
+                    currHigherT = std::max(currHigherT, std::max(p0.x, p1.x));
                 }
             }
             else
@@ -236,8 +236,8 @@ bool Impl_calcSafeParams( double&           t1,
                 // calc intersection with horizontal dMax line
                 const double currTHigh( (upperYBound - p0.y) * r_x / r_y + p0.x );
 
-                currLowerT = ::std::min(currLowerT, ::std::min(currTLow, currTHigh));
-                currHigherT = ::std::max(currHigherT, ::std::max(currTLow, currTHigh));
+                currLowerT = std::min(currLowerT, std::min(currTLow, currTHigh));
+                currHigherT = std::max(currHigherT, std::max(currTLow, currTHigh));
             }
 
             // set flag that at least one segment is contained or
@@ -248,8 +248,8 @@ bool Impl_calcSafeParams( double&           t1,
 
 #ifndef WITH_SAFEPARAMBASE_TEST
     // limit intersections found to permissible t parameter range
-    t1 = ::std::max(0.0, currLowerT);
-    t2 = ::std::min(1.0, currHigherT);
+    t1 = std::max(0.0, currLowerT);
+    t2 = std::min(1.0, currHigherT);
 #endif
 
     return bIntersection;
@@ -810,7 +810,7 @@ bool Impl_calcSafeParams_focus( double&         t1,
         for( j=0; j<j_card; ++j )
         {
             // calc single d_{ij} sum:
-            for( d=0.0, k=::std::max(0,i-n); k<=k_max && k<=i; ++k )
+            for( d=0.0, k=std::max(0,i-n); k<=k_max && k<=i; ++k )
             {
                 l = i - k; // invariant: k + l = i
                 assert(k>=0 && k<=n-1); // k \in {0,...,n-1}
@@ -895,7 +895,7 @@ bool Impl_calcSafeParams_focus( double&         t1,
     c1_orig, where c1_orig is 'safe' from c2_part. If the whole
     c1_orig is safe, false must be returned, true otherwise.
  */
-template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_iterator< ::std::vector< ::std::pair<double, double> > >&    result,
+template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterator< std::vector< std::pair<double, double> > >&    result,
                                                         double                                                                          delta,
                                                         const Functor&                                                                  safeRangeFunctor,
                                                         int                                                                             recursionLevel,
@@ -970,8 +970,8 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
             // [last_t1,last_t2], on the other hand, so values
             // of [t1,t2] outside that range are irrelevant
             // here. Clip range appropriately.
-            t1_c1 = ::std::max(t1_c1, last_t1_c1);
-            t2_c1 = ::std::min(t2_c1, last_t2_c1);
+            t1_c1 = std::max(t1_c1, last_t1_c1);
+            t2_c1 = std::min(t2_c1, last_t2_c1);
 
             // TODO: respect delta
             // for now, end condition is just a fixed threshold on the t's
@@ -991,12 +991,12 @@ template <class Functor> void Impl_applySafeRanges_rec( ::std::back_insert_itera
                 if( recursionLevel % 2 )
                 {
                     // uneven level: have to swap the t's, since curves are swapped, too
-                    *result++ = ::std::make_pair( last_t1_c2 + (last_t2_c2 - last_t1_c2)/2.0,
+                    *result++ = std::make_pair( last_t1_c2 + (last_t2_c2 - last_t1_c2)/2.0,
                                                   last_t1_c1 + (last_t2_c1 - last_t1_c1)/2.0 );
                 }
                 else
                 {
-                    *result++ = ::std::make_pair( last_t1_c1 + (last_t2_c1 - last_t1_c1)/2.0,
+                    *result++ = std::make_pair( last_t1_c1 + (last_t2_c1 - last_t1_c1)/2.0,
                                                   last_t1_c2 + (last_t2_c2 - last_t1_c2)/2.0 );
                 }
 
@@ -1157,7 +1157,7 @@ struct BezierTangencyFunctor
     Maximal allowed distance to true intersection (measured in the
     original curve's coordinate system)
  */
-void clipBezier( ::std::back_insert_iterator< ::std::vector< ::std::pair<double, double> > >&   result,
+void clipBezier( std::back_insert_iterator< std::vector< std::pair<double, double> > >&   result,
                  double                                                                         delta,
                  const Bezier&                                                                  c1,
                  const Bezier&                                                                  c2        )
@@ -1173,8 +1173,8 @@ void clipBezier( ::std::back_insert_iterator< ::std::vector< ::std::pair<double,
     // tangencies. Sederberg et al. state that collinear normal
     // algorithm then degrades quickly.
 
-    ::std::vector< ::std::pair<double,double> > results;
-    ::std::back_insert_iterator< ::std::vector< ::std::pair<double, double> > > ii(results);
+    std::vector< std::pair<double,double> > results;
+    std::back_insert_iterator< std::vector< std::pair<double, double> > > ii(results);
 
     Impl_calcCollinearNormals( ii, delta, 0, c1, c1, 0.0, 1.0, c2, c2, 0.0, 1.0 );
 
@@ -1187,8 +1187,8 @@ void clipBezier( ::std::back_insert_iterator< ::std::vector< ::std::pair<double,
     // e.g. intersect with the right part of curve 2.
 
     // divide c1 and c2 at collinear normal intersection points
-    ::std::vector< Bezier > c1_segments( results.size()+1 );
-    ::std::vector< Bezier > c2_segments( results.size()+1 );
+    std::vector< Bezier > c1_segments( results.size()+1 );
+    std::vector< Bezier > c2_segments( results.size()+1 );
     Bezier c1_remainder( c1 );
     Bezier c2_remainder( c2 );
     unsigned int i;
@@ -1898,8 +1898,8 @@ int main(int argc, const char *argv[])
 #endif
 
 #ifdef WITH_BEZIERCLIP_TEST
-    ::std::vector< ::std::pair<double, double> >                                result;
-    ::std::back_insert_iterator< ::std::vector< ::std::pair<double, double> > > ii(result);
+    std::vector< std::pair<double, double> >                                result;
+    std::back_insert_iterator< std::vector< std::pair<double, double> > > ii(result);
 
     // test full bezier clipping
     const double bezierClip_xOffset( curr_Offset );

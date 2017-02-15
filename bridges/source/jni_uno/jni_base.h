@@ -213,10 +213,10 @@ struct rtl_mem
     inline static void operator delete ( void *, void * )
         {}
 
-    static inline rtl_mem * allocate( ::std::size_t bytes );
+    static inline rtl_mem * allocate( std::size_t bytes );
 };
 
-inline rtl_mem * rtl_mem::allocate( ::std::size_t bytes )
+inline rtl_mem * rtl_mem::allocate( std::size_t bytes )
 {
     void * p = rtl_allocateMemory( bytes );
     if (nullptr == p)

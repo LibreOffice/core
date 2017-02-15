@@ -26,8 +26,8 @@ namespace basegfx { namespace tools
     BColor rgb2hsl(const BColor& rRGBColor)
     {
         const double r=rRGBColor.getRed(), g=rRGBColor.getGreen(), b=rRGBColor.getBlue();
-        const double minVal = ::std::min( ::std::min( r, g ), b );
-        const double maxVal = ::std::max( ::std::max( r, g ), b );
+        const double minVal = std::min( std::min( r, g ), b );
+        const double maxVal = std::max( std::max( r, g ), b );
         const double d = maxVal - minVal;
 
         double h=0, s=0, l=0;

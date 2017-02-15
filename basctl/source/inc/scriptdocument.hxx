@@ -58,7 +58,7 @@ namespace basctl
     };
 
     class ScriptDocument;
-    typedef ::std::vector< ScriptDocument >  ScriptDocuments;
+    typedef std::vector< ScriptDocument >  ScriptDocuments;
 
     /** encapsulates a document which contains Basic scripts and dialogs
     */

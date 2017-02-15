@@ -101,7 +101,7 @@ namespace animcore
 {
 
 
-typedef ::std::list< Reference< XAnimationNode > > ChildList_t;
+typedef std::list< Reference< XAnimationNode > > ChildList_t;
 
 
 class AnimationNodeBase :   public XAnimateMotion,
@@ -1768,11 +1768,11 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertBefore( const Referenc
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator before = ::std::find(maChildren.begin(), maChildren.end(), refChild);
+    ChildList_t::iterator before = std::find(maChildren.begin(), maChildren.end(), refChild);
     if( before == maChildren.end() )
         throw NoSuchElementException();
 
-    if( ::std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
+    if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
 
     maChildren.insert( before, newChild );
@@ -1792,11 +1792,11 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::insertAfter( const Reference
     if( !newChild.is() || !refChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator before = ::std::find(maChildren.begin(), maChildren.end(), refChild);
+    ChildList_t::iterator before = std::find(maChildren.begin(), maChildren.end(), refChild);
     if( before == maChildren.end() )
         throw NoSuchElementException();
 
-    if( ::std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
+    if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
 
     ++before;
@@ -1820,11 +1820,11 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::replaceChild( const Referenc
     if( !newChild.is() || !oldChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator replace = ::std::find(maChildren.begin(), maChildren.end(), oldChild);
+    ChildList_t::iterator replace = std::find(maChildren.begin(), maChildren.end(), oldChild);
     if( replace == maChildren.end() )
         throw NoSuchElementException();
 
-    if( ::std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
+    if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
 
     Reference< XInterface > xNull( nullptr );
@@ -1847,7 +1847,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::removeChild( const Reference
     if( !oldChild.is() )
         throw IllegalArgumentException();
 
-    ChildList_t::iterator old = ::std::find(maChildren.begin(), maChildren.end(), oldChild);
+    ChildList_t::iterator old = std::find(maChildren.begin(), maChildren.end(), oldChild);
     if( old == maChildren.end() )
         throw NoSuchElementException();
 
@@ -1868,7 +1868,7 @@ Reference< XAnimationNode > SAL_CALL AnimationNode::appendChild( const Reference
     if( !newChild.is() )
         throw IllegalArgumentException();
 
-    if( ::std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
+    if( std::find(maChildren.begin(), maChildren.end(), newChild) != maChildren.end() )
         throw ElementExistException();
 
     Reference< XInterface > xThis( static_cast< OWeakObject * >(this) );

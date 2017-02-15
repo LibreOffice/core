@@ -546,8 +546,8 @@ void TabBar::Sort()
         }
 
         // sort module and dialog lists by page text
-        ::std::sort( aModuleList.begin() , aModuleList.end() );
-        ::std::sort( aDialogList.begin() , aDialogList.end() );
+        std::sort( aModuleList.begin() , aModuleList.end() );
+        std::sort( aDialogList.begin() , aDialogList.end() );
 
 
         sal_uInt16 nModules = sal::static_int_cast<sal_uInt16>( aModuleList.size() );

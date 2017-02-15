@@ -104,8 +104,8 @@ namespace basegfx
             void setNext(EdgeEntry* pNext) { mpNext = pNext; }
         };
 
-        typedef ::std::vector< EdgeEntry > EdgeEntries;
-        typedef ::std::vector< EdgeEntry* > EdgeEntryPointers;
+        typedef std::vector< EdgeEntry > EdgeEntries;
+        typedef std::vector< EdgeEntry* > EdgeEntryPointers;
 
         class Triangulator
         {
@@ -245,7 +245,7 @@ namespace basegfx
                 if(!maStartEntries.empty())
                 {
                     // sort initial list
-                    ::std::sort(maStartEntries.begin(), maStartEntries.end());
+                    std::sort(maStartEntries.begin(), maStartEntries.end());
 
                     // insert to own simply linked list
                     EdgeEntries::iterator aPos(maStartEntries.begin());

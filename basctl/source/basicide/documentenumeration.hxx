@@ -32,7 +32,7 @@ namespace com { namespace sun { namespace star { namespace uno {
 namespace basctl { namespace docs {
 
 
-    typedef ::std::vector< css::uno::Reference< css::frame::XController > >   Controllers;
+    typedef std::vector< css::uno::Reference< css::frame::XController > >   Controllers;
 
     struct DocumentDescriptor
     {
@@ -40,7 +40,7 @@ namespace basctl { namespace docs {
         Controllers                                aControllers;
     };
 
-    typedef ::std::vector< DocumentDescriptor > Documents;
+    typedef std::vector< DocumentDescriptor > Documents;
 
 
     /// allows pre-filtering when enumerating document descriptors

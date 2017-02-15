@@ -1124,7 +1124,7 @@ namespace basctl
 
     namespace
     {
-        struct DocumentTitleLess : public ::std::binary_function< ScriptDocument, ScriptDocument, bool >
+        struct DocumentTitleLess : public std::binary_function< ScriptDocument, ScriptDocument, bool >
         {
             explicit DocumentTitleLess( const CollatorWrapper& _rCollator )
                 :m_aCollator( _rCollator )
@@ -1178,7 +1178,7 @@ namespace basctl
         {
             CollatorWrapper aCollator( ::comphelper::getProcessComponentContext() );
             aCollator.loadDefaultCollator( SvtSysLocale().GetLanguageTag().getLocale(), 0 );
-            ::std::sort( aScriptDocs.begin(), aScriptDocs.end(), DocumentTitleLess( aCollator ) );
+            std::sort( aScriptDocs.begin(), aScriptDocs.end(), DocumentTitleLess( aCollator ) );
         }
 
         return aScriptDocs;
@@ -1258,7 +1258,7 @@ namespace basctl
         }
 
         // sort
-        ::std::sort( aModuleNames.getArray() , aModuleNames.getArray() + aModuleNames.getLength() , StringCompareLessThan );
+        std::sort( aModuleNames.getArray() , aModuleNames.getArray() + aModuleNames.getLength() , StringCompareLessThan );
 
         return aModuleNames;
     }
@@ -1271,9 +1271,9 @@ namespace basctl
         OUString aBaseName = _eType == E_SCRIPTS ? OUString("Module") : OUString("Dialog");
 
         Sequence< OUString > aUsedNames( getObjectNames( _eType, _rLibName ) );
-        ::std::set< OUString > aUsedNamesCheck;
-        ::std::copy( aUsedNames.begin(), aUsedNames.end(),
-            ::std::insert_iterator< ::std::set< OUString > >( aUsedNamesCheck, aUsedNamesCheck.begin() ) );
+        std::set< OUString > aUsedNamesCheck;
+        std::copy( aUsedNames.begin(), aUsedNames.end(),
+            std::insert_iterator< std::set< OUString > >( aUsedNamesCheck, aUsedNamesCheck.begin() ) );
 
         bool bValid = false;
         sal_Int32 i = 1;

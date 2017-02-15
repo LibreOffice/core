@@ -105,7 +105,7 @@ namespace basctl { namespace docs {
             const IDocumentDescriptorFilter* _pFilter )
         {
             // ensure we don't encounter some models multiple times
-            ::std::set< Reference< XModel >, ::comphelper::OInterfaceCompare< XModel > > aEncounteredModels;
+            std::set< Reference< XModel >, ::comphelper::OInterfaceCompare< XModel > > aEncounteredModels;
 
             for (   const Reference< XFrame >* pFrame = _rFrames.getConstArray();
                     pFrame != _rFrames.getConstArray() + _rFrames.getLength();

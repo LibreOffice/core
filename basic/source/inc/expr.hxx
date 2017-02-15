@@ -35,8 +35,8 @@ class SbiSymDef;
 class SbiProcDef;
 
 
-typedef ::std::unique_ptr<SbiExprList> SbiExprListPtr;
-typedef ::std::vector<SbiExprListPtr> SbiExprListVector;
+typedef std::unique_ptr<SbiExprList> SbiExprListPtr;
+typedef std::vector<SbiExprListPtr> SbiExprListVector;
 
 struct SbVar {
     SbiExprNode*        pNext;      // next element (for structures)

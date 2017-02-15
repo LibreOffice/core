@@ -591,8 +591,8 @@ sal_Bool VCLXAccessibleEdit::replaceText( sal_Int32 nStartIndex, sal_Int32 nEndI
     if ( !implIsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
         throw IndexOutOfBoundsException();
 
-    sal_Int32 nMinIndex = ::std::min( nStartIndex, nEndIndex );
-    sal_Int32 nMaxIndex = ::std::max( nStartIndex, nEndIndex );
+    sal_Int32 nMinIndex = std::min( nStartIndex, nEndIndex );
+    sal_Int32 nMaxIndex = std::max( nStartIndex, nEndIndex );
 
     VCLXEdit* pVCLXEdit = static_cast< VCLXEdit* >( GetVCLXWindow() );
     if ( pVCLXEdit && pVCLXEdit->isEditable() )

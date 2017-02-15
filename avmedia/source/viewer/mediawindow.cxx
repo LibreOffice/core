@@ -201,7 +201,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 
     for( size_t i = 0; i < SAL_N_ELEMENTS(pFilters); i += 2 )
     {
-        rFilterNameVector.push_back( ::std::make_pair< OUString, OUString >(
+        rFilterNameVector.push_back( std::make_pair< OUString, OUString >(
                                         OUString::createFromAscii(pFilters[i]),
                                         OUString::createFromAscii(pFilters[i+1]) ) );
     }

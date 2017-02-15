@@ -125,7 +125,7 @@ private:
     ::sal_Int32 m_nHeight;
 };
 
-typedef ::std::vector< ParagraphInfo > Paragraphs;
+typedef std::vector< ParagraphInfo > Paragraphs;
 
 typedef ::cppu::WeakAggComponentImplHelper7<
     css::accessibility::XAccessible,
@@ -615,7 +615,7 @@ private:
 
     Paragraphs::iterator m_aFocused;
 
-    ::std::queue< ::TextHint > m_aParagraphNotifications;
+    std::queue< ::TextHint > m_aParagraphNotifications;
     bool m_bSelectionChangedNotification;
 };
 

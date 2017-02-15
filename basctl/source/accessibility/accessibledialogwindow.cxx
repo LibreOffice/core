@@ -241,7 +241,7 @@ bool AccessibleDialogWindow::IsChildVisible( const ChildDescriptor& rDesc )
 void AccessibleDialogWindow::InsertChild( const ChildDescriptor& rDesc )
 {
     // check, if object is already in child list
-    AccessibleChildren::iterator aIter = ::std::find( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end(), rDesc );
+    AccessibleChildren::iterator aIter = std::find( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end(), rDesc );
 
     // if not found, insert in child list
     if ( aIter == m_aAccessibleChildren.end() )
@@ -269,7 +269,7 @@ void AccessibleDialogWindow::InsertChild( const ChildDescriptor& rDesc )
 void AccessibleDialogWindow::RemoveChild( const ChildDescriptor& rDesc )
 {
     // find object in child list
-    AccessibleChildren::iterator aIter = ::std::find( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end(), rDesc );
+    AccessibleChildren::iterator aIter = std::find( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end(), rDesc );
 
     // if found, remove from child list
     if ( aIter != m_aAccessibleChildren.end() )
@@ -325,7 +325,7 @@ void AccessibleDialogWindow::UpdateChildren()
 void AccessibleDialogWindow::SortChildren()
 {
     // sort child list
-    ::std::sort( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end() );
+    std::sort( m_aAccessibleChildren.begin(), m_aAccessibleChildren.end() );
 }
 
 
