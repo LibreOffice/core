@@ -19,7 +19,7 @@
 
 #include <rtl/ref.hxx>
 
-#include "DocumentHandlerForOdg.hxx"
+#include "DocumentHandlerForOdp.hxx"
 #include "ImportFilter.hxx"
 #include "WpftFilterFixture.hxx"
 #include "WpftLoader.hxx"
@@ -30,11 +30,11 @@ namespace
 
 namespace uno = css::uno;
 
-class DrawImportFilter : public writerperfect::ImportFilter<OdgGenerator>
+class PresentationImportFilter : public writerperfect::ImportFilter<OdpGenerator>
 {
 public:
-    explicit DrawImportFilter(const uno::Reference< uno::XComponentContext > &rxContext)
-        : writerperfect::ImportFilter<OdgGenerator>(rxContext) {}
+    explicit PresentationImportFilter(const uno::Reference< uno::XComponentContext > &rxContext)
+        : writerperfect::ImportFilter<OdpGenerator>(rxContext) {}
 
     // XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName() override;
@@ -43,40 +43,40 @@ public:
 
 private:
     virtual bool doDetectFormat(librevenge::RVNGInputStream &rInput, rtl::OUString &rTypeName) override;
-    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdgGenerator &rGenerator, utl::MediaDescriptor &rDescriptor) override;
+    virtual bool doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &rDescriptor) override;
 
-    static void generate(librevenge::RVNGDrawingInterface &rDocument);
+    static void generate(librevenge::RVNGPresentationInterface &rDocument);
 };
 
-bool DrawImportFilter::doImportDocument(librevenge::RVNGInputStream &, OdgGenerator &rGenerator, utl::MediaDescriptor &)
+bool PresentationImportFilter::doImportDocument(librevenge::RVNGInputStream &, OdpGenerator &rGenerator, utl::MediaDescriptor &)
 {
-    DrawImportFilter::generate(rGenerator);
+    PresentationImportFilter::generate(rGenerator);
     return true;
 }
 
-bool DrawImportFilter::doDetectFormat(librevenge::RVNGInputStream &, rtl::OUString &rTypeName)
+bool PresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream &, rtl::OUString &rTypeName)
 {
     rTypeName = "WpftDummyText";
     return true;
 }
 
 // XServiceInfo
-rtl::OUString SAL_CALL DrawImportFilter::getImplementationName()
+rtl::OUString SAL_CALL PresentationImportFilter::getImplementationName()
 {
-    return OUString("org.libreoffice.comp.Wpft.QA.DrawImportFilter");
+    return OUString("org.libreoffice.comp.Wpft.QA.PresentationImportFilter");
 }
 
-sal_Bool SAL_CALL DrawImportFilter::supportsService(const rtl::OUString &rServiceName)
+sal_Bool SAL_CALL PresentationImportFilter::supportsService(const rtl::OUString &rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< rtl::OUString > SAL_CALL DrawImportFilter::getSupportedServiceNames()
+uno::Sequence< rtl::OUString > SAL_CALL PresentationImportFilter::getSupportedServiceNames()
 {
     return {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
 }
 
-void DrawImportFilter::generate(librevenge::RVNGDrawingInterface &rDocument)
+void PresentationImportFilter::generate(librevenge::RVNGPresentationInterface &rDocument)
 {
     using namespace librevenge;
 
@@ -84,7 +84,7 @@ void DrawImportFilter::generate(librevenge::RVNGDrawingInterface &rDocument)
     RVNGPropertyList aProps;
     aProps.insert("svg:width", 800);
     aProps.insert("svg:height", 600);
-    rDocument.startPage(aProps);
+    rDocument.startSlide(aProps);
     aProps.clear();
     aProps.insert("svg:x", 50);
     aProps.insert("svg:y", 50);
@@ -97,7 +97,7 @@ void DrawImportFilter::generate(librevenge::RVNGDrawingInterface &rDocument)
     rDocument.closeSpan();
     rDocument.closeParagraph();
     rDocument.endTextObject();
-    rDocument.endPage();
+    rDocument.endSlide();
     rDocument.endDocument();
 }
 
@@ -106,22 +106,22 @@ void DrawImportFilter::generate(librevenge::RVNGDrawingInterface &rDocument)
 namespace
 {
 
-class DrawImportTest : public writerperfect::test::WpftFilterFixture
+class PresentationImportTest : public writerperfect::test::WpftFilterFixture
 {
 public:
     void test();
 
-    CPPUNIT_TEST_SUITE(DrawImportTest);
+    CPPUNIT_TEST_SUITE(PresentationImportTest);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void DrawImportTest::test()
+void PresentationImportTest::test()
 {
     using namespace css;
 
-    rtl::Reference<DrawImportFilter> xFilter{new DrawImportFilter(m_xContext)};
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(), "private:factory/sdraw", m_xDesktop, m_xContext);
+    rtl::Reference<PresentationImportFilter> xFilter{new PresentationImportFilter(m_xContext)};
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(), "private:factory/simpress", m_xDesktop, m_xContext);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
@@ -147,7 +147,7 @@ void DrawImportTest::test()
     CPPUNIT_ASSERT_EQUAL(rtl::OUString("My hovercraft is full of eels."), xText->getString());
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(DrawImportTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(PresentationImportTest);
 
 }
 
