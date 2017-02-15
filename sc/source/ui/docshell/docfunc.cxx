@@ -1287,10 +1287,12 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
 
         // create new note (creates drawing undo action for the new caption object)
         ScNoteData aNewData;
-        if( ScPostIt* pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true ) )
+        ScPostIt* pNewNote = nullptr;
+        if( (pNewNote = ScNoteUtil::CreateNoteFromString( rDoc, rPos, rNoteText, false, true )) )
         {
             if( pAuthor ) pNewNote->SetAuthor( *pAuthor );
             if( pDate ) pNewNote->SetDate( *pDate );
+
             // rescue note data for undo
             aNewData = pNewNote->GetNoteData();
         }
@@ -1306,6 +1308,13 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
             rDoc.SetStreamValid(rPos.Tab(), false);
 
         aModificator.SetDocumentModified();
+
+        // Let our LOK clients know about the new/modified note
+        if (pNewNote)
+        {
+            ScDocShell::LOKCommentNotify(pOldNote ? LOKCommentNotificationType::Modify : LOKCommentNotificationType::Add,
+                                         &rDoc, rPos, pNewNote);
+        }
     }
     else if (!bApi)
     {

@@ -75,6 +75,8 @@ typedef std::unordered_map< sal_uLong, sal_uLong > ScChangeActionMergeMap;
 
 //enum ScDBFormat { SC_FORMAT_SDF, SC_FORMAT_DBF };
 
+enum class LOKCommentNotificationType { Add, Modify, Remove };
+
                                     // Extra flags for Repaint
 #define SC_PF_LINES         1
 #define SC_PF_TESTMERGE     2
@@ -398,6 +400,7 @@ public:
     static OUString   GetDBaseFilterName();
     static OUString   GetDifFilterName();
     static bool       HasAutomaticTableName( const OUString& rFilter );
+    static void       LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument* pDocument, const ScAddress& rPos, const ScPostIt* pNote);
 
     DECL_LINK( RefreshDBDataHdl, Timer*, void );
 
