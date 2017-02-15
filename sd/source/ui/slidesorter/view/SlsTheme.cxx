@@ -182,6 +182,7 @@ ColorData Theme::GetGradientColor (
         case GradientColorClass::Fill1: return rDescriptor.maFillColor1;
         case GradientColorClass::Fill2: return rDescriptor.maFillColor2;
     }
+    return 0;
 }
 
 void Theme::SetGradient (
