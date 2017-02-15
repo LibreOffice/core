@@ -21,8 +21,6 @@
 #define INCLUDED_VCL_ACCEL_HXX
 
 #include <tools/link.hxx>
-#include <tools/resid.hxx>
-#include <tools/rc.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/dllapi.h>
 
@@ -30,7 +28,7 @@ class ImplAccelData;
 class ImplAccelEntry;
 class CommandEvent;
 
-class VCL_DLLPUBLIC Accelerator : public Resource
+class VCL_DLLPUBLIC Accelerator
 {
     friend class ImplAccelManager;
 
@@ -60,7 +58,7 @@ private:
 public:
                             Accelerator();
                             Accelerator( const Accelerator& rAccel );
-    virtual                 ~Accelerator();
+                            ~Accelerator();
 
     void                    Activate();
     void                    Select();

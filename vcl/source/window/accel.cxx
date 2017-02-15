@@ -232,9 +232,8 @@ Accelerator::Accelerator()
     mpData = new ImplAccelData;
 }
 
-Accelerator::Accelerator( const Accelerator& rAccel ) :
-    Resource(),
-    maCurKeyCode( rAccel.maCurKeyCode )
+Accelerator::Accelerator(const Accelerator& rAccel)
+    : maCurKeyCode( rAccel.maCurKeyCode )
 {
 
     ImplInit();
