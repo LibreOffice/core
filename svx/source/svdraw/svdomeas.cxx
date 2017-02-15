@@ -263,7 +263,7 @@ struct ImpMeasureRec : public SdrDragStatUserData
     Point                       aPt2;
     SdrMeasureKind              eKind;
     css::drawing::MeasureTextHorzPos eWantTextHPos;
-    SdrMeasureTextVPos          eWantTextVPos;
+    css::drawing::MeasureTextVertPos eWantTextVPos;
     long                        nLineDist;
     long                        nHelplineOverhang;
     long                        nHelplineDist;
@@ -307,7 +307,7 @@ struct ImpMeasurePoly
     double                      nHlpCos;
     sal_uInt16                      nMainlineAnz;
     css::drawing::MeasureTextHorzPos eUsedTextHPos;
-    SdrMeasureTextVPos          eUsedTextVPos;
+    css::drawing::MeasureTextVertPos eUsedTextVPos;
     long                        nLineWdt2;  // half the line width
     long                        nArrow1Len; // length of 1st arrowhead; for Center, use only half
     long                        nArrow2Len; // length of 2nd arrowhead; for Center, use only half
@@ -411,10 +411,10 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
 
     rPol.eUsedTextHPos=rRec.eWantTextHPos;
     rPol.eUsedTextVPos=rRec.eWantTextVPos;
-    if (rPol.eUsedTextVPos==SdrMeasureTextVPos::Auto)
-        rPol.eUsedTextVPos=SdrMeasureTextVPos::Above;
+    if (rPol.eUsedTextVPos == css::drawing::MeasureTextVertPos_AUTO)
+        rPol.eUsedTextVPos = css::drawing::MeasureTextVertPos_EAST;
     bool bBrkLine=false;
-    if (rPol.eUsedTextVPos==SdrMeasureTextVPos::VerticalCentered)
+    if (rPol.eUsedTextVPos == css::drawing::MeasureTextVertPos_CENTERED)
     {
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
         if (pOutlinerParaObject!=nullptr && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1)
@@ -667,7 +667,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     bool bUpsideDown=aRec.bTextUpsideDown!=aMPol.bAutoUpsideDown;
     bool bBelowRefEdge=aRec.bBelowRefEdge;
     css::drawing::MeasureTextHorzPos eMH=aMPol.eUsedTextHPos;
-    SdrMeasureTextVPos eMV=aMPol.eUsedTextVPos;
+    css::drawing::MeasureTextVertPos eMV=aMPol.eUsedTextVPos;
     if (!bRota90) {
         switch (eMH) {
             case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE: aTextPos.X()=aPt1b.X()-aTextSize2.Width()-nArr1Len-nLWdt; break;
@@ -675,9 +675,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
             default: aTextPos.X()=aPt1b.X(); aTextSize2.Width()=nLen;
         }
         switch (eMV) {
-            case SdrMeasureTextVPos::VerticalCentered:
+            case css::drawing::MeasureTextVertPos_CENTERED:
                 aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()/2; break;
-            case SdrMeasureTextVPos::Below: {
+            case css::drawing::MeasureTextVertPos_WEST: {
                 if (!bUpsideDown) aTextPos.Y()=aPt1b.Y()+nLWdt;
                 else aTextPos.Y()=aPt1b.Y()-aTextSize2.Height()-nLWdt;
             } break;
@@ -697,9 +697,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
             default: aTextPos.X()=aPt1b.X(); aTextSize2.Height()=nLen;
         }
         switch (eMV) {
-            case SdrMeasureTextVPos::VerticalCentered:
+            case css::drawing::MeasureTextVertPos_CENTERED:
                 aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()/2; break;
-            case SdrMeasureTextVPos::Below: {
+            case css::drawing::MeasureTextVertPos_WEST: {
                 if (!bBelowRefEdge) aTextPos.Y()=aPt1b.Y()+aTextSize2.Width()+nLWdt;
                 else aTextPos.Y()=aPt1b.Y()-nLWdt;
             } break;
@@ -1323,8 +1323,8 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
 
     SdrTextHorzAdjust eTH=GetTextHorizontalAdjust();
     SdrTextVertAdjust eTV=GetTextVerticalAdjust();
-    css::drawing::MeasureTextHorzPos eMH=aMPol.eUsedTextHPos;
-    SdrMeasureTextVPos eMV=aMPol.eUsedTextVPos;
+    css::drawing::MeasureTextHorzPos eMH = aMPol.eUsedTextHPos;
+    css::drawing::MeasureTextVertPos eMV = aMPol.eUsedTextVPos;
     bool bTextRota90=aRec.bTextRota90;
     bool bBelowRefEdge=aRec.bBelowRefEdge;
 
@@ -1333,21 +1333,21 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
         if (eMH==css::drawing::MeasureTextHorzPos_LEFTOUTSIDE) eTH=SDRTEXTHORZADJUST_RIGHT;
         if (eMH==css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE) eTH=SDRTEXTHORZADJUST_LEFT;
         // at eMH==css::drawing::MeasureTextHorzPos_INSIDE we can anchor horizontally
-        if (eMV==SdrMeasureTextVPos::Above) eTV=SDRTEXTVERTADJUST_BOTTOM;
-        if (eMV==SdrMeasureTextVPos::Below) eTV=SDRTEXTVERTADJUST_TOP;
-        if (eMV==SdrMeasureTextVPos::VerticalCentered) eTV=SDRTEXTVERTADJUST_CENTER;
+        if (eMV==css::drawing::MeasureTextVertPos_EAST) eTV=SDRTEXTVERTADJUST_BOTTOM;
+        if (eMV==css::drawing::MeasureTextVertPos_WEST) eTV=SDRTEXTVERTADJUST_TOP;
+        if (eMV==css::drawing::MeasureTextVertPos_CENTERED) eTV=SDRTEXTVERTADJUST_CENTER;
     } else {
         if (eMH==css::drawing::MeasureTextHorzPos_LEFTOUTSIDE) eTV=SDRTEXTVERTADJUST_BOTTOM;
         if (eMH==css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE) eTV=SDRTEXTVERTADJUST_TOP;
         // at eMH==css::drawing::MeasureTextHorzPos_INSIDE we can anchor vertically
         if (!bBelowRefEdge) {
-            if (eMV==SdrMeasureTextVPos::Above) eTH=SDRTEXTHORZADJUST_LEFT;
-            if (eMV==SdrMeasureTextVPos::Below) eTH=SDRTEXTHORZADJUST_RIGHT;
+            if (eMV==css::drawing::MeasureTextVertPos_EAST) eTH=SDRTEXTHORZADJUST_LEFT;
+            if (eMV==css::drawing::MeasureTextVertPos_WEST) eTH=SDRTEXTHORZADJUST_RIGHT;
         } else {
-            if (eMV==SdrMeasureTextVPos::Above) eTH=SDRTEXTHORZADJUST_RIGHT;
-            if (eMV==SdrMeasureTextVPos::Below) eTH=SDRTEXTHORZADJUST_LEFT;
+            if (eMV==css::drawing::MeasureTextVertPos_EAST) eTH=SDRTEXTHORZADJUST_RIGHT;
+            if (eMV==css::drawing::MeasureTextVertPos_WEST) eTH=SDRTEXTHORZADJUST_LEFT;
         }
-        if (eMV==SdrMeasureTextVPos::VerticalCentered) eTH=SDRTEXTHORZADJUST_CENTER;
+        if (eMV==css::drawing::MeasureTextVertPos_CENTERED) eTH=SDRTEXTHORZADJUST_CENTER;
     }
 
     EVAnchorMode eRet=ANCHOR_BOTTOM_HCENTER;

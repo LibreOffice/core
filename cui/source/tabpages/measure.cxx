@@ -339,7 +339,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
     // Position
     if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
     {
-        SdrMeasureTextVPos eVPos = (SdrMeasureTextVPos)
+        css::drawing::MeasureTextVertPos eVPos =
                     static_cast<const SdrMeasureTextVPosItem&>( rAttrs->Get( SDRATTR_MEASURETEXTVPOS ) ).GetValue();
         {
             if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTHPOS ) != SfxItemState::DONTCARE )
@@ -352,7 +352,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                 RectPoint eRP = RectPoint::MM;
                 switch( eVPos )
                 {
-                case SdrMeasureTextVPos::Above:
+                case css::drawing::MeasureTextVertPos_EAST:
                     switch( eHPos )
                     {
                     case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LT; break;
@@ -362,7 +362,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     default: break;
                     }
                     break;
-                case SdrMeasureTextVPos::VerticalCentered:
+                case css::drawing::MeasureTextVertPos_CENTERED:
                     switch( eHPos )
                     {
                     case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LM; break;
@@ -372,7 +372,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     default: break;
                     }
                     break;
-                case SdrMeasureTextVPos::Below:
+                case css::drawing::MeasureTextVertPos_WEST:
                     switch( eHPos )
                     {
                     case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LB; break;
@@ -382,7 +382,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     default: break;
                     }
                     break;
-                case SdrMeasureTextVPos::Auto:
+                case css::drawing::MeasureTextVertPos_AUTO:
                     switch( eHPos )
                     {
                     case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:    eRP = RectPoint::LM; break;
@@ -403,7 +403,7 @@ void SvxMeasurePage::Reset( const SfxItemSet* rAttrs )
                     nState = CTL_STATE::NOHORZ;
                 }
 
-                if( eVPos == SdrMeasureTextVPos::Auto )
+                if (eVPos == css::drawing::MeasureTextVertPos_AUTO)
                 {
                     m_pTsbAutoPosV->SetState( TRISTATE_TRUE );
                     nState |= CTL_STATE::NOVERT;
@@ -522,42 +522,41 @@ bool SvxMeasurePage::FillItemSet( SfxItemSet* rAttrs)
     if( bPositionModified )
     {
         // Position
-        SdrMeasureTextVPos eVPos, eOldVPos;
+        css::drawing::MeasureTextVertPos eVPos, eOldVPos;
         css::drawing::MeasureTextHorzPos eHPos, eOldHPos;
 
         RectPoint eRP = m_pCtlPosition->GetActualRP();
         switch( eRP )
         {
             default:
-            case RectPoint::LT: eVPos = SdrMeasureTextVPos::Above;
+            case RectPoint::LT: eVPos = css::drawing::MeasureTextVertPos_EAST;
                         eHPos = css::drawing::MeasureTextHorzPos_LEFTOUTSIDE; break;
-            case RectPoint::LM: eVPos = SdrMeasureTextVPos::VerticalCentered;
+            case RectPoint::LM: eVPos = css::drawing::MeasureTextVertPos_CENTERED;
                         eHPos = css::drawing::MeasureTextHorzPos_LEFTOUTSIDE; break;
-            case RectPoint::LB: eVPos = SdrMeasureTextVPos::Below;
+            case RectPoint::LB: eVPos = css::drawing::MeasureTextVertPos_WEST;
                         eHPos = css::drawing::MeasureTextHorzPos_LEFTOUTSIDE; break;
-            case RectPoint::MT: eVPos = SdrMeasureTextVPos::Above;
+            case RectPoint::MT: eVPos = css::drawing::MeasureTextVertPos_EAST;
                         eHPos = css::drawing::MeasureTextHorzPos_INSIDE; break;
-            case RectPoint::MM: eVPos = SdrMeasureTextVPos::VerticalCentered;
+            case RectPoint::MM: eVPos = css::drawing::MeasureTextVertPos_CENTERED;
                         eHPos = css::drawing::MeasureTextHorzPos_INSIDE; break;
-            case RectPoint::MB: eVPos = SdrMeasureTextVPos::Below;
+            case RectPoint::MB: eVPos = css::drawing::MeasureTextVertPos_WEST;
                         eHPos = css::drawing::MeasureTextHorzPos_INSIDE; break;
-            case RectPoint::RT: eVPos = SdrMeasureTextVPos::Above;
+            case RectPoint::RT: eVPos = css::drawing::MeasureTextVertPos_EAST;
                         eHPos = css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE; break;
-            case RectPoint::RM: eVPos = SdrMeasureTextVPos::VerticalCentered;
+            case RectPoint::RM: eVPos = css::drawing::MeasureTextVertPos_CENTERED;
                         eHPos = css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE; break;
-            case RectPoint::RB: eVPos = SdrMeasureTextVPos::Below;
+            case RectPoint::RB: eVPos = css::drawing::MeasureTextVertPos_WEST;
                         eHPos = css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE; break;
         }
         if (m_pTsbAutoPosH->GetState() == TRISTATE_TRUE)
             eHPos = css::drawing::MeasureTextHorzPos_AUTO;
 
-        if( m_pTsbAutoPosV->GetState() == TRISTATE_TRUE )
-            eVPos = SdrMeasureTextVPos::Auto;
+        if (m_pTsbAutoPosV->GetState() == TRISTATE_TRUE)
+            eVPos = css::drawing::MeasureTextVertPos_AUTO;
 
         if ( rAttrs->GetItemState( SDRATTR_MEASURETEXTVPOS ) != SfxItemState::DONTCARE )
         {
-            eOldVPos = (SdrMeasureTextVPos)
-                        static_cast<const SdrMeasureTextVPosItem&>( rOutAttrs.Get( SDRATTR_MEASURETEXTVPOS ) ).GetValue();
+            eOldVPos = static_cast<const SdrMeasureTextVPosItem&>(rOutAttrs.Get(SDRATTR_MEASURETEXTVPOS)).GetValue();
             if( eOldVPos != eVPos )
             {
                 rAttrs->Put( SdrMeasureTextVPosItem( eVPos ) );
@@ -751,29 +750,29 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void* p )
 
         // Position
         RectPoint eRP = m_pCtlPosition->GetActualRP();
-        SdrMeasureTextVPos eVPos;
+        css::drawing::MeasureTextVertPos eVPos;
         css::drawing::MeasureTextHorzPos eHPos;
 
         switch( eRP )
         {
             default:
-            case RectPoint::LT: eVPos = SdrMeasureTextVPos::Above;
+            case RectPoint::LT: eVPos = css::drawing::MeasureTextVertPos_EAST;
                         eHPos = css::drawing::MeasureTextHorzPos_LEFTOUTSIDE; break;
-            case RectPoint::LM: eVPos = SdrMeasureTextVPos::VerticalCentered;
+            case RectPoint::LM: eVPos = css::drawing::MeasureTextVertPos_CENTERED;
                         eHPos = css::drawing::MeasureTextHorzPos_LEFTOUTSIDE; break;
-            case RectPoint::LB: eVPos = SdrMeasureTextVPos::Below;
+            case RectPoint::LB: eVPos = css::drawing::MeasureTextVertPos_WEST;
                         eHPos = css::drawing::MeasureTextHorzPos_LEFTOUTSIDE; break;
-            case RectPoint::MT: eVPos = SdrMeasureTextVPos::Above;
+            case RectPoint::MT: eVPos = css::drawing::MeasureTextVertPos_EAST;
                         eHPos = css::drawing::MeasureTextHorzPos_INSIDE; break;
-            case RectPoint::MM: eVPos = SdrMeasureTextVPos::VerticalCentered;
+            case RectPoint::MM: eVPos = css::drawing::MeasureTextVertPos_CENTERED;
                         eHPos = css::drawing::MeasureTextHorzPos_INSIDE; break;
-            case RectPoint::MB: eVPos = SdrMeasureTextVPos::Below;
+            case RectPoint::MB: eVPos = css::drawing::MeasureTextVertPos_WEST;
                         eHPos = css::drawing::MeasureTextHorzPos_INSIDE; break;
-            case RectPoint::RT: eVPos = SdrMeasureTextVPos::Above;
+            case RectPoint::RT: eVPos = css::drawing::MeasureTextVertPos_EAST;
                         eHPos = css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE; break;
-            case RectPoint::RM: eVPos = SdrMeasureTextVPos::VerticalCentered;
+            case RectPoint::RM: eVPos = css::drawing::MeasureTextVertPos_CENTERED;
                         eHPos = css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE; break;
-            case RectPoint::RB: eVPos = SdrMeasureTextVPos::Below;
+            case RectPoint::RB: eVPos = css::drawing::MeasureTextVertPos_WEST;
                         eHPos = css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE; break;
         }
 
@@ -785,9 +784,9 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void* p )
             nState = CTL_STATE::NOHORZ;
         }
 
-        if( m_pTsbAutoPosV->GetState() == TRISTATE_TRUE )
+        if (m_pTsbAutoPosV->GetState() == TRISTATE_TRUE)
         {
-            eVPos = SdrMeasureTextVPos::Auto;
+            eVPos = css::drawing::MeasureTextVertPos_AUTO;
             nState |= CTL_STATE::NOVERT;
         }
 

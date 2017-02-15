@@ -90,22 +90,22 @@ namespace sdr
 
             switch(static_cast<const SdrMeasureTextVPosItem&>(rItemSet.Get(SDRATTR_MEASURETEXTVPOS)).GetValue())
             {
-                case SdrMeasureTextVPos::Above :
+                case css::drawing::MeasureTextVertPos_EAST:
                 {
                     aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_NEGATIVE;
                     break;
                 }
-                case SdrMeasureTextVPos::VerticalCentered :
+                case css::drawing::MeasureTextVertPos_CENTERED:
                 {
                     aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_CENTERED;
                     break;
                 }
-                case SdrMeasureTextVPos::Below :
+                case css::drawing::MeasureTextVertPos_WEST:
                 {
                     aMTPVer = drawinglayer::primitive2d::MEASURETEXTPOSITION_POSITIVE;
                     break;
                 }
-                default : // SdrMeasureTextVPos::Auto
+                default : // css::drawing::MeasureTextVertPos_AUTO
                 {
                     break;
                 }

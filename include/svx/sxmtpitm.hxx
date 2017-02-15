@@ -23,19 +23,19 @@
 #include <svl/eitem.hxx>
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/MeasureTextHorzPos.hpp>
-
-enum class SdrMeasureTextVPos { Auto, Above, Below, VerticalCentered };
-
+#include <com/sun/star/drawing/MeasureTextVertPos.hpp>
 
 // class SdrMeasureTextHPosItem
-
 class SVX_DLLPUBLIC SdrMeasureTextHPosItem: public SfxEnumItem {
 public:
     SdrMeasureTextHPosItem(css::drawing::MeasureTextHorzPos ePos = css::drawing::MeasureTextHorzPos::MeasureTextHorzPos_AUTO)
-        : SfxEnumItem(SDRATTR_MEASURETEXTHPOS,sal::static_int_cast< sal_uInt16 >(ePos))
+        : SfxEnumItem(SDRATTR_MEASURETEXTHPOS, sal::static_int_cast<sal_uInt16>(ePos))
     {
     }
-    SdrMeasureTextHPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTHPOS,rIn)    {}
+    SdrMeasureTextHPosItem(SvStream& rIn)
+        : SfxEnumItem(SDRATTR_MEASURETEXTHPOS, rIn)
+    {
+    }
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16         GetValueCount() const override; // { return 4; }
@@ -48,17 +48,21 @@ public:
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper * = nullptr) const override;
 };
 
-
 // class SdrMeasureTextVPosItem
-
 class SVX_DLLPUBLIC SdrMeasureTextVPosItem: public SfxEnumItem {
 public:
-    SdrMeasureTextVPosItem(SdrMeasureTextVPos ePos=SdrMeasureTextVPos::Auto): SfxEnumItem(SDRATTR_MEASURETEXTVPOS,sal::static_int_cast< sal_uInt16 >(ePos)) {}
-    SdrMeasureTextVPosItem(SvStream& rIn)                               : SfxEnumItem(SDRATTR_MEASURETEXTVPOS,rIn)    {}
+    SdrMeasureTextVPosItem(css::drawing::MeasureTextVertPos ePos = css::drawing::MeasureTextVertPos_AUTO)
+        : SfxEnumItem(SDRATTR_MEASURETEXTVPOS, sal::static_int_cast<sal_uInt16>(ePos))
+    {
+    }
+    SdrMeasureTextVPosItem(SvStream& rIn)
+        : SfxEnumItem(SDRATTR_MEASURETEXTVPOS, rIn)
+    {
+    }
     virtual SfxPoolItem*   Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*   Create(SvStream& rIn, sal_uInt16 nVer) const override;
     virtual sal_uInt16         GetValueCount() const override; // { return 5; }
-            SdrMeasureTextVPos GetValue() const { return (SdrMeasureTextVPos)SfxEnumItem::GetValue(); }
+    css::drawing::MeasureTextVertPos GetValue() const { return (css::drawing::MeasureTextVertPos)SfxEnumItem::GetValue(); }
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
