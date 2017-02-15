@@ -1151,17 +1151,8 @@ Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAt
                         {
                             switch( eValue )
                             {
-                            case VALUE_FROM: aProperty = xAnimate->getFrom(); break;
-                            case VALUE_TO:   aProperty = xAnimate->getTo(); break;
-                            case VALUE_BY:   aProperty = xAnimate->getBy(); break;
-                            case VALUE_FIRST:
-                            case VALUE_LAST:
-                                {
-                                    Sequence<Any> aValues( xAnimate->getValues() );
-                                    if( aValues.hasElements() )
-                                        aProperty =  aValues[ eValue == VALUE_FIRST ? 0 : aValues.getLength() - 1 ];
-                                }
-                                break;
+                            case EValue::To:   aProperty = xAnimate->getTo(); break;
+                            case EValue::By:   aProperty = xAnimate->getBy(); break;
                             }
                         }
                     }
@@ -1200,43 +1191,20 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rA
                         {
                             switch( eValue )
                             {
-                            case VALUE_FROM:
-                                if( xAnimate->getFrom() != rValue )
-                                {
-                                    xAnimate->setFrom( rValue );
-                                    bChanged = true;
-                                }
-                                break;
-                            case VALUE_TO:
+                            case EValue::To:
                                 if( xAnimate->getTo() != rValue )
                                 {
                                     xAnimate->setTo( rValue );
                                     bChanged = true;
                                 }
                                 break;
-                            case VALUE_BY:
+                            case EValue::By:
                                 if( xAnimate->getTo() != rValue )
                                 {
                                     xAnimate->setBy( rValue );
                                     bChanged = true;
                                 }
                                 break;
-                            case VALUE_FIRST:
-                            case VALUE_LAST:
-                                {
-                                    Sequence<Any> aValues( xAnimate->getValues() );
-                                    if( !aValues.hasElements() )
-                                        aValues.realloc(1);
-
-                                    sal_Int32 nIndex = eValue == VALUE_FIRST ? 0 : aValues.getLength() - 1;
-
-                                    if( aValues[ nIndex ] != rValue )
-                                    {
-                                        aValues[ nIndex ] = rValue;
-                                        xAnimate->setValues( aValues );
-                                        bChanged = true;
-                                    }
-                                }
                             }
                         }
                     }
@@ -1378,17 +1346,8 @@ Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, 
                     {
                         switch( eValue )
                         {
-                        case VALUE_FROM: aProperty = xTransform->getFrom(); break;
-                        case VALUE_TO:   aProperty = xTransform->getTo(); break;
-                        case VALUE_BY:   aProperty = xTransform->getBy(); break;
-                        case VALUE_FIRST:
-                        case VALUE_LAST:
-                            {
-                                Sequence<Any> aValues( xTransform->getValues() );
-                                if( aValues.hasElements() )
-                                    aProperty =  aValues[ eValue == VALUE_FIRST ? 0 : aValues.getLength() - 1 ];
-                            }
-                            break;
+                        case EValue::To:   aProperty = xTransform->getTo(); break;
+                        case EValue::By:   aProperty = xTransform->getBy(); break;
                         }
                     }
                 }
@@ -1424,42 +1383,20 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
                     {
                         switch( eValue )
                         {
-                        case VALUE_FROM:
-                            if( xTransform->getFrom() != rValue )
-                            {
-                                xTransform->setFrom( rValue );
-                                bChanged = true;
-                            }
-                            break;
-                        case VALUE_TO:
+                        case EValue::To:
                             if( xTransform->getTo() != rValue )
                             {
                                 xTransform->setTo( rValue );
                                 bChanged = true;
                             }
                             break;
-                        case VALUE_BY:
+                        case EValue::By:
                             if( xTransform->getBy() != rValue )
                             {
                                 xTransform->setBy( rValue );
                                 bChanged = true;
                             }
                             break;
-                        case VALUE_FIRST:
-                        case VALUE_LAST:
-                            {
-                                Sequence<Any> aValues( xTransform->getValues() );
-                                if( !aValues.hasElements() )
-                                    aValues.realloc(1);
-
-                                sal_Int32 nIndex = eValue == VALUE_FIRST ? 0 : aValues.getLength() - 1;
-                                if( aValues[nIndex] != rValue )
-                                {
-                                    aValues[nIndex] = rValue;
-                                    xTransform->setValues( aValues );
-                                    bChanged = true;
-                                }
-                            }
                         }
                     }
                 }

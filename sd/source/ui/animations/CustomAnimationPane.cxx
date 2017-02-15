@@ -1001,32 +1001,32 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, const CustomAnimati
         }
 
     case nPropertyTypeFont:
-        return pEffect->getProperty( AnimationNodeType::SET, "CharFontName" , VALUE_TO );
+        return pEffect->getProperty( AnimationNodeType::SET, "CharFontName" , EValue::To );
 
     case nPropertyTypeCharHeight:
         {
             const OUString aAttributeName( "CharHeight" );
-            Any aValue( pEffect->getProperty( AnimationNodeType::SET, aAttributeName, VALUE_TO ) );
+            Any aValue( pEffect->getProperty( AnimationNodeType::SET, aAttributeName, EValue::To ) );
             if( !aValue.hasValue() )
-                aValue = pEffect->getProperty( AnimationNodeType::ANIMATE, aAttributeName, VALUE_TO );
+                aValue = pEffect->getProperty( AnimationNodeType::ANIMATE, aAttributeName, EValue::To );
             return aValue;
         }
 
     case nPropertyTypeRotate:
-        return pEffect->getTransformationProperty( AnimationTransformType::ROTATE, VALUE_BY);
+        return pEffect->getTransformationProperty( AnimationTransformType::ROTATE, EValue::By);
 
     case nPropertyTypeTransparency:
-        return pEffect->getProperty( AnimationNodeType::SET, "Opacity" , VALUE_TO );
+        return pEffect->getProperty( AnimationNodeType::SET, "Opacity" , EValue::To );
 
     case nPropertyTypeScale:
-        return pEffect->getTransformationProperty( AnimationTransformType::SCALE, VALUE_BY );
+        return pEffect->getTransformationProperty( AnimationTransformType::SCALE, EValue::By );
 
     case nPropertyTypeCharDecoration:
         {
             Sequence< Any > aValues(3);
-            aValues[0] = pEffect->getProperty( AnimationNodeType::SET, "CharWeight" , VALUE_TO );
-            aValues[1] = pEffect->getProperty( AnimationNodeType::SET, "CharPosture" , VALUE_TO );
-            aValues[2] = pEffect->getProperty( AnimationNodeType::SET, "CharUnderline" , VALUE_TO );
+            aValues[0] = pEffect->getProperty( AnimationNodeType::SET, "CharWeight" , EValue::To );
+            aValues[1] = pEffect->getProperty( AnimationNodeType::SET, "CharPosture" , EValue::To );
+            aValues[2] = pEffect->getProperty( AnimationNodeType::SET, "CharUnderline" , EValue::To );
             return makeAny( aValues );
         }
     }
@@ -1072,36 +1072,36 @@ bool CustomAnimationPane::setProperty1Value( sal_Int32 nType, const CustomAnimat
         break;
 
     case nPropertyTypeFont:
-        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "CharFontName" , VALUE_TO, rValue );
+        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "CharFontName" , EValue::To, rValue );
         break;
 
     case nPropertyTypeCharHeight:
         {
             const OUString aAttributeName( "CharHeight" );
-            bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, aAttributeName, VALUE_TO, rValue );
+            bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, aAttributeName, EValue::To, rValue );
             if( !bEffectChanged )
-                bEffectChanged = pEffect->setProperty( AnimationNodeType::ANIMATE, aAttributeName, VALUE_TO, rValue );
+                bEffectChanged = pEffect->setProperty( AnimationNodeType::ANIMATE, aAttributeName, EValue::To, rValue );
         }
         break;
     case nPropertyTypeRotate:
-        bEffectChanged = pEffect->setTransformationProperty( AnimationTransformType::ROTATE, VALUE_BY , rValue );
+        bEffectChanged = pEffect->setTransformationProperty( AnimationTransformType::ROTATE, EValue::By , rValue );
         break;
 
     case nPropertyTypeTransparency:
-        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "Opacity" , VALUE_TO, rValue );
+        bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "Opacity" , EValue::To, rValue );
         break;
 
     case nPropertyTypeScale:
-        bEffectChanged = pEffect->setTransformationProperty( AnimationTransformType::SCALE, VALUE_BY, rValue );
+        bEffectChanged = pEffect->setTransformationProperty( AnimationTransformType::SCALE, EValue::By, rValue );
         break;
 
     case nPropertyTypeCharDecoration:
         {
             Sequence< Any > aValues(3);
             rValue >>= aValues;
-            bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "CharWeight" , VALUE_TO, aValues[0] );
-            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, "CharPosture" , VALUE_TO, aValues[1] );
-            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, "CharUnderline" , VALUE_TO, aValues[2] );
+            bEffectChanged = pEffect->setProperty( AnimationNodeType::SET, "CharWeight" , EValue::To, aValues[0] );
+            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, "CharPosture" , EValue::To, aValues[1] );
+            bEffectChanged |= pEffect->setProperty( AnimationNodeType::SET, "CharUnderline" , EValue::To, aValues[2] );
         }
         break;
 
