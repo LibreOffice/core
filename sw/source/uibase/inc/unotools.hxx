@@ -45,16 +45,6 @@ public:
     virtual void Resize() override;
 };
 
-class MenuResource : public Resource
-{
-    ResStringArray      aMenuArray;
-
-public:
-    MenuResource(const ResId& rResId);
-
-    ResStringArray& GetMenuArray() {return aMenuArray;}
-};
-
 #define EX_SHOW_ONLINE_LAYOUT   0x001
 
 // hard zoom value
@@ -75,7 +65,7 @@ class SW_DLLPUBLIC SwOneExampleFrame
     Idle            aLoadedIdle;
     Link<SwOneExampleFrame&,void> aInitializedLink;
 
-    MenuResource    aMenuRes;
+    ResStringArray  aMenuRes;
     OUString        sArgumentURL;
 
     SwView*         pModuleView;

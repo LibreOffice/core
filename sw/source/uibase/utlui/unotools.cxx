@@ -450,16 +450,15 @@ static const sal_Int16 nZoomValues[] =
 void SwOneExampleFrame::CreatePopup(const Point& rPt)
 {
     ScopedVclPtrInstance<PopupMenu> aPop;
-    ResStringArray& rArr = aMenuRes.GetMenuArray();
 
-    aPop->InsertItem(ITEM_UP,   rArr.GetString(rArr.FindIndex(ST_MENU_UP )));
-    aPop->InsertItem(ITEM_DOWN, rArr.GetString(rArr.FindIndex(ST_MENU_DOWN )));
+    aPop->InsertItem(ITEM_UP,   aMenuRes.GetString(aMenuRes.FindIndex(ST_MENU_UP)));
+    aPop->InsertItem(ITEM_DOWN, aMenuRes.GetString(aMenuRes.FindIndex(ST_MENU_DOWN)));
 
     Link<Menu*,bool> aSelLk = LINK(this, SwOneExampleFrame, PopupHdl );
     aPop->SetSelectHdl(aSelLk);
     if(EX_SHOW_ONLINE_LAYOUT == nStyleFlags)
     {
-        aPop->InsertItem(ITEM_ZOOM, rArr.GetString(rArr.FindIndex(ST_MENU_ZOOM   )));
+        aPop->InsertItem(ITEM_ZOOM, aMenuRes.GetString(aMenuRes.FindIndex(ST_MENU_ZOOM)));
 
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
@@ -547,11 +546,6 @@ void SwFrameCtrlWindow::Resize()
 {
     VclEventBox::Resize();
     pExampleFrame->ClearDocument();
-}
-
-MenuResource::MenuResource(const ResId& rResId)
-    : aMenuArray(rResId)
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
