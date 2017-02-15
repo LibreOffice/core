@@ -235,10 +235,10 @@ namespace canvas
 
         // sort sprites after prio
         VectorOfSprites aSortedSpriteVector;
-        ::std::copy( maSprites.begin(),
+        std::copy( maSprites.begin(),
                      maSprites.end(),
-                     ::std::back_insert_iterator< VectorOfSprites >(aSortedSpriteVector) );
-        ::std::sort( aSortedSpriteVector.begin(),
+                     std::back_insert_iterator< VectorOfSprites >(aSortedSpriteVector) );
+        std::sort( aSortedSpriteVector.begin(),
                      aSortedSpriteVector.end(),
                      aSpriteComparator );
 
@@ -254,18 +254,18 @@ namespace canvas
                 aUpdatableSprites.push_back( rSprite );
         }
 
-        ::std::sort( aUpdatableSprites.begin(),
+        std::sort( aUpdatableSprites.begin(),
                      aUpdatableSprites.end(),
                      aSpriteComparator );
 
         VectorOfSprites::iterator aEnd=
-            ::std::unique( aUpdatableSprites.begin(),
+            std::unique( aUpdatableSprites.begin(),
                            aUpdatableSprites.end() );
 
         // for each unique sprite, check the change event vector,
         // calculate the update operation from that, and add the
         // result to the aUpdateArea.
-        ::std::for_each( aUpdatableSprites.begin(),
+        std::for_each( aUpdatableSprites.begin(),
                          aEnd,
                          SpriteUpdater( rUpdateAreas,
                                         maChangeRecords) );
@@ -279,11 +279,11 @@ namespace canvas
         // (i.e. the difference between aSortedSpriteVector and
         // aUpdatableSprites).
         VectorOfSprites aUnchangedSprites;
-        ::std::set_difference( aSortedSpriteVector.begin(),
+        std::set_difference( aSortedSpriteVector.begin(),
                                aSortedSpriteVector.end(),
                                aUpdatableSprites.begin(),
                                aEnd,
-                               ::std::back_insert_iterator< VectorOfSprites >(aUnchangedSprites),
+                               std::back_insert_iterator< VectorOfSprites >(aUnchangedSprites),
                                aSpriteComparator );
 
         // add each remaining unchanged sprite to connected ranges,
@@ -318,7 +318,7 @@ namespace canvas
     bool SpriteRedrawManager::isAreaUpdateScroll( ::basegfx::B2DRectangle&  o_rMoveStart,
                                                   ::basegfx::B2DRectangle&  o_rMoveEnd,
                                                   const UpdateArea&         rUpdateArea,
-                                                  ::std::size_t             nNumSprites ) const
+                                                  std::size_t             nNumSprites ) const
     {
         // check for a solitary move, which consists of exactly two
         // pure-move entries, the first with valid, the second with
@@ -378,7 +378,7 @@ namespace canvas
     }
 
     bool SpriteRedrawManager::isAreaUpdateOpaque( const UpdateArea& rUpdateArea,
-                                                  ::std::size_t     nNumSprites ) const
+                                                  std::size_t     nNumSprites ) const
     {
         // check whether the sprites in the update area's list will
         // fully cover the given area _and_ do that in an opaque way
@@ -406,9 +406,9 @@ namespace canvas
 
         // and check whether _any_ of the sprites tells that its area
         // update will not be opaque.
-        return ::std::none_of( rUpdateArea.maComponentList.begin(),
+        return std::none_of( rUpdateArea.maComponentList.begin(),
                                 aEnd,
-                                [&aTrueArea, this]( const ::std::pair< ::basegfx::B2DRange, SpriteInfo >& cp )
+                                [&aTrueArea, this]( const std::pair< ::basegfx::B2DRange, SpriteInfo >& cp )
                                 { return this->isAreaUpdateNotOpaque(aTrueArea, cp); } );
     }
 
@@ -421,9 +421,9 @@ namespace canvas
         // component (return false)
         const SpriteConnectedRanges::ComponentListType::const_iterator aEnd(
             rUpdateArea.maComponentList.end() );
-        return ::std::any_of( rUpdateArea.maComponentList.begin(),
+        return std::any_of( rUpdateArea.maComponentList.begin(),
                                 aEnd,
-                                []( const ::std::pair< ::basegfx::B2DRange, SpriteInfo >& cp )
+                                []( const std::pair< ::basegfx::B2DRange, SpriteInfo >& cp )
                                 { return cp.second.needsUpdate(); } );
     }
 

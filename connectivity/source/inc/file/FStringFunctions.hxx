@@ -102,7 +102,7 @@ namespace connectivity
         class OOp_Char : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** CONCAT(str1,str2,...)
@@ -119,7 +119,7 @@ namespace connectivity
         class OOp_Concat : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** LOCATE(substr,str)
@@ -140,7 +140,7 @@ namespace connectivity
         class OOp_Locate : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** SUBSTRING(str,pos)
@@ -162,7 +162,7 @@ namespace connectivity
         class OOp_SubString : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** LTRIM(str)
@@ -214,7 +214,7 @@ namespace connectivity
         class OOp_Replace : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** REPEAT(str,count)
@@ -240,7 +240,7 @@ namespace connectivity
         class OOp_Insert : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** LEFT(str,len)

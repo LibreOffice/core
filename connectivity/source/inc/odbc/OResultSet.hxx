@@ -63,11 +63,11 @@ namespace connectivity
                                                       css::lang::XServiceInfo> OResultSet_BASE;
 
 
-        typedef ::std::pair<sal_Int64,sal_Int32> TVoidPtr;
-        typedef ::std::allocator< TVoidPtr > TVoidAlloc;
-        typedef ::std::vector<TVoidPtr> TVoidVector;
+        typedef std::pair<sal_Int64,sal_Int32> TVoidPtr;
+        typedef std::allocator< TVoidPtr > TVoidAlloc;
+        typedef std::vector<TVoidPtr> TVoidVector;
         /// unary_function Functor object for class ZZ returntype is void
-        struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare : ::std::binary_function< css::uno::Sequence<sal_Int8>, css::uno::Sequence<sal_Int8>, bool >
+        struct OOO_DLLPUBLIC_ODBCBASE TBookmarkPosMapCompare : std::binary_function< css::uno::Sequence<sal_Int8>, css::uno::Sequence<sal_Int8>, bool >
         {
             inline bool operator()( const css::uno::Sequence<sal_Int8>& _rLH,
                                     const css::uno::Sequence<sal_Int8>& _rRH) const
@@ -102,7 +102,7 @@ namespace connectivity
             }
         };
 
-        typedef ::std::map< css::uno::Sequence<sal_Int8>, sal_Int32,TBookmarkPosMapCompare > TBookmarkPosMap;
+        typedef std::map< css::uno::Sequence<sal_Int8>, sal_Int32,TBookmarkPosMapCompare > TBookmarkPosMap;
 
         class OOO_DLLPUBLIC_ODBCBASE OResultSet :
                             public  cppu::BaseMutex,
@@ -114,11 +114,11 @@ namespace connectivity
         protected:
             TBookmarkPosMap                             m_aPosToBookmarks;
             // used top hold the information about the value and the datatype to save calls to metadata
-            typedef ::std::vector<ORowSetValue>         TDataRow;
+            typedef std::vector<ORowSetValue>         TDataRow;
 
             TVoidVector                                 m_aBindVector;
-            ::std::vector<SQLLEN>                       m_aLengthVector;
-            ::std::map<sal_Int32,SWORD>                 m_aODBCColumnTypes;
+            std::vector<SQLLEN>                       m_aLengthVector;
+            std::map<sal_Int32,SWORD>                 m_aODBCColumnTypes;
 
             // In baseline ODBC, SQLGetData can only be called on monotonically increasing column numbers.
             // additionally, any variable-length data can be fetched only once (possibly in parts);

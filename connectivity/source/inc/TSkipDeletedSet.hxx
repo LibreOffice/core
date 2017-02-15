@@ -32,7 +32,7 @@ namespace connectivity
     */
     class OOO_DLLPUBLIC_DBTOOLS OSkipDeletedSet
     {
-        ::std::vector<sal_Int32>                m_aBookmarksPositions;// vector of iterators to position map, the order is the logical position
+        std::vector<sal_Int32>                m_aBookmarksPositions;// vector of iterators to position map, the order is the logical position
         IResultSetHelper*                       m_pHelper;            // used for moving in the resultset
         bool                                    m_bDeletedVisible;
 

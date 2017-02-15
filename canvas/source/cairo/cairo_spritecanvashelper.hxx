@@ -111,10 +111,10 @@ namespace cairocanvas
                            const ::canvas::SpriteRedrawManager::UpdateArea&     rUpdateArea );
 
         void opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                           const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                           const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
         void genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                            const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
     private:
         ::cairo::SurfaceSharedPtr const & getCompositingSurface( const ::basegfx::B2ISize& rNeededSize );

@@ -38,7 +38,7 @@
 #include "ogl_canvashelper.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::std::placeholders;
+using namespace std::placeholders;
 
 namespace oglcanvas
 {
@@ -81,7 +81,7 @@ namespace oglcanvas
         rendering::ARGBColor            maARGBColor;
         ::basegfx::B2DPolyPolygonVector maPolyPolys;
 
-        ::std::function< bool (
+        std::function< bool (
                             const CanvasHelper&,
                             const ::basegfx::B2DHomMatrix&,
                             GLenum,
@@ -409,7 +409,7 @@ namespace oglcanvas
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = ::std::bind(&lcl_drawPoint,
+            rAct.maFunction = std::bind(&lcl_drawPoint,
                                             _1,_2,_3,_4,_5,
                                             aPoint);
         }
@@ -427,7 +427,7 @@ namespace oglcanvas
             Action& rAct=mpRecordedActions->back();
 
             setupGraphicsState( rAct, viewState, renderState );
-            rAct.maFunction = ::std::bind(&lcl_drawLine,
+            rAct.maFunction = std::bind(&lcl_drawLine,
                                           _1, _2, _3, _4, _5,
                                           aStartPoint, aEndPoint);
         }
@@ -447,7 +447,7 @@ namespace oglcanvas
             setupGraphicsState( rAct, viewState, renderState );
 
             // TODO(F2): subdivide&render whole curve
-            rAct.maFunction = ::std::bind(&lcl_drawLine,
+            rAct.maFunction = std::bind(&lcl_drawLine,
                                             _1,_2,_3,_4,_5,
                                             geometry::RealPoint2D(
                                                 aBezierSegment.Px,
@@ -600,7 +600,7 @@ namespace oglcanvas
                     const ::canvas::ParametricPolyPolygon::Values& rValues(
                         pGradient->getValues() );
 
-                    rAct.maFunction = ::std::bind(&lcl_fillGradientPolyPolygon,
+                    rAct.maFunction = std::bind(&lcl_fillGradientPolyPolygon,
                                                     _1,_2,_3,_4,
                                                     rValues,
                                                     textures[0],
@@ -643,7 +643,7 @@ namespace oglcanvas
                                 aPixelData,
                                 canvas::tools::getStdColorSpace()));
 
-                        rAct.maFunction = ::std::bind(&lcl_fillTexturedPolyPolygon,
+                        rAct.maFunction = std::bind(&lcl_fillTexturedPolyPolygon,
                                                         _1,_2,_3,_4,
                                                         textures[0],
                                                         aSize,
@@ -764,7 +764,7 @@ namespace oglcanvas
                 {
                     // create the DXArray
                     const sal_Int32 nLen( aLogicalAdvancements.getLength() );
-                    ::std::unique_ptr<long[]> pDXArray( new long[nLen] );
+                    std::unique_ptr<long[]> pDXArray( new long[nLen] );
                     for( sal_Int32 i=0; i<nLen; ++i )
                         pDXArray[i] = basegfx::fround( aLogicalAdvancements[i] );
 
@@ -820,7 +820,7 @@ namespace oglcanvas
                 Action& rAct=mpRecordedActions->back();
 
                 setupGraphicsState( rAct, viewState, renderState );
-                rAct.maFunction = ::std::bind(&lcl_drawOwnBitmap,
+                rAct.maFunction = std::bind(&lcl_drawOwnBitmap,
                                                 _1,_2,_3,_4,_5,
                                                 *pOwnBitmap);
             }
@@ -849,7 +849,7 @@ namespace oglcanvas
                     Action& rAct=mpRecordedActions->back();
 
                     setupGraphicsState( rAct, viewState, renderState );
-                    rAct.maFunction = ::std::bind(&lcl_drawGenericBitmap,
+                    rAct.maFunction = std::bind(&lcl_drawGenericBitmap,
                                                     _1,_2,_3,_4,_5,
                                                     aSize, aARGBBytes,
                                                     rtl_crc32(0,

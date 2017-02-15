@@ -152,7 +152,7 @@ namespace connectivity
 
         Sequence< PropertyValue > lcl_convertProperties(T_DRIVERTYPE _eType,const Sequence< PropertyValue >& info,const OUString& _sUrl)
         {
-            ::std::vector<PropertyValue> aProps;
+            std::vector<PropertyValue> aProps;
             const PropertyValue* pSupported = info.getConstArray();
             const PropertyValue* pEnd = pSupported + info.getLength();
 
@@ -325,7 +325,7 @@ namespace connectivity
 
     Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& info )
     {
-        ::std::vector< DriverPropertyInfo > aDriverInfo;
+        std::vector< DriverPropertyInfo > aDriverInfo;
         if ( !acceptsURL(url) )
             return Sequence< DriverPropertyInfo >();
 

@@ -31,7 +31,7 @@ namespace
     array (which you can get from an OUString with getStr()) and puts the result
     into the OUStringBuffer given in the CTOR
  */
-class lcl_Escape : public ::std::unary_function< sal_Unicode, void >
+class lcl_Escape : public std::unary_function< sal_Unicode, void >
 {
 public:
     explicit lcl_Escape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
@@ -54,7 +54,7 @@ private:
     you can get from an OUString with getStr()) and puts the result into the
     OUStringBuffer given in the CTOR
  */
-class lcl_UnEscape : public ::std::unary_function< sal_Unicode, void >
+class lcl_UnEscape : public std::unary_function< sal_Unicode, void >
 {
 public:
     explicit lcl_UnEscape( OUStringBuffer & aResultBuffer ) : m_aResultBuffer( aResultBuffer ) {}
@@ -186,7 +186,7 @@ bool lcl_getCellAddressFromXMLString(
         const sal_Unicode * pTableName = rXMLString.getStr();
 
         // remove escapes from table name
-        ::std::for_each( pTableName + nStartPos,
+        std::for_each( pTableName + nStartPos,
                          pTableName + nDelimiterPos,
                          lcl_UnEscape( aTableNameBuffer ));
 
@@ -367,7 +367,7 @@ OUString getXMLStringFromCellRange( const CellRange & rRange )
                 const sal_Unicode * pTableNameBeg = rRange.aTableName.getStr();
 
                 // append the quoted string at the buffer
-                ::std::for_each( pTableNameBeg,
+                std::for_each( pTableNameBeg,
                                  pTableNameBeg + rRange.aTableName.getLength(),
                                  lcl_Escape( aBuffer ) );
             }

@@ -60,11 +60,11 @@ namespace vclcanvas
 
 
         const ::Size aSize(
-            static_cast<sal_Int32>( ::std::max( 1.0,
+            static_cast<sal_Int32>( std::max( 1.0,
                                                 ceil( rSpriteSize.Width ))),  // round up to nearest int,
                                                                               // enforce sprite to have at
                                                                                // least (1,1) pixel size
-            static_cast<sal_Int32>( ::std::max( 1.0,
+            static_cast<sal_Int32>( std::max( 1.0,
                                                 ceil( rSpriteSize.Height ))) );
 
         // create content backbuffer in screen depth

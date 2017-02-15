@@ -196,9 +196,9 @@ Connection::~Connection()
         m_settings.logFile = nullptr;
     }
 }
-typedef ::std::list< css::uno::Reference< css::sdbc::XCloseable > > CloseableList;
+typedef std::list< css::uno::Reference< css::sdbc::XCloseable > > CloseableList;
 
-typedef ::std::list< css::uno::Reference< css::lang::XComponent > > DisposeableList;
+typedef std::list< css::uno::Reference< css::lang::XComponent > > DisposeableList;
 
 void Connection::close()
 {

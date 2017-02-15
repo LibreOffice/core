@@ -328,7 +328,7 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
     }
     else
     {
-        ::std::vector< uno::Reference< chart2::XDataSeries > > aSeries(
+        std::vector< uno::Reference< chart2::XDataSeries > > aSeries(
             DiagramHelper::getDataSeriesFromDiagram( ChartModelHelper::findDiagram( getModel() )));
 
         for( const auto& xSrs : aSeries )

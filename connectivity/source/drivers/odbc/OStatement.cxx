@@ -139,7 +139,7 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
     Sequence< Type > aOldTypes = OStatement_BASE::getTypes();
     if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() )
     {
-        ::std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
+        std::remove(aOldTypes.getArray(),aOldTypes.getArray() + aOldTypes.getLength(),
                         cppu::UnoType<XGeneratedResultSet>::get());
         aOldTypes.realloc(aOldTypes.getLength() - 1);
     }
@@ -485,7 +485,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
 
     OString aBatchSql;
     sal_Int32 nLen = 0;
-    for(::std::list< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
+    for(std::list< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
     {
         aBatchSql += OUStringToOString(*i,getOwnConnection()->getTextEncoding());
         aBatchSql += ";";

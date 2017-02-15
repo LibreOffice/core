@@ -62,7 +62,7 @@ namespace connectivity
             css::sdbc::SQLWarning          m_aLastWarning;
 
         protected:
-            ::std::list< OUString>               m_aBatchList;
+            std::list< OUString>               m_aBatchList;
 
             css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
                                                                         //  for this Statement
@@ -72,7 +72,7 @@ namespace connectivity
             WpADORecordset                              m_RecordSet;
             OLEVariant                                  m_RecordsAffected;
             OLEVariant                                  m_Parameters;
-            ::std::vector<connectivity::OTypeInfo>      m_aTypeInfo;    // Hashtable containing an entry
+            std::vector<connectivity::OTypeInfo>      m_aTypeInfo;    // Hashtable containing an entry
                                                                         //  for each row returned by
                                                                         //  DatabaseMetaData.getTypeInfo.
             ADO_LONGPTR                                 m_nMaxRows;

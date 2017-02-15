@@ -48,8 +48,8 @@ class SearchProgress;
 class TakeProgress;
 class TPGalleryThemeProperties;
 
-typedef ::std::vector< OUString > StringList;
-typedef ::std::vector< sal_uLong > TokenList_impl;
+typedef std::vector< OUString > StringList;
+typedef std::vector< sal_uLong > TokenList_impl;
 
 struct FilterEntry
 {
@@ -65,7 +65,7 @@ private:
     INetURLObject               maStartURL;
 
     void                        ImplSearch( const INetURLObject& rStartURL,
-                                            const ::std::vector< OUString >& rFormats,
+                                            const std::vector< OUString >& rFormats,
                                             bool bRecursive );
 
     virtual                     ~SearchThread() override;
@@ -250,7 +250,7 @@ class TPGalleryThemeProperties : public SfxTabPage
 
     ExchangeData*           pData;
     StringList              aFoundList;
-    ::std::vector< FilterEntry* >
+    std::vector< FilterEntry* >
                             aFilterEntryList;
     Timer                   aPreviewTimer;
     OUString                aLastFilterName;

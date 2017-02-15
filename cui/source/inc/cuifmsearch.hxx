@@ -84,7 +84,7 @@ class FmSearchDialog : public ModalDialog
     Link<FmSearchContext&,sal_uInt32>  m_lnkContextSupplier;       ///< for search in contexts
 
     /// memorize the currently selected field for every context
-    ::std::vector<OUString> m_arrContextFields;
+    std::vector<OUString> m_arrContextFields;
 
     FmSearchEngine* m_pSearchEngine;
 
@@ -107,7 +107,7 @@ public:
         (of course needed : the string number i in strUsedFields of a context must correspond with the interface number i in the
         arrFields of the context)
     */
-    FmSearchDialog(vcl::Window* pParent, const OUString& strInitialText, const ::std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
+    FmSearchDialog(vcl::Window* pParent, const OUString& strInitialText, const std::vector< OUString >& _rContexts, sal_Int16 nInitialContext,
         const Link<FmSearchContext&,sal_uInt32>& lnkContextSupplier);
 
     virtual ~FmSearchDialog() override;

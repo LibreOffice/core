@@ -89,7 +89,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector_PointProperties(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     //service chart::Chart3DBarProperties
     rOutProperties.push_back(
@@ -186,7 +186,7 @@ void lcl_AddPropertiesToVector_PointProperties(
 }
 
 void lcl_AddPropertiesToVector_SeriesOnly(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "Axis",
@@ -205,7 +205,7 @@ void lcl_AddPropertiesToVector_SeriesOnly(
 
 uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType _eType )
 {
-    ::std::vector< css::beans::Property > aProperties;
+    std::vector< css::beans::Property > aProperties;
 
     lcl_AddPropertiesToVector_PointProperties( aProperties );
     if( _eType == DataSeriesPointWrapper::DATA_SERIES )
@@ -222,7 +222,7 @@ uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType
     ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
     ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
-    ::std::sort( aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess() );
+    std::sort( aProperties.begin(), aProperties.end(), ::chart::PropertyNameLess() );
 
     return comphelper::containerToSequence( aProperties );
 }
@@ -551,7 +551,7 @@ Reference< chart2::XDataSeries > DataSeriesPointWrapper::getDataSeries()
     if( !xSeries.is() )
     {
         Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
-        ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
+        std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
             ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
 
         if( m_nSeriesIndexInNewAPI >= 0 && m_nSeriesIndexInNewAPI < static_cast<sal_Int32>(aSeriesList.size()) )
@@ -719,7 +719,7 @@ const Sequence< beans::Property >& DataSeriesPointWrapper::getPropertySequence()
 
 const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedProperties()
 {
-    ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+    std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
 

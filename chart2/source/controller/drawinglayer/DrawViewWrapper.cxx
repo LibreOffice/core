@@ -198,7 +198,7 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
             if( pScene )
             {
                 // prepare result vector and call helper
-                ::std::vector< const E3dCompoundObject* > aHitList;
+                std::vector< const E3dCompoundObject* > aHitList;
                 const basegfx::B2DPoint aHitPoint(rPnt.X(), rPnt.Y());
                 getAllHit3DObjectsSortedFrontToBack(aHitPoint, *pScene, aHitList);
 

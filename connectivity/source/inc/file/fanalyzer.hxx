@@ -30,9 +30,9 @@ namespace connectivity
         class OConnection;
         class OOO_DLLPUBLIC_FILE OSQLAnalyzer final
         {
-            typedef ::std::pair< ::rtl::Reference<OPredicateCompiler>,::rtl::Reference<OPredicateInterpreter> > TPredicates;
+            typedef std::pair< ::rtl::Reference<OPredicateCompiler>,::rtl::Reference<OPredicateInterpreter> > TPredicates;
 
-            ::std::vector< TPredicates >        m_aSelectionEvaluations;
+            std::vector< TPredicates >        m_aSelectionEvaluations;
             ::rtl::Reference<OPredicateCompiler>        m_aCompiler;
             ::rtl::Reference<OPredicateInterpreter> m_aInterpreter;
             OConnection*                        m_pConnection;
@@ -73,7 +73,7 @@ namespace connectivity
             bool hasRestriction() const;
             bool hasFunctions() const;
             inline bool evaluateRestriction()   { return m_aInterpreter->start(); }
-            void setSelectionEvaluationResult(OValueRefRow& _pRow,const ::std::vector<sal_Int32>& _rColumnMapping);
+            void setSelectionEvaluationResult(OValueRefRow& _pRow,const std::vector<sal_Int32>& _rColumnMapping);
             void setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols);
             static OOperandAttr* createOperandAttr(sal_Int32 _nPos,
                                                     const css::uno::Reference< css::beans::XPropertySet>& _xCol,

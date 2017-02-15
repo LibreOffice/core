@@ -49,8 +49,8 @@ public:
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix);
 
-    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
-    const ::std::vector< ExplicitScaleData >& getScales() const { return m_aScales;}
+    virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
+    const std::vector< ExplicitScaleData >& getScales() const { return m_aScales;}
 
     //better performance for big data
     inline void   setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
@@ -111,7 +111,7 @@ public:
     void AllowShiftZAxisPos( bool bAllowShift );
 
 protected: //member
-    ::std::vector< ExplicitScaleData >  m_aScales;
+    std::vector< ExplicitScaleData >  m_aScales;
     ::basegfx::B3DHomMatrix             m_aMatrixScreenToScene;
 
     //this is calculated based on m_aScales and m_aMatrixScreenToScene

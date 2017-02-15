@@ -42,15 +42,15 @@ namespace ContainerHelper
     example:
 
     Sequence< sal_Int32 > aSequence;
-    ::std::vector< sal_Int32 > aVector(
-        ContainerToSequence::SequenceToSTLSequenceContainer< ::std::vector< sal_Int32 > >( aSequence );
+    std::vector< sal_Int32 > aVector(
+        ContainerToSequence::SequenceToSTLSequenceContainer< std::vector< sal_Int32 > >( aSequence );
 */
 template< class Container >
     Container
     SequenceToSTLSequenceContainer( const css::uno::Sequence< typename Container::value_type > & rSeq )
 {
     Container aResult( rSeq.getLength());
-    ::std::copy( rSeq.begin(), rSeq.end(), aResult.begin() );
+    std::copy( rSeq.begin(), rSeq.end(), aResult.begin() );
     return aResult;
 }
 
@@ -61,13 +61,13 @@ template< class Container >
     example:
 
     Sequence< sal_Int32 > aSequence;
-    ::std::vector< sal_Int32 > aVector( ContainerHelper::SequenceToVector( aSequence ));
+    std::vector< sal_Int32 > aVector( ContainerHelper::SequenceToVector( aSequence ));
  */
 template< typename T >
-    ::std::vector< T >
+    std::vector< T >
     SequenceToVector( const css::uno::Sequence< T > & rSeq )
 {
-    return SequenceToSTLSequenceContainer< ::std::vector< T > >( rSeq );
+    return SequenceToSTLSequenceContainer< std::vector< T > >( rSeq );
 }
 
 } // namespace ContainerHelper

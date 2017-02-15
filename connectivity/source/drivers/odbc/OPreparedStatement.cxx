@@ -790,7 +790,7 @@ void OPreparedStatement::putParamData (sal_Int32 index)
 
         do
         {
-            sal_Int32 toReadThisRound = ::std::min( MAX_PUT_DATA_LENGTH, maxBytesLeft );
+            sal_Int32 toReadThisRound = std::min( MAX_PUT_DATA_LENGTH, maxBytesLeft );
 
             // Read some data from the input stream
             haveRead = inputStream->readBytes( buf, toReadThisRound );

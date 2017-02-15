@@ -137,7 +137,7 @@ namespace connectivity
         class OOp_Week : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** YEAR(date)
@@ -199,7 +199,7 @@ namespace connectivity
         class OOp_CurDate : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** CURTIME()
@@ -212,7 +212,7 @@ namespace connectivity
         class OOp_CurTime : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
 
         /** NOW()
@@ -224,7 +224,7 @@ namespace connectivity
         class OOp_Now : public ONthOperator
         {
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const override;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const override;
         };
     }
 }

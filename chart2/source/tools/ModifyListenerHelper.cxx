@@ -59,8 +59,8 @@ void lcl_fireModifyEvent(
     }
 }
 
-struct lcl_weakReferenceToSame : public ::std::unary_function<
-        ::std::pair<
+struct lcl_weakReferenceToSame : public std::unary_function<
+        std::pair<
             css::uno::WeakReference< css::util::XModifyListener >,
             css::uno::Reference< css::util::XModifyListener > >,
         bool >
@@ -131,7 +131,7 @@ void ModifyEventForwarder::RemoveListener( const Reference< util::XModifyListene
         // look up fitting helper class that has been added
         Reference< util::XModifyListener > xListenerToRemove( aListener );
         tListenerMap::iterator aIt(
-            ::std::find_if( m_aListenerMap.begin(), m_aListenerMap.end(), lcl_weakReferenceToSame( aListener )));
+            std::find_if( m_aListenerMap.begin(), m_aListenerMap.end(), lcl_weakReferenceToSame( aListener )));
         if( aIt != m_aListenerMap.end())
         {
             xListenerToRemove.set( (*aIt).second );

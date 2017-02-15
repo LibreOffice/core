@@ -44,7 +44,7 @@ namespace connectivity
         class WpADOConnection;
         class ODriver;
         class OCatalog;
-        typedef ::std::multimap<DataTypeEnum, OExtendedTypeInfo*>       OTypeInfoMap;
+        typedef std::multimap<DataTypeEnum, OExtendedTypeInfo*>       OTypeInfoMap;
         typedef connectivity::OMetaConnection                           OConnection_BASE;
 
 

@@ -37,8 +37,8 @@ namespace connectivity
 
     class OOO_DLLPUBLIC_DBTOOLS ODatabaseMetaDataResultSetMetaData :    public  ODatabaseMetaResultSetMetaData_BASE
     {
-        ::std::map<sal_Int32,connectivity::OColumn> m_mColumns;
-        ::std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
+        std::map<sal_Int32,connectivity::OColumn> m_mColumns;
+        std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
 
     protected:
         virtual ~ODatabaseMetaDataResultSetMetaData() override;

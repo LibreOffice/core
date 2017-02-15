@@ -353,7 +353,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         double fTempValue = fSourceMinimum;
         fSourceMinimum = -fSourceMaximum;
         fSourceMaximum = -fTempValue;
-        ::std::swap( bAutoMinimum, bAutoMaximum );
+        std::swap( bAutoMinimum, bAutoMaximum );
     }
 
     // *** STEP 2: find temporary (unrounded) axis minimum and maximum ***
@@ -518,7 +518,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
                 rExplicitScale.Maximum = 10.0;
         }
         if( rExplicitScale.Maximum < rExplicitScale.Minimum )
-            ::std::swap( rExplicitScale.Maximum, rExplicitScale.Minimum );
+            std::swap( rExplicitScale.Maximum, rExplicitScale.Minimum );
     }
 
     //fill explicit sub increment
@@ -773,7 +773,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
         double fTempValue = fSourceMinimum;
         fSourceMinimum = -fSourceMaximum;
         fSourceMaximum = -fTempValue;
-        ::std::swap( bAutoMinimum, bAutoMaximum );
+        std::swap( bAutoMinimum, bAutoMaximum );
     }
 
     // *** STEP 2: find temporary (unrounded) axis minimum and maximum ***

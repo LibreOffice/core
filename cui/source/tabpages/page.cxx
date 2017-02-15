@@ -349,7 +349,7 @@ SvxPageDescPage::SvxPageDescPage( vcl::Window* pParent, const SfxItemSet& rAttr 
     m_pBottomMarginEdit->SetLast(m_pBottomMarginEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperBottomMargin()), FUNIT_MM);
 
     // Get the i18n framework numberings and add them to the listbox.
-    SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_pNumberFormatBox, ::std::numeric_limits<sal_uInt16>::max());
+    SvxNumOptionsTabPageHelper::GetI18nNumbering( *m_pNumberFormatBox, std::numeric_limits<sal_uInt16>::max());
 }
 
 

@@ -85,7 +85,7 @@ sal_Int32 ODatabaseMetaData::getMaxSize(sal_uInt32 _nId)
         fillLiterals();
 
     sal_Int32 nSize = 0;
-    ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
+    std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
     if(aIter != m_aLiteralInfo.end() && (*aIter).second.fSupported)
         nSize = (static_cast<sal_Int32>((*aIter).second.cchMaxLen) == (-1)) ? 0 : (*aIter).second.cchMaxLen;
     return nSize;
@@ -96,7 +96,7 @@ bool ODatabaseMetaData::isCapable(sal_uInt32 _nId)
     if(m_aLiteralInfo.empty())
         fillLiterals();
     bool bSupported = false;
-    ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
+    std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
     if(aIter != m_aLiteralInfo.end())
         bSupported = (*aIter).second.fSupported;
     return bSupported;
@@ -108,7 +108,7 @@ OUString ODatabaseMetaData::getLiteral(sal_uInt32 _nId)
     if(m_aLiteralInfo.empty())
         fillLiterals();
     OUString sStr;
-    ::std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
+    std::map<sal_uInt32,LiteralInfo>::const_iterator aIter = m_aLiteralInfo.find(_nId);
     if(aIter != m_aLiteralInfo.end() && (*aIter).second.fSupported)
         sStr = (*aIter).second.pwszLiteralValue;
     return sStr;

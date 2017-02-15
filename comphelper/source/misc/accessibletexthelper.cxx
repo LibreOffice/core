@@ -295,8 +295,8 @@ namespace comphelper
         if ( !implIsValidRange( nStartIndex, nEndIndex, sText.getLength() ) )
             throw IndexOutOfBoundsException();
 
-        sal_Int32 nMinIndex = ::std::min( nStartIndex, nEndIndex );
-        sal_Int32 nMaxIndex = ::std::max( nStartIndex, nEndIndex );
+        sal_Int32 nMinIndex = std::min( nStartIndex, nEndIndex );
+        sal_Int32 nMaxIndex = std::max( nStartIndex, nEndIndex );
 
         return sText.copy( nMinIndex, nMaxIndex - nMinIndex );
     }

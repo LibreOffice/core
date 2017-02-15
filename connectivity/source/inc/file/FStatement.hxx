@@ -62,10 +62,10 @@ namespace connectivity
 
         {
         protected:
-            ::std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
-            ::std::vector<sal_Int32>                    m_aParameterIndexes; // maps the parameter index to column index
-            ::std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
-            ::std::vector<TAscendingOrder>              m_aOrderbyAscending;
+            std::vector<sal_Int32>                    m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
+            std::vector<sal_Int32>                    m_aParameterIndexes; // maps the parameter index to column index
+            std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
+            std::vector<TAscendingOrder>              m_aOrderbyAscending;
 
             css::sdbc::SQLWarning                              m_aLastWarning;
             css::uno::WeakReference< css::sdbc::XResultSet>    m_xResultSet;   // The last ResultSet created
@@ -117,7 +117,7 @@ namespace connectivity
                                    const OUString& aValue,
                                    bool bSetNull = false,
                                    sal_uInt32 nParameter=SQL_NO_PARAMETER);
-            void ParseAssignValues( const ::std::vector< OUString>& aColumnNameList,
+            void ParseAssignValues( const std::vector< OUString>& aColumnNameList,
                                     connectivity::OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex);
 
             virtual void parseParamterElem(const OUString& _sColumnName,OSQLParseNode* pRow_Value_Constructor_Elem);

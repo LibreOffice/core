@@ -35,18 +35,18 @@ namespace connectivity
         typedef file::OFileTable OFlatTable_BASE;
         class OFlatConnection;
 
-        typedef ::std::pair<sal_Int32, sal_Int32> TRowPositionInFile;
+        typedef std::pair<sal_Int32, sal_Int32> TRowPositionInFile;
 
         class OFlatTable :  public OFlatTable_BASE
         {
             // maps a row position to a file position
             // row n is positions [m_aRowPosToFilePos[n]->first, m_aRowPosToFilePos[n]->second) in file
             // "real" row indexes start at 1; for the purposes of m_aRowPosToFilePos, row 0 is headers
-            ::std::vector<TRowPositionInFile>
+            std::vector<TRowPositionInFile>
                                             m_aRowPosToFilePos;
-            ::std::vector<sal_Int32>        m_aTypes;       // holds all type for columns just to avoid to ask the propertyset
-            ::std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
-            ::std::vector<sal_Int32>        m_aScales;
+            std::vector<sal_Int32>        m_aTypes;       // holds all type for columns just to avoid to ask the propertyset
+            std::vector<sal_Int32>        m_aPrecisions;  // same as aboth
+            std::vector<sal_Int32>        m_aScales;
             QuotedTokenizedString           m_aCurrentLine;
             css::uno::Reference< css::util::XNumberFormatter > m_xNumberFormatter;
             css::util::Date                 m_aNullDate;
@@ -58,7 +58,7 @@ namespace connectivity
         private:
             void fillColumns(const css::lang::Locale& _aLocale);
             bool readLine(sal_Int32 *pEndPos, sal_Int32 *pStartPos, bool nonEmpty = false);
-            void setRowPos(::std::vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos);
+            void setRowPos(std::vector<TRowPositionInFile>::size_type rowNum, const TRowPositionInFile &rowPos);
             void impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine, sal_Int32& nStartPosFirstLine, sal_Int32& nStartPosFirstLine2,
                                              sal_Int32& io_nType, sal_Int32& io_nPrecisions, sal_Int32& io_nScales, OUString& o_sTypeName,
                                              const sal_Unicode cDecimalDelimiter, const sal_Unicode cThousandDelimiter, const CharClass& aCharClass);

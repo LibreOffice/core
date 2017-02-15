@@ -126,7 +126,7 @@ css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() && xChartDoc.is() )
     {
-        ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
+        std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
         if( aSeriesVector.size() > 0 )
         {
@@ -191,7 +191,7 @@ css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() && xChartDoc.is() )
     {
-        ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
+        std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
         if( aSeriesVector.size() > 0 )
         {
@@ -241,7 +241,7 @@ enum
 
 }//anonymous namespace
 
-void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProperties )
+void WrappedStockProperties::addProperties( std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "Volume",

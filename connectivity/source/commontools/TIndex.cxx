@@ -36,7 +36,7 @@ OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex
                  , m_pTable(_pTable)
 {
     construct();
-    ::std::vector< OUString> aVector;
+    std::vector< OUString> aVector;
     m_pColumns.reset( new OIndexColumns(this,m_aMutex,aVector) );
 }
 
@@ -63,7 +63,7 @@ void OIndexHelper::refreshColumns()
     if ( !m_pTable )
         return;
 
-    ::std::vector< OUString> aVector;
+    std::vector< OUString> aVector;
     if ( !isNew() )
     {
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();

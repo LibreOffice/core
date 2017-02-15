@@ -31,8 +31,8 @@
 namespace chart
 {
 
-typedef ::std::map< OUString, OUString >                              tPropertyNameMap;
-typedef ::std::map< OUString, css::uno::Any >            tPropertyNameValueMap;
+typedef std::map< OUString, OUString >                              tPropertyNameMap;
+typedef std::map< OUString, css::uno::Any >            tPropertyNameValueMap;
 typedef css::uno::Sequence< OUString >                   tNameSequence;
 typedef css::uno::Sequence< css::uno::Any > tAnySequence;
 

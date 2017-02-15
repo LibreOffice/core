@@ -89,7 +89,7 @@ IMPL_LINK_NOARG( SvPasteObjectDialog, DoubleClickHdl, ListBox&, void )
 *************************************************************************/
 void SvPasteObjectDialog::Insert( SotClipboardFormatId nFormat, const OUString& rFormatName )
 {
-    aSupplementMap.insert( ::std::make_pair( nFormat, rFormatName ) );
+    aSupplementMap.insert( std::make_pair( nFormat, rFormatName ) );
 }
 
 SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper)
@@ -116,7 +116,7 @@ SotClipboardFormatId SvPasteObjectDialog::GetFormat( const TransferableDataHelpe
     {
         SotClipboardFormatId nFormat = (*aIter++).mnSotId;
 
-        ::std::map< SotClipboardFormatId, OUString >::iterator itName =
+        std::map< SotClipboardFormatId, OUString >::iterator itName =
             aSupplementMap.find( nFormat );
 
         // if there is an "Embed Source" or and "Embedded Object" on the

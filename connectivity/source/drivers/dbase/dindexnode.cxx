@@ -710,7 +710,7 @@ void ONDXNode::Write(SvStream &rStream, const ONDXPage& rPage) const
     else
     {
         sal_uInt16 const nLen(rIndex.getHeader().db_keylen);
-        ::std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nLen]);
+        std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[nLen]);
         memset(&pBuf[0], 0x20, nLen);
         if (!aKey.getValue().isNull())
         {

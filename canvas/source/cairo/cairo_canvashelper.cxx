@@ -861,9 +861,9 @@ namespace cairocanvas
                                 // use at least three steps, and at utmost the number of color
                                 // steps
                                 const unsigned int nStepCount(
-                                    ::std::max(
+                                    std::max(
                                         3U,
-                                        ::std::min(
+                                        std::min(
                                             nGradientSize / nStripSize,
                                             128U )) + 1 );
 

@@ -506,11 +506,11 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         return;
 
     Sequence< OUString > eventNames = nameReplace->getElementNames();
-    ::std::set< OUString > aEventNamesCache;
-    ::std::copy(
+    std::set< OUString > aEventNamesCache;
+    std::copy(
         eventNames.getConstArray(),
         eventNames.getConstArray() + eventNames.getLength(),
-        ::std::insert_iterator< ::std::set< OUString > >( aEventNamesCache, aEventNamesCache.end() )
+        std::insert_iterator< std::set< OUString > >( aEventNamesCache, aEventNamesCache.end() )
     );
 
     for (   EventDisplayNames::const_iterator displayableEvent = aDisplayNames.begin();
@@ -769,7 +769,7 @@ void SvxMacroTabPage_::InitAndSetHandler( const Reference< container::XNameRepla
 // returns the two props EventType & Script for a given event name
 Any SvxMacroTabPage_::GetPropsByName( const OUString& eventName, EventsHash& eventsHash )
 {
-    const ::std::pair< OUString, OUString >& rAssignedEvent( eventsHash[ eventName ] );
+    const std::pair< OUString, OUString >& rAssignedEvent( eventsHash[ eventName ] );
 
     Any aReturn;
     ::comphelper::NamedValueCollection aProps;
@@ -785,7 +785,7 @@ Any SvxMacroTabPage_::GetPropsByName( const OUString& eventName, EventsHash& eve
 
 // converts the Any returned by GetByName into a pair which can be stored in
 // the EventHash
-::std::pair< OUString, OUString  > SvxMacroTabPage_::GetPairFromAny( const Any& aAny )
+std::pair< OUString, OUString  > SvxMacroTabPage_::GetPairFromAny( const Any& aAny )
 {
     Sequence< beans::PropertyValue > props;
     OUString type, url;
@@ -795,7 +795,7 @@ Any SvxMacroTabPage_::GetPropsByName( const OUString& eventName, EventsHash& eve
         type = aProps.getOrDefault( "EventType", type );
         url = aProps.getOrDefault( "Script", url );
     }
-    return ::std::make_pair( type, url );
+    return std::make_pair( type, url );
 }
 
 SvxMacroTabPage::SvxMacroTabPage(vcl::Window* pParent,

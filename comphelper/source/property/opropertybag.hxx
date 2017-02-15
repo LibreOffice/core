@@ -44,7 +44,7 @@ namespace comphelper
 {
 
 
-    struct UnoTypeLess : public ::std::unary_function< css::uno::Type, bool >
+    struct UnoTypeLess : public std::unary_function< css::uno::Type, bool >
     {
         inline bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
         {
@@ -55,8 +55,8 @@ namespace comphelper
         }
     };
 
-    typedef ::std::map< sal_Int32, css::uno::Any >     MapInt2Any;
-    typedef ::std::set< css::uno::Type, UnoTypeLess >  TypeBag;
+    typedef std::map< sal_Int32, css::uno::Any >     MapInt2Any;
+    typedef std::set< css::uno::Type, UnoTypeLess >  TypeBag;
 
     typedef ::cppu::WeakAggImplHelper5  <   css::beans::XPropertyBag
                                         ,   css::util::XModifiable
@@ -73,7 +73,7 @@ namespace comphelper
     {
     private:
         /// our IPropertyArrayHelper implementation
-        ::std::unique_ptr< ::cppu::OPropertyArrayHelper >
+        std::unique_ptr< ::cppu::OPropertyArrayHelper >
                         m_pArrayHelper;
         ::comphelper::PropertyBag
                         m_aDynamicProperties;

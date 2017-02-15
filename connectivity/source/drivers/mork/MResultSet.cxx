@@ -1100,8 +1100,8 @@ void SAL_CALL OResultSet::executeQuery()
                 }
 
                 OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-                ::std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
-                for ( ::std::vector<sal_Int16>::size_type i = 0; aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
+                std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
+                for ( std::vector<sal_Int16>::size_type i = 0; aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
                 {
                     OSL_ENSURE((sal_Int32)m_aRow->get().size() > *aOrderByIter,"Invalid Index");
                     switch ((m_aRow->get().begin()+*aOrderByIter)->getTypeKind())
@@ -1147,7 +1147,7 @@ void SAL_CALL OResultSet::executeQuery()
                     OSortIndex aSortIndex(eKeyType,m_aOrderbyAscending);
 
 #if OSL_DEBUG_LEVEL > 0
-                    for ( ::std::vector<sal_Int32>::size_type i = 0; i < m_aColMapping.size(); i++ )
+                    for ( std::vector<sal_Int32>::size_type i = 0; i < m_aColMapping.size(); i++ )
                         SAL_INFO(
                             "connectivity.mork",
                             "Mapped: " << i << " -> " << m_aColMapping[i]);
@@ -1156,7 +1156,7 @@ void SAL_CALL OResultSet::executeQuery()
 
                         OKeyValue* pKeyValue = OKeyValue::createKeyValue((nRow));
 
-                        ::std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
+                        std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
                         for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
                         {
                             const ORowSetValue& value = getValue(nRow, *aIter);
@@ -1206,8 +1206,8 @@ void SAL_CALL OResultSet::executeQuery()
                         }
                     }
                     // Now remove any keys marked with a 0
-                    m_pKeySet->get().erase(::std::remove_if(m_pKeySet->get().begin(),m_pKeySet->get().end()
-                                    ,::std::bind2nd(::std::equal_to<sal_Int32>(),0))
+                    m_pKeySet->get().erase(std::remove_if(m_pKeySet->get().begin(),m_pKeySet->get().end()
+                                    ,std::bind2nd(std::equal_to<sal_Int32>(),0))
                                      ,m_pKeySet->get().end());
 
                 }
@@ -1229,7 +1229,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                                    const Reference<XIndexAccess>& _xNames,
                                    bool _bSetColumnMapping,
                                    const Reference<XDatabaseMetaData>& _xMetaData,
-                                   ::std::vector<sal_Int32>& _rColMapping)
+                                   std::vector<sal_Int32>& _rColMapping)
 {
     ::comphelper::UStringMixEqual aCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
 
@@ -1239,7 +1239,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
     const OUString sName     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME);
     const OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
 
-    ::std::vector< OUString> aColumnNames;
+    std::vector< OUString> aColumnNames;
     aColumnNames.reserve(_rxColumns->get().size());
     OValueVector::Vector::iterator aRowIter = _rRow->get().begin()+1;
     for (sal_Int32 i=0; // the first column is the bookmark column
@@ -1434,7 +1434,7 @@ bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
     return true;
 }
 
-void OResultSet::setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)
+void OResultSet::setColumnMapping(const std::vector<sal_Int32>& _aColumnMapping)
 {
     m_aColMapping = _aColumnMapping;
 #if OSL_DEBUG_LEVEL > 0
@@ -1747,12 +1747,12 @@ void OResultSet::setTable(OTable* _rTable)
         m_aColumnNames = m_xTableColumns->getElementNames();
 }
 
-void OResultSet::setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)
+void OResultSet::setOrderByColumns(const std::vector<sal_Int32>& _aColumnOrderBy)
 {
     m_aOrderbyColumnNumber = _aColumnOrderBy;
 }
 
-void OResultSet::setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc)
+void OResultSet::setOrderByAscending(const std::vector<TAscendingOrder>& _aOrderbyAsc)
 {
     m_aOrderbyAscending = _aOrderbyAsc;
 }

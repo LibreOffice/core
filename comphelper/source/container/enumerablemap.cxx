@@ -82,15 +82,15 @@ namespace comphelper
 
     class MapEnumerator;
 
-    typedef ::std::map< Any, Any, LessPredicateAdapter > KeyedValues;
+    typedef std::map< Any, Any, LessPredicateAdapter > KeyedValues;
     struct MapData
     {
         Type                                        m_aKeyType;
         Type                                        m_aValueType;
-        ::std::unique_ptr< KeyedValues >            m_pValues;
-        ::std::shared_ptr< IKeyPredicateLess >      m_pKeyCompare;
+        std::unique_ptr< KeyedValues >            m_pValues;
+        std::shared_ptr< IKeyPredicateLess >      m_pKeyCompare;
         bool                                        m_bMutable;
-        ::std::vector< MapEnumerator* >             m_aModListeners;
+        std::vector< MapEnumerator* >             m_aModListeners;
 
         MapData()
             :m_bMutable( true )
@@ -125,7 +125,7 @@ namespace comphelper
 
     static void lcl_revokeMapModificationListener( MapData& _mapData, MapEnumerator& _listener )
     {
-        for (   ::std::vector< MapEnumerator* >::iterator lookup = _mapData.m_aModListeners.begin();
+        for (   std::vector< MapEnumerator* >::iterator lookup = _mapData.m_aModListeners.begin();
                 lookup != _mapData.m_aModListeners.end();
                 ++lookup
              )
@@ -297,7 +297,7 @@ namespace comphelper
     private:
         // since we share our mutex with the main map, we need to keep it alive as long as we live
         Reference< XInterface >     m_xKeepMapAlive;
-        ::std::unique_ptr< MapData > m_pMapDataCopy;
+        std::unique_ptr< MapData > m_pMapDataCopy;
         MapEnumerator               m_aEnumerator;
     };
 
@@ -349,7 +349,7 @@ namespace comphelper
             throw IllegalTypeException("Unsupported value type.", *this );
 
         // create the comparator for the KeyType, and throw if the type is not supported
-        ::std::unique_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, nullptr ) );
+        std::unique_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, nullptr ) );
         if ( !pComparator.get() )
             throw IllegalTypeException("Unsupported key type.", *this );
 

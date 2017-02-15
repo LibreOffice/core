@@ -155,9 +155,9 @@ namespace comphelper
     }
 
 
-    ::std::vector< OUString > NamedValueCollection::getNames() const
+    std::vector< OUString > NamedValueCollection::getNames() const
     {
-        ::std::vector< OUString > aNames;
+        std::vector< OUString > aNames;
         for ( NamedValueRepository::const_iterator it = m_pImpl->aValues.begin(), end = m_pImpl->aValues.end(); it != end; ++it )
         {
             aNames.push_back( it->first );
@@ -314,7 +314,7 @@ namespace comphelper
 
     namespace
     {
-        struct Value2PropertyValue : public ::std::unary_function< NamedValueRepository::value_type, PropertyValue >
+        struct Value2PropertyValue : public std::unary_function< NamedValueRepository::value_type, PropertyValue >
         {
             PropertyValue operator()( const NamedValueRepository::value_type& _rValue )
             {
@@ -323,7 +323,7 @@ namespace comphelper
             }
         };
 
-        struct Value2NamedValue : public ::std::unary_function< NamedValueRepository::value_type, NamedValue >
+        struct Value2NamedValue : public std::unary_function< NamedValueRepository::value_type, NamedValue >
         {
             NamedValue operator()( const NamedValueRepository::value_type& _rValue )
             {
@@ -336,7 +336,7 @@ namespace comphelper
     sal_Int32 NamedValueCollection::operator >>= ( Sequence< PropertyValue >& _out_rValues ) const
     {
         _out_rValues.realloc( m_pImpl->aValues.size() );
-        ::std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2PropertyValue() );
+        std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2PropertyValue() );
         return _out_rValues.getLength();
     }
 
@@ -344,7 +344,7 @@ namespace comphelper
     sal_Int32 NamedValueCollection::operator >>= ( Sequence< NamedValue >& _out_rValues ) const
     {
         _out_rValues.realloc( m_pImpl->aValues.size() );
-        ::std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2NamedValue() );
+        std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2NamedValue() );
         return _out_rValues.getLength();
     }
 

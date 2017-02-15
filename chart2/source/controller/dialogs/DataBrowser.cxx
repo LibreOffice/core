@@ -403,7 +403,7 @@ namespace
     with focus is set at pIndex if pOutIndex is not 0.
 */
 bool lcl_SeriesHeaderHasFocus(
-    const ::std::vector< std::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader,
+    const std::vector< std::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader,
     sal_Int32 * pOutIndex = nullptr )
 {
     sal_Int32 nIndex = 0;
@@ -420,7 +420,7 @@ bool lcl_SeriesHeaderHasFocus(
 }
 
 sal_Int32 lcl_getColumnInDataOrHeader(
-    sal_uInt16 nCol, const ::std::vector< std::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
+    sal_uInt16 nCol, const std::vector< std::shared_ptr< ::chart::impl::SeriesHeader > > & rSeriesHeader )
 {
     sal_Int32 nColIdx = 0;
     bool bHeaderHasFocus( lcl_SeriesHeaderHasFocus( rSeriesHeader, &nColIdx ));
@@ -590,8 +590,8 @@ void DataBrowser::RenewTable()
     }
 
     RowInserted( 1, nRowCountLocal );
-    GoToRow( ::std::min( nOldRow, GetRowCount() - 1 ));
-    GoToColumnId( ::std::min( nOldColId, static_cast< sal_uInt16 >( ColCount() - 1 )));
+    GoToRow( std::min( nOldRow, GetRowCount() - 1 ));
+    GoToColumnId( std::min( nOldColId, static_cast< sal_uInt16 >( ColCount() - 1 )));
 
     Dialog* pDialog = GetParentDialog();
     vcl::Window* pWin = pDialog->get<VclContainer>("columns");

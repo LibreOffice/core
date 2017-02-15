@@ -78,7 +78,7 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
         {
             Reference< lang::XSingleServiceFactory > xStorageFact( embed::StorageFactory::create( xContext ) );
 
-            ::std::vector< beans::PropertyValue > aPropertiesForStorage;
+            std::vector< beans::PropertyValue > aPropertiesForStorage;
 
             for( sal_Int32 i=rMediaDescriptor.getLength(); i--; )
             {
@@ -142,7 +142,7 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
         {
             // get XStream from MediaDescriptor
             uno::Reference< io::XInputStream > xStream;
-            ::std::vector< beans::PropertyValue > aPropertiesForStorage;
+            std::vector< beans::PropertyValue > aPropertiesForStorage;
             for( sal_Int32 i=rMediaDescriptor.getLength(); i--; )
             {
                 if( rMediaDescriptor[i].Name == "InputStream" )

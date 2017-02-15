@@ -109,7 +109,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     memset(szConnStrOut,'\0',4096);
     memset(szConnStrIn,'\0',2048);
     OString aConStr(OUStringToOString(aConnectStr,getTextEncoding()));
-    memcpy(szConnStrIn, aConStr.getStr(), ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
+    memcpy(szConnStrIn, aConStr.getStr(), std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()));
 
 #ifndef MACOSX
     N3SQLSetConnectAttr(m_aConnectionHandle,SQL_ATTR_LOGIN_TIMEOUT,reinterpret_cast<SQLPOINTER>(nTimeOut),SQL_IS_UINTEGER);
@@ -122,7 +122,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     nSQLRETURN = N3SQLDriverConnect(m_aConnectionHandle,
                       nullptr,
                       szConnStrIn,
-                      (SQLSMALLINT) ::std::min((sal_Int32)2048,aConStr.getLength()),
+                      (SQLSMALLINT) std::min((sal_Int32)2048,aConStr.getLength()),
                       szConnStrOut,
                       (SQLSMALLINT) (sizeof(szConnStrOut)/sizeof(SDB_ODBC_CHAR)) -1,
                       &cbConnStrOut,
@@ -135,7 +135,7 @@ SQLRETURN OConnection::OpenConnection(const OUString& aConnectStr, sal_Int32 nTi
     nSQLRETURN = N3SQLDriverConnect(m_aConnectionHandle,
                       nullptr,
                       szConnStrIn,
-                      (SQLSMALLINT) ::std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()),
+                      (SQLSMALLINT) std::min<sal_Int32>((sal_Int32)2048,aConStr.getLength()),
                       szConnStrOut,
                       (SQLSMALLINT) sizeof szConnStrOut,
                       &cbConnStrOut,
@@ -480,10 +480,10 @@ void OConnection::disposing()
 
     OConnection_BASE::disposing();
 
-    for (::std::map< SQLHANDLE,OConnection*>::iterator aConIter = m_aConnections.begin();aConIter != m_aConnections.end();++aConIter )
+    for (std::map< SQLHANDLE,OConnection*>::iterator aConIter = m_aConnections.begin();aConIter != m_aConnections.end();++aConIter )
         aConIter->second->dispose();
 
-    ::std::map< SQLHANDLE,OConnection*>().swap(m_aConnections);
+    std::map< SQLHANDLE,OConnection*>().swap(m_aConnections);
 
     if(!m_bClosed)
         N3SQLDisconnect(m_aConnectionHandle);
@@ -516,7 +516,7 @@ SQLHANDLE OConnection::createStatementHandle()
     N3SQLAllocHandle(SQL_HANDLE_STMT,pConnectionTemp->getConnection(),&aStatementHandle);
     ++m_nStatementCount;
     if(bNew)
-        m_aConnections.insert(::std::map< SQLHANDLE,OConnection*>::value_type(aStatementHandle,pConnectionTemp));
+        m_aConnections.insert(std::map< SQLHANDLE,OConnection*>::value_type(aStatementHandle,pConnectionTemp));
 
     return aStatementHandle;
 
@@ -527,7 +527,7 @@ void OConnection::freeStatementHandle(SQLHANDLE& _pHandle)
     if( SQL_NULL_HANDLE == _pHandle )
         return;
 
-    ::std::map< SQLHANDLE,OConnection*>::iterator aFind = m_aConnections.find(_pHandle);
+    std::map< SQLHANDLE,OConnection*>::iterator aFind = m_aConnections.find(_pHandle);
 
     N3SQLFreeStmt(_pHandle,SQL_RESET_PARAMS);
     N3SQLFreeStmt(_pHandle,SQL_UNBIND);

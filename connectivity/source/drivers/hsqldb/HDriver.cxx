@@ -408,7 +408,7 @@ namespace connectivity
     {
         if ( !acceptsURL(url) )
             return Sequence< DriverPropertyInfo >();
-        ::std::vector< DriverPropertyInfo > aDriverInfo;
+        std::vector< DriverPropertyInfo > aDriverInfo;
         aDriverInfo.push_back(DriverPropertyInfo(
                 "Storage"
                 ,"Defines the storage where the database will be stored."
@@ -577,7 +577,7 @@ namespace connectivity
             if ( xStorage.is() )
             {
                 OUString sKey = StorageContainer::getRegisteredKey(xStorage);
-                TWeakPairVector::iterator i = ::std::find_if(m_aConnections.begin(),m_aConnections.end(),
+                TWeakPairVector::iterator i = std::find_if(m_aConnections.begin(),m_aConnections.end(),
                     [&sKey] (const TWeakPairVector::value_type& conn) {
                         return conn.second.first == sKey;
                     });
@@ -633,7 +633,7 @@ namespace connectivity
         OUString sKey = StorageContainer::getRegisteredKey(xStorage);
         if ( !sKey.isEmpty() )
         {
-            TWeakPairVector::const_iterator i = ::std::find_if(m_aConnections.begin(), m_aConnections.end(),
+            TWeakPairVector::const_iterator i = std::find_if(m_aConnections.begin(), m_aConnections.end(),
                 [&sKey] (const TWeakPairVector::value_type& conn) {
                     return conn.second.first == sKey;
                 });

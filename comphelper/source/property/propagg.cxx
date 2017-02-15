@@ -51,7 +51,7 @@ namespace comphelper
         const Property* lcl_findPropertyByName( const std::vector< Property >& _rProps, const OUString& _rName )
         {
             Property aNameProp(_rName, 0, Type(), 0);
-            auto pResult = ::std::lower_bound(_rProps.begin(), _rProps.end(), aNameProp, PropertyCompareByName());
+            auto pResult = std::lower_bound(_rProps.begin(), _rProps.end(), aNameProp, PropertyCompareByName());
             if ( pResult == _rProps.end() || pResult->Name != _rName )
                 return nullptr;
 
@@ -67,15 +67,15 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
     // merge and sort properties by name, delete duplicates (stable sort ensures delegator properties win)
     m_aProperties.insert( m_aProperties.end(), _rProperties.begin(), _rProperties.end() );
     m_aProperties.insert( m_aProperties.end(), _rAggProperties.begin(), _rAggProperties.end() );
-    ::std::stable_sort( m_aProperties.begin(), m_aProperties.end(), PropertyCompareByName() );
-    m_aProperties.erase( ::std::unique(m_aProperties.begin(), m_aProperties.end(),
+    std::stable_sort( m_aProperties.begin(), m_aProperties.end(), PropertyCompareByName() );
+    m_aProperties.erase( std::unique(m_aProperties.begin(), m_aProperties.end(),
         []( const css::beans::Property& x, const css::beans::Property& y ) -> bool { return x.Name == y.Name; } ),
         m_aProperties.end() );
     m_aProperties.shrink_to_fit();
 
     // fill aDelegatorProps with names from _rProperties for a fast existence check
     // different kinds of properties are processed differently
-    ::std::unordered_set< OUString, OUStringHash > aDelegatorProps;
+    std::unordered_set< OUString, OUStringHash > aDelegatorProps;
     aDelegatorProps.reserve( _rProperties.getLength() );
     for( auto &delegateProp: _rProperties )
     {
@@ -84,7 +84,7 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
             "OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper: duplicate delegatee property!" );
     }
 
-    ::std::unordered_set< sal_Int32 > existingHandles;
+    std::unordered_set< sal_Int32 > existingHandles;
     existingHandles.reserve( m_aProperties.size() );
     sal_Int32 nAggregateHandle = _nFirstAggregateId;
     for ( sal_Int32 nMPLoop = 0; nMPLoop < static_cast< sal_Int32 >( m_aProperties.size() ); ++nMPLoop )
@@ -237,7 +237,7 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
     for( sal_Int32 i = 0; i < nReqLen; ++i )
     {
         aNameProp.Name = pReqProps[i];
-        auto findIter = ::std::lower_bound(m_aProperties.begin(), m_aProperties.end(), aNameProp, PropertyCompareByName());
+        auto findIter = std::lower_bound(m_aProperties.begin(), m_aProperties.end(), aNameProp, PropertyCompareByName());
         if ( findIter != m_aProperties.end() )
         {
             _pHandles[i] = findIter->Handle;
@@ -253,7 +253,7 @@ namespace internal
     {
     private:
         OPropertySetAggregationHelper&  m_rAggregationHelper;
-        ::std::set< sal_Int32 >         m_aProperties;
+        std::set< sal_Int32 >         m_aProperties;
         sal_Int32                       m_nCurrentlyForwarding;
 
     public:

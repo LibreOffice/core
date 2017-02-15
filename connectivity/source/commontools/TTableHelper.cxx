@@ -57,7 +57,7 @@ class OTableContainerListener:
     public ::cppu::WeakImplHelper< XContainerListener >
 {
     OTableHelper* m_pComponent;
-    ::std::map< OUString,bool> m_aRefNames;
+    std::map< OUString,bool> m_aRefNames;
 
 protected:
     virtual ~OTableContainerListener() override {}
@@ -89,7 +89,7 @@ public:
     {
     }
     void clear() { m_pComponent = nullptr; }
-    inline void add(const OUString& _sRefName) { m_aRefNames.insert(::std::map< OUString,bool>::value_type(_sRefName,true)); }
+    inline void add(const OUString& _sRefName) { m_aRefNames.insert(std::map< OUString,bool>::value_type(_sRefName,true)); }
 };
 }
 namespace connectivity
@@ -116,7 +116,7 @@ namespace connectivity
         Reference< css::sdbc::XDatabaseMetaData >      m_xMetaData;
         Reference< css::sdbc::XConnection >            m_xConnection;
         rtl::Reference<OTableContainerListener>        m_xTablePropertyListener;
-        ::std::vector< ColumnDesc >                    m_aColumnDesc;
+        std::vector< ColumnDesc >                    m_aColumnDesc;
         explicit OTableHelperImpl(const Reference< css::sdbc::XConnection >& _xConnection)
             : m_xConnection(_xConnection)
         {
@@ -191,7 +191,7 @@ namespace
 {
     /** collects ColumnDesc's from a resultset produced by XDatabaseMetaData::getColumns
     */
-    void lcl_collectColumnDescs_throw( const Reference< XResultSet >& _rxResult, ::std::vector< ColumnDesc >& _out_rColumns )
+    void lcl_collectColumnDescs_throw( const Reference< XResultSet >& _rxResult, std::vector< ColumnDesc >& _out_rColumns )
     {
         Reference< XRow > xRow( _rxResult, UNO_QUERY_THROW );
         OUString sName;
@@ -214,14 +214,14 @@ namespace
     /** checks a given array of ColumnDesc's whether it has reasonable ordinal positions. If not,
         they will be normalized to be the array index.
     */
-    void lcl_sanitizeColumnDescs( ::std::vector< ColumnDesc >& _rColumns )
+    void lcl_sanitizeColumnDescs( std::vector< ColumnDesc >& _rColumns )
     {
         if ( _rColumns.empty() )
             return;
 
         // collect all used ordinals
-        ::std::set< OrdinalPosition > aUsedOrdinals;
-        for (   ::std::vector< ColumnDesc >::const_iterator collect = _rColumns.begin();
+        std::set< OrdinalPosition > aUsedOrdinals;
+        for (   std::vector< ColumnDesc >::const_iterator collect = _rColumns.begin();
                 collect != _rColumns.end();
                 ++collect
             )
@@ -239,7 +239,7 @@ namespace
             OSL_FAIL( "lcl_sanitizeColumnDescs: database did provide invalid ORDINAL_POSITION values!" );
 
             OrdinalPosition nNormalizedPosition = 1;
-            for (   ::std::vector< ColumnDesc >::iterator normalize = _rColumns.begin();
+            for (   std::vector< ColumnDesc >::iterator normalize = _rColumns.begin();
                     normalize != _rColumns.end();
                     ++normalize
                 )
@@ -250,7 +250,7 @@ namespace
         // what's left is that the range might not be from 1 to <column count>, but for instance
         // 0 to <column count>-1.
         size_t nOffset = *aUsedOrdinals.begin() - 1;
-        for (   ::std::vector< ColumnDesc >::iterator offset = _rColumns.begin();
+        for (   std::vector< ColumnDesc >::iterator offset = _rColumns.begin();
                 offset != _rColumns.end();
                 ++offset
             )
@@ -283,19 +283,19 @@ void OTableHelper::refreshColumns()
         lcl_sanitizeColumnDescs( m_pImpl->m_aColumnDesc );
 
         // sort by ordinal position
-        ::std::map< OrdinalPosition, OUString > aSortedColumns;
-        for (   ::std::vector< ColumnDesc >::const_iterator copy = m_pImpl->m_aColumnDesc.begin();
+        std::map< OrdinalPosition, OUString > aSortedColumns;
+        for (   std::vector< ColumnDesc >::const_iterator copy = m_pImpl->m_aColumnDesc.begin();
                 copy != m_pImpl->m_aColumnDesc.end();
                 ++copy
             )
             aSortedColumns[ copy->nOrdinalPosition ] = copy->sName;
 
         // copy them to aVector, now that we have the proper ordering
-        ::std::transform(
+        std::transform(
             aSortedColumns.begin(),
             aSortedColumns.end(),
-            ::std::insert_iterator< TStringVector >( aVector, aVector.begin() ),
-            ::o3tl::select2nd< ::std::map< OrdinalPosition, OUString >::value_type >()
+            std::insert_iterator< TStringVector >( aVector, aVector.begin() ),
+            ::o3tl::select2nd< std::map< OrdinalPosition, OUString >::value_type >()
             );
     }
 
@@ -308,15 +308,15 @@ void OTableHelper::refreshColumns()
 const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) const
 {
     const ColumnDesc* pRet = nullptr;
-    ::std::vector< ColumnDesc >::const_iterator aEnd = m_pImpl->m_aColumnDesc.end();
-    for (::std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
+    std::vector< ColumnDesc >::const_iterator aEnd = m_pImpl->m_aColumnDesc.end();
+    for (std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
     {
         if ( aIter->sName == _sName )
         {
             pRet = &*aIter;
             break;
         }
-    } // for (::std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
+    } // for (std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
     return pRet;
 }
 

@@ -43,7 +43,7 @@ public:
 protected:
     MultipleItemConverter( SfxItemPool& rItemPool );
 
-    ::std::vector< ItemConverter * >            m_aConverters;
+    std::vector< ItemConverter * >            m_aConverters;
 };
 
 }}

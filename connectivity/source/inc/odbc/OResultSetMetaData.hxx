@@ -40,8 +40,8 @@ namespace connectivity
             public  OResultSetMetaData_BASE
         {
         protected:
-            ::std::vector<sal_Int32> m_vMapping; // when not every column is needed
-            ::std::map<sal_Int32,sal_Int32> m_aColumnTypes;
+            std::vector<sal_Int32> m_vMapping; // when not every column is needed
+            std::map<sal_Int32,sal_Int32> m_aColumnTypes;
 
             SQLHANDLE       m_aStatementHandle;
             OConnection*    m_pConnection;
@@ -62,7 +62,7 @@ namespace connectivity
                 ,m_nColCount(-1)
                 ,m_bUseODBC2Types(false)
             {}
-            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ,const ::std::vector<sal_Int32> & _vMapping)
+            OResultSetMetaData(OConnection* _pConnection, SQLHANDLE _pStmt ,const std::vector<sal_Int32> & _vMapping)
                     :m_vMapping(_vMapping)
                     ,m_aStatementHandle( _pStmt )
                     ,m_pConnection(_pConnection)

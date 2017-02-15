@@ -244,19 +244,19 @@ void NetChart::impl_createSeriesShapes()
     //the polygon shapes for each series need to be created before
 
     //iterate through all series again to create the series shapes
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
-    const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
+    std::vector< std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
+    const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
     for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
     {
-        ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+        std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
+        const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
         for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
         {
-            ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+            std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
-            ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-            const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+            std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
+            const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
 
             std::map< sal_Int32, drawing::PolyPolygonShape3D* > aPreviousSeriesPolyMap;//a PreviousSeriesPoly for each different nAttachedAxisIndex
             drawing::PolyPolygonShape3D* pSeriesPoly = nullptr;
@@ -290,20 +290,20 @@ void NetChart::impl_createSeriesShapes()
 namespace
 {
 
-void lcl_reorderSeries( ::std::vector< ::std::vector< VDataSeriesGroup > >&  rZSlots )
+void lcl_reorderSeries( std::vector< std::vector< VDataSeriesGroup > >&  rZSlots )
 {
-    ::std::vector< ::std::vector< VDataSeriesGroup > >  aRet;
+    std::vector< std::vector< VDataSeriesGroup > >  aRet;
     aRet.reserve( rZSlots.size() );
 
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::reverse_iterator aZIt( rZSlots.rbegin() );
-    ::std::vector< ::std::vector< VDataSeriesGroup > >::reverse_iterator aZEnd( rZSlots.rend() );
+    std::vector< std::vector< VDataSeriesGroup > >::reverse_iterator aZIt( rZSlots.rbegin() );
+    std::vector< std::vector< VDataSeriesGroup > >::reverse_iterator aZEnd( rZSlots.rend() );
     for( ; aZIt != aZEnd; ++aZIt )
     {
-        ::std::vector< VDataSeriesGroup > aXSlot;
+        std::vector< VDataSeriesGroup > aXSlot;
         aXSlot.reserve( aZIt->size() );
 
-        ::std::vector< VDataSeriesGroup >::reverse_iterator aXIt( aZIt->rbegin() );
-        ::std::vector< VDataSeriesGroup >::reverse_iterator aXEnd( aZIt->rend() );
+        std::vector< VDataSeriesGroup >::reverse_iterator aXIt( aZIt->rbegin() );
+        std::vector< VDataSeriesGroup >::reverse_iterator aXEnd( aZIt->rend() );
         for( ; aXIt != aXEnd; ++aXIt )
             aXSlot.push_back(*aXIt);
 
@@ -375,14 +375,14 @@ void NetChart::createShapes()
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
-        ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
-        const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
+        std::vector< std::vector< VDataSeriesGroup > >::iterator aZSlotIter = m_aZSlots.begin();
+        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
 
         std::map< sal_Int32, double > aLogicYSumMap;//one for each different nAttachedAxisIndex
         for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
         {
-            ::std::vector< VDataSeriesGroup >::iterator aXSlotIter = aZSlotIter->begin();
-            const ::std::vector< VDataSeriesGroup >::iterator aXSlotEnd = aZSlotIter->end();
+            std::vector< VDataSeriesGroup >::iterator aXSlotIter = aZSlotIter->begin();
+            const std::vector< VDataSeriesGroup >::iterator aXSlotEnd = aZSlotIter->end();
 
             //iterate through all x slots in this category to get 100percent sum
             for( ; aXSlotIter != aXSlotEnd; ++aXSlotIter )
@@ -419,8 +419,8 @@ void NetChart::createShapes()
         aZSlotIter = m_aZSlots.begin();
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, ++nZ )
         {
-            ::std::vector< VDataSeriesGroup >::const_iterator aXSlotIter = aZSlotIter->begin();
-            ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+            std::vector< VDataSeriesGroup >::const_iterator aXSlotIter = aZSlotIter->begin();
+            std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
             //for the area chart there should be at most one x slot (no side by side stacking available)
             //attention different: xSlots are always interpreted as independent areas one behind the other: @todo this doesn't work why not???

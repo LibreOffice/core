@@ -55,7 +55,7 @@ namespace chart
 namespace
 {
 
-typedef ::std::pair< ::chart::tNameSequence, ::chart::tAnySequence > tPropertyValues;
+typedef std::pair< ::chart::tNameSequence, ::chart::tAnySequence > tPropertyValues;
 
 double lcl_CalcViewFontSize(
     const Reference< beans::XPropertySet > & xProp,
@@ -148,7 +148,7 @@ awt::Size lcl_createTextShapes(
     const std::vector<ViewLegendEntry> & rEntries,
     const Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const Reference< drawing::XShapes > & xTarget,
-    ::std::vector< Reference< drawing::XShape > > & rOutTextShapes,
+    std::vector< Reference< drawing::XShape > > & rOutTextShapes,
     const tPropertyValues & rTextProperties )
 {
     awt::Size aResult;
@@ -178,8 +178,8 @@ awt::Size lcl_createTextShapes(
 
             // adapt max-extent
             awt::Size aCurrSize( xEntry->getSize());
-            aResult.Width  = ::std::max( aResult.Width,  aCurrSize.Width  );
-            aResult.Height = ::std::max( aResult.Height, aCurrSize.Height );
+            aResult.Width  = std::max( aResult.Width,  aCurrSize.Width  );
+            aResult.Height = std::max( aResult.Height, aCurrSize.Height );
 
             rOutTextShapes.push_back( xEntry );
         }
@@ -193,7 +193,7 @@ awt::Size lcl_createTextShapes(
 }
 
 void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns,
-                              const ::std::vector< Reference< drawing::XShape > >& rTextShapes, sal_Int32 nSymbolPlusDistanceWidth )
+                              const std::vector< Reference< drawing::XShape > >& rTextShapes, sal_Int32 nSymbolPlusDistanceWidth )
 {
     rColumnWidths.clear();
     sal_Int32 nNumberOfEntries = rTextShapes.size();
@@ -209,14 +209,14 @@ void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal
                 if( nRow==0 )
                     rColumnWidths.push_back( nWidth );
                 else
-                    rColumnWidths[nColumn] = ::std::max( nWidth, rColumnWidths[nColumn] );
+                    rColumnWidths[nColumn] = std::max( nWidth, rColumnWidths[nColumn] );
             }
         }
     }
 }
 
 void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns,
-                           const ::std::vector< Reference< drawing::XShape > >& rTextShapes )
+                           const std::vector< Reference< drawing::XShape > >& rTextShapes )
 {
     // calculate maximum height for each row
     // and collect column widths
@@ -231,7 +231,7 @@ void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int3
             if( nEntry < nNumberOfEntries )
             {
                 awt::Size aTextSize( rTextShapes[ nEntry ]->getSize() );
-                nCurrentRowHeight = ::std::max( nCurrentRowHeight, aTextSize.Height );
+                nCurrentRowHeight = std::max( nCurrentRowHeight, aTextSize.Height );
             }
         }
         rRowHeights.push_back( nCurrentRowHeight );
@@ -292,7 +292,7 @@ awt::Size lcl_placeLegendEntries(
         *pFrameWidthAny <<= nMaxTextWidth;
     }
 
-    ::std::vector< Reference< drawing::XShape > > aTextShapes;
+    std::vector< Reference< drawing::XShape > > aTextShapes;
     awt::Size aMaxEntryExtent = lcl_createTextShapes( rEntries, xShapeFactory, xTarget, aTextShapes, rTextProperties );
     OSL_ASSERT( aTextShapes.size() == rEntries.size());
 
@@ -547,7 +547,7 @@ awt::Size lcl_placeLegendEntries(
             nCurrentYPos += aRowHeights[ nRow ];
             if( nRow+1 < nNumberOfRows )
                 nCurrentYPos += nYOffset;
-            nMaxYPos = ::std::max( nMaxYPos, nCurrentYPos );
+            nMaxYPos = std::max( nMaxYPos, nCurrentYPos );
         }
         if( bSymbolsLeftSide )
         {

@@ -52,7 +52,7 @@ namespace connectivity
             css::sdbc::SQLWarning               m_aLastWarning;
 
         protected:
-            ::std::list< OUString>              m_aBatchList;
+            std::list< OUString>              m_aBatchList;
             connectivity::OSQLParser            m_aParser;
             connectivity::OSQLParseTreeIterator m_aSQLIterator;
             connectivity::OSQLParseNode*        m_pParseTree;

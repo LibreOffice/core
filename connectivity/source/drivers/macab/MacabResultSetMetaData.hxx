@@ -40,7 +40,7 @@ namespace connectivity
         {
             MacabConnection*                m_pConnection;
             OUString                 m_sTableName;
-            ::std::vector<sal_Int32>    m_aMacabFields; // for each selected column, contains the number
+            std::vector<sal_Int32>    m_aMacabFields; // for each selected column, contains the number
                                                         //  of the corresponding AddressBook field
 
         protected:

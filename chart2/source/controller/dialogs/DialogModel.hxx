@@ -64,13 +64,13 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext );
     ~DialogModel();
 
-    typedef ::std::pair<
+    typedef std::pair<
                 OUString,
-                ::std::pair< css::uno::Reference< css::chart2::XDataSeries >,
+                std::pair< css::uno::Reference< css::chart2::XDataSeries >,
                              css::uno::Reference< css::chart2::XChartType > > >
         tSeriesWithChartTypeByName;
 
-    typedef ::std::map< OUString, OUString >
+    typedef std::map< OUString, OUString >
         tRolesWithRanges;
 
     void setTemplate(
@@ -85,10 +85,10 @@ public:
     css::uno::Reference< css::chart2::data::XDataProvider >
         getDataProvider() const;
 
-    ::std::vector< css::uno::Reference< css::chart2::XDataSeriesContainer > >
+    std::vector< css::uno::Reference< css::chart2::XDataSeriesContainer > >
         getAllDataSeriesContainers() const;
 
-    ::std::vector< tSeriesWithChartTypeByName >
+    std::vector< tSeriesWithChartTypeByName >
         getAllDataSeriesWithLabel() const;
 
     static tRolesWithRanges getRolesWithRanges(
@@ -164,7 +164,7 @@ private:
 private:
     void applyInterpretedData(
         const css::chart2::InterpretedData & rNewData,
-        const ::std::vector< css::uno::Reference< css::chart2::XDataSeries > > & rSeriesToReUse );
+        const std::vector< css::uno::Reference< css::chart2::XDataSeries > > & rSeriesToReUse );
 
     sal_Int32 countSeries() const;
 

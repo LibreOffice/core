@@ -83,7 +83,7 @@ Sequence< Type > SAL_CALL OFileCatalog::getTypes(  )
     typedef sdbcx::OCatalog OFileCatalog_BASE;
 
     Sequence< Type > aTypes = OFileCatalog_BASE::getTypes();
-    ::std::vector<Type> aOwnTypes;
+    std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();

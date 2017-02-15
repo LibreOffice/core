@@ -94,7 +94,7 @@ namespace dbtools
 
     const OUString& OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
     {
-        ::std::map<sal_Int32, OUString>::const_iterator aIter = m_aPropertyMap.find(_nIndex);
+        std::map<sal_Int32, OUString>::const_iterator aIter = m_aPropertyMap.find(_nIndex);
         return aIter->second;
     }
 }

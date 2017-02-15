@@ -91,7 +91,7 @@ private: //member
 
     bool m_bIsExplicitCategoriesInited;
     css::uno::Sequence< OUString >  m_aExplicitCategories;
-    ::std::vector< ::std::vector< ComplexCategory > >   m_aComplexCats;
+    std::vector< std::vector< ComplexCategory > >   m_aComplexCats;
     css::uno::Sequence< css::uno::Reference<
         css::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
 

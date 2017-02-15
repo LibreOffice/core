@@ -74,9 +74,9 @@ namespace connectivity
 
             connectivity::OSQLParseNode*                m_pParseTree;
 
-            ::std::vector<sal_Int32>                    m_aColMapping;
-            ::std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
-            ::std::vector<TAscendingOrder>              m_aOrderbyAscending;
+            std::vector<sal_Int32>                    m_aColMapping;
+            std::vector<sal_Int32>                    m_aOrderbyColumnNumber;
+            std::vector<TAscendingOrder>              m_aOrderbyAscending;
 
         protected:
 

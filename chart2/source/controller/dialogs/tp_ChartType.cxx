@@ -742,8 +742,8 @@ ChartTypeTabPage::ChartTypeTabPage(vcl::Window* pParent
     if ( aOpts.IsExperimentalMode() )
         m_aChartTypeDialogControllerList.push_back(new GL3DBarChartDialogController());
 
-    ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
-    const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
+    std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
+    const std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
     for( ; aIter != aEnd; ++aIter )
     {
         m_pMainTypeList->InsertEntry( (*aIter)->getName(), (*aIter)->getImage() );
@@ -766,8 +766,8 @@ ChartTypeTabPage::~ChartTypeTabPage()
 void ChartTypeTabPage::dispose()
 {
     //delete all dialog controller
-    ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
-    const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
+    std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
+    const std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
     for( ; aIter != aEnd; ++aIter )
     {
         delete *aIter;
@@ -850,7 +850,7 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
 ChartTypeDialogController* ChartTypeTabPage::getSelectedMainType()
 {
     ChartTypeDialogController* pTypeController = nullptr;
-    ::std::vector< ChartTypeDialogController* >::size_type nM = static_cast< ::std::vector< ChartTypeDialogController* >::size_type >(
+    std::vector< ChartTypeDialogController* >::size_type nM = static_cast< std::vector< ChartTypeDialogController* >::size_type >(
         m_pMainTypeList->GetSelectEntryPos() );
     if( nM<m_aChartTypeDialogControllerList.size() )
         pTypeController = m_aChartTypeDialogControllerList[nM];
@@ -962,8 +962,8 @@ void ChartTypeTabPage::initializePage()
 
     bool bFound = false;
 
-    ::std::vector< ChartTypeDialogController* >::iterator             aIter = m_aChartTypeDialogControllerList.begin();
-    const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
+    std::vector< ChartTypeDialogController* >::iterator             aIter = m_aChartTypeDialogControllerList.begin();
+    const std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
     for( sal_uInt16 nM=0; aIter != aEnd; ++aIter, ++nM )
     {
         if( (*aIter)->isSubType(aServiceName) )

@@ -104,7 +104,7 @@ enum eServiceType
     SERVICE_NAME_IMPORT_GRAPHIC_RESOLVER
 };
 
-typedef ::std::map< OUString, enum eServiceType > tServiceNameMap;
+typedef std::map< OUString, enum eServiceType > tServiceNameMap;
 
 tServiceNameMap & lcl_getStaticServiceNameMap()
 {
@@ -152,7 +152,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "HasMainTitle",
@@ -246,10 +246,10 @@ struct StaticChartDocumentWrapperPropertyArray_Initializer
 private:
     static uno::Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -991,7 +991,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
 
     // iterate 'flat' over all top-level objects
     // and determine all that are no chart objects
-    ::std::vector< uno::Reference< drawing::XShape > > aShapeVector;
+    std::vector< uno::Reference< drawing::XShape > > aShapeVector;
     sal_Int32 nSubCount = xDrawPageShapes->getCount();
     uno::Reference< drawing::XShape > xShape;
     for( sal_Int32 nS = 0; nS < nSubCount; nS++ )
@@ -1012,7 +1012,7 @@ Reference< drawing::XShapes > ChartDocumentWrapper::getAdditionalShapes() const
         OSL_ENSURE( xFoundShapes.is(), "Couldn't create a shape collection!" );
         if( xFoundShapes.is())
         {
-            ::std::vector< uno::Reference< drawing::XShape > >::iterator aIter;
+            std::vector< uno::Reference< drawing::XShape > >::iterator aIter;
             for( aIter = aShapeVector.begin(); aIter != aShapeVector.end(); ++aIter )
                 xFoundShapes->add( *aIter );
         }
@@ -1433,7 +1433,7 @@ const Sequence< beans::Property >& ChartDocumentWrapper::getPropertySequence()
 
 const std::vector< WrappedProperty* > ChartDocumentWrapper::createWrappedProperties()
 {
-    ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
+    std::vector< ::chart::WrappedProperty* > aWrappedProperties;
     aWrappedProperties.push_back( new WrappedDataSourceLabelsInFirstRowProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedDataSourceLabelsInFirstColumnProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedHasLegendProperty( m_spChart2ModelContact ) );

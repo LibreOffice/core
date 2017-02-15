@@ -182,7 +182,7 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
 ::sal_Int32 NumberedCollection::impl_searchFreeNumber ()
 {
     // create ordered list of all possible numbers.
-    ::std::vector< ::sal_Int32 > lPossibleNumbers;
+    std::vector< ::sal_Int32 > lPossibleNumbers;
     ::sal_Int32                  c = (::sal_Int32)m_lComponents.size ();
     ::sal_Int32                  i = 1;
 
@@ -212,7 +212,7 @@ OUString SAL_CALL NumberedCollection::getUntitledPrefix()
                 continue;
             }
 
-            ::std::vector< ::sal_Int32 >::iterator pPossible = ::std::find(lPossibleNumbers.begin (), lPossibleNumbers.end (), rItem.nNumber);
+            std::vector< ::sal_Int32 >::iterator pPossible = std::find(lPossibleNumbers.begin (), lPossibleNumbers.end (), rItem.nNumber);
             if (pPossible != lPossibleNumbers.end ())
                 lPossibleNumbers.erase (pPossible);
         }

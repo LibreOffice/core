@@ -416,17 +416,17 @@ void OStatement_Base::construct(const OUString& sql)
         // set the binding of the resultrow
         m_aRow          = new OValueRefVector(xNames->getCount());
         (m_aRow->get())[0]->setBound(true);
-        ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetRefBound(false));
+        std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetRefBound(false));
 
         // set the binding of the resultrow
         m_aEvaluateRow  = new OValueRefVector(xNames->getCount());
 
         (m_aEvaluateRow->get())[0]->setBound(true);
-        ::std::for_each(m_aEvaluateRow->get().begin()+1,m_aEvaluateRow->get().end(),TSetRefBound(false));
+        std::for_each(m_aEvaluateRow->get().begin()+1,m_aEvaluateRow->get().end(),TSetRefBound(false));
 
         // set the select row
         m_aSelectRow = new OValueRefVector(m_aSQLIterator.getSelectColumns()->get().size());
-        ::std::for_each(m_aSelectRow->get().begin(),m_aSelectRow->get().end(),TSetRefBound(true));
+        std::for_each(m_aSelectRow->get().begin(),m_aSelectRow->get().end(),TSetRefBound(true));
 
         // create the column mapping
         createColumnMapping();
@@ -492,12 +492,12 @@ void OStatement_Base::GetAssignValues()
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
         m_aAssignValues = new OAssignValues(nCount);
         // unbound all
-        ::std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(false));
+        std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(false));
 
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
         // List of Column-Names, that exist in the column_commalist (separated by ;):
-        ::std::vector<OUString> aColumnNameList;
+        std::vector<OUString> aColumnNameList;
 
         OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
 
@@ -579,7 +579,7 @@ void OStatement_Base::GetAssignValues()
         sal_Int32 nCount = Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount();
         m_aAssignValues = new OAssignValues(nCount);
         // unbound all
-        ::std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(false));
+        std::for_each(m_aAssignValues->get().begin()+1,m_aAssignValues->get().end(),TSetRefBound(false));
 
         m_aParameterIndexes.resize(nCount+1,SQL_NO_PARAMETER);
 
@@ -591,7 +591,7 @@ void OStatement_Base::GetAssignValues()
         OSL_ENSURE(pAssignmentCommalist->count() > 0,"OResultSet: pAssignmentCommalist->count() <= 0");
 
         // work on all assignments (commalist) ...
-        ::std::vector< OUString> aList(1);
+        std::vector< OUString> aList(1);
         for (size_t i = 0; i < pAssignmentCommalist->count(); i++)
         {
             OSQLParseNode * pAssignment = pAssignmentCommalist->getChild(i);
@@ -619,7 +619,7 @@ void OStatement_Base::GetAssignValues()
     }
 }
 
-void OStatement_Base::ParseAssignValues(const ::std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex)
+void OStatement_Base::ParseAssignValues(const std::vector< OUString>& aColumnNameList,OSQLParseNode* pRow_Value_Constructor_Elem, sal_Int32 nIndex)
 {
     OSL_ENSURE(size_t(nIndex) <= aColumnNameList.size(),"SdbFileCursor::ParseAssignValues: nIndex > aColumnNameList.GetTokenCount()");
     OUString aColumnName(aColumnNameList[nIndex]);

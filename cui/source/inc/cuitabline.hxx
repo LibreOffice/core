@@ -137,7 +137,7 @@ private:
     VclPtr<MetricField>        m_pSymbolHeightMF;
     VclPtr<CheckBox>           m_pSymbolRatioCB;
     std::vector<OUString>      m_aGrfNames;
-    ::std::vector< SvxBmpItemInfo* >
+    std::vector< SvxBmpItemInfo* >
                                m_aGrfBrushItems;
     bool                m_bLastWidthModified;
     Size                m_aSymbolLastSize;

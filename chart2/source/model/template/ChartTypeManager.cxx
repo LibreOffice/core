@@ -129,7 +129,7 @@ enum TemplateId
     TEMPLATE_NOT_FOUND = 0xffff
 };
 
-typedef ::std::map< OUString, TemplateId > tTemplateMapType;
+typedef std::map< OUString, TemplateId > tTemplateMapType;
 
 const tTemplateMapType & lcl_DefaultChartTypeMap()
 {
@@ -563,12 +563,12 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithA
 
 uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 {
-    ::std::vector< OUString > aServices;
+    std::vector< OUString > aServices;
     const tTemplateMapType & rMap = lcl_DefaultChartTypeMap();
     aServices.reserve( rMap.size());
 
     // get own default templates
-    ::std::transform( rMap.begin(), rMap.end(), ::std::back_inserter( aServices ),
+    std::transform( rMap.begin(), rMap.end(), std::back_inserter( aServices ),
             ::o3tl::select1st< tTemplateMapType::value_type >() );
 
     // add components that were registered in the context's factory

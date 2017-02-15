@@ -55,16 +55,16 @@ namespace connectivity
                                     public  ::cppu::OPropertySetHelper,
                                     public  ::comphelper::OPropertyArrayUsageHelper<ODatabaseMetaDataResultSet>
         {
-            ::std::vector<sal_Int32>        m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
+            std::vector<sal_Int32>        m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
 
-            ::std::map<sal_Int32, TInt2IntMap > m_aValueRange;
-            ::std::map<sal_Int32, TInt2IntMap >::iterator   m_aValueRangeIter;
+            std::map<sal_Int32, TInt2IntMap > m_aValueRange;
+            std::map<sal_Int32, TInt2IntMap >::iterator   m_aValueRangeIter;
 
-            ::std::map<sal_Int32, ::std::map< OUString,sal_Int32> >              m_aStrValueRange;
-            ::std::map<sal_Int32, ::std::map< OUString,sal_Int32> >::iterator    m_aStrValueRangeIter;
+            std::map<sal_Int32, std::map< OUString,sal_Int32> >              m_aStrValueRange;
+            std::map<sal_Int32, std::map< OUString,sal_Int32> >::iterator    m_aStrValueRangeIter;
 
-            ::std::map<sal_Int32, ::std::map< sal_Int32,OUString> >              m_aIntValueRange;
-            ::std::map<sal_Int32, ::std::map< sal_Int32,OUString> >::iterator    m_aIntValueRangeIter;
+            std::map<sal_Int32, std::map< sal_Int32,OUString> >              m_aIntValueRange;
+            std::map<sal_Int32, std::map< sal_Int32,OUString> >::iterator    m_aIntValueRangeIter;
 
             ADORecordset*                   m_pRecordSet;
             css::uno::WeakReferenceHelper   m_aStatement;
@@ -193,7 +193,7 @@ namespace connectivity
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
 
-            const ::std::vector<sal_Int32>& getColumnMapping() { return m_aColMapping; }
+            const std::vector<sal_Int32>& getColumnMapping() { return m_aColMapping; }
 
             void setCatalogsMap();
             void setSchemasMap();

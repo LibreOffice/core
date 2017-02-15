@@ -120,7 +120,7 @@ sal_Int32 lcl_getErrorBarStyle( const uno::Reference< beans::XPropertySet >& xEr
 }
 
 uno::Reference< chart2::data::XDataProvider > lcl_getDataProviderFromContact(
-    const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
+    const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     uno::Reference< chart2::data::XDataProvider > xResult;
     if( spChart2ModelContact.get())
@@ -135,7 +135,7 @@ uno::Reference< chart2::data::XDataProvider > lcl_getDataProviderFromContact(
 
 void lcl_ConvertRangeFromXML(
     OUString & rInOutRange,
-    const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
+    const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     if( !rInOutRange.isEmpty())
     {
@@ -151,7 +151,7 @@ void lcl_ConvertRangeFromXML(
 
 void lcl_ConvertRangeToXML(
     OUString & rInOutRange,
-    const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
+    const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     if( !rInOutRange.isEmpty())
     {
@@ -172,7 +172,7 @@ class WrappedStatisticProperty : public WrappedSeriesOrDiagramProperty< PROPERTY
 {
 public:
     explicit WrappedStatisticProperty( const OUString& rName, const Any& rDefaulValue
-                              , ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact
+                              , std::shared_ptr< Chart2ModelContact > spChart2ModelContact
                               , tSeriesOrDiagramPropertyType ePropertyType )
             : WrappedSeriesOrDiagramProperty< PROPERTYTYPE >(rName,rDefaulValue,spChart2ModelContact,ePropertyType)
     {}
@@ -205,7 +205,7 @@ public:
     virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const override;
 
-    explicit WrappedConstantErrorLowProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedConstantErrorLowProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                               tSeriesOrDiagramPropertyType ePropertyType );
 
 private:
@@ -213,7 +213,7 @@ private:
 };
 
 WrappedConstantErrorLowProperty::WrappedConstantErrorLowProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "ConstantErrorLow"
             , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
@@ -255,7 +255,7 @@ public:
     virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const override;
 
-    explicit WrappedConstantErrorHighProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedConstantErrorHighProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                tSeriesOrDiagramPropertyType ePropertyType );
 
 private:
@@ -263,7 +263,7 @@ private:
 };
 
 WrappedConstantErrorHighProperty::WrappedConstantErrorHighProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "ConstantErrorHigh"
             , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
@@ -305,12 +305,12 @@ public:
     virtual bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const bool& aNewValue ) const override;
 
-    explicit WrappedMeanValueProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedMeanValueProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType );
 };
 
 WrappedMeanValueProperty::WrappedMeanValueProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< bool >( "MeanValue", uno::Any( false ), spChart2ModelContact, ePropertyType  )
 {
@@ -345,12 +345,12 @@ public:
     virtual css::chart::ChartErrorCategory getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartErrorCategory& aNewValue ) const override;
 
-    explicit WrappedErrorCategoryProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedErrorCategoryProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                            tSeriesOrDiagramPropertyType ePropertyType );
 };
 
 WrappedErrorCategoryProperty::WrappedErrorCategoryProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< css::chart::ChartErrorCategory >( "ErrorCategory"
             , uno::Any( css::chart::ChartErrorCategory_NONE ), spChart2ModelContact, ePropertyType  )
@@ -439,7 +439,7 @@ public:
     virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const override;
 
-    explicit WrappedPercentageErrorProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedPercentageErrorProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                              tSeriesOrDiagramPropertyType ePropertyType );
 
 private:
@@ -447,7 +447,7 @@ private:
 };
 
 WrappedPercentageErrorProperty::WrappedPercentageErrorProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "PercentageError"
             , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
@@ -489,7 +489,7 @@ public:
     virtual double getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const double& aNewValue ) const override;
 
-    explicit WrappedErrorMarginProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedErrorMarginProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                          tSeriesOrDiagramPropertyType ePropertyType );
 
 private:
@@ -497,7 +497,7 @@ private:
 };
 
 WrappedErrorMarginProperty::WrappedErrorMarginProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< double >( "ErrorMargin"
             , uno::Any( double(0.0) ), spChart2ModelContact, ePropertyType  )
@@ -539,12 +539,12 @@ public:
     virtual css::chart::ChartErrorIndicatorType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartErrorIndicatorType& aNewValue ) const override;
 
-    explicit WrappedErrorIndicatorProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedErrorIndicatorProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                             tSeriesOrDiagramPropertyType ePropertyType );
 };
 
 WrappedErrorIndicatorProperty::WrappedErrorIndicatorProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< css::chart::ChartErrorIndicatorType >( "ErrorIndicator"
             , uno::Any( css::chart::ChartErrorIndicatorType_NONE ), spChart2ModelContact, ePropertyType  )
@@ -608,12 +608,12 @@ public:
     virtual sal_Int32 getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& nNewValue ) const override;
 
-    explicit WrappedErrorBarStyleProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact1,
+    explicit WrappedErrorBarStyleProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact1,
                                            tSeriesOrDiagramPropertyType ePropertyType );
 };
 
 WrappedErrorBarStyleProperty::WrappedErrorBarStyleProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< sal_Int32 >( "ErrorBarStyle"
             , uno::Any( css::chart::ErrorBarStyle::NONE ), spChart2ModelContact, ePropertyType  )
@@ -650,7 +650,7 @@ public:
     virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const override;
 
-    explicit WrappedErrorBarRangePositiveProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedErrorBarRangePositiveProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
 
 private:
@@ -658,7 +658,7 @@ private:
 };
 
 WrappedErrorBarRangePositiveProperty::WrappedErrorBarRangePositiveProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< OUString >( "ErrorBarRangePositive"
             , uno::Any( OUString() ), spChart2ModelContact, ePropertyType  )
@@ -713,7 +713,7 @@ public:
     virtual OUString getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const OUString& aNewValue ) const override;
 
-    explicit WrappedErrorBarRangeNegativeProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedErrorBarRangeNegativeProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                                    tSeriesOrDiagramPropertyType ePropertyType );
 
 private:
@@ -721,7 +721,7 @@ private:
 };
 
 WrappedErrorBarRangeNegativeProperty::WrappedErrorBarRangeNegativeProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< OUString >( "ErrorBarRangeNegative"
             , uno::Any( OUString() ), spChart2ModelContact, ePropertyType  )
@@ -776,12 +776,12 @@ public:
     virtual css::chart::ChartRegressionCurveType getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const css::chart::ChartRegressionCurveType & aNewValue ) const override;
 
-    explicit WrappedRegressionCurvesProperty( ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    explicit WrappedRegressionCurvesProperty( std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
                                               tSeriesOrDiagramPropertyType ePropertyType );
 };
 
 WrappedRegressionCurvesProperty::WrappedRegressionCurvesProperty(
-    ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+    std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
     tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< css::chart::ChartRegressionCurveType >( "RegressionCurves"
         , lcl_getRegressionDefault(), spChart2ModelContact, ePropertyType  )
@@ -835,7 +835,7 @@ public:
     };
 
     explicit WrappedStatisticPropertySetProperty(
-        PropertySetType ePropertySetType, ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
+        PropertySetType ePropertySetType, std::shared_ptr< Chart2ModelContact > spChart2ModelContact,
         tSeriesOrDiagramPropertyType ePropertyType );
 
 private:
@@ -844,7 +844,7 @@ private:
 
 WrappedStatisticPropertySetProperty::WrappedStatisticPropertySetProperty(
     PropertySetType ePropertySetType
-    , ::std::shared_ptr< Chart2ModelContact > spChart2ModelContact
+    , std::shared_ptr< Chart2ModelContact > spChart2ModelContact
     , tSeriesOrDiagramPropertyType ePropertyType )
         : WrappedStatisticProperty< Reference< beans::XPropertySet > >(
             (ePropertySetType == PROPERTY_SET_TYPE_REGRESSION)
@@ -913,7 +913,7 @@ enum
                series
  */
 void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
-            , const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact
+            , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact
             , tSeriesOrDiagramPropertyType ePropertyType )
 {
     rList.push_back( new WrappedConstantErrorLowProperty( spChart2ModelContact, ePropertyType ) );
@@ -937,7 +937,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 
 }//anonymous namespace
 
-void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOutProperties )
+void WrappedStatisticProperties::addProperties( std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "ConstantErrorLow",
@@ -1030,13 +1030,13 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
 }
 
 void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
-                                    , const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DATA_SERIES );
 }
 
 void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
-                                    , const ::std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
+                                    , const std::shared_ptr< Chart2ModelContact >& spChart2ModelContact )
 {
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM  );
 }

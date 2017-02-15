@@ -1522,7 +1522,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     aCurrentRow[5] = new ORowSetValueDecorator(); // FKTABLE_CAT unsupported
     aCurrentRow[6] = new ORowSetValueDecorator(); // FKTABLE_SCHEM unsupported
 
-    ::std::map< OUString,sal_Int32> aRuleMap;
+    std::map< OUString,sal_Int32> aRuleMap;
     aRuleMap[ OUString("CASCADE")] = KeyRule::CASCADE;
     aRuleMap[ OUString("RESTRICT")] = KeyRule::RESTRICT;
     aRuleMap[ OUString("SET NULL")] = KeyRule::SET_NULL;

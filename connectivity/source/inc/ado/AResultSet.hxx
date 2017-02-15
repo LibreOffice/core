@@ -67,7 +67,7 @@ namespace connectivity
             OStatement_Base*                m_pStmt;
             css::uno::Reference< css::uno::XInterface>    m_xStatement;
             css::uno::Reference< css::sdbc::XResultSetMetaData>        m_xMetaData;
-            ::std::vector<OLEVariant>       m_aBookmarks;
+            std::vector<OLEVariant>       m_aBookmarks;
             OLEVariant                      m_aValue;
             ADO_LONGPTR                     m_nRowPos;
             bool                            m_bEOF;

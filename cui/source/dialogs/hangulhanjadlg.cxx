@@ -137,7 +137,7 @@ namespace svx
 
         // position these rectangles properly
         // x-axis:
-        sal_Int32 nCombinedWidth = ::std::max( aSecondaryRect.GetWidth(), aPrimaryRect.GetWidth() );
+        sal_Int32 nCombinedWidth = std::max( aSecondaryRect.GetWidth(), aPrimaryRect.GetWidth() );
             // the rectangle where both texts will reside is as high as possible, and as wide as the
             // widest of both text rects
         aPrimaryRect.Left() = aSecondaryRect.Left() = _rRect.Left();

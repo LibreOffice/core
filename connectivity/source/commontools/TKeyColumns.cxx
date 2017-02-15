@@ -40,7 +40,7 @@ using namespace ::com::sun::star::lang;
 
 OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
                 ::osl::Mutex& _rMutex,
-                const ::std::vector< OUString> &_rVector)
+                const std::vector< OUString> &_rVector)
             : connectivity::sdbcx::OCollection(*_pKey,true,_rMutex,_rVector)
             ,m_pKey(_pKey)
 {

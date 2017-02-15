@@ -58,7 +58,7 @@ class SelectorListBox : public ListBox
     private:
         css::uno::WeakReference< css::frame::XController >   m_xChartController;
 
-        ::std::vector< ListBoxEntryData > m_aEntries;
+        std::vector< ListBoxEntryData > m_aEntries;
 
         bool m_bReleaseFocus;
 };

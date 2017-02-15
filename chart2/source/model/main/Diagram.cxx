@@ -81,7 +81,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "RelativePosition",
@@ -241,12 +241,12 @@ struct StaticDiagramInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::SceneProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -273,8 +273,8 @@ struct StaticDiagramInfo : public rtl::StaticAggregate< uno::Reference< beans::X
 
 /// clones a UNO-sequence of UNO-References
 typedef Reference< chart2::XCoordinateSystem > lcl_tCooSysRef;
-typedef ::std::map< lcl_tCooSysRef, lcl_tCooSysRef >  lcl_tCooSysMapping;
-typedef ::std::vector< lcl_tCooSysRef >               lcl_tCooSysVector;
+typedef std::map< lcl_tCooSysRef, lcl_tCooSysRef >  lcl_tCooSysMapping;
+typedef std::vector< lcl_tCooSysRef >               lcl_tCooSysVector;
 
 lcl_tCooSysMapping lcl_CloneCoordinateSystems(
         const lcl_tCooSysVector & rSource,
@@ -507,7 +507,7 @@ void SAL_CALL Diagram::addCoordinateSystem(
 {
     {
         MutexGuard aGuard( GetMutex() );
-        if( ::std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys )
+        if( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys )
             != m_aCoordSystems.end())
             throw lang::IllegalArgumentException();
 
@@ -527,8 +527,8 @@ void SAL_CALL Diagram::removeCoordinateSystem(
 {
     {
         MutexGuard aGuard( GetMutex() );
-        ::std::vector< uno::Reference< chart2::XCoordinateSystem > >::iterator
-              aIt( ::std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys ));
+        std::vector< uno::Reference< chart2::XCoordinateSystem > >::iterator
+              aIt( std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys ));
         if( aIt == m_aCoordSystems.end())
             throw container::NoSuchElementException(
                 "The given coordinate-system is no element of the container",

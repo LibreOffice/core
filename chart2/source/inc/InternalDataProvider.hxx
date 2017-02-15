@@ -197,11 +197,11 @@ private:
     void increaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
     void decreaseMapReferences( sal_Int32 nBegin, sal_Int32 nEnd );
 
-    typedef ::std::multimap< OUString,
+    typedef std::multimap< OUString,
             css::uno::WeakReference< css::chart2::data::XDataSequence > >
         tSequenceMap;
-    typedef ::std::pair< tSequenceMap::iterator, tSequenceMap::iterator > tSequenceMapRange;
-    typedef ::std::pair< tSequenceMap::const_iterator, tSequenceMap::const_iterator > tConstSequenceMapRange;
+    typedef std::pair< tSequenceMap::iterator, tSequenceMap::iterator > tSequenceMapRange;
+    typedef std::pair< tSequenceMap::const_iterator, tSequenceMap::const_iterator > tConstSequenceMapRange;
 
     /** cache for all sequences that have been returned.
 

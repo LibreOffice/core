@@ -48,7 +48,7 @@ struct EventDisplayName
     {
     }
 };
-typedef ::std::vector< EventDisplayName >   EventDisplayNames;
+typedef std::vector< EventDisplayName >   EventDisplayNames;
 
 class SvxMacroTabPage_;
 class SvTabListBox;
@@ -78,7 +78,7 @@ protected:
 
     void                        EnableButtons();
     static css::uno::Any  GetPropsByName( const OUString& eventName, EventsHash& eventsHash );
-    static ::std::pair< OUString, OUString > GetPairFromAny( const css::uno::Any& aAny );
+    static std::pair< OUString, OUString > GetPairFromAny( const css::uno::Any& aAny );
 
 public:
 

@@ -84,7 +84,7 @@ public:
 private:
     mutable MarkHandleProvider*     m_pMarkHandleProvider;
 
-    ::std::unique_ptr< SdrOutliner >  m_apOutliner;
+    std::unique_ptr< SdrOutliner >  m_apOutliner;
 
     // #i79965# scroll back view when ending text edit
     bool m_bRestoreMapMode;

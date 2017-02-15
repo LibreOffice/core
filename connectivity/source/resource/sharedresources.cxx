@@ -43,7 +43,7 @@ namespace connectivity
         static  oslInterlockedCount     s_nClients;
 
     private:
-        ::std::unique_ptr< ::comphelper::OfficeResourceBundle >
+        std::unique_ptr< ::comphelper::OfficeResourceBundle >
                                         m_pResourceBundle;
 
     public:
@@ -194,11 +194,11 @@ namespace connectivity
     }
 
     OUString SharedResources::getResourceStringWithSubstitution( ResourceId _nResId,
-                    const ::std::list< ::std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const
+                    const std::list< std::pair<const sal_Char* , OUString > >& _rStringToSubstitutes) const
     {
         OUString sString( SharedResources_Impl::getInstance().getResourceString( _nResId ) );
-        ::std::list< ::std::pair<const sal_Char* , OUString > >::const_iterator aIter = _rStringToSubstitutes.begin();
-        ::std::list< ::std::pair<const sal_Char* , OUString > >::const_iterator aEnd  = _rStringToSubstitutes.end();
+        std::list< std::pair<const sal_Char* , OUString > >::const_iterator aIter = _rStringToSubstitutes.begin();
+        std::list< std::pair<const sal_Char* , OUString > >::const_iterator aEnd  = _rStringToSubstitutes.end();
         for(;aIter != aEnd; ++aIter)
             OSL_VERIFY( lcl_substitute( sString, aIter->first, aIter->second ) );
 

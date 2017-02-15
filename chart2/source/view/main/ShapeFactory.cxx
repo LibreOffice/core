@@ -209,7 +209,7 @@ uno::Any createPolyPolygon_Cylinder(
     double fY2 = fHeight;
 
     if( fHeight<0.0 )
-        ::std::swap(fY1,fY2);
+        std::swap(fY1,fY2);
 
     for(sal_Int32 nN = 2; nN--;)
         *pInnerSequenceZ++ = 0.0;
@@ -302,8 +302,8 @@ uno::Any createPolyPolygon_Cone( double fHeight, double fRadius, double fTopHeig
 
     if( fHeight<0.0 )
     {
-        ::std::swap(fX1,fX3);
-        ::std::swap(fY1,fY3);
+        std::swap(fX1,fX3);
+        std::swap(fY1,fY3);
     }
 
     for(sal_Int32 nN = 2; nN--;)

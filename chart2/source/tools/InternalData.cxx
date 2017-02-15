@@ -66,7 +66,7 @@ private:
 };
 
 template< typename T >
-    Sequence< T > lcl_ValarrayToSequence( const ::std::valarray< T > & rValarray )
+    Sequence< T > lcl_ValarrayToSequence( const std::valarray< T > & rValarray )
 {
     // is there a more elegant way of conversion?
     Sequence< T > aResult( rValarray.size());
@@ -137,7 +137,7 @@ void InternalData::setData( const Sequence< Sequence< double > >& rDataInRows )
     for( sal_Int32 nRow=0; nRow<m_nRowCount; ++nRow )
     {
         int nDataIdx = nRow*m_nColumnCount;
-        const sal_Int32 nMax = ::std::min( rDataInRows[nRow].getLength(), m_nColumnCount );
+        const sal_Int32 nMax = std::min( rDataInRows[nRow].getLength(), m_nColumnCount );
         for( sal_Int32 nCol=0; nCol < nMax; ++nCol )
         {
             m_aData[nDataIdx] = rDataInRows[nRow][nCol];
@@ -152,7 +152,7 @@ Sequence< Sequence< double > > InternalData::getData() const
 
     for( sal_Int32 i=0; i<m_nRowCount; ++i )
         aResult[i] = lcl_ValarrayToSequence< tDataType::value_type >(
-            m_aData[ ::std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
+            m_aData[ std::slice( i*m_nColumnCount, m_nColumnCount, 1 ) ] );
 
     return aResult;
 }
@@ -161,14 +161,14 @@ Sequence< double > InternalData::getColumnValues( sal_Int32 nColumnIndex ) const
 {
     if( nColumnIndex >= 0 && nColumnIndex < m_nColumnCount )
         return lcl_ValarrayToSequence< tDataType::value_type >(
-            m_aData[ ::std::slice( nColumnIndex, m_nRowCount, m_nColumnCount ) ] );
+            m_aData[ std::slice( nColumnIndex, m_nRowCount, m_nColumnCount ) ] );
     return Sequence< double >();
 }
 Sequence< double > InternalData::getRowValues( sal_Int32 nRowIndex ) const
 {
     if( nRowIndex >= 0 && nRowIndex < m_nRowCount )
         return lcl_ValarrayToSequence< tDataType::value_type >(
-            m_aData[ ::std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ] );
+            m_aData[ std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ] );
     return Sequence< double >();
 }
 
@@ -178,10 +178,10 @@ void InternalData::setColumnValues( sal_Int32 nColumnIndex, const vector< double
         return;
     enlargeData( nColumnIndex + 1, rNewData.size() );
 
-    tDataType aSlice = m_aData[ ::std::slice( nColumnIndex, m_nRowCount, m_nColumnCount ) ];
+    tDataType aSlice = m_aData[ std::slice( nColumnIndex, m_nRowCount, m_nColumnCount ) ];
     for( vector< double >::size_type i = 0; i < rNewData.size(); ++i )
         aSlice[i] = rNewData[i];
-    m_aData[ ::std::slice( nColumnIndex, m_nRowCount, m_nColumnCount ) ] = aSlice;
+    m_aData[ std::slice( nColumnIndex, m_nRowCount, m_nColumnCount ) ] = aSlice;
 }
 
 void InternalData::setRowValues( sal_Int32 nRowIndex, const vector< double > & rNewData )
@@ -190,10 +190,10 @@ void InternalData::setRowValues( sal_Int32 nRowIndex, const vector< double > & r
         return;
     enlargeData( rNewData.size(), nRowIndex+1 );
 
-    tDataType aSlice = m_aData[ ::std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ];
+    tDataType aSlice = m_aData[ std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ];
     for( vector< double >::size_type i = 0; i < rNewData.size(); ++i )
         aSlice[i] = rNewData[i];
-    m_aData[ ::std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ]= aSlice;
+    m_aData[ std::slice( nRowIndex*m_nColumnCount, m_nColumnCount, 1 ) ]= aSlice;
 }
 
 void InternalData::setComplexColumnLabel( sal_Int32 nColumnIndex, const vector< uno::Any >& rComplexLabel )
@@ -279,8 +279,8 @@ void InternalData::swapColumnWithNext( sal_Int32 nColumnIndex )
 
 bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
 {
-    sal_Int32 nNewColumnCount( ::std::max<sal_Int32>( m_nColumnCount, nColumnCount ) );
-    sal_Int32 nNewRowCount( ::std::max<sal_Int32>( m_nRowCount, nRowCount ) );
+    sal_Int32 nNewColumnCount( std::max<sal_Int32>( m_nColumnCount, nColumnCount ) );
+    sal_Int32 nNewRowCount( std::max<sal_Int32>( m_nRowCount, nRowCount ) );
     sal_Int32 nNewSize( nNewColumnCount*nNewRowCount );
 
     bool bGrow = (nNewSize > m_nColumnCount*m_nRowCount);
@@ -293,8 +293,8 @@ bool InternalData::enlargeData( sal_Int32 nColumnCount, sal_Int32 nRowCount )
         // copy old data
         for( int nCol=0; nCol<m_nColumnCount; ++nCol )
             static_cast< tDataType >(
-                aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] ) =
-                m_aData[ ::std::slice( nCol, m_nRowCount, m_nColumnCount ) ];
+                aNewData[ std::slice( nCol, m_nRowCount, nNewColumnCount ) ] ) =
+                m_aData[ std::slice( nCol, m_nRowCount, m_nColumnCount ) ];
 
         m_aData.resize( nNewSize );
         m_aData = aNewData;
@@ -320,13 +320,13 @@ void InternalData::insertColumn( sal_Int32 nAfterIndex )
     // copy old data
     int nCol=0;
     for( ; nCol<=nAfterIndex; ++nCol )
-        aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
+        aNewData[ std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
             static_cast< tDataType >(
-                m_aData[ ::std::slice( nCol, m_nRowCount, m_nColumnCount ) ] );
+                m_aData[ std::slice( nCol, m_nRowCount, m_nColumnCount ) ] );
     for( ++nCol; nCol<nNewColumnCount; ++nCol )
-        aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
+        aNewData[ std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
             static_cast< tDataType >(
-                m_aData[ ::std::slice( nCol - 1, m_nRowCount, m_nColumnCount ) ] );
+                m_aData[ std::slice( nCol - 1, m_nRowCount, m_nColumnCount ) ] );
 
     m_nColumnCount = nNewColumnCount;
     m_aData.resize( nNewSize );
@@ -376,16 +376,16 @@ void InternalData::insertRow( sal_Int32 nAfterIndex )
 
     // copy old data
     sal_Int32 nIndex = nAfterIndex + 1;
-    aNewData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] =
+    aNewData[ std::slice( 0, nIndex * m_nColumnCount, 1 ) ] =
         static_cast< tDataType >(
-            m_aData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] );
+            m_aData[ std::slice( 0, nIndex * m_nColumnCount, 1 ) ] );
 
     if( nIndex < m_nRowCount )
     {
         sal_Int32 nRemainingCount = m_nColumnCount * (m_nRowCount - nIndex);
-        aNewData[ ::std::slice( (nIndex + 1) * m_nColumnCount, nRemainingCount, 1 ) ] =
+        aNewData[ std::slice( (nIndex + 1) * m_nColumnCount, nRemainingCount, 1 ) ] =
             static_cast< tDataType >(
-                m_aData[ ::std::slice( nIndex * m_nColumnCount, nRemainingCount, 1 ) ] );
+                m_aData[ std::slice( nIndex * m_nColumnCount, nRemainingCount, 1 ) ] );
     }
 
     m_nRowCount = nNewRowCount;
@@ -414,13 +414,13 @@ void InternalData::deleteColumn( sal_Int32 nAtIndex )
     // copy old data
     int nCol=0;
     for( ; nCol<nAtIndex; ++nCol )
-        aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
+        aNewData[ std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
             static_cast< tDataType >(
-                m_aData[ ::std::slice( nCol, m_nRowCount, m_nColumnCount ) ] );
+                m_aData[ std::slice( nCol, m_nRowCount, m_nColumnCount ) ] );
     for( ; nCol<nNewColumnCount; ++nCol )
-        aNewData[ ::std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
+        aNewData[ std::slice( nCol, m_nRowCount, nNewColumnCount ) ] =
             static_cast< tDataType >(
-                m_aData[ ::std::slice( nCol + 1, m_nRowCount, m_nColumnCount ) ] );
+                m_aData[ std::slice( nCol + 1, m_nRowCount, m_nColumnCount ) ] );
 
     m_nColumnCount = nNewColumnCount;
     m_aData.resize( nNewSize );
@@ -448,16 +448,16 @@ void InternalData::deleteRow( sal_Int32 nAtIndex )
     // copy old data
     sal_Int32 nIndex = nAtIndex;
     if( nIndex )
-        aNewData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] =
+        aNewData[ std::slice( 0, nIndex * m_nColumnCount, 1 ) ] =
             static_cast< tDataType >(
-                m_aData[ ::std::slice( 0, nIndex * m_nColumnCount, 1 ) ] );
+                m_aData[ std::slice( 0, nIndex * m_nColumnCount, 1 ) ] );
 
     if( nIndex < nNewRowCount )
     {
         sal_Int32 nRemainingCount = m_nColumnCount * (nNewRowCount - nIndex);
-        aNewData[ ::std::slice( nIndex * m_nColumnCount, nRemainingCount, 1 ) ] =
+        aNewData[ std::slice( nIndex * m_nColumnCount, nRemainingCount, 1 ) ] =
             static_cast< tDataType >(
-                m_aData[ ::std::slice( (nIndex + 1) * m_nColumnCount, nRemainingCount, 1 ) ] );
+                m_aData[ std::slice( (nIndex + 1) * m_nColumnCount, nRemainingCount, 1 ) ] );
     }
 
     m_nRowCount = nNewRowCount;
@@ -539,7 +539,7 @@ void InternalData::dump() const
 
     for (sal_Int32 nRow = 0; nRow < m_nRowCount; ++nRow)
     {
-        tDataType aSlice( m_aData[ ::std::slice( nRow*m_nColumnCount, m_nColumnCount, 1 ) ] );
+        tDataType aSlice( m_aData[ std::slice( nRow*m_nColumnCount, m_nColumnCount, 1 ) ] );
         for (sal_Int32 nCol = 0; nCol < m_nColumnCount; ++nCol)
             aPrinter.set(nRow, nCol, OUString::number(aSlice[nCol]));
     }

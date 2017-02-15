@@ -101,7 +101,7 @@ namespace connectivity
             friend class MQueryHelper;
 
         public:
-            typedef ::std::vector< MQueryExpressionBase* > ExprVector;
+            typedef std::vector< MQueryExpressionBase* > ExprVector;
 
             typedef enum {
                 AND,

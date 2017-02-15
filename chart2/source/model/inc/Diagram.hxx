@@ -156,7 +156,7 @@ private:
      css::uno::Reference< css::uno::XComponentContext >                m_xContext;
 
     typedef
-        ::std::vector< css::uno::Reference< css::chart2::XCoordinateSystem > >
+        std::vector< css::uno::Reference< css::chart2::XCoordinateSystem > >
         tCoordinateSystemContainerType;
 
     tCoordinateSystemContainerType m_aCoordSystems;

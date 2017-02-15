@@ -44,7 +44,7 @@ public:
     virtual void createShapes() override;
     virtual void rearrangeLabelToAvoidOverlapIfRequested( const css::awt::Size& rPageSize ) override;
 
-    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
+    virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis ) override;
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 ) override;
 
     virtual css::drawing::Direction3D  getPreferredDiagramAspectRatio() const override;
@@ -134,7 +134,7 @@ private: //member
         css::awt::Point aPreviousPosition;
     };
 
-    ::std::vector< PieLabelInfo > m_aLabelInfoList;
+    std::vector< PieLabelInfo > m_aLabelInfoList;
 
     double m_fMaxOffset;    /// cached max offset value (init'ed to NaN)
 };

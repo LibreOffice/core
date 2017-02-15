@@ -330,7 +330,7 @@ void OInterfaceContainerHelper::clear()
 
 // specialized class for type
 
-typedef ::std::vector< std::pair < Type , void* > > t_type2ptr;
+typedef std::vector< std::pair < Type , void* > > t_type2ptr;
 
 OMultiTypeInterfaceContainerHelper::OMultiTypeInterfaceContainerHelper( Mutex & rMutex_ )
     : rMutex( rMutex_ )
@@ -494,7 +494,7 @@ void OMultiTypeInterfaceContainerHelper::clear()
 
 // specialized class for long
 
-typedef ::std::vector< std::pair < sal_Int32 , void* > > t_long2ptr;
+typedef std::vector< std::pair < sal_Int32 , void* > > t_long2ptr;
 
 static t_long2ptr::iterator findLong(t_long2ptr *pMap, sal_Int32 nKey )
 {

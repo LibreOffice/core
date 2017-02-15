@@ -45,7 +45,7 @@ namespace offapp
     public:
         ODriverEnumeration() throw();
         ~ODriverEnumeration() throw();
-        typedef ::std::vector< OUString >::const_iterator const_iterator;
+        typedef std::vector< OUString >::const_iterator const_iterator;
 
         const_iterator  begin() const throw();
         const_iterator  end() const throw();

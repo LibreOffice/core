@@ -69,8 +69,8 @@ namespace canvas
         geometry::RealSize2D createInfiniteSize2D()
         {
             return geometry::RealSize2D(
-                ::std::numeric_limits<double>::infinity(),
-                ::std::numeric_limits<double>::infinity() );
+                std::numeric_limits<double>::infinity(),
+                std::numeric_limits<double>::infinity() );
         }
 
         rendering::RenderState& initRenderState( rendering::RenderState& renderState )
@@ -1052,7 +1052,7 @@ namespace canvas
 
         bool clipScrollArea( ::basegfx::B2IRange&                  io_rSourceArea,
                              ::basegfx::B2IPoint&                  io_rDestPoint,
-                             ::std::vector< ::basegfx::B2IRange >& o_ClippedAreas,
+                             std::vector< ::basegfx::B2IRange >& o_ClippedAreas,
                              const ::basegfx::B2IRange&            rBounds )
         {
             ::basegfx::B2IRange aResultingDestArea;
@@ -1228,7 +1228,7 @@ namespace canvas
             // longest line in gradient bound rect
             const int nGradientSize(
                 static_cast<int>(
-                    ::std::max(
+                    std::max(
                         ::basegfx::B2DVector(aRightBottom-aLeftTop).getLength(),
                         ::basegfx::B2DVector(aRightTop-aLeftBottom).getLength() ) + 1.0 ) );
 
@@ -1237,8 +1237,8 @@ namespace canvas
 
             // use at least three steps, and at utmost the number of color
             // steps
-            return ::std::max( 3,
-                               ::std::min(
+            return std::max( 3,
+                               std::min(
                                    nGradientSize / nStripSize,
                                    nColorSteps ) );
         }

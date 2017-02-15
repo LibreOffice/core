@@ -40,9 +40,9 @@ namespace connectivity
         {
             friend class ODatabaseMetaDataResultSet;
 
-            const ::std::vector<sal_Int32> &m_vMapping; // when not every column is needed
-            ::std::map<sal_Int32,connectivity::OColumn> m_mColumns;
-            ::std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
+            const std::vector<sal_Int32> &m_vMapping; // when not every column is needed
+            std::map<sal_Int32,connectivity::OColumn> m_mColumns;
+            std::map<sal_Int32,connectivity::OColumn>::const_iterator m_mColumnsIter;
 
             ADORecordset*   m_pRecordSet;
             sal_Int32       m_nColCount;

@@ -54,7 +54,7 @@ using ::com::sun::star::uno::Sequence;
 namespace
 {
 
-class lcl_MatchesRole : public ::std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
+class lcl_MatchesRole : public std::unary_function< Reference< chart2::data::XLabeledDataSequence >, bool >
 {
 public:
     explicit lcl_MatchesRole( const OUString & aRole, bool bMatchPrefix ) :
@@ -218,7 +218,7 @@ Reference< chart2::data::XLabeledDataSequence >
     const Reference< chart2::data::XLabeledDataSequence > * pBegin = aLabeledSeq.getConstArray();
     const Reference< chart2::data::XLabeledDataSequence > * pEnd = pBegin + aLabeledSeq.getLength();
     const Reference< chart2::data::XLabeledDataSequence > * pMatch =
-        ::std::find_if( pBegin, pEnd, lcl_MatchesRole( aRole, bMatchPrefix ));
+        std::find_if( pBegin, pEnd, lcl_MatchesRole( aRole, bMatchPrefix ));
 
     if( pMatch != pEnd )
         return *pMatch;
@@ -226,21 +226,21 @@ Reference< chart2::data::XLabeledDataSequence >
     return aNoResult;
 }
 
-::std::vector< Reference< chart2::data::XLabeledDataSequence > >
+std::vector< Reference< chart2::data::XLabeledDataSequence > >
     getAllDataSequencesByRole( const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole, bool bMatchPrefix /* = false */ )
 {
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVec;
-    ::std::remove_copy_if( aDataSequences.getConstArray(), aDataSequences.getConstArray() + aDataSequences.getLength(),
-                           ::std::back_inserter( aResultVec ),
-                           ::std::not1( lcl_MatchesRole( aRole, bMatchPrefix )));
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVec;
+    std::remove_copy_if( aDataSequences.getConstArray(), aDataSequences.getConstArray() + aDataSequences.getLength(),
+                           std::back_inserter( aResultVec ),
+                           std::not1( lcl_MatchesRole( aRole, bMatchPrefix )));
     return aResultVec;
 }
 
 std::vector<Reference<css::chart2::data::XLabeledDataSequence> >
 getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& aSeries )
 {
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
 
     for( sal_Int32 i = 0; i < aSeries.getLength(); ++i )
     {
@@ -248,8 +248,8 @@ getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& 
         if( xSource.is())
         {
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
-            ::std::copy( aSeq.begin(), aSeq.end(),
-                         ::std::back_inserter( aSeqVec ));
+            std::copy( aSeq.begin(), aSeq.end(),
+                         std::back_inserter( aSeqVec ));
         }
     }
 
@@ -427,7 +427,7 @@ void setStackModeAtSeries(
             aAxisIndexSet.insert(0);
         }
 
-        for( ::std::set< sal_Int32 >::const_iterator aIt = aAxisIndexSet.begin();
+        for( std::set< sal_Int32 >::const_iterator aIt = aAxisIndexSet.begin();
             aIt != aAxisIndexSet.end(); ++aIt )
         {
             sal_Int32 nAxisIndex = *aIt;
@@ -522,10 +522,10 @@ void deleteSeries(
     try
     {
         Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY_THROW );
-        ::std::vector< Reference< chart2::XDataSeries > > aSeries(
+        std::vector< Reference< chart2::XDataSeries > > aSeries(
             ContainerHelper::SequenceToVector( xSeriesCnt->getDataSeries()));
-        ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt =
-              ::std::find( aSeries.begin(), aSeries.end(), xSeries );
+        std::vector< Reference< chart2::XDataSeries > >::iterator aIt =
+              std::find( aSeries.begin(), aSeries.end(), xSeries );
         if( aIt != aSeries.end())
         {
             aSeries.erase( aIt );
@@ -737,8 +737,8 @@ sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nIndex, const Refere
             xProp->getPropertyValue( "HiddenValues" ) >>= aHiddenIndicesSeq;
             if( aHiddenIndicesSeq.getLength() )
             {
-                ::std::vector< sal_Int32 > aHiddenIndices( ContainerHelper::SequenceToVector( aHiddenIndicesSeq ) );
-                ::std::sort( aHiddenIndices.begin(), aHiddenIndices.end() );
+                std::vector< sal_Int32 > aHiddenIndices( ContainerHelper::SequenceToVector( aHiddenIndicesSeq ) );
+                std::sort( aHiddenIndices.begin(), aHiddenIndices.end() );
 
                 sal_Int32 nHiddenCount = static_cast<sal_Int32>(aHiddenIndices.size());
                 for( sal_Int32 nN = 0; nN < nHiddenCount; ++nN)
@@ -822,8 +822,8 @@ bool hasDataLabelAtPoint( const Reference< chart2::XDataSeries >& xSeries, sal_I
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
             if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
             {
-                ::std::vector< sal_Int32 > aIndices( ContainerHelper::SequenceToVector( aAttributedDataPointIndexList ) );
-                ::std::vector< sal_Int32 >::iterator aIt = ::std::find( aIndices.begin(), aIndices.end(), nPointIndex );
+                std::vector< sal_Int32 > aIndices( ContainerHelper::SequenceToVector( aAttributedDataPointIndexList ) );
+                std::vector< sal_Int32 >::iterator aIt = std::find( aIndices.begin(), aIndices.end(), nPointIndex );
                 if( aIt != aIndices.end())
                     xProp = xSeries->getDataPointByIndex(nPointIndex);
                 else

@@ -124,7 +124,7 @@ Any SAL_CALL OMySQLCatalog::queryInterface( const Type & rType )
 Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  )
 {
     Sequence< Type > aTypes = OCatalog::getTypes();
-    ::std::vector<Type> aOwnTypes;
+    std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
     const Type* pBegin = aTypes.getConstArray();
     const Type* pEnd = pBegin + aTypes.getLength();

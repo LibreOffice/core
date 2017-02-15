@@ -55,7 +55,7 @@ protected:
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet ) override;
 
 private:
-    ::std::vector< ItemConverter * >    m_aConverters;
+    std::vector< ItemConverter * >    m_aConverters;
 };
 
 }}

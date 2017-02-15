@@ -1157,7 +1157,7 @@ Sequence<sal_Int8> OResultSet::impl_getBookmark(  )
 {
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    TBookmarkPosMap::const_iterator aFind = ::std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
+    TBookmarkPosMap::const_iterator aFind = std::find_if(m_aPosToBookmarks.begin(),m_aPosToBookmarks.end(),
         [this] (const TBookmarkPosMap::value_type& bookmarkPos) {
             return bookmarkPos.second == m_nRowPos;
         });
@@ -1818,9 +1818,9 @@ void OResultSet::fillNeededData(SQLRETURN _nRet)
 
 SWORD OResultSet::impl_getColumnType_nothrow(sal_Int32 columnIndex)
 {
-    ::std::map<sal_Int32,SWORD>::const_iterator aFind = m_aODBCColumnTypes.find(columnIndex);
+    std::map<sal_Int32,SWORD>::const_iterator aFind = m_aODBCColumnTypes.find(columnIndex);
     if ( aFind == m_aODBCColumnTypes.end() )
-        aFind = m_aODBCColumnTypes.insert(::std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
+        aFind = m_aODBCColumnTypes.insert(std::map<sal_Int32,SWORD>::value_type(columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex))).first;
     return aFind->second;
 }
 

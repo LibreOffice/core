@@ -25,7 +25,7 @@
 
 namespace chart { namespace wrapper {
 
-typedef ::std::map< ItemConverter::tWhichIdType, ::std::pair< ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType > >
+typedef std::map< ItemConverter::tWhichIdType, std::pair< ItemConverter::tPropertyNameType, ItemConverter::tMemberIdType > >
     ItemPropertyMapType;
 
 }}

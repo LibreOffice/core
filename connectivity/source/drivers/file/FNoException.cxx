@@ -67,7 +67,7 @@ void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
     }
 }
 
-void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
+void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,std::vector< OSQLParseNode*>& _rParaNodes)
 {
     DBG_ASSERT(pParseNode != nullptr,"OResultSet: interner Fehler: ungueltiger ParseNode");
 
@@ -93,7 +93,7 @@ OKeyValue* OResultSet::GetOrderbyKeyValue(OValueRefRow& _rRow)
 
     OKeyValue* pKeyValue = OKeyValue::createKeyValue((sal_uInt32)nBookmarkValue);
 
-    ::std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
+    std::vector<sal_Int32>::const_iterator aIter = m_aOrderbyColumnNumber.begin();
     for (;aIter != m_aOrderbyColumnNumber.end(); ++aIter)
     {
         OSL_ENSURE(*aIter < static_cast<sal_Int32>(_rRow->get().size()),"Invalid index for orderkey values!");
