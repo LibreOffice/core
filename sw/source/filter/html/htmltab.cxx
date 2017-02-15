@@ -442,7 +442,7 @@ class HTMLTable
     // the following parameters are from the <TABLE>-Tag
     sal_uInt16 m_nWidth;                  // width of the table
     sal_uInt16 m_nHeight;                 // absolute height of the table
-    SvxAdjust m_eTableAdjust;         // drawing::Alignment of the table
+    SvxAdjust m_eTableAdjust;             // drawing::Alignment of the table
     sal_Int16 m_eVertOrientation;         // Default vertical direction of the cells
     sal_uInt16 m_nBorder;                 // width of the external border
     HTMLTableFrame m_eFrame;          // frame around the table
@@ -515,7 +515,7 @@ class HTMLTable
 
 public:
 
-    bool m_bFirstCell;                // wurde schon eine Zelle angelegt?
+    bool m_bFirstCell;                // is there a cell created already?
 
     HTMLTable( SwHTMLParser* pPars, HTMLTable *pTopTab,
                bool bParHead, bool bHasParentSec,
@@ -568,10 +568,10 @@ public:
     void InsertCol( sal_uInt16 nSpan, sal_uInt16 nWidth, bool bRelWidth,
                     SvxAdjust eAdjust, sal_Int16 eVertOri );
 
-    // Beenden einer Tab-Definition (MUSS fuer ALLE Tabs aufgerufen werden)
+    // End a table definition (needs to be called for every table)
     void CloseTable();
 
-    // SwTable konstruieren (inkl. der Child-Tabellen)
+    // Consstruct a SwTable (including child tables)
     void MakeTable( SwTableBox *pUpper, sal_uInt16 nAbsAvail,
                     sal_uInt16 nRelAvail=0, sal_uInt16 nAbsLeftSpace=0,
                     sal_uInt16 nAbsRightSpace=0, sal_uInt16 nInhAbsSpace=0 );
@@ -639,7 +639,7 @@ HTMLTableCnts::HTMLTableCnts( HTMLTable* pTab ):
 
 HTMLTableCnts::~HTMLTableCnts()
 {
-    delete m_pTable;              // die Tabellen brauchen wir nicht mehr
+    delete m_pTable;              // we don't need the tables anymore
     delete m_pNext;
 }
 
@@ -693,8 +693,7 @@ HTMLTableCell::HTMLTableCell():
 
 HTMLTableCell::~HTMLTableCell()
 {
-    // der Inhalt ist in mehrere Zellen eingetragen, darf aber nur einmal
-    // geloescht werden
+    // the content is in multiple cells but mustn't be deleted more than once
     if( 1==nRowSpan && 1==nColSpan )
     {
         delete pContents;
@@ -733,13 +732,12 @@ inline void HTMLTableCell::SetWidth( sal_uInt16 nWdth, bool bRelWdth )
 
 void HTMLTableCell::SetProtected()
 {
-    // Die Inhalte dieser Zelle mussen nich irgenwo anders verankert
-    // sein, weil sie nicht geloescht werden!!!
+    // The content of this cell doesn't have to be anchored anywhere else,
+    // since they're not gonna be deleted
 
-    // Inhalt loeschen
     pContents = nullptr;
 
-    // Hintergrundfarbe kopieren.
+    // Copy background color
     if( pBGBrush )
         pBGBrush = new SvxBrushItem( *pBGBrush );
 
@@ -808,9 +806,8 @@ inline HTMLTableCell *HTMLTableRow::GetCell( sal_uInt16 nCell ) const
 
 void HTMLTableRow::Expand( sal_uInt16 nCells, bool bOneCell )
 {
-    // die Zeile wird mit einer einzigen Zelle aufgefuellt, wenn
-    // bOneCell gesetzt ist. Das geht, nur fuer Zeilen, in die keine
-    // Zellen mehr eingefuegt werden!
+    // This row will be filled with a single cell if bOneCell is set.
+    // This will only work for rows that don't allow adding cells!
 
     sal_uInt16 nColSpan = nCells - m_pCells->size();
     for (sal_uInt16 i = m_pCells->size(); i < nCells; ++i)
@@ -957,16 +954,14 @@ void HTMLTable::InitCtor( const HTMLTableOptions *pOptions )
     long nPHeight = nBorderOpt==USHRT_MAX ? 0 : nBorderOpt;
     SvxCSS1Parser::PixelToTwip( nPWidth, nPHeight );
 
-    // nBorder gibt die Breite der Umrandung an, wie sie in die
-    // Breitenberechnung in Netscape einfliesst. Wenn pOption->nBorder
-    // == USHRT_MAX, wurde keine BORDER-Option angegeben. Trotzdem fliesst
-    // eine 1 Pixel breite Umrandung in die Breitenberechnung mit ein.
+    // nBorder tells the width of the burder as it's used in the width calculation of NetScape
+    // If pOption->nBorder == USHRT_MAX, there wasn't a BORDER option given
+    // Nonetheless, a 1 pixel wide border will be used for width fcalculation
     m_nBorder = (sal_uInt16)nPWidth;
     if( nBorderOpt==USHRT_MAX )
         nPWidth = 0;
 
-    // HACK: ein Pixel-breite Linien sollen zur Haarlinie werden, wenn
-    // wir mit doppelter Umrandung arbeiten
+    // HACK: one pixel wide lines should be hairlines when we'll use double bordering
     if( pOptions->nCellSpacing!=0 && nBorderOpt==1 )
     {
         nPWidth = 1;
@@ -1092,8 +1087,7 @@ HTMLTable::~HTMLTable()
 
     delete m_pContext;
 
-    // pLayoutInfo wurde entweder bereits geloescht oder muss aber es
-    // in den Besitz der SwTable uebergegangen.
+    // pLayoutInfo has either already been deleted or is now owned by SwTable
 }
 
 SwHTMLTableLayout *HTMLTable::CreateLayoutInfo()
@@ -1180,28 +1174,28 @@ void HTMLTable::ProtectRowSpan( sal_uInt16 nRow, sal_uInt16 nCol, sal_uInt16 nRo
     }
 }
 
-// Suchen des SwStartNodes der letzten belegten Vorgaengerbox
+// Search the SwStartNode of the last used predecessor box
 const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 nCol ) const
 {
     const HTMLTableCnts *pPrevCnts = nullptr;
 
     if( 0==nRow )
     {
-        // immer die Vorgaenger-Zelle
+        // always the predecessor cell
         if( nCol>0 )
             pPrevCnts = GetCell( 0, nCol-1 )->GetContents();
         else
             return m_pPrevStartNode;
     }
     else if( USHRT_MAX==nRow && USHRT_MAX==nCol )
-        // der Contents der letzten Zelle
+        // contents of preceding cell
         pPrevCnts = GetCell( m_nRows-1, m_nCols-1 )->GetContents();
     else
     {
         sal_uInt16 i;
         HTMLTableRow *const pPrevRow = (*m_pRows)[nRow-1].get();
 
-        // evtl. eine Zelle in der aktuellen Zeile
+        // maybe a cell in the current row
         i = nCol;
         while( i )
         {
@@ -1213,7 +1207,7 @@ const SwStartNode* HTMLTable::GetPrevBoxStartNode( sal_uInt16 nRow, sal_uInt16 n
             }
         }
 
-        // sonst die letzte gefuellte Zelle der Zeile davor suchen
+        // otherwise the last filled cell of the row before
         if( !pPrevCnts )
         {
             i = m_nCols;
@@ -1283,12 +1277,12 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
                              sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                              bool bFirstPara, bool bLastPara ) const
 {
-    SwFrameFormat *pFrameFormat = nullptr;      // frame::Frame-Format
+    SwFrameFormat *pFrameFormat = nullptr;      // frame::Frame format
     sal_Int16 eVOri = text::VertOrientation::NONE;
-    const SvxBrushItem *pBGBrushItem = nullptr;   // Hintergrund
+    const SvxBrushItem *pBGBrushItem = nullptr;   // background
     std::shared_ptr<SvxBoxItem> pBoxItem;
     bool bTopLine = false, bBottomLine = false, bLastBottomLine = false;
-    bool bReUsable = false;     // Format nochmals verwendbar?
+    bool bReUsable = false;     // Format reusable?
     sal_uInt16 nEmptyRows = 0;
     bool bHasNumFormat = false;
     bool bHasValue = false;
@@ -1299,19 +1293,16 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
 
     if( pBox->GetSttNd() )
     {
-        // die Hintergrundfarbe/-grafik bestimmen
+        // Determine background color/graphic
         const HTMLTableCell *pCell = GetCell( nRow, nCol );
         pBoxItem = pCell->GetBoxItem();
         pBGBrushItem = pCell->GetBGBrush();
         if( !pBGBrushItem )
         {
-            // Wenn die Zelle ueber mehrere Zeilen geht muss ein evtl.
-            // an der Zeile gesetzter Hintergrund an die Zelle uebernommen
-            // werden.
-            // Wenn es sich um eine Tabelle in der Tabelle handelt und
-            // die Zelle ueber die gesamte Heoehe der Tabelle geht muss
-            // ebenfalls der Hintergrund der Zeile uebernommen werden, weil
-            // die Line von der GC (zu Recht) wegoptimiert wird.
+            // If a cell spans multiple rows, a background to that row should be copied to the cell.
+            // If it's a table in a table and that cell goes over the whole height of that table,
+            // the row's background has to be copied to the cell aswell,
+            // since the line is gonna be GC-ed (correctly).
             if( nRowSpan > 1 || (this != m_pTopTable && nRowSpan==m_nRows) )
             {
                 pBGBrushItem = (*m_pRows)[nRow]->GetBGBrush();
@@ -1351,16 +1342,16 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
     {
         pFrameFormat = pBox->ClaimFrameFormat();
 
-        // die Breite der Box berechnen
+        // calculate width of the box
         SwTwips nFrameWidth = (SwTwips)m_pLayoutInfo->GetColumn(nCol)
                                                 ->GetRelColWidth();
         for( sal_uInt16 i=1; i<nColSpan; i++ )
             nFrameWidth += (SwTwips)m_pLayoutInfo->GetColumn(nCol+i)
                                              ->GetRelColWidth();
 
-        // die Umrandung nur an Edit-Boxen setzen (bei der oberen und unteren
-        // Umrandung muss beruecks. werden, ob es sich um den ersten oder
-        // letzen Absatz der Zelle handelt)
+        // Only set the border on edit boxes.
+        // On setting the upper and lower border, keep in mind if
+        // it's the first or the last paragraph of the cell
         if( pBox->GetSttNd() )
         {
             bool bSet = (m_nCellPadding > 0);
@@ -1382,9 +1373,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             {
                 if( nEmptyRows && !m_aBorderLine.GetInWidth() )
                 {
-                    // Leere Zeilen koennen zur Zeit nur dann ueber
-                    // dicke Linien simuliert werden, wenn die Linie
-                    // einfach ist.
+                    // For now, empty rows can only be emulated by thick lines, if it's a single line
                     SvxBorderLine aThickBorderLine( m_aBorderLine );
 
                     sal_uInt16 nBorderWidth = m_aBorderLine.GetOutWidth();
@@ -1421,14 +1410,12 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             }
             else if (bSet)
             {
-                // BorderDist nicht mehr Bestandteil einer Zelle mit fixer Breite
+                // BorderDist is not part of a cell with fixed width
                 sal_uInt16 nBDist = static_cast< sal_uInt16 >(
                     (2*m_nCellPadding <= nInnerFrameWidth) ? m_nCellPadding
                                                       : (nInnerFrameWidth / 2) );
-                // wir setzen das Item nur, wenn es eine Umrandung gibt
-                // oder eine Border-Distanz vorgegeben ist. Fehlt letztere,
-                // dann gibt es eine Umrandung, und wir muessen die Distanz
-                // setzen
+                // We only set the item if there's a border or a border distance
+                // If the latter is missing, there's gonna be a border and we'll have to set the distance
                 aBoxItem.SetAllDistances((nBDist) ? nBDist : MIN_BORDER_DIST);
                 pFrameFormat->SetFormatAttr( aBoxItem );
             }
@@ -1442,7 +1429,7 @@ void HTMLTable::FixFrameFormat( SwTableBox *pBox,
             else
                 pFrameFormat->ResetFormatAttr( RES_BACKGROUND );
 
-            // Format nur setzten, wenn es auch einen Value gibt oder die Box leer ist.
+            // Only set format if there's a value or the box is empty
             if( bHasNumFormat && (bHasValue || IsBoxEmpty(pBox)) )
             {
                 bool bLock = pFrameFormat->GetDoc()->GetNumberFormatter()
@@ -1554,8 +1541,7 @@ SwTableBox *HTMLTable::NewTableBox( const SwStartNode *pStNd,
     if( m_pTopTable->m_pBox1 &&
         m_pTopTable->m_pBox1->GetSttNd() == pStNd )
     {
-        // wenn der StartNode dem StartNode der initial angelegten Box
-        // entspricht nehmen wir diese Box
+        // If the StartNode is the StartNode of the initially created box, we take that box
         pBox = m_pTopTable->m_pBox1;
         pBox->SetUpper( pUpper );
         m_pTopTable->m_pBox1 = nullptr;
@@ -1575,7 +1561,7 @@ static void ResetLineFrameFormatAttrs( SwFrameFormat *pFrameFormat )
             "Zeile hat vertikale Ausrichtung" );
 }
 
-// !!! kann noch vereinfacht werden
+// !!! could be simplified
 SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                                        sal_uInt16 nTopRow, sal_uInt16 nLeftCol,
                                        sal_uInt16 nBottomRow, sal_uInt16 nRightCol )
@@ -1593,16 +1579,14 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     const SvxBrushItem *pBGBrushItem = nullptr;
     if( this == m_pTopTable || nTopRow>0 || nBottomRow<m_nRows )
     {
-        // An der Line eine Frabe zu setzen macht keinen Sinn, wenn sie
-        // die auesserste und gleichzeitig einzige Zeile einer Tabelle in
-        // der Tabelle ist.
+        // It doesn't make sense to set a color on a line,
+        // if it's the outermost and simultaneously sole line of a table in a table
         pBGBrushItem = pTopRow->GetBGBrush();
 
         if( !pBGBrushItem && this != m_pTopTable )
         {
-            // Ein an einer Tabellen in der Tabelle gesetzter Hintergrund
-            // wird an den Rows gesetzt. Das gilt auch fuer den Hintergrund
-            // der Zelle, in dem die Tabelle vorkommt.
+            // A background that's set on a table in a table is set on the rows.
+            // It's the same for the background of the cell where that table is
             pBGBrushItem = GetBGBrush();
             if( !pBGBrushItem )
                 pBGBrushItem = GetInhBGBrush();
@@ -1615,10 +1599,8 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
 
         if( nRowHeight )
         {
-            // Tabellenhoehe einstellen. Da es sich um eine
-            // Mindesthoehe handelt, kann sie genauso wie in
-            // Netscape berechnet werden, also ohne Beruecksichtigung
-            // der tatsaechlichen Umrandungsbreite.
+            // set table height. Since it's a minimum height it can be calculated in Netscape,
+            // so without considerung the actual border width
             nRowHeight += GetTopCellSpace( nTopRow ) +
                        GetBottomCellSpace( nTopRow, 1 );
 
@@ -1633,8 +1615,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     }
     else if( !m_pLineFrameFormatNoHeight )
     {
-        // sonst muessen wir die Hoehe aus dem Attribut entfernen
-        // und koennen uns das Format merken
+        // else, we'll have to remove the height from the attribute and remember the formatx
         m_pLineFrameFormatNoHeight = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
 
         ResetLineFrameFormatAttrs( m_pLineFrameFormatNoHeight );
@@ -1662,8 +1643,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                 HTMLTableCell *pCell2 = GetCell( nTopRow, nStartCol );
                 if( pCell2->GetColSpan() == (nCol+1-nStartCol) )
                 {
-                    // Die HTML-Tabellen-Zellen bilden genau eine Box.
-                    // Dann muss hinter der Box gesplittet werden
+                    // The HTML tables represent a box. So we need to split behind that box
                     nSplitCol = nCol + 1;
 
                     long nBoxRowSpan = pCell2->GetRowSpan();
@@ -1685,7 +1665,7 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                         if( nBoxRowSpan < 0 )
                             pCurrCell->SetRowSpan( 0 );
 
-                        // ggf. COLSPAN beachten
+                        // check COLSPAN if needed
                         for( sal_uInt16 j=nStartCol+1; j<nSplitCol; j++ )
                         {
                             GetCell(nTopRow,j)->SetContents( pCnts );
@@ -1728,10 +1708,10 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
 
     if( !pCnts->Next() )
     {
-        // nur eine Inhalts-Section
+        // just one content section
         if( pCnts->GetStartNode() )
         {
-            // und die ist keine Tabelle
+            // ... that's not a table
             pBox = NewTableBox( pCnts->GetStartNode(), pUpper );
             pCnts->SetTableBox( pBox );
         }
@@ -1739,9 +1719,8 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
         {
             pCnts->GetTable()->InheritVertBorders( this, nLeftCol,
                                                    nRightCol-nLeftCol );
-            // und die ist eine Tabelle: dann bauen wir eine neue
-            // Box und fuegen die Zeilen der Tabelle in die Zeilen
-            // der Box ein
+            // ... that's a table. We'll build a new box and put the rows of the table
+            // in the rows of the box
             pBox = new SwTableBox( m_pBoxFormat, 0, pUpper );
             sal_uInt16 nAbs, nRel;
             m_pLayoutInfo->GetAvail( nLeftCol, nColSpan, nAbs, nRel );
@@ -1754,7 +1733,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
     }
     else
     {
-        // mehrere Inhalts Sections: dann brauchen wir eine Box mit Zeilen
+        // multiple content sections: we'll build a box with rows
         pBox = new SwTableBox( m_pBoxFormat, 0, pUpper );
         SwTableLines& rLines = pBox->GetTabLines();
         bool bFirstPara = true;
@@ -1763,14 +1742,13 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
         {
             if( pCnts->GetStartNode() )
             {
-                // normale Absaetze werden zu einer Box in einer Zeile
+                // normal paragraphs are gonna be boxes in a row
                 SwTableLine *pLine =
                     new SwTableLine( m_pLineFrameFormatNoHeight ? m_pLineFrameFormatNoHeight
                                                          : m_pLineFormat, 0, pBox );
                 if( !m_pLineFrameFormatNoHeight )
                 {
-                    // Wenn es noch kein Line-Format ohne Hoehe gibt, koennen
-                    // wir uns dieses her als soleches merken
+                    // If there's no line format without height yet, we can use that one
                     m_pLineFrameFormatNoHeight = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
 
                     ResetLineFrameFormatAttrs( m_pLineFrameFormatNoHeight );
@@ -1789,7 +1767,7 @@ SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
             {
                 pCnts->GetTable()->InheritVertBorders( this, nLeftCol,
                                                        nRightCol-nLeftCol );
-                // Tabellen werden direkt eingetragen
+                // Tables are entered directly
                 sal_uInt16 nAbs, nRel;
                 m_pLayoutInfo->GetAvail( nLeftCol, nColSpan, nAbs, nRel );
                 sal_uInt16 nLSpace = m_pLayoutInfo->GetLeftCellSpace( nLeftCol,
@@ -1819,47 +1797,39 @@ void HTMLTable::InheritBorders( const HTMLTable *pParent,
     OSL_ENSURE( m_nRows>0 && m_nCols>0 && m_nCurrentRow==m_nRows,
             "Wurde CloseTable nicht aufgerufen?" );
 
-    // Die Child-Tabelle muss einen Rahmen bekommen, wenn die umgebende
-    // Zelle einen Rand an der betreffenden Seite besitzt.
-    // Der obere bzw. untere Rand wird nur gesetzt, wenn die Tabelle
-    // ale erster bzw. letzter Absatz in der Zelle vorkommt. Ansonsten
-    // Fuer den linken/rechten Rand kann noch nicht entschieden werden,
-    // ob eine Umrandung der Tabelle noetig/moeglich ist, weil das davon
-    // abhaengt, ob "Filler"-Zellen eingefuegt werden. Hier werden deshalb
+    // The child table needs a border, if the surrounding cell has an edge on that side.
+    // The upper/lower border is only set if the table is the first/last paragraph in that cell
+    // It can't be determined if a border for that table is needed or possible for the left or right side,
+    // since that's depending on if filler cells are gonna be added. We'll only collect info for now
     // erstmal nur Informationen gesammelt
 
     if( 0==nRow && pParent->m_bTopBorder && bFirstPara )
     {
         m_bTopBorder = true;
-        m_bFillerTopBorder = true; // auch Filler bekommt eine Umrandung
+        m_bFillerTopBorder = true; // fillers get a border too
         m_aTopBorderLine = pParent->m_aTopBorderLine;
     }
     if ((*pParent->m_pRows)[nRow+nRowSpan-1]->bBottomBorder && bLastPara)
     {
         (*m_pRows)[m_nRows-1]->bBottomBorder = true;
-        m_bFillerBottomBorder = true; // auch Filler bekommt eine Umrandung
+        m_bFillerBottomBorder = true; // fillers get a border too
         m_aBottomBorderLine =
             nRow+nRowSpan==pParent->m_nRows ? pParent->m_aBottomBorderLine
                                           : pParent->m_aBorderLine;
     }
 
-    // Die Child Tabelle darf keinen oberen oder linken Rahmen bekommen,
-    // wenn der bereits durch die umgebende Tabelle gesetzt ist.
-    // Sie darf jedoch immer einen oberen Rand bekommen, wenn die Tabelle
-    // nicht der erste Absatz in der Zelle ist.
+    // The child table mustn't get an upper or lower border, if that's already done by the surrounding table
+    // It can get an upper border if the table is not the first paragraph in that cell
     m_bTopAllowed = ( !bFirstPara || (pParent->m_bTopAllowed &&
                  (0==nRow || !((*pParent->m_pRows)[nRow-1])->bBottomBorder)) );
 
-    // die Child-Tabelle muss die Farbe der Zelle erben, in der sie
-    // vorkommt, wenn sie keine eigene besitzt
+    // The child table has to inherit the color of the cell it's contained in, if it doesn't have one
     const SvxBrushItem *pInhBG = pParent->GetCell(nRow,nCol)->GetBGBrush();
     if( !pInhBG && pParent != m_pTopTable &&
         pParent->GetCell(nRow,nCol)->GetRowSpan() == pParent->m_nRows )
     {
-        // die ganze umgebende Tabelle ist eine Tabelle in der Tabelle
-        // und besteht nur aus einer Line, die bei der GC (zu Recht)
-        // wegoptimiert wird. Deshalb muss der Hintergrund der Line in
-        // diese Tabelle uebernommen werden.
+        // the whole surrounding table is a table in a table and consists only of a single line
+        // that's gonna be GC-ed (correctly). That's why the background of that line is copied.
         pInhBG = (*pParent->m_pRows)[nRow]->GetBGBrush();
         if( !pInhBG )
             pInhBG = pParent->GetBGBrush();
@@ -1878,7 +1848,7 @@ void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
 
     if( nCol+nColSpan==pParent->m_nCols && pParent->m_bRightBorder )
     {
-        m_bInheritedRightBorder = true; // erstmal nur merken
+        m_bInheritedRightBorder = true; // just remember for now
         m_aInheritedRightBorderLine = pParent->m_aRightBorderLine;
         nInhRightBorderWidth =
             GetBorderWidth( m_aInheritedRightBorderLine, true ) + MIN_BORDER_DIST;
@@ -1886,7 +1856,7 @@ void HTMLTable::InheritVertBorders( const HTMLTable *pParent,
 
     if (((*pParent->m_pColumns)[nCol])->bLeftBorder)
     {
-        m_bInheritedLeftBorder = true;  // erstmal nur merken
+        m_bInheritedLeftBorder = true;  // just remember for now
         m_aInheritedLeftBorderLine = 0==nCol ? pParent->m_aLeftBorderLine
                                      : pParent->m_aBorderLine;
         nInhLeftBorderWidth =
@@ -2006,7 +1976,7 @@ SvxAdjust HTMLTable::GetInheritedAdjust() const
 
 sal_Int16 HTMLTable::GetInheritedVertOri() const
 {
-    // text::VertOrientation::TOP ist der default!
+    // text::VertOrientation::TOP is default!
     sal_Int16 eVOri = (*m_pRows)[m_nCurrentRow]->GetVertOri();
     if( text::VertOrientation::TOP==eVOri && m_nCurrentColumn<m_nCols )
         eVOri = ((*m_pColumns)[m_nCurrentColumn])->GetVertOri();
@@ -2031,12 +2001,11 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
     if( !nColSpan || (sal_uInt32)m_nCurrentColumn + nColSpan > USHRT_MAX )
         nColSpan = 1;
 
-    sal_uInt16 nColsReq = m_nCurrentColumn + nColSpan;       // benoetigte Spalten
-    sal_uInt16 nRowsReq = m_nCurrentRow + nRowSpan;       // benoetigte Zeilen
+    sal_uInt16 nColsReq = m_nCurrentColumn + nColSpan;
+    sal_uInt16 nRowsReq = m_nCurrentRow + nRowSpan;
     sal_uInt16 i, j;
 
-    // falls wir mehr Spalten benoetigen als wir zur Zeit haben,
-    // muessen wir in allen Zeilen noch Zellen hinzufuegen
+    // if we need more colums than we currently have, we need to add cells for all rows
     if( m_nCols < nColsReq )
     {
         for( i=m_nCols; i<nColsReq; i++ )
@@ -2050,8 +2019,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
     if( nColsReq > m_nFilledColumns )
         m_nFilledColumns = nColsReq;
 
-    // falls wir mehr Zeilen benoetigen als wir zur Zeit haben,
-    // muessen wir noch neue Zeilen hinzufuegen
+    // if we need more rows than we currently have, we need to add cells
     if( m_nRows < nRowsReq )
     {
         for( i=m_nRows; i<nRowsReq; i++ )
@@ -2060,8 +2028,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         OSL_ENSURE(m_nRows == m_pRows->size(), "wrong number of rows in Insert");
     }
 
-    // Testen, ob eine Ueberschneidung vorliegt und diese
-    // gegebenfalls beseitigen
+    // Check if we have an overlap and could remove that
     sal_uInt16 nSpanedCols = 0;
     if( m_nCurrentRow>0 )
     {
@@ -2071,11 +2038,9 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
             HTMLTableCell *pCell = pCurRow->GetCell(i);
             if( pCell->GetContents() )
             {
-                // Der Inhalt reicht von einer weiter oben stehenden Zelle
-                // hier herein. Inhalt und Farbe der Zelle sind deshalb in
-                // jedem Fall noch dort verankert und koennen deshalb
-                // ueberschrieben werden bzw. von ProtectRowSpan geloescht
-                // (Inhalt) oder kopiert (Farbe) werden.
+                // The content is coming from a cell a few rows up.
+                // Content and colors are coming from that cell and can be overwritten
+                // or deleted (content) or copied (color) by ProtectRowSpan
                 nSpanedCols = i + pCell->GetColSpan();
                 FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents() );
                 if( pCell->GetRowSpan() > nRowSpan )
@@ -2085,8 +2050,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         }
         for( i=nColsReq; i<nSpanedCols; i++ )
         {
-            // Auch diese Inhalte sind in jedem Fall nich in der Zeile
-            // darueber verankert.
+            // These contents are anchored in the row above in any case
             HTMLTableCell *pCell = pCurRow->GetCell(i);
             FixRowSpan( m_nCurrentRow-1, i, pCell->GetContents() );
             ProtectRowSpan( m_nCurrentRow, i, pCell->GetRowSpan() );
@@ -2112,32 +2076,32 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
                     ->PixelToLogic( aTwipSz, MapMode( MapUnit::MapTwip ) );
     }
 
-    // die Breite nur in die erste Zelle setzen!
+    // Only set width on the first cell!
     if( nCellWidth )
     {
         sal_uInt16 nTmp = bRelWidth ? nCellWidth : (sal_uInt16)aTwipSz.Width();
         GetCell( m_nCurrentRow, m_nCurrentColumn )->SetWidth( nTmp, bRelWidth );
     }
 
-    // Ausserdem noch die Hoehe merken
+    // Remember height
     if( nCellHeight && 1==nRowSpan )
     {
         (*m_pRows)[m_nCurrentRow]->SetHeight(static_cast<sal_uInt16>(aTwipSz.Height()));
     }
 
-    // den Spaltenzaehler hinter die neuen Zellen setzen
+    // Set the column counter behind the new cells
     m_nCurrentColumn = nColsReq;
     if( nSpanedCols > m_nCurrentColumn )
         m_nCurrentColumn = nSpanedCols;
 
-    // und die naechste freie Zelle suchen
+    // and search for the next free cell
     while( m_nCurrentColumn<m_nCols && GetCell(m_nCurrentRow,m_nCurrentColumn)->IsUsed() )
         m_nCurrentColumn++;
 }
 
 inline void HTMLTable::CloseSection( bool bHead )
 {
-    // die vorhergende Section beenden, falls es schon eine Zeile gibt
+    // Close the preceding sections if there's already a row
     OSL_ENSURE( m_nCurrentRow<=m_nRows, "ungeultige aktuelle Zeile" );
     if( m_nCurrentRow>0 && m_nCurrentRow<=m_nRows )
         (*m_pRows)[m_nCurrentRow-1]->SetEndOfGroup();
@@ -2148,9 +2112,9 @@ inline void HTMLTable::CloseSection( bool bHead )
 void HTMLTable::OpenRow( SvxAdjust eAdjust, sal_Int16 eVertOrient,
                          SvxBrushItem *pBGBrushItem )
 {
-    sal_uInt16 nRowsReq = m_nCurrentRow+1;    // Anzahl benoetigter Zeilen;
+    sal_uInt16 nRowsReq = m_nCurrentRow+1;
 
-    // die naechste Zeile anlegen, falls sie nicht schon da ist
+    // create the next row if it's not there already
     if( m_nRows<nRowsReq )
     {
         for( sal_uInt16 i=m_nRows; i<nRowsReq; i++ )
@@ -2166,10 +2130,10 @@ void HTMLTable::OpenRow( SvxAdjust eAdjust, sal_Int16 eVertOrient,
     if( pBGBrushItem )
         (*m_pRows)[m_nCurrentRow]->SetBGBrush( pBGBrushItem );
 
-    // den Spaltenzaehler wieder an den Anfang setzen
+    // reset the column counter
     m_nCurrentColumn=0;
 
-    // und die naechste freie Zelle suchen
+    // and search for the next free cell
     while( m_nCurrentColumn<m_nCols && GetCell(m_nCurrentRow,m_nCurrentColumn)->IsUsed() )
         m_nCurrentColumn++;
 }
@@ -2178,7 +2142,7 @@ void HTMLTable::CloseRow( bool bEmpty )
 {
     OSL_ENSURE( m_nCurrentRow<m_nRows, "aktulle Zeile hinter dem Tabellenende" );
 
-    // leere Zellen bekommen einfach einen etwas dickeren unteren Rand!
+    // empty cells just get a slightly thicker lower border!
     if( bEmpty )
     {
         if( m_nCurrentRow > 0 )
@@ -2188,10 +2152,8 @@ void HTMLTable::CloseRow( bool bEmpty )
 
     HTMLTableRow *const pRow = (*m_pRows)[m_nCurrentRow].get();
 
-    // den COLSPAN aller leeren Zellen am Zeilenende so anpassen, dass
-    // eine Zelle daraus wird. Das kann man hier machen (und auf keinen
-    // Fall frueher), weill jetzt keine Zellen mehr in die Zeile eingefuegt
-    // werden.
+    // modify the COLSPAN of all empty cells at the row end in a way, that they're forming a single cell
+    // that can be done here (and not earlier) since there's no more cells in that row
     sal_uInt16 i=m_nCols;
     while( i )
     {
@@ -2233,7 +2195,7 @@ void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, bool bRelWidt
     if( !nSpan )
         nSpan = 1;
 
-    sal_uInt16 nColsReq = m_nCurrentColumn + nSpan;      // benoetigte Spalten
+    sal_uInt16 nColsReq = m_nCurrentColumn + nSpan;
 
     if( m_nCols < nColsReq )
     {
@@ -2267,11 +2229,9 @@ void HTMLTable::CloseTable()
 {
     sal_uInt16 i;
 
-    // Die Anzahl der Tabellenzeilen richtet sich nur nach den
-    // <TR>-Elementen (d.h. nach nCurRow). Durch ROWSPAN aufgespannte
-    // Zeilen hinter Zeile nCurRow muessen wir deshalb loeschen
-    // und vor allem aber den ROWSPAN in den darueberliegenden Zeilen
-    // anpassen.
+    // The number of table rows is only dependent on the <TR> elements (i.e. nCurRow).
+    // Rows that are spanned via ROWSPAN behind nCurRow need to be deleted
+    // and we need to adjust the ROWSPAN in the rows above
     if( m_nRows>m_nCurrentRow )
     {
         HTMLTableRow *const pPrevRow = (*m_pRows)[m_nCurrentRow-1].get();
@@ -2287,7 +2247,7 @@ void HTMLTable::CloseTable()
         m_nRows = m_nCurrentRow;
     }
 
-    // falls die Tabelle keine Spalte hat, muessen wir eine hinzufuegen
+    // if the table has no column, we need to add one
     if( 0==m_nCols )
     {
         m_pColumns->push_back(o3tl::make_unique<HTMLTableColumn>());
@@ -2297,7 +2257,7 @@ void HTMLTable::CloseTable()
         m_nFilledColumns = 1;
     }
 
-    // falls die Tabelle keine Zeile hat, muessen wir eine hinzufuegen
+    // if the table has no row, we need to add one
     if( 0==m_nRows )
     {
         m_pRows->push_back(o3tl::make_unique<HTMLTableRow>(m_nCols));
@@ -2318,8 +2278,6 @@ void HTMLTable::MakeTable_( SwTableBox *pBox )
 {
     SwTableLines& rLines = (pBox ? pBox->GetTabLines()
                                  : const_cast<SwTable *>(m_pSwTable)->GetTabLines() );
-
-    // jetzt geht's richtig los ...
 
     for( sal_uInt16 i=0; i<m_nRows; i++ )
     {
@@ -2371,35 +2329,32 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
     if( this==m_pTopTable )
     {
-        // Umrandung der Tabelle und aller in ihr enthaltenen berechnen
+        // Calculate borders of the table and all contained tables
         SetBorders();
 
-        // Schritt 1: Die benoetigten Layout-Strukturen werden angelegt
-        // (inklusive Tabellen in Tabellen).
+        // Step 1: needed layout structures are created (including tables in tables)
         CreateLayoutInfo();
 
-        // Schritt 2: Die minimalen und maximalen Spaltenbreiten werden
-        // berechnet (inklusive Tabellen in Tabellen). Da wir noch keine
-        // Boxen haben, arabeiten wir noch auf den Start-Nodes.
+        // Step 2: the mininal and maximal column width is calculated
+        // (including tables in tables). Since we don't have boxes yet,
+        // we'll work on the start nodes
         m_pLayoutInfo->AutoLayoutPass1();
     }
 
-    // Schritt 3: Die tatsaechlichen Spaltenbreiten dieser Tabelle werden
-    // berechnet (nicht von Tabellen in Tabellen). Dies muss jetzt schon
-    // sein, damit wir entscheiden koennen ob Filler-Zellen benoetigt werden
-    // oder nicht (deshalb war auch Pass1 schon noetig).
+    // Step 3: the actual table widths of this table are calculated (not tables in tables)
+    // We need this now to decide if we need filler cells
+    // (Pass1 was needed because of this aswell)
     m_pLayoutInfo->AutoLayoutPass2( nAbsAvail, nRelAvail, nAbsLeftSpace,
                                   nAbsRightSpace, nInhAbsSpace );
 
     if( this!=m_pTopTable )
     {
-        // die linke und rechte Umrandung der Tabelle kann jetzt entgueltig
-        // festgelegt werden
+        // the right and left border of this table can be finally defined
         if( m_pLayoutInfo->GetRelRightFill() == 0 )
         {
             if( !m_bRightBorder )
             {
-                // linke Umrandung von auesserer Tabelle uebernehmen
+                // inherit left border of the outer table
                 if( m_bInheritedRightBorder )
                 {
                     m_bRightBorder = true;
@@ -2408,7 +2363,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             }
             else
             {
-                // Umrandung nur setzen, wenn es erlaubt ist
+                // Only set border if allowed
                 m_bRightBorder = m_bRightAllowed;
             }
         }
@@ -2417,47 +2372,43 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             !((*m_pColumns)[0])->bLeftBorder &&
             m_bInheritedLeftBorder )
         {
-            // ggf. rechte Umrandung von auesserer Tabelle uebernehmen
+            // If applicable, inherit right border of outer table
             ((*m_pColumns)[0])->bLeftBorder = true;
             m_aLeftBorderLine = m_aInheritedLeftBorderLine;
         }
     }
 
-    // Fuer die Top-Table muss die Ausrichtung gesetzt werden
+    // Set adjustment for the top table
     if( this==m_pTopTable )
     {
         sal_Int16 eHoriOri;
         if( m_bForceFrame )
         {
-            // Die Tabelle soll in einen Rahmen und ist auch schmaler
-            // als der verfuegbare Platz und nicht 100% breit.
-            // Dann kommt sie in einen Rahmen
+            // The table should go in a border and it's narrower than the
+            // available space and not 100% wide. So it gets a border
             eHoriOri = m_bPrcWidth ? text::HoriOrientation::FULL : text::HoriOrientation::LEFT;
         }
         else switch( m_eTableAdjust )
         {
-            // Die Tabelle passt entweder auf die Seite, soll aber in keinen
-            // Rahmen oder sie ist Breiter als die Seite und soll deshalb
-            // in keinen Rahmen
+            // The table either fits the page but shouldn't get a border,
+            // or it's wider than the page so it doesn't need a border
 
         case SVX_ADJUST_RIGHT:
-            // in rechtsbuendigen Tabellen kann nicht auf den rechten
-            // Rand Ruecksicht genommen werden
+            // Don't be considerate of the right edge in right-adjusted tables
             eHoriOri = text::HoriOrientation::RIGHT;
             break;
         case SVX_ADJUST_CENTER:
-            // zentrierte Tabellen nehmen keine Ruecksicht auf Raender!
+            // Centred tables are not considerate of edges
             eHoriOri = text::HoriOrientation::CENTER;
             break;
         case SVX_ADJUST_LEFT:
         default:
-            // linksbuendige Tabellen nehmen nur auf den linken Rand
-            // Ruecksicht
+            // left-adjusted tables are only considerate of the left edge
             eHoriOri = m_nLeftMargin ? text::HoriOrientation::LEFT_AND_WIDTH : text::HoriOrientation::LEFT;
             break;
         }
 
-        // das Tabellenform holen und anpassen
+        // get the table format and adapt it
         SwFrameFormat *pFrameFormat = m_pSwTable->GetFrameFormat();
         pFrameFormat->SetFormatAttr( SwFormatHoriOrient(0,eHoriOri) );
         if( text::HoriOrientation::LEFT_AND_WIDTH==eHoriOri )
@@ -2482,10 +2433,10 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         }
     }
 
-    // die Default Line- und Box-Formate holen
+    // get the default line and box format
     if( this==m_pTopTable )
     {
-        // die erste Box merken und aus der ersten Zeile ausketten
+        // remember the first box and unlist it from the first row
         SwTableLine *pLine1 = (m_pSwTable->GetTabLines())[0];
         m_pBox1 = (pLine1->GetTabBoxes())[0];
         pLine1->GetTabBoxes().erase(pLine1->GetTabBoxes().begin());
@@ -2499,8 +2450,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         m_pBoxFormat = m_pTopTable->m_pBoxFormat;
     }
 
-    // ggf. muessen fuer Tabellen in Tabellen "Filler"-Zellen eingefuegt
-    // werden
+    // If applicable, add filler cells for tables in tables
     if( this != m_pTopTable &&
         ( m_pLayoutInfo->GetRelLeftFill() > 0  ||
           m_pLayoutInfo->GetRelRightFill() > 0 ) )
@@ -2509,17 +2459,17 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
         SwTableLines& rLines = pBox->GetTabLines();
 
-        // dazu brauchen wir erstmal ein eine neue Table-Line in der Box
+        // first, we need a new table line in the box
         SwTableLine *pLine =
             new SwTableLine( m_pLineFrameFormatNoHeight ? m_pLineFrameFormatNoHeight
                                                  : m_pLineFormat, 0, pBox );
         rLines.push_back( pLine );
 
-        // Sicherstellen, dass wie ein Format ohne Hoehe erwischt haben
+        // Check that we have a format without height
         if( !m_pLineFrameFormatNoHeight )
         {
-            // sonst muessen wir die Hoehe aus dem Attribut entfernen
-            // und koennen uns das Format merken
+            // Otherwise, we need to remove the height from the attributes
+            // and remember that format
             m_pLineFrameFormatNoHeight = static_cast<SwTableLineFormat*>(pLine->ClaimFrameFormat());
 
             ResetLineFrameFormatAttrs( m_pLineFrameFormatNoHeight );
@@ -2528,11 +2478,11 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         SwTableBox *pNewBox;
 
-        // ggf. links eine Zelle einfuegen
+        // If applicable, add a cell to the left
         if( m_pLayoutInfo->GetRelLeftFill() > 0 )
         {
-            // pPrevStNd ist der Vorgaenger-Start-Node der Tabelle. Den
-            // "Filler"-Node fuegen wir einfach dahinter ein ...
+            // pPrevStNd is the predecessor start node of the table
+            // We'll add the filler node just behind
             m_pPrevStartNode = m_pParser->InsertTableSection( m_pPrevStartNode );
 
             pNewBox = NewTableBox( m_pPrevStartNode, pLine );
@@ -2541,7 +2491,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             m_pLayoutInfo->SetLeftFillerBox( pNewBox );
         }
 
-        // jetzt die Tabelle bearbeiten
+        // modify the table now
         pNewBox = new SwTableBox( m_pBoxFormat, 0, pLine );
         rBoxes.push_back( pNewBox );
 
@@ -2553,7 +2503,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
 
         MakeTable_( pNewBox );
 
-        // und noch ggf. rechts eine Zelle einfuegen
+        // and add a table to the right if applicable
         if( m_pLayoutInfo->GetRelRightFill() > 0 )
         {
             const SwStartNode *pStNd =
@@ -2572,16 +2522,14 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         MakeTable_( pBox );
     }
 
-    // zum Schluss fuehren wir noch eine Garbage-Collection fuer die
-    // Top-Level-Tabelle durch
+    // Finally, we'll do a garbage collection for the top level table
     if( this==m_pTopTable )
     {
         if( 1==m_nRows && m_nHeight && 1==m_pSwTable->GetTabLines().size() )
         {
-            // Hoehe einer einzeiligen Tabelle als Mindesthoehe der
-            // Zeile setzen. (War mal fixe Hoehe, aber das gibt manchmal
-            // Probleme (fix #34972#) und ist auch nicht Netscape 4.0
-            // konform
+            // Set height of a one-row table as the minimum width of the row
+            // Was originally a fixed height, but that made problems (fix #34972#)
+            // and is not Netscape 4.0 compliant
             m_nHeight = SwHTMLParser::ToTwips( m_nHeight );
             if( m_nHeight < MINLAY )
                 m_nHeight = MINLAY;
@@ -2604,10 +2552,9 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             if (eAdjust != SVX_ADJUST_LEFT &&
                 eAdjust != SVX_ADJUST_RIGHT)
             {
-                // Wenn eine Tabelle ohne Breitenangabe nicht links oder
-                // rechts umflossen werden soll, dann stacken wir sie
-                // in einem Rahmen mit 100%-Breite, damit ihre Groesse
-                // angepasst wird. Der Rahmen darf nicht angepasst werden.
+                // If a table with a width attribute isn't flowed around left or right
+                // we'll stack it with a border of 100% width, so its size will
+                // be adapted. That border mustn't be modified
                 OSL_ENSURE( HasToFly(), "Warum ist die Tabelle in einem Rahmen?" );
                 sal_uInt32 nMin = m_pLayoutInfo->GetMin();
                 if( nMin > USHRT_MAX )
@@ -2619,9 +2566,8 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
             }
             else
             {
-                // Links und rechts ausgerichtete Tabellen ohne Breite
-                // duerfen leider nicht in der Breite angepasst werden, denn
-                // sie wuerden nur schrumpfen aber nie wachsen.
+                // left or right adjusted table without width mustn't be adjusted in width
+                // as they would only shrink but never grow
                 m_pLayoutInfo->SetMustNotRecalc( true );
                 if( m_pContext->GetFrameFormat()->GetAnchor().GetContentAnchor()
                     ->nNode.GetNode().FindTableNode() )
@@ -2641,8 +2587,7 @@ void HTMLTable::MakeTable( SwTableBox *pBox, sal_uInt16 nAbsAvail,
         }
         m_pLayoutInfo->SetMayBeInFlyFrame( bIsInFlyFrame );
 
-        // Nur Tabellen mit relativer Breite oder ohne Breite muessen
-        // angepasst werden.
+        // Only tables with relative width or without width should be modifed
         m_pLayoutInfo->SetMustResize( m_bPrcWidth || !m_nWidth );
 
         m_pLayoutInfo->SetWidths();
@@ -2855,15 +2800,12 @@ sal_Int32 SwHTMLParser::StripTrailingLF()
             {
                 if( nLFCount > 2 )
                 {
-                    // Bei Netscape entspricht ein Absatz-Ende zwei LFs
-                    // (mit einem kommt man in die naechste Zeile, das
-                    // zweite erzeugt eine Leerzeile) Diesen Abstand
-                    // erreichen wie aber schon mit dem unteren
-                    // Absatz-Abstand. Wenn nach den <BR> ein neuer
-                    // Absatz aufgemacht wird, wird das Maximum des Abstands,
-                    // der sich aus den BR und dem P ergibt genommen.
-                    // Deshalb muessen wir 2 bzw. alle bei weniger
-                    // als zweien loeschen
+                    // On Netscape, a paragraph end matches 2 LFs
+                    // (1 is just a newline, 2 creates a blank line)
+                    // We already have this space with the lower paragraph gap
+                    // If there's a paragraph after the <BR>, we take the maximum
+                    // of the gap that results from the <BR> and <P>
+                    // That's why we need to delete 2 respectively all if lower than 2
                     nLFCount = 2;
                 }
 
@@ -2958,7 +2900,7 @@ SectionSaveStruct::SectionSaveStruct( SwHTMLParser& rParser ) :
     m_nDefListDeepSave(0), m_nContextStMinSave(0), m_nContextStAttrMinSave(0),
     m_pTable( nullptr )
 {
-    // Font-Stacks einfrieren
+    // Freeze font stacks
     m_nBaseFontStMinSave = rParser.m_nBaseFontStMin;
     rParser.m_nBaseFontStMin = rParser.m_aBaseFontStack.size();
 
@@ -2966,20 +2908,20 @@ SectionSaveStruct::SectionSaveStruct( SwHTMLParser& rParser ) :
     m_nFontStHeadStartSave = rParser.m_nFontStHeadStart;
     rParser.m_nFontStMin = rParser.m_aFontStack.size();
 
-    // Kontext-Stack einfrieren
+    // Freeze context stack
     m_nContextStMinSave = rParser.m_nContextStMin;
     m_nContextStAttrMinSave = rParser.m_nContextStAttrMin;
     rParser.m_nContextStMin = rParser.m_aContexts.size();
     rParser.m_nContextStAttrMin = rParser.m_nContextStMin;
 
-    // und noch ein par Zaehler retten
+    // And remember a few counters
     m_nDefListDeepSave = rParser.m_nDefListDeep;
     rParser.m_nDefListDeep = 0;
 }
 
 void SectionSaveStruct::Restore( SwHTMLParser& rParser )
 {
-    // Font-Stacks wieder auftauen
+    // Unfreeze font stacks
     sal_uInt16 nMin = rParser.m_nBaseFontStMin;
     if( rParser.m_aBaseFontStack.size() > nMin )
         rParser.m_aBaseFontStack.erase( rParser.m_aBaseFontStack.begin() + nMin,
@@ -2999,10 +2941,10 @@ void SectionSaveStruct::Restore( SwHTMLParser& rParser )
     rParser.m_nContextStMin = m_nContextStMinSave;
     rParser.m_nContextStAttrMin = m_nContextStAttrMinSave;
 
-    // und noch ein par Zaehler rekonstruieren
+    // Reconstruct a few counters
     rParser.m_nDefListDeep = m_nDefListDeepSave;
 
-    // und ein par Flags zuruecksetzen
+    // Reset a few flags
     rParser.m_bNoParSpace = false;
     rParser.m_nOpenParaToken = 0;
 
@@ -3017,16 +2959,16 @@ class CellSaveStruct : public SectionSaveStruct
     Color m_aBGColor;
     std::shared_ptr<SvxBoxItem> m_pBoxItem;
 
-    HTMLTableCnts* m_pCnts;           // Liste aller Inhalte
-    HTMLTableCnts* m_pCurrCnts;   // der aktuelle Inhalt oder 0
-    std::unique_ptr<SwNodeIndex> m_pNoBreakEndNodeIndex;// Absatz-Index eines </NOBR>
+    HTMLTableCnts* m_pCnts;           // List of all contents
+    HTMLTableCnts* m_pCurrCnts;   // current content or 0
+    std::unique_ptr<SwNodeIndex> m_pNoBreakEndNodeIndex;// Paragraph index of a <NOBR>
 
     double m_nValue;
 
     sal_uInt32 m_nNumFormat;
 
     sal_uInt16 m_nRowSpan, m_nColSpan, m_nWidth, m_nHeight;
-    sal_Int32 m_nNoBreakEndContentPos;     // Zeichen-Index eines </NOBR>
+    sal_Int32 m_nNoBreakEndContentPos;     // Character index of a <NOBR>
 
     SvxAdjust m_eAdjust;
     sal_Int16 m_eVertOri;
@@ -3036,8 +2978,8 @@ class CellSaveStruct : public SectionSaveStruct
     bool m_bHasNumFormat : 1;
     bool m_bHasValue : 1;
     bool m_bBGColor : 1;
-    bool m_bNoWrap : 1;       // NOWRAP-Option
-    bool m_bNoBreak : 1;      // NOBREAK-Tag
+    bool m_bNoWrap : 1;       // NOWRAP option
+    bool m_bNoBreak : 1;      // NOBREAK tag
 
 public:
 
@@ -3110,19 +3052,19 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                                         aHTMLTableVAlignTable, m_eVertOri );
                 break;
             case HTML_O_WIDTH:
-                m_nWidth = (sal_uInt16)rOption.GetNumber();   // nur fuer Netscape
+                m_nWidth = (sal_uInt16)rOption.GetNumber();   // Just for Netscape
                 m_bPrcWidth = (rOption.GetString().indexOf('%') != -1);
                 if( m_bPrcWidth && m_nWidth>100 )
                     m_nWidth = 100;
                 break;
             case HTML_O_HEIGHT:
-                m_nHeight = (sal_uInt16)rOption.GetNumber();  // nur fuer Netscape
+                m_nHeight = (sal_uInt16)rOption.GetNumber();  // Just for Netscape
                 if( rOption.GetString().indexOf('%') != -1)
-                    m_nHeight = 0;    // keine %-Angaben beruecksichtigen
+                    m_nHeight = 0;    // don't consider % attributes
                 break;
             case HTML_O_BGCOLOR:
-                // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netscape
-                // ignorieren, bei allen anderen Tags *wirklich* nicht.
+                // Ignore empty BGCOLOR on <TABLE>, <TR> and <TD>/>TH> like Netscape
+                // *reallyç not on other tags
                 if( !rOption.GetString().isEmpty() )
                 {
                     rOption.GetColor( m_aBGColor );
@@ -3170,9 +3112,8 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                             *rParser.m_xDoc->GetNumberFormatter() );
     }
 
-    // einen neuen Kontext anlegen, aber das drawing::Alignment-Attribut
-    // nicht dort verankern, weil es noch ger keine Section gibt, in der
-    // es gibt.
+    // Create a new context but don't anchor the drawing::Alignment attribute there,
+    // since there's no section yet
     sal_uInt16 nToken, nColl;
     if( m_bHead )
     {
@@ -3227,20 +3168,18 @@ void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
                                   HTMLTable *pCurTable )
 {
 #if OSL_DEBUG_LEVEL > 0
-    // Die Attribute muessen schon beim Auefrauemen des Kontext-Stacks
-    // entfernt worden sein, sonst ist etwas schiefgelaufen. Das
-    // Checken wir mal eben ...
-    // MIB 8.1.98: Wenn ausserhalb einer Zelle Attribute geoeffnet
-    // wurden stehen diese noch in der Attribut-Tabelle und werden erst
-    // ganz zum Schluss durch die CleanContext-Aufrufe in BuildTable
-    // geloescht. Damit es in diesem Fall keine Asserts gibt findet dann
-    // keine Ueberpruefung statt. Erkennen tut man diesen Fall an
-    // nContextStAttrMin: Der gemerkte Wert nContextStAttrMinSave ist der
-    // Wert, den nContextStAttrMin beim Start der Tabelle hatte. Und
-    // der aktuelle Wert von nContextStAttrMin entspricht der Anzahl der
-    // Kontexte, die beim Start der Zelle vorgefunden wurden. Sind beide
-    // Werte unterschiedlich, wurden ausserhalb der Zelle Kontexte
-    // angelegt und wir ueberpruefen nichts.
+    // The attributes need to have been removed when tidying up the context stack,
+    // Otherwise something's wrong. Let's check that...
+
+    // MIB 8.1.98 (translated 15.2.2017): When attributes were opened in a cell,
+    // they're still in the attribut table and will only be deleted at the end
+    // through the CleanContext calls in BuildTable. We don't check that there
+    // so that we get no assert [violations, by translator]
+    // We can see this on nContextStAttrMin: the remembered value of nContextStAttrMinSave
+    // is the value that nContextStAttrMin had at the start of the table. And the
+    // current value of nContextStAttrMin corresponds to the number of contexts
+    // we found at the start of the cell. If the values differ, contexts
+    // were created and we don't check anything.
 
     if( rParser.m_nContextStAttrMin == GetContextStAttrMin() )
     {
@@ -3254,7 +3193,7 @@ void CellSaveStruct::InsertCell( SwHTMLParser& rParser,
     }
 #endif
 
-    // jetzt muessen wir noch die Zelle an der aktuellen Position einfuegen
+    // we need to add the cell on the current position
     SvxBrushItem *pBrushItem =
         rParser.CreateBrushItem( m_bBGColor ? &m_aBGColor : nullptr, m_aBGImage,
                                  m_aStyle, m_aId, m_aClass );
@@ -3293,7 +3232,7 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
     {
         if( m_bNoBreak )
         {
-            // <NOBR> wurde nicht beendet
+            // <NOBR> wasn't closed
             m_pCnts->SetNoBreak();
         }
         else if( m_pNoBreakEndNodeIndex &&
@@ -3301,7 +3240,7 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
         {
             if( m_nNoBreakEndContentPos == rPos.nContent.GetIndex() )
             {
-                // <NOBR> wurde unmittelbar vor dem Zellen-Ende beendet
+                // <NOBR> was closed immediately before the cell end
                 m_pCnts->SetNoBreak();
             }
             else if( m_nNoBreakEndContentPos + 1 == rPos.nContent.GetIndex() )
@@ -3313,8 +3252,7 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
                             pTextNd->GetText()[m_nNoBreakEndContentPos];
                     if( ' '==cLast || '\x0a'==cLast )
                     {
-                        // Zwischem dem </NOBR> und dem Zellen-Ende gibt es nur
-                        // ein Blank oder einen Zeilenumbruch.
+                        // There's just a blank or a newline between the <NOBR> and the cell end
                         m_pCnts->SetNoBreak();
                     }
                 }
@@ -3326,20 +3264,20 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
 HTMLTableCnts *SwHTMLParser::InsertTableContents(
                                         bool bHead )
 {
-    // eine neue Section anlegen, der PaM steht dann darin
+    // create a new section, the PaM is there
     const SwStartNode *pStNd =
         InsertTableSection( static_cast< sal_uInt16 >(bHead ? RES_POOLCOLL_TABLE_HDLN
                                            : RES_POOLCOLL_TABLE) );
 
     if( GetNumInfo().GetNumRule() )
     {
-        // 1. Absatz auf nicht numeriert setzen
+        // Set the first paragraph to non-enumerated
         sal_uInt8 nLvl = GetNumInfo().GetLevel();
 
         SetNodeNum( nLvl );
     }
 
-    // Attributierungs-Anfang neu setzen
+    // Reset attributation start
     const SwNodeIndex& rSttPara = m_pPam->GetPoint()->nNode;
     sal_Int32 nSttCnt = m_pPam->GetPoint()->nContent.GetIndex();
 
@@ -3391,13 +3329,13 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
     else
     {
-        // <TH> bzw. <TD> wurde bereits gelesen
+        // <TH> resp. <TH> were already read
         if( m_pTable->IsOverflowing() )
         {
             SaveState( 0 );
@@ -3408,8 +3346,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         {
             bool bTopTable = m_pTable==pCurTable;
 
-            // die Tabelle besitzt noch keinen Inhalt, d.h. die eigentliche
-            // Tabelle muss erst noch angelegt werden
+            // the table has no content yet, this means the actual table needs
+            // to be created first
 
             static sal_uInt16 aWhichIds[] =
             {
@@ -3450,13 +3388,12 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 }
             }
 
-            // Den linken/rechten Absatzeinzug ermitteln
             sal_uInt16 nLeftSpace = 0;
             sal_uInt16 nRightSpace = 0;
             short nIndent;
             GetMarginsFromContextWithNumBul( nLeftSpace, nRightSpace, nIndent );
 
-            // die aktuelle Position an die wir irgendwann zurueckkehren
+            // save the current position we'll get back to some time
             SwPosition *pSavePos = nullptr;
             bool bForceFrame = false;
             bool bAppended = false;
@@ -3465,32 +3402,29 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             {
                 SvxAdjust eTableAdjust = m_pTable->GetTableAdjust(false);
 
-                // Wenn die Tabelle links oder rechts ausgerivchtet ist,
-                // oder in einen Rahmen soll, dann kommt sie auch in einen
-                // solchen.
+                // If the table is left or right adjusted or should be in a border,
+                // it'll get one
                 bForceFrame = eTableAdjust == SVX_ADJUST_LEFT ||
                               eTableAdjust == SVX_ADJUST_RIGHT ||
                               pCurTable->HasToFly();
 
-                // Entweder kommt die Tabelle in keinen Rahmen und befindet
-                // sich in keinem Rahmen (wird also durch Zellen simuliert),
-                // oder es gibt bereits Inhalt an der entsprechenden Stelle.
+                // The table either shouldn't get in a border and isn't in one
+                // (it gets simulated through cells),
+                // or there's already content at that position
                 OSL_ENSURE( !bForceFrame || pCurTable->HasParentSection(),
                         "Tabelle im Rahmen hat keine Umgebung!" );
 
                 bool bAppend = false;
                 if( bForceFrame )
                 {
-                    // Wenn die Tabelle in einen Rahmen kommt, muss
-                    // nur ein neuer Absatz aufgemacht werden, wenn
-                    // der Absatz Rahmen ohne Umlauf enthaelt.
+                    // If the table gets in a border, we only need to open a new
+                    //paragraph if the paragraph has borders that don't fly
                     bAppend = HasCurrentParaFlys(true);
                 }
                 else
                 {
-                    // Sonst muss ein neuer Absatz aufgemacht werden,
-                    // wenn der Absatz nicht leer ist, oder Rahmen
-                    // oder text::Bookmarks enthaelt.
+                    // Otherwise, we need to open a new paragraph if the paragraph
+                    // is empty or contains borders or text::Bookmarks
                     bAppend =
                         m_pPam->GetPoint()->nContent.GetIndex() ||
                         HasCurrentParaFlys() ||
@@ -3521,9 +3455,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                         pTmp = new HTMLAttr( *m_pPam->GetPoint(),
                                             SvxULSpaceItem( 0, 0, RES_UL_SPACE ) );
-                        m_aSetAttrTab.push_front( pTmp ); // ja, 0, weil schon
-                                                        // vom Tabellenende vorher
-                                                        // was gesetzt sein kann.
+                        m_aSetAttrTab.push_front( pTmp ); // 0, since there
+                                                          // be something set from
+                                                          // the table end before
                     }
                     AppendTextNode( AM_NOSPACE );
                     bAppended = true;
@@ -3532,9 +3466,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 {
                     if( !bForceFrame )
                     {
-                        // Der Absatz wird gleich hinter die Tabelle
-                        // verschoben. Deshalb entfernen wir alle harten
-                        // Attribute des Absatzes
+                        // The paragraph will be moved right behind the table.
+                        // That's why we remove all hard attributes of that paragraph
 
                         for(HTMLAttr* i : m_aParaAttrs)
                             i->Invalidate();
@@ -3549,33 +3482,30 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             {
                 bParentLFStripped = StripTrailingLF() > 0;
 
-                // Absaetze bzw. ueberschriften beeenden
+                // Close paragraph resp. headers
                 m_nOpenParaToken = 0;
                 m_nFontStHeadStart = m_nFontStMin;
 
-                // die harten Attribute an diesem Absatz werden nie mehr ungueltig
+                // The hard attributes on that paragraph are never gonna be invalid anymore
                 if( !m_aParaAttrs.empty() )
                     m_aParaAttrs.clear();
             }
 
-            // einen Tabellen Kontext anlegen
+            // create a table context
             HTMLTableContext *pTCntxt =
                         new HTMLTableContext( pSavePos, m_nContextStMin,
                                                m_nContextStAttrMin );
 
-            // alle noch offenen Attribute beenden und hinter der Tabelle
-            // neu aufspannen
+            // end all open attributes and open them again behind the table
             HTMLAttrs *pPostIts = nullptr;
             if( !bForceFrame && (bTopTable || pCurTable->HasParentSection()) )
             {
                 SplitAttrTab( pTCntxt->aAttrTab, bTopTable );
-                // Wenn wir einen schon vorhandenen Absatz verwenden, duerfen
-                // in den keine PostIts eingefuegt werden, weil der Absatz
-                // ja hinter die Tabelle wandert. Sie werden deshalb in den
-                // ersten Absatz der Tabelle verschoben.
-                // Bei Tabellen in Tabellen duerfen ebenfalls keine PostIts
-                // in einen noch leeren Absatz eingefuegt werden, weil
-                // der sonat nicht geloescht wird.
+                // If we reuse a already existing paragraph, we can't add
+                // PostIts since the paragraph gets behind that table.
+                // They're gonna be moved behind the first paragraph of the table
+                // If we have tables in tables, we also can't add PostIts to a
+                // still empty paragraph, since it's not gonna be deleted that way
                 if( (bTopTable && !bAppended) ||
                     (!bTopTable && !bParentLFStripped &&
                      !m_pPam->GetPoint()->nContent.GetIndex()) )
@@ -3593,7 +3523,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             }
             m_bNoParSpace = false;
 
-            // Aktuelle Numerierung retten und auschalten.
+            // Save current numbering and turn it off
             pTCntxt->SetNumInfo( GetNumInfo() );
             GetNumInfo().Clear();
             pTCntxt->SavePREListingXMP( *this );
@@ -3602,7 +3532,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             {
                 if( bForceFrame )
                 {
-                    // Die Tabelle soll in einen Rahmen geschaufelt werden.
+                    // the table should be put in a border
 
                     SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
                                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
@@ -3658,10 +3588,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                 }
 
-                // eine SwTable mit einer Box anlegen und den PaM in den
-                // Inhalt der Box-Section bewegen (der Ausrichtungs-Parameter
-                // ist erstmal nur ein Dummy und wird spaeter noch richtig
-                // gesetzt)
+                // create a SwTable with a box and set the PaM to the content of
+                // the ox section (the adjustment parameter is a dummy for now
+                // and will be corrected later)
                 OSL_ENSURE( !m_pPam->GetPoint()->nContent.GetIndex(),
                         "Der Absatz hinter der Tabelle ist nicht leer!" );
                 const SwTable* pSwTable = m_xDoc->InsertTable(
@@ -3719,8 +3648,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
                 if( !bAppended && pPostIts )
                 {
-                    // noch vorhandene PostIts in den ersten Absatz
-                    // der Tabelle setzen
+                    // set still-existing PostIts to the first paragraph of the table
                     InsertAttrs( *pPostIts );
                     delete pPostIts;
                     pPostIts = nullptr;
@@ -3736,22 +3664,20 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             }
             else
             {
-                // noch offene Bereiche muessen noch entfernt werden
+                // still open sections need to be deleted
                 if( EndSections( bParentLFStripped ) )
                     bParentLFStripped = false;
 
                 if( pCurTable->HasParentSection() )
                 {
-                    // dannach entfernen wir ein ggf. zu viel vorhandenen
-                    // leeren Absatz, aber nur, wenn er schon vor dem
-                    // entfernen von LFs leer war
+                    // after that, we remove a possibly redundant empty paragraph,
+                    // but only if it was empty before we stripped the LFs
                     if( !bParentLFStripped )
                         StripTrailingPara();
 
                     if( pPostIts )
                     {
-                        // noch vorhandene PostIts an das Ende des jetzt
-                        // aktuellen Absatzes schieben
+                        // move still existing PostIts to the end of the current paragraph
                         InsertAttrs( *pPostIts );
                         delete pPostIts;
                         pPostIts = nullptr;
@@ -3873,7 +3799,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                                    bHead,
                                                    pSaveStruct->IsInSection(),
                                                    bHasToFly );
-                if( SvParserState::Pending != GetStatus() )
+                if( SVPAR_PENDING != GetStatus() )
                 {
                     // nur wenn die Tabelle wirklich zu Ende ist!
                     if( pSubTable )
@@ -3994,7 +3920,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             nToken = GetNextToken();
     }
 
-    if( SvParserState::Pending == GetStatus() )
+    if( SVPAR_PENDING == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( bHead ? HTML_TABLEHEADER_ON
                                                : HTML_TABLEDATA_ON, m_pPendStack );
@@ -4111,7 +4037,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
@@ -4223,7 +4149,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_TABLEHEADER_ON:
         case HTML_TABLEDATA_ON:
             BuildTableCell( pCurTable, true, HTML_TABLEHEADER_ON==nToken );
-            if( SvParserState::Pending != GetStatus() )
+            if( SVPAR_PENDING != GetStatus() )
             {
                 pSaveStruct->bHasCells = true;
                 bDone = m_pTable->IsOverflowing();
@@ -4283,7 +4209,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
             nToken = GetNextToken();
     }
 
-    if( SvParserState::Pending == GetStatus() )
+    if( SVPAR_PENDING == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HTML_TABLEROW_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
@@ -4317,7 +4243,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
@@ -4445,7 +4371,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             nToken = GetNextToken();
     }
 
-    if( SvParserState::Pending == GetStatus() )
+    if( SVPAR_PENDING == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( bHead ? HTML_THEAD_ON
                                                : HTML_TBODY_ON, m_pPendStack );
@@ -4505,7 +4431,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
@@ -4662,7 +4588,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
             nToken = GetNextToken();
     }
 
-    if( SvParserState::Pending == GetStatus() )
+    if( SVPAR_PENDING == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HTML_COL_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
@@ -4808,7 +4734,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             {
                 BuildTable( SVX_ADJUST_END );
             }
-            if( SvParserState::Pending != GetStatus() )
+            if( SVPAR_PENDING != GetStatus() )
             {
                 m_pTable = pSaveStruct->m_pTable;
             }
@@ -4848,7 +4774,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             nToken = GetNextToken();
     }
 
-    if( SvParserState::Pending==GetStatus() )
+    if( SVPAR_PENDING==GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HTML_CAPTION_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
@@ -5103,7 +5029,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         delete m_pPendStack;
         m_pPendStack = pTmp;
         nToken = m_pPendStack ? m_pPendStack->nToken : GetSaveToken();
-        bPending = SvParserState::Error == eState && m_pPendStack != nullptr;
+        bPending = SVPAR_ERROR == eState && m_pPendStack != nullptr;
 
         SaveState( nToken );
     }
@@ -5227,7 +5153,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             nToken = GetNextToken();
     }
 
-    if( SvParserState::Pending == GetStatus() )
+    if( SVPAR_PENDING == GetStatus() )
     {
         m_pPendStack = new SwPendingStack( HTML_TABLE_ON, m_pPendStack );
         m_pPendStack->pData = pSaveStruct;
@@ -5338,7 +5264,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             // kein Show aufgerufen werden, weil sonst waehrend des
             // Reschedules der Parser zerstoert wird, wenn noch ein
             // DataAvailable-Link kommt. Deshalb: Nur im WORKING-State.
-            if( !m_nParaCnt && SvParserState::Working == GetStatus() )
+            if( !m_nParaCnt && SVPAR_WORKING == GetStatus() )
                 Show();
         }
     }
