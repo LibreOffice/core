@@ -71,11 +71,16 @@ void SAL_CALL SvxShowCharSetVirtualAcc::fireEvent(
         m_xTable->fireEvent(_nEventId,_rOldValue,_rNewValue);
 }
 
-sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChildCount(  )
+sal_Int32 SvxShowCharSetVirtualAcc::getImplAccessibleChildCount() const
+{
+    return mpParent->getScrollBar().IsVisible() ? 2 : 1;
+}
+
+sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    return ( mpParent->getScrollBar().IsVisible() ) ? 2 : 1;
+    return getImplAccessibleChildCount();
 }
 
 uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleAtPoint( const awt::Point& aPoint )
@@ -115,17 +120,17 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChild( 
 {
     OExternalLockGuard aGuard( this );
     ensureAlive();
-    if ( mpParent->getScrollBar().IsVisible() && i == 0 )
-        return mpParent->getScrollBar().GetAccessible();
-    else if ( i == 1 )
-    {
-        if ( !m_xTable.is() )
-        {
-            m_xTable = new SvxShowCharSetAcc(this);
-        }
-    }
-    else
+
+    sal_Int32 nCount = getImplAccessibleChildCount();
+    if (i >= nCount)
         throw IndexOutOfBoundsException();
+
+    if (i == 0 && mpParent->getScrollBar().IsVisible())
+        return mpParent->getScrollBar().GetAccessible();
+
+    if (!m_xTable.is())
+        m_xTable = new SvxShowCharSetAcc(this);
+
     return m_xTable.get();
 }
 

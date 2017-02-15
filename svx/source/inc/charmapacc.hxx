@@ -43,6 +43,7 @@ namespace svx
     {
         VclPtr<SvxShowCharSet>             mpParent; // the vcl control
         rtl::Reference<SvxShowCharSetAcc>  m_xTable; // the table, which holds the characters shown by the vcl control
+        sal_Int32 getImplAccessibleChildCount() const;
     protected:
         virtual ~SvxShowCharSetVirtualAcc() override;
 
