@@ -937,6 +937,70 @@ DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
     }
 }
 
+DECLARE_DUMP_TEST(AreaChartTest, Chart2DumpTest, false)
+{
+    const std::vector<OUString> aTestFiles =
+    {
+        "normal_area_chart.ods",
+        "stacked_area_chart.ods",
+        "percent_stacked_area_chart.ods"
+    };
+
+    for (const OUString& sTestFile : aTestFiles)
+    {
+        setTestFileName(sTestFile);
+        load(getTestFileDirName(), getTestFileName());
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShapes.is());
+
+        uno::Reference< chart2::XChartDocument > xChartDoc2(xChartDoc, UNO_QUERY_THROW);
+        Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc2, 0);
+        CPPUNIT_ASSERT(xChartType.is());
+
+        std::vector<std::vector<double> > aDataSeriesYValues = getDataSeriesYValuesFromChartType(xChartType);
+        size_t nSeriesCount = aDataSeriesYValues.size();
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nSeriesCount);
+
+        for (size_t nSeries = 0; nSeries < nSeriesCount; ++nSeries)
+        {
+            uno::Reference<drawing::XShape> xSeries = getShapeByName(xShapes, "CID/D=0:CS=0:CT=0:Series=" + OUString::number(nSeries));
+            CPPUNIT_ASSERT(xSeries.is());
+            CPPUNIT_DUMP_ASSERT_NOTE("Series " + OUString::number(nSeries));
+
+            // One are for one series
+            uno::Reference<container::XIndexAccess> xIndexAccess(xSeries, UNO_QUERY_THROW);
+            uno::Reference<container::XIndexAccess> xIndexAccess2(xIndexAccess->getByIndex(0), UNO_QUERY_THROW); // Why this second group shape is here?
+            uno::Reference<drawing::XShape> xArea(xIndexAccess2->getByIndex(0), UNO_QUERY_THROW);
+
+            // Check size and position
+            awt::Point aAreaPosition = xArea->getPosition();
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAreaPosition.X, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAreaPosition.Y, INT_EPS);
+            awt::Size aAreaSize = xArea->getSize();
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAreaSize.Height, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aAreaSize.Width, INT_EPS);
+
+            // Check transformation
+            Reference< beans::XPropertySet > xPropSet(xArea, UNO_QUERY_THROW);
+            CPPUNIT_ASSERT(xPropSet.is());
+            drawing::HomogenMatrix3 aAreaTransformation;
+            xPropSet->getPropertyValue("Transformation") >>= aAreaTransformation;
+            CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aAreaTransformation);
+
+            // Check area fill style and color
+            drawing::FillStyle aAreaFillStyle;
+            xPropSet->getPropertyValue(UNO_NAME_FILLSTYLE) >>= aAreaFillStyle;
+            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aAreaFillStyle));
+            util::Color aAreaFillColor = 0;
+            xPropSet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= aAreaFillColor;
+            CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aAreaFillColor));
+        }
+    }
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
