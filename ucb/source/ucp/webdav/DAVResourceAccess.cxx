@@ -28,6 +28,9 @@
 #include "DAVAuthListenerImpl.hxx"
 #include "DAVResourceAccess.hxx"
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/io/IOException.hpp>
+
 using namespace http_dav_ucp;
 using namespace com::sun::star;
 
