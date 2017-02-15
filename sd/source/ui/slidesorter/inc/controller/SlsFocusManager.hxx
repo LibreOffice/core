@@ -49,13 +49,12 @@ public:
 
     ~FocusManager();
 
-    enum FocusMoveDirection
+    enum class FocusMoveDirection
     {
-        FMD_NONE,
-        FMD_LEFT,
-        FMD_RIGHT,
-        FMD_UP,
-        FMD_DOWN
+        Left,
+        Right,
+        Up,
+        Down
     };
 
     /** Move the focus from the currently focused page to one that is
@@ -66,10 +65,9 @@ public:
             wrap around takes place in the same column, i.e. when you are
             in the top row and move up you come out in the bottom row in the
             same column.  Horizontal wrap around moves to the next
-            (FMD_RIGHT) or previous (FMD_LEFT) page.  Moving to the right
+            (FocusMoveDirection::Right) or previous (FocusMoveDirection::Left) page.  Moving to the right
             from the last page goes to the first page and vice versa.
-            When FMD_NONE is given, the current page index is checked for
-            being valid.  If it is not, then it is set to the nearest valid
+            The current page index is set to the nearest valid
             page index.
     */
     void MoveFocus (FocusMoveDirection eDirection);

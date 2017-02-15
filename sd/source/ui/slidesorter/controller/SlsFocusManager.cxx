@@ -58,21 +58,17 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
         const sal_Int32 nPageCount (mrSlideSorter.GetModel().GetPageCount());
         switch (eDirection)
         {
-            case FMD_NONE:
-                // Nothing to be done.
-                break;
-
-            case FMD_LEFT:
+            case FocusMoveDirection::Left:
                 if (mnPageIndex > 0)
                     mnPageIndex -= 1;
                 break;
 
-            case FMD_RIGHT:
+            case FocusMoveDirection::Right:
                 if (mnPageIndex < nPageCount-1)
                     mnPageIndex += 1;
                 break;
 
-            case FMD_UP:
+            case FocusMoveDirection::Up:
             {
                 const sal_Int32 nCandidate (mnPageIndex - nColumnCount);
                 if (nCandidate >= 0)
@@ -83,7 +79,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
             }
             break;
 
-            case FMD_DOWN:
+            case FocusMoveDirection::Down:
             {
                 const sal_Int32 nCandidate (mnPageIndex + nColumnCount);
                 if (nCandidate < nPageCount)

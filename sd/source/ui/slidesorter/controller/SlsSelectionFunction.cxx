@@ -445,25 +445,25 @@ bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
 
         // Move the focus indicator left.
         case KEY_LEFT:
-            MoveFocus(FocusManager::FMD_LEFT, rCode.IsShift(), rCode.IsMod1());
+            MoveFocus(FocusManager::FocusMoveDirection::Left, rCode.IsShift(), rCode.IsMod1());
             bResult = true;
             break;
 
         // Move the focus indicator right.
         case KEY_RIGHT:
-            MoveFocus(FocusManager::FMD_RIGHT, rCode.IsShift(), rCode.IsMod1());
+            MoveFocus(FocusManager::FocusMoveDirection::Right, rCode.IsShift(), rCode.IsMod1());
             bResult = true;
             break;
 
         // Move the focus indicator up.
         case KEY_UP:
-            MoveFocus(FocusManager::FMD_UP, rCode.IsShift(), rCode.IsMod1());
+            MoveFocus(FocusManager::FocusMoveDirection::Up, rCode.IsShift(), rCode.IsMod1());
             bResult = true;
             break;
 
         // Move the focus indicator down.
         case KEY_DOWN:
-            MoveFocus(FocusManager::FMD_DOWN, rCode.IsShift(), rCode.IsMod1());
+            MoveFocus(FocusManager::FocusMoveDirection::Down, rCode.IsShift(), rCode.IsMod1());
             bResult = true;
             break;
 
