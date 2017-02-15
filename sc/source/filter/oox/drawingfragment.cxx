@@ -156,7 +156,7 @@ GroupShapeContext::GroupShapeContext( ContextHandler2Helper& rParent,
         {
             ShapePtr xShape( new Shape( rHelper, rAttribs, "com.sun.star.drawing.GraphicObjectShape" ) );
             if( pxShape ) *pxShape = xShape;
-            return new GraphicalObjectFrameContext( rParent, rxParentShape, xShape, rHelper.getSheetType() != SHEETTYPE_CHARTSHEET );
+            return new GraphicalObjectFrameContext( rParent, rxParentShape, xShape, rHelper.getSheetType() != WorksheetType::Chart );
         }
         case XDR_TOKEN( grpSp ):
         {

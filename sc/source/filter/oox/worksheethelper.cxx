@@ -1164,7 +1164,7 @@ void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
     sal_Int32 nWidth = getUnitConverter().scaleToMm100( rModel.mfWidth, UNIT_DIGIT );
 
     // macro sheets have double width
-    if( meSheetType == SHEETTYPE_MACROSHEET )
+    if( meSheetType == WorksheetType::Macro )
         nWidth *= 2;
 
     SCTAB nTab = getSheetIndex();

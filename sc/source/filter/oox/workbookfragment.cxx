@@ -401,21 +401,21 @@ void WorkbookFragment::finalizeImport()
                 ISegmentProgressBarRef xSheetSegment = getProgressBar().createSegment( fSegmentLength );
 
                 // get the sheet type according to the relations type
-                WorksheetType eSheetType = SHEETTYPE_EMPTYSHEET;
+                WorksheetType eSheetType = WorksheetType::Empty;
                 if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "worksheet" ) ||
                         pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "worksheet" ))
-                    eSheetType = SHEETTYPE_WORKSHEET;
+                    eSheetType = WorksheetType::Work;
                 else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "chartsheet" ) ||
                         pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE_STRICT( "chartsheet" ))
-                    eSheetType = SHEETTYPE_CHARTSHEET;
+                    eSheetType = WorksheetType::Chart;
                 else if( (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlMacrosheet" )) ||
                          (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlIntlMacrosheet" )) )
-                    eSheetType = SHEETTYPE_MACROSHEET;
+                    eSheetType = WorksheetType::Macro;
                 else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "dialogsheet" ) ||
                         pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE_STRICT(" dialogsheet" ))
-                    eSheetType = SHEETTYPE_DIALOGSHEET;
-                OSL_ENSURE( eSheetType != SHEETTYPE_EMPTYSHEET, "WorkbookFragment::finalizeImport - unknown sheet type" );
-                if( eSheetType != SHEETTYPE_EMPTYSHEET )
+                    eSheetType = WorksheetType::Dialog;
+                OSL_ENSURE( eSheetType != WorksheetType::Empty, "WorkbookFragment::finalizeImport - unknown sheet type" );
+                if( eSheetType != WorksheetType::Empty )
                 {
                     // create the WorksheetGlobals object
                     WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, xSheetSegment, eSheetType, nCalcSheet );
@@ -426,17 +426,16 @@ void WorkbookFragment::finalizeImport()
                         ::rtl::Reference< WorksheetFragmentBase > xFragment;
                         switch( eSheetType )
                         {
-                            case SHEETTYPE_WORKSHEET:
-                            case SHEETTYPE_MACROSHEET:
-                            case SHEETTYPE_DIALOGSHEET:
+                            case WorksheetType::Work:
+                            case WorksheetType::Macro:
+                            case WorksheetType::Dialog:
                                 xFragment.set( new WorksheetFragment( *xSheetGlob, aFragmentPath ) );
                             break;
-                            case SHEETTYPE_CHARTSHEET:
+                            case WorksheetType::Chart:
                                 xFragment.set( new ChartsheetFragment( *xSheetGlob, aFragmentPath ) );
                             break;
                             // coverity[dead_error_begin] - following conditions exist to avoid compiler warning
-                            case SHEETTYPE_EMPTYSHEET:
-                            case SHEETTYPE_MODULESHEET:
+                            case WorksheetType::Empty:
                                 break;
                         }
 

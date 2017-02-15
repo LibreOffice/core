@@ -894,7 +894,7 @@ void PageSettingsConverter::writePageSettingsProperties(
         PropertySet& rPropSet, const PageSettingsModel& rModel, WorksheetType eSheetType )
 {
     // special handling for chart sheets
-    bool bChartSheet = eSheetType == SHEETTYPE_CHARTSHEET;
+    bool bChartSheet = eSheetType == WorksheetType::Chart;
 
     // printout scaling
     if( bChartSheet )

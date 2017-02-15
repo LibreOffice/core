@@ -356,12 +356,11 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
     {
         case XML_ROOT_CONTEXT: switch( getSheetType() )
         {
-            case SHEETTYPE_WORKSHEET:   return (nElement == XLS_TOKEN( worksheet )) ? this : nullptr;
-            case SHEETTYPE_CHARTSHEET:  return nullptr;
-            case SHEETTYPE_MACROSHEET:  return (nElement == XM_TOKEN( macrosheet )) ? this : nullptr;
-            case SHEETTYPE_DIALOGSHEET: return (nElement == XLS_TOKEN( dialogsheet )) ? this : nullptr;
-            case SHEETTYPE_MODULESHEET: return nullptr;
-            case SHEETTYPE_EMPTYSHEET:  return nullptr;
+            case WorksheetType::Work:   return (nElement == XLS_TOKEN( worksheet )) ? this : nullptr;
+            case WorksheetType::Chart:  return nullptr;
+            case WorksheetType::Macro:  return (nElement == XM_TOKEN( macrosheet )) ? this : nullptr;
+            case WorksheetType::Dialog: return (nElement == XLS_TOKEN( dialogsheet )) ? this : nullptr;
+            case WorksheetType::Empty:  return nullptr;
         }
         break;
 

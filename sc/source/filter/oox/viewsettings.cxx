@@ -327,7 +327,7 @@ void SheetViewSettings::finalizeImport()
     SheetViewModelRef xModel = maSheetViews.empty() ? createSheetView() : maSheetViews.front();
 
     // #i59590# #158194# special handling for chart sheets (Excel ignores some settings in chart sheets)
-    if( getSheetType() == SHEETTYPE_CHARTSHEET )
+    if( getSheetType() == WorksheetType::Chart )
     {
         xModel->maPaneSelMap.clear();
         xModel->maFirstPos = xModel->maSecondPos = ScAddress( SCCOL ( 0 ), SCROW ( 0 ), SCTAB (getSheetIndex() ) );

@@ -58,14 +58,13 @@ class WorksheetSettings;
 typedef ::std::map< OUString, ScDataBarFormatData* >  ExtLst;
 
 /** An enumeration for all types of sheets in a workbook. */
-enum WorksheetType
+enum class WorksheetType
 {
-    SHEETTYPE_WORKSHEET,            /// Worksheet.
-    SHEETTYPE_CHARTSHEET,           /// Chart sheet.
-    SHEETTYPE_MACROSHEET,           /// Macro sheet.
-    SHEETTYPE_DIALOGSHEET,          /// Dialog sheet (BIFF5+).
-    SHEETTYPE_MODULESHEET,          /// VB module sheet (BIFF5 only).
-    SHEETTYPE_EMPTYSHEET            /// Other (unsupported) sheet type.
+    Work,            /// Worksheet.
+    Chart,           /// Chart sheet.
+    Macro,           /// Macro sheet.
+    Dialog,          /// Dialog sheet (BIFF5+).
+    Empty            /// Other (unsupported) sheet type.
 };
 
 /** Stores settings and formatting data about a range of sheet columns. */
