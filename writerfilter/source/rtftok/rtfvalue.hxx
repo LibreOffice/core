@@ -26,19 +26,19 @@ class RTFValue
 {
 public:
     typedef std::shared_ptr<RTFValue> Pointer_t;
-    RTFValue(int nValue, const OUString& sValue, RTFSprms rAttributes, RTFSprms rSprms,
-             css::uno::Reference<css::drawing::XShape> const& xShape,
-             css::uno::Reference<css::io::XInputStream> const& xStream,
-             css::uno::Reference<css::embed::XEmbeddedObject> const& xObject,
+    RTFValue(int nValue, OUString sValue, RTFSprms rAttributes, RTFSprms rSprms,
+             css::uno::Reference<css::drawing::XShape> xShape,
+             css::uno::Reference<css::io::XInputStream> xStream,
+             css::uno::Reference<css::embed::XEmbeddedObject> xObject,
              bool bForceString, const RTFShape& aShape);
     RTFValue();
     explicit RTFValue(int nValue);
-    RTFValue(const OUString& sValue, bool bForce = false);
+    RTFValue(OUString sValue, bool bForce = false);
     explicit RTFValue(RTFSprms rAttributes);
     RTFValue(RTFSprms rAttributes, RTFSprms rSprms);
-    explicit RTFValue(css::uno::Reference<css::drawing::XShape> const& xShape);
-    explicit RTFValue(css::uno::Reference<css::io::XInputStream> const& xStream);
-    explicit RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> const& xObject);
+    explicit RTFValue(css::uno::Reference<css::drawing::XShape> xShape);
+    explicit RTFValue(css::uno::Reference<css::io::XInputStream> xStream);
+    explicit RTFValue(css::uno::Reference<css::embed::XEmbeddedObject> xObject);
     explicit RTFValue(const RTFShape& aShape);
     virtual ~RTFValue() override;
     void setString(const OUString& sValue);

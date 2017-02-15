@@ -96,8 +96,8 @@ protected:
     uno::Reference<lang::XComponent> m_xSrcDoc, m_xDstDoc;
 
 public:
-    explicit WriterFilter(const uno::Reference<uno::XComponentContext>& rxContext)
-        : m_xContext(rxContext)
+    explicit WriterFilter(uno::Reference<uno::XComponentContext> xContext)
+        : m_xContext(std::move(xContext))
     {}
 
     // XFilter
