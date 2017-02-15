@@ -2593,11 +2593,22 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
                 nExpSign = 1;
             }
             ExpStr = OUString::number( nExp );
+            const sal_Unicode cFirstDigit = sStr[0];
             // rescale mantissa
             sStr = ::rtl::math::doubleToUString( fNumber,
                                          rtl_math_StringFormat_E,
                                          nRescale + rInfo.nCntPost, '.' );
+
+            // sStr now may contain a rounded-up value shifted into the next
+            // magnitude, for example 1.000E+02 (4 digits) for fNumber 99.995
+            // (9.9995E+02 rounded to 3 decimals) but we want the final result
+            // to be 100.00E+00 (5 digits), so for the following fill routines
+            // below to work correctly append a zero decimal.
+            /* TODO: this is awkward, could an engineering notation mode be
+             * introduced to rtl_math_doubleToUString()? */
             sStr.truncate( sStr.indexOf('E') );
+            if (sStr[0] == '1' && cFirstDigit != '1')
+                sStr.append('0');
         }
 
         // cut any decimal delimiter
