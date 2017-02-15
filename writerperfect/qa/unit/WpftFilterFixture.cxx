@@ -34,13 +34,6 @@ void WpftFilterFixture::setUp()
     m_xTypeMap.set(m_xTypeDetection, uno::UNO_QUERY_THROW);
 }
 
-void WpftFilterFixture::tearDown()
-{
-    m_xDesktop->terminate();
-
-    ::test::BootstrapFixture::tearDown();
-}
-
 }
 }
 

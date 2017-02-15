@@ -73,7 +73,6 @@ class WPFTQAHELPER_DLLPUBLIC WpftFilterFixture : public ::test::BootstrapFixture
 {
 public:
     virtual void setUp() override;
-    virtual void tearDown() override;
 
 protected:
     css::uno::Reference<css::frame::XDesktop2> m_xDesktop;
