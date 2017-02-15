@@ -51,10 +51,11 @@ namespace sdr { namespace table {
 struct RTFCellDefault
 {
     SfxItemSet          maItemSet;
+    sal_Int32           mnRowSpan;
     sal_Int32           mnColSpan;   // MergeCell if >1, merged cells if 0
     sal_Int32           mnCellX;
 
-    explicit RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnColSpan(1), mnCellX(0) {}
+    explicit RTFCellDefault( SfxItemPool* pPool ) : maItemSet( *pPool ), mnRowSpan(1), mnColSpan(1), mnCellX(0) {}
 };
 
 typedef std::vector< std::shared_ptr< RTFCellDefault > > RTFCellDefaultVector;
@@ -65,8 +66,10 @@ struct RTFCellInfo
     sal_Int32           mnStartPara;
     sal_Int32           mnParaCount;
     sal_Int32           mnCellX;
+    sal_Int32           mnRowSpan;
+    std::shared_ptr< RTFCellInfo > mxVMergeCell;
 
-    explicit RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0), mnCellX(0) {}
+    explicit RTFCellInfo( SfxItemPool& rPool ) : maItemSet(  rPool ), mnStartPara(0), mnParaCount(0), mnCellX(0), mnRowSpan(1), mxVMergeCell(nullptr) {}
 };
 
 typedef std::shared_ptr< RTFCellInfo > RTFCellInfoPtr;
@@ -110,6 +113,7 @@ private:
 
     sal_Int32       mnRowCnt;
     sal_Int32       mnLastEdge;
+    sal_Int32       mnVMergeIdx;
 
     std::vector< sal_Int32 > maColumnEdges;
     std::vector< sal_Int32 >::iterator maLastEdge;
@@ -121,6 +125,7 @@ private:
 
     Reference< XTable > mxTable;
 
+    RTFColumnVectorPtr mxLastRow;
     // Copy assignment is forbidden and not implemented.
     SdrTableRTFParser (const SdrTableRTFParser &) = delete;
     SdrTableRTFParser & operator= (const SdrTableRTFParser &) = delete;
@@ -137,6 +142,7 @@ SdrTableRTFParser::SdrTableRTFParser( SdrTableObj& rTableObj )
 , mpActDefault( nullptr )
 , mpDefMerge( nullptr )
 , mxTable( rTableObj.getTable() )
+, mxLastRow( nullptr )
 {
     mpOutliner->SetUpdateMode(true);
     mpOutliner->SetStyleSheet( 0, mrTableObj.GetStyleSheet() );
@@ -201,6 +207,8 @@ IMPL_LINK( SdrTableRTFParser, RTFImportHdl, ImportInfo&, rInfo, void )
 
 void SdrTableRTFParser::NextRow()
 {
+    mxLastRow = maRows.back();
+    mnVMergeIdx = 0;
     ++mnRowCnt;
 }
 
@@ -212,10 +220,36 @@ void SdrTableRTFParser::InsertCell( ImportInfo* pInfo )
     xCellInfo->mnStartPara = mnStartPara;
     xCellInfo->mnParaCount = pInfo->aSelection.nEndPara - 1 - mnStartPara;
     xCellInfo->mnCellX = mpActDefault->mnCellX;
+    xCellInfo->mnRowSpan = mpActDefault->mnRowSpan;
+
+
+    if ( mxLastRow != nullptr )
+    {
+        sal_Int32 nSize = mxLastRow->size();
+        while( mnVMergeIdx < nSize &&
+             (*mxLastRow)[mnVMergeIdx]->mnCellX < xCellInfo->mnCellX )
+            ++mnVMergeIdx;
+
+        if ( xCellInfo->mnRowSpan == 0 && mnVMergeIdx < nSize )
+        {
+            RTFCellInfoPtr xLastCell( (*mxLastRow)[mnVMergeIdx] );
+            if (xLastCell->mnRowSpan)
+                xCellInfo->mxVMergeCell = xLastCell;
+            else
+                xCellInfo->mxVMergeCell = xLastCell->mxVMergeCell;
+        }
+    }
 
     if( !maRows.empty() )
     {
         RTFColumnVectorPtr xColumn( maRows.back() );
+        if ( xCellInfo->mxVMergeCell )
+        {
+            if ( xColumn->size()==0 ||
+                    xColumn->back()->mxVMergeCell != xCellInfo->mxVMergeCell )
+                xCellInfo->mxVMergeCell->mnRowSpan++;
+        }
+
         xColumn->push_back( xCellInfo );
     }
 
@@ -288,6 +322,11 @@ void SdrTableRTFParser::FillTable()
                         rOutliner.SetText( *pTextObject );
                         mrTableObj.NbcSetOutlinerParaObjectForText( rOutliner.CreateParaObject(), xCell.get() );
                     }
+
+                    sal_Int32 nLastRow = nRow;
+                    if ( xCellInfo->mnRowSpan )
+                        nLastRow += xCellInfo->mnRowSpan - 1;
+
                     aEdge = std::lower_bound( aEdge, maColumnEdges.end(), xCellInfo->mnCellX );
                     sal_Int32 nLastCol = nCol;
                     if ( aEdge != maColumnEdges.end() )
@@ -296,9 +335,9 @@ void SdrTableRTFParser::FillTable()
                         ++aEdge;
                     }
 
-                    if ( nLastCol > nCol )
+                    if ( nLastCol > nCol || nLastRow > nRow )
                     {
-                         Reference< XMergeableCellRange > xRange( mxTable->createCursorByRange( mxTable->getCellRangeByPosition( nCol, nRow, nLastCol, nRow ) ), UNO_QUERY_THROW );
+                         Reference< XMergeableCellRange > xRange( mxTable->createCursorByRange( mxTable->getCellRangeByPosition( nCol, nRow, nLastCol, nLastRow ) ), UNO_QUERY_THROW );
                          if( xRange->isMergeable() )
                              xRange->merge();
                     }
@@ -376,6 +415,17 @@ void SdrTableRTFParser::ProcToken( ImportInfo* pInfo )
             if( mpDefMerge )
                 mpDefMerge->mnColSpan++;
             mpInsDefault->mnColSpan = 0;
+            mnLastToken = pInfo->nToken;
+        }
+        break;
+        case RTF_CLVMGF:
+        {
+            mnLastToken = pInfo->nToken;
+        }
+        break;
+        case RTF_CLVMRG:
+        {
+            mpInsDefault->mnRowSpan = 0;
             mnLastToken = pInfo->nToken;
         }
         break;
