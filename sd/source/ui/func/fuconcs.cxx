@@ -99,7 +99,7 @@ void FuConstructCustomShape::DoExecute( SfxRequest& rReq )
     }
 
     mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
-        ToolBarManager::TBG_FUNCTION,
+        ToolBarManager::ToolBarGroup::Function,
         ToolBarManager::msDrawingObjectToolBar);
 }
 

@@ -89,7 +89,7 @@ void FuConstructRectangle::DoExecute( SfxRequest& rReq )
     FuConstruct::DoExecute( rReq );
 
     mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBar(
-        ToolBarManager::TBG_FUNCTION,
+        ToolBarManager::ToolBarGroup::Function,
         ToolBarManager::msDrawingObjectToolBar);
 
     const SfxItemSet *pArgs = rReq.GetArgs ();

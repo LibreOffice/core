@@ -186,7 +186,7 @@ void FuText::disposing()
 void FuText::DoExecute( SfxRequest& )
 {
     mpViewShell->GetViewShellBase().GetToolBarManager()->SetToolBarShell(
-        ToolBarManager::TBG_FUNCTION,
+        ToolBarManager::ToolBarGroup::Function,
         RID_DRAW_TEXT_TOOLBOX);
 
     mpView->SetCurrentObj(OBJ_TEXT);
@@ -225,7 +225,7 @@ void FuText::DoExecute( SfxRequest& )
             SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
             if( pObj && (pObj->GetObjInventor() == SdrInventor::Default ) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
             {
-                mpViewShell->GetViewShellBase().GetToolBarManager()->AddToolBarShell( ToolBarManager::TBG_FUNCTION, RID_DRAW_TABLE_TOOLBOX );
+                mpViewShell->GetViewShellBase().GetToolBarManager()->AddToolBarShell( ToolBarManager::ToolBarGroup::Function, RID_DRAW_TABLE_TOOLBOX );
             }
         }
     }

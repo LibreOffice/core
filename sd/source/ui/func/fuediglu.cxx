@@ -65,7 +65,7 @@ void FuEditGluePoints::DoExecute( SfxRequest& rReq )
     FuDraw::DoExecute( rReq );
     mpView->SetInsGluePointMode(false);
     mpViewShell->GetViewShellBase().GetToolBarManager()->AddToolBar(
-        ToolBarManager::TBG_FUNCTION,
+        ToolBarManager::ToolBarGroup::Function,
         ToolBarManager::msGluePointsToolBar);
 }
 

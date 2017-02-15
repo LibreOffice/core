@@ -375,9 +375,9 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             && IsMainViewShell())
         {
             if ( !bShowMasterViewToolbar )
-                GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::TBG_MASTER_MODE);
+                GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::ToolBarGroup::MasterMode);
             if ( !bShowPresentationToolbar )
-                GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::TBG_COMMON_TASK);
+                GetViewShellBase().GetToolBarManager()->ResetToolBars(ToolBarManager::ToolBarGroup::CommonTask);
         }
 
         ConfigureAppBackgroundColor();
@@ -463,11 +463,11 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         {
             if (bShowMasterViewToolbar)
                 GetViewShellBase().GetToolBarManager()->SetToolBar(
-                    ToolBarManager::TBG_MASTER_MODE,
+                    ToolBarManager::ToolBarGroup::MasterMode,
                     ToolBarManager::msMasterViewToolBar);
             if (bShowPresentationToolbar)
                 GetViewShellBase().GetToolBarManager()->SetToolBar(
-                    ToolBarManager::TBG_COMMON_TASK,
+                    ToolBarManager::ToolBarGroup::CommonTask,
                     ToolBarManager::msCommonTaskToolBar);
         }
 
