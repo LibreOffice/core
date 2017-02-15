@@ -570,9 +570,7 @@ bool ScDBFunc::MakePivotTable(
         OUString aStr;
 
         pDoc->GetName( nSrcTab, aStr );
-        aName += "_";
-        aName += aStr;
-        aName += "_";
+        aName += "_" + aStr + "_";
 
         SCTAB nNewTab = nSrcTab+1;
 
