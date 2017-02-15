@@ -121,7 +121,7 @@ void ImpressImportTest::test()
     using namespace css;
 
     rtl::Reference<ImpressImportFilter> xFilter{new ImpressImportFilter(m_xContext)};
-    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(), "private:factory/sdraw", m_xDesktop, m_xContext);
+    writerperfect::test::WpftLoader aLoader(createDummyInput(), xFilter.get(), "private:factory/simpress", m_xDesktop, m_xContext);
 
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(aLoader.getDocument(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
