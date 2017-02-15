@@ -346,7 +346,7 @@ static void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
     boost::property_tree::write_json(aStream, aTree);
     std::string aArguments = aStream.str();
 
-    lok_doc_view_post_command(LOK_DOC_VIEW(rWindow.m_pDocView), ".uno:DeleteComment", aArguments.c_str(), false);
+    lok_doc_view_post_command(LOK_DOC_VIEW(rWindow.m_pDocView), rWindow.m_aToolItemCommandNames[rWindow.m_pDeleteComment].c_str(), aArguments.c_str(), false);
 }
 
 GtkWidget* CommentsSidebar::createCommentBox(const boost::property_tree::ptree& aComment)
