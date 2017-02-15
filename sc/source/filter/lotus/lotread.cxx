@@ -82,10 +82,8 @@ FltError ImportLotus::Read()
                     Bof();
                     switch (rContext.pLotusRoot->eFirstType)
                     {
-                        case Lotus_WK1: eAkt = S_WK1; break;
-                        case Lotus_WK3: eAkt = S_WK3; break;
-                        case Lotus_WK4: eAkt = S_WK4; break;
-                        case Lotus_FM3: eAkt = S_FM3; break;
+                        case Lotus123Typ::WK3: eAkt = S_WK3; break;
+                        case Lotus123Typ::WK4: eAkt = S_WK4; break;
                         default:
                         eRet = SCERR_IMPORT_UNKNOWN_WK;
                         eAkt = S_END;

@@ -70,7 +70,7 @@ FltError ScFormatFilterPluginImpl::ScImportLotus123( SfxMedium& rMedium, ScDocum
     if( eRet != eERR_OK )
         return eRet;
 
-    if (aContext.pLotusRoot->eFirstType == Lotus_WK3)
+    if (aContext.pLotusRoot->eFirstType == Lotus123Typ::WK3)
     {
         // try to load *.FM3 file
         INetURLObject aURL( rMedium.GetURLObject() );

@@ -30,13 +30,11 @@ enum BiffTyp
     Biff8 = 0x8000, Biff8W = 0x8001, Biff8V = 0x8002, Biff8C = 0x8004, Biff8M4 = 0x8008
 };
 
-enum Lotus123Typ
+enum class Lotus123Typ
 {
-    Lotus_X,
-    Lotus_WK1,
-    Lotus_WK3,
-    Lotus_WK4,
-    Lotus_FM3
+    X,
+    WK3,
+    WK4,
 };
 
 #endif

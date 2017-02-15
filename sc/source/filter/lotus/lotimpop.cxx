@@ -45,8 +45,8 @@ LOTUS_ROOT::LOTUS_ROOT( ScDocument* pDocP, rtl_TextEncoding eQ )
         pRangeNames( new LotusRangeList(this)),
         pScRangeName( pDocP->GetRangeName()),
         eCharsetQ( eQ),
-        eFirstType( Lotus_X),
-        eActType( Lotus_X),
+        eFirstType( Lotus123Typ::X),
+        eActType( Lotus123Typ::X),
         pRngNmBffWK3( new RangeNameBufferWK3(this)),
         pFontBuff( new LotusFontBuffer),
         pAttrTable( new LotAttrTable(this))
@@ -105,11 +105,11 @@ void ImportLotus::Bof()
     {
         if( nFileCode == 0x1000 )
         {// <= WK3
-            rContext.pLotusRoot->eFirstType = rContext.pLotusRoot->eActType = Lotus_WK3;
+            rContext.pLotusRoot->eFirstType = rContext.pLotusRoot->eActType = Lotus123Typ::WK3;
         }
         else if( nFileCode == 0x1002 )
         {// WK4
-            rContext.pLotusRoot->eFirstType = rContext.pLotusRoot->eActType = Lotus_WK4;
+            rContext.pLotusRoot->eFirstType = rContext.pLotusRoot->eActType = Lotus123Typ::WK4;
         }
     }
 }
