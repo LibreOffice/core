@@ -212,6 +212,9 @@ public:
                               sal_uInt16& nPrecision,
                               sal_uInt16& nAnzLeading) const;
 
+    /// Get index of subformat (0..3) according to conditions and fNumber value
+    sal_uInt16 GetSubformatIndex( double fNumber ) const;
+
     /// Count of decimal precision
     sal_uInt16 GetFormatPrecision() const   { return NumFor[0].Info().nCntPost; }
 
@@ -242,6 +245,9 @@ public:
     OUString GetDenominatorString( sal_uInt16 nNumFor ) const;
     OUString GetNumeratorString( sal_uInt16 nNumFor ) const;
     OUString GetIntegerFractionDelimiterString( sal_uInt16 nNumFor ) const;
+    /// Round fNumber to its fraction representation
+    double GetRoundFractionValue ( double fNumber ) const;
+
     /** If the count of string elements (substrings, ignoring [modifiers] and
         so on) in a subformat code nNumFor (0..3) is equal to the given number.
         Used by ImpSvNumberInputScan::IsNumberFormatMain() to detect a matched
@@ -579,6 +585,19 @@ private:
                                  sal_uInt16 nIx,
                                  bool bInteger );
 
+    /** Calculate each element of fraction:
+     * integer part, numerator part, denominator part
+     * @param fNumber value to be represented as fraction. Will contain absolute fractional part
+     * @param nIx subformat number 0..3
+     * @param fIntPart integral part of fraction
+     * @param nFrac numerator of fraction
+     * @param nDic denominator of fraction
+     */
+    SVL_DLLPRIVATE void ImpGetFractionElements( double& fNumber,
+                                                sal_uInt16 nIx,
+                                                double& fIntPart,
+                                                sal_uInt64& nFrac,
+                                                sal_uInt64& nDiv ) const;
     SVL_DLLPRIVATE bool ImpGetFractionOutput(double fNumber,
                                              sal_uInt16 nIx,
                                              OUStringBuffer& OutString);
