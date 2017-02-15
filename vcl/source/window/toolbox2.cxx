@@ -635,7 +635,8 @@ ToolBoxButtonSize ToolBox::GetToolboxButtonSize() const
 
 /*static*/ Size ToolBox::GetDefaultImageSize(ToolBoxButtonSize eToolBoxButtonSize)
 {
-    float fScaleFactor = Application::GetDefaultDevice()->GetDPIScaleFactor();
+    OutputDevice *pDefault = Application::GetDefaultDevice();
+    float fScaleFactor = pDefault ? pDefault->GetDPIScaleFactor() : 1.0;
 
     Size aUnscaledSize = Size(16, 16);
 
