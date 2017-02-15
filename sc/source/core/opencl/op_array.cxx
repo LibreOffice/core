@@ -38,7 +38,7 @@ void OpSumX2MY2::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp =0;\n";
     GenTmpVariables(ss,vSubArguments);
     if(vSubArguments[0]->GetFormulaToken()->GetType() ==
-    formula::svDoubleVectorRef)
+    formula::StackVar::DoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
         const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
@@ -95,7 +95,7 @@ void OpSumX2PY2::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp =0;\n";
     GenTmpVariables(ss,vSubArguments);
     if(vSubArguments[0]->GetFormulaToken()->GetType() ==
-    formula::svDoubleVectorRef)
+    formula::StackVar::DoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
         const formula::DoubleVectorRefToken*pCurDVR= static_cast<const
@@ -151,7 +151,7 @@ void OpSumXMY2::GenSlidingWindowFunction(std::stringstream &ss,
     ss << "    double tmp =0;\n";
     GenTmpVariables(ss,vSubArguments);
     if(vSubArguments[0]->GetFormulaToken()->GetType() ==
-    formula::svDoubleVectorRef)
+    formula::StackVar::DoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[0]->GetFormulaToken();
         const formula::DoubleVectorRefToken*pCurDVR= static_cast<const

@@ -138,9 +138,9 @@ void ScInterpreter::ScGCD()
         {
             switch (GetStackType())
             {
-                case svDouble :
-                case svString:
-                case svSingleRef:
+                case StackVar::Double :
+                case StackVar::String:
+                case StackVar::SingleRef:
                 {
                     fx = ::rtl::math::approxFloor( GetDouble());
                     if (fx < 0.0)
@@ -151,8 +151,8 @@ void ScInterpreter::ScGCD()
                     fy = ScGetGCD(fx, fy);
                 }
                 break;
-                case svDoubleRef :
-                case svRefList :
+                case StackVar::DoubleRef :
+                case StackVar::RefList :
                 {
                     FormulaError nErr = FormulaError::NONE;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -174,9 +174,9 @@ void ScInterpreter::ScGCD()
                     SetError(nErr);
                 }
                 break;
-                case svMatrix :
-                case svExternalSingleRef:
-                case svExternalDoubleRef:
+                case StackVar::Matrix :
+                case StackVar::ExternalSingleRef:
+                case StackVar::ExternalDoubleRef:
                 {
                     ScMatrixRef pMat = GetMatrix();
                     if (pMat)
@@ -228,9 +228,9 @@ void ScInterpreter:: ScLCM()
         {
             switch (GetStackType())
             {
-                case svDouble :
-                case svString:
-                case svSingleRef:
+                case StackVar::Double :
+                case StackVar::String:
+                case StackVar::SingleRef:
                 {
                     fx = ::rtl::math::approxFloor( GetDouble());
                     if (fx < 0.0)
@@ -244,8 +244,8 @@ void ScInterpreter:: ScLCM()
                         fy = fx * fy / ScGetGCD(fx, fy);
                 }
                 break;
-                case svDoubleRef :
-                case svRefList :
+                case StackVar::DoubleRef :
+                case StackVar::RefList :
                 {
                     FormulaError nErr = FormulaError::NONE;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -270,9 +270,9 @@ void ScInterpreter:: ScLCM()
                     SetError(nErr);
                 }
                 break;
-                case svMatrix :
-                case svExternalSingleRef:
-                case svExternalDoubleRef:
+                case StackVar::Matrix :
+                case StackVar::ExternalSingleRef:
+                case StackVar::ExternalDoubleRef:
                 {
                     ScMatrixRef pMat = GetMatrix();
                     if (pMat)
@@ -386,7 +386,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
     ScMatrixRef pMat = nullptr;
     switch (GetRawStackType())
     {
-        case svSingleRef :
+        case StackVar::SingleRef :
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
@@ -407,7 +407,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             }
         }
         break;
-        case svDoubleRef:
+        case StackVar::DoubleRef:
         {
             SCCOL nCol1, nCol2;
             SCROW nRow1, nRow2;
@@ -418,12 +418,12 @@ ScMatrixRef ScInterpreter::GetMatrix()
                     nCol2, nRow2, nTab2);
         }
         break;
-        case svMatrix:
+        case StackVar::Matrix:
             pMat = PopMatrix();
         break;
-        case svError :
-        case svMissing :
-        case svDouble :
+        case StackVar::Error :
+        case StackVar::Missing :
+        case StackVar::Double :
         {
             double fVal = GetDouble();
             pMat = GetNewMat( 1, 1);
@@ -438,7 +438,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             }
         }
         break;
-        case svString :
+        case StackVar::String :
         {
             svl::SharedString aStr = GetString();
             pMat = GetNewMat( 1, 1);
@@ -455,7 +455,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             }
         }
         break;
-        case svExternalSingleRef:
+        case StackVar::ExternalSingleRef:
         {
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
@@ -473,13 +473,13 @@ ScMatrixRef ScInterpreter::GetMatrix()
             }
             switch (pToken->GetType())
             {
-                case svError:
+                case StackVar::Error:
                     pMat->PutError( pToken->GetError(), 0, 0);
                 break;
-                case svDouble:
+                case StackVar::Double:
                     pMat->PutDouble( pToken->GetDouble(), 0, 0);
                 break;
-                case svString:
+                case StackVar::String:
                     pMat->PutString( pToken->GetString(), 0, 0);
                 break;
                 default:
@@ -487,7 +487,7 @@ ScMatrixRef ScInterpreter::GetMatrix()
             }
         }
         break;
-        case svExternalDoubleRef:
+        case StackVar::ExternalDoubleRef:
             PopExternalDoubleRef(pMat);
         break;
         default:
@@ -503,7 +503,7 @@ sc::RangeMatrix ScInterpreter::GetRangeMatrix()
     sc::RangeMatrix aRet;
     switch (GetRawStackType())
     {
-        case svMatrix:
+        case StackVar::Matrix:
             aRet = PopRangeMatrix();
         break;
         default:
@@ -528,7 +528,7 @@ void ScInterpreter::ScMatValue()
         }
         switch (GetStackType())
         {
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
@@ -548,7 +548,7 @@ void ScInterpreter::ScMatValue()
                     PushIllegalParameter();
             }
             break;
-            case svDoubleRef :
+            case StackVar::DoubleRef :
             {
                 SCCOL nCol1;
                 SCROW nRow1;
@@ -577,7 +577,7 @@ void ScInterpreter::ScMatValue()
                     PushNoValue();
             }
             break;
-            case svMatrix:
+            case StackVar::Matrix:
             {
                 ScMatrixRef pMat = PopMatrix();
                 CalculateMatrixValue(pMat.get(),nC,nR);
@@ -1238,7 +1238,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
     short nFmtCurrencyType = nCurFmtType;
     sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
     short nFmtPercentType = nCurFmtType;
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat2 = GetMatrix();
     else
     {
@@ -1259,7 +1259,7 @@ void ScInterpreter::CalculateAddSub(bool _bSub)
             break;
         }
     }
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat1 = GetMatrix();
     else
     {
@@ -1357,11 +1357,11 @@ void ScInterpreter::ScAmpersand()
     ScMatrixRef pMat1 = nullptr;
     ScMatrixRef pMat2 = nullptr;
     OUString sStr1, sStr2;
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat2 = GetMatrix();
     else
         sStr2 = GetString().getString();
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat1 = GetMatrix();
     else
         sStr1 = GetString().getString();
@@ -1457,7 +1457,7 @@ void ScInterpreter::ScMul()
     double fVal1 = 0.0, fVal2 = 0.0;
     short nFmtCurrencyType = nCurFmtType;
     sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat2 = GetMatrix();
     else
     {
@@ -1470,7 +1470,7 @@ void ScInterpreter::ScMul()
             break;
         }
     }
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat1 = GetMatrix();
     else
     {
@@ -1533,7 +1533,7 @@ void ScInterpreter::ScDiv()
     short nFmtCurrencyType = nCurFmtType;
     sal_uLong nFmtCurrencyIndex = nCurFmtIndex;
     short nFmtCurrencyType2 = css::util::NumberFormat::UNDEFINED;
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat2 = GetMatrix();
     else
     {
@@ -1541,7 +1541,7 @@ void ScInterpreter::ScDiv()
         // do not take over currency, 123kg/456USD is not USD
         nFmtCurrencyType2 = nCurFmtType;
     }
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat1 = GetMatrix();
     else
     {
@@ -1613,11 +1613,11 @@ void ScInterpreter::ScPow()
     ScMatrixRef pMat1 = nullptr;
     ScMatrixRef pMat2 = nullptr;
     double fVal1 = 0.0, fVal2 = 0.0;
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat2 = GetMatrix();
     else
         fVal2 = GetDouble();
-    if ( GetStackType() == svMatrix )
+    if ( GetStackType() == StackVar::Matrix )
         pMat1 = GetMatrix();
     else
         fVal1 = GetDouble();

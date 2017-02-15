@@ -213,9 +213,9 @@ void ScFormulaReferenceHelper::ShowFormulaReference(const OUString& rStr)
 
                 while(pToken!=nullptr)
                 {
-                    bool bDoubleRef=(pToken->GetType()==formula::svDoubleRef);
+                    bool bDoubleRef=(pToken->GetType()==formula::StackVar::DoubleRef);
 
-                    if(pToken->GetType()==formula::svSingleRef || bDoubleRef)
+                    if(pToken->GetType()==formula::StackVar::SingleRef || bDoubleRef)
                     {
                         ScRange aRange;
                         if(bDoubleRef)

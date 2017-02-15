@@ -4534,7 +4534,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                     (pFunctionStack[ nFunc ].eOp == ocWeek &&   // 2nd week start
                      pFunctionStack[ nFunc ].nSep == 0))
             {
-                if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
+                if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( StackVar::Sep, ocSep)) ||
                         !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
                 {
                     SetError(FormulaError::CodeOverflow); break;
@@ -4550,7 +4550,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
                     pFunctionStack[ nFunction ].eOp == ocAddress &&
                     pFunctionStack[ nFunction ].nSep == 3)
             {
-                if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( svSep, ocSep)) ||
+                if (    !static_cast<ScTokenArray*>(pArr)->Add( new FormulaToken( StackVar::Sep, ocSep)) ||
                         !static_cast<ScTokenArray*>(pArr)->Add( new FormulaDoubleToken( 1.0)))
                 {
                     SetError(FormulaError::CodeOverflow); break;
@@ -4564,7 +4564,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
             SetError(FormulaError::CodeOverflow);
             break;
         }
-        else if (eLastOp == ocRange && pNewToken->GetOpCode() == ocPush && pNewToken->GetType() == svSingleRef)
+        else if (eLastOp == ocRange && pNewToken->GetOpCode() == ocPush && pNewToken->GetType() == StackVar::SingleRef)
         {
             static_cast<ScTokenArray*>(pArr)->MergeRangeReference( aPos);
         }
@@ -4622,7 +4622,7 @@ ScTokenArray* ScCompiler::CompileString( const OUString& rFormula )
 
         if (nBrackets)
         {
-            FormulaToken aToken( svSep, ocClose );
+            FormulaToken aToken( StackVar::Sep, ocClose );
             while( nBrackets-- )
             {
                 if( !pArr->AddToken( aToken ) )
@@ -4766,10 +4766,10 @@ bool ScCompiler::HandleExternalReference(const FormulaToken& _aToken)
     // Handle external range names.
     switch (_aToken.GetType())
     {
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
+        case StackVar::ExternalSingleRef:
+        case StackVar::ExternalDoubleRef:
             break;
-        case svExternalName:
+        case StackVar::ExternalName:
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
             const OUString* pFile = pRefMgr->getExternalFileName(_aToken.GetIndex());
@@ -4814,7 +4814,7 @@ void ScCompiler::AdjustSheetLocalNameRelReferences( SCTAB nDelta )
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if (rRef1.IsTabRel())
             rRef1.IncTab( nDelta);
-        if ( t->GetType() == svDoubleRef )
+        if ( t->GetType() == StackVar::DoubleRef )
         {
             ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
             if (rRef2.IsTabRel())
@@ -4834,7 +4834,7 @@ void ScCompiler::SetRelNameReference()
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
             rRef1.SetRelName( true );
-        if ( t->GetType() == svDoubleRef )
+        if ( t->GetType() == StackVar::DoubleRef )
         {
             ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
             if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
@@ -4851,7 +4851,7 @@ void ScCompiler::MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow )
     for( formula::FormulaToken* t = pArr->GetNextReference(); t;
                   t = pArr->GetNextReference() )
     {
-        if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
+        if ( t->GetType() == StackVar::SingleRef || t->GetType() == StackVar::ExternalSingleRef )
             ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
         else
             ScRefUpdate::MoveRelWrap( pDoc, aPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
@@ -4867,7 +4867,7 @@ void ScCompiler::MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddr
     for( formula::FormulaToken* t = rArr.GetNextReference(); t;
                   t = rArr.GetNextReference() )
     {
-        if ( t->GetType() == svSingleRef || t->GetType() == svExternalSingleRef )
+        if ( t->GetType() == StackVar::SingleRef || t->GetType() == StackVar::ExternalSingleRef )
             ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, SingleDoubleRefModifier( *t->GetSingleRef() ).Ref() );
         else
             ScRefUpdate::MoveRelWrap( pDoc, rPos, nMaxCol, nMaxRow, *t->GetDoubleRef() );
@@ -4906,15 +4906,15 @@ void ScCompiler::CreateStringFromExternal( OUStringBuffer& rBuffer, const Formul
 
     switch (t->GetType())
     {
-        case svExternalName:
+        case StackVar::ExternalName:
             rBuffer.append(pConv->makeExternalNameStr( nFileId, *pFileName, t->GetString().getString()));
         break;
-        case svExternalSingleRef:
+        case StackVar::ExternalSingleRef:
             pConv->makeExternalRefStr(
                    rBuffer, GetPos(), nFileId, *pFileName, t->GetString().getString(),
                    *t->GetSingleRef());
         break;
-        case svExternalDoubleRef:
+        case StackVar::ExternalDoubleRef:
         {
             vector<OUString> aTabNames;
             pRefMgr->getAllCachedTableNames(nFileId, aTabNames);
@@ -5123,13 +5123,13 @@ void ScCompiler::CreateStringFromIndex( OUStringBuffer& rBuffer, const FormulaTo
                     {
                         switch (pRef->GetType())
                         {
-                            case svSingleRef:
+                            case StackVar::SingleRef:
                                 CreateStringFromSingleRef( aBuffer, pRef);
                                 break;
-                            case svDoubleRef:
+                            case StackVar::DoubleRef:
                                 CreateStringFromDoubleRef( aBuffer, pRef);
                                 break;
-                            case svError:
+                            case StackVar::Error:
                                 AppendErrorConstant( aBuffer, pRef->GetError());
                                 break;
                             default:
@@ -5621,7 +5621,7 @@ bool ScCompiler::HandleTableRef()
                             eState = ((eState == sClose) ? sSep : sStop);
                             break;
                         case ocPush:
-                            if (eState == sOpen && p->GetType() == svSingleRef)
+                            if (eState == sOpen && p->GetType() == StackVar::SingleRef)
                             {
                                 bColumnRange = true;
                                 bCol1Rel = p->GetSingleRef()->IsColRel();
@@ -5659,7 +5659,7 @@ bool ScCompiler::HandleTableRef()
                 ScRange aColRange( ScAddress::INITIALIZE_INVALID );
                 switch (mpToken->GetType())
                 {
-                    case svSingleRef:
+                    case StackVar::SingleRef:
                         {
                             aColRange.aStart = aColRange.aEnd = mpToken->GetSingleRef()->toAbs( aPos);
                             if (    GetTokenIfOpCode( ocTableRefClose) && (nLevel--) &&
@@ -5667,7 +5667,7 @@ bool ScCompiler::HandleTableRef()
                                     GetTokenIfOpCode( ocTableRefOpen) && (++nLevel) &&
                                     GetTokenIfOpCode( ocPush))
                             {
-                                if (mpToken->GetType() != svSingleRef)
+                                if (mpToken->GetType() != StackVar::SingleRef)
                                     aColRange = ScRange( ScAddress::INITIALIZE_INVALID);
                                 else
                                 {

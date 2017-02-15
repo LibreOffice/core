@@ -1434,13 +1434,13 @@ Any SAL_CALL ScExternalSheetCacheObj::getCellValue(sal_Int32 nCol, sal_Int32 nRo
     Any aValue;
     switch (pToken->GetType())
     {
-        case svDouble:
+        case StackVar::Double:
         {
             double fVal = pToken->GetDouble();
             aValue <<= fVal;
         }
         break;
-        case svString:
+        case StackVar::String:
         {
             OUString aVal = pToken->GetString().getString();
             aValue <<= aVal;

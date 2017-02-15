@@ -1013,7 +1013,7 @@ void Test::testSharedFormulasDeleteColumns()
     const ScTokenArray* pCode = pFC->GetCode();
     CPPUNIT_ASSERT(pCode && pCode->GetLen() == 1);
     const FormulaToken* pToken = pCode->GetArray()[0];
-    CPPUNIT_ASSERT_EQUAL(svSingleRef, static_cast<StackVarEnum>(pToken->GetType()));
+    CPPUNIT_ASSERT_EQUAL((int)StackVar::SingleRef, (int)pToken->GetType());
     const ScSingleRefData* pSRef = pToken->GetSingleRef();
     CPPUNIT_ASSERT(pSRef->IsColDeleted());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), pSRef->toAbs(ScAddress(1,0,0)).Row());

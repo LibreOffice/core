@@ -590,7 +590,7 @@ rtl_uString* ScStringTokenIterator::Next()
     while( pToken && (pToken->GetOpCode() == ocSep) )
         pToken = mrTokArr.NextNoSpaces();
 
-    mbOk = !pToken || (pToken->GetType() == formula::svString);
+    mbOk = !pToken || (pToken->GetType() == formula::StackVar::String);
 
     maCurString = svl::SharedString(); // start with invalid string.
     if (mbOk && pToken)
@@ -700,7 +700,7 @@ bool ScValidationData::GetSelectionFromFormula(
                 bRef = true;
             }
         }
-        else if (t->GetType() != svIndex)
+        else if (t->GetType() != StackVar::Index)
         {
             if (pArr->IsValidReference(aRange, rPos))
             {

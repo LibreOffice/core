@@ -76,7 +76,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
 
         switch (p->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
                 {
                     const ScSingleRefData& rRef = *p->GetSingleRef();
                     if (!rRef.Valid())
@@ -85,7 +85,7 @@ void ScRefTokenHelper::compileRangeRepresentation(
                         bFailure = true;
                 }
                 break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 {
                     const ScComplexRefData& rRef = *p->GetDoubleRef();
                     if (!rRef.Valid())
@@ -94,19 +94,19 @@ void ScRefTokenHelper::compileRangeRepresentation(
                         bFailure = true;
                 }
                 break;
-            case svExternalSingleRef:
+            case StackVar::ExternalSingleRef:
                 {
                     if (!p->GetSingleRef()->ValidExternal())
                         bFailure = true;
                 }
                 break;
-            case svExternalDoubleRef:
+            case StackVar::ExternalDoubleRef:
                 {
                     if (!p->GetDoubleRef()->ValidExternal())
                         bFailure = true;
                 }
                 break;
-            case svString:
+            case StackVar::String:
                 if (p->GetString().isEmpty())
                     bFailure = true;
                 break;
@@ -128,11 +128,11 @@ bool ScRefTokenHelper::getRangeFromToken(
     StackVar eType = pToken->GetType();
     switch (pToken->GetType())
     {
-        case svSingleRef:
-        case svExternalSingleRef:
+        case StackVar::SingleRef:
+        case StackVar::ExternalSingleRef:
         {
-            if ((eType == svExternalSingleRef && !bExternal) ||
-                (eType == svSingleRef && bExternal))
+            if ((eType == StackVar::ExternalSingleRef && !bExternal) ||
+                (eType == StackVar::SingleRef && bExternal))
                 return false;
 
             const ScSingleRefData& rRefData = *pToken->GetSingleRef();
@@ -140,11 +140,11 @@ bool ScRefTokenHelper::getRangeFromToken(
             rRange.aEnd = rRange.aStart;
             return true;
         }
-        case svDoubleRef:
-        case svExternalDoubleRef:
+        case StackVar::DoubleRef:
+        case StackVar::ExternalDoubleRef:
         {
-            if ((eType == svExternalDoubleRef && !bExternal) ||
-                (eType == svDoubleRef && bExternal))
+            if ((eType == StackVar::ExternalDoubleRef && !bExternal) ||
+                (eType == StackVar::DoubleRef && bExternal))
                 return false;
 
             const ScComplexRefData& rRefData = *pToken->GetDoubleRef();
@@ -205,10 +205,10 @@ bool ScRefTokenHelper::isRef(const ScTokenRef& pToken)
 {
     switch (pToken->GetType())
     {
-        case svSingleRef:
-        case svDoubleRef:
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
+        case StackVar::SingleRef:
+        case StackVar::DoubleRef:
+        case StackVar::ExternalSingleRef:
+        case StackVar::ExternalDoubleRef:
             return true;
         default:
             ;
@@ -220,8 +220,8 @@ bool ScRefTokenHelper::isExternalRef(const ScTokenRef& pToken)
 {
     switch (pToken->GetType())
     {
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
+        case StackVar::ExternalSingleRef:
+        case StackVar::ExternalDoubleRef:
             return true;
         default:
             ;
@@ -436,8 +436,8 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
 {
     switch (pToken->GetType())
     {
-        case svSingleRef:
-        case svExternalSingleRef:
+        case StackVar::SingleRef:
+        case StackVar::ExternalSingleRef:
         {
             const ScSingleRefData& r = *pToken->GetSingleRef();
             rData.Ref1 = r;
@@ -446,8 +446,8 @@ bool ScRefTokenHelper::getDoubleRefDataFromToken(ScComplexRefData& rData, const 
             rData.Ref2.SetFlag3D(false); // Don't display sheet name on second reference.
         }
         break;
-        case svDoubleRef:
-        case svExternalDoubleRef:
+        case StackVar::DoubleRef:
+        case StackVar::ExternalDoubleRef:
             rData = *pToken->GetDoubleRef();
         break;
         default:

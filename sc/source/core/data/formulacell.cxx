@@ -421,8 +421,8 @@ lcl_refListFormsOneRange(
 bool lcl_isReference(const FormulaToken& rToken)
 {
     return
-        rToken.GetType() == svSingleRef ||
-        rToken.GetType() == svDoubleRef;
+        rToken.GetType() == StackVar::SingleRef ||
+        rToken.GetType() == StackVar::DoubleRef;
 }
 
 void adjustRangeName(formula::FormulaToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldDoc,
@@ -892,7 +892,7 @@ ScFormulaCell::ScFormulaCell(const ScFormulaCell& rCell, ScDocument& rDoc, const
                 // External name, cell, and area references.
                 bCompile = true;
             }
-            else if ( t->GetType() == svIndex )
+            else if ( t->GetType() == StackVar::Index )
             {
                 const ScRangeData* pRangeData = rDoc.FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex());
                 if( pRangeData )
@@ -1101,7 +1101,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
     MaybeInterpret();
 
     const ScMatrix* pMat = nullptr;
-    if (pCode->GetCodeError() == FormulaError::NONE && aResult.GetType() == svMatrixCell &&
+    if (pCode->GetCodeError() == FormulaError::NONE && aResult.GetType() == StackVar::MatrixCell &&
             ((pMat = aResult.GetToken().get()->GetMatrix()) != nullptr))
         pMat->GetDimensions( rCols, rRows );
     else
@@ -1850,10 +1850,10 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         {
             bool bIsValue = aResult.IsValue();  // the previous type
             // Did it converge?
-            if ((bIsValue && p->GetResultType() == svDouble && fabs(
+            if ((bIsValue && p->GetResultType() == StackVar::Double && fabs(
                             p->GetNumResult() - aResult.GetDouble()) <=
                         pDocument->GetDocOptions().GetIterEps()) ||
-                    (!bIsValue && p->GetResultType() == svString &&
+                    (!bIsValue && p->GetResultType() == StackVar::String &&
                      p->GetStringResult() == aResult.GetString()))
             {
                 // A convergence in the first iteration doesn't necessarily
@@ -1876,7 +1876,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         {
             bChanged = true;
             // bContentChanged only has to be set if the file content would be changed
-            if ( aResult.GetCellResultType() != svUnknown )
+            if ( aResult.GetCellResultType() != StackVar::Unknown )
                 bContentChanged = true;
         }
 
@@ -1976,10 +1976,10 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 // some other elements should be. We'd need to transport type
                 // or format information on arrays.
                 StackVar eNewCellResultType = aNewResult.GetCellResultType();
-                if (eNewCellResultType != svError || cMatrixFlag == MM_REFERENCE)
+                if (eNewCellResultType != StackVar::Error || cMatrixFlag == MM_REFERENCE)
                 {
                     double fVal;
-                    if (eNewCellResultType != svDouble)
+                    if (eNewCellResultType != StackVar::Double)
                     {
                         bSetFormat = false;
                         nFormatType = nOldFormatType;   // that? or number?
@@ -2024,20 +2024,20 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             {
                 StackVar eOld = aResult.GetCellResultType();
                 StackVar eNew = aNewResult.GetCellResultType();
-                if ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) )
+                if ( eOld == StackVar::Unknown && ( eNew == StackVar::Error || ( eNew == StackVar::Double && aNewResult.GetDouble() == 0.0 ) ) )
                 {
                     // ScXMLTableRowCellContext::EndElement doesn't call SetFormulaResultDouble for 0
                     // -> no change
                 }
                 else
                 {
-                    if ( eOld == svHybridCell )     // string result from SetFormulaResultString?
-                        eOld = svString;            // ScHybridCellToken has a valid GetString method
+                    if ( eOld == StackVar::HybridCell )     // string result from SetFormulaResultString?
+                        eOld = StackVar::String;            // ScHybridCellToken has a valid GetString method
 
                     // #i106045# use approxEqual to compare with stored value
                     bContentChanged = (eOld != eNew ||
-                            (eNew == svDouble && !rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble() )) ||
-                            (eNew == svString && aResult.GetString() != aNewResult.GetString()));
+                            (eNew == StackVar::Double && !rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble() )) ||
+                            (eNew == StackVar::String && aResult.GetString() != aNewResult.GetString()));
                 }
             }
 
@@ -2048,17 +2048,17 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             StackVar eOld = aResult.GetCellResultType();
             StackVar eNew = aNewResult.GetCellResultType();
             bChanged = (eOld != eNew ||
-                    (eNew == svDouble && aResult.GetDouble() != aNewResult.GetDouble()) ||
-                    (eNew == svString && aResult.GetString() != aNewResult.GetString()));
+                    (eNew == StackVar::Double && aResult.GetDouble() != aNewResult.GetDouble()) ||
+                    (eNew == StackVar::String && aResult.GetString() != aNewResult.GetString()));
 
             // #i102616# handle special cases of initial results after loading
             // (only if the sheet is still marked unchanged)
             if ( bChanged && !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
             {
-                if ((eOld == svUnknown && (eNew == svError || (eNew == svDouble && aNewResult.GetDouble() == 0.0))) ||
-                        ((eOld == svHybridCell) &&
-                         eNew == svString && aResult.GetString() == aNewResult.GetString()) ||
-                        (eOld == svDouble && eNew == svDouble &&
+                if ((eOld == StackVar::Unknown && (eNew == StackVar::Error || (eNew == StackVar::Double && aNewResult.GetDouble() == 0.0))) ||
+                        ((eOld == StackVar::HybridCell) &&
+                         eNew == StackVar::String && aResult.GetString() == aNewResult.GetString()) ||
+                        (eOld == StackVar::Double && eNew == StackVar::Double &&
                          rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble())))
                 {
                     // no change, see above
@@ -2569,7 +2569,7 @@ EditTextObject* ScFormulaCell::CreateURLObject()
 bool ScFormulaCell::IsEmpty()
 {
     MaybeInterpret();
-    return aResult.GetCellResultType() == formula::svEmptyCell;
+    return aResult.GetCellResultType() == formula::StackVar::EmptyCell;
 }
 
 bool ScFormulaCell::IsEmptyDisplayedAsString()
@@ -2915,11 +2915,11 @@ ScFormulaCell::RelNameRef ScFormulaCell::HasRelNameReference() const
     {
         switch (t->GetType())
         {
-            case formula::svSingleRef:
+            case formula::StackVar::SingleRef:
                 if (t->GetSingleRef()->IsRelName() && eRelNameRef == RelNameRef::NONE)
                     eRelNameRef = RelNameRef::SINGLE;
             break;
-            case formula::svDoubleRef:
+            case formula::StackVar::DoubleRef:
                 if (t->GetDoubleRef()->Ref1.IsRelName() || t->GetDoubleRef()->Ref2.IsRelName())
                     // May originate from individual cell names, in which case
                     // it needs recompilation.
@@ -3516,7 +3516,7 @@ void ScFormulaCell::UpdateInsertTabAbs(SCTAB nTable)
         ScSingleRefData& rRef1 = *p->GetSingleRef();
         if (!rRef1.IsTabRel() && nTable <= rRef1.Tab())
             rRef1.IncTab(1);
-        if (p->GetType() == formula::svDoubleRef)
+        if (p->GetType() == formula::StackVar::DoubleRef)
         {
             ScSingleRefData& rRef2 = p->GetDoubleRef()->Ref2;
             if (!rRef2.IsTabRel() && nTable <= rRef2.Tab())
@@ -3548,7 +3548,7 @@ bool ScFormulaCell::TestTabRefAbs(SCTAB nTable)
             else if (nTable != aPos.Tab())
                 rRef1.SetAbsTab(aPos.Tab());
         }
-        if (p->GetType() == formula::svDoubleRef)
+        if (p->GetType() == formula::StackVar::DoubleRef)
         {
             ScSingleRefData& rRef2 = p->GetDoubleRef()->Ref2;
             if (!rRef2.IsTabRel())
@@ -3584,7 +3584,7 @@ void ScFormulaCell::TransposeReference()
         ScSingleRefData& rRef1 = *t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.IsRowRel() )
         {
-            bool bDouble = (t->GetType() == formula::svDoubleRef);
+            bool bDouble = (t->GetType() == formula::StackVar::DoubleRef);
             ScSingleRefData& rRef2 = (bDouble ? t->GetDoubleRef()->Ref2 : rRef1);
             if ( !bDouble || (rRef2.IsColRel() && rRef2.IsRowRel()) )
             {
@@ -3649,7 +3649,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
                     bRefChanged = true;
             }
         }
-        else if( t->GetType() != svIndex )
+        else if( t->GetType() != StackVar::Index )
         {
             SingleDoubleRefModifier aMod(*t);
             ScComplexRefData& rRef = aMod.Ref();
@@ -3703,7 +3703,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
                     bRefChanged = true;
             }
         }
-        else if( t->GetType() != svIndex )
+        else if( t->GetType() != StackVar::Index )
         {
             SingleDoubleRefModifier aMod(*t);
             ScComplexRefData& rRef = aMod.Ref();
@@ -3897,13 +3897,13 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
 
         switch (pThisTok->GetType())
         {
-            case formula::svMatrix:
-            case formula::svExternalSingleRef:
-            case formula::svExternalDoubleRef:
+            case formula::StackVar::Matrix:
+            case formula::StackVar::ExternalSingleRef:
+            case formula::StackVar::ExternalDoubleRef:
                 // Ignoring matrix and external references for now.
                 return NotEqual;
 
-            case formula::svSingleRef:
+            case formula::StackVar::SingleRef:
             {
                 // Single cell reference.
                 const ScSingleRefData& rRef = *pThisTok->GetSingleRef();
@@ -3914,7 +3914,7 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
                     bInvariant = false;
             }
             break;
-            case formula::svDoubleRef:
+            case formula::StackVar::DoubleRef:
             {
                 // Range reference.
                 const ScSingleRefData& rRef1 = *pThisTok->GetSingleRef();
@@ -3932,31 +3932,31 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
                     bInvariant = false;
             }
             break;
-            case formula::svDouble:
+            case formula::StackVar::Double:
             {
                 if(!rtl::math::approxEqual(pThisTok->GetDouble(), pOtherTok->GetDouble()))
                     return NotEqual;
             }
             break;
-            case formula::svString:
+            case formula::StackVar::String:
             {
                 if(pThisTok->GetString() != pOtherTok->GetString())
                     return NotEqual;
             }
             break;
-            case formula::svIndex:
+            case formula::StackVar::Index:
             {
                 if(pThisTok->GetIndex() != pOtherTok->GetIndex() || pThisTok->GetSheet() != pOtherTok->GetSheet())
                     return NotEqual;
             }
             break;
-            case formula::svByte:
+            case formula::StackVar::Byte:
             {
                 if(pThisTok->GetByte() != pOtherTok->GetByte())
                     return NotEqual;
             }
             break;
-            case formula::svExternal:
+            case formula::StackVar::External:
             {
                 if (pThisTok->GetExternal() != pOtherTok->GetExternal())
                     return NotEqual;
@@ -3965,7 +3965,7 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
                     return NotEqual;
             }
             break;
-            case formula::svError:
+            case formula::StackVar::Error:
             {
                 if (pThisTok->GetError() != pOtherTok->GetError())
                     return NotEqual;
@@ -4010,7 +4010,7 @@ ScFormulaCell::CompareState ScFormulaCell::CompareByTokenArray( ScFormulaCell& r
         {
             // All index tokens are names. Different categories already had
             // different OpCode values.
-            case formula::svIndex:
+            case formula::StackVar::Index:
                 {
                     if (pThisTok->GetIndex() != pOtherTok->GetIndex())
                         return NotEqual;
@@ -4242,7 +4242,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
         {
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                 {
                     ScSingleRefData aRef = *p->GetSingleRef();
                     ScAddress aRefPos = aRef.toAbs(aPos);
@@ -4253,7 +4253,7 @@ bool ScFormulaCell::InterpretInvariantFormulaGroup()
                     aCode.AddToken(*pNewToken);
                 }
                 break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                 {
                     ScComplexRefData aRef = *p->GetDoubleRef();
                     ScRange aRefRange = aRef.toAbs(aPos);
@@ -4358,14 +4358,14 @@ void ScFormulaCell::StartListeningTo( ScDocument* pDoc )
     {
         switch (t->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 ScAddress aCell =  t->GetSingleRef()->toAbs(aPos);
                 if (aCell.IsValid())
                     pDoc->StartListeningCell(aCell, this);
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 startListeningArea(this, *pDoc, aPos, *t);
             break;
             default:
@@ -4401,14 +4401,14 @@ void ScFormulaCell::StartListeningTo( sc::StartListeningContext& rCxt )
     {
         switch (t->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 ScAddress aCell = t->GetSingleRef()->toAbs(aPos);
                 if (aCell.IsValid())
                     rDoc.StartListeningCell(rCxt, aCell, *this);
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 startListeningArea(this, rDoc, aPos, *t);
             break;
             default:
@@ -4478,14 +4478,14 @@ void ScFormulaCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
     {
         switch (t->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 ScAddress aCell = t->GetSingleRef()->toAbs(aCellPos);
                 if (aCell.IsValid())
                     pDoc->EndListeningCell(aCell, this);
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 endListeningArea(this, *pDoc, aCellPos, *t);
             break;
             default:
@@ -4525,14 +4525,14 @@ void ScFormulaCell::EndListeningTo( sc::EndListeningContext& rCxt )
     {
         switch (t->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 ScAddress aCell = t->GetSingleRef()->toAbs(aCellPos);
                 if (aCell.IsValid())
                     rDoc.EndListeningCell(rCxt, aCell, *this);
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 endListeningArea(this, rDoc, aCellPos, *t);
             break;
             default:

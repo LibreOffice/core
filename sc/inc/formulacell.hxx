@@ -290,10 +290,10 @@ public:
     bool            IsSubTotal() const { return bSubTotal;}
     bool            IsChanged() const { return bChanged;}
     void            SetChanged(bool b);
-    bool            IsEmpty();      // formula::svEmptyCell result
-                    // display as empty string if formula::svEmptyCell result
+    bool            IsEmpty();      // formula::StackVar::EmptyCell result
+                    // display as empty string if formula::StackVar::EmptyCell result
     bool            IsEmptyDisplayedAsString();
-    bool            IsValue();      // also true if formula::svEmptyCell
+    bool            IsValue();      // also true if formula::StackVar::EmptyCell
     bool            IsValueNoError();
     bool            IsValueNoError() const;
     double          GetValue();

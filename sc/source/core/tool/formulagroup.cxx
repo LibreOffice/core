@@ -180,7 +180,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 
             switch (p->GetType())
             {
-                case formula::svSingleVectorRef:
+                case formula::StackVar::SingleVectorRef:
                 {
                     const formula::SingleVectorRefToken* p2 = static_cast<const formula::SingleVectorRefToken*>(p);
                     const formula::VectorRefArray& rArray = p2->GetArray();
@@ -211,7 +211,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         aCode2.AddDouble(fVal);
                 }
                 break;
-                case formula::svDoubleVectorRef:
+                case formula::StackVar::DoubleVectorRef:
                 {
                     const formula::DoubleVectorRefToken* p2 = static_cast<const formula::DoubleVectorRefToken*>(p);
                     size_t nRowStart = p2->IsStartFixed() ? 0 : i;

@@ -224,7 +224,7 @@ bool XclExpShrfmlaBuffer::IsValidTokenArray( const ScTokenArray& rArray ) const
         const FormulaToken* p = pTokens[i];
         switch (p->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 const ScSingleRefData& rRefData = *p->GetSingleRef();
                 if (!GetFormulaCompiler().IsRef2D(rRefData))
@@ -232,7 +232,7 @@ bool XclExpShrfmlaBuffer::IsValidTokenArray( const ScTokenArray& rArray ) const
                     return false;
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 const ScComplexRefData& rRefData = *p->GetDoubleRef();
                 if (!GetFormulaCompiler().IsRef2D(rRefData))
@@ -240,9 +240,9 @@ bool XclExpShrfmlaBuffer::IsValidTokenArray( const ScTokenArray& rArray ) const
                     return false;
             }
             break;
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
-            case svExternalName:
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
+            case StackVar::ExternalName:
                 // External references aren't allowed.
                 return false;
             default:

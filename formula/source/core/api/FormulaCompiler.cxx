@@ -316,24 +316,24 @@ bool isPotentialRangeType( FormulaToken* pToken, bool bRPN, bool bRight )
 {
     switch (pToken->GetType())
     {
-        case svByte:                // could be range result, but only a few
+        case StackVar::Byte:                // could be range result, but only a few
             if (bRPN)
                 return isRangeResultOpCode( pToken->GetOpCode());
             else if (bRight)
                 return isRangeResultFunction( pToken->GetOpCode());
             else
                 return isPotentialRangeLeftOp( pToken->GetOpCode());
-        case svSingleRef:
-        case svDoubleRef:
-        case svIndex:               // could be range
-        //case svRefList:           // um..what?
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
-        case svExternalName:        // could be range
+        case StackVar::SingleRef:
+        case StackVar::DoubleRef:
+        case StackVar::Index:               // could be range
+        //case StackVar::RefList:           // um..what?
+        case StackVar::ExternalSingleRef:
+        case StackVar::ExternalDoubleRef:
+        case StackVar::ExternalName:        // could be range
             return true;
         default:
             // Separators are not part of RPN and right opcodes need to be
-            // other StackVarEnum types or functions and thus svByte.
+            // other StackVar types or functions and thus StackVar::Byte.
             return !bRPN && !bRight && isPotentialRangeLeftOp( pToken->GetOpCode());
     }
 }
@@ -1380,8 +1380,8 @@ void FormulaCompiler::Factor()
         {
             // PUSH( is an error that may be caused by an unknown function.
             SetError(
-                ( mpToken->GetType() == svString
-               || mpToken->GetType() == svSingleRef )
+                ( mpToken->GetType() == StackVar::String
+               || mpToken->GetType() == StackVar::SingleRef )
                ? FormulaError::NoName : FormulaError::OperatorExpected );
             if ( bAutoCorrect && !pStack )
             {   // assume multiplication
@@ -1532,12 +1532,12 @@ void FormulaCompiler::Factor()
                     // nSepPos+4 if expression continues after the call because
                     // we just called NextToken() to move away from it.
                     if (pc >= 2 && (pArr->nIndex == nSepPos + 3 || pArr->nIndex == nSepPos + 4) &&
-                            pArr->pCode[nSepPos+1]->GetType() == svDouble &&
+                            pArr->pCode[nSepPos+1]->GetType() == StackVar::Double &&
                             pArr->pCode[nSepPos+1]->GetDouble() != 1.0 &&
                             pArr->pCode[nSepPos+2]->GetOpCode() == ocClose &&
                             pArr->RemoveToken( nSepPos, 2) == 2)
                     {
-                        // Remove the ocPush/svDouble just removed also from
+                        // Remove the ocPush/StackVar::Double just removed also from
                         // the compiler local RPN array.
                         --pCode; --pc;
                         (*pCode)->DecRef(); // may be dead now
@@ -1628,7 +1628,7 @@ void FormulaCompiler::Factor()
             else
                 NextToken();
             // Jumps are just normal functions for the FunctionAutoPilot tree view
-            if (!mbJumpCommandReorder && pFacToken->GetType() == svJump)
+            if (!mbJumpCommandReorder && pFacToken->GetType() == StackVar::Jump)
                 pFacToken = new FormulaFAPToken( pFacToken->GetOpCode(), nSepCount, pFacToken );
             else
                 pFacToken->SetByte( nSepCount );
@@ -2190,28 +2190,28 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
         {
             switch( t->GetType() )
             {
-            case svDouble:
+            case StackVar::Double:
                 AppendDouble( rBuffer, t->GetDouble() );
             break;
 
-            case svString:
+            case StackVar::String:
                 if( eOp == ocBad || eOp == ocStringXML )
                     rBuffer.append( t->GetString().getString());
                 else
                     AppendString( rBuffer, t->GetString().getString() );
                 break;
-            case svSingleRef:
+            case StackVar::SingleRef:
                 CreateStringFromSingleRef( rBuffer, t);
                 break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 CreateStringFromDoubleRef( rBuffer, t);
                 break;
-            case svMatrix:
-            case svMatrixCell:
+            case StackVar::Matrix:
+            case StackVar::MatrixCell:
                 CreateStringFromMatrix( rBuffer, t );
                 break;
 
-            case svIndex:
+            case StackVar::Index:
                 CreateStringFromIndex( rBuffer, t );
                 if (t->GetOpCode() == ocTableRef && bAllowArrAdvance && NeedsTableRefTransformation())
                 {
@@ -2255,7 +2255,7 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                     }
                 }
                 break;
-            case svExternal:
+            case StackVar::External:
             {
                 // mapped or translated name of AddIns
                 OUString aAddIn( t->GetExternal() );
@@ -2274,17 +2274,17 @@ const FormulaToken* FormulaCompiler::CreateStringFromToken( OUStringBuffer& rBuf
                 rBuffer.append( aAddIn);
             }
             break;
-            case svError:
+            case StackVar::Error:
                 AppendErrorConstant( rBuffer, t->GetError());
             break;
-            case svByte:
-            case svJump:
-            case svFAP:
-            case svMissing:
-            case svSep:
+            case StackVar::Byte:
+            case StackVar::Jump:
+            case StackVar::FAP:
+            case StackVar::Missing:
+            case StackVar::Sep:
                 break;      // Opcodes
             default:
-                SAL_WARN("formula.core", "FormulaCompiler::GetStringFromToken: unknown token type " << t->GetType());
+                SAL_WARN("formula.core", "FormulaCompiler::GetStringFromToken: unknown token type " << (int)t->GetType());
             } // of switch
         }
     }
@@ -2566,7 +2566,7 @@ void FormulaCompiler::ForceArrayOperator( FormulaTokenRef& rCurr )
     if (!pCurrentFactorToken || (pCurrentFactorToken.get() == rCurr.get()))
         return;
 
-    if (!(rCurr->GetOpCode() != ocPush && (rCurr->GetType() == svByte || rCurr->GetType() == svJump)))
+    if (!(rCurr->GetOpCode() != ocPush && (rCurr->GetType() == StackVar::Byte || rCurr->GetType() == StackVar::Jump)))
         return;
 
     if (pCurrentFactorToken->IsInForceArray())

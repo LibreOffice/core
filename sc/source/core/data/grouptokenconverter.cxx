@@ -114,7 +114,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
         SCROW nLen = mrCell.GetCellGroup()->mnLength;
         switch (p->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 ScSingleRefData aRef = *p->GetSingleRef();
                 ScAddress aRefPos = aRef.toAbs(mrPos);
@@ -164,7 +164,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
                 }
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 ScComplexRefData aRef = *p->GetDoubleRef();
                 ScRange aAbs = aRef.toAbs(mrPos);
@@ -236,7 +236,7 @@ bool ScGroupTokenConverter::convert( ScTokenArray& rCode, sc::FormulaLogger::Gro
                 }
             }
             break;
-            case svIndex:
+            case StackVar::Index:
             {
                 // Named range.
                 ScRangeName* pNames = mrDoc.GetRangeName();

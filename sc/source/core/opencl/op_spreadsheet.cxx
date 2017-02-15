@@ -49,13 +49,13 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
     // common-case) to validate consistent return types vs. the input.
     int index = 0;
     int indexArg = vSubArguments.size() - 2;
-    if (vSubArguments[indexArg]->GetFormulaToken()->GetType() == formula::svDouble)
+    if (vSubArguments[indexArg]->GetFormulaToken()->GetType() == formula::StackVar::Double)
     {
         const formula::FormulaDoubleToken *dblToken = static_cast<const FormulaDoubleToken *>(vSubArguments[indexArg]->GetFormulaToken());
         index = ::rtl::math::approxFloor(dblToken->GetDouble());
     }
 
-    if (vSubArguments[1]->GetFormulaToken()->GetType() == formula::svDoubleVectorRef)
+    if (vSubArguments[1]->GetFormulaToken()->GetType() == formula::StackVar::DoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[1]->GetFormulaToken();
         const formula::DoubleVectorRefToken*pCurDVR = static_cast<const formula::DoubleVectorRefToken *>(tmpCur);
@@ -95,7 +95,7 @@ void OpVLookup::GenSlidingWindowFunction(std::stringstream &ss,
         CheckSubArgumentIsNan(ss,vSubArguments,arg++);
     }
 
-    if (vSubArguments[1]->GetFormulaToken()->GetType() == formula::svDoubleVectorRef)
+    if (vSubArguments[1]->GetFormulaToken()->GetType() == formula::StackVar::DoubleVectorRef)
     {
         FormulaToken *tmpCur = vSubArguments[1]->GetFormulaToken();
         const formula::DoubleVectorRefToken*pCurDVR = static_cast<const formula::DoubleVectorRefToken *>(tmpCur);

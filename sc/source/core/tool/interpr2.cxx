@@ -409,8 +409,8 @@ FormulaError ScInterpreter::GetWeekendAndHolidayMasks_MS(
         {
             switch ( GetStackType() )
             {
-                case svDoubleRef :
-                case svExternalDoubleRef :
+                case StackVar::DoubleRef :
+                case StackVar::ExternalDoubleRef :
                     return FormulaError::NoValue;
                     break;
 
@@ -1279,13 +1279,13 @@ void ScInterpreter::ScNPV()
             {
                 switch (GetStackType())
                 {
-                    case svDouble :
+                    case StackVar::Double :
                     {
                         nVal += (GetDouble() / pow(1.0 + nInterest, (double)nCount));
                         nCount++;
                     }
                     break;
-                    case svSingleRef :
+                    case StackVar::SingleRef :
                     {
                         ScAddress aAdr;
                         PopSingleRef( aAdr );
@@ -1298,8 +1298,8 @@ void ScInterpreter::ScNPV()
                         }
                     }
                     break;
-                    case svDoubleRef :
-                    case svRefList :
+                    case StackVar::DoubleRef :
+                    case StackVar::RefList :
                     {
                         FormulaError nErr = FormulaError::NONE;
                         double nCellVal;
@@ -1314,9 +1314,9 @@ void ScInterpreter::ScNPV()
                             SetError(nErr);
                     }
                     break;
-                    case svMatrix :
-                    case svExternalSingleRef:
-                    case svExternalDoubleRef:
+                    case StackVar::Matrix :
+                    case StackVar::ExternalSingleRef:
+                    case StackVar::ExternalDoubleRef:
                     {
                         ScMatrixRef pMat = GetMatrix();
                         if (pMat)
@@ -1377,7 +1377,7 @@ void ScInterpreter::ScIRR()
         x = fEstimated;                    // startvalue
     switch (GetStackType())
     {
-        case svDoubleRef :
+        case StackVar::DoubleRef :
         break;
         default:
         {
@@ -1438,12 +1438,12 @@ void ScInterpreter::ScMIRR()
         bool bIsMatrix = false;
         switch ( GetStackType() )
         {
-            case svDoubleRef :
+            case StackVar::DoubleRef :
                 PopDoubleRef( aRange );
                 break;
-            case svMatrix :
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::Matrix :
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
                 {
                     pMat = GetMatrix();
                     if ( pMat )
@@ -2363,8 +2363,8 @@ void ScInterpreter::ScIntersect()
 
     StackVar sv1 = p1st->GetType();
     StackVar sv2 = p2nd->GetType();
-    if ((sv1 != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList) ||
-        (sv2 != svSingleRef && sv2 != svDoubleRef && sv2 != svRefList))
+    if ((sv1 != StackVar::SingleRef && sv1 != StackVar::DoubleRef && sv1 != StackVar::RefList) ||
+        (sv2 != StackVar::SingleRef && sv2 != StackVar::DoubleRef && sv2 != StackVar::RefList))
     {
         PushIllegalArgument();
         return;
@@ -2372,7 +2372,7 @@ void ScInterpreter::ScIntersect()
 
     const formula::FormulaToken* x1 = p1st.get();
     const formula::FormulaToken* x2 = p2nd.get();
-    if (sv1 == svRefList || sv2 == svRefList)
+    if (sv1 == StackVar::RefList || sv2 == StackVar::RefList)
     {
         // Now this is a bit nasty but it simplifies things, and having
         // intersections with lists isn't too common, if at all..
@@ -2384,7 +2384,7 @@ void ScInterpreter::ScIntersect()
         std::unique_ptr<formula::FormulaToken> p;
         for (size_t i=0; i<2; ++i)
         {
-            if (sv[i] == svSingleRef)
+            if (sv[i] == StackVar::SingleRef)
             {
                 ScComplexRefData aRef;
                 aRef.Ref1 = aRef.Ref2 = *xt[i]->GetSingleRef();
@@ -2392,7 +2392,7 @@ void ScInterpreter::ScIntersect()
                 p->GetRefList()->push_back( aRef);
                 xt[i] = p.get();
             }
-            else if (sv[i] == svDoubleRef)
+            else if (sv[i] == StackVar::DoubleRef)
             {
                 ScComplexRefData aRef = *xt[i]->GetDoubleRef();
                 p.reset(new ScRefListToken);
@@ -2458,8 +2458,8 @@ void ScInterpreter::ScIntersect()
         {
             switch (sv[i])
             {
-                case svSingleRef:
-                case svDoubleRef:
+                case StackVar::SingleRef:
+                case StackVar::DoubleRef:
                 {
                     {
                         const ScAddress& r = pt[i]->GetSingleRef()->toAbs(aPos);
@@ -2467,7 +2467,7 @@ void ScInterpreter::ScIntersect()
                         nR1[i] = r.Row();
                         nT1[i] = r.Tab();
                     }
-                    if (sv[i] == svDoubleRef)
+                    if (sv[i] == StackVar::DoubleRef)
                     {
                         const ScAddress& r = pt[i]->GetSingleRef2()->toAbs(aPos);
                         nC2[i] = r.Col();
@@ -2534,8 +2534,8 @@ void ScInterpreter::ScUnionFunc()
 
     StackVar sv1 = p1st->GetType();
     StackVar sv2 = p2nd->GetType();
-    if ((sv1 != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList) ||
-        (sv2 != svSingleRef && sv2 != svDoubleRef && sv2 != svRefList))
+    if ((sv1 != StackVar::SingleRef && sv1 != StackVar::DoubleRef && sv1 != StackVar::RefList) ||
+        (sv2 != StackVar::SingleRef && sv2 != StackVar::DoubleRef && sv2 != StackVar::RefList))
     {
         PushIllegalArgument();
         return;
@@ -2546,15 +2546,15 @@ void ScInterpreter::ScUnionFunc()
 
     ScTokenRef xRes;
     // Append to an existing RefList if there is one.
-    if (sv1 == svRefList)
+    if (sv1 == StackVar::RefList)
     {
         xRes = x1->Clone();
-        sv1 = svUnknown;    // mark as handled
+        sv1 = StackVar::Unknown;    // mark as handled
     }
-    else if (sv2 == svRefList)
+    else if (sv2 == StackVar::RefList)
     {
         xRes = x2->Clone();
-        sv2 = svUnknown;    // mark as handled
+        sv2 = StackVar::Unknown;    // mark as handled
     }
     else
         xRes = new ScRefListToken;
@@ -2567,17 +2567,17 @@ void ScInterpreter::ScUnionFunc()
             continue;
         switch (sv[i])
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
                 {
                     ScComplexRefData aRef;
                     aRef.Ref1 = aRef.Ref2 = *pt[i]->GetSingleRef();
                     pRes->push_back( aRef);
                 }
                 break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 pRes->push_back( *pt[i]->GetDoubleRef());
                 break;
-            case svRefList:
+            case StackVar::RefList:
                 {
                     const ScRefList* p = pt[i]->GetRefList();
                     ScRefList::const_iterator it( p->begin());
@@ -3148,15 +3148,15 @@ void ScInterpreter::ScHyperLink()
         {
             switch ( GetStackType() )
             {
-                case svDouble:
+                case StackVar::Double:
                     fVal = GetDouble();
                     nResultType = ScMatValType::Value;
                 break;
-                case svString:
+                case StackVar::String:
                     aStr = GetString();
                 break;
-                case svSingleRef:
-                case svDoubleRef:
+                case StackVar::SingleRef:
+                case StackVar::DoubleRef:
                 {
                     ScAddress aAdr;
                     if ( !PopDoubleRefOrSingleRef( aAdr ) )
@@ -3180,11 +3180,11 @@ void ScInterpreter::ScHyperLink()
                     }
                 }
                 break;
-                case svMatrix:
+                case StackVar::Matrix:
                     nResultType = GetDoubleOrStringFromMatrix( fVal, aStr);
                 break;
-                case svMissing:
-                case svEmptyCell:
+                case StackVar::Missing:
+                case StackVar::EmptyCell:
                     Pop();
                     // mimic xcl
                     fVal = 0.0;
@@ -3519,7 +3519,7 @@ void ScInterpreter::ScGetPivotData()
     {
         // if the first parameter is a ref, assume old syntax
         StackVar eFirstType = GetStackType(2);
-        if (eFirstType == svSingleRef || eFirstType == svDoubleRef)
+        if (eFirstType == StackVar::SingleRef || eFirstType == StackVar::DoubleRef)
             bOldSyntax = true;
     }
 
@@ -3533,10 +3533,10 @@ void ScInterpreter::ScGetPivotData()
 
         switch (GetStackType())
         {
-            case svDoubleRef :
+            case StackVar::DoubleRef :
                 PopDoubleRef(aBlock);
             break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 ScAddress aAddr;
                 PopSingleRef(aAddr);
@@ -3565,8 +3565,8 @@ void ScInterpreter::ScGetPivotData()
             bool bEvaluateFormatIndex;
             switch (GetRawStackType())
             {
-                case svSingleRef:
-                case svDoubleRef:
+                case StackVar::SingleRef:
+                case StackVar::DoubleRef:
                     bEvaluateFormatIndex = true;
                 break;
                 default:
@@ -3619,10 +3619,10 @@ void ScInterpreter::ScGetPivotData()
 
         switch (GetStackType())
         {
-            case svDoubleRef :
+            case StackVar::DoubleRef :
                 PopDoubleRef(aBlock);
             break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 ScAddress aAddr;
                 PopSingleRef(aAddr);

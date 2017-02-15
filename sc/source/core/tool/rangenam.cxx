@@ -171,7 +171,7 @@ void ScRangeData::CompileRangeData( const OUString& rSymbol, bool bSetError )
         {
             // first token is a reference
             /* FIXME: wouldn't that need a check if it's exactly one reference? */
-            if( p->GetType() == svSingleRef )
+            if( p->GetType() == StackVar::SingleRef )
                 eType = eType | Type::AbsPos;
             else
                 eType = eType | Type::AbsArea;
@@ -235,7 +235,7 @@ void ScRangeData::GuessPosition()
         if ( rRef1.IsTabRel() && rRef1.Tab() < nMinTab )
             nMinTab = rRef1.Tab();
 
-        if ( t->GetType() == svDoubleRef )
+        if ( t->GetType() == StackVar::DoubleRef )
         {
             ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
             if ( rRef2.IsColRel() && rRef2.Col() < nMinCol )
@@ -292,13 +292,13 @@ void ScRangeData::UpdateTranspose( const ScRange& rSource, const ScAddress& rDes
 
     while ( ( t = pCode->GetNextReference() ) != nullptr )
     {
-        if( t->GetType() != svIndex )
+        if( t->GetType() != StackVar::Index )
         {
             SingleDoubleRefModifier aMod( *t );
             ScComplexRefData& rRef = aMod.Ref();
             if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                     (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
-                ( t->GetType() == svSingleRef ||
+                ( t->GetType() == StackVar::SingleRef ||
                 (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
@@ -324,13 +324,13 @@ void ScRangeData::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 
     while ( ( t = pCode->GetNextReference() ) != nullptr )
     {
-        if( t->GetType() != svIndex )
+        if( t->GetType() != StackVar::Index )
         {
             SingleDoubleRefModifier aMod( *t );
             ScComplexRefData& rRef = aMod.Ref();
             if (!rRef.Ref1.IsColRel() && !rRef.Ref1.IsRowRel() &&
                     (!rRef.Ref1.IsFlag3D() || !rRef.Ref1.IsTabRel()) &&
-                ( t->GetType() == svSingleRef ||
+                ( t->GetType() == StackVar::SingleRef ||
                 (!rRef.Ref2.IsColRel() && !rRef.Ref2.IsRowRel() &&
                     (!rRef.Ref2.IsFlag3D() || !rRef.Ref2.IsTabRel()))))
             {
@@ -561,7 +561,7 @@ void ScRangeData::ValidateTabRefs()
             if (aAbs.Tab() > nMaxTab)
                 nMaxTab = aAbs.Tab();
         }
-        if ( t->GetType() == svDoubleRef )
+        if ( t->GetType() == StackVar::DoubleRef )
         {
             ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
             aAbs = rRef2.toAbs(aPos);
@@ -590,7 +590,7 @@ void ScRangeData::ValidateTabRefs()
         {
             switch (t->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                 {
                     ScSingleRefData& rRef = *t->GetSingleRef();
                     if (!rRef.IsTabDeleted())
@@ -600,7 +600,7 @@ void ScRangeData::ValidateTabRefs()
                     }
                 }
                 break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                 {
                     ScComplexRefData& rRef = *t->GetDoubleRef();
                     if (!rRef.Ref1.IsTabDeleted())
@@ -637,7 +637,7 @@ void ScRangeData::InitCode()
         FormulaToken* p = pCode->GetNextReference();
         if( p )   // exact one reference at first
         {
-            if( p->GetType() == svSingleRef )
+            if( p->GetType() == StackVar::SingleRef )
                 eType = eType | Type::AbsPos;
             else
                 eType = eType | Type::AbsArea;

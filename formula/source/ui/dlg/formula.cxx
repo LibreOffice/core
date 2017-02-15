@@ -632,7 +632,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
         OpCode eOp = _pToken->GetOpCode();
 
         // #i101512# for output, the original token is needed
-        FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
+        FormulaToken* pOrigToken = (_pToken->GetType() == StackVar::FAP) ? _pToken->GetFAPOrigToken() : _pToken;
         uno::Sequence<sheet::FormulaToken> aArgs(1);
         ::std::map<FormulaToken*,sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
         if (itr == m_aTokenMap.end())
@@ -718,7 +718,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
                      * a scalar value is expected matrix should not be forced.
                      * */
                     bool bForceMatrix = (!m_pBtnMatrix->IsChecked() &&
-                            (_pToken->GetType() == svDoubleRef || _pToken->GetType() == svExternalDoubleRef));
+                            (_pToken->GetType() == StackVar::DoubleRef || _pToken->GetType() == StackVar::ExternalDoubleRef));
                     OUString aCellResult;
                     if (CalcValue( "=" + aResult, aCellResult, bForceMatrix) && aCellResult != aResult)
                         // Cell is a formula, print subformula.

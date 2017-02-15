@@ -476,7 +476,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
     {
         switch (GetStackType())
         {
-            case svString:
+            case StackVar::String:
             {
                 if( eFunc == ifCOUNT )
                 {
@@ -526,7 +526,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
             }
             break;
-            case svDouble    :
+            case StackVar::Double    :
                 fVal = GetDouble();
                 nCount++;
                 switch( eFunc )
@@ -544,7 +544,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
                 nFuncFmtType = css::util::NumberFormat::NUMBER;
                 break;
-            case svExternalSingleRef:
+            case StackVar::ExternalSingleRef:
             {
                 ScExternalRefCache::TokenRef pToken;
                 ScExternalRefCache::CellFormat aFmt;
@@ -564,7 +564,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 StackVar eType = pToken->GetType();
                 if (eFunc == ifCOUNT2)
                 {
-                    if ( eType != formula::svEmptyCell &&
+                    if ( eType != formula::StackVar::EmptyCell &&
                          ( ( pToken->GetOpCode() != ocSubTotal &&
                              pToken->GetOpCode() != ocAggregate ) ||
                            ( mnSubTotalFlags & SubtotalFlags::IgnoreNestedStAg ) ) )
@@ -572,7 +572,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     if (nGlobalError != FormulaError::NONE)
                         nGlobalError = FormulaError::NONE;
                 }
-                else if (eType == formula::svDouble)
+                else if (eType == formula::StackVar::Double)
                 {
                     nCount++;
                     fVal = pToken->GetDouble();
@@ -602,7 +602,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                         default: ; // nothing
                     }
                 }
-                else if (bTextAsZero && eType == formula::svString)
+                else if (bTextAsZero && eType == formula::StackVar::String)
                 {
                     nCount++;
                     if ( eFunc == ifPRODUCT )
@@ -610,7 +610,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
             }
             break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 PopSingleRef( aAdr );
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
@@ -672,8 +672,8 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
             }
             break;
-            case svDoubleRef :
-            case svRefList :
+            case StackVar::DoubleRef :
+            case StackVar::RefList :
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 if ( nGlobalError != FormulaError::NONE && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ||
@@ -825,7 +825,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 }
             }
             break;
-            case svExternalDoubleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScMatrixRef pMat;
                 PopExternalDoubleRef(pMat);
@@ -835,14 +835,14 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                 IterateMatrix( pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem );
             }
             break;
-            case svMatrix :
+            case StackVar::Matrix :
             {
                 ScMatrixRef pMat = PopMatrix();
 
                 IterateMatrix( pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem );
             }
             break;
-            case svError:
+            case StackVar::Error:
             {
                 PopError();
                 if ( eFunc == ifCOUNT || ( mnSubTotalFlags & SubtotalFlags::IgnoreErrVal ) )
