@@ -1234,35 +1234,31 @@
 
 #define WID_CONDFRMT_REF                (SC_DIALOGS_START + 163)
 
-#define SC_DIALOGS_END                  (WID_CONDFRMT_REF + 1)
+// toggle sheet grid
+#define FID_TAB_TOGGLE_GRID             (SC_DIALOGS_START + 164)
+
+// formula options page
+#define RID_SCPAGE_FORMULA              (SC_DIALOGS_START + 165)
+
+// insert current date and time to cell via command
+#define SID_INSERT_CURRENT_DATE         (SC_DIALOGS_START + 166)
+#define SID_INSERT_CURRENT_TIME         (SC_DIALOGS_START + 167)
+
+// data Form
+#define SID_DATA_FORM                   (SC_DIALOGS_START + 168) // menu (in Data menu)
+
+// compatibility options page
+#define RID_SCPAGE_COMPATIBILITY        (SC_DIALOGS_START + 169)
+
+// init option page
+#define RID_SCPAGE_DEFAULTS             (SC_DIALOGS_START + 170)
+
+#define SC_DIALOGS_END                  (RID_SCPAGE_DEFAULTS + 1)
 
 #define MID_1   1
 #define MID_2   2
 #define MID_3   3
 #define MID_4   4
-
-// ooo-build specific resources
-
-#define SC_OOO_BUILD_START          (SC_DIALOGS_END)
-
-// toggle sheet grid
-#define FID_TAB_TOGGLE_GRID         (SC_OOO_BUILD_START + 1)
-
-// formula options page
-#define RID_SCPAGE_FORMULA          (SC_OOO_BUILD_START + 2)
-
-// insert current date and time to cell via command
-#define SID_INSERT_CURRENT_DATE     (SC_OOO_BUILD_START + 4)
-#define SID_INSERT_CURRENT_TIME     (SC_OOO_BUILD_START + 5)
-
-// data Form
-#define SID_DATA_FORM               (SC_OOO_BUILD_START + 7) // menu (in Data menu)
-
-// compatibility options page
-#define RID_SCPAGE_COMPATIBILITY    (SC_OOO_BUILD_START + 9)
-
-// init option page
-#define RID_SCPAGE_DEFAULTS         (SC_OOO_BUILD_START + 10)
 
 #endif
 
