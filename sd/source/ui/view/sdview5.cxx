@@ -33,7 +33,6 @@ static bool implIsMultiPresObj( PresObjKind eKind )
     case PRESOBJ_CHART:
     case PRESOBJ_ORGCHART:
     case PRESOBJ_TABLE:
-    case PRESOBJ_IMAGE:
     case PRESOBJ_MEDIA:
         return true;
     default:

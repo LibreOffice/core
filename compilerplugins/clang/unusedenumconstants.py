@@ -111,6 +111,7 @@ for d in definitionSet:
          "include/svx/msdffdef.hxx",
          "include/svtools/rtftoken.h", # RTF_TOKEN_IDS
          "starmath/source/mathtype.hxx", # MathType::MTOKENS
+         "sd/source/filter/eppt/epptbase.hxx", # PPTExTextAttr
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -150,6 +151,9 @@ for d in definitionSet:
          "include/svx/sxekitm.hxx", # SdrEdgeKind (from UI)
          "include/svx/paraprev.hxx", # SvxPrevLineSpace (from UI)
          "include/svx/ctredlin.hxx", # SvxRedlinDateMode (from UI)
+         "sd/source/ui/inc/animobjs.hxx", # BitmapAdjustment (from UI)
+         "sd/source/ui/dlg/PhotoAlbumDialog.hxx", # SlideImageLayout (from UI)
+         "sd/inc/pres.hxx", # AutoLayout (from UI)
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",
