@@ -112,6 +112,7 @@ for d in definitionSet:
          "include/svtools/rtftoken.h", # RTF_TOKEN_IDS
          "starmath/source/mathtype.hxx", # MathType::MTOKENS
          "sd/source/filter/eppt/epptbase.hxx", # PPTExTextAttr
+         "sc/source/filter/inc/tokstack.hxx", # E_TYPE
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on

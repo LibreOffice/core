@@ -367,12 +367,11 @@ struct ApiOpCodes
 // Function parameter info ====================================================
 
 /** Enumerates validity modes for a function parameter. */
-enum FuncParamValidity
+enum class FuncParamValidity
 {
-    FUNC_PARAM_NONE = 0,        /// Default for an unspecified entry in a C-array.
-    FUNC_PARAM_REGULAR,         /// Parameter supported by Calc and Excel.
-    FUNC_PARAM_CALCONLY,        /// Parameter supported by Calc only.
-    FUNC_PARAM_EXCELONLY        /// Parameter supported by Excel only.
+    Regular,         /// Parameter supported by Calc and Excel.
+    CalcOnly,        /// Parameter supported by Calc only.
+    ExcelOnly        /// Parameter supported by Excel only.
 };
 
 /** Structure that contains all needed information for a parameter in a
@@ -474,7 +473,7 @@ enum FunctionLibraryType
 
     The member mpParamInfos points to a C-array of type information structures
     for all parameters of the function. The last initialized structure
-    describing a regular parameter (member meValid == FUNC_PARAM_REGULAR) in
+    describing a regular parameter (member meValid == FuncParamValidity::Regular) in
     this array is used repeatedly for all following parameters supported by a
     function.
  */

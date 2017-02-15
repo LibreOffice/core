@@ -203,18 +203,18 @@ const sal_uInt8 V = BIFF_TOKCLASS_VAL;
 const sal_uInt8 A = BIFF_TOKCLASS_ARR;
 
 // abbreviations for parameter infos
-#define RO   { FUNC_PARAM_REGULAR }
-#define RA   { FUNC_PARAM_REGULAR }
-#define RR   { FUNC_PARAM_REGULAR }
-#define RX   { FUNC_PARAM_REGULAR }
-#define VO   { FUNC_PARAM_REGULAR  }
-#define VV   { FUNC_PARAM_REGULAR  }
-#define VA   { FUNC_PARAM_REGULAR  }
-#define VR   { FUNC_PARAM_REGULAR  }
-#define VX   { FUNC_PARAM_REGULAR  }
-#define RO_E { FUNC_PARAM_EXCELONLY }
-#define VR_E { FUNC_PARAM_EXCELONLY  }
-#define C    { FUNC_PARAM_CALCONLY }
+#define RO   { FuncParamValidity::Regular }
+#define RA   { FuncParamValidity::Regular }
+#define RR   { FuncParamValidity::Regular }
+#define RX   { FuncParamValidity::Regular }
+#define VO   { FuncParamValidity::Regular  }
+#define VV   { FuncParamValidity::Regular  }
+#define VA   { FuncParamValidity::Regular  }
+#define VR   { FuncParamValidity::Regular  }
+#define VX   { FuncParamValidity::Regular  }
+#define RO_E { FuncParamValidity::ExcelOnly }
+#define VR_E { FuncParamValidity::ExcelOnly  }
+#define C    { FuncParamValidity::CalcOnly }
 
 // Note: parameter types of all macro sheet functions (FUNCFLAG_MACROFUNC/FUNCFLAG_MACROCMD) untested!
 
@@ -928,12 +928,12 @@ FunctionParamInfoIterator::FunctionParamInfoIterator( const FunctionInfo& rFuncI
 
 bool FunctionParamInfoIterator::isCalcOnlyParam() const
 {
-    return mpParamInfo && (mpParamInfo->meValid == FUNC_PARAM_CALCONLY);
+    return mpParamInfo && (mpParamInfo->meValid == FuncParamValidity::CalcOnly);
 }
 
 bool FunctionParamInfoIterator::isExcelOnlyParam() const
 {
-    return mpParamInfo && (mpParamInfo->meValid == FUNC_PARAM_EXCELONLY);
+    return mpParamInfo && (mpParamInfo->meValid == FuncParamValidity::ExcelOnly);
 }
 
 FunctionParamInfoIterator& FunctionParamInfoIterator::operator++()
@@ -941,7 +941,7 @@ FunctionParamInfoIterator& FunctionParamInfoIterator::operator++()
     if( mpParamInfo )
     {
         // move pointer to next entry, if something explicit follows
-        if( (mpParamInfo + 1 < mpParamInfoEnd) && (mpParamInfo[ 1 ].meValid != FUNC_PARAM_NONE) )
+        if( mpParamInfo + 1 < mpParamInfoEnd )
             ++mpParamInfo;
         // if last parameter type is 'Excel-only' or 'Calc-only', do not repeat it
         else if( isExcelOnlyParam() || isCalcOnlyParam() )
