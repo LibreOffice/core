@@ -158,16 +158,16 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     }
 }
 
-::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies()
+std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies()
 {
     // It's an optional interface!
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY);
     if (!xModel.is())
-        return ::std::vector< SfxStyleInfo_Impl >();
+        return std::vector< SfxStyleInfo_Impl >();
 
     css::uno::Reference< css::container::XNameAccess > xCont = xModel->getStyleFamilies();
     css::uno::Sequence< OUString > lFamilyNames = xCont->getElementNames();
-    ::std::vector< SfxStyleInfo_Impl > lFamilies;
+    std::vector< SfxStyleInfo_Impl > lFamilies;
     sal_Int32 c = lFamilyNames.getLength();
     sal_Int32 i = 0;
     for(i=0; i<c; ++i)
@@ -190,7 +190,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
         catch(const css::uno::RuntimeException&)
             { throw; }
         catch(const css::uno::Exception&)
-            { return ::std::vector< SfxStyleInfo_Impl >(); }
+            { return std::vector< SfxStyleInfo_Impl >(); }
 
         lFamilies.push_back(aFamilyInfo);
     }
@@ -198,7 +198,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     return lFamilies;
 }
 
-::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& sFamily)
+std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& sFamily)
 {
     css::uno::Sequence< OUString > lStyleNames;
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY_THROW);
@@ -212,9 +212,9 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
     catch(const css::uno::RuntimeException&)
         { throw; }
     catch(const css::uno::Exception&)
-        { return ::std::vector< SfxStyleInfo_Impl >(); }
+        { return std::vector< SfxStyleInfo_Impl >(); }
 
-    ::std::vector< SfxStyleInfo_Impl > lStyles;
+    std::vector< SfxStyleInfo_Impl > lStyles;
     sal_Int32                          c      = lStyleNames.getLength();
     sal_Int32                          i      = 0;
     for (i=0; i<c; ++i)
@@ -891,8 +891,8 @@ void SfxConfigGroupListBox::GroupSelected()
             SfxStyleInfo_Impl* pFamily = static_cast<SfxStyleInfo_Impl*>(pInfo->pObject);
             if (pFamily)
             {
-                const ::std::vector< SfxStyleInfo_Impl > lStyles = pStylesInfo->getStyles(pFamily->sFamily);
-                ::std::vector< SfxStyleInfo_Impl >::const_iterator pIt;
+                const std::vector< SfxStyleInfo_Impl > lStyles = pStylesInfo->getStyles(pFamily->sFamily);
+                std::vector< SfxStyleInfo_Impl >::const_iterator pIt;
                 for (  pIt  = lStyles.begin();
                        pIt != lStyles.end()  ;
                      ++pIt                   )
@@ -1053,8 +1053,8 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
         {
             if ( !GetChildCount( pEntry ) )
             {
-                const ::std::vector< SfxStyleInfo_Impl >                 lStyleFamilies = pStylesInfo->getStyleFamilies();
-                      ::std::vector< SfxStyleInfo_Impl >::const_iterator pIt;
+                const std::vector< SfxStyleInfo_Impl >                 lStyleFamilies = pStylesInfo->getStyleFamilies();
+                      std::vector< SfxStyleInfo_Impl >::const_iterator pIt;
                 for (  pIt  = lStyleFamilies.begin();
                        pIt != lStyleFamilies.end()  ;
                      ++pIt                          )

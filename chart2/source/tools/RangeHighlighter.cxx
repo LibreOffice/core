@@ -268,7 +268,7 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
         if( xSource.is() )
         {
             sal_Int32 nPreferredColor = defaultPreferredColor;
-            ::std::vector< chart2::data::HighlightedRange > aHilightedRanges;
+            std::vector< chart2::data::HighlightedRange > aHilightedRanges;
             Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());
             for( sal_Int32 i=0; i<aLSeqSeq.getLength(); ++i )
             {

@@ -57,10 +57,10 @@ namespace comphelper
     };
 
 
-    typedef ::std::deque< ProcessableEvent >    EventQueue;
+    typedef std::deque< ProcessableEvent >    EventQueue;
 
 
-    struct EqualProcessor : public ::std::unary_function< ProcessableEvent, bool >
+    struct EqualProcessor : public std::unary_function< ProcessableEvent, bool >
     {
         const ::rtl::Reference< IEventProcessor >&  rProcessor;
         explicit EqualProcessor( const ::rtl::Reference< IEventProcessor >& _rProcessor ) :rProcessor( _rProcessor ) { }
@@ -104,7 +104,7 @@ namespace comphelper
         ::osl::MutexGuard aGuard( m_xImpl->aMutex );
 
         // remove all events for this processor
-        m_xImpl->aEvents.erase(::std::remove_if( m_xImpl->aEvents.begin(), m_xImpl->aEvents.end(), EqualProcessor( _xProcessor ) ), m_xImpl->aEvents.end());
+        m_xImpl->aEvents.erase(std::remove_if( m_xImpl->aEvents.begin(), m_xImpl->aEvents.end(), EqualProcessor( _xProcessor ) ), m_xImpl->aEvents.end());
     }
 
 

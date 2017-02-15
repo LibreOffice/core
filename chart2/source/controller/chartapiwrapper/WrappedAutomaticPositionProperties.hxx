@@ -31,7 +31,7 @@ namespace wrapper
 class WrappedAutomaticPositionProperties
 {
 public:
-    static void addProperties( ::std::vector< css::beans::Property >& rOutProperties );
+    static void addProperties( std::vector< css::beans::Property >& rOutProperties );
     static void addWrappedProperties( std::vector< WrappedProperty* >& rList );
 };
 

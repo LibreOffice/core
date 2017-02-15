@@ -47,7 +47,7 @@ using ::com::sun::star::uno::Sequence;
 
 namespace
 {
-void lcl_addRanges( ::std::vector< OUString > & rOutResult,
+void lcl_addRanges( std::vector< OUString > & rOutResult,
                     const uno::Reference< data::XLabeledDataSequence > & xLabeledSeq )
 {
     if( ! xLabeledSeq.is())
@@ -61,7 +61,7 @@ void lcl_addRanges( ::std::vector< OUString > & rOutResult,
 }
 
 void lcl_addDataSourceRanges(
-    ::std::vector< OUString > & rOutResult,
+    std::vector< OUString > & rOutResult,
     const uno::Reference< data::XDataSource > & xDataSource )
 {
     if( xDataSource.is() )
@@ -73,7 +73,7 @@ void lcl_addDataSourceRanges(
 }
 
 void lcl_addErrorBarRanges(
-    ::std::vector< OUString > & rOutResult,
+    std::vector< OUString > & rOutResult,
     const uno::Reference< XDataSeries > & xDataSeries )
 {
     uno::Reference< beans::XPropertySet > xSeriesProp( xDataSeries, uno::UNO_QUERY );
@@ -229,7 +229,7 @@ void DataSourceHelper::readArguments( const uno::Sequence< beans::PropertyValue 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoRectangularFormat(
         const uno::Reference< chart2::XChartDocument >& xChartDoc )
 {
-    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVector;
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVector;
 
     //categories are always the first sequence
     Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
@@ -238,7 +238,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
     if( xCategories.is() )
         aResultVector.push_back( xCategories );
 
-    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
     uno::Reference< chart2::data::XDataSource > xSeriesSource(
         DataSeriesHelper::getDataSource( comphelper::containerToSequence(aSeriesVector) ) );
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSeqences( xSeriesSource->getDataSequences() );
@@ -263,7 +263,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
 uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
     const uno::Reference< chart2::XDiagram > & xDiagram )
 {
-    ::std::vector< OUString > aResult;
+    std::vector< OUString > aResult;
 
     if( xDiagram.is())
     {
@@ -271,8 +271,8 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
         if( xCategories.is() )
             lcl_addRanges( aResult, xCategories );
 
-        ::std::vector< uno::Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-        for( ::std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
+        std::vector< uno::Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+        for( std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
                  ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
         {
             uno::Reference< data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
@@ -299,23 +299,23 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
     const uno::Reference< frame::XModel >& xChartModel )
 {
-    ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
 
     uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
     uno::Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
     if( xCategories.is() )
         aResult.push_back( xCategories );
 
-    ::std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartModel ) );
-    for( ::std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
+    std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xChartModel ) );
+    for( std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
         ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
     {
         uno::Reference< data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
         if( !xDataSource.is() )
             continue;
         uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-        ::std::copy( aDataSequences.begin(), aDataSequences.end(),
-                     ::std::back_inserter( aResult ));
+        std::copy( aDataSequences.begin(), aDataSequences.end(),
+                     std::back_inserter( aResult ));
     }
 
     return uno::Reference< chart2::data::XDataSource >(
@@ -325,23 +325,23 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
     ChartModel& rModel )
 {
-    ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
 
     uno::Reference< XDiagram > xDiagram( rModel.getFirstDiagram() );
     uno::Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
     if( xCategories.is() )
         aResult.push_back( xCategories );
 
-    ::std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( rModel ) );
-    for( ::std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
+    std::vector< uno::Reference< XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( rModel ) );
+    for( std::vector< uno::Reference< XDataSeries > >::const_iterator aSeriesIt( aSeriesVector.begin() )
         ; aSeriesIt != aSeriesVector.end(); ++aSeriesIt )
     {
         uno::Reference< data::XDataSource > xDataSource( *aSeriesIt, uno::UNO_QUERY );
         if( !xDataSource.is() )
             continue;
         uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
-        ::std::copy( aDataSequences.begin(), aDataSequences.end(),
-                     ::std::back_inserter( aResult ));
+        std::copy( aDataSequences.begin(), aDataSequences.end(),
+                     std::back_inserter( aResult ));
     }
 
     return uno::Reference< chart2::data::XDataSource >(
@@ -516,7 +516,7 @@ OUString DataSourceHelper::getRangeFromValues(
 
 Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference< data::XDataSource > & xSource )
 {
-    ::std::vector< OUString > aResult;
+    std::vector< OUString > aResult;
     if( xSource.is())
     {
         Sequence< Reference< data::XLabeledDataSequence > > aLSeqSeq( xSource->getDataSequences());

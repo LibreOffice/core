@@ -1115,8 +1115,8 @@ void OResultSet::sortRows()
     }
 
     OSortIndex::TKeyTypeVector eKeyType(m_aOrderbyColumnNumber.size());
-    ::std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
-    for (::std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
+    std::vector<sal_Int32>::const_iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
+    for (std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
     {
         OSL_ENSURE((sal_Int32)m_aSelectRow->get().size() > *aOrderByIter,"Invalid Index");
         switch ((*(m_aSelectRow->get().begin()+*aOrderByIter))->getValue().getTypeKind())
@@ -1261,7 +1261,7 @@ bool OResultSet::OpenImpl()
                     for (size_t i = 1; // 0: bookmark (see setBoundedColumns)
                          i < m_aColMapping.size(); ++i)
                     {
-                        if (::std::find(m_aOrderbyColumnNumber.begin(),
+                        if (std::find(m_aOrderbyColumnNumber.begin(),
                                         m_aOrderbyColumnNumber.end(), i)
                                 == m_aOrderbyColumnNumber.end())
                         {
@@ -1348,8 +1348,8 @@ bool OResultSet::OpenImpl()
     #endif
                         }
 
-                        m_pFileSet->get().erase(::std::remove_if(m_pFileSet->get().begin(),m_pFileSet->get().end(),
-                                                            ::std::bind2nd(::std::equal_to<sal_Int32>(),0))
+                        m_pFileSet->get().erase(std::remove_if(m_pFileSet->get().begin(),m_pFileSet->get().end(),
+                                                            std::bind2nd(std::equal_to<sal_Int32>(),0))
                                           ,m_pFileSet->get().end());
                     }
                 }
@@ -1432,7 +1432,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
                                    const Reference<XIndexAccess>& _xNames,
                                    bool _bSetColumnMapping,
                                    const Reference<XDatabaseMetaData>& _xMetaData,
-                                   ::std::vector<sal_Int32>& _rColMapping)
+                                   std::vector<sal_Int32>& _rColMapping)
 {
     ::comphelper::UStringMixEqual aCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
 
@@ -1443,7 +1443,7 @@ void OResultSet::setBoundedColumns(const OValueRefRow& _rRow,
     const OUString sRealName = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REALNAME);
     const OUString sType     = OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE);
 
-    typedef ::std::map<OSQLColumns::Vector::iterator,sal_Bool> IterMap;
+    typedef std::map<OSQLColumns::Vector::iterator,sal_Bool> IterMap;
     IterMap aSelectIters;
     OValueRefVector::Vector::const_iterator aRowIter = _rRow->get().begin()+1;
     for (sal_Int32 i=0; // the first column is the bookmark column
@@ -1590,7 +1590,7 @@ void OResultSet::initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount)
     {
         _rRow   = new OValueRefVector(_nColumnCount);
         (_rRow->get())[0]->setBound(true);
-        ::std::for_each(_rRow->get().begin()+1,_rRow->get().end(),TSetRefBound(false));
+        std::for_each(_rRow->get().begin()+1,_rRow->get().end(),TSetRefBound(false));
     }
 }
 

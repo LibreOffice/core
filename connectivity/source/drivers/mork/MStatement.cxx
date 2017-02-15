@@ -145,7 +145,7 @@ OCommonStatement::StatementType OCommonStatement::parseSql( const OUString& sql 
             // set the binding of the resultrow
             m_aRow          = new OValueVector(xNames->getCount());
             (m_aRow->get())[0].setBound(true);
-            ::std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetBound(false));
+            std::for_each(m_aRow->get().begin()+1,m_aRow->get().end(),TSetBound(false));
             // create the column mapping
             createColumnMapping();
 

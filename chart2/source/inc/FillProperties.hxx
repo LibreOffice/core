@@ -64,7 +64,7 @@ namespace FillProperties
     };
 
     OOO_DLLPUBLIC_CHARTTOOLS void AddPropertiesToVector(
-        ::std::vector< css::beans::Property > & rOutProperties );
+        std::vector< css::beans::Property > & rOutProperties );
 
     OOO_DLLPUBLIC_CHARTTOOLS void AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap );
 }

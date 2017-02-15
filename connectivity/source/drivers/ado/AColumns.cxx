@@ -86,7 +86,7 @@ sdbcx::ObjectType OColumns::appendObject( const OUString&, const Reference< XPro
     const OTypeInfoMap* pTypeInfoMap = m_pConnection->getTypeInfo();
     ::comphelper::UStringMixEqual aCase(false);
     // search for typeinfo where the typename is equal sTypeName
-    OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(), pTypeInfoMap->end(),
+    OTypeInfoMap::const_iterator aFind = std::find_if(pTypeInfoMap->begin(), pTypeInfoMap->end(),
         [&aCase, &sTypeName] (const OTypeInfoMap::value_type& typeInfo) {
             return aCase(typeInfo.second->getDBName(), sTypeName);
         });

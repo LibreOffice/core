@@ -1579,8 +1579,8 @@ namespace cppcanvas
                         // least one dimension
                       
                         // Remark the 1L cannot be replaced, that would cause max to compare long/int
-                        const Size aMtfSizePix( ::std::max( aMtfSizePixPre.Width(), 1L ),
-                                                ::std::max( aMtfSizePixPre.Height(), 1L ) );
+                        const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1L ),
+                                                std::max( aMtfSizePixPre.Height(), 1L ) );
 
                         // Setup local transform, such that the
                         // metafile renders itself into the given
@@ -2588,7 +2588,7 @@ namespace cppcanvas
                         // generating a DX array, and uniformly
                         // distributing the excess/insufficient width
                         // to every logical character.
-                        ::std::unique_ptr< long []> pDXArray( new long[nLen] );
+                        std::unique_ptr< long []> pDXArray( new long[nLen] );
 
                         rVDev.GetTextArray( pAct->GetText(), pDXArray.get(),
                                             pAct->GetIndex(), pAct->GetLen() );
@@ -2749,9 +2749,9 @@ namespace cppcanvas
                 {
                     // only a single action. Setup subset, and call functor
                     Action::Subset aSubset;
-                    aSubset.mnSubsetBegin = ::std::max( sal_Int32( 0 ),
+                    aSubset.mnSubsetBegin = std::max( sal_Int32( 0 ),
                                                         nStartIndex - aRangeBegin->mnOrigIndex );
-                    aSubset.mnSubsetEnd   = ::std::min( aRangeBegin->mpAction->getActionCount(),
+                    aSubset.mnSubsetEnd   = std::min( aRangeBegin->mpAction->getActionCount(),
                                                         nEndIndex - aRangeBegin->mnOrigIndex );
 
                     ENSURE_OR_RETURN_FALSE( aSubset.mnSubsetBegin >= 0 && aSubset.mnSubsetEnd >= 0,
@@ -2766,7 +2766,7 @@ namespace cppcanvas
                     // render partial first, full intermediate, and
                     // partial last action
                     Action::Subset aSubset;
-                    aSubset.mnSubsetBegin = ::std::max( sal_Int32( 0 ),
+                    aSubset.mnSubsetBegin = std::max( sal_Int32( 0 ),
                                                         nStartIndex - aRangeBegin->mnOrigIndex );
                     aSubset.mnSubsetEnd   = aRangeBegin->mpAction->getActionCount();
 
@@ -2826,9 +2826,9 @@ namespace cppcanvas
 
             // clip given range to permissible values (there might be
             // ranges before and behind the valid indices)
-            io_rStartIndex = ::std::max( nMinActionIndex,
+            io_rStartIndex = std::max( nMinActionIndex,
                                          io_rStartIndex );
-            io_rEndIndex = ::std::min( nMaxActionIndex,
+            io_rEndIndex = std::min( nMaxActionIndex,
                                        io_rEndIndex );
 
             if( io_rStartIndex == io_rEndIndex ||
@@ -2847,10 +2847,10 @@ namespace cppcanvas
 
             // find start and end action
             // =========================
-            o_rRangeBegin = ::std::lower_bound( aBegin, aEnd,
+            o_rRangeBegin = std::lower_bound( aBegin, aEnd,
                                                 MtfAction( ActionSharedPtr(), io_rStartIndex ),
                                                 UpperBoundActionIndexComparator() );
-            o_rRangeEnd   = ::std::lower_bound( aBegin, aEnd,
+            o_rRangeEnd   = std::lower_bound( aBegin, aEnd,
                                                 MtfAction( ActionSharedPtr(), io_rEndIndex ),
                                                 UpperBoundActionIndexComparator() );
             return true;
@@ -2917,8 +2917,8 @@ namespace cppcanvas
             // #i44110# correct null-sized output - there are shapes
             // which have zero size in at least one dimension
             // Remark the 1L cannot be replaced, that would cause max to compare long/int
-            const Size aMtfSizePix( ::std::max( aMtfSizePixPre.Width(), 1L ),
-                                    ::std::max( aMtfSizePixPre.Height(), 1L ) );
+            const Size aMtfSizePix( std::max( aMtfSizePixPre.Width(), 1L ),
+                                    std::max( aMtfSizePixPre.Height(), 1L ) );
 
             sal_Int32 nCurrActions(0);
             ActionFactoryParameters aParms(aStateStack,
@@ -3102,7 +3102,7 @@ namespace cppcanvas
 
             try
             {
-                return ::std::for_each( maActions.begin(), maActions.end(), ActionRenderer( aMatrix ) ).result();
+                return std::for_each( maActions.begin(), maActions.end(), ActionRenderer( aMatrix ) ).result();
             }
             catch( uno::Exception& )
             {

@@ -68,8 +68,8 @@ public:
         static bool parseStyleCommand(SfxStyleInfo_Impl& aStyle);
         void getLabel4Style(SfxStyleInfo_Impl& aStyle);
 
-        ::std::vector< SfxStyleInfo_Impl > getStyleFamilies();
-        ::std::vector< SfxStyleInfo_Impl > getStyles(const OUString& sFamily);
+        std::vector< SfxStyleInfo_Impl > getStyleFamilies();
+        std::vector< SfxStyleInfo_Impl > getStyles(const OUString& sFamily);
 
         static OUString generateCommand(const OUString& sFamily, const OUString& sStyle);
 };

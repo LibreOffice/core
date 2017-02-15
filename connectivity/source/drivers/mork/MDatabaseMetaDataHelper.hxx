@@ -24,7 +24,7 @@ namespace connectivity
 
 
             static bool getTableStrings( OConnection*                        _pCon,
-                                         ::std::vector< OUString >&   _rStrings);
+                                         std::vector< OUString >&   _rStrings);
 
             static bool getTables( OConnection* _pCon,
                                 const OUString& tableNamePattern,

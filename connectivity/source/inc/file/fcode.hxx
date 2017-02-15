@@ -37,7 +37,7 @@ namespace connectivity
     {
 
         class OOperand;
-        typedef ::std::stack<OOperand*> OCodeStack;
+        typedef std::stack<OOperand*> OCodeStack;
 
         class OOO_DLLPUBLIC_FILE OCode
         {
@@ -321,7 +321,7 @@ namespace connectivity
 
 
         protected:
-            virtual ORowSetValue operate(const ::std::vector<ORowSetValue>& lhs) const = 0;
+            virtual ORowSetValue operate(const std::vector<ORowSetValue>& lhs) const = 0;
         };
 
         class OBinaryOperator : public OOperator

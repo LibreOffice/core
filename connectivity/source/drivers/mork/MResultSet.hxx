@@ -65,8 +65,8 @@ namespace connectivity
 
 
         typedef sal_Int64 TVoidPtr;
-        typedef ::std::allocator< TVoidPtr >    TVoidAlloc;
-        typedef ::std::vector<TVoidPtr>         TVoidVector;
+        typedef std::allocator< TVoidPtr >    TVoidAlloc;
+        typedef std::vector<TVoidPtr>         TVoidVector;
 
         class OResultSet :  public  cppu::BaseMutex,
                             public  OResultSet_BASE,
@@ -219,13 +219,13 @@ protected:
             css::uno::Reference< css::container::XNameAccess >
                                      m_xTableColumns;
 
-            ::std::vector<sal_Int32> m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
-            ::std::vector<sal_Int32> m_aOrderbyColumnNumber;
-            ::std::vector<TAscendingOrder>  m_aOrderbyAscending;
+            std::vector<sal_Int32> m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
+            std::vector<sal_Int32> m_aOrderbyColumnNumber;
+            std::vector<TAscendingOrder>  m_aOrderbyAscending;
             css::uno::Sequence< OUString> m_aColumnNames;
             OValueRow                m_aRow;
             OValueRow                m_aParameterRow;
-            ::std::vector< OUString> m_aAttributeStrings;
+            std::vector< OUString> m_aAttributeStrings;
             sal_Int32                m_nParamIndex;
             bool                 m_bIsAlwaysFalseQuery;
             ::rtl::Reference<OKeySet>     m_pKeySet;
@@ -295,11 +295,11 @@ public:
             void setBindingRow(const OValueRow& _aRow)
                       { m_aRow = _aRow; }
 
-            void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping);
+            void setColumnMapping(const std::vector<sal_Int32>& _aColumnMapping);
 
-            void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy);
+            void setOrderByColumns(const std::vector<sal_Int32>& _aColumnOrderBy);
 
-            void setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc);
+            void setOrderByAscending(const std::vector<TAscendingOrder>& _aOrderbyAsc);
 
             inline sal_Int32 mapColumn(sal_Int32 column);
 
@@ -312,7 +312,7 @@ public:
                 const css::uno::Reference< css::container::XIndexAccess>& _xNames,
                 bool _bSetColumnMapping,
                 const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
-                ::std::vector<sal_Int32>& _rColMapping);
+                std::vector<sal_Int32>& _rColMapping);
 
             ::osl::Mutex&   getMutex() { return m_aMutex; }
             void            methodEntry();

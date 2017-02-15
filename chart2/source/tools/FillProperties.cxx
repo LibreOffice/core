@@ -34,7 +34,7 @@ namespace chart
 namespace
 {
 
-void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< css::beans::Property > & rOutProperties )
+void lcl_AddPropertiesToVector_without_BitmapProperties( std::vector< css::beans::Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "FillStyle",
@@ -99,7 +99,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< css::bea
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
-void lcl_AddPropertiesToVector_only_BitmapProperties( ::std::vector< css::beans::Property > & rOutProperties )
+void lcl_AddPropertiesToVector_only_BitmapProperties( std::vector< css::beans::Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "FillBitmapName",
@@ -200,7 +200,7 @@ void lcl_AddDefaultsToMap_only_BitmapProperties(
 }//end anonymous namespace
 
 void FillProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     // Fill Properties see service drawing::FillProperties
     lcl_AddPropertiesToVector_without_BitmapProperties( rOutProperties );

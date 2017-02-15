@@ -162,7 +162,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 
 }//anonymous namespace
 
-void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutProperties )
+void WrappedSymbolProperties::addProperties( std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "SymbolType",

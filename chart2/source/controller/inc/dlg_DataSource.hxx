@@ -58,8 +58,8 @@ public:
     virtual void setValidPage( TabPage * pTabPage ) override;
 
 protected:
-    ::std::unique_ptr< ChartTypeTemplateProvider >  m_apDocTemplateProvider;
-    ::std::unique_ptr< DialogModel >                m_apDialogModel;
+    std::unique_ptr< ChartTypeTemplateProvider >  m_apDocTemplateProvider;
+    std::unique_ptr< DialogModel >                m_apDialogModel;
 
 private:
     VclPtr<DataSourceTabControl> m_pTabControl;

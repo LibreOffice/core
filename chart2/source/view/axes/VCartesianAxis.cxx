@@ -295,9 +295,9 @@ B2DVector lcl_getLabelsDistance( TickIter& rIter, const B2DVector& rDistanceTick
         {
             awt::Size aSize = AbstractShapeFactory::getSizeAfterRotation( xShape2DText, fRotationAngleDegree );
             if(fabs(aStaggerDirection.getX())>fabs(aStaggerDirection.getY()))
-                nDistance = ::std::max(nDistance,aSize.Width);
+                nDistance = std::max(nDistance,aSize.Width);
             else
-                nDistance = ::std::max(nDistance,aSize.Height);
+                nDistance = std::max(nDistance,aSize.Height);
         }
     }
 
@@ -1092,8 +1092,8 @@ VCartesianAxis::ScreenPosAndLogicPos VCartesianAxis::getScreenPosAndLogicPos( do
     return aRet;
 }
 
-typedef ::std::vector< VCartesianAxis::ScreenPosAndLogicPos > tScreenPosAndLogicPosList;
-struct lcl_LessXPos : ::std::binary_function< VCartesianAxis::ScreenPosAndLogicPos, VCartesianAxis::ScreenPosAndLogicPos, bool >
+typedef std::vector< VCartesianAxis::ScreenPosAndLogicPos > tScreenPosAndLogicPosList;
+struct lcl_LessXPos : std::binary_function< VCartesianAxis::ScreenPosAndLogicPos, VCartesianAxis::ScreenPosAndLogicPos, bool >
 {
     inline bool operator() ( const VCartesianAxis::ScreenPosAndLogicPos& rPos1, const VCartesianAxis::ScreenPosAndLogicPos& rPos2 )
     {
@@ -1101,7 +1101,7 @@ struct lcl_LessXPos : ::std::binary_function< VCartesianAxis::ScreenPosAndLogicP
     }
 };
 
-struct lcl_GreaterYPos : ::std::binary_function< VCartesianAxis::ScreenPosAndLogicPos, VCartesianAxis::ScreenPosAndLogicPos, bool >
+struct lcl_GreaterYPos : std::binary_function< VCartesianAxis::ScreenPosAndLogicPos, VCartesianAxis::ScreenPosAndLogicPos, bool >
 {
     inline bool operator() ( const VCartesianAxis::ScreenPosAndLogicPos& rPos1, const VCartesianAxis::ScreenPosAndLogicPos& rPos2 )
     {
@@ -1201,14 +1201,14 @@ void VCartesianAxis::get2DAxisMainLine(
                 {
                     rAlignment.meAlignment = LABEL_ALIGN_LEFT;
                     //choose most left positions
-                    ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
+                    std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
                     rAlignment.mfLabelDirection = (fDeltaY < 0) ? -1.0 : 1.0;
                 }
                 else
                 {
                     rAlignment.meAlignment = LABEL_ALIGN_BOTTOM;
                     //choose most bottom positions
-                    ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
+                    std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
                     rAlignment.mfLabelDirection = (fDeltaX < 0) ? -1.0 : 1.0;
                 }
                 ScreenPosAndLogicPos aBestPos( aPosList[0] );
@@ -1255,14 +1255,14 @@ void VCartesianAxis::get2DAxisMainLine(
                 {
                     rAlignment.meAlignment = LABEL_ALIGN_LEFT;
                     //choose most left positions
-                    ::std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
+                    std::sort( aPosList.begin(), aPosList.end(), lcl_LessXPos() );
                     rAlignment.mfLabelDirection = (fDeltaY < 0) ? -1.0 : 1.0;
                 }
                 else
                 {
                     rAlignment.meAlignment = LABEL_ALIGN_BOTTOM;
                     //choose most bottom positions
-                    ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
+                    std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
                     rAlignment.mfLabelDirection = (fDeltaX < 0) ? -1.0 : 1.0;
                 }
                 ScreenPosAndLogicPos aBestPos( aPosList[0] );
@@ -1330,7 +1330,7 @@ void VCartesianAxis::get2DAxisMainLine(
                 aPosList.push_back( getScreenPosAndLogicPos( fXOther, fYOnYPlane, fMinZ ) );
                 aPosList.push_back( getScreenPosAndLogicPos( fXOnXPlane, fYOther, fMinZ ) );
 
-                ::std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
+                std::sort( aPosList.begin(), aPosList.end(), lcl_GreaterYPos() );
                 ScreenPosAndLogicPos aBestPos( aPosList[0] );
                 ScreenPosAndLogicPos aNotSoGoodPos( aPosList[1] );
 
@@ -1768,7 +1768,7 @@ void VCartesianAxis::createShapes()
             pTickFactory2D->updateScreenValues( aComplexTickInfos );
             hideIdenticalScreenValues( aComplexTickInfos );
 
-            ::std::vector<TickmarkProperties> aTickmarkPropertiesList;
+            std::vector<TickmarkProperties> aTickmarkPropertiesList;
             static bool bIncludeSpaceBetweenTickAndText = false;
             sal_Int32 nOffset = static_cast<sal_Int32>(pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, false, bIncludeSpaceBetweenTickAndText ).getLength());
             sal_Int32 nTextLevelCount = getTextLevelCount();

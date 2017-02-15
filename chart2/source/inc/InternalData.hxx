@@ -40,14 +40,14 @@ public:
     css::uno::Sequence< double > getColumnValues( sal_Int32 nColumnIndex ) const;
     css::uno::Sequence< double > getRowValues( sal_Int32 nRowIndex ) const;
 
-    void setColumnValues( sal_Int32 nColumnIndex, const ::std::vector< double > & rNewData );
-    void setRowValues( sal_Int32 nRowIndex, const ::std::vector< double > & rNewData );
+    void setColumnValues( sal_Int32 nColumnIndex, const std::vector< double > & rNewData );
+    void setRowValues( sal_Int32 nRowIndex, const std::vector< double > & rNewData );
 
-    void setComplexColumnLabel( sal_Int32 nColumnIndex, const ::std::vector< css::uno::Any >& rComplexLabel );
-    void setComplexRowLabel( sal_Int32 nRowIndex, const ::std::vector< css::uno::Any >& rComplexLabel );
+    void setComplexColumnLabel( sal_Int32 nColumnIndex, const std::vector< css::uno::Any >& rComplexLabel );
+    void setComplexRowLabel( sal_Int32 nRowIndex, const std::vector< css::uno::Any >& rComplexLabel );
 
-    ::std::vector< css::uno::Any > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
-    ::std::vector< css::uno::Any > getComplexRowLabel( sal_Int32 nRowIndex ) const;
+    std::vector< css::uno::Any > getComplexColumnLabel( sal_Int32 nColumnIndex ) const;
+    std::vector< css::uno::Any > getComplexRowLabel( sal_Int32 nRowIndex ) const;
 
     void swapRowWithNext( sal_Int32 nRowIndex );
     void swapColumnWithNext( sal_Int32 nColumnIndex );
@@ -65,7 +65,7 @@ public:
     sal_Int32 getRowCount() const;
     sal_Int32 getColumnCount() const;
 
-    typedef ::std::vector< ::std::vector< css::uno::Any > > tVecVecAny; //inner index is hierarchical level
+    typedef std::vector< std::vector< css::uno::Any > > tVecVecAny; //inner index is hierarchical level
 
     void setComplexRowLabels( const tVecVecAny& rNewRowLabels );
     const tVecVecAny& getComplexRowLabels() const;
@@ -86,7 +86,7 @@ private:
     sal_Int32   m_nColumnCount;
     sal_Int32   m_nRowCount;
 
-    typedef ::std::valarray< double > tDataType;
+    typedef std::valarray< double > tDataType;
     tDataType    m_aData;
     tVecVecAny   m_aRowLabels;//outer index is row index, inner index is category level
     tVecVecAny   m_aColumnLabels;//outer index is column index

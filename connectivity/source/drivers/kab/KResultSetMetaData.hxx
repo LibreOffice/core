@@ -36,7 +36,7 @@ namespace connectivity
 
         class KabResultSetMetaData : public KabResultSetMetaData_BASE
         {
-            ::std::vector<sal_Int32>    m_aKabFields;   // for each selected column, contains the number
+            std::vector<sal_Int32>    m_aKabFields;   // for each selected column, contains the number
                                                         //  of the corresponding KAddressBook field
 
         protected:

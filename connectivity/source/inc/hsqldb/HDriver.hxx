@@ -48,11 +48,11 @@ namespace connectivity
                                                  , css::embed::XTransactionListener
                                                >   ODriverDelegator_BASE;
 
-        typedef ::std::pair< css::uno::WeakReferenceHelper,css::uno::WeakReferenceHelper> TWeakRefPair;
-        typedef ::std::pair< OUString ,TWeakRefPair > TWeakConnectionPair;
+        typedef std::pair< css::uno::WeakReferenceHelper,css::uno::WeakReferenceHelper> TWeakRefPair;
+        typedef std::pair< OUString ,TWeakRefPair > TWeakConnectionPair;
 
-        typedef ::std::pair< css::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
-        typedef ::std::vector< TWeakPair > TWeakPairVector;
+        typedef std::pair< css::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
+        typedef std::vector< TWeakPair > TWeakPairVector;
 
 
         /** delegates all calls to the orignal driver and extend the existing one with the SDBCX layer.

@@ -55,7 +55,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "OffsetMode",
@@ -116,10 +116,10 @@ struct StaticPieChartTypeTemplateInfoHelper_Initializer
 private:
     static uno::Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -320,7 +320,7 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
             double fOffset=0.0;
             bool bAllOffsetsEqual = true;
 
-            ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+            std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
                 DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
             //check offset of outer series
@@ -572,10 +572,10 @@ void SAL_CALL PieChartTypeTemplate::resetStyles( const Reference< chart2::XDiagr
 
     // vary colors by point,
     // line style
-    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+    std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );
-    for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
+    for( std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeriesVec.begin());
          aIt != aSeriesVec.end(); ++aIt )
     {
         Reference< beans::XPropertyState > xState( *aIt, uno::UNO_QUERY );

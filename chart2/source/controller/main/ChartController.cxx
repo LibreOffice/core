@@ -1496,9 +1496,9 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
     }
 }
 
-const ::std::set< OUString >& ChartController::impl_getAvailableCommands()
+const std::set< OUString >& ChartController::impl_getAvailableCommands()
 {
-    static ::std::set< OUString > s_AvailableCommands {
+    static std::set< OUString > s_AvailableCommands {
         // commands for container forward
         "AddDirect",           "NewDoc",                "Open",
         "Save",                "SaveAs",                "SendMail",

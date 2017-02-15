@@ -46,7 +46,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "SwapXAndYAxis",
@@ -81,11 +81,11 @@ struct StaticCooSysInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -253,7 +253,7 @@ sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int
 // ____ XChartTypeContainer ____
 void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChartType >& aChartType )
 {
-    if( ::std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType )
+    if( std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType )
         != m_aChartTypes.end())
         throw lang::IllegalArgumentException();
 
@@ -264,8 +264,8 @@ void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChar
 
 void SAL_CALL BaseCoordinateSystem::removeChartType( const Reference< chart2::XChartType >& aChartType )
 {
-    ::std::vector< uno::Reference< chart2::XChartType > >::iterator
-          aIt( ::std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType ));
+    std::vector< uno::Reference< chart2::XChartType > >::iterator
+          aIt( std::find( m_aChartTypes.begin(), m_aChartTypes.end(), aChartType ));
     if( aIt == m_aChartTypes.end())
         throw container::NoSuchElementException(
             "The given chart type is no element of the container",

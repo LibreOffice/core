@@ -174,7 +174,7 @@ namespace dxcanvas
             }
 
             void graphicsPathFromB2DPolygon( GraphicsPathSharedPtr&             rOutput,
-                                             ::std::vector< Gdiplus::PointF >&  rPoints,
+                                             std::vector< Gdiplus::PointF >&  rPoints,
                                              const ::basegfx::B2DPolygon&       rPoly,
                                              bool bNoLineJoin)
             {
@@ -406,7 +406,7 @@ namespace dxcanvas
         GraphicsPathSharedPtr graphicsPathFromRealPoint2DSequence( const uno::Sequence< uno::Sequence< geometry::RealPoint2D > >& points )
         {
             GraphicsPathSharedPtr pRes( new Gdiplus::GraphicsPath() );
-            ::std::vector< Gdiplus::PointF > aPoints;
+            std::vector< Gdiplus::PointF > aPoints;
 
             sal_Int32 nCurrPoly;
             for( nCurrPoly=0; nCurrPoly<points.getLength(); ++nCurrPoly )
@@ -419,7 +419,7 @@ namespace dxcanvas
                     // TODO(F1): Closed/open polygons
 
                     // convert from RealPoint2D array to Gdiplus::PointF array
-                    ::std::transform( points[nCurrPoly].getConstArray(),
+                    std::transform( points[nCurrPoly].getConstArray(),
                                       points[nCurrPoly].getConstArray()+nCurrSize,
                                       aPoints.begin(),
                                       implGdiPlusPointFromRealPoint2D );
@@ -434,7 +434,7 @@ namespace dxcanvas
         GraphicsPathSharedPtr graphicsPathFromB2DPolygon( const ::basegfx::B2DPolygon& rPoly, bool bNoLineJoin )
         {
             GraphicsPathSharedPtr               pRes( new Gdiplus::GraphicsPath() );
-            ::std::vector< Gdiplus::PointF >    aPoints;
+            std::vector< Gdiplus::PointF >    aPoints;
 
             graphicsPathFromB2DPolygon( pRes, aPoints, rPoly, bNoLineJoin );
 
@@ -444,7 +444,7 @@ namespace dxcanvas
         GraphicsPathSharedPtr graphicsPathFromB2DPolyPolygon( const ::basegfx::B2DPolyPolygon& rPoly, bool bNoLineJoin )
         {
             GraphicsPathSharedPtr               pRes( new Gdiplus::GraphicsPath() );
-            ::std::vector< Gdiplus::PointF >    aPoints;
+            std::vector< Gdiplus::PointF >    aPoints;
 
             const sal_uInt32 nPolies( rPoly.count() );
             for( sal_uInt32 nCurrPoly=0; nCurrPoly<nPolies; ++nCurrPoly )

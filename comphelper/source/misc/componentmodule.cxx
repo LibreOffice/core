@@ -33,7 +33,7 @@ namespace comphelper
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
 
-    typedef ::std::vector< ComponentDescription >   ComponentDescriptions;
+    typedef std::vector< ComponentDescription >   ComponentDescriptions;
 
     /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by its owner
     */

@@ -69,10 +69,10 @@ namespace connectivity
         {
 
         protected:
-            ::std::vector<sal_Int32>                m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
+            std::vector<sal_Int32>                m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
 
-            ::std::vector<sal_Int32>                m_aOrderbyColumnNumber;
-            ::std::vector<TAscendingOrder>          m_aOrderbyAscending;
+            std::vector<sal_Int32>                m_aOrderbyColumnNumber;
+            std::vector<TAscendingOrder>          m_aOrderbyAscending;
 
             OValueRefRow                            m_aSelectRow;
             OValueRefRow                            m_aRow;
@@ -274,11 +274,11 @@ namespace connectivity
                 m_aSelectRow = _rRow;
                 m_nColumnCount = m_aSelectRow->get().size();
             }
-            inline void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)   { m_aColMapping = _aColumnMapping; }
+            inline void setColumnMapping(const std::vector<sal_Int32>& _aColumnMapping)   { m_aColMapping = _aColumnMapping; }
             inline void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                     { m_pSQLAnalyzer = _pSQLAnalyzer; }
 
-            inline void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)  { m_aOrderbyColumnNumber = _aColumnOrderBy; }
-            inline void setOrderByAscending(const ::std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
+            inline void setOrderByColumns(const std::vector<sal_Int32>& _aColumnOrderBy)  { m_aOrderbyColumnNumber = _aColumnOrderBy; }
+            inline void setOrderByAscending(const std::vector<TAscendingOrder>& _aOrderbyAsc)    { m_aOrderbyAscending = _aOrderbyAsc; }
             inline void setMetaData(const css::uno::Reference< css::sdbc::XResultSetMetaData>& _xMetaData) { m_xMetaData = _xMetaData;}
 
             static void setBoundedColumns(const OValueRefRow& _rRow,
@@ -287,7 +287,7 @@ namespace connectivity
                                     const css::uno::Reference< css::container::XIndexAccess>& _xNames,
                                     bool _bSetColumnMapping,
                                     const css::uno::Reference< css::sdbc::XDatabaseMetaData>& _xMetaData,
-                                    ::std::vector<sal_Int32>& _rColMapping);
+                                    std::vector<sal_Int32>& _rColMapping);
 
             // IResultSetHelper
             virtual bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, bool _bRetrieveData) override;

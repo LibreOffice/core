@@ -85,10 +85,10 @@ namespace connectivity
                 }
             };
 
-            ::std::vector<sal_Int32> m_aTypes;      // holds all types for columns just to avoid to ask the propertyset
-            ::std::vector<sal_Int32> m_aPrecisions; // same as above
-            ::std::vector<sal_Int32> m_aScales;
-            ::std::vector<sal_Int32> m_aRealFieldLengths;
+            std::vector<sal_Int32> m_aTypes;      // holds all types for columns just to avoid to ask the propertyset
+            std::vector<sal_Int32> m_aPrecisions; // same as above
+            std::vector<sal_Int32> m_aScales;
+            std::vector<sal_Int32> m_aRealFieldLengths;
             DBFHeader       m_aHeader;
             DBFMemoHeader   m_aMemoHeader;
             SvStream*       m_pMemoStream;

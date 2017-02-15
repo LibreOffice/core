@@ -25,7 +25,7 @@
 using namespace connectivity;
 
 /// binary_function Functor object for class OSortIndex::TIntValuePairVector::value_type returntype is bool
-struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::value_type,OSortIndex::TIntValuePairVector::value_type,bool>
+struct TKeyValueFunc : std::binary_function<OSortIndex::TIntValuePairVector::value_type,OSortIndex::TIntValuePairVector::value_type,bool>
 {
     OSortIndex* pIndex;
 
@@ -35,9 +35,9 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     // return false if compared values are equal otherwise true
     inline bool operator()(const OSortIndex::TIntValuePairVector::value_type& lhs,const OSortIndex::TIntValuePairVector::value_type& rhs)   const
     {
-        const ::std::vector<OKeyType>& aKeyType = pIndex->getKeyType();
-        ::std::vector<OKeyType>::const_iterator aIter = aKeyType.begin();
-        for (::std::vector<sal_Int16>::size_type i=0;aIter != aKeyType.end(); ++aIter,++i)
+        const std::vector<OKeyType>& aKeyType = pIndex->getKeyType();
+        std::vector<OKeyType>::const_iterator aIter = aKeyType.begin();
+        for (std::vector<sal_Int16>::size_type i=0;aIter != aKeyType.end(); ++aIter,++i)
         {
             const bool bGreater = pIndex->getAscending(i) != TAscendingOrder::ASC;
             const bool bLess = !bGreater;
@@ -82,16 +82,16 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
 
     ::rtl::Reference<OKeySet> pKeySet = new OKeySet();
     pKeySet->get().reserve(m_aKeyValues.size());
-    ::std::transform(m_aKeyValues.begin()
+    std::transform(m_aKeyValues.begin()
                     ,m_aKeyValues.end()
-                    ,::std::back_inserter(pKeySet->get())
+                    ,std::back_inserter(pKeySet->get())
                     ,::o3tl::select1st<TIntValuePairVector::value_type>());
     pKeySet->setFrozen();
     return pKeySet;
 }
 
-OSortIndex::OSortIndex( const ::std::vector<OKeyType>& _aKeyType,
-                        const ::std::vector<TAscendingOrder>& _aAscending)
+OSortIndex::OSortIndex( const std::vector<OKeyType>& _aKeyType,
+                        const std::vector<TAscendingOrder>& _aAscending)
     :m_aKeyType(_aKeyType)
     ,m_aAscending(_aAscending)
     ,m_bFrozen(false)
@@ -120,7 +120,7 @@ void OSortIndex::Freeze()
     // Sortierung:
     if (m_aKeyType[0] != OKeyType::NONE)
         // we will sort ourself when the first keyType say so
-        ::std::sort(m_aKeyValues.begin(),m_aKeyValues.end(),TKeyValueFunc(this));
+        std::sort(m_aKeyValues.begin(),m_aKeyValues.end(),TKeyValueFunc(this));
 
     TIntValuePairVector::iterator aIter = m_aKeyValues.begin();
     for(;aIter != m_aKeyValues.end();++aIter)

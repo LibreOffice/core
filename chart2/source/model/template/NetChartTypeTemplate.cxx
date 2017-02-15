@@ -101,10 +101,10 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
         bool bSymbolFound = false;
         bool bLineFound = false;
 
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+        std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+        for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
                  aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
         {
             try

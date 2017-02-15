@@ -127,7 +127,7 @@ OUString SAL_CALL ChartType::getRoleOfSequenceForSeriesLabel()
 void ChartType::impl_addDataSeriesWithoutNotification(
         const Reference< chart2::XDataSeries >& xDataSeries )
 {
-    if( ::std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries )
+    if( std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries )
         != m_aDataSeries.end())
         throw lang::IllegalArgumentException();
 
@@ -152,7 +152,7 @@ void SAL_CALL ChartType::removeDataSeries( const Reference< chart2::XDataSeries 
     SolarMutexGuard g;
 
     tDataSeriesContainerType::iterator aIt(
-            ::std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries ) );
+            std::find( m_aDataSeries.begin(), m_aDataSeries.end(), xDataSeries ) );
 
     if( aIt == m_aDataSeries.end())
         throw container::NoSuchElementException(

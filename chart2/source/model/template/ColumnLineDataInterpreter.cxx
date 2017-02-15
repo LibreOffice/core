@@ -66,13 +66,13 @@ InterpretedData SAL_CALL ColumnLineDataInterpreter::interpretDataSource(
         // if we have more than one series put the last nNumOfLines ones into a new group
         if( nNumberOfSeries > 1 && m_nNumberOfLines > 0 )
         {
-            sal_Int32 nNumOfLines = ::std::min( m_nNumberOfLines, nNumberOfSeries - 1 );
+            sal_Int32 nNumOfLines = std::min( m_nNumberOfLines, nNumberOfSeries - 1 );
             aResult.Series.realloc(2);
 
             Sequence< Reference< XDataSeries > > & rColumnDataSeries = aResult.Series[0];
             Sequence< Reference< XDataSeries > > & rLineDataSeries   = aResult.Series[1];
             rLineDataSeries.realloc( nNumOfLines );
-            ::std::copy( rColumnDataSeries.begin() + nNumberOfSeries - nNumOfLines,
+            std::copy( rColumnDataSeries.begin() + nNumberOfSeries - nNumOfLines,
                          rColumnDataSeries.begin() + nNumberOfSeries,
                          rLineDataSeries.getArray() );
             rColumnDataSeries.realloc( nNumberOfSeries - nNumOfLines );

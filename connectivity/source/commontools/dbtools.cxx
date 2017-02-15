@@ -965,7 +965,7 @@ try
         if ( pOldProps[i].Name != "DefaultControl" && pOldProps[i].Name != "LabelControl" )
         {
             // binary search
-            Property* pResult = ::std::lower_bound(
+            Property* pResult = std::lower_bound(
                 pNewProps, pNewProps + nNewLen, pOldProps[i], ::comphelper::PropertyCompareByName());
 
             if (    pResult
@@ -1383,11 +1383,11 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 
 OUString createUniqueName( const Sequence< OUString >& _rNames, const OUString& _rBaseName, bool _bStartWithNumber )
 {
-    ::std::set< OUString > aUsedNames;
-    ::std::copy(
+    std::set< OUString > aUsedNames;
+    std::copy(
         _rNames.getConstArray(),
         _rNames.getConstArray() + _rNames.getLength(),
-        ::std::insert_iterator< ::std::set< OUString > >( aUsedNames, aUsedNames.end() )
+        std::insert_iterator< std::set< OUString > >( aUsedNames, aUsedNames.end() )
     );
 
     OUString sName( _rBaseName );
@@ -1630,10 +1630,10 @@ namespace
 {
     class OParameterWrapper : public ::cppu::WeakImplHelper< XIndexAccess >
     {
-        ::std::vector<bool, std::allocator<bool> >       m_aSet;
+        std::vector<bool, std::allocator<bool> >       m_aSet;
         Reference<XIndexAccess> m_xSource;
     public:
-        OParameterWrapper(const ::std::vector<bool, std::allocator<bool> >& _aSet,const Reference<XIndexAccess>& _xSource) : m_aSet(_aSet),m_xSource(_xSource){}
+        OParameterWrapper(const std::vector<bool, std::allocator<bool> >& _aSet,const Reference<XIndexAccess>& _xSource) : m_aSet(_aSet),m_xSource(_xSource){}
     private:
         // css::container::XElementAccess
         virtual Type SAL_CALL getElementType() override
@@ -1644,14 +1644,14 @@ namespace
         {
             if ( m_aSet.empty() )
                 return m_xSource->hasElements();
-            return ::std::count(m_aSet.begin(),m_aSet.end(),false) != 0;
+            return std::count(m_aSet.begin(),m_aSet.end(),false) != 0;
         }
         // css::container::XIndexAccess
         virtual sal_Int32 SAL_CALL getCount(  ) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->getCount();
-            return ::std::count(m_aSet.begin(),m_aSet.end(),false);
+            return std::count(m_aSet.begin(),m_aSet.end(),false);
         }
         virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override
         {
@@ -1660,8 +1660,8 @@ namespace
             if ( m_aSet.size() < (size_t)Index )
                 throw IndexOutOfBoundsException();
 
-            ::std::vector<bool, std::allocator<bool> >::const_iterator aIter = m_aSet.begin();
-            ::std::vector<bool, std::allocator<bool> >::const_iterator aEnd = m_aSet.end();
+            std::vector<bool, std::allocator<bool> >::const_iterator aIter = m_aSet.begin();
+            std::vector<bool, std::allocator<bool> >::const_iterator aEnd = m_aSet.end();
             sal_Int32 i = 0;
             sal_Int32 nParamPos = -1;
             for(; aIter != aEnd && i <= Index; ++aIter)
@@ -1681,7 +1681,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                       const Reference<XParameters>& _xParameters,
                       const Reference< XConnection>& _xConnection,
                       const Reference< XInteractionHandler >& _rxHandler,
-                      const ::std::vector<bool, std::allocator<bool> >& _aParametersSet)
+                      const std::vector<bool, std::allocator<bool> >& _aParametersSet)
 {
     OSL_ENSURE(_xComposer.is(),"dbtools::askForParameters XSQLQueryComposer is null!");
     OSL_ENSURE(_xParameters.is(),"dbtools::askForParameters XParameters is null!");
@@ -1693,12 +1693,12 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
 
     Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
-    ::std::vector<bool, std::allocator<bool> > aNewParameterSet( _aParametersSet );
-    if ( nParamCount && ::std::count(aNewParameterSet.begin(),aNewParameterSet.end(),true) != nParamCount )
+    std::vector<bool, std::allocator<bool> > aNewParameterSet( _aParametersSet );
+    if ( nParamCount && std::count(aNewParameterSet.begin(),aNewParameterSet.end(),true) != nParamCount )
     {
         static const OUString PROPERTY_NAME(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME));
         aNewParameterSet.resize(nParamCount ,false);
-        typedef ::std::map< OUString, ::std::vector<sal_Int32> > TParameterPositions;
+        typedef std::map< OUString, std::vector<sal_Int32> > TParameterPositions;
         TParameterPositions aParameterNames;
         for(sal_Int32 i = 0; i < nParamCount; ++i)
         {
@@ -1758,8 +1758,8 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                     xParamColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)) >>= nScale;
                     // (the index of the parameters is one-based)
                 TParameterPositions::const_iterator aFind = aParameterNames.find(pFinalValues->Name);
-                ::std::vector<sal_Int32>::const_iterator aIterPos = aFind->second.begin();
-                ::std::vector<sal_Int32>::const_iterator aEndPos = aFind->second.end();
+                std::vector<sal_Int32>::const_iterator aIterPos = aFind->second.begin();
+                std::vector<sal_Int32>::const_iterator aEndPos = aFind->second.end();
                 for(;aIterPos != aEndPos;++aIterPos)
                 {
                     if ( _aParametersSet.empty() || !_aParametersSet[(*aIterPos)-1] )

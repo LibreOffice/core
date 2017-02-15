@@ -44,7 +44,7 @@ namespace chart
 {
 
 void DataPointProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     // DataPointProperties
 

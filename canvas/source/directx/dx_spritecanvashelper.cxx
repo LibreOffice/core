@@ -79,7 +79,7 @@ namespace dxcanvas
     void SpriteCanvasHelper::init( SpriteCanvas&                                    rParent,
                                    ::canvas::SpriteRedrawManager&                   rManager,
                                    const IDXRenderModuleSharedPtr&                  rRenderModule,
-                                   const ::std::shared_ptr<canvas::ISurfaceProxyManager>&   rSurfaceProxy,
+                                   const std::shared_ptr<canvas::ISurfaceProxyManager>&   rSurfaceProxy,
                                    const DXSurfaceBitmapSharedPtr&                  rBackBuffer,
                                    const ::basegfx::B2ISize&                        rOutputOffset )
     {
@@ -265,7 +265,7 @@ namespace dxcanvas
         // repaint uncovered areas from backbuffer - take the
         // _rounded_ rectangles from above, to have the update
         // consistent with the scroll above.
-        ::std::vector< ::basegfx::B2DRange > aUncoveredAreas;
+        std::vector< ::basegfx::B2DRange > aUncoveredAreas;
         ::basegfx::computeSetDifference( aUncoveredAreas,
                                          rUpdateArea.maTotalBounds,
                                          ::basegfx::B2DRange( rDestRect ) );
@@ -283,7 +283,7 @@ namespace dxcanvas
     }
 
     void SpriteCanvasHelper::opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                                           const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
+                                           const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
         ENSURE_OR_THROW( mpRenderModule &&
                           mpBackBuffer,
@@ -313,7 +313,7 @@ namespace dxcanvas
     }
 
     void SpriteCanvasHelper::genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
+                                            const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites )
     {
         ENSURE_OR_THROW( mpRenderModule &&
                           mpBackBuffer,

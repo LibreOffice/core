@@ -503,7 +503,7 @@ void ControllerCommandDispatch::fireStatusEventForURLImpl(
     const OUString & rURL,
     const Reference< frame::XStatusListener > & xSingleListener )
 {
-    ::std::map< OUString, uno::Any >::const_iterator aArgIt( m_aCommandArguments.find( rURL ));
+    std::map< OUString, uno::Any >::const_iterator aArgIt( m_aCommandArguments.find( rURL ));
     if( aArgIt != m_aCommandArguments.end())
         fireStatusEventForURL( rURL, aArgIt->second, commandAvailable( rURL ), xSingleListener );
     else
@@ -690,7 +690,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
 bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
 {
-    ::std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.find( rCommand ));
+    std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.find( rCommand ));
     if( aIt != m_aCommandAvailability.end())
         return aIt->second;
     OSL_FAIL( "commandAvailable: command not in availability map" );
@@ -726,7 +726,7 @@ void ControllerCommandDispatch::fireStatusEvent(
     }
 
     if( rURL.isEmpty() )
-        for( ::std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.begin());
+        for( std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.begin());
              aIt != m_aCommandAvailability.end(); ++aIt )
             fireStatusEventForURLImpl( aIt->first, xSingleListener );
     else if( !bIsChartSelectorURL )

@@ -30,7 +30,7 @@ namespace chart
 {
 
 void UserDefinedProperties::AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "ChartUserDefinedAttributes",

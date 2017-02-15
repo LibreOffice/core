@@ -103,7 +103,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
 
 
     /// an STL functor which ensures that a SdbcDriver described by a DriverAccess is loaded
-    struct EnsureDriver : public ::std::unary_function< DriverAccess, DriverAccess >
+    struct EnsureDriver : public std::unary_function< DriverAccess, DriverAccess >
     {
         explicit EnsureDriver( const Reference< XComponentContext > &rxContext )
             : mxContext( rxContext ) {}
@@ -138,7 +138,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     };
 
     /// an STL functor which extracts a SdbcDriver from a DriverAccess
-    struct ExtractDriverFromAccess : public ::std::unary_function< DriverAccess, const Reference<XDriver>& >
+    struct ExtractDriverFromAccess : public std::unary_function< DriverAccess, const Reference<XDriver>& >
     {
         const Reference<XDriver>& operator()( const DriverAccess& _rAccess ) const
         {
@@ -146,7 +146,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
         }
     };
 
-    struct ExtractDriverFromCollectionElement : public ::std::unary_function< DriverCollection::value_type, const Reference<XDriver>& >
+    struct ExtractDriverFromCollectionElement : public std::unary_function< DriverCollection::value_type, const Reference<XDriver>& >
     {
         const Reference<XDriver>& operator()( const DriverCollection::value_type& _rElement ) const
         {
@@ -155,7 +155,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     };
 
     // predicate for checking whether or not a driver accepts a given URL
-    class AcceptsURL : public ::std::unary_function< Reference<XDriver>, bool >
+    class AcceptsURL : public std::unary_function< Reference<XDriver>, bool >
     {
     protected:
         const OUString& m_rURL;
@@ -212,7 +212,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     }
 
     /// an STL argorithm compatible predicate comparing two DriverAccess instances by their implementation names
-    struct CompareDriverAccessByName : public ::std::binary_function< DriverAccess, DriverAccess, bool >
+    struct CompareDriverAccessByName : public std::binary_function< DriverAccess, DriverAccess, bool >
     {
 
         bool operator()( const DriverAccess& lhs, const DriverAccess& rhs )
@@ -222,7 +222,7 @@ Any SAL_CALL ODriverEnumeration::nextElement(  )
     };
 
     /// and STL argorithm compatible predicate comparing a DriverAccess' impl name to a string
-    struct EqualDriverAccessToName : public ::std::binary_function< DriverAccess, OUString, bool >
+    struct EqualDriverAccessToName : public std::binary_function< DriverAccess, OUString, bool >
     {
         OUString m_sImplName;
         explicit EqualDriverAccessToName(const OUString& _sImplName) : m_sImplName(_sImplName){}
@@ -350,7 +350,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
         }
 
         // sort our bootstrapped drivers
-        ::std::sort( m_aDriversBS.begin(), m_aDriversBS.end(), CompareDriverAccessByName() );
+        std::sort( m_aDriversBS.begin(), m_aDriversBS.end(), CompareDriverAccessByName() );
 
         // loop through the names in the precedence order
         const OUString* pDriverOrder     =                   aDriverOrder.getConstArray();
@@ -366,13 +366,13 @@ void OSDBCDriverManager::initializeDriverPrecedence()
             driver_order.sImplementationName = *pDriverOrder;
 
             // look for the impl name in the DriverAccess array
-            ::std::pair< DriverAccessArray::iterator, DriverAccessArray::iterator > aPos =
-                ::std::equal_range( aNoPrefDriversStart, m_aDriversBS.end(), driver_order, CompareDriverAccessByName() );
+            std::pair< DriverAccessArray::iterator, DriverAccessArray::iterator > aPos =
+                std::equal_range( aNoPrefDriversStart, m_aDriversBS.end(), driver_order, CompareDriverAccessByName() );
 
             if ( aPos.first != aPos.second )
             {   // we have a DriverAccess with this impl name
 
-                OSL_ENSURE( ::std::distance( aPos.first, aPos.second ) == 1,
+                OSL_ENSURE( std::distance( aPos.first, aPos.second ) == 1,
                     "OSDBCDriverManager::initializeDriverPrecedence: more than one driver with this impl name? How this?" );
                 // move the DriverAccess pointed to by aPos.first to the position pointed to by aNoPrefDriversStart
 
@@ -380,7 +380,7 @@ void OSDBCDriverManager::initializeDriverPrecedence()
                 {   // if this does not hold, the DriverAccess alread has the correct position
 
                     // rotate the range [aNoPrefDriversStart, aPos.second) right 1 element
-                    ::std::rotate( aNoPrefDriversStart, aPos.second - 1, aPos.second );
+                    std::rotate( aNoPrefDriversStart, aPos.second - 1, aPos.second );
                 }
 
                 // next round we start searching and pos right
@@ -468,21 +468,21 @@ Reference< XEnumeration > SAL_CALL OSDBCDriverManager::createEnumeration(  )
     ODriverEnumeration::DriverArray aDrivers;
 
     // ensure that all our bootstrapped drivers are instantiated
-    ::std::for_each( m_aDriversBS.begin(), m_aDriversBS.end(), EnsureDriver( m_xContext ) );
+    std::for_each( m_aDriversBS.begin(), m_aDriversBS.end(), EnsureDriver( m_xContext ) );
 
     // copy the bootstrapped drivers
-    ::std::transform(
+    std::transform(
         m_aDriversBS.begin(),               // "copy from" start
         m_aDriversBS.end(),                 // "copy from" end
-        ::std::back_inserter( aDrivers ),   // insert into
+        std::back_inserter( aDrivers ),   // insert into
         ExtractDriverFromAccess()           // transformation to apply (extract a driver from a driver access)
     );
 
     // append the runtime drivers
-    ::std::transform(
+    std::transform(
         m_aDriversRT.begin(),                   // "copy from" start
         m_aDriversRT.end(),                     // "copy from" end
-        ::std::back_inserter( aDrivers ),       // insert into
+        std::back_inserter( aDrivers ),       // insert into
         ExtractDriverFromCollectionElement()    // transformation to apply (extract a driver from a driver access)
     );
 
@@ -633,11 +633,11 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
         const OUString sDriverFactoryName = m_aDriverConfig.getDriverFactoryName(_rURL);
 
         EqualDriverAccessToName aEqual(sDriverFactoryName);
-        DriverAccessArray::const_iterator aFind = ::std::find_if(m_aDriversBS.begin(),m_aDriversBS.end(),aEqual);
+        DriverAccessArray::const_iterator aFind = std::find_if(m_aDriversBS.begin(),m_aDriversBS.end(),aEqual);
         if ( aFind == m_aDriversBS.end() )
         {
             // search all bootstrapped drivers
-            aFind = ::std::find_if(
+            aFind = std::find_if(
                 m_aDriversBS.begin(),       // begin of search range
                 m_aDriversBS.end(),         // end of search range
                 [&_rURL, this] (const DriverAccessArray::value_type& driverAccess) {
@@ -661,7 +661,7 @@ Reference< XDriver > OSDBCDriverManager::implGetDriverForURL(const OUString& _rU
     if ( !xReturn.is() )
     {
         // no -> search the runtime drivers
-        DriverCollection::const_iterator aPos = ::std::find_if(
+        DriverCollection::const_iterator aPos = std::find_if(
             m_aDriversRT.begin(),       // begin of search range
             m_aDriversRT.end(),         // end of search range
             [&_rURL] (const DriverCollection::value_type& element) {

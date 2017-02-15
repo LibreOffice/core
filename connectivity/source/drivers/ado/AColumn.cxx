@@ -213,7 +213,7 @@ void OAdoColumn::fillPropertyValues()
         else if ( eType == adVarBinary && ADOS::isJetEngine(m_pConnection->getEngineType()) )
         {
             ::comphelper::UStringMixEqual aCase(false);
-            OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(), pTypeInfoMap->end(),
+            OTypeInfoMap::const_iterator aFind = std::find_if(pTypeInfoMap->begin(), pTypeInfoMap->end(),
                 [&aCase] (const OTypeInfoMap::value_type& typeInfo) {
                     return aCase(typeInfo.second->getDBName(), OUString("VarBinary"));
                 });

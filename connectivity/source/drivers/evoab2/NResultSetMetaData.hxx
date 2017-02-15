@@ -37,7 +37,7 @@ namespace connectivity
         class OEvoabResultSetMetaData : public  OResultSetMetaData_BASE
         {
           OUString       m_aTableName;
-                  ::std::vector<sal_Int32>        m_aEvoabFields;
+                  std::vector<sal_Int32>        m_aEvoabFields;
 
         protected:
             virtual ~OEvoabResultSetMetaData() override;

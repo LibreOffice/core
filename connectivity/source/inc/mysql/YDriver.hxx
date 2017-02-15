@@ -50,9 +50,9 @@ namespace connectivity
                                                ,   css::lang::XServiceInfo
                                                >   ODriverDelegator_BASE;
 
-        typedef ::std::pair< css::uno::WeakReferenceHelper,OMetaConnection*> TWeakConnectionPair;
-        typedef ::std::pair< css::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
-        typedef ::std::vector< TWeakPair > TWeakPairVector;
+        typedef std::pair< css::uno::WeakReferenceHelper,OMetaConnection*> TWeakConnectionPair;
+        typedef std::pair< css::uno::WeakReferenceHelper,TWeakConnectionPair> TWeakPair;
+        typedef std::vector< TWeakPair > TWeakPairVector;
         typedef std::map< OUString, css::uno::Reference< css::sdbc::XDriver > > TJDBCDrivers;
 
         /** delegates all calls to the orignal driver and extend the existing one with the SDBCX layer.

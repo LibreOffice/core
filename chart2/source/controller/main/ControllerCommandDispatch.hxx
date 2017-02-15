@@ -105,11 +105,11 @@ private:
     css::uno::Reference< css::view::XSelectionSupplier > m_xSelectionSupplier;
     css::uno::Reference< css::frame::XDispatch > m_xDispatch;
 
-    ::std::unique_ptr< impl::ModelState > m_apModelState;
-    ::std::unique_ptr< impl::ControllerState > m_apControllerState;
+    std::unique_ptr< impl::ModelState > m_apModelState;
+    std::unique_ptr< impl::ControllerState > m_apControllerState;
 
-    mutable ::std::map< OUString, bool > m_aCommandAvailability;
-    mutable ::std::map< OUString, css::uno::Any > m_aCommandArguments;
+    mutable std::map< OUString, bool > m_aCommandAvailability;
+    mutable std::map< OUString, css::uno::Any > m_aCommandArguments;
 
     CommandDispatchContainer* m_pDispatchContainer;
 };

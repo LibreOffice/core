@@ -74,7 +74,7 @@ struct TimeBasedInfo
     Timer maTimer;
 
     // only valid when we are in the time based mode
-    ::std::vector< std::vector< VDataSeries* > > m_aDataSeriesList;
+    std::vector< std::vector< VDataSeries* > > m_aDataSeriesList;
 };
 
 /**

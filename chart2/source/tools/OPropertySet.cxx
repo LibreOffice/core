@@ -122,7 +122,7 @@ Sequence< beans::PropertyState > SAL_CALL
     std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ aPropertyName.getLength() ]);
     rPH.fillHandles( pHandles.get(), aPropertyName );
 
-    ::std::vector< sal_Int32 > aHandles( pHandles.get(), pHandles.get() + aPropertyName.getLength());
+    std::vector< sal_Int32 > aHandles( pHandles.get(), pHandles.get() + aPropertyName.getLength());
     pHandles.reset();
 
     return m_pImplProperties->GetPropertyStatesByHandle( aHandles );
@@ -165,7 +165,7 @@ void SAL_CALL
     std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ aPropertyNames.getLength() ]);
     rPH.fillHandles( pHandles.get(), aPropertyNames );
 
-    ::std::vector< sal_Int32 > aHandles( pHandles.get(), pHandles.get() + aPropertyNames.getLength());
+    std::vector< sal_Int32 > aHandles( pHandles.get(), pHandles.get() + aPropertyNames.getLength());
     pHandles.reset();
 
     m_pImplProperties->SetPropertiesToDefault( aHandles );

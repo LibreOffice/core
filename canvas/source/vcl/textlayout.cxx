@@ -119,7 +119,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        ::std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
+        std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
         setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
 
         std::vector< uno::Reference< rendering::XPolyPolygon2D> > aOutlineSequence;
@@ -171,7 +171,7 @@ namespace vclcanvas
             uno::Sequence<double>(4),
             rendering::CompositeOperation::SOURCE);
 
-        ::std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
+        std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
         setupTextOffsets(aOffsets.get(), maLogicalAdvancements, aViewState, aRenderState);
 
         MetricVector aMetricVector;
@@ -365,7 +365,7 @@ namespace vclcanvas
         if( maLogicalAdvancements.getLength() )
         {
             // TODO(P2): cache that
-            ::std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
+            std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
             setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
 
             // TODO(F3): ensure correct length and termination for DX
@@ -435,7 +435,7 @@ namespace vclcanvas
                                                      renderState);
 
         // fill integer offsets
-        ::std::transform( inputOffsets.getConstArray(),
+        std::transform( inputOffsets.getConstArray(),
                           inputOffsets.getConstArray()+inputOffsets.getLength(),
                           outputOffsets,
                           OffsetTransformer( aMatrix ) );

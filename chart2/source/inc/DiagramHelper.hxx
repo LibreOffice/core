@@ -51,7 +51,7 @@ enum DiagramPositioningMode
 class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper
 {
 public:
-    typedef ::std::pair<
+    typedef std::pair<
             css::uno::Reference< css::chart2::XChartTypeTemplate >,
             OUString >
         tTemplateWithServiceName;
@@ -159,7 +159,7 @@ public:
             const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
             const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
-    static ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+    static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
         getDataSeriesFromDiagram(
             const css::uno::Reference< css::chart2::XDiagram > & xDiagram );
 

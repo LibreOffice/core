@@ -152,7 +152,7 @@ struct AxisUsage
     ~AxisUsage();
 
     void addCoordinateSystem( VCoordinateSystem* pCooSys, sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
-    ::std::vector< VCoordinateSystem* > getCoordinateSystems( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
+    std::vector< VCoordinateSystem* > getCoordinateSystems( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
     sal_Int32 getMaxAxisIndexForDimension( sal_Int32 nDimensionIndex );
 
     void prepareAutomaticAxisScaling( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex );
@@ -211,9 +211,9 @@ void AxisUsage::addCoordinateSystem( VCoordinateSystem* pCooSys, sal_Int32 nDime
         aMaxIndexPerDimension[nDimensionIndex]=nAxisIndex;
 }
 
-::std::vector< VCoordinateSystem* > AxisUsage::getCoordinateSystems( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
+std::vector< VCoordinateSystem* > AxisUsage::getCoordinateSystems( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex )
 {
-    ::std::vector< VCoordinateSystem* > aRet;
+    std::vector< VCoordinateSystem* > aRet;
 
     tCoordinateSystemMap::const_iterator aIter;
     for( aIter = aCoordinateSystems.begin(); aIter!=aCoordinateSystems.end();++aIter )
@@ -357,7 +357,7 @@ private:
     /** A map whose key is a `XAxis` interface and the related value is
      *  an object of `AxisUsage` type.
      */
-    ::std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
+    std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
 
     /**
      * Max axis index of all dimensions.  Currently this can be either 0 or 1
@@ -703,8 +703,8 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
     }
 
     // Determine the highest axis index of all dimensions.
-    ::std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
-    const ::std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
+    std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
+    const std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
     m_nMaxAxisIndex = 0;
     for (VCoordinateSystem* pVCooSys : m_rVCooSysList)
     {
@@ -797,8 +797,8 @@ void SeriesPlotterContainer::doAutoScaling( ChartModel& rChartModel )
         // We need these two containers populated to do auto-scaling.  Bail out.
         return;
 
-    ::std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
-    const ::std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
+    std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
+    const std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
 
     //iterate over the main scales first than secondary axis
     for (sal_Int32 nAxisIndex = 0; nAxisIndex <= m_nMaxAxisIndex; ++nAxisIndex)
@@ -842,15 +842,15 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
 {
     //issue #i80518#
 
-    ::std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
-    const ::std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
+    std::map< uno::Reference< XAxis >, AxisUsage >::iterator             aAxisIter    = m_aAxisUsageList.begin();
+    const std::map< uno::Reference< XAxis >, AxisUsage >::const_iterator aAxisEndIter = m_aAxisUsageList.end();
 
     for( sal_Int32 nAxisIndex=0; nAxisIndex<=m_nMaxAxisIndex; nAxisIndex++ )
     {
         for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
-            ::std::vector< VCoordinateSystem* > aVCooSysList_Y = rAxisUsage.getCoordinateSystems( 1, nAxisIndex );
+            std::vector< VCoordinateSystem* > aVCooSysList_Y = rAxisUsage.getCoordinateSystems( 1, nAxisIndex );
             if( aVCooSysList_Y.empty() )
                 continue;
 
@@ -861,8 +861,8 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
             bool bSeriesAttachedToThisAxis = false;
             sal_Int32 nAttachedAxisIndex = -1;
             {
-                ::std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
-                ::std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
+                std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+                std::vector< Reference< XDataSeries > >::const_iterator aIter = aSeriesVector.begin();
                 for( ; aIter != aSeriesVector.end(); ++aIter )
                 {
                     sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex( *aIter );
@@ -946,7 +946,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
         for( aAxisIter = m_aAxisUsageList.begin(); aAxisIter != aAxisEndIter; ++aAxisIter )
         {
             AxisUsage& rAxisUsage = (*aAxisIter).second;
-            ::std::vector< VCoordinateSystem* > aVCooSysList = rAxisUsage.getCoordinateSystems(nDimensionIndex,nAxisIndex);
+            std::vector< VCoordinateSystem* > aVCooSysList = rAxisUsage.getCoordinateSystems(nDimensionIndex,nAxisIndex);
             size_t nC;
             for( nC=0; nC < aVCooSysList.size(); nC++)
             {
@@ -1243,10 +1243,10 @@ ChartView::~ChartView()
 void ChartView::impl_deleteCoordinateSystems()
 {
     //delete all coordinate systems
-    ::std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
-    ::std::swap( aVectorToDeleteObjects, m_aVCooSysList );//#i109770#
-    ::std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
-    const ::std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
+    std::vector< VCoordinateSystem* > aVectorToDeleteObjects;
+    std::swap( aVectorToDeleteObjects, m_aVCooSysList );//#i109770#
+    std::vector< VCoordinateSystem* >::const_iterator       aIter = aVectorToDeleteObjects.begin();
+    const std::vector< VCoordinateSystem* >::const_iterator aEnd  = aVectorToDeleteObjects.end();
     for( ; aIter != aEnd; ++aIter )
     {
         delete *aIter;

@@ -451,15 +451,15 @@ void BarChart::createShapes()
     //iterate through all x values per indices
     for( sal_Int32 nPointIndex = nStartIndex; nPointIndex < nEndIndex; nPointIndex++ )
     {
-        ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-        const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
+        std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
+        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
 
         //sum up the values for all series in a complete z zlot per attached axis
-        ::std::map< sal_Int32,  double > aLogicYSumMap;
+        std::map< sal_Int32,  double > aLogicYSumMap;
         for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
         {
-            ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
+            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
             for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter )
             {
@@ -485,8 +485,8 @@ void BarChart::createShapes()
         aZSlotIter = m_aZSlots.begin();
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
         {
-            ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
+            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
             //iterate through all x slots in this category
             double fSlotX=0;
@@ -508,7 +508,7 @@ void BarChart::createShapes()
                 pPosHelper->updateSeriesCount( aZSlotIter->size() );
                 double fLogicBaseWidth = pPosHelper->getScaledSlotWidth();
 
-                ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+                std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
                 // get distance from base value to maximum and minimum
 
@@ -553,8 +553,8 @@ void BarChart::createShapes()
                 double fPositiveLogicYForNextSeries = fBaseValue;
                 double fNegativeLogicYForNextSeries = fBaseValue;
 
-                ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+                std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
+                const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
                 //iterate through all series in this x slot
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
@@ -862,12 +862,12 @@ void BarChart::createShapes()
     }//next category
     if( bDrawConnectionLines )
     {
-        ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-        const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
+        std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
+        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
         for( sal_Int32 nZ=1; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
         {
-            ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
+            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
             BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
             if( aXSlotIter != aXSlotEnd )
@@ -883,10 +883,10 @@ void BarChart::createShapes()
             //iterate through all x slots in this category
             for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
-                ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+                std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
-                ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+                std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
+                const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
                 //iterate through all series in this x slot
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {

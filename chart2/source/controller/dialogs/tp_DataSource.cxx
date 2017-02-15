@@ -403,11 +403,11 @@ void DataSourceTabPage::fillSeriesListBox()
     SvTreeListEntry * pSelectedEntry = nullptr;
     m_pLB_SERIES->Clear();
 
-    ::std::vector< DialogModel::tSeriesWithChartTypeByName > aSeries(
+    std::vector< DialogModel::tSeriesWithChartTypeByName > aSeries(
         m_rDialogModel.getAllDataSeriesWithLabel() );
 
     sal_Int32 nUnnamedSeriesIndex = 1;
-    for( ::std::vector< DialogModel::tSeriesWithChartTypeByName >::const_iterator aIt = aSeries.begin();
+    for( std::vector< DialogModel::tSeriesWithChartTypeByName >::const_iterator aIt = aSeries.begin();
          aIt != aSeries.end(); ++aIt )
     {
         OUString aLabel( (*aIt).first );
@@ -635,7 +635,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl, Button*, void)
     }
     else
     {
-        ::std::vector< Reference< XDataSeriesContainer > > aCntVec(
+        std::vector< Reference< XDataSeriesContainer > > aCntVec(
             m_rDialogModel.getAllDataSeriesContainers());
         if( ! aCntVec.empty())
             xChartTypeForNewSeries.set( aCntVec.front(), uno::UNO_QUERY );

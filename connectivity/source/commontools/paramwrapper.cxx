@@ -76,7 +76,7 @@ namespace param
 
 
     ParameterWrapper::ParameterWrapper( const Reference< XPropertySet >& _rxColumn,
-            const Reference< XParameters >& _rxAllParameters, const ::std::vector< sal_Int32 >& _rIndexes )
+            const Reference< XParameters >& _rxAllParameters, const std::vector< sal_Int32 >& _rIndexes )
         :PropertyBase( m_aBHelper )
         ,m_aIndexes( _rIndexes )
         ,m_xDelegator( _rxColumn )
@@ -206,7 +206,7 @@ namespace param
 
                 if ( m_xValueDestination.is() )
                 {
-                    for ( ::std::vector< sal_Int32 >::const_iterator aIter = m_aIndexes.begin(); aIter != m_aIndexes.end(); ++aIter )
+                    for ( std::vector< sal_Int32 >::const_iterator aIter = m_aIndexes.begin(); aIter != m_aIndexes.end(); ++aIter )
                     {
                         m_xValueDestination->setObjectWithInfo( *aIter + 1, rValue, nParamType, nScale );
                             // (the index of the parameters is one-based)

@@ -306,7 +306,7 @@ namespace cairocanvas
         setupLayoutMode( rOutDev, mnTextDirection );
 
         // TODO(P2): cache that
-        ::std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
+        std::unique_ptr< long []> aOffsets(new long[maLogicalAdvancements.getLength()]);
 
         if( maLogicalAdvancements.getLength() )
         {
@@ -553,7 +553,7 @@ namespace cairocanvas
                                                      renderState);
 
         // fill integer offsets
-        ::std::transform( inputOffsets.getConstArray(),
+        std::transform( inputOffsets.getConstArray(),
                           inputOffsets.getConstArray()+inputOffsets.getLength(),
                           outputOffsets,
                           OffsetTransformer( aMatrix ) );

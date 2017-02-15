@@ -122,7 +122,7 @@ namespace dxcanvas
         COMReference& operator=( const COMReference& rRHS )
         {
             COMReference aTmp(rRHS);
-            ::std::swap( mp, aTmp.mp );
+            std::swap( mp, aTmp.mp );
 
             return *this;
         }

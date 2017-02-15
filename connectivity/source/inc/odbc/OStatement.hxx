@@ -68,7 +68,7 @@ namespace connectivity
             css::uno::Reference< css::sdbc::XStatement>       m_xGeneratedStatement;
             //  for this Statement
 
-            ::std::list< OUString>   m_aBatchList;
+            std::list< OUString>   m_aBatchList;
             OUString                 m_sSqlStatement;
 
             rtl::Reference<OConnection>     m_pConnection;// The owning Connection object

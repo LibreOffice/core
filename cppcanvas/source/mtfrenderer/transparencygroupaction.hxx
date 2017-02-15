@@ -43,8 +43,8 @@ namespace cppcanvas
     {
         struct OutDevState;
 
-        typedef ::std::unique_ptr< GDIMetaFile >  MtfAutoPtr;
-        typedef ::std::unique_ptr< Gradient >     GradientAutoPtr;
+        typedef std::unique_ptr< GDIMetaFile >  MtfAutoPtr;
+        typedef std::unique_ptr< Gradient >     GradientAutoPtr;
 
         /** Transparency group action.
 

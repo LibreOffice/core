@@ -46,7 +46,7 @@ namespace dxcanvas
         void init( SpriteCanvas&                                    rParent,
                    ::canvas::SpriteRedrawManager&                   rManager,
                    const IDXRenderModuleSharedPtr&                  rRenderModule,
-                   const ::std::shared_ptr<canvas::ISurfaceProxyManager>&   rSurfaceProxy,
+                   const std::shared_ptr<canvas::ISurfaceProxyManager>&   rSurfaceProxy,
                    const DXSurfaceBitmapSharedPtr&                  rBackBuffer,
                    const ::basegfx::B2ISize&                        rOutputOffset );
 
@@ -119,10 +119,10 @@ namespace dxcanvas
                            const ::canvas::SpriteRedrawManager::UpdateArea&     rUpdateArea );
 
         void opaqueUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                           const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                           const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
         void genericUpdate( const ::basegfx::B2DRange&                          rTotalArea,
-                            const ::std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
+                            const std::vector< ::canvas::Sprite::Reference >& rSortedUpdateSprites );
 
     private:
         /// For generating sprites
@@ -134,7 +134,7 @@ namespace dxcanvas
         /// DX device, handling all low-level rendering
         IDXRenderModuleSharedPtr                        mpRenderModule;
 
-        ::std::shared_ptr<canvas::ISurfaceProxyManager>         mpSurfaceProxy;
+        std::shared_ptr<canvas::ISurfaceProxyManager>         mpSurfaceProxy;
 
         /// Backbuffer, contains the static canvas render output
         DXSurfaceBitmapSharedPtr                        mpBackBuffer;

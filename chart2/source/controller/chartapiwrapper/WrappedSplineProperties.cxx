@@ -175,7 +175,7 @@ enum
 
 }//anonymous namespace
 
-void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutProperties )
+void WrappedSplineProperties::addProperties( std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( CHART_UNONAME_SPLINE_TYPE,

@@ -95,10 +95,10 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDoc ));
 
     // DataSeries/Points
-    ::std::vector< Reference< XDataSeries > > aSeries(
+    std::vector< Reference< XDataSeries > > aSeries(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-    for( ::std::vector< Reference< XDataSeries > >::const_iterator aIt( aSeries.begin());
+    for( std::vector< Reference< XDataSeries > >::const_iterator aIt( aSeries.begin());
          aIt != aSeries.end(); ++aIt )
     {
         Reference< beans::XPropertySet > xSeriesProp( *aIt, uno::UNO_QUERY );
@@ -266,10 +266,10 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
     }
 
     // DataSeries/Points
-    ::std::vector< Reference< XDataSeries > > aSeries(
+    std::vector< Reference< XDataSeries > > aSeries(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-    for( ::std::vector< Reference< XDataSeries > >::const_iterator aIt( aSeries.begin());
+    for( std::vector< Reference< XDataSeries > >::const_iterator aIt( aSeries.begin());
          aIt != aSeries.end(); ++aIt )
     {
         Reference< beans::XPropertySet > xSeriesProp( *aIt, uno::UNO_QUERY );

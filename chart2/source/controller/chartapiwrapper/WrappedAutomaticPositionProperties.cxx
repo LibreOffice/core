@@ -105,7 +105,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList )
 
 }//anonymous namespace
 
-void WrappedAutomaticPositionProperties::addProperties( ::std::vector< Property > & rOutProperties )
+void WrappedAutomaticPositionProperties::addProperties( std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( "AutomaticPosition",

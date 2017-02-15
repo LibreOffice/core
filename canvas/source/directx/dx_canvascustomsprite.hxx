@@ -99,7 +99,7 @@ namespace dxcanvas
         CanvasCustomSprite( const css::geometry::RealSize2D&   rSpriteSize,
                             const SpriteCanvasRef&                          rRefDevice,
                             const IDXRenderModuleSharedPtr&                 rRenderModule,
-                            const ::std::shared_ptr<canvas::ISurfaceProxyManager>&  rSurfaceProxy,
+                            const std::shared_ptr<canvas::ISurfaceProxyManager>&  rSurfaceProxy,
                             bool                                            bShowSpriteBounds );
 
         virtual void disposeThis() override;

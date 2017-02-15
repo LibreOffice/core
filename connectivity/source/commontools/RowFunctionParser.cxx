@@ -129,7 +129,7 @@ typedef const sal_Char* StringIteratorT;
 
 struct ParserContext
 {
-    typedef ::std::stack< std::shared_ptr<ExpressionNode> > OperandStack;
+    typedef std::stack< std::shared_ptr<ExpressionNode> > OperandStack;
 
     // stores a stack of not-yet-evaluated operands. This is used
     // by the operators (i.e. '+', '*', 'sin' etc.) to pop their
@@ -426,7 +426,7 @@ std::shared_ptr<ExpressionNode> FunctionParser::parseFunction( const OUString& _
                                     ::boost::spirit::space_p ) );
 
 #if (OSL_DEBUG_LEVEL > 0)
-    ::std::cout.flush(); // needed to keep stdout and cout in sync
+    std::cout.flush(); // needed to keep stdout and cout in sync
 #endif
 
     // input fully congested by the parser?

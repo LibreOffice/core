@@ -183,7 +183,7 @@ namespace dxcanvas
 
             virtual void resize( const ::basegfx::B2IRange& rect ) override;
             virtual ::basegfx::B2IVector getPageSize() override;
-            virtual ::std::shared_ptr<canvas::ISurface> createSurface( const ::basegfx::B2IVector& surfaceSize ) override;
+            virtual std::shared_ptr<canvas::ISurface> createSurface( const ::basegfx::B2IVector& surfaceSize ) override;
             virtual void beginPrimitive( PrimitiveType eType ) override;
             virtual void endPrimitive() override;
             virtual void pushVertex( const ::canvas::Vertex& vertex ) override;
@@ -212,7 +212,7 @@ namespace dxcanvas
             COMReference<IDirect3D9>                    mpDirect3D9;
             COMReference<IDirect3DSwapChain9>           mpSwapChain;
             COMReference<IDirect3DVertexBuffer9>        mpVertexBuffer;
-            ::std::shared_ptr<canvas::ISurface>                 mpTexture;
+            std::shared_ptr<canvas::ISurface>                 mpTexture;
             VclPtr<SystemChildWindow>                   mpWindow;
             ::basegfx::B2IVector                        maSize;
             typedef std::vector<canvas::Vertex>         vertexCache_t;
@@ -514,7 +514,7 @@ namespace dxcanvas
             ::basegfx::B2IVector aPageSize(maPageSize);
             while(true)
             {
-                mpTexture = ::std::shared_ptr<canvas::ISurface>(
+                mpTexture = std::shared_ptr<canvas::ISurface>(
                     new DXSurface(*this,aPageSize));
                 if(mpTexture->isValid())
                     break;
@@ -980,13 +980,13 @@ namespace dxcanvas
         // DXRenderModule::createSurface
 
 
-        ::std::shared_ptr<canvas::ISurface> DXRenderModule::createSurface( const ::basegfx::B2IVector& surfaceSize )
+        std::shared_ptr<canvas::ISurface> DXRenderModule::createSurface( const ::basegfx::B2IVector& surfaceSize )
         {
             // TODO(P2): get rid of those fine-grained locking
             ::osl::MutexGuard aGuard( maMutex );
 
             if(isDisposed())
-                return ::std::shared_ptr<canvas::ISurface>();
+                return std::shared_ptr<canvas::ISurface>();
 
             const ::basegfx::B2IVector& rPageSize( getPageSize() );
             ::basegfx::B2ISize aSize(surfaceSize);
@@ -998,7 +998,7 @@ namespace dxcanvas
             if(mpTexture.use_count() == 1)
                 return mpTexture;
 
-            return ::std::shared_ptr<canvas::ISurface>( new DXSurface(*this,aSize) );
+            return std::shared_ptr<canvas::ISurface>( new DXSurface(*this,aSize) );
         }
 
 

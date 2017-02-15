@@ -48,13 +48,13 @@ namespace
 {
     template < typename T> class OHardRefMap : public connectivity::sdbcx::IObjectCollection
     {
-        typedef ::std::multimap< OUString, T , ::comphelper::UStringMixLess> ObjectMap;
+        typedef std::multimap< OUString, T , ::comphelper::UStringMixLess> ObjectMap;
         typedef typename ObjectMap::iterator   ObjectIter;
         typedef typename ObjectMap::value_type ObjectEntry;
 
     //  private:
         // this combination of map and vector is used to have a fast name and index access
-        ::std::vector< ObjectIter >             m_aElements;        // hold the iterators which point to map
+        std::vector< ObjectIter >             m_aElements;        // hold the iterators which point to map
         ObjectMap                               m_aNameMap;         // hold the elements and a name
     public:
         OHardRefMap(bool _bCase)
@@ -74,13 +74,13 @@ namespace
 
         virtual void swapAll() override
         {
-            ::std::vector< ObjectIter >(m_aElements).swap(m_aElements);
+            std::vector< ObjectIter >(m_aElements).swap(m_aElements);
             ObjectMap(m_aNameMap).swap(m_aNameMap);
         }
 
         virtual void swap() override
         {
-            ::std::vector< ObjectIter >().swap(m_aElements);
+            std::vector< ObjectIter >().swap(m_aElements);
 
             OSL_ENSURE( m_aNameMap.empty(), "swap: what did disposeElements do?" );
             ObjectMap( m_aNameMap ).swap( m_aNameMap );
@@ -117,7 +117,7 @@ namespace
             ObjectIter aIter = m_aNameMap.find(_sOldName);
             if ( aIter != m_aNameMap.end() )
             {
-                typename ::std::vector< ObjectIter >::iterator aFind = ::std::find(m_aElements.begin(),m_aElements.end(),aIter);
+                typename std::vector< ObjectIter >::iterator aFind = std::find(m_aElements.begin(),m_aElements.end(),aIter);
                 if(m_aElements.end() != aFind)
                 {
                     (*aFind) = m_aNameMap.insert(m_aNameMap.begin(), ObjectEntry(_sNewName,(*aFind)->second));
@@ -139,8 +139,8 @@ namespace
             Sequence< OUString > aNameList(m_aElements.size());
 
             OUString* pStringArray = aNameList.getArray();
-            typename ::std::vector< ObjectIter >::const_iterator aEnd = m_aElements.end();
-            for(typename ::std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != aEnd;++aIter,++pStringArray)
+            typename std::vector< ObjectIter >::const_iterator aEnd = m_aElements.end();
+            for(typename std::vector< ObjectIter >::const_iterator aIter = m_aElements.begin(); aIter != aEnd;++aIter,++pStringArray)
                 *pStringArray = (*aIter)->first;
 
             return aNameList;
@@ -182,7 +182,7 @@ namespace
         {
             ObjectIter aIter = m_aNameMap.find(columnName);
             OSL_ENSURE(aIter != m_aNameMap.end(),"findColumn:: Illegal name!");
-            return m_aElements.size() - (m_aElements.end() - ::std::find(m_aElements.begin(),m_aElements.end(),aIter));
+            return m_aElements.size() - (m_aElements.end() - std::find(m_aElements.begin(),m_aElements.end(),aIter));
         }
 
         virtual ObjectType getObject(sal_Int32 _nIndex) override
@@ -258,7 +258,7 @@ Sequence< Type > SAL_CALL OCollection::getTypes()
         Type* pBegin    = aTypes.getArray();
         Type* pEnd      = pBegin + aTypes.getLength();
 
-        ::std::vector<Type> aOwnTypes;
+        std::vector<Type> aOwnTypes;
         aOwnTypes.reserve(aTypes.getLength());
         Type aType = cppu::UnoType<XNameAccess>::get();
         for(;pBegin != pEnd; ++pBegin)

@@ -139,12 +139,12 @@ void CandleStickChart::createShapes()
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
     {
-        ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
-        const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
+        std::vector< std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
+        const std::vector< std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
         for( sal_Int32 nZ=0; aZSlotIter != aZSlotEnd; ++aZSlotIter, nZ++ )
         {
-            ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
-            const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+            std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
+            const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
             sal_Int32 nAttachedAxisIndex = 0;
             BarPositionHelper* pPosHelper = m_pMainPosHelper.get();
@@ -163,10 +163,10 @@ void CandleStickChart::createShapes()
             //iterate through all x slots in this category
             for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
-                ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+                std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
-                ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
-                const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
+                std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
+                const std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
                 //iterate through all series in this x slot
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {

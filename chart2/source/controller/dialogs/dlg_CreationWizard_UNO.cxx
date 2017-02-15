@@ -122,7 +122,7 @@ uno::Sequence< uno::Type > CreationWizardUnoDlg::getTypes()
     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
     if( !aTypeList.getLength() )
     {
-        ::std::vector< uno::Type > aTypes;
+        std::vector< uno::Type > aTypes;
         aTypes.push_back( cppu::UnoType<lang::XComponent>::get() );
         aTypes.push_back( cppu::UnoType<lang::XTypeProvider>::get() );
         aTypes.push_back( cppu::UnoType<uno::XAggregation>::get() );

@@ -58,7 +58,7 @@ void SvxDefaultColorOptPage::InsertColorEntry(const XColorEntry& rEntry, sal_Int
         if ( static_cast<size_t>(nPos) < aColorList.size() )
         {
             ImpColorList::iterator it = aColorList.begin();
-            ::std::advance( it, nPos );
+            std::advance( it, nPos );
             aColorList.insert( it, rColor );
         }
         else

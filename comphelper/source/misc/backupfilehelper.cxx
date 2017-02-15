@@ -554,7 +554,7 @@ namespace
         }
     };
 
-    typedef ::std::vector< ExtensionInfoEntry > ExtensionInfoEntryVector;
+    typedef std::vector< ExtensionInfoEntry > ExtensionInfoEntryVector;
 
     class ExtensionInfo
     {
@@ -1354,7 +1354,7 @@ namespace
 
 namespace
 {
-    typedef ::std::deque< PackedFileEntry > PackedFileEntryVector;
+    typedef std::deque< PackedFileEntry > PackedFileEntryVector;
 
     class PackedFile
     {
@@ -1775,7 +1775,7 @@ namespace comphelper
             const sal_uInt16 nConfigNumCopies(static_cast<sal_uInt16>(sTokenOut.toUInt32()));
 
             // limit to range [1..mnMaxAllowedBackups]
-            mnNumBackups = ::std::min(::std::max(nConfigNumCopies, mnNumBackups), mnMaxAllowedBackups);
+            mnNumBackups = std::min(std::max(nConfigNumCopies, mnNumBackups), mnMaxAllowedBackups);
         }
 
         if (mbActive && rtl::Bootstrap::get("SecureUserConfigMode", sTokenOut))
@@ -1783,7 +1783,7 @@ namespace comphelper
             const sal_uInt16 nMode(static_cast<sal_uInt16>(sTokenOut.toUInt32()));
 
             // limit to range [0..2]
-            mnMode = ::std::min(nMode, sal_uInt16(2));
+            mnMode = std::min(nMode, sal_uInt16(2));
         }
 
         if (mbActive && rtl::Bootstrap::get("SecureUserConfigExtensions", sTokenOut))

@@ -55,7 +55,7 @@ namespace
 {
 
     // comparing two PropertyValue instances
-    struct PropertyValueCompare : public ::std::binary_function< beans::PropertyValue, OUString, bool >
+    struct PropertyValueCompare : public std::binary_function< beans::PropertyValue, OUString, bool >
     {
         bool operator() ( const beans::PropertyValue& rPropValue, const OUString& rName ) const
         {
@@ -119,7 +119,7 @@ void DrawCommandDispatch::setAttributes( SdrObject* pObj )
             bool bAttributesAppliedFromGallery = false;
             if ( GalleryExplorer::GetSdrObjCount( GALLERY_THEME_POWERPOINT ) )
             {
-                ::std::vector< OUString > aObjList;
+                std::vector< OUString > aObjList;
                 if ( GalleryExplorer::FillObjListTitle( GALLERY_THEME_POWERPOINT, aObjList ) )
                 {
                     for ( size_t i = 0; i < aObjList.size(); ++i )
@@ -372,8 +372,8 @@ void DrawCommandDispatch::execute( const OUString& rCommand, const Sequence< bea
                 const OUString sKeyModifier( "KeyModifier" );
                 const beans::PropertyValue* pIter = rArgs.getConstArray();
                 const beans::PropertyValue* pEnd  = pIter + rArgs.getLength();
-                const beans::PropertyValue* pKeyModifier = ::std::find_if(
-                    pIter, pEnd, ::std::bind2nd( PropertyValueCompare(), std::cref( sKeyModifier ) ) );
+                const beans::PropertyValue* pKeyModifier = std::find_if(
+                    pIter, pEnd, std::bind2nd( PropertyValueCompare(), std::cref( sKeyModifier ) ) );
                 sal_Int16 nKeyModifier = 0;
                 if ( pKeyModifier != pEnd && pKeyModifier && ( pKeyModifier->Value >>= nKeyModifier ) && nKeyModifier == KEY_MOD1 )
                 {

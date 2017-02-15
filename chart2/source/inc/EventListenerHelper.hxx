@@ -36,7 +36,7 @@ namespace impl
 {
 
 template< class InterfaceRef >
-struct addListenerFunctor : public ::std::unary_function< InterfaceRef, void >
+struct addListenerFunctor : public std::unary_function< InterfaceRef, void >
 {
     explicit addListenerFunctor( const css::uno::Reference< css::lang::XEventListener > & xListener ) :
             m_xListener( xListener )
@@ -54,7 +54,7 @@ private:
 };
 
 template< class InterfaceRef >
-struct removeListenerFunctor : public ::std::unary_function< InterfaceRef, void >
+struct removeListenerFunctor : public std::unary_function< InterfaceRef, void >
 {
     explicit removeListenerFunctor( const css::uno::Reference<  css::lang::XEventListener > & xListener ) :
             m_xListener( xListener )
@@ -91,7 +91,7 @@ void addListenerToAllElements(
     const css::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
-        ::std::for_each( rContainer.begin(), rContainer.end(),
+        std::for_each( rContainer.begin(), rContainer.end(),
                          impl::addListenerFunctor< typename Container::value_type >( xListener ));
 }
 
@@ -113,7 +113,7 @@ void removeListenerFromAllElements(
     const css::uno::Reference< css::lang::XEventListener > & xListener )
 {
     if( xListener.is())
-        ::std::for_each( rContainer.begin(), rContainer.end(),
+        std::for_each( rContainer.begin(), rContainer.end(),
                          impl::removeListenerFunctor< typename Container::value_type >( xListener ));
 }
 

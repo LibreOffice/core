@@ -146,7 +146,7 @@ typedef std::unordered_map<
     ::rtl::ByteSequence,
     css::uno::WeakReference< css::sdbc::XCloseable >,
     HashByteSequence > WeakHashMap;
-typedef ::std::vector< OString > OStringVector;
+typedef std::vector< OString > OStringVector;
 
 
 typedef std::unordered_map

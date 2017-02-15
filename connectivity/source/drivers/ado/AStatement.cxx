@@ -214,10 +214,10 @@ sal_Int32 OStatement_Base::getPrecision ( sal_Int32 sqlType)
     aInfo.nType = (sal_Int16)sqlType;
     if (!m_aTypeInfo.empty())
     {
-        ::std::vector<OTypeInfo>::const_iterator aIter = ::std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
+        std::vector<OTypeInfo>::const_iterator aIter = std::find(m_aTypeInfo.begin(),m_aTypeInfo.end(),aInfo);
         for(;aIter != m_aTypeInfo.end();++aIter)
         {
-            prec = ::std::max(prec,(*aIter).nPrecision);
+            prec = std::max(prec,(*aIter).nPrecision);
         }
     }
 
@@ -352,7 +352,7 @@ Sequence< sal_Int32 > SAL_CALL OStatement::executeBatch(  )
 
     OUString aBatchSql;
     sal_Int32 nLen = 0;
-    for(::std::list< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
+    for(std::list< OUString>::const_iterator i=m_aBatchList.begin();i != m_aBatchList.end();++i,++nLen)
         aBatchSql = aBatchSql + *i + ";";
 
 

@@ -149,7 +149,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
     impl_checkURL_throw(url);
     if ( acceptsURL(url) )
     {
-        ::std::vector< DriverPropertyInfo > aDriverInfo;
+        std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< OUString > aBooleanValues(2);
         aBooleanValues[0] = "false";

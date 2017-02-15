@@ -66,9 +66,9 @@ public:
         if( m_ePropertyType == DIAGRAM &&
             m_spChart2ModelContact.get() )
         {
-            ::std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
+            std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
-            ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >::const_iterator aIter =
+            std::vector< css::uno::Reference< css::chart2::XDataSeries > >::const_iterator aIter =
                     aSeriesVector.begin();
             for( ; aIter != aSeriesVector.end(); ++aIter )
             {
@@ -95,9 +95,9 @@ public:
         if( m_ePropertyType == DIAGRAM &&
             m_spChart2ModelContact.get() )
         {
-            ::std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
+            std::vector< css::uno::Reference< css::chart2::XDataSeries > > aSeriesVector(
                 ::chart::DiagramHelper::getDataSeriesFromDiagram( m_spChart2ModelContact->getChart2Diagram() ) );
-            ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >::const_iterator aIter =
+            std::vector< css::uno::Reference< css::chart2::XDataSeries > >::const_iterator aIter =
                     aSeriesVector.begin();
             for( ; aIter != aSeriesVector.end(); ++aIter )
             {

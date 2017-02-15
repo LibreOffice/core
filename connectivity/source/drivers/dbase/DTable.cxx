@@ -732,7 +732,7 @@ void SAL_CALL ODbaseTable::disposing()
 Sequence< Type > SAL_CALL ODbaseTable::getTypes(  )
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
-    ::std::vector<Type> aOwnTypes;
+    std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
 
     const Type* pBegin = aTypes.getConstArray();
@@ -1321,7 +1321,7 @@ bool ODbaseTable::CreateFile(const INetURLObject& aFile, bool& bCreateMemo)
                         throwInvalidColumnType(STR_INVALID_COLUMN_PRECISION, aName);
                     }
                     (*m_pFileStream).WriteUChar( std::min((unsigned)nPrecision, 255U) );      // field length
-                    nRecLength = nRecLength + (sal_uInt16)::std::min((sal_uInt16)nPrecision, (sal_uInt16)255UL);
+                    nRecLength = nRecLength + (sal_uInt16)std::min((sal_uInt16)nPrecision, (sal_uInt16)255UL);
                     (*m_pFileStream).WriteUChar( 0 );                                                                // decimals
                     break;
                 case 'F':
@@ -1682,7 +1682,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
     sal_uInt16 i;
     OUString aColName;
     const sal_Int32 nColumnCount = m_pColumns->getCount();
-    ::std::vector< Reference<XPropertySet> > aIndexedCols(nColumnCount);
+    std::vector< Reference<XPropertySet> > aIndexedCols(nColumnCount);
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
@@ -1934,11 +1934,11 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
                         m_pColumns->getByIndex(i) >>= xCol;
                         OSL_ENSURE(xCol.is(),"ODbaseTable::UpdateBuffer column is null!");
                         xCol->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= aColName;
-                        ::std::list< ::std::pair<const sal_Char* , OUString > > aStringToSubstitutes;
-                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$columnname$", aColName));
-                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$precision$", OUString::number(nLen)));
-                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$scale$", OUString::number(nScale)));
-                        aStringToSubstitutes.push_back(::std::pair<const sal_Char* , OUString >("$value$", OStringToOUString(aDefaultValue,RTL_TEXTENCODING_UTF8)));
+                        std::list< std::pair<const sal_Char* , OUString > > aStringToSubstitutes;
+                        aStringToSubstitutes.push_back(std::pair<const sal_Char* , OUString >("$columnname$", aColName));
+                        aStringToSubstitutes.push_back(std::pair<const sal_Char* , OUString >("$precision$", OUString::number(nLen)));
+                        aStringToSubstitutes.push_back(std::pair<const sal_Char* , OUString >("$scale$", OUString::number(nScale)));
+                        aStringToSubstitutes.push_back(std::pair<const sal_Char* , OUString >("$value$", OStringToOUString(aDefaultValue,RTL_TEXTENCODING_UTF8)));
 
                         const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                                 STR_INVALID_COLUMN_DECIMAL_VALUE
@@ -2518,13 +2518,13 @@ void ODbaseTable::copyData(ODbaseTable* _pNewTable,sal_Int32 _nPos)
     if(_nPos)
     {
         aInsertRow = new OValueRefVector(_pNewTable->m_pColumns->getCount());
-        ::std::for_each(aInsertRow->get().begin(),aInsertRow->get().end(),TSetRefBound(true));
+        std::for_each(aInsertRow->get().begin(),aInsertRow->get().end(),TSetRefBound(true));
     }
     else
         aInsertRow = aRow;
 
     // we only have to bind the values which we need to copy into the new table
-    ::std::for_each(aRow->get().begin(),aRow->get().end(),TSetRefBound(true));
+    std::for_each(aRow->get().begin(),aRow->get().end(),TSetRefBound(true));
     if(_nPos && (_nPos < (sal_Int32)aRow->get().size()))
         (aRow->get())[nPos]->setBound(false);
 

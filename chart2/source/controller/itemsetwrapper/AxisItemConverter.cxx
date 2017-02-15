@@ -108,7 +108,7 @@ AxisItemConverter::~AxisItemConverter()
     delete m_pExplicitScale;
     delete m_pExplicitIncrement;
 
-    ::std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
+    std::for_each(m_aConverters.begin(), m_aConverters.end(), std::default_delete<ItemConverter>());
 }
 
 void AxisItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const

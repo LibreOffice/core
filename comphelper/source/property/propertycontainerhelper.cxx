@@ -41,7 +41,7 @@ using namespace ::com::sun::star::beans;
 namespace
 {
     // comparing two property descriptions
-    struct PropertyDescriptionHandleCompare : public ::std::binary_function< PropertyDescription, PropertyDescription, bool >
+    struct PropertyDescriptionHandleCompare : public std::binary_function< PropertyDescription, PropertyDescription, bool >
     {
         bool operator() (const PropertyDescription& x, const PropertyDescription& y) const
         {
@@ -49,7 +49,7 @@ namespace
         }
     };
     // comparing two property descriptions (by name)
-    struct PropertyDescriptionNameMatch : public ::std::unary_function< PropertyDescription, bool >
+    struct PropertyDescriptionNameMatch : public std::unary_function< PropertyDescription, bool >
     {
         OUString m_rCompare;
         explicit PropertyDescriptionNameMatch( const OUString& _rCompare ) : m_rCompare( _rCompare ) { }
@@ -154,7 +154,7 @@ bool OPropertyContainerHelper::isRegisteredProperty( const OUString& _rName ) co
     // i.e. registered and revoked even though the XPropertySet has already been
     // accessed, a vector is not really the best data structure anymore ...
 
-    ConstPropertiesIterator pos = ::std::find_if(
+    ConstPropertiesIterator pos = std::find_if(
         m_aProperties.begin(),
         m_aProperties.end(),
         PropertyDescriptionNameMatch( _rName )
@@ -188,7 +188,7 @@ void OPropertyContainerHelper::implPushBackProperty(const PropertyDescription& _
     }
 #endif
 
-    PropertiesIterator pos = ::std::lower_bound(
+    PropertiesIterator pos = std::lower_bound(
         m_aProperties.begin(), m_aProperties.end(),
         _rProp, ComparePropertyHandles() );
 
@@ -433,7 +433,7 @@ OPropertyContainerHelper::PropertiesIterator OPropertyContainerHelper::searchHan
     PropertyDescription aHandlePropDesc;
     aHandlePropDesc.aProperty.Handle = _nHandle;
     // search a lower bound
-    PropertiesIterator aLowerBound = ::std::lower_bound(
+    PropertiesIterator aLowerBound = std::lower_bound(
         m_aProperties.begin(),
         m_aProperties.end(),
         aHandlePropDesc,
@@ -449,7 +449,7 @@ OPropertyContainerHelper::PropertiesIterator OPropertyContainerHelper::searchHan
 
 const Property& OPropertyContainerHelper::getProperty( const OUString& _rName ) const
 {
-    ConstPropertiesIterator pos = ::std::find_if(
+    ConstPropertiesIterator pos = std::find_if(
         m_aProperties.begin(),
         m_aProperties.end(),
         PropertyDescriptionNameMatch( _rName )
@@ -478,14 +478,14 @@ void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps)
     }
 
     // as our property vector is sorted by handles, not by name, we have to sort aOwnProps
-    ::std::sort(aOwnProps.getArray(), aOwnProps.getArray() + aOwnProps.getLength(), PropertyCompareByName());
+    std::sort(aOwnProps.getArray(), aOwnProps.getArray() + aOwnProps.getLength(), PropertyCompareByName());
 
     // unfortunately the STL merge function does not allow the output range to overlap one of the input ranges,
     // so we need an extra sequence
     Sequence< Property > aOutput;
     aOutput.realloc(_rProps.getLength() + aOwnProps.getLength());
     // do the merge
-    ::std::merge(   _rProps.getConstArray(), _rProps.getConstArray() + _rProps.getLength(),         // input 1
+    std::merge(   _rProps.getConstArray(), _rProps.getConstArray() + _rProps.getLength(),         // input 1
                     aOwnProps.getConstArray(), aOwnProps.getConstArray() + aOwnProps.getLength(),   // input 2
                     aOutput.getArray(),                                                             // output
                     PropertyCompareByName()                                                         // compare operator

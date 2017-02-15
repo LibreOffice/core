@@ -49,7 +49,7 @@ protected:
 
 protected: //member
     PolarPlottingPositionHelper* m_pPosHelper;
-    ::std::vector< ExplicitIncrementData >   m_aIncrements;
+    std::vector< ExplicitIncrementData >   m_aIncrements;
 };
 
 } //namespace chart

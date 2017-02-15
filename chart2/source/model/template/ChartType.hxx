@@ -130,7 +130,7 @@ private:
         const m_xContext;
 
     typedef
-        ::std::vector< css::uno::Reference< css::chart2::XDataSeries > >  tDataSeriesContainerType;
+        std::vector< css::uno::Reference< css::chart2::XDataSeries > >  tDataSeriesContainerType;
 
     // --- mutable members: the following members need mutex guard ---
 

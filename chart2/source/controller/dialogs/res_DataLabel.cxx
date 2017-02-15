@@ -298,7 +298,7 @@ bool DataLabelResources::FillItemSet( SfxItemSet* rOutAttrs ) const
     OUString aSep = our_aLBEntryMap[m_pLB_Separator->GetSelectEntryPos()];
     rOutAttrs->Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, aSep) );
 
-    ::std::map< sal_uInt16, sal_Int32 >::const_iterator aIt( m_aListBoxToPlacementMap.find(m_pLB_LabelPlacement->GetSelectEntryPos()) );
+    std::map< sal_uInt16, sal_Int32 >::const_iterator aIt( m_aListBoxToPlacementMap.find(m_pLB_LabelPlacement->GetSelectEntryPos()) );
     if(aIt!=m_aListBoxToPlacementMap.end())
     {
         sal_Int32 nValue = aIt->second;
@@ -344,7 +344,7 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     if( rInAttrs.GetItemState(SCHATTR_DATADESCR_PLACEMENT, true, &pPoolItem) == SfxItemState::SET )
     {
         sal_Int32 nPlacement = static_cast<const SfxInt32Item*>(pPoolItem)->GetValue();
-        ::std::map< sal_Int32, sal_uInt16 >::const_iterator aIt( m_aPlacementToListBoxMap.find(nPlacement) );
+        std::map< sal_Int32, sal_uInt16 >::const_iterator aIt( m_aPlacementToListBoxMap.find(nPlacement) );
         if(aIt!=m_aPlacementToListBoxMap.end())
         {
             sal_uInt16 nPos = aIt->second;

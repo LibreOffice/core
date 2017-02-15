@@ -50,7 +50,7 @@ enum
 };
 
 void lcl_AddPropertiesToVector(
-    ::std::vector< Property > & rOutProperties )
+    std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
         Property( CHART_UNONAME_CURVE_STYLE,
@@ -107,10 +107,10 @@ struct StaticLineChartTypeTemplateInfoHelper_Initializer
 private:
     static Sequence< Property > lcl_GetPropertySequence()
     {
-        ::std::vector< css::beans::Property > aProperties;
+        std::vector< css::beans::Property > aProperties;
         lcl_AddPropertiesToVector( aProperties );
 
-        ::std::sort( aProperties.begin(), aProperties.end(),
+        std::sort( aProperties.begin(), aProperties.end(),
                      ::chart::PropertyNameLess() );
 
         return comphelper::containerToSequence( aProperties );
@@ -208,10 +208,10 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
         bool bSymbolFound = false;
         bool bLineFound = false;
 
-        ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+        std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+        for( std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
                  aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
         {
             try

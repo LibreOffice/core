@@ -149,9 +149,9 @@ public:
     bool m_bFireEvents;
     class IEventNotificationHook * const m_pFireEvents;
 
-    ::std::vector< sal_Int32 >  m_handles;
-    ::std::vector< Any >        m_newValues;
-    ::std::vector< Any >        m_oldValues;
+    std::vector< sal_Int32 >  m_handles;
+    std::vector< Any >        m_newValues;
+    std::vector< Any >        m_oldValues;
 };
 
 
@@ -577,17 +577,17 @@ void OPropertySetHelper::impl_fireAll( sal_Int32* i_handles, const Any* i_newVal
             &&  additionalEvents == m_pReserved->m_oldValues.size(),
             "OPropertySetHelper::impl_fireAll: inconsistency!" );
 
-    ::std::vector< sal_Int32 > allHandles( additionalEvents + i_count );
-    ::std::copy( m_pReserved->m_handles.begin(), m_pReserved->m_handles.end(), allHandles.begin() );
-    ::std::copy( i_handles, i_handles + i_count, allHandles.begin() + additionalEvents );
+    std::vector< sal_Int32 > allHandles( additionalEvents + i_count );
+    std::copy( m_pReserved->m_handles.begin(), m_pReserved->m_handles.end(), allHandles.begin() );
+    std::copy( i_handles, i_handles + i_count, allHandles.begin() + additionalEvents );
 
-    ::std::vector< Any > allNewValues( additionalEvents + i_count );
-    ::std::copy( m_pReserved->m_newValues.begin(), m_pReserved->m_newValues.end(), allNewValues.begin() );
-    ::std::copy( i_newValues, i_newValues + i_count, allNewValues.begin() + additionalEvents );
+    std::vector< Any > allNewValues( additionalEvents + i_count );
+    std::copy( m_pReserved->m_newValues.begin(), m_pReserved->m_newValues.end(), allNewValues.begin() );
+    std::copy( i_newValues, i_newValues + i_count, allNewValues.begin() + additionalEvents );
 
-    ::std::vector< Any > allOldValues( additionalEvents + i_count );
-    ::std::copy( m_pReserved->m_oldValues.begin(), m_pReserved->m_oldValues.end(), allOldValues.begin() );
-    ::std::copy( i_oldValues, i_oldValues + i_count, allOldValues.begin() + additionalEvents );
+    std::vector< Any > allOldValues( additionalEvents + i_count );
+    std::copy( m_pReserved->m_oldValues.begin(), m_pReserved->m_oldValues.end(), allOldValues.begin() );
+    std::copy( i_oldValues, i_oldValues + i_count, allOldValues.begin() + additionalEvents );
 
     m_pReserved->m_handles.clear();
     m_pReserved->m_newValues.clear();

@@ -41,7 +41,7 @@ using namespace ::com::sun::star::sdbc;
 
 
 extern
-::std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression* _aExpr, MQueryHelperResultEntry* entry);
+std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression* _aExpr, MQueryHelperResultEntry* entry);
 
 MQueryHelperResultEntry::MQueryHelperResultEntry()
 {
@@ -239,9 +239,9 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
                     OUString valueOUString = OStringToOUString( valueOString, RTL_TEXTENCODING_UTF8 );
                     entry->setValue(key, valueOUString);
                 }
-                ::std::vector<bool> vector = entryMatchedByExpression(this, &expr, entry);
+                std::vector<bool> vector = entryMatchedByExpression(this, &expr, entry);
                 bool result = true;
-                for (::std::vector<bool>::const_iterator iter = vector.begin(); iter != vector.end(); ++iter)
+                for (std::vector<bool>::const_iterator iter = vector.begin(); iter != vector.end(); ++iter)
                 {
                     result = result && *iter;
                 }
@@ -259,9 +259,9 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
     return 0;
 }
 
-::std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression* _aExpr, MQueryHelperResultEntry* entry)
+std::vector<bool> entryMatchedByExpression(MQueryHelper* _aQuery, MQueryExpression* _aExpr, MQueryHelperResultEntry* entry)
 {
-    ::std::vector<bool> resultVector;
+    std::vector<bool> resultVector;
     MQueryExpression::ExprVector::const_iterator evIter;
     for( evIter = _aExpr->getExpressions().begin();
          evIter != _aExpr->getExpressions().end();
@@ -322,17 +322,17 @@ sal_Int32 MQueryHelper::executeQuery(OConnection* xConnection, MQueryExpression 
             SAL_INFO("connectivity.mork", "Appending Subquery Expression");
             MQueryExpression* queryExpression = static_cast<MQueryExpression*> (*evIter);
             // recursive call
-            ::std::vector<bool> subquery_result = entryMatchedByExpression(_aQuery, queryExpression, entry);
+            std::vector<bool> subquery_result = entryMatchedByExpression(_aQuery, queryExpression, entry);
             MQueryExpression::bool_cond condition = queryExpression->getExpressionCondition();
             if (condition == MQueryExpression::OR) {
                 bool result = false;
-                for (::std::vector<bool>::const_iterator iter =  subquery_result.begin(); iter != subquery_result.end(); ++iter) {
+                for (std::vector<bool>::const_iterator iter =  subquery_result.begin(); iter != subquery_result.end(); ++iter) {
                     result = result || *iter;
                 }
                 resultVector.push_back(result);
             } else if (condition == MQueryExpression::AND) {
                 bool result = true;
-                for (::std::vector<bool>::const_iterator iter = subquery_result.begin(); iter != subquery_result.end(); ++iter) {
+                for (std::vector<bool>::const_iterator iter = subquery_result.begin(); iter != subquery_result.end(); ++iter) {
                     result = result && *iter;
                 }
                 resultVector.push_back(result);

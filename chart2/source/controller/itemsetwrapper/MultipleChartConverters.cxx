@@ -104,10 +104,10 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
         : MultipleItemConverter( rItemPool )
 {
-    ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
+    std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
         ::chart::ChartModelHelper::getDataSeries( xChartModel ));
 
-    ::std::vector< uno::Reference< chart2::XDataSeries > >::const_iterator aIt;
+    std::vector< uno::Reference< chart2::XDataSeries > >::const_iterator aIt;
     for( aIt = aSeriesList.begin(); aIt != aSeriesList.end(); ++aIt )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
@@ -169,10 +169,10 @@ AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
     SfxItemPool& rItemPool )
         : MultipleItemConverter( rItemPool )
 {
-    ::std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
+    std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
         ::chart::ChartModelHelper::getDataSeries( xChartModel ));
 
-    ::std::vector< uno::Reference< chart2::XDataSeries > >::const_iterator aIt;
+    std::vector< uno::Reference< chart2::XDataSeries > >::const_iterator aIt;
     for( aIt = aSeriesList.begin(); aIt != aSeriesList.end(); ++aIt )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);

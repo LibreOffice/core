@@ -86,10 +86,10 @@ namespace comphelper
            && (_rArguments[1] >>= AllowEmptyPropertyName)
            && (_rArguments[2] >>= AutomaticAddition))
         {
-            ::std::copy(
+            std::copy(
                 aTypes.getConstArray(),
                 aTypes.getConstArray() + aTypes.getLength(),
-                ::std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
+                std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
             );
             m_bAutoAddProperties = AutomaticAddition;
 
@@ -97,10 +97,10 @@ namespace comphelper
             ::comphelper::NamedValueCollection aArguments( _rArguments );
 
             if ( aArguments.get_ensureType( "AllowedTypes", aTypes ) )
-                ::std::copy(
+                std::copy(
                     aTypes.getConstArray(),
                     aTypes.getConstArray() + aTypes.getLength(),
-                    ::std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
+                    std::insert_iterator< TypeBag >( m_aAllowedTypes, m_aAllowedTypes.begin() )
                 );
 
             aArguments.get_ensureType( "AutomaticAddition", m_bAutoAddProperties );
@@ -350,7 +350,7 @@ namespace comphelper
 
     namespace
     {
-        struct ComparePropertyValueByName : public ::std::binary_function< PropertyValue, PropertyValue, bool >
+        struct ComparePropertyValueByName : public std::binary_function< PropertyValue, PropertyValue, bool >
         {
             bool operator()( const PropertyValue& _rLHS, const PropertyValue& _rRHS )
             {
@@ -359,7 +359,7 @@ namespace comphelper
         };
 
         template< typename CLASS >
-        struct TransformPropertyToName : public ::std::unary_function< CLASS, OUString >
+        struct TransformPropertyToName : public std::unary_function< CLASS, OUString >
         {
             const OUString& operator()( const CLASS& _rProp )
             {
@@ -367,7 +367,7 @@ namespace comphelper
             }
         };
 
-        struct ExtractPropertyValue : public ::std::unary_function< PropertyValue, Any >
+        struct ExtractPropertyValue : public std::unary_function< PropertyValue, Any >
         {
             const Any& operator()( const PropertyValue& _rProp )
             {
@@ -387,7 +387,7 @@ namespace comphelper
 
         // their names
         Sequence< OUString > aNames( aProperties.getLength() );
-        ::std::transform(
+        std::transform(
             aProperties.getConstArray(),
             aProperties.getConstArray() + aProperties.getLength(),
             aNames.getArray(),
@@ -436,7 +436,7 @@ namespace comphelper
     {
         // sort (the XMultiPropertySet interface requires this)
         Sequence< PropertyValue > aProperties( _rProps );
-        ::std::sort(
+        std::sort(
             aProperties.getArray(),
             aProperties.getArray() + aProperties.getLength(),
             ComparePropertyValueByName()
@@ -444,7 +444,7 @@ namespace comphelper
 
         // a sequence of names
         Sequence< OUString > aNames( aProperties.getLength() );
-        ::std::transform(
+        std::transform(
             aProperties.getConstArray(),
             aProperties.getConstArray() + aProperties.getLength(),
             aNames.getArray(),
@@ -489,7 +489,7 @@ namespace comphelper
 
             // a sequence of values
             Sequence< Any > aValues( aProperties.getLength() );
-            ::std::transform(
+            std::transform(
                 aProperties.getConstArray(),
                 aProperties.getConstArray() + aProperties.getLength(),
                 aValues.getArray(),

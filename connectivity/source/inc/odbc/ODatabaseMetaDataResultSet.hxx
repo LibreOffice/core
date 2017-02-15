@@ -63,10 +63,10 @@ namespace connectivity
         {
             ::connectivity::TIntVector                  m_aColMapping; // pos 0 is unused so we don't have to decrement 1 every time
 
-            ::std::map<sal_Int32, ::connectivity::TInt2IntMap >
+            std::map<sal_Int32, ::connectivity::TInt2IntMap >
                                                         m_aValueRange;
 
-            ::std::map<sal_Int32,SWORD>                 m_aODBCColumnTypes;
+            std::map<sal_Int32,SWORD>                 m_aODBCColumnTypes;
 
             SQLHANDLE                                   m_aStatementHandle;   // ... until freed
             css::uno::WeakReferenceHelper               m_aStatement;

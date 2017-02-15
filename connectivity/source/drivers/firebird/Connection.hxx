@@ -64,7 +64,7 @@ namespace connectivity
         class ODatabaseMetaData;
 
 
-        typedef ::std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
+        typedef std::vector< ::connectivity::OTypeInfo>   TTypeInfoVector;
         typedef std::vector< css::uno::WeakReferenceHelper > OWeakRefArray;
 
         class Connection : public Connection_BASE,

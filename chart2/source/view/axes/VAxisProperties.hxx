@@ -129,7 +129,7 @@ struct AxisProperties final
     */
     sal_Int32                           m_nMajorTickmarks;
     sal_Int32                           m_nMinorTickmarks;
-    ::std::vector<TickmarkProperties>   m_aTickmarkPropertiesList;
+    std::vector<TickmarkProperties>   m_aTickmarkPropertiesList;
 
     VLineProperties                     m_aLineProperties;
 

@@ -123,7 +123,7 @@ protected:
     css::uno::Reference< css::util::XURLTransformer >  m_xURLTransformer;
 
 private:
-    typedef ::std::map< OUString, ::comphelper::OInterfaceContainerHelper2* >
+    typedef std::map< OUString, ::comphelper::OInterfaceContainerHelper2* >
         tListenerMap;
 
     tListenerMap m_aListeners;

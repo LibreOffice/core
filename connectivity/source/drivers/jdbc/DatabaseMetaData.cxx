@@ -430,7 +430,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
             if ( xMeta.is() && xMeta->getColumnCount() != 7 )
             {
                 // here we know that the count of column doesn't match
-                ::std::map<sal_Int32,sal_Int32> aColumnMatching;
+                std::map<sal_Int32,sal_Int32> aColumnMatching;
                 static const OUStringLiteral sPrivs[] = {
                                             "TABLE_CAT",
                                             "TABLE_SCHEM",
@@ -450,7 +450,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                     {
                         if ( sPrivs[j] == sColumnName )
                         {
-                            aColumnMatching.insert( ::std::map<sal_Int32,sal_Int32>::value_type(i,j+1) );
+                            aColumnMatching.insert( std::map<sal_Int32,sal_Int32>::value_type(i,j+1) );
                             break;
                         }
                     }
@@ -467,8 +467,8 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
                 ODatabaseMetaDataResultSet::ORow aRow(8);
                 while ( xRow.is() && xTemp->next() )
                 {
-                    ::std::map<sal_Int32,sal_Int32>::const_iterator aIter = aColumnMatching.begin();
-                    ::std::map<sal_Int32,sal_Int32>::const_iterator aEnd  = aColumnMatching.end();
+                    std::map<sal_Int32,sal_Int32>::const_iterator aIter = aColumnMatching.begin();
+                    std::map<sal_Int32,sal_Int32>::const_iterator aEnd  = aColumnMatching.end();
                     for (;aIter != aEnd ; ++aIter)
                     {
                         sValue = xRow->getString(aIter->first);

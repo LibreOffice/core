@@ -513,7 +513,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const Refe
             nIndex = aRet.indexOf( aWildcard );
             if( nIndex != -1 )
             {
-                ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
+                std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
                     DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
                 sal_Int32 nSeriesIndex = -1;
                 for( nSeriesIndex=aSeriesVector.size();nSeriesIndex--;)
@@ -735,7 +735,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
 
             // replace data series index
             {
-                ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
+                std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
                     DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
                 sal_Int32 nSeriesIndex = -1;
                 for( nSeriesIndex=aSeriesVector.size();nSeriesIndex--;)

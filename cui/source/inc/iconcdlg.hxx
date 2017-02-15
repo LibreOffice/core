@@ -99,7 +99,7 @@ class IconChoiceDialog : public ModalDialog
 private:
     friend class IconChoicePage;
 
-    ::std::vector< IconChoicePageData* > maPageList;
+    std::vector< IconChoicePageData* > maPageList;
 
     VclPtr<SvtIconChoiceCtrl>       m_pIconCtrl;
 

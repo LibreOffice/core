@@ -122,8 +122,8 @@ private:
     basegfx::B2IRange   maB2IRange;
 };
 
-typedef ::std::vector< ControlDataEntry > ControlDataCollection;
-typedef ::std::set< ControlDataEntry* > ControlDataSet;
+typedef std::vector< ControlDataEntry > ControlDataCollection;
+typedef std::set< ControlDataEntry* > ControlDataSet;
 
 class ScreenshotAnnotationDlg_Impl // : public ModalDialog
 {

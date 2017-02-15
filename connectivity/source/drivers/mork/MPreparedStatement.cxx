@@ -427,7 +427,7 @@ _pParameter,OSQLParseNode* _pNode,const OSQLTable& _xTable)
 
 void OPreparedStatement::describeParameter()
 {
-    ::std::vector< OSQLParseNode*> aParseNodes;
+    std::vector< OSQLParseNode*> aParseNodes;
     scanParameter(m_pParseTree,aParseNodes);
     if(!aParseNodes.empty())
     {
@@ -436,7 +436,7 @@ void OPreparedStatement::describeParameter()
         if(rTabs.size())
         {
             OSQLTable xTable = rTabs.begin()->second;
-            ::std::vector< OSQLParseNode*>::const_iterator aIter =
+            std::vector< OSQLParseNode*>::const_iterator aIter =
 aParseNodes.begin();
             for (;aIter != aParseNodes.end();++aIter )
             {
@@ -447,7 +447,7 @@ aParseNodes.begin();
 }
 
 
-void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
+void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,std::vector< OSQLParseNode*>& _rParaNodes)
 {
     OSL_ENSURE(pParseNode != nullptr,"OResultSet: internal error: invalid ParseNode");
 

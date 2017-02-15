@@ -97,7 +97,7 @@ public:
                                                 , bool bSeparateStackingForDifferentSigns
                                                 , double& rfMinimumY, double& rfMaximumY, sal_Int32 nAxisIndex );
 
-    ::std::vector< VDataSeries* >   m_aSeriesVector;
+    std::vector< VDataSeries* >   m_aSeriesVector;
 
 private:
     //cached values
@@ -113,7 +113,7 @@ private:
     mutable bool        m_bMaxPointCountDirty;
     mutable sal_Int32   m_nMaxPointCount;
     typedef std::map< sal_Int32, CachedYValues > tCachedYValuesPerAxisIndexMap;
-    mutable ::std::vector< tCachedYValuesPerAxisIndexMap >   m_aListOfCachedYValues;
+    mutable std::vector< tCachedYValuesPerAxisIndexMap >   m_aListOfCachedYValues;
 };
 
 class VSeriesPlotter : public PlotterBase, public MinimumAndMaximumSupplier, public LegendEntryProvider
@@ -220,7 +220,7 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& xContext
                 );
 
-    ::std::vector< VDataSeries* > getAllSeries();
+    std::vector< VDataSeries* > getAllSeries();
 
     // This method creates a series plotter of the requested type; e.g. : return new PieChart ....
     static VSeriesPlotter* createSeriesPlotter( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
@@ -394,7 +394,7 @@ protected:
     css::uno::Reference< css::chart2::XChartType >    m_xChartTypeModel;
     css::uno::Reference< css::beans::XPropertySet >   m_xChartTypeModelProps;
 
-    ::std::vector< ::std::vector< VDataSeriesGroup > >  m_aZSlots;
+    std::vector< std::vector< VDataSeriesGroup > >  m_aZSlots;
 
     bool                                m_bCategoryXAxis;//true->xvalues are indices (this would not be necessary if series for category chart wouldn't have x-values)
     long m_nTimeResolution;

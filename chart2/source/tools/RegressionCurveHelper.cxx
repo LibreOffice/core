@@ -407,7 +407,7 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
         {
             uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
                 xRegCnt->getRegressionCurves());
-            ::std::vector< uno::Reference< chart2::XRegressionCurve > > aCurvesToDelete;
+            std::vector< uno::Reference< chart2::XRegressionCurve > > aCurvesToDelete;
             for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
             {
                 if( ! isMeanValueLine( aCurves[i] ))
@@ -416,7 +416,7 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
                 }
             }
 
-            for( ::std::vector< uno::Reference< chart2::XRegressionCurve > >::const_iterator aIt = aCurvesToDelete.begin();
+            for( std::vector< uno::Reference< chart2::XRegressionCurve > >::const_iterator aIt = aCurvesToDelete.begin();
                      aIt != aCurvesToDelete.end(); ++aIt )
             {
                 xRegCnt->removeRegressionCurve( *aIt );

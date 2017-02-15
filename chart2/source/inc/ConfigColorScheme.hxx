@@ -65,7 +65,7 @@ private:
 
     // member variables
     css::uno::Reference< css::uno::XComponentContext >    m_xContext;
-    ::std::unique_ptr< impl::ChartConfigItem >            m_apChartConfigItem;
+    std::unique_ptr< impl::ChartConfigItem >            m_apChartConfigItem;
     mutable css::uno::Sequence< sal_Int64 >               m_aColorSequence;
     mutable sal_Int32                                     m_nNumberOfColors;
     bool                                                  m_bNeedsUpdate;

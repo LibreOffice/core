@@ -60,7 +60,7 @@ namespace connectivity
             FieldSort() : nField(0), bAscending( true ) { }
             FieldSort( const sal_Int32 _nField, const bool _bAscending ) : nField( _nField ), bAscending( _bAscending ) { }
         };
-        typedef ::std::vector< FieldSort >  SortDescriptor;
+        typedef std::vector< FieldSort >  SortDescriptor;
 
         enum QueryFilterType
         {

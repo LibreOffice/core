@@ -38,7 +38,7 @@ using namespace ::com::sun::star::lang;
 
 OIndexColumns::OIndexColumns(   OIndexHelper* _pIndex,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector)
+                        const std::vector< OUString> &_rVector)
             : connectivity::sdbcx::OCollection(*_pIndex,true,_rMutex,_rVector)
             ,m_pIndex(_pIndex)
 {

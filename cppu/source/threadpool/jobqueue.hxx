@@ -38,7 +38,7 @@ namespace cppu_threadpool
         RequestFun * doRequest;
     };
 
-    typedef ::std::list < struct Job > JobList;
+    typedef std::list < struct Job > JobList;
 
     class DisposedCallerAdmin;
     typedef std::shared_ptr<DisposedCallerAdmin> DisposedCallerAdminHolder;

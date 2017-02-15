@@ -58,7 +58,7 @@ namespace connectivity
 {
     struct OSQLParseTreeIteratorImpl
     {
-        ::std::vector< TNodePair >      m_aJoinConditions;
+        std::vector< TNodePair >      m_aJoinConditions;
         Reference< XConnection >        m_xConnection;
         Reference< XDatabaseMetaData >  m_xDatabaseMetaData;
         Reference< XNameAccess >        m_xTableContainer;
@@ -342,8 +342,8 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
     } while ( false );
 
     // copy the parameters of the sub query to our own parameter array
-    ::std::copy( pSubQueryParameterColumns->get().begin(), pSubQueryParameterColumns->get().end(),
-        ::std::insert_iterator< OSQLColumns::Vector >( m_aParameters->get(), m_aParameters->get().end() ) );
+    std::copy( pSubQueryParameterColumns->get().begin(), pSubQueryParameterColumns->get().end(),
+        std::insert_iterator< OSQLColumns::Vector >( m_aParameters->get(), m_aParameters->get().end() ) );
 }
 
 
@@ -488,7 +488,7 @@ void OSQLParseTreeIterator::impl_fillJoinConditions(const OSQLParseNode* i_pJoin
     }
 }
 
-::std::vector< TNodePair >& OSQLParseTreeIterator::getJoinConditions() const
+std::vector< TNodePair >& OSQLParseTreeIterator::getJoinConditions() const
 {
     return m_pImpl->m_aJoinConditions;
 }

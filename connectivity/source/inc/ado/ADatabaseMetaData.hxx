@@ -42,7 +42,7 @@ namespace connectivity
                 bool            fSupported;
             };
 
-            ::std::map<sal_uInt32,LiteralInfo>  m_aLiteralInfo;
+            std::map<sal_uInt32,LiteralInfo>  m_aLiteralInfo;
             WpADOConnection*                    m_pADOConnection;
             OConnection*                        m_pConnection;
 

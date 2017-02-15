@@ -117,7 +117,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUStr
 {
     if ( acceptsURL(url) )
     {
-        ::std::vector< DriverPropertyInfo > aDriverInfo;
+        std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< OUString > aBooleanValues(2);
         aBooleanValues[0] = "false";

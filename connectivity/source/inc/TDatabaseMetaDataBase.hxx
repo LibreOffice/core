@@ -40,21 +40,21 @@ namespace connectivity
             ::connectivity::ODatabaseMetaDataResultSet::ORows m_aTypeInfoRows;
 
             // cached database information
-            ::std::pair<bool,bool>              m_isCatalogAtStart;
-            ::std::pair<bool,OUString>          m_sCatalogSeparator;
-            ::std::pair<bool,OUString>          m_sIdentifierQuoteString;
-            ::std::pair<bool,bool>              m_supportsCatalogsInTableDefinitions;
-            ::std::pair<bool,bool>              m_supportsSchemasInTableDefinitions;
-            ::std::pair<bool,bool>              m_supportsCatalogsInDataManipulation;
-            ::std::pair<bool,bool>              m_supportsSchemasInDataManipulation;
-            ::std::pair<bool,bool>              m_supportsMixedCaseQuotedIdentifiers;
-            ::std::pair<bool,bool>              m_supportsAlterTableWithAddColumn;
-            ::std::pair<bool,bool>              m_supportsAlterTableWithDropColumn;
-            ::std::pair<bool,sal_Int32>         m_MaxStatements;
-            ::std::pair<bool,sal_Int32>         m_MaxTablesInSelect;
-            ::std::pair<bool,bool>              m_storesMixedCaseQuotedIdentifiers;
+            std::pair<bool,bool>              m_isCatalogAtStart;
+            std::pair<bool,OUString>          m_sCatalogSeparator;
+            std::pair<bool,OUString>          m_sIdentifierQuoteString;
+            std::pair<bool,bool>              m_supportsCatalogsInTableDefinitions;
+            std::pair<bool,bool>              m_supportsSchemasInTableDefinitions;
+            std::pair<bool,bool>              m_supportsCatalogsInDataManipulation;
+            std::pair<bool,bool>              m_supportsSchemasInDataManipulation;
+            std::pair<bool,bool>              m_supportsMixedCaseQuotedIdentifiers;
+            std::pair<bool,bool>              m_supportsAlterTableWithAddColumn;
+            std::pair<bool,bool>              m_supportsAlterTableWithDropColumn;
+            std::pair<bool,sal_Int32>         m_MaxStatements;
+            std::pair<bool,sal_Int32>         m_MaxTablesInSelect;
+            std::pair<bool,bool>              m_storesMixedCaseQuotedIdentifiers;
 
-            template <typename T> T callImplMethod(::std::pair<bool,T>& _rCache,const ::std::mem_fun_t<T,ODatabaseMetaDataBase>& _pImplMethod)
+            template <typename T> T callImplMethod(std::pair<bool,T>& _rCache,const std::mem_fun_t<T,ODatabaseMetaDataBase>& _pImplMethod)
             {
                 ::osl::MutexGuard aGuard( m_aMutex );
                 if ( !_rCache.first )

@@ -497,7 +497,7 @@ private:
     Reference<XSingleComponentFactory > xModuleFactory;
     Reference<XSingleServiceFactory >   xModuleFactoryDepr;
     Reference< beans::XPropertySetInfo > m_xInfo;
-    ::std::unique_ptr< IPropertyArrayHelper > m_property_array_helper;
+    std::unique_ptr< IPropertyArrayHelper > m_property_array_helper;
 protected:
     using OPropertySetHelper::getTypes;
 };

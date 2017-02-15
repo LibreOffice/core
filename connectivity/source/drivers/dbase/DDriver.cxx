@@ -78,7 +78,7 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
 {
     if ( acceptsURL(url) )
     {
-        ::std::vector< DriverPropertyInfo > aDriverInfo;
+        std::vector< DriverPropertyInfo > aDriverInfo;
 
         Sequence< OUString > aBoolean(2);
         aBoolean[0] = "0";

@@ -56,7 +56,7 @@ public:
         , const OUString& rCID
                 );
 
-    virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
+    virtual void setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix );
 

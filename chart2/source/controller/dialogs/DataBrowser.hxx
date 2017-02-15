@@ -147,7 +147,7 @@ private:
     css::uno::Reference< css::chart2::XChartDocument > m_xChartDoc;
     std::unique_ptr< DataBrowserModel > m_apDataBrowserModel;
 
-    typedef ::std::vector< std::shared_ptr< impl::SeriesHeader > > tSeriesHeaderContainer;
+    typedef std::vector< std::shared_ptr< impl::SeriesHeader > > tSeriesHeaderContainer;
     tSeriesHeaderContainer m_aSeriesHeaders;
 
     std::shared_ptr< NumberFormatterWrapper >  m_spNumberFormatterWrapper;
