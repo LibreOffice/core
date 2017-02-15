@@ -594,24 +594,19 @@ void FormulaParserImpl::initializeImport( const ScAddress& rBaseAddr, FormulaTyp
     mbRelativeAsOffset = mb2dRefsAs3dRefs = mbSpecialTokens = false;
     switch( eType )
     {
-        case FORMULATYPE_CELL:
+        case FormulaType::Cell:
             mbSpecialTokens = true;
         break;
-        case FORMULATYPE_ARRAY:
+        case FormulaType::Array:
         break;
-        case FORMULATYPE_SHAREDFORMULA:
+        case FormulaType::SharedFormula:
             mbRelativeAsOffset = true;
         break;
-        case FORMULATYPE_CONDFORMAT:
+        case FormulaType::CondFormat:
             mbRelativeAsOffset = true;
         break;
-        case FORMULATYPE_VALIDATION:
+        case FormulaType::Validation:
             mbRelativeAsOffset = true;
-        break;
-        case FORMULATYPE_DEFINEDNAME:
-            mbRelativeAsOffset = true;
-            // BIFF2-BIFF4: convert 2D references to absolute 3D references
-            mb2dRefsAs3dRefs = false;
         break;
     }
 

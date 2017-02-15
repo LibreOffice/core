@@ -501,7 +501,7 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
     if( rStrm.getRemaining() >= 8 )
     {
         ScAddress aBaseAddr = mrCondFormat.getRanges().GetTopLeftCorner();
-        ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
+        ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FormulaType::CondFormat, rStrm );
         maModel.maFormulas.push_back( aTokens );
 
         // second formula
@@ -509,14 +509,14 @@ void CondFormatRule::importCfRule( SequenceInputStream& rStrm )
         OSL_ENSURE( (nFmla2Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
         if( rStrm.getRemaining() >= 8 )
         {
-            aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
+            aTokens = getFormulaParser().importFormula( aBaseAddr, FormulaType::CondFormat, rStrm );
             maModel.maFormulas.push_back( aTokens );
 
             // third formula
             OSL_ENSURE( (nFmla3Size > 0) == (rStrm.getRemaining() >= 8), "CondFormatRule::importCfRule - formula size mismatch" );
             if( rStrm.getRemaining() >= 8 )
             {
-                aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_CONDFORMAT, rStrm );
+                aTokens = getFormulaParser().importFormula( aBaseAddr, FormulaType::CondFormat, rStrm );
                 maModel.maFormulas.push_back( aTokens );
             }
         }

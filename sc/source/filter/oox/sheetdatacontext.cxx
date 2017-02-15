@@ -425,7 +425,7 @@ bool SheetDataContext::readCellHeader( SequenceInputStream& rStrm, CellType eCel
 ApiTokenSequence SheetDataContext::readCellFormula( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );
-    return mxFormulaParser->importFormula( maCellData.maCellAddr, FORMULATYPE_CELL, rStrm );
+    return mxFormulaParser->importFormula( maCellData.maCellAddr, FormulaType::Cell, rStrm );
 }
 
 bool SheetDataContext::readFormulaRef( SequenceInputStream& rStrm )
@@ -535,7 +535,7 @@ void SheetDataContext::importArray( SequenceInputStream& rStrm )
     if( readFormulaRef( rStrm ) && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
     {
         rStrm.skip( 1 );
-        ApiTokenSequence aTokens = mxFormulaParser->importFormula( maCellData.maCellAddr, FORMULATYPE_ARRAY, rStrm );
+        ApiTokenSequence aTokens = mxFormulaParser->importFormula( maCellData.maCellAddr, FormulaType::Array, rStrm );
         mrSheetData.createArrayFormula( maFmlaData.maFormulaRef, aTokens );
     }
 }
@@ -562,7 +562,7 @@ void SheetDataContext::importSharedFmla( SequenceInputStream& rStrm )
 {
     if( readFormulaRef( rStrm ) && maFmlaData.isValidSharedRef( maCellData.maCellAddr ) )
     {
-        ApiTokenSequence aTokens = mxFormulaParser->importFormula( maCellData.maCellAddr, FORMULATYPE_SHAREDFORMULA, rStrm );
+        ApiTokenSequence aTokens = mxFormulaParser->importFormula( maCellData.maCellAddr, FormulaType::SharedFormula, rStrm );
         mrSheetData.createSharedFormula( maCellData.maCellAddr, aTokens );
     }
 }

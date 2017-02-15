@@ -210,14 +210,13 @@ const sal_uInt16 BIFF_FUNC_WEEKNUM              = 465;      /// Function identif
 // Formula type ===============================================================
 
 /** Enumerates all possible types of a formula. */
-enum FormulaType
+enum class FormulaType
 {
-    FORMULATYPE_CELL,           /// Simple cell formula, or reference to a shared formula name.
-    FORMULATYPE_ARRAY,          /// Array (matrix) formula.
-    FORMULATYPE_SHAREDFORMULA,  /// Shared formula definition.
-    FORMULATYPE_CONDFORMAT,     /// Condition of a conditional format rule.
-    FORMULATYPE_VALIDATION,     /// Condition of a data validation.
-    FORMULATYPE_DEFINEDNAME     /// Definition of a defined name.
+    Cell,           /// Simple cell formula, or reference to a shared formula name.
+    Array,          /// Array (matrix) formula.
+    SharedFormula,  /// Shared formula definition.
+    CondFormat,     /// Condition of a conditional format rule.
+    Validation      /// Condition of a data validation.
 };
 
 // Reference helpers ==========================================================

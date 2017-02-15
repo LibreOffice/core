@@ -138,8 +138,8 @@ void DataValidationsContextBase::importDataValidation( SequenceInputStream& rStr
     // condition formula(s)
     FormulaParser& rParser = rTarget.getFormulaParser();
     ScAddress aBaseAddr = aModel.maRanges.GetTopLeftCorner();
-    aModel.maTokens1 = rParser.importFormula(aBaseAddr, FORMULATYPE_VALIDATION, rStrm);
-    aModel.maTokens2 = rParser.importFormula(aBaseAddr, FORMULATYPE_VALIDATION, rStrm);
+    aModel.maTokens1 = rParser.importFormula(aBaseAddr, FormulaType::Validation, rStrm);
+    aModel.maTokens2 = rParser.importFormula(aBaseAddr, FormulaType::Validation, rStrm);
     // process string list of a list validation (convert to list of string tokens)
     if ((aModel.mnType == XML_list) && getFlag(nFlags, BIFF_DATAVAL_STRINGLIST))
         rParser.convertStringToStringList(aModel.maTokens1, ',', true);
