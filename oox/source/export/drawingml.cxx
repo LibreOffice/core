@@ -1912,6 +1912,17 @@ void DrawingML::WriteLinespacing( LineSpacing& rSpacing )
     }
 }
 
+#if defined(ANDROID)
+namespace std
+{
+template<typename T>
+T lround(T x)
+{
+    return ::lround(x);
+}
+}
+#endif
+
 void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rParagraph )
 {
     Reference< XPropertySet > rXPropSet( rParagraph, UNO_QUERY );
