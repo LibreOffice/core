@@ -44,50 +44,42 @@ enum class FormulaError : sal_uInt16;
 namespace formula
 {
 
-enum StackVarEnum
+enum class StackVar : sal_uInt8 // save memory since compilers tend to int an enum
 {
-    svByte,
-    svDouble,
-    svString,
-    svSingleRef,
-    svDoubleRef,
-    svMatrix,
-    svIndex,
-    svJump,
-    svExternal,                         // Byte + String
-    svFAP,                              // FormulaAutoPilot only, ever exported
-    svJumpMatrix,                       // 2003-07-02
-    svRefList,                          // ocUnion result
-    svEmptyCell,                        // Result is an empty cell, e.g. in LOOKUP()
+    Byte,
+    Double,
+    String,
+    SingleRef,
+    DoubleRef,
+    Matrix,
+    Index,
+    Jump,
+    External,                         // Byte + String
+    FAP,                              // FormulaAutoPilot only, ever exported
+    JumpMatrix,                       // 2003-07-02
+    RefList,                          // ocUnion result
+    EmptyCell,                        // Result is an empty cell, e.g. in LOOKUP()
 
-    svMatrixCell,                       // Result is a matrix with bells and
+    MatrixCell,                       // Result is a matrix with bells and
                                         // whistles as needed for _the_ matrix
                                         // formula result.
 
-    svHybridCell,                       // A temporary condition of a formula
+    HybridCell,                       // A temporary condition of a formula
                                         // cell during import, having a double
                                         // and/or string result and a formula
                                         // string to be compiled.
 
-    svExternalSingleRef,
-    svExternalDoubleRef,
-    svExternalName,
-    svSingleVectorRef,
-    svDoubleVectorRef,
-    svSubroutine,                       // A token with a subroutine token array.
-    svError,                            // error token
-    svMissing = 0x70,                   // 0 or ""
-    svSep,                              // separator, ocSep, ocOpen, ocClose
-    svUnknown                           // unknown StackType
+    ExternalSingleRef,
+    ExternalDoubleRef,
+    ExternalName,
+    SingleVectorRef,
+    DoubleVectorRef,
+    Subroutine,                       // A token with a subroutine token array.
+    Error,                            // error token
+    Missing = 0x70,                   // 0 or ""
+    Sep,                              // separator, ocSep, ocOpen, ocClose
+    Unknown                           // unknown StackType
 };
-
-#ifndef DBG_UTIL
-// save memory since compilers tend to int an enum
-typedef sal_uInt8 StackVar;
-#else
-// have enum names in debugger
-typedef StackVarEnum StackVar;
-#endif
 
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 {
@@ -215,13 +207,13 @@ protected:
                                     bIsInForceArray( b ) {}
 public:
                                 FormulaByteToken( OpCode e, sal_uInt8 n, bool b ) :
-                                    FormulaToken( svByte,e ), nByte( n ),
+                                    FormulaToken( StackVar::Byte,e ), nByte( n ),
                                     bIsInForceArray( b ) {}
                                 FormulaByteToken( OpCode e, sal_uInt8 n ) :
-                                    FormulaToken( svByte,e ), nByte( n ),
+                                    FormulaToken( StackVar::Byte,e ), nByte( n ),
                                     bIsInForceArray( false ) {}
                                 FormulaByteToken( OpCode e ) :
-                                    FormulaToken( svByte,e ), nByte( 0 ),
+                                    FormulaToken( StackVar::Byte,e ), nByte( 0 ),
                                     bIsInForceArray( false ) {}
                                 FormulaByteToken( const FormulaByteToken& r ) :
                                     FormulaToken( r ), nByte( r.nByte ),
@@ -246,7 +238,7 @@ private:
             FormulaTokenRef     pOrigToken;
 public:
                                 FormulaFAPToken( OpCode e, sal_uInt8 n, FormulaToken* p ) :
-                                    FormulaByteToken( e, n, svFAP, false ),
+                                    FormulaByteToken( e, n, StackVar::FAP, false ),
                                     pOrigToken( p ) {}
                                 FormulaFAPToken( const FormulaFAPToken& r ) :
                                     FormulaByteToken( r ), pOrigToken( r.pOrigToken ) {}
@@ -262,7 +254,7 @@ private:
             double              fDouble;
 public:
                                 FormulaDoubleToken( double f ) :
-                                    FormulaToken( svDouble ), fDouble( f ) {}
+                                    FormulaToken( StackVar::Double ), fDouble( f ) {}
                                 FormulaDoubleToken( const FormulaDoubleToken& r ) :
                                     FormulaToken( r ), fDouble( r.fDouble ) {}
 
@@ -334,7 +326,7 @@ private:
             sal_Int16           mnSheet;
 public:
                                 FormulaIndexToken( OpCode e, sal_uInt16 n, sal_Int16 nSheet = -1 ) :
-                                    FormulaToken(  svIndex, e ), nIndex( n ), mnSheet( nSheet ) {}
+                                    FormulaToken(  StackVar::Index, e ), nIndex( n ), mnSheet( nSheet ) {}
                                 FormulaIndexToken( const FormulaIndexToken& r ) :
                                     FormulaToken( r ), nIndex( r.nIndex ), mnSheet( r.mnSheet ) {}
 
@@ -354,10 +346,10 @@ private:
             sal_uInt8           nByte;
 public:
                                 FormulaExternalToken( OpCode e, sal_uInt8 n, const OUString& r ) :
-                                    FormulaToken( svExternal, e ), aExternal( r ),
+                                    FormulaToken( StackVar::External, e ), aExternal( r ),
                                     nByte( n ) {}
                                 FormulaExternalToken( OpCode e, const OUString& r ) :
-                                    FormulaToken(svExternal, e ), aExternal( r ),
+                                    FormulaToken(StackVar::External, e ), aExternal( r ),
                                     nByte( 0 ) {}
                                 FormulaExternalToken( const FormulaExternalToken& r ) :
                                     FormulaToken( r ), aExternal( r.aExternal ),
@@ -375,7 +367,7 @@ class FORMULA_DLLPUBLIC FormulaMissingToken : public FormulaToken
 {
 public:
                                 FormulaMissingToken() :
-                                    FormulaToken( svMissing,ocMissing ) {}
+                                    FormulaToken( StackVar::Missing,ocMissing ) {}
                                 FormulaMissingToken( const FormulaMissingToken& r ) :
                                     FormulaToken( r ) {}
 
@@ -393,7 +385,7 @@ private:
             bool                bIsInForceArray;
 public:
                                 FormulaJumpToken( OpCode e, short* p ) :
-                                    FormulaToken( formula::svJump , e),
+                                    FormulaToken( formula::StackVar::Jump , e),
                                     bIsInForceArray( false)
                                 {
                                     pJump.reset( new short[ p[0] + 1 ] );
@@ -419,7 +411,7 @@ class FORMULA_DLLPUBLIC FormulaUnknownToken : public FormulaToken
 {
 public:
                                 FormulaUnknownToken( OpCode e ) :
-                                    FormulaToken( svUnknown, e ) {}
+                                    FormulaToken( StackVar::Unknown, e ) {}
                                 FormulaUnknownToken( const FormulaUnknownToken& r ) :
                                     FormulaToken( r ) {}
 
@@ -433,7 +425,7 @@ class FORMULA_DLLPUBLIC FormulaErrorToken : public FormulaToken
          FormulaError          nError;
 public:
                                 FormulaErrorToken( FormulaError nErr ) :
-                                    FormulaToken( svError ), nError( nErr) {}
+                                    FormulaToken( StackVar::Error ), nError( nErr) {}
                                 FormulaErrorToken( const FormulaErrorToken& r ) :
                                     FormulaToken( r ), nError( r.nError) {}
 

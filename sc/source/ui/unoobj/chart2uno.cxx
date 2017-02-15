@@ -311,7 +311,7 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                         ScRange aRange;
                         bool bExternal = false;
                         StackVar eType = pToken->GetType();
-                        if( eType==svExternal || eType==svExternalSingleRef || eType==svExternalDoubleRef || eType==svExternalName )
+                        if( eType==StackVar::External || eType==StackVar::ExternalSingleRef || eType==StackVar::ExternalDoubleRef || eType==StackVar::ExternalName )
                             bExternal = true;//lllll todo correct?
                         ScTokenRef pSharedToken(pToken->Clone());
                         ScRefTokenHelper::getRangeFromToken(aRange, pSharedToken, ScAddress(), bExternal);
@@ -1112,7 +1112,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
     ScTokenRef pToken = *itr;
     switch (pToken->GetType())
     {
-        case svSingleRef:
+        case StackVar::SingleRef:
         {
             const ScSingleRefData& rData = *pToken->GetSingleRef();
             nMinCol = rData.Col();
@@ -1122,7 +1122,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             nTab = rData.Tab();
         }
         break;
-        case svDoubleRef:
+        case StackVar::DoubleRef:
         {
             const ScComplexRefData& rData = *pToken->GetDoubleRef();
             nMinCol = min(rData.Ref1.Col(), rData.Ref2.Col());
@@ -1132,7 +1132,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             nTab = rData.Ref1.Tab();
         }
         break;
-        case svExternalSingleRef:
+        case StackVar::ExternalSingleRef:
         {
             const ScSingleRefData& rData = *pToken->GetSingleRef();
             nMinCol = rData.Col();
@@ -1145,7 +1145,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
             bExternal = true;
         }
         break;
-        case svExternalDoubleRef:
+        case StackVar::ExternalDoubleRef:
         {
             const ScComplexRefData& rData = *pToken->GetDoubleRef();
             nMinCol = min(rData.Ref1.Col(), rData.Ref2.Col());
@@ -1170,7 +1170,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         pToken = *itr;
         switch (pToken->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 const ScSingleRefData& rData = *pToken->GetSingleRef();
 
@@ -1182,7 +1182,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
                     return false;
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 const ScComplexRefData& rData = *pToken->GetDoubleRef();
 
@@ -1200,7 +1200,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
                     return false;
             }
             break;
-            case svExternalSingleRef:
+            case StackVar::ExternalSingleRef:
             {
                 if (!bExternal)
                     return false;
@@ -1216,7 +1216,7 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
                 nMaxRow = max(nMaxRow, rData.Row());
             }
             break;
-            case svExternalDoubleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 if (!bExternal)
                     return false;
@@ -1261,8 +1261,8 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
         pToken = *itr;
         switch (pToken->GetType())
         {
-            case svSingleRef:
-            case svExternalSingleRef:
+            case StackVar::SingleRef:
+            case StackVar::ExternalSingleRef:
             {
                 const ScSingleRefData& rData = *pToken->GetSingleRef();
                 if (rData.Col() == nMinCol && rData.Row() == nMinRow)
@@ -1279,8 +1279,8 @@ bool lcl_addUpperLeftCornerIfMissing(vector<ScTokenRef>& rRefTokens,
                     bDiagonal = true;
             }
             break;
-            case svDoubleRef:
-            case svExternalDoubleRef:
+            case StackVar::DoubleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 const ScComplexRefData& rData = *pToken->GetDoubleRef();
                 const ScSingleRefData& r1 = rData.Ref1;
@@ -1371,7 +1371,7 @@ public:
 
         // Don't assume an ScDoubleRefToken if it isn't. It can be at least an
         // ScSingleRefToken, then there isn't anything to shrink.
-        if (rRef->GetType() != svDoubleRef)
+        if (rRef->GetType() != StackVar::DoubleRef)
             return;
 
         ScComplexRefData& rData = *rRef->GetDoubleRef();
@@ -1482,7 +1482,7 @@ ScChart2DataProvider::createDataSource(
         for(vector<ScTokenRef>::iterator itr = aRefTokens.begin(),
                 itrEnd = aRefTokens.end(); itr != itrEnd; ++itr)
         {
-            if ((*itr)->GetType() != svDoubleRef)
+            if ((*itr)->GetType() != StackVar::DoubleRef)
                 continue;
 
             ScComplexRefData& rData = *(*itr)->GetDoubleRef();
@@ -1688,7 +1688,7 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
     {
         ScTokenRef aRefToken = *itr;
         StackVar eVar = aRefToken->GetType();
-        if (eVar == svDoubleRef || eVar == svExternalDoubleRef)
+        if (eVar == StackVar::DoubleRef || eVar == StackVar::ExternalDoubleRef)
         {
             const ScComplexRefData& r = *aRefToken->GetDoubleRef();
             if (r.Ref1.Tab() == r.Ref2.Tab())
@@ -1709,7 +1709,7 @@ void RangeAnalyzer::initRangeAnalyzer( const vector<ScTokenRef>& rTokens )
             else
                 mbAmbiguous=true;
         }
-        else if (eVar == svSingleRef || eVar == svExternalSingleRef)
+        else if (eVar == StackVar::SingleRef || eVar == StackVar::ExternalSingleRef)
         {
             const ScSingleRefData& r = *aRefToken->GetSingleRef();
             mnColumnCount = std::max<SCCOL>( mnColumnCount, 1);
@@ -2116,7 +2116,7 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossibl
     {
         switch (p->GetType())
         {
-            case svSep:
+            case StackVar::Sep:
             {
                 switch (p->GetOpCode())
                 {
@@ -2138,10 +2138,10 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossibl
                 }
             }
             break;
-            case svSingleRef:
-            case svDoubleRef:
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::SingleRef:
+            case StackVar::DoubleRef:
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             break;
             default:
                 return false;
@@ -2174,7 +2174,7 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
     {
         switch (p->GetType())
         {
-            case svSep:
+            case StackVar::Sep:
             {
                 switch (p->GetOpCode())
                 {
@@ -2196,11 +2196,11 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
                 }
             }
             break;
-            case svString:
-            case svSingleRef:
-            case svDoubleRef:
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::String:
+            case StackVar::SingleRef:
+            case StackVar::DoubleRef:
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScTokenRef pNew(p->Clone());
                 aRefTokens.push_back(pNew);
@@ -2638,7 +2638,7 @@ sal_Int32 ScChart2DataSequence::FillCacheFromExternalRef(const ScTokenRef& pToke
         // we introduce a new token type to store multi-table range
         // data.
 
-        if (p->GetType() != svMatrix)
+        if (p->GetType() != StackVar::Matrix)
         {
             OSL_FAIL("Cached array is not a matrix token.");
             continue;
@@ -3013,7 +3013,7 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
     }
     else if ( m_aTokens.front() )
     {
-        if( m_aTokens.front()->GetType() == svString )
+        if( m_aTokens.front()->GetType() == StackVar::String )
         {
             aSeq = uno::Sequence<OUString>(1);
             aSeq[0] = m_aTokens.front()->GetString().getString();
@@ -3390,7 +3390,7 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rProper
         if (m_aTokens.size() == 1)
         {
             const formula::FormulaToken& rToken = *m_aTokens[0];
-            bHasStringLabel = rToken.GetType() == formula::svString;
+            bHasStringLabel = rToken.GetType() == formula::StackVar::String;
         }
         aRet <<= bHasStringLabel;
     }
@@ -3452,7 +3452,7 @@ sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
     for(vector<ScTokenRef>::iterator itr = m_aTokens.begin(),
             itrEnd = m_aTokens.end(); itr != itrEnd; ++itr)
     {
-        if ((*itr)->GetType() != svDoubleRef)
+        if ((*itr)->GetType() != StackVar::DoubleRef)
             continue;
 
         ScComplexRefData& rData = *(*itr)->GetDoubleRef();
@@ -3486,7 +3486,7 @@ sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
     for(vector<ScTokenRef>::iterator itr = m_aTokens.begin(),
             itrEnd = m_aTokens.end(); itr != itrEnd; ++itr)
     {
-        if ((*itr)->GetType() != svDoubleRef)
+        if ((*itr)->GetType() != StackVar::DoubleRef)
             continue;
 
         ScComplexRefData& rData = *(*itr)->GetDoubleRef();

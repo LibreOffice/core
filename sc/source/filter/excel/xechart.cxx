@@ -867,9 +867,9 @@ void lclAddDoubleRefData(
     if( orArray.GetLen() > 0 )
         orArray.AddOpCode( ocUnion );
 
-    OSL_ENSURE( (rToken.GetType() == ::formula::svDoubleRef) || (rToken.GetType() == ::formula::svExternalDoubleRef),
+    OSL_ENSURE( (rToken.GetType() == ::formula::StackVar::DoubleRef) || (rToken.GetType() == ::formula::StackVar::ExternalDoubleRef),
         "lclAddDoubleRefData - double reference token expected");
-    if( rToken.GetType() == ::formula::svExternalDoubleRef )
+    if( rToken.GetType() == ::formula::StackVar::ExternalDoubleRef )
         orArray.AddExternalDoubleReference(
             rToken.GetIndex(), rToken.GetString(), aComplexRef);
     else
@@ -910,8 +910,8 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > c
     {
         switch( pToken->GetType() )
         {
-            case ::formula::svSingleRef:
-            case ::formula::svExternalSingleRef:
+            case ::formula::StackVar::SingleRef:
+            case ::formula::StackVar::ExternalSingleRef:
                 // for a single ref token, just add it to the new token array as is
                 if( aArray.GetLen() > 0 )
                     aArray.AddOpCode( ocUnion );
@@ -919,8 +919,8 @@ sal_uInt16 XclExpChSourceLink::ConvertDataSequence( Reference< XDataSequence > c
                 ++nValueCount;
             break;
 
-            case ::formula::svDoubleRef:
-            case ::formula::svExternalDoubleRef:
+            case ::formula::StackVar::DoubleRef:
+            case ::formula::StackVar::ExternalDoubleRef:
             {
                 // split 3-dimensional ranges into single sheets
                 const ScComplexRefData& rComplexRef = *pToken->GetDoubleRef();

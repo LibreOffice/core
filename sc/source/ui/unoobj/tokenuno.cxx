@@ -376,32 +376,32 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
             // eOpCode may be changed in the following switch/case
             switch ( rToken.GetType() )
             {
-                case svByte:
+                case StackVar::Byte:
                     // Only the count of spaces is stored as "long". Parameter count is ignored.
                     if ( eOpCode == ocSpaces )
                         rAPI.Data <<= (sal_Int32) rToken.GetByte();
                     else
                         rAPI.Data.clear();      // no data
                     break;
-                case formula::svDouble:
+                case formula::StackVar::Double:
                     rAPI.Data <<= rToken.GetDouble();
                     break;
-                case formula::svString:
+                case formula::StackVar::String:
                     rAPI.Data <<= rToken.GetString().getString();
                     break;
-                case svExternal:
+                case StackVar::External:
                     // Function name is stored as string.
                     // Byte (parameter count) is ignored.
                     rAPI.Data <<= OUString( rToken.GetExternal() );
                     break;
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         sheet::SingleReference aSingleRef;
                         lcl_SingleRefToApi( aSingleRef, *rToken.GetSingleRef() );
                         rAPI.Data <<= aSingleRef;
                     }
                     break;
-                case formula::svDoubleRef:
+                case formula::StackVar::DoubleRef:
                     {
                         sheet::ComplexReference aCompRef;
                         lcl_SingleRefToApi( aCompRef.Reference1, *rToken.GetSingleRef() );
@@ -409,7 +409,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                         rAPI.Data <<= aCompRef;
                     }
                     break;
-                case svIndex:
+                case StackVar::Index:
                     {
                         sheet::NameToken aNameToken;
                         aNameToken.Index = static_cast<sal_Int32>( rToken.GetIndex() );
@@ -417,11 +417,11 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                         rAPI.Data <<= aNameToken;
                     }
                     break;
-                case svMatrix:
+                case StackVar::Matrix:
                     if (!ScRangeToSequence::FillMixedArray( rAPI.Data, rToken.GetMatrix(), true))
                         rAPI.Data.clear();
                     break;
-                case svExternalSingleRef:
+                case StackVar::ExternalSingleRef:
                     {
                         sheet::SingleReference aSingleRef;
                         lcl_ExternalRefToApi( aSingleRef, *rToken.GetSingleRef() );
@@ -436,7 +436,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                         eOpCode = ocPush;
                     }
                     break;
-                case svExternalDoubleRef:
+                case StackVar::ExternalDoubleRef:
                     {
                         sheet::ComplexReference aComplRef;
                         lcl_ExternalRefToApi( aComplRef.Reference1, *rToken.GetSingleRef() );
@@ -456,7 +456,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                         eOpCode = ocPush;
                     }
                     break;
-                case svExternalName:
+                case StackVar::ExternalName:
                     {
                         sheet::ExternalReference aExtRef;
                         aExtRef.Index = rToken.GetIndex();
@@ -466,11 +466,11 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     }
                     break;
                 default:
-                    SAL_WARN("sc",  "ScTokenConversion::ConvertToTokenSequence: unhandled token type SvStackVar " << rToken.GetType());
+                    SAL_WARN("sc",  "ScTokenConversion::ConvertToTokenSequence: unhandled token type SvStackVar " << (int)rToken.GetType());
                     SAL_FALLTHROUGH;
-                case svSep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
-                case svJump:    // occurs with ocIf, ocChoose
-                case svMissing: // occurs with ocMissing
+                case StackVar::Sep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
+                case StackVar::Jump:    // occurs with ocIf, ocChoose
+                case StackVar::Missing: // occurs with ocMissing
                     rAPI.Data.clear();      // no data
             }
             rAPI.OpCode = static_cast<sal_Int32>(eOpCode);      //! assuming equal values for the moment

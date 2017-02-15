@@ -54,7 +54,7 @@ void ScSimpleFormulaCalculator::Calculate()
         aInt.AssertFormulaMatrix();
 
     formula::StackVar aIntType = aInt.Interpret();
-    if ( aIntType == formula::svMatrixCell )
+    if ( aIntType == formula::StackVar::MatrixCell )
     {
         ScCompiler aComp(mpDoc, maAddr);
         aComp.SetGrammar(maGram);

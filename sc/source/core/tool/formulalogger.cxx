@@ -199,10 +199,10 @@ void FormulaLogger::GroupScope::addRefMessage(
 
     switch (rToken.GetType())
     {
-        case formula::svDouble:
+        case formula::StackVar::Double:
             aBuf.append("numeric value");
             break;
-        case formula::svString:
+        case formula::StackVar::String:
             aBuf.append("string value");
             break;
         default:

@@ -38,7 +38,7 @@ static bool lcl_ScDetectiveRefIter_SkipRef( formula::FormulaToken* p, const ScAd
     ScAddress aAbs1 = rRef1.toAbs(rPos);
     if (!ValidAddress(aAbs1))
         return true;
-    if ( p->GetType() == svDoubleRef || p->GetType() == svExternalDoubleRef )
+    if ( p->GetType() == StackVar::DoubleRef || p->GetType() == StackVar::ExternalDoubleRef )
     {
         ScSingleRefData& rRef2 = p->GetDoubleRef()->Ref2;
         ScAddress aAbs2 = rRef2.toAbs(rPos);

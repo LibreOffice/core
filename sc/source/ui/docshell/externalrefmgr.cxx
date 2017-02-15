@@ -694,10 +694,10 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                     SCSIZE nC = nCol - nDataCol1, nR = nRow - nDataRow1;
                     switch (pToken->GetType())
                     {
-                        case svDouble:
+                        case StackVar::Double:
                             xMat->PutDouble(pToken->GetDouble(), nC, nR);
                             break;
-                        case svString:
+                        case StackVar::String:
                             xMat->PutString(pToken->GetString(), nC, nR);
                             break;
                         default:
@@ -1811,7 +1811,7 @@ void putCellDataIntoCache(
     const ScExternalRefCache::CellFormat* pFmt)
 {
     // Now, insert the token into cache table but don't cache empty cells.
-    if (pToken->GetType() != formula::svEmptyCell)
+    if (pToken->GetType() != formula::StackVar::EmptyCell)
     {
         sal_uLong nFmtIndex = (pFmt && pFmt->mbIsSet) ? pFmt->mnIndex : 0;
         rRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pToken, nFmtIndex);
@@ -2341,7 +2341,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
         bool bTokenAdded = false;
         switch (pToken->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 const ScSingleRefData& rRef = *pToken->GetSingleRef();
                 OUString aTabName;
@@ -2352,7 +2352,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getRangeNameTokensFromSr
                 bTokenAdded = true;
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 const ScSingleRefData& rRef = *pToken->GetSingleRef();
                 OUString aTabName;

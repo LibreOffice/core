@@ -1041,11 +1041,11 @@ void Test::testFormulaCompilerJumpReordering()
         // RPN tokens should be ordered: B1, ocIf, C1, ocSep, D1, ocClose.
         TokenCheck aCheckRPN[] =
         {
-            { ocPush,  svSingleRef },
+            { ocPush,  StackVar::SingleRef },
             { ocIf,    static_cast<formula::StackVar>(0) },
-            { ocPush,  svDouble    },
+            { ocPush,  StackVar::Double    },
             { ocSep,   static_cast<formula::StackVar>(0) },
-            { ocPush,  svString    },
+            { ocPush,  StackVar::String    },
             { ocClose, static_cast<formula::StackVar>(0) },
         };
 
@@ -1070,9 +1070,9 @@ void Test::testFormulaCompilerJumpReordering()
 
         TokenCheck aCheckRPN2[] =
         {
-            { ocPush,  svSingleRef },
-            { ocPush,  svDouble    },
-            { ocPush,  svString    },
+            { ocPush,  StackVar::SingleRef },
+            { ocPush,  StackVar::Double    },
+            { ocPush,  StackVar::String    },
             { ocIf,    static_cast<formula::StackVar>(0) },
         };
 

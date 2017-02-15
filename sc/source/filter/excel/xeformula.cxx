@@ -59,7 +59,7 @@ struct XclExpScToken
 
     inline explicit     XclExpScToken() : mpScToken( nullptr ), mnSpaces( 0 ) {}
     inline bool         Is() const { return mpScToken != nullptr; }
-    inline StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< StackVar >( svUnknown ); }
+    inline StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : StackVar::Unknown; }
     inline OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : static_cast< OpCode >( ocNone ); }
 };
 
@@ -1140,16 +1140,16 @@ XclExpScToken XclExpFmlaCompImpl::Factor( XclExpScToken aTokData )
 
     switch( aTokData.GetType() )
     {
-        case svUnknown:             mxData->mbOk = false;                   break;
-        case svDouble:              ProcessDouble( aTokData );              break;
-        case svString:              ProcessString( aTokData );              break;
-        case svSingleRef:           ProcessCellRef( aTokData );             break;
-        case svDoubleRef:           ProcessRangeRef( aTokData );            break;
-        case svExternalSingleRef:   ProcessExternalCellRef( aTokData );     break;
-        case svExternalDoubleRef:   ProcessExternalRangeRef( aTokData );    break;
-        case svExternalName:        ProcessExternalName( aTokData );        break;
-        case svMatrix:              ProcessMatrix( aTokData );              break;
-        case svExternal:            ProcessExternal( aTokData );            break;
+        case StackVar::Unknown:             mxData->mbOk = false;                   break;
+        case StackVar::Double:              ProcessDouble( aTokData );              break;
+        case StackVar::String:              ProcessString( aTokData );              break;
+        case StackVar::SingleRef:           ProcessCellRef( aTokData );             break;
+        case StackVar::DoubleRef:           ProcessRangeRef( aTokData );            break;
+        case StackVar::ExternalSingleRef:   ProcessExternalCellRef( aTokData );     break;
+        case StackVar::ExternalDoubleRef:   ProcessExternalRangeRef( aTokData );    break;
+        case StackVar::ExternalName:        ProcessExternalName( aTokData );        break;
+        case StackVar::Matrix:              ProcessMatrix( aTokData );              break;
+        case StackVar::External:            ProcessExternal( aTokData );            break;
 
         default: switch( aTokData.GetOpCode() )
         {
@@ -1216,7 +1216,7 @@ namespace {
 
 inline bool lclGetTokenString( OUString& rString, const XclExpScToken& rTokData )
 {
-    bool bIsStr = (rTokData.GetType() == svString) && (rTokData.GetOpCode() == ocPush);
+    bool bIsStr = (rTokData.GetType() == StackVar::String) && (rTokData.GetOpCode() == ocPush);
     if( bIsStr )
         rString = rTokData.mpScToken->GetString().getString();
     return bIsStr;
@@ -1248,7 +1248,7 @@ void XclExpFmlaCompImpl::ProcessDdeLink( const XclExpScToken& rTokData )
 
 void XclExpFmlaCompImpl::ProcessExternal( const XclExpScToken& rTokData )
 {
-    /*  #i47228# Excel import generates svExternal/ocMacro tokens for invalid
+    /*  #i47228# Excel import generates StackVar::External/ocMacro tokens for invalid
         names and for external/invalid function calls. This function looks for
         the next token in the token array. If it is an opening parenthesis, the
         token is processed as external function call, otherwise as undefined name. */
@@ -2132,14 +2132,14 @@ void XclExpFmlaCompImpl::ProcessExternalName( const XclExpScToken& rTokData )
                     {
                         switch( pScToken->GetType() )
                         {
-                            case svExternalSingleRef:
+                            case StackVar::ExternalSingleRef:
                             {
                                 ScSingleRefData aRefData = *pScToken->GetSingleRef();
                                 mxData->mpLinkMgr->StoreCell(
                                     nFileId, pScToken->GetString().getString(), aRefData.toAbs(*mxData->mpScBasePos));
                             }
                             break;
-                            case svExternalDoubleRef:
+                            case StackVar::ExternalDoubleRef:
                             {
                                 ScComplexRefData aRefData = *pScToken->GetDoubleRef();
                                 mxData->mpLinkMgr->StoreCellRange(

@@ -42,7 +42,7 @@ bool VectorRefArray::isValid() const
 }
 
 SingleVectorRefToken::SingleVectorRefToken( const VectorRefArray& rArray, size_t nReqLength, size_t nArrayLength ) :
-    FormulaToken(svSingleVectorRef, ocPush), maArray(rArray), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength)
+    FormulaToken(StackVar::SingleVectorRef, ocPush), maArray(rArray), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength)
 {
     SAL_INFO("formula.core", "Created SingleVectorRefToken nReqLength=" << nReqLength << " nArrayLength=" << nArrayLength);
 }
@@ -65,7 +65,7 @@ size_t SingleVectorRefToken::GetArrayLength() const
 DoubleVectorRefToken::DoubleVectorRefToken(
     const std::vector<VectorRefArray>& rArrays, size_t nReqLength, size_t nArrayLength,
     size_t nRefRowSize, bool bStartFixed, bool bEndFixed ) :
-    FormulaToken(svDoubleVectorRef, ocPush),
+    FormulaToken(StackVar::DoubleVectorRef, ocPush),
     maArrays(rArrays), mnRequestedLength(nReqLength), mnArrayLength(nArrayLength),
     mnRefRowSize(nRefRowSize), mbStartFixed(bStartFixed), mbEndFixed(bEndFixed)
 {

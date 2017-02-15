@@ -785,13 +785,13 @@ sal_uInt16 XclImpChSourceLink::GetCellCount() const
         {
             switch( pToken->GetType() )
             {
-                case ::formula::svSingleRef:
-                case ::formula::svExternalSingleRef:
+                case ::formula::StackVar::SingleRef:
+                case ::formula::StackVar::ExternalSingleRef:
                     // single cell
                     ++nCellCount;
                 break;
-                case ::formula::svDoubleRef:
-                case ::formula::svExternalDoubleRef:
+                case ::formula::StackVar::DoubleRef:
+                case ::formula::StackVar::ExternalDoubleRef:
                 {
                     // cell range
                     const ScComplexRefData& rComplexRef = *pToken->GetDoubleRef();

@@ -226,7 +226,7 @@ public:
     bool    HasExternalRef() const;
     bool    HasOpCode( OpCode ) const;
     bool    HasOpCodeRPN( OpCode ) const;
-    /// Token of type svIndex or opcode ocColRowName
+    /// Token of type StackVar::Index or opcode ocColRowName
     bool    HasNameOrColRowName() const;
 
     /**

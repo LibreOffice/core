@@ -973,7 +973,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
 
         switch (p->GetType())
         {
-            case svExternalSingleRef:
+            case StackVar::ExternalSingleRef:
             {
                 const ScSingleRefData& rRef = *p->GetSingleRef();
                 if (rRef.IsTabRel())
@@ -997,7 +997,7 @@ void XclExpExtName::WriteAddData( XclExpStream& rStrm )
                 rStrm << nSBTab << nSBTab << nRow << nCol;
                 return;
             }
-            case svExternalDoubleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 const ScComplexRefData& rRef = *p->GetDoubleRef();
                 const ScSingleRefData& r1 = rRef.Ref1;
@@ -1371,12 +1371,12 @@ bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
                 using namespace ::formula;
                 if( xToken.get() ) switch( xToken->GetType() )
                 {
-                    case svDouble:
+                    case StackVar::Double:
                         bValid = (rFormatter.GetType( nScNumFmt ) == css::util::NumberFormat::LOGICAL) ?
                             rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() != 0 ) ) :
                             rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetDouble() ) );
                     break;
-                    case svString:
+                    case StackVar::String:
                         // do not save empty strings (empty cells) to cache
                         if( !xToken->GetString().isEmpty() )
                             bValid = rCrnRecs.InsertValue( nScCol, nScRow, Any( xToken->GetString().getString() ) );
@@ -1918,7 +1918,7 @@ void XclExpSupbookBuffer::StoreCellRange( sal_uInt16 nFileId, const OUString& rT
 
     for (FormulaToken* p = pArray->First(); p; p = pArray->Next())
     {
-        if (p->GetType() == svMatrix)
+        if (p->GetType() == StackVar::Matrix)
             aMatrixList.push_back(p);
         else if (p->GetOpCode() != ocSep)
         {

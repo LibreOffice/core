@@ -222,7 +222,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
 {
     int i = argumentNum;
     if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-            formula::svSingleVectorRef)
+            formula::StackVar::SingleVectorRef)
     {
         const formula::SingleVectorRefToken* pTmpDVR1 =
             static_cast<const formula::SingleVectorRefToken*>(vSubArguments[i]->GetFormulaToken());
@@ -242,7 +242,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
         ss << ";\n";
     }
     if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-            formula::svDoubleVectorRef)
+            formula::StackVar::DoubleVectorRef)
     {
         const formula::DoubleVectorRefToken* pTmpDVR2 =
             static_cast<const formula::DoubleVectorRefToken*>(vSubArguments[i]->GetFormulaToken());
@@ -261,7 +261,7 @@ void CheckVariables::CheckSubArgumentIsNan( std::stringstream& ss,
         ss << vSubArguments[i]->GenSlidingWindowDeclRef();
         ss << ";\n";
     }
-    if (vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble ||
+    if (vSubArguments[i]->GetFormulaToken()->GetType() == formula::StackVar::Double ||
         vSubArguments[i]->GetFormulaToken()->GetOpCode() != ocPush)
     {
         ss << "    if(";
@@ -285,7 +285,7 @@ void CheckVariables::CheckSubArgumentIsNan2( std::stringstream& ss,
     SubArguments& vSubArguments,  int argumentNum, const std::string& p )
 {
     int i = argumentNum;
-    if (vSubArguments[i]->GetFormulaToken()->GetType() == formula::svDouble)
+    if (vSubArguments[i]->GetFormulaToken()->GetType() == formula::StackVar::Double)
     {
         ss << "    tmp";
         ss << i;
@@ -300,10 +300,10 @@ void CheckVariables::CheckSubArgumentIsNan2( std::stringstream& ss,
     ss << "= fsum(";
     vSubArguments[i]->GenDeclRef(ss);
     if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-            formula::svDoubleVectorRef)
+            formula::StackVar::DoubleVectorRef)
         ss << "[" << p.c_str() << "]";
     else  if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-            formula::svSingleVectorRef)
+            formula::StackVar::SingleVectorRef)
         ss << "[get_group_id(1)]";
     ss << ", 0);\n";
 }

@@ -445,10 +445,10 @@ bool setCacheTableReferenced(formula::FormulaToken& rToken, ScExternalRefManager
 {
     switch (rToken.GetType())
     {
-        case svExternalSingleRef:
+        case StackVar::ExternalSingleRef:
             return rRefMgr.setCacheTableReferenced(
                 rToken.GetIndex(), rToken.GetString().getString(), 1);
-        case svExternalDoubleRef:
+        case StackVar::ExternalDoubleRef:
         {
             const ScComplexRefData& rRef = *rToken.GetDoubleRef();
             ScRange aAbs = rRef.toAbs(rPos);
@@ -456,11 +456,11 @@ bool setCacheTableReferenced(formula::FormulaToken& rToken, ScExternalRefManager
             return rRefMgr.setCacheTableReferenced(
                     rToken.GetIndex(), rToken.GetString().getString(), nSheets);
         }
-        case svExternalName:
+        case StackVar::ExternalName:
             /* TODO: external names aren't supported yet, but would
              * have to be marked as well, if so. Mechanism would be
              * different. */
-            OSL_FAIL("ScDocument::MarkUsedExternalReferences: implement the svExternalName case!");
+            OSL_FAIL("ScDocument::MarkUsedExternalReferences: implement the StackVar::ExternalName case!");
             break;
         default:
             break;
@@ -488,7 +488,7 @@ bool ScDocument::MarkUsedExternalReferences( ScTokenArray& rArr, const ScAddress
 
             bAllMarked = setCacheTableReferenced(*t, *pRefMgr, rPos);
         }
-        else if (t->GetType() == svIndex)
+        else if (t->GetType() == StackVar::Index)
         {
             // this is a named range.  Check if the range contains an external
             // reference.

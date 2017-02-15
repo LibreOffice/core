@@ -646,7 +646,7 @@ void ScInterpreter::Push( const FormulaToken& r )
     {
         if (nGlobalError != FormulaError::NONE)
         {
-            if (r.GetType() == svError)
+            if (r.GetType() == StackVar::Error)
                 PushWithoutError( r);
             else
                 PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
@@ -668,7 +668,7 @@ void ScInterpreter::PushTempToken( FormulaToken* p )
     {
         if (nGlobalError != FormulaError::NONE)
         {
-            if (p->GetType() == svError)
+            if (p->GetType() == StackVar::Error)
             {
                 p->SetError( nGlobalError);
                 PushTempTokenWithoutError( p);
@@ -715,7 +715,7 @@ void ScInterpreter::PushTokenRef( const formula::FormulaConstTokenRef& x )
     {
         if (nGlobalError != FormulaError::NONE)
         {
-            if (x->GetType() == svError && x->GetError() == nGlobalError)
+            if (x->GetType() == StackVar::Error && x->GetError() == nGlobalError)
                 PushTempTokenWithoutError( x.get());
             else
                 PushTempTokenWithoutError( new FormulaErrorToken( nGlobalError));
@@ -797,7 +797,7 @@ void ScInterpreter::PopError()
     if( sp )
     {
         sp--;
-        if (pStack[sp]->GetType() == svError)
+        if (pStack[sp]->GetType() == StackVar::Error)
             nGlobalError = pStack[sp]->GetError();
     }
     else
@@ -810,7 +810,7 @@ FormulaConstTokenRef ScInterpreter::PopToken()
     {
         sp--;
         const FormulaToken* p = pStack[ sp ];
-        if (p->GetType() == svError)
+        if (p->GetType() == StackVar::Error)
             nGlobalError = p->GetError();
         return p;
     }
@@ -829,18 +829,18 @@ double ScInterpreter::PopDouble()
         const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
-            case svError:
+            case StackVar::Error:
                 nGlobalError = p->GetError();
                 break;
-            case svDouble:
+            case StackVar::Double:
                 {
                     short nType = p->GetDoubleType();
                     if (nType && nType != css::util::NumberFormat::UNDEFINED)
                         nCurFmtType = nType;
                     return p->GetDouble();
                 }
-            case svEmptyCell:
-            case svMissing:
+            case StackVar::EmptyCell:
+            case StackVar::Missing:
                 return 0.0;
             default:
                 SetError( FormulaError::IllegalArgument);
@@ -861,13 +861,13 @@ svl::SharedString ScInterpreter::PopString()
         const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
-            case svError:
+            case StackVar::Error:
                 nGlobalError = p->GetError();
                 break;
-            case svString:
+            case StackVar::String:
                 return p->GetString();
-            case svEmptyCell:
-            case svMissing:
+            case StackVar::EmptyCell:
+            case StackVar::Missing:
                 return svl::SharedString::getEmptyString();
             default:
                 SetError( FormulaError::IllegalArgument);
@@ -946,10 +946,10 @@ void ScInterpreter::PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab)
         const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
-            case svError:
+            case StackVar::Error:
                 nGlobalError = p->GetError();
                 break;
-            case svSingleRef:
+            case StackVar::SingleRef:
                 SingleRefToVars( *p->GetSingleRef(), rCol, rRow, rTab);
                 if (!pDok->m_TableOpList.empty())
                     ReplaceCell( rCol, rRow, rTab );
@@ -970,10 +970,10 @@ void ScInterpreter::PopSingleRef( ScAddress& rAdr )
         const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
-            case svError:
+            case StackVar::Error:
                 nGlobalError = p->GetError();
                 break;
-            case svSingleRef:
+            case StackVar::SingleRef:
                 {
                     SCCOL nCol;
                     SCROW nRow;
@@ -1012,13 +1012,13 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
     StackVar eType = GetStackType();
     switch (eType)
     {
-        case svUnknown:
+        case StackVar::Unknown:
             SetError(FormulaError::UnknownStackVariable);
         break;
-        case svError:
+        case StackVar::Error:
             PopError();
         break;
-        case svDoubleRef:
+        case StackVar::DoubleRef:
         {
             SCCOL nCol1, nCol2;
             SCROW nRow1, nRow2;
@@ -1029,11 +1029,11 @@ ScDBRangeBase* ScInterpreter::PopDBDoubleRef()
             return new ScDBInternalRange(pDok,
                 ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
         }
-        case svMatrix:
-        case svExternalDoubleRef:
+        case StackVar::Matrix:
+        case StackVar::ExternalDoubleRef:
         {
             ScMatrixRef pMat;
-            if (eType == svMatrix)
+            if (eType == StackVar::Matrix)
                 pMat = PopMatrix();
             else
                 PopExternalDoubleRef(pMat);
@@ -1057,10 +1057,10 @@ void ScInterpreter::PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
-            case svError:
+            case StackVar::Error:
                 nGlobalError = p->GetError();
                 break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 DoubleRefToVars( p, rCol1, rRow1, rTab1, rCol2, rRow2, rTab2);
                 break;
             default:
@@ -1096,14 +1096,14 @@ void ScInterpreter::PopDoubleRef( ScRange & rRange, short & rParam, size_t & rRe
         const formula::FormulaToken* pToken = pStack[ sp-1 ];
         switch (pToken->GetType())
         {
-            case svError:
+            case StackVar::Error:
                 nGlobalError = pToken->GetError();
                 break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 --sp;
                 DoubleRefToRange( *pToken->GetDoubleRef(), rRange);
                 break;
-            case svRefList:
+            case StackVar::RefList:
                 {
                     const ScRefList* pList = pToken->GetRefList();
                     if (rRefInList < pList->size())
@@ -1141,10 +1141,10 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
         const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
-            case svError:
+            case StackVar::Error:
                 nGlobalError = p->GetError();
                 break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 DoubleRefToRange( *p->GetDoubleRef(), rRange, bDontCheckForTableOp);
                 break;
             default:
@@ -1167,13 +1167,13 @@ void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName
     const FormulaToken* p = pStack[sp];
     StackVar eType = p->GetType();
 
-    if (eType == svError)
+    if (eType == StackVar::Error)
     {
         nGlobalError = p->GetError();
         return;
     }
 
-    if (eType != svExternalSingleRef)
+    if (eType != StackVar::ExternalSingleRef)
     {
         SetError( FormulaError::IllegalParameter);
         return;
@@ -1226,7 +1226,7 @@ void ScInterpreter::PopExternalSingleRef(
         return;
     }
 
-    if (xNew->GetType() == svError)
+    if (xNew->GetType() == StackVar::Error)
         SetError( xNew->GetError());
 
     rToken = xNew;
@@ -1246,13 +1246,13 @@ void ScInterpreter::PopExternalDoubleRef(sal_uInt16& rFileId, OUString& rTabName
     const FormulaToken* p = pStack[sp];
     StackVar eType = p->GetType();
 
-    if (eType == svError)
+    if (eType == StackVar::Error)
     {
         nGlobalError = p->GetError();
         return;
     }
 
-    if (eType != svExternalDoubleRef)
+    if (eType != StackVar::ExternalDoubleRef)
     {
         SetError( FormulaError::IllegalParameter);
         return;
@@ -1288,7 +1288,7 @@ void ScInterpreter::PopExternalDoubleRef(ScMatrixRef& rMat)
     // references, which means the array should only contain a
     // single matrix token.
     formula::FormulaToken* p = pArray->First();
-    if (!p || p->GetType() != svMatrix)
+    if (!p || p->GetType() != StackVar::Matrix)
         SetError( FormulaError::IllegalParameter);
     else
     {
@@ -1327,12 +1327,12 @@ void ScInterpreter::GetExternalDoubleRef(
     }
 
     formula::FormulaToken* pToken = pArray->First();
-    if (pToken->GetType() == svError)
+    if (pToken->GetType() == StackVar::Error)
     {
         SetError( pToken->GetError());
         return;
     }
-    if (pToken->GetType() != svMatrix)
+    if (pToken->GetType() != StackVar::Matrix)
     {
         SetError(FormulaError::IllegalArgument);
         return;
@@ -1352,13 +1352,13 @@ bool ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
 {
     switch ( GetStackType() )
     {
-        case svDoubleRef :
+        case StackVar::DoubleRef :
         {
             ScRange aRange;
             PopDoubleRef( aRange, true );
             return DoubleRefToPosSingleRef( aRange, rAdr );
         }
-        case svSingleRef :
+        case StackVar::SingleRef :
         {
             PopSingleRef( rAdr );
             return true;
@@ -1372,7 +1372,7 @@ bool ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
 
 void ScInterpreter::PopDoubleRefPushMatrix()
 {
-    if ( GetStackType() == svDoubleRef )
+    if ( GetStackType() == StackVar::DoubleRef )
     {
         ScMatrixRef pMat = GetMatrix();
         if ( pMat )
@@ -1387,13 +1387,13 @@ void ScInterpreter::PopDoubleRefPushMatrix()
 void ScInterpreter::ConvertMatrixJumpConditionToMatrix()
 {
     StackVar eStackType = GetStackType();
-    if (eStackType == svUnknown)
+    if (eStackType == StackVar::Unknown)
         return;     // can't do anything, some caller will catch that
-    if (eStackType == svMatrix)
+    if (eStackType == StackVar::Matrix)
         return;     // already matrix, nothing to do
 
-    if (eStackType != svDoubleRef && GetStackType(2) != svJumpMatrix)
-        return;     // always convert svDoubleRef, others only in JumpMatrix context
+    if (eStackType != StackVar::DoubleRef && GetStackType(2) != StackVar::JumpMatrix)
+        return;     // always convert StackVar::DoubleRef, others only in JumpMatrix context
 
     GetTokenMatrixMap();    // make sure it exists, create if not.
     ScMatrixRef pMat = GetMatrix();
@@ -1424,16 +1424,16 @@ bool ScInterpreter::ConvertMatrixParameters()
         {
             switch ( p->GetType() )
             {
-                case svDouble:
-                case svString:
-                case svSingleRef:
-                case svExternalSingleRef:
-                case svMissing:
-                case svError:
-                case svEmptyCell:
+                case StackVar::Double:
+                case StackVar::String:
+                case StackVar::SingleRef:
+                case StackVar::ExternalSingleRef:
+                case StackVar::Missing:
+                case StackVar::Error:
+                case StackVar::EmptyCell:
                     // nothing to do
                 break;
-                case svMatrix:
+                case StackVar::Matrix:
                 {
                     if ( ScParameterClassification::GetParameterType( pCur, nParams - i)
                             == ScParameterClassification::Value )
@@ -1453,7 +1453,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     }
                 }
                 break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                 {
                     ScParameterClassification::Type eType =
                         ScParameterClassification::GetParameterType( pCur, nParams - i);
@@ -1491,7 +1491,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     }
                 }
                 break;
-                case svExternalDoubleRef:
+                case StackVar::ExternalDoubleRef:
                 {
                     ScParameterClassification::Type eType =
                         ScParameterClassification::GetParameterType( pCur, nParams - i);
@@ -1519,7 +1519,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                     }
                 }
                 break;
-                case svRefList:
+                case StackVar::RefList:
                 {
                     ScParameterClassification::Type eType =
                         ScParameterClassification::GetParameterType( pCur, nParams - i);
@@ -1579,10 +1579,10 @@ ScMatrixRef ScInterpreter::PopMatrix()
         const FormulaToken* p = pStack[ sp ];
         switch (p->GetType())
         {
-            case svError:
+            case StackVar::Error:
                 nGlobalError = p->GetError();
                 break;
-            case svMatrix:
+            case StackVar::Matrix:
                 {
                     // ScMatrix itself maintains an im/mutable flag that should
                     // be obeyed where necessary.. so we can return ScMatrixRef
@@ -1610,7 +1610,7 @@ sc::RangeMatrix ScInterpreter::PopRangeMatrix()
     {
         switch (pStack[sp-1]->GetType())
         {
-            case svMatrix:
+            case StackVar::Matrix:
             {
                 --sp;
                 const FormulaToken* p = pStack[sp];
@@ -1865,7 +1865,7 @@ void ScInterpreter::PushNoValue()
 
 bool ScInterpreter::IsMissing()
 {
-    return sp && pStack[sp - 1]->GetType() == svMissing;
+    return sp && pStack[sp - 1]->GetType() == StackVar::Missing;
 }
 
 StackVar ScInterpreter::GetRawStackType()
@@ -1878,7 +1878,7 @@ StackVar ScInterpreter::GetRawStackType()
     else
     {
         SetError(FormulaError::UnknownStackVariable);
-        eRes = svUnknown;
+        eRes = StackVar::Unknown;
     }
     return eRes;
 }
@@ -1889,13 +1889,13 @@ StackVar ScInterpreter::GetStackType()
     if( sp )
     {
         eRes = pStack[sp - 1]->GetType();
-        if( eRes == svMissing || eRes == svEmptyCell )
-            eRes = svDouble;    // default!
+        if( eRes == StackVar::Missing || eRes == StackVar::EmptyCell )
+            eRes = StackVar::Double;    // default!
     }
     else
     {
         SetError(FormulaError::UnknownStackVariable);
-        eRes = svUnknown;
+        eRes = StackVar::Unknown;
     }
     return eRes;
 }
@@ -1906,11 +1906,11 @@ StackVar ScInterpreter::GetStackType( sal_uInt8 nParam )
     if( sp > nParam-1 )
     {
         eRes = pStack[sp - nParam]->GetType();
-        if( eRes == svMissing || eRes == svEmptyCell )
-            eRes = svDouble;    // default!
+        if( eRes == StackVar::Missing || eRes == StackVar::EmptyCell )
+            eRes = StackVar::Double;    // default!
     }
     else
-        eRes = svUnknown;
+        eRes = StackVar::Unknown;
     return eRes;
 }
 
@@ -2061,13 +2061,13 @@ double ScInterpreter::GetDouble()
     double nVal(0.0);
     switch( GetRawStackType() )
     {
-        case svDouble:
+        case StackVar::Double:
             nVal = PopDouble();
         break;
-        case svString:
+        case StackVar::String:
             nVal = ConvertStringToValue( PopString().getString());
         break;
-        case svSingleRef:
+        case StackVar::SingleRef:
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
@@ -2075,7 +2075,7 @@ double ScInterpreter::GetDouble()
             nVal = GetCellValue(aAdr, aCell);
         }
         break;
-        case svDoubleRef:
+        case StackVar::DoubleRef:
         {   // generate position dependent SingleRef
             ScRange aRange;
             PopDoubleRef( aRange );
@@ -2089,20 +2089,20 @@ double ScInterpreter::GetDouble()
                 nVal = 0.0;
         }
         break;
-        case svExternalSingleRef:
+        case StackVar::ExternalSingleRef:
         {
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
             if (nGlobalError == FormulaError::NONE)
             {
-                if (pToken->GetType() == svDouble || pToken->GetType() == svEmptyCell)
+                if (pToken->GetType() == StackVar::Double || pToken->GetType() == StackVar::EmptyCell)
                     nVal = pToken->GetDouble();
                 else
                     nVal = ConvertStringToValue( pToken->GetString().getString());
             }
         }
         break;
-        case svExternalDoubleRef:
+        case StackVar::ExternalDoubleRef:
         {
             ScMatrixRef pMat;
             PopExternalDoubleRef(pMat);
@@ -2112,18 +2112,18 @@ double ScInterpreter::GetDouble()
             nVal = GetDoubleFromMatrix(pMat);
         }
         break;
-        case svMatrix:
+        case StackVar::Matrix:
         {
             ScMatrixRef pMat = PopMatrix();
             nVal = GetDoubleFromMatrix(pMat);
         }
         break;
-        case svError:
+        case StackVar::Error:
             PopError();
             nVal = 0.0;
         break;
-        case svEmptyCell:
-        case svMissing:
+        case StackVar::EmptyCell:
+        case StackVar::Missing:
             Pop();
             nVal = 0.0;
         break;
@@ -2238,15 +2238,15 @@ bool ScInterpreter::GetDoubleOrString( double& rDouble, svl::SharedString& rStri
     bool bDouble = true;
     switch( GetRawStackType() )
     {
-        case svDouble:
+        case StackVar::Double:
             rDouble = PopDouble();
         break;
-        case svString:
+        case StackVar::String:
             rString = PopString();
             bDouble = false;
         break;
-        case svDoubleRef :
-        case svSingleRef :
+        case StackVar::DoubleRef :
+        case StackVar::SingleRef :
         {
             ScAddress aAdr;
             if (!PopDoubleRefOrSingleRef( aAdr))
@@ -2266,20 +2266,20 @@ bool ScInterpreter::GetDoubleOrString( double& rDouble, svl::SharedString& rStri
             }
         }
         break;
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
-        case svMatrix:
+        case StackVar::ExternalSingleRef:
+        case StackVar::ExternalDoubleRef:
+        case StackVar::Matrix:
         {
             ScMatValType nType = GetDoubleOrStringFromMatrix( rDouble, rString);
             bDouble = ScMatrix::IsValueType( nType);
         }
         break;
-        case svError:
+        case StackVar::Error:
             PopError();
             rDouble = 0.0;
         break;
-        case svEmptyCell:
-        case svMissing:
+        case StackVar::EmptyCell:
+        case StackVar::Missing:
             Pop();
             rDouble = 0.0;
         break;
@@ -2297,14 +2297,14 @@ svl::SharedString ScInterpreter::GetString()
 {
     switch (GetRawStackType())
     {
-        case svError:
+        case StackVar::Error:
             PopError();
             return svl::SharedString::getEmptyString();
-        case svMissing:
-        case svEmptyCell:
+        case StackVar::Missing:
+        case StackVar::EmptyCell:
             Pop();
             return svl::SharedString::getEmptyString();
-        case svDouble:
+        case StackVar::Double:
         {
             double fVal = PopDouble();
             sal_uLong nIndex = pFormatter->GetStandardFormat(
@@ -2314,9 +2314,9 @@ svl::SharedString ScInterpreter::GetString()
             pFormatter->GetInputLineString(fVal, nIndex, aStr);
             return mrStrPool.intern(aStr);
         }
-        case svString:
+        case StackVar::String:
             return PopString();
-        case svSingleRef:
+        case StackVar::SingleRef:
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
@@ -2330,7 +2330,7 @@ svl::SharedString ScInterpreter::GetString()
             else
                 return svl::SharedString::getEmptyString();
         }
-        case svDoubleRef:
+        case StackVar::DoubleRef:
         {   // generate position dependent SingleRef
             ScRange aRange;
             PopDoubleRef( aRange );
@@ -2345,7 +2345,7 @@ svl::SharedString ScInterpreter::GetString()
             else
                 return svl::SharedString::getEmptyString();
         }
-        case svExternalSingleRef:
+        case StackVar::ExternalSingleRef:
         {
             ScExternalRefCache::TokenRef pToken;
             PopExternalSingleRef(pToken);
@@ -2354,13 +2354,13 @@ svl::SharedString ScInterpreter::GetString()
 
             return pToken->GetString();
         }
-        case svExternalDoubleRef:
+        case StackVar::ExternalDoubleRef:
         {
             ScMatrixRef pMat;
             PopExternalDoubleRef(pMat);
             return GetStringFromMatrix(pMat);
         }
-        case svMatrix:
+        case StackVar::Matrix:
         {
             ScMatrixRef pMat = PopMatrix();
             return GetStringFromMatrix(pMat);
@@ -2405,7 +2405,7 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix(
 
     ScMatrixRef pMat;
     StackVar eType = GetStackType();
-    if (eType == svExternalDoubleRef || eType == svExternalSingleRef || eType == svMatrix)
+    if (eType == StackVar::ExternalDoubleRef || eType == StackVar::ExternalSingleRef || eType == StackVar::Matrix)
     {
         pMat = GetMatrix();
     }
@@ -2734,7 +2734,7 @@ void ScInterpreter::ScExternal()
                 continue;   // while
             }
 
-            sal_uInt8 nStackType = sal::static_int_cast<sal_uInt8>( GetStackType() );
+            StackVar nStackType = GetStackType();
             ScAddInArgumentType eType = aCall.GetArgType( nPar );
             switch (eType)
             {
@@ -2757,9 +2757,9 @@ void ScInterpreter::ScExternal()
                 case SC_ADDINARG_INTEGER_ARRAY:
                     switch( nStackType )
                     {
-                        case svDouble:
-                        case svString:
-                        case svSingleRef:
+                        case StackVar::Double:
+                        case StackVar::String:
+                        case StackVar::SingleRef:
                             {
                                 sal_Int32 nVal = GetInt32();
                                 if (nGlobalError == FormulaError::NONE)
@@ -2770,7 +2770,7 @@ void ScInterpreter::ScExternal()
                                 }
                             }
                             break;
-                        case svDoubleRef:
+                        case StackVar::DoubleRef:
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
@@ -2778,7 +2778,7 @@ void ScInterpreter::ScExternal()
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
-                        case svMatrix:
+                        case StackVar::Matrix:
                             if (!ScRangeToSequence::FillLongArray( aParam, PopMatrix().get() ))
                                 SetError(FormulaError::IllegalParameter);
                             break;
@@ -2791,9 +2791,9 @@ void ScInterpreter::ScExternal()
                 case SC_ADDINARG_DOUBLE_ARRAY:
                     switch( nStackType )
                     {
-                        case svDouble:
-                        case svString:
-                        case svSingleRef:
+                        case StackVar::Double:
+                        case StackVar::String:
+                        case StackVar::SingleRef:
                             {
                                 double fVal = GetDouble();
                                 uno::Sequence<double> aInner( &fVal, 1 );
@@ -2801,7 +2801,7 @@ void ScInterpreter::ScExternal()
                                 aParam <<= aOuter;
                             }
                             break;
-                        case svDoubleRef:
+                        case StackVar::DoubleRef:
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
@@ -2809,7 +2809,7 @@ void ScInterpreter::ScExternal()
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
-                        case svMatrix:
+                        case StackVar::Matrix:
                             if (!ScRangeToSequence::FillDoubleArray( aParam, PopMatrix().get() ))
                                 SetError(FormulaError::IllegalParameter);
                             break;
@@ -2822,9 +2822,9 @@ void ScInterpreter::ScExternal()
                 case SC_ADDINARG_STRING_ARRAY:
                     switch( nStackType )
                     {
-                        case svDouble:
-                        case svString:
-                        case svSingleRef:
+                        case StackVar::Double:
+                        case StackVar::String:
+                        case StackVar::SingleRef:
                             {
                                 OUString aString = GetString().getString();
                                 uno::Sequence<OUString> aInner( &aString, 1 );
@@ -2832,7 +2832,7 @@ void ScInterpreter::ScExternal()
                                 aParam <<= aOuter;
                             }
                             break;
-                        case svDoubleRef:
+                        case StackVar::DoubleRef:
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
@@ -2840,7 +2840,7 @@ void ScInterpreter::ScExternal()
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
-                        case svMatrix:
+                        case StackVar::Matrix:
                             if (!ScRangeToSequence::FillStringArray( aParam, PopMatrix().get(), pFormatter ))
                                 SetError(FormulaError::IllegalParameter);
                             break;
@@ -2853,14 +2853,14 @@ void ScInterpreter::ScExternal()
                 case SC_ADDINARG_MIXED_ARRAY:
                     switch( nStackType )
                     {
-                        case svDouble:
-                        case svString:
-                        case svSingleRef:
+                        case StackVar::Double:
+                        case StackVar::String:
+                        case StackVar::SingleRef:
                             {
                                 uno::Any aElem;
-                                if ( nStackType == svDouble )
+                                if ( nStackType == StackVar::Double )
                                     aElem <<= (double) GetDouble();
-                                else if ( nStackType == svString )
+                                else if ( nStackType == StackVar::String )
                                     aElem <<= GetString().getString();
                                 else
                                 {
@@ -2883,7 +2883,7 @@ void ScInterpreter::ScExternal()
                                 aParam <<= aOuter;
                             }
                             break;
-                        case svDoubleRef:
+                        case StackVar::DoubleRef:
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
@@ -2891,7 +2891,7 @@ void ScInterpreter::ScExternal()
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
-                        case svMatrix:
+                        case StackVar::Matrix:
                             if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix().get() ))
                                 SetError(FormulaError::IllegalParameter);
                             break;
@@ -2904,13 +2904,13 @@ void ScInterpreter::ScExternal()
                 case SC_ADDINARG_VALUE_OR_ARRAY:
                     switch( nStackType )
                     {
-                        case svDouble:
+                        case StackVar::Double:
                             aParam <<= (double) GetDouble();
                             break;
-                        case svString:
+                        case StackVar::String:
                             aParam <<= GetString().getString();
                             break;
-                        case svSingleRef:
+                        case StackVar::SingleRef:
                             {
                                 ScAddress aAdr;
                                 if ( PopDoubleRefOrSingleRef( aAdr ) )
@@ -2927,7 +2927,7 @@ void ScInterpreter::ScExternal()
                                 }
                             }
                             break;
-                        case svDoubleRef:
+                        case StackVar::DoubleRef:
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
@@ -2935,7 +2935,7 @@ void ScInterpreter::ScExternal()
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
-                        case svMatrix:
+                        case StackVar::Matrix:
                             if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix().get() ))
                                 SetError(FormulaError::IllegalParameter);
                             break;
@@ -2948,7 +2948,7 @@ void ScInterpreter::ScExternal()
                 case SC_ADDINARG_CELLRANGE:
                     switch( nStackType )
                     {
-                        case svSingleRef:
+                        case StackVar::SingleRef:
                             {
                                 ScAddress aAdr;
                                 PopSingleRef( aAdr );
@@ -2961,7 +2961,7 @@ void ScInterpreter::ScExternal()
                                     SetError(FormulaError::IllegalParameter);
                             }
                             break;
-                        case svDoubleRef:
+                        case StackVar::DoubleRef:
                             {
                                 ScRange aRange;
                                 PopDoubleRef( aRange );
@@ -3222,16 +3222,16 @@ void ScInterpreter::ScMacro()
     for( short i = nParamCount; i && bOk ; i-- )
     {
         SbxVariable* pPar = refPar->Get( (sal_uInt16) i );
-        sal_uInt8 nStackType = sal::static_int_cast<sal_uInt8>( GetStackType() );
+        StackVar nStackType = GetStackType();
         switch( nStackType )
         {
-            case svDouble:
+            case StackVar::Double:
                 pPar->PutDouble( GetDouble() );
             break;
-            case svString:
+            case StackVar::String:
                 pPar->PutString( GetString().getString() );
             break;
-            case svExternalSingleRef:
+            case StackVar::ExternalSingleRef:
             {
                 ScExternalRefCache::TokenRef pToken;
                 PopExternalSingleRef(pToken);
@@ -3239,9 +3239,9 @@ void ScInterpreter::ScMacro()
                     bOk = false;
                 else
                 {
-                    if ( pToken->GetType() == svString )
+                    if ( pToken->GetType() == StackVar::String )
                         pPar->PutString( pToken->GetString().getString() );
-                    else if ( pToken->GetType() == svDouble )
+                    else if ( pToken->GetType() == StackVar::Double )
                         pPar->PutDouble( pToken->GetDouble() );
                     else
                     {
@@ -3251,7 +3251,7 @@ void ScInterpreter::ScMacro()
                 }
             }
             break;
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
@@ -3266,7 +3266,7 @@ void ScInterpreter::ScMacro()
                 }
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 SCCOL nCol1;
                 SCROW nRow1;
@@ -3311,8 +3311,8 @@ void ScInterpreter::ScMacro()
                 }
             }
             break;
-            case svExternalDoubleRef:
-            case svMatrix:
+            case StackVar::ExternalDoubleRef:
+            case StackVar::Matrix:
             {
                 ScMatrixRef pMat = GetMatrix();
                 SCSIZE nC, nR;
@@ -3935,7 +3935,7 @@ StackVar ScInterpreter::Interpret()
                  !(eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChoose) &&
                 ((aTokenMatrixMapIter = pTokenMatrixMap->find( pCur)) !=
                  pTokenMatrixMap->end()) &&
-                (*aTokenMatrixMapIter).second->GetType() != svJumpMatrix)
+                (*aTokenMatrixMapIter).second->GetType() != StackVar::JumpMatrix)
         {
             // Path already calculated, reuse result.
             nStackBase = sp - pCur->GetParamCount();
@@ -4401,7 +4401,7 @@ StackVar ScInterpreter::Interpret()
             // If the function pushed a subroutine as result, continue with
             // execution of the subroutine.
             if (sp > nStackBase && pStack[sp-1]->GetOpCode() == ocCall
-                /* && pStack[sp-1]->GetType() == svSubroutine */)
+                /* && pStack[sp-1]->GetType() == StackVar::Subroutine */)
             {
                 Pop(); continue;
             }
@@ -4410,7 +4410,7 @@ StackVar ScInterpreter::Interpret()
                 meVolatileType = VOLATILE;
 
             // Remember result matrix in case it could be reused.
-            if (pTokenMatrixMap && sp && GetStackType() == svMatrix)
+            if (pTokenMatrixMap && sp && GetStackType() == StackVar::Matrix)
                 pTokenMatrixMap->insert( ScTokenMatrixMap::value_type( pCur,
                             pStack[sp-1]));
 
@@ -4450,9 +4450,9 @@ StackVar ScInterpreter::Interpret()
         {
             bGotResult = false;
             sal_uInt8 nLevel = 0;
-            if ( GetStackType( ++nLevel ) == svJumpMatrix )
+            if ( GetStackType( ++nLevel ) == StackVar::JumpMatrix )
                 ;   // nothing
-            else if ( GetStackType( ++nLevel ) == svJumpMatrix )
+            else if ( GetStackType( ++nLevel ) == StackVar::JumpMatrix )
                 ;   // nothing
             else
                 nLevel = 0;
@@ -4516,13 +4516,13 @@ StackVar ScInterpreter::Interpret()
         {
             switch( pCur->GetType() )
             {
-                case svEmptyCell:
+                case StackVar::EmptyCell:
                     ;   // nothing
                 break;
-                case svError:
+                case StackVar::Error:
                     nGlobalError = pCur->GetError();
                 break;
-                case svDouble :
+                case StackVar::Double :
                     {
                         // If typed, pop token to obtain type information and
                         // push a plain untyped double so the result token to
@@ -4546,11 +4546,11 @@ StackVar ScInterpreter::Interpret()
                         }
                     }
                 break;
-                case svString :
+                case StackVar::String :
                     nRetTypeExpr = css::util::NumberFormat::TEXT;
                     nRetIndexExpr = 0;
                 break;
-                case svSingleRef :
+                case StackVar::SingleRef :
                 {
                     ScAddress aAdr;
                     PopSingleRef( aAdr );
@@ -4558,11 +4558,11 @@ StackVar ScInterpreter::Interpret()
                         PushCellResultToken( false, aAdr, &nRetTypeExpr, &nRetIndexExpr, true);
                 }
                 break;
-                case svRefList :
+                case StackVar::RefList :
                     PopError();     // maybe #REF! takes precedence over #VALUE!
                     PushError( FormulaError::NoValue);
                 break;
-                case svDoubleRef :
+                case StackVar::DoubleRef :
                 {
                     if ( bMatrixFormula )
                     {   // create matrix for {=A1:A5}
@@ -4580,14 +4580,14 @@ StackVar ScInterpreter::Interpret()
                     }
                 }
                 break;
-                case svExternalDoubleRef:
+                case StackVar::ExternalDoubleRef:
                 {
                     ScMatrixRef xMat;
                     PopExternalDoubleRef(xMat);
                     QueryMatrixType(xMat, nRetTypeExpr, nRetIndexExpr);
                 }
                 break;
-                case svMatrix :
+                case StackVar::Matrix :
                 {
                     sc::RangeMatrix aMat = PopRangeMatrix();
                     if (aMat.isRangeValid())
@@ -4604,7 +4604,7 @@ StackVar ScInterpreter::Interpret()
                         QueryMatrixType(aMat.mpMat, nRetTypeExpr, nRetIndexExpr);
                 }
                 break;
-                case svExternalSingleRef:
+                case StackVar::ExternalSingleRef:
                 {
                     FormulaTokenRef xToken;
                     ScExternalRefCache::CellFormat aFmt;
@@ -4644,7 +4644,7 @@ StackVar ScInterpreter::Interpret()
     else
         nRetFmtType = css::util::NumberFormat::NUMBER;
 
-    if (nGlobalError != FormulaError::NONE && GetStackType() != svError )
+    if (nGlobalError != FormulaError::NONE && GetStackType() != StackVar::Error )
         PushError( nGlobalError);
 
     // THE final result.
@@ -4658,7 +4658,7 @@ StackVar ScInterpreter::Interpret()
         (*p++)->DecRef();
 
     StackVar eType = xResult->GetType();
-    if (eType == svMatrix)
+    if (eType == StackVar::Matrix)
         // Results are immutable in case they would be reused as input for new
         // interpreters.
         xResult.get()->GetMatrix()->SetImmutable();
