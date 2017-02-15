@@ -19,6 +19,7 @@
 
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <formula/token.hxx>
 
 #include "document.hxx"
@@ -671,6 +672,10 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
                     else if ( fVal < 0.0 )
                         nPrecision = sal::static_int_cast<short>( nPrecision - (short)floor( log10( -fVal ) ) );
                     break;
+                }
+                case css::util::NumberFormat::FRACTION:     // get value of fraction representation
+                {
+                    return GetFormatTable()->GetEntry( nFormat )->GetRoundFractionValue( fVal );
                 }
             }
         }
