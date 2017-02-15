@@ -151,8 +151,8 @@ SvxPostItIdItem::SvxPostItIdItem( sal_uInt16 _nWhich )
     SetWhich( _nWhich );
 }
 
-SvxPostItIdItem::SvxPostItIdItem( sal_uInt32 rId, sal_uInt16 _nWhich ) :
-    SfxUInt32Item( _nWhich, rId )
+SvxPostItIdItem::SvxPostItIdItem( const OUString& rId, sal_uInt16 _nWhich ) :
+    SfxStringItem( _nWhich, rId )
 {
 }
 

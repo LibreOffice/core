@@ -1929,7 +1929,7 @@ void DesktopLOKTest::testCommentsCallbacks()
     int nCommentId1 = aView1.m_aCommentCallbackResult.get<int>("id");
 
     // Reply to a comment just added
-    aCommandArgs = "{ \"Id\": { \"type\": \"long\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Reply comment\" } }";
+    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Reply comment\" } }";
     pDocument->pClass->postUnoCommand(pDocument, ".uno:ReplyComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
@@ -1943,7 +1943,7 @@ void DesktopLOKTest::testCommentsCallbacks()
     int nCommentId2 = aView1.m_aCommentCallbackResult.get<int>("id");
 
     // Edit the previously added comment
-    aCommandArgs = "{ \"Id\": { \"type\": \"long\", \"value\": \"" + OString::number(nCommentId2) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Edited comment\" } }";
+    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId2) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Edited comment\" } }";
     pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
@@ -1957,7 +1957,7 @@ void DesktopLOKTest::testCommentsCallbacks()
     CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
 
     // Delete the reply comment just added
-    aCommandArgs = "{ \"Id\": { \"type\": \"long\", \"value\":  \"" + OString::number(nCommentId2) + "\" } }";
+    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\":  \"" + OString::number(nCommentId2) + "\" } }";
     pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 
@@ -1968,7 +1968,7 @@ void DesktopLOKTest::testCommentsCallbacks()
     CPPUNIT_ASSERT_EQUAL(nCommentId2, aView2.m_aCommentCallbackResult.get<int>("id"));
 
     // Reply to nCommentId1 again
-    aCommandArgs = "{ \"Id\": { \"type\": \"long\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Reply comment again\" } }";
+    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Reply comment again\" } }";
     pDocument->pClass->postUnoCommand(pDocument, ".uno:ReplyComment", aCommandArgs.getStr(), false);
     Scheduler::ProcessEventsToIdle();
 

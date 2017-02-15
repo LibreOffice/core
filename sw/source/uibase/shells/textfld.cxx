@@ -332,9 +332,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             case FN_DELETE_COMMENT:
             {
                 const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
-                if (pIdItem && pIdItem->GetValue() && GetView().GetPostItMgr())
+                if (pIdItem && !pIdItem->GetValue().isEmpty() && GetView().GetPostItMgr())
                 {
-                    GetView().GetPostItMgr()->Delete(pIdItem->GetValue());
+                    GetView().GetPostItMgr()->Delete(pIdItem->GetValue().toUInt32());
                 }
                 else if ( GetView().GetPostItMgr() &&
                           GetView().GetPostItMgr()->HasActiveSidebarWin() )
@@ -382,16 +382,16 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             case FN_REPLY:
             {
                 const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
-                if (pIdItem && pIdItem->GetValue())
+                if (pIdItem && !pIdItem->GetValue().isEmpty())
                 {
                     SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_POSTITFLD, OUString(), false);
                     SwIterator<SwFormatField,SwFieldType> aIter( *pType );
                     SwFormatField* pSwFormatField = aIter.First();
                     while( pSwFormatField )
                     {
-                        if ( static_cast<SwPostItField*>(pSwFormatField->GetField())->GetPostItId() == pIdItem->GetValue())
+                        if ( static_cast<SwPostItField*>(pSwFormatField->GetField())->GetPostItId() == pIdItem->GetValue().toUInt32() )
                         {
-                            sw::annotation::SwAnnotationWin* pWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue());
+                            sw::annotation::SwAnnotationWin* pWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue().toUInt32());
                             if (pWin)
                             {
                                 const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
@@ -481,14 +481,14 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             case SID_EDIT_POSTIT:
             {
                 const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
-                if (pIdItem && pIdItem->GetValue())
+                if (pIdItem && !pIdItem->GetValue().isEmpty())
                 {
                     const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
                     OUString sText;
                     if ( pTextItem )
                         sText = pTextItem->GetValue();
 
-                    sw::annotation::SwAnnotationWin* pAnnotationWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue());
+                    sw::annotation::SwAnnotationWin* pAnnotationWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue().toUInt32());
                     if (pAnnotationWin)
                         pAnnotationWin->UpdateText(sText);
                 }
