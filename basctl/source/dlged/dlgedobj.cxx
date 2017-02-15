@@ -527,8 +527,8 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
     if ( pForm )
     {
         // stop listening with all children
-        ::std::vector<DlgEdObj*> aChildList = pForm->GetChildren();
-        ::std::vector<DlgEdObj*>::iterator aIter;
+        std::vector<DlgEdObj*> aChildList = pForm->GetChildren();
+        std::vector<DlgEdObj*>::iterator aIter;
         for ( aIter = aChildList.begin() ; aIter != aChildList.end() ; ++aIter )
         {
             (*aIter)->EndListening( false );
@@ -565,8 +565,8 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
             }
 
             // create a helper list of control names, sorted by tab index
-            ::std::vector< OUString > aNameList( aIndexToNameMap.size() );
-            ::std::transform(
+            std::vector< OUString > aNameList( aIndexToNameMap.size() );
+            std::transform(
                     aIndexToNameMap.begin(), aIndexToNameMap.end(),
                     aNameList.begin(),
                     ::o3tl::select2nd< IndexToNameMap::value_type >( )
@@ -1257,7 +1257,7 @@ void DlgEdForm::AddChild( DlgEdObj* pDlgEdObj )
 
 void DlgEdForm::RemoveChild( DlgEdObj* pDlgEdObj )
 {
-    pChildren.erase( ::std::find( pChildren.begin() , pChildren.end() , pDlgEdObj ) );
+    pChildren.erase( std::find( pChildren.begin() , pChildren.end() , pDlgEdObj ) );
 }
 
 void DlgEdForm::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
@@ -1389,7 +1389,7 @@ void DlgEdForm::UpdateStep()
 void DlgEdForm::UpdateTabIndices()
 {
     // stop listening with all children
-    ::std::vector<DlgEdObj*>::iterator aIter;
+    std::vector<DlgEdObj*>::iterator aIter;
     for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
         (*aIter)->EndListening( false );
@@ -1479,7 +1479,7 @@ void DlgEdForm::UpdateGroups()
     if ( xTabModel.is() )
     {
         // create a global list of controls that belong to the dialog
-        ::std::vector<DlgEdObj*> aChildList = GetChildren();
+        std::vector<DlgEdObj*> aChildList = GetChildren();
         sal_uInt32 nSize = aChildList.size();
         Sequence< Reference< awt::XControl > > aSeqControls( nSize );
         for ( sal_uInt32 i = 0; i < nSize; ++i )
@@ -1546,7 +1546,7 @@ void DlgEdForm::NbcMove( const Size& rSize )
     StartListening();
 
     // set geometry properties of all children
-    ::std::vector<DlgEdObj*>::iterator aIter;
+    std::vector<DlgEdObj*>::iterator aIter;
     for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
         (*aIter)->EndListening(false);
@@ -1568,7 +1568,7 @@ void DlgEdForm::NbcResize(const Point& rRef, const Fraction& xFract, const Fract
     StartListening();
 
     // set geometry properties of all children
-    ::std::vector<DlgEdObj*>::iterator aIter;
+    std::vector<DlgEdObj*>::iterator aIter;
     for ( aIter = pChildren.begin() ; aIter != pChildren.end() ; ++aIter )
     {
         (*aIter)->EndListening(false);

@@ -31,7 +31,7 @@
 namespace basctl
 {
 
-typedef ::std::multimap< sal_Int16, OUString > IndexToNameMap;
+typedef std::multimap< sal_Int16, OUString > IndexToNameMap;
 
 
 class DlgEdForm;
@@ -148,7 +148,7 @@ class DlgEdForm: public DlgEdObj
 
 private:
     DlgEditor& rDlgEditor;
-    ::std::vector<DlgEdObj*> pChildren;
+    std::vector<DlgEdObj*> pChildren;
 
     mutable ::boost::optional< css::awt::DeviceInfo >   mpDeviceInfo;
 

@@ -1250,7 +1250,7 @@ void LibPage::ExportAsPackage( const OUString& aLibName )
             xSFA->kill( aMetaInfFolder );
         xSFA->createFolder( aMetaInfFolder );
 
-        ::std::vector< Sequence<beans::PropertyValue> > manifest;
+        std::vector< Sequence<beans::PropertyValue> > manifest;
         const OUString strMediaType = "MediaType" ;
         const OUString strFullPath = "FullPath" ;
         const OUString strBasicMediaType = "application/vnd.sun.star.basic-library" ;

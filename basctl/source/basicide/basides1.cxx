@@ -637,7 +637,7 @@ void Shell::ExecuteGlobal( SfxRequest& rReq )
                                         long nMaxY = nTextHeight - nVisHeight;
                                         long nOldY = pTextView->GetStartDocPos().Y();
                                         long nNewY = nLine * pTextEngine->GetCharHeight() - nVisHeight / 2;
-                                        nNewY = ::std::min( nNewY, nMaxY );
+                                        nNewY = std::min( nNewY, nMaxY );
                                         pTextView->Scroll( 0, -( nNewY - nOldY ) );
                                         pTextView->ShowCursor( false );
                                         pModWin->GetEditVScrollBar().SetThumbPos( pTextView->GetStartDocPos().Y() );

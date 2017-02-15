@@ -39,7 +39,7 @@ class VCLXAccessibleTabControl :    public VCLXAccessibleComponent,
                                     public VCLXAccessibleTabControl_BASE
 {
 private:
-    typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
+    typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
     AccessibleChildren      m_aAccessibleChildren;
     VclPtr<TabControl>      m_pTabControl;

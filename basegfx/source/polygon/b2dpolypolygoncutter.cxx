@@ -90,11 +90,11 @@ namespace basegfx
             }
         };
 
-        typedef ::std::vector< PN > PNV;
-        typedef ::std::vector< VN > VNV;
-        typedef ::std::vector< SN > SNV;
-        typedef ::std::pair< basegfx::B2DPoint /*orig*/, basegfx::B2DPoint /*repl*/ > CorrectionPair;
-        typedef ::std::vector< CorrectionPair > CorrectionTable;
+        typedef std::vector< PN > PNV;
+        typedef std::vector< VN > VNV;
+        typedef std::vector< SN > SNV;
+        typedef std::pair< basegfx::B2DPoint /*orig*/, basegfx::B2DPoint /*repl*/ > CorrectionPair;
+        typedef std::vector< CorrectionPair > CorrectionTable;
 
         class solver
         {
@@ -161,14 +161,14 @@ namespace basegfx
 
             void impSwitchNext(PN& rPNa, PN& rPNb)
             {
-                ::std::swap(rPNa.mnIN, rPNb.mnIN);
+                std::swap(rPNa.mnIN, rPNb.mnIN);
 
                 if(mbIsCurve)
                 {
                     VN& rVNa = maVNV[rPNa.mnI];
                     VN& rVNb = maVNV[rPNb.mnI];
 
-                    ::std::swap(rVNa.maNext, rVNb.maNext);
+                    std::swap(rVNa.maNext, rVNb.maNext);
                 }
 
                 if(!mbChanged)
@@ -429,7 +429,7 @@ namespace basegfx
             void impSolve()
             {
                 // sort by point to identify common nodes easier
-                ::std::sort(maSNV.begin(), maSNV.end());
+                std::sort(maSNV.begin(), maSNV.end());
 
                 // handle common nodes
                 const sal_uInt32 nNodeCount(maSNV.size());
@@ -745,7 +745,7 @@ namespace basegfx
             if(nCount > 1)
             {
                 sal_uInt32 a, b;
-                ::std::vector< StripHelper > aHelpers;
+                std::vector< StripHelper > aHelpers;
                 aHelpers.resize(nCount);
 
                 for(a = 0; a < nCount; a++)
@@ -825,7 +825,7 @@ namespace basegfx
                 else
                 {
                     sal_uInt32 a, b;
-                    ::std::vector< StripHelper > aHelpers;
+                    std::vector< StripHelper > aHelpers;
                     aHelpers.resize(nCount);
 
                     for(a = 0; a < nCount; a++)

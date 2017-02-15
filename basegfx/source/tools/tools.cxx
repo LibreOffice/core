@@ -46,19 +46,19 @@ namespace basegfx
 
                 // calc maximum orthogonal distance for all four bound
                 // rect corners to the line
-                const double nMaxDistance( ::std::max(
+                const double nMaxDistance( std::max(
                                                0.0,
-                                               ::std::max(
+                                               std::max(
                                                    distance(rFitTarget.getMinX(),
                                                             rFitTarget.getMinY(),
                                                             rMoveDirection,
                                                             nC),
-                                                   ::std::max(
+                                                   std::max(
                                                        distance(rFitTarget.getMinX(),
                                                                 rFitTarget.getMaxY(),
                                                                 rMoveDirection,
                                                                 nC),
-                                                       ::std::max(
+                                                       std::max(
                                                            distance(rFitTarget.getMaxX(),
                                                                     rFitTarget.getMinY(),
                                                                     rMoveDirection,

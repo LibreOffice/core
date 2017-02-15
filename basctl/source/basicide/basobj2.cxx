@@ -98,7 +98,7 @@ static bool StringCompareLessThan( const OUString& rStr1, const OUString& rStr2 
 Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
 {
     // create a sorted list of module library names
-    ::std::vector<OUString> aModLibList;
+    std::vector<OUString> aModLibList;
     if ( xModLibContainer.is() )
     {
         Sequence< OUString > aModLibNames = xModLibContainer->getElementNames();
@@ -106,11 +106,11 @@ Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryCon
         const OUString* pModLibNames = aModLibNames.getConstArray();
         for ( sal_Int32 i = 0 ; i < nModLibCount ; i++ )
             aModLibList.push_back( pModLibNames[ i ] );
-        ::std::sort( aModLibList.begin() , aModLibList.end() , StringCompareLessThan );
+        std::sort( aModLibList.begin() , aModLibList.end() , StringCompareLessThan );
     }
 
     // create a sorted list of dialog library names
-    ::std::vector<OUString> aDlgLibList;
+    std::vector<OUString> aDlgLibList;
     if ( xDlgLibContainer.is() )
     {
         Sequence< OUString > aDlgLibNames = xDlgLibContainer->getElementNames();
@@ -118,13 +118,13 @@ Sequence< OUString > GetMergedLibraryNames( const Reference< script::XLibraryCon
         const OUString* pDlgLibNames = aDlgLibNames.getConstArray();
         for ( sal_Int32 i = 0 ; i < nDlgLibCount ; i++ )
             aDlgLibList.push_back( pDlgLibNames[ i ] );
-        ::std::sort( aDlgLibList.begin() , aDlgLibList.end() , StringCompareLessThan );
+        std::sort( aDlgLibList.begin() , aDlgLibList.end() , StringCompareLessThan );
     }
 
     // merge both lists
-    ::std::vector<OUString> aLibList( aModLibList.size() + aDlgLibList.size() );
-    ::std::merge( aModLibList.begin(), aModLibList.end(), aDlgLibList.begin(), aDlgLibList.end(), aLibList.begin(), StringCompareLessThan );
-    ::std::vector<OUString>::iterator aIterEnd = ::std::unique( aLibList.begin(), aLibList.end() );  // move unique elements to the front
+    std::vector<OUString> aLibList( aModLibList.size() + aDlgLibList.size() );
+    std::merge( aModLibList.begin(), aModLibList.end(), aDlgLibList.begin(), aDlgLibList.end(), aLibList.begin(), StringCompareLessThan );
+    std::vector<OUString>::iterator aIterEnd = std::unique( aLibList.begin(), aLibList.end() );  // move unique elements to the front
     aLibList.erase( aIterEnd, aLibList.end() ); // remove duplicates
 
     // copy to sequence

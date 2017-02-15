@@ -74,7 +74,7 @@ private:
         bool operator<( const ChildDescriptor& rDesc ) const;
     };
 
-    typedef ::std::vector< ChildDescriptor > AccessibleChildren;
+    typedef std::vector< ChildDescriptor > AccessibleChildren;
 
     AccessibleChildren             m_aAccessibleChildren;
     VCLExternalSolarLock*          m_pExternalLock;

@@ -38,11 +38,11 @@ struct _Unwind_Exception
 
 struct __cxa_exception
 {
-    ::std::type_info *exceptionType;
+    std::type_info *exceptionType;
     void (*exceptionDestructor)(void *);
 
-    ::std::unexpected_handler unexpectedHandler;
-    ::std::terminate_handler terminateHandler;
+    std::unexpected_handler unexpectedHandler;
+    std::terminate_handler terminateHandler;
 
     __cxa_exception *nextException;
 

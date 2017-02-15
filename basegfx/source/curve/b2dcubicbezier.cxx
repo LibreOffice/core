@@ -281,7 +281,7 @@ namespace basegfx
                 const double fJ1y(rfEA.getY() - rfPA.getY() - 1.0/3.0*(rfPB.getY() - rfPA.getY()));
                 const double fJ2x(rfEB.getX() - rfPA.getX() - 2.0/3.0*(rfPB.getX() - rfPA.getX()));
                 const double fJ2y(rfEB.getY() - rfPA.getY() - 2.0/3.0*(rfPB.getY() - rfPA.getY()));
-                const double fDistanceError2(::std::max(fJ1x*fJ1x + fJ1y*fJ1y, fJ2x*fJ2x + fJ2y*fJ2y));
+                const double fDistanceError2(std::max(fJ1x*fJ1x + fJ1y*fJ1y, fJ2x*fJ2x + fJ2y*fJ2y));
 
                 // stop if error measure does not improve anymore. This is a
                 // safety guard against floating point inaccuracies.
@@ -640,7 +640,7 @@ namespace basegfx
         if(isBezier())
         {
             ImpSubDivDistance(maStartPoint, maControlPointA, maControlPointB, maEndPoint, rTarget,
-                fDistanceBound * fDistanceBound, ::std::numeric_limits<double>::max(), 30);
+                fDistanceBound * fDistanceBound, std::numeric_limits<double>::max(), 30);
         }
         else
         {
@@ -912,7 +912,7 @@ namespace basegfx
 
     bool B2DCubicBezier::getMinimumExtremumPosition(double& rfResult) const
     {
-        ::std::vector< double > aAllResults;
+        std::vector< double > aAllResults;
 
         aAllResults.reserve(4);
         getAllExtremumPositions(aAllResults);
@@ -930,14 +930,14 @@ namespace basegfx
         }
         else
         {
-            rfResult = *(::std::min_element(aAllResults.begin(), aAllResults.end()));
+            rfResult = *(std::min_element(aAllResults.begin(), aAllResults.end()));
             return true;
         }
     }
 
     namespace
     {
-        inline void impCheckExtremumResult(double fCandidate, ::std::vector< double >& rResult)
+        inline void impCheckExtremumResult(double fCandidate, std::vector< double >& rResult)
         {
             // check for range ]0.0 .. 1.0[ with excluding 1.0 and 0.0 clearly
             // by using the equalZero test, NOT ::more or ::less which will use the
@@ -952,7 +952,7 @@ namespace basegfx
         }
     }
 
-    void B2DCubicBezier::getAllExtremumPositions(::std::vector< double >& rResults) const
+    void B2DCubicBezier::getAllExtremumPositions(std::vector< double >& rResults) const
     {
         rResults.clear();
 

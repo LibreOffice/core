@@ -59,7 +59,7 @@ namespace basegfx
 
         // define vector of simple edges
 
-        typedef ::std::vector< TrDeSimpleEdge > TrDeSimpleEdges;
+        typedef std::vector< TrDeSimpleEdge > TrDeSimpleEdges;
 
         // helper class for holding a traversing edge. It will always have some
         // distance in YPos. The slope (in a numerically useful form, see comments) is
@@ -180,7 +180,7 @@ namespace basegfx
 
         // define double linked list of edges (for fast random insert)
 
-        typedef ::std::list< TrDeEdgeEntry > TrDeEdgeEntries;
+        typedef std::list< TrDeEdgeEntry > TrDeEdgeEntries;
 
     } // end of anonymous namespace
 } // end of namespace basegfx
@@ -250,7 +250,7 @@ namespace basegfx
             // local data
             sal_uInt32                  mnInitialEdgeEntryCount;
             TrDeEdgeEntries             maTrDeEdgeEntries;
-            ::std::vector< B2DPoint >   maPoints;
+            std::vector< B2DPoint >   maPoints;
             /// new points allocated for cuts
             PointBlockAllocator         maNewPoints;
 

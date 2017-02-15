@@ -50,7 +50,7 @@ class BreakPointList
 {
 private:
     void operator =(BreakPointList) = delete;
-    ::std::vector<BreakPoint*> maBreakPoints;
+    std::vector<BreakPoint*> maBreakPoints;
 
 public:
     BreakPointList();

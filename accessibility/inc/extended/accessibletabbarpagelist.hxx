@@ -49,7 +49,7 @@ namespace accessibility
                                         public AccessibleTabBarPageList_BASE
     {
     private:
-        typedef ::std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
+        typedef std::vector< css::uno::Reference< css::accessibility::XAccessible > > AccessibleChildren;
 
         AccessibleChildren      m_aAccessibleChildren;
         sal_Int32               m_nIndexInParent;

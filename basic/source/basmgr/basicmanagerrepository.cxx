@@ -63,9 +63,9 @@ namespace basic
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::document::XEmbeddedScripts;
 
-    typedef ::std::map< Reference< XInterface >, BasicManager*, ::comphelper::OInterfaceCompare< XInterface > > BasicManagerStore;
+    typedef std::map< Reference< XInterface >, BasicManager*, ::comphelper::OInterfaceCompare< XInterface > > BasicManagerStore;
 
-    typedef ::std::vector< BasicManagerCreationListener* >  CreationListeners;
+    typedef std::vector< BasicManagerCreationListener* >  CreationListeners;
 
     class ImplRepository : public ::utl::OEventListenerAdapter, public SfxListener
     {
@@ -337,7 +337,7 @@ namespace basic
     {
         SolarMutexGuard g;
 
-        CreationListeners::iterator pos = ::std::find( m_aCreationListeners.begin(), m_aCreationListeners.end(), &_rListener );
+        CreationListeners::iterator pos = std::find( m_aCreationListeners.begin(), m_aCreationListeners.end(), &_rListener );
         if ( pos != m_aCreationListeners.end() )
             m_aCreationListeners.erase( pos );
         else {

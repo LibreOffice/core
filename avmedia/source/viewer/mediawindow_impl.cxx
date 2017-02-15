@@ -556,7 +556,7 @@ void MediaWindowImpl::Resize()
     if (mpMediaWindowControl)
     {
         const sal_Int32 nControlHeight = mpMediaWindowControl->GetSizePixel().Height();
-        const sal_Int32 nControlY = ::std::max(aCurSize.Height() - nControlHeight - nOffset, 0L);
+        const sal_Int32 nControlY = std::max(aCurSize.Height() - nControlHeight - nOffset, 0L);
 
         aPlayerWindowSize.Height() = (nControlY - (nOffset << 1));
         mpMediaWindowControl->SetPosSizePixel(Point(nOffset, nControlY ), Size(aCurSize.Width() - (nOffset << 1), nControlHeight));

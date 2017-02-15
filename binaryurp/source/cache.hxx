@@ -86,7 +86,7 @@ private:
     typedef std::list<T> LruList; // last recently used list
     typedef typename LruList::iterator LruListIt;
     struct CmpT{ bool operator()( const LruListIt& rA, const LruListIt& rB) const { return (*rA<*rB);}};
-    typedef ::std::map< LruListIt, IdxType, CmpT > LruItMap; // a map into a LruList
+    typedef std::map< LruListIt, IdxType, CmpT > LruItMap; // a map into a LruList
 
     std::size_t size_;
     LruItMap map_;

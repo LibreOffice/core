@@ -52,7 +52,7 @@ public:
 
 class CoordinateDataArray2D
 {
-    typedef ::std::vector< CoordinateData2D > CoordinateData2DVector;
+    typedef std::vector< CoordinateData2D > CoordinateData2DVector;
 
     CoordinateData2DVector                          maVector;
 
@@ -152,7 +152,7 @@ public:
 
             for(sal_uInt32 a(0); a < nHalfSize; a++)
             {
-                ::std::swap(*aStart, *aEnd);
+                std::swap(*aStart, *aEnd);
                 ++aStart;
                 --aEnd;
             }
@@ -239,13 +239,13 @@ public:
 
     void flip()
     {
-        ::std::swap(maPrevVector, maNextVector);
+        std::swap(maPrevVector, maNextVector);
     }
 };
 
 class ControlVectorArray2D
 {
-    typedef ::std::vector< ControlVectorPair2D > ControlVectorPair2DVector;
+    typedef std::vector< ControlVectorPair2D > ControlVectorPair2DVector;
 
     ControlVectorPair2DVector                           maVector;
     sal_uInt32                                          mnUsedVectors;
@@ -443,7 +443,7 @@ public:
                 aEnd->flip();
 
                 // swap entries
-                ::std::swap(*aStart, *aEnd);
+                std::swap(*aStart, *aEnd);
 
                 ++aStart;
                 --aEnd;
@@ -530,7 +530,7 @@ public:
                                     // subdividing the bezier segment.
                                     // Ideal here is a subdivision at the extreme values, so use
                                     // getAllExtremumPositions to get all extremas in one run
-                                    ::std::vector< double > aExtremas;
+                                    std::vector< double > aExtremas;
 
                                     aExtremas.reserve(4);
                                     aEdge.getAllExtremumPositions(aExtremas);

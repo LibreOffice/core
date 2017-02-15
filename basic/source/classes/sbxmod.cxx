@@ -84,7 +84,7 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::uno;
 
 typedef ::cppu::WeakImplHelper< XInvocation > DocObjectWrapper_BASE;
-typedef ::std::map< sal_Int16, Any > OutParamMap;
+typedef std::map< sal_Int16, Any > OutParamMap;
 
 class DocObjectWrapper : public DocObjectWrapper_BASE
 {

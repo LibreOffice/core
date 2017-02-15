@@ -26,7 +26,7 @@
 
 
 #include <vector>
-typedef ::std::vector< OUString > StringVector;
+typedef std::vector< OUString > StringVector;
 
 struct SbiParseStack;
 

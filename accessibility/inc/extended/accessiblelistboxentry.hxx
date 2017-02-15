@@ -77,7 +77,7 @@ namespace accessibility
 
     private:
         /** The treelistbox control */
-        ::std::deque< sal_Int32 >           m_aEntryPath;
+        std::deque< sal_Int32 >           m_aEntryPath;
         SvTreeListEntry*                    m_pSvLBoxEntry; // Needed for a11y focused item...
 
 
