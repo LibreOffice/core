@@ -3405,6 +3405,20 @@ $(call gb_LinkTarget_add_libs,$(1),\
 
 endef
 
+else # NON-SYSTEM_GPGME
+
+define gb_LinkTarget__use_gpgme
+$(call gb_LinkTarget_set_include,$(1),\
+	-I$(call gb_UnpackedTarball_get_dir,gpgme)/lang/cpp/src \
+	$$(INCLUDE) \
+)
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(call gb_UnpackedTarball_get_dir,gpgme)/lang/cpp/src/.libs/libgpgmepp$(gb_StaticLibrary_PLAINEXT)  \
+)
+$(call gb_LinkTarget_use_external_project,$(1),gpgme)
+
+endef
+
 endif
 
 ifeq ($(ENABLE_GLTF),TRUE)
