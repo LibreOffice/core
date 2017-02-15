@@ -120,14 +120,14 @@ public:
 The internal id of a note
 */
 
-class SVX_DLLPUBLIC SvxPostItIdItem: public SfxUInt32Item
+class SVX_DLLPUBLIC SvxPostItIdItem: public SfxStringItem
 {
 public:
     static SfxPoolItem* CreateDefault();
 
     SvxPostItIdItem( sal_uInt16 nWhich  );
 
-    SvxPostItIdItem( sal_uInt32 rId, sal_uInt16 nWhich  );
+    SvxPostItIdItem( const OUString& rId, sal_uInt16 nWhich  );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
