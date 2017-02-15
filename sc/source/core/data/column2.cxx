@@ -18,6 +18,7 @@
  */
 
 #include "column.hxx"
+#include "docsh.hxx"
 #include "scitems.hxx"
 #include "formulacell.hxx"
 #include "document.hxx"
@@ -1875,26 +1876,38 @@ void ScColumn::SetCellNote(SCROW nRow, ScPostIt* pNote)
 }
 
 namespace {
-class ForgetCellNoteCaptionsHandler
-{
-
-public:
-    ForgetCellNoteCaptionsHandler() {}
-
-    void operator() ( size_t /*nRow*/, ScPostIt* p )
+    class CellNoteHandler
     {
-        p->ForgetCaption();
-    }
-};
-}
+        const ScDocument* m_pDocument;
+        const ScAddress m_aAddress; // 'incomplete' address consisting of tab, column
+        const bool m_bForgetCaptionOwnership;
+
+    public:
+        CellNoteHandler(const ScDocument* pDocument, const ScAddress& rPos, bool bForgetCaptionOwnership) :
+            m_pDocument(pDocument),
+            m_aAddress(rPos),
+            m_bForgetCaptionOwnership(bForgetCaptionOwnership) {}
+
+        void operator() ( size_t nRow, ScPostIt* p )
+        {
+            if (m_bForgetCaptionOwnership)
+                p->ForgetCaption();
+
+            // Create a 'complete' address object
+            ScAddress aAddr(m_aAddress);
+            aAddr.SetRow(nRow);
+            // Notify our LOK clients
+            ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Remove, m_pDocument, aAddr, p);
+        }
+    };
+} // anonymous namespace
 
 void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2, bool bForgetCaptionOwnership )
 {
-    if (bForgetCaptionOwnership)
-    {
-        ForgetCellNoteCaptionsHandler aFunc;
-        sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
-    }
+    ScAddress aAddr(nCol, 0, nTab);
+    CellNoteHandler aFunc(pDocument, aAddr, bForgetCaptionOwnership);
+    sc::ParseNote(maCellNotes.begin(), maCellNotes, nRow1, nRow2, aFunc);
+
     rBlockPos.miCellNotePos =
         maCellNotes.set_empty(rBlockPos.miCellNotePos, nRow1, nRow2);
 }
