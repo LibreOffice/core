@@ -3064,7 +3064,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                 break;
             case HTML_O_BGCOLOR:
                 // Ignore empty BGCOLOR on <TABLE>, <TR> and <TD>/>TH> like Netscape
-                // *reallyç not on other tags
+                // *really* not on other tags
                 if( !rOption.GetString().isEmpty() )
                 {
                     rOption.GetColor( m_aBGColor );
@@ -3264,7 +3264,7 @@ void CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
 HTMLTableCnts *SwHTMLParser::InsertTableContents(
                                         bool bHead )
 {
-    // create a new section, the PaM is there
+    // create a new section, the PaM is gonna be there
     const SwStartNode *pStNd =
         InsertTableSection( static_cast< sal_uInt16 >(bHead ? RES_POOLCOLL_TABLE_HDLN
                                            : RES_POOLCOLL_TABLE) );
@@ -3691,10 +3691,9 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 pCurTable->SetTable( pStNd, pTCntxt, nLeftSpace, nRightSpace );
             }
 
-            // Den Kontext-Stack einfrieren, denn es koennen auch mal
-            // irgendwo ausserhalb von Zellen Attribute gesetzt werden.
-            // Darf nicht frueher passieren, weil eventuell noch im
-            // Stack gesucht wird!!!
+            // Freeze the context stack, since ther could be attributes set
+            // outside of cells. Can't happen earlier, since there may be
+            // searches in the stack
             m_nContextStMin = m_aContexts.size();
             m_nContextStAttrMin = m_nContextStMin;
         }
@@ -3702,13 +3701,12 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         pSaveStruct = new CellSaveStruct( *this, pCurTable, bHead,
                                             bReadOptions );
 
-        // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // Is pending on the first GetNextToken, needs to be re-read on each construction
         SaveState( 0 );
     }
 
     if( !nToken )
-        nToken = GetNextToken();    // Token nach <TABLE>
+        nToken = GetNextToken();    // Token after <TABLE>
 
     bool bDone = false;
     while( (IsParserWorking() && !bDone) || bPending )
@@ -3721,8 +3719,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 "Wo ist die Section gebieben?" );
         if( !m_pPendStack && m_bCallNextToken && pSaveStruct->IsInSection() )
         {
-            // NextToken direkt aufrufen (z.B. um den Inhalt von
-            // Floating-Frames oder Applets zu ignorieren)
+            // Call NextToken directly (e.g. ignore the content of floating frames or applets)
             NextToken( nToken );
         }
         else switch( nToken )
@@ -3750,17 +3747,15 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 SvxAdjust eTabAdjust = SVX_ADJUST_END;
                 if( !m_pPendStack )
                 {
-                    // nur wenn eine neue Tabelle aufgemacht wird, aber
-                    // nicht wenn nach einem Pending in der Tabelle
-                    // weitergelesen wird!
+                    // only if we create a new table, but not if we're still
+                    // reading in the table after a Pending
                     pSaveStruct->m_pTable = m_pTable;
 
-                    // HACK: Eine Section fuer eine Tabelle anlegen, die
-                    // in einen Rahmen kommt.
+                    // HACK: create a section for a table that gets in a border
                     if( !pSaveStruct->IsInSection() )
                     {
-                        // Diese Schleife muss vorwartes sein, weil die
-                        // erste Option immer gewinnt.
+                        // The loop needs to be forward, since the
+                        // first option always wins
                         bool bNeedsSection = false;
                         const HTMLOptions& rHTMLOptions = GetOptions();
                         for (const auto & rOption : rHTMLOptions)
@@ -3783,12 +3778,12 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     }
                     else
                     {
-                        // Wenn im aktuellen Absatz Flys verankert sind,
-                        // muss die neue Tabelle in einen Rahmen.
+                        // If Flys are anchored in the current paragraph,
+                        // the table needs to get in a border
                         bHasToFly = HasCurrentParaFlys(false,true);
                     }
 
-                    // in der Zelle kann sich ein Bereich befinden!
+                    // There could be a section in the cell
                     eTabAdjust = m_aAttrTab.pAdjust
                         ? static_cast<const SvxAdjustItem&>(m_aAttrTab.pAdjust->GetItem()).
                                                  GetAdjust()
@@ -3801,7 +3796,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                                    bHasToFly );
                 if( SVPAR_PENDING != GetStatus() )
                 {
-                    // nur wenn die Tabelle wirklich zu Ende ist!
+                    // Only if the table is really complete
                     if( pSubTable )
                     {
                         OSL_ENSURE( pSubTable->GetTableAdjust(false)!= SVX_ADJUST_LEFT &&
@@ -3815,8 +3810,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                             OSL_ENSURE( !pSaveStruct->IsInSection(),
                                     "Wo ist die Section geblieben" );
 
-                            // Wenn jetzt keine Tabelle kommt haben wir eine
-                            // Section
+                            // If there's no table coming, we have a section
                             pSaveStruct->AddContents( pParentContents );
                         }
 
@@ -3843,18 +3837,17 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                     new HTMLTableCnts(pCapStNd) );
                             }
 
-                            // Jetzt haben wir keine Section mehr
+                            // We don't have a section anymore
                             pSaveStruct->ClearIsInSection();
                         }
                         else if( pCapStNd )
                         {
-                            // Da wir diese Section nicht mehr loeschen
-                            // koennen (sie koeente zur erster Box
-                            // gehoeren), fuegen wir sie ein.
+                            // Since we can't delete this section (it might
+                            // belong to the first box), we'll add it
                             pSaveStruct->AddContents(
                                 new HTMLTableCnts(pCapStNd) );
 
-                            // Jetzt haben wir keine Section mehr
+                            // We don't have a section anymore
                             pSaveStruct->ClearIsInSection();
                         }
                     }
@@ -3865,7 +3858,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             break;
 
         case HTML_NOBR_ON:
-            // HACK fuer MS: Steht das <NOBR> zu beginn der Zelle?
+            // HACK for MS: Is the <NOBR> at the start of the cell?
             pSaveStruct->StartNoBreak( *m_pPam->GetPoint() );
             break;
 
@@ -3874,16 +3867,15 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             break;
 
         case HTML_COMMENT:
-            // Mit Kommentar-Feldern werden Spaces nicht mehr geloescht
-            // ausserdem wollen wir fuer einen Kommentar keine neue Zelle
-            // anlegen !!!
+            // Spaces are not gonna be deleted with comment fields,
+            // and we don't want a new cell for a comment
             NextToken( nToken );
             break;
 
         case HTML_MARQUEE_ON:
             if( !pSaveStruct->IsInSection() )
             {
-                // eine neue Section anlegen, der PaM steht dann darin
+                // create a new section, the PaM is gonna be there
                 pSaveStruct->AddContents(
                     InsertTableContents( bHead ) );
             }
@@ -3892,7 +3884,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             break;
 
         case HTML_TEXTTOKEN:
-            // keine Section fuer einen leeren String anlegen
+            // Don't add a section for an empty string
             if( !pSaveStruct->IsInSection() && 1==aToken.getLength() &&
                 ' '==aToken[0] )
                 break;
@@ -3900,7 +3892,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         default:
             if( !pSaveStruct->IsInSection() )
             {
-                // eine neue Section anlegen, der PaM steht dann darin
+                // add a new section, the PaM's gonna be there
                 pSaveStruct->AddContents(
                     InsertTableContents( bHead ) );
             }
@@ -3929,11 +3921,10 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         return;
     }
 
-    // Falls der Inhalt der Zelle leer war, muessen wir noch einen
-    // leeren Inhalt anlegen. Ausserdem legen wir einen leeren Inhalt
-    // an, wenn die Zelle mit einer Tabelle aufgehoert hat und keine
-    // COL-Tags hatte (sonst wurde sie wahrscheinlich von uns exportiert,
-    // und dann wollen wir natuerlich keinen zusaetzlichen Absatz haben).
+    // If the content of the cell was empty, we need to create an epty content
+    // We also create an empty content if the cell ended with a table and had no
+    // COL tags. Otherwise, it was probably exported by us and we don't
+    // want to have an additional paragraph
     if( !pSaveStruct->GetFirstContents() ||
         (!pSaveStruct->IsInSection() && !pCurTable->HasColTags()) )
     {
@@ -3962,9 +3953,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
     {
         pSaveStruct->CheckNoBreak( *m_pPam->GetPoint(), m_xDoc.get() );
 
-        // Alle noch offenen Kontexte beenden. Wir nehmen hier
-        // AttrMin, weil nContxtStMin evtl. veraendert wurde.
-        // Da es durch EndContext wieder restauriert wird, geht das.
+        // End all open contexts. We'll take AttrMin because nContextStMin might
+        // have been modified. Since it's gonna be restored by EndContext, it's okay
         while( m_aContexts.size() > m_nContextStAttrMin+1 )
         {
             HTMLAttrContext *pCntxt = PopContext();
@@ -3972,19 +3962,18 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
             delete pCntxt;
         }
 
-        // LFs am Absatz-Ende entfernen
+        // Remove LFs at the paragraph end
         if( StripTrailingLF()==0 && !m_pPam->GetPoint()->nContent.GetIndex() )
             StripTrailingPara();
 
-        // falls fuer die Zelle eine Ausrichtung gesetzt wurde, muessen
-        // wir die beenden
+        // If there was an adjustment set for the cell, we need to close it
         HTMLAttrContext *pCntxt = PopContext();
         EndContext( pCntxt );
         delete pCntxt;
     }
     else
     {
-        // Alle noch offenen Kontexte beenden
+        // Close all still open contexts
         while( m_aContexts.size() > m_nContextStAttrMin )
         {
             HTMLAttrContext *pCntxt = PopContext();
@@ -3993,14 +3982,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
         }
     }
 
-    // auch eine Numerierung muss beendet werden
+    // end an enumeration
     GetNumInfo().Clear();
 
     SetAttr( false );
 
     pSaveStruct->InsertCell( *this, pCurTable );
 
-    // wir stehen jetzt (wahrschenlich) vor <TH>, <TD>, <TR> oder </TABLE>
+    // we're probably before a <TH>, <TR>, <TR> or </TABLE>
     delete pSaveStruct;
 }
 
@@ -4020,7 +4009,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                                   SvxAdjust eGrpAdjust,
                                   sal_Int16 eGrpVertOri )
 {
-    // <TR> wurde bereist gelesen
+    // <TR> was already read
 
     if( !IsParserWorking() && !m_pPendStack )
         return;
@@ -4070,8 +4059,8 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                                     aHTMLTableVAlignTable, eVertOri );
                     break;
                 case HTML_O_BGCOLOR:
-                    // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netsc.
-                    // ignorieren, bei allen anderen Tags *wirklich* nicht.
+                    // Ignore empty BGCOLOR on <TABLE>, <TR> and <TD>/>TH> like Netscape
+                    // *really* not on other tags
                     if( !rOption.GetString().isEmpty() )
                     {
                         rOption.GetColor( aBGColor );
@@ -4098,13 +4087,12 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
             CreateBrushItem( bBGColor ? &aBGColor : nullptr, aBGImage, aStyle,
                              aId, aClass );
         pCurTable->OpenRow( eAdjust, eVertOri, pBrushItem );
-        // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // Is pending on the first GetNextToken, needs to be re-read on each construction
         SaveState( 0 );
     }
 
     if( !nToken )
-        nToken = GetNextToken();    // naechstes Token
+        nToken = GetNextToken();
 
     bool bDone = false;
     while( (IsParserWorking() && !bDone) || bPending )
@@ -4119,8 +4107,7 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         if( !m_pPendStack && m_bCallNextToken &&
             (pCurTable->GetContext() || pCurTable->HasParentSection()) )
         {
-            // NextToken direkt aufrufen (z.B. um den Inhalt von
-            // Floating-Frames oder Applets zu ignorieren)
+            /// Call NextToken directly (e.g. ignore the content of floating frames or applets)
             NextToken( nToken );
         }
         else switch( nToken )
@@ -4166,25 +4153,23 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         case HTML_COLGROUP_OFF:
         case HTML_COL_ON:
         case HTML_COL_OFF:
-            // wo keine Zelle anfing kann auch keine aufhoehren, oder?
-            // und die ganzen anderen Tokens haben hier auch nicht zu
-            // suchen und machen nur die Tabelle kaputt
+            // Where no cell started, there can't be a cell ending
+            // all the other tokens are bogus anyway and only break the table
             break;
         case HTML_MULTICOL_ON:
-            // spaltige Rahmen koennen wir hier leider nicht einguegen
+            // we can't add columned borders here
             break;
         case HTML_FORM_ON:
-            NewForm( false );   // keinen neuen Absatz aufmachen!
+            NewForm( false );   // don't create a new paragraph
             break;
         case HTML_FORM_OFF:
-            EndForm( false );   // keinen neuen Absatz aufmachen!
+            EndForm( false );   // don't create a new paragraph
             break;
         case HTML_COMMENT:
             NextToken( nToken );
             break;
         case HTML_MAP_ON:
-            // eine Image-Map fuegt nichts ein, deshalb koennen wir sie
-            // problemlos auch ohne Zelle parsen
+            // an image map doesn't add anything, so we can parse it in the cell
             NextToken( nToken );
             break;
         case HTML_TEXTTOKEN:
@@ -4220,14 +4205,14 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
         delete pSaveStruct;
     }
 
-    // wir stehen jetzt (wahrscheinlich) vor <TR> oder </TABLE>
+    // we're probably before <TR> or </TABLE>
 }
 
 void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
                                       bool bReadOptions,
                                       bool bHead )
 {
-    // <THEAD>, <TBODY> bzw. <TFOOT> wurde bereits gelesen
+    // <THEAD>, <TBODY> resp. <TFOOT> were read already
     if( !IsParserWorking() && !m_pPendStack )
         return;
 
@@ -4276,13 +4261,12 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             }
         }
 
-        // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // Is pending on the first GetNextToken, needs to be re-read on each construction
         SaveState( 0 );
     }
 
     if( !nToken )
-        nToken = GetNextToken();    // naechstes Token
+        nToken = GetNextToken();
 
     bool bDone = false;
     while( (IsParserWorking() && !bDone) || bPending )
@@ -4297,8 +4281,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         if( !m_pPendStack && m_bCallNextToken &&
             (pCurTable->GetContext() || pCurTable->HasParentSection()) )
         {
-            // NextToken direkt aufrufen (z.B. um den Inhalt von
-            // Floating-Frames oder Applets zu ignorieren)
+            // Call NextToken directly (e.g. ignore the content of floating frames or applets)
             NextToken( nToken );
         }
         else switch( nToken )
@@ -4341,13 +4324,13 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
             bDone = m_pTable->IsOverflowing();
             break;
         case HTML_MULTICOL_ON:
-            // spaltige Rahmen koennen wir hier leider nicht einguegen
+            // we can't add columned borders here
             break;
         case HTML_FORM_ON:
-            NewForm( false );   // keinen neuen Absatz aufmachen!
+            NewForm( false );   // don't create a new paragraph
             break;
         case HTML_FORM_OFF:
-            EndForm( false );   // keinen neuen Absatz aufmachen!
+            EndForm( false );   // don't create a new paragraph'
             break;
         case HTML_TEXTTOKEN:
             // Blank-Strings sind Folge von CR+LF und kein Text
@@ -4414,7 +4397,7 @@ inline void TableColGrpSaveStruct::CloseColGroup( HTMLTable *pTable )
 void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                                        bool bReadOptions )
 {
-    // <COLGROUP> wurde bereits gelesen, wenn bReadOptions
+    // <COLGROUP> was read already if bReadOptions [is set?, by translator[]
 
     if( !IsParserWorking() && !m_pPendStack )
         return;
@@ -4471,8 +4454,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                 }
             }
         }
-        // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        //  Is pending on the first GetNextToken, needs to be re-read on each construction
         SaveState( 0 );
     }
 
@@ -4492,8 +4474,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
         if( !m_pPendStack && m_bCallNextToken &&
             (pCurTable->GetContext() || pCurTable->HasParentSection()) )
         {
-            // NextToken direkt aufrufen (z.B. um den Inhalt von
-            // Floating-Frames oder Applets zu ignorieren)
+            // Call NextToken directly (e.g. ignore the content of floating frames or applets)
             NextToken( nToken );
         }
         else switch( nToken )
@@ -4557,15 +4538,14 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                 pCurTable->InsertCol( nColSpan, nColWidth, bRelColWidth,
                                       eColAdjust, eColVertOri );
 
-                // die Angaben in <COLGRP> sollen ignoriert werden, wenn
-                // <COL>-Elemente existieren
+                // the attributes in <COLGRP> should be ignored, if there are <COL> elements
                 pSaveStruct->nColGrpSpan = 0;
             }
             break;
         case HTML_COL_OFF:
-            break;      // Ignorieren
+            break;      // Ignore
         case HTML_MULTICOL_ON:
-            // spaltige Rahmen koennen wir hier leider nicht einguegen
+            // we can't add columned borders here
             break;
         case HTML_TEXTTOKEN:
             if( (pCurTable->GetContext() ||
@@ -4603,19 +4583,18 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
 class CaptionSaveStruct : public SectionSaveStruct
 {
     SwPosition aSavePos;
-    SwHTMLNumRuleInfo aNumRuleInfo; // gueltige Numerierung
+    SwHTMLNumRuleInfo aNumRuleInfo; // valid numbering
 
 public:
 
-    HTMLAttrTable aAttrTab;        // und die Attribute
+    HTMLAttrTable aAttrTab;        // attributes
 
     CaptionSaveStruct( SwHTMLParser& rParser, const SwPosition& rPos ) :
         SectionSaveStruct( rParser ), aSavePos( rPos )
     {
         rParser.SaveAttrTab( aAttrTab );
 
-        // Die aktuelle Numerierung wurde gerettet und muss nur
-        // noch beendet werden.
+        // The current numbering was remembered and just needs to be closed
         aNumRuleInfo.Set( rParser.GetNumInfo() );
         rParser.GetNumInfo().Clear();
     }
@@ -4624,20 +4603,20 @@ public:
 
     void RestoreAll( SwHTMLParser& rParser )
     {
-        // Die alten Stack wiederherstellen
+        // Recover the old stack
         Restore( rParser );
 
-        // Die alte Attribut-Tabelle wiederherstellen
+        // Recover the old attribute tables
         rParser.RestoreAttrTab( aAttrTab );
 
-        // Die alte Numerierung wieder aufspannen
+        // Re-open the old numbering
         rParser.GetNumInfo().Set( aNumRuleInfo );
     }
 };
 
 void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 {
-    // <CAPTION> wurde bereits gelesen
+    // <CAPTION> was read already
 
     if( !IsParserWorking() && !m_pPendStack )
         return;
@@ -4680,11 +4659,11 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             }
         }
 
-        // Alte PaM-Position retten.
+        // Remember old PaM position
         pSaveStruct = new CaptionSaveStruct( *this, *m_pPam->GetPoint() );
 
-        // Eine Text-Section im Icons-Bereich als Container fuer die
-        // Ueberschrift anlegen und PaM dort reinstellen.
+        // Add a text section in the icon section as a container for the header
+        // and set the PaM there
         const SwStartNode *pStNd;
         if( m_pTable == pCurTable )
             pStNd = InsertTempTableCaptionSection();
@@ -4693,7 +4672,7 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 
         HTMLAttrContext *pCntxt = new HTMLAttrContext( HTML_CAPTION_ON );
 
-        // Tabellen-Ueberschriften sind immer zentriert.
+        // Table headers are always centered
         NewAttr( &m_aAttrTab.pAdjust, SvxAdjustItem(SVX_ADJUST_CENTER, RES_PARATR_ADJUST) );
 
         HTMLAttrs &rAttrs = pCntxt->GetAttrs();
@@ -4701,18 +4680,17 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
 
         PushContext( pCntxt );
 
-        // StartNode der Section an der Tabelle merken.
+        // Remember the start node of the section at the table
         pCurTable->SetCaption( pStNd, bTop );
 
-        // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // Is pending on the first GetNextToken, needs to be re-read on each construction
         SaveState( 0 );
     }
 
     if( !nToken )
-        nToken = GetNextToken();    // naechstes Token
+        nToken = GetNextToken();
 
-    // </CAPTION> wird laut DTD benoetigt
+    // </CAPTION> is needed according to DTD
     bool bDone = false;
     while( IsParserWorking() && !bDone )
     {
@@ -4789,37 +4767,33 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
         delete pCntxt;
     }
 
-    // LF am Absatz-Ende entfernen
     bool bLFStripped = StripTrailingLF() > 0;
 
     if( m_pTable==pCurTable )
     {
-        // Beim spaeteren verschieben der Beschriftung vor oder hinter
-        // die Tabelle wird der letzte Absatz nicht mitverschoben.
-        // Deshalb muss sich am Ende der Section immer ein leerer
-        // Absatz befinden.
+        // On moving the caption later, the last paragraph isn't moved aswell.
+        // That means, there hast to be an empty paragraph at the end of the section
         if( m_pPam->GetPoint()->nContent.GetIndex() || bLFStripped )
             AppendTextNode( AM_NOSPACE );
     }
     else
     {
-        // LFs am Absatz-Ende entfernen
+        // Strip LFs at the end of the paragraph
         if( !m_pPam->GetPoint()->nContent.GetIndex() && !bLFStripped )
             StripTrailingPara();
     }
 
-    // falls fuer die Zelle eine Ausrichtung gesetzt wurde, muessen
-    // wir die beenden
+    // If there's an adjustment for the cell, we need to close it
     HTMLAttrContext *pCntxt = PopContext();
     EndContext( pCntxt );
     delete pCntxt;
 
     SetAttr( false );
 
-    // Stacks und Attribut-Tabelle wiederherstellen
+    // Recover stack and attribute table
     pSaveStruct->RestoreAll( *this );
 
-    // PaM wiederherstellen.
+    // Recover PaM
     *m_pPam->GetPoint() = pSaveStruct->GetPos();
 
     delete pSaveStruct;
@@ -4834,9 +4808,8 @@ public:
         m_pCurrentTable( pCurTable )
     {}
 
-    // Aufbau der Tabelle anstossen und die Tabelle ggf. in einen
-    // Rahmen packen. Wenn true zurueckgegeben wird muss noch ein
-    // Absatz eingefuegt werden!
+    // Initiate creation of the table and put the table in a border if needed
+    // If it returns true, we need a paragraph
     void MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDoc );
 };
 
@@ -4852,8 +4825,7 @@ void TableSaveStruct::MakeTable( sal_uInt16 nWidth, SwPosition& rPos, SwDoc *pDo
 
     if( pDoc->getIDocumentLayoutAccess().GetCurrentViewShell() && pTableNd )
     {
-        // Existiert schon ein Layout, dann muss an dieser Tabelle die
-        // BoxFrames neu erzeugt werden.
+        // If there's already a layout, the BoxFrames need to be regenerated at this table
 
         if( pTCntxt->GetFrameFormat() )
         {
@@ -4911,7 +4883,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
         case HTML_O_HEIGHT:
             nHeight = (sal_uInt16)rOption.GetNumber();
             if( rOption.GetString().indexOf('%') != -1 )
-                nHeight = 0;    // keine %-Anagben benutzen!!!
+                nHeight = 0;    // don't use % attributes
             break;
         case HTML_O_CELLPADDING:
             nCellPadding = (sal_uInt16)rOption.GetNumber();
@@ -4933,7 +4905,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, eVertOri );
             break;
         case HTML_O_BORDER:
-            // BORDER und BORDER=BORDER wie BORDER=1 behandeln
+            // Handle BORDER and BORDER=BORDER like BORDER=1
             if (!rOption.GetString().isEmpty() &&
                 !rOption.GetString().equalsIgnoreAsciiCase(
                         OOO_STRING_SVTOOLS_HTML_O_border))
@@ -4957,8 +4929,8 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             bHasRules = true;
             break;
         case HTML_O_BGCOLOR:
-            // Leere BGCOLOR bei <TABLE>, <TR> und <TD>/<TH> wie Netscape
-            // ignorieren, bei allen anderen Tags *wirklich* nicht.
+            // Ignore empty BGCOLOR on <TABLE>, <TR> and <TD>/>TH> like Netscape
+            // *really* not on other tags
             if( !rOption.GetString().isEmpty() )
             {
                 rOption.GetColor( aBGColor );
@@ -5000,8 +4972,7 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
         bPrcWidth = true;
     }
 
-    // Wenn BORDER=0 oder kein BORDER gegeben ist, daan darf es auch
-    // keine Umrandung geben
+    // If BORDER=0 or no BORDER given, then there shouldn't be a border
     if( 0==nBorder || USHRT_MAX==nBorder )
     {
         eFrame = HTML_TF_VOID;
@@ -5054,16 +5025,15 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
 
         delete pTableOptions;
 
-        // ist beim ersten GetNextToken schon pending, muss bei
-        // wiederaufsetzen auf jedenfall neu gelesen werden!
+        // Is pending on the first GetNextToken, needs to be re-read on each construction
         SaveState( 0 );
     }
 
     HTMLTable *pCurTable = pSaveStruct->m_pCurrentTable;
 
-    // </TABLE> wird laut DTD benoetigt
+    // </TABLE> is needed according to DTD
     if( !nToken )
-        nToken = GetNextToken();    // naechstes Token
+        nToken = GetNextToken();
 
     bool bDone = false;
     while( (IsParserWorking() && !bDone) || bPending )
@@ -5078,8 +5048,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         if( !m_pPendStack && m_bCallNextToken &&
             (pCurTable->GetContext() || pCurTable->HasParentSection()) )
         {
-            // NextToken direkt aufrufen (z.B. um den Inhalt von
-            // Floating-Frames oder Applets zu ignorieren)
+            /// Call NextToken directly (e.g. ignore the content of floating frames or applets)
             NextToken( nToken );
         }
         else switch( nToken )
@@ -5087,8 +5056,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         case HTML_TABLE_ON:
             if( !pCurTable->GetContext() )
             {
-                // Wenn noch keine Tabelle eingefuegt wurde,
-                // die naechste Tabelle lesen
+                // If there's no table added, read the next table'
                 SkipToken();
                 bDone = true;
             }
@@ -5122,16 +5090,16 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             bDone = m_pTable->IsOverflowing();
             break;
         case HTML_MULTICOL_ON:
-            // spaltige Rahmen koennen wir hier leider nicht einguegen
+            // we can't add columned borders here
             break;
         case HTML_FORM_ON:
-            NewForm( false );   // keinen neuen Absatz aufmachen!
+            NewForm( false );   // don't add a new paragraph
             break;
         case HTML_FORM_OFF:
-            EndForm( false );   // keinen neuen Absatz aufmachen!
+            EndForm( false );   // don't add a new paragraph
             break;
         case HTML_TEXTTOKEN:
-            // Blank-Strings sind u. U. eine Folge von CR+LF und kein Text
+            // blank strings may be a series of CR+LR and no text
             if( (pCurTable->GetContext() ||
                  !pCurTable->HasParentSection()) &&
                 1==aToken.getLength() && ' '==aToken[0] )
@@ -5163,14 +5131,12 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
     HTMLTableContext *pTCntxt = pCurTable->GetContext();
     if( pTCntxt )
     {
-        // Die Tabelle wurde auch angelegt
 
-        // Tabellen-Struktur anpassen
+        // Modify table structure
         pCurTable->CloseTable();
 
-        // ausserhalb von Zellen begonnene Kontexte beenden
-        // muss vor(!) dem Umsetzten der Attribut Tabelle existieren,
-        // weil die aktuelle danach nicht mehr existiert
+        // end contexts that began out of cells. Needs to exist before (!) we move the table,
+        // since the current one doesn't exist anymore afterwards
         while( m_aContexts.size() > m_nContextStAttrMin )
         {
             HTMLAttrContext *pCntxt = PopContext();
@@ -5183,16 +5149,16 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
 
         if( m_pTable==pCurTable )
         {
-            // Tabellen-Beschriftung setzen
+            // Set table caption
             const SwStartNode *pCapStNd = m_pTable->GetCaptionStartNode();
             if( pCapStNd )
             {
-                // Der letzte Absatz der Section wird nie mitkopiert. Deshalb
-                // muss die Section mindestens zwei Absaetze enthalten.
+                // The last paragraph of the section is never part of the copy.
+                // That's why the section needs to contain at least two paragraphs
 
                 if( pCapStNd->EndOfSectionIndex() - pCapStNd->GetIndex() > 2 )
                 {
-                    // Start-Node und letzten Absatz nicht mitkopieren.
+                    // Don't copy start node and the last paragraph
                     SwNodeRange aSrcRg( *pCapStNd, 1,
                                     *pCapStNd->EndOfSectionNode(), -1 );
 
@@ -5213,11 +5179,10 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                     m_xDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx,
                         SwMoveFlags::DEFAULT );
 
-                    // Wenn die Caption vor der Tabelle eingefuegt wurde muss
-                    // eine an der Tabelle gestzte Seitenvorlage noch in den
-                    // ersten Absatz der Ueberschrift verschoben werden.
-                    // Ausserdem muessen alle gemerkten Indizes, die auf den
-                    // Tabellen-Node zeigen noch verschoben werden.
+                    // If the caption was added before the table, a page style on that table
+                    // needs to be moved to the first paragraph of the header.
+                    // Additionally, all remembered indices that point to the table node
+                    // need to be moved
                     if( bTop )
                     {
                         MovePageDescAttrs( pTableStNd, aSrcRg.aStart.GetIndex(),
@@ -5225,14 +5190,14 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                     }
                 }
 
-                // Die Section wird jetzt nicht mehr gebraucht.
+                // The section isn't needed anymore
                 m_pPam->SetMark();
                 m_pPam->DeleteMark();
                 m_xDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
                 m_pTable->SetCaption( nullptr, false );
             }
 
-            // SwTable aufbereiten
+            // Process SwTable
             sal_uInt16 nBrowseWidth = (sal_uInt16)GetCurrentBrowseWidth();
             pSaveStruct->MakeTable( nBrowseWidth, *m_pPam->GetPoint(), m_xDoc.get() );
         }
@@ -5243,14 +5208,14 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
 
         if( m_pTable==pCurTable )
         {
-            // oberen Absatz-Abstand einstellen
+            // Set upper paragraph spacing
             m_bUpperSpace = true;
             SetTextCollAttrs();
 
             m_nParaCnt = m_nParaCnt - std::min(m_nParaCnt,
                 pTCntxt->GetTableNode()->GetTable().GetTabSortBoxes().size());
 
-            // ggfs. eine Tabelle anspringen
+            // Jump to a table if needed
             if( JUMPTO_TABLE == m_eJumpTo && m_pTable->GetSwTable() &&
                 m_pTable->GetSwTable()->GetFrameFormat()->GetName() == m_sJmpMark )
             {
@@ -5258,21 +5223,20 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 m_eJumpTo = JUMPTO_NONE;
             }
 
-            // Wenn Import abgebrochen wurde kein erneutes Show
-            // aufrufen, weil die SwViewShell schon geloescht wurde!
-            // Genuegt nicht. Auch im ACCEPTING_STATE darf
-            // kein Show aufgerufen werden, weil sonst waehrend des
-            // Reschedules der Parser zerstoert wird, wenn noch ein
-            // DataAvailable-Link kommt. Deshalb: Nur im WORKING-State.
+            // If the import was canceled, a new Show wasn't called since
+            // the SwViewShell was already deleted
+            // That's not enough. Even in the ACCEPTING_STATE, a Show mustn't be called
+            // because otherwise the parseris gonna be destroyed on the reschedule,
+            // if there's still a DataAvailable link coming. So: only in the WORKING state
             if( !m_nParaCnt && SVPAR_WORKING == GetStatus() )
                 Show();
         }
     }
     else if( m_pTable==pCurTable )
     {
-        // Es wurde gar keine Tabelle gelesen.
+        // There was no table read
 
-        // Dann muss eine evtl gelesene Beschriftung noch geloescht werden.
+        // We maybe need to delete a read caption
         const SwStartNode *pCapStNd = pCurTable->GetCaptionStartNode();
         if( pCapStNd )
         {
