@@ -71,10 +71,6 @@ enum class EventMultiplexerEventId
     */
     ViewAdded,
 
-    /** The PaneManager is being destroyed.
-    */
-    PaneManagerDying,
-
     /** Edit mode was (or is being) switched to normal mode.  Find
         EventId::EditModeMaster below.
     */

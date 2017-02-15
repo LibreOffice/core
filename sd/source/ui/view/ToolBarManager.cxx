@@ -870,10 +870,6 @@ IMPL_LINK(ToolBarManager::Implementation,EventMultiplexerCallback,
             SetValid(false);
             break;
 
-        case EventMultiplexerEventId::PaneManagerDying:
-            SetValid(false);
-            break;
-
         default: break;
     }
 }
