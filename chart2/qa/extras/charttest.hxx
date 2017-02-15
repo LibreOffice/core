@@ -113,8 +113,6 @@ void ChartTest::load( const OUString& aDir, const OUString& aName )
     {
         maServiceName = "com.sun.star.drawing.DrawingDocument";
     }
-    if (mxComponent.is())
-        mxComponent->dispose();
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(aDir) + aName, maServiceName);
     CPPUNIT_ASSERT(mxComponent.is());
 }
