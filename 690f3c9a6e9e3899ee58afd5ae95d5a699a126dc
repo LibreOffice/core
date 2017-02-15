@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_3841a83a",
+        "filename": "sw/source/filter/html/htmlbas.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T21:36:42Z",
+      "side": 1,
+      "message": "It looks like the original indentation was correct. This line refers to the entire body of the \"if\" condition, while the next comment line refers to the subsequent line only.\n\nIt may be useful to add an empty line after this one, to make that clearer.",
+      "range": {
+        "startLine": 107,
+        "startChar": 4,
+        "endLine": 107,
+        "endChar": 8
+      },
+      "revId": "690f3c9a6e9e3899ee58afd5ae95d5a699a126dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_583e6cb9",
+        "filename": "sw/source/filter/html/htmlbas.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T21:36:42Z",
+      "side": 1,
+      "message": "Because this is an independent comment line (see previous comment), it might be good to change \"This module\" to \"The Basic\", as in the original.",
+      "range": {
+        "startLine": 108,
+        "startChar": 11,
+        "endLine": 108,
+        "endChar": 22
+      },
+      "revId": "690f3c9a6e9e3899ee58afd5ae95d5a699a126dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_185ce424",
+        "filename": "sw/source/filter/html/htmlbas.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T21:36:42Z",
+      "side": 1,
+      "message": "It would be better to use \"behind\" instead of \"after\" here. Because \"to be after\" means \"to search for\".",
+      "range": {
+        "startLine": 227,
+        "startChar": 21,
+        "endLine": 227,
+        "endChar": 26
+      },
+      "revId": "690f3c9a6e9e3899ee58afd5ae95d5a699a126dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_784b305a",
+        "filename": "sw/source/filter/html/htmlnumreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T21:36:42Z",
+      "side": 1,
+      "message": "An exact translation might be (referring to paragraph, as in the original): \"If the layer has already been used, the start value may need to be set hard to the paragraph.\"",
+      "range": {
+        "startLine": 124,
+        "startChar": 11,
+        "endLine": 124,
+        "endChar": 74
+      },
+      "revId": "690f3c9a6e9e3899ee58afd5ae95d5a699a126dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d8517c10",
+        "filename": "sw/source/filter/html/htmlnumreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T21:36:42Z",
+      "side": 1,
+      "message": "This left-over line can be removed",
+      "revId": "690f3c9a6e9e3899ee58afd5ae95d5a699a126dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_f8a48009",
+        "filename": "sw/source/filter/html/htmlnumreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T21:36:42Z",
+      "side": 1,
+      "message": "\"both\" is \"the NodeNum object as well\" in the original :)\n\nThat probably refers to the functioning of ResetAttr() alone (disregarding its RES_PARATR_NUMRULE argument) and might make it a bit clearer. You seem to think way ahead here. :)",
+      "range": {
+        "startLine": 392,
+        "startChar": 61,
+        "endLine": 392,
+        "endChar": 65
+      },
+      "revId": "690f3c9a6e9e3899ee58afd5ae95d5a699a126dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
