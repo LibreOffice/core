@@ -24,7 +24,7 @@
 #include <rtl/string.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
-//!! WARNING: be aware of cui/source/tabpages/page.h where someone had the broken idea
+//!! WARNING: be aware of svx/source/dialog/page.h where someone had the broken idea
 //!! of duplicating the values of this enum in order to use those defines within
 //!! src files.
 //!! Thus don't reorder the enum values here without changing the code there as well.

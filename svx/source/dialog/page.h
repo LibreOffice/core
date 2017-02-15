@@ -23,7 +23,7 @@
 
 //!! the values of the following defines must correspond to the array position
 //!! of the respective paper size in the file i18nutil/source/utility/paper.cxx
-//!! There are enums for them in i18nutil/inc/i18nutil/paper.hxx but unfortunately
+//!! There are enums for them in include/i18nutil/paper.hxx but unfortunately
 //!! the resource compiler does not understand enums, thus the enum values need
 //!! to be duplicated here for use in the src file.
 #define PAPERSIZE_A0            0
