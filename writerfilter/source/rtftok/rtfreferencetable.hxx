@@ -24,7 +24,7 @@ class RTFReferenceTable
 public:
     typedef std::map<int, writerfilter::Reference<Properties>::Pointer_t> Entries_t;
     typedef std::pair<int, writerfilter::Reference<Properties>::Pointer_t> Entry_t;
-    explicit RTFReferenceTable(Entries_t const& rEntries);
+    explicit RTFReferenceTable(Entries_t aEntries);
     virtual ~RTFReferenceTable();
     virtual void resolve(Table& rHandler) override;
 private:

@@ -52,7 +52,7 @@ class RtfFilter : public cppu::WeakImplHelper
     uno::Reference<lang::XComponent> m_xSrcDoc, m_xDstDoc;
 
 public:
-    explicit RtfFilter(const uno::Reference<uno::XComponentContext>& xContext);
+    explicit RtfFilter(uno::Reference<uno::XComponentContext> xContext);
 
     // XFilter
     sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
@@ -74,8 +74,8 @@ public:
 
 };
 
-RtfFilter::RtfFilter(const uno::Reference< uno::XComponentContext >& rxContext)
-    : m_xContext(rxContext)
+RtfFilter::RtfFilter(uno::Reference<uno::XComponentContext> xContext)
+    : m_xContext(std::move(xContext))
 {
 }
 
