@@ -74,7 +74,7 @@ class PresenterToolBar
 public:
     typedef ::std::function<void ()> Action;
 
-    enum Anchor { Left, Center, Right };
+    enum Anchor { Left, Center };
 
     PresenterToolBar (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext,

@@ -758,7 +758,6 @@ void PresenterToolBar::Layout (
     {
         case Left : nX = 0; break;
         case Center: nX = (aWindowBox.Width - aTotalSize.Width - nTotalHorizontalGap) / 2; break;
-        case Right: nX = aWindowBox.Width - aTotalSize.Width - nTotalHorizontalGap; break;
     }
 
     // Place the parts.
