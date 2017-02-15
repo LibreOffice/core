@@ -342,8 +342,7 @@ OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilte
     while( mxFilterContainer->hasByName( aFilterName ) )
     {
         aFilterName = rFilterName;
-        aFilterName += aSpace;
-        aFilterName += OUString::number( nId++ );
+        aFilterName += aSpace + OUString::number( nId++ );
     }
 
     return aFilterName;
@@ -360,9 +359,7 @@ OUString XMLFilterSettingsDialog::createUniqueTypeName( const OUString& rTypeNam
 
     while( mxFilterContainer->hasByName( aTypeName ) )
     {
-        aTypeName = rTypeName;
-        aTypeName += aSpace;
-        aTypeName += OUString::number( nId++ );
+        aTypeName = rTypeName + aSpace + OUString::number( nId++ );
     }
 
     return aTypeName;
@@ -595,8 +592,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         OUString aDocType;
         if( !pFilterEntry->maDocType.match( m_sDocTypePrefix ) )
         {
-            aDocType = m_sDocTypePrefix;
-            aDocType += pFilterEntry->maDocType;
+            aDocType = m_sDocTypePrefix + pFilterEntry->maDocType;
         }
         else
         {
