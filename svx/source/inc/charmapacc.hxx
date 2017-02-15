@@ -44,6 +44,7 @@ namespace svx
         VclPtr<SvxShowCharSet>     mpParent; // the vcl control
         SvxShowCharSetAcc*  m_pTable; // the table, which holds the characters shown by the vcl control
         css::uno::Reference< css::accessibility::XAccessible > m_xAcc; // the ref to the table
+        sal_Int32 getImplAccessibleChildCount() const;
     protected:
         virtual ~SvxShowCharSetVirtualAcc();
 
