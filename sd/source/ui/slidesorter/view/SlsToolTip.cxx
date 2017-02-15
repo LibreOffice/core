@@ -110,7 +110,7 @@ void ToolTip::DoShow()
         Rectangle aBox (
             mrSlideSorter.GetView().GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
                 mpDescriptor,
-                PageObjectLayouter::Preview,
+                PageObjectLayouter::Part::Preview,
                 PageObjectLayouter::WindowCoordinateSystem));
 
         // Do not show the help text when the (lower edge of the ) preview

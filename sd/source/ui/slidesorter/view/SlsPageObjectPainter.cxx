@@ -121,7 +121,7 @@ void PageObjectPainter::PaintBackground (
         rDevice.SetLineColor(pPage->GetPageBackgroundColor(nullptr));
         const Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
-            PageObjectLayouter::Preview,
+            PageObjectLayouter::Part::Preview,
             PageObjectLayouter::ModelCoordinateSystem));
         rDevice.DrawRect(aPreviewBox);
     }
@@ -134,7 +134,7 @@ void PageObjectPainter::PaintPreview (
 {
     const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
-        PageObjectLayouter::Preview,
+        PageObjectLayouter::Part::Preview,
         PageObjectLayouter::ModelCoordinateSystem));
 
     if (mpCache != nullptr)
@@ -194,7 +194,7 @@ Bitmap PageObjectPainter::GetPreviewBitmap (
         Bitmap aMarkedPreview (mpCache->GetMarkedPreviewBitmap(pPage));
         const Rectangle aPreviewBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
-            PageObjectLayouter::Preview,
+            PageObjectLayouter::Part::Preview,
             PageObjectLayouter::ModelCoordinateSystem));
         if (aMarkedPreview.IsEmpty() || aMarkedPreview.GetSizePixel()!=aPreviewBox.GetSize())
         {
@@ -220,7 +220,7 @@ void PageObjectPainter::PaintPageNumber (
 {
     const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
         rpDescriptor,
-        PageObjectLayouter::PageNumber,
+        PageObjectLayouter::Part::PageNumber,
         PageObjectLayouter::ModelCoordinateSystem));
 
     // Determine the color of the page number.
@@ -276,7 +276,7 @@ void PageObjectPainter::PaintTransitionEffect (
     {
         const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
-            PageObjectLayouter::TransitionEffectIndicator,
+            PageObjectLayouter::Part::TransitionEffectIndicator,
             PageObjectLayouter::ModelCoordinateSystem));
 
         rDevice.DrawBitmapEx(
@@ -298,7 +298,7 @@ void PageObjectPainter::PaintCustomAnimationEffect (
     {
         const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
             rpDescriptor,
-            PageObjectLayouter::CustomAnimationEffectIndicator,
+            PageObjectLayouter::Part::CustomAnimationEffectIndicator,
             PageObjectLayouter::ModelCoordinateSystem));
         rDevice.DrawBitmapEx(
             aBox.TopCenter(),
@@ -366,12 +366,12 @@ void PageObjectPainter::PaintBackgroundDetail (
 
     const Rectangle aFocusSize (pPageObjectLayouter->GetBoundingBox(
                                         rpDescriptor,
-                                        PageObjectLayouter::FocusIndicator,
+                                        PageObjectLayouter::Part::FocusIndicator,
                                         PageObjectLayouter::ModelCoordinateSystem));
 
     const Rectangle aPageObjectBox (pPageObjectLayouter->GetBoundingBox(
                                         rpDescriptor,
-                                        PageObjectLayouter::PageObject,
+                                        PageObjectLayouter::Part::PageObject,
                                         PageObjectLayouter::ModelCoordinateSystem));
 
     // Fill the background with the background color of the slide sorter.
@@ -430,7 +430,7 @@ void PageObjectPainter::PaintBackgroundDetail (
     // Compensate for the border around the preview.
     const Rectangle aBox (pPageObjectLayouter->GetBoundingBox(
                                 rpDescriptor,
-                                PageObjectLayouter::Preview,
+                                PageObjectLayouter::Part::Preview,
                                 PageObjectLayouter::ModelCoordinateSystem));
     Rectangle aFrameBox (aBox.Left()-1,aBox.Top()-1,aBox.Right()+1,aBox.Bottom()+1);
     mpShadowPainter->PaintFrame(rDevice, aFrameBox);

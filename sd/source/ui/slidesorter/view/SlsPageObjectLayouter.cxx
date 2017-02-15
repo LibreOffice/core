@@ -179,31 +179,26 @@ Rectangle PageObjectLayouter::GetBoundingBox (
     Rectangle aBoundingBox;
     switch (ePart)
     {
-        case FocusIndicator:
+        case Part::FocusIndicator:
             aBoundingBox = maFocusIndicatorBoundingBox;
             break;
 
-        case PageObject:
-        case MouseOverIndicator:
+        case Part::PageObject:
             aBoundingBox = maPageObjectBoundingBox;
             break;
 
-        case Preview:
+        case Part::Preview:
             aBoundingBox = maPreviewBoundingBox;
             break;
 
-        case PageNumber:
+        case Part::PageNumber:
             aBoundingBox = maPageNumberAreaBoundingBox;
             break;
 
-        case Name:
-            aBoundingBox = maPageNumberAreaBoundingBox;
-            break;
-
-        case TransitionEffectIndicator:
+        case Part::TransitionEffectIndicator:
             aBoundingBox = maTransitionEffectBoundingBox;
             break;
-        case CustomAnimationEffectIndicator:
+        case Part::CustomAnimationEffectIndicator:
             aBoundingBox = maCustomAnimationEffectBoundingBox;
             break;
     }
@@ -220,13 +215,13 @@ Rectangle PageObjectLayouter::GetBoundingBox (
 
 Size PageObjectLayouter::GetPreviewSize ()
 {
-    return GetBoundingBox(Point(0,0), PageObjectLayouter::Preview,
+    return GetBoundingBox(Point(0,0), PageObjectLayouter::Part::Preview,
                           WindowCoordinateSystem).GetSize();
 }
 
 Size PageObjectLayouter::GetGridMaxSize()
 {
-    return GetBoundingBox(Point(0,0), PageObjectLayouter::FocusIndicator,
+    return GetBoundingBox(Point(0,0), PageObjectLayouter::Part::FocusIndicator,
                           WindowCoordinateSystem).GetSize();
 }
 

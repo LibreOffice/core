@@ -52,7 +52,7 @@ public:
         const sal_Int32 nPageCount);
     ~PageObjectLayouter();
 
-    enum Part {
+    enum class Part {
         // The focus indicator is painted outside the actual page object.
         FocusIndicator,
         // This is the outer bounding box that includes the preview, page
@@ -60,12 +60,8 @@ public:
         PageObject,
         // Bounding box of the actual preview.
         Preview,
-        // Bounding box of the mouse indicator indicator frame.
-        MouseOverIndicator,
         // Bounding box of the page number.
         PageNumber,
-        // Bounding box of the pane name.
-        Name,
         // Indicator whether or not there is a slide transition associated
         // with this slide.
         TransitionEffectIndicator,

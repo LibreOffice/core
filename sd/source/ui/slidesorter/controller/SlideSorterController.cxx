@@ -204,7 +204,7 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
             // Make sure that the mouse is over the preview area.
             if ( ! mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox(
                 pDescriptorAtPoint,
-                view::PageObjectLayouter::Preview,
+                view::PageObjectLayouter::Part::Preview,
                 view::PageObjectLayouter::WindowCoordinateSystem).IsInside(aWindowPosition))
             {
                 pDescriptorAtPoint.reset();
@@ -374,7 +374,7 @@ bool SlideSorterController::Command (
                     Rectangle aBBox (
                         mrView.GetLayouter().GetPageObjectLayouter()->GetBoundingBox (
                             pDescriptor,
-                            PageObjectLayouter::PageObject,
+                            PageObjectLayouter::Part::PageObject,
                             PageObjectLayouter::ModelCoordinateSystem));
                     aMenuLocation = aBBox.Center();
                 }

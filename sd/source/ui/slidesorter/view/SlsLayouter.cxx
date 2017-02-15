@@ -794,10 +794,10 @@ Rectangle Layouter::Implementation::GetInnerBoundingBox (
     if ( ! pDescriptor)
         return Rectangle();
 
-    PageObjectLayouter::Part ePart = PageObjectLayouter::Preview;
+    PageObjectLayouter::Part ePart = PageObjectLayouter::Part::Preview;
 
     if (pDescriptor->HasState(model::PageDescriptor::ST_Selected))
-        ePart = PageObjectLayouter::PageObject;
+        ePart = PageObjectLayouter::Part::PageObject;
 
     return mpPageObjectLayouter->GetBoundingBox(
             pDescriptor, ePart,
