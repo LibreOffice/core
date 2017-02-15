@@ -823,9 +823,9 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
             // display month in title bar
             nDeltaX = nX;
             nDeltaY = nY + TITLE_BORDERY;
-            OUString aMonthText(maCalendarWrapper.getDisplayName(i18n::CalendarDisplayIndex::MONTH, nMonth - 1, 1));
-            aMonthText += " ";
-            aMonthText += OUString::number(nYear);
+            OUString aMonthText = maCalendarWrapper.getDisplayName(i18n::CalendarDisplayIndex::MONTH, nMonth - 1, 1)
+                    + " "
+                    + OUString::number(nYear);
             long nMonthTextWidth = rRenderContext.GetTextWidth(aMonthText);
             long nMonthOffX1 = 0;
             long nMonthOffX2 = 0;
@@ -840,9 +840,9 @@ void Calendar::ImplDraw(vcl::RenderContext& rRenderContext)
             if (nMonthTextWidth > nMaxMonthWidth)
             {
                 // Abbreviated month name.
-                aMonthText  = maCalendarWrapper.getDisplayName(i18n::CalendarDisplayIndex::MONTH, nMonth - 1, 0);
-                aMonthText += " ";
-                aMonthText += OUString::number(nYear);
+                aMonthText  = maCalendarWrapper.getDisplayName(i18n::CalendarDisplayIndex::MONTH, nMonth - 1, 0)
+                            + " "
+                            + OUString::number(nYear);
                 nMonthTextWidth = rRenderContext.GetTextWidth(aMonthText);
             }
             long nTempOff = (mnMonthWidth - nMonthTextWidth + 1) / 2;
@@ -1539,23 +1539,21 @@ void Calendar::RequestHelp( const HelpEvent& rHEvt )
                 maCalendarWrapper.setGregorianDateTime( aDate);
                 sal_uInt16      nWeek = (sal_uInt16) maCalendarWrapper.getValue( i18n::CalendarFieldIndex::WEEK_OF_YEAR);
                 sal_uInt16      nMonth = aDate.GetMonth();
-                OUString   aStr( maDayText );
-                aStr += ": ";
-                aStr += OUString::number(aDate.GetDayOfYear());
-                aStr += " / ";
-                aStr += maWeekText;
-                aStr += ": ";
-                aStr += OUString::number(nWeek);
+                OUString   aStr = maDayText
+                                + ": "
+                                + OUString::number(aDate.GetDayOfYear())
+                                + " / "
+                                + maWeekText
+                                + ": "
+                                + OUString::number(nWeek);
         // if year is not the same, add it
                 if ( (nMonth == 12) && (nWeek == 1) )
                 {
-                    aStr += ",  ";
-                    aStr += OUString::number(aDate.GetNextYear());
+                    aStr += ",  " + OUString::number(aDate.GetNextYear());
                 }
                 else if ( (nMonth == 1) && (nWeek > 50) )
                 {
-                    aStr += ", ";
-                    aStr += OUString::number(aDate.GetYear()-1);
+                    aStr += ", " + OUString::number(aDate.GetYear()-1);
                 }
                 Help::ShowQuickHelp( this, aDateRect, aStr );
                 return;

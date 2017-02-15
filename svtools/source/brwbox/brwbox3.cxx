@@ -235,11 +235,11 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
             else
                 aRetText = "TableCell";
 #if OSL_DEBUG_LEVEL > 0
-            aRetText += " [";
-            aRetText += OUString::number(sal_Int32(GetCurRow()));
-            aRetText += ",";
-            aRetText += OUString::number(sal_Int32(GetCurColumnId()));
-            aRetText += "]";
+            aRetText += " ["
+                        + OUString::number(sal_Int32(GetCurRow()))
+                        + ","
+                        + OUString::number(sal_Int32(GetCurColumnId()))
+                        + "]";
 #endif
             break;
         case ::svt::BBTYPE_ROWHEADERCELL:
@@ -248,21 +248,21 @@ OUString BrowseBox::GetAccessibleObjectName( ::svt::AccessibleBrowseBoxObjType e
                 aRetText = OUString::number( rowId );
             }
 #if OSL_DEBUG_LEVEL > 0
-            aRetText += " [";
-            aRetText += OUString::number(sal_Int32(GetCurRow()));
-            aRetText += ",";
-            aRetText += OUString::number(sal_Int32(GetCurColumnId()));
-            aRetText += "]";
+            aRetText += " ["
+                        + OUString::number(sal_Int32(GetCurRow()))
+                        + ","
+                        + OUString::number(sal_Int32(GetCurColumnId()))
+                        + "]";
 #endif
             break;
         case ::svt::BBTYPE_COLUMNHEADERCELL:
             aRetText = GetColumnDescription( sal_Int16( _nPosition ) );
 #if OSL_DEBUG_LEVEL > 0
-            aRetText += " [";
-            aRetText += OUString::number(sal_Int32(GetCurRow()));
-            aRetText += ",";
-            aRetText += OUString::number(sal_Int32(GetCurColumnId()));
-            aRetText += "]";
+            aRetText += " ["
+                        + OUString::number(sal_Int32(GetCurRow()))
+                        + ","
+                        + OUString::number(sal_Int32(GetCurColumnId()))
+                        + "]";
 #endif
             break;
         default:

@@ -219,8 +219,7 @@ void GenericToolbarController::statusChanged( const FeatureStateEvent& Event )
                 if ( aStrValue.startsWith("($1)") )
                 {
                     OUString aTmp(FwkResId(STR_UPDATEDOC));
-                    aTmp += " ";
-                    aTmp += aStrValue.copy( 4 );
+                    aTmp += " " + aStrValue.copy( 4 );
                     aStrValue = aTmp;
                 }
                 else if ( aStrValue.startsWith("($2)") )
