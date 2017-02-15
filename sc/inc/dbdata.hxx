@@ -42,7 +42,6 @@ struct ScImportParam;
 enum class ScDBDataPortion
 {
     TOP_LEFT,   ///< top left cell of area
-    HEADER,     ///< header row of area, if headers are present
     AREA        ///< entire area
 };
 

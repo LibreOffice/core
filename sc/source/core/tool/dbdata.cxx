@@ -487,8 +487,6 @@ bool ScDBData::IsDBAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, ScDBDataPortion 
         {
             case ScDBDataPortion::TOP_LEFT:
                 return nCol == nStartCol && nRow == nStartRow;
-            case ScDBDataPortion::HEADER:
-                return HasHeader() && nRow == nStartRow && nCol >= nStartCol && nCol <= nEndCol;
             case ScDBDataPortion::AREA:
                 return nCol >= nStartCol && nCol <= nEndCol && nRow >= nStartRow && nRow <= nEndRow;
         }
