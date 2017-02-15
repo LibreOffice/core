@@ -25,6 +25,7 @@
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
 
+#include <comphelper/lok.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zforlist.hxx>
@@ -2212,7 +2213,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     ScAddress aPos( GetViewData()->GetCurX(), GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
                     pTabViewShell->ReplaceNote( aPos, pTextItem->GetValue(), &pAuthorItem->GetValue(), &pDateItem->GetValue() );
                 }
-                else
+                else if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
                 {
                     pTabViewShell->EditNote();                  // note object to edit
                 }
