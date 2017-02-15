@@ -79,12 +79,12 @@ namespace
     }
 }
 
-enum SylkVersion
+enum class SylkVersion
 {
-    SYLK_SCALC3,    // Wrote wrongly quoted strings and unescaped semicolons.
-    SYLK_OOO32,     // Correct strings, plus multiline content.
-    SYLK_OWN,       // Place our new versions, if any, before this value.
-    SYLK_OTHER      // Assume that aliens wrote correct strings.
+    SCALC3,    // Wrote wrongly quoted strings and unescaped semicolons.
+    OOO32,     // Correct strings, plus multiline content.
+    OWN,       // Place our new versions, if any, before this value.
+    OTHER      // Assume that aliens wrote correct strings.
 };
 
 // Whole document without Undo
@@ -696,7 +696,7 @@ static void lcl_UnescapeSylk( OUString & rString, SylkVersion eVersion )
     // Older versions didn't escape the semicolon.
     // Older versions quoted the string and doubled embedded quotes, but not
     // the semicolons, which was plain wrong.
-    if (eVersion >= SYLK_OOO32)
+    if (eVersion >= SylkVersion::OOO32)
         rString = rString.replaceAll(";;", ";");
     else
         rString = rString.replaceAll("\"\"", "\"");
@@ -714,7 +714,7 @@ static const sal_Unicode* lcl_ScanSylkString( const sal_Unicode* p,
         if( *p == '"' )
         {
             pEndQuote = p;
-            if (eVersion >= SYLK_OOO32)
+            if (eVersion >= SylkVersion::OOO32)
             {
                 if (*(p+1) == ';')
                 {
@@ -750,7 +750,7 @@ static const sal_Unicode* lcl_ScanSylkFormula( const sal_Unicode* p,
         OUString& rString, SylkVersion eVersion )
 {
     const sal_Unicode* pStart = p;
-    if (eVersion >= SYLK_OOO32)
+    if (eVersion >= SylkVersion::OOO32)
     {
         while (*p)
         {
@@ -1712,7 +1712,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
 {
     bool bOk = true;
     bool bMyDoc = false;
-    SylkVersion eVersion = SYLK_OTHER;
+    SylkVersion eVersion = SylkVersion::OTHER;
 
     // US-English separators for StringToDouble
     sal_Unicode cDecSep = '.';
@@ -1941,10 +1941,10 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
             {
                 aLine = aLine.copy(4);
                 if (aLine == "CALCOOO32")
-                    eVersion = SYLK_OOO32;
+                    eVersion = SylkVersion::OOO32;
                 else if (aLine == "SCALC3")
-                    eVersion = SYLK_SCALC3;
-                bMyDoc = (eVersion <= SYLK_OWN);
+                    eVersion = SylkVersion::SCALC3;
+                bMyDoc = (eVersion <= SylkVersion::OWN);
             }
             else if( cTag == 'E' )                      // Ende
                 break;

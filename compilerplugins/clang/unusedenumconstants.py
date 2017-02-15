@@ -128,6 +128,7 @@ for d in definitionSet:
          "svtools/source/config/helpopt.cxx", # HelpProperty
          "include/svtools/htmltokn.h",
          "include/sfx2/sidebar/Theme.hxx", # ThemeItem
+         "sc/source/ui/docshell/impex.cxx", # SylkVersion
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
