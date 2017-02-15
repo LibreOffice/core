@@ -1603,7 +1603,7 @@ bool FormulaProcessorBase::extractCellRange( ScRange& orRange,
     lclProcessRef( aRanges, extractReference( rTokens ), bAllowRelative, -1 );
     if( !aRanges.empty() )
     {
-        orRange = aRanges.GetTopLeftCorner();
+        orRange = *aRanges.front();
         return true;
     }
     return false;
