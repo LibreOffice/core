@@ -1,0 +1,62 @@
+// nSeriesCount
+4
+/// Series 0
+// aAreaPosition.X
+5507
+// aAreaPosition.Y
+3295
+// aAreaSize.Height
+4052
+// aAreaSize.Width
+11328
+// aAreaTransformation
+11328;0;5507;0;4052;3295;0;0;1
+// static_cast<sal_Int32>(aAreaFillStyle)
+1
+// static_cast<sal_Int32>(aAreaFillColor)
+16711680
+/// Series 1
+// aAreaPosition.X
+5507
+// aAreaPosition.Y
+3385
+// aAreaSize.Height
+3962
+// aAreaSize.Width
+11328
+// aAreaTransformation
+11328;0;5507;0;3962;3385;0;0;1
+// static_cast<sal_Int32>(aAreaFillStyle)
+2
+// static_cast<sal_Int32>(aAreaFillColor)
+10079487
+/// Series 2
+// aAreaPosition.X
+5507
+// aAreaPosition.Y
+3345
+// aAreaSize.Height
+4002
+// aAreaSize.Width
+11328
+// aAreaTransformation
+11328;0;5507;0;4002;3345;0;0;1
+// static_cast<sal_Int32>(aAreaFillStyle)
+4
+// static_cast<sal_Int32>(aAreaFillColor)
+10079487
+/// Series 3
+// aAreaPosition.X
+5507
+// aAreaPosition.Y
+2334
+// aAreaSize.Height
+5013
+// aAreaSize.Width
+11328
+// aAreaTransformation
+11328;0;5507;0;5013;2334;0;0;1
+// static_cast<sal_Int32>(aAreaFillStyle)
+3
+// static_cast<sal_Int32>(aAreaFillColor)
+16777215
