@@ -44,9 +44,6 @@ $(eval $(call gb_CppunitTest_use_rdbs,writerperfect_wpftimport,\
 $(eval $(call gb_CppunitTest_use_configuration,writerperfect_wpftimport))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,writerperfect_wpftimport,\
-	writerperfect/qa/unit/DrawImportTest \
-	writerperfect/qa/unit/ImpressImportTest \
-	writerperfect/qa/unit/SpreadsheetImportTest \
 	writerperfect/qa/unit/TextImportTest \
 	writerperfect/qa/unit/wpftimport \
 ))
