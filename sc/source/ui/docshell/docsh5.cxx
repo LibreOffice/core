@@ -124,9 +124,9 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGe
     if (!pData)
         pData = pColl->GetDBNearCursor(nCol, nRow, nTab );
 
-    bool bSelected = ( eSel == SC_DBSEL_FORCE_MARK ||
-            (rMarked.aStart != rMarked.aEnd && eSel != SC_DBSEL_ROW_DOWN) );
-    bool bOnlyDown = (!bSelected && eSel == SC_DBSEL_ROW_DOWN && rMarked.aStart.Row() == rMarked.aEnd.Row());
+    bool bSelected = ( eSel == ScGetDBSelection::ForceMark ||
+            (rMarked.aStart != rMarked.aEnd && eSel != ScGetDBSelection::RowDown) );
+    bool bOnlyDown = (!bSelected && eSel == ScGetDBSelection::RowDown && rMarked.aStart.Row() == rMarked.aEnd.Row());
 
     bool bUseThis = false;
     if (pData)

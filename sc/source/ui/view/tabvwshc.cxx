@@ -254,7 +254,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
             pDBData->ExtendDataArea(pDoc);
             pDBData->GetQueryParam( aQueryParam );
 
@@ -284,7 +284,7 @@ VclPtr<SfxModelessDialog> ScTabViewShell::CreateRefDialog(
                                      SCITEM_QUERYDATA,
                                      SCITEM_QUERYDATA );
 
-            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, SC_DBSEL_ROW_DOWN);
+            ScDBData* pDBData = GetDBData(false, SC_DB_MAKE, ScGetDBSelection::RowDown);
             pDBData->ExtendDataArea(pDoc);
             pDBData->GetQueryParam( aQueryParam );
 

@@ -890,7 +890,7 @@ bool ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             pNewData = rDocShell.GetDBData(
                             ScRange( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
                                      aLocalParam.nCol2, aLocalParam.nRow2, nDestTab ),
-                            SC_DB_MAKE, SC_DBSEL_FORCE_MARK );
+                            SC_DB_MAKE, ScGetDBSelection::ForceMark );
 
         if (pNewData)
         {

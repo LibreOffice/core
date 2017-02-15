@@ -208,7 +208,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 GetUndoManager()->EnterListAction( aStrImport, aStrImport, 0, nViewShellId );
                             }
 
-                            ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
+                            ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, ScGetDBSelection::Keep );
                             OSL_ENSURE(pDBData, "kann DB-Daten nicht anlegen");
                             sTarget = pDBData->GetName();
                         }

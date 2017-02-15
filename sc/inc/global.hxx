@@ -394,26 +394,23 @@ enum ScGetDBMode
 };
 
 /// For ScDBFunc::GetDBData()
-enum ScGetDBSelection
+enum class ScGetDBSelection
 {
     /** Keep selection as is, expand to used data area if no selection. */
-    SC_DBSEL_KEEP,
-
-    /** Shrink selection to sheet's data area. */
-    SC_DBSEL_SHRINK_TO_SHEET_DATA,
+    Keep,
 
     /** Shrink selection to actually used data area within the selection. */
-    SC_DBSEL_SHRINK_TO_USED_DATA,
+    ShrinkToUsedData,
 
     /** If only one row or portion thereof is selected, shrink row to used data
         columns and select further rows down until end of data. If an area is
         selected, shrink rows to actually used columns. Else, no selection,
         expand to used data area. */
-    SC_DBSEL_ROW_DOWN,
+    RowDown,
 
     /** Behave as if the range corresponding to a ScDBData area was selected,
         for API use. */
-    SC_DBSEL_FORCE_MARK
+    ForceMark
 };
 
 enum ScLkUpdMode    // modes for updating links

@@ -390,7 +390,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
             //  Creation of database area "Import1" isn't here, but in the DocShell
             //  slot execute, so it can be added to the undo action
 
-            ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, SC_DBSEL_KEEP );
+            ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, ScGetDBSelection::Keep );
             OUString sTarget;
             if (pDBData)
                 sTarget = pDBData->GetName();

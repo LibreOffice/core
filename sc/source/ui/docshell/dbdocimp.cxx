@@ -107,7 +107,7 @@ bool ScDBDocFunc::DoImportUno( const ScAddress& rPos,
     svx::ODataAccessDescriptor aDesc( aArgs );      // includes selection and result set
 
     //  create database range
-    ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
+    ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, ScGetDBSelection::Keep );
     DBG_ASSERT(pDBData, "can't create DB data");
     OUString sTarget = pDBData->GetName();
 
