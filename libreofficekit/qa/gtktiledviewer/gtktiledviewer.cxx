@@ -215,8 +215,6 @@ static std::map<GtkWidget*, TiledWindow> g_aWindows;
 static void setupDocView(GtkWidget* pDocView);
 static GtkWidget* createWindow(TiledWindow& rWindow);
 static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpointer userdata);
-/// Called when the document size is changed.
-static void signalSize(LOKDocView* pLOKDocView, gpointer pData);
 /// Handler for m_pPartModeComboBox.
 static void changePartMode( GtkWidget* pSelector, gpointer /*pItem*/);
 /// Handler for m_pPartSelector.
@@ -1135,8 +1133,13 @@ static void registerSelectorHandlers(TiledWindow& rWindow)
 /// document load)
 static void initWindow(TiledWindow& rWindow)
 {
+    rWindow.m_bPartSelectorBroadcast = false;
     populatePartSelector(LOK_DOC_VIEW(rWindow.m_pDocView));
+    rWindow.m_bPartSelectorBroadcast = true;
+
     populatePartModeSelector( GTK_COMBO_BOX_TEXT(rWindow.m_pPartModeComboBox) );
+    registerSelectorHandlers(rWindow);
+
     registerSelectorHandlers(rWindow);
 
     GList *focusChain = nullptr;
@@ -1170,9 +1173,6 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
     // Hide the unused progress bar.
     gtk_widget_show_all(rNewWindow.m_pStatusBar);
     gtk_widget_hide(rNewWindow.m_pProgressBar);
-    // Trigger a 'document size changed' event to populate the part selectors.
-    signalSize(LOK_DOC_VIEW(pDocView), nullptr);
-    registerSelectorHandlers(rNewWindow);
 }
 
 /// Creates a new model, i.e. LOK init and document load, one view implicitly.
@@ -1727,14 +1727,6 @@ static void populatePartSelector(LOKDocView* pLOKDocView)
     gtk_combo_box_set_active(GTK_COMBO_BOX(rWindow.m_pPartSelector), lok_doc_view_get_part(pLOKDocView));
 }
 
-static void signalSize(LOKDocView* pLOKDocView, gpointer /*pData*/)
-{
-    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
-    rWindow.m_bPartSelectorBroadcast = false;
-    populatePartSelector(pLOKDocView);
-    rWindow.m_bPartSelectorBroadcast = true;
-}
-
 static void changePart( GtkWidget* pSelector, gpointer /* pItem */ )
 {
     int nPart = gtk_combo_box_get_active( GTK_COMBO_BOX(pSelector) );
@@ -2206,7 +2198,6 @@ static void setupDocView(GtkWidget* pDocView)
     g_signal_connect(pDocView, "search-not-found", G_CALLBACK(signalSearch), nullptr);
     g_signal_connect(pDocView, "search-result-count", G_CALLBACK(signalSearchResultCount), nullptr);
     g_signal_connect(pDocView, "part-changed", G_CALLBACK(signalPart), nullptr);
-    g_signal_connect(pDocView, "size-changed", G_CALLBACK(signalSize), nullptr);
     g_signal_connect(pDocView, "hyperlink-clicked", G_CALLBACK(signalHyperlink), nullptr);
     g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), nullptr);
     g_signal_connect(pDocView, "formula-changed", G_CALLBACK(formulaChanged), nullptr);
