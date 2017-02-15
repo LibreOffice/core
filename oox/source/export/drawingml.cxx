@@ -104,6 +104,17 @@ using ::css::io::XOutputStream;
 using ::sax_fastparser::FSHelperPtr;
 using ::sax_fastparser::FastSerializerHelper;
 
+#if defined(ANDROID)
+namespace std
+{
+template<typename T>
+T lround(T x)
+{
+    return ::lround(x);
+}
+}
+#endif
+
 namespace oox {
 namespace drawingml {
 
@@ -1911,17 +1922,6 @@ void DrawingML::WriteLinespacing( LineSpacing& rSpacing )
                                FSEND );
     }
 }
-
-#if defined(ANDROID)
-namespace std
-{
-template<typename T>
-T lround(T x)
-{
-    return ::lround(x);
-}
-}
-#endif
 
 void DrawingML::WriteParagraphProperties( const Reference< XTextContent >& rParagraph )
 {
