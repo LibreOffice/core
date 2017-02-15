@@ -4436,19 +4436,28 @@ OUString INetURLObject::getFSysPath(FSysStyle eStyle,
                 + ((eStyle & FSysStyle::Dos) ? 1 : 0)
             > 1)
     {
-        eStyle = eStyle & FSysStyle::Vos
-                 && m_aHost.isPresent()
-                 && m_aHost.getLength() > 0 ?
-                     FSysStyle::Vos :
-                 hasDosVolume(eStyle)
-                 || ((eStyle & FSysStyle::Dos)
-                    && m_aHost.isPresent()
-                    && m_aHost.getLength() > 0) ?
-                     FSysStyle::Dos :
-                 eStyle & FSysStyle::Unix
-                 && (!m_aHost.isPresent() || m_aHost.getLength() == 0) ?
-                     FSysStyle::Unix :
-                     FSysStyle(0);
+        if(eStyle & FSysStyle::Vos && m_aHost.isPresent() && m_aHost.getLength() > 0)
+        {
+            eStyle= FSysStyle::Vos;
+        }
+        else
+        {
+            if(hasDosVolume(eStyle) || ((eStyle & FSysStyle::Dos) && m_aHost.isPresent() && m_aHost.getLength() > 0))
+            {
+                eStyle = FSysStyle::Dos;
+            }
+            else
+            {
+                if(eStyle & FSysStyle::Unix && (!m_aHost.isPresent() || m_aHost.getLength() == 0))
+                {
+                    eStyle = FSysStyle::Unix;
+                }
+                else
+                {
+                    eStyle= FSysStyle(0);
+                }
+            }
+        }
     }
 
     switch (eStyle)
