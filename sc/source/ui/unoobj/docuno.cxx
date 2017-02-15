@@ -1004,13 +1004,6 @@ OUString ScModelObj::getPostIts()
         ScGridWindow* pGridWindow = pViewData->GetActiveWin();
         if (pGridWindow)
         {
-            Fraction zoomX = Fraction(long(mnTilePixelWidth * TWIPS_PER_PIXEL), mnTileTwipWidth);
-            Fraction zoomY = Fraction(long(mnTilePixelHeight * TWIPS_PER_PIXEL), mnTileTwipHeight);
-
-            Fraction defaultZoomX = pViewData->GetZoomX();
-            Fraction defaultZoomY = pViewData->GetZoomY();
-            pViewData->SetZoom(zoomX, zoomY, true);
-
             SCCOL nX = aNote.maPos.Col();
             SCROW nY = aNote.maPos.Row();
             Point aScrPos = pViewData->GetScrPos(nX, nY, pViewData->GetActivePart(), true);
@@ -1022,8 +1015,6 @@ OUString ScModelObj::getPostIts()
             double fPPTY = pViewData->GetPPTY();
             Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
                             Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
-
-            pViewData->SetZoom(defaultZoomX, defaultZoomY, true);
 
             aAnnotation.put("cellPos", aRect.toString());
         }
