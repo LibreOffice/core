@@ -297,7 +297,6 @@ inline void deleteTestDirectory( const ::rtl::OUString& basename, const ::rtl::O
 /** Check for the file and directory access right.
 */
 enum class oslCheckMode {
-    Exist,
     OpenAccess,
     ReadAccess,
     WriteAccess
@@ -345,10 +344,6 @@ inline bool checkDirectory( const ::rtl::OUString & str, oslCheckMode nCheckMode
     if ( ( ::osl::FileBase::E_NOENT != rc ) && ( ::osl::FileBase::E_ACCES != rc ) ){
 
         switch ( nCheckMode ) {
-            case oslCheckMode::Exist:
-                if ( rc == ::osl::FileBase::E_None )
-                    bCheckResult = true;
-                break;
             case oslCheckMode::OpenAccess:
                 if ( rc == ::osl::FileBase::E_None )
                     bCheckResult = true;

@@ -163,6 +163,7 @@ for d in definitionSet:
          "vcl/inc/unx/XIM.h",
          "vcl/unx/gtk/xid_fullscreen_on_all_monitors.c",
          "vcl/unx/gtk/salnativewidgets-gtk.cxx",
+         "sc/inc/callform.hxx", # ParamType
          ]):
         continue
 
