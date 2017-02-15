@@ -19,6 +19,8 @@
 
 #include <config_features.h>
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -51,7 +53,9 @@ using namespace ::com::sun::star;
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/securityoptions.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
+#include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
 #include "docuno.hxx"
 
@@ -2236,6 +2240,58 @@ bool ScDocShell::DdeSetData( const OUString& rItem,
     //  GetLinkManager()->InsertServer() is in the ScServerObject ctor
 
     return pObj;
+}
+
+void ScDocShell::LOKCommentNotify(LOKCommentNotificationType nType, const ScDocument* pDocument, const ScAddress& rPos, const ScPostIt* pNote)
+{
+    if ( !pDocument->IsDocVisible() || // don't want callbacks until document load
+         !comphelper::LibreOfficeKit::isActive() ||
+         comphelper::LibreOfficeKit::isTiledAnnotations() )
+        return;
+
+    boost::property_tree::ptree aAnnotation;
+    aAnnotation.put("action", (nType == LOKCommentNotificationType::Add ? "Add" :
+                               (nType == LOKCommentNotificationType::Remove ? "Remove" :
+                                (nType == LOKCommentNotificationType::Modify ? "Modify" : "???"))));
+    OUString aCellId = rPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pDocument,
+                                   ScAddress::Details(formula::FormulaGrammar::AddressConvention::CONV_ODF, rPos));
+    aAnnotation.put("id", aCellId.toUtf8().getStr());
+    if (nType != LOKCommentNotificationType::Remove && pNote)
+    {
+        aAnnotation.put("author", pNote->GetAuthor());
+        aAnnotation.put("dateTime", pNote->GetDate());
+        aAnnotation.put("text", pNote->GetText());
+
+        // Calculating the cell cursor position
+        ScViewData* pViewData = GetViewData();
+        if (pViewData && pViewData->GetActiveWin())
+        {
+            Point aScrPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), pViewData->GetActivePart(), true);
+            long nSizeXPix;
+            long nSizeYPix;
+            pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeXPix, nSizeYPix);
+
+            const double fPPTX = pViewData->GetPPTX();
+            const double fPPTY = pViewData->GetPPTY();
+            Rectangle aRect(Point(aScrPos.getX() / fPPTX, aScrPos.getY() / fPPTY),
+                            Size(nSizeXPix / fPPTX, nSizeYPix / fPPTY));
+
+            aAnnotation.put("cellPos", aRect.toString());
+        }
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("comment", aAnnotation);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aPayload = aStream.str();
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+    while (pViewShell)
+    {
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+        pViewShell = SfxViewShell::GetNext(*pViewShell);
+    }
 }
 
 ScViewData* ScDocShell::GetViewData()
