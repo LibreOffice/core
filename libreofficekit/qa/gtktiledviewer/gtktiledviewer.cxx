@@ -165,6 +165,8 @@ public:
     std::shared_ptr<CommentsSidebar> m_pCommentsSidebar;
     /// Rendering arguments, which are the same for all views.
     boost::property_tree::ptree m_aRenderingArguments;
+    /// Author of this window
+    std::string m_aAuthor;
 
     TiledWindow()
         : m_pDocView(nullptr),
@@ -1130,9 +1132,9 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
     TiledWindow& rWindow = lcl_getTiledWindow(pButton);
 
     boost::property_tree::ptree aTree = rWindow.m_aRenderingArguments;
-    std::string aAuthor = getNextAuthor();
+    rWindow.m_aAuthor = getNextAuthor();
     aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), aAuthor);
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), rWindow.m_aAuthor);
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
     std::string aArguments = aStream.str();
@@ -1194,9 +1196,9 @@ static void createModelAndView(const char* pLOPath, const char* pDocPath, const 
 
     // Save rendering arguments for views which are created later.
     rWindow.m_aRenderingArguments = aTree;
-
+    rWindow.m_aAuthor = getNextAuthor();
     aTree.put(boost::property_tree::ptree::path_type(".uno:Author/type", '/'), "string");
-    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), getNextAuthor());
+    aTree.put(boost::property_tree::ptree::path_type(".uno:Author/value", '/'), rWindow.m_aAuthor);
 
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
