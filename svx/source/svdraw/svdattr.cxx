@@ -1850,7 +1850,7 @@ bool SdrMeasureTextVPosItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMember
         ePos = (drawing::MeasureTextVertPos)nEnum;
     }
 
-    SetValue( sal::static_int_cast< sal_uInt16 >( (SdrMeasureTextHPos)ePos ) );
+    SetValue( sal::static_int_cast< sal_uInt16 >( (SdrMeasureTextVPos)ePos ) );
     return true;
 }
 
