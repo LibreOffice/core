@@ -245,7 +245,7 @@ void removeRangeNamesBySrcDoc(ScRangeName& rRanges, sal_uInt16 nFileId)
 }
 
 ScExternalRefCache::Table::Table()
-    : meReferenced( REFERENCED_MARKED )
+    : mbReferenced( true )
       // Prevent accidental data loss due to lack of knowledge.
 {
 }
@@ -258,23 +258,17 @@ void ScExternalRefCache::Table::clear()
 {
     maRows.clear();
     maCachedRanges.RemoveAll();
-    meReferenced = REFERENCED_MARKED;
-}
-
-void ScExternalRefCache::Table::setReferencedFlag( ScExternalRefCache::Table::ReferencedFlag eFlag )
-{
-    meReferenced = eFlag;
+    mbReferenced = true;
 }
 
 void ScExternalRefCache::Table::setReferenced( bool bReferenced )
 {
-    if (meReferenced != REFERENCED_PERMANENT)
-        meReferenced = (bReferenced ? REFERENCED_MARKED : UNREFERENCED);
+    mbReferenced = bReferenced;
 }
 
 bool ScExternalRefCache::Table::isReferenced() const
 {
-    return meReferenced != UNREFERENCED;
+    return mbReferenced;
 }
 
 void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef const & pToken, sal_uLong nFmtIndex, bool bSetCacheRange)
@@ -1158,11 +1152,9 @@ bool ScExternalRefCache::setCacheTableReferenced( sal_uInt16 nFileId, const OUSt
                 TableTypeRef pTab = pDoc->maTables[i];
                 if (pTab.get())
                 {
-                    Table::ReferencedFlag eNewFlag = Table::REFERENCED_MARKED;
-                    Table::ReferencedFlag eOldFlag = pTab->getReferencedFlag();
-                    if (eOldFlag != Table::REFERENCED_PERMANENT && eNewFlag != eOldFlag)
+                    if (!pTab->isReferenced())
                     {
-                        pTab->setReferencedFlag( eNewFlag);
+                        pTab->setReferenced(true);
                         addCacheTableToReferenced( nFileId, i);
                     }
                 }
@@ -1213,17 +1205,12 @@ void ScExternalRefCache::setAllCacheTableReferencedStati( bool bReferenced )
                 TableTypeRef & xTab = rDocItem.maTables[i];
                 if (xTab.get())
                 {
-                    if (xTab->getReferencedFlag() == Table::REFERENCED_PERMANENT)
-                        addCacheTableToReferenced( nFileId, i);
-                    else
-                    {
-                        xTab->setReferencedFlag( Table::UNREFERENCED);
-                        rDocReferenced.maTables[i] = false;
-                        rDocReferenced.mbAllTablesReferenced = false;
-                        // An addCacheTableToReferenced() actually may have
-                        // resulted in mbAllReferenced been set. Clear it.
-                        maReferenced.mbAllReferenced = false;
-                    }
+                    xTab->setReferenced(false);
+                    rDocReferenced.maTables[i] = false;
+                    rDocReferenced.mbAllTablesReferenced = false;
+                    // An addCacheTableToReferenced() actually may have
+                    // resulted in mbAllReferenced been set. Clear it.
+                    maReferenced.mbAllReferenced = false;
                 }
             }
         }

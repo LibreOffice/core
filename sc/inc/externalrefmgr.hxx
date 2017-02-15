@@ -134,13 +134,6 @@ public:
     {
     public:
 
-        enum ReferencedFlag
-        {
-            UNREFERENCED,
-            REFERENCED_MARKED,      // marked as referenced during store to file
-            REFERENCED_PERMANENT    // permanently marked, e.g. from within interpreter
-        };
-
         Table();
         ~Table();
 
@@ -159,9 +152,6 @@ public:
         /** Set/clear referenced status flag only if current status is not
             REFERENCED_PERMANENT. */
         void setReferenced( bool bReferenced );
-        /// Unconditionally set the reference status flag.
-        void setReferencedFlag( ReferencedFlag eFlag );
-        ReferencedFlag getReferencedFlag() const { return meReferenced;}
         bool isReferenced() const;
         /// Obtain a sorted vector of rows.
         void getAllRows(::std::vector<SCROW>& rRows, SCROW nLow = 0, SCROW nHigh = MAXROW) const;
@@ -195,7 +185,7 @@ public:
         /** Collection of individual cached ranges.  The table ranges are
          *  not used & always zero. */
         ScRangeList                     maCachedRanges;
-        ReferencedFlag                  meReferenced;
+        bool                            mbReferenced;
     };
 
     typedef std::shared_ptr<Table> TableTypeRef;
