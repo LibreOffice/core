@@ -686,7 +686,7 @@
 #define RID_OBJECTBAR_PREVIEW   (SC_RESOURCE_START+6)
 #define RID_DRAW_WIN            (SC_RESOURCE_START+13)
 #define RID_CNTRLR_WIN          (SC_RESOURCE_START+14)
-#define RID_GLOBSTR             (SC_RESOURCE_START+15)
+// free
 #define RID_ALIGNMENT_WIN       (SC_RESOURCE_START+19)
 #define RID_ERRHDLSC            (SC_RESOURCE_START+23)
 #define RID_OBJECTBAR_TOOLS     (SC_RESOURCE_START+35)
@@ -1254,6 +1254,8 @@
 #define RID_SCPAGE_DEFAULTS             (SC_DIALOGS_START + 170)
 
 #define SC_DIALOGS_END                  (RID_SCPAGE_DEFAULTS + 1)
+
+#define RID_GLOBSTR_OFFSET              SC_DIALOGS_END
 
 #define MID_1   1
 #define MID_2   2
