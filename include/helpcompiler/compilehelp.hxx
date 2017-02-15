@@ -31,23 +31,22 @@
 
 #include <rtl/ustring.hxx>
 
-enum HelpProcessingErrorClass
+enum class HelpProcessingErrorClass
 {
-    HELPPROCESSING_NO_ERROR,
-    HELPPROCESSING_GENERAL_ERROR,       // Missing files, options etc.
-    HELPPROCESSING_INTERNAL_ERROR,      // Unexpected problems
-    HELPPROCESSING_XMLPARSING_ERROR     // Errors thrown by libxml
+    NONE,
+    General,       // Missing files, options etc.
+    XmlParsing     // Errors thrown by libxml
 };
 
 struct HelpProcessingErrorInfo
 {
-    HelpProcessingErrorClass        m_eErrorClass;
+    HelpProcessingErrorClass   m_eErrorClass;
     OUString                   m_aErrorMsg;
     OUString                   m_aXMLParsingFile;
-    sal_Int32                       m_nXMLParsingLine;
+    sal_Int32                  m_nXMLParsingLine;
 
     HelpProcessingErrorInfo()
-        : m_eErrorClass( HELPPROCESSING_NO_ERROR )
+        : m_eErrorClass( HelpProcessingErrorClass::NONE )
         , m_nXMLParsingLine( -1 )
     {}
 

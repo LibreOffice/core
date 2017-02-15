@@ -449,7 +449,7 @@ bool HelpCompiler::compile()
         {
             std::stringstream aStrStream;
             aStrStream << "ERROR: file not existing: " << inputFile.native_file_string().c_str() << std::endl;
-            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+            throw HelpProcessingException( HelpProcessingErrorClass::General, aStrStream.str() );
         }
     }
 

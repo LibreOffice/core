@@ -486,9 +486,8 @@ void BackendImpl::implProcessHelp(
                             sal_uInt16 nErrStrId = 0;
                             switch( aErrorInfo.m_eErrorClass )
                             {
-                            case HELPPROCESSING_GENERAL_ERROR:
-                            case HELPPROCESSING_INTERNAL_ERROR:     nErrStrId = RID_STR_HELPPROCESSING_GENERAL_ERROR; break;
-                            case HELPPROCESSING_XMLPARSING_ERROR:   nErrStrId = RID_STR_HELPPROCESSING_XMLPARSING_ERROR; break;
+                            case HelpProcessingErrorClass::General:      nErrStrId = RID_STR_HELPPROCESSING_GENERAL_ERROR; break;
+                            case HelpProcessingErrorClass::XmlParsing:   nErrStrId = RID_STR_HELPPROCESSING_XMLPARSING_ERROR; break;
                             default: ;
                             };
 

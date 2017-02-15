@@ -199,7 +199,7 @@ struct HelpProcessingException
         , m_nXMLParsingLine( 0 )
     {}
     HelpProcessingException( const std::string& aErrorMsg, const std::string& aXMLParsingFile, int nXMLParsingLine )
-        : m_eErrorClass( HELPPROCESSING_XMLPARSING_ERROR )
+        : m_eErrorClass( HelpProcessingErrorClass::XmlParsing )
         , m_aErrorMsg( aErrorMsg )
         , m_aXMLParsingFile( aXMLParsingFile )
         , m_nXMLParsingLine( nXMLParsingLine )

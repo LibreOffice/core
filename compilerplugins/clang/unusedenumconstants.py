@@ -159,6 +159,7 @@ for d in definitionSet:
          "sd/source/ui/dlg/PhotoAlbumDialog.hxx", # SlideImageLayout (from UI)
          "sd/inc/pres.hxx", # AutoLayout (from UI)
          "sc/source/ui/inc/scuitphfedit.hxx", # ScHFEntryId (from UI)
+         "include/i18nlangtag/languagetag.hxx", # LanguageTag::ScriptType
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",
@@ -166,6 +167,7 @@ for d in definitionSet:
          "vcl/unx/gtk/xid_fullscreen_on_all_monitors.c",
          "vcl/unx/gtk/salnativewidgets-gtk.cxx",
          "sc/inc/callform.hxx", # ParamType
+         "include/i18nlangtag/applelangid.hxx", # AppleLanguageId
          ]):
         continue
 
