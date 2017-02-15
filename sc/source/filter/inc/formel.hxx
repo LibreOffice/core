@@ -41,13 +41,12 @@ class ScTokenArray;
 struct ScSingleRefData;
 struct ScComplexRefData;
 
-enum ConvErr
+enum class ConvErr
 {
-    ConvOK = 0,
-    ConvErrNi,      // unimplemented/unknown opcode occurred
-    ConvErrNoMem,   // alloc error
-    ConvErrExternal,// excel add-ins are not converted
-    ConvErrCount    // did not get all bytes of formula
+    OK = 0,
+    Ni,      // unimplemented/unknown opcode occurred
+    External,// excel add-ins are not converted
+    Count    // did not get all bytes of formula
 };
 
 enum FORMULA_TYPE

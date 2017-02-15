@@ -151,7 +151,7 @@ const ScRange* ScRangeListTabs::Next ()
 ConverterBase::ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer ) :
     aPool(rSPool),
     aEingPos( 0, 0, 0 ),
-    eStatus( ConvOK )
+    eStatus( ConvErr::OK )
 {
     OSL_ENSURE( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
     pBuffer.reset( new sal_Char[ nNewBuffer ] );
@@ -163,7 +163,7 @@ ConverterBase::~ConverterBase()
 
 void ConverterBase::Reset()
 {
-    eStatus = ConvOK;
+    eStatus = ConvErr::OK;
     aPool.Reset();
     aStack.Reset();
 }

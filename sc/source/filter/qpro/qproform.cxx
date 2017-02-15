@@ -205,7 +205,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
             {
                 maIn.ReadUInt16( nInt );
                 nIntArray[ nIntCount ] = nInt;
-                SAFEDEC_OR_RET(nRef, 2, ConvErrCount);
+                SAFEDEC_OR_RET(nRef, 2, ConvErr::Count);
                 nIntCount++;
             }
 
@@ -214,7 +214,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
                 double nFloat;
                 maIn.ReadDouble( nFloat );
                 nFloatArray[ nFloatCount ] = nFloat;
-                SAFEDEC_OR_RET(nRef, 8, ConvErrCount);
+                SAFEDEC_OR_RET(nRef, 8, ConvErr::Count);
                 nFloatCount++;
             }
 
@@ -223,7 +223,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
                 maIn.ReadUChar( nArg ).ReadUInt16( nDummy ).ReadUInt16( nDLLId );
                 nArgArray[ nArgCount ] = nArg;
                 nDLLArray[ nDLLCount ] = nDLLId;
-                SAFEDEC_OR_RET(nRef, 5, ConvErrCount);
+                SAFEDEC_OR_RET(nRef, 5, ConvErr::Count);
                 nDLLCount++;
                 nArgCount++;
             }
@@ -232,12 +232,12 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
                 OUString aTmp(::read_zeroTerminated_uInt8s_ToOUString(maIn, maIn.GetStreamCharSet()));
                 sStringArray[ nStringCount ] = aTmp;
                 nStringCount++;
-                SAFEDEC_OR_RET(nRef, aTmp.getLength() + 1, ConvErrCount);
+                SAFEDEC_OR_RET(nRef, aTmp.getLength() + 1, ConvErr::Count);
             }
         }
     }
     else
-        return ConvErrCount;
+        return ConvErr::Count;
 
     i = 0;
     nIntCount = 0;
@@ -368,7 +368,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray )
         i++;
     }
     pArray = aPool[ aStack.Get() ];
-    return ConvOK;
+    return ConvErr::OK;
 }
 
 static const struct

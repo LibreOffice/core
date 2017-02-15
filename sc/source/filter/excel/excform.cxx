@@ -171,7 +171,7 @@ void ImportExcel::Formula(
     if (pCell)
     {
         pCell->SetNeedNumberFormat(false);
-        if( eErr != ConvOK )
+        if( eErr != ConvErr::OK )
             ExcelToSc::SetError( *pCell, eErr );
 
         if (rtl::math::isFinite(fCurVal))
@@ -219,7 +219,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
     ScComplexRefData        aCRD;
     ExtensionTypeVec    aExtensions;
 
-    if( eStatus != ConvOK )
+    if( eStatus != ConvErr::OK )
     {
         aIn.Ignore( nFormulaLen );
         return eStatus;
@@ -230,7 +230,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
         aPool.Store( OUString("-/-") );
         aPool >> aStack;
         pErgebnis = aPool[ aStack.Get() ];
-        return ConvOK;
+        return ConvErr::OK;
     }
 
     std::size_t nEndPos = aIn.GetRecPos() + nFormulaLen;
@@ -868,29 +868,29 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
         aPool << ocBad;
         aPool >> aStack;
         pErgebnis = aPool[ aStack.Get() ];
-        eRet = ConvErrNi;
+        eRet = ConvErr::Ni;
     }
     else if( aIn.GetRecPos() != nEndPos )
     {
         aPool << ocBad;
         aPool >> aStack;
         pErgebnis = aPool[ aStack.Get() ];
-        eRet = ConvErrCount;
+        eRet = ConvErr::Count;
     }
     else if( bArrayFormula )
     {
         pErgebnis = nullptr;
-        eRet = ConvOK;
+        eRet = ConvErr::OK;
     }
     else
     {
         pErgebnis = aPool[ aStack.Get() ];
-        eRet = ConvOK;
+        eRet = ConvErr::OK;
     }
 
     aIn.Seek( nEndPos );
 
-    if( eRet == ConvOK )
+    if( eRet == ConvErr::OK )
         ReadExtensions( aExtensions, aIn );
 
     return eRet;
@@ -913,14 +913,14 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
     aCRD.Ref1.SetAbsTab(aEingPos.Tab());
     aCRD.Ref2.SetAbsTab(aEingPos.Tab());
 
-    if( eStatus != ConvOK )
+    if( eStatus != ConvErr::OK )
     {
         aIn.Ignore( nFormulaLen );
         return eStatus;
     }
 
     if( nFormulaLen == 0 )
-        return ConvOK;
+        return ConvErr::OK;
 
     std::size_t nEndPos = aIn.GetRecPos() + nFormulaLen;
 
@@ -1314,11 +1314,11 @@ ConvErr ExcelToSc::Convert( ScRangeListTabs& rRangeList, XclImpStream& aIn, std:
     ConvErr eRet;
 
     if( bError )
-        eRet = ConvErrNi;
+        eRet = ConvErr::Ni;
     else if( aIn.GetRecPos() != nEndPos )
-        eRet = ConvErrCount;
+        eRet = ConvErr::Count;
     else
-        eRet = ConvOK;
+        eRet = ConvErr::OK;
 
     aIn.Seek( nEndPos );
     return eRet;
@@ -1749,11 +1749,10 @@ void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )
 
     switch( eErr )
     {
-        case ConvErrNi:         nInd = FormulaError::UnknownToken; break;
-        case ConvErrNoMem:      nInd = FormulaError::CodeOverflow; break;
-        case ConvErrExternal:   nInd = FormulaError::NoName; break;
-        case ConvErrCount:      nInd = FormulaError::CodeOverflow; break;
-        default:                nInd = FormulaError::NoCode;   // I had no better idea
+        case ConvErr::Ni:         nInd = FormulaError::UnknownToken; break;
+        case ConvErr::External:   nInd = FormulaError::NoName; break;
+        case ConvErr::Count:      nInd = FormulaError::CodeOverflow; break;
+        default:                  nInd = FormulaError::NoCode;   // I had no better idea
     }
 
     rCell.SetErrCode( nInd );

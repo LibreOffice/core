@@ -105,7 +105,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 const ScTokenArray *pArray;
 
                 QProToSc aConv(*mpStream, pDoc->GetSharedStringPool(), aAddr);
-                if (ConvOK != aConv.Convert( pArray ))
+                if (ConvErr::OK != aConv.Convert( pArray ))
                     eRet = eERR_FORMAT;
                 else
                 {
