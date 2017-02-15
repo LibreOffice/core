@@ -444,8 +444,7 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                         if ( aItemText.startsWith("($1)") )
                         {
                             OUString aTmp(FWK_RESSTR(STR_UPDATEDOC));
-                            aTmp += " ";
-                            aTmp += aItemText.copy( 4 );
+                            aTmp += " " + aItemText.copy( 4 );
                             aItemText = aTmp;
                         }
                         else if ( aItemText.startsWith("($2)") )

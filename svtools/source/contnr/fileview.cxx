@@ -1320,8 +1320,7 @@ OUString SvtFileView::GetConfigString() const
     DBG_ASSERT( pBar, "invalid headerbar" );
 
     // sort order
-    sRet += OUString::number( mpImpl->mnSortColumn );
-    sRet += ";";
+    sRet += OUString::number( mpImpl->mnSortColumn ) + ";";
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImpl->mnSortColumn );
     bool bUp = ( ( nBits & HeaderBarItemBits::UPARROW ) == HeaderBarItemBits::UPARROW );
     sRet += bUp ? OUString("1") : OUString("0");
@@ -1331,10 +1330,10 @@ OUString SvtFileView::GetConfigString() const
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         sal_uInt16 nId = pBar->GetItemId(i);
-        sRet += OUString::number( nId );
-        sRet += ";";
-        sRet += OUString::number( pBar->GetItemSize( nId ) );
-        sRet += ";";
+        sRet += OUString::number( nId )
+                + ";"
+                + OUString::number( pBar->GetItemSize( nId ) )
+                + ";";
     }
 
     sRet = comphelper::string::stripEnd(sRet, ';');
@@ -1896,9 +1895,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
         // title, type, size, date
         aValue = (*aIt)->GetTitle();
         ReplaceTabWithString( aValue );
-        aValue += aTab;
-        aValue += (*aIt)->maType;
-        aValue += aTab;
+        aValue += aTab + (*aIt)->maType + aTab;
         // folders don't have a size
         if ( ! (*aIt)->mbIsFolder )
             aValue += CreateExactSizeText( (*aIt)->maSize );
@@ -1908,9 +1905,9 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
         {
             SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-            aValue += rLocaleData.getDate( (*aIt)->maModDate );
-            aValue += aDateSep;
-            aValue += rLocaleData.getTime( (*aIt)->maModDate, false );
+            aValue += rLocaleData.getDate( (*aIt)->maModDate )
+                    + aDateSep
+                    + rLocaleData.getTime( (*aIt)->maModDate, false );
         }
         (*aIt)->maDisplayText = aValue;
 
@@ -2138,17 +2135,15 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
     // title, type, size, date
     aValue = pData->GetTitle();
     ReplaceTabWithString( aValue );
-    aValue += aTab;
-    aValue += pData->maType;
-    aValue += aTab;
+    aValue += aTab + pData->maType + aTab;
     // folders don't have a size
     aValue += aTab;
     // set the date
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
-    aValue += rLocaleData.getDate( pData->maModDate );
-    aValue += aDateSep;
-    aValue += rLocaleData.getTime( pData->maModDate );
+    aValue += rLocaleData.getDate( pData->maModDate )
+            + aDateSep
+            + rLocaleData.getTime( pData->maModDate );
 
     pData->maDisplayText = aValue;
     maContent.push_back( pData );

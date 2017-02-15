@@ -1354,8 +1354,7 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
                     }
                     if (!headString.isEmpty())
                     {
-                        sRet += headString ;
-                        sRet += ":" ;
+                        sRet += headString + ":";
                     }
                 }
                 else
@@ -1367,8 +1366,7 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
                     }
                     if (!aString.isEmpty())
                     {
-                        sRet += aString ;
-                        sRet += ":" ;
+                        sRet += aString + ":";
                     }
                     nHeaderCur++;
                 }
@@ -1376,8 +1374,7 @@ OUString SvTreeListBox::SearchEntryTextWithHeadTitle( SvTreeListEntry* pEntry )
             }
             else
             {
-                sRet += static_cast<SvLBoxString&>( rItem ).GetText();
-                sRet += ",";
+                sRet += static_cast<SvLBoxString&>( rItem ).GetText() + ",";
             }
             //end want to the column header
         }
