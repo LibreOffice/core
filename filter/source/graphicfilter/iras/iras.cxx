@@ -168,12 +168,17 @@ bool RASReader::ReadRAS(Graphic & rGraphic)
     if (!bOk)
         return false;
 
-    if (mnType != RAS_TYPE_BYTE_ENCODED) //simple raw format
+    //The RLE packets are typically three bytes in size:
+    //The first byte is a Flag Value indicating the type of RLE packet.
+    //The second byte is the Run Count.
+    //The third byte is the Run Value.
+    //
+    //for the sake of simplicity we'll assume that RAS_TYPE_BYTE_ENCODED can
+    //describe data 255 times larger than the data stored
+    size_t nMaxCompression = mnType != RAS_TYPE_BYTE_ENCODED ? 1 : 255;
+    if (m_rRAS.remainingSize() * nMaxCompression < static_cast<sal_uInt64>(mnHeight) * mnWidth * mnDepth / 8)
     {
-        if (m_rRAS.remainingSize() < static_cast<sal_uInt64>(mnHeight) * mnWidth * mnDepth / 8)
-        {
-            return false;
-        }
+        return false;
     }
 
     Bitmap aBmp(Size(mnWidth, mnHeight), mnDstBitsPerPix);
