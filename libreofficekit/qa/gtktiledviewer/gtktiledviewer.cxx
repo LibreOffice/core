@@ -220,6 +220,10 @@ static void signalSize(LOKDocView* pLOKDocView, gpointer pData);
 static void changePartMode( GtkWidget* pSelector, gpointer /*pItem*/);
 /// Handler for m_pPartSelector.
 static void changePart( GtkWidget* pSelector, gpointer /*pItem*/ );
+/// Part selector populator
+static void populatePartSelector(LOKDocView* pLOKDocView);
+/// Part mode selector populator
+static void populatePartModeSelector( GtkComboBoxText* pSelector );
 
 static TiledWindow& lcl_getTiledWindow(GtkWidget* pWidget)
 {
@@ -1126,6 +1130,24 @@ static void registerSelectorHandlers(TiledWindow& rWindow)
     g_signal_connect(G_OBJECT(rWindow.m_pPartSelector), "changed", G_CALLBACK(changePart), 0);
 }
 
+/// Helper function to do some tasks after widget is fully loaded (including
+/// document load)
+static void initWindow(TiledWindow& rWindow)
+{
+    populatePartSelector(LOK_DOC_VIEW(rWindow.m_pDocView));
+    populatePartModeSelector( GTK_COMBO_BOX_TEXT(rWindow.m_pPartModeComboBox) );
+    registerSelectorHandlers(rWindow);
+
+    GList *focusChain = nullptr;
+    focusChain = g_list_append( focusChain, rWindow.m_pDocView );
+    gtk_container_set_focus_chain ( GTK_CONTAINER (rWindow.m_pVBox), focusChain );
+
+    gtk_widget_show_all(rWindow.m_pStatusBar);
+    gtk_widget_hide(rWindow.m_pProgressBar);
+
+    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(rWindow.m_pEnableEditing), TRUE);
+}
+
 /// Creates a new view, i.e. no LOK init or document load.
 static void createView(GtkWidget* pButton, gpointer /*pItem*/)
 {
@@ -1143,6 +1165,7 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
     gboolean bTiledAnnotations;
     g_object_get(G_OBJECT(rWindow.m_pDocView), "tiled-annotations", &bTiledAnnotations, nullptr);
     TiledWindow& rNewWindow = setupWidgetAndCreateWindow(pDocView, bTiledAnnotations);
+    initWindow(rNewWindow);
     // Hide the unused progress bar.
     gtk_widget_show_all(rNewWindow.m_pStatusBar);
     gtk_widget_hide(rNewWindow.m_pProgressBar);
@@ -1756,7 +1779,6 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
     LOKDocView* pDocView = LOK_DOC_VIEW (source_object);
     TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pDocView));
     GError* error = nullptr;
-    GList *focusChain = nullptr;
 
     if (!lok_doc_view_open_document_finish(pDocView, res, &error))
     {
@@ -1786,17 +1808,7 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
         gtk_widget_set_valign(GTK_WIDGET(pDocView), GTK_ALIGN_START);
     }
 
-    populatePartSelector(pDocView);
-    populatePartModeSelector( GTK_COMBO_BOX_TEXT(rWindow.m_pPartModeComboBox) );
-    registerSelectorHandlers(rWindow);
-
-    focusChain = g_list_append( focusChain, pDocView );
-    gtk_container_set_focus_chain ( GTK_CONTAINER (rWindow.m_pVBox), focusChain );
-
-    gtk_widget_show_all(rWindow.m_pStatusBar);
-    gtk_widget_hide(rWindow.m_pProgressBar);
-
-    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(rWindow.m_pEnableEditing), TRUE);
+    initWindow(rWindow);
 }
 
 /**
