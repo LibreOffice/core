@@ -2347,6 +2347,31 @@ bool SvNumberformat::GetOutputString(double fNumber, sal_uInt16 nCharCount, OUSt
     return true;
 }
 
+sal_uInt16 SvNumberformat::GetSubformatIndex (double fNumber ) const
+{
+    sal_uInt16 nIx; // Index of the partial format
+    double fLimit_1 = fLimit1;
+    short nCheck = ImpCheckCondition(fNumber, fLimit_1, eOp1);
+    if (nCheck == -1 || nCheck == 1) // Only 1 String or True
+    {
+        nIx = 0;
+    }
+    else
+    {
+        double fLimit_2 = fLimit2;
+        nCheck = ImpCheckCondition(fNumber, fLimit_2, eOp2);
+        if (nCheck == -1 || nCheck == 1)
+        {
+            nIx = 1;
+        }
+        else
+        {
+            nIx = 2;
+        }
+    }
+    return nIx;
+}
+
 bool SvNumberformat::GetOutputString(double fNumber,
                                      OUString& OutString,
                                      Color** ppColor)
@@ -2437,24 +2462,7 @@ bool SvNumberformat::GetOutputString(double fNumber,
     }
     if ( !bHadStandard )
     {
-        sal_uInt16 nIx; // Index of the partial format
-        short nCheck = ImpCheckCondition(fNumber, fLimit1, eOp1);
-        if (nCheck == -1 || nCheck == 1) // Only 1 String or True
-        {
-            nIx = 0;
-        }
-        else
-        {
-            nCheck = ImpCheckCondition(fNumber, fLimit2, eOp2);
-            if (nCheck == -1 || nCheck == 1)
-            {
-                nIx = 1;
-            }
-            else
-            {
-                nIx = 2;
-            }
-        }
+        sal_uInt16 nIx = GetSubformatIndex ( fNumber ); // Index of the partial format
         if (fNumber < 0.0 &&
                 ((nIx == 0 && IsFirstSubformatRealNegative()) || // 1st, usually positive subformat
                  (nIx == 1 && IsSecondSubformatRealNegative()))) // 2nd, usually negative subformat
@@ -2677,45 +2685,31 @@ bool SvNumberformat::ImpGetScientificOutput(double fNumber,
     return bRes;
 }
 
-bool SvNumberformat::ImpGetFractionOutput(double fNumber,
-                                          sal_uInt16 nIx,
-                                          OUStringBuffer& sBuff)
+double SvNumberformat::GetRoundFractionValue ( double fNumber ) const
 {
-    bool bRes = false;
-    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
-    const sal_uInt16 nAnz = NumFor[nIx].GetCount();
-    OUStringBuffer sStr, sFrac, sDiv; // Strings, value for
-    sal_uInt64 nFrac=0, nDiv=1;       // Integral part
-    bool bSign = false;               // Numerator and denominator
-    const OUString sIntegerFormat = lcl_GetFractionIntegerString(rInfo, nAnz);
-    const OUString sNumeratorFormat = lcl_GetNumeratorString(rInfo, nAnz);
-    const OUString sDenominatorFormat = lcl_GetDenominatorString(rInfo, nAnz);
+    sal_uInt16 nIx = GetSubformatIndex ( fNumber );
+    double fIntPart = 0.0;           // integer part of fraction
+    sal_uInt64 nFrac = 0, nDiv = 1;  // numerator and denominator
+    double fSign = (fNumber < 0.0) ? -1.0 : 1.0;
+    // fNumber is modified in ImpGetFractionElements to absolute fractional part
+    ImpGetFractionElements ( fNumber, nIx, fIntPart, nFrac, nDiv );
+    if ( nDiv > 0 )
+        return fSign * ( fIntPart + (double)nFrac / (double)nDiv );
+    else
+        return fSign * fIntPart;
+}
 
-    if (fNumber < 0)
-    {
-        if (nIx == 0) // Not in the ones at the end
-            bSign = true; // Formats
+void SvNumberformat::ImpGetFractionElements ( double& fNumber, sal_uInt16 nIx,
+                                              double& fIntPart, sal_uInt64& nFrac, sal_uInt64& nDiv ) const
+{
+    if ( fNumber < 0.0 )
         fNumber = -fNumber;
-    }
-
-    double fNum = floor(fNumber); // Integral part
-
-    fNumber -= fNum; // Fractional part
-    if (fNum > D_MAX_U_INT32 || rInfo.nCntExp > 9) // Too large
-    {
-        sBuff = rScan.GetErrorString();
-        return false;
-    }
-    if (rInfo.nCntExp == 0)
-    {
-        SAL_WARN( "svl.numbers", "SvNumberformat:: Fraction, nCntExp == 0");
-        sBuff.truncate();
-        return false;
-    }
-
-    if( sal_Int32 nForcedDiv = sDenominatorFormat.toInt32() )
+    fIntPart = floor(fNumber); // Integral part
+    fNumber -= fIntPart;         // Fractional part
+    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    nDiv = lcl_GetDenominatorString( rInfo, NumFor[nIx].GetCount() ).toInt32();
+    if( nDiv > 0 )
     {   // Forced Denominator
-        nDiv = (sal_uInt64) nForcedDiv;
         nFrac = (sal_uInt64)floor ( fNumber * nDiv );
         double fFracNew = (double)nFrac / (double)nDiv;
         double fFracNew1 = (double)(nFrac + 1) / (double)nDiv;
@@ -2724,14 +2718,10 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
         {
             nFrac++;
         }
-        if( nFrac >= nDiv )
-        {
-            nFrac = nDiv = 0;
-            fNum = fNum + 1.0;
-        }
     }
     else // Calculated Denominator
     {
+        nDiv = 1;
         sal_uInt64 nBasis = ((sal_uInt64)floor( pow(10.0,rInfo.nCntExp))) - 1; // 9, 99, 999 ,...
         sal_uInt64 nFracPrev = 1L, nDivPrev = 0, nFracNext, nDivNext, nPartialDenom;
         double fRemainder = fNumber;
@@ -2769,12 +2759,43 @@ bool SvNumberformat::ImpGetFractionOutput(double fNumber,
                 fRemainder = 0.0; // exit while loop
             }
         }
-        if (nFrac == nDiv)
-        {
-            ++fNum;
-            nFrac = 0;
-        }
     }
+    if (nFrac >= nDiv)
+    {
+        ++fIntPart;
+        nFrac = nDiv = 0;
+    }
+}
+
+bool SvNumberformat::ImpGetFractionOutput(double fNumber,
+                                          sal_uInt16 nIx,
+                                          OUStringBuffer& sBuff)
+{
+    bool bRes = false;
+    const ImpSvNumberformatInfo& rInfo = NumFor[nIx].Info();
+    const sal_uInt16 nAnz = NumFor[nIx].GetCount();
+    OUStringBuffer sStr, sFrac, sDiv; // Strings, value for Integral part Numerator and denominator
+    bool bSign = ( (fNumber < 0) && (nIx == 0) ); // sign Not in the ones at the end
+    const OUString sIntegerFormat = lcl_GetFractionIntegerString(rInfo, nAnz);
+    const OUString sNumeratorFormat = lcl_GetNumeratorString(rInfo, nAnz);
+    const OUString sDenominatorFormat = lcl_GetDenominatorString(rInfo, nAnz);
+
+    sal_uInt64 nFrac = 0, nDiv = 1;
+    double fNum = floor(fNumber); // Integral part
+
+    if (fNum > D_MAX_U_INT32 || rInfo.nCntExp > 9) // Too large
+    {
+        sBuff = rScan.GetErrorString();
+        return false;
+    }
+    if (rInfo.nCntExp == 0)
+    {
+        SAL_WARN( "svl.numbers", "SvNumberformat:: Fraction, nCntExp == 0");
+        sBuff.truncate();
+        return false;
+    }
+
+    ImpGetFractionElements( fNumber, nIx, fNum, nFrac, nDiv);
 
     if (rInfo.nCntPre == 0) // Improper fraction
     {

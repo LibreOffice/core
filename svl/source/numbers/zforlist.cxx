@@ -1963,6 +1963,15 @@ void SvNumberFormatter::GetFormatSpecialInfo(sal_uInt32 nFormat,
     }
 }
 
+double SvNumberFormatter::GetRoundFractionValue( sal_uInt32 nFormat, double fValue ) const
+{
+    const SvNumberformat* pFormat = GetFormatEntry( nFormat );
+    if ( pFormat )
+        return pFormat->GetRoundFractionValue( fValue );
+    else
+        return fValue;
+}
+
 sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
 {
     const SvNumberformat* pFormat = GetFormatEntry( nFormat );

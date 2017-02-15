@@ -530,6 +530,9 @@ public:
                                      sal_uInt16& nPrecision, sal_uInt16& nAnzLeading,
                                      LanguageType eLnge = LANGUAGE_DONTKNOW );
 
+    /// Get round value with fraction representation
+    double GetRoundFractionValue( sal_uInt32 nFormat, double fValue ) const;
+
     /// Check if format code string may be deleted by user
     bool IsUserDefined( const OUString& sStr, LanguageType eLnge = LANGUAGE_DONTKNOW );
 
