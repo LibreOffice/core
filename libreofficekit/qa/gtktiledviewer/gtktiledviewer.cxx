@@ -586,11 +586,6 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         gtk_widget_queue_draw(rWindow.m_pColumnBar->m_pDrawingArea);
         gtk_widget_show(rWindow.m_pFormulabarEntry);
 
-        // Change cell alignment uno commands for spreadsheet
-        lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:AlignLeft");
-        lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:AlignHorizontalCenter");
-        lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:AlignRight");
-        gtk_widget_hide(GTK_WIDGET(rWindow.m_pJustifypara));
     }
 
     return TRUE;
@@ -1121,6 +1116,14 @@ static void initWindow(TiledWindow& rWindow)
         // used.
         gtk_widget_set_halign(GTK_WIDGET(rWindow.m_pDocView), GTK_ALIGN_START);
         gtk_widget_set_valign(GTK_WIDGET(rWindow.m_pDocView), GTK_ALIGN_START);
+
+        // Change cell alignment uno commands for spreadsheet
+        lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:AlignLeft");
+        lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:AlignHorizontalCenter");
+        lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:AlignRight");
+        gtk_widget_hide(GTK_WIDGET(rWindow.m_pJustifypara));
+
+        lcl_registerToolItem(rWindow, rWindow.m_pDeleteComment, ".uno:DeleteNote");
     }
 
     // Fill our comments sidebar
