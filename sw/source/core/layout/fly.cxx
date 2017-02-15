@@ -437,12 +437,7 @@ void SwFlyFrame::FinitDrawObj()
             }
         }
     }
-    if(!pFormat)
-    {
-        GetVirtDrawObj()->SetUserCall(nullptr);
-        delete GetVirtDrawObj();
-        return;
-    }
+
     bool bOtherFramesAround(false);
     SwFlyDrawContact* pContact(nullptr);
     pFormat->CallSwClientNotify(sw::KillDrawHint(this, bOtherFramesAround, pContact));
