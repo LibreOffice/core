@@ -147,11 +147,11 @@ const Image& MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize 
      {
          pResult.reset(new std::vector<MasterPageContainerChangeEvent::EventType>());
          if (bDataChanged)
-             pResult->push_back(MasterPageContainerChangeEvent::DATA_CHANGED);
+             pResult->push_back(MasterPageContainerChangeEvent::EventType::DATA_CHANGED);
          if (bIndexChanged)
-             pResult->push_back(MasterPageContainerChangeEvent::INDEX_CHANGED);
+             pResult->push_back(MasterPageContainerChangeEvent::EventType::INDEX_CHANGED);
          if (bPreviewChanged)
-             pResult->push_back(MasterPageContainerChangeEvent::PREVIEW_CHANGED);
+             pResult->push_back(MasterPageContainerChangeEvent::EventType::PREVIEW_CHANGED);
      }
 
      return pResult;

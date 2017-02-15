@@ -303,10 +303,9 @@ IMPL_LINK(RecentlyUsedMasterPages, MasterPageContainerChangeListener,
 {
     switch (rEvent.meEventType)
     {
-        case MasterPageContainerChangeEvent::CHILD_ADDED:
-        case MasterPageContainerChangeEvent::CHILD_REMOVED:
-        case MasterPageContainerChangeEvent::INDEX_CHANGED:
-        case MasterPageContainerChangeEvent::INDEXES_CHANGED:
+        case MasterPageContainerChangeEvent::EventType::CHILD_ADDED:
+        case MasterPageContainerChangeEvent::EventType::CHILD_REMOVED:
+        case MasterPageContainerChangeEvent::EventType::INDEX_CHANGED:
             ResolveList();
             break;
 

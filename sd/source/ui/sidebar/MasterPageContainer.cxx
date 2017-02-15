@@ -236,7 +236,7 @@ void MasterPageContainer::SetPreviewSize (PreviewSize eSize)
 {
     mePreviewSize = eSize;
     mpImpl->FireContainerChange(
-        MasterPageContainerChangeEvent::SIZE_CHANGED,
+        MasterPageContainerChangeEvent::EventType::SIZE_CHANGED,
         NIL_TOKEN);
 }
 
@@ -597,7 +597,7 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel()
         maSmallPreviewSizePixel.Height() = nNewSmallHeight;
         maLargePreviewSizePixel.Height() = nNewLargeHeight;
         FireContainerChange(
-            MasterPageContainerChangeEvent::SIZE_CHANGED,
+            MasterPageContainerChangeEvent::EventType::SIZE_CHANGED,
             NIL_TOKEN);
     }
 }
@@ -657,7 +657,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             maContainer.push_back(rpDescriptor);
             aEntry = maContainer.end()-1;
 
-            FireContainerChange(MasterPageContainerChangeEvent::CHILD_ADDED,aResult);
+            FireContainerChange(MasterPageContainerChangeEvent::EventType::CHILD_ADDED,aResult);
         }
     }
     else
@@ -963,11 +963,11 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
         mpDocument));
     if (nPageObjectModified == 1 && bSendEvents)
         FireContainerChange(
-            MasterPageContainerChangeEvent::DATA_CHANGED,
+            MasterPageContainerChangeEvent::EventType::DATA_CHANGED,
             rpDescriptor->maToken);
     if (nPageObjectModified == -1 && bSendEvents)
         FireContainerChange(
-            MasterPageContainerChangeEvent::CHILD_REMOVED,
+            MasterPageContainerChangeEvent::EventType::CHILD_REMOVED,
             rpDescriptor->maToken);
     if (nPageObjectModified && ! mbFirstPageObjectSeen)
         UpdatePreviewSizePixel();
@@ -981,7 +981,7 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
 
     if (bPreviewModified && bSendEvents)
         FireContainerChange(
-            MasterPageContainerChangeEvent::PREVIEW_CHANGED,
+            MasterPageContainerChangeEvent::EventType::PREVIEW_CHANGED,
             rpDescriptor->maToken);
 
     return nPageObjectModified || bPreviewModified;

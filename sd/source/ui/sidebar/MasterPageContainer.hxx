@@ -170,7 +170,7 @@ private:
 class MasterPageContainerChangeEvent
 {
 public:
-    enum EventType {
+    enum class EventType {
         // A master page was added to the container.
         CHILD_ADDED,
         // A master page was removed from the container.
@@ -183,8 +183,6 @@ public:
         DATA_CHANGED,
         // The TemplateIndex of a master page has changed.
         INDEX_CHANGED,
-        // More than one entries changed their TemplateIndex
-        INDEXES_CHANGED
     } meEventType;
 
     // Token of the container entry whose data changed or which was added or

@@ -418,12 +418,12 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
 
     switch (rEvent.meEventType)
     {
-        case MasterPageContainerChangeEvent::SIZE_CHANGED:
+        case MasterPageContainerChangeEvent::EventType::SIZE_CHANGED:
             PreviewValueSet::SetPreviewSize(mpContainer->GetPreviewSizePixel());
             UpdateAllPreviews();
             break;
 
-        case MasterPageContainerChangeEvent::PREVIEW_CHANGED:
+        case MasterPageContainerChangeEvent::EventType::PREVIEW_CHANGED:
         {
             int nIndex (GetIndexForToken(rEvent.maChildToken));
             if (nIndex >= 0)
@@ -436,14 +436,14 @@ void MasterPagesSelector::NotifyContainerChangeEvent (const MasterPageContainerC
         }
         break;
 
-        case MasterPageContainerChangeEvent::DATA_CHANGED:
+        case MasterPageContainerChangeEvent::EventType::DATA_CHANGED:
         {
             InvalidateItem(rEvent.maChildToken);
             Fill();
         }
         break;
 
-        case MasterPageContainerChangeEvent::CHILD_REMOVED:
+        case MasterPageContainerChangeEvent::EventType::CHILD_REMOVED:
         {
             int nIndex (GetIndexForToken(rEvent.maChildToken));
             SetItem(nIndex, MasterPageContainer::NIL_TOKEN);

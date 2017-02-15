@@ -128,13 +128,12 @@ void AllMasterPagesSelector::NotifyContainerChangeEvent (
 {
     switch (rEvent.meEventType)
     {
-        case MasterPageContainerChangeEvent::CHILD_ADDED:
+        case MasterPageContainerChangeEvent::EventType::CHILD_ADDED:
             AddItem(rEvent.maChildToken);
             MasterPagesSelector::Fill();
             break;
 
-        case MasterPageContainerChangeEvent::INDEX_CHANGED:
-        case MasterPageContainerChangeEvent::INDEXES_CHANGED:
+        case MasterPageContainerChangeEvent::EventType::INDEX_CHANGED:
             mpSortedMasterPages->clear();
             MasterPagesSelector::Fill();
             break;
