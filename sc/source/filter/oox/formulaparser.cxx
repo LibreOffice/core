@@ -582,8 +582,8 @@ ApiTokenSequence FormulaParserImpl::importBiff12Formula( const ScAddress&, Formu
 OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const
 {
     const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId, bUseRefSheets ).get();
-    OSL_ENSURE( pExtLink && (pExtLink->getLinkType() == LINKTYPE_OLE), "FormulaParserImpl::resolveOleTarget - missing or wrong link" );
-    if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_OLE) )
+    OSL_ENSURE( pExtLink && (pExtLink->getLinkType() == ExternalLinkType::OLE), "FormulaParserImpl::resolveOleTarget - missing or wrong link" );
+    if( pExtLink && (pExtLink->getLinkType() == ExternalLinkType::OLE) )
          return getBaseFilter().getAbsoluteUrl( pExtLink->getTargetUrl() );
     return OUString();
 }
@@ -982,23 +982,16 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
 {
     if( rxExtName.get() ) switch( rExtLink.getLinkType() )
     {
-        case LINKTYPE_INTERNAL:
-        case LINKTYPE_EXTERNAL:
+        case ExternalLinkType::External:
             return pushEmbeddedRefOperand( *rxExtName, false );
 
-        case LINKTYPE_ANALYSIS:
-            // TODO: need support for localized addin function names
-            if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseModelName() ) )
-                return pushExternalFuncOperand( *pFuncInfo );
-        break;
-
-        case LINKTYPE_LIBRARY:
+        case ExternalLinkType::Library:
             if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( rxExtName->getUpcaseModelName() ) )
                 if( (pFuncInfo->meFuncLibType != FUNCLIB_UNKNOWN) && (pFuncInfo->meFuncLibType == rExtLink.getFuncLibraryType()) )
                     return pushExternalFuncOperand( *pFuncInfo );
         break;
 
-        case LINKTYPE_DDE:
+        case ExternalLinkType::DDE:
         {
             OUString aDdeServer, aDdeTopic, aDdeItem;
             if( rxExtName->getDdeLinkData( aDdeServer, aDdeTopic, aDdeItem ) )
@@ -1007,7 +1000,7 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
         break;
 
         default:
-            OSL_ENSURE( rExtLink.getLinkType() != LINKTYPE_SELF, "FormulaParserImpl::pushExternalNameOperand - invalid call" );
+            OSL_ENSURE( rExtLink.getLinkType() != ExternalLinkType::Self, "FormulaParserImpl::pushExternalNameOperand - invalid call" );
     }
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
@@ -1170,7 +1163,7 @@ const FunctionInfo* FormulaParserImpl::resolveBadFuncName( const OUString& rToke
     {
         sal_Int32 nRefId = rTokenData.copy( nBracketOpen + 1, nBracketClose - nBracketOpen - 1 ).toInt32();
         const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get();
-        if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_LIBRARY) )
+        if( pExtLink && (pExtLink->getLinkType() == ExternalLinkType::Library) )
         {
             OUString aFuncName = rTokenData.copy( nExclamation + 1 ).toAsciiUpperCase();
             if( const FunctionInfo* pFuncInfo = getFuncInfoFromOoxFuncName( aFuncName ) )
@@ -1722,7 +1715,7 @@ bool OoxFormulaParserImpl::pushBiff12ExtName( sal_Int32 nRefId, sal_Int32 nNameI
 {
     if( const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get() )
     {
-        if( pExtLink->getLinkType() == LINKTYPE_SELF )
+        if( pExtLink->getLinkType() == ExternalLinkType::Self )
             return pushBiff12Name( nNameId );
         // external name indexes are one-based in BIFF12
         ExternalNameRef xExtName = pExtLink->getNameByIndex( nNameId - 1 );
@@ -1857,7 +1850,7 @@ OUString FormulaParser::importMacroName( const OUString& rFormulaString )
         const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId, false ).get();
         OSL_ENSURE( pExtLink, "FormulaParser::importMacroName - missing link" );
         // do not accept macros in external documents (not supported)
-        if( pExtLink && (pExtLink->getLinkType() == LINKTYPE_SELF) )
+        if( pExtLink && (pExtLink->getLinkType() == ExternalLinkType::Self) )
         {
             // ignore sheet macros (defined name for VBA macros may not exist, see above)
             OUString aMacroName = aRemainder.copy( 1 );

@@ -195,7 +195,7 @@ ContextHandlerRef ExternalLinkFragment::onCreateContext( sal_Int32 nElement, con
             if( nElement == XLS_TOKEN( definedName ) ) mrExtLink.importDefinedName( rAttribs );
         break;
         case XLS_TOKEN( sheetDataSet ):
-            if( (nElement == XLS_TOKEN( sheetData )) && (mrExtLink.getLinkType() == LINKTYPE_EXTERNAL) )
+            if( (nElement == XLS_TOKEN( sheetData )) && (mrExtLink.getLinkType() == ExternalLinkType::External) )
                 return createSheetDataContext( rAttribs.getInteger( XML_sheetId, -1 ) );
         break;
 
@@ -280,7 +280,7 @@ ContextHandlerRef ExternalLinkFragment::onCreateRecordContext( sal_Int32 nRecId,
             switch( nRecId )
             {
                 case BIFF12_ID_EXTSHEETDATA:
-                    if( mrExtLink.getLinkType() == LINKTYPE_EXTERNAL )
+                    if( mrExtLink.getLinkType() == ExternalLinkType::External )
                         return createSheetDataContext( rStrm.readInt32() );
                 break;
 

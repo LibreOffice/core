@@ -155,18 +155,15 @@ private:
     sal_Int32           mnLast;         /// Index of the last sheet or index of last external sheet cache.
 };
 
-enum ExternalLinkType
+enum class ExternalLinkType
 {
-    LINKTYPE_SELF,          /// Link refers to the current workbook.
-    LINKTYPE_SAME,          /// Link refers to the current sheet.
-    LINKTYPE_INTERNAL,      /// Link refers to a sheet in the own workbook.
-    LINKTYPE_EXTERNAL,      /// Link refers to an external spreadsheet document.
-    LINKTYPE_ANALYSIS,      /// Link refers to the Analysis add-in.
-    LINKTYPE_LIBRARY,       /// Link refers to an external add-in.
-    LINKTYPE_DDE,           /// DDE link.
-    LINKTYPE_OLE,           /// OLE link.
-    LINKTYPE_MAYBE_DDE_OLE, /// Could be DDE or OLE link (BIFF only).
-    LINKTYPE_UNKNOWN        /// Unknown or unsupported link type.
+    Self,          /// Link refers to the current workbook.
+    Same,          /// Link refers to the current sheet.
+    External,      /// Link refers to an external spreadsheet document.
+    Library,       /// Link refers to an external add-in.
+    DDE,           /// DDE link.
+    OLE,           /// OLE link.
+    Unknown        /// Unknown or unsupported link type.
 };
 
 class ExternalLink : public WorkbookHelper
@@ -207,7 +204,7 @@ public:
     void                importExternalAddin( SequenceInputStream& rStrm );
 
     /** Sets the link type to 'self reference'. */
-    inline void         setSelfLinkType() { meLinkType = LINKTYPE_SELF; }
+    inline void         setSelfLinkType() { meLinkType = ExternalLinkType::Self; }
 
     /** Returns the type of this external link. */
     inline ExternalLinkType getLinkType() const { return meLinkType; }
@@ -254,7 +251,7 @@ private:
     typedef RefVector< ExternalName >   ExternalNameVector;
 
     ExternalLinkType    meLinkType;         /// Type of this link object.
-    FunctionLibraryType meFuncLibType;      /// Type of the function library, if link type is LINKTYPE_LIBRARY.
+    FunctionLibraryType meFuncLibType;      /// Type of the function library, if link type is ExternalLinkType::Library.
     OUString            maRelId;            /// Relation identifier for the external link fragment.
     OUString            maClassName;        /// DDE service, OLE class name.
     OUString            maTargetUrl;        /// Target link, DDE topic, OLE target.
