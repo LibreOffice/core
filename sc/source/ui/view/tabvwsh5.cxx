@@ -64,7 +64,7 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                            pPaintHint->GetEndCol(), pPaintHint->GetEndRow() );
             if (nParts & PaintPartFlags::Marks)
                 PaintArea( pPaintHint->GetStartCol(), pPaintHint->GetStartRow(),
-                           pPaintHint->GetEndCol(), pPaintHint->GetEndRow(), SC_UPDATE_MARKS );
+                           pPaintHint->GetEndCol(), pPaintHint->GetEndRow(), ScUpdateMode::Marks );
             if (nParts & PaintPartFlags::Left)
                 PaintLeftArea( pPaintHint->GetStartRow(), pPaintHint->GetEndRow() );
             if (nParts & PaintPartFlags::Top)

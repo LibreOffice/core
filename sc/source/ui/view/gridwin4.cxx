@@ -371,7 +371,7 @@ void ScGridWindow::Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangl
         ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
     }
 
-    Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS ); // don't continue with painting
+    Draw( nX1,nY1,nX2,nY2, ScUpdateMode::Marks ); // don't continue with painting
 
     bIsInPaint = false;
 }
@@ -417,7 +417,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if (nY2 > maVisibleRange.mnRow2)
         nY2 = maVisibleRange.mnRow2;
 
-    if ( eMode != SC_UPDATE_MARKS && nX2 < maVisibleRange.mnCol2)
+    if ( eMode != ScUpdateMode::Marks && nX2 < maVisibleRange.mnCol2)
         nX2 = maVisibleRange.mnCol2;  // to continue painting
 
     // point of no return
@@ -504,7 +504,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         bLogicText = true; // use logic MapMode
     }
 
-    DrawContent(*this, aTabInfo, aOutputData, bLogicText, eMode);
+    DrawContent(*this, aTabInfo, aOutputData, bLogicText);
 
     // If something was inverted during the Paint (selection changed from Basic Macro)
     // then this is now mixed up and has to be repainted
@@ -519,7 +519,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 }
 
 void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData,
-        bool bLogicText, ScUpdateMode eMode)
+        bool bLogicText)
 {
     ScModule* pScMod = SC_MOD();
     ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -559,12 +559,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     bool bGridFirst = !rOpts.GetOption( VOPT_GRID_ONTOP );
 
     bool bPage = rOpts.GetOption( VOPT_PAGEBREAKS );
-
-    if ( eMode == SC_UPDATE_CHANGED )
-    {
-        aOutputData.FindChanged();
-        aOutputData.SetSingleGrid(true);
-    }
 
     bool bPageMode = pViewData->IsPagebreakMode();
     if (bPageMode)                                      // after FindChanged
@@ -713,7 +707,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             // drawing background
 
         pContentDev->SetMapMode(aDrawMode);
-        DrawRedraw( aOutputData, eMode, SC_LAYER_BACK );
+        DrawRedraw( aOutputData, SC_LAYER_BACK );
     }
     else
         aOutputData.SetSolidBackground(true);
@@ -793,8 +787,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         //! Merge SetChangedClip() with DrawMarks() ?? (different MapMode!)
 
         bool bAny = true;
-        if (eMode == SC_UPDATE_CHANGED)
-            bAny = aOutputData.SetChangedClip();
         if (bAny)
         {
             if ( bHasChange )
@@ -804,9 +796,6 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                 lcl_DrawScenarioFrames( pContentDev, pViewData, eWhich, nX1,nY1,nX2,nY2 );
 
             lcl_DrawHighlight( aOutputData, pViewData, rHigh );
-
-            if (eMode == SC_UPDATE_CHANGED)
-                pContentDev->SetClipRegion();
         }
     }
 
@@ -830,21 +819,13 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         comphelper::LibreOfficeKit::setLocalRendering();
     }
 
-    DrawRedraw( aOutputData, eMode, SC_LAYER_FRONT );
-    DrawRedraw( aOutputData, eMode, SC_LAYER_INTERN );
+    DrawRedraw( aOutputData, SC_LAYER_FRONT );
+    DrawRedraw( aOutputData, SC_LAYER_INTERN );
     DrawSdrGrid( aDrawingRectLogic, pContentDev );
 
     if (bIsTiledRendering)
     {
         pContentDev->SetMapMode(aOrig);
-    }
-
-    if (!bIsInScroll)                               // Drawing marks
-    {
-        if(eMode == SC_UPDATE_CHANGED && aOutputData.SetChangedClip())
-        {
-            pContentDev->SetClipRegion();
-        }
     }
 
     pContentDev->SetMapMode(MapUnit::MapPixel);
@@ -1224,7 +1205,7 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     }
 
     // draw the content
-    DrawContent(rDevice, aTabInfo, aOutputData, true, SC_UPDATE_ALL);
+    DrawContent(rDevice, aTabInfo, aOutputData, true);
 
     rDevice.SetMapMode(aOriginalMode);
 }

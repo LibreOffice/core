@@ -120,7 +120,7 @@ void ScTabView::StopRefMode()
             if ( nStartX == nEndX && nStartY == nEndY )
                 pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
 
-            PaintArea( nStartX,nStartY,nEndX,nEndY, SC_UPDATE_MARKS );
+            PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
         }
 
         pSelEngine->Reset();
@@ -169,7 +169,7 @@ void ScTabView::DoneRefMode( bool bContinue )
         if ( nStartX == nEndX && nStartY == nEndY )
             pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
 
-        PaintArea( nStartX,nStartY,nEndX,nEndY, SC_UPDATE_MARKS );
+        PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
     }
 }
 
@@ -237,7 +237,7 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
         SCCOL nPaintEndX;
         SCROW nPaintEndY;
         if (aRect.GetDiff( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY ))
-            PaintArea( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY, SC_UPDATE_MARKS );
+            PaintArea( nPaintStartX, nPaintStartY, nPaintEndX, nPaintEndY, ScUpdateMode::Marks );
     }
 
     //  Tip-Hilfe fuer Auto-Fill
@@ -302,7 +302,7 @@ void ScTabView::InitRefMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ, ScRefType eT
             pDoc->ExtendMerge( nStartX, nStartY, nEndX, nEndY, aViewData.GetTabNo() );
 
             //! nur Markierung ueber Inhalte zeichnen!
-            PaintArea( nStartX,nStartY,nEndX,nEndY, SC_UPDATE_MARKS );
+            PaintArea( nStartX,nStartY,nEndX,nEndY, ScUpdateMode::Marks );
 
             //  SetReference ohne Merge-Anpassung
             ScRange aRef( nCurX,nCurY,nCurZ, nCurX,nCurY,nCurZ );

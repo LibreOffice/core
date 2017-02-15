@@ -517,7 +517,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, bool bScrol
             pViewData->GetView()->UpdateShrinkOverlay();
 
             pViewData->GetView()->
-                PaintArea( nStartX,nDelStartY, nEndX,nEndY, SC_UPDATE_MARKS );
+                PaintArea( nStartX,nDelStartY, nEndX,nEndY, ScUpdateMode::Marks );
 
             nPosX = nEndX;      // keep red border around range
             nPosY = nEndY;

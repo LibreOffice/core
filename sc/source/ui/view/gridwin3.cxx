@@ -185,7 +185,7 @@ bool ScGridWindow::DrawKeyInput(const KeyEvent& rKEvt)
     return false;
 }
 
-void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, sal_uLong nLayer )
+void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, sal_uLong nLayer )
 {
     const ScViewOptions& rOpts = pViewData->GetOptions();
 
@@ -206,14 +206,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, sa
             pDrView->setHideFormControl(!bDrawDraw);
         }
 
-        if(SC_UPDATE_CHANGED == eMode)
-        {
-            rOutputData.DrawingSingle((sal_uInt16)nLayer);
-        }
-        else
-        {
-            rOutputData.DrawSelectiveObjects((sal_uInt16)nLayer);
-        }
+        rOutputData.DrawSelectiveObjects((sal_uInt16)nLayer);
     }
 }
 

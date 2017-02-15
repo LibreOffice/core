@@ -35,7 +35,7 @@ class ScAddress;
 class ScRange;
 class ScMarkData;
 enum class SvtScriptType;
-enum ScUpdateMode { SC_UPDATE_ALL, SC_UPDATE_CHANGED, SC_UPDATE_MARKS };
+enum class ScUpdateMode { All, Marks };
 
 class SC_DLLPUBLIC ScViewUtil
 {

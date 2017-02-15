@@ -323,7 +323,7 @@ void ScTabView::PaintMarks(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
 
     aViewData.GetDocument()->ExtendMerge( nStartCol, nStartRow, nEndCol, nEndRow,
                                             aViewData.GetTabNo() );
-    PaintArea( nStartCol, nStartRow, nEndCol, nEndRow, SC_UPDATE_MARKS );
+    PaintArea( nStartCol, nStartRow, nEndCol, nEndRow, ScUpdateMode::Marks );
 }
 
 bool ScTabView::IsMarking( SCCOL nCol, SCROW nRow, SCTAB nTab ) const

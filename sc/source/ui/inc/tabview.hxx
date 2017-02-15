@@ -451,7 +451,7 @@ public:
                                     // Zeichnen
 
     void            PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
-                                        ScUpdateMode eMode = SC_UPDATE_ALL );
+                                        ScUpdateMode eMode = ScUpdateMode::All );
 
     void            PaintGrid();
 

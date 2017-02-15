@@ -253,7 +253,7 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     SdrObject*      GetEditObject();
     bool            IsMyModel(SdrEditView* pSdrView);
 
-    void            DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, sal_uLong nLayer );
+    void            DrawRedraw( ScOutputData& rOutputData, sal_uLong nLayer );
     void            DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev );
     void            DrawAfterScroll();
     Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
@@ -374,7 +374,7 @@ public:
                           ScUpdateMode eMode );
 
     /// Draw content of the gridwindow; shared between the desktop and the tiled rendering.
-    void DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData, bool bLogicText, ScUpdateMode eMode);
+    void DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableInfo, ScOutputData& aOutputData, bool bLogicText);
 
     void            CreateAnchorHandle(SdrHdlList& rHdl, const ScAddress& rAddress);
 
