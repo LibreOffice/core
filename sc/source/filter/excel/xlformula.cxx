@@ -849,7 +849,7 @@ void XclTokenArrayIterator::SkipSpaces()
 
 bool XclTokenArrayHelper::GetTokenString( OUString& rString, const FormulaToken& rScToken )
 {
-    bool bIsStr = (rScToken.GetType() == svString) && (rScToken.GetOpCode() == ocPush);
+    bool bIsStr = (rScToken.GetType() == StackVar::String) && (rScToken.GetOpCode() == ocPush);
     if( bIsStr ) rString = rScToken.GetString().getString();
     return bIsStr;
 }
@@ -915,7 +915,7 @@ namespace {
 inline bool lclGetAddress( ScAddress& rAddress, const FormulaToken& rToken, const ScAddress& rPos )
 {
     OpCode eOpCode = rToken.GetOpCode();
-    bool bIsSingleRef = (eOpCode == ocPush) && (rToken.GetType() == svSingleRef);
+    bool bIsSingleRef = (eOpCode == ocPush) && (rToken.GetType() == StackVar::SingleRef);
     if( bIsSingleRef )
     {
         const ScSingleRefData& rRef = *rToken.GetSingleRef();

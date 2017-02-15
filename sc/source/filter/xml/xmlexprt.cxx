@@ -4680,7 +4680,7 @@ void ScXMLExport::WriteExternalRefCaches()
 
                         switch(pToken->GetType())
                         {
-                            case svDouble:
+                            case StackVar::Double:
                             {
                                 AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_FLOAT);
                                 OUStringBuffer aVal;
@@ -4689,7 +4689,7 @@ void ScXMLExport::WriteExternalRefCaches()
                                 AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE, aStrVal);
                             }
                             break;
-                            case svString:
+                            case StackVar::String:
                             {
                                 AddAttribute(XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_STRING);
                                 aStrVal = pToken->GetString().getString();

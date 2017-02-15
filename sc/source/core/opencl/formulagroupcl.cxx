@@ -97,34 +97,34 @@ namespace sc { namespace opencl {
 
 namespace {
 
-std::string StackVarEnumToString(StackVar const e)
+std::string StackVarToString(StackVar const e)
 {
     switch (e)
     {
-        case svByte:              return "Byte";
-        case svDouble:            return "Double";
-        case svString:            return "String";
-        case svSingleRef:         return "SingleRef";
-        case svDoubleRef:         return "DoubleRef";
-        case svMatrix:            return "Matrix";
-        case svIndex:             return "Index";
-        case svJump:              return "Jump";
-        case svExternal:          return "External";
-        case svFAP:               return "FAP";
-        case svJumpMatrix:        return "JumpMatrix";
-        case svRefList:           return "RefList";
-        case svEmptyCell:         return "EmptyCell";
-        case svMatrixCell:        return "MatrixCell";
-        case svHybridCell:        return "HybridCell";
-        case svExternalSingleRef: return "ExternalSingleRef";
-        case svExternalDoubleRef: return "ExternalDoubleRef";
-        case svExternalName:      return "ExternalName";
-        case svSingleVectorRef:   return "SingleVectorRef";
-        case svDoubleVectorRef:   return "DoubleVectorRef";
-        case svError:             return "Error";
-        case svMissing:           return "Missing";
-        case svSep:               return "Sep";
-        case svUnknown:           return "Unknown";
+        case StackVar::Byte:              return "Byte";
+        case StackVar::Double:            return "Double";
+        case StackVar::String:            return "String";
+        case StackVar::SingleRef:         return "SingleRef";
+        case StackVar::DoubleRef:         return "DoubleRef";
+        case StackVar::Matrix:            return "Matrix";
+        case StackVar::Index:             return "Index";
+        case StackVar::Jump:              return "Jump";
+        case StackVar::External:          return "External";
+        case StackVar::FAP:               return "FAP";
+        case StackVar::JumpMatrix:        return "JumpMatrix";
+        case StackVar::RefList:           return "RefList";
+        case StackVar::EmptyCell:         return "EmptyCell";
+        case StackVar::MatrixCell:        return "MatrixCell";
+        case StackVar::HybridCell:        return "HybridCell";
+        case StackVar::ExternalSingleRef: return "ExternalSingleRef";
+        case StackVar::ExternalDoubleRef: return "ExternalDoubleRef";
+        case StackVar::ExternalName:      return "ExternalName";
+        case StackVar::SingleVectorRef:   return "SingleVectorRef";
+        case StackVar::DoubleVectorRef:   return "DoubleVectorRef";
+        case StackVar::Error:             return "Error";
+        case StackVar::Missing:           return "Missing";
+        case StackVar::Sep:               return "Sep";
+        case StackVar::Unknown:           return "Unknown";
     }
     return std::to_string(static_cast<int>(e));
 }
@@ -166,7 +166,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
     FormulaToken* ref = mFormulaTree->GetFormulaToken();
     double* pHostBuffer = nullptr;
     size_t szHostBuffer = 0;
-    if (ref->GetType() == formula::svSingleVectorRef)
+    if (ref->GetType() == formula::StackVar::SingleVectorRef)
     {
         const formula::SingleVectorRefToken* pSVR =
             static_cast<const formula::SingleVectorRefToken*>(ref);
@@ -176,7 +176,7 @@ size_t VectorRef::Marshal( cl_kernel k, int argno, int, cl_program )
         pHostBuffer = const_cast<double*>(pSVR->GetArray().mpNumericArray);
         szHostBuffer = pSVR->GetArrayLength() * sizeof(double);
     }
-    else if (ref->GetType() == formula::svDoubleVectorRef)
+    else if (ref->GetType() == formula::StackVar::DoubleVectorRef)
     {
         const formula::DoubleVectorRefToken* pDVR =
             static_cast<const formula::DoubleVectorRefToken*>(ref);
@@ -265,7 +265,7 @@ public:
     virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
     {
         std::stringstream ss;
-        if (GetFormulaToken()->GetType() != formula::svString)
+        if (GetFormulaToken()->GetType() != formula::StackVar::String)
             throw Unhandled(__FILE__, __LINE__);
         FormulaToken* Tok = GetFormulaToken();
         ss << Tok->GetString().getString().toAsciiUpperCase().hashCode() << "U";
@@ -280,7 +280,7 @@ public:
     {
         FormulaToken* ref = mFormulaTree->GetFormulaToken();
         cl_uint hashCode = 0;
-        if (ref->GetType() == formula::svString)
+        if (ref->GetType() == formula::StackVar::String)
         {
             const rtl::OUString s = ref->GetString().getString().toAsciiUpperCase();
             hashCode = s.hashCode();
@@ -321,7 +321,7 @@ public:
     }
     virtual std::string GenSlidingWindowDeclRef( bool = false ) const override
     {
-        if (GetFormulaToken()->GetType() != formula::svDouble)
+        if (GetFormulaToken()->GetType() != formula::StackVar::Double)
             throw Unhandled(__FILE__, __LINE__);
         return mSymName;
     }
@@ -332,7 +332,7 @@ public:
     double GetDouble() const
     {
         FormulaToken* Tok = GetFormulaToken();
-        if (Tok->GetType() != formula::svDouble)
+        if (Tok->GetType() != formula::StackVar::Double)
             throw Unhandled(__FILE__, __LINE__);
         return Tok->GetDouble();
     }
@@ -785,14 +785,14 @@ size_t DynamicKernelStringArgument::Marshal( cl_kernel k, int argno, int, cl_pro
     cl_int err;
     formula::VectorRefArray vRef;
     size_t nStrings = 0;
-    if (ref->GetType() == formula::svSingleVectorRef)
+    if (ref->GetType() == formula::StackVar::SingleVectorRef)
     {
         const formula::SingleVectorRefToken* pSVR =
             static_cast<const formula::SingleVectorRefToken*>(ref);
         nStrings = pSVR->GetArrayLength();
         vRef = pSVR->GetArray();
     }
-    else if (ref->GetType() == formula::svDoubleVectorRef)
+    else if (ref->GetType() == formula::StackVar::DoubleVectorRef)
     {
         const formula::DoubleVectorRefToken* pDVR =
             static_cast<const formula::DoubleVectorRefToken*>(ref);
@@ -948,7 +948,7 @@ public:
         Base(config, s, ft, index), mpCodeGen(CodeGen)
     {
         FormulaToken* t = ft->GetFormulaToken();
-        if (t->GetType() != formula::svDoubleVectorRef)
+        if (t->GetType() != formula::StackVar::DoubleVectorRef)
             throw Unhandled(__FILE__, __LINE__);
         mpDVR = static_cast<const formula::DoubleVectorRefToken*>(t);
         bIsStartFixed = mpDVR->IsStartFixed();
@@ -1236,7 +1236,7 @@ public:
         Base(config, s, ft, index), mpCodeGen(CodeGen), mpClmem2(nullptr)
     {
         FormulaToken* t = ft->GetFormulaToken();
-        if (t->GetType() != formula::svDoubleVectorRef)
+        if (t->GetType() != formula::StackVar::DoubleVectorRef)
             throw Unhandled(__FILE__, __LINE__);
         mpDVR = static_cast<const formula::DoubleVectorRefToken*>(t);
         bIsStartFixed = mpDVR->IsStartFixed();
@@ -1712,10 +1712,10 @@ public:
             {
                 FormulaToken* pCur = vSubArguments[i]->GetFormulaToken();
                 assert(pCur);
-                assert(pCur->GetType() != formula::svDoubleVectorRef);
+                assert(pCur->GetType() != formula::StackVar::DoubleVectorRef);
 
-                if (pCur->GetType() == formula::svSingleVectorRef ||
-                    pCur->GetType() == formula::svDouble)
+                if (pCur->GetType() == formula::StackVar::SingleVectorRef ||
+                    pCur->GetType() == formula::StackVar::Double)
                 {
                     ss << "{\n";
                 }
@@ -1883,7 +1883,7 @@ public:
                             temp3 << i;
                             temp3 << ">";
                             if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                                    formula::svSingleVectorRef)
+                                    formula::StackVar::SingleVectorRef)
                             {
                                 const formula::SingleVectorRefToken* pSVR =
                                     static_cast<const formula::SingleVectorRefToken*>
@@ -1896,7 +1896,7 @@ public:
                                 temp3  << ")";
                             }
                             else if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                                    formula::svDoubleVectorRef)
+                                    formula::StackVar::DoubleVectorRef)
                             {
                                 const formula::DoubleVectorRefToken* pSVR =
                                     static_cast<const formula::DoubleVectorRefToken*>
@@ -1959,7 +1959,7 @@ public:
                         temp4 << i;
                         temp4 << ">";
                         if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                                formula::svSingleVectorRef)
+                                formula::StackVar::SingleVectorRef)
                         {
                             const formula::SingleVectorRefToken* pSVR =
                                 static_cast<const formula::SingleVectorRefToken*>
@@ -1972,7 +1972,7 @@ public:
                             temp4  << ")";
                         }
                         else if (vSubArguments[i]->GetFormulaToken()->GetType() ==
-                                formula::svDoubleVectorRef)
+                                formula::StackVar::DoubleVectorRef)
                         {
                             const formula::DoubleVectorRefToken* pSVR =
                                 static_cast<const formula::DoubleVectorRefToken*>
@@ -2472,10 +2472,10 @@ public:
                 throw Unhandled(__FILE__, __LINE__);
             bool bArgument1_NeedNested =
                 mvSubArguments[0]->GetFormulaToken()->GetType()
-                != formula::svSingleVectorRef;
+                != formula::StackVar::SingleVectorRef;
             bool bArgument2_NeedNested =
                 mvSubArguments[1]->GetFormulaToken()->GetType()
-                != formula::svSingleVectorRef;
+                != formula::StackVar::SingleVectorRef;
             ss << "(";
             ss << mpCodeGen->
                 Gen2(mvSubArguments[0]
@@ -2594,7 +2594,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
         switch (opc)
         {
             case ocPush:
-                if (pChild->GetType() == formula::svDoubleVectorRef)
+                if (pChild->GetType() == formula::StackVar::DoubleVectorRef)
                 {
                     const formula::DoubleVectorRefToken* pDVR =
                         static_cast<const formula::DoubleVectorRefToken*>(pChild);
@@ -2642,7 +2642,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                             {
                                 // Can't handle
                                 SAL_INFO("sc.opencl", "Strings but can't do that.");
-                                throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
+                                throw UnhandledToken(("unhandled operand " + StackVarToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
                             }
                             else
                             {
@@ -2664,7 +2664,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         }
                     }
                 }
-                else if (pChild->GetType() == formula::svSingleVectorRef)
+                else if (pChild->GetType() == formula::StackVar::SingleVectorRef)
                 {
                     const formula::SingleVectorRefToken* pSVR =
                         static_cast<const formula::SingleVectorRefToken*>(pChild);
@@ -2736,14 +2736,14 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                         throw UnhandledToken("Got unhandled case here", __FILE__, __LINE__);
                     }
                 }
-                else if (pChild->GetType() == formula::svDouble)
+                else if (pChild->GetType() == formula::StackVar::Double)
                 {
                     SAL_INFO("sc.opencl", "Constant number (?) case");
                     mvSubArguments.push_back(
                         DynamicKernelArgumentRef(new DynamicKernelConstantArgument(mCalcConfig, ts,
                                 ft->Children[i])));
                 }
-                else if (pChild->GetType() == formula::svString
+                else if (pChild->GetType() == formula::StackVar::String
                     && pCodeGen->takeString())
                 {
                     SAL_INFO("sc.opencl", "Constant string (?) case");
@@ -2754,7 +2754,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(const ScCalcConfig& config,
                 else
                 {
                     SAL_INFO("sc.opencl", "Fallback case, rejecting for OpenCL");
-                    throw UnhandledToken(("unhandled operand " + StackVarEnumToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
+                    throw UnhandledToken(("unhandled operand " + StackVarToString(pChild->GetType()) + " for ocPush").c_str(), __FILE__, __LINE__);
                 }
                 break;
             case ocDiv:

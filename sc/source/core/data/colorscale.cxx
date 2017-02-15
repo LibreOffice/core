@@ -45,7 +45,7 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
     {
         switch (t->GetType())
         {
-            case formula::svSingleRef:
+            case formula::StackVar::SingleRef:
             {
                 ScAddress aCell = t->GetSingleRef()->toAbs(rRange.aStart);
                 ScAddress aCell2 = t->GetSingleRef()->toAbs(rRange.aEnd);
@@ -56,7 +56,7 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange
                 maCells.push_back(aCell);
             }
             break;
-            case formula::svDoubleRef:
+            case formula::StackVar::DoubleRef:
             {
                 const ScSingleRefData& rRef1 = *t->GetSingleRef();
                 const ScSingleRefData& rRef2 = *t->GetSingleRef2();

@@ -70,7 +70,7 @@ private:
             ScSingleRefData       aSingleRef;
 public:
                                 ScSingleRefToken( const ScSingleRefData& r, OpCode e = ocPush ) :
-                                    FormulaToken( formula::svSingleRef, e ), aSingleRef( r ) {}
+                                    FormulaToken( formula::StackVar::SingleRef, e ), aSingleRef( r ) {}
                                 ScSingleRefToken( const ScSingleRefToken& r ) :
                                     FormulaToken( r ), aSingleRef( r.aSingleRef ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
@@ -88,7 +88,7 @@ private:
             ScComplexRefData        aDoubleRef;
 public:
                                 ScDoubleRefToken( const ScComplexRefData& r, OpCode e = ocPush  ) :
-                                    FormulaToken( formula::svDoubleRef, e ), aDoubleRef( r ) {}
+                                    FormulaToken( formula::StackVar::DoubleRef, e ), aDoubleRef( r ) {}
                                 ScDoubleRefToken( const ScDoubleRefToken& r ) :
                                     FormulaToken( r ), aDoubleRef( r.aDoubleRef ) {}
     virtual const ScSingleRefData*    GetSingleRef() const override;
@@ -250,7 +250,7 @@ private:
             ScJumpMatrix*       pJumpMatrix;
 public:
                                 ScJumpMatrixToken( ScJumpMatrix* p ) :
-                                    FormulaToken( formula::svJumpMatrix ), pJumpMatrix( p ) {}
+                                    FormulaToken( formula::StackVar::JumpMatrix ), pJumpMatrix( p ) {}
                                 ScJumpMatrixToken( const ScJumpMatrixToken& r ) :
                                     FormulaToken( r ), pJumpMatrix( r.pJumpMatrix ) {}
     virtual                     ~ScJumpMatrixToken() override;
@@ -267,7 +267,7 @@ private:
             ScRefList           aRefList;
 public:
                                 ScRefListToken() :
-                                    FormulaToken( formula::svRefList ) {}
+                                    FormulaToken( formula::StackVar::RefList ) {}
                                 ScRefListToken( const ScRefListToken & r ) :
                                     FormulaToken( r ), aRefList( r.aRefList ) {}
     virtual const ScRefList*    GetRefList() const override;
@@ -282,7 +282,7 @@ class SC_DLLPUBLIC ScEmptyCellToken : public formula::FormulaToken
             bool                bDisplayedAsString  :1;
 public:
     explicit                    ScEmptyCellToken( bool bInheritedP, bool bDisplayAsString ) :
-                                    FormulaToken( formula::svEmptyCell ),
+                                    FormulaToken( formula::StackVar::EmptyCell ),
                                     bInherited( bInheritedP ),
                                     bDisplayedAsString( bDisplayAsString ) {}
                                 ScEmptyCellToken( const ScEmptyCellToken& r ) :
@@ -320,7 +320,7 @@ public:
                                     {
                                         return xUpperLeft ?
                                             xUpperLeft->GetType() :
-                                            static_cast<formula::StackVar>(formula::svUnknown);
+                                            formula::StackVar::Unknown;
                                     }
     const formula::FormulaConstTokenRef& GetUpperLeftToken() const { return xUpperLeft; }
     void Assign( const ScMatrixCellResultToken & r );
@@ -366,7 +366,7 @@ public:
                                     be assigned NULL. */
             void                Assign( const formula::FormulaToken & r );
 
-                                /** Modify xUpperLeft if formula::svDouble, or create
+                                /** Modify xUpperLeft if formula::StackVar::Double, or create
                                     new formula::FormulaDoubleToken if not set yet. Does
                                     nothing if xUpperLeft is of different type! */
             void                SetUpperLeftDouble( double f);
@@ -378,7 +378,7 @@ public:
 private:
 
     /** xUpperLeft is modifiable through SetUpperLeftDouble(), so clone it
-        whenever an svDouble token is assigned to. */
+        whenever an StackVar::Double token is assigned to. */
     void CloneUpperLeftIfNecessary();
 };
 
@@ -417,7 +417,7 @@ public:
         SingleDoubleRefModifier( formula::FormulaToken& rT )
                     {
                         formula::StackVar eType = rT.GetType();
-                        if ( eType == formula::svSingleRef || eType == formula::svExternalSingleRef )
+                        if ( eType == formula::StackVar::SingleRef || eType == formula::StackVar::ExternalSingleRef )
                         {
                             pS = rT.GetSingleRef();
                             aDub.Ref1 = aDub.Ref2 = *pS;
@@ -454,8 +454,8 @@ public:
 
                 SingleDoubleRefProvider( const formula::FormulaToken& r )
                         : Ref1( *r.GetSingleRef() ),
-                        Ref2( (r.GetType() == formula::svDoubleRef ||
-                                    r.GetType() == formula::svExternalDoubleRef) ?
+                        Ref2( (r.GetType() == formula::StackVar::DoubleRef ||
+                                    r.GetType() == formula::StackVar::ExternalDoubleRef) ?
                                 r.GetDoubleRef()->Ref2 : Ref1 )
                     {}
 };

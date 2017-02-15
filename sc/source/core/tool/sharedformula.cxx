@@ -379,7 +379,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
         const formula::FormulaToken* t = *p;
         switch (t->GetType())
         {
-            case formula::svSingleRef:
+            case formula::StackVar::SingleRef:
             {
                 const ScSingleRefData* pRef = t->GetSingleRef();
                 ScAddress aPos = pRef->toAbs(rTopCell.aPos);
@@ -396,7 +396,7 @@ void SharedFormulaUtil::startListeningAsGroup( sc::StartListeningContext& rCxt, 
                 }
             }
             break;
-            case formula::svDoubleRef:
+            case formula::StackVar::DoubleRef:
             {
                 const ScSingleRefData& rRef1 = *t->GetSingleRef();
                 const ScSingleRefData& rRef2 = *t->GetSingleRef2();

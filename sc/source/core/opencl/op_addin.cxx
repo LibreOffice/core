@@ -46,7 +46,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur0);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur0->GetType() == formula::svSingleVectorRef)
+        if(tmpCur0->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurSVR0 =
                 static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
@@ -58,7 +58,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "            x = 0.0;\n";
             ss << "    }\n";
         }
-        else if(tmpCur0->GetType() == formula::svDouble)
+        else if(tmpCur0->GetType() == formula::StackVar::Double)
         {
             ss << "    x = " << tmpCur0->GetDouble() << ";\n";
         }
@@ -78,7 +78,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur1);
     if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur1->GetType() == formula::svSingleVectorRef)
+        if(tmpCur1->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurSVR1 =
                 static_cast<const formula::SingleVectorRefToken *>(tmpCur1);
@@ -90,7 +90,7 @@ void OpBesselj::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "            N = 0.0;\n";
             ss << "    }\n";
         }
-        else if(tmpCur1->GetType() == formula::svDouble)
+        else if(tmpCur1->GetType() == formula::StackVar::Double)
         {
             ss << "    N = " << tmpCur1->GetDouble() << ";\n";
         }
@@ -209,14 +209,14 @@ void OpGestep::GenSlidingWindowFunction(
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
-        if (pCur->GetType() == formula::svSingleVectorRef)
+        if (pCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken& rSVR =
             dynamic_cast< const formula::SingleVectorRefToken& >(*pCur);
             ss << "    if (gid0 < " << rSVR.GetArrayLength() << ")\n";
             ss << "    {\n";
         }
-        else if (pCur->GetType() == formula::svDouble)
+        else if (pCur->GetType() == formula::StackVar::Double)
         {
             ss << "    {\n";
         }

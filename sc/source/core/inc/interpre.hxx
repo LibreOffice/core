@@ -329,9 +329,9 @@ void SingleRefToVars( const ScSingleRefData & rRef, SCCOL & rCol, SCROW & rRow, 
 void PopSingleRef( ScAddress& );
 void PopSingleRef(SCCOL& rCol, SCROW &rRow, SCTAB& rTab);
 void DoubleRefToRange( const ScComplexRefData&, ScRange&, bool bDontCheckForTableOp = false );
-/** If formula::StackVar formula::svDoubleRef pop ScDoubleRefToken and return values of
+/** If formula::StackVar formula::StackVar::DoubleRef pop ScDoubleRefToken and return values of
     ScComplexRefData.
-    Else if StackVar svRefList return values of the ScComplexRefData where
+    Else if StackVar StackVar::RefList return values of the ScComplexRefData where
     rRefInList is pointing to. rRefInList is incremented. If rRefInList was the
     last element in list pop ScRefListToken and set rRefInList to 0, else
     rParam is incremented (!) to allow usage as in
@@ -361,15 +361,15 @@ void PopExternalDoubleRef(ScMatrixRef& rMat);
 void GetExternalDoubleRef(sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& aData, ScExternalRefCache::TokenArrayRef& rArray);
 bool PopDoubleRefOrSingleRef( ScAddress& rAdr );
 void PopDoubleRefPushMatrix();
-// If MatrixFormula: convert svDoubleRef to svMatrix, create JumpMatrix.
+// If MatrixFormula: convert StackVar::DoubleRef to StackVar::Matrix, create JumpMatrix.
 // Else convert area reference parameters marked as ForceArray to array.
 // Returns true if JumpMatrix created.
 bool ConvertMatrixParameters();
 // If MatrixFormula: ConvertMatrixJumpConditionToMatrix()
 inline void MatrixJumpConditionToMatrix();
 // For MatrixFormula (preconditions already checked by
-// MatrixJumpConditionToMatrix()): convert svDoubleRef to svMatrix, or if
-// JumpMatrix currently in effect convert also other types to svMatrix so
+// MatrixJumpConditionToMatrix()): convert StackVar::DoubleRef to StackVar::Matrix, or if
+// JumpMatrix currently in effect convert also other types to StackVar::Matrix so
 // another JumpMatrix will be created by jump commands.
 void ConvertMatrixJumpConditionToMatrix();
 // If MatrixFormula or ForceArray: ConvertMatrixParameters()
@@ -400,7 +400,7 @@ void PushMatrix(const ScMatrixRef& pMat);
 void PushError( FormulaError nError );
 /// Raw stack type without default replacements.
 formula::StackVar GetRawStackType();
-/// Stack type with replacement of defaults, e.g. svMissing and formula::svEmptyCell will result in formula::svDouble.
+/// Stack type with replacement of defaults, e.g. StackVar::Missing and formula::StackVar::EmptyCell will result in formula::StackVar::Double.
 formula::StackVar GetStackType();
 // peek StackType of Parameter, Parameter 1 == TOS, 2 == TOS-1, ...
 formula::StackVar GetStackType( sal_uInt8 nParam );

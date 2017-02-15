@@ -89,7 +89,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
         {
             switch( t->GetType() )
             {
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                 {
                     ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
                     if ( rRef2.IsColRel() || rRef2.IsRowRel() || rRef2.IsTabRel() )
@@ -97,7 +97,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
                     SAL_FALLTHROUGH;
                 }
 
-                case svSingleRef:
+                case StackVar::SingleRef:
                 {
                     ScSingleRefData& rRef1 = *t->GetSingleRef();
                     if ( rRef1.IsColRel() || rRef1.IsRowRel() || rRef1.IsTabRel() )
@@ -105,7 +105,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
                 }
                 break;
 
-                case svIndex:
+                case StackVar::Index:
                 {
                     if( t->GetOpCode() == ocName )      // DB areas always absolute
                         if( ScRangeData* pRangeData = pDoc->FindRangeNameBySheetAndIndex( t->GetSheet(), t->GetIndex()) )
@@ -115,7 +115,7 @@ static bool lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, sal_uInt16 
                 break;
 
                 // #i34474# function result dependent on cell position
-                case svByte:
+                case StackVar::Byte:
                 {
                     switch( t->GetOpCode() )
                     {
@@ -313,12 +313,12 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
             FormulaToken* pToken = pFormula1->First();
             if ( pToken->GetOpCode() == ocPush )
             {
-                if ( pToken->GetType() == svDouble )
+                if ( pToken->GetType() == StackVar::Double )
                 {
                     nVal1 = pToken->GetDouble();
                     DELETEZ(pFormula1);             // Do not remember as formula
                 }
-                else if ( pToken->GetType() == svString )
+                else if ( pToken->GetType() == StackVar::String )
                 {
                     bIsStr1 = true;
                     aStrVal1 = pToken->GetString().getString();
@@ -337,12 +337,12 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
             FormulaToken* pToken = pFormula2->First();
             if ( pToken->GetOpCode() == ocPush )
             {
-                if ( pToken->GetType() == svDouble )
+                if ( pToken->GetType() == StackVar::Double )
                 {
                     nVal2 = pToken->GetDouble();
                     DELETEZ(pFormula2);             // Do not remember as formula
                 }
-                else if ( pToken->GetType() == svString )
+                else if ( pToken->GetType() == StackVar::String )
                 {
                     bIsStr2 = true;
                     aStrVal2 = pToken->GetString().getString();
@@ -401,12 +401,12 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
                     FormulaToken* pToken = pFormula1->First();
                     if ( pToken->GetOpCode() == ocPush )
                     {
-                        if ( pToken->GetType() == svDouble )
+                        if ( pToken->GetType() == StackVar::Double )
                         {
                             nVal1 = pToken->GetDouble();
                             DELETEZ(pFormula1);             // Do not remember as formula
                         }
-                        else if ( pToken->GetType() == svString )
+                        else if ( pToken->GetType() == StackVar::String )
                         {
                             bIsStr1 = true;
                             aStrVal1 = pToken->GetString().getString();
@@ -439,12 +439,12 @@ void ScConditionEntry::Compile( const OUString& rExpr1, const OUString& rExpr2,
                     FormulaToken* pToken = pFormula2->First();
                     if ( pToken->GetOpCode() == ocPush )
                     {
-                        if ( pToken->GetType() == svDouble )
+                        if ( pToken->GetType() == StackVar::Double )
                         {
                             nVal2 = pToken->GetDouble();
                             DELETEZ(pFormula2);             // Do not remember as formula
                         }
-                        else if ( pToken->GetType() == svString )
+                        else if ( pToken->GetType() == StackVar::String )
                         {
                             bIsStr2 = true;
                             aStrVal2 = pToken->GetString().getString();
@@ -1440,7 +1440,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
                     if (aAbs.Tab() > nMaxTab)
                         nMaxTab = aAbs.Tab();
                 }
-                if ( t->GetType() == svDoubleRef )
+                if ( t->GetType() == StackVar::DoubleRef )
                 {
                     ScSingleRefData& rRef2 = t->GetDoubleRef()->Ref2;
                     aAbs = rRef2.toAbs(aSrcPos);

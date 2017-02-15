@@ -44,19 +44,19 @@ public:
 
         /** In array formula: single value to be passed. Results in JumpMatrix
             being created and multiple calls to function. Functions handling a
-            formula::svDoubleRef by means of DoubleRefToPosSingleRef() or
+            formula::StackVar::DoubleRef by means of DoubleRefToPosSingleRef() or
             PopDoubleRefOrSingleRef() or GetDouble() or GetString() should have
             this. */
         Value,
 
         /** In array formula: area reference must stay reference. Otherwise
-            don't care. Functions handling a formula::svDoubleRef by means of
+            don't care. Functions handling a formula::StackVar::DoubleRef by means of
             PopDoubleRefOrSingleRef() should not have this. */
         Reference,
 
         /** In array formula: convert area reference to array. Function will be
             called only once if no Value type is involved. Functions able to
-            handle a svMatrix parameter but not a formula::svDoubleRef parameter as area
+            handle a StackVar::Matrix parameter but not a formula::StackVar::DoubleRef parameter as area
             should have this. */
         Array,
 

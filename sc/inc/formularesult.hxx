@@ -81,11 +81,11 @@ class ScFormulaResult
         prior to assigning other types */
     void ResetToDefaults();
 
-    /** If token is of formula::svError set error code and decrement RefCount.
-        If token is of formula::svEmptyCell set mbEmpty and mbEmptyAsString and
+    /** If token is of formula::StackVar::Error set error code and decrement RefCount.
+        If token is of formula::StackVar::EmptyCell set mbEmpty and mbEmptyAsString and
         decrement RefCount.
-        If token is of formula::svDouble set mfValue and decrement RefCount.
-        Else assign token to mpToken. NULL is valid => svUnknown.
+        If token is of formula::StackVar::Double set mfValue and decrement RefCount.
+        Else assign token to mpToken. NULL is valid => StackVar::Unknown.
         Other member variables are set accordingly.
         @precondition: Token MUST had been IncRef'ed prior to this call!
         @precondition: An already existing different mpToken MUST had been
@@ -95,7 +95,7 @@ class ScFormulaResult
     void ResolveToken( const formula::FormulaToken * p );
 
 public:
-    /** Effectively type svUnknown. */
+    /** Effectively type StackVar::Unknown. */
     ScFormulaResult();
 
     ScFormulaResult( const ScFormulaResult & r );
@@ -111,39 +111,39 @@ public:
     /** Assignment as in operator=() but without return */
     void Assign( const ScFormulaResult & r );
 
-    /** Sets a direct double if token type is formula::svDouble, or mbEmpty if
-        formula::svEmptyCell, else token. If p is NULL, that is set as well, effectively
-        resulting in GetType()==svUnknown. If the already existing result is
+    /** Sets a direct double if token type is formula::StackVar::Double, or mbEmpty if
+        formula::StackVar::EmptyCell, else token. If p is NULL, that is set as well, effectively
+        resulting in GetType()==StackVar::Unknown. If the already existing result is
         ScMatrixFormulaCellToken, the upper left is set to token.
 
         ATTENTION! formula::FormulaToken had to be allocated using 'new' and if of type
-        formula::svDouble and no RefCount was set may not be used after this call
+        formula::StackVar::Double and no RefCount was set may not be used after this call
         because it was deleted after decrement! */
     void SetToken( const formula::FormulaToken* p );
 
-    /** May be NULL if SetToken() did so, also if type formula::svDouble or formula::svError! */
+    /** May be NULL if SetToken() did so, also if type formula::StackVar::Double or formula::StackVar::Error! */
     formula::FormulaConstTokenRef GetToken() const;
 
-    /** Return upper left token if formula::svMatrixCell, else return GetToken().
-        May be NULL if SetToken() did so, also if type formula::svDouble or formula::svError! */
+    /** Return upper left token if formula::StackVar::MatrixCell, else return GetToken().
+        May be NULL if SetToken() did so, also if type formula::StackVar::Double or formula::StackVar::Error! */
     formula::FormulaConstTokenRef GetCellResultToken() const;
 
-    /** Return type of result, including formula::svError, formula::svEmptyCell, formula::svDouble and
-        formula::svMatrixCell. */
+    /** Return type of result, including formula::StackVar::Error, formula::StackVar::EmptyCell, formula::StackVar::Double and
+        formula::StackVar::MatrixCell. */
     formula::StackVar GetType() const;
 
-    /** If type is formula::svMatrixCell return the type of upper left element, else
+    /** If type is formula::StackVar::MatrixCell return the type of upper left element, else
         GetType() */
     formula::StackVar GetCellResultType() const;
 
-    /** If type is formula::svEmptyCell (including matrix upper left) and should be
+    /** If type is formula::StackVar::EmptyCell (including matrix upper left) and should be
         displayed as empty string */
     bool IsEmptyDisplayedAsString() const;
 
-    /** Test for cell result type formula::svDouble, including upper left if
-        formula::svMatrixCell. Also included is formula::svError for legacy, because previously
+    /** Test for cell result type formula::StackVar::Double, including upper left if
+        formula::StackVar::MatrixCell. Also included is formula::StackVar::Error for legacy, because previously
         an error result was treated like a numeric value at some places in
-        ScFormulaCell. Also included is formula::svEmptyCell as a reference to an empty
+        ScFormulaCell. Also included is formula::StackVar::EmptyCell as a reference to an empty
         cell usually is treated as numeric 0. Use GetCellResultType() for
         details instead. */
     bool IsValue() const;
@@ -157,7 +157,7 @@ public:
     bool GetErrorOrDouble( FormulaError& rErr, double& rVal ) const;
     sc::FormulaResultValue GetResult() const;
 
-    /** Get error code if set or GetCellResultType() is formula::svError or svUnknown,
+    /** Get error code if set or GetCellResultType() is formula::StackVar::Error or StackVar::Unknown,
         else 0. */
     FormulaError GetResultError() const;
 
@@ -169,22 +169,22 @@ public:
         SetResultDouble(), see there for condition. If
         ScMatrixFormulaCellToken the token isn't replaced but upper
         left result is modified instead, but only if it was of type
-        formula::svDouble before or not set at all.
+        formula::StackVar::Double before or not set at all.
      */
     SC_DLLPUBLIC void SetDouble( double f );
 
-    /** Return value if type formula::svDouble or formula::svHybridCell or formula::svMatrixCell and upper
-        left formula::svDouble, else 0.0 */
+    /** Return value if type formula::StackVar::Double or formula::StackVar::HybridCell or formula::StackVar::MatrixCell and upper
+        left formula::StackVar::Double, else 0.0 */
     double GetDouble() const;
 
-    /** Return string if type formula::svString or formula::svHybridCell or formula::svMatrixCell and
-        upper left formula::svString, else empty string. */
+    /** Return string if type formula::StackVar::String or formula::StackVar::HybridCell or formula::StackVar::MatrixCell and
+        upper left formula::StackVar::String, else empty string. */
     svl::SharedString GetString() const;
 
-    /** Return matrix if type formula::svMatrixCell and ScMatrix present, else NULL. */
+    /** Return matrix if type formula::StackVar::MatrixCell and ScMatrix present, else NULL. */
     ScConstMatrixRef GetMatrix() const;
 
-    /** Return formula string if type formula::svHybridCell, else empty string. */
+    /** Return formula string if type formula::StackVar::HybridCell, else empty string. */
     const OUString& GetHybridFormula() const;
 
     /** Should only be used by import filters, best in the order

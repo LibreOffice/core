@@ -330,7 +330,7 @@ IMPL_LINK(ScConditionFrmtEntry, OnEdChanged, Edit&, rEdit, void)
     formula::StackVar t = token->GetType();
     OpCode op = token->GetOpCode();
     if( ( op == ocColRowName ) ||
-        ( ( op == ocBad ) && ( t == formula::svString ) )
+        ( ( op == ocBad ) && ( t == formula::StackVar::String ) )
       )
     {
         rEdit.SetControlBackground(COL_YELLOW);

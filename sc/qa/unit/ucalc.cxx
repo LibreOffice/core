@@ -1107,7 +1107,7 @@ formula::FormulaToken* getSingleRefToken(ScDocument& rDoc, const ScAddress& rPos
     }
 
     formula::FormulaToken* pToken = pTokens->First();
-    if (!pToken || pToken->GetType() != formula::svSingleRef)
+    if (!pToken || pToken->GetType() != formula::StackVar::SingleRef)
     {
         cerr << "Not a single reference token." << endl;
         return nullptr;
@@ -4554,7 +4554,7 @@ bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange, 
 
         switch (p->GetType())
         {
-            case formula::svSingleRef:
+            case formula::StackVar::SingleRef:
             {
                 ScSingleRefData aData = *p->GetSingleRef();
                 if (rRange.aStart != rRange.aEnd)
@@ -4565,7 +4565,7 @@ bool hasRange(const std::vector<ScTokenRef>& rRefTokens, const ScRange& rRange, 
                     return true;
             }
             break;
-            case formula::svDoubleRef:
+            case formula::StackVar::DoubleRef:
             {
                 ScComplexRefData aData = *p->GetDoubleRef();
                 ScRange aThis = aData.toAbs(rPos);

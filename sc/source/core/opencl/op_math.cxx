@@ -41,7 +41,7 @@ void OpCos::GenSlidingWindowFunction(std::stringstream &ss,
         assert(tmpCur);
         if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
         {
-            if(tmpCur->GetType() == formula::svSingleVectorRef)
+            if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
             {
                 const formula::SingleVectorRefToken*tmpCurDVR=
                     static_cast
@@ -56,7 +56,7 @@ void OpCos::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "))\n";
                 ss << "    { arg0 = 0.0f; }\n";
             }
-            else if(tmpCur->GetType() == formula::svDouble)
+            else if(tmpCur->GetType() == formula::StackVar::Double)
             {
                 ss << "    arg0=" << tmpCur->GetDouble() << ";\n";
             }
@@ -149,13 +149,13 @@ void OpMROUND::GenSlidingWindowFunction(std::stringstream &ss,
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
         assert(pCur);
-        if (pCur->GetType() == formula::svSingleVectorRef)
+        if (pCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken* pSVR =
                 static_cast< const formula::SingleVectorRefToken* >(pCur);
             ss << "if (gid0 < " << pSVR->GetArrayLength() << "){\n";
         }
-        else if (pCur->GetType() == formula::svDouble)
+        else if (pCur->GetType() == formula::StackVar::Double)
         {
             ss << "{\n";
         }
@@ -231,7 +231,7 @@ void OpCot::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR=
                 static_cast
@@ -246,7 +246,7 @@ void OpCot::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    arg0=";
             ss << tmpCur->GetDouble() << ";\n";
@@ -325,7 +325,7 @@ void OpCombinA::GenSlidingWindowFunction(std::stringstream &ss,
         assert(pCur);
         ss << "    arg"<<i<<" = "<<vSubArguments[i]->GenSlidingWindowDeclRef();
         ss << ";\n";
-        if(pCur->GetType() == formula::svSingleVectorRef)
+        if(pCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken* pSVR =
             static_cast< const formula::SingleVectorRefToken* >(pCur);
@@ -334,7 +334,7 @@ void OpCombinA::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "        arg" << i << " = 0;\n";
         }
-        else if (pCur->GetType() == formula::svDouble)
+        else if (pCur->GetType() == formula::StackVar::Double)
         {
             ss << "    if(isnan(arg" << i <<"))\n";
             ss << "        arg" << i << " = 0;\n";
@@ -447,7 +447,7 @@ void OpLog::GenSlidingWindowFunction(std::stringstream &ss,
         assert(pCur);
         ss << "    arg"<<i<<" = "<<vSubArguments[i]->GenSlidingWindowDeclRef();
         ss << ";\n";
-        if(pCur->GetType() == formula::svSingleVectorRef)
+        if(pCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken* pSVR =
             static_cast< const formula::SingleVectorRefToken* >(pCur);
@@ -459,7 +459,7 @@ void OpLog::GenSlidingWindowFunction(std::stringstream &ss,
             else if ( i == 1)
                 ss << "        arg1 = 10;\n";
         }
-        else if (pCur->GetType() == formula::svDouble)
+        else if (pCur->GetType() == formula::StackVar::Double)
         {
             ss << "    if(isnan(arg" << i <<"))\n";
             if( i == 0)
@@ -810,7 +810,7 @@ void OpExp::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR=
                 static_cast
@@ -825,7 +825,7 @@ void OpExp::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    arg0=" << tmpCur->GetDouble() << ";\n";
         }
@@ -967,7 +967,7 @@ void OpSin::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR=
                 static_cast
@@ -982,7 +982,7 @@ void OpSin::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    arg0=" << tmpCur->GetDouble() << ";\n";
         }
@@ -1077,7 +1077,7 @@ void OpArcCosHyp::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur0);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur0->GetType() == formula::svSingleVectorRef)
+        if(tmpCur0->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR0=
                 static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
@@ -1089,7 +1089,7 @@ void OpArcCosHyp::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
         }
-        else if(tmpCur0->GetType() == formula::svDouble)
+        else if(tmpCur0->GetType() == formula::StackVar::Double)
         {
             ss << "    tmp = " << tmpCur0->GetDouble() << ";\n";
         }
@@ -1121,7 +1121,7 @@ void OpTan::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR=
                 static_cast
@@ -1136,7 +1136,7 @@ void OpTan::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    arg0=" << tmpCur->GetDouble() << ";\n";
         }
@@ -1199,7 +1199,7 @@ void OpPower::GenSlidingWindowFunction(std::stringstream &ss,
         assert(tmpCur);
         if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
-            if(tmpCur->GetType() == formula::svDoubleVectorRef)
+            if(tmpCur->GetType() == formula::StackVar::DoubleVectorRef)
             {
                 const formula::DoubleVectorRefToken* tmpCurDVR =
                     static_cast<
@@ -1215,7 +1215,7 @@ void OpPower::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "        arg["<<i;
                 ss << "] = 0;\n";
             }
-            else if(tmpCur->GetType() == formula::svSingleVectorRef)
+            else if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
             {
                 const formula::SingleVectorRefToken* tmpCurDVR=
                       static_cast<
@@ -1230,7 +1230,7 @@ void OpPower::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "        arg["<<i;
                 ss << "] = 0;\n";
             }
-            else if(tmpCur->GetType() == formula::svDouble)
+            else if(tmpCur->GetType() == formula::StackVar::Double)
             {
                 ss << "        arg["<<i<<"] = ";
                 ss << tmpCur->GetDouble() << ";\n";
@@ -1265,7 +1265,7 @@ void OpSqrt::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR=
                 static_cast
@@ -1280,7 +1280,7 @@ void OpSqrt::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "    { arg0 = 0; }\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    arg0=";
             ss << tmpCur->GetDouble() << ";\n";
@@ -1338,7 +1338,7 @@ void OpArcCotHyp::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR=
                 static_cast
@@ -1353,7 +1353,7 @@ void OpArcCotHyp::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    arg0=";
             ss << tmpCur->GetDouble() << ";\n";
@@ -1416,7 +1416,7 @@ void OpArcSinHyp::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur0);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur0->GetType() == formula::svSingleVectorRef)
+        if(tmpCur0->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR0=
                 static_cast<const formula::SingleVectorRefToken *>(tmpCur0);
@@ -1428,7 +1428,7 @@ void OpArcSinHyp::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    tmp = " << vSubArguments[0]->GenSlidingWindowDeclRef();
             ss << ";\n";
         }
-        else if(tmpCur0->GetType() == formula::svDouble)
+        else if(tmpCur0->GetType() == formula::StackVar::Double)
         {
             ss << "    tmp = " << tmpCur0->GetDouble() << ";\n";
         }
@@ -1500,7 +1500,7 @@ void OpArcTan::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR=
                 static_cast
@@ -1515,7 +1515,7 @@ void OpArcTan::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    arg0=" << tmpCur->GetDouble() << ";\n";
         }
@@ -1879,7 +1879,7 @@ void OpCountIf::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken* tmpCurDVR=
                 static_cast<
@@ -1892,7 +1892,7 @@ void OpCountIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "        varb = 0;\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    varb = ";
             ss << tmpCur->GetDouble() << ";\n";
@@ -1909,7 +1909,7 @@ void OpCountIf::GenSlidingWindowFunction(std::stringstream &ss,
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
         //TODO       DoubleVector
-        if (tmpCur->GetType() == formula::svDoubleVectorRef)
+        if (tmpCur->GetType() == formula::StackVar::DoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =
                 static_cast<const formula::DoubleVectorRefToken *>(tmpCur);
@@ -1946,7 +1946,7 @@ void OpCountIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "        (vara == varb) && varc++;\n";
             ss << "    }\n";
         }
-        else if(tmpCur->GetType() == formula::svSingleVectorRef)
+        else if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken* tmpCurDVR=
                 static_cast<
@@ -1984,7 +1984,7 @@ void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[1]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken* tmpCurDVR=
                 static_cast<
@@ -1997,7 +1997,7 @@ void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "        varb = 0;\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    varb = ";
             ss << tmpCur->GetDouble() << ";\n";
@@ -2014,7 +2014,7 @@ void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
         //TODO       DoubleVector
-        if (tmpCur->GetType() == formula::svDoubleVectorRef)
+        if (tmpCur->GetType() == formula::StackVar::DoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =
                 static_cast<const formula::DoubleVectorRefToken *>(tmpCur);
@@ -2056,7 +2056,7 @@ void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "        (vara == varb)&&(sum = sum + varc);\n";
             ss << "    }\n";
         }
-        else if(tmpCur->GetType() == formula::svSingleVectorRef)
+        else if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken* tmpCurDVR=
                 static_cast<
@@ -2105,7 +2105,7 @@ void OpTrunc::GenSlidingWindowFunction(std::stringstream &ss,
         assert(tmpCur);
         if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
-            if(tmpCur->GetType() == formula::svDoubleVectorRef)
+            if(tmpCur->GetType() == formula::StackVar::DoubleVectorRef)
             {
                 const formula::DoubleVectorRefToken* tmpCurDVR =
                     static_cast<
@@ -2121,7 +2121,7 @@ void OpTrunc::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "        arg["<<i;
                 ss << "] = 0;\n";
             }
-            else if(tmpCur->GetType() == formula::svSingleVectorRef)
+            else if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
             {
                 const formula::SingleVectorRefToken* tmpCurDVR=
                       static_cast<
@@ -2136,7 +2136,7 @@ void OpTrunc::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "        arg["<<i;
                 ss << "] = 0;\n";
             }
-            else if(tmpCur->GetType() == formula::svDouble)
+            else if(tmpCur->GetType() == formula::StackVar::Double)
             {
                 ss << "        arg["<<i<<"] = ";
                 ss << tmpCur->GetDouble() << ";\n";
@@ -2375,7 +2375,7 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
         assert(tmpCur);
         if(ocPush == rArg->GetFormulaToken()->GetOpCode())
         {
-            if (tmpCur->GetType() == formula::svDoubleVectorRef)
+            if (tmpCur->GetType() == formula::StackVar::DoubleVectorRef)
             {
                 const formula::DoubleVectorRefToken* pDVR =
                     static_cast<const formula::DoubleVectorRefToken *>(tmpCur);
@@ -2412,7 +2412,7 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "        sum += pown(arg, 2);\n";
                 ss << "    }\n";
             }
-            else if(tmpCur->GetType() == formula::svSingleVectorRef)
+            else if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
             {
                 const formula::SingleVectorRefToken* tmpCurDVR=
                       static_cast<
@@ -2426,7 +2426,7 @@ void OpSumSQ::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "        arg = 0.0f;\n";
                 ss << "    sum += pown(arg, 2);\n";
             }
-            else if(tmpCur->GetType() == formula::svDouble)
+            else if(tmpCur->GetType() == formula::StackVar::Double)
             {
                 ss << "        arg = ";
                 ss << tmpCur->GetDouble() << ";\n";
@@ -2463,7 +2463,7 @@ void OpSqrtPi::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR=
                 static_cast
@@ -2478,7 +2478,7 @@ void OpSqrtPi::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    arg0=";
             ss << tmpCur->GetDouble() << ";\n";
@@ -2523,19 +2523,19 @@ void OpCeil::GenSlidingWindowFunction(std::stringstream &ss,
     if (vSubArguments.size() > 2)
     {
         FormulaToken *bAbs = vSubArguments[2]->GetFormulaToken();
-        if(bAbs->GetType() == formula::svSingleVectorRef)
+        if(bAbs->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken* tmpCurSVRIsAbs=
                 static_cast<const formula::SingleVectorRefToken*>(bAbs);
             ss<< "    if((gid0)>=" << tmpCurSVRIsAbs->GetArrayLength() << " ||";
         }
-        if(bAbs->GetType() == formula::svDoubleVectorRef)
+        if(bAbs->GetType() == formula::StackVar::DoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* tmpCurDVRIsAbs=
                 static_cast<const formula::DoubleVectorRefToken*>(bAbs);
             ss<< "    if((gid0)>=" << tmpCurDVRIsAbs->GetArrayLength() << " ||";
         }
-        if(bAbs->GetType() == formula::svDouble)
+        if(bAbs->GetType() == formula::StackVar::Double)
         {
             ss<< "    if(";
         }
@@ -2574,8 +2574,8 @@ void OpCombin::GenSlidingWindowFunction(std::stringstream &ss,
     assert(iNum);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(iNum->GetType() == formula::svSingleVectorRef &&
-            iNumChosen->GetType() == formula::svSingleVectorRef)
+        if(iNum->GetType() == formula::StackVar::SingleVectorRef &&
+            iNumChosen->GetType() == formula::StackVar::SingleVectorRef)
         {
             ss << "    if(isnan(";
             ss << vSubArguments[0]->GenSlidingWindowDeclRef() << "))\n";
@@ -2590,8 +2590,8 @@ void OpCombin::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    num_chosen = floor(";
             ss << vSubArguments[1]->GenSlidingWindowDeclRef() << ");\n";
         }
-        else if(iNum->GetType() == formula::svDouble &&
-            iNumChosen->GetType() == formula::svDouble)
+        else if(iNum->GetType() == formula::StackVar::Double &&
+            iNumChosen->GetType() == formula::StackVar::Double)
         {
             ss << "    num = floor(" << iNum->GetDouble() << ");\n";
             ss << "    num_chosen = floor("<< iNumChosen->GetDouble()<< ");\n";
@@ -2724,7 +2724,7 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
     {
         FormulaToken *pCur = rArg->GetFormulaToken();
         assert(pCur);
-        if (pCur->GetType() == formula::svDoubleVectorRef)
+        if (pCur->GetType() == formula::StackVar::DoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =
             static_cast<const formula::DoubleVectorRefToken *>(pCur);
@@ -2760,7 +2760,7 @@ void OpProduct::GenSlidingWindowFunction(std::stringstream &ss,
               ss << rArg->GenSlidingWindowDeclRef()<<";\n";
               ss << "    }\n";
             }
-            else if (pCur->GetType() == formula::svSingleVectorRef)
+            else if (pCur->GetType() == formula::StackVar::SingleVectorRef)
             {
                 ss << "if(!isnan("<<rArg->GenSlidingWindowDeclRef()<<"))\n";
                 ss << "product = product*";
@@ -2803,7 +2803,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
     unsigned paraTwoWidth = 1;
     unsigned loopTimes = 0;
 
-    if(vSubArguments[0]->GetFormulaToken()->GetType() == formula::svDoubleVectorRef)
+    if(vSubArguments[0]->GetFormulaToken()->GetType() == formula::StackVar::DoubleVectorRef)
     {
         paraOneIsDoubleVector = 1;
         FormulaToken *tmpCur0 = vSubArguments[0]->GetFormulaToken();
@@ -2818,7 +2818,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
     }
 
     if(vSubArguments[paraOneWidth]->GetFormulaToken()->GetType() ==
-     formula::svDoubleVectorRef)
+     formula::StackVar::DoubleVectorRef)
 
     {
         FormulaToken *tmpCur1 = vSubArguments[1]->GetFormulaToken();
@@ -2850,7 +2850,7 @@ void OpAverageIf::GenSlidingWindowFunction(std::stringstream &ss,
     if(vSubArguments.size() > paraThreeIndex)
     {
         if(vSubArguments[paraThreeIndex]->GetFormulaToken()->GetType() ==
-        formula::svDoubleVectorRef)
+        formula::StackVar::DoubleVectorRef)
         {
             FormulaToken *tmpCur2 =
             vSubArguments[paraThreeIndex]->GetFormulaToken();
@@ -2954,7 +2954,7 @@ void OpDeg::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        if(tmpCur->GetType() == formula::svSingleVectorRef)
+        if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken*tmpCurDVR=
                 static_cast
@@ -2969,7 +2969,7 @@ void OpDeg::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "))\n";
             ss << "    { arg0 = 0.0f; }\n";
         }
-        else if(tmpCur->GetType() == formula::svDouble)
+        else if(tmpCur->GetType() == formula::StackVar::Double)
         {
             ss << "    arg0=";
             ss << tmpCur->GetDouble() << ";\n";
@@ -3002,13 +3002,13 @@ void OpFact::GenSlidingWindowFunction(std::stringstream& ss,
     ss << "    double arg0 = " << GetBottom() << ";\n";
     FormulaToken* pCur = vSubArguments[0]->GetFormulaToken();
     assert(pCur);
-    if (pCur->GetType() == formula::svSingleVectorRef)
+    if (pCur->GetType() == formula::StackVar::SingleVectorRef)
     {
         const formula::SingleVectorRefToken* pSVR =
             static_cast< const formula::SingleVectorRefToken* >(pCur);
         ss << "    if (gid0 < " << pSVR->GetArrayLength() << "){\n";
     }
-    else if (pCur->GetType() == formula::svDouble)
+    else if (pCur->GetType() == formula::StackVar::Double)
     {
         ss << "    {\n";
     }
@@ -3097,7 +3097,7 @@ void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
         assert(tmpCur);
         if(ocPush == vSubArguments[i]->GetFormulaToken()->GetOpCode())
         {
-            if(tmpCur->GetType() == formula::svSingleVectorRef)
+            if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
             {
                 const formula::SingleVectorRefToken* tmpCurDVR=
                     static_cast<
@@ -3110,7 +3110,7 @@ void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
                 ss << "))\n";
                 ss << "        var["<<i<<"] = 0;\n";
             }
-            else if(tmpCur->GetType() == formula::svDouble)
+            else if(tmpCur->GetType() == formula::StackVar::Double)
             {
                 ss << "    var["<<i<<"] = ";
                 ss << tmpCur->GetDouble() << ";\n";
@@ -3128,7 +3128,7 @@ void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
     if(ocPush == vSubArguments[3]->GetFormulaToken()->GetOpCode())
     {
         //TODO       DoubleVector
-        if (tmpCur->GetType() == formula::svDoubleVectorRef)
+        if (tmpCur->GetType() == formula::StackVar::DoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =
                 static_cast<const formula::DoubleVectorRefToken *>(tmpCur);
@@ -3168,7 +3168,7 @@ void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "        ++j;\n";
             ss << "    }\n";
         }
-        else if(tmpCur->GetType() == formula::svSingleVectorRef)
+        else if(tmpCur->GetType() == formula::StackVar::SingleVectorRef)
         {
             const formula::SingleVectorRefToken* tmpCurDVR=
                 static_cast<

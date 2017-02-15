@@ -1887,7 +1887,7 @@ static void lcl_InvalidateReference( formula::FormulaToken& rTok, const ScBigAdd
     {
         rRef1.SetTabDeleted( true );
     }
-    if ( rTok.GetType() == formula::svDoubleRef )
+    if ( rTok.GetType() == formula::StackVar::DoubleRef )
     {
         ScSingleRefData& rRef2 = rTok.GetDoubleRef()->Ref2;
         if ( rPos.Col() < 0 || MAXCOL < rPos.Col() )

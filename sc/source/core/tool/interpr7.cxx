@@ -65,7 +65,7 @@ void ScInterpreter::ScFilterXML()
                     nMatRows = nRows;
                 }
             }
-            else if (GetStackType() == formula::svMatrix)
+            else if (GetStackType() == formula::StackVar::Matrix)
             {
                 pPathMatrix = pStack[sp-1]->GetMatrix();
                 if (!pPathMatrix)
@@ -142,7 +142,7 @@ void ScInterpreter::ScFilterXML()
                         return;
                     }
 
-                    /* TODO: for nMatCols>1 IF stack type is svMatrix, i.e.
+                    /* TODO: for nMatCols>1 IF stack type is StackVar::Matrix, i.e.
                      * pPathMatrix!=nullptr, we may want a result matrix with
                      * nMatCols columns as well, but clarify first how to treat
                      * differing path elements. */

@@ -1397,11 +1397,11 @@ void ScInterpreter::ScConcat_MS()
     {
         switch ( GetStackType() )
         {
-            case svString:
-            case svDouble:
+            case StackVar::String:
+            case StackVar::Double:
                 aResBuf.append( GetString().getString() );
                 break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
@@ -1419,8 +1419,8 @@ void ScInterpreter::ScConcat_MS()
                 }
             }
             break;
-            case svDoubleRef :
-            case svRefList :
+            case StackVar::DoubleRef :
+            case StackVar::RefList :
             {
                 ScRange aRange;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -1462,9 +1462,9 @@ void ScInterpreter::ScConcat_MS()
                 }
             }
             break;
-            case svMatrix :
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::Matrix :
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
@@ -1515,11 +1515,11 @@ void ScInterpreter::ScTextJoin_MS()
         size_t nRefInList = 0;
         switch ( GetStackType() )
         {
-            case svString:
-            case svDouble:
+            case StackVar::String:
+            case StackVar::Double:
                 aDelimiters.push_back( GetString().getString() );
                 break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 ScAddress aAdr;
                 PopSingleRef( aAdr );
@@ -1537,8 +1537,8 @@ void ScInterpreter::ScTextJoin_MS()
                 }
             }
             break;
-            case svDoubleRef :
-            case svRefList :
+            case StackVar::DoubleRef :
+            case StackVar::RefList :
             {
                 ScRange aRange;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -1582,9 +1582,9 @@ void ScInterpreter::ScTextJoin_MS()
                 }
             }
             break;
-            case svMatrix :
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::Matrix :
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
@@ -1640,8 +1640,8 @@ void ScInterpreter::ScTextJoin_MS()
         {
             switch ( GetStackType() )
             {
-                case svString:
-                case svDouble:
+                case StackVar::String:
+                case StackVar::Double:
                 {
                     OUString aStr = GetString().getString();
                     if ( !aStr.isEmpty() || !bSkipEmpty )
@@ -1661,7 +1661,7 @@ void ScInterpreter::ScTextJoin_MS()
                     }
                 }
                 break;
-                case svSingleRef :
+                case StackVar::SingleRef :
                 {
                     ScAddress aAdr;
                     PopSingleRef( aAdr );
@@ -1697,8 +1697,8 @@ void ScInterpreter::ScTextJoin_MS()
                     }
                 }
                 break;
-                case svDoubleRef :
-                case svRefList :
+                case StackVar::DoubleRef :
+                case StackVar::RefList :
                 {
                     ScRange aRange;
                     PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -1758,9 +1758,9 @@ void ScInterpreter::ScTextJoin_MS()
                     }
                 }
                 break;
-                case svMatrix :
-                case svExternalSingleRef:
-                case svExternalDoubleRef:
+                case StackVar::Matrix :
+                case StackVar::ExternalSingleRef:
+                case StackVar::ExternalDoubleRef:
                 {
                     ScMatrixRef pMat = GetMatrix();
                     if (pMat)
@@ -1809,7 +1809,7 @@ void ScInterpreter::ScTextJoin_MS()
                     }
                 }
                 break;
-                case svMissing :
+                case StackVar::Missing :
                 {
                     if ( !bSkipEmpty )
                     {
@@ -1920,16 +1920,16 @@ void ScInterpreter::ScSwitch_MS()
     svl::SharedString aRefStr;
     switch ( GetStackType() )
     {
-        case svDouble:
+        case StackVar::Double:
             isValue = true;
             fRefVal = GetDouble();
             break;
-        case svString:
+        case StackVar::String:
             isValue = false;
             aRefStr = GetString();
             break;
-        case svSingleRef :
-        case svDoubleRef :
+        case StackVar::SingleRef :
+        case StackVar::DoubleRef :
             {
                 ScAddress aAdr;
                 if (!PopDoubleRefOrSingleRef( aAdr ))
@@ -1942,9 +1942,9 @@ void ScInterpreter::ScSwitch_MS()
                     GetCellString( aRefStr, aCell);
             }
             break;
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
-        case svMatrix:
+        case StackVar::ExternalSingleRef:
+        case StackVar::ExternalDoubleRef:
+        case StackVar::Matrix:
             isValue = ScMatrix::IsValueType( GetDoubleOrStringFromMatrix( fRefVal, aRefStr ) );
             break;
         default :

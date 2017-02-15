@@ -161,9 +161,9 @@ namespace
                     // named expressions. Resolved expressions are only in RPN.
                     switch ((*pp)->GetType())
                     {
-                        case svSingleRef:
+                        case StackVar::SingleRef:
                             return (*pp)->GetSingleRef()->IsRelName();
-                        case svDoubleRef:
+                        case StackVar::DoubleRef:
                             {
                                 const ScComplexRefData& rRef = *(*pp)->GetDoubleRef();
                                 return rRef.Ref1.IsRelName() || rRef.Ref2.IsRelName();
@@ -230,20 +230,20 @@ void ScRawToken::SetOpCode( OpCode e )
     switch (eOp)
     {
         case ocIf:
-            eType = svJump;
+            eType = StackVar::Jump;
             nJump[ 0 ] = 3; // If, Else, Behind
             break;
         case ocIfError:
         case ocIfNA:
-            eType = svJump;
+            eType = StackVar::Jump;
             nJump[ 0 ] = 2; // If, Behind
             break;
         case ocChoose:
-            eType = svJump;
+            eType = StackVar::Jump;
             nJump[ 0 ] = FORMULA_MAXJUMPCOUNT + 1;
             break;
         case ocMissing:
-            eType = svMissing;
+            eType = StackVar::Missing;
             break;
         case ocSep:
         case ocOpen:
@@ -254,10 +254,10 @@ void ScRawToken::SetOpCode( OpCode e )
         case ocArrayClose:
         case ocTableRefOpen:
         case ocTableRefClose:
-            eType = svSep;
+            eType = StackVar::Sep;
             break;
         default:
-            eType = svByte;
+            eType = StackVar::Byte;
             sbyte.cByte = 0;
             sbyte.bIsInForceArray = false;
     }
@@ -266,7 +266,7 @@ void ScRawToken::SetOpCode( OpCode e )
 void ScRawToken::SetString( rtl_uString* pData, rtl_uString* pDataIgoreCase )
 {
     eOp   = ocPush;
-    eType = svString;
+    eType = StackVar::String;
 
     sharedstring.mpData = pData;
     sharedstring.mpDataIgnoreCase = pDataIgoreCase;
@@ -275,7 +275,7 @@ void ScRawToken::SetString( rtl_uString* pData, rtl_uString* pDataIgoreCase )
 void ScRawToken::SetSingleReference( const ScSingleRefData& rRef )
 {
     eOp       = ocPush;
-    eType     = svSingleRef;
+    eType     = StackVar::SingleRef;
     aRef.Ref1 =
     aRef.Ref2 = rRef;
 }
@@ -283,28 +283,28 @@ void ScRawToken::SetSingleReference( const ScSingleRefData& rRef )
 void ScRawToken::SetDoubleReference( const ScComplexRefData& rRef )
 {
     eOp   = ocPush;
-    eType = svDoubleRef;
+    eType = StackVar::DoubleRef;
     aRef  = rRef;
 }
 
 void ScRawToken::SetDouble(double rVal)
 {
     eOp   = ocPush;
-    eType = svDouble;
+    eType = StackVar::Double;
     nValue = rVal;
 }
 
 void ScRawToken::SetErrorConstant( FormulaError nErr )
 {
     eOp   = ocPush;
-    eType = svError;
+    eType = StackVar::Error;
     nError = nErr;
 }
 
 void ScRawToken::SetName(sal_Int16 nSheet, sal_uInt16 nIndex)
 {
     eOp = ocName;
-    eType = svIndex;
+    eType = StackVar::Index;
 
     name.nSheet = nSheet;
     name.nIndex = nIndex;
@@ -313,7 +313,7 @@ void ScRawToken::SetName(sal_Int16 nSheet, sal_uInt16 nIndex)
 void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScSingleRefData& rRef )
 {
     eOp = ocPush;
-    eType = svExternalSingleRef;
+    eType = StackVar::ExternalSingleRef;
 
     extref.nFileId = nFileId;
     extref.aRef.Ref1 =
@@ -327,7 +327,7 @@ void ScRawToken::SetExternalSingleRef( sal_uInt16 nFileId, const OUString& rTabN
 void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabName, const ScComplexRefData& rRef )
 {
     eOp = ocPush;
-    eType = svExternalDoubleRef;
+    eType = StackVar::ExternalDoubleRef;
 
     extref.nFileId = nFileId;
     extref.aRef = rRef;
@@ -340,7 +340,7 @@ void ScRawToken::SetExternalDoubleRef( sal_uInt16 nFileId, const OUString& rTabN
 void ScRawToken::SetExternalName( sal_uInt16 nFileId, const OUString& rName )
 {
     eOp = ocPush;
-    eType = svExternalName;
+    eType = StackVar::ExternalName;
 
     extname.nFileId = nFileId;
 
@@ -352,7 +352,7 @@ void ScRawToken::SetExternalName( sal_uInt16 nFileId, const OUString& rName )
 void ScRawToken::SetExternal( const sal_Unicode* pStr )
 {
     eOp   = ocExternal;
-    eType = svExternal;
+    eType = StackVar::External;
     sal_Int32 nLen = GetStrLen( pStr ) + 1;
     if( nLen >= MAXSTRLEN )
         nLen = MAXSTRLEN-1;
@@ -365,12 +365,12 @@ bool ScRawToken::IsValidReference() const
 {
     switch (eType)
     {
-        case svSingleRef:
+        case StackVar::SingleRef:
             return aRef.Ref1.Valid();
-        case svDoubleRef:
+        case StackVar::DoubleRef:
             return aRef.Valid();
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
+        case StackVar::ExternalSingleRef:
+        case StackVar::ExternalDoubleRef:
             return true;
         default:
             ;   // nothing
@@ -387,12 +387,12 @@ FormulaToken* ScRawToken::CreateToken() const
 #endif
     switch ( GetType() )
     {
-        case svByte :
+        case StackVar::Byte :
             return new FormulaByteToken( eOp, sbyte.cByte, sbyte.bIsInForceArray );
-        case svDouble :
+        case StackVar::Double :
             IF_NOT_OPCODE_ERROR( ocPush, FormulaDoubleToken);
             return new FormulaDoubleToken( nValue );
-        case svString :
+        case StackVar::String :
         {
             svl::SharedString aSS(sharedstring.mpData, sharedstring.mpDataIgnoreCase);
             if (eOp == ocPush)
@@ -400,53 +400,53 @@ FormulaToken* ScRawToken::CreateToken() const
             else
                 return new FormulaStringOpToken(eOp, aSS);
         }
-        case svSingleRef :
+        case StackVar::SingleRef :
             if (eOp == ocPush)
                 return new ScSingleRefToken( aRef.Ref1 );
             else
                 return new ScSingleRefToken( aRef.Ref1, eOp );
-        case svDoubleRef :
+        case StackVar::DoubleRef :
             if (eOp == ocPush)
                 return new ScDoubleRefToken( aRef );
             else
                 return new ScDoubleRefToken( aRef, eOp );
-        case svMatrix :
+        case StackVar::Matrix :
             IF_NOT_OPCODE_ERROR( ocPush, ScMatrixToken);
             return new ScMatrixToken( pMat );
-        case svIndex :
+        case StackVar::Index :
             if (eOp == ocTableRef)
                 return new ScTableRefToken( table.nIndex, table.eItem);
             else
                 return new FormulaIndexToken( eOp, name.nIndex, name.nSheet);
-        case svExternalSingleRef:
+        case StackVar::ExternalSingleRef:
             {
                 svl::SharedString aTabName( OUString( extref.cTabName));    // string not interned
                 return new ScExternalSingleRefToken(extref.nFileId, aTabName, extref.aRef.Ref1);
             }
-        case svExternalDoubleRef:
+        case StackVar::ExternalDoubleRef:
             {
                 svl::SharedString aTabName( OUString( extref.cTabName));    // string not interned
                 return new ScExternalDoubleRefToken(extref.nFileId, aTabName, extref.aRef);
             }
-        case svExternalName:
+        case StackVar::ExternalName:
             {
                 svl::SharedString aName( OUString( extname.cName));         // string not interned
                 return new ScExternalNameToken( extname.nFileId, aName );
             }
-        case svJump :
+        case StackVar::Jump :
             return new FormulaJumpToken( eOp, const_cast<short*>(nJump) );
-        case svExternal :
+        case StackVar::External :
             return new FormulaExternalToken( eOp, sbyte.cByte, OUString( cStr+1 ) );
-        case svFAP :
+        case StackVar::FAP :
             return new FormulaFAPToken( eOp, sbyte.cByte, nullptr );
-        case svMissing :
+        case StackVar::Missing :
             IF_NOT_OPCODE_ERROR( ocMissing, FormulaMissingToken);
             return new FormulaMissingToken;
-        case svSep :
-            return new FormulaToken( svSep,eOp );
-        case svError :
+        case StackVar::Sep :
+            return new FormulaToken( StackVar::Sep,eOp );
+        case StackVar::Error :
             return new FormulaErrorToken( nError );
-        case svUnknown :
+        case StackVar::Unknown :
             return new FormulaUnknownToken( eOp );
         default:
             {
@@ -463,13 +463,13 @@ namespace {
 bool checkTextEqual( const FormulaToken& _rToken1, const FormulaToken& _rToken2 )
 {
     assert(
-        (_rToken1.GetType() == svSingleRef || _rToken1.GetType() == svDoubleRef)
+        (_rToken1.GetType() == StackVar::SingleRef || _rToken1.GetType() == StackVar::DoubleRef)
         && _rToken1.FormulaToken::operator ==(_rToken2));
 
     //  in relative Refs only compare relative parts
 
     ScComplexRefData aTemp1;
-    if ( _rToken1.GetType() == svSingleRef )
+    if ( _rToken1.GetType() == StackVar::SingleRef )
     {
         aTemp1.Ref1 = *_rToken1.GetSingleRef();
         aTemp1.Ref2 = aTemp1.Ref1;
@@ -478,7 +478,7 @@ bool checkTextEqual( const FormulaToken& _rToken1, const FormulaToken& _rToken2 
         aTemp1 = *_rToken1.GetDoubleRef();
 
     ScComplexRefData aTemp2;
-    if ( _rToken2.GetType() == svSingleRef )
+    if ( _rToken2.GetType() == StackVar::SingleRef )
     {
         aTemp2.Ref1 = *_rToken2.GetSingleRef();
         aTemp2.Ref2 = aTemp2.Ref1;
@@ -500,11 +500,11 @@ bool checkTextEqual( const FormulaToken& _rToken1, const FormulaToken& _rToken2 
 void DumpToken(formula::FormulaToken const & rToken)
 {
     switch (rToken.GetType()) {
-    case svSingleRef:
+    case StackVar::SingleRef:
         cout << "-- ScSingleRefToken" << endl;
         rToken.GetSingleRef()->Dump(1);
         break;
-    case svDoubleRef:
+    case StackVar::DoubleRef:
         cout << "-- ScDoubleRefToken" << endl;
         rToken.GetDoubleRef()->Dump(1);
         break;
@@ -515,10 +515,10 @@ void DumpToken(formula::FormulaToken const & rToken)
         cout << "  type: " << static_cast<int>(rToken.GetType()) << endl;
         switch (rToken.GetType())
         {
-        case svDouble:
+        case StackVar::Double:
             cout << "  value: " << rToken.GetDouble() << endl;
             break;
-        case svString:
+        case StackVar::String:
             cout << "  string: "
                  << OUStringToOString(rToken.GetString().getString(), RTL_TEXTENCODING_UTF8).getStr()
                  << endl;
@@ -538,16 +538,16 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
     StackVar sv1 = rTok1.GetType();
     // Doing a RangeOp with RefList is probably utter nonsense, but Xcl
     // supports it, so do we.
-    if (sv1 != svSingleRef && sv1 != svDoubleRef && sv1 != svRefList
-         && sv1 != svExternalSingleRef && sv1 != svExternalDoubleRef)
+    if (sv1 != StackVar::SingleRef && sv1 != StackVar::DoubleRef && sv1 != StackVar::RefList
+         && sv1 != StackVar::ExternalSingleRef && sv1 != StackVar::ExternalDoubleRef)
         return nullptr;
     StackVar sv2 = rTok2.GetType();
-    if (sv2 != svSingleRef && sv2 != svDoubleRef && sv2 != svRefList)
+    if (sv2 != StackVar::SingleRef && sv2 != StackVar::DoubleRef && sv2 != StackVar::RefList)
         return nullptr;
 
     ScTokenRef xRes;
-    bool bExternal = (sv1 == svExternalSingleRef);
-    if ((sv1 == svSingleRef || bExternal) && sv2 == svSingleRef)
+    bool bExternal = (sv1 == StackVar::ExternalSingleRef);
+    if ((sv1 == StackVar::SingleRef || bExternal) && sv2 == StackVar::SingleRef)
     {
         // Range references like Sheet1.A1:A2 are generalized and built by
         // first creating a DoubleRef from the first SingleRef, effectively
@@ -559,7 +559,7 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
          * reference can only be extended if the second reference does not
          * point to a different sheet. 'file'#Sheet1.A1:A2 is ok,
          * 'file'#Sheet1.A1:Sheet2.A2 is not. Since we can't determine from a
-         * svSingleRef whether the sheet would be different from the one given
+         * StackVar::SingleRef whether the sheet would be different from the one given
          * in the external reference, we have to bail out if there is any sheet
          * specified. NOTE: Xcl does handle external 3D references as in
          * '[file]Sheet1:Sheet2'!A1:A2
@@ -585,21 +585,21 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
     }
     else
     {
-        bExternal |= (sv1 == svExternalDoubleRef);
+        bExternal |= (sv1 == StackVar::ExternalDoubleRef);
         const ScRefList* pRefList = nullptr;
-        if (sv1 == svDoubleRef)
+        if (sv1 == StackVar::DoubleRef)
         {
             xRes = (bReuseDoubleRef && rTok1.GetRef() == 1 ? &rTok1 : rTok1.Clone());
-            sv1 = svUnknown;    // mark as handled
+            sv1 = StackVar::Unknown;    // mark as handled
         }
-        else if (sv2 == svDoubleRef)
+        else if (sv2 == StackVar::DoubleRef)
         {
             xRes = (bReuseDoubleRef && rTok2.GetRef() == 1 ? &rTok2 : rTok2.Clone());
-            sv2 = svUnknown;    // mark as handled
+            sv2 = StackVar::Unknown;    // mark as handled
         }
-        else if (sv1 == svRefList)
+        else if (sv1 == StackVar::RefList)
             pRefList = rTok1.GetRefList();
-        else if (sv2 == svRefList)
+        else if (sv2 == StackVar::RefList)
             pRefList = rTok2.GetRefList();
         if (pRefList)
         {
@@ -618,13 +618,13 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
         {
             switch (sv[i])
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     rRef.Extend( *pt[i]->GetSingleRef(), rPos);
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     rRef.Extend( *pt[i]->GetDoubleRef(), rPos);
                     break;
-                case svRefList:
+                case StackVar::RefList:
                     {
                         const ScRefList* p = pt[i]->GetRefList();
                         if (p->empty())
@@ -637,13 +637,13 @@ FormulaTokenRef extendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2
                         }
                     }
                     break;
-                case svExternalSingleRef:
+                case StackVar::ExternalSingleRef:
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
                         return nullptr;    // no other sheets with external refs
                     else
                         rRef.Extend( *pt[i]->GetSingleRef(), rPos);
                     break;
-                case svExternalDoubleRef:
+                case StackVar::ExternalDoubleRef:
                     if (rRef.Ref1.IsFlag3D() || rRef.Ref2.IsFlag3D())
                         return nullptr;    // no other sheets with external refs
                     else
@@ -693,7 +693,7 @@ bool ScRefListToken::operator==( const FormulaToken& r ) const
 }
 
 ScMatrixToken::ScMatrixToken( const ScMatrixRef& p ) :
-    FormulaToken(formula::svMatrix), pMatrix(p) {}
+    FormulaToken(formula::StackVar::Matrix), pMatrix(p) {}
 
 ScMatrixToken::ScMatrixToken( const ScMatrixToken& r ) :
     FormulaToken(r), pMatrix(r.pMatrix) {}
@@ -706,10 +706,10 @@ bool ScMatrixToken::operator==( const FormulaToken& r ) const
 }
 
 ScMatrixRangeToken::ScMatrixRangeToken( const ScMatrixRef& p, const ScComplexRefData& rRef ) :
-    FormulaToken(formula::svMatrix), mpMatrix(p), maRef(rRef) {}
+    FormulaToken(formula::StackVar::Matrix), mpMatrix(p), maRef(rRef) {}
 
 ScMatrixRangeToken::ScMatrixRangeToken( const sc::RangeMatrix& rMat ) :
-    FormulaToken(formula::svMatrix), mpMatrix(rMat.mpMat)
+    FormulaToken(formula::StackVar::Matrix), mpMatrix(rMat.mpMat)
 {
     maRef.InitRange(rMat.mnCol1, rMat.mnRow1, rMat.mnTab1, rMat.mnCol2, rMat.mnRow2, rMat.mnTab2);
 }
@@ -753,7 +753,7 @@ FormulaToken* ScMatrixRangeToken::Clone() const
 }
 
 ScExternalSingleRefToken::ScExternalSingleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScSingleRefData& r ) :
-    FormulaToken( svExternalSingleRef, ocPush),
+    FormulaToken( StackVar::ExternalSingleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
     maSingleRef(r)
@@ -807,7 +807,7 @@ bool ScExternalSingleRefToken::operator ==( const FormulaToken& r ) const
 }
 
 ScExternalDoubleRefToken::ScExternalDoubleRefToken( sal_uInt16 nFileId, const svl::SharedString& rTabName, const ScComplexRefData& r ) :
-    FormulaToken( svExternalDoubleRef, ocPush),
+    FormulaToken( StackVar::ExternalDoubleRef, ocPush),
     mnFileId(nFileId),
     maTabName(rTabName),
     maDoubleRef(r)
@@ -881,7 +881,7 @@ bool ScExternalDoubleRefToken::operator ==( const FormulaToken& r ) const
 }
 
 ScExternalNameToken::ScExternalNameToken( sal_uInt16 nFileId, const svl::SharedString& rName ) :
-    FormulaToken( svExternalName, ocPush),
+    FormulaToken( StackVar::ExternalName, ocPush),
     mnFileId(nFileId),
     maName(rName)
 {
@@ -918,7 +918,7 @@ bool ScExternalNameToken::operator==( const FormulaToken& r ) const
 }
 
 ScTableRefToken::ScTableRefToken( sal_uInt16 nIndex, ScTableRefToken::Item eItem ) :
-    FormulaToken( svIndex, ocTableRef),
+    FormulaToken( StackVar::Index, ocTableRef),
     mnIndex(nIndex),
     meItem(eItem)
 {
@@ -947,7 +947,7 @@ void ScTableRefToken::SetIndex( sal_uInt16 n )
 sal_Int16 ScTableRefToken::GetSheet() const
 {
     // Code asking for this may have to be adapted as it might assume an
-    // svIndex token would always be ocName or ocDBArea.
+    // StackVar::Index token would always be ocName or ocDBArea.
     SAL_WARN("sc.core","ScTableRefToken::GetSheet - maybe adapt caller to know about TableRef?");
     // Database range is always global.
     return -1;
@@ -1023,7 +1023,7 @@ bool ScEmptyCellToken::operator==( const FormulaToken& r ) const
 }
 
 ScMatrixCellResultToken::ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
-    FormulaToken(formula::svMatrixCell), xMatrix(pMat), xUpperLeft(pUL) {}
+    FormulaToken(formula::StackVar::MatrixCell), xMatrix(pMat), xUpperLeft(pUL) {}
 
 ScMatrixCellResultToken::ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) :
     FormulaToken(r), xMatrix(r.xMatrix), xUpperLeft(r.xUpperLeft) {}
@@ -1090,7 +1090,7 @@ bool ScMatrixFormulaCellToken::operator==( const FormulaToken& r ) const
 
 void ScMatrixFormulaCellToken::CloneUpperLeftIfNecessary()
 {
-    if (xUpperLeft && xUpperLeft->GetType() == svDouble)
+    if (xUpperLeft && xUpperLeft->GetType() == StackVar::Double)
         xUpperLeft = xUpperLeft->Clone();
 }
 
@@ -1110,8 +1110,8 @@ void ScMatrixFormulaCellToken::Assign( const formula::FormulaToken& r )
         ScMatrixCellResultToken::Assign( *p);
     else
     {
-        OSL_ENSURE( r.GetType() != svMatrix, "ScMatrixFormulaCellToken::operator=: assigning ScMatrixToken to ScMatrixFormulaCellToken is not proper, use ScMatrixCellResultToken instead");
-        if (r.GetType() == svMatrix)
+        OSL_ENSURE( r.GetType() != StackVar::Matrix, "ScMatrixFormulaCellToken::operator=: assigning ScMatrixToken to ScMatrixFormulaCellToken is not proper, use ScMatrixCellResultToken instead");
+        if (r.GetType() == StackVar::Matrix)
         {
             xUpperLeft = nullptr;
             xMatrix = r.GetMatrix();
@@ -1129,13 +1129,13 @@ void ScMatrixFormulaCellToken::SetUpperLeftDouble( double f )
 {
     switch (GetUpperLeftType())
     {
-        case svDouble:
+        case StackVar::Double:
             const_cast<FormulaToken*>(xUpperLeft.get())->GetDoubleAsReference() = f;
             break;
-        case svString:
+        case StackVar::String:
             xUpperLeft = new FormulaDoubleToken( f);
             break;
-        case svUnknown:
+        case StackVar::Unknown:
             if (!xUpperLeft)
             {
                 xUpperLeft = new FormulaDoubleToken( f);
@@ -1157,7 +1157,7 @@ void ScMatrixFormulaCellToken::ResetResult()
 
 ScHybridCellToken::ScHybridCellToken(
     double f, const svl::SharedString & rStr, const OUString & rFormula, bool bEmptyDisplayedAsString ) :
-        FormulaToken( formula::svHybridCell ),
+        FormulaToken( formula::StackVar::HybridCell ),
         mfDouble( f ), maString( rStr ),
         maFormula( rFormula ),
         mbEmptyDisplayedAsString( bEmptyDisplayedAsString)
@@ -1544,33 +1544,33 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
 
         switch (r.GetType())
         {
-            case svByte:
-            case svDouble:
-            case svString:
+            case StackVar::Byte:
+            case StackVar::Double:
+            case StackVar::String:
                 // Don't change the state.
             break;
-            case svSingleRef:
-            case svDoubleRef:
+            case StackVar::SingleRef:
+            case StackVar::DoubleRef:
                 // Depends on the reference state.
                 meVectorState = FormulaVectorCheckReference;
             break;
-            case svError:
-            case svEmptyCell:
-            case svExternal:
-            case svExternalDoubleRef:
-            case svExternalName:
-            case svExternalSingleRef:
-            case svFAP:
-            case svHybridCell:
-            case svIndex:
-            case svJump:
-            case svJumpMatrix:
-            case svMatrix:
-            case svMatrixCell:
-            case svMissing:
-            case svRefList:
-            case svSep:
-            case svUnknown:
+            case StackVar::Error:
+            case StackVar::EmptyCell:
+            case StackVar::External:
+            case StackVar::ExternalDoubleRef:
+            case StackVar::ExternalName:
+            case StackVar::ExternalSingleRef:
+            case StackVar::FAP:
+            case StackVar::HybridCell:
+            case StackVar::Index:
+            case StackVar::Jump:
+            case StackVar::JumpMatrix:
+            case StackVar::Matrix:
+            case StackVar::MatrixCell:
+            case StackVar::Missing:
+            case StackVar::RefList:
+            case StackVar::Sep:
+            case StackVar::Unknown:
                 // We don't support vectorization on these.
                 SAL_INFO("sc.opencl", "opcode ocPush: variable type disables vectorisation for formula group");
                 meVectorState = FormulaVectorDisabled;
@@ -1606,13 +1606,13 @@ bool ScTokenArray::ImplGetReference( ScRange& rRange, const ScAddress& rPos, boo
         const FormulaToken* pToken = pCode[0];
         if ( pToken )
         {
-            if ( pToken->GetType() == svSingleRef )
+            if ( pToken->GetType() == StackVar::SingleRef )
             {
                 const ScSingleRefData& rRef = *static_cast<const ScSingleRefToken*>(pToken)->GetSingleRef();
                 rRange.aStart = rRange.aEnd = rRef.toAbs(rPos);
                 bIs = !bValidOnly || ValidAddress(rRange.aStart);
             }
-            else if ( pToken->GetType() == svDoubleRef )
+            else if ( pToken->GetType() == StackVar::DoubleRef )
             {
                 const ScComplexRefData& rCompl = *static_cast<const ScDoubleRefToken*>(pToken)->GetDoubleRef();
                 const ScSingleRefData& rRef1 = rCompl.Ref1;
@@ -1662,34 +1662,34 @@ void ScTokenArray::GenHash()
             eType = p->GetType();
             switch (eType)
             {
-                case svByte:
+                case StackVar::Byte:
                 {
                     // Constant value.
                     sal_uInt8 nVal = p->GetByte();
                     nHash += static_cast<size_t>(nVal);
                 }
                 break;
-                case svDouble:
+                case StackVar::Double:
                 {
                     // Constant value.
                     double fVal = p->GetDouble();
                     nHash += std::hash<double>()(fVal);
                 }
                 break;
-                case svString:
+                case StackVar::String:
                 {
                     // Constant string.
                     OUString aStr = p->GetString().getString();
                     nHash += aHasher(aStr);
                 }
                 break;
-                case svSingleRef:
+                case StackVar::SingleRef:
                 {
                     size_t nVal = HashSingleRef(*p->GetSingleRef());
                     nHash += nVal;
                 }
                 break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                 {
                     const ScComplexRefData& rRef = *p->GetDoubleRef();
                     size_t nVal1 = HashSingleRef(rRef.Ref1);
@@ -1721,23 +1721,23 @@ bool ScTokenArray::IsInvariant() const
     {
         switch ((*p)->GetType())
         {
-            case svSingleRef:
-            case svExternalSingleRef:
+            case StackVar::SingleRef:
+            case StackVar::ExternalSingleRef:
             {
                 const ScSingleRefData& rRef = *(*p)->GetSingleRef();
                 if (rRef.IsRowRel())
                     return false;
             }
             break;
-            case svDoubleRef:
-            case svExternalDoubleRef:
+            case StackVar::DoubleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 const ScComplexRefData& rRef = *(*p)->GetDoubleRef();
                 if (rRef.Ref1.IsRowRel() || rRef.Ref2.IsRowRel())
                     return false;
             }
             break;
-            case svIndex:
+            case StackVar::Index:
                 return false;
             default:
                 ;
@@ -1880,11 +1880,11 @@ FormulaToken* ScTokenArray::MergeArray( )
                 }
 
                 // no references or nested arrays
-                if ( t->GetType() != svDouble  && t->GetType() != svString )
+                if ( t->GetType() != StackVar::Double  && t->GetType() != StackVar::String )
                 {
                     return nullptr;
                 }
-                bNumeric = (t->GetType() == svDouble);
+                bNumeric = (t->GetType() == StackVar::Double);
             break;
 
             case ocMissing :
@@ -1986,12 +1986,12 @@ FormulaToken* ScTokenArray::MergeArray( )
         switch ( t->GetOpCode() )
         {
             case ocPush :
-                if ( t->GetType() == svDouble )
+                if ( t->GetType() == StackVar::Double )
                 {
                     pArray->PutDouble( t->GetDouble() * nSign, nCol, nRow );
                     nSign = 1;
                 }
-                else if ( t->GetType() == svString )
+                else if ( t->GetType() == StackVar::String )
                 {
                     pArray->PutString(svl::SharedString(t->GetString()), nCol, nRow);
                 }
@@ -2166,7 +2166,7 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
     if ( pRPN && nRPN )
     {
         FormulaToken* t = pRPN[nRPN-1];
-        if ( t->GetType() == svByte )
+        if ( t->GetType() == StackVar::Byte )
         {
             sal_uInt8 nParamCount = t->GetByte();
             if ( nParamCount && nRPN > nParamCount )
@@ -2178,7 +2178,7 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                     FormulaToken* p = pRPN[nParam];
                     switch ( p->GetType() )
                     {
-                        case svSingleRef :
+                        case StackVar::SingleRef :
                         {
                             ScSingleRefData& rRef = *p->GetSingleRef();
                             ScAddress aAbs = rRef.toAbs(rPos);
@@ -2215,7 +2215,7 @@ bool ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                             }
                         }
                         break;
-                        case svDoubleRef :
+                        case StackVar::DoubleRef :
                         {
                             ScComplexRefData& rRef = *p->GetDoubleRef();
                             ScRange aAbs = rRef.toAbs(rPos);
@@ -2293,14 +2293,14 @@ bool SkipReference(formula::FormulaToken* pToken, const ScAddress& rPos, const S
     {
         switch (pToken->GetType())
         {
-            case svDoubleRef:
+            case StackVar::DoubleRef:
                 {
                     ScSingleRefData& rRef = *pToken->GetSingleRef2();
                     if (rRef.IsColRel() || rRef.IsRowRel())
                         return true;
                 }
                 SAL_FALLTHROUGH;
-            case svSingleRef:
+            case StackVar::SingleRef:
                 {
                     ScSingleRefData& rRef = *pToken->GetSingleRef();
                     if (rRef.IsColRel() || rRef.IsRowRel())
@@ -2342,7 +2342,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDo
     {
         switch ( pCode[j]->GetType() )
         {
-            case svDoubleRef :
+            case StackVar::DoubleRef :
             {
                 if (SkipReference(pCode[j], rPos, pOldDoc, bRangeName, true))
                     continue;
@@ -2362,7 +2362,7 @@ void ScTokenArray::ReadjustAbsolute3DReferences( const ScDocument* pOldDoc, ScDo
                 }
             }
             break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 if (SkipReference(pCode[j], rPos, pOldDoc, bRangeName, true))
                     continue;
@@ -2404,7 +2404,7 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
 
             switch ( p->GetType() )
             {
-                case svDoubleRef :
+                case StackVar::DoubleRef :
                     {
                         if (!SkipReference(p, rOldPos, pOldDoc, false, bCheckCopyRange))
                             continue;
@@ -2417,7 +2417,7 @@ void ScTokenArray::AdjustAbsoluteRefs( const ScDocument* pOldDoc, const ScAddres
                         AdjustSingleRefData( rRef2, rOldPos, rNewPos );
                     }
                     break;
-                case svSingleRef :
+                case StackVar::SingleRef :
                     {
                         if (!SkipReference(p, rOldPos, pOldDoc, false, bCheckCopyRange))
                             continue;
@@ -2451,7 +2451,7 @@ void ScTokenArray::AdjustSheetLocalNameReferences( SCTAB nOldTab, SCTAB nNewTab 
 
             switch ( p->GetType() )
             {
-                case svDoubleRef :
+                case StackVar::DoubleRef :
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScSingleRefData& rRef2 = rRef.Ref2;
@@ -2469,7 +2469,7 @@ void ScTokenArray::AdjustSheetLocalNameReferences( SCTAB nOldTab, SCTAB nNewTab 
                         }
                     }
                     break;
-                case svSingleRef :
+                case StackVar::SingleRef :
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
 
@@ -2499,7 +2499,7 @@ bool ScTokenArray::ReferencesSheet( SCTAB nTab, SCTAB nPosTab ) const
 
             switch ( p->GetType() )
             {
-                case svDoubleRef :
+                case StackVar::DoubleRef :
                     {
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
                         const ScSingleRefData& rRef2 = rRef.Ref2;
@@ -2511,7 +2511,7 @@ bool ScTokenArray::ReferencesSheet( SCTAB nTab, SCTAB nPosTab ) const
                             return true;
                     }
                     break;
-                case svSingleRef :
+                case StackVar::SingleRef :
                     {
                         const ScSingleRefData& rRef = *p->GetSingleRef();
                         if (rRef.IsTabRel())
@@ -2937,7 +2937,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         ScAddress aAbs = rRef.toAbs(rOldPos);
@@ -2973,7 +2973,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         rRef.SetAddress(aAbs, aNewPos);
                     }
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(rOldPos);
@@ -3051,7 +3051,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         rRef.SetRange(aAbs, aNewPos);
                     }
                     break;
-                case svExternalSingleRef:
+                case StackVar::ExternalSingleRef:
                     {
                         // For external reference, just reset the reference with
                         // respect to the new cell position.
@@ -3060,7 +3060,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                         rRef.SetAddress(aAbs, aNewPos);
                     }
                     break;
-                case svExternalDoubleRef:
+                case StackVar::ExternalDoubleRef:
                     {
                         // Same as above.
                         ScComplexRefData& rRef = *p->GetDoubleRef();
@@ -3074,7 +3074,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
 
             // For ocTableRef p is the inner token of *pp, so have a separate
             // condition here.
-            if ((*pp)->GetType() == svIndex)
+            if ((*pp)->GetType() == StackVar::Index)
             {
                 switch ((*pp)->GetOpCode())
                 {
@@ -3137,7 +3137,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
 
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         ScAddress aAbs = rRef.toAbs(rOldPos);
@@ -3153,7 +3153,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                         rRef.SetFlag3D(aAbs.Tab() != rNewPos.Tab() || !rRef.IsTabRel());
                     }
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(rOldPos);
@@ -3174,14 +3174,14 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
                                 rRef.Ref2.IsFlag3D());
                     }
                     break;
-                case svExternalSingleRef:
+                case StackVar::ExternalSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         ScAddress aAbs = rRef.toAbs(rOldPos);
                         rRef.SetAddress(aAbs, rNewPos);
                     }
                     break;
-                case svExternalDoubleRef:
+                case StackVar::ExternalDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(rOldPos);
@@ -3194,7 +3194,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMove(
 
             // For ocTableRef p is the inner token of *pp, so have a separate
             // condition here.
-            if ((*pp)->GetType() == svIndex)
+            if ((*pp)->GetType() == StackVar::Index)
             {
                 switch ((*pp)->GetOpCode())
                 {
@@ -3243,7 +3243,7 @@ sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc
     {
         switch ((*p)->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
@@ -3259,7 +3259,7 @@ sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc
                 }
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
@@ -3275,7 +3275,7 @@ sc::RefUpdateResult ScTokenArray::MoveReference( const ScAddress& rPos, const sc
                 }
             }
             break;
-            case svIndex:
+            case StackVar::Index:
             {
                 switch ((*p)->GetOpCode())
                 {
@@ -3319,7 +3319,7 @@ void ScTokenArray::MoveReferenceColReorder(
     {
         switch ((*p)->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
@@ -3339,7 +3339,7 @@ void ScTokenArray::MoveReferenceColReorder(
                 }
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
@@ -3382,7 +3382,7 @@ void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, S
     {
         switch ((*p)->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
@@ -3402,7 +3402,7 @@ void ScTokenArray::MoveReferenceRowReorder( const ScAddress& rPos, SCTAB nTab, S
                 }
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
@@ -3609,14 +3609,14 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         if (adjustSingleRefInName(rRef, rCxt, rPos, nullptr))
                             aRes.mbReferenceModified = true;
                     }
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(rPos);
@@ -3828,7 +3828,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
 
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         if (rRef.IsColRel() || rRef.IsRowRel() || rRef.IsTabRel())
@@ -3846,7 +3846,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInMovedName( const sc::RefUpdat
                         rRef.SetAddress(aAbs, rPos);
                     }
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         if (rRef.Ref1.IsColRel() || rRef.Ref1.IsRowRel() || rRef.Ref1.IsTabRel() ||
@@ -3980,14 +3980,14 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDele
 
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         if (adjustSingleRefOnDeletedTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos))
                             aRes.mbReferenceModified = true;
                     }
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         aRes.mbReferenceModified |= adjustDoubleRefOnDeleteTab(rRef, rCxt.mnDeletePos, rCxt.mnSheets, rOldPos, aNewPos);
@@ -3999,7 +3999,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnDeletedTab( sc::RefUpdateDele
 
             // For ocTableRef p is the inner token of *pp, so have a separate
             // condition here.
-            if ((*pp)->GetType() == svIndex)
+            if ((*pp)->GetType() == StackVar::Index)
             {
                 switch ((*pp)->GetOpCode())
                 {
@@ -4053,14 +4053,14 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateIns
 
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         if (adjustSingleRefOnInsertedTab(rRef, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
                             aRes.mbReferenceModified = true;
                     }
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         if (adjustSingleRefOnInsertedTab(rRef.Ref1, rCxt.mnInsertPos, rCxt.mnSheets, rOldPos, aNewPos))
@@ -4075,7 +4075,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnInsertedTab( sc::RefUpdateIns
 
             // For ocTableRef p is the inner token of *pp, so have a separate
             // condition here.
-            if ((*pp)->GetType() == svIndex)
+            if ((*pp)->GetType() == StackVar::Index)
             {
                 switch ((*pp)->GetOpCode())
                 {
@@ -4142,7 +4142,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
 
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         ScAddress aAbs = rRef.toAbs(rOldPos);
@@ -4151,7 +4151,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
                         rRef.SetAddress(aAbs, aNewPos);
                     }
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(rOldPos);
@@ -4168,7 +4168,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnMovedTab( sc::RefUpdateMoveTa
 
             // For ocTableRef p is the inner token of *pp, so have a separate
             // condition here.
-            if ((*pp)->GetType() == svIndex)
+            if ((*pp)->GetType() == StackVar::Index)
             {
                 switch ((*pp)->GetOpCode())
                 {
@@ -4215,16 +4215,16 @@ void ScTokenArray::AdjustReferenceOnMovedOrigin( const ScAddress& rOldPos, const
 
             switch (p->GetType())
             {
-                case svSingleRef:
-                case svExternalSingleRef:
+                case StackVar::SingleRef:
+                case StackVar::ExternalSingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         ScAddress aAbs = rRef.toAbs(rOldPos);
                         rRef.SetAddress(aAbs, rNewPos);
                     }
                     break;
-                case svDoubleRef:
-                case svExternalDoubleRef:
+                case StackVar::DoubleRef:
+                case StackVar::ExternalDoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(rOldPos);
@@ -4254,10 +4254,10 @@ void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rO
             bool bAdjust = false;
             switch (p->GetType())
             {
-                case svExternalSingleRef:
+                case StackVar::ExternalSingleRef:
                     bAdjust = true;     // always
                     SAL_FALLTHROUGH;
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         ScSingleRefData& rRef = *p->GetSingleRef();
                         ScAddress aAbs = rRef.toAbs(rOldPos);
@@ -4267,10 +4267,10 @@ void ScTokenArray::AdjustReferenceOnMovedOriginIfOtherSheet( const ScAddress& rO
                             rRef.SetAddress(aAbs, rNewPos);
                     }
                     break;
-                case svExternalDoubleRef:
+                case StackVar::ExternalDoubleRef:
                     bAdjust = true;     // always
                     SAL_FALLTHROUGH;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         ScRange aAbs = rRef.toAbs(rOldPos);
@@ -4302,7 +4302,7 @@ void ScTokenArray::AdjustReferenceOnCopy( const ScAddress& rNewPos )
 
             switch (p->GetType())
             {
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         ScComplexRefData& rRef = *p->GetDoubleRef();
                         rRef.PutInOrder( rNewPos);
@@ -4340,14 +4340,14 @@ void ScTokenArray::ClearTabDeleted( const ScAddress& rPos, SCTAB nStartTab, SCTA
     {
         switch ((*p)->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
                 clearTabDeletedFlag(rRef, rPos, nStartTab, nEndTab);
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
@@ -4483,12 +4483,12 @@ void ScTokenArray::CheckRelativeReferenceBounds(
 
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         checkBounds(rCxt, rPos, nGroupLen, *p->GetSingleRef(), rBounds);
                     }
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
                         checkBounds(rCxt, rPos, nGroupLen, rRef.Ref1, rBounds);
@@ -4518,13 +4518,13 @@ void ScTokenArray::CheckRelativeReferenceBounds(
 
             switch (p->GetType())
             {
-                case svSingleRef:
+                case StackVar::SingleRef:
                     {
                         const ScSingleRefData& rRef = *p->GetSingleRef();
                         checkBounds(rPos, nGroupLen, rRange, rRef, rBounds, nullptr);
                     }
                     break;
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
                         checkBounds(rPos, nGroupLen, rRange, rRef.Ref1, rBounds, nullptr);
@@ -4555,7 +4555,7 @@ void ScTokenArray::CheckExpandReferenceBounds(
 
             switch (p->GetType())
             {
-                case svDoubleRef:
+                case StackVar::DoubleRef:
                     {
                         const ScComplexRefData& rRef = *p->GetDoubleRef();
                         bool bStartRowRelative = rRef.Ref1.IsRowRel();
@@ -4679,14 +4679,14 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
 
         switch (rToken.GetType())
         {
-            case svExternalName:
+            case StackVar::ExternalName:
                 rBuf.append(rCxt.mpRefConv->makeExternalNameStr(nFileId, aFileName, aTabName));
             break;
-            case svExternalSingleRef:
+            case StackVar::ExternalSingleRef:
                 rCxt.mpRefConv->makeExternalRefStr(
                        rBuf, rPos, nFileId, aFileName, aTabName, *rToken.GetSingleRef());
             break;
-            case svExternalDoubleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 sc::TokenStringContext::IndexNamesMapType::const_iterator it =
                     rCxt.maExternalCachedTabNames.find(nFileId);
@@ -4710,10 +4710,10 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
     OpCode eOp = rToken.GetOpCode();
     switch (rToken.GetType())
     {
-        case svDouble:
+        case StackVar::Double:
             appendDouble(rCxt, rBuf, rToken.GetDouble());
         break;
-        case svString:
+        case StackVar::String:
         {
             OUString aStr = rToken.GetString().getString();
             if (eOp == ocBad || eOp == ocStringXML)
@@ -4725,7 +4725,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             appendString(rBuf, aStr);
         }
         break;
-        case svSingleRef:
+        case StackVar::SingleRef:
         {
             if (rCxt.mpRefConv)
             {
@@ -4740,7 +4740,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                 rBuf.append(rCxt.maErrRef);
         }
         break;
-        case svDoubleRef:
+        case StackVar::DoubleRef:
         {
             if (rCxt.mpRefConv)
             {
@@ -4752,7 +4752,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
                 rBuf.append(rCxt.maErrRef);
         }
         break;
-        case svMatrix:
+        case StackVar::Matrix:
         {
             const ScMatrix* pMat = rToken.GetMatrix();
             if (!pMat)
@@ -4803,7 +4803,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             rBuf.append(rCxt.mxOpCodeMap->getSymbol(ocArrayClose));
         }
         break;
-        case svIndex:
+        case StackVar::Index:
         {
             typedef sc::TokenStringContext::IndexNameMapType NameType;
 
@@ -4876,7 +4876,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             }
         }
         break;
-        case svExternal:
+        case StackVar::External:
         {
             // mapped or translated name of AddIns
             OUString aAddIn = rToken.GetExternal();
@@ -4898,7 +4898,7 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             rBuf.append(aAddIn);
         }
         break;
-        case svError:
+        case StackVar::Error:
         {
             FormulaError nErr = rToken.GetError();
             OpCode eOpErr;
@@ -4930,11 +4930,11 @@ void appendTokenByType( sc::TokenStringContext& rCxt, OUStringBuffer& rBuf, cons
             rBuf.append(rCxt.mxOpCodeMap->getSymbol(eOpErr));
         }
         break;
-        case svByte:
-        case svJump:
-        case svFAP:
-        case svMissing:
-        case svSep:
+        case StackVar::Byte:
+        case StackVar::Jump:
+        case StackVar::FAP:
+        case StackVar::Missing:
+        case StackVar::Sep:
         default:
             ;
     }
@@ -5024,7 +5024,7 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
     {
         switch ((*p)->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
@@ -5033,7 +5033,7 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
                 rRef.SetAddress(aAbs, rPos);
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
@@ -5067,7 +5067,7 @@ bool ScTokenArray::NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCR
     {
         switch ((*p)->GetType())
         {
-            case svSingleRef:
+            case StackVar::SingleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScSingleRefData& rRef = *pToken->GetSingleRef();
@@ -5076,7 +5076,7 @@ bool ScTokenArray::NeedsWrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCR
                    return true;
             }
             break;
-            case svDoubleRef:
+            case StackVar::DoubleRef:
             {
                 formula::FormulaToken* pToken = *p;
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();

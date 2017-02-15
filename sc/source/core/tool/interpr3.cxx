@@ -2463,7 +2463,7 @@ void ScInterpreter::ScZTest()
     double rValCount = 0.0;
     switch (GetStackType())
     {
-        case formula::svDouble :
+        case formula::StackVar::Double :
         {
             fVal = GetDouble();
             fSum    += fVal;
@@ -2471,7 +2471,7 @@ void ScInterpreter::ScZTest()
             rValCount++;
         }
         break;
-        case svSingleRef :
+        case StackVar::SingleRef :
         {
             ScAddress aAdr;
             PopSingleRef( aAdr );
@@ -2485,8 +2485,8 @@ void ScInterpreter::ScZTest()
             }
         }
         break;
-        case svRefList :
-        case formula::svDoubleRef :
+        case StackVar::RefList :
+        case formula::StackVar::DoubleRef :
         {
             short nParam = 1;
             size_t nRefInList = 0;
@@ -2512,9 +2512,9 @@ void ScInterpreter::ScZTest()
             }
         }
         break;
-        case svMatrix :
-        case svExternalSingleRef:
-        case svExternalDoubleRef:
+        case StackVar::Matrix :
+        case StackVar::ExternalSingleRef:
+        case StackVar::ExternalDoubleRef:
         {
             ScMatrixRef pMat = GetMatrix();
             if (pMat)
@@ -2881,7 +2881,7 @@ void ScInterpreter::ScHarMean()
     {
         switch (GetStackType())
         {
-            case formula::svDouble    :
+            case formula::StackVar::Double    :
             {
                 double x = GetDouble();
                 if (x > 0.0)
@@ -2893,7 +2893,7 @@ void ScInterpreter::ScHarMean()
                     SetError( FormulaError::IllegalArgument);
                 break;
             }
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 PopSingleRef( aAdr );
                 ScRefCellValue aCell(*pDok, aAdr);
@@ -2910,8 +2910,8 @@ void ScInterpreter::ScHarMean()
                 }
                 break;
             }
-            case formula::svDoubleRef :
-            case svRefList :
+            case formula::StackVar::DoubleRef :
+            case StackVar::RefList :
             {
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -2941,9 +2941,9 @@ void ScInterpreter::ScHarMean()
                 }
             }
             break;
-            case svMatrix :
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::Matrix :
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
@@ -3003,7 +3003,7 @@ void ScInterpreter::ScGeoMean()
     {
         switch (GetStackType())
         {
-            case formula::svDouble    :
+            case formula::StackVar::Double    :
             {
                 double x = GetDouble();
                 if (x > 0.0)
@@ -3015,7 +3015,7 @@ void ScInterpreter::ScGeoMean()
                     SetError( FormulaError::IllegalArgument);
                 break;
             }
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 PopSingleRef( aAdr );
                 ScRefCellValue aCell(*pDok, aAdr);
@@ -3032,8 +3032,8 @@ void ScInterpreter::ScGeoMean()
                 }
                 break;
             }
-            case formula::svDoubleRef :
-            case svRefList :
+            case formula::StackVar::DoubleRef :
+            case StackVar::RefList :
             {
                 FormulaError nErr = FormulaError::NONE;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
@@ -3063,9 +3063,9 @@ void ScInterpreter::ScGeoMean()
                 }
             }
             break;
-            case svMatrix :
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::Matrix :
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
@@ -3144,7 +3144,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
     {
         switch (GetStackType())
         {
-            case formula::svDouble :
+            case formula::StackVar::Double :
             {
                 fVal = GetDouble();
                 fSum += fVal;
@@ -3152,7 +3152,7 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
                 fCount++;
             }
                 break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 PopSingleRef( aAdr );
                 ScRefCellValue aCell(*pDok, aAdr);
@@ -3165,8 +3165,8 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
                 }
             }
             break;
-            case formula::svDoubleRef :
-            case svRefList :
+            case formula::StackVar::DoubleRef :
+            case StackVar::RefList :
             {
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 FormulaError nErr = FormulaError::NONE;
@@ -3187,9 +3187,9 @@ bool ScInterpreter::CalculateSkew(double& fSum,double& fCount,double& vSum,std::
                 }
             }
             break;
-            case svMatrix :
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::Matrix :
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
@@ -3632,10 +3632,10 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
         const StackVar eStackType = GetStackType();
         switch (eStackType)
         {
-            case formula::svDouble :
+            case formula::StackVar::Double :
                 rArray.push_back( PopDouble());
             break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 PopSingleRef( aAdr );
                 ScRefCellValue aCell(*pDok, aAdr);
@@ -3643,8 +3643,8 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                     rArray.push_back(GetCellValue(aAdr, aCell));
             }
             break;
-            case formula::svDoubleRef :
-            case svRefList :
+            case formula::StackVar::DoubleRef :
+            case StackVar::RefList :
             {
                 PopDoubleRef( aRange, nParam, nRefInList);
                 if (nGlobalError != FormulaError::NONE)
@@ -3668,9 +3668,9 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                 }
             }
             break;
-            case svMatrix :
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::Matrix :
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (!pMat)
@@ -3683,7 +3683,7 @@ void ScInterpreter::GetNumberSequenceArray( sal_uInt8 nParamCount, vector<double
                     for (SCSIZE i = 0; i < nCount; ++i)
                         rArray.push_back( pMat->GetDouble(i));
                 }
-                else if (bConvertTextInArray && eStackType == svMatrix)
+                else if (bConvertTextInArray && eStackType == StackVar::Matrix)
                 {
                     for (SCSIZE i = 0; i < nCount; ++i)
                     {
@@ -3915,11 +3915,11 @@ void ScInterpreter::ScAveDev()
     {
         switch (GetStackType())
         {
-            case formula::svDouble :
+            case formula::StackVar::Double :
                 rVal += GetDouble();
                 rValCount++;
                 break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 PopSingleRef( aAdr );
                 ScRefCellValue aCell(*pDok, aAdr);
@@ -3930,8 +3930,8 @@ void ScInterpreter::ScAveDev()
                 }
             }
             break;
-            case formula::svDoubleRef :
-            case svRefList :
+            case formula::StackVar::DoubleRef :
+            case StackVar::RefList :
             {
                 FormulaError nErr = FormulaError::NONE;
                 double nCellVal;
@@ -3951,9 +3951,9 @@ void ScInterpreter::ScAveDev()
                 }
             }
             break;
-            case svMatrix :
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::Matrix :
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
@@ -3998,10 +3998,10 @@ void ScInterpreter::ScAveDev()
     {
         switch (GetStackType())
         {
-            case formula::svDouble :
+            case formula::StackVar::Double :
                 rVal += fabs(GetDouble() - nMiddle);
                 break;
-            case svSingleRef :
+            case StackVar::SingleRef :
             {
                 PopSingleRef( aAdr );
                 ScRefCellValue aCell(*pDok, aAdr);
@@ -4009,8 +4009,8 @@ void ScInterpreter::ScAveDev()
                     rVal += fabs(GetCellValue(aAdr, aCell) - nMiddle);
             }
             break;
-            case formula::svDoubleRef :
-            case svRefList :
+            case formula::StackVar::DoubleRef :
+            case StackVar::RefList :
             {
                 FormulaError nErr = FormulaError::NONE;
                 double nCellVal;
@@ -4024,9 +4024,9 @@ void ScInterpreter::ScAveDev()
                 }
             }
             break;
-            case svMatrix :
-            case svExternalSingleRef:
-            case svExternalDoubleRef:
+            case StackVar::Matrix :
+            case StackVar::ExternalSingleRef:
+            case StackVar::ExternalDoubleRef:
             {
                 ScMatrixRef pMat = GetMatrix();
                 if (pMat)
@@ -4247,7 +4247,7 @@ void ScInterpreter::ScRSQ()
     {
         switch (GetStackType())
         {
-            case formula::svDouble:
+            case formula::StackVar::Double:
                 {
                     double fVal = PopDouble();
                     PushDouble( fVal * fVal);
