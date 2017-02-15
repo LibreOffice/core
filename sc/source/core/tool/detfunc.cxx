@@ -312,29 +312,15 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) c
 
     switch( eMode )
     {
-        case DRAWPOS_TOPLEFT:
+        case DrawPosMode::TopLeft:
         break;
-        case DRAWPOS_BOTTOMRIGHT:
+        case DrawPosMode::BottomRight:
             ++nCol;
             ++nRow;
         break;
-        case DRAWPOS_DETARROW:
+        case DrawPosMode::DetectiveArrow:
             aPos.X() += pDoc->GetColWidth( nCol, nTab ) / 4;
             aPos.Y() += pDoc->GetRowHeight( nRow, nTab ) / 2;
-        break;
-        case DRAWPOS_CAPTIONLEFT:
-            aPos.X() += 6;
-        break;
-        case DRAWPOS_CAPTIONRIGHT:
-        {
-            // find right end of passed cell position
-            const ScMergeAttr* pMerge = static_cast< const ScMergeAttr* >( pDoc->GetAttr( nCol, nRow, nTab, ATTR_MERGE ) );
-            if ( pMerge->GetColMerge() > 1 )
-                nCol = nCol + pMerge->GetColMerge();
-            else
-                ++nCol;
-            aPos.X() -= 6;
-        }
         break;
     }
 
@@ -354,8 +340,8 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) c
 Rectangle ScDetectiveFunc::GetDrawRect( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 ) const
 {
     Rectangle aRect(
-        GetDrawPos( ::std::min( nCol1, nCol2 ), ::std::min( nRow1, nRow2 ), DRAWPOS_TOPLEFT ),
-        GetDrawPos( ::std::max( nCol1, nCol2 ), ::std::max( nRow1, nRow2 ), DRAWPOS_BOTTOMRIGHT ) );
+        GetDrawPos( ::std::min( nCol1, nCol2 ), ::std::min( nRow1, nRow2 ), DrawPosMode::TopLeft ),
+        GetDrawPos( ::std::max( nCol1, nCol2 ), ::std::max( nRow1, nRow2 ), DrawPosMode::BottomRight ) );
     aRect.Justify();    // reorder left/right in RTL sheets
     return aRect;
 }
@@ -483,8 +469,8 @@ bool ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
         pData->maEnd.Set( nRefEndCol, nRefEndRow, nTab);
     }
 
-    Point aStartPos = GetDrawPos( nRefStartCol, nRefStartRow, DRAWPOS_DETARROW );
-    Point aEndPos = GetDrawPos( nCol, nRow, DRAWPOS_DETARROW );
+    Point aStartPos = GetDrawPos( nRefStartCol, nRefStartRow, DrawPosMode::DetectiveArrow );
+    Point aEndPos = GetDrawPos( nCol, nRow, DrawPosMode::DetectiveArrow );
 
     if (bFromOtherTab)
     {
@@ -559,7 +545,7 @@ bool ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     bool bNegativePage = pDoc->IsNegativePage( nTab );
     long nPageSign = bNegativePage ? -1 : 1;
 
-    Point aStartPos = GetDrawPos( nStartCol, nStartRow, DRAWPOS_DETARROW );
+    Point aStartPos = GetDrawPos( nStartCol, nStartRow, DrawPosMode::DetectiveArrow );
     Point aEndPos   = Point( aStartPos.X() + 1000 * nPageSign, aStartPos.Y() - 1000 );
     if (aEndPos.Y() < 0)
         aEndPos.Y() += 2000;
