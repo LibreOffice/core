@@ -23,7 +23,6 @@
 #include <tools/solar.h>
 #include <vcl/dllapi.h>
 #include <vcl/outdev.hxx>
-#include <tools/resid.hxx>
 #include <vcl/pointr.hxx>
 #include <tools/wintypes.hxx>
 #include <rsc/rsc-vcl-shared-types.hxx>
@@ -479,7 +478,7 @@ public:
                                         Color* pPaintColor = nullptr);
 };
 
-class VCL_DLLPUBLIC Window : public ::OutputDevice, public Resource
+class VCL_DLLPUBLIC Window : public ::OutputDevice
 {
     friend class ::vcl::Cursor;
     friend class ::OutputDevice;
