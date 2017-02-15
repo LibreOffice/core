@@ -34,7 +34,7 @@ class SmartTagHandler
     std::vector< std::pair<OUString, OUString> > m_aAttributes;
 
 public:
-    SmartTagHandler(const css::uno::Reference<css::uno::XComponentContext>& xComponentContext, const css::uno::Reference<css::text::XTextDocument>& xTextDocument);
+    SmartTagHandler(css::uno::Reference<css::uno::XComponentContext> xComponentContext, const css::uno::Reference<css::text::XTextDocument>& xTextDocument);
     virtual ~SmartTagHandler() override;
 
     virtual void lcl_attribute(Id Name, Value& val) override;

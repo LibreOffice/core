@@ -47,7 +47,7 @@ protected:
     css::uno::Reference<css::uno::XComponentContext> m_xCtx;
     css::uno::Reference<css::lang::XComponent> m_xSrcDoc;
 public:
-    explicit RtfExportFilter(const css::uno::Reference<css::uno::XComponentContext>& xCtx);
+    explicit RtfExportFilter(css::uno::Reference<css::uno::XComponentContext> xCtx);
     virtual ~RtfExportFilter() override;
 
     // XFilter
