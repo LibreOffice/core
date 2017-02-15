@@ -1221,6 +1221,41 @@ void Test::testUserDefinedNumberFormats()
         sCode = "[DBNum2][$-0404]General\\ ";
         checkPreviewString(aFormatter, sCode, 120, eLang, sExpected);
     }
+    {  // tdf#105968 engineering format with value rounded up to next magnitude
+        sCode = "##0.00E+00";
+        sExpected = "100.00E+00";
+        checkPreviewString(aFormatter, sCode, 99.995, eLang, sExpected);
+        // test '1'=='1' assumption
+        checkPreviewString(aFormatter, sCode, 100.0, eLang, sExpected);
+        sExpected = "199.99E+00";
+        checkPreviewString(aFormatter, sCode, 199.99, eLang, sExpected);
+        sExpected = "1.00E+03";
+        checkPreviewString(aFormatter, sCode, 1000.0, eLang, sExpected);
+        // and another just "normally" rounded value
+        sExpected = "894.55E-06";
+        checkPreviewString(aFormatter, sCode, 0.000894549, eLang, sExpected);
+        // not expecting rounding into another magnitude
+        sExpected = "999.99E-06";
+        checkPreviewString(aFormatter, sCode, 0.000999991, eLang, sExpected);
+        // expecting rounding into another magnitude
+        sExpected = "1.00E-03";
+        checkPreviewString(aFormatter, sCode, 0.000999999, eLang, sExpected);
+
+        // Now the same all negative values.
+        sExpected = "-100.00E+00";
+        checkPreviewString(aFormatter, sCode, -99.995, eLang, sExpected);
+        checkPreviewString(aFormatter, sCode, -100.0, eLang, sExpected);
+        sExpected = "-199.99E+00";
+        checkPreviewString(aFormatter, sCode, -199.99, eLang, sExpected);
+        sExpected = "-1.00E+03";
+        checkPreviewString(aFormatter, sCode, -1000.0, eLang, sExpected);
+        sExpected = "-894.55E-06";
+        checkPreviewString(aFormatter, sCode, -0.000894549, eLang, sExpected);
+        sExpected = "-999.99E-06";
+        checkPreviewString(aFormatter, sCode, -0.000999991, eLang, sExpected);
+        sExpected = "-1.00E-03";
+        checkPreviewString(aFormatter, sCode, -0.000999999, eLang, sExpected);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
