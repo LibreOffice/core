@@ -599,10 +599,13 @@ void ScGlobal::Clear()
     DELETEZ(pAddInCollection);
     DELETEZ(pUserList);
 
-    for( sal_uInt16 nC = 0 ; nC < SC_GLOBSTR_STR_COUNT ; nC++ )
-        if( ppRscString ) delete ppRscString[ nC ];
-    delete[] ppRscString;
-    ppRscString = nullptr;
+    if (ppRscString)
+    {
+        for (sal_uInt16 nC = 0; nC < SC_GLOBSTR_STR_COUNT; ++nC)
+            delete ppRscString[nC];
+        delete[] ppRscString;
+        ppRscString = nullptr;
+    }
 
     DELETEZ(pStarCalcFunctionList); // Destroy before ResMgr!
     DELETEZ(pStarCalcFunctionMgr);
