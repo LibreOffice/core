@@ -215,10 +215,7 @@ ToxTextGenerator::GenerateText(SwDoc* pDoc, const std::vector<SwTOXSortTabBase*>
             }
 
             case TOKEN_TEXT:
-                {
-                     if(rText.getLength() > 0) rText = rText.copy(0, rText.getLength() - 1);  //Ugly hack to remove default spacing when user specifies <E#>
-                     rText += aToken.sText;
-                }
+                rText += aToken.sText;
                 break;
 
             case TOKEN_PAGE_NUMS:
