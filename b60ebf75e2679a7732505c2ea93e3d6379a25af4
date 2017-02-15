@@ -1,0 +1,602 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_38960895",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3802,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "CAUTION! This and similar changes revert the commit 52305b662033ebbac6e09aa66622f7eef2bfccae for this file.",
+      "range": {
+        "startLine": 3802,
+        "startChar": 20,
+        "endLine": 3802,
+        "endChar": 33
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_5893cca3",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3804,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 3804,
+        "startChar": 23,
+        "endLine": 3804,
+        "endChar": 65
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_78909096",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3933,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 3932,
+        "startChar": 7,
+        "endLine": 3933,
+        "endChar": 69
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_18f864e5",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4223,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4223,
+        "startChar": 7,
+        "endLine": 4223,
+        "endChar": 63
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_38dd2871",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4230,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4230,
+        "startChar": 7,
+        "endLine": 4230,
+        "endChar": 58
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_58daec79",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4280,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4279,
+        "startChar": 11,
+        "endLine": 4280,
+        "endChar": 60
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_78e7b040",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4285,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4285,
+        "startChar": 39,
+        "endLine": 4285,
+        "endChar": 54
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_98e4543c",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4301,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4300,
+        "startChar": 15,
+        "endLine": 4301,
+        "endChar": 58
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b8cf58b2",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4344,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4344,
+        "startChar": 15,
+        "endLine": 4344,
+        "endChar": 70
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d8d41c49",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4347,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4347,
+        "startChar": 32,
+        "endLine": 4347,
+        "endChar": 65
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_f8c9e0ad",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4350,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4350,
+        "startChar": 35,
+        "endLine": 4350,
+        "endChar": 65
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_18cf84b1",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4353,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4353,
+        "startChar": 15,
+        "endLine": 4353,
+        "endChar": 63
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_38c44891",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4417,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4417,
+        "startChar": 7,
+        "endLine": 4417,
+        "endChar": 58
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_988d347e",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4784,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 4784,
+        "startChar": 7,
+        "endLine": 4784,
+        "endChar": 41
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_58c10c80",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5058,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5057,
+        "startChar": 11,
+        "endLine": 5058,
+        "endChar": 60
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_78bed000",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5064,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5064,
+        "startChar": 7,
+        "endLine": 5064,
+        "endChar": 39
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_98bb740e",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5066,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5066,
+        "startChar": 39,
+        "endLine": 5066,
+        "endChar": 54
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b83678b2",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5082,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5081,
+        "startChar": 15,
+        "endLine": 5082,
+        "endChar": 58
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d83b3c9b",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5091,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5090,
+        "startChar": 19,
+        "endLine": 5091,
+        "endChar": 45
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_f840000a",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5125,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5125,
+        "startChar": 15,
+        "endLine": 5125,
+        "endChar": 70
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_1846a423",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5128,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5128,
+        "startChar": 35,
+        "endLine": 5128,
+        "endChar": 65
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_384b682d",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5131,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5131,
+        "startChar": 35,
+        "endLine": 5131,
+        "endChar": 65
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_58482c2e",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5134,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5134,
+        "startChar": 15,
+        "endLine": 5134,
+        "endChar": 74
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b8e83818",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5166,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5166,
+        "startChar": 11,
+        "endLine": 5166,
+        "endChar": 42
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d8edfc26",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5266,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5261,
+        "startChar": 15,
+        "endLine": 5266,
+        "endChar": 71
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_f8f2c005",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5275,
+      "author": {
+        "id": 1001316
+      },
+      "writtenOn": "2017-02-15T22:04:03Z",
+      "side": 1,
+      "message": "This has been overlooked (still in German).",
+      "range": {
+        "startLine": 5273,
+        "startChar": 11,
+        "endLine": 5275,
+        "endChar": 75
+      },
+      "revId": "b60ebf75e2679a7732505c2ea93e3d6379a25af4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
