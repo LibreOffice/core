@@ -130,6 +130,8 @@ for d in definitionSet:
          "include/svtools/htmltokn.h",
          "include/sfx2/sidebar/Theme.hxx", # ThemeItem
          "sc/source/ui/docshell/impex.cxx", # SylkVersion
+         "include/rsc/rsc-vcl-shared-types.hxx", # KeyFuncType
+         "include/i18nutil/paper.hxx", # Paper
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",

@@ -145,7 +145,6 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
         case SymbolType::SPIN_LEFT:
         case SymbolType::FIRST:
         case SymbolType::PREV:
-        case SymbolType::REVERSEPLAY:
             nRect.Left() += n4;
             if ( eType==SymbolType::FIRST )
             {
@@ -209,7 +208,6 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
             break;
 
         case SymbolType::RADIOCHECKMARK:
-        case SymbolType::RECORD:
             {
                 // Midpoint circle algorithm
                 long x = 0;
@@ -243,49 +241,6 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
 
         case SymbolType::STOP:
             pDev->DrawRect( nRect );
-            break;
-
-        case SymbolType::PAUSE:
-            pDev->DrawRect( Rectangle ( nRect.Left(), nRect.Top(),
-                                        aCenter.X()-n8, nRect.Bottom() ) );
-            pDev->DrawRect( Rectangle ( aCenter.X()+n8, nRect.Top(),
-                                        nRect.Right(), nRect.Bottom() ) );
-            break;
-
-        case SymbolType::WINDSTART:
-            pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-n2+1 ),
-                            Point( nRect.Left(), aCenter.Y()+n2-1 ) );
-            ++nRect.Left();
-            SAL_FALLTHROUGH;
-        case SymbolType::WINDBACKWARD:
-            pDev->DrawPixel( Point( nRect.Left(), aCenter.Y() ) );
-            pDev->DrawPixel( Point( nRect.Left()+n2, aCenter.Y() ) );
-            for ( long i=1; i < n2; ++i )
-            {
-                ++nRect.Left();
-                pDev->DrawLine( Point( nRect.Left(), aCenter.Y()-i ),
-                                Point( nRect.Left(), aCenter.Y()+i ) );
-                pDev->DrawLine( Point( nRect.Left()+n2, aCenter.Y()-i ),
-                                Point( nRect.Left()+n2, aCenter.Y()+i ) );
-            }
-            break;
-
-        case SymbolType::WINDEND:
-            pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-n2+1 ),
-                            Point( nRect.Right(), aCenter.Y()+n2-1 ) );
-            --nRect.Right();
-            SAL_FALLTHROUGH;
-        case SymbolType::WINDFORWARD:
-            pDev->DrawPixel( Point( nRect.Right(), aCenter.Y() ) );
-            pDev->DrawPixel( Point( nRect.Right()-n2, aCenter.Y() ) );
-            for ( long i=1; i < n2; ++i )
-            {
-                --nRect.Right();
-                pDev->DrawLine( Point( nRect.Right(), aCenter.Y()-i ),
-                                Point( nRect.Right(), aCenter.Y()+i ) );
-                pDev->DrawLine( Point( nRect.Right()-n2, aCenter.Y()-i ),
-                                Point( nRect.Right()-n2, aCenter.Y()+i ) );
-            }
             break;
 
         case SymbolType::CLOSE:
@@ -353,20 +308,6 @@ void ImplDrawSymbol( OutputDevice* pDev, Rectangle nRect, const SymbolType eType
                     pDev->DrawLine( Point( nRect.Left()+n3, nRect.Bottom() ),
                                     Point( nRect.Right(), nRect.Top()+n3 ) );
                 }
-            }
-            break;
-
-        case SymbolType::SPIN_UPDOWN:
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Top() ) );
-            pDev->DrawPixel( Point( aCenter.X(), nRect.Bottom() ) );
-            for ( long i=1; i < n2; ++i )
-            {
-                ++nRect.Top();
-                --nRect.Bottom();
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Top() ),
-                                Point( aCenter.X()+i, nRect.Top() ) );
-                pDev->DrawLine( Point( aCenter.X()-i, nRect.Bottom() ),
-                                Point( aCenter.X()+i, nRect.Bottom() ) );
             }
             break;
 
