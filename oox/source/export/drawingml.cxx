@@ -1631,29 +1631,37 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun )
         }
     }
 
-    if( ( bWriteField ) )
+    if (sText == "\n")
     {
-        OString sUUID(GetUUID());
-        mpFS->startElementNS( XML_a, XML_fld,
-                              XML_id, sUUID.getStr(),
-                              XML_type, OUStringToOString( sFieldValue, RTL_TEXTENCODING_UTF8 ).getStr(),
-                              FSEND );
+        mpFS->singleElementNS( XML_a, XML_br,
+                               FSEND );
     }
     else
     {
-        mpFS->startElementNS( XML_a, XML_r, FSEND );
+        if( ( bWriteField ) )
+        {
+            OString sUUID(GetUUID());
+            mpFS->startElementNS( XML_a, XML_fld,
+                                  XML_id, sUUID.getStr(),
+                                  XML_type, OUStringToOString( sFieldValue, RTL_TEXTENCODING_UTF8 ).getStr(),
+                                  FSEND );
+        }
+        else
+        {
+            mpFS->startElementNS( XML_a, XML_r, FSEND );
+        }
+
+        Reference< XPropertySet > xPropSet( rRun, uno::UNO_QUERY );
+        WriteRunProperties( xPropSet, bIsURLField );
+        mpFS->startElementNS( XML_a, XML_t, FSEND );
+        mpFS->writeEscaped( sText );
+        mpFS->endElementNS( XML_a, XML_t );
+
+        if( bWriteField )
+            mpFS->endElementNS( XML_a, XML_fld );
+        else
+            mpFS->endElementNS( XML_a, XML_r );
     }
-
-    Reference< XPropertySet > xPropSet( rRun, uno::UNO_QUERY );
-    WriteRunProperties( xPropSet, bIsURLField );
-    mpFS->startElementNS( XML_a, XML_t, FSEND );
-    mpFS->writeEscaped( sText );
-    mpFS->endElementNS( XML_a, XML_t );
-
-    if( bWriteField )
-        mpFS->endElementNS( XML_a, XML_fld );
-    else
-        mpFS->endElementNS( XML_a, XML_r );
 }
 
 OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBehind, bool bPBoth)
