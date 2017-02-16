@@ -657,6 +657,10 @@ public:
     //collect the pieces of the command
     void AppendFieldCommand(OUString& rPartOfCommand);
     void handleRubyEQField( const FieldContextPtr& pContext);
+    void handleFieldSet
+        (const FieldContextPtr& pContext,
+        css::uno::Reference< css::uno::XInterface > & xFieldInterface,
+        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleFieldAsk
         (const FieldContextPtr& pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
