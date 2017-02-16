@@ -914,9 +914,9 @@ bool LoadEnv::impl_furtherDocsAllowed()
 
             FrameListAnalyzer aAnalyzer(xDesktop,
                                         css::uno::Reference< css::frame::XFrame >(),
-                                        FrameListAnalyzer::E_HELP |
-                                        FrameListAnalyzer::E_BACKINGCOMPONENT |
-                                        FrameListAnalyzer::E_HIDDEN);
+                                        FrameAnalyzerFlags::Help |
+                                        FrameAnalyzerFlags::BackingComponent |
+                                        FrameAnalyzerFlags::Hidden);
 
             sal_Int32 nOpenDocuments = aAnalyzer.m_lOtherVisibleFrames.size();
                       bAllowed       = (nOpenDocuments < nMaxOpenDocuments);
@@ -1352,7 +1352,7 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
         return css::uno::Reference< css::frame::XFrame >();
 
     css::uno::Reference< css::frame::XFramesSupplier > xSupplier( css::frame::Desktop::create( m_xContext ), css::uno::UNO_QUERY);
-    FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameListAnalyzer::E_BACKINGCOMPONENT);
+    FrameListAnalyzer aTasksAnalyzer(xSupplier, css::uno::Reference< css::frame::XFrame >(), FrameAnalyzerFlags::BackingComponent);
     if (aTasksAnalyzer.m_xBackingComponent.is())
     {
         if (!impl_isFrameAlreadyUsedForLoading(aTasksAnalyzer.m_xBackingComponent))

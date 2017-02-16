@@ -21,9 +21,29 @@
 #define INCLUDED_FRAMEWORK_FRAMELISTANALYZER_HXX
 
 #include <com/sun/star/frame/XFrame.hpp>
-
 #include <framework/fwedllapi.h>
+#include <o3tl/typed_flags_set.hxx>
+
 #include <vector>
+
+/** These enums can be combined as flags to enable/disable
+    special search algorithm during analyze phase.
+    see impl_analyze() for further information.
+    But note: To be useable as flags, these enums
+    must be values of range [2^n]! */
+enum class FrameAnalyzerFlags
+{
+    Model             =     1,
+    Help              =     2,
+    BackingComponent  =     4,
+    Hidden            =     8,
+    All               =    15,
+    Zombie            = 32768 // use it for special test scenarios only!!!
+};
+namespace o3tl {
+    template<> struct typed_flags<FrameAnalyzerFlags> : is_typed_flags<FrameAnalyzerFlags, 32768+15> {};
+}
+
 
 namespace framework{
 
@@ -41,22 +61,6 @@ class FWE_DLLPUBLIC FrameListAnalyzer final
 
     public:
 
-        /** These enums can be combined as flags to enable/disable
-            special search algorithm during analyze phase.
-            see impl_analyze() for further information.
-            But note: To be useable as flags, these enums
-            must be values of range [2^n]! */
-        enum EDetect
-        {
-            E_MODEL             =     1,
-            E_HELP              =     2,
-            E_BACKINGCOMPONENT  =     4,
-            E_HIDDEN            =     8,
-            E_ALL               =    15,
-            E_ZOMBIE            = 32768 // use it for special test scenarios only!!!
-        };
-
-
     // member
 
     public:
@@ -69,10 +73,10 @@ class FWE_DLLPUBLIC FrameListAnalyzer final
 
         /** enable/disable some special analyzing steps.
             see impl_analyze() for further information. */
-        sal_uInt32 m_eDetectMode;
+        FrameAnalyzerFlags m_eDetectMode;
 
         /** contains all frames, which uses the same model like the reference frame.
-            Will be filled only if m_eDetectMode has set the flag E_MODEL.
+            Will be filled only if m_eDetectMode has set the flag FrameAnalyzerFlags::Model.
             The reference frame is never part of this list! */
         std::vector< css::uno::Reference< css::frame::XFrame > > m_lModelFrames;
 
@@ -140,17 +144,17 @@ class FWE_DLLPUBLIC FrameListAnalyzer final
         css::uno::Reference< css::frame::XFrame > m_xBackingComponent;
 
         /** is set to true only, if the reference frame is a hidden one.
-            This value is undefined if m_eDetectMode doesn't have set the flag E_HIDDEN! */
+            This value is undefined if m_eDetectMode doesn't have set the flag FrameAnalyzerFlags::Hidden! */
         bool m_bReferenceIsHidden;
 
         /** is set to true only, if the reference frame contains the help component.
             In this case the member m_xHelp is set to NULL every time.
-            This value is undefined if m_eDetectMode doesn't have set the flag E_HELP! */
+            This value is undefined if m_eDetectMode doesn't have set the flag FrameAnalyzerFlags::Help! */
         bool m_bReferenceIsHelp;
 
         /** is set to true only, if the reference frame contains the backing component.
             In this case the member m_xBackingComponent is set to NULL every time.
-            This value is undefined if m_eDetectMode doesn't have set the flag E_BACKINGCOMPONENT! */
+            This value is undefined if m_eDetectMode doesn't have set the flag FrameAnalyzerFlags::BackingComponent! */
         bool m_bReferenceIsBacking;
 
 
@@ -176,7 +180,7 @@ class FWE_DLLPUBLIC FrameListAnalyzer final
          */
                  FrameListAnalyzer( const css::uno::Reference< css::frame::XFramesSupplier >& xSupplier       ,
                                     const css::uno::Reference< css::frame::XFrame >&          xReferenceFrame ,
-                                          sal_uInt32                                          eDetectMode     );
+                                          FrameAnalyzerFlags                                  eDetectMode     );
                  ~FrameListAnalyzer();
 
 

@@ -111,7 +111,7 @@ bool StartModuleDispatcher::implts_isBackingModePossible()
     FrameListAnalyzer aCheck(
         xDesktop,
         css::uno::Reference< css::frame::XFrame >(),
-        FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
+        FrameAnalyzerFlags::Help | FrameAnalyzerFlags::BackingComponent);
 
     bool  bIsPossible    = false;
 

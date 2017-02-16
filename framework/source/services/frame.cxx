@@ -3254,7 +3254,7 @@ void Frame::impl_checkMenuCloser()
     FrameListAnalyzer aAnalyzer(
         xTaskSupplier,
         this,
-        FrameListAnalyzer::E_HIDDEN | FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
+        FrameAnalyzerFlags::Hidden | FrameAnalyzerFlags::Help | FrameAnalyzerFlags::BackingComponent);
 
     // specify the new frame, which must have this special state ...
     css::uno::Reference< css::frame::XFrame2 > xNewCloserFrame;

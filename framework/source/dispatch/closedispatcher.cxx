@@ -287,7 +287,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
     // If we found some special cases, we can
     // make some decisions earlier!
     css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create(xContext), css::uno::UNO_QUERY_THROW);
-    FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameListAnalyzer::E_HELP | FrameListAnalyzer::E_BACKINGCOMPONENT);
+    FrameListAnalyzer aCheck1(xDesktop, xCloseFrame, FrameAnalyzerFlags::Help | FrameAnalyzerFlags::BackingComponent);
 
     // Check for existing UNO connections.
     // NOTE: There is a race between checking this and connections being created/destroyed before
@@ -330,7 +330,7 @@ IMPL_LINK_NOARG(CloseDispatcher, impl_asyncCallback, LinkParamNone*, void)
         {
             // OK; this frame is empty now.
             // Check the environment again to decide, what is the next step.
-            FrameListAnalyzer aCheck2(xDesktop, xCloseFrame, FrameListAnalyzer::E_ALL);
+            FrameListAnalyzer aCheck2(xDesktop, xCloseFrame, FrameAnalyzerFlags::All);
 
             // c1) there is as minimum 1 frame open, which is visible and contains a document
             //     different from our one. And it's not the help!
@@ -456,7 +456,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
         }
 
         css::uno::Reference< css::frame::XFramesSupplier > xDesktop( css::frame::Desktop::create( xContext ), css::uno::UNO_QUERY_THROW);
-        FrameListAnalyzer aCheck(xDesktop, xFrame, FrameListAnalyzer::E_ALL);
+        FrameListAnalyzer aCheck(xDesktop, xFrame, FrameAnalyzerFlags::All);
 
         size_t c = aCheck.m_lModelFrames.size();
         size_t i = 0;
