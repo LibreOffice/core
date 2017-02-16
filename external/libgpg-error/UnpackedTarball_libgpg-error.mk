@@ -11,4 +11,10 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,libgpg-error))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,libgpg-error,$(LIBGPGERROR_TARBALL)))
 
+$(eval $(call gb_UnpackedTarball_set_patchlevel,libgpg-error,0))
+
+$(eval $(call gb_UnpackedTarball_add_patches,libgpg-error, \
+    external/libgpg-error/fix-autoconf-macros.patch \
+))
+
 # vim: set noet sw=4 ts=4:
