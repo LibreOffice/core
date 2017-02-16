@@ -32,7 +32,7 @@ a:active { color: #4dadea; }
 	   margin-right: 0;
 	   font-family: Arial, Helvetica, sans-serif; }
 
-.note { font-size: 20;
+.note { font-size: 20px;
         font-weight: bold;
 	font-style: italic; 
 	text-align: center; }
@@ -44,94 +44,93 @@ a:active { color: #4dadea; }
 
 .table2 { width: 100%;
 	  border-style: none;
-	  border-spacing: 8;
-	  padding: 5; }
+	  border-spacing: 8px;
+	  padding: 5px; }
 
 .table3 { width: 100%;
 	  border-style: none;
-	  border-spacing: 6;
+	  border-spacing: 0px 6px;
 	  padding: 0; }
 
 .table4 { width: 100%;
-	  border-width: 2px; 
-	  border-style: groove;
-	  border-color: #CCCCCC;
+	  border-width: 1px; 
+	  border-style: solid;
+	  border-color: #555555;
 	  border-spacing: 0; 
 	  border-collapse: collapse; }
 
 .cell15 { width: 15%; 
-	  border-width: 2px; 
-	  border-style: groove;
-	  border-color: #CCCCCC;
+	  border-width: 1px; 
+	  border-style: solid;
+	  border-color: #555555;
 	  border-spacing: 0;
 	  border-collapse: collapse; 
-	  padding: 4; }
+	  padding: 4px; }
 
 .cell20 { width: 20%; 
-	  border-width: 2px; 
-	  border-style: groove;
-	  border-color: #CCCCCC;
+	  border-width: 1px; 
+	  border-style: solid;
+	  border-color: #555555;
 	  border-spacing: 0;
 	  border-collapse: collapse; 
-	  padding: 4; }
+	  padding: 4px; }
 
 .cell80 { width: 80%;
-	  border-width: 2px; 
-	  border-style: groove;
-	  border-color: #CCCCCC;
+	  border-width: 1px; 
+	  border-style: solid;
+	  border-color: #555555;
 	  border-spacing: 0;
 	  border-collapse: collapse;
-	  padding: 4; }
+	  padding: 4px; }
 
 .cell85 { width: 85%; 
-	  border-width: 2px; 
-	  border-style: groove;
-	  border-color: #CCCCCC;
+	  border-width: 1px; 
+	  border-style: solid;
+	  border-color: #555555;
 	  border-spacing: 0;
 	  border-collapse: collapse; 
-	  padding: 4; }
+	  padding: 4px; }
 
-.nothing1 { width: 20;
-	   height: 1; }
+.nothing1 { width: 20px;
+	   height: 1px; }
 
-.nothing8 { width: 20;
-	    height: 8; }
+.nothing8 { width: 20px;
+	    height: 8px; }
 
-.nothing10 { width: 20;
-	    height: 10; }
+.nothing10 { width: 20px;
+	    height: 10px; }
 
-.nothing30 { width: 20;
-	    height: 30; }
+.nothing30 { width: 20px;
+	    height: 30px; }
 
 
-.appicon { width: 32;
-	   height: 32;
+.appicon { width: 32px;
+	   height: 32px;
 	   border: 0; }
 
 .line { width: 100%;
-        height: 2px;
+        height: 1px;
 	border: 0; 
 	vertical-align: middle; }
 
 
-.arrow { width: 16;
-	 height: 13; }
+.arrow { width: 16px;
+	 height: 13px; }
 
-.head1 { font-size: 20;
+.head1 { font-size: 20px;
          font-weight: bold; }
 
-.head2 { font-size: 18;
+.head2 { font-size: 18px;
          font-weight: bold; }
 
-.head3 { font-size: 17;
+.head3 { font-size: 17px;
          font-weight: bold; }
 
-.head4 { font-size: 16;
+.head4 { font-size: 16px;
          font-weight: bold; }
 
 .thead { font-weight: bold;
-         background-image:url(../docs/images/bg_table.png);
-	 background-position: middle; }
+         background-color: #CCCCCC; }
 
 .navigate { border: 0; }
 
@@ -146,5 +145,5 @@ a:active { color: #4dadea; }
 .content87 { width: 87%; }
 
 .centertext { padding-left:20px; padding-bottom:5px; text-align:left; font-size: 12px; line-height:10pt; }
-.apachelogo { float: right; text-align: left; padding-bottom: 12px; padding-right: 8px; width: 188px; height: 76px; }
+.apachelogo { float: right; text-align: left; padding-bottom: 12px; padding-right: 8px; padding-left: 5px; width: 188px; height: 76px; }
 
