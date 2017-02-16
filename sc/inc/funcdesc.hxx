@@ -220,7 +220,7 @@ public:
     sal_uInt16            nCategory;              /**< Function category */
     sal_uInt16            nArgCount;              /**< All parameter count, suppressed and unsuppressed */
     sal_uInt16            nVarArgsStart;          /**< Start of variable arguments, for numbering */
-    OString          sHelpId;                /**< HelpId of function */
+    OString               sHelpId;                /**< HelpId of function */
     bool                  bIncomplete         :1; /**< Incomplete argument info (set for add-in info from configuration) */
     bool                  bHasSuppressedArgs  :1; /**< Whether there is any suppressed parameter. */
     bool                  mbHidden            :1; /**< Whether function is hidden */

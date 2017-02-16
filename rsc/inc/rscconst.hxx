@@ -77,7 +77,7 @@ public:
     void            WriteSrc( const RSCINST &rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
+                             RscTypCont * pTC, sal_uInt32 ) override;
 };
 
 class RscNameTable;

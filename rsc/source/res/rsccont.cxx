@@ -677,13 +677,13 @@ void RscBaseCont::ContWriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                                  RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
+                                  RscTypCont * pTC, sal_uInt32 nDeep )
 {
     RscBaseContInst * pClassData;
     ERRTYPE       aError;
 
-    if( bExtra || bNoId )
-    { // only write sub resources when bExtra == true
+    if( bNoId )
+    {
         pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
         for (sal_uInt32 i = 0; i < pClassData->nEntries && aError.IsOk(); i++ )
@@ -692,7 +692,7 @@ ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
                          WriteRcHeader( pClassData->pEntries[ i ].aInst,
                                         rMem, pTC,
                                         pClassData->pEntries[ i ].aName,
-                                        nDeep, bExtra );
+                                        nDeep );
         }
     }
 
@@ -708,13 +708,13 @@ void RscBaseCont::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscBaseCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                              RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
+                              RscTypCont * pTC, sal_uInt32 nDeep )
 {
     ERRTYPE       aError;
 
-    aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+    aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep );
     if( aError.IsOk() )
-        aError = ContWriteRc( rInst, rMem, pTC, nDeep, bExtra );
+        aError = ContWriteRc( rInst, rMem, pTC, nDeep );
 
     return aError;
 }
@@ -752,37 +752,19 @@ RscCont::RscCont( Atom nId, RESOURCE_TYPE nTypeId )
 }
 
 ERRTYPE RscCont::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                                 RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
+                                 RscTypCont * pTC, sal_uInt32 nDeep )
 {
     RscBaseContInst * pClassData;
     ERRTYPE aError;
 
-    aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+    aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep );
 
     pClassData = reinterpret_cast<RscBaseContInst *>(rInst.pData + nOffInstData);
 
     rMem.Put( pClassData->nEntries );
 
     if( aError.IsOk() )
-        aError = ContWriteRc( rInst, rMem, pTC, nDeep, bExtra );
-
-    return aError;
-}
-
-RscContExtraData::RscContExtraData( Atom nId, RESOURCE_TYPE nTypeId )
-    : RscContWriteSrc( nId, nTypeId )
-{
-}
-
-ERRTYPE RscContExtraData::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                                   RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
-{
-    ERRTYPE aError;
-
-    if( bExtra )
-        aError = RscContWriteSrc::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
-    else
-        aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+        aError = ContWriteRc( rInst, rMem, pTC, nDeep );
 
     return aError;
 }

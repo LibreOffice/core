@@ -59,7 +59,7 @@ public:
     void            WriteSrc( const RSCINST &, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
+                             RscTypCont * pTC, sal_uInt32 ) override;
 };
 
 #endif // INCLUDED_RSC_INC_RSCSTR_HXX

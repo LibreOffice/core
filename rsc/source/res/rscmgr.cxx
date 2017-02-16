@@ -158,7 +158,7 @@ void RscMgr::WriteSrc( const RSCINST &, FILE *, RscTypCont *, sal_uInt32,
 
 ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                RscTypCont * pTC, const RscId &rId,
-                               sal_uInt32 nDeep, bool bExtra )
+                               sal_uInt32 nDeep )
 {
     RscMgrInst *    pClassData;
     ERRTYPE         aError;
@@ -196,13 +196,13 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
             if( pTmpRefClass == rInst.pClass )
             {
                 aError = aRefI.pClass->WriteRcHeader( aRefI, rMem, pTC,
-                                                       rId, nDeep, bExtra );
+                                                       rId, nDeep );
             }
             else
             {
                 RSCINST aRefInst = rInst.pClass->Create( nullptr, aRefI );
                 aError = aRefI.pClass->WriteRcHeader( aRefInst, rMem, pTC,
-                                                       rId, nDeep, bExtra );
+                                                       rId, nDeep );
                 pTmpRefClass->Destroy( aRefInst );
             }
         }
@@ -213,15 +213,15 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 
             nOldSize = rMem.IncSize( 16 /*sizeof( RSHEADER_TYPE )*/ );
 
-            aError = rInst.pClass->WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+            aError = rInst.pClass->WriteRc( rInst, rMem, pTC, nDeep );
             if( aError.IsOk() )
-                aError = WriteInstRc( rInst, rMem, pTC, nDeep, bExtra );
+                aError = WriteInstRc( rInst, rMem, pTC, nDeep );
             nLocalSize = rMem.Size();
 
             if( aError.IsOk() )
             {
                 // RscClass is skipped
-                aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+                aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep );
             }
 
             /*
@@ -245,7 +245,7 @@ ERRTYPE RscMgr::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
 }
 
 ERRTYPE RscMgr::WriteRc( const RSCINST &, RscWriteRc &,
-                         RscTypCont *, sal_uInt32, bool )
+                         RscTypCont *, sal_uInt32 )
 
 {
     return ERR_OK;

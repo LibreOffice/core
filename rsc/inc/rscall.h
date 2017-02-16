@@ -41,7 +41,6 @@ extern OString* pStdPar2;
 extern sal_uInt32       nRefDeep;
 extern sal_uInt32       nRsc_DELTALANG;
 extern sal_uInt32       nRsc_DELTASYSTEM;
-extern sal_uInt32       nRsc_EXTRADATA;
 extern AtomContainer*   pHS;
 
 /******************* D e f i n e s ***************************************/

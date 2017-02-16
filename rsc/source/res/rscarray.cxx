@@ -387,7 +387,7 @@ void RscArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                           RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
+                           RscTypCont * pTC, sal_uInt32 nDeep )
 {
     ERRTYPE aError;
     RscArrayInst * pClassData;
@@ -415,9 +415,9 @@ ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
     if( pNode )
         aError = pNode->aInst.pClass->WriteRc( pNode->aInst, rMem, pTC,
-                                                nDeep, bExtra );
+                                                nDeep );
     else
-        aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+        aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep );
 
     return aError;
 }

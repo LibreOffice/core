@@ -567,8 +567,7 @@ void RscClass::WriteSrc( const RSCINST & rInst,
 ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
                                RscWriteRc & rMem,
                                RscTypCont * pTC,
-                               sal_uInt32 nDeep,
-                               bool bExtra)
+                               sal_uInt32 nDeep )
 {
     sal_uInt32 i = 0;
     ERRTYPE aError;
@@ -595,11 +594,9 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
                 if( !IsDflt( rInst.pData, i ) )
                 {
                     aTmpI = GetInstData( rInst.pData, i, true );
-                    // set only for variable extradata with bExtra not false
                     aError = aTmpI.pClass->
-                        WriteRcHeader( aTmpI, rMem, pTC,
-                                       RscId(), nDeep,
-                                       (nRsc_EXTRADATA == pVarTypeList[ i ].nVarName) && bExtra );
+                        WriteRcHeader(aTmpI, rMem, pTC,
+                                      RscId(), nDeep);
                     sal_uInt32 nMask = rMem.GetLong( nMaskOff );
                     nMask |= pVarTypeList[ i ].nMask;
                     rMem.PutAt( nMaskOff, nMask );
@@ -615,11 +612,9 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
                 else
                     aTmpI = GetInstData( rInst.pData, i, true );
 
-                // set only for variable extradata with bExtra not false
                 aError = aTmpI.pClass->
                             WriteRcHeader( aTmpI, rMem, pTC,
-                                        RscId(), nDeep,
-                                        (nRsc_EXTRADATA == pVarTypeList[ i ].nVarName) && bExtra );
+                                        RscId(), nDeep );
             }
         }
     }
@@ -630,14 +625,13 @@ ERRTYPE RscClass::WriteInstRc( const RSCINST & rInst,
 ERRTYPE RscClass::WriteRc( const RSCINST & rInst,
                            RscWriteRc & rMem,
                            RscTypCont * pTC,
-                           sal_uInt32 nDeep,
-                           bool bExtra)
+                           sal_uInt32 nDeep )
 {
     ERRTYPE aError;
 
-    aError = RscTop::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+    aError = RscTop::WriteRc(rInst, rMem, pTC, nDeep);
     if( aError.IsOk() )
-        aError = WriteInstRc( rInst, rMem, pTC, nDeep, bExtra );
+        aError = WriteInstRc(rInst, rMem, pTC, nDeep);
 
     return aError;
 }
@@ -648,7 +642,7 @@ RscSysDepend::RscSysDepend( Atom nId, RESOURCE_TYPE nTypeId, RscTop * pSuper )
 }
 
 ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem,
-                                        RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
+                                        RscTypCont * pTC, sal_uInt32 nDeep )
 {
     ERRTYPE     aError;
     RSCINST     aFileName;
@@ -659,7 +653,7 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
     {
         RscWriteRc aTmpMem;
         aError = aFileName.pClass->WriteRcHeader( aFileName, aTmpMem, pTC,
-                                                  RscId(), nDeep, bExtra );
+                                                  RscId(), nDeep );
         // Obsolete - need changes in VCL
         rMem.Put( sal_uInt32(0) );
 
@@ -672,7 +666,7 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
         }
         rMem.Put( nId );
         aError = aFileName.pClass->WriteRcHeader( aFileName, rMem, pTC,
-                                                  RscId(), nDeep, bExtra );
+                                                  RscId(), nDeep );
     }
     else
         aError = ERR_ERROR;
@@ -681,14 +675,14 @@ ERRTYPE RscSysDepend::WriteSysDependRc( const RSCINST & rInst, RscWriteRc & rMem
 }
 
 ERRTYPE RscSysDepend::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                               RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
+                               RscTypCont * pTC, sal_uInt32 nDeep )
 {
-    ERRTYPE     aError = RscClass::WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+    ERRTYPE     aError = RscClass::WriteRc( rInst, rMem, pTC, nDeep );
 
     if( this == rInst.pClass )
     {
         // only when it is own class
-        aError = WriteSysDependRc( rInst, rMem, pTC, nDeep, bExtra );
+        aError = WriteSysDependRc( rInst, rMem, pTC, nDeep );
     }
     return aError;
 }

@@ -117,7 +117,7 @@ void RscRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                           RscTypCont *, sal_uInt32, bool )
+                           RscTypCont *, sal_uInt32 )
 {
     if( nMin >= 0 )
     {
@@ -231,7 +231,7 @@ void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscLongRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                               RscTypCont *, sal_uInt32, bool )
+                               RscTypCont *, sal_uInt32 )
 {
     sal_Int32 lVal;
 
@@ -372,7 +372,7 @@ void RscIdRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscIdRange::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont *, sal_uInt32, bool )
+                             RscTypCont *, sal_uInt32 )
 {
     sal_Int32 lVal = reinterpret_cast<RscId*>(rInst.pData)->GetNumber();
 

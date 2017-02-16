@@ -181,7 +181,7 @@ void RscEnum::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscEnum::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                          RscTypCont *, sal_uInt32, bool )
+                          RscTypCont *, sal_uInt32 )
 {
     aMem.Put( (sal_Int32)pVarArray[ reinterpret_cast<RscEnumInst *>(rInst.pData)->nValue ].lValue );
     return ERR_OK;

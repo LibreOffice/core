@@ -204,9 +204,9 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab,const char * );
     virtual ERRTYPE WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & aId,
-                                    sal_uInt32 nDeep, bool bExtra );
+                                    sal_uInt32 nDeep );
     virtual ERRTYPE WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra );
+                             RscTypCont * pTC, sal_uInt32 nDeep );
 };
 
 #endif // INCLUDED_RSC_INC_RSCTOP_HXX

@@ -275,7 +275,7 @@ IMPL_LINK( RscEnumerateObj, CallBackWriteRc, const NameNode&, rNode, void )
 
     aError = pClass->WriteRcHeader( RSCINST( pClass, rObjNode.GetRscObj() ),
                                      aMem, pTypCont,
-                                     rObjNode.GetRscId(), 0, true );
+                                     rObjNode.GetRscId(), 0 );
     if( aError.IsError() || aError.IsWarning() )
         pTypCont->pEH->Error( aError, pClass, rObjNode.GetRscId() );
 
@@ -393,7 +393,7 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 
     // version control
     RscWriteRc aMem( nByteOrder );
-    aVersion.pClass->WriteRcHeader( aVersion, aMem, this, RscId( RSCVERSION_ID ), 0, true );
+    aVersion.pClass->WriteRcHeader( aVersion, aMem, this, RscId( RSCVERSION_ID ), 0 );
     aEnumRef.aEnumObj.WriteRcFile( aMem, rContext.fOutput );
 
     return aError;

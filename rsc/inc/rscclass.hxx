@@ -87,9 +87,9 @@ public:
     void            WriteSrc( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
     ERRTYPE         WriteInstRc( const RSCINST & rInst, RscWriteRc & aMem,
-                                 RscTypCont * pTC, sal_uInt32, bool bExtra );
+                                 RscTypCont * pTC, sal_uInt32 );
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
+                             RscTypCont * pTC, sal_uInt32 ) override;
 };
 
 class RscSysDepend : public RscClass
@@ -97,9 +97,9 @@ class RscSysDepend : public RscClass
 public:
                     RscSysDepend( Atom nId, RESOURCE_TYPE nTypId, RscTop * pSuper );
     ERRTYPE         WriteSysDependRc( const RSCINST &, RscWriteRc & aMem,
-                                      RscTypCont * pTC, sal_uInt32, bool bExtra );
+                                      RscTypCont * pTC, sal_uInt32 );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
+                             RscTypCont * pTC, sal_uInt32 ) override;
 };
 
 class RscTupel : public RscClass
