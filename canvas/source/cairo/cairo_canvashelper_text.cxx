@@ -37,11 +37,6 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
-    enum ColorType
-    {
-        LINE_COLOR, FILL_COLOR, TEXT_COLOR, IGNORE_COLOR
-    };
-
     uno::Reference< rendering::XCanvasFont > CanvasHelper::createFont( const rendering::XCanvas*                    ,
                                                                        const rendering::FontRequest&                fontRequest,
                                                                        const uno::Sequence< beans::PropertyValue >& extraFontProperties,
@@ -114,14 +109,13 @@ namespace cairocanvas
     setupOutDevState( OutputDevice&                 rOutDev,
                       const rendering::XCanvas*     pOwner,
                       const rendering::ViewState&   viewState,
-                      const rendering::RenderState& renderState,
-                      ColorType                     eColorType )
+                      const rendering::RenderState& renderState )
     {
         ::canvas::tools::verifyInput( renderState,
                                       OSL_THIS_FUNC,
                                       const_cast<rendering::XCanvas*>(pOwner), // only for refcount
                                       2,
-                                      eColorType == IGNORE_COLOR ? 0 : 3 );
+                                      3 /* text */ );
 
         int nTransparency(0);
 
@@ -129,45 +123,19 @@ namespace cairocanvas
         // state and change only when update is necessary
         ::canvas::tools::clipOutDev(viewState, renderState, rOutDev);
 
-        if( eColorType != IGNORE_COLOR )
+        Color aColor( COL_WHITE );
+
+        if( renderState.DeviceColor.getLength() > 2 )
         {
-            Color aColor( COL_WHITE );
-
-            if( renderState.DeviceColor.getLength() > 2 )
-            {
-                aColor = vcl::unotools::stdColorSpaceSequenceToColor( renderState.DeviceColor );
-            }
-
-            // extract alpha, and make color opaque
-            // afterwards. Otherwise, OutputDevice won't draw anything
-            nTransparency = aColor.GetTransparency();
-            aColor.SetTransparency(0);
-
-            switch( eColorType )
-            {
-                case LINE_COLOR:
-                    rOutDev.SetLineColor( aColor );
-                    rOutDev.SetFillColor();
-
-                    break;
-
-                case FILL_COLOR:
-                    rOutDev.SetFillColor( aColor );
-                    rOutDev.SetLineColor();
-
-                    break;
-
-                case TEXT_COLOR:
-                    rOutDev.SetTextColor( aColor );
-
-                    break;
-
-                default:
-                    ENSURE_OR_THROW( false,
-                                      "CanvasHelper::setupOutDevState(): Unexpected color type");
-                    break;
-            }
+            aColor = vcl::unotools::stdColorSpaceSequenceToColor( renderState.DeviceColor );
         }
+
+        // extract alpha, and make color opaque
+        // afterwards. Otherwise, OutputDevice won't draw anything
+        nTransparency = aColor.GetTransparency();
+        aColor.SetTransparency(0);
+
+        rOutDev.SetTextColor( aColor );
 
         return nTransparency;
     }
@@ -204,7 +172,7 @@ namespace cairocanvas
                           const rendering::RenderState&                     renderState,
                           const uno::Reference< rendering::XCanvasFont >&   xFont   )
     {
-        setupOutDevState( rOutDev, pOwner, viewState, renderState, TEXT_COLOR );
+        setupOutDevState( rOutDev, pOwner, viewState, renderState );
 
         CanvasFont* pFont = dynamic_cast< CanvasFont* >( xFont.get() );
 
