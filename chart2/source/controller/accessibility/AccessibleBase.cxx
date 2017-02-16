@@ -122,14 +122,7 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
         aSelected <<= AccessibleStateType::SELECTED;
         switch( eEventType )
         {
-            case OBJECT_CHANGE:
-                {
-                    BroadcastAccEvent( AccessibleEventId::VISIBLE_DATA_CHANGED, aEmpty, aEmpty );
-                    SAL_INFO("chart2.accessibility", "Visible data event sent by: " << getAccessibleName());
-                }
-                break;
-
-            case GOT_SELECTION:
+            case EventType::GOT_SELECTION:
                 {
                     AddState( AccessibleStateType::SELECTED );
                     BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aSelected, aEmpty );
@@ -142,7 +135,7 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
                 }
                 break;
 
-            case LOST_SELECTION:
+            case EventType::LOST_SELECTION:
                 {
                     RemoveState( AccessibleStateType::SELECTED );
                     BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aEmpty, aSelected );
@@ -151,12 +144,6 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
                     aSelected <<= AccessibleStateType::FOCUSED;
                     BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aEmpty, aSelected, true );
                     SAL_INFO("chart2.accessibility", "Selection lost by: " << getAccessibleName());
-                }
-                break;
-
-            case PROPERTY_CHANGE:
-                {
-                    //not implemented --> rebuild all
                 }
                 break;
         }

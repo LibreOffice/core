@@ -93,12 +93,10 @@ class AccessibleBase :
     public impl::AccessibleBase_Base
 {
 public:
-    enum EventType
+    enum class EventType
     {
-        OBJECT_CHANGE,
         GOT_SELECTION,
-        LOST_SELECTION,
-        PROPERTY_CHANGE
+        LOST_SELECTION
     };
 
     AccessibleBase( const AccessibleElementInfo & rAccInfo,

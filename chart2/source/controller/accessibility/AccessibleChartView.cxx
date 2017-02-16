@@ -338,11 +338,11 @@ void SAL_CALL AccessibleChartView::selectionChanged( const lang::EventObject& /*
         ObjectIdentifier aSelectedOID( xSelectionSupplier->getSelection() );
         if ( m_aCurrentSelectionOID.isValid() )
         {
-            NotifyEvent( LOST_SELECTION, m_aCurrentSelectionOID );
+            NotifyEvent( EventType::LOST_SELECTION, m_aCurrentSelectionOID );
         }
         if( aSelectedOID.isValid() )
         {
-            NotifyEvent( GOT_SELECTION, aSelectedOID );
+            NotifyEvent( EventType::GOT_SELECTION, aSelectedOID );
         }
         m_aCurrentSelectionOID = aSelectedOID;
     }
