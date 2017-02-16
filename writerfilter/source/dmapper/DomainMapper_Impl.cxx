@@ -2307,6 +2307,14 @@ static OUString lcl_ExtractToken(OUString const& rCommand,
                     }
                 }
             break;
+            case '=':
+                if (token.isEmpty())
+                {
+                    rHaveToken = true;
+                    ++rIndex;
+                    return OUString("FORMULA");
+                }
+            break;
             default:
                 token.append(currentChar);
             break;
@@ -2837,7 +2845,7 @@ if(!bFilled)
             {OUString("FILLIN"),        "Input",                    FIELD_FILLIN       },
             {OUString("FILENAME"),      "FileName",                 FIELD_FILENAME     },
 //            {OUString("FILESIZE"),      "",                         FIELD_FILESIZE     },
-//            {OUString("FORMULA"),     "",                           FIELD_FORMULA },
+            {OUString("FORMULA"),       "TableFormula",             FIELD_FORMULA },
             {OUString("FORMCHECKBOX"),     "",                        FIELD_FORMCHECKBOX},
             {OUString("FORMDROPDOWN"),     "DropDown",                FIELD_FORMDROPDOWN},
             {OUString("FORMTEXT"),     "Input", FIELD_FORMTEXT},
@@ -3007,6 +3015,23 @@ void DomainMapper_Impl::handleFieldAsk
     }
 }
 
+void DomainMapper_Impl::handleFieldFormula
+    (const FieldContextPtr& pContext,
+     uno::Reference< beans::XPropertySet > const& xFieldProperties)
+{
+    OUString command = pContext->GetCommand().trim();
+    // command must contains = and at least another char
+    if (command.getLength() < 2)
+        return;
+
+    // we don't copy the = symbol from the command
+    OUString formula = command.copy(1);
+    sal_Int32 standardFormat = 0;
+
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny(formula));
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_NUMBER_FORMAT), uno::makeAny(standardFormat));
+    xFieldProperties->setPropertyValue("IsShowFormula", uno::makeAny(false));
+}
 
 void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
 {
@@ -3853,7 +3878,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                     break;
                     case FIELD_FILESIZE     : break;
-                    case FIELD_FORMULA : break;
+                    case FIELD_FORMULA :
+                        handleFieldFormula(pContext, xFieldProperties);
+                    break;
                     case FIELD_FORMCHECKBOX :
                     case FIELD_FORMDROPDOWN :
                     case FIELD_FORMTEXT :
