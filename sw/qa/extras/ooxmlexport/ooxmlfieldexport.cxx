@@ -432,7 +432,7 @@ DECLARE_OOXMLEXPORT_TEST(testFDO76163 , "fdo76163.docx")
     if (!pXmlDoc)
         return;
     //docx file after RT is getting corrupted.
-    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink/w:r[11]/w:fldChar", "fldCharType", "end" );
+    assertXPath ( pXmlDoc, "/w:document/w:body/w:p[2]/w:hyperlink/w:r[10]/w:fldChar", "fldCharType", "end" );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFDO78659, "fdo78659.docx")
