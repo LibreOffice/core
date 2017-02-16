@@ -1930,7 +1930,6 @@ static bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
              (rLocaleDataWrapper.getTimePM().indexOf(cChar) != -1) ||
              // Accept AM/PM:
              (cChar == 'a') || (cChar == 'A') || (cChar == 'm') || (cChar == 'M') || (cChar == 'p') || (cChar == 'P') ||
-             ((eFormat == TimeFieldFormat::F_100TH_SEC) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
              ((eFormat == TimeFieldFormat::F_SEC_CS) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
              (bDuration && (cChar == '-')) )
             return false;
@@ -2185,8 +2184,6 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
     bool b100Sec = false;
     if ( meFormat != TimeFieldFormat::F_NONE )
         bSecond = true;
-    if ( meFormat == TimeFieldFormat::F_100TH_SEC )
-        b100Sec = true;
 
     if ( meFormat == TimeFieldFormat::F_SEC_CS )
     {
@@ -2412,7 +2409,7 @@ void TimeFormatter::ImplSetUserTime( const tools::Time& rNewTime, Selection* pNe
         bool b100Sec = false;
         if ( meFormat != TimeFieldFormat::F_NONE )
             bSec = true;
-        if ( meFormat == TimeFieldFormat::F_100TH_SEC || meFormat == TimeFieldFormat::F_SEC_CS )
+        if ( meFormat == TimeFieldFormat::F_SEC_CS )
             b100Sec = true;
         if ( meFormat == TimeFieldFormat::F_SEC_CS )
         {

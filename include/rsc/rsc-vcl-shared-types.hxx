@@ -23,7 +23,7 @@
 #include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 
-enum class TimeFieldFormat : sal_Int32 { F_NONE, F_SEC, F_100TH_SEC, F_SEC_CS };
+enum class TimeFieldFormat : sal_Int32 { F_NONE, F_SEC, F_SEC_CS };
 
 enum class KeyFuncType : sal_Int32 { DONTKNOW, NEW, OPEN, SAVE,
                    SAVEAS, PRINT, CLOSE, QUIT,
