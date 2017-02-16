@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_18e22404",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-02-16T00:22:00Z",
+      "side": 1,
+      "message": "not really - those Update* methods should be in front of any actual drawing output.\n\nCan you check why the next render action (polygon, rect, those guys) would miss out on the settings here?",
+      "revId": "e3523b106058e8ddf6a3baf8e7c081db3c5bef83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
