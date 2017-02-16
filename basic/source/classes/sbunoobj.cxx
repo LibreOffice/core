@@ -1500,7 +1500,7 @@ void processAutomationParams( SbxArray* pParams, Sequence< Any >& args, bool bOL
     }
 
 }
-enum INVOKETYPE
+enum class INVOKETYPE
 {
    GetProp = 0,
    SetProp,
@@ -1514,23 +1514,17 @@ Any invokeAutomationMethod( const OUString& Name, Sequence< Any >& args, SbxArra
     Any aRetAny;
     switch( invokeType )
     {
-        case Func:
+        case INVOKETYPE::Func:
             aRetAny = rxInvocation->invoke( Name, args, OutParamIndex, OutParam );
             break;
-        case GetProp:
+        case INVOKETYPE::GetProp:
             {
                 Reference< XAutomationInvocation > xAutoInv( rxInvocation, UNO_QUERY );
                 aRetAny = xAutoInv->invokeGetProperty( Name, args, OutParamIndex, OutParam );
                 break;
             }
-        case SetProp:
-            {
-                Reference< XAutomationInvocation > xAutoInv( rxInvocation, UNO_QUERY_THROW );
-                aRetAny = xAutoInv->invokePutProperty( Name, args, OutParamIndex, OutParam );
-                break;
-            }
         default:
-            break; // should introduce an error here
+            assert(false); break;
 
     }
     const sal_Int16* pIndices = OutParamIndex.getConstArray();
@@ -2085,7 +2079,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                             // XInvocation
                             Sequence<Any> args;
                             processAutomationParams( pParams, args, true, nParamCount );
-                            aRetAny = invokeAutomationMethod( pProp->GetName(), args, pParams, nParamCount, mxInvocation, GetProp );
+                            aRetAny = invokeAutomationMethod( pProp->GetName(), args, pParams, nParamCount, mxInvocation, INVOKETYPE::GetProp );
                         }
                         else
                             aRetAny = mxInvocation->getValue( pProp->GetName() );
@@ -2265,7 +2259,7 @@ void SbUnoObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     }
                     else if( bInvocation && mxInvocation.is() )
                     {
-                        Any aRetAny = invokeAutomationMethod( pMeth->GetName(), args, pParams, nParamCount, mxInvocation, Func );
+                        Any aRetAny = invokeAutomationMethod( pMeth->GetName(), args, pParams, nParamCount, mxInvocation, INVOKETYPE::Func );
                         unoToSbxValue( pVar, aRetAny );
                         }
 
