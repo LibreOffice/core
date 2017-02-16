@@ -2422,9 +2422,6 @@ namespace
             case eNoSelectStatement:
                 nResId = STR_QRY_NOSELECT;
                 break;
-            case eColumnInLikeNotFound:
-                nResId = STR_QRY_SYNTAX;
-                break;
             case eNoColumnInLike:
                 nResId = STR_QRY_SYNTAX;
                 break;
@@ -2436,9 +2433,6 @@ namespace
                 break;
             case eTooManyTables:
                 nResId = STR_QRY_TOO_MANY_TABLES;
-                break;
-            case eTooManyConditions:
-                nResId = STR_QRY_TOOMANYCOND;
                 break;
             case eTooManyColumns:
                 nResId = STR_QRY_TOO_MANY_COLUMNS;

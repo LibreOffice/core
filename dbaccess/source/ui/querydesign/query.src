@@ -243,11 +243,6 @@ String STR_QRY_NOSELECT
     Text [ en-US ] = "Nothing has been selected." ;
 };
 
-String STR_QRY_TOOMANYCOND
-{
-    Text [ en-US ] = "Too many search criteria" ;
-};
-
 String STR_QRY_SYNTAX
 {
     Text [ en-US ] = "SQL syntax error" ;

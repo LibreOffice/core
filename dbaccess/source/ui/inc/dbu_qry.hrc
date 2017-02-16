@@ -60,7 +60,7 @@
 #define STR_QRY_SYNTAX                      RID_STR_QRY_START + 38
 #define STR_QRY_NATIVE                      RID_STR_QRY_START + 39
 #define STR_QRY_TOO_MANY_TABLES             RID_STR_QRY_START + 40
-#define STR_QRY_TOOMANYCOND                 RID_STR_QRY_START + 41
+// empty
 #define STR_QUERYDESIGN                     RID_STR_QRY_START + 42
 #define STR_VIEWDESIGN                      RID_STR_QRY_START + 43
 #define STR_JOIN_TYPE_HINT                  RID_STR_QRY_START + 44

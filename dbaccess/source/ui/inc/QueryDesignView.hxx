@@ -41,12 +41,10 @@ namespace dbaui
         eNoConnection,
         eNoSelectStatement,
         eStatementTooComplex,
-        eColumnInLikeNotFound,
         eNoColumnInLike,
         eColumnNotFound,
         eNativeMode,
         eTooManyTables,
-        eTooManyConditions,
         eTooManyColumns,
         eIllegalJoinCondition,
         eOk
