@@ -24,7 +24,7 @@
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/field.hxx>
-#include "sc.hrc"
+#include "scres.hrc"
 #include "global.hxx"
 #include "pivot.hxx"
 #include <i18nlangtag/lang.h>

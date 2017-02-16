@@ -32,7 +32,7 @@
 #include <vcl/msgbox.hxx>
 
 #include "graphsh.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "viewdata.hxx"
 #include "drawview.hxx"
 #include "scresid.hxx"

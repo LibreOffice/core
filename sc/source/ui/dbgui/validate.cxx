@@ -34,7 +34,7 @@
 #include <sfx2/app.hxx>
 
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 
 #include "stringutil.hxx"
 #include "validat.hxx"

@@ -28,7 +28,7 @@
 #include "tabvwsh.hxx"
 #include "globstr.hrc"
 #include "global.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "undoolk.hxx"
 #include "target.hxx"
 #include "uiitems.hxx"

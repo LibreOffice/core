@@ -21,7 +21,7 @@
 #include "miscuno.hxx"
 #include "document.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "table.hxx"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

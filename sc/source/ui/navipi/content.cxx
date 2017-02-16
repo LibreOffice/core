@@ -49,7 +49,7 @@
 #include "lnktrans.hxx"
 #include "formulacell.hxx"
 #include "dociter.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "scresid.hxx"
 #include "globstr.hrc"
 #include "arealink.hxx"

@@ -26,7 +26,7 @@
 #include "docsh.hxx"
 #include "formulacell.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "unonames.hxx"
 #include "detfunc.hxx"
 #include "chgtrack.hxx"

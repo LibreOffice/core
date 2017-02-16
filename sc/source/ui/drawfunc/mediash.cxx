@@ -27,7 +27,7 @@
 #include <vcl/EnumContext.hxx>
 
 #include "mediash.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "viewdata.hxx"
 #include "drawview.hxx"
 #include "scresid.hxx"

@@ -76,7 +76,7 @@
 #include "funcdesc.hxx"
 #include "globstr.hrc"
 #include "scfuncs.hrc"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "scmod.hxx"
 #include "appoptio.hxx"
 #include "editutil.hxx"

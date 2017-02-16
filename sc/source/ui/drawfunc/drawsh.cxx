@@ -36,7 +36,7 @@
 
 #include "drawsh.hxx"
 #include "drwlayer.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "docpool.hxx"

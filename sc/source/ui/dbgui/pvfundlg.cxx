@@ -34,7 +34,7 @@
 #include "scresid.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "globstr.hrc"
 #include "dputil.hxx"
 

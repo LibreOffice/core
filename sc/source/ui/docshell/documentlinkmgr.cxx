@@ -20,7 +20,7 @@
 #include <documentlinkmgr.hxx>
 #include <datastream.hxx>
 #include <ddelink.hxx>
-#include <sc.hrc>
+#include <scres.hrc>
 #include <scresid.hxx>
 
 #include <svx/svdoole2.hxx>

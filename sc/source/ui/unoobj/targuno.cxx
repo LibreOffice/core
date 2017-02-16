@@ -34,7 +34,7 @@
 #include "docsh.hxx"
 #include "content.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "unonames.hxx"
 
 using  namespace ::com::sun::star;

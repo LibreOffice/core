@@ -25,7 +25,7 @@
 
 #include "dbfunc.hxx"
 
-#include "sc.hrc"
+#include "scres.hrc"
 
 #define DECL_WRAPPER_WITHID(Class) \
     class Class : public SfxChildWindow                                         \

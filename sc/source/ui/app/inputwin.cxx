@@ -46,7 +46,7 @@
 #include "uiitems.hxx"
 #include "global.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "globstr.hrc"
 #include "reffact.hxx"
 #include "editutil.hxx"

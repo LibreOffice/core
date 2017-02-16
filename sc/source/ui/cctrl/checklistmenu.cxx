@@ -20,7 +20,7 @@
 #include "checklistmenu.hxx"
 #include "globstr.hrc"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 
 #include <vcl/decoview.hxx>
 #include <vcl/settings.hxx>

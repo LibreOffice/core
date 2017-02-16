@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 #include "docsh.hxx"
 #include "docshimp.hxx"
 #include "docfunc.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
 #include "appoptio.hxx"

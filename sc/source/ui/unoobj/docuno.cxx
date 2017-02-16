@@ -121,7 +121,7 @@
 #include "transobj.hxx"
 #include "chgtrack.hxx"
 
-#include "sc.hrc"
+#include "scres.hrc"
 
 using namespace com::sun::star;
 

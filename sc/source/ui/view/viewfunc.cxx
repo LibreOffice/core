@@ -46,7 +46,7 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "uiitems.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "undocell.hxx"
 #include "undoblk.hxx"
 #include "undotab.hxx"

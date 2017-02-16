@@ -35,7 +35,7 @@
 #include <vcl/msgbox.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/sfxresid.hxx>
-#include "sc.hrc"
+#include "scres.hrc"
 #include "scmod.hxx"
 #include "attrib.hxx"
 #include "zforauto.hxx"

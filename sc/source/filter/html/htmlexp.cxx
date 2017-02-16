@@ -69,12 +69,12 @@
 #include <editeng/borderline.hxx>
 #include <unotools/syslocale.hxx>
 
-// Without sc.hrc: error C2679: binary '=' : no operator defined which takes a
+// Without scres.hrc: error C2679: binary '=' : no operator defined which takes a
 // right-hand operand of type 'const class String (__stdcall *)(class ScResId)'
 // at
 // const String aStrTable( ScResId( SCSTR_TABLE ) ); aStrOut = aStrTable;
 // ?!???
-#include "sc.hrc"
+#include "scres.hrc"
 #include "globstr.hrc"
 
 #include <com/sun/star/uno/Reference.h>

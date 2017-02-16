@@ -80,7 +80,7 @@
 #include "imoptdlg.hxx"
 #include "impex.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "globstr.hrc"
 #include "scerrors.hxx"
 #include "brdcst.hxx"

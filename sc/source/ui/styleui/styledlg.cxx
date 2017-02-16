@@ -30,7 +30,7 @@
 #include "tphf.hxx"
 #include "tptable.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include <svx/svxdlg.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>

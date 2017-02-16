@@ -28,7 +28,7 @@
 #include "drwlayer.hxx"
 #include "editsrc.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "DrawModelBroadcaster.hxx"
 #include "docsh.hxx"
 #include "drawview.hxx"

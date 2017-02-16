@@ -87,7 +87,7 @@
 #include "drwlayer.hxx"
 #include "uiitems.hxx"
 #include "globstr.hrc"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "cfgids.hxx"
 #include "inputhdl.hxx"
 #include "inputwin.hxx"

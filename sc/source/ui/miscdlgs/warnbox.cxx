@@ -22,7 +22,7 @@
 #include "scmod.hxx"
 #include "inputopt.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 
 ScReplaceWarnBox::ScReplaceWarnBox( vcl::Window* pParent ) :
     WarningBox( pParent, WB_YES_NO | WB_DEF_YES, OUString( ScResId( STR_REPLCELLSWARN ) ) )

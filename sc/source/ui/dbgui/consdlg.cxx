@@ -29,7 +29,7 @@
 #include "scresid.hxx"
 
 #include "globstr.hrc"
-#include "sc.hrc"
+#include "scres.hrc"
 
 #include "consdlg.hxx"
 #include <vcl/msgbox.hxx>

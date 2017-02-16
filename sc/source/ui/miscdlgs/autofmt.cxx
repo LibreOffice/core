@@ -37,7 +37,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "sc.hrc"
+#include "scres.hrc"
 #include "scmod.hxx"
 #include "attrib.hxx"
 #include "zforauto.hxx"

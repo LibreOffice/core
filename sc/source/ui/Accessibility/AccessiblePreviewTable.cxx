@@ -28,7 +28,7 @@
 #include "attrib.hxx"
 #include "document.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>

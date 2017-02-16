@@ -17,7 +17,7 @@
 #include "document.hxx"
 #include "rangeutl.hxx"
 #include "tabvwsh.hxx"
-#include <sc.hrc>
+#include <scres.hrc>
 #include "scresid.hxx"
 
 namespace sc {

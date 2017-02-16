@@ -10,7 +10,7 @@
 #ifndef INCLUDED_SC_SOURCE_UI_INC_CONDFORMATMGR_HXX
 #define INCLUDED_SC_SOURCE_UI_INC_CONDFORMATMGR_HXX
 
-#include "sc.hrc"
+#include "scres.hrc"
 
 #include <vcl/dialog.hxx>
 #include <vcl/layout.hxx>

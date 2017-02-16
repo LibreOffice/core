@@ -77,7 +77,7 @@
 #include "printopt.hxx"
 #include "externalrefmgr.hxx"
 #include "globstr.hrc"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "charthelper.hxx"
 #include "macromgr.hxx"
 #include "dpobject.hxx"

@@ -22,7 +22,7 @@
 #include "scuiimoptdlg.hxx"
 #include "tabvwsh.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>

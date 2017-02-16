@@ -38,7 +38,7 @@
 #include "rangenam.hxx"
 #include "rangeutl.hxx"
 #include "popmenu.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "scresid.hxx"
 #include "scmod.hxx"
 #include "navicfg.hxx"

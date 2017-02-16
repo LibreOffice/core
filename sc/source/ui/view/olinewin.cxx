@@ -25,7 +25,7 @@
 #include "olinetab.hxx"
 #include "document.hxx"
 #include "dbfunc.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "scresid.hxx"
 
 const long SC_OL_BITMAPSIZE                 = 12;

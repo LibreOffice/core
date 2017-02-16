@@ -28,7 +28,7 @@
 #include "navipi.hxx"
 #include "popmenu.hxx"
 #include "scresid.hxx"
-#include "sc.hrc"
+#include "scres.hrc"
 #include "globstr.hrc"
 
 // class ScScenarioWindow ------------------------------------------------

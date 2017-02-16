@@ -36,7 +36,7 @@
 
 #include "docfunc.hxx"
 
-#include "sc.hrc"
+#include "scres.hrc"
 
 #include "arealink.hxx"
 #include "attrib.hxx"
