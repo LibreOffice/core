@@ -26,18 +26,6 @@ bool TargetHelper::matchSpecialTarget(const OUString& sCheckTarget  ,
 {
     switch(eSpecialTarget)
     {
-        case ESpecialTarget::Self :
-            return (
-                    (sCheckTarget.isEmpty()                 ) ||
-                    sCheckTarget == SPECIALTARGET_SELF
-                   );
-
-        case ESpecialTarget::Parent :
-            return sCheckTarget == SPECIALTARGET_PARENT;
-
-        case ESpecialTarget::Top :
-            return sCheckTarget == SPECIALTARGET_TOP;
-
         case ESpecialTarget::Blank :
             return sCheckTarget == SPECIALTARGET_BLANK;
 

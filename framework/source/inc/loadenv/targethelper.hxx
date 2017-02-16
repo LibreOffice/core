@@ -41,9 +41,6 @@ class TargetHelper
          */
         enum class ESpecialTarget
         {
-            Self,
-            Parent,
-            Top,
             Blank,
             Default,
             Beamer,
