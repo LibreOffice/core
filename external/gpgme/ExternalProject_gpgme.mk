@@ -19,6 +19,7 @@ $(call gb_ExternalProject_get_state_target,gpgme,build):
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \
 		&& ./configure \
+		   --enable-languages="cl cpp" \
 		   GPG_ERROR_CFLAGS="$(GPG_ERROR_CFLAGS)" \
 		   GPG_ERROR_LIBS="$(GPG_ERROR_LIBS)" \
 		   LIBASSUAN_CFLAGS="$(LIBASSUAN_CFLAGS)" \

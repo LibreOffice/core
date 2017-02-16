@@ -1,0 +1,39 @@
+diff -ur libgpg-error.org/configure.ac libgpg-error/configure.ac
+--- configure.ac	2017-02-16 18:43:50.697941033 +0100
++++ configure.ac~	2017-02-16 18:44:07.085881259 +0100
+@@ -33,6 +33,11 @@
+ # decimalized short revision number, a beta version string, and a flag
+ # indicating a development version (mym4_isgit). Note that the m4
+ # processing is done by autoconf and not during the configure run.
++m4_define([m4_chomp_all],
++[m4_format([[%.*s]], m4_bregexp(m4_translit([[$1]], [
++/], [/ ]), [/*$]), [$1])])
++
++m4_define([m4_esyscmd_s], [m4_chomp_all(m4_esyscmd([$1]))])
+ m4_define([mym4_version], [mym4_version_major.mym4_version_minor])
+ m4_define([mym4_revision],
+           m4_esyscmd([git rev-parse --short HEAD | tr -d '\n\r']))
+@@ -65,7 +70,22 @@
+ AC_SUBST(VERSION_NUMBER)
+ 
+ AC_CONFIG_AUX_DIR([build-aux])
+-AM_INIT_AUTOMAKE([serial-tests dist-bzip2])
++
++dnl Initialize automake.  automake < 1.12 didn't have serial-tests and
++dnl gives an error if it sees this, but for automake >= 1.13
++dnl serial-tests is required so we have to include it.  Solution is to
++dnl test for the version of automake (by running an external command)
++dnl and provide it if necessary.  Note we have to do this entirely using
++dnl m4 macros since automake queries this macro by running
++dnl 'autoconf --trace ...'.
++m4_define([serial_tests], [
++    m4_esyscmd([automake --version |
++                head -1 |
++                awk '{split ($NF,a,"."); if (a[1] == 1 && a[2] >= 12) { print "serial-tests" }}'
++    ])
++])
++AM_INIT_AUTOMAKE(foreign serial_tests dist-bzip2) dnl NB: Do not [quote] this parameter.
++
+ AM_MAINTAINER_MODE
+ AC_CONFIG_SRCDIR([src/err-sources.h.in])
+ AC_CONFIG_HEADER([config.h])
