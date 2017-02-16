@@ -1066,7 +1066,7 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
         {
             ESelection aSel( GetSelection() );
             CheckSelection( aSel, pForwarder );
-            pSet = new SfxItemSet( pForwarder->GetAttribs( aSel, EditEngineAttribs_OnlyHard ) );
+            pSet = new SfxItemSet( pForwarder->GetAttribs( aSel, EditEngineAttribs::OnlyHard ) );
         }
 
         bool bUnknownPropertyFound = false;

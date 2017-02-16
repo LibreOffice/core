@@ -337,14 +337,14 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
         // First the very hard formatting ...
         EditDoc::FindAttribs( pNode, nStartPos, nEndPos, aCurSet );
 
-        if( nOnlyHardAttrib != EditEngineAttribs_OnlyHard )
+        if( nOnlyHardAttrib != EditEngineAttribs::OnlyHard )
         {
             // and then paragraph formatting and template...
             for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++)
             {
                 if ( aCurSet.GetItemState( nWhich ) == SfxItemState::DEFAULT )
                 {
-                    if ( nOnlyHardAttrib == EditEngineAttribs_All )
+                    if ( nOnlyHardAttrib == EditEngineAttribs::All )
                     {
                         const SfxPoolItem& rItem = pNode->GetContentAttribs().GetItem( nWhich );
                         aCurSet.Put( rItem );
@@ -358,7 +358,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
                 else if ( aCurSet.GetItemState( nWhich ) == SfxItemState::SET )
                 {
                     const SfxPoolItem* pItem = nullptr;
-                    if ( nOnlyHardAttrib == EditEngineAttribs_All )
+                    if ( nOnlyHardAttrib == EditEngineAttribs::All )
                     {
                         pItem = &pNode->GetContentAttribs().GetItem( nWhich );
                     }
@@ -384,7 +384,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, EditEngineAttribs nOnl
     }
 
     // fill empty slots with defaults ...
-    if ( nOnlyHardAttrib == EditEngineAttribs_All )
+    if ( nOnlyHardAttrib == EditEngineAttribs::All )
     {
         for ( sal_uInt16 nWhich = EE_ITEMS_START; nWhich <= EE_CHAR_END; nWhich++ )
         {

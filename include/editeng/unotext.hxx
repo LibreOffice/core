@@ -180,7 +180,7 @@ public:
     virtual sal_Int32       GetParagraphCount() const override;
     virtual sal_Int32       GetTextLen( sal_Int32 nParagraph ) const override;
     virtual OUString        GetText( const ESelection& rSel ) const override;
-    virtual SfxItemSet      GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All ) const override;
+    virtual SfxItemSet      GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All ) const override;
     virtual SfxItemSet      GetParaAttribs( sal_Int32 nPara ) const override;
     virtual void            SetParaAttribs( sal_Int32 nPara, const SfxItemSet& rSet ) override;
     virtual void            RemoveAttribs( const ESelection& rSelection ) override;

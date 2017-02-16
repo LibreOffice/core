@@ -79,13 +79,10 @@ static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, EditE
 
         switch( nOnlyHardAttrib )
         {
-        case EditEngineAttribs_All:
+        case EditEngineAttribs::All:
             nFlags = GetAttribsFlags::ALL;
             break;
-        case EditEngineAttribs_HardAndPara:
-            nFlags = GetAttribsFlags::PARAATTRIBS|GetAttribsFlags::CHARATTRIBS;
-            break;
-        case EditEngineAttribs_OnlyHard:
+        case EditEngineAttribs::OnlyHard:
             nFlags = GetAttribsFlags::CHARATTRIBS;
             break;
         default:
@@ -101,7 +98,7 @@ static SfxItemSet ImplOutlinerForwarderGetAttribs( const ESelection& rSel, EditE
 
 SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib ) const
 {
-    if( mpAttribsCache && ( EditEngineAttribs_All == nOnlyHardAttrib ) )
+    if( mpAttribsCache && ( EditEngineAttribs::All == nOnlyHardAttrib ) )
     {
         // have we the correct set in cache?
         if( const_cast<SvxOutlinerForwarder*>(this)->maAttribCacheSelection.IsEqual(rSel) )
@@ -123,7 +120,7 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, EditEngineA
 
     SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, nOnlyHardAttrib, rEditEngine ) );
 
-    if( EditEngineAttribs_All == nOnlyHardAttrib )
+    if( EditEngineAttribs::All == nOnlyHardAttrib )
     {
         mpAttribsCache = new SfxItemSet( aSet );
         maAttribCacheSelection = rSel;

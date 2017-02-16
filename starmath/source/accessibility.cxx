@@ -928,13 +928,10 @@ SfxItemSet SmTextForwarder::GetAttribs( const ESelection& rSel, EditEngineAttrib
         GetAttribsFlags nFlags = GetAttribsFlags::NONE;
         switch( nOnlyHardAttrib )
         {
-        case EditEngineAttribs_All:
+        case EditEngineAttribs::All:
             nFlags = GetAttribsFlags::ALL;
             break;
-        case EditEngineAttribs_HardAndPara:
-            nFlags = GetAttribsFlags::PARAATTRIBS|GetAttribsFlags::CHARATTRIBS;
-            break;
-        case EditEngineAttribs_OnlyHard:
+        case EditEngineAttribs::OnlyHard:
             nFlags = GetAttribsFlags::CHARATTRIBS;
             break;
         default:

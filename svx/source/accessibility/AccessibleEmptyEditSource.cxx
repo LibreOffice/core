@@ -89,7 +89,7 @@ namespace accessibility
         sal_Int32          GetParagraphCount() const override { return 1; }
         sal_Int32          GetTextLen( sal_Int32 /*nParagraph*/ ) const override { return 0; }
         OUString           GetText( const ESelection& /*rSel*/ ) const override { return OUString(); }
-        SfxItemSet         GetAttribs( const ESelection& /*rSel*/, EditEngineAttribs /*nOnlyHardAttrib*/ = EditEngineAttribs_All ) const override
+        SfxItemSet         GetAttribs( const ESelection& /*rSel*/, EditEngineAttribs /*nOnlyHardAttrib*/ = EditEngineAttribs::All ) const override
         {
             // AW: Very dangerous: The former implementation used a SfxItemPool created on the
             // fly which of course was deleted again ASAP. Thus, the returned SfxItemSet was using

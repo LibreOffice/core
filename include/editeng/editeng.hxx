@@ -113,12 +113,11 @@ enum class CharCompressType;
 
 
 /** values for:
-       SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All );
+       SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All );
 */
-enum EditEngineAttribs {
-    EditEngineAttribs_All,          /// returns all attributes even when theire not set
-    EditEngineAttribs_HardAndPara,  /// returns all attributes set on paragraph and on portions
-    EditEngineAttribs_OnlyHard      /// returns only attributes hard set on portions
+enum class EditEngineAttribs {
+    All,          /// returns all attributes even when they are not set
+    OnlyHard      /// returns only attributes hard set on portions
 };
 
 /** values for:
@@ -321,7 +320,7 @@ public:
     void            GetCharAttribs( sal_Int32 nPara, std::vector<EECharAttrib>& rLst ) const;
 
     SfxItemSet      GetAttribs( sal_Int32 nPara, sal_Int32 nStart, sal_Int32 nEnd, GetAttribsFlags nFlags = GetAttribsFlags::ALL ) const;
-    SfxItemSet      GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs_All );
+    SfxItemSet      GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All );
 
     bool            HasParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_Int32 nPara, sal_uInt16 nWhich );
