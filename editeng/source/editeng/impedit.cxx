@@ -1096,7 +1096,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         long nDiff = pEditEngine->pImpEditEngine->GetTextHeight() - aNewVisArea.Bottom(); // negative
         aNewVisArea.Move( 0, nDiff );   // could end up in the negative area...
     }
-    if ( ( aNewVisArea.Top() < 0 ) && ( nRangeCheck != ScrollRangeCheck::NONE ) )
+    if ( aNewVisArea.Top() < 0 )
         aNewVisArea.Move( 0, -aNewVisArea.Top() );
 
     // Horizontal:
@@ -1115,7 +1115,7 @@ Pair ImpEditView::Scroll( long ndX, long ndY, ScrollRangeCheck nRangeCheck )
         long nDiff = pEditEngine->pImpEditEngine->CalcTextWidth( false ) - aNewVisArea.Right();     // negative
         aNewVisArea.Move( nDiff, 0 );   // could end up in the negative area...
     }
-    if ( ( aNewVisArea.Left() < 0 ) && ( nRangeCheck != ScrollRangeCheck::NONE ) )
+    if ( aNewVisArea.Left() < 0 )
         aNewVisArea.Move( -aNewVisArea.Left(), 0 );
 
     // The difference must be alignt on pixel (due to scroll!)

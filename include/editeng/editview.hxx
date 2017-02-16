@@ -73,7 +73,6 @@ namespace linguistic2 {
 
 enum class ScrollRangeCheck
 {
-    NONE          = 0,   // No correction of VisArea when scrolling
     NoNegative    = 1,   // No negative VisArea when scrolling
     PaperWidthTextSize = 2,   // VisArea must be within paper width, Text Size
 };

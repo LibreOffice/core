@@ -133,6 +133,10 @@ for d in definitionSet:
          "sc/source/ui/docshell/impex.cxx", # SylkVersion
          "include/rsc/rsc-vcl-shared-types.hxx", # KeyFuncType
          "include/i18nutil/paper.hxx", # Paper
+         "cppcanvas/source/mtfrenderer/emfplus.cxx", # EmfPlusCombineMode
+         "cppcanvas/source/mtfrenderer/emfpbrush.hxx", # EmfPlusHatchStyle
+         "include/filter/msfilter/svdfppt.hxx", # PptPlaceholder, PptSlideLayout
+         "include/filter/msfilter/escherex.hxx", # various
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
@@ -162,6 +166,9 @@ for d in definitionSet:
          "sc/source/ui/inc/scuitphfedit.hxx", # ScHFEntryId (from UI)
          "include/i18nlangtag/languagetag.hxx", # LanguageTag::ScriptType
          "extensions/source/scanner/grid.hxx", # ResetType (from UI)
+         "dbaccess/source/inc/dsntypes.hxx", # dbaccess::DATASOURCE_TYPE (from UI)
+         "cui/source/tabpages/tparea.cxx", # FillType (from UI)
+         "include/editeng/svxenum.hxx", # css::style::NumberingType
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",
