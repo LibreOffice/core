@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_bbb592d1",
+        "filename": "sw/source/filter/ww8/ww8graf2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-16T21:37:03Z",
+      "side": 1,
+      "message": "a bit decadent to create a SwNodeRange when only the start is needed",
+      "revId": "3a0a52076be23c8adfbe3f653a4c0f246e5bdc6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
