@@ -68,8 +68,6 @@ class  SplashScreen
 {
     friend class SplashScreenWindow;
 private:
-    enum BitmapMode { BM_FULLSCREEN, BM_DEFAULTMODE };
-
     VclPtr<SplashScreenWindow> pWindow;
 
     DECL_LINK( AppEventListenerHdl, VclSimpleEvent&, void );
@@ -91,7 +89,6 @@ private:
 
     sal_Int32   _iMax;
     sal_Int32   _iProgress;
-    BitmapMode  _eBitmapMode;
     bool        _bPaintProgress;
     bool        _bVisible;
     bool        _bShowLogo;
@@ -157,7 +154,6 @@ SplashScreen::SplashScreen()
     , _bNativeProgress(true)
     , _iMax(100)
     , _iProgress(0)
-    , _eBitmapMode(BM_DEFAULTMODE)
     , _bPaintProgress(false)
     , _bVisible(true)
     , _bShowLogo(true)
@@ -195,8 +191,6 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
     if (_bVisible) {
         _bProgressEnd = false;
         SolarMutexGuard aSolarGuard;
-        if ( _eBitmapMode == BM_FULLSCREEN )
-            pWindow->ShowFullScreenMode();
         pWindow->Show();
         pWindow->Redraw();
     }
@@ -207,8 +201,6 @@ void SAL_CALL SplashScreen::end()
     _iProgress = _iMax;
     if (_bVisible )
     {
-        if ( _eBitmapMode == BM_FULLSCREEN )
-            pWindow->EndFullScreenMode();
         pWindow->Hide();
     }
     _bProgressEnd = true;
@@ -219,8 +211,6 @@ void SAL_CALL SplashScreen::reset()
     _iProgress = 0;
     if (_bVisible && !_bProgressEnd )
     {
-        if ( _eBitmapMode == BM_FULLSCREEN )
-            pWindow->ShowFullScreenMode();
         pWindow->Show();
         updateStatus();
     }
@@ -235,8 +225,6 @@ void SAL_CALL SplashScreen::setText(const OUString& rText)
 
         if (_bVisible && !_bProgressEnd)
         {
-            if ( _eBitmapMode == BM_FULLSCREEN )
-                pWindow->ShowFullScreenMode();
             pWindow->Show();
             updateStatus();
         }
@@ -249,8 +237,6 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
 
     SolarMutexGuard aSolarGuard;
     if (_bVisible && !_bProgressEnd) {
-        if ( _eBitmapMode == BM_FULLSCREEN )
-            pWindow->ShowFullScreenMode();
         pWindow->Show();
         if (nValue >= _iMax)
             _iProgress = _iMax;
@@ -291,19 +277,6 @@ SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
                 _barwidth = 263;
             if ( NOT_LOADED == _barheight )
                 _barheight = 8;
-            if (( _eBitmapMode == BM_FULLSCREEN ) &&
-                _bFullScreenSplash )
-            {
-                if( ( _fXPos >= 0.0 ) && ( _fYPos >= 0.0 ))
-                {
-                    _tlx = sal_Int32( double( aSize.Width() ) * _fXPos );
-                    _tly = sal_Int32( double( aSize.Height() ) * _fYPos );
-                }
-                if ( _fWidth >= 0.0 )
-                    _barwidth  = sal_Int32( double( aSize.Width() ) * _fWidth );
-                if ( _fHeight >= 0.0 )
-                    _barheight = sal_Int32( double( aSize.Width() ) * _fHeight );
-            }
         }
         else
         {
