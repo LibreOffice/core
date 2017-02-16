@@ -324,7 +324,7 @@ SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight
 {
     (void)rLeft;
     (void)rRight;
-    return (SbxDecimal::CmpResult)0;
+    return SbxDecimal::CmpResult::LT;
 }
 
 void SbxDecimal::setChar( sal_Unicode val )     { (void)val; }

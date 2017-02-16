@@ -95,7 +95,8 @@ public:
 
     bool isZero();
 
-    enum CmpResult { LT, EQ, GT };
+    // must match the return values of the Microsoft VarDecCmp Automation function
+    enum class CmpResult { LT, EQ, GT };
     friend CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight );
 };
 

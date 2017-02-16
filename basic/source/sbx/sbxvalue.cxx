@@ -1293,17 +1293,17 @@ bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
                 switch( eOp )
                 {
                     case SbxEQ:
-                        bRes = ( eRes == SbxDecimal::EQ ); break;
+                        bRes = ( eRes == SbxDecimal::CmpResult::EQ ); break;
                     case SbxNE:
-                        bRes = ( eRes != SbxDecimal::EQ ); break;
+                        bRes = ( eRes != SbxDecimal::CmpResult::EQ ); break;
                     case SbxLT:
-                        bRes = ( eRes == SbxDecimal::LT ); break;
+                        bRes = ( eRes == SbxDecimal::CmpResult::LT ); break;
                     case SbxGT:
-                        bRes = ( eRes == SbxDecimal::GT ); break;
+                        bRes = ( eRes == SbxDecimal::CmpResult::GT ); break;
                     case SbxLE:
-                        bRes = ( eRes != SbxDecimal::GT ); break;
+                        bRes = ( eRes != SbxDecimal::CmpResult::GT ); break;
                     case SbxGE:
-                        bRes = ( eRes != SbxDecimal::LT ); break;
+                        bRes = ( eRes != SbxDecimal::CmpResult::LT ); break;
                     default:
                         SetError( ERRCODE_SBX_NOTIMP );
                 }
