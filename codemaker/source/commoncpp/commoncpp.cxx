@@ -169,8 +169,7 @@ OString translateUnoToCppIdentifier(
         || unoIdentifier == "xor"
         /* unoIdentifier == "xor_eq" */
         // Standard macros:
-        || (transmode != IdentifierTranslationMode::KeywordsOnly
-            && (unoIdentifier == "BUFSIZ"
+        || (unoIdentifier == "BUFSIZ"
                 || unoIdentifier == "CLOCKS_PER_SEC"
                 || unoIdentifier == "EDOM"
                 || unoIdentifier == "EOF"
@@ -264,7 +263,7 @@ OString translateUnoToCppIdentifier(
                 || unoIdentifier == "UCHAR_MAX"
                 || unoIdentifier == "UINT_MAX"
                 || unoIdentifier == "ULONG_MAX"
-                || unoIdentifier == "USHRT_MAX"))
+                || unoIdentifier == "USHRT_MAX")
             || (transmode == IdentifierTranslationMode::Global
                 && (// Standard types:
                     /* unoIdentifier == "clock_t" */
