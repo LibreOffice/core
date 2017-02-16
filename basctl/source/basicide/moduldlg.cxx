@@ -506,14 +506,14 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
         VclPtr<TabPage> pNewTabPage;
         if (sPageName == "modules")
         {
-            VclPtrInstance<ObjectPage> pObjectPage(pTabCtrl, "ModulePage", BROWSEMODE_MODULES);
+            VclPtrInstance<ObjectPage> pObjectPage(pTabCtrl, "ModulePage", BrowseMode::Modules);
             pNewTabPage.reset(pObjectPage);
             pObjectPage->SetTabDlg(this);
             pObjectPage->SetCurrentEntry(m_aCurEntry);
         }
         else if (sPageName == "dialogs")
         {
-            VclPtrInstance<ObjectPage> pObjectPage( pTabCtrl, "DialogPage", BROWSEMODE_DIALOGS );
+            VclPtrInstance<ObjectPage> pObjectPage( pTabCtrl, "DialogPage", BrowseMode::Dialogs );
             pNewTabPage.reset(pObjectPage);
             pObjectPage->SetTabDlg(this);
             pObjectPage->SetCurrentEntry(m_aCurEntry);
@@ -537,7 +537,7 @@ IMPL_LINK( OrganizeDialog, ActivatePageHdl, TabControl *, pTabCtrl, void )
 // ObjectPage
 
 
-ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nMode)
+ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, BrowseMode nMode)
     : TabPage(pParent, rName, "modules/BasicIDE/ui/" +
         OStringToOUString(rName, RTL_TEXTENCODING_UTF8).toAsciiLowerCase() +
         ".ui")
@@ -557,12 +557,12 @@ ObjectPage::ObjectPage(vcl::Window *pParent, const OString &rName, sal_uInt16 nM
     m_pDelButton->SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
     m_pBasicBox->SetSelectHdl( LINK( this, ObjectPage, BasicBoxHighlightHdl ) );
 
-    if( nMode & BROWSEMODE_MODULES )
+    if( nMode & BrowseMode::Modules )
     {
         m_pNewModButton->SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
         m_pNewDlgButton->Hide();
     }
-    else if ( nMode & BROWSEMODE_DIALOGS )
+    else if ( nMode & BrowseMode::Dialogs )
     {
         m_pNewDlgButton->SetClickHdl( LINK( this, ObjectPage, ButtonHdl ) );
         m_pNewModButton->Hide();
@@ -620,12 +620,12 @@ void ObjectPage::CheckButtons()
     OUString aLibName( aDesc.GetLibName() );
     OUString aLibSubName( aDesc.GetLibSubName() );
     bool bVBAEnabled = aDocument.isInVBAMode();
-    sal_uInt16 nMode = m_pBasicBox->GetMode();
+    BrowseMode nMode = m_pBasicBox->GetMode();
 
     sal_uInt16 nDepth = pCurEntry ? m_pBasicBox->GetModel()->GetDepth( pCurEntry ) : 0;
     if ( nDepth >= 2 )
     {
-        if( bVBAEnabled && ( nMode & BROWSEMODE_MODULES ) && ( nDepth == 2 ) )
+        if( bVBAEnabled && ( nMode & BrowseMode::Modules ) && ( nDepth == 2 ) )
             m_pEditButton->Disable();
         else
         m_pEditButton->Enable();
@@ -660,7 +660,7 @@ void ObjectPage::CheckButtons()
     // enable/disable delete button
     if ( nDepth >= 2 && !bReadOnly && eLocation != LIBRARY_LOCATION_SHARE )
     {
-        if( bVBAEnabled && ( nMode & BROWSEMODE_MODULES ) && ( ( nDepth == 2 ) || aLibSubName == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) ) )
+        if( bVBAEnabled && ( nMode & BrowseMode::Modules ) && ( ( nDepth == 2 ) || aLibSubName == IDE_RESSTR(RID_STR_DOCUMENT_OBJECTS) ) )
             m_pDelButton->Disable();
         else
         m_pDelButton->Enable();

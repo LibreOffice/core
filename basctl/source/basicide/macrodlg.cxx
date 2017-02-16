@@ -97,7 +97,7 @@ MacroChooser::MacroChooser( vcl::Window* pParnt, const Reference< frame::XFrame 
     m_pMacroBox->SetDoubleClickHdl( LINK( this, MacroChooser, MacroDoubleClickHdl ) );
     m_pMacroBox->SetSelectHdl( LINK( this, MacroChooser, MacroSelectHdl ) );
 
-    m_pBasicBox->SetMode( BROWSEMODE_MODULES );
+    m_pBasicBox->SetMode( BrowseMode::Modules );
     m_pBasicBox->SetStyle( WB_TABSTOP | WB_BORDER |
                         WB_HASLINES | WB_HASLINESATROOT |
                         WB_HASBUTTONS | WB_HASBUTTONSATROOT |

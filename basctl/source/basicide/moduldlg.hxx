@@ -199,7 +199,7 @@ protected:
     virtual void        DeactivatePage() override;
 
 public:
-    ObjectPage(vcl::Window* pParent, const OString& rName, sal_uInt16 nMode);
+    ObjectPage(vcl::Window* pParent, const OString& rName, BrowseMode nMode);
     virtual ~ObjectPage() override;
     virtual void dispose() override;
 

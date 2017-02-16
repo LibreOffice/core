@@ -1525,8 +1525,8 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                         pEntry = pBasicBox->GetParent( pEntry );
                     }
 
-                    sal_uInt16 nMode = pBasicBox->GetMode();
-                    bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
+                    BrowseMode nMode = pBasicBox->GetMode();
+                    bool bDlgMode = ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules );
                     const sal_uInt16 nId = bDlgMode ? RID_BMP_DLGLIB : RID_BMP_MODLIB;
                     SvTreeListEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,

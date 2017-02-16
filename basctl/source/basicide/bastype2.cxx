@@ -163,7 +163,7 @@ TreeListBox::TreeListBox (vcl::Window* pParent, WinBits nStyle)
 {
     SetNodeDefaultImages();
     SetSelectionMode( SelectionMode::Single );
-    nMode = 0xFF;   // everything
+    nMode = BrowseMode::All;   // everything
 }
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(TreeListBox, WB_TABSTOP)
@@ -256,7 +256,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
 
             // create tree list box entry
             sal_uInt16 nId;
-            if ( ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES ) )
+            if ( ( nMode & BrowseMode::Dialogs ) && !( nMode & BrowseMode::Modules ) )
                 nId = bLoaded ? RID_BMP_DLGLIB : RID_BMP_DLGLIBNOTLOADED;
             else
                 nId = bLoaded ? RID_BMP_MODLIB : RID_BMP_MODLIBNOTLOADED;
@@ -282,7 +282,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
 void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const ScriptDocument& rDocument, const OUString& rLibName )
 {
     // modules
-    if ( nMode & BROWSEMODE_MODULES )
+    if ( nMode & BrowseMode::Modules )
     {
         Reference< script::XLibraryContainer > xModLibContainer( rDocument.getLibraryContainer( E_SCRIPTS ) );
 
@@ -313,7 +313,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                         }
 
                         // methods
-                        if ( nMode & BROWSEMODE_SUBS )
+                        if ( nMode & BrowseMode::Subs )
                         {
                             Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
                             sal_Int32 nCount = aNames.getLength();
@@ -345,7 +345,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
     }
 
     // dialogs
-    if ( nMode & BROWSEMODE_DIALOGS )
+    if ( nMode & BrowseMode::Dialogs )
     {
          Reference< script::XLibraryContainer > xDlgLibContainer( rDocument.getLibraryContainer( E_DIALOGS ) );
 
@@ -469,7 +469,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
             }
 
             // methods
-            if ( nMode & BROWSEMODE_SUBS )
+            if ( nMode & BrowseMode::Subs )
             {
                 Sequence< OUString > aNames = GetMethodNames( rDocument, rLibName, aModName );
                 sal_Int32 nCount = aNames.getLength();
@@ -716,9 +716,9 @@ void TreeListBox::SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage
 LibraryType TreeListBox::GetLibraryType() const
 {
     LibraryType eType = LibraryType::All;
-    if ( ( nMode & BROWSEMODE_MODULES ) && !( nMode & BROWSEMODE_DIALOGS ) )
+    if ( ( nMode & BrowseMode::Modules ) && !( nMode & BrowseMode::Dialogs ) )
         eType = LibraryType::Module;
-    else if ( !( nMode & BROWSEMODE_MODULES ) && ( nMode & BROWSEMODE_DIALOGS ) )
+    else if ( !( nMode & BrowseMode::Modules ) && ( nMode & BrowseMode::Dialogs ) )
         eType = LibraryType::Dialog;
     return eType;
 }

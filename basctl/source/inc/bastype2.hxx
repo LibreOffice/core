@@ -30,10 +30,22 @@
 #include <basic/sbstar.hxx>
 #include <sbxitem.hxx>
 #include "basobj.hxx"
+#include <o3tl/typed_flags_set.hxx>
 
 class SbModule;
 class SvTreeListEntry;
 class SbxVariable;
+
+enum class BrowseMode
+{
+    Modules  = 0x01,
+    Subs     = 0x02,
+    Dialogs  = 0x04,
+    All      = Modules | Subs | Dialogs,
+};
+namespace o3tl {
+    template<> struct typed_flags<BrowseMode> : is_typed_flags<BrowseMode, 0x7> {};
+}
 
 namespace basctl
 {
@@ -50,13 +62,6 @@ enum EntryType
     OBJ_TYPE_USERFORMS,
     OBJ_TYPE_NORMAL_MODULES,
     OBJ_TYPE_CLASS_MODULES
-};
-
-enum
-{
-    BROWSEMODE_MODULES  = 0x01,
-    BROWSEMODE_SUBS     = 0x02,
-    BROWSEMODE_DIALOGS  = 0x04,
 };
 
 class Entry
@@ -172,7 +177,7 @@ public:
 class TreeListBox : public SvTreeListBox, public DocumentEventListener
 {
 private:
-    sal_uInt16 nMode;
+    BrowseMode            nMode;
     DocumentEventNotifier m_aNotifier;
     void            SetEntryBitmaps( SvTreeListEntry * pEntry, const Image& rImage );
     virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
@@ -213,8 +218,8 @@ public:
 
     bool            IsEntryProtected( SvTreeListEntry* pEntry );
 
-    void            SetMode( sal_uInt16 nM ) { nMode = nM; }
-    sal_uInt16          GetMode() const { return nMode; }
+    void            SetMode( BrowseMode nM ) { nMode = nM; }
+    BrowseMode      GetMode() const { return nMode; }
 
     SbModule*       FindModule( SvTreeListEntry* pEntry );
     SbxVariable*    FindVariable( SvTreeListEntry* pEntry );
