@@ -13,6 +13,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef _WIN32
+#include <prewin.h>
+#include <postwin.h>
+#endif
+
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/property_tree/json_parser.hpp>
