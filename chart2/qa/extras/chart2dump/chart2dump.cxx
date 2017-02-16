@@ -398,20 +398,21 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "legend_on_right_side.ods",
-        "legend_on_bottom.ods",
-        "legend_on_left_side.ods",
-        "legend_on_top.ods",
-        "many_legend_entries.ods",
-        "custom_legend_position.ods",
-        "multiple_categories.ods"
+        "legend_on_right_side.odp",
+        "legend_on_bottom.odp",
+        "legend_on_left_side.odp",
+        "legend_on_top.odp",
+        "many_legend_entries.odp",
+        "custom_legend_position.odp",
+        "multiple_categories.odp"
     };
 
     for (const OUString& aTestFile : aTestFiles)
     {
         setTestFileName(aTestFile);
         load(getTestFileDirName(), getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -645,17 +646,18 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "default_formated_axis.ods",
-        "rotated_axis_labels.ods",
-        "formated_axis_labels.ods",
-        "percent_stacked_column_chart.ods",
+        "default_formated_axis.odp",
+        "rotated_axis_labels.odp",
+        "formated_axis_labels.odp",
+        "percent_stacked_column_chart.odp",
     };
 
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
         load(getTestFileDirName(), getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -797,20 +799,21 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
     }
 }
 
-DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
+DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, true)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "chartwall_auto_adjust_with_titles.ods",
-        "chartwall_auto_adjust_without_titles.ods",
-        "chartwall_custom_positioning.ods"
+        "chartwall_auto_adjust_with_titles.odp",
+        "chartwall_auto_adjust_without_titles.odp",
+        "chartwall_custom_positioning.odp"
     };
 
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
         load(getTestFileDirName(), getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
