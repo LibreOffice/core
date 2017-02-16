@@ -351,8 +351,6 @@ static const sal_Char* parseStateToMessage(ParseState state)
         return "Illegal syntax or missing '(' after operation identifier";
     case PS_OpParsCompleted:
         return "Illegal syntax after operation parameter list";
-    case PS_OpCompleted:
-        return "Illegal syntax after operation declaration";
     case PS_OpSqSeen:
         return "Illegal syntax after operation parameter list '(' opener";
     case PS_OpQsSeen:

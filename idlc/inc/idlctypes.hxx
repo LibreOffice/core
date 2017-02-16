@@ -176,7 +176,6 @@ enum ParseState
     PS_OpTypeSeen,          // Seen operation return type
     PS_OpIDSeen,            // Seen operation ID
     PS_OpParsCompleted,     // Completed operation param list
-    PS_OpCompleted,         // Completed operation statement
     PS_OpSqSeen,            // Seen '(' for operation
     PS_OpQsSeen,            // Seen ')' for operation
     PS_OpParCommaSeen,      // Seen ',' in list of op params
