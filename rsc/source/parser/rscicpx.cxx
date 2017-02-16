@@ -47,15 +47,6 @@ RscTop * RscTypCont::InitClassMgr()
     pClassMgr->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
 
     // initialize variables
-    {
-        RscContWriteSrc *   pCont;
-
-        // initialize variables
-        aBaseLst.push_back( pCont = new RscContExtraData( pHS->getID( "ContExtradata" ), RSC_NOTYPE ) );
-        pCont->SetTypeClass( &aShort, &aString );
-        nRsc_EXTRADATA = nId = aNmTb.Put( "ExtraData", VARNAME );
-        pClassMgr->SetVariable( nId, pCont );
-    };
     nId = aNmTb.Put( "Comment", VARNAME );
     pClassMgr->SetVariable( nId, &aString, nullptr, RSCVAR::NoRc );
 

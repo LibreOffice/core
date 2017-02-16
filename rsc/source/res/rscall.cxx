@@ -26,7 +26,6 @@
 
 Atom    nRsc_DELTALANG = InvalidAtom;
 Atom    nRsc_DELTASYSTEM = InvalidAtom;
-Atom    nRsc_EXTRADATA = InvalidAtom;
 
 void InitRscCompiler()
 {

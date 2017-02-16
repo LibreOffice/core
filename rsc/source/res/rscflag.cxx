@@ -270,7 +270,7 @@ void RscFlag::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 }
 
 ERRTYPE RscFlag::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                          RscTypCont *, sal_uInt32, bool )
+                          RscTypCont *, sal_uInt32 )
 {
     sal_Int32   lVal = 0;
     sal_uInt32  i = 0, Flag = 0, nIndex = 0;

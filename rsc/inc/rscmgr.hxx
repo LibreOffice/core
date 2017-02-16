@@ -54,9 +54,9 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * ) override;
     ERRTYPE         WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                    RscTypCont * pTC, const RscId & rId,
-                                   sal_uInt32, bool bExtra ) override;
+                                   sal_uInt32 ) override;
     ERRTYPE         WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
-                             RscTypCont * pTC, sal_uInt32, bool bExtra ) override;
+                             RscTypCont * pTC, sal_uInt32 ) override;
     bool            IsConsistent( const RSCINST & rInst ) override;
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * ) override;
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId ) override;

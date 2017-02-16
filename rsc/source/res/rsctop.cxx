@@ -396,19 +396,19 @@ void RscTop::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 
 ERRTYPE RscTop::WriteRcHeader( const RSCINST & rInst, RscWriteRc & rMem,
                                RscTypCont * pTC, const RscId & rId,
-                               sal_uInt32 nDeep, bool bExtra )
+                               sal_uInt32 nDeep )
 {
     if( pSuperClass )
-        return pSuperClass->WriteRcHeader( rInst, rMem, pTC, rId, nDeep, bExtra );
+        return pSuperClass->WriteRcHeader( rInst, rMem, pTC, rId, nDeep );
     else
-        return rInst.pClass->WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+        return rInst.pClass->WriteRc( rInst, rMem, pTC, nDeep );
 }
 
 ERRTYPE RscTop::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                         RscTypCont * pTC, sal_uInt32 nDeep, bool bExtra )
+                         RscTypCont * pTC, sal_uInt32 nDeep )
 {
     if( pSuperClass )
-        return pSuperClass->WriteRc( rInst, rMem, pTC, nDeep, bExtra );
+        return pSuperClass->WriteRc( rInst, rMem, pTC, nDeep );
     else
         return ERR_OK;
 }
