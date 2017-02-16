@@ -699,6 +699,14 @@ DECLARE_OOXMLIMPORT_TEST(testTdf105143, "tdf105143.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("6674"), aTop);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf105975, "105975.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xMasters(xTextFieldsSupplier->getTextFieldMasters());
+    // Make sure we have a variable named TEST_VAR.
+    CPPUNIT_ASSERT(xMasters->hasByName("com.sun.star.text.FieldMaster.SetExpression.TEST_VAR"));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testfdo76583, "fdo76583.docx")
 {
     // The problem was that the floating table was imported as a non-floating one.
