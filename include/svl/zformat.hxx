@@ -219,7 +219,8 @@ public:
     sal_uInt16 GetSubformatIndex( double fNumber ) const;
 
     /// Count of decimal precision
-    sal_uInt16 GetFormatPrecision() const   { return NumFor[0].Info().nCntPost; }
+    sal_uInt16 GetFormatPrecision( sal_uInt16 nIx = 0 ) const
+        { return NumFor[nIx].Info().nCntPost; }
 
     /// Count of integer digits
     sal_uInt16 GetFormatIntegerDigits() const { return NumFor[0].Info().nCntPre; }
