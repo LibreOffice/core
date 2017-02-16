@@ -2121,7 +2121,7 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
         }
         case RID_SC_TP_DEFAULTS:
         {
-            ::CreateTabPage ScTpDefaultsOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SCPAGE_DEFAULTS);
+            ::CreateTabPage ScTpDefaultsOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_DEFAULTS);
             if (ScTpDefaultsOptionsCreate)
                 pRet = (*ScTpDefaultsOptionsCreate)(pParent, &rSet);
             break;

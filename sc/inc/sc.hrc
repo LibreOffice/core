@@ -1238,10 +1238,7 @@
 // data Form
 #define SID_DATA_FORM                   (SC_DIALOGS_START + 168) // menu (in Data menu)
 
-// init option page
-#define RID_SCPAGE_DEFAULTS             (SC_DIALOGS_START + 170)
-
-#define SC_DIALOGS_END                  (RID_SCPAGE_DEFAULTS + 1)
+#define SC_DIALOGS_END                  (SID_DATA_FORM + 1)
 
 #define RID_GLOBSTR_OFFSET              SC_DIALOGS_END
 
