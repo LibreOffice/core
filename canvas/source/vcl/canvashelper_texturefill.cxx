@@ -857,9 +857,7 @@ namespace vclcanvas
                         // complex transformation, use generic affine bitmap
                         // transformation
                         aBmpEx = tools::transformBitmap( aBmpEx,
-                                                         aTotalTransform,
-                                                         uno::Sequence< double >(),
-                                                         tools::MODULATE_NONE);
+                                                         aTotalTransform);
 
                         pGrfObj.reset( new GraphicObject( aBmpEx ) );
 

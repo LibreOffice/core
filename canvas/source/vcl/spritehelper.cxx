@@ -204,9 +204,7 @@ namespace vclcanvas
                     // actually re-create the bitmap ONLY if necessary
                     if( bNeedBitmapUpdate )
                         maContent = tools::transformBitmap( *maContent,
-                                                            aTransform,
-                                                            uno::Sequence<double>(),
-                                                            tools::MODULATE_NONE );
+                                                            aTransform );
 
                     aOutputSize = maContent->GetSizePixel();
                 }

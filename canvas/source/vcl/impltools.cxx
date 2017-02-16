@@ -197,9 +197,7 @@ namespace vclcanvas
         }
 
         ::BitmapEx transformBitmap( const BitmapEx&                 rBitmap,
-                                    const ::basegfx::B2DHomMatrix&  rTransform,
-                                    const uno::Sequence< double >&  rDeviceColor,
-                                    ModulationMode                  eModulationMode )
+                                    const ::basegfx::B2DHomMatrix&  rTransform )
         {
             SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap()" );
             SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap: 0x" << std::hex << &rBitmap );
@@ -229,14 +227,6 @@ namespace vclcanvas
             ::canvas::tools::calcRectToOriginTransform( aLocalTransform,
                                                         aSrcRect,
                                                         rTransform );
-
-            const bool bModulateColors( eModulationMode == MODULATE_WITH_DEVICECOLOR &&
-                                        rDeviceColor.getLength() > 2 );
-            const double nRedModulation( bModulateColors ? rDeviceColor[0] : 1.0 );
-            const double nGreenModulation( bModulateColors ? rDeviceColor[1] : 1.0 );
-            const double nBlueModulation( bModulateColors ? rDeviceColor[2] : 1.0 );
-            const double nAlphaModulation( bModulateColors && rDeviceColor.getLength() > 3 ?
-                                           rDeviceColor[3] : 1.0 );
 
             Bitmap aSrcBitmap( rBitmap.GetBitmap() );
             Bitmap aSrcAlpha;
@@ -328,163 +318,50 @@ namespace vclcanvas
                     // for the time being, always read as ARGB
                     for( long y=0; y<aDestBmpSize.Height(); ++y )
                     {
-                        if( bModulateColors )
+                        // differentiate mask and alpha channel (on-off
+                        // vs. multi-level transparency)
+                        if( rBitmap.IsTransparent() )
                         {
-                            // TODO(P2): Have different branches for
-                            // alpha-only modulation (color
-                            // modulations eq. 1.0)
-
-                            // modulate all color channels with given
-                            // values
-
-                            // differentiate mask and alpha channel (on-off
-                            // vs. multi-level transparency)
-                            if( rBitmap.IsTransparent() )
+                            // Handling alpha and mask just the same...
+                            for( long x=0; x<aDestBmpSize.Width(); ++x )
                             {
-                                // Handling alpha and mask just the same...
-                                for( long x=0; x<aDestBmpSize.Width(); ++x )
+                                ::basegfx::B2DPoint aPoint(x,y);
+                                aPoint *= aTransform;
+
+                                const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
+                                const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
+                                if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
+                                    nSrcY < 0 || nSrcY >= aBmpSize.Height() )
                                 {
-                                    ::basegfx::B2DPoint aPoint(x,y);
-                                    aPoint *= aTransform;
-
-                                    const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
-                                    const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
-                                    if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
-                                        nSrcY < 0 || nSrcY >= aBmpSize.Height() )
-                                    {
-                                        pAlphaWriteAccess->SetPixel( y, x, BitmapColor(255) );
-                                    }
-                                    else
-                                    {
-                                        // modulate alpha with
-                                        // nAlphaModulation. This is a
-                                        // little bit verbose, formula
-                                        // is 255 - (255-pixAlpha)*nAlphaModulation
-                                        // (invert 'alpha' pixel value,
-                                        // to get the standard alpha
-                                        // channel behaviour)
-                                        const sal_uInt8 cMappedAlphaIdx = aAlphaMap[ pAlphaReadAccess->GetPixelIndex( nSrcY, nSrcX ) ];
-                                        const sal_uInt8 cModulatedAlphaIdx = 255U - static_cast<sal_uInt8>( nAlphaModulation* (255U - cMappedAlphaIdx) + .5 );
-                                        pAlphaWriteAccess->SetPixelIndex( y, x, cModulatedAlphaIdx );
-                                        BitmapColor aColor( pReadAccess->GetPixel( nSrcY, nSrcX ) );
-
-                                        aColor.SetRed(
-                                            static_cast<sal_uInt8>(
-                                                nRedModulation *
-                                                aColor.GetRed() + .5 ));
-                                        aColor.SetGreen(
-                                            static_cast<sal_uInt8>(
-                                                nGreenModulation *
-                                                aColor.GetGreen() + .5 ));
-                                        aColor.SetBlue(
-                                            static_cast<sal_uInt8>(
-                                                nBlueModulation *
-                                                aColor.GetBlue() + .5 ));
-
-                                        pWriteAccess->SetPixel( y, x,
-                                                                aColor );
-                                    }
+                                    pAlphaWriteAccess->SetPixelIndex( y, x, 255 );
                                 }
-                            }
-                            else
-                            {
-                                for( long x=0; x<aDestBmpSize.Width(); ++x )
+                                else
                                 {
-                                    ::basegfx::B2DPoint aPoint(x,y);
-                                    aPoint *= aTransform;
-
-                                    const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
-                                    const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
-                                    if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
-                                        nSrcY < 0 || nSrcY >= aBmpSize.Height() )
-                                    {
-                                        pAlphaWriteAccess->SetPixel( y, x, BitmapColor(255) );
-                                    }
-                                    else
-                                    {
-                                        // modulate alpha with
-                                        // nAlphaModulation. This is a
-                                        // little bit verbose, formula
-                                        // is 255 - 255*nAlphaModulation
-                                        // (invert 'alpha' pixel value,
-                                        // to get the standard alpha
-                                        // channel behaviour)
-                                        pAlphaWriteAccess->SetPixel( y, x,
-                                                                     BitmapColor(
-                                                                         255U -
-                                                                         static_cast<sal_uInt8>(
-                                                                             nAlphaModulation*255.0
-                                                                             + .5 ) ) );
-
-                                        BitmapColor aColor( pReadAccess->GetPixel( nSrcY,
-                                                                                   nSrcX ) );
-
-                                        aColor.SetRed(
-                                            static_cast<sal_uInt8>(
-                                                nRedModulation *
-                                                aColor.GetRed() + .5 ));
-                                        aColor.SetGreen(
-                                            static_cast<sal_uInt8>(
-                                                nGreenModulation *
-                                                aColor.GetGreen() + .5 ));
-                                        aColor.SetBlue(
-                                            static_cast<sal_uInt8>(
-                                                nBlueModulation *
-                                                aColor.GetBlue() + .5 ));
-
-                                        pWriteAccess->SetPixel( y, x,
-                                                                aColor );
-                                    }
+                                    const sal_uInt8 cAlphaIdx = pAlphaReadAccess->GetPixelIndex( nSrcY, nSrcX );
+                                    pAlphaWriteAccess->SetPixelIndex( y, x, aAlphaMap[ cAlphaIdx ] );
+                                    pWriteAccess->SetPixel( y, x, pReadAccess->GetPixel( nSrcY, nSrcX ) );
                                 }
                             }
                         }
                         else
                         {
-                            // differentiate mask and alpha channel (on-off
-                            // vs. multi-level transparency)
-                            if( rBitmap.IsTransparent() )
+                            for( long x=0; x<aDestBmpSize.Width(); ++x )
                             {
-                                // Handling alpha and mask just the same...
-                                for( long x=0; x<aDestBmpSize.Width(); ++x )
-                                {
-                                    ::basegfx::B2DPoint aPoint(x,y);
-                                    aPoint *= aTransform;
+                                ::basegfx::B2DPoint aPoint(x,y);
+                                aPoint *= aTransform;
 
-                                    const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
-                                    const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
-                                    if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
-                                        nSrcY < 0 || nSrcY >= aBmpSize.Height() )
-                                    {
-                                        pAlphaWriteAccess->SetPixelIndex( y, x, 255 );
-                                    }
-                                    else
-                                    {
-                                        const sal_uInt8 cAlphaIdx = pAlphaReadAccess->GetPixelIndex( nSrcY, nSrcX );
-                                        pAlphaWriteAccess->SetPixelIndex( y, x, aAlphaMap[ cAlphaIdx ] );
-                                        pWriteAccess->SetPixel( y, x, pReadAccess->GetPixel( nSrcY, nSrcX ) );
-                                    }
+                                const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
+                                const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
+                                if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
+                                    nSrcY < 0 || nSrcY >= aBmpSize.Height() )
+                                {
+                                    pAlphaWriteAccess->SetPixel( y, x, BitmapColor(255) );
                                 }
-                            }
-                            else
-                            {
-                                for( long x=0; x<aDestBmpSize.Width(); ++x )
+                                else
                                 {
-                                    ::basegfx::B2DPoint aPoint(x,y);
-                                    aPoint *= aTransform;
-
-                                    const int nSrcX( ::basegfx::fround( aPoint.getX() ) );
-                                    const int nSrcY( ::basegfx::fround( aPoint.getY() ) );
-                                    if( nSrcX < 0 || nSrcX >= aBmpSize.Width() ||
-                                        nSrcY < 0 || nSrcY >= aBmpSize.Height() )
-                                    {
-                                        pAlphaWriteAccess->SetPixel( y, x, BitmapColor(255) );
-                                    }
-                                    else
-                                    {
-                                        pAlphaWriteAccess->SetPixel( y, x, BitmapColor(0) );
-                                        pWriteAccess->SetPixel( y, x, pReadAccess->GetPixel( nSrcY,
-                                                                                             nSrcX ) );
-                                    }
+                                    pAlphaWriteAccess->SetPixel( y, x, BitmapColor(0) );
+                                    pWriteAccess->SetPixel( y, x, pReadAccess->GetPixel( nSrcY,
+                                                                                         nSrcX ) );
                                 }
                             }
                         }
