@@ -510,9 +510,9 @@ void SdrMarkView::BrkMarkGluePoints()
     }
 }
 
-sal_uIntPtr SdrMarkView::GetMarkableObjCount() const
+size_t SdrMarkView::GetMarkableObjCount() const
 {
-    sal_uIntPtr nCount=0;
+    size_t nCount=0;
     SdrPageView* pPV = GetSdrPageView();
 
     if(pPV)
@@ -1883,7 +1883,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
     if ((bBoundCheckOn2ndPass || bCheckNearestOn3rdPass) && !bFnd) {
         SdrObject* pBestObj=nullptr;
         SdrPageView* pBestPV=nullptr;
-        sal_uIntPtr nBestDist=ULONG_MAX;
+        sal_uInt64 nBestDist=ULONG_MAX;
         for (size_t nMarkNum=nMarkCount; nMarkNum>0 && !bFnd;) {
             --nMarkNum;
             SdrMark* pM=GetSdrMarkByIndex(nMarkNum);
@@ -1899,7 +1899,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
                 rpObj=pObj;
                 rpPV=pPV;
             } else if (bCheckNearestOn3rdPass) {
-                sal_uIntPtr nDist=0;
+                sal_uInt64 nDist=0;
                 if (aPt.X()<aRect.Left())   nDist+=aRect.Left()-aPt.X();
                 if (aPt.X()>aRect.Right())  nDist+=aPt.X()-aRect.Right();
                 if (aPt.Y()<aRect.Top())    nDist+=aRect.Top()-aPt.Y();
