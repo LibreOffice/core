@@ -2079,7 +2079,7 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
             break;
         case SID_SC_TP_USERLISTS:
         {
-            ::CreateTabPage ScTpUserListsCreate = pFact->GetTabPageCreatorFunc(RID_SCPAGE_USERLISTS );
+            ::CreateTabPage ScTpUserListsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_USERLISTS);
             if (ScTpUserListsCreate)
                 pRet = (*ScTpUserListsCreate)(pParent, &rSet);
             break;
