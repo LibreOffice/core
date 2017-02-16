@@ -123,7 +123,7 @@ class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventLis
 LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : m_xContext(xContext)
     , m_nSearchFlags(0)
-    , m_eFeature(E_NO_FEATURE)
+    , m_eFeature(LoadEnvFeatures::NONE)
     , m_eContentType(E_UNSUPPORTED_CONTENT)
     , m_bCloseFrameOnError(false)
     , m_bReactivateControllerOnError(false)
@@ -213,7 +213,7 @@ utl::MediaDescriptor addModelArgs(const uno::Sequence<beans::PropertyValue>& rDe
 
 void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans::PropertyValue>& lMediaDescriptor,
         const uno::Reference<frame::XFrame>& xBaseFrame, const OUString& sTarget,
-        sal_Int32 nSearchFlags, EFeature eFeature)
+        sal_Int32 nSearchFlags, LoadEnvFeatures eFeature)
 {
     osl::MutexGuard g(m_mutex);
 
@@ -269,7 +269,7 @@ void LoadEnv::initializeLoading(const OUString& sURL, const uno::Sequence<beans:
 
     // UI mode
     const bool bUIMode =
-        ((m_eFeature & E_WORK_WITH_UI) == E_WORK_WITH_UI) &&
+        (m_eFeature & LoadEnvFeatures::WorkWithUI) &&
         !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_HIDDEN(), false) &&
         !m_lMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_PREVIEW(), false);
 
@@ -359,7 +359,7 @@ void LoadEnv::startLoading()
     // Use another strategy here. Try it and let it run into the case "loading not possible".
     bool bStarted = false;
     if (
-        ((m_eFeature & E_ALLOW_CONTENTHANDLER) == E_ALLOW_CONTENTHANDLER) &&
+        (m_eFeature & LoadEnvFeatures::AllowContentHandler) &&
         (m_eContentType                        != E_CAN_BE_SET          )   /* Attention: special feature to set existing component on a frame must ignore type detection! */
        )
     {

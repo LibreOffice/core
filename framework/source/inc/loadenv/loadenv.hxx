@@ -35,6 +35,33 @@
 #include <rtl/ref.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <o3tl/typed_flags_set.hxx>
+
+
+/** @short  enable/disable special features
+            of a load request.
+
+    @desrc  Such features must outcome without
+            any special parameters.
+            To make enabling/disabling of
+            features very easy (e.g. at the ctor of
+             this class) these values must be combinable
+            as flags. That means: its values must be in
+            range of [2^n]!
+ */
+enum class LoadEnvFeatures
+{
+    /// we should be informed, if no feature is enabled :-)
+    NONE = 0,
+    /// enable using of UI elements during loading (means progress, interaction handler etcpp.)
+    WorkWithUI = 1,
+    /// enable loading of resources, which are not related to a target frame! (see concept of ContentHandler)
+    AllowContentHandler = 2
+};
+namespace o3tl {
+    template<> struct typed_flags<LoadEnvFeatures> : is_typed_flags<LoadEnvFeatures, 0x3> {};
+}
+
 
 namespace framework {
 
@@ -51,28 +78,6 @@ class QuietInteraction;
 class LoadEnv
 {
 public:
-
-    /** @short  enable/disable special features
-                of a load request.
-
-        @desrc  Such features must outcome without
-                any special parameters.
-                To make enabling/disabling of
-                features very easy (e.g. at the ctor of
-                this class) these values must be combinable
-                as flags. That means: its values must be in
-                range of [2^n]!
-     */
-    enum EFeature
-    {
-        /// we should be informed, if no feature is enabled :-)
-        E_NO_FEATURE = 0,
-        /// enable using of UI elements during loading (means progress, interaction handler etcpp.)
-        E_WORK_WITH_UI = 1,
-        /// enable loading of resources, which are not related to a target frame! (see concept of ContentHandler)
-        E_ALLOW_CONTENTHANDLER = 2
-    };
-
     /** @short  classify a content.
 
         @descr  The load environment must know, if a content
@@ -153,7 +158,7 @@ private:
     css::util::URL m_aURL;
 
     /** @short  enable/disable special features of a load request. */
-    EFeature m_eFeature;
+    LoadEnvFeatures m_eFeature;
 
     /** @short  classify the content, which should be loaded by this instance. */
     EContentType m_eContentType;
@@ -264,7 +269,7 @@ public:
                            const css::uno::Reference< css::frame::XFrame >&          xBaseFrame      ,
                            const OUString&                                           sTarget         ,
                                  sal_Int32                                           nSearchFlags    ,
-                                 EFeature                                            eFeature        = E_NO_FEATURE);
+                                 LoadEnvFeatures                                     eFeature        = LoadEnvFeatures::NONE);
 
     /** @short  start loading of the resource represented by this loadenv instance.
 
