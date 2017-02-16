@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,xsec_fw,\
 
 $(eval $(call gb_Library_add_exception_objects,xsec_fw,\
 	xmlsecurity/source/framework/buffernode \
-	xmlsecurity/source/framework/decryptorimpl \
 	xmlsecurity/source/framework/elementcollector \
 	xmlsecurity/source/framework/elementmark \
 	xmlsecurity/source/framework/encryptionengine \
