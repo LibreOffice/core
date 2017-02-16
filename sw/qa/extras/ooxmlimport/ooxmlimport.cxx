@@ -707,6 +707,15 @@ DECLARE_OOXMLIMPORT_TEST(testfdo76583, "fdo76583.docx")
     lcl_countTextFrames( mxComponent, 1 );
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf105975formula, "tdf105975.docx")
+{
+    // Make sure the field contains a formula with 10 + 15
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xTextRange(xTextDocument->getText(), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("25"), xTextRange->getString());
+}
+
 DECLARE_OOXMLIMPORT_TEST(testTdf75573, "tdf75573_page1frame.docx")
 {
     // the problem was that the frame was discarded
