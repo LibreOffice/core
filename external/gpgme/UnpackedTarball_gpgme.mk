@@ -15,5 +15,6 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,gpgme,0))
 
 $(eval $(call gb_UnpackedTarball_add_patches,gpgme, \
     external/gpgme/find-libgpg-error-libassuan.patch \
+    external/gpgme/fix-autoconf-macros.patch \
 ))
 # vim: set noet sw=4 ts=4:
