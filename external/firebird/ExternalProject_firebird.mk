@@ -54,6 +54,8 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			" \
 		&& export CXXFLAGS=" \
 			$(if $(filter MSC,$(COM)),$(if $(MSVC_USE_DEBUG_RUNTIME),-DMSVC_USE_DEBUG_RUNTIME)) \
+			$(if $(filter LINUX/X86_64/TRUE,$(OS)/$(CPUNAME)/$(COM_IS_CLANG)), \
+				-DDEBUG_GDS_ALLOC) \
 			$(if $(HAVE_GCC_FNO_SIZED_DEALLOCATION),-fno-sized-deallocation -fno-delete-null-pointer-checks) \
 			$(if $(SYSTEM_BOOST),$(BOOST_CPPFLAGS), \
 				$(BOOST_CPPFLAGS) \
