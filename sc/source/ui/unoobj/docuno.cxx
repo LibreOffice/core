@@ -128,9 +128,9 @@ using namespace com::sun::star;
 // #i111553# provides the name of the VBA constant for this document type (e.g. 'ThisExcelDoc' for Calc)
 #define SC_UNO_VBAGLOBNAME "VBAGlobalConstantName"
 
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+//  no Which-ID here, map only for PropertySetInfo
 
-//! umbenennen, sind nicht mehr nur Options
+//! rename this, those are no longer only options
 static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
 {
     static const SfxItemPropertyMapEntry aDocOptPropertyMap_Impl[] =
@@ -184,7 +184,7 @@ static const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
     return aDocOptPropertyMap_Impl;
 }
 
-//! StandardDecimals als Property und vom NumberFormatter ????????
+//! StandardDecimals as property and from NumberFormatter ????????
 
 static const SfxItemPropertyMapEntry* lcl_GetColumnsPropertyMap()
 {
@@ -403,18 +403,18 @@ uno::Reference< uno::XAggregation> const & ScModelObj::GetFormatter()
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
     if ( !xNumberAgg.is() && pDocShell )
     {
-        // setDelegator veraendert den RefCount, darum eine Referenz selber halten
-        // (direkt am m_refCount, um sich beim release nicht selbst zu loeschen)
+        // setDelegator changes RefCount, so we'd better hold the reference ourselves
+        // (directly in m_refCount, so we don't delete ourselves with release())
         osl_atomic_increment( &m_refCount );
-        // waehrend des queryInterface braucht man ein Ref auf das
-        // SvNumberFormatsSupplierObj, sonst wird es geloescht.
+        // we need a reference to SvNumberFormatsSupplierObj during queryInterface,
+        // otherwise it'll be deleted
         uno::Reference<util::XNumberFormatsSupplier> xFormatter(new SvNumberFormatsSupplierObj(pDocShell->GetDocument().GetFormatTable() ));
         {
             xNumberAgg.set(uno::Reference<uno::XAggregation>( xFormatter, uno::UNO_QUERY ));
             // extra block to force deletion of the temporary before setDelegator
         }
 
-        // beim setDelegator darf die zusaetzliche Ref nicht mehr existieren
+        // during setDelegator no additional reference should exist
         xFormatter = nullptr;
 
         if (xNumberAgg.is())
@@ -1946,7 +1946,7 @@ void SAL_CALL ScModelObj::calculate()
         pDocShell->DoRecalc(true);
     else
     {
-        OSL_FAIL("keine DocShell");     //! Exception oder so?
+        OSL_FAIL("no DocShell");     //! throw exception?
     }
 }
 
@@ -1957,7 +1957,7 @@ void SAL_CALL ScModelObj::calculateAll()
         pDocShell->DoHardRecalc(true);
     else
     {
-        OSL_FAIL("keine DocShell");     //! Exception oder so?
+        OSL_FAIL("no DocShell");     //! throw exception?
     }
 }
 
@@ -1967,7 +1967,7 @@ sal_Bool SAL_CALL ScModelObj::isAutomaticCalculationEnabled()
     if (pDocShell)
         return pDocShell->GetDocument().GetAutoCalc();
 
-    OSL_FAIL("keine DocShell");     //! Exception oder so?
+    OSL_FAIL("no DocShell");     //! throw exception?
     return false;
 }
 
@@ -1986,7 +1986,7 @@ void SAL_CALL ScModelObj::enableAutomaticCalculation( sal_Bool bEnabledIn )
     }
     else
     {
-        OSL_FAIL("keine DocShell");     //! Exception oder so?
+        OSL_FAIL("no DocShell");     //! throw exception?
     }
 }
 
@@ -2019,7 +2019,7 @@ sal_Bool SAL_CALL ScModelObj::isProtected()
     if (pDocShell)
         return pDocShell->GetDocument().IsDocProtected();
 
-    OSL_FAIL("keine DocShell");     //! Exception oder so?
+    OSL_FAIL("no DocShell");     //! throw exception?
     return false;
 }
 
@@ -2031,7 +2031,7 @@ uno::Reference<drawing::XDrawPages> SAL_CALL ScModelObj::getDrawPages()
     if (pDocShell)
         return new ScDrawPagesObj(pDocShell);
 
-    OSL_FAIL("keine DocShell");     //! Exception oder so?
+    OSL_FAIL("no DocShell");     //! throw exception?
     return nullptr;
 }
 
@@ -2044,7 +2044,7 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
 {
     SolarMutexGuard aGuard;
     sheet::GoalResult aResult;
-    aResult.Divergence = DBL_MAX;       // nichts gefunden
+    aResult.Divergence = DBL_MAX;       // not found
     if (pDocShell)
     {
         WaitObject aWait( ScDocShell::GetActiveDialogParent() );
@@ -2056,7 +2056,7 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
                     aGoalValue, fValue );
         aResult.Result = fValue;
         if (bFound)
-            aResult.Divergence = 0.0;   //! das ist gelogen
+            aResult.Divergence = 0.0;   //! this is a lie
     }
     return aResult;
 }
@@ -2082,10 +2082,10 @@ void SAL_CALL ScModelObj::consolidate(
     const uno::Reference<sheet::XConsolidationDescriptor>& xDescriptor )
 {
     SolarMutexGuard aGuard;
-    //  das koennte theoretisch ein fremdes Objekt sein, also nur das
-    //  oeffentliche XConsolidationDescriptor Interface benutzen, um
-    //  die Daten in ein ScConsolidationDescriptor Objekt zu kopieren:
-    //! wenn es schon ein ScConsolidationDescriptor ist, direkt per getImplementation?
+    //  in theory, this could also be a different object, so use only
+    //  public XConsolidationDescriptor interface to copy the data into
+    //  ScConsolidationDescriptor object
+    //! but if this already is ScConsolidationDescriptor, do it directly via getImplementation?
 
     rtl::Reference< ScConsolidationDescriptor > xImpl(new ScConsolidationDescriptor);
     xImpl->setFunction( xDescriptor->getFunction() );
@@ -2139,8 +2139,8 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
     return xRet;
 }
 
-//  XPropertySet (Doc-Optionen)
-//! auch an der Applikation anbieten?
+//  XPropertySet (Doc-Options)
+//! provide them also to the application?
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScModelObj::getPropertySetInfo()
 {
@@ -2538,8 +2538,8 @@ css::uno::Reference<css::uno::XInterface> ScModelObj::create(
     }
     else
     {
-        //  alles was ich nicht kenn, werf ich der SvxFmMSFactory an den Hals,
-        //  da wird dann 'ne Exception geworfen, wenn's nicht passt...
+        //  we offload everything we don't know to SvxFmMSFactory,
+        //  it'll throw exception if this isn't okay ...
 
         try
         {
@@ -2578,7 +2578,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstanceWithArguments
                                 const OUString& ServiceSpecifier,
                                 const uno::Sequence<uno::Any>& aArgs )
 {
-    //! unterscheiden zwischen eigenen Services und denen vom Drawing-Layer?
+    //! distinguish between own services and those of drawing layer?
 
     SolarMutexGuard aGuard;
     uno::Reference<uno::XInterface> xInt(create(ServiceSpecifier, &aArgs));
@@ -2599,7 +2599,7 @@ uno::Sequence<OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
 {
     SolarMutexGuard aGuard;
 
-    //! warum sind die Parameter bei concatServiceNames nicht const ???
+    //! why are the parameters of concatServiceNames not const ???
     //! return concatServiceNames( ScServiceProvider::GetAllServiceNames(),
     //!                            SvxFmMSFactory::getAvailableServiceNames() );
 
@@ -3036,11 +3036,11 @@ ScDrawPagesObj::~ScDrawPagesObj()
 
 void ScDrawPagesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    //  we don't care about update of references here
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -3053,7 +3053,7 @@ uno::Reference<drawing::XDrawPage> ScDrawPagesObj::GetObjectByIndex_Impl(sal_Int
         if ( pDrawLayer && nIndex >= 0 && nIndex < pDocShell->GetDocument().GetTableCount() )
         {
             SdrPage* pPage = pDrawLayer->GetPage((sal_uInt16)nIndex);
-            OSL_ENSURE(pPage,"Draw-Page nicht gefunden");
+            OSL_ENSURE(pPage,"Draw-Page not found");
             if (pPage)
             {
                 return uno::Reference<drawing::XDrawPage> (pPage->getUnoPage(), uno::UNO_QUERY);
@@ -3143,11 +3143,11 @@ ScTableSheetsObj::~ScTableSheetsObj()
 
 void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //  Referenz-Update interessiert hier nicht
+    // we don't care about update of references here
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -3240,7 +3240,7 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::
         if ( xInterface.is() )
         {
             ScTableSheetObj* pSheetObj = ScTableSheetObj::getImplementation( xInterface );
-            if ( pSheetObj && !pSheetObj->GetDocShell() )   // noch nicht eingefuegt?
+            if ( pSheetObj && !pSheetObj->GetDocShell() )   // not inserted yet?
             {
                 ScDocument& rDoc = pDocShell->GetDocument();
                 SCTAB nDummy;
@@ -3256,7 +3256,7 @@ void SAL_CALL ScTableSheetsObj::insertByName( const OUString& aName, const uno::
                                                                  true, true );
                     if (bDone)
                         pSheetObj->InitInsertSheet( pDocShell, nPosition );
-                    //  Dokument und neuen Range am Objekt setzen
+                    //  set document and new range in the object
                 }
             }
             else
@@ -3289,14 +3289,14 @@ void SAL_CALL ScTableSheetsObj::replaceByName( const OUString& aName, const uno:
         if ( xInterface.is() )
         {
             ScTableSheetObj* pSheetObj = ScTableSheetObj::getImplementation( xInterface );
-            if ( pSheetObj && !pSheetObj->GetDocShell() )   // noch nicht eingefuegt?
+            if ( pSheetObj && !pSheetObj->GetDocShell() )   // not inserted yet?
             {
                 SCTAB nPosition;
                 if ( pDocShell->GetDocument().GetTable( aName, nPosition ) )
                 {
                     if ( pDocShell->GetDocFunc().DeleteTable( nPosition, true, true ) )
                     {
-                        //  InsertTable kann jetzt eigentlich nicht schiefgehen...
+                        //  InsertTable can't really go wrong now
                         bDone = pDocShell->GetDocFunc().InsertTable( nPosition, aName, true, true );
                         if (bDone)
                             pSheetObj->InitInsertSheet( pDocShell, nPosition );
@@ -3365,7 +3365,7 @@ sal_Int32 ScTableSheetsObj::importSheet(
     if (nIndexDest > nCount || nIndexDest < 0)
         throw lang::IndexOutOfBoundsException();
 
-    // Transfert Tab
+    // Transfer Tab
     bool bInsertNew = true;
     bool bNotifyAndPaint = true;
     pDocShell->TransferTab(
@@ -3530,11 +3530,11 @@ void ScTableColumnsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        //! Referenz-Update fuer Tab und Start/Ende
+        //! update of references for sheet and its start/end
     }
     else if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -3546,7 +3546,7 @@ ScTableColumnObj* ScTableColumnsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) con
     if ( pDocShell && nCol <= nEndCol )
         return new ScTableColumnObj( pDocShell, nCol, nTab );
 
-    return nullptr;    // falscher Index
+    return nullptr;    // wrong index
 }
 
 ScTableColumnObj* ScTableColumnsObj::GetObjectByName_Impl(const OUString& aName) const
@@ -3578,7 +3578,7 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
-    //  Der zu loeschende Bereich muss innerhalb des Objekts liegen
+    //  the range to be deleted has to lie within the object
     if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartCol+nIndex+nCount-1 <= nEndCol )
     {
         ScRange aRange( (SCCOL)(nStartCol+nIndex), 0, nTab,
@@ -3657,7 +3657,7 @@ sal_Bool SAL_CALL ScTableColumnsObj::hasByName( const OUString& aName )
         if ( pDocShell && nCol >= nStartCol && nCol <= nEndCol )
             return true;
 
-    return false;       // nicht gefunden
+    return false;       // not found
 }
 
 // XPropertySet
@@ -3778,11 +3778,11 @@ void ScTableRowsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        //! Referenz-Update fuer Tab und Start/Ende
+        //! update of references for sheet and its start/end
     }
     else if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -3794,7 +3794,7 @@ ScTableRowObj* ScTableRowsObj::GetObjectByIndex_Impl(sal_Int32 nIndex) const
     if ( pDocShell && nRow <= nEndRow )
         return new ScTableRowObj( pDocShell, nRow, nTab );
 
-    return nullptr;    // falscher Index
+    return nullptr;    // wrong index
 }
 
 void SAL_CALL ScTableRowsObj::insertByIndex( sal_Int32 nPosition, sal_Int32 nCount )
@@ -3816,7 +3816,7 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
 {
     SolarMutexGuard aGuard;
     bool bDone = false;
-    //  Der zu loeschende Bereich muss innerhalb des Objekts liegen
+    // the range to be deleted has to lie within the object
     if ( pDocShell && nCount > 0 && nIndex >= 0 && nStartRow+nIndex+nCount-1 <= nEndRow )
     {
         ScRange aRange( 0, (SCROW)(nStartRow+nIndex), nTab,
@@ -4037,19 +4037,16 @@ ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSpreadsheetSettingsObj::getPropertySetInfo()
 {
-    //! muss noch
     return nullptr;
 }
 
 void SAL_CALL ScSpreadsheetSettingsObj::setPropertyValue(
                         const OUString& /* aPropertyName */, const uno::Any& /* aValue */ )
 {
-    //! muss noch
 }
 
 uno::Any SAL_CALL ScSpreadsheetSettingsObj::getPropertyValue( const OUString& /* aPropertyName */ )
 {
-    //! muss noch
     return uno::Any();
 }
 
@@ -4072,11 +4069,11 @@ ScAnnotationsObj::~ScAnnotationsObj()
 
 void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! nTab bei Referenz-Update anpassen!!!
+    //! adjust nTab when updatig references!!!
 
     if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -4109,7 +4106,7 @@ void SAL_CALL ScAnnotationsObj::insertNew(
     SolarMutexGuard aGuard;
     if (pDocShell)
     {
-        OSL_ENSURE( aPosition.Sheet == nTab, "addAnnotation mit falschem Sheet" );
+        OSL_ENSURE( aPosition.Sheet == nTab, "addAnnotation with a wrong Sheet" );
         ScAddress aPos( (SCCOL)aPosition.Column, (SCROW)aPosition.Row, nTab );
         pDocShell->GetDocFunc().ReplaceNote( aPos, rText, nullptr, nullptr, true );
     }
@@ -4198,11 +4195,11 @@ void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( dynamic_cast<const ScUpdateRefHint*>(&rHint) )
     {
-        //! Referenz-Update fuer Tab und Start/Ende
+        //! update of references for sheet and its start/end
     }
     else if ( rHint.GetId() == SfxHintId::Dying )
     {
-        pDocShell = nullptr;       // ungueltig geworden
+        pDocShell = nullptr;       // became invalid
     }
 }
 
@@ -4210,7 +4207,7 @@ void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 bool ScScenariosObj::GetScenarioIndex_Impl( const OUString& rName, SCTAB& rIndex )
 {
-    //! Case-insensitiv ????
+    //! Case-insensitive ????
 
     if ( pDocShell )
     {
@@ -4235,7 +4232,7 @@ ScTableSheetObj* ScScenariosObj::GetObjectByIndex_Impl(sal_Int32 nIndex)
     if ( pDocShell && nIndex >= 0 && nIndex < nCount )
         return new ScTableSheetObj( pDocShell, nTab+static_cast<SCTAB>(nIndex)+1 );
 
-    return nullptr;    // kein Dokument oder falscher Index
+    return nullptr;    // no document or wrong index
 }
 
 ScTableSheetObj* ScScenariosObj::GetObjectByName_Impl(const OUString& aName)
@@ -4244,7 +4241,7 @@ ScTableSheetObj* ScScenariosObj::GetObjectByName_Impl(const OUString& aName)
     if ( pDocShell && GetScenarioIndex_Impl( aName, nIndex ) )
         return new ScTableSheetObj( pDocShell, nTab+nIndex+1 );
 
-    return nullptr;    // nicht gefunden
+    return nullptr;    // not found
 }
 
 void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
@@ -4263,7 +4260,7 @@ void SAL_CALL ScScenariosObj::addNewByName( const OUString& aName,
             const table::CellRangeAddress* pAry = aRanges.getConstArray();
             for (sal_uInt16 i=0; i<nRangeCount; i++)
             {
-                OSL_ENSURE( pAry[i].Sheet == nTab, "addScenario mit falscher Tab" );
+                OSL_ENSURE( pAry[i].Sheet == nTab, "addScenario with a wrong Tab" );
                 ScRange aRange( (SCCOL)pAry[i].StartColumn, (SCROW)pAry[i].StartRow, nTab,
                                 (SCCOL)pAry[i].EndColumn,   (SCROW)pAry[i].EndRow,   nTab );
 
@@ -4356,7 +4353,7 @@ uno::Sequence<OUString> SAL_CALL ScScenariosObj::getElementNames()
     SCTAB nCount = (SCTAB)getCount();
     uno::Sequence<OUString> aSeq(nCount);
 
-    if ( pDocShell )    // sonst ist auch Count = 0
+    if ( pDocShell )    // otherwise Count = 0
     {
         OUString aTabName;
         ScDocument& rDoc = pDocShell->GetDocument();
