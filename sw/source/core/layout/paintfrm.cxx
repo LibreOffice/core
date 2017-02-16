@@ -5578,6 +5578,7 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
         case SwFootnoteAdj::Left:
             /* do nothing */; break;
         default:
+            SAL_WARN("sw.core", "New adjustment for footnote lines?");
             assert(false);
     }
     SwTwips nLineWidth = rInf.GetLineWidth();

@@ -45,7 +45,7 @@ class SwPageDescs;
 /// Separator line adjustment.
 enum class SwFootnoteAdj
 {
-    Left, Right
+    Left = 0, Center = 1, Right = 2
 };
 
 /// Footnote information.
@@ -76,7 +76,7 @@ public:
     void SetLineStyle(editeng::SvxBorderStyle const eSet) {m_eLineStyle = eSet;}
     void SetLineColor(const Color& rCol)    { m_LineColor = rCol;}
     void SetWidth(const Fraction & rNew)    { m_Width = rNew; }
-    void SetAdj(SwFootnoteAdj const eNew)        { m_eAdjust = eNew; }
+    void SetAdj(SwFootnoteAdj const eNew)   { m_eAdjust = eNew; }
     void SetTopDist   (SwTwips const nNew)  { m_nTopDist = nNew; }
     void SetBottomDist(SwTwips const nNew)  { m_nBottomDist = nNew; }
 
