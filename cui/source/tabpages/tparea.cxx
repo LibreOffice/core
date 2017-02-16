@@ -401,7 +401,6 @@ void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
     if(nId == SOLID )
     {
         static_cast<SvxColorTabPage*>(pTab)->SetColorList( m_pColorList );
-        static_cast<SvxColorTabPage*>(pTab)->SetPos( &m_nPos );
         static_cast<SvxColorTabPage*>(pTab)->SetColorChgd( m_pnColorListState );
         static_cast<SvxColorTabPage*>(pTab)->Construct();
         static_cast<SvxColorTabPage*>(pTab)->ActivatePage( m_rXFSet );

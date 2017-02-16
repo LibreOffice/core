@@ -267,6 +267,7 @@ public:
 
     void Replace(long nIndex, std::unique_ptr<XColorEntry> pEntry);
     XColorEntry* GetColor(long nIndex) const;
+    long GetIndexOfColor( const Color& rColor) const;
     virtual css::uno::Reference< css::container::XNameContainer > createInstance() override;
     virtual bool Create() override;
 
