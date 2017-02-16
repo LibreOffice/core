@@ -249,7 +249,7 @@ public:
     void Dump( SvStream&, bool bDumpAll );
 
     void SetName( const OUString& );
-    const OUString& GetName( SbxNameType = SbxNAME_NONE ) const;
+    const OUString& GetName( SbxNameType = SbxNameType::NONE ) const;
     sal_uInt16 GetHashCode() const          { return nHash; }
 
     virtual void SetModified( bool ) override;

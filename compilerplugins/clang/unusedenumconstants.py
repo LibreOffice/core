@@ -114,6 +114,7 @@ for d in definitionSet:
          "sd/source/filter/eppt/epptbase.hxx", # PPTExTextAttr
          "sc/source/filter/inc/tokstack.hxx", # E_TYPE
          "filter/source/graphicfilter/icgm/cgmtypes.hxx",
+         ":basic/source/inc/filefmt.hxx", # FileOffset
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -137,6 +138,9 @@ for d in definitionSet:
          "cppcanvas/source/mtfrenderer/emfpbrush.hxx", # EmfPlusHatchStyle
          "include/filter/msfilter/svdfppt.hxx", # PptPlaceholder, PptSlideLayout
          "include/filter/msfilter/escherex.hxx", # various
+         "basic/source/inc/opcodes.hxx", # SbiOpcode
+         "basic/source/inc/token.hxx", # SbiToken
+         "binaryurp/source/specialfunctionids.hxx", # binaryurp::SpecialFunctionIds
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
@@ -170,6 +174,7 @@ for d in definitionSet:
          "cui/source/tabpages/tparea.cxx", # FillType (from UI)
          "include/editeng/svxenum.hxx", # css::style::NumberingType
          "include/editeng/bulletitem.hxx", # css::style::NumberingType
+         ":basic/source/sbx/sbxdec.hxx", # SbxDecimal::CmpResult, must match some Windows API
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",

@@ -232,7 +232,7 @@ void SbxVariable::SetName( const OUString& rName )
 const OUString& SbxVariable::GetName( SbxNameType t ) const
 {
     static const char cSuffixes[] = "  %&!#@ $";
-    if( t == SbxNAME_NONE )
+    if( t == SbxNameType::NONE )
     {
         return maName;
     }
@@ -247,7 +247,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     OUString aTmp( maName );
     // short type? Then fetch it, possible this is 0.
     SbxDataType et = GetType();
-    if( t == SbxNAME_SHORT_TYPES )
+    if( t == SbxNameType::ShortTypes )
     {
         if( et <= SbxSTRING )
         {
@@ -279,7 +279,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
         aTmp += i->aName;
         cType = ' ';
         // short type? Then fetch it, possible this is 0.
-        if( t == SbxNAME_SHORT_TYPES )
+        if( t == SbxNameType::ShortTypes )
         {
             if( nt <= SbxSTRING )
             {
@@ -301,34 +301,18 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
                 aTmp += "()";
             }
             // long type?
-            if( t != SbxNAME_SHORT )
+            aTmp += GetSbxRes( StringId::As );
+            if( nt < 32 )
             {
-                aTmp += GetSbxRes( StringId::As );
-                if( nt < 32 )
-                {
-                    aTmp += GetSbxRes( static_cast<StringId>( static_cast<int>( StringId::Types ) + nt ) );
-                }
-                else
-                {
-                    aTmp += GetSbxRes( StringId::Any );
-                }
+                aTmp += GetSbxRes( static_cast<StringId>( static_cast<int>( StringId::Types ) + nt ) );
+            }
+            else
+            {
+                aTmp += GetSbxRes( StringId::Any );
             }
         }
     }
     aTmp += ")";
-    // Long type? Then fetch it
-    if( t == SbxNAME_LONG_TYPES && et != SbxEMPTY )
-    {
-        aTmp += GetSbxRes( StringId::As );
-        if( et < 32 )
-        {
-            aTmp += GetSbxRes(  static_cast<StringId>( static_cast<int>( StringId::Types ) + et ) );
-        }
-        else
-        {
-            aTmp += GetSbxRes( StringId::Any );
-        }
-    }
     const_cast<SbxVariable*>(this)->aToolString = aTmp;
     return aToolString;
 }
@@ -699,7 +683,7 @@ void SbxAlias::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void SbxVariable::Dump( SvStream& rStrm, bool bFill )
 {
-    OString aBNameStr(OUStringToOString(GetName( SbxNAME_SHORT_TYPES ), RTL_TEXTENCODING_ASCII_US));
+    OString aBNameStr(OUStringToOString(GetName( SbxNameType::ShortTypes ), RTL_TEXTENCODING_ASCII_US));
     rStrm.WriteCharPtr( "Variable( " )
          .WriteCharPtr( OString::number(reinterpret_cast<sal_Int64>(this)).getStr() ).WriteCharPtr( "==" )
          .WriteCharPtr( aBNameStr.getStr() );

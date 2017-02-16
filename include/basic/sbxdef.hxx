@@ -119,11 +119,9 @@ enum SbxOperator {
     SbxGE       // this >= var
 };
 
-enum SbxNameType {          // Type of the questioned name of a variable
-    SbxNAME_NONE,           // plain name
-    SbxNAME_SHORT,          // Name(A,B)
-    SbxNAME_SHORT_TYPES,    // Name%(A%,B$)
-    SbxNAME_LONG_TYPES      // Name(A As Integer, B As String) As Integer
+enum class SbxNameType {          // Type of the questioned name of a variable
+    NONE,           // plain name
+    ShortTypes,     // Name%(A%,B$)
 };
 
 // from 1996/3/20: New error messages

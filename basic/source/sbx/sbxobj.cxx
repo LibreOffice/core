@@ -764,7 +764,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
         SbxVariable* pVar = r.get();
         if( pVar )
         {
-            OUString aLine = aIndent + "  - " + pVar->GetName( SbxNAME_SHORT_TYPES );
+            OUString aLine = aIndent + "  - " + pVar->GetName( SbxNameType::ShortTypes );
             OUString aAttrs2;
             if( CollectAttrs( pVar, aAttrs2 ) )
             {
@@ -801,7 +801,7 @@ void SbxObject::Dump( SvStream& rStrm, bool bFill )
             SbxVariable* pVar = r.get();
             if( pVar )
             {
-                OUString aLine = aIndent + "  - " + pVar->GetName( SbxNAME_SHORT_TYPES );
+                OUString aLine = aIndent + "  - " + pVar->GetName( SbxNameType::ShortTypes );
                 OUString aAttrs3;
                 if( CollectAttrs( pVar, aAttrs3 ) )
                 {
