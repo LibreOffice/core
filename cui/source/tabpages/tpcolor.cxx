@@ -59,7 +59,6 @@ SvxColorTabPage::SvxColorTabPage(vcl::Window* pParent, const SfxItemSet& rInAttr
     , rOutAttrs           ( rInAttrs )
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
-    , pPos( nullptr )
     , aXFStyleItem( drawing::FillStyle_SOLID )
     , aXFillColorItem( OUString(), Color( COL_BLACK ) )
     , aXFillAttr( rInAttrs.GetPool() )
@@ -239,38 +238,26 @@ void SvxColorTabPage::ActivatePage( const SfxItemSet& )
 {
     if( pColorList.is() )
     {
-        if( *pPos != LISTBOX_ENTRY_NOTFOUND )
+        const SfxPoolItem* pPoolItem = nullptr;
+        if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
         {
-            m_pValSetColorList->SelectItem( m_pValSetColorList->GetItemId( static_cast<size_t>(*pPos) ) );
-            const XColorEntry* pEntry = pColorList->GetColor(*pPos);
-            aPreviousColor = pEntry->GetColor();
-            ChangeColor(pEntry->GetColor());
-        }
-        else if( *pPos == LISTBOX_ENTRY_NOTFOUND )
-        {
-            const SfxPoolItem* pPoolItem = nullptr;
-            if( SfxItemState::SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), true, &pPoolItem ) )
-            {
-                SetColorModel( ColorModel::RGB );
-                ChangeColorModel();
+            SetColorModel( ColorModel::RGB );
+            ChangeColorModel();
 
-                aPreviousColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
-                ChangeColor( aPreviousColor );
+            const Color aColor = static_cast<const XFillColorItem*>(pPoolItem)->GetColorValue();
+            ChangeColor( aColor );
+            sal_Int32 nPos = FindInPalette( aColor );
 
-                m_pRcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetRed() ) );
-                m_pGcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetGreen() ) );
-                m_pBcustom->SetValue( ColorToPercent_Impl( aCurrentColor.GetBlue() ) );
-                m_pHexcustom->SetColor( aCurrentColor.GetColor() );
+            if ( nPos != -1 )
+                m_pValSetColorList->SelectItem( m_pValSetColorList->GetItemId( nPos ) );
+            // else search in other palettes?
 
-            }
         }
 
         m_pCtlPreviewOld->SetAttributes( aXFillAttr.GetItemSet() );
         m_pCtlPreviewOld->Invalidate();
 
         SelectValSetHdl_Impl( m_pValSetColorList );
-
-        *pPos = LISTBOX_ENTRY_NOTFOUND;
     }
 }
 
@@ -374,7 +361,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
     while (!bValidColorName)
     {
         aName = aNewName + " " + OUString::number( j++ );
-        bValidColorName = (SearchColorList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidColorName = (FindInCustomColors(aName) == LISTBOX_ENTRY_NOTFOUND);
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
@@ -386,7 +373,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, Button*, void)
     {
         pDlg->GetName( aName );
 
-        bValidColorName = (SearchColorList(aName) == LISTBOX_ENTRY_NOTFOUND);
+        bValidColorName = (FindInCustomColors(aName) == LISTBOX_ENTRY_NOTFOUND);
         if (bValidColorName)
         {
             nError = 0;
@@ -662,7 +649,7 @@ void SvxColorTabPage::UpdateColorValues( bool bUpdatePreset )
     }
 }
 
-sal_Int32 SvxColorTabPage::SearchColorList(OUString const & aColorName)
+sal_Int32 SvxColorTabPage::FindInCustomColors(OUString const & aColorName)
 {
     css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
     long nCount = aCustomColorNameList.getLength();
@@ -678,6 +665,13 @@ sal_Int32 SvxColorTabPage::SearchColorList(OUString const & aColorName)
         }
     }
     return nPos;
+}
+
+sal_Int32 SvxColorTabPage::FindInPalette( const Color& rColor )
+{
+    sal_Int32 nPos = pColorList->GetIndexOfColor( rColor );
+
+    return ( nPos == -1) ? LISTBOX_ENTRY_NOTFOUND : nPos;
 }
 
 // A RGB value is converted to a CMYK value - not in an ideal way as

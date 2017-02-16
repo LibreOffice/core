@@ -157,4 +157,17 @@ Bitmap XColorList::CreateBitmapForUI( long /*nIndex*/ )
     return Bitmap();
 }
 
+long XColorList::GetIndexOfColor( const Color& rColor ) const
+{
+    for( long i = 0, n = maList.size(); i < n; ++i )
+    {
+        const Color aColor = static_cast<XColorEntry*>( maList[i].get() )->GetColor();
+
+        if (aColor == rColor )
+            return i;
+    }
+
+    return -1;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
