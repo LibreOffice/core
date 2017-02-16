@@ -46,18 +46,7 @@ private:
     sal_uInt16 GetNum();
 };
 
-class ScResourcePublisher : public Resource
-{
-private:
-    using Resource::FreeResource;
-public:
-    explicit ScResourcePublisher( const ScResId& rId ) : Resource( rId ) {}
-    ~ScResourcePublisher() { FreeResource(); }
-    using Resource::IsAvailableRes;
-};
-
 // class ScFuncDesc:
-
 ScFuncDesc::ScFuncDesc() :
         pFuncName       (nullptr),
         pFuncDesc       (nullptr),
@@ -391,49 +380,40 @@ bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
 
 // class ScFunctionList:
 
-ScFunctionList::ScFunctionList() :
-        nMaxFuncNameLen ( 0 )
+ScFunctionList::ScFunctionList()
+    : nMaxFuncNameLen(0)
 {
     ScFuncDesc* pDesc = nullptr;
     sal_Int32 nStrLen = 0;
     ::std::list<ScFuncDesc*> tmpFuncList;
-    sal_uInt16 nDescBlock[] =
-    {
-        RID_SC_FUNCTION_DESCRIPTIONS1,
-        RID_SC_FUNCTION_DESCRIPTIONS2
-    };
 
-    for (sal_uInt16 k : nDescBlock)
+    // Browse for all possible OpCodes. This is not the fastest method, but
+    // otherwise the sub resources within the resource blocks and the
+    // resource blocks themselves would had to be ordered according to
+    // OpCodes, which is utopian...
+    for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
     {
-        std::unique_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( k ) ) );
-        // Browse for all possible OpCodes. This is not the fastest method, but
-        // otherwise the sub resources within the resource blocks and the
-        // resource blocks themselves would had to be ordered according to
-        // OpCodes, which is utopian...
-        for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
+        ScResId aRes(RID_SC_FUNC_DESCRIPTIONS_START + i);
+        aRes.SetRT(RSC_RESOURCE);
+        // Sub resource of OpCode available?
+        if (SC_MOD()->GetResMgr()->IsAvailable(aRes))
         {
-            ScResId aRes(i);
-            aRes.SetRT(RSC_RESOURCE);
-            // Sub resource of OpCode available?
-            if (pBlock->IsAvailableRes(aRes))
+            pDesc = new ScFuncDesc;
+            bool bSuppressed = false;
+            ScFuncRes aSubRes( aRes, pDesc, bSuppressed);
+            // Instead of dealing with this exceptional case at 1001 places
+            // we simply don't add an entirely suppressed function to the
+            // list and delete it.
+            if (bSuppressed)
+                delete pDesc;
+            else
             {
-                pDesc = new ScFuncDesc;
-                bool bSuppressed = false;
-                ScFuncRes aSubRes( aRes, pDesc, bSuppressed);
-                // Instead of dealing with this exceptional case at 1001 places
-                // we simply don't add an entirely suppressed function to the
-                // list and delete it.
-                if (bSuppressed)
-                    delete pDesc;
-                else
-                {
-                    pDesc->nFIndex = i;
-                    tmpFuncList.push_back(pDesc);
+                pDesc->nFIndex = i;
+                tmpFuncList.push_back(pDesc);
 
-                    nStrLen = (*(pDesc->pFuncName)).getLength();
-                    if (nStrLen > nMaxFuncNameLen)
-                        nMaxFuncNameLen = nStrLen;
-                }
+                nStrLen = (*(pDesc->pFuncName)).getLength();
+                if (nStrLen > nMaxFuncNameLen)
+                    nMaxFuncNameLen = nStrLen;
             }
         }
     }
@@ -803,6 +783,7 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
 ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
  : Resource(aRes)
 {
+    const sal_uInt16 nOpCode = aRes.GetId() - RID_SC_FUNC_DESCRIPTIONS_START;
     sal_uInt16 nFunctionFlags = GetNum();
     // Bit 1: entirely suppressed
     // Bit 2: hidden unless used
@@ -840,7 +821,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
         if (nSuppressed > nArgs)
         {
             SAL_WARN("sc.core", "ScFuncRes: suppressed parameters count mismatch on OpCode " <<
-                    aRes.GetId() << ": suppressed " << nSuppressed << " > params " << nArgs);
+                     nOpCode << ": suppressed " << nSuppressed << " > params " << nArgs);
             nSuppressed = nArgs;    // sanitize
         }
         for (sal_uInt16 i = 0; i < nSuppressed; ++i)
@@ -851,12 +832,12 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
                 if (pDesc->nArgCount >= PAIRED_VAR_ARGS && nParam >= nArgs-2)
                 {
                     SAL_WARN("sc.core", "ScFuncRes: PAIRED_VAR_ARGS parameters can't be suppressed, on OpCode " <<
-                            aRes.GetId() << ": param " << nParam << " >= arg " << nArgs << "-2");
+                             nOpCode << ": param " << nParam << " >= arg " << nArgs << "-2");
                 }
                 else if (pDesc->nArgCount >= VAR_ARGS && nParam == nArgs-1)
                 {
                     SAL_WARN("sc.core", "ScFuncRes: VAR_ARGS parameters can't be suppressed, on OpCode " <<
-                            aRes.GetId() << ": param " << nParam << " == arg " << nArgs << "-1");
+                             nOpCode << ": param " << nParam << " == arg " << nArgs << "-1");
                 }
                 else
                 {
@@ -867,12 +848,12 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
             else
             {
                 SAL_WARN("sc.core", "ScFuncRes: suppressed parameter exceeds count on OpCode " <<
-                        aRes.GetId() << ": param " << nParam << " >= args " << nArgs);
+                         nOpCode << ": param " << nParam << " >= args " << nArgs);
             }
         }
     }
 
-    pDesc->pFuncName = new OUString( ScCompiler::GetNativeSymbol( static_cast<OpCode>( aRes.GetId())));
+    pDesc->pFuncName = new OUString(ScCompiler::GetNativeSymbol(static_cast<OpCode>(nOpCode)));
     pDesc->pFuncDesc = new OUString( SC_RESSTR(1) );
 
     if (nArgs)

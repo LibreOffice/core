@@ -21,6 +21,7 @@
 #define SC_SCRES_HRC
 
 #include "sc.hrc"
+#include "formula/compiler.hrc"
 
 #define STR_START               (SC_RESOURCE_START+100)
 #define STR_ROWHEIGHT           (STR_START)
@@ -538,9 +539,14 @@
 
 #define WID_CONDFRMT_REF                (SC_DIALOGS_START + 163)
 
+//put new things here and adjust SC_DIALOGS_END to match
+
 #define SC_DIALOGS_END                  (WID_CONDFRMT_REF + 1)
 
-#define RID_GLOBSTR_OFFSET              SC_DIALOGS_END
+#define RID_SC_FUNC_DESCRIPTIONS_START  SC_DIALOGS_END
+#define RID_SC_FUNC_DESCRIPTIONS_END    (RID_SC_FUNC_DESCRIPTIONS_START + SC_OPCODE_LAST_OPCODE_ID + 1)
+
+#define RID_GLOBSTR_OFFSET              (RID_SC_FUNC_DESCRIPTIONS_END + 1)
 
 #endif
 
