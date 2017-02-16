@@ -203,7 +203,7 @@ public:
     void SetFrameHandles(bool bOn);
     bool IsFrameHandles() const { return mbForceFrameHandles; }
 
-    sal_uIntPtr GetMarkableObjCount() const;
+    size_t GetMarkableObjCount() const;
 
     void SetEditMode(SdrViewEditMode eMode);
     SdrViewEditMode GetEditMode() const { return meEditMode; }
