@@ -1,0 +1,58 @@
+// nSeriesCount
+4
+/// Series 0
+/// Lines are displayed
+// static_cast<sal_Int32>(aSeriesLineStyle)
+1
+// aLinePosition.X
+3740
+// aLinePosition.Y
+2917
+// aLineSize.Height
+2434
+// aLineSize.Width
+6162
+// aLineTransformation
+6162;0;3740;0;2434;2917;0;0;1
+/// Series 1
+/// Lines are displayed
+// static_cast<sal_Int32>(aSeriesLineStyle)
+1
+// aLinePosition.X
+3740
+// aLinePosition.Y
+3035
+// aLineSize.Height
+3138
+// aLineSize.Width
+6162
+// aLineTransformation
+6162;0;3740;0;3138;3035;0;0;1
+/// Series 2
+/// Lines are displayed
+// static_cast<sal_Int32>(aSeriesLineStyle)
+1
+// aLinePosition.X
+3740
+// aLinePosition.Y
+2983
+// aLineSize.Height
+4210
+// aLineSize.Width
+6162
+// aLineTransformation
+6162;0;3740;0;4210;2983;0;0;1
+/// Series 3
+/// Lines are displayed
+// static_cast<sal_Int32>(aSeriesLineStyle)
+1
+// aLinePosition.X
+3740
+// aLinePosition.Y
+1654
+// aLineSize.Height
+4944
+// aLineSize.Width
+6162
+// aLineTransformation
+6162;0;3740;0;4944;1654;0;0;1

@@ -1,0 +1,310 @@
+// nSeriesCount
+4
+/// Series 0
+/// Lines are displayed
+// static_cast<sal_Int32>(aSeriesLineStyle)
+1
+// aLinePosition.X
+3740
+// aLinePosition.Y
+2917
+// aLineSize.Height
+2434
+// aLineSize.Width
+6162
+// aLineTransformation
+6162;0;3740;0;2434;2917;0;0;1
+/// Points are displayed
+// nPointCountInSeries
+4
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0
+// aPointPosition.X
+3615
+// aPointPosition.Y
+5226
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;3615;0;250;5226;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+17798
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=1
+// aPointPosition.X
+5669
+// aPointPosition.Y
+2792
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;5669;0;250;2792;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+17798
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=2
+// aPointPosition.X
+7723
+// aPointPosition.Y
+4963
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;7723;0;250;4963;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+17798
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=3
+// aPointPosition.X
+9777
+// aPointPosition.Y
+3878
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;9777;0;250;3878;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+17798
+/// Series 1
+/// Lines are displayed
+// static_cast<sal_Int32>(aSeriesLineStyle)
+1
+// aLinePosition.X
+3740
+// aLinePosition.Y
+3035
+// aLineSize.Height
+3138
+// aLineSize.Width
+6162
+// aLineTransformation
+6162;0;3740;0;3138;3035;0;0;1
+/// Points are displayed
+// nPointCountInSeries
+4
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=0
+// aPointPosition.X
+3615
+// aPointPosition.Y
+6048
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;3615;0;250;6048;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+16728590
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=1
+// aPointPosition.X
+5669
+// aPointPosition.Y
+5160
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;5669;0;250;5160;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+16728590
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=2
+// aPointPosition.X
+7723
+// aPointPosition.Y
+4568
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;7723;0;250;4568;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+16728590
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=1:Point=3
+// aPointPosition.X
+9777
+// aPointPosition.Y
+2910
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;9777;0;250;2910;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+16728590
+/// Series 2
+/// Lines are displayed
+// static_cast<sal_Int32>(aSeriesLineStyle)
+1
+// aLinePosition.X
+3740
+// aLinePosition.Y
+2983
+// aLineSize.Height
+4210
+// aLineSize.Width
+6162
+// aLineTransformation
+6162;0;3740;0;4210;2983;0;0;1
+/// Points are displayed
+// nPointCountInSeries
+4
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=0
+// aPointPosition.X
+3615
+// aPointPosition.Y
+7068
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;3615;0;250;7068;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+16765728
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=1
+// aPointPosition.X
+5669
+// aPointPosition.Y
+5226
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;5669;0;250;5226;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+16765728
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=2
+// aPointPosition.X
+7723
+// aPointPosition.Y
+6015
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;7723;0;250;6015;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+16765728
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=2:Point=3
+// aPointPosition.X
+9777
+// aPointPosition.Y
+2858
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;9777;0;250;2858;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+16765728
+/// Series 3
+/// Lines are displayed
+// static_cast<sal_Int32>(aSeriesLineStyle)
+1
+// aLinePosition.X
+3740
+// aLinePosition.Y
+1654
+// aLineSize.Height
+4944
+// aLineSize.Width
+6162
+// aLineTransformation
+6162;0;3740;0;4944;1654;0;0;1
+/// Points are displayed
+// nPointCountInSeries
+4
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=0
+// aPointPosition.X
+3615
+// aPointPosition.Y
+6473
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;3615;0;250;6473;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+5741852
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=1
+// aPointPosition.X
+5669
+// aPointPosition.Y
+4825
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;5669;0;250;4825;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+5741852
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=2
+// aPointPosition.X
+7723
+// aPointPosition.Y
+3177
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;7723;0;250;3177;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+5741852
+/// CID/MultiClick/D=0:CS=0:CT=0:Series=3:Point=3
+// aPointPosition.X
+9777
+// aPointPosition.Y
+1529
+// aPointSize.Height
+250
+// aPointSize.Width
+250
+// aPointTransformation
+250;0;9777;0;250;1529;0;0;1
+// static_cast<sal_Int32>(aPointFillStyle)
+1
+// static_cast<sal_Int32>(aPointFillColor)
+5741852
