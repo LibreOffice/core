@@ -14,8 +14,12 @@ $(eval $(call gb_StaticLibrary_set_warnings_not_errors,cmislib))
 ifeq ($(COM_IS_CLANG),TRUE)
 # Avoid narrowing conversion error (even though the option is technically a warning)
 # caused by boost.
+# Also avoid -Wdynamic-exception-spec errors in C++17 mode.
 $(eval $(call gb_StaticLibrary_add_cxxflags,cmislib,\
     -Wno-error=c++11-narrowing \
+    $(if $(filter -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z, \
+            $(CXXFLAGS_CXX11)), \
+        -Wno-error=dynamic-exception-spec) \
 ))
 endif
 
