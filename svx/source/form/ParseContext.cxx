@@ -68,7 +68,7 @@ OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
         case ErrorCode::InvalidColumn:         aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_COLUMN); break;
         case ErrorCode::InvalidTableExist:     aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS); break;
         case ErrorCode::InvalidQueryExist:     aMsg = SVX_RESSTR(RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS); break;
-        case ErrorCode::None: break;
+        default: break;
     }
     return aMsg;
 }
