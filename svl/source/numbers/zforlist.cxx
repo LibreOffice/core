@@ -1980,6 +1980,18 @@ sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat ) const
         return pFormatScanner->GetStandardPrec();
 }
 
+sal_uInt16 SvNumberFormatter::GetFormatPrecision( sal_uInt32 nFormat, double fValue ) const
+{
+    const SvNumberformat* pFormat = GetFormatEntry( nFormat );
+    if ( pFormat )
+    {
+        sal_uInt16 nIx = pFormat->GetSubformatIndex( fValue );
+        return pFormat->GetFormatPrecision( nIx );
+    }
+    else
+        return pFormatScanner->GetStandardPrec();
+}
+
 sal_uInt16 SvNumberFormatter::GetFormatIntegerDigits( sal_uInt32 nFormat ) const
 {
     const SvNumberformat* pFormat = GetFormatEntry( nFormat );

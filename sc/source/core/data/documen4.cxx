@@ -660,7 +660,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
         short nPrecision;
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
         {
-            nPrecision = (short)pFormat->GetFormatPrecision();
+            nPrecision = (short)GetFormatTable()->GetFormatPrecision( nFormat, fVal );
             switch ( nType )
             {
                 case css::util::NumberFormat::PERCENT:      // 0.41% == 0.0041
