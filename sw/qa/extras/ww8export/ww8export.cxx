@@ -328,6 +328,25 @@ DECLARE_WW8EXPORT_TEST(testListNolevel, "list-nolevel.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
 }
 
+DECLARE_WW8EXPORT_TEST(testHeaderApoTable, "ooo92948-1.doc")
+{
+    // the problem was that a table anchored in the header was split across
+    // 3 text frames and quite messed up
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xFrame(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextContent> xTable(getParagraphOrTable(1, xFrame));
+    getCell(xTable, "A1", "Aan" SAL_NEWLINE_STRING "Recipient" SAL_NEWLINE_STRING "Recipient" SAL_NEWLINE_STRING);
+    getCell(xTable, "A2", "Kopie aan" SAL_NEWLINE_STRING);
+    getCell(xTable, "A3", "Datum" SAL_NEWLINE_STRING "31 juli 2008");
+    getCell(xTable, "A4", "Locatie" SAL_NEWLINE_STRING "Locationr");
+    getCell(xTable, "A5", "Van" SAL_NEWLINE_STRING "Sender  ");
+    getCell(xTable, "A6", "Directie" SAL_NEWLINE_STRING "Department");
+    getCell(xTable, "A7", "Telefoon" SAL_NEWLINE_STRING "Phone");
+}
+
 DECLARE_WW8EXPORT_TEST(testBnc821208, "bnc821208.doc")
 {
     // WW8Num1z0 earned a Symbol font, turning numbers into rectangles.
