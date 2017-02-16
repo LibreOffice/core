@@ -2093,7 +2093,7 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
         }
         case SID_SC_TP_FORMULA:
         {
-            ::CreateTabPage ScTpFormulaOptionsCreate = pFact->GetTabPageCreatorFunc (RID_SCPAGE_FORMULA);
+            ::CreateTabPage ScTpFormulaOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_FORMULA);
             if (ScTpFormulaOptionsCreate)
                 pRet = (*ScTpFormulaOptionsCreate)(pParent, &rSet);
             break;

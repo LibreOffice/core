@@ -1231,9 +1231,6 @@
 // toggle sheet grid
 #define FID_TAB_TOGGLE_GRID             (SC_DIALOGS_START + 164)
 
-// formula options page
-#define RID_SCPAGE_FORMULA              (SC_DIALOGS_START + 165)
-
 // insert current date and time to cell via command
 #define SID_INSERT_CURRENT_DATE         (SC_DIALOGS_START + 166)
 #define SID_INSERT_CURRENT_TIME         (SC_DIALOGS_START + 167)
