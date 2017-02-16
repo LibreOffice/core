@@ -1,16 +1,16 @@
 /// CID/D=0:CS=0:Axis=0,0
 // aAxisPosition.X
-3510
+3486
 // aAxisPosition.Y
-7520
+7398
 // aAxisSize.Height
-495
+150
 // aAxisSize.Width
-14439
+11283
 // aAxisTransformation
-14440;0;3510;0;496;7520;0;0;1
+11284;0;3486;0;151;7398;0;0;1
 // nAxisGeometriesCount
-4
+2
 // sAxisLineDash
 0;1;201;20;20
 // static_cast<sal_Int32>(aAxisLineColor)
@@ -19,15 +19,15 @@
 0
 /// CID/D=0:CS=0:Axis=1,0
 // aAxisPosition.X
-3360
+3336
 // aAxisPosition.Y
-1588
+1561
 // aAxisSize.Height
-5932
+5837
 // aAxisSize.Width
 150
 // aAxisTransformation
-151;0;3360;0;5933;1588;0;0;1
+151;0;3336;0;5838;1561;0;0;1
 // nAxisGeometriesCount
 2
 // sAxisLineDash
