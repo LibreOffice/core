@@ -584,18 +584,18 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
             // oversteer values with global settings
             if ( pGlobalSettings && ( bGetSettingsState || bGlobalSettings ))
             {
-                if ( pGlobalSettings->HasStatesInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR ))
+                if ( pGlobalSettings->HasToolbarStatesInfo())
                 {
                     SolarMutexClearableGuard aWriteLock2;
                     bInGlobalSettings = true;
                     aWriteLock2.clear();
 
                     uno::Any aValue;
-                    if ( pGlobalSettings->GetStateInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR,
+                    if ( pGlobalSettings->GetToolbarStateInfo(
                                                         GlobalSettings::STATEINFO_LOCKED,
                                                         aValue ))
                         aValue >>= rElementData.m_aDockedData.m_bLocked;
-                    if ( pGlobalSettings->GetStateInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR,
+                    if ( pGlobalSettings->GetToolbarStateInfo(
                                                         GlobalSettings::STATEINFO_DOCKED,
                                                         aValue ))
                     {

@@ -60,8 +60,8 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // settings access
-        bool HasStatesInfo( GlobalSettings::UIElementType eElementType );
-        bool GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, css::uno::Any& aValue );
+        bool HasToolbarStatesInfo();
+        bool GetToolbarStateInfo( GlobalSettings::StateInfo eStateInfo, css::uno::Any& aValue );
 
     private:
         void impl_initConfigAccess();
@@ -112,13 +112,9 @@ void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
 }
 
 // settings access
-bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eElementType )
+bool GlobalSettings_Access::HasToolbarStatesInfo()
 {
     osl::MutexGuard g(m_mutex);
-    if ( eElementType == GlobalSettings::UIELEMENT_TYPE_DOCKWINDOW )
-        return false;
-    else if ( eElementType == GlobalSettings::UIELEMENT_TYPE_STATUSBAR )
-        return false;
 
     if ( m_bDisposed )
         return false;
@@ -150,13 +146,9 @@ bool GlobalSettings_Access::HasStatesInfo( GlobalSettings::UIElementType eElemen
     return false;
 }
 
-bool GlobalSettings_Access::GetStateInfo( GlobalSettings::UIElementType eElementType, GlobalSettings::StateInfo eStateInfo, css::uno::Any& aValue )
+bool GlobalSettings_Access::GetToolbarStateInfo( GlobalSettings::StateInfo eStateInfo, css::uno::Any& aValue )
 {
     osl::MutexGuard g(m_mutex);
-    if ( eElementType == GlobalSettings::UIELEMENT_TYPE_DOCKWINDOW )
-        return false;
-    else if ( eElementType == GlobalSettings::UIELEMENT_TYPE_STATUSBAR )
-        return false;
 
     if ( m_bDisposed )
         return false;
@@ -257,22 +249,22 @@ GlobalSettings::~GlobalSettings()
 }
 
 // settings access
-bool GlobalSettings::HasStatesInfo( UIElementType eElementType )
+bool GlobalSettings::HasToolbarStatesInfo()
 {
     GlobalSettings_Access* pSettings( GetGlobalSettings( m_xContext ));
 
     if ( pSettings )
-        return pSettings->HasStatesInfo( eElementType );
+        return pSettings->HasToolbarStatesInfo();
     else
         return false;
 }
 
-bool GlobalSettings::GetStateInfo( UIElementType eElementType, StateInfo eStateInfo, css::uno::Any& aValue )
+bool GlobalSettings::GetToolbarStateInfo( StateInfo eStateInfo, css::uno::Any& aValue )
 {
     GlobalSettings_Access* pSettings( GetGlobalSettings( m_xContext ));
 
     if ( pSettings )
-        return pSettings->GetStateInfo( eElementType, eStateInfo, aValue );
+        return pSettings->GetToolbarStateInfo( eStateInfo, aValue );
     else
         return false;
 }
