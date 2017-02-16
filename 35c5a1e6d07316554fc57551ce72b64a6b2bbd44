@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_3b72827d",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1421,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-16T17:27:32Z",
+      "side": 1,
+      "message": "Nitpick: please use 4 spaces indentation per level.",
+      "revId": "35c5a1e6d07316554fc57551ce72b64a6b2bbd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_5b6f4692",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1432,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-16T17:27:32Z",
+      "side": 1,
+      "message": "Nitpick: also, one empty line between top level struct and function names helps the reader.",
+      "revId": "35c5a1e6d07316554fc57551ce72b64a6b2bbd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_7b6c0a9d",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1514,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-16T17:27:32Z",
+      "side": 1,
+      "message": "Nitpick: the public keyword goes to the same indentation level as the class declaration, here first column.",
+      "revId": "35c5a1e6d07316554fc57551ce72b64a6b2bbd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_db0976df",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1516,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-16T17:27:32Z",
+      "side": 1,
+      "message": "Nitpick: some spaces help the reader.",
+      "revId": "35c5a1e6d07316554fc57551ce72b64a6b2bbd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_9b69ae8e",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1522,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-16T17:27:32Z",
+      "side": 1,
+      "message": "Nitpick: again, please 4 spaces per indentation. And one space between switch (or other keywords) and the following opening parenthesis.",
+      "revId": "35c5a1e6d07316554fc57551ce72b64a6b2bbd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_fb0e3ae4",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1530,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-16T17:27:32Z",
+      "side": 1,
+      "message": "Nitpick: and again some spaces help the reader.",
+      "revId": "35c5a1e6d07316554fc57551ce72b64a6b2bbd44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
