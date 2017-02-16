@@ -708,6 +708,12 @@ DECLARE_OOXMLIMPORT_TEST(testTdf105143, "tdf105143.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("6674"), aTop);
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf105975, "105975.docx")
+{
+    OUString content = parseDump("/root/page/body/txt/Special", "nType");
+    CPPUNIT_ASSERT_EQUAL(OUString("POR_FLD"), content);
+}
+
 DECLARE_OOXMLIMPORT_TEST(testfdo76583, "fdo76583.docx")
 {
     // The problem was that the floating table was imported as a non-floating one.
