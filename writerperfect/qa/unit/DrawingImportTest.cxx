@@ -56,7 +56,7 @@ bool DrawingImportFilter::doImportDocument(librevenge::RVNGInputStream &, OdgGen
 
 bool DrawingImportFilter::doDetectFormat(librevenge::RVNGInputStream &, rtl::OUString &rTypeName)
 {
-    rTypeName = "WpftDummyText";
+    rTypeName = "WpftDummyDrawing";
     return true;
 }
 

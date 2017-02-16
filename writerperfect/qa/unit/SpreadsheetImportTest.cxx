@@ -55,7 +55,7 @@ bool SpreadsheetImportFilter::doImportDocument(librevenge::RVNGInputStream &, Od
 
 bool SpreadsheetImportFilter::doDetectFormat(librevenge::RVNGInputStream &, rtl::OUString &rTypeName)
 {
-    rTypeName = "WpftDummyText";
+    rTypeName = "WpftDummySpreadsheet";
     return true;
 }
 

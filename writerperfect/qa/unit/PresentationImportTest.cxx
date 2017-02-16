@@ -56,7 +56,7 @@ bool PresentationImportFilter::doImportDocument(librevenge::RVNGInputStream &, O
 
 bool PresentationImportFilter::doDetectFormat(librevenge::RVNGInputStream &, rtl::OUString &rTypeName)
 {
-    rTypeName = "WpftDummyText";
+    rTypeName = "WpftDummyPresentation";
     return true;
 }
 
