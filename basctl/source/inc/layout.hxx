@@ -79,7 +79,7 @@ private:
     class SplittedSide
     {
     public:
-        enum Side {Right, Top, Left, Bottom};
+        enum class Side {Left, Bottom};
         SplittedSide (Layout*, Side);
         void Add (DockingWindow*, Size const&);
         void Remove (DockingWindow*);

@@ -37,8 +37,8 @@ Layout::Layout (vcl::Window* pParent) :
     Window(pParent, WB_CLIPCHILDREN),
     pChild(nullptr),
     bFirstSize(true),
-    aLeftSide(this, SplittedSide::Left),
-    aBottomSide(this, SplittedSide::Bottom)
+    aLeftSide(this, SplittedSide::Side::Left),
+    aBottomSide(this, SplittedSide::Side::Bottom)
 {
     SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
 
@@ -169,8 +169,8 @@ void Layout::DataChanged (DataChangedEvent const& rDCEvt)
 // ctor
 Layout::SplittedSide::SplittedSide (Layout* pParent, Side eSide) :
     rLayout(*pParent),
-    bVertical(eSide == Left || eSide == Right),
-    bLower(eSide == Left || eSide == Top),
+    bVertical(eSide == Side::Left),
+    bLower(eSide == Side::Left),
     nSize(0),
     aSplitter(VclPtr<Splitter>::Create(pParent, bVertical ? WB_HSCROLL : WB_VSCROLL))
 {
