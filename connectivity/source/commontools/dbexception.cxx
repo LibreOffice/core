@@ -472,28 +472,17 @@ OUString getStandardSQLState( StandardSQLState _eState )
 {
     switch ( _eState )
     {
-    case StandardSQLState::WRONG_PARAMETER_NUMBER:    return OUString("07001");
     case StandardSQLState::INVALID_DESCRIPTOR_INDEX:  return OUString("07009");
-    case StandardSQLState::UNABLE_TO_CONNECT:         return OUString("08001");
-    case StandardSQLState::NUMERIC_OUT_OF_RANGE:      return OUString("22003");
-    case StandardSQLState::INVALID_DATE_TIME:         return OUString("22007");
     case StandardSQLState::INVALID_CURSOR_STATE:      return OUString("24000");
-    case StandardSQLState::TABLE_OR_VIEW_EXISTS:      return OUString("42S01");
-    case StandardSQLState::TABLE_OR_VIEW_NOT_FOUND:   return OUString("42S02");
-    case StandardSQLState::INDEX_ESISTS:              return OUString("42S11");
-    case StandardSQLState::INDEX_NOT_FOUND:           return OUString("42S12");
-    case StandardSQLState::COLUMN_EXISTS:             return OUString("42S21");
     case StandardSQLState::COLUMN_NOT_FOUND:          return OUString("42S22");
     case StandardSQLState::GENERAL_ERROR:             return OUString("HY000");
     case StandardSQLState::INVALID_SQL_DATA_TYPE:     return OUString("HY004");
-    case StandardSQLState::OPERATION_CANCELED:        return OUString("HY008");
     case StandardSQLState::FUNCTION_SEQUENCE_ERROR:   return OUString("HY010");
     case StandardSQLState::INVALID_CURSOR_POSITION:   return OUString("HY109");
-    case StandardSQLState::INVALID_BOOKMARK_VALUE:    return OUString("HY111");
     case StandardSQLState::FEATURE_NOT_IMPLEMENTED:   return OUString("HYC00");
     case StandardSQLState::FUNCTION_NOT_SUPPORTED:    return OUString("IM001");
     case StandardSQLState::CONNECTION_DOES_NOT_EXIST: return OUString("08003");
-    default:                            return OUString("HY001"); // General Error
+    default:                                          return OUString("HY001"); // General Error
     }
 }
 

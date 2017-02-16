@@ -33,24 +33,13 @@ namespace dbtools
     */
     enum class StandardSQLState
     {
-        WRONG_PARAMETER_NUMBER,     // 07001
         INVALID_DESCRIPTOR_INDEX,   // 07009
-        UNABLE_TO_CONNECT,          // 08001
-        NUMERIC_OUT_OF_RANGE,       // 22003
-        INVALID_DATE_TIME,          // 22007
         INVALID_CURSOR_STATE,       // 24000
-        TABLE_OR_VIEW_EXISTS,       // 42S01
-        TABLE_OR_VIEW_NOT_FOUND,    // 42S02
-        INDEX_ESISTS,               // 42S11
-        INDEX_NOT_FOUND,            // 42S12
-        COLUMN_EXISTS,              // 42S21
         COLUMN_NOT_FOUND,           // 42S22
         GENERAL_ERROR,              // HY000
         INVALID_SQL_DATA_TYPE,      // HY004
-        OPERATION_CANCELED,         // HY008
         FUNCTION_SEQUENCE_ERROR,    // HY010
         INVALID_CURSOR_POSITION,    // HY109
-        INVALID_BOOKMARK_VALUE,     // HY111
         FEATURE_NOT_IMPLEMENTED,    // HYC00
         FUNCTION_NOT_SUPPORTED,     // IM001
         CONNECTION_DOES_NOT_EXIST,  // 08003
