@@ -273,7 +273,7 @@
 
 #define STR_UNDO_GRAFEDIT           199
 
-#define STR_NOLANGERR               200
+// empty
 
 #define STR_UNDO_INSERT_TAB         201
 #define STR_UNDO_DELETE_TAB         202

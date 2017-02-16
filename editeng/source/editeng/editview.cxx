@@ -763,7 +763,7 @@ void EditView::CompleteAutoCorrect( vcl::Window* pFrameWin )
 EESpellState EditView::StartSpeller( bool bMultipleDoc )
 {
     if ( !pImpEditView->pEditEngine->pImpEditEngine->GetSpeller().is() )
-        return EE_SPELL_NOSPELLER;
+        return EESpellState::NoSpeller;
 
     return pImpEditView->pEditEngine->pImpEditEngine->Spell( this, bMultipleDoc );
 }
@@ -771,7 +771,7 @@ EESpellState EditView::StartSpeller( bool bMultipleDoc )
 EESpellState EditView::StartThesaurus()
 {
     if ( !pImpEditView->pEditEngine->pImpEditEngine->GetSpeller().is() )
-        return EE_SPELL_NOSPELLER;
+        return EESpellState::NoSpeller;
 
     return pImpEditView->pEditEngine->pImpEditEngine->StartThesaurus( this );
 }

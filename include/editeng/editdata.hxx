@@ -35,7 +35,7 @@ enum EEHorizontalTextDirection { EE_HTEXTDIR_DEFAULT, EE_HTEXTDIR_L2R, EE_HTEXTD
 enum EESelectionMode    { EE_SELMODE_STD, EE_SELMODE_TXTONLY, EE_SELMODE_HIDDEN };
     // EE_SELMODE_HIDDEN can be used to completely hide the selection. This is useful e.g. when you want show the selection
     // only as long as your window (which the edit view works on) has the focus
-enum EESpellState       { EE_SPELL_OK, EE_SPELL_NOLANGUAGE, EE_SPELL_LANGUAGENOTINSTALLED, EE_SPELL_NOSPELLER, EE_SPELL_ERRORFOUND };
+enum class EESpellState  { Ok, LanguageNotInstalled, NoSpeller, ErrorFound };
 enum EVAnchorMode       {
             ANCHOR_TOP_LEFT,    ANCHOR_VCENTER_LEFT,    ANCHOR_BOTTOM_LEFT,
             ANCHOR_TOP_HCENTER, ANCHOR_VCENTER_HCENTER, ANCHOR_BOTTOM_HCENTER,

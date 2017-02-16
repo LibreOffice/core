@@ -206,7 +206,7 @@
 
 #define STR_OBJECTS                         (RID_APP_START+341)
 #define STR_END_SPELLING                    (RID_APP_START+343)
-#define STR_NOLANGUAGE                      (RID_APP_START+344)
+// empty
 #define STR_ASK_FOR_CONVERT_TO_BEZIER       (RID_APP_START+347)
 #define STR_UNDO_CHANGE_PRES_OBJECT         (RID_APP_START+349)
 #define STR_UNDO_MODIFY_PAGE                (RID_APP_START+350)

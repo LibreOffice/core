@@ -780,7 +780,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     pOutlView->SetOutputArea( aRect );
                     aTmpOutliner.SetText( *pParaObj );
                     aTmpOutliner.ClearModifyFlag();
-                    bHasSpellError = EE_SPELL_OK != aTmpOutliner.HasSpellErrors();
+                    bHasSpellError = EESpellState::Ok != aTmpOutliner.HasSpellErrors();
                     aTmpOutliner.RemoveView( pOutlView.get() );
                 }
                 if(bHasSpellError)

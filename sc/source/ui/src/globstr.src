@@ -1059,10 +1059,6 @@ String STR_SPELLING_STOP_OK+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "The spellcheck of this sheet has been completed." ;
 };
-String STR_NOLANGERR+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "No language set" ;
-};
 String STR_UNDO_INSERT_TAB+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Insert Sheet" ;

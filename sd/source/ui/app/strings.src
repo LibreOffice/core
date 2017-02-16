@@ -482,10 +482,6 @@ String STR_END_SPELLING_OBJ
 {
     Text [ en-US ] = "The spellcheck for the selected objects has been completed." ;
 };
-String STR_NOLANGUAGE
-{
-    Text [ en-US ] = "The selected language is not available." ;
-};
 String STR_ASK_FOR_CONVERT_TO_BEZIER
 {
     Text [ en-US ] = "Convert selected object to curve?" ;

@@ -382,9 +382,9 @@ void ScViewFunc::DoThesaurus()
     //  language is now in EditEngine attributes -> no longer passed to StartThesaurus
 
     eState = pEditView->StartThesaurus();
-    OSL_ENSURE(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
+    OSL_ENSURE(eState != EESpellState::NoSpeller, "No SpellChecker");
 
-    if (eState == EE_SPELL_ERRORFOUND)              // should happen later through Wrapper!
+    if (eState == EESpellState::ErrorFound)              // should happen later through Wrapper!
     {
         LanguageType eLnge = ScViewUtil::GetEffLanguage( &rDoc, ScAddress( nCol, nRow, nTab ) );
         OUString aErr = SvtLanguageTable::GetLanguageString(eLnge);

@@ -169,6 +169,7 @@ for d in definitionSet:
          "dbaccess/source/inc/dsntypes.hxx", # dbaccess::DATASOURCE_TYPE (from UI)
          "cui/source/tabpages/tparea.cxx", # FillType (from UI)
          "include/editeng/svxenum.hxx", # css::style::NumberingType
+         "include/editeng/bulletitem.hxx", # css::style::NumberingType
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",

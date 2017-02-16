@@ -1477,7 +1477,7 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, bool bMultipleDoc )
     SAL_WARN_IF( !xSpeller.is(), "editeng", "No Spell checker set!" );
 
     if ( !xSpeller.is() )
-        return EE_SPELL_NOSPELLER;
+        return EESpellState::NoSpeller;
 
     aOnlineSpellTimer.Stop();
 
@@ -1898,7 +1898,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
         if ( !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
         else
-            pSpellInfo->eState = EE_SPELL_ERRORFOUND;
+            pSpellInfo->eState = EESpellState::ErrorFound;
     }
 
     pEditView->pImpEditView->DrawSelection();
@@ -1946,7 +1946,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
             aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
         else
         {
-            pSpellInfo->eState = EE_SPELL_ERRORFOUND;
+            pSpellInfo->eState = EESpellState::ErrorFound;
             rSelection = aCurSel;
         }
     }
@@ -2456,7 +2456,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
         if ( ( aCurSel.Max().GetNode() == pLastNode ) &&
              ( aCurSel.Max().GetIndex() >= pLastNode->Len() ) )
         {
-            return EE_SPELL_OK;
+            return EESpellState::Ok;
         }
 
         aCurSel = SelectWord( aCurSel, css::i18n::WordType::DICTIONARY_WORD );
@@ -2470,7 +2470,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
         aCurSel = WordRight( aCurSel.Max(), css::i18n::WordType::DICTIONARY_WORD );
     }
 
-    return EE_SPELL_ERRORFOUND;
+    return EESpellState::ErrorFound;
 }
 
 void ImpEditEngine::ClearSpellErrors()
@@ -2487,7 +2487,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
 
     Reference< XThesaurus > xThes( LinguMgr::GetThesaurus() );
     if (!xThes.is())
-        return EE_SPELL_ERRORFOUND;
+        return EESpellState::ErrorFound;
 
     EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractThesaurusDialog> xDlg(pFact->CreateThesaurusDialog( pEditView->GetWindow(), xThes, aWord, GetLanguage( aCurSel.Max() ) ));
@@ -2501,7 +2501,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
         pEditView->ShowCursor(true, false);
     }
 
-    return EE_SPELL_OK;
+    return EESpellState::Ok;
 }
 
 sal_Int32 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxSearchItem& rSearchItem )

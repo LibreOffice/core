@@ -172,7 +172,7 @@ struct SpellInfo
     svx::SpellPortions    aLastSpellPortions;
     SpellContentSelections  aLastSpellContentSelections;
     SpellInfo()
-        { bSpellToEnd = true; eState = EE_SPELL_OK; bMultipleDoc = false; }
+        { bSpellToEnd = true; eState = EESpellState::Ok; bMultipleDoc = false; }
 };
 
 // used for text conversion

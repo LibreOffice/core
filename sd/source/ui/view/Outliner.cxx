@@ -1273,17 +1273,9 @@ void SdOutliner::PutTextIntoOutliner()
 void SdOutliner::PrepareSpellCheck()
 {
     EESpellState eState = HasSpellErrors();
-    DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
+    DBG_ASSERT(eState != EESpellState::NoSpeller, "No SpellChecker");
 
-    if (eState == EE_SPELL_NOLANGUAGE)
-    {
-        mbError = true;
-        mbEndOfSearch = true;
-        ScopedVclPtrInstance<MessageDialog> aErrorBox (
-            nullptr, SD_RESSTR(STR_NOLANGUAGE));
-        ShowModalMessageBox (*aErrorBox.get());
-    }
-    else if (eState != EE_SPELL_OK)
+    if (eState != EESpellState::Ok)
     {
         // When spell checking we have to test whether we have processed the
         // whole document and have reached the start page again.

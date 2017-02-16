@@ -2168,7 +2168,7 @@ bool EditEngine::SpellNextDocument()
 EESpellState EditEngine::HasSpellErrors()
 {
     if ( !pImpEditEngine->GetSpeller().is()  )
-        return EE_SPELL_NOSPELLER;
+        return EESpellState::NoSpeller;
 
     return pImpEditEngine->HasSpellErrors();
 }
