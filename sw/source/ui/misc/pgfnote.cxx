@@ -266,7 +266,7 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
     rFootnoteInfo.SetLineColor( m_pLineColorBox->GetSelectEntryColor() );
 
         // Position
-    rFootnoteInfo.SetAdj((SwFootnoteAdj)m_pLinePosBox->GetSelectEntryPos());
+    rFootnoteInfo.SetAdj((css::text::HorizontalAdjust)m_pLinePosBox->GetSelectEntryPos());
 
         // Breite
     rFootnoteInfo.SetWidth(Fraction( static_cast< long >(m_pLineLengthEdit->GetValue()), 100));

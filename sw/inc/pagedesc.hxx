@@ -27,6 +27,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/borderline.hxx>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
+#include <com/sun/star/text/HorizontalAdjust.hpp>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <boost/multi_index_container.hpp>
@@ -42,12 +43,6 @@ class SwTextFormatColl;
 class SwNode;
 class SwPageDescs;
 
-/// Separator line adjustment.
-enum class SwFootnoteAdj
-{
-    Left = 0, Center = 1, Right = 2
-};
-
 /// Footnote information.
 class SW_DLLPUBLIC SwPageFootnoteInfo
 {
@@ -57,7 +52,7 @@ private:
     editeng::SvxBorderStyle m_eLineStyle;  ///< Style of the separator line
     Color       m_LineColor;    ///< color of the separator line
     Fraction    m_Width;        ///< percentage width of the separator line.
-    SwFootnoteAdj    m_eAdjust;      ///< line adjustment.
+    css::text::HorizontalAdjust m_eAdjust;      ///< line adjustment.
     SwTwips     m_nTopDist;     ///< distance between body and separator.
     SwTwips     m_nBottomDist;  ///< distance between separator and first footnote
 
@@ -67,7 +62,7 @@ public:
     const Color& GetLineColor() const   { return m_LineColor;}
     editeng::SvxBorderStyle  GetLineStyle() const { return m_eLineStyle; }
     const Fraction& GetWidth() const    { return m_Width; }
-    SwFootnoteAdj    GetAdj() const          { return m_eAdjust; }
+    css::text::HorizontalAdjust GetAdj() const { return m_eAdjust; }
     SwTwips     GetTopDist() const      { return m_nTopDist; }
     SwTwips     GetBottomDist() const   { return m_nBottomDist; }
 
@@ -76,7 +71,7 @@ public:
     void SetLineStyle(editeng::SvxBorderStyle const eSet) {m_eLineStyle = eSet;}
     void SetLineColor(const Color& rCol)    { m_LineColor = rCol;}
     void SetWidth(const Fraction & rNew)    { m_Width = rNew; }
-    void SetAdj(SwFootnoteAdj const eNew)   { m_eAdjust = eNew; }
+    void SetAdj(css::text::HorizontalAdjust const eNew)   { m_eAdjust = eNew; }
     void SetTopDist   (SwTwips const nNew)  { m_nTopDist = nNew; }
     void SetBottomDist(SwTwips const nNew)  { m_nBottomDist = nNew; }
 

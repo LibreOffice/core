@@ -5573,9 +5573,9 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
     SwTwips nX = aRectFnSet.GetPrtLeft(*this);
     switch ( rInf.GetAdj() )
     {
-        case SwFootnoteAdj::Right:
+        case css::text::HorizontalAdjust_RIGHT:
             nX += nPrtWidth - nWidth; break;
-        case SwFootnoteAdj::Left:
+        case css::text::HorizontalAdjust_LEFT:
             /* do nothing */; break;
         default:
             SAL_WARN("sw.core", "New adjustment for footnote lines?");

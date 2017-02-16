@@ -383,8 +383,8 @@ SwPageFootnoteInfo::SwPageFootnoteInfo()
     , m_nBottomDist( 57 )
 {
     m_eAdjust = FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) ?
-           SwFootnoteAdj::Right :
-           SwFootnoteAdj::Left;
+           css::text::HorizontalAdjust_RIGHT :
+           css::text::HorizontalAdjust_LEFT;
 }
 
 SwPageFootnoteInfo::SwPageFootnoteInfo( const SwPageFootnoteInfo &rCpy )

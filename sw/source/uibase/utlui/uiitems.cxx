@@ -166,7 +166,7 @@ bool SwPageFootnoteInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
             sal_Int16 nSet = 0;
             rVal >>= nSet;
             if(nSet >= 0 && nSet < 3) //text::HorizontalAdjust
-                aFootnoteInfo.SetAdj((SwFootnoteAdj)nSet);
+                aFootnoteInfo.SetAdj((css::text::HorizontalAdjust)nSet);
             else
                 bRet = false;
         }
