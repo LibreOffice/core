@@ -173,12 +173,6 @@ namespace dbaui
                         rString += OStringToOUString(sT, RTL_TEXTENCODING_UTF8);
                      break;}
 
-                case SQLNodeType::Comparison:
-                    {
-                        rString += "SQL_COMPARISON:" + _pNode->getTokenValue(); // append Nodevalue
-                            // and start new line
-                        break;}
-
                 case SQLNodeType::Name:
                     {
                         rString += "SQL_NAME:\"" + _pNode->getTokenValue() + "\"";
@@ -202,11 +196,6 @@ namespace dbaui
                 case SQLNodeType::Punctuation:
                     {
                         rString += "SQL_PUNCTUATION:" + _pNode->getTokenValue(); // append Nodevalue
-                        break;}
-
-                case SQLNodeType::AMMSC:
-                    {
-                        rString += "SQL_AMMSC:" + _pNode->getTokenValue(); // append Nodevalue
                         break;}
 
                 default:

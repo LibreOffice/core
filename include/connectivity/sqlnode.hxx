@@ -66,10 +66,10 @@ namespace connectivity
     typedef ::std::vector< OSQLParseNode* >                  OSQLParseNodes;
 
     enum class SQLNodeType { Rule, ListRule, CommaListRule,
-                         Keyword, Comparison, Name,
+                         Keyword, Name,
                          String, IntNum, ApproxNum,
                          Equal, Less, Great, LessEq, GreatEq, NotEqual,
-                         Punctuation, AMMSC, AccessDate, Date, Concat};
+                         Punctuation, AccessDate, Concat};
 
     typedef ::std::set< OUString >   QueryNameSet;
 

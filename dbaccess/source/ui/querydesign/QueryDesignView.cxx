@@ -3221,11 +3221,9 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
     case SQLNodeType::ApproxNum:
         nDataType = DataType::DOUBLE;
         break;
-    case SQLNodeType::Date:
     case SQLNodeType::AccessDate:
         nDataType = DataType::TIMESTAMP;
         break;
-    case SQLNodeType::Comparison:
     case SQLNodeType::Equal:
     case SQLNodeType::Less:
     case SQLNodeType::Great:
@@ -3238,7 +3236,6 @@ void OQueryDesignView::fillFunctionInfo(  const ::connectivity::OSQLParseNode* p
     case SQLNodeType::ListRule:
     case SQLNodeType::CommaListRule:
     case SQLNodeType::Keyword:
-    case SQLNodeType::AMMSC: //??
     case SQLNodeType::Punctuation:
         OSL_FAIL("Unexpected SQL Node Type");
         break;

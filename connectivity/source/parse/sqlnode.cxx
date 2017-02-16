@@ -2290,12 +2290,6 @@ void OSQLParseNode::showParseTree( OUStringBuffer& _inout_rBuffer, sal_uInt32 nL
             _inout_rBuffer.append( '\n' );
             break;
 
-        case SQLNodeType::Comparison:
-            _inout_rBuffer.appendAscii( "SQL_COMPARISON: " );
-            _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( '\n' );
-            break;
-
         case SQLNodeType::Name:
             _inout_rBuffer.appendAscii( "SQL_NAME: " );
             _inout_rBuffer.append( '"' );
@@ -2330,12 +2324,6 @@ void OSQLParseNode::showParseTree( OUStringBuffer& _inout_rBuffer, sal_uInt32 nL
             _inout_rBuffer.append( '\n' );
             break;
 
-        case SQLNodeType::AMMSC:
-            _inout_rBuffer.appendAscii( "SQL_AMMSC: " );
-            _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( '\n' );
-            break;
-
         case SQLNodeType::Equal:
         case SQLNodeType::Less:
         case SQLNodeType::Great:
@@ -2348,12 +2336,6 @@ void OSQLParseNode::showParseTree( OUStringBuffer& _inout_rBuffer, sal_uInt32 nL
 
         case SQLNodeType::AccessDate:
             _inout_rBuffer.appendAscii( "SQL_ACCESS_DATE: " );
-            _inout_rBuffer.append( m_aNodeValue );
-            _inout_rBuffer.append( '\n' );
-            break;
-
-        case SQLNodeType::Date:
-            _inout_rBuffer.appendAscii( "SQL_DATE: " );
             _inout_rBuffer.append( m_aNodeValue );
             _inout_rBuffer.append( '\n' );
             break;
