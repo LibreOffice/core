@@ -1,23 +1,23 @@
 // aLegendPosition.X
-2397
+3005
 // aLegendPosition.Y
-6498
+12414
 // aLegendSize.Width
-8041
+16083
 // aLegendSize.Height
-938
+519
 // nLegendEntryCount
 8
 // aLegendEntryPosition.X
-2501
+3109
 // aLegendEntryPosition.Y
-6662
+12578
 // aLegendEntrySize.Height
 190
 // aLegendEntrySize.Width
 800
 // aLegendEntryTransformation
-801;0;2501;0;191;6662;0;0;1
+801;0;3109;0;191;12578;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -25,15 +25,15 @@ com.sun.star.drawing.LineShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 7512015
 // aLegendEntryPosition.X
-4273
+4881
 // aLegendEntryPosition.Y
-6662
+12578
 // aLegendEntrySize.Height
 190
 // aLegendEntrySize.Width
 800
 // aLegendEntryTransformation
-801;0;4273;0;191;6662;0;0;1
+801;0;4881;0;191;12578;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -41,15 +41,15 @@ com.sun.star.drawing.LineShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 7512015
 // aLegendEntryPosition.X
-6363
+6971
 // aLegendEntryPosition.Y
-6662
+12578
 // aLegendEntrySize.Height
 190
 // aLegendEntrySize.Width
 800
 // aLegendEntryTransformation
-801;0;6363;0;191;6662;0;0;1
+801;0;6971;0;191;12578;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -57,15 +57,15 @@ com.sun.star.drawing.LineShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 7512015
 // aLegendEntryPosition.X
-8453
+9061
 // aLegendEntryPosition.Y
-6662
+12578
 // aLegendEntrySize.Height
 190
 // aLegendEntrySize.Width
 800
 // aLegendEntryTransformation
-801;0;8453;0;191;6662;0;0;1
+801;0;9061;0;191;12578;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -73,15 +73,15 @@ com.sun.star.drawing.LineShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 7512015
 // aLegendEntryPosition.X
-2501
+11151
 // aLegendEntryPosition.Y
-7081
+12578
 // aLegendEntrySize.Height
 190
 // aLegendEntrySize.Width
 800
 // aLegendEntryTransformation
-801;0;2501;0;191;7081;0;0;1
+801;0;11151;0;191;12578;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -89,15 +89,15 @@ com.sun.star.drawing.LineShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 7512015
 // aLegendEntryPosition.X
-4273
+12923
 // aLegendEntryPosition.Y
-7081
+12578
 // aLegendEntrySize.Height
 190
 // aLegendEntrySize.Width
 800
 // aLegendEntryTransformation
-801;0;4273;0;191;7081;0;0;1
+801;0;12923;0;191;12578;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -105,15 +105,15 @@ com.sun.star.drawing.LineShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 7512015
 // aLegendEntryPosition.X
-6363
+15013
 // aLegendEntryPosition.Y
-7081
+12578
 // aLegendEntrySize.Height
 190
 // aLegendEntrySize.Width
 800
 // aLegendEntryTransformation
-801;0;6363;0;191;7081;0;0;1
+801;0;15013;0;191;12578;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -121,15 +121,15 @@ com.sun.star.drawing.LineShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 7512015
 // aLegendEntryPosition.X
-8453
+17103
 // aLegendEntryPosition.Y
-7081
+12578
 // aLegendEntrySize.Height
 190
 // aLegendEntrySize.Width
 800
 // aLegendEntryTransformation
-801;0;8453;0;191;7081;0;0;1
+801;0;17103;0;191;12578;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
