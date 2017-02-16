@@ -265,10 +265,10 @@ bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
     // Separator color
     rFootnoteInfo.SetLineColor( m_pLineColorBox->GetSelectEntryColor() );
 
-        // Position
+    // Position
     rFootnoteInfo.SetAdj((css::text::HorizontalAdjust)m_pLinePosBox->GetSelectEntryPos());
 
-        // Breite
+    // Width
     rFootnoteInfo.SetWidth(Fraction( static_cast< long >(m_pLineLengthEdit->GetValue()), 100));
 
     const SfxPoolItem* pOldItem;
