@@ -659,6 +659,9 @@ public:
         (const FieldContextPtr& pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
         css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
+    static void handleFieldFormula
+        (const FieldContextPtr& pContext,
+        css::uno::Reference< css::beans::XPropertySet > const& xFieldProperties);
     void handleAutoNum
         (const FieldContextPtr& pContext,
         css::uno::Reference< css::uno::XInterface > & xFieldInterface,
