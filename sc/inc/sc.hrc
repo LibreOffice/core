@@ -687,6 +687,8 @@
 #define RID_DRAW_WIN            (SC_RESOURCE_START+13)
 #define RID_CNTRLR_WIN          (SC_RESOURCE_START+14)
 #define SID_DATA_FORM           (SC_RESOURCE_START+15) // menu (in Data menu)
+#define SID_INSERT_CURRENT_DATE (SC_RESOURCE_START+16)
+#define SID_INSERT_CURRENT_TIME (SC_RESOURCE_START+17)
 // free
 #define RID_ALIGNMENT_WIN       (SC_RESOURCE_START+19)
 #define RID_ERRHDLSC            (SC_RESOURCE_START+23)
@@ -1224,11 +1226,7 @@
 // toggle sheet grid
 #define FID_TAB_TOGGLE_GRID             (SC_DIALOGS_START + 164)
 
-// insert current date and time to cell via command
-#define SID_INSERT_CURRENT_DATE         (SC_DIALOGS_START + 166)
-#define SID_INSERT_CURRENT_TIME         (SC_DIALOGS_START + 167)
-
-#define SC_DIALOGS_END                  (SID_INSERT_CURRENT_TIME + 1)
+#define SC_DIALOGS_END                  (FID_TAB_TOGGLE_GRID + 1)
 
 #define RID_GLOBSTR_OFFSET              SC_DIALOGS_END
 
