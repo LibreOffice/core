@@ -450,7 +450,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     if (eAutoLayout == AUTOLAYOUT_TITLE ||
         eAutoLayout == AUTOLAYOUT_ONLY_TITLE)
     {
-        pPage->SetAutoLayout(AUTOLAYOUT_ENUM, true);
+        pPage->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
     }
     else
     {
@@ -975,7 +975,7 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
     {
     case AUTOLAYOUT_NONE:
     case AUTOLAYOUT_ONLY_TITLE:
-    case AUTOLAYOUT_TITLE:  eNewLayout = AUTOLAYOUT_ENUM; break;
+    case AUTOLAYOUT_TITLE:  eNewLayout = AUTOLAYOUT_TITLE_CONTENT; break;
 
     case AUTOLAYOUT_CHART:  eNewLayout = AUTOLAYOUT_CHARTTEXT; break;
 

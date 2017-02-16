@@ -1095,12 +1095,12 @@ bool ImplSdPPTImport::Import()
                 {
                     case PptSlideLayout::TITLEANDBODYSLIDE :
                     {
-                        eAutoLayout = AUTOLAYOUT_ENUM;
+                        eAutoLayout = AUTOLAYOUT_TITLE_CONTENT;
                         PptPlaceholder nID1 = pSlideLayout->aPlaceholderId[ 1 ];
                         switch ( nID1 )
                         {
                             case PptPlaceholder::BODY :
-                                eAutoLayout = AUTOLAYOUT_ENUM;
+                                eAutoLayout = AUTOLAYOUT_TITLE_CONTENT;
                             break;
                             case PptPlaceholder::TABLE :
                                 eAutoLayout = AUTOLAYOUT_TAB;
@@ -1182,7 +1182,7 @@ bool ImplSdPPTImport::Import()
                         eAutoLayout = AUTOLAYOUT_OBJ;
                     break;
                     case PptSlideLayout::TITLERIGHTBODYLEFT :
-                        eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE; // AUTOLAYOUT_ENUM;
+                        eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE;
                     break;
                     case PptSlideLayout::TITLERIGHT2BODIESLEFT :
                         eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART; // AUTOLAYOUT_TEXT2OBJ;

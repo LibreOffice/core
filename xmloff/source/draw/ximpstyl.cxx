@@ -36,6 +36,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
 #include <comphelper/namecontainer.hxx>
+#include <xmloff/autolayout.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/families.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -523,7 +524,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     }
                     else if( pObj1->GetName() == "outline" )
                     {
-                        mnTypeId = 1; // AUTOLAYOUT_ENUM
+                        mnTypeId = AUTOLAYOUT_TITLE_CONTENT;
                     }
                     else if( pObj1->GetName() == "chart" )
                     {

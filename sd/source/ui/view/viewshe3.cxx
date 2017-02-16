@@ -234,7 +234,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         {
             eStandardLayout = pTemplatePage->GetAutoLayout();
             if( eStandardLayout == AUTOLAYOUT_TITLE )
-                eStandardLayout = AUTOLAYOUT_ENUM;
+                eStandardLayout = AUTOLAYOUT_TITLE_CONTENT;
 
             SdPage* pNotesTemplatePage = static_cast<SdPage*>(pDocument->GetPage(pTemplatePage->GetPageNum()+1));
             if (pNotesTemplatePage != nullptr)

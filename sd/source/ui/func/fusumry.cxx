@@ -133,7 +133,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     // use MasterPage of the current page
                     pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pSummaryPage->SetLayoutName(pActualPage->GetLayoutName());
-                    pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, true);
+                    pSummaryPage->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
                     pSummaryPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 

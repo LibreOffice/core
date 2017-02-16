@@ -152,7 +152,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // use MasterPage of the current page
                     pPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pPage->SetLayoutName(pActualPage->GetLayoutName());
-                    pPage->SetAutoLayout(AUTOLAYOUT_ENUM, true);
+                    pPage->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
                     // notes-page
