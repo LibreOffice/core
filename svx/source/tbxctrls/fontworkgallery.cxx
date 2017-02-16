@@ -106,7 +106,7 @@ void FontWorkGalleryDialog::dispose()
 void FontWorkGalleryDialog::initFavorites(sal_uInt16 nThemeId)
 {
     // Ueber die Gallery werden die Favoriten eingelesen
-    sal_uIntPtr nFavCount = GalleryExplorer::GetSdrObjCount( nThemeId );
+    sal_uInt32 nFavCount = GalleryExplorer::GetSdrObjCount( nThemeId );
 
     // Gallery thema locken
     GalleryExplorer::BeginLocking(nThemeId);
