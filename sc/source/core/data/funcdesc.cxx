@@ -779,7 +779,6 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
 }
 
 // class ScFuncRes:
-
 ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
  : Resource(aRes)
 {
@@ -816,42 +815,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
     // Need to read the value from the resource even if nArgs==0 to advance the
     // resource position pointer, so this can't be in the if(nArgs) block above.
     sal_uInt16 nSuppressed = GetNum();
-    if (nSuppressed)
-    {
-        if (nSuppressed > nArgs)
-        {
-            SAL_WARN("sc.core", "ScFuncRes: suppressed parameters count mismatch on OpCode " <<
-                     nOpCode << ": suppressed " << nSuppressed << " > params " << nArgs);
-            nSuppressed = nArgs;    // sanitize
-        }
-        for (sal_uInt16 i = 0; i < nSuppressed; ++i)
-        {
-            sal_uInt16 nParam = GetNum();
-            if (nParam < nArgs)
-            {
-                if (pDesc->nArgCount >= PAIRED_VAR_ARGS && nParam >= nArgs-2)
-                {
-                    SAL_WARN("sc.core", "ScFuncRes: PAIRED_VAR_ARGS parameters can't be suppressed, on OpCode " <<
-                             nOpCode << ": param " << nParam << " >= arg " << nArgs << "-2");
-                }
-                else if (pDesc->nArgCount >= VAR_ARGS && nParam == nArgs-1)
-                {
-                    SAL_WARN("sc.core", "ScFuncRes: VAR_ARGS parameters can't be suppressed, on OpCode " <<
-                             nOpCode << ": param " << nParam << " == arg " << nArgs << "-1");
-                }
-                else
-                {
-                    pDesc->pDefArgFlags[nParam].bSuppress = true;
-                    pDesc->bHasSuppressedArgs = true;
-                }
-            }
-            else
-            {
-                SAL_WARN("sc.core", "ScFuncRes: suppressed parameter exceeds count on OpCode " <<
-                         nOpCode << ": param " << nParam << " >= args " << nArgs);
-            }
-        }
-    }
+    assert(!nSuppressed); (void)nSuppressed;
 
     pDesc->pFuncName = new OUString(ScCompiler::GetNativeSymbol(static_cast<OpCode>(nOpCode)));
     pDesc->pFuncDesc = new OUString( SC_RESSTR(1) );
