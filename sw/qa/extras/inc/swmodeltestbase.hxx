@@ -516,6 +516,19 @@ protected:
         return xParagraph;
     }
 
+    /// get nth object/fly that is anchored AT paragraph
+    uno::Reference<beans::XPropertySet> getParagraphAnchoredObject(
+        int const index, uno::Reference<text::XTextRange> const & xPara) const
+    {
+        uno::Reference<container::XContentEnumerationAccess> xContentEnumAccess(xPara, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentEnum(xContentEnumAccess->createContentEnumeration("com.sun.star.text.TextContent"), uno::UNO_QUERY);
+        for (int i = 1; i < index; ++i)
+        {
+            xContentEnum->nextElement();
+        }
+        return uno::Reference<beans::XPropertySet>(xContentEnum->nextElement(), uno::UNO_QUERY);
+    }
+
     /// Get run (counted from 1) of a paragraph, optionally check it contains the given text.
     uno::Reference<text::XTextRange> getRun(uno::Reference<text::XTextRange> const & xParagraph, int number, const OUString& content = OUString()) const
     {

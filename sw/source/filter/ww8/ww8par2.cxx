@@ -2020,6 +2020,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         // PlcxMan currently points too far ahead so we need to bring
         // it back to where we are trying to make a table
         m_pIo->m_pPlcxMan->GetPap()->nOrigStartPos = aRes.nStartPos;
+        m_pIo->m_pPlcxMan->GetPap()->nCpOfs = aRes.nCpOfs;
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
             aRes.nEndPos = WW8_CP_MAX;

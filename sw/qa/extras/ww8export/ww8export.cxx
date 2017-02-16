@@ -328,6 +328,30 @@ DECLARE_WW8EXPORT_TEST(testListNolevel, "list-nolevel.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("1."), aText);
 }
 
+DECLARE_WW8EXPORT_TEST(testHeaderApoTable, "ooo92948-1.doc")
+{
+    // the problem was that a table anchored in the header was split across
+    // 3 text frames and quite messed up
+
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xFrame(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+
+//    uno::Reference<text::XText> xHeaderText = getProperty<uno::Reference<text::XText>>(getStyles("PageStyles")->getByName("Standard"), "HeaderTextFirst");
+//    uno::Reference<text::XTextRange> xPara(getParagraphOfText(9, xHeaderText));
+//TODO why does this not work
+//    uno::Reference<beans::XPropertySet> xFrame(getParagraphAnchoredObject(1, xPara));
+
+    uno::Reference<text::XTextContent> xTable(getParagraphOrTable(1, xFrame));
+    getCell(xTable, "A1", "Aan\nRecipient\nRecipient\n");
+    getCell(xTable, "A2", "Kopie aan\n");
+    getCell(xTable, "A3", "Datum\n31 juli 2008");
+    getCell(xTable, "A4", "Locatie\nLocationr");
+    getCell(xTable, "A5", "Van\nSender  ");
+    getCell(xTable, "A6", "Directie\nDepartment");
+    getCell(xTable, "A7", "Telefoon\nPhone");
+}
+
 DECLARE_WW8EXPORT_TEST(testBnc821208, "bnc821208.doc")
 {
     // WW8Num1z0 earned a Symbol font, turning numbers into rectangles.
