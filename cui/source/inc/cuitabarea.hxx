@@ -734,7 +734,6 @@ private:
     XColorListRef         pColorList;
 
     ChangeType*         pnColorListState;
-    sal_Int32*          pPos;
 
     XFillStyleItem      aXFStyleItem;
     XFillColorItem      aXFillColorItem;
@@ -754,6 +753,7 @@ private:
 
     void ImpColorCountChanged();
     void FillPaletteLB();
+    long FindColorInPalette(const OUString& rPaletteName) const;
 
     DECL_LINK( ClickAddHdl_Impl, Button*, void );
     DECL_LINK( ClickWorkOnHdl_Impl, Button*, void );
@@ -766,11 +766,14 @@ private:
     void SetColorModel(ColorModel eModel);
     void ChangeColorModel();
     void UpdateColorValues( bool bUpdatePreset = true );
-    static sal_Int32 SearchColorList(OUString const & aColorName);
     DECL_LINK( ModifiedHdl_Impl, Edit&, void );
 
     void UpdateModified();
     css::uno::Reference< css::uno::XComponentContext > m_context;
+
+    static sal_Int32 FindInCustomColors( OUString const & aColorName );
+    sal_Int32 FindInPalette( const Color& rColor );
+
 public:
     SvxColorTabPage( vcl::Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~SvxColorTabPage() override;
@@ -786,7 +789,6 @@ public:
     virtual DeactivateRC DeactivatePage( SfxItemSet* pSet ) override;
 
     void    SetPropertyList( XPropertyListType t, const XPropertyListRef &xRef );
-    void    SetPos( sal_Int32* pInPos ) { pPos = pInPos; }
     void    SetColorList( const XColorListRef& pColList );
 
 
