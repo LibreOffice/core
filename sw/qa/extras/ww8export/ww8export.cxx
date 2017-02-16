@@ -343,13 +343,13 @@ DECLARE_WW8EXPORT_TEST(testHeaderApoTable, "ooo92948-1.doc")
 //    uno::Reference<beans::XPropertySet> xFrame(getParagraphAnchoredObject(1, xPara));
 
     uno::Reference<text::XTextContent> xTable(getParagraphOrTable(1, xFrame));
-    getCell(xTable, "A1", "Aan\nRecipient\nRecipient\n");
-    getCell(xTable, "A2", "Kopie aan\n");
-    getCell(xTable, "A3", "Datum\n31 juli 2008");
-    getCell(xTable, "A4", "Locatie\nLocationr");
-    getCell(xTable, "A5", "Van\nSender  ");
-    getCell(xTable, "A6", "Directie\nDepartment");
-    getCell(xTable, "A7", "Telefoon\nPhone");
+    getCell(xTable, "A1", "Aan" SAL_NEWLINE_STRING "Recipient" SAL_NEWLINE_STRING "Recipient" SAL_NEWLINE_STRING);
+    getCell(xTable, "A2", "Kopie aan" SAL_NEWLINE_STRING);
+    getCell(xTable, "A3", "Datum" SAL_NEWLINE_STRING "31 juli 2008");
+    getCell(xTable, "A4", "Locatie" SAL_NEWLINE_STRING "Locationr");
+    getCell(xTable, "A5", "Van" SAL_NEWLINE_STRING "Sender  ");
+    getCell(xTable, "A6", "Directie" SAL_NEWLINE_STRING "Department");
+    getCell(xTable, "A7", "Telefoon" SAL_NEWLINE_STRING "Phone");
 }
 
 DECLARE_WW8EXPORT_TEST(testBnc821208, "bnc821208.doc")
