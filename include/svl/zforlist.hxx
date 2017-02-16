@@ -516,6 +516,9 @@ public:
     /// Count of decimals
     sal_uInt16 GetFormatPrecision( sal_uInt32 nFormat ) const;
 
+    /// Count of decimals with correct subformat according to fValue
+    sal_uInt16 GetFormatPrecision( sal_uInt32 nFormat, double fValue ) const;
+
     /// Count of integer digits
     sal_uInt16 GetFormatIntegerDigits( sal_uInt32 nFormat ) const;
 
