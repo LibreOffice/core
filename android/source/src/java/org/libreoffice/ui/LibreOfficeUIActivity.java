@@ -29,7 +29,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,8 +44,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +65,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -164,55 +160,48 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         //Setting up navigation drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationDrawer = (NavigationView) findViewById(R.id.navigation_drawer);
-        /*
-         * These are the currently-known document providers (for which icons are assigned).
-         * This is to ensure that there is an icon available if the provider is recognized, while
-         * the unrecognized ones still appear, but without an icon. If there is a document provider
-         * not on this list, it should be added and an icon assigned to it, in the if-else ladder
-         * bellow. This is a hacky implementation, maybe we could make something better in the
-         * future, i.e. we could move this into the menu file and load it that way.
-         */
-        final String LOCAL_DOCUMENTS_NAME = "Local documents";
-        final String LOCAL_FILE_SYSTEM_NAME = "Local file system";
-        final String EXTERNAL_SD_NAME = "External SD";
-        final String OTG_FILE_SYSTEM_NAME = "OTG device (experimental)";
-        final String OWNCLOUD_NAME = "Remote server";
-
-        //Provider names are wrapped as a ArrayList so indexOf(Object) method could be used
-        final ArrayList<CharSequence> providerNames = new ArrayList<CharSequence>(
-                Arrays.asList(documentProviderFactory.getNames())
-        );
-        for (CharSequence name : providerNames) {
-            int iconRes = 0;
-            if (name.equals(LOCAL_DOCUMENTS_NAME)) {
-                iconRes = R.drawable.ic_insert_drive_file_black_24dp;
-            } else if (name.equals(LOCAL_FILE_SYSTEM_NAME)) {
-                iconRes = R.drawable.ic_storage_black_24dp;
-            } else if (name.equals(EXTERNAL_SD_NAME)) {
-                iconRes = R.drawable.ic_sd_card_black_24dp;
-            } else if (name.equals(OTG_FILE_SYSTEM_NAME)) {
-                iconRes = R.drawable.ic_usb_black_24dp;
-            } else if (name.equals(OWNCLOUD_NAME)) {
-                iconRes = R.drawable.ic_cloud_black_24dp;
-            }
-            MenuItem item = navigationDrawer.getMenu().add(R.id.group_providers, Menu.NONE, Menu.NONE, name)
-                            .setCheckable(true);
-            if (iconRes != 0) {
-                item.setIcon(iconRes);
-            }
-        }
 
         final Context context = this; //needed for anonymous method below
         navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.menu_storage_preferences) {
-                    startActivity(new Intent(context, DocumentProviderSettingsActivity.class));
-                    return true;
+
+                switch (item.getItemId()) {
+                    case R.id.menu_storage_preferences: {
+                        startActivity(new Intent(context, DocumentProviderSettingsActivity.class));
+                        return true;
+                    }
+
+                    case R.id.menu_provider_documents: {
+                        switchToDocumentProvider(documentProviderFactory.getProvider(0));
+                        return true;
+                    }
+
+                    case R.id.menu_provider_filesystem: {
+                        switchToDocumentProvider(documentProviderFactory.getProvider(1));
+                        return true;
+                    }
+
+                    case R.id.menu_provider_extsd: {
+                        switchToDocumentProvider(documentProviderFactory.getProvider(2));
+                        return true;
+                    }
+
+                    case R.id.menu_provider_otg: {
+                        switchToDocumentProvider(documentProviderFactory.getProvider(3));
+                        return true;
+                    }
+
+                    case R.id.menu_provider_owncloud: {
+                        switchToDocumentProvider(documentProviderFactory.getProvider(4));
+                        return true;
+                    }
+
+                    default:
+                        return false;
                 }
-                int position = providerNames.indexOf(item.getTitle());
-                switchToDocumentProvider(documentProviderFactory.getProvider(position));
-                return true;
+
+
             }
         });
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
@@ -600,7 +589,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 filterMode = FileUtilities.DRAWING;
                 openDirectory(currentDirectory);
                 break;
-            
+
             case R.id.menu_sort_size:
             case R.id.menu_sort_az:
             case R.id.menu_sort_modified:
