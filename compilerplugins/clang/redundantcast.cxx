@@ -176,11 +176,13 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
                 expr->getSubExpr()->IgnoreParenImpCasts());
             if (e != nullptr && !isRedundantConstCast(e)) {
                 auto t1 = e->getSubExpr()->getType().getCanonicalType();
-                auto t2 = expr->getType().getCanonicalType();
+                auto t3 = expr->getType().getCanonicalType();
                 bool ObjCLifetimeConversion;
-                if (t1.getTypePtr() == t2.getTypePtr()
-                    || compiler.getSema().IsQualificationConversion(
-                        t1, t2, false, ObjCLifetimeConversion))
+                if (t1.getTypePtr() == t3.getTypePtr()
+                    || (compiler.getSema().IsQualificationConversion(
+                            t1, t3, false, ObjCLifetimeConversion)
+                        && (e->getType().getCanonicalType().getTypePtr()
+                            != t3.getTypePtr())))
                 {
                     report(
                         DiagnosticsEngine::Warning,
