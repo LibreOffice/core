@@ -34,6 +34,24 @@
       "revId": "7eacdc94d0f885af74c5235c40dda3bd1d4dd538",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b81118b2",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitInit.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-16T08:58:25Z",
+      "side": 1,
+      "message": "My understanding is that you disable inline here. Definitions have to be inline in headers otherwise you cause an ODR violation.",
+      "parentUuid": "9a57fde8_84e4f43b",
+      "revId": "7eacdc94d0f885af74c5235c40dda3bd1d4dd538",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
