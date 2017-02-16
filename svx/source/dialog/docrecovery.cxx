@@ -1087,8 +1087,8 @@ void RecoveryDialog::start()
 
 void RecoveryDialog::updateItems()
 {
-    sal_uIntPtr c = m_pFileListLB->GetEntryCount();
-    sal_uIntPtr i = 0;
+    sal_uInt32 c = m_pFileListLB->GetEntryCount();
+    sal_uInt32 i = 0;
     for ( i=0; i<c; ++i )
     {
         SvTreeListEntry* pEntry = m_pFileListLB->GetEntry(i);
@@ -1111,8 +1111,8 @@ void RecoveryDialog::updateItems()
 
 void RecoveryDialog::stepNext(TURLInfo* pItem)
 {
-    sal_uIntPtr c = m_pFileListLB->GetEntryCount();
-    sal_uIntPtr i = 0;
+    sal_uInt32 c = m_pFileListLB->GetEntryCount();
+    sal_uInt32 i = 0;
     for (i=0; i<c; ++i)
     {
         SvTreeListEntry* pEntry = m_pFileListLB->GetEntry(i);

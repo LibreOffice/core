@@ -582,7 +582,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
     if (pAktCreate!=nullptr)
     {
-        sal_uIntPtr nCount=maDragStat.GetPointCount();
+        sal_uInt32 nCount=maDragStat.GetPointCount();
 
         if (nCount<=1 && eCmd==SdrCreateCmd::ForceEnd)
         {
@@ -591,7 +591,7 @@ bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
         }
 
         bool bPntsEq=nCount>1;
-        sal_uIntPtr i=1;
+        sal_uInt32 i=1;
         Point aP0=maDragStat.GetPoint(0);
         while (bPntsEq && i<nCount) { bPntsEq=aP0==maDragStat.GetPoint(i); i++; }
 
