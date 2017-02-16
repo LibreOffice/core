@@ -1686,8 +1686,17 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext )
         rContext->Insert(PROP_CHAR_AUTO_KERNING, uno::makeAny( nIntValue != 0 ) );
         break;
     case NS_ooxml::LN_EG_RPrBase_w:
-        rContext->Insert(PROP_CHAR_SCALE_WIDTH,
-                         uno::makeAny( sal_Int16(nIntValue) ));
+        // ST_TextScale must fall between 1% and 600% according to spec, otherwise resets to 100% according to experience
+        if ((1 <= nIntValue) && (nIntValue <= 600))
+        {
+            rContext->Insert(PROP_CHAR_SCALE_WIDTH,
+                             uno::makeAny( sal_Int16(nIntValue) ));
+        }
+        else
+        {
+            rContext->Insert(PROP_CHAR_SCALE_WIDTH,
+                             uno::makeAny( sal_Int16(100) ));
+        }
         break;
     case NS_ooxml::LN_EG_RPrBase_imprint:
         // FontRelief: NONE, EMBOSSED, ENGRAVED
