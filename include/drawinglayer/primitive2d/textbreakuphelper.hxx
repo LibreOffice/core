@@ -33,8 +33,7 @@ namespace drawinglayer
         enum class BreakupUnit
         {
             Character,
-            Word,
-            Sentence
+            Word
         };
 
         class DRAWINGLAYER_DLLPUBLIC TextBreakupHelper

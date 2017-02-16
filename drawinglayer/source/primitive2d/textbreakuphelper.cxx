@@ -260,24 +260,6 @@ namespace drawinglayer
                         }
                         break;
                     }
-                    case BreakupUnit::Sentence:
-                    {
-                        sal_Int32 nNextSentenceBreak(xBreakIterator->endOfSentence(rTxt, nTextPosition, rLocale));
-                        sal_Int32 a(nTextPosition);
-
-                        for(; a < nTextPosition + nTextLength; a++)
-                        {
-                            if(a == nNextSentenceBreak)
-                            {
-                                breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
-                                nCurrent = a;
-                                nNextSentenceBreak = xBreakIterator->endOfSentence(rTxt, a + 1, rLocale);
-                            }
-                        }
-
-                        breakupPortion(aTempResult, nCurrent, a - nCurrent, false);
-                        break;
-                    }
                 }
 
                 mxResult = aTempResult;
