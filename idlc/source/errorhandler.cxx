@@ -145,15 +145,7 @@ static const sal_Char* warningCodeToMessage(WarningCode wCode)
 {
     switch (wCode)
     {
-    case WIDL_EXPID_CONFLICT:
-        return "exception id conflict: ";
-    case WIDL_REQID_CONFLICT:
-        return "request id conflict: ";
-    case WIDL_INHERIT_IDCONFLICT:
-        return "request id conflict in inheritance tree: ";
-    case WIDL_TYPE_IDENT_CONFLICT:
-        return "type and parameter|member name are equal: ";
-    case WIDL_WRONG_NAMING_CONV:
+    case WarningCode::WrongNamingConvention:
         return "type or identifier doesn't fulfill the UNO naming convention: ";
     }
     return "unknown warning";

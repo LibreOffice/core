@@ -77,13 +77,9 @@ enum ErrorCode
     EIDL_SIMILAR_CONSTRUCTORS
 };
 
-enum WarningCode
+enum class WarningCode
 {
-    WIDL_EXPID_CONFLICT,        // exception id conflict
-    WIDL_REQID_CONFLICT,        // request id conflict
-    WIDL_INHERIT_IDCONFLICT,    // request id conflict inheritance tree
-    WIDL_TYPE_IDENT_CONFLICT,   // type and identifier has equal names
-    WIDL_WRONG_NAMING_CONV      // type or identifier doesn't fulfill the UNO naming convention
+    WrongNamingConvention    // type or identifier doesn't fulfill the UNO naming convention
 };
 
 class ErrorHandler

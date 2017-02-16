@@ -89,7 +89,7 @@ void checkIdentifier(::rtl::OString* id)
                                          msg.getStr());
             }
             else
-                ErrorHandler::warning0(WIDL_WRONG_NAMING_CONV, id->getStr());
+                ErrorHandler::warning0(WarningCode::WrongNamingConvention, id->getStr());
         }
 }
 
