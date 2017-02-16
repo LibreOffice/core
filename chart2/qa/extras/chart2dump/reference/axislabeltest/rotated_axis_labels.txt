@@ -4,15 +4,15 @@
 // xLabel->getString()
 1. quarter
 // aLabelPosition.X
-4677
+4696
 // aLabelPosition.Y
-8800
+11140
 // aLabelSize.Height
 345
 // aLabelSize.Width
 1457
 // aLabelTransformation
-1030.96168696999;244.658946290545;4677;-1030.96168696999;244.658946290545;8800;0;0;1
+1030.96168696999;244.658946290545;4696;-1030.96168696999;244.658946290545;11140;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -20,15 +20,15 @@
 // xLabel->getString()
 2. quarter
 // aLabelPosition.X
-8287
+8799
 // aLabelPosition.Y
-8800
+11140
 // aLabelSize.Height
 345
 // aLabelSize.Width
 1457
 // aLabelTransformation
-1030.96168696999;244.658946290545;8287;-1030.96168696999;244.658946290545;8800;0;0;1
+1030.96168696999;244.658946290545;8799;-1030.96168696999;244.658946290545;11140;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -36,15 +36,15 @@
 // xLabel->getString()
 3. quarter
 // aLabelPosition.X
-11897
+12902
 // aLabelPosition.Y
-8800
+11140
 // aLabelSize.Height
 345
 // aLabelSize.Width
 1457
 // aLabelTransformation
-1030.96168696999;244.658946290545;11897;-1030.96168696999;244.658946290545;8800;0;0;1
+1030.96168696999;244.658946290545;12902;-1030.96168696999;244.658946290545;11140;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -52,15 +52,15 @@
 // xLabel->getString()
 4. quarter
 // aLabelPosition.X
-15507
+17005
 // aLabelPosition.Y
-8800
+11140
 // aLabelSize.Height
 345
 // aLabelSize.Width
 1457
 // aLabelTransformation
-1030.96168696999;244.658946290545;15507;-1030.96168696999;244.658946290545;8800;0;0;1
+1030.96168696999;244.658946290545;17005;-1030.96168696999;244.658946290545;11140;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -71,15 +71,31 @@
 // xLabel->getString()
 - Ft
 // aLabelPosition.X
-2616
+2831
 // aLabelPosition.Y
-7000
+9502
 // aLabelSize.Height
 345
 // aLabelSize.Width
 743
 // aLabelTransformation
-644.322900415622;-173;2616;372;299.644789709416;7000;0;0;1
+718.648814759067;-89.5513896054722;2831;192.561369556275;334.210335896018;9502;0;0;1
+// static_cast<sal_Int32>(aLabelFontColor)
+0
+// fLabelFontHeight
+10
+// xLabel->getString()
+5,000,000 Ft
+// aLabelPosition.X
+1477
+// aLabelPosition.Y
+7194
+// aLabelSize.Height
+345
+// aLabelSize.Width
+2145
+// aLabelTransformation
+2072.87682321634;-89.5513896054722;1477;555.425670790009;334.210335896018;7194;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -87,15 +103,31 @@
 // xLabel->getString()
 10,000,000 Ft
 // aLabelPosition.X
-1241
+1297
 // aLabelPosition.Y
-4723
+5202
 // aLabelSize.Height
 345
 // aLabelSize.Width
 2331
 // aLabelTransformation
-2019.57124162531;-173;1241;1166;299.644789709416;4723;0;0;1
+2252.53902690611;-89.5513896054722;1297;603.566013179078;334.210335896018;5202;0;0;1
+// static_cast<sal_Int32>(aLabelFontColor)
+0
+// fLabelFontHeight
+10
+// xLabel->getString()
+15,000,000 Ft
+// aLabelPosition.X
+1297
+// aLabelPosition.Y
+3257
+// aLabelSize.Height
+345
+// aLabelSize.Width
+2331
+// aLabelTransformation
+2252.53902690611;-89.5513896054722;1297;603.566013179078;334.210335896018;3257;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight
@@ -103,47 +135,15 @@
 // xLabel->getString()
 20,000,000 Ft
 // aLabelPosition.X
-1241
+1297
 // aLabelPosition.Y
-3240
+1313
 // aLabelSize.Height
 345
 // aLabelSize.Width
 2331
 // aLabelTransformation
-2019.57124162531;-173;1241;1166;299.644789709416;3240;0;0;1
-// static_cast<sal_Int32>(aLabelFontColor)
-0
-// fLabelFontHeight
-10
-// xLabel->getString()
-30,000,000 Ft
-// aLabelPosition.X
-1241
-// aLabelPosition.Y
-1757
-// aLabelSize.Height
-345
-// aLabelSize.Width
-2331
-// aLabelTransformation
-2019.57124162531;-173;1241;1166;299.644789709416;1757;0;0;1
-// static_cast<sal_Int32>(aLabelFontColor)
-0
-// fLabelFontHeight
-10
-// xLabel->getString()
-40,000,000 Ft
-// aLabelPosition.X
-1241
-// aLabelPosition.Y
-274
-// aLabelSize.Height
-345
-// aLabelSize.Width
-2331
-// aLabelTransformation
-2019.57124162531;-173;1241;1166;299.644789709416;274;0;0;1
+2252.53902690611;-89.5513896054722;1297;603.566013179078;334.210335896018;1313;0;0;1
 // static_cast<sal_Int32>(aLabelFontColor)
 0
 // fLabelFontHeight

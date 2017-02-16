@@ -1,7 +1,7 @@
 // aLegendPosition.X
-14671
+22525
 // aLegendPosition.Y
-4000
+6206
 // aLegendSize.Width
 1127
 // aLegendSize.Height
@@ -9,15 +9,15 @@
 // nLegendEntryCount
 2
 // aLegendEntryPosition.X
-14787
+22641
 // aLegendEntryPosition.Y
-4167
+6373
 // aLegendEntrySize.Height
 211
 // aLegendEntrySize.Width
 211
 // aLegendEntryTransformation
-212;0;14787;0;212;4167;0;0;1
+212;0;22641;0;212;6373;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
@@ -25,15 +25,15 @@ com.sun.star.drawing.RectangleShape
 // static_cast<sal_Int32>(aEntryGeomColor)
 17798
 // aLegendEntryPosition.X
-14787
+22641
 // aLegendEntryPosition.Y
-4612
+6818
 // aLegendEntrySize.Height
 211
 // aLegendEntrySize.Width
 211
 // aLegendEntryTransformation
-212;0;14787;0;212;4612;0;0;1
+212;0;22641;0;212;6818;0;0;1
 // xLegendEntryContainer->getCount()
 2
 // sEntryGeomShapeType
