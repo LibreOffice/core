@@ -28,7 +28,7 @@
 
 #if defined(MACOSX)
 #define INT_EPS     200.1
-#elif defined(UNX)
+#elif defined(X86)
 #define INT_EPS     2.1
 #else
 #define INT_EPS     0.1
@@ -398,20 +398,21 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "legend_on_right_side.ods",
-        "legend_on_bottom.ods",
-        "legend_on_left_side.ods",
-        "legend_on_top.ods",
-        "many_legend_entries.ods",
-        "custom_legend_position.ods",
-        "multiple_categories.ods"
+        "legend_on_right_side.odp",
+        "legend_on_bottom.odp",
+        "legend_on_left_side.odp",
+        "legend_on_top.odp",
+        "many_legend_entries.odp",
+        "custom_legend_position.odp",
+        "multiple_categories.odp"
     };
 
     for (const OUString& aTestFile : aTestFiles)
     {
         setTestFileName(aTestFile);
         load(getTestFileDirName(), getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -444,8 +445,8 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
             // Check position and size
             awt::Point aLegendEntryPosition = xLegendEntry->getPosition();
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.X, 76.1);
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.Y, 38.1);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.X, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.Y, INT_EPS);
             awt::Size aLegendEntrySize = xLegendEntry->getSize();
             CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Height, INT_EPS);
             CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Width, INT_EPS);
@@ -645,17 +646,18 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "default_formated_axis.ods",
-        "rotated_axis_labels.ods",
-        "formated_axis_labels.ods",
-        "percent_stacked_column_chart.ods",
+        "default_formated_axis.odp",
+        "rotated_axis_labels.odp",
+        "formated_axis_labels.odp",
+        "percent_stacked_column_chart.odp",
     };
 
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
         load(getTestFileDirName(), getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -801,16 +803,17 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "chartwall_auto_adjust_with_titles.ods",
-        "chartwall_auto_adjust_without_titles.ods",
-        "chartwall_custom_positioning.ods"
+        "chartwall_auto_adjust_with_titles.odp",
+        "chartwall_auto_adjust_without_titles.odp",
+        "chartwall_custom_positioning.odp"
     };
 
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
         load(getTestFileDirName(), getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
