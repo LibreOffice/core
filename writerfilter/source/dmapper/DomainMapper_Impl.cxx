@@ -2367,7 +2367,7 @@ std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCo
     return std::make_tuple(sType, arguments, switches);
 }
 
-OUString lcl_ExctractAskVariableAndHint( const OUString& rCommand, OUString& rHint )
+OUString lcl_ExctractVariableAndHint( const OUString& rCommand, OUString& rHint )
 {
     // the first word after "ASK " is the variable
     // the text after the variable and before a '\' is the hint
@@ -2862,7 +2862,7 @@ if(!bFilled)
 //            {OUString("SECTION"),       "",                         FIELD_SECTION      },
 //            {OUString("SECTIONPAGES"),  "",                         FIELD_SECTIONPAGES },
             {OUString("SEQ"),           "SetExpression",            FIELD_SEQ          },
-//            {OUString("SET"),           FIELD_SET          },
+            {OUString("SET"),           "SetExpression",            FIELD_SET          },
 //            {OUString("SKIPIF"),"",                                 FIELD_SKIPIF       },
 //            {OUString("STYLEREF"),"",                               FIELD_STYLEREF     },
             {OUString("SUBJECT"),       "DocInfo.Subject",          FIELD_SUBJECT      },
@@ -2928,6 +2928,42 @@ const FieldConversionMap_t & lcl_GetEnhancedFieldConversion()
     return aEnhancedFieldConversionMap;
 }
 
+void DomainMapper_Impl::handleFieldSet
+    (const FieldContextPtr& pContext,
+     uno::Reference< uno::XInterface > & xFieldInterface,
+     uno::Reference< beans::XPropertySet > const& xFieldProperties)
+{
+    OUString sVariable, sHint;
+
+    sVariable = lcl_ExctractVariableAndHint(pContext->GetCommand(), sHint);
+
+    // remove surrounding "" if exists
+    if( sHint.match("\"") )
+    {
+        sHint = sHint.trim().copy(1, sHint.getLength() - 3);
+    }
+
+    // determine field master name
+    uno::Reference< beans::XPropertySet > xMaster =
+        FindOrCreateFieldMaster
+        ("com.sun.star.text.FieldMaster.SetExpression", sVariable );
+
+    // a set field is a string
+    xMaster->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
+
+    // attach the master to the field
+    uno::Reference< text::XDependentTextField > xDependentField
+        ( xFieldInterface, uno::UNO_QUERY_THROW );
+    xDependentField->attachTextFieldMaster( xMaster );
+
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_HINT), uno::makeAny( sHint ));
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny( sHint ));
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
+
+    // Mimic MS Word behavior (hide the SET)
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_IS_VISIBLE), uno::makeAny(false));
+}
+
 void DomainMapper_Impl::handleFieldAsk
     (const FieldContextPtr& pContext,
      uno::Reference< uno::XInterface > & xFieldInterface,
@@ -2936,7 +2972,7 @@ void DomainMapper_Impl::handleFieldAsk
     //doesn the command contain a variable name?
     OUString sVariable, sHint;
 
-    sVariable = lcl_ExctractAskVariableAndHint( pContext->GetCommand(),
+    sVariable = lcl_ExctractVariableAndHint( pContext->GetCommand(),
         sHint );
     if(!sVariable.isEmpty())
     {
@@ -4099,7 +4135,9 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 uno::makeAny(nNumberingType));
                     }
                     break;
-                    case FIELD_SET          : break;
+                    case FIELD_SET          :
+                        handleFieldSet(pContext, xFieldInterface, xFieldProperties);
+                    break;
                     case FIELD_SKIPIF       : break;
                     case FIELD_STYLEREF     : break;
                     case FIELD_SUBJECT      :
