@@ -1230,8 +1230,6 @@
 #define BMP_STYLES_FAMILY_CELL          (SC_DIALOGS_START + 140)
 #define BMP_STYLES_FAMILY_PAGE          (SC_DIALOGS_START + 141)
 
-#define RID_SCDLG_COND_FORMAT_MANAGER   (SC_DIALOGS_START + 159)
-
 #define WID_CONDFRMT_REF                (SC_DIALOGS_START + 163)
 
 // toggle sheet grid
