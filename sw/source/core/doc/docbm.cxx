@@ -84,9 +84,11 @@ namespace
         {
             return rFirstStart.nNode < rSecondStart.nNode;
         }
-        if (rFirstStart.nContent != 0 || rSecondStart.nContent != 0)
+        const sal_Int32 nFirstContent = rFirstStart.nContent.GetIndex();
+        const sal_Int32 nSecondContent = rSecondStart.nContent.GetIndex();
+        if (nFirstContent != 0 || nSecondContent != 0)
         {
-            return rFirstStart.nContent < rSecondStart.nContent;
+            return nFirstContent < nSecondContent;
         }
         auto *const pCRFirst (dynamic_cast<::sw::mark::CrossRefBookmark const*>(rpFirst.get()));
         auto *const pCRSecond(dynamic_cast<::sw::mark::CrossRefBookmark const*>(rpSecond.get()));
