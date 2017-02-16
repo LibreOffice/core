@@ -52,6 +52,24 @@
       "revId": "7eacdc94d0f885af74c5235c40dda3bd1d4dd538",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b862f814",
+        "filename": "include/LibreOfficeKit/LibreOfficeKitInit.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-02-16T11:15:55Z",
+      "side": 1,
+      "message": "Please have a look at line 57-59, just copied that....so why would it introduce a ODR in this line, but not in line 57-59 ?\n\nNot having the #ifndef gives compilation errors, when compiling with the IOSsimulator as target.\n\nSo your original comment is maybe that not only my change would cause an ODR, but also all the other #ifndef that have been in the code for a longer time ?",
+      "parentUuid": "9a57fde8_b81118b2",
+      "revId": "7eacdc94d0f885af74c5235c40dda3bd1d4dd538",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
