@@ -2593,13 +2593,13 @@ void WW8TabDesc::MergeCells()
                     if( rCell.bVertMerge && !rCell.bVertRestart )
                     {
                         SwPaM aPam( *m_pTabBox->GetSttNd(), 0 );
-                        aPam.GetPoint()->nNode++;
+                        ++aPam.GetPoint()->nNode;
                         SwTextNode* pNd = aPam.GetNode().GetTextNode();
                         while( pNd )
                         {
                             pNd->SetCountedInList( false );
 
-                            aPam.GetPoint()->nNode++;
+                            ++aPam.GetPoint()->nNode;
                             pNd = aPam.GetNode().GetTextNode();
                         }
                     }

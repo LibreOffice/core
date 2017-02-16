@@ -180,7 +180,7 @@ namespace
                 {
                     --rDelCount;
                 }
-                rLastIdx--;
+                --rLastIdx;
             }
         }
     }
@@ -739,7 +739,7 @@ namespace
     {
         SwDoc* pDoc = rRg.aStart.GetNode().GetDoc();
         sal_uInt16 nRedlPos;
-        SwPosition aSrchPos( rRg.aStart ); aSrchPos.nNode--;
+        SwPosition aSrchPos( rRg.aStart ); --aSrchPos.nNode;
         aSrchPos.nContent.Assign( aSrchPos.nNode.GetNode().GetContentNode(), 0 );
         if( pDoc->getIDocumentRedlineAccess().GetRedline( aSrchPos, &nRedlPos ) && nRedlPos )
             --nRedlPos;
@@ -1579,7 +1579,7 @@ namespace //local functions originally from docfmt.cxx
             SwPosition aEndPos (*rRg.End());
 
             if (aEndPos.nNode.GetNode().GetTextNode() && aEndPos.nContent != aEndPos.nNode.GetNode().GetTextNode()->Len())
-                aEndPos.nNode--;
+                --aEndPos.nNode;
 
             sal_uLong nStart = aStartPos.nNode.GetIndex();
             sal_uLong nEnd = aEndPos.nNode.GetIndex();
@@ -1826,7 +1826,7 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
             rPam.SetMark();
         else if( rPam.GetPoint() == &rStt )
             rPam.Exchange();
-        rPam.GetPoint()->nNode++;
+        ++rPam.GetPoint()->nNode;
 
         SwContentNode *pTmpNode = rPam.GetPoint()->nNode.GetNode().GetContentNode();
         rPam.GetPoint()->nContent.Assign( pTmpNode, 0 );
@@ -2043,7 +2043,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
     const bool bNullContent = !aSavePam.Move( fnMoveBackward, GoInContent );
     if( bNullContent )
     {
-        aSavePam.GetPoint()->nNode--;
+        --aSavePam.GetPoint()->nNode;
     }
 
     // Copy all Bookmarks that are within the Move range into an array,
@@ -2120,7 +2120,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         }
         else if ( !aSavePam.Move( fnMoveForward, GoInContent ) )
         {
-            aSavePam.GetPoint()->nNode++;
+            ++aSavePam.GetPoint()->nNode;
         }
 
         // The newly inserted range is now inbetween SPoint and GetMark.
@@ -2144,7 +2144,7 @@ bool DocumentContentOperationsManager::MoveRange( SwPaM& rPaM, SwPosition& rPos,
         }
         if( bNullContent )
         {
-            aSavePam.GetPoint()->nNode++;
+            ++aSavePam.GetPoint()->nNode;
             aSavePam.GetPoint()->nContent.Assign( aSavePam.GetContentNode(), 0 );
         }
         else if( bRemove ) // No move forward after joining with next paragraph
@@ -2976,7 +2976,7 @@ bool DocumentContentOperationsManager::AppendTextNode( SwPosition& rPos )
     else
         pCurNode = pCurNode->AppendNode( rPos )->GetTextNode();
 
-    rPos.nNode++;
+    ++rPos.nNode;
     rPos.nContent.Assign( pCurNode, 0 );
 
     if (m_rDoc.GetIDocumentUndoRedo().DoesUndo())
@@ -4193,7 +4193,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         bAfterTable = true;
     }
     if( !bCanMoveBack )
-        pCopyPam->GetPoint()->nNode--;
+        --pCopyPam->GetPoint()->nNode;
 
     SwNodeRange aRg( pStt->nNode, pEnd->nNode );
     SwNodeIndex aInsPos( rPos.nNode );
@@ -4293,7 +4293,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     else if( rPos == *pEnd )
                     {
                         // The end was also moved
-                        pEnd->nNode--;
+                        --pEnd->nNode;
                         pEnd->nContent.Assign( pDestTextNd, nContentEnd );
                     }
                     // tdf#63022 always reset pEndTextNd after SplitNode
@@ -4330,7 +4330,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     break;
                 }
 
-                aRg.aStart++;
+                ++aRg.aStart;
             }
         }
         else if( pDestTextNd )
@@ -4363,15 +4363,15 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                 // Correct the area again
                 if( bEndEqualIns )
-                    aRg.aEnd--;
+                    --aRg.aEnd;
                 // The end would also be moved
                 else if( rPos == *pEnd )
                 {
                     rPos.nNode-=2;
                     rPos.nContent.Assign( rPos.nNode.GetNode().GetContentNode(),
                                             nContentEnd );
-                    rPos.nNode++;
-                    aRg.aEnd--;
+                    ++rPos.nNode;
+                    --aRg.aEnd;
                 }
             }
             else if( bCanMoveBack )
@@ -4382,7 +4382,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 // We want to be moved to the table node itself thus we have to set bCanMoveBack
                 // and to manipulate pCopyPam.
                 bCanMoveBack = false;
-                pCopyPam->GetPoint()->nNode--;
+                --pCopyPam->GetPoint()->nNode;
             }
         }
 
@@ -4395,7 +4395,7 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 pDestTextNd = pDoc->GetNodes().MakeTextNode( aInsPos,
                             pDoc->getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD));
                 aDestIdx.Assign( pDestTextNd, 0  );
-                aInsPos--;
+                --aInsPos;
 
                 // if we have to insert an extra text node
                 // at the destination, this node will be our new destination
@@ -4506,11 +4506,11 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         // Reset the offset to 0 as it was before the insertion
         pCopyPam->GetPoint()->nContent = 0;
 
-        pCopyPam->GetPoint()->nNode++;
+        ++pCopyPam->GetPoint()->nNode;
         // If the next node is a start node, then step back: the start node
         // has been copied and needs to be in the selection for the undo
         if (pCopyPam->GetPoint()->nNode.GetNode().IsStartNode())
-            pCopyPam->GetPoint()->nNode--;
+            --pCopyPam->GetPoint()->nNode;
 
     }
     pCopyPam->Exchange();
