@@ -48,7 +48,7 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
     {
         if ( pDecl->hasAncestor(pDeclaration) )
         {
-            ErrorHandler::error2(EIDL_REDEF_SCOPE, pDecl, pDeclaration);
+            ErrorHandler::error2(ErrorCode::RedefScope, pDecl, pDeclaration);
             return nullptr;
         }
         if ( (pDecl->getNodeType() == pDeclaration->getNodeType()) &&
@@ -75,7 +75,7 @@ AstDeclaration* AstScope::addDeclaration(AstDeclaration* pDecl)
             return pDecl;
         }
 
-        ErrorHandler::error2(EIDL_REDEF_SCOPE, scopeAsDecl(this), pDecl);
+        ErrorHandler::error2(ErrorCode::RedefScope, scopeAsDecl(this), pDecl);
         return nullptr;
     }
 

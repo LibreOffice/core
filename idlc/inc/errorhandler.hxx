@@ -23,58 +23,48 @@
 #include <astexpression.hxx>
 #include <astenum.hxx>
 
-enum ErrorCode
+enum class ErrorCode
 {
-    EIDL_NONE,              // No error
-    EIDL_SYNTAX_ERROR,      // Syntax error in IDL input
-                            // More details will be gleaned from examining
-                            // the parse state
-    EIDL_REDEF,             // Redefinition
-    EIDL_REDEF_SCOPE,       // Redefinition inside defining scope
-    EIDL_DEF_USE,           // Definition after use
-    EIDL_COERCION_FAILURE,  // Coercion failure
-    EIDL_SCOPE_CONFLICT,    // Between fwd declare and full declare
-    EIDL_ILLEGAL_ADD,       // Illegal add action
-    EIDL_ILLEGAL_USE,       // Illegal type used in expression
-    EIDL_ILLEGAL_RAISES,    // Error in "raises" clause
-    EIDL_CANT_INHERIT,      // Cannot inherit from non-interface
-    EIDL_LOOKUP_ERROR,      // Identifier not found
-    EIDL_INHERIT_FWD_ERROR, // Cannot inherit from fwd decl interface
-    EIDL_CONSTANT_EXPECTED, // We got something else..
-    EIDL_NAME_CASE_ERROR,   // Spelling differences found
-    EIDL_EVAL_ERROR,        // Error in evaluating expression
-    EIDL_AMBIGUOUS,         // Ambiguous name definition
-    EIDL_DECL_NOT_DEFINED,  // Forward declared but never defined
-    EIDL_FWD_DECL_LOOKUP,   // Tried to lookup in fwd declared intf
-    EIDL_RECURSIVE_TYPE,    // Illegal recursive use of type
-    EIDL_NOT_A_TYPE,        // Not a type
-    EIDL_TYPE_NOT_VALID,    // Type is not valid in this context
-    EIDL_INTERFACEMEMBER_LOOKUP,    // interface is not defined or a fwd declaration not exists
-    EIDL_SERVICEMEMBER_LOOKUP,
-    EIDL_TYPE_IDENT_CONFLICT,   // type and identifier has equal names
-    EIDL_WRONGATTRIBUTEFLAG,
-    EIDL_DEFINED_ATTRIBUTEFLAG,
-    EIDL_WRONGATTRIBUTEKEYWORD,
-    EIDL_MISSINGATTRIBUTEKEYWORD,
-    EIDL_BAD_ATTRIBUTE_FLAGS,
-    EIDL_OPTIONALEXPECTED,
-    EIDL_MIXED_INHERITANCE,
-    EIDL_DOUBLE_INHERITANCE,
-    EIDL_DOUBLE_MEMBER,
-    EIDL_CONSTRUCTOR_PARAMETER_NOT_IN,
-    EIDL_CONSTRUCTOR_REST_PARAMETER_NOT_FIRST,
-    EIDL_REST_PARAMETER_NOT_LAST,
-    EIDL_REST_PARAMETER_NOT_ANY,
-    EIDL_METHOD_HAS_REST_PARAMETER,
-    EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS,
-    EIDL_UNSIGNED_TYPE_ARGUMENT,
-    EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS,
-    EIDL_INSTANTIATED_STRUCT_TYPE_TYPEDEF,
-    EIDL_IDENTICAL_TYPE_PARAMETERS,
-    EIDL_STRUCT_TYPE_TEMPLATE_WITH_BASE,
-    EIDL_PUBLISHED_FORWARD,
-    EIDL_PUBLISHED_USES_UNPUBLISHED,
-    EIDL_SIMILAR_CONSTRUCTORS
+    SyntaxError,      // Syntax error in IDL input
+                      // More details will be gleaned from examining
+                      // the parse state
+    RedefScope,       // Redefinition inside defining scope
+    CoercionFailure,  // Coercion failure
+    ScopeConflict,    // Between fwd declare and full declare
+    IllegalAdd,       // Illegal add action
+    IllegalRaises,    // Error in "raises" clause
+    CantInherit,      // Cannot inherit from non-interface
+    IdentNotFound,    // Identifier not found
+    CannotInheritFromForward, // Cannot inherit from fwd decl interface
+    ExpectedConstant,       // We got something else..
+    Eval,                   // Error in evaluating expression
+    ForwardDeclLookup,      // Tried to lookup in fwd declared intf
+    RecursiveType,          // Illegal recursive use of type
+    NotAType,               // Not a type
+    InterfaceMemberLookup,  // interface is not defined or a fwd declaration not exists
+    ServiceMemberLookup,
+    DefinedAttributeFlag,
+    WrongAttributeKeyword,
+    MissingAttributeKeyword,
+    BadAttributeFlags,
+    ExpectedOptional,
+    MixedInheritance,
+    DoubleInheritance,
+    DoubleMember,
+    ConstructorParameterNotIn,
+    ConstructorRestParameterNotFirst,
+    RestParameterNotLast,
+    RestParameterNotAny,
+    MethodHasRestParameter,
+    ReadOnlyAttributeSetExceptions,
+    UnsignedTypeArgument,
+    WrongNumberOfTypeArguments,
+    InstantiatedStructTypeTypedef,
+    IdenticalTypeParameters,
+    StructTypeTemplateWithBase,
+    PublishedForward,
+    PublishedusesUnpublished,
+    SimilarConstructors
 };
 
 enum class WarningCode
