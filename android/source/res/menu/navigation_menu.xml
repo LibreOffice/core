@@ -4,7 +4,26 @@
         android:checkableBehavior="single"
         android:id="@+id/group_providers">
 
-        <!--Items will be added programmatically in LibreOfficeUIActivity.java-->
+        <item android:id="@+id/menu_provider_documents"
+            android:title="@string/local_documents"
+            android:icon="@drawable/ic_insert_drive_file_black_24dp" />
+
+        <item android:id="@+id/menu_provider_filesystem"
+            android:title="@string/local_file_system"
+            android:icon="@drawable/ic_storage_black_24dp"/>
+
+        <item android:id="@+id/menu_provider_extsd"
+            android:title="@string/external_sd_file_system"
+            android:icon="@drawable/ic_sd_card_black_24dp"/>
+
+        <item android:id="@+id/menu_provider_otg"
+            android:title="@string/otg_file_system"
+            android:icon="@drawable/ic_usb_black_24dp"/>
+
+        <item android:id="@+id/menu_provider_owncloud"
+            android:title="@string/owncloud"
+            android:icon="@drawable/ic_cloud_black_24dp"/>
+
 
     </group>
 
