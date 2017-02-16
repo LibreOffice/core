@@ -56,7 +56,6 @@ namespace framework{
 /** well known protocols */
 enum class EProtocol
 {
-    Private,
     PrivateObject,
     PrivateStream,
     PrivateFactory,
@@ -82,9 +81,6 @@ class ProtocolCheck
         bool bRet = false;
         switch(eRequired)
         {
-            case EProtocol::Private:
-                bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE);
-                break;
             case EProtocol::PrivateObject:
                 bRet = sURL.startsWith(SPECIALPROTOCOL_PRIVATE_OBJECT);
                 break;
