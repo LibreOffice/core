@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_1bf85ee5",
+        "filename": "svx/source/dialog/docrecovery.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1090,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-16T15:25:18Z",
+      "side": 1,
+      "message": "ListBox::GetEntryCount returns sal_Int32.  What made you decide on sal_uInt64 (here and elsewhere)?  Just \"sal_uInt64 can\u0027t be worse than sal_uIntPtr\" or some more reasoned approach?",
+      "revId": "2371d7d0cc8c7cb03c068aac225e32ae25e23f17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
