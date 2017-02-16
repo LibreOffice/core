@@ -58,6 +58,15 @@ $(eval $(call gb_Library_add_libs,mysqlcppconn,\
 ))
 endif
 
+# Avoid -Wdynamic-exception-spec errors in Clang C++17 mode:
+ifeq ($(COM_IS_CLANG),TRUE)
+$(eval $(call gb_Library_add_cxxflags,mysqlcppconn, \
+    $(if $(filter -std=gnu++17 -std=gnu++1z -std=c++17 -std=c++1z, \
+            $(CXXFLAGS_CXX11)), \
+        -Wno-error=dynamic-exception-spec) \
+))
+endif
+
 $(eval $(call gb_Library_add_generated_exception_objects,mysqlcppconn,\
 	UnpackedTarball/mysqlcppconn/driver/mysql_art_resultset \
 	UnpackedTarball/mysqlcppconn/driver/mysql_art_rset_metadata \
