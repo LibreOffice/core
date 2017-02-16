@@ -189,7 +189,7 @@ void CheckBox::Init()
     SetHighlightRange();
 }
 
-void CheckBox::SetMode (ObjectMode::Mode e)
+void CheckBox::SetMode (ObjectMode e)
 {
     eMode = e;
 
@@ -356,7 +356,7 @@ IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler, Button*, void)
     }
 }
 
-NewObjectDialog::NewObjectDialog(vcl::Window * pParent, ObjectMode::Mode eMode,
+NewObjectDialog::NewObjectDialog(vcl::Window * pParent, ObjectMode eMode,
     bool bCheckName)
     : ModalDialog(pParent, "NewLibDialog", "modules/BasicIDE/ui/newlibdialog.ui")
 {
@@ -372,9 +372,6 @@ NewObjectDialog::NewObjectDialog(vcl::Window * pParent, ObjectMode::Mode eMode,
             break;
         case ObjectMode::Module:
             SetText( IDE_RESSTR(RID_STR_NEWMOD) );
-            break;
-        case ObjectMode::Method:
-            SetText( IDE_RESSTR(RID_STR_NEWMETH) );
             break;
         case ObjectMode::Dialog:
             SetText( IDE_RESSTR(RID_STR_NEWDLG) );

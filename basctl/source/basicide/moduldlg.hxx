@@ -34,16 +34,12 @@ class SvxPasswordDialog;
 namespace basctl
 {
 
-namespace ObjectMode
+enum class ObjectMode
 {
-    enum Mode
-    {
-        Library = 1,
-        Module  = 2,
-        Dialog  = 3,
-        Method  = 4,
-    };
-}
+    Library = 1,
+    Module  = 2,
+    Dialog  = 3,
+};
 
 class NewObjectDialog : public ModalDialog
 {
@@ -53,7 +49,7 @@ private:
 
     DECL_LINK(OkButtonHandler, Button*, void);
 public:
-    NewObjectDialog (vcl::Window* pParent, ObjectMode::Mode, bool bCheckName = false);
+    NewObjectDialog (vcl::Window* pParent, ObjectMode, bool bCheckName = false);
     virtual ~NewObjectDialog() override;
     virtual void dispose() override;
     OUString GetObjectName() const { return m_pEdit->GetText(); }
@@ -118,7 +114,7 @@ public:
 class CheckBox : public SvTabListBox
 {
 private:
-    ObjectMode::Mode    eMode;
+    ObjectMode          eMode;
     SvLBoxButtonData*   pCheckButton;
     ScriptDocument      m_aDocument;
     void                Init();
@@ -140,7 +136,7 @@ public:
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
-    void            SetMode (ObjectMode::Mode);
+    void            SetMode(ObjectMode);
 };
 
 class LibDialog: public ModalDialog

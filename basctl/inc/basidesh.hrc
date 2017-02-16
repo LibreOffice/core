@@ -92,7 +92,7 @@
 #define RID_STR_NOIMPORT                ( RID_BASICIDE_START + 68 )
 #define RID_STR_ENTERPASSWORD           ( RID_BASICIDE_START + 69 )
 
-#define RID_STR_NEWMETH                 ( RID_BASICIDE_START + 71 )
+// free
 #define RID_STR_USERMACROS              ( RID_BASICIDE_START + 72 )
 #define RID_STR_USERDIALOGS             ( RID_BASICIDE_START + 73 )
 #define RID_STR_USERMACROSDIALOGS       ( RID_BASICIDE_START + 74 )
