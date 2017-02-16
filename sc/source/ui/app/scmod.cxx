@@ -2107,7 +2107,7 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
         }
         case SID_SC_TP_CHANGES:
         {
-            ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc(RID_SCPAGE_OPREDLINE);
+            ::CreateTabPage ScRedlineOptionsTabPageCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_CHANGES);
             if (ScRedlineOptionsTabPageCreate)
                 pRet =(*ScRedlineOptionsTabPageCreate)(pParent, &rSet);
             break;

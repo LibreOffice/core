@@ -962,7 +962,7 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
 {
     switch ( nId )
     {
-        case RID_SCPAGE_OPREDLINE :
+        case SID_SC_TP_CHANGES:
             return ScRedlineOptionsTabPage::Create;
         case RID_SCPAGE_CALC :
             return ScTpCalcOptions::Create;
