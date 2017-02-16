@@ -1,14 +1,14 @@
 /// CID/D=0:CS=0:Axis=0,0
 // aAxisPosition.X
-2854
+3798
 // aAxisPosition.Y
-7408
+9860
 // aAxisSize.Height
 150
 // aAxisSize.Width
-12330
+16412
 // aAxisTransformation
-12331;0;2854;0;151;7408;0;0;1
+16413;0;3798;0;151;9860;0;0;1
 // nAxisGeometriesCount
 2
 // sAxisLineDash
@@ -19,15 +19,15 @@
 0
 /// CID/D=0:CS=0:Axis=1,0
 // aAxisPosition.X
-2704
+3648
 // aAxisPosition.Y
-1564
+2082
 // aAxisSize.Height
-5844
+7778
 // aAxisSize.Width
 150
 // aAxisTransformation
-151;0;2704;0;5845;1564;0;0;1
+151;0;3648;0;7779;2082;0;0;1
 // nAxisGeometriesCount
 2
 // sAxisLineDash
