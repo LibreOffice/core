@@ -21,7 +21,7 @@
 
 #include "crdlg.hxx"
 #include "scresid.hxx"
-#include "miscdlgs.hrc"
+#include "scres.hrc"
 
 ScColOrRowDlg::ScColOrRowDlg(vcl::Window* pParent, const OUString& rStrTitle,
     const OUString& rStrLabel)

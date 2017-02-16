@@ -24,7 +24,7 @@
 #include "mvtabdlg.hxx"
 #include "document.hxx"
 #include "docsh.hxx"
-#include "miscdlgs.hrc"
+#include "scres.hrc"
 #include "global.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"

@@ -43,7 +43,7 @@
 #include "globstr.hrc"
 #include "autoform.hxx"
 #include "strindlg.hxx"
-#include "miscdlgs.hrc"
+#include "scres.hrc"
 #include "scuiautofmt.hxx"
 #include "scresid.hxx"
 #include "document.hxx"

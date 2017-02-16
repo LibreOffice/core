@@ -26,7 +26,7 @@
 #include "scresid.hxx"
 #include "document.hxx"
 #include "globstr.hrc"
-#include "miscdlgs.hrc"
+#include "scres.hrc"
 #include "filldlg.hxx"
 
 // class ScFillSeriesDlg

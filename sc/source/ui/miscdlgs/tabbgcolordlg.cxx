@@ -21,7 +21,7 @@
 
 #include "tabbgcolordlg.hxx"
 #include "scresid.hxx"
-#include "miscdlgs.hrc"
+#include "scres.hrc"
 
 #include <tools/color.hxx>
 #include <sfx2/objsh.hxx>

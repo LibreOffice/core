@@ -22,7 +22,7 @@
 #include "namepast.hxx"
 #include "scresid.hxx"
 #include "docsh.hxx"
-#include "miscdlgs.hrc"
+#include "scres.hrc"
 #include "rangenam.hxx"
 #include "viewdata.hxx"
 

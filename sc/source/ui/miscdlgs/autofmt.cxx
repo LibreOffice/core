@@ -44,7 +44,7 @@
 #include "global.hxx"
 #include "globstr.hrc"
 #include "autoform.hxx"
-#include "miscdlgs.hrc"
+#include "scres.hrc"
 #include "autofmt.hxx"
 #include "scresid.hxx"
 #include "document.hxx"
