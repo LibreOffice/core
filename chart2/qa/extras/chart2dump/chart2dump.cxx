@@ -16,6 +16,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
 
 #include <editeng/unoprnms.hxx>
 #include <test/xmltesttools.hxx>
@@ -974,7 +975,7 @@ DECLARE_DUMP_TEST(AreaChartTest, Chart2DumpTest, false)
             CPPUNIT_ASSERT(xSeries.is());
             CPPUNIT_DUMP_ASSERT_NOTE("Series " + OUString::number(nSeries));
 
-            // One are for one series
+            // One area for one series
             uno::Reference<container::XIndexAccess> xIndexAccess(xSeries, UNO_QUERY_THROW);
             uno::Reference<container::XIndexAccess> xIndexAccess2(xIndexAccess->getByIndex(0), UNO_QUERY_THROW); // Why this second group shape is here?
             uno::Reference<drawing::XShape> xArea(xIndexAccess2->getByIndex(0), UNO_QUERY_THROW);
@@ -1001,6 +1002,119 @@ DECLARE_DUMP_TEST(AreaChartTest, Chart2DumpTest, false)
             util::Color aAreaFillColor = 0;
             xPropSet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= aAreaFillColor;
             CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aAreaFillColor));
+        }
+    }
+}
+
+
+DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
+{
+    const std::vector<OUString> aTestFiles =
+    {
+        "normal_line_chart_lines_only.ods",
+        "normal_line_chart_points_only.ods",
+        "normal_line_chart_lines_and_points.ods",
+        "stacked_line_chart_lines_only.ods",
+        "stacked_line_chart_points_only.ods",
+        "stacked_line_chart_lines_and_points.ods",
+        "percent_stacked_line_chart_lines_only.ods",
+        "percent_stacked_line_chart_points_only.ods",
+        "percent_stacked_line_chart_lines_and_points.ods",
+        "scatter_chart_points_only.ods",
+        "scatter_chart_lines_only.ods",
+        "scatter_chart_lines_and_points.ods",
+    };
+
+    for (const OUString& sTestFile : aTestFiles)
+    {
+        setTestFileName(sTestFile);
+        load(getTestFileDirName(), getTestFileName());
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
+        uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+        uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xShapes.is());
+
+        uno::Reference< chart2::XChartDocument > xChartDoc2(xChartDoc, UNO_QUERY_THROW);
+        Reference<chart2::XChartType> xChartType = getChartTypeFromDoc(xChartDoc2, 0);
+        CPPUNIT_ASSERT(xChartType.is());
+
+        std::vector<std::vector<double> > aDataSeriesYValues = getDataSeriesYValuesFromChartType(xChartType);
+        size_t nSeriesCount = aDataSeriesYValues.size();
+        CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nSeriesCount);
+
+        for (size_t nSeries = 0; nSeries < nSeriesCount; ++nSeries)
+        {
+            uno::Reference<drawing::XShape> xSeries = getShapeByName(xShapes, "CID/D=0:CS=0:CT=0:Series=" + OUString::number(nSeries));
+            CPPUNIT_ASSERT(xSeries.is());
+            CPPUNIT_DUMP_ASSERT_NOTE("Series " + OUString::number(nSeries));
+
+            uno::Reference<container::XIndexAccess> xIndexAccess(xSeries, UNO_QUERY_THROW);
+            uno::Reference<container::XIndexAccess> xIndexAccess2(xIndexAccess->getByIndex(0), UNO_QUERY_THROW);
+            uno::Reference<drawing::XShape> xLine(xIndexAccess2->getByIndex(0), UNO_QUERY_THROW);
+            Reference< beans::XPropertySet > xPropSet(xLine, UNO_QUERY_THROW);
+
+            // Check whether we have line
+            drawing::LineStyle aSeriesLineStyle;
+            xPropSet->getPropertyValue(UNO_NAME_LINESTYLE) >>= aSeriesLineStyle;
+            if (aSeriesLineStyle != drawing::LineStyle_NONE)
+            {
+                CPPUNIT_DUMP_ASSERT_NOTE("Lines are displayed");
+                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aSeriesLineStyle));
+
+                // Check line shape geometry
+                awt::Point aLinePosition = xLine->getPosition();
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLinePosition.X, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLinePosition.Y, INT_EPS);
+                awt::Size aLineSize = xLine->getSize();
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLineSize.Height, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLineSize.Width, INT_EPS);
+                CPPUNIT_ASSERT(xPropSet.is());
+                drawing::HomogenMatrix3 aLineTransformation;
+                xPropSet->getPropertyValue("Transformation") >>= aLineTransformation;
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLineTransformation);
+            }
+
+            // Check points of series
+            if (xIndexAccess->getCount() >= 2)
+            {
+                CPPUNIT_DUMP_ASSERT_NOTE("Points are displayed");
+                uno::Reference<container::XIndexAccess> xPointsOfSeries(xIndexAccess->getByIndex(1), UNO_QUERY_THROW);
+                sal_Int32 nPointCountInSeries = xPointsOfSeries->getCount();
+                CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(nPointCountInSeries);
+                for (sal_Int32 nPoint = 0; nPoint < nPointCountInSeries; ++nPoint)
+                {
+                    uno::Reference<container::XIndexAccess> XPointContainer (
+                        getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=" + OUString::number(nSeries) + ":Point=" + OUString::number(nPoint)), UNO_QUERY_THROW);
+                    CPPUNIT_ASSERT(XPointContainer.is());
+                    uno::Reference<drawing::XShape> XPoint(XPointContainer->getByIndex(0), UNO_QUERY_THROW);
+                    uno::Reference<container::XNamed> xNamedShape(XPointContainer, uno::UNO_QUERY);
+                    CPPUNIT_DUMP_ASSERT_NOTE(xNamedShape->getName());
+
+                    // Check size and position
+                    awt::Point aPointPosition = XPoint->getPosition();
+                    CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aPointPosition.X, INT_EPS);
+                    CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aPointPosition.Y, INT_EPS);
+                    awt::Size aPointSize = XPoint->getSize();
+                    CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aPointSize.Height, INT_EPS);
+                    CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aPointSize.Width, INT_EPS);
+
+                    // Check transformation
+                    Reference< beans::XPropertySet > xPointPropSet(XPoint, UNO_QUERY_THROW);
+                    CPPUNIT_ASSERT(xPointPropSet.is());
+                    drawing::HomogenMatrix3 aPointTransformation;
+                    xPointPropSet->getPropertyValue("Transformation") >>= aPointTransformation;
+                    CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aPointTransformation);
+
+                    // Check fill style and color
+                    drawing::FillStyle aPointFillStyle;
+                    xPointPropSet->getPropertyValue(UNO_NAME_FILLSTYLE) >>= aPointFillStyle;
+                    CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aPointFillStyle));
+                    util::Color aPointFillColor = 0;
+                    xPointPropSet->getPropertyValue(UNO_NAME_FILLCOLOR) >>= aPointFillColor;
+                    CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(static_cast<sal_Int32>(aPointFillColor));
+                }
+            }
         }
     }
 }
