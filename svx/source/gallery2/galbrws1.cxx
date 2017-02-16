@@ -132,7 +132,7 @@ GalleryBrowser1::GalleryBrowser1(
     mpThemes->SetSelectHdl( LINK( this, GalleryBrowser1, SelectThemeHdl ) );
     mpThemes->SetAccessibleName(SVX_RESSTR(RID_SVXSTR_GALLERYPROPS_GALTHEME));
 
-    for( sal_uIntPtr i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
+    for( sal_uInt64 i = 0, nCount = mpGallery->GetThemeCount(); i < nCount; i++ )
         ImplInsertThemeEntry( mpGallery->GetThemeInfo( i ) );
 
     ImplAdjustControls();
@@ -156,11 +156,11 @@ void GalleryBrowser1::dispose()
     Control::dispose();
 }
 
-sal_uIntPtr GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
+sal_uInt64 GalleryBrowser1::ImplInsertThemeEntry( const GalleryThemeEntry* pEntry )
 {
     static const bool bShowHiddenThemes = ( getenv( "GALLERY_SHOW_HIDDEN_THEMES" ) != nullptr );
 
-    sal_uIntPtr nRet = LISTBOX_ENTRY_NOTFOUND;
+    sal_uInt64 nRet = LISTBOX_ENTRY_NOTFOUND;
 
     if( pEntry && ( !pEntry->IsHidden() || bShowHiddenThemes ) )
     {
@@ -296,9 +296,9 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* /*pDialog*/, bool bC
 
             while( mpGallery->HasTheme( aTitle ) && ( nCount++ < 16000 ) )
             {
-                aTitle = mpExchangeData->aEditedTitle;
-                aTitle += " ";
-                aTitle += OUString::number( nCount );
+                aTitle = mpExchangeData->aEditedTitle
+                        + " "
+                        + OUString::number( nCount );
             }
 
             mpGallery->RenameTheme( aName, aTitle );
@@ -389,9 +389,9 @@ void GalleryBrowser1::ImplExecute( sal_uInt16 nId )
 
                     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
                     {
-                        aName = aNewName;
-                        aName += " ";
-                        aName += OUString::number( nCount );
+                        aName = aNewName
+                                + " "
+                                + OUString::number( nCount );
                     }
 
                     mpGallery->RenameTheme( aOldName, aName );
@@ -617,13 +617,13 @@ IMPL_LINK_NOARG(GalleryBrowser1, ClickNewThemeHdl, Button*, void)
 {
     OUString  aNewTheme( GAL_RESSTR(RID_SVXSTR_GALLERY_NEWTHEME) );
     OUString  aName( aNewTheme );
-    sal_uIntPtr nCount = 0;
+    sal_uInt64 nCount = 0;
 
     while( mpGallery->HasTheme( aName ) && ( nCount++ < 16000 ) )
     {
-        aName = aNewTheme;
-        aName += " ";
-        aName += OUString::number( nCount );
+        aName = aNewTheme
+                + " "
+                + OUString::number( nCount );
     }
 
     if( !mpGallery->HasTheme( aName ) && mpGallery->CreateTheme( aName ) )

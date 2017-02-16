@@ -91,7 +91,7 @@ private:
     ::std::function<void ()> maThemeSlectionHandler;
 
     void                    ImplAdjustControls();
-    sal_uIntPtr             ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
+    sal_uInt64              ImplInsertThemeEntry( const GalleryThemeEntry* pEntry );
     static void             ImplFillExchangeData( const GalleryTheme* pThm, ExchangeData& rData );
     void                    ImplGetExecuteVector(::std::vector< sal_uInt16 >& o_aExec);
     void                    ImplExecute( sal_uInt16 nId );
