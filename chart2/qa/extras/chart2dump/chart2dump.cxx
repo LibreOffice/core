@@ -77,13 +77,13 @@
         CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), readExpected(#aActual), aActual.trim()); \
     }
 
-#define CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aActual) \
+#define CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aActual, EPS_) \
     if(isInDumpMode()) \
         writeActualTransformation(aActual, #aActual); \
     else \
     { \
         OUString expectedTransform; \
-        if (!readAndCheckTransformation (aActual, #aActual, expectedTransform)) \
+        if (!readAndCheckTransformation (aActual, #aActual, EPS_, expectedTransform)) \
         { \
             OString sTestFileName = OUStringToOString(getTestFileName(), RTL_TEXTENCODING_UTF8); \
             CPPUNIT_ASSERT_EQUAL_MESSAGE(OString("Failing test file is: " + sTestFileName).getStr(), expectedTransform, transformationToOneLineString(aActual)); \
@@ -201,7 +201,7 @@ protected:
         writeActual(transformationToOneLineString(rTransform), sCheck);
     }
 
-    bool readAndCheckTransformation(const drawing::HomogenMatrix3& rTransform, const OUString& sCheck, OUString& rExpectedTranform)
+    bool readAndCheckTransformation(const drawing::HomogenMatrix3& rTransform, const OUString& sCheck, const double fEPS, OUString& rExpectedTranform)
     {
         rExpectedTranform = readExpected(sCheck); // Reference transfromation string
 
@@ -218,15 +218,15 @@ protected:
         aExpectedTransform.Line3.Column3 = rExpectedTranform.getToken(8, ';').toDouble();
 
         // Check the equality of the two transformation
-        return (std::abs(aExpectedTransform.Line1.Column1 - rTransform.Line1.Column1) < INT_EPS &&
-            std::abs(aExpectedTransform.Line1.Column2 - rTransform.Line1.Column2) < INT_EPS &&
-            std::abs(aExpectedTransform.Line1.Column3 - rTransform.Line1.Column3) < INT_EPS &&
-            std::abs(aExpectedTransform.Line2.Column1 - rTransform.Line2.Column1) < INT_EPS &&
-            std::abs(aExpectedTransform.Line2.Column2 - rTransform.Line2.Column2) < INT_EPS &&
-            std::abs(aExpectedTransform.Line2.Column3 - rTransform.Line2.Column3) < INT_EPS &&
-            std::abs(aExpectedTransform.Line3.Column1 - rTransform.Line3.Column1) < INT_EPS &&
-            std::abs(aExpectedTransform.Line3.Column2 - rTransform.Line3.Column2) < INT_EPS &&
-            std::abs(aExpectedTransform.Line3.Column3 - rTransform.Line3.Column3) < INT_EPS);
+        return (std::abs(aExpectedTransform.Line1.Column1 - rTransform.Line1.Column1) < fEPS &&
+            std::abs(aExpectedTransform.Line1.Column2 - rTransform.Line1.Column2) < fEPS &&
+            std::abs(aExpectedTransform.Line1.Column3 - rTransform.Line1.Column3) < fEPS &&
+            std::abs(aExpectedTransform.Line2.Column1 - rTransform.Line2.Column1) < fEPS &&
+            std::abs(aExpectedTransform.Line2.Column2 - rTransform.Line2.Column2) < fEPS &&
+            std::abs(aExpectedTransform.Line2.Column3 - rTransform.Line2.Column3) < fEPS &&
+            std::abs(aExpectedTransform.Line3.Column1 - rTransform.Line3.Column1) < fEPS &&
+            std::abs(aExpectedTransform.Line3.Column2 - rTransform.Line3.Column2) < fEPS &&
+            std::abs(aExpectedTransform.Line3.Column3 - rTransform.Line3.Column3) < fEPS);
     }
 
     OUString sequenceToOneLineString(uno::Sequence<OUString>& rSeq)
@@ -457,7 +457,7 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
             CPPUNIT_ASSERT(xLegendEntryPropSet.is());
             drawing::HomogenMatrix3 aLegendEntryTransformation;
             xLegendEntryPropSet->getPropertyValue("Transformation") >>= aLegendEntryTransformation;
-            CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLegendEntryTransformation);
+            CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLegendEntryTransformation, INT_EPS);
 
             uno::Reference<container::XIndexAccess> xLegendEntryContainer(xLegendEntry, UNO_QUERY_THROW);
             CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(xLegendEntryContainer->getCount());
@@ -542,7 +542,7 @@ DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
                 CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aGridTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aGridTransformation;
-                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aGridTransformation);
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aGridTransformation, INT_EPS);
 
                 // Check line properties
                 uno::Reference<container::XIndexAccess> xIndexAccess(xGrid, UNO_QUERY_THROW);
@@ -615,7 +615,7 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
             CPPUNIT_ASSERT(xPropSet.is());
             drawing::HomogenMatrix3 aAxisTransformation;
             xPropSet->getPropertyValue("Transformation") >>= aAxisTransformation;
-            CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aAxisTransformation);
+            CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aAxisTransformation, INT_EPS);
 
             // Check line properties
             uno::Reference<container::XIndexAccess> xIndexAccess(xXAxis, UNO_QUERY_THROW);
@@ -645,6 +645,7 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 {
+    const double fLocalEPS = 100.1;
     const std::vector<OUString> aTestFiles =
     {
         "default_formated_axis.odp",
@@ -700,18 +701,18 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
                 // Check size and position
                 uno::Reference<drawing::XShape> xLabelShape(xLabel, uno::UNO_QUERY);
                 awt::Point aLabelPosition = xLabelShape->getPosition();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.X, INT_EPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.Y, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.X, fLocalEPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.Y, fLocalEPS);
                 awt::Size aLabelSize = xLabelShape->getSize();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Height, INT_EPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Width, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Height, fLocalEPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Width, fLocalEPS);
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xLabelShape, UNO_QUERY_THROW);
                 CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aLabelTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aLabelTransformation;
-                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLabelTransformation);
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLabelTransformation, fLocalEPS);
 
                 // Check font color and height
                 util::Color aLabelFontColor = 0;
@@ -794,7 +795,7 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
                 CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aColumnOrBarTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aColumnOrBarTransformation;
-                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aColumnOrBarTransformation);
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aColumnOrBarTransformation, INT_EPS);
             }
         }
     }
@@ -804,9 +805,7 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "chartwall_auto_adjust_with_titles.odp",
-        "chartwall_auto_adjust_without_titles.odp",
-        "chartwall_custom_positioning.odp"
+        "formated_chartwall.odp"
     };
 
     for (const OUString& sTestFile : aTestFiles)
@@ -822,21 +821,7 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 
         uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, "CID/DiagramWall=");
         CPPUNIT_ASSERT(xChartWall.is());
-
-        // Check position and size
-        awt::Point aChartWallPosition = xChartWall->getPosition();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.X, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.Y, INT_EPS);
-        awt::Size aChartWallSize = xChartWall->getSize();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Height, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Width, INT_EPS);
-
-        // Check transformation
         Reference< beans::XPropertySet > xPropSet(xChartWall, UNO_QUERY_THROW);
-        CPPUNIT_ASSERT(xPropSet.is());
-        drawing::HomogenMatrix3 aChartWallTransformation;
-        xPropSet->getPropertyValue("Transformation") >>= aChartWallTransformation;
-        CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aChartWallTransformation);
 
         // Check fill properties
         drawing::FillStyle aChartWallFillStyle;
@@ -928,7 +913,7 @@ DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
                 CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aSliceTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aSliceTransformation;
-                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aSliceTransformation);
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aSliceTransformation, INT_EPS);
 
                 // Check slice fill style and color
                 drawing::FillStyle aSliceFillStyle;
@@ -993,7 +978,7 @@ DECLARE_DUMP_TEST(AreaChartTest, Chart2DumpTest, false)
             CPPUNIT_ASSERT(xPropSet.is());
             drawing::HomogenMatrix3 aAreaTransformation;
             xPropSet->getPropertyValue("Transformation") >>= aAreaTransformation;
-            CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aAreaTransformation);
+            CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aAreaTransformation, INT_EPS);
 
             // Check area fill style and color
             drawing::FillStyle aAreaFillStyle;
@@ -1072,7 +1057,7 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
                 CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aLineTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aLineTransformation;
-                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLineTransformation);
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLineTransformation, INT_EPS);
             }
 
             // Check points of series
@@ -1104,7 +1089,7 @@ DECLARE_DUMP_TEST(PointLineChartTest, Chart2DumpTest, false)
                     CPPUNIT_ASSERT(xPointPropSet.is());
                     drawing::HomogenMatrix3 aPointTransformation;
                     xPointPropSet->getPropertyValue("Transformation") >>= aPointTransformation;
-                    CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aPointTransformation);
+                    CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aPointTransformation, INT_EPS);
 
                     // Check fill style and color
                     drawing::FillStyle aPointFillStyle;
