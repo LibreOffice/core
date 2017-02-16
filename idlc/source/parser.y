@@ -1314,7 +1314,7 @@ or_expr :
     xor_expr
     | or_expr '|' xor_expr
     {
-        $$ = new AstExpression(EC_or, $1, $3);
+        $$ = new AstExpression(ExprComb::Or, $1, $3);
     }
     ;
 
@@ -1322,7 +1322,7 @@ xor_expr :
     and_expr
     | xor_expr '^' and_expr
     {
-        $$ = new AstExpression(EC_xor, $1, $3);
+        $$ = new AstExpression(ExprComb::Xor, $1, $3);
     }
     ;
 
@@ -1330,7 +1330,7 @@ and_expr :
     shift_expr
     | and_expr '&' shift_expr
     {
-        $$ = new AstExpression(EC_and, $1, $3);
+        $$ = new AstExpression(ExprComb::And, $1, $3);
     }
     ;
 
@@ -1338,11 +1338,11 @@ shift_expr :
     add_expr
     | shift_expr IDL_LEFTSHIFT add_expr
     {
-        $$ = new AstExpression(EC_left, $1, $3);
+        $$ = new AstExpression(ExprComb::Left, $1, $3);
     }
     | shift_expr IDL_RIGHTSHIFT add_expr
     {
-        $$ = new AstExpression(EC_right, $1, $3);
+        $$ = new AstExpression(ExprComb::Right, $1, $3);
     }
     ;
 
@@ -1350,11 +1350,11 @@ add_expr :
     mult_expr
     | add_expr '+' mult_expr
     {
-        $$ = new AstExpression(EC_add, $1, $3);
+        $$ = new AstExpression(ExprComb::Add, $1, $3);
     }
     | add_expr '-' mult_expr
     {
-        $$ = new AstExpression(EC_minus, $1, $3);
+        $$ = new AstExpression(ExprComb::Minus, $1, $3);
     }
     ;
 
@@ -1362,15 +1362,15 @@ mult_expr :
     unary_expr
     | mult_expr '*' unary_expr
     {
-        $$ = new AstExpression(EC_mul, $1, $3);
+        $$ = new AstExpression(ExprComb::Mul, $1, $3);
     }
     | mult_expr '/' unary_expr
     {
-        $$ = new AstExpression(EC_div, $1, $3);
+        $$ = new AstExpression(ExprComb::Div, $1, $3);
     }
     | mult_expr '%' unary_expr
     {
-        $$ = new AstExpression(EC_mod, $1, $3);
+        $$ = new AstExpression(ExprComb::Mod, $1, $3);
     }
     ;
 
@@ -1378,11 +1378,11 @@ unary_expr :
     primary_expr
     | '+' primary_expr
     {
-        $$ = new AstExpression(EC_u_plus, $2, nullptr);
+        $$ = new AstExpression(ExprComb::UPlus, $2, nullptr);
     }
     | '-' primary_expr
     {
-        $$ = new AstExpression(EC_u_minus, $2, nullptr);
+        $$ = new AstExpression(ExprComb::UMinus, $2, nullptr);
     }
     | '~' primary_expr
     {

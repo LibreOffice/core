@@ -41,7 +41,7 @@ AstExpression::AstExpression(ExprComb c, AstExpression *pExpr1, AstExpression *p
 }
 
 AstExpression::AstExpression(sal_Int32 l)
-    : m_combOperator(EC_none)
+    : m_combOperator(ExprComb::NONE)
     , m_subExpr1(nullptr)
     , m_subExpr2(nullptr)
     , m_exprValue(nullptr)
@@ -55,7 +55,7 @@ AstExpression::AstExpression(sal_Int32 l)
 }
 
 AstExpression::AstExpression(sal_Int32  l, ExprType et)
-    : m_combOperator(EC_none)
+    : m_combOperator(ExprComb::NONE)
     , m_subExpr1(nullptr)
     , m_subExpr2(nullptr)
     , m_exprValue(nullptr)
@@ -69,7 +69,7 @@ AstExpression::AstExpression(sal_Int32  l, ExprType et)
 }
 
 AstExpression::AstExpression(sal_Int64  h)
-    : m_combOperator(EC_none)
+    : m_combOperator(ExprComb::NONE)
     , m_subExpr1(nullptr)
     , m_subExpr2(nullptr)
     , m_exprValue(nullptr)
@@ -83,7 +83,7 @@ AstExpression::AstExpression(sal_Int64  h)
 }
 
 AstExpression::AstExpression(sal_uInt64 uh)
-    : m_combOperator(EC_none)
+    : m_combOperator(ExprComb::NONE)
     , m_subExpr1(nullptr)
     , m_subExpr2(nullptr)
     , m_exprValue(nullptr)
@@ -97,7 +97,7 @@ AstExpression::AstExpression(sal_uInt64 uh)
 }
 
 AstExpression::AstExpression(double d)
-    : m_combOperator(EC_none)
+    : m_combOperator(ExprComb::NONE)
     , m_subExpr1(nullptr)
     , m_subExpr2(nullptr)
     , m_exprValue(nullptr)
@@ -111,7 +111,7 @@ AstExpression::AstExpression(double d)
 }
 
 AstExpression::AstExpression(OString* scopedName)
-    : m_combOperator(EC_symbol)
+    : m_combOperator(ExprComb::Symbol)
     , m_subExpr1(nullptr)
     , m_subExpr2(nullptr)
     , m_exprValue(nullptr)
@@ -801,29 +801,28 @@ void AstExpression::evaluate()
      */
     switch (m_combOperator)
     {
-        case EC_add:
-        case EC_minus:
-        case EC_mul:
-        case EC_div:
-        case EC_mod:
+        case ExprComb::Add:
+        case ExprComb::Minus:
+        case ExprComb::Mul:
+        case ExprComb::Div:
+        case ExprComb::Mod:
             m_exprValue = eval_bin_op().release();
             break;
-        case EC_or:
-        case EC_xor:
-        case EC_and:
-        case EC_left:
-        case EC_right:
+        case ExprComb::Or:
+        case ExprComb::Xor:
+        case ExprComb::And:
+        case ExprComb::Left:
+        case ExprComb::Right:
             m_exprValue = eval_bit_op().release();
             break;
-        case EC_u_plus:
-        case EC_u_minus:
-        case EC_bit_neg:
+        case ExprComb::UPlus:
+        case ExprComb::UMinus:
             m_exprValue = eval_un_op().release();
             break;
-        case EC_symbol:
+        case ExprComb::Symbol:
             m_exprValue = eval_symbol();
             break;
-        case EC_none:
+        case ExprComb::NONE:
             break;
     }
 }
@@ -832,7 +831,7 @@ std::unique_ptr<AstExprValue> AstExpression::eval_bin_op()
 {
     ExprType eType = ET_double;
 
-    if ( m_combOperator == EC_mod )
+    if ( m_combOperator == ExprComb::Mod )
         eType = ET_hyper;
 
     if (m_subExpr1 == nullptr || m_subExpr2 == nullptr)
@@ -853,21 +852,21 @@ std::unique_ptr<AstExprValue> AstExpression::eval_bin_op()
 
     switch (m_combOperator)
     {
-        case EC_mod:
+        case ExprComb::Mod:
             if (m_subExpr2->getExprValue()->u.hval == 0)
                 return nullptr;
             retval->u.hval = m_subExpr1->getExprValue()->u.hval % m_subExpr2->getExprValue()->u.hval;
             break;
-        case EC_add:
+        case ExprComb::Add:
             retval->u.dval = m_subExpr1->getExprValue()->u.dval + m_subExpr2->getExprValue()->u.dval;
             break;
-        case EC_minus:
+        case ExprComb::Minus:
             retval->u.dval = m_subExpr1->getExprValue()->u.dval - m_subExpr2->getExprValue()->u.dval;
             break;
-        case EC_mul:
+        case ExprComb::Mul:
             retval->u.dval = m_subExpr1->getExprValue()->u.dval * m_subExpr2->getExprValue()->u.dval;
             break;
-        case EC_div:
+        case ExprComb::Div:
             if (m_subExpr2->getExprValue()->u.dval == 0.0)
                 return nullptr;
             retval->u.dval = m_subExpr1->getExprValue()->u.dval / m_subExpr2->getExprValue()->u.dval;
@@ -899,19 +898,19 @@ std::unique_ptr<AstExprValue> AstExpression::eval_bit_op()
 
     switch (m_combOperator)
     {
-        case EC_or:
+        case ExprComb::Or:
             retval->u.lval = m_subExpr1->getExprValue()->u.lval | m_subExpr2->getExprValue()->u.lval;
             break;
-        case EC_xor:
+        case ExprComb::Xor:
             retval->u.lval = m_subExpr1->getExprValue()->u.lval ^ m_subExpr2->getExprValue()->u.lval;
             break;
-        case EC_and:
+        case ExprComb::And:
             retval->u.lval = m_subExpr1->getExprValue()->u.lval & m_subExpr2->getExprValue()->u.lval;
             break;
-        case EC_left:
+        case ExprComb::Left:
             retval->u.lval = m_subExpr1->getExprValue()->u.lval << m_subExpr2->getExprValue()->u.lval;
             break;
-        case EC_right:
+        case ExprComb::Right:
             retval->u.lval = m_subExpr1->getExprValue()->u.lval >> m_subExpr2->getExprValue()->u.lval;
             break;
         default:
@@ -936,16 +935,11 @@ std::unique_ptr<AstExprValue> AstExpression::eval_un_op()
 
     switch (m_combOperator)
     {
-        case EC_u_plus:
+        case ExprComb::UPlus:
             retval->u.lval = m_subExpr1->getExprValue()->u.lval;
             break;
-        case EC_u_minus:
+        case ExprComb::UMinus:
             retval->u.lval = -(m_subExpr1->getExprValue()->u.lval);
-            break;
-        case EC_bit_neg:
-            if (!m_subExpr1->coerce(ET_long))
-                return nullptr;
-            retval->u.lval = ~m_subExpr1->getExprValue()->u.lval;
             break;
         default:
             return nullptr;
@@ -1011,7 +1005,7 @@ AstExprValue* AstExpression::eval_symbol()
 OString AstExpression::toString()
 {
     OString exprStr;
-    if ( m_combOperator == EC_symbol )
+    if ( m_combOperator == ExprComb::Symbol )
         return m_pSymbolicName ? *m_pSymbolicName : OString("<Undefined Name>");
 
     if ( m_exprValue )
@@ -1049,14 +1043,11 @@ OString AstExpression::toString()
 
     switch (m_combOperator)
     {
-        case EC_u_plus:
+        case ExprComb::UPlus:
             exprStr += OString("+");
             break;
-        case EC_u_minus:
+        case ExprComb::UMinus:
             exprStr += OString("-");
-            break;
-        case EC_bit_neg:
-            exprStr += OString("~");
             break;
         default:
             break;
@@ -1065,34 +1056,34 @@ OString AstExpression::toString()
         exprStr += m_subExpr1->toString();
     switch (m_combOperator)
     {
-        case EC_add:
+        case ExprComb::Add:
             exprStr += OString(" + ");
             break;
-        case EC_minus:
+        case ExprComb::Minus:
             exprStr += OString(" - ");
             break;
-        case EC_mul:
+        case ExprComb::Mul:
             exprStr += OString(" * ");
             break;
-        case EC_div:
+        case ExprComb::Div:
             exprStr += OString(" / ");
             break;
-        case EC_mod:
+        case ExprComb::Mod:
             exprStr += OString(" % ");
             break;
-        case EC_or:
+        case ExprComb::Or:
             exprStr += OString(" | ");
             break;
-        case EC_xor:
+        case ExprComb::Xor:
             exprStr += OString(" ^ ");
             break;
-        case EC_and:
+        case ExprComb::And:
             exprStr += OString(" & ");
             break;
-        case EC_left:
+        case ExprComb::Left:
             exprStr += OString(" << ");
             break;
-        case EC_right:
+        case ExprComb::Right:
             exprStr += OString(" >> ");
             break;
         default:

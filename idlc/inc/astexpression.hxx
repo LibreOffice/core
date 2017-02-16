@@ -26,23 +26,22 @@
 #include <idlc.hxx>
 
 // Enum to define all the different operators to combine expressions
-enum ExprComb
+enum class ExprComb
 {
-    EC_add,     // '+'
-    EC_minus,   // '-'
-    EC_mul,     // '*'
-    EC_div,     // '/'
-    EC_mod,     // '%'
-    EC_or,      // '|'
-    EC_xor,     // '^'
-    EC_and,     // '&'
-    EC_left,    // '<<'
-    EC_right,   // '>>'
-    EC_u_plus,  // unary '+'
-    EC_u_minus, // unary '-'
-    EC_bit_neg, // '~'
-    EC_none,    // No operator (missing)
-    EC_symbol   // a symbol (function or constant name)
+    Add,     // '+'
+    Minus,   // '-'
+    Mul,     // '*'
+    Div,     // '/'
+    Mod,     // '%'
+    Or,      // '|'
+    Xor,     // '^'
+    And,     // '&'
+    Left,    // '<<'
+    Right,   // '>>'
+    UPlus,   // unary '+'
+    UMinus,  // unary '-'
+    NONE,    // No operator (missing)
+    Symbol   // a symbol (function or constant name)
 };
 
 // Enum to define expression type
