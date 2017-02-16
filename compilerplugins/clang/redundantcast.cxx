@@ -107,6 +107,12 @@ bool isVoidPointer(QualType type) {
         && type->getAs<clang::PointerType>()->getPointeeType()->isVoidType();
 }
 
+bool isRedundantConstCast(CXXConstCastExpr const * expr) {
+    return expr->getTypeAsWritten().getCanonicalType().getTypePtr()
+        == (expr->getSubExprAsWritten()->getType().getCanonicalType()
+            .getTypePtr());
+}
+
 class RedundantCast:
     public RecursiveASTVisitor<RedundantCast>, public loplugin::RewritePlugin
 {
@@ -168,7 +174,7 @@ bool RedundantCast::VisitImplicitCastExpr(const ImplicitCastExpr * expr) {
         {
             auto e = dyn_cast<CXXConstCastExpr>(
                 expr->getSubExpr()->IgnoreParenImpCasts());
-            if (e != nullptr) {
+            if (e != nullptr && !isRedundantConstCast(e)) {
                 auto t1 = e->getSubExpr()->getType().getCanonicalType();
                 auto t2 = expr->getType().getCanonicalType();
                 bool ObjCLifetimeConversion;
@@ -392,10 +398,7 @@ bool RedundantCast::VisitCXXConstCastExpr(CXXConstCastExpr const * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    if (expr->getTypeAsWritten().getCanonicalType().getTypePtr()
-        == (expr->getSubExprAsWritten()->getType().getCanonicalType()
-            .getTypePtr()))
-    {
+    if (isRedundantConstCast(expr)) {
         report(
             DiagnosticsEngine::Warning, "redundant const_cast from %0 to %1",
             expr->getExprLoc())

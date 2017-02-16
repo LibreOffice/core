@@ -19,8 +19,8 @@ int main() {
     f1(const_cast<char * const>(p1)); // expected-error {{redundant const_cast from 'char *' to 'char *const' [loplugin:redundantcast]}}
     f1(const_cast<char *>(p2));
     f1(const_cast<char * const>(p2));
-    f2(const_cast<char *>(p1)); // expected-error {{redundant const_cast from 'char *' to 'char *', result is implictly cast to 'const char *' [loplugin:redundantcast]}} expected-error {{redundant const_cast from 'char *' to 'char *' [loplugin:redundantcast]}}
-    f2(const_cast<char * const>(p1)); // expected-error {{redundant const_cast from 'char *' to 'char *', result is implictly cast to 'const char *' [loplugin:redundantcast]}} expected-error {{redundant const_cast from 'char *' to 'char *const' [loplugin:redundantcast]}}
+    f2(const_cast<char *>(p1)); // expected-error {{redundant const_cast from 'char *' to 'char *' [loplugin:redundantcast]}}
+    f2(const_cast<char * const>(p1)); //  expected-error {{redundant const_cast from 'char *' to 'char *const' [loplugin:redundantcast]}}
     f2(const_cast<char const *>(p1));
     f2(const_cast<char const * const>(p1));
     f2(const_cast<char *>(p2)); // expected-error {{redundant const_cast from 'const char *' to 'char *', result is implictly cast to 'const char *' [loplugin:redundantcast]}}
