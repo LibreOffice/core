@@ -16,6 +16,24 @@
       "revId": "e3523b106058e8ddf6a3baf8e7c081db3c5bef83",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_9b31aeef",
+        "filename": "vcl/source/filter/wmf/winmtf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 629,
+      "author": {
+        "id": 1001502
+      },
+      "writtenOn": "2017-02-16T13:44:42Z",
+      "side": 1,
+      "message": "After a detailed look, I found no missing Updates in other functions. \n\nBUT what I found out: The filling of the 4 (to be) patterned objects (right bar and the most right squares in the key) is a GDI_COMMENT and thus an EMF+ Action, which is not handled here, but in cpp_canvas module. When I disable the PassEMFPlus(...) function, the output is fine (ok, besides no patterns at all). \n\nThese EMF+ Actions contains four \"EmfPlusFillRects\" records, where the UpdateFillStyle() has to be placed, but since this is a complete different module, it is not possible \n\nnow I don\u0027t know how to continue.",
+      "parentUuid": "9a57fde8_18e22404",
+      "revId": "e3523b106058e8ddf6a3baf8e7c081db3c5bef83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
