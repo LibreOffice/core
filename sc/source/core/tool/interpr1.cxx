@@ -6403,7 +6403,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
 
     if (!pMat)
     {
-        nZIndex += nRow1;                       // Wertzeile
+        nZIndex += nRow1;                       // value row
         nSpIndex = sal::static_int_cast<SCCOL>( nSpIndex + nCol1 );     // value column
     }
 
@@ -6419,12 +6419,12 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
     if ( bHLookup )
     {
         aParam.nCol2 = nCol2;
-        aParam.nRow2 = nRow1;     // nur in der ersten Zeile suchen
+        aParam.nRow2 = nRow1;     // search only in the first row
         aParam.bByRow = false;
     }
     else
     {
-        aParam.nCol2 = nCol1;     // nur in der ersten Spalte suchen
+        aParam.nCol2 = nCol1;     // search only in the first column
         aParam.nRow2 = nRow2;
         aParam.nTab  = nTab1;
     }
@@ -7891,9 +7891,9 @@ void ScInterpreter::ScCurrency()
             OUString sFormatString = pFormatter->GenerateFormat(
                                                    nIndex,
                                                    ScGlobal::eLnge,
-                                                   true,        // mit Tausenderpunkt
-                                                   false,       // nicht rot
-                                                  (sal_uInt16) fDec);// Nachkommastellen
+                                                   true,        // with thousand separator
+                                                   false,       // not red
+                                                  (sal_uInt16) fDec);// decimal places
             if (!pFormatter->GetPreviewString(sFormatString,
                                               fVal,
                                               aStr,
@@ -7945,7 +7945,7 @@ void ScInterpreter::ScFixed()
         double fDec;
         bool bThousand;
         if (nParamCount == 3)
-            bThousand = !GetBool();     // Param TRUE: keine Tausenderpunkte
+            bThousand = !GetBool();     // Param true: no thousand separator
         else
             bThousand = true;
         if (nParamCount >= 2)
@@ -7978,9 +7978,9 @@ void ScInterpreter::ScFixed()
         OUString sFormatString = pFormatter->GenerateFormat(
                                                nIndex,
                                                ScGlobal::eLnge,
-                                               bThousand,   // mit Tausenderpunkt
-                                               false,       // nicht rot
-                                               (sal_uInt16) fDec);// Nachkommastellen
+                                               bThousand,   // with thousand separator
+                                               false,       // not red
+                                               (sal_uInt16) fDec);// decimal places
         if (!pFormatter->GetPreviewString(sFormatString,
                                                   fVal,
                                                   aStr,
