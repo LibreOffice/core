@@ -686,6 +686,7 @@
 #define RID_OBJECTBAR_PREVIEW   (SC_RESOURCE_START+6)
 #define RID_DRAW_WIN            (SC_RESOURCE_START+13)
 #define RID_CNTRLR_WIN          (SC_RESOURCE_START+14)
+#define SID_DATA_FORM           (SC_RESOURCE_START+15) // menu (in Data menu)
 // free
 #define RID_ALIGNMENT_WIN       (SC_RESOURCE_START+19)
 #define RID_ERRHDLSC            (SC_RESOURCE_START+23)
@@ -1227,10 +1228,7 @@
 #define SID_INSERT_CURRENT_DATE         (SC_DIALOGS_START + 166)
 #define SID_INSERT_CURRENT_TIME         (SC_DIALOGS_START + 167)
 
-// data Form
-#define SID_DATA_FORM                   (SC_DIALOGS_START + 168) // menu (in Data menu)
-
-#define SC_DIALOGS_END                  (SID_DATA_FORM + 1)
+#define SC_DIALOGS_END                  (SID_INSERT_CURRENT_TIME + 1)
 
 #define RID_GLOBSTR_OFFSET              SC_DIALOGS_END
 
