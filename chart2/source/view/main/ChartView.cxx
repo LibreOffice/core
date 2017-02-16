@@ -3342,16 +3342,10 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
             }
         }
 
-        if(maTimeBased.eMode != MANUAL)
-        {
-            mrChartModel.setTimeBased(true);
-            mrChartModel.getNextTimePoint();
-        }
-        else
-            maTimeBased.maTimer.Stop();
+        maTimeBased.maTimer.Stop();
     }
 
-    if(maTimeBased.bTimeBased && maTimeBased.eMode != MANUAL && !maTimeBased.maTimer.IsActive())
+    if(maTimeBased.bTimeBased && !maTimeBased.maTimer.IsActive())
     {
         maTimeBased.maTimer.SetTimeout(15);
         maTimeBased.maTimer.SetInvokeHandler(LINK(this, ChartView, UpdateTimeBased));

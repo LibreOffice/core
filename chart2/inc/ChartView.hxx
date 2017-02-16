@@ -55,22 +55,14 @@ class GL3DPlotterBase;
 class GL2DRenderer;
 struct CreateShapeParam2D;
 
-enum TimeBasedMode
-{
-    MANUAL,
-    AUTOMATIC
-};
-
 struct TimeBasedInfo
 {
     TimeBasedInfo():
         bTimeBased(false),
-        nFrame(0),
-        eMode(AUTOMATIC) {}
+        nFrame(0) {}
 
     bool bTimeBased;
     size_t nFrame;
-    TimeBasedMode eMode;
     Timer maTimer;
 
     // only valid when we are in the time based mode
