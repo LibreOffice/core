@@ -689,7 +689,7 @@
 #define SID_DATA_FORM           (SC_RESOURCE_START+15) // menu (in Data menu)
 #define SID_INSERT_CURRENT_DATE (SC_RESOURCE_START+16)
 #define SID_INSERT_CURRENT_TIME (SC_RESOURCE_START+17)
-// free
+#define FID_TAB_TOGGLE_GRID     (SC_RESOURCE_START+18) // toggle sheet grid
 #define RID_ALIGNMENT_WIN       (SC_RESOURCE_START+19)
 #define RID_ERRHDLSC            (SC_RESOURCE_START+23)
 #define RID_OBJECTBAR_TOOLS     (SC_RESOURCE_START+35)
@@ -1223,10 +1223,7 @@
 
 #define WID_CONDFRMT_REF                (SC_DIALOGS_START + 163)
 
-// toggle sheet grid
-#define FID_TAB_TOGGLE_GRID             (SC_DIALOGS_START + 164)
-
-#define SC_DIALOGS_END                  (FID_TAB_TOGGLE_GRID + 1)
+#define SC_DIALOGS_END                  (WID_CONDFRMT_REF + 1)
 
 #define RID_GLOBSTR_OFFSET              SC_DIALOGS_END
 
