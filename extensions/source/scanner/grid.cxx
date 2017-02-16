@@ -127,7 +127,7 @@ public:
 
     double* getNewYValues() { return m_pNewYValues; }
 
-    void ChangeMode(int nType);
+    void ChangeMode(ResetType nType);
 
     virtual void Paint( vcl::RenderContext& /*rRenderContext*/, const Rectangle& rRect ) override;
 };
@@ -631,11 +631,11 @@ void GridWindow::MouseButtonDown( const MouseEvent& rEvt )
     Window::MouseButtonDown( rEvt );
 }
 
-void GridWindow::ChangeMode(int nType)
+void GridWindow::ChangeMode(ResetType nType)
 {
     switch( nType )
     {
-        case LINEAR_ASCENDING:
+        case ResetType::LINEAR_ASCENDING:
         {
             for( int i = 0; i < m_nValues; i++ )
             {
@@ -643,7 +643,7 @@ void GridWindow::ChangeMode(int nType)
             }
         }
         break;
-        case LINEAR_DESCENDING:
+        case ResetType::LINEAR_DESCENDING:
         {
             for( int i = 0; i < m_nValues; i++ )
             {
@@ -651,13 +651,13 @@ void GridWindow::ChangeMode(int nType)
             }
         }
         break;
-        case RESET:
+        case ResetType::RESET:
         {
             if( m_pOrigYValues && m_pNewYValues && m_nValues )
                 memcpy( m_pNewYValues, m_pOrigYValues, m_nValues*sizeof(double) );
         }
         break;
-        case EXPONENTIAL:
+        case ResetType::EXPONENTIAL:
         {
             for( int i = 0; i < m_nValues; i++ )
             {
@@ -704,7 +704,7 @@ IMPL_LINK( GridDialog, ClickButtonHdl, Button*, pButton, void )
     if (pButton == m_pResetButton)
     {
         int nType = m_pResetTypeBox->GetSelectEntryPos();
-        m_pGridWindow->ChangeMode(nType);
+        m_pGridWindow->ChangeMode((ResetType)nType);
     }
 }
 

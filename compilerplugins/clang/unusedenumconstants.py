@@ -113,6 +113,7 @@ for d in definitionSet:
          "starmath/source/mathtype.hxx", # MathType::MTOKENS
          "sd/source/filter/eppt/epptbase.hxx", # PPTExTextAttr
          "sc/source/filter/inc/tokstack.hxx", # E_TYPE
+         "filter/source/graphicfilter/icgm/cgmtypes.hxx",
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -160,6 +161,7 @@ for d in definitionSet:
          "sd/inc/pres.hxx", # AutoLayout (from UI)
          "sc/source/ui/inc/scuitphfedit.hxx", # ScHFEntryId (from UI)
          "include/i18nlangtag/languagetag.hxx", # LanguageTag::ScriptType
+         "extensions/source/scanner/grid.hxx", # ResetType (from UI)
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",

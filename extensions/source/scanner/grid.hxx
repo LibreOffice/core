@@ -27,7 +27,7 @@
 
 class GridWindow;
 
-enum resetType
+enum class ResetType
 {
     LINEAR_ASCENDING = 0,
     LINEAR_DESCENDING = 1,
