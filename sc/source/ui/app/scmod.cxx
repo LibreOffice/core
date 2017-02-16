@@ -2114,7 +2114,7 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
         }
         case RID_SC_TP_PRINT:
         {
-            ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SCPAGE_PRINT);
+            ::CreateTabPage ScTpPrintOptionsCreate = pFact->GetTabPageCreatorFunc(RID_SC_TP_PRINT);
             if (ScTpPrintOptionsCreate)
                 pRet = (*ScTpPrintOptionsCreate)(pParent, &rSet);
             break;
