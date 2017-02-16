@@ -137,6 +137,7 @@
 #define SID_SD_TP_SNAP                  (RID_OFA_START + 227)
 #define SID_SD_TP_MISC                  (RID_OFA_START + 231)
 #define RID_SC_TP_DEFAULTS              (RID_OFA_START + 253)
+#define SID_SC_TP_STAT                  (RID_OFA_START + 254)
 
 // ResId's fuer Dialoge aus StarDraw
 #define RID_SVXSW_FRAMEPOSITIONS            (RID_SVX_START + 289)

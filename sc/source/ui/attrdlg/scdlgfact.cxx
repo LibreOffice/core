@@ -974,7 +974,7 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             return ScTpDefaultsOptions::Create;
         case RID_SC_TP_PRINT:
             return ScTpPrintOptions::Create;
-        case RID_SCPAGE_STAT :
+        case SID_SC_TP_STAT:
             return ScDocStatPage::Create;
         case SID_SC_TP_USERLISTS:
              return ScTpUserLists::Create;
