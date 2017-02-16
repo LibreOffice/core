@@ -1,33 +1,33 @@
 /// CID/D=0:CS=0:Axis=0,0
 // aAxisPosition.X
-3601
+2864
 // aAxisPosition.Y
-7520
+7221
 // aAxisSize.Height
-495
+150
 // aAxisSize.Width
-14815
+11786
 // aAxisTransformation
-14816;0;3601;0;496;7520;0;0;1
+11787;0;2864;0;151;7221;0;0;1
 // nAxisGeometriesCount
-4
+2
 // sAxisLineDash
 0;1;00;0;457
 // static_cast<sal_Int32>(aAxisLineColor)
-0
+16711680
 // nAxisLineWidth
 100
 /// CID/D=0:CS=0:Axis=1,0
 // aAxisPosition.X
-3451
+2714
 // aAxisPosition.Y
-1588
+1525
 // aAxisSize.Height
-5932
+5696
 // aAxisSize.Width
 150
 // aAxisTransformation
-151;0;3451;0;5933;1588;0;0;1
+151;0;2714;0;5697;1525;0;0;1
 // nAxisGeometriesCount
 2
 // sAxisLineDash

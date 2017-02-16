@@ -571,17 +571,18 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
 {
     const std::vector<OUString> aTestFiles =
     {
-        "default_formated_axis.ods",
-        "axis_special_positioning.ods",
-        "formated_axis_lines.ods",
-        "rotated_axis_labels.ods"
+        "default_formated_axis.odp",
+        "axis_special_positioning.odp",
+        "formated_axis_lines.odp",
+        "rotated_axis_labels.odp"
     };
 
     for (const OUString& sTestFile : aTestFiles)
     {
         setTestFileName(sTestFile);
         load(getTestFileDirName(), getTestFileName());
-        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromSheet(0, mxComponent), UNO_QUERY_THROW);
+        uno::Reference< chart::XChartDocument > xChartDoc(getChartDocFromDrawImpress(0, 0), UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xChartDoc.is());
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
         uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
         uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
