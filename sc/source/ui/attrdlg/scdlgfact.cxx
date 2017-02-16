@@ -960,7 +960,7 @@ VclPtr<SfxAbstractTabDialog> ScAbstractDialogFactory_Impl::CreateScSortDlg(vcl::
 //------------------ Factories for TabPages--------------------
 CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId )
 {
-    switch ( nId )
+    switch (nId)
     {
         case SID_SC_TP_CHANGES:
             return ScRedlineOptionsTabPage::Create;
@@ -968,7 +968,7 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             return ScTpCalcOptions::Create;
         case SID_SC_TP_FORMULA:
             return ScTpFormulaOptions::Create;
-        case RID_SCPAGE_COMPATIBILITY:
+        case SID_SC_TP_COMPATIBILITY:
             return ScTpCompatOptions::Create;
         case RID_SCPAGE_DEFAULTS:
             return ScTpDefaultsOptions::Create;

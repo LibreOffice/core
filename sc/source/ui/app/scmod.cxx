@@ -2100,7 +2100,7 @@ VclPtr<SfxTabPage> ScModule::CreateTabPage( sal_uInt16 nId, vcl::Window* pParent
         }
         case SID_SC_TP_COMPATIBILITY:
         {
-            ::CreateTabPage ScTpCompatOptionsCreate = pFact->GetTabPageCreatorFunc (RID_SCPAGE_COMPATIBILITY);
+            ::CreateTabPage ScTpCompatOptionsCreate = pFact->GetTabPageCreatorFunc(SID_SC_TP_COMPATIBILITY);
             if (ScTpCompatOptionsCreate)
                 pRet = (*ScTpCompatOptionsCreate)(pParent, &rSet);
             break;

@@ -1238,9 +1238,6 @@
 // data Form
 #define SID_DATA_FORM                   (SC_DIALOGS_START + 168) // menu (in Data menu)
 
-// compatibility options page
-#define RID_SCPAGE_COMPATIBILITY        (SC_DIALOGS_START + 169)
-
 // init option page
 #define RID_SCPAGE_DEFAULTS             (SC_DIALOGS_START + 170)
 
