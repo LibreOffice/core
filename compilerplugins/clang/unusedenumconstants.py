@@ -145,6 +145,8 @@ for d in definitionSet:
          "basic/source/inc/token.hxx", # SbiToken
          "binaryurp/source/specialfunctionids.hxx", # binaryurp::SpecialFunctionIds
          "connectivity/source/inc/odbc/OTools.hxx", # ODBC3SQLFunctionId
+         "include/formula/grammar.hxx", # FormulaGrammar::Grammar
+         "include/formula/opcode.hxx", # OpCode
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
