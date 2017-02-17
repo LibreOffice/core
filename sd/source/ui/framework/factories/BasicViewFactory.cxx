@@ -59,7 +59,6 @@ class BasicViewFactory::ViewDescriptor
 public:
     Reference<XResource> mxView;
     std::shared_ptr<sd::ViewShell> mpViewShell;
-    ViewShellWrapper* mpWrapper;
     Reference<XResourceId> mxViewId;
     static bool CompareView (const std::shared_ptr<ViewDescriptor>& rpDescriptor,
         const Reference<XResource>& rxView)
@@ -300,22 +299,22 @@ std::shared_ptr<BasicViewFactory::ViewDescriptor> BasicViewFactory::CreateView (
         mpBase->GetViewShellManager()->ActivateViewShell(pDescriptor->mpViewShell.get());
 
         Reference<awt::XWindow> xWindow(rxPane->getWindow());
-        pDescriptor->mpWrapper = new ViewShellWrapper(
+        rtl::Reference<ViewShellWrapper> wrapper(new ViewShellWrapper(
             pDescriptor->mpViewShell,
             rxViewId,
-            xWindow);
+            xWindow));
 
         // register ViewShellWrapper on pane window
         if (xWindow.is())
         {
-            xWindow->addWindowListener(pDescriptor->mpWrapper);
+            xWindow->addWindowListener(wrapper.get());
             if (pDescriptor->mpViewShell != nullptr)
             {
                 pDescriptor->mpViewShell->Resize();
             }
         }
 
-        pDescriptor->mxView.set( pDescriptor->mpWrapper->queryInterface( cppu::UnoType<XResource>::get() ), UNO_QUERY_THROW );
+        pDescriptor->mxView = wrapper.get();
     }
 
     return pDescriptor;
