@@ -701,7 +701,13 @@ void ScUndoMerge::DoChange( bool bUndo ) const
         // undo -> copy back deleted contents
         if (bUndo && mpUndoDoc)
         {
-            rDoc.DeleteAreaTab( aRange, InsertDeleteFlags::CONTENTS|InsertDeleteFlags::NOCAPTIONS );
+            // If there are note captions to be deleted during Undo they were
+            // kept or moved during the merge and copied to the Undo document
+            // without cloning the caption. Forget the target area's caption
+            // pointer that is identical to the one in the Undo document
+            // instead of deleting it.
+            rDoc.DeleteAreaTab( aRange,
+                    InsertDeleteFlags::CONTENTS | InsertDeleteFlags::NOCAPTIONS | InsertDeleteFlags::FORGETCAPTIONS );
             mpUndoDoc->CopyToDocument(aRange, InsertDeleteFlags::ALL|InsertDeleteFlags::NOCAPTIONS, false, rDoc);
         }
 
