@@ -1,0 +1,896 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_ee083a2b",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "typo \"Consstruct\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6e1d2a66",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 957,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "typo \"burder\"",
+      "range": {
+        "startLine": 957,
+        "startChar": 38,
+        "endLine": 957,
+        "endChar": 44
+      },
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8e1a4e6d",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 959,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "typo \"fcalculation\"",
+      "range": {
+        "startLine": 959,
+        "startChar": 65,
+        "endLine": 959,
+        "endChar": 77
+      },
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ce51b610",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1602,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not \"in Netscape\", \"like in Netscape\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ee567a05",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "considering",
+      "range": {
+        "startLine": 1603,
+        "startChar": 26,
+        "endLine": 1603,
+        "endChar": 37
+      },
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8e488e5d",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1800,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not edge, \"margin\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ae7392b3",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1804,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "leftover german",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8e9c0e6b",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2041,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "perhaps better \"a cell from a row further above overlaps this one.\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4e922659",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2344,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "\"table widths\" -\u003e \"column widths\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_aea0f2a6",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2387,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not \"border\", \"text frame\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_cea536b6",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2393,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not \"border\", \"text frame\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_eeaafa84",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2397,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not edge, margin",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0eb01ef4",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2401,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not edge, margin",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2e95e23f",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2406,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not edge, margin",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8ec5ee5c",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2506,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "it\u0027s adding a cell, not a table",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6ec8ca75",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2531,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "the #34972# refers to a private inaccessible bug tracker, you can just remove it",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4ecb0673",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2556,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "here not \"border\" but \"text frame\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2ecec283",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2808,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "less than 2",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0eb9fee9",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3066,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "typo \"\u003eTH\u003e\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_cebe16d4",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3174,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not opened in a cell, opened outside of a cell\n\nand i don\u0027t think the reader cares when it was translated :)",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_aeb9d2ee",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3338,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "duplicate \"\u003cTH\u003e\" -\u003e \"\u003cTD\u003e\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6ef1aacd",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3405,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "\"border\" -\u003e text frame",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8eeeceea",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3411,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "\"border\" -\u003e text frame",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4ee4e60c",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3420,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "another case of \"Rahmen\" -\u003e \"text frame\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2ee7a213",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3427,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "here also \"border\" -\u003e \"text frame\"\n\nalso, remove the \"text::\" prefix, that was probably inserted by some sed gone wild in ancient times...",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_eedcba48",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3458,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "the german comment is outdated, insert a \"position\" there to make it \"position 0\", then it makes sense again with push_front",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ced7f621",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3506,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not \"behind\", \"into\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_aed2b232",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3535,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not \"border\", \"text frame\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8e17aeec",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3592,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "typo \"ox\"",
+      "range": {
+        "startLine": 3592,
+        "startChar": 23,
+        "endLine": 3592,
+        "endChar": 25
+      },
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ce30d6a1",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3694,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "typ \"ther\"",
+      "range": {
+        "startLine": 3694,
+        "startChar": 47,
+        "endLine": 3694,
+        "endChar": 51
+      },
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ae2b9232",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3704,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "... that\u0027s too confusing, what does this actually do... SaveState sort of marks the input file position... how about \"If the first GetNextToken() doesn\u0027t succeed (pending input), must re-read from the beginning.\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6e036ab9",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3754,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "here not \"border\" but \"text frame\"\n\nalso perhaps not \"gets in\" but \"goes in\"?",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2ef962c9",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3782,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "here not \"border\" but \"text frame\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ce09b6df",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3992,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "the \u003cTD\u003e became  a duplicate \u003cTR\u003e",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2e72427d",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4090,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "... that\u0027s too confusing, what does this actually do... SaveState sort of marks the input file position... how about \"If the first GetNextToken() doesn\u0027t succeed (pending input), must re-read from the beginning.\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8e696e8e",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4160,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "here not \"borders\" but \"text frames\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ae0472c6",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4172,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "the german comment said: we can parse it without a cell",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ce6296ad",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4264,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "... that\u0027s too confusing, what does this actually do... SaveState sort of marks the input file position... how about \"If the first GetNextToken() doesn\u0027t succeed (pending input), must re-read from the beginning.\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8e524edc",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4327,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "here not \"borders\" but \"text frames\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ae5d52ee",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4333,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "trailing \u0027",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6e552ac5",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4400,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "yes that sounds plausible",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ce3b769b",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4457,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "... that\u0027s too confusing, what does this actually do... SaveState sort of marks the input file position... how about \"If the first GetNextToken() doesn\u0027t succeed (pending input), must re-read from the beginning.\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ae3632b2",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4548,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "here not \"borders\" but \"text frames\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4ec14680",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4686,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "... that\u0027s too confusing, what does this actually do... SaveState sort of marks the input file position... how about \"If the first GetNextToken() doesn\u0027t succeed (pending input), must re-read from the beginning.\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4eda267a",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4775,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "typo \"hast\"",
+      "range": {
+        "startLine": 4775,
+        "startChar": 29,
+        "endLine": 4775,
+        "endChar": 33
+      },
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2edde270",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4811,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "not \"border\" here, \"text frame\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0ef81ee5",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4932,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "the \u003cTH\u003e is mangled",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4e9306a4",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5093,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "here \"Rahmen\" means text frames / text boxes, not borders",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0e81fe4a",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5226,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "wrong tense, it\u0027s about the Show() below, maybe something like \"don\u0027t call Show again here\"",
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2e96c294",
+        "filename": "sw/source/filter/html/htmltab.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5229,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-17T15:07:00Z",
+      "side": 1,
+      "message": "\"parseris\" typo",
+      "range": {
+        "startLine": 5229,
+        "startChar": 37,
+        "endLine": 5229,
+        "endChar": 45
+      },
+      "revId": "76c2f86561ee9be39701d7e2798807f3e7218a8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
