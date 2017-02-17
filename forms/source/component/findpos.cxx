@@ -36,7 +36,7 @@ sal_Int32 findPos(
     const css::uno::Sequence< OUString >& rList)
 {
     const OUString* pStrList = rList.getConstArray();
-    const OUString* pResult = ::std::lower_bound(
+    const OUString* pResult = std::lower_bound(
         pStrList, pStrList + rList.getLength(), aStr );
     if ( ( pResult != pStrList + rList.getLength() ) && ( *pResult == aStr ) )
         return ( pResult - pStrList );

@@ -336,10 +336,10 @@ Idlc::dumpDeps(OString const& rDepFile, OString const& rTarget)
         return false;
     }
     m_includes.erase(getRealFileName()); // eeek, that is a temp file...
-    ::std::for_each(m_includes.begin(), m_includes.end(),
+    std::for_each(m_includes.begin(), m_includes.end(),
             WriteDep(depFile, rc));
     lcl_writeString(depFile, rc, "\n\n");
-    ::std::for_each(m_includes.begin(), m_includes.end(),
+    std::for_each(m_includes.begin(), m_includes.end(),
             WriteDummy(depFile, rc));
     if (::osl::FileBase::E_None != rc) {
         return false;

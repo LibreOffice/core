@@ -469,7 +469,7 @@ void Export::Execute( int nToken, const char * pToken )
                     }
                     WriteData( pResData );
                     ResStack::iterator it = aResStack.begin();
-                    ::std::advance( it, nLevel-1 );
+                    std::advance( it, nLevel-1 );
                     delete *it;
                     aResStack.erase( it );
                     nLevel--;

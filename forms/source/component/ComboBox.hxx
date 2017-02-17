@@ -60,7 +60,7 @@ class OComboBoxModel
     css::form::ListSourceType  m_eListSourceType;      // ListSource's type
     bool                       m_bEmptyIsNull;         // Empty string is interpreted as NULL
 
-    ::std::unique_ptr< ::dbtools::FormattedColumnValue > m_pValueFormatter;
+    std::unique_ptr< ::dbtools::FormattedColumnValue > m_pValueFormatter;
 
 
 protected:

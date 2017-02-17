@@ -326,7 +326,7 @@ public:
     };
 
     /** @short  used to know every currently open document. */
-    typedef ::std::vector< TDocumentInfo > TDocumentList;
+    typedef std::vector< TDocumentInfo > TDocumentList;
 
 // member
 
@@ -1972,7 +1972,7 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
     i_rInfo.ViewNames.realloc(0);
 
     // obtain list of controllers of this document
-    ::std::vector< OUString > aViewNames;
+    std::vector< OUString > aViewNames;
     const Reference< XModel2 > xModel( i_rInfo.Document, UNO_QUERY );
     if ( xModel.is() )
     {
@@ -2002,7 +2002,7 @@ void AutoRecovery::implts_collectActiveViewNames( AutoRecovery::TDocumentInfo& i
     }
 
     i_rInfo.ViewNames.realloc( aViewNames.size() );
-    ::std::copy( aViewNames.begin(), aViewNames.end(), i_rInfo.ViewNames.getArray() );
+    std::copy( aViewNames.begin(), aViewNames.end(), i_rInfo.ViewNames.getArray() );
 }
 
 void AutoRecovery::implts_persistAllActiveViewNames()
@@ -2903,7 +2903,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
     // which should be saved as last one. E.g. if it was used
     // already for an UI save operation => crashed ... and
     // now we try to save it again ... which can fail again ( of course .-) ).
-    ::std::vector< AutoRecovery::TDocumentList::iterator > lDangerousDocs;
+    std::vector< AutoRecovery::TDocumentList::iterator > lDangerousDocs;
 
     AutoRecovery::TDocumentList::iterator pIt;
     for (  pIt  = m_lDocCache.begin();
@@ -3012,7 +3012,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_saveDocs(       bool        bAllow
 
     // Did we have some "dangerous candidates" ?
     // Try to save it ... but may be it will fail !
-    ::std::vector< AutoRecovery::TDocumentList::iterator >::iterator pIt2;
+    std::vector< AutoRecovery::TDocumentList::iterator >::iterator pIt2;
     for (  pIt2  = lDangerousDocs.begin();
            pIt2 != lDangerousDocs.end();
          ++pIt2                          )
@@ -3378,7 +3378,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
 {
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(m_xContext);
 
-    ::std::vector< Reference< XComponent > > aCleanup;
+    std::vector< Reference< XComponent > > aCleanup;
     try
     {
         // create a new document of the desired type
@@ -3419,14 +3419,14 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         }
 
         // re-create all the views
-        ::std::vector< OUString > aViewsToRestore( rInfo.ViewNames.getLength() );
+        std::vector< OUString > aViewsToRestore( rInfo.ViewNames.getLength() );
         if ( rInfo.ViewNames.getLength() )
-            ::std::copy( rInfo.ViewNames.begin(), rInfo.ViewNames.end(), aViewsToRestore.begin() );
+            std::copy( rInfo.ViewNames.begin(), rInfo.ViewNames.end(), aViewsToRestore.begin() );
         // if we don't have views for whatever reason, then create a default-view, at least
         if ( aViewsToRestore.empty() )
             aViewsToRestore.push_back( OUString() );
 
-        for (   ::std::vector< OUString >::const_iterator viewName = aViewsToRestore.begin();
+        for (   std::vector< OUString >::const_iterator viewName = aViewsToRestore.begin();
                 viewName != aViewsToRestore.end();
                 ++viewName
             )
@@ -3465,7 +3465,7 @@ void AutoRecovery::implts_openOneDoc(const OUString&               sURL       ,
         Any aCaughtException( ::cppu::getCaughtException() );
 
         // clean up
-        for (   ::std::vector< Reference< XComponent > >::const_iterator component = aCleanup.begin();
+        for (   std::vector< Reference< XComponent > >::const_iterator component = aCleanup.begin();
                 component != aCleanup.end();
                 ++component
             )

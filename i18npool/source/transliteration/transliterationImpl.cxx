@@ -469,7 +469,7 @@ TransliterationImpl::equals(
 
     const sal_Unicode *p1 = tmpStr1.getStr();
     const sal_Unicode *p2 = tmpStr2.getStr();
-    sal_Int32 i, nLen = ::std::min( tmpStr1.getLength(), tmpStr2.getLength());
+    sal_Int32 i, nLen = std::min( tmpStr1.getLength(), tmpStr2.getLength());
     for (i = 0; i < nLen; ++i, ++p1, ++p2 ) {
         if (*p1 != *p2) {
             // return number of matched code points so far

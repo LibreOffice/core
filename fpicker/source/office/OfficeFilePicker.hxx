@@ -41,8 +41,8 @@ struct FilterEntry;
 struct ElementEntry_Impl;
 enum class PickerFlags;
 
-typedef ::std::list< FilterEntry >             FilterList;     // can be maintained more effectively
-typedef ::std::list < ElementEntry_Impl >      ElementList;
+typedef std::list< FilterEntry >             FilterList;     // can be maintained more effectively
+typedef std::list < ElementEntry_Impl >      ElementList;
 
 typedef css::beans::StringPair                 UnoFilterEntry;
 typedef css::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively

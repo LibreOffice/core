@@ -87,7 +87,7 @@ namespace framework
             virtual sal_Bool SAL_CALL isReadOnly() override;
 
         private:
-            ::std::unique_ptr<ImageManagerImpl>                                               m_pImpl;
+            std::unique_ptr<ImageManagerImpl>                                               m_pImpl;
    };
 }
 

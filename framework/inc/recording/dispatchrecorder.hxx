@@ -52,7 +52,7 @@ class DispatchRecorder
 {
     // private member
     private:
-        ::std::vector < css::frame::DispatchStatement >        m_aStatements;
+        std::vector < css::frame::DispatchStatement >        m_aStatements;
         sal_Int32                                              m_nRecordingID;
         css::uno::Reference< css::script::XTypeConverter >     m_xConverter;
 

@@ -1039,11 +1039,11 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
 
             css::uno::Sequence< OUString > lLocales = xCommand->getElementNames();
             sal_Int32 nLocales = lLocales.getLength();
-            ::std::vector< OUString > aLocales;
+            std::vector< OUString > aLocales;
             for ( sal_Int32 j=0; j<nLocales; ++j )
                 aLocales.push_back(lLocales[j]);
 
-            ::std::vector< OUString >::const_iterator pFound;
+            std::vector< OUString >::const_iterator pFound;
             for ( pFound = aLocales.begin(); pFound != aLocales.end(); ++pFound )
             {
                 if ( *pFound == sIsoLang )

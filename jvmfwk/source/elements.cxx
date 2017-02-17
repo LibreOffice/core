@@ -1037,10 +1037,10 @@ void MergedSettings::merge(const NodeJava & share, const NodeJava & user)
 }
 
 
-::std::vector< OString> MergedSettings::getVmParametersUtf8() const
+std::vector< OString> MergedSettings::getVmParametersUtf8() const
 {
-    ::std::vector< OString> ret;
-    typedef ::std::vector< OUString>::const_iterator cit;
+    std::vector< OString> ret;
+    typedef std::vector< OUString>::const_iterator cit;
     for (cit i = m_vmParams.begin(); i != m_vmParams.end(); ++i)
     {
         ret.push_back( OUStringToOString(*i, RTL_TEXTENCODING_UTF8));

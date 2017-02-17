@@ -60,12 +60,12 @@ namespace frm
 
             FeatureInfo() : bCachedState( false ) { }
         };
-        typedef ::std::map< sal_Int16, FeatureInfo >    FeatureMap;
+        typedef std::map< sal_Int16, FeatureInfo >    FeatureMap;
 
     private:
         css::uno::Reference< css::uno::XComponentContext >
                             m_xORB;
-        ::std::unique_ptr< ControlFeatureInterception >
+        std::unique_ptr< ControlFeatureInterception >
                             m_pFeatureInterception;
 
         // all supported features
@@ -135,7 +135,7 @@ namespace frm
                 the array of features to support. Out parameter to fill by the derivee's implementation
             @pure
         */
-        virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds ) = 0;
+        virtual void    getSupportedFeatures( std::vector< sal_Int16 >& /* [out] */ _rFeatureIds ) = 0;
 
     protected:
         /** update all our dispatches which are controlled by our dispatch interceptors
@@ -175,7 +175,7 @@ namespace frm
     class OFormNavigationMapper
     {
     private:
-        ::std::unique_ptr< UrlTransformer >   m_pUrlTransformer;
+        std::unique_ptr< UrlTransformer >   m_pUrlTransformer;
 
     public:
         OFormNavigationMapper(

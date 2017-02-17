@@ -37,7 +37,7 @@ private:
     OString  m_name;
 };
 
-typedef ::std::list< FeDeclarator* > FeDeclList;
+typedef std::list< FeDeclarator* > FeDeclList;
 
 class FeInheritanceHeader final
 {

@@ -121,7 +121,7 @@ void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatus
     osl::ClearableMutexGuard aWriteLock(m_mutex);
 
     // create new info structure for this child or move it to the front of our stack
-    IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
+    IndicatorStack::iterator pItem = std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
         m_aStack.erase(pItem);
     IndicatorInfo aInfo(xChild, sText, nRange);
@@ -148,7 +148,7 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     osl::ClearableMutexGuard aReadLock(m_mutex);
 
     // reset the internal info structure related to this child
-    IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
+    IndicatorStack::iterator pItem = std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
     {
         pItem->m_nValue = 0;
@@ -178,7 +178,7 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
     osl::ClearableMutexGuard aWriteLock(m_mutex);
 
     // remove this child from our stack
-    IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
+    IndicatorStack::iterator pItem = std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
         m_aStack.erase(pItem);
 
@@ -231,7 +231,7 @@ void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStat
     // SAFE -> ----------------------------------
     osl::ClearableMutexGuard aWriteLock(m_mutex);
 
-    IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
+    IndicatorStack::iterator pItem = std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
         pItem->m_sText = sText;
 
@@ -261,7 +261,7 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
     osl::ClearableMutexGuard aWriteLock(m_mutex);
 
     sal_Int32 nOldValue = 0;
-    IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
+    IndicatorStack::iterator pItem = std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
     {
         nOldValue       = pItem->m_nValue;

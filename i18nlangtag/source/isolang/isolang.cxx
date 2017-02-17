@@ -1457,9 +1457,9 @@ LanguageType MsLangId::convertUnxByteStringToLanguage(
 
 
 // static
-::std::vector< MsLangId::LanguagetagMapping > MsLangId::getDefinedLanguagetags()
+std::vector< MsLangId::LanguagetagMapping > MsLangId::getDefinedLanguagetags()
 {
-    ::std::vector< LanguagetagMapping > aVec;
+    std::vector< LanguagetagMapping > aVec;
     for (const Bcp47CountryEntry* pEntry = aImplBcp47CountryEntries;
             pEntry->mnLang != LANGUAGE_DONTKNOW; ++pEntry)
     {

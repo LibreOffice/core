@@ -79,7 +79,7 @@ static void debug_icu_cal_dump( const ::icu::Calendar & r )
 static void debug_cal_millis_to_time( long nMillis, long & h, long & m, long & s, long & f )
 {
     int sign = (nMillis < 0 ? -1 : 1);
-    nMillis = ::std::abs(nMillis);
+    nMillis = std::abs(nMillis);
     h = sign * nMillis / (60 * 60 * 1000);
     nMillis -= sign * h * (60 * 60 * 1000);
     m = nMillis / (60 * 1000);
@@ -687,7 +687,7 @@ Calendar_gregorian::getFirstDayOfWeek()
 {
     // UCAL_SUNDAY == 1, Weekdays::SUNDAY == 0 => offset -1
     // Check for underflow just in case we're called "out of sync".
-    return ::std::max( sal::static_int_cast<sal_Int16>(0),
+    return std::max( sal::static_int_cast<sal_Int16>(0),
             sal::static_int_cast<sal_Int16>( static_cast<sal_Int16>(
                     body->getFirstDayOfWeek()) - 1));
 }

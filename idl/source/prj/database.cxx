@@ -513,9 +513,9 @@ void SvIdlDataBase::WriteDepFile(
 {
     rStream.WriteOString( OUStringToOString(rTarget, RTL_TEXTENCODING_UTF8) );
     rStream.WriteCharPtr( " :" );
-    ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
+    std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDep(rStream));
     rStream.WriteCharPtr( "\n\n" );
-    ::std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDummy(rStream));
+    std::for_each(m_DepFiles.begin(), m_DepFiles.end(), WriteDummy(rStream));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

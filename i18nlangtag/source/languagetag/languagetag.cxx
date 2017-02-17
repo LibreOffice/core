@@ -69,15 +69,15 @@ static const KnownTagSet & getKnowns()
         osl::MutexGuard aGuard( theMutex::get());
         if (rKnowns.empty())
         {
-            ::std::vector< MsLangId::LanguagetagMapping > aDefined( MsLangId::getDefinedLanguagetags());
-            for (::std::vector< MsLangId::LanguagetagMapping >::const_iterator it( aDefined.begin());
+            std::vector< MsLangId::LanguagetagMapping > aDefined( MsLangId::getDefinedLanguagetags());
+            for (std::vector< MsLangId::LanguagetagMapping >::const_iterator it( aDefined.begin());
                     it != aDefined.end(); ++it)
             {
                 // Do not use the BCP47 string here to initialize the
                 // LanguageTag because then canonicalize() would call this
                 // getKnowns() again..
-                ::std::vector< OUString > aFallbacks( LanguageTag( (*it).mnLang).getFallbackStrings( true));
-                for (::std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
+                std::vector< OUString > aFallbacks( LanguageTag( (*it).mnLang).getFallbackStrings( true));
+                for (std::vector< OUString >::const_iterator fb( aFallbacks.begin()); fb != aFallbacks.end(); ++fb)
                 {
                     rKnowns.insert( *fb);
                 }
@@ -96,8 +96,8 @@ struct compareIgnoreAsciiCaseLess
         return r1.compareToIgnoreAsciiCase( r2) < 0;
     }
 };
-typedef ::std::map< OUString, LanguageTag::ImplPtr, compareIgnoreAsciiCaseLess > MapBcp47;
-typedef ::std::map< LanguageType, LanguageTag::ImplPtr > MapLangID;
+typedef std::map< OUString, LanguageTag::ImplPtr, compareIgnoreAsciiCaseLess > MapBcp47;
+typedef std::map< LanguageType, LanguageTag::ImplPtr > MapLangID;
 struct theMapBcp47 : public rtl::Static< MapBcp47, theMapBcp47 > {};
 struct theMapLangID : public rtl::Static< MapLangID, theMapLangID > {};
 struct theDontKnow : public rtl::Static< LanguageTag::ImplPtr, theDontKnow > {};
@@ -647,7 +647,7 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
     {
         SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: new impl for '" << maBcp47 << "'");
         pImpl.reset( new LanguageTagImpl( *this));
-        rMapBcp47.insert( ::std::make_pair( maBcp47, pImpl));
+        rMapBcp47.insert( std::make_pair( maBcp47, pImpl));
     }
 
     if (!bOtherImpl || !pImpl->mbInitializedLangID)
@@ -667,14 +667,14 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
                 if ((*itID).second->maBcp47 != maBcp47)
                 {
                     SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: not using suggested 0x"
-                            << ::std::hex << nRegisterID << " for '" << maBcp47 << "' have '"
+                            << std::hex << nRegisterID << " for '" << maBcp47 << "' have '"
                             << (*itID).second->maBcp47 << "'");
                     nRegisterID = getNextOnTheFlyLanguage();
                 }
                 else
                 {
                     SAL_WARN( "i18nlangtag", "LanguageTag::registerOnTheFly: suggested 0x"
-                            << ::std::hex << nRegisterID << " for '" << maBcp47 << "' already registered");
+                            << std::hex << nRegisterID << " for '" << maBcp47 << "' already registered");
                 }
             }
         }
@@ -692,17 +692,17 @@ LanguageTag::ImplPtr LanguageTagImpl::registerOnTheFly( LanguageType nRegisterID
         }
     }
 
-    ::std::pair< MapLangID::const_iterator, bool > res(
-            theMapLangID::get().insert( ::std::make_pair( pImpl->mnLangID, pImpl)));
+    std::pair< MapLangID::const_iterator, bool > res(
+            theMapLangID::get().insert( std::make_pair( pImpl->mnLangID, pImpl)));
     if (res.second)
     {
         SAL_INFO( "i18nlangtag", "LanguageTag::registerOnTheFly: cross-inserted 0x"
-                << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
+                << std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
     }
     else
     {
         SAL_WARN( "i18nlangtag", "LanguageTag::registerOnTheFly: not cross-inserted 0x"
-                << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' have '"
+                << std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' have '"
                 << (*res.first).second->maBcp47 << "'");
     }
 
@@ -728,10 +728,10 @@ void LanguageTag::setConfiguredSystemLanguage( LanguageType nLang )
     {
         SAL_WARN( "i18nlangtag",
                 "LanguageTag::setConfiguredSystemLanguage: refusing to set unresolved system locale 0x" <<
-                ::std::hex << nLang);
+                std::hex << nLang);
         return;
     }
-    SAL_INFO( "i18nlangtag", "LanguageTag::setConfiguredSystemLanguage: setting to 0x" << ::std::hex << nLang);
+    SAL_INFO( "i18nlangtag", "LanguageTag::setConfiguredSystemLanguage: setting to 0x" << std::hex << nLang);
     MsLangId::LanguageTagAccess::setConfiguredSystemLanguage( nLang);
     // Reset system locale to none and let registerImpl() do the rest to
     // initialize a new one.
@@ -863,7 +863,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     // getKnowns() in canonicalize() via pImpl->convertBcp47ToLocale() below,
     // everything else is suspicious.
     SAL_WARN_IF( nRunning > 1, "i18nlangtag", "LanguageTag::registerImpl: re-entered for '"
-            << maBcp47 << "' 0x" << ::std::hex << mnLangID );
+            << maBcp47 << "' 0x" << std::hex << mnLangID );
     struct Runner { Runner() { ++nRunning; } ~Runner() { --nRunning; } } aRunner;
 #endif
 
@@ -874,14 +874,14 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         MapLangID::const_iterator it( rMap.find( mnLangID));
         if (it != rMap.end())
         {
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: found impl for 0x" << ::std::hex << mnLangID);
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: found impl for 0x" << std::hex << mnLangID);
             pImpl = (*it).second;
         }
         else
         {
-            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for 0x" << ::std::hex << mnLangID);
+            SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for 0x" << std::hex << mnLangID);
             pImpl.reset( new LanguageTagImpl( *this));
-            rMap.insert( ::std::make_pair( mnLangID, pImpl));
+            rMap.insert( std::make_pair( mnLangID, pImpl));
             // Try round-trip.
             if (!pImpl->mbInitializedLocale)
                 pImpl->convertLangToLocale();
@@ -891,23 +891,23 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
             {
                 if (!pImpl->mbInitializedBcp47)
                     pImpl->convertLocaleToBcp47();
-                ::std::pair< MapBcp47::const_iterator, bool > res(
-                        theMapBcp47::get().insert( ::std::make_pair( pImpl->maBcp47, pImpl)));
+                std::pair< MapBcp47::const_iterator, bool > res(
+                        theMapBcp47::get().insert( std::make_pair( pImpl->maBcp47, pImpl)));
                 if (res.second)
                 {
-                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted '" << pImpl->maBcp47 << "' for 0x" << ::std::hex << mnLangID);
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted '" << pImpl->maBcp47 << "' for 0x" << std::hex << mnLangID);
                 }
                 else
                 {
-                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "' for 0x" << ::std::hex << mnLangID << " have 0x"
-                            << ::std::hex << (*res.first).second->mnLangID);
+                    SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "' for 0x" << std::hex << mnLangID << " have 0x"
+                            << std::hex << (*res.first).second->mnLangID);
                 }
             }
             else
             {
                 if (!pImpl->mbInitializedBcp47)
                     pImpl->convertLocaleToBcp47();
-                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "' for 0x" << ::std::hex << mnLangID << " round-trip to 0x" << ::std::hex << nLang);
+                SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted '" << pImpl->maBcp47 << "' for 0x" << std::hex << mnLangID << " round-trip to 0x" << std::hex << nLang);
             }
         }
     }
@@ -924,14 +924,14 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
         {
             SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: new impl for '" << maBcp47 << "'");
             pImpl.reset( new LanguageTagImpl( *this));
-            ::std::pair< MapBcp47::iterator, bool > insOrig( rMap.insert( ::std::make_pair( maBcp47, pImpl)));
+            std::pair< MapBcp47::iterator, bool > insOrig( rMap.insert( std::make_pair( maBcp47, pImpl)));
             // If changed after canonicalize() also add the resulting tag to
             // the map.
             if (pImpl->synCanonicalize())
             {
                 SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: canonicalized to '" << pImpl->maBcp47 << "'");
-                ::std::pair< MapBcp47::const_iterator, bool > insCanon(
-                        rMap.insert( ::std::make_pair( pImpl->maBcp47, pImpl)));
+                std::pair< MapBcp47::const_iterator, bool > insCanon(
+                        rMap.insert( std::make_pair( pImpl->maBcp47, pImpl)));
                 SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: " << (insCanon.second ? "" : "not ")
                         << "inserted '" << pImpl->maBcp47 << "'");
                 // If the canonicalized tag already existed (was not inserted)
@@ -946,7 +946,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                 {
                     (*insOrig.first).second = pImpl = (*insCanon.first).second;
                     SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: share impl with 0x"
-                            << ::std::hex << pImpl->mnLangID);
+                            << std::hex << pImpl->mnLangID);
                 }
             }
             if (!pImpl->mbInitializedLangID)
@@ -974,24 +974,24 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
                 // If round-trip is identical cross-insert to Bcp47 map.
                 if (bInsert)
                 {
-                    ::std::pair< MapLangID::const_iterator, bool > res(
-                            theMapLangID::get().insert( ::std::make_pair( pImpl->mnLangID, pImpl)));
+                    std::pair< MapLangID::const_iterator, bool > res(
+                            theMapLangID::get().insert( std::make_pair( pImpl->mnLangID, pImpl)));
                     if (res.second)
                     {
                         SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: cross-inserted 0x"
-                                << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
+                                << std::hex << pImpl->mnLangID << " for '" << maBcp47 << "'");
                     }
                     else
                     {
                         SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted 0x"
-                                << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' have '"
+                                << std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' have '"
                                 << (*res.first).second->maBcp47 << "'");
                     }
                 }
                 else
                 {
                     SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: not cross-inserted 0x"
-                            << ::std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' round-trip to '"
+                            << std::hex << pImpl->mnLangID << " for '" << maBcp47 << "' round-trip to '"
                             << aBcp47 << "'");
                 }
             }
@@ -999,7 +999,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     }
     else
     {
-        SAL_WARN( "i18nlangtag", "LanguageTag::registerImpl: can't register for 0x" << ::std::hex << mnLangID );
+        SAL_WARN( "i18nlangtag", "LanguageTag::registerImpl: can't register for 0x" << std::hex << mnLangID );
         pImpl.reset( new LanguageTagImpl( *this));
     }
 
@@ -1009,7 +1009,7 @@ LanguageTag::ImplPtr LanguageTag::registerImpl() const
     {
         theSystemLocale::get() = pImpl;
         SAL_INFO( "i18nlangtag", "LanguageTag::registerImpl: added system locale 0x"
-                << ::std::hex << pImpl->mnLangID << " '" << pImpl->maBcp47 << "'");
+                << std::hex << pImpl->mnLangID << " '" << pImpl->maBcp47 << "'");
     }
 
     return pImpl;
@@ -1289,7 +1289,7 @@ void LanguageTag::syncFromImpl()
             (mbInitializedLangID && mnLangID != pImpl->mnLangID));
     SAL_INFO_IF( bRegister, "i18nlangtag",
             "LanguageTag::syncFromImpl: re-registering, '" << pImpl->maBcp47 << "' vs '" << maBcp47 <<
-            " and 0x" << ::std::hex << pImpl->mnLangID << " vs 0x" << ::std::hex << mnLangID);
+            " and 0x" << std::hex << pImpl->mnLangID << " vs 0x" << std::hex << mnLangID);
     syncVarsFromRawImpl();
     if (bRegister)
         mpImpl = registerImpl();
@@ -2103,8 +2103,8 @@ LanguageTag & LanguageTag::makeFallback()
             {
                 // "en-US" is the last resort fallback, try if we get a better
                 // one for the fallback hierarchy of a non-"en" locale.
-                ::std::vector< OUString > aFallbacks( getFallbackStrings( false));
-                for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+                std::vector< OUString > aFallbacks( getFallbackStrings( false));
+                for (std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
                 {
                     lang::Locale aLocale3( LanguageTag( *it).getLocale());
                     aLocale2 = MsLangId::Conversion::lookupFallbackLocale( aLocale3);
@@ -2128,9 +2128,9 @@ LanguageTag & LanguageTag::makeFallback()
  * fallbacks. Though iterating through those tables would be slower and even
  * then there would be some special cases, but we wouldn't lack entries that
  * were missed out. */
-::std::vector< OUString > LanguageTag::getFallbackStrings( bool bIncludeFullBcp47 ) const
+std::vector< OUString > LanguageTag::getFallbackStrings( bool bIncludeFullBcp47 ) const
 {
-    ::std::vector< OUString > aVec;
+    std::vector< OUString > aVec;
     OUString aLanguage( getLanguage());
     OUString aCountry( getCountry());
     if (isIsoLocale())
@@ -2162,7 +2162,7 @@ LanguageTag & LanguageTag::makeFallback()
             }
             else if (aLanguage == "ca" && aCountry == "XV")
             {
-                ::std::vector< OUString > aRep( LanguageTag( "ca-ES-valencia").getFallbackStrings( true));
+                std::vector< OUString > aRep( LanguageTag( "ca-ES-valencia").getFallbackStrings( true));
                 aVec.insert( aVec.end(), aRep.begin(), aRep.end());
                 // Already includes 'ca' language fallback.
             }
@@ -2547,13 +2547,13 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
 
 
 // static
-::std::vector< OUString >::const_iterator LanguageTag::getFallback(
-        const ::std::vector< OUString > & rList, const OUString & rReference )
+std::vector< OUString >::const_iterator LanguageTag::getFallback(
+        const std::vector< OUString > & rList, const OUString & rReference )
 {
     if (rList.empty())
         return rList.end();
 
-    ::std::vector< OUString >::const_iterator it;
+    std::vector< OUString >::const_iterator it;
 
     // Try the simple case first without constructing fallbacks.
     for (it = rList.begin(); it != rList.end(); ++it)
@@ -2562,7 +2562,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
             return it;  // exact match
     }
 
-    ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
+    std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
     if (rReference != "en-US")
     {
         aFallbacks.push_back( "en-US");
@@ -2578,7 +2578,7 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
      * "x-no-translate" and "x-notranslate" apparently was never used anywhere.
      * Did that ever work? Was it supposed to work at all like this? */
 
-    for (::std::vector< OUString >::const_iterator fb = aFallbacks.begin(); fb != aFallbacks.end(); ++fb)
+    for (std::vector< OUString >::const_iterator fb = aFallbacks.begin(); fb != aFallbacks.end(); ++fb)
     {
         for (it = rList.begin(); it != rList.end(); ++it)
         {
@@ -2595,14 +2595,14 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
 
 
 // static
-::std::vector< css::lang::Locale >::const_iterator LanguageTag::getMatchingFallback(
-        const ::std::vector< css::lang::Locale > & rList,
+std::vector< css::lang::Locale >::const_iterator LanguageTag::getMatchingFallback(
+        const std::vector< css::lang::Locale > & rList,
         const css::lang::Locale & rReference )
 {
     if (rList.empty())
         return rList.end();
 
-    ::std::vector< lang::Locale >::const_iterator it;
+    std::vector< lang::Locale >::const_iterator it;
 
     // Try the simple case first without constructing fallbacks.
     for (it = rList.begin(); it != rList.end(); ++it)
@@ -2614,20 +2614,20 @@ LanguageTagImpl::Extraction LanguageTagImpl::simpleExtract( const OUString& rBcp
     }
 
     // Now for each reference fallback test the fallbacks of the list in order.
-    ::std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
-    ::std::vector< ::std::vector< OUString > > aListFallbacks( rList.size());
+    std::vector< OUString > aFallbacks( LanguageTag( rReference).getFallbackStrings( false));
+    std::vector< std::vector< OUString > > aListFallbacks( rList.size());
     size_t i = 0;
     for (it = rList.begin(); it != rList.end(); ++it, ++i)
     {
-        ::std::vector< OUString > aTmp( LanguageTag( *it).getFallbackStrings( true));
+        std::vector< OUString > aTmp( LanguageTag( *it).getFallbackStrings( true));
         aListFallbacks[i] = aTmp;
     }
-    for (::std::vector< OUString >::const_iterator rfb( aFallbacks.begin()); rfb != aFallbacks.end(); ++rfb)
+    for (std::vector< OUString >::const_iterator rfb( aFallbacks.begin()); rfb != aFallbacks.end(); ++rfb)
     {
-        for (::std::vector< ::std::vector< OUString > >::const_iterator lfb( aListFallbacks.begin());
+        for (std::vector< std::vector< OUString > >::const_iterator lfb( aListFallbacks.begin());
                 lfb != aListFallbacks.end(); ++lfb)
         {
-            for (::std::vector< OUString >::const_iterator fb( (*lfb).begin()); fb != (*lfb).end(); ++fb)
+            for (std::vector< OUString >::const_iterator fb( (*lfb).begin()); fb != (*lfb).end(); ++fb)
             {
                 if (*rfb == *fb)
                     return rList.begin() + (lfb - aListFallbacks.begin());

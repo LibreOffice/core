@@ -58,7 +58,7 @@ struct AddonToolbarItem
     sal_uInt16 nWidth;
 };
 
-typedef ::std::vector< AddonToolbarItem > AddonToolbarItemContainer;
+typedef std::vector< AddonToolbarItem > AddonToolbarItemContainer;
 
 struct ReferenceToolbarPathInfo
 {

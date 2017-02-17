@@ -39,9 +39,9 @@ class StorageHolder final
     public:
 
         /** @short  TODO */
-        typedef ::std::vector< css::uno::Reference< css::embed::XStorage > > TStorageList;
+        typedef std::vector< css::uno::Reference< css::embed::XStorage > > TStorageList;
 
-        typedef ::std::vector< XMLBasedAcceleratorConfiguration* > TStorageListenerList;
+        typedef std::vector< XMLBasedAcceleratorConfiguration* > TStorageListenerList;
 
         struct TStorageInfo
         {

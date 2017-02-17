@@ -117,7 +117,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
         css::uno::Sequence< css::beans::PropertyValue > lConfig;
         aHandler >> lConfig;
 
-        ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector< css::uno::Any > >(lArguments));
+        std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer< std::vector< css::uno::Any > >(lArguments));
         stlArguments.insert(stlArguments.begin(), css::uno::makeAny(lConfig));
 
         xInit->initialize(comphelper::containerToSequence(stlArguments));

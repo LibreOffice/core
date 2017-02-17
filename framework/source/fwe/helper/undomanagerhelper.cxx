@@ -137,7 +137,7 @@ namespace framework
     class UndoManagerRequest : public ::comphelper::AnyEvent
     {
     public:
-        explicit UndoManagerRequest( ::std::function<void ()> const& i_request )
+        explicit UndoManagerRequest( std::function<void ()> const& i_request )
             :m_request( i_request )
             ,m_caughtException()
             ,m_finishCondition()
@@ -180,7 +180,7 @@ namespace framework
         }
 
     private:
-        ::std::function<void ()>    m_request;
+        std::function<void ()>    m_request;
         Any                         m_caughtException;
         ::osl::Condition            m_finishCondition;
     };
@@ -199,11 +199,11 @@ namespace framework
         ::comphelper::OInterfaceContainerHelper2   m_aUndoListeners;
         ::comphelper::OInterfaceContainerHelper2   m_aModifyListeners;
         IUndoManagerImplementation&         m_rUndoManagerImplementation;
-        ::std::stack< bool >                m_aContextVisibilities;
+        std::stack< bool >                m_aContextVisibilities;
 #if OSL_DEBUG_LEVEL > 0
-        ::std::stack< bool >                m_aContextAPIFlags;
+        std::stack< bool >                m_aContextAPIFlags;
 #endif
-        ::std::queue< ::rtl::Reference< UndoManagerRequest > >
+        std::queue< ::rtl::Reference< UndoManagerRequest > >
                                             m_aEventQueue;
 
     public:
@@ -296,7 +296,7 @@ namespace framework
 
     private:
         /// adds a function to be called to the request processor's queue
-        void impl_processRequest(::std::function<void ()> const& i_request, IMutexGuard& i_instanceLock);
+        void impl_processRequest(std::function<void ()> const& i_request, IMutexGuard& i_instanceLock);
 
         /// impl-versions of the XUndoManager API.
         void impl_enterUndoContext( const OUString& i_title, const bool i_hidden );
@@ -446,7 +446,7 @@ namespace framework
         // <--- SYNCHRONIZED
     }
 
-    void UndoManagerHelper_Impl::impl_processRequest(::std::function<void ()> const& i_request, IMutexGuard& i_instanceLock)
+    void UndoManagerHelper_Impl::impl_processRequest(std::function<void ()> const& i_request, IMutexGuard& i_instanceLock)
     {
         // create the request, and add it to our queue
         ::rtl::Reference< UndoManagerRequest > pRequest( new UndoManagerRequest( i_request ) );

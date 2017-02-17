@@ -118,9 +118,9 @@ OUString lcl_getURLFromShellItem (IShellItem* pItem)
 }
 
 
-::std::vector< COMDLG_FILTERSPEC > lcl_buildFilterList(CFilterContainer& rContainer)
+std::vector< COMDLG_FILTERSPEC > lcl_buildFilterList(CFilterContainer& rContainer)
 {
-          ::std::vector< COMDLG_FILTERSPEC > lList  ;
+          std::vector< COMDLG_FILTERSPEC > lList  ;
           CFilterContainer::FILTER_ENTRY_T   aFilter;
 
     rContainer.beginEnumFilter( );
@@ -759,7 +759,7 @@ void VistaFilePickerImpl::impl_sta_setFiltersOnDialog()
     // SYNCHRONIZED->
     ::osl::ResettableMutexGuard aLock(m_aMutex);
 
-    ::std::vector< COMDLG_FILTERSPEC > lFilters       = lcl_buildFilterList(m_lFilters);
+    std::vector< COMDLG_FILTERSPEC > lFilters       = lcl_buildFilterList(m_lFilters);
     OUString                    sCurrentFilter = m_lFilters.getCurrentFilter();
     sal_Int32                          nCurrentFilter = m_lFilters.getFilterPos(sCurrentFilter);
     TFileDialog                        iDialog        = impl_getBaseDialogInterface();
@@ -915,7 +915,7 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
                     {
                         // COM dialog base on 1 ... filter container on 0 .-)
                         ::size_t nRealIndex = (nFileType-1);
-                        ::std::vector< COMDLG_FILTERSPEC > lFilters = lcl_buildFilterList(m_lFilters);
+                        std::vector< COMDLG_FILTERSPEC > lFilters = lcl_buildFilterList(m_lFilters);
                         if ( nRealIndex < lFilters.size() )
                         {
                             PCWSTR lpFilterExt = lFilters[nRealIndex].pszSpec;

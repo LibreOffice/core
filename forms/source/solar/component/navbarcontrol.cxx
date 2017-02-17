@@ -465,7 +465,7 @@ namespace frm
     }
 
 
-    void ONavigationBarPeer::getSupportedFeatures( ::std::vector< sal_Int16 >& _rFeatureIds )
+    void ONavigationBarPeer::getSupportedFeatures( std::vector< sal_Int16 >& _rFeatureIds )
     {
         _rFeatureIds.push_back( FormFeature::MoveAbsolute );
         _rFeatureIds.push_back( FormFeature::TotalRecords );

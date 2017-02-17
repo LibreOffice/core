@@ -214,7 +214,7 @@ bool GlobalImageList::hasImage( vcl::ImageType nImageType, const OUString& rComm
     return CmdImageList::hasImage( nImageType, rCommandURL );
 }
 
-::std::vector< OUString >& GlobalImageList::getImageCommandNames()
+std::vector< OUString >& GlobalImageList::getImageCommandNames()
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
     return CmdImageList::getImageCommandNames();

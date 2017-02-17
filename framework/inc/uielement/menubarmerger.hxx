@@ -29,7 +29,7 @@ namespace framework
 {
 
 struct AddonMenuItem;
-typedef ::std::vector< AddonMenuItem > AddonMenuContainer;
+typedef std::vector< AddonMenuItem > AddonMenuContainer;
 
 struct AddonMenuItem
 {
@@ -81,7 +81,7 @@ namespace MenuBarMerger
                                                     sal_uInt16&                             rItemId,
                                                     const OUString&                  rMergeCommand,
                                                     const OUString&                  rMergeFallback,
-                                                    const ::std::vector< OUString >& rReferencePath,
+                                                    const std::vector< OUString >& rReferencePath,
                                                     const OUString&                  rModuleIdentifier,
                                                     const AddonMenuContainer&               rAddonMenuItems );
         bool       MergeMenuItems( Menu*                     pMenu,

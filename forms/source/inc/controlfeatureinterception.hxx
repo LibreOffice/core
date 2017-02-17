@@ -49,7 +49,7 @@ namespace frm
     private:
         css::uno::Reference< css::frame::XDispatchProviderInterceptor >
                                               m_xFirstDispatchInterceptor;
-        ::std::unique_ptr< UrlTransformer >   m_pUrlTransformer;
+        std::unique_ptr< UrlTransformer >   m_pUrlTransformer;
 
     public:
         /** retrieves our URL transformer, so our clients may use it, too

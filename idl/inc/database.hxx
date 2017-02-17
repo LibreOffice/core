@@ -80,7 +80,7 @@ class SvIdlDataBase
     SvRefMemberList<SvMetaObject *>    aContextStack;
 
 protected:
-    ::std::set< OUString >      m_DepFiles;
+    std::set< OUString >      m_DepFiles;
     OUString                    aPath;
     SvIdlError                  aError;
     void WriteReset()

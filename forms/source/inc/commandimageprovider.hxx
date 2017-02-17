@@ -34,7 +34,7 @@ namespace frm
 
     //= ICommandImageProvider
 
-    typedef ::std::vector< Image >                 CommandImages;
+    typedef std::vector< Image >                 CommandImages;
 
     class SAL_NO_VTABLE ICommandImageProvider
     {

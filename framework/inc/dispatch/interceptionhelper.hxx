@@ -75,7 +75,7 @@ class InterceptionHelper : public  ::cppu::WeakImplHelper<
         @descr Because interceptor objects can be registered for URL patterns,
                it supports a wildcard search on all list items.
      */
-    class InterceptorList : public ::std::deque< InterceptorInfo >
+    class InterceptorList : public std::deque< InterceptorInfo >
     {
         public:
 

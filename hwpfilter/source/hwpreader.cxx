@@ -1334,7 +1334,7 @@ void HwpReader::parseCharShape(CharShape * cshape)
     padd("style:font-size-asian", sXML_CDATA,
         ascii(Int2Str(cshape->size / 25, "%dpt", buf)));
 
-    ::std::string const tmp = hstr2ksstr(kstr2hstr(
+    std::string const tmp = hstr2ksstr(kstr2hstr(
         reinterpret_cast<unsigned char const *>(hwpfont.GetFontName(0, cshape->font[0]))).c_str());
     double fRatio = 1.0;
     int size = getRepFamilyName(tmp.c_str(), buf, fRatio);
@@ -3724,8 +3724,8 @@ void HwpReader::makeHyperText(TxtBox * hbox)
      if( !hypert ) return;
 
     if (hypert->filename[0] != '\0') {
-          ::std::string const tmp = hstr2ksstr(hypert->bookmark);
-          ::std::string const tmp2 = hstr2ksstr(kstr2hstr(
+          std::string const tmp = hstr2ksstr(hypert->bookmark);
+          std::string const tmp2 = hstr2ksstr(kstr2hstr(
 #ifdef _WIN32
               reinterpret_cast<uchar const *>(urltowin(reinterpret_cast<char *>(hypert->filename)).c_str())).c_str());
 #else
@@ -3733,7 +3733,7 @@ void HwpReader::makeHyperText(TxtBox * hbox)
 #endif
           padd("xlink:type", sXML_CDATA, "simple");
           if (tmp.size() > 0 && strcmp(tmp.c_str(), "[HTML]")) {
-              ::std::string tmp3(tmp2);
+              std::string tmp3(tmp2);
               tmp3.push_back('#');
               tmp3.append(tmp);
               padd("xlink:href", sXML_CDATA,
@@ -3748,7 +3748,7 @@ void HwpReader::makeHyperText(TxtBox * hbox)
     else
     {
         padd("xlink:type", sXML_CDATA, "simple");
-        ::std::string tmp;
+        std::string tmp;
         tmp.push_back('#');
         tmp.append(hstr2ksstr(hypert->bookmark));
         padd("xlink:href", sXML_CDATA,
@@ -4356,7 +4356,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                     if ((drawobj->u.freeform.npt > 2) &&
                         (static_cast<size_t>(drawobj->u.freeform.npt) <
-                         ((::std::numeric_limits<int>::max)() / sizeof(double))))
+                         ((std::numeric_limits<int>::max)() / sizeof(double))))
                     {
                               int n, i;
                               n = drawobj->u.freeform.npt;

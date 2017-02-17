@@ -443,7 +443,7 @@ public:
 
 private:
     ::osl::Mutex maMutex;
-    ::std::vector< LocaleDataLookupTableItem* >  maLookupTable;
+    std::vector< LocaleDataLookupTableItem* >  maLookupTable;
 };
 
 // from instance.hxx: Helper base class for a late-initialized
@@ -1428,8 +1428,8 @@ oslGenericFunction SAL_CALL LocaleDataImpl::getFunctionSymbol( const Locale& rLo
             pFunction, &pCachedItem);
     if (!pSymbol)
     {
-        ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
-        for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+        std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
+        for (std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
         {
             pSymbol = rLookupTable.getFunctionSymbolByName( *it, pFunction, &pCachedItem);
             if (pSymbol)
@@ -1576,13 +1576,13 @@ OUString LocaleDataImpl::getFirstLocaleServiceName( const css::lang::Locale & rL
 }
 
 // static
-::std::vector< OUString > LocaleDataImpl::getFallbackLocaleServiceNames( const css::lang::Locale & rLocale )
+std::vector< OUString > LocaleDataImpl::getFallbackLocaleServiceNames( const css::lang::Locale & rLocale )
 {
-    ::std::vector< OUString > aVec;
+    std::vector< OUString > aVec;
     if (rLocale.Language == I18NLANGTAG_QLT)
     {
         aVec = LanguageTag( rLocale).getFallbackStrings( false);
-        for (::std::vector< OUString >::iterator it(aVec.begin()); it != aVec.end(); ++it)
+        for (std::vector< OUString >::iterator it(aVec.begin()); it != aVec.end(); ++it)
         {
             *it = (*it).replace( cHyphen, cUnder);
         }

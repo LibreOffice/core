@@ -42,11 +42,11 @@ class OutputDevice;
 
 class SVGFontExport
 {
-    typedef ::std::vector< ObjectRepresentation >                 ObjectVector;
-    typedef ::std::set< OUString, ::std::greater< OUString > >    GlyphSet;
-    typedef ::std::map< FontItalic, GlyphSet >                    FontItalicMap;
-    typedef ::std::map< FontWeight, FontItalicMap >               FontWeightMap;
-    typedef ::std::map< OUString, FontWeightMap >                 FontNameMap;
+    typedef std::vector< ObjectRepresentation >                 ObjectVector;
+    typedef std::set< OUString, std::greater< OUString > >    GlyphSet;
+    typedef std::map< FontItalic, GlyphSet >                    FontItalicMap;
+    typedef std::map< FontWeight, FontItalicMap >               FontWeightMap;
+    typedef std::map< OUString, FontWeightMap >                 FontNameMap;
     typedef FontNameMap                                           GlyphTree;
 
 private:
@@ -63,7 +63,7 @@ private:
 
 public:
 
-                        SVGFontExport( SVGExport& rExport, const ::std::vector< ObjectRepresentation >& rObjects );
+                        SVGFontExport( SVGExport& rExport, const std::vector< ObjectRepresentation >& rObjects );
                         ~SVGFontExport();
 
     void                EmbedFonts();

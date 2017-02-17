@@ -39,7 +39,7 @@
 
 namespace framework{
 
-typedef ::std::vector< css::uno::Reference< css::frame::XFrame > >  TFrameContainer;
+typedef std::vector< css::uno::Reference< css::frame::XFrame > >  TFrameContainer;
 
 /*-************************************************************************************************************
     @short          implement a container to hold children of frame, task or desktop

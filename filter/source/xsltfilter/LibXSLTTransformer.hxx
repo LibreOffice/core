@@ -39,8 +39,8 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-using ::std::list;
-using ::std::map;
+using std::list;
+using std::map;
 
 #define EXT_MODULE_OLE_URI "http://libreoffice.org/2011/xslt/ole"
 
@@ -107,13 +107,13 @@ namespace XSLT
 
         css::uno::Reference<XOutputStream> m_rOutputStream;
 
-        typedef ::std::list<css::uno::Reference<XStreamListener> > ListenerList;
+        typedef std::list<css::uno::Reference<XStreamListener> > ListenerList;
 
         ListenerList m_listeners;
 
         OString m_styleSheetURL;
 
-        ::std::map<const char *, OString> m_parameters;
+        std::map<const char *, OString> m_parameters;
 
         rtl::Reference<Reader> m_Reader;
 
@@ -162,7 +162,7 @@ namespace XSLT
         const OString& SAL_CALL
         getStyleSheetURL() { return m_styleSheetURL; }
 
-        const ::std::map<const char*, OString>& SAL_CALL
+        const std::map<const char*, OString>& SAL_CALL
         getParameters() { return m_parameters; }
 
         const css::uno::Reference<css::uno::XComponentContext>& SAL_CALL

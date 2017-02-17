@@ -177,9 +177,9 @@ public:
 class PropertySetBase : public ::comphelper::OStatefulPropertySet
 {
 private:
-    typedef ::std::map< const sal_Int32, ::rtl::Reference< PropertyAccessorBase > >     PropertyAccessors;
-    typedef ::std::vector< css::beans::Property >                                       PropertyArray;
-    typedef ::std::map< const sal_Int32, css::uno::Any >                                PropertyValueCache;
+    typedef std::map< const sal_Int32, ::rtl::Reference< PropertyAccessorBase > >     PropertyAccessors;
+    typedef std::vector< css::beans::Property >                                       PropertyArray;
+    typedef std::map< const sal_Int32, css::uno::Any >                                PropertyValueCache;
 
     PropertyArray                   m_aProperties;
     cppu::IPropertyArrayHelper*     m_pProperties;

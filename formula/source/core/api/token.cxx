@@ -866,7 +866,7 @@ sal_uInt16 FormulaTokenArray::RemoveToken( sal_uInt16 nOffset, sal_uInt16 nCount
     {
         SAL_WARN_IF( nOffset + nCount > nLen, "formula.core",
                 "FormulaTokenArray::RemoveToken - nOffset " << nOffset << " + nCount " << nCount << " > nLen " << nLen);
-        const sal_uInt16 nStop = ::std::min( static_cast<sal_uInt16>(nOffset + nCount), nLen);
+        const sal_uInt16 nStop = std::min( static_cast<sal_uInt16>(nOffset + nCount), nLen);
         nCount = nStop - nOffset;
         for (sal_uInt16 j = nOffset; j < nStop; ++j)
         {

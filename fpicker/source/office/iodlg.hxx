@@ -83,7 +83,7 @@ private:
 
     ::svt::SmartContent         m_aContent;
 
-    ::std::set< VclPtr<Control> >
+    std::set< VclPtr<Control> >
                                 m_aDisabledControls;
 
     ::utl::OConfigurationNode   m_aConfiguration;

@@ -6738,7 +6738,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             // now will search for possible textextensions such as date/time fields
                             // or ParaTabStops and append them on this textobj
                             rIn.Seek( nFilePos );
-                            ::std::vector< PPTFieldEntry* > FieldList;
+                            std::vector< PPTFieldEntry* > FieldList;
                             auto nEndRecPos = DffPropSet::SanitizeEndPos(rIn, aClientTextBoxHd.GetRecEndFilePos());
                             while (rIn.Tell() < nEndRecPos)
                             {
@@ -6911,7 +6911,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 if (xEntry)
                                 {
                                     // sorting fields ( hi >> lo )
-                                    ::std::vector< PPTFieldEntry* >::iterator it = FieldList.begin();
+                                    std::vector< PPTFieldEntry* >::iterator it = FieldList.begin();
                                     for( ; it != FieldList.end(); ++it ) {
                                         if ( (*it)->nPos < xEntry->nPos ) {
                                             break;
@@ -6926,7 +6926,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             }
                             if ( !FieldList.empty() )
                             {
-                                ::std::vector< PPTFieldEntry* >::iterator FE = FieldList.begin();
+                                std::vector< PPTFieldEntry* >::iterator FE = FieldList.begin();
                                 PPTCharPropSetList& aCharPropList = aStyleTextPropReader.aCharPropList;
 
                                 sal_Int32   i = nParagraphs - 1;

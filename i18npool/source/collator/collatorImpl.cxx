@@ -183,8 +183,8 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
                 LocaleDataImpl::getFirstLocaleServiceName( rLocale) + "_" + rSortAlgorithm, rSortAlgorithm);
         if (!bLoaded)
         {
-            ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
-            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+            std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
+            for (std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
             {
                 bLoaded = createCollator( rLocale, *it + "_" + rSortAlgorithm, rSortAlgorithm);
                 if (bLoaded)

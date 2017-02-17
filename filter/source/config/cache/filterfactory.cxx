@@ -136,7 +136,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
         css::uno::Sequence< css::beans::PropertyValue > lConfig;
         aFilter >> lConfig;
 
-        ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector< css::uno::Any > >(lArguments));
+        std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer< std::vector< css::uno::Any > >(lArguments));
         stlArguments.insert(stlArguments.begin(), css::uno::makeAny(lConfig));
 
         xInit->initialize(comphelper::containerToSequence(stlArguments));
@@ -484,7 +484,7 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sM
 
     // bring "other" filters in an alphabetical order
     // It's needed below.
-    ::std::sort(lOtherFilters.begin(), lOtherFilters.end());
+    std::sort(lOtherFilters.begin(), lOtherFilters.end());
 
     // merge both lists together
     OUStringList           lMergedFilters = lSortedFilters;
@@ -494,7 +494,7 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sM
            pIt != itlOtherFiltersEnd  ;
          ++pIt                         )
     {
-        if (::std::find(lSortedFilters.begin(), lSortedFilters.end(), *pIt) == itlSortedFiltersEnd)
+        if (std::find(lSortedFilters.begin(), lSortedFilters.end(), *pIt) == itlSortedFiltersEnd)
             lMergedFilters.push_back(*pIt);
     }
 
@@ -503,12 +503,12 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const OUString& sM
     // remove all filters from this merged list, which does not fit the flag specification
     if (nIFlags != -1)
     {
-        pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nIFlags, true));
+        pItToErase = std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nIFlags, true));
         lMergedFilters.erase(pItToErase, lMergedFilters.end());
     }
     if (nEFlags != -1)
     {
-        pItToErase = ::std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nEFlags, false));
+        pItToErase = std::remove_if(lMergedFilters.begin(), lMergedFilters.end(), stlcomp_removeIfMatchFlags(pCache, nEFlags, false));
         lMergedFilters.erase(pItToErase, lMergedFilters.end());
     }
 

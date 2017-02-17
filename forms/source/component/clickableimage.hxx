@@ -187,7 +187,7 @@ namespace frm
     private:
         rtl::Reference<OImageProducerThread_Impl>  m_pThread;
         ::comphelper::OInterfaceContainerHelper2   m_aSubmissionVetoListeners;
-        ::std::unique_ptr< ControlFeatureInterception >
+        std::unique_ptr< ControlFeatureInterception >
                                                    m_pFeatureInterception;
 
     protected:

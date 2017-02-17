@@ -52,7 +52,7 @@ DEFINE_INIT_SERVICE(
 
 
 void flatten_struct_members(
-    ::std::vector< Any > * vec, void const * data,
+    std::vector< Any > * vec, void const * data,
     typelib_CompoundTypeDescription * pTD )
 {
     if (pTD->pBaseTypeDescription)
@@ -85,7 +85,7 @@ Sequence< Any > make_seq_out_of_struct(
             "cannot get type descr of type " + type.getTypeName() );
     }
 
-    ::std::vector< Any > vec;
+    std::vector< Any > vec;
     vec.reserve( reinterpret_cast<typelib_CompoundTypeDescription *>(pTD)->nMembers ); // good guess
     flatten_struct_members( &vec, val.getValue(), reinterpret_cast<typelib_CompoundTypeDescription *>(pTD) );
     TYPELIB_DANGER_RELEASE( pTD );

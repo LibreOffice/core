@@ -687,7 +687,7 @@ void SAL_CALL OButtonControl::setDesignMode( sal_Bool _bOn )
 }
 
 
-void OButtonControl::getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds )
+void OButtonControl::getSupportedFeatures( std::vector< sal_Int16 >& /* [out] */ _rFeatureIds )
 {
     if ( -1 != m_nTargetUrlFeatureId )
         _rFeatureIds.push_back( m_nTargetUrlFeatureId );

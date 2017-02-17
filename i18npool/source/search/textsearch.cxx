@@ -570,7 +570,7 @@ void TextSearch::MakeForwardTab()
         sal_Int32 nDiff = nLen - n - 1;
         TextSearchJumpTable::value_type aEntry( cCh, nDiff );
 
-        ::std::pair< TextSearchJumpTable::iterator, bool > aPair =
+        std::pair< TextSearchJumpTable::iterator, bool > aPair =
             pJumpTable->insert( aEntry );
         if ( !aPair.second )
             (*(aPair.first)).second = nDiff;
@@ -597,7 +597,7 @@ void TextSearch::MakeForwardTab2()
         sal_Int32 nDiff = nLen - n - 1;
 
         TextSearchJumpTable::value_type aEntry( cCh, nDiff );
-        ::std::pair< TextSearchJumpTable::iterator, bool > aPair =
+        std::pair< TextSearchJumpTable::iterator, bool > aPair =
             pJumpTable2->insert( aEntry );
         if ( !aPair.second )
             (*(aPair.first)).second = nDiff;
@@ -622,7 +622,7 @@ void TextSearch::MakeBackwardTab()
     {
         sal_Unicode cCh = sSrchStr[n];
         TextSearchJumpTable::value_type aEntry( cCh, n );
-        ::std::pair< TextSearchJumpTable::iterator, bool > aPair =
+        std::pair< TextSearchJumpTable::iterator, bool > aPair =
             pJumpTable->insert( aEntry );
         if ( !aPair.second )
             (*(aPair.first)).second = n;
@@ -647,7 +647,7 @@ void TextSearch::MakeBackwardTab2()
     {
         sal_Unicode cCh = sSrchStr2[n];
         TextSearchJumpTable::value_type aEntry( cCh, n );
-        ::std::pair< TextSearchJumpTable::iterator, bool > aPair =
+        std::pair< TextSearchJumpTable::iterator, bool > aPair =
             pJumpTable2->insert( aEntry );
         if ( !aPair.second )
             (*(aPair.first)).second = n;

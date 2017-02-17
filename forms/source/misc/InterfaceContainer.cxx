@@ -278,7 +278,7 @@ void OInterfaceContainer::disposing()
 namespace
 {
 
-    void lcl_saveEvents( ::std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
+    void lcl_saveEvents( std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
         const Reference< XEventAttacherManager >& _rxManager, const sal_Int32 _nItemCount )
     {
         OSL_ENSURE( _rxManager.is(), "lcl_saveEvents: invalid event attacher manager!" );
@@ -294,15 +294,15 @@ namespace
     }
 
 
-    void lcl_restoreEvents( const ::std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
+    void lcl_restoreEvents( const std::vector< Sequence< ScriptEventDescriptor > >& _rSave,
         const Reference< XEventAttacherManager >& _rxManager )
     {
         OSL_ENSURE( _rxManager.is(), "lcl_restoreEvents: invalid event attacher manager!" );
         if ( !_rxManager.is() )
             return;
 
-        ::std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aLoop = _rSave.begin();
-        ::std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aEnd = _rSave.end();
+        std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aLoop = _rSave.begin();
+        std::vector< Sequence< ScriptEventDescriptor > >::const_iterator aEnd = _rSave.end();
         for ( sal_Int32 i=0; aLoop != aEnd; ++aLoop, ++i )
         {
             _rxManager->revokeScriptEvents( i );
@@ -317,7 +317,7 @@ void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStre
     // We're writing a document in SO 5.2 format (or even from earlier versions)
     // -> convert the events from the new runtime format to the format of the 5.2 files
     // but before, remember the current script events set for our children
-    ::std::vector< Sequence< ScriptEventDescriptor > > aSave;
+    std::vector< Sequence< ScriptEventDescriptor > > aSave;
     if ( m_xEventAttacher.is() )
         lcl_saveEvents( aSave, m_xEventAttacher, m_aItems.size() );
 
@@ -356,7 +356,7 @@ void SAL_CALL OInterfaceContainer::writeEvents(const Reference<XObjectOutputStre
 }
 
 
-struct TransformEventTo52Format : public ::std::unary_function< ScriptEventDescriptor, void >
+struct TransformEventTo52Format : public std::unary_function< ScriptEventDescriptor, void >
 {
     void operator()( ScriptEventDescriptor& _rDescriptor )
     {
@@ -403,7 +403,7 @@ void OInterfaceContainer::transformEvents()
                 ScriptEventDescriptor* pChildEventsEnd  =   pChildEvents    +   aChildEvents.getLength();
 
                 // do the transformation
-                ::std::for_each( pChildEvents, pChildEventsEnd, TransformEventTo52Format() );
+                std::for_each( pChildEvents, pChildEventsEnd, TransformEventTo52Format() );
 
                 // revoke the script events
                 m_xEventAttacher->revokeScriptEvents( i );
@@ -666,7 +666,7 @@ void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt) {
         {
             css::uno::Reference<css::uno::XInterface>  xCorrectType((*i).second);
             m_aMap.erase(i);
-            m_aMap.insert(::std::pair<const OUString, css::uno::Reference<css::uno::XInterface> >(::comphelper::getString(evt.NewValue),xCorrectType));
+            m_aMap.insert(std::pair<const OUString, css::uno::Reference<css::uno::XInterface> >(::comphelper::getString(evt.NewValue),xCorrectType));
         }
     }
 }
@@ -696,7 +696,7 @@ Reference<XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration()
 
 Any SAL_CALL OInterfaceContainer::getByName( const OUString& _rName )
 {
-    ::std::pair <OInterfaceMap::iterator,
+    std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
 
     if (aPair.first == aPair.second)
@@ -714,7 +714,7 @@ css::uno::Sequence<OUString> SAL_CALL OInterfaceContainer::getElementNames()
 
 sal_Bool SAL_CALL OInterfaceContainer::hasByName( const OUString& _rName )
 {
-    ::std::pair <OInterfaceMap::iterator,
+    std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
     return aPair.first != aPair.second;
 }
@@ -810,7 +810,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     else
         m_aItems.insert( m_aItems.begin() + _nIndex, pElementMetaData->xInterface );
 
-    m_aMap.insert( ::std::pair< const OUString, css::uno::Reference<css::uno::XInterface> >( sName, pElementMetaData->xInterface ) );
+    m_aMap.insert( std::pair< const OUString, css::uno::Reference<css::uno::XInterface> >( sName, pElementMetaData->xInterface ) );
 
     // announce ourself as parent to the new element
     pElementMetaData->xChild->setParent(static_cast<XContainer*>(this));
@@ -973,7 +973,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     aElementMetaData.get()->xPropertySet->addPropertyChangeListener(PROPERTY_NAME, this);
 
     // insert the new one
-    m_aMap.insert( ::std::pair<const OUString, css::uno::Reference<css::uno::XInterface>  >( sName, aElementMetaData.get()->xInterface ) );
+    m_aMap.insert( std::pair<const OUString, css::uno::Reference<css::uno::XInterface>  >( sName, aElementMetaData.get()->xInterface ) );
     m_aItems[ _nIndex ] = aElementMetaData.get()->xInterface;
 
     aElementMetaData.get()->xChild->setParent(static_cast<XContainer*>(this));
@@ -1104,7 +1104,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const An
 void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any& Element)
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
-    ::std::pair <OInterfaceMap::iterator,
+    std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(Name);
     if (aPair.first == aPair.second)
         throw NoSuchElementException();
@@ -1123,7 +1123,7 @@ void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any
     }
 
     // determine the element pos
-    sal_Int32 nPos = ::std::find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
+    sal_Int32 nPos = std::find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
 
     implReplaceByIndex( nPos, Element, aGuard );
 }
@@ -1132,12 +1132,12 @@ void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any
 void SAL_CALL OInterfaceContainer::removeByName(const OUString& Name)
 {
     ::osl::MutexGuard aGuard( m_rMutex );
-    ::std::pair <OInterfaceMap::iterator,
+    std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(Name);
     if (aPair.first == aPair.second)
         throw NoSuchElementException();
 
-    sal_Int32 nPos = ::std::find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
+    sal_Int32 nPos = std::find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
     removeByIndex(nPos);
 }
 

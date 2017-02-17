@@ -38,7 +38,7 @@ namespace xforms
     {
     private:
         typedef ::rtl::Reference< OXSDDataType >            DataType;
-        typedef ::std::map< OUString, DataType >            Repository;
+        typedef std::map< OUString, DataType >            Repository;
 
         ::osl::Mutex                                        m_aMutex;
         Repository                                          m_aRepository;

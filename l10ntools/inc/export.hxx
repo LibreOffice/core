@@ -108,7 +108,7 @@ enum class StringType {
 };
 
 
-typedef ::std::vector< ResData* > ResStack;
+typedef std::vector< ResData* > ResStack;
 class ParserQueue;
 
 /// Purpose: syntax check and export of *.src, called from lexer

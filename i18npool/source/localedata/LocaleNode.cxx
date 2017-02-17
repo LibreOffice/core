@@ -35,8 +35,8 @@
 // NOTE: MUST match the Locale versionDTD attribute defined in data/locale.dtd
 #define LOCALE_VERSION_DTD "2.0.3"
 
-typedef ::std::set< OUString > NameSet;
-typedef ::std::set< sal_Int16 > ValueSet;
+typedef std::set< OUString > NameSet;
+typedef std::set< sal_Int16 > ValueSet;
 
 namespace cssi = ::com::sun::star::i18n;
 
@@ -604,7 +604,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
     if (mnSection >= 2)
         incError("more than 2 LC_FORMAT sections");
 
-    ::std::vector< OUString > theDateAcceptancePatterns;
+    std::vector< OUString > theDateAcceptancePatterns;
 
     OUString useLocale(getAttr().getValueByName("ref"));
 
@@ -941,7 +941,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         else
         {
             bool bHaveAbbr = false;
-            for (::std::vector< OUString >::const_iterator it( theDateAcceptancePatterns.begin());
+            for (std::vector< OUString >::const_iterator it( theDateAcceptancePatterns.begin());
                     !bHaveAbbr && it != theDateAcceptancePatterns.end(); ++it)
             {
                 if ((*it).indexOf('D') > -1 && (*it).indexOf('M') > -1 && (*it).indexOf('Y') <= -1)
@@ -956,7 +956,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         for (sal_Int16 nNext = cssi::NumberFormatIndex::NUMBER_START;
                 nNext < cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES; ++nNext)
         {
-            sal_Int16 nHere = ::std::min( ((aIter != aFormatIndexSet.end() ? *aIter :
+            sal_Int16 nHere = std::min( ((aIter != aFormatIndexSet.end() ? *aIter :
                     cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES)),
                     cssi::NumberFormatIndex::INDEX_TABLE_ENTRIES);
             if (aIter != aFormatIndexSet.end()) ++aIter;

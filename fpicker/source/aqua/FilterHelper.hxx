@@ -36,8 +36,8 @@
 
 typedef css::beans::StringPair UnoFilterEntry;
 typedef css::uno::Sequence< UnoFilterEntry >   UnoFilterList;  // can be transported more effectively
-typedef ::std::list<NSString *> NSStringList;
-typedef ::std::list<OUString> OUStringList;
+typedef std::list<NSString *> NSStringList;
+typedef std::list<OUString> OUStringList;
 
 struct FilterEntry
 {
@@ -72,7 +72,7 @@ public:
     const UnoFilterEntry*   endSubFilters() const { return m_aSubFilters.getConstArray() + m_aSubFilters.getLength(); }
 };
 
-typedef ::std::vector < FilterEntry >       FilterList;
+typedef std::vector < FilterEntry >       FilterList;
 
 class FilterHelper {
 

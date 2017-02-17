@@ -97,7 +97,7 @@ struct SVGState
 struct PartialState
 {
     PushFlags                           meFlags;
-    ::std::unique_ptr<vcl::Font>        mupFont;
+    std::unique_ptr<vcl::Font>        mupFont;
     sal_Int32                           mnRegionClipPathId;
 
     const vcl::Font&        getFont( const vcl::Font& rDefaultFont ) const
@@ -128,7 +128,7 @@ struct PartialState
 class SVGContextHandler
 {
 private:
-    ::std::stack<PartialState> maStateStack;
+    std::stack<PartialState> maStateStack;
     SVGState maCurrentState;
 
 public:
@@ -183,7 +183,7 @@ struct SVGShapeDescriptor
     Color                               maShapeLineColor;
     sal_Int32                           mnStrokeWidth;
     SvtGraphicStroke::DashArray         maDashArray;
-    ::std::unique_ptr< Gradient >       mapShapeGradient;
+    std::unique_ptr< Gradient >       mapShapeGradient;
     OUString                            maId;
     basegfx::B2DLineJoin        maLineJoin;
     css::drawing::LineCap       maLineCap;
@@ -320,8 +320,8 @@ private:
     sal_Int32                                   mnCurMaskId;
     sal_Int32                                   mnCurPatternId;
     sal_Int32                                   mnCurClipPathId;
-    ::std::unique_ptr< SvXMLElementExport >     mpCurrentClipRegionElem;
-    ::std::unique_ptr< SVGShapeDescriptor >     mapCurShape;
+    std::unique_ptr< SvXMLElementExport >     mpCurrentClipRegionElem;
+    std::unique_ptr< SVGShapeDescriptor >     mapCurShape;
     SVGExport&                                  mrExport;
     SVGContextHandler                           maContextHandler;
     SVGState&                                   mrCurrentState;

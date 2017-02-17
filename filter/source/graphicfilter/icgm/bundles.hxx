@@ -156,7 +156,7 @@ class CGMFList
 {
     sal_uInt32      nFontNameCount;
     sal_uInt32      nCharSetCount;
-    ::std::vector< FontEntry* >
+    std::vector< FontEntry* >
                     aFontEntryList;
     void            ImplDeleteList();
 

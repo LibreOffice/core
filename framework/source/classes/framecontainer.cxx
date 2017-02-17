@@ -87,7 +87,7 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
 {
     SolarMutexGuard g;
 
-    TFrameContainer::iterator aSearchedItem = ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );
+    TFrameContainer::iterator aSearchedItem = std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );
     if (aSearchedItem!=m_aContainer.end())
     {
         m_aContainer.erase( aSearchedItem );
@@ -111,7 +111,7 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
 bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
 {
     SolarMutexGuard g;
-    return( ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame ) != m_aContainer.end() );
+    return( std::find( m_aContainer.begin(), m_aContainer.end(), xFrame ) != m_aContainer.end() );
 }
 
 /**-***************************************************************************************************************

@@ -34,7 +34,7 @@
 #include <vector>
 #include <map>
 
-typedef ::std::map<BitmapChecksum, sal_uInt16> ChecksumCache;
+typedef std::map<BitmapChecksum, sal_uInt16> ChecksumCache;
 
 class GDIMetaFile;
 
@@ -103,7 +103,7 @@ struct PageInfo
     sal_uInt16      mnObjectsID;
     sal_uInt16      mnForegroundID;
 
-    ::std::vector<ShapeInfo*>
+    std::vector<ShapeInfo*>
                     maShapesVector;
 
     PageInfo();
@@ -148,7 +148,7 @@ private:
 
     css::uno::Reference< css::drawing::XGraphicExportFilter > mxGraphicExporter;
 
-    ::std::map<sal_uInt32, PageInfo> maPagesMap;
+    std::map<sal_uInt32, PageInfo> maPagesMap;
 
     sal_uInt16 exportDrawPageBackground(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage > const & xPage);
     sal_uInt16 exportMasterPageObjects(sal_uInt16 nPage, css::uno::Reference< css::drawing::XDrawPage >& xMasterPage);

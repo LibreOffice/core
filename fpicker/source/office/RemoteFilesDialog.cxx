@@ -1352,8 +1352,8 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
     m_pTreeView->SetSelectHdl( Link<SvTreeListBox*,void>() );
 
     // read cached data for this url and fill the tree
-    const ::std::vector< SvtContentEntry >& rFolders = m_pFileView->GetContent();
-    ::std::vector< std::pair< OUString, OUString > > aFolders;
+    const std::vector< SvtContentEntry >& rFolders = m_pFileView->GetContent();
+    std::vector< std::pair< OUString, OUString > > aFolders;
 
     m_pName_ed->ClearEntries();
 

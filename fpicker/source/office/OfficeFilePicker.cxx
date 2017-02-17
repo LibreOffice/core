@@ -332,7 +332,7 @@ void SvtFilePicker::notify( sal_Int16 _nEventId, sal_Int16 _nControlId )
 
 namespace {
 
-    struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
+    struct FilterTitleMatch : public std::unary_function< FilterEntry, bool >
     {
     protected:
         const OUString& rTitle;
@@ -350,7 +350,7 @@ namespace {
             else
                 // a filter group -> search the sub filters
                 bMatch =
-                    ::std::any_of(
+                    std::any_of(
                         _rEntry.beginSubFilters(),
                         _rEntry.endSubFilters(),
                         *this
@@ -372,7 +372,7 @@ bool SvtFilePicker::FilterNameExists( const OUString& rTitle )
 
     if ( m_pFilterList )
         bRet =
-            ::std::any_of(
+            std::any_of(
                 m_pFilterList->begin(),
                 m_pFilterList->end(),
                 FilterTitleMatch( rTitle )
@@ -391,7 +391,7 @@ bool SvtFilePicker::FilterNameExists( const UnoFilterList& _rGroupedFilters )
         const UnoFilterEntry* pStart = _rGroupedFilters.getConstArray();
         const UnoFilterEntry* pEnd = pStart + _rGroupedFilters.getLength();
         for ( ; pStart != pEnd; ++pStart )
-            if ( ::std::any_of( m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch( pStart->First ) ) )
+            if ( std::any_of( m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch( pStart->First ) ) )
                 break;
 
         bRet = pStart != pEnd;

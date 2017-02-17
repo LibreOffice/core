@@ -250,7 +250,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     OUString EVENT_ON_DOCUMENT_ADDED("onDocumentAdded");     // Job API event : OnCreate or OnLoadFinished
 
     OUString aModuleIdentifier;
-    ::std::vector< JobData::TJob2DocEventBinding > lJobs;
+    std::vector< JobData::TJob2DocEventBinding > lJobs;
 
     /* SAFE */ {
     osl::MutexGuard g(rBHelper.rMutex);
@@ -294,7 +294,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     } /* SAFE */
 
     // step over all enabled jobs and execute it
-    ::std::vector< JobData::TJob2DocEventBinding >::const_iterator pIt;
+    std::vector< JobData::TJob2DocEventBinding >::const_iterator pIt;
     for (  pIt  = lJobs.begin();
            pIt != lJobs.end();
          ++pIt                 )

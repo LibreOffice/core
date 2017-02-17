@@ -95,7 +95,7 @@
 namespace frm
 {
 
-typedef ::std::vector< ::connectivity::ORowSetValue >   ValueList;
+typedef std::vector< ::connectivity::ORowSetValue >   ValueList;
 
 class OListBoxModel :public OBoundControlModel
                     ,public OEntryListHelper

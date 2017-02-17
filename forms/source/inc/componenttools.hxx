@@ -32,7 +32,7 @@ namespace frm
 {
 
 
-    struct TypeCompareLess : public ::std::binary_function< css::uno::Type, css::uno::Type, bool >
+    struct TypeCompareLess : public std::binary_function< css::uno::Type, css::uno::Type, bool >
     {
         bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
         {
@@ -47,7 +47,7 @@ namespace frm
     {
     public:
         typedef css::uno::Sequence< css::uno::Type >            TypeSequence;
-        typedef ::std::set< css::uno::Type, TypeCompareLess >   TypeSet;
+        typedef std::set< css::uno::Type, TypeCompareLess >   TypeSet;
 
     private:
         TypeSet     m_aTypes;

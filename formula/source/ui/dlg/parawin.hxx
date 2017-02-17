@@ -48,7 +48,7 @@ private:
         Link<ParaWin&,void>  aFxLink;
         Link<ParaWin&,void>  aArgModifiedLink;
 
-        ::std::vector<sal_uInt16>   aVisibleArgMapping;
+        std::vector<sal_uInt16>   aVisibleArgMapping;
         const IFunctionDescription* pFuncDesc;
         IControlReferenceHandler*   pMyParent;
         sal_uInt16          nArgs;      // unsuppressed arguments
@@ -89,7 +89,7 @@ private:
 
         ArgInput        aArgInput[4];
         OUString        aDefaultString;
-        ::std::vector<OUString>
+        std::vector<OUString>
                         aParaArray;
 
         DECL_LINK( ScrollHdl, ScrollBar*, void);

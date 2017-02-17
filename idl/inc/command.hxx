@@ -23,8 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <vector>
 
-typedef ::std::vector< OUString > StringList;
-typedef ::std::vector< OString* > ByteStringList;
+typedef std::vector< OUString > StringList;
+typedef std::vector< OString* > ByteStringList;
 
 class SvCommand
 {

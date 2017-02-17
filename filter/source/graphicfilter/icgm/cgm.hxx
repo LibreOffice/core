@@ -75,8 +75,8 @@ class CGM
         CGMElements*        pElement;
         CGMElements*        pCopyOfE;
         CGMImpressOutAct*   mpOutAct;
-        ::std::vector< sal_uInt8 * > maDefRepList;
-        ::std::vector< sal_uInt32  > maDefRepSizeList;
+        std::vector< sal_uInt8 * > maDefRepList;
+        std::vector< sal_uInt32  > maDefRepSizeList;
 
         sal_uInt8*              mpSource;         // start of source buffer that is not increased
                                                   // ( instead use mnParaCount to index )

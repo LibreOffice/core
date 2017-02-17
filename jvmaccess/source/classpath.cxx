@@ -52,7 +52,7 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
     if (ctorUrl == nullptr) {
         return nullptr;
     }
-    ::std::vector< jobject > urls;
+    std::vector< jobject > urls;
     for (::sal_Int32 i = 0; i != -1;) {
         OUString url(classPath.getToken(0, ' ', i));
         if (!url.isEmpty()) {

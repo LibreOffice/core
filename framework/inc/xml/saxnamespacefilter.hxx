@@ -61,7 +61,7 @@ class FWE_DLLPUBLIC SaxNamespaceFilter :
             const css::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
 
     protected:
-        typedef ::std::stack< XMLNamespaces > NamespaceStack;
+        typedef std::stack< XMLNamespaces > NamespaceStack;
 
         OUString getErrorLineString();
 

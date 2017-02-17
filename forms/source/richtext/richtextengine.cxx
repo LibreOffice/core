@@ -117,10 +117,10 @@ namespace frm
 
     void RichTextEngine::revokeEngineStatusListener( IEngineStatusListener* _pListener )
     {
-        ::std::vector< IEngineStatusListener* >::iterator aPos = ::std::find_if(
+        std::vector< IEngineStatusListener* >::iterator aPos = std::find_if(
             m_aStatusListeners.begin(),
             m_aStatusListeners.end(),
-            ::std::bind2nd( ::std::equal_to< IEngineStatusListener* >( ), _pListener )
+            std::bind2nd( std::equal_to< IEngineStatusListener* >( ), _pListener )
         );
         OSL_ENSURE( aPos != m_aStatusListeners.end(), "RichTextEngine::revokeEngineStatusListener: listener not registered!" );
         if ( aPos != m_aStatusListeners.end() )
@@ -130,7 +130,7 @@ namespace frm
 
     IMPL_LINK( RichTextEngine, EditEngineStatusChanged, EditStatus&, _rStatus, void )
     {
-        for ( ::std::vector< IEngineStatusListener* >::const_iterator aLoop = m_aStatusListeners.begin();
+        for ( std::vector< IEngineStatusListener* >::const_iterator aLoop = m_aStatusListeners.begin();
               aLoop != m_aStatusListeners.end();
               ++aLoop
             )

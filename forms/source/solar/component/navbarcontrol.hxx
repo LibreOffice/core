@@ -122,7 +122,7 @@ namespace frm
         virtual void    interceptorsChanged( ) override;
         virtual void    featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled ) override;
         virtual void    allFeatureStatesChanged( ) override;
-        virtual void    getSupportedFeatures( ::std::vector< sal_Int16 >& /* [out] */ _rFeatureIds ) override;
+        virtual void    getSupportedFeatures( std::vector< sal_Int16 >& /* [out] */ _rFeatureIds ) override;
 
         // IFeatureDispatcher overriables
         virtual bool    isEnabled( sal_Int16 _nFeatureId ) const override;

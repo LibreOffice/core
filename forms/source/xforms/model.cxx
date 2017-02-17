@@ -194,7 +194,7 @@ void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
     OSL_ENSURE( pTag != nullptr, "empty tag?" );
     OSL_ENSURE( xNode.is(), "no node" );
 
-    MIPs_t::value_type aValue( xNode, ::std::pair<void*,MIP>( pTag, rMIP ) );
+    MIPs_t::value_type aValue( xNode, std::pair<void*,MIP>( pTag, rMIP ) );
     maMIPs.insert( aValue );
 }
 

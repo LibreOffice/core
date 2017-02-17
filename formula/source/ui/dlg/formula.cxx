@@ -74,7 +74,7 @@ using namespace ::com::sun::star;
 class FormulaDlg_Impl
 {
 public:
-    ::std::pair<RefButton*,RefEdit*>
+    std::pair<RefButton*,RefEdit*>
         RefInputStartBefore( RefEdit* pEdit, RefButton* pButton );
     void            RefInputStartAfter( RefEdit* pEdit, RefButton* pButton );
     void            RefInputDoneAfter( bool bForced );
@@ -136,7 +136,7 @@ public:
 public:
     mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
     uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
-    ::std::unique_ptr<FormulaTokenArray>                    m_pTokenArray;
+    std::unique_ptr<FormulaTokenArray>                    m_pTokenArray;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aSpecialOpCodes;
     mutable const sheet::FormulaOpCodeMapEntry*             m_pSpecialOpCodesEnd;
     mutable uno::Sequence< sheet::FormulaToken >            m_aSeparatorsOpCodes;
@@ -146,7 +146,7 @@ public:
     mutable const sheet::FormulaOpCodeMapEntry*             m_pUnaryOpCodesEnd;
     mutable uno::Sequence< sheet::FormulaOpCodeMapEntry >   m_aBinaryOpCodes;
     mutable const sheet::FormulaOpCodeMapEntry*             m_pBinaryOpCodesEnd;
-    ::std::map<FormulaToken*,sheet::FormulaToken>           m_aTokenMap;
+    std::map<FormulaToken*,sheet::FormulaToken>           m_aTokenMap;
     IFormulaEditorHelper*                                   m_pHelper;
     VclPtr<Dialog>          m_pParent;
     VclPtr<TabControl>      m_pTabCtrl;
@@ -204,7 +204,7 @@ public:
     bool            bEditFlag;
     const IFunctionDescription* pFuncDesc;
     sal_Int32      nArgs;
-    ::std::vector< OUString > m_aArguments;
+    std::vector< OUString > m_aArguments;
     Selection       aFuncSel;
 
     sal_Int32       mnFuncExpStart;     ///< current formula position for treeview results
@@ -430,7 +430,7 @@ void FormulaDlg_Impl::InitFormulaOpCodeMapper()
 
 void FormulaDlg_Impl::DeleteArgs()
 {
-    ::std::vector< OUString>().swap(m_aArguments);
+    std::vector< OUString>().swap(m_aArguments);
     nArgs = 0;
 }
 
@@ -508,7 +508,7 @@ sal_Int32 FormulaDlg_Impl::GetFunctionPos(sal_Int32 nPos)
                 bFlag = false;
                 nFuncPos = nPrevFuncPos;
             }
-            bool bIsFunction = ::std::find_if(m_aFunctionOpCodes.getConstArray(),
+            bool bIsFunction = std::find_if(m_aFunctionOpCodes.getConstArray(),
                                     m_pFunctionOpCodesEnd,
                                     [&eOp](const sheet::FormulaOpCodeMapEntry& aEntry) { return aEntry.Token.OpCode == eOp; } ) != m_pFunctionOpCodesEnd;
 
@@ -634,7 +634,7 @@ void FormulaDlg_Impl::MakeTree(StructPage* _pTree,SvTreeListEntry* pParent,Formu
         // #i101512# for output, the original token is needed
         FormulaToken* pOrigToken = (_pToken->GetType() == svFAP) ? _pToken->GetFAPOrigToken() : _pToken;
         uno::Sequence<sheet::FormulaToken> aArgs(1);
-        ::std::map<FormulaToken*,sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
+        std::map<FormulaToken*,sheet::FormulaToken>::const_iterator itr = m_aTokenMap.find(pOrigToken);
         if (itr == m_aTokenMap.end())
             return;
 
@@ -773,7 +773,7 @@ void FormulaDlg_Impl::UpdateTokenArray( const OUString& rStrExp)
     {
         for (sal_Int32 nPos=0; nPos<nLen; nPos++)
         {
-            m_aTokenMap.insert(::std::map<FormulaToken*,sheet::FormulaToken>::value_type(pTokens[nPos],m_aTokenList[nPos]));
+            m_aTokenMap.insert(std::map<FormulaToken*,sheet::FormulaToken>::value_type(pTokens[nPos],m_aTokenList[nPos]));
         }
     } // if ( pTokens && nLen == m_aTokenList.getLength() )
 
@@ -1452,7 +1452,7 @@ void FormulaDlg_Impl::UpdateSelection()
     m_pMEFormula->UpdateOldSel();
 }
 
-::std::pair<RefButton*,RefEdit*> FormulaDlg_Impl::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
+std::pair<RefButton*,RefEdit*> FormulaDlg_Impl::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
 {
     //because its initially hidden, give it its optimal
     //size so clicking the refbutton has an initial
@@ -1471,7 +1471,7 @@ void FormulaDlg_Impl::UpdateSelection()
 
     m_pRefBtn->Show( pButton != nullptr );
 
-    ::std::pair<RefButton*,RefEdit*> aPair;
+    std::pair<RefButton*,RefEdit*> aPair;
     aPair.first = pButton ? m_pRefBtn.get() : nullptr;
     aPair.second = m_pEdRef;
     return aPair;
@@ -1721,7 +1721,7 @@ void FormulaModalDialog::Update()
     m_pImpl->Update();
 }
 
-::std::pair<RefButton*,RefEdit*> FormulaModalDialog::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
+std::pair<RefButton*,RefEdit*> FormulaModalDialog::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
 {
     return m_pImpl->RefInputStartBefore( pEdit, pButton );
 }
@@ -1811,7 +1811,7 @@ void FormulaDlg::DoEnter()
     m_pImpl->DoEnter(false);
 }
 
-::std::pair<RefButton*,RefEdit*> FormulaDlg::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
+std::pair<RefButton*,RefEdit*> FormulaDlg::RefInputStartBefore( RefEdit* pEdit, RefButton* pButton )
 {
     return m_pImpl->RefInputStartBefore( pEdit, pButton );
 }

@@ -220,7 +220,7 @@ bool isSubSet(const css::uno::Any& aSubSet,
                                                   it1 != stl_s1.end()  ;
                                                 ++it1                  )
                 {
-                    if (::std::find(stl_s2.begin(), stl_s2.end(), *it1) == stl_s2.end())
+                    if (std::find(stl_s2.begin(), stl_s2.end(), *it1) == stl_s2.end())
                     {
                         FILTER_CONFIG_LOG_1_("isSubSet() ... check for list types [OUString] ... didn't found \"%s\" => return FALSE\n", _FILTER_CONFIG_TO_ASCII_(*it1))
                         return false;

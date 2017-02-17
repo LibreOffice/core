@@ -346,7 +346,7 @@ namespace frm
         const sal_uInt16 nItemCount = m_pToolbar->GetItemCount();
 
         // collect the FormFeatures in the toolbar
-        typedef ::std::vector< sal_Int16 >  FormFeatures;
+        typedef std::vector< sal_Int16 >  FormFeatures;
         FormFeatures aFormFeatures;
         aFormFeatures.reserve( nItemCount );
 

@@ -40,8 +40,8 @@ namespace formula
             virtual const IFunctionCategory* getCategory() const override { return nullptr; }
             virtual OUString getDescription() const override { return OUString(); }
             virtual sal_Int32 getSuppressedArgumentCount() const override { return 0; }
-            virtual OUString getFormula(const ::std::vector< OUString >& ) const override { return OUString(); }
-            virtual void fillVisibleArgumentMapping(::std::vector<sal_uInt16>& ) const override {}
+            virtual OUString getFormula(const std::vector< OUString >& ) const override { return OUString(); }
+            virtual void fillVisibleArgumentMapping(std::vector<sal_uInt16>& ) const override {}
             virtual void initArgumentInfo()  const override {}
             virtual OUString getSignature() const override { return OUString(); }
             virtual OString getHelpId() const override { return ""; }
@@ -76,7 +76,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
                                      sal_Int32&       rFStart,   // Input and output
                                      sal_Int32*       pFEnd,     // = NULL
                                      const IFunctionDescription**   ppFDesc,   // = NULL
-                                     ::std::vector< OUString>*   pArgs )  const // = NULL
+                                     std::vector< OUString>*   pArgs )  const // = NULL
 {
     sal_Int32  nOldStart = rFStart;
     OUString   aFname;
@@ -128,7 +128,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
 void FormulaHelper::FillArgStrings( const OUString&   rFormula,
                                     sal_Int32         nFuncPos,
                                     sal_uInt16        nArgs,
-                                    ::std::vector< OUString >& _rArgs ) const
+                                    std::vector< OUString >& _rArgs ) const
 {
     sal_Int32       nStart  = 0;
     sal_Int32       nEnd    = 0;
@@ -167,7 +167,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
 }
 
 
-void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
+void FormulaHelper::GetArgStrings( std::vector< OUString >& _rArgs,
                                    const OUString& rFormula,
                                    sal_Int32 nFuncPos,
                                    sal_uInt16 nArgs ) const
@@ -203,7 +203,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
         return nStart;
 
     sal_Int32  nFStart = FUNC_NOTFOUND;
-    sal_Int32  nParPos = bBack ? ::std::min( nStart, nStrLen - 1) : nStart;
+    sal_Int32  nParPos = bBack ? std::min( nStart, nStrLen - 1) : nStart;
 
     bool bRepeat;
     do

@@ -270,7 +270,7 @@ namespace frm
             {
                 if ( pLoop->Name == _rPropertyName )
                 {
-                    ::std::copy( pLoop + 1, pEnd, pLoop );
+                    std::copy( pLoop + 1, pEnd, pLoop );
                     _rSeq.realloc( _rSeq.getLength() - 1 );
                     break;
                 }

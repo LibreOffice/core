@@ -114,8 +114,8 @@ void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
 
     // normalize value to fit the range of 0-100%
     sal_uInt16 nPercent = sal::static_int_cast< sal_uInt16 >(
-        ::std::min(
-            ((nValue*100) / ::std::max(nRange,(sal_Int32)1)), (sal_Int32)100));
+        std::min(
+            ((nValue*100) / std::max(nRange,(sal_Int32)1)), (sal_Int32)100));
 
     if (m_pStatusBar)
         m_pStatusBar->SetProgressValue(nPercent);

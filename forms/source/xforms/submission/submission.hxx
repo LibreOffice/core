@@ -114,7 +114,7 @@ protected:
     css::uno::Reference< css::uno::XComponentContext >      m_xContext;
     OUString m_aEncoding;
 
-    ::std::unique_ptr< CSerialization > createSerialization(const css::uno::Reference< css::task::XInteractionHandler >& aHandler
+    std::unique_ptr< CSerialization > createSerialization(const css::uno::Reference< css::task::XInteractionHandler >& aHandler
                                                   ,css::uno::Reference<css::ucb::XCommandEnvironment>& _rOutEnv);
 
 public:

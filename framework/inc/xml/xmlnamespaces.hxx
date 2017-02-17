@@ -44,7 +44,7 @@ class FWE_DLLPUBLIC XMLNamespaces final
         OUString applyNSToElementName( const OUString& ) const;
 
     private:
-        typedef ::std::map< OUString, OUString > NamespaceMap;
+        typedef std::map< OUString, OUString > NamespaceMap;
 
         /// @throws css::xml::sax::SAXException
         OUString getNamespaceValue( const OUString& aNamespace ) const;

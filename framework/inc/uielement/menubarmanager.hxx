@@ -211,7 +211,7 @@ class MenuBarManager : public css::frame::XStatusListener                ,
         css::uno::Reference< css::frame::XFrame >                    m_xFrame;
         css::uno::Reference< css::container::XNameAccess >           m_xUICommandLabels;
         css::uno::Reference< css::frame::XUIControllerFactory >      m_xPopupMenuControllerFactory;
-        ::std::vector< MenuItemHandler* >                            m_aMenuItemHandlerVector;
+        std::vector< MenuItemHandler* >                            m_aMenuItemHandlerVector;
         osl::Mutex                                                   m_mutex;
         ::cppu::OMultiTypeInterfaceContainerHelper                   m_aListenerContainer;   /// container for ALL Listener
         css::uno::Reference< css::frame::XDispatchProvider >         m_xDispatchProvider;

@@ -135,8 +135,8 @@ IndexEntrySupplier::getLocaleSpecificIndexEntrySupplier(const Locale& rLocale, c
                     LocaleDataImpl::getFirstLocaleServiceName( rLocale) + "_" + aSortAlgorithm);
             if (!bLoaded)
             {
-                ::std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
-                for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+                std::vector< OUString > aFallbacks( LocaleDataImpl::getFallbackLocaleServiceNames( rLocale));
+                for (std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
                 {
                     bLoaded = createLocaleSpecificIndexEntrySupplier( *it + "_" + aSortAlgorithm);
                     if (bLoaded)

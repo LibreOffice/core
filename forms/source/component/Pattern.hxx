@@ -35,7 +35,7 @@ class OPatternModel
 {
 private:
     css::uno::Any               m_aLastKnownValue;
-    ::std::unique_ptr< ::dbtools::FormattedColumnValue >
+    std::unique_ptr< ::dbtools::FormattedColumnValue >
                                 m_pFormattedValue;
 
 public:

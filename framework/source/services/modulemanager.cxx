@@ -300,7 +300,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
 {
     ::comphelper::SequenceAsHashMap lSearchProps(lProperties);
     const css::uno::Sequence< OUString > lModules = getElementNames();
-    ::std::vector< css::uno::Any > lResult;
+    std::vector< css::uno::Any > lResult;
 
     for (sal_Int32 i = 0; i < lModules.getLength(); ++i)
     {

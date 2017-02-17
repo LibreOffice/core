@@ -81,7 +81,7 @@ namespace framework
 
             virtual Image                           getImageFromCommandURL( vcl::ImageType nImageType, const OUString& rCommandURL ) override;
             virtual bool                            hasImage( vcl::ImageType nImageType, const OUString& rCommandURL ) override;
-            virtual ::std::vector< OUString >&      getImageCommandNames() override;
+            virtual std::vector< OUString >&      getImageCommandNames() override;
     };
 
     class ImageManagerImpl
@@ -159,7 +159,7 @@ namespace framework
                 NotifyOp_Replace
             };
 
-            typedef ::std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
+            typedef std::vector< css::ui::ConfigurationEvent > ConfigEventNotifyContainer;
 
             void                                      implts_initialize();
             void                                      implts_notifyContainerListener( const css::ui::ConfigurationEvent& aEvent, NotifyOp eOp );

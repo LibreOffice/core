@@ -235,7 +235,7 @@ sal_Int32 compileFile(const OString * pathname)
     idlc()->setMainFileName(fileName);
     idlc()->setRealFileName(tmpFile);
 
-    ::std::vector< OUString> lCppArgs;
+    std::vector< OUString> lCppArgs;
     lCppArgs.push_back("-DIDL");
     lCppArgs.push_back("-C");
     lCppArgs.push_back("-zI");
@@ -317,8 +317,8 @@ sal_Int32 compileFile(const OString * pathname)
     rtl_uString** pCmdArgs = nullptr;
     pCmdArgs = static_cast<rtl_uString**>(rtl_allocateZeroMemory(nCmdArgs * sizeof(rtl_uString*)));
 
-    ::std::vector< OUString >::iterator iter = lCppArgs.begin();
-    ::std::vector< OUString >::iterator end = lCppArgs.end();
+    std::vector< OUString >::iterator iter = lCppArgs.begin();
+    std::vector< OUString >::iterator end = lCppArgs.end();
     int i = 0;
     while ( iter != end ) {
         pCmdArgs[i++] = (*iter).pData;

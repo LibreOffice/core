@@ -107,7 +107,7 @@ const sal_uInt8 TAG_HEADER          = 0xff;
 sal_uInt32 getFixed( double fValue );
 
 
-typedef ::std::map<BitmapChecksum, sal_uInt16> ChecksumCache;
+typedef std::map<BitmapChecksum, sal_uInt16> ChecksumCache;
 
 /** container class to create bit structures */
 class BitStream

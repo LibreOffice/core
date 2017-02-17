@@ -453,7 +453,7 @@ namespace frm
             // ensure the values will be  formatted according to the field format
             const ::dbtools::FormattedColumnValue aFormatter( m_xFormatter, xDataField );
 
-            ::std::vector< OUString > aProposals;
+            std::vector< OUString > aProposals;
             aProposals.reserve(16);
 
             while ( xListCursor->next() && ( aProposals.size() < size_t( SHRT_MAX ) ) )
@@ -469,7 +469,7 @@ namespace frm
             xComboBox->addItems( aStringSeq, 0 );
 
             // set the drop down line count to something reasonable
-            const sal_Int16 nLineCount = ::std::min( sal_Int16( 16 ), sal_Int16( aStringSeq.getLength() ) );
+            const sal_Int16 nLineCount = std::min( sal_Int16( 16 ), sal_Int16( aStringSeq.getLength() ) );
             xComboBox->setDropDownLineCount( nLineCount );
         }
         catch( const Exception& )
@@ -849,7 +849,7 @@ namespace frm
                         Sequence< OUString > aValueItems;
                         OSL_VERIFY( xControlModel->getPropertyValue( PROPERTY_VALUE_SEQ ) >>= aValueItems );
                         OSL_ENSURE( aDisplayItems.getLength() == aValueItems.getLength(), "OFilterControl::initialize: inconsistent item lists!" );
-                        for ( sal_Int32 i=0; i < ::std::min( aDisplayItems.getLength(), aValueItems.getLength() ); ++i )
+                        for ( sal_Int32 i=0; i < std::min( aDisplayItems.getLength(), aValueItems.getLength() ); ++i )
                             m_aDisplayItemToValueItem[ aDisplayItems[i] ] = aValueItems[i];
                     }
                     break;

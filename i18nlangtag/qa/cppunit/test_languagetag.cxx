@@ -155,7 +155,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT_EQUAL( OUString("CS"), sr_Latn_CS.getCountry() );
         CPPUNIT_ASSERT_EQUAL( OUString("Latn"), sr_Latn_CS.getScript() );
         CPPUNIT_ASSERT_EQUAL( OUString("sr-Latn"), sr_Latn_CS.getLanguageAndScript() );
-        ::std::vector< OUString > sr_Latn_CS_Fallbacks( sr_Latn_CS.getFallbackStrings( true));
+        std::vector< OUString > sr_Latn_CS_Fallbacks( sr_Latn_CS.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(9), sr_Latn_CS_Fallbacks.size());
         CPPUNIT_ASSERT_EQUAL( OUString("sr-Latn-CS"), sr_Latn_CS_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("sr-Latn-YU"), sr_Latn_CS_Fallbacks[1]);
@@ -186,7 +186,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT_EQUAL( OUString("RS"), sh_RS.getCountry() );
         CPPUNIT_ASSERT_EQUAL( OUString("Latn"), sh_RS.getScript() );
         CPPUNIT_ASSERT_EQUAL( OUString("sr-Latn"), sh_RS.getLanguageAndScript() );
-        ::std::vector< OUString > sh_RS_Fallbacks( sh_RS.getFallbackStrings( true));
+        std::vector< OUString > sh_RS_Fallbacks( sh_RS.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(6), sh_RS_Fallbacks.size());
         CPPUNIT_ASSERT_EQUAL( OUString("sr-Latn-RS"), sh_RS_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("sh-RS"), sh_RS_Fallbacks[1]);
@@ -218,7 +218,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT_EQUAL( OUString("BA"), bs_Latn_BA.getCountry() );
         CPPUNIT_ASSERT( bs_Latn_BA.getScript().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( OUString("bs"), bs_Latn_BA.getLanguageAndScript() );
-        ::std::vector< OUString > bs_Latn_BA_Fallbacks( bs_Latn_BA.getFallbackStrings( true));
+        std::vector< OUString > bs_Latn_BA_Fallbacks( bs_Latn_BA.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(2), bs_Latn_BA_Fallbacks.size());
         CPPUNIT_ASSERT_EQUAL( OUString("bs-BA"), bs_Latn_BA_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("bs"), bs_Latn_BA_Fallbacks[1]);
@@ -243,7 +243,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT_EQUAL( OUString("ES"), ca_ES_valencia.getCountry() );
         CPPUNIT_ASSERT( ca_ES_valencia.getScript().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( OUString("ca"), ca_ES_valencia.getLanguageAndScript() );
-        ::std::vector< OUString > ca_ES_valencia_Fallbacks( ca_ES_valencia.getFallbackStrings( true));
+        std::vector< OUString > ca_ES_valencia_Fallbacks( ca_ES_valencia.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(5), ca_ES_valencia_Fallbacks.size());
         CPPUNIT_ASSERT_EQUAL( OUString("ca-ES-valencia"), ca_ES_valencia_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("ca-XV"), ca_ES_valencia_Fallbacks[1]);
@@ -269,7 +269,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( ca_valencia.getCountry().isEmpty() );
         CPPUNIT_ASSERT( ca_valencia.getScript().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( OUString("ca"), ca_valencia.getLanguageAndScript() );
-        ::std::vector< OUString > ca_valencia_Fallbacks( ca_valencia.getFallbackStrings( true));
+        std::vector< OUString > ca_valencia_Fallbacks( ca_valencia.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(2), ca_valencia_Fallbacks.size());
         CPPUNIT_ASSERT_EQUAL( OUString("ca-valencia"), ca_valencia_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("ca"), ca_valencia_Fallbacks[1]);
@@ -294,7 +294,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT_EQUAL( OUString("ES"), ca_XV.getCountry() );
         CPPUNIT_ASSERT( ca_XV.getScript().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( OUString("ca"), ca_XV.getLanguageAndScript() );
-        ::std::vector< OUString > ca_XV_Fallbacks( ca_XV.getFallbackStrings( true));
+        std::vector< OUString > ca_XV_Fallbacks( ca_XV.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(5), ca_XV_Fallbacks.size());
         CPPUNIT_ASSERT_EQUAL( OUString("ca-ES-valencia"), ca_XV_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("ca-XV"), ca_XV_Fallbacks[1]);
@@ -320,7 +320,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT_EQUAL( OUString("DE"), de_DE.getCountry() );
         CPPUNIT_ASSERT( de_DE.getScript().isEmpty() );
         CPPUNIT_ASSERT_EQUAL( OUString("de"), de_DE.getLanguageAndScript() );
-        ::std::vector< OUString > de_DE_Fallbacks( de_DE.getFallbackStrings( true));
+        std::vector< OUString > de_DE_Fallbacks( de_DE.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(2), de_DE_Fallbacks.size());
         CPPUNIT_ASSERT_EQUAL( OUString("de-DE"), de_DE_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("de"), de_DE_Fallbacks[1]);
@@ -406,7 +406,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( !de_1901.isIsoODF() );
         CPPUNIT_ASSERT_EQUAL( OUString("de"), de_1901.getLanguageAndScript() );
         CPPUNIT_ASSERT_EQUAL( OUString("1901"), de_1901.getVariants() );
-        ::std::vector< OUString > de_1901_Fallbacks( de_1901.getFallbackStrings( true));
+        std::vector< OUString > de_1901_Fallbacks( de_1901.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(2), de_1901_Fallbacks.size());
         CPPUNIT_ASSERT_EQUAL( OUString("de-1901"), de_1901_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("de"), de_1901_Fallbacks[1]);
@@ -429,7 +429,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( !en_GB_oed.isIsoODF() );
         CPPUNIT_ASSERT_EQUAL( OUString("en"), en_GB_oed.getLanguageAndScript() );
         CPPUNIT_ASSERT_EQUAL( OUString("oed"), en_GB_oed.getVariants() );
-        ::std::vector< OUString > en_GB_oed_Fallbacks( en_GB_oed.getFallbackStrings( true));
+        std::vector< OUString > en_GB_oed_Fallbacks( en_GB_oed.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(4), en_GB_oed_Fallbacks.size() );
         CPPUNIT_ASSERT_EQUAL( OUString("en-GB-oed"), en_GB_oed_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("en-GB-oxendict"), en_GB_oed_Fallbacks[1]);
@@ -453,7 +453,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( !en_GB_oxendict.isIsoODF() );
         CPPUNIT_ASSERT_EQUAL( OUString("en"), en_GB_oxendict.getLanguageAndScript() );
         CPPUNIT_ASSERT_EQUAL( OUString("oxendict"), en_GB_oxendict.getVariants() );
-        ::std::vector< OUString > en_GB_oxendict_Fallbacks( en_GB_oxendict.getFallbackStrings( true));
+        std::vector< OUString > en_GB_oxendict_Fallbacks( en_GB_oxendict.getFallbackStrings( true));
         CPPUNIT_ASSERT_EQUAL( static_cast<size_t>(5), en_GB_oxendict_Fallbacks.size() );
         CPPUNIT_ASSERT_EQUAL( OUString("en-GB-oxendict"), en_GB_oxendict_Fallbacks[0]);
         CPPUNIT_ASSERT_EQUAL( OUString("en-GB-oed"), en_GB_oxendict_Fallbacks[1]);
@@ -486,7 +486,7 @@ void TestLanguageTag::testAllTags()
         CPPUNIT_ASSERT( zh_yue_HK.isIsoODF() == true );
         CPPUNIT_ASSERT( zh_yue_HK.getLanguageAndScript() == "yue" );
         CPPUNIT_ASSERT( zh_yue_HK.getVariants() == "" );
-        ::std::vector< OUString > zh_yue_HK_Fallbacks( zh_yue_HK.getFallbackStrings( true));
+        std::vector< OUString > zh_yue_HK_Fallbacks( zh_yue_HK.getFallbackStrings( true));
         CPPUNIT_ASSERT( zh_yue_HK_Fallbacks.size() == 2);
         CPPUNIT_ASSERT( zh_yue_HK_Fallbacks[0] == "yue-HK");
         CPPUNIT_ASSERT( zh_yue_HK_Fallbacks[1] == "yue");
@@ -727,8 +727,8 @@ bool checkMapping( const OUString& rStr1, const OUString& rStr2 )
 
 void TestLanguageTag::testAllIsoLangEntries()
 {
-    const ::std::vector< MsLangId::LanguagetagMapping > aList( MsLangId::getDefinedLanguagetags());
-    for (::std::vector< MsLangId::LanguagetagMapping >::const_iterator it( aList.begin()); it != aList.end(); ++it)
+    const std::vector< MsLangId::LanguagetagMapping > aList( MsLangId::getDefinedLanguagetags());
+    for (std::vector< MsLangId::LanguagetagMapping >::const_iterator it( aList.begin()); it != aList.end(); ++it)
     {
         bool b=false;
         if ((*it).maBcp47 == "la-VA")

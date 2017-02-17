@@ -294,7 +294,7 @@ void OGridColumn::disposing()
 void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, bool bAllowDropDown )
 {
     // some properties are not to be exposed to the outer world
-    ::std::set< OUString > aForbiddenProperties;
+    std::set< OUString > aForbiddenProperties;
     aForbiddenProperties.insert( PROPERTY_ALIGN );
     aForbiddenProperties.insert( PROPERTY_AUTOCOMPLETE );
     aForbiddenProperties.insert( PROPERTY_BACKGROUNDCOLOR );

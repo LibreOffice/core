@@ -522,7 +522,7 @@ bool MSCodec97::Skip(std::size_t nDatLen)
 
     while (bResult && nDatLeft)
     {
-        std::size_t nBlockLen = ::std::min< std::size_t >( nDatLeft, sizeof(pnDummy) );
+        std::size_t nBlockLen = std::min< std::size_t >( nDatLeft, sizeof(pnDummy) );
         bResult = Decode( pnDummy, nBlockLen, pnDummy, nBlockLen );
         nDatLeft -= nBlockLen;
     }

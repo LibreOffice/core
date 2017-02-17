@@ -717,12 +717,12 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openPathIgnoring
     return xPath;
 }
 
-::std::vector< OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(
-        const ::std::vector< OUString >& lLocalizedValues,
+std::vector< OUString >::const_iterator PresetHandler::impl_findMatchingLocalizedValue(
+        const std::vector< OUString >& lLocalizedValues,
         OUString& rLanguageTag,
         bool bAllowFallbacks )
 {
-    ::std::vector< OUString >::const_iterator pFound = lLocalizedValues.end();
+    std::vector< OUString >::const_iterator pFound = lLocalizedValues.end();
     if (bAllowFallbacks)
     {
         pFound = LanguageTag::getFallback(lLocalizedValues, rLanguageTag);
@@ -755,8 +755,8 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
         bool              bAllowFallback)
 {
     css::uno::Reference< css::embed::XStorage >      xPath         = impl_openPathIgnoringErrors(sPath, eMode, bShare);
-    ::std::vector< OUString >                 lSubFolders   = impl_getSubFolderNames(xPath);
-    ::std::vector< OUString >::const_iterator pLocaleFolder = impl_findMatchingLocalizedValue(lSubFolders, rLanguageTag, bAllowFallback);
+    std::vector< OUString >                 lSubFolders   = impl_getSubFolderNames(xPath);
+    std::vector< OUString >::const_iterator pLocaleFolder = impl_findMatchingLocalizedValue(lSubFolders, rLanguageTag, bAllowFallback);
 
     // no fallback ... creation not allowed => no storage
     if (
@@ -786,13 +786,13 @@ css::uno::Reference< css::embed::XStorage > PresetHandler::impl_openLocalizedPat
     return xLocalePath;
 }
 
-::std::vector< OUString > PresetHandler::impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder)
+std::vector< OUString > PresetHandler::impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder)
 {
     css::uno::Reference< css::container::XNameAccess > xAccess(xFolder, css::uno::UNO_QUERY);
     if (!xAccess.is())
-        return ::std::vector< OUString >();
+        return std::vector< OUString >();
 
-          ::std::vector< OUString >      lSubFolders;
+          std::vector< OUString >      lSubFolders;
     const css::uno::Sequence< OUString > lNames = xAccess->getElementNames();
     const OUString*                      pNames = lNames.getConstArray();
           sal_Int32                             c      = lNames.getLength();

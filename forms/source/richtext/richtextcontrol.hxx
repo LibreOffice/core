@@ -81,7 +81,7 @@ namespace frm
     {
     private:
         typedef rtl::Reference<ORichTextFeatureDispatcher> SingleAttributeDispatcher;
-        typedef ::std::map< SfxSlotId, SingleAttributeDispatcher >                                                      AttributeDispatchers;
+        typedef std::map< SfxSlotId, SingleAttributeDispatcher >                                                      AttributeDispatchers;
         AttributeDispatchers                                                                                            m_aDispatchers;
 
     public:

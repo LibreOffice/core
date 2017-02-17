@@ -46,7 +46,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
     sal_Int32                                                                             c1        = lProvider.getLength();
     sal_Int32                                                                             i1        = 0;
 
-    ::std::vector< sal_Int16 > lGroups;
+    std::vector< sal_Int16 > lGroups;
 
     for (i1=0; i1<c1; ++i1)
     {
@@ -61,8 +61,8 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
         for (i2=0; i2<c2; ++i2)
         {
             const sal_Int16&                                                  rGroup = lProviderGroups[i2];
-                  ::std::vector< sal_Int16 >::const_iterator pGroup =
-                            ::std::find(lGroups.begin(), lGroups.end(), rGroup);
+                  std::vector< sal_Int16 >::const_iterator pGroup =
+                            std::find(lGroups.begin(), lGroups.end(), rGroup);
             if (pGroup == lGroups.end())
                 lGroups.push_back(rGroup);
         }

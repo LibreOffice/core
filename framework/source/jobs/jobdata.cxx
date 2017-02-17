@@ -469,7 +469,7 @@ bool isEnabled( const OUString& sAdminTime ,
  */
 void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XComponentContext >&              rxContext,
                                          const OUString&                                                 sEvent ,
-                                               ::std::vector< JobData::TJob2DocEventBinding >& lJobs  )
+                                               std::vector< JobData::TJob2DocEventBinding >& lJobs  )
 {
     std::vector< OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(rxContext, sEvent);
     sal_Int32                c               = lAdditionalJobs.size();

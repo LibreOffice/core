@@ -61,7 +61,7 @@ bool MenuBarMerger::IsCorrectContext( const OUString& rContext, const OUString& 
 
 void MenuBarMerger::RetrieveReferencePath(
     const OUString& rReferencePathString,
-    ::std::vector< OUString >& rReferencePath )
+    std::vector< OUString >& rReferencePath )
 {
     const sal_Char aDelimiter = '\\';
 
@@ -77,7 +77,7 @@ void MenuBarMerger::RetrieveReferencePath(
 }
 
 ReferencePathInfo MenuBarMerger::FindReferencePath(
-    const ::std::vector< OUString >& rReferencePath,
+    const std::vector< OUString >& rReferencePath,
     Menu* pMenu )
 {
     sal_uInt32       i( 0 );
@@ -309,7 +309,7 @@ bool MenuBarMerger::ProcessFallbackOperation(
     sal_uInt16&                             rItemId,
     const OUString&                  rMergeCommand,
     const OUString&                  rMergeFallback,
-    const ::std::vector< OUString >& rReferencePath,
+    const std::vector< OUString >& rReferencePath,
     const OUString&                  rModuleIdentifier,
     const AddonMenuContainer&               rAddonMenuItems )
 {

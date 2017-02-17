@@ -126,7 +126,7 @@ shrinkFilterName( const rtl::OUString& aFilterName, bool bAllowNoStar = false )
 
 namespace {
 
-    struct FilterTitleMatch : public ::std::unary_function< FilterEntry, bool >
+    struct FilterTitleMatch : public std::unary_function< FilterEntry, bool >
     {
 protected:
         const rtl::OUString rTitle;
@@ -152,7 +152,7 @@ public:
             else
                 // a filter group -> search the sub filters
                 bMatch =
-                    ::std::any_of(_rEntry.beginSubFilters(),
+                    std::any_of(_rEntry.beginSubFilters(),
                                   _rEntry.endSubFilters(),
                                   *this);
 
@@ -200,7 +200,7 @@ bool FilterHelper::FilterNameExists( const rtl::OUString& rTitle )
 
     if( m_pFilterList )
         bRet =
-            ::std::any_of(m_pFilterList->begin(),
+            std::any_of(m_pFilterList->begin(),
                           m_pFilterList->end(),
                           FilterTitleMatch( rTitle ));
 
@@ -217,7 +217,7 @@ bool FilterHelper::FilterNameExists( const UnoFilterList& _rGroupedFilters )
         const UnoFilterEntry* pStart = _rGroupedFilters.getConstArray();
         const UnoFilterEntry* pEnd = pStart + _rGroupedFilters.getLength();
         for( ; pStart != pEnd; ++pStart )
-            if( ::std::any_of(m_pFilterList->begin(),
+            if( std::any_of(m_pFilterList->begin(),
                               m_pFilterList->end(),
                               FilterTitleMatch( pStart->First ) ) )
                 break;
@@ -337,7 +337,7 @@ bool FilterHelper::filenameMatchesFilter(NSString* sFilename)
         }
     }
 
-    FilterList::iterator filter = ::std::find_if(m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(m_aCurrentFilter));
+    FilterList::iterator filter = std::find_if(m_pFilterList->begin(), m_pFilterList->end(), FilterTitleMatch(m_aCurrentFilter));
     if (filter == m_pFilterList->end()) {
         SAL_WARN("fpicker", "filter not found in list");
         return true;

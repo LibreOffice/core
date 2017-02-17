@@ -54,9 +54,9 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
-using ::std::list;
-using ::std::map;
-using ::std::pair;
+using std::list;
+using std::map;
+using std::pair;
 
 namespace XSLT
 {
@@ -235,12 +235,12 @@ namespace XSLT
         {
             css::uno::Reference<XOutputStream> xos = m_transformer->getOutputStream();
             sal_Int32 writeLen = len;
-            sal_Int32 bufLen = ::std::min(writeLen, OUTPUT_BUFFER_SIZE);
+            sal_Int32 bufLen = std::min(writeLen, OUTPUT_BUFFER_SIZE);
             const sal_uInt8* memPtr =
                     reinterpret_cast<const sal_uInt8*> (buffer);
             while (writeLen > 0)
             {
-                sal_Int32 n = ::std::min(writeLen, bufLen);
+                sal_Int32 n = std::min(writeLen, bufLen);
                 m_writeBuf.realloc(n);
                 memcpy(m_writeBuf.getArray(), memPtr,
                         static_cast<size_t> (n));
@@ -272,9 +272,9 @@ namespace XSLT
         OSL_ASSERT(m_transformer->getInputStream().is());
         OSL_ASSERT(m_transformer->getOutputStream().is());
         OSL_ASSERT(!m_transformer->getStyleSheetURL().isEmpty());
-        ::std::map<const char*, OString>::iterator pit;
-        ::std::map<const char*, OString> pmap = m_transformer->getParameters();
-        ::std::vector< const char* > params( pmap.size() * 2 + 1 ); // build parameters
+        std::map<const char*, OString>::iterator pit;
+        std::map<const char*, OString> pmap = m_transformer->getParameters();
+        std::vector< const char* > params( pmap.size() * 2 + 1 ); // build parameters
         int paramIndex = 0;
         for (pit = pmap.begin(); pit != pmap.end(); ++pit)
         {

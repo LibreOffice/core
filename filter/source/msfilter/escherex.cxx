@@ -3857,7 +3857,7 @@ void EscherPersistTable::PtInsert( sal_uInt32 nID, sal_uInt32 nOfs )
 
 void EscherPersistTable::PtDelete( sal_uInt32 nID )
 {
-    ::std::vector< EscherPersistEntry* >::iterator it = maPersistTable.begin();
+    std::vector< EscherPersistEntry* >::iterator it = maPersistTable.begin();
     for( ; it != maPersistTable.end() ; ++it )
     {
         if ( (*it)->mnID == nID ) {
@@ -4893,7 +4893,7 @@ void EscherExGlobal::WriteDggAtom( SvStream& rStrm ) const
     for( DrawingInfoVector::const_iterator aIt = maDrawingInfos.begin(), aEnd = maDrawingInfos.end(); aIt != aEnd; ++aIt )
     {
         nShapeCount += aIt->mnShapeCount;
-        nLastShapeId = ::std::max( nLastShapeId, aIt->mnLastShapeId );
+        nLastShapeId = std::max( nLastShapeId, aIt->mnLastShapeId );
     }
     // the non-existing cluster with index #0 is counted too
     sal_uInt32 nClusterCount = static_cast< sal_uInt32 >( maClusterTable.size() + 1 );

@@ -65,7 +65,7 @@ bool OGroupCompAcc::operator==( const OGroupCompAcc& rCompAcc ) const
     return m_xComponent == rCompAcc.m_xComponent;
 }
 
-class OGroupCompAccLess : public ::std::binary_function<OGroupCompAcc, OGroupCompAcc, sal_Bool>
+class OGroupCompAccLess : public std::binary_function<OGroupCompAcc, OGroupCompAcc, sal_Bool>
 {
 public:
     bool operator() (const OGroupCompAcc& lhs, const OGroupCompAcc& rhs) const
@@ -109,7 +109,7 @@ bool OGroupComp::operator==( const OGroupComp& rComp ) const
     return m_nTabIndex == rComp.GetTabIndex() && m_nPos == rComp.GetPos();
 }
 
-class OGroupCompLess : public ::std::binary_function<OGroupComp, OGroupComp, sal_Bool>
+class OGroupCompLess : public std::binary_function<OGroupComp, OGroupComp, sal_Bool>
 {
 public:
     bool operator() (const OGroupComp& lhs, const OGroupComp& rhs) const
@@ -237,7 +237,7 @@ void OGroupManager::removeFromGroupMap(const OUString& _sGroupName,const Referen
         sal_Int32 nCount = aFind->second.Count();
         if ( nCount == 1 || nCount == 0 )
         {
-            OActiveGroups::iterator aActiveFind = ::std::find(
+            OActiveGroups::iterator aActiveFind = std::find(
                 m_aActiveGroupMap.begin(),
                 m_aActiveGroupMap.end(),
                 aFind
@@ -384,7 +384,7 @@ void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
 
     if ( bActivateGroup )
     {
-        OActiveGroups::iterator aAlreadyExistent = ::std::find(
+        OActiveGroups::iterator aAlreadyExistent = std::find(
             m_aActiveGroupMap.begin(),
             m_aActiveGroupMap.end(),
             aFind

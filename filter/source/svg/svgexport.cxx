@@ -819,7 +819,7 @@ bool SVGFilter::implExportDocument()
         if( implCreateObjects() )
         {
             ObjectMap::const_iterator                aIter( mpObjects->begin() );
-            ::std::vector< ObjectRepresentation >    aObjects( mpObjects->size() );
+            std::vector< ObjectRepresentation >    aObjects( mpObjects->size() );
             sal_uInt32                               nPos = 0;
 
             while( aIter != mpObjects->end() )

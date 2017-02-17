@@ -47,7 +47,7 @@ public:
     sal_uInt16      GetImageId( sal_uInt16 nPos ) const;
 
     OUString        GetImageName( sal_uInt16 nPos ) const;
-    void            GetImageNames( ::std::vector< OUString >& rNames ) const;
+    void            GetImageNames( std::vector< OUString >& rNames ) const;
 
     bool            operator==( const ImageList& rImageList ) const;
     bool            operator!=( const ImageList& rImageList ) const { return !(ImageList::operator==( rImageList )); }

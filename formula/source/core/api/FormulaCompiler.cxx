@@ -119,7 +119,7 @@ short lcl_GetRetFormat( OpCode eOpCode )
     }
 }
 
-inline void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
+inline void lclPushOpCodeMapEntry( std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
         const OUString* pTable, sal_uInt16 nOpCode )
 {
     sheet::FormulaOpCodeMapEntry aEntry;
@@ -128,14 +128,14 @@ inline void lclPushOpCodeMapEntry( ::std::vector< sheet::FormulaOpCodeMapEntry >
     rVec.push_back( aEntry);
 }
 
-void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
+void lclPushOpCodeMapEntries( std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
         const OUString* pTable, sal_uInt16 nOpCodeBeg, sal_uInt16 nOpCodeEnd )
 {
     for (sal_uInt16 nOpCode = nOpCodeBeg; nOpCode < nOpCodeEnd; ++nOpCode)
         lclPushOpCodeMapEntry( rVec, pTable, nOpCode );
 }
 
-void lclPushOpCodeMapEntries( ::std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
+void lclPushOpCodeMapEntries( std::vector< sheet::FormulaOpCodeMapEntry >& rVec,
         const OUString* pTable, const sal_uInt16* pnOpCodes, size_t nCount )
 {
     for (const sal_uInt16* pnEnd = pnOpCodes + nCount; pnOpCodes < pnEnd; ++pnOpCodes)
@@ -426,7 +426,7 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
     // Unfortunately uno::Sequence can't grow without cumbersome reallocs. As
     // we don't know in advance how many elements it will have we use a
     // temporary vector to add elements and then copy to Sequence :-(
-    ::std::vector< FormulaOpCodeMapEntry > aVec;
+    std::vector< FormulaOpCodeMapEntry > aVec;
 
     if (nGroups == FormulaMapGroup::SPECIAL)
     {
@@ -548,9 +548,9 @@ uno::Sequence< sheet::FormulaOpCodeMapEntry > FormulaCompiler::OpCodeMap::create
             // Function names are not consecutive, skip the gaps between
             // functions with no parameter, functions with 1 parameter
             lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_NO_PAR,
-                    ::std::min< sal_uInt16 >( SC_OPCODE_STOP_NO_PAR, mnSymbols ) );
+                    std::min< sal_uInt16 >( SC_OPCODE_STOP_NO_PAR, mnSymbols ) );
             lclPushOpCodeMapEntries( aVec, mpTable, SC_OPCODE_START_1_PAR,
-                    ::std::min< sal_uInt16 >( SC_OPCODE_STOP_1_PAR, mnSymbols ) );
+                    std::min< sal_uInt16 >( SC_OPCODE_STOP_1_PAR, mnSymbols ) );
             // Additional functions not within range of functions.
             static const sal_uInt16 aOpCodes[] = {
                 SC_OPCODE_IF,
@@ -671,7 +671,7 @@ void FormulaCompiler::OpCodeMap::putOpCode( const OUString & rStr, const OpCode 
                     SAL_WARN("formula.core",
                             "OpCodeMap::putOpCode: reusing OpCode " << static_cast<sal_uInt16>(eOp)
                             << ", replacing '" << mpTable[eOp] << "' with '" << rStr << "' in "
-                            << (mbEnglish ? "" : "non-") << "English map 0x" << ::std::hex << meGrammar);
+                            << (mbEnglish ? "" : "non-") << "English map 0x" << std::hex << meGrammar);
             }
         }
 
@@ -1027,7 +1027,7 @@ bool FormulaCompiler::DeQuote( OUString& rStr )
 }
 
 void FormulaCompiler::fillAddInToken(
-        ::std::vector< sheet::FormulaOpCodeMapEntry >& /*_rVec*/,
+        std::vector< sheet::FormulaOpCodeMapEntry >& /*_rVec*/,
         bool /*_bIsEnglish*/) const
 {
 }

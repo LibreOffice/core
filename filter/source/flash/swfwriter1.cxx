@@ -1918,7 +1918,7 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
         // Should denominator be 0: then P1P2 and P3P4 are parallel (P1P2^T R[90,P3P4] = 0.0),
         // meaning that either we have a straight line or an inflexion point (see else block below)
         if( 0.0 != denominator &&
-            ::std::max( fJ1x*fJ1x + fJ1y*fJ1y,
+            std::max( fJ1x*fJ1x + fJ1y*fJ1y,
                         fJ2x*fJ2x + fJ2y*fJ2y) < d2 )
         {
             // requested resolution reached.
@@ -1955,7 +1955,7 @@ void Writer::Impl_quadBezierApprox( BitStream& rBits,
             const double fJ2y2( P3y - P1y - 2.0/3.0*(P4y - P1y) );
 
             // stop if distance from line is guaranteed to be bounded by d/4
-            if( ::std::max( fJ1x2*fJ1x2 + fJ1y2*fJ1y2,
+            if( std::max( fJ1x2*fJ1x2 + fJ1y2*fJ1y2,
                             fJ2x2*fJ2x2 + fJ2y2*fJ2y2) < d2/16.0 )
             {
                 // do not subdivide further, add straight line instead

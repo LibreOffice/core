@@ -35,7 +35,7 @@ typedef unsigned char   uchar;
 typedef unsigned short  ushort;
 typedef unsigned int    uint;
 
-typedef ::std::basic_string<hchar> hchar_string;
+typedef std::basic_string<hchar> hchar_string;
 
 /**
  * @short Point

@@ -41,7 +41,7 @@ struct AddonStatusbarItem
     sal_Int16         nWidth;
 };
 
-typedef ::std::vector< AddonStatusbarItem > AddonStatusbarItemContainer;
+typedef std::vector< AddonStatusbarItem > AddonStatusbarItemContainer;
 
 namespace StatusbarMerger
 {

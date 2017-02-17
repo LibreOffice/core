@@ -139,10 +139,10 @@ private:
     NSControl* m_pListControls[ LIST_LAST ];
 
     /** a map to store a control's label text */
-    ::std::map<NSControl *, NSString *> m_aMapListLabels;
+    std::map<NSControl *, NSString *> m_aMapListLabels;
 
     /** a map to store a popup menu's label text field */
-    ::std::map<NSPopUpButton *, NSTextField *> m_aMapListLabelFields;
+    std::map<NSPopUpButton *, NSTextField *> m_aMapListLabelFields;
 
     /** the visibility flags for the popup menus */
     bool m_bListVisibility[ LIST_LAST ];
@@ -157,7 +157,7 @@ private:
     bool m_bIsFilterControlNeeded;
 
     /** a list with all actively used controls */
-    ::std::list<NSControl*> m_aActiveControls;
+    std::list<NSControl*> m_aActiveControls;
 
     /** the filter helper */
     FilterHelper *m_pFilterHelper;

@@ -614,7 +614,7 @@ void ToolBarManager::impl_elementChanged(bool const isRemove,
 void ToolBarManager::setToolBarImage(const Image& rImage,
         const CommandToInfoMap::const_iterator& rIter)
 {
-    const ::std::vector<sal_uInt16>& rIDs = rIter->second.aIds;
+    const std::vector<sal_uInt16>& rIDs = rIter->second.aIds;
     m_pToolBar->SetItemImage( rIter->second.nId, rImage );
     for (auto const& it : rIDs)
     {

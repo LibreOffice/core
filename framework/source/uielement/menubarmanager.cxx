@@ -1728,7 +1728,7 @@ void MenuBarManager::MergeAddonMenus(
 
         if ( MenuBarMerger::IsCorrectContext( rMergeInstruction.aMergeContext, rModuleIdentifier ))
         {
-            ::std::vector< OUString > aMergePath;
+            std::vector< OUString > aMergePath;
 
             // retrieve the merge path from the merge point string
             MenuBarMerger::RetrieveReferencePath( rMergeInstruction.aMergePoint, aMergePath );
@@ -1987,7 +1987,7 @@ void MenuBarManager::SetHdl()
 void MenuBarManager::UpdateSpecialWindowMenu( Menu* pMenu,const Reference< XComponentContext >& xContext )
 {
     // update window list
-    ::std::vector< OUString > aNewWindowListVector;
+    std::vector< OUString > aNewWindowListVector;
 
     Reference< XDesktop2 > xDesktop = css::frame::Desktop::create( xContext );
 

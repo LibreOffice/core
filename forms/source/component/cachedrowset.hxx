@@ -72,7 +72,7 @@ namespace frm
         void    setConnection       ( const css::uno::Reference< css::sdbc::XConnection >& _rxConnection );
 
     private:
-        ::std::unique_ptr< CachedRowSet_Data >    m_pData;
+        std::unique_ptr< CachedRowSet_Data >    m_pData;
     };
 
 

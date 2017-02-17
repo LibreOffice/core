@@ -358,7 +358,7 @@ class PresetHandler
             @return An iterator, which points directly into lLocalizedValue list.
                     As a negative result the special iterator lLocalizedValues.end() will be returned.
          */
-        ::std::vector< OUString >::const_iterator impl_findMatchingLocalizedValue(const ::std::vector< OUString >& lLocalizedValues,
+        std::vector< OUString >::const_iterator impl_findMatchingLocalizedValue(const std::vector< OUString >& lLocalizedValues,
                                                                                                OUString&             rLanguageTag         ,
                                                                                                bool                          bAllowFallbacks );
 
@@ -403,7 +403,7 @@ class PresetHandler
             @return [vector< string >]
                     a list of folder names.
          */
-        ::std::vector< OUString > impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder);
+        std::vector< OUString > impl_getSubFolderNames(const css::uno::Reference< css::embed::XStorage >& xFolder);
 };
 
 } // namespace framework
