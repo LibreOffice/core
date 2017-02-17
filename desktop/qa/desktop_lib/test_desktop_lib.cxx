@@ -103,8 +103,7 @@ public:
     void testPaintPartTile();
     void testWriterCommentInsertCursor();
     void testGetFontSubset();
-    void testNoTiledAnnotations();
-    void testCommentsCallbacks();
+    void testCommentsWriter();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -139,8 +138,7 @@ public:
     CPPUNIT_TEST(testPaintPartTile);
     CPPUNIT_TEST(testWriterCommentInsertCursor);
     CPPUNIT_TEST(testGetFontSubset);
-    CPPUNIT_TEST(testNoTiledAnnotations);
-    CPPUNIT_TEST(testCommentsCallbacks);
+    CPPUNIT_TEST(testCommentsWriter);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -1685,7 +1683,6 @@ class ViewCallback
 public:
     bool m_bTilesInvalidated;
     Rectangle m_aOwnCursor;
-    boost::property_tree::ptree m_aCommentCallbackResult;
 
     ViewCallback()
         : m_bTilesInvalidated(false)
@@ -1717,14 +1714,6 @@ public:
             m_aOwnCursor.setY(aSeq[1].toInt32());
             m_aOwnCursor.setWidth(aSeq[2].toInt32());
             m_aOwnCursor.setHeight(aSeq[3].toInt32());
-        }
-        break;
-        case LOK_CALLBACK_COMMENT:
-        {
-            m_aCommentCallbackResult.clear();
-            std::stringstream aStream(pPayload);
-            boost::property_tree::read_json(aStream, m_aCommentCallbackResult);
-            m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
         }
@@ -1841,7 +1830,7 @@ void DesktopLOKTest::testGetFontSubset()
     comphelper::LibreOfficeKit::setActive(false);
 }
 
-void DesktopLOKTest::testNoTiledAnnotations()
+void DesktopLOKTest::testCommentsWriter()
 {
     comphelper::LibreOfficeKit::setActive();
     // Disable tiled rendering for comments
@@ -1889,94 +1878,6 @@ void DesktopLOKTest::testNoTiledAnnotations()
             CPPUNIT_ASSERT_EQUAL(nComment2Id, rComment.second.get<int>("parent"));
         }
     }
-
-    comphelper::LibreOfficeKit::setActive(false);
-}
-
-void DesktopLOKTest::testCommentsCallbacks()
-{
-    comphelper::LibreOfficeKit::setActive();
-    // Comments callback are emitted only if tiled annotations are off
-    comphelper::LibreOfficeKit::setTiledAnnotations(false);
-    ViewCallback aView1;
-    ViewCallback aView2;
-    LibLODocument_Impl* pDocument = loadDoc("comments.odt");
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView1);
-    pDocument->m_pDocumentClass->createView(pDocument);
-    pDocument->m_pDocumentClass->initializeForRendering(pDocument, "{}");
-    pDocument->m_pDocumentClass->registerCallback(pDocument, &ViewCallback::callback, &aView2);
-
-    // Add a new comment
-    OString aCommandArgs("{ \"Text\": { \"type\": \"string\", \"value\": \"Additional comment\" }, \"Author\": { \"type\": \"string\", \"value\": \"LOK User1\" } }");
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:InsertAnnotation", aCommandArgs.getStr(), false);
-    Scheduler::ProcessEventsToIdle();
-
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
-    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    int nCommentId1 = aView1.m_aCommentCallbackResult.get<int>("id");
-
-    // Reply to a comment just added
-    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Reply comment\" } }";
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:ReplyComment", aCommandArgs.getStr(), false);
-    Scheduler::ProcessEventsToIdle();
-
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action and linked to its parent comment
-    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parent"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parent"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
-    int nCommentId2 = aView1.m_aCommentCallbackResult.get<int>("id");
-
-    // Edit the previously added comment
-    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId2) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Edited comment\" } }";
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:EditAnnotation", aCommandArgs.getStr(), false);
-    Scheduler::ProcessEventsToIdle();
-
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
-    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    // parent is unchanged still
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parent"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parent"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
-
-    // Delete the reply comment just added
-    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\":  \"" + OString::number(nCommentId2) + "\" } }";
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:DeleteComment", aCommandArgs.getStr(), false);
-    Scheduler::ProcessEventsToIdle();
-
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
-    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId2, aView1.m_aCommentCallbackResult.get<int>("id"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId2, aView2.m_aCommentCallbackResult.get<int>("id"));
-
-    // Reply to nCommentId1 again
-    aCommandArgs = "{ \"Id\": { \"type\": \"string\", \"value\": \"" + OString::number(nCommentId1) + "\" }, \"Text\": { \"type\": \"string\", \"value\": \"Reply comment again\" } }";
-    pDocument->pClass->postUnoCommand(pDocument, ".uno:ReplyComment", aCommandArgs.getStr(), false);
-    Scheduler::ProcessEventsToIdle();
-
-    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action and linked to its parent comment
-    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parent"));
-    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parent"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment again"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment again"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
-
-    // .uno:ViewAnnotations returns total of 5 comments
-    boost::property_tree::ptree aTree;
-    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
-    std::stringstream aStream(pJSON);
-    free(pJSON);
-    CPPUNIT_ASSERT(!aStream.str().empty());
-    boost::property_tree::read_json(aStream, aTree);
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("comments").size());
 
     comphelper::LibreOfficeKit::setActive(false);
 }
