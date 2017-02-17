@@ -52,6 +52,7 @@
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -85,10 +86,10 @@
 #include <editeng/svxenum.hxx>
 #include <editeng/unonames.hxx>
 #include <editeng/flditem.hxx>
-#include <svx/unoapi.hxx>
+#include <svx/sdtfsitm.hxx>
 #include <svx/svdoashp.hxx>
+#include <svx/unoapi.hxx>
 #include <svx/unoshape.hxx>
-
 
 using namespace ::css;
 using namespace ::css::beans;
@@ -2175,6 +2176,14 @@ void DrawingML::WriteText( const Reference< XInterface >& rXIface, const OUStrin
             bool bTextAutoGrowHeight = false;
             GET(bTextAutoGrowHeight, TextAutoGrowHeight);
             mpFS->singleElementNS(XML_a, (bTextAutoGrowHeight ? XML_spAutoFit : XML_noAutofit), FSEND);
+        }
+        if (GetDocumentType() == DOCUMENT_PPTX)
+        {
+            TextFitToSizeType eFit = TextFitToSizeType_NONE;
+            if (GETA(TextFitToSize))
+                mAny >>= eFit;
+            if (eFit == TextFitToSizeType_AUTOFIT)
+                mpFS->singleElementNS(XML_a, XML_normAutofit, FSEND);
         }
         mpFS->endElementNS((nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr);
     }
