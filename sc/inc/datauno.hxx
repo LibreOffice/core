@@ -90,7 +90,7 @@ public:
     static void FillProperties(
                     css::uno::Sequence<css::beans::PropertyValue>& rSeq,
                     const ScSortParam& rParam );
-    //! SortAscending muss aus der SheetSortDescriptor service-Beschreibung raus
+    //! SortAscending needs to get out of the SheetSortDescriptor service description
     static long GetPropertyCount()
     {
         return 9;       // TableSortDescriptor and SheetSortDescriptor
