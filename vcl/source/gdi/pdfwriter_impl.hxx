@@ -195,9 +195,12 @@ public:
         BitmapID    m_aID;
         BitmapEx    m_aBitmap;
         sal_Int32   m_nObject;
+        /// ID of the Form XObject, if any.
+        sal_Int32 m_nFormObject;
 
         BitmapEmit()
-            : m_nObject(0)
+            : m_nObject(0),
+              m_nFormObject(0)
         {
         }
     };
@@ -826,7 +829,7 @@ i12626
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
-    const BitmapEmit& createBitmapEmit( const BitmapEx& rBitmapEx );
+    const BitmapEmit& createBitmapEmit( const BitmapEx& rBitmapEx, const Graphic& rGraphic );
 
     /* writes the Do operation inside the content stream */
     void drawBitmap( const Point& rDestPt, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor );
@@ -1190,7 +1193,7 @@ public:
     void drawEllipse( const Rectangle& rRect );
     void drawArc( const Rectangle& rRect, const Point& rStart, const Point& rStop, bool bWithPie, bool bWidthChord );
 
-    void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap );
+    void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Graphic& rGraphic );
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap );
     void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
 

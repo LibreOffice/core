@@ -186,9 +186,9 @@ void PDFWriter::DrawPixel( const Point& rPos, const Color& rColor )
     xImplementation->drawPixel( rPos, rColor );
 }
 
-void PDFWriter::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap )
+void PDFWriter::DrawBitmap( const Point& rDestPt, const Size& rDestSize, const Bitmap& rBitmap, const Graphic& rGraphic )
 {
-    xImplementation->drawBitmap( rDestPt, rDestSize, rBitmap );
+    xImplementation->drawBitmap( rDestPt, rDestSize, rBitmap, rGraphic );
 }
 
 void PDFWriter::DrawBitmapEx( const Point& rDestPt, const Size& rDestSize, const BitmapEx& rBitmap )

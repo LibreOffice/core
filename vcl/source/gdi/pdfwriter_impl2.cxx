@@ -247,7 +247,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
             else if ( aBitmapEx.IsTransparent() )
                 m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
             else
-                m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap() );
+                m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap(), i_Graphic );
 
             if (i_Graphic.getPdfData().hasElements())
             {
