@@ -802,7 +802,7 @@ The following structure describes the permissions used in PDF security
                                    const Point& rStartPt, const Point& rEndPt );
 
     void                DrawBitmap( const Point& rDestPt, const Size& rDestSize,
-                                    const Bitmap& rBitmap );
+                                    const Bitmap& rBitmap, const Graphic& rGraphic );
 
     void                DrawBitmapEx( const Point& rDestPt, const Size& rDestSize,
                                       const BitmapEx& rBitmapEx );

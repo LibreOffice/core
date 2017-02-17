@@ -11177,6 +11177,37 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         return writeBitmapObject( aEmit, true );
     }
 
+    // Write the form XObject proxy for the image.
+    if (rObject.m_nFormObject > 0)
+    {
+        aLine.setLength(0);
+        if (!updateObject(rObject.m_nFormObject))
+            return false;
+
+        aLine.append(rObject.m_nFormObject);
+        aLine.append(" 0 obj\n");
+        aLine.append("<< /Type /XObject");
+        aLine.append(" /Subtype /Form");
+        aLine.append(" /Resources << /XObject<</Im");
+        aLine.append(rObject.m_nObject);
+        aLine.append(" ");
+        aLine.append(rObject.m_nObject);
+        aLine.append(" 0 R>> >>");
+        aLine.append(" /BBox [ 0 0 1 1 ]");
+        aLine.append(" /Length ");
+
+        OStringBuffer aStream;
+        aStream.append("/Im");
+        aStream.append(rObject.m_nObject);
+        aStream.append(" Do");
+        aLine.append(aStream.getLength());
+
+        aLine.append(">>\nstream\n");
+        aLine.append(aStream.getStr());
+        aLine.append("\nendstream\nendobj\n\n");
+        CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
+    }
+
     return true;
 }
 
@@ -11289,7 +11320,8 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rDestPoint + Point( 0, rDestSize.Height()-1 ), aLine );
     aLine.append( " cm\n/Im" );
-    aLine.append( rBitmap.m_nObject );
+    sal_Int32 nObject = rBitmap.m_nFormObject > 0 ? rBitmap.m_nFormObject : rBitmap.m_nObject;
+    aLine.append(nObject);
     aLine.append( " Do Q\n" );
     if( nCheckWidth == 0 || nCheckHeight == 0 )
     {
@@ -11302,7 +11334,7 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
-const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap )
+const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx& i_rBitmap, const Graphic& rGraphic )
 {
     BitmapEx aBitmap( i_rBitmap );
     if( m_aContext.ColorMode == PDFWriter::DrawGreyscale )
@@ -11339,18 +11371,21 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
         m_aBitmaps.front().m_nObject    = createObject();
+        if (rGraphic.getPdfData().hasElements())
+            m_aBitmaps.front().m_nFormObject = createObject();
         it = m_aBitmaps.begin();
     }
 
     OStringBuffer aObjName( 16 );
     aObjName.append( "Im" );
-    aObjName.append( it->m_nObject );
-    pushResource( ResXObject, aObjName.makeStringAndClear(), it->m_nObject );
+    sal_Int32 nObject = it->m_nFormObject > 0 ? it->m_nFormObject : it->m_nObject;
+    aObjName.append(nObject);
+    pushResource( ResXObject, aObjName.makeStringAndClear(), nObject );
 
     return *it;
 }
 
-void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap )
+void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Graphic& rGraphic )
 {
     MARK( "drawBitmap (Bitmap)" );
 
@@ -11358,7 +11393,7 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     if( ! (rDestSize.Width() && rDestSize.Height()) )
         return;
 
-    const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( rBitmap ) );
+    const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( rBitmap ), rGraphic );
     drawBitmap( rDestPoint, rDestSize, rEmit, Color( COL_TRANSPARENT ) );
 }
 
@@ -11370,7 +11405,7 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     if( ! (rDestSize.Width() && rDestSize.Height()) )
         return;
 
-    const BitmapEmit& rEmit = createBitmapEmit( rBitmap );
+    const BitmapEmit& rEmit = createBitmapEmit( rBitmap, Graphic() );
     drawBitmap( rDestPoint, rDestSize, rEmit, Color( COL_TRANSPARENT ) );
 }
 
@@ -11546,7 +11581,7 @@ void PDFWriterImpl::drawWallpaper( const Rectangle& rRect, const Wallpaper& rWal
             else
             {
                 // push the bitmap
-                const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( aBitmap ) );
+                const BitmapEmit& rEmit = createBitmapEmit( BitmapEx( aBitmap ), Graphic() );
 
                 // convert to page coordinates; this needs to be done here
                 // since the emit does not know the page anymore
