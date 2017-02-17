@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_2eca4250",
+        "filename": "external/lcms2/ExternalProject_lcms2.mk",
+        "patchSetId": 15
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-17T17:18:25Z",
+      "side": 1,
+      "message": "what this is supposed to do?  $(filter ...,) always expands to the empty string",
+      "revId": "b862cbdd345ec57c2595629ded6a3969e1e65d56",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
