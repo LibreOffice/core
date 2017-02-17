@@ -43,7 +43,6 @@ enum class ResourceType {
     String,
     Shape,
     Boolean,
-    HexValue,
     Value,
     XNote,
     TextTableCell,

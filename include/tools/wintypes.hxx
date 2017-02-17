@@ -58,7 +58,6 @@ enum class WindowType : sal_uInt16
     MOREBUTTON           ,
     SPINBUTTON           ,
     RADIOBUTTON          ,
-    IMAGERADIOBUTTON     ,
     CHECKBOX             ,
     TRISTATEBOX          ,
     EDIT                 ,
