@@ -4400,8 +4400,7 @@ StackVar ScInterpreter::Interpret()
 
             // If the function pushed a subroutine as result, continue with
             // execution of the subroutine.
-            if (sp > nStackBase && pStack[sp-1]->GetOpCode() == ocCall
-                /* && pStack[sp-1]->GetType() == svSubroutine */)
+            if (sp > nStackBase && pStack[sp-1]->GetOpCode() == ocCall)
             {
                 Pop(); continue;
             }

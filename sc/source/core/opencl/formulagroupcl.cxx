@@ -121,7 +121,6 @@ std::string StackVarEnumToString(StackVar const e)
         case svExternalName:      return "ExternalName";
         case svSingleVectorRef:   return "SingleVectorRef";
         case svDoubleVectorRef:   return "DoubleVectorRef";
-        case svSubroutine:        return "Subroutine";
         case svError:             return "Error";
         case svMissing:           return "Missing";
         case svSep:               return "Sep";
