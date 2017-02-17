@@ -8,9 +8,15 @@
  */
 
 #include "SecurityEnvironment.hxx"
+#include "CertificateImpl.hxx"
 
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/servicehelper.hxx>
+
+#include <gpgme.h>
+#include <context.h>
+#include <key.h>
+#include <keylistresult.h>
 
 using namespace css;
 using namespace css::security;
@@ -99,8 +105,32 @@ OUString SecurityEnvironment::getSecurityEnvironmentInformation()
 Sequence< Reference < XCertificate > > SecurityEnvironment::getPersonalCertificates()
     throw( SecurityException , RuntimeException, std::exception )
 {
-    Sequence<Reference < XCertificate >>* seq = new Sequence< Reference < XCertificate > >(0);
-    return *seq;
+    std::vector<GpgME::Key> keys;
+    GpgME::initializeLibrary();
+    GpgME::Error err = GpgME::checkEngine(GpgME::OpenPGP);
+    if (err)
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+    std::shared_ptr<GpgME::Context> ctx(GpgME::Context::createForProtocol(GpgME::OpenPGP));
+    if (ctx == nullptr)
+        throw RuntimeException("The GpgME library failed to initialize for the OpenPGP protocol.");
+
+    ctx->setKeyListMode(GPGME_KEYLIST_MODE_LOCAL);
+    err = ctx->startKeyListing();
+    while (!err) {
+        GpgME::Key k = ctx->nextKey(err);
+        if (err)
+            break;
+        if (!k.isInvalid() && k.canEncrypt() && (k.ownerTrust() == GpgME::Key::Ultimate)) {
+            keys.push_back(k);
+        }
+    }
+    ctx->endKeyListing();
+
+    Sequence< Reference< XCertificate > > xCertificateSequence(keys.size());
+    //std::for_each(keys.begin(), keys.end(), xCertificateSequence);
+
+    return Sequence< Reference < XCertificate > > ();
 }
 
 Reference< XCertificate > SecurityEnvironment::getCertificate( const OUString& /*issuerName*/, const Sequence< sal_Int8 >& /*serialNumber*/ )
