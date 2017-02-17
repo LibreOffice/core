@@ -166,7 +166,9 @@ try_again:
         }
     } else if (const CXXOperatorCallExpr * operatorCall = dyn_cast<CXXOperatorCallExpr>(parent))
     {
-        if (operatorCall->isAssignmentOp()) {
+        auto oo = operatorCall->getOperator();
+        if (oo == OO_Equal
+            || (oo >= OO_PlusEqual && oo <= OO_GreaterGreaterEqual)) {
             bWrite = true;
         } else {
             bRead = true;
