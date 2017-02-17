@@ -16,6 +16,24 @@
       "revId": "9c452adbf011473d5e22c93cc75e8b777cad3842",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_3b0c4242",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1001484
+      },
+      "writtenOn": "2017-02-17T10:34:45Z",
+      "side": 1,
+      "message": "Thanks for your advice. It\u0027s simpler for me to work on the layout but I can try to work directly on the model.",
+      "parentUuid": "9a57fde8_5b22e6ba",
+      "revId": "9c452adbf011473d5e22c93cc75e8b777cad3842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
