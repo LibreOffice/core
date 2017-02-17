@@ -2592,6 +2592,8 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
     if (!sCustomProperty.isEmpty())
         aProperties[OString("customproperty")] = sCustomProperty;
 
+    bool bInserted = false;
+
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -2602,11 +2604,22 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
 
         if (res == xmlreader::XmlReader::Result::Begin)
         {
-            ++nLevel;
-            if (name.equals("property"))
-                collectProperty(reader, sID, aProperties);
-            else if (name.equals("accelerator"))
-                collectAccelerator(reader, aAccelerators);
+            if (name.equals("child"))
+            {
+                insertMenuObject(pParent, sClass, sID, aProperties, aAccelerators);
+                VclPtr<PopupMenu> xSubMenu = VclPtr<PopupMenu>::Create();
+                pParent->SetPopupMenu(pParent->GetItemCount(), xSubMenu);
+                handleMenuChild(xSubMenu, reader);
+                bInserted = true;
+            }
+            else
+            {
+                ++nLevel;
+                if (name.equals("property"))
+                    collectProperty(reader, sID, aProperties);
+                else if (name.equals("accelerator"))
+                    collectAccelerator(reader, aAccelerators);
+            }
         }
 
         if (res == xmlreader::XmlReader::Result::End)
@@ -2617,6 +2630,9 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
         if (!nLevel)
             break;
     }
+
+    if (bInserted)
+        return;
 
     insertMenuObject(pParent, sClass, sID, aProperties, aAccelerators);
 }
@@ -2722,6 +2738,9 @@ namespace
 void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, const OString &rID,
     stringmap &rProps, accelmap &rAccels)
 {
+    if (rClass == "GtkMenu")
+        return;
+
     sal_uInt16 nOldCount = pParent->GetItemCount();
     sal_uInt16 nNewId = nOldCount + 1;
 
@@ -2746,7 +2765,6 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK, rID);
         pParent->SetItemCommand(nNewId, aCommand);
     }
-
     else if (rClass == "GtkSeparatorMenuItem")
     {
         pParent->InsertSeparator(rID);
