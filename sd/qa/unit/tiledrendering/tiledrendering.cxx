@@ -45,6 +45,8 @@
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
 
+#include <chrono>
+
 using namespace css;
 
 static const char* const DATA_DIRECTORY = "/sd/qa/unit/tiledrendering/data/";
@@ -668,8 +670,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
     for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:InsertPage", aArgs);
 
-    TimeValue aTimeValue = { 2 , 0 }; // 2 seconds max
-    osl::Condition::Result aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    osl::Condition::Result aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
 
     // Verify inserted slides
@@ -686,7 +687,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
     for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:DeletePage", aArgs);
 
-    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
 
     // Verify deleted slides
@@ -702,7 +703,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
     for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:Undo", aArgs);
 
-    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
 
     // Verify inserted slides
@@ -718,7 +719,7 @@ void SdTiledRenderingTest::testInsertDeletePage()
     for (unsigned it = 1; it <= 10; it++)
         comphelper::dispatchCommand(".uno:Redo", aArgs);
 
-    aResult = m_aDocumentSizeCondition.wait(aTimeValue);
+    aResult = m_aDocumentSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
 
     // Verify deleted slides
