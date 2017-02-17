@@ -24,9 +24,9 @@
 #include <document.hxx>
 #include <osl/diagnose.h>
 
-// Defaultwerte
-const sal_uInt8 nDezStd = 0;        // Dezimalstellen fuer Standard-Zellen
-const sal_uInt8 nDezFloat = 2;  //        "         "  Float-Zellen
+// Default values
+const sal_uInt8 nDezStd = 0;        // Decimal points for standard cells
+const sal_uInt8 nDezFloat = 2;      //        "         " float cells
 
 struct LotusContext;
 
@@ -47,8 +47,8 @@ typedef sal_uInt16 StampTyp;
 class FormIdent
 {
 private:
-    StampTyp        nStamp;         // Identifikations-Schluessel
-    SfxUInt32Item*  pAttr;          // zugehoeriges Attribut
+    StampTyp        nStamp;         // ID key
+    SfxUInt32Item*  pAttr;          // associated attribute
 public:
                     FormIdent( void )
                     {
@@ -85,12 +85,12 @@ public:
 class FormCache
 {
 private:
-    FormIdent           aIdents[ nSize_ ]; //gepufferte Formate
+    FormIdent           aIdents[ nSize_ ]; //buffered formats
     bool                bValid[ nSize_ ];
-    FormIdent           aCompareIdent;      // zum Vergleichen
-    SvNumberFormatter*  pFormTable;         // Value-Format-Table-Anker
+    FormIdent           aCompareIdent;      // for comparing
+    SvNumberFormatter*  pFormTable;         // value format table anchor
     StampTyp            nIndex;
-    LanguageType        eLanguage;          // Systemsprache
+    LanguageType        eLanguage;          // System language
 
     SfxUInt32Item*      NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt );
 public:
@@ -103,9 +103,9 @@ public:
 
 inline const SfxUInt32Item* FormCache::GetAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
 {
-    // PREC:    nFormat = Lotus-Format-Byte
-    //          nSt = Stellenzahl
-    // POST:    return = zu nFormat und nSt passendes SC-Format
+    // PREC:    nFormat = Lotus format byte
+    //          nSt = Number of digit
+    // POST:    return = SC-format fitting nFormat and nSt
     SfxUInt32Item*      pAttr;
     SfxUInt32Item*      pRet;
 

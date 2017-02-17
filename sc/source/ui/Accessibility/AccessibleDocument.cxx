@@ -442,7 +442,7 @@ void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
                         AddShape(xShape, true);
                 }
                 break;
-                case SdrHintKind::ObjectRemoved :     // Zeichenobjekt aus Liste entfernt
+                case SdrHintKind::ObjectRemoved :     // Removed drawing object from list
                 {
                     uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
                     if (xShape.is())
