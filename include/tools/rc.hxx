@@ -27,10 +27,6 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Resource
 protected:
     ResMgr* m_pResMgr;
 
-    // check availability of Resource
-    bool                IsAvailableRes( const ResId& rId ) const
-        { return m_pResMgr->IsAvailable( rId, this ); }
-
     // Load a Resource
     void                GetRes( const ResId& rResId );
 
