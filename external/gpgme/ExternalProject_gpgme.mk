@@ -9,13 +9,16 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,gpgme))
 
-$(eval $(call gb_ExternalProject_use_external_project,gpgme,libassuan))
-
 $(eval $(call gb_ExternalProject_register_targets,gpgme,\
 	build \
 ))
 
 $(eval $(call gb_ExternalProject_use_autoconf,gpgme,build))
+
+$(eval $(call gb_ExternalProject_use_externals,gpgme,\
+       libgpg-error \
+       libassuan \
+))
 
 $(call gb_ExternalProject_get_state_target,gpgme,build):
 	$(call gb_ExternalProject_run,build,\
