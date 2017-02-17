@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <chrono>
 #include <cstddef>
 #include <list>
 #include <set>
@@ -178,8 +179,7 @@ Components::WriteThread::WriteThread(
 }
 
 void Components::WriteThread::execute() {
-    TimeValue t = { 1, 0 }; // 1 sec
-    delay_.wait(&t); // must not throw; result_error is harmless and ignored
+    delay_.wait(std::chrono::seconds(1)); // must not throw; result_error is harmless and ignored
     osl::MutexGuard g(*lock_); // must not throw
     try {
         try {
