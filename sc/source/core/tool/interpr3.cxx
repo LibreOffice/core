@@ -2268,7 +2268,9 @@ void ScInterpreter::ScTInv( int nType )
     }
     if ( nType == 4 ) // left-tailed cumulative t-distribution
     {
-        if ( fP < 0.5 )
+        if ( fP == 1.0 )
+            PushIllegalArgument();
+        else if ( fP < 0.5 )
             PushDouble( -GetTInv( 1 - fP, fDF, nType ) );
         else
             PushDouble( GetTInv( fP, fDF, nType ) );
