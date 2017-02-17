@@ -817,10 +817,17 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
     ESelection aOldSel = GetSelection();
     if ( xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, true ) )
     {
-        ScopedVclPtrInstance<PopupMenu> aPopupMenu( EditResId( RID_MENU_SPELL ) );
-        PopupMenu *pAutoMenu = aPopupMenu->GetPopupMenu( MN_AUTOCORR );
-        PopupMenu *pInsertMenu = aPopupMenu->GetPopupMenu( MN_INSERT );  // add word to user-dictionaries
+        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "editeng/ui/spellmenu.ui", "");
+        VclPtr<PopupMenu> aPopupMenu(aBuilder.get_menu("menu"));
+        const sal_uInt16 nAutoCorrId = aPopupMenu->GetItemId("autocorrect");
+        PopupMenu *pAutoMenu = aPopupMenu->GetPopupMenu(nAutoCorrId);
+        const sal_uInt16 nInsertId = aPopupMenu->GetItemId("insert");
+        PopupMenu *pInsertMenu = aPopupMenu->GetPopupMenu(nInsertId);  // add word to user-dictionaries
         pInsertMenu->SetMenuFlags( MenuFlags::NoAutoMnemonics );         //! necessary to retrieve the correct dictionary names later
+        const sal_uInt16 nAddId = aPopupMenu->GetItemId("add");
+        const sal_uInt16 nIgnoreId = aPopupMenu->GetItemId("ignore");
+        const sal_uInt16 nCheckId = aPopupMenu->GetItemId("check");
+        const sal_uInt16 nAutoCorrectDlgId = aPopupMenu->GetItemId("autocorrectdlg");
 
         EditPaM aPaM2( aPaM );
         aPaM2.SetIndex( aPaM2.GetIndex()+1 );
@@ -910,7 +917,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             aPopupMenu->InsertSeparator(OString(), nWords);
         }
         else
-            aPopupMenu->RemoveItem( MN_AUTOCORR );   // delete?
+            aPopupMenu->RemoveItem(nAutoCorrId);   // delete?
 
         SvtLinguConfig aCfg;
 
@@ -963,10 +970,11 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
                 }
             }
         }
-        if ( pInsertMenu->GetItemCount() != 1)
-            aPopupMenu->EnableItem( MN_INSERT_SINGLE, false );
-        if ( pInsertMenu->GetItemCount() < 2 )
-            aPopupMenu->EnableItem( MN_INSERT, false );
+
+        if (pInsertMenu->GetItemCount() != 1)
+            aPopupMenu->EnableItem(nAddId, false);
+        if (pInsertMenu->GetItemCount() < 2)
+            aPopupMenu->EnableItem(nInsertId, false);
 
         aPopupMenu->RemoveDisabledEntries( true, true );
 
@@ -976,7 +984,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         aTempRect = pImpEditView->GetWindow()->LogicToPixel( Rectangle(aScreenPos, aTempRect.GetSize() ));
 
         sal_uInt16 nId = aPopupMenu->Execute( pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose );
-        if ( nId == MN_IGNORE )
+        if (nId == nIgnoreId)
         {
             OUString aWord = pImpEditView->SpellIgnoreWord();
             if ( pCallBack )
@@ -1015,7 +1023,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
             }
             SetSelection( aOldSel );
         }
-        else if ( nId == MN_SPELLING )
+        else if (nId == nCheckId)
         {
             if ( !pCallBack )
             {
@@ -1033,12 +1041,12 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
                 pCallBack->Call( aInf );
             }
         }
-        else if ( nId == MN_AUTO_CORRECT_DLG && pCallBack)
+        else if (nId == nAutoCorrectDlgId && pCallBack)
         {
             SpellCallbackInfo aInf( SpellCallbackCommand::AUTOCORRECT_OPTIONS, OUString() );
             pCallBack->Call( aInf );
         }
-        else if ( nId >= MN_DICTSTART || nId == MN_INSERT_SINGLE )
+        else if ( nId >= MN_DICTSTART || nId == nAddId)
         {
             OUString aDicName;
             if (nId >= MN_DICTSTART)

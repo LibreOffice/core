@@ -1105,6 +1105,7 @@ $(eval $(call gb_Helper_register_uiconfigs,\
 	cui \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbaccess) \
 	desktop \
+	editeng \
 	filter \
 	formula \
 	fps \

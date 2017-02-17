@@ -358,7 +358,7 @@
 #define RID_EDITUNDO_RESETATTRIBS           (RID_EDIT_START + 308)
 #define RID_EDITUNDO_INDENT                 (RID_EDIT_START + 309)
 #define RID_EDITUNDO_TRANSLITERATE          (RID_EDIT_START + 310)
-#define RID_MENU_SPELL                      (RID_EDIT_START + 311)
+//free
 #define RID_STR_PARAGRAPH                   (RID_EDIT_START + 312)
 #define RID_STR_WORD                        (RID_EDIT_START + 313)
 #define RID_SVXSTR_A11Y_IMAGEBULLET_DESCRIPTION (RID_EDIT_START + 314)

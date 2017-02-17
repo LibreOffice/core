@@ -65,55 +65,6 @@ String RID_EDITUNDO_TRANSLITERATE
     Text [ en-US ] = "Change Case";
 };
 
-Menu RID_MENU_SPELL
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = MN_IGNORE ;
-            HelpId = HID_EDITENG_SPELLER_IGNORE;
-            Text [ en-US ] = "I~gnore All" ;
-        };
-        MenuItem
-        {
-            Identifier = MN_INSERT ;
-            HelpId = HID_EDITENG_SPELLER_ADDWORD;
-            SubMenu = Menu
-            {
-            };
-            Text [ en-US ] = "~Add to Dictionary" ;
-        };
-        MenuItem
-        {
-            Identifier = MN_INSERT_SINGLE ;
-            HelpId = HID_EDITENG_SPELLER_ADDWORD;
-            Text [ en-US ] = "~Add to Dictionary" ;
-        };
-        MenuItem
-        {
-            Identifier = MN_SPELLING ;
-            HelpId = HID_EDITENG_SPELLER_START;
-            Text [ en-US ] = "~Spellcheck..." ;
-        };
-        MenuItem { Separator = TRUE ; };
-        MenuItem
-        {
-            Identifier = MN_AUTOCORR ;
-            HelpId = HID_EDITENG_SPELLER_AUTOCORRECT;
-            SubMenu = Menu
-            {
-            };
-            Text [ en-US ] = "AutoCorrect ~To" ;
-        };
-        MenuItem
-        {
-            Identifier = MN_AUTO_CORRECT_DLG ;
-            Text [ en-US ] = "Auto~Correct Options..." ;
-        };
-    };
-};
-
 String RID_STR_WORD
 {
     Text [ en-US ] = "Word is %x";
