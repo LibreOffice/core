@@ -387,14 +387,11 @@ void setStackModeAtSeries(
     const Reference< chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem,
     StackMode eStackMode )
 {
-    if( eStackMode == StackMode_AMBIGUOUS )
-        return;
-
     const uno::Any aPropValue(
-        ( (eStackMode == StackMode_Y_STACKED) ||
-          (eStackMode == StackMode_Y_STACKED_PERCENT) )
+        ( (eStackMode == StackMode::YStacked) ||
+          (eStackMode == StackMode::YStackedPercent) )
         ? chart2::StackingDirection_Y_STACKING
-        : (eStackMode == StackMode_Z_STACKED )
+        : (eStackMode == StackMode::ZStacked )
         ? chart2::StackingDirection_Z_STACKING
         : chart2::StackingDirection_NO_STACKING );
 
@@ -435,7 +432,7 @@ void setStackModeAtSeries(
                 xCorrespondingCoordinateSystem->getAxisByDimension( 1, nAxisIndex ));
             if( xAxis.is())
             {
-                bool bPercent = (eStackMode == StackMode_Y_STACKED_PERCENT);
+                bool bPercent = (eStackMode == StackMode::YStackedPercent);
                 chart2::ScaleData aScaleData = xAxis->getScaleData();
 
                 if( bPercent != (aScaleData.AxisType==chart2::AxisType::PERCENT) )

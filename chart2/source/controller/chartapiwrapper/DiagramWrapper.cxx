@@ -1273,13 +1273,13 @@ WrappedStackingProperty::WrappedStackingProperty(StackMode eStackMode, const std
 {
     switch( m_eStackMode )
     {
-    case StackMode_Y_STACKED:
+    case StackMode::YStacked:
         m_aOuterName = "Stacked";
         break;
-    case StackMode_Y_STACKED_PERCENT:
+    case StackMode::YStackedPercent:
         m_aOuterName = "Percent";
         break;
-    case StackMode_Z_STACKED:
+    case StackMode::ZStacked:
         m_aOuterName = "Deep";
         break;
     default:
@@ -1320,7 +1320,7 @@ void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Re
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() )
     {
-        StackMode eNewStackMode = bNewValue ? m_eStackMode : StackMode_NONE;
+        StackMode eNewStackMode = bNewValue ? m_eStackMode : StackMode::NONE;
         DiagramHelper::setStackMode( xDiagram, eNewStackMode );
     }
 }
@@ -1913,9 +1913,9 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     WrappedGL3DProperties::addWrappedProperties(aWrappedProperties, m_spChart2ModelContact);
 
     aWrappedProperties.push_back( new WrappedDataRowSourceProperty( m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedStackingProperty( StackMode_Y_STACKED,m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedStackingProperty( StackMode_Y_STACKED_PERCENT, m_spChart2ModelContact ) );
-    aWrappedProperties.push_back( new WrappedStackingProperty( StackMode_Z_STACKED, m_spChart2ModelContact ) );
+    aWrappedProperties.push_back( new WrappedStackingProperty( StackMode::YStacked,m_spChart2ModelContact ) );
+    aWrappedProperties.push_back( new WrappedStackingProperty( StackMode::YStackedPercent, m_spChart2ModelContact ) );
+    aWrappedProperties.push_back( new WrappedStackingProperty( StackMode::ZStacked, m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedDim3DProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedVerticalProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedNumberOfLinesProperty( m_spChart2ModelContact ) );

@@ -24,13 +24,12 @@ namespace chart
 
 // needed for chart type templates
 
-enum StackMode
+enum class StackMode
 {
-    StackMode_NONE = 0,
-    StackMode_Y_STACKED,
-    StackMode_Y_STACKED_PERCENT,
-    StackMode_Z_STACKED,
-    StackMode_AMBIGUOUS
+    NONE,
+    YStacked,
+    YStackedPercent,
+    ZStacked
 };
 
 } //  namespace chart

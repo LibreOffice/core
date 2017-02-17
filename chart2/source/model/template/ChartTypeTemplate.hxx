@@ -118,7 +118,7 @@ protected:
     /// returns 2 by default.  Supported are 2 and 3
     virtual sal_Int32 getDimension() const;
 
-    /** returns StackMode_NONE by default.  This is a global flag used for all
+    /** returns StackMode::NONE by default.  This is a global flag used for all
         series of a specific chart type.  If percent stacking is supported, the
         percent stacking mode is retrieved from the first chart type (index 0)
 

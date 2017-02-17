@@ -232,9 +232,6 @@ void DiagramHelper::setStackMode(
 {
     try
     {
-        if( eStackMode == StackMode_AMBIGUOUS )
-            return;
-
         bool bValueFound = false;
         bool bIsAmbiguous = false;
         StackMode eOldStackMode = DiagramHelper::getStackMode( xDiagram, bValueFound, bIsAmbiguous );
@@ -243,15 +240,15 @@ void DiagramHelper::setStackMode(
             return;
 
         StackingDirection eNewDirection = StackingDirection_NO_STACKING;
-        if( eStackMode == StackMode_Y_STACKED || eStackMode == StackMode_Y_STACKED_PERCENT )
+        if( eStackMode == StackMode::YStacked || eStackMode == StackMode::YStackedPercent )
             eNewDirection = StackingDirection_Y_STACKING;
-        else if( eStackMode == StackMode_Z_STACKED )
+        else if( eStackMode == StackMode::ZStacked )
             eNewDirection = StackingDirection_Z_STACKING;
 
         uno::Any aNewDirection( eNewDirection );
 
         bool bPercent = false;
-        if( eStackMode == StackMode_Y_STACKED_PERCENT )
+        if( eStackMode == StackMode::YStackedPercent )
             bPercent = true;
 
         //iterate through all coordinate systems
@@ -319,7 +316,7 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
     rbFound=false;
     rbAmbiguous=false;
 
-    StackMode eGlobalStackMode = StackMode_NONE;
+    StackMode eGlobalStackMode = StackMode::NONE;
 
     //iterate through all coordinate systems
     uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
@@ -360,7 +357,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
     bool& rbFound, bool& rbAmbiguous,
     const Reference< XCoordinateSystem > & xCorrespondingCoordinateSystem )
 {
-    StackMode eStackMode = StackMode_NONE;
+    StackMode eStackMode = StackMode::NONE;
     rbFound = false;
     rbAmbiguous = false;
 
@@ -403,10 +400,10 @@ StackMode DiagramHelper::getStackModeFromChartType(
         if( rbFound )
         {
             if( eCommonDirection == chart2::StackingDirection_Z_STACKING )
-                eStackMode = StackMode_Z_STACKED;
+                eStackMode = StackMode::ZStacked;
             else if( eCommonDirection == chart2::StackingDirection_Y_STACKING )
             {
-                eStackMode = StackMode_Y_STACKED;
+                eStackMode = StackMode::YStacked;
 
                 // percent stacking
                 if( xCorrespondingCoordinateSystem.is() )
@@ -423,7 +420,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
                         {
                             chart2::ScaleData aScaleData = xAxis->getScaleData();
                             if( aScaleData.AxisType==chart2::AxisType::PERCENT )
-                                eStackMode = StackMode_Y_STACKED_PERCENT;
+                                eStackMode = StackMode::YStackedPercent;
                         }
                     }
                 }
@@ -519,10 +516,10 @@ void DiagramHelper::setDimension(
         }
 
         //correct stack mode if necessary
-        if( nNewDimensionCount==3 && eStackMode != StackMode_Z_STACKED && bIsSupportingOnlyDeepStackingFor3D )
-            DiagramHelper::setStackMode( xDiagram, StackMode_Z_STACKED );
-        else if( nNewDimensionCount==2 && eStackMode == StackMode_Z_STACKED )
-            DiagramHelper::setStackMode( xDiagram, StackMode_NONE );
+        if( nNewDimensionCount==3 && eStackMode != StackMode::ZStacked && bIsSupportingOnlyDeepStackingFor3D )
+            DiagramHelper::setStackMode( xDiagram, StackMode::ZStacked );
+        else if( nNewDimensionCount==2 && eStackMode == StackMode::ZStacked )
+            DiagramHelper::setStackMode( xDiagram, StackMode::NONE );
     }
     catch( const uno::Exception & ex )
     {

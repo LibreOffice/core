@@ -389,10 +389,10 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
         {
             StackMode eStackMode = getStackMode( nChartTypeIndex );
             const uno::Any aPropValue = uno::Any(
-                ( (eStackMode == StackMode_Y_STACKED) ||
-                  (eStackMode == StackMode_Y_STACKED_PERCENT) )
+                ( (eStackMode == StackMode::YStacked) ||
+                  (eStackMode == StackMode::YStackedPercent) )
                 ? chart2::StackingDirection_Y_STACKING
-                : (eStackMode == StackMode_Z_STACKED )
+                : (eStackMode == StackMode::ZStacked )
                 ? chart2::StackingDirection_Z_STACKING
                 : chart2::StackingDirection_NO_STACKING );
             xSeriesProp->setPropertyValue( "StackingDirection", aPropValue );
@@ -435,7 +435,7 @@ void SAL_CALL ChartTypeTemplate::applyStyles( const Reference< chart2::XDiagram 
 void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram >& xDiagram )
 {
     // reset number format if we had percent stacking on
-    bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
+    bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
     if( bPercent )
     {
         Sequence< Reference< chart2::XAxis > > aAxisSeq( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
@@ -523,7 +523,7 @@ sal_Int32 ChartTypeTemplate::getDimension() const
 
 StackMode ChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) const
 {
-    return StackMode_NONE;
+    return StackMode::NONE;
 }
 
 bool ChartTypeTemplate::isSwapXAndY() const
@@ -652,7 +652,7 @@ void ChartTypeTemplate::adaptScales(
                     Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( 1,nI ));
                     if( xAxis.is())
                     {
-                        bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
+                        bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
                         chart2::ScaleData aScaleData = xAxis->getScaleData();
 
                         if( bPercent != (aScaleData.AxisType==AxisType::PERCENT) )
@@ -738,7 +738,7 @@ void ChartTypeTemplate::adaptAxes(
                     if( nAxisIndex == MAIN_AXIS_INDEX || nAxisIndex == SECONDARY_AXIS_INDEX )
                     {
                         // adapt scales
-                        bool bPercent = (getStackMode(0) == StackMode_Y_STACKED_PERCENT);
+                        bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
                         if( bPercent && nDim == 1 )
                         {
                             Reference< beans::XPropertySet > xAxisProp( xAxis, uno::UNO_QUERY );

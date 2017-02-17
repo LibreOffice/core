@@ -180,6 +180,7 @@ for d in definitionSet:
          "include/editeng/bulletitem.hxx", # css::style::NumberingType
          "basic/source/sbx/sbxdec.hxx", # SbxDecimal::CmpResult, must match some Windows API
          "codemaker/source/javamaker/javatype.cxx", # TypeInfo::Flags, from UNO
+         "chart2/source/view/inc/AbstractShapeFactory.hxx", # chart::SymbolEnum, called via int UNO param
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",

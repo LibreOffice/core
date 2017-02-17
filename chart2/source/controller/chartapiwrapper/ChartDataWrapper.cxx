@@ -671,11 +671,11 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     //correct stacking mode
     if( bStacked || bPercent || bDeep )
     {
-        StackMode eStackMode = StackMode_Y_STACKED;
+        StackMode eStackMode = StackMode::YStacked;
         if( bDeep )
-            eStackMode = StackMode_Z_STACKED;
+            eStackMode = StackMode::ZStacked;
         else if( bPercent )
-            eStackMode = StackMode_Y_STACKED_PERCENT;
+            eStackMode = StackMode::YStackedPercent;
         DiagramHelper::setStackMode( xDia, eStackMode );
     }
 

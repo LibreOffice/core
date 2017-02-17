@@ -45,7 +45,7 @@ bool ChartTypeHelper::isSupportingAxisSideBySide(
         bool bFound=false;
         bool bAmbiguous=false;
         StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, nullptr );
-        if( eStackMode == StackMode_NONE && !bAmbiguous )
+        if( eStackMode == StackMode::NONE && !bAmbiguous )
         {
             OUString aChartTypeName = xChartType->getChartType();
             bResult = ( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||
@@ -223,7 +223,7 @@ bool ChartTypeHelper::isSupportingBarConnectors(
         bool bFound=false;
         bool bAmbiguous=false;
         StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, nullptr );
-        if( eStackMode != StackMode_Y_STACKED || bAmbiguous )
+        if( eStackMode != StackMode::YStacked || bAmbiguous )
             return false;
 
         OUString aChartTypeName = xChartType->getChartType();
@@ -574,7 +574,7 @@ uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedMissingValueTreatments(
     bool bFound=false;
     bool bAmbiguous=false;
     StackMode eStackMode = DiagramHelper::getStackModeFromChartType( xChartType, bFound, bAmbiguous, nullptr );
-    bool bStacked = bFound && (StackMode_Y_STACKED == eStackMode);
+    bool bStacked = bFound && (StackMode::YStacked == eStackMode);
 
     OUString aChartTypeName = xChartType->getChartType();
     if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) ||

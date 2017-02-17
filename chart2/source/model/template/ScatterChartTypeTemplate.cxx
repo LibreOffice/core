@@ -192,8 +192,8 @@ sal_Int32 ScatterChartTypeTemplate::getDimension() const
 StackMode ScatterChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) const
 {
     if( m_nDim == 3 )
-        return StackMode_Z_STACKED;
-    return StackMode_NONE;
+        return StackMode::ZStacked;
+    return StackMode::NONE;
 }
 
 void SAL_CALL ScatterChartTypeTemplate::applyStyle(

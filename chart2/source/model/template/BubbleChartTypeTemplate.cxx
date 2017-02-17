@@ -137,7 +137,7 @@ sal_Int32 BubbleChartTypeTemplate::getDimension() const
 
 StackMode BubbleChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) const
 {
-    return StackMode_NONE;
+    return StackMode::NONE;
 }
 
 void SAL_CALL BubbleChartTypeTemplate::applyStyle(

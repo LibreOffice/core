@@ -260,7 +260,7 @@ StackMode ColumnLineChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex )
 {
     if( nChartTypeIndex == 0 )
         return m_eStackMode;
-    return StackMode_NONE;
+    return StackMode::NONE;
 }
 
 // ____ XChartTypeTemplate ____
