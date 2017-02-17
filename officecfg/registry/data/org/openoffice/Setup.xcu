@@ -199,7 +199,7 @@
           <value>private:factory/smath</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowAttributes">
-          <value/>
+          <value>,,,;4;</value>
         </prop>
         <prop oor:name="ooSetupFactoryIcon">
           <value>13</value>
@@ -243,7 +243,7 @@
           <value>private:factory/swriter/GlobalDocument</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowAttributes">
-          <value/>
+          <value>,,,;4;</value>
         </prop>
         <prop oor:name="ooSetupFactoryIcon">
           <value>10</value>
@@ -287,7 +287,7 @@
           <value>private:factory/swriter</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowAttributes">
-          <value/>
+          <value>,,,;4;</value>
         </prop>
         <prop oor:name="ooSetupFactoryIcon">
           <value>2</value>
@@ -401,7 +401,7 @@
           <value>WriterCommands</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowAttributes">
-          <value/>
+          <value>,,,;4;</value>
         </prop>
         <prop oor:name="ooSetupFactoryIcon">
           <value>2</value>
@@ -437,7 +437,7 @@
           <value>private:factory/swriter/web</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowAttributes">
-          <value/>
+          <value>,,,;4;</value>
         </prop>
         <prop oor:name="ooSetupFactoryIcon">
           <value>11</value>
@@ -692,7 +692,7 @@
           <value>private:factory/schart</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowAttributes">
-          <value/>
+          <value>,,,;4;</value>
         </prop>
         <prop oor:name="ooSetupFactoryIcon">
           <value>1</value>
@@ -734,7 +734,7 @@
           <value>private:factory/sdatabase</value>
         </prop>
         <prop oor:name="ooSetupFactoryWindowAttributes">
-          <value/>
+          <value>,,,;4;</value>
         </prop>
         <prop oor:name="ooSetupFactoryIcon">
           <value>12</value>
