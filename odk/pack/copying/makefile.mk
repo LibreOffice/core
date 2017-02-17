@@ -128,9 +128,9 @@ DOCUFILES= \
     $(DESTDIRGENIDLREF)/idl.css \
     $(DESTDIRDOCUIMAGES)/nada.gif \
     $(DESTDIRDOCUIMAGES)/arrow-2.gif \
-    $(DESTDIRDOCUIMAGES)/bluball.gif \
+    $(DESTDIRDOCUIMAGES)/blueball.png \
     $(DESTDIRDOCUIMAGES)/ooo-main-app_32.png \
-    $(DESTDIRDOCUIMAGES)/odk-footer-logo.gif \
+    $(DESTDIRDOCUIMAGES)/sdk-footer-logo.png \
     $(DESTDIRDOCUIMAGES)/arrow-1.gif \
     $(DESTDIRDOCUIMAGES)/arrow-3.gif \
     $(DESTDIRDOCUIMAGES)/bg_table.png \

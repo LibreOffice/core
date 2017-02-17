@@ -19,10 +19,9 @@
  * 
  *************************************************************/
 
-a { text-decoration: none; }
-a:link { color: #107EC0; }
-a:visited { color: #638093; }
-a:active { color: #4dadea; }
+a:link { color: #107EC0; text-decoration: none; }
+a:visited { color: #638093; text-decoration: none; }
+a:hover { color: #107EC0; text-decoration: underline; }
 
 .sdkbody { background-color: #FFFFFF;
 	   color: #333333;

@@ -80,7 +80,7 @@ if (-d "$StartDir") {
     my @filelist = ( "install.html",
              "notsupported.html","sdk_styles.css","tools.html",
              "images/arrow-1.gif", "images/arrow-3.gif",
-             "images/odk-footer-logo.gif",
+             "images/sdk-footer-logo.png",
              "images/bg_table.png","images/bg_table2.png",
              "images/bg_table3.png", "images/nav_down.png",
              "images/nav_home.png","images/nav_left.png",
@@ -88,7 +88,7 @@ if (-d "$StartDir") {
              "images/sdk_head-1.png", "images/sdk_head-2.png",
              "images/sdk_line-1.gif", "images/sdk_line-2.gif",
              "common/ref/idl.css", "images/nada.gif",
-             "images/arrow-2.gif", "images/bluball.gif",
+             "images/arrow-2.gif", "images/blueball.png",
              "images/ooo-main-app_32.png");
 
     foreach $i (@filelist)
