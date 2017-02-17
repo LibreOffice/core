@@ -155,6 +155,7 @@ for d in definitionSet:
          "include/vcl/svapp.hxx",
          "include/vcl/salbtype.hxx",
          "include/vcl/commandevent.hxx", # CommandEvent, MediaCommand, ShowDialogId
+         "include/canvas/rendering/irendermodule.hxx", # canvas::IRenderModule::PrimitiveType
         # must match some other enum
          "include/editeng/bulletitem.hxx",
          "include/editeng/svxenum.hxx",
