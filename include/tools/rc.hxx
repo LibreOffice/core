@@ -64,10 +64,6 @@ protected:
     OString ReadByteStringRes()
     { return m_pResMgr->ReadByteString(); }
 
-    // free the resource from m_pResMgr's stack (pass this ptr for validation)
-    void FreeResource()
-    { m_pResMgr->PopContext( this ); }
-
     // constructors
     Resource() : m_pResMgr( nullptr ) {}
     Resource( const ResId& rResId );

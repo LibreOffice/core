@@ -59,8 +59,6 @@ namespace dbaui
             this function and do what need to be done.
             @param  _pTB
                 The new ToolBox.
-            @attention
-                Must be called after a FreeResource() call.
         */
         void    setToolBox(ToolBox* _pTB);
 

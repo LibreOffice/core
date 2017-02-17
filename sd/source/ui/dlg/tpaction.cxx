@@ -83,7 +83,6 @@ SdActionDlg::SdActionDlg (
         "modules/simpress/ui/interactiondialog.ui")
     , rOutAttrs(*pAttr)
 {
-    // FreeResource();
     VclPtr<SfxTabPage> pNewPage = SdTPAction::Create(get_content_area(), rOutAttrs);
     assert(pNewPage); //Unable to create page
 
