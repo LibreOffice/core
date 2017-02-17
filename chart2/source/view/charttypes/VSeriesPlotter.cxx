@@ -2356,15 +2356,15 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
     LegendSymbolStyle eLegendSymbolStyle = this->getLegendSymbolStyle();
     uno::Any aExplicitSymbol( this->getExplicitSymbol( rSeries, -1 ) );
 
-    VLegendSymbolFactory::tPropertyType ePropType =
-        VLegendSymbolFactory::PROP_TYPE_FILLED_SERIES;
+    VLegendSymbolFactory::PropertyType ePropType =
+        VLegendSymbolFactory::PropertyType::FilledSeries;
 
     // todo: maybe the property-style does not solely depend on the
     // legend-symbol type
     switch( eLegendSymbolStyle )
     {
         case LegendSymbolStyle_LINE:
-            ePropType = VLegendSymbolFactory::PROP_TYPE_LINE_SERIES;
+            ePropType = VLegendSymbolFactory::PropertyType::LineSeries;
             break;
         default:
             break;
@@ -2387,15 +2387,15 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
     LegendSymbolStyle eLegendSymbolStyle = this->getLegendSymbolStyle();
     uno::Any aExplicitSymbol( this->getExplicitSymbol(rSeries,nPointIndex) );
 
-    VLegendSymbolFactory::tPropertyType ePropType =
-        VLegendSymbolFactory::PROP_TYPE_FILLED_SERIES;
+    VLegendSymbolFactory::PropertyType ePropType =
+        VLegendSymbolFactory::PropertyType::FilledSeries;
 
     // todo: maybe the property-style does not solely depend on the
     // legend-symbol type
     switch( eLegendSymbolStyle )
     {
         case LegendSymbolStyle_LINE:
-            ePropType = VLegendSymbolFactory::PROP_TYPE_LINE_SERIES;
+            ePropType = VLegendSymbolFactory::PropertyType::LineSeries;
             break;
         default:
             break;
@@ -2537,7 +2537,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
                         xSymbolGroup, LegendSymbolStyle_LINE, xShapeFactory,
                         Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ),
-                        VLegendSymbolFactory::PROP_TYPE_LINE, uno::Any() ));
+                        VLegendSymbolFactory::PropertyType::Line, uno::Any() ));
 
                     // set CID to symbol for selection
                     if( xShape.is())

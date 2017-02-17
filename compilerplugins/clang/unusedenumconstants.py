@@ -117,6 +117,7 @@ for d in definitionSet:
          "basic/source/inc/filefmt.hxx", # FileOffset
          "include/basic/sbxdef.hxx", # SbxDataType
          "connectivity/source/inc/dbase/DTable.hxx", # ODbaseTable::DBFType
+         "codemaker/source/javamaker/classfile.hxx", # AccessFlags
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -177,7 +178,8 @@ for d in definitionSet:
          "cui/source/tabpages/tparea.cxx", # FillType (from UI)
          "include/editeng/svxenum.hxx", # css::style::NumberingType
          "include/editeng/bulletitem.hxx", # css::style::NumberingType
-         ":basic/source/sbx/sbxdec.hxx", # SbxDecimal::CmpResult, must match some Windows API
+         "basic/source/sbx/sbxdec.hxx", # SbxDecimal::CmpResult, must match some Windows API
+         "codemaker/source/javamaker/javatype.cxx", # TypeInfo::Flags, from UNO
         # represents constants from an external API
          "opencl/inc/opencl_device_selection.h",
          "vcl/inc/sft.hxx",
