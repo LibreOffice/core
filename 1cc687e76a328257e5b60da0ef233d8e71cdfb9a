@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_7be5eaa6",
+        "filename": "writerfilter/source/dmapper/DomainMapper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1698,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-17T08:32:47Z",
+      "side": 1,
+      "message": "Nitpick: personally I find:\n\nif ((nIntValue \u003e\u003d 1) \u0026\u0026 (nIntValue \u003c\u003d 600))\n\nmore readable, but it\u0027s a minor thing.",
+      "revId": "1cc687e76a328257e5b60da0ef233d8e71cdfb9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
