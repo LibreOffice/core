@@ -123,6 +123,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_pctfuzzer \
     Executable_pcxfuzzer \
     Executable_rasfuzzer \
+    Executable_tgafuzzer \
 ))
 endif
 
