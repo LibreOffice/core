@@ -316,11 +316,10 @@ drawing::Direction3D PlottingPositionHelper::getScaledLogicWidth() const
     return aRet;
 }
 
-PolarPlottingPositionHelper::PolarPlottingPositionHelper( NormalAxis eNormalAxis )
+PolarPlottingPositionHelper::PolarPlottingPositionHelper()
     : m_fRadiusOffset(0.0)
     , m_fAngleDegreeOffset(90.0)
     , m_aUnitCartesianToScene()
-    , m_eNormalAxis(eNormalAxis)
 {
     m_bMaySkipPointsInRegressionCalculation = false;
 }
@@ -330,7 +329,6 @@ PolarPlottingPositionHelper::PolarPlottingPositionHelper( const PolarPlottingPos
     , m_fRadiusOffset( rSource.m_fRadiusOffset )
     , m_fAngleDegreeOffset( rSource.m_fAngleDegreeOffset )
     , m_aUnitCartesianToScene( rSource.m_aUnitCartesianToScene )
-    , m_eNormalAxis( rSource.m_eNormalAxis )
 {
 }
 
@@ -390,27 +388,8 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
     double fScaleY = fScale;
     double fScaleZ = fScale;
 
-    switch(m_eNormalAxis)
-    {
-        case NormalAxis_X:
-            {
-                fTranslateX = fTranslateLogicZ;
-                fScaleX = fScaleLogicZ;
-            }
-            break;
-        case NormalAxis_Y:
-            {
-                fTranslateY = fTranslateLogicZ;
-                fScaleY = fScaleLogicZ;
-            }
-            break;
-        default: //NormalAxis_Z:
-            {
-                fTranslateZ = fTranslateLogicZ;
-                fScaleZ = fScaleLogicZ;
-            }
-            break;
-    }
+    fTranslateZ = fTranslateLogicZ;
+    fScaleZ = fScaleLogicZ;
 
     aRet.translate(fTranslateX, fTranslateY, fTranslateZ);//x first
     aRet.scale(fScaleX, fScaleY, fScaleZ);//x first
@@ -644,19 +623,6 @@ drawing::Position3D PolarPlottingPositionHelper::transformUnitCircleToScene( dou
     double fX=fUnitRadius*rtl::math::cos(fAnglePi);
     double fY=fUnitRadius*rtl::math::sin(fAnglePi);
     double fZ=fLogicZ;
-
-    switch(m_eNormalAxis)
-    {
-        case NormalAxis_X:
-            std::swap(fX,fZ);
-            break;
-        case NormalAxis_Y:
-            std::swap(fY,fZ);
-            fZ*=-1;
-            break;
-        default: //NormalAxis_Z
-            break;
-    }
 
     //!! applying matrix to vector does ignore translation, so it is important to use a B3DPoint here instead of B3DVector
     ::basegfx::B3DPoint aPoint(fX,fY,fZ);

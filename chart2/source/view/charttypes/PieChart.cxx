@@ -97,7 +97,7 @@ struct PieChart::ShapeParam
 class PiePositionHelper : public PolarPlottingPositionHelper
 {
 public:
-    PiePositionHelper( NormalAxis eNormalAxis, double fAngleDegreeOffset );
+    PiePositionHelper( double fAngleDegreeOffset );
 
     bool    getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius, bool bUseRings, double fMaxOffset ) const;
 
@@ -106,9 +106,8 @@ public:
     double  m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
 };
 
-PiePositionHelper::PiePositionHelper( NormalAxis eNormalAxis, double fAngleDegreeOffset )
-        : PolarPlottingPositionHelper(eNormalAxis)
-        , m_fRingDistance(0.0)
+PiePositionHelper::PiePositionHelper( double fAngleDegreeOffset )
+        : m_fRingDistance(0.0)
 {
     m_fRadiusOffset = 0.0;
     m_fAngleDegreeOffset = fAngleDegreeOffset;
@@ -166,7 +165,7 @@ PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
                    , sal_Int32 nDimensionCount
                    , bool bExcludingPositioning )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
-        , m_pPosHelper( new PiePositionHelper( NormalAxis_Z, (m_nDimension==3)?0.0:90.0 ) )
+        , m_pPosHelper( new PiePositionHelper( (m_nDimension==3) ? 0.0 : 90.0 ) )
         , m_bUseRings(false)
         , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
 {

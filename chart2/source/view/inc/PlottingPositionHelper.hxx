@@ -134,18 +134,10 @@ protected: //member
     bool   m_bAllowShiftZAxisPos;
 };
 
-//describes which axis of the drawinglayer scene or screen axis are the normal axis
-enum NormalAxis
-{
-      NormalAxis_X
-    , NormalAxis_Y
-    , NormalAxis_Z
-};
-
 class PolarPlottingPositionHelper : public PlottingPositionHelper
 {
 public:
-    PolarPlottingPositionHelper( NormalAxis eNormalAxis=NormalAxis_Z );
+    PolarPlottingPositionHelper();
     PolarPlottingPositionHelper( const PolarPlottingPositionHelper& rSource );
     virtual ~PolarPlottingPositionHelper() override;
 
@@ -217,7 +209,6 @@ public:
 
 private:
     ::basegfx::B3DHomMatrix m_aUnitCartesianToScene;
-    NormalAxis  m_eNormalAxis;
 
     ::basegfx::B3DHomMatrix impl_calculateMatrixUnitCartesianToScene( const ::basegfx::B3DHomMatrix& rMatrixScreenToScene ) const;
 };
