@@ -266,11 +266,10 @@ public:
         than RESOURCE_BASE may override the resource strings. Used by OpCodeList
         implementation via loadSymbols().
      */
-    enum SeparatorType
+    enum class SeparatorType
     {
         RESOURCE_BASE,
-        SEMICOLON_BASE,
-        COMMA_BASE
+        SEMICOLON_BASE
     };
 
 protected:
@@ -359,7 +358,7 @@ private:
     void InitSymbolsOOXML() const;     /// only SymbolsOOXML, on demand
 
     void loadSymbols( sal_uInt16 nSymbols, FormulaGrammar::Grammar eGrammar, NonConstOpCodeMapPtr& rxMap,
-            SeparatorType eSepType = SEMICOLON_BASE ) const;
+            SeparatorType eSepType = SeparatorType::SEMICOLON_BASE ) const;
 
     /** Check pCurrentFactorToken for nParam's (0-based) ForceArray types and
         set ForceArray at rCurr if so. Set nParam+1 as 1-based

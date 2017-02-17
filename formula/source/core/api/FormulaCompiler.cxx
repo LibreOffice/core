@@ -147,7 +147,7 @@ class OpCodeList
 public:
 
     OpCodeList( sal_uInt16, FormulaCompiler::NonConstOpCodeMapPtr,
-            FormulaCompiler::SeparatorType = FormulaCompiler::SEMICOLON_BASE );
+            FormulaCompiler::SeparatorType = FormulaCompiler::SeparatorType::SEMICOLON_BASE );
 
 private:
     bool getOpCodeString( OUString& rStr, sal_uInt16 nOp );
@@ -165,7 +165,7 @@ OpCodeList::OpCodeList( sal_uInt16 nRID, FormulaCompiler::NonConstOpCodeMapPtr x
 {
     SvtSysLocale aSysLocale;
     const CharClass* pCharClass = (xMap->isEnglish() ? nullptr : aSysLocale.GetCharClassPtr());
-    if (meSepType == FormulaCompiler::RESOURCE_BASE)
+    if (meSepType == FormulaCompiler::SeparatorType::RESOURCE_BASE)
     {
         for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
         {
@@ -191,12 +191,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
     {
         case SC_OPCODE_SEP:
         {
-            if (meSepType == FormulaCompiler::COMMA_BASE)
-            {
-                rStr = ",";
-                return true;
-            }
-            else if (meSepType == FormulaCompiler::SEMICOLON_BASE)
+            if (meSepType == FormulaCompiler::SeparatorType::SEMICOLON_BASE)
             {
                 rStr = ";";
                 return true;
@@ -205,12 +200,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
         break;
         case SC_OPCODE_ARRAY_COL_SEP:
         {
-            if (meSepType == FormulaCompiler::COMMA_BASE)
-            {
-                rStr = ",";
-                return true;
-            }
-            else if (meSepType == FormulaCompiler::SEMICOLON_BASE)
+            if (meSepType == FormulaCompiler::SeparatorType::SEMICOLON_BASE)
             {
                 rStr = ";";
                 return true;
@@ -219,12 +209,7 @@ bool OpCodeList::getOpCodeString( OUString& rStr, sal_uInt16 nOp )
         break;
         case SC_OPCODE_ARRAY_ROW_SEP:
         {
-            if (meSepType == FormulaCompiler::COMMA_BASE)
-            {
-                rStr = ";";
-                return true;
-            }
-            else if (meSepType == FormulaCompiler::SEMICOLON_BASE)
+            if (meSepType == FormulaCompiler::SeparatorType::SEMICOLON_BASE)
             {
                 rStr = "|";
                 return true;
@@ -893,7 +878,7 @@ void FormulaCompiler::InitSymbolsPODF() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, RESOURCE_BASE);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_PODF, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsPODF = aMap.mxSymbolMap;
 }
 
@@ -903,7 +888,7 @@ void FormulaCompiler::InitSymbolsAPI() const
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
         // XFunctionAccess API always used PODF grammar, keep it.
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_API, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, RESOURCE_BASE);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_API, FormulaGrammar::GRAM_PODF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsAPI = aMap.mxSymbolMap;
 }
 
@@ -912,7 +897,7 @@ void FormulaCompiler::InitSymbolsODFF() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF, FormulaGrammar::GRAM_ODFF, aMap.mxSymbolMap, RESOURCE_BASE);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_ODFF, FormulaGrammar::GRAM_ODFF, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsODFF = aMap.mxSymbolMap;
 }
 
@@ -937,7 +922,7 @@ void FormulaCompiler::InitSymbolsOOXML() const
     static OpCodeMapData aMap;
     osl::MutexGuard aGuard(&aMap.maMtx);
     if (!aMap.mxSymbolMap)
-        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML, FormulaGrammar::GRAM_OOXML, aMap.mxSymbolMap, RESOURCE_BASE);
+        loadSymbols(RID_STRLIST_FUNCTION_NAMES_ENGLISH_OOXML, FormulaGrammar::GRAM_OOXML, aMap.mxSymbolMap, SeparatorType::RESOURCE_BASE);
     mxSymbolsOOXML = aMap.mxSymbolMap;
 }
 
