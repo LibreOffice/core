@@ -3354,6 +3354,13 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
     maComment = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
     rIStm.ReadInt32( mnValue ).ReadUInt32( mnDataSize );
 
+    if (mnDataSize > rIStm.remainingSize())
+    {
+        SAL_WARN("vcl.gdi", "Parsing error: " << rIStm.remainingSize() <<
+                 " available data, but " << mnDataSize << " claimed, truncating");
+        mnDataSize = rIStm.remainingSize();
+    }
+
     SAL_INFO("vcl.gdi", "MetaCommentAction::Read " << maComment);
 
     delete[] mpData;
