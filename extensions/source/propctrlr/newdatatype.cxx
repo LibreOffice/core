@@ -28,7 +28,7 @@ namespace pcr
     //= NewDataTypeDialog
 
 
-    NewDataTypeDialog::NewDataTypeDialog( vcl::Window* _pParent, const OUString& _rNameBase, const ::std::vector< OUString >& _rProhibitedNames )
+    NewDataTypeDialog::NewDataTypeDialog( vcl::Window* _pParent, const OUString& _rNameBase, const std::vector< OUString >& _rProhibitedNames )
         : ModalDialog( _pParent, "DataTypeDialog",
         "modules/spropctrlr/ui/datatypedialog.ui" )
         , m_aProhibitedNames( _rProhibitedNames.begin(), _rProhibitedNames.end() )

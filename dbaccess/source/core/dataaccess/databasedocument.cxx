@@ -244,22 +244,22 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  )
         // strip XEmbeddedScripts, and immediately re-assign to aTypes
         aTypes = Sequence< Type >(
             pStripTo,
-            ::std::remove_copy_if(
+            std::remove_copy_if(
                 aTypes.getConstArray(),
                 aTypes.getConstArray() + aTypes.getLength(),
                 pStripTo,
-                ::std::bind2nd( ::std::equal_to< Type >(), cppu::UnoType<XEmbeddedScripts>::get() )
+                std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XEmbeddedScripts>::get() )
             ) - pStripTo
         );
 
         // strip XScriptInvocationContext, and immediately re-assign to aTypes
         aTypes = Sequence< Type >(
             pStripTo,
-            ::std::remove_copy_if(
+            std::remove_copy_if(
                 aTypes.getConstArray(),
                 aTypes.getConstArray() + aTypes.getLength(),
                 pStripTo,
-                ::std::bind2nd( ::std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
+                std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
             ) - pStripTo
         );
     }
@@ -858,7 +858,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     {
         DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
 
-        Controllers::iterator pos = ::std::find( m_aControllers.begin(), m_aControllers.end(), _xController );
+        Controllers::iterator pos = std::find( m_aControllers.begin(), m_aControllers.end(), _xController );
         OSL_ENSURE( pos != m_aControllers.end(), "ODatabaseDocument::disconnectController: don't know this controller!" );
         if ( pos != m_aControllers.end() )
         {
@@ -1812,7 +1812,7 @@ void ODatabaseDocument::disposing()
     // case they will be deleted - if they're C++ implementations, that is :).
     // Some of those implementations are offending enough to require the SolarMutex, which
     // means we should not release the last reference while our own mutex is locked ...
-    ::std::list< Reference< XInterface > > aKeepAlive;
+    std::list< Reference< XInterface > > aKeepAlive;
 
     // SYNCHRONIZED ->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -2035,7 +2035,7 @@ Reference< XInterface > ODatabaseDocument::getThis() const
     return *const_cast< ODatabaseDocument* >( this );
 }
 
-struct CreateAny : public ::std::unary_function< Reference<XController>, Any>
+struct CreateAny : public std::unary_function< Reference<XController>, Any>
 {
     Any operator() (const Reference<XController>& lhs) const
     {
@@ -2048,7 +2048,7 @@ Reference< XEnumeration > SAL_CALL ODatabaseDocument::getControllers(  )
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
     uno::Sequence< Any> aController( m_aControllers.size() );
-    ::std::transform( m_aControllers.begin(), m_aControllers.end(), aController.getArray(), CreateAny() );
+    std::transform( m_aControllers.begin(), m_aControllers.end(), aController.getArray(), CreateAny() );
     return new ::comphelper::OAnyEnumeration(aController);
 }
 

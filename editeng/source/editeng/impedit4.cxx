@@ -794,7 +794,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         break;
         case EE_CHAR_COLOR:
         {
-            SvxColorList::const_iterator const iter = ::std::find(
+            SvxColorList::const_iterator const iter = std::find(
                     rColorList.begin(), rColorList.end(),
                     static_cast<SvxColorItem const&>(rItem).GetValue());
             assert(iter != rColorList.end());

@@ -30,7 +30,7 @@
 
 #define CLIPBOARDMANAGER_IMPLEMENTATION_NAME "com.sun.star.comp.datatransfer.ClipboardManager"
 
-typedef ::std::map< OUString, css::uno::Reference< css::datatransfer::clipboard::XClipboard > > ClipboardMap;
+typedef std::map< OUString, css::uno::Reference< css::datatransfer::clipboard::XClipboard > > ClipboardMap;
 
 namespace dtrans
 {

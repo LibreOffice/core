@@ -483,8 +483,8 @@ sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
 
     ::comphelper::UStringMixEqual bCase(!xMetaData.is() || xMetaData->supportsMixedCaseQuotedIdentifiers());
 
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
     sal_Int32 nCount(0);
     for(;aIter != aEnd;++aIter)
     {
@@ -719,7 +719,7 @@ void OTableEditorCtrl::CopyRows()
     // Copy selected rows to the ClipboardList
      std::shared_ptr<OTableRow>  pClipboardRow;
      std::shared_ptr<OTableRow>  pRow;
-    ::std::vector< std::shared_ptr<OTableRow> > vClipboardList;
+    std::vector< std::shared_ptr<OTableRow> > vClipboardList;
     vClipboardList.reserve(GetSelectRowCount());
 
     for( long nIndex=FirstSelectedRow(); nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()); nIndex=NextSelectedRow() )
@@ -769,7 +769,7 @@ OUString OTableEditorCtrl::GenerateName( const OUString& rName )
 void OTableEditorCtrl::InsertRows( long nRow )
 {
 
-    ::std::vector<  std::shared_ptr<OTableRow> > vInsertedUndoRedoRows; // need for undo/redo handling
+    std::vector<  std::shared_ptr<OTableRow> > vInsertedUndoRedoRows; // need for undo/redo handling
     // get rows from clipboard
     TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(GetParent()));
     if(aTransferData.HasFormat(SotClipboardFormatId::SBA_TABED))
@@ -1449,7 +1449,7 @@ IMPL_LINK_NOARG( OTableEditorCtrl, DelayedPaste, void*, void )
     {   // Insertion is not allowed, only appending, so test if there are full cells after the PastePosition
 
         sal_Int32 nFreeFromPos; // from here on there are only empty rows
-        ::std::vector< std::shared_ptr<OTableRow> >::const_reverse_iterator aIter = m_pRowList->rbegin();
+        std::vector< std::shared_ptr<OTableRow> >::const_reverse_iterator aIter = m_pRowList->rbegin();
         for(nFreeFromPos = m_pRowList->size();
             aIter != m_pRowList->rend() && (!(*aIter) || !(*aIter)->GetActFieldDescr() || (*aIter)->GetActFieldDescr()->GetName().isEmpty());
             --nFreeFromPos, ++aIter)
@@ -1514,8 +1514,8 @@ void OTableEditorCtrl::SetPrimaryKey( bool bSet )
     MultiSelection aDeletedPrimKeys;
     aDeletedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
 
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
     for(sal_Int32 nRow = 0;aIter != aEnd;++aIter,++nRow)
     {
         OFieldDescription* pFieldDescr = (*aIter)->GetActFieldDescr();
@@ -1557,8 +1557,8 @@ bool OTableEditorCtrl::IsPrimaryKey()
 {
     // Are all marked fields part of the Primary Key ?
     long nPrimaryKeys = 0;
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
     for(sal_Int32 nRow=0;aIter != aEnd;++aIter,++nRow)
     {
         if( IsRowSelected(nRow) && !(*aIter)->IsPrimaryKey() )

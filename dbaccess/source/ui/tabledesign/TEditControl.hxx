@@ -43,7 +43,7 @@ namespace dbaui
             NONE
         };
 
-        ::std::vector< ::std::shared_ptr<OTableRow> >*    m_pRowList;
+        std::vector< std::shared_ptr<OTableRow> >*    m_pRowList;
 
         VclPtr<OSQLNameEdit>               pNameCell;
         VclPtr< ::svt::ListBoxControl>      pTypeCell;
@@ -51,7 +51,7 @@ namespace dbaui
         VclPtr<Edit>                       pDescrCell;
         VclPtr<OTableFieldDescWin>         pDescrWin;          // properties of one column
 
-         ::std::shared_ptr<OTableRow> pActRow;
+         std::shared_ptr<OTableRow> pActRow;
 
         ImplSVEvent *               nCutEvent;
         ImplSVEvent *               nPasteEvent;
@@ -143,9 +143,9 @@ namespace dbaui
 
         virtual OTableDesignView* GetView() const override;
 
-        ::std::vector< ::std::shared_ptr<OTableRow> >* GetRowList(){ return m_pRowList; }
+        std::vector< std::shared_ptr<OTableRow> >* GetRowList(){ return m_pRowList; }
 
-        const ::std::shared_ptr<OTableRow>& GetActRow(){ return pActRow; }
+        const std::shared_ptr<OTableRow>& GetActRow(){ return pActRow; }
         void CellModified( long nRow, sal_uInt16 nColId );
         void SetReadOnly( bool bRead );
 

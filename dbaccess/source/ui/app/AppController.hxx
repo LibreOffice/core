@@ -84,7 +84,7 @@ namespace dbaui
             ,public IContextMenuProvider
     {
     public:
-        typedef ::std::vector< css::uno::Reference< css::container::XContainer > >  TContainerVector;
+        typedef std::vector< css::uno::Reference< css::container::XContainer > >  TContainerVector;
 
     private:
 
@@ -118,9 +118,9 @@ namespace dbaui
         bool                    m_bNeedToReconnect;         // true when the settings of the data source were modified and the connection is no longer up to date
         bool                    m_bSuspended;               // is true when the controller was already suspended
 
-        ::std::unique_ptr< SelectionNotifier >
+        std::unique_ptr< SelectionNotifier >
                                 m_pSelectionNotifier;
-        typedef ::std::map< ElementType, ::std::vector< OUString > > SelectionByElementType;
+        typedef std::map< ElementType, std::vector< OUString > > SelectionByElementType;
         SelectionByElementType  m_aPendingSelection;
 
     private:
@@ -190,7 +190,7 @@ namespace dbaui
         bool isConnectionReadOnly() const;
 
         /// fills the list with the selected entries.
-        void getSelectionElementNames( ::std::vector< OUString>& _rNames ) const;
+        void getSelectionElementNames( std::vector< OUString>& _rNames ) const;
 
         /// deletes the entries selected.
         void deleteEntries();
@@ -207,14 +207,14 @@ namespace dbaui
                 determines whether the user must confirm the deletion
         */
         void deleteObjects( ElementType _eType,
-                            const ::std::vector< OUString>& _rList,
+                            const std::vector< OUString>& _rList,
                             bool _bConfirm );
 
         /** deletes tables.
             @param  _rList
                 The list of tables.
         */
-        void deleteTables(const ::std::vector< OUString>& _rList);
+        void deleteTables(const std::vector< OUString>& _rList);
 
         /// copies the current object into clipboard
         TransferableHelper* copyObject();
@@ -225,9 +225,9 @@ namespace dbaui
         /** returns the document access for the specific type
             @param  _eType
                 the type
-            @return ::std::unique_ptr<OLinkedDocumentsAccess>
+            @return std::unique_ptr<OLinkedDocumentsAccess>
         */
-        ::std::unique_ptr<OLinkedDocumentsAccess> getDocumentsAccess(ElementType _eType);
+        std::unique_ptr<OLinkedDocumentsAccess> getDocumentsAccess(ElementType _eType);
 
         /// returns the query definitions of the active data source.
         css::uno::Reference< css::container::XNameContainer> getQueryDefinitions() const;
@@ -264,7 +264,7 @@ namespace dbaui
             @param  _rFormatIds
                 The vector to be filled up.
         */
-        static void getSupportedFormats(ElementType _eType,::std::vector<SotClipboardFormatId>& _rFormatIds);
+        static void getSupportedFormats(ElementType _eType,std::vector<SotClipboardFormatId>& _rFormatIds);
 
         /** adds a listener to the current name access.
             @param  _xCollection

@@ -33,11 +33,11 @@ namespace drawinglayer
         public:
             // 3D light attribute definitions
             basegfx::BColor                         maAmbientLight;
-            ::std::vector< Sdr3DLightAttribute >    maLightVector;
+            std::vector< Sdr3DLightAttribute >    maLightVector;
 
             ImpSdrLightingAttribute(
                 const basegfx::BColor& rAmbientLight,
-                const ::std::vector< Sdr3DLightAttribute >& rLightVector)
+                const std::vector< Sdr3DLightAttribute >& rLightVector)
             :   maAmbientLight(rAmbientLight),
                 maLightVector(rLightVector)
             {
@@ -51,7 +51,7 @@ namespace drawinglayer
 
             // data read access
             const basegfx::BColor& getAmbientLight() const { return maAmbientLight; }
-            const ::std::vector< Sdr3DLightAttribute >& getLightVector() const { return maLightVector; }
+            const std::vector< Sdr3DLightAttribute >& getLightVector() const { return maLightVector; }
 
             bool operator==(const ImpSdrLightingAttribute& rCandidate) const
             {
@@ -68,7 +68,7 @@ namespace drawinglayer
 
         SdrLightingAttribute::SdrLightingAttribute(
             const basegfx::BColor& rAmbientLight,
-            const ::std::vector< Sdr3DLightAttribute >& rLightVector)
+            const std::vector< Sdr3DLightAttribute >& rLightVector)
         :   mpSdrLightingAttribute(ImpSdrLightingAttribute(
                 rAmbientLight, rLightVector))
         {
@@ -119,7 +119,7 @@ namespace drawinglayer
             return rCandidate.mpSdrLightingAttribute == mpSdrLightingAttribute;
         }
 
-        const ::std::vector< Sdr3DLightAttribute >& SdrLightingAttribute::getLightVector() const
+        const std::vector< Sdr3DLightAttribute >& SdrLightingAttribute::getLightVector() const
         {
             return mpSdrLightingAttribute->getLightVector();
         }

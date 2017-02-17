@@ -54,7 +54,7 @@ namespace pcr
         virtual ~PropertyControlExtender() override;
 
     private:
-        ::std::unique_ptr< PropertyControlExtender_Data > m_pData;
+        std::unique_ptr< PropertyControlExtender_Data > m_pData;
     };
 
 

@@ -61,8 +61,8 @@ namespace dbaui
         virtual void dispose() override;
 
     protected:
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         DECL_LINK( OnTreeEntryCompare, const SvSortData&, sal_Int32 );
         DECL_LINK( OnTreeEntryChecked, void*, void );

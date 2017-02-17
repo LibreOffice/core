@@ -166,7 +166,7 @@ public:
 
 // ============ class ComSmart =====================
 
-typedef ::std::vector< FORMATETC* > FormatEtcList;
+typedef std::vector< FORMATETC* > FormatEtcList;
 
 FORMATETC const pFormatTemplates[FORMATS_NUM] = {
                     { CF_ENHMETAFILE, nullptr, 0, -1, TYMED_ENHMF },

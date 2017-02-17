@@ -118,7 +118,7 @@ namespace dbaui
         OGenericAdministrationPage::dispose();
     }
 
-    void OCommonBehaviourTabPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OCommonBehaviourTabPage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
         {
@@ -130,7 +130,7 @@ namespace dbaui
             _rControlList.push_back(new ODisableWrapper<FixedText>(m_pCharsetLabel));
         }
     }
-    void OCommonBehaviourTabPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OCommonBehaviourTabPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         if (m_nControlFlags & OCommonBehaviourTabPageFlags::UseOptions)
             _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pOptions));
@@ -362,14 +362,14 @@ namespace dbaui
 
         return bChangedSomething;
     }
-    void OUserDriverDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OUserDriverDetailsPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
         _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pEDHostname));
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pUseCatalog));
         _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pNFPortNumber));
     }
-    void OUserDriverDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OUserDriverDetailsPage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFTHostname));
@@ -586,7 +586,7 @@ namespace dbaui
         OCommonBehaviourTabPage::dispose();
     }
 
-    void MySQLNativePage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void MySQLNativePage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls( _rControlList );
         m_aMySQLSettings->fillControls( _rControlList );
@@ -594,7 +594,7 @@ namespace dbaui
         _rControlList.push_back(new OSaveValueWrapper<Edit>(m_pUserName));
         _rControlList.push_back(new OSaveValueWrapper<CheckBox>(m_pPasswordRequired));
     }
-    void MySQLNativePage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void MySQLNativePage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows( _rControlList );
         m_aMySQLSettings->fillWindows( _rControlList);
@@ -768,13 +768,13 @@ namespace dbaui
     {
         return VclPtr<OTextDetailsPage>::Create( pParent, *_rAttrSet );
     }
-    void OTextDetailsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTextDetailsPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillControls(_rControlList);
         m_pTextConnectionHelper->fillControls(_rControlList);
 
     }
-    void OTextDetailsPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTextDetailsPage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         OCommonBehaviourTabPage::fillWindows(_rControlList);
         m_pTextConnectionHelper->fillWindows(_rControlList);

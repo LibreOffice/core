@@ -175,7 +175,7 @@ namespace pcr
 
     Sequence< Property > SAL_CALL ButtonNavigationHandler::doDescribeSupportedProperties() const
     {
-        ::std::vector< Property > aProperties;
+        std::vector< Property > aProperties;
 
         if ( isNavigationCapableButton( m_xComponent ) )
         {

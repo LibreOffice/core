@@ -232,7 +232,7 @@ bool MigrationImpl::doMigration()
     bool result = false;
     try {
         NewVersionUIInfo aNewVersionUIInfo;
-        ::std::vector< MigrationModuleInfo > vModulesInfo = dectectUIChangesForAllModules();
+        std::vector< MigrationModuleInfo > vModulesInfo = dectectUIChangesForAllModules();
         aNewVersionUIInfo.init(vModulesInfo);
 
         copyFiles();
@@ -912,9 +912,9 @@ void MigrationImpl::runServices()
     }
 }
 
-::std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules() const
+std::vector< MigrationModuleInfo > MigrationImpl::dectectUIChangesForAllModules() const
 {
-    ::std::vector< MigrationModuleInfo > vModulesInfo;
+    std::vector< MigrationModuleInfo > vModulesInfo;
     const OUString MENUBAR("menubar");
     const OUString TOOLBAR("toolbar");
 
@@ -987,8 +987,8 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
 {
     const OUString MENU_SEPARATOR(" | ");
 
-    ::std::vector< MigrationItem > vOldItems;
-    ::std::vector< MigrationItem > vNewItems;
+    std::vector< MigrationItem > vOldItems;
+    std::vector< MigrationItem > vNewItems;
     uno::Sequence< beans::PropertyValue > aProp;
     sal_Int32 nOldCount = xIndexOld->getCount();
     sal_Int32 nNewCount = xIndexNew->getCount();
@@ -1023,11 +1023,11 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
         }
     }
 
-    ::std::vector< MigrationItem >::iterator it;
+    std::vector< MigrationItem >::iterator it;
 
     OUString sSibling;
     for (it = vOldItems.begin(); it!=vOldItems.end(); ++it) {
-        ::std::vector< MigrationItem >::iterator pFound = ::std::find(vNewItems.begin(), vNewItems.end(), *it);
+        std::vector< MigrationItem >::iterator pFound = std::find(vNewItems.begin(), vNewItems.end(), *it);
         if (pFound != vNewItems.end() && it->m_xPopupMenu.is()) {
             OUString sName;
             if (!sParent.isEmpty())
@@ -1038,11 +1038,11 @@ void MigrationImpl::compareOldAndNewConfig(const OUString& sParent,
         } else if (pFound == vNewItems.end()) {
             MigrationItem aMigrationItem(sParent, sSibling, it->m_sCommandURL, it->m_xPopupMenu);
             if (m_aOldVersionItemsHashMap.find(sResourceURL)==m_aOldVersionItemsHashMap.end()) {
-                ::std::vector< MigrationItem > vMigrationItems;
+                std::vector< MigrationItem > vMigrationItems;
                 m_aOldVersionItemsHashMap.insert(MigrationHashMap::value_type(sResourceURL, vMigrationItems));
                 m_aOldVersionItemsHashMap[sResourceURL].push_back(aMigrationItem);
             } else {
-                if (::std::find(m_aOldVersionItemsHashMap[sResourceURL].begin(), m_aOldVersionItemsHashMap[sResourceURL].end(), aMigrationItem)==m_aOldVersionItemsHashMap[sResourceURL].end())
+                if (std::find(m_aOldVersionItemsHashMap[sResourceURL].begin(), m_aOldVersionItemsHashMap[sResourceURL].end(), aMigrationItem)==m_aOldVersionItemsHashMap[sResourceURL].end())
                     m_aOldVersionItemsHashMap[sResourceURL].push_back(aMigrationItem);
             }
         }
@@ -1060,7 +1060,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
     if (pFound==m_aOldVersionItemsHashMap.end())
         return;
 
-    ::std::vector< MigrationItem >::iterator it;
+    std::vector< MigrationItem >::iterator it;
     for (it=pFound->second.begin(); it!=pFound->second.end(); ++it) {
         uno::Reference< container::XIndexContainer > xTemp = xIndexContainer;
 
@@ -1191,7 +1191,7 @@ uno::Reference< container::XIndexContainer > NewVersionUIInfo::getNewToolbarSett
     return xNewToolbarSettings;
 }
 
-void NewVersionUIInfo::init(const ::std::vector< MigrationModuleInfo >& vModulesInfo)
+void NewVersionUIInfo::init(const std::vector< MigrationModuleInfo >& vModulesInfo)
 {
     m_lCfgManagerSeq.resize(vModulesInfo.size());
     m_lNewVersionMenubarSettingsSeq.realloc(vModulesInfo.size());

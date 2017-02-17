@@ -31,7 +31,7 @@ struct DataSupplier_Impl;
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
-    ::std::unique_ptr<DataSupplier_Impl> m_pImpl;
+    std::unique_ptr<DataSupplier_Impl> m_pImpl;
 
 public:
     explicit DataSupplier( const rtl::Reference< ODocumentContainer >& rxContent );

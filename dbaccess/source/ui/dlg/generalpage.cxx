@@ -94,9 +94,9 @@ namespace dbaui
 
             DisplayedType( const OUString& _eType, const OUString& _rDisplayName ) : eType( _eType ), sDisplayName( _rDisplayName ) { }
         };
-        typedef ::std::vector< DisplayedType > DisplayedTypes;
+        typedef std::vector< DisplayedType > DisplayedTypes;
 
-        struct DisplayedTypeLess : ::std::binary_function< DisplayedType, DisplayedType, bool >
+        struct DisplayedTypeLess : std::binary_function< DisplayedType, DisplayedType, bool >
         {
             bool operator() ( const DisplayedType& _rLHS, const DisplayedType& _rRHS )
             {
@@ -133,7 +133,7 @@ namespace dbaui
                         }
                     }
                 }
-                ::std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
+                std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
                 DisplayedTypes::const_iterator aDisplayEnd = aDisplayedTypes.end();
                 for (   DisplayedTypes::const_iterator loop = aDisplayedTypes.begin();
                         loop != aDisplayEnd;
@@ -172,7 +172,7 @@ namespace dbaui
                         }
                     }
                 }
-                ::std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
+                std::sort( aDisplayedTypes.begin(), aDisplayedTypes.end(), DisplayedTypeLess() );
                 DisplayedTypes::const_iterator aDisplayEnd = aDisplayedTypes.end();
                 for (   DisplayedTypes::const_iterator loop = aDisplayedTypes.begin();
                         loop != aDisplayEnd;
@@ -377,12 +377,12 @@ namespace dbaui
         m_aEmbeddedURLPrefixes[nPos] = _sType;
     }
 
-    void OGeneralPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OGeneralPage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back( new ODisableWrapper<FixedText>( m_pSpecialMessage ) );
     }
 
-    void OGeneralPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OGeneralPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back( new OSaveValueWrapper<ListBox>( m_pDatasourceType ) );
     }

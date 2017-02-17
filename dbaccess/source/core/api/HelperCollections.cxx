@@ -41,7 +41,7 @@ namespace dbaccess
                         bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector,
+                        const std::vector< OUString> &_rVector,
                         bool _bUseAsIndex
                     ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector,_bUseAsIndex)
                         ,m_aColumns(_rColumns)
@@ -51,7 +51,7 @@ namespace dbaccess
     OPrivateColumns* OPrivateColumns::createWithIntrinsicNames( const ::rtl::Reference< ::connectivity::OSQLColumns >& _rColumns,
         bool _bCase, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex )
     {
-        ::std::vector< OUString > aNames; aNames.reserve( _rColumns->get().size() );
+        std::vector< OUString > aNames; aNames.reserve( _rColumns->get().size() );
 
         OUString sColumName;
         for (   ::connectivity::OSQLColumns::Vector::const_iterator column = _rColumns->get().begin();

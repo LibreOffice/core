@@ -120,7 +120,7 @@ namespace abp
         m_aAllTypes.push_back( ButtonItem( m_pOther, AST_OTHER, true ) );
 
         Link<Button*,void> aTypeSelectionHandler = LINK(this, TypeSelectionPage, OnTypeSelected );
-        for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
+        for ( std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
             ButtonItem aItem = *loop;
@@ -142,7 +142,7 @@ namespace abp
 
     void TypeSelectionPage::dispose()
     {
-        for ( ::std::vector< ButtonItem >::iterator loop = m_aAllTypes.begin();
+        for ( std::vector< ButtonItem >::iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
             loop->m_bVisible = false;
@@ -163,7 +163,7 @@ namespace abp
     {
         AddressBookSourcePage::ActivatePage();
 
-        for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
+        for ( std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
             const ButtonItem& rItem = (*loop);
@@ -187,7 +187,7 @@ namespace abp
 
     void TypeSelectionPage::selectType( AddressSourceType _eType )
     {
-        for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
+        for ( std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
             ButtonItem aItem = (*loop);
@@ -198,7 +198,7 @@ namespace abp
 
     AddressSourceType TypeSelectionPage::getSelectedType() const
     {
-        for ( ::std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
+        for ( std::vector< ButtonItem >::const_iterator loop = m_aAllTypes.begin();
               loop != m_aAllTypes.end(); ++loop )
         {
             ButtonItem aItem = (*loop);

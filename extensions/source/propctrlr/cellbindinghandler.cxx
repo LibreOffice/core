@@ -107,7 +107,7 @@ namespace pcr
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
 
-        ::std::vector< PropertyId > aDependentProperties;
+        std::vector< PropertyId > aDependentProperties;
 
         switch ( nActuatingPropId )
         {
@@ -189,7 +189,7 @@ namespace pcr
             OSL_FAIL( "CellBindingPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
         }
 
-        for ( ::std::vector< PropertyId >::const_iterator loopAffected = aDependentProperties.begin();
+        for ( std::vector< PropertyId >::const_iterator loopAffected = aDependentProperties.begin();
               loopAffected != aDependentProperties.end();
               ++loopAffected
             )
@@ -444,7 +444,7 @@ namespace pcr
 
     Sequence< Property > SAL_CALL CellBindingPropertyHandler::doDescribeSupportedProperties() const
     {
-        ::std::vector< Property > aProperties;
+        std::vector< Property > aProperties;
 
         bool bAllowCellLinking      = m_pHelper.get() && m_pHelper->isCellBindingAllowed();
         bool bAllowCellIntLinking   = m_pHelper.get() && m_pHelper->isCellIntegerBindingAllowed();

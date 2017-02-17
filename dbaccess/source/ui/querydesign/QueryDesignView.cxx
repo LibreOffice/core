@@ -719,7 +719,7 @@ namespace
         OTableFields::const_iterator aEnd = _rFieldList.end();
         for(;aIter != aEnd;++aIter)
         {
-            nMaxCriteria = ::std::max<sal_uInt16>(nMaxCriteria,(sal_uInt16)(*aIter)->GetCriteria().size());
+            nMaxCriteria = std::max<sal_uInt16>(nMaxCriteria,(sal_uInt16)(*aIter)->GetCriteria().size());
         }
         try
         {
@@ -964,7 +964,7 @@ namespace
 
     void GenerateInnerJoinCriterias(const Reference< XConnection>& _xConnection,
                                     OUString& _rJoinCrit,
-                                    const ::std::vector<VclPtr<OTableConnection> >& _rConnList)
+                                    const std::vector<VclPtr<OTableConnection> >& _rConnList)
     {
         auto aIter = _rConnList.begin();
         auto aEnd = _rConnList.end();
@@ -995,7 +995,7 @@ namespace
     }
     OUString GenerateFromClause( const Reference< XConnection>& _xConnection,
                                         const OQueryTableView::OTableWindowMap* pTabList,
-                                        const ::std::vector<VclPtr<OTableConnection> >& rConnList
+                                        const std::vector<VclPtr<OTableConnection> >& rConnList
                                         )
     {
 
@@ -1008,24 +1008,24 @@ namespace
         {
             auto aIter = rConnList.begin();
             auto aEnd = rConnList.end();
-            ::std::map<OTableWindow*,sal_Int32> aConnectionCount;
+            std::map<OTableWindow*,sal_Int32> aConnectionCount;
             for(;aIter != aEnd;++aIter)
             {
                 static_cast<OQueryTableConnection*>((*aIter).get())->SetVisited(false);
                 ++aConnectionCount[(*aIter)->GetSourceWin()];
                 ++aConnectionCount[(*aIter)->GetDestWin()];
             }
-            ::std::multimap<sal_Int32 , OTableWindow*> aMulti;
-            ::std::map<OTableWindow*,sal_Int32>::const_iterator aCountIter = aConnectionCount.begin();
-            ::std::map<OTableWindow*,sal_Int32>::const_iterator aCountEnd = aConnectionCount.end();
+            std::multimap<sal_Int32 , OTableWindow*> aMulti;
+            std::map<OTableWindow*,sal_Int32>::const_iterator aCountIter = aConnectionCount.begin();
+            std::map<OTableWindow*,sal_Int32>::const_iterator aCountEnd = aConnectionCount.end();
             for(;aCountIter != aCountEnd;++aCountIter)
             {
-                aMulti.insert(::std::multimap<sal_Int32 , OTableWindow*>::value_type(aCountIter->second,aCountIter->first));
+                aMulti.insert(std::multimap<sal_Int32 , OTableWindow*>::value_type(aCountIter->second,aCountIter->first));
             }
 
             const bool bUseEscape = ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_OUTERJOINESCAPE );
-            ::std::multimap<sal_Int32 , OTableWindow*>::const_reverse_iterator aRIter = aMulti.rbegin();
-            ::std::multimap<sal_Int32 , OTableWindow*>::const_reverse_iterator aREnd = aMulti.rend();
+            std::multimap<sal_Int32 , OTableWindow*>::const_reverse_iterator aRIter = aMulti.rbegin();
+            std::multimap<sal_Int32 , OTableWindow*>::const_reverse_iterator aREnd = aMulti.rend();
             for(;aRIter != aREnd;++aRIter)
             {
                 auto aConIter = aRIter->second->getTableView()->getTableConnections(aRIter->second);
@@ -1115,7 +1115,7 @@ namespace
         if(!xConnection.is())
             return OUString();
 
-        ::std::map< OUString,bool> aGroupByNames;
+        std::map< OUString,bool> aGroupByNames;
 
         OUString aGroupByStr;
         try
@@ -1159,7 +1159,7 @@ namespace
                     }
                     if ( aGroupByNames.find(sGroupByPart) == aGroupByNames.end() )
                     {
-                        aGroupByNames.insert(::std::map< OUString,bool>::value_type(sGroupByPart,true));
+                        aGroupByNames.insert(std::map< OUString,bool>::value_type(sGroupByPart,true));
                         aGroupByStr += sGroupByPart + ",";
                     }
                 }
@@ -2701,7 +2701,7 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
 
     OJoinTableView::OTableWindowMap& rTabWins = m_pTableView->GetTabWinMap();
     OUString strCurrentPrefix;
-    ::std::vector< OUString> aFields;
+    std::vector< OUString> aFields;
     OJoinTableView::OTableWindowMap::const_iterator aIter = rTabWins.begin();
     OJoinTableView::OTableWindowMap::const_iterator aEnd  = rTabWins.end();
     for(;aIter != aEnd;++aIter)
@@ -2713,8 +2713,8 @@ void OQueryDesignView::fillValidFields(const OUString& sAliasName, ComboBox* pFi
 
             pCurrentWin->EnumValidFields(aFields);
 
-            ::std::vector< OUString>::const_iterator aStrIter = aFields.begin();
-            ::std::vector< OUString>::const_iterator aStrEnd = aFields.end();
+            std::vector< OUString>::const_iterator aStrIter = aFields.begin();
+            std::vector< OUString>::const_iterator aStrEnd = aFields.end();
             for(;aStrIter != aStrEnd;++aStrIter)
             {
                 if (bAllTables || aStrIter->toChar() == '*')

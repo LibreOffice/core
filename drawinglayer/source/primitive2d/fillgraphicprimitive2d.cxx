@@ -55,7 +55,7 @@ namespace drawinglayer
                         if(rAttribute.getTiling())
                         {
                             // get object range and create tiling matrices
-                            ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+                            std::vector< basegfx::B2DHomMatrix > aMatrices;
                             texture::GeoTexSvxTiled aTiling(
                                 rAttribute.getGraphicRange(),
                                 rAttribute.getOffsetX(),

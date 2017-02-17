@@ -68,7 +68,7 @@ public:
     ::boost::optional<Data> getEntry(OUString const & url);
     //must also return the data urls for entries with @activ="false". That is,
     //those are currently revoked.
-    ::std::list< OUString> getAllDataUrls();
+    std::list< OUString> getAllDataUrls();
 
 };
 

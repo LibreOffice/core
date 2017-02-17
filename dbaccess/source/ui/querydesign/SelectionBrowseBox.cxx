@@ -930,7 +930,7 @@ bool OSelectionBrowseBox::SaveModified()
                     {
                         OTableFieldDescRef pNewEntry = new OTableFieldDesc();
                         pNewEntry->SetColumnId( pEntry->GetColumnId() );
-                        ::std::replace(getFields().begin(),getFields().end(),pEntry,pNewEntry);
+                        std::replace(getFields().begin(),getFields().end(),pEntry,pNewEntry);
                         sal_uInt16 nCol = GetCurColumnId();
                         for (int i = 0; i < m_nVisibleCount; i++)   // redraw column
                             RowModified(i,nCol);

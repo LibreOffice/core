@@ -122,7 +122,7 @@ void OAppBorderWindow::Resize()
             if ( pSwap->GetEntryCount() != 0 )
                 nX = pSwap->GetBoundingBox( pSwap->GetEntry(0) ).GetWidth() + aFLSize.Height();
         }
-        nX = ::std::max(m_pPanel->GetWidthPixel() ,nX);
+        nX = std::max(m_pPanel->GetWidthPixel() ,nX);
         m_pPanel->SetPosSizePixel(Point(0,0),Size(nX,nOutputHeight));
     }
 
@@ -401,7 +401,7 @@ sal_Int32 OApplicationView::getElementCount()
     return getDetailView()->getElementCount();
 }
 
-void OApplicationView::getSelectionElementNames( ::std::vector< OUString>& _rNames ) const
+void OApplicationView::getSelectionElementNames( std::vector< OUString>& _rNames ) const
 {
     OSL_ENSURE(m_pWin && getDetailView(),"Detail view is NULL! -> GPF");
     getDetailView()->getSelectionElementNames( _rNames );

@@ -30,11 +30,11 @@ namespace drawinglayer
         {
         public:
             // data definitions
-            ::std::vector< double >                     maDotDashArray;         // array of double which defines the dot-dash pattern
+            std::vector< double >                     maDotDashArray;         // array of double which defines the dot-dash pattern
             double                                      mfFullDotDashLen;       // sum of maDotDashArray (for convenience)
 
             ImpStrokeAttribute(
-                const ::std::vector< double >& rDotDashArray,
+                const std::vector< double >& rDotDashArray,
                 double fFullDotDashLen)
             :   maDotDashArray(rDotDashArray),
                 mfFullDotDashLen(fFullDotDashLen)
@@ -48,13 +48,13 @@ namespace drawinglayer
             }
 
             // data read access
-            const ::std::vector< double >& getDotDashArray() const { return maDotDashArray; }
+            const std::vector< double >& getDotDashArray() const { return maDotDashArray; }
             double getFullDotDashLen() const
             {
                 if(0.0 == mfFullDotDashLen && maDotDashArray.size())
                 {
                     // calculate length on demand
-                    const double fAccumulated(::std::accumulate(maDotDashArray.begin(), maDotDashArray.end(), 0.0));
+                    const double fAccumulated(std::accumulate(maDotDashArray.begin(), maDotDashArray.end(), 0.0));
                     const_cast< ImpStrokeAttribute* >(this)->mfFullDotDashLen = fAccumulated;
                 }
 
@@ -75,7 +75,7 @@ namespace drawinglayer
         }
 
         StrokeAttribute::StrokeAttribute(
-            const ::std::vector< double >& rDotDashArray,
+            const std::vector< double >& rDotDashArray,
             double fFullDotDashLen)
         :   mpStrokeAttribute(ImpStrokeAttribute(
                 rDotDashArray, fFullDotDashLen))
@@ -127,7 +127,7 @@ namespace drawinglayer
             return rCandidate.mpStrokeAttribute == mpStrokeAttribute;
         }
 
-        const ::std::vector< double >& StrokeAttribute::getDotDashArray() const
+        const std::vector< double >& StrokeAttribute::getDotDashArray() const
         {
             return mpStrokeAttribute->getDotDashArray();
         }

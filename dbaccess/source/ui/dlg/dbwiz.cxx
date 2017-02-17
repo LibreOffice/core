@@ -202,7 +202,7 @@ SfxItemSet* ODbTypeWizDialog::getWriteOutputSet()
     return m_pOutSet;
 }
 
-::std::pair< Reference<XConnection>,sal_Bool> ODbTypeWizDialog::createConnection()
+std::pair< Reference<XConnection>,sal_Bool> ODbTypeWizDialog::createConnection()
 {
     return m_pImpl->createConnection();
 }

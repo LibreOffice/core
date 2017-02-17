@@ -90,7 +90,7 @@ namespace dbaui
         virtual void _disposing( const css::lang::EventObject& _rSource ) override;
     };
 
-    typedef ::std::vector< std::shared_ptr<OTableWindowData> >      TTableWindowData;
+    typedef std::vector< std::shared_ptr<OTableWindowData> >      TTableWindowData;
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_TABLEWINDOWDATA_HXX
 

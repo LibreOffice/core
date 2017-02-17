@@ -171,7 +171,7 @@ namespace drawinglayer
 
                 if(pDotDashArray)
                 {
-                    ::std::vector< double > aDoubleArray;
+                    std::vector< double > aDoubleArray;
 
                     for(const int* p = pDotDashArray; *p; ++p)
                     {

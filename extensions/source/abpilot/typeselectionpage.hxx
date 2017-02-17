@@ -55,7 +55,7 @@ namespace abp
             {}
         };
 
-        ::std::vector< ButtonItem > m_aAllTypes;
+        std::vector< ButtonItem > m_aAllTypes;
 
     public:
         explicit TypeSelectionPage( OAddressBookSourcePilot* _pParent );

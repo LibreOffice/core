@@ -665,7 +665,7 @@ namespace
 
                 if(bDashDotUsed)
                 {
-                    ::std::vector< double > fDotDashArray;
+                    std::vector< double > fDotDashArray;
                     const double fDashLen(rLineInfo.GetDashLen());
                     const double fDotLen(rLineInfo.GetDotLen());
                     const double fDistance(rLineInfo.GetDistance());
@@ -682,7 +682,7 @@ namespace
                         fDotDashArray.push_back(fDistance);
                     }
 
-                    const double fAccumulated(::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
+                    const double fAccumulated(std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
                     const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
                         fDotDashArray,
                         fAccumulated);
@@ -1251,7 +1251,7 @@ namespace
         const OUString& rText,
         sal_uInt16 nTextStart,
         sal_uInt16 nTextLength,
-        const ::std::vector< double >& rDXArray,
+        const std::vector< double >& rDXArray,
         TargetHolder& rTarget,
         PropertyHolder& rProperty)
     {
@@ -2030,7 +2030,7 @@ namespace
                         drawinglayer::primitive2d::TextLayouterDevice aTextLayouterDevice;
                         aTextLayouterDevice.setFont(rPropertyHolders.Current().getFont());
 
-                        ::std::vector< double > aTextArray(
+                        std::vector< double > aTextArray(
                             aTextLayouterDevice.getTextArray(
                                 pA->GetText(),
                                 nTextIndex,

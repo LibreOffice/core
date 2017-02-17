@@ -292,7 +292,7 @@ Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex
     // EditEngine's 'internal' methods like GetCharacterBounds()
     // don't rotate for vertical text.
     Size aSize( rOutliner.CalcTextSize() );
-    ::std::swap( aSize.Width(), aSize.Height() );
+    std::swap( aSize.Width(), aSize.Height() );
     bool bIsVertical( rOutliner.IsVertical() );
 
     // #108900# Handle virtual position one-past-the end of the string
@@ -369,7 +369,7 @@ OutputDevice* SvxOutlinerForwarder::GetRefDevice() const
 bool SvxOutlinerForwarder::GetIndexAtPoint( const Point& rPos, sal_Int32& nPara, sal_Int32& nIndex ) const
 {
     Size aSize( rOutliner.CalcTextSize() );
-    ::std::swap( aSize.Width(), aSize.Height() );
+    std::swap( aSize.Width(), aSize.Height() );
     Point aEEPos( SvxEditSourceHelper::UserSpaceToEE( rPos,
                                                       aSize,
                                                       rOutliner.IsVertical() ));

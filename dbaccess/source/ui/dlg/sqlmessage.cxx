@@ -186,7 +186,7 @@ namespace
                     );
     }
 
-    typedef ::std::vector< ExceptionDisplayInfo >   ExceptionDisplayChain;
+    typedef std::vector< ExceptionDisplayInfo >   ExceptionDisplayChain;
 
     /// strips the [OOoBase] vendor identifier from the given error message, if applicable
     OUString lcl_stripOOoBaseVendor( const OUString& _rErrorMessage )

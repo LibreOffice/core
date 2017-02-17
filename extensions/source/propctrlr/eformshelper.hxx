@@ -41,7 +41,7 @@ namespace pcr
 {
 
 
-    typedef ::std::map< OUString, css::uno::Reference< css::beans::XPropertySet >, ::std::less< OUString > >
+    typedef std::map< OUString, css::uno::Reference< css::beans::XPropertySet >, std::less< OUString > >
             MapStringToPropertySet;
 
 
@@ -117,12 +117,12 @@ namespace pcr
 
         /** retrieves the names of all XForms models in the document the control lives in
         */
-        void    getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const;
+        void    getFormModelNames( std::vector< OUString >& /* [out] */ _rModelNames ) const;
 
         /** retrieves the names of all bindings for a given model
             @see getFormModelNames
         */
-        void    getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const;
+        void    getBindingNames( const OUString& _rModelName, std::vector< OUString >& /* [out] */ _rBindingNames ) const;
 
         /// retrieves the XForms model (within the control model's document) with the given name
         css::uno::Reference< css::xforms::XModel >
@@ -215,7 +215,7 @@ namespace pcr
         */
         void    getAllElementUINames(
                     const ModelElementType _eType,
-                    ::std::vector< OUString >& /* [out] */ _rElementNames,
+                    std::vector< OUString >& /* [out] */ _rElementNames,
                     bool _bPrepentEmptyEntry
                 );
 
@@ -223,7 +223,7 @@ namespace pcr
         void    firePropertyChanges(
                     const css::uno::Reference< css::beans::XPropertySet >& _rxOldProps,
                     const css::uno::Reference< css::beans::XPropertySet >& _rxNewProps,
-                    ::std::set< OUString >& _rFilter
+                    std::set< OUString >& _rFilter
                 ) const;
 
         /** fires a change in a single property, if the property value changed, and if we have a listener

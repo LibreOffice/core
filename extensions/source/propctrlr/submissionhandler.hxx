@@ -69,7 +69,7 @@ namespace pcr
     class SubmissionPropertyHandler : public EditPropertyHandler_Base, public ::comphelper::OPropertyChangeListener
     {
     private:
-        ::std::unique_ptr< SubmissionHelper >                    m_pHelper;
+        std::unique_ptr< SubmissionHelper >                    m_pHelper;
         rtl::Reference<::comphelper::OPropertyChangeMultiplexer> m_xPropChangeMultiplexer;
 
     public:

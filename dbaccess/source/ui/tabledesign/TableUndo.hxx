@@ -88,7 +88,7 @@ namespace dbaui
     class OTableEditorDelUndoAct : public OTableEditorUndoAct
     {
     protected:
-        ::std::vector< std::shared_ptr<OTableRow> > m_aDeletedRows;
+        std::vector< std::shared_ptr<OTableRow> > m_aDeletedRows;
 
         virtual void    Undo() override;
         virtual void    Redo() override;
@@ -100,7 +100,7 @@ namespace dbaui
     class OTableEditorInsUndoAct : public OTableEditorUndoAct
     {
     protected:
-        ::std::vector< std::shared_ptr<OTableRow> > m_vInsertedRows;
+        std::vector< std::shared_ptr<OTableRow> > m_vInsertedRows;
         long                        m_nInsPos;
 
         virtual void    Undo() override;
@@ -108,7 +108,7 @@ namespace dbaui
     public:
         OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                 long nInsertPosition,
-                                const ::std::vector<  std::shared_ptr<OTableRow> >& _vInsertedRows);
+                                const std::vector<  std::shared_ptr<OTableRow> >& _vInsertedRows);
         virtual ~OTableEditorInsUndoAct() override;
     };
 

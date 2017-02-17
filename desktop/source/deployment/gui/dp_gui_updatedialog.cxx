@@ -1275,7 +1275,7 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler, Button*, void)
 {
     //If users are going to update a shared extension then we need
     //to warn them
-    typedef ::std::vector<UpdateData>::const_iterator CIT;
+    typedef std::vector<UpdateData>::const_iterator CIT;
     for (CIT i = m_enabledUpdates.begin(); i < m_enabledUpdates.end(); ++i)
     {
         OSL_ASSERT(i->aInstalledPackage.is());

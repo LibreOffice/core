@@ -519,7 +519,7 @@ bool OTableWindow::ExistsAConn() const
     return getTableView()->ExistsAConn(this);
 }
 
-void OTableWindow::EnumValidFields(::std::vector< OUString>& arrstrFields)
+void OTableWindow::EnumValidFields(std::vector< OUString>& arrstrFields)
 {
     arrstrFields.clear();
     // This default implementation counts every item in the ListBox ... for any other behaviour it must be over-written

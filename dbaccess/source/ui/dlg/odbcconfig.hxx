@@ -88,7 +88,7 @@ protected:
 class ProcessTerminationWait;
 class OOdbcManagement
 {
-    ::std::unique_ptr< ProcessTerminationWait >   m_pProcessWait;
+    std::unique_ptr< ProcessTerminationWait >   m_pProcessWait;
     Link<void*,void>                              m_aAsyncFinishCallback;
 
 public:

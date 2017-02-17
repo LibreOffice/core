@@ -212,7 +212,7 @@ namespace pcr
 
     Sequence< Property > SAL_CALL EditPropertyHandler::doDescribeSupportedProperties() const
     {
-        ::std::vector< Property > aProperties;
+        std::vector< Property > aProperties;
 
         if ( implHaveBothScrollBarProperties() )
             addInt32PropertyDescription( aProperties, PROPERTY_SHOW_SCROLLBARS );
@@ -229,7 +229,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL EditPropertyHandler::getSupersededProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::std::vector< OUString > aSuperseded;
+        std::vector< OUString > aSuperseded;
         if ( implHaveBothScrollBarProperties() )
         {
             aSuperseded.push_back( static_cast<const OUString&>(PROPERTY_HSCROLL) );
@@ -249,7 +249,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL EditPropertyHandler::getActuatingProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::std::vector< OUString > aInterestingActuatingProps;
+        std::vector< OUString > aInterestingActuatingProps;
         if ( implHaveTextTypeProperty() )
             aInterestingActuatingProps.push_back(  static_cast<const OUString&>(PROPERTY_TEXTTYPE) );
         aInterestingActuatingProps.push_back( static_cast<const OUString&>(PROPERTY_MULTILINE) );

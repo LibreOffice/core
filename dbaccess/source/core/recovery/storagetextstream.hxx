@@ -43,7 +43,7 @@ namespace dbaccess
         void    writeLine();
 
     private:
-        ::std::unique_ptr< StorageTextOutputStream_Data > m_pData;
+        std::unique_ptr< StorageTextOutputStream_Data > m_pData;
     };
 
 } // namespace dbaccess

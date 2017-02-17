@@ -202,7 +202,7 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
         return;
     }
 
-    ::std::vector< OUString > aPropertyList;
+    std::vector< OUString > aPropertyList;
     try
     {
         // initially copy from the settings object (if existent) to the newly created object

@@ -49,14 +49,14 @@ ExtensionProperties::ExtensionProperties(
 {
     m_propFileUrl = urlExtension + "properties";
 
-    ::std::list< ::std::pair< OUString, OUString> > props;
+    std::list< std::pair< OUString, OUString> > props;
     if (! dp_misc::create_ucb_content(nullptr, m_propFileUrl, nullptr, false))
         return;
 
     ::ucbhelper::Content contentProps(m_propFileUrl, m_xCmdEnv, m_xContext);
     dp_misc::readProperties(props, contentProps);
 
-    typedef ::std::list< ::std::pair< OUString, OUString> >::const_iterator CI;
+    typedef std::list< std::pair< OUString, OUString> >::const_iterator CI;
     for (CI i = props.begin(); i != props.end(); ++i)
     {
         if (i->first == PROP_SUPPRESS_LICENSE)

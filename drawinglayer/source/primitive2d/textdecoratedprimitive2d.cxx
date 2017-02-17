@@ -40,7 +40,7 @@ namespace drawinglayer
             const OUString& rText,
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
-            const ::std::vector< double >& rDXArray,
+            const std::vector< double >& rDXArray,
             const attribute::FontAttribute& rFontAttribute) const
         {
             // create the SimpleTextPrimitive needed in any case
@@ -311,7 +311,7 @@ namespace drawinglayer
             const OUString& rText,
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
-            const ::std::vector< double >& rDXArray,
+            const std::vector< double >& rDXArray,
             const attribute::FontAttribute& rFontAttribute,
             const css::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,

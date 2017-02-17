@@ -41,7 +41,7 @@ namespace dbaui
     class OTableFieldDesc : public ::salhelper::SimpleReferenceObject
     {
     private:
-       ::std::vector< OUString >
+       std::vector< OUString >
                                     m_aCriteria;
 
         OUString             m_aTableName;
@@ -118,15 +118,15 @@ namespace dbaui
 
         bool HasCriteria() const
         {
-            ::std::vector< OUString>::const_iterator aIter = m_aCriteria.begin();
-            ::std::vector< OUString>::const_iterator aEnd = m_aCriteria.end();
+            std::vector< OUString>::const_iterator aIter = m_aCriteria.begin();
+            std::vector< OUString>::const_iterator aEnd = m_aCriteria.end();
             for(;aIter != aEnd;++aIter)
                 if(!aIter->isEmpty())
                     break;
             return aIter != aEnd;
         }
 
-        const ::std::vector< OUString>&  GetCriteria() const { return m_aCriteria; }
+        const std::vector< OUString>&  GetCriteria() const { return m_aCriteria; }
 
         void Load( const css::beans::PropertyValue& i_rSettings, const bool i_bIncludingCriteria );
         void Save( ::comphelper::NamedValueCollection& o_rSettings, const bool i_bIncludingCriteria );
@@ -144,7 +144,7 @@ namespace dbaui
     }
 
     typedef ::rtl::Reference< OTableFieldDesc> OTableFieldDescRef;
-    typedef ::std::vector<OTableFieldDescRef> OTableFields;
+    typedef std::vector<OTableFieldDescRef> OTableFields;
 }
 #endif
 

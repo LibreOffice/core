@@ -830,7 +830,7 @@ namespace pcr
         if ( !m_xComponentPropertyInfo.is() )
             return Sequence< Property >();
 
-        ::std::vector< Property > aProperties;
+        std::vector< Property > aProperties;
 
         Sequence< Property > aAllProperties( m_xComponentPropertyInfo->getProperties() );
         aProperties.reserve( aAllProperties.getLength() );
@@ -911,7 +911,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL FormComponentPropertyHandler::getActuatingProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::std::vector< OUString > aInterestingProperties;
+        std::vector< OUString > aInterestingProperties;
         aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_DATASOURCE) );
         aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_COMMAND) );
         aInterestingProperties.push_back(  static_cast<const OUString&>(PROPERTY_COMMANDTYPE) );
@@ -1241,9 +1241,9 @@ namespace pcr
         bool bIsEnumProperty = ( nPropertyUIFlags & PROP_FLAG_ENUM ) != 0;
         if ( bIsEnumProperty || ( PROPERTY_ID_TARGET_FRAME == nPropId ) )
         {
-            ::std::vector< OUString > aEnumValues = m_pInfoService->getPropertyEnumRepresentations( nPropId );
-            ::std::vector< OUString >::const_iterator pStart = aEnumValues.begin();
-            ::std::vector< OUString >::const_iterator pEnd = aEnumValues.end();
+            std::vector< OUString > aEnumValues = m_pInfoService->getPropertyEnumRepresentations( nPropId );
+            std::vector< OUString >::const_iterator pStart = aEnumValues.begin();
+            std::vector< OUString >::const_iterator pEnd = aEnumValues.end();
 
             // for a checkbox: if "ambiguous" is not allowed, remove this from the sequence
             if  (   ( PROPERTY_ID_DEFAULT_STATE == nPropId )
@@ -1268,8 +1268,8 @@ namespace pcr
                     ++pStart;
 
             // copy the sequence
-            ::std::vector< OUString > aListEntries( pEnd - pStart );
-            ::std::copy( pStart, pEnd, aListEntries.begin() );
+            std::vector< OUString > aListEntries( pEnd - pStart );
+            std::copy( pStart, pEnd, aListEntries.begin() );
 
             // create the control
             if ( PROPERTY_ID_TARGET_FRAME == nPropId )
@@ -1290,7 +1290,7 @@ namespace pcr
                 aDescriptor.Control = pControl;
 
                 pControl->setMinValue( Optional< double >( true, 0 ) );
-                pControl->setMaxValue( Optional< double >( true, ::std::numeric_limits< double >::max() ) );
+                pControl->setMaxValue( Optional< double >( true, std::numeric_limits< double >::max() ) );
             }
             break;
 
@@ -1333,12 +1333,12 @@ namespace pcr
             {
                 aDescriptor.PrimaryButtonId = UID_PROP_DLG_ATTR_DATASOURCE;
 
-                ::std::vector< OUString > aListEntries;
+                std::vector< OUString > aListEntries;
 
                 Reference< XDatabaseContext > xDatabaseContext = sdb::DatabaseContext::create( m_xContext );
                 Sequence< OUString > aDatasources = xDatabaseContext->getElementNames();
                 aListEntries.resize( aDatasources.getLength() );
-                ::std::copy( aDatasources.begin(), aDatasources.end(), aListEntries.begin() );
+                std::copy( aDatasources.begin(), aDatasources.end(), aListEntries.begin() );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
                     _rxControlFactory, aListEntries, false, true );
             }
@@ -1346,7 +1346,7 @@ namespace pcr
 
             case PROPERTY_ID_CONTROLSOURCE:
             {
-                ::std::vector< OUString > aFieldNames;
+                std::vector< OUString > aFieldNames;
                 impl_initFieldList_nothrow( aFieldNames );
                 aDescriptor.Control = PropertyHandlerHelper::createComboBoxControl(
                     _rxControlFactory, aFieldNames, false, false );
@@ -1498,7 +1498,7 @@ namespace pcr
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nActuatingPropId( impl_getPropertyId_nothrow( _rActuatingPropertyName ) );
 
-        ::std::vector< PropertyId > aDependentProperties;
+        std::vector< PropertyId > aDependentProperties;
 
         switch ( nActuatingPropId )
         {
@@ -1768,7 +1768,7 @@ namespace pcr
 
         }   // switch ( nActuatingPropId )
 
-        for ( ::std::vector< PropertyId >::const_iterator loopAffected = aDependentProperties.begin();
+        for ( std::vector< PropertyId >::const_iterator loopAffected = aDependentProperties.begin();
               loopAffected != aDependentProperties.end();
               ++loopAffected
             )
@@ -2327,7 +2327,7 @@ namespace pcr
     }
 
 
-    void FormComponentPropertyHandler::impl_initFieldList_nothrow( ::std::vector< OUString >& _rFieldNames ) const
+    void FormComponentPropertyHandler::impl_initFieldList_nothrow( std::vector< OUString >& _rFieldNames ) const
     {
         clearContainer( _rFieldNames );
         try
@@ -2451,7 +2451,7 @@ namespace pcr
             case CommandType::TABLE:
             case CommandType::QUERY:
             {
-                ::std::vector< OUString > aNames;
+                std::vector< OUString > aNames;
                 if ( impl_ensureRowsetConnection_nothrow() )
                 {
                     if ( nCommandType == CommandType::TABLE )
@@ -2476,7 +2476,7 @@ namespace pcr
     }
 
 
-    void FormComponentPropertyHandler::impl_fillTableNames_throw( ::std::vector< OUString >& _out_rNames ) const
+    void FormComponentPropertyHandler::impl_fillTableNames_throw( std::vector< OUString >& _out_rNames ) const
     {
         OSL_PRECOND( m_xRowSetConnection.is(), "FormComponentPropertyHandler::impl_fillTableNames_throw: need a connection!" );
         _out_rNames.resize( 0 );
@@ -2498,7 +2498,7 @@ namespace pcr
     }
 
 
-    void FormComponentPropertyHandler::impl_fillQueryNames_throw( ::std::vector< OUString >& _out_rNames ) const
+    void FormComponentPropertyHandler::impl_fillQueryNames_throw( std::vector< OUString >& _out_rNames ) const
     {
         OSL_PRECOND( m_xRowSetConnection.is(), "FormComponentPropertyHandler::impl_fillQueryNames_throw: need a connection!" );
         _out_rNames.resize( 0 );
@@ -2512,7 +2512,7 @@ namespace pcr
         }
     }
 
-    void FormComponentPropertyHandler::impl_fillQueryNames_throw( const Reference< XNameAccess >& _xQueryNames,::std::vector< OUString >& _out_rNames,const OUString& _sName ) const
+    void FormComponentPropertyHandler::impl_fillQueryNames_throw( const Reference< XNameAccess >& _xQueryNames,std::vector< OUString >& _out_rNames,const OUString& _sName ) const
     {
         DBG_ASSERT( _xQueryNames.is(), "FormComponentPropertyHandler::impl_fillQueryNames_throw: no way to obtain the queries of the connection!" );
         if ( !_xQueryNames.is() )
@@ -2567,7 +2567,7 @@ namespace pcr
         case ListSourceType_TABLE:
         case ListSourceType_QUERY:
         {
-            ::std::vector< OUString > aListEntries;
+            std::vector< OUString > aListEntries;
             if ( impl_ensureRowsetConnection_nothrow() )
             {
                 if ( nListSourceType == ListSourceType_QUERY )

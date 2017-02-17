@@ -62,17 +62,17 @@ namespace backend {
 namespace component {
 namespace {
 
-typedef ::std::list<OUString> t_stringlist;
-typedef ::std::vector< ::std::pair<OUString, OUString> > t_stringpairvec;
+typedef std::list<OUString> t_stringlist;
+typedef std::vector< std::pair<OUString, OUString> > t_stringpairvec;
 
 #define IMPLEMENTATION_NAME  "com.sun.star.comp.deployment.component.PackageRegistryBackend"
 
 /** return a vector of bootstrap variables which have been provided
     as command arguments.
 */
-::std::vector<OUString> getCmdBootstrapVariables()
+std::vector<OUString> getCmdBootstrapVariables()
 {
-    ::std::vector<OUString> ret;
+    std::vector<OUString> ret;
     sal_uInt32 count = osl_getCommandArgCount();
     for (sal_uInt32 i = 0; i < count; i++)
     {
@@ -976,7 +976,7 @@ void BackendImpl::addToUnoRc( RcItem kind, OUString const & url_,
     const ::osl::MutexGuard guard( getMutex() );
     unorc_verify_init( xCmdEnv );
     t_stringlist & rSet = getRcItemList(kind);
-    if (::std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
+    if (std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
         rSet.push_front( rcterm ); // prepend to list, thus overriding
         // write immediately:
         m_unorc_modified = true;
@@ -1005,7 +1005,7 @@ bool BackendImpl::hasInUnoRc(
     const OUString rcterm( dp_misc::makeRcTerm(url_) );
     const ::osl::MutexGuard guard( getMutex() );
     t_stringlist const & rSet = getRcItemList(kind);
-    return ::std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();
+    return std::find( rSet.begin(), rSet.end(), rcterm ) != rSet.end();
 }
 
 css::uno::Reference< css::uno::XComponentContext > BackendImpl::getRootContext()
@@ -1040,7 +1040,7 @@ Reference<XInterface> BackendImpl::insertObject(
     OUString const & id, Reference<XInterface> const & xObject )
 {
     const ::osl::MutexGuard guard( getMutex() );
-    const ::std::pair<t_string2object::iterator, bool> insertion(
+    const std::pair<t_string2object::iterator, bool> insertion(
         m_backendObjects.insert( t_string2object::value_type(
                                      id, xObject ) ) );
     return insertion.first->second;
@@ -1061,7 +1061,7 @@ Reference<XComponentContext> raise_uno_process(
     // javavm service uses unorc next to executable to retrieve deployed
     // jar typelibs
 
-    ::std::vector<OUString> args{
+    std::vector<OUString> args{
 #if OSL_DEBUG_LEVEL == 0
         "--quiet",
 #endif
@@ -1072,7 +1072,7 @@ Reference<XComponentContext> raise_uno_process(
         "-env:INIFILENAME=" };
 
     //now add the bootstrap variables which were supplied on the command line
-    ::std::vector<OUString> bootvars = getCmdBootstrapVariables();
+    std::vector<OUString> bootvars = getCmdBootstrapVariables();
     args.insert(args.end(), bootvars.begin(), bootvars.end());
 
     oslProcess hProcess;

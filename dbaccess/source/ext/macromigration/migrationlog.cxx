@@ -52,7 +52,7 @@ namespace dbmm
     {
         SubDocumentType                 eType;
         OUString                 sName;
-        ::std::vector< LibraryEntry >   aMovedLibraries;
+        std::vector< LibraryEntry >   aMovedLibraries;
 
         DocumentEntry()
             :eType( eForm )
@@ -69,10 +69,10 @@ namespace dbmm
     };
 
     // DocumentLogs
-    typedef ::std::map< DocumentID, DocumentEntry > DocumentLogs;
+    typedef std::map< DocumentID, DocumentEntry > DocumentLogs;
 
     // ErrorLog
-    typedef ::std::list< MigrationError >   ErrorLog;
+    typedef std::list< MigrationError >   ErrorLog;
 
     // MigrationLog_Data
     struct MigrationLog_Data
@@ -169,7 +169,7 @@ namespace dbmm
         }
 
         const DocumentEntry& rDocEntry( docPos->second );
-        for (   ::std::vector< LibraryEntry >::const_iterator lib = rDocEntry.aMovedLibraries.begin();
+        for (   std::vector< LibraryEntry >::const_iterator lib = rDocEntry.aMovedLibraries.begin();
                 lib != rDocEntry.aMovedLibraries.end();
                 ++lib
             )
@@ -189,7 +189,7 @@ namespace dbmm
         void lcl_appendErrorDescription( OUStringBuffer& _inout_rBuffer, const MigrationError& _rError )
         {
             const sal_Char* pAsciiErrorDescription( nullptr );
-            ::std::vector< OUString > aParameterNames;
+            std::vector< OUString > aParameterNames;
             switch ( _rError.eType )
             {
             case ERR_OPENING_SUB_DOCUMENT_FAILED:
@@ -334,7 +334,7 @@ namespace dbmm
                 OSL_ENSURE( aParameterNames.size() == _rError.aErrorDetails.size(),
                     "lcl_appendErrorDescription: unexpected number of error message parameters!" );
 
-                for ( size_t i=0; i < ::std::min( aParameterNames.size(), _rError.aErrorDetails.size() ); ++i )
+                for ( size_t i=0; i < std::min( aParameterNames.size(), _rError.aErrorDetails.size() ); ++i )
                 {
                     sSubstituted = sSubstituted.replaceFirst(
                         aParameterNames[i], _rError.aErrorDetails[i]);
@@ -421,7 +421,7 @@ namespace dbmm
 
                 aBuffer.append( "=== " + sDocTitle + " ===\n" );
 
-                for (   ::std::vector< LibraryEntry >::const_iterator lib = rDoc.aMovedLibraries.begin();
+                for (   std::vector< LibraryEntry >::const_iterator lib = rDoc.aMovedLibraries.begin();
                         lib != rDoc.aMovedLibraries.end();
                         ++lib
                     )

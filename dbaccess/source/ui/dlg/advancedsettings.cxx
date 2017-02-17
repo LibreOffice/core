@@ -200,7 +200,7 @@ namespace dbaui
         }
     }
 
-    void SpecialSettingsPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
+    void SpecialSettingsPage::fillWindows( std::vector< ISaveValueWrapper* >& _rControlList )
     {
         if ( m_bHasBooleanComparisonMode )
         {
@@ -212,7 +212,7 @@ namespace dbaui
         }
     }
 
-    void SpecialSettingsPage::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void SpecialSettingsPage::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         for (   BooleanSettingDescs::const_iterator setting = m_aBooleanSettings.begin();
                 setting != m_aBooleanSettings.end();
@@ -364,12 +364,12 @@ namespace dbaui
         OGenericAdministrationPage::dispose();
     }
 
-    void GeneratedValuesPage::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
+    void GeneratedValuesPage::fillWindows( std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new ODisableWrapper< VclFrame >( m_pAutoFrame ) );
     }
 
-    void GeneratedValuesPage::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
+    void GeneratedValuesPage::fillControls( std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new OSaveValueWrapper< CheckBox >( m_pAutoRetrievingEnabled ) );
         _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pAutoIncrement ) );
@@ -503,7 +503,7 @@ namespace dbaui
         return m_pExampleSet;
     }
 
-    ::std::pair< Reference< XConnection >, sal_Bool > AdvancedSettingsDialog::createConnection()
+    std::pair< Reference< XConnection >, sal_Bool > AdvancedSettingsDialog::createConnection()
     {
         return m_pImpl->createConnection();
     }

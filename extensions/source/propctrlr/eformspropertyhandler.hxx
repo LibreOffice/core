@@ -38,7 +38,7 @@ namespace pcr
     class EFormsPropertyHandler : public EFormsPropertyHandler_Base
     {
     private:
-        ::std::unique_ptr< EFormsHelper > m_pHelper;
+        std::unique_ptr< EFormsHelper > m_pHelper;
         /** current value of the Model property, if there is no binding, yet
         */
         OUString                 m_sBindingLessModelName;

@@ -151,7 +151,7 @@ namespace dbaui
         bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        ::std::vector< ISaveValueWrapper* > aControlList;
+        std::vector< ISaveValueWrapper* > aControlList;
         if ( _bSaveValue )
         {
             fillControls(aControlList);
@@ -240,7 +240,7 @@ namespace dbaui
             bool bShowMessage = true;
             try
             {
-                ::std::pair< Reference<XConnection>,sal_Bool> aConnectionPair = m_pAdminDialog->createConnection();
+                std::pair< Reference<XConnection>,sal_Bool> aConnectionPair = m_pAdminDialog->createConnection();
                 bShowMessage = aConnectionPair.second;
                 bSuccess = aConnectionPair.first.is();
                 ::comphelper::disposeComponent(aConnectionPair.first);

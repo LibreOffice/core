@@ -315,8 +315,8 @@ bool OConnectionLine::CheckHit( const Point& rMousePos ) const
     double l = fabs(dist_Euklid(m_aSourceConnPos,m_aDestConnPos,rMousePos,q));
     if( l < HIT_SENSITIVE_RADIUS)
     {
-        if(::std::min(m_aSourceConnPos.X(),m_aDestConnPos.X()) <= q.X() && ::std::min(m_aSourceConnPos.Y(),m_aDestConnPos.Y()) <= q.Y()
-            && q.X() <= ::std::max(m_aDestConnPos.X(),m_aSourceConnPos.X())   && q.Y() <= ::std::max(m_aDestConnPos.Y(),m_aSourceConnPos.Y()))
+        if(std::min(m_aSourceConnPos.X(),m_aDestConnPos.X()) <= q.X() && std::min(m_aSourceConnPos.Y(),m_aDestConnPos.Y()) <= q.Y()
+            && q.X() <= std::max(m_aDestConnPos.X(),m_aSourceConnPos.X())   && q.Y() <= std::max(m_aDestConnPos.Y(),m_aSourceConnPos.Y()))
             return true;
     }
 

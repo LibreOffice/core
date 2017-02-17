@@ -174,7 +174,7 @@ private:
     rtl::Reference<DocumentStorageAccess>                             m_pStorageAccess;
     ::comphelper::SharedMutex                                         m_aMutex;
     VosMutexFacade                                                    m_aMutexFacade;
-    ::std::vector< TContentPtr >                                      m_aContainer;   // one for each ObjectType
+    std::vector< TContentPtr >                                      m_aContainer;   // one for each ObjectType
     ::sfx2::DocumentMacroMode                                         m_aMacroMode;
     sal_Int16                                                         m_nImposedMacroExecMode;
 

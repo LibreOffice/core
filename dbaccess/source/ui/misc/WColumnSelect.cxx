@@ -220,7 +220,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton, void )
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
     ::comphelper::UStringMixEqual aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
-    ::std::vector< OUString> aRightColumns;
+    std::vector< OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
     if(!bAll)
@@ -266,7 +266,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, ListBox&, rListBox, void )
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
     ::comphelper::UStringMixEqual aCase(xMetaData->supportsMixedCaseQuotedIdentifiers());
-    ::std::vector< OUString> aRightColumns;
+    std::vector< OUString> aRightColumns;
     fillColumns(pRight,aRightColumns);
 
     for(sal_Int32 i=0; i < pLeft->GetSelectEntryCount(); ++i)
@@ -284,7 +284,7 @@ void OWizColumnSelect::clearListBox(ListBox& _rListBox)
     _rListBox.Clear();
 }
 
-void OWizColumnSelect::fillColumns(ListBox* pRight,::std::vector< OUString> &_rRightColumns)
+void OWizColumnSelect::fillColumns(ListBox* pRight,std::vector< OUString> &_rRightColumns)
 {
     const sal_Int32 nCount = pRight->GetEntryCount();
     _rRightColumns.reserve(nCount);
@@ -294,7 +294,7 @@ void OWizColumnSelect::fillColumns(ListBox* pRight,::std::vector< OUString> &_rR
 
 void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
                                         OFieldDescription* _pSrcField,
-                                        ::std::vector< OUString>& _rRightColumns,
+                                        std::vector< OUString>& _rRightColumns,
                                         const OUString&  _sColumnName,
                                         const OUString&  _sExtraChars,
                                         sal_Int32               _nMaxNameLen,
@@ -320,7 +320,7 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
 
 void OWizColumnSelect::moveColumn(  ListBox* _pRight,
                                     ListBox* _pLeft,
-                                    ::std::vector< OUString>& _rRightColumns,
+                                    std::vector< OUString>& _rRightColumns,
                                     const OUString&  _sColumnName,
                                     const OUString&  _sExtraChars,
                                     sal_Int32               _nMaxNameLen,
@@ -335,7 +335,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
     else
     {
         // find the new column in the dest name mapping to obtain the old column
-        OCopyTableWizard::TNameMapping::const_iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
+        OCopyTableWizard::TNameMapping::const_iterator aIter = std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
             [&_aCase, &_sColumnName] (const OCopyTableWizard::TNameMapping::value_type& nameMap) {
                 return _aCase(nameMap.second, _sColumnName);
             });
@@ -349,7 +349,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
         {
             // we need also the old position of this column to insert it back on that position again
             const ODatabaseExport::TColumnVector& rSrcVector = m_pParent->getSrcVector();
-            ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(rSrcVector.begin(), rSrcVector.end(), aSrcIter);
+            ODatabaseExport::TColumnVector::const_iterator aPos = std::find(rSrcVector.begin(), rSrcVector.end(), aSrcIter);
             OSL_ENSURE( aPos != rSrcVector.end(),"Invalid position for the iterator here!");
             ODatabaseExport::TColumnVector::size_type nPos = (aPos - rSrcVector.begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - rSrcVector.begin()), _aCase);
 
@@ -384,7 +384,7 @@ sal_Int32 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
         if(_sColumnName != sColumnString)
         {
             // find the new column in the dest name mapping to obtain the old column
-            OCopyTableWizard::TNameMapping::const_iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
+            OCopyTableWizard::TNameMapping::const_iterator aIter = std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
                 [&_aCase, &sColumnString] (const OCopyTableWizard::TNameMapping::value_type& nameMap) {
                     return _aCase(nameMap.second, sColumnString);
                 });
@@ -396,7 +396,7 @@ sal_Int32 OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
             {
                 // we need also the old position of this column to insert it back on that position again
                 const ODatabaseExport::TColumnVector& rSrcVector = m_pParent->getSrcVector();
-                ODatabaseExport::TColumnVector::const_iterator aPos = ::std::find(rSrcVector.begin(), rSrcVector.end(), aSrcIter);
+                ODatabaseExport::TColumnVector::const_iterator aPos = std::find(rSrcVector.begin(), rSrcVector.end(), aSrcIter);
                 ODatabaseExport::TColumnVector::size_type nPos = aPos - rSrcVector.begin();
                 if( nPos < nCurrentPos)
                 {

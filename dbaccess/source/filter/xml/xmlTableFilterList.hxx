@@ -27,8 +27,8 @@ namespace dbaxml
     class ODBFilter;
     class OXMLTableFilterList : public SvXMLImportContext
     {
-        ::std::vector< OUString> m_aPatterns;
-        ::std::vector< OUString> m_aTypes;
+        std::vector< OUString> m_aPatterns;
+        std::vector< OUString> m_aTypes;
 
         ODBFilter& GetOwnImport();
     public:

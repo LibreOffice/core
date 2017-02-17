@@ -85,7 +85,7 @@ namespace dbaui
             ExternalFeature( const css::util::URL& _rURL ) : aURL( _rURL ), bEnabled( false ) { }
         };
 
-        typedef ::std::map< sal_uInt16, ExternalFeature >  ExternalFeaturesMap;
+        typedef std::map< sal_uInt16, ExternalFeature >  ExternalFeaturesMap;
         ExternalFeaturesMap     m_aExternalFeatures;
 
         svx::ODataAccessDescriptor    m_aDocumentDataSource;
@@ -325,7 +325,7 @@ namespace dbaui
         bool getExistentConnectionFor( SvTreeListEntry* _pDSEntry, SharedConnection& _rConnection );
         /** returns an image provider which works with the connection belonging to the given entry
         */
-        ::std::unique_ptr< ImageProvider >
+        std::unique_ptr< ImageProvider >
                 getImageProviderFor( SvTreeListEntry* _pAnyEntry );
 
         void    implAdministrate( SvTreeListEntry* _pApplyTo );

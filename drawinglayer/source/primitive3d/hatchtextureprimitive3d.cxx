@@ -135,7 +135,7 @@ namespace drawinglayer
                                             const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(aTexPolyPolygon));
                                             const basegfx::BColor aHatchColor(getHatch().getColor());
                                             const double fAngle(getHatch().getAngle());
-                                            ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+                                            std::vector< basegfx::B2DHomMatrix > aMatrices;
 
                                             // get hatch transformations
                                             switch(getHatch().getStyle())

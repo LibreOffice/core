@@ -90,8 +90,8 @@ namespace pcr
                 ,public IPropertyExistenceCheck
     {
     private:
-        typedef ::std::multimap< sal_Int32, css::beans::Property >  OrderedPropertyMap;
-        typedef ::std::vector< css::uno::Reference< css::uno::XInterface > >
+        typedef std::multimap< sal_Int32, css::beans::Property >  OrderedPropertyMap;
+        typedef std::vector< css::uno::Reference< css::uno::XInterface > >
                                                                             InterfaceArray;
 
     protected:
@@ -111,7 +111,7 @@ namespace pcr
 
         typedef css::uno::Reference< css::inspection::XPropertyHandler >
                                                         PropertyHandlerRef;
-        typedef ::std::vector< PropertyHandlerRef >     PropertyHandlerArray;
+        typedef std::vector< PropertyHandlerRef >     PropertyHandlerArray;
         typedef std::unordered_map< OUString, PropertyHandlerRef, OUStringHash >
                                                         PropertyHandlerRepository;
         typedef std::unordered_multimap< OUString, PropertyHandlerRef, OUStringHash >
@@ -120,7 +120,7 @@ namespace pcr
         PropertyHandlerMultiRepository                  m_aDependencyHandlers;
         PropertyHandlerRef                              m_xInteractiveHandler;
 
-        ::std::unique_ptr< ComposedPropertyUIUpdate >   m_pUIRequestComposer;
+        std::unique_ptr< ComposedPropertyUIUpdate >   m_pUIRequestComposer;
 
         /// our InspectorModel
         css::uno::Reference< css::inspection::XObjectInspectorModel >

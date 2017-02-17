@@ -38,7 +38,7 @@ namespace pcr
 {
 
 
-    struct TypeLess : ::std::binary_function< css::uno::Type, css::uno::Type, bool >
+    struct TypeLess : std::binary_function< css::uno::Type, css::uno::Type, bool >
     {
         bool operator()( const css::uno::Type& _rLHS, const css::uno::Type& _rRHS ) const
         {
@@ -73,7 +73,7 @@ namespace pcr
         PropertyMap                                                                         m_aProperties;
         /// property change listeners
         ::comphelper::OInterfaceContainerHelper2                                                   m_aPropertyListeners;
-        ::std::map< css::uno::Type, ::rtl::Reference< IPropertyEnumRepresentation >, TypeLess >
+        std::map< css::uno::Type, ::rtl::Reference< IPropertyEnumRepresentation >, TypeLess >
                                                                                             m_aEnumConverters;
 
         /// has ->m_aProperties been initialized?

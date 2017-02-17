@@ -499,7 +499,7 @@ void OContentHelper::notifyPropertiesChange( const Sequence< PropertyChangeEvent
         }
 
         typedef Sequence< PropertyChangeEvent > PropertyEventSequence;
-        typedef ::std::map< XPropertiesChangeListener*, PropertyEventSequence* > PropertiesEventListenerMap;
+        typedef std::map< XPropertiesChangeListener*, PropertyEventSequence* > PropertiesEventListenerMap;
         PropertiesEventListenerMap aListeners;
 
         const PropertyChangeEvent* propertyChangeEvent = evt.getConstArray();

@@ -45,7 +45,7 @@ namespace dbaccess
 
 /** creates a vector of WildCards and reduce the _rTableFilter of the length of WildsCards
 */
-sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
+sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, std::vector< WildCard >& _rOut)
 {
     // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
     // for them
@@ -74,17 +74,17 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
     bool lcl_isElementAllowed(  const OUString& _rName,
                                 const Sequence< OUString >& _rTableFilter,
-                                const ::std::vector< WildCard >& _rWCSearch )
+                                const std::vector< WildCard >& _rWCSearch )
     {
         sal_Int32 nTableFilterLen = _rTableFilter.getLength();
 
         const OUString* tableFilter = _rTableFilter.getConstArray();
         const OUString* tableFilterEnd = _rTableFilter.getConstArray() + nTableFilterLen;
-        bool bFilterMatch = ::std::find( tableFilter, tableFilterEnd, _rName ) != tableFilterEnd;
+        bool bFilterMatch = std::find( tableFilter, tableFilterEnd, _rName ) != tableFilterEnd;
         // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
         if (!bFilterMatch && !_rWCSearch.empty())
         {   // or if one of the wildcard expression matches
-            for (   ::std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
+            for (   std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
                     aLoop != _rWCSearch.end() && !bFilterMatch;
                     ++aLoop
                 )
@@ -118,7 +118,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         {
         }
     };
-    typedef ::std::vector< TableInfo >    TableInfos;
+    typedef std::vector< TableInfo >    TableInfos;
 
     void lcl_ensureComposedName( TableInfo& _io_tableInfo, const Reference< XDatabaseMetaData >& _metaData )
     {
@@ -176,7 +176,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         {
             // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
             // for them
-            ::std::vector< WildCard > aWildCardTableFilter;
+            std::vector< WildCard > aWildCardTableFilter;
             Sequence< OUString > aNonWildCardTableFilter = _tableFilter;
             nTableFilterCount = createWildCardVector( aNonWildCardTableFilter, aWildCardTableFilter );
 
@@ -216,7 +216,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                 // ensure that we know the table type
                 lcl_ensureType( *table, _metaData, _masterContainer );
 
-                if ( ::std::find( pTableTypeFilterBegin, pTableTypeFilterEnd, *table->sType ) != pTableTypeFilterEnd )
+                if ( std::find( pTableTypeFilterBegin, pTableTypeFilterEnd, *table->sType ) != pTableTypeFilterEnd )
                     aFilteredTables.push_back( *table );
             }
         }
@@ -241,7 +241,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                                  IRefreshListener*  _pRefreshListener,
                                  ::dbtools::WarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
-        :OCollection(_rParent,_bCase,_rMutex,::std::vector< OUString>())
+        :OCollection(_rParent,_bCase,_rMutex,std::vector< OUString>())
         ,m_bConstructed(false)
         ,m_pWarningsContainer(_pWarningsContainer)
         ,m_pRefreshListener(_pRefreshListener)
@@ -297,7 +297,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
         // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
         // for them
-        ::std::vector< WildCard > aWCSearch;
+        std::vector< WildCard > aWCSearch;
         createWildCardVector(aTableFilter,aWCSearch);
 
         try

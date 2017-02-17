@@ -480,7 +480,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource)
         Reference<XContainer> xContainer( _rSource.Source, UNO_QUERY );
         if ( xContainer.is() )
         {
-            TContainerVector::iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer);
+            TContainerVector::iterator aFind = std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer);
             if ( aFind != m_aCurrentContainers.end() )
                 m_aCurrentContainers.erase(aFind);
         }
@@ -768,10 +768,10 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                             &&  ( getContainer()->isALeafSelected() )
                             )
                         {
-                            ::std::vector< OUString > aSelected;
+                            std::vector< OUString > aSelected;
                             getSelectionElementNames( aSelected );
                             bool bAlterableViews = true;
-                            for (   ::std::vector< OUString >::const_iterator selectedName = aSelected.begin();
+                            for (   std::vector< OUString >::const_iterator selectedName = aSelected.begin();
                                     bAlterableViews && ( selectedName != aSelected.end() ) ;
                                     ++selectedName
                                 )
@@ -1006,7 +1006,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                         case E_TABLE:
                             {
                                 // get the selected tablename
-                                ::std::vector< OUString > aList;
+                                std::vector< OUString > aList;
                                 getSelectionElementNames( aList );
                                 if ( !aList.empty() )
                                     m_aTableCopyHelper.SetTableNameForAppend( *aList.begin() );
@@ -1023,7 +1023,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             break;
                         default:
                             {
-                                ::std::vector< OUString> aList;
+                                std::vector< OUString> aList;
                                 getSelectionElementNames(aList);
                                 OUString sFolderNameToInsertInto;
                                 if ( !aList.empty() )
@@ -1049,10 +1049,10 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     {
                         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         ScopedVclPtr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( getView() ));
-                        ::std::vector<SotClipboardFormatId> aFormatIds;
+                        std::vector<SotClipboardFormatId> aFormatIds;
                         getSupportedFormats(getContainer()->getElementType(),aFormatIds);
-                        const ::std::vector<SotClipboardFormatId>::const_iterator aEnd = aFormatIds.end();
-                        for (::std::vector<SotClipboardFormatId>::const_iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
+                        const std::vector<SotClipboardFormatId>::const_iterator aEnd = aFormatIds.end();
+                        for (std::vector<SotClipboardFormatId>::const_iterator aIter = aFormatIds.begin();aIter != aEnd; ++aIter)
                             pDlg->Insert(*aIter,"");
 
                         const TransferableDataHelper& rClipboard = getViewClipboard();
@@ -1507,7 +1507,7 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
     ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
-    if ( ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
+    if ( std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
     {
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
         if ( getContainer() )
@@ -1543,7 +1543,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
     ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
-    if ( ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
+    if ( std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
     {
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
         OUString sName;
@@ -1577,7 +1577,7 @@ void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rE
     ::osl::MutexGuard aGuard( getMutex() );
 
     Reference< XContainer > xContainer(_rEvent.Source, UNO_QUERY);
-    if ( ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
+    if ( std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xContainer) != m_aCurrentContainers.end() )
     {
         OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
         OUString sName;
@@ -1795,7 +1795,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
     {
         if ( isStandaloneDocument || !m_pSubComponentManager->activateSubFrame( _sName, _eType, _eOpenMode, xRet ) )
         {
-            ::std::unique_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
+            std::unique_ptr< OLinkedDocumentsAccess > aHelper = getDocumentsAccess( _eType );
             if ( !aHelper->isConnected() )
                 break;
 
@@ -1817,7 +1817,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
             if ( !xConnection.is() )
                 break;
 
-            ::std::unique_ptr< DatabaseObjectView > pDesigner;
+            std::unique_ptr< DatabaseObjectView > pDesigner;
             ::comphelper::NamedValueCollection aArguments( _rAdditionalArguments );
 
             Any aDataSource;
@@ -1899,7 +1899,7 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
         case E_REPORT:
         case E_FORM:
         {
-            ::std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
+            std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
             if ( aHelper->isConnected() )
             {
                 sal_Int32 nCommandType = -1;
@@ -1914,7 +1914,7 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
         case E_QUERY:
         case E_TABLE:
          {
-            ::std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
+            std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
             if ( aHelper->isConnected() )
             {
                 if ( E_QUERY == _eType )
@@ -1945,7 +1945,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
         case E_FORM:
         case E_REPORT:
         {
-            ::std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess( _eType );
+            std::unique_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess( _eType );
             if ( !aHelper->isConnected() )
                 break;
 
@@ -1956,7 +1956,7 @@ Reference< XComponent > OApplicationController::newElement( ElementType _eType, 
         case E_QUERY:
         case E_TABLE:
         {
-            ::std::unique_ptr< DatabaseObjectView > pDesigner;
+            std::unique_ptr< DatabaseObjectView > pDesigner;
             SharedConnection xConnection( ensureConnection() );
             if ( !xConnection.is() )
                 break;
@@ -1994,7 +1994,7 @@ void OApplicationController::addContainerListener(const Reference<XNameAccess>& 
         if ( xCont.is() )
         {
             // add as listener to get notified if elements are inserted or removed
-            TContainerVector::const_iterator aFind = ::std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xCont);
+            TContainerVector::const_iterator aFind = std::find(m_aCurrentContainers.begin(),m_aCurrentContainers.end(),xCont);
             if ( aFind == m_aCurrentContainers.end() )
             {
                 xCont->addContainerListener(this);
@@ -2014,7 +2014,7 @@ void OApplicationController::renameEntry()
     ::osl::MutexGuard aGuard( getMutex() );
 
     OSL_ENSURE(getContainer(),"View is NULL! -> GPF");
-    ::std::vector< OUString> aList;
+    std::vector< OUString> aList;
     getSelectionElementNames(aList);
 
     Reference< XNameAccess > xContainer = getElements(getContainer()->getElementType());
@@ -2026,7 +2026,7 @@ void OApplicationController::renameEntry()
     {
         if ( xContainer.is() )
         {
-            ::std::unique_ptr< IObjectNameCheck > pNameChecker;
+            std::unique_ptr< IObjectNameCheck > pNameChecker;
             VclPtr< OSaveAsDlg > aDialog;
 
             Reference<XRename> xRename;
@@ -2339,7 +2339,7 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
         if ( eType != E_NONE && (eType != E_TABLE || !isConnectionReadOnly()) )
         {
             // check for the concrete type
-            if(::std::any_of(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(eType)))
+            if(std::any_of(_rFlavors.begin(),_rFlavors.end(),TAppSupportedSotFunctor(eType)))
                 return DND_ACTION_COPY;
             if ( eType == E_FORM || eType == E_REPORT )
             {

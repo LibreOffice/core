@@ -68,7 +68,7 @@ namespace dbaccess
                             ,const connectivity::OSQLTable& _xTable
                             ,OUStringBuffer& _sCondition
                             ,OUStringBuffer& _sParameter
-                            ,::std::vector< sal_Int32>& _rOrgValues);
+                            ,std::vector< sal_Int32>& _rOrgValues);
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
         void fillTableName(const css::uno::Reference< css::beans::XPropertySet>& _xTable);
@@ -173,9 +173,9 @@ namespace dbaccess
 
         virtual bool isResultSetChanged() const;
         virtual void reset(const css::uno::Reference< css::sdbc::XResultSet>& _xDriverSet) = 0;
-        virtual void mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& io_aInsertRow,ORowSetValueVector::Vector& io_aRow,::std::vector<sal_Int32>& o_aChangedColumns);
+        virtual void mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& io_aInsertRow,ORowSetValueVector::Vector& io_aRow,std::vector<sal_Int32>& o_aChangedColumns);
         virtual bool columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow,const ORowSetValueVector::Vector& i_aRow);
-        virtual bool updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const ::std::vector<sal_Int32>& i_aChangedColumns);
+        virtual bool updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const std::vector<sal_Int32>& i_aChangedColumns);
         virtual void fillMissingValues(ORowSetValueVector::Vector& io_aRow) const;
         virtual bool previous_checked( bool i_bFetchRow );
         virtual bool absolute_checked( sal_Int32 row,bool i_bFetchRow );

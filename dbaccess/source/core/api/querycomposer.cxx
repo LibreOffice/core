@@ -156,7 +156,7 @@ OUString SAL_CALL OQueryComposer::getFilter(  )
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
     FilterCreator aFilterCreator;
-    aFilterCreator = ::std::for_each(m_aFilters.begin(),m_aFilters.end(),aFilterCreator);
+    aFilterCreator = std::for_each(m_aFilters.begin(),m_aFilters.end(),aFilterCreator);
     return aFilterCreator.getComposedAndClear();
 }
 
@@ -174,7 +174,7 @@ OUString SAL_CALL OQueryComposer::getOrder(  )
 
     ::osl::MutexGuard aGuard( m_aMutex );
     OrderCreator aOrderCreator;
-    aOrderCreator = ::std::for_each(m_aOrders.begin(),m_aOrders.end(),aOrderCreator);
+    aOrderCreator = std::for_each(m_aOrders.begin(),m_aOrders.end(),aOrderCreator);
     return aOrderCreator.getComposedAndClear();
 }
 

@@ -111,7 +111,7 @@ bool VosMutexFacade::tryToAcquire()
 class DocumentStorageAccess : public ::cppu::WeakImplHelper<   XDocumentSubStorageSupplier
                                                            ,   XTransactionListener >
 {
-    typedef ::std::map< OUString, Reference< XStorage > >    NamedStorages;
+    typedef std::map< OUString, Reference< XStorage > >    NamedStorages;
 
     ::osl::Mutex        m_aMutex;
     /// all sub storages which we ever gave to the outer world
@@ -320,7 +320,7 @@ Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames
     if ( !xRootStor.is() )
         return Sequence< OUString >();
 
-    ::std::vector< OUString > aNames;
+    std::vector< OUString > aNames;
 
     Sequence< OUString > aElementNames( xRootStor->getElementNames() );
     for ( sal_Int32 i=0; i<aElementNames.getLength(); ++i )
@@ -609,7 +609,7 @@ bool ODatabaseModelImpl::objectHasMacros( const Reference< XStorage >& _rxContai
 void ODatabaseModelImpl::reset()
 {
     m_bReadOnly = false;
-    ::std::vector< TContentPtr > aEmptyContainers( 4 );
+    std::vector< TContentPtr > aEmptyContainers( 4 );
     m_aContainer.swap( aEmptyContainers );
 
     if ( m_pStorageAccess.is() )
@@ -695,8 +695,8 @@ void ODatabaseModelImpl::dispose()
     m_xDataSource = WeakReference<XDataSource>();
     m_xModel = WeakReference< XModel >();
 
-    ::std::vector<TContentPtr>::const_iterator aIter = m_aContainer.begin();
-    ::std::vector<TContentPtr>::const_iterator aEnd = m_aContainer.end();
+    std::vector<TContentPtr>::const_iterator aIter = m_aContainer.begin();
+    std::vector<TContentPtr>::const_iterator aEnd = m_aContainer.end();
     for (;aIter != aEnd ; ++aIter)
     {
         if ( aIter->get() )

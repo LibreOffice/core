@@ -31,7 +31,7 @@
 namespace dbaccess
 {
 
-    typedef ::std::map< OUString, css::uno::Sequence< css::beans::PropertyValue > >
+    typedef std::map< OUString, css::uno::Sequence< css::beans::PropertyValue > >
             DocumentEventsData;
 
     // DocumentEvents
@@ -68,7 +68,7 @@ namespace dbaccess
         virtual sal_Bool SAL_CALL hasElements(  ) override;
 
     private:
-        ::std::unique_ptr< DocumentEvents_Data >  m_pData;
+        std::unique_ptr< DocumentEvents_Data >  m_pData;
     };
 
 } // namespace dbaccess

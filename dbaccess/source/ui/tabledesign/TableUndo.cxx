@@ -160,7 +160,7 @@ OTableEditorDelUndoAct::OTableEditorDelUndoAct( OTableEditorCtrl* pOwner) :
      OTableEditorUndoAct( pOwner ,STR_TABED_UNDO_ROWDELETED)
 {
     // fill DeletedRowList
-    ::std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pOwner->GetRowList();
+    std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pOwner->GetRowList();
     long nIndex = pOwner->FirstSelectedRow();
      std::shared_ptr<OTableRow>  pOriginalRow;
      std::shared_ptr<OTableRow>  pNewRow;
@@ -184,11 +184,11 @@ void OTableEditorDelUndoAct::Undo()
 {
     // Insert the deleted line
     sal_uLong nPos;
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_aDeletedRows.begin();
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_aDeletedRows.end();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_aDeletedRows.begin();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_aDeletedRows.end();
 
      std::shared_ptr<OTableRow>  pNewOrigRow;
-    ::std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
+    std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
     for(;aIter != aEnd;++aIter)
     {
@@ -206,9 +206,9 @@ void OTableEditorDelUndoAct::Redo()
 {
     // delete line again
     sal_uLong nPos;
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_aDeletedRows.begin();
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_aDeletedRows.end();
-    ::std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_aDeletedRows.begin();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_aDeletedRows.end();
+    std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
     for(;aIter != aEnd;++aIter)
     {
@@ -224,7 +224,7 @@ void OTableEditorDelUndoAct::Redo()
 // class OTableEditorInsUndoAct
 OTableEditorInsUndoAct::OTableEditorInsUndoAct( OTableEditorCtrl* pOwner,
                                                long nInsertPosition ,
-                                               const ::std::vector<  std::shared_ptr<OTableRow> >& _vInsertedRows)
+                                               const std::vector<  std::shared_ptr<OTableRow> >& _vInsertedRows)
     :OTableEditorUndoAct( pOwner,STR_TABED_UNDO_ROWINSERTED )
     ,m_vInsertedRows(_vInsertedRows)
     ,m_nInsPos( nInsertPosition )
@@ -239,7 +239,7 @@ OTableEditorInsUndoAct::~OTableEditorInsUndoAct()
 void OTableEditorInsUndoAct::Undo()
 {
     // delete lines again
-    ::std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
+    std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
     for( long i=(m_nInsPos+m_vInsertedRows.size()-1); i>(m_nInsPos-1); i-- )
     {
         pOriginalRows->erase(pOriginalRows->begin()+i);
@@ -256,9 +256,9 @@ void OTableEditorInsUndoAct::Redo()
     // insert lines again
     long nInsertRow = m_nInsPos;
      std::shared_ptr<OTableRow>  pRow;
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vInsertedRows.begin();
-    ::std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vInsertedRows.end();
-    ::std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aIter = m_vInsertedRows.begin();
+    std::vector< std::shared_ptr<OTableRow> >::const_iterator aEnd = m_vInsertedRows.end();
+    std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
     for(;aIter != aEnd;++aIter)
     {
         pRow.reset(new OTableRow( **aIter ));
@@ -287,7 +287,7 @@ OTableEditorInsNewUndoAct::~OTableEditorInsNewUndoAct()
 void OTableEditorInsNewUndoAct::Undo()
 {
     // delete inserted lines
-    ::std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
+    std::vector< std::shared_ptr<OTableRow> >* pOriginalRows = pTabEdCtrl->GetRowList();
 
     for( long i=(m_nInsPos+m_nInsRows-1); i>(m_nInsPos-1); i-- )
     {
@@ -303,7 +303,7 @@ void OTableEditorInsNewUndoAct::Undo()
 void OTableEditorInsNewUndoAct::Redo()
 {
     // insert lines again
-    ::std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
+    std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
 
     for( long i=m_nInsPos; i<(m_nInsPos+m_nInsRows); i++ )
         pRowList->insert( pRowList->begin()+i,std::make_shared<OTableRow>() );
@@ -329,7 +329,7 @@ OPrimKeyUndoAct::~OPrimKeyUndoAct()
 
 void OPrimKeyUndoAct::Undo()
 {
-    ::std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
+    std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
     std::shared_ptr<OTableRow>  pRow;
     long nIndex;
 
@@ -355,7 +355,7 @@ void OPrimKeyUndoAct::Undo()
 
 void OPrimKeyUndoAct::Redo()
 {
-    ::std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
+    std::vector< std::shared_ptr<OTableRow> >* pRowList = pTabEdCtrl->GetRowList();
     long nIndex;
 
     // delete the deleted keys

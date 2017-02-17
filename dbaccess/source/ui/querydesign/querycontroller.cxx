@@ -403,7 +403,7 @@ void SAL_CALL OQueryController::getFastPropertyValue( Any& o_rValue, sal_Int32 i
         PropertyAttribute::READONLY
     );
 
-    ::std::sort(
+    std::sort(
         aProps.getArray(),
         aProps.getArray() + aProps.getLength(),
         ::comphelper::PropertyCompareByName()
@@ -1568,9 +1568,9 @@ struct CommentStrip
 
     See also delComment() implementation for OSQLParser::parseTree().
  */
-static ::std::vector< CommentStrip > getComment( const OUString& rQuery )
+static std::vector< CommentStrip > getComment( const OUString& rQuery )
 {
-    ::std::vector< CommentStrip > aRet;
+    std::vector< CommentStrip > aRet;
     // First a quick search if there is any "--" or "//" or "/*", if not then
     // the whole copying loop is pointless.
     if (rQuery.indexOf( "--" ) < 0 && rQuery.indexOf( "//" ) < 0 &&
@@ -1645,7 +1645,7 @@ static ::std::vector< CommentStrip > getComment( const OUString& rQuery )
     recomposition. This is ugly but at least allows commented queries while
     preserving the comments _somehow_.
  */
-static OUString concatComment( const OUString& rQuery, const ::std::vector< CommentStrip >& rComments )
+static OUString concatComment( const OUString& rQuery, const std::vector< CommentStrip >& rComments )
 {
     // No comments => return query.
     if (rComments.empty())
@@ -1657,7 +1657,7 @@ static OUString concatComment( const OUString& rQuery, const ::std::vector< Comm
     // Obtaining the needed size once should be faster than reallocating.
     // Also add a blank or linefeed for each comment.
     sal_Int32 nBufSize = nLen + nComments;
-    for (::std::vector< CommentStrip >::const_iterator it( rComments.begin()); it != rComments.end(); ++it)
+    for (std::vector< CommentStrip >::const_iterator it( rComments.begin()); it != rComments.end(); ++it)
         nBufSize += (*it).maComment.getLength();
     OUStringBuffer aBuf( nBufSize );
     sal_Int32 nIndBeg = 0;
@@ -1706,7 +1706,7 @@ OUString OQueryController::translateStatement( bool _bFireStatementChange )
         {
             OUString aErrorMsg;
 
-            ::std::vector< CommentStrip > aComments = getComment( m_sStatement);
+            std::vector< CommentStrip > aComments = getComment( m_sStatement);
 
             ::connectivity::OSQLParseNode* pNode = m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign );
             if(pNode)
@@ -1844,7 +1844,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
             else if ( m_bEscapeProcessing )
             {
                 OUString aErrorMsg;
-                ::std::unique_ptr< ::connectivity::OSQLParseNode > pNode(
+                std::unique_ptr< ::connectivity::OSQLParseNode > pNode(
                     m_aSqlParser.parseTree( aErrorMsg, m_sStatement, m_bGraphicalDesign ) );
 
                 if ( pNode.get() )

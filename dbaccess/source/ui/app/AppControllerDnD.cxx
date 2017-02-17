@@ -98,7 +98,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::util;
 
-void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList)
+void OApplicationController::deleteTables(const std::vector< OUString>& _rList)
 {
     SharedConnection xConnection( ensureConnection() );
 
@@ -111,8 +111,8 @@ void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList
         if ( xDrop.is() )
         {
             bool bConfirm = true;
-            ::std::vector< OUString>::const_iterator aEnd = _rList.end();
-            for (::std::vector< OUString>::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter)
+            std::vector< OUString>::const_iterator aEnd = _rList.end();
+            for (std::vector< OUString>::const_iterator aIter = _rList.begin(); aIter != aEnd; ++aIter)
             {
                 OUString sTableName = *aIter;
 
@@ -182,7 +182,7 @@ void OApplicationController::deleteTables(const ::std::vector< OUString>& _rList
     }
 }
 
-void OApplicationController::deleteObjects( ElementType _eType, const ::std::vector< OUString>& _rList, bool _bConfirm )
+void OApplicationController::deleteObjects( ElementType _eType, const std::vector< OUString>& _rList, bool _bConfirm )
 {
     Reference< XNameContainer > xNames( getElements( _eType ), UNO_QUERY );
     Reference< XHierarchicalNameContainer > xHierarchyName( xNames, UNO_QUERY );
@@ -195,19 +195,19 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
         // be the ancestor or child of another element from the list.
         // We want to ensure that ancestors get deleted first, so we normalize the list in this respect.
         // #i33353#
-        ::std::set< OUString > aDeleteNames;
-            // Note that this implicitly uses ::std::less< OUString > a comparison operation, which
+        std::set< OUString > aDeleteNames;
+            // Note that this implicitly uses std::less< OUString > a comparison operation, which
             // results in lexicographical order, which is exactly what we need, because "foo" is *before*
             // any "foo/bar" in this order.
-        ::std::copy(
+        std::copy(
             _rList.begin(), _rList.end(),
-            ::std::insert_iterator< ::std::set< OUString > >( aDeleteNames, aDeleteNames.begin() )
+            std::insert_iterator< std::set< OUString > >( aDeleteNames, aDeleteNames.begin() )
         );
 
-        ::std::set< OUString >::size_type nCount = aDeleteNames.size();
-        for ( ::std::set< OUString >::size_type nObjectsLeft = nCount; !aDeleteNames.empty(); )
+        std::set< OUString >::size_type nCount = aDeleteNames.size();
+        for ( std::set< OUString >::size_type nObjectsLeft = nCount; !aDeleteNames.empty(); )
         {
-            ::std::set< OUString >::const_iterator  aThisRound = aDeleteNames.begin();
+            std::set< OUString >::const_iterator  aThisRound = aDeleteNames.begin();
 
             if ( eResult != svtools::QUERYDELETE_ALL )
             {
@@ -252,12 +252,12 @@ void OApplicationController::deleteObjects( ElementType _eType, const ::std::vec
                     OUStringBuffer sSmallestSiblingName( *aThisRound );
                     sSmallestSiblingName.append( (sal_Unicode)( '/' + 1) );
 
-                    ::std::set< OUString >::const_iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName.makeStringAndClear() );
-                    for ( ::std::set< OUString >::const_iterator aObsolete = aThisRound;
+                    std::set< OUString >::const_iterator aUpperChildrenBound = aDeleteNames.lower_bound( sSmallestSiblingName.makeStringAndClear() );
+                    for ( std::set< OUString >::const_iterator aObsolete = aThisRound;
                           aObsolete != aUpperChildrenBound;
                         )
                     {
-                        ::std::set< OUString >::const_iterator aNextObsolete = aObsolete; ++aNextObsolete;
+                        std::set< OUString >::const_iterator aNextObsolete = aObsolete; ++aNextObsolete;
                         aDeleteNames.erase( aObsolete );
                         --nObjectsLeft;
                         aObsolete = aNextObsolete;
@@ -299,7 +299,7 @@ void OApplicationController::deleteEntries()
 
     if ( getContainer() )
     {
-        ::std::vector< OUString> aList;
+        std::vector< OUString> aList;
         getSelectionElementNames(aList);
         ElementType eType = getContainer()->getElementType();
         switch(eType)
@@ -483,7 +483,7 @@ Reference< XNameAccess > OApplicationController::getElements( ElementType _eType
     return xElements;
 }
 
-void OApplicationController::getSelectionElementNames(::std::vector< OUString>& _rNames) const
+void OApplicationController::getSelectionElementNames(std::vector< OUString>& _rNames) const
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -493,7 +493,7 @@ void OApplicationController::getSelectionElementNames(::std::vector< OUString>& 
     getContainer()->getSelectionElementNames( _rNames );
 }
 
-::std::unique_ptr< OLinkedDocumentsAccess > OApplicationController::getDocumentsAccess( ElementType _eType )
+std::unique_ptr< OLinkedDocumentsAccess > OApplicationController::getDocumentsAccess( ElementType _eType )
 {
     OSL_ENSURE( ( _eType == E_TABLE ) || ( _eType == E_QUERY ) || ( _eType == E_FORM ) || ( _eType == E_REPORT ),
         "OApplicationController::getDocumentsAccess: only forms and reports are supported here!" );
@@ -507,7 +507,7 @@ void OApplicationController::getSelectionElementNames(::std::vector< OUString>& 
         OSL_ENSURE( xDocContainer.is(), "OApplicationController::getDocumentsAccess: invalid container!" );
     }
 
-    ::std::unique_ptr< OLinkedDocumentsAccess > pDocuments( new OLinkedDocumentsAccess(
+    std::unique_ptr< OLinkedDocumentsAccess > pDocuments( new OLinkedDocumentsAccess(
         getView(), this, getORB(), xDocContainer, xConnection, getDatabaseName()
     ) );
     return pDocuments;
@@ -551,7 +551,7 @@ TransferableHelper* OApplicationController::copyObject()
             case E_FORM:
             case E_REPORT:
             {
-                ::std::vector< OUString> aList;
+                std::vector< OUString> aList;
                 getSelectionElementNames(aList);
                 Reference< XHierarchicalNameAccess > xElements(getElements(eType),UNO_QUERY);
                 if ( xElements.is() && !aList.empty() )
@@ -775,7 +775,7 @@ Reference<XNameContainer> OApplicationController::getQueryDefinitions() const
     return xNames;
 }
 
-void OApplicationController::getSupportedFormats(ElementType _eType,::std::vector<SotClipboardFormatId>& _rFormatIds)
+void OApplicationController::getSupportedFormats(ElementType _eType,std::vector<SotClipboardFormatId>& _rFormatIds)
 {
     switch( _eType )
     {
@@ -816,7 +816,7 @@ IMPL_LINK_NOARG( OApplicationController, OnAsyncDrop, void*, void )
         {
             Reference<XContent> xContent;
             m_aAsyncDrop.aDroppedData[DataAccessDescriptorProperty::Component] >>= xContent;
-            ::std::vector< OUString> aList;
+            std::vector< OUString> aList;
             sal_Int32 nIndex = 0;
             OUString sName = xContent->getIdentifier()->getContentIdentifier();
             OUString sErase = sName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part

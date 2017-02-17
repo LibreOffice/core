@@ -311,7 +311,7 @@ void OAppDetailPageHelper::sortUp()
         sort(nPos,SortAscending);
 }
 
-void OAppDetailPageHelper::getSelectionElementNames( ::std::vector< OUString>& _rNames ) const
+void OAppDetailPageHelper::getSelectionElementNames( std::vector< OUString>& _rNames ) const
 {
     int nPos = getVisibleControlIndex();
     if ( nPos < E_ELEMENT_TYPE_COUNT )
@@ -366,7 +366,7 @@ void OAppDetailPageHelper::describeCurrentSelectionForType( const ElementType _e
     if ( !pList )
         return;
 
-    ::std::vector< NamedDatabaseObject > aSelected;
+    std::vector< NamedDatabaseObject > aSelected;
 
     SvTreeListEntry* pEntry = pList->FirstSelected();
     while( pEntry )

@@ -381,19 +381,19 @@ void SAL_CALL OConnection::clearWarnings(  )
 
 namespace
 {
-    struct CompareTypeByName : public ::std::binary_function< Type, Type, bool >
+    struct CompareTypeByName : public std::binary_function< Type, Type, bool >
     {
         bool operator() ( const Type& _rLHS, const Type& _rRHS ) const
         {
             return _rLHS.getTypeName() < _rRHS.getTypeName();
         }
     };
-    typedef ::std::set< Type, CompareTypeByName > TypeBag;
+    typedef std::set< Type, CompareTypeByName > TypeBag;
 
     void lcl_copyTypes( TypeBag& _out_rTypes, const Sequence< Type >& _rTypes )
     {
-        ::std::copy( _rTypes.begin(), _rTypes.end(),
-            ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
+        std::copy( _rTypes.begin(), _rTypes.end(),
+            std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
     }
 }
 
@@ -768,7 +768,7 @@ void OConnection::impl_checkTableQueryNames_nothrow()
     {
         Reference< XNameAccess > xTables( getTables() );
         Sequence< OUString > aTableNames( xTables->getElementNames() );
-        ::std::set< OUString > aSortedTableNames( aTableNames.getConstArray(), aTableNames.getConstArray() + aTableNames.getLength() );
+        std::set< OUString > aSortedTableNames( aTableNames.getConstArray(), aTableNames.getConstArray() + aTableNames.getLength() );
 
         Reference< XNameAccess > xQueries( getQueries() );
         Sequence< OUString > aQueryNames( xQueries->getElementNames() );

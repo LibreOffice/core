@@ -58,22 +58,22 @@ class ODBFilter : public SvXMLImport
 {
 public:
     typedef std::map< OUString, Sequence<PropertyValue> > TPropertyNameMap;
-    typedef ::std::vector< css::beans::PropertyValue> TInfoSequence;
+    typedef std::vector< css::beans::PropertyValue> TInfoSequence;
 private:
     TPropertyNameMap                                m_aQuerySettings;
     TPropertyNameMap                                m_aTablesSettings;
     TInfoSequence                                   m_aInfoSequence;
 
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDataSourceElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pLoginElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDatabaseDescriptionElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDataSourceInfoElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pDocumentsElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pQueryElemTokenMap;
-    mutable ::std::unique_ptr<SvXMLTokenMap>          m_pColumnElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pDocElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pDatabaseElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pDataSourceElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pLoginElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pDatabaseDescriptionElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pDataSourceInfoElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pDocumentsElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pComponentElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pQueryElemTokenMap;
+    mutable std::unique_ptr<SvXMLTokenMap>          m_pColumnElemTokenMap;
 
     mutable rtl::Reference < XMLPropertySetMapper >   m_xTableStylesPropertySetMapper;
     mutable rtl::Reference < XMLPropertySetMapper >   m_xColumnStylesPropertySetMapper;

@@ -152,9 +152,9 @@ void ObjectCopySource::copyUISettingsTo( const Reference< XPropertySet >& _rxObj
 
 void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _xConnection,const Reference< XPropertySet >& _rxObject ) const
 {
-    ::std::pair< OUString, OUString > aProperties[] = {
-                 ::std::pair< OUString, OUString >(PROPERTY_FILTER,OUString(" AND "))
-                ,::std::pair< OUString, OUString >(PROPERTY_ORDER,OUString(" ORDER BY "))
+    std::pair< OUString, OUString > aProperties[] = {
+                 std::pair< OUString, OUString >(PROPERTY_FILTER,OUString(" AND "))
+                ,std::pair< OUString, OUString >(PROPERTY_ORDER,OUString(" ORDER BY "))
     };
 
     try
@@ -340,7 +340,7 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
 Sequence< OUString > NamedTableCopySource::getColumnNames() const
 {
     Sequence< OUString > aNames( m_aColumnInfo.size() );
-    for (   ::std::vector< OFieldDescription >::const_iterator col = m_aColumnInfo.begin();
+    for (   std::vector< OFieldDescription >::const_iterator col = m_aColumnInfo.begin();
             col != m_aColumnInfo.end();
             ++col
         )
@@ -374,7 +374,7 @@ Sequence< OUString > NamedTableCopySource::getPrimaryKeyColumnNames() const
 
 OFieldDescription* NamedTableCopySource::createFieldDescription( const OUString& _rColumnName ) const
 {
-    for (   ::std::vector< OFieldDescription >::const_iterator col = m_aColumnInfo.begin();
+    for (   std::vector< OFieldDescription >::const_iterator col = m_aColumnInfo.begin();
             col != m_aColumnInfo.end();
             ++col
         )
@@ -795,7 +795,7 @@ bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
 
                 if ( aDestIter != m_vDestColumns.end() )
                 {
-                    ODatabaseExport::TColumnVector::const_iterator aFind = ::std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
+                    ODatabaseExport::TColumnVector::const_iterator aFind = std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
                     sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
                     m_vColumnPos.push_back(ODatabaseExport::TPositions::value_type(nPos,nPos));
                     m_vColumnTypes.push_back((*aFind)->second->GetType());
@@ -873,7 +873,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, Button*, void)
                 {
                     if ( supportsPrimaryKey() )
                     {
-                        ODatabaseExport::TColumns::const_iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end(),
+                        ODatabaseExport::TColumns::const_iterator aFind = std::find_if(m_vDestColumns.begin(),m_vDestColumns.end(),
                             [] (const ODatabaseExport::TColumns::value_type& tCol) { return tCol.second->IsPrimaryKey(); });
                         if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
@@ -1270,10 +1270,10 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 
                 if ( aDestIter != m_vDestColumns.end() )
                 {
-                    ODatabaseExport::TColumnVector::const_iterator aFind = ::std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
+                    ODatabaseExport::TColumnVector::const_iterator aFind = std::find(m_aDestVec.begin(),m_aDestVec.end(),aDestIter);
                     sal_Int32 nPos = (aFind - m_aDestVec.begin())+1;
 
-                    ODatabaseExport::TPositions::iterator aPosFind = ::std::find_if(
+                    ODatabaseExport::TPositions::iterator aPosFind = std::find_if(
                         m_vColumnPos.begin(),
                         m_vColumnPos.end(),
                         [nPos] (const ODatabaseExport::TPositions::value_type& tPos) {

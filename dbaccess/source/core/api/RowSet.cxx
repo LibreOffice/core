@@ -566,7 +566,7 @@ void ORowSet::freeResources( bool _bComplete )
         // the columns must be disposed before the querycomposer is disposed because
         // their owner can be the composer
         TDataColumns().swap(m_aDataColumns);// clear and resize capacity
-        ::std::vector<bool>().swap(m_aReadOnlyDataColumns);
+        std::vector<bool>().swap(m_aReadOnlyDataColumns);
 
         m_xColumns      = nullptr;
         if ( m_pColumns )
@@ -909,7 +909,7 @@ void SAL_CALL ORowSet::insertRow()
     RowsChangeEvent aEvt(*this,RowChangeAction::INSERT,1,aChangedBookmarks);
     notifyAllListenersRowBeforeChange(aGuard,aEvt);
 
-    ::std::vector< Any > aBookmarks;
+    std::vector< Any > aBookmarks;
     bool bInserted = m_pCache->insertRow(aBookmarks);
 
     // make sure that our row is set to the new inserted row before clearing the insert flags in the cache
@@ -963,7 +963,7 @@ void SAL_CALL ORowSet::updateRow(  )
         RowsChangeEvent aEvt(*this,RowChangeAction::UPDATE,1,aChangedBookmarks);
         notifyAllListenersRowBeforeChange(aGuard,aEvt);
 
-        ::std::vector< Any > aBookmarks;
+        std::vector< Any > aBookmarks;
         m_pCache->updateRow(m_aCurrentRow.operator ->(),aBookmarks);
         if ( !aBookmarks.empty() )
             aEvt.Bookmarks = Sequence<Any>(&(*aBookmarks.begin()),aBookmarks.size());
@@ -1243,7 +1243,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
     impl_restoreDataColumnsWriteable_throw();
     TDataColumns::const_iterator aIter = m_aDataColumns.begin();
     m_aReadOnlyDataColumns.resize(m_aDataColumns.size(),false);
-    ::std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
+    std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aIter != m_aDataColumns.end();++aIter,++aReadIter)
     {
         bool bReadOnly = false;
@@ -1258,7 +1258,7 @@ void ORowSet::impl_restoreDataColumnsWriteable_throw()
 {
     assert(m_aDataColumns.size() == m_aReadOnlyDataColumns.size() || m_aReadOnlyDataColumns.size() == 0 );
     TDataColumns::const_iterator aIter = m_aDataColumns.begin();
-    ::std::vector<bool, std::allocator<bool> >::const_iterator aReadIter = m_aReadOnlyDataColumns.begin();
+    std::vector<bool, std::allocator<bool> >::const_iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aReadIter != m_aReadOnlyDataColumns.end();++aIter,++aReadIter)
     {
         (*aIter)->setPropertyValue(PROPERTY_ISREADONLY, makeAny( (bool)*aReadIter ) );
@@ -1849,10 +1849,10 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             m_xNumberFormatTypes.set(xNumberFormat->getNumberFormats(),UNO_QUERY);
 
         ::rtl::Reference< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
-        ::std::vector< OUString> aNames;
+        std::vector< OUString> aNames;
         OUString aDescription;
 
-        const ::std::map<sal_Int32,sal_Int32>& rKeyColumns = m_pCache->getKeyColumns();
+        const std::map<sal_Int32,sal_Int32>& rKeyColumns = m_pCache->getKeyColumns();
         if(!m_xColumns.is())
         {
             SAL_INFO("dbaccess", "ORowSet::execute_NoApprove_NoNewConn::creating columns" );
@@ -1930,7 +1930,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
             sal_Int32 nCount = xMeta->getColumnCount();
             m_aDataColumns.reserve(nCount+1);
             aColumns->get().reserve(nCount+1);
-            ::std::set< Reference< XPropertySet > > aAllColumns;
+            std::set< Reference< XPropertySet > > aAllColumns;
 
             for(sal_Int32 i=1; i <= nCount ;++i)
             {
@@ -2448,7 +2448,7 @@ void ORowSet::impl_initParametersContainer_nothrow()
 
     m_pParameters = new param::ParameterWrapperContainer( m_xComposer.get() );
     // copy the premature parameters into the final ones
-    size_t nParamCount( ::std::min( m_pParameters->size(), m_aPrematureParamValues->get().size() ) );
+    size_t nParamCount( std::min( m_pParameters->size(), m_aPrematureParamValues->get().size() ) );
     for ( size_t i=0; i<nParamCount; ++i )
     {
         (*m_pParameters)[i] = m_aPrematureParamValues->get()[i];
@@ -2798,7 +2798,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
     m_aOldRow = m_pCache->registerOldRow();
 
     ::rtl::Reference< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
-    ::std::vector< OUString> aNames;
+    std::vector< OUString> aNames;
 
     OUString aDescription;
     Locale aLocale = SvtSysLocale().GetLanguageTag().getLocale();

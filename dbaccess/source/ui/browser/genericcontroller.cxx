@@ -78,8 +78,8 @@ using namespace ::dbtools;
 using namespace ::comphelper;
 
 #define ALL_FEATURES                -1
-#define FIRST_USER_DEFINED_FEATURE  ( ::std::numeric_limits< sal_uInt16 >::max() - 1000 )
-#define LAST_USER_DEFINED_FEATURE   ( ::std::numeric_limits< sal_uInt16 >::max()        )
+#define FIRST_USER_DEFINED_FEATURE  ( std::numeric_limits< sal_uInt16 >::max() - 1000 )
+#define LAST_USER_DEFINED_FEATURE   ( std::numeric_limits< sal_uInt16 >::max()        )
 
 typedef std::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
 
@@ -401,7 +401,7 @@ void OGenericUnoController::attachFrame( const Reference< XFrame >& _rxFrame )
 
 namespace
 {
-    typedef ::std::vector< Any >    States;
+    typedef std::vector< Any >    States;
 
     void    lcl_notifyMultipleStates( XStatusListener& _rListener, FeatureStateEvent& _rEvent, const States& _rStates )
     {
@@ -503,10 +503,10 @@ void OGenericUnoController::ImplBroadcastFeatureState(const OUString& _rFeature,
 
 bool OGenericUnoController::isFeatureSupported( sal_Int32 _nId )
 {
-    SupportedFeatures::const_iterator aFeaturePos = ::std::find_if(
+    SupportedFeatures::const_iterator aFeaturePos = std::find_if(
         m_aSupportedFeatures.begin(),
         m_aSupportedFeatures.end(),
-        ::std::bind2nd( CompareFeatureById(), _nId )
+        std::bind2nd( CompareFeatureById(), _nId )
     );
 
     return ( m_aSupportedFeatures.end() != aFeaturePos && !aFeaturePos->first.isEmpty());
@@ -536,10 +536,10 @@ void OGenericUnoController::InvalidateFeature_Impl()
         }
         else
         {
-            SupportedFeatures::const_iterator aFeaturePos = ::std::find_if(
+            SupportedFeatures::const_iterator aFeaturePos = std::find_if(
                 m_aSupportedFeatures.begin(),
                 m_aSupportedFeatures.end(),
-                ::std::bind2nd( CompareFeatureById(), aNextFeature.nId )
+                std::bind2nd( CompareFeatureById(), aNextFeature.nId )
             );
 
 #if OSL_DEBUG_LEVEL > 0
@@ -573,10 +573,10 @@ void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Referen
 #if OSL_DEBUG_LEVEL > 0
     if ( _nId != -1 )
     {
-        SupportedFeatures::const_iterator aFeaturePos = ::std::find_if(
+        SupportedFeatures::const_iterator aFeaturePos = std::find_if(
             m_aSupportedFeatures.begin(),
             m_aSupportedFeatures.end(),
-            ::std::bind2nd( CompareFeatureById(), _nId )
+            std::bind2nd( CompareFeatureById(), _nId )
         );
         OSL_ENSURE( aFeaturePos != m_aSupportedFeatures.end(), "OGenericUnoController::ImplInvalidateFeature: invalidating an unsupported feature is suspicious, at least!" );
     }
@@ -759,9 +759,9 @@ void OGenericUnoController::removeStatusListener(const Reference< XStatusListene
     // now remove the listener from the deque
     ::osl::MutexGuard aGuard( m_aFeatureMutex );
     m_aFeaturesToInvalidate.erase(
-        ::std::remove_if(   m_aFeaturesToInvalidate.begin(),
+        std::remove_if(   m_aFeaturesToInvalidate.begin(),
                             m_aFeaturesToInvalidate.end(),
-                            ::std::bind2nd(FindFeatureListener(),aListener))
+                            std::bind2nd(FindFeatureListener(),aListener))
         ,m_aFeaturesToInvalidate.end());
 }
 
@@ -897,10 +897,10 @@ URL OGenericUnoController::getURLForId(sal_Int32 _nId) const
     URL aReturn;
     if ( m_xUrlTransformer.is() )
     {
-        SupportedFeatures::const_iterator aIter = ::std::find_if(
+        SupportedFeatures::const_iterator aIter = std::find_if(
             m_aSupportedFeatures.begin(),
             m_aSupportedFeatures.end(),
-            ::std::bind2nd( CompareFeatureById(), _nId )
+            std::bind2nd( CompareFeatureById(), _nId )
         );
 
         if ( m_aSupportedFeatures.end() != aIter && !aIter->first.isEmpty() )
@@ -1452,7 +1452,7 @@ namespace
 
 Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup )
 {
-    ::std::list< DispatchInformation > aInformationList;
+    std::list< DispatchInformation > aInformationList;
     DispatchInformation aDispatchInfo;
     for (   SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
             aIter != m_aSupportedFeatures.end();
@@ -1467,7 +1467,7 @@ Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableD
     }
 
     Sequence< DispatchInformation > aInformation( aInformationList.size() );
-    ::std::transform( aInformationList.begin(),
+    std::transform( aInformationList.begin(),
         aInformationList.end(),
         aInformation.getArray(),
         SGI_identity< DispatchInformation >()

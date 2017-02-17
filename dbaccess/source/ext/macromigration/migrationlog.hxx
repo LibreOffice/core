@@ -101,7 +101,7 @@ namespace dbmm
                     getCompleteLog() const;
 
     private:
-        ::std::unique_ptr< MigrationLog_Data >    m_pData;
+        std::unique_ptr< MigrationLog_Data >    m_pData;
     };
 
 } // namespace dbmm

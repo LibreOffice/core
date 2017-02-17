@@ -566,11 +566,11 @@ namespace dbaui
         return true;
     }
 
-    void OTableSubscriptionPage::fillControls(::std::vector< ISaveValueWrapper* >& /*_rControlList*/)
+    void OTableSubscriptionPage::fillControls(std::vector< ISaveValueWrapper* >& /*_rControlList*/)
     {
     }
 
-    void OTableSubscriptionPage::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OTableSubscriptionPage::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new ODisableWrapper<VclContainer>(m_pTables));
     }

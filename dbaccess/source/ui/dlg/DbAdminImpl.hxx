@@ -64,7 +64,7 @@ namespace dbaui
         css::uno::Reference< css::frame::XModel >         m_xModel;
 
         css::uno::Any              m_aDataSourceOrName;
-        typedef ::std::set< OUString >   StringSet;
+        typedef std::set< OUString >   StringSet;
         typedef StringSet::const_iterator       ConstStringSetIterator;
 
         MapInt2String           m_aDirectPropTranslator;    /// translating property id's into names (direct properties of a data source)
@@ -94,7 +94,7 @@ namespace dbaui
 
         /** creates a new connection. The caller is responsible to dispose it !!!!
         */
-        ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool>      createConnection();
+        std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool>      createConnection();
 
         /** return the corresponding driver for the selected URL
         */

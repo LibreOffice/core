@@ -33,7 +33,7 @@ namespace dbaxml
         virtual void exportStyleAttributes(
                 SvXMLAttributeList& rAttrList,
                 sal_Int32 nFamily,
-                const ::std::vector< XMLPropertyState >& rProperties,
+                const std::vector< XMLPropertyState >& rProperties,
                 const SvXMLExportPropertyMapper& rPropExp,
                 const SvXMLUnitConverter& rUnitConverter,
                 const SvXMLNamespaceMap& rNamespaceMap

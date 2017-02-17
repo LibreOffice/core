@@ -61,7 +61,7 @@ namespace pcr
         sal_Int32               m_nMinHelpTextLines;
         sal_Int32               m_nMaxHelpTextLines;
         bool                m_bIsReadOnly;
-        ::std::unique_ptr< ::cppu::IPropertyArrayHelper >
+        std::unique_ptr< ::cppu::IPropertyArrayHelper >
                                 m_pPropertyInfo;
 
     public:

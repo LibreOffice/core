@@ -180,7 +180,7 @@ namespace dbaxml
                 const XMLPropertyState& /*rProperty*/,
                 const SvXMLUnitConverter& /*rUnitConverter*/,
                 const SvXMLNamespaceMap& /*rNamespaceMap*/,
-                const ::std::vector< XMLPropertyState > * /*pProperties*/ ,
+                const std::vector< XMLPropertyState > * /*pProperties*/ ,
                 sal_uInt32 /*nIdx*/ ) const override
         {
             // nothing to do here
@@ -646,7 +646,7 @@ void ODBExport::exportConnectionData()
 }
 
 template< typename T > void ODBExport::exportDataSourceSettingsSequence(
-    ::std::vector< TypedPropertyValue >::iterator const & in)
+    std::vector< TypedPropertyValue >::iterator const & in)
 {
     OSequenceIterator< T > i( in->Value );
     while (i.hasMoreElements())
@@ -663,8 +663,8 @@ void ODBExport::exportDataSourceSettings()
         return;
 
     SvXMLElementExport aElem(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTINGS, true, true);
-    ::std::vector< TypedPropertyValue >::iterator aIter = m_aDataSourceSettings.begin();
-    ::std::vector< TypedPropertyValue >::const_iterator aEnd = m_aDataSourceSettings.end();
+    std::vector< TypedPropertyValue >::iterator aIter = m_aDataSourceSettings.begin();
+    std::vector< TypedPropertyValue >::const_iterator aEnd = m_aDataSourceSettings.end();
     for ( ; aIter != aEnd; ++aIter )
     {
         const bool bIsSequence = TypeClass_SEQUENCE == aIter->Type.getTypeClass();
@@ -1118,8 +1118,8 @@ void ODBExport::exportTables(bool _bExportContext)
 
 void ODBExport::exportAutoStyle(XPropertySet* _xProp)
 {
-    typedef ::std::pair<TPropertyStyleMap*,sal_uInt16> TEnumMapperPair;
-    typedef ::std::pair< rtl::Reference < SvXMLExportPropertyMapper> , TEnumMapperPair> TExportPropMapperPair;
+    typedef std::pair<TPropertyStyleMap*,sal_uInt16> TEnumMapperPair;
+    typedef std::pair< rtl::Reference < SvXMLExportPropertyMapper> , TEnumMapperPair> TExportPropMapperPair;
     Reference<XColumnsSupplier> xSup(_xProp,UNO_QUERY);
     if ( xSup.is() )
     {
@@ -1129,7 +1129,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
             ,TExportPropMapperPair(m_xRowExportHelper,TEnumMapperPair(&m_aRowAutoStyleNames,XML_STYLE_FAMILY_TABLE_ROW))
         };
 
-        ::std::vector< XMLPropertyState > aPropertyStates;
+        std::vector< XMLPropertyState > aPropertyStates;
         for (const auto & i : pExportHelper)
         {
             aPropertyStates = i.first->Filter(_xProp);
@@ -1177,11 +1177,11 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
         };
         for (const auto & i : pExportHelper)
         {
-            ::std::vector< XMLPropertyState > aPropStates = i.first->Filter( _xProp );
+            std::vector< XMLPropertyState > aPropStates = i.first->Filter( _xProp );
             if ( !aPropStates.empty() )
             {
-                ::std::vector< XMLPropertyState >::iterator aItr = aPropStates.begin();
-                ::std::vector< XMLPropertyState >::const_iterator aEnd = aPropStates.end();
+                std::vector< XMLPropertyState >::iterator aItr = aPropStates.begin();
+                std::vector< XMLPropertyState >::const_iterator aEnd = aPropStates.end();
                 const rtl::Reference < XMLPropertySetMapper >& pStyle = i.first->getPropertySetMapper();
                 while ( aItr != aEnd )
                 {
@@ -1207,7 +1207,7 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
 
             }
             if ( XML_STYLE_FAMILY_TABLE_CELL == i.second.second )
-                ::std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), ::std::back_inserter( aPropStates ));
+                std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), std::back_inserter( aPropStates ));
             if ( !aPropStates.empty() )
                 i.second.first->insert( TPropertyStyleMap::value_type(_xProp,GetAutoStylePool()->Add( i.second.second, aPropStates )));
         }

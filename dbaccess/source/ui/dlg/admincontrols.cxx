@@ -201,7 +201,7 @@ namespace dbaui
         TabPage::dispose();
     }
 
-    void MySQLNativeSettings::fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList )
+    void MySQLNativeSettings::fillControls( std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pDatabaseName ) );
         _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pHostName ) );
@@ -210,7 +210,7 @@ namespace dbaui
         _rControlList.push_back( new OSaveValueWrapper< Edit >( m_pNamedPipe ) );
     }
 
-    void MySQLNativeSettings::fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList )
+    void MySQLNativeSettings::fillWindows( std::vector< ISaveValueWrapper* >& _rControlList )
     {
         _rControlList.push_back( new ODisableWrapper< FixedText >( m_pDatabaseNameLabel ) );
         _rControlList.push_back( new ODisableWrapper< FixedText >( m_pHostNameLabel ) );

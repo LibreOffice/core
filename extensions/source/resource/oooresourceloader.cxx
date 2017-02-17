@@ -80,7 +80,7 @@ namespace extensions { namespace resource
     {
     private:
         typedef std::shared_ptr< StringResourceAccess >  ResourceTypePtr;
-        typedef ::std::map< OUString, ResourceTypePtr >  ResourceTypes;
+        typedef std::map< OUString, ResourceTypePtr >  ResourceTypes;
 
         ::osl::Mutex                    m_aMutex;
         Reference< XResourceBundle >    m_xParent;

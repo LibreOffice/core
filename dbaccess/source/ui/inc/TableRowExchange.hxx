@@ -28,9 +28,9 @@ namespace dbaui
     class OTableRow;
     class OTableRowExchange : public TransferableHelper
     {
-        ::std::vector< std::shared_ptr<OTableRow> > m_vTableRow;
+        std::vector< std::shared_ptr<OTableRow> > m_vTableRow;
     public:
-        OTableRowExchange(const ::std::vector< std::shared_ptr<OTableRow> >& _rvTableRow);
+        OTableRowExchange(const std::vector< std::shared_ptr<OTableRow> >& _rvTableRow);
     protected:
         virtual void        AddSupportedFormats() override;
         virtual bool GetData( const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;

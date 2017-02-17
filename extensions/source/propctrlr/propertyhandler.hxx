@@ -94,7 +94,7 @@ namespace pcr
         /// type converter, needed on various occasions
         css::uno::Reference< css::script::XTypeConverter >    m_xTypeConverter;
         /// access to property meta data
-        ::std::unique_ptr< OPropertyInfoService >             m_pInfoService;
+        std::unique_ptr< OPropertyInfoService >             m_pInfoService;
 
     protected:
         explicit PropertyHandler(
@@ -164,14 +164,14 @@ namespace pcr
             Most probably to be called from within getSupportedProperties
         */
         inline void addStringPropertyDescription(
-                    ::std::vector< css::beans::Property >& _rProperties,
+                    std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName
                 ) const;
 
         /** adds a description for the given int32 property to the given property vector
         */
         inline void addInt32PropertyDescription(
-                    ::std::vector< css::beans::Property >& _rProperties,
+                    std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs = 0
                 ) const;
@@ -179,7 +179,7 @@ namespace pcr
         /** adds a description for the given int16 property to the given property vector
         */
         inline void addInt16PropertyDescription(
-                    ::std::vector< css::beans::Property >& _rProperties,
+                    std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs = 0
                 ) const;
@@ -187,7 +187,7 @@ namespace pcr
         /** adds a description for the given double property to the given property vector
         */
         inline void addDoublePropertyDescription(
-                    ::std::vector< css::beans::Property >& _rProperties,
+                    std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs
                 ) const;
@@ -195,7 +195,7 @@ namespace pcr
         /** adds a description for the given date property to the given property vector
         */
         inline void addDatePropertyDescription(
-                    ::std::vector< css::beans::Property >& _rProperties,
+                    std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs
                 ) const;
@@ -203,7 +203,7 @@ namespace pcr
         /** adds a description for the given time property to the given property vector
         */
         inline void addTimePropertyDescription(
-                    ::std::vector< css::beans::Property >& _rProperties,
+                    std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs
                 ) const;
@@ -211,14 +211,14 @@ namespace pcr
         /** adds a description for the given DateTime property to the given property vector
         */
         inline void addDateTimePropertyDescription(
-                    ::std::vector< css::beans::Property >& _rProperties,
+                    std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     sal_Int16 _nAttribs
                 ) const;
 
         /// adds a Property, given by name only, to a given vector of Properties
         void implAddPropertyDescription(
-                    ::std::vector< css::beans::Property >& _rProperties,
+                    std::vector< css::beans::Property >& _rProperties,
                     const OUString& _rPropertyName,
                     const css::uno::Type& _rType,
                     sal_Int16 _nAttribs = 0
@@ -303,37 +303,37 @@ namespace pcr
     };
 
 
-    inline void PropertyHandler::addStringPropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName ) const
+    inline void PropertyHandler::addStringPropertyDescription( std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<OUString>::get() );
     }
 
-    inline void PropertyHandler::addInt32PropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addInt32PropertyDescription( std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<sal_Int32>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addInt16PropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addInt16PropertyDescription( std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<sal_Int16>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addDoublePropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addDoublePropertyDescription( std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<double>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addDatePropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addDatePropertyDescription( std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<css::util::Date>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addTimePropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addTimePropertyDescription( std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<css::util::Time>::get(), _nAttribs );
     }
 
-    inline void PropertyHandler::addDateTimePropertyDescription( ::std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
+    inline void PropertyHandler::addDateTimePropertyDescription( std::vector< css::beans::Property >& _rProperties, const OUString& _rPropertyName, sal_Int16 _nAttribs ) const
     {
         implAddPropertyDescription( _rProperties, _rPropertyName, ::cppu::UnoType<css::util::DateTime>::get(), _nAttribs );
     }

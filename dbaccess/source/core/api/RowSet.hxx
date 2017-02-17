@@ -90,8 +90,8 @@ namespace dbaccess
         */
         rtl::Reference<ORowSetValueVector>          m_aPrematureParamValues;
         rtl::Reference<ORowSetValueVector>          m_aParameterValueForCache;
-        ::std::vector<bool>                         m_aParametersSet;
-        ::std::vector<bool>                         m_aReadOnlyDataColumns;
+        std::vector<bool>                         m_aParametersSet;
+        std::vector<bool>                         m_aReadOnlyDataColumns;
 
         ::comphelper::OInterfaceContainerHelper2    m_aRowsetListeners;
         ::comphelper::OInterfaceContainerHelper2    m_aApproveListeners;

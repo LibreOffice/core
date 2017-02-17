@@ -56,7 +56,7 @@ class ODbTypeWizDialog : public svt::OWizardMachine , public IItemSetHelper, pub
 {
 private:
     OModuleClient           m_aModuleClient;
-    ::std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+    std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
     ::dbaccess::ODsnTypeCollection*
                             m_pCollection;  /// the DSN type collection instance
@@ -79,7 +79,7 @@ public:
 
     // forwards to ODbDataSourceAdministrationHelper
     virtual css::uno::Reference< css::uno::XComponentContext > getORB() const override;
-    virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() override;
+    virtual std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() override;
     virtual css::uno::Reference< css::sdbc::XDriver > getDriver() override;
     virtual OUString getDatasourceType(const SfxItemSet& _rSet) const override;
     virtual void clearPassword() override;

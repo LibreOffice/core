@@ -46,7 +46,7 @@ protected:
     VclPtr<CancelButton>   m_pCancel;
 #ifdef HAVE_ODBC_ADMINISTRATION
     VclPtr<PushButton>     m_pManageDatasources;
-    ::std::unique_ptr< OOdbcManagement >
+    std::unique_ptr< OOdbcManagement >
     m_pODBCManagement;
 #endif
 

@@ -123,7 +123,7 @@ HelpBackendDb::getEntry(OUString const & url)
     }
 }
 
-::std::list<OUString> HelpBackendDb::getAllDataUrls()
+std::list<OUString> HelpBackendDb::getAllDataUrls()
 {
     return getOneChildFromAllEntries("data-url");
 }

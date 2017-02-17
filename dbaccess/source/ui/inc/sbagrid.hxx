@@ -44,7 +44,7 @@ namespace com { namespace sun { namespace star {
 
 namespace dbaui
 {
-    struct SbaURLCompare : public ::std::binary_function< css::util::URL, css::util::URL, bool>
+    struct SbaURLCompare : public std::binary_function< css::util::URL, css::util::URL, bool>
     {
         bool operator() (const css::util::URL& x, const css::util::URL& y) const { return x.Complete == y.Complete; }
     };
@@ -146,7 +146,7 @@ namespace dbaui
             css::util::URL                                                 aURL;
             css::uno::Sequence< css::beans::PropertyValue >   aArgs;
         };
-        ::std::queue< DispatchArgs >    m_aDispatchArgs;
+        std::queue< DispatchArgs >    m_aDispatchArgs;
         DECL_LINK( OnDispatchEvent, void*, void );
 
         // for dynamic states of our 4 dispatchable URLs

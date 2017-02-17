@@ -287,7 +287,7 @@ namespace pcr
             return _rFormComponentEventDescriptor.ListenerType;
         }
 
-        typedef ::std::set< Type, TypeLessByName > TypeBag;
+        typedef std::set< Type, TypeLessByName > TypeBag;
 
         void lcl_addListenerTypesFor_throw( const Reference< XInterface >& _rxComponent,
             const Reference< XIntrospection >& _rxIntrospection, TypeBag& _out_rTypes )
@@ -301,8 +301,8 @@ namespace pcr
 
             Sequence< Type > aListeners( xIntrospectionAccess->getSupportedListeners() );
 
-            ::std::copy( aListeners.begin(), aListeners.end(),
-                         ::std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
+            std::copy( aListeners.begin(), aListeners.end(),
+                         std::insert_iterator< TypeBag >( _out_rTypes, _out_rTypes.begin() ) );
         }
     }
 
@@ -313,7 +313,7 @@ namespace pcr
     {
     private:
         typedef std::unordered_map< OUString, ScriptEventDescriptor, OUStringHash >  EventMap;
-        typedef ::std::map< EventId, EventMap::iterator >                                       EventMapIndexAccess;
+        typedef std::map< EventId, EventMap::iterator >                                       EventMapIndexAccess;
 
         EventMap            m_aEventNameAccess;
         EventMapIndexAccess m_aEventIndexAccess;
@@ -356,7 +356,7 @@ namespace pcr
 
     void EventHolder::addEvent( EventId _nId, const OUString& _rEventName, const ScriptEventDescriptor& _rScriptEvent )
     {
-        ::std::pair< EventMap::iterator, bool > insertionResult =
+        std::pair< EventMap::iterator, bool > insertionResult =
             m_aEventNameAccess.insert( EventMap::value_type( _rEventName, _rScriptEvent ) );
         OSL_ENSURE( insertionResult.second, "EventHolder::addEvent: there already was a MacroURL for this event!" );
         m_aEventIndexAccess[ _nId ] = insertionResult.first;
@@ -743,7 +743,7 @@ namespace pcr
         }
 
         // sort them by ID - this is the relative ordering in the UI
-        ::std::map< EventId, Property > aOrderedProperties;
+        std::map< EventId, Property > aOrderedProperties;
         for (   EventMap::const_iterator loop = m_aEvents.begin();
                 loop != m_aEvents.end();
                 ++loop
@@ -823,7 +823,7 @@ namespace pcr
 
         // the initial selection in the dialog
         Sequence< OUString > aNames( pEventHolder->getElementNames() );
-        const OUString* pChosenEvent = ::std::find( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength(), rForEvent.sListenerMethodName );
+        const OUString* pChosenEvent = std::find( aNames.getConstArray(), aNames.getConstArray() + aNames.getLength(), rForEvent.sListenerMethodName );
         sal_uInt16 nInitialSelection = (sal_uInt16)( pChosenEvent - aNames.getConstArray() );
 
         // the dialog

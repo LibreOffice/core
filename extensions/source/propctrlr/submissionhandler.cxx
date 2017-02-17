@@ -261,7 +261,7 @@ namespace pcr
 
     Sequence< Property > SAL_CALL SubmissionPropertyHandler::doDescribeSupportedProperties() const
     {
-        ::std::vector< Property > aProperties;
+        std::vector< Property > aProperties;
         if ( m_pHelper.get() )
         {
             implAddPropertyDescription( aProperties, PROPERTY_SUBMISSION_ID, cppu::UnoType<submission::XSubmission>::get() );
@@ -282,7 +282,7 @@ namespace pcr
         if ( !m_pHelper.get() )
             RuntimeException();
 
-        ::std::vector< OUString > aListEntries;
+        std::vector< OUString > aListEntries;
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         switch ( nPropId )
         {

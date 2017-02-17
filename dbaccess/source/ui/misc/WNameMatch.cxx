@@ -154,7 +154,7 @@ bool OWizNameMatching::LeavePage()
         ODatabaseExport::TColumnVector::const_iterator aSrcEnd  = rSrcColumns.end();
         for(;aSrcIter != aSrcEnd && (*aSrcIter)->second != pSrcField;++aSrcIter)
             ;
-        const sal_Int32 nPos = ::std::distance(rSrcColumns.begin(),aSrcIter);
+        const sal_Int32 nPos = std::distance(rSrcColumns.begin(),aSrcIter);
 
         if(m_pCTRL_LEFT->GetCheckButtonState(pLeftEntry) == SvButtonState::Checked)
         {
@@ -169,7 +169,7 @@ bool OWizNameMatching::LeavePage()
 
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(m_pParent->m_vColumnPos.size()),"m_pParent->m_vColumnPos: Illegal index for vector");
             m_pParent->m_vColumnPos[nPos].first = ++nParamPos;
-            m_pParent->m_vColumnPos[nPos].second = ::std::distance(rDestColumns.begin(),aDestIter) + 1;
+            m_pParent->m_vColumnPos[nPos].second = std::distance(rDestColumns.begin(),aDestIter) + 1;
 
             TOTypeInfoSP pTypeInfo;
 

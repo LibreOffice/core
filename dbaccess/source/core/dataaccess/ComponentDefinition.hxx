@@ -44,7 +44,7 @@ namespace dbaccess
                                      ,public ODataSettings_Base
     {
     public:
-        typedef ::std::map  <   OUString
+        typedef std::map  <   OUString
                             ,   css::uno::Reference< css::beans::XPropertySet >
                             >   Columns;
     typedef Columns::iterator           iterator;

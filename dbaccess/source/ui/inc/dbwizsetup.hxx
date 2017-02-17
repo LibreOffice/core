@@ -61,7 +61,7 @@ class ODbTypeWizDialogSetup : public svt::RoadmapWizard , public IItemSetHelper,
 
 private:
     OModuleClient           m_aModuleClient;
-    ::std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+    std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
     OUString                m_sURL;
     OUString                m_sOldURL;
@@ -106,7 +106,7 @@ public:
 
     // forwards to ODbDataSourceAdministrationHelper
     virtual css::uno::Reference< css::uno::XComponentContext > getORB() const override;
-    virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() override;
+    virtual std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() override;
     virtual css::uno::Reference< css::sdbc::XDriver > getDriver() override;
     virtual OUString getDatasourceType(const SfxItemSet& _rSet) const override;
     virtual void clearPassword() override;

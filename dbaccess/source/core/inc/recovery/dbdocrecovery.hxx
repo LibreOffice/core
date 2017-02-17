@@ -50,7 +50,7 @@ namespace dbaccess
         */
         void saveModifiedSubComponents(
                 const css::uno::Reference< css::embed::XStorage >& i_rTargetStorage,
-                const ::std::vector< css::uno::Reference< css::frame::XController > >& i_rControllers
+                const std::vector< css::uno::Reference< css::frame::XController > >& i_rControllers
             );
 
         /** recovery sub components from the given document storage, if applicable
@@ -66,7 +66,7 @@ namespace dbaccess
             );
 
     private:
-        const ::std::unique_ptr< DatabaseDocumentRecovery_Data >  m_pData;
+        const std::unique_ptr< DatabaseDocumentRecovery_Data >  m_pData;
     };
 
 } // namespace dbaccess

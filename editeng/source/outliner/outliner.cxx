@@ -57,7 +57,7 @@
 #include <unicode/ubidi.h>
 #include <cassert>
 #include <memory>
-using ::std::advance;
+using std::advance;
 
 
 // Outliner

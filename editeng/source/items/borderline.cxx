@@ -500,7 +500,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderStyle nStyle, sal_uInt16 nOut, sa
                 case FINE_DASHED:
                 case DASH_DOT:
                 case DASH_DOT_DOT:
-                    ::std::swap( nOut, nIn);
+                    std::swap( nOut, nIn);
                     break;
                 default:
                     ;   // nothing

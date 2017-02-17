@@ -47,11 +47,11 @@ namespace dbaui
 
         static void clearListBox(ListBox& _rListBox);
         static void fillColumns( ListBox* pRight,
-                                ::std::vector< OUString> &_rRightColumns);
+                                std::vector< OUString> &_rRightColumns);
 
         void createNewColumn(   ListBox* _pListbox,
                                 OFieldDescription* _pSrcField,
-                                ::std::vector< OUString>& _rRightColumns,
+                                std::vector< OUString>& _rRightColumns,
                                 const OUString&  _sColumnName,
                                 const OUString&  _sExtraChars,
                                 sal_Int32               _nMaxNameLen,
@@ -59,7 +59,7 @@ namespace dbaui
 
         void moveColumn(        ListBox* _pRight,
                                 ListBox* _pLeft,
-                                ::std::vector< OUString>& _rRightColumns,
+                                std::vector< OUString>& _rRightColumns,
                                 const OUString&  _sColumnName,
                                 const OUString&  _sExtraChars,
                                 sal_Int32               _nMaxNameLen,

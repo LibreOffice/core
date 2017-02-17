@@ -52,7 +52,7 @@ namespace pcr
 
         /** retrieves the names of all XForms models in the document the control lives in
         */
-        void    getAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const;
+        void    getAvailableDataTypeNames( std::vector< OUString >& /* [out] */ _rNames ) const;
 
         /** retrieves a particular data type given by name
         */

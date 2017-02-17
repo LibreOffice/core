@@ -77,7 +77,7 @@ namespace dbmm
         void    endPhase();
 
     private:
-        ::std::unique_ptr< ProgressMixer_Data >   m_pData;
+        std::unique_ptr< ProgressMixer_Data >   m_pData;
     };
 
 } // namespace dbmm
