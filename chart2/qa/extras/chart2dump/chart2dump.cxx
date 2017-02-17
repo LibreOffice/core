@@ -645,7 +645,7 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 {
-    const double fLocalEPS = 100.1;
+    const double fLocalEPS = 150.1;
     const std::vector<OUString> aTestFiles =
     {
         "default_formated_axis.odp",
