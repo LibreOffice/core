@@ -99,7 +99,7 @@ wrapper::ItemConverter* createItemConverter(
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
                                         rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                        wrapper::GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES );
+                                        wrapper::GraphicObjectType::LineAndFillProperties );
                     break;
             case OBJECTTYPE_TITLE:
             {
@@ -134,7 +134,7 @@ wrapper::ItemConverter* createItemConverter(
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
                                         rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                        wrapper::GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES );
+                                        wrapper::GraphicObjectType::LineAndFillProperties );
                     break;
             case OBJECTTYPE_AXIS:
             {
@@ -202,8 +202,8 @@ wrapper::ItemConverter* createItemConverter(
                 if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
-                wrapper::GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
-                    wrapper::GraphicPropertyItemConverter::FILLED_DATA_POINT;
+                wrapper::GraphicObjectType eMapTo =
+                    wrapper::GraphicObjectType::FilledDataPoint;
 
                 uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel );
                 uno::Reference< XChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
@@ -211,7 +211,7 @@ wrapper::ItemConverter* createItemConverter(
                 uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
                 sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
                 if( !ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount ) )
-                    eMapTo = wrapper::GraphicPropertyItemConverter::LINE_DATA_POINT;
+                    eMapTo = wrapper::GraphicObjectType::LineDataPoint;
 
                 bool bDataSeries = eObjectType == OBJECTTYPE_DATA_SERIES;
 
@@ -255,7 +255,7 @@ wrapper::ItemConverter* createItemConverter(
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
                                         rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                        wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES );
+                                        wrapper::GraphicObjectType::LineProperties );
                     break;
 
             case OBJECTTYPE_DATA_ERRORS_X:
@@ -292,7 +292,7 @@ wrapper::ItemConverter* createItemConverter(
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
                                         rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
-                                        wrapper::GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES );
+                                        wrapper::GraphicObjectType::LineAndFillProperties );
                     break;
             default: //OBJECTTYPE_UNKNOWN
                     break;
@@ -776,7 +776,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard(
                                         , m_pDrawModelWrapper->getSdrModel().GetItemPool()
                                         , m_pDrawModelWrapper->getSdrModel()
                                         , uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY )
-                                        , wrapper::GraphicPropertyItemConverter::FILLED_DATA_POINT );
+                                        , wrapper::GraphicObjectType::FilledDataPoint );
 
             pSymbolShapeProperties = new SfxItemSet( aSymbolItemConverter.CreateEmptyItemSet() );
             aSymbolItemConverter.FillItemSet( *pSymbolShapeProperties );

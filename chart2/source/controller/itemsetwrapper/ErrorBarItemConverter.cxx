@@ -100,7 +100,7 @@ ErrorBarItemConverter::ErrorBarItemConverter(
         m_spGraphicConverter( new GraphicPropertyItemConverter(
                                   rPropertySet, rItemPool, rDrawModel,
                                   xNamedPropertyContainerFactory,
-                                  GraphicPropertyItemConverter::LINE_PROPERTIES )),
+                                  GraphicObjectType::LineProperties )),
         m_xModel( xModel )
 {}
 

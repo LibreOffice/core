@@ -30,24 +30,23 @@ namespace chart
 namespace wrapper
 {
 
+enum class GraphicObjectType
+{
+    FilledDataPoint,
+    LineDataPoint,
+    LineProperties,
+    LineAndFillProperties
+};
+
 class GraphicPropertyItemConverter : public ItemConverter
 {
 public:
-    enum eGraphicObjectType
-    {
-        FILLED_DATA_POINT,
-        LINE_DATA_POINT,
-        LINE_PROPERTIES,
-        FILL_PROPERTIES,
-        LINE_AND_FILL_PROPERTIES
-    };
-
     GraphicPropertyItemConverter(
         const css::uno::Reference< css::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
         SdrModel& rDrawModel,
         const css::uno::Reference< css::lang::XMultiServiceFactory > & xNamedPropertyContainerFactory,
-        eGraphicObjectType eObjectType = FILLED_DATA_POINT );
+        GraphicObjectType eObjectType = GraphicObjectType::FilledDataPoint );
     virtual ~GraphicPropertyItemConverter() override;
 
 protected:
@@ -58,7 +57,7 @@ protected:
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet ) override;
 
 private:
-    eGraphicObjectType              m_eGraphicObjectType;
+    GraphicObjectType              m_GraphicObjectType;
     SdrModel &                      m_rDrawModel;
     css::uno::Reference< css::lang::XMultiServiceFactory >  m_xNamedPropertyTableFactory;
 };

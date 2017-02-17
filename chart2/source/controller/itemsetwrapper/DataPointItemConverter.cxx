@@ -198,7 +198,7 @@ DataPointItemConverter::DataPointItemConverter(
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference<lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
-    GraphicPropertyItemConverter::eGraphicObjectType eMapTo,
+    GraphicObjectType eMapTo,
     const awt::Size* pRefSize,
     bool bDataSeries,
     bool bUseSpecialFillColor,

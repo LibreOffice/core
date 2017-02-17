@@ -100,7 +100,7 @@ RegressionCurveItemConverter::RegressionCurveItemConverter(
         m_spGraphicConverter( new GraphicPropertyItemConverter(
                                   rPropertySet, rItemPool, rDrawModel,
                                   xNamedPropertyContainerFactory,
-                                  GraphicPropertyItemConverter::LINE_PROPERTIES )),
+                                  GraphicObjectType::LineProperties )),
         m_xCurveContainer( xContainer )
 {}
 

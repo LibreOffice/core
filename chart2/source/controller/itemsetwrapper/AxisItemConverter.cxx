@@ -95,7 +95,7 @@ AxisItemConverter::AxisItemConverter(
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
                                  xNamedPropertyContainerFactory,
-                                 GraphicPropertyItemConverter::LINE_PROPERTIES ));
+                                 GraphicObjectType::LineProperties ));
     m_aConverters.push_back(
         new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));
 

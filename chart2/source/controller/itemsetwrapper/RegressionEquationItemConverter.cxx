@@ -59,7 +59,7 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
                                  xNamedPropertyContainerFactory,
-                                 GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES ));
+                                 GraphicObjectType::LineAndFillProperties ));
 
     m_aConverters.push_back(
         new CharacterPropertyItemConverter(rPropertySet, rItemPool, pRefSize, "ReferencePageSize"));

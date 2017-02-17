@@ -83,7 +83,7 @@ AllGridItemConverter::AllGridItemConverter(
         Reference< beans::XPropertySet > xObjectProperties(aElementList[nA]);
         m_aConverters.push_back( new ::chart::wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rItemPool, rDrawModel, xNamedPropertyContainerFactory,
-                                        ::chart::wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES ) );
+                                        ::chart::wrapper::GraphicObjectType::LineProperties ) );
     }
 }
 
@@ -120,7 +120,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
         m_aConverters.push_back(
             new ::chart::wrapper::DataPointItemConverter(
                 xChartModel, xContext, xObjectProperties, *aIt, rItemPool, rDrawModel,
-                xNamedPropertyContainerFactory, GraphicPropertyItemConverter::FILLED_DATA_POINT,
+                xNamedPropertyContainerFactory, GraphicObjectType::FilledDataPoint,
                 nullptr, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
     }
 }
