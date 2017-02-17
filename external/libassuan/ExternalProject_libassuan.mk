@@ -15,6 +15,10 @@ $(eval $(call gb_ExternalProject_register_targets,libassuan,\
 
 $(eval $(call gb_ExternalProject_use_autoconf,libassuan,build))
 
+$(eval $(call gb_ExternalProject_use_externals,libassuan,\
+       libgpg-error \
+))
+
 $(call gb_ExternalProject_get_state_target,libassuan,build):
 	$(call gb_ExternalProject_run,build,\
 		autoreconf \

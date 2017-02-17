@@ -3393,6 +3393,10 @@ endif # ENABLE_BREAKPAD
 
 ifneq ($(SYSTEM_GPGME),)
 
+gb_ExternalProject__use_gpgme:=
+gb_ExternalProject__use_libassuan:=
+gb_ExternalProject__use_libgpg-error:=
+
 define gb_LinkTarget__use_gpgme
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
@@ -3406,6 +3410,19 @@ $(call gb_LinkTarget_add_libs,$(1),\
 endef
 
 else # NON-SYSTEM_GPGME
+
+define gb_ExternalProject__use_gpgme
+$(call gb_ExternalProject_use_external_project,$(1),gpgme)
+
+endef
+define gb_ExternalProject__use_libassuan
+$(call gb_ExternalProject_use_external_project,$(1),libassuan)
+
+endef
+define gb_ExternalProject__use_libgpg-error
+$(call gb_ExternalProject_use_external_project,$(1),libgpg-error)
+
+endef
 
 define gb_LinkTarget__use_gpgme
 $(call gb_LinkTarget_set_include,$(1),\
