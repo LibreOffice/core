@@ -32,6 +32,7 @@
 #include <sfx2/lokhelper.hxx>
 #include <svx/svdpage.hxx>
 
+#include <chrono>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
@@ -350,15 +351,13 @@ void ScTiledRenderingTest::testDocumentSize()
     // Set cursor column
     pViewShell->SetCursor(100, 0);
     // 2 seconds
-    TimeValue aTime = { 2 , 0 };
-    osl::Condition::Result aResult = m_aDocSizeCondition.wait(aTime);
+    osl::Condition::Result aResult = m_aDocSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
 
     // Set cursor row
     pViewShell->SetCursor(0, 100);
     // 2 seconds
-    aTime = { 2 , 0 };
-    aResult = m_aDocSizeCondition.wait(aTime);
+    aResult = m_aDocSizeCondition.wait(std::chrono::seconds(2));
     CPPUNIT_ASSERT_EQUAL(aResult, osl::Condition::result_ok);
 
     comphelper::LibreOfficeKit::setActive(false);
