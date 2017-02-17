@@ -297,12 +297,10 @@ Reference<XResource> PresenterPaneFactory::CreatePane (
             auto const pPane(dynamic_cast<PresenterSpritePane*>(xPane.get()));
             pDescriptor->maSpriteProvider = [pPane](){ return pPane->GetSprite(); };
             pDescriptor->mbIsSprite = true;
-            pDescriptor->mbNeedsClipping = false;
         }
         else
         {
             pDescriptor->mbIsSprite = false;
-            pDescriptor->mbNeedsClipping = true;
         }
 
         // Get the window of the frame and make that visible.

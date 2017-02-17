@@ -96,7 +96,6 @@ public:
         double mnBottom;
         SharedBitmapDescriptor mpViewBackground;
         bool mbIsActive;
-        bool mbNeedsClipping;
         bool mbIsOpaque;
         SpriteProvider maSpriteProvider;
         bool mbIsSprite;
