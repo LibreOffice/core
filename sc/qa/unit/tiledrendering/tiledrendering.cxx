@@ -70,6 +70,7 @@ public:
     void testHideColRow();
     void testInvalidateOnCopyPasteCells();
     void testInvalidateOnInserRowCol();
+    void testCommentCallback();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnSelections);
@@ -91,6 +92,7 @@ public:
     CPPUNIT_TEST(testHideColRow);
     CPPUNIT_TEST(testInvalidateOnCopyPasteCells);
     CPPUNIT_TEST(testInvalidateOnInserRowCol);
+    CPPUNIT_TEST(testCommentCallback);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -399,6 +401,7 @@ public:
     bool m_bInvalidateTiles;
     bool m_bViewLock;
     OString m_sCellFormula;
+    boost::property_tree::ptree m_aCommentCallbackResult;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
@@ -471,6 +474,15 @@ public:
         {
             m_sCellFormula = pPayload;
         }
+        break;
+        case LOK_CALLBACK_COMMENT:
+        {
+            m_aCommentCallbackResult.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aCommentCallbackResult);
+            m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
+        }
+        break;
         }
     }
 };
@@ -1026,6 +1038,87 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void ScTiledRenderingTest::testCommentCallback()
+{
+    // Load a document
+    comphelper::LibreOfficeKit::setActive();
+    // Comments callback are emitted only if tiled annotations are off
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+
+    ScModelObj* pModelObj = createDoc("small.ods");
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    int nView1 = SfxLokHelper::getView();
+
+    // Create a 2nd view
+    SfxLokHelper::createView();
+    pModelObj->initializeForTiledRendering({});
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    SfxLokHelper::setView(nView1);
+
+    // Add a new comment
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    {
+        {"Text", uno::makeAny(OUString("Comment"))},
+        {"Author", uno::makeAny(OUString("LOK User1"))},
+    }));
+    comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView1.m_aCommentCallbackResult.get<std::string>("cellPos"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
+
+    // Edit a comment
+    aArgs = comphelper::InitPropertySequence(
+    {
+        {"Text", uno::makeAny(OUString("Edited comment"))},
+        {"Author", uno::makeAny(OUString("LOK User2"))},
+    });
+    comphelper::dispatchCommand(".uno:EditAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView1.m_aCommentCallbackResult.get<std::string>("cellPos"));
+    CPPUNIT_ASSERT_EQUAL(std::string("0, 255, 1274, 254"), aView2.m_aCommentCallbackResult.get<std::string>("cellPos"));
+
+    // Delete the comment
+    aArgs = comphelper::InitPropertySequence(
+    {
+    });
+    comphelper::dispatchCommand(".uno:DeleteNote", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView1.m_aCommentCallbackResult.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Sheet1.A2"), aView2.m_aCommentCallbackResult.get<std::string>("id"));
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
