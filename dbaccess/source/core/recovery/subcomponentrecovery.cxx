@@ -264,7 +264,7 @@ namespace dbaccess
         const ::comphelper::NamedValueCollection&   getSettings() const { return m_aSettings; }
 
     private:
-        ::std::stack< ::rtl::Reference< SettingsImport > >  m_aStates;
+        std::stack< ::rtl::Reference< SettingsImport > >  m_aStates;
         ::comphelper::NamedValueCollection                  m_aSettings;
     };
 

@@ -72,7 +72,7 @@ namespace bib
         m_xForm = _rxForm;
     }
 
-    struct ControlModeSwitch : public ::std::unary_function< Reference< XControl >, void >
+    struct ControlModeSwitch : public std::unary_function< Reference< XControl >, void >
     {
         bool bDesign;
         explicit ControlModeSwitch( bool _bDesign ) : bDesign( _bDesign ) { }
@@ -93,7 +93,7 @@ namespace bib
             if ( xControlCont.is() )
                 aControls = xControlCont->getControls();
 
-            ::std::for_each(
+            std::for_each(
                 aControls.getConstArray(),
                 aControls.getConstArray() + aControls.getLength(),
                 ControlModeSwitch( _bDesign )

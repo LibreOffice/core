@@ -54,7 +54,7 @@ namespace dbaccess
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     private:
-        ::std::unique_ptr< DocumentEventExecutor_Data >   m_pData;
+        std::unique_ptr< DocumentEventExecutor_Data >   m_pData;
     };
 
 } // namespace dbaccess

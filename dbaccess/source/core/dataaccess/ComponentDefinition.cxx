@@ -198,7 +198,7 @@ Reference< XNameAccess> OComponentDefinition::getColumns()
 
     if ( !m_xColumns.is() )
     {
-        ::std::vector< OUString> aNames;
+        std::vector< OUString> aNames;
 
         const OComponentDefinition_Impl& rDefinition( getDefinition() );
         aNames.reserve( rDefinition.size() );

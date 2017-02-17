@@ -2354,7 +2354,7 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
     ContentNode* pNode = pParaPortion->GetNode();
     DBG_ASSERT( pNode->Len(), "CreateTextPortions should not be used for empty paragraphs!" );
 
-    ::std::set< sal_Int32 > aPositions;
+    std::set< sal_Int32 > aPositions;
     aPositions.insert( 0 );
 
     sal_uInt16 nAttr = 0;
@@ -2427,10 +2427,10 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_Int32& rS
     // A portion may also have been formed by a line break:
     aPositions.insert( nPortionStart );
 
-    ::std::set< sal_Int32 >::iterator nInvPos = aPositions.find(  nPortionStart );
+    std::set< sal_Int32 >::iterator nInvPos = aPositions.find(  nPortionStart );
     DBG_ASSERT( (nInvPos != aPositions.end()), "InvPos ?!" );
 
-    ::std::set< sal_Int32 >::iterator i = nInvPos;
+    std::set< sal_Int32 >::iterator i = nInvPos;
     ++i;
     while ( i != aPositions.end() )
     {
@@ -3032,7 +3032,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                     // Over the Portions of the line ...
 
                     bool bParsingFields = false;
-                    ::std::vector< sal_Int32 >::iterator itSubLines;
+                    std::vector< sal_Int32 >::iterator itSubLines;
 
                     for ( sal_Int32 nPortion = pLine->GetStartPortion(); nPortion <= pLine->GetEndPortion(); nPortion++ )
                     {
@@ -3230,7 +3230,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRect, Point aSt
                                                 aStartPos.X() -= pLine->GetHeight();
                                             }
                                         }
-                                        ::std::vector< sal_Int32 >::iterator curIt = itSubLines;
+                                        std::vector< sal_Int32 >::iterator curIt = itSubLines;
                                         ++itSubLines;
                                         if( itSubLines != pExtraInfo->lineBreaksList.end() )
                                         {

@@ -265,11 +265,11 @@ Sequence< Type > SAL_CALL SbaTableQueryBrowser::getTypes(  )
     if ( !m_aDocScriptSupport || !*m_aDocScriptSupport )
     {
         Sequence< Type > aStrippedTypes( aTypes.getLength() - 1 );
-        ::std::remove_copy_if(
+        std::remove_copy_if(
             aTypes.getConstArray(),
             aTypes.getConstArray() + aTypes.getLength(),
             aStrippedTypes.getArray(),
-            ::std::bind2nd( ::std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
+            std::bind2nd( std::equal_to< Type >(), cppu::UnoType<XScriptInvocationContext>::get() )
         );
         aTypes = aStrippedTypes;
     }
@@ -299,7 +299,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing()
     clearTreeModel();
     // clear the tree model
     {
-        ::std::unique_ptr<SvTreeList> aTemp(m_pTreeModel);
+        std::unique_ptr<SvTreeList> aTemp(m_pTreeModel);
         m_pTreeModel = nullptr;
     }
 
@@ -387,7 +387,7 @@ bool SbaTableQueryBrowser::Construct(vcl::Window* pParent)
 
 namespace
 {
-    struct SelectValueByName : public ::std::unary_function< OUString, Any >
+    struct SelectValueByName : public std::unary_function< OUString, Any >
     {
         const Any& operator()( OUString const& i_name ) const
         {
@@ -543,12 +543,12 @@ bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > & i_f
             aPropertyValues.put( aTransferPropertie, pData->xObjectProperties->getPropertyValue( aTransferPropertie ) );
         }
 
-        ::std::vector< OUString > aNames( aPropertyValues.getNames() );
-        ::std::sort(aNames.begin(), aNames.end());
+        std::vector< OUString > aNames( aPropertyValues.getNames() );
+        std::sort(aNames.begin(), aNames.end());
         Sequence< OUString > aPropNames( comphelper::containerToSequence(aNames) );
 
         Sequence< Any > aPropValues( aNames.size() );
-        ::std::transform( aNames.begin(), aNames.end(), aPropValues.getArray(), SelectValueByName( aPropertyValues ) );
+        std::transform( aNames.begin(), aNames.end(), aPropValues.getArray(), SelectValueByName( aPropertyValues ) );
 
         Reference< XMultiPropertySet > xFormMultiSet( i_formProperties, UNO_QUERY_THROW );
         xFormMultiSet->setPropertyValues( aPropNames, aPropValues );
@@ -685,8 +685,8 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                 bool bFormattedIsNumeric    = true;
                 sal_Int32 nType = ::comphelper::getINT32( xColumn->getPropertyValue( PROPERTY_TYPE ) );
 
-                ::std::vector< NamedValue > aInitialValues;
-                ::std::vector< OUString > aCopyProperties;
+                std::vector< NamedValue > aInitialValues;
+                std::vector< OUString > aCopyProperties;
                 Any aDefault;
 
                 switch(nType)
@@ -791,14 +791,14 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     aInitialValues.push_back( NamedValue( PROPERTY_MOUSE_WHEEL_BEHAVIOR, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) ) );
 
                 // now set all those values
-                for ( ::std::vector< NamedValue >::const_iterator property = aInitialValues.begin();
+                for ( std::vector< NamedValue >::const_iterator property = aInitialValues.begin();
                       property != aInitialValues.end();
                       ++property
                     )
                 {
                     xGridCol->setPropertyValue( property->Name, property->Value );
                 }
-                for ( ::std::vector< OUString >::const_iterator copyPropertyName = aCopyProperties.begin();
+                for ( std::vector< OUString >::const_iterator copyPropertyName = aCopyProperties.begin();
                       copyPropertyName != aCopyProperties.end();
                       ++copyPropertyName
                     )
@@ -2132,7 +2132,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
 
 SvTreeListEntry* SbaTableQueryBrowser::implAppendEntry( SvTreeListEntry* _pParent, const OUString& _rName, void* _pUserData, EntryType _eEntryType )
 {
-    ::std::unique_ptr< ImageProvider > pImageProvider( getImageProviderFor( _pParent ) );
+    std::unique_ptr< ImageProvider > pImageProvider( getImageProviderFor( _pParent ) );
 
     Image aImage;
     pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage );
@@ -3281,9 +3281,9 @@ bool SbaTableQueryBrowser::ensureConnection(SvTreeListEntry* _pAnyEntry, SharedC
     return ensureConnection( pDSEntry, pDSData, _rConnection );
 }
 
-::std::unique_ptr< ImageProvider > SbaTableQueryBrowser::getImageProviderFor( SvTreeListEntry* _pAnyEntry )
+std::unique_ptr< ImageProvider > SbaTableQueryBrowser::getImageProviderFor( SvTreeListEntry* _pAnyEntry )
 {
-    ::std::unique_ptr< ImageProvider > pImageProvider( new ImageProvider );
+    std::unique_ptr< ImageProvider > pImageProvider( new ImageProvider );
     SharedConnection xConnection;
     if ( getExistentConnectionFor( _pAnyEntry, xConnection ) )
         pImageProvider.reset( new ImageProvider( xConnection ) );

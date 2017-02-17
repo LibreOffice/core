@@ -280,9 +280,9 @@ void printf_package(
             xPackage->getBundle( Reference<task::XAbortChannel>(), xCmdEnv ) );
         printf_space( level + 1 );
         dp_misc::writeConsole("bundled Packages: {\n");
-        ::std::vector<Reference<deployment::XPackage> >vec_bundle;
+        std::vector<Reference<deployment::XPackage> >vec_bundle;
         ::comphelper::sequenceToContainer(vec_bundle, seq);
-        printf_packages( vec_bundle, ::std::vector<bool>(vec_bundle.size()),
+        printf_packages( vec_bundle, std::vector<bool>(vec_bundle.size()),
                          xCmdEnv, level + 2 );
         printf_space( level + 1 );
         dp_misc::writeConsole("}\n");
@@ -303,8 +303,8 @@ void printf_unaccepted_licenses(
 
 
 void printf_packages(
-    ::std::vector< Reference<deployment::XPackage> > const & allExtensions,
-    ::std::vector<bool> const & vecUnaccepted,
+    std::vector< Reference<deployment::XPackage> > const & allExtensions,
+    std::vector<bool> const & vecUnaccepted,
     Reference<XCommandEnvironment> const & xCmdEnv, sal_Int32 level )
 {
     OSL_ASSERT(allExtensions.size() == vecUnaccepted.size());
@@ -316,7 +316,7 @@ void printf_packages(
     }
     else
     {
-        typedef ::std::vector< Reference<deployment::XPackage> >::const_iterator I_EXT;
+        typedef std::vector< Reference<deployment::XPackage> >::const_iterator I_EXT;
         int index = 0;
         for (I_EXT i = allExtensions.begin(); i != allExtensions.end(); ++i, ++index)
         {

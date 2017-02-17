@@ -63,7 +63,7 @@ void ODefinitionContainer_Impl::erase( const TContentPtr& _pDefinition )
 
 ODefinitionContainer_Impl::const_iterator ODefinitionContainer_Impl::find( const TContentPtr& _pDefinition ) const
 {
-    return ::std::find_if(
+    return std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
         [&_pDefinition] (const NamedDefinitions::value_type& namedDef) {
@@ -73,7 +73,7 @@ ODefinitionContainer_Impl::const_iterator ODefinitionContainer_Impl::find( const
 
 ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( const TContentPtr& _pDefinition )
 {
-    return ::std::find_if(
+    return std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
         [&_pDefinition] (const NamedDefinitions::value_type& namedDef) {
@@ -472,7 +472,7 @@ void ODefinitionContainer::implRemove(const OUString& _rName)
     Documents::const_iterator aFind = m_aDocumentMap.find(_rName);
     if ( aFind != m_aDocumentMap.end() )
     {
-        m_aDocuments.erase( ::std::find(m_aDocuments.begin(),m_aDocuments.end(),aFind));
+        m_aDocuments.erase( std::find(m_aDocuments.begin(),m_aDocuments.end(),aFind));
         m_aDocumentMap.erase(aFind);
 
         getDefinitions().erase( _rName );

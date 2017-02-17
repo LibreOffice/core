@@ -128,7 +128,7 @@ PackageManagerFactoryImpl::getPackageManager( OUString const & context )
     guard.clear();
     xRet.set( PackageManagerImpl::create( m_xComponentContext, context ) );
     guard.reset();
-    ::std::pair< t_string2weakref::iterator, bool > insertion(
+    std::pair< t_string2weakref::iterator, bool > insertion(
         m_managers.insert( t_string2weakref::value_type( context, xRet ) ) );
     if (insertion.second)
     {

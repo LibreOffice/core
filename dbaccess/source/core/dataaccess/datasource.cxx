@@ -275,7 +275,7 @@ class OSharedConnectionManager : public ::cppu::WeakImplHelper< XEventListener >
     } TConnectionHolder;
 
     // the less-compare functor, used for the stl::map
-    struct TDigestLess : public ::std::binary_function< TDigestHolder, TDigestHolder, bool>
+    struct TDigestLess : public std::binary_function< TDigestHolder, TDigestHolder, bool>
     {
         bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
         {
@@ -286,8 +286,8 @@ class OSharedConnectionManager : public ::cppu::WeakImplHelper< XEventListener >
         }
     };
 
-    typedef ::std::map< TDigestHolder,TConnectionHolder,TDigestLess>        TConnectionMap;      // holds the master connections
-    typedef ::std::map< Reference< XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
+    typedef std::map< TDigestHolder,TConnectionHolder,TDigestLess>        TConnectionMap;      // holds the master connections
+    typedef std::map< Reference< XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
 
     ::osl::Mutex                m_aMutex;
     TConnectionMap              m_aConnections;         // remember the master connection in conjunction with the digest
@@ -404,7 +404,7 @@ namespace
             const PropertyValue* pDataSourceSetting = _rDataSourceSettings.getConstArray();
             const PropertyValue* pEnd = pDataSourceSetting + _rDataSourceSettings.getLength();
 
-            ::std::vector< PropertyValue > aRet;
+            std::vector< PropertyValue > aRet;
 
             for ( ; pDataSourceSetting != pEnd ; ++pDataSourceSetting )
             {
@@ -440,9 +440,9 @@ namespace
         return Sequence< PropertyValue >();
     }
 
-    typedef ::std::map< OUString, sal_Int32 > PropertyAttributeCache;
+    typedef std::map< OUString, sal_Int32 > PropertyAttributeCache;
 
-    struct IsDefaultAndNotRemoveable : public ::std::unary_function< PropertyValue, bool >
+    struct IsDefaultAndNotRemoveable : public std::unary_function< PropertyValue, bool >
     {
     private:
         const PropertyAttributeCache& m_rAttribs;
@@ -796,7 +796,7 @@ sal_Bool ODatabaseSource::convertFastPropertyValue(Any & rConvertedValue, Any & 
 
 namespace
 {
-    struct SelectPropertyName : public ::std::unary_function< PropertyValue, OUString >
+    struct SelectPropertyName : public std::unary_function< PropertyValue, OUString >
     {
     public:
         const OUString& operator()( const PropertyValue& _lhs )
@@ -821,12 +821,12 @@ namespace
     void lcl_setPropertyValues_resetOrRemoveOther( const Reference< XPropertyBag >& _rxPropertyBag, const Sequence< PropertyValue >& _rAllNewPropertyValues )
     {
         // sequences are ugly to operate on
-        typedef ::std::set< OUString >   StringSet;
+        typedef std::set< OUString >   StringSet;
         StringSet aToBeSetPropertyNames;
-        ::std::transform(
+        std::transform(
             _rAllNewPropertyValues.getConstArray(),
             _rAllNewPropertyValues.getConstArray() + _rAllNewPropertyValues.getLength(),
-            ::std::insert_iterator< StringSet >( aToBeSetPropertyNames, aToBeSetPropertyNames.end() ),
+            std::insert_iterator< StringSet >( aToBeSetPropertyNames, aToBeSetPropertyNames.end() ),
             SelectPropertyName()
         );
 
@@ -943,7 +943,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                     Reference< XPropertySet > xSettingsAsProps( m_pImpl->m_xSettings, UNO_QUERY_THROW );
                     Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_QUERY_THROW );
                     Sequence< Property > aSettings( xPST->getProperties() );
-                    ::std::map< OUString, sal_Int32 > aPropertyAttributes;
+                    std::map< OUString, sal_Int32 > aPropertyAttributes;
                     for (   const Property* pSettings = aSettings.getConstArray();
                             pSettings != aSettings.getConstArray() + aSettings.getLength();
                             ++pSettings
@@ -958,7 +958,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                     // transform them so that only property values which fulfill certain
                     // criteria survive
                     Sequence< PropertyValue > aNonDefaultOrUserDefined( aValues.getLength() );
-                    const PropertyValue* pCopyEnd = ::std::remove_copy_if(
+                    const PropertyValue* pCopyEnd = std::remove_copy_if(
                         aValues.getConstArray(),
                         aValues.getConstArray() + aValues.getLength(),
                         aNonDefaultOrUserDefined.getArray(),

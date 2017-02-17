@@ -465,7 +465,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlatforms() const
     //There is a platform element.
     const OUString value = getNodeValueFromExpression("desc:platform/@value");
     //parse the string, it can contained multiple strings separated by commas
-    ::std::vector< OUString> vec;
+    std::vector< OUString> vec;
     sal_Int32 nIndex = 0;
     do
     {
@@ -567,7 +567,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
     return urls;
 }
 
-::std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAndURL() const
+std::pair< OUString, OUString > DescriptionInfoset::getLocalizedPublisherNameAndURL() const
 {
     css::uno::Reference< css::xml::dom::XNode > node =
         getLocalizedChild("desc:publisher");
@@ -598,7 +598,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
         if (xURL.is())
            sURL = xURL->getNodeValue();
     }
-    return ::std::make_pair(sPublisherName, sURL);
+    return std::make_pair(sPublisherName, sURL);
 }
 
 OUString DescriptionInfoset::getLocalizedReleaseNotesURL() const
@@ -692,8 +692,8 @@ DescriptionInfoset::getLocalizedChild( const OUString & sParent) const
         if (! nodeMatch.is())
         {
             // Already tried full tag, continue with first fallback.
-            const ::std::vector< OUString > aFallbacks( getOfficeLanguageTag().getFallbackStrings( false));
-            for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
+            const std::vector< OUString > aFallbacks( getOfficeLanguageTag().getFallbackStrings( false));
+            for (std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
             {
                 nodeMatch = matchLanguageTag(xParent, *it);
                 if (nodeMatch.is())

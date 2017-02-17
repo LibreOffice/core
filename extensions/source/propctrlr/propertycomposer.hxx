@@ -54,12 +54,12 @@ namespace pcr
                             ,public IPropertyExistenceCheck
     {
     public:
-        typedef ::std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >
+        typedef std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >
                                                             HandlerArray;
 
     private:
         HandlerArray                                    m_aSlaveHandlers;
-        ::std::unique_ptr< ComposedPropertyUIUpdate >   m_pUIRequestComposer;
+        std::unique_ptr< ComposedPropertyUIUpdate >   m_pUIRequestComposer;
         PropertyChangeListeners                         m_aPropertyListeners;
         bool                                            m_bSupportedPropertiesAreKnown;
         PropertyBag                                     m_aSupportedProperties;
@@ -71,7 +71,7 @@ namespace pcr
             @param _rSlaveHandlers
                 the set of slave handlers to invoke. Must not be <NULL/>
         */
-        explicit PropertyComposer( const ::std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >& _rSlaveHandlers );
+        explicit PropertyComposer( const std::vector< css::uno::Reference< css::inspection::XPropertyHandler > >& _rSlaveHandlers );
 
     public:
         // XPropertyHandler overridables

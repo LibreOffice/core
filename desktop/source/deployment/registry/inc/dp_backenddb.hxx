@@ -70,13 +70,13 @@ protected:
         OUString const & url);
 
     void writeSimpleList(
-        ::std::list< OUString> const & list,
+        std::list< OUString> const & list,
         OUString const & sListTagName,
         OUString const & sMemberTagName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
     void writeVectorOfPair(
-        ::std::vector< ::std::pair< OUString, OUString > > const & vecPairs,
+        std::vector< std::pair< OUString, OUString > > const & vecPairs,
         OUString const & sVectorTagName,
         OUString const & sPairTagName,
         OUString const & sFirstTagName,
@@ -94,7 +94,7 @@ protected:
         OUString const & sElementName,
         css::uno::Reference<css::xml::dom::XNode> const & xParent);
 
-    ::std::vector< ::std::pair< OUString, OUString > >
+    std::vector< std::pair< OUString, OUString > >
     readVectorOfPair(
         css::uno::Reference<css::xml::dom::XNode> const & parent,
         OUString const & sListTagName,
@@ -102,14 +102,14 @@ protected:
         OUString const & sFirstTagName,
         OUString const & sSecondTagName);
 
-    ::std::list< OUString> readList(
+    std::list< OUString> readList(
         css::uno::Reference<css::xml::dom::XNode> const & parent,
         OUString const & sListTagName,
         OUString const & sMemberTagName);
 
     /* returns the values of one particularly child element of all key elements.
      */
-    ::std::list< OUString> getOneChildFromAllEntries(
+    std::list< OUString> getOneChildFromAllEntries(
         OUString const & sElementName);
 
 

@@ -86,7 +86,7 @@ namespace dbaccess
         Type aAlterType = cppu::UnoType<XAlterView>::get();
 
         Sequence< Type > aTypes( ::comphelper::concatSequences(View_Base::getTypes(),View_IBASE::getTypes()) );
-        ::std::vector<Type> aOwnTypes;
+        std::vector<Type> aOwnTypes;
         aOwnTypes.reserve(aTypes.getLength());
 
         const Type* pIter = aTypes.getConstArray();

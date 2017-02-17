@@ -109,7 +109,7 @@ class BackendImpl : public ImplBaseT
             Reference<ucb::XCommandEnvironment> const & xCmdEnv,
             bool notifyDetectionError = true );
 
-        typedef ::std::vector< Reference<deployment::XPackage> > t_packagevec;
+        typedef std::vector< Reference<deployment::XPackage> > t_packagevec;
         void scanBundle(
             t_packagevec & bundle,
             ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -120,7 +120,7 @@ class BackendImpl : public ImplBaseT
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<ucb::XCommandEnvironment> const & xCmdEnv,
             bool skip_registration = false );
-        ::std::vector<Reference<deployment::XPackage> > getPackagesFromDb(
+        std::vector<Reference<deployment::XPackage> > getPackagesFromDb(
             Reference<ucb::XCommandEnvironment> const & xCmdEnv);
         bool checkPlatform(
             Reference<ucb::XCommandEnvironment > const &  environment);
@@ -754,7 +754,7 @@ beans::StringPair BackendImpl::PackageImpl::getPublisherInfo()
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
-    ::std::pair< OUString, OUString > aInfo = getDescriptionInfoset().getLocalizedPublisherNameAndURL();
+    std::pair< OUString, OUString > aInfo = getDescriptionInfoset().getLocalizedPublisherNameAndURL();
     beans::StringPair aStrPair( aInfo.first, aInfo.second );
     return aStrPair;
 }
@@ -866,7 +866,7 @@ void BackendImpl::PackageImpl::processPackage_(
                 }
             }
             data.items.push_back(
-                ::std::make_pair(xPackage->getURL(),
+                std::make_pair(xPackage->getURL(),
                                  xPackage->getPackageType()->getMediaType()));
         }
         getMyBackend()->addDataToDb(getURL(), data);
@@ -1071,7 +1071,7 @@ void BackendImpl::PackageImpl::exportTo(
                             exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
         }
 
-        ::std::vector< Sequence<beans::PropertyValue> > manifest;
+        std::vector< Sequence<beans::PropertyValue> > manifest;
         manifest.reserve( bundle.getLength() );
         sal_Int32 baseURLlen = m_url_expanded.getLength();
         Reference<deployment::XPackage> const *pbundle = bundle.getConstArray();
@@ -1371,8 +1371,8 @@ void BackendImpl::PackageImpl::scanBundle(
 
 
     const LanguageTag& officeLocale = getOfficeLanguageTag();
-    const ::std::vector< OUString > officeFallbacks( officeLocale.getFallbackStrings( true));
-    const size_t nPenaltyMax = ::std::numeric_limits<size_t>::max();
+    const std::vector< OUString > officeFallbacks( officeLocale.getFallbackStrings( true));
+    const size_t nPenaltyMax = std::numeric_limits<size_t>::max();
     size_t descrPenalty = nPenaltyMax;
     OUString descrFile;
 
@@ -1429,7 +1429,7 @@ void BackendImpl::PackageImpl::scanBundle(
                 if (officeLocale.getLanguage() == descrTag.getLanguage())
                 {
                     size_t nPenalty = nPenaltyMax;
-                    const ::std::vector< OUString > descrFallbacks( descrTag.getFallbackStrings( true));
+                    const std::vector< OUString > descrFallbacks( descrTag.getFallbackStrings( true));
                     for (size_t o=0; o < officeFallbacks.size() && nPenalty == nPenaltyMax; ++o)
                     {
                         for (size_t d=0; d < descrFallbacks.size() && nPenalty == nPenaltyMax; ++d)
@@ -1579,13 +1579,13 @@ OUString BackendImpl::PackageImpl::getDisplayName()
         return sName;
 }
 
-::std::vector<Reference<deployment::XPackage> >
+std::vector<Reference<deployment::XPackage> >
 BackendImpl::PackageImpl::getPackagesFromDb(
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    ::std::vector<Reference<deployment::XPackage> > retVector;
+    std::vector<Reference<deployment::XPackage> > retVector;
 
-    typedef ::std::vector< ::std::pair<OUString, OUString> >::const_iterator ITC;
+    typedef std::vector< std::pair<OUString, OUString> >::const_iterator ITC;
     for (ITC i = m_dbData.items.begin(); i != m_dbData.items.end(); ++i)
     {
         Reference<deployment::XPackage> xExtension =

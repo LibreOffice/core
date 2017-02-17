@@ -62,7 +62,7 @@ namespace backend {
 namespace configuration {
 namespace {
 
-typedef ::std::list<OUString> t_stringlist;
+typedef std::list<OUString> t_stringlist;
 
 
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
@@ -116,7 +116,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
 #if HAVE_FEATURE_EXTENSIONS
     // for backwards compatibility - nil if no (compatible) back-compat db present
-    ::std::unique_ptr<PersistentMap> m_registeredPackages;
+    std::unique_ptr<PersistentMap> m_registeredPackages;
 #endif
 
     virtual void SAL_CALL disposing() override;
@@ -214,13 +214,13 @@ BackendImpl::BackendImpl(
         //are still registers. Only after revoking and restarting OOo the folders
         //can be removed. This works now, because the extension manager is a singleton
         //and the backends are only create once per process.
-        ::std::list<OUString> folders = m_backendDb->getAllDataUrls();
+        std::list<OUString> folders = m_backendDb->getAllDataUrls();
         deleteUnusedFolders(OUString(), folders);
 
         configmgrini_verify_init( xCmdEnv );
 
 #if HAVE_FEATURE_EXTENSIONS
-        ::std::unique_ptr<PersistentMap> pMap;
+        std::unique_ptr<PersistentMap> pMap;
         OUString aCompatURL( makeURL( getCachePath(), "registered_packages.pmap" ) );
 
         // Don't create it if it doesn't exist already
@@ -474,7 +474,7 @@ void BackendImpl::addToConfigmgrIni( bool isSchema, bool isURL, OUString const &
     const ::osl::MutexGuard guard( getMutex() );
     configmgrini_verify_init( xCmdEnv );
     t_stringlist & rSet = getFiles(isSchema);
-    if (::std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
+    if (std::find( rSet.begin(), rSet.end(), rcterm ) == rSet.end()) {
         rSet.push_front( rcterm ); // prepend to list, thus overriding
         // write immediately:
         m_configmgrini_modified = true;

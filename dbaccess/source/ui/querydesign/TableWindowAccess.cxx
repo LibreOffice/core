@@ -213,7 +213,7 @@ namespace dbaui
 
             auto aIter = pView->getTableConnections(m_pTable);
             auto aEnd = rConnectionList.end();
-            ::std::vector< Reference<XInterface> > aRelations;
+            std::vector< Reference<XInterface> > aRelations;
             aRelations.reserve(5); // just guessing
             for (; aIter != aEnd ; ++aIter )
             {

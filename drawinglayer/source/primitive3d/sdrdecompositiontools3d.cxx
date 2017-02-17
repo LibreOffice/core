@@ -45,7 +45,7 @@ namespace drawinglayer
 {
     namespace primitive3d
     {
-        basegfx::B3DRange getRangeFrom3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill)
+        basegfx::B3DRange getRangeFrom3DGeometry(std::vector< basegfx::B3DPolyPolygon >& rFill)
         {
             basegfx::B3DRange aRetval;
 
@@ -57,7 +57,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-        void applyNormalsKindSphereTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill, const basegfx::B3DRange& rRange)
+        void applyNormalsKindSphereTo3DGeometry(std::vector< basegfx::B3DPolyPolygon >& rFill, const basegfx::B3DRange& rRange)
         {
             // create sphere normals
             const basegfx::B3DPoint aCenter(rRange.getCenter());
@@ -68,7 +68,7 @@ namespace drawinglayer
             }
         }
 
-        void applyNormalsKindFlatTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill)
+        void applyNormalsKindFlatTo3DGeometry(std::vector< basegfx::B3DPolyPolygon >& rFill)
         {
             for(basegfx::B3DPolyPolygon & a : rFill)
             {
@@ -76,7 +76,7 @@ namespace drawinglayer
             }
         }
 
-        void applyNormalsInvertTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill)
+        void applyNormalsInvertTo3DGeometry(std::vector< basegfx::B3DPolyPolygon >& rFill)
         {
             // invert normals
             for(basegfx::B3DPolyPolygon & a : rFill)
@@ -88,7 +88,7 @@ namespace drawinglayer
         void applyTextureTo3DGeometry(
             css::drawing::TextureProjectionMode eModeX,
             css::drawing::TextureProjectionMode eModeY,
-            ::std::vector< basegfx::B3DPolyPolygon >& rFill,
+            std::vector< basegfx::B3DPolyPolygon >& rFill,
             const basegfx::B3DRange& rRange,
             const basegfx::B2DVector& rTextureSize)
         {
@@ -165,7 +165,7 @@ namespace drawinglayer
         }
 
         Primitive3DContainer create3DPolyPolygonFillPrimitives(
-            const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
+            const std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B2DVector& rTextureSize,
             const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute,
@@ -298,7 +298,7 @@ namespace drawinglayer
         }
 
         Primitive3DContainer createHiddenGeometryPrimitives3D(
-            const ::std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
+            const std::vector< basegfx::B3DPolyPolygon >& r3DPolyPolygonVector,
             const basegfx::B3DHomMatrix& rObjectTransform,
             const basegfx::B2DVector& rTextureSize,
             const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute)

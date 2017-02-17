@@ -242,7 +242,7 @@ private:
 
     ::dbtools::ParameterManager m_aParameterManager;
     ::dbtools::FilterManager    m_aFilterManager;
-    ::std::map< OUString, css::uno::Any>                          m_aNumberFormats;
+    std::map< OUString, css::uno::Any>                          m_aNumberFormats;
 
     css::uno::Reference< css::uno::XComponentContext >            m_xContext;
     css::uno::Reference< css::sdbc::XConnection >                 m_xActiveConnection;

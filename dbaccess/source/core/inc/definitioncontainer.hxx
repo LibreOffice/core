@@ -50,7 +50,7 @@ namespace dbaccess
 class ODefinitionContainer_Impl : public OContentHelper_Impl
 {
 public:
-    typedef ::std::map< OUString, TContentPtr >  NamedDefinitions;
+    typedef std::map< OUString, TContentPtr >  NamedDefinitions;
     typedef NamedDefinitions::iterator                  iterator;
     typedef NamedDefinitions::const_iterator            const_iterator;
 

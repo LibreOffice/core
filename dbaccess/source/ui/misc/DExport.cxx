@@ -182,8 +182,8 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     if(xSet.is())
     {
         ::connectivity::ORowSetValue aValue;
-        ::std::vector<sal_Int32> aTypes;
-        ::std::vector<sal_Bool> aNullable;
+        std::vector<sal_Int32> aTypes;
+        std::vector<sal_Bool> aNullable;
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xSet,UNO_QUERY_THROW)->getMetaData();
         Reference<XRow> xRow(xSet,UNO_QUERY_THROW);
         while(xSet->next())
@@ -608,8 +608,8 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
             if(aFind != _pInfoMap->end())
             {
                 (*aIter)->second->SetType(aFind->second);
-                (*aIter)->second->SetPrecision(::std::min<sal_Int32>(aFind->second->nPrecision,nLength));
-                (*aIter)->second->SetScale(::std::min<sal_Int32>(aFind->second->nMaximumScale,nScale));
+                (*aIter)->second->SetPrecision(std::min<sal_Int32>(aFind->second->nPrecision,nLength));
+                (*aIter)->second->SetScale(std::min<sal_Int32>(aFind->second->nMaximumScale,nScale));
 
                 sal_Int32 nFormatKey = ::dbtools::getDefaultNumberFormat( nDataType,
                                     (*aIter)->second->GetScale(),
@@ -632,7 +632,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
         aAlias = ::dbtools::convertName2SQLName(_rColumnName,xDestMetaData->getExtraNameCharacters());
 
     if(nMaxNameLen && aAlias.getLength() > nMaxNameLen)
-        aAlias = aAlias.copy(0, ::std::min<sal_Int32>( nMaxNameLen-1, aAlias.getLength() ) );
+        aAlias = aAlias.copy(0, std::min<sal_Int32>( nMaxNameLen-1, aAlias.getLength() ) );
 
     OUString sName(aAlias);
     if(m_aDestColumns.find(sName) != m_aDestColumns.end())
@@ -645,7 +645,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
                   + OUString::number(++nPos);
             if(nMaxNameLen && sName.getLength() > nMaxNameLen)
             {
-                aAlias = aAlias.copy(0,::std::min<sal_Int32>( nMaxNameLen-nCount, aAlias.getLength() ));
+                aAlias = aAlias.copy(0,std::min<sal_Int32>( nMaxNameLen-nCount, aAlias.getLength() ));
                 sName = aAlias
                       + OUString::number(nPos);
                 ++nCount;
@@ -657,7 +657,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
     OFieldDescription* pField = new OFieldDescription();
     pField->SetType(m_pTypeInfo);
     pField->SetName(aAlias);
-    pField->SetPrecision(::std::min<sal_Int32>((sal_Int32)255,m_pTypeInfo->nPrecision));
+    pField->SetPrecision(std::min<sal_Int32>((sal_Int32)255,m_pTypeInfo->nPrecision));
     pField->SetScale(0);
     pField->SetIsNullable(ColumnValue::NULLABLE);
     pField->SetAutoIncrement(false);
@@ -776,7 +776,7 @@ void ODatabaseExport::adjustFormat()
                 OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vNumberFormat.size()),"m_vFormatKey: Illegal index for vector");
                 OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vColumnSize.size()),"m_vColumnSize: Illegal index for vector");
                 m_vNumberFormat[nColPos] = CheckString(m_sTextToken,m_vNumberFormat[nColPos]);
-                m_vColumnSize[nColPos] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos], m_sTextToken.getLength());
+                m_vColumnSize[nColPos] = std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos], m_sTextToken.getLength());
             }
         }
         eraseTokens();
@@ -829,11 +829,11 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
         return Reference< XPreparedStatement > ();
     }
     const OUString* pIter = aDestColumnNames.getConstArray();
-    ::std::vector< OUString> aInsertList;
+    std::vector< OUString> aInsertList;
     aInsertList.resize(aDestColumnNames.getLength()+1);
     for(size_t j=0; j < aInsertList.size(); ++j)
     {
-        ODatabaseExport::TPositions::const_iterator aFind = ::std::find_if(_rvColumns.begin(),_rvColumns.end(),
+        ODatabaseExport::TPositions::const_iterator aFind = std::find_if(_rvColumns.begin(),_rvColumns.end(),
             [j] (const ODatabaseExport::TPositions::value_type& tPos)
                 { return tPos.second == (sal_Int32)(j+1); });
         if ( _rvColumns.end() != aFind && aFind->second != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) && aFind->first != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND) )
@@ -844,8 +844,8 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     }
 
     // create the sql string
-    ::std::vector< OUString>::const_iterator aInsertEnd = aInsertList.end();
-    for (::std::vector< OUString>::const_iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
+    std::vector< OUString>::const_iterator aInsertEnd = aInsertList.end();
+    for (std::vector< OUString>::const_iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
     {
         if ( !aInsertIter->isEmpty() )
         {

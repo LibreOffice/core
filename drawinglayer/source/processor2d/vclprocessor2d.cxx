@@ -239,7 +239,7 @@ namespace drawinglayer
                     }
 
                     // create transformed integer DXArray in view coordinate system
-                    ::std::vector< long > aTransformedDXArray;
+                    std::vector< long > aTransformedDXArray;
 
                     if(rTextCandidate.getDXArray().size())
                     {
@@ -247,7 +247,7 @@ namespace drawinglayer
                         const basegfx::B2DVector aPixelVector(maCurrentTransformation * basegfx::B2DVector(1.0, 0.0));
                         const double fPixelVectorFactor(aPixelVector.getLength());
 
-                        for(::std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin());
+                        for(std::vector< double >::const_iterator aStart(rTextCandidate.getDXArray().begin());
                             aStart != rTextCandidate.getDXArray().end(); ++aStart)
                         {
                             aTransformedDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorFactor));

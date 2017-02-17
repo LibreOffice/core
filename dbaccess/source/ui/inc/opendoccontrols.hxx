@@ -50,8 +50,8 @@ namespace dbaui
     class OpenDocumentListBox : public ListBox
     {
     private:
-        typedef ::std::pair< OUString, OUString >       StringPair;
-        typedef ::std::map< sal_uInt16, StringPair >    MapIndexToStringPair;
+        typedef std::pair< OUString, OUString >       StringPair;
+        typedef std::map< sal_uInt16, StringPair >    MapIndexToStringPair;
 
         MapIndexToStringPair    m_aURLs;
 

@@ -301,7 +301,7 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
 
 void OJoinController::removeConnectionData(const TTableConnectionData::value_type& _pData)
 {
-    m_vTableConnectionData.erase( ::std::remove(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData),m_vTableConnectionData.end());
+    m_vTableConnectionData.erase( std::remove(m_vTableConnectionData.begin(),m_vTableConnectionData.end(),_pData),m_vTableConnectionData.end());
 }
 
 void OJoinController::describeSupportedFeatures()

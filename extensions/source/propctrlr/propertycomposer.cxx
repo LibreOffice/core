@@ -46,7 +46,7 @@ namespace pcr
     namespace
     {
 
-        struct SetPropertyValue : public ::std::unary_function< Reference< XPropertyHandler >, void >
+        struct SetPropertyValue : public std::unary_function< Reference< XPropertyHandler >, void >
         {
             OUString sPropertyName;
             const Any&      rValue;
@@ -61,8 +61,8 @@ namespace pcr
         template < class BagType >
         void putIntoBag( const Sequence< typename BagType::value_type >& _rArray, BagType& /* [out] */ _rBag )
         {
-            ::std::copy( _rArray.begin(), _rArray.end(),
-                         ::std::insert_iterator< BagType >( _rBag, _rBag.begin() ) );
+            std::copy( _rArray.begin(), _rArray.end(),
+                         std::insert_iterator< BagType >( _rBag, _rBag.begin() ) );
         }
 
 
@@ -70,7 +70,7 @@ namespace pcr
         void copyBagToArray( const BagType& /* [out] */ _rBag, Sequence< typename BagType::value_type >& _rArray )
         {
             _rArray.realloc( _rBag.size() );
-            ::std::copy( _rBag.begin(), _rBag.end(), _rArray.getArray() );
+            std::copy( _rBag.begin(), _rBag.end(), _rArray.getArray() );
         }
     }
 
@@ -84,7 +84,7 @@ namespace pcr
     // of supported properties per handler). Shouldn't we cache this? So that it is O( log k )?
 
 
-    PropertyComposer::PropertyComposer( const ::std::vector< Reference< XPropertyHandler > >& _rSlaveHandlers )
+    PropertyComposer::PropertyComposer( const std::vector< Reference< XPropertyHandler > >& _rSlaveHandlers )
         :PropertyComposer_Base          ( m_aMutex          )
         ,m_aSlaveHandlers               ( _rSlaveHandlers   )
         ,m_aPropertyListeners           ( m_aMutex          )
@@ -134,7 +134,7 @@ namespace pcr
     void SAL_CALL PropertyComposer::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         MethodGuard aGuard( *this );
-        ::std::for_each( m_aSlaveHandlers.begin(), m_aSlaveHandlers.end(), SetPropertyValue( _rPropertyName, _rValue ) );
+        std::for_each( m_aSlaveHandlers.begin(), m_aSlaveHandlers.end(), SetPropertyValue( _rPropertyName, _rValue ) );
     }
 
 
@@ -228,8 +228,8 @@ namespace pcr
 
                 // the intersection of those properties with all we already have
                 PropertyBag aIntersection;
-                ::std::set_intersection( aThisRound.begin(), aThisRound.end(), m_aSupportedProperties.begin(), m_aSupportedProperties.end(),
-                    ::std::insert_iterator< PropertyBag >( aIntersection, aIntersection.begin() ), PropertyLessByName() );
+                std::set_intersection( aThisRound.begin(), aThisRound.end(), m_aSupportedProperties.begin(), m_aSupportedProperties.end(),
+                    std::insert_iterator< PropertyBag >( aIntersection, aIntersection.begin() ), PropertyLessByName() );
 
                 m_aSupportedProperties.swap( aIntersection );
                 if ( m_aSupportedProperties.empty() )
@@ -262,7 +262,7 @@ namespace pcr
     void uniteStringArrays( const PropertyComposer::HandlerArray& _rHandlers, Sequence< OUString > (SAL_CALL XPropertyHandler::*pGetter)( void ),
         Sequence< OUString >& /* [out] */ _rUnion )
     {
-        ::std::set< OUString > aUnitedBag;
+        std::set< OUString > aUnitedBag;
 
         Sequence< OUString > aThisRound;
         for ( PropertyComposer::HandlerArray::const_iterator loop = _rHandlers.begin();

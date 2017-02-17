@@ -85,7 +85,7 @@ namespace dbaui
 
     private:
         OTableWindowMap     m_aTableMap;
-        ::std::vector<VclPtr<OTableConnection> >    m_vTableConnection;
+        std::vector<VclPtr<OTableConnection> >    m_vTableConnection;
 
         Idle                m_aDragScrollIdle;
         Rectangle           m_aDragRect;
@@ -181,7 +181,7 @@ namespace dbaui
 
         /** gives a read only access to the connection vector
         */
-        const ::std::vector<VclPtr<OTableConnection> >& getTableConnections() const { return m_vTableConnection; }
+        const std::vector<VclPtr<OTableConnection> >& getTableConnections() const { return m_vTableConnection; }
 
         bool ExistsAConn(const OTableWindow* pFromWin) const;
 
@@ -190,7 +190,7 @@ namespace dbaui
             @param  _pFromWin   the table for which connections should be found
             @return an iterator which can be used to travel all connections of the table
         */
-        ::std::vector<VclPtr<OTableConnection> >::const_iterator getTableConnections(const OTableWindow* _pFromWin) const;
+        std::vector<VclPtr<OTableConnection> >::const_iterator getTableConnections(const OTableWindow* _pFromWin) const;
 
         /** how many connection belongs to single table
 

@@ -1901,7 +1901,7 @@ OUString SvxAutoCorrect::GetAutoCorrFileName( const LanguageTag& rLanguageTag,
     if (bUnlocalized)
     {
         // we don't want variant, so we'll take "fr" instead of "fr-CA" for example
-        ::std::vector< OUString > vecFallBackStrings = rLanguageTag.getFallbackStrings(false);
+        std::vector< OUString > vecFallBackStrings = rLanguageTag.getFallbackStrings(false);
         if (!vecFallBackStrings.empty())
            sExt = vecFallBackStrings[0];
     }

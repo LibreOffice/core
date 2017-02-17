@@ -40,7 +40,7 @@ namespace dbaccess
     */
     class ObjectNameApproval : public IContainerApprove
     {
-        ::std::unique_ptr< ObjectNameApproval_Impl >   m_pImpl;
+        std::unique_ptr< ObjectNameApproval_Impl >   m_pImpl;
 
     public:
         enum ObjectType

@@ -39,9 +39,9 @@ namespace dbaui
     {
     private:
         OModuleClient                                   m_aModuleClient;
-        ::std::vector< std::shared_ptr<OTableRow> > m_vRowList;
+        std::vector< std::shared_ptr<OTableRow> > m_vRowList;
         OTypeInfoMap                                    m_aTypeInfo;
-        ::std::vector<OTypeInfoMap::iterator>           m_aTypeInfoIndex;
+        std::vector<OTypeInfoMap::iterator>           m_aTypeInfoIndex;
 
         css::uno::Reference< css::beans::XPropertySet >       m_xTable;
 
@@ -99,7 +99,7 @@ namespace dbaui
 
         virtual void impl_onModifyChanged() override;
 
-        inline ::std::vector< std::shared_ptr<OTableRow> >& getRows() { return m_vRowList; }
+        inline std::vector< std::shared_ptr<OTableRow> >& getRows() { return m_vRowList; }
 
         /// returns the position of the first empty row
         sal_Int32                           getFirstEmptyRowPosition();

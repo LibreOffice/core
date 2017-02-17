@@ -60,14 +60,14 @@ namespace dbaui
     {
     public:
         typedef std::map<OUString, OFieldDescription*, ::comphelper::UStringMixLess> TColumns;
-        typedef ::std::vector<TColumns::const_iterator>             TColumnVector;
-        typedef ::std::vector< ::std::pair<sal_Int32,sal_Int32> >   TPositions;
+        typedef std::vector<TColumns::const_iterator>             TColumnVector;
+        typedef std::vector< std::pair<sal_Int32,sal_Int32> >   TPositions;
 
     protected:
         TPositions                      m_vColumns;     ///< columns to be used
-        ::std::vector<sal_Int32>        m_vColumnTypes; ///< ColumnTypes for faster access
-        ::std::vector<sal_Int32>        m_vColumnSize;
-        ::std::vector<sal_Int16>        m_vNumberFormat;
+        std::vector<sal_Int32>        m_vColumnTypes; ///< ColumnTypes for faster access
+        std::vector<sal_Int32>        m_vColumnSize;
+        std::vector<sal_Int16>        m_vNumberFormat;
         css::lang::Locale               m_aLocale;
 
         TColumns                        m_aDestColumns; ///< container for new created columns

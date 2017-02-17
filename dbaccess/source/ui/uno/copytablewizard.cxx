@@ -234,7 +234,7 @@ namespace dbaui
         /** extracts the source object (table or query) described by the given descriptor,
             relative to m_xSourceConnection
         */
-        ::std::unique_ptr< ICopyTableSourceObject >
+        std::unique_ptr< ICopyTableSourceObject >
                 impl_extractSourceObject_throw(
                     const Reference< XPropertySet >& _rxDescriptor,
                     sal_Int32& _out_rCommandType
@@ -333,7 +333,7 @@ private:
         // source
         SharedConnection                m_xSourceConnection;
         sal_Int32                       m_nCommandType;
-        ::std::unique_ptr< ICopyTableSourceObject >
+        std::unique_ptr< ICopyTableSourceObject >
                                         m_pSourceObject;
         Reference< XResultSet >         m_xSourceResultSet;
         Sequence< Any >                 m_aSourceSelection;
@@ -711,7 +711,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
 
 }
 
-::std::unique_ptr< ICopyTableSourceObject > CopyTableWizard::impl_extractSourceObject_throw( const Reference< XPropertySet >& _rxDescriptor, sal_Int32& _out_rCommandType ) const
+std::unique_ptr< ICopyTableSourceObject > CopyTableWizard::impl_extractSourceObject_throw( const Reference< XPropertySet >& _rxDescriptor, sal_Int32& _out_rCommandType ) const
 {
     OSL_PRECOND( _rxDescriptor.is() && m_xSourceConnection.is(), "CopyTableWizard::impl_extractSourceObject_throw: illegal arguments!" );
 
@@ -728,7 +728,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
     OSL_VERIFY( _rxDescriptor->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand );
     OSL_VERIFY( _rxDescriptor->getPropertyValue( PROPERTY_COMMAND_TYPE ) >>= _out_rCommandType );
 
-    ::std::unique_ptr< ICopyTableSourceObject > pSourceObject;
+    std::unique_ptr< ICopyTableSourceObject > pSourceObject;
     Reference< XNameAccess > xContainer;
     switch ( _out_rCommandType )
     {
@@ -968,7 +968,7 @@ namespace
     class ValueTransfer
     {
     public:
-        ValueTransfer( const sal_Int32& _rSourcePos, const sal_Int32& _rDestPos, const ::std::vector< sal_Int32 >& _rColTypes,
+        ValueTransfer( const sal_Int32& _rSourcePos, const sal_Int32& _rDestPos, const std::vector< sal_Int32 >& _rColTypes,
             const Reference< XRow >& _rxSource, const Reference< XParameters >& _rxDest )
             :m_rSourcePos( _rSourcePos )
             ,m_rDestPos( _rDestPos )
@@ -1003,7 +1003,7 @@ namespace
     private:
         const sal_Int32&                    m_rSourcePos;
         const sal_Int32&                    m_rDestPos;
-        const ::std::vector< sal_Int32 >    m_rColTypes;
+        const std::vector< sal_Int32 >    m_rColTypes;
         const Reference< XRow >             m_xSource;
         const Reference< XParameters >      m_xDest;
     };
@@ -1106,11 +1106,11 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
     // we need a vector which all types
     sal_Int32 nCount = xMeta->getColumnCount();
-    ::std::vector< sal_Int32 > aSourceColTypes;
+    std::vector< sal_Int32 > aSourceColTypes;
     aSourceColTypes.reserve( nCount + 1 );
     aSourceColTypes.push_back( -1 ); // just to avoid a every time i-1 call
 
-    ::std::vector< sal_Int32 > aSourcePrec;
+    std::vector< sal_Int32 > aSourcePrec;
     aSourcePrec.reserve( nCount + 1 );
     aSourcePrec.push_back( -1 ); // just to avoid a every time i-1 call
 

@@ -285,7 +285,7 @@ namespace pcr
 
     Sequence< Property > SAL_CALL EFormsPropertyHandler::doDescribeSupportedProperties() const
     {
-        ::std::vector< Property > aProperties;
+        std::vector< Property > aProperties;
 
         if ( m_pHelper.get() )
         {
@@ -386,7 +386,7 @@ namespace pcr
         if ( !m_pHelper.get() )
             return Sequence< OUString >();
 
-        ::std::vector< OUString > aInterestedInActuations( 2 );
+        std::vector< OUString > aInterestedInActuations( 2 );
         aInterestedInActuations[ 0 ] = PROPERTY_XML_DATA_MODEL;
         aInterestedInActuations[ 1 ] = PROPERTY_BINDING_NAME;
         return Sequence< OUString >( &(*aInterestedInActuations.begin()), aInterestedInActuations.size() );
@@ -415,7 +415,7 @@ namespace pcr
 
         LineDescriptor aDescriptor;
         sal_Int16 nControlType = PropertyControlType::TextField;
-        ::std::vector< OUString > aListEntries;
+        std::vector< OUString > aListEntries;
         PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
         switch ( nPropId )
         {

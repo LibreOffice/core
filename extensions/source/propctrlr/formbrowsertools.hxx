@@ -36,7 +36,7 @@ namespace pcr
     sal_Int16 classifyComponent( const css::uno::Reference< css::uno::XInterface >& _rxComponent );
 
 
-    struct FindPropertyByHandle : public ::std::unary_function< css::beans::Property, bool >
+    struct FindPropertyByHandle : public std::unary_function< css::beans::Property, bool >
     {
     private:
         sal_Int32 m_nId;
@@ -50,7 +50,7 @@ namespace pcr
     };
 
 
-    struct FindPropertyByName : public ::std::unary_function< css::beans::Property, bool >
+    struct FindPropertyByName : public std::unary_function< css::beans::Property, bool >
     {
     private:
         OUString m_sName;
@@ -65,7 +65,7 @@ namespace pcr
 
 
     struct PropertyLessByName
-                :public ::std::binary_function  <   css::beans::Property,
+                :public std::binary_function  <   css::beans::Property,
                                                     css::beans::Property,
                                                     bool
                                                 >
@@ -78,7 +78,7 @@ namespace pcr
 
 
     struct TypeLessByName
-                :public ::std::binary_function  <   css::uno::Type,
+                :public std::binary_function  <   css::uno::Type,
                                                     css::uno::Type,
                                                     bool
                                                 >
@@ -90,7 +90,7 @@ namespace pcr
     };
 
 
-    typedef ::std::set< css::beans::Property, PropertyLessByName > PropertyBag;
+    typedef std::set< css::beans::Property, PropertyLessByName > PropertyBag;
 
 
 } // namespace pcr

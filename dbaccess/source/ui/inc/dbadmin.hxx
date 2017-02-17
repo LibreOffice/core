@@ -48,10 +48,10 @@ class ODbDataSourceAdministrationHelper;
 class ODbAdminDialog : public SfxTabDialog , public IItemSetHelper, public IDatabaseSettingsDialog
 {
 private:
-    typedef ::std::stack< sal_Int32 > PageStack;
+    typedef std::stack< sal_Int32 > PageStack;
     PageStack               m_aCurrentDetailPages;  // ids of all currently enabled (type-dependent) detail pages
 
-    ::std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
+    std::unique_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
 
     bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
     bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
@@ -88,7 +88,7 @@ public:
 
     // forwards to ODbDataSourceAdministrationHelper
     virtual css::uno::Reference< css::uno::XComponentContext > getORB() const override;
-    virtual ::std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() override;
+    virtual std::pair< css::uno::Reference< css::sdbc::XConnection >,sal_Bool> createConnection() override;
     virtual css::uno::Reference< css::sdbc::XDriver > getDriver() override;
     virtual OUString getDatasourceType(const SfxItemSet& _rSet) const override;
     virtual void clearPassword() override;

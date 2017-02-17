@@ -58,7 +58,7 @@ namespace dbmm
         }
     };
 
-    typedef ::std::map< PhaseID, PhaseData >   Phases;
+    typedef std::map< PhaseID, PhaseData >   Phases;
 
     // ProgressMixer_Data
     struct ProgressMixer_Data

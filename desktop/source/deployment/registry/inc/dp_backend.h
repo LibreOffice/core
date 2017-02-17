@@ -256,7 +256,7 @@ protected:
      */
     void deleteUnusedFolders(
         OUString const & relUrl,
-        ::std::list< OUString> const & usedFolders);
+        std::list< OUString> const & usedFolders);
     /* deletes one folder with a "temporary" name and the corresponding
        tmp file, which was used to derive the folder name.
     */

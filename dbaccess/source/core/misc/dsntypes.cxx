@@ -421,7 +421,7 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
     return DST_UNKNOWN;
 }
 
-void ODsnTypeCollection::fillPageIds(const OUString& _sURL,::std::vector<sal_Int16>& _rOutPathIds) const
+void ODsnTypeCollection::fillPageIds(const OUString& _sURL,std::vector<sal_Int16>& _rOutPathIds) const
 {
     DATASOURCE_TYPE eType = determineType(_sURL);
     switch(eType)

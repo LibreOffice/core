@@ -60,7 +60,7 @@ protected:
     virtual void impl_refresh() override;
     virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
 public:
-    OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent, true, _rMutex, ::std::vector< OUString>()){}
+    OEmptyCollection(::cppu::OWeakObject& _rParent,::osl::Mutex& _rMutex) : OCollection(_rParent, true, _rMutex, std::vector< OUString>()){}
 };
 
 void OEmptyCollection::impl_refresh()
@@ -776,8 +776,8 @@ void SAL_CALL ORowSetBase::afterLast(  )
     SAL_INFO("dbaccess", "ORowSetBase::afterLast() Clone = " << m_bClone);
 }
 
-bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<bool,ORowSetBase>& _aCheckFunctor,
-                                    ::std::mem_fun_t<bool,ORowSetCache>& _aMovementFunctor)
+bool SAL_CALL ORowSetBase::move(    std::mem_fun_t<bool,ORowSetBase>& _aCheckFunctor,
+                                    std::mem_fun_t<bool,ORowSetCache>& _aMovementFunctor)
 {
     SAL_INFO("dbaccess", "ORowSetBase::move() Clone = " << m_bClone);
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
@@ -826,16 +826,16 @@ bool SAL_CALL ORowSetBase::move(    ::std::mem_fun_t<bool,ORowSetBase>& _aCheckF
 sal_Bool SAL_CALL ORowSetBase::first(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::first() Clone = " << m_bClone);
-    ::std::mem_fun_t<bool,ORowSetBase> ioF_tmp(&ORowSetBase::isOnFirst);
-    ::std::mem_fun_t<bool,ORowSetCache> F_tmp(&ORowSetCache::first);
+    std::mem_fun_t<bool,ORowSetBase> ioF_tmp(&ORowSetBase::isOnFirst);
+    std::mem_fun_t<bool,ORowSetCache> F_tmp(&ORowSetCache::first);
     return move(ioF_tmp,F_tmp);
 }
 
 sal_Bool SAL_CALL ORowSetBase::last(  )
 {
     SAL_INFO("dbaccess", "ORowSetBase::last() Clone = " << m_bClone);
-    ::std::mem_fun_t<bool,ORowSetBase> ioL_tmp(&ORowSetBase::isOnLast);
-    ::std::mem_fun_t<bool,ORowSetCache> L_tmp(&ORowSetCache::last);
+    std::mem_fun_t<bool,ORowSetBase> ioL_tmp(&ORowSetBase::isOnLast);
+    std::mem_fun_t<bool,ORowSetCache> L_tmp(&ORowSetCache::last);
     return move(ioL_tmp,L_tmp);
 }
 
@@ -1364,7 +1364,7 @@ sal_Int32 ORowSetBase::impl_getRowCount() const
 
 struct ORowSetNotifierImpl
 {
-    ::std::vector<sal_Int32>    aChangedColumns;
+    std::vector<sal_Int32>    aChangedColumns;
     ORowSetValueVector::Vector  aRow;
 };
 
@@ -1427,7 +1427,7 @@ void ORowSetNotifier::fire()
 #endif
 }
 
-::std::vector<sal_Int32>& ORowSetNotifier::getChangedColumns() const
+std::vector<sal_Int32>& ORowSetNotifier::getChangedColumns() const
 {
     OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
     return m_pImpl->aChangedColumns;
@@ -1438,7 +1438,7 @@ void ORowSetNotifier::firePropertyChange()
     OSL_ENSURE(m_pImpl.get(),"Illegal CTor call, use the other one!");
     if( m_pImpl.get() )
     {
-        ::std::vector<sal_Int32>::const_iterator aIter = m_pImpl->aChangedColumns.begin();
+        std::vector<sal_Int32>::const_iterator aIter = m_pImpl->aChangedColumns.begin();
         for(;aIter != m_pImpl->aChangedColumns.end();++aIter)
         {
             m_pRowSet->firePropertyChange((*aIter)-1 ,m_pImpl->aRow[(*aIter)-1], ORowSetBase::GrantNotifierAccess());

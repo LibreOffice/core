@@ -222,7 +222,7 @@ namespace dbaccess
     }
 
     void DatabaseDocumentRecovery::saveModifiedSubComponents( const Reference< XStorage >& i_rTargetStorage,
-        const ::std::vector< Reference< XController > >& i_rControllers )
+        const std::vector< Reference< XController > >& i_rControllers )
     {
         ENSURE_OR_THROW( i_rTargetStorage.is(), "invalid document storage" );
 
@@ -242,7 +242,7 @@ namespace dbaccess
 
             MapCompTypeToCompDescs aMapCompDescs;
 
-            for (   ::std::vector< Reference< XController > >::const_iterator ctrl = i_rControllers.begin();
+            for (   std::vector< Reference< XController > >::const_iterator ctrl = i_rControllers.begin();
                     ctrl != i_rControllers.end();
                     ++ctrl
                 )

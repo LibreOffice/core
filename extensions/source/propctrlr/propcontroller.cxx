@@ -418,7 +418,7 @@ namespace pcr
                 ++handler
             )
         {
-            if ( ::std::find( aAllHandlers.begin(), aAllHandlers.end(), handler->second ) != aAllHandlers.end() )
+            if ( std::find( aAllHandlers.begin(), aAllHandlers.end(), handler->second ) != aAllHandlers.end() )
                 // already visited this particular handler (m_aPropertyHandlers usually contains
                 // the same handler more than once)
                 continue;
@@ -890,7 +890,7 @@ namespace pcr
               aHandler != m_aPropertyHandlers.end();
               ++aHandler
             )
-            if ( ::std::find( aAllHandlers.begin(), aAllHandlers.end(), aHandler->second ) == aAllHandlers.end() )
+            if ( std::find( aAllHandlers.begin(), aAllHandlers.end(), aHandler->second ) == aAllHandlers.end() )
                 aAllHandlers.push_back( aHandler->second );
 
         for ( PropertyHandlerArray::iterator loop = aAllHandlers.begin();
@@ -968,7 +968,7 @@ namespace pcr
         {
 
             // obtain the properties of the object
-            ::std::vector< Property > aProperties;
+            std::vector< Property > aProperties;
 
             PropertyHandlerArray aPropertyHandlers;
             getPropertyHandlers( m_aInspectedObjects, aPropertyHandlers );
@@ -992,7 +992,7 @@ namespace pcr
                 aProperties.reserve( aProperties.size() + aThisHandlersProperties.size() );
                 for (const auto & aThisHandlersPropertie : aThisHandlersProperties)
                 {
-                    ::std::vector< Property >::const_iterator previous = ::std::find_if(
+                    std::vector< Property >::const_iterator previous = std::find_if(
                         aProperties.begin(),
                         aProperties.end(),
                         FindPropertyByName( aThisHandlersPropertie.Name )
@@ -1011,7 +1011,7 @@ namespace pcr
                     // This is 'cause we have a new handler which is responsible for this property,
                     // which means it can give it a completely different meaning than the previous
                     // handler for this property is prepared for.
-                    ::std::pair< PropertyHandlerMultiRepository::iterator, PropertyHandlerMultiRepository::iterator >
+                    std::pair< PropertyHandlerMultiRepository::iterator, PropertyHandlerMultiRepository::iterator >
                         aDepHandlers = m_aDependencyHandlers.equal_range( aThisHandlersPropertie.Name );
                     m_aDependencyHandlers.erase( aDepHandlers.first, aDepHandlers.second );
                 }
@@ -1020,7 +1020,7 @@ namespace pcr
                 StlSyntaxSequence< OUString > aSupersededByThisHandler( (*aHandler)->getSupersededProperties() );
                 for (const auto & superseded : aSupersededByThisHandler)
                 {
-                    ::std::vector< Property >::iterator existent = ::std::find_if(
+                    std::vector< Property >::iterator existent = std::find_if(
                         aProperties.begin(),
                         aProperties.end(),
                         FindPropertyByName( superseded )
@@ -1058,7 +1058,7 @@ namespace pcr
             m_pUIRequestComposer.reset( new ComposedPropertyUIUpdate( getInspectorUI(), this ) );
 
             // sort the properties by relative position, as indicated by the model
-            for (   ::std::vector< Property >::const_iterator sourceProps = aProperties.begin();
+            for (   std::vector< Property >::const_iterator sourceProps = aProperties.begin();
                     sourceProps != aProperties.end();
                     ++sourceProps
                 )
@@ -1186,12 +1186,12 @@ namespace pcr
             // create our tab pages
             impl_buildCategories_throw();
             // (and allow for pages to be actually unused)
-            ::std::set< sal_uInt16 > aUsedPages;
+            std::set< sal_uInt16 > aUsedPages;
 
             // when building the UI below, remember which properties are actuating,
             // to allow for a initial actuatinPropertyChanged call
-            ::std::vector< OUString > aActuatingProperties;
-            ::std::vector< Any > aActuatingPropertyValues;
+            std::vector< OUString > aActuatingProperties;
+            std::vector< Any > aActuatingPropertyValues;
 
             // ask the handlers to describe the property UI, and insert the resulting
             // entries into our list boxes
@@ -1236,8 +1236,8 @@ namespace pcr
 
             // update any dependencies for the actuating properties which we encountered
             {
-                ::std::vector< OUString >::const_iterator aProperty = aActuatingProperties.begin();
-                ::std::vector< Any >::const_iterator aPropertyValue = aActuatingPropertyValues.begin();
+                std::vector< OUString >::const_iterator aProperty = aActuatingProperties.begin();
+                std::vector< Any >::const_iterator aPropertyValue = aActuatingPropertyValues.begin();
                 for ( ; aProperty != aActuatingProperties.end(); ++aProperty, ++aPropertyValue )
                     impl_broadcastPropertyChange_nothrow( *aProperty, *aPropertyValue, *aPropertyValue, true );
             }
@@ -1485,8 +1485,8 @@ namespace pcr
             else
             {
                 // create a single handler for every single object
-                ::std::vector< Reference< XPropertyHandler > > aSingleHandlers( _rObjects.size() );
-                ::std::vector< Reference< XPropertyHandler > >::iterator pHandler = aSingleHandlers.begin();
+                std::vector< Reference< XPropertyHandler > > aSingleHandlers( _rObjects.size() );
+                std::vector< Reference< XPropertyHandler > >::iterator pHandler = aSingleHandlers.begin();
 
                 InterfaceArray::const_iterator pObject = _rObjects.begin();
                 InterfaceArray::const_iterator pObjectEnd = _rObjects.end();
@@ -1694,7 +1694,7 @@ namespace pcr
     void OPropertyBrowserController::impl_broadcastPropertyChange_nothrow( const OUString& _rPropertyName, const Any& _rNewValue, const Any& _rOldValue, bool _bFirstTimeInit ) const
     {
         // are there one or more handlers which are interested in the actuation?
-        ::std::pair< PropertyHandlerMultiRepository::const_iterator, PropertyHandlerMultiRepository::const_iterator > aInterestedHandlers =
+        std::pair< PropertyHandlerMultiRepository::const_iterator, PropertyHandlerMultiRepository::const_iterator > aInterestedHandlers =
             m_aDependencyHandlers.equal_range( _rPropertyName );
         if ( aInterestedHandlers.first == aInterestedHandlers.second )
             // none of our handlers is interested in this

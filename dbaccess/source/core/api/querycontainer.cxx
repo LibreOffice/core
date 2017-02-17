@@ -387,7 +387,7 @@ bool OQueryContainer::checkExistence(const OUString& _rName)
         Documents::const_iterator aFind = m_aDocumentMap.find(_rName);
         if ( !bRet && aFind != m_aDocumentMap.end() )
         {
-            m_aDocuments.erase( ::std::find(m_aDocuments.begin(),m_aDocuments.end(),aFind));
+            m_aDocuments.erase( std::find(m_aDocuments.begin(),m_aDocuments.end(),aFind));
             m_aDocumentMap.erase(aFind);
         }
         else if ( bRet && aFind == m_aDocumentMap.end() )

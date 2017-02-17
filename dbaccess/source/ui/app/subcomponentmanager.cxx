@@ -157,7 +157,7 @@ namespace dbaui
             }
         };
 
-        struct SelectSubComponent : public ::std::unary_function< SubComponentDescriptor, Reference< XComponent > >
+        struct SelectSubComponent : public std::unary_function< SubComponentDescriptor, Reference< XComponent > >
         {
             Reference< XComponent > operator()( const SubComponentDescriptor &_desc ) const
             {
@@ -168,9 +168,9 @@ namespace dbaui
             }
         };
 
-        typedef ::std::vector< SubComponentDescriptor > SubComponents;
+        typedef std::vector< SubComponentDescriptor > SubComponents;
 
-        struct SubComponentMatch : public ::std::unary_function< SubComponentDescriptor, bool >
+        struct SubComponentMatch : public std::unary_function< SubComponentDescriptor, bool >
         {
         public:
             SubComponentMatch( const OUString& i_rName, const sal_Int32 i_nComponentType,
@@ -413,7 +413,7 @@ namespace dbaui
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
 
         Sequence< Reference< XComponent > > aComponents( m_pData->m_aComponents.size() );
-        ::std::transform(
+        std::transform(
             m_pData->m_aComponents.begin(),
             m_pData->m_aComponents.end(),
             aComponents.getArray(),
@@ -461,7 +461,7 @@ namespace dbaui
         if ( !_rName.isEmpty() )
         {
             // check there does not already exist such a component
-            SubComponents::const_iterator existentPos = ::std::find_if(
+            SubComponents::const_iterator existentPos = std::find_if(
                 m_pData->m_aComponents.begin(),
                 m_pData->m_aComponents.end(),
                 SubComponentMatch( _rName, _nComponentType, _eOpenMode )
@@ -492,7 +492,7 @@ namespace dbaui
     {
         ::osl::MutexGuard aGuard( m_pData->getMutex() );
 
-        SubComponents::const_iterator pos = ::std::find_if(
+        SubComponents::const_iterator pos = std::find_if(
             m_pData->m_aComponents.begin(),
             m_pData->m_aComponents.end(),
             SubComponentMatch( _rName, _nComponentType, _eOpenMode )

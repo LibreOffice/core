@@ -99,7 +99,7 @@ namespace dbaui
 
         TaskEntry( const sal_Char* _pAsciiUNOCommand, sal_uInt16 _nHelpID, sal_uInt16 _nTitleResourceID, bool _bHideWhenDisabled = false );
     };
-    typedef ::std::vector< TaskEntry >  TaskEntryList;
+    typedef std::vector< TaskEntry >  TaskEntryList;
 
     struct TaskPaneData
     {
@@ -150,7 +150,7 @@ namespace dbaui
         VclPtr<OTitleWindow>                m_aContainer;
         OAppBorderWindow&                   m_rBorderWin;       // my parent
         VclPtr<OAppDetailPageHelper>        m_pControlHelper;
-        ::std::vector< TaskPaneData >       m_aTaskPaneData;
+        std::vector< TaskPaneData >       m_aTaskPaneData;
         MnemonicGenerator                   m_aExternalMnemonics;
 
         void ImplInitSettings();
@@ -256,7 +256,7 @@ namespace dbaui
             @param  _rNames
                 The list will be filled.
         */
-        void getSelectionElementNames(::std::vector< OUString>& _rNames ) const;
+        void getSelectionElementNames(std::vector< OUString>& _rNames ) const;
 
         /** describes the current selection for the given control
         */

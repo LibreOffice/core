@@ -64,8 +64,8 @@ namespace dbaui
 
     void OTableConnection::clearLineData()
     {
-        ::std::vector<OConnectionLine*>::const_iterator aLineEnd = m_vConnLine.end();
-        for(::std::vector<OConnectionLine*>::const_iterator aLineIter = m_vConnLine.begin();aLineIter != aLineEnd;++aLineIter)
+        std::vector<OConnectionLine*>::const_iterator aLineEnd = m_vConnLine.end();
+        for(std::vector<OConnectionLine*>::const_iterator aLineIter = m_vConnLine.begin();aLineIter != aLineEnd;++aLineIter)
             delete *aLineIter;
         m_vConnLine.clear();
     }
@@ -88,9 +88,9 @@ namespace dbaui
         // copy linelist
         if(! rConn.GetConnLineList().empty() )
         {
-            const ::std::vector<OConnectionLine*>& rLine = rConn.GetConnLineList();
-            ::std::vector<OConnectionLine*>::const_iterator aIter = rLine.begin();
-            ::std::vector<OConnectionLine*>::const_iterator aEnd = rLine.end();
+            const std::vector<OConnectionLine*>& rLine = rConn.GetConnLineList();
+            std::vector<OConnectionLine*>::const_iterator aIter = rLine.begin();
+            std::vector<OConnectionLine*>::const_iterator aEnd = rLine.end();
             m_vConnLine.reserve(rLine.size());
             for(;aIter != aEnd;++aIter)
                 m_vConnLine.push_back( new OConnectionLine( **aIter ));
@@ -148,7 +148,7 @@ namespace dbaui
     bool OTableConnection::CheckHit( const Point& rMousePos ) const
     {
         // check if the point hit our line
-        return ::std::any_of(m_vConnLine.begin(),
+        return std::any_of(m_vConnLine.begin(),
                              m_vConnLine.end(),
                              [&rMousePos]
                              ( const OConnectionLine* pLine )
@@ -172,8 +172,8 @@ namespace dbaui
         // determine all lines of the surrounding rectangle
         Rectangle aBoundingRect( Point(0,0), Point(0,0) );
         Rectangle aTempRect;
-        ::std::vector<OConnectionLine*>::const_iterator aEnd = m_vConnLine.end();
-        for(::std::vector<OConnectionLine*>::const_iterator aIter = m_vConnLine.begin();aIter != aEnd;++aIter)
+        std::vector<OConnectionLine*>::const_iterator aEnd = m_vConnLine.end();
+        for(std::vector<OConnectionLine*>::const_iterator aIter = m_vConnLine.begin();aIter != aEnd;++aIter)
         {
             aTempRect = (*aIter)->GetBoundingRect();
 

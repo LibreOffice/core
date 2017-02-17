@@ -198,7 +198,7 @@ ORowSetDataColumns::ORowSetDataColumns(
                 const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                 ::cppu::OWeakObject& _rParent,
                 ::osl::Mutex& _rMutex,
-                const ::std::vector< OUString> &_rVector
+                const std::vector< OUString> &_rVector
                 ) : connectivity::sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                 ,m_aColumns(_rColumns)
 {
@@ -226,7 +226,7 @@ void SAL_CALL ORowSetDataColumns::disposing()
     m_aColumns = nullptr;
 }
 
-void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< OUString> &_rVector)
+void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const std::vector< OUString> &_rVector)
 {
     m_aColumns = _rColumns;
     reFill(_rVector);

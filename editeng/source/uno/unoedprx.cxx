@@ -207,7 +207,7 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwa
             break;
         }
 
-        mnIndex += ::std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0);
+        mnIndex += std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0);
     }
 }
 
@@ -260,13 +260,13 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
         if( aFieldInfo.aPosition.nIndex > mnEEIndex )
             break;
 
-        mnEEIndex -= ::std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0);
+        mnEEIndex -= std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0);
 
         // we're within a field
         if( aFieldInfo.aPosition.nIndex >= mnEEIndex )
         {
             AreInField();
-            SetFieldOffset( ::std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0) - (aFieldInfo.aPosition.nIndex - mnEEIndex),
+            SetFieldOffset( std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0) - (aFieldInfo.aPosition.nIndex - mnEEIndex),
                             aFieldInfo.aCurrentText.getLength() );
             mnEEIndex = aFieldInfo.aPosition.nIndex ;
             break;
@@ -304,7 +304,7 @@ SvxEditSource* SvxEditSourceAdapter::Clone() const
 {
     if( mbEditSourceValid && mpAdaptee.get() )
     {
-        ::std::unique_ptr< SvxEditSource > pClonedAdaptee( mpAdaptee->Clone() );
+        std::unique_ptr< SvxEditSource > pClonedAdaptee( mpAdaptee->Clone() );
 
         if( pClonedAdaptee.get() )
         {
@@ -388,7 +388,7 @@ SfxBroadcaster& SvxEditSourceAdapter::GetBroadcaster() const
     return maDummyBroadcaster;
 }
 
-void SvxEditSourceAdapter::SetEditSource( ::std::unique_ptr< SvxEditSource > && pAdaptee )
+void SvxEditSourceAdapter::SetEditSource( std::unique_ptr< SvxEditSource > && pAdaptee )
 {
     if( pAdaptee.get() )
     {
@@ -442,7 +442,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     if( rSel.nStartPara > rSel.nEndPara ||
         (rSel.nStartPara == rSel.nEndPara && rSel.nStartPos > rSel.nEndPos) )
     {
-        ::std::swap( aStartIndex, aEndIndex );
+        std::swap( aStartIndex, aEndIndex );
     }
 
     OUString sStr = mpTextForwarder->GetText( MakeEESelection(aStartIndex, aEndIndex) );
@@ -1093,7 +1093,7 @@ bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel )
     if( rSel.nStartPara > rSel.nEndPara ||
         (rSel.nStartPara == rSel.nEndPara && rSel.nStartPos > rSel.nEndPos) )
     {
-        ::std::swap( aStartIndex, aEndIndex );
+        std::swap( aStartIndex, aEndIndex );
     }
 
     return aStartIndex.IsEditableRange( aEndIndex );

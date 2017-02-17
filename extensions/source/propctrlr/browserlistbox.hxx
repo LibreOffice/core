@@ -66,7 +66,7 @@ namespace pcr
         {
         }
     };
-    typedef ::std::vector< ListBoxLine > ListBoxLines;
+    typedef std::vector< ListBoxLine > ListBoxLines;
 
 
     class OBrowserListBox   :public Control
@@ -86,7 +86,7 @@ namespace pcr
                                     m_xActiveControl;
         sal_uInt16                  m_nTheNameSize;
         long                        m_nRowHeight;
-        ::std::set< sal_uInt16 >    m_aOutOfDateLines;
+        std::set< sal_uInt16 >    m_aOutOfDateLines;
         bool                    m_bIsActive : 1;
         bool                    m_bUpdate : 1;
         ::rtl::Reference< PropertyControlContext_Impl >

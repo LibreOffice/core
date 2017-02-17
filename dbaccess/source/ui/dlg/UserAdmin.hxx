@@ -72,10 +72,10 @@ public:
     virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
 
     // <method>OGenericAdministrationPage::fillControls</method>
-    virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+    virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
     // <method>OGenericAdministrationPage::fillWindows</method>
-    virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+    virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
 };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_DLG_USERADMIN_HXX

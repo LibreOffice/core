@@ -59,7 +59,7 @@ namespace dbaccess
         StorageXMLOutputStream& operator=( const StorageXMLOutputStream& ) = delete;
 
     private:
-        ::std::unique_ptr< StorageXMLOutputStream_Data >   m_pData;
+        std::unique_ptr< StorageXMLOutputStream_Data >   m_pData;
     };
 
     class StorageXMLInputStream

@@ -162,8 +162,8 @@ Rectangle OCreationList::GetFocusRect( SvTreeListEntry* _pEntry, long _nLine )
         aRect.Left() = pTab->GetPos() - pItemData->maSize.Width() / 2;
 
     // inflate the rectangle a little bit - looks better, too
-    aRect.Left() = ::std::max< long >( 0, aRect.Left() - 2 );
-    aRect.Right() = ::std::min< long >( GetOutputSizePixel().Width() - 1, aRect.Right() + 2 );
+    aRect.Left() = std::max< long >( 0, aRect.Left() - 2 );
+    aRect.Right() = std::min< long >( GetOutputSizePixel().Width() - 1, aRect.Right() + 2 );
 
     return aRect;
 }
@@ -785,7 +785,7 @@ sal_Int32 OApplicationDetailView::getElementCount()
     return m_pControlHelper->getElementCount();
 }
 
-void OApplicationDetailView::getSelectionElementNames( ::std::vector< OUString>& _rNames ) const
+void OApplicationDetailView::getSelectionElementNames( std::vector< OUString>& _rNames ) const
 {
     m_pControlHelper->getSelectionElementNames( _rNames );
 }

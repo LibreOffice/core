@@ -234,7 +234,7 @@ namespace drawinglayer
             const OUString& rText,
             sal_uInt32 nIndex,
             sal_uInt32 nLength,
-            const ::std::vector< double >& rDXArray) const
+            const std::vector< double >& rDXArray) const
         {
             const sal_uInt32 nDXArrayCount(rDXArray.size());
             sal_uInt32 nTextLength(nLength);
@@ -333,12 +333,12 @@ namespace drawinglayer
                 rRectangle, rText, nStyle, rGDIMetaFile);
         }
 
-        ::std::vector< double > TextLayouterDevice::getTextArray(
+        std::vector< double > TextLayouterDevice::getTextArray(
             const OUString& rText,
             sal_uInt32 nIndex,
             sal_uInt32 nLength) const
         {
-            ::std::vector< double > aRetval;
+            std::vector< double > aRetval;
             sal_uInt32 nTextLength(nLength);
             const sal_uInt32 nStringLength(rText.getLength());
 
@@ -350,7 +350,7 @@ namespace drawinglayer
             if(nTextLength)
             {
                 aRetval.reserve(nTextLength);
-                ::std::vector<long> aArray(nTextLength);
+                std::vector<long> aArray(nTextLength);
                 mrDevice.GetTextArray(rText, &aArray[0], nIndex, nLength);
                 aRetval.assign(aArray.begin(), aArray.end());
             }

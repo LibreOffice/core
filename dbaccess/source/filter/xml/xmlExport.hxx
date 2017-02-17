@@ -61,9 +61,9 @@ using namespace ::com::sun::star::xml::sax;
 
 class ODBExport : public SvXMLExport
 {
-    typedef ::std::map< ::xmloff::token::XMLTokenEnum, OUString> TSettingsMap;
+    typedef std::map< ::xmloff::token::XMLTokenEnum, OUString> TSettingsMap;
 
-    typedef ::std::pair< OUString ,OUString> TStringPair;
+    typedef std::pair< OUString ,OUString> TStringPair;
     struct TDelimiter
     {
         OUString sText;
@@ -74,8 +74,8 @@ class ODBExport : public SvXMLExport
 
         TDelimiter() : bUsed( false ) { }
     };
-    typedef ::std::map< Reference<XPropertySet> ,OUString >          TPropertyStyleMap;
-    typedef ::std::map< Reference<XPropertySet> ,Reference<XPropertySet> >  TTableColumnMap;
+    typedef std::map< Reference<XPropertySet> ,OUString >          TPropertyStyleMap;
+    typedef std::map< Reference<XPropertySet> ,Reference<XPropertySet> >  TTableColumnMap;
 
     struct TypedPropertyValue
     {
@@ -91,10 +91,10 @@ class ODBExport : public SvXMLExport
         }
     };
 
-    ::std::unique_ptr< TStringPair >                  m_aAutoIncrement;
-    ::std::unique_ptr< TDelimiter >                   m_aDelimiter;
-    ::std::vector< TypedPropertyValue >             m_aDataSourceSettings;
-    ::std::vector< XMLPropertyState >               m_aCurrentPropertyStates;
+    std::unique_ptr< TStringPair >                  m_aAutoIncrement;
+    std::unique_ptr< TDelimiter >                   m_aDelimiter;
+    std::vector< TypedPropertyValue >             m_aDataSourceSettings;
+    std::vector< XMLPropertyState >               m_aCurrentPropertyStates;
     TPropertyStyleMap                               m_aAutoStyleNames;
     TPropertyStyleMap                               m_aCellAutoStyleNames;
     TPropertyStyleMap                               m_aRowAutoStyleNames;
@@ -125,7 +125,7 @@ class ODBExport : public SvXMLExport
     void                    exportAutoIncrement();
     void                    exportCharSet();
     template< typename T > void exportDataSourceSettingsSequence(
-        ::std::vector< TypedPropertyValue >::iterator const & in);
+        std::vector< TypedPropertyValue >::iterator const & in);
     void                    exportDataSourceSettings();
     void                    exportForms();
     void                    exportReports();

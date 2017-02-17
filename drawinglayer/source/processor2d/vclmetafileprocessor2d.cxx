@@ -896,7 +896,7 @@ namespace drawinglayer
                             // PDF export. Emulate data handling from UnoControlPDFExportContact
                             // I have now moved describePDFControl to toolkit, thus i can implement the PDF
                             // form control support now as follows
-                            ::std::unique_ptr< vcl::PDFWriter::AnyWidget > pPDFControl(
+                            std::unique_ptr< vcl::PDFWriter::AnyWidget > pPDFControl(
                                 ::toolkitform::describePDFControl( rXControl, *mpPDFExtOutDevData ) );
 
                             if(pPDFControl.get())

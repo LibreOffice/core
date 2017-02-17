@@ -121,14 +121,14 @@ OQueryDescriptor_Base::OQueryDescriptor_Base(::osl::Mutex&  _rMutex,::cppu::OWea
     :m_bColumnsOutOfDate(true)
     ,m_rMutex(_rMutex)
 {
-    m_pColumns = new OColumns(_rMySelf, m_rMutex, true,::std::vector< OUString>(), this,this);
+    m_pColumns = new OColumns(_rMySelf, m_rMutex, true,std::vector< OUString>(), this,this);
 }
 
 OQueryDescriptor_Base::OQueryDescriptor_Base(const OQueryDescriptor_Base& _rSource,::cppu::OWeakObject& _rMySelf)
     :m_bColumnsOutOfDate(true)
     ,m_rMutex(_rSource.m_rMutex)
 {
-    m_pColumns = new OColumns(_rMySelf, m_rMutex, true,::std::vector< OUString>(), this,this);
+    m_pColumns = new OColumns(_rMySelf, m_rMutex, true,std::vector< OUString>(), this,this);
 
     m_sCommand = _rSource.m_sCommand;
     m_bEscapeProcessing = _rSource.m_bEscapeProcessing;

@@ -75,7 +75,7 @@ namespace dbaui
     };
 
     typedef ::rtl::Reference< OConnectionLineData >     OConnectionLineDataRef;
-    typedef ::std::vector< OConnectionLineDataRef > OConnectionLineDataVec;
+    typedef std::vector< OConnectionLineDataRef > OConnectionLineDataVec;
 }
 #endif // INCLUDED_DBACCESS_SOURCE_UI_INC_CONNECTIONLINEDATA_HXX
 

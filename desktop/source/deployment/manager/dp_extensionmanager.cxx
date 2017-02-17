@@ -75,23 +75,23 @@ namespace {
 
 struct CompIdentifiers
 {
-    bool operator() (::std::vector<Reference<css::deployment::XPackage> > const & a,
-                     ::std::vector<Reference<css::deployment::XPackage> > const & b)
+    bool operator() (std::vector<Reference<css::deployment::XPackage> > const & a,
+                     std::vector<Reference<css::deployment::XPackage> > const & b)
         {
             if (getName(a).compareTo(getName(b)) < 0)
                 return true;
             return false;
         }
 
-    static OUString getName(::std::vector<Reference<css::deployment::XPackage> > const & a);
+    static OUString getName(std::vector<Reference<css::deployment::XPackage> > const & a);
 };
 
-OUString CompIdentifiers::getName(::std::vector<Reference<css::deployment::XPackage> > const & a)
+OUString CompIdentifiers::getName(std::vector<Reference<css::deployment::XPackage> > const & a)
 {
     OSL_ASSERT(a.size() == 3);
     //get the first non-null reference
     Reference<css::deployment::XPackage>  extension;
-    ::std::vector<Reference<css::deployment::XPackage> >::const_iterator it = a.begin();
+    std::vector<Reference<css::deployment::XPackage> >::const_iterator it = a.begin();
     for (; it != a.end(); ++it)
     {
         if (it->is())
@@ -241,7 +241,7 @@ void ExtensionManager::addExtensionsToMap(
 {
     //Determine the index in the vector where these extensions are to be
     //added.
-    ::std::list<OUString>::const_iterator citNames =
+    std::list<OUString>::const_iterator citNames =
         m_repositoryNames.begin();
     int index = 0;
     for (;citNames != m_repositoryNames.end(); ++citNames, ++index)
@@ -257,7 +257,7 @@ void ExtensionManager::addExtensionsToMap(
         id2extensions::iterator ivec =  mapExt.find(id);
         if (ivec == mapExt.end())
         {
-            ::std::vector<Reference<css::deployment::XPackage> > vec(3);
+            std::vector<Reference<css::deployment::XPackage> > vec(3);
             vec[index] = xExtension;
             mapExt[id] = vec;
         }
@@ -280,13 +280,13 @@ void ExtensionManager::addExtensionsToMap(
    The number of elements is always three, unless the number of repository
    changes.
  */
-::std::list<Reference<css::deployment::XPackage> >
+std::list<Reference<css::deployment::XPackage> >
     ExtensionManager::getExtensionsWithSameId(
         OUString const & identifier, OUString const & fileName,
         Reference< ucb::XCommandEnvironment> const & /*xCmdEnv*/)
 
 {
-    ::std::list<Reference<css::deployment::XPackage> > extensionList;
+    std::list<Reference<css::deployment::XPackage> > extensionList;
     Reference<css::deployment::XPackageManager> lRepos[] = {
           getUserRepository(), getSharedRepository(), getBundledRepository() };
     for (int i(0); i != SAL_N_ELEMENTS(lRepos); ++i)
@@ -315,13 +315,13 @@ ExtensionManager::getExtensionsWithSameIdentifier(
 {
     try
     {
-        ::std::list<Reference<css::deployment::XPackage> > listExtensions =
+        std::list<Reference<css::deployment::XPackage> > listExtensions =
             getExtensionsWithSameId(
                 identifier, fileName, xCmdEnv);
         bool bHasExtension = false;
 
         //throw an IllegalArgumentException if there is no extension at all.
-        typedef  ::std::list<Reference<css::deployment::XPackage> >::const_iterator CIT;
+        typedef  std::list<Reference<css::deployment::XPackage> >::const_iterator CIT;
         for (CIT i = listExtensions.begin(); i != listExtensions.end(); ++i)
             bHasExtension |= i->is();
         if (!bHasExtension)
@@ -355,7 +355,7 @@ ExtensionManager::getExtensionsWithSameIdentifier(
 bool ExtensionManager::isUserDisabled(
     OUString const & identifier, OUString const & fileName)
 {
-    ::std::list<Reference<css::deployment::XPackage> > listExtensions;
+    std::list<Reference<css::deployment::XPackage> > listExtensions;
 
     try {
         listExtensions = getExtensionsWithSameId(identifier, fileName);
@@ -408,7 +408,7 @@ void ExtensionManager::activateExtension(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
 {
-    ::std::list<Reference<css::deployment::XPackage> > listExtensions;
+    std::list<Reference<css::deployment::XPackage> > listExtensions;
     try {
         listExtensions = getExtensionsWithSameId(identifier, fileName);
     } catch (const lang::IllegalArgumentException &) {
@@ -1111,16 +1111,16 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
         getTmpRepository();
 
         //copy the values of the map to a vector for sorting
-        ::std::vector< ::std::vector<Reference<css::deployment::XPackage> > >
+        std::vector< std::vector<Reference<css::deployment::XPackage> > >
               vecExtensions;
         id2extensions::const_iterator mapIt = mapExt.begin();
         for (;mapIt != mapExt.end(); ++mapIt)
             vecExtensions.push_back(mapIt->second);
 
         //sort the element according to the identifier
-        ::std::sort(vecExtensions.begin(), vecExtensions.end(), CompIdentifiers());
+        std::sort(vecExtensions.begin(), vecExtensions.end(), CompIdentifiers());
 
-        ::std::vector< ::std::vector<Reference<css::deployment::XPackage> > >::const_iterator
+        std::vector< std::vector<Reference<css::deployment::XPackage> > >::const_iterator
               citVecVec = vecExtensions.begin();
         sal_Int32 j = 0;
         uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > > seqSeq(vecExtensions.size());

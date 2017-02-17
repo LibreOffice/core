@@ -251,7 +251,7 @@ void OQueryTableView::ReSync()
         "before calling OQueryTableView::ReSync() please call ClearAll !");
 
     // I need a collection of all window names that cannot be created so that I do not initialize connections for them.
-    ::std::vector<OUString> arrInvalidTables;
+    std::vector<OUString> arrInvalidTables;
 
     TTableWindowData::const_reverse_iterator aIter = rTabWinDataList.rbegin();
     // Create the window and add it
@@ -272,7 +272,7 @@ void OQueryTableView::ReSync()
             pTabWin.disposeAndClear();
             arrInvalidTables.push_back(pData->GetAliasName());
 
-            rTabWinDataList.erase( ::std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
+            rTabWinDataList.erase( std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), *aIter), rTabWinDataList.end());
             continue;
         }
 
@@ -294,14 +294,14 @@ void OQueryTableView::ReSync()
 
         // do both tables for the connection exist ?
         OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetWinName();
-        bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
+        bool bInvalid = std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
         strTabExistenceTest = pTabConnData->getReferencedTable()->GetWinName();
-        bInvalid = bInvalid && ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
+        bInvalid = bInvalid && std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
         if (bInvalid)
         {
             // no -> bad luck, no connection
-            rTabConnDataList.erase( ::std::remove(rTabConnDataList.begin(), rTabConnDataList.end(), *aConIter), rTabConnDataList.end());
+            rTabConnDataList.erase( std::remove(rTabConnDataList.begin(), rTabConnDataList.end(), *aConIter), rTabConnDataList.end());
             continue;
         }
 
@@ -329,7 +329,7 @@ void OQueryTableView::NotifyTabConnection(const OQueryTableConnection& rNewConn,
     OQueryTableConnection* pTabConn = nullptr;
     const auto& rConnections = getTableConnections();
     auto aEnd = rConnections.end();
-    auto aIter = ::std::find(   rConnections.begin(),
+    auto aIter = std::find(   rConnections.begin(),
                                 aEnd,
                                 VclPtr<OTableConnection>(const_cast<OTableConnection*>(static_cast<const OTableConnection*>(&rNewConn)))
                             );
@@ -809,7 +809,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 
     // the TabWin data must also be passed out of my responsibility
     TTableWindowData& rTabWinDataList = m_pView->getController().getTableWindowData();
-    rTabWinDataList.erase( ::std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), pTabWin->GetData()), rTabWinDataList.end());
+    rTabWinDataList.erase( std::remove(rTabWinDataList.begin(), rTabWinDataList.end(), pTabWin->GetData()), rTabWinDataList.end());
         // The data should not be destroyed as TabWin itself - which is still alive - needs them
         // Either it goes back into my responsibility, (via ShowTabWin), then I add the data back,
         // or the Undo-Action, which currently has full responsibility for the window

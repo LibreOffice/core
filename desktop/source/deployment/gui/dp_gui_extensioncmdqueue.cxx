@@ -905,7 +905,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
     {
         // If there is at least one directly downloadable extension then we
         // open the install dialog.
-        ::std::vector< UpdateData > dataDownload;
+        std::vector< UpdateData > dataDownload;
         int countWebsiteDownload = 0;
         typedef std::vector< dp_gui::UpdateData >::const_iterator cit;
 

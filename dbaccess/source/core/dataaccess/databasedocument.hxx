@@ -70,7 +70,7 @@ class DocumentEvents;
 class DocumentEventExecutor;
 class DocumentGuard;
 
-typedef ::std::vector< css::uno::Reference< css::frame::XController > >   Controllers;
+typedef std::vector< css::uno::Reference< css::frame::XController > >   Controllers;
 
 // ViewMonitor
 /** helper class monitoring the views of a document, and firing appropriate events

@@ -154,8 +154,8 @@ private:
     css::uno::Reference< css::configuration::backend::XLayer> m_xLayer;
 
     void migrateJavarc();
-    typedef ::std::pair< OUString,   sal_Int16>  TElementType;
-    typedef ::std::stack< TElementType > TElementStack;
+    typedef std::pair< OUString,   sal_Int16>  TElementType;
+    typedef std::stack< TElementType > TElementStack;
     TElementStack m_aStack;
 
 };

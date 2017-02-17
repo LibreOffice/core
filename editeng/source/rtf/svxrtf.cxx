@@ -298,7 +298,7 @@ void SvxRTFParser::ReadStyleTable()
     sal_uInt16 nStyleNo = 0;
     bool bHasStyleNo = false;
     int _nOpenBrakets = 1;      // the first was already detected earlier!!
-    ::std::unique_ptr<SvxRTFStyleType> pStyle(
+    std::unique_ptr<SvxRTFStyleType> pStyle(
             new SvxRTFStyleType( *pAttrPool, &aWhichMap[0] ));
     pStyle->aAttrSet.Put( GetRTFDefaults() );
 
@@ -911,7 +911,7 @@ void SvxRTFParser::AttrGroupEnd()   // process the current, delete from Stack
                         // - all character attributes sre keep the area
                         // - all paragraph attributes to get the area
                         //   up to the previous paragraph
-                        ::std::unique_ptr<SvxRTFItemStackType> pNew(
+                        std::unique_ptr<SvxRTFItemStackType> pNew(
                             new SvxRTFItemStackType(*pOld, *pInsPos, true));
                         pNew->aAttrSet.SetParent( pOld->aAttrSet.GetParent() );
 

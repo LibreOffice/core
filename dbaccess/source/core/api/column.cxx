@@ -145,7 +145,7 @@ void OColumn::registerMayBeVoidProperty( const OUString& _rName, sal_Int32 _nHan
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent,
                    ::osl::Mutex& _rMutex,
-                   bool _bCaseSensitive,const ::std::vector< OUString> &_rVector,
+                   bool _bCaseSensitive,const std::vector< OUString> &_rVector,
                    IColumnFactory* _pColFactory,
                    ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
                    bool _bAddColumn,
@@ -164,7 +164,7 @@ OColumns::OColumns(::cppu::OWeakObject& _rParent,
 
 OColumns::OColumns(::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
         const css::uno::Reference< css::container::XNameAccess >& _rxDrvColumns,
-        bool _bCaseSensitive,const ::std::vector< OUString> &_rVector,
+        bool _bCaseSensitive,const std::vector< OUString> &_rVector,
         IColumnFactory* _pColFactory,
         ::connectivity::sdbcx::IRefreshableColumns* _pRefresh,
         bool _bAddColumn,

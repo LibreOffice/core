@@ -221,8 +221,8 @@ namespace pcr
     void FormLinkDialog::commitLinkPairs()
     {
         // collect the field lists from the rows
-        ::std::vector< OUString > aDetailFields; aDetailFields.reserve( 4 );
-        ::std::vector< OUString > aMasterFields; aMasterFields.reserve( 4 );
+        std::vector< OUString > aDetailFields; aDetailFields.reserve( 4 );
+        std::vector< OUString > aMasterFields; aMasterFields.reserve( 4 );
 
         const FieldLinkRow* aRows[] = {
             m_aRow1.get(), m_aRow2.get(), m_aRow3.get(), m_aRow4.get()

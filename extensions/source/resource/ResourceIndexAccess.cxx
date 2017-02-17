@@ -70,7 +70,7 @@ Any SAL_CALL ResourceIndexAccess::getByName(const OUString& aName)
 {
     const Sequence<OUString> aNames(getElementNames());
     Reference<XIndexAccess> xResult;
-    switch(::std::find(aNames.begin(), aNames.end(), aName) - aNames.begin())
+    switch(std::find(aNames.begin(), aNames.end(), aName) - aNames.begin())
     {
         case 0:
             xResult.set(new ResourceStringIndexAccess(m_pResMgr));
@@ -95,7 +95,7 @@ Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
 sal_Bool SAL_CALL ResourceIndexAccess::hasByName(const OUString& aName)
 {
     const Sequence<OUString> aNames(getElementNames());
-    return (::std::find(aNames.begin(), aNames.end(), aName) != aNames.end());
+    return (std::find(aNames.begin(), aNames.end(), aName) != aNames.end());
 }
 
 Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)

@@ -575,7 +575,7 @@ namespace dbaui
 
         INetProtocol eProtocol = aParser.GetProtocol();
 
-        ::std::vector< OUString > aToBeCreated;  // the to-be-created levels
+        std::vector< OUString > aToBeCreated;  // the to-be-created levels
 
         // search a level which exists
         IS_PATH_EXIST eParentExists = PATH_NOT_EXIST;
@@ -615,7 +615,7 @@ namespace dbaui
             Sequence< Any > aNewDirectoryAttributes(1);
 
             // loop
-            for (   ::std::vector< OUString >::const_reverse_iterator aLocalName = aToBeCreated.rbegin();
+            for (   std::vector< OUString >::const_reverse_iterator aLocalName = aToBeCreated.rbegin();
                     aLocalName != aToBeCreated.rend();
                     ++aLocalName
                 )
@@ -634,14 +634,14 @@ namespace dbaui
         return true;
     }
 
-    void OConnectionHelper::fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OConnectionHelper::fillWindows(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back(new ODisableWrapper<FixedText>(m_pFT_Connection));
         _rControlList.push_back(new ODisableWrapper<PushButton>(m_pPB_Connection));
         _rControlList.push_back(new ODisableWrapper<PushButton>(m_pPB_CreateDB));
     }
 
-    void OConnectionHelper::fillControls(::std::vector< ISaveValueWrapper* >& _rControlList)
+    void OConnectionHelper::fillControls(std::vector< ISaveValueWrapper* >& _rControlList)
     {
         _rControlList.push_back( new OSaveValueWrapper<Edit>( m_pConnectionURL ) );
     }

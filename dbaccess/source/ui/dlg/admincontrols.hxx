@@ -57,8 +57,8 @@ namespace dbaui
         MySQLNativeSettings( vcl::Window& _rParent, const Link<void*,void>& _rControlModificationLink );
         virtual ~MySQLNativeSettings() override;
         virtual void dispose() override;
-        void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList );
-        void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList );
+        void fillControls( std::vector< ISaveValueWrapper* >& _rControlList );
+        void fillWindows( std::vector< ISaveValueWrapper* >& _rControlList );
 
         bool FillItemSet( SfxItemSet* _rCoreAttrs );
         void implInitControls( const SfxItemSet& _rSet );

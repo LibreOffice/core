@@ -42,7 +42,7 @@ namespace drawinglayer
                 // create hatch
                 const basegfx::BColor aHatchColor(getFillHatch().getColor());
                 const double fAngle(getFillHatch().getAngle());
-                ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+                std::vector< basegfx::B2DHomMatrix > aMatrices;
                 double fDistance(getFillHatch().getDistance());
                 const bool bAdaptDistance(0 != getFillHatch().getMinimalDiscreteDistance());
 

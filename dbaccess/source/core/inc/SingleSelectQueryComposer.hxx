@@ -74,16 +74,16 @@ namespace dbaccess
             OrderColumns        = 2,
             ParameterColumns    = 3
         };
-        typedef ::std::const_mem_fun_t< const ::connectivity::OSQLParseNode*, ::connectivity::OSQLParseTreeIterator >
+        typedef std::const_mem_fun_t< const ::connectivity::OSQLParseNode*, ::connectivity::OSQLParseTreeIterator >
                                                 TGetParseNode;
         ::svxform::OSystemParseContext          m_aParseContext;
         ::connectivity::OSQLParser              m_aSqlParser;
         ::connectivity::OSQLParseTreeIterator   m_aSqlIterator;         // the iterator for the complete statement
         ::connectivity::OSQLParseTreeIterator   m_aAdditiveIterator;    // the iterator for the "additive statement" (means without the clauses of the elementary statement)
-        ::std::vector<OPrivateColumns*>         m_aColumnsCollection;   // used for columns and parameters of old queries
-        ::std::vector<OPrivateTables*>          m_aTablesCollection;
+        std::vector<OPrivateColumns*>         m_aColumnsCollection;   // used for columns and parameters of old queries
+        std::vector<OPrivateTables*>          m_aTablesCollection;
 
-        ::std::vector< OUString >        m_aElementaryParts;     // the filter/groupby/having/order of the elementary statement
+        std::vector< OUString >        m_aElementaryParts;     // the filter/groupby/having/order of the elementary statement
 
         css::uno::Reference< css::sdbc::XConnection>              m_xConnection;
         css::uno::Reference< css::sdbc::XDatabaseMetaData>        m_xMetaData;
@@ -93,7 +93,7 @@ namespace dbaccess
         css::uno::Reference< css::uno::XComponentContext>         m_aContext;
         css::uno::Reference< css::script::XTypeConverter >        m_xTypeConverter;
 
-        ::std::vector<OPrivateColumns*>         m_aCurrentColumns;
+        std::vector<OPrivateColumns*>         m_aCurrentColumns;
         OPrivateTables*                         m_pTables;      // currently used tables
 
         OUString                                m_aPureSelectSQL;   // the pure select statement, without filter/order/groupby/having
@@ -109,11 +109,11 @@ namespace dbaccess
 
 
         bool setORCriteria(::connectivity::OSQLParseNode* pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
-            ::std::vector< ::std::vector < css::beans::PropertyValue > >& rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
+            std::vector< std::vector < css::beans::PropertyValue > >& rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setANDCriteria(::connectivity::OSQLParseNode* pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
-            ::std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
+            std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
         bool setComparsionPredicate(::connectivity::OSQLParseNode* pCondition, ::connectivity::OSQLParseTreeIterator& _rIterator,
-            ::std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
+            std::vector < css::beans::PropertyValue > & rFilters, const css::uno::Reference< css::util::XNumberFormatter > & xFormatter) const;
 
         static OUString getColumnName(::connectivity::OSQLParseNode* pColumnRef,::connectivity::OSQLParseTreeIterator& _rIterator);
         OUString getTableAlias(const css::uno::Reference< css::beans::XPropertySet >& column ) const;
@@ -132,7 +132,7 @@ namespace dbaccess
 
         void setConditionByColumn( const css::uno::Reference< css::beans::XPropertySet >& column
                                 , bool andCriteria
-                                ,::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor
+                                ,std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString& >& _aSetFunctor
                                 ,sal_Int32 filterOperator);
 
         /** getStructuredCondition returns the structured condition for the where or having clause
@@ -175,7 +175,7 @@ namespace dbaccess
 
         /** composes a statement from m_aPureSelectSQL and the 4 usual clauses
         */
-        OUString composeStatementFromParts( const ::std::vector< OUString >& _rParts );
+        OUString composeStatementFromParts( const std::vector< OUString >& _rParts );
 
         /** return the name of the column in the *source* *table*.
 

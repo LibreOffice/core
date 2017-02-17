@@ -171,7 +171,7 @@ namespace pcr
 
     Sequence< Property > XSDValidationPropertyHandler::doDescribeSupportedProperties() const
     {
-        ::std::vector< Property > aProperties;
+        std::vector< Property > aProperties;
 
         if ( m_pHelper.get() )
         {
@@ -226,7 +226,7 @@ namespace pcr
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        ::std::vector< OUString > aSuperfluous;
+        std::vector< OUString > aSuperfluous;
         if ( m_pHelper.get() )
         {
             aSuperfluous.push_back(  OUString(PROPERTY_CONTROLSOURCE) );
@@ -260,7 +260,7 @@ namespace pcr
     Sequence< OUString > SAL_CALL XSDValidationPropertyHandler::getActuatingProperties( )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
-        ::std::vector< OUString > aInterestedInActuations;
+        std::vector< OUString > aInterestedInActuations;
         if ( m_pHelper.get() )
         {
             aInterestedInActuations.push_back(  OUString(PROPERTY_XSD_DATA_TYPE) );
@@ -299,7 +299,7 @@ namespace pcr
 
         // collect some information about the to-be-created control
         sal_Int16 nControlType = PropertyControlType::TextField;
-        ::std::vector< OUString > aListEntries;
+        std::vector< OUString > aListEntries;
         Optional< double > aMinValue( false, 0 );
         Optional< double > aMaxValue( false, 0 );
 
@@ -354,7 +354,7 @@ namespace pcr
 
             aMinValue.IsPresent = aMaxValue.IsPresent = true;
             aMinValue.Value = DataTypeClass::gYear == nTypeClass ? 0 : 1;
-            aMaxValue.Value = ::std::numeric_limits< sal_Int32 >::max();
+            aMaxValue.Value = std::numeric_limits< sal_Int32 >::max();
             if ( DataTypeClass::gMonth == nTypeClass )
                 aMaxValue.Value = 12;
             else if ( DataTypeClass::gDay == nTypeClass )
@@ -484,7 +484,7 @@ namespace pcr
             return false;
         }
 
-        ::std::vector< OUString > aExistentNames;
+        std::vector< OUString > aExistentNames;
         m_pHelper->getAvailableDataTypeNames( aExistentNames );
 
         ScopedVclPtrInstance<NewDataTypeDialog> aDialog( nullptr, pType->getName(), aExistentNames );  // TODO/eForms: proper parent
@@ -643,17 +643,17 @@ namespace pcr
     }
 
 
-    void XSDValidationPropertyHandler::implGetAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const
+    void XSDValidationPropertyHandler::implGetAvailableDataTypeNames( std::vector< OUString >& /* [out] */ _rNames ) const
     {
         OSL_PRECOND( m_pHelper.get(), "XSDValidationPropertyHandler::implGetAvailableDataTypeNames: this will crash!" );
         // start with *all* types which are available at the model
-        ::std::vector< OUString > aAllTypes;
+        std::vector< OUString > aAllTypes;
         m_pHelper->getAvailableDataTypeNames( aAllTypes );
         _rNames.clear();
         _rNames.reserve( aAllTypes.size() );
 
         // then allow only those which are "compatible" with our control
-        for ( ::std::vector< OUString >::const_iterator dataType = aAllTypes.begin();
+        for ( std::vector< OUString >::const_iterator dataType = aAllTypes.begin();
               dataType != aAllTypes.end();
               ++dataType
             )

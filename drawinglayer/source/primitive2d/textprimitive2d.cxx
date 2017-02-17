@@ -124,7 +124,7 @@ namespace drawinglayer
                     // outlines already aligned to given, but wrong DXArray
                     if(getDXArray().size() && !basegfx::fTools::equal(aScale.getX(), 1.0))
                     {
-                        ::std::vector< double > aScaledDXArray = getDXArray();
+                        std::vector< double > aScaledDXArray = getDXArray();
                         const double fDXArrayScale(1.0 / aScale.getX());
 
                         for(double & a : aScaledDXArray)
@@ -219,7 +219,7 @@ namespace drawinglayer
             const OUString& rText,
             sal_Int32 nTextPosition,
             sal_Int32 nTextLength,
-            const ::std::vector< double >& rDXArray,
+            const std::vector< double >& rDXArray,
             const attribute::FontAttribute& rFontAttribute,
             const css::lang::Locale& rLocale,
             const basegfx::BColor& rFontColor,

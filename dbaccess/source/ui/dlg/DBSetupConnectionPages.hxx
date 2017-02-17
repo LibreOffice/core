@@ -48,8 +48,8 @@ namespace dbaui
     protected:
         VclPtr<CheckBox> m_pPasswordrequired;
 
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
     };
 
     // OTextConnectionPage
@@ -66,8 +66,8 @@ namespace dbaui
     protected:
         virtual bool prepareLeave() override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
         bool    checkTestConnection() override;
 
     private:
@@ -87,8 +87,8 @@ namespace dbaui
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
     private:
         VclPtr<FixedText>          m_pFTHelpText;
@@ -117,8 +117,8 @@ namespace dbaui
         static VclPtr<OGenericAdministrationPage> Create( vcl::Window* pParent, const SfxItemSet& _rAttrSet );
 
     protected:
-        virtual void fillControls( ::std::vector< ISaveValueWrapper* >& _rControlList ) override;
-        virtual void fillWindows( ::std::vector< ISaveValueWrapper* >& _rControlList ) override;
+        virtual void fillControls( std::vector< ISaveValueWrapper* >& _rControlList ) override;
+        virtual void fillWindows( std::vector< ISaveValueWrapper* >& _rControlList ) override;
 
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
@@ -145,8 +145,8 @@ namespace dbaui
     protected:
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
         virtual void callModifiedHdl(void* pControl = nullptr) override;
 
         DECL_LINK(OnTestJavaClickHdl, Button*, void);
@@ -182,8 +182,8 @@ namespace dbaui
 
         virtual bool FillItemSet( SfxItemSet* _rCoreAttrs ) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
         DECL_LINK(OnTestJavaClickHdl, Button*, void);
         DECL_LINK(OnEditModified, Edit&, void);
@@ -214,8 +214,8 @@ namespace dbaui
     protected:
         virtual bool FillItemSet(SfxItemSet* _rSet) override;
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
 
     private:
         VclPtr<RadioButton>         m_pODBCDatabase;
@@ -246,8 +246,8 @@ namespace dbaui
 
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
     };
 
     // OFinalDBPageSetup
@@ -277,8 +277,8 @@ namespace dbaui
         DECL_LINK(OnOpenSelected, Button*, void);
     protected:
         virtual void implInitControls(const SfxItemSet& _rSet, bool _bSaveValue) override;
-        virtual void fillControls(::std::vector< ISaveValueWrapper* >& _rControlList) override;
-        virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillControls(std::vector< ISaveValueWrapper* >& _rControlList) override;
+        virtual void fillWindows(std::vector< ISaveValueWrapper* >& _rControlList) override;
     };
 
 }   // namespace dbaui

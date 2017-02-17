@@ -74,7 +74,7 @@ namespace pcr
     }
 
 
-    void XSDValidationHelper::getAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const
+    void XSDValidationHelper::getAvailableDataTypeNames( std::vector< OUString >& /* [out] */ _rNames ) const
     {
         _rNames.resize( 0 );
 
@@ -86,7 +86,7 @@ namespace pcr
                 aElements = xRepository->getElementNames();
 
             _rNames.resize( aElements.getLength() );
-            ::std::copy( aElements.begin(), aElements.end(), _rNames.begin() );
+            std::copy( aElements.begin(), aElements.end(), _rNames.begin() );
         }
         catch( const Exception& )
         {

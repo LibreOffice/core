@@ -85,7 +85,7 @@ namespace dbmm
 
     // helper
     static void lcl_getControllers_throw(const Reference< XModel2 >& _rxDocument,
-        ::std::list< Reference< XController2 > >& _out_rControllers )
+        std::list< Reference< XController2 > >& _out_rControllers )
     {
         _out_rControllers.clear();
         Reference< XEnumeration > xControllerEnum( _rxDocument->getControllers(), UNO_SET_THROW );
@@ -308,11 +308,11 @@ namespace dbmm
         try
         {
             // collect all controllers of our document
-            ::std::list< Reference< XController2 > > aControllers;
+            std::list< Reference< XController2 > > aControllers;
             lcl_getControllers_throw( m_pData->xDocumentModel, aControllers );
 
             // close all sub documents of all controllers
-            for (   ::std::list< Reference< XController2 > >::const_iterator pos = aControllers.begin();
+            for (   std::list< Reference< XController2 > >::const_iterator pos = aControllers.begin();
                     pos != aControllers.end() && bSuccess;
                     ++pos
                 )
@@ -419,8 +419,8 @@ namespace dbmm
 
     void MacroMigrationDialog::impl_reloadDocument_nothrow( bool _bMigrationSuccess )
     {
-        typedef ::std::pair< Reference< XFrame >, OUString > ViewDescriptor;
-        ::std::list< ViewDescriptor > aViews;
+        typedef std::pair< Reference< XFrame >, OUString > ViewDescriptor;
+        std::list< ViewDescriptor > aViews;
 
         try
         {
@@ -446,7 +446,7 @@ namespace dbmm
             aDocumentArgs.remove( "URL" );
 
             // collect all controllers of our document
-            ::std::list< Reference< XController2 > > aControllers;
+            std::list< Reference< XController2 > > aControllers;
             lcl_getControllers_throw( m_pData->xDocumentModel, aControllers );
 
             // close all those controllers

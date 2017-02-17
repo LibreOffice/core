@@ -190,8 +190,8 @@ void PackageManagerImpl::initActivationLayer(
                                          ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
 
             // get all temp directories:
-            ::std::vector<OUString> tempEntries;
-            ::std::vector<OUString> removedEntries;
+            std::vector<OUString> tempEntries;
+            std::vector<OUString> removedEntries;
             while (xResultSet->next())
             {
                 OUString title(
@@ -219,7 +219,7 @@ void PackageManagerImpl::initActivationLayer(
             for (OUString & tempEntry : tempEntries)
             {
                 const MatchTempDir match( tempEntry );
-                if (::std::none_of( id2temp.begin(), id2temp.end(), match ))
+                if (std::none_of( id2temp.begin(), id2temp.end(), match ))
                 {
                     const OUString url(
                         makeURL(m_activePackages_expanded, tempEntry ) );
@@ -228,7 +228,7 @@ void PackageManagerImpl::initActivationLayer(
                     //added extensions if there is no xxx.tmpremoved file.
                     if (bShared)
                     {
-                        if (::std::find(removedEntries.begin(), removedEntries.end(), tempEntry) ==
+                        if (std::find(removedEntries.begin(), removedEntries.end(), tempEntry) ==
                             removedEntries.end())
                         {
                             continue;
@@ -1010,7 +1010,7 @@ Sequence< Reference<deployment::XPackage> >
 PackageManagerImpl::getDeployedPackages_(
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    ::std::vector< Reference<deployment::XPackage> > packages;
+    std::vector< Reference<deployment::XPackage> > packages;
     ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
     ActivePackages::Entries::const_iterator iPos( id2temp.begin() );
     ActivePackages::Entries::const_iterator const iEnd( id2temp.end() );
@@ -1332,7 +1332,7 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
             //installed the extension it was already checked if there is one with the
             //same identifier.
             const MatchTempDir match(titleEncoded);
-            if (::std::none_of( id2temp.begin(), id2temp.end(), match ))
+            if (std::none_of( id2temp.begin(), id2temp.end(), match ))
             {
 
                 // The folder was not found in the data base, so it must be
@@ -1432,7 +1432,7 @@ sal_Bool PackageManagerImpl::synchronize(
 Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWithUnacceptedLicenses(
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    ::std::vector<Reference<deployment::XPackage> > vec;
+    std::vector<Reference<deployment::XPackage> > vec;
 
     try
     {

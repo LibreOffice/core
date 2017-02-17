@@ -50,7 +50,7 @@ namespace pcr
         virtual OString                        getPropertyHelpId(sal_Int32 _nId) const override;
         virtual sal_Int16                      getPropertyPos(sal_Int32 _nId) const override;
         virtual sal_uInt32                     getPropertyUIFlags(sal_Int32 _nId) const override;
-        virtual ::std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const override;
+        virtual std::vector< OUString >      getPropertyEnumRepresentations(sal_Int32 _nId) const override;
 
         bool                                   isComposeable( const OUString& _rPropertyName ) const;
 
@@ -89,7 +89,7 @@ namespace pcr
 
     protected:
         // IPropertyEnumRepresentation implementqation
-        virtual ::std::vector< OUString >
+        virtual std::vector< OUString >
                                     SAL_CALL getDescriptions() const override;
         virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, css::uno::Any& _out_rValue ) const override;
         virtual OUString            SAL_CALL getDescriptionForValue( const css::uno::Any& _rEnumValue ) const override;

@@ -30,7 +30,7 @@ namespace dbaxml
 void OXMLAutoStylePoolP::exportStyleAttributes(
             SvXMLAttributeList& rAttrList,
             sal_Int32 nFamily,
-            const ::std::vector< XMLPropertyState >& rProperties,
+            const std::vector< XMLPropertyState >& rProperties,
             const SvXMLExportPropertyMapper& rPropExp
             , const SvXMLUnitConverter& rUnitConverter,
             const SvXMLNamespaceMap& rNamespaceMap
@@ -40,8 +40,8 @@ void OXMLAutoStylePoolP::exportStyleAttributes(
     if ( nFamily == XML_STYLE_FAMILY_TABLE_COLUMN )
     {
         rtl::Reference< XMLPropertySetMapper > aPropMapper = rODBExport.GetColumnStylesPropertySetMapper();
-        ::std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
-        ::std::vector< XMLPropertyState >::const_iterator aEnd = rProperties.end();
+        std::vector< XMLPropertyState >::const_iterator i = rProperties.begin();
+        std::vector< XMLPropertyState >::const_iterator aEnd = rProperties.end();
         for ( ; i != aEnd ; ++i )
         {
             sal_Int16 nContextID = aPropMapper->GetEntryContextId(i->mnIndex);

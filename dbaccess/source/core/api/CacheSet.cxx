@@ -194,7 +194,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
                                         ,const connectivity::OSQLTable& _xTable
                                         ,OUStringBuffer& _sCondition
                                         ,OUStringBuffer& _sParameter
-                                        ,::std::vector< sal_Int32>& _rOrgValues)
+                                        ,std::vector< sal_Int32>& _rOrgValues)
 {
     // use keys and indexes for exact positioning
     // first the keys
@@ -209,7 +209,7 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
     //  Reference<XColumnsSupplier>
     Reference<XPropertySet> xIndexColsSup;
     Reference<XNameAccess> xIndexColumns;
-    ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
+    std::vector< Reference<XNameAccess> > aAllIndexColumns;
     if(xIndexes.is())
     {
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
@@ -250,8 +250,8 @@ void OCacheSet::fillParameters( const ORowSetRow& _rRow
             _rOrgValues.push_back(nCheckCount);
 
         }
-        ::std::vector< Reference<XNameAccess> >::const_iterator aIndexEnd = aAllIndexColumns.end();
-        for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
+        std::vector< Reference<XNameAccess> >::const_iterator aIndexEnd = aAllIndexColumns.end();
+        for( std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
                 aIndexIter != aIndexEnd;++aIndexIter)
         {
             if((*aIndexIter)->hasByName(aColumnName))
@@ -282,7 +282,7 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     // list all columns that should be set
 
     OUStringBuffer aCondition;
-    ::std::vector< sal_Int32> aOrgValues;
+    std::vector< sal_Int32> aOrgValues;
     fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
     aSql[aSql.getLength() - 1] = ' ';
     if ( !aCondition.isEmpty() )
@@ -336,7 +336,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     //  Reference<XColumnsSupplier>
     Reference<XPropertySet> xIndexColsSup;
     Reference<XNameAccess> xIndexColumns;
-    ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
+    std::vector< Reference<XNameAccess> > aAllIndexColumns;
     if(xIndexes.is())
     {
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
@@ -351,7 +351,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     }
 
     OUStringBuffer aColumnName;
-    ::std::vector< sal_Int32> aOrgValues;
+    std::vector< sal_Int32> aOrgValues;
     fillParameters(_rDeleteRow,_xTable,aSql,aColumnName,aOrgValues);
 
     aSql.setLength(aSql.getLength()-5);
@@ -594,7 +594,7 @@ bool OCacheSet::isResultSetChanged() const
     return false;
 }
 
-void OCacheSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& /*io_aInsertRow*/,ORowSetValueVector::Vector& /*io_aRow*/,::std::vector<sal_Int32>& o_aChangedColumns)
+void OCacheSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& /*io_aInsertRow*/,ORowSetValueVector::Vector& /*io_aRow*/,std::vector<sal_Int32>& o_aChangedColumns)
 {
     o_aChangedColumns.push_back(i_nColumnIndex);
 }
@@ -604,7 +604,7 @@ bool OCacheSet::columnValuesUpdated(ORowSetValueVector::Vector& /*io_aCachedRow*
     return false;
 }
 
-bool OCacheSet::updateColumnValues(const ORowSetValueVector::Vector& /*io_aCachedRow*/,ORowSetValueVector::Vector& /*io_aRow*/,const ::std::vector<sal_Int32>& /*i_aChangedColumns*/)
+bool OCacheSet::updateColumnValues(const ORowSetValueVector::Vector& /*io_aCachedRow*/,ORowSetValueVector::Vector& /*io_aRow*/,const std::vector<sal_Int32>& /*i_aChangedColumns*/)
 {
     return true;
 }

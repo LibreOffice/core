@@ -38,7 +38,7 @@
 
 namespace
 {
-    typedef ::std::vector< VclPtr<VirtualDevice> > aBuffers;
+    typedef std::vector< VclPtr<VirtualDevice> > aBuffers;
 
     class VDevBuffer : public Timer, protected cppu::BaseMutex
     {
@@ -209,7 +209,7 @@ namespace
     void VDevBuffer::free(VirtualDevice& rDevice)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        const aBuffers::iterator aUsedFound(::std::find(maUsedBuffers.begin(), maUsedBuffers.end(), &rDevice));
+        const aBuffers::iterator aUsedFound(std::find(maUsedBuffers.begin(), maUsedBuffers.end(), &rDevice));
         OSL_ENSURE(aUsedFound != maUsedBuffers.end(), "OOps, non-registered buffer freed (!)");
 
         maUsedBuffers.erase(aUsedFound);

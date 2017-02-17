@@ -149,7 +149,7 @@ private:
        priority. That is, the first element is "user" followed by "shared" and
        then "bundled"
      */
-    ::std::list< OUString > m_repositoryNames;
+    std::list< OUString > m_repositoryNames;
 
     css::uno::Reference<css::deployment::XPackageManager> getUserRepository();
     css::uno::Reference<css::deployment::XPackageManager> getSharedRepository();
@@ -176,7 +176,7 @@ private:
         css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv );
 
-    ::std::list<css::uno::Reference<css::deployment::XPackage> >
+    std::list<css::uno::Reference<css::deployment::XPackage> >
     getExtensionsWithSameId(OUString  const & identifier,
                             OUString const & fileName,
                             css::uno::Reference< css::ucb::XCommandEnvironment> const & xCmdEnv =

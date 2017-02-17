@@ -380,7 +380,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
 
         pTabWin->Hide();
         OJoinController& rController = m_pView->getController();
-        TTableWindowData::iterator aFind = ::std::find(rController.getTableWindowData().begin(), rController.getTableWindowData().end(), pData);
+        TTableWindowData::iterator aFind = std::find(rController.getTableWindowData().begin(), rController.getTableWindowData().end(), pData);
         if(aFind != rController.getTableWindowData().end())
         {
             rController.getTableWindowData().erase(aFind);
@@ -902,8 +902,8 @@ void OJoinTableView::SelectConn(OTableConnection* pConn)
             SvTreeListEntry* pFirstSourceVisible = pSourceBox->GetFirstEntryInView();
             SvTreeListEntry* pFirstDestVisible = pDestBox->GetFirstEntryInView();
 
-            const ::std::vector<OConnectionLine*>& rLines = pConn->GetConnLineList();
-            ::std::vector<OConnectionLine*>::const_reverse_iterator aIter = rLines.rbegin();
+            const std::vector<OConnectionLine*>& rLines = pConn->GetConnLineList();
+            std::vector<OConnectionLine*>::const_reverse_iterator aIter = rLines.rbegin();
             for(;aIter != rLines.rend();++aIter)
             {
                 if ((*aIter)->IsValid())
@@ -955,18 +955,18 @@ void OJoinTableView::DrawConnections(vcl::RenderContext& rRenderContext, const R
         GetSelectedConn()->Draw(rRenderContext, rRect);
 }
 
-::std::vector<VclPtr<OTableConnection> >::const_iterator OJoinTableView::getTableConnections(const OTableWindow* _pFromWin) const
+std::vector<VclPtr<OTableConnection> >::const_iterator OJoinTableView::getTableConnections(const OTableWindow* _pFromWin) const
 {
-    return ::std::find_if(  m_vTableConnection.begin(),
+    return std::find_if(  m_vTableConnection.begin(),
                             m_vTableConnection.end(),
-                            ::std::bind2nd(::std::mem_fun(&OTableConnection::isTableConnection),_pFromWin));
+                            std::bind2nd(std::mem_fun(&OTableConnection::isTableConnection),_pFromWin));
 }
 
 sal_Int32 OJoinTableView::getConnectionCount(const OTableWindow* _pFromWin) const
 {
-    return ::std::count_if( m_vTableConnection.begin(),
+    return std::count_if( m_vTableConnection.begin(),
                             m_vTableConnection.end(),
-                            ::std::bind2nd(::std::mem_fun(&OTableConnection::isTableConnection),_pFromWin));
+                            std::bind2nd(std::mem_fun(&OTableConnection::isTableConnection),_pFromWin));
 }
 
 bool OJoinTableView::ExistsAConn(const OTableWindow* pFrom) const
@@ -1159,8 +1159,8 @@ void OJoinTableView::Command(const CommandEvent& rEvt)
             {
                 if (rSelConnection)
                 {
-                    const ::std::vector<OConnectionLine*>& rLines = rSelConnection->GetConnLineList();
-                    ::std::vector<OConnectionLine*>::const_iterator aIter = ::std::find_if(rLines.begin(), rLines.end(),::std::mem_fun(&OConnectionLine::IsValid));
+                    const std::vector<OConnectionLine*>& rLines = rSelConnection->GetConnLineList();
+                    std::vector<OConnectionLine*>::const_iterator aIter = std::find_if(rLines.begin(), rLines.end(),std::mem_fun(&OConnectionLine::IsValid));
                     if( aIter != rLines.end() )
                         executePopup((*aIter)->getMidPoint(), rSelConnection);
                 }
@@ -1561,7 +1561,7 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,bool _bAddData
     {
 #if OSL_DEBUG_LEVEL > 0
         TTableConnectionData& rTabConnDataList = m_pView->getController().getTableConnectionData();
-        OSL_ENSURE( ::std::find(rTabConnDataList.begin(), rTabConnDataList.end(),_pConnection->GetData()) == rTabConnDataList.end(),"Data already in vector!");
+        OSL_ENSURE( std::find(rTabConnDataList.begin(), rTabConnDataList.end(),_pConnection->GetData()) == rTabConnDataList.end(),"Data already in vector!");
 #endif
         m_pView->getController().getTableConnectionData().push_back(_pConnection->GetData());
     }

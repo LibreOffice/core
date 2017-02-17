@@ -66,7 +66,7 @@ namespace pcr
 
 
     // Compare PropertyInfo
-    struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
+    struct PropertyInfoLessByName : public std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
         bool operator()( const OPropertyInfoImpl& _rLHS, const OPropertyInfoImpl& _rRHS )
         {
@@ -346,7 +346,7 @@ namespace pcr
         s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
 
         // sort
-        ::std::sort( s_pPropertyInfos, s_pPropertyInfos + s_nCount, PropertyInfoLessByName() );
+        std::sort( s_pPropertyInfos, s_pPropertyInfos + s_nCount, PropertyInfoLessByName() );
 
 #if OSL_DEBUG_LEVEL > 0
         for ( const OPropertyInfoImpl* pCheck = s_pPropertyInfos; pCheck != s_pPropertyInfos + s_nCount - 1; ++pCheck )
@@ -394,7 +394,7 @@ namespace pcr
     }
 
 
-    ::std::vector< OUString > OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
+    std::vector< OUString > OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
     {
         OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) || ( _nId == PROPERTY_ID_TARGET_FRAME ),
             "OPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
@@ -530,7 +530,7 @@ namespace pcr
             getPropertyInfo();
         OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), 0, "", 0);
 
-        const OPropertyInfoImpl* pInfo = ::std::lower_bound(
+        const OPropertyInfoImpl* pInfo = std::lower_bound(
             s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
 
         if ( pInfo == s_pPropertyInfos + s_nCount )
@@ -574,7 +574,7 @@ namespace pcr
     }
 
 
-    ::std::vector< OUString > SAL_CALL DefaultEnumRepresentation::getDescriptions() const
+    std::vector< OUString > SAL_CALL DefaultEnumRepresentation::getDescriptions() const
     {
         return m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
     }
@@ -583,8 +583,8 @@ namespace pcr
     void SAL_CALL DefaultEnumRepresentation::getValueFromDescription( const OUString& _rDescription, Any& _out_rValue ) const
     {
         sal_uInt32  nPropertyUIFlags = m_rMetaData.getPropertyUIFlags( m_nPropertyId );
-        ::std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
-        ::std::vector< OUString >::const_iterator pos = ::std::find( aEnumStrings.begin(), aEnumStrings.end(), _rDescription );
+        std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
+        std::vector< OUString >::const_iterator pos = std::find( aEnumStrings.begin(), aEnumStrings.end(), _rDescription );
         if ( pos != aEnumStrings.end() )
         {
             sal_Int32 nPos = pos - aEnumStrings.begin();
@@ -634,7 +634,7 @@ namespace pcr
             // enum value starting with 1
             --nIntValue;
 
-        ::std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
+        std::vector< OUString > aEnumStrings = m_rMetaData.getPropertyEnumRepresentations( m_nPropertyId );
         if ( ( nIntValue >= 0 ) && ( nIntValue < (sal_Int32)aEnumStrings.size() ) )
         {
             sReturn = aEnumStrings[ nIntValue ];

@@ -47,7 +47,7 @@ namespace pcr
 
     namespace
     {
-        struct HandlerLess : public ::std::binary_function  <   Reference< XPropertyHandler >
+        struct HandlerLess : public std::binary_function  <   Reference< XPropertyHandler >
                                                             ,   Reference< XPropertyHandler >
                                                             ,   bool
                                                             >
@@ -59,8 +59,8 @@ namespace pcr
         };
 
 
-        typedef ::std::set< OUString >       StringBag;
-        typedef ::std::map< sal_Int16, StringBag >  MapIntToStringBag;
+        typedef std::set< OUString >       StringBag;
+        typedef std::map< sal_Int16, StringBag >  MapIntToStringBag;
     }
 
 
@@ -352,7 +352,7 @@ namespace pcr
 
     // HandlerMap
 
-    typedef ::std::map  <   Reference< XPropertyHandler >
+    typedef std::map  <   Reference< XPropertyHandler >
                         ,   ::rtl::Reference< CachedInspectorUI >
                         ,   HandlerLess
                         >   ImplMapHandlerToUI;
@@ -393,7 +393,7 @@ namespace pcr
     {
 
         // an STL-compatible structure which collects strings from a CachedInspectorUI instances
-        struct StringBagCollector : public ::std::unary_function< ImplMapHandlerToUI::value_type, void >
+        struct StringBagCollector : public std::unary_function< ImplMapHandlerToUI::value_type, void >
         {
         private:
             StringBag&                      m_rBag;
@@ -410,13 +410,13 @@ namespace pcr
 
             static void collectAll( StringBag& _rAll, const ImplMapHandlerToUI& _rMap, CachedInspectorUI::FGetStringBag _pGetter )
             {
-                ::std::for_each( _rMap.begin(), _rMap.end(), StringBagCollector( _rAll, _pGetter ) );
+                std::for_each( _rMap.begin(), _rMap.end(), StringBagCollector( _rAll, _pGetter ) );
             }
         };
 
 
         // an STL-compatible structure which cleans a certain string bag in a CachedInspectorUI instances
-        struct StringBagClearer : public ::std::unary_function< ImplMapHandlerToUI::value_type, void >
+        struct StringBagClearer : public std::unary_function< ImplMapHandlerToUI::value_type, void >
         {
         private:
             CachedInspectorUI::FGetStringBag  m_pGetter;
@@ -431,7 +431,7 @@ namespace pcr
 
             static void clearAll( const ImplMapHandlerToUI& _rMap, CachedInspectorUI::FGetStringBag _pGetter )
             {
-                ::std::for_each( _rMap.begin(), _rMap.end(), StringBagClearer( _pGetter ) );
+                std::for_each( _rMap.begin(), _rMap.end(), StringBagClearer( _pGetter ) );
             }
         };
 
@@ -441,7 +441,7 @@ namespace pcr
 
         // an STL-compatible struct which calls a certain member method (taking a string) at a
         //    given ->XObjectInspectorUI instance
-        struct PropertyUIOperator : public ::std::unary_function< OUString, void >
+        struct PropertyUIOperator : public std::unary_function< OUString, void >
         {
         private:
             Reference< XObjectInspectorUI > m_xUpdater;
@@ -461,7 +461,7 @@ namespace pcr
 
             static void forEach( const StringBag& _rProperties, const Reference< XObjectInspectorUI >& _rxDelegatorUI, FPropertyUISetter _pSetter )
             {
-                ::std::for_each( _rProperties.begin(), _rProperties.end(), PropertyUIOperator( _rxDelegatorUI, _pSetter ) );
+                std::for_each( _rProperties.begin(), _rProperties.end(), PropertyUIOperator( _rxDelegatorUI, _pSetter ) );
             }
         };
 
@@ -541,7 +541,7 @@ namespace pcr
 
         // an STL-compatible structure which applies a ->IStringKeyBooleanUIUpdate::updateUIForKey
         // operation with a fixed boolean value, for a given string value
-        struct BooleanUIAspectUpdate : public ::std::unary_function< OUString, void >
+        struct BooleanUIAspectUpdate : public std::unary_function< OUString, void >
         {
         private:
             const IStringKeyBooleanUIUpdate&    m_rUpdater;
@@ -561,7 +561,7 @@ namespace pcr
 
             static void forEach( const StringBag& _rProperties, const IStringKeyBooleanUIUpdate& _rUpdater, bool _bFlag )
             {
-                ::std::for_each( _rProperties.begin(), _rProperties.end(), BooleanUIAspectUpdate( _rUpdater, _bFlag ) );
+                std::for_each( _rProperties.begin(), _rProperties.end(), BooleanUIAspectUpdate( _rUpdater, _bFlag ) );
             }
         };
 
@@ -569,7 +569,7 @@ namespace pcr
         // BooleanUIAspectUpdate
 
         // an STL-compatible structure subtracting a given string from a fixed ->StringBag
-        struct StringBagComplement : public ::std::unary_function< OUString, void >
+        struct StringBagComplement : public std::unary_function< OUString, void >
         {
         private:
             StringBag&  m_rMinuend;
@@ -584,7 +584,7 @@ namespace pcr
 
             static void subtract( StringBag& _rMinuend, const StringBag& _rSubtrahend )
             {
-                ::std::for_each( _rSubtrahend.begin(), _rSubtrahend.end(), StringBagComplement( _rMinuend ) );
+                std::for_each( _rSubtrahend.begin(), _rSubtrahend.end(), StringBagComplement( _rMinuend ) );
             }
         };
 

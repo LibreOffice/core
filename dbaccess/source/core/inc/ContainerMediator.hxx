@@ -40,7 +40,7 @@ namespace dbaccess
     {
     private:
         typedef ::rtl::Reference< OPropertyForward >          TPropertyForward;
-        typedef ::std::map< OUString, TPropertyForward >      PropertyForwardList;
+        typedef std::map< OUString, TPropertyForward >      PropertyForwardList;
         PropertyForwardList                                   m_aForwardList;
         css::uno::Reference< css::container::XNameAccess >    m_xSettings;    // can not be weak
         css::uno::Reference< css::container::XContainer >     m_xContainer;   // can not be weak

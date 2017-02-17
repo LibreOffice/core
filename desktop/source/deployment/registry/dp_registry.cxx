@@ -64,7 +64,7 @@ typedef ::cppu::WeakComponentImplHelper<
 class PackageRegistryImpl : private MutexHolder, public t_helper
 {
     struct ci_string_hash {
-        ::std::size_t operator () ( OUString const & str ) const {
+        std::size_t operator () ( OUString const & str ) const {
             return str.toAsciiLowerCase().hashCode();
         }
     };
@@ -86,7 +86,7 @@ class PackageRegistryImpl : private MutexHolder, public t_helper
     t_string2string m_filter2mediaType;
     t_registryset m_ambiguousBackends;
     t_registryset m_allBackends;
-    ::std::vector< Reference<deployment::XPackageTypeInfo> > m_typesInfos;
+    std::vector< Reference<deployment::XPackageTypeInfo> > m_typesInfos;
 
     void insertBackend(
         Reference<deployment::XPackageRegistry> const & xBackend );
@@ -194,7 +194,7 @@ void PackageRegistryImpl::insertBackend(
 
         const OUString mediaType( normalizeMediaType(
                                       xPackageType->getMediaType() ) );
-        ::std::pair<t_string2registry::iterator, bool> a_insertion(
+        std::pair<t_string2registry::iterator, bool> a_insertion(
             m_mediaType2backend.insert( t_string2registry::value_type(
                                             mediaType, xBackend ) ) );
         if (a_insertion.second)
@@ -227,7 +227,7 @@ void PackageRegistryImpl::insertBackend(
                     bool ambig = (token.indexOf('*') >= 0 ||
                                   token.indexOf('?') >= 0);
                     if (! ambig) {
-                        ::std::pair<t_string2string::iterator, bool> ins(
+                        std::pair<t_string2string::iterator, bool> ins(
                             m_filter2mediaType.insert(
                                 t_string2string::value_type(
                                     token, mediaType ) ) );

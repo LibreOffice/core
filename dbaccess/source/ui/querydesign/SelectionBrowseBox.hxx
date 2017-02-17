@@ -51,7 +51,7 @@ namespace dbaui
     class OSelectionBrowseBox : public ::svt::EditBrowseBox
     {
         friend class OQueryDesignView;
-        ::std::vector<bool>                 m_bVisibleRow;              // at pos we find the RowId
+        std::vector<bool>                 m_bVisibleRow;              // at pos we find the RowId
         Timer                               m_timerInvalidate;
 
         long                                m_nSeekRow;

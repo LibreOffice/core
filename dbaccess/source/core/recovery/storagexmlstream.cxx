@@ -48,7 +48,7 @@ namespace dbaccess
     struct StorageXMLOutputStream_Data
     {
         Reference< XDocumentHandler >           xHandler;
-        ::std::stack< OUString >         aElements;
+        std::stack< OUString >         aElements;
         ::rtl::Reference< SvXMLAttributeList >  xAttributes;
     };
 

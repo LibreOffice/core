@@ -549,7 +549,7 @@ void ODBTableDecorator::refreshColumns()
     ::osl::MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
 
-    ::std::vector< OUString> aVector;
+    std::vector< OUString> aVector;
 
     Reference<XNameAccess> xNames;
     if(m_xTable.is())

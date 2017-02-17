@@ -57,7 +57,7 @@ namespace dbaui
         VclPtr<VclMultiLineEdit> m_pOutput;
         VclPtr<PushButton>       m_pClose;
 
-        typedef ::std::deque< OUString >  StringQueue;
+        typedef std::deque< OUString >  StringQueue;
         StringQueue     m_aStatementHistory;    // previous statements
         StringQueue     m_aNormalizedHistory;   // previous statements, normalized to be used in the list box
 

@@ -280,7 +280,7 @@ sal_Bool SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentationP
 
 uno::Any DatabaseDataProvider::impl_getNumberFormatKey_nothrow(const OUString & _sRangeRepresentation) const
 {
-    ::std::map< OUString,css::uno::Any>::const_iterator aFind = m_aNumberFormats.find(_sRangeRepresentation);
+    std::map< OUString,css::uno::Any>::const_iterator aFind = m_aNumberFormats.find(_sRangeRepresentation);
     if ( aFind != m_aNumberFormats.end() )
         return aFind->second;
     return uno::makeAny(sal_Int32(0));
@@ -635,7 +635,7 @@ namespace
         }
     };
 
-    struct CreateColumnDescription : public ::std::unary_function< OUString, ColumnDescription >
+    struct CreateColumnDescription : public std::unary_function< OUString, ColumnDescription >
     {
         ColumnDescription operator()( const OUString& i_rName )
         {
@@ -643,7 +643,7 @@ namespace
         }
     };
 
-    struct SelectColumnName : public ::std::unary_function< ColumnDescription, OUString >
+    struct SelectColumnName : public std::unary_function< ColumnDescription, OUString >
     {
         const OUString& operator()( const ColumnDescription& i_rColumn )
         {
@@ -659,7 +659,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
     uno::Reference< container::XNameAccess > xColumns( xColSup->getColumns(), uno::UNO_SET_THROW );
     const uno::Sequence< OUString > aRowSetColumnNames( xColumns->getElementNames() );
 
-    typedef ::std::vector< ColumnDescription > ColumnDescriptions;
+    typedef std::vector< ColumnDescription > ColumnDescriptions;
     ColumnDescriptions aColumns;
     bool bFirstColumnIsCategory = _bHasCategories;
     if ( i_aColumnNames.getLength() )
@@ -711,7 +711,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
     if ( aColumns.empty() )
     {
         aColumns.resize( aRowSetColumnNames.getLength() );
-        ::std::transform(
+        std::transform(
             aRowSetColumnNames.getConstArray(),
             aRowSetColumnNames.getConstArray() + aRowSetColumnNames.getLength(),
             aColumns.begin(),
@@ -739,11 +739,11 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
 
         const sal_Int32 columnIndex = col - aColumns.begin();
         const OUString sRangeName = OUString::number( columnIndex );
-        m_aNumberFormats.insert( ::std::map< OUString, uno::Any >::value_type( sRangeName, aNumberFormat ) );
+        m_aNumberFormats.insert( std::map< OUString, uno::Any >::value_type( sRangeName, aNumberFormat ) );
     }
 
-    ::std::vector< OUString > aRowLabels;
-    ::std::vector< ::std::vector< double > > aDataValues;
+    std::vector< OUString > aRowLabels;
+    std::vector< std::vector< double > > aDataValues;
     sal_Int32 nRowCount = 0;
     ::connectivity::ORowSetValue aValue;
     while( xRes->next() && (!m_RowLimit || nRowCount < m_RowLimit) )
@@ -753,7 +753,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
         aValue.fill( aColumns[0].nResultSetPosition, aColumns[0].nDataType, xRow );
         aRowLabels.push_back( aValue.getString() );
 
-        ::std::vector< double > aRow;
+        std::vector< double > aRow;
         for (   ColumnDescriptions::const_iterator col = aColumns.begin();
                 col != aColumns.end();
                 ++col
@@ -788,7 +788,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
         for(sal_Int32 h = 0,k = 0; h < nRowCount; ++h,++k )
         {
             aRowLabels.push_back(OUString::number(h+1));
-            ::std::vector< double > aRow;
+            std::vector< double > aRow;
             const sal_Int32 nSize = SAL_N_ELEMENTS(fDefaultData);
             for (size_t j = 0; j < (aColumns.size()-1); ++j,++k)
             {
@@ -805,7 +805,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
 
     const size_t nOffset = bFirstColumnIsCategory ? 1 : 0;
     uno::Sequence< OUString > aColumnDescriptions( aColumns.size() - nOffset );
-    ::std::transform(
+    std::transform(
         aColumns.begin() + nOffset,
         aColumns.end(),
         aColumnDescriptions.getArray(),

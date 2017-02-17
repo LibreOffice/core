@@ -112,7 +112,7 @@ private:
     void SAL_CALL notifyAllClipboardListener( );
 
 private:
-    ::std::unique_ptr< CWinClipbImpl >                  m_pImpl;
+    std::unique_ptr< CWinClipbImpl >                  m_pImpl;
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
     friend class CWinClipbImpl;

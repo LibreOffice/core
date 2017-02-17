@@ -38,7 +38,7 @@ namespace pcr
     class XSDValidationPropertyHandler : public XSDValidationPropertyHandler_Base
     {
     private:
-        ::std::unique_ptr< XSDValidationHelper >  m_pHelper;
+        std::unique_ptr< XSDValidationHelper >  m_pHelper;
 
     public:
         explicit XSDValidationPropertyHandler(
@@ -83,7 +83,7 @@ namespace pcr
 
         /** retrieves the names of the data types which our introspectee can be validated against
         */
-        void    implGetAvailableDataTypeNames( ::std::vector< OUString >& /* [out] */ _rNames ) const;
+        void    implGetAvailableDataTypeNames( std::vector< OUString >& /* [out] */ _rNames ) const;
     };
 
 

@@ -74,7 +74,7 @@ namespace dbaui
     class FeatureSet
     {
     public:
-        typedef ::std::set< ItemID >::const_iterator    const_iterator;
+        typedef std::set< ItemID >::const_iterator    const_iterator;
 
     public:
         inline FeatureSet() { }
@@ -89,7 +89,7 @@ namespace dbaui
         inline  const_iterator end() const      { return m_aContent.end(); }
 
     private:
-        ::std::set< ItemID >    m_aContent;
+        std::set< ItemID >    m_aContent;
     };
 
     inline  bool FeatureSet::supportsGeneratedValues() const

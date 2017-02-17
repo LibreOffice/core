@@ -61,7 +61,7 @@ OResultSet::OResultSet(const css::uno::Reference< css::sdbc::XResultSet >& _xRes
            ,m_nResultSetConcurrency(0)
            ,m_bIsBookmarkable(false)
 {
-    m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, ::std::vector< OUString>(), nullptr,nullptr);
+    m_pColumns = new OColumns(*this, m_aMutex, _bCaseSensitive, std::vector< OUString>(), nullptr,nullptr);
 
     try
     {

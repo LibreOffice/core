@@ -46,8 +46,8 @@ namespace dbaccess
                             public OSubComponent,
                             public OQueryComposer_BASE
     {
-        ::std::vector< OUString>                                   m_aFilters;
-        ::std::vector< OUString>                                   m_aOrders;
+        std::vector< OUString>                                   m_aFilters;
+        std::vector< OUString>                                   m_aOrders;
         OUString m_sOrgFilter;
         OUString m_sOrgOrder;
         css::uno::Reference< css::sdb::XSingleSelectQueryComposer> m_xComposer;

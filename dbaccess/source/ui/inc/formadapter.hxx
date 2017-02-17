@@ -141,8 +141,8 @@ namespace dbaui
 
         // hierarchy administration
         css::uno::Reference< css::uno::XInterface >                           m_xParent;
-        ::std::vector<  css::uno::Reference< css::form::XFormComponent > >    m_aChildren;
-        ::std::vector< OUString >                                             m_aChildNames;
+        std::vector<  css::uno::Reference< css::form::XFormComponent > >    m_aChildren;
+        std::vector< OUString >                                             m_aChildNames;
 
         // properties
         OUString                            m_sName;

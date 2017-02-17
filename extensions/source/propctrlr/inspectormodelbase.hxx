@@ -54,7 +54,7 @@ namespace pcr
             ,public ImplInspectorModel_PBase
     {
     protected:
-        ::std::unique_ptr< InspectorModelProperties >                     m_pProperties;
+        std::unique_ptr< InspectorModelProperties >                     m_pProperties;
 
     protected:
         virtual ~ImplInspectorModel() override;

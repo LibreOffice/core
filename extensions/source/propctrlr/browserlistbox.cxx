@@ -573,7 +573,7 @@ namespace pcr
 
     void OBrowserListBox::UpdatePosNSize()
     {
-        for  (  ::std::set< sal_uInt16 >::const_iterator aLoop = m_aOutOfDateLines.begin();
+        for  (  std::set< sal_uInt16 >::const_iterator aLoop = m_aOutOfDateLines.begin();
                 aLoop != m_aOutOfDateLines.end();
                 ++aLoop
              )
@@ -1192,8 +1192,8 @@ namespace pcr
                 if ( nScrollOffset )
                 {
                     long nNewThumbPos = m_aVScroll->GetThumbPos() + nScrollOffset;
-                    nNewThumbPos = ::std::max( nNewThumbPos, m_aVScroll->GetRangeMin() );
-                    nNewThumbPos = ::std::min( nNewThumbPos, m_aVScroll->GetRangeMax() );
+                    nNewThumbPos = std::max( nNewThumbPos, m_aVScroll->GetRangeMin() );
+                    nNewThumbPos = std::min( nNewThumbPos, m_aVScroll->GetRangeMax() );
                     m_aVScroll->DoScroll( nNewThumbPos );
                     nNewThumbPos = m_aVScroll->GetThumbPos();
 

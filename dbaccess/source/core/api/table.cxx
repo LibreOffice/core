@@ -262,7 +262,7 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  )
     Type aAlterType = cppu::UnoType<XAlterTable>::get();
 
     Sequence< Type > aTypes(OTable_Base::getTypes());
-    ::std::vector<Type> aOwnTypes;
+    std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
 
     const Type* pIter = aTypes.getConstArray();

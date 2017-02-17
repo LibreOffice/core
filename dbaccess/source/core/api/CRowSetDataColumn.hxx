@@ -88,12 +88,12 @@ namespace dbaccess
                         const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector
+                        const std::vector< OUString> &_rVector
                         );
         virtual ~ORowSetDataColumns() override;
         // only the name is identical to ::cppu::OComponentHelper
         virtual void SAL_CALL disposing() override;
-        void assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< OUString> &_rVector);
+        void assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const std::vector< OUString> &_rVector);
     };
 }
 

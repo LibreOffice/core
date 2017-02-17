@@ -50,7 +50,7 @@ namespace dbaccess
         ::osl::Mutex&                                           m_rMutex;
         bool                                                    m_bInitialized;
         bool                                                    m_bDisposed;
-        ::std::shared_ptr<::comphelper::AsyncEventNotifierAutoJoin> m_pEventBroadcaster;
+        std::shared_ptr<::comphelper::AsyncEventNotifierAutoJoin> m_pEventBroadcaster;
         ::comphelper::OInterfaceContainerHelper2                      m_aLegacyEventListeners;
         ::comphelper::OInterfaceContainerHelper2                      m_aDocumentEventListeners;
 

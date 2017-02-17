@@ -890,7 +890,7 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl& rEntry, const long nSta
 
 void ExtensionBox_Impl::cleanVecListenerAdded()
 {
-    typedef ::std::vector<uno::WeakReference<deployment::XPackage> >::iterator IT;
+    typedef std::vector<uno::WeakReference<deployment::XPackage> >::iterator IT;
     IT i = m_vListenerAdded.begin();
     while( i != m_vListenerAdded.end())
     {
@@ -907,7 +907,7 @@ void ExtensionBox_Impl::addEventListenerOnce(
 {
     //make sure to only add the listener once
     cleanVecListenerAdded();
-    if ( ::std::none_of(m_vListenerAdded.begin(), m_vListenerAdded.end(),
+    if ( std::none_of(m_vListenerAdded.begin(), m_vListenerAdded.end(),
                         FindWeakRef(extension)) )
     {
         extension->addEventListener( m_xRemoveListener.get() );

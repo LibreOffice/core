@@ -57,7 +57,7 @@ namespace dbaccess
                         bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector,
+                        const std::vector< OUString> &_rVector,
                         bool _bUseAsIndex = false
                     );
 
@@ -90,7 +90,7 @@ namespace dbaccess
                         bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
-                        const ::std::vector< OUString> &_rVector
+                        const std::vector< OUString> &_rVector
                     ) : sdbcx::OCollection(_rParent,_bCase,_rMutex,_rVector)
                         ,m_aTables(_rTables)
         {

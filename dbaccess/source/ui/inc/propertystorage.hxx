@@ -48,7 +48,7 @@ namespace dbaui
         const sal_uInt16  m_nItemID;
     };
 
-    typedef ::std::map< sal_Int32, std::shared_ptr< SetItemPropertyStorage > >   PropertyValues;
+    typedef std::map< sal_Int32, std::shared_ptr< SetItemPropertyStorage > >   PropertyValues;
 
 } // namespace dbaui
 

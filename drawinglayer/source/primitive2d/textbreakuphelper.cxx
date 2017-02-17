@@ -62,13 +62,13 @@ namespace drawinglayer
             {
                 // prepare values for new portion
                 basegfx::B2DHomMatrix aNewTransform;
-                ::std::vector< double > aNewDXArray;
+                std::vector< double > aNewDXArray;
                 const bool bNewStartIsNotOldStart(nIndex > mrSource.getTextPosition());
 
                 if(!mbNoDXArray)
                 {
                     // prepare new DXArray for the single word
-                    aNewDXArray = ::std::vector< double >(
+                    aNewDXArray = std::vector< double >(
                         mrSource.getDXArray().begin() + (nIndex - mrSource.getTextPosition()),
                         mrSource.getDXArray().begin() + ((nIndex + nLength) - mrSource.getTextPosition()));
                 }

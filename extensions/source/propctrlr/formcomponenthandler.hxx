@@ -81,7 +81,7 @@ namespace pcr
         /// the string indicating a "default" (VOID) value in list-like controls
         OUString                        m_sDefaultValueString;
         /// all properties to whose control's we added ->m_sDefaultValueString
-        ::std::set< OUString >          m_aPropertiesWithDefListEntry;
+        std::set< OUString >          m_aPropertiesWithDefListEntry;
         /// type of our component
         ComponentClassification         m_eComponentClass;
         /// is our component a (database) sub form?
@@ -159,7 +159,7 @@ namespace pcr
         /** initializes the list of field names, if we're handling a control which supports the
             DataField property
         */
-        void impl_initFieldList_nothrow( ::std::vector< OUString >& rFieldNames ) const;
+        void impl_initFieldList_nothrow( std::vector< OUString >& rFieldNames ) const;
 
         /** obtaines the RowSet to which our component belongs
 
@@ -207,14 +207,14 @@ namespace pcr
             @precond
                 m_xRowSetConnection is not <NULL/>
         */
-        void impl_fillTableNames_throw( ::std::vector< OUString >& _out_rNames ) const;
+        void impl_fillTableNames_throw( std::vector< OUString >& _out_rNames ) const;
 
         /** describes the UI for selecting a query name
 
             @precond
                 m_xRowSetConnection is not <NULL/>
         */
-        void impl_fillQueryNames_throw( ::std::vector< OUString >& _out_rNames ) const;
+        void impl_fillQueryNames_throw( std::vector< OUString >& _out_rNames ) const;
 
         /** describes the UI for selecting a query name
 
@@ -222,7 +222,7 @@ namespace pcr
                 m_xRowSetConnection is not <NULL/>
         */
         void impl_fillQueryNames_throw( const css::uno::Reference< css::container::XNameAccess >& _xQueryNames
-                    ,::std::vector< OUString >& _out_rNames
+                    ,std::vector< OUString >& _out_rNames
                     ,const OUString& _sName = OUString() ) const;
 
         /** describes the UI for selecting a ListSource (for list-like form controls)
@@ -441,7 +441,7 @@ namespace pcr
     class WaitCursor
     {
     private:
-        ::std::unique_ptr< WaitObject >       m_aWaitObject;
+        std::unique_ptr< WaitObject >       m_aWaitObject;
 
     public:
         explicit WaitCursor( vcl::Window* _pWindow )

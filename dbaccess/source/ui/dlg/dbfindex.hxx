@@ -46,7 +46,7 @@ public:
     const OUString& GetIndexFileName() const { return aIndexFileName; }
 };
 
-typedef ::std::list< OTableIndex >  TableIndexList;
+typedef std::list< OTableIndex >  TableIndexList;
 
 // OTableInfo
 class ODbaseIndexDialog;
@@ -65,7 +65,7 @@ public:
     void WriteInfFile( const OUString& rDSN ) const;
 };
 
-typedef ::std::list< OTableInfo >   TableInfoList;
+typedef std::list< OTableInfo >   TableInfoList;
 
 // IndexDialog
 class ODbaseIndexDialog : public ModalDialog

@@ -36,13 +36,13 @@ namespace dbaccess
         ::connectivity::OSQLParser                              m_aSqlParser;
         ::connectivity::OSQLParseTreeIterator                   m_aSqlIterator;
 
-        ::std::map<sal_Int32,sal_Int32>                         m_aJoinedColumns;
-        ::std::map<sal_Int32,sal_Int32>                         m_aJoinedKeyColumns;
+        std::map<sal_Int32,sal_Int32>                         m_aJoinedColumns;
+        std::map<sal_Int32,sal_Int32>                         m_aJoinedKeyColumns;
 
         mutable bool m_bResultSetChanged;
 
         void executeDelete(const ORowSetRow& _rDeleteRow,const OUString& i_sSQL,const OUString& i_sTableName);
-        void fillJoinedColumns_throw(const ::std::vector< ::connectivity::TNodePair>& i_aJoinColumns);
+        void fillJoinedColumns_throw(const std::vector< ::connectivity::TNodePair>& i_aJoinColumns);
         void fillJoinedColumns_throw(const OUString& i_sLeftColumn,const OUString& i_sRightColumn);
     protected:
         virtual void makeNewStatement( ) override;
@@ -65,13 +65,13 @@ namespace dbaccess
 
         // CacheSet
         virtual bool isResultSetChanged() const override;
-        virtual void mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& io_aInsertRow,ORowSetValueVector::Vector& io_aRow,::std::vector<sal_Int32>& o_aChangedColumns) override;
+        virtual void mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& io_aInsertRow,ORowSetValueVector::Vector& io_aRow,std::vector<sal_Int32>& o_aChangedColumns) override;
         virtual bool columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow,const ORowSetValueVector::Vector& i_aRow) override;
-        virtual bool updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const ::std::vector<sal_Int32>& i_aChangedColumns) override;
+        virtual bool updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const std::vector<sal_Int32>& i_aChangedColumns) override;
         virtual void fillMissingValues(ORowSetValueVector::Vector& io_aRow) const override;
 
         bool isReadOnly() const { return m_aJoinedKeyColumns.empty(); }
-        const ::std::map<sal_Int32,sal_Int32>& getJoinedKeyColumns() const { return m_aJoinedKeyColumns; }
+        const std::map<sal_Int32,sal_Int32>& getJoinedKeyColumns() const { return m_aJoinedKeyColumns; }
     };
 }
 #endif // INCLUDED_DBACCESS_SOURCE_CORE_API_OPTIMISTICSET_HXX

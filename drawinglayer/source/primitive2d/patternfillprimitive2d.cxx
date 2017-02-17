@@ -172,7 +172,7 @@ namespace drawinglayer
                     if(!aMaskRange.isEmpty() && aMaskRange.getWidth() > 0.0 && aMaskRange.getHeight() > 0.0)
                     {
                         // create tiling matrices
-                        ::std::vector< basegfx::B2DHomMatrix > aMatrices;
+                        std::vector< basegfx::B2DHomMatrix > aMatrices;
                         texture::GeoTexSvxTiled aTiling(getReferenceRange());
 
                         aTiling.appendTransformations(aMatrices);

@@ -298,7 +298,7 @@ STDMETHODIMP EmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnec
         return E_OUTOFMEMORY;
 
     pAdvSink->AddRef();
-    m_aAdviseHashMap.insert( ::std::pair< DWORD, IAdviseSink* >( m_nAdviseNum, pAdvSink ) );
+    m_aAdviseHashMap.insert( std::pair< DWORD, IAdviseSink* >( m_nAdviseNum, pAdvSink ) );
     *pdwConnection = m_nAdviseNum++;
 
     return S_OK;

@@ -33,7 +33,7 @@ namespace dbaui
     class OQueryTabWinUndoAct : public OQueryDesignUndoAction
     {
     protected:
-        ::std::vector<VclPtr<OTableConnection> > m_vTableConnection;
+        std::vector<VclPtr<OTableConnection> > m_vTableConnection;
         VclPtr<OQueryTableWindow>                m_pTabWin;
         bool                         m_bOwnerOfObjects;
         // am I the only owner of the managed objects? (changes with every redo or undo)
@@ -51,7 +51,7 @@ namespace dbaui
         void SetTabWin(OQueryTableWindow* pTW) { m_pTabWin = pTW; }
         // now SetOwnership should be invoked
 
-        ::std::vector<VclPtr<OTableConnection> >&       GetTabConnList() { return m_vTableConnection; }
+        std::vector<VclPtr<OTableConnection> >&       GetTabConnList() { return m_vTableConnection; }
 
         void InsertConnection( OTableConnection* pConnection ) { m_vTableConnection.push_back(pConnection); }
     };

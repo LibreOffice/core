@@ -148,7 +148,7 @@ namespace dbmm
         }
     };
 
-    typedef ::std::vector< SubDocument >    SubDocuments;
+    typedef std::vector< SubDocument >    SubDocuments;
 
     // helper
     typedef ::utl::SharedUNOComponent< XStorage >   SharedStorage;
@@ -564,7 +564,7 @@ namespace dbmm
 
         /** returns the names of the elements in the "Scripts" storage
         */
-        ::std::set< OUString >
+        std::set< OUString >
                 getElementNames() const;
 
         /** removes the sub storage for a given script type
@@ -667,17 +667,17 @@ namespace dbmm
         return xStorage;
     }
 
-    ::std::set< OUString > ScriptsStorage::getElementNames() const
+    std::set< OUString > ScriptsStorage::getElementNames() const
     {
         Sequence< OUString > aElementNames;
         if ( isValid() )
             aElementNames = m_xScriptsStorage->getElementNames();
 
-        ::std::set< OUString > aNames;
-        ::std::copy(
+        std::set< OUString > aNames;
+        std::copy(
             aElementNames.getConstArray(),
             aElementNames.getConstArray() + aElementNames.getLength(),
-            ::std::insert_iterator< ::std::set< OUString > >( aNames, aNames.end() )
+            std::insert_iterator< std::set< OUString > >( aNames, aNames.end() )
         );
         return aNames;
     }
@@ -1180,7 +1180,7 @@ namespace dbmm
             {   // no scripts at all, or no scripts of the given type
                 return !m_rLogger.hadFailure();
             }
-            ::std::set< OUString > aElementNames( aDocStorage.getElementNames() );
+            std::set< OUString > aElementNames( aDocStorage.getElementNames() );
 
             const ScriptType aKnownStorageBasedTypes[] = {
                 eBeanShell, eJavaScript, ePython, eJava

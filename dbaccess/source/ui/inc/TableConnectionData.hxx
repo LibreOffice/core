@@ -98,7 +98,7 @@ namespace dbaui
         virtual bool Update(){ return true; }
     };
 
-    typedef ::std::vector< ::std::shared_ptr<OTableConnectionData> >  TTableConnectionData;
+    typedef std::vector< std::shared_ptr<OTableConnectionData> >  TTableConnectionData;
 
 }
 #endif

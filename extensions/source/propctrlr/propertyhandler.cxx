@@ -78,8 +78,8 @@ namespace pcr
             return;
 
         // remove all old property change listeners
-        ::std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > removeListener = m_aPropertyListeners.createIterator();
-        ::std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > readdListener = m_aPropertyListeners.createIterator();  // will copy the container as needed
+        std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > removeListener = m_aPropertyListeners.createIterator();
+        std::unique_ptr< ::comphelper::OInterfaceIteratorHelper2 > readdListener = m_aPropertyListeners.createIterator();  // will copy the container as needed
         while ( removeListener->hasMoreElements() )
             removePropertyChangeListener( static_cast< XPropertyChangeListener* >( removeListener->next() ) );
         OSL_ENSURE( m_aPropertyListeners.empty(), "PropertyHandler::inspect: derived classes are expected to forward the removePropertyChangeListener call to their base class (me)!" );
@@ -265,7 +265,7 @@ namespace pcr
     const Property* PropertyHandler::impl_getPropertyFromId_nothrow( PropertyId _nPropId ) const
     {
         const_cast< PropertyHandler* >( this )->getSupportedProperties();
-        const Property* pFound = ::std::find_if( m_aSupportedProperties.begin(), m_aSupportedProperties.end(),
+        const Property* pFound = std::find_if( m_aSupportedProperties.begin(), m_aSupportedProperties.end(),
             FindPropertyByHandle( _nPropId )
         );
         if ( pFound != m_aSupportedProperties.end() )
@@ -285,7 +285,7 @@ namespace pcr
     const Property& PropertyHandler::impl_getPropertyFromName_throw( const OUString& _rPropertyName ) const
     {
         const_cast< PropertyHandler* >( this )->getSupportedProperties();
-        StlSyntaxSequence< Property >::const_iterator pFound = ::std::find_if( m_aSupportedProperties.begin(), m_aSupportedProperties.end(),
+        StlSyntaxSequence< Property >::const_iterator pFound = std::find_if( m_aSupportedProperties.begin(), m_aSupportedProperties.end(),
             FindPropertyByName( _rPropertyName )
         );
         if ( pFound == m_aSupportedProperties.end() )
@@ -294,7 +294,7 @@ namespace pcr
         return *pFound;
     }
 
-    void PropertyHandler::implAddPropertyDescription( ::std::vector< Property >& _rProperties, const OUString& _rPropertyName, const Type& _rType, sal_Int16 _nAttribs ) const
+    void PropertyHandler::implAddPropertyDescription( std::vector< Property >& _rProperties, const OUString& _rPropertyName, const Type& _rType, sal_Int16 _nAttribs ) const
     {
         _rProperties.push_back( Property(
             _rPropertyName,

@@ -186,7 +186,7 @@ namespace dbaui
         // do I have connections to the outside?
         bool ExistsAConn() const;
 
-        void EnumValidFields(::std::vector< OUString>& arrstrFields);
+        void EnumValidFields(std::vector< OUString>& arrstrFields);
 
         /** clears the listbox inside. Must be called be the dtor is called.
         */

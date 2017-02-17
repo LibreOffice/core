@@ -74,7 +74,7 @@ namespace dbaccess
     {
         OModuleClient                           m_aModuleClient;
     protected:
-        typedef ::std::vector<ORowSetDataColumn*>   TDataColumns;
+        typedef std::vector<ORowSetDataColumn*>   TDataColumns;
         ::osl::Mutex*                           m_pMutex;           // this the mutex form the rowset itself
         ::osl::Mutex                            // we need a extra mutex for columns to prevend deadlock when setting new values
                                                 // for a row
@@ -202,8 +202,8 @@ namespace dbaccess
             @return
                 <TRUE/> if movement was successful.
         */
-        bool SAL_CALL move( ::std::mem_fun_t<bool,ORowSetBase>& _aCheckFunctor,
-                            ::std::mem_fun_t<bool,ORowSetCache>& _aMovementFunctor);
+        bool SAL_CALL move( std::mem_fun_t<bool,ORowSetBase>& _aCheckFunctor,
+                            std::mem_fun_t<bool,ORowSetCache>& _aMovementFunctor);
 
         /** same meaning as isFirst. Only need by mem_fun
             @return
@@ -356,7 +356,7 @@ namespace dbaccess
     class ORowSetNotifier
     {
     private:
-        ::std::unique_ptr<ORowSetNotifierImpl> m_pImpl;
+        std::unique_ptr<ORowSetNotifierImpl> m_pImpl;
         ORowSetBase*    m_pRowSet;
             // not acquired! This is not necessary because this class here is to be used on the stack within
             // a method of ORowSetBase (or derivees)
@@ -402,7 +402,7 @@ namespace dbaccess
 
         /** use this one to store the inde of the changed column values
         */
-        ::std::vector<sal_Int32>& getChangedColumns() const;
+        std::vector<sal_Int32>& getChangedColumns() const;
 
     };
 

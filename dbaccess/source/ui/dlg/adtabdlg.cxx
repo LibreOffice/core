@@ -183,13 +183,13 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
         {
             const OUString* pTableBegin  = sTables.getConstArray();
             const OUString* pTableEnd    = pTableBegin + sTables.getLength();
-            ::std::vector< OUString > aTables(pTableBegin,pTableEnd);
+            std::vector< OUString > aTables(pTableBegin,pTableEnd);
 
             const OUString* pViewBegin = sViews.getConstArray();
             const OUString* pViewEnd   = pViewBegin + sViews.getLength();
             ::comphelper::UStringMixEqual aEqualFunctor;
             for(;pViewBegin != pViewEnd;++pViewBegin)
-                aTables.erase(::std::remove_if(aTables.begin(),aTables.end(),::std::bind2nd(aEqualFunctor,*pViewBegin)),aTables.end());
+                aTables.erase(std::remove_if(aTables.begin(),aTables.end(),std::bind2nd(aEqualFunctor,*pViewBegin)),aTables.end());
             sTables = Sequence< OUString>(aTables.data(), aTables.size());
             sViews = Sequence< OUString>();
         }

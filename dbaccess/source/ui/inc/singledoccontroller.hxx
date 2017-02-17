@@ -70,7 +70,7 @@ namespace dbaui
         using OSingleDocumentController_Base::disposing;
 
     private:
-        ::std::unique_ptr< OSingleDocumentController_Data >   m_pData;
+        std::unique_ptr< OSingleDocumentController_Data >   m_pData;
     };
 
 } // namespace dbaui
