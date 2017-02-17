@@ -74,7 +74,6 @@ enum StackVarEnum
     svExternalName,
     svSingleVectorRef,
     svDoubleVectorRef,
-    svSubroutine,                       // A token with a subroutine token array.
     svError,                            // error token
     svMissing = 0x70,                   // 0 or ""
     svSep,                              // separator, ocSep, ocOpen, ocClose

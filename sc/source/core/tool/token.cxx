@@ -1570,7 +1570,6 @@ void ScTokenArray::CheckToken( const FormulaToken& r )
             case svMissing:
             case svRefList:
             case svSep:
-            case svSubroutine:
             case svUnknown:
                 // We don't support vectorization on these.
                 SAL_INFO("sc.opencl", "opcode ocPush: variable type disables vectorisation for formula group");
