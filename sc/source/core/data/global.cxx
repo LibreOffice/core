@@ -361,7 +361,6 @@ OUString ScGlobal::GetErrorString(FormulaError nErr)
         case FormulaError::NoName             : nErrNumber = STR_NO_NAME_REF; break;
         case FormulaError::NoAddin            : nErrNumber = STR_NO_ADDIN; break;
         case FormulaError::NoMacro            : nErrNumber = STR_NO_MACRO; break;
-        case FormulaError::DoubleRef          :
         case FormulaError::NoValue            : nErrNumber = STR_NO_VALUE; break;
         case FormulaError::NoCode             : nErrNumber = STR_NULL_ERROR; break;
         case FormulaError::DivisionByZero     : nErrNumber = STR_DIV_ZERO; break;
@@ -392,9 +391,6 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
         case FormulaError::IllegalParameter:
             nErrNumber = STR_LONG_ERR_ILL_PAR;
         break;
-        case FormulaError::Separator:
-            nErrNumber = STR_LONG_ERR_ILL_SEP;
-        break;
         case FormulaError::Pair:
         case FormulaError::PairExpected:
             nErrNumber = STR_LONG_ERR_PAIR;
@@ -418,14 +414,12 @@ OUString ScGlobal::GetLongErrorString(FormulaError nErr)
         case FormulaError::MatrixSize:
             nErrNumber = STR_LONG_ERR_MATRIX_SIZE;
         break;
-        case FormulaError::IllegalJump:
         case FormulaError::UnknownState:
         case FormulaError::UnknownVariable:
         case FormulaError::UnknownOpCode:
         case FormulaError::UnknownStackVariable:
         case FormulaError::UnknownToken:
         case FormulaError::NoCode:
-        case FormulaError::DoubleRef:
             nErrNumber = STR_LONG_ERR_SYNTAX;
         break;
         case FormulaError::CircularReference:

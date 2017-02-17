@@ -2608,7 +2608,7 @@ bool ScFormulaCell::IsValueNoError() const
 double ScFormulaCell::GetValue()
 {
     MaybeInterpret();
-    if ((pCode->GetCodeError() == FormulaError::NONE || pCode->GetCodeError() == FormulaError::DoubleRef) &&
+    if ((pCode->GetCodeError() == FormulaError::NONE) &&
             aResult.GetResultError() == FormulaError::NONE)
         return aResult.GetDouble();
     return 0.0;
@@ -2617,7 +2617,7 @@ double ScFormulaCell::GetValue()
 svl::SharedString ScFormulaCell::GetString()
 {
     MaybeInterpret();
-    if ((pCode->GetCodeError() == FormulaError::NONE || pCode->GetCodeError() == FormulaError::DoubleRef) &&
+    if ((pCode->GetCodeError() == FormulaError::NONE) &&
             aResult.GetResultError() == FormulaError::NONE)
         return aResult.GetString();
 

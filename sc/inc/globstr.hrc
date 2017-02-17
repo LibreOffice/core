@@ -195,7 +195,7 @@
 #define STR_LONG_ERR_ILL_PAR        134
 #define STR_LONG_ERR_ILL_FPO        135
 #define STR_LONG_ERR_ILL_CHAR       136
-#define STR_LONG_ERR_ILL_SEP        137
+// empty
 #define STR_LONG_ERR_PAIR           138
 #define STR_LONG_ERR_OP_EXP         139
 #define STR_LONG_ERR_VAR_EXP        140

@@ -836,10 +836,6 @@ String STR_LONG_ERR_ILL_CHAR+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Error: Invalid character" ;
 };
-String STR_LONG_ERR_ILL_SEP+RID_GLOBSTR_OFFSET
-{
-    Text [ en-US ] = "Error: Invalid semicolon" ;
-};
 String STR_LONG_ERR_PAIR+RID_GLOBSTR_OFFSET
 {
     Text [ en-US ] = "Error: in bracketing" ;

@@ -113,7 +113,7 @@ double ScSimpleFormulaCalculator::GetValue()
 {
     Calculate();
 
-    if ((mpCode->GetCodeError() == FormulaError::NONE || mpCode->GetCodeError() == FormulaError::DoubleRef) &&
+    if ((mpCode->GetCodeError() == FormulaError::NONE) &&
             maResult.GetResultError() == FormulaError::NONE)
         return maResult.GetDouble();
 
@@ -127,7 +127,7 @@ svl::SharedString ScSimpleFormulaCalculator::GetString()
     if (mbMatrixResult)
         return svl::SharedString( maMatrixFormulaResult);   // string not interned
 
-    if ((mpCode->GetCodeError() == FormulaError::NONE || mpCode->GetCodeError() == FormulaError::DoubleRef) &&
+    if ((mpCode->GetCodeError() == FormulaError::NONE) &&
             maResult.GetResultError() == FormulaError::NONE)
         return maResult.GetString();
 

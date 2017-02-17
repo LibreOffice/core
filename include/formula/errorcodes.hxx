@@ -34,8 +34,6 @@ enum class FormulaError : sal_uInt16
     IllegalArgument      = 502,
     IllegalFPOperation   = 503, // #NUM!
     IllegalParameter     = 504,
-    IllegalJump          = 505,
-    Separator            = 506,
     Pair                 = 507,
     PairExpected         = 508,
     OperatorExpected     = 509,
@@ -55,10 +53,6 @@ enum class FormulaError : sal_uInt16
     NoConvergence        = 523,
     NoRef                = 524, // #REF!
     NoName               = 525, // #NAME?
-    DoubleRef            = 526,
-// Not displayed, temporary for TrackFormulas,
-// Cell depends on another cell that has FormulaError::CircularReference
-    TrackFromCircRef     = 528,
 // ScInterpreter internal:  no numeric value but numeric queried. If this is
 // set as mnStringNoValueError no error is generated but 0 returned.
     CellNoValue          = 529,
@@ -137,8 +131,6 @@ inline bool isPublishedFormulaError( FormulaError nErr )
         case FormulaError::IllegalArgument:
         case FormulaError::IllegalFPOperation:
         case FormulaError::IllegalParameter:
-        case FormulaError::IllegalJump:
-        case FormulaError::Separator:
         case FormulaError::Pair:
         case FormulaError::PairExpected:
         case FormulaError::OperatorExpected:
@@ -158,10 +150,8 @@ inline bool isPublishedFormulaError( FormulaError nErr )
         case FormulaError::NoConvergence:
         case FormulaError::NoRef:
         case FormulaError::NoName:
-        case FormulaError::DoubleRef:
             return true;
 
-        case FormulaError::TrackFromCircRef:
         case FormulaError::CellNoValue:
             return false;
 
