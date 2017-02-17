@@ -344,9 +344,10 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
 
     OUString aDataNames[SC_DPOUT_MAXLEVELS];
     sal_uInt32 nDataFormats[SC_DPOUT_MAXLEVELS];
-    long nDataCount = 0;
-    long nDimCount = xDims->getCount();
-    for (long nDim=0; nDim<nDimCount; nDim++)
+    size_t nDataCount = 0;
+    sal_Int32 nDimCount = xDims->getCount();
+    sal_Int32 nDim = 0;
+    for ( ; nDim < nDimCount && nDataCount < SC_DPOUT_MAXLEVELS; nDim++)
     {
         uno::Reference<uno::XInterface> xDim =
                 ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
@@ -369,6 +370,8 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
             }
         }
     }
+    SAL_WARN_IF( nDim < nDimCount && nDataCount == SC_DPOUT_MAXLEVELS, "sc.core",
+            "lcl_FillNumberFormats - may have lost an output level due to SC_DPOUT_MAXLEVELS=" << SC_DPOUT_MAXLEVELS);
 
     if (!nDataCount)
         return;
@@ -394,7 +397,7 @@ void lcl_FillNumberFormats( sal_uInt32*& rFormats, long& rCount,
                 aName = pArray[nPos].Name;
 
             sal_uInt32 nFormat = 0;
-            for (long i=0; i<nDataCount; i++)
+            for (size_t i=0; i<nDataCount; i++)
                 if (aName == aDataNames[i])         //TODO: search more efficiently?
                 {
                     nFormat = nDataFormats[i];
