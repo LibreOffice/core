@@ -618,53 +618,74 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 switch ( eDimOrient )
                                 {
                                     case sheet::DataPilotFieldOrientation_COLUMN:
-                                        pColFields[nColFieldCount].nDim    = nDim;
-                                        pColFields[nColFieldCount].nHier   = nHierarchy;
-                                        pColFields[nColFieldCount].nLevel  = nLev;
-                                        pColFields[nColFieldCount].nDimPos = nDimPos;
-                                        pColFields[nColFieldCount].aResult = xLevRes->getResults();
-                                        pColFields[nColFieldCount].mnSrcNumFmt = nNumFmt;
-                                        pColFields[nColFieldCount].maName  = aName;
-                                        pColFields[nColFieldCount].maCaption= aCaption;
-                                        pColFields[nColFieldCount].mfValue = fValue;
-                                        pColFields[nColFieldCount].mbHasHiddenMember = bHasHiddenMember;
-                                        pColFields[nColFieldCount].mbDataLayout = bIsDataLayout;
-                                        if (!lcl_MemberEmpty(pColFields[nColFieldCount].aResult))
-                                            ++nColFieldCount;
-                                        break;
-                                    case sheet::DataPilotFieldOrientation_ROW:
-                                        pRowFields[nRowFieldCount].nDim    = nDim;
-                                        pRowFields[nRowFieldCount].nHier   = nHierarchy;
-                                        pRowFields[nRowFieldCount].nLevel  = nLev;
-                                        pRowFields[nRowFieldCount].nDimPos = nDimPos;
-                                        pRowFields[nRowFieldCount].aResult = xLevRes->getResults();
-                                        pRowFields[nRowFieldCount].mnSrcNumFmt = nNumFmt;
-                                        pRowFields[nRowFieldCount].maName  = aName;
-                                        pRowFields[nRowFieldCount].maCaption= aCaption;
-                                        pRowFields[nRowFieldCount].mfValue = fValue;
-                                        pRowFields[nRowFieldCount].mbHasHiddenMember = bHasHiddenMember;
-                                        pRowFields[nRowFieldCount].mbDataLayout = bIsDataLayout;
-                                        if (!lcl_MemberEmpty(pRowFields[nRowFieldCount].aResult))
+                                        if (nColFieldCount < SC_DPOUT_MAXLEVELS)
                                         {
-                                            ++nRowFieldCount;
-                                            bRowFieldHasMember = true;
+                                            pColFields[nColFieldCount].nDim    = nDim;
+                                            pColFields[nColFieldCount].nHier   = nHierarchy;
+                                            pColFields[nColFieldCount].nLevel  = nLev;
+                                            pColFields[nColFieldCount].nDimPos = nDimPos;
+                                            pColFields[nColFieldCount].aResult = xLevRes->getResults();
+                                            pColFields[nColFieldCount].mnSrcNumFmt = nNumFmt;
+                                            pColFields[nColFieldCount].maName  = aName;
+                                            pColFields[nColFieldCount].maCaption= aCaption;
+                                            pColFields[nColFieldCount].mfValue = fValue;
+                                            pColFields[nColFieldCount].mbHasHiddenMember = bHasHiddenMember;
+                                            pColFields[nColFieldCount].mbDataLayout = bIsDataLayout;
+                                            if (!lcl_MemberEmpty(pColFields[nColFieldCount].aResult))
+                                                ++nColFieldCount;
                                         }
-                                        break;
+                                        else
+                                        {
+                                            SAL_WARN("sc.core","ScDPOutput - nColFieldCount already at SC_DPOUT_MAXLEVELS=" << SC_DPOUT_MAXLEVELS);
+                                        }
+                                    break;
+                                    case sheet::DataPilotFieldOrientation_ROW:
+                                        if (nRowFieldCount < SC_DPOUT_MAXLEVELS)
+                                        {
+                                            pRowFields[nRowFieldCount].nDim    = nDim;
+                                            pRowFields[nRowFieldCount].nHier   = nHierarchy;
+                                            pRowFields[nRowFieldCount].nLevel  = nLev;
+                                            pRowFields[nRowFieldCount].nDimPos = nDimPos;
+                                            pRowFields[nRowFieldCount].aResult = xLevRes->getResults();
+                                            pRowFields[nRowFieldCount].mnSrcNumFmt = nNumFmt;
+                                            pRowFields[nRowFieldCount].maName  = aName;
+                                            pRowFields[nRowFieldCount].maCaption= aCaption;
+                                            pRowFields[nRowFieldCount].mfValue = fValue;
+                                            pRowFields[nRowFieldCount].mbHasHiddenMember = bHasHiddenMember;
+                                            pRowFields[nRowFieldCount].mbDataLayout = bIsDataLayout;
+                                            if (!lcl_MemberEmpty(pRowFields[nRowFieldCount].aResult))
+                                            {
+                                                ++nRowFieldCount;
+                                                bRowFieldHasMember = true;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            SAL_WARN("sc.core","ScDPOutput - nRowFieldCount already at SC_DPOUT_MAXLEVELS=" << SC_DPOUT_MAXLEVELS);
+                                        }
+                                    break;
                                     case sheet::DataPilotFieldOrientation_PAGE:
-                                        pPageFields[nPageFieldCount].nDim    = nDim;
-                                        pPageFields[nPageFieldCount].nHier   = nHierarchy;
-                                        pPageFields[nPageFieldCount].nLevel  = nLev;
-                                        pPageFields[nPageFieldCount].nDimPos = nDimPos;
-                                        pPageFields[nPageFieldCount].aResult = getVisiblePageMembersAsResults(xLevel);
-                                        pPageFields[nPageFieldCount].mnSrcNumFmt = nNumFmt;
-                                        pPageFields[nPageFieldCount].maName  = aName;
-                                        pPageFields[nPageFieldCount].maCaption= aCaption;
-                                        pPageFields[nPageFieldCount].mfValue = fValue;
-                                        pPageFields[nPageFieldCount].mbHasHiddenMember = bHasHiddenMember;
-                                        pPageFields[nPageFieldCount].mbPageDim = true;
-                                        // no check on results for page fields
-                                        ++nPageFieldCount;
-                                        break;
+                                        if (nPageFieldCount < SC_DPOUT_MAXLEVELS)
+                                        {
+                                            pPageFields[nPageFieldCount].nDim    = nDim;
+                                            pPageFields[nPageFieldCount].nHier   = nHierarchy;
+                                            pPageFields[nPageFieldCount].nLevel  = nLev;
+                                            pPageFields[nPageFieldCount].nDimPos = nDimPos;
+                                            pPageFields[nPageFieldCount].aResult = getVisiblePageMembersAsResults(xLevel);
+                                            pPageFields[nPageFieldCount].mnSrcNumFmt = nNumFmt;
+                                            pPageFields[nPageFieldCount].maName  = aName;
+                                            pPageFields[nPageFieldCount].maCaption= aCaption;
+                                            pPageFields[nPageFieldCount].mfValue = fValue;
+                                            pPageFields[nPageFieldCount].mbHasHiddenMember = bHasHiddenMember;
+                                            pPageFields[nPageFieldCount].mbPageDim = true;
+                                            // no check on results for page fields
+                                            ++nPageFieldCount;
+                                        }
+                                        else
+                                        {
+                                            SAL_WARN("sc.core","ScDPOutput - nPageFieldCount already at SC_DPOUT_MAXLEVELS=" << SC_DPOUT_MAXLEVELS);
+                                        }
+                                    break;
                                     default:
                                     {
                                         // added to avoid warnings
