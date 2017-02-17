@@ -129,7 +129,7 @@ bool SbxDecimal::isZero()
 {
     SbxDecimal aZeroDec;
     aZeroDec.setLong( 0 );
-    bool bZero = ( EQ == compare( *this, aZeroDec ) );
+    bool bZero = CmpResult::EQ == compare( *this, aZeroDec );
     return bZero;
 }
 
