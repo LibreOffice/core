@@ -81,7 +81,7 @@ public:
     void testPaintCallbacks();
     void testUndoRepairResult();
     void testRedoRepairResult();
-
+    void testCommentsCallbacks();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -126,6 +126,7 @@ public:
     CPPUNIT_TEST(testPaintCallbacks);
     CPPUNIT_TEST(testUndoRepairResult);
     CPPUNIT_TEST(testRedoRepairResult);
+    CPPUNIT_TEST(testCommentsCallbacks);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -651,6 +652,7 @@ public:
     bool m_bViewLock;
     /// Set if any callback was invoked.
     bool m_bCalled;
+    boost::property_tree::ptree m_aCommentCallbackResult;
 
     ViewCallback()
         : m_bOwnCursorInvalidated(false),
@@ -755,6 +757,14 @@ public:
             boost::property_tree::ptree aTree;
             boost::property_tree::read_json(aStream, aTree);
             m_bViewLock = aTree.get_child("rectangle").get_value<std::string>() != "EMPTY";
+        }
+        break;
+        case LOK_CALLBACK_COMMENT:
+        {
+            m_aCommentCallbackResult.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aCommentCallbackResult);
+            m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
         }
@@ -1666,6 +1676,102 @@ void SwTiledRenderingTest::testRedoRepairResult()
 
     mxComponent->dispose();
     mxComponent.clear();
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SwTiledRenderingTest::testCommentsCallbacks()
+{
+    comphelper::LibreOfficeKit::setActive();
+    // Comments callback are emitted only if tiled annotations are off
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+
+    SwXTextDocument* pXTextDocument = createDoc();
+    ViewCallback aView1;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+    int nView1 = SfxLokHelper::getView();
+
+    // Crete a second view
+    SfxLokHelper::createView();
+    pXTextDocument->initializeForTiledRendering({});
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+
+    SfxLokHelper::setView(nView1);
+
+    // Add a new comment
+    uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
+    {
+        {"Text", uno::makeAny(OUString("Comment"))},
+        {"Author", uno::makeAny(OUString("LOK User1"))},
+    }));
+    comphelper::dispatchCommand(".uno:InsertAnnotation", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    int nCommentId1 = aView1.m_aCommentCallbackResult.get<int>("id");
+
+    // Reply to a comment just added
+    aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"Id", uno::makeAny(OUString::number(nCommentId1))},
+        {"Text", uno::makeAny(OUString("Reply comment"))},
+    });
+    comphelper::dispatchCommand(".uno:ReplyComment", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action and linked to its parent comment
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parent"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parent"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Reply comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+    int nCommentId2 = aView1.m_aCommentCallbackResult.get<int>("id");
+
+    // Edit the previously added comment
+    aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"Id", uno::makeAny(OUString::number(nCommentId2))},
+        {"Text", uno::makeAny(OUString("Edited comment"))},
+    });
+    comphelper::dispatchCommand(".uno:EditAnnotation", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    // parent is unchanged still
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView1.m_aCommentCallbackResult.get<int>("parent"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId1, aView2.m_aCommentCallbackResult.get<int>("parent"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Edited comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+
+    // Delete the reply comment just added
+    aPropertyValues = comphelper::InitPropertySequence(
+    {
+        {"Id", uno::makeAny(OUString::number(nCommentId2))},
+    });
+    comphelper::dispatchCommand(".uno:DeleteComment", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId2, aView1.m_aCommentCallbackResult.get<int>("id"));
+    CPPUNIT_ASSERT_EQUAL(nCommentId2, aView2.m_aCommentCallbackResult.get<int>("id"));
+
+    // .uno:ViewAnnotations returns total of 1 comment
+    OUString aPostIts = pXTextDocument->getPostIts();
+    std::stringstream aStream(aPostIts.toUtf8().getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aTree.get_child("comments").size());
+
+    mxComponent->dispose();
+    mxComponent.clear();
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
