@@ -25,7 +25,11 @@
 
 #include <fstream>
 
+#if defined(X86)
+#define INT_EPS     2.1
+#else
 #define INT_EPS     0.1
+#endif
 
 #define DECLARE_DUMP_TEST(TestName, BaseClass, DumpMode) \
     class TestName : public BaseClass { \
@@ -639,10 +643,9 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
     }
 }
 
-#if !defined(MACOSX)
-
 DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 {
+    const double fLocalEPS = 150.1;
     const std::vector<OUString> aTestFiles =
     {
         "default_formated_axis.odp",
@@ -698,18 +701,18 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
                 // Check size and position
                 uno::Reference<drawing::XShape> xLabelShape(xLabel, uno::UNO_QUERY);
                 awt::Point aLabelPosition = xLabelShape->getPosition();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.X, INT_EPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.Y, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.X, std::max(fLocalEPS, INT_EPS));
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.Y, std::max(fLocalEPS, INT_EPS));
                 awt::Size aLabelSize = xLabelShape->getSize();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Height, INT_EPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Width, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Height, std::max(fLocalEPS, INT_EPS));
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Width, std::max(fLocalEPS, INT_EPS));
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xLabelShape, UNO_QUERY_THROW);
                 CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aLabelTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aLabelTransformation;
-                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLabelTransformation, INT_EPS);
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLabelTransformation, std::max(fLocalEPS, INT_EPS));
 
                 // Check font color and height
                 util::Color aLabelFontColor = 0;
@@ -722,8 +725,6 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
         }
     }
 }
-
-#endif
 
 DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
 {
@@ -800,10 +801,9 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
     }
 }
 
-#if !defined(MACOSX)
-
 DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 {
+    const double fLocalEPS = 400.1;
     const std::vector<OUString> aTestFiles =
     {
         "chartwall_auto_adjust_with_titles.ods",
@@ -827,18 +827,18 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 
         // Check position and size
         awt::Point aChartWallPosition = xChartWall->getPosition();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.X, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.Y, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.X, std::max(fLocalEPS, INT_EPS));
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallPosition.Y, std::max(fLocalEPS, INT_EPS));
         awt::Size aChartWallSize = xChartWall->getSize();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Height, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Width, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Height, std::max(fLocalEPS, INT_EPS));
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aChartWallSize.Width, std::max(fLocalEPS, INT_EPS));
 
         // Check transformation
         Reference< beans::XPropertySet > xPropSet(xChartWall, UNO_QUERY_THROW);
         CPPUNIT_ASSERT(xPropSet.is());
         drawing::HomogenMatrix3 aChartWallTransformation;
         xPropSet->getPropertyValue("Transformation") >>= aChartWallTransformation;
-        CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aChartWallTransformation, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aChartWallTransformation, std::max(fLocalEPS, INT_EPS));
 
         // Check fill properties
         drawing::FillStyle aChartWallFillStyle;
@@ -867,8 +867,6 @@ DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 
     }
 }
-
-#endif
 
 DECLARE_DUMP_TEST(PieChartTest, Chart2DumpTest, false)
 {
