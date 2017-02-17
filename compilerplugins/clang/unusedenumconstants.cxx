@@ -164,6 +164,13 @@ try_again:
         } else {
             bRead = true;
         }
+    } else if (const CXXOperatorCallExpr * operatorCall = dyn_cast<CXXOperatorCallExpr>(parent))
+    {
+        if (operatorCall->isAssignmentOp()) {
+            bWrite = true;
+        } else {
+            bRead = true;
+        }
     } else if (isa<CastExpr>(parent) || isa<UnaryOperator>(parent)
                 || isa<ConditionalOperator>(parent) || isa<ParenExpr>(parent)
                 || isa<MaterializeTemporaryExpr>(parent)
