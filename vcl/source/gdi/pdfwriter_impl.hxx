@@ -26,6 +26,7 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <osl/file.hxx>
 #include <rtl/cipher.h>
 #include <rtl/digest.h>
@@ -416,6 +417,20 @@ public:
         }
     };
 
+    /// A PDF embedded file.
+    struct PDFEmbeddedFile
+    {
+        /// ID of the file.
+        sal_Int32 m_nObject;
+        /// Contents of the file.
+        css::uno::Sequence<sal_Int8> m_aData;
+
+        PDFEmbeddedFile()
+            : m_nObject(0)
+        {
+        }
+    };
+
     struct PDFNoteEntry : public PDFAnnotation
     {
         PDFNote                     m_aContents;
@@ -608,6 +623,8 @@ private:
     std::vector<PDFLink>                m_aLinks;
     /// Contains all screen annotations.
     std::vector<PDFScreen> m_aScreens;
+    /// Contains embedded files.
+    std::vector<PDFEmbeddedFile> m_aEmbeddedFiles;
     /* makes correctly encoded for export to PDF URLS
     */
     css::uno::Reference< css::util::XURLTransformer > m_xTrans;
@@ -868,6 +885,8 @@ i12626
     bool emitWidgetAnnotations();
     // writes all annotation objects
     bool emitAnnotations();
+    /// Writes embedded files.
+    bool emitEmbeddedFiles();
     //write the named destination stuff
     sal_Int32 emitNamedDestinations();//i56629
     // writes outline dict and tree

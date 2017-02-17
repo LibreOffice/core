@@ -4967,6 +4967,39 @@ bool PDFWriterImpl::emitAnnotations()
     return true;
 }
 
+bool PDFWriterImpl::emitEmbeddedFiles()
+{
+    for (auto& rEmbeddedFile : m_aEmbeddedFiles)
+    {
+        if (!updateObject(rEmbeddedFile.m_nObject))
+            continue;
+
+        SvMemoryStream aUncompressed;
+        aUncompressed.WriteBytes(rEmbeddedFile.m_aData.getArray(), rEmbeddedFile.m_aData.getLength());
+        aUncompressed.Seek(0);
+        SvMemoryStream aCompressed;
+        ZCodec aZCodec;
+        aZCodec.BeginCompression();
+        aZCodec.Compress(aUncompressed, aCompressed);
+        aZCodec.EndCompression();
+
+        OStringBuffer aLine;
+        aLine.append(rEmbeddedFile.m_nObject);
+        aLine.append(" 0 obj\n");
+        aLine.append("<< /Type /EmbeddedFile /Filter /FlateDecode /Length ");
+        aLine.append(static_cast<sal_Int64>(aCompressed.GetSize()));
+        aLine.append(" >>\nstream\n");
+        CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
+        aLine.setLength(0);
+
+        CHECK_RETURN(writeBuffer(aCompressed.GetData(), aCompressed.GetSize()));
+
+        aLine.append("\nendstream\nendobj\n\n");
+        CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
+    }
+    return true;
+}
+
 #undef CHECK_RETURN
 #define CHECK_RETURN( x ) if( !x ) return false
 
@@ -5057,6 +5090,7 @@ bool PDFWriterImpl::emitCatalog()
 
     // emit annotation objects
     CHECK_RETURN( emitAnnotations() );
+    CHECK_RETURN( emitEmbeddedFiles() );
 
     // emit Catalog
     m_nCatalogObject = createObject();
