@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_5b22e6ba",
+        "filename": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-17T10:32:41Z",
+      "side": 1,
+      "message": "Any reason you need to assert the layout here?\n\nSomething like:\n\nCPPUNIT_ASSERT_EQUAL( OUString(\"...\"), getProperty\u003cOUString\u003e(getRun(getParagraph(1), 1), \"TextPortionType\"));\n\nwould work as well I think, and that would work directly on the document model.",
+      "revId": "9c452adbf011473d5e22c93cc75e8b777cad3842",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
