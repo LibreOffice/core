@@ -1612,14 +1612,14 @@ void ScInterpreter::ScExpDist()
         double x      = GetDouble();                    // x
         if (lambda <= 0.0)
             PushIllegalArgument();
-        else if (kum == 0.0)                        // Dichte
+        else if (kum == 0.0)                        // density
         {
             if (x >= 0.0)
                 PushDouble(lambda * exp(-lambda*x));
             else
                 PushInt(0);
         }
-        else                                        // Verteilung
+        else                                        // distribution
         {
             if (x > 0.0)
                 PushDouble(1.0 - exp(-lambda*x));
@@ -1756,10 +1756,10 @@ void ScInterpreter::ScWeibull()
         double x     = GetDouble();                 // x
         if (alpha <= 0.0 || beta <= 0.0 || x < 0.0)
             PushIllegalArgument();
-        else if (kum == 0.0)                        // Dichte
+        else if (kum == 0.0)                        // Density
             PushDouble(alpha/pow(beta,alpha)*pow(x,alpha-1.0)*
                        exp(-pow(x/beta,alpha)));
-        else                                        // Verteilung
+        else                                        // Distribution
             PushDouble(1.0 - exp(-pow(x/beta,alpha)));
     }
 }
@@ -2613,14 +2613,14 @@ bool ScInterpreter::CalculateTest(bool _bTemplin
         }
         fT = fabs(fSum1/fCount1 - fSum2/fCount2)/sqrt(fS1+fS2);
         double c = fS1/(fS1+fS2);
-    //  GetTDist wird mit GetBetaDist berechnet und kommt auch mit nicht ganzzahligen
-    //  Freiheitsgraden klar. Dann stimmt das Ergebnis auch mit Excel ueberein (#52406#):
+    //  GetTDist is calculated via GetBetaDist and works with integral
+    // degrees of freedom. The result matches Excel
         fF = 1.0/(c*c/(fCount1-1.0)+(1.0-c)*(1.0-c)/(fCount2-1.0));
     }
     else
     {
-        //  laut Bronstein-Semendjajew
-        double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1) / (fCount1 - 1.0);    // Varianz
+        //  according to Bronstein-Semendjajew
+        double fS1 = (fSumSqr1 - fSum1*fSum1/fCount1) / (fCount1 - 1.0);    // Variance
         double fS2 = (fSumSqr2 - fSum2*fSum2/fCount2) / (fCount2 - 1.0);
         fT = fabs( fSum1/fCount1 - fSum2/fCount2 ) /
              sqrt( (fCount1-1.0)*fS1 + (fCount2-1.0)*fS2 ) *

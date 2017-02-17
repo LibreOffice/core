@@ -7891,9 +7891,9 @@ void ScInterpreter::ScCurrency()
             OUString sFormatString = pFormatter->GenerateFormat(
                                                    nIndex,
                                                    ScGlobal::eLnge,
-                                                   true,        // mit Tausenderpunkt
-                                                   false,       // nicht rot
-                                                  (sal_uInt16) fDec);// Nachkommastellen
+                                                   true,        // with thousands separator
+                                                   false,       // not red
+                                                  (sal_uInt16) fDec);// decimals
             if (!pFormatter->GetPreviewString(sFormatString,
                                               fVal,
                                               aStr,
@@ -7945,7 +7945,7 @@ void ScInterpreter::ScFixed()
         double fDec;
         bool bThousand;
         if (nParamCount == 3)
-            bThousand = !GetBool();     // Param TRUE: keine Tausenderpunkte
+            bThousand = !GetBool();     // Param TRUE: no thousands separator
         else
             bThousand = true;
         if (nParamCount >= 2)
