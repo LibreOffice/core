@@ -27,8 +27,8 @@
 
 #define EPS         1E-12
 
-#if defined(MACOSX)
-#define INT_EPS     200.1
+#if defined(MACOSX) // On mac we don't check geometry
+#define INT_EPS     1000.1
 #elif defined(X86)
 #define INT_EPS     2.1
 #else
@@ -701,18 +701,18 @@ DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
                 // Check size and position
                 uno::Reference<drawing::XShape> xLabelShape(xLabel, uno::UNO_QUERY);
                 awt::Point aLabelPosition = xLabelShape->getPosition();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.X, fLocalEPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.Y, fLocalEPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.X, std::max(fLocalEPS,INT_EPS));
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelPosition.Y, std::max(fLocalEPS, INT_EPS));
                 awt::Size aLabelSize = xLabelShape->getSize();
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Height, fLocalEPS);
-                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Width, fLocalEPS);
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Height, std::max(fLocalEPS, INT_EPS));
+                CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLabelSize.Width, std::max(fLocalEPS, INT_EPS));
 
                 // Check transformation
                 Reference< beans::XPropertySet > xPropSet(xLabelShape, UNO_QUERY_THROW);
                 CPPUNIT_ASSERT(xPropSet.is());
                 drawing::HomogenMatrix3 aLabelTransformation;
                 xPropSet->getPropertyValue("Transformation") >>= aLabelTransformation;
-                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLabelTransformation, fLocalEPS);
+                CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLabelTransformation, std::max(fLocalEPS, INT_EPS));
 
                 // Check font color and height
                 util::Color aLabelFontColor = 0;
