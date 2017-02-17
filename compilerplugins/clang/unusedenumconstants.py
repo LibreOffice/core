@@ -116,6 +116,7 @@ for d in definitionSet:
          "filter/source/graphicfilter/icgm/cgmtypes.hxx",
          "basic/source/inc/filefmt.hxx", # FileOffset
          "include/basic/sbxdef.hxx", # SbxDataType
+         "connectivity/source/inc/dbase/DTable.hxx", # ODbaseTable::DBFType
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -142,6 +143,7 @@ for d in definitionSet:
          "basic/source/inc/opcodes.hxx", # SbiOpcode
          "basic/source/inc/token.hxx", # SbiToken
          "binaryurp/source/specialfunctionids.hxx", # binaryurp::SpecialFunctionIds
+         "connectivity/source/inc/odbc/OTools.hxx", # ODBC3SQLFunctionId
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
@@ -184,6 +186,7 @@ for d in definitionSet:
          "vcl/unx/gtk/salnativewidgets-gtk.cxx",
          "sc/inc/callform.hxx", # ParamType
          "include/i18nlangtag/applelangid.hxx", # AppleLanguageId
+         "connectivity/source/drivers/firebird/Util.hxx", # firebird::BlobSubtype
          ]):
         continue
 

@@ -73,7 +73,7 @@ private:
 
     template< typename T > css::uno::Any convertItems();
 
-    enum State { STATE_TEXT, STATE_TEXT_UNICODE, STATE_IT, STATE_IT_UNICODE };
+    enum class State { Text, TextUnicode, IT, ITUnicode };
 
     int layer_;
     rtl::Reference< Node > node_;
