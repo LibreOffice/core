@@ -9,6 +9,8 @@
 
 $(eval $(call gb_ExternalProject_ExternalProject,gpgme))
 
+$(eval $(call gb_ExternalProject_use_external_project,gpgme,libassuan))
+
 $(eval $(call gb_ExternalProject_register_targets,gpgme,\
 	build \
 ))
