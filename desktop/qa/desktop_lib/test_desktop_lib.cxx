@@ -104,6 +104,7 @@ public:
     void testWriterCommentInsertCursor();
     void testGetFontSubset();
     void testCommentsWriter();
+    void testCommentsCalc();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -139,6 +140,7 @@ public:
     CPPUNIT_TEST(testWriterCommentInsertCursor);
     CPPUNIT_TEST(testGetFontSubset);
     CPPUNIT_TEST(testCommentsWriter);
+    CPPUNIT_TEST(testCommentsCalc);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -1856,7 +1858,7 @@ void DesktopLOKTest::testCommentsWriter()
 
     int nComment2Id = 0;
     // Check if all comment fields have valid data
-    for (boost::property_tree::ptree::value_type& rComment : aTree.get_child("comments"))
+    for (const auto& rComment : aTree.get_child("comments"))
     {
         CPPUNIT_ASSERT(rComment.second.get<int>("id") > 0);
         CPPUNIT_ASSERT(!rComment.second.get<std::string>("author").empty());
@@ -1879,6 +1881,59 @@ void DesktopLOKTest::testCommentsWriter()
         }
     }
 
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+
+void DesktopLOKTest::testCommentsCalc()
+{
+    comphelper::LibreOfficeKit::setActive();
+    // Disable tiled rendering for comments
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+
+    LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
+
+    // Can we get all the comments using .uno:ViewAnnotations command ?
+    boost::property_tree::ptree aTree;
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
+    std::stringstream aStream(pJSON);
+    free(pJSON);
+    CPPUNIT_ASSERT(!aStream.str().empty());
+    boost::property_tree::read_json(aStream, aTree);
+    // There are 2 comments in the document already
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTree.get_child("comments").size());
+
+    // Check if all comment fields have valid data
+    int nIdx = 0;
+    for (const auto& rComment : aTree.get_child("comments"))
+    {
+        switch(nIdx)
+        {
+            case 0:
+            {
+                CPPUNIT_ASSERT_EQUAL(std::string("Sheet5.G15"), rComment.second.get<std::string>("id"));
+                CPPUNIT_ASSERT_EQUAL(std::string("Comment1"), rComment.second.get<std::string>("text"));
+                CPPUNIT_ASSERT_EQUAL(std::string("7650, 3570, 1274, 254"), rComment.second.get<std::string>("cellPos"));
+            }
+            break;
+            case 1:
+            {
+                CPPUNIT_ASSERT_EQUAL(std::string("Sheet5.H18"), rComment.second.get<std::string>("id"));
+                CPPUNIT_ASSERT_EQUAL(std::string("Comment2"), rComment.second.get<std::string>("text"));
+                CPPUNIT_ASSERT_EQUAL(std::string("8925, 4335, 1274, 254"), rComment.second.get<std::string>("cellPos"));
+            }
+            break;
+        }
+
+        ++nIdx;
+    }
+
+    // We checked all the comments
+    CPPUNIT_ASSERT_EQUAL(2, nIdx);
+
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
