@@ -34,7 +34,6 @@ namespace connectivity
     enum class TAscendingOrder
     {
         ASC     = 1,            // ascending
-        NONE    = 0,
         DESC    = -1            // otherwise
     };
 

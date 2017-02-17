@@ -114,7 +114,8 @@ for d in definitionSet:
          "sd/source/filter/eppt/epptbase.hxx", # PPTExTextAttr
          "sc/source/filter/inc/tokstack.hxx", # E_TYPE
          "filter/source/graphicfilter/icgm/cgmtypes.hxx",
-         ":basic/source/inc/filefmt.hxx", # FileOffset
+         "basic/source/inc/filefmt.hxx", # FileOffset
+         "include/basic/sbxdef.hxx", # SbxDataType
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
