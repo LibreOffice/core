@@ -60,6 +60,7 @@
 #include <avmedia/mediawindow.hxx>
 #include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 
 #include "DrawViewShell.hxx"
 #include "slideshow.hxx"
@@ -722,8 +723,12 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_PRESENTATION_CURRENT_SLIDE:
         case SID_REHEARSE_TIMINGS:
         {
+            sfx2::SfxNotebookBar::LockNotebookBar();
+
             slideshowhelp::ShowSlideShow(rReq, *GetDoc());
             rReq.Ignore ();
+
+            sfx2::SfxNotebookBar::UnlockNotebookBar();
         }
         break;
 
