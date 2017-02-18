@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_2e0c0242",
+        "filename": "sc/source/core/tool/interpr3.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2615,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-02-18T02:47:29Z",
+      "side": 1,
+      "message": "integral is wrong here. it should be works also with non-integral numbers",
+      "revId": "9a02db30a6d2d361ba7e32baca8c7b1bdec8de64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
