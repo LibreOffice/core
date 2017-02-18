@@ -168,7 +168,9 @@ $(eval $(call gb_Helper_register_executables_for_install,OOO,ooo, \
 	gengal \
 	$(if $(filter WNT,$(OS)),,uri-encode) \
 	$(if $(ENABLE_MACOSX_SANDBOX),, \
-		ui-previewer \
+		$(if $(ENABLE_HEADLESS),, \
+			ui-previewer \
+		) \
 	) \
 	$(if $(filter WNT,$(OS)), \
 		senddoc \
@@ -315,7 +317,9 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	canvastools \
 	chartcore \
 	chartcontroller \
-	chartopengl \
+	$(if $(ENABLE_HEADLESS),, \
+		chartopengl \
+	) \
 	$(call gb_Helper_optional,OPENCL,clew) \
 	$(if $(filter $(OS),WNT),,cmdmail) \
 	cppcanvas \
@@ -930,7 +934,9 @@ $(eval $(call gb_Helper_register_packages_for_install,ooo,\
 	wizards_basicsrvtutorials \
 	wizards_basicusr \
 	xmlsec \
-	chart2_opengl_shader \
+	$(if $(ENABLE_HEADLESS),, \
+		chart2_opengl_shader \
+	) \
 	vcl_opengl_shader \
 	$(if $(filter WNT,$(OS)), \
 		vcl_opengl_blacklist \
@@ -971,7 +977,11 @@ $(eval $(call gb_Helper_register_packages_for_install,xsltfilter,\
 $(eval $(call gb_Helper_register_packages_for_install,brand,\
 	desktop_branding \
 	$(if $(CUSTOM_BRAND_DIR),desktop_branding_custom) \
-	$(if $(and $(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),desktop_soffice_sh) \
+	$(if $(and $(filter-out MACOSX WNT,$(OS)),$(filter DESKTOP,$(BUILD_TYPE))),\
+		$(if $(ENABLE_HEADLESS),, \
+			desktop_soffice_sh \
+		) \
+	) \
 	readlicense_oo_files \
 	$(if $(filter WNT,$(OS)),readlicense_oo_license) \
 	$(call gb_Helper_optional,DESKTOP,setup_native_packinfo) \
