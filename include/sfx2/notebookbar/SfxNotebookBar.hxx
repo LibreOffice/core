@@ -37,6 +37,11 @@ public:
                             const css::uno::Reference<css::frame::XFrame> & xFrame,
                             const OUString& rUIFile);
 
+    /// Method temporarily blocks showing of the NotebookBar
+    static void LockNotebookBar();
+    /// Method restores normal behaviour of the Notebookbar
+    static void UnlockNotebookBar();
+
     static void RemoveListeners(SystemWindow* pSysWindow);
 
     static void ShowMenubar(bool bShow);
@@ -44,6 +49,7 @@ public:
 
 private:
     static bool m_bLock;
+    static bool m_bHide;
 
     DECL_STATIC_LINK(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, void);
 };
