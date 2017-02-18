@@ -177,10 +177,7 @@ namespace desktop
             explicit lcl_Console(short nBufHeight)
                 : mConsoleMode(unknown)
             {
-                HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE),
-                    hOut = GetStdHandle(STD_OUTPUT_HANDLE),
-                    hErr = GetStdHandle(STD_ERROR_HANDLE);
-                if (hOut == nullptr) // application does not have associated standard handles
+                if (GetStdHandle(STD_OUTPUT_HANDLE) == nullptr) // application does not have associated standard handles
                 {
                     STARTUPINFOA aStartupInfo;
                     aStartupInfo.cb = sizeof(aStartupInfo);
@@ -188,9 +185,9 @@ namespace desktop
                     if ((aStartupInfo.dwFlags & STARTF_USESTDHANDLES) == STARTF_USESTDHANDLES)
                     {
                         // If standard handles had been passed to this process, use them
-                        hIn = aStartupInfo.hStdInput;
-                        hOut = aStartupInfo.hStdOutput;
-                        hErr = aStartupInfo.hStdError;
+                        SetStdHandle(STD_INPUT_HANDLE, aStartupInfo.hStdInput);
+                        SetStdHandle(STD_OUTPUT_HANDLE, aStartupInfo.hStdOutput);
+                        SetStdHandle(STD_ERROR_HANDLE, aStartupInfo.hStdError);
                     }
                     else
                     {
@@ -201,9 +198,7 @@ namespace desktop
                         else if (AllocConsole() != FALSE)
                             mConsoleMode = allocated;
 
-                        hIn = GetStdHandle(STD_INPUT_HANDLE);
-                        hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-                        hErr = GetStdHandle(STD_ERROR_HANDLE);
+                        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 
                         // Ensure that console buffer is enough to hold required data
                         CONSOLE_SCREEN_BUFFER_INFO cinfo;
@@ -216,21 +211,9 @@ namespace desktop
                     }
                 }
 
-                // stdin
-                int fileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(hIn), _O_TEXT);
-                FILE *fp = _fdopen(fileHandle, "r");
-                *stdin = *fp;
-                setvbuf(stdin, nullptr, _IONBF, 0);
-                // stdout
-                fileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(hOut), _O_TEXT);
-                fp = _fdopen(fileHandle, "w");
-                *stdout = *fp;
-                setvbuf(stdout, nullptr, _IONBF, 0);
-                // stderr
-                fileHandle = _open_osfhandle(reinterpret_cast<intptr_t>(hErr), _O_TEXT);
-                fp = _fdopen(fileHandle, "w");
-                *stderr = *fp;
-                setvbuf(stderr, nullptr, _IONBF, 0);
+                freopen("CON", "r", stdin);
+                freopen("CON", "w", stdout);
+                freopen("CON", "w", stderr);
 
                 std::ios::sync_with_stdio(true);
 
@@ -242,6 +225,7 @@ namespace desktop
 
             ~lcl_Console()
             {
+                fflush(stdout);
                 switch (mConsoleMode) {
                 case unknown:
                     // Don't free the console
