@@ -400,7 +400,7 @@ ScDocument::~ScDocument()
     delete pBASM;       // BroadcastAreaSlotMachine
     pBASM = nullptr;
 
-    delete pUnoBroadcaster;     // broadcasted nochmal SfxHintId::Dying
+    delete pUnoBroadcaster;     // broadcasts SfxHintId::Dying again
     pUnoBroadcaster = nullptr;
 
     delete pUnoRefUndoList;
@@ -900,7 +900,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
     if (bValid)
     {
-        SetNoListening( true );     // noch nicht bei CopyToTable/Insert
+        SetNoListening( true );     // not yet at CopyToTable/Insert
 
         const bool bGlobalNamesToLocal = true;
         const SCTAB nRealOldPos = (nNewPos < nOldPos) ? nOldPos - 1 : nOldPos;
