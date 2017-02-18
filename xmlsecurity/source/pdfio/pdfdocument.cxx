@@ -1032,7 +1032,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                 ++nDictionaryDepth;
             }
             else
-                rElements.push_back(std::unique_ptr<PDFElement>(new PDFHexStringElement()));
+                rElements.push_back(std::unique_ptr<PDFElement>(new PDFHexStringElement));
             if (!rElements.back()->Read(rStream))
             {
                 SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFDictionaryElement::Read() failed");
@@ -1101,7 +1101,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
         }
         case '(':
         {
-            rElements.push_back(std::unique_ptr<PDFElement>(new PDFLiteralStringElement()));
+            rElements.push_back(std::unique_ptr<PDFElement>(new PDFLiteralStringElement));
             rStream.SeekRel(-1);
             if (!rElements.back()->Read(rStream))
             {
@@ -1224,7 +1224,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                 }
                 else if (aKeyword == "endstream")
                 {
-                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndStreamElement()));
+                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndStreamElement));
                     if (!rElements.back()->Read(rStream))
                     {
                         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFEndStreamElement::Read() failed");
@@ -1233,7 +1233,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                 }
                 else if (aKeyword == "endobj")
                 {
-                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndObjectElement()));
+                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFEndObjectElement));
                     if (!rElements.back()->Read(rStream))
                     {
                         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::Tokenize: PDFEndObjectElement::Read() failed");
@@ -1256,7 +1256,7 @@ bool PDFDocument::Tokenize(SvStream& rStream, TokenizeMode eMode, std::vector< s
                 else if (aKeyword == "true" || aKeyword == "false")
                     rElements.push_back(std::unique_ptr<PDFElement>(new PDFBooleanElement(aKeyword.toBoolean())));
                 else if (aKeyword == "null")
-                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFNullElement()));
+                    rElements.push_back(std::unique_ptr<PDFElement>(new PDFNullElement));
                 else if (aKeyword == "xref")
                     // Allow 'f' and 'n' keywords.
                     bInXRef = true;
