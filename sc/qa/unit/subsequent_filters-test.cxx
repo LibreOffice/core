@@ -158,6 +158,7 @@ public:
     void testComplexIconSetsXLSX();
     void testCondFormatParentXLSX();
     void testColorScaleNumWithRefXLSX();
+    void testCondFormatXLSB();
 
     void testOrcusODSStyleInterface();
 
@@ -289,6 +290,7 @@ public:
     CPPUNIT_TEST(testComplexIconSetsXLSX);
     CPPUNIT_TEST(testCondFormatParentXLSX);
     CPPUNIT_TEST(testColorScaleNumWithRefXLSX);
+    CPPUNIT_TEST(testCondFormatXLSB);
 
     CPPUNIT_TEST(testOrcusODSStyleInterface);
 
@@ -3824,6 +3826,22 @@ void ScFiltersTest::testTdf97598XLSX()
     ScDocument& rDoc = xDocSh->GetDocument();
     OUString aStr = rDoc.GetString(0, 0, 0); // A1
     CPPUNIT_ASSERT_EQUAL(OUString("Cell A1"), aStr);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testCondFormatXLSB()
+{
+    ScDocShellRef xDocSh = loadDoc("cond_format.", FORMAT_XLSB);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
+    CPPUNIT_ASSERT(pList);
+
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->size());
+    ScConditionalFormat* pFormat = pList->begin()->get();
+    CPPUNIT_ASSERT(pFormat);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pFormat->size());
 
     xDocSh->DoClose();
 }
