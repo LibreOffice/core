@@ -597,7 +597,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     return bRet;
 }
 
-// Is a DrawTextObjekt selected?
+// Is a DrawTextObject selected?
 
 bool SwView::IsTextTool() const
 {

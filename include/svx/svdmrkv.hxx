@@ -36,7 +36,7 @@ enum class SdrSearchOptions
     DEEP         = 0x0001, /* recursive into group objects */
     ALSOONMASTER = 0x0002, /* MasterPages are also scanned */
     WHOLEPAGE    = 0x0004, /* Not just the ObjList of PageView */
-    TESTMARKABLE = 0x0008, /* just markable Objekte/Punkte/Handles/... */
+    TESTMARKABLE = 0x0008, /* just markable objects/points/handles/... */
     TESTMACRO    = 0x0010, /* Just objects with macro */
     TESTTEXTEDIT = 0x0020, /* Just TextEdit-enabled objects */
     WITHTEXT     = 0x0040, /* Just objects with text */

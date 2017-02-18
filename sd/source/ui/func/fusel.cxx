@@ -366,7 +366,7 @@ bool FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 
                         if (pIPClient && pIPClient->IsObjectInPlaceActive())
                         {
-                            // OLE-Objekt gets deactivated in subsequent UnmarkAll()
+                            // OLE-object gets deactivated in subsequent UnmarkAll()
                             bDeactivateOLE = true;
                         }
 

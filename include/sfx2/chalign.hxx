@@ -35,7 +35,7 @@ enum class SfxChildAlignment
     FIRSTRIGHT,
     TOP,              // for example Hyperlink-Builder, SplitWindow
     BOTTOM,           // for example SplitWindow
-    TOOLBOXTOP,       // for example Objekt bar
+    TOOLBOXTOP,       // for example Object bar
     TOOLBOXBOTTOM,
     LOWESTTOP,        // for example Calc bar
     HIGHESTBOTTOM,    // for example Status bar

@@ -65,7 +65,7 @@ public:
     static css::sheet::GeneralFunction SubTotalToGeneral( ScSubTotalFunc eSubTotal );
 };
 
-//  ImportDescriptor is not available as Uno-Objekt any longer, only Property-Sequence
+//  ImportDescriptor is not available as Uno-object any longer, only Property-Sequence
 
 class ScImportDescriptor
 {
@@ -79,7 +79,7 @@ public:
     static long GetPropertyCount() { return 4; }
 };
 
-//  SortDescriptor is not available as Uno-Objekt any longer, only Property-Sequence
+//  SortDescriptor is not available as Uno-object any longer, only Property-Sequence
 
 class ScSortDescriptor
 {

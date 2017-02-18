@@ -329,7 +329,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
     // check special cases for pasting table formats as RTL
     if( !bLink && (nFormat == SotClipboardFormatId::NONE || (nFormat == SotClipboardFormatId::RTF) || (nFormat == SotClipboardFormatId::RICHTEXT)) )
     {
-        // if the objekt supports rtf and there is a table involved, default is to create a table
+        // if the object supports rtf and there is a table involved, default is to create a table
         bool bIsRTF = aDataHelper.HasFormat( SotClipboardFormatId::RTF );
         if( ( bIsRTF || aDataHelper.HasFormat( SotClipboardFormatId::RICHTEXT ) )
             && ! aDataHelper.HasFormat( SotClipboardFormatId::DRAWING ) )

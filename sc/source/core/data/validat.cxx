@@ -278,7 +278,7 @@ bool ScValidationData::DoMacro( const ScAddress& rPos, const OUString& rInput,
     bool bRet = false;                      // default: do not abort
 
     //  If the Doc was loaded during a Basic-Calls,
-    //  the Sbx-Objekt may not be created (?)
+    //  the Sbx-object may not be created (?)
 //  pDocSh->GetSbxObject();
 
 #if HAVE_FEATURE_SCRIPTING

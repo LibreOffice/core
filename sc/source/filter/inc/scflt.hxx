@@ -474,17 +474,17 @@ struct Sc10ColAttr
 // GraphHeader
 struct Sc10GraphHeader
 {
-    sal_uInt8       Typ;            // Type of Grafik (Ole-Objekt, Image (Bitmap of MetaFile), Chart-Object)
-    sal_Int16       CarretX;        // Cell Position of Grafik
+    sal_uInt8       Typ;            // Type of grafic (Ole-object, Image (Bitmap of MetaFile), Chart-object)
+    sal_Int16       CarretX;        // Cell Position of grafic
     sal_Int16       CarretY;
     sal_Int16       CarretZ;
-    sal_Int32       x;              // x,y distance to cell border in pixels (pixels, as Graphics are stored in window)
+    sal_Int32       x;              // x,y distance to cell border in pixels (pixels, as graphics are stored in window)
     sal_Int32       y;
     sal_Int32       w;              // w,h width and height in pixels
     sal_Int32       h;
     sal_uInt8       IsRelPos;       // position relative to cell, or absolute in the table
-    sal_uInt8       DoPrint;        // print Grafic?
-    sal_uInt16      FrameType;      // Frame type around Grafic (none, simple, double, simple thick, double thick)
+    sal_uInt8       DoPrint;        // print grafic?
+    sal_uInt16      FrameType;      // Frame type around grafic (none, simple, double, simple thick, double thick)
     sal_uInt8       IsTransparent;  // show background?
     Sc10Color   FrameColor;         // FrameColor as RGB value
     Sc10Color   BackColor;          // BackGroundColor as RGB value

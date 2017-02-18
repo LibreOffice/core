@@ -333,7 +333,7 @@ void SwWrtShell::Insert( const OUString &rPath, const OUString &rFilter,
     EndAllAction();
 }
 
-// Insert an OLE-Objekt into the CORE.
+// Insert an OLE-Object into the CORE.
 // if no object is transferred, then one will be created.
 
 void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName *pName,

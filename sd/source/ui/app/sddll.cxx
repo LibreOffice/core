@@ -280,7 +280,7 @@ void SdDLL::Init()
     // register SvDraw-Fields
     SdrRegisterFieldClasses();
 
-    // register 3D-Objekt-Factory
+    // register 3D-object-factory
     E3dObjFactory();
 
     // register css::form::component::Form-Object-Factory

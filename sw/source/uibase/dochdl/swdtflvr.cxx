@@ -445,7 +445,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         pTmpDoc->getIDocumentFieldsAccess().LockExpFields();     // never update fields - leave text as it is
         lclOverWriteDoc(*m_pWrtShell, *pTmpDoc);
 
-        // in CORE a new one was created (OLE-Objekte copied!)
+        // in CORE a new one was created (OLE-objects copied!)
         m_aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( m_aDocShellRef.Is() )
             SwTransferable::InitOle( m_aDocShellRef, *pTmpDoc );

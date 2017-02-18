@@ -1713,7 +1713,7 @@ void ScCellRangesBase::InitInsertRange(ScDocShell* pDocSh, const ScRange& rR)
 
         pDocShell->GetDocument().AddUnoObject(*this);
 
-        RefChanged();   // adjust range in range objekt
+        RefChanged();   // adjust range in range object
     }
 }
 

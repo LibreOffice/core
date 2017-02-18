@@ -330,7 +330,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertRe
 {
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::NbcInsertObject(NULL)");
     if (pObj!=nullptr) {
-        DBG_ASSERT(!pObj->IsInserted(),"ZObjekt already has the status Inserted.");
+        DBG_ASSERT(!pObj->IsInserted(),"The object already has the status Inserted.");
         const size_t nCount = GetObjCount();
         if (nPos>nCount) nPos=nCount;
         InsertObjectIntoContainer(*pObj,nPos);
@@ -409,7 +409,7 @@ SdrObject* SdrObjList::NbcRemoveObject(size_t nObjNum)
         // flushViewObjectContacts() clears the VOC's and those invalidate
         pObj->GetViewContact().flushViewObjectContacts();
 
-        DBG_ASSERT(pObj->IsInserted(),"ZObjekt does not have the status Inserted.");
+        DBG_ASSERT(pObj->IsInserted(),"The object does not have the status Inserted.");
         pObj->SetInserted(false); // Ruft u.a. den UserCall
         pObj->SetObjList(nullptr);
         pObj->SetPage(nullptr);
@@ -441,7 +441,7 @@ SdrObject* SdrObjList::RemoveObject(size_t nObjNum)
         // flushViewObjectContacts() clears the VOC's and those invalidate
         pObj->GetViewContact().flushViewObjectContacts();
 
-        DBG_ASSERT(pObj->IsInserted(),"ZObjekt does not have the status Inserted.");
+        DBG_ASSERT(pObj->IsInserted(),"The object does not have the status Inserted.");
         if (pModel!=nullptr) {
             // TODO: We need a different broadcast here.
             if (pObj->GetPage()!=nullptr) {
@@ -482,7 +482,7 @@ SdrObject* SdrObjList::NbcReplaceObject(SdrObject* pNewObj, size_t nObjNum)
     SdrObject* pObj=maList[nObjNum];
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::ReplaceObject: Could not find object to remove.");
     if (pObj!=nullptr) {
-        DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: ZObjekt does not have status Inserted.");
+        DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: the object does not have status Inserted.");
         pObj->SetInserted(false);
         pObj->SetObjList(nullptr);
         pObj->SetPage(nullptr);
@@ -521,7 +521,7 @@ SdrObject* SdrObjList::ReplaceObject(SdrObject* pNewObj, size_t nObjNum)
     SdrObject* pObj=maList[nObjNum];
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::ReplaceObject: Could not find object to remove.");
     if (pObj!=nullptr) {
-        DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: ZObjekt does not have status Inserted.");
+        DBG_ASSERT(pObj->IsInserted(),"SdrObjList::ReplaceObject: the object does not have status Inserted.");
         if (pModel!=nullptr) {
             // TODO: We need a different broadcast here.
             if (pObj->GetPage()!=nullptr) {
@@ -572,7 +572,7 @@ SdrObject* SdrObjList::SetObjectOrdNum(size_t nOldObjNum, size_t nNewObjNum)
     if (nOldObjNum==nNewObjNum) return pObj;
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::SetObjectOrdNum: Object not found.");
     if (pObj!=nullptr) {
-        DBG_ASSERT(pObj->IsInserted(),"SdrObjList::SetObjectOrdNum: ZObjekt does not have status Inserted.");
+        DBG_ASSERT(pObj->IsInserted(),"SdrObjList::SetObjectOrdNum: the object does not have status Inserted.");
         RemoveObjectFromContainer(nOldObjNum);
         InsertObjectIntoContainer(*pObj,nNewObjNum);
 
