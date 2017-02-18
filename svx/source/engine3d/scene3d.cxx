@@ -626,7 +626,7 @@ void E3dScene::RecalcSnapRect()
 
     if(pScene == this)
     {
-        // The Scene is used as a 2D-Objekt, take the SnapRect from the
+        // The Scene is used as a 2D-Object, take the SnapRect from the
         // 2D Display settings
         maSnapRect = pScene->aCamera.GetDeviceWindow();
     }

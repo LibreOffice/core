@@ -1178,7 +1178,7 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
     SwLayHelper *pPageMaker;
 
     //If the layout will be created (bPages == true) we do head on the progress
-    //Flys and DrawObjekte are not connected immediately, this
+    //Flys and DrawObjects are not connected immediately, this
     //happens only at the end of the function.
     if ( bPages )
     {

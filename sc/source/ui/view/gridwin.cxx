@@ -1812,7 +1812,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt, MouseEventSta
             return;
         }
 
-        pViewData->GetViewShell()->SetDrawShell( false );               // no Draw-Objekt selected
+        pViewData->GetViewShell()->SetDrawShell( false );               // no Draw-object selected
 
         // TestMouse has already happened above
     }

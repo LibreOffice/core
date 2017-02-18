@@ -258,7 +258,7 @@ public:
     friend SvStream& ReadTextType(SvStream& rIStream, TextType& rText);
     virtual void Draw(OutputDevice& rOut) override;
 };
-#define TextOutlBit 0x01     /*       1=Sourcecode for outliner (ignored byDrawObjekt()) */
+#define TextOutlBit 0x01     /*       1=Sourcecode for outliner (ignored byDrawObject()) */
 #define TextFitSBit 0x02     /* Bit1: 1=Text-Fit2Size, also outliner  (2.0)              */
 #define TextFitZBit 0x08     /* Bit3: 1=Fit2Size line by line         (2.0)              */
 #define TextFitBits (TextFitSBit | TextFitZBit)

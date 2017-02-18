@@ -3174,7 +3174,7 @@ void ScInterpreter::ScMacro()
     //  no security queue beforehand (just CheckMacroWarn), moved to  CallBasic
 
     //  If the  Dok was loaded during a Basic-Calls,
-    //  is the  Sbx-Objekt created(?)
+    //  is the  Sbx-object created(?)
 //  pDocSh->GetSbxObject();
 
     //  search function with the name,

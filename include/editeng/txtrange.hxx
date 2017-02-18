@@ -53,8 +53,8 @@ class EDITENG_DLLPUBLIC TextRanger
     sal_uInt16 nLower;      // Distance Text-Contour
     sal_uInt32 nPointCount; // Number of polygon points
     bool       bSimple : 1; // Just outside edge
-    bool       bInner  : 1; // TRUE: Objekt inline (EditEngine);
-                            // FALSE: Objekt flow (StarWriter);
+    bool       bInner  : 1; // TRUE: Object inline (EditEngine);
+                            // FALSE: Object flow (StarWriter);
     bool       bVertical :1;// for vertical writing mode
 
     TextRanger( const TextRanger& ) = delete;

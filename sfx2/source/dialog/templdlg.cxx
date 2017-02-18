@@ -1461,7 +1461,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
 
             // Necessary if switching between documents and in both documents
             // the same template is used. Do not immediately call Update_Impl,
-            // for the case that one of the documents is an internal InPlaceObjekt!
+            // for the case that one of the documents is an internal InPlaceObject!
         case SfxHintId::DocChanged:
             bUpdate = true;
         break;

@@ -450,7 +450,7 @@ uno::Sequence< OUString > SAL_CALL Svx3DSceneObject::getSupportedServiceNames()
 }
 
 Svx3DCubeObject::Svx3DCubeObject( SdrObject* pObj ) throw()
-:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DCUBEOBJEKT), getSvxMapProvider().GetPropertySet(SVXMAP_3DCUBEOBJEKT, SdrObject::GetGlobalDrawObjectItemPool()) )
+:   SvxShape( pObj, getSvxMapProvider().GetMap(SVXMAP_3DCUBEOBJECT), getSvxMapProvider().GetPropertySet(SVXMAP_3DCUBEOBJECT, SdrObject::GetGlobalDrawObjectItemPool()) )
 {
 }
 

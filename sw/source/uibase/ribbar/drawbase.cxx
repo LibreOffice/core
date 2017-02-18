@@ -131,7 +131,7 @@ bool SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
             }
             else if (eHit == SdrHitKind::MarkedObject && !rMEvt.IsShift() && !rMEvt.IsMod2())
             {
-                // Move objekt
+                // Move object
                 return false;
             }
             else if (eHit == SdrHitKind::Handle)

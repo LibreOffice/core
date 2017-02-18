@@ -1622,7 +1622,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                     switch ( pCli->eAlign )
                     {
                         case SfxChildAlignment::TOP:
-                            // Objekt-Toolboxes come always last
+                            // Object-Toolboxes come always last
                                 aInnerRect.Top() += pCli->aSize.Height();
                             break;
 
@@ -1638,7 +1638,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
                             break;
 
                         case SfxChildAlignment::BOTTOM:
-                            // Objekt-Toolboxes come always last
+                            // Object-Toolboxes come always last
                                 aInnerRect.Bottom() -= pCli->aSize.Height();
                             break;
 

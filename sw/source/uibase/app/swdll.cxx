@@ -112,10 +112,10 @@ SwDLL::SwDLL()
     // register SvDraw-Fields
     SdrRegisterFieldClasses();
 
-    // register 3D-Objekt-Factory
+    // register 3D-object-Factory
     E3dObjFactory();
 
-    // register form::component::Form-Objekt-Factory
+    // register form::component::Form-object-Factory
     FmFormObjFactory();
 
     SdrObjFactory::InsertMakeObjectHdl( LINK( &aSwObjectFactory, SwObjectFactory, MakeObject ) );
@@ -164,7 +164,7 @@ SwDLL::~SwDLL()
     ::FinitUI();
     filters_.reset();
     ::FinitCore();
-    // sign out Objekt-Factory
+    // sign out object-Factory
     SdrObjFactory::RemoveMakeObjectHdl(LINK(&aSwObjectFactory, SwObjectFactory, MakeObject ));
 }
 
