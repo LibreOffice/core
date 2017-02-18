@@ -13,6 +13,10 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/dbreport,\
 	reportdesign/uiconfig/dbreport/menubar/menubar \
 ))
 
+$(eval $(call gb_UIConfig_add_popupmenufiles,modules/dbreport,\
+	reportdesign/uiconfig/dbreport/popupmenu/report \
+))
+
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/dbreport,\
 	reportdesign/uiconfig/dbreport/statusbar/statusbar \
 ))

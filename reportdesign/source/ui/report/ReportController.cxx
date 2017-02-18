@@ -1405,6 +1405,8 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 uno::Reference<report::XSection> xSection;
                 if (aArgs.getLength() == 1 )
                     aArgs[0].Value >>= xSection;
+                else if (_nId == SID_ATTR_CHAR_COLOR_BACKGROUND)
+                    xSection.set(getDesignView()->getMarkedSection()->getReportSection().getSection());
                 openPageDialog(xSection);
                 bForceBroadcast = true;
             }

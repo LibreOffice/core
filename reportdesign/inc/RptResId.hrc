@@ -208,9 +208,8 @@
 #define RID_STR_PARAADJUST                  (RID_STRING_START + 161)
 
 // menu -----------------------------------------------------------------------
-#define RID_MENU_REPORT                     ( RID_MENU_START + 0 )
-#define RID_GROUPSROWPOPUPMENU              ( RID_MENU_START + 1 )
-#define RID_MENU_NAVIGATOR                  ( RID_MENU_START + 2 )
+#define RID_GROUPSROWPOPUPMENU              ( RID_MENU_START + 0 )
+#define RID_MENU_NAVIGATOR                  ( RID_MENU_START + 1 )
 // bitmaps
 #define RID_SVXBMP_SELECT_REPORT            (RID_BITMAP_START + 0 )
 #define RID_SVXBMP_FM_FIXEDTEXT             (RID_BITMAP_START + 1 )

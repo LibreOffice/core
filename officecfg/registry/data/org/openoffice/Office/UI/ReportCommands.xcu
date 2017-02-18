@@ -308,6 +308,11 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:DBBackgroundColor" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Background Color...</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="Popups">
       <node oor:name=".uno:ExportReportTo" oor:op="replace">
@@ -323,11 +328,6 @@
       <node oor:name=".uno:ObjectResize" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Object Resizing</value>
-        </prop>
-      </node>
-      <node oor:name=".uno:ArrangeMenu" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">A~rrange</value>
         </prop>
       </node>
     </node>
