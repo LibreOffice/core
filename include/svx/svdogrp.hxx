@@ -24,7 +24,7 @@
 #include <svx/svxdllapi.h>
 
 
-//   Vorausdeklarationen
+// Forward declarations
 
 
 class SdrObjList;
@@ -42,8 +42,8 @@ protected:
     virtual sdr::contact::ViewContact* CreateObjectSpecificViewContact() override;
     virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties() override;
 
-    std::unique_ptr<SdrObjList> pSub;    // Subliste (Kinder)
-    Point                       aRefPoint; // Referenzpunkt innerhalb der Objektgruppe
+    std::unique_ptr<SdrObjList> pSub;    // sub list (children)
+    Point                       aRefPoint; // Reference point inside the object group
 
 public:
     SdrObjGroup();
