@@ -35,6 +35,7 @@ using namespace css;
 #define MENUBAR_STR "private:resource/menubar/menubar"
 
 bool SfxNotebookBar::m_bLock = false;
+bool SfxNotebookBar::m_bHide = false;
 
 static Reference<frame::XLayoutManager> lcl_getLayoutManager( const Reference<frame::XFrame>& xFrame )
 {
@@ -168,8 +169,21 @@ void SfxNotebookBar::CloseMethod(SystemWindow* pSysWindow)
     }
 }
 
+void SfxNotebookBar::LockNotebookBar()
+{
+    m_bHide = true;
+}
+
+void SfxNotebookBar::UnlockNotebookBar()
+{
+    m_bHide = false;
+}
+
 bool SfxNotebookBar::IsActive()
 {
+    if (m_bHide)
+        return false;
+
     vcl::EnumContext::Application eApp = vcl::EnumContext::Application::Application_Any;
 
     if (SfxViewFrame::Current())
