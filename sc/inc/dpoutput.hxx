@@ -48,9 +48,9 @@ private:
     ScDocument*             pDoc;
     css::uno::Reference< css::sheet::XDimensionsSupplier> xSource;
     ScAddress               aStartPos;
-    ScDPOutLevelData*       pColFields;
-    ScDPOutLevelData*       pRowFields;
-    ScDPOutLevelData*       pPageFields;
+    std::vector<ScDPOutLevelData>       pColFields;
+    std::vector<ScDPOutLevelData>       pRowFields;
+    std::vector<ScDPOutLevelData>       pPageFields;
     long                    nColFieldCount;
     long                    nRowFieldCount;
     long                    nPageFieldCount;
