@@ -22,7 +22,6 @@
 Public DocumentName as String
 Public FormPath as String
 Public WizardPath as String
-Public WebWizardPath as String
 Public WorkPath as String
 Public TempPath as String
 Public TexturePath as String
@@ -90,7 +89,6 @@ Dim SelList(0) as Integer
 Dim LocList() as String
 	SelList(0) = 0
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
-	BasicLibraries.LoadLibrary(&quot;WebWizard&quot;)
 	bDebug = False
 	If Not bDebug Then
 		On Local Error GoTo WIZARDERROR

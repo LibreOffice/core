@@ -323,19 +323,16 @@ End Function
 Function GetFormWizardPaths() as Boolean
 	FormPath = GetOfficeSubPath(&quot;Template&quot;,&quot;../wizard/bitmap&quot;)
 	If FormPath &lt;&gt; &quot;&quot; Then
-		WebWizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/web&quot;)
-		If WebWizardPath &lt;&gt; &quot;&quot; Then
-			WizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/&quot;)
-			If Wizardpath &lt;&gt; &quot;&quot; Then
-				TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
-				If TexturePath &lt;&gt; &quot;&quot; Then
-					WorkPath = GetPathSettings(&quot;Work&quot;)
-					If WorkPath &lt;&gt; &quot;&quot; Then
-						TempPath = GetPathSettings(&quot;Temp&quot;)
-						If TempPath &lt;&gt; &quot;&quot; Then
-							GetFormWizardPaths = True
-							Exit Function
-						End If
+		WizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/&quot;)
+		If Wizardpath &lt;&gt; &quot;&quot; Then
+			TexturePath = GetOfficeSubPath(&quot;Gallery&quot;, &quot;www-back/&quot;)
+			If TexturePath &lt;&gt; &quot;&quot; Then
+				WorkPath = GetPathSettings(&quot;Work&quot;)
+				If WorkPath &lt;&gt; &quot;&quot; Then
+					TempPath = GetPathSettings(&quot;Temp&quot;)
+					If TempPath &lt;&gt; &quot;&quot; Then
+						GetFormWizardPaths = True
+						Exit Function
 					End If
 				End If
 			End If

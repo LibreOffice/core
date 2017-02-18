@@ -94,14 +94,6 @@
    </dlg:radio>
   </dlg:radiogroup>
   <dlg:fixedline dlg:id="hlnBinaries" dlg:tab-index="12" dlg:left="6" dlg:top="158" dlg:width="258" dlg:height="8" dlg:page="1" dlg:value="hlnBinaries"/>
-  <dlg:radiogroup>
-   <dlg:radio dlg:id="optTiled" dlg:tab-index="31" dlg:left="156" dlg:top="154" dlg:width="81" dlg:height="10" dlg:page="2" dlg:tag="11" dlg:help-url="HID:WIZARDS_HID_DLGFORM_LINKER_LSTMASTERLINK2" dlg:value="optTiled" dlg:checked="true">
-    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.script:WebWizard.Common.SetBackGraphicStyle?language=Basic&amp;location=application" script:language="Script"/>
-   </dlg:radio>
-   <dlg:radio dlg:id="optArea" dlg:tab-index="32" dlg:left="156" dlg:top="168" dlg:width="81" dlg:height="10" dlg:page="2" dlg:tag="10" dlg:help-url="HID:WIZARDS_HID_DLGFORM_LINKER_LSTSLAVELINK3" dlg:value="optArea">
-    <script:event script:event-name="on-mouseup" script:macro-name="vnd.sun.star.script:WebWizard.Common.SetBackGraphicStyle?language=Basic&amp;location=application" script:language="Script"/>
-   </dlg:radio>
-  </dlg:radiogroup>
   <dlg:fixedline dlg:id="hlnBackground" dlg:tab-index="30" dlg:left="150" dlg:top="143" dlg:width="114" dlg:height="8" dlg:page="2" dlg:value="hlnBackground"/>
   <dlg:fixedline dlg:id="hlnAlign" dlg:tab-index="27" dlg:left="6" dlg:top="143" dlg:width="137" dlg:height="8" dlg:page="2" dlg:value="hlnAlign"/>
   <dlg:fixedline dlg:id="hlnBorderLayout" dlg:tab-index="21" dlg:left="6" dlg:top="83" dlg:width="137" dlg:height="8" dlg:page="2" dlg:value="hlnBorderLayout"/>
