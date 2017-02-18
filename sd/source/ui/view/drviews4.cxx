@@ -618,6 +618,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     GetActiveWindow()->ReleaseMouse();
                                     LockInput();
                                     pOutlinerView->ExecuteSpellPopup(aPos, &aLink);
+                                    pOutlinerView->GetEditView().Invalidate();
                                     UnlockInput();
                                 }
                                 else
