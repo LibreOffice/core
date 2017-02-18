@@ -29,7 +29,7 @@ class SpinFieldTest(UITestCase):
         assert(decimal_places_state["Text"] == "2")
 
         okBtn = xCellsDlg.getChild("ok")
-        okBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(okBtn)
 
         self.ui_test.close_doc()
 
@@ -56,7 +56,7 @@ class SpinFieldTest(UITestCase):
         assert(decimal_places_state["Text"] == "2")
 
         okBtn = xCellsDlg.getChild("ok")
-        okBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(okBtn)
 
         self.ui_test.close_doc()
 
@@ -74,7 +74,7 @@ class SpinFieldTest(UITestCase):
         assert(decimal_places_state["Text"] == "41")
 
         okBtn = xCellsDlg.getChild("ok")
-        okBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(okBtn)
 
         self.ui_test.close_doc()
 
