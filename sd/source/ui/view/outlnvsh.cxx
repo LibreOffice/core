@@ -30,6 +30,7 @@
 #include <sot/exchange.hxx>
 #include <svx/ruler.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <sfx2/shell.hxx>
@@ -1371,6 +1372,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
             Link<SpellCallbackInfo&,void> aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
             pOLV->ExecuteSpellPopup(aPos, &aLink);
+            pOLV->GetEditView().Invalidate();
         }
         else
         {
