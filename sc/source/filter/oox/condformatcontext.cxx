@@ -253,7 +253,9 @@ void CondFormatContext::onEndRecord()
     {
         case BIFF12_ID_CONDFORMATTING:
             if( mxCondFmt.get() )
-                mxCondFmt->finalizeImport();
+            {
+                mxCondFmt->setReadyForFinalize();
+            }
             break;
     }
 }
