@@ -9,19 +9,26 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
 
+import json
+
 class CheckBoxTest(UITestCase):
 
-    def test_toggle_checkbox(self):
+    def test_get_json(self):
 
         self.ui_test.create_doc_in_start_center("calc")
 
-        self.ui_test.execute_dialog_through_command(".uno:FormatCellDialog")
-        xCellsDlg = self.xUITest.getTopFocusWindow()
-        xNegativeNumRedCB = xCellsDlg.getChild("negnumred")
-        xNegativeNumRedCB.executeAction("CLICK",tuple())
+        self.ui_test.execute_dialog_through_command(".uno:About")
 
-        okBtn = xCellsDlg.getChild("ok")
-        self.ui_test.close_dialog_through_button(okBtn)
+        xAboutDlg = self.xUITest.getTopFocusWindow()
+
+        json_string = xAboutDlg.getHierarchy()
+        print(json_string)
+        json_content = json.loads(json_string)
+        print(json_content)
+        print(json.dumps(json_content, indent=4))
+
+        closeBtn = xAboutDlg.getChild("close")
+        self.ui_test.close_dialog_through_button(closeBtn)
 
         self.ui_test.close_doc()
 

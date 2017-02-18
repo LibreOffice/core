@@ -23,7 +23,7 @@ class ComboBoxTest(UITestCase):
         select_pos(scopeCB, "1")
 
         xCancelBtn = xAddNameDlg.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 

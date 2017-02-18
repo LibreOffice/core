@@ -29,7 +29,7 @@ class CharDialogText(UITestCase):
         sleep(5)
 
         xCancelBtn = xCharDialog.getChild("cancel")
-        xCancelBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xCancelBtn)
 
         self.ui_test.close_doc()
 

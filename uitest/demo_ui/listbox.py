@@ -23,7 +23,7 @@ class ListBoxTest(UITestCase):
         select_pos(categoryLB, "4")
 
         xOkBtn = xCellsDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xOkBtn)
 
         self.ui_test.close_doc()
 
@@ -41,7 +41,7 @@ class ListBoxTest(UITestCase):
         categoryLB.executeAction("SELECT", actionProps)
 
         xOkBtn = xCellsDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xOkBtn)
 
         self.ui_test.close_doc()
 
