@@ -143,6 +143,6 @@ a:hover { color: #107EC0; text-decoration: underline; }
 .content80 { width: 80%; }
 .content87 { width: 87%; }
 
-.centertext { padding-left:20px; padding-bottom:5px; text-align:left; font-size: 12px; line-height:10pt; }
+.centertext { padding-left:20px; padding-top:3px; padding-bottom:5px; text-align:left; font-size: 12px; line-height:10pt; }
 .apachelogo { float: right; text-align: left; padding-bottom: 12px; padding-right: 8px; padding-left: 5px; width: 188px; height: 76px; }
 
