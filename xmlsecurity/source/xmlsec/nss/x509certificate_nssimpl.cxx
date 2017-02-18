@@ -209,13 +209,13 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
 
             if (objID.equals("2.5.29.17"))
             {
-                SanExtensionImpl* pExtn = new SanExtensionImpl();
+                SanExtensionImpl* pExtn = new SanExtensionImpl;
                 pExtn->setCertExtn(value, vlen, objid, objidlen, crit);
                 xExtns[len] = pExtn ;
             }
             else
             {
-                CertificateExtension_XmlSecImpl* pExtn = new CertificateExtension_XmlSecImpl();
+                CertificateExtension_XmlSecImpl* pExtn = new CertificateExtension_XmlSecImpl;
                 pExtn->setCertExtn(value, vlen, objid, objidlen, crit);
                 xExtns[len] = pExtn;
             }
@@ -255,14 +255,14 @@ css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certifi
                 if ( objId.equals("OID.2.5.29.17") )
                 {
                     rtl::Reference<SanExtensionImpl> xSanImpl(
-                        new SanExtensionImpl());
+                        new SanExtensionImpl);
                     xSanImpl->setCertExtn(value, vlen, objid, objidlen, crit);
                     xExtn = xSanImpl.get();
                 }
                 else
                 {
                     rtl::Reference<CertificateExtension_XmlSecImpl> xSecImpl(
-                        new CertificateExtension_XmlSecImpl());
+                        new CertificateExtension_XmlSecImpl);
                     xSecImpl->setCertExtn(value, vlen, objid, objidlen, crit);
                     xExtn = xSecImpl.get();
                 }
