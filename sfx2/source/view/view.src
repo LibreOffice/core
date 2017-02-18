@@ -142,17 +142,17 @@ String STR_READONLY_SIGN
 
 String STR_SIGNATURE_BROKEN
 {
-    Text[ en-US ] = "This Document has an invalid signature.";
+    Text[ en-US ] = "This document has an invalid signature.";
 };
 
 String STR_SIGNATURE_NOTVALIDATED
 {
-    Text[ en-US ] = "The signature is ok, but the certificate could not be validated.";
+    Text[ en-US ] = "The signature is OK, but the certificate could not be validated.";
 };
 
 String STR_SIGNATURE_PARTIAL_OK
 {
-    Text[ en-US ] = "The signature is ok, but the document is only partially signed.";
+    Text[ en-US ] = "The signature is OK, but the document is only partially signed.";
 };
 
 String STR_SIGNATURE_SHOW
