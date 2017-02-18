@@ -87,7 +87,7 @@ IniParser::IniParser(OUString const & rIniName)
     }
     else
     {
-        SAL_WARN("connectivity.mozab", "couldn't open file: " << iniUrl );
+        SAL_INFO("connectivity.mozab", "couldn't open file: " << iniUrl );
     }
 }
 
