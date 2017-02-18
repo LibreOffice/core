@@ -3017,11 +3017,11 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
         SalMenu* pMenu = ImplGetSalMenu();
         if( pMenu && bRealExecute && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FloatWinPopupFlags::GrabFocus ) )
         {
-            ImplFlushPendingSelect();
             pWin->StopExecute();
             pWin->doShutdown();
             pWindow->doLazyDelete();
             pWindow = nullptr;
+            ImplFlushPendingSelect();
             return nSelectedId;
         }
         else

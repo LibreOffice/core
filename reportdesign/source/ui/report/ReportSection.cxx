@@ -38,11 +38,13 @@
 #include <svx/svditer.hxx>
 #include <svx/dbaexchange.hxx>
 
-#include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <comphelper/propertyvalue.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
 #include "RptDef.hxx"
 #include "SectionWindow.hxx"
@@ -427,43 +429,6 @@ void OReportSection::SelectAll(const sal_uInt16 _nObjectType)
         }
     }
 }
-void lcl_insertMenuItemImages(
-    PopupMenu& rContextMenu,
-    OReportController& rController,
-    const uno::Reference< report::XReportDefinition>& _xReportDefinition,uno::Reference<frame::XFrame>& _rFrame
-)
-{
-    const sal_uInt16 nCount = rContextMenu.GetItemCount();
-    for (sal_uInt16 i = 0; i < nCount; ++i)
-    {
-        if ( MenuItemType::SEPARATOR != rContextMenu.GetItemType(i))
-        {
-            const sal_uInt16 nId = rContextMenu.GetItemId(i);
-            PopupMenu* pPopupMenu = rContextMenu.GetPopupMenu( nId );
-            if ( pPopupMenu )
-            {
-                lcl_insertMenuItemImages(*pPopupMenu,rController,_xReportDefinition,_rFrame);
-            }
-            else
-            {
-                const OUString sCommand = rContextMenu.GetItemCommand(nId);
-                rContextMenu.SetItemImage(nId, vcl::CommandInfoProvider::Instance().GetImageForCommand(sCommand, _rFrame));
-                if ( nId == SID_PAGEHEADERFOOTER )
-                {
-                    OUString sText = ModuleRes((_xReportDefinition.is() && _xReportDefinition->getPageHeaderOn()) ? RID_STR_PAGEHEADERFOOTER_DELETE : RID_STR_PAGEHEADERFOOTER_INSERT);
-                    rContextMenu.SetItemText(nId,sText);
-                }
-                else if ( nId == SID_REPORTHEADERFOOTER )
-                {
-                    OUString sText = ModuleRes((_xReportDefinition.is() && _xReportDefinition->getReportHeaderOn()) ? RID_STR_REPORTHEADERFOOTER_DELETE : RID_STR_REPORTHEADERFOOTER_INSERT);
-                    rContextMenu.SetItemText(nId,sText);
-                }
-            }
-            rContextMenu.CheckItem(nId,rController.isCommandChecked(nId));
-            rContextMenu.EnableItem(nId,rController.isCommandEnabled(nId));
-        }
-    }
-}
 
 void OReportSection::Command( const CommandEvent& _rCEvt )
 {
@@ -472,25 +437,29 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     {
         OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
         uno::Reference<frame::XFrame> xFrame = rController.getFrame();
-        ScopedVclPtrInstance<PopupMenu> aContextMenu( ModuleRes( RID_MENU_REPORT ) );
-        uno::Reference< report::XReportDefinition> xReportDefinition = getSection()->getReportDefinition();
+        css::uno::Sequence<css::uno::Any> aArgs {
+            css::uno::makeAny(comphelper::makePropertyValue("Value", OUString("report"))),
+            css::uno::makeAny(comphelper::makePropertyValue("Frame", xFrame)),
+            css::uno::makeAny(comphelper::makePropertyValue("IsContextMenu", true))
+        };
 
-        lcl_insertMenuItemImages(*aContextMenu.get(),rController,xReportDefinition,xFrame);
+        css::uno::Reference<css::uno::XComponentContext> xContext(rController.getORB());
+        css::uno::Reference<css::frame::XPopupMenuController> xMenuController(
+            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), css::uno::UNO_QUERY);
+
+        if (!xMenuController.is())
+            return;
+
+        rtl::Reference<VCLXPopupMenu> xPopupMenu(new VCLXPopupMenu);
+        xMenuController->setPopupMenu(xPopupMenu.get());
 
         Point aPos = _rCEvt.GetMousePosPixel();
         m_pView->EndAction();
-        const sal_uInt16 nId = aContextMenu->Execute(this, aPos);
-        if ( nId )
-        {
-            uno::Sequence< beans::PropertyValue> aArgs;
-            if ( nId == SID_ATTR_CHAR_COLOR_BACKGROUND )
-            {
-                aArgs.realloc(1);
-                aArgs[0].Name = "Selection";
-                aArgs[0].Value <<= m_xSection;
-            }
-            rController.executeChecked(nId,aArgs);
-        }
+        static_cast<PopupMenu*>(xPopupMenu->GetMenu())->Execute(this, aPos);
+
+        css::uno::Reference<css::lang::XComponent> xComponent(xMenuController, css::uno::UNO_QUERY);
+        xComponent->dispose();
     }
 }
 
