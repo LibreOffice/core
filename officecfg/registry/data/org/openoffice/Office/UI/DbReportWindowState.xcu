@@ -19,6 +19,11 @@
 <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="DbReportWindowState" oor:package="org.openoffice.Office.UI">
   <node oor:name="UIElements">
     <node oor:name="States">
+      <node oor:name="private:resource/popupmenu/report" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Report</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/toolbar/toolbar" oor:op="replace">
         <prop oor:name="DockPos" oor:type="xs:string">
           <value>0,1</value>
