@@ -59,11 +59,6 @@ namespace accessibility
     }
 
 
-    AccessibleTabBarPage::~AccessibleTabBarPage()
-    {
-    }
-
-
     bool AccessibleTabBarPage::IsEnabled()
     {
         OExternalLockGuard aGuard( this );

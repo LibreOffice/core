@@ -55,11 +55,6 @@ VCLXAccessibleTabControl::VCLXAccessibleTabControl( VCLXWindow* pVCLXWindow )
 }
 
 
-VCLXAccessibleTabControl::~VCLXAccessibleTabControl()
-{
-}
-
-
 void VCLXAccessibleTabControl::UpdateFocused()
 {
     for (Reference<XAccessible>& xChild : m_aAccessibleChildren)

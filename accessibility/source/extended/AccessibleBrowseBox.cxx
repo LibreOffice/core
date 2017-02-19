@@ -74,9 +74,7 @@ void AccessibleBrowseBox::setCreator( const css::uno::Reference< css::accessibil
 }
 
 
-AccessibleBrowseBox::~AccessibleBrowseBox()
-{
-}
+AccessibleBrowseBox::~AccessibleBrowseBox() = default;
 
 
 void SAL_CALL AccessibleBrowseBox::disposing()

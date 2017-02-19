@@ -51,7 +51,7 @@ public:
         ::svt::AccessibleBrowseBoxObjType eObjType );
 
 protected:
-    virtual ~AccessibleBrowseBoxHeaderBar() override;
+    ~AccessibleBrowseBoxHeaderBar() override = default;
 
 public:
     // XAccessibleContext

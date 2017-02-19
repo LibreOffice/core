@@ -25,8 +25,7 @@
 class FloatingWindowAccessible : public VCLXAccessibleComponent
 {
 public:
-    FloatingWindowAccessible( VCLXWindow* pWindow );
-    virtual ~FloatingWindowAccessible() override;
+    using VCLXAccessibleComponent::VCLXAccessibleComponent;
 
     virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) override;
 };

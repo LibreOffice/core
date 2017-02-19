@@ -74,7 +74,6 @@ namespace accessibility
 
     public:
         AccessibleTabBarPageList( TabBar* pTabBar, sal_Int32 nIndexInParent );
-        virtual ~AccessibleTabBarPageList() override;
 
         // XInterface
         DECLARE_XINTERFACE()

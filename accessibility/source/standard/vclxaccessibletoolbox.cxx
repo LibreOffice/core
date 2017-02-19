@@ -171,17 +171,6 @@ namespace
 
 // VCLXAccessibleToolBox
 
-VCLXAccessibleToolBox::VCLXAccessibleToolBox( VCLXWindow* pVCLXWindow ) :
-
-    VCLXAccessibleComponent( pVCLXWindow )
-
-{
-}
-
-VCLXAccessibleToolBox::~VCLXAccessibleToolBox()
-{
-}
-
 VCLXAccessibleToolBoxItem* VCLXAccessibleToolBox::GetItem_Impl( ToolBox::ImplToolItems::size_type _nPos )
 {
     VCLXAccessibleToolBoxItem* pItem = nullptr;

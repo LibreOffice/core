@@ -55,7 +55,7 @@ private:
     void                        ReleaseSubToolBox( ToolBox* _pSubToolBox );
 
 protected:
-    virtual ~VCLXAccessibleToolBox() override;
+    ~VCLXAccessibleToolBox() override = default;
 
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
@@ -68,7 +68,7 @@ protected:
     virtual void SAL_CALL disposing() override;
 
 public:
-    VCLXAccessibleToolBox( VCLXWindow* pVCLXWindow );
+    using VCLXAccessibleComponent::VCLXAccessibleComponent;
 
     // XInterface
     DECLARE_XINTERFACE( )

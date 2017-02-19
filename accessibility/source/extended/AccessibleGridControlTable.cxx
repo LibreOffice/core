@@ -44,10 +44,6 @@ AccessibleGridControlTable::AccessibleGridControlTable(
 {
 }
 
-AccessibleGridControlTable::~AccessibleGridControlTable()
-{
-}
-
 // XAccessibleContext ---------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL

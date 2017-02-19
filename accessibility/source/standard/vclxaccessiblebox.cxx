@@ -56,10 +56,6 @@ VCLXAccessibleBox::VCLXAccessibleBox (VCLXWindow* pVCLWindow, BoxType aType, boo
         m_bHasTextChild = true;
 }
 
-VCLXAccessibleBox::~VCLXAccessibleBox()
-{
-}
-
 void VCLXAccessibleBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
 {
        uno::Any aOldValue, aNewValue;
