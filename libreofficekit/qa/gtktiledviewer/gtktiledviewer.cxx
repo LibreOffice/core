@@ -1132,9 +1132,7 @@ static void initWindow(TiledWindow& rWindow)
     g_object_get(G_OBJECT(rWindow.m_pDocView), "tiled-annotations", &bTiledAnnotations, nullptr);
 
     // comments api implemented only for writer, calc as of now
-    if (!bTiledAnnotations && pDocument &&
-        (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_TEXT ||
-         pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET))
+    if (!bTiledAnnotations && pDocument)
     {
         if (!rWindow.m_pCommentsSidebar)
         {
