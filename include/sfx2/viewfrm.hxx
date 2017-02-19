@@ -174,13 +174,7 @@ public:
     VclPtr<SfxInfoBarWindow> AppendInfoBar(const OUString& sId,
                                     const OUString& sMessage,
                                     InfoBarType aInfoBarType,
-                                    WinBits nMessageStyle = 0);
-    VclPtr<SfxInfoBarWindow> AppendInfoBar(const OUString& sId,
-                                    const OUString& sMessage,
-                                    const basegfx::BColor* pBackgroundColor = nullptr,
-                                    const basegfx::BColor* pForegroundColor = nullptr,
-                                    const basegfx::BColor* pMessageColor = nullptr,
-                                    WinBits nMessageStyle = 0);
+                                    WinBits nMessageStyle = WB_LEFT|WB_VCENTER);
     void              RemoveInfoBar(const OUString& sId);
 
     SAL_DLLPRIVATE void GetDocNumber_Impl();
