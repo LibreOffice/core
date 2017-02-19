@@ -591,6 +591,19 @@ public:
     {
         return mpThis->pClass->getVersionInfo(mpThis);
     }
+
+    /**
+     * Run a macro.
+     *
+     * Same syntax as on command line is permissible (ie. the macro:// URI forms)
+     *
+     * @param pURL macro url to run
+     */
+
+    inline bool runMacro( const char* pURL)
+    {
+        return mpThis->pClass->runMacro( mpThis, pURL );
+    }
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
