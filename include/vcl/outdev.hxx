@@ -1172,6 +1172,8 @@ public:
                                               vcl::TextLayoutCache const* = nullptr) const;
     std::shared_ptr<vcl::TextLayoutCache> CreateTextLayoutCache(OUString const&) const;
 
+    static bool                 UseCommonLayout();
+
 private:
     SAL_DLLPRIVATE void         ImplInitTextColor();
 
