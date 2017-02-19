@@ -4538,11 +4538,12 @@ void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
         mnImagesRotationAngle = aItem.GetRotation();
 
         // update image orientation
+        OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(mpStatusListener->getFrame()));
         for (std::vector<ImplToolItem>::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
         {
-            if (vcl::CommandInfoProvider::IsMirrored(it->maCommandStr, mpStatusListener->getFrame()))
+            if (vcl::CommandInfoProvider::IsMirrored(it->maCommandStr, aModuleName))
                 SetItemImageMirrorMode(it->mnId, mbImagesMirrored);
-            if (vcl::CommandInfoProvider::IsRotated(it->maCommandStr, mpStatusListener->getFrame()))
+            if (vcl::CommandInfoProvider::IsRotated(it->maCommandStr, aModuleName))
                 SetItemImageAngle(it->mnId, mnImagesRotationAngle);
         }
     }

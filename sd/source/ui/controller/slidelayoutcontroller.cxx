@@ -245,7 +245,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, vcl::W
 
             OUString sSlotTitle;
             if( bInsertPage )
-                sSlotTitle = vcl::CommandInfoProvider::GetLabelForCommand( sSlotStr, xFrame );
+                sSlotTitle = vcl::CommandInfoProvider::GetLabelForCommand( sSlotStr, rController.getModuleName() );
             else
                 sSlotTitle = SD_RESSTR( STR_RESET_LAYOUT );
             appendEntry( 2, sSlotTitle, aSlotImage);

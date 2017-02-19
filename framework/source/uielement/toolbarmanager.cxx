@@ -684,7 +684,7 @@ void ToolBarManager::CreateControllers()
 
         OUString aCommandURL( m_pToolBar->GetItemCommand( nId ) );
         // Command can be just an alias to another command.
-        OUString aRealCommandURL( vcl::CommandInfoProvider::GetRealCommandForCommand( aCommandURL, m_xFrame ) );
+        OUString aRealCommandURL( vcl::CommandInfoProvider::GetRealCommandForCommand( aCommandURL, m_aModuleIdentifier ) );
         if ( !aRealCommandURL.isEmpty() )
             aCommandURL = aRealCommandURL;
 
@@ -764,7 +764,7 @@ void ToolBarManager::CreateControllers()
                         new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
 
                     // Accessibility support: Set toggle button role for specific commands
-                    sal_Int32 nProps = vcl::CommandInfoProvider::GetPropertiesForCommand(aCommandURL, m_xFrame);
+                    sal_Int32 nProps = vcl::CommandInfoProvider::GetPropertiesForCommand(aCommandURL, m_aModuleIdentifier);
                     if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
                         m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
                 }
@@ -1021,7 +1021,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString(vcl::CommandInfoProvider::GetLabelForCommand(aCommandURL, m_xFrame));
+                    OUString aString(vcl::CommandInfoProvider::GetLabelForCommand(aCommandURL, m_aModuleIdentifier));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     m_pToolBar->InsertItem( nId, aString, nItemBits );

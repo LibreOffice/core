@@ -879,7 +879,8 @@ namespace
         if (aCommand.isEmpty())
             return;
 
-        OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aCommand, rFrame));
+        OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
+        OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(aCommand, aModuleName));
         if (!aLabel.isEmpty())
             pButton->SetText(aLabel);
 

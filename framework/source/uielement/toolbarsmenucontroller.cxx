@@ -147,7 +147,7 @@ void ToolbarsMenuController::addCommand(
 
     OUString aLabel;
     if ( rLabel.isEmpty() )
-        aLabel = vcl::CommandInfoProvider::GetMenuLabelForCommand( rCommandURL, m_xFrame );
+        aLabel = vcl::CommandInfoProvider::GetMenuLabelForCommand( rCommandURL, m_aModuleName );
     else
         aLabel = rLabel;
 

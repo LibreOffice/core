@@ -370,7 +370,7 @@ void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
     {
         removeStatusListener( m_aCommandURL );
 
-        OUString aRealCommand( vcl::CommandInfoProvider::GetRealCommandForCommand( rCommand, m_xFrame ) );
+        OUString aRealCommand( vcl::CommandInfoProvider::GetRealCommandForCommand( rCommand, m_sModuleName ) );
         m_aCommandURL = aRealCommand.isEmpty() ? rCommand : aRealCommand;
         addStatusListener( m_aCommandURL );
 
@@ -380,7 +380,7 @@ void GenericPopupToolbarController::functionExecuted( const OUString& rCommand )
         {
             pToolBox->SetItemCommand( nId, rCommand );
             pToolBox->SetHelpText( nId, OUString() ); // Will retrieve the new one from help.
-            pToolBox->SetItemText( nId, vcl::CommandInfoProvider::GetLabelForCommand( rCommand, m_xFrame ) );
+            pToolBox->SetItemText( nId, vcl::CommandInfoProvider::GetLabelForCommand( rCommand, m_sModuleName ) );
             pToolBox->SetQuickHelpText( nId, vcl::CommandInfoProvider::GetTooltipForCommand( rCommand, m_xFrame ) );
 
             vcl::ImageType eImageType = getImageType(pToolBox->GetToolboxButtonSize());

@@ -432,7 +432,8 @@ void ToolBox::InsertItem( sal_uInt16 nItemId, const OUString& rText, ToolBoxItem
 void ToolBox::InsertItem(const OUString& rCommand, const css::uno::Reference<css::frame::XFrame>& rFrame, ToolBoxItemBits nBits,
                          const Size& rRequestedSize, sal_uInt16 nPos)
 {
-    OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(rCommand, rFrame));
+    OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
+    OUString aLabel(vcl::CommandInfoProvider::GetLabelForCommand(rCommand, aModuleName));
     OUString aTooltip(vcl::CommandInfoProvider::GetTooltipForCommand(rCommand, rFrame));
 
     vcl::ImageType eImageType = vcl::ImageType::Size16;

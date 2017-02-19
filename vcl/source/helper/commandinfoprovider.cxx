@@ -125,17 +125,17 @@ OUString RetrieveShortcutsFromConfiguration(
     return OUString();
 }
 
-bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
+bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName, const OUString& rsModuleName)
 {
     Sequence< OUString > aSequence;
     try
     {
-        const OUString sModuleIdentifier (GetModuleIdentifier(rxFrame));
-        if (!sModuleIdentifier.isEmpty())
+        if (!rsModuleName.isEmpty())
         {
             Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
-            if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels) {
+            if (xNameAccess->getByName(rsModuleName) >>= xUICommandLabels)
+            {
                 xUICommandLabels->getByName(rsResourceName) >>= aSequence;
                 for ( sal_Int32 i = 0; i < aSequence.getLength(); i++ )
                 {
@@ -151,18 +151,17 @@ bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandNam
     return false;
 }
 
-Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
+Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCommandName, const OUString& rsModuleName)
 {
     Sequence<beans::PropertyValue> aProperties;
 
     try
     {
-        const OUString sModuleIdentifier (GetModuleIdentifier(rxFrame));
-        if (sModuleIdentifier.getLength() > 0)
+        if (!rsModuleName.isEmpty())
         {
             Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
-            if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels)
+            if (xNameAccess->getByName(rsModuleName) >>= xUICommandLabels)
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
         }
     }
@@ -173,9 +172,9 @@ Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCommandNam
     return aProperties;
 }
 
-OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
+OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName, const OUString& rsModuleName)
 {
-    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rxFrame));
+    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rsModuleName));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
     {
         if (aProperties[nIndex].Name == rsProperty)
@@ -190,41 +189,38 @@ OUString GetCommandProperty(const OUString& rsProperty, const OUString& rsComman
 
 OUString GetLabelForCommand (
     const OUString& rsCommandName,
-    const Reference<frame::XFrame>& rxFrame)
+    const OUString& rsModuleName)
 {
-
-    return GetCommandProperty("Name", rsCommandName, rxFrame);
+    return GetCommandProperty("Name", rsCommandName, rsModuleName);
 }
 
 OUString GetMenuLabelForCommand (
     const OUString& rsCommandName,
-    const Reference<frame::XFrame>& rxFrame)
+    const OUString& rsModuleName)
 {
-
     // Here we want to use "Label", not "Name". "Name" is a stripped-down version of "Label" without accelerators
     // and ellipsis. In the menu, we want to have those accelerators and ellipsis.
-    return GetCommandProperty("Label", rsCommandName, rxFrame);
+    return GetCommandProperty("Label", rsCommandName, rsModuleName);
 }
 
 OUString GetPopupLabelForCommand (
     const OUString& rsCommandName,
-    const css::uno::Reference<css::frame::XFrame>& rxFrame)
+    const OUString& rsModuleName)
 {
-
-    OUString sPopupLabel(GetCommandProperty("PopupLabel", rsCommandName, rxFrame));
+    OUString sPopupLabel(GetCommandProperty("PopupLabel", rsCommandName, rsModuleName));
     if (!sPopupLabel.isEmpty())
         return sPopupLabel;
-    return GetCommandProperty("Label", rsCommandName, rxFrame);
+    return GetCommandProperty("Label", rsCommandName, rsModuleName);
 }
 
 OUString GetTooltipForCommand (
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
 {
-
-    OUString sLabel (GetCommandProperty("TooltipLabel", rsCommandName, rxFrame));
+    OUString sModuleName(GetModuleIdentifier(rxFrame));
+    OUString sLabel (GetCommandProperty("TooltipLabel", rsCommandName, sModuleName));
     if (sLabel.isEmpty()) {
-        sLabel = GetPopupLabelForCommand(rsCommandName, rxFrame);
+        sLabel = GetPopupLabelForCommand(rsCommandName, sModuleName);
         // Remove '...' at the end and mnemonics (we don't want those in tooltips)
         sLabel = comphelper::string::stripEnd(sLabel, '.');
         sLabel = MnemonicGenerator::EraseAllMnemonicChars(sLabel);
@@ -232,7 +228,7 @@ OUString GetTooltipForCommand (
 
     // Command can be just an alias to another command,
     // so need to get the shortcut of the "real" command.
-    const OUString sRealCommand(GetRealCommandForCommand(rsCommandName, rxFrame));
+    const OUString sRealCommand(GetRealCommandForCommand(rsCommandName, sModuleName));
     const OUString sShortCut(GetCommandShortcut(!sRealCommand.isEmpty() ? sRealCommand : rsCommandName, rxFrame));
     if (!sShortCut.isEmpty())
         return sLabel + " (" + sShortCut + ")";
@@ -261,10 +257,9 @@ OUString GetCommandShortcut (const OUString& rsCommandName,
 }
 
 OUString GetRealCommandForCommand(const OUString& rCommandName,
-                                                       const css::uno::Reference<frame::XFrame>& rxFrame)
+                                  const OUString& rsModuleName)
 {
-
-    return GetCommandProperty("TargetURL", rCommandName, rxFrame);
+    return GetCommandProperty("TargetURL", rCommandName, rsModuleName);
 }
 
 BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
@@ -342,11 +337,11 @@ Image GetImageForCommand(const OUString& rsCommandName,
 
 sal_Int32 GetPropertiesForCommand (
     const OUString& rsCommandName,
-    const Reference<frame::XFrame>& rxFrame)
+    const OUString& rsModuleName)
 {
 
     sal_Int32 nValue = 0;
-    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rxFrame));
+    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rsModuleName));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
     {
         if (aProperties[nIndex].Name == "Properties")
@@ -358,14 +353,14 @@ sal_Int32 GetPropertiesForCommand (
     return nValue;
 }
 
-bool IsRotated(const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
+bool IsRotated(const OUString& rsCommandName, const OUString& rsModuleName)
 {
-    return ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName, rxFrame);
+    return ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName, rsModuleName);
 }
 
-bool IsMirrored(const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
+bool IsMirrored(const OUString& rsCommandName, const OUString& rsModuleName)
 {
-    return ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName, rxFrame);
+    return ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName, rsModuleName);
 }
 
 bool IsExperimental(const OUString& rsCommandName,
@@ -401,38 +396,6 @@ OUString const GetModuleIdentifier(const Reference<frame::XFrame>& rxFrame)
 {
     Reference<frame::XModuleManager2> xModuleManager = frame::ModuleManager::create(comphelper::getProcessComponentContext());
     return xModuleManager->identify(rxFrame);
-}
-
-OUString GetCommandPropertyFromModule( const OUString& rCommandName, const OUString& rModuleName )
-{
-    OUString sLabel;
-    if ( rCommandName.isEmpty() )
-        return sLabel;
-
-    Sequence<beans::PropertyValue> aProperties;
-    try
-    {
-        if( rModuleName.getLength() > 0)
-        {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
-            Reference<container::XNameAccess> xUICommandLabels;
-            if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
-                xUICommandLabels->getByName(rCommandName) >>= aProperties;
-
-            for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
-            {
-                if(aProperties[nIndex].Name == "Label")
-                {
-                    aProperties[nIndex].Value >>= sLabel;
-                    return sLabel;
-                }
-            }
-        }
-    }
-    catch (Exception&)
-    {
-    }
-    return OUString();
 }
 
 } }

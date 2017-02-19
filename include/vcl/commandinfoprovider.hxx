@@ -29,22 +29,22 @@ namespace vcl { namespace CommandInfoProvider {
     /** Return a label for the given command.
         @param rsCommandName
             The command name is expected to start with .uno:
-        @param rxFrame
-            The frame is used to identify the module and document.
+        @param rsModuleName
+            The current application module.
         @return
             The command label.
     */
     VCL_DLLPUBLIC OUString GetLabelForCommand (
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const OUString& rsModuleName);
 
     VCL_DLLPUBLIC OUString GetMenuLabelForCommand (
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const OUString& rsModuleName);
 
     VCL_DLLPUBLIC OUString GetPopupLabelForCommand (
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const OUString& rsModuleName);
 
     /** Return a tooltip for the given command. Falls back to label if command has no tooltip.
         @param rsCommandName
@@ -64,9 +64,7 @@ namespace vcl { namespace CommandInfoProvider {
                                  const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     VCL_DLLPUBLIC OUString GetRealCommandForCommand( const OUString& rCommandName,
-                                       const css::uno::Reference<css::frame::XFrame>& rxFrame );
-
-    VCL_DLLPUBLIC OUString GetCommandPropertyFromModule( const OUString& rCommandName, const OUString& rModuleName );
+                                                     const OUString& rsModuleName );
 
     VCL_DLLPUBLIC BitmapEx GetBitmapForCommand(
         const OUString& rsCommandName,
@@ -80,10 +78,10 @@ namespace vcl { namespace CommandInfoProvider {
 
     VCL_DLLPUBLIC sal_Int32 GetPropertiesForCommand(
         const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame);
+        const OUString& rsModuleName);
 
-    VCL_DLLPUBLIC bool IsRotated(const OUString& rsCommandName,const css::uno::Reference<css::frame::XFrame>& rxFrame);
-    VCL_DLLPUBLIC bool IsMirrored(const OUString& rsCommandName, const css::uno::Reference<css::frame::XFrame>& rxFrame);
+    VCL_DLLPUBLIC bool IsRotated(const OUString& rsCommandName, const OUString& rsModuleName);
+    VCL_DLLPUBLIC bool IsMirrored(const OUString& rsCommandName, const OUString& rsModuleName);
 
     /** Returns whether the command is experimental. */
     VCL_DLLPUBLIC bool IsExperimental(
