@@ -78,6 +78,8 @@ struct _LibreOfficeKitClass
 
     /// @see lok::Office::getVersionInfo().
     char* (*getVersionInfo) (LibreOfficeKit* pThis);
+
+    bool (*runMacro) (LibreOfficeKit *pThis, const char* pURL);
 #endif
 
 };
