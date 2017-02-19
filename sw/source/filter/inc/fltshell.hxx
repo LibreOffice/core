@@ -86,7 +86,7 @@ public:
     }
 };
 
-// Stack-Eintrag fuer die Attribute Es werden immer Pointer auf neue Attribute uebergeben.
+// Stack entry for the attributes. It is always pointers to new attributes that are passed.
 class SwFltStackEntry
 {
 private:
@@ -200,7 +200,7 @@ public:
     SwFltAnchor(const SwFltAnchor&);
     virtual ~SwFltAnchor() override;
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
     void SetFrameFormat(SwFrameFormat * _pFrameFormat);
@@ -249,7 +249,7 @@ public:
         nAutorNo(       rCpy.nAutorNo     ),
         nAutorNoPrev(   rCpy.nAutorNoPrev )
         {}
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem& rItem) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
 };
@@ -270,7 +270,7 @@ public:
                    const bool bIsTOCBookmark = false );
     SwFltBookmark( const SwFltBookmark& );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
 
@@ -310,7 +310,7 @@ class SW_DLLPUBLIC SwFltTOX : public SfxPoolItem
 public:
     SwFltTOX(SwTOXBase* pBase);
     SwFltTOX(const SwFltTOX&);
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "purely virtual methods" of SfxPoolItem
     virtual bool operator==(const SfxPoolItem&) const override;
     virtual SfxPoolItem* Clone(SfxItemPool* = nullptr) const override;
     SwTOXBase* GetBase()            { return pTOXBase; }
@@ -320,9 +320,9 @@ public:
     bool HadPageDescItem() const { return bHadPageDescItem; }
 };
 
-// Der WWEndStack verhaelt sich wie der WWControlStck, nur dass die Attribute
-// auf ihm bis ans Ende des Dokuments gehortet werden, falls auf sie noch
-// zugegriffen werden muss (z.B. Book/RefMarks, Index u.s.w.)
+// The WWEndStack behaves like the WWControlStack, except that the attributes
+// on it are hoarded to the end of the document if they need to be accessed
+// (e.g., book/RefMarks, index, etc.).
 class SwFltEndStack : public SwFltControlStack
 {
 public:
