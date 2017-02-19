@@ -1401,6 +1401,7 @@ void ToolBox::ImplInitToolBoxData()
     mnActivateCount   = 0;
     mnImagesRotationAngle = 0;
     mpStatusListener  = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
+    mpStatusListener->startListening();
 
     mpIdle = new Idle("vcl::ToolBox maIdle update");
     mpIdle->SetPriority( TaskPriority::RESIZE );

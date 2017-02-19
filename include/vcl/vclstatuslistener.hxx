@@ -41,6 +41,8 @@ public:
 
     const css::uno::Reference<css::frame::XFrame>& getFrame() { return mxFrame; }
 
+    void startListening();
+
     void dispose();
 };
 
@@ -57,19 +59,24 @@ VclStatusListener<T>::VclStatusListener(T* widget, const rtl::OUString& aCommand
 
     mxFrame = xFrame;
 
-    css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(xFrame, css::uno::UNO_QUERY);
-    if (!xDispatchProvider.is())
-        return;
-
     maCommandURL.Complete = aCommand;
     css::uno::Reference<css::util::XURLTransformer> xParser = css::util::URLTransformer::create(xContext);
     xParser->parseStrict(maCommandURL);
+}
 
-    mxDispatch = xDispatchProvider->queryDispatch(maCommandURL, "", 0);
-    if (!mxDispatch.is())
+template<class T>
+void VclStatusListener<T>::startListening()
+{
+    if (mxDispatch.is())
+        mxDispatch->removeStatusListener(this, maCommandURL);
+
+    css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(mxFrame, css::uno::UNO_QUERY);
+    if (!xDispatchProvider.is())
         return;
 
-    mxDispatch->addStatusListener(this, maCommandURL);
+    mxDispatch = xDispatchProvider->queryDispatch(maCommandURL, "", 0);
+    if (mxDispatch.is())
+        mxDispatch->addStatusListener(this, maCommandURL);
 }
 
 template<class T>
