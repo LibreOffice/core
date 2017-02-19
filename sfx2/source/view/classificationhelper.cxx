@@ -588,9 +588,11 @@ bool SfxClassificationHelper::HasDocumentFooter()
     return true;
 }
 
-basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
+InfoBarType SfxClassificationHelper::GetImpactLevelType()
 {
-    basegfx::BColor aRet;
+    InfoBarType aRet;
+
+    aRet = InfoBarType::Warning;
 
     auto itCategory = m_pImpl->m_aCategory.find(SfxClassificationPolicyType::IntellectualProperty);
     if (itCategory == m_pImpl->m_aCategory.end())
@@ -598,48 +600,36 @@ basegfx::BColor SfxClassificationHelper::GetImpactLevelColor()
 
     SfxClassificationCategory& rCategory = itCategory->second;
     auto it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTSCALE());
+    OUString aScale = it->second;
     if (it == rCategory.m_aLabels.end())
         return aRet;
-    OUString aScale = it->second;
 
     it = rCategory.m_aLabels.find(PROP_PREFIX_INTELLECTUALPROPERTY() + PROP_IMPACTLEVEL());
+    OUString aLevel = it->second;
     if (it == rCategory.m_aLabels.end())
         return aRet;
-    OUString aLevel = it->second;
 
     // The spec defines two valid scale values: FIPS-199 and UK-Cabinet.
     if (aScale == "UK-Cabinet")
     {
-        static std::map<OUString, basegfx::BColor> aColors;
-        if (aColors.empty())
-        {
-            // Green -> brown -> orange -> red.
-            aColors["0"] = basegfx::BColor(0.0, 0.5, 0.0);
-            aColors["1"] = basegfx::BColor(0.5, 0.5, 0.0);
-            aColors["2"] = basegfx::BColor(1.0, 0.5, 0.0);
-            aColors["3"] = basegfx::BColor(0.5, 0.0, 0.0);
-        }
-        auto itColor = aColors.find(aLevel);
-        if (itColor == aColors.end())
-            return aRet;
-        aRet = itColor->second;
+        if (aLevel == "0")
+            aRet = InfoBarType::Success;
+        else if (aLevel == "1")
+            aRet = InfoBarType::Warning;
+        else if (aLevel == "2")
+            aRet = InfoBarType::Warning;
+        else if (aLevel == "3")
+            aRet = InfoBarType::Danger;
     }
     else if (aScale == "FIPS-199")
     {
-        static std::map<OUString, basegfx::BColor> aColors;
-        if (aColors.empty())
-        {
-            // Green -> orange -> red.
-            aColors["Low"] = basegfx::BColor(0.0, 0.5, 0.0);
-            aColors["Moderate"] = basegfx::BColor(1.0, 0.5, 0.0);
-            aColors["High"] = basegfx::BColor(0.5, 0.0, 0.0);
-        }
-        auto itColor = aColors.find(aLevel);
-        if (itColor == aColors.end())
-            return aRet;
-        aRet = itColor->second;
+        if (aLevel == "Low")
+            aRet = InfoBarType::Success;
+        else if (aLevel == "Moderate")
+            aRet = InfoBarType::Warning;
+        else if (aLevel == "High")
+            aRet = InfoBarType::Danger;
     }
-
     return aRet;
 }
 
@@ -766,11 +756,9 @@ void SfxClassificationHelper::UpdateInfobar(SfxViewFrame& rViewFrame)
     {
         OUString aMessage = SfxResId(STR_CLASSIFIED_DOCUMENT);
         aMessage = aMessage.replaceFirst("%1", aBACName);
-        basegfx::BColor aBackgroundColor = GetImpactLevelColor();
-        basegfx::BColor aForegroundColor(1.0, 1.0, 1.0);
 
         rViewFrame.RemoveInfoBar("classification");
-        rViewFrame.AppendInfoBar("classification", aMessage, &aBackgroundColor, &aForegroundColor, &aForegroundColor, WB_CENTER);
+        rViewFrame.AppendInfoBar("classification", aMessage, GetImpactLevelType());
     }
 }
 
