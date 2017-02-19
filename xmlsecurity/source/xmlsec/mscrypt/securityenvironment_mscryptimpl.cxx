@@ -808,13 +808,13 @@ sal_Int32 SecurityEnvironment_MSCryptImpl::verifyCertificate(
     sal_Int32 validity = 0;
     PCCERT_CHAIN_CONTEXT pChainContext = nullptr;
     PCCERT_CONTEXT pCertContext = nullptr;
-    const X509Certificate_MSCryptImpl* xcert = nullptr;
 
     Reference< XUnoTunnel > xCertTunnel( aCert, UNO_QUERY_THROW ) ;
 
     SAL_INFO("xmlsecurity.xmlsec", "Start verification of certificate: " << aCert->getSubjectName());
 
-    xcert = reinterpret_cast<X509Certificate_MSCryptImpl*>(xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ));
+    auto xcert = reinterpret_cast<const X509Certificate_MSCryptImpl*>
+            (xCertTunnel->getSomething( X509Certificate_MSCryptImpl::getUnoTunnelId() ));
     if( xcert == nullptr ) {
         throw RuntimeException() ;
     }
