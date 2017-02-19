@@ -107,6 +107,7 @@ public:
     void testCommentsCalc();
     void testCommentsImpress();
     void testCommentsCallbacksWriter();
+    void testRunMacro();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -145,6 +146,7 @@ public:
     CPPUNIT_TEST(testCommentsCalc);
     CPPUNIT_TEST(testCommentsImpress);
     CPPUNIT_TEST(testCommentsCallbacksWriter);
+    CPPUNIT_TEST(testRunMacro);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -2094,6 +2096,19 @@ void DesktopLOKTest::testCommentsCallbacksWriter()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(5), aTree.get_child("comments").size());
 
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+void DesktopLOKTest::testRunMacro()
+{
+    LibLibreOffice_Impl aOffice;
+    bool bGoodMacro, bNonExistentMacro;
+
+    // Tools macros come pre-installed in system share/basic folder,
+    bGoodMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, OString("macro:///Tools.Debug.ActivateReadOnlyFlag()").getStr());
+    CPPUNIT_ASSERT(bGoodMacro);
+
+    bNonExistentMacro = aOffice.m_pOfficeClass->runMacro(&aOffice, OString("macro:///I.Am.Not(There)").getStr());
+    CPPUNIT_ASSERT(!bNonExistentMacro);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopLOKTest);
