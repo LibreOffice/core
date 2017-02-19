@@ -78,6 +78,7 @@
 #include "ViewShellBase.hxx"
 #include <UnoDocumentSettings.hxx>
 
+#include <Annotation.hxx>
 #include <drawdoc.hxx>
 #include <glob.hrc>
 #include <sdresid.hxx>
@@ -2380,7 +2381,7 @@ OUString SdXImpressDocument::getPostIts()
             uno::Reference<office::XAnnotation> xAnnotation(aPageAnnotation);
 
             boost::property_tree::ptree aAnnotation;
-
+            aAnnotation.put("id", sd::getAnnotationId(xAnnotation));
             aAnnotation.put("author", xAnnotation->getAuthor());
             aAnnotation.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
