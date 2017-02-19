@@ -50,10 +50,6 @@ VCLXAccessibleDropDownListBox::VCLXAccessibleDropDownListBox (VCLXWindow* pVCLWi
 }
 
 
-VCLXAccessibleDropDownListBox::~VCLXAccessibleDropDownListBox()
-{
-}
-
 bool VCLXAccessibleDropDownListBox::IsValid() const
 {
     return GetWindow().get() != nullptr;

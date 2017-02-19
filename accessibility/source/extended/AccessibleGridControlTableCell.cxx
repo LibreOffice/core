@@ -70,11 +70,6 @@ namespace accessibility
     }
 
 
-    AccessibleGridControlCell::~AccessibleGridControlCell()
-    {
-    }
-
-
     void SAL_CALL AccessibleGridControlCell::grabFocus()
     {
         SolarMutexGuard aSolarGuard;

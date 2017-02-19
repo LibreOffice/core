@@ -52,11 +52,6 @@ OAccessibleMenuComponent::OAccessibleMenuComponent( Menu* pMenu )
 }
 
 
-OAccessibleMenuComponent::~OAccessibleMenuComponent()
-{
-}
-
-
 bool OAccessibleMenuComponent::IsEnabled()
 {
     return true;

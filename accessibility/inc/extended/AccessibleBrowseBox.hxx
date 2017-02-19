@@ -45,7 +45,7 @@ protected:
         ::svt::IAccessibleTableProvider& _rBrowseBox
     );
 
-    virtual ~AccessibleBrowseBox() override;
+    ~AccessibleBrowseBox() override;
 
     /** sets the XAccessible which created the context
 

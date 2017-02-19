@@ -106,7 +106,7 @@ namespace accessibility
         void                    NotifyAccessibleEvent( sal_Int16 _nEventId, const css::uno::Any& _aOldValue, const css::uno::Any& _aNewValue );
 
     protected:
-        virtual ~AccessibleListBoxEntry() override;
+        ~AccessibleListBoxEntry() override;
 
         /** this function is called upon disposing the component
         */

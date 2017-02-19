@@ -106,7 +106,7 @@ public:
         const OUString& rDescription );
 
 protected:
-    virtual ~AccessibleBrowseBoxBase() override;
+    ~AccessibleBrowseBoxBase() override;
 
     /** Commits DeFunc event to listeners and cleans up members. */
     virtual void SAL_CALL disposing() override;
@@ -371,7 +371,7 @@ public:
     DECLARE_XTYPEPROVIDER( )
 
 protected:
-    virtual ~BrowseBoxAccessibleElement() override;
+    ~BrowseBoxAccessibleElement() override;
 
 protected:
     // XAccessible

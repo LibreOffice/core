@@ -44,10 +44,6 @@ namespace accessibility
         implSetName( aAccName );
     }
 
-    AccessibleBrowseBoxCell::~AccessibleBrowseBoxCell()
-    {
-    }
-
     void SAL_CALL AccessibleBrowseBoxCell::grabFocus()
     {
         SolarMethodGuard aGuard(getMutex());

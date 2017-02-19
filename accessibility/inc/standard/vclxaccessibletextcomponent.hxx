@@ -51,7 +51,6 @@ protected:
 
 public:
     VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow );
-    virtual ~VCLXAccessibleTextComponent() override;
 
     // XInterface
     DECLARE_XINTERFACE()

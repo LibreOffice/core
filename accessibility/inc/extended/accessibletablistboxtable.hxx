@@ -73,7 +73,7 @@ public:
 
 protected:
     /** dtor() */
-    virtual ~AccessibleTabListBoxTable() override;
+    ~AccessibleTabListBoxTable() override;
 
 public:
     // XInterface

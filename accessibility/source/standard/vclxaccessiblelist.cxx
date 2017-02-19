@@ -97,11 +97,6 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
 }
 
 
-VCLXAccessibleList::~VCLXAccessibleList()
-{
-}
-
-
 void VCLXAccessibleList::SetIndexInParent (sal_Int32 nIndex)
 {
     m_nIndexInParent = nIndex;
