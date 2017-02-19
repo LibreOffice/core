@@ -1665,7 +1665,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
 
     if(aCEvt.GetCommand()==CommandEventId::ContextMenu)
     {
-        ScopedVclPtrInstance<ScPopupMenu> aPopup(ScResId(RID_POPUP_CHANGES));
+        ScopedVclPtrInstance<PopupMenu> aPopup(ScResId(RID_POPUP_CHANGES));
 
         aPopup->SetMenuFlags(MenuFlags::HideDisabledEntries);
 
