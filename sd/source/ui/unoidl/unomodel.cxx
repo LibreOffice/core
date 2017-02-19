@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -66,6 +68,7 @@
 #include <svx/unoshape.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/eeitem.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/saveopt.hxx>
 
 // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
@@ -2359,6 +2362,40 @@ Size SdXImpressDocument::getDocumentSize()
     // Convert the size in 100th mm to TWIP
     // See paintTile above for further info.
     return Size(convertMm100ToTwip(aSize.getWidth()), convertMm100ToTwip(aSize.getHeight()));
+}
+
+OUString SdXImpressDocument::getPostIts()
+{
+    boost::property_tree::ptree aAnnotations;
+    // Return annotations on master pages too ?
+    const sal_uInt16 nMaxPages = mpDoc->GetPageCount();
+    SdPage* pPage;
+    for (sal_uInt16 nPage = 0; nPage < nMaxPages; ++nPage)
+    {
+        pPage = static_cast<SdPage*>(mpDoc->GetPage(nPage));
+        const sd::AnnotationVector& aPageAnnotations = pPage->getAnnotations();
+
+        for (const auto& aPageAnnotation : aPageAnnotations)
+        {
+            uno::Reference<office::XAnnotation> xAnnotation(aPageAnnotation);
+
+            boost::property_tree::ptree aAnnotation;
+
+            aAnnotation.put("author", xAnnotation->getAuthor());
+            aAnnotation.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
+            uno::Reference<text::XText> xText(xAnnotation->getTextRange());
+            aAnnotation.put("text", xText->getString());
+
+            aAnnotations.push_back(std::make_pair("", aAnnotation));
+        }
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("comments", aAnnotations);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+
+    return OUString::createFromAscii(aStream.str().c_str());
 }
 
 void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
