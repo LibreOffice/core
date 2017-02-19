@@ -227,6 +227,8 @@ public:
     SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
     SdPage* GetPage();
     SdrObject* GetSelectedSingleObject(SdPage* pPage);
+    void SetAuthor(const OUString& rAuthor) { m_sAuthor = rAuthor; }
+    const OUString& GetAuthor() { return m_sAuthor; }
 
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner::ParagraphHdlParam, void );
@@ -261,6 +263,7 @@ protected:
 private:
     ::std::unique_ptr<ViewClipboard> mpClipboard;
     OutlinerMasterViewFilter maMasterViewFilter;
+    OUString m_sAuthor;
 };
 
 SdDrawDocument& View::GetDoc() const
