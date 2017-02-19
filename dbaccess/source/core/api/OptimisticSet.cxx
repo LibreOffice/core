@@ -551,7 +551,6 @@ void OptimisticSet::fillMissingValues(ORowSetValueVector::Vector& io_aRow) const
 {
     TSQLStatements aSql;
     TSQLStatements aKeyConditions;
-    std::map< OUString,bool > aResultSetChanged;
     OUString aQuote  = getIdentifierQuoteString();
     // here we build the condition part for the update statement
     SelectColumnsMetaData::const_iterator aColIter = m_pColumnNames->begin();

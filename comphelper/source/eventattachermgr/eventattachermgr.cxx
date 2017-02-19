@@ -397,8 +397,6 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
     // Examine the index and apply the array
     std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
 
-    std::deque< AttachedObject_Impl > aList = (*aIt).aObjList;
-
     ScriptEventDescriptor aEvt = ScriptEvent;
     sal_Int32 nLastDot = aEvt.ListenerType.lastIndexOf('.');
     if (nLastDot != -1)
