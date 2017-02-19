@@ -147,7 +147,23 @@ uno::Any SAL_CALL SfxMacroLoader::dispatchWithReturnValue(
     const util::URL& aURL, const uno::Sequence<beans::PropertyValue>& )
 {
     uno::Any aRet;
-    loadMacro( aURL.Complete, aRet, GetObjectShell_Impl() );
+    ErrCode nErr = loadMacro( aURL.Complete, aRet, GetObjectShell_Impl() );
+
+    // aRet gets set to a different value only if nErr == ERRCODE_NONE
+    // Return it in such case to preserve the original behaviour
+
+    // In all other cases (nErr != ERRCODE_NONE), the calling code gets
+    // the actual error code back
+    if ( nErr != ERRCODE_NONE )
+    {
+        beans::PropertyValue aErrorCode;
+
+        aErrorCode.Name = "ErrorCode";
+        aErrorCode.Value <<= nErr;
+
+        aRet <<= aErrorCode;
+    }
+
     return aRet;
 }
 
