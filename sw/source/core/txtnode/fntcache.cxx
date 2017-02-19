@@ -1384,10 +1384,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     {
         const OUString* pStr = &rInf.GetText();
 
-#if !defined(MACOSX) && !defined(IOS)
         OUString aStr;
         OUString aBulletOverlay;
-#endif
+
         bool bBullet = rInf.GetBullet();
         if( m_bSymbol )
             bBullet = false;
@@ -1492,8 +1491,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         nScrPos = pScrArray[ 0 ];
 
-#if !defined(MACOSX) && !defined(IOS)
-        if( bBullet )
+        if( bBullet
+#if defined(MACOSX) || defined(IOS)
+            && OutputDevice::UseCommonLayout()
+#endif
+          )
         {
             // !!! HACK !!!
             // The Arabic layout engine requires some context of the string
@@ -1532,7 +1534,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     aBulletOverlay = aBulletOverlay.replaceAt(i, 1, OUString(CH_BLANK));
                 }
         }
-#endif
+
         sal_Int32 nCnt = rInf.GetText().getLength();
         if ( nCnt < rInf.GetIdx() )
             nCnt = 0;
@@ -1557,14 +1559,21 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
 #if defined(MACOSX) || defined(IOS)
-            rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
+            if (!OutputDevice::UseCommonLayout())
+            {
+                rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                          pKernArray, rInf.GetIdx(), 1, bBullet ? SalLayoutFlags::DrawBullet : SalLayoutFlags::NONE );
-#else
+            }
+            else
+            {
+#endif
             rInf.GetOut().DrawTextArray( aTextOriginPos, rInf.GetText(),
                                          pKernArray, rInf.GetIdx(), 1 );
             if( bBullet )
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray,
                                              rInf.GetIdx() ? 1 : 0, 1 );
+#if defined(MACOSX) || defined(IOS)
+            }
 #endif
         }
         else
@@ -1747,9 +1756,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
 
 #if defined(MACOSX) || defined(IOS)
-                rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray + nOffs,
+                if (!OutputDevice::UseCommonLayout())
+                {
+                        rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, pKernArray + nOffs,
                                              rInf.GetIdx() + nOffs , nLen - nOffs, bBullet ? SalLayoutFlags::DrawBullet : SalLayoutFlags::NONE );
-#else
+                }
+                else
+                {
+#endif
                 // If we paint bullets instead of spaces, we use a copy of
                 // the paragraph string. For the layout engine, the copy
                 // of the string has to be an environment of the range which
@@ -1803,6 +1817,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pTmpFont->SetOverline(aPreviousOverline);
                     pTmpFont->SetStrikeout(aPreviousStrikeout);
                     rInf.GetOut().Pop();
+                }
+#if defined(MACOSX) || defined(IOS)
                 }
 #endif
             }
