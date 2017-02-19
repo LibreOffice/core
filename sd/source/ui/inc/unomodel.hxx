@@ -265,6 +265,8 @@ public:
     virtual bool isMimeTypeSupported() override;
     /// @see vcl::ITiledRenderable::getPointer().
     virtual Pointer getPointer() override;
+    /// @see vcl::ITiledRenderable::getPostIts().
+    virtual OUString getPostIts() override;
 
     // XComponent
 
