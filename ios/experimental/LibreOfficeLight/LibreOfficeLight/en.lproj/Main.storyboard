@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DGj-7d-jfR">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Document-->
+        <scene sceneID="ufC-wZ-h7g">
+            <objects>
+                <viewController storyboardIdentifier="Document" useStoryboardIdentifierAsRestorationIdentifier="YES" id="vXZ-lx-hvc" customClass="ViewDocument" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="lZa-u5-V0W"/>
+                        <viewControllerLayoutGuide type="bottom" id="uE0-fS-86O"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kh9-bI-dsS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My Document" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UR6-NA-Ecz">
+                                <rect key="frame" x="177" y="495" width="128" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Document" id="5c6-32-T4J">
+                        <barButtonItem key="leftBarButtonItem" image="menu" id="fdq-Uw-536">
+                            <connections>
+                                <action selector="doMenu:" destination="vXZ-lx-hvc" id="sJP-Fp-Kn2"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="BNq-ol-ZVK">
+                            <connections>
+                                <action selector="doDelete:" destination="vXZ-lx-hvc" id="lUR-yj-rgv"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1109.5999999999999" y="-378.26086956521743"/>
+        </scene>
+        <!--File Manager-->
+        <scene sceneID="q6l-iR-WN3">
+            <objects>
+                <viewController storyboardIdentifier="FileManager" useStoryboardIdentifierAsRestorationIdentifier="YES" id="khG-SL-0rk" customClass="ViewFileManager" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7nB-gN-E7d"/>
+                        <viewControllerLayoutGuide type="bottom" id="ykb-8v-9YB"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8Tm-V4-HTY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My File Manager" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BHy-9g-bWe">
+                                <rect key="frame" x="124" y="377" width="172" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="File Manager" id="f24-Ia-thn">
+                        <barButtonItem key="leftBarButtonItem" image="menu" id="R1E-Ko-iZM">
+                            <connections>
+                                <action selector="doMenu:" destination="khG-SL-0rk" id="x2w-2j-oWj"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mmn-PL-HS6" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="256.80000000000001" y="1145.577211394303"/>
+        </scene>
+        <!--Print Manager-->
+        <scene sceneID="viJ-XJ-htc">
+            <objects>
+                <viewController storyboardIdentifier="PrintManager" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ay1-ce-WHs" customClass="ViewPrintManager" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="N2T-Vd-NX5"/>
+                        <viewControllerLayoutGuide type="bottom" id="pxU-MS-J0z"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uQ6-KY-cCv">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My Print Manager" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbo-NR-JZi">
+                                <rect key="frame" x="175" y="386" width="156" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Print Manager" id="2Z5-ad-smF">
+                        <barButtonItem key="leftBarButtonItem" image="menu" id="KpY-Uq-nOk">
+                            <connections>
+                                <action selector="doMenu:" destination="ay1-ce-WHs" id="abP-LB-4yO"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="S7J-dT-DQn" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1109.5999999999999" y="1145.577211394303"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="nrt-yR-DmY">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="DGj-7d-jfR" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="mjw-Ry-qIh">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.58367598684210531" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="20"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="h7c-B7-pKT" kind="show" identifier="showProperties" id="dDf-1s-0HH"/>
+                        <segue destination="khG-SL-0rk" kind="show" identifier="showFilemanager" id="Xag-AL-gHQ"/>
+                        <segue destination="ay1-ce-WHs" kind="show" identifier="showPrintManager" id="BgL-QR-QJ0"/>
+                        <segue destination="vXZ-lx-hvc" kind="relationship" relationship="rootViewController" id="BEf-s3-rE8"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XfU-3W-Qcb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="259.19999999999999" y="305.84707646176912"/>
+        </scene>
+        <!--Sidebar Controller-->
+        <scene sceneID="moB-At-Om8">
+            <objects>
+                <viewController storyboardIdentifier="SidebarController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="E9y-3m-fEc" customClass="SidebarController" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qJv-1E-iEi"/>
+                        <viewControllerLayoutGuide type="bottom" id="syI-80-ufe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="e1u-sT-aSe">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="K3a-CQ-sBC">
+                                <rect key="frame" x="16" y="359" width="150" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="Rg4-bW-MQk"/>
+                                    <constraint firstAttribute="width" constant="150" id="y0o-Nq-4z4"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Properties..." image="properties">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="menuProperties:" destination="E9y-3m-fEc" eventType="touchUpInside" id="LcD-vQ-l3D"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hk4-yl-lM9">
+                                <rect key="frame" x="16" y="304" width="150" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="UL6-xy-1qB"/>
+                                    <constraint firstAttribute="height" constant="45" id="hty-y5-gVo"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="PDF" image="pdf">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="menuPDF:" destination="E9y-3m-fEc" eventType="touchUpInside" id="IdR-tr-sxl"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CBj-V3-BKJ">
+                                <rect key="frame" x="16" y="249" width="150" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="U6W-G1-H2J"/>
+                                    <constraint firstAttribute="height" constant="45" id="wOH-9b-B8P"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Save as..." image="saveas">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="menuSaveAs:" destination="E9y-3m-fEc" eventType="touchUpInside" id="5zk-pM-Bpu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eZV-Rh-hCf">
+                                <rect key="frame" x="16" y="194" width="150" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="N7I-YK-5uo"/>
+                                    <constraint firstAttribute="width" constant="150" id="eLW-p8-QBZ"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Save" image="save">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="menuSave:" destination="E9y-3m-fEc" eventType="touchUpInside" id="fMK-Ar-DfV"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YTV-Y5-L8R">
+                                <rect key="frame" x="16" y="139" width="150" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="4H0-0k-rm5"/>
+                                    <constraint firstAttribute="width" constant="150" id="Q1z-1N-WMF"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="New..." image="document">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="menuNew:" destination="E9y-3m-fEc" eventType="touchUpInside" id="shs-o3-IgE"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Mv-7b-xjF">
+                                <rect key="frame" x="16" y="414" width="150" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="45" id="Fyt-Iq-YWv"/>
+                                    <constraint firstAttribute="width" constant="150" id="eFy-qB-RER"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Print..." image="print">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="menuPrint:" destination="E9y-3m-fEc" eventType="touchUpInside" id="SQh-RG-I4h"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g5y-SJ-jU1">
+                                <rect key="frame" x="16" y="84" width="150" height="45"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="Uuo-01-tfU"/>
+                                    <constraint firstAttribute="height" constant="45" id="v75-o1-ii6"/>
+                                </constraints>
+                                <inset key="titleEdgeInsets" minX="10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                <state key="normal" title="Open..." image="document">
+                                    <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </state>
+                                <connections>
+                                    <action selector="menuOpen:" destination="E9y-3m-fEc" eventType="touchUpInside" id="owI-Ax-5Au"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Hk4-yl-lM9" firstAttribute="top" secondItem="CBj-V3-BKJ" secondAttribute="bottom" constant="10" id="3aD-it-Msw"/>
+                            <constraint firstItem="Hk4-yl-lM9" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="4zN-qk-gCk"/>
+                            <constraint firstItem="g5y-SJ-jU1" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="JxJ-kA-qwz"/>
+                            <constraint firstItem="eZV-Rh-hCf" firstAttribute="top" secondItem="YTV-Y5-L8R" secondAttribute="bottom" constant="10" id="PLr-1M-6Jv"/>
+                            <constraint firstItem="YTV-Y5-L8R" firstAttribute="top" secondItem="g5y-SJ-jU1" secondAttribute="bottom" constant="10" id="Ws8-TE-V6O"/>
+                            <constraint firstItem="CBj-V3-BKJ" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="XWf-mb-RwF"/>
+                            <constraint firstItem="eZV-Rh-hCf" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="akz-vF-hHv"/>
+                            <constraint firstItem="K3a-CQ-sBC" firstAttribute="top" secondItem="Hk4-yl-lM9" secondAttribute="bottom" constant="10" id="bIw-3k-voG"/>
+                            <constraint firstItem="YTV-Y5-L8R" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="dto-y0-1aX"/>
+                            <constraint firstItem="CBj-V3-BKJ" firstAttribute="top" secondItem="eZV-Rh-hCf" secondAttribute="bottom" constant="10" id="hEC-J7-NxJ"/>
+                            <constraint firstItem="5Mv-7b-xjF" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="k0M-cK-qBw"/>
+                            <constraint firstItem="g5y-SJ-jU1" firstAttribute="top" secondItem="qJv-1E-iEi" secondAttribute="bottom" constant="64" id="nSZ-rC-b7a"/>
+                            <constraint firstItem="K3a-CQ-sBC" firstAttribute="leading" secondItem="e1u-sT-aSe" secondAttribute="leadingMargin" id="njx-0E-3hs"/>
+                            <constraint firstItem="5Mv-7b-xjF" firstAttribute="top" secondItem="K3a-CQ-sBC" secondAttribute="bottom" constant="10" id="sPb-nU-SoB"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wg5-HE-6LR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-612" y="304.4977511244378"/>
+        </scene>
+        <!--LibreOffice - Properties-->
+        <scene sceneID="XNm-Ch-28q">
+            <objects>
+                <viewController storyboardIdentifier="Properties" title="LibreOffice - Properties" useStoryboardIdentifierAsRestorationIdentifier="YES" id="h7c-B7-pKT" customClass="ViewProperties" customModule="LibreOfficeLight" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="VKw-5g-PNK"/>
+                        <viewControllerLayoutGuide type="bottom" id="BiA-CR-Pte"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Z9n-50-7Jf">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My Properties" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Jt-Yy-kcR">
+                                <rect key="frame" x="166" y="484" width="142" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Properties" id="9nH-at-6AF">
+                        <barButtonItem key="leftBarButtonItem" image="menu" id="wYo-zq-cqh">
+                            <connections>
+                                <action selector="doMenu:" destination="h7c-B7-pKT" id="Yls-8o-msb"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="25I-J4-o11">
+                            <connections>
+                                <action selector="doDelete:" destination="h7c-B7-pKT" id="c6k-Q0-vtQ"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vaO-NX-hiP" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1109.5999999999999" y="304.4977511244378"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="document" width="20" height="20"/>
+        <image name="menu" width="22" height="22"/>
+        <image name="pdf" width="20" height="20"/>
+        <image name="print" width="20" height="20"/>
+        <image name="properties" width="20" height="20"/>
+        <image name="save" width="20" height="20"/>
+        <image name="saveas" width="20" height="20"/>
+    </resources>
+</document>
