@@ -950,7 +950,7 @@ SmTableNode *SmParser::DoTable()
     }
 
     if (m_aCurToken.eType != TEND)
-        Error(PE_UNEXPECTED_CHAR);
+        Error(SmParseError::UnexpectedChar);
 
     SmNodeArray  LineArray(m_aNodeStack.size());
     for (auto rIt = LineArray.rbegin(), rEnd = LineArray.rend(); rIt != rEnd; ++rIt)
@@ -977,7 +977,7 @@ void SmParser::DoAlign()
         // allow for just one align statement in 5.0
         if (TokenInGroup(TG::Align))
         {
-            Error(PE_DOUBLE_ALIGN);
+            Error(SmParseError::DoubleAlign);
             return;
         }
     }
@@ -1230,7 +1230,7 @@ void SmParser::DoSubSup(TG nActiveGroup)
 
         // set sub-/supscript if not already done
         if (aSubNodes[nIndex] != nullptr)
-            Error(PE_DOUBLE_SUBSUPSCRIPT);
+            Error(SmParseError::DoubleSubsupscript);
         aSubNodes[nIndex] = popOrZero(m_aNodeStack);
     }
 
@@ -1319,7 +1319,7 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                 {
                     DoAlign();
                     if (m_aCurToken.eType != TRGROUP)
-                        Error(PE_RGROUP_EXPECTED);
+                        Error(SmParseError::RgroupExpected);
                     else
                         NextToken();
                 }
@@ -1518,7 +1518,7 @@ void SmParser::DoTerm(bool bGroupNumberIdent)
                 DoFunction();
             }
             else
-                Error(PE_UNEXPECTED_CHAR);
+                Error(SmParseError::UnexpectedChar);
     }
 }
 
@@ -1550,7 +1550,7 @@ void SmParser::DoEscape()
         case TRDLINE :
             break;
         default:
-            Error(PE_UNEXPECTED_TOKEN);
+            Error(SmParseError::UnexpectedToken);
     }
 
     m_aNodeStack.push_front(o3tl::make_unique<SmMathSymbolNode>(m_aCurToken));
@@ -1678,7 +1678,7 @@ void SmParser::DoUnOper()
             break;
 
         default :
-            Error(PE_UNOPER_EXPECTED);
+            Error(SmParseError::UnoperExpected);
     }
 
     // get argument
@@ -1804,7 +1804,7 @@ void SmParser::DoColor()
             NextToken();
         }
         else
-            Error(PE_COLOR_EXPECTED);
+            Error(SmParseError::ColorExpected);
     } while (m_aCurToken.eType == TCOLOR);
 
     m_aNodeStack.push_front(o3tl::make_unique<SmFontNode>(aToken));
@@ -1824,7 +1824,7 @@ void SmParser::DoFont()
             NextToken();
         }
         else
-            Error(PE_FONT_EXPECTED);
+            Error(SmParseError::FontExpected);
     } while (m_aCurToken.eType == TFONT);
 
     m_aNodeStack.push_front(o3tl::make_unique<SmFontNode>(aToken));
@@ -1871,7 +1871,7 @@ void SmParser::DoFontSize()
         case TDIVIDEBY: Type = FontSizeType::DIVIDE;   break;
 
         default:
-            Error(PE_SIZE_EXPECTED);
+            Error(SmParseError::SizeExpected);
             return;
     }
 
@@ -1880,7 +1880,7 @@ void SmParser::DoFontSize()
         NextToken();
         if (m_aCurToken.eType != TNUMBER)
         {
-            Error(PE_SIZE_EXPECTED);
+            Error(SmParseError::SizeExpected);
             return;
         }
     }
@@ -1926,7 +1926,7 @@ void SmParser::DoBrace()
     std::unique_ptr<SmStructureNode> pSNode(new SmBraceNode(m_aCurToken));
     std::unique_ptr<SmNode> pBody, pLeft, pRight;
     SmScaleMode   eScaleMode = SCALE_NONE;
-    SmParseError  eError     = PE_NONE;
+    SmParseError  eError     = SmParseError::None;
 
     if (m_aCurToken.eType == TLEFT)
     {   NextToken();
@@ -1952,13 +1952,13 @@ void SmParser::DoBrace()
                     NextToken();
                 }
                 else
-                    eError = PE_RBRACE_EXPECTED;
+                    eError = SmParseError::RbraceExpected;
             }
             else
-                eError = PE_RIGHT_EXPECTED;
+                eError = SmParseError::RightExpected;
         }
         else
-            eError = PE_LBRACE_EXPECTED;
+            eError = SmParseError::LbraceExpected;
     }
     else
     {
@@ -1991,10 +1991,10 @@ void SmParser::DoBrace()
             NextToken();
         }
         else
-            eError = PE_PARENT_MISMATCH;
+            eError = SmParseError::ParentMismatch;
     }
 
-    if (eError == PE_NONE)
+    if (eError == SmParseError::None)
     {
         assert(pLeft);
         assert(pRight);
@@ -2028,7 +2028,7 @@ void SmParser::DoBracebody(bool bIsLeftRight)
                 nNum++;
 
                 if (m_aCurToken.eType != TMLINE  &&  m_aCurToken.eType != TRIGHT)
-                    Error(PE_RIGHT_EXPECTED);
+                    Error(SmParseError::RightExpected);
             }
         } while (m_aCurToken.eType != TEND  &&  m_aCurToken.eType != TRIGHT);
     }
@@ -2048,7 +2048,7 @@ void SmParser::DoBracebody(bool bIsLeftRight)
                 nNum++;
 
                 if (m_aCurToken.eType != TMLINE  &&  !TokenInGroup(TG::RBrace))
-                    Error(PE_RBRACE_EXPECTED);
+                    Error(SmParseError::RbraceExpected);
             }
         } while (m_aCurToken.eType != TEND  &&  !TokenInGroup(TG::RBrace));
     }
@@ -2097,7 +2097,7 @@ void SmParser::DoFunction()
             break;
 
         default:
-            Error(PE_FUNC_EXPECTED);
+            Error(SmParseError::FuncExpected);
     }
 }
 
@@ -2139,7 +2139,7 @@ void SmParser::DoStack()
         }
 
         if (m_aCurToken.eType != TRGROUP)
-            Error(PE_RGROUP_EXPECTED);
+            Error(SmParseError::RgroupExpected);
 
         pSNode->SetSubNodes(ExpressionArray);
         m_aNodeStack.push_front(std::move(pSNode));
@@ -2147,7 +2147,7 @@ void SmParser::DoStack()
         NextToken();
     }
     else
-        Error(PE_LGROUP_EXPECTED);
+        Error(SmParseError::LgroupExpected);
 }
 
 void SmParser::DoMatrix()
@@ -2181,7 +2181,7 @@ void SmParser::DoMatrix()
                         NextToken();
                     }
                     else
-                        Error(PE_POUND_EXPECTED);
+                        Error(SmParseError::PoundExpected);
                 }
             }
 
@@ -2197,7 +2197,7 @@ void SmParser::DoMatrix()
         }
 
         if (m_aCurToken.eType != TRGROUP)
-            Error(PE_RGROUP_EXPECTED);
+            Error(SmParseError::RgroupExpected);
 
         pMNode->SetSubNodes(ExpressionArray);
         pMNode->SetRowCol(r, c);
@@ -2206,7 +2206,7 @@ void SmParser::DoMatrix()
         NextToken();
     }
     else
-        Error(PE_LGROUP_EXPECTED);
+        Error(SmParseError::LgroupExpected);
 }
 
 void SmParser::DoSpecial()
@@ -2340,16 +2340,16 @@ void SmParser::AddError(SmParseError Type, SmNode *pNode)
     sal_uInt16  nRID;
     switch (Type)
     {
-        case PE_UNEXPECTED_CHAR:     nRID = RID_ERR_UNEXPECTEDCHARACTER;    break;
-        case PE_LGROUP_EXPECTED:     nRID = RID_ERR_LGROUPEXPECTED;         break;
-        case PE_RGROUP_EXPECTED:     nRID = RID_ERR_RGROUPEXPECTED;         break;
-        case PE_LBRACE_EXPECTED:     nRID = RID_ERR_LBRACEEXPECTED;         break;
-        case PE_RBRACE_EXPECTED:     nRID = RID_ERR_RBRACEEXPECTED;         break;
-        case PE_FUNC_EXPECTED:       nRID = RID_ERR_FUNCEXPECTED;           break;
-        case PE_UNOPER_EXPECTED:     nRID = RID_ERR_UNOPEREXPECTED;         break;
-        case PE_POUND_EXPECTED:      nRID = RID_ERR_POUNDEXPECTED;          break;
-        case PE_COLOR_EXPECTED:      nRID = RID_ERR_COLOREXPECTED;          break;
-        case PE_RIGHT_EXPECTED:      nRID = RID_ERR_RIGHTEXPECTED;          break;
+        case SmParseError::UnexpectedChar: nRID = RID_ERR_UNEXPECTEDCHARACTER; break;
+        case SmParseError::LgroupExpected: nRID = RID_ERR_LGROUPEXPECTED;      break;
+        case SmParseError::RgroupExpected: nRID = RID_ERR_RGROUPEXPECTED;      break;
+        case SmParseError::LbraceExpected: nRID = RID_ERR_LBRACEEXPECTED;      break;
+        case SmParseError::RbraceExpected: nRID = RID_ERR_RBRACEEXPECTED;      break;
+        case SmParseError::FuncExpected:   nRID = RID_ERR_FUNCEXPECTED;        break;
+        case SmParseError::UnoperExpected: nRID = RID_ERR_UNOPEREXPECTED;      break;
+        case SmParseError::PoundExpected:  nRID = RID_ERR_POUNDEXPECTED;       break;
+        case SmParseError::ColorExpected:  nRID = RID_ERR_COLOREXPECTED;       break;
+        case SmParseError::RightExpected:  nRID = RID_ERR_RIGHTEXPECTED;       break;
 
         default:
             nRID = RID_ERR_UNKNOWN;
