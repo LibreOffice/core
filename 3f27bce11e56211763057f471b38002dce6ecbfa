@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_515ba754",
+        "filename": "sc/source/ui/docshell/dataprovider.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-02-19T18:59:01Z",
+      "side": 1,
+      "message": "This leaks memory.",
+      "revId": "3f27bce11e56211763057f471b38002dce6ecbfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_7158ab57",
+        "filename": "sc/source/ui/docshell/dataprovider.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-02-19T18:59:01Z",
+      "side": 1,
+      "message": "I suppose that should be const OUString\u0026",
+      "revId": "3f27bce11e56211763057f471b38002dce6ecbfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
