@@ -2430,7 +2430,6 @@ void Test::testPivotTableDPCollection()
     ScRange aDataRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
-    bool bSuccess = false;
 
     // Check at the beginning
     CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be no DP table", size_t(0), pDPs->GetCount());
@@ -2442,7 +2441,7 @@ void Test::testPivotTableDPCollection()
 
     // Add 2 DP objects
     ScDPObject* pDPObj = createDPFromRange(m_pDoc, aDataRange , aFields, nFieldCount, false);
-    bSuccess = pDPs->InsertNewTable(pDPObj);
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new DP object into document", bSuccess);
     pDPObj->SetName("DP1"); // set custom name
 
@@ -2563,6 +2562,7 @@ void Test::testPivotTableMedianFunc()
     }
 
     bSuccess = aFunc.RemovePivotTable(*pDPObject, false, true);
+    CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table object.", bSuccess);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
