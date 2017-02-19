@@ -18,6 +18,13 @@
 #include <sfx2/dllapi.h>
 #include <sfx2/childwin.hxx>
 
+enum class InfoBarType {
+    Info,
+    Success,
+    Warning,
+    Danger
+};
+
 /** SfxChildWindow for positioning the InfoBar in the view.
   */
 class SFX2_DLLPUBLIC SfxInfoBarContainerChild : public SfxChildWindow
@@ -43,25 +50,23 @@ class SfxInfoBarWindow : public vcl::Window
 {
     private:
         OUString                           m_sId;
-        VclPtr<FixedText>                  m_pMessage;
-        VclPtr<Button>                     m_pCloseBtn;
+        VclPtr<FixedImage>        m_pImage;
+        VclPtr<FixedText>           m_pMessage;
+        VclPtr<Button>                m_pCloseBtn;
         std::vector< VclPtr<PushButton> >  m_aActionBtns;
-        basegfx::BColor                    m_aBackgroundColor;
-        basegfx::BColor                    m_aForegroundColor;
 
     public:
         SfxInfoBarWindow( vcl::Window* parent, const OUString& sId,
                           const OUString& sMessage,
-                          const basegfx::BColor* pBackgroundColor,
-                          const basegfx::BColor* pForegroundColor,
-                          const basegfx::BColor* pMessageColor,
-                          WinBits nMessageStyle );
-        virtual ~SfxInfoBarWindow( ) override;
+                          InfoBarType infoBarType,
+                          WinBits nMessageStyle);
         virtual void dispose() override;
 
         const OUString& getId() const { return m_sId; }
         virtual void Paint( vcl::RenderContext& rRenderContext, const Rectangle& ) override;
         virtual void Resize( ) override;
+        basegfx::BColor                m_aBackgroundColor;
+        basegfx::BColor                m_aForegroundColor;
 
         /** Add button to Infobar.
          * Infobar takes ownership of the button so the button is
@@ -71,14 +76,6 @@ class SfxInfoBarWindow : public vcl::Window
 
     private:
         DECL_LINK( CloseHandler, Button*, void );
-};
-
-
-enum class InfoBarType {
-    Info,
-    Success,
-    Warning,
-    Danger
 };
 
 class SfxInfoBarContainerWindow : public vcl::Window
@@ -94,14 +91,8 @@ class SfxInfoBarContainerWindow : public vcl::Window
 
         VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId,
                                         const OUString& sMessage,
-                                        InfoBarType aInfoBarType,
-                                        WinBits nMessageStyle);
-        VclPtr<SfxInfoBarWindow> appendInfoBar(const OUString& sId,
-                                        const OUString& sMessage,
-                                        const basegfx::BColor* pBackgroundColor,
-                                        const basegfx::BColor* pForegroundColor,
-                                        const basegfx::BColor* pMessageColor,
-                                        WinBits nMessageStyle);
+                                        InfoBarType ibType,
+                                        WinBits nMessageStyle = WB_LEFT|WB_VCENTER);
         VclPtr<SfxInfoBarWindow> getInfoBar(const OUString& sId);
         void removeInfoBar(VclPtr<SfxInfoBarWindow> const & pInfoBar);
 
