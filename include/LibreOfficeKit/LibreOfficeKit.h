@@ -55,6 +55,7 @@ struct _LibreOfficeKitClass
     void (*registerCallback) (LibreOfficeKit* pThis,
                               LibreOfficeKitCallback pCallback,
                               void* pData);
+    void (*runMacro) (LibreOfficeKit *pThis, const char* pURL);
 #endif
 };
 

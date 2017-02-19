@@ -300,6 +300,18 @@ public:
     {
         mpThis->pClass->freeError(pfree);
     }
+
+    /**
+     * Run a macro.
+     *
+     * Same syntax as on command line is permissible (ie. the macro:// URI forms)
+     *
+     * @param pURL macro url to run
+     */
+    inline void runMacro( const char* pURL)
+    {
+        mpThis->pClass->runMacro( mpThis, pURL );
+    }
 };
 
 /// Factory method to create a lok::Office instance.

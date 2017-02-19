@@ -41,12 +41,16 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #include <com/sun/star/ucb/XUniversalContentBroker.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
 
 #include <vcl/svapp.hxx>
 #include <vcl/svpforlokit.hxx>
@@ -293,6 +297,7 @@ static void doc_destroy(LibreOfficeKitDocument *pThis)
 static void                    lo_destroy       (LibreOfficeKit* pThis);
 static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
+static void                    lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
 static void                    lo_freeError     (const char *pfree);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
@@ -325,6 +330,7 @@ struct LibLibreOffice_Impl : public _LibreOfficeKit
             m_pOfficeClass->freeError = lo_freeError;
             m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
             m_pOfficeClass->registerCallback = lo_registerCallback;
+            m_pOfficeClass->runMacro = lo_runMacro;
 
             gOfficeClass = m_pOfficeClass;
         }
@@ -415,6 +421,78 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     }
 
     return NULL;
+}
+
+static void lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
+{
+    SolarMutexGuard aGuard;
+
+    LibLibreOffice_Impl* pLib = static_cast<LibLibreOffice_Impl*>(pThis);
+
+    OUString sURL( pURL, strlen(pURL), RTL_TEXTENCODING_UTF8 );
+    if (sURL.isEmpty())
+    {
+        pLib->maLastExceptionMsg = "Macro to run was not provided.";
+        SAL_INFO("lok", "Macro URL is empty");
+        return;
+    }
+
+    if (!sURL.startsWith("macro://"))
+    {
+        pLib->maLastExceptionMsg = "This doesn't look like macro URL";
+        SAL_INFO("lok", "Macro URL is invalid");
+        return;
+    }
+
+    pLib->maLastExceptionMsg.clear();
+
+    if (!xContext.is())
+    {
+        pLib->maLastExceptionMsg = "ComponentContext is not available";
+        SAL_INFO("lok", "ComponentContext is not available");
+        return;
+    }
+
+    util::URL aURL;
+    aURL.Complete = sURL;
+
+    uno::Reference < util::XURLTransformer > xParser( util::URLTransformer::create( xContext ) );
+
+    if( xParser.is() )
+        xParser->parseStrict( aURL );
+
+    uno::Reference<frame::XDesktop2> xComponentLoader = frame::Desktop::create(xContext);
+
+    if (!xComponentLoader.is())
+    {
+        pLib->maLastExceptionMsg = "ComponentLoader is not available";
+        SAL_INFO("lok", "ComponentLoader is not available");
+        return;
+    }
+
+    xFactory = xContext->getServiceManager();
+
+    // perhaps all of this code can be killed and a comphelper::dispatchCommand
+    // used instead
+    if (xFactory.is())
+    {
+        uno::Reference<frame::XDispatchProvider> xDP;
+        xSFactory.set(xFactory, uno::UNO_QUERY_THROW);
+        xDP.set( xSFactory->createInstance("com.sun.star.comp.sfx2.SfxMacroLoader"), uno::UNO_QUERY );
+        uno::Reference<frame::XDispatch> xD = xDP->queryDispatch( aURL, OUString(), 0);
+
+        if (!xD.is())
+        {
+            pLib->maLastExceptionMsg = "Macro loader is not available";
+            SAL_INFO("lok", "Macro loader is not available");
+            return;
+        }
+
+        // FIXME: with notification
+        uno::Sequence<css::beans::PropertyValue> aEmpty;
+        xD->dispatch( aURL, aEmpty);
+    }
+
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,
