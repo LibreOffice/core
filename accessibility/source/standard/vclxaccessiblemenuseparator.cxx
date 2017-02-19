@@ -37,11 +37,6 @@ VCLXAccessibleMenuSeparator::VCLXAccessibleMenuSeparator( Menu* pParent, sal_uIn
 }
 
 
-VCLXAccessibleMenuSeparator::~VCLXAccessibleMenuSeparator()
-{
-}
-
-
 // XServiceInfo
 
 

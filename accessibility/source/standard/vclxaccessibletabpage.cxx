@@ -63,7 +63,6 @@ VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt1
 VCLXAccessibleTabPage::~VCLXAccessibleTabPage()
 {
     delete m_pExternalLock;
-    m_pExternalLock = nullptr;
 }
 
 

@@ -57,11 +57,6 @@ namespace accessibility
     }
 
 
-    AccessibleTabBar::~AccessibleTabBar()
-    {
-    }
-
-
     void AccessibleTabBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         Any aOldValue, aNewValue;

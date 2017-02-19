@@ -37,18 +37,6 @@ using namespace ::svt::table;
 namespace accessibility {
 
 
-AccessibleGridControlTableBase::AccessibleGridControlTableBase(
-        const Reference< XAccessible >& rxParent,
-        IAccessibleTable& rTable,
-        AccessibleTableControlObjType eObjType ) :
-    GridControlAccessibleElement( rxParent, rTable, eObjType )
-{
-}
-
-AccessibleGridControlTableBase::~AccessibleGridControlTableBase()
-{
-}
-
 // XAccessibleContext ---------------------------------------------------------
 
 sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleChildCount()

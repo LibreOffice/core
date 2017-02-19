@@ -64,7 +64,6 @@ VCLXAccessibleStatusBarItem::VCLXAccessibleStatusBarItem( StatusBar* pStatusBar,
 VCLXAccessibleStatusBarItem::~VCLXAccessibleStatusBarItem()
 {
     delete m_pExternalLock;
-    m_pExternalLock = nullptr;
 }
 
 

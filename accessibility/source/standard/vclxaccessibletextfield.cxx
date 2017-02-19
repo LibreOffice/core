@@ -46,10 +46,6 @@ VCLXAccessibleTextField::VCLXAccessibleTextField (VCLXWindow* pVCLWindow, const 
 }
 
 
-VCLXAccessibleTextField::~VCLXAccessibleTextField()
-{
-}
-
 OUString VCLXAccessibleTextField::implGetText()
 {
     OUString aText;

@@ -48,17 +48,6 @@ using namespace ::comphelper;
 // VCLXAccessibleRadioButton
 
 
-VCLXAccessibleRadioButton::VCLXAccessibleRadioButton( VCLXWindow* pVCLWindow )
-    :VCLXAccessibleTextComponent( pVCLWindow )
-{
-}
-
-
-VCLXAccessibleRadioButton::~VCLXAccessibleRadioButton()
-{
-}
-
-
 void VCLXAccessibleRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )

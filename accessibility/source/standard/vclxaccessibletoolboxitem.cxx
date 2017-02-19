@@ -119,7 +119,6 @@ VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_In
 VCLXAccessibleToolBoxItem::~VCLXAccessibleToolBoxItem()
 {
     delete m_pExternalLock;
-    m_pExternalLock = nullptr;
 }
 
 OUString VCLXAccessibleToolBoxItem::GetText()

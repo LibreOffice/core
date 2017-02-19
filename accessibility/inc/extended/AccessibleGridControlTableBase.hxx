@@ -44,13 +44,10 @@ public:
         @param rxParent  XAccessible interface of the parent object.
         @param rTable    The Table control.
         @param eObjType  Type of table control object */
-    AccessibleGridControlTableBase(
-        const css::uno::Reference< css::accessibility::XAccessible >& rxParent,
-        ::svt::table::IAccessibleTable& rTable,
-        ::svt::table::AccessibleTableControlObjType  eObjType );
+    using GridControlAccessibleElement::GridControlAccessibleElement;
 
 protected:
-    virtual ~AccessibleGridControlTableBase() override;
+    virtual ~AccessibleGridControlTableBase() override = default;
 
 public:
     // XAccessibleContext
