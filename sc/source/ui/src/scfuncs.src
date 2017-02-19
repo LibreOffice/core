@@ -4847,5 +4847,17 @@ StringArray SC_OPCODE_RAWSUBTRACT+RID_SC_FUNC_DESCRIPTIONS_START
         < "" ; >;
     };
 };
+ // -=*# Resource for function ROUNDSIG #*=-
+StringArray SC_OPCODE_ROUNDSIG+RID_SC_FUNC_DESCRIPTIONS_START
+{
+    ItemList [ en-US ] =
+    {
+        < "Rounds a number to predefined significant digits." ; >;
+        < "value" ; >;
+        < "The number to be rounded." ; >;
+        < "digits" ; >;
+        < "The number of significant digits to which value is to be rounded." ; >;
+    };
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

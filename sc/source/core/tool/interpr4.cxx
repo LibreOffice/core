@@ -4097,6 +4097,7 @@ StackVar ScInterpreter::Interpret()
                 case ocMod              : ScMod();                      break;
                 case ocPower            : ScPower();                    break;
                 case ocRound            : ScRound();                    break;
+                case ocRoundSig         : ScRoundSignificant();         break;
                 case ocRoundUp          : ScRoundUp();                  break;
                 case ocTrunc            :
                 case ocRoundDown        : ScRoundDown();                break;
