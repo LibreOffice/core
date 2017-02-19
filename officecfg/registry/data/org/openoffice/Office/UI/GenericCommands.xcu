@@ -5893,9 +5893,6 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Toolbar Layout</value>
         </prop>
-        <prop oor:name="IsExperimental" oor:type="xs:boolean">
-          <value>true</value>
-        </prop>
       </node>
       <node oor:name=".uno:AvailableToolbars" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">

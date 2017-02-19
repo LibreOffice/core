@@ -117,6 +117,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
     const Sequence<OUString> aModeNodeNames (aModesNode.getNodeNames());
     const sal_Int32 nCount(aModeNodeNames.getLength());
+    SvtMiscOptions aMiscOptions;
 
     for ( sal_Int32 nReadIndex = 0; nReadIndex < nCount; ++nReadIndex )
     {
@@ -127,6 +128,10 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         OUString aLabel = comphelper::getString( aModeNode.getNodeValue( "Label" ) );
         OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
         long nPosition = comphelper::getINT32( aModeNode.getNodeValue( "MenuPosition" ) );
+
+        // Allow Notebookbar only in experimental mode
+        if ( !aMiscOptions.IsExperimentalMode() && aCommandArg.compareTo( "Notebookbar" ) == 0 )
+            continue;
 
         m_xPopupMenu->insertItem( nReadIndex+1, aLabel, css::awt::MenuItemStyle::RADIOCHECK, nPosition );
         rPopupMenu->setCommand( nReadIndex+1, aCommandArg );
