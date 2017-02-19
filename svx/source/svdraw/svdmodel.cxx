@@ -123,8 +123,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     eObjUnit=SdrEngineDefaults::GetMapUnit();
     eUIUnit=FUNIT_MM;
     aUIScale=Fraction(1,1);
-    nUIUnitComma=0;
-    bUIOnlyComma=false;
+    nUIUnitDecimalMark=0;
+    bUIOnlyDecimalMark=false;
     pLayerAdmin=nullptr;
     pItemPool=pPool;
     bMyPool=false;
@@ -931,23 +931,23 @@ void SdrModel::ImpSetUIUnit()
     }
 
     // set start values
-    nUIUnitComma = 0;
+    nUIUnitDecimalMark = 0;
     sal_Int64 nMul(1);
     sal_Int64 nDiv(1);
 
     // normalize on meters resp. inch
     switch (eObjUnit)
     {
-        case MapUnit::Map100thMM   : nUIUnitComma+=5; break;
-        case MapUnit::Map10thMM    : nUIUnitComma+=4; break;
-        case MapUnit::MapMM         : nUIUnitComma+=3; break;
-        case MapUnit::MapCM         : nUIUnitComma+=2; break;
-        case MapUnit::Map1000thInch: nUIUnitComma+=3; break;
-        case MapUnit::Map100thInch : nUIUnitComma+=2; break;
-        case MapUnit::Map10thInch  : nUIUnitComma+=1; break;
-        case MapUnit::MapInch       : nUIUnitComma+=0; break;
+        case MapUnit::Map100thMM   : nUIUnitDecimalMark+=5; break;
+        case MapUnit::Map10thMM    : nUIUnitDecimalMark+=4; break;
+        case MapUnit::MapMM         : nUIUnitDecimalMark+=3; break;
+        case MapUnit::MapCM         : nUIUnitDecimalMark+=2; break;
+        case MapUnit::Map1000thInch: nUIUnitDecimalMark+=3; break;
+        case MapUnit::Map100thInch : nUIUnitDecimalMark+=2; break;
+        case MapUnit::Map10thInch  : nUIUnitDecimalMark+=1; break;
+        case MapUnit::MapInch       : nUIUnitDecimalMark+=0; break;
         case MapUnit::MapPoint      : nDiv=72;     break;          // 1Pt   = 1/72"
-        case MapUnit::MapTwip       : nDiv=144; nUIUnitComma++; break; // 1Twip = 1/1440"
+        case MapUnit::MapTwip       : nDiv=144; nUIUnitDecimalMark++; break; // 1Twip = 1/1440"
         case MapUnit::MapPixel      : break;
         case MapUnit::MapSysFont    : break;
         case MapUnit::MapAppFont    : break;
@@ -965,21 +965,21 @@ void SdrModel::ImpSetUIUnit()
     {
         case FUNIT_NONE   : break;
         // metric
-        case FUNIT_100TH_MM: nUIUnitComma-=5; break;
-        case FUNIT_MM     : nUIUnitComma-=3; break;
-        case FUNIT_CM     : nUIUnitComma-=2; break;
-        case FUNIT_M      : nUIUnitComma+=0; break;
-        case FUNIT_KM     : nUIUnitComma+=3; break;
+        case FUNIT_100TH_MM: nUIUnitDecimalMark-=5; break;
+        case FUNIT_MM     : nUIUnitDecimalMark-=3; break;
+        case FUNIT_CM     : nUIUnitDecimalMark-=2; break;
+        case FUNIT_M      : nUIUnitDecimalMark+=0; break;
+        case FUNIT_KM     : nUIUnitDecimalMark+=3; break;
         // Inch
-        case FUNIT_TWIP   : nMul=144; nUIUnitComma--;  break;  // 1Twip = 1/1440"
+        case FUNIT_TWIP   : nMul=144; nUIUnitDecimalMark--;  break;  // 1Twip = 1/1440"
         case FUNIT_POINT  : nMul=72;     break;            // 1Pt   = 1/72"
         case FUNIT_PICA   : nMul=6;      break;            // 1Pica = 1/6"
         case FUNIT_INCH   : break;                         // 1"    = 1"
         case FUNIT_FOOT   : nDiv*=12;    break;            // 1Ft   = 12"
-        case FUNIT_MILE   : nDiv*=6336; nUIUnitComma++; break; // 1mile = 63360"
+        case FUNIT_MILE   : nDiv*=6336; nUIUnitDecimalMark++; break; // 1mile = 63360"
         // other
         case FUNIT_CUSTOM : break;
-        case FUNIT_PERCENT: nUIUnitComma+=2; break;
+        case FUNIT_PERCENT: nUIUnitDecimalMark+=2; break;
         // TODO: Add code to handle the following if needed (added to remove warning)
         case FUNIT_CHAR   : break;
         case FUNIT_LINE   : break;
@@ -995,7 +995,7 @@ void SdrModel::ImpSetUIUnit()
 
     if (bMapInch && bUIMetr)
     {
-        nUIUnitComma += 4;
+        nUIUnitDecimalMark += 4;
         nMul *= 254;
     }
 
@@ -1005,7 +1005,7 @@ void SdrModel::ImpSetUIUnit()
 
     if (bMapMetr && bUIInch)
     {
-        nUIUnitComma -= 4;
+        nUIUnitDecimalMark -= 4;
         nDiv *= 254;
     }
 
@@ -1029,20 +1029,20 @@ void SdrModel::ImpSetUIUnit()
     // shorten trailing zeros for dividend
     while(0 == (nMul % 10))
     {
-        nUIUnitComma--;
+        nUIUnitDecimalMark--;
         nMul /= 10;
     }
 
     // shorten trailing zeros for divisor
     while(0 == (nDiv % 10))
     {
-        nUIUnitComma++;
+        nUIUnitDecimalMark++;
         nDiv /= 10;
     }
 
     // end preparations, set member values
     aUIUnitFact = Fraction(sal_Int32(nMul), sal_Int32(nDiv));
-    bUIOnlyComma = (nMul == nDiv);
+    bUIOnlyDecimalMark = (nMul == nDiv);
     TakeUnitStr(eUIUnit, aUIUnitStr);
 }
 
@@ -1203,45 +1203,45 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
         nNumDigits = LocaleDataWrapper::getNumDigits();
     }
 
-    sal_Int32 nComma(nUIUnitComma);
+    sal_Int32 nDecimalMark(nUIUnitDecimalMark);
 
-    if(nComma > nNumDigits)
+    if(nDecimalMark > nNumDigits)
     {
-        const sal_Int32 nDiff(nComma - nNumDigits);
+        const sal_Int32 nDiff(nDecimalMark - nNumDigits);
         const double fFactor(pow(10.0, static_cast<const int>(nDiff)));
 
         fLocalValue /= fFactor;
-        nComma = nNumDigits;
+        nDecimalMark = nNumDigits;
     }
-    else if(nComma < nNumDigits)
+    else if(nDecimalMark < nNumDigits)
     {
-        const sal_Int32 nDiff(nNumDigits - nComma);
+        const sal_Int32 nDiff(nNumDigits - nDecimalMark);
         const double fFactor(pow(10.0, static_cast<const int>(nDiff)));
 
         fLocalValue *= fFactor;
-        nComma = nNumDigits;
+        nDecimalMark = nNumDigits;
     }
 
     OUStringBuffer aBuf;
     aBuf.append(static_cast<sal_Int32>(fLocalValue + 0.5));
 
-    if(nComma < 0)
+    if(nDecimalMark < 0)
     {
-        // negative nComma (decimal point) means: add zeros
-        sal_Int32 nCount(-nComma);
+        // negative nDecimalMark (decimal point) means: add zeros
+        sal_Int32 nCount(-nDecimalMark);
 
         for(sal_Int32 i=0; i<nCount; i++)
             aBuf.append('0');
 
-        nComma = 0;
+        nDecimalMark = 0;
     }
 
     // the second condition needs to be <= since inside this loop
     // also the leading zero is inserted.
-    if (nComma > 0 && aBuf.getLength() <= nComma)
+    if (nDecimalMark > 0 && aBuf.getLength() <= nDecimalMark)
     {
         // if necessary, add zeros before the decimal point
-        sal_Int32 nCount = nComma - aBuf.getLength();
+        sal_Int32 nCount = nDecimalMark - aBuf.getLength();
 
         if(nCount >= 0 && LocaleDataWrapper::isNumLeadingZero())
             nCount++;
@@ -1252,11 +1252,11 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
 
     sal_Unicode cDec( rLoc.getNumDecimalSep()[0] );
 
-    // insert CommaChar (decimal point character)
-    sal_Int32 nVorComma = aBuf.getLength() - nComma;
+    // insert the decimal mark character
+    sal_Int32 nBeforeDecimalMark = aBuf.getLength() - nDecimalMark;
 
-    if(nComma > 0)
-        aBuf.insert(nVorComma, cDec);
+    if(nDecimalMark > 0)
+        aBuf.insert(nBeforeDecimalMark, cDec);
 
     if(!LocaleDataWrapper::isNumTrailingZeros())
     {
@@ -1270,13 +1270,13 @@ void SdrModel::TakeMetricStr(long nVal, OUString& rStr, bool bNoUnitChars, sal_I
     }
 
     // if necessary, add separators before every third digit
-    if( nVorComma > 3 )
+    if( nBeforeDecimalMark > 3 )
     {
         const OUString& aThoSep( rLoc.getNumThousandSep() );
         if ( !aThoSep.isEmpty() )
         {
             sal_Unicode cTho( aThoSep[0] );
-            sal_Int32 i(nVorComma - 3);
+            sal_Int32 i(nBeforeDecimalMark - 3);
 
             while(i > 0)
             {
