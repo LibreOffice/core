@@ -2366,6 +2366,7 @@ void Test::testFunctionLists()
         "RAWSUBTRACT",
         "ROUND",
         "ROUNDDOWN",
+        "ROUNDSIG",
         "ROUNDUP",
         "SEC",
         "SECH",
