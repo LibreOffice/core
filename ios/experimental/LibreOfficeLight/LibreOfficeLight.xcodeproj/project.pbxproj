@@ -1,0 +1,581 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */; };
+		397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397868D81E59A3EA007F9248 /* LaunchScreen.xib */; };
+		397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E08FD1E597BD8001374E0 /* AppDelegate.swift */; };
+		397E09031E597BD8001374E0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 397E09011E597BD8001374E0 /* Main.storyboard */; };
+		397E09061E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 397E09041E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld */; };
+		397E09081E597BD8001374E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 397E09071E597BD8001374E0 /* Assets.xcassets */; };
+		397E09161E597BD8001374E0 /* LibreOfficeLightTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E09151E597BD8001374E0 /* LibreOfficeLightTests.swift */; };
+		397E09211E597BD8001374E0 /* LibreOfficeLightUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 397E09201E597BD8001374E0 /* LibreOfficeLightUITests.swift */; };
+		3992D8581E5B761700BEA987 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8571E5B761700BEA987 /* ViewController.swift */; };
+		3992D85A1E5B762A00BEA987 /* ViewDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D8591E5B762A00BEA987 /* ViewDocument.swift */; };
+		3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85B1E5B764A00BEA987 /* SideMenu.swift */; };
+		3992D85E1E5B764A00BEA987 /* ViewFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3992D85C1E5B764A00BEA987 /* ViewFileManager.swift */; };
+		399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399648461E5B87DC00E73E83 /* ViewProperties.swift */; };
+		399648491E5C4E5500E73E83 /* LO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399648481E5C4E5500E73E83 /* LO.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		397E09121E597BD8001374E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 397E08F21E597BD8001374E0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 397E08F91E597BD8001374E0;
+			remoteInfo = LibreOfficeLight;
+		};
+		397E091D1E597BD8001374E0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 397E08F21E597BD8001374E0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 397E08F91E597BD8001374E0;
+			remoteInfo = LibreOfficeLight;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewPrintManager.swift; sourceTree = "<group>"; };
+		397868D71E59A3EA007F9248 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		397E08FA1E597BD8001374E0 /* LibreOfficeLight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LibreOfficeLight.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		397E08FD1E597BD8001374E0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = LibreOfficeLight/AppDelegate.swift; sourceTree = SOURCE_ROOT; };
+		397E09021E597BD8001374E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/Main.storyboard; sourceTree = "<group>"; };
+		397E09051E597BD8001374E0 /* LibreOfficeLight.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LibreOfficeLight.xcdatamodel; sourceTree = "<group>"; };
+		397E09071E597BD8001374E0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = LibreOfficeLight/Assets.xcassets; sourceTree = SOURCE_ROOT; };
+		397E090C1E597BD8001374E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LibreOfficeLight/Info.plist; sourceTree = SOURCE_ROOT; };
+		397E09111E597BD8001374E0 /* LibreOfficeLightTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LibreOfficeLightTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		397E09151E597BD8001374E0 /* LibreOfficeLightTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibreOfficeLightTests.swift; path = LibreOfficeLightTests/LibreOfficeLightTests.swift; sourceTree = SOURCE_ROOT; };
+		397E09171E597BD8001374E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LibreOfficeLightTests/Info.plist; sourceTree = SOURCE_ROOT; };
+		397E091C1E597BD8001374E0 /* LibreOfficeLightUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LibreOfficeLightUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		397E09201E597BD8001374E0 /* LibreOfficeLightUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = LibreOfficeLightUITests.swift; path = LibreOfficeLightUITests/LibreOfficeLightUITests.swift; sourceTree = SOURCE_ROOT; };
+		397E09221E597BD8001374E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = LibreOfficeLightUITests/Info.plist; sourceTree = SOURCE_ROOT; };
+		3992D8571E5B761700BEA987 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		3992D8591E5B762A00BEA987 /* ViewDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewDocument.swift; sourceTree = "<group>"; };
+		3992D85B1E5B764A00BEA987 /* SideMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
+		3992D85C1E5B764A00BEA987 /* ViewFileManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewFileManager.swift; sourceTree = "<group>"; };
+		399648461E5B87DC00E73E83 /* ViewProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewProperties.swift; sourceTree = "<group>"; };
+		399648481E5C4E5500E73E83 /* LO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LO.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		397E08F71E597BD8001374E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		397E090E1E597BD8001374E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		397E09191E597BD8001374E0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3911D89F1E5993600050D6BC /* Support files */ = {
+			isa = PBXGroup;
+			children = (
+				397E09071E597BD8001374E0 /* Assets.xcassets */,
+				397E09041E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld */,
+				397E090C1E597BD8001374E0 /* Info.plist */,
+			);
+			name = "Support files";
+			path = LibreOfficeLight;
+			sourceTree = SOURCE_ROOT;
+		};
+		397E08F11E597BD8001374E0 = {
+			isa = PBXGroup;
+			children = (
+				397E08FC1E597BD8001374E0 /* LibreOfficeLight */,
+				397E09141E597BD8001374E0 /* LibreOfficeLightTests */,
+				397E091F1E597BD8001374E0 /* LibreOfficeLightUITests */,
+				397E08FB1E597BD8001374E0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		397E08FB1E597BD8001374E0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				397E08FA1E597BD8001374E0 /* LibreOfficeLight.app */,
+				397E09111E597BD8001374E0 /* LibreOfficeLightTests.xctest */,
+				397E091C1E597BD8001374E0 /* LibreOfficeLightUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		397E08FC1E597BD8001374E0 /* LibreOfficeLight */ = {
+			isa = PBXGroup;
+			children = (
+				397E08FD1E597BD8001374E0 /* AppDelegate.swift */,
+				3992D8571E5B761700BEA987 /* ViewController.swift */,
+				3992D85B1E5B764A00BEA987 /* SideMenu.swift */,
+				3992D8591E5B762A00BEA987 /* ViewDocument.swift */,
+				3992D85C1E5B764A00BEA987 /* ViewFileManager.swift */,
+				392ED9B21E5E4B03005C8435 /* ViewPrintManager.swift */,
+				399648461E5B87DC00E73E83 /* ViewProperties.swift */,
+				399648481E5C4E5500E73E83 /* LO.swift */,
+				397E09011E597BD8001374E0 /* Main.storyboard */,
+				397868D81E59A3EA007F9248 /* LaunchScreen.xib */,
+				3911D89F1E5993600050D6BC /* Support files */,
+			);
+			path = LibreOfficeLight;
+			sourceTree = SOURCE_ROOT;
+		};
+		397E09141E597BD8001374E0 /* LibreOfficeLightTests */ = {
+			isa = PBXGroup;
+			children = (
+				397E09151E597BD8001374E0 /* LibreOfficeLightTests.swift */,
+				397E09171E597BD8001374E0 /* Info.plist */,
+			);
+			path = LibreOfficeLightTests;
+			sourceTree = SOURCE_ROOT;
+		};
+		397E091F1E597BD8001374E0 /* LibreOfficeLightUITests */ = {
+			isa = PBXGroup;
+			children = (
+				397E09201E597BD8001374E0 /* LibreOfficeLightUITests.swift */,
+				397E09221E597BD8001374E0 /* Info.plist */,
+			);
+			path = LibreOfficeLightUITests;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		397E08F91E597BD8001374E0 /* LibreOfficeLight */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 397E09251E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLight" */;
+			buildPhases = (
+				397E08F61E597BD8001374E0 /* Sources */,
+				397E08F71E597BD8001374E0 /* Frameworks */,
+				397E08F81E597BD8001374E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LibreOfficeLight;
+			productName = LibreOfficeLight;
+			productReference = 397E08FA1E597BD8001374E0 /* LibreOfficeLight.app */;
+			productType = "com.apple.product-type.application";
+		};
+		397E09101E597BD8001374E0 /* LibreOfficeLightTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 397E09281E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLightTests" */;
+			buildPhases = (
+				397E090D1E597BD8001374E0 /* Sources */,
+				397E090E1E597BD8001374E0 /* Frameworks */,
+				397E090F1E597BD8001374E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				397E09131E597BD8001374E0 /* PBXTargetDependency */,
+			);
+			name = LibreOfficeLightTests;
+			productName = LibreOfficeLightTests;
+			productReference = 397E09111E597BD8001374E0 /* LibreOfficeLightTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		397E091B1E597BD8001374E0 /* LibreOfficeLightUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 397E092B1E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLightUITests" */;
+			buildPhases = (
+				397E09181E597BD8001374E0 /* Sources */,
+				397E09191E597BD8001374E0 /* Frameworks */,
+				397E091A1E597BD8001374E0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				397E091E1E597BD8001374E0 /* PBXTargetDependency */,
+			);
+			name = LibreOfficeLightUITests;
+			productName = LibreOfficeLightUITests;
+			productReference = 397E091C1E597BD8001374E0 /* LibreOfficeLightUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		397E08F21E597BD8001374E0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0820;
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = jani;
+				TargetAttributes = {
+					397E08F91E597BD8001374E0 = {
+						CreatedOnToolsVersion = 8.2;
+						ProvisioningStyle = Automatic;
+					};
+					397E09101E597BD8001374E0 = {
+						CreatedOnToolsVersion = 8.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 397E08F91E597BD8001374E0;
+					};
+					397E091B1E597BD8001374E0 = {
+						CreatedOnToolsVersion = 8.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 397E08F91E597BD8001374E0;
+					};
+				};
+			};
+			buildConfigurationList = 397E08F51E597BD8001374E0 /* Build configuration list for PBXProject "LibreOfficeLight" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 397E08F11E597BD8001374E0;
+			productRefGroup = 397E08FB1E597BD8001374E0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				397E08F91E597BD8001374E0 /* LibreOfficeLight */,
+				397E09101E597BD8001374E0 /* LibreOfficeLightTests */,
+				397E091B1E597BD8001374E0 /* LibreOfficeLightUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		397E08F81E597BD8001374E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				397E09081E597BD8001374E0 /* Assets.xcassets in Resources */,
+				397868D61E59A3EA007F9248 /* LaunchScreen.xib in Resources */,
+				397E09031E597BD8001374E0 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		397E090F1E597BD8001374E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		397E091A1E597BD8001374E0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		397E08F61E597BD8001374E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				392ED9B31E5E4B03005C8435 /* ViewPrintManager.swift in Sources */,
+				397E09061E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld in Sources */,
+				3992D85D1E5B764A00BEA987 /* SideMenu.swift in Sources */,
+				399648471E5B87DC00E73E83 /* ViewProperties.swift in Sources */,
+				3992D85E1E5B764A00BEA987 /* ViewFileManager.swift in Sources */,
+				3992D85A1E5B762A00BEA987 /* ViewDocument.swift in Sources */,
+				397E08FE1E597BD8001374E0 /* AppDelegate.swift in Sources */,
+				399648491E5C4E5500E73E83 /* LO.swift in Sources */,
+				3992D8581E5B761700BEA987 /* ViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		397E090D1E597BD8001374E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				397E09161E597BD8001374E0 /* LibreOfficeLightTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		397E09181E597BD8001374E0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				397E09211E597BD8001374E0 /* LibreOfficeLightUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		397E09131E597BD8001374E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 397E08F91E597BD8001374E0 /* LibreOfficeLight */;
+			targetProxy = 397E09121E597BD8001374E0 /* PBXContainerItemProxy */;
+		};
+		397E091E1E597BD8001374E0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 397E08F91E597BD8001374E0 /* LibreOfficeLight */;
+			targetProxy = 397E091D1E597BD8001374E0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		397868D81E59A3EA007F9248 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				397868D71E59A3EA007F9248 /* en */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+		397E09011E597BD8001374E0 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				397E09021E597BD8001374E0 /* en */,
+			);
+			name = Main.storyboard;
+			path = LibreOfficeLight;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		397E09231E597BD8001374E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		397E09241E597BD8001374E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		397E09261E597BD8001374E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jani.libreofficeLight.LibreOfficeLight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		397E09271E597BD8001374E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = LibreOfficeLight/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jani.libreofficeLight.LibreOfficeLight;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		397E09291E597BD8001374E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = LibreOfficeLightTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jani.libreofficeLight.LibreOfficeLightTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LibreOfficeLight.app/LibreOfficeLight";
+			};
+			name = Debug;
+		};
+		397E092A1E597BD8001374E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = LibreOfficeLightTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jani.libreofficeLight.LibreOfficeLightTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LibreOfficeLight.app/LibreOfficeLight";
+			};
+			name = Release;
+		};
+		397E092C1E597BD8001374E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				INFOPLIST_FILE = LibreOfficeLightUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jani.libreofficeLight.LibreOfficeLightUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = LibreOfficeLight;
+			};
+			name = Debug;
+		};
+		397E092D1E597BD8001374E0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				INFOPLIST_FILE = LibreOfficeLightUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = jani.libreofficeLight.LibreOfficeLightUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = LibreOfficeLight;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		397E08F51E597BD8001374E0 /* Build configuration list for PBXProject "LibreOfficeLight" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				397E09231E597BD8001374E0 /* Debug */,
+				397E09241E597BD8001374E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		397E09251E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLight" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				397E09261E597BD8001374E0 /* Debug */,
+				397E09271E597BD8001374E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		397E09281E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLightTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				397E09291E597BD8001374E0 /* Debug */,
+				397E092A1E597BD8001374E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		397E092B1E597BD8001374E0 /* Build configuration list for PBXNativeTarget "LibreOfficeLightUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				397E092C1E597BD8001374E0 /* Debug */,
+				397E092D1E597BD8001374E0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		397E09041E597BD8001374E0 /* LibreOfficeLight.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				397E09051E597BD8001374E0 /* LibreOfficeLight.xcdatamodel */,
+			);
+			currentVersion = 397E09051E597BD8001374E0 /* LibreOfficeLight.xcdatamodel */;
+			path = LibreOfficeLight.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 397E08F21E597BD8001374E0 /* Project object */;
+}
