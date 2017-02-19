@@ -40,7 +40,7 @@ AccessibleTabBarBase::AccessibleTabBarBase( TabBar* pTabBar ) :
 AccessibleTabBarBase::~AccessibleTabBarBase()
 {
     ClearTabBarPointer();
-    DELETEZ( m_pExternalLock );
+    delete  m_pExternalLock ;
 }
 
 IMPL_LINK( AccessibleTabBarBase, WindowEventListener, VclWindowEvent&, rEvent, void )

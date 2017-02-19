@@ -49,11 +49,6 @@ VCLXAccessibleButton::VCLXAccessibleButton( VCLXWindow* pVCLWindow )
 }
 
 
-VCLXAccessibleButton::~VCLXAccessibleButton()
-{
-}
-
-
 void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )

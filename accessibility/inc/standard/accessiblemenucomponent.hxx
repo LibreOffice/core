@@ -44,7 +44,6 @@ protected:
 
 public:
     OAccessibleMenuComponent( Menu* pMenu );
-    virtual ~OAccessibleMenuComponent() override;
 
     // XInterface
     DECLARE_XINTERFACE()

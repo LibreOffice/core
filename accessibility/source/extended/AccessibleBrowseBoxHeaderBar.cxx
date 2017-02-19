@@ -46,10 +46,6 @@ AccessibleBrowseBoxHeaderBar::AccessibleBrowseBoxHeaderBar(
         "extended/AccessibleBrowseBoxHeaderBar - invalid object type" );
 }
 
-AccessibleBrowseBoxHeaderBar::~AccessibleBrowseBoxHeaderBar()
-{
-}
-
 // XAccessibleContext ---------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL

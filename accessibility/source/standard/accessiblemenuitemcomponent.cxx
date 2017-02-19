@@ -64,11 +64,6 @@ OAccessibleMenuItemComponent::OAccessibleMenuItemComponent( Menu* pParent, sal_u
 }
 
 
-OAccessibleMenuItemComponent::~OAccessibleMenuItemComponent()
-{
-}
-
-
 bool OAccessibleMenuItemComponent::IsEnabled()
 {
     OExternalLockGuard aGuard( this );

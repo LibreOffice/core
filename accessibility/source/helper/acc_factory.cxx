@@ -80,12 +80,10 @@ inline bool hasFloatingChild(vcl::Window *pWindow)
 }
 
 // IAccessibleFactory
-class AccessibleFactory :public ::toolkit::IAccessibleFactory
-                        ,public ::svt::IAccessibleFactory
+class AccessibleFactory final :public ::toolkit::IAccessibleFactory
+                              ,public ::svt::IAccessibleFactory
 {
 public:
-    AccessibleFactory();
-
     // ::toolkit::IAccessibleFactory
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
         createAccessibleContext( VCLXButton* _pXWindow ) override;
@@ -201,16 +199,8 @@ public:
         ) const override;
 
 protected:
-    virtual ~AccessibleFactory() override;
+    virtual ~AccessibleFactory() override = default;
 };
-
-AccessibleFactory::AccessibleFactory()
-{
-}
-
-AccessibleFactory::~AccessibleFactory()
-{
-}
 
 Reference< XAccessible > AccessibleFactory::createAccessible( Menu* _pMenu, bool _bIsMenuBar )
 {

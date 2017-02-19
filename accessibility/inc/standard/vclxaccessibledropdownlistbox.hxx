@@ -42,7 +42,7 @@ public:
         getSupportedServiceNames() override;
 
 protected:
-    virtual ~VCLXAccessibleDropDownListBox() override;
+    virtual ~VCLXAccessibleDropDownListBox() override = default;
 
     virtual bool IsValid() const override;
 

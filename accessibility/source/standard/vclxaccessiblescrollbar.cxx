@@ -50,11 +50,6 @@ VCLXAccessibleScrollBar::VCLXAccessibleScrollBar( VCLXWindow* pVCLWindow )
 }
 
 
-VCLXAccessibleScrollBar::~VCLXAccessibleScrollBar()
-{
-}
-
-
 void VCLXAccessibleScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )

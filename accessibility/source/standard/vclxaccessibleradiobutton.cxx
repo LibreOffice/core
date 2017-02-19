@@ -54,11 +54,6 @@ VCLXAccessibleRadioButton::VCLXAccessibleRadioButton( VCLXWindow* pVCLWindow )
 }
 
 
-VCLXAccessibleRadioButton::~VCLXAccessibleRadioButton()
-{
-}
-
-
 void VCLXAccessibleRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )

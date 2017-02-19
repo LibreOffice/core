@@ -41,10 +41,6 @@ AccessibleBrowseBoxTable::AccessibleBrowseBoxTable(
 {
 }
 
-AccessibleBrowseBoxTable::~AccessibleBrowseBoxTable()
-{
-}
-
 // XAccessibleContext ---------------------------------------------------------
 
 Reference< XAccessible > SAL_CALL

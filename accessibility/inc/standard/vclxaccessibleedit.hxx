@@ -44,7 +44,7 @@ private:
     sal_Int32   m_nCaretPosition;
 
 protected:
-    virtual ~VCLXAccessibleEdit() override;
+    virtual ~VCLXAccessibleEdit() override = default;
 
     virtual void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void                FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
