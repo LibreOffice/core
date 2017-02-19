@@ -57,8 +57,11 @@ public:
     Annotation(const Annotation&) = delete;
     Annotation& operator=(const Annotation&) = delete;
 
+    static sal_uInt32 m_nLastId;
+
     SdPage* GetPage() const { return mpPage; }
     SdrModel* GetModel() { return (mpPage != nullptr) ? mpPage->GetModel() : nullptr; }
+    sal_uInt32 GetId() const { return m_nId; }
 
     // XInterface:
     virtual Any SAL_CALL queryInterface(Type const & type) override;
@@ -99,6 +102,7 @@ private:
     // disposed, do it here.
     virtual void SAL_CALL disposing() override;
 
+    sal_uInt32 m_nId;
     SdPage* mpPage;
     RealPoint2D m_Position;
     RealSize2D m_Size;
@@ -170,9 +174,12 @@ void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage )
     pPage->addAnnotation(xAnnotation, -1);
 }
 
+sal_uInt32 Annotation::m_nLastId = 1;
+
 Annotation::Annotation( const Reference< XComponentContext >& context, SdPage* pPage )
 : ::cppu::WeakComponentImplHelper< XAnnotation >(m_aMutex)
 , ::cppu::PropertySetMixin< XAnnotation >(context, static_cast< Implements >(IMPLEMENTS_PROPERTY_SET), Sequence< OUString >())
+, m_nId( m_nLastId++ )
 , mpPage( pPage )
 {
 }
