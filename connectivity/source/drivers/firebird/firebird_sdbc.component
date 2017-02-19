@@ -12,6 +12,7 @@
     prefix="firebird_sdbc" xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.sdbc.firebird.Driver">
     <service name="com.sun.star.sdbc.Driver"/>
+    <service name="com.sun.star.sdbcx.Driver"/>
   </implementation>
 </component>
 
