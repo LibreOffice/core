@@ -150,18 +150,18 @@ void Test::editFailure()
 
     const SmErrorDesc *pErrorDesc = m_xDocShRef->GetParser().NextError();
 
-    CPPUNIT_ASSERT_MESSAGE("Should be a PE_COLOR_EXPECTED",
-        pErrorDesc && pErrorDesc->m_eType == PE_COLOR_EXPECTED);
+    CPPUNIT_ASSERT_MESSAGE("Should be a SmParseError::ColorExpected",
+        pErrorDesc && pErrorDesc->m_eType == SmParseError::ColorExpected);
 
     pErrorDesc = m_xDocShRef->GetParser().PrevError();
 
-    CPPUNIT_ASSERT_MESSAGE("Should be a PE_UNEXPECTED_CHAR",
-        pErrorDesc && pErrorDesc->m_eType == PE_UNEXPECTED_CHAR);
+    CPPUNIT_ASSERT_MESSAGE("Should be a SmParseError::UnexpectedChar",
+        pErrorDesc && pErrorDesc->m_eType == SmParseError::UnexpectedChar);
 
     pErrorDesc = m_xDocShRef->GetParser().PrevError();
 
-    CPPUNIT_ASSERT_MESSAGE("Should be a PE_RGROUP_EXPECTED",
-        pErrorDesc && pErrorDesc->m_eType == PE_RGROUP_EXPECTED);
+    CPPUNIT_ASSERT_MESSAGE("Should be a SmParseError::RgroupExpected",
+        pErrorDesc && pErrorDesc->m_eType == SmParseError::RgroupExpected);
 
     const SmErrorDesc *pLastErrorDesc = m_xDocShRef->GetParser().PrevError();
 
