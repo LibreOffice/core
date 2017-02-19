@@ -301,6 +301,7 @@ public:
         mpThis->pClass->freeError(pfree);
     }
 
+#ifdef LOK_USE_UNSTABLE_API
     /**
      * Run a macro.
      *
@@ -308,10 +309,12 @@ public:
      *
      * @param pURL macro url to run
      */
-    inline void runMacro( const char* pURL)
+
+    inline bool runMacro( const char* pURL)
     {
-        mpThis->pClass->runMacro( mpThis, pURL );
+        return mpThis->pClass->runMacro( mpThis, pURL );
     }
+#endif // defined LOK_USE_UNSTABLE_API
 };
 
 /// Factory method to create a lok::Office instance.

@@ -44,6 +44,8 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/frame/XSynchronousDispatch.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -297,7 +299,7 @@ static void doc_destroy(LibreOfficeKitDocument *pThis)
 static void                    lo_destroy       (LibreOfficeKit* pThis);
 static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
-static void                    lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
+static bool                    lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
 static void                    lo_freeError     (const char *pfree);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
@@ -423,7 +425,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     return NULL;
 }
 
-static void lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
+static bool lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
 {
     SolarMutexGuard aGuard;
 
@@ -434,14 +436,14 @@ static void lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = "Macro to run was not provided.";
         SAL_INFO("lok", "Macro URL is empty");
-        return;
+        return false;
     }
 
     if (!sURL.startsWith("macro://"))
     {
         pLib->maLastExceptionMsg = "This doesn't look like macro URL";
         SAL_INFO("lok", "Macro URL is invalid");
-        return;
+        return false;
     }
 
     pLib->maLastExceptionMsg.clear();
@@ -450,7 +452,7 @@ static void lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = "ComponentContext is not available";
         SAL_INFO("lok", "ComponentContext is not available");
-        return;
+        return false;
     }
 
     util::URL aURL;
@@ -467,13 +469,11 @@ static void lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
     {
         pLib->maLastExceptionMsg = "ComponentLoader is not available";
         SAL_INFO("lok", "ComponentLoader is not available");
-        return;
+        return false;
     }
 
     xFactory = xContext->getServiceManager();
 
-    // perhaps all of this code can be killed and a comphelper::dispatchCommand
-    // used instead
     if (xFactory.is())
     {
         uno::Reference<frame::XDispatchProvider> xDP;
@@ -485,14 +485,28 @@ static void lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
         {
             pLib->maLastExceptionMsg = "Macro loader is not available";
             SAL_INFO("lok", "Macro loader is not available");
-            return;
+            return false;
         }
 
-        // FIXME: with notification
+        uno::Reference < frame::XSynchronousDispatch > xSyncDisp( xD, uno::UNO_QUERY_THROW );
         uno::Sequence<css::beans::PropertyValue> aEmpty;
-        xD->dispatch( aURL, aEmpty);
+        css::beans::PropertyValue aErr;
+        uno::Any aRet;
+
+        aRet = xSyncDisp->dispatchWithReturnValue( aURL, aEmpty );
+        aRet >>= aErr;
+
+        if (aErr.Name == "ErrorCode")
+        {
+            pLib->maLastExceptionMsg = "An error occured running macro";
+            SAL_INFO("lok", "Macro execution terminated with errors");
+            return false;
+        }
+
+        return true;
     }
 
+    return false;
 }
 
 static void lo_registerCallback (LibreOfficeKit* pThis,
