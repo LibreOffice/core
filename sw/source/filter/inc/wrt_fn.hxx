@@ -20,14 +20,14 @@
 #define INCLUDED_SW_SOURCE_FILTER_INC_WRT_FN_HXX
 #include "hintids.hxx"
 
-// einige Forward-Deklarationen
+// some forward declarations
 class SwNode;
 class SwContentNode;
 class Writer;
 class SfxPoolItem;
 class SfxItemSet;
 
-/* Funktionspointer auf die Attribut-Write-Funktionen */
+/* function pointers to the attribute-write functions */
 typedef Writer& (*FnAttrOut)( Writer&, const SfxPoolItem& );
 typedef FnAttrOut SwAttrFnTab[ POOLATTR_END - POOLATTR_BEGIN ];
 
@@ -35,7 +35,7 @@ SW_DLLPUBLIC Writer& Out( const SwAttrFnTab, const SfxPoolItem&, Writer& );
 SW_DLLPUBLIC Writer& Out_SfxItemSet( const SwAttrFnTab, Writer&, const SfxItemSet&,
                          bool bDeep );
 
-/* Funktionspointer auf die Node-Write-Funktionen */
+/* function pointers to the node-write functions */
 
 enum RES_NODE
 {
