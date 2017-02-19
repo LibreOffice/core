@@ -17,6 +17,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sfx2/dllapi.h>
+#include <sfx2/infobar.hxx>
 
 class SfxObjectShell;
 class SfxViewFrame;
@@ -66,7 +67,7 @@ public:
     void SetBACName(const OUString& rName, SfxClassificationPolicyType eType);
     /// If GetImpactScale() and GetImpactLevel*() will return something meaningful.
     bool HasImpactLevel();
-    basegfx::BColor GetImpactLevelColor();
+    InfoBarType GetImpactLevelType();
     /// Larger value means more confidential.
     sal_Int32 GetImpactLevel();
     /// Comparing the GetImpactLevel() result is only meaningful when the impact scale is the same.

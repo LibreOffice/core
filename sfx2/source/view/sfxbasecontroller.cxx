@@ -1440,7 +1440,7 @@ void SfxBaseController::ShowInfoBars( )
                 {
                     // Get the Frame and show the InfoBar if not checked out
                     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
-                    auto pInfoBar = pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ) );
+                    auto pInfoBar = pViewFrame->AppendInfoBar( "checkout", SfxResId( STR_NONCHECKEDOUT_DOCUMENT ), InfoBarType::Warning);
                     if (pInfoBar)
                     {
                         VclPtrInstance<PushButton> xBtn(&pViewFrame->GetWindow());

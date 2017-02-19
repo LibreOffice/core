@@ -1234,7 +1234,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 {
                     bool bSignPDF = IsSignPDF(m_xObjSh);
 
-                    auto pInfoBar = AppendInfoBar("readonly", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT));
+                    auto pInfoBar = AppendInfoBar("readonly", SfxResId(bSignPDF ? STR_READONLY_PDF : STR_READONLY_DOCUMENT), InfoBarType::Info);
                     if (pInfoBar)
                     {
                         if (bSignPDF)
@@ -3108,23 +3108,6 @@ VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar(const OUString& sId,
 
     SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
     auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, aInfoBarType, nMessageStyle);
-    ShowChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
-    return pInfoBar;
-}
-
-VclPtr<SfxInfoBarWindow> SfxViewFrame::AppendInfoBar( const OUString& sId,
-                                               const OUString& sMessage,
-                                               const basegfx::BColor* pBackgroundColor,
-                                               const basegfx::BColor* pForegroundColor,
-                                               const basegfx::BColor* pMessageColor,
-                                               WinBits nMessageStyle )
-{
-    SfxChildWindow* pChild = GetChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
-    if (!pChild)
-        return nullptr;
-
-    SfxInfoBarContainerWindow* pInfoBarContainer = static_cast<SfxInfoBarContainerWindow*>(pChild->GetWindow());
-    auto pInfoBar = pInfoBarContainer->appendInfoBar(sId, sMessage, pBackgroundColor, pForegroundColor, pMessageColor, nMessageStyle);
     ShowChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
     return pInfoBar;
 }
