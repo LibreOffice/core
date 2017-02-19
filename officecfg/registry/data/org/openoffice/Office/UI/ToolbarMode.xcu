@@ -93,6 +93,9 @@
           <prop oor:name="HasNotebookbar">
             <value>true</value>
           </prop>
+          <prop oor:name="IsExperimental">
+            <value>true</value>
+          </prop>
           <prop oor:name="MenuPosition">
             <value>3</value>
           </prop>
@@ -204,6 +207,9 @@
           <prop oor:name="HasNotebookbar">
             <value>true</value>
           </prop>
+          <prop oor:name="IsExperimental">
+            <value>true</value>
+          </prop>
           <prop oor:name="MenuPosition">
             <value>3</value>
           </prop>
@@ -288,6 +294,9 @@
             <value xml:lang="en-US">Notebookbar</value>
           </prop>
           <prop oor:name="HasNotebookbar">
+            <value>true</value>
+          </prop>
+          <prop oor:name="IsExperimental">
             <value>true</value>
           </prop>
           <prop oor:name="MenuPosition">
