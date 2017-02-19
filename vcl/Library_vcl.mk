@@ -595,6 +595,10 @@ $(eval $(call gb_Library_use_externals,vcl,\
 	cairo \
 	freetype \
 ))
+ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
+$(eval $(call gb_Library_add_libs,vcl,\
+    -lpthread \
+))
 ifneq ($(OS),EMSCRIPTEN)
 $(eval $(call gb_Library_use_externals,vcl,\
 	fontconfig \
