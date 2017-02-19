@@ -2903,4 +2903,9 @@ bool OutputDevice::GetTextOutline( tools::PolyPolygon& rPolyPoly, const OUString
     return true;
 }
 
+bool OutputDevice::UseCommonLayout()
+{
+    return SalLayout::UseCommonLayout();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
