@@ -41,7 +41,7 @@ namespace accessibility
         bool m_bIsTriState;
 
     protected:
-        virtual ~AccessibleCheckBoxCell() override {}
+        ~AccessibleCheckBoxCell() override = default;
 
         virtual ::utl::AccessibleStateSetHelper* implCreateStateSetHelper() override;
 

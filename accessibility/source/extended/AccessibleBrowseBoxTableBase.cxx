@@ -46,10 +46,6 @@ AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
 {
 }
 
-AccessibleBrowseBoxTableBase::~AccessibleBrowseBoxTableBase()
-{
-}
-
 // XAccessibleContext ---------------------------------------------------------
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleChildCount()

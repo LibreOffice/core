@@ -77,7 +77,7 @@ public:
         ::svt::table::AccessibleTableControlObjType  eObjType );
 
 protected:
-    virtual ~AccessibleGridControlBase() override;
+    ~AccessibleGridControlBase() override;
 
     /** Commits DeFunc event to listeners and cleans up members. */
     virtual void SAL_CALL disposing() override;

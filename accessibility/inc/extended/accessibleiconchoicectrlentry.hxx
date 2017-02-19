@@ -88,7 +88,7 @@ namespace accessibility
         void                    EnsureIsAlive() const;
 
     protected:
-        virtual ~AccessibleIconChoiceCtrlEntry() override;
+        ~AccessibleIconChoiceCtrlEntry() override;
         /** this function is called upon disposing the component
         */
         virtual void SAL_CALL                   disposing() override;

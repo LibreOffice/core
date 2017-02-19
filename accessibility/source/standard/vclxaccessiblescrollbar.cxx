@@ -44,17 +44,6 @@ using namespace ::comphelper;
 // VCLXAccessibleScrollBar
 
 
-VCLXAccessibleScrollBar::VCLXAccessibleScrollBar( VCLXWindow* pVCLWindow )
-    :VCLXAccessibleComponent( pVCLWindow )
-{
-}
-
-
-VCLXAccessibleScrollBar::~VCLXAccessibleScrollBar()
-{
-}
-
-
 void VCLXAccessibleScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
     switch ( rVclWindowEvent.GetId() )

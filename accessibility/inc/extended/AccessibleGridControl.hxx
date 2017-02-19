@@ -44,7 +44,7 @@ protected:
     ::svt::table::IAccessibleTable& _rTable
     );
 
-    virtual ~AccessibleGridControl() override;
+    ~AccessibleGridControl() override = default;
 
     /** Cleans up members. */
     using AccessibleGridControlBase::disposing;

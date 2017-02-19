@@ -39,14 +39,14 @@ class VCLXAccessibleRadioButton : public VCLXAccessibleTextComponent,
                                   public VCLXAccessibleRadioButton_BASE
 {
 protected:
-    virtual ~VCLXAccessibleRadioButton() override;
+    virtual ~VCLXAccessibleRadioButton() override = default;
 
     virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) override;
     virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
 public:
-    VCLXAccessibleRadioButton( VCLXWindow* pVCLXindow );
+    using VCLXAccessibleTextComponent::VCLXAccessibleTextComponent;
 
     // XInterface
     DECLARE_XINTERFACE()

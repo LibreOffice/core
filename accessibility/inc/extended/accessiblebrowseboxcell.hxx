@@ -43,7 +43,6 @@ namespace accessibility
         sal_Int32    getRowPos( ) const { return m_nRowPos; }
         sal_Int32    getColumnPos( ) const { return m_nColPos; }
 
-    protected:
         // AccessibleBrowseBoxBase overridables
         virtual tools::Rectangle implGetBoundingBox() override;
         virtual tools::Rectangle implGetBoundingBoxOnScreen() override;
@@ -51,7 +50,6 @@ namespace accessibility
         // XAccessibleComponent
         virtual void SAL_CALL grabFocus() override;
 
-    protected:
         AccessibleBrowseBoxCell(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
             ::svt::IAccessibleTableProvider& _rBrowseBox,
@@ -61,7 +59,7 @@ namespace accessibility
             ::svt::AccessibleBrowseBoxObjType _eType = ::svt::BBTYPE_TABLECELL
         );
 
-        virtual ~AccessibleBrowseBoxCell() override;
+        ~AccessibleBrowseBoxCell() override = default;
 
     private:
         AccessibleBrowseBoxCell( const AccessibleBrowseBoxCell& ) = delete;

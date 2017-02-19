@@ -44,7 +44,7 @@ public:
         getSupportedServiceNames() override;
 
 protected:
-    virtual ~VCLXAccessibleComboBox() override;
+    ~VCLXAccessibleComboBox() override = default;
 
     virtual bool IsValid() const override;
 };

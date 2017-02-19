@@ -29,12 +29,12 @@
 class VCLXAccessibleFixedText : public VCLXAccessibleTextComponent
 {
 protected:
-    virtual ~VCLXAccessibleFixedText() override;
+    virtual ~VCLXAccessibleFixedText() override = default;
 
     virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
 public:
-    VCLXAccessibleFixedText( VCLXWindow* pVCLXindow );
+    using VCLXAccessibleTextComponent::VCLXAccessibleTextComponent;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

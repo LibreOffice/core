@@ -25,17 +25,6 @@ using namespace ::com::sun::star;
 // VCLXAccessibleFixedHyperlink
 
 
-VCLXAccessibleFixedHyperlink::VCLXAccessibleFixedHyperlink( VCLXWindow* pVCLWindow )
-    :VCLXAccessibleTextComponent( pVCLWindow )
-{
-}
-
-
-VCLXAccessibleFixedHyperlink::~VCLXAccessibleFixedHyperlink()
-{
-}
-
-
 // XServiceInfo
 
 
