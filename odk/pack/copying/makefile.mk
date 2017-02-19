@@ -143,8 +143,7 @@ DOCUFILES= \
     $(DESTDIRDOCUIMAGES)/nav_up.png \
     $(DESTDIRDOCUIMAGES)/sdk_head-1.png \
     $(DESTDIRDOCUIMAGES)/sdk_head-2.png \
-    $(DESTDIRDOCUIMAGES)/sdk_line-1.gif \
-    $(DESTDIRDOCUIMAGES)/sdk_line-2.gif
+    $(DESTDIRDOCUIMAGES)/sdk_line-1.gif
 
 .IF "$(GUI)"=="UNX"
 INSTALLSCRIPT= \

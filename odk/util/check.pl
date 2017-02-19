@@ -86,7 +86,7 @@ if (-d "$StartDir") {
              "images/nav_home.png","images/nav_left.png",
              "images/nav_right.png","images/nav_up.png",
              "images/sdk_head-1.png", "images/sdk_head-2.png",
-             "images/sdk_line-1.gif", "images/sdk_line-2.gif",
+             "images/sdk_line-1.gif",
              "common/ref/idl.css", "images/nada.gif",
              "images/arrow-2.gif", "images/blueball.png",
              "images/ooo-main-app_32.png");

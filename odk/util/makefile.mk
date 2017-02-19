@@ -68,7 +68,6 @@ ODK_OO_FILES=\
     $(PRJ)$/docs$/images$/sdk_head-2.gif \
     $(PRJ)$/docs$/images$/sdk_head-3.gif \
     $(PRJ)$/docs$/images$/sdk_line-1.gif \
-    $(PRJ)$/docs$/images$/sdk_line-2.gif \
     $(PRJ)$/examples$/examples.html \
     $(PRJ)$/examples$/DevelopersGuide$/examples.html
 
