@@ -315,15 +315,11 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
     case SID_DELETE_POSTIT:
         {
             Reference< XAnnotation > xAnnotation;
-
-            if( rReq.GetSlot() == SID_DELETE_POSTIT )
+            if( pArgs )
             {
-                if( pArgs )
-                {
-                    const SfxPoolItem*  pPoolItem = nullptr;
-                    if( SfxItemState::SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
-                        static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xAnnotation;
-                }
+                const SfxPoolItem*  pPoolItem = nullptr;
+                if( SfxItemState::SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
+                    static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xAnnotation;
             }
 
             if( !xAnnotation.is() )
