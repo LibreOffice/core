@@ -1318,9 +1318,10 @@ AC_ARG_ENABLE(kde4,
 
 libo_FUZZ_ARG_ENABLE(gui,
     AS_HELP_STRING([--disable-gui],
-        [Disable X11/Wayland support to reduce dependencies. Maybe useful for
-         headless servers, but soffice --headless works just fine without it.
-         Work in progress, use only if you are hacking on it.]),
+        [Disable use of X11 or Wayland to reduce dependencies. Not related to the --headless
+         command-line option. Not related to LibreOffice Online functionality. Don't use
+         unless you are certain you need to. Nobody will help you if you insist on trying
+         this and run into problems.]),
 ,test "${enable_gui+set}" = set || enable_gui=yes)
 
 libo_FUZZ_ARG_ENABLE(randr,
