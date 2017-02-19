@@ -382,14 +382,11 @@ void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleDat
 
     double fTranslateX = fTranslate;
     double fTranslateY = fTranslate;
-    double fTranslateZ = fTranslate;
+    double fTranslateZ = fTranslateLogicZ;
 
     double fScaleX = fScale;
     double fScaleY = fScale;
-    double fScaleZ = fScale;
-
-    fTranslateZ = fTranslateLogicZ;
-    fScaleZ = fScaleLogicZ;
+    double fScaleZ = fScaleLogicZ;
 
     aRet.translate(fTranslateX, fTranslateY, fTranslateZ);//x first
     aRet.scale(fScaleX, fScaleY, fScaleZ);//x first
