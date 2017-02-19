@@ -2373,6 +2373,8 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
             const beans::PropertyValue& rValue = rArguments[i];
             if (rValue.Name == ".uno:ShowBorderShadow" && rValue.Value.has<bool>())
                 pDrawView->SetPageShadowVisible(rValue.Value.get<bool>());
+            else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())
+                pDrawView->SetAuthor(rValue.Value.get<OUString>());
         }
         // Disable map mode, so that it's possible to send mouse event coordinates
         // in logic units.
