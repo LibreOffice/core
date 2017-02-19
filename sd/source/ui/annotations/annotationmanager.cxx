@@ -26,6 +26,7 @@
 #include <com/sun/star/geometry/RealPoint2D.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/document/XEventBroadcaster.hpp>
+#include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
 #include <svx/svxids.hrc>
 
@@ -394,11 +395,18 @@ void AnnotationManagerImpl::InsertAnnotation()
         Reference< XAnnotation > xAnnotation;
         pPage->createAnnotation( xAnnotation );
 
-        // set current author to new annotation
-        SvtUserOptions aUserOptions;
-        xAnnotation->setAuthor( aUserOptions.GetFullName() );
-        xAnnotation->setInitials( aUserOptions.GetID() );
+        OUString sAuthor;
+        if (comphelper::LibreOfficeKit::isActive())
+            sAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
+        else
+        {
+            SvtUserOptions aUserOptions;
+            sAuthor = aUserOptions.GetFullName();
+            xAnnotation->setInitials( aUserOptions.GetID() );
+        }
 
+        // set current author to new annotation
+        xAnnotation->setAuthor( sAuthor );
         // set current time to new annotation
         xAnnotation->setDateTime( getCurrentDateTime() );
 
