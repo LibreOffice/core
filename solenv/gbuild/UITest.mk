@@ -52,14 +52,14 @@ $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
 		URE_BOOTSTRAP=vnd.sun.star.pathname:$(call gb_Helper_get_rcfile,$(INSTROOT)/$(LIBO_ETC_FOLDER)/fundamental) \
 		PYTHONPATH="$(PYPATH)" \
 		TestUserDir="$(call gb_Helper_make_url,$(dir $(call gb_UITest_get_target,$*)))" \
-		PYTHONDONTWRITEBYTECODE=1 \
+		PYTHONDONTWRITEBYTECODE=0 \
 		$(if $(filter-out MACOSX WNT,$(OS_FOR_BUILD)),$(if $(ENABLE_HEADLESS),, \
 			SAL_USE_VCLPLUGIN=svp \
 		)) \
 		$(gb_UITest_COMMAND) \
 		--soffice=path:$(INSTROOT)/$(LIBO_BIN_FOLDER)/soffice \
 		--userdir=$(call gb_Helper_make_url,$(dir $(call gb_UITest_get_target,$*))user) \
-		--dir=$(SRCDIR)/uitest/$(strip $(MODULES)) \
+		--dir=$(strip $(MODULES)) \
 		$(gb_UITest_GDBTRACE) \
 		$(if $(gb_UITest__interactive),, \
 		    > $@.log 2>&1 \
@@ -70,7 +70,7 @@ $(call gb_UITest_get_target,%) :| $(gb_UITest_DEPS)
 
 # always use udkapi and URE services
 define gb_UITest_UITest
-$(call gb_UITest_get_target,$(1)) : PYPATH := $(SRCDIR)/unotest/source/python$$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_PYUNO_FOLDER)$(if $(filter-out $(LIBO_LIB_PYUNO_FOLDER),$(LIBO_LIB_FOLDER)),$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_FOLDER))
+$(call gb_UITest_get_target,$(1)) : PYPATH := $(SRCDIR)/uitest$$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_PYUNO_FOLDER)$(if $(filter-out $(LIBO_LIB_PYUNO_FOLDER),$(LIBO_LIB_FOLDER)),$(gb_CLASSPATHSEP)$(INSTROOT)/$(LIBO_LIB_FOLDER))
 $(call gb_UITest_get_target,$(1)) : MODULES :=
 
 $(eval $(call gb_Module_register_target,$(call gb_UITest_get_target,$(1)),$(call gb_UITest_get_clean_target,$(1))))
@@ -90,8 +90,8 @@ endef
 #
 # gb_UITest_add_modules directory module(s)
 define gb_UITest_add_modules
-$(call gb_UITest_get_target,$(1)) : PYPATH := $$(PYPATH)$$(gb_CLASSPATHSEP)$(2)
-$(call gb_UITest_get_target,$(1)) : MODULES += $(3)
+$(call gb_UITest_get_target,$(1)) : PYPATH := $$(PYPATH)$$(gb_CLASSPATHSEP)$(strip $(2))/$(strip $(3))
+$(call gb_UITest_get_target,$(1)) : MODULES += $(strip $(2))/$(strip $(3))
 
 endef
 
