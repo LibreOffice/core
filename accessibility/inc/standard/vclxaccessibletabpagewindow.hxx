@@ -47,7 +47,6 @@ protected:
 
 public:
     VCLXAccessibleTabPageWindow( VCLXWindow* pVCLXWindow );
-    virtual ~VCLXAccessibleTabPageWindow() override;
 
     // XAccessibleContext
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;

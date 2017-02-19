@@ -43,7 +43,7 @@ public:
         getSupportedServiceNames() override;
 
 protected:
-    virtual ~VCLXAccessibleDropDownComboBox() override;
+    virtual ~VCLXAccessibleDropDownComboBox() override = default;
 
     virtual bool IsValid() const override;
     virtual void ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent) override;

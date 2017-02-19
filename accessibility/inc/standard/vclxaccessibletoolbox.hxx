@@ -54,7 +54,7 @@ private:
     void                        ReleaseSubToolBox( ToolBox* _pSubToolBox );
 
 protected:
-    virtual ~VCLXAccessibleToolBox() override;
+    virtual ~VCLXAccessibleToolBox() override = default;
 
     virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
     virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;

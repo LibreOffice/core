@@ -43,7 +43,7 @@ private:
     bool    m_bIndeterminate;
 
 protected:
-    virtual ~VCLXAccessibleCheckBox() override;
+    virtual ~VCLXAccessibleCheckBox() override = default;
 
     bool    IsChecked();
     bool    IsIndeterminate();

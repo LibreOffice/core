@@ -37,10 +37,6 @@ VCLXAccessibleComboBox::VCLXAccessibleComboBox (VCLXWindow* pVCLWindow)
 }
 
 
-VCLXAccessibleComboBox::~VCLXAccessibleComboBox()
-{
-}
-
 bool VCLXAccessibleComboBox::IsValid() const
 {
     return GetWindow().get() != nullptr;

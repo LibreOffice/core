@@ -39,7 +39,7 @@ class VCLXAccessibleButton : public VCLXAccessibleTextComponent,
                              public VCLXAccessibleButton_BASE
 {
 protected:
-    virtual ~VCLXAccessibleButton() override;
+    virtual ~VCLXAccessibleButton() override = default;
 
     virtual void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent ) override;
     virtual void FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
