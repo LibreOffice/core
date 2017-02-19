@@ -41,6 +41,11 @@
           <desc>Position in the menu.</desc>
         </info>
       </prop>
+      <prop oor:name="IsExperimental" oor:type="xs:boolean" oor:nillable="true">
+        <info>
+          <desc>Enables entry only in the experimental mode.</desc>
+        </info>
+      </prop>
       <prop oor:name="HasNotebookbar" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Determines if Notebookbar is visible.</desc>
