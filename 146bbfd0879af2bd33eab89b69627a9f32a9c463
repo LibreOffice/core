@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_517487ce",
+        "filename": "external/poppler/UnpackedTarball_poppler.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-19T17:27:39Z",
+      "side": 0,
+      "message": "Bad rebase, in previous patch set it was correctly removed.",
+      "range": {
+        "startLine": 16,
+        "startChar": 40,
+        "endLine": 16,
+        "endChar": 81
+      },
+      "revId": "146bbfd0879af2bd33eab89b69627a9f32a9c463",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
