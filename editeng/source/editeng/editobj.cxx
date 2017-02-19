@@ -476,7 +476,7 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
 // from SfxItemPoolUser
 void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
 {
-    if(!bOwnerOfPool && pPool && pPool == &rSfxItemPool)
+    if(!bOwnerOfPool && pPool == &rSfxItemPool)
     {
         // The pool we are based on gets destructed; get owner of pool by creating own one.
         // No need to call RemoveSfxItemPoolUser(), this is done from the pool's destructor
@@ -484,10 +484,7 @@ void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
         // pool if needed, but only text attributes should be used.
         SfxItemPool* pNewPool = EditEngine::CreatePool();
 
-        if(pPool)
-        {
-            pNewPool->SetDefaultMetric(pPool->GetMetric(DEF_METRIC));
-        }
+        pNewPool->SetDefaultMetric(pPool->GetMetric(DEF_METRIC));
 
         ContentInfosType aReplaced;
         aReplaced.reserve(aContents.size());
