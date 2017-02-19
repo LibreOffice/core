@@ -370,6 +370,15 @@ SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const Reference< XAnnotation 
     }
 }
 
+sal_uInt32 getAnnotationId(const Reference<XAnnotation>& xAnnotation)
+{
+    Annotation* pAnnotation = dynamic_cast<Annotation*>(xAnnotation.get());
+    sal_uInt32 nId = 0;
+    if (pAnnotation)
+        nId = pAnnotation->GetId();
+    return nId;
+}
+
 UndoInsertOrRemoveAnnotation::UndoInsertOrRemoveAnnotation( Annotation& rAnnotation, bool bInsert )
 : SdrUndoAction( *rAnnotation.GetModel() )
 , mxAnnotation( &rAnnotation )
