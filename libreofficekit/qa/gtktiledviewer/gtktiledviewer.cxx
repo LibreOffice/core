@@ -1110,21 +1110,28 @@ static void initWindow(TiledWindow& rWindow)
     gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(rWindow.m_pEnableEditing), TRUE);
 
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(rWindow.m_pDocView));
-    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
+    if (pDocument)
     {
-        // Align to top left corner, so the tiles are in sync with the
-        // row/column bar, even when zooming out enough that not all space is
-        // used.
-        gtk_widget_set_halign(GTK_WIDGET(rWindow.m_pDocView), GTK_ALIGN_START);
-        gtk_widget_set_valign(GTK_WIDGET(rWindow.m_pDocView), GTK_ALIGN_START);
+        if (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_SPREADSHEET)
+        {
+            // Align to top left corner, so the tiles are in sync with the
+            // row/column bar, even when zooming out enough that not all space is
+            // used.
+            gtk_widget_set_halign(GTK_WIDGET(rWindow.m_pDocView), GTK_ALIGN_START);
+            gtk_widget_set_valign(GTK_WIDGET(rWindow.m_pDocView), GTK_ALIGN_START);
 
-        // Change cell alignment uno commands for spreadsheet
-        lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:AlignLeft");
-        lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:AlignHorizontalCenter");
-        lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:AlignRight");
-        gtk_widget_hide(GTK_WIDGET(rWindow.m_pJustifypara));
+            // Change cell alignment uno commands for spreadsheet
+            lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:AlignLeft");
+            lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:AlignHorizontalCenter");
+            lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:AlignRight");
+            gtk_widget_hide(GTK_WIDGET(rWindow.m_pJustifypara));
 
-        lcl_registerToolItem(rWindow, rWindow.m_pDeleteComment, ".uno:DeleteNote");
+            lcl_registerToolItem(rWindow, rWindow.m_pDeleteComment, ".uno:DeleteNote");
+        }
+        else if (pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_PRESENTATION)
+        {
+            lcl_registerToolItem(rWindow, rWindow.m_pDeleteComment, ".uno:DeleteAnnotation");
+        }
     }
 
     // Fill our comments sidebar
