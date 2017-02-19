@@ -137,4 +137,8 @@ $(eval $(call gb_Module_add_screenshot_targets,sc,\
 	CppunitTest_sc_screenshots \
 ))
 
+$(eval $(call gb_Module_add_uicheck_targets,sc,\
+	UITest_conditional_format \
+))
+
 # vim: set noet sw=4 ts=4:
