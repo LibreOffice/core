@@ -47,7 +47,7 @@ protected:
 
 public:
     VCLXAccessibleMenuBar( Menu* pMenu );
-    virtual ~VCLXAccessibleMenuBar() override;
+    ~VCLXAccessibleMenuBar() override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;

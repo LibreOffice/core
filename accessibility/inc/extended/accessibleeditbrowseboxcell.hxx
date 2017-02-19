@@ -48,7 +48,7 @@ namespace accessibility
         );
 
     protected:
-        virtual ~EditBrowseBoxTableCell() override;
+        ~EditBrowseBoxTableCell() override;
 
     protected:
         // XAccessibleComponent

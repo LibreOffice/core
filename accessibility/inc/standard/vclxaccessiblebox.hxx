@@ -142,8 +142,6 @@ protected:
     */
     bool m_bHasListChild;
 
-    virtual ~VCLXAccessibleBox() override;
-
     /** Returns true when the object is valid.
     */
     virtual bool IsValid() const = 0;

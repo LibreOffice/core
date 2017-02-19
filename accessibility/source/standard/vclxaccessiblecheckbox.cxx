@@ -53,11 +53,6 @@ VCLXAccessibleCheckBox::VCLXAccessibleCheckBox( VCLXWindow* pVCLWindow )
 }
 
 
-VCLXAccessibleCheckBox::~VCLXAccessibleCheckBox()
-{
-}
-
-
 bool VCLXAccessibleCheckBox::IsChecked()
 {
     bool bChecked = false;

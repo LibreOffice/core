@@ -33,17 +33,6 @@ using namespace ::com::sun::star::accessibility;
 // VCLXAccessibleFixedText
 
 
-VCLXAccessibleFixedText::VCLXAccessibleFixedText( VCLXWindow* pVCLWindow )
-    :VCLXAccessibleTextComponent( pVCLWindow )
-{
-}
-
-
-VCLXAccessibleFixedText::~VCLXAccessibleFixedText()
-{
-}
-
-
 void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
     VCLXAccessibleTextComponent::FillAccessibleStateSet( rStateSet );
