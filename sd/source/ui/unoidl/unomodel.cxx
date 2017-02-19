@@ -30,6 +30,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 
 #include <osl/mutex.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -88,12 +89,15 @@
 #include <stlpool.hxx>
 #include <unopback.hxx>
 #include <unokywds.hxx>
+
 #include "FrameView.hxx"
 #include "ClientView.hxx"
 #include "DrawViewShell.hxx"
 #include "ViewShell.hxx"
 #include "Window.hxx"
 #include "app.hrc"
+#include "optsitem.hxx"
+
 #include <vcl/pdfextoutdevdata.hxx>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -2376,6 +2380,11 @@ void SdXImpressDocument::initializeForTiledRendering(const css::uno::Sequence<cs
             else if (rValue.Name == ".uno:Author" && rValue.Value.has<OUString>())
                 pDrawView->SetAuthor(rValue.Value.get<OUString>());
         }
+
+        // Disable comments if requested
+        SdOptions* pOptions = SD_MOD()->GetSdOptions(mpDoc->GetDocumentType());
+        pOptions->SetShowComments(comphelper::LibreOfficeKit::isTiledAnnotations());
+
         // Disable map mode, so that it's possible to send mouse event coordinates
         // in logic units.
         if (sd::Window* pWindow = pViewShell->GetActiveWindow())
