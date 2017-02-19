@@ -848,7 +848,7 @@ bool SVGFilter::implExportDocument()
                 implExportMasterPages( mMasterPageTargets, 0, mMasterPageTargets.size() - 1 );
             implExportDrawPages( mSelectedPages, 0, nLastPage );
 
-            if( mbPresentation )
+            if( mbPresentation && !mbExportShapeSelection )
             {
                 implGenerateScript();
             }
