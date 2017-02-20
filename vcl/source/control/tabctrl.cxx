@@ -2211,13 +2211,7 @@ NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent)
     , bLastContextWasSupported(true)
     , eLastContext(vcl::EnumContext::Context::Any)
 {
-    LanguageTag aLocale( Application::GetSettings().GetUILanguageTag());
-    ResMgr* pResMgr = ResMgr::SearchCreateResMgr( "vcl", aLocale );
-
-    Bitmap aBitmap;
-    if( pResMgr )
-        aBitmap = Bitmap( ResId( SV_RESID_BITMAP_NOTEBOOKBAR, *pResMgr ) );
-
+    Bitmap aBitmap(VclResId(SV_RESID_BITMAP_NOTEBOOKBAR));
     InsertPage(1, "");
     SetPageImage(1, Image(aBitmap));
 }
