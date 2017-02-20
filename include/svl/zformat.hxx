@@ -169,6 +169,9 @@ public:
     /// Get type of format, may include css::util::NumberFormat::DEFINED bit
     short GetType() const                       { return eType; }
 
+    /// Get type of format, does not include css::util::NumberFormat::DEFINED
+    short GetMaskedType() const                 { return eType & ~css::util::NumberFormat::DEFINED; }
+
     void SetType(const short eSetType)          { eType = eSetType; }
     // Standard means the I18N defined standard format of this type
     void SetStandard()                          { bStandard = true; }
