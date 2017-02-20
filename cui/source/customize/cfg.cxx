@@ -2874,7 +2874,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
     // Copy the entries list passed in
     if ( entries != nullptr )
     {
-        mpEntries = new SvxEntries();
+        mpEntries = new SvxEntries;
         SvxEntries::const_iterator iter = entries->begin();
 
         while ( iter != entries->end() )
@@ -3075,7 +3075,7 @@ SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
 {
     if (bPopUp)
     {
-        mpEntries = new SvxEntries();
+        mpEntries = new SvxEntries;
     }
 }
 

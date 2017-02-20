@@ -297,7 +297,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
             SvxBrushItem* pBrushItem = new SvxBrushItem(*it, "", GPOS_AREA, SID_ATTR_BRUSH);
 
-            SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
+            SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
             pInfo->pBrushItem = pBrushItem;
             pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i);
             if ( i < m_aGrfBrushItems.size() )
@@ -388,7 +388,7 @@ void SvxLineTabPage::InitSymbols(MenuButton* pButton)
 
             SvxBrushItem* pBrushItem = new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH);
 
-            SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
+            SvxBmpItemInfo* pInfo = new SvxBmpItemInfo;
             pInfo->pBrushItem = pBrushItem;
             pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i + m_nNumMenuGalleryItems);
             if ( (size_t)(m_nNumMenuGalleryItems + i) < m_aGrfBrushItems.size() ) {
