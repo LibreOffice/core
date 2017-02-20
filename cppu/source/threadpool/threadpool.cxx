@@ -397,7 +397,7 @@ uno_threadpool_create() SAL_THROW_EXTERN_C()
     ThreadPoolHolder p;
     if( ! g_pThreadpoolHashSet )
     {
-        g_pThreadpoolHashSet = new ThreadpoolHashSet();
+        g_pThreadpoolHashSet = new ThreadpoolHashSet;
         p = new ThreadPool;
     }
     else

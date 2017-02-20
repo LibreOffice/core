@@ -2101,7 +2101,7 @@ extern "C" void SAL_CALL typelib_typedescriptionreference_new(
 
     if( reallyWeak( eTypeClass ) )
     {
-        typelib_TypeDescriptionReference * pTDR = new typelib_TypeDescriptionReference();
+        typelib_TypeDescriptionReference * pTDR = new typelib_TypeDescriptionReference;
 #if OSL_DEBUG_LEVEL > 0
         osl_atomic_increment( &rInit.nTypeDescriptionReferenceCount );
 #endif
