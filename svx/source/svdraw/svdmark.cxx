@@ -179,8 +179,9 @@ void SdrMarkList::ImpForceSort()
             if(maList.size() > 1)
             {
                 SdrMark* pAkt = maList.back();
-                for (size_t i = maList.size() - 2; i; --i)
+                for (size_t count = maList.size() - 1; count; --count)
                 {
+                    size_t i = count - 1;
                     SdrMark* pCmp = maList[i];
                     if(pAkt->GetMarkedSdrObj() == pCmp->GetMarkedSdrObj() && pAkt->GetMarkedSdrObj())
                     {
