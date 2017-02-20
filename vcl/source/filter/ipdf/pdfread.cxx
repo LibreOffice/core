@@ -37,12 +37,9 @@ double pointToPixel(double fPoint)
     return fPoint / 72 * 96;
 }
 
-#endif
-
 /// Does PDF to PNG conversion using pdfium.
 bool generatePreview(SvStream& rStream, Graphic& rGraphic)
 {
-#if HAVE_FEATURE_PDFIUM
     FPDF_LIBRARY_CONFIG aConfig;
     aConfig.version = 2;
     aConfig.m_pUserFontPaths = nullptr;
@@ -109,13 +106,18 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
     FPDF_ClosePage(pPdfPage);
     FPDF_CloseDocument(pPdfDocument);
     FPDF_DestroyLibrary();
-#else
-    (void)rStream;
-    (void)rGraphic;
-#endif
 
     return true;
 }
+#else
+bool generatePreview(SvStream& rStream, Graphic& rGraphic)
+{
+    (void)rStream;
+    (void)rGraphic;
+
+    return true;
+}
+#endif // HAVE_FEATURE_PDFIUM
 
 }
 
