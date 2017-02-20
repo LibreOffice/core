@@ -461,7 +461,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
         comphelper::FlagRestorationGuard aStartedParaSdtGuard(m_bStartedParaSdt, false);
 
         assert(!m_pPostponedCustomShape);
-        m_pPostponedCustomShape.reset(new std::list<PostponedDrawing>());
+        m_pPostponedCustomShape.reset(new std::list<PostponedDrawing>);
         for (size_t nIndex = 0; nIndex < m_aFramesOfParagraph.size(); ++nIndex)
         {
             m_bParagraphFrameOpen = true;
@@ -1720,19 +1720,19 @@ void DocxAttributeOutput::StartRunProperties()
     InitCollectedRunProperties();
 
     OSL_ASSERT( !m_pPostponedGraphic );
-    m_pPostponedGraphic.reset(new std::list<PostponedGraphic>());
+    m_pPostponedGraphic.reset(new std::list<PostponedGraphic>);
 
     OSL_ASSERT( !m_pPostponedDiagrams );
-    m_pPostponedDiagrams.reset(new std::list<PostponedDiagram>());
+    m_pPostponedDiagrams.reset(new std::list<PostponedDiagram>);
 
     OSL_ASSERT( !m_pPostponedVMLDrawings );
-    m_pPostponedVMLDrawings.reset(new std::list<PostponedDrawing>());
+    m_pPostponedVMLDrawings.reset(new std::list<PostponedDrawing>);
 
     assert(!m_pPostponedDMLDrawings);
-    m_pPostponedDMLDrawings.reset(new std::list<PostponedDrawing>());
+    m_pPostponedDMLDrawings.reset(new std::list<PostponedDrawing>);
 
     assert( !m_pPostponedOLEs );
-    m_pPostponedOLEs.reset(new std::list<PostponedOLE>());
+    m_pPostponedOLEs.reset(new std::list<PostponedOLE>);
 }
 
 void DocxAttributeOutput::InitCollectedRunProperties()

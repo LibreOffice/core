@@ -869,7 +869,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleUINameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetCellStyleUINameArray()
 {
     if (!s_pCellStyleUINameArray)
-        s_pCellStyleUINameArray = new std::vector<OUString>();
+        s_pCellStyleUINameArray = new std::vector<OUString>;
     return *s_pCellStyleUINameArray;
 }
 
@@ -973,7 +973,7 @@ const std::vector<OUString>& SwStyleNameMapper::GetTableStyleProgNameArray()
 const std::vector<OUString>& SwStyleNameMapper::GetCellStyleProgNameArray()
 {
     if (!s_pCellStyleProgNameArray)
-        s_pCellStyleProgNameArray = new std::vector<OUString>();
+        s_pCellStyleProgNameArray = new std::vector<OUString>;
     return *s_pCellStyleProgNameArray;
 }
 

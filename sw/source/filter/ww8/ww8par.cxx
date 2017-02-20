@@ -6064,7 +6064,7 @@ void SwWW8ImplReader::GetSmartTagInfo(SwFltRDFMark& rMark)
 {
     if (!m_pSmartTagData && m_pWwFib->m_lcbFactoidData)
     {
-        m_pSmartTagData.reset(new WW8SmartTagData());
+        m_pSmartTagData.reset(new WW8SmartTagData);
         m_pSmartTagData->Read(*m_pTableStream, m_pWwFib->m_fcFactoidData, m_pWwFib->m_lcbFactoidData);
     }
 
@@ -6187,7 +6187,7 @@ sal_uLong SwWW8ImplReader::LoadDoc(WW8Glossary *pGloss)
 
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportDOC()
 {
-    return new WW8Reader();
+    return new WW8Reader;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportDOC(const OUString &rURL, const OUString &rFltName)

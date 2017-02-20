@@ -395,7 +395,7 @@ SwTwips SwTextAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
     OSL_ENSURE( pCurrent->Height(), "SwTextAdjuster::CalcBlockAdjust: missing CalcLine()" );
     OSL_ENSURE( !pCurrent->GetpKanaComp(), "pKanaComp already exists!!" );
 
-    std::deque<sal_uInt16> *pNewKana = new std::deque<sal_uInt16>();
+    std::deque<sal_uInt16> *pNewKana = new std::deque<sal_uInt16>;
     pCurrent->SetKanaComp( pNewKana );
 
     const sal_uInt16 nNull = 0;

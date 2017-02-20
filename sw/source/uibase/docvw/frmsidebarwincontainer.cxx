@@ -65,7 +65,7 @@ class FrameSidebarWinContainer : public FrameSidebarWinContainer_
 };
 
 SwFrameSidebarWinContainer::SwFrameSidebarWinContainer()
-    : mpFrameSidebarWinContainer( new FrameSidebarWinContainer() )
+    : mpFrameSidebarWinContainer( new FrameSidebarWinContainer )
 {}
 
 SwFrameSidebarWinContainer::~SwFrameSidebarWinContainer()

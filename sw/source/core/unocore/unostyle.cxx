@@ -1851,7 +1851,7 @@ void SwXStyle::SetPropertyValue<FN_UNO_CATEGORY>(const SfxItemPropertySimpleEntr
     static std::unique_ptr<std::map<paragraphstyle_t, swstylebits_t>> pUnoToCore;
     if(!pUnoToCore)
     {
-        pUnoToCore.reset(new std::map<paragraphstyle_t, swstylebits_t>());
+        pUnoToCore.reset(new std::map<paragraphstyle_t, swstylebits_t>);
         auto pEntries = lcl_GetParagraphStyleCategoryEntries();
         std::transform(pEntries->begin(), pEntries->end(), std::inserter(*pUnoToCore, pUnoToCore->end()),
             [] (const ParagraphStyleCategoryEntry& rEntry) { return std::pair<paragraphstyle_t, swstylebits_t>(rEntry.m_eCategory, rEntry.m_nSwStyleBits); });
@@ -2217,7 +2217,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertySimple
     static std::unique_ptr<std::map<collectionbits_t, paragraphstyle_t>> pUnoToCore;
     if(!pUnoToCore)
     {
-        pUnoToCore.reset(new std::map<collectionbits_t, paragraphstyle_t>());
+        pUnoToCore.reset(new std::map<collectionbits_t, paragraphstyle_t>);
         auto pEntries = lcl_GetParagraphStyleCategoryEntries();
         std::transform(pEntries->begin(), pEntries->end(), std::inserter(*pUnoToCore, pUnoToCore->end()),
             [] (const ParagraphStyleCategoryEntry& rEntry) { return std::pair<collectionbits_t, paragraphstyle_t>(rEntry.m_nCollectionBits, rEntry.m_eCategory); });

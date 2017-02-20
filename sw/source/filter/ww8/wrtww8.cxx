@@ -1959,7 +1959,7 @@ void WW8Export::SaveData( sal_uLong nStt, sal_uLong nEnd )
     if ( !pO->empty() )
     {
         rData.pOOld = pO;
-        pO = new ww::bytes();
+        pO = new ww::bytes;
     }
     else
         rData.pOOld = nullptr; // reuse pO
@@ -3262,7 +3262,7 @@ void WW8Export::ExportDocument_Impl()
 
     m_pPapPlc = new WW8_WrPlcPn( *this, PAP, pFib->m_fcMin );
     m_pChpPlc = new WW8_WrPlcPn( *this, CHP, pFib->m_fcMin );
-    pO = new ww::bytes();
+    pO = new ww::bytes;
     m_pStyles = new MSWordStyles( *this );
     m_pFieldMain = new WW8_WrPlcField( 2, TXT_MAINTEXT );
     m_pFieldHdFt = new WW8_WrPlcField( 2, TXT_HDFT );

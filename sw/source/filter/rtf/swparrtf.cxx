@@ -155,7 +155,7 @@ sal_uLong SwRTFReader::Read(SwDoc& rDoc, const OUString& /*rBaseURL*/, SwPaM& rP
 
 extern "C" SAL_DLLPUBLIC_EXPORT Reader* SAL_CALL ImportRTF()
 {
-    return new SwRTFReader();
+    return new SwRTFReader;
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportRTF(const OUString& rURL)

@@ -276,7 +276,7 @@ void StgReader::SetFltName( const OUString& rFltNm )
 
 SwRelNumRuleSpaces::SwRelNumRuleSpaces( SwDoc& rDoc, bool bNDoc )
 {
-    pNumRuleTable = new SwNumRuleTable();
+    pNumRuleTable = new SwNumRuleTable;
     pNumRuleTable->reserve(8);
     if( !bNDoc )
         pNumRuleTable->insert( pNumRuleTable->begin(),

@@ -569,7 +569,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
     // pass 1: calculate columns
     SwXMLTableLines_Impl *pLines = new SwXMLTableLines_Impl( rLines );
     if( !m_pTableLines )
-        m_pTableLines = new SwXMLTableLinesCache_Impl();
+        m_pTableLines = new SwXMLTableLinesCache_Impl;
 
     m_pTableLines->push_back( pLines );
 

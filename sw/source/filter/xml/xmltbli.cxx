@@ -1809,7 +1809,7 @@ SwTableBoxFormat* SwXMLTableContext::GetSharedBoxFormat(
     bool* pModifyLocked )
 {
     if ( m_pSharedBoxFormats == nullptr )
-        m_pSharedBoxFormats = new map_BoxFormat();
+        m_pSharedBoxFormats = new map_BoxFormat;
 
     SwTableBoxFormat* pBoxFormat2;
 

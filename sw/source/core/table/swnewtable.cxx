@@ -381,7 +381,7 @@ SwBoxSelection* SwTable::CollectBoxSelection( const SwPaM& rPam ) const
     {
         SwTableLine* pLine = m_aLines[nRow];
         OSL_ENSURE( pLine, "Missing table line" );
-        SwSelBoxes *pBoxes = new SwSelBoxes();
+        SwSelBoxes *pBoxes = new SwSelBoxes;
         long nRight = 0;
         const size_t nCount = pLine->GetTabBoxes().size();
         for( size_t nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )

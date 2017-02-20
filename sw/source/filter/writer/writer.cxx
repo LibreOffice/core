@@ -324,7 +324,7 @@ bool Writer::CopyLocalFileToINet( OUString& rFileNm )
     }
     else
     {
-        m_pImpl->pFileNameMap.reset( new std::map<OUString, OUString>() );
+        m_pImpl->pFileNameMap.reset( new std::map<OUString, OUString> );
     }
 
     OUString aSrc  = rFileNm;

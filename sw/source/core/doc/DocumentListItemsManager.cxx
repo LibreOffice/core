@@ -25,7 +25,7 @@
 namespace sw
 {
 
-DocumentListItemsManager::DocumentListItemsManager() : mpListItemsList( new tImplSortedNodeNumList() ) // #i83479#
+DocumentListItemsManager::DocumentListItemsManager() : mpListItemsList( new tImplSortedNodeNumList ) // #i83479#
 {
 }
 

@@ -62,7 +62,7 @@ class SwPageNumAndTypeOfAnchors
 
         inline void Collect( SwAnchoredObject& _rAnchoredObj )
         {
-            tEntry* pNewEntry = new tEntry();
+            tEntry* pNewEntry = new tEntry;
             pNewEntry->mpAnchoredObj = &_rAnchoredObj;
             // #i33751#, #i34060# - method <GetPageFrameOfAnchor()>
             // is replaced by method <FindPageFrameOfAnchor()>. It's return value

@@ -143,7 +143,7 @@ namespace sw
 DocumentFieldsManager::DocumentFieldsManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc ),
                                                                   mbNewFieldLst(true),
                                                                   mpUpdateFields( new SwDocUpdateField( &m_rDoc ) ),
-                                                                  mpFieldTypes( new SwFieldTypes() ),
+                                                                  mpFieldTypes( new SwFieldTypes ),
                                                                   mnLockExpField( 0 )
 {
 }
