@@ -39,47 +39,40 @@ class GbuildLinkTarget:
 
 
 class GbuildLib(GbuildLinkTarget):
-    def __init__(self, name, library, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
-        self.library = library
 
     def short_name(self):
         """Return the short name of target based on the Library_* makefile name"""
         return 'Library %s' % self.name
 
     def target_name(self):
-        return 'Library_%s' % self.library
+        return 'Library_%s' % self.name
 
     def library_name(self):
-        return self.library
+        return self.name
 
 class GbuildTest(GbuildLinkTarget):
-    def __init__(self, name, test, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
-        self.test = test
 
     def short_name(self):
         """Return the short name of target based n the CppunitTest_* makefile names"""
         return 'CppunitTest %s' % self.name
 
     def target_name(self):
-        return 'CppunitTest_%s' % self.test
-
-    def test_name(self):
-        return self.test
-
+        return 'CppunitTest_%s' % self.name
 
 class GbuildExe(GbuildLinkTarget):
-    def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
         GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
-        self.executable = executable
 
     def short_name(self):
         """Return the short name of target based on the Executable_* makefile name"""
         return 'Executable %s' % self.name
 
     def target_name(self):
-        return 'Executable_%s' % self.executable
+        return 'Executable_%s' % self.name
 
 
 class GbuildParser:
@@ -88,7 +81,7 @@ class GbuildParser:
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
         (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
         (self.libs, self.exes, self.tests, self.modulenamelist) = ([], [], [], [])
-        (self.libnames, self.exenames, self.testnames, self.target_by_path, self.target_by_location) = ({}, {}, {}, {}, {})
+        (self.target_by_path, self.target_by_location) = ({}, {})
 
     includepattern = re.compile('-I(\S+)')
     isystempattern = re.compile('-isystem\s*(\S+)')
@@ -129,7 +122,6 @@ class GbuildParser:
         (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
         return GbuildLib(
             GbuildParser.libpattern.match(os.path.basename(json['MAKEFILE'])).group(1),
-            json['LINKTARGET'],
             os.path.dirname(json['MAKEFILE']),
             foundincludes,
             foundisystem,
@@ -151,7 +143,6 @@ class GbuildParser:
 
         return GbuildTest(
             testname,
-            json['LINKTARGET'],
             os.path.dirname(json['MAKEFILE']),
             foundincludes,
             foundisystem,
@@ -165,7 +156,6 @@ class GbuildParser:
         (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
         return GbuildExe(
             GbuildParser.exepattern.match(os.path.basename(json['MAKEFILE'])).group(1),
-            json['LINKTARGET'],
             os.path.dirname(json['MAKEFILE']),
             foundincludes,
             foundisystem,
@@ -178,17 +168,14 @@ class GbuildParser:
         for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Library')):
             with open(os.path.join(self.workdir, 'GbuildToJson', 'Library', jsonfilename), 'r') as f:
                 lib = self.__lib_from_json(json.load(f))
-                self.libnames[lib.library] = lib.name
                 self.libs.append(lib)
         for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Executable')):
             with open(os.path.join(self.workdir, 'GbuildToJson', 'Executable', jsonfilename), 'r') as f:
                 exe = self.__exe_from_json(json.load(f))
-                self.exenames[exe.executable] = exe.name
                 self.exes.append(exe)
         for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'CppunitTest')):
             with open(os.path.join(self.workdir, 'GbuildToJson', 'CppunitTest', jsonfilename), 'r') as f:
                 test = self.__test_from_json(json.load(f))
-                self.testnames[test.test] = test.name
                 self.tests.append(test)
         for target in set(self.libs) | set(self.exes) | set(self.tests):
             if target.location not in self.target_by_location:
@@ -199,6 +186,10 @@ class GbuildParser:
                 if path not in self.target_by_path:
                     self.target_by_path[path] = set()
                 self.target_by_path[path] |= set([target])
+        for path in self.target_by_path:
+            if len(set(self.target_by_path[path])) > 1:
+                print('fdo#70422: multiple target use dir %s: %s' % (
+                    path, ', '.join([target.short_name() for target in set(self.target_by_path[path])])))
         for location in self.target_by_location:
             self.modulenamelist.append(os.path.split(location)[1])
         return self
@@ -711,7 +702,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
     # For some reverse-engineered documentation on the project.pbxproj format,
     # see http://www.monobjc.net/xcode-project-file-format.html .
     def write_xcodeproj(self, moduledir, target):
-        xcodeprojdir = os.path.join(moduledir, '%s.xcodeproj' % target.name)
+        xcodeprojdir = os.path.join(moduledir, '%s.xcodeproj' % target.target_name())
         try:
             os.mkdir(xcodeprojdir)
         except:
@@ -728,7 +719,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             # module = location.split('/')[-1]
             # module_directory = os.path.join(self.rootlocation, module)
             for target in self.gbuildparser.target_by_location[location]:
-                # project_path = os.path.join(module_directory, '%s.pbxroj' % target.name)
+                # project_path = os.path.join(module_directory, '%s.pbxroj' % target.target_name())
                 self.write_xcodeproj(location, target)
 
 
@@ -777,7 +768,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             module = location.split('/')[-1]
             module_directory = os.path.join(self.solution_directory, module)
             for target in self.gbuildparser.target_by_location[location]:
-                project_path = os.path.join(module_directory, '%s.vcxproj' % target.name)
+                project_path = os.path.join(module_directory, '%s.vcxproj' % target.target_name())
                 project_guid = self.write_project(project_path, target)
                 p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
                 projects.append(p)
@@ -803,7 +794,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
             for project in projects:
                 target = project.target
-                print(' %s' % target.name, end='')
+                print(' %s' % target.target_name(), end='')
                 proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
@@ -915,7 +906,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             if os.path.isfile(cxxfile):
                 ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxfile)
             else:
-                print('Source %s in project %s does not exist' % (cxxfile, target.name))
+                print('Source %s in project %s does not exist' % (cxxfile, target.target_name()))
 
         includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target.cxxobjects:
@@ -1616,14 +1607,18 @@ SUBDIRS = %(subdirs)s
 """
 
 
-if __name__ == '__main__':
+def get_options():
     parser = argparse.ArgumentParser(
         description='LibreOffice gbuild IDE project generator')
     parser.add_argument('--ide', dest='ide', required=True,
                         help='the IDE to generate project files for')
     parser.add_argument('--make', dest='makecmd', required=True,
                         help='the command to execute make')
-    args = parser.parse_args()
+    return parser.parse_args()
+
+
+if __name__ == '__main__':
+    args = get_options()
     # FIXME: Hack
     if args.makecmd == 'make':
         args.makecmd = '/usr/bin/make'
