@@ -109,18 +109,20 @@ using namespace ::com::sun::star::office;
 
 namespace {
 
-    void lcl_CommentNotification(const OUString& rEventName, const sd::ViewShellBase& rViewShell, Reference<XAnnotation>& rxAnnotation)
+    enum class CommentNotificationType { Add, Modify, Remove };
+
+    void lcl_CommentNotification(CommentNotificationType nType, const SfxViewShell* pViewShell, Reference<XAnnotation>& rxAnnotation)
     {
         // callbacks only if tiled annotations are explicltly turned off by LOK client
         if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
             return;
 
         boost::property_tree::ptree aAnnotation;
-        aAnnotation.put("action", (rEventName == "OnAnnotationInserted" ? "Add" :
-                                   (rEventName == "OnAnnotationRemoved" ? "Remove" :
-                                    (rEventName == "OnAnnotationChanged" ? "Modify" : "???"))));
+        aAnnotation.put("action", (nType == CommentNotificationType::Add ? "Add" :
+                                   (nType == CommentNotificationType::Remove ? "Remove" :
+                                    (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
         aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
-        if (rEventName != "OnAnnotationRemoved")
+        if (nType != CommentNotificationType::Remove)
         {
             aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
             aAnnotation.put("author", rxAnnotation->getAuthor());
@@ -135,7 +137,7 @@ namespace {
         boost::property_tree::write_json(aStream, aTree);
         std::string aPayload = aStream.str();
 
-        rViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
     }
 
 } // anonymous ns
@@ -276,12 +278,21 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
 {
     if( aEvent.EventName == "OnAnnotationInserted" || aEvent.EventName == "OnAnnotationRemoved" || aEvent.EventName == "OnAnnotationChanged" )
     {
-        Reference<XAnnotation> xAnnotation(aEvent.Source, uno::UNO_QUERY);
-        if (xAnnotation.is())
+        // AnnotationInsertion and modification is not handled here because when
+        // a new annotation is inserted, it consists of OnAnnotationInserted
+        // followed by a chain of OnAnnotationChanged (called for setting each
+        // of the annotation attributes - author, text etc.). This is not what a
+        // LOK client wants. So only handle removal here as annotation removal
+        // consists of only one event - 'OnAnnotationRemoved'
+        if ( aEvent.EventName == "OnAnnotationRemoved" )
         {
-            // Inform our LOK clients
-            lcl_CommentNotification(aEvent.EventName, mrBase, xAnnotation);
+            Reference< XAnnotation > xAnnotation( aEvent.Source, uno::UNO_QUERY );
+            if ( xAnnotation.is() )
+            {
+                lcl_CommentNotification(CommentNotificationType::Remove, &mrBase, xAnnotation);
+            }
         }
+
         UpdateTags();
     }
 }
@@ -507,6 +518,14 @@ void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
         if( mpDoc->IsUndoEnabled() )
             mpDoc->EndUndo();
 
+        // Tell our LOK clients about new comment added
+        const SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            lcl_CommentNotification(CommentNotificationType::Add, pViewShell, xAnnotation);
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
+
         UpdateTags(true);
         SelectAnnotation( xAnnotation, true );
     }
@@ -584,6 +603,14 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 
         // set current time to reply
         xAnnotation->setDateTime( getCurrentDateTime() );
+
+        // Tell our LOK clients about this (comment modification)
+        const SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while (pViewShell)
+        {
+            lcl_CommentNotification(CommentNotificationType::Modify, pViewShell, xAnnotation);
+            pViewShell = SfxViewShell::GetNext(*pViewShell);
+        }
 
         UpdateTags(true);
         SelectAnnotation( xAnnotation, true );
