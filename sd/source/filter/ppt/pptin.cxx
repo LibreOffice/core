@@ -1187,7 +1187,7 @@ bool ImplSdPPTImport::Import()
                         eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE;
                     break;
                     case PptSlideLayout::TITLERIGHT2BODIESLEFT :
-                        eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART;
+                        eAutoLayout = AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT;
                     break;
 
                     case PptSlideLayout::BOTTOMROW2COLUMNS :

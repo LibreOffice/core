@@ -606,8 +606,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     }
                     else if( pObj1->GetName() == "vertical_outline" )
                     {
-                        // AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART
-                        mnTypeId = 27;
+                        mnTypeId = AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT;
                     }
                     else
                     {
