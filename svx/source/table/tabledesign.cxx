@@ -737,7 +737,7 @@ void TableDesignFamily::removeVetoableChangeListener( const OUString& , const Re
 
 Reference< XNameAccess > CreateTableDesignFamily()
 {
-    return new TableDesignFamily();
+    return new TableDesignFamily;
 }
 
 } }

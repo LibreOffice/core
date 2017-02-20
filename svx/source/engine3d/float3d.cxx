@@ -97,7 +97,7 @@ Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* p
     , pControllerItem(nullptr)
     , pConvertTo3DItem(nullptr)
     , pConvertTo3DLatheItem(nullptr)
-    , mpImpl(new Svx3DWinImpl())
+    , mpImpl(new Svx3DWinImpl)
     , ePoolUnit(MapUnit::MapMM)
     , mpRemember2DAttributes(nullptr)
 {

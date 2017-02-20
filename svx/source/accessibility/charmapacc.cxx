@@ -41,7 +41,7 @@ namespace svx
     using namespace ::com::sun::star::accessibility;
 
 
-SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock())
+SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock)
 ,mpParent( pParent )
 {
     osl_atomic_increment(&m_refCount);
@@ -254,7 +254,7 @@ uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItem::GetAccessi
 
 
 
-SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAccessibleSelectionHelper(new VCLExternalSolarLock())
+SvxShowCharSetAcc::SvxShowCharSetAcc( SvxShowCharSetVirtualAcc* _pParent ) : OAccessibleSelectionHelper(new VCLExternalSolarLock)
   ,m_pParent( _pParent )
 {
     osl_atomic_increment(&m_refCount);
@@ -560,7 +560,7 @@ sal_Int32 SAL_CALL SvxShowCharSetAcc::getAccessibleColumn( sal_Int32 nChildIndex
 }
 
 
-SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock())
+SvxShowCharSetItemAcc::SvxShowCharSetItemAcc( SvxShowCharSetItem* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock)
 ,mpParent( pParent )
 {
     OSL_ENSURE(pParent,"NO parent supplied!");

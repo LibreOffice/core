@@ -78,13 +78,13 @@ struct SdrMediaObj::Impl
 
 SdrMediaObj::SdrMediaObj()
     : SdrRectObj()
-    , m_xImpl( new Impl() )
+    , m_xImpl( new Impl )
 {
 }
 
 SdrMediaObj::SdrMediaObj( const Rectangle& rRect )
     : SdrRectObj( rRect )
-    , m_xImpl( new Impl() )
+    , m_xImpl( new Impl )
 {
 }
 
