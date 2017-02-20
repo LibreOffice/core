@@ -63,11 +63,7 @@ def startswith_one_of( srcLoc, fileSet ):
             return True;
     return False;
 
-untouchedSet = set()
-for d in definitionSet:
-    if d in readSet or d in writeSet:
-        continue
-    srcLoc = definitionToSourceLocationMap[d];
+def is_ignore(srcLoc):
     if startswith_one_of(srcLoc,
         [
         # this is all representations of on-disk or external data structures
@@ -118,6 +114,8 @@ for d in definitionSet:
          "include/basic/sbxdef.hxx", # SbxDataType
          "connectivity/source/inc/dbase/DTable.hxx", # ODbaseTable::DBFType
          "codemaker/source/javamaker/classfile.hxx", # AccessFlags
+         "basic/source/inc/filefmt.hxx", # FileOffset
+         "basic/source/inc/opcodes.hxx", #  SbiOpcode
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -146,7 +144,7 @@ for d in definitionSet:
          "binaryurp/source/specialfunctionids.hxx", # binaryurp::SpecialFunctionIds
          "connectivity/source/inc/odbc/OTools.hxx", # ODBC3SQLFunctionId
          "include/formula/grammar.hxx", # FormulaGrammar::Grammar
-         "include/formula/opcode.hxx", # OpCode
+         "basic/source/sbx/sbxres.hxx", # StringId
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
@@ -159,7 +157,7 @@ for d in definitionSet:
         # must match some other enum
          "include/editeng/bulletitem.hxx",
          "include/editeng/svxenum.hxx",
-         "include/formula/opcode.hxx",
+         "include/formula/opcode.hxx", # OpCode
          "include/i18nutil/paper.hxx",
          "include/oox/drawingml/shapepropertymap.hxx",
          "include/svl/nfkeytab.hx",
@@ -194,9 +192,19 @@ for d in definitionSet:
          "include/i18nlangtag/applelangid.hxx", # AppleLanguageId
          "connectivity/source/drivers/firebird/Util.hxx", # firebird::BlobSubtype
          ]):
-        continue
+         return True
+    if d[1] == "UNKNOWN" or d[1] == "LAST" or d[1].endswith("NONE") or d[1].endswith("None") or d[1].endswith("EQUAL_SIZE"):
+        return True
+    return False
 
-    if d[1] == "UNKNOWN" or d[1].endswith("NONE") or d[1].endswith("None") or d[1].endswith("EQUAL_SIZE"): continue
+
+untouchedSet = set()
+for d in definitionSet:
+    if d in readSet or d in writeSet:
+        continue
+    srcLoc = definitionToSourceLocationMap[d];
+    if (is_ignore(srcLoc)):
+        continue
 
     untouchedSet.add((d[0] + " " + d[1], srcLoc))
 
@@ -205,6 +213,8 @@ for d in writeSet:
     if d in readSet:
         continue
     srcLoc = definitionToSourceLocationMap[d];
+    if (is_ignore(srcLoc)):
+        continue
     writeonlySet.add((d[0] + " " + d[1], srcLoc))
 
 readonlySet = set()
@@ -212,6 +222,8 @@ for d in readSet:
     if d in writeSet:
         continue
     srcLoc = definitionToSourceLocationMap[d];
+    if (is_ignore(srcLoc)):
+        continue
     readonlySet.add((d[0] + " " + d[1], srcLoc))
 
 # sort the results using a "natural order" so sequences like [item1,item2,item10] sort nicely

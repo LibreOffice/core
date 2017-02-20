@@ -1067,17 +1067,6 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
         int nStateAtoms = 0;
 
         // set NET_WM_STATE_MODAL
-        if( m_aWMAtoms[ NET_WM_STATE_MODAL ]
-            && pFrame->meWindowType == WMWindowType::ModalDialogue )
-        {
-            aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MODAL ];
-            /*
-             *  #90998# NET_WM_STATE_SKIP_TASKBAR set on a frame will
-             *  cause kwin not to give it the focus on map request
-             *  this seems to be a bug in kwin
-             *  aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_SKIP_TASKBAR ];
-             */
-        }
         if( pFrame->mbMaximizedVert
             && m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ] )
             aStateAtoms[ nStateAtoms++ ] = m_aWMAtoms[ NET_WM_STATE_MAXIMIZED_VERT ];
@@ -1321,15 +1310,6 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
                 aHint.deco |= 1L << 4;
                 aHint.func |= 1L << 5;
             }
-        }
-        // evaluate window type
-        switch( eType )
-        {
-            case WMWindowType::ModalDialogue:
-                aHint.input_mode = 1;
-                break;
-            default:
-                break;
         }
 
         // set the hint
