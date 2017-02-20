@@ -257,11 +257,16 @@ SwDoubleLinePortion::SwDoubleLinePortion(SwDoubleLinePortion& rDouble, sal_Int32
 // internet style, which contains the 2-line-attribute.
 SwDoubleLinePortion::SwDoubleLinePortion(const SwMultiCreator& rCreate, sal_Int32 nEnd)
     : SwMultiPortion(nEnd)
-    , pBracket(new SwBracket())
+    , pBracket(new SwBracket)
     , nLineDiff(0)
     , nBlank1(0)
     , nBlank2(0)
 {
+    pBracket->nAscent = 0;
+    pBracket->nHeight = 0;
+    pBracket->nPreWidth = 0;
+    pBracket->nPostWidth = 0;
+
     SetDouble();
     const SvxTwoLinesItem* pTwo = static_cast<const SvxTwoLinesItem*>(rCreate.pItem);
     if( pTwo )
