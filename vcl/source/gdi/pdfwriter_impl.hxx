@@ -221,6 +221,9 @@ public:
               m_nFormObject(0)
         {
         }
+
+        /// Returns the ID one should use when referring to this bitmap.
+        sal_Int32 getObject() const;
     };
 
     struct JPGEmit
