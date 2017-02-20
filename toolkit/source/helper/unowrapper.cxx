@@ -86,7 +86,6 @@ css::uno::Reference< css::awt::XWindowPeer > CreateXWindow( vcl::Window* pWindow
         case WindowType::SCROLLBAR:      return new VCLXScrollBar;
         case WindowType::TIMEFIELD:      return new VCLXTimeField;
 
-        case WindowType::SYSWINDOW:
         case WindowType::WORKWINDOW:
         case WindowType::DOCKINGWINDOW:
         case WindowType::FLOATINGWINDOW:

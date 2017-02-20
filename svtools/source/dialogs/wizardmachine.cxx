@@ -319,8 +319,7 @@ namespace svt
 
             // is it a button?
             WindowType eType = pChildLoop->GetType();
-            if  (   (WindowType::BUTTON == eType)
-                ||  (WindowType::PUSHBUTTON == eType)
+            if  (   (WindowType::PUSHBUTTON == eType)
                 ||  (WindowType::OKBUTTON == eType)
                 ||  (WindowType::CANCELBUTTON == eType)
                 ||  (WindowType::HELPBUTTON == eType)
