@@ -53,7 +53,6 @@ namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 enum class WMWindowType
 {
     Normal,
-    ModalDialogue,
     ModelessDialogue,
     Utility,
     Splash,
