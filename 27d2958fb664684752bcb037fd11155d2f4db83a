@@ -1,0 +1,187 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_2cbb2a74",
+        "filename": "sc/inc/dpoutput.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-20T14:01:42Z",
+      "side": 1,
+      "message": "The count variables should be removed now and the vector sizes be used instead.",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 56,
+        "endChar": 44
+      },
+      "revId": "27d2958fb664684752bcb037fd11155d2f4db83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4cb06e8c",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-20T14:01:42Z",
+      "side": 1,
+      "message": "nDataCount is superfluous now, use one of aDataNames.size() or nDataFormats.size() instead (btw, the name nDataFormats (prefixed with n) is rather odd for a vector).",
+      "range": {
+        "startLine": 349,
+        "startChar": 0,
+        "endLine": 349,
+        "endChar": 26
+      },
+      "revId": "27d2958fb664684752bcb037fd11155d2f4db83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_cc629e16",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-20T14:01:42Z",
+      "side": 1,
+      "message": "Why obtain the results always if not used for page fields?",
+      "revId": "27d2958fb664684752bcb037fd11155d2f4db83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4c778ed4",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-20T14:01:42Z",
+      "side": 1,
+      "message": "Using new here and the copy-ctor in push_back() leaks memory.",
+      "revId": "27d2958fb664684752bcb037fd11155d2f4db83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8caa5618",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 624,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-20T14:01:42Z",
+      "side": 1,
+      "message": "This does not the same as the original code, it adds the new data unconditionally, whereas the original code did that only for not lcl_MemberEmpty(). Probably best to check that on xLevRes-\u003egetResults() beforehand.",
+      "range": {
+        "startLine": 622,
+        "startChar": 0,
+        "endLine": 624,
+        "endChar": 61
+      },
+      "revId": "27d2958fb664684752bcb037fd11155d2f4db83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6c7452cf",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 627,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-20T14:01:42Z",
+      "side": 1,
+      "message": "memory leak",
+      "revId": "27d2958fb664684752bcb037fd11155d2f4db83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_aca71a4e",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-20T14:01:42Z",
+      "side": 1,
+      "message": "ditto, add only for not lcl_MemberEmpty()",
+      "range": {
+        "startLine": 639,
+        "startChar": 0,
+        "endLine": 642,
+        "endChar": 61
+      },
+      "revId": "27d2958fb664684752bcb037fd11155d2f4db83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8c817692",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 645,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-20T14:01:42Z",
+      "side": 1,
+      "message": "memory leak",
+      "revId": "27d2958fb664684752bcb037fd11155d2f4db83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0c44a672",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 730,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-20T14:01:42Z",
+      "side": 1,
+      "message": "The clear() calls are unnecessary, the vectors will be destructed anyway.",
+      "range": {
+        "startLine": 728,
+        "startChar": 0,
+        "endLine": 730,
+        "endChar": 24
+      },
+      "revId": "27d2958fb664684752bcb037fd11155d2f4db83a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
