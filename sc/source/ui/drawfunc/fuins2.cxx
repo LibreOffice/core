@@ -185,7 +185,20 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
             aArgs[3] = beans::PropertyValue(
                 "DataRowSource", -1,
                 uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
-            xReceiver->setArguments( aArgs );
+
+            try
+            {
+                xReceiver->setArguments( aArgs );
+            }
+            catch (const lang::IllegalArgumentException& e)
+            {
+                // Can happen for invalid aRangeString, in which case a Chart
+                // will be created nevertheless and the range string can be
+                // edited.
+                SAL_WARN("sc.ui",
+                        "lcl_ChartInit - caught IllegalArgumentException with message \"" << e.Message << "\","
+                        " might be due to aRangeString: " << aRangeString);
+            }
 
             // don't create chart listener here (range may be modified in chart dialog)
         }
