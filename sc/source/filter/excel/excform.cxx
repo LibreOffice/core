@@ -1750,7 +1750,6 @@ void ExcelToSc::SetError( ScFormulaCell &rCell, const ConvErr eErr )
     switch( eErr )
     {
         case ConvErr::Ni:         nInd = FormulaError::UnknownToken; break;
-        case ConvErr::External:   nInd = FormulaError::NoName; break;
         case ConvErr::Count:      nInd = FormulaError::CodeOverflow; break;
         default:                  nInd = FormulaError::NoCode;   // I had no better idea
     }
