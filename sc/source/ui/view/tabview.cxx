@@ -213,6 +213,7 @@ ScTabView::ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* 
     pTimerWindow( nullptr ),
     aExtraEditViewManager( pViewShell, pGridWin ),
     nTipVisible( 0 ),
+    nTipAlign( QuickHelpFlags::NONE ),
     nPrevDragPos( 0 ),
     meBlockMode(None),
     nBlockStartX( 0 ),
