@@ -45,7 +45,6 @@ enum class ConvErr
 {
     OK = 0,
     Ni,      // unimplemented/unknown opcode occurred
-    External,// excel add-ins are not converted
     Count    // did not get all bytes of formula
 };
 
