@@ -506,7 +506,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 {
                     if( pObj0->GetName() == "title" )
                     {
-                        mnTypeId = 19; // AUTOLAYOUT_ONLY_TITLE
+                        mnTypeId = AUTOLAYOUT_TITLE_ONLY;
                     }
                     else
                     {

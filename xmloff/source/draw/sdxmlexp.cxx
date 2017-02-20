@@ -1003,7 +1003,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderObject, aBottomRight);
                         break;
                     }
-                    case 19 : // AUTOLAYOUT_ONLY_TITLE
+                    case AUTOLAYOUT_TITLE_ONLY :
                     {
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderTitle, pInfo->GetTitleRectangle());
                         break;

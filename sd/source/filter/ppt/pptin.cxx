@@ -1164,7 +1164,7 @@ bool ImplSdPPTImport::Import()
                         eAutoLayout = AUTOLAYOUT_TITLE;
                     break;
                     case PptSlideLayout::ONLYTITLE :
-                        eAutoLayout = AUTOLAYOUT_ONLY_TITLE;
+                        eAutoLayout = AUTOLAYOUT_TITLE_ONLY;
                     break;
                     case PptSlideLayout::RIGHTCOLUMN2ROWS :
                         eAutoLayout = AUTOLAYOUT_TEXT2OBJ;

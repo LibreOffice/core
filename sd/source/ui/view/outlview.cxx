@@ -42,6 +42,7 @@
 #include <editeng/numitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editeng.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include <editeng/editobj.hxx>
 #include <editeng/editund2.hxx>
@@ -448,7 +449,7 @@ SdPage* OutlineView::InsertSlideForParagraph( Paragraph* pPara )
     // page
     AutoLayout eAutoLayout = pExample->GetAutoLayout();
     if (eAutoLayout == AUTOLAYOUT_TITLE ||
-        eAutoLayout == AUTOLAYOUT_ONLY_TITLE)
+        eAutoLayout == AUTOLAYOUT_TITLE_ONLY)
     {
         pPage->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
     }
@@ -954,7 +955,7 @@ SdrTextObj* OutlineView::CreateTitleTextObject(SdPage* pPage)
     if( pPage->GetAutoLayout() == AUTOLAYOUT_NONE )
     {
         // simple case
-        pPage->SetAutoLayout( AUTOLAYOUT_ONLY_TITLE, true );
+        pPage->SetAutoLayout( AUTOLAYOUT_TITLE_ONLY, true );
     }
     else
     {
@@ -974,7 +975,7 @@ SdrTextObj* OutlineView::CreateOutlineTextObject(SdPage* pPage)
     switch( eNewLayout )
     {
     case AUTOLAYOUT_NONE:
-    case AUTOLAYOUT_ONLY_TITLE:
+    case AUTOLAYOUT_TITLE_ONLY:
     case AUTOLAYOUT_TITLE:  eNewLayout = AUTOLAYOUT_TITLE_CONTENT; break;
 
     case AUTOLAYOUT_CHART:  eNewLayout = AUTOLAYOUT_CHARTTEXT; break;
