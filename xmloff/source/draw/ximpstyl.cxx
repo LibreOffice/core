@@ -650,7 +650,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
 
                     if( pObj1->GetName() == "object" )
                     {
-                        mnTypeId = 18; // AUTOLAYOUT_4OBJ
+                        mnTypeId = AUTOLAYOUT_TITLE_4CONTENT;
                     }
                     else
                     {
