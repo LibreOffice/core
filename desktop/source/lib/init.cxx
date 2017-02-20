@@ -2114,7 +2114,7 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
     }
 
     uno::Reference<datatransfer::XTransferable> xTransferable(new LOKTransferable(pMimeType, pData, nSize));
-    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new LOKClipboard());
+    uno::Reference<datatransfer::clipboard::XClipboard> xClipboard(new LOKClipboard);
     xClipboard->setContents(xTransferable, uno::Reference<datatransfer::clipboard::XClipboardOwner>());
     pDoc->setClipboard(xClipboard);
     if (!pDoc->isMimeTypeSupported())
