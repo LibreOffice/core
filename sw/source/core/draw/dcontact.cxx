@@ -1245,7 +1245,6 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
         case SdrUserCallType::ChildResize :
         case SdrUserCallType::ChildChangeAttr :
         case SdrUserCallType::ChildDelete :
-        case SdrUserCallType::ChildCopy :
         {
             // #i31698# - improvement
             // get instance <SwAnchoredDrawObject> only once

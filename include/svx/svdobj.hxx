@@ -167,7 +167,6 @@ enum class SdrUserCallType {
     ChildResize,      // a child within a group has changed
     ChildChangeAttr,  // a child within a group has changed
     ChildDelete,      // a child within a group has changed
-    ChildCopy,        // a child within a group has changed
     ChildInserted,    // a child within a group has changed
     ChildRemoved      // a child within a group has changed
 };
