@@ -4590,7 +4590,7 @@ SfxBoolItem ShowAnnotations SID_SHOW_POSTIT
 
 
 SfxVoidItem ReplyToAnnotation SID_REPLYTO_POSTIT
-()
+(SvxPostItIdItem Id SID_ATTR_POSTIT_ID,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
