@@ -521,7 +521,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             aContents = pField->GetPar2();
 
         // sonst ist es der Script-Inhalt selbst. Da nur noh JavaScript
-        // in Feldern landet, muss es sich um JavaSrript handeln ...:)
+        // in Feldern landet, muss es sich um JavaScript handeln ...:)
         HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
                                  aURL, nullptr, nullptr, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
 

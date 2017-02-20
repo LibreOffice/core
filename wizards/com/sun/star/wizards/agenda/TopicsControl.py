@@ -57,7 +57,7 @@ This control relays on the ControlScroller control which uses the following
 Data model:<br/>
 1. It uses a vector, whose members are arrays of PropertyValue.<br/>
 2. Each array represents a row.<br/>
-(Note: the Name and Value memebrs of the PropertyValue object are being used)
+(Note: the Name and Value memebers of the PropertyValue object are being used)
 3. Each property Value represents a value
 for a single control with the following rules:<br/>
 3. a. the Value of the property is used for as value
