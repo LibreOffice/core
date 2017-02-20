@@ -230,7 +230,7 @@ private:
 
     void loadChildNodes()
     {
-        m_hBNA = new BrowseNodeAggregatorHash();
+        m_hBNA = new BrowseNodeAggregatorHash;
 
         Sequence< Reference< browse::XBrowseNode > > langNodes =
             m_origNode->getChildNodes();

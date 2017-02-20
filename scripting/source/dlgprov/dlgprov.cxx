@@ -589,7 +589,7 @@ namespace dlgprov
         {
             // call from RTL_Impl_CreateUnoDialog
             aArguments[0] >>= m_xModel;
-            m_BasicInfo.reset( new BasicRTLParams() );
+            m_BasicInfo.reset( new BasicRTLParams );
             m_BasicInfo->mxInput.set( aArguments[ 1 ], UNO_QUERY_THROW );
             // allow null mxDlgLib, a document dialog instantiated from
             // from application basic is unable to provide ( or find ) it's
