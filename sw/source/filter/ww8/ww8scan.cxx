@@ -4773,10 +4773,10 @@ WW8PLCFMan::~WW8PLCFMan()
 // 0. which attr class,
 // 1. if it's a attr start,
 // 2. CP, where is next attr change
-sal_uInt16 WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
+sal_uInt16 WW8PLCFMan::WhereIdx(bool *const pbStart, WW8_CP *const pPos) const
 {
     OSL_ENSURE(m_nPLCF,"What the hell");
-    long nNext = LONG_MAX;  // search order:
+    WW8_CP nNext = WW8_CP_MAX;  // search order:
     sal_uInt16 nNextIdx = m_nPLCF;// first ending found ( CHP, PAP, ( SEP ) ),
     bool bStart = true;     // now find beginnings ( ( SEP ), PAP, CHP )
     const WW8PLCFxDesc* pD;
@@ -4817,7 +4817,7 @@ sal_uInt16 WW8PLCFMan::WhereIdx(bool* pbStart, long* pPos) const
 // gives the CP pos of the next attr change
 WW8_CP WW8PLCFMan::Where() const
 {
-    long l;
+    WW8_CP l;
     WhereIdx(nullptr, &l);
     return l;
 }

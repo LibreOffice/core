@@ -932,7 +932,7 @@ private:
 
     const WW8Fib* m_pWwFib;
 
-    sal_uInt16 WhereIdx(bool* pbStart, long* pPos=nullptr) const;
+    sal_uInt16 WhereIdx(bool* pbStart, WW8_CP * pPos=nullptr) const;
     void AdjustEnds(WW8PLCFxDesc& rDesc);
     void GetNewSprms(WW8PLCFxDesc& rDesc);
     static void GetNewNoSprms(WW8PLCFxDesc& rDesc);
