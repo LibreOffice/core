@@ -1124,7 +1124,7 @@ bool ImplSdPPTImport::Import()
 
                     case PptSlideLayout::TWOCOLUMNSANDTITLE :
                     {
-                        eAutoLayout = AUTOLAYOUT_2TEXT;
+                        eAutoLayout = AUTOLAYOUT_TITLE_2CONTENT;
                         PptPlaceholder nID1 = pSlideLayout->aPlaceholderId[ 1 ];
                         PptPlaceholder nID2 = pSlideLayout->aPlaceholderId[ 2 ];
                         if ( nID1 == PptPlaceholder::BODY && nID2 == PptPlaceholder::GRAPH )
@@ -1150,7 +1150,7 @@ bool ImplSdPPTImport::Import()
 
                     case PptSlideLayout::TWOROWSANDTITLE :
                     {
-                        eAutoLayout = AUTOLAYOUT_2TEXT;
+                        eAutoLayout = AUTOLAYOUT_TITLE_2CONTENT;
                         PptPlaceholder nID1 = pSlideLayout->aPlaceholderId[ 1 ];
                         PptPlaceholder nID2 = pSlideLayout->aPlaceholderId[ 2 ];
                         if ( nID1 == PptPlaceholder::BODY && nID2 == PptPlaceholder::OBJECT )

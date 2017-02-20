@@ -566,7 +566,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     {
                         if( pObj2->GetName() == "outline" )
                         {
-                            mnTypeId = 3; // AUTOLAYOUT_2TEXT
+                            mnTypeId = AUTOLAYOUT_TITLE_2CONTENT;
                         }
                         else if( pObj2->GetName() == "chart" )
                         {

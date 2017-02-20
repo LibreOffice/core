@@ -43,7 +43,6 @@ enum AutoLayout
 
     // deprecated
     AUTOLAYOUT_CHART = 2,
-    AUTOLAYOUT_2TEXT = 3,
     AUTOLAYOUT_TEXTCHART = 4,
     AUTOLAYOUT_ORG = 5,
     AUTOLAYOUT_TEXTCLIP = 6,
