@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_8c6c169e",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-20T06:26:14Z",
+      "side": 1,
+      "message": "maybe a better name? something like GetInfoBarColors?",
+      "revId": "213d43d02ec9b0cbf3fae184c7c46f64888bc98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2c5deae9",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-20T06:26:14Z",
+      "side": 1,
+      "message": "should be m_aMessageColor, it\u0027s not a pointer\nand there is an extra \";\" :-)",
+      "revId": "213d43d02ec9b0cbf3fae184c7c46f64888bc98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4c722e7e",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-20T06:26:14Z",
+      "side": 1,
+      "message": "there are not pointers anymore, please use names like aBackgroundColor",
+      "revId": "213d43d02ec9b0cbf3fae184c7c46f64888bc98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6c6ff292",
+        "filename": "sfx2/source/dialog/infobar.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 303,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-20T06:26:14Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "213d43d02ec9b0cbf3fae184c7c46f64888bc98c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
