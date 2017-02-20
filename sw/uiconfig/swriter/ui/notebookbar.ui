@@ -124,6 +124,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">sfx2/res/placeholder.png</property>
   </object>
+  <object class="GtkImage" id="showannotationsi">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">cmd/lc_showannotations.png</property>
+  </object>
   <object class="GtkImage" id="PlaceholderImg1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -212,7 +217,6 @@
               <object class="sfxlo-PriorityHBox" id="FileBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="vcllo-SmallButton" id="Open">
                     <property name="visible">True</property>
@@ -400,7 +404,6 @@
               <object class="sfxlo-PriorityHBox" id="HomeBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="sfxlo-DropdownBox" id="PasteSection">
                     <property name="visible">True</property>
@@ -409,10 +412,10 @@
                       <object class="sfxlo-NotebookbarToolBox" id="pastebox">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="toolbar_style">both</property>
-                        <property name="icon_size">3</property>
                         <property name="valign">center</property>
+                        <property name="toolbar_style">both</property>
                         <property name="show_arrow">False</property>
+                        <property name="icon_size">3</property>
                         <child>
                           <object class="GtkMenuToolButton" id="Paste">
                             <property name="use_action_appearance">False</property>
@@ -534,7 +537,6 @@
                           <object class="GtkBox" id="box76">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">6</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="font">
                                 <property name="visible">True</property>
@@ -592,7 +594,6 @@
                           <object class="GtkBox" id="box10">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">6</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="fonteffects">
                                 <property name="visible">True</property>
@@ -925,7 +926,6 @@
                       <object class="GtkBox" id="box8">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkSeparator" id="separator5">
                             <property name="visible">True</property>
@@ -1093,7 +1093,6 @@
                       <object class="GtkBox" id="box5">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkSeparator" id="separator20">
                             <property name="visible">True</property>
@@ -1111,7 +1110,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="valign">center</property>
-                            <property name="column_spacing">6</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="verticalalignment1">
                                 <property name="visible">True</property>
@@ -1328,7 +1326,6 @@
                       <object class="GtkBox" id="box31">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkSeparator" id="separator18">
                             <property name="visible">True</property>
@@ -1351,7 +1348,6 @@
                               <object class="GtkBox" id="box66">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">12</property>
                                 <child>
                                   <object class="sfxlo-NotebookbarToolBox" id="indent">
                                     <property name="visible">True</property>
@@ -1516,6 +1512,7 @@
                       <object class="GtkBox" id="box9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <child>
                           <object class="GtkSeparator" id="separator35">
                             <property name="visible">True</property>
@@ -1560,7 +1557,6 @@
                               <object class="GtkBox" id="box64">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkButton" id="StyleUpdateByExample">
                                     <property name="visible">True</property>
@@ -1701,6 +1697,7 @@
                       <object class="GtkBox" id="box18">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="GotoPage">
@@ -1781,6 +1778,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Break</property>
+                    <property name="valign">center</property>
                     <property name="orientation">vertical</property>
                     <child>
                       <object class="GtkBox" id="box14">
@@ -1880,10 +1878,10 @@
                   <object class="sfxlo-NotebookbarToolBox" id="tablebox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
                     <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
                     <child>
                       <object class="GtkMenuToolButton" id="InsertTable">
                         <property name="use_action_appearance">False</property>
@@ -2026,6 +2024,7 @@
                       <object class="GtkBox" id="box83">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="InsertObjectStarMath">
@@ -2080,12 +2079,10 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Shapes</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox" id="box81">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="spacing">6</property>
                         <child>
                           <object class="GtkSeparator" id="separator7">
                             <property name="visible">True</property>
@@ -2102,6 +2099,7 @@
                           <object class="GtkBox" id="box84">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkBox" id="box13">
@@ -2442,6 +2440,7 @@
                       <object class="GtkBox" id="box109">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <child>
                           <object class="GtkSeparator" id="separator9">
                             <property name="visible">True</property>
@@ -2559,6 +2558,7 @@
                       <object class="GtkBox" id="box82">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <child>
                           <object class="GtkSeparator" id="separator10">
                             <property name="visible">True</property>
@@ -2653,15 +2653,15 @@
               <object class="sfxlo-PriorityHBox" id="LayoutBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="sfxlo-DropdownBox" id="ParaSpacingSection">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="sfxlo-NotebookbarToolBox" id="ulspacing">
-                        <property name="width_request">210</property>
-                        <property name="height_request">72</property>
+                        <property name="width_request">200</property>
+                        <property name="height_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
@@ -2691,7 +2691,7 @@
                     <child>
                       <object class="sfxlo-NotebookbarToolBox" id="lrspacing">
                         <property name="width_request">200</property>
-                        <property name="height_request">72</property>
+                        <property name="height_request">60</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="has_tooltip">True</property>
@@ -2733,6 +2733,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Setup</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box29">
                         <property name="visible">True</property>
@@ -2805,42 +2806,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="sfxlo-NotebookbarToolBox" id="sizebox">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
-                    <property name="valign">center</property>
-                    <property name="show_arrow">False</property>
-                    <child>
-                      <object class="GtkMenuToolButton" id="Size">
-                        <property name="use_action_appearance">False</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="is_important">True</property>
-                        <property name="action_name">.uno:AttributePageSize</property>
-                        <property name="use_underline">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="sfxlo-NotebookbarToolBox" id="columnbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
                     <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
                     <child>
                       <object class="GtkMenuToolButton" id="Columns">
                         <property name="use_action_appearance">False</property>
@@ -2863,13 +2835,42 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="sfxlo-NotebookbarToolBox" id="sizebox">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
+                    <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
+                    <child>
+                      <object class="GtkMenuToolButton" id="Size">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="is_important">True</property>
+                        <property name="action_name">.uno:AttributePageSize</property>
+                        <property name="use_underline">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">True</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="sfxlo-NotebookbarToolBox" id="orientationbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
                     <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
                     <child>
                       <object class="GtkMenuToolButton" id="Orientation">
                         <property name="use_action_appearance">False</property>
@@ -2895,10 +2896,10 @@
                   <object class="sfxlo-NotebookbarToolBox" id="marginbox">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="toolbar_style">both</property>
-                    <property name="icon_size">3</property>
                     <property name="valign">center</property>
+                    <property name="toolbar_style">both</property>
                     <property name="show_arrow">False</property>
+                    <property name="icon_size">3</property>
                     <child>
                       <object class="GtkMenuToolButton" id="Margin">
                         <property name="use_action_appearance">False</property>
@@ -2941,12 +2942,10 @@
               <object class="sfxlo-PriorityHBox" id="ReferencesBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="sfxlo-DropdownBox" id="box53">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="vcllo-SmallButton" id="InsertMultiIndex">
                         <property name="visible">True</property>
@@ -2985,6 +2984,7 @@
                       <object class="GtkBox" id="box54">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="UpdateCurIndex">
@@ -3048,7 +3048,6 @@
                   <object class="sfxlo-DropdownBox" id="box47">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="vcllo-SmallButton" id="InsertFootnote">
                         <property name="visible">True</property>
@@ -3082,6 +3081,7 @@
                       <object class="GtkBox" id="box112">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="InsertEndnote1">
@@ -3148,7 +3148,6 @@
                   <object class="sfxlo-DropdownBox" id="box49">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox" id="box110">
                         <property name="visible">True</property>
@@ -3203,7 +3202,6 @@
                   <object class="sfxlo-DropdownBox" id="box51">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="vcllo-SmallButton" id="InsertCaptionDialog1">
                         <property name="visible">True</property>
@@ -3239,6 +3237,7 @@
                       <object class="GtkBox" id="box111">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="InsertAuthoritiesEntry">
@@ -3443,6 +3442,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="action_name">.uno:InsertAnnotation</property>
+                            <property name="image">showannotationsi</property>
                             <property name="relief">none</property>
                             <property name="image_position">top</property>
                             <property name="always_show_image">True</property>
@@ -3536,6 +3536,7 @@
                       <object class="GtkBox" id="box87">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="ShowTrackedChanges">
@@ -3596,6 +3597,7 @@
                       <object class="GtkBox" id="box88">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="AcceptTrackedChange">
@@ -3656,6 +3658,7 @@
                       <object class="GtkBox" id="box89">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkButton" id="NextTrackedChange">
@@ -3904,6 +3907,7 @@
                           <object class="GtkBox" id="box86">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="valign">center</property>
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkButton" id="Ruler">
@@ -3982,7 +3986,6 @@
                   <object class="sfxlo-DropdownBox" id="box24">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox" id="box23">
                         <property name="visible">True</property>
@@ -4035,6 +4038,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Zoom</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="vcllo-SmallButton" id="Zoom100Percent">
                         <property name="visible">True</property>
@@ -4167,7 +4171,6 @@
               <object class="sfxlo-PriorityHBox" id="TableBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="sfxlo-DropdownBox" id="box34">
                     <property name="visible">True</property>
@@ -4269,7 +4272,6 @@
                   <object class="sfxlo-DropdownBox" id="box96">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox" id="box97">
                         <property name="visible">True</property>
@@ -4326,7 +4328,6 @@
                   <object class="sfxlo-DropdownBox" id="box35">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
                     <child>
                       <object class="GtkBox" id="box20">
                         <property name="visible">True</property>
@@ -4698,7 +4699,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <object class="GtkBox" id="box94">
@@ -4830,7 +4830,6 @@
               <object class="sfxlo-PriorityHBox" id="ImageBox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="spacing">6</property>
                 <child>
                   <object class="sfxlo-DropdownBox" id="BasicsSection">
                     <property name="visible">True</property>
@@ -5370,7 +5369,7 @@
                             <property name="position">1</property>
                           </packing>
                         </child>
-                         <child>
+                        <child>
                           <object class="sfxlo-NotebookbarToolBox" id="rotate2">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
