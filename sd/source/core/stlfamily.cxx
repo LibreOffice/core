@@ -101,7 +101,7 @@ SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, 
 SdStyleFamily::SdStyleFamily( const rtl::Reference< SfxStyleSheetPool >& xPool, const SdPage* pMasterPage )
 : mnFamily( SD_STYLE_FAMILY_MASTERPAGE )
 , mxPool( xPool )
-, mpImpl( new SdStyleFamilyImpl() )
+, mpImpl( new SdStyleFamilyImpl )
 {
     mpImpl->mxMasterPage.reset( const_cast< SdPage* >( pMasterPage ) );
     mpImpl->mxPool = xPool;

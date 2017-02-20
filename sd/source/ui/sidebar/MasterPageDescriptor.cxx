@@ -145,7 +145,7 @@ const Image& MasterPageDescriptor::GetPreview (MasterPageContainer::PreviewSize 
      ::std::unique_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pResult;
      if (bDataChanged || bIndexChanged || bPreviewChanged)
      {
-         pResult.reset(new std::vector<MasterPageContainerChangeEvent::EventType>());
+         pResult.reset(new std::vector<MasterPageContainerChangeEvent::EventType>);
          if (bDataChanged)
              pResult->push_back(MasterPageContainerChangeEvent::EventType::DATA_CHANGED);
          if (bIndexChanged)

@@ -102,7 +102,7 @@ sal_Int32 ResolutionReduction::ResolutionReducedReplacement::GetMemorySize() con
 std::shared_ptr<BitmapReplacement> ResolutionReduction::Compress (
     const Bitmap& rBitmap) const
 {
-    ResolutionReducedReplacement* pResult = new ResolutionReducedReplacement();
+    ResolutionReducedReplacement* pResult = new ResolutionReducedReplacement;
     pResult->maPreview = rBitmap;
     Size aSize (rBitmap.GetSizePixel());
     pResult->maOriginalSize = aSize;

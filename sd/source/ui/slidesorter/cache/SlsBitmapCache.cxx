@@ -394,7 +394,7 @@ void BitmapCache::Recycle (const BitmapCache& rCache)
     ::std::sort(aSortedContainer.begin(), aSortedContainer.end(), AccessTimeComparator());
 
     // Return a list with the keys of the sorted entries.
-    ::std::unique_ptr<CacheIndex> pIndex(new CacheIndex());
+    ::std::unique_ptr<CacheIndex> pIndex(new CacheIndex);
     SortableBitmapContainer::iterator iIndexEntry;
     pIndex->reserve(aSortedContainer.size());
     for (iIndexEntry=aSortedContainer.begin(); iIndexEntry!=aSortedContainer.end(); ++iIndexEntry)

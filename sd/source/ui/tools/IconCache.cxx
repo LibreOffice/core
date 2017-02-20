@@ -96,7 +96,7 @@ Image IconCache::GetIcon (sal_uInt16 nResourceId)
 }
 
 IconCache::IconCache()
-    : mpImpl (new Implementation())
+    : mpImpl (new Implementation)
 {
 }
 

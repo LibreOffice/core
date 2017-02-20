@@ -156,7 +156,7 @@ void MasterPagesSelector::UpdateLocks (const ItemList& rItemList)
 
 void MasterPagesSelector::Fill()
 {
-    ::std::unique_ptr<ItemList> pItemList (new ItemList());
+    ::std::unique_ptr<ItemList> pItemList (new ItemList);
 
     Fill(*pItemList);
 
@@ -364,7 +364,7 @@ void MasterPagesSelector::AssignMasterPageToAllSlides (SdPage* pMasterPage)
     // assigned.
     OUString sFullLayoutName(pMasterPage->GetLayoutName());
     ::sd::slidesorter::SharedPageSelection pPageList (
-        new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
+        new ::sd::slidesorter::SlideSorterViewShell::PageSelection);
     for (sal_uInt16 nPageIndex=0; nPageIndex<nPageCount; nPageIndex++)
     {
         SdPage* pPage = mrDocument.GetSdPage (nPageIndex, PageKind::Standard);

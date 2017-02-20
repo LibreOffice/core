@@ -570,7 +570,7 @@ void SlideTransitionPane::onChangeCurrentPage()
     }
     else
     {
-        pSelection.reset(new sd::slidesorter::SlideSorterViewShell::PageSelection());
+        pSelection.reset(new sd::slidesorter::SlideSorterViewShell::PageSelection);
         if( mxView.is() )
         {
             SdPage* pPage = SdPage::getImplementation( mxView->getCurrentPage() );
@@ -1014,7 +1014,7 @@ IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked, Button*, void)
         return;
 
     ::sd::slidesorter::SharedPageSelection pPages (
-        new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
+        new ::sd::slidesorter::SlideSorterViewShell::PageSelection);
 
     sal_uInt16 nPageCount = mpDrawDoc->GetSdPageCount( PageKind::Standard );
     pPages->reserve( nPageCount );

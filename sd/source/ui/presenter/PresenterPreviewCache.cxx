@@ -285,7 +285,7 @@ const SdrPage* PresenterPreviewCache::PresenterCacheContext::GetPage (CacheKey a
 std::shared_ptr<std::vector<CacheKey> >
     PresenterPreviewCache::PresenterCacheContext::GetEntryList (bool bVisible)
 {
-    std::shared_ptr<std::vector<CacheKey> > pKeys (new std::vector<CacheKey>());
+    std::shared_ptr<std::vector<CacheKey> > pKeys (new std::vector<CacheKey>);
 
     if ( ! mxSlides.is())
         return pKeys;

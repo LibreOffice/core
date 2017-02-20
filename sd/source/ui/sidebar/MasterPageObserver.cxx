@@ -140,7 +140,7 @@ void MasterPageObserver::RemoveEventListener (const Link<MasterPageObserverEvent
 }
 
 MasterPageObserver::MasterPageObserver()
-    : mpImpl (new Implementation())
+    : mpImpl (new Implementation)
 {}
 
 MasterPageObserver::~MasterPageObserver()

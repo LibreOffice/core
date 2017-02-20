@@ -27,7 +27,7 @@ namespace sd { namespace tools {
 
 PropertySet::PropertySet()
     : PropertySetInterfaceBase(m_aMutex),
-      mpChangeListeners(new ChangeListenerContainer())
+      mpChangeListeners(new ChangeListenerContainer)
 {
 }
 

@@ -260,7 +260,7 @@ void PageSelector::DisableBroadcasting()
 
 std::shared_ptr<PageSelector::PageSelection> PageSelector::GetPageSelection() const
 {
-    std::shared_ptr<PageSelection> pSelection (new PageSelection());
+    std::shared_ptr<PageSelection> pSelection (new PageSelection);
     pSelection->reserve(GetSelectedPageCount());
 
     int nPageCount = GetPageCount();

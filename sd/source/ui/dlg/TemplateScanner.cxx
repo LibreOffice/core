@@ -154,7 +154,7 @@ TemplateScanner::TemplateScanner()
       mpTemplateDirectory(nullptr),
       maFolderList(),
       mpLastAddedEntry(nullptr),
-      mpFolderDescriptors(new FolderDescriptorList()),
+      mpFolderDescriptors(new FolderDescriptorList),
       mxTemplateRoot(),
       mxFolderEnvironment(),
       mxEntryEnvironment(),

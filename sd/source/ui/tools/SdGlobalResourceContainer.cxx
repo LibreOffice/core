@@ -146,7 +146,7 @@ void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxReso
 }
 
 SdGlobalResourceContainer::SdGlobalResourceContainer()
-    : mpImpl (new SdGlobalResourceContainer::Implementation())
+    : mpImpl (new SdGlobalResourceContainer::Implementation)
 {
 }
 
