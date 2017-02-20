@@ -39,11 +39,43 @@
 
 struct ScFuncDescCore
 {
+    /*
+     * An opcode from include/formula/compiler.hrc
+     */
     sal_uInt16 nOpCode;
+    /*
+     * 16-bit value:
+     *
+     * Bit 1: boolean flag whether function is suppressed. Usually 0. This
+     * may be used to add UI string resources before UI freeze if
+     * implementation isn't ready yet without displaying them in the
+     * function wizard, most recent used list and other UI elements. Also
+     * not available via API then.
+     *
+     * Bit 2: boolean flag whether function is hidden in the Function
+     * Wizard unless used in an expression.
+     */
     sal_uInt16 nFunctionFlags;
+    /*
+     * Function group (text, math, ...), one of ID_FUNCTION_GRP_...
+     */
     sal_uInt16 nCategory;
+    /*
+     * Help ID, HID_FUNC_...
+     */
     const char* pHelpId;
+    /*
+     * Number of parameters. VAR_ARGS if variable number, or
+     * VAR_ARGS+number if number of fixed parameters and variable
+     * arguments following. Or PAIRED_VAR_ARGS if variable number of
+     * paired parameters, or PAIRED_VAR_ARGS+number if number of fixed
+     * parameters and variable paired arguments following.
+     */
     sal_uInt16 nArgs;
+    /*
+     * For every parameter:
+     *     Boolean flag whether the parameter is optional.
+     */
     sal_uInt8 aOptionalArgs[7];
 };
 
@@ -389,33 +421,9 @@ bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
 ScFunctionList::ScFunctionList()
     : nMaxFuncNameLen(0)
 {
-    /*
-     * 16-bit value:
-     *
-     * Bit 1: boolean flag whether function is suppressed. Usually 0. This
-     * may be used to add UI string resources before UI freeze if
-     * implementation isn't ready yet without displaying them in the
-     * function wizard, most recent used list and other UI elements. Also
-     * not available via API then.
-     *
-     * Bit 2: boolean flag whether function is hidden in the Function
-     * Wizard unless used in an expression.
-     *
-     *
-     * Function group (text, math, ...), one of ID_FUNCTION_GRP_...
-     *
-     * Help ID, HID_FUNC_...
-     *
-     * Number of parameters. VAR_ARGS if variable number, or
-     * VAR_ARGS+number if number of fixed parameters and variable
-     * arguments following. Or PAIRED_VAR_ARGS if variable number of
-     * paired parameters, or PAIRED_VAR_ARGS+number if number of fixed
-     * parameters and variable paired arguments following.
-     *
-     * For every parameter:
-     *
-     *     Boolean flag whether the parameter is optional.
-     */
+    // See ScFuncDescCore definition for format details.
+    // This list must be sorted in order of the opcode, dbgutil builds enable _GLIBCXX_DEBUG
+    // which will concept check that the list is sorted on first use to ensure this holds
     ScFuncDescCore aDescs[] =
     {
         { SC_OPCODE_IF, 0, ID_FUNCTION_GRP_LOGIC, HID_FUNC_WENN, 3, { 0, 1, 1 } },
