@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_8cf25699",
+        "filename": "svx/source/form/datanavi.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-20T11:12:13Z",
+      "side": 1,
+      "message": "why sal_uInt16?",
+      "revId": "779716a0710f4631d9387169dca3f33bf1c284f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ec2f62f4",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-20T11:12:13Z",
+      "side": 1,
+      "message": "why sal_uInt16?",
+      "revId": "779716a0710f4631d9387169dca3f33bf1c284f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_cc2a9ee7",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-20T11:12:13Z",
+      "side": 1,
+      "message": "this gerrit change is already hard to review with various unrelated uses of sal_uIntPtr being addressed; mixing in completely unrelated changes doesn\u0027t make it any better",
+      "revId": "779716a0710f4631d9387169dca3f33bf1c284f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2c3a4a37",
+        "filename": "svx/source/gallery2/galbrws1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 620,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-20T11:12:13Z",
+      "side": 1,
+      "message": "given nCount must encompass at least 0..16000 and is only used in a call to OUString::number, more appropriate types might be more \"canonic\" types like int, unsigned int, sal_Int32, sal_uInt32;  some \"unnatural\" type like sal_uInt16 should only be used if there\u0027s clear demand (e.g., some memory layout, or compatibility with existing interfaces)",
+      "revId": "779716a0710f4631d9387169dca3f33bf1c284f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0c358645",
+        "filename": "svx/source/svdraw/svdcrtv.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-20T11:12:13Z",
+      "side": 1,
+      "message": "why sal_uInt32?",
+      "revId": "779716a0710f4631d9387169dca3f33bf1c284f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ac463abd",
+        "filename": "svx/source/svdraw/svdmrkv.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 513,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-20T11:12:13Z",
+      "side": 1,
+      "message": "(preferably use proper C++ std::size_t instead of deprecated size_t; but I see that 47e2fd0dc8d88af120508e463decf5b15563a629 unfortunately used size_t, so you might have been tempted to keep consistent with that)",
+      "revId": "779716a0710f4631d9387169dca3f33bf1c284f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2c116aad",
+        "filename": "svx/source/svdraw/svdmrkv.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1886,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-20T11:12:13Z",
+      "side": 1,
+      "message": "why use sal_uInt64 here?  nBestDist/nDist are used in computations involving Point/Rectangle, whose members are of type long, so that may be more appropriate.  Apparently, nDist shall always be non-negative, so using unsigned long may be more appropriate to keep with the existing use of an unsigned type.  nBestDist\u003dULONG_MAX is apparently meant to be the largest value representable by nBestDist\u0027s type T; better change that to std::numeric_limits\u003cT\u003e::max() after deciding on an appropriate type T.",
+      "revId": "779716a0710f4631d9387169dca3f33bf1c284f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4c3f8e25",
+        "filename": "svx/source/svdraw/svdview.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1237,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-20T11:12:13Z",
+      "side": 1,
+      "message": "why sal_uInt16?",
+      "revId": "779716a0710f4631d9387169dca3f33bf1c284f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
