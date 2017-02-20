@@ -1477,35 +1477,44 @@ NamedColor SvxColorWindow::GetNoneColor() const
     return std::make_pair(aColor, sColorName);
 }
 
+namespace
+{
+    NamedColor GetAutoColor(sal_uInt16 nSlotId)
+    {
+        Color aColor;
+        OUString sColorName;
+        switch (nSlotId)
+        {
+            case SID_ATTR_CHAR_COLOR_BACKGROUND:
+            case SID_BACKGROUND_COLOR:
+            case SID_ATTR_CHAR_BACK_COLOR:
+                aColor = COL_TRANSPARENT;
+                sColorName = SVX_RESSTR(RID_SVXSTR_NOFILL);
+                break;
+            case SID_AUTHOR_COLOR:
+                aColor = COL_TRANSPARENT;
+                sColorName = SVX_RESSTR(RID_SVXSTR_BY_AUTHOR);
+                break;
+            case SID_BMPMASK_COLOR:
+                aColor = COL_TRANSPARENT;
+                sColorName = SVX_RESSTR(RID_SVXSTR_TRANSPARENT);
+                break;
+            case SID_ATTR_CHAR_COLOR:
+            case SID_ATTR_CHAR_COLOR2:
+            case SID_EXTRUSION_3D_COLOR:
+            default:
+                aColor = COL_AUTO;
+                sColorName = SVX_RESSTR(RID_SVXSTR_AUTOMATIC);
+                break;
+        }
+
+        return std::make_pair(aColor, sColorName);
+    }
+}
+
 NamedColor SvxColorWindow::GetAutoColor() const
 {
-    Color aColor;
-    OUString sColorName;
-    switch (theSlotId)
-    {
-        case SID_ATTR_CHAR_COLOR_BACKGROUND:
-        case SID_BACKGROUND_COLOR:
-        case SID_ATTR_CHAR_BACK_COLOR:
-            aColor = COL_TRANSPARENT;
-            sColorName = SVX_RESSTR(RID_SVXSTR_NOFILL);
-            break;
-        case SID_AUTHOR_COLOR:
-            aColor = COL_TRANSPARENT;
-            sColorName = SVX_RESSTR(RID_SVXSTR_BY_AUTHOR);
-            break;
-        case SID_BMPMASK_COLOR:
-            aColor = COL_TRANSPARENT;
-            sColorName = SVX_RESSTR(RID_SVXSTR_TRANSPARENT);
-            break;
-        case SID_ATTR_CHAR_COLOR:
-        case SID_ATTR_CHAR_COLOR2:
-        case SID_EXTRUSION_3D_COLOR:
-            aColor = COL_AUTO;
-            sColorName = SVX_RESSTR(RID_SVXSTR_AUTOMATIC);
-            break;
-    }
-
-    return std::make_pair(aColor, sColorName);
+    return ::GetAutoColor(theSlotId);
 }
 
 IMPL_LINK(SvxColorWindow, AutoColorClickHdl, Button*, pButton, void)
@@ -3213,7 +3222,9 @@ SvxColorListBox::SvxColorListBox(vcl::Window* pParent, WinBits nStyle)
     , m_nSlotId(0)
     , m_bShowNoneButton(false)
 {
+    m_aSelectedColor = GetAutoColor(m_nSlotId);
     LockWidthRequest();
+    ShowPreview(m_aSelectedColor);
     m_aPaletteManager.SetColorSelectFunction(m_aColorWrapper);
     SetActivateHdl(LINK(this, SvxColorListBox, MenuActivateHdl));
     SetNoSelection();
