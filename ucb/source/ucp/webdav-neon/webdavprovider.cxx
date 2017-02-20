@@ -46,7 +46,7 @@ using namespace webdav_ucp;
 ContentProvider::ContentProvider(
                 const uno::Reference< uno::XComponentContext >& rxContext )
 : ::ucbhelper::ContentProviderImplHelper( rxContext ),
-  m_xDAVSessionFactory( new DAVSessionFactory() ),
+  m_xDAVSessionFactory( new DAVSessionFactory ),
   m_pProps( nullptr )
 {
 }

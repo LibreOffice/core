@@ -149,7 +149,7 @@ struct UcbStore_Impl
 
 UcbStore::UcbStore( const Reference< XComponentContext >& xContext )
 : m_xContext( xContext ),
-  m_pImpl( new UcbStore_Impl() )
+  m_pImpl( new UcbStore_Impl )
 {
 }
 

@@ -453,7 +453,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
 
     if ( xResultSet.is() )
     {
-        pFiles = new StringList_Impl();
+        pFiles = new StringList_Impl;
         Reference< css::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
 
         while ( xResultSet->next() )
@@ -508,7 +508,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
     INetURLObject aObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
-    Reference< XActiveDataSink > xSink = static_cast<XActiveDataSink*>(new OActiveDataSink());
+    Reference< XActiveDataSink > xSink = static_cast<XActiveDataSink*>(new OActiveDataSink);
 
     try
     {
@@ -535,7 +535,7 @@ Reference< XOutputStream > OFileAccess::openFileWrite( const OUString& FileURL )
 
 Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 {
-    Reference< XActiveDataStreamer > xSink = static_cast<XActiveDataStreamer*>(new OActiveDataStreamer());
+    Reference< XActiveDataStreamer > xSink = static_cast<XActiveDataStreamer*>(new OActiveDataStreamer);
     Reference< XInterface > xSinkIface( xSink, UNO_QUERY );
 
     OpenCommandArgument2 aArg;
@@ -598,7 +598,7 @@ void OFileAccess::setInteractionHandler( const Reference< XInteractionHandler >&
 {
     if( !mxEnvironment.is() )
     {
-        mxEnvironment = new OCommandEnvironment();
+        mxEnvironment = new OCommandEnvironment;
     }
     mxEnvironment->setHandler( Handler );
 }

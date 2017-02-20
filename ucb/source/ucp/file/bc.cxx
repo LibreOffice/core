@@ -1280,7 +1280,7 @@ BaseContent::cPCL()
 
     if( length )
     {
-        ListenerMap* listener = new ListenerMap();
+        ListenerMap* listener = new ListenerMap;
         for( sal_Int32 i = 0; i < length; ++i )
         {
             cppu::OInterfaceContainerHelper* pContainer = m_pPropertyListener->getContainer(seqNames[i]);

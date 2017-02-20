@@ -530,7 +530,7 @@ TaskManager::registerNotifier( const OUString& aUnqPath, Notifier* pNotifier )
         m_aContent.insert( ContentMap::value_type( aUnqPath,UnqPathData() ) ).first;
 
     if( ! it->second.notifier )
-        it->second.notifier = new NotifierList();
+        it->second.notifier = new NotifierList;
 
     std::list< Notifier* >& nlist = *( it->second.notifier );
 
