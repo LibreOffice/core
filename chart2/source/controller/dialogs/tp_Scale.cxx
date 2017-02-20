@@ -422,11 +422,11 @@ DeactivateRC ScaleTabPage::DeactivatePage(SfxItemSet* pItemSet)
     bool bDateAxis = chart2::AxisType::DATE == m_nAxisType;
 
     sal_uInt32 nMinMaxOriginFmt = m_pFmtFldMax->GetFormatKey();
-    if ((pNumFormatter->GetType(nMinMaxOriginFmt) & ~css::util::NumberFormat::DEFINED) == css::util::NumberFormat::TEXT)
+    if (pNumFormatter->GetType(nMinMaxOriginFmt) == css::util::NumberFormat::TEXT)
         nMinMaxOriginFmt = 0;
     // numberformat_text cause numbers to fail being numbers...  Shouldn't happen, but can.
     sal_uInt32 nStepFmt = m_pFmtFldStepMain->GetFormatKey();
-    if ((pNumFormatter->GetType(nStepFmt) & ~css::util::NumberFormat::DEFINED) == css::util::NumberFormat::TEXT)
+    if (pNumFormatter->GetType(nStepFmt) == css::util::NumberFormat::TEXT)
         nStepFmt = 0;
 
     Control* pControl = nullptr;
