@@ -49,7 +49,7 @@ AstExpression::AstExpression(sal_Int32 l)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue();
+    m_exprValue = new AstExprValue;
     m_exprValue->et = ET_long;
     m_exprValue->u.lval = l;
 }
@@ -63,7 +63,7 @@ AstExpression::AstExpression(sal_Int32  l, ExprType et)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue();
+    m_exprValue = new AstExprValue;
     m_exprValue->et = et;
     m_exprValue->u.lval = l;
 }
@@ -77,7 +77,7 @@ AstExpression::AstExpression(sal_Int64  h)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue();
+    m_exprValue = new AstExprValue;
     m_exprValue->et = ET_hyper;
     m_exprValue->u.hval = h;
 }
@@ -91,7 +91,7 @@ AstExpression::AstExpression(sal_uInt64 uh)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue();
+    m_exprValue = new AstExprValue;
     m_exprValue->et = ET_uhyper;
     m_exprValue->u.uhval = uh;
 }
@@ -105,7 +105,7 @@ AstExpression::AstExpression(double d)
 {
     fillDefinitionDetails();
 
-    m_exprValue = new AstExprValue();
+    m_exprValue = new AstExprValue;
     m_exprValue->et = ET_double;
     m_exprValue->u.dval = d;
 }
@@ -847,7 +847,7 @@ std::unique_ptr<AstExprValue> AstExpression::eval_bin_op()
     if (!m_subExpr2->coerce(eType))
         return nullptr;
 
-    std::unique_ptr< AstExprValue > retval(new AstExprValue());
+    std::unique_ptr< AstExprValue > retval(new AstExprValue);
     retval->et = eType;
 
     switch (m_combOperator)
@@ -893,7 +893,7 @@ std::unique_ptr<AstExprValue> AstExpression::eval_bit_op()
     if (!m_subExpr2->coerce(ET_long))
         return nullptr;
 
-    std::unique_ptr< AstExprValue > retval(new AstExprValue());
+    std::unique_ptr< AstExprValue > retval(new AstExprValue);
     retval->et = ET_long;
 
     switch (m_combOperator)
@@ -930,7 +930,7 @@ std::unique_ptr<AstExprValue> AstExpression::eval_un_op()
     if (!m_subExpr1->coerce(ET_double))
         return nullptr;
 
-    std::unique_ptr< AstExprValue > retval(new AstExprValue());
+    std::unique_ptr< AstExprValue > retval(new AstExprValue);
     retval->et = ET_double;
 
     switch (m_combOperator)

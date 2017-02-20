@@ -2074,7 +2074,7 @@ at_least_one_declarator :
             $$ = $2;
         } else
         {
-            FeDeclList* pList = new FeDeclList();
+            FeDeclList* pList = new FeDeclList;
             pList->push_back($1);
             $$ = pList;
         }
@@ -2096,7 +2096,7 @@ declarators :
             $$ = $1;
         } else
         {
-            FeDeclList* pList = new FeDeclList();
+            FeDeclList* pList = new FeDeclList;
             pList->push_back($4);
             $$ = pList;
         }
@@ -2135,7 +2135,7 @@ at_least_one_scoped_name :
             $$ = $2;
         } else
         {
-            std::list< OString >* pScopedNames = new std::list< OString >();
+            std::list< OString >* pScopedNames = new std::list< OString >;
             // coverity [copy_paste_error]
             pScopedNames->push_back(*$1);
             $$ = pScopedNames;
@@ -2159,7 +2159,7 @@ scoped_names :
             $$ = $1;
         } else
         {
-            std::list< OString >* pNames = new std::list< OString >();
+            std::list< OString >* pNames = new std::list< OString >;
             pNames->push_back(*$4);
             $$ = pNames;
         }

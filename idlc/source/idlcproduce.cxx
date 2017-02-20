@@ -83,7 +83,7 @@ static bool checkOutputPath(const OString& completeName)
             } else
             {
                 if ( !pCreatedDirectories )
-                    pCreatedDirectories = new std::list< OString >();
+                    pCreatedDirectories = new std::list< OString >;
                 pCreatedDirectories->push_front(buffer.getStr());
             }
         }
