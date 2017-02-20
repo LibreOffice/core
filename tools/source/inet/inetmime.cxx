@@ -51,16 +51,6 @@ inline bool isWhiteSpace(sal_uInt32 nChar);
  */
 bool isTokenChar(sal_uInt32 nChar);
 
-/** Check whether some character is valid within an RFC 2047 <token>.
-
-    @param nChar  Some UCS-4 character.
-
-    @return  True if nChar is valid within an RFC 2047 <token> (US-ASCII
-    'A'--'Z', 'a'--'z', '0'--'9', '!', '#', '$', '%', '&', ''', '*', '+',
-    '-', '^', '_', '`', '{', '|', '}', or '~').
- */
-bool isEncodedWordTokenChar(sal_uInt32 nChar);
-
 /** Get the Base 64 digit weight of a US-ASCII character.
 
     @param nChar  Some UCS-4 character.
@@ -953,12 +943,11 @@ private:
 
     enum Coding { CODING_NONE, CODING_ENCODED, CODING_ENCODED_TERMINATED };
 
-    enum EncodedWordState { STATE_INITIAL, STATE_FIRST_EQUALS,
-                            STATE_CHARSET,
-                            STATE_SECOND_QUESTION, STATE_ENCODING,
-                            STATE_THIRD_QUESTION, STATE_ENCODED_TEXT,
-                            STATE_FOURTH_QUESTION, STATE_SECOND_EQUALS,
-                            STATE_BAD };
+    enum class WordState { INITIAL, FIRST_EQUALS,
+                           SECOND_QUESTION, ENCODING,
+                           THIRD_QUESTION, ENCODED_TEXT,
+                           FOURTH_QUESTION, SECOND_EQUALS,
+                           BAD };
 
     INetMIMEOutputSink & m_rSink;
     sal_uInt32 m_nExtraSpaces;
@@ -969,7 +958,7 @@ private:
     Coding m_ePrevCoding;
     rtl_TextEncoding m_ePrevMIMEEncoding;
     Coding m_eCoding;
-    EncodedWordState m_eEncodedWordState;
+    WordState m_eEncodedWordState;
 
     void finish(bool bWriteTrailer);
 
@@ -994,7 +983,7 @@ inline INetMIMEEncodedWordOutputSink::INetMIMEEncodedWordOutputSink(
     m_ePrevCoding(CODING_NONE),
     m_ePrevMIMEEncoding(RTL_TEXTENCODING_DONTKNOW),
     m_eCoding(CODING_NONE),
-    m_eEncodedWordState(STATE_INITIAL)
+    m_eEncodedWordState(WordState::INITIAL)
 {
     m_nBufferSize = BUFFER_SIZE;
     m_pBuffer = static_cast< sal_Unicode * >(rtl_allocateMemory(
@@ -1157,7 +1146,7 @@ needsEncodedWordEscape(sal_uInt32 nChar)
 
 void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
 {
-    if (m_eEncodedWordState == STATE_SECOND_EQUALS)
+    if (m_eEncodedWordState == WordState::SECOND_EQUALS)
     {
         // If the text is already an encoded word, copy it verbatim:
         switch (m_ePrevCoding)
@@ -1374,7 +1363,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
     m_pBufferEnd = m_pBuffer;
     m_ePrevCoding = m_eCoding;
     m_eCoding = CODING_NONE;
-    m_eEncodedWordState = STATE_INITIAL;
+    m_eEncodedWordState = WordState::INITIAL;
 }
 
 INetMIMEEncodedWordOutputSink::~INetMIMEEncodedWordOutputSink()
@@ -1397,69 +1386,62 @@ INetMIMEEncodedWordOutputSink::WriteUInt32(sal_uInt32 nChar)
         // Check for an already encoded word:
         switch (m_eEncodedWordState)
         {
-            case STATE_INITIAL:
+            case WordState::INITIAL:
                 if (nChar == '=')
-                    m_eEncodedWordState = STATE_FIRST_EQUALS;
+                    m_eEncodedWordState = WordState::FIRST_EQUALS;
                 else
-                    m_eEncodedWordState = STATE_BAD;
+                    m_eEncodedWordState = WordState::BAD;
                 break;
 
-            case STATE_FIRST_EQUALS:
+            case WordState::FIRST_EQUALS:
                 if (nChar == '?')
-                    m_eEncodedWordState = STATE_FIRST_EQUALS;
+                    m_eEncodedWordState = WordState::FIRST_EQUALS;
                 else
-                    m_eEncodedWordState = STATE_BAD;
+                    m_eEncodedWordState = WordState::BAD;
                 break;
 
 
-            case STATE_CHARSET:
-                if (nChar == '?')
-                    m_eEncodedWordState = STATE_SECOND_QUESTION;
-                else if (!isEncodedWordTokenChar(nChar))
-                    m_eEncodedWordState = STATE_BAD;
-                break;
-
-            case STATE_SECOND_QUESTION:
+            case WordState::SECOND_QUESTION:
                 if (nChar == 'B' || nChar == 'Q'
                     || nChar == 'b' || nChar == 'q')
-                    m_eEncodedWordState = STATE_ENCODING;
+                    m_eEncodedWordState = WordState::ENCODING;
                 else
-                    m_eEncodedWordState = STATE_BAD;
+                    m_eEncodedWordState = WordState::BAD;
                 break;
 
-            case STATE_ENCODING:
+            case WordState::ENCODING:
                 if (nChar == '?')
-                    m_eEncodedWordState = STATE_THIRD_QUESTION;
+                    m_eEncodedWordState = WordState::THIRD_QUESTION;
                 else
-                    m_eEncodedWordState = STATE_BAD;
+                    m_eEncodedWordState = WordState::BAD;
                 break;
 
-            case STATE_THIRD_QUESTION:
+            case WordState::THIRD_QUESTION:
                 if (INetMIME::isVisible(nChar) && nChar != '?')
-                    m_eEncodedWordState = STATE_ENCODED_TEXT;
+                    m_eEncodedWordState = WordState::ENCODED_TEXT;
                 else
-                    m_eEncodedWordState = STATE_BAD;
+                    m_eEncodedWordState = WordState::BAD;
                 break;
 
-            case STATE_ENCODED_TEXT:
+            case WordState::ENCODED_TEXT:
                 if (nChar == '?')
-                    m_eEncodedWordState = STATE_FOURTH_QUESTION;
+                    m_eEncodedWordState = WordState::FOURTH_QUESTION;
                 else if (!INetMIME::isVisible(nChar))
-                    m_eEncodedWordState = STATE_BAD;
+                    m_eEncodedWordState = WordState::BAD;
                 break;
 
-            case STATE_FOURTH_QUESTION:
+            case WordState::FOURTH_QUESTION:
                 if (nChar == '=')
-                    m_eEncodedWordState = STATE_SECOND_EQUALS;
+                    m_eEncodedWordState = WordState::SECOND_EQUALS;
                 else
-                    m_eEncodedWordState = STATE_BAD;
+                    m_eEncodedWordState = WordState::BAD;
                 break;
 
-            case STATE_SECOND_EQUALS:
-                m_eEncodedWordState = STATE_BAD;
+            case WordState::SECOND_EQUALS:
+                m_eEncodedWordState = WordState::BAD;
                 break;
 
-            case STATE_BAD:
+            case WordState::BAD:
                 break;
         }
 
@@ -1626,29 +1608,6 @@ bool isTokenChar(sal_uInt32 nChar)
             false, false, false, false, false, false, false, false,
             false,  true, false,  true,  true,  true,  true,  true, // !"#$%&'
             false, false,  true,  true, false,  true,  true, false, //()*+,-./
-             true,  true,  true,  true,  true,  true,  true,  true, //01234567
-             true,  true, false, false, false, false, false, false, //89:;<=>?
-            false,  true,  true,  true,  true,  true,  true,  true, //@ABCDEFG
-             true,  true,  true,  true,  true,  true,  true,  true, //HIJKLMNO
-             true,  true,  true,  true,  true,  true,  true,  true, //PQRSTUVW
-             true,  true,  true, false, false, false,  true,  true, //XYZ[\]^_
-             true,  true,  true,  true,  true,  true,  true,  true, //`abcdefg
-             true,  true,  true,  true,  true,  true,  true,  true, //hijklmno
-             true,  true,  true,  true,  true,  true,  true,  true, //pqrstuvw
-             true,  true,  true,  true,  true,  true,  true, false  //xyz{|}~
-          };
-    return rtl::isAscii(nChar) && aMap[nChar];
-}
-
-bool isEncodedWordTokenChar(sal_uInt32 nChar)
-{
-    static const bool aMap[128]
-        = { false, false, false, false, false, false, false, false,
-            false, false, false, false, false, false, false, false,
-            false, false, false, false, false, false, false, false,
-            false, false, false, false, false, false, false, false,
-            false,  true, false,  true,  true,  true,  true,  true, // !"#$%&'
-            false, false,  true,  true, false,  true, false, false, //()*+,-./
              true,  true,  true,  true,  true,  true,  true,  true, //01234567
              true,  true, false, false, false, false, false, false, //89:;<=>?
             false,  true,  true,  true,  true,  true,  true,  true, //@ABCDEFG
