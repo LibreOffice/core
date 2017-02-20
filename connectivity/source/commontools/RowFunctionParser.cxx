@@ -388,7 +388,7 @@ private:
 
 const ParserContextSharedPtr& getParserContext()
 {
-    static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
+    static ParserContextSharedPtr lcl_parserContext( new ParserContext );
 
     // clear node stack (since we reuse the static object, that's
     // the whole point here)

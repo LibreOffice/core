@@ -153,11 +153,11 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
 
         if (SQL_ISTOKEN(pPredicateNode->getChild(1),OR))                // OR-Operator
         {
-            m_aCodeList.push_back(new OOp_OR());
+            m_aCodeList.push_back(new OOp_OR);
             m_bORCondition = true;
         }
         else if (SQL_ISTOKEN(pPredicateNode->getChild(1),AND))      // AND-Operator
-            m_aCodeList.push_back(new OOp_AND());
+            m_aCodeList.push_back(new OOp_AND);
         else
         {
             OSL_FAIL("OPredicateCompiler: Fehler im Parse Tree");
@@ -166,7 +166,7 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     else if (SQL_ISRULE(pPredicateNode,boolean_factor))
     {
         execute(pPredicateNode->getChild(1));
-        m_aCodeList.push_back(new OOp_NOT());
+        m_aCodeList.push_back(new OOp_NOT);
     }
     else if (SQL_ISRULE(pPredicateNode,comparison_predicate))
     {
@@ -190,10 +190,10 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
         execute(pPredicateNode->getChild(2));                           // process the right branch
         if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"+"))
         {
-            m_aCodeList.push_back(new OOp_ADD());
+            m_aCodeList.push_back(new OOp_ADD);
         }
         else if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"-"))
-            m_aCodeList.push_back(new OOp_SUB());
+            m_aCodeList.push_back(new OOp_SUB);
         else
         {
             OSL_FAIL("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
@@ -205,10 +205,10 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
         execute(pPredicateNode->getChild(2));                           // process the right branch
         if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"*"))
         {
-            m_aCodeList.push_back(new OOp_MUL());
+            m_aCodeList.push_back(new OOp_MUL);
         }
         else if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"/"))
-            m_aCodeList.push_back(new OOp_DIV());
+            m_aCodeList.push_back(new OOp_DIV);
         else
         {
             OSL_FAIL("OPredicateCompiler: Fehler im Parse Tree num_value_exp");
@@ -386,9 +386,9 @@ void OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode)
 
     OBoolOperator* pBoolOp = nullptr;
     if ( bNot )
-        pBoolOp = new OOp_OR();
+        pBoolOp = new OOp_OR;
     else
-        pBoolOp = new OOp_AND();
+        pBoolOp = new OOp_AND;
     m_aCodeList.push_back(pBoolOp);
 }
 
@@ -406,7 +406,7 @@ void OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode)
 
     execute(pPredicateNode->getChild(0));
     OBoolOperator* pOperator = (ePredicateType == SQLFilterOperator::SQLNULL) ?
-                                new OOp_ISNULL() : new OOp_ISNOTNULL();
+                                new OOp_ISNULL : new OOp_ISNOTNULL;
     m_aCodeList.push_back(pOperator);
 }
 
@@ -598,9 +598,9 @@ void OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)
     execute(pPredicateNode->getChild(2));
     OOperator* pOperator = nullptr;
     if ( bUpper )
-        pOperator = new OOp_Upper();
+        pOperator = new OOp_Upper;
     else
-        pOperator = new OOp_Lower();
+        pOperator = new OOp_Lower;
 
     m_aCodeList.push_back(pOperator);
 }
@@ -657,107 +657,107 @@ void OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)
                 case SQL_TOKEN_CHAR_LENGTH:
                 case SQL_TOKEN_LENGTH:
                 case SQL_TOKEN_OCTET_LENGTH:
-                    pOperator = new OOp_CharLength();
+                    pOperator = new OOp_CharLength;
                     break;
                 case SQL_TOKEN_ASCII:
-                    pOperator = new OOp_Ascii();
+                    pOperator = new OOp_Ascii;
                     break;
                 case SQL_TOKEN_LCASE:
-                    pOperator = new OOp_Lower();
+                    pOperator = new OOp_Lower;
                     break;
 
                 case SQL_TOKEN_LTRIM:
-                    pOperator = new OOp_LTrim();
+                    pOperator = new OOp_LTrim;
                     break;
                 case SQL_TOKEN_RTRIM:
-                    pOperator = new OOp_RTrim();
+                    pOperator = new OOp_RTrim;
                     break;
                 case SQL_TOKEN_SPACE:
-                    pOperator = new OOp_Space();
+                    pOperator = new OOp_Space;
                     break;
                 case SQL_TOKEN_UCASE:
-                    pOperator = new OOp_Upper();
+                    pOperator = new OOp_Upper;
                     break;
                 case SQL_TOKEN_ABS:
-                    pOperator = new OOp_Abs();
+                    pOperator = new OOp_Abs;
                     break;
                 case SQL_TOKEN_ACOS:
-                    pOperator = new OOp_ACos();
+                    pOperator = new OOp_ACos;
                     break;
                 case SQL_TOKEN_ASIN:
-                    pOperator = new OOp_ASin();
+                    pOperator = new OOp_ASin;
                     break;
                 case SQL_TOKEN_ATAN:
-                    pOperator = new OOp_ATan();
+                    pOperator = new OOp_ATan;
                     break;
                 case SQL_TOKEN_CEILING:
-                    pOperator = new OOp_Ceiling();
+                    pOperator = new OOp_Ceiling;
                     break;
                 case SQL_TOKEN_COS:
-                    pOperator = new OOp_Cos();
+                    pOperator = new OOp_Cos;
                     break;
                 case SQL_TOKEN_DEGREES:
-                    pOperator = new OOp_Degrees();
+                    pOperator = new OOp_Degrees;
                     break;
                 case SQL_TOKEN_EXP:
-                    pOperator = new OOp_Exp();
+                    pOperator = new OOp_Exp;
                     break;
                 case SQL_TOKEN_FLOOR:
-                    pOperator = new OOp_Floor();
+                    pOperator = new OOp_Floor;
                     break;
                 case SQL_TOKEN_LOG10:
-                    pOperator = new OOp_Log10();
+                    pOperator = new OOp_Log10;
                     break;
                 case SQL_TOKEN_LN:
-                    pOperator = new OOp_Ln();
+                    pOperator = new OOp_Ln;
                     break;
                 case SQL_TOKEN_RADIANS:
-                    pOperator = new OOp_Radians();
+                    pOperator = new OOp_Radians;
                     break;
                 case SQL_TOKEN_SIGN:
-                    pOperator = new OOp_Sign();
+                    pOperator = new OOp_Sign;
                     break;
                 case SQL_TOKEN_SIN:
-                    pOperator = new OOp_Sin();
+                    pOperator = new OOp_Sin;
                     break;
                 case SQL_TOKEN_SQRT:
-                    pOperator = new OOp_Sqrt();
+                    pOperator = new OOp_Sqrt;
                     break;
                 case SQL_TOKEN_TAN:
-                    pOperator = new OOp_Tan();
+                    pOperator = new OOp_Tan;
                     break;
                 case SQL_TOKEN_DAYOFWEEK:
-                    pOperator = new OOp_DayOfWeek();
+                    pOperator = new OOp_DayOfWeek;
                     break;
                 case SQL_TOKEN_DAYOFMONTH:
-                    pOperator = new OOp_DayOfMonth();
+                    pOperator = new OOp_DayOfMonth;
                     break;
                 case SQL_TOKEN_DAYOFYEAR:
-                    pOperator = new OOp_DayOfYear();
+                    pOperator = new OOp_DayOfYear;
                     break;
                 case SQL_TOKEN_MONTH:
-                    pOperator = new OOp_Month();
+                    pOperator = new OOp_Month;
                     break;
                 case SQL_TOKEN_DAYNAME:
-                    pOperator = new OOp_DayName();
+                    pOperator = new OOp_DayName;
                     break;
                 case SQL_TOKEN_MONTHNAME:
-                    pOperator = new OOp_MonthName();
+                    pOperator = new OOp_MonthName;
                     break;
                 case SQL_TOKEN_QUARTER:
-                    pOperator = new OOp_Quarter();
+                    pOperator = new OOp_Quarter;
                     break;
                 case SQL_TOKEN_YEAR:
-                    pOperator = new OOp_Year();
+                    pOperator = new OOp_Year;
                     break;
                 case SQL_TOKEN_HOUR:
-                    pOperator = new OOp_Hour();
+                    pOperator = new OOp_Hour;
                     break;
                 case SQL_TOKEN_MINUTE:
-                    pOperator = new OOp_Minute();
+                    pOperator = new OOp_Minute;
                     break;
                 case SQL_TOKEN_SECOND:
-                    pOperator = new OOp_Second();
+                    pOperator = new OOp_Second;
                     break;
                 default:
                     OSL_FAIL("Error in switch!");
@@ -792,60 +792,60 @@ void OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)
                 switch( nTokenId )
                 {
                     case SQL_TOKEN_CHAR:
-                        pOperator = new OOp_Char();
+                        pOperator = new OOp_Char;
                         break;
                     case SQL_TOKEN_CONCAT:
-                        pOperator = new OOp_Concat();
+                        pOperator = new OOp_Concat;
                         break;
                     case SQL_TOKEN_INSERT:
-                        pOperator = new OOp_Insert();
+                        pOperator = new OOp_Insert;
                         break;
                     case SQL_TOKEN_LEFT:
-                        pOperator = new OOp_Left();
+                        pOperator = new OOp_Left;
                         break;
                     case SQL_TOKEN_LOCATE:
                     case SQL_TOKEN_LOCATE_2:
-                        pOperator = new OOp_Locate();
+                        pOperator = new OOp_Locate;
                         break;
                     case SQL_TOKEN_REPEAT:
-                        pOperator = new OOp_Repeat();
+                        pOperator = new OOp_Repeat;
                         break;
                     case SQL_TOKEN_REPLACE:
-                        pOperator = new OOp_Replace();
+                        pOperator = new OOp_Replace;
                         break;
                     case SQL_TOKEN_RIGHT:
-                        pOperator = new OOp_Right();
+                        pOperator = new OOp_Right;
                         break;
                     case SQL_TOKEN_MOD:
-                        pOperator = new OOp_Mod();
+                        pOperator = new OOp_Mod;
                         break;
                     case SQL_TOKEN_ROUND:
-                        pOperator = new OOp_Round();
+                        pOperator = new OOp_Round;
                         break;
                     case SQL_TOKEN_LOGF:
                     case SQL_TOKEN_LOG:
-                        pOperator = new OOp_Log();
+                        pOperator = new OOp_Log;
                         break;
                     case SQL_TOKEN_POWER:
-                        pOperator = new OOp_Pow();
+                        pOperator = new OOp_Pow;
                         break;
                     case SQL_TOKEN_ATAN2:
-                        pOperator = new OOp_ATan2();
+                        pOperator = new OOp_ATan2;
                         break;
                     case SQL_TOKEN_PI:
-                        pOperator = new OOp_Pi();
+                        pOperator = new OOp_Pi;
                         break;
                     case SQL_TOKEN_CURDATE:
-                        pOperator = new OOp_CurDate();
+                        pOperator = new OOp_CurDate;
                         break;
                     case SQL_TOKEN_CURTIME:
-                        pOperator = new OOp_CurTime();
+                        pOperator = new OOp_CurTime;
                         break;
                     case SQL_TOKEN_NOW:
-                        pOperator = new OOp_Now();
+                        pOperator = new OOp_Now;
                         break;
                     case SQL_TOKEN_WEEK:
-                        pOperator = new OOp_Week();
+                        pOperator = new OOp_Week;
                         break;
                     default:
                         OSL_FAIL("Error in switch!");
@@ -867,7 +867,7 @@ void OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)
                 execute(pPredicateNode->getChild(4));
                 execute(pPredicateNode->getChild(5)->getChild(1));
             }
-            pOperator = new OOp_SubString();
+            pOperator = new OOp_SubString;
             break;
 
         case SQL_TOKEN_POSITION:
@@ -883,7 +883,7 @@ void OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)
                 execute(pPredicateNode->getChild(2));
                 execute(pPredicateNode->getChild(4));
             }
-            pOperator = new OOp_Locate();
+            pOperator = new OOp_Locate;
             break;
         default:
             m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_FUNCTION_NOT_SUPPORTED,nullptr);

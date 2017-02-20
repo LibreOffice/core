@@ -645,7 +645,7 @@ Reference< XNameAccess > Connection::getUsers()
 Reference< XInterface >  ConnectionCreateInstance(
     const Reference< XComponentContext > & ctx )
 {
-    ::rtl::Reference< RefCountedMutex > ref = new RefCountedMutex();
+    ::rtl::Reference< RefCountedMutex > ref = new RefCountedMutex;
     return * new Connection( ref, ctx );
 }
 
