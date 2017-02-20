@@ -20,6 +20,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_TABVIEW_HXX
 
 #include <vcl/scrbar.hxx>
+#include <vcl/help.hxx>
 
 #include <sfx2/ipclient.hxx>
 
@@ -169,6 +170,10 @@ private:
     ScExtraEditViewManager aExtraEditViewManager;
 
     sal_uLong               nTipVisible;
+    Rectangle               aTipRectangle;
+    QuickHelpFlags          nTipAlign;
+    OUString                sTipString;
+    VclPtr<vcl::Window>     sTopParent;
 
     long                nPrevDragPos;
 
