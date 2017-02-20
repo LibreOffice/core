@@ -4609,7 +4609,7 @@ SfxVoidItem ReplyToAnnotation SID_REPLYTO_POSTIT
 
 
 SfxVoidItem DeleteAnnotation SID_DELETE_POSTIT
-()
+(SvxPostItIdItem Id SID_ATTR_POSTIT_ID)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

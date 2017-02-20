@@ -61,6 +61,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
 
+#include <svx/postattr.hxx>
 #include <svx/svdetc.hxx>
 
 #include "annotationmanager.hxx"
@@ -68,6 +69,7 @@
 #include "annotationwindow.hxx"
 #include "annotations.hrc"
 
+#include "Annotation.hxx"
 #include "ToolBarManager.hxx"
 #include "DrawDocShell.hxx"
 #include "DrawViewShell.hxx"
@@ -244,6 +246,30 @@ void SAL_CALL AnnotationManagerImpl::disposing( const css::lang::EventObject& /*
 {
 }
 
+Reference<XAnnotation> AnnotationManagerImpl::GetAnnotationById(sal_uInt32 nAnnotationId)
+{
+    SdPage* pPage = nullptr;
+    do
+    {
+        pPage = GetNextPage(pPage, true);
+        if( pPage && !pPage->getAnnotations().empty() )
+        {
+            AnnotationVector aAnnotations(pPage->getAnnotations());
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            {
+                Reference<XAnnotation> xAnnotation(*iter);
+                if( sd::getAnnotationId(xAnnotation) == nAnnotationId )
+                {
+                    return xAnnotation;
+                }
+            }
+        }
+    } while( pPage );
+
+    Reference<XAnnotation> xAnnotationEmpty;
+    return xAnnotationEmpty;
+}
+
 void AnnotationManagerImpl::ShowAnnotations( bool bShow )
 {
     // enforce show annotations if a new annotation is inserted
@@ -315,14 +341,19 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
     case SID_DELETE_POSTIT:
         {
             Reference< XAnnotation > xAnnotation;
+            sal_uInt32 nId = 0;
             if( pArgs )
             {
                 const SfxPoolItem*  pPoolItem = nullptr;
                 if( SfxItemState::SET == pArgs->GetItemState( SID_DELETE_POSTIT, true, &pPoolItem ) )
                     static_cast<const SfxUnoAnyItem*>(pPoolItem)->GetValue() >>= xAnnotation;
+                if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_POSTIT_ID, true, &pPoolItem ) )
+                    nId = static_cast<const SvxPostItIdItem*>(pPoolItem)->GetValue().toUInt32();
             }
 
-            if( !xAnnotation.is() )
+            if (nId != 0)
+                xAnnotation = GetAnnotationById(nId);
+            else if( !xAnnotation.is() )
                 GetSelectedAnnotation( xAnnotation );
 
             DeleteAnnotation( xAnnotation );
@@ -576,7 +607,8 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     Reference< XAnnotation > xAnnotation;
     GetSelectedAnnotation( xAnnotation );
 
-    if( !xAnnotation.is() || bReadOnly )
+    // Don't disable SID_DELETE_POSTIT slot in case of LOK
+    if( (!xAnnotation.is() && !comphelper::LibreOfficeKit::isActive()) || bReadOnly )
         rSet.DisableItem( SID_DELETE_POSTIT );
 
     SdPage* pPage = nullptr;
