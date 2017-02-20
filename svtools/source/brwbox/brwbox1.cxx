@@ -2091,18 +2091,17 @@ sal_uInt16 BrowseBox::GetColumnAtXPosPixel( long nX, bool ) const
     return BROWSER_INVALIDID;
 }
 
-
-void BrowseBox::ReserveControlArea( sal_uInt16 nWidth )
+bool BrowseBox::ReserveControlArea(sal_uInt16 nWidth)
 {
-
-    if ( nWidth != nControlAreaWidth )
+    if (nWidth != nControlAreaWidth)
     {
         OSL_ENSURE(nWidth,"Control area of 0 is not allowed, Use USHRT_MAX instead!");
         nControlAreaWidth = nWidth;
         UpdateScrollbars();
+        return true;
     }
+    return false;
 }
-
 
 Rectangle BrowseBox::GetControlArea() const
 {
@@ -2112,7 +2111,6 @@ Rectangle BrowseBox::GetControlArea() const
         Size( GetOutputSizePixel().Width() - aHScroll->GetSizePixel().Width(),
              aHScroll->GetSizePixel().Height() ) );
 }
-
 
 void BrowseBox::SetMode( BrowserMode nMode )
 {
