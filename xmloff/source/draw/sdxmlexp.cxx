@@ -928,7 +928,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderOutline, aRight);
                         break;
                     }
-                    case 14 : // AUTOLAYOUT_OBJOVERTEXT
+                    case AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT :
                     {
                         Rectangle aTop(pInfo->GetPresRectangle());
                         aTop.setHeight(long(aTop.GetHeight() * 0.477));

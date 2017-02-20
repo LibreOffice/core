@@ -617,7 +617,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                         }
                         else
                         {
-                            mnTypeId = 14; // AUTOLAYOUT_OBJOVERTEXT -> top, bottom
+                            mnTypeId = AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT; // top, bottom
                         }
                     }
                     break;

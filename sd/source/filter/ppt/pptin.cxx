@@ -1156,7 +1156,7 @@ bool ImplSdPPTImport::Import()
                         if ( nID1 == PptPlaceholder::BODY && nID2 == PptPlaceholder::OBJECT )
                             eAutoLayout = AUTOLAYOUT_TEXTOVEROBJ;
                         else if ( nID1 == PptPlaceholder::OBJECT && nID2 == PptPlaceholder::BODY )
-                            eAutoLayout = AUTOLAYOUT_OBJOVERTEXT;
+                            eAutoLayout = AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT;
                     }
                     break;
 
