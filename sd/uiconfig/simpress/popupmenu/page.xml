@@ -13,6 +13,7 @@
   <menu:menuitem menu:id=".uno:Paste"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:SlideSetup"/>
+  <menu:menuitem menu:id=".uno:InsertGraphic"/>
   <menu:menuitem menu:id=".uno:SelectBackground"/>
   <menu:menuitem menu:id=".uno:SaveBackground"/>
   <menu:menu menu:id=".uno:SlideFeaturesMenu">
