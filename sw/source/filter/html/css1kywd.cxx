@@ -144,6 +144,7 @@ const sal_Char* sCSS1_PV_justify = "justify";
 const sal_Char* sCSS1_P_text_indent = "text-indent";
 
 const sal_Char* sCSS1_P_line_height = "line-height";
+const sal_Char* sCSS1_P_list_style_type = "list-style-type";
 
 // Strings for box properties
 

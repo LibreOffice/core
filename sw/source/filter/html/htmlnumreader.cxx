@@ -288,6 +288,16 @@ void SwHTMLParser::NewNumBulList( int nToken )
                     aNumFormat.SetFirstLineOffset( nTextIndent );
                     bChangeNumFormat = true;
                 }
+                if( aPropInfo.m_bNumbering )
+                {
+                    aNumFormat.SetNumberingType(aPropInfo.m_nNumberingType);
+                    bChangeNumFormat = true;
+                }
+                if( aPropInfo.m_bBullet )
+                {
+                    aNumFormat.SetBulletChar( (sal_Unicode)aPropInfo.m_cBulletChar );
+                    bChangeNumFormat = true;
+                }
             }
             aPropInfo.m_bLeftMargin = aPropInfo.m_bTextIndent = false;
             if( !aPropInfo.m_bRightMargin )

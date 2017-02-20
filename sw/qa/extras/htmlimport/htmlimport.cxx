@@ -126,6 +126,54 @@ DECLARE_HTMLIMPORT_TEST(testInlinedImagesPageAndParagraph, "PageAndParagraphFill
     }
 }
 
+DECLARE_HTMLIMPORT_TEST(testListStyleType, "list-style.html")
+{
+    // check unnumbered list style - should be type circle here
+    uno::Reference< beans::XPropertySet > xParagraphProperties(getParagraph(4),
+                                                               uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(
+        xParagraphProperties->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    bool bBulletFound=false;
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "BulletChar")
+        {
+            // should be 'o'.
+            CPPUNIT_ASSERT_EQUAL(OUString("\xEE\x80\x89", 3, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            bBulletFound = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("no BulletChar property found for para 4", bBulletFound);
+
+    // check numbered list style - should be type lower-alpha here
+    xParagraphProperties.set(getParagraph(14),
+                             uno::UNO_QUERY);
+    xLevels.set(xParagraphProperties->getPropertyValue("NumberingRules"),
+                uno::UNO_QUERY);
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "NumberingType")
+        {
+            printf("style is %d\n", rProp.Value.get<sal_Int16>());
+            // is lower-alpha in input, translates into chars_lower_letter here
+            CPPUNIT_ASSERT_EQUAL(style::NumberingType::CHARS_LOWER_LETTER,
+                                 rProp.Value.get<sal_Int16>());
+            return;
+        }
+    }
+    CPPUNIT_FAIL("no NumberingType property found for para 14");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
