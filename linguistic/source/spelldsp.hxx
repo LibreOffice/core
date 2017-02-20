@@ -53,14 +53,14 @@ class SpellCheckerDispatcher :
 {
     typedef std::shared_ptr< LangSvcEntries_Spell >               LangSvcEntries_Spell_Ptr_t;
     typedef std::map< LanguageType, LangSvcEntries_Spell_Ptr_t >    SpellSvcByLangMap_t;
-    SpellSvcByLangMap_t     aSvcMap;
+    SpellSvcByLangMap_t     m_aSvcMap;
 
-    css::uno::Reference< css::linguistic2::XLinguProperties >           xPropSet;
-    css::uno::Reference< css::linguistic2::XSearchableDictionaryList >  xDicList;
+    css::uno::Reference< css::linguistic2::XLinguProperties >           m_xPropSet;
+    css::uno::Reference< css::linguistic2::XSearchableDictionaryList >  m_xDicList;
 
-    LngSvcMgr                   &rMgr;
-    mutable linguistic::SpellCache      *pCache; // Spell Cache (holds known words)
-    CharClass                   * pCharClass;
+    LngSvcMgr                       &m_rMgr;
+    mutable linguistic::SpellCache  *m_pCache; // Spell Cache (holds known words)
+    CharClass                       *m_pCharClass;
 
     SpellCheckerDispatcher(const SpellCheckerDispatcher &) = delete;
     SpellCheckerDispatcher & operator = (const SpellCheckerDispatcher &) = delete;
@@ -120,25 +120,25 @@ private:
 
 inline linguistic::SpellCache & SpellCheckerDispatcher::GetCache() const
 {
-    if (!pCache)
-        pCache = new linguistic::SpellCache();
-    return *pCache;
+    if (!m_pCache)
+        m_pCache = new linguistic::SpellCache();
+    return *m_pCache;
 }
 
 
 inline css::uno::Reference< css::linguistic2::XLinguProperties >
         SpellCheckerDispatcher::GetPropSet()
 {
-    return xPropSet.is() ?
-        xPropSet : xPropSet = linguistic::GetLinguProperties();
+    return m_xPropSet.is() ?
+        m_xPropSet : m_xPropSet = linguistic::GetLinguProperties();
 }
 
 
 inline css::uno::Reference< css::linguistic2::XSearchableDictionaryList >
         SpellCheckerDispatcher::GetDicList()
 {
-    return xDicList.is() ?
-        xDicList : xDicList = linguistic::GetDictionaryList();
+    return m_xDicList.is() ?
+        m_xDicList : m_xDicList = linguistic::GetDictionaryList();
 }
 
 
