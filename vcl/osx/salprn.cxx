@@ -281,10 +281,6 @@ sal_uInt32 AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup*, PrinterCapT
             return 0xffff;
         case PrinterCapType::SetOrientation:
             return 1;
-        case PrinterCapType::SetDuplex:
-            return 0;
-        case PrinterCapType::SetPaperBin:
-            return 0;
         case PrinterCapType::SetPaperSize:
             return 1;
         case PrinterCapType::SetPaper:
