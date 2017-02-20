@@ -90,8 +90,8 @@ HandlerCache::HandlerCache()
 
     if (m_nRefCount==0)
     {
-        m_pHandler = new HandlerHash();
-        m_pPattern = new PatternHash();
+        m_pHandler = new HandlerHash;
+        m_pPattern = new PatternHash;
         m_pConfig  = new HandlerCFGAccess(PACKAGENAME_PROTOCOLHANDLER);
         m_pConfig->read(&m_pHandler,&m_pPattern);
         m_pConfig->setCache(this);
