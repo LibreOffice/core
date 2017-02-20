@@ -1905,6 +1905,7 @@ bool SdrMarkView::PickMarkedObj(const Point& rPnt, SdrObject*& rpObj, SdrPageVie
                 if (aPt.Y()<aRect.Top())    nDist+=aRect.Top()-aPt.Y();
                 if (aPt.Y()>aRect.Bottom()) nDist+=aPt.Y()-aRect.Bottom();
                 if (nDist<nBestDist) {
+                    nBestDist = nDist;
                     pBestObj=pObj;
                     pBestPV=pPV;
                 }
