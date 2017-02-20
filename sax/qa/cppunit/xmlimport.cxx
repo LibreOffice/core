@@ -356,7 +356,7 @@ void XMLImportTest::setUp()
     m_xLegacyFastParser->setDocumentHandler( m_xDocumentHandler.get() );
 
     Reference< XFastTokenHandler > xTokenHandler;
-    xTokenHandler.set( new DummyTokenHandler() );
+    xTokenHandler.set( new DummyTokenHandler );
     uno::Reference<lang::XInitialization> const xInit(m_xLegacyFastParser,
                             uno::UNO_QUERY_THROW);
     uno::Sequence<uno::Any> args(1);
