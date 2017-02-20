@@ -19,6 +19,8 @@
 
 #include "sddll.hxx"
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
@@ -37,6 +39,7 @@
 #include <sal/macros.h>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/saveopt.hxx>
@@ -60,6 +63,8 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/crossedoutitem.hxx>
+
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <svx/postattr.hxx>
 #include <svx/svdetc.hxx>
@@ -101,6 +106,39 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::office;
+
+namespace {
+
+    void lcl_CommentNotification(const OUString& rEventName, const sd::ViewShellBase& rViewShell, Reference<XAnnotation>& rxAnnotation)
+    {
+        // callbacks only if tiled annotations are explicltly turned off by LOK client
+        if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
+            return;
+
+        boost::property_tree::ptree aAnnotation;
+        aAnnotation.put("action", (rEventName == "OnAnnotationInserted" ? "Add" :
+                                   (rEventName == "OnAnnotationRemoved" ? "Remove" :
+                                    (rEventName == "OnAnnotationChanged" ? "Modify" : "???"))));
+        aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
+        if (rEventName != "OnAnnotationRemoved")
+        {
+            aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
+            aAnnotation.put("author", rxAnnotation->getAuthor());
+            aAnnotation.put("dateTime", utl::toISO8601(rxAnnotation->getDateTime()));
+            uno::Reference<text::XText> xText(rxAnnotation->getTextRange());
+            aAnnotation.put("text", xText->getString());
+        }
+
+        boost::property_tree::ptree aTree;
+        aTree.add_child("comment", aAnnotation);
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        std::string aPayload = aStream.str();
+
+        rViewShell.libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+    }
+
+} // anonymous ns
 
 namespace sd {
 
@@ -238,6 +276,12 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
 {
     if( aEvent.EventName == "OnAnnotationInserted" || aEvent.EventName == "OnAnnotationRemoved" || aEvent.EventName == "OnAnnotationChanged" )
     {
+        Reference<XAnnotation> xAnnotation(aEvent.Source, uno::UNO_QUERY);
+        if (xAnnotation.is())
+        {
+            // Inform our LOK clients
+            lcl_CommentNotification(aEvent.EventName, mrBase, xAnnotation);
+        }
         UpdateTags();
     }
 }
