@@ -107,10 +107,7 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * func )
     PyRef object(PyDict_GetItemString( runtime.getImpl()->cargo->getUnoModule().get(), func ) );
     if( !object.is() )
     {
-        OUStringBuffer buf;
-        buf.append( "couldn't find core function " );
-        buf.appendAscii( func );
-        throw RuntimeException(buf.makeStringAndClear());
+        throw RuntimeException("couldn't find core function " + OUString::createFromAscii(func));
     }
     return object;
 }

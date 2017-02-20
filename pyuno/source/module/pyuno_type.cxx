@@ -164,12 +164,9 @@ Any PyEnum2Enum( PyObject *obj )
     {
         if(desc.get()->eTypeClass != typelib_TypeClass_ENUM )
         {
-            OUStringBuffer buf;
-            buf.append( "pyuno.checkEnum: " ).append(strTypeName).append( "is a " );
-            buf.appendAscii(
-                typeClassToString( (css::uno::TypeClass) desc.get()->eTypeClass));
-            buf.append( ", expected ENUM" );
-            throw RuntimeException( buf.makeStringAndClear() );
+            throw RuntimeException( "pyuno.checkEnum: " + strTypeName +  "is a " +
+                OUString::createFromAscii(typeClassToString( (css::uno::TypeClass) desc.get()->eTypeClass)) +
+                ", expected ENUM" );
         }
 
         desc.makeComplete();
@@ -185,18 +182,15 @@ Any PyEnum2Enum( PyObject *obj )
         }
         if( i == pEnumDesc->nEnumValues )
         {
-            OUStringBuffer buf;
-            buf.append( "value " ).appendAscii( stringValue ).append( "is unknown in enum " );
-            buf.appendAscii( PyStr_AsString( typeName.get() ) );
-            throw RuntimeException( buf.makeStringAndClear() );
+            throw RuntimeException( "value " + OUString::createFromAscii( stringValue ) +
+                "is unknown in enum " +
+                OUString::createFromAscii( PyStr_AsString( typeName.get() ) ) );
         }
         ret = Any( &pEnumDesc->pEnumValues[i], desc.get()->pWeakRef );
     }
     else
     {
-        OUStringBuffer buf;
-        buf.append( "enum " ).appendAscii( PyStr_AsString(typeName.get()) ).append( " is unknown" );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException( "enum " + OUString::createFromAscii( PyStr_AsString(typeName.get()) ) + " is unknown" );
     }
     return ret;
 }
@@ -218,19 +212,15 @@ Type PyType2Type( PyObject * o )
     TypeDescription desc( name );
     if( ! desc.is() )
     {
-        OUStringBuffer buf;
-        buf.append( "type " ).append(name).append( " is unknown" );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException( "type " + name +  " is unknown" );
     }
     css::uno::TypeClass tc = *o3tl::doAccess<css::uno::TypeClass>(enumValue);
     if( static_cast<css::uno::TypeClass>(desc.get()->eTypeClass) != tc )
     {
-        OUStringBuffer buf;
-        buf.append( "pyuno.checkType: " ).append(name).append( " is a " );
-        buf.appendAscii( typeClassToString( (TypeClass) desc.get()->eTypeClass) );
-        buf.append( ", but type got construct with typeclass " );
-        buf.appendAscii( typeClassToString( tc ) );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException( "pyuno.checkType: " + name + " is a " +
+            OUString::createFromAscii( typeClassToString( (TypeClass) desc.get()->eTypeClass) ) +
+            ", but type got construct with typeclass " +
+            OUString::createFromAscii( typeClassToString( tc ) ) );
     }
     return desc.get()->pWeakRef;
 }

@@ -464,11 +464,8 @@ PyRef Runtime::any2PyObject (const Any &a ) const
                 }
             }
         }
-        OUStringBuffer buf;
-        buf.append( "Any carries enum " );
-        buf.append( a.getValueType().getTypeName());
-        buf.append( " with invalid value " ).append( l );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException( "Any carries enum " + a.getValueType().getTypeName() +
+                " with invalid value " + OUString::number(l) );
     }
     case typelib_TypeClass_EXCEPTION:
     case typelib_TypeClass_STRUCT:
@@ -480,10 +477,8 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         PyRef ret( PyObject_CallObject( excClass.get() , argsTuple.get() ), SAL_NO_ACQUIRE );
         if( ! ret.is() )
         {
-            OUStringBuffer buf;
-            buf.append( "Couldn't instantiate python representation of structured UNO type " );
-            buf.append( a.getValueType().getTypeName() );
-            throw RuntimeException( buf.makeStringAndClear() );
+            throw RuntimeException( "Couldn't instantiate python representation of structured UNO type " +
+                        a.getValueType().getTypeName() );
         }
 
         if( auto e = o3tl::tryAccess<css::uno::Exception>(a) )
@@ -550,10 +545,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     default:
     {
-        OUStringBuffer buf;
-        buf.append( "Unknown UNO type class " );
-        buf.append( (sal_Int32 ) a.getValueTypeClass() );
-        throw RuntimeException(buf.makeStringAndClear( ) );
+        throw RuntimeException( "Unknown UNO type class " + OUString::number(a.getValueTypeClass()) );
     }
     }
 }

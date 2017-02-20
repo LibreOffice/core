@@ -100,10 +100,8 @@ static PyRef getObjectFromLoaderModule( const char * func )
     PyRef object( PyDict_GetItemString(getLoaderModule().get(), func ) );
     if( !object.is() )
     {
-        OUStringBuffer buf;
-        buf.append( "pythonloader: couldn't find core element pythonloader." );
-        buf.appendAscii( func );
-        throw RuntimeException(buf.makeStringAndClear());
+        throw RuntimeException( "pythonloader: couldn't find core element pythonloader." +
+                OUString::createFromAscii( func ));
     }
     return object;
 }

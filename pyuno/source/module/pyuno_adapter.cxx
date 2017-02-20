@@ -355,10 +355,7 @@ void Adapter::setValue( const OUString & aPropertyName, const Any & value )
 {
     if( !hasProperty( aPropertyName ) )
     {
-        OUStringBuffer buf;
-        buf.append( "pyuno::Adapter: Property " ).append( aPropertyName );
-        buf.append( " is unknown." );
-        throw UnknownPropertyException( buf.makeStringAndClear() );
+        throw UnknownPropertyException( "pyuno::Adapter: Property " + aPropertyName + " is unknown." );
     }
 
     PyThreadAttach guard( mInterpreter );
@@ -401,10 +398,7 @@ Any Adapter::getValue( const OUString & aPropertyName )
 
         if (!pyRef.is() || PyErr_Occurred())
         {
-            OUStringBuffer buf;
-            buf.append( "pyuno::Adapter: Property " ).append( aPropertyName );
-            buf.append( " is unknown." );
-            throw UnknownPropertyException( buf.makeStringAndClear() );
+            throw UnknownPropertyException( "pyuno::Adapter: Property " + aPropertyName + " is unknown." );
         }
         ret = runtime.pyObject2Any( pyRef );
     }
