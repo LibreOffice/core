@@ -392,12 +392,12 @@ void loadDiagram( ShapePtr& pShape,
                   const OUString& rQStylePath,
                   const OUString& rColorStylePath )
 {
-    DiagramPtr pDiagram( new Diagram() );
+    DiagramPtr pDiagram( new Diagram );
 
     DiagramDataPtr pData( new DiagramData() );
     pDiagram->setData( pData );
 
-    DiagramLayoutPtr pLayout( new DiagramLayout() );
+    DiagramLayoutPtr pLayout( new DiagramLayout );
     pDiagram->setLayout( pLayout );
 
     // data
@@ -489,12 +489,12 @@ void loadDiagram( const ShapePtr& pShape,
                   const uno::Reference<xml::dom::XDocument>& rXQStyleDom,
                   const uno::Reference<xml::dom::XDocument>& rXColorStyleDom )
 {
-    DiagramPtr pDiagram( new Diagram() );
+    DiagramPtr pDiagram( new Diagram );
 
     DiagramDataPtr pData( new DiagramData() );
     pDiagram->setData( pData );
 
-    DiagramLayoutPtr pLayout( new DiagramLayout() );
+    DiagramLayoutPtr pLayout( new DiagramLayout );
     pDiagram->setLayout( pLayout );
 
     // data

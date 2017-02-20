@@ -106,7 +106,7 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
                 {
                     // The shape wants a background, but the slide doesn't have
                     // one: default to white.
-                    pBackgroundPropertiesPtr.reset(new oox::drawingml::FillProperties());
+                    pBackgroundPropertiesPtr.reset(new oox::drawingml::FillProperties);
                     pBackgroundPropertiesPtr->moFillType = XML_solidFill;
                     pBackgroundPropertiesPtr->maFillColor.setSrgbClr(0xFFFFFF);
                 }

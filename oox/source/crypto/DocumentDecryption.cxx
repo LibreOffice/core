@@ -242,7 +242,7 @@ bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInp
 
 bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStream)
 {
-    Standard2007Engine* engine = new Standard2007Engine();
+    Standard2007Engine* engine = new Standard2007Engine;
     mEngine.reset(engine);
     msfilter::StandardEncryptionInfo& info = engine->getInfo();
 

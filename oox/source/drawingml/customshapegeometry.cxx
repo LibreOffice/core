@@ -442,7 +442,7 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
 {
     if ( !pCommandHashMap )
     {
-        FormulaCommandHMap* pHM = new FormulaCommandHMap();
+        FormulaCommandHMap* pHM = new FormulaCommandHMap;
         for(const FormularCommandNameTable& i : pFormularCommandNameTable)
             (*pHM)[ OUString::createFromAscii( i.pS ) ] =  i.pE;
         pCommandHashMap = pHM;
