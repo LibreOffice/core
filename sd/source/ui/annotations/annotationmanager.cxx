@@ -472,11 +472,21 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 {
     Reference< XAnnotation > xAnnotation;
     const SfxItemSet* pArgs = rReq.GetArgs();
+    sal_uInt32 nReplyId = 0; // Id of the comment to reply to
+    OUString sReplyText;
     if( pArgs )
     {
         const SfxPoolItem*  pPoolItem = nullptr;
-        if( SfxItemState::SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
+        if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_POSTIT_ID, true, &pPoolItem ) )
+        {
+            nReplyId = static_cast<const SvxPostItIdItem*>(pPoolItem)->GetValue().toUInt32();
+            xAnnotation = GetAnnotationById(nReplyId);
+        }
+        else if( SfxItemState::SET == pArgs->GetItemState( rReq.GetSlot(), true, &pPoolItem ) )
             static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue() >>= xAnnotation;
+
+        if( SfxItemState::SET == pArgs->GetItemState( SID_ATTR_POSTIT_TEXT, true, &pPoolItem ) )
+            sReplyText = static_cast<const SvxPostItTextItem*>( pPoolItem )->GetValue();
     }
 
     TextApiObject* pTextApi = getTextApiObject( xAnnotation );
@@ -517,6 +527,9 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 
             pOutliner->QuickSetAttribs( aAnswerSet, aSel );
         }
+
+        if (!sReplyText.isEmpty())
+            pOutliner->Insert(sReplyText);
 
         std::unique_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
         pTextApi->SetText( *pOPO.get() );
