@@ -376,7 +376,7 @@ PyRef PyUNOStruct_new (
     PyUNO* self = PyObject_New (PyUNO, &PyUNOStructType);
     if (self == nullptr)
         return PyRef(); // == error
-    self->members = new PyUNOInternals();
+    self->members = new PyUNOInternals;
     self->members->xInvocation = xInvocation;
     self->members->wrappedObject = targetInterface;
     return PyRef( reinterpret_cast<PyObject*>(self), SAL_NO_ACQUIRE );

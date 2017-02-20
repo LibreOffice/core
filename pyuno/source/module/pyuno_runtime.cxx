@@ -257,7 +257,7 @@ PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
     me->cargo = nullptr;
     // must use a different struct here, as the PyObject_New
     // makes C++ unusable
-    RuntimeCargo *c = new RuntimeCargo();
+    RuntimeCargo *c = new RuntimeCargo;
     readLoggingConfig( &(c->logLevel) , &(c->logFile) );
     log( c, LogLevel::CALL, "Instantiating pyuno bridge" );
 

@@ -171,7 +171,7 @@ PyObject* PyUNO_iterator_new( const Reference< XEnumeration >& xEnumeration )
     PyUNO_iterator* self = PyObject_New( PyUNO_iterator, &PyUNO_iterator_Type );
     if ( self == nullptr )
         return nullptr; // == error
-    self->members = new PyUNO_iterator_Internals();
+    self->members = new PyUNO_iterator_Internals;
     self->members->xEnumeration = xEnumeration;
     return reinterpret_cast<PyObject*>(self);
 }
@@ -301,7 +301,7 @@ PyObject* PyUNO_list_iterator_new( const Reference<XIndexAccess> &xIndexAccess )
     PyUNO_list_iterator* self = PyObject_New( PyUNO_list_iterator, &PyUNO_list_iterator_Type );
     if ( self == nullptr )
         return nullptr; // == error
-    self->members = new PyUNO_list_iterator_Internals();
+    self->members = new PyUNO_list_iterator_Internals;
     self->members->xIndexAccess = xIndexAccess;
     self->members->index = 0;
     return reinterpret_cast<PyObject*>(self);
