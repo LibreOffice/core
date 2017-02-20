@@ -271,7 +271,7 @@ OUString GetTooltipForCommand (
 }
 
 OUString GetCommandShortcut (const OUString& rsCommandName,
-                                                  const Reference<frame::XFrame>& rxFrame)
+                             const Reference<frame::XFrame>& rxFrame)
 {
 
     OUString sShortcut;
@@ -298,8 +298,8 @@ OUString GetRealCommandForCommand(const OUString& rCommandName,
 }
 
 BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
-                                                 const Reference<frame::XFrame>& rxFrame,
-                                                 vcl::ImageType eImageType)
+                             const Reference<frame::XFrame>& rxFrame,
+                             vcl::ImageType eImageType)
 {
 
     if (rsCommandName.isEmpty())
@@ -364,8 +364,8 @@ BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
 }
 
 Image GetImageForCommand(const OUString& rsCommandName,
-                                              const Reference<frame::XFrame>& rxFrame,
-                                              vcl::ImageType eImageType)
+                         const Reference<frame::XFrame>& rxFrame,
+                         vcl::ImageType eImageType)
 {
     return Image(GetBitmapForCommand(rsCommandName, rxFrame, eImageType));
 }
@@ -398,8 +398,7 @@ bool IsMirrored(const OUString& rsCommandName, const OUString& rsModuleName)
     return ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName, rsModuleName);
 }
 
-bool IsExperimental(const OUString& rsCommandName,
-                                         const OUString& rModuleName)
+bool IsExperimental(const OUString& rsCommandName, const OUString& rModuleName)
 {
     Sequence<beans::PropertyValue> aProperties;
     try

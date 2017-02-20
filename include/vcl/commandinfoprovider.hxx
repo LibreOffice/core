@@ -61,15 +61,10 @@ namespace vcl { namespace CommandInfoProvider {
 
     /** Returns the shortcut for a command in human-readable form */
     VCL_DLLPUBLIC OUString GetCommandShortcut (const OUString& rCommandName,
-                                 const css::uno::Reference<css::frame::XFrame>& rxFrame);
+                                               const css::uno::Reference<css::frame::XFrame>& rxFrame);
 
     VCL_DLLPUBLIC OUString GetRealCommandForCommand( const OUString& rCommandName,
                                                      const OUString& rsModuleName );
-
-    VCL_DLLPUBLIC BitmapEx GetBitmapForCommand(
-        const OUString& rsCommandName,
-        const css::uno::Reference<css::frame::XFrame>& rxFrame,
-        vcl::ImageType eImageType = vcl::ImageType::Small);
 
     VCL_DLLPUBLIC Image GetImageForCommand(
         const OUString& rsCommandName,
