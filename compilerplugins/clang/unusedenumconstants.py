@@ -117,6 +117,7 @@ def is_ignore(srcLoc):
          "basic/source/inc/filefmt.hxx", # FileOffset
          "basic/source/inc/opcodes.hxx", #  SbiOpcode
          "sc/source/filter/inc/flttypes.hxx", # BiffTyp
+         "sc/inc/optutil.hxx", # ScOptionsUtil::KeyBindingType
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -148,6 +149,8 @@ def is_ignore(srcLoc):
          "basic/source/sbx/sbxres.hxx", # StringId
          "sc/source/core/tool/chartpos.cxx", # CellState
          "sc/source/core/data/global2.cxx", # State
+         "sc/inc/global.hxx", # ScAggregateFunc
+         "registry/source/reflcnst.hxx", #CPInfoTag
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
@@ -157,6 +160,7 @@ def is_ignore(srcLoc):
          "include/vcl/salbtype.hxx",
          "include/vcl/commandevent.hxx", # CommandEvent, MediaCommand, ShowDialogId
          "include/canvas/rendering/irendermodule.hxx", # canvas::IRenderModule::PrimitiveType
+         "sal/osl/unx/file.cxx", # FileHandle_Impl::Kind
         # must match some other enum
          "include/editeng/bulletitem.hxx",
          "include/editeng/svxenum.hxx",
