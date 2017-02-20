@@ -635,7 +635,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                         }
                         else
                         {
-                            mnTypeId = 15; // AUTOLAYOUT_2OBJTEXT
+                            mnTypeId = AUTOLAYOUT_TITLE_2CONTENT_CONTENT;
                         }
                     }
                     else

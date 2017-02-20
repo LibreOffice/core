@@ -940,7 +940,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderOutline, aBottom);
                         break;
                     }
-                    case 15 : // AUTOLAYOUT_2OBJTEXT
+                    case AUTOLAYOUT_TITLE_2CONTENT_CONTENT :
                     {
                         Rectangle aLeftTop(pInfo->GetPresRectangle());
                         aLeftTop.setWidth(long(aLeftTop.GetWidth() * 0.488));
