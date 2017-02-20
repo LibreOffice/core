@@ -546,8 +546,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                         }
                         else
                         {
-                            // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
-                            mnTypeId = 29;
+                            mnTypeId = AUTOLAYOUT_TITLE_VCONTENT;
                         }
                     }
                     else

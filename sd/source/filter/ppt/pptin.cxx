@@ -1117,7 +1117,7 @@ bool ImplSdPPTImport::Import()
                                 eAutoLayout = AUTOLAYOUT_OBJ;
                             break;
                             case PptPlaceholder::VERTICALTEXTBODY :
-                                eAutoLayout = AUTOLAYOUT_TITLE_VERTICAL_OUTLINE;
+                                eAutoLayout = AUTOLAYOUT_TITLE_VCONTENT;
                             break;
                             default: break;
                         }

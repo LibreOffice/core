@@ -1084,7 +1084,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalOutline, pInfo->GetPresRectangle());
                         break;
                     }
-                    case 29 : // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
+                    case AUTOLAYOUT_TITLE_VCONTENT :
                     {
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderTitle, pInfo->GetTitleRectangle());
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalOutline, pInfo->GetPresRectangle());
