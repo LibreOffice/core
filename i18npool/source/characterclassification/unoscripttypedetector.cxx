@@ -86,7 +86,7 @@ com_sun_star_i18n_ScriptTypeDetector_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new UnoScriptTypeDetector());
+    return cppu::acquire(new UnoScriptTypeDetector);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
