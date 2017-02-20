@@ -808,7 +808,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if (bIsTiledRendering)
     {
         MapMode aNew = aOrig;
-        auto aOrigin = aOriginalMode.GetOrigin();
+        Point aOrigin = aOriginalMode.GetOrigin();
         aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
         aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
         static const double twipFactor = 15 * 1.76388889; // 26.45833335
@@ -874,7 +874,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
             if (bIsTiledRendering)
             {
-                auto aOrigin = aOriginalMode.GetOrigin();
+                Point aOrigin = aOriginalMode.GetOrigin();
                 aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + aOutputData.nScrX);
                 aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + aOutputData.nScrY);
                 const double twipFactor = 15 * 1.76388889; // 26.45833335
@@ -943,7 +943,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
                             Rectangle aBackground(aStart, aEnd);
 
                             // Need to draw the background in absolute coords.
-                            auto aOrigin = aOriginalMode.GetOrigin();
+                            Point aOrigin = aOriginalMode.GetOrigin();
                             aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScreenX);
                             aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScreenY);
                             aBackground += aOrigin;
@@ -1007,7 +1007,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
         if (bIsTiledRendering)
         {
             // Need to draw the background in absolute coords.
-            auto aOrigin = aOriginalMode.GetOrigin();
+            Point aOrigin = aOriginalMode.GetOrigin();
             aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
             aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
             aBackground += aOrigin;
@@ -1018,7 +1018,7 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
         if (bIsTiledRendering)
         {
-            auto aOrigin = aOriginalMode.GetOrigin();
+            Point aOrigin = aOriginalMode.GetOrigin();
             aOrigin.setX(aOrigin.getX() / TWIPS_PER_PIXEL + nScrX);
             aOrigin.setY(aOrigin.getY() / TWIPS_PER_PIXEL + nScrY);
             static const double twipFactor = 15 * 1.76388889; // 26.45833335
