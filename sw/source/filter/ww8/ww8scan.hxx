@@ -914,7 +914,7 @@ public:
 
 private:
     wwSprmParser maSprmParser;
-    long m_nCpO;                      // Origin Cp -- the basis for nNewCp
+    WW8_CP m_nCpO;                  //< Origin Cp -- the basis for nNewCp
 
     WW8_CP m_nLineEnd;                // points *after* the <CR>
     sal_uInt16 m_nPLCF;                   // this many PLCFs are managed
