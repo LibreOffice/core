@@ -45,7 +45,7 @@ $(call gb_ExternalProject_get_state_target,libgltf,build) :
 			$(if $(filter 120,$(VCVER)),/p:PlatformToolset=v120 /p:VisualStudioVersion=12.0 /ToolsVersion:12.0) \
 			$(if $(filter 140,$(VCVER)),/p:PlatformToolset=v140 /p:VisualStudioVersion=14.0 /ToolsVersion:14.0) \
 			$(if $(filter 150,$(VCVER)),/p:PlatformToolset=v141 /p:VisualStudioVersion=15.0 /ToolsVersion:15.0) \
-			$(if $(filter $(UCRTVERSION),),,/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
+			$(if $(UCRTVERSION),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
 			'/p:AdditionalIncludeDirectories=$(subst $(WHITESPACE),;,$(subst /,\,$(strip $(libgltf_AdditionalIncludes))))' \
 			/p:AdditionalLibraryDirectories=$(if $(SYSTEM_EPOXY),,"$(subst /,\,$(call gb_UnpackedTarball_get_dir,epoxy))\lib\$(if $(MSVC_USE_DEBUG_RUNTIME),Debug,Release)\Win32") \
 	,build/win32)
