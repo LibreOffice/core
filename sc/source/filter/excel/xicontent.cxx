@@ -596,7 +596,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     {
         XclImpFont aFont( GetRoot() );
         aFont.ReadCFFontBlock( rStrm );
-        aFont.FillToItemSet( rStyleItemSet, EXC_FONTITEM_CELL );
+        aFont.FillToItemSet( rStyleItemSet, XclFontItemType::Cell );
     }
 
     // alignment

@@ -389,12 +389,11 @@ struct XclFontData
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight );
 
 /** Enumerates different types of Which-IDs for font items. */
-enum XclFontItemType
+enum class XclFontItemType
 {
-    EXC_FONTITEM_CELL,          /// Use Calc Which-IDs (ATTR_*).
-    EXC_FONTITEM_EDITENG,       /// Use edit engine Which-IDs (EE_CHAR_*).
-    EXC_FONTITEM_HF,            /// Use header/footer edit engine Which-IDs (EE_CHAR_*).
-    EXC_FONTITEM_NOTE           /// Use note edit engine Which-IDs (EE_CHAR_*), special font handling.
+    Cell,          /// Use Calc Which-IDs (ATTR_*).
+    Editeng,       /// Use edit engine Which-IDs (EE_CHAR_*).
+    HeaderFooter   /// Use header/footer edit engine Which-IDs (EE_CHAR_*).
 };
 
 /** Enumerates different types for objects with font settings (using different property names). */
