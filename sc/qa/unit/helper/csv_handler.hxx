@@ -112,7 +112,7 @@ public:
                 CPPUNIT_ASSERT_MESSAGE(createErrorMessage(mnCol, mnRow, mnTab).getStr(), false);
             }
         }
-        else if (meStringType == PureString)
+        else if (meStringType == StringType::PureString)
         {
             OUString aCSVString(p, n, RTL_TEXTENCODING_UTF8);
             OUString aString = mpDoc->GetString(mnCol, mnRow, mnTab);
@@ -135,11 +135,8 @@ public:
                 OUString aString;
                 switch (meStringType)
                 {
-                    case StringValue:
+                    case StringType::StringValue:
                         aString = mpDoc->GetString(mnCol, mnRow, mnTab);
-                        break;
-                    case FormulaValue:
-                        mpDoc->GetFormula(mnCol, mnRow, mnTab, aString);
                         break;
                     default:
                         break;

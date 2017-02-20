@@ -547,13 +547,13 @@ void ScFiltersTest::testFunctionsODS()
     testFile(aCSVFileName, rDoc, 1);
     //test mathematical functions
     createCSVPath("mathematical-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 2, PureString);
+    testFile(aCSVFileName, rDoc, 2, StringType::PureString);
     //test information functions
     createCSVPath("information-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 3);
     // text functions
     createCSVPath("text-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc, 4, PureString);
+    testFile(aCSVFileName, rDoc, 4, StringType::PureString);
     // statistical functions
     createCSVPath("statistical-functions.", aCSVFileName);
     testFile(aCSVFileName, rDoc, 5);
@@ -578,7 +578,7 @@ void ScFiltersTest::testFunctionsODS()
     xDocSh->DoHardRecalc(true);
     ScDocument& rDoc3 = xDocSh->GetDocument();
     createCSVPath("date-time-functions.", aCSVFileName);
-    testFile(aCSVFileName, rDoc3, 0, PureString);
+    testFile(aCSVFileName, rDoc3, 0, StringType::PureString);
 
     xDocSh->DoClose();
 
@@ -631,13 +631,13 @@ void ScFiltersTest::testCachedFormulaResultsODS()
         testFile(aCSVFileName, rDoc, 1);
         //test cached formula results of mathematical functions
         createCSVPath("mathematical-functions.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 2, PureString);
+        testFile(aCSVFileName, rDoc, 2, StringType::PureString);
         //test cached formula results of information functions
         createCSVPath("information-functions.", aCSVFileName);
         testFile(aCSVFileName, rDoc, 3);
         // text functions
         createCSVPath("text-functions.", aCSVFileName);
-        testFile(aCSVFileName, rDoc, 4, PureString);
+        testFile(aCSVFileName, rDoc, 4, StringType::PureString);
 
         xDocSh->DoClose();
     }
@@ -1480,7 +1480,7 @@ void ScFiltersTest::testBrokenQuotesCSV()
     OUString aCSVPath;
     createCSVPath( aSheet2CSV, aCSVPath );
     // fdo#48621
-    testFile( aCSVPath, rDoc, 0, PureString);
+    testFile( aCSVPath, rDoc, 0, StringType::PureString);
 
     xDocSh->DoClose();
 }
