@@ -203,7 +203,7 @@ void SfxApplication::Initialize_Impl()
 #endif
 
     Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
-    xDesktop->addTerminateListener( new SfxTerminateListener_Impl() );
+    xDesktop->addTerminateListener( new SfxTerminateListener_Impl );
 
     pImpl->mxAppDispatch = new SfxStatusDispatcher;
 

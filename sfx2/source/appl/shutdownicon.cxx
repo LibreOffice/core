@@ -295,7 +295,7 @@ void ShutdownIcon::FromTemplate()
             if (xNotifier.is())
             {
                 EnterModalMode();
-                xNotifier->dispatchWithNotification(aTargetURL, aArgs, new SfxNotificationListener_Impl());
+                xNotifier->dispatchWithNotification(aTargetURL, aArgs, new SfxNotificationListener_Impl);
             }
             else
                 xDisp->dispatch( aTargetURL, aArgs );
