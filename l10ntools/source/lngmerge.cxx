@@ -53,7 +53,7 @@ LngParser::LngParser(const OString &rLngFile)
     , pLines( nullptr )
     , sSource( rLngFile )
 {
-    pLines = new LngLineList();
+    pLines = new LngLineList;
     std::ifstream aStream(sSource.getStr());
     if (aStream.is_open())
     {
