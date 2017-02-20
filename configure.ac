@@ -3579,25 +3579,35 @@ if test "$_os" = "WINNT"; then
     # location, isn't it likely that lots of other things needs changes, too, and just setting CC
     # is not enough?
 
-    if test -z "$CC"; then
+    dnl Save the true MSVC cl.exe for use when CC/CXX is actually clang-cl,
+    dnl needed when building CLR code:
+    if test -z "$MSVC_CXX"; then
         if test "$BITNESS_OVERRIDE" = ""; then
             if test -f "$VC_PRODUCT_DIR/bin/cl.exe"; then
-                CC="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
+                MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
             fi
         else
             if test "$vcexpress" = "Express"; then
                if test -f "$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"; then
-                    CC="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
+                    MSVC_CXX="$VC_PRODUCT_DIR/bin/x86_amd64/cl.exe"
                fi
             else
                if test -f "$VC_PRODUCT_DIR/$CL_DIR/cl.exe"; then
-                    CC="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
+                    MSVC_CXX="$VC_PRODUCT_DIR/$CL_DIR/cl.exe"
                fi
             fi
         fi
 
         # This gives us a posix path with 8.3 filename restrictions
-        CC=`win_short_path_for_make "$CC"`
+        MSVC_CXX=`win_short_path_for_make "$MSVC_CXX"`
+    fi
+
+    if test -z "$CC"; then
+        CC=$MSVC_CXX
+    fi
+    if test "$BITNESS_OVERRIDE" = ""; then
+        dnl since MSVC 2012, default for x86 is -arch:SSE2:
+        MSVC_CXX="$MSVC_CXX -arch:SSE"
     fi
 
     if test -n "$CC"; then
@@ -3741,6 +3751,7 @@ AC_SUBST(VCVER)
 AC_SUBST(DEVENV)
 PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
+AC_SUBST(MSVC_CXX)
 AC_SUBST(SHOWINCLUDES_PREFIX)
 
 if test "$_os" = "WINNT"; then

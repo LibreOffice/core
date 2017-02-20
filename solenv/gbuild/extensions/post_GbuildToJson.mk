@@ -55,6 +55,7 @@ $(call gb_Executable_get_command,gbuildtojson) \
 --yaccobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(YACCOBJECTS)) \
 --objcobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(OBJCOBJECTS)) \
 --objcxxobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(OBJCXXOBJECTS)) \
+--cxxclrobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(CXXCLROBJECTS)) \
 --asmobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(ASMOBJECTS)) \
 --lexobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(LEXOBJECTS)) \
 --gencobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(GENCOBJECTS)) \
@@ -70,6 +71,8 @@ $(call gb_Executable_get_command,gbuildtojson) \
 --objcflagsappend=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_OBJCFLAGS_APPEND)) \
 --objcxxflags=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_OBJCXXFLAGS)) \
 --objcxxflagsappend=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_OBJCXXFLAGS_APPEND)) \
+--cxxclrflags=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_CXXCLRFLAGS)) \
+--cxxclrflagsappend=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_CXXCLRFLAGS_APPEND)) \
 --defs=$(call var2file,$(shell $(gb_MKTEMP)),100,$(DEFS)) \
 --include=$(call var2file,$(shell $(gb_MKTEMP)),100,$(INCLUDE)) \
 --linked_libs=$(call var2file,$(shell $(gb_MKTEMP)),100,$(LINKED_LIBS)) \
@@ -117,6 +120,10 @@ $(call gb_LinkTarget_get_target,$(1)) : OBJCOBJECTS += $(2)
 endef
 define gb_LinkTarget_add_objcxxobject
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS += $(2)
+
+endef
+define gb_LinkTarget_add_cxxclrobject
+$(call gb_LinkTarget_get_target,$(1)) : CXXCLROBJECTS += $(2)
 
 endef
 define gb_LinkTarget_add_scanners
