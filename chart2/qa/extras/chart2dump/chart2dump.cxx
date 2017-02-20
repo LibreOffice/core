@@ -199,9 +199,9 @@ protected:
 
     bool readAndCheckTransformation(const drawing::HomogenMatrix3& rTransform, const OUString& sCheck, const double fEPS, OUString& rExpectedTranform)
     {
-        rExpectedTranform = readExpected(sCheck); // Reference transfromation string
+        rExpectedTranform = readExpected(sCheck); // Reference transformation string
 
-        // Covnert string back to a transformation;
+        // Convert string back to a transformation;
         drawing::HomogenMatrix3 aExpectedTransform;
         aExpectedTransform.Line1.Column1 = rExpectedTranform.getToken(0, ';').toDouble();
         aExpectedTransform.Line1.Column2 = rExpectedTranform.getToken(1, ';').toDouble();

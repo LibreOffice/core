@@ -1445,7 +1445,7 @@ public:
 // Only character attributes are considered; paragraph attributes do not need this treatment.
 // The paragraph and text attributes of the Writer are passed, and
 // Where() returns the next position where the attributes change.
-// IsTextAtr() tells if, at the position returned by Where(), there is
+// IsTextAttr() tells if, at the position returned by Where(), there is
 // an attribute without end and with \xff in the text.
 // Using OutAttr(), the attributes on the passed SwPos are returned.
 class SwWW8AttrIter : public MSWordAttrIter

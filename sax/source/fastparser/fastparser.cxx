@@ -980,7 +980,7 @@ bool FastSaxParserImpl::consume(EventList *pEventList)
                 return false;
             case EXCEPTION:
                 rEntity.throwException( mxDocumentLocator, false );
-                SAL_FALLTHROUGH; // avoid unreachable code warning with some comilers
+                SAL_FALLTHROUGH; // avoid unreachable code warning with some compilers
             default:
                 assert(false);
                 return false;
