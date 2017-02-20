@@ -128,6 +128,8 @@ private:
     bool mbPopupMenuActive;
     ImplSVEvent * mnUpdateTagsEvent;
     vcl::Font maFont;
+
+    css::uno::Reference<css::office::XAnnotation> GetAnnotationById(sal_uInt32 nAnnotationId);
 };
 
 OUString getAnnotationDateTimeString( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
