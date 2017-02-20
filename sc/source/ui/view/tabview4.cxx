@@ -39,6 +39,10 @@ void ScTabView::HideTip()
         vcl::Window* pWin = pGridWin[eWhich];
         Help::HidePopover(pWin, nTipVisible);
         nTipVisible = 0;
+        aTipRectangle = Rectangle();
+        nTipAlign = QuickHelpFlags::NONE;
+        sTipString.clear();
+        sTopParent.clear();
     }
 }
 
@@ -89,8 +93,15 @@ void ScTabView::ShowRefTip()
 
                 //! Test, ob geaendert ??
 
-                HideTip();
-                nTipVisible = Help::ShowPopover(pWin, aRect, aHelp, nFlags);
+                if (!nTipVisible || nFlags != nTipAlign || aRect != aTipRectangle || sTipString != aHelp || sTopParent != pWin)
+                {
+                    HideTip();
+                    nTipVisible = Help::ShowPopover(pWin, aRect, aHelp, nFlags);
+                    aTipRectangle = aRect;
+                    nTipAlign = nFlags;
+                    sTipString = aHelp;
+                    sTopParent = pWin;
+                }
                 bDone = true;
             }
         }
@@ -276,8 +287,15 @@ void ScTabView::UpdateRef( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ )
                 aPos = pWin->OutputToScreenPixel( aPos );
                 Rectangle aRect( aPos, aPos );
                 QuickHelpFlags nAlign = QuickHelpFlags::Left|QuickHelpFlags::Top;
-                HideTip();
-                nTipVisible = Help::ShowPopover(pWin, aRect, aHelpStr, nAlign);
+                if (!nTipVisible || nAlign != nTipAlign || aRect != aTipRectangle || sTipString != aHelpStr || sTopParent != pWin)
+                {
+                    HideTip();
+                    nTipVisible = Help::ShowPopover(pWin, aRect, aHelpStr, nAlign);
+                    aTipRectangle = aRect;
+                    nTipAlign = nAlign;
+                    sTipString = aHelpStr;
+                    sTopParent = pWin;
+                }
             }
         }
     }
