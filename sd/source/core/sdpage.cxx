@@ -1231,7 +1231,7 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
         LayoutDescriptor( ),                                                              // AUTOLAYOUT_HANDOUT4
         LayoutDescriptor( ),                                                              // AUTOLAYOUT_HANDOUT6
         LayoutDescriptor( PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL, PRESOBJ_OUTLINE ),// AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT
-        LayoutDescriptor( PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL ),            // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
+        LayoutDescriptor( PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL ),            // AUTOLAYOUT_VTITLE_VCONTENT
         LayoutDescriptor( PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL ),                     // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
         LayoutDescriptor( PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL ),   // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
         LayoutDescriptor( ),                                                              // AUTOLAYOUT_HANDOUT9

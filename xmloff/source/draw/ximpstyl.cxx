@@ -542,8 +542,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     {
                         if( pObj0->GetName() == "vertical_title" )
                         {
-                            // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
-                            mnTypeId = 28;
+                            mnTypeId = AUTOLAYOUT_VTITLE_VCONTENT;
                         }
                         else
                         {

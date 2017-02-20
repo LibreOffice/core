@@ -282,9 +282,8 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
         aTitlePos = aPos;
         aTitleSize = aSize;
     }
-    else if(mnType == AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT || mnType == 28)
+    else if(mnType == AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT || mnType == AUTOLAYOUT_VTITLE_VCONTENT)
     {
-        // or AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
         Point aClassicTPos(
             aTitlePos.X() + long( aTitleSize.Width() * 0.0735 ),
             aTitlePos.Y() + long( aTitleSize.Height() * 0.083 ));
@@ -346,9 +345,8 @@ ImpXMLAutoLayoutInfo::ImpXMLAutoLayoutInfo(sal_uInt16 nTyp, ImpXMLEXPPageMasterI
         if(mnGapY < aPageInnerSize.Height() / 10)
             mnGapY = aPageInnerSize.Height() / 10;
     }
-    else if(mnType == AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT || mnType == 28)
+    else if(mnType == AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT || mnType == AUTOLAYOUT_VTITLE_VCONTENT)
     {
-        // or AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
         Point aClassicTPos(
             aTitlePos.X() + long( aTitleSize.Width() * 0.0735 ),
             aTitlePos.Y() + long( aTitleSize.Height() * 0.083 ));
@@ -1080,7 +1078,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderChart, aBottom);
                         break;
                     }
-                    case 28 : // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
+                    case AUTOLAYOUT_VTITLE_VCONTENT :
                     {
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalTitle, pInfo->GetTitleRectangle());
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalOutline, pInfo->GetPresRectangle());
