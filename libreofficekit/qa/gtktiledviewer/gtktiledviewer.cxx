@@ -296,7 +296,7 @@ static void editButtonClicked(GtkWidget* pWidget, gpointer userdata)
     gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
     boost::property_tree::ptree aTree;
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "string");
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentId));
 
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
@@ -320,7 +320,7 @@ static void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
     gchar *commentId = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
     boost::property_tree::ptree aTree;
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "string");
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentId));
 
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
@@ -340,7 +340,7 @@ static void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
     gchar *commentid = static_cast<gchar*>(g_object_get_data(G_OBJECT(userdata), "id"));
 
     boost::property_tree::ptree aTree;
-    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "string");
     aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::string(commentid));
 
     std::stringstream aStream;
