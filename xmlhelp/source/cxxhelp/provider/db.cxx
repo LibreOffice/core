@@ -68,13 +68,13 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
     {
         if( m_pStringToDataMap != nullptr )
             return;
-        m_pStringToDataMap = new StringToDataMap();
+        m_pStringToDataMap = new StringToDataMap;
     }
     else
     {
         if( m_pStringToValPosMap != nullptr )
             return;
-        m_pStringToValPosMap = new StringToValPosMap();
+        m_pStringToValPosMap = new StringToValPosMap;
     }
 
     Reference< XInputStream > xIn = m_xSFA->openFileRead( m_aFileURL );

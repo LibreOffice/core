@@ -150,7 +150,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                 vector<HitItem>* pQueryResultVector;
                 if( nQueryListSize > 1 )
                 {
-                    pQueryResultVector = new vector<HitItem>();
+                    pQueryResultVector = new vector<HitItem>;
                     aQueryListResultVectorVector.push_back( pQueryResultVector );
                 }
                 else
