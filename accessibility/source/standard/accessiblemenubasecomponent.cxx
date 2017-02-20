@@ -44,7 +44,7 @@ using namespace ::comphelper;
 
 
 OAccessibleMenuBaseComponent::OAccessibleMenuBaseComponent( Menu* pMenu )
-    :OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() )
+    :OAccessibleExtendedComponentHelper( new VCLExternalSolarLock )
     ,m_pMenu( pMenu )
     ,m_bEnabled( false )
     ,m_bFocused( false )

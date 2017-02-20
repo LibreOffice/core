@@ -65,7 +65,7 @@ AccessibleGridControl::AccessibleGridControl(
             ::svt::table::IAccessibleTable& _rTable )
     : AccessibleGridControlBase( _rxParent, _rTable, TCTYPE_GRIDCONTROL )
 {
-    m_xImpl.reset( new AccessibleGridControl_Impl() );
+    m_xImpl.reset( new AccessibleGridControl_Impl );
     m_xImpl->m_aCreator = _rxCreator;
 }
 

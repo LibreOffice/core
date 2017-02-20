@@ -49,7 +49,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleTabPage::VCLXAccessibleTabPage( TabControl* pTabControl, sal_uInt16 nPageId )
-    :AccessibleTextHelper_BASE( new VCLExternalSolarLock() )
+    :AccessibleTextHelper_BASE( new VCLExternalSolarLock )
     ,m_pTabControl( pTabControl )
     ,m_nPageId( nPageId )
 {

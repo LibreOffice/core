@@ -60,7 +60,7 @@ using namespace ::comphelper;
 
 VCLXAccessibleToolBoxItem::VCLXAccessibleToolBoxItem( ToolBox* _pToolBox, sal_Int32 _nPos ) :
 
-    AccessibleTextHelper_BASE( new VCLExternalSolarLock() ),
+    AccessibleTextHelper_BASE( new VCLExternalSolarLock ),
 
     m_pToolBox      ( _pToolBox ),
     m_nIndexInParent( _nPos ),

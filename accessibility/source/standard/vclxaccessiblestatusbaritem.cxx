@@ -49,7 +49,7 @@ using namespace ::comphelper;
 
 
 VCLXAccessibleStatusBarItem::VCLXAccessibleStatusBarItem( StatusBar* pStatusBar, sal_uInt16 nItemId )
-    :AccessibleTextHelper_BASE( new VCLExternalSolarLock() )
+    :AccessibleTextHelper_BASE( new VCLExternalSolarLock )
     ,m_pStatusBar( pStatusBar )
     ,m_nItemId( nItemId )
 {

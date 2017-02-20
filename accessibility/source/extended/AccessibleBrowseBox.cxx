@@ -58,7 +58,7 @@ AccessibleBrowseBox::AccessibleBrowseBox(
             ::svt::IAccessibleTableProvider& _rBrowseBox )
     : AccessibleBrowseBoxBase( _rxParent, _rBrowseBox,nullptr, BBTYPE_BROWSEBOX )
 {
-    m_xImpl.reset( new AccessibleBrowseBoxImpl() );
+    m_xImpl.reset( new AccessibleBrowseBoxImpl );
     m_xImpl->m_aCreator = _rxCreator;
 
     m_xFocusWindow = VCLUnoHelper::GetInterface(mpBrowseBox->GetWindowInstance());

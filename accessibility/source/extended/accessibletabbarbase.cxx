@@ -30,7 +30,7 @@ namespace accessibility
 
 
 AccessibleTabBarBase::AccessibleTabBarBase( TabBar* pTabBar ) :
-    OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() ),
+    OAccessibleExtendedComponentHelper( new VCLExternalSolarLock ),
     m_pTabBar( nullptr )
 {
     m_pExternalLock = static_cast< VCLExternalSolarLock* >( getExternalLock() );
