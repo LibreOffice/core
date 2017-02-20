@@ -1167,7 +1167,7 @@ bool ImplSdPPTImport::Import()
                         eAutoLayout = AUTOLAYOUT_TITLE_ONLY;
                     break;
                     case PptSlideLayout::RIGHTCOLUMN2ROWS :
-                        eAutoLayout = AUTOLAYOUT_TEXT2OBJ;
+                        eAutoLayout = AUTOLAYOUT_TITLE_CONTENT_2CONTENT;
                     break;
                     case PptSlideLayout::LEFTCOLUMN2ROWS :
                         eAutoLayout = AUTOLAYOUT_2OBJTEXT;
@@ -1185,7 +1185,7 @@ bool ImplSdPPTImport::Import()
                         eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE;
                     break;
                     case PptSlideLayout::TITLERIGHT2BODIESLEFT :
-                        eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART; // AUTOLAYOUT_TEXT2OBJ;
+                        eAutoLayout = AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART;
                     break;
 
                     case PptSlideLayout::BOTTOMROW2COLUMNS :

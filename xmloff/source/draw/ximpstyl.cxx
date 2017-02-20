@@ -640,7 +640,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     }
                     else
                     {
-                        mnTypeId = 12; // AUTOLAYOUT_TEXT2OBJ
+                        mnTypeId = AUTOLAYOUT_TITLE_CONTENT_2CONTENT;
                     }
                     break;
                 }
