@@ -1395,6 +1395,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:Paste"),
         OUString(".uno:SelectAll"),
         OUString(".uno:InsertAnnotation"),
+        OUString(".uno:DeleteAnnotation"),
         OUString(".uno:ReplyComment"),
         OUString(".uno:InsertRowsBefore"),
         OUString(".uno:InsertRowsAfter"),
