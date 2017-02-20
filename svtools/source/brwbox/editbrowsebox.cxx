@@ -1091,7 +1091,6 @@ namespace svt
         return nId;
     }
 
-
     void EditBrowseBox::Resize()
     {
         BrowseBox::Resize();
@@ -1110,14 +1109,21 @@ namespace svt
 
         if (!nX)
             nX = USHRT_MAX;
-        ReserveControlArea((sal_uInt16)nX);
-    }
 
+        bool bChanged = ReserveControlArea(nX);
+
+        //tdf#97731 if the reserved area changed size, give the controls a
+        //chance to adapt to the new size
+        if (bChanged)
+        {
+            nX = (sal_uInt16)aPoint.X();
+            ArrangeControls(nX, (sal_uInt16)aPoint.Y());
+        }
+    }
 
     void EditBrowseBox::ArrangeControls(sal_uInt16&, sal_uInt16)
     {
     }
-
 
     CellController* EditBrowseBox::GetController(long, sal_uInt16)
     {
