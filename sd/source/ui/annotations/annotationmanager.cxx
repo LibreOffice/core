@@ -597,10 +597,17 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         std::unique_ptr< OutlinerParaObject > pOPO( pOutliner->CreateParaObject() );
         pTextApi->SetText( *pOPO.get() );
 
-        SvtUserOptions aUserOptions;
-        xAnnotation->setAuthor( aUserOptions.GetFullName() );
-        xAnnotation->setInitials( aUserOptions.GetID() );
+        OUString sReplyAuthor;
+        if (comphelper::LibreOfficeKit::isActive())
+            sReplyAuthor = mrBase.GetMainViewShell()->GetView()->GetAuthor();
+        else
+        {
+            SvtUserOptions aUserOptions;
+            sReplyAuthor = aUserOptions.GetFullName();
+            xAnnotation->setInitials( aUserOptions.GetID() );
+        }
 
+        xAnnotation->setAuthor( sReplyAuthor );
         // set current time to reply
         xAnnotation->setDateTime( getCurrentDateTime() );
 
