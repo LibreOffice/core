@@ -1349,7 +1349,6 @@ IMPL_LINK_NOARG(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
 
 IMPL_LINK_NOARG(SfxViewFrame, SignDocumentHandler, Button*, void)
 {
-    RemoveInfoBar("signature");
     GetDispatcher()->Execute(SID_SIGNATURE);
 }
 
