@@ -40,11 +40,15 @@ $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) $(dir $(4)) && \
 	unset INCLUDE && \
 	$(if $(filter YES,$(CXXOBJECT_X64)), $(CXX_X64_BINARY), \
-		$(if $(filter %.c,$(3)), $(gb_CC), $(gb_CXX))) \
+		$(if $(filter %.c,$(3)), $(gb_CC), \
+			$(if $(filter -clr,$(2)), \
+				$(MSVC_CXX) -I$(SRCDIR)/solenv/clang-cl,$(gb_CXX)))) \
 		$(DEFS) \
 		$(gb_LTOFLAGS) \
 		$(2) \
-		$(if $(EXTERNAL_CODE),$(if $(COM_IS_CLANG),-Wno-undef),$(gb_DEFS_INTERNAL)) \
+		$(if $(EXTERNAL_CODE), \
+			$(if $(filter -clr,$(2)),,$(if $(COM_IS_CLANG),-Wno-undef)), \
+			$(gb_DEFS_INTERNAL)) \
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
 		$(PCHFLAGS) \
@@ -105,6 +109,7 @@ endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
+gb_LinkTarget_CXXCLRFLAGS := $(gb_CXXCLRFLAGS)
 
 gb_LinkTarget_INCLUDE :=\
 	$(subst -I. , ,$(SOLARINC)) \
@@ -157,6 +162,7 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
 		$(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
 		$(foreach object,$(GENCOBJECTS),$(call gb_GenCObject_get_target,$(object))) \
+		$(foreach object,$(CXXCLROBJECTS),$(call gb_CxxClrObject_get_target,$(object))) \
 		$(foreach object,$(ASMOBJECTS),$(call gb_AsmObject_get_target,$(object))) \
 		$(foreach extraobjectlist,$(EXTRAOBJECTLISTS),$(shell cat $(extraobjectlist))) \
 		$(PCHOBJS) $(NATIVERES)) && \

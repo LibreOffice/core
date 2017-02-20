@@ -9,13 +9,6 @@
 
 $(eval $(call gb_Library_Library,cli_uno))
 
-$(eval $(call gb_Library_add_cxxflags,cli_uno,\
-	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
-	-EHa \
-	-clr \
-	-wd4339 \
-))
-
 $(eval $(call gb_Library_add_ldflags,cli_uno,\
 	-ignore:4248 \
 ))
@@ -32,7 +25,7 @@ $(eval $(call gb_Library_use_system_win32_libs,cli_uno,\
 	msvcmrt \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,cli_uno,\
+$(eval $(call gb_Library_add_cxxclrobjects,cli_uno,\
     cli_ure/source/uno_bridge/cli_bridge \
     cli_ure/source/uno_bridge/cli_data \
     cli_ure/source/uno_bridge/cli_environment \
