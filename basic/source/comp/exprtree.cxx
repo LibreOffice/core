@@ -231,7 +231,7 @@ SbiExprNode* SbiExpression::Term( const KeywordSymbolInfo* pKeywordSymbolInfo )
         {
             if( pvMoreParLcl == nullptr )
             {
-                pvMoreParLcl = new SbiExprListVector();
+                pvMoreParLcl = new SbiExprListVector;
             }
             SbiExprListPtr pAddPar = SbiExprList::ParseParameters( pParser );
             bError = bError || !pAddPar->IsValid();
@@ -428,7 +428,7 @@ SbiExprNode* SbiExpression::ObjTerm( SbiSymDef& rObj )
         {
             if( pvMoreParLcl == nullptr )
             {
-                pvMoreParLcl = new SbiExprListVector();
+                pvMoreParLcl = new SbiExprListVector;
             }
             SbiExprListPtr pAddPar = SbiExprList::ParseParameters( pParser );
             bError = bError || !pPar->IsValid();
