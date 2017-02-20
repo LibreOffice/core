@@ -374,8 +374,6 @@ bool BitmapScaleConvolution::filter(Bitmap& rBitmap)
 
     switch(meKernelType)
     {
-        case ConvolutionKernelType::Box:
-            return ImplScaleConvolution(rBitmap, mrScaleX, mrScaleY, BoxKernel());
         case ConvolutionKernelType::BiLinear:
             return ImplScaleConvolution(rBitmap, mrScaleX, mrScaleY, BilinearKernel());
         case ConvolutionKernelType::BiCubic:
