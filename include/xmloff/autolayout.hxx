@@ -57,7 +57,7 @@ enum AutoLayout
     AUTOLAYOUT_TITLE_2VTEXT = 30,               ///< Title, 2 Vertical Content
     AUTOLAYOUT_HANDOUT9 = 31,
     AUTOLAYOUT_ONLY_TEXT = 32,                  ///< Centered Text
-    // 33 missing
+    AUTOLAYOUT_4CLIPART = 33,
     AUTOLAYOUT_TITLE_6CONTENT = 34,             ///< Title, 6 Content
     AUTOLAYOUT_END
 };

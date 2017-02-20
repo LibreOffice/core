@@ -650,14 +650,14 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     }
                     else
                     {
-                        mnTypeId = 33; // AUTOLAYOUT_4CLIPART
+                        mnTypeId = AUTOLAYOUT_4CLIPART;
                     }
                      break;
 
                 }
                 case 7:
                 {
-                    mnTypeId = 33; // AUTOLAYOUT_6CLIPART (huh? 33 is not that)
+                    mnTypeId = AUTOLAYOUT_4CLIPART; // FIXME: not AUTOLAYOUT_TITLE_6CONTENT?
                     break;
                 }
                 default:
