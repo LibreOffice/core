@@ -54,16 +54,16 @@ class SpellChecker :
         XServiceDisplayName
     >
 {
-    Sequence< Locale >                 aSuppLocales;
-    Hunspell **                        aDicts;
-    rtl_TextEncoding *                 aDEncs;
-    Locale *                           aDLocs;
-    OUString *                         aDNames;
-    sal_Int32                          numdict;
+    Sequence< Locale >                 m_aSuppLocales;
+    Hunspell **                        m_aDicts;
+    rtl_TextEncoding *                 m_aDEncs;
+    Locale *                           m_aDLocs;
+    OUString *                         m_aDNames;
+    sal_Int32                          m_nNumDict;
 
-    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
-    linguistic::PropertyHelper_Spelling*    pPropHelper;
-    bool                                    bDisposing;
+    ::comphelper::OInterfaceContainerHelper2       m_aEvtListeners;
+    linguistic::PropertyHelper_Spelling*    m_pPropHelper;
+    bool                                    m_bDisposing;
 
     SpellChecker(const SpellChecker &) = delete;
     SpellChecker & operator = (const SpellChecker &) = delete;
@@ -71,7 +71,7 @@ class SpellChecker :
     linguistic::PropertyHelper_Spelling&  GetPropHelper_Impl();
     linguistic::PropertyHelper_Spelling&  GetPropHelper()
     {
-        return pPropHelper ? *pPropHelper : GetPropHelper_Impl();
+        return m_pPropHelper ? *m_pPropHelper : GetPropHelper_Impl();
     }
 
     sal_Int16   GetSpellFailure( const OUString &rWord, const Locale &rLocale );
