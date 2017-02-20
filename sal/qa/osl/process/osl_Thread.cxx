@@ -452,7 +452,7 @@ namespace osl_Thread
         */
         void create_001()
             {
-                myThread* newthread = new myThread();
+                myThread* newthread = new myThread;
                 bool bRes = newthread->create();
                 CPPUNIT_ASSERT_MESSAGE("Can not creates a new thread!\n", bRes);
 
@@ -479,7 +479,7 @@ namespace osl_Thread
          */
         void create_002()
             {
-                myThread* newthread = new myThread();
+                myThread* newthread = new myThread;
                 bool res1 = newthread->create();
                 bool res2 = newthread->create();
                 t_print("In non pro, an assertion should occurred. This behaviour is right.\n");
@@ -510,7 +510,7 @@ namespace osl_Thread
         */
         void createSuspended_001()
             {
-                myThread* newthread = new myThread();
+                myThread* newthread = new myThread;
                 bool bRes = newthread->createSuspended();
                 CPPUNIT_ASSERT_MESSAGE("Can not creates a new thread!", bRes);
 
@@ -532,7 +532,7 @@ namespace osl_Thread
 
         void createSuspended_002()
             {
-                myThread* newthread = new myThread();
+                myThread* newthread = new myThread;
                 bool res1 = newthread->createSuspended();
                 bool res2 = newthread->createSuspended();
 
@@ -667,7 +667,7 @@ namespace osl_Thread
          */
         void resume_002()
             {
-                myThread* newthread = new myThread();
+                myThread* newthread = new myThread;
                 bool bRes = newthread->createSuspended();
                 CPPUNIT_ASSERT_MESSAGE ( "Can't create thread!", bRes );
 
