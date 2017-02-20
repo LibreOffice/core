@@ -133,7 +133,6 @@ enum SdrObjKind {
     OBJ_PATHPLIN   =27,  /// Polyline represented by SdrPathObj
     OBJ_PAGE       =28,  /// object that represents a SdrPage
     OBJ_MEASURE    =29,  /// measurement object
-    OBJ_DUMMY      =30,  /// dummy object for saving holes (to recover surrogates later)
     OBJ_FRAME      =31,  /// continuously activated OLE (PlugIn-Frame or similar)
     OBJ_UNO        =32,  /// Universal Network Object packed into SvDraw object
     OBJ_CUSTOMSHAPE=33,  /// custom shape

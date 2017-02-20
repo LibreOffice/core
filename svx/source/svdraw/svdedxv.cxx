@@ -2179,7 +2179,6 @@ bool SdrObjEditView::SupportsFormatPaintbrush( SdrInventor nObjectInventor, sal_
             return true;
         case OBJ_PAGE:
         case OBJ_MEASURE:
-        case OBJ_DUMMY:
         case OBJ_FRAME:
         case OBJ_UNO:
             return false;
