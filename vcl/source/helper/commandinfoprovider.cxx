@@ -395,7 +395,15 @@ bool IsExperimental(const OUString& rsCommandName,
 OUString const GetModuleIdentifier(const Reference<frame::XFrame>& rxFrame)
 {
     Reference<frame::XModuleManager2> xModuleManager = frame::ModuleManager::create(comphelper::getProcessComponentContext());
-    return xModuleManager->identify(rxFrame);
+
+    try
+    {
+        return xModuleManager->identify(rxFrame);
+    }
+    catch (const Exception&)
+    {}
+
+    return OUString();
 }
 
 } }
