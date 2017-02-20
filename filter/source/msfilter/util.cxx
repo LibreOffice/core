@@ -1186,7 +1186,7 @@ const char* GetOOXMLPresetGeometry( const char* sShapeType )
 {
     if( pCustomShapeTypeTranslationHashMap == nullptr )
     {
-        pCustomShapeTypeTranslationHashMap = new CustomShapeTypeTranslationHashMap ();
+        pCustomShapeTypeTranslationHashMap = new CustomShapeTypeTranslationHashMap;
         for(const msfilter::util::CustomShapeTypeTranslationTable& i : pCustomShapeTypeTranslationTable)
         {
             (*pCustomShapeTypeTranslationHashMap)[ i.sOOo ] = i.sMSO;
@@ -1206,7 +1206,7 @@ MSO_SPT GETVMLShapeType(const OString& aType)
 
     if (!pDMLToVMLMap)
     {
-        pDMLToVMLMap = new DMLToVMLTranslationHashMap();
+        pDMLToVMLMap = new DMLToVMLTranslationHashMap;
         for (auto& i : pDMLToVMLTable)
             (*pDMLToVMLMap)[i.sDML] = i.nVML;
     }
