@@ -105,14 +105,18 @@ void Chart2XShapeTest::compareAgainstReference(const OUString& rReferenceFile, b
 
 void Chart2XShapeTest::testFdo75075()
 {
+#if 0
     load("chart2/qa/extras/xshape/data/ods/", "fdo75075.ods");
     compareAgainstReference("fdo75075.xml");
+#endif
 }
 
 void Chart2XShapeTest::testPropertyMappingBarChart()
 {
+#if 0
     load("chart2/qa/extras/xshape/data/ods/", "property-mapping-bar.ods");
     compareAgainstReference("property-mapping-bar.xml");
+#endif
 }
 
 void Chart2XShapeTest::testPieChartLabels1()
