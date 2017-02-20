@@ -89,7 +89,7 @@ namespace DOM
                 NodeType_DOCUMENT_NODE, reinterpret_cast<xmlNodePtr>(pDoc))
         , m_aDocPtr(pDoc)
         , m_streamListeners()
-        , m_pEventDispatcher(new events::CEventDispatcher())
+        , m_pEventDispatcher(new events::CEventDispatcher)
     {
     }
 

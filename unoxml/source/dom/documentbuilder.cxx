@@ -87,7 +87,7 @@ namespace DOM
     };
 
     CDocumentBuilder::CDocumentBuilder()
-        : m_xEntityResolver(new CDefaultEntityResolver())
+        : m_xEntityResolver(new CDefaultEntityResolver)
     {
         // init libxml. libxml will protect itself against multiple
         // initializations so there is no problem here if this gets

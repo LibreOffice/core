@@ -276,8 +276,8 @@ struct SerializerTest : public test::BootstrapFixture
         mxDomBuilder.set( xDB );
         mxInStream.set( new SequenceInputStream(css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8 const *>(validTestFile), SAL_N_ELEMENTS(validTestFile))) );
         mxDomBuilder->setErrorHandler(mxErrHandler.get());
-        mxHandler.set( new DocumentHandler() );
-        mxTokHandler.set( new TokenHandler() );
+        mxHandler.set( new DocumentHandler );
+        mxTokHandler.set( new TokenHandler );
 
         maRegisteredNamespaces.realloc(2);
         maRegisteredNamespaces[0] = beans::make_Pair(
