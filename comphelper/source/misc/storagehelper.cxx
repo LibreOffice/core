@@ -489,7 +489,7 @@ bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSeg
 class LifecycleProxy::Impl
     : public std::vector< uno::Reference< embed::XStorage > > {};
 LifecycleProxy::LifecycleProxy()
-    : m_xBadness( new Impl() ) { }
+    : m_xBadness( new Impl ) { }
 LifecycleProxy::~LifecycleProxy() { }
 
 void LifecycleProxy::commitStorages()

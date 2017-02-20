@@ -164,60 +164,60 @@ namespace comphelper
         switch ( i_type.getTypeClass() )
         {
         case TypeClass_CHAR:
-            pComparator.reset( new ScalarPredicateLess< sal_Unicode >() );
+            pComparator.reset( new ScalarPredicateLess< sal_Unicode > );
             break;
         case TypeClass_BOOLEAN:
-            pComparator.reset( new ScalarPredicateLess< bool >() );
+            pComparator.reset( new ScalarPredicateLess< bool > );
             break;
         case TypeClass_BYTE:
-            pComparator.reset( new ScalarPredicateLess< sal_Int8 >() );
+            pComparator.reset( new ScalarPredicateLess< sal_Int8 > );
             break;
         case TypeClass_SHORT:
-            pComparator.reset( new ScalarPredicateLess< sal_Int16 >() );
+            pComparator.reset( new ScalarPredicateLess< sal_Int16 > );
             break;
         case TypeClass_UNSIGNED_SHORT:
-            pComparator.reset( new ScalarPredicateLess< sal_uInt16 >() );
+            pComparator.reset( new ScalarPredicateLess< sal_uInt16 > );
             break;
         case TypeClass_LONG:
-            pComparator.reset( new ScalarPredicateLess< sal_Int32 >() );
+            pComparator.reset( new ScalarPredicateLess< sal_Int32 > );
             break;
         case TypeClass_UNSIGNED_LONG:
-            pComparator.reset( new ScalarPredicateLess< sal_uInt32 >() );
+            pComparator.reset( new ScalarPredicateLess< sal_uInt32 > );
             break;
         case TypeClass_HYPER:
-            pComparator.reset( new ScalarPredicateLess< sal_Int64 >() );
+            pComparator.reset( new ScalarPredicateLess< sal_Int64 > );
             break;
         case TypeClass_UNSIGNED_HYPER:
-            pComparator.reset( new ScalarPredicateLess< sal_uInt64 >() );
+            pComparator.reset( new ScalarPredicateLess< sal_uInt64 > );
             break;
         case TypeClass_FLOAT:
-            pComparator.reset( new ScalarPredicateLess< float >() );
+            pComparator.reset( new ScalarPredicateLess< float > );
             break;
         case TypeClass_DOUBLE:
-            pComparator.reset( new ScalarPredicateLess< double >() );
+            pComparator.reset( new ScalarPredicateLess< double > );
             break;
         case TypeClass_STRING:
             if ( i_collator.is() )
                 pComparator.reset( new StringCollationPredicateLess( i_collator ) );
             else
-                pComparator.reset( new StringPredicateLess() );
+                pComparator.reset( new StringPredicateLess );
             break;
         case TypeClass_TYPE:
-            pComparator.reset( new TypePredicateLess() );
+            pComparator.reset( new TypePredicateLess );
             break;
         case TypeClass_ENUM:
             pComparator.reset( new EnumPredicateLess( i_type ) );
             break;
         case TypeClass_INTERFACE:
-            pComparator.reset( new InterfacePredicateLess() );
+            pComparator.reset( new InterfacePredicateLess );
             break;
         case TypeClass_STRUCT:
             if ( i_type.equals( ::cppu::UnoType< Date >::get() ) )
-                pComparator.reset( new DatePredicateLess() );
+                pComparator.reset( new DatePredicateLess );
             else if ( i_type.equals( ::cppu::UnoType< Time >::get() ) )
-                pComparator.reset( new TimePredicateLess() );
+                pComparator.reset( new TimePredicateLess );
             else if ( i_type.equals( ::cppu::UnoType< DateTime >::get() ) )
-                pComparator.reset( new DateTimePredicateLess() );
+                pComparator.reset( new DateTimePredicateLess );
             break;
         default:
             break;

@@ -66,9 +66,9 @@ void TestInterfaceContainer2::test1()
     {
         comphelper::OInterfaceContainerHelper2 helper( mutex );
 
-        Reference< XVetoableChangeListener > r1 = new TestListener();
-        Reference< XVetoableChangeListener > r2 = new TestListener();
-        Reference< XVetoableChangeListener > r3 = new TestListener();
+        Reference< XVetoableChangeListener > r1 = new TestListener;
+        Reference< XVetoableChangeListener > r2 = new TestListener;
+        Reference< XVetoableChangeListener > r3 = new TestListener;
 
         helper.addInterface( r1 );
         helper.addInterface( r2 );
@@ -80,9 +80,9 @@ void TestInterfaceContainer2::test1()
     {
         comphelper::OInterfaceContainerHelper2 helper( mutex );
 
-        Reference< XVetoableChangeListener > r1 = new TestListener();
-        Reference< XVetoableChangeListener > r2 = new TestListener();
-        Reference< XVetoableChangeListener > r3 = new TestListener();
+        Reference< XVetoableChangeListener > r1 = new TestListener;
+        Reference< XVetoableChangeListener > r2 = new TestListener;
+        Reference< XVetoableChangeListener > r3 = new TestListener;
 
         helper.addInterface( r1 );
         helper.addInterface( r2 );
@@ -99,9 +99,9 @@ void TestInterfaceContainer2::test1()
     {
         comphelper::OInterfaceContainerHelper2 helper( mutex );
 
-        Reference< XVetoableChangeListener > r1 = new TestListener();
-        Reference< XVetoableChangeListener > r2 = new TestListener();
-        Reference< XVetoableChangeListener > r3 = new TestListener();
+        Reference< XVetoableChangeListener > r1 = new TestListener;
+        Reference< XVetoableChangeListener > r2 = new TestListener;
+        Reference< XVetoableChangeListener > r3 = new TestListener;
 
         helper.addInterface( r1 );
         helper.addInterface( r2 );
@@ -123,9 +123,9 @@ void TestInterfaceContainer2::test1()
     {
         comphelper::OInterfaceContainerHelper2 helper( mutex );
 
-        Reference< XVetoableChangeListener > r1 = new TestListener();
-        Reference< XVetoableChangeListener > r2 = new TestListener();
-        Reference< XVetoableChangeListener > r3 = new TestListener();
+        Reference< XVetoableChangeListener > r1 = new TestListener;
+        Reference< XVetoableChangeListener > r2 = new TestListener;
+        Reference< XVetoableChangeListener > r3 = new TestListener;
 
         helper.addInterface( r1 );
         helper.addInterface( r2 );

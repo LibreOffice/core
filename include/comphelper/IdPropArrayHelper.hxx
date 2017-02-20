@@ -93,7 +93,7 @@ namespace comphelper
         ::osl::MutexGuard aGuard(OIdPropertyArrayUsageHelperMutex<TYPE>::get());
         // create the map if necessary
         if (s_pMap == nullptr)
-            s_pMap = new OIdPropertyArrayMap();
+            s_pMap = new OIdPropertyArrayMap;
         ++s_nRefCount;
     }
 
