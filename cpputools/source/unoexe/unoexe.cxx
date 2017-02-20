@@ -339,7 +339,7 @@ void ODisposingListener::disposing( const EventObject & )
 
 void ODisposingListener::waitFor( const Reference< XComponent > & xComp )
 {
-    ODisposingListener * pListener = new ODisposingListener();
+    ODisposingListener * pListener = new ODisposingListener;
     Reference< XEventListener > xListener( pListener );
 
     xComp->addEventListener( xListener );
