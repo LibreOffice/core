@@ -310,10 +310,23 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
     }
 }
 
-void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& /*rReq*/)
+void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& rReq)
 {
-    ShowAnnotations(true);
-    InsertAnnotation();
+    if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
+        ShowAnnotations(true);
+
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    OUString sText;
+    if (pArgs)
+    {
+        const SfxPoolItem* pPoolItem = nullptr;
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_TEXT, true, &pPoolItem))
+        {
+            sText = static_cast<const SfxStringItem*>(pPoolItem)->GetValue();
+        }
+    }
+
+    InsertAnnotation(sText);
 }
 
 void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
@@ -364,7 +377,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
     UpdateTags();
 }
 
-void AnnotationManagerImpl::InsertAnnotation()
+void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
 {
     SdPage* pPage = GetCurrentPage();
     if( pPage )
@@ -430,6 +443,12 @@ void AnnotationManagerImpl::InsertAnnotation()
             SvtUserOptions aUserOptions;
             sAuthor = aUserOptions.GetFullName();
             xAnnotation->setInitials( aUserOptions.GetID() );
+        }
+
+        if (!rText.isEmpty())
+        {
+            Reference<XText> xText(xAnnotation->getTextRange());
+            xText->setString(rText);
         }
 
         // set current author to new annotation

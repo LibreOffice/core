@@ -73,7 +73,7 @@ public:
     void SelectAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation, bool bEdit = false );
     void GetSelectedAnnotation( css::uno::Reference< css::office::XAnnotation >& xAnnotation );
 
-    void InsertAnnotation();
+    void InsertAnnotation(const OUString& rText);
     void DeleteAnnotation( const css::uno::Reference< css::office::XAnnotation >& xAnnotation );
     void DeleteAnnotationsByAuthor( const OUString& sAuthor );
     void DeleteAllAnnotations();
