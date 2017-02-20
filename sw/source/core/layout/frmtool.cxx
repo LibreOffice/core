@@ -2127,14 +2127,14 @@ SwBorderAttrAccess::SwBorderAttrAccess( SwCache &rCach, const SwFrame *pFrame ) 
                    (pFrame->IsContentFrame() ?
                       static_cast<SwModify const *>(static_cast<const SwContentFrame*>(pFrame)->GetNode())->IsInCache() :
                       static_cast<SwModify const *>(static_cast<const SwLayoutFrame*>(pFrame)->GetFormat())->IsInCache()) ),
-    pConstructor( pFrame )
+    m_pConstructor( pFrame )
 {
 }
 
 SwCacheObj *SwBorderAttrAccess::NewObj()
 {
     const_cast<SwModify *>(static_cast<SwModify const *>(m_pOwner))->SetInCache( true );
-    return new SwBorderAttrs( static_cast<SwModify const *>(m_pOwner), pConstructor );
+    return new SwBorderAttrs( static_cast<SwModify const *>(m_pOwner), m_pConstructor );
 }
 
 SwBorderAttrs *SwBorderAttrAccess::Get()

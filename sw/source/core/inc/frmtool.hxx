@@ -367,7 +367,7 @@ public:
 
 class SwBorderAttrAccess : public SwCacheAccess
 {
-    const SwFrame *pConstructor;      //opt: for passing on to SwBorderAttrs
+    const SwFrame *m_pConstructor;      //opt: for passing on to SwBorderAttrs
 
 protected:
     virtual SwCacheObj *NewObj() override;
