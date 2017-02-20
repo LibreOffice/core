@@ -1128,7 +1128,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         break;
                     }
 
-                    case 34 : // AUTOLAYOUT_6CLIPART
+                    case AUTOLAYOUT_TITLE_6CONTENT :
                     {
                         Rectangle aTopLeft(pInfo->GetPresRectangle());
                         aTopLeft.setHeight(long(aTopLeft.GetHeight() * 0.477));

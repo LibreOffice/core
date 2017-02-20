@@ -657,7 +657,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 case 7:
                 {
-                    mnTypeId = 33; // AUTOLAYOUT_6CLIPART
+                    mnTypeId = 33; // AUTOLAYOUT_6CLIPART (huh? 33 is not that)
                     break;
                 }
                 default:

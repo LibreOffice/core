@@ -26,23 +26,8 @@ enum AutoLayout
     AUTOLAYOUT_START = 0,
     AUTOLAYOUT_TITLE = 0,                       ///< Title Slide
     AUTOLAYOUT_TITLE_CONTENT = 1,               ///< Title, Content
-    AUTOLAYOUT_TITLE_2CONTENT = 3,              ///< Title and 2 Content
-    AUTOLAYOUT_TITLE_ONLY = 19,                 ///< Title Only
-    AUTOLAYOUT_NONE = 20,                       ///< Blank Slide
-    AUTOLAYOUT_ONLY_TEXT = 32,                  ///< Centered Text
-    AUTOLAYOUT_TITLE_CONTENT_2CONTENT = 12,     ///< Title, Content and 2 Content
-    AUTOLAYOUT_TITLE_2CONTENT_CONTENT = 15,     ///< Title, 2 Content and Content
-    AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT = 16,///< Title, 2 Content over Content
-    AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT = 14, ///< Title, Content over Content
-    AUTOLAYOUT_TITLE_4CONTENT = 18,             ///< Title, 4 Content
-    AUTOLAYOUT_TITLE_6CONTENT = 34,             ///< Title, 6 Content
-    AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT = 27, ///< Vertical Title, Vertical Content over Vertical Content
-    AUTOLAYOUT_VTITLE_VCONTENT = 28,            ///< Vertical Title, Vertical Content over Vertical Content
-    AUTOLAYOUT_TITLE_VCONTENT = 29,             ///< Title, Vertical Content
-    AUTOLAYOUT_TITLE_2VTEXT = 30,               ///< Title, 2 Vertical Content
-
-    // deprecated
     AUTOLAYOUT_CHART = 2,
+    AUTOLAYOUT_TITLE_2CONTENT = 3,              ///< Title and 2 Content
     AUTOLAYOUT_TEXTCHART = 4,
     AUTOLAYOUT_ORG = 5,
     AUTOLAYOUT_TEXTCLIP = 6,
@@ -51,16 +36,29 @@ enum AutoLayout
     AUTOLAYOUT_CLIPTEXT = 9,
     AUTOLAYOUT_TEXTOBJ = 10,
     AUTOLAYOUT_OBJ = 11,
+    AUTOLAYOUT_TITLE_CONTENT_2CONTENT = 12,     ///< Title, Content and 2 Content
     AUTOLAYOUT_OBJTEXT = 13,
+    AUTOLAYOUT_TITLE_CONTENT_OVER_CONTENT = 14, ///< Title, Content over Content
+    AUTOLAYOUT_TITLE_2CONTENT_CONTENT = 15,     ///< Title, 2 Content and Content
+    AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT = 16,///< Title, 2 Content over Content
     AUTOLAYOUT_TEXTOVEROBJ = 17,
+    AUTOLAYOUT_TITLE_4CONTENT = 18,             ///< Title, 4 Content
+    AUTOLAYOUT_TITLE_ONLY = 19,                 ///< Title Only
+    AUTOLAYOUT_NONE = 20,                       ///< Blank Slide
     AUTOLAYOUT_NOTES = 21,
     AUTOLAYOUT_HANDOUT1 = 22,
     AUTOLAYOUT_HANDOUT2 = 23,
     AUTOLAYOUT_HANDOUT3 = 24,
     AUTOLAYOUT_HANDOUT4 = 25,
     AUTOLAYOUT_HANDOUT6 = 26,
+    AUTOLAYOUT_VTITLE_VCONTENT_OVER_VCONTENT = 27, ///< Vertical Title, Vertical Content over Vertical Content
+    AUTOLAYOUT_VTITLE_VCONTENT = 28,            ///< Vertical Title, Vertical Content over Vertical Content
+    AUTOLAYOUT_TITLE_VCONTENT = 29,             ///< Title, Vertical Content
+    AUTOLAYOUT_TITLE_2VTEXT = 30,               ///< Title, 2 Vertical Content
     AUTOLAYOUT_HANDOUT9 = 31,
-    AUTOLAYOUT_6CLIPART = 34,
+    AUTOLAYOUT_ONLY_TEXT = 32,                  ///< Centered Text
+    // 33 missing
+    AUTOLAYOUT_TITLE_6CONTENT = 34,             ///< Title, 6 Content
     AUTOLAYOUT_END
 };
 
