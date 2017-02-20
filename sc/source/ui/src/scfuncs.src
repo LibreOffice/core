@@ -19,13 +19,12 @@
 
 /* Resource file for the function wizard / autopilot.
  *
- *  For every function there is a sub resource with the number of the OpCode of
- *  the function.
+ *  For every function there is a StringArray with a resource id (offset by
+ *  RID_SC_FUNC_DESCRIPTIONS_START) with the OpCode of the function
  *
- *      In this sub resource, with index 1 the description of the function is
- *      given, followed by two string resources for each parameter,
- *      first the type or name of the parameter, second a description of the
- *      parameter.
+ *  In this stringarray, the description of the function is given as the first
+ *  entry, followed by two entries for each parameter, first the type or name
+ *  of the parameter, second a description of the parameter.
  */
 
 #include "scfuncs.hrc"
