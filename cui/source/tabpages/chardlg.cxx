@@ -1498,12 +1498,16 @@ void SvxCharEffectsPage::UpdatePreview_Impl()
     rCTLFont.SetStrikeout( eStrikeout );
 
     nPos = m_pPositionLB->GetSelectEntryPos();
-    bool bUnder = ( CHRDLG_POSITION_UNDER == reinterpret_cast<sal_uLong>(m_pPositionLB->GetEntryData( nPos )) );
-    FontEmphasisMark eMark = (FontEmphasisMark)m_pEmphasisLB->GetSelectEntryPos();
-    eMark |= bUnder ? FontEmphasisMark::PosBelow : FontEmphasisMark::PosAbove;
-    rFont.SetEmphasisMark( eMark );
-    rCJKFont.SetEmphasisMark( eMark );
-    rCTLFont.SetEmphasisMark( eMark );
+    sal_Int32 nEmphasis = m_pEmphasisLB->GetSelectEntryPos();
+    if (nEmphasis != LISTBOX_ENTRY_NOTFOUND)
+    {
+        bool bUnder = ( CHRDLG_POSITION_UNDER == reinterpret_cast<sal_uLong>(m_pPositionLB->GetEntryData( nPos )) );
+        FontEmphasisMark eMark = (FontEmphasisMark)nEmphasis;
+        eMark |= bUnder ? FontEmphasisMark::PosBelow : FontEmphasisMark::PosAbove;
+        rFont.SetEmphasisMark( eMark );
+        rCJKFont.SetEmphasisMark( eMark );
+        rCTLFont.SetEmphasisMark( eMark );
+    }
 
     sal_Int32 nRelief = m_pReliefLB->GetSelectEntryPos();
     if (LISTBOX_ENTRY_NOTFOUND != nRelief)
