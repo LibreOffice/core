@@ -52,6 +52,7 @@
 
 #include "css1kywd.hxx"
 #include "svxcss1.hxx"
+#include "htmlnum.hxx"
 
 #include <memory>
 #include <utility>
@@ -215,7 +216,25 @@ static CSS1PropertyEnum const aPageBreakTable[] =
     { 0,                    0                           }
 };
 
-// /Feature: PrintExt
+static CSS1PropertyEnum const aNumberStyleTable[] =
+{
+    { "decimal",          SVX_NUM_ARABIC              },
+    { "lower-alpha",      SVX_NUM_CHARS_LOWER_LETTER  },
+    { "lower-latin",      SVX_NUM_CHARS_LOWER_LETTER  },
+    { "lower-roman",      SVX_NUM_ROMAN_LOWER         },
+    { "upper-alpha",      SVX_NUM_CHARS_UPPER_LETTER  },
+    { "upper-latin",      SVX_NUM_CHARS_UPPER_LETTER  },
+    { "upper-roman",      SVX_NUM_ROMAN_UPPER         },
+    { nullptr,            0                           }
+};
+
+static CSS1PropertyEnum const aBulletStyleTable[] =
+{
+    { "circle",      HTML_BULLETCHAR_CIRCLE   },
+    { "disc",        HTML_BULLETCHAR_DISC     },
+    { "square",      HTML_BULLETCHAR_SQUARE   },
+    { nullptr,       0                        }
+};
 
 static sal_uInt16 const aBorderWidths[] =
 {
@@ -403,6 +422,7 @@ void SvxCSS1PropertyInfo::Clear()
     aId.clear();
     bTopMargin = bBottomMargin = false;
     bLeftMargin = bRightMargin = bTextIndent = false;
+    m_bNumbering = m_bBullet = false;
     nLeftMargin = nRightMargin = 0;
     eFloat = SVX_ADJUST_END;
 
@@ -411,6 +431,9 @@ void SvxCSS1PropertyInfo::Clear()
     nLeftBorderDistance = nRightBorderDistance = USHRT_MAX;
 
     nColumnCount = 0;
+
+    m_nNumberingType = 0;
+    m_cBulletChar = ' ';
 
     nLeft = nTop = nWidth = nHeight = 0;
     eLeftType = eTopType = eWidthType = eHeightType = SVX_CSS1_LTYPE_NONE;
@@ -1688,6 +1711,32 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
         rItemSet.Put( aLSItem );
     }
 
+}
+
+static void ParseCSS1_list_style_type( const CSS1Expression *pExpr,
+                                       SfxItemSet & /*rItemSet*/,
+                                       SvxCSS1PropertyInfo& rPropInfo,
+                                       const SvxCSS1Parser& /*rParser*/ )
+{
+    OSL_ENSURE( pExpr, "no expression" );
+
+    if( pExpr->GetType() == CSS1_IDENT )
+    {
+        const OUString& rValue = pExpr->GetString();
+
+        // values are context-dependent, so fill both
+        sal_uInt16 nEnum;
+        if( SvxCSS1Parser::GetEnum( aNumberStyleTable, rValue, nEnum ) )
+        {
+            rPropInfo.m_bNumbering = true;
+            rPropInfo.m_nNumberingType = nEnum;
+        }
+        if( SvxCSS1Parser::GetEnum( aBulletStyleTable, rValue, nEnum ) )
+        {
+            rPropInfo.m_bBullet = true;
+            rPropInfo.m_cBulletChar = nEnum;
+        }
+    }
 }
 
 static void ParseCSS1_font( const CSS1Expression *pExpr,
@@ -3102,6 +3151,7 @@ static CSS1PropEntry aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(font_weight),
     CSS1_PROP_ENTRY(letter_spacing),
     CSS1_PROP_ENTRY(line_height),
+    CSS1_PROP_ENTRY(list_style_type),
     CSS1_PROP_ENTRY(font),
     CSS1_PROP_ENTRY(text_align),
     CSS1_PROP_ENTRY(text_decoration),
