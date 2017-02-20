@@ -423,7 +423,7 @@ SdXMLPresentationPageLayoutContext::SdXMLPresentationPageLayoutContext(
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList)
 :   SvXMLStyleContext(rImport, nPrfx, rLName, xAttrList, XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID),
-    mnTypeId( 20 ) // AUTOLAYOUT_NONE
+    mnTypeId( AUTOLAYOUT_NONE )
 {
     // set family to something special at SvXMLStyleContext
     // for differences in search-methods
@@ -480,22 +480,22 @@ void SdXMLPresentationPageLayoutContext::EndElement()
             switch( maList.size() )
             {
             case 1:
-                mnTypeId = 22; // AUTOLAYOUT_HANDOUT1
+                mnTypeId = AUTOLAYOUT_HANDOUT1;
                 break;
             case 2:
-                mnTypeId = 23; // AUTOLAYOUT_HANDOUT2
+                mnTypeId = AUTOLAYOUT_HANDOUT2;
                 break;
             case 3:
-                mnTypeId = 24; // AUTOLAYOUT_HANDOUT3
+                mnTypeId = AUTOLAYOUT_HANDOUT3;
                 break;
             case 4:
-                mnTypeId = 25; // AUTOLAYOUT_HANDOUT4
+                mnTypeId = AUTOLAYOUT_HANDOUT4;
                 break;
             case 9:
-                mnTypeId = 31; // AUTOLAYOUT_HANDOUT9
+                mnTypeId = AUTOLAYOUT_HANDOUT9;
                 break;
             default:
-                mnTypeId = 26; // AUTOLAYOUT_HANDOUT6
+                mnTypeId = AUTOLAYOUT_HANDOUT6;
             }
         }
         else
@@ -510,7 +510,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     }
                     else
                     {
-                        mnTypeId = 32; // AUTOLAYOUT_ONLY_TEXT
+                        mnTypeId = AUTOLAYOUT_ONLY_TEXT;
                     }
                     break;
                 }
@@ -520,7 +520,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
 
                     if( pObj1->GetName() == "subtitle" )
                     {
-                        mnTypeId = 0; // AUTOLAYOUT_TITLE
+                        mnTypeId = AUTOLAYOUT_TITLE;
                     }
                     else if( pObj1->GetName() == "outline" )
                     {
@@ -528,15 +528,15 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     }
                     else if( pObj1->GetName() == "chart" )
                     {
-                        mnTypeId = 2; // AUTOLAYOUT_CHART
+                        mnTypeId = AUTOLAYOUT_CHART;
                     }
                     else if( pObj1->GetName() == "table" )
                     {
-                        mnTypeId = 8; // AUTOLAYOUT_TAB
+                        mnTypeId = AUTOLAYOUT_TAB;
                     }
                     else if( pObj1->GetName() == "object" )
                     {
-                        mnTypeId = 11; // AUTOLAYOUT_OBJ
+                        mnTypeId = AUTOLAYOUT_OBJ;
                     }
                     else if( pObj1->GetName() == "vertical_outline" )
                     {
@@ -551,7 +551,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     }
                     else
                     {
-                        mnTypeId = 21; // AUTOLAYOUT_NOTES
+                        mnTypeId = AUTOLAYOUT_NOTES;
                     }
                     break;
                 }
@@ -568,27 +568,27 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                         }
                         else if( pObj2->GetName() == "chart" )
                         {
-                            mnTypeId = 4; // AUTOLAYOUT_TEXTCHART
+                            mnTypeId = AUTOLAYOUT_TEXTCHART;
                         }
                         else if( pObj2->GetName() == "graphic" )
                         {
-                            mnTypeId = 6; // AUTOLAYOUT_TEXTCLIP
+                            mnTypeId = AUTOLAYOUT_TEXTCLIP;
                         }
                         else
                         {
                             if(pObj1->GetX() < pObj2->GetX())
                             {
-                                mnTypeId = 10; // AUTOLAYOUT_TEXTOBJ -> outline left, object right
+                                mnTypeId = AUTOLAYOUT_TEXTOBJ; // outline left, object right
                             }
                             else
                             {
-                                mnTypeId = 17; // AUTOLAYOUT_TEXTOVEROBJ -> outline top, object right
+                                mnTypeId = AUTOLAYOUT_TEXTOVEROBJ; // outline top, object right
                             }
                         }
                     }
                     else if( pObj1->GetName() == "chart" )
                     {
-                        mnTypeId = 7; // AUTOLAYOUT_CHARTTEXT
+                        mnTypeId = AUTOLAYOUT_CHARTTEXT;
                     }
                     else if( pObj1->GetName() == "graphic" )
                     {
@@ -598,7 +598,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                         }
                         else
                         {
-                            mnTypeId = 9; // AUTOLAYOUT_CLIPTEXT
+                            mnTypeId = AUTOLAYOUT_CLIPTEXT;
                         }
                     }
                     else if( pObj1->GetName() == "vertical_outline" )
@@ -609,7 +609,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     {
                         if(pObj1->GetX() < pObj2->GetX())
                         {
-                            mnTypeId = 13; // AUTOLAYOUT_OBJTEXT -> left, right
+                            mnTypeId = AUTOLAYOUT_OBJTEXT; // left, right
                         }
                         else
                         {
@@ -662,7 +662,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                 }
                 default:
                 {
-                    mnTypeId = 20; // AUTOLAYOUT_NONE
+                    mnTypeId = AUTOLAYOUT_NONE;
                     break;
                 }
             }
