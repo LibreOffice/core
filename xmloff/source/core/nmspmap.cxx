@@ -284,7 +284,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
                                             OUString *pNamespace,
                                             bool bCache) const
 {
-    sal_uInt16 nKey = XML_NAMESPACE_UNKNOWN;
+    sal_uInt16 nKey;
 
     NameSpaceHash::const_iterator it;
     if (bCache)
@@ -307,7 +307,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
     }
     else
     {
-    rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry());
+    rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry);
 
         sal_Int32 nColonPos = rAttrName.indexOf( ':' );
         if( -1L == nColonPos )
@@ -342,6 +342,8 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName_( const OUString& rAttrName,
         else if( nColonPos == -1L )
             // not found, and no namespace: 'namespace' none
             nKey = xEntry->nKey = XML_NAMESPACE_NONE;
+        else
+            nKey = xEntry->nKey = XML_NAMESPACE_UNKNOWN;
 
         if (bCache)
         {
