@@ -11320,7 +11320,7 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rDestPoint + Point( 0, rDestSize.Height()-1 ), aLine );
     aLine.append( " cm\n/Im" );
-    sal_Int32 nObject = rBitmap.m_nFormObject > 0 ? rBitmap.m_nFormObject : rBitmap.m_nObject;
+    sal_Int32 nObject = rBitmap.getObject();
     aLine.append(nObject);
     aLine.append( " Do Q\n" );
     if( nCheckWidth == 0 || nCheckHeight == 0 )
@@ -11378,7 +11378,7 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
 
     OStringBuffer aObjName( 16 );
     aObjName.append( "Im" );
-    sal_Int32 nObject = it->m_nFormObject > 0 ? it->m_nFormObject : it->m_nObject;
+    sal_Int32 nObject = it->getObject();
     aObjName.append(nObject);
     pushResource( ResXObject, aObjName.makeStringAndClear(), nObject );
 
@@ -13236,4 +13236,13 @@ PDFWriterImpl::JPGEmit::JPGEmit(PDFWriterImpl::JPGEmit&& rOther)
     m_nObject = rOther.m_nObject;
     m_bTrueColor = rOther.m_bTrueColor;
 }
+
+sal_Int32 PDFWriterImpl::BitmapEmit::getObject() const
+{
+    if (m_nFormObject > 0)
+        return m_nFormObject;
+    else
+        return m_nObject;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
