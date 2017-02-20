@@ -508,7 +508,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     SmNodeList* pLineList = NodeToList(pLine);
 
     //Take the selection, and/or find iterator for current position
-    SmNodeList* pSelectedNodesList = new SmNodeList();
+    SmNodeList* pSelectedNodesList = new SmNodeList;
     SmNodeList::iterator it;
     if(HasSelection())
         it = TakeSelectedNodesFromList(pLineList, pSelectedNodesList);
@@ -672,7 +672,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     SmNodeList *pLineList = NodeToList(pLine);
 
     //Take the selection, and/or find iterator for current position
-    SmNodeList *pSelectedNodesList = new SmNodeList();
+    SmNodeList *pSelectedNodesList = new SmNodeList;
     SmNodeList::iterator it;
     if(HasSelection())
         it = TakeSelectedNodesFromList(pLineList, pSelectedNodesList);
@@ -802,7 +802,7 @@ bool SmCursor::InsertRow() {
 
     //If we're in the context of a table
     if(pTable) {
-        SmNodeList *pNewLineList = new SmNodeList();
+        SmNodeList *pNewLineList = new SmNodeList;
         //Move elements from pLineList to pNewLineList
         pNewLineList->splice(pNewLineList->begin(), *pLineList, it, pLineList->end());
         //Make sure it is valid again
@@ -887,7 +887,7 @@ void SmCursor::InsertFraction() {
     SmNodeList* pLineList = NodeToList(pLine);
 
     //Take the selection, and/or find iterator for current position
-    SmNodeList* pSelectedNodesList = new SmNodeList();
+    SmNodeList* pSelectedNodesList = new SmNodeList;
     SmNodeList::iterator it;
     if(HasSelection())
         it = TakeSelectedNodesFromList(pLineList, pSelectedNodesList);
@@ -936,7 +936,7 @@ void SmCursor::InsertText(const OUString& aString)
     pText->AdjustFontDesc();
     pText->Prepare(mpDocShell->GetFormat(), *mpDocShell);
 
-    SmNodeList* pList = new SmNodeList();
+    SmNodeList* pList = new SmNodeList;
     pList->push_front(pText);
     InsertNodes(pList);
 
@@ -1038,7 +1038,7 @@ void SmCursor::InsertElement(SmFormulaElement element){
     pNewNode->Prepare(mpDocShell->GetFormat(), *mpDocShell);
 
     //Insert new node
-    SmNodeList* pList = new SmNodeList();
+    SmNodeList* pList = new SmNodeList;
     pList->push_front(pNewNode);
     InsertNodes(pList);
 
@@ -1065,7 +1065,7 @@ void SmCursor::InsertSpecial(const OUString& _aString)
     pSpecial->Prepare(mpDocShell->GetFormat(), *mpDocShell);
 
     //Insert the node
-    SmNodeList* pList = new SmNodeList();
+    SmNodeList* pList = new SmNodeList;
     pList->push_front(pSpecial);
     InsertNodes(pList);
 
@@ -1163,7 +1163,7 @@ void SmCursor::Paste() {
 
 SmNodeList* SmCursor::CloneList(SmClipboard &rClipboard){
     SmCloningVisitor aCloneFactory;
-    SmNodeList* pClones = new SmNodeList();
+    SmNodeList* pClones = new SmNodeList;
 
     for(auto &xNode : rClipboard){
         SmNode *pClone = aCloneFactory.Clone(xNode.get());
