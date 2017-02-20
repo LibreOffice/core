@@ -594,8 +594,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     {
                         if( pObj2->GetName() == "vertical_outline" )
                         {
-                            // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
-                            mnTypeId = 30;
+                            mnTypeId = AUTOLAYOUT_TITLE_2VTEXT;
                         }
                         else
                         {

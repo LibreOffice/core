@@ -1090,7 +1090,7 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
                         ImpWriteAutoLayoutPlaceholder(XmlPlaceholderVerticalOutline, pInfo->GetPresRectangle());
                         break;
                     }
-                    case 30 : // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
+                    case AUTOLAYOUT_TITLE_2VTEXT :
                     {
                         Rectangle aLeft(pInfo->GetPresRectangle());
                         aLeft.setWidth(long(aLeft.GetWidth() * 0.488));

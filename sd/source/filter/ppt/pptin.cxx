@@ -1138,7 +1138,7 @@ bool ImplSdPPTImport::Import()
                         else if ( nID1 == PptPlaceholder::CLIPART && nID2 == PptPlaceholder::BODY )
                             eAutoLayout = AUTOLAYOUT_CLIPTEXT;
                         else if ( nID1 == PptPlaceholder::CLIPART && nID2 == PptPlaceholder::VERTICALTEXTBODY )
-                            eAutoLayout = AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART;
+                            eAutoLayout = AUTOLAYOUT_TITLE_2VTEXT;
                         else if ( ( nID1 == PptPlaceholder::BODY )
                             && ( ( nID2 == PptPlaceholder::OBJECT ) || ( nID2 == PptPlaceholder::MEDIACLIP ) ) )
                             eAutoLayout = AUTOLAYOUT_TEXTOBJ;
