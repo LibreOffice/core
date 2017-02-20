@@ -100,7 +100,7 @@ bool AccessibleDialogWindow::ChildDescriptor::operator<( const ChildDescriptor& 
 
 
 AccessibleDialogWindow::AccessibleDialogWindow (basctl::DialogWindow* pDialogWindow)
-    : OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() )
+    : OAccessibleExtendedComponentHelper( new VCLExternalSolarLock )
     , m_pDialogWindow(pDialogWindow)
     , m_pDlgEditor(nullptr)
     , m_pDlgEdModel(nullptr)
