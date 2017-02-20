@@ -872,7 +872,6 @@ OUString SwContentTree::GetEntryAltText( SvTreeListEntry* pEntry ) const
                         case OBJ_GRUP:
                         case OBJ_TEXT:
                         case OBJ_TEXTEXT:
-                        case OBJ_wegFITTEXT:
                         case OBJ_LINE:
                         case OBJ_RECT:
                         case OBJ_CUSTOMSHAPE:
@@ -957,7 +956,6 @@ OUString SwContentTree::GetEntryLongDescription( SvTreeListEntry* pEntry ) const
                         case OBJ_GRUP:
                         case OBJ_TEXT:
                         case OBJ_TEXTEXT:
-                        case OBJ_wegFITTEXT:
                         case OBJ_LINE:
                         case OBJ_RECT:
                         case OBJ_CUSTOMSHAPE:
@@ -2797,7 +2795,6 @@ void SwContentTree::KeyInput(const KeyEvent& rEvent)
                                 case OBJ_GRUP:
                                 case OBJ_TEXT:
                                 case OBJ_TEXTEXT:
-                                case OBJ_wegFITTEXT:
                                 case OBJ_LINE:
                                 case OBJ_RECT:
                                 case OBJ_CIRC:
