@@ -18,7 +18,7 @@
 from .LetterWizardDialogConst import LetterWizardDialogConst, HIDMAIN, HID
 from .LetterWizardDialogResources import LetterWizardDialogResources
 from ..common.HelpIds import HelpIds
-from ..ui.WizardDialog import WizardDialog, uno, PropertyNames
+from ..ui.WizardDialog import WizardDialog, uno, UIConsts, PropertyNames
 
 from com.sun.star.awt.FontUnderline import SINGLE
 
