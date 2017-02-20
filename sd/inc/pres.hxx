@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SD_INC_PRES_HXX
 #define INCLUDED_SD_INC_PRES_HXX
 
-#include <xmloff/autolayout.hxx>
-
 enum PresObjKind
 {
     PRESOBJ_NONE = 0,

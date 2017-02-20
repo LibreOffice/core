@@ -51,6 +51,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include <vector>
 

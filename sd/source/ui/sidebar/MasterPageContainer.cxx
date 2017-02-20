@@ -53,6 +53,8 @@
 #include "pres.hxx"
 #include <osl/mutex.hxx>
 #include <osl/getglobalmutex.hxx>
+#include <xmloff/autolayout.hxx>
+
 #include <memory>
 
 using namespace ::com::sun::star;

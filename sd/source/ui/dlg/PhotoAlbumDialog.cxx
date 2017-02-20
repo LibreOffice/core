@@ -29,6 +29,8 @@
 #include <svx/unoshape.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xfillit.hxx>
+#include <xmloff/autolayout.hxx>
+
 #include "PhotoAlbumDialog.hxx"
 #include "strings.hrc"
 #include "sdresid.hxx"

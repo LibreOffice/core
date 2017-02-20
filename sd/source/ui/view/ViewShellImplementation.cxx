@@ -50,6 +50,8 @@
 #include <svx/imapdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <basic/sbstar.hxx>
+#include <xmloff/autolayout.hxx>
+
 #include "undo/undoobjects.hxx"
 
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>

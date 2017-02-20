@@ -40,6 +40,8 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 
+#include <xmloff/autolayout.hxx>
+
 #include "app.hrc"
 #include "facreg.hxx"
 #include "glob.hrc"

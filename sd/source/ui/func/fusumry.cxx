@@ -23,6 +23,7 @@
 #include <svx/svdundo.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/outlobj.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include "strings.hrc"
 

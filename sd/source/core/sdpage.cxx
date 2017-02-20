@@ -55,6 +55,7 @@
 #include <rtl/ustring.hxx>
 #include <basegfx/tools/tools.hxx>
 #include <o3tl/enumarray.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include "Outliner.hxx"
 #include "app.hrc"

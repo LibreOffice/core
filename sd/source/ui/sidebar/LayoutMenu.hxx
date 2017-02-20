@@ -33,6 +33,7 @@
 #include <svtools/valueset.hxx>
 #include <svtools/transfer.hxx>
 #include <sfx2/shell.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include <com/sun/star/ui/XSidebar.hpp>
 

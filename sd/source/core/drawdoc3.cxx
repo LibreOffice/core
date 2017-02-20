@@ -39,6 +39,7 @@
 #include <vcl/layout.hxx>
 #include <vcl/msgbox.hxx>
 #include <sot/formats.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include "glob.hrc"
 #include "drawdoc.hxx"

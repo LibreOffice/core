@@ -30,6 +30,7 @@
 #include <vector>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
+#include <xmloff/autolayout.hxx>
 #include "fadedef.h"
 #include "diadef.h"
 #include "pres.hxx"

@@ -48,6 +48,7 @@
 #include <svl/languageoptions.hxx>
 #include <vcl/image.hxx>
 #include <vcl/floatwin.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>

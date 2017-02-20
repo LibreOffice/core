@@ -26,6 +26,7 @@
 #include <sfx2/printer.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdetc.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include "app.hrc"
 #include "strings.hrc"

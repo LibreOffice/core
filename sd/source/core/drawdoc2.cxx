@@ -47,6 +47,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/lok.hxx>
+#include <xmloff/autolayout.hxx>
 
 #include "sdresid.hxx"
 #include "drawdoc.hxx"

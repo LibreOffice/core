@@ -70,6 +70,7 @@
 #include <editeng/eeitem.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/saveopt.hxx>
+#include <xmloff/autolayout.hxx>
 
 // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
