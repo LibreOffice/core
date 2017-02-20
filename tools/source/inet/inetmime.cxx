@@ -968,7 +968,7 @@ public:
 
     ~INetMIMEEncodedWordOutputSink();
 
-    INetMIMEEncodedWordOutputSink & WriteUInt32(sal_uInt32 nChar);
+    INetMIMEEncodedWordOutputSink & writeChar(sal_uInt32 nChar);
 
     inline void write(const sal_Unicode * pBegin, const sal_Unicode * pEnd);
 
@@ -1000,7 +1000,7 @@ inline void INetMIMEEncodedWordOutputSink::write(const sal_Unicode * pBegin,
                "INetMIMEEncodedWordOutputSink::write(): Bad sequence");
 
     while (pBegin != pEnd)
-        WriteUInt32(*pBegin++);
+        writeChar(*pBegin++);
 }
 
 inline void INetMIMEEncodedWordOutputSink::flush()
@@ -1373,7 +1373,7 @@ INetMIMEEncodedWordOutputSink::~INetMIMEEncodedWordOutputSink()
 }
 
 INetMIMEEncodedWordOutputSink &
-INetMIMEEncodedWordOutputSink::WriteUInt32(sal_uInt32 nChar)
+INetMIMEEncodedWordOutputSink::writeChar(sal_uInt32 nChar)
 {
     if (nChar == ' ')
     {
