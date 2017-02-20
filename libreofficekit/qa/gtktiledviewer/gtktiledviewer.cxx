@@ -330,7 +330,12 @@ static void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
     boost::property_tree::write_json(aStream, aTree);
     std::string aArguments = aStream.str();
 
-    lok_doc_view_post_command(LOK_DOC_VIEW(rWindow.m_pDocView), ".uno:ReplyComment", aArguments.c_str(), false);
+    // Different reply UNO command for impress
+    std::string replyCommand = ".uno:ReplyComment";
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(rWindow.m_pDocView));
+    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_PRESENTATION)
+        replyCommand = ".uno:ReplyToAnnotation";
+    lok_doc_view_post_command(LOK_DOC_VIEW(rWindow.m_pDocView), replyCommand.c_str(), aArguments.c_str(), false);
 }
 
 static void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
