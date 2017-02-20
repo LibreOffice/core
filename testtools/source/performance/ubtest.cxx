@@ -371,24 +371,14 @@ static void createInstance( Reference< T > & rxOut,
 
     if (! x.is())
     {
-        OUStringBuffer buf( 64 );
-        buf.append( "cannot get service instance \"" );
-        buf.append( rServiceName );
-        buf.append( "\"!" );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException( "cannot get service instance \"" + rServiceName );
     }
 
     rxOut = Reference< T >::query( x );
     if (! rxOut.is())
     {
-        OUStringBuffer buf( 64 );
-        buf.append( "service instance \"" );
-        buf.append( rServiceName );
-        buf.append( "\" does not support demanded interface \"" );
-        const Type & rType = cppu::UnoType<T>::get();
-        buf.append( rType.getTypeName() );
-        buf.append( "\"!" );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException( "service instance \"" + rServiceName +
+                  "\" does not support demanded interface \"" + cppu::UnoType<T>::get().getTypeName() );
     }
 }
 
@@ -490,11 +480,7 @@ Reference< XInterface > TestImpl::resolveObject( const OUString & rUnoUrl )
 
     if (! xResolvedObject.is())
     {
-        OUStringBuffer buf( 32 );
-        buf.append( "cannot resolve object \"" );
-        buf.append( rUnoUrl );
-        buf.append( "\"!" );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException( "cannot resolve object \"" + rUnoUrl + "\"!" );
     }
 
     return xResolvedObject;
@@ -987,11 +973,7 @@ sal_Int32 TestImpl::run( const Sequence< OUString > & rArgs )
                 stream = ::fopen( aFileName.getStr(), "w" );
                 if (! stream)
                 {
-                    OUStringBuffer buf( 32 );
-                    buf.append( "cannot open file for writing: \"" );
-                    buf.append( aLogStr );
-                    buf.append( "\"!" );
-                    throw RuntimeException( buf.makeStringAndClear() );
+                    throw RuntimeException( "cannot open file for writing: \"" + aLogStr + "\"!" );
                 }
             }
         }

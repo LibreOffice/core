@@ -403,11 +403,7 @@ PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args )
             OUString attrName = OUString::createFromAscii(name);
             if (! me->members->xInvocation->hasMethod (attrName))
             {
-                OUStringBuffer buf;
-                buf.append( "Attribute " );
-                buf.append( attrName );
-                buf.append( " unknown" );
-                throw RuntimeException( buf.makeStringAndClear() );
+                throw RuntimeException( "Attribute " + attrName + " unknown" );
             }
             callable = PyUNO_callable_new (
                 me->members->xInvocation,

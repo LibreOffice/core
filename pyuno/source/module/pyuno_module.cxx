@@ -416,13 +416,10 @@ static PyObject *createUnoStructHelper(
                             fillStruct( me->members->xInvocation, pCompType, initializer, keywordArgs, state, runtime );
                         if( state.getCntConsumed() != PyTuple_Size(initializer) )
                         {
-                            OUStringBuffer buf;
-                            buf.append( "pyuno._createUnoStructHelper: too many ");
-                            buf.append( "elements in the initializer list, expected " );
-                            buf.append( state.getCntConsumed() );
-                            buf.append( ", got " );
-                            buf.append( (sal_Int32) PyTuple_Size(initializer) );
-                            throw RuntimeException( buf.makeStringAndClear());
+                            throw RuntimeException( "pyuno._createUnoStructHelper: too many "
+                                "elements in the initializer list, expected " +
+                                OUString::number(state.getCntConsumed()) + ", got " +
+                                OUString::number( PyTuple_Size(initializer) ) );
                         }
                         ret = PyRef( PyTuple_Pack(2, returnCandidate.get(), state.getUsed()), SAL_NO_ACQUIRE);
                     }
@@ -518,10 +515,7 @@ static PyObject *getConstantByName(
                       typeName)
                   >>= td))
             {
-                OUStringBuffer buf;
-                buf.append( "pyuno.getConstantByName: " ).append( typeName );
-                buf.append( "is not a constant" );
-                throw RuntimeException(buf.makeStringAndClear() );
+                throw RuntimeException( "pyuno.getConstantByName: " + typeName + "is not a constant" );
             }
             PyRef constant = runtime.any2PyObject( td->getConstantValue() );
             ret = constant.getAcquired();
