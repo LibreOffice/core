@@ -34,6 +34,7 @@
 #include <comphelper/lok.hxx>
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
+#include <unotools/datetime.hxx>
 
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
@@ -89,6 +90,7 @@ public:
     void testTdf104405();
     void testTdf81754();
     void testTdf105502();
+    void testCommentCallbacks();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -122,11 +124,12 @@ public:
     CPPUNIT_TEST(testTdf104405);
     CPPUNIT_TEST(testTdf81754);
     CPPUNIT_TEST(testTdf105502);
+    CPPUNIT_TEST(testCommentCallbacks);
 
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    SdXImpressDocument* createDoc(const char* pName);
+    SdXImpressDocument* createDoc(const char* pName, const uno::Sequence<beans::PropertyValue>& rArguments = uno::Sequence<beans::PropertyValue>());
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
     xmlDocPtr parseXmlDump();
@@ -173,14 +176,14 @@ void SdTiledRenderingTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName)
+SdXImpressDocument* SdTiledRenderingTest::createDoc(const char* pName, const uno::Sequence<beans::PropertyValue>& rArguments)
 {
     if (mxComponent.is())
         mxComponent->dispose();
     mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(pName), "com.sun.star.presentation.PresentationDocument");
     SdXImpressDocument* pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pImpressDocument);
-    pImpressDocument->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+    pImpressDocument->initializeForTiledRendering(rArguments);
     return pImpressDocument;
 }
 
@@ -898,6 +901,7 @@ public:
     std::map<int, bool> m_aViewCursorInvalidations;
     std::map<int, bool> m_aViewCursorVisibilities;
     bool m_bViewSelectionSet;
+    boost::property_tree::ptree m_aCommentCallbackResult;
 
     ViewCallback()
         : m_bGraphicSelectionInvalidated(false),
@@ -973,6 +977,14 @@ public:
         case LOK_CALLBACK_TEXT_VIEW_SELECTION:
         {
             m_bViewSelectionSet = true;
+        }
+        break;
+        case LOK_CALLBACK_COMMENT:
+        {
+            m_aCommentCallbackResult.clear();
+            std::stringstream aStream(pPayload);
+            boost::property_tree::read_json(aStream, m_aCommentCallbackResult);
+            m_aCommentCallbackResult = m_aCommentCallbackResult.get_child("comment");
         }
         break;
         }
@@ -1556,6 +1568,99 @@ void SdTiledRenderingTest::testTdf105502()
     CPPUNIT_ASSERT(nA1Height > nA2Height);
     xmlFreeDoc(pXmlDoc);
 
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+void SdTiledRenderingTest::testCommentCallbacks()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    // Set the tield annotations off
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp", comphelper::InitPropertySequence(
+    {
+        {".uno:Author", uno::makeAny(OUString("LOK User1"))},
+    }));
+    ViewCallback aView1;
+    int nView1 = SfxLokHelper::getView();
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView1);
+
+    SfxLokHelper::createView();
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+    {
+        {".uno:Author", uno::makeAny(OUString("LOK User2"))},
+    }));
+    pXImpressDocument->initializeForTiledRendering(aArgs);
+    ViewCallback aView2;
+    SfxViewShell::Current()->registerLibreOfficeKitViewCallback(&ViewCallback::callback, &aView2);
+    int nView2 = SfxLokHelper::getView();
+
+    SfxLokHelper::setView(nView1);
+
+    // Add a new comment
+    aArgs = comphelper::InitPropertySequence(
+    {
+        {"Text", uno::makeAny(OUString("Comment"))},
+    });
+    comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    int nComment1 = aView1.m_aCommentCallbackResult.get<int>("id");
+    CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
+    css::util::DateTime aDateTime;
+    OUString aDateTimeString = OUString::createFromAscii(aView1.m_aCommentCallbackResult.get<std::string>("dateTime").c_str());
+    CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
+    CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+
+    // Reply to a just added comment
+    SfxLokHelper::setView(nView2);
+    aArgs = comphelper::InitPropertySequence(
+    {
+        {"Id", uno::makeAny(OUString::number(nComment1))},
+        {"Text", uno::makeAny(OUString("Reply to comment"))},
+    });
+    comphelper::dispatchCommand(".uno:ReplyToAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Modify' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Modify"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
+    CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView1.m_aCommentCallbackResult.get<std::string>("author"));
+    CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
+    OUString aReplyTextView1 = OUString::createFromAscii(aView1.m_aCommentCallbackResult.get<std::string>("text").c_str());
+    OUString aReplyTextView2 = OUString::createFromAscii(aView2.m_aCommentCallbackResult.get<std::string>("text").c_str());
+    CPPUNIT_ASSERT(aReplyTextView1.startsWith("Reply to LOK User1"));
+    CPPUNIT_ASSERT(aReplyTextView1.endsWith("Reply to comment"));
+    CPPUNIT_ASSERT(aReplyTextView2.startsWith("Reply to LOK User1"));
+    CPPUNIT_ASSERT(aReplyTextView2.endsWith("Reply to comment"));
+
+    // Delete the comment
+    aArgs = comphelper::InitPropertySequence(
+    {
+        {"Id", uno::makeAny(OUString::number(nComment1))},
+    });
+    comphelper::dispatchCommand(".uno:DeleteAnnotation", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // We received a LOK_CALLBACK_COMMENT callback with comment 'Remove' action
+    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView1.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Remove"), aView2.m_aCommentCallbackResult.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(nComment1, aView1.m_aCommentCallbackResult.get<int>("id"));
+    CPPUNIT_ASSERT_EQUAL(nComment1, aView2.m_aCommentCallbackResult.get<int>("id"));
+
+    mxComponent->dispose();
+    mxComponent.clear();
+
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
     comphelper::LibreOfficeKit::setActive(false);
 }
 
