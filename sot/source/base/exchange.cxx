@@ -242,7 +242,7 @@ static tDataFlavorList& InitFormats_Impl()
 {
     SotData_Impl *pSotData = &ImplData::get();
     if( !pSotData->pDataFlavorList )
-        pSotData->pDataFlavorList = new tDataFlavorList();
+        pSotData->pDataFlavorList = new tDataFlavorList;
     return *pSotData->pDataFlavorList;
 }
 
