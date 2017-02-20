@@ -2987,7 +2987,7 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
         xRowSetProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, uno::makeAny( getConnection() ) );
         xRowSetProp->setPropertyValue( PROPERTY_APPLYFILTER, uno::makeAny( true ) );
 
-        std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter());
+        std::shared_ptr<AnyConverter> aNoConverter(new AnyConverter);
         TPropertyNamePair aPropertyMediation;
         aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMAND, TPropertyConverter(PROPERTY_COMMAND,aNoConverter) ) );
         aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMANDTYPE, TPropertyConverter(PROPERTY_COMMANDTYPE,aNoConverter) ) );
