@@ -1472,7 +1472,7 @@ void ToolBox::ImplUpdateInputEnable()
 
 void ToolBox::ImplFillLayoutData() const
 {
-    mpData->m_pLayoutData = new ToolBoxLayoutData();
+    mpData->m_pLayoutData = new ToolBoxLayoutData;
 
     sal_uInt16 nCount = (sal_uInt16)mpData->m_aItems.size();
     for( sal_uInt16 i = 0; i < nCount; i++ )

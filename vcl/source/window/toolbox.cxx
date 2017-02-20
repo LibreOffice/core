@@ -1127,7 +1127,7 @@ sal_uInt16 ToolBox::ImplFindItemPos( ToolBox* pBox, const Point& rPos )
 }
 
 ImplTBDragMgr::ImplTBDragMgr()
-    : mpBoxList(new ImplTBList())
+    : mpBoxList(new ImplTBList)
     , mpDragBox(nullptr)
     , mnMinWidth(0)
     , mnMaxWidth(0)

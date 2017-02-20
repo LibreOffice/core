@@ -692,7 +692,7 @@ void OutputDevice::AddFontSubstitute( const OUString& rFontName,
 {
     ImplDirectFontSubstitution*& rpSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
     if( !rpSubst )
-        rpSubst = new ImplDirectFontSubstitution();
+        rpSubst = new ImplDirectFontSubstitution;
     rpSubst->AddFontSubstitute( rFontName, rReplaceFontName, nFlags );
     ImplGetSVData()->maGDIData.mbFontSubChanged = true;
 }

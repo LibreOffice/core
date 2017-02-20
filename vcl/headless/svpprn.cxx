@@ -160,7 +160,7 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
                                                    ImplJobSetup*        pJobSetup )
 {
     // create and initialize SalInfoPrinter
-    SvpSalInfoPrinter* pPrinter = new SvpSalInfoPrinter();
+    SvpSalInfoPrinter* pPrinter = new SvpSalInfoPrinter;
 
     if( pJobSetup )
     {

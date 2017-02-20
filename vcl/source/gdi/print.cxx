@@ -1497,7 +1497,7 @@ OUString Printer::GetPaperName( Paper ePaper )
     ImplSVData* pSVData = ImplGetSVData();
     if( ! pSVData->mpPaperNames )
     {
-        pSVData->mpPaperNames = new std::unordered_map< int, OUString >();
+        pSVData->mpPaperNames = new std::unordered_map< int, OUString >;
         if( ImplGetResMgr() )
         {
             ResStringArray aPaperStrings( VclResId( RID_STR_PAPERNAMES ) );

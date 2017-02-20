@@ -96,7 +96,8 @@ ImplRegionBand::ImplRegionBand(
         ImplRegionBandPoint* pPrevPointCopy = nullptr;
         while (pPoint != nullptr)
         {
-            ImplRegionBandPoint* pPointCopy = new ImplRegionBandPoint();
+            ImplRegionBandPoint* pPointCopy = new ImplRegionBandPoint;
+            pPointCopy->mpNextBandPoint = nullptr;
             pPointCopy->mnX = pPoint->mnX;
             pPointCopy->mnLineId = pPoint->mnLineId;
             pPointCopy->mbEndPoint = pPoint->mbEndPoint;

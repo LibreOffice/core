@@ -395,7 +395,7 @@ css::uno::Reference< css::awt::XGraphics > OutputDevice::CreateUnoGraphics()
 
 std::vector< VCLXGraphics* > *OutputDevice::CreateUnoGraphicsList()
 {
-    mpUnoGraphicsList = new std::vector< VCLXGraphics* >();
+    mpUnoGraphicsList = new std::vector< VCLXGraphics* >;
     return mpUnoGraphicsList;
 }
 

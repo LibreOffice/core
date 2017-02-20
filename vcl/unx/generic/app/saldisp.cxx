@@ -2592,7 +2592,7 @@ SalColormap::SalColormap( sal_uInt16 nDepth )
                                TrueColor,
                                &aVI ) )
         {
-            aVI.visual          = new Visual();
+            aVI.visual          = new Visual;
             aVI.visualid        = (VisualID)0; // beware of temporary destructor below
             aVI.screen          = 0;
             aVI.depth           = nDepth;

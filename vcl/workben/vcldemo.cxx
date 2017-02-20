@@ -1619,20 +1619,20 @@ bool DemoRenderer::MouseButtonDown(const MouseEvent& rMEvt)
 
 void DemoRenderer::InitRenderers()
 {
-    maRenderers.push_back(new DrawLines());
-    maRenderers.push_back(new DrawText());
-    maRenderers.push_back(new DrawPoly());
-    maRenderers.push_back(new DrawEllipse());
-    maRenderers.push_back(new DrawCheckered());
-    maRenderers.push_back(new DrawBitmapEx());
-    maRenderers.push_back(new DrawBitmap());
-    maRenderers.push_back(new DrawGradient());
-    maRenderers.push_back(new DrawPolyPolygons());
-    maRenderers.push_back(new DrawClipped());
-    maRenderers.push_back(new DrawToVirtualDevice());
-    maRenderers.push_back(new DrawXOR());
+    maRenderers.push_back(new DrawLines);
+    maRenderers.push_back(new DrawText);
+    maRenderers.push_back(new DrawPoly);
+    maRenderers.push_back(new DrawEllipse);
+    maRenderers.push_back(new DrawCheckered);
+    maRenderers.push_back(new DrawBitmapEx);
+    maRenderers.push_back(new DrawBitmap);
+    maRenderers.push_back(new DrawGradient);
+    maRenderers.push_back(new DrawPolyPolygons);
+    maRenderers.push_back(new DrawClipped);
+    maRenderers.push_back(new DrawToVirtualDevice);
+    maRenderers.push_back(new DrawXOR);
     maRenderers.push_back(new DrawIcons());
-    maRenderers.push_back(new FetchDrawBitmap());
+    maRenderers.push_back(new FetchDrawBitmap);
 }
 
 OUString DemoRenderer::getRendererList()

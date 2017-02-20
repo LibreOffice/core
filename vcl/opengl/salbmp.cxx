@@ -95,7 +95,7 @@ sal_uInt16 lclBytesPerRow(sal_uInt16 nBits, int nWidth)
 }
 
 typedef std::vector<std::unique_ptr< FixedTextureAtlasManager > > TextureAtlasVector;
-static vcl::DeleteOnDeinit< TextureAtlasVector > gTextureAtlases(new TextureAtlasVector());
+static vcl::DeleteOnDeinit< TextureAtlasVector > gTextureAtlases(new TextureAtlasVector);
 
 }
 

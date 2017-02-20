@@ -75,7 +75,7 @@ void DeleteOnDeinitBase::addDeinitContainer( DeleteOnDeinitBase* i_pContainer )
         return;
 
     if( pSVData->mpDeinitDeleteList == nullptr )
-        pSVData->mpDeinitDeleteList = new std::list< DeleteOnDeinitBase* >();
+        pSVData->mpDeinitDeleteList = new std::list< DeleteOnDeinitBase* >;
     pSVData->mpDeinitDeleteList->push_back( i_pContainer );
 }
 

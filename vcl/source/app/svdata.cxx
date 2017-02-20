@@ -201,7 +201,7 @@ FieldUnitStringList* ImplGetFieldUnits()
         {
             ResStringArray aUnits( ResId (SV_FUNIT_STRINGS, *pResMgr) );
             sal_uInt32 nUnits = aUnits.Count();
-            pSVData->maCtrlData.mpFieldUnitStrings = new FieldUnitStringList();
+            pSVData->maCtrlData.mpFieldUnitStrings = new FieldUnitStringList;
             pSVData->maCtrlData.mpFieldUnitStrings->reserve( nUnits );
             for( sal_uInt32 i = 0; i < nUnits; i++ )
             {
@@ -222,7 +222,7 @@ FieldUnitStringList* ImplGetCleanedFieldUnits()
         if( pUnits )
         {
             size_t nUnits = pUnits->size();
-            pSVData->maCtrlData.mpCleanUnitStrings = new FieldUnitStringList();
+            pSVData->maCtrlData.mpCleanUnitStrings = new FieldUnitStringList;
             pSVData->maCtrlData.mpCleanUnitStrings->reserve( nUnits );
             for( size_t i = 0; i < nUnits; ++i )
             {

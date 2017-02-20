@@ -2256,7 +2256,7 @@ void Menu::ImplFillLayoutData() const
 {
     if (pWindow && pWindow->IsReallyVisible())
     {
-        mpLayoutData = new MenuLayoutData();
+        mpLayoutData = new MenuLayoutData;
         if (IsMenuBar())
         {
             ImplPaint(*pWindow, 0, 0, nullptr, false, true); // FIXME

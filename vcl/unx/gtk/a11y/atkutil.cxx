@@ -519,7 +519,7 @@ WindowList g_aWindowList;
 static void handle_get_focus(::VclWindowEvent const * pEvent)
 {
     static rtl::Reference< DocumentFocusListener > aDocumentFocusListener =
-        new DocumentFocusListener();
+        new DocumentFocusListener;
 
     vcl::Window *pWindow = pEvent->GetWindow();
 

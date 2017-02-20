@@ -450,7 +450,7 @@ void PPDParser::initPPDFiles(PPDCache &rPPDCache)
     if( rPPDCache.pAllPPDFiles )
         return;
 
-    rPPDCache.pAllPPDFiles = new std::unordered_map< OUString, OUString, OUStringHash >();
+    rPPDCache.pAllPPDFiles = new std::unordered_map< OUString, OUString, OUStringHash >;
 
     // check installation directories
     std::list< OUString > aPathList;

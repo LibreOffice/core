@@ -46,7 +46,7 @@ namespace vcl
 
 OldStylePrintAdaptor::OldStylePrintAdaptor( const VclPtr< Printer >& i_xPrinter )
     : PrinterController( i_xPrinter )
-    , mpData( new ImplOldStyleAdaptorData() )
+    , mpData( new ImplOldStyleAdaptorData )
 {
 }
 
