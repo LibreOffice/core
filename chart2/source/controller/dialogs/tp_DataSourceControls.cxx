@@ -37,7 +37,7 @@ VCL_BUILDER_FACTORY_CONSTRUCTOR(SeriesListBox, 0)
 
 SvTreeListEntry* SeriesListBox::CreateEntry() const
 {
-    return new SeriesEntry();
+    return new SeriesEntry;
 }
 
 } //  namespace chart

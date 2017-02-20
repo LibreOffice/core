@@ -61,7 +61,7 @@ namespace chart
 
 extern "C" {
     SAL_DLLPUBLIC_EXPORT opengl::OpenglShapeFactory* getOpenglShapeFactory()
-                              {    return new opengl::OpenglShapeFactory();}
+                              {    return new opengl::OpenglShapeFactory;}
     }
 
 using dummy::DummyCylinder;

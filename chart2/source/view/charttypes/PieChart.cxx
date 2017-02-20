@@ -648,7 +648,7 @@ void PieChart::createShapes()
                 std::unique_ptr< tPropertyNameValueMap > apOverwritePropertiesMap(nullptr);
                 if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
                 {
-                    apOverwritePropertiesMap.reset( new tPropertyNameValueMap() );
+                    apOverwritePropertiesMap.reset( new tPropertyNameValueMap );
                     (*apOverwritePropertiesMap)["FillColor"] <<=
                         m_xColorScheme->getColorByIndex( nPointIndex );
                 }

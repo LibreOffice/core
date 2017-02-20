@@ -504,7 +504,7 @@ GL3DBarChart::GL3DBarChart(
     mpWindow(pWindow),
     mpCamera(nullptr),
     mbValidContext(true),
-    mpTextCache(new opengl3D::TextCache()),
+    mpTextCache(new opengl3D::TextCache),
     mnMaxX(0),
     mnMaxY(0),
     mnDistance(0.0),

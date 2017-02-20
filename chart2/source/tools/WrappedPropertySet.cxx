@@ -426,7 +426,7 @@ tWrappedPropertyMap& WrappedPropertySet::getWrappedPropertyMap()
         if(!p)
         {
             std::vector< WrappedProperty* > aPropList( createWrappedProperties() );
-            p = new tWrappedPropertyMap();
+            p = new tWrappedPropertyMap;
 
             for( std::vector< WrappedProperty* >::const_iterator aIt = aPropList.begin(); aIt!=aPropList.end(); ++aIt )
             {
