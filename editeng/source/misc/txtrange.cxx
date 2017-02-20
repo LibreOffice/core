@@ -491,7 +491,7 @@ void SvxBoundArgs::Concat( const tools::PolyPolygon* pPoly )
     SetConcat( true );
     DBG_ASSERT( pPoly, "Nothing to do?" );
     LongDqPtr pOld = pLongArr;
-    pLongArr = new std::deque<long>();
+    pLongArr = new std::deque<long>;
     aBoolArr.clear();
     bInner = false;
     Calc( *pPoly ); // Note that this updates pLongArr, which is why we swapped it out earlier.

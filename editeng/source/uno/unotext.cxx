@@ -2322,7 +2322,7 @@ SvxDummyTextSource::~SvxDummyTextSource()
 
 SvxEditSource* SvxDummyTextSource::Clone() const
 {
-    return new SvxDummyTextSource();
+    return new SvxDummyTextSource;
 }
 
 SvxTextForwarder* SvxDummyTextSource::GetTextForwarder()

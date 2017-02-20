@@ -536,7 +536,7 @@ sal_Int16 SvxUnoNumberingRules::Compare( const Any& Any1, const Any& Any2 )
 
 Reference< XAnyCompare > SvxCreateNumRuleCompare() throw()
 {
-    return new SvxUnoNumberingRulesCompare();
+    return new SvxUnoNumberingRulesCompare;
 }
 
 css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule() throw()

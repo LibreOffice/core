@@ -1149,7 +1149,7 @@ SvxRTFItemStackType::~SvxRTFItemStackType()
 void SvxRTFItemStackType::Add(std::unique_ptr<SvxRTFItemStackType> pIns)
 {
     if (!m_pChildList)
-         m_pChildList = new SvxRTFItemStackList();
+         m_pChildList = new SvxRTFItemStackList;
     m_pChildList->push_back(std::move(pIns));
 }
 
