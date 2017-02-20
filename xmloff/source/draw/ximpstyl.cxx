@@ -631,7 +631,7 @@ void SdXMLPresentationPageLayoutContext::EndElement()
                     {
                         if(pObj1->GetX() < pObj2->GetX())
                         {
-                            mnTypeId = 16; // AUTOLAYOUT_2OBJOVERTEXT
+                            mnTypeId = AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT;
                         }
                         else
                         {

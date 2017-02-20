@@ -1173,7 +1173,7 @@ bool ImplSdPPTImport::Import()
                         eAutoLayout = AUTOLAYOUT_TITLE_2CONTENT_CONTENT;
                     break;
                     case PptSlideLayout::TOPROW2COLUMN :
-                        eAutoLayout = AUTOLAYOUT_2OBJOVERTEXT;
+                        eAutoLayout = AUTOLAYOUT_TITLE_2CONTENT_OVER_CONTENT;
                     break;
                     case PptSlideLayout::FOUROBJECTS :
                         eAutoLayout = AUTOLAYOUT_4OBJ;
