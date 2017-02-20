@@ -791,10 +791,6 @@ sal_uInt32 PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, Pr
         }
         case PrinterCapType::SetOrientation:
             return 1;
-        case PrinterCapType::SetDuplex:
-            return 1;
-        case PrinterCapType::SetPaperBin:
-            return 1;
         case PrinterCapType::SetPaperSize:
             return 1;
         case PrinterCapType::SetPaper:

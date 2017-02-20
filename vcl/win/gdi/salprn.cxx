@@ -1241,12 +1241,6 @@ sal_uInt32 WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, P
                 return TRUE;
             return FALSE;
 
-        case PrinterCapType::SetPaperBin:
-            nRet = ImplDeviceCaps( this, DC_BINS, nullptr, pSetupData );
-            if ( nRet && (nRet != GDI_ERROR) )
-                return TRUE;
-            return FALSE;
-
         case PrinterCapType::SetPaperSize:
         case PrinterCapType::SetPaper:
             nRet = ImplDeviceCaps( this, DC_PAPERS, nullptr, pSetupData );

@@ -75,13 +75,11 @@ enum class PrinterCapType
     Copies             = 2,
     CollateCopies      = 3,
     SetOrientation     = 4,
-    SetPaperBin        = 5,
     SetPaperSize       = 6,
     SetPaper           = 7,
     Fax                = 8,
     PDF                = 9,
     ExternalDialog     = 10,
-    SetDuplex          = 11,
     UsePullModel       = 12,
 };
 
