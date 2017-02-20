@@ -709,7 +709,7 @@ static struct hostent* osl_gethostbyname_r (
     const char *name, struct hostent *result,
     char *buffer, int buflen, int *h_errnop)
 {
-#if defined(LINUX) || defined(ANDROID) || defined(FREEBSD) || defined(DRAGONFLY) || defined(EMSCRIPTEN)
+#if defined(LINUX) || defined(ANDROID) || defined(FREEBSD) || defined(DRAGONFLY)
     struct hostent *result_; /* will be the same as result */
     int e;
     e = gethostbyname_r (name, result, buffer, buflen,

@@ -85,7 +85,7 @@
 
 #endif
 
-#if defined(ANDROID) || defined(EMSCRIPTEN)
+#if defined(ANDROID)
 #   include <pthread.h>
 #   include <sys/file.h>
 #   include <sys/ioctl.h>
@@ -242,8 +242,7 @@ int macxp_resolveAlias(char *path, int buflen);
     !defined(AIX)     && \
     !defined(__sun) && !defined(MACOSX) && \
     !defined(OPENBSD) && !defined(DRAGONFLY) && \
-    !defined(IOS) && !defined(ANDROID) && \
-    !defined(EMSCRIPTEN)
+    !defined(IOS) && !defined(ANDROID)
 #   error "Target platform not specified!"
 #endif
 

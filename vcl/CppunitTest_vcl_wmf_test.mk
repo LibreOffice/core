@@ -124,12 +124,8 @@ ifeq ($(ENABLE_HEADLESS),TRUE)
 $(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
     cairo \
     freetype \
-))
-ifneq ($(OS),EMSCRIPTEN)
-$(eval $(call gb_CppunitTest_use_externals,vcl_wmf_test,\
     fontconfig \
 ))
-endif
 else
 ifeq ($(OS),LINUX)
 $(eval $(call gb_CppunitTest_add_libs,vcl_wmf_test,\
