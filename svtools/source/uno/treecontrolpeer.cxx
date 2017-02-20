@@ -159,7 +159,7 @@ void TreeControlPeer::addEntry( UnoTreeListEntry* pEntry )
     {
         if( !mpTreeNodeMap )
         {
-            mpTreeNodeMap = new TreeNodeMap();
+            mpTreeNodeMap = new TreeNodeMap;
         }
 
         (*mpTreeNodeMap)[ pEntry->mxNode ] = pEntry;

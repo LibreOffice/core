@@ -482,7 +482,7 @@ void LineListBox::ImplInit()
 {
     aTxtSize.Width()  = GetTextWidth( " " );
     aTxtSize.Height() = GetTextHeight();
-    pLineList   = new ImpLineList();
+    pLineList   = new ImpLineList;
     eUnit       = FUNIT_POINT;
     eSourceUnit = FUNIT_POINT;
 

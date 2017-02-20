@@ -109,7 +109,7 @@ namespace svt
 
     void EditBrowseBox::impl_construct()
     {
-        m_aImpl.reset(new EditBrowseBoxImpl());
+        m_aImpl.reset(new EditBrowseBoxImpl);
 
         SetCompoundControl(true);
         SetGridLineColor( Color( COL_LIGHTGRAY ) );

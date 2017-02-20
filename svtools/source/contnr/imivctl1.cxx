@@ -117,7 +117,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     bHighlightFramePressed = false;
     eSelectionMode = SelectionMode::Multiple;
     pView = pCurView;
-    pZOrderList = new SvxIconChoiceCtrlEntryList_impl();
+    pZOrderList = new SvxIconChoiceCtrlEntryList_impl;
     ePositionMode = SvxIconChoiceCtrlPositionMode::Free;
     SetStyle( nWinStyle );
     nFlags = IconChoiceFlags::NONE;
@@ -660,8 +660,8 @@ void SvxIconChoiceCtrl_Impl::Paint(vcl::RenderContext& rRenderContext, const Rec
     rRenderContext.Push(PushFlags::CLIPREGION);
     rRenderContext.SetClipRegion(vcl::Region(rRect));
 
-    SvxIconChoiceCtrlEntryList_impl* pNewZOrderList = new SvxIconChoiceCtrlEntryList_impl();
-    std::unique_ptr<SvxIconChoiceCtrlEntryList_impl> pPaintedEntries(new SvxIconChoiceCtrlEntryList_impl());
+    SvxIconChoiceCtrlEntryList_impl* pNewZOrderList = new SvxIconChoiceCtrlEntryList_impl;
+    std::unique_ptr<SvxIconChoiceCtrlEntryList_impl> pPaintedEntries(new SvxIconChoiceCtrlEntryList_impl);
 
     size_t nPos = 0;
     while(nCount)
