@@ -130,7 +130,9 @@ rtl_cache_hash_rescale (
 
         cache->m_hash_table = new_table;
         cache->m_hash_size  = new_size;
-        cache->m_hash_shift = highbit(cache->m_hash_size) - 1;
+        const auto bit = highbit(cache->m_hash_size);
+        assert(bit > 0);
+        cache->m_hash_shift = bit - 1;
 
         for (i = 0; i < old_size; i++)
         {
