@@ -265,7 +265,7 @@ private:
 
         if (iso_lang_replacement_table_.end() == iter)
         {
-            prt = new replacement_table_t();
+            prt = new replacement_table_t;
             iso_lang_replacement_table_.insert(std::make_pair(iso_lang, prt));
         }
         else
