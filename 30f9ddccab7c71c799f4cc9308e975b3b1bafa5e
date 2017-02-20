@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_cc045ec8",
+        "filename": "configmgr/source/components.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-20T06:29:57Z",
+      "side": 1,
+      "message": "dropped the comment?",
+      "revId": "30f9ddccab7c71c799f4cc9308e975b3b1bafa5e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
