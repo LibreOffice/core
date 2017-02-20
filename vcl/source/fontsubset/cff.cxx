@@ -25,8 +25,6 @@
 
 #include <vcl/strhelper.hxx>
 
-//#define IGNORE_HINTS
-
 typedef unsigned char U8;
 typedef unsigned short U16;
 typedef long long S64;
@@ -473,15 +471,12 @@ void CffSubsetterContext::addHints( bool bVerticalHints)
 
     assert( (mnHintSize + mnStackIdx) <= 2*NMAXHINTS);
 
-#ifdef IGNORE_HINTS
-    mnHintSize += mnStackIdx;
-#else
     ValType nHintOfs = 0;
     for( int i = 0; i < mnStackIdx; ++i) {
         nHintOfs += mnValStack[ i ];
         mnHintStack[ mnHintSize++] = nHintOfs;
     }
-#endif // IGNORE_HINTS
+
     if( !bVerticalHints)
         mnHorzHintSize = mnHintSize;
 
@@ -760,13 +755,11 @@ void CffSubsetterContext::convertOneTypeOp()
     case TYPE2OP::HSTEM:
     case TYPE2OP::VSTEM:
         addHints( nType2Op == TYPE2OP::VSTEM );
-#ifndef IGNORE_HINTS
         for( i = 0; i < mnHintSize; i+=2 ) {
             writeType1Val( mnHintStack[i]);
             writeType1Val( mnHintStack[i+1] - mnHintStack[i]);
             writeTypeOp( nType2Op );
         }
-#endif // IGNORE_HINTS
         break;
     case TYPE2OP::HSTEMHM:
     case TYPE2OP::VSTEMHM:
@@ -775,10 +768,6 @@ void CffSubsetterContext::convertOneTypeOp()
     case TYPE2OP::CNTRMASK:
         // TODO: replace cntrmask with vstem3/hstem3
         addHints( true);
-#ifdef IGNORE_HINTS
-        mpReadPtr += (mnHintSize + 15) / 16;
-        mbIgnoreHints = true;
-#else
         {
         U8 nMaskBit = 0;
         U8 nMaskByte = 0;
@@ -796,13 +785,9 @@ void CffSubsetterContext::convertOneTypeOp()
             mnCntrMask |= (1U << i);
         }
         }
-#endif
         break;
     case TYPE2OP::HINTMASK:
         addHints( true);
-#ifdef IGNORE_HINTS
-        mpReadPtr += (mnHintSize + 15) / 16;
-#else
         {
         sal_Int32 nHintMask = 0;
         int nCntrBits[2] = {0,0};
@@ -840,7 +825,6 @@ void CffSubsetterContext::convertOneTypeOp()
                 writeTypeEsc( bHorz ? TYPE1OP::HSTEM3 : TYPE1OP::VSTEM3);
         }
         }
-#endif
         break;
     case TYPE2OP::CALLSUBR:
     case TYPE2OP::CALLGSUBR:
@@ -1934,7 +1918,6 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     // which always starts with a privdict
     // count the privdict entries
     int nPrivEntryCount = 9;
-#if !defined(IGNORE_HINTS)
     // emit blue hints only if non-default values
     nPrivEntryCount += int(!mpCffLocal->maOtherBlues.empty());
     nPrivEntryCount += int(!mpCffLocal->maFamilyBlues.empty());
@@ -1952,7 +1935,6 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
     nPrivEntryCount += int(mpCffLocal->mnLangGroup != 0);
     nPrivEntryCount += int(mpCffLocal->mnLangGroup == 1);
     nPrivEntryCount += int(mpCffLocal->mbForceBold);
-#endif // IGNORE_HINTS
     // emit the privdict header
     pOut += sprintf( pOut,
         "\110\104\125 "
@@ -1964,9 +1946,6 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         "/password 5839 def\n",     // TODO: mnRDCryptSeed?
             nPrivEntryCount);
 
-#if defined(IGNORE_HINTS)
-    pOut += sprintf( pOut, "/BlueValues []ND\n");   // BlueValues are mandatory
-#else
     // emit blue hint related privdict entries
     if( !mpCffLocal->maBlueValues.empty())
         rEmitter.emitValVector( "/BlueValues [", "]ND\n", mpCffLocal->maBlueValues);
@@ -2018,7 +1997,6 @@ bool CffSubsetterContext::emitAsType1( Type1Emitter& rEmitter,
         pOut += dbl2str( pOut, mpCffLocal->mfExpFactor);
         pOut += sprintf( pOut, " def\n");
     }
-#endif // IGNORE_HINTS
 
     // emit remaining privdict entries
     pOut += sprintf( pOut, "/UniqueID %d def\n", nUniqueId);
