@@ -3774,14 +3774,7 @@ uno::Reference<accessibility::XAccessibleEditableText>
     if (xState.is())
     {
         if (xState->contains(accessibility::AccessibleStateType::FOCUSED))
-        {
-            uno::Reference< accessibility::XAccessibleEditableText > xText =
-                uno::Reference<accessibility::XAccessibleEditableText>(xContext, uno::UNO_QUERY);
-            if (xText.is())
-                return xText;
-        }
-        if (xState->contains(accessibility::AccessibleStateType::MANAGES_DESCENDANTS))
-            return uno::Reference< accessibility::XAccessibleEditableText >();
+            return uno::Reference<accessibility::XAccessibleEditableText>(xContext, uno::UNO_QUERY);
     }
 
     for (sal_Int32 i = 0; i < xContext->getAccessibleChildCount(); ++i)
