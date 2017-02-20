@@ -105,6 +105,7 @@ public:
     void testGetFontSubset();
     void testCommentsWriter();
     void testCommentsCalc();
+    void testCommentsImpress();
 
     CPPUNIT_TEST_SUITE(DesktopLOKTest);
     CPPUNIT_TEST(testGetStyles);
@@ -141,6 +142,7 @@ public:
     CPPUNIT_TEST(testGetFontSubset);
     CPPUNIT_TEST(testCommentsWriter);
     CPPUNIT_TEST(testCommentsCalc);
+    CPPUNIT_TEST(testCommentsImpress);
     CPPUNIT_TEST_SUITE_END();
 
     uno::Reference<lang::XComponent> mxComponent;
@@ -1923,6 +1925,64 @@ void DesktopLOKTest::testCommentsCalc()
                 CPPUNIT_ASSERT_EQUAL(std::string("Sheet5.H18"), rComment.second.get<std::string>("id"));
                 CPPUNIT_ASSERT_EQUAL(std::string("Comment2"), rComment.second.get<std::string>("text"));
                 CPPUNIT_ASSERT_EQUAL(std::string("8925, 4335, 1274, 254"), rComment.second.get<std::string>("cellPos"));
+            }
+            break;
+        }
+
+        ++nIdx;
+    }
+
+    // We checked all the comments
+    CPPUNIT_ASSERT_EQUAL(2, nIdx);
+
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
+    comphelper::LibreOfficeKit::setActive(false);
+}
+
+
+void DesktopLOKTest::testCommentsImpress()
+{
+    comphelper::LibreOfficeKit::setActive();
+    // Disable tiled rendering for comments
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+
+    LibLODocument_Impl* pDocument = loadDoc("blank_presentation.odp");
+    pDocument->m_pDocumentClass->initializeForRendering(pDocument, nullptr);
+
+    // Can we get all the comments using .uno:ViewAnnotations command ?
+    boost::property_tree::ptree aTree;
+    char* pJSON = pDocument->m_pDocumentClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
+    std::stringstream aStream(pJSON);
+    free(pJSON);
+    CPPUNIT_ASSERT(!aStream.str().empty());
+    boost::property_tree::read_json(aStream, aTree);
+    // There are 2 comments in the document already
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTree.get_child("comments").size());
+
+    // Check if all comment fields have valid data
+    int nIdx = 0;
+    for (const auto& rComment : aTree.get_child("comments"))
+    {
+        switch(nIdx)
+        {
+            case 0:
+            {
+                CPPUNIT_ASSERT(rComment.second.get<int>("id") > 0);
+                CPPUNIT_ASSERT_EQUAL(std::string("This is comment1"), rComment.second.get<std::string>("text"));
+                CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), rComment.second.get<std::string>("author"));
+                css::util::DateTime aDateTime;
+                OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime").c_str());
+                CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
+            }
+            break;
+            case 1:
+            {
+                CPPUNIT_ASSERT(rComment.second.get<int>("id") > 0);
+                CPPUNIT_ASSERT_EQUAL(std::string("This is comment2"), rComment.second.get<std::string>("text"));
+                CPPUNIT_ASSERT_EQUAL(std::string("LOK User2"), rComment.second.get<std::string>("author"));
+                css::util::DateTime aDateTime;
+                OUString aDateTimeString = OUString::createFromAscii(rComment.second.get<std::string>("dateTime").c_str());
+                CPPUNIT_ASSERT(utl::ISO8601parseDateTime(aDateTimeString, aDateTime));
             }
             break;
         }
