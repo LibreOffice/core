@@ -109,21 +109,6 @@ private:
     }
 };
 
-class BoxKernel : public Kernel
-{
-public:
-    BoxKernel() : Kernel () {}
-
-private:
-    virtual double  GetWidth() const override { return 0.5; }
-    virtual double  Calculate (double x) const override
-    {
-        if (-0.5 <= x && x < 0.5)
-            return 1.0;
-        return 0.0;
-    }
-};
-
 } // namespace vcl
 
 #endif // INCLUDED_VCL_RESAMPLEKERNEL_HXX

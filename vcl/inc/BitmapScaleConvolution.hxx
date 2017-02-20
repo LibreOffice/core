@@ -27,7 +27,6 @@ namespace vcl
 
 enum class ConvolutionKernelType
 {
-    Box       = 0,
     BiLinear  = 1,
     BiCubic   = 2,
     Lanczos3  = 3,
