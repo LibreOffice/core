@@ -302,9 +302,6 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
 
         case WindowType::MODELESSDIALOG:
         case WindowType::MODALDIALOG:
-        case WindowType::SYSTEMDIALOG:
-        case WindowType::PRINTERSETUPDIALOG:
-        case WindowType::PRINTDIALOG:
         case WindowType::TABDIALOG:
         case WindowType::BUTTONDIALOG:
         case WindowType::DIALOG: nRole = accessibility::AccessibleRole::DIALOG; break;
@@ -315,14 +312,8 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WindowType::HELPBUTTON:
         case WindowType::IMAGEBUTTON:
         case WindowType::MOREBUTTON:
-        case WindowType::SPINBUTTON:
-        case WindowType::BUTTON: nRole = accessibility::AccessibleRole::PUSH_BUTTON; break;
+        case WindowType::SPINBUTTON: nRole = accessibility::AccessibleRole::PUSH_BUTTON; break;
         case WindowType::MENUBUTTON: nRole = accessibility::AccessibleRole::BUTTON_MENU; break;
-
-        case WindowType::PATHDIALOG: nRole = accessibility::AccessibleRole::DIRECTORY_PANE; break;
-        case WindowType::FILEDIALOG: nRole = accessibility::AccessibleRole::FILE_CHOOSER; break;
-        case WindowType::COLORDIALOG: nRole = accessibility::AccessibleRole::COLOR_CHOOSER; break;
-        case WindowType::FONTDIALOG: nRole = accessibility::AccessibleRole::FONT_CHOOSER; break;
 
         case WindowType::RADIOBUTTON: nRole = accessibility::AccessibleRole::RADIO_BUTTON; break;
         case WindowType::TRISTATEBOX:
@@ -380,8 +371,7 @@ sal_uInt16 Window::getDefaultAccessibleRole() const
         case WindowType::TABPAGE: nRole = accessibility::AccessibleRole::PANEL; break;
         case WindowType::TABCONTROL: nRole = accessibility::AccessibleRole::PAGE_TAB_LIST; break;
 
-        case WindowType::DOCKINGWINDOW:
-        case WindowType::SYSWINDOW:      nRole = (mpWindowImpl->mbFrame) ? accessibility::AccessibleRole::FRAME :
+        case WindowType::DOCKINGWINDOW: nRole = (mpWindowImpl->mbFrame) ? accessibility::AccessibleRole::FRAME :
                                                                       accessibility::AccessibleRole::PANEL; break;
 
         case WindowType::FLOATINGWINDOW: nRole = ( mpWindowImpl->mbFrame ||

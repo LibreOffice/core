@@ -523,7 +523,7 @@ namespace
                 isEnabledInLayout(pWindow) && pWindow->IsInputEnabled() &&
                 //Pure window shouldn't get window after controls such as
                 //buttons.
-                (pWindow->GetType() != WindowType::WINDOW && pWindow->GetType() != WindowType::SYSWINDOW &&
+                (pWindow->GetType() != WindowType::WINDOW &&
                   pWindow->GetType() != WindowType::WORKWINDOW && pWindow->GetType() != WindowType::CONTROL)
                );
     }

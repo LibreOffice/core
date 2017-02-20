@@ -1754,7 +1754,6 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             switch ( eWinType )
             {
                 case WindowType::COMBOBOX:
-                case WindowType::BUTTON:
                 case WindowType::PUSHBUTTON:
                 case WindowType::OKBUTTON:
                 case WindowType::CANCELBUTTON:
@@ -1790,7 +1789,6 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
             if  (  ( eWinType == WindowType::FIXEDTEXT )
                 || ( eWinType == WindowType::CHECKBOX )
                 || ( eWinType == WindowType::RADIOBUTTON )
-                || ( eWinType == WindowType::BUTTON )
                 || ( eWinType == WindowType::PUSHBUTTON )
                 || ( eWinType == WindowType::OKBUTTON )
                 || ( eWinType == WindowType::CANCELBUTTON )
@@ -2057,7 +2055,6 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
                     case WindowType::RADIOBUTTON:
                     case WindowType::LISTBOX:
                     case WindowType::COMBOBOX:
-                    case WindowType::BUTTON:
                     case WindowType::PUSHBUTTON:
                     case WindowType::OKBUTTON:
                     case WindowType::CANCELBUTTON:
@@ -2081,7 +2078,6 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
                 if  (  ( eWinType == WindowType::FIXEDTEXT )
                     || ( eWinType == WindowType::CHECKBOX )
                     || ( eWinType == WindowType::RADIOBUTTON )
-                    || ( eWinType == WindowType::BUTTON )
                     || ( eWinType == WindowType::PUSHBUTTON )
                     || ( eWinType == WindowType::OKBUTTON )
                     || ( eWinType == WindowType::CANCELBUTTON )
