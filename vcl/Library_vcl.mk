@@ -594,15 +594,11 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 $(eval $(call gb_Library_use_externals,vcl,\
 	cairo \
 	freetype \
+	fontconfig \
 ))
 ifeq ($(OS), $(filter LINUX %BSD SOLARIS, $(OS)))
 $(eval $(call gb_Library_add_libs,vcl,\
     -lpthread \
-))
-endif
-ifneq ($(OS),EMSCRIPTEN)
-$(eval $(call gb_Library_use_externals,vcl,\
-	fontconfig \
 ))
 endif
 else

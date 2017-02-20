@@ -845,27 +845,6 @@ linux-android*)
     BUILD_TYPE="$BUILD_TYPE CAIRO FONTCONFIG FREETYPE"
     ;;
 
-emscripten*)
-    build_gstreamer_1_0=no
-    build_gstreamer_0_10=no
-    enable_lotuswordpro=no
-    enable_mpl_subset=yes
-    enable_coinmp=yes
-    enable_lpsolve=no
-    enable_report_builder=no
-    with_theme="tango"
-    test_cups=no
-    test_dbus=no
-    test_fontconfig=no
-    test_freetype=no
-    test_gtk=no
-    test_tde=no
-    test_kde4=no
-    test_randr=no
-    test_xrender=no
-    _os=Emscripten
-    ;;
-
 *)
     AC_MSG_ERROR([$host_os operating system is not suitable to build LibreOffice for!])
     ;;
@@ -4402,17 +4381,6 @@ linux-android*)
     esac
     ;;
 
-emscripten*)
-    COM=emcc
-    USING_X11=
-    OS=EMSCRIPTEN
-    RTL_OS=Emscripten
-    P_SEP=:
-    CPUNAME=INTEL
-    RTL_ARCH=x86
-    PLATFORMID=linux_x86
-    ;;
-
 *netbsd*)
     COM=GCC
     USING_X11=TRUE
@@ -5530,7 +5498,7 @@ else
 fi
 
 dnl check for GNU C++ compiler version
-if test "$GXX" = "yes" -a "$CXX" != "emcc"; then
+if test "$GXX" = "yes"; then
     AC_MSG_CHECKING([the GNU C++ compiler version])
 
     _gpp_version=`$CXX -dumpversion`
@@ -7548,13 +7516,10 @@ AC_MSG_CHECKING([which zlib to use])
 if test "$with_system_zlib" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_ZLIB=TRUE
-    if test "$_os" != "Emscripten"; then
-        # Emscripten provides its own zlib, don't check for that
-        AC_CHECK_HEADER(zlib.h, [],
-            [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
-        AC_CHECK_LIB(z, deflate, [ ZLIB_LIBS=-lz ],
-            [AC_MSG_ERROR(zlib not found or functional)], [])
-    fi
+    AC_CHECK_HEADER(zlib.h, [],
+        [AC_MSG_ERROR(zlib.h not found. install zlib)], [])
+    AC_CHECK_LIB(z, deflate, [ ZLIB_LIBS=-lz ],
+        [AC_MSG_ERROR(zlib not found or functional)], [])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ZLIB=
@@ -11579,8 +11544,7 @@ dnl ===================================================================
 ENABLE_LIBLANGTAG=
 SYSTEM_LIBLANGTAG=
 AC_MSG_CHECKING([whether to use liblangtag])
-if test "$enable_liblangtag" = "yes" -o \
-        \( "$enable_liblangtag" = "" -a $_os != Emscripten \); then
+if test "$enable_liblangtag" = "yes" -o "$enable_liblangtag" = ""; then
     ENABLE_LIBLANGTAG=TRUE
     AC_MSG_RESULT([yes])
     AC_MSG_CHECKING([whether to use system liblangtag])

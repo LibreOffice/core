@@ -64,7 +64,7 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 			--disable-layout --disable-samples \
 			$(if $(CROSS_COMPILING),--disable-tools --disable-extras) \
 			$(if $(filter IOS ANDROID,$(OS)),--disable-dyload) \
-			$(if $(filter ANDROID EMSCRIPTEN,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
+			$(if $(filter ANDROID,$(OS)),--disable-strict ac_cv_c_bigendian=no) \
 			$(if $(filter SOLARIS AIX,$(OS)),--disable-64bit-libs) \
 			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),\
 				--with-data-packaging=static --enable-static --disable-shared --disable-dyload,\
