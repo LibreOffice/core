@@ -442,7 +442,7 @@ void XMLStyleExport::exportStyleFamily(
                     xPropSet->getPropertySetInfo();
 
                 if (xPropSetInfo->hasPropertyByName( sFollowStyle ))
-                    pExportedStyles.reset(new std::set<OUString>());
+                    pExportedStyles.reset(new std::set<OUString>);
                 bFirstStyle = false;
             }
 

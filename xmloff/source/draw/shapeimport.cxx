@@ -102,7 +102,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
         SvXMLImport& rImporter,
         const uno::Reference< frame::XModel>& rModel,
         SvXMLImportPropertyMapper *pExtMapper )
-:   mpImpl( new XMLShapeImportHelperImpl() ),
+:   mpImpl( new XMLShapeImportHelperImpl ),
 
     mpPropertySetMapper(nullptr),
     mpPresPagePropsMapper(nullptr),

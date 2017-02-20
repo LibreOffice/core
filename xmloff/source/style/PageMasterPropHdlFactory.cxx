@@ -71,16 +71,16 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
         switch( nType )
         {
             case XML_PM_TYPE_PAGESTYLELAYOUT:
-                pHdl = new XMLPMPropHdl_PageStyleLayout();
+                pHdl = new XMLPMPropHdl_PageStyleLayout;
             break;
             case XML_PM_TYPE_NUMFORMAT:
-                pHdl = new XMLPMPropHdl_NumFormat();
+                pHdl = new XMLPMPropHdl_NumFormat;
             break;
             case XML_PM_TYPE_NUMLETTERSYNC:
-                pHdl = new XMLPMPropHdl_NumLetterSync();
+                pHdl = new XMLPMPropHdl_NumLetterSync;
             break;
             case XML_PM_TYPE_PAPERTRAYNUMBER:
-                pHdl = new XMLPMPropHdl_PaperTrayNumber();
+                pHdl = new XMLPMPropHdl_PaperTrayNumber;
             break;
             case XML_PM_TYPE_PRINTORIENTATION:
                 pHdl = new XMLNamedBoolPropertyHdl(
@@ -119,10 +119,10 @@ const XMLPropertyHandler* XMLPageMasterPropHdlFactory::GetPropertyHandler( sal_I
                 pHdl = new XMLNumberNonePropHdl( XML_CONTINUE, 2 );
             break;
             case XML_PM_TYPE_CENTER_HORIZONTAL:
-                pHdl = new XMLPMPropHdl_CenterHorizontal();
+                pHdl = new XMLPMPropHdl_CenterHorizontal;
             break;
             case XML_PM_TYPE_CENTER_VERTICAL:
-                pHdl = new XMLPMPropHdl_CenterVertical();
+                pHdl = new XMLPMPropHdl_CenterVertical;
             break;
             case XML_TYPE_TEXT_COLUMNS:
                 pHdl = new XMLTextColumnsPropertyHandler;

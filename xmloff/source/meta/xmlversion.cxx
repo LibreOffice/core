@@ -448,7 +448,7 @@ XMLVersionListPersistence_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new XMLVersionListPersistence());
+    return cppu::acquire(new XMLVersionListPersistence);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

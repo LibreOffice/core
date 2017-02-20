@@ -916,7 +916,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
             }
             case XML_SD_TYPE_PRESPAGE_DURATION :
             {
-                pHdl = new XMLDurationPropertyHdl();
+                pHdl = new XMLDurationPropertyHdl;
                 break;
             }
             case XML_SD_TYPE_TEXT_CROSSEDOUT :
@@ -1109,10 +1109,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             }
             case XML_SD_TYPE_CAPTION_IS_ESC_REL:
-                pHdl = new XMLIsPercentagePropertyHandler();
+                pHdl = new XMLIsPercentagePropertyHandler;
                 break;
             case XML_SD_TYPE_CAPTION_ESC_REL:
-                pHdl = new XMLCaptionEscapeRelative();
+                pHdl = new XMLCaptionEscapeRelative;
                 break;
             case XML_SD_TYPE_CAPTION_ESC_ABS:
                 pHdl = new XMLPercentOrMeasurePropertyHandler;
@@ -1147,7 +1147,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLMoveSizeProtectHdl( nType );
                 break;
             case XML_SD_TYPE_HEADER_FOOTER_VISIBILITY_TYPE:
-                pHdl = new XMLSdHeaderFooterVisibilityTypeHdl();
+                pHdl = new XMLSdHeaderFooterVisibilityTypeHdl;
                 break;
         }
 

@@ -201,7 +201,7 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             pPropHdl = new XMLPercentPropHdl( 2 );
             break;
         case XML_TYPE_DOUBLE_PERCENT :
-            pPropHdl = new XMLDoublePercentPropHdl();
+            pPropHdl = new XMLDoublePercentPropHdl;
             break;
         case XML_TYPE_NEG_PERCENT :
             pPropHdl = new XMLNegPercentPropHdl( 4 );
@@ -461,7 +461,7 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::CreatePropertyHandler( sal_
             pPropHdl = new XMLNumberWithoutZeroPropHdl( 2 );
             break;
         case XML_TYPE_NUMBER16_AUTO:
-            pPropHdl = new XMLNumberWithAutoInsteadZeroPropHdl();
+            pPropHdl = new XMLNumberWithAutoInsteadZeroPropHdl;
             break;
         case XML_TYPE_TEXT_VERTICAL_POS:
             pPropHdl = new XMLConstantsPropertyHandler( pXML_VertPos_Enum, XML_TOKEN_INVALID );

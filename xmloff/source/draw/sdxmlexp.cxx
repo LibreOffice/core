@@ -393,11 +393,11 @@ SdXMLExport::SdXMLExport(
     mnDocMasterPageCount(0L),
     mnDocDrawPageCount(0L),
     mnObjectCount(0L),
-    mpPageMasterInfoList(new ImpXMLEXPPageMasterList()),
-    mpPageMasterUsageList(new ImpXMLEXPPageMasterList()),
-    mpNotesPageMasterUsageList(new ImpXMLEXPPageMasterList()),
+    mpPageMasterInfoList(new ImpXMLEXPPageMasterList),
+    mpPageMasterUsageList(new ImpXMLEXPPageMasterList),
+    mpNotesPageMasterUsageList(new ImpXMLEXPPageMasterList),
     mpHandoutPageMaster(nullptr),
-    mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList()),
+    mpAutoLayoutInfoList(new ImpXMLAutoLayoutInfoList),
     mbIsDraw(bIsDraw),
     msPageLayoutNames( "PageLayoutNames" )
 {

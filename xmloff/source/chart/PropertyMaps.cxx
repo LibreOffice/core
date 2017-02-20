@@ -148,7 +148,7 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                                                cppu::UnoType<chart::ChartDataRowSource>::get());
                 break;
             case XML_SCH_TYPE_TEXT_ORIENTATION:
-                pHdl = new XMLTextOrientationHdl();
+                pHdl = new XMLTextOrientationHdl;
                 break;
 
             case XML_SCH_TYPE_INTERPOLATION:

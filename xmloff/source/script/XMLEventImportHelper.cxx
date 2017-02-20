@@ -31,7 +31,7 @@ using ::com::sun::star::uno::Sequence;
 
 XMLEventImportHelper::XMLEventImportHelper() :
     aFactoryMap(),
-    pEventNameMap(new NameMap()),
+    pEventNameMap(new NameMap),
     aEventNameMapList()
 {
 }
@@ -92,7 +92,7 @@ void XMLEventImportHelper::PushTranslationTable()
 {
     // save old map and install new one
     aEventNameMapList.push_back(pEventNameMap);
-    pEventNameMap = new NameMap();
+    pEventNameMap = new NameMap;
 }
 
 void XMLEventImportHelper::PopTranslationTable()

@@ -211,7 +211,7 @@ static bool has_states( const std::vector< XMLPropertyState >& xPropStates )
      if( !mbExportTables )
          return;
 
-    std::shared_ptr< XMLTableInfo > xTableInfo( new XMLTableInfo() );
+    std::shared_ptr< XMLTableInfo > xTableInfo( new XMLTableInfo );
     maTableInfoMap[xColumnRowRange] = xTableInfo;
 
     try

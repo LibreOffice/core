@@ -2501,7 +2501,7 @@ SvI18NMap& XMLTextImportHelper::GetRenameMap()
 {
     if (!m_xImpl->m_xRenameMap.get())
     {
-        m_xImpl->m_xRenameMap.reset( new SvI18NMap() );
+        m_xImpl->m_xRenameMap.reset( new SvI18NMap );
     }
     return *m_xImpl->m_xRenameMap;
 }

@@ -21,7 +21,7 @@
 #include <xmloff/xmlcnimp.hxx>
 #include <rtl/ustring.hxx>
 
-SvXMLAttrContainerData::SvXMLAttrContainerData() : pimpl( new SvXMLAttrCollection() )
+SvXMLAttrContainerData::SvXMLAttrContainerData() : pimpl( new SvXMLAttrCollection )
 {
 }
 

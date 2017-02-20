@@ -104,7 +104,7 @@ void XMLPropertyBackpatcher<A>::SetProperty(
         if (! aBackpatchListMap.count(sName))
         {
             // create backpatch list for this name
-            BackpatchListType* pTmp = new BackpatchListType() ;
+            BackpatchListType* pTmp = new BackpatchListType;
             aBackpatchListMap[sName] = static_cast<void*>(pTmp);
         }
 
