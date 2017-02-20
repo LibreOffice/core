@@ -523,7 +523,7 @@ public:
     void            RowInserted( long nRow, long nNumRows = 1, bool bDoPaint = true, bool bKeepSelection = false );
 
     // miscellaneous
-    void            ReserveControlArea( sal_uInt16 nWidth = USHRT_MAX );
+    bool            ReserveControlArea(sal_uInt16 nWidth = USHRT_MAX);
     Rectangle       GetControlArea() const;
     bool            ProcessKey( const KeyEvent& rEvt );
     void            Dispatch( sal_uInt16 nId );
