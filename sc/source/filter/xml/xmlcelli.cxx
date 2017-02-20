@@ -682,7 +682,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( sal_uInt16 nPr
         {
             bIsEmpty = false;
             if (!pDetectiveObjVec)
-                pDetectiveObjVec = new ScMyImpDetectiveObjVec();
+                pDetectiveObjVec = new ScMyImpDetectiveObjVec;
             pContext = new ScXMLDetectiveContext(
                 rXMLImport, nPrefix, rLName, pDetectiveObjVec );
         }

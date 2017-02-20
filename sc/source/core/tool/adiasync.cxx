@@ -48,7 +48,7 @@ ScAddInAsync::ScAddInAsync(sal_uLong nHandleP, LegacyFuncData* pFuncData, ScDocu
     meType(pFuncData->GetAsyncType()),
     bValid( false )
 {
-    pDocs = new ScAddInDocs();
+    pDocs = new ScAddInDocs;
     pDocs->insert( pDoc );
     theAddInAsyncTbl.insert( this );
 }

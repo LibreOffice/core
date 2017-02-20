@@ -1096,7 +1096,7 @@ public:
     void AddNamedExpression(ScMyNamedExpression* pMyNamedExpression)
     {
         if (!m_pMyNamedExpressions)
-            m_pMyNamedExpressions = new ScMyNamedExpressions();
+            m_pMyNamedExpressions = new ScMyNamedExpressions;
         m_pMyNamedExpressions->push_back(std::unique_ptr<ScMyNamedExpression>(pMyNamedExpression));
     }
 
@@ -1104,12 +1104,12 @@ public:
 
     void    AddLabelRange(const ScMyLabelRange* pMyLabelRange) {
         if (!pMyLabelRanges)
-            pMyLabelRanges = new ScMyLabelRanges();
+            pMyLabelRanges = new ScMyLabelRanges;
         pMyLabelRanges->push_back(pMyLabelRange); }
 
     void AddValidation(const ScMyImportValidation& rValidation) {
         if (!pValidations)
-            pValidations = new ScMyImportValidations();
+            pValidations = new ScMyImportValidations;
         pValidations->push_back(rValidation); }
     bool GetValidation(const OUString& sName, ScMyImportValidation& aValidation);
 

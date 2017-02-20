@@ -1074,7 +1074,7 @@ ScFunctionMgr::ScFunctionMgr() :
     OSL_ENSURE( pFuncList, "Functionlist not found." );
     sal_uInt32 catCount[MAX_FUNCCAT] = {0};
 
-    aCatLists[0] = new ::std::vector<const ScFuncDesc*>();
+    aCatLists[0] = new ::std::vector<const ScFuncDesc*>;
     aCatLists[0]->reserve(pFuncList->GetCount());
 
     // Retrieve all functions, store in cumulative ("All") category, and count
@@ -1093,7 +1093,7 @@ ScFunctionMgr::ScFunctionMgr() :
     // Allocate correct amount of space for categories
     for (sal_uInt16 i = 1; i < MAX_FUNCCAT; ++i)
     {
-        aCatLists[i] = new ::std::vector<const ScFuncDesc*>();
+        aCatLists[i] = new ::std::vector<const ScFuncDesc*>;
         aCatLists[i]->reserve(catCount[i]);
     }
 

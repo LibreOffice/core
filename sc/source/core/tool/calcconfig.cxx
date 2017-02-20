@@ -170,7 +170,7 @@ OUString ScOpCodeSetToSymbolicString(const ScCalcConfig::OpCodeSet& rOpCodes)
 
 ScCalcConfig::OpCodeSet ScStringToOpCodeSet(const OUString& rOpCodes)
 {
-    ScCalcConfig::OpCodeSet result(new std::set< OpCode >());
+    ScCalcConfig::OpCodeSet result(new std::set< OpCode >);
     formula::FormulaCompiler aCompiler;
     formula::FormulaCompiler::OpCodeMapPtr pOpCodeMap(aCompiler.GetOpCodeMap(css::sheet::FormulaLanguage::ENGLISH));
 

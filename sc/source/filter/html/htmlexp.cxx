@@ -1285,7 +1285,7 @@ void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
         }
         else
         {
-            pFileNameMap.reset( new std::map<OUString, OUString>() );
+            pFileNameMap.reset( new std::map<OUString, OUString> );
         }
 
         bool bRet = false;

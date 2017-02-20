@@ -3032,7 +3032,7 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                             pCellProt = nullptr;
                         }
 
-                        XclExpColor* pColor = new XclExpColor();
+                        XclExpColor* pColor = new XclExpColor;
                         if(!pColor->FillFromItemSet( rSet ))
                         {
                             delete pColor;

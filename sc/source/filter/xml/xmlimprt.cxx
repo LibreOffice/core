@@ -3040,7 +3040,7 @@ XMLNumberFormatAttributesExportHelper* ScXMLImport::GetNumberFormatAttributesExp
 ScMyStyleNumberFormats* ScXMLImport::GetStyleNumberFormats()
 {
     if (!pStyleNumberFormats)
-        pStyleNumberFormats = new ScMyStyleNumberFormats();
+        pStyleNumberFormats = new ScMyStyleNumberFormats;
     return pStyleNumberFormats;
 }
 

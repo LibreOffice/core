@@ -1611,7 +1611,7 @@ class InsertTabNumber : public unary_function<ScTokenRef, void>
 {
 public:
     InsertTabNumber() :
-        mpTabNumList(new list<SCTAB>())
+        mpTabNumList(new list<SCTAB>)
     {
     }
 
@@ -2780,7 +2780,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
         // updated, and bring the change back to the token list.
 
         ScRangeList aRanges;
-        m_pRangeIndices.reset(new vector<sal_uInt32>());
+        m_pRangeIndices.reset(new vector<sal_uInt32>);
         vector<ScTokenRef>::const_iterator itrBeg = m_aTokens.begin(), itrEnd = m_aTokens.end();
         for (vector<ScTokenRef>::const_iterator itr = itrBeg ;itr != itrEnd; ++itr)
         {

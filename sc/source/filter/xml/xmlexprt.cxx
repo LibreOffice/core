@@ -367,7 +367,7 @@ ScXMLExport::ScXMLExport(
         pMergedRangesContainer = new ScMyMergedRangesContainer();
         pValidationsContainer = new ScMyValidationsContainer();
         mpCellsItr.reset(new ScMyNotEmptyCellsIterator(*this));
-        pDefaults = new ScMyDefaultStyles();
+        pDefaults = new ScMyDefaultStyles;
     }
     pCellStyles = new ScFormatRangeStyles();
 
