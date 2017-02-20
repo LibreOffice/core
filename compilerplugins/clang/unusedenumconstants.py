@@ -116,6 +116,7 @@ def is_ignore(srcLoc):
          "codemaker/source/javamaker/classfile.hxx", # AccessFlags
          "basic/source/inc/filefmt.hxx", # FileOffset
          "basic/source/inc/opcodes.hxx", #  SbiOpcode
+         "sc/source/filter/inc/flttypes.hxx", # BiffTyp
         # unit test code
          "cppu/source/uno/check.cxx",
         # general weird nonsense going on
@@ -145,6 +146,8 @@ def is_ignore(srcLoc):
          "connectivity/source/inc/odbc/OTools.hxx", # ODBC3SQLFunctionId
          "include/formula/grammar.hxx", # FormulaGrammar::Grammar
          "basic/source/sbx/sbxres.hxx", # StringId
+         "sc/source/core/tool/chartpos.cxx", # CellState
+         "sc/source/core/data/global2.cxx", # State
         # Windows or OSX only
          "include/canvas/rendering/icolorbuffer.hxx",
          "include/vcl/commandevent.hxx",
