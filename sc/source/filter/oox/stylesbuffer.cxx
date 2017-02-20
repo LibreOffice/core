@@ -892,8 +892,8 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, bool bEditEngineText, bool bSkip
     if( maUsedFlags.mbHeightUsed )
     {
         sal_Int32 nHeight = maApiData.maDesc.Height;
-        // do we use EXC_FONTITEM_HF ( or is it just relevant for the binary filter )
-        if( bEditEngineText/* && (eType != EXC_FONTITEM_HF) */)     // do not convert header/footer height
+        // do we use XclFontItemType::HeaderFooter ( or is it just relevant for the binary filter )
+        if( bEditEngineText/* && (eType != XclFontItemType::HeaderFooter) */)     // do not convert header/footer height
             nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // 1 in == 72 pt
         SvxFontHeightItem aHeightItem( nHeight, 100, ATTR_FONT_HEIGHT );
         ScfTools::PutItem( rItemSet, aHeightItem, bEditEngineText ? EE_CHAR_FONTHEIGHT :  ATTR_FONT_HEIGHT, bSkipPoolDefs );

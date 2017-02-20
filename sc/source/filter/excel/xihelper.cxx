@@ -152,8 +152,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
         const XclImpFontBuffer& rFontBuffer = rRoot.GetFontBuffer();
         const XclFormatRunVec& rFormats = rString.GetFormats();
 
-        ScEditEngineDefaulter& rEE = (eType == EXC_FONTITEM_NOTE) ?
-            static_cast< ScEditEngineDefaulter& >( rRoot.GetDoc().GetNoteEngine() ) : rRoot.GetEditEngine();
+        ScEditEngineDefaulter& rEE = rRoot.GetEditEngine();
         rEE.SetText( rString.GetText() );
 
         SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
@@ -218,7 +217,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
 EditTextObject* XclImpStringHelper::CreateTextObject(
         const XclImpRoot& rRoot, const XclImpString& rString )
 {
-    return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, 0 );
+    return lclCreateTextObject( rRoot, rString, XclFontItemType::Editeng, 0 );
 }
 
 void XclImpStringHelper::SetToDocument(
@@ -228,7 +227,7 @@ void XclImpStringHelper::SetToDocument(
     if (rString.GetText().isEmpty())
         return;
 
-    ::std::unique_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, nXFIndex ) );
+    ::std::unique_ptr< EditTextObject > pTextObj( lclCreateTextObject( rRoot, rString, XclFontItemType::Editeng, nXFIndex ) );
 
     if (pTextObj.get())
     {
@@ -515,7 +514,7 @@ void XclImpHFConverter::SetAttribs()
     {
         SfxItemSet aItemSet( mrEE.GetEmptyItemSet() );
         XclImpFont aFont( GetRoot(), *mxFontData );
-        aFont.FillToItemSet( aItemSet, EXC_FONTITEM_HF );
+        aFont.FillToItemSet( aItemSet, XclFontItemType::HeaderFooter );
         mrEE.QuickSetAttribs( aItemSet, rSel );
         rSel.nStartPara = rSel.nEndPara;
         rSel.nStartPos = rSel.nEndPos;

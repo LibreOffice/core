@@ -300,7 +300,7 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
 void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, bool bSkipPoolDefs ) const
 {
     // true = edit engine Which-IDs (EE_CHAR_*); false = Calc Which-IDs (ATTR_*)
-    bool bEE = eType != EXC_FONTITEM_CELL;
+    bool bEE = eType != XclFontItemType::Cell;
 
 // item = the item to put into the item set
 // sc_which = the Calc Which-ID of the item
@@ -309,9 +309,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
     ScfTools::PutItem( rItemSet, item, (bEE ? (ee_which) : (sc_which)), bSkipPoolDefs )
 
 // Font item
-    // #i36997# do not set default Tahoma font from notes
-    bool bDefNoteFont = (eType == EXC_FONTITEM_NOTE) && (maData.maName.equalsIgnoreAsciiCase( "Tahoma" ));
-    if( mbFontNameUsed && !bDefNoteFont )
+    if( mbFontNameUsed )
     {
         rtl_TextEncoding eFontEnc = maData.GetFontEncoding();
         rtl_TextEncoding eTempTextEnc = (bEE && (eFontEnc == GetTextEncoding())) ?
@@ -342,7 +340,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
     if( mbHeightUsed )
     {
         sal_Int32 nHeight = maData.mnHeight;
-        if( bEE && (eType != EXC_FONTITEM_HF) )     // do not convert header/footer height
+        if( bEE && (eType != XclFontItemType::HeaderFooter) )     // do not convert header/footer height
             nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // 1 in == 72 pt
 
         SvxFontHeightItem aHeightItem( nHeight, 100, ATTR_FONT_HEIGHT );
@@ -1272,7 +1270,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 
     // font
     if( mbFontUsed )
-        GetFontBuffer().FillToItemSet( rItemSet, EXC_FONTITEM_CELL, mnXclFont, bSkipPoolDefs );
+        GetFontBuffer().FillToItemSet( rItemSet, XclFontItemType::Cell, mnXclFont, bSkipPoolDefs );
 
     // value format
     if( mbFmtUsed )
