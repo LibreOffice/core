@@ -335,7 +335,7 @@ typedef std::vector< std::pair < Type , void* > > t_type2ptr;
 OMultiTypeInterfaceContainerHelper::OMultiTypeInterfaceContainerHelper( Mutex & rMutex_ )
     : rMutex( rMutex_ )
 {
-    m_pMap = new t_type2ptr();
+    m_pMap = new t_type2ptr;
 }
 
 OMultiTypeInterfaceContainerHelper::~OMultiTypeInterfaceContainerHelper()
@@ -586,7 +586,7 @@ sal_Int32 OMultiTypeInterfaceContainerHelperInt32::addInterface(
 {
     ::osl::MutexGuard aGuard( rMutex );
     if (!m_pMap)
-        m_pMap = new t_long2ptr();
+        m_pMap = new t_long2ptr;
     t_long2ptr * pMap = static_cast<t_long2ptr *>(m_pMap);
     t_long2ptr::iterator iter = findLong( pMap, rKey );
      if( iter == pMap->end() )
