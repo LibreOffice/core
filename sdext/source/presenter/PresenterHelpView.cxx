@@ -349,7 +349,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
 
 void PresenterHelpView::ReadHelpStrings()
 {
-    mpTextContainer.reset(new TextContainer());
+    mpTextContainer.reset(new TextContainer);
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
         "/org.openoffice.Office.PresenterScreen/",
@@ -668,7 +668,7 @@ void LineDescriptorList::FormatText (
 {
     LineDescriptor aLineDescriptor;
 
-    mpLineDescriptors.reset(new vector<LineDescriptor>());
+    mpLineDescriptors.reset(new vector<LineDescriptor>);
 
     vector<OUString>::const_iterator iPart (rTextParts.begin());
     vector<OUString>::const_iterator iEnd (rTextParts.end());

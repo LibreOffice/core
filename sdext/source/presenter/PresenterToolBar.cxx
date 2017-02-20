@@ -609,7 +609,7 @@ void PresenterToolBar::CreateControls (
         "/org.openoffice.Office.PresenterScreen/",
         PresenterConfigurationAccess::READ_ONLY);
 
-    mpCurrentContainerPart.reset(new ElementContainerPart());
+    mpCurrentContainerPart.reset(new ElementContainerPart);
     maElementContainer.clear();
     maElementContainer.push_back(mpCurrentContainerPart);
 
@@ -679,7 +679,7 @@ void PresenterToolBar::ProcessEntry (
         pElement.set(new Label(this));
     else if ( sType == "ChangeOrientation" )
     {
-        mpCurrentContainerPart.reset(new ElementContainerPart());
+        mpCurrentContainerPart.reset(new ElementContainerPart);
         maElementContainer.push_back(mpCurrentContainerPart);
         return;
     }

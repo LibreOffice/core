@@ -70,7 +70,7 @@ void PresenterPaneContainer::PreparePane (
     if (pPane.get() == nullptr)
     {
         // No entry found for the given pane id.  Create a new one.
-        SharedPaneDescriptor pDescriptor (new PaneDescriptor());
+        SharedPaneDescriptor pDescriptor (new PaneDescriptor);
         pDescriptor->mxPaneId = rxPaneId;
         pDescriptor->msViewURL = rsViewURL;
         pDescriptor->mxPane = nullptr;
