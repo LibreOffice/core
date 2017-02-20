@@ -323,8 +323,6 @@ void SdrMarkList::InsertEntry(const SdrMark& rMark, bool bChkSort)
             }
         }
     }
-
-    return;
 }
 
 void SdrMarkList::DeleteMark(size_t nNum)
