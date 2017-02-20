@@ -13,11 +13,8 @@ $(eval $(call gb_Executable_use_package,climaker,\
 	cli_basetypes_copy \
 ))
 
-$(eval $(call gb_Executable_add_cxxflags,climaker,\
-	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
-	-EHa -clr \
+$(eval $(call gb_Executable_add_cxxclrflags,climaker,\
 	-LN \
-	-wd4339 \
 	-wd4715 \
 ))
 
@@ -43,7 +40,7 @@ $(eval $(call gb_Executable_use_system_win32_libs,climaker,\
 	msvcmrt \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,climaker,\
+$(eval $(call gb_Executable_add_cxxclrobjects,climaker,\
 	cli_ure/source/climaker/climaker_app \
 	cli_ure/source/climaker/climaker_emit \
 ))

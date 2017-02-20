@@ -175,6 +175,8 @@ $(eval $(foreach method,\
 	add_objcobjects \
 	add_objcxxobject \
 	add_objcxxobjects \
+	add_cxxclrobject \
+	add_cxxclrobjects \
 	add_asmobject \
 	add_asmobjects \
 	add_exception_objects \
@@ -191,6 +193,7 @@ $(eval $(foreach method,\
 	add_cxxflags \
 	add_objcxxflags \
 	add_objcflags \
+	add_cxxclrflags \
 	add_defs \
 	set_include \
 	add_ldflags \

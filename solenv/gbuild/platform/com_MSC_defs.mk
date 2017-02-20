@@ -152,16 +152,7 @@ gb_CFLAGS := \
 	-wd4706 \
 	-wd4800 \
 
-ifeq ($(COM_IS_CLANG),TRUE)
-gb_CFLAGS += \
-	-Wdeclaration-after-statement \
-	-Wendif-labels \
-	-Wshadow \
-	-Wstrict-prototypes \
-	-Wundef \
-	-Wunused-macros \
-
-else
+ifneq ($(COM_IS_CLANG),TRUE)
 
 gb_CFLAGS += \
 	$(if $(filter-out 120,$(VCVER)), -Wv:18 -wd4267) \
@@ -212,19 +203,7 @@ gb_CFLAGS += \
 
 endif
 
-ifeq ($(COM_IS_CLANG),TRUE)
-gb_CXXFLAGS += \
-	-Wendif-labels \
-	-Wimplicit-fallthrough \
-	-Wno-missing-braces \
-	-Wno-missing-braces \
-	-Wnon-virtual-dtor \
-	-Woverloaded-virtual \
-	-Wshadow \
-	-Wundef \
-	-Wunused-macros \
-
-else
+ifneq ($(COM_IS_CLANG),TRUE)
 
 gb_CXXFLAGS += \
 	$(if $(filter-out 120,$(VCVER)), -Wv:18 -wd4267) \
@@ -289,6 +268,38 @@ endef
 endif
 
 gb_LTOFLAGS := $(if $(filter TRUE,$(ENABLE_LTO)),-GL)
+
+# When compiling for CLR, disable "warning C4339: use of undefined type detected
+# in CLR meta-data - use of this type may lead to a runtime exception":
+gb_CXXCLRFLAGS := $(gb_CXXFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
+	-EHa \
+	-clr \
+	-wd4339 \
+	$(if $(filter-out 120,$(VCVER)), -Wv:18 -wd4267) \
+
+ifeq ($(COM_IS_CLANG),TRUE)
+
+gb_CFLAGS += \
+	-Wdeclaration-after-statement \
+	-Wendif-labels \
+	-Wshadow \
+	-Wstrict-prototypes \
+	-Wundef \
+	-Wunused-macros \
+
+gb_CXXFLAGS += \
+	-Wendif-labels \
+	-Wimplicit-fallthrough \
+	-Wno-missing-braces \
+	-Wno-missing-braces \
+	-Wnon-virtual-dtor \
+	-Woverloaded-virtual \
+	-Wshadow \
+	-Wundef \
+	-Wunused-macros \
+
+endif
 
 # Helper class
 

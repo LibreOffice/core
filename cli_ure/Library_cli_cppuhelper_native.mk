@@ -11,15 +11,6 @@ include $(SRCDIR)/cli_ure/version/version.txt
 
 $(eval $(call gb_Library_Assembly,cli_cppuhelper))
 
-# When compiling for CLR, disable "warning C4339: use of undefined type detected
-# in CLR meta-data - use of this type may lead to a runtime exception":
-$(eval $(call gb_Library_add_cxxflags,cli_cppuhelper,\
-	-AI $(INSTDIR)/$(LIBO_URE_LIB_FOLDER) \
-	-EHa \
-	-clr \
-	-wd4339 \
-))
-
 $(eval $(call gb_Library_add_ldflags,cli_cppuhelper,\
 	-ignore:4248 \
 	-keyfile:$(SRCDIR)/cli_ure/source/cliuno.snk \
@@ -48,12 +39,12 @@ $(eval $(call gb_Library_use_system_win32_libs,cli_cppuhelper,\
 	msvcmrt \
 ))
 
-$(eval $(call gb_Library_add_exception_objects,cli_cppuhelper,\
+$(eval $(call gb_Library_add_cxxclrobjects,cli_cppuhelper,\
 	cli_ure/source/native/native_bootstrap \
 	cli_ure/source/native/path \
 ))
 
-$(eval $(call gb_Library_add_generated_exception_objects,cli_cppuhelper,\
+$(eval $(call gb_Library_add_generated_cxxclrobjects,cli_cppuhelper,\
 	CustomTarget/cli_ure/source/native/assembly \
 ))
 
