@@ -169,7 +169,7 @@ void testFormats(ScBootstrapFixture* pTest, ScDocument* pDoc, sal_Int32 nFormat)
     //test Sheet1 with csv file
     OUString aCSVFileName;
     pTest->createCSVPath("numberFormat.", aCSVFileName);
-    testFile(aCSVFileName, *pDoc, 0, PureString);
+    testFile(aCSVFileName, *pDoc, 0, StringType::PureString);
     //need to test the color of B3
     //it's not a font color!
     //formatting for B5: # ??/100 gets lost during import

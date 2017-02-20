@@ -65,7 +65,7 @@
 #define FORMAT_XLSB     9
 #define FORMAT_FODS     10
 
-enum StringType { PureString, FormulaValue, StringValue };
+enum class StringType { PureString, StringValue };
 
 SCQAHELPER_DLLPUBLIC bool testEqualsWithTolerance( long nVal1, long nVal2, long nTol );
 
@@ -119,7 +119,7 @@ SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const OpCode&
 
 SCQAHELPER_DLLPUBLIC void loadFile(const OUString& aFileName, std::string& aContent);
 
-SCQAHELPER_DLLPUBLIC void testFile(OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat = StringValue);
+SCQAHELPER_DLLPUBLIC void testFile(OUString& aFileName, ScDocument& rDoc, SCTAB nTab, StringType aStringFormat = StringType::StringValue);
 
 //need own handler because conditional formatting strings must be generated
 SCQAHELPER_DLLPUBLIC void testCondFile(OUString& aFileName, ScDocument* pDoc, SCTAB nTab);
