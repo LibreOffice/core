@@ -109,6 +109,8 @@ public:
     bool m_bLeftMargin : 1;
     bool m_bRightMargin : 1;
     bool m_bTextIndent : 1;
+    bool m_bNumbering : 1;
+    bool m_bBullet : 1;
 
     SvxAdjust m_eFloat;
 
@@ -118,6 +120,9 @@ public:
     sal_uInt16 m_nBottomBorderDistance;
     sal_uInt16 m_nLeftBorderDistance;
     sal_uInt16 m_nRightBorderDistance;
+
+    sal_uInt16  m_nNumberingType;
+    sal_Unicode m_cBulletChar;
 
     sal_uInt16 m_nColumnCount;
 
