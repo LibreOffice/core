@@ -928,7 +928,7 @@ SvNumberFormatTable& SvNumberFormatter::GetFirstEntryTable(
         else
         {
             rLnge = pFormat->GetLanguage();
-            eType = pFormat->GetType()&~css::util::NumberFormat::DEFINED;
+            eType = pFormat->GetMaskedType();
             if (eType == 0)
             {
                 eType = css::util::NumberFormat::DEFINED;
@@ -1081,7 +1081,7 @@ bool SvNumberFormatter::IsNumberFormat(const OUString& sString,
     }
     else
     {
-        FType = pFormat->GetType() &~css::util::NumberFormat::DEFINED;
+        FType = pFormat->GetMaskedType();
         if (FType == 0)
         {
             FType = css::util::NumberFormat::DEFINED;
@@ -1249,8 +1249,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
         while ( it2 != aFTable.end() && (nKey = it2->first ) >= CLOffset && nKey < nStopKey )
         {
             const SvNumberformat* pEntry = it2->second;
-            if ( pEntry->IsStandard() && ((pEntry->GetType() &
-                            ~css::util::NumberFormat::DEFINED) == nType) )
+            if ( pEntry->IsStandard() && (pEntry->GetMaskedType() == nType) )
             {
                 nDefaultFormat = nKey;
                 break;  // while
@@ -1490,7 +1489,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
     LanguageType eLang = pFormat->GetLanguage();
     ChangeIntl( eLang );
 
-    short eType = pFormat->GetType() & ~css::util::NumberFormat::DEFINED;
+    short eType = pFormat->GetMaskedType();
     if (eType == 0)
     {
         // Mixed types in subformats, use first.
@@ -3039,7 +3038,7 @@ short SvNumberFormatter::GetType(sal_uInt32 nFIndex)
     }
     else
     {
-        eType = pFormat->GetType() &~css::util::NumberFormat::DEFINED;
+        eType = pFormat->GetMaskedType();
         if (eType == 0)
         {
             eType = css::util::NumberFormat::DEFINED;

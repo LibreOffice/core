@@ -692,7 +692,7 @@ short SvxNumberFormatShell::FillEListWithFormats_Impl( std::vector<OUString>& rL
 
         if(pNumEntry==nullptr) continue;
 
-        nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
+        nMyCat=pNumEntry->GetMaskedType();
         aStrComment=pNumEntry->GetComment();
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -727,7 +727,7 @@ short SvxNumberFormatShell::FillEListWithDateTime_Impl( std::vector<OUString>& r
         const SvNumberformat* pNumEntry   = pFormatter->GetEntry(nNFEntry);
         if(pNumEntry!=nullptr)
         {
-            nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
+            nMyCat=pNumEntry->GetMaskedType();
             aStrComment=pNumEntry->GetComment();
             CategoryToPos_Impl(nMyCat,nMyType);
             aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -811,7 +811,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 
         if(pNumEntry==nullptr) continue;
 
-        nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
+        nMyCat=pNumEntry->GetMaskedType();
         aStrComment=pNumEntry->GetComment();
         CategoryToPos_Impl(nMyCat,nMyType);
         aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -850,7 +850,7 @@ short SvxNumberFormatShell::FillEListWithSysCurrencys( std::vector<OUString>& rL
 
                 if(!bUserNewCurrency &&(pNumEntry->GetType() & css::util::NumberFormat::DEFINED))
                 {
-                    nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
+                    nMyCat=pNumEntry->GetMaskedType();
                     aStrComment=pNumEntry->GetComment();
                     CategoryToPos_Impl(nMyCat,nMyType);
                     aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -935,7 +935,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
             if( pNumEntry->GetType() & css::util::NumberFormat::DEFINED ||
                 pNumEntry->IsAdditionalBuiltin() )
             {
-                nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
+                nMyCat=pNumEntry->GetMaskedType();
                 aStrComment = pNumEntry->GetComment();
                 CategoryToPos_Impl(nMyCat,nMyType);
                 aNewFormNInfo =  pNumEntry->GetFormatstring();
@@ -1086,7 +1086,7 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
             if( (pNumEntry->GetType() & css::util::NumberFormat::DEFINED) ||
                     (bAdditional && pNumEntry->IsAdditionalBuiltin()) )
             {
-                nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
+                nMyCat=pNumEntry->GetMaskedType();
                 aStrComment=pNumEntry->GetComment();
                 CategoryToPos_Impl(nMyCat,nMyType);
                 aNewFormNInfo=  pNumEntry->GetFormatstring();
@@ -1262,7 +1262,7 @@ short SvxNumberFormatShell::GetCategory4Entry(short nEntry) const
             sal_uInt16 nMyCat,nMyType;
             if(pNumEntry!=nullptr)
             {
-                nMyCat=pNumEntry->GetType() & ~css::util::NumberFormat::DEFINED;
+                nMyCat=pNumEntry->GetMaskedType();
                 CategoryToPos_Impl(nMyCat,nMyType);
 
                 return (short) nMyType;

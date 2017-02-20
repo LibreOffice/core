@@ -269,7 +269,7 @@ void ScViewFunc::InsertCurrentTime(short nReqFmt, const OUString& rUndoStr)
     SvNumberFormatter* pFormatter = rDoc.GetFormatTable();
     const SvNumberformat* pCurNumFormatEntry = pFormatter->GetEntry(nCurNumFormat);
     const short nCurNumFormatType = (pCurNumFormatEntry ?
-            (pCurNumFormatEntry->GetType() & ~css::util::NumberFormat::DEFINED) : css::util::NumberFormat::UNDEFINED);
+            pCurNumFormatEntry->GetMaskedType() : css::util::NumberFormat::UNDEFINED);
 
     if (bInputMode)
     {

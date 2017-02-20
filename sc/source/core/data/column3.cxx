@@ -1700,7 +1700,7 @@ bool ScColumn::ParseString(
                     bool bOverwrite = false;
                     if ( pOldFormat )
                     {
-                        short nOldType = pOldFormat->GetType() & ~css::util::NumberFormat::DEFINED;
+                        short nOldType = pOldFormat->GetMaskedType();
                         if ( nOldType == css::util::NumberFormat::NUMBER || nOldType == css::util::NumberFormat::DATE ||
                              nOldType == css::util::NumberFormat::TIME || nOldType == css::util::NumberFormat::LOGICAL )
                         {
