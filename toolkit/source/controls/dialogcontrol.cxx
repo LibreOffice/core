@@ -201,7 +201,7 @@ UnoControlDialogModel::UnoControlDialogModel( const Reference< XComponentContext
     ImplRegisterProperty( BASEPROPERTY_MOVEABLE, aBool );
     ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
     // #TODO separate class for 'UserForm' ( instead of re-using Dialog ? )
-    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
 }
 
@@ -210,7 +210,7 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
 {
     // need to clone BASEPROPERTY_USERFORMCONTAINEES too
     Reference< XNameContainer > xSrcNameCont( const_cast< UnoControlDialogModel& >(rModel).getPropertyValue( GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ) ), UNO_QUERY );
-    Reference<XNameContainer > xNameCont( new SimpleNamedThingContainer< XControlModel >() );
+    Reference<XNameContainer > xNameCont( new SimpleNamedThingContainer< XControlModel > );
 
     uno::Sequence< OUString > sNames = xSrcNameCont->getElementNames();
     OUString* pName = sNames.getArray();
@@ -871,7 +871,7 @@ UnoMultiPageModel::UnoMultiPageModel( const Reference< XComponentContext >& rxCo
     // MultiPage Control has the tab stop property. And the default value is True.
     ImplRegisterProperty( BASEPROPERTY_TABSTOP, aBool );
 
-    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
 }
 
@@ -989,7 +989,7 @@ UnoPageModel::UnoPageModel( const Reference< XComponentContext >& rxContext ) : 
     ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
     //ImplRegisterProperty( BASEPROPERTY_TABSTOP, aBool );
 
-    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
 }
 
@@ -1152,7 +1152,7 @@ UnoFrameModel::UnoFrameModel(  const Reference< XComponentContext >& rxContext )
     ImplRegisterProperty( BASEPROPERTY_SCROLLLEFT );
 
 
-    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+    uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
     ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
 }
 
@@ -1194,7 +1194,7 @@ uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
             return uno::Any( sal_Int32(0) );
         case BASEPROPERTY_USERFORMCONTAINEES:
         {
-            uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >();
+            uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
             return makeAny( xNameCont );
         }
     }

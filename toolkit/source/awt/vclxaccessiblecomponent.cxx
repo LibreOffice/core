@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 VCLXAccessibleComponent::VCLXAccessibleComponent( VCLXWindow* pVCLXWindow )
-    : OAccessibleExtendedComponentHelper( new VCLExternalSolarLock() )
+    : OAccessibleExtendedComponentHelper( new VCLExternalSolarLock )
     , OAccessibleImplementationAccess( )
 {
     m_xVCLXWindow = pVCLXWindow;

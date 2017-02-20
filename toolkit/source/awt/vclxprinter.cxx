@@ -403,7 +403,7 @@ stardiv_Toolkit_VCLXPrinterServer_get_implementation(
     css::uno::XComponentContext *,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    return cppu::acquire(new VCLXPrinterServer());
+    return cppu::acquire(new VCLXPrinterServer);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
