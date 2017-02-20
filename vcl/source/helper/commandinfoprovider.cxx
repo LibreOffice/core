@@ -22,6 +22,7 @@
 #include <vcl/mnemonic.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
+#include <cppuhelper/weakref.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
@@ -37,6 +38,48 @@ using namespace css::uno;
 
 namespace vcl { namespace CommandInfoProvider {
 
+Reference<container::XNameAccess> const GetCommandDescription()
+{
+    static WeakReference<container::XNameAccess> xWeakRef;
+    css::uno::Reference<container::XNameAccess> xRef(xWeakRef);
+
+    if (!xRef.is())
+    {
+        xRef = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
+        xWeakRef = xRef;
+    }
+
+    return xRef;
+}
+
+Reference<ui::XModuleUIConfigurationManagerSupplier> const GetModuleConfigurationSupplier()
+{
+    static WeakReference<ui::XModuleUIConfigurationManagerSupplier> xWeakRef;
+    css::uno::Reference<ui::XModuleUIConfigurationManagerSupplier> xRef(xWeakRef);
+
+    if (!xRef.is())
+    {
+        xRef = ui::theModuleUIConfigurationManagerSupplier::get(comphelper::getProcessComponentContext());
+        xWeakRef = xRef;
+    }
+
+    return xRef;
+}
+
+Reference<ui::XAcceleratorConfiguration> const GetGlobalAcceleratorConfiguration()
+{
+    static WeakReference<ui::XAcceleratorConfiguration> xWeakRef;
+    css::uno::Reference<ui::XAcceleratorConfiguration> xRef(xWeakRef);
+
+    if (!xRef.is())
+    {
+        xRef = ui::GlobalAcceleratorConfiguration::create(comphelper::getProcessComponentContext());
+        xWeakRef = xRef;
+    }
+
+    return xRef;
+}
+
 Reference<ui::XAcceleratorConfiguration> const GetDocumentAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
 {
     Reference<frame::XController> xController = rxFrame->getController();
@@ -49,8 +92,7 @@ Reference<ui::XAcceleratorConfiguration> const GetDocumentAcceleratorConfigurati
             if (xSupplier.is())
             {
                 Reference<ui::XUIConfigurationManager> xConfigurationManager(
-                    xSupplier->getUIConfigurationManager(),
-                    UNO_QUERY);
+                    xSupplier->getUIConfigurationManager());
                 if (xConfigurationManager.is())
                 {
                     return xConfigurationManager->getShortCutManager();
@@ -66,7 +108,7 @@ Reference<ui::XAcceleratorConfiguration> const GetModuleAcceleratorConfiguration
     css::uno::Reference<css::ui::XAcceleratorConfiguration> curModuleAcceleratorConfiguration;
     try
     {
-        Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier  = ui::theModuleUIConfigurationManagerSupplier::get(comphelper::getProcessComponentContext());
+        Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier(GetModuleConfigurationSupplier());
         Reference<ui::XUIConfigurationManager> xManager (
             xSupplier->getUIConfigurationManager(GetModuleIdentifier(rxFrame)));
         if (xManager.is())
@@ -78,13 +120,6 @@ Reference<ui::XAcceleratorConfiguration> const GetModuleAcceleratorConfiguration
     {
     }
     return curModuleAcceleratorConfiguration;
-}
-
-Reference<ui::XAcceleratorConfiguration> const GetGlobalAcceleratorConfiguration()
-{
-    // Get the global accelerator configuration.
-    return ui::GlobalAcceleratorConfiguration::create(comphelper::getProcessComponentContext());
-
 }
 
 vcl::KeyCode AWTKey2VCLKey(const awt::KeyEvent& aAWTKey)
@@ -132,7 +167,7 @@ bool ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandNam
     {
         if (!rsModuleName.isEmpty())
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
+            Reference<container::XNameAccess> xNameAccess(GetCommandDescription());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName(rsModuleName) >>= xUICommandLabels)
             {
@@ -159,7 +194,7 @@ Sequence<beans::PropertyValue> GetCommandProperties(const OUString& rsCommandNam
     {
         if (!rsModuleName.isEmpty())
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
+            Reference<container::XNameAccess> xNameAccess(GetCommandDescription());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName(rsModuleName) >>= xUICommandLabels)
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
@@ -285,7 +320,7 @@ BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
         Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xModel, UNO_QUERY);
         if (xSupplier.is())
         {
-            Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager(), UNO_QUERY);
+            Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager());
             Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), UNO_QUERY);
 
             Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
@@ -305,7 +340,7 @@ BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
     }
 
     try {
-        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(comphelper::getProcessComponentContext()));
+        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(GetModuleConfigurationSupplier());
         Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(GetModuleIdentifier(rxFrame)));
 
         Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
@@ -371,7 +406,7 @@ bool IsExperimental(const OUString& rsCommandName,
     {
         if( rModuleName.getLength() > 0)
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
+            Reference<container::XNameAccess> xNameAccess(GetCommandDescription());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
@@ -394,11 +429,18 @@ bool IsExperimental(const OUString& rsCommandName,
 
 OUString const GetModuleIdentifier(const Reference<frame::XFrame>& rxFrame)
 {
-    Reference<frame::XModuleManager2> xModuleManager = frame::ModuleManager::create(comphelper::getProcessComponentContext());
+    static WeakReference<frame::XModuleManager2> xWeakRef;
+    css::uno::Reference<frame::XModuleManager2> xRef(xWeakRef);
+
+    if (!xRef.is())
+    {
+        xRef = frame::ModuleManager::create(comphelper::getProcessComponentContext());
+        xWeakRef = xRef;
+    }
 
     try
     {
-        return xModuleManager->identify(rxFrame);
+        return xRef->identify(rxFrame);
     }
     catch (const Exception&)
     {}
