@@ -19,6 +19,7 @@
 
 #include <svl/intitem.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <formula/token.hxx>
 
 #include "document.hxx"
@@ -651,14 +652,15 @@ bool ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
 
 double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
 {
+    const SvNumberformat* pFormat = GetFormatTable()->GetEntry( nFormat );
     short nType;
-    if ( (nType = GetFormatTable()->GetType( nFormat )) != css::util::NumberFormat::DATE
-      && nType != css::util::NumberFormat::TIME && nType != css::util::NumberFormat::DATETIME )
+    if (pFormat && (nType = pFormat->GetMaskedType()) != css::util::NumberFormat::DATE
+            && nType != css::util::NumberFormat::TIME && nType != css::util::NumberFormat::DATETIME )
     {
         short nPrecision;
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
         {
-            nPrecision = (short)GetFormatTable()->GetFormatPrecision( nFormat );
+            nPrecision = (short)pFormat->GetFormatPrecision();
             switch ( nType )
             {
                 case css::util::NumberFormat::PERCENT:      // 0.41% == 0.0041
@@ -674,7 +676,7 @@ double ScDocument::RoundValueAsShown( double fVal, sal_uInt32 nFormat ) const
                 }
                 case css::util::NumberFormat::FRACTION:     // get value of fraction representation
                 {
-                    return GetFormatTable()->GetRoundFractionValue( nFormat, fVal );
+                    return pFormat->GetRoundFractionValue( fVal );
                 }
             }
         }
