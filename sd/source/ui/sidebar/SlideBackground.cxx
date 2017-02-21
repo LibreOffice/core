@@ -853,13 +853,13 @@ IMPL_LINK_NOARG(SlideBackground, FillBackgroundHdl, ListBox&, void)
             sal_Int16 nPos = mpFillAttr->GetSelectEntryPos();
             GraphicObject aBitmap;
             OUString aName;
-            if(nPos == static_cast< sal_Int32 >(BITMAP))
+            if( nFillPos == BITMAP )
             {
                 SvxBitmapListItem aBitmapListItem(*static_cast<const SvxBitmapListItem*>(pSh->GetItem(SID_BITMAP_LIST)));
                 aBitmap = aBitmapListItem.GetBitmapList()->GetBitmap(nPos)->GetGraphicObject();
                 aName = aBitmapListItem.GetBitmapList()->GetBitmap(nPos)->GetName();
             }
-            else if(nPos == static_cast< sal_Int32 >(PATTERN))
+            else if( nFillPos == PATTERN )
             {
                 SvxPatternListItem aPatternListItem(*static_cast<const SvxPatternListItem*>(pSh->GetItem(SID_PATTERN_LIST)));
                 aBitmap = aPatternListItem.GetPatternList()->GetBitmap(nPos)->GetGraphicObject();
