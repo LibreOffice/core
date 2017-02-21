@@ -138,6 +138,7 @@ static const TokenTable aTokTable_Basic [] = {
     { PRINT,    "Print" },
     { PRIVATE,  "Private" },
     { PROPERTY, "Property" },
+    { PTRSAFE,  "PtrSafe" },
     { PUBLIC,   "Public" },
     { RANDOM,   "Random" },
     { READ,     "Read" },
