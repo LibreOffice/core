@@ -67,7 +67,18 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape)
         assert(nullptr != dynamic_cast<SwFlyFrameFormat*>(pFormat));
 
         pShape->SetOtherTextBoxFormat(pFormat);
-        pFormat->SetOtherTextBoxFormat(pShape);
+
+        /* If I disable the second cross reference between
+         * pShape and pFomat, the bug tdf#101627
+         * seems to be solved (but it causes a destructor error, of course)
+         *
+         * My question is: is there an error in the data (pShape etc.)
+         *                 or in the processing of the pShape?
+         *
+         * I don't know how to proceed in this case,
+         * so I hope a reviewer can help me */
+
+        //pFormat->SetOtherTextBoxFormat(pShape);   <---- disabled!
 
         // Initialize properties.
         uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
