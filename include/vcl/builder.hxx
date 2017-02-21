@@ -295,6 +295,8 @@ private:
 
         sal_uInt16 m_nLastToolbarId;
 
+        sal_uInt16 m_nLastMenuItemId;
+
         ParserState();
     };
 

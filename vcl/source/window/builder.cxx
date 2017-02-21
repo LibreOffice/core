@@ -2740,7 +2740,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
     stringmap &rProps, accelmap &rAccels)
 {
     sal_uInt16 nOldCount = pParent->GetItemCount();
-    sal_uInt16 nNewId = nOldCount + 1;
+    sal_uInt16 nNewId = ++m_pParserState->m_nLastMenuItemId;
 
     if (rClass == "GtkMenuItem")
     {
@@ -3630,6 +3630,7 @@ void VclBuilder::mungeTextBuffer(VclMultiLineEdit &rTarget, const TextBuffer &rT
 
 VclBuilder::ParserState::ParserState()
     : m_nLastToolbarId(0)
+    , m_nLastMenuItemId(0)
 {}
 
 VclBuilder::MenuAndId::MenuAndId(const OString &rId, PopupMenu *pMenu)
