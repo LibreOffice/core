@@ -2762,7 +2762,7 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const
     {
         OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
         OUString aCommand(OStringToOUString(extractActionName(rProps), RTL_TEXTENCODING_UTF8));
-        pParent->InsertItem(nNewId, sLabel, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK, rID);
+        pParent->InsertItem(nNewId, sLabel, MenuItemBits::AUTOCHECK | MenuItemBits::RADIOCHECK, rID);
         pParent->SetItemCommand(nNewId, aCommand);
     }
     else if (rClass == "GtkSeparatorMenuItem")
