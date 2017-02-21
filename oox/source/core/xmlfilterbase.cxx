@@ -174,19 +174,17 @@ struct XmlFilterBaseImpl
 {
     typedef RefMap< OUString, Relations > RelationsMap;
 
-    Reference<XComponentContext>   mxContext;
     FastParser                     maFastParser;
     const OUString                 maBinSuffix;
     RelationsMap                   maRelationsMap;
     TextFieldStack                 maTextFieldStack;
-    const NamespaceMap&             mrNamespaceMap;
+    const NamespaceMap&            mrNamespaceMap;
 
     /// @throws RuntimeException
-    explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext );
+    explicit            XmlFilterBaseImpl();
 };
 
-XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) :
-    mxContext(rxContext),
+XmlFilterBaseImpl::XmlFilterBaseImpl() :
     maBinSuffix( ".bin" ),
     mrNamespaceMap(StaticNamespaceMap::get())
 {
@@ -196,7 +194,7 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
 
 XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) :
     FilterBase( rxContext ),
-    mxImpl( new XmlFilterBaseImpl( rxContext ) ),
+    mxImpl( new XmlFilterBaseImpl ),
     mnRelId( 1 ),
     mnMaxDocId( 0 ),
     mbMSO2007(false),
