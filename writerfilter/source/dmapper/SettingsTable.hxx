@@ -45,7 +45,7 @@ class SettingsTable : public LoggedProperties, public LoggedTable
     std::unique_ptr<SettingsTable_Impl> m_pImpl;
 
  public:
-    SettingsTable();
+    SettingsTable(const DomainMapper& rDomainMapper);
     virtual ~SettingsTable() override;
 
     //returns default TabStop in 1/100th mm
