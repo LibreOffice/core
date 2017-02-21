@@ -35,7 +35,6 @@ $(eval $(call gb_Library_add_exception_objects,i18nlangtag,\
 ))
 
 
-ifeq ($(ENABLE_LIBLANGTAG),TRUE)
 $(eval $(call gb_Library_use_external,i18nlangtag,liblangtag))
 $(eval $(call gb_Library_use_external,i18nlangtag,libxml2))
 $(eval $(call gb_Library_use_system_win32_libs,i18nlangtag,\
@@ -43,6 +42,5 @@ $(eval $(call gb_Library_use_system_win32_libs,i18nlangtag,\
                 kernel32 \
         ) \
 ))
-endif
 
 # vim: set noet sw=4 ts=4:
