@@ -122,13 +122,15 @@ namespace {
                                    (nType == CommentNotificationType::Remove ? "Remove" :
                                     (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
         aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
-        if (nType != CommentNotificationType::Remove)
+        if (nType != CommentNotificationType::Remove && rxAnnotation.is())
         {
             aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
             aAnnotation.put("author", rxAnnotation->getAuthor());
             aAnnotation.put("dateTime", utl::toISO8601(rxAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(rxAnnotation->getTextRange());
             aAnnotation.put("text", xText->getString());
+            const SdPage* pPage = sd::getAnnotationPage(rxAnnotation);
+            aAnnotation.put("parthash", pPage ? OString::number(pPage->GetHashCode()) : OString());
         }
 
         boost::property_tree::ptree aTree;

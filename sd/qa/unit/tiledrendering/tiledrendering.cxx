@@ -1618,6 +1618,8 @@ void SdTiledRenderingTest::testCommentCallbacks()
     CPPUNIT_ASSERT_EQUAL(std::string("LOK User1"), aView2.m_aCommentCallbackResult.get<std::string>("author"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView1.m_aCommentCallbackResult.get<std::string>("text"));
     CPPUNIT_ASSERT_EQUAL(std::string("Comment"), aView2.m_aCommentCallbackResult.get<std::string>("text"));
+    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
+    CPPUNIT_ASSERT(!aView2.m_aCommentCallbackResult.get<std::string>("parthash").empty());
 
     // Reply to a just added comment
     SfxLokHelper::setView(nView2);
@@ -1642,6 +1644,8 @@ void SdTiledRenderingTest::testCommentCallbacks()
     CPPUNIT_ASSERT(aReplyTextView1.endsWith("Reply to comment"));
     CPPUNIT_ASSERT(aReplyTextView2.startsWith("Reply to LOK User1"));
     CPPUNIT_ASSERT(aReplyTextView2.endsWith("Reply to comment"));
+    CPPUNIT_ASSERT(!aView1.m_aCommentCallbackResult.get<std::string>("parthash").empty());
+    CPPUNIT_ASSERT(!aView2.m_aCommentCallbackResult.get<std::string>("parthash").empty());
 
     // Delete the comment
     aArgs = comphelper::InitPropertySequence(
