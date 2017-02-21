@@ -24,12 +24,9 @@
 #include <rtl/string.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/tencinfo.h>
 #include <tools/debug.hxx>
 
 #include <unordered_map>
-
-class INetMIMEOutputSink;
 
 struct INetContentTypeParameter
 {
@@ -177,10 +174,6 @@ public:
         sal_Unicode const *pBegin, sal_Unicode const * pEnd,
         OUString * pType = nullptr, OUString * pSubType = nullptr,
         INetContentTypeParameterList * pParameters = nullptr);
-
-    static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
-                                     const OUString& rBody,
-                                     rtl_TextEncoding ePreferredEncoding);
 
     static OUString decodeHeaderFieldBody(const OString& rBody);
 

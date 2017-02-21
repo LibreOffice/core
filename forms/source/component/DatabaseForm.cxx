@@ -950,6 +950,8 @@ void ODatabaseForm::InsertTextPart( INetMIMEMessage& rParent, const OUString& rN
 
 
     // Header
+    //TODO: Encode rName into a properly formatted Content-Disposition header
+    // field as per RFC 2231:
     OUStringBuffer aContentDisp;
     aContentDisp.append("form-data; name=\"");
     aContentDisp.append(rName);
@@ -1013,6 +1015,8 @@ bool ODatabaseForm::InsertFilePart( INetMIMEMessage& rParent, const OUString& rN
 
 
     // Header
+    //TODO: Encode rName and aFileName into a properly formatted
+    // Content-Disposition header field as per RFC 2231:
     OUStringBuffer aContentDisp;
     aContentDisp.append("form-data; name=\"");
     aContentDisp.append(rName);

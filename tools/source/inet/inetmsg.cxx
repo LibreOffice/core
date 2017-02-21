@@ -18,9 +18,7 @@
  */
 
 #include <sal/types.h>
-#include <osl/thread.h>
 #include <tools/datetime.hxx>
-#include <tools/inetmime.hxx>
 #include <tools/inetmsg.hxx>
 #include <tools/contnr.hxx>
 #include <rtl/instance.hxx>
@@ -34,11 +32,8 @@ void INetMIMEMessage::SetHeaderField_Impl (
     const OUString &rValue,
     sal_uIntPtr &rnIndex)
 {
-    INetMIMEOutputSink aSink;
-    INetMIME::writeHeaderFieldBody (
-        aSink, rValue, osl_getThreadTextEncoding());
     SetHeaderField_Impl (
-        INetMessageHeader (rName, aSink.takeBuffer()), rnIndex);
+        INetMessageHeader (rName, rValue.toUtf8()), rnIndex);
 }
 
 /* ParseDateField and local helper functions.
