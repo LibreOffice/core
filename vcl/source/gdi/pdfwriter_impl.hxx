@@ -781,14 +781,14 @@ i12626
     sal_Int32                               m_nEncryptionBufferSize;
 
     /* check and reallocate the buffer for encryption */
-    bool checkEncryptionBufferSize( register sal_Int32 newSize );
+    bool checkEncryptionBufferSize( sal_Int32 newSize );
     /* this function implements part of the PDF spec algorithm 3.1 in encryption, the rest (the actual encryption) is in PDFWriterImpl::writeBuffer */
-    void checkAndEnableStreamEncryption( register sal_Int32 nObject );
+    void checkAndEnableStreamEncryption( sal_Int32 nObject );
 
     void disableStreamEncryption() { m_bEncryptThisStream = false; };
 
     /* */
-    void enableStringEncryption( register sal_Int32 nObject );
+    void enableStringEncryption( sal_Int32 nObject );
 
 // test if the encryption is active, if yes than encrypt the unicode string  and add to the OStringBuffer parameter
     void appendUnicodeTextStringEncrypt( const OUString& rInString, const sal_Int32 nInObjectNumber, OStringBuffer& rOutBuffer );
