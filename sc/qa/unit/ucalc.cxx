@@ -5343,6 +5343,42 @@ void Test::testNoteLifeCycle()
     const SdrCaptionObj* pUndoCaptionB4 = pUndoNoteB4->GetCaption();
     CPPUNIT_ASSERT_MESSAGE("Captions not identical after Merge Undo.", pCaptionB4 == pUndoCaptionB4);
 
+
+    // In a second document copy a note from B5 to clipboard, close the
+    // document and then paste the note into this document.
+    {
+        ScDocShellRef xDocSh2;
+        getNewDocShell(xDocSh2);
+        ScDocument* pDoc2 = &xDocSh2->GetDocument();
+        pDoc2->InsertTab(0, "OtherSheet1");
+        pDoc2->InitDrawLayer(xDocSh2.get());
+
+        ScAddress aPosB5(1,4,0);
+        ScPostIt* pOtherNoteB5 = pDoc2->GetOrCreateNote(aPosB5);
+        CPPUNIT_ASSERT_MESSAGE("Failed to insert cell comment at B5.", pOtherNoteB5);
+        const SdrCaptionObj* pOtherCaptionB5 = pOtherNoteB5->GetOrCreateCaption(aPosB5);
+        CPPUNIT_ASSERT_MESSAGE("No caption at B5.", pOtherCaptionB5);
+
+        ScDocument aClipDoc2(SCDOCMODE_CLIP);
+        copyToClip( pDoc2, aPosB5, &aClipDoc2);
+
+        // There's no ScTransferObject involved in the "fake" clipboard copy
+        // and ScDocument dtor asking IsClipboardSource() gets no, so emulate
+        // the part that normally is reponsible for forgetting the caption
+        // objects. Ugly.
+        aClipDoc2.ForgetNoteCaptions( ScRangeList( ScRange( 0,0,0, MAXCOL, MAXROW, aClipDoc2.GetTableCount()-1)), true);
+
+        pDoc2->DeleteTab(0);
+        closeDocShell(xDocSh2);
+
+        pasteFromClip( m_pDoc, aPosB5, &aClipDoc2); // should not crash ... tdf#104967
+        ScPostIt* pNoteB5 = m_pDoc->GetNote(aPosB5);
+        CPPUNIT_ASSERT_MESSAGE("Failed to paste cell comment at B5.", pNoteB5);
+        const SdrCaptionObj* pCaptionB5 = pNoteB5->GetCaption();
+        CPPUNIT_ASSERT_MESSAGE("No caption at pasted B5.", pCaptionB5);
+        CPPUNIT_ASSERT_MESSAGE("Captions not different after Paste.", pCaptionB5 != pOtherCaptionB5);
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
