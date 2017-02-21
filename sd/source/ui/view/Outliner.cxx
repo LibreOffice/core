@@ -155,7 +155,6 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       mnPageCount(0),
       mbEndOfSearch(false),
       mbFoundObject(false),
-      mbError(false),
       mbDirectionIsForward(true),
       mbRestrictSearchToSelection(false),
       maMarkListCopy(),

@@ -49,8 +49,6 @@ public:
 private:
     struct ValueSetWithTextItem
     {
-        Image maItemImage;
-        Image maSelectedItemImage;
         OUString maItemText;
         OUString maItemText2;
     };
