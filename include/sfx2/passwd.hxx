@@ -112,6 +112,13 @@ public:
     {
         mpPassword1ED->SetHelpId( rId );
     }
+    /* tdf#60874 we need a custom help ID for the Confirm
+       field of the Protect Document window */
+    void SetConfirmHelpId(const OString& rId)
+    {
+        mpConfirm1ED->SetHelpId( rId );
+    }
+
     void ShowExtras(SfxShowExtras nExtras)
     {
         mnExtras = nExtras;

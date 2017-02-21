@@ -67,6 +67,7 @@
 // Help IDs for Submenus (max.50) --------------------------------------------
 #define HID_PASSWD_TABLE                                        "SC_HID_PASSWD_TABLE"
 #define HID_PASSWD_DOC                                          "SC_HID_PASSWD_DOC"
+#define HID_PASSWD_DOC_CONFIRM                                  "SC_HID_PASSWD_DOC_CONFIRM"
 
 
 // Other help IDs (max.70) ---------------------------------------------------
