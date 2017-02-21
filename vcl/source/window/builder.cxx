@@ -2561,6 +2561,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
     OString sClass;
     OString sID;
     OString sCustomProperty;
+    PopupMenu *pSubMenu = nullptr;
 
     xmlreader::Span name;
     int nsId;
@@ -2607,11 +2608,10 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
         {
             if (name.equals("child"))
             {
-                insertMenuObject(pParent, sClass, sID, aProperties, aAccelerators);
-                VclPtr<PopupMenu> xSubMenu = VclPtr<PopupMenu>::Create();
-                pParent->SetPopupMenu(pParent->GetItemCount(), xSubMenu);
-                handleMenuChild(xSubMenu, reader);
-                bInserted = true;
+                size_t nChildMenuIdx = m_aMenus.size();
+                handleChild(nullptr, reader);
+                assert(m_aMenus.size() > nChildMenuIdx && "menu not inserted");
+                pSubMenu = m_aMenus[nChildMenuIdx].m_pMenu;
             }
             else
             {
@@ -2635,7 +2635,7 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
     if (bInserted)
         return;
 
-    insertMenuObject(pParent, sClass, sID, aProperties, aAccelerators);
+    insertMenuObject(pParent, pSubMenu, sClass, sID, aProperties, aAccelerators);
 }
 
 void VclBuilder::handleSizeGroup(xmlreader::XmlReader &reader, const OString &rID)
@@ -2736,12 +2736,9 @@ namespace
     }
 }
 
-void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, const OString &rID,
+void VclBuilder::insertMenuObject(PopupMenu *pParent, PopupMenu *pSubMenu, const OString &rClass, const OString &rID,
     stringmap &rProps, accelmap &rAccels)
 {
-    if (rClass == "GtkMenu")
-        return;
-
     sal_uInt16 nOldCount = pParent->GetItemCount();
     sal_uInt16 nNewId = nOldCount + 1;
 
@@ -2751,6 +2748,8 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
         OUString aCommand(OStringToOUString(extractActionName(rProps), RTL_TEXTENCODING_UTF8));
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::TEXT, rID);
         pParent->SetItemCommand(nNewId, aCommand);
+        if (pSubMenu)
+            pParent->SetPopupMenu(nNewId, pSubMenu);
     }
     else if (rClass == "GtkCheckMenuItem")
     {

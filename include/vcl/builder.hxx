@@ -366,6 +366,7 @@ private:
 
     void        insertMenuObject(
                    PopupMenu *pParent,
+                   PopupMenu *pSubMenu,
                    const OString &rClass,
                    const OString &rID,
                    stringmap &rProps,
