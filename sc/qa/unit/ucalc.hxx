@@ -99,6 +99,11 @@ public:
 
     ScDocShell& getDocShell();
 
+    /** Get a separate new ScDocShell with ScDocument that suits unit test needs. */
+    void getNewDocShell( ScDocShellRef& rDocShellRef );
+    /** Close such new ScDocShell. */
+    void closeDocShell( ScDocShellRef& rDocShellRef );
+
     virtual void setUp() override;
     virtual void tearDown() override;
 
