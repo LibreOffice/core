@@ -7,12 +7,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_Module_Module,gpgme))
+$(eval $(call gb_ExternalPackage_ExternalPackage,gpgme,gpgme))
 
-$(eval $(call gb_Module_add_targets,gpgme,\
-	ExternalProject_gpgme \
-	ExternalPackage_gpgme \
-	UnpackedTarball_gpgme \
-))
+$(eval $(call gb_ExternalPackage_use_external_project,gpgme,gpgme))
+
+ifneq ($(DISABLE_DYNLOADING),TRUE)
+
+$(eval $(call gb_ExternalPackage_add_file,gpgme,$(LIBO_LIB_FOLDER)/libgpgmepp.so.6,lang/cpp/src/.libs/libgpgmepp.so.6.3.0))
+
+endif # $(DISABLE_DYNLOADING)
 
 # vim: set noet sw=4 ts=4:
