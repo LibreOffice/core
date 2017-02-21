@@ -21,6 +21,8 @@ class GtkSalPrinter : public PspSalPrinter
 public:
     GtkSalPrinter(SalInfoPrinter* i_pInfoPrinter);
 
+    ~GtkSalPrinter() override;
+
     using PspSalPrinter::StartJob;
     virtual bool StartJob(
             const OUString* i_pFileName, const OUString& i_rJobName,

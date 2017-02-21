@@ -164,6 +164,8 @@ GtkSalPrinter::GtkSalPrinter(SalInfoPrinter* const i_pInfoPrinter)
 {
 }
 
+GtkSalPrinter::~GtkSalPrinter() = default;
+
 bool
 GtkSalPrinter::impl_doJob(
         const OUString* const i_pFileName,
