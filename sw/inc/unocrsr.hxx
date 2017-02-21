@@ -25,17 +25,8 @@
 
 namespace sw
 {
-    enum class UnoCursorHintType
-    {
-        DOC_DISPOSING,
-        LEAVES_SECTION
-    };
-
     struct SW_DLLPUBLIC UnoCursorHint final : public SfxHint
     {
-        UnoCursorHintType m_eType;
-        UnoCursorHint(UnoCursorHintType eType)
-                : m_eType(eType) {};
         virtual ~UnoCursorHint() override;
     };
 }

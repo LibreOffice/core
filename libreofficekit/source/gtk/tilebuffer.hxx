@@ -90,10 +90,8 @@ private:
 class TileBuffer
 {
  public:
- TileBuffer(LibreOfficeKitDocument *document = nullptr,
-            int columns = 0)
-     : m_pLOKDocument(document)
-     , m_nWidth(columns)
+ TileBuffer(int columns = 0)
+     : m_nWidth(columns)
     {
         cairo_surface_t *pSurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nTileSizePixels, nTileSizePixels);
         m_DummyTile.setSurface(pSurface);
@@ -135,8 +133,6 @@ class TileBuffer
      */
     void setInvalid(int x, int y, float zoom, GTask* task, GThreadPool*);
 
-    /// Contains the reference to the LOK Document that this tile buffer is for.
-    LibreOfficeKitDocument *m_pLOKDocument;
     /// Stores all the tiles cached by this tile buffer.
     std::map<int, Tile> m_mTiles;
     /// Width of the current tile buffer (number of columns)

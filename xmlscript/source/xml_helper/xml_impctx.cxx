@@ -320,15 +320,12 @@ class ExtendedAttributes :
     OUString * m_pQNames;
     OUString * m_pValues;
 
-    rtl::Reference<DocumentHandlerImpl> m_xHandler;
-
 public:
     inline ExtendedAttributes(
         sal_Int32 nAttributes,
         sal_Int32 * pUids,
         OUString * pLocalNames, OUString * pQNames,
-        Reference< xml::sax::XAttributeList > const & xAttributeList,
-        DocumentHandlerImpl * pHandler );
+        Reference< xml::sax::XAttributeList > const & xAttributeList );
     virtual ~ExtendedAttributes() throw () override;
 
     // XAttributes
@@ -355,14 +352,12 @@ inline ExtendedAttributes::ExtendedAttributes(
     sal_Int32 nAttributes,
     sal_Int32 * pUids,
     OUString * pLocalNames, OUString * pQNames,
-    Reference< xml::sax::XAttributeList > const & xAttributeList,
-    DocumentHandlerImpl * pHandler )
+    Reference< xml::sax::XAttributeList > const & xAttributeList )
     : m_nAttributes( nAttributes )
     , m_pUids( pUids )
     , m_pLocalNames( pLocalNames )
     , m_pQNames( pQNames )
     , m_pValues( new OUString[ nAttributes ] )
-    , m_xHandler( pHandler )
 {
     for ( sal_Int32 nPos = 0; nPos < nAttributes; ++nPos )
     {
@@ -542,7 +537,7 @@ void DocumentHandlerImpl::startElement(
     xAttributes = static_cast< xml::input::XAttributes * >(
         new ExtendedAttributes(
             nAttribs, pUids, pLocalNames, pQNames,
-            xAttribs, this ) );
+            xAttribs ) );
 
     getElementName( rQElementName, &nUid, &aLocalName );
 

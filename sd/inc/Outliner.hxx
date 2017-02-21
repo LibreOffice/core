@@ -246,12 +246,6 @@ private:
     */
     bool mbFoundObject;
 
-    /** When set to <TRUE/> this flag indicates that an error has occurred
-        that should terminate the iteration over the objects to search/spell
-        check.
-    */
-    bool mbError;
-
     /** This flag indicates whether to search forward or backwards.
     */
     bool mbDirectionIsForward;
