@@ -5338,9 +5338,9 @@ void Test::testNoteLifeCycle()
 
     // Undo contained the original caption object pointer which was still alive
     // at B4 after the merge and not cloned nor recreated during Undo.
-    ScPostIt* pUndoNoteB4 = m_pDoc->GetOrCreateNote(aPosB4);
+    ScPostIt* pUndoNoteB4 = m_pDoc->GetNote(aPosB4);
     CPPUNIT_ASSERT_MESSAGE("No cell comment at B4 after Undo.", pUndoNoteB4);
-    const SdrCaptionObj* pUndoCaptionB4 = pUndoNoteB4->GetOrCreateCaption(aPosB4);
+    const SdrCaptionObj* pUndoCaptionB4 = pUndoNoteB4->GetCaption();
     CPPUNIT_ASSERT_MESSAGE("Captions not identical after Merge Undo.", pCaptionB4 == pUndoCaptionB4);
 
     m_pDoc->DeleteTab(0);
