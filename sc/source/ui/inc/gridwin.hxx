@@ -223,13 +223,9 @@ class ScGridWindow : public vcl::Window, public DropTargetHelper, public DragSou
     void            UpdateDragRect( bool bShowRange, const Rectangle& rPosRect );
 
     bool            IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab );
-    void            ExecFilter( sal_uLong nSel, SCCOL nCol, SCROW nRow,
-                                const OUString& aValue );
     void            FilterSelect( sal_uLong nSel );
 
     void            ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr );
-
-    void            ExecPageFieldSelect( SCCOL nCol, SCROW nRow, bool bHasSelection, const OUString& rStr );
 
     bool            HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange );
 

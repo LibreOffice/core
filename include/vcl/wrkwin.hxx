@@ -80,7 +80,6 @@ public:
      @overload void ShowFullScreenMode(bool bFullScreenMode, sal_Int32 nDisplayScreen)
     */
     void            ShowFullScreenMode( bool bFullScreenMode = true );
-    void            EndFullScreenMode() { ShowFullScreenMode( false ); }
     bool            IsFullScreenMode() const { return mbFullScreenMode; }
 
     void            StartPresentationMode( bool   bPresentation,

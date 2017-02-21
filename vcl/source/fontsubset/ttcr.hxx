@@ -204,13 +204,6 @@ namespace vcl
  */
     sal_uInt32 glyfCount(const TrueTypeTable *);
 
-/**
- * Add a Name Record to a name table.
- * NOTE: This function duplicates NameRecord, so the argument
- * has to be deallocated by the caller (unlike glyfAdd)
- */
-    void nameAdd(TrueTypeTable *, NameRecord *nr);
-
 } // namespace
 
 extern "C"

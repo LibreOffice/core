@@ -1464,11 +1464,6 @@ bool Polygon::IsInside( const Point& rPoint ) const
     return ( ( nPCounter & 1 ) == 1 );
 }
 
-bool Polygon::IsRightOrientated() const
-{
-    return GetSignedArea() >= 0.0;
-}
-
 void Polygon::Insert( sal_uInt16 nPos, const Point& rPt )
 {
     ImplMakeUnique();

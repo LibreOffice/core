@@ -941,35 +941,6 @@ void XMLShapeImportHelper::addGluePointMapping( css::uno::Reference< css::drawin
         mpPageContext->maShapeGluePointsMap[xShape][nSourceId] = nDestinnationId;
 }
 
-/** find mapping for given DestinationID. This allows to extract the original draw:id imported with a draw:glue-point */
-sal_Int32 XMLShapeImportHelper::findGluePointMapping(
-    const css::uno::Reference< css::drawing::XShape >& xShape,
-    sal_Int32 nDestinnationId ) const
-{
-    if( mpPageContext )
-    {
-        ShapeGluePointsMap::iterator aShapeIter( mpPageContext->maShapeGluePointsMap.find( xShape ) );
-
-        if( aShapeIter != mpPageContext->maShapeGluePointsMap.end() )
-        {
-            GluePointIdMap::iterator aShapeIdIter = (*aShapeIter).second.begin();
-            GluePointIdMap::iterator aShapeIdEnd  = (*aShapeIter).second.end();
-
-            while ( aShapeIdIter != aShapeIdEnd )
-            {
-                if ( (*aShapeIdIter).second == nDestinnationId )
-                {
-                    return (*aShapeIdIter).first;
-                }
-
-                ++aShapeIdIter;
-            }
-        }
-    }
-
-    return -1;
-}
-
 /** moves all current DestinationId's by n */
 void XMLShapeImportHelper::moveGluePointMapping( const css::uno::Reference< css::drawing::XShape >& xShape, const sal_Int32 n )
 {

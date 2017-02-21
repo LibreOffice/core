@@ -1023,37 +1023,6 @@ The following structure describes the permissions used in PDF security
     */
     sal_Int32 CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID );
 
-    /** Set an outline item's parent
-
-    @param nItem
-    specififies which item should be reparented.
-
-    @param nNewParent
-    specifies which outline item will be the item's new parent.
-    Use 0 for reparenting to top level.
-    */
-    void SetOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent );
-
-    /** Set an outline item's title text
-
-    @param nItem
-    specififies which item should get a new text
-
-    @param rText
-    sets the title text of the item
-    */
-    void SetOutlineItemText( sal_Int32 nItem, const OUString& rText );
-
-    /** Set an outline item's destination
-
-    @param nItem
-    specififies which item should get a new dest
-
-    @param nDestID
-    specifies the item's new destination
-    */
-    void SetOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID );
-
     /** Create a new note on a page
 
     @param rRect
@@ -1209,17 +1178,6 @@ The following structure describes the permissions used in PDF security
     contains the replacement text for the structural element
     */
     void SetAlternateText( const OUString& rText );
-
-    /** Sets the time in seconds a page will appear before the next
-        page is shown automatically
-
-        @param nSeconds
-        time in seconds the current page will be shown; pass 0 for manual advancement
-
-        @param nPageNr
-        the page number to apply the autoadvance time to; -1 denotes the current page
-    */
-    void SetAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr );
 
     /** Sets the transitional effect to be applied when the current page gets shown.
 

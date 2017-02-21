@@ -196,10 +196,6 @@ protected:
                     SalLayout();
     virtual         ~SalLayout();
 
-    // used by layout layers
-    void            SetOrientation( int nOrientation )      // in 0-3600 system
-                    { mnOrientation = nOrientation; }
-
     static int      CalcAsianKerning( sal_UCS4, bool bLeft, bool bVertical );
 
 private:

@@ -203,8 +203,6 @@ public:
 
     /** Returns the absolute cell position in 1/100 mm. */
     css::awt::Point getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
-    /** Returns the cell size in 1/100 mm. */
-    css::awt::Size getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Returns the size of the entire drawing page in 1/100 mm. */
     css::awt::Size getDrawPageSize() const;
 

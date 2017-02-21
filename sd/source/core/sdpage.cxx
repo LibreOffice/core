@@ -1645,9 +1645,9 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, bool bInit, bool bCreate )
 |*
 \************************************************************************/
 
-void SdPage::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
+void SdPage::NbcInsertObject(SdrObject* pObj, size_t nPos)
 {
-    FmFormPage::NbcInsertObject(pObj, nPos, pReason);
+    FmFormPage::NbcInsertObject(pObj, nPos);
 
     static_cast<SdDrawDocument*>(pModel)->InsertObject(pObj, this);
 

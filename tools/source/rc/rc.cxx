@@ -24,12 +24,6 @@
 #include <tools/rc.hxx>
 #include <tools/rcid.h>
 
-Resource::Resource( const ResId& rResId )
-    : m_pResMgr(nullptr)
-{
-    GetRes( rResId.SetRT( RSC_RESOURCE ) );
-}
-
 void Resource::GetRes( const ResId& rResId )
 {
     if( rResId.GetResMgr() )

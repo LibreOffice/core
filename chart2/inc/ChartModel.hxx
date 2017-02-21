@@ -466,9 +466,7 @@ public:
     css::uno::Reference< css::uno::XInterface > getChartView() const;
 
     bool isTimeBased() const { return mbTimeBased;}
-    void setTimeBased(bool bTimeBased);
 
-    void getNextTimePoint();
     void setTimeBasedRange(sal_Int32 nStart, sal_Int32 nEnd);
 
 #if HAVE_FEATURE_OPENGL

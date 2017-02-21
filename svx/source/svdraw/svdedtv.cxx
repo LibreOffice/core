@@ -676,8 +676,7 @@ void SdrEditView::ForceMarkedObjToAnotherPage()
             if(bFnd)
             {
                 pM->GetPageView()->GetObjList()->RemoveObject(pObj->GetOrdNum());
-                SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
-                pPV->GetObjList()->InsertObject(pObj, SAL_MAX_SIZE, &aReason);
+                pPV->GetObjList()->InsertObject(pObj, SAL_MAX_SIZE);
                 pM->SetPageView(pPV);
                 InvalidateAllWin(aObjRect);
                 bFlg=true;
@@ -906,8 +905,7 @@ void SdrEditView::CopyMarkedObj()
         SdrMark* pM=aSourceObjectsForCopy.GetMark(nm);
         SdrObject* pO=pM->GetMarkedSdrObj()->Clone();
         if (pO!=nullptr) {
-            SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
-            pM->GetPageView()->GetObjList()->InsertObject(pO, SAL_MAX_SIZE, &aReason);
+            pM->GetPageView()->GetObjList()->InsertObject(pO, SAL_MAX_SIZE);
 
             if( bUndo )
                 AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoCopyObject(*pO));
@@ -969,11 +967,10 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
         pObj->SetMergedItemSet(maDefaultAttr);
     }
     if (!pObj->IsInserted()) {
-        SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
         if (nOptions & SdrInsertFlags::NOBROADCAST) {
-            rPV.GetObjList()->NbcInsertObject(pObj, SAL_MAX_SIZE, &aReason);
+            rPV.GetObjList()->NbcInsertObject(pObj, SAL_MAX_SIZE);
         } else {
-            rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE, &aReason);
+            rPV.GetObjList()->InsertObject(pObj, SAL_MAX_SIZE);
         }
     }
     if( IsUndoEnabled() )

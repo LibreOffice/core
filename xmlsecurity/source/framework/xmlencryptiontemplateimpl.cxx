@@ -108,8 +108,4 @@ Reference< XInterface > SAL_CALL XMLEncryptionTemplateImpl::impl_createInstance(
     return Reference< XInterface >( *new XMLEncryptionTemplateImpl ) ;
 }
 
-Reference< XSingleServiceFactory > XMLEncryptionTemplateImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

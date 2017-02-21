@@ -135,7 +135,6 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     bRectsDirty     =false;
     size_t nCloneErrCnt = 0;
     const size_t nCount = rSrcList.GetObjCount();
-    SdrInsertReason aReason(SdrInsertReasonKind::Copy);
     for (size_t no=0; no<nCount; ++no) {
         SdrObject* pSO=rSrcList.GetObj(no);
 
@@ -144,7 +143,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         if (pDO!=nullptr) {
             pDO->SetModel(pModel);
             pDO->SetPage(pPage);
-            NbcInsertObject(pDO, SAL_MAX_SIZE, &aReason);
+            NbcInsertObject(pDO, SAL_MAX_SIZE);
         } else {
             nCloneErrCnt++;
         }
@@ -326,7 +325,7 @@ void SdrObjList::impChildInserted(SdrObject& rChild)
     }
 }
 
-void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* /*pReason*/)
+void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos)
 {
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::NbcInsertObject(NULL)");
     if (pObj!=nullptr) {
@@ -352,7 +351,7 @@ void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertRe
     }
 }
 
-void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
+void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos)
 {
     DBG_ASSERT(pObj!=nullptr,"SdrObjList::InsertObject(NULL)");
 
@@ -367,7 +366,7 @@ void SdrObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReaso
         }
 
         // do insert to new group
-        NbcInsertObject(pObj, nPos, pReason);
+        NbcInsertObject(pObj, nPos);
 
         // In case the object is inserted into a group and doesn't overlap with
         // the group's other members, it needs an own repaint.
@@ -734,8 +733,7 @@ void SdrObjList::UnGroupObj( size_t nObjNum )
             for( size_t i=0; i<nCount; ++i )
             {
                 SdrObject* pObj = pSrcLst->RemoveObject(0);
-                SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
-                InsertObject(pObj, nInsertPos, &aReason);
+                InsertObject(pObj, nInsertPos);
                 ++nInsertPos;
             }
 

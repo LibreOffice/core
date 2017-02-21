@@ -85,9 +85,7 @@ class XMLEncryptionTemplateImpl : public ::cppu::WeakImplHelper<
         //Helper for registry
         /// @throws css::uno::RuntimeException
         static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
-
-        static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
-} ;
+};
 
 #endif  // _XMLENCRYPTIONTEMPLATE_XMLSECIMPL_HXX_
 

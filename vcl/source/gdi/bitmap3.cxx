@@ -215,35 +215,6 @@ const long FloydIndexMap[6] =
     -30,  21, 72, 123, 174, 225
 };
 
-void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
-{
-    const double fVal = 3.125;
-    const double fVal16 = fVal / 16.;
-    const double fValScale = 254.;
-    sal_uInt16 pMtx[ 16 ][ 16 ];
-    sal_uInt16 nMax = 0;
-    static const sal_uInt8 pMagic[4][4] = { { 0, 14,  3, 13, },
-                                     {11,  5,  8,  6, },
-                                     {12,  2, 15,  1, },
-                                     {7,   9,  4, 10 } };
-
-    // Build MagicSquare
-    for ( long i = 0; i < 4; i++ )
-       for ( long j = 0; j < 4; j++ )
-           for ( long k = 0; k < 4; k++ )
-                for ( long l = 0; l < 4; l++ )
-                {
-                    pMtx[ (k<<2) + i][(l<<2 ) + j ] = (sal_uInt16) ( 0.5 + pMagic[i][j]*fVal + pMagic[k][l]*fVal16 );
-                    nMax = std::max ( pMtx[ (k<<2) + i][(l<<2 ) + j], nMax );
-                }
-
-    // Scale to interval [0;254]
-    double tmp = fValScale / nMax;
-    for ( long i = 0; i < 16; i++ )
-        for( long j = 0; j < 16; j++ )
-            (*pDitherMatrix)[i][j] = (sal_uInt8) ( tmp * pMtx[i][j] );
-}
-
 bool Bitmap::Convert( BmpConversion eConversion )
 {
     // try to convert in backend
@@ -371,81 +342,6 @@ bool Bitmap::ImplMakeMono( sal_uInt8 cThreshold )
                     {
                         if( pReadAcc->GetPixel( nY, nX ).GetLuminance() >=
                             cThreshold )
-                        {
-                            pWriteAcc->SetPixel( nY, nX, aWhite );
-                        }
-                        else
-                            pWriteAcc->SetPixel( nY, nX, aBlack );
-                    }
-                }
-            }
-
-            pWriteAcc.reset();
-            bRet = true;
-        }
-
-        pReadAcc.reset();
-
-        if( bRet )
-        {
-            const MapMode aMap( maPrefMapMode );
-            const Size aSize( maPrefSize );
-
-            *this = aNewBmp;
-
-            maPrefMapMode = aMap;
-            maPrefSize = aSize;
-        }
-    }
-
-    return bRet;
-}
-
-bool Bitmap::ImplMakeMonoDither()
-{
-    ScopedReadAccess pReadAcc(*this);
-    bool bRet = false;
-
-    if( pReadAcc )
-    {
-        Bitmap aNewBmp( GetSizePixel(), 1 );
-        ScopedWriteAccess pWriteAcc(aNewBmp);
-
-        if( pWriteAcc )
-        {
-            const BitmapColor aBlack( pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) ) );
-            const BitmapColor aWhite( pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) ) );
-            const long nWidth = pWriteAcc->Width();
-            const long nHeight = pWriteAcc->Height();
-            sal_uInt8 pDitherMatrix[ 16 ][ 16 ];
-
-            ImplCreateDitherMatrix( &pDitherMatrix );
-
-            if( pReadAcc->HasPalette() )
-            {
-                for( long nY = 0; nY < nHeight; nY++ )
-                {
-                    for( long nX = 0, nModY = nY % 16; nX < nWidth; nX++ )
-                    {
-                        const sal_uInt8 cIndex = pReadAcc->GetPixelIndex( nY, nX );
-                        if( pReadAcc->GetPaletteColor( cIndex ).GetLuminance() >
-                            pDitherMatrix[ nModY ][ nX % 16 ] )
-                        {
-                            pWriteAcc->SetPixel( nY, nX, aWhite );
-                        }
-                        else
-                            pWriteAcc->SetPixel( nY, nX, aBlack );
-                    }
-                }
-            }
-            else
-            {
-                for( long nY = 0; nY < nHeight; nY++ )
-                {
-                    for( long nX = 0, nModY = nY % 16; nX < nWidth; nX++ )
-                    {
-                        if( pReadAcc->GetPixel( nY, nX ).GetLuminance() >
-                            pDitherMatrix[ nModY ][ nX % 16 ] )
                         {
                             pWriteAcc->SetPixel( nY, nX, aWhite );
                         }

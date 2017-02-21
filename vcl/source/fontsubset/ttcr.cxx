@@ -1234,18 +1234,6 @@ sal_uInt32 glyfCount(const TrueTypeTable *table)
     return listCount(static_cast<list>(table->data));
 }
 
-void nameAdd(TrueTypeTable *table, NameRecord *nr)
-{
-    list l;
-
-    assert(table != nullptr);
-    assert(table->tag == T_name);
-
-    l = static_cast<list>(table->data);
-
-    listAppend(l, NameRecordNewCopy(nr));
-}
-
 static TrueTypeTable *FindTable(TrueTypeCreator *tt, sal_uInt32 tag)
 {
     if (listIsEmpty(tt->tables)) return nullptr;

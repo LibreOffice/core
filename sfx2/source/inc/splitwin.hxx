@@ -120,7 +120,6 @@ public:
     bool                IsAutoHide( bool bSelf ) const;
     SplitWindow*        GetSplitWindow();
 
-    virtual void        AutoHide() override;
     virtual void        FadeOut() override;
     virtual void        FadeIn() override;
     void                SetActiveWindow_Impl( SfxDockingWindow* pWin );

@@ -62,7 +62,6 @@ protected:
 
     // constructors
     Resource() : m_pResMgr( nullptr ) {}
-    Resource( const ResId& rResId );
 
 public:
 #ifdef DBG_UTIL

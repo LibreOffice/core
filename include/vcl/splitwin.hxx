@@ -122,7 +122,6 @@ public:
     virtual void        StartSplit();
     virtual void        Split();
     virtual void        SplitResize();
-    virtual void        AutoHide();
     virtual void        FadeIn();
     virtual void        FadeOut();
 
