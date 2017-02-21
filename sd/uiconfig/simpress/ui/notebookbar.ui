@@ -187,7 +187,7 @@
         <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="vcllo-NotebookbarTabControl" id="ContextContainer">
+          <object class="sfxlo-NotebookbarTabControl" id="ContextContainer">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="hexpand">True</property>

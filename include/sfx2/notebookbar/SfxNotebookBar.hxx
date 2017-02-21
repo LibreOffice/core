@@ -50,8 +50,6 @@ public:
 private:
     static bool m_bLock;
     static bool m_bHide;
-
-    DECL_STATIC_LINK(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, void);
 };
 
 } // namespace sfx2

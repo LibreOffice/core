@@ -120,12 +120,6 @@ void NotebookBar::Resize()
     Control::Resize();
 }
 
-void NotebookBar::SetIconClickHdl(Link<NotebookBar*, void> aHdl)
-{
-    if (m_pContextContainer)
-        m_pContextContainer->SetIconClickHdl(aHdl);
-}
-
 void NotebookBar::SetSystemWindow(SystemWindow* pSystemWindow)
 {
     m_pSystemWindow = pSystemWindow;

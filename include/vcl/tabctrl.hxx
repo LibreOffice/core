@@ -22,6 +22,7 @@
 
 #include <vcl/dllapi.h>
 #include <vcl/ctrl.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/EnumContext.hxx>
 #include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 
@@ -190,14 +191,18 @@ public:
 
 class NotebookBar;
 
-class VCL_DLLPUBLIC NotebookbarTabControl : public TabControl,
+class VCL_DLLPUBLIC NotebookbarTabControlBase : public TabControl,
                                             public NotebookbarContextControl
 {
 public:
-    NotebookbarTabControl( vcl::Window* pParent );
+    NotebookbarTabControlBase( vcl::Window* pParent );
+    ~NotebookbarTabControlBase() override;
+    void dispose() override;
 
     void SetContext( vcl::EnumContext::Context eContext ) override;
-    void SetIconClickHdl( Link<NotebookBar*, void> aHdl ) override;
+    void SetIconClickHdl( Link<NotebookBar*, void> aHdl );
+    void SetToolBox( ToolBox* pToolBox );
+    ToolBox* GetToolBox() { return m_pShortcuts; }
 
     virtual sal_uInt16  GetPageId( const Point& rPos ) const override;
     virtual void        SelectTabPage( sal_uInt16 nPageId ) override;
@@ -215,6 +220,7 @@ private:
     vcl::EnumContext::Context eLastContext;
     Link<NotebookBar*,void> m_aIconClickHdl;
     static sal_uInt16 m_nHeaderHeight;
+    VclPtr<ToolBox> m_pShortcuts;
 };
 
 #endif // INCLUDED_VCL_TABCTRL_HXX

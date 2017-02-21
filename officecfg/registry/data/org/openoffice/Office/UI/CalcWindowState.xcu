@@ -733,6 +733,17 @@
           <value>false</value>
         </prop>
       </node>
+      <node oor:name="private:resource/toolbar/notebookbarshortcuts" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Notebookbar shortcuts</value>
+        </prop>
+        <prop oor:name="Visible" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+      </node>
     </node>
   </node>
 </oor:component-data>

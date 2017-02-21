@@ -2202,11 +2202,9 @@ FactoryFunction TabControl::GetUITestFactory() const
     return TabControlUIObject::create;
 }
 
-VCL_BUILDER_FACTORY(NotebookbarTabControl);
+sal_uInt16 NotebookbarTabControlBase::m_nHeaderHeight = 0;
 
-sal_uInt16 NotebookbarTabControl::m_nHeaderHeight = 0;
-
-NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent)
+NotebookbarTabControlBase::NotebookbarTabControlBase(vcl::Window* pParent)
     : TabControl(pParent, WB_STDTABCONTROL)
     , bLastContextWasSupported(true)
     , eLastContext(vcl::EnumContext::Context::Any)
@@ -2216,7 +2214,12 @@ NotebookbarTabControl::NotebookbarTabControl(vcl::Window* pParent)
     SetPageImage(1, Image(aBitmap));
 }
 
-void NotebookbarTabControl::SetContext( vcl::EnumContext::Context eContext )
+NotebookbarTabControlBase::~NotebookbarTabControlBase()
+{
+    disposeOnce();
+}
+
+void NotebookbarTabControlBase::SetContext( vcl::EnumContext::Context eContext )
 {
     if (eLastContext != eContext)
     {
@@ -2225,21 +2228,22 @@ void NotebookbarTabControl::SetContext( vcl::EnumContext::Context eContext )
         for (int nChild = 0; nChild < GetChildCount(); ++nChild)
         {
             TabPage* pPage = static_cast<TabPage*>(GetChild(nChild));
+            sal_uInt16 nPageId = TabControl::GetPageId(*pPage);
 
             if (pPage->HasContext(eContext) || pPage->HasContext(vcl::EnumContext::Context::Any))
-                EnablePage(nChild + 2);
+                EnablePage(nPageId);
             else
-                EnablePage(nChild + 2, false);
+                EnablePage(nPageId, false);
 
             if (!bHandled && bLastContextWasSupported
                 && pPage->HasContext(vcl::EnumContext::Context::Default))
             {
-                SetCurPageId(nChild + 2);
+                SetCurPageId(nPageId);
             }
 
             if (pPage->HasContext(eContext) && eContext != vcl::EnumContext::Context::Any)
             {
-                SetCurPageId(nChild + 2);
+                SetCurPageId(nPageId);
                 bHandled = true;
                 bLastContextWasSupported = true;
             }
@@ -2251,16 +2255,27 @@ void NotebookbarTabControl::SetContext( vcl::EnumContext::Context eContext )
     }
 }
 
-void NotebookbarTabControl::SetIconClickHdl( Link<NotebookBar*, void> aHdl )
+void NotebookbarTabControlBase::dispose()
+{
+    m_pShortcuts.disposeAndClear();
+    TabControl::dispose();
+}
+
+void NotebookbarTabControlBase::SetToolBox( ToolBox* pToolBox )
+{
+    m_pShortcuts.set( pToolBox );
+}
+
+void NotebookbarTabControlBase::SetIconClickHdl( Link<NotebookBar*, void> aHdl )
 {
     m_aIconClickHdl = aHdl;
 }
 
-sal_uInt16 NotebookbarTabControl::GetPageId( const Point& rPos ) const
+sal_uInt16 NotebookbarTabControlBase::GetPageId( const Point& rPos ) const
 {
     for( size_t i = 0; i < mpTabCtrlData->maItemList.size(); ++i )
     {
-        if ( const_cast<NotebookbarTabControl*>(this)->ImplGetTabRect( static_cast<sal_uInt16>(i) ).IsInside( rPos ) )
+        if ( const_cast<NotebookbarTabControlBase*>(this)->ImplGetTabRect( static_cast<sal_uInt16>(i) ).IsInside( rPos ) )
             if ( mpTabCtrlData->maItemList[ i ].mbEnabled )
                 return mpTabCtrlData->maItemList[ i ].mnId;
     }
@@ -2268,10 +2283,10 @@ sal_uInt16 NotebookbarTabControl::GetPageId( const Point& rPos ) const
     return 0;
 }
 
-void NotebookbarTabControl::SelectTabPage( sal_uInt16 nPageId )
+void NotebookbarTabControlBase::SelectTabPage( sal_uInt16 nPageId )
 {
     if ( nPageId == 1 )
-        m_aIconClickHdl.Call( static_cast<NotebookBar*>(GetParent()) );
+        m_aIconClickHdl.Call( static_cast<NotebookBar*>(GetParent()->GetParent()) );
     else
     {
         TabControl::SelectTabPage( nPageId );
@@ -2279,7 +2294,7 @@ void NotebookbarTabControl::SelectTabPage( sal_uInt16 nPageId )
     }
 }
 
-void NotebookbarTabControl::SetCurPageId( sal_uInt16 nPageId )
+void NotebookbarTabControlBase::SetCurPageId( sal_uInt16 nPageId )
 {
     if ( nPageId != 1 )
     {
@@ -2290,7 +2305,7 @@ void NotebookbarTabControl::SetCurPageId( sal_uInt16 nPageId )
         ImplActivateTabPage( true );
 }
 
-void NotebookbarTabControl::ImplActivateTabPage( bool bNext )
+void NotebookbarTabControlBase::ImplActivateTabPage( bool bNext )
 {
     sal_uInt16 nCurPos = GetPagePos( GetCurPageId() );
 
@@ -2323,12 +2338,12 @@ void NotebookbarTabControl::ImplActivateTabPage( bool bNext )
     SelectTabPage( TabControl::GetPageId( nCurPos ) );
 }
 
-sal_uInt16 NotebookbarTabControl::GetHeaderHeight()
+sal_uInt16 NotebookbarTabControlBase::GetHeaderHeight()
 {
     return m_nHeaderHeight;
 }
 
-bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )
+bool NotebookbarTabControlBase::ImplPlaceTabs( long nWidth )
 {
     if ( nWidth <= 0 )
         return false;
@@ -2358,6 +2373,7 @@ bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )
         nMaxWidth = mnMaxPageWidth;
     nMaxWidth -= GetItemsOffset().X();
 
+    long nShortcutsWidth = m_pShortcuts != nullptr ? m_pShortcuts->GetSizePixel().getWidth() : 0;
     long nX = nOffsetX;
     long nY = nOffsetY;
 
@@ -2376,6 +2392,9 @@ bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )
     for( std::vector<ImplTabItem>::iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it, ++nIndex )
     {
+        if( it == mpTabCtrlData->maItemList.begin() + 1 )
+            nX += nShortcutsWidth;
+
         Size aSize = ImplGetItemSize( &(*it), nMaxWidth );
 
         bool bNewLine = false;
@@ -2506,7 +2525,7 @@ bool NotebookbarTabControl::ImplPlaceTabs( long nWidth )
     return true;
 }
 
-void NotebookbarTabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
+void NotebookbarTabControlBase::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect)
 {
     HideFocus();
 
@@ -2697,9 +2716,11 @@ void NotebookbarTabControl::ImplPaint(vcl::RenderContext& rRenderContext, const 
         ImplShowFocus();
 
     mbSmallInvalidate = true;
+
+    Control::Paint(rRenderContext, rRect);
 }
 
-Size NotebookbarTabControl::calculateRequisition() const
+Size NotebookbarTabControlBase::calculateRequisition() const
 {
     Size aOptimalPageSize(0, 0);
 
@@ -2712,7 +2733,7 @@ Size NotebookbarTabControl::calculateRequisition() const
         //We need to force all tabs to exist to get overall optimal size for dialog
         if (!pPage)
         {
-            NotebookbarTabControl *pThis = const_cast<NotebookbarTabControl*>(this);
+            NotebookbarTabControlBase *pThis = const_cast<NotebookbarTabControlBase*>(this);
             pThis->SetCurPageId(it->mnId);
             pThis->ActivatePage();
             pPage = it->mpTabPage;
@@ -2734,7 +2755,7 @@ Size NotebookbarTabControl::calculateRequisition() const
     //page and re-activate it
     if (nOrigPageId != GetCurPageId())
     {
-        NotebookbarTabControl *pThis = const_cast<NotebookbarTabControl*>(this);
+        NotebookbarTabControlBase *pThis = const_cast<NotebookbarTabControlBase*>(this);
         pThis->SetCurPageId(nOrigPageId);
         pThis->ActivatePage();
     }
@@ -2743,7 +2764,7 @@ Size NotebookbarTabControl::calculateRequisition() const
     for( std::vector< ImplTabItem >::const_iterator it = mpTabCtrlData->maItemList.begin();
          it != mpTabCtrlData->maItemList.end(); ++it )
     {
-        NotebookbarTabControl* pThis = const_cast<NotebookbarTabControl*>(this);
+        NotebookbarTabControlBase* pThis = const_cast<NotebookbarTabControlBase*>(this);
 
         sal_uInt16 nPos = it - mpTabCtrlData->maItemList.begin();
         Rectangle aTabRect = pThis->ImplGetTabRect(nPos, aOptimalPageSize.Width(), LONG_MAX);
