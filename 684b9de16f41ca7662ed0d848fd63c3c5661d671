@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0712c162",
+        "filename": "include/formula/token.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-21T12:46:26Z",
+      "side": 0,
+      "message": "Please keep the sv prefixes, it much eases finding places that use a specific value using id-utils. Also, is it really necessary to prefix all uses with StackVar::? With this massive use I find that more awkward than helpful.",
+      "revId": "684b9de16f41ca7662ed0d848fd63c3c5661d671",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
