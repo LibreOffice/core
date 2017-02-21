@@ -5374,7 +5374,7 @@ void Test::testNoteLifeCycle()
         pasteFromClip( m_pDoc, aPosB5, &aClipDoc2); // should not crash ... tdf#104967
         ScPostIt* pNoteB5 = m_pDoc->GetNote(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("Failed to paste cell comment at B5.", pNoteB5);
-        const SdrCaptionObj* pCaptionB5 = pNoteB5->GetCaption();
+        const SdrCaptionObj* pCaptionB5 = pNoteB5->GetOrCreateCaption(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("No caption at pasted B5.", pCaptionB5);
         CPPUNIT_ASSERT_MESSAGE("Captions not different after Paste.", pCaptionB5 != pOtherCaptionB5);
     }
