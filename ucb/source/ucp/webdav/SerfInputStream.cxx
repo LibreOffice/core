@@ -21,6 +21,8 @@
 
 #include <cppuhelper/queryinterface.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 #include <string.h>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -29,7 +31,6 @@ using namespace cppu;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
 using namespace http_dav_ucp;
-
 
 // Constructor
 
