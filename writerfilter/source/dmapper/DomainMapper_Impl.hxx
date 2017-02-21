@@ -596,7 +596,7 @@ public:
     SettingsTablePtr const & GetSettingsTable()
     {
         if( !m_pSettingsTable )
-            m_pSettingsTable.reset( new SettingsTable );
+            m_pSettingsTable.reset(new SettingsTable(m_rDMapper));
         return m_pSettingsTable;
     }
 
