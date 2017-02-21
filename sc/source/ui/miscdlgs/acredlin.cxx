@@ -1725,7 +1725,6 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
             {
                 bool bSortDir = pTheView->GetSortDirection();
                 sal_uInt16 nDialogCol = nCommand - nActionId;
-                fprintf(stderr, "sort by %d\n", nDialogCol);
                 if(nSortedCol==nDialogCol) bSortDir=!bSortDir;
                 pTheView->SortByCol(nDialogCol,bSortDir);
                 /*
