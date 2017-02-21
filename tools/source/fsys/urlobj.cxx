@@ -36,6 +36,7 @@
 #include <sal/types.h>
 
 #include <algorithm>
+#include <cassert>
 #include <limits>
 #include <memory>
 
@@ -406,13 +407,26 @@ inline INetURLObject::SchemeInfo const & INetURLObject::getSchemeInfo() const
     return getSchemeInfo(m_eScheme);
 }
 
+namespace {
+
+sal_Unicode getHexDigit(sal_uInt32 nWeight)
+{
+    assert(nWeight < 16);
+    static const sal_Unicode aDigits[16]
+        = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
+            'D', 'E', 'F' };
+    return aDigits[nWeight];
+}
+
+}
+
 // static
 inline void INetURLObject::appendEscape(OUStringBuffer & rTheText,
                                         sal_uInt32 nOctet)
 {
     rTheText.append( '%' );
-    rTheText.append( (sal_Unicode)INetMIME::getHexDigit(int(nOctet >> 4)) );
-    rTheText.append( (sal_Unicode)INetMIME::getHexDigit(int(nOctet & 15)) );
+    rTheText.append( getHexDigit(nOctet >> 4) );
+    rTheText.append( getHexDigit(nOctet & 15) );
 }
 
 namespace {

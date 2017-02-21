@@ -1145,18 +1145,6 @@ bool INetMIME::isIMAPAtomChar(sal_uInt32 nChar)
 }
 
 // static
-sal_uInt32 INetMIME::getHexDigit(int nWeight)
-{
-    DBG_ASSERT(nWeight >= 0 && nWeight < 16,
-               "INetMIME::getHexDigit(): Bad weight");
-
-    static const sal_Char aDigits[16]
-        = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C',
-            'D', 'E', 'F' };
-    return aDigits[nWeight];
-}
-
-// static
 bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
                                const sal_Unicode * pEnd1,
                                const sal_Char * pString2)

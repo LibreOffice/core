@@ -109,15 +109,6 @@ public:
      */
     static inline int getHexWeight(sal_uInt32 nChar);
 
-    /** Get a hexadecimal digit encoded as US-ASCII.
-
-        @param nWeight  Must be in the range 0--15, inclusive.
-
-        @return  The canonic (i.e., upper case) hexadecimal digit
-        corresponding to nWeight (US-ASCII '0'--'9' or 'A'--'F').
-     */
-    static sal_uInt32 getHexDigit(int nWeight);
-
     /** Check two US-ASCII strings for equality, ignoring case.
 
         @param pBegin1  Points to the start of the first string, must not be
