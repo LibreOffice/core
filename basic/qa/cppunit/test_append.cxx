@@ -20,12 +20,14 @@ namespace
         public:
         EnableTest() : BootstrapFixture(true, false) {};
         void testDimEnable();
+        void testDeclare();
         void testEnableRuntime();
         // Adds code needed to register the test suite
         CPPUNIT_TEST_SUITE(EnableTest);
 
         // Declares the method as a test to call
         CPPUNIT_TEST(testDimEnable);
+        CPPUNIT_TEST(testDeclare);
         CPPUNIT_TEST(testEnableRuntime);
 
         // End of test suite definition
@@ -61,6 +63,18 @@ void EnableTest::testDimEnable()
     MacroSnippet myMacro(sTestDimEnable);
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("Dim causes compile error", !myMacro.HasError() );
+}
+
+void EnableTest::testDeclare()
+{
+    OUStringBuffer aDeclare("Declare PtrSafe Function aht_apiGetOpenFileName Lib ");
+    aDeclare.append('"');
+    aDeclare.append("comdlg32.dll");
+    aDeclare.append('"');
+
+    MacroSnippet myMacro(aDeclare.toString());
+    myMacro.Compile();
+    CPPUNIT_ASSERT_MESSAGE("Declare PtrSafe causes compile error", !myMacro.HasError() );
 }
 
   // Put the test suite in the registry
