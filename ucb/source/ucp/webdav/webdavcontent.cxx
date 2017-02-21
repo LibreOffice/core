@@ -26,17 +26,22 @@
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 
+#include <com/sun/star/beans/IllegalTypeException.hpp>
+#include <com/sun/star/beans/NotRemoveableException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyExistException.hpp>
 #include <com/sun/star/beans/PropertySetInfoChange.hpp>
 #include <com/sun/star/beans/PropertySetInfoChangeEvent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/task/PasswordContainerInteractionHandler.hpp>
 #include <com/sun/star/ucb/CommandEnvironment.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include <com/sun/star/ucb/ContentInfoAttribute.hpp>
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ucb/InteractiveBadTransferURLException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
@@ -71,6 +76,7 @@
 #include "ContentProperties.hxx"
 #include "SerfUri.hxx"
 #include "UCBDeadPropertyValue.hxx"
+#include "DAVException.hxx"
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;
