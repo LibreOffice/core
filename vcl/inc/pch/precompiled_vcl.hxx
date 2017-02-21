@@ -54,7 +54,9 @@
 #include <boost/math/special_functions/sinc.hpp>
 #include <boost/multi_array.hpp>
 #include <boost/optional.hpp>
+#ifndef LIBO_HEADLESS
 #include <epoxy/gl.h>
+#endif
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
