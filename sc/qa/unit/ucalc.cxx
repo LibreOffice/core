@@ -5376,7 +5376,9 @@ void Test::testNoteLifeCycle()
         CPPUNIT_ASSERT_MESSAGE("Failed to paste cell comment at B5.", pNoteB5);
         const SdrCaptionObj* pCaptionB5 = pNoteB5->GetOrCreateCaption(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("No caption at pasted B5.", pCaptionB5);
-        CPPUNIT_ASSERT_MESSAGE("Captions not different after Paste.", pCaptionB5 != pOtherCaptionB5);
+        // Do not test if  pCaptionB5 != pOtherCaptionB5  because since pDoc2
+        // has been closed and the caption been deleted objects *may* be
+        // allocated at the very same memory location.
     }
 
     m_pDoc->DeleteTab(0);
