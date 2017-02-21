@@ -1577,15 +1577,14 @@ void lcl_CopyHint(
     }
 }
 
-//  Beschreibung    kopiert Attribute an der Position nStart in pDest.
-//  BP 7.6.93:      Es werden mit Absicht nur die Attribute _mit_ EndIdx
-//                  kopiert! CopyAttr wird vornehmlich dann gerufen,
-//                  wenn Attribute fuer einen Node mit leerem String
-//                  gesetzt werden sollen.
+/// copy attributes at position nTextStartIdx to node pDest
+//  BP 7.6.93:      Intentionally copy only attributes _with_ EndIdx!
+//                  CopyAttr is usually called when attributes are set on a
+//                  node with no text.
 void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
                           const sal_Int32 nOldPos )
 {
-    if ( HasHints() )    // keine Attribute, keine Kekse
+    if ( HasHints() )
     {
         SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc()) ?
                 pDest->GetDoc() : nullptr;
@@ -1595,7 +1594,7 @@ void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
             SwTextAttr *const pHt = m_pSwpHints->Get(i);
             sal_Int32 const nAttrStartIdx = pHt->GetStart();
             if ( nTextStartIdx < nAttrStartIdx )
-                break; // ueber das Textende, da nLen == 0
+                break; // beyond end of text, because nLen == 0
 
             const sal_Int32 *const pEndIdx = pHt->GetEnd();
             if ( pEndIdx && !pHt->HasDummyChar() )
@@ -1631,7 +1630,7 @@ void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
 
     if( this != pDest )
     {
-        // Frames benachrichtigen, sonst verschwinden die Footnote-Nummern
+        // notify layout frames, to prevent disappearance of footnote numbers
         SwUpdateAttr aHint(
             nOldPos,
             nOldPos,
@@ -1641,8 +1640,7 @@ void SwTextNode::CopyAttr( SwTextNode *pDest, const sal_Int32 nTextStartIdx,
     }
 }
 
-// kopiert Zeichen und Attibute in pDest, wird angehaengt
-// introduction of new optional parameter to control, if all attributes have to be copied.
+/// copy text and attributes to node pDest
 void SwTextNode::CopyText( SwTextNode *const pDest,
                       const SwIndex &rStart,
                       const sal_Int32 nLen,
@@ -1652,7 +1650,6 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     CopyText( pDest, aIdx, rStart, nLen, bForceCopyOfAllAttrs );
 }
 
-// introduction of new optional parameter to control, if all attributes have to be copied.
 void SwTextNode::CopyText( SwTextNode *const pDest,
                       const SwIndex &rDestStart,
                       const SwIndex &rStart,
@@ -1662,7 +1659,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     CHECK_SWPHINTS_IF_FRM(this);
     CHECK_SWPHINTS(pDest);
     sal_Int32 nTextStartIdx = rStart.GetIndex();
-    sal_Int32 nDestStart = rDestStart.GetIndex();      // alte Pos merken
+    sal_Int32 nDestStart = rDestStart.GetIndex();      // remember old Pos
 
     if (pDest->GetDoc()->IsClipBoard() && this->GetNum())
     {
@@ -1674,15 +1671,13 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
 
     if( !nLen )
     {
-        // wurde keine Laenge angegeben, dann Kopiere die Attribute
-        // an der Position rStart.
+        // if no length is given, copy attributes at position rStart
         CopyAttr( pDest, nTextStartIdx, nDestStart );
 
-        // harte Absatz umspannende Attribute kopieren
+        // copy hard attributes on whole paragraph
         if( HasSwAttrSet() )
         {
-            // alle, oder nur die CharAttribute ?
-            // #i96213#
+            // i#96213 all or just the Char attributes?
             if ( !bForceCopyOfAllAttrs &&
                  ( nDestStart ||
                    pDest->HasSwAttrSet() ||
@@ -1708,26 +1703,24 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         return;
     }
 
-    // 1. Text kopieren
+    // 1. copy text
     const sal_Int32 oldLen = pDest->m_Text.getLength();
-    //JP 15.02.96: Bug 25537 - Attributbehandlung am Ende fehlt! Darum
-    //              ueber die InsertMethode den Text einfuegen und nicht
-    //              selbst direkt
+    // JP 15.02.96: missing attribute handling at the end!
+    //              hence call InsertText and don't modify m_Text directly
     pDest->InsertText( m_Text.copy(nTextStartIdx, nLen), rDestStart,
                    SwInsertFlags::EMPTYEXPAND );
 
-    // um reale Groesse Updaten !
+    // update with actual new size
     nLen = pDest->m_Text.getLength() - oldLen;
     if ( !nLen ) // string not longer?
         return;
 
     SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc()) ? pDest->GetDoc() : nullptr;
 
-    // harte Absatz umspannende Attribute kopieren
+    // copy hard attributes on whole paragraph
     if( HasSwAttrSet() )
     {
-        // alle, oder nur die CharAttribute ?
-        // #i96213#
+        // i#96213 all or just the Char attributes?
         if ( !bForceCopyOfAllAttrs &&
              ( nDestStart ||
                pDest->HasSwAttrSet() ||
@@ -1754,26 +1747,24 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
     bool const bUndoNodes = !pOtherDoc
                             && GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
-    // Ende erst jetzt holen, weil beim Kopieren in sich selbst der
-    // Start-Index und alle Attribute vorher aktualisiert werden.
+    // Fetch end only now, because copying into self updates the start index
+    // and all attributes
     nTextStartIdx = rStart.GetIndex();
     const sal_Int32 nEnd = nTextStartIdx + nLen;
 
-    // 2. Attribute kopieren
-    // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
-    // des Attributs hinter dem zu kopierenden Bereich liegt
+    // 2. copy attributes
+    // Iterate over attribute array until the start of the attribute
+    // is behind the copied range
     const size_t nSize = m_pSwpHints ? m_pSwpHints->Count() : 0;
 
-    // wird in sich selbst kopiert, dann kann beim Einfuegen ein
-    // Attribut geloescht werden. Darum erst ins Tmp-Array kopieren und
-    // dann erst ins eigene uebertragen.
+    // If copying into self, inserting can delete attributes!
+    // Hence first copy into temp-array, and then move that into hints array.
     SwpHts aArr;
 
-    // Del-Array fuer alle RefMarks ohne Ausdehnung
+    // Del-Array for all RefMarks without extent
     SwpHts aRefMrkArr;
 
     sal_Int32 nDeletedDummyChars(0);
-    //Achtung: kann ungueltig sein!!
     for (size_t n = 0; n < nSize; ++n)
     {
         const sal_Int32 nAttrStartIdx = m_pSwpHints->Get(n)->GetStart();
@@ -1784,12 +1775,12 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         const sal_Int32 * const pEndIdx = pHt->GetEnd();
         const sal_uInt16 nWhich = pHt->Which();
 
-        // JP 26.04.94: REFMARK's werden nie kopiert. Hat das Refmark aber
-        //              keinen Bereich umspannt, so steht im Text ein 255
-        //              dieses muss entfernt werden. Trick: erst kopieren,
-        //              erkennen und sammeln, nach dem kopieren Loeschen.
-        //              Nimmt sein Zeichen mit ins Grab !!
-        // JP 14.08.95: Duerfen RefMarks gemovt werden?
+        // JP 26.04.94: RefMarks are never copied. If the refmark doesn't have
+        //              an extent, there is a dummy char in the text, which
+        //              must be removed. So we first copy the attribute,
+        //              but remember it, and when we're done delete it,
+        //              which also deletes the dummy character!
+        // JP 14.08.95: May RefMarks be moved?
         const bool bCopyRefMark = RES_TXTATR_REFMARK == nWhich
                                   && ( bUndoNodes
                                        || ( !pOtherDoc
@@ -1889,8 +1880,7 @@ void SwTextNode::CopyText( SwTextNode *const pDest,
         }
     }
 
-    // nur falls im Array Attribute stehen (kann nur beim Kopieren
-    // sich selbst passieren!!)
+    // this can only happen when copying into self
     for (SwTextAttr* i : aArr)
     {
         InsertHint( i, SetAttrMode::NOTXTATRCHR );
@@ -1951,10 +1941,6 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
         SetIgnoreDontExpand( bOldExpFlg );
     }
 
-    // analog zu Insert(char) in txtedt.cxx:
-    // 1) bei bHintExp leere Hints an rIdx.GetIndex suchen und aufspannen
-    // 2) bei bHintExp == false mitgezogene Feldattribute zuruecksetzen
-
     if ( HasHints() )
     {
         bool const bHadHints(!m_pSwpHints->CanBeDeleted());
@@ -1973,7 +1959,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                     (!(nMode & SwInsertFlags::FORCEHINTEXPAND)
                      && pHt->DontExpand()) )
                 {
-                    // bei leeren Attributen auch Start veraendern
+                    // on empty attributes also adjust Start
                     if( rIdx == pHt->GetStart() )
                         pHt->GetStart() = pHt->GetStart() - nLen;
                     *pEndIdx = *pEndIdx - nLen;
@@ -2011,7 +1997,7 @@ OUString SwTextNode::InsertText( const OUString & rStr, const SwIndex & rIdx,
                  rIdx == nLen && pHt->GetStart() == rIdx.GetIndex() &&
                  !pHt->IsDontExpandStartAttr() )
             {
-                // Kein Feld, am Absatzanfang, HintExpand
+                // no field, at paragraph start, HintExpand
                 m_pSwpHints->DeleteAtPos(i);
                 pHt->GetStart() = pHt->GetStart() - nLen;
                 // no effect on format ignore flags here (para start)
@@ -2059,14 +2045,13 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
 
     if( !nLen )
     {
-        // wurde keine Laenge angegeben, dann Kopiere die Attribute
-        // an der Position rStart.
+        // if no length is given, copy attributes at position rStart
         CopyAttr( pDest, rStart.GetIndex(), rDestStart.GetIndex() );
         return;
     }
 
     sal_Int32 nTextStartIdx = rStart.GetIndex();
-    sal_Int32 nDestStart = rDestStart.GetIndex();      // alte Pos merken
+    sal_Int32 nDestStart = rDestStart.GetIndex();      // remember old Pos
     const sal_Int32 nInitSize = pDest->m_Text.getLength();
 
     pDest->m_Text = pDest->m_Text.replaceAt(nDestStart, 0,
@@ -2078,12 +2063,12 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         abort();
     }
     nLen = pDest->m_Text.getLength() - nInitSize; // update w/ current size!
-    if (!nLen)                 // String nicht gewachsen ??
+    if (!nLen)                 // String didn't grow?
         return;
 
     if (bUpdate)
     {
-        // Update aller Indizies
+        // Update all SwIndex
         pDest->Update( rDestStart, nLen, false, true);
     }
 
@@ -2093,10 +2078,10 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
     bool const bUndoNodes =
         GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
-    // harte Absatz umspannende Attribute kopieren
+    // copy hard attributes on whole paragraph
     if (HasSwAttrSet())
     {
-        // alle, oder nur die CharAttribute ?
+        // all or just the Char attributes?
         if( nInitSize || pDest->HasSwAttrSet() ||
             nLen != pDest->GetText().getLength())
         {
@@ -2116,9 +2101,9 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         }
     }
 
-    // 2. Attribute verschieben
-    // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
-    // des Attributs hinter dem zu verschiebenden Bereich liegt
+    // 2. move attributes
+    // Iterate over attribute array until the start of the attribute
+    // is behind the moved range
     bool bMergePortionsNeeded(false);
     size_t nAttrCnt = 0;
     while (m_pSwpHints && (nAttrCnt < m_pSwpHints->Count()))
@@ -2134,12 +2119,11 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         // if the hint has a dummy character, then it must not be split!
         if(nAttrStartIdx < nTextStartIdx)
         {
-            // Anfang liegt vor dem Bereich
+            // start is before the range
             if (!pHt->HasDummyChar() && ( RES_TXTATR_REFMARK != nWhich
                 || bUndoNodes ) && pEndIdx && *pEndIdx > nTextStartIdx)
             {
-                // Attribut mit einem Bereich
-                // und das Ende des Attribut liegt im Bereich
+                // attribute with extent and end of attribute is in the range
                 pNewHt = MakeTextAttr( *pDest->GetDoc(), pHt->GetAttr(),
                                 nDestStart,
                                 nDestStart + (
@@ -2150,7 +2134,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         }
         else
         {
-            // der Anfang liegt vollstaendig im Bereich
+            // start is inside the range
             if (!pEndIdx || *pEndIdx < nEnd ||
                 (!bUndoNodes && RES_TXTATR_REFMARK == nWhich)
                 || pHt->HasDummyChar() )
@@ -2160,9 +2144,9 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
                 {
                     GetDoc()->GetDocShell()->Broadcast( SfxHint(SfxHintId::SwSplitNodeOperation));
                 }
-                // Attribut verschieben
+                // move attribute
                 m_pSwpHints->Delete( pHt );
-                // die Start/End Indicies neu setzen
+                // reset start/end indexes
                 if (pHt->IsFormatIgnoreStart() || pHt->IsFormatIgnoreEnd())
                 {
                     bMergePortionsNeeded = true;
@@ -2183,9 +2167,9 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
                 {
                     GetDoc()->GetDocShell()->Broadcast( SfxHint(SfxHintId::SwSplitNodeOperation));
                 }
-                continue;           // while-Schleife weiter, ohne ++ !
+                continue;           // iterate while loop, no ++ !
             }
-                // das Ende liegt dahinter
+                // the end is behind the range
             else if (RES_TXTATR_REFMARK != nWhich || bUndoNodes)
             {
                 pNewHt = MakeTextAttr( *GetDoc(), pHt->GetAttr(),
@@ -2208,10 +2192,10 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
         }
         ++nAttrCnt;
     }
-    // sollten jetzt noch leere Attribute rumstehen, dann haben diese
-    // eine hoehere Praezedenz. Also herausholen und das Array updaten.
-    // Die dabei entstehenden leeren Hints werden von den gesicherten
-    // "uebergeplaettet".   (Bug: 6977)
+    // If there are still empty attributes around, they have a higher priority
+    // than any attributes that become empty due to the move.
+    // So temporarily remove them and Update the array, then re-insert the
+    // removed ones so they overwrite the others.
     if (m_pSwpHints && nAttrCnt < m_pSwpHints->Count())
     {
         SwpHts aArr;
@@ -2253,7 +2237,7 @@ void SwTextNode::CutImpl( SwTextNode * const pDest, const SwIndex & rDestStart,
 
     TryDeleteSwpHints();
 
-    // Frames benachrichtigen;
+    // notify layout frames
     SwInsText aInsHint( nDestStart, nLen );
     pDest->ModifyNotification( nullptr, &aInsHint );
     SwDelText aDelHint( nTextStartIdx, nLen );
@@ -2271,10 +2255,8 @@ void SwTextNode::EraseText(const SwIndex &rIdx, const sal_Int32 nCount,
     const sal_Int32 nEndIdx = nStartIdx + nCnt;
     m_Text = m_Text.replaceAt(nStartIdx, nCnt, "");
 
-    /* GCAttr(); alle leeren weggwerfen ist zu brutal.
-     * Es duerfen nur die wegggeworfen werden,
-     * die im Bereich liegen und nicht am Ende des Bereiches liegen
-     */
+    // GCAttr(); don't remove all empty ones, just the ones that are in the
+    // range but not at the end of the range.
 
     for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
@@ -2369,14 +2351,13 @@ void SwTextNode::GCAttr()
     bool   bChanged = false;
     sal_Int32 nMin = m_Text.getLength();
     sal_Int32 nMax = 0;
-    const bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
-                           // INet-Formate entfernt.
+    const bool bAll = nMin != 0; // on empty paragraphs only remove INetFormats
 
     for ( size_t i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
         SwTextAttr * const pHt = m_pSwpHints->Get(i);
 
-        // wenn Ende und Start gleich sind --> loeschen
+        // if end and start are equal, delete it
         const sal_Int32 * const pEndIdx = pHt->GetEnd();
         if (pEndIdx && !pHt->HasDummyChar() && (*pEndIdx == pHt->GetStart())
             && ( bAll || pHt->Which() == RES_TXTATR_INETFMT ) )
@@ -2396,7 +2377,7 @@ void SwTextNode::GCAttr()
 
     if(bChanged)
     {
-        //TextFrame's reagieren auf aHint, andere auf aNew
+        // textframes react to aHint, others to aNew
         SwUpdateAttr aHint(
             nMin,
             nMax,
@@ -2508,7 +2489,7 @@ bool SwTextNode::HasMarkedLabel() const
 SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
                                        bool bChgFollow )
 {
-    /* hartes PageBreak/PageDesc/ColumnBreak aus AUTO-Set ignorieren */
+    // ignore hard PageBreak/PageDesc/ColumnBreak from Auto-Set
     SwAttrSet* pNewAttrSet = nullptr;
     // #i75353#
     bool bClearHardSetNumRuleWhenFormatCollChanges( false );
@@ -2517,10 +2498,10 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
         pNewAttrSet = new SwAttrSet( *GetpSwAttrSet() );
         const SfxItemSet* pTmpSet = GetpSwAttrSet();
 
-        if( bNext )     // der naechste erbt keine Breaks!
+        if (bNext)     // successor doesn't inherit breaks!
             pTmpSet = pNewAttrSet;
 
-        // PageBreaks/PageDesc/ColBreak rausschmeissen.
+        // !bNext: remove PageBreaks/PageDesc/ColBreak from this
         bool bRemoveFromCache = false;
         std::vector<sal_uInt16> aClearWhichIds;
         if ( bNext )
@@ -2598,20 +2579,19 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
             SetCountedInList(true);
     }
 
-    // jetzt kann es sein, das durch die Nummerierung dem neuen Node eine
-    // Vorlage aus dem Pool zugewiesen wurde. Dann darf diese nicht
-    // nochmal uebergeplaettet werden !!
+    // In case the numbering caused a style form the pool to be assigned to
+    // the new node, don't overwrite that here!
     if( pColl != pNode->GetTextColl() ||
         ( bChgFollow && pColl != GetTextColl() ))
-        return pNode;       // mehr duerfte nicht gemacht werden oder ????
+        return pNode;       // that ought to be enough?
 
-    pNode->ChgTextCollUpdateNum( nullptr, pColl ); // fuer Nummerierung/Gliederung
+    pNode->ChgTextCollUpdateNum( nullptr, pColl ); // for numbering/outline
     if( bNext || !bChgFollow )
         return pNode;
 
     SwTextFormatColl *pNextColl = &pColl->GetNextTextFormatColl();
-    // #i101870#
-    // perform action on different paragraph styles before applying the new paragraph style
+    // i#101870 perform action on different paragraph styles before applying
+    // the new paragraph style
     if (pNextColl != pColl)
     {
         // #i75353#
@@ -2633,7 +2613,7 @@ SwTextNode* SwTextNode::MakeNewTextNode( const SwNodeIndex& rPos, bool bNext,
 
 SwContentNode* SwTextNode::AppendNode( const SwPosition & rPos )
 {
-    // Position hinter dem eingefuegt wird
+    // position behind which it will be inserted
     SwNodeIndex aIdx( rPos.nNode, 1 );
     SwTextNode* pNew = MakeNewTextNode( aIdx );
 
@@ -3066,7 +3046,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
         aDestIdx = *pDestIdx;
     const sal_Int32 nDestStt = aDestIdx.GetIndex();
 
-    // Text einfuegen
+    // first, start with the text
     OUStringBuffer buf(GetText());
     if( bReplaceTabsWithSpaces )
         buf.replace('\t', ' ');
@@ -3088,7 +3068,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
     rDestNd.InsertText(buf.makeStringAndClear(), aDestIdx);
     nLen = aDestIdx.GetIndex() - nDestStt;
 
-    // alle FontAttribute mit CHARSET Symbol in dem Bereich setzen
+    // set all char attributes with Symbol font
     if ( HasHints() )
     {
         sal_Int32 nInsPos = nDestStt - nIdx;
@@ -3098,7 +3078,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
             const sal_Int32 nAttrStartIdx = pHt->GetStart();
             const sal_uInt16 nWhich = pHt->Which();
             if (nIdx + nLen <= nAttrStartIdx)
-                break;      // ueber das Textende
+                break;      // behind end of text
 
             const sal_Int32 *pEndIdx = pHt->End();
             if( pEndIdx && *pEndIdx > nIdx &&
@@ -3128,7 +3108,7 @@ bool SwTextNode::GetExpandText( SwTextNode& rDestNd, const SwIndex* pDestIdx,
                             static_txtattr_cast<SwTextField const*>(pHt)->GetFormatField().GetField()->ExpandField(true));
                         if (!aExpand.isEmpty())
                         {
-                            ++aDestIdx;     // dahinter einfuegen;
+                            ++aDestIdx;     // insert behind
                             OUString const ins(
                                 rDestNd.InsertText( aExpand, aDestIdx));
                             SAL_INFO_IF(ins.getLength() != aExpand.getLength(),
@@ -3235,7 +3215,7 @@ OUString SwTextNode::GetRedlineText() const
     sal_uInt16 nRedlPos = pDoc->getIDocumentRedlineAccess().GetRedlinePos( *this, nsRedlineType_t::REDLINE_DELETE );
     if( USHRT_MAX != nRedlPos )
     {
-        // es existiert fuer den Node irgendein Redline-Delete-Object
+        // some redline-delete object exists for the node
         const sal_uLong nNdIdx = GetIndex();
         for( ; nRedlPos < pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() ; ++nRedlPos )
         {
@@ -3246,11 +3226,11 @@ OUString SwTextNode::GetRedlineText() const
                 if( pRStt->nNode < nNdIdx )
                 {
                     if( pREnd->nNode > nNdIdx )
-                        // Absatz ist komplett geloescht
+                        // paragraph is fully deleted
                         return OUString();
                     else if( pREnd->nNode == nNdIdx )
                     {
-                        // von 0 bis nContent ist alles geloescht
+                        // deleted from 0 to nContent
                         aRedlArr.push_back( 0 );
                         aRedlArr.push_back( pREnd->nContent.GetIndex() );
                     }
@@ -3264,11 +3244,11 @@ OUString SwTextNode::GetRedlineText() const
                     else
                     {
                         aRedlArr.push_back(GetText().getLength());
-                        break;      // mehr kann nicht kommen
+                        break;  // that was all
                     }
                 }
                 else
-                    break;      // mehr kann nicht kommen
+                    break;      // that was all
             }
         }
     }
@@ -3342,8 +3322,8 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
 
     if (nLen && sInserted.getLength())
     {
-        // dann das 1. Zeichen ersetzen den Rest loschen und einfuegen
-        // Dadurch wird die Attributierung des 1. Zeichen expandiert!
+        // Replace the 1st char, then delete the rest and insert.
+        // This way the attributes of the 1st char are expanded!
         m_Text = m_Text.replaceAt(nStartPos, 1, sInserted.copy(0, 1));
 
         ++const_cast<SwIndex&>(rStart);
@@ -3632,7 +3612,7 @@ SwFormatColl* SwTextNode::ChgFormatColl( SwFormatColl *pNewColl )
         }
     }
 
-    // nur wenn im normalen Nodes-Array
+    // only for real nodes-array
     if( GetNodes().IsDocNodes() )
     {
         ChgTextCollUpdateNum( pOldColl, static_cast<SwTextFormatColl *>(pNewColl) );
