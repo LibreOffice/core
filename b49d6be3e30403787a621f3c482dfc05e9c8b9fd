@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_6792ad59",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-21T00:11:55Z",
+      "side": 1,
+      "message": "Btw, per our conventions these should be named rA and rB instead of pA and pB.",
+      "revId": "b49d6be3e30403787a621f3c482dfc05e9c8b9fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a71735ec",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-21T00:11:55Z",
+      "side": 1,
+      "message": "Um.. this still leaks. tmp is created new, a copy is placed in the vector and tmp is not deleted.\n\nI meant to \"just create an instance on the stack\" (instead new from the heap) and place the copy in the vector, or best introduce a ScDPOutLevelData ctor that takes all variables to avoid a temporary copy at all.\n\nIf your stuck with that I\u0027ll do.",
+      "revId": "b49d6be3e30403787a621f3c482dfc05e9c8b9fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c7d27934",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1000,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-21T00:11:55Z",
+      "side": 1,
+      "message": "You can avoid all these static_cast by making nField type size_t instead of long. Best also declare it in the local scope of for(), it isn\u0027t used outside the loops.",
+      "revId": "b49d6be3e30403787a621f3c482dfc05e9c8b9fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_e7d77d21",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1483,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-21T00:11:55Z",
+      "side": 1,
+      "message": "nColField should be size_t as well.",
+      "range": {
+        "startLine": 1483,
+        "startChar": 9,
+        "endLine": 1483,
+        "endChar": 14
+      },
+      "revId": "b49d6be3e30403787a621f3c482dfc05e9c8b9fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_07dd6142",
+        "filename": "sc/source/core/data/dpoutput.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1507,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-21T00:11:55Z",
+      "side": 1,
+      "message": "nRowField should be size_t as well.",
+      "range": {
+        "startLine": 1507,
+        "startChar": 9,
+        "endLine": 1507,
+        "endChar": 14
+      },
+      "revId": "b49d6be3e30403787a621f3c482dfc05e9c8b9fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
