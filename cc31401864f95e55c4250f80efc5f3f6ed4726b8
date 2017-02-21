@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_27d6e5c5",
+        "filename": "framework/source/uielement/toolbarmodemenucontroller.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-02-21T08:47:10Z",
+      "side": 1,
+      "message": "Maybe you can just use \u003d\u003d instead of compareTo?",
+      "revId": "cc31401864f95e55c4250f80efc5f3f6ed4726b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
