@@ -125,25 +125,36 @@ ScDocShell& Test::getDocShell()
     return *m_pImpl->m_xDocShell;
 }
 
+void Test::getNewDocShell( ScDocShellRef& rDocShellRef )
+{
+    rDocShellRef = new ScDocShell(
+        SfxModelFlags::EMBEDDED_OBJECT |
+        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
+        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
+
+    rDocShellRef->SetIsInUcalc();
+    rDocShellRef->DoInitUnitTest();
+}
+
+void Test::closeDocShell( ScDocShellRef& rDocShellRef )
+{
+    rDocShellRef->DoClose();
+    rDocShellRef.Clear();
+}
+
 void Test::setUp()
 {
     BootstrapFixture::setUp();
 
     ScDLL::Init();
-    m_pImpl->m_xDocShell = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
 
-    m_pImpl->m_xDocShell->SetIsInUcalc();
-    m_pImpl->m_xDocShell->DoInitUnitTest();
+    getNewDocShell(m_pImpl->m_xDocShell);
     m_pDoc = &m_pImpl->m_xDocShell->GetDocument();
 }
 
 void Test::tearDown()
 {
-    m_pImpl->m_xDocShell->DoClose();
-    m_pImpl->m_xDocShell.Clear();
+    closeDocShell(m_pImpl->m_xDocShell);
     BootstrapFixture::tearDown();
 }
 
