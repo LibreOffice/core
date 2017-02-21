@@ -131,6 +131,14 @@ void Test::editMarker()
         m_pEditWindow->Delete();
         m_pEditWindow->InsertText("b");
 
+        // tdf#106116: should be safe i.e. do nothing
+        m_pEditWindow->SelPrevMark();
+        auto aSelection = m_pEditWindow->GetSelection();
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nStartPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.nStartPos);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aSelection.nEndPara);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(9), aSelection.nEndPos);
+
         m_pEditWindow->Flush();
         OUString sFinalText = m_pEditWindow->GetText();
         CPPUNIT_ASSERT_MESSAGE("Should be a under b under c", sFinalText == sTargetText);

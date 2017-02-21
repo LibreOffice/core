@@ -869,36 +869,20 @@ void SmEditWindow::SelPrevMark()
     if (pEditEngine  &&  pEditView)
     {
         ESelection eSelection = pEditView->GetSelection();
-        sal_Int32 nPos = -1;
+        sal_Int32 nPara = eSelection.nStartPara;
         sal_Int32 nMax = eSelection.nStartPos;
-        OUString aText(pEditEngine->GetText(eSelection.nStartPara));
-        OUString aMark("<?>");
-        sal_Int32 nCounts = pEditEngine->GetParagraphCount();
+        OUString aText(pEditEngine->GetText(nPara));
+        const OUString aMark("<?>");
+        sal_Int32 nPos;
 
-        do
+        while ( (nPos = aText.lastIndexOf(aMark, nMax)) < 0 )
         {
-            sal_Int32 nMarkIndex = aText.indexOf(aMark);
-            while ((nMarkIndex < nMax) && (nMarkIndex != -1))
-            {
-                nPos = nMarkIndex;
-                nMarkIndex = aText.indexOf(aMark, nMarkIndex + 1);
-            }
-
-            if (nPos == -1)
-            {
-                eSelection.nStartPara--;
-                aText = pEditEngine->GetText(eSelection.nStartPara);
-                nMax = aText.getLength();
-            }
+            if (--nPara < 0)
+                return;
+            aText = pEditEngine->GetText(nPara);
+            nMax = aText.getLength();
         }
-        while ((eSelection.nStartPara < nCounts) &&
-            (nPos == -1));
-
-        if (nPos != -1)
-        {
-            pEditView->SetSelection(ESelection(
-                eSelection.nStartPara, nPos, eSelection.nStartPara, nPos + 3));
-        }
+        pEditView->SetSelection(ESelection(nPara, nPos, nPara, nPos + 3));
     }
 }
 
