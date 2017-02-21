@@ -30,6 +30,7 @@
 #include <comphelper/sequence.hxx>
 #include <ooxml/resourceids.hxx>
 #include <ConversionHelper.hxx>
+#include <DomainMapper.hxx>
 #include "util.hxx"
 
 using namespace com::sun::star;
@@ -99,12 +100,14 @@ struct SettingsTable_Impl
 
 };
 
-SettingsTable::SettingsTable()
+SettingsTable::SettingsTable(const DomainMapper& rDomainMapper)
 : LoggedProperties("SettingsTable")
 , LoggedTable("SettingsTable")
 , m_pImpl( new SettingsTable_Impl )
 {
-
+    // HTML paragraph auto-spacing is opt-in for RTF, opt-out for OOXML.
+    if (rDomainMapper.IsRTFImport())
+        m_pImpl->m_bDoNotUseHTMLParagraphAutoSpacing = true;
 }
 
 SettingsTable::~SettingsTable()

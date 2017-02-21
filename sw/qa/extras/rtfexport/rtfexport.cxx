@@ -892,6 +892,13 @@ DECLARE_RTFEXPORT_TEST(testFdo82006, "fdo82006.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(280)), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf104081, "tdf104081.rtf")
+{
+    // These were 494 (280 twips), as \htmautsp was ignored.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(100)), getProperty<sal_Int32>(getParagraph(1), "ParaTopMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(convertTwipToMm100(100)), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf88583, "tdf88583.odt")
 {
     // This was FillStyle_NONE, as background color was missing from the color table during export.

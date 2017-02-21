@@ -1069,6 +1069,9 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         putNestedAttribute(m_aStates.top().aSectionSprms, NS_ooxml::LN_EG_SectPrContents_pgNumType, NS_ooxml::LN_CT_PageNumber_fmt, pIntValue);
     }
     break;
+    case RTF_HTMAUTSP:
+        m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Compat_doNotUseHTMLParagraphAutoSpacing, std::make_shared<RTFValue>(0));
+    break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle flag '" << keywordToString(nKeyword) << "'");
