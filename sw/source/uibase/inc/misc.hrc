@@ -39,7 +39,6 @@
 #define STR_CHANGE_END              (RC_MISC_BEGIN + 45)
 #define STR_SAVE_GLOSSARY           (RC_MISC_BEGIN + 46)
 
-#define MN_REDLINE_POPUP            (RC_MISC_BEGIN + 61)
 #define STR_MY_AUTOTEXT             (RC_MISC_BEGIN + 64)
 
 #define STR_COMMENTS_LABEL          (RC_MISC_BEGIN + 65)

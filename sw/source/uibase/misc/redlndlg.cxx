@@ -36,7 +36,6 @@
 #include <helpid.h>
 #include <cmdid.h>
 #include <misc.hrc>
-#include <redlndlg.hrc>
 #include <shells.hrc>
 
 // -> #111827#
@@ -150,7 +149,7 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
                                        vcl::Window *pContentArea, bool bAutoFormat) :
     m_pParentDlg      (pParent),
     m_aTabPagesCTRL   (VclPtr<SvxAcceptChgCtr>::Create(pContentArea, pBuilder)),
-    m_aPopup          (SW_RES(MN_REDLINE_POPUP)),
+    m_xPopup(pBuilder->get_menu("writermenu")),
     m_sInserted       (SW_RES(STR_REDLINE_INSERTED)),
     m_sDeleted        (SW_RES(STR_REDLINE_DELETED)),
     m_sFormated       (SW_RES(STR_REDLINE_FORMATED)),
@@ -1012,166 +1011,147 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
 {
     const CommandEvent aCEvt(m_pTable->GetCommandEvent());
 
-    switch ( aCEvt.GetCommand() )
+    if (aCEvt.GetCommand() != CommandEventId::ContextMenu)
+        return;
+
+    SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
+    SvTreeListEntry* pEntry = m_pTable->FirstSelected();
+    const SwRangeRedline *pRed = nullptr;
+
+    if (pEntry)
     {
-        case CommandEventId::ContextMenu:
+        SvTreeListEntry* pTopEntry = pEntry;
+
+        if (m_pTable->GetParent(pEntry))
+            pTopEntry = m_pTable->GetParent(pEntry);
+
+        sal_uInt16 nPos = GetRedlinePos(*pTopEntry);
+
+        // disable commenting for protected areas
+        if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, true)) != nullptr)
         {
-            SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
-            SvTreeListEntry* pEntry = m_pTable->FirstSelected();
-            const SwRangeRedline *pRed = nullptr;
-
-            if (pEntry)
-            {
-                SvTreeListEntry* pTopEntry = pEntry;
-
-                if (m_pTable->GetParent(pEntry))
-                    pTopEntry = m_pTable->GetParent(pEntry);
-
-                sal_uInt16 nPos = GetRedlinePos(*pTopEntry);
-
-                // disable commenting for protected areas
-                if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, true)) != nullptr)
-                {
-                    if( pSh->IsCursorPtAtEnd() )
-                        pSh->SwapPam();
-                    pSh->SetInSelect();
-                }
-            }
-
-            m_aPopup->EnableItem( MN_EDIT_COMMENT, pEntry && pRed &&
-                                            !m_pTable->GetParent(pEntry) &&
-                                            !m_pTable->NextSelected(pEntry)
-//JP 27.9.2001: make no sense if we handle readonly sections
-//                                          && pRed->HasReadonlySel()
-                                            );
-
-            m_aPopup->EnableItem( MN_SUB_SORT, m_pTable->First() != nullptr );
-            sal_uInt16 nColumn = m_pTable->GetSortedCol();
-            if (nColumn == 0xffff)
-                nColumn = 4;
-
-            PopupMenu *pSubMenu = m_aPopup->GetPopupMenu(MN_SUB_SORT);
-            if (pSubMenu)
-            {
-                for (sal_uInt16 i = MN_SORT_ACTION; i < MN_SORT_ACTION + 5; i++)
-                    pSubMenu->CheckItem(i, false);
-
-                pSubMenu->CheckItem(nColumn + MN_SORT_ACTION);
-            }
-
-            sal_uInt16 nRet = m_aPopup->Execute(m_pTable, aCEvt.GetMousePosPixel());
-
-            switch( nRet )
-            {
-                case MN_EDIT_COMMENT:
-                {
-                    if (pEntry)
-                    {
-                        if (m_pTable->GetParent(pEntry))
-                            pEntry = m_pTable->GetParent(pEntry);
-
-                        sal_uInt16 nPos = GetRedlinePos(*pEntry);
-
-                        if (nPos == USHRT_MAX)
-                            break;
-
-                        const SwRangeRedline &rRedline = pSh->GetRedline(nPos);
-
-                        /* enable again once we have redline comments in the margin
-                        sComment = rRedline.GetComment();
-                        if ( !sComment.Len() )
-                            GetActiveView()->GetDocShell()->Broadcast(SwRedlineHint(&rRedline,SWREDLINE_INSERTED));
-                        const_cast<SwRangeRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
-                        */
-
-                        OUString sComment = convertLineEnd(rRedline.GetComment(), GetSystemLineEnd());
-                        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                        OSL_ENSURE(pFact, "Dialog creation failed!");
-                        ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();
-                        OSL_ENSURE(fnGetRange, "Dialog creation failed! GetRanges()");
-                        SfxItemSet aSet( pSh->GetAttrPool(), fnGetRange() );
-
-                        aSet.Put(SvxPostItTextItem(sComment, SID_ATTR_POSTIT_TEXT));
-                        aSet.Put(SvxPostItAuthorItem(rRedline.GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
-
-                        aSet.Put(SvxPostItDateItem( GetAppLangDateTimeString(
-                                    rRedline.GetRedlineData().GetTimeStamp() ),
-                                    SID_ATTR_POSTIT_DATE ));
-
-                        ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( m_pParentDlg, aSet ));
-                        OSL_ENSURE(pDlg, "Dialog creation failed!");
-
-                        pDlg->HideAuthor();
-
-                        sal_uInt16 nResId = 0;
-                        switch( rRedline.GetType() )
-                        {
-                        case nsRedlineType_t::REDLINE_INSERT:
-                            nResId = STR_REDLINE_INSERTED;
-                            break;
-                        case nsRedlineType_t::REDLINE_DELETE:
-                            nResId = STR_REDLINE_DELETED;
-                            break;
-                        case nsRedlineType_t::REDLINE_FORMAT:
-                        case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
-                            nResId = STR_REDLINE_FORMATED;
-                            break;
-                        case nsRedlineType_t::REDLINE_TABLE:
-                            nResId = STR_REDLINE_TABLECHG;
-                            break;
-                        default:;//prevent warning
-                        }
-                        OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
-                        if( nResId )
-                            sTitle += SW_RESSTR( nResId );
-                        pDlg->SetText(sTitle);
-
-                        SwViewShell::SetCareWin(pDlg->GetWindow());
-
-                        if ( pDlg->Execute() == RET_OK )
-                        {
-                            const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                            OUString sMsg(static_cast<const SvxPostItTextItem&>(pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
-
-                            // insert / change comment
-                            pSh->SetRedlineComment(sMsg);
-                            m_pTable->SetEntryText(sMsg.replace('\n', ' '), pEntry, 3);
-                        }
-
-                        pDlg.disposeAndClear();
-                        SwViewShell::SetCareWin(nullptr);
-                    }
-
-                }
-                break;
-
-            case MN_SORT_ACTION:
-            case MN_SORT_AUTHOR:
-            case MN_SORT_DATE:
-            case MN_SORT_COMMENT:
-            case MN_SORT_POSITION:
-                {
-                    bSortDir = true;
-                    if (nRet - MN_SORT_ACTION == 4 && m_pTable->GetSortedCol() == 0xffff)
-                        break;  // we already have it
-
-                    nSortMode = nRet - MN_SORT_ACTION;
-                    if (nSortMode == 4)
-                        nSortMode = 0xffff; // unsorted / sorted by position
-
-                    if (m_pTable->GetSortedCol() == nSortMode)
-                        bSortDir = !m_pTable->GetSortDirection();
-
-                    SwWait aWait( *::GetActiveView()->GetDocShell(), false );
-                    m_pTable->SortByCol(nSortMode, bSortDir);
-                    if (nSortMode == 0xffff)
-                        Init();             // newly fill everything
-                }
-                break;
-            }
+            if( pSh->IsCursorPtAtEnd() )
+                pSh->SwapPam();
+            pSh->SetInSelect();
         }
-        break;
-        default: break;
+    }
+
+    const sal_uInt16 nEditId = m_xPopup->GetItemId("writeredit");
+
+    m_xPopup->EnableItem(nEditId, pEntry && pRed &&
+                                  !m_pTable->GetParent(pEntry) &&
+                                  !m_pTable->NextSelected(pEntry));
+
+    sal_uInt16 nColumn = m_pTable->GetSortedCol();
+    if (nColumn == 0xffff)
+        nColumn = 4;
+
+    const sal_uInt16 nSubSortId = m_xPopup->GetItemId("writersort");
+    m_xPopup->EnableItem(nSubSortId, m_pTable->First() != nullptr);
+    PopupMenu *pSubMenu = m_xPopup->GetPopupMenu(nSubSortId);
+    const sal_uInt16 nActionId = pSubMenu->GetItemId("writeraction");
+    for (sal_uInt16 i = nActionId; i < nActionId + 5; ++i)
+        pSubMenu->CheckItem(i, false);
+    pSubMenu->CheckItem(nActionId + nColumn);
+
+    sal_uInt16 nRet = m_xPopup->Execute(m_pTable, aCEvt.GetMousePosPixel());
+
+    if (nRet == nEditId)
+    {
+        if (pEntry)
+        {
+            if (m_pTable->GetParent(pEntry))
+                pEntry = m_pTable->GetParent(pEntry);
+
+            sal_uInt16 nPos = GetRedlinePos(*pEntry);
+
+            if (nPos == USHRT_MAX)
+                return;
+
+            const SwRangeRedline &rRedline = pSh->GetRedline(nPos);
+
+            /* enable again once we have redline comments in the margin
+            sComment = rRedline.GetComment();
+            if ( !sComment.Len() )
+                GetActiveView()->GetDocShell()->Broadcast(SwRedlineHint(&rRedline,SWREDLINE_INSERTED));
+            const_cast<SwRangeRedline&>(rRedline).Broadcast(SwRedlineHint(&rRedline,SWREDLINE_FOCUS));
+            */
+
+            OUString sComment = convertLineEnd(rRedline.GetComment(), GetSystemLineEnd());
+            SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+            OSL_ENSURE(pFact, "Dialog creation failed!");
+            ::DialogGetRanges fnGetRange = pFact->GetDialogGetRangesFunc();
+            OSL_ENSURE(fnGetRange, "Dialog creation failed! GetRanges()");
+            SfxItemSet aSet( pSh->GetAttrPool(), fnGetRange() );
+
+            aSet.Put(SvxPostItTextItem(sComment, SID_ATTR_POSTIT_TEXT));
+            aSet.Put(SvxPostItAuthorItem(rRedline.GetAuthorString(), SID_ATTR_POSTIT_AUTHOR));
+
+            aSet.Put(SvxPostItDateItem( GetAppLangDateTimeString(
+                        rRedline.GetRedlineData().GetTimeStamp() ),
+                        SID_ATTR_POSTIT_DATE ));
+
+            ScopedVclPtr<AbstractSvxPostItDialog> pDlg(pFact->CreateSvxPostItDialog( m_pParentDlg, aSet ));
+            OSL_ENSURE(pDlg, "Dialog creation failed!");
+
+            pDlg->HideAuthor();
+
+            sal_uInt16 nResId = 0;
+            switch( rRedline.GetType() )
+            {
+                case nsRedlineType_t::REDLINE_INSERT:
+                    nResId = STR_REDLINE_INSERTED;
+                    break;
+                case nsRedlineType_t::REDLINE_DELETE:
+                    nResId = STR_REDLINE_DELETED;
+                    break;
+                case nsRedlineType_t::REDLINE_FORMAT:
+                case nsRedlineType_t::REDLINE_PARAGRAPH_FORMAT:
+                    nResId = STR_REDLINE_FORMATED;
+                    break;
+                case nsRedlineType_t::REDLINE_TABLE:
+                    nResId = STR_REDLINE_TABLECHG;
+                    break;
+                default:;//prevent warning
+            }
+            OUString sTitle(SW_RES(STR_REDLINE_COMMENT));
+            if( nResId )
+                sTitle += SW_RESSTR( nResId );
+            pDlg->SetText(sTitle);
+
+            SwViewShell::SetCareWin(pDlg->GetWindow());
+
+            if ( pDlg->Execute() == RET_OK )
+            {
+                const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
+                OUString sMsg(static_cast<const SvxPostItTextItem&>(pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
+
+                // insert / change comment
+                pSh->SetRedlineComment(sMsg);
+                m_pTable->SetEntryText(sMsg.replace('\n', ' '), pEntry, 3);
+            }
+
+            pDlg.disposeAndClear();
+            SwViewShell::SetCareWin(nullptr);
+        }
+    }
+    else if (nRet)
+    {
+        bSortDir = true;
+        if (nRet - nActionId == 4 && m_pTable->GetSortedCol() == 0xffff)
+            return;  // we already have it
+
+        nSortMode = nRet - nActionId;
+        if (nSortMode == 4)
+            nSortMode = 0xffff; // unsorted / sorted by position
+
+        if (m_pTable->GetSortedCol() == nSortMode)
+            bSortDir = !m_pTable->GetSortDirection();
+
+        SwWait aWait( *::GetActiveView()->GetDocShell(), false );
+        m_pTable->SortByCol(nSortMode, bSortDir);
+        if (nSortMode == 0xffff)
+            Init();             // newly fill everything
     }
 }
 

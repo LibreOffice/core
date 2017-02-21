@@ -58,13 +58,6 @@
 #define HID_GLBLTREE_UPD_IDX                                    "SW_HID_GLBLTREE_UPD_IDX"
 #define HID_GLBLTREE_UPD_LINK                                   "SW_HID_GLBLTREE_UPD_LINK"
 #define HID_GLBLTREEUPD_ALL                                     "SW_HID_GLBLTREEUPD_ALL"
-#define HID_SORT_ACTION                                         "SW_HID_SORT_ACTION"
-#define HID_SORT_AUTHOR                                         "SW_HID_SORT_AUTHOR"
-#define HID_SORT_DATE                                           "SW_HID_SORT_DATE"
-#define HID_SORT_COMMENT                                        "SW_HID_SORT_COMMENT"
-#define HID_SW_SORT_POSITION                                    "SW_HID_SW_SORT_POSITION"
-#define HID_EDIT_COMMENT                                        "SW_HID_EDIT_COMMENT"
-
 
 #define HID_GLBLTREE_EDIT_LINK                                  "SW_HID_GLBLTREE_EDIT_LINK"
 
@@ -72,8 +65,6 @@
 // TabPage Help-IDs
 
 #define HID_REDLINE_CTRL                                        "SW_HID_REDLINE_CTRL"
-
-
 
 // sw::sidebar::PagePropertyPanel
 #define HID_SWPAGE_LEFT_MARGIN              "HID_SWPAGE_LEFT_MARGIN"

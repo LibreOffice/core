@@ -1679,15 +1679,15 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
             m_xPopup->Deactivate();
         }
 
-        const sal_uInt16 nSubSortId = m_xPopup->GetItemId("sort");
+        const sal_uInt16 nSubSortId = m_xPopup->GetItemId("calcsort");
         PopupMenu *pSubMenu = m_xPopup->GetPopupMenu(nSubSortId);
-        const sal_uInt16 nActionId = pSubMenu->GetItemId("action");
+        const sal_uInt16 nActionId = pSubMenu->GetItemId("calcaction");
 
         sal_uInt16 nSortedCol = pTheView->GetSortedCol();
         if (nSortedCol != 0xFFFF)
             pSubMenu->CheckItem(nActionId + nSortedCol);
 
-        const sal_uInt16 nEditId = m_xPopup->GetItemId("edit");
+        const sal_uInt16 nEditId = m_xPopup->GetItemId("calcedit");
 
         m_xPopup->EnableItem(nEditId, false);
 

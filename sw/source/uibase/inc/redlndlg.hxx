@@ -66,7 +66,7 @@ class SW_DLLPUBLIC SwRedlineAcceptDlg final
     SwRedlineDataChildArr   m_RedlineChildren;
     SwRedlineDataParentSortArr m_aUsedSeqNo;
     VclPtr<SvxAcceptChgCtr>    m_aTabPagesCTRL;
-    ScopedVclPtrInstance<PopupMenu> m_aPopup;
+    VclPtr<PopupMenu>       m_xPopup;
     Timer                   m_aDeselectTimer;
     Timer                   m_aSelectTimer;
     OUString                m_sInserted;

@@ -66,7 +66,6 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/uibase/dialog/regionsw.src \
     sw/source/uibase/docvw/docvw.src \
     sw/source/uibase/lingu/olmenu.src \
-    sw/source/uibase/misc/redlndlg.src \
     sw/source/uibase/ribbar/inputwin.src \
     sw/source/uibase/ribbar/workctrl.src \
     sw/source/uibase/uiview/view.src \
