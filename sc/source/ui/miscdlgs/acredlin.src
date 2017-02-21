@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "acredlin.hrc"
 #include "globstr.hrc"
 
 String STR_CHG_INSERT_COLS
@@ -84,65 +83,4 @@ String STR_CHG_EMPTY
 {
     Text [ en-US ] = "<empty>" ;
 };
-
-Menu RID_POPUP_CHANGES
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SC_CHANGES_COMMENT ;
-            HelpId = HID_SC_CHANGES_COMMENT ;
-            Text [ en-US ] = "Edit Comment..." ;
-
-        };
-        MenuItem
-        {
-            Identifier = SC_SUB_SORT ;
-            SubMenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        Identifier = SC_SORT_ACTION ;
-                        HelpID = HID_SC_SORT_ACTION ;
-                        RadioCheck = TRUE ;
-                        Text [ en-US ] = "Action" ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = SC_SORT_POSITION ;
-                        HelpID = HID_SORT_POSITION ;
-                        RadioCheck = TRUE ;
-                        Text [ en-US ] = "Position" ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = SC_SORT_AUTHOR ;
-                        HelpID = HID_SC_SORT_AUTHOR ;
-                        RadioCheck = TRUE ;
-                        Text [ en-US ] = "Author" ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = SC_SORT_DATE ;
-                        HelpID = HID_SC_SORT_DATE ;
-                        RadioCheck = TRUE ;
-                        Text [ en-US ] = "Date" ;
-                    };
-                    MenuItem
-                    {
-                        Identifier = SC_SORT_COMMENT ;
-                        HelpID = HID_SC_SORT_COMMENT ;
-                        RadioCheck = TRUE ;
-                        Text [ en-US ] = "Description" ;
-                    };
-                };
-            };
-            Text [ en-US ] = "Sorting" ;
-        };
-    };
-};
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

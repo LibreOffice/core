@@ -55,9 +55,9 @@ public:
 class ScAcceptChgDlg : public SfxModelessDialog
 {
 private:
-
     Idle                    aSelectionIdle;
     Idle                    aReOpenIdle;
+    VclPtr<PopupMenu>       m_xPopup;
     VclPtr<SvxAcceptChgCtr> m_pAcceptChgCtr;
     ScViewData*             pViewData;
     ScDocument*             pDoc;

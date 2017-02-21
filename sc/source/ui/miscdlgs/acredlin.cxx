@@ -33,7 +33,7 @@
 #include "docsh.hxx"
 #include "scresid.hxx"
 #include "globstr.hrc"
-#include "acredlin.hrc"
+#include "scres.hrc"
 #include "simpref.hxx"
 #include "scmod.hxx"
 #include "popmenu.hxx"
@@ -79,6 +79,7 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
         "AcceptRejectChangesDialog", "svx/ui/acceptrejectchangesdialog.ui"),
         aSelectionIdle("ScAcceptChgDlg SelectionIdle"),
         aReOpenIdle("ScAcceptChgDlg ReOpenIdle"),
+        m_xPopup(get_menu("calcmenu")),
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         aStrInsertCols       (SC_RESSTR(STR_CHG_INSERT_COLS)),
@@ -162,6 +163,7 @@ void ScAcceptChgDlg::dispose()
         pChanges->SetModifiedLink(aLink);
     }
 
+    m_xPopup.clear();
     m_pAcceptChgCtr.disposeAndClear();
     pTPFilter.clear();
     pTPView.clear();
@@ -1665,9 +1667,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
 
     if(aCEvt.GetCommand()==CommandEventId::ContextMenu)
     {
-        ScopedVclPtrInstance<PopupMenu> aPopup(ScResId(RID_POPUP_CHANGES));
-
-        aPopup->SetMenuFlags(MenuFlags::HideDisabledEntries);
+        m_xPopup->SetMenuFlags(MenuFlags::HideDisabledEntries);
 
         SvTreeListEntry* pEntry=pTheView->GetCurEntry();
         if(pEntry!=nullptr)
@@ -1676,24 +1676,20 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
         }
         else
         {
-            aPopup->Deactivate();
+            m_xPopup->Deactivate();
         }
 
-        sal_uInt16 nSortedCol= pTheView->GetSortedCol();
+        const sal_uInt16 nSubSortId = m_xPopup->GetItemId("sort");
+        PopupMenu *pSubMenu = m_xPopup->GetPopupMenu(nSubSortId);
+        const sal_uInt16 nActionId = pSubMenu->GetItemId("action");
 
-        if(nSortedCol!=0xFFFF)
-        {
-            sal_uInt16 nItemId=nSortedCol+SC_SUB_SORT+1;
+        sal_uInt16 nSortedCol = pTheView->GetSortedCol();
+        if (nSortedCol != 0xFFFF)
+            pSubMenu->CheckItem(nActionId + nSortedCol);
 
-            aPopup->CheckItem(nItemId);
+        const sal_uInt16 nEditId = m_xPopup->GetItemId("edit");
 
-            PopupMenu *pSubMenu = aPopup->GetPopupMenu(SC_SUB_SORT);
-
-            if (pSubMenu)
-                pSubMenu->CheckItem(nItemId);
-        }
-
-        aPopup->EnableItem(SC_CHANGES_COMMENT,false);
+        m_xPopup->EnableItem(nEditId, false);
 
         if(pDoc->IsDocEditable() && pEntry!=nullptr)
         {
@@ -1702,16 +1698,16 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
             {
                 ScChangeAction* pScChangeAction=
                         static_cast<ScChangeAction*>(pEntryData->pData);
-                if(pScChangeAction!=nullptr && !pTheView->GetParent(pEntry))
-                    aPopup->EnableItem(SC_CHANGES_COMMENT);
+                if (pScChangeAction!=nullptr && !pTheView->GetParent(pEntry))
+                    m_xPopup->EnableItem(nEditId);
             }
         }
 
-        sal_uInt16 nCommand = aPopup->Execute( this, GetPointerPosPixel() );
+        sal_uInt16 nCommand = m_xPopup->Execute(this, GetPointerPosPixel());
 
         if(nCommand)
         {
-            if(nCommand==SC_CHANGES_COMMENT)
+            if (nCommand == nEditId)
             {
                 if(pEntry!=nullptr)
                 {
@@ -1728,16 +1724,16 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl, SvSimpleTable*, void)
             else
             {
                 bool bSortDir = pTheView->GetSortDirection();
-                sal_uInt16 nDialogCol=nCommand-SC_SUB_SORT-1;
+                sal_uInt16 nDialogCol = nCommand - nActionId;
+                fprintf(stderr, "sort by %d\n", nDialogCol);
                 if(nSortedCol==nDialogCol) bSortDir=!bSortDir;
                 pTheView->SortByCol(nDialogCol,bSortDir);
                 /*
-                SC_SUB_SORT
-                SC_SORT_ACTION
-                SC_SORT_POSITION
-                SC_SORT_AUTHOR
-                SC_SORT_DATE
-                SC_SORT_COMMENT
+                0, sort by action
+                1, sort by position
+                2, sort by author
+                3, sort by date
+                4, sort by comment
                 */
             }
         }

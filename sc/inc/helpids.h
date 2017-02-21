@@ -64,13 +64,7 @@
 
 #define HID_SC_REN_AFMT_DLG                                     "SC_HID_SC_REN_AFMT_DLG"
 
-// Hilfe IDs fuer Submenus (max.50) ------------------------------------------
-#define HID_SC_SORT_ACTION                                      "SC_HID_SC_SORT_ACTION"
-#define HID_SC_SORT_AUTHOR                                      "SC_HID_SC_SORT_AUTHOR"
-#define HID_SC_SORT_DATE                                        "SC_HID_SC_SORT_DATE"
-#define HID_SC_SORT_COMMENT                                     "SC_HID_SC_SORT_COMMENT"
-#define HID_SORT_POSITION                                       "SC_HID_SORT_POSITION"
-#define HID_SC_CHANGES_COMMENT                                  "SC_HID_SC_CHANGES_COMMENT"
+// Help IDs for Submenus (max.50) --------------------------------------------
 #define HID_PASSWD_TABLE                                        "SC_HID_PASSWD_TABLE"
 #define HID_PASSWD_DOC                                          "SC_HID_PASSWD_DOC"
 
