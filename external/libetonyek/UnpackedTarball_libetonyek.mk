@@ -24,7 +24,6 @@ ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_UnpackedTarball_add_patches,libetonyek,\
 	external/libetonyek/libetonyek-bundled-soname.patch.0 \
-	external/libetonyek/libetonyek-support-disable-liblangtag.patch.0 \
 ))
 endif
 endif

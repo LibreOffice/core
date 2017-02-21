@@ -1485,12 +1485,6 @@ libo_FUZZ_ARG_ENABLE(firebird-sdbc,
         [Disable the build of the Firebird-SDBC driver if it doesn't compile for you.]),
 ,test "${enable_firebird_sdbc+set}" = set || enable_firebird_sdbc=yes)
 
-libo_FUZZ_ARG_ENABLE(liblangtag,
-    AS_HELP_STRING([--disable-liblangtag],
-        [Disable use of liblangtag, and instead use an own simple
-         implementation.]),
-)
-
 AC_ARG_ENABLE(bogus-pkg-config,
     AS_HELP_STRING([--enable-bogus-pkg-config],
         [MACOSX only: on MacOSX pkg-config can cause trouble. by default if one is found in the PATH, an error is issued. This flag turn that error into a warning.]),
@@ -11585,39 +11579,28 @@ AC_SUBST(AVAHI_LIBS)
 dnl ===================================================================
 dnl Test whether to use liblangtag
 dnl ===================================================================
-ENABLE_LIBLANGTAG=
 SYSTEM_LIBLANGTAG=
-AC_MSG_CHECKING([whether to use liblangtag])
-if test "$enable_liblangtag" = "yes" -o "$enable_liblangtag" = ""; then
-    ENABLE_LIBLANGTAG=TRUE
+AC_MSG_CHECKING([whether to use system liblangtag])
+if test "$with_system_liblangtag" = yes; then
+    SYSTEM_LIBLANGTAG=TRUE
     AC_MSG_RESULT([yes])
-    AC_MSG_CHECKING([whether to use system liblangtag])
-    if test "$with_system_liblangtag" = yes; then
-        SYSTEM_LIBLANGTAG=TRUE
-        AC_MSG_RESULT([yes])
-        PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.4.0)
-        dnl cf. <https://bitbucket.org/tagoh/liblangtag/commits/9324836a0d1c> "Fix a build issue with inline keyword"
-        PKG_CHECK_EXISTS([liblangtag >= 0.5.5], [], [AC_DEFINE([LIBLANGTAG_INLINE_FIX])])
-        LIBLANGTAG_CFLAGS=$(printf '%s' "$LIBLANGTAG_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
-        FilterLibs "${LIBLANGTAG_LIBS}"
-        LIBLANGTAG_LIBS="${filteredlibs}"
-    else
-        SYSTEM_LIBLANGTAG=
-        AC_MSG_RESULT([no])
-        BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
-        LIBLANGTAG_CFLAGS="-I${WORKDIR}/UnpackedTarball/langtag"
-        if test "$COM" = "MSC"; then
-            LIBLANGTAG_LIBS="${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs/liblangtag.lib"
-        else
-            LIBLANGTAG_LIBS="-L${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs -llangtag"
-        fi
-    fi
-    AC_DEFINE(ENABLE_LIBLANGTAG)
+    PKG_CHECK_MODULES( LIBLANGTAG, liblangtag >= 0.4.0)
+    dnl cf. <https://bitbucket.org/tagoh/liblangtag/commits/9324836a0d1c> "Fix a build issue with inline keyword"
+    PKG_CHECK_EXISTS([liblangtag >= 0.5.5], [], [AC_DEFINE([LIBLANGTAG_INLINE_FIX])])
+    LIBLANGTAG_CFLAGS=$(printf '%s' "$LIBLANGTAG_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
+    FilterLibs "${LIBLANGTAG_LIBS}"
+    LIBLANGTAG_LIBS="${filteredlibs}"
 else
+    SYSTEM_LIBLANGTAG=
     AC_MSG_RESULT([no])
-    LIBLANGTAG_CFLAGS="-DDISABLE_LIBLANGTAG"
+    BUILD_TYPE="$BUILD_TYPE LIBLANGTAG"
+    LIBLANGTAG_CFLAGS="-I${WORKDIR}/UnpackedTarball/langtag"
+    if test "$COM" = "MSC"; then
+        LIBLANGTAG_LIBS="${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs/liblangtag.lib"
+    else
+        LIBLANGTAG_LIBS="-L${WORKDIR}/UnpackedTarball/langtag/liblangtag/.libs -llangtag"
+    fi
 fi
-AC_SUBST(ENABLE_LIBLANGTAG)
 AC_SUBST(SYSTEM_LIBLANGTAG)
 AC_SUBST(LIBLANGTAG_CFLAGS)
 AC_SUBST(LIBLANGTAG_LIBS)
