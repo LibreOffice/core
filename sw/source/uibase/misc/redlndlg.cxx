@@ -146,25 +146,24 @@ void SwModelessRedlineAcceptDlg::dispose()
 }
 
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer *pBuilder,
-                                       vcl::Window *pContentArea, bool bAutoFormat) :
-    m_pParentDlg      (pParent),
-    m_aTabPagesCTRL   (VclPtr<SvxAcceptChgCtr>::Create(pContentArea, pBuilder)),
-    m_xPopup(pBuilder->get_menu("writermenu")),
-    m_sInserted       (SW_RES(STR_REDLINE_INSERTED)),
-    m_sDeleted        (SW_RES(STR_REDLINE_DELETED)),
-    m_sFormated       (SW_RES(STR_REDLINE_FORMATED)),
-    m_sTableChgd      (SW_RES(STR_REDLINE_TABLECHG)),
-    m_sFormatCollSet     (SW_RES(STR_REDLINE_FMTCOLLSET)),
-    m_sAutoFormat     (SW_RES(STR_REDLINE_AUTOFMT)),
-    m_bOnlyFormatedRedlines( false ),
-    m_bRedlnAutoFormat   (bAutoFormat),
-    m_bInhibitActivate( false ),
-    m_aInserted       (BitmapEx(SW_RES(BMP_REDLINE_INSERTED))),
-    m_aDeleted        (BitmapEx(SW_RES(BMP_REDLINE_DELETED))),
-    m_aFormated       (BitmapEx(SW_RES(BMP_REDLINE_FORMATED))),
-    m_aTableChgd      (BitmapEx(SW_RES(BMP_REDLINE_TABLECHG))),
-    m_aFormatCollSet  (BitmapEx(SW_RES(BMP_REDLINE_FMTCOLLSET)))
-
+                                       vcl::Window *pContentArea, bool bAutoFormat)
+    : m_pParentDlg(pParent)
+    , m_aTabPagesCTRL(VclPtr<SvxAcceptChgCtr>::Create(pContentArea, pBuilder))
+    , m_xPopup(pBuilder->get_menu("writermenu"))
+    , m_sInserted(SW_RES(STR_REDLINE_INSERTED))
+    , m_sDeleted(SW_RES(STR_REDLINE_DELETED))
+    , m_sFormated(SW_RES(STR_REDLINE_FORMATED))
+    , m_sTableChgd(SW_RES(STR_REDLINE_TABLECHG))
+    , m_sFormatCollSet(SW_RES(STR_REDLINE_FMTCOLLSET))
+    , m_sAutoFormat(SW_RES(STR_REDLINE_AUTOFMT))
+    , m_bOnlyFormatedRedlines(false)
+    , m_bRedlnAutoFormat(bAutoFormat)
+    , m_bInhibitActivate(false)
+    , m_aInserted(BitmapEx(SW_RES(BMP_REDLINE_INSERTED)))
+    , m_aDeleted(BitmapEx(SW_RES(BMP_REDLINE_DELETED)))
+    , m_aFormated(BitmapEx(SW_RES(BMP_REDLINE_FORMATED)))
+    , m_aTableChgd(BitmapEx(SW_RES(BMP_REDLINE_TABLECHG)))
+    , m_aFormatCollSet(BitmapEx(SW_RES(BMP_REDLINE_FMTCOLLSET)))
 {
     m_aTabPagesCTRL->SetHelpId(HID_REDLINE_CTRL);
     m_pTPView = m_aTabPagesCTRL->GetViewPage();
