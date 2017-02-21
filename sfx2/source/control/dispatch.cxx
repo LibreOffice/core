@@ -911,6 +911,7 @@ bool SfxDispatcher::GetShellAndSlot_Impl(sal_uInt16 nSlot, SfxShell** ppShell,
 void SfxDispatcher::Execute_(SfxShell& rShell, const SfxSlot& rSlot,
         SfxRequest& rReq, SfxCallMode eCallMode)
 {
+    SFX_STACK(SfxDispatcher::Execute_);
     DBG_ASSERT( !xImp->bFlushing, "recursive call to dispatcher" );
     DBG_ASSERT( xImp->aToDoStack.empty(), "unprepared InPlace _Execute" );
 
@@ -1738,7 +1739,7 @@ SfxSlotFilterState SfxDispatcher::IsSlotEnabledByFilter_Impl( sal_uInt16 nSID ) 
 */
 bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer, bool bModal)
 {
-    SFX_STACK(SfxDispatcher::_FindServer);
+    SFX_STACK(SfxDispatcher::FindServer_);
 
     // Dispatcher locked? (nevertheless let SID_HELP_PI through)
     if ( IsLocked(nSlot) )
@@ -1872,7 +1873,7 @@ bool SfxDispatcher::FindServer_(sal_uInt16 nSlot, SfxSlotServer& rServer, bool b
 bool SfxDispatcher::FillState_(const SfxSlotServer& rSvr, SfxItemSet& rState,
         const SfxSlot* pRealSlot)
 {
-    SFX_STACK(SfxDispatcher::_FillState);
+    SFX_STACK(SfxDispatcher::FillState_);
 
     const SfxSlot *pSlot = rSvr.GetSlot();
     if ( pSlot && IsLocked( pSlot->GetSlotId() ) )
