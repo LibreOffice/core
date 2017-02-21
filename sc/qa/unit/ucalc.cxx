@@ -5311,6 +5311,27 @@ void Test::testNoteLifeCycle()
     pOrigCaption = pOrigNote->GetOrCreateCaption(aOrigPos);
     CPPUNIT_ASSERT_MESSAGE("Captions identical after move undo.", pOrigCaption != pMoveCaption);
 
+
+    // Create a note at B4, merge B4 and B5 with ScUndoMerge, and Undo.
+
+    ScAddress aPosB4(1,3,0);
+    ScPostIt* pNoteB4 = m_pDoc->GetOrCreateNote(aPosB4);
+    CPPUNIT_ASSERT_MESSAGE("Failed to insert cell comment at B4.", pNoteB4);
+    const SdrCaptionObj* pCaptionB4 = pNoteB4->GetOrCreateCaption(aPosB4);
+    ScCellMergeOption aCellMergeOption(1,3,2,3);
+    rDocFunc.MergeCells( aCellMergeOption, true /*bContents*/, bRecord, bApi, false /*bEmptyMergedCells*/ );
+
+    SfxUndoManager* pMergeUndoManager = m_pDoc->GetUndoManager();
+    CPPUNIT_ASSERT(pMergeUndoManager);
+    pMergeUndoManager->Undo();  // this should not crash ... tdf#105667
+
+    // Undo contained the original caption object pointer which was still alive
+    // at B4 after the merge and not cloned nor recreated during Undo.
+    ScPostIt* pUndoNoteB4 = m_pDoc->GetOrCreateNote(aPosB4);
+    CPPUNIT_ASSERT_MESSAGE("No cell comment at B4 after Undo.", pUndoNoteB4);
+    const SdrCaptionObj* pUndoCaptionB4 = pUndoNoteB4->GetOrCreateCaption(aPosB4);
+    CPPUNIT_ASSERT_MESSAGE("Captions not identical after Merge Undo.", pCaptionB4 == pUndoCaptionB4);
+
     m_pDoc->DeleteTab(0);
 }
 
