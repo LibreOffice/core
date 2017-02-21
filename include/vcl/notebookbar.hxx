@@ -32,8 +32,6 @@ public:
     virtual void setPosSizePixel(long nX, long nY, long nWidth, long nHeight, PosSizeFlags nFlags = PosSizeFlags::All) SAL_OVERRIDE;
     virtual void Resize() override;
 
-    void SetIconClickHdl(Link<NotebookBar*, void> aHdl);
-
     void SetSystemWindow(SystemWindow* pSystemWindow);
 
     const css::uno::Reference<css::ui::XContextChangeEventListener>& getContextChangeEventListener() const { return m_pEventListener; }

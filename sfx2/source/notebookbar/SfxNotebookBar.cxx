@@ -270,8 +270,10 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
 
     if (IsActive())
     {
-        const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( ::comphelper::getProcessComponentContext() );
-        vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum(xModuleManager->identify(xFrame));
+        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
+        OUString aModuleName = xModuleManager->identify( xFrame );
+        vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
         OUString sFile = lcl_getNotebookbarFileName( eApp );
         OUString sNewFile = rUIFile + sFile;
         OUString sCurrentFile;
@@ -302,7 +304,6 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             pNotebookBar = pSysWindow->GetNotebookBar();
             pNotebookBar->Show();
             pNotebookBar->GetParent()->Resize();
-            pNotebookBar->SetIconClickHdl( LINK( nullptr, SfxNotebookBar, OpenNotebookbarPopupMenu ) );
 
             utl::OConfigurationTreeRoot aRoot(lcl_getCurrentImplConfigRoot());
             const utl::OConfigurationNode aModeNode(lcl_getCurrentImplConfigNode(xFrame, aRoot));
@@ -313,8 +314,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
             if(pView)
             {
                 Reference<XContextChangeEventMultiplexer> xMultiplexer
-                            = ContextChangeEventMultiplexer::get(
-                                    ::comphelper::getProcessComponentContext());
+                            = ContextChangeEventMultiplexer::get( xContext );
 
                 if(xFrame.is())
                 {
@@ -347,38 +347,6 @@ void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
     {
         xMultiplexer->removeAllContextChangeEventListeners(
                            pSysWindow->GetNotebookBar()->getContextChangeEventListener());
-    }
-}
-
-IMPL_STATIC_LINK(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, pNotebookbar, void)
-{
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    if (pNotebookbar && pViewFrame)
-    {
-        css::uno::Sequence<css::uno::Any> aArgs {
-            css::uno::makeAny(comphelper::makePropertyValue("Value", OUString("notebookbar"))),
-            css::uno::makeAny(comphelper::makePropertyValue("Frame", pViewFrame->GetFrame().GetFrameInterface())) };
-
-        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
-        css::uno::Reference<css::frame::XPopupMenuController> xPopupController(
-            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), css::uno::UNO_QUERY);
-
-        css::uno::Reference<css::awt::XPopupMenu> xPopupMenu(xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.awt.PopupMenu", xContext), css::uno::UNO_QUERY);
-
-        if (!xPopupController.is() || !xPopupMenu.is())
-            return;
-
-        xPopupController->setPopupMenu(xPopupMenu);
-        VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation(xPopupMenu);
-        PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
-        Point aPos(0, NotebookbarTabControl::GetHeaderHeight());
-        pVCLMenu->Execute(pNotebookbar, Rectangle(aPos, aPos),PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
-
-        css::uno::Reference<css::lang::XComponent> xComponent(xPopupController, css::uno::UNO_QUERY);
-        if (xComponent.is())
-            xComponent->dispose();
     }
 }
 

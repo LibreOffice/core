@@ -19,7 +19,6 @@ class NotebookbarContextControl
 public:
     virtual ~NotebookbarContextControl() {}
     virtual void SetContext( vcl::EnumContext::Context eContext ) = 0;
-    virtual void SetIconClickHdl( Link<NotebookBar*, void> aHdl ) = 0;
 };
 
 #endif // INCLUDED_SFX2_NOTEBOOKBAR_NOTEBOOKBARCONTEXTCONTROL_HXX

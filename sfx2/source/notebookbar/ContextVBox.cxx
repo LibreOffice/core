@@ -68,11 +68,6 @@ public:
         aSize.Width() += 6;
         SetSizePixel( aSize );
     }
-
-    void SetIconClickHdl( Link<NotebookBar*, void> ) override
-    {
-        // Menu not supported
-    }
 };
 
 VCL_BUILDER_FACTORY(ContextVBox)
