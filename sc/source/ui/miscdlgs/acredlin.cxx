@@ -1873,9 +1873,6 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, const SvSortData*, pSortData, sal_Int3
                 nCompare = ScGlobal::GetCaseCollator()->compareString(
                                         static_cast<SvLBoxString*>(pLeftItem)->GetText(),
                                         static_cast<SvLBoxString*>(pRightItem)->GetText());
-
-                if (nCompare == 0)
-                    nCompare = -1;
             }
         }
 
