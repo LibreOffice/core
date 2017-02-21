@@ -77,7 +77,7 @@ IMapWindow::~IMapWindow()
 
 void IMapWindow::dispose()
 {
-    SfxItemPool::Free(pIMapPool);
+    delete pIMapPool;
     delete[] pItemInfo;
     GraphCtrl::dispose();
 }

@@ -459,7 +459,7 @@ void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, 
     {
         _rpPool->ReleaseDefaults(true);
             // the "true" means delete the items, too
-        SfxItemPool::Free(_rpPool);
+        delete _rpPool;
         _rpPool = nullptr;
     }
 

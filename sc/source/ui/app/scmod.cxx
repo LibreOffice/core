@@ -202,7 +202,7 @@ ScModule::~ScModule()
 
     // InputHandler does not need to be deleted (there's none in the App anymore)
 
-    SfxItemPool::Free(pMessagePool);
+    delete pMessagePool;
 
     DELETEZ( pFormEditData );
 

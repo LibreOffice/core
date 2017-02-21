@@ -2517,7 +2517,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    SfxItemPool::Free(pPool);
+    delete pPool;
 
     for (SfxPoolItem* pDefault : pDefaults)
         delete pDefault;
@@ -4235,7 +4235,7 @@ void OReportController::openZoomDialog()
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        SfxItemPool::Free(pPool);
+        delete pPool;
 
         for (SfxPoolItem* pDefault : pDefaults)
             delete pDefault;

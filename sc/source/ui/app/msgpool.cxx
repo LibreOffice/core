@@ -76,6 +76,7 @@ ScMessagePool::ScMessagePool()
     SetDefaults( mpPoolDefaults );
 
     SetSecondaryPool( pDocPool );
+    SetDefaultMetric(MapUnit::Map100thMM);
 }
 
 ScMessagePool::~ScMessagePool()
@@ -88,7 +89,8 @@ ScMessagePool::~ScMessagePool()
 
     delete mpPoolDefaults;
 
-    SfxItemPool::Free(pDocPool);
+    delete pDocPool;
+    assert(GetMetric(0) == MapUnit::Map100thMM);
 }
 
 MapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
@@ -97,7 +99,7 @@ MapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
     if ( nWhich >= ATTR_STARTINDEX && nWhich <= ATTR_ENDINDEX )
         return MapUnit::MapTwip;
     else
-        return MapUnit::Map100thMM;
+        return SfxItemPool::GetMetric(nWhich); // set in constructor
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

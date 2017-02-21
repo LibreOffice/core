@@ -622,7 +622,7 @@ EditTextObjectImpl::~EditTextObjectImpl()
     aContents.clear();
     if ( bOwnerOfPool )
     {
-        SfxItemPool::Free(pPool);
+        delete pPool;
     }
 }
 

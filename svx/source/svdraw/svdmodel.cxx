@@ -295,10 +295,10 @@ SdrModel::~SdrModel()
     {
         // delete Pools if they're mine
         SfxItemPool* pOutlPool=pItemPool->GetSecondaryPool();
-        SfxItemPool::Free(pItemPool);
+        delete pItemPool;
         // OutlinerPool has to be deleted after deleting ItemPool, because
         // ItemPool contains SetItems that themselves reference Items from OutlinerPool.
-        SfxItemPool::Free(pOutlPool);
+        delete pOutlPool;
     }
 
     mpForbiddenCharactersTable.clear();

@@ -368,12 +368,13 @@ ScDocumentPool::ScDocumentPool()
     SetVersionMap( 11, 100, 187, pVersionMap11 );
     // ATTR_HYERLINK added
     SetVersionMap( 12, 100, 192, pVersionMap12 );
+
+    SetDefaultMetric(MapUnit::Map100thMM);
 }
 
 ScDocumentPool::~ScDocumentPool()
 {
     Delete();
-
     for ( sal_uInt16 i=0; i < ATTR_ENDINDEX-ATTR_STARTINDEX+1; i++ )
     {
         SetRefCount( *(*mpPoolDefaults)[i], 0 );
@@ -381,6 +382,7 @@ ScDocumentPool::~ScDocumentPool()
     }
 
     delete mpPoolDefaults;
+    assert(GetMetric(0) == MapUnit::Map100thMM);
 }
 
 void ScDocumentPool::InitVersionMaps()
@@ -879,7 +881,7 @@ MapUnit ScDocumentPool::GetMetric( sal_uInt16 nWhich ) const
     if ( nWhich >= ATTR_STARTINDEX && nWhich <= ATTR_ENDINDEX )
         return MapUnit::MapTwip;
     else
-        return MapUnit::Map100thMM;
+        return SfxItemPool::GetMetric(nWhich); // set in constructor
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

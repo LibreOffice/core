@@ -40,6 +40,7 @@ ChartItemPool::ChartItemPool():
         SfxItemPool( "ChartItemPool" , SCHATTR_START, SCHATTR_END, nullptr, nullptr ),
         pItemInfos(new SfxItemInfo[SCHATTR_END - SCHATTR_START + 1])
 {
+    SetDefaultMetric(MapUnit::Map100thMM);
     /**************************************************************************
     * PoolDefaults
     **************************************************************************/
@@ -183,6 +184,7 @@ ChartItemPool::ChartItemPool():
 ChartItemPool::ChartItemPool(const ChartItemPool& rPool):
     SfxItemPool(rPool), pItemInfos(nullptr)
 {
+    SetDefaultMetric(MapUnit::Map100thMM);
 }
 
 ChartItemPool::~ChartItemPool()
@@ -192,16 +194,12 @@ ChartItemPool::~ChartItemPool()
     ReleaseDefaults(true);
 
     delete[] pItemInfos;
+    assert(GetMetric(0) == MapUnit::Map100thMM);
 }
 
 SfxItemPool* ChartItemPool::Clone() const
 {
     return new ChartItemPool(*this);
-}
-
-MapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
-{
-    return MapUnit::Map100thMM;
 }
 
 SfxItemPool* ChartItemPool::CreateChartItemPool()
