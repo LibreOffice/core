@@ -11581,10 +11581,8 @@ if test "$enable_liblangtag" = "yes" -o "$enable_liblangtag" = ""; then
     fi
     AC_DEFINE(ENABLE_LIBLANGTAG)
 else
-    if test "x$SYSTEM_ETONYEK" = "x"; then
-            AC_MSG_ERROR([internal libetonyek requires liblangtag])
-    fi
     AC_MSG_RESULT([no])
+    LIBLANGTAG_CFLAGS="-DDISABLE_LIBLANGTAG"
 fi
 AC_SUBST(ENABLE_LIBLANGTAG)
 AC_SUBST(SYSTEM_LIBLANGTAG)

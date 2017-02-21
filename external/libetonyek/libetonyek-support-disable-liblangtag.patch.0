@@ -1,0 +1,130 @@
+--- src/lib/IWORKLanguageManager.cpp.orig	2017-02-21 10:28:39.646017140 +0000
++++ src/lib/IWORKLanguageManager.cpp	2017-02-21 10:29:26.601817549 +0000
+@@ -12,7 +12,9 @@
+ #include <cstdlib>
+ #include <stdexcept>
+ 
++#if !defined(DISABLE_LIBLANGTAG)
+ #include <liblangtag/langtag.h>
++#endif
+ 
+ #include "libetonyek_utils.h"
+ 
+@@ -27,6 +29,7 @@
+ 
+ using std::string;
+ 
++#if !defined(DISABLE_LIBLANGTAG)
+ namespace
+ {
+ 
+@@ -56,6 +59,7 @@
+ }
+ 
+ }
++#endif
+ 
+ struct IWORKLanguageManager::LangDB
+ {
+@@ -67,6 +71,7 @@
+ IWORKLanguageManager::LangDB::LangDB()
+   : m_db()
+ {
++#if !defined(DISABLE_LIBLANGTAG)
+   shared_ptr<lt_lang_db_t> langDB(lt_db_get_lang(), lt_lang_db_unref);
+   shared_ptr<lt_iter_t> it(LT_ITER_INIT(langDB.get()), lt_iter_finish);
+   lt_pointer_t key(0);
+@@ -77,6 +82,7 @@
+     lt_lang_t *const lang = reinterpret_cast<lt_lang_t *>(value);
+     m_db[lt_lang_get_name(lang)] = tag;
+   }
++#endif
+ }
+ 
+ IWORKLanguageManager::IWORKLanguageManager()
+@@ -102,6 +108,10 @@
+   if (invIt != m_invalidTags.end())
+     return "";
+ 
++#if defined(DISABLE_LIBLANGTAG)
++  m_invalidTags.insert(tag);
++  return "";
++#else
+   const shared_ptr<lt_tag_t> &langTag = parseTag(tag);
+   if (!langTag)
+   {
+@@ -114,6 +124,7 @@
+   addProperties(fullTag);
+ 
+   return fullTag;
++#endif
+ }
+ 
+ const std::string IWORKLanguageManager::addLanguage(const std::string &lang)
+@@ -134,6 +145,10 @@
+     return "";
+   }
+ 
++#if defined(DISABLE_LIBLANGTAG)
++  m_invalidLangs.insert(lang);
++  return "";
++#else
+   const shared_ptr<lt_tag_t> &langTag = parseTag(langIt->second);
+   if (!langTag)
+     throw std::logic_error("cannot parse tag that came from liblangtag language DB");
+@@ -143,6 +158,7 @@
+   addProperties(fullTag);
+ 
+   return fullTag;
++#endif
+ }
+ 
+ const std::string IWORKLanguageManager::addLocale(const std::string &locale)
+@@ -156,6 +172,9 @@
+   if (invIt != m_invalidLocales.end())
+     return "";
+ 
++#if defined(DISABLE_LIBLANGTAG)
++  return "";
++#else
+   lt_error_t *error = 0;
+   const shared_ptr<lt_tag_t> tag(lt_tag_convert_from_locale_string(locale.c_str(), &error), lt_tag_unref);
+   if ((error && lt_error_is_set(error, LT_ERR_ANY)) || !tag)
+@@ -170,14 +189,19 @@
+   addProperties(fullTag);
+ 
+   return fullTag;
++#endif
+ }
+ 
+ const std::string IWORKLanguageManager::getLanguage(const std::string &tag) const
+ {
++#if defined(DISABLE_LIBLANGTAG)
++  return "";
++#else
+   const shared_ptr<lt_tag_t> &langTag = parseTag(tag);
+   if (!langTag)
+     throw std::logic_error("cannot parse tag that has been successfully parsed before");
+   return lt_lang_get_name(lt_tag_get_language(langTag.get()));
++#endif
+ }
+ 
+ const IWORKLanguageManager::LangDB &IWORKLanguageManager::getLangDB() const
+@@ -189,6 +213,9 @@
+ 
+ void IWORKLanguageManager::addProperties(const std::string &tag)
+ {
++#if defined(DISABLE_LIBLANGTAG)
++  return;
++#else
+   const shared_ptr<lt_tag_t> &langTag = parseTag(tag);
+   if (!langTag)
+     throw std::logic_error("cannot parse tag that has been successfully parsed before");
+@@ -205,6 +232,7 @@
+     props.insert("fo:script", lt_script_get_tag(script));
+ 
+   m_propsMap[tag] = props;
++#endif
+ }
+ 
+ void IWORKLanguageManager::writeProperties(const std::string &tag, librevenge::RVNGPropertyList &props) const
