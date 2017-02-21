@@ -195,13 +195,13 @@ void LwpFribPtr::XFConvert()
             {
                 XFTextSpan *pSpan = new XFTextSpan();
                 pSpan->SetStyleName(tabFrib->GetStyleName());
-                XFTabStop *pTab = new XFTabStop();
+                XFTabStop *pTab = new XFTabStop;
                 pSpan->Add(pTab);
                 m_pXFPara->Add(pSpan);
             }
             else
             {
-                XFTabStop *pTab = new XFTabStop();
+                XFTabStop *pTab = new XFTabStop;
                 m_pXFPara->Add(pTab);
             }
         }
@@ -248,7 +248,7 @@ void LwpFribPtr::XFConvert()
             break;
         case FRIB_TAG_LINEBREAK:
         {
-            XFLineBreak *pLineBreak = new XFLineBreak();
+            XFLineBreak *pLineBreak = new XFLineBreak;
             m_pXFPara->Add(pLineBreak);
         }
             break;
