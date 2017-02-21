@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_47b0498c",
+        "filename": "sw/source/filter/inc/fltini.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-21T10:50:03Z",
+      "side": 1,
+      "message": "don\u0027t think \"implementation\" is right, maybe \"conversion\" or \"mapping\"?",
+      "revId": "fd6b4a325f4926bf5c823deda2044dafe2d9e000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_e7c05de3",
+        "filename": "sw/source/filter/inc/wrtswtbl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-21T10:50:03Z",
+      "side": 1,
+      "message": "typo \"hight\"",
+      "revId": "fd6b4a325f4926bf5c823deda2044dafe2d9e000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_67ad4d31",
+        "filename": "sw/source/filter/inc/wrtswtbl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-21T10:50:03Z",
+      "side": 1,
+      "message": "i think we call it \"table heading\"",
+      "revId": "fd6b4a325f4926bf5c823deda2044dafe2d9e000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a7a7354e",
+        "filename": "sw/source/filter/inc/wrtswtbl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-21T10:50:03Z",
+      "side": 1,
+      "message": "maybe better \"generate relative widths\"",
+      "revId": "fd6b4a325f4926bf5c823deda2044dafe2d9e000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_87aa3118",
+        "filename": "sw/source/filter/inc/wrtswtbl.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 246,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-21T10:50:03Z",
+      "side": 1,
+      "message": "height",
+      "revId": "fd6b4a325f4926bf5c823deda2044dafe2d9e000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
