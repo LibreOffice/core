@@ -1012,6 +1012,9 @@ void SbiParser::Declare()
 void SbiParser::DefDeclare( bool bPrivate )
 {
     Next();
+    if( eCurTok == PTRSAFE )
+        Next();
+
     if( eCurTok != SUB && eCurTok != FUNCTION )
     {
       Error( ERRCODE_BASIC_UNEXPECTED, eCurTok );
