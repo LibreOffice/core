@@ -375,6 +375,7 @@ namespace
     const OUString source5("'asdf _\n100");
     const OUString source6("'asdf _\n'100");
     const OUString source7("'asdf _\n 1234 _\n asdf'");
+    const OUString source8("  #if Win64");
 
     std::vector<Symbol> symbols;
 
@@ -430,6 +431,11 @@ namespace
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[2].type);
     CPPUNIT_ASSERT_EQUAL(rem, symbols[3].text);
     CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[3].type);
+
+    symbols = getSymbols(source8);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), symbols.size());
+    CPPUNIT_ASSERT_EQUAL(rem, symbols[0].text);
+    CPPUNIT_ASSERT_EQUAL(SbxVARIANT, symbols[0].type);
   }
 
   void ScannerTest::testGoto()
