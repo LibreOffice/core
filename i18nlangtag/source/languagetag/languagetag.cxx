@@ -24,19 +24,10 @@
 
 //#define erDEBUG
 
-#if ENABLE_LIBLANGTAG
 #if LIBLANGTAG_INLINE_FIX
 #define LT_HAVE_INLINE
 #endif
 #include <liblangtag/langtag.h>
-#else
-/* Replacement code for LGPL phobic and Android systems.
- * For iOS we could probably use NSLocale instead, that should have more or
- * less required functionality. If it is good enough, it could be used for Mac
- * OS X, too.
- */
-#include "simple-langtag.cxx"
-#endif
 
 using namespace com::sun::star;
 

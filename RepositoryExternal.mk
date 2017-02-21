@@ -926,7 +926,6 @@ endef
 
 endif # SYSTEM_LIBXSLT
 
-ifeq ($(ENABLE_LIBLANGTAG),TRUE)
 
 ifneq ($(SYSTEM_LIBLANGTAG),)
 
@@ -985,12 +984,6 @@ endef
 
 endif # SYSTEM_LIBLANGTAG
 
-else
-
-gb_LinkTarget__use_liblangtag :=
-gb_ExternalProject__use_liblangtag :=
-
-endif # ENABLE_LIBLANGTAG
 
 gb_ExternalProject__use_apr :=
 
