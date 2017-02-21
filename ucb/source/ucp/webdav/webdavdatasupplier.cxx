@@ -32,6 +32,7 @@
 #include "ContentProperties.hxx"
 #include "DAVSession.hxx"
 #include "SerfUri.hxx"
+#include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;

@@ -44,6 +44,9 @@
 #include <com/sun/star/security/XCertificateContainer.hpp>
 #include <com/sun/star/security/CertAltNameEntry.hpp>
 #include <com/sun/star/security/XSanExtension.hpp>
+#include <com/sun/star/io/NotConnectedException.hpp>
+#include <com/sun/star/io/BufferSizeExceededException.hpp>
+#include <com/sun/star/io/IOException.hpp>
 #define OID_SUBJECT_ALTERNATIVE_NAME "2.5.29.17"
 
 #include <com/sun/star/ucb/Lock.hpp>
