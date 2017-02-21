@@ -117,7 +117,6 @@ private:
     Options*            m_pOptions;
     AstStack*           m_pScopes;
     AstModule*          m_pRoot;
-    ErrorHandler*       m_pErrorHandler;
     OString      m_fileName;
     OString      m_mainFileName;
     OString      m_realFileName;

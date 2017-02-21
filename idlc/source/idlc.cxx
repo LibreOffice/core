@@ -212,7 +212,6 @@ Idlc::Idlc(Options* pOptions)
     m_pScopes = new AstStack();
     // init root object after construction
     m_pRoot = nullptr;
-    m_pErrorHandler = new ErrorHandler();
     m_bGenerateDoc = m_pOptions->isValid("-C");
 }
 
@@ -220,7 +219,6 @@ Idlc::~Idlc()
 {
     delete m_pRoot;
     delete m_pScopes;
-    delete m_pErrorHandler;
 }
 
 void Idlc::init()
