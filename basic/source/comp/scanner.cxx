@@ -212,6 +212,7 @@ bool SbiScanner::NextSym()
     eScanType = SbxVARIANT;
     aSym.clear();
     bHash = bSymbol = bNumber = bSpaces = false;
+    bool bCompilerDirective = false;
 
     // read in line?
     if( !pLine )
@@ -246,7 +247,11 @@ bool SbiScanner::NextSym()
     {
         ++pLine;
         ++nCol;
-        bHash = true;
+        //ignore compiler directives (# is first non-space character)
+        if( nOldCol2 == 0 )
+            bCompilerDirective = true;
+        else
+            bHash = true;
     }
 
     // copy character if symbol
@@ -551,7 +556,9 @@ bool SbiScanner::NextSym()
 PrevLineCommentLbl:
 
     if( bPrevLineExtentsComment || (eScanType != SbxSTRING &&
-                                    ( aSym.startsWith("'") || aSym.equalsIgnoreAsciiCase( "REM" ) ) ) )
+                                    ( bCompilerDirective ||
+                                      aSym.startsWith("'") ||
+                                      aSym.equalsIgnoreAsciiCase( "REM" ) ) ) )
     {
         bPrevLineExtentsComment = false;
         aSym = "REM";
