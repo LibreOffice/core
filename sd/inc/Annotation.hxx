@@ -37,6 +37,8 @@ SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const css::uno::Reference< cs
 
 sal_uInt32 getAnnotationId(const css::uno::Reference <css::office::XAnnotation>& xAnnotation);
 
+const SdPage* getAnnotationPage(const css::uno::Reference<css::office::XAnnotation>& xAnnotation);
+
 }
 
 #endif

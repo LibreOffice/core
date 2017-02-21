@@ -2387,6 +2387,7 @@ OUString SdXImpressDocument::getPostIts()
             aAnnotation.put("dateTime", utl::toISO8601(xAnnotation->getDateTime()));
             uno::Reference<text::XText> xText(xAnnotation->getTextRange());
             aAnnotation.put("text", xText->getString());
+            aAnnotation.put("parthash", OUString::number(pPage->GetHashCode()));
 
             aAnnotations.push_back(std::make_pair("", aAnnotation));
         }
