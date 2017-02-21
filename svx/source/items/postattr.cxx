@@ -151,11 +151,6 @@ SvxPostItIdItem::SvxPostItIdItem( sal_uInt16 _nWhich )
     SetWhich( _nWhich );
 }
 
-SvxPostItIdItem::SvxPostItIdItem( const OUString& rId, sal_uInt16 _nWhich ) :
-    SfxStringItem( _nWhich, rId )
-{
-}
-
 SfxPoolItem* SvxPostItIdItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItIdItem( *this );

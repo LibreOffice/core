@@ -310,28 +310,6 @@ void VCLXAccessibleList::NotifyListItem(css::uno::Any& val)
     }
 }
 
-void VCLXAccessibleList::UpdateFocus_Impl_Acc (sal_Int32 nPos ,bool b_IsDropDownList)
-{
-    if (!(m_aBoxType == LISTBOX && !b_IsDropDownList))
-    {
-        return ;
-    }
-    Reference<XAccessible> xChild= CreateChild(nPos);
-    if ( !xChild.is() )
-    {
-        return ;
-    }
-    m_nCurSelectedPos = nPos;
-    uno::Any aOldValue, aNewValue;
-    aNewValue <<= xChild;
-
-    NotifyAccessibleEvent(
-            AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
-            aOldValue,
-            aNewValue );
-}
-
-
 void VCLXAccessibleList::ProcessWindowEvent (const VclWindowEvent& rVclWindowEvent,  bool b_IsDropDownList)
 {
     switch ( rVclWindowEvent.GetId() )

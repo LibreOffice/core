@@ -149,7 +149,6 @@ public:
     virtual ~Shell() override;
 
     BaseWindow*      GetCurWindow() const    { return pCurWin; }
-    ScriptDocument const& GetCurDocument() const { return m_aCurDocument; }
     OUString const&  GetCurLibName() const { return m_aCurLibName; }
     const std::shared_ptr<LocalizationMgr>& GetCurLocalizationMgr() const { return m_pCurLocalizationMgr; }
 

@@ -673,7 +673,6 @@ public:
                                 int* pCount );
 
     SAL_DLLPRIVATE bool     ImplMakeMono( sal_uInt8 cThreshold );
-    SAL_DLLPRIVATE bool     ImplMakeMonoDither();
     SAL_DLLPRIVATE bool     ImplMakeGreyscales( sal_uInt16 nGreyscales );
     SAL_DLLPRIVATE bool     ImplConvertUp( sal_uInt16 nBitCount, Color* pExtColor = nullptr );
     SAL_DLLPRIVATE bool     ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor = nullptr );

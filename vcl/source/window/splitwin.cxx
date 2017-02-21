@@ -2039,10 +2039,6 @@ void SplitWindow::SplitResize()
 {
 }
 
-void SplitWindow::AutoHide()
-{
-}
-
 void SplitWindow::FadeIn()
 {
 }

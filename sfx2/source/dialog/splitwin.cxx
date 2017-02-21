@@ -122,7 +122,6 @@ public:
                             SplitWindow::dispose();
                         }
 
-    virtual void        AutoHide() override;
     virtual void        FadeIn() override;
     void                Actualize();
 };
@@ -143,14 +142,6 @@ void SfxEmptySplitWin_Impl::Actualize()
     }
 
     SetSizePixel( aSize );
-}
-
-void SfxEmptySplitWin_Impl::AutoHide()
-{
-    pOwner->SetPinned_Impl( !pOwner->bPinned );
-    pOwner->SaveConfig_Impl();
-    bAutoHide = true;
-    FadeIn();
 }
 
 void SfxEmptySplitWin_Impl::FadeIn()
@@ -1143,28 +1134,6 @@ void SfxSplitWindow::SetFadeIn_Impl( bool bOn )
             pWorkWin->ArrangeAutoHideWindows( this );
         }
     }
-}
-
-void SfxSplitWindow::AutoHide()
-{
-    // If this handler is called in the "real" SplitWindow, it is
-    // either docked and should be displayed as floating, or vice versa
-    if ( !bPinned )
-    {
-        // It "floats", thus dock it again
-        SetPinned_Impl( true );
-        pWorkWin->ArrangeChildren_Impl();
-    }
-    else
-    {
-        // In "limbo"
-        SetPinned_Impl( false );
-        pWorkWin->ArrangeChildren_Impl();
-        pWorkWin->ArrangeAutoHideWindows( this );
-    }
-
-    pWorkWin->ShowChildren_Impl();
-    SaveConfig_Impl();
 }
 
 void SfxSplitWindow::FadeOut_Impl()

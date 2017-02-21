@@ -89,20 +89,6 @@ namespace dbaui
         */
         virtual bool isCommandEnabled( const OUString& _rCompleteCommandURL ) const = 0;
 
-        /** registers a command URL, giving it a unique name
-
-            If you call this with a command URL which is supported by the controller, then
-            you will simply get the controller's internal numeric shortcut to this command.
-
-            If you call this with a command URL which is not supported by the controller, then
-            you will get a new ID, which is unique during the lifetime of the controller.
-
-            If the command URL is invalid, or the controller cannot register new commands anymore,
-            then 0 is returned.
-        */
-        virtual sal_uInt16
-                        registerCommandURL( const OUString& _rCompleteCommandURL ) = 0;
-
         /** notifyHiContrastChanged will be called when the hicontrast mode changed.
             @param  _bHiContrast
                 <TRUE/> when in hicontrast mode.

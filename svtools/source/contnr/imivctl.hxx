@@ -441,7 +441,6 @@ public:
                             bool bInScrollBarEvent=false
                         );
 
-    void                AdjustEntryAtGrid();
 #ifdef DBG_UTIL
     void                SetEntryTextMode(
                             SvxIconChoiceCtrlTextMode,

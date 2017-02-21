@@ -115,11 +115,6 @@ public:
         Rectangle aRect = m_pObject->GetLogicRect();
         m_pViewShell->DoDPFieldPopup(aRect.TopLeft(), aRect.GetSize());
     }
-
-    virtual void SAL_CALL disposing()
-    {
-        m_pViewShell = nullptr;
-    }
 };
 
 void ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )

@@ -461,7 +461,6 @@ namespace dbaui
         virtual void executeChecked(sal_uInt16 _nCommandId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
         virtual bool isCommandEnabled(sal_uInt16 _nCommandId) const override;
         virtual bool isCommandEnabled(const OUString& _rCompleteCommandURL) const override;
-        virtual sal_uInt16 registerCommandURL( const OUString& _rCompleteCommandURL ) override;
         virtual void notifyHiContrastChanged() override;
         virtual bool isDataSourceReadOnly() const override;
         virtual css::uno::Reference< css::frame::XController > getXController() override;

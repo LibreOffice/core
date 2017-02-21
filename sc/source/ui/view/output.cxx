@@ -290,11 +290,6 @@ void ScOutputData::SetMetaFileMode( bool bNewMode )
     bMetaFile = bNewMode;
 }
 
-void ScOutputData::SetSingleGrid( bool bNewMode )
-{
-    bSingleGrid = bNewMode;
-}
-
 void ScOutputData::SetSyntaxMode( bool bNewMode )
 {
     mbSyntaxMode = bNewMode;

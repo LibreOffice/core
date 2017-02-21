@@ -52,21 +52,6 @@ class Color;
 class SfxStyleSheet;
 class SvxUnoDrawPagesAccess;
 
-enum class SdrInsertReasonKind {
-    Undo,       /// from Undo
-    Copy,       /// something copied...
-    ViewCall    /// via SdrView::Group(), ...
-};
-
-class SdrInsertReason {
-    SdrInsertReasonKind eReason;
-public:
-    SdrInsertReason(SdrInsertReasonKind eR): eReason(eR) {}
-
-    SdrInsertReasonKind GetReason() const         { return eReason; }
-};
-
-
 // class SdrObjList
 
 class SVX_DLLPUBLIC SdrObjList
@@ -120,10 +105,8 @@ public:
     /// recalculate order numbers / ZIndex
     void           RecalcObjOrdNums();
     bool           IsObjOrdNumsDirty() const        { return bObjOrdNumsDirty; }
-    virtual void   NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE,
-                                   const SdrInsertReason* pReason=nullptr);
-    virtual void   InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE,
-                                const SdrInsertReason* pReason=nullptr);
+    virtual void   NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
+    virtual void   InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE);
     /// remove from list without delete
     virtual SdrObject* NbcRemoveObject(size_t nObjNum);
     virtual SdrObject* RemoveObject(size_t nObjNum);

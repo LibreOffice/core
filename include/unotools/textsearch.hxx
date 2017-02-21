@@ -132,11 +132,6 @@ public:
     // signed return for API use
     sal_Int32       GetWildEscChar() const      { return static_cast<sal_Int32>(m_cWildEscChar); }
 
-    bool            IsSrchRelaxed() const       { return bLEV_Relaxed; }
-    int             GetLEVOther() const         { return nLEV_OtherX; }
-    int             GetLEVShorter() const       { return nLEV_ShorterY; }
-    int             GetLEVLonger() const        { return nLEV_LongerZ; }
-
     long GetTransliterationFlags() const        { return nTransliterationFlags; }
 };
 

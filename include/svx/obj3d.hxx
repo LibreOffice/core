@@ -86,8 +86,8 @@ public:
 
     virtual E3dObjList* Clone() const override;
 
-    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=nullptr) override;
-    virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE, const SdrInsertReason* pReason=nullptr) override;
+    virtual void NbcInsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
+    virtual void InsertObject(SdrObject* pObj, size_t nPos=SAL_MAX_SIZE) override;
     virtual SdrObject* NbcRemoveObject(size_t nObjNum) override;
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
 

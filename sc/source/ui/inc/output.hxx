@@ -283,7 +283,6 @@ public:
     void    SetEditCell( SCCOL nCol, SCROW nRow );
     void    SetSyntaxMode( bool bNewMode );
     void    SetMetaFileMode( bool bNewMode );
-    void    SetSingleGrid( bool bNewMode );
     void    SetGridColor( const Color& rColor );
     void    SetMarkClipped( bool bSet );
     void    SetShowNullValues ( bool bSet );
@@ -321,7 +320,6 @@ public:
     void PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOffset);
 
     // only screen:
-    void    DrawingSingle(const sal_uInt16 nLayer);
     void    DrawSelectiveObjects(const sal_uInt16 nLayer);
 
     bool    SetChangedClip();       // sal_False = not

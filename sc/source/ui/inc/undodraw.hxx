@@ -36,7 +36,6 @@ public:
                             ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh );
     virtual                 ~ScUndoDraw() override;
 
-    SfxUndoAction*          GetDrawUndo()       { return pDrawUndo.get(); }
     SfxUndoAction*          ReleaseDrawUndo()   { return pDrawUndo.release(); }
 
     virtual void            Undo() override;

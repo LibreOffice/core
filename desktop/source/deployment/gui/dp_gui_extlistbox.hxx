@@ -173,13 +173,11 @@ public:
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
     virtual Size GetOptimalSize() const override;
 
-    void            SetExtraSize( long nSize ) { m_nExtraHeight = nSize; }
     TEntry_Impl     GetEntryData( long nPos ) { return m_vEntries[ nPos ]; }
     long            GetEntryCount() { return (long) m_vEntries.size(); }
     Rectangle       GetEntryRect( const long nPos ) const;
     bool            HasActive() { return m_bHasActive; }
     long            PointToPos( const Point& rPos );
-    void            SetScrollHdl( const Link<ScrollBar*,void>& rLink );
     void            DoScroll( long nDelta );
     virtual void    RecalcAll();
     void            RemoveUnlocked();

@@ -147,12 +147,6 @@
 using namespace css;
 using namespace css::uno;
 
-#define SC_AUTOFILTER_ALL       0
-#define SC_AUTOFILTER_TOP10     1
-#define SC_AUTOFILTER_CUSTOM    2
-#define SC_AUTOFILTER_EMPTY     3
-#define SC_AUTOFILTER_NOTEMPTY  4
-
 enum class ScFilterBoxMode
 {
     DataSelect,
@@ -552,46 +546,6 @@ IMPL_LINK( ScGridWindow, PopupSpellingHdl, SpellCallbackInfo&, rInfo, void )
         pViewData->GetDispatcher().Execute( SID_SPELL_DIALOG, SfxCallMode::ASYNCHRON );
     else if (rInfo.nCommand == SpellCallbackCommand::AUTOCORRECT_OPTIONS)
         pViewData->GetDispatcher().Execute( SID_AUTO_CORRECT_DLG, SfxCallMode::ASYNCHRON );
-}
-
-void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, bool bHasSelection, const OUString& rStr )
-{
-    //! gridwin2 ?
-
-    ScDocument* pDoc = pViewData->GetDocument();
-    SCTAB nTab = pViewData->GetTabNo();
-    ScDPObject* pDPObj = pDoc->GetDPAtCursor(nCol, nRow, nTab);
-    if ( pDPObj && nCol > 0 )
-    {
-        // look for the dimension header left of the drop-down arrow
-        sal_uInt16 nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
-        long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
-        if ( nField >= 0 && nOrient == sheet::DataPilotFieldOrientation_PAGE )
-        {
-            ScDPSaveData aSaveData( *pDPObj->GetSaveData() );
-
-            bool bIsDataLayout;
-            OUString aDimName = pDPObj->GetDimName( nField, bIsDataLayout );
-            if ( !bIsDataLayout )
-            {
-                ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
-
-                if ( bHasSelection )
-                {
-                    const OUString aName = rStr;
-                    pDim->SetCurrentPage( &aName );
-                }
-                else
-                    pDim->SetCurrentPage( nullptr );
-
-                ScDPObject aNewObj( *pDPObj );
-                aNewObj.SetSaveData( aSaveData );
-                ScDBDocFunc aFunc( *pViewData->GetDocShell() );
-                aFunc.DataPilotUpdate( pDPObj, &aNewObj, true, false );
-                pViewData->GetView()->CursorPosChanged();       // shells may be switched
-            }
-        }
-    }
 }
 
 namespace {
@@ -1247,130 +1201,6 @@ void ScGridWindow::ExecDataSelect( SCCOL nCol, SCROW nRow, const OUString& rStr 
         // #i52307# CellContentChanged is not in EnterData so it isn't called twice
         // if the cursor is moved afterwards.
         pView->CellContentChanged();
-    }
-}
-
-void ScGridWindow::ExecFilter( sal_uLong nSel,
-                               SCCOL nCol, SCROW nRow,
-                               const OUString& aValue )
-{
-    SCTAB nTab = pViewData->GetTabNo();
-    ScDocument* pDoc = pViewData->GetDocument();
-    svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
-
-    ScDBData* pDBData = pDoc->GetDBAtCursor( nCol, nRow, nTab, ScDBDataPortion::AREA );
-    if (pDBData)
-    {
-        ScQueryParam aParam;
-        pDBData->GetQueryParam( aParam );       // Can only return MAXQUERY entries
-
-        if (SC_AUTOFILTER_CUSTOM == nSel)
-        {
-            SCTAB nAreaTab;
-            SCCOL nStartCol;
-            SCROW nStartRow;
-            SCCOL nEndCol;
-            SCROW nEndRow;
-            pDBData->GetArea( nAreaTab, nStartCol,nStartRow,nEndCol,nEndRow );
-            pViewData->GetView()->MarkRange( ScRange( nStartCol,nStartRow,nAreaTab,nEndCol,nEndRow,nAreaTab));
-            pViewData->GetView()->SetCursor(nCol,nRow);     //! Also through Slot ??
-            pViewData->GetDispatcher().Execute( SID_FILTER, SfxCallMode::SLOT | SfxCallMode::RECORD );
-        }
-        else
-        {
-            bool bDeleteOld = false;
-            SCSIZE nQueryPos = 0;
-            bool bFound = false;
-            if (!aParam.bInplace)
-                bDeleteOld = true;
-            if (aParam.eSearchType != utl::SearchParam::SearchType::Normal)
-                bDeleteOld = true;
-            SCSIZE nCount = aParam.GetEntryCount();
-            for (SCSIZE i = 0; i < nCount && !bDeleteOld; ++i)    // current filter settings
-                if (aParam.GetEntry(i).bDoQuery)
-                {
-                    //!         Summaries DrawButtons query!
-
-                    ScQueryEntry& rEntry = aParam.GetEntry(i);
-                    if (i>0)
-                        if (rEntry.eConnect != SC_AND)
-                            bDeleteOld = true;
-
-                    if (rEntry.nField == nCol)
-                    {
-                        if (bFound)                         // this column twice?
-                            bDeleteOld = true;
-                        nQueryPos = i;
-                        bFound = true;
-                    }
-                    if (!bFound)
-                        nQueryPos = i + 1;
-                }
-
-            if (bDeleteOld)
-            {
-                SCSIZE nEC = aParam.GetEntryCount();
-                for (SCSIZE i=0; i<nEC; i++)
-                    aParam.GetEntry(i).Clear();
-                nQueryPos = 0;
-                aParam.bInplace = true;
-                aParam.eSearchType = utl::SearchParam::SearchType::Normal;
-            }
-
-            if ( nQueryPos < nCount || SC_AUTOFILTER_ALL == nSel )    // delete is always possible
-            {
-                if (nSel)
-                {
-                    ScQueryEntry& rNewEntry = aParam.GetEntry(nQueryPos);
-                    ScQueryEntry::Item& rItem = rNewEntry.GetQueryItem();
-                    rNewEntry.bDoQuery       = true;
-                    rNewEntry.nField         = nCol;
-                    rItem.meType = ScQueryEntry::ByString;
-
-                    if ( nSel == SC_AUTOFILTER_TOP10 )
-                    {
-                        rNewEntry.eOp = SC_TOPVAL;
-                        rItem.maString = rPool.intern("10");
-                    }
-                    else if (nSel == SC_AUTOFILTER_EMPTY)
-                    {
-                        rNewEntry.SetQueryByEmpty();
-                    }
-                    else if (nSel == SC_AUTOFILTER_NOTEMPTY)
-                    {
-                        rNewEntry.SetQueryByNonEmpty();
-                    }
-                    else
-                    {
-                        rNewEntry.eOp = SC_EQUAL;
-                        rItem.maString = rPool.intern(aValue);
-                    }
-                    if (nQueryPos > 0)
-                        rNewEntry.eConnect   = SC_AND;
-                }
-                else
-                {
-                    if (bFound)
-                        aParam.RemoveEntryByField(nCol);
-                }
-
-                //  end edit mode - like in ScCellShell::ExecuteDB
-                if ( pViewData->HasEditView( pViewData->GetActivePart() ) )
-                {
-                    SC_MOD()->InputEnterHandler();
-                    pViewData->GetViewShell()->UpdateInputHandler();
-                }
-
-                pViewData->GetView()->Query( aParam, nullptr, true );
-                pDBData->SetQueryParam( aParam );                           // save
-            }
-            else                    //  "Too many conditions"
-                pViewData->GetView()->ErrorMessage( STR_FILTER_TOOMANY );
-        }
-    }
-    else
-    {
-        OSL_FAIL("Where is the database range?");
     }
 }
 

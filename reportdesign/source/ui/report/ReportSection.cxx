@@ -268,8 +268,7 @@ void OReportSection::Paste(const uno::Sequence< beans::NamedValue >& _aAllreadyC
 
                             pNeuObj->SetPage( m_pPage );
                             pNeuObj->SetModel( m_pModel.get() );
-                            SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
-                            m_pPage->InsertObject(pNeuObj, SAL_MAX_SIZE, &aReason);
+                            m_pPage->InsertObject(pNeuObj, SAL_MAX_SIZE);
 
                             Rectangle aRet(VCLPoint((*pCopiesIter)->getPosition()),VCLSize((*pCopiesIter)->getSize()));
                             aRet.setHeight(aRet.getHeight() + 1);

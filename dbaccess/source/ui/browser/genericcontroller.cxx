@@ -1361,34 +1361,6 @@ bool OGenericUnoController::isCommandEnabled(sal_uInt16 _nCommandId) const
     return GetState( _nCommandId ).bEnabled;
 }
 
-sal_uInt16 OGenericUnoController::registerCommandURL( const OUString& _rCompleteCommandURL )
-{
-    if ( _rCompleteCommandURL.isEmpty() )
-        return 0;
-
-    SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( _rCompleteCommandURL );
-    if ( aIter != m_aSupportedFeatures.end() )
-        return aIter->second.nFeatureId;
-
-    // this is a previously unknown command
-    sal_uInt16 nFeatureId = FIRST_USER_DEFINED_FEATURE;
-    while ( isFeatureSupported( nFeatureId ) && ( nFeatureId < LAST_USER_DEFINED_FEATURE ) )
-        ++nFeatureId;
-    if ( nFeatureId == LAST_USER_DEFINED_FEATURE )
-    {
-        SAL_WARN("dbaccess.ui", "OGenericUnoController::registerCommandURL: no more space for user defined features!" );
-        return 0L;
-    }
-
-    ControllerFeature aFeature;
-    aFeature.Command = _rCompleteCommandURL;
-    aFeature.nFeatureId = nFeatureId;
-    aFeature.GroupId = CommandGroup::INTERNAL;
-    m_aSupportedFeatures[ aFeature.Command ] = aFeature;
-
-    return nFeatureId;
-}
-
 void OGenericUnoController::notifyHiContrastChanged()
 {
 }

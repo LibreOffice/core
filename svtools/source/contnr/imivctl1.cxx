@@ -2691,25 +2691,6 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Timer *, void)
     }
 }
 
-
-// Function to align entries to the grid
-
-
-// pStart == 0: align all entries
-// else: align all entries of the row from pStart on (including pStart)
-void SvxIconChoiceCtrl_Impl::AdjustEntryAtGrid()
-{
-    IconChoiceMap aLists;
-    pImpCursor->CreateGridAjustData( aLists );
-    for (IconChoiceMap::const_iterator iter = aLists.begin();
-            iter != aLists.end(); ++iter)
-    {
-        AdjustAtGrid(iter->second);
-    }
-    IcnCursor_Impl::DestroyGridAdjustData( aLists );
-    CheckScrollBars();
-}
-
 // align a row, might expand width, doesn't break the line
 void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& rRow )
 {

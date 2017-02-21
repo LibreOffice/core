@@ -46,7 +46,6 @@ public:
                             mpPattern(pPattern) {}
                         ~FontConfigFontOptions();
 
-    FontHintStyle       GetHintStyle() const { return meHintStyle; }
     void                SyncPattern(const OString& rFileName, int nFontFace, bool bEmbolden);
     FcPattern*          GetPattern() const;
     static void         cairo_font_options_substitute(FcPattern* pPattern);

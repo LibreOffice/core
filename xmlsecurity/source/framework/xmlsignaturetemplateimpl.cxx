@@ -128,9 +128,4 @@ OUString XMLSignatureTemplateImpl::impl_getImplementationName() {
 Reference< XInterface > SAL_CALL XMLSignatureTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) {
     return Reference< XInterface >( *new XMLSignatureTemplateImpl ) ;
 }
-
-Reference< XSingleServiceFactory > XMLSignatureTemplateImpl::impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

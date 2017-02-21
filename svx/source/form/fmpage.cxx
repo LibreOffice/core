@@ -129,10 +129,9 @@ SdrPage* FmFormPage::Clone(SdrModel* const pNewModel) const
 }
 
 
-void FmFormPage::InsertObject(SdrObject* pObj, size_t nPos,
-                              const SdrInsertReason* pReason)
+void FmFormPage::InsertObject(SdrObject* pObj, size_t nPos)
 {
-    SdrPage::InsertObject( pObj, nPos, pReason );
+    SdrPage::InsertObject( pObj, nPos );
     if (GetModel())
         static_cast<FmFormModel*>(GetModel())->GetUndoEnv().Inserted(pObj);
 }

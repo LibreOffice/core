@@ -134,7 +134,6 @@ public:
     static BitmapColor GetPixelForN16BitTcLsbMask(ConstScanline pScanline, long nX, const ColorMask& rMask);
     static BitmapColor GetPixelForN24BitTcBgr(ConstScanline pScanline, long nX, const ColorMask& rMask);
     static BitmapColor GetPixelForN24BitTcRgb(ConstScanline pScanline, long nX, const ColorMask& rMask);
-    static BitmapColor GetPixelForN24BitTcMask(ConstScanline pScanline, long nX, const ColorMask& rMask);
     static BitmapColor GetPixelForN32BitTcAbgr(ConstScanline pScanline, long nX, const ColorMask& rMask);
     static BitmapColor GetPixelForN32BitTcArgb(ConstScanline pScanline, long nX, const ColorMask& rMask);
     static BitmapColor GetPixelForN32BitTcBgra(ConstScanline pScanline, long nX, const ColorMask& rMask);
@@ -151,7 +150,6 @@ public:
     static void SetPixelForN16BitTcLsbMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
     static void SetPixelForN24BitTcBgr(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
     static void SetPixelForN24BitTcRgb(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
-    static void SetPixelForN24BitTcMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
     static void SetPixelForN32BitTcAbgr(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
     static void SetPixelForN32BitTcArgb(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);
     static void SetPixelForN32BitTcBgra(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask);

@@ -330,11 +330,6 @@ public:
     void addGluePointMapping( css::uno::Reference< css::drawing::XShape >& xShape,
                               sal_Int32 nSourceId, sal_Int32 nDestinnationId );
 
-    /** find mapping for given DestinationID. This allows to extract the original draw:id imported with a draw:glue-point */
-    sal_Int32 findGluePointMapping(
-        const css::uno::Reference< css::drawing::XShape >& xShape,
-        sal_Int32 nDestinnationId ) const;
-
     /** moves all current DestinationId's for rXShape by n */
     void moveGluePointMapping( const css::uno::Reference< css::drawing::XShape >& xShape, const sal_Int32 n );
 

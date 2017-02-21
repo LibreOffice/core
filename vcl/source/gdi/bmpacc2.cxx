@@ -159,18 +159,6 @@ void BitmapReadAccess::SetPixelForN24BitTcRgb(Scanline pScanline, long nX, const
     *pScanline = rBitmapColor.GetBlue();
 }
 
-BitmapColor BitmapReadAccess::GetPixelForN24BitTcMask(ConstScanline pScanline, long nX, const ColorMask& rMask)
-{
-    BitmapColor aColor;
-    rMask.GetColorFor24Bit( aColor, pScanline + nX * 3 );
-    return aColor;
-}
-
-void BitmapReadAccess::SetPixelForN24BitTcMask(Scanline pScanline, long nX, const BitmapColor& rBitmapColor, const ColorMask& rMask)
-{
-    rMask.SetColorFor24Bit( rBitmapColor, pScanline + nX * 3 );
-}
-
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcAbgr(ConstScanline pScanline, long nX, const ColorMask&)
 {
     BitmapColor aBitmapColor;

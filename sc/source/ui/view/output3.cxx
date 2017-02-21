@@ -211,32 +211,4 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
     mpDev->SetDrawMode(nOldDrawMode);
 }
 
-// parts only for the screen
-
-void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
-{
-    bool    bHad    = false;
-    SCSIZE  nArrY;
-    for (nArrY=1; nArrY+1<nArrCount; nArrY++)
-    {
-        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-
-        if ( pThisRowInfo->bChanged )
-        {
-            if (!bHad)
-            {
-                bHad = true;
-            }
-        }
-        else if (bHad)
-        {
-            DrawSelectiveObjects( nLayer );
-            bHad = false;
-        }
-    }
-
-    if (bHad)
-        DrawSelectiveObjects( nLayer );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

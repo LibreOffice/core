@@ -342,8 +342,7 @@ bool SdrExchangeView::Paste(
                     pNeuObj->SetLayer(nLayer);
                 }
 
-                SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
-                pDstLst->InsertObject(pNeuObj, SAL_MAX_SIZE, &aReason);
+                pDstLst->InsertObject(pNeuObj, SAL_MAX_SIZE);
 
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pNeuObj));
@@ -420,8 +419,7 @@ void SdrExchangeView::ImpPasteObject(SdrObject* pObj, SdrObjList& rLst, const Po
     Point aPos(rCenter.X()-xs/2,rCenter.Y()-ys/2);
     Rectangle aR(aPos.X(),aPos.Y(),aPos.X()+xs,aPos.Y()+ys);
     pObj->SetLogicRect(aR);
-    SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
-    rLst.InsertObject(pObj, SAL_MAX_SIZE, &aReason);
+    rLst.InsertObject(pObj, SAL_MAX_SIZE);
 
     if( IsUndoEnabled() )
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
@@ -750,8 +748,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
                 pNeuObj->SetModel( pNeuMod );
             }
 
-            SdrInsertReason aReason(SdrInsertReasonKind::ViewCall);
-            pNeuPag->InsertObject(pNeuObj, SAL_MAX_SIZE, &aReason);
+            pNeuPag->InsertObject(pNeuObj, SAL_MAX_SIZE);
 
             // #i13033#
             aCloneList.AddPair(pObj, pNeuObj);

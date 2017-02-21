@@ -393,21 +393,6 @@ sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, const OUString& rText
     return xImplementation->createOutlineItem( nParent, rText, nDestID );
 }
 
-void PDFWriter::SetOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
-{
-    xImplementation->setOutlineItemParent( nItem, nNewParent );
-}
-
-void PDFWriter::SetOutlineItemText( sal_Int32 nItem, const OUString& rText )
-{
-    xImplementation->setOutlineItemText( nItem, rText );
-}
-
-void PDFWriter::SetOutlineItemDest( sal_Int32 nItem, sal_Int32 nDest )
-{
-    xImplementation->setOutlineItemDest( nItem, nDest );
-}
-
 void PDFWriter::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr )
 {
     xImplementation->createNote( rRect, rNote, nPageNr );
@@ -451,11 +436,6 @@ void PDFWriter::SetActualText( const OUString& rText )
 void PDFWriter::SetAlternateText( const OUString& rText )
 {
     xImplementation->setAlternateText( rText );
-}
-
-void PDFWriter::SetAutoAdvanceTime( sal_uInt32 nSeconds, sal_Int32 nPageNr )
-{
-    xImplementation->setAutoAdvanceTime( nSeconds, nPageNr );
 }
 
 void PDFWriter::SetPageTransition( PDFWriter::PageTransition eType, sal_uInt32 nMilliSec, sal_Int32 nPageNr )

@@ -56,8 +56,7 @@ public:
     virtual SdrPage* Clone() const override;
     virtual SdrPage* Clone(SdrModel* pNewModel) const override;
 
-    virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE,
-                                    const SdrInsertReason* pReason=nullptr) override;
+    virtual void    InsertObject(SdrObject* pObj, size_t nPos = SAL_MAX_SIZE) override;
 
     virtual SdrObject* RemoveObject(size_t nObjNum) override;
 

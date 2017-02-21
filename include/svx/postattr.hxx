@@ -125,9 +125,7 @@ class SVX_DLLPUBLIC SvxPostItIdItem: public SfxStringItem
 public:
     static SfxPoolItem* CreateDefault();
 
-    SvxPostItIdItem( sal_uInt16 nWhich  );
-
-    SvxPostItIdItem( const OUString& rId, sal_uInt16 nWhich  );
+    SvxPostItIdItem( sal_uInt16 nWhich );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 

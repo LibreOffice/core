@@ -236,8 +236,6 @@ public:
 
     /** Returns the absolute position of the top-left corner of the cell in 1/100 mm. */
     awt::Point               getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
-    /** Returns the size of the cell in 1/100 mm. */
-    awt::Size                getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const;
 
     /** Returns the address of the cell that contains the passed point in 1/100 mm. */
     ScAddress                getCellAddressFromPosition( const awt::Point& rPosition ) const;
@@ -543,14 +541,6 @@ awt::Point WorksheetGlobals::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) c
     PropertySet aCellProp( getCell( ScAddress( nCol, nRow, getSheetIndex() ) ) );
     aCellProp.getProperty( aPoint, PROP_Position );
     return aPoint;
-}
-
-awt::Size WorksheetGlobals::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
-{
-    awt::Size aSize;
-    PropertySet aCellProp( getCell( ScAddress( nCol, nRow, getSheetIndex() ) ) );
-    aCellProp.getProperty( aSize, PROP_Size );
-    return aSize;
 }
 
 namespace {
@@ -1400,11 +1390,6 @@ Reference< XDrawPage > WorksheetHelper::getDrawPage() const
 awt::Point WorksheetHelper::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
 {
     return mrSheetGlob.getCellPosition( nCol, nRow );
-}
-
-awt::Size WorksheetHelper::getCellSize( sal_Int32 nCol, sal_Int32 nRow ) const
-{
-    return mrSheetGlob.getCellSize( nCol, nRow );
 }
 
 awt::Size WorksheetHelper::getDrawPageSize() const

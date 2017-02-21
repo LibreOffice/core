@@ -742,8 +742,7 @@ void SdrUndoRemoveObj::Undo()
         }
 
         E3DModifySceneSnapRectUpdater aUpdater(pObjList->GetOwnerObj());
-        SdrInsertReason aReason(SdrInsertReasonKind::Undo);
-        pObjList->InsertObject(pObj,nOrdNum,&aReason);
+        pObjList->InsertObject(pObj,nOrdNum);
 
         // #i11426#
         if(aOwnerAnchorPos.X() || aOwnerAnchorPos.Y())
@@ -801,8 +800,7 @@ void SdrUndoInsertObj::Redo()
             aAnchorPos = pObj->GetAnchorPos();
         }
 
-        SdrInsertReason aReason(SdrInsertReasonKind::Undo);
-        pObjList->InsertObject(pObj,nOrdNum,&aReason);
+        pObjList->InsertObject(pObj,nOrdNum);
 
         // Arcs lose position when grouped (#i45952#)
         if ( aAnchorPos.X() || aAnchorPos.Y() )

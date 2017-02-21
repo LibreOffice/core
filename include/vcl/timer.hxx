@@ -56,7 +56,6 @@ public:
      */
     void            Invoke( Timer *arg );
     void            SetInvokeHandler( const Link<Timer *, void>& rLink ) { maInvokeHandler = rLink; }
-    bool            HasInvokeHandler() const { return maInvokeHandler.IsSet(); };
     void            ClearInvokeHandler() { SetInvokeHandler( Link<Timer *, void>() ); }
 
     void            SetTimeout( sal_uInt64 nTimeoutMs );

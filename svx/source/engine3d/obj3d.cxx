@@ -105,7 +105,7 @@ E3dObjList::~E3dObjList()
 {
 }
 
-void E3dObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
+void E3dObjList::NbcInsertObject(SdrObject* pObj, size_t nPos)
 {
     // Get owner
     DBG_ASSERT(dynamic_cast<const E3dObject*>(GetOwnerObj()), "Insert 3D object in parent != 3DObject");
@@ -115,7 +115,7 @@ void E3dObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertRe
     {
         // Normal 3D object, insert means
         // call parent
-        SdrObjList::NbcInsertObject(pObj, nPos, pReason);
+        SdrObjList::NbcInsertObject(pObj, nPos);
     }
     else
     {
@@ -124,12 +124,12 @@ void E3dObjList::NbcInsertObject(SdrObject* pObj, size_t nPos, const SdrInsertRe
     }
 }
 
-void E3dObjList::InsertObject(SdrObject* pObj, size_t nPos, const SdrInsertReason* pReason)
+void E3dObjList::InsertObject(SdrObject* pObj, size_t nPos)
 {
     OSL_ENSURE(dynamic_cast<const E3dObject*>(GetOwnerObj()), "Insert 3D object in non-3D Parent");
 
     // call parent
-    SdrObjList::InsertObject(pObj, nPos, pReason);
+    SdrObjList::InsertObject(pObj, nPos);
 
     E3dScene* pScene = static_cast<E3dObject*>(GetOwnerObj())->GetScene();
     if(pScene)
