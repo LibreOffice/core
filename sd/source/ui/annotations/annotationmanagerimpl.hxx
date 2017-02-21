@@ -66,6 +66,7 @@ public:
 
     void ExecuteInsertAnnotation(SfxRequest& rReq);
     void ExecuteDeleteAnnotation(SfxRequest& rReq);
+    void ExecuteEditAnnotation(SfxRequest& rReq);
     void ExecuteReplyToAnnotation(SfxRequest& rReq);
 
     void SelectNextAnnotation(bool bForeward);

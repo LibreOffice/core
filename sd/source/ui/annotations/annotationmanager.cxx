@@ -354,6 +354,9 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
     case SID_DELETEALLBYAUTHOR_POSTIT:
         ExecuteDeleteAnnotation( rReq );
         break;
+    case SID_EDIT_POSTIT:
+        ExecuteEditAnnotation( rReq );
+        break;
     case SID_PREVIOUS_POSTIT:
     case SID_NEXT_POSTIT:
         SelectNextAnnotation( rReq.GetSlot() == SID_NEXT_POSTIT );
@@ -432,6 +435,41 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
     }
 
     UpdateTags();
+}
+
+void AnnotationManagerImpl::ExecuteEditAnnotation(SfxRequest& rReq)
+{
+    const SfxItemSet* pArgs = rReq.GetArgs();
+    Reference< XAnnotation > xAnnotation;
+    sal_uInt32 nId = 0;
+    OUString sText;
+    if (pArgs)
+    {
+        const SfxPoolItem* pPoolItem = nullptr;
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_ID, true, &pPoolItem))
+        {
+            nId = static_cast<const SvxPostItIdItem*>(pPoolItem)->GetValue().toUInt32();
+            xAnnotation = GetAnnotationById(nId);
+        }
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_POSTIT_TEXT, true, &pPoolItem))
+            sText = static_cast<const SfxStringItem*>(pPoolItem)->GetValue();
+
+        if (xAnnotation.is() && !sText.isEmpty())
+        {
+            // TODO: Not allow other authors to change others' comments ?
+            Reference<XText> xText(xAnnotation->getTextRange());
+            xText->setString(sText);
+
+            const SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+            while (pViewShell)
+            {
+                lcl_CommentNotification(CommentNotificationType::Modify, pViewShell, xAnnotation);
+                pViewShell = SfxViewShell::GetNext(*pViewShell);
+            }
+        }
+    }
+
+    UpdateTags(true);
 }
 
 void AnnotationManagerImpl::InsertAnnotation(const OUString& rText)
@@ -719,9 +757,13 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     Reference< XAnnotation > xAnnotation;
     GetSelectedAnnotation( xAnnotation );
 
-    // Don't disable SID_DELETE_POSTIT slot in case of LOK
+    // Don't disable these slot in case of LOK, as postit doesn't need to
+    // selected before doing an operation on it in LOK
     if( (!xAnnotation.is() && !comphelper::LibreOfficeKit::isActive()) || bReadOnly )
+    {
         rSet.DisableItem( SID_DELETE_POSTIT );
+        rSet.DisableItem( SID_EDIT_POSTIT );
+    }
 
     SdPage* pPage = nullptr;
 
