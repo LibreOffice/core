@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_0212af62",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/UI/ToolbarMode.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-22T11:00:51Z",
+      "side": 1,
+      "message": "doesn\u0027t it work to make this non-nillable and give it a default value here in the .xcs?\n\nnillable props, esp. boolean ones, are easily misused with the \"simplified C++ configruation access\", where such a prop maps to boost::optional\u003cbool\u003e, so best avoided",
+      "revId": "50468779725c9eaccae17e4e39a6651f12e49340",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
