@@ -1148,7 +1148,9 @@ static void initWindow(TiledWindow& rWindow)
     {
         if (!rWindow.m_pCommentsSidebar)
         {
-            rWindow.m_pCommentsSidebar.reset(new CommentsSidebar());
+            rWindow.m_pCommentsSidebar.reset(new CommentsSidebar);
+            rWindow.m_pCommentsSidebar->m_pCommentsVBox = nullptr;
+            rWindow.m_pCommentsSidebar->m_pScrolledWindow = nullptr;
             rWindow.m_pCommentsSidebar->m_pMainVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
             gtk_container_add(GTK_CONTAINER(rWindow.m_pMainHBox), rWindow.m_pCommentsSidebar->m_pMainVBox);
 
