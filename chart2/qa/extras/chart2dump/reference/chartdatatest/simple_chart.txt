@@ -1,5 +1,5 @@
 // sChartTitle
-Annual Revenue
+Annaul Revenue
 // sChartType
 com.sun.star.chart2.ColumnChartType
 // sXAxisTitle
