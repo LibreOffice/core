@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_7db95a2e",
+        "filename": "include/LibreOfficeKit/LibreOfficeKit.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-22T13:32:57Z",
+      "side": 1,
+      "message": "Please add this at the end of the struct to avoid unnecessary incompatibility for existing users of the unstable API.",
+      "revId": "da21bbbf23773ebde2511f0a275891f8a9488149",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
