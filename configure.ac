@@ -3502,6 +3502,7 @@ if test "$_os" = "WINNT"; then
         else
             AC_MSG_ERROR([No msbuild found, Visual Studio installation broken?])
         fi
+        AC_MSG_RESULT([found: $regvalue])
     fi
 
     # Find the version of devenv.exe
@@ -12417,6 +12418,28 @@ AC_MSG_RESULT([$broken])
 if test "$broken" = yes; then
     AC_MSG_ERROR([working support for static initializer_list needed])
 fi
+
+AC_MSG_CHECKING([whether $CXX has broken constexpr static initialization])
+save_CXXFLAGS=$CXXFLAGS
+CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
+save_LIBS=$LIBS
+if test -n "$ILIB1"; then
+    LIBS="$LIBS $ILIB1"
+fi
+AC_LANG_PUSH([C++])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+    #include <vector>
+    class t {static const std::vector<int> v;};
+    const std::vector<int> t::v = {1,2};
+    ])], [broken=no], [broken=yes])
+AC_LANG_POP([C++])
+LIBS=$save_LIBS
+CXXFLAGS=$save_CXXFLAGS
+AC_MSG_RESULT([$broken])
+if test "$broken" = yes; then
+    AC_MSG_ERROR([working support for constexpr static initialization needed])
+fi
+
 
 
 # ===================================================================
