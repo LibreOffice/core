@@ -163,7 +163,7 @@ IdContainer * getIdContainer()
     IdContainer * pId = static_cast< IdContainer * >( ::osl_getThreadKeyData( aKey ) );
     if (! pId)
     {
-        pId = new IdContainer();
+        pId = new IdContainer;
         pId->pCurrentContext = nullptr;
         pId->pCurrentContextEnv = nullptr;
         pId->bInit = false;
