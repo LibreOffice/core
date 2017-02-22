@@ -1163,7 +1163,7 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
             {
                 Rectangle aRect = ImplGetItemRectPos(nPos);
                 Invalidate(aRect);
-                Flush();
+                Update();
             }
         }
     }
@@ -1216,7 +1216,7 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
         {
             Rectangle aRect = ImplGetItemRectPos(nPos);
             Invalidate(aRect, InvalidateFlags::NoErase);
-            Flush();
+            Update();
         }
     }
 }
@@ -1246,7 +1246,7 @@ void StatusBar::RedrawItem(sal_uInt16 nItemId)
     {
         Rectangle aRect = ImplGetItemRectPos(nPos);
         Invalidate(aRect);
-        Flush();
+        Update();
     }
 }
 
@@ -1338,7 +1338,7 @@ void StatusBar::StartProgressMode( const OUString& rText )
     if ( IsReallyVisible() )
     {
         Invalidate();
-        Flush();
+        Update();
     }
 }
 
@@ -1353,7 +1353,7 @@ void StatusBar::SetProgressValue( sal_uInt16 nNewPercent )
     {
         bool bNeedErase = ImplGetSVData()->maNWFData.mbProgressNeedsErase;
         Invalidate(maPrgsFrameRect, bNeedErase ? InvalidateFlags::NONE : InvalidateFlags::NoErase);
-        Flush();
+        Update();
     }
     mnPercent = nNewPercent;
 }
@@ -1368,7 +1368,7 @@ void StatusBar::EndProgressMode()
     if ( IsReallyVisible() )
     {
         Invalidate();
-        Flush();
+        Update();
     }
 }
 
@@ -1385,7 +1385,7 @@ void StatusBar::SetText(const OUString& rText)
         {
             Invalidate();
             Window::SetText(rText);
-            Flush();
+            Update();
         }
     }
     else if (mbProgressMode)
@@ -1394,7 +1394,7 @@ void StatusBar::SetText(const OUString& rText)
         if (IsReallyVisible())
         {
             Invalidate();
-            Flush();
+            Update();
         }
     }
     else
