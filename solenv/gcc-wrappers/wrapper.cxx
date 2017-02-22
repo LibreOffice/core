@@ -49,7 +49,7 @@ void setupccenv() {
     }
 
     // Set-up include path
-    string includepath="INCLUDE=.;";
+    string includepath="INCLUDE=.";
     char* incbuf;
     size_t inclen;
     _dupenv_s(&incbuf,&inclen,"SOLARINC");
@@ -61,16 +61,20 @@ void setupccenv() {
     free(incbuf);
 
     // 3 = strlen(" -I")
-    for(size_t pos=0; pos != string::npos;) {
-        size_t endpos=inctmp.find(" -I",pos+3);
-        size_t len=endpos-pos-3;
+    for(size_t pos=0,len=0;pos<inctmp.length();) {
+        size_t endpos=inctmp.find(" -I",pos+1);
         if(endpos==string::npos)
-            includepath.append(inctmp,pos+3,endpos);
-        else if(len>0) {
-            includepath.append(inctmp,pos+3,len);
+            endpos=inctmp.length();
+        len=endpos-pos;
+
+        while(len>0&&inctmp[pos+len-1]==' ')
+            --len;
+
+        if(len>3) {
             includepath.append(";");
+            includepath.append(inctmp,pos+3,len-3);
         }
-        pos=inctmp.find(" -I",pos+len);
+        pos=endpos;
     }
     if(_putenv(includepath.c_str())<0) {
         cerr << "Error: could not export INCLUDE" << endl;
