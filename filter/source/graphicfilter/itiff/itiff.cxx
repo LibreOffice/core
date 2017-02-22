@@ -927,12 +927,16 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         {
             sal_uLong nMinMax = ( ( 1 << nDstBitsPerPixel ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
             sal_uInt8* pt = pMap[ 0 ];
+            sal_uInt8* ptend = pt + nBytesPerRow;
             sal_uInt8 nShift;
 
             switch ( nDstBitsPerPixel )
             {
                 case 8 :
                 {
+                    if (pt + nImageWidth > ptend)
+                        return false;
+
                     if ( bByteSwap )
                     {
                         if ( nPredictor == 2 )
