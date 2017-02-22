@@ -50,7 +50,6 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
@@ -126,7 +125,7 @@ const OUString* ScDPSource::GetGrandTotalName() const
     return mpGrandTotalName.get();
 }
 
-sal_uInt16 ScDPSource::GetOrientation(long nColumn)
+sheet::DataPilotFieldOrientation ScDPSource::GetOrientation(long nColumn)
 {
     if (std::find(maColDims.begin(), maColDims.end(), nColumn) != maColDims.end())
         return sheet::DataPilotFieldOrientation_COLUMN;
@@ -245,7 +244,7 @@ bool ScDPSource::SubTotalAllowed(long nColumn)
     return bAllowed;
 }
 
-void ScDPSource::SetOrientation(long nColumn, sal_uInt16 nNew)
+void ScDPSource::SetOrientation(long nColumn, sheet::DataPilotFieldOrientation nNew)
 {
     //TODO: change to no-op if new orientation is equal to old?
 
@@ -284,7 +283,7 @@ bool ScDPSource::IsDataLayoutDimension(long nDim)
     return nDim == pData->GetColumnCount();
 }
 
-sal_uInt16 ScDPSource::GetDataLayoutOrientation()
+sheet::DataPilotFieldOrientation ScDPSource::GetDataLayoutOrientation()
 {
     return GetOrientation(pData->GetColumnCount());
 }
@@ -763,7 +762,7 @@ void ScDPSource::CreateRes_Impl()
     if (pResData)
         return;
 
-    sal_uInt16 nDataOrient = GetDataLayoutOrientation();
+    sheet::DataPilotFieldOrientation nDataOrient = GetDataLayoutOrientation();
     if (maDataDims.size() > 1 && ( nDataOrient != sheet::DataPilotFieldOrientation_COLUMN &&
                                 nDataOrient != sheet::DataPilotFieldOrientation_ROW ) )
     {
@@ -778,7 +777,7 @@ void ScDPSource::CreateRes_Impl()
     vector<OUString> aDataNames;
     vector<sheet::DataPilotFieldReference> aDataRefValues;
     vector<ScSubTotalFunc> aDataFunctions;
-    vector<sal_uInt16> aDataRefOrient;
+    vector<sheet::DataPilotFieldOrientation> aDataRefOrient;
 
     ScDPTableData::CalcInfo aInfo;
 
@@ -807,7 +806,7 @@ void ScDPSource::CreateRes_Impl()
 
         // Get reference field/item information.
         aDataRefValues.push_back(pDim->GetReferenceValue());
-        sal_uInt16 nDataRefOrient = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
+        sheet::DataPilotFieldOrientation nDataRefOrient = sheet::DataPilotFieldOrientation_HIDDEN;    // default if not used
         sal_Int32 eRefType = aDataRefValues.back().ReferenceType;
         if ( eRefType == sheet::DataPilotFieldReferenceType::ITEM_DIFFERENCE ||
              eRefType == sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE ||
@@ -868,7 +867,7 @@ void ScDPSource::CreateRes_Impl()
 
     // Show grand total columns only when the option is set *and* there is at
     // least one column field.  Same for the grand total rows.
-    sal_uInt16 nDataLayoutOrient = GetDataLayoutOrientation();
+    sheet::DataPilotFieldOrientation nDataLayoutOrient = GetDataLayoutOrientation();
     long nColDimCount2 = maColDims.size() - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_COLUMN ? 1 : 0);
     long nRowDimCount2 = maRowDims.size() - (nDataLayoutOrient == sheet::DataPilotFieldOrientation_ROW ? 1 : 0);
     bool bShowColGrand = bColumnGrand && nColDimCount2 > 0;
@@ -978,7 +977,7 @@ void ScDPSource::CreateRes_Impl()
 #endif
 }
 
-void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*> &rList )
+void ScDPSource::FillLevelList( sheet::DataPilotFieldOrientation nOrientation, std::vector<ScDPLevel*> &rList )
 {
     rList.clear();
 
@@ -1361,7 +1360,7 @@ void SAL_CALL ScDPDimension::setName( const OUString& rNewName )
     aName = rNewName;
 }
 
-sal_uInt16 ScDPDimension::getOrientation() const
+sheet::DataPilotFieldOrientation ScDPDimension::getOrientation() const
 {
     return pSource->GetOrientation( nDim );
 }
@@ -1472,7 +1471,7 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
     {
         sheet::DataPilotFieldOrientation eEnum;
         if (aValue >>= eEnum)
-            pSource->SetOrientation( nDim, sal::static_int_cast<sal_uInt16>(eEnum) );
+            pSource->SetOrientation( nDim, eEnum );
     }
     else if ( aPropertyName == SC_UNO_DP_FUNCTION )
     {

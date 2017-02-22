@@ -115,6 +115,81 @@ protected:
     }
 };
 
+namespace com { namespace sun { namespace star { namespace beans {
+
+std::ostream& operator<<(std::ostream& rStrm, PropertyState n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace awt {
+
+std::ostream& operator<<(std::ostream& rStrm, FontSlant n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace style {
+
+std::ostream& operator<<(std::ostream& rStrm, ParagraphAdjust n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, TextVerticalAdjust n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace table {
+
+std::ostream& operator<<(std::ostream& rStrm, ShadowLocation n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace text {
+
+std::ostream& operator<<(std::ostream& rStrm, WrapTextMode n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+std::ostream& operator<<(std::ostream& rStrm, TextContentAnchorType n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace style {
+
+std::ostream& operator<<(std::ostream& rStrm, BreakType n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 #if !defined(_WIN32)
 
 DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")

@@ -302,7 +302,7 @@ void SvxUnoConvertToMM( const MapUnit eSourceMapUnit, uno::Any & rMetric ) throw
                 rMetric <<= (sal_uInt32)(TWIPS_TO_MM(*o3tl::forceAccess<sal_uInt32>(rMetric)));
                 break;
             default:
-                OSL_FAIL(OString("AW: Missing unit translation to 100th mm, " + OString::number(rMetric.getValueTypeClass())).getStr());
+                OSL_FAIL(OString("AW: Missing unit translation to 100th mm, " + OString::number((sal_Int32)rMetric.getValueTypeClass())).getStr());
             }
             break;
         }

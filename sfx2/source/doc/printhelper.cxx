@@ -55,7 +55,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/event.hxx>
 
-#define SFX_PRINTABLESTATE_CANCELJOB    -2
+#define SFX_PRINTABLESTATE_CANCELJOB    (css::view::PrintableState)-2
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -240,7 +240,7 @@ namespace
             case view::PaperFormat_USER:
                 eRet = PAPER_USER;
                 break;
-            case view::PaperFormat_MAKE_FIXED_SIZE:
+            case view::PaperFormat::PaperFormat_MAKE_FIXED_SIZE:
                 break;
             //deliberate no default to force warn on a new papersize
         }

@@ -2570,18 +2570,15 @@ bool SwMSConvertControls::InsertControl(
 
     //I lay a small bet that this will change to
     //sal_Int16 nTemp=TextContentAnchorType::AS_CHARACTER;
-    sal_Int16 nTemp;
+    text::TextContentAnchorType nTemp;
     if (bFloatingCtrl)
-        nTemp= text::TextContentAnchorType_AT_PARAGRAPH;
+        nTemp = text::TextContentAnchorType_AT_PARAGRAPH;
     else
-        nTemp= text::TextContentAnchorType_AS_CHARACTER;
+        nTemp = text::TextContentAnchorType_AS_CHARACTER;
 
-    aTmp <<= nTemp;
-    xShapePropSet->setPropertyValue("AnchorType", aTmp );
+    xShapePropSet->setPropertyValue("AnchorType", uno::Any((sal_Int16)nTemp) );
 
-    nTemp= text::VertOrientation::TOP;
-    aTmp <<= nTemp;
-    xShapePropSet->setPropertyValue("VertOrient", aTmp );
+    xShapePropSet->setPropertyValue("VertOrient", uno::Any((sal_Int16)text::VertOrientation::TOP) );
 
     uno::Reference< text::XText >  xDummyTextRef;
     uno::Reference< text::XTextRange >  xTextRg =

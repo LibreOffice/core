@@ -1151,52 +1151,52 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
     bool bSuccessfullyReRouted = true;
     switch (_rValue.getValueTypeClass())
     {
-        case typelib_TypeClass_HYPER:
+        case css::uno::TypeClass_HYPER:
         {
             sal_Int64 nValue = 0;
             _rxParameters->setLong( _nColumnIndex, nValue );
         }
         break;
 
-        case typelib_TypeClass_VOID:
+        case css::uno::TypeClass_VOID:
             _rxParameters->setNull(_nColumnIndex,css::sdbc::DataType::VARCHAR);
             break;
 
-        case typelib_TypeClass_STRING:
+        case css::uno::TypeClass_STRING:
             _rxParameters->setString(_nColumnIndex, *o3tl::forceAccess<OUString>(_rValue));
             break;
 
-        case typelib_TypeClass_BOOLEAN:
+        case css::uno::TypeClass_BOOLEAN:
             _rxParameters->setBoolean(_nColumnIndex, *o3tl::forceAccess<bool>(_rValue));
             break;
 
-        case typelib_TypeClass_BYTE:
+        case css::uno::TypeClass_BYTE:
             _rxParameters->setByte(_nColumnIndex, *o3tl::forceAccess<sal_Int8>(_rValue));
             break;
 
-        case typelib_TypeClass_UNSIGNED_SHORT:
-        case typelib_TypeClass_SHORT:
+        case css::uno::TypeClass_UNSIGNED_SHORT:
+        case css::uno::TypeClass_SHORT:
             _rxParameters->setShort(_nColumnIndex, *o3tl::forceAccess<sal_Int16>(_rValue));
             break;
 
-        case typelib_TypeClass_CHAR:
+        case css::uno::TypeClass_CHAR:
             _rxParameters->setString(_nColumnIndex, OUString(*o3tl::forceAccess<sal_Unicode>(_rValue)));
             break;
 
-        case typelib_TypeClass_UNSIGNED_LONG:
-        case typelib_TypeClass_LONG:
+        case css::uno::TypeClass_UNSIGNED_LONG:
+        case css::uno::TypeClass_LONG:
             _rxParameters->setInt(_nColumnIndex, *o3tl::forceAccess<sal_Int32>(_rValue));
             break;
 
-        case typelib_TypeClass_FLOAT:
+        case css::uno::TypeClass_FLOAT:
             _rxParameters->setFloat(_nColumnIndex, *o3tl::forceAccess<float>(_rValue));
             break;
 
-        case typelib_TypeClass_DOUBLE:
+        case css::uno::TypeClass_DOUBLE:
             _rxParameters->setDouble(_nColumnIndex, *o3tl::forceAccess<double>(_rValue));
             break;
 
-        case typelib_TypeClass_SEQUENCE:
+        case css::uno::TypeClass_SEQUENCE:
             if (auto s = o3tl::tryAccess<Sequence< sal_Int8 >>(_rValue))
             {
                 _rxParameters->setBytes(_nColumnIndex, *s);
@@ -1204,7 +1204,7 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
             else
                 bSuccessfullyReRouted = false;
             break;
-        case typelib_TypeClass_STRUCT:
+        case css::uno::TypeClass_STRUCT:
             if (auto s1 = o3tl::tryAccess<css::util::DateTime>(_rValue))
                 _rxParameters->setTimestamp(_nColumnIndex, *s1);
             else if (auto s2 = o3tl::tryAccess<css::util::Date>(_rValue))
@@ -1215,7 +1215,7 @@ bool implSetObject( const Reference< XParameters >& _rxParameters,
                 bSuccessfullyReRouted = false;
             break;
 
-        case typelib_TypeClass_INTERFACE:
+        case css::uno::TypeClass_INTERFACE:
         {
             Reference< css::io::XInputStream >  xStream;
             if (_rValue >>= xStream)

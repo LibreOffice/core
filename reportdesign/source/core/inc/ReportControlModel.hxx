@@ -27,6 +27,7 @@
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <comphelper/uno3.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 
@@ -35,7 +36,7 @@ namespace reportdesign
 {
     struct OFormatProperties
     {
-        ::sal_Int16                                         nAlign;
+        css::style::ParagraphAdjust                         nAlign;
         css::awt::FontDescriptor                            aFontDescriptor;
         css::awt::FontDescriptor                            aAsianFontDescriptor;
         css::awt::FontDescriptor                            aComplexFontDescriptor;

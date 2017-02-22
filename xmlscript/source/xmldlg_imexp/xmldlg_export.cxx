@@ -834,7 +834,7 @@ void ElementDescriptor::readButtonTypeAttr( OUString const & rPropName, OUString
         Any a( _xProps->getPropertyValue( rPropName ) );
         if (auto n = o3tl::tryAccess<sal_Int16>(a))
         {
-            switch (*n)
+            switch ((awt::PushButtonType)*n)
             {
             case awt::PushButtonType_STANDARD:
                 addAttribute( rAttrName, "standard" );

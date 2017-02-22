@@ -217,7 +217,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (pArgs->Count () == 1)
                 {
                     const SfxUInt32Item* pFillStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
-                    if (CHECK_RANGE (drawing::FillStyle_NONE, (sal_Int32)pFillStyle->GetValue (), drawing::FillStyle_BITMAP))
+                    if (CHECK_RANGE (drawing::FillStyle_NONE, (drawing::FillStyle)pFillStyle->GetValue (), drawing::FillStyle_BITMAP))
                     {
                         pAttr->ClearItem (XATTR_FILLSTYLE);
                         XFillStyleItem aStyleItem((drawing::FillStyle) pFillStyle->GetValue ());
@@ -242,7 +242,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 if (pArgs->Count () == 1)
                 {
                     const SfxUInt32Item* pLineStyle = rReq.GetArg<SfxUInt32Item>(ID_VAL_STYLE);
-                    if (CHECK_RANGE (drawing::LineStyle_NONE, (sal_Int32)pLineStyle->GetValue (), drawing::LineStyle_DASH))
+                    if (CHECK_RANGE ((sal_Int32)drawing::LineStyle_NONE, (sal_Int32)pLineStyle->GetValue(), (sal_Int32)drawing::LineStyle_DASH))
                     {
                         pAttr->ClearItem (XATTR_LINESTYLE);
                         XLineStyleItem aStyleItem((drawing::LineStyle) pLineStyle->GetValue());
@@ -475,7 +475,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pDashLen = rReq.GetArg<SfxUInt32Item>(ID_VAL_DASHLEN);
                     const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
 
-                    if (CHECK_RANGE (css::drawing::DashStyle_RECT, (sal_Int32)pStyle->GetValue (), css::drawing::DashStyle_ROUNDRELATIVE))
+                    if (CHECK_RANGE ((sal_Int32)css::drawing::DashStyle_RECT, (sal_Int32)pStyle->GetValue(), (sal_Int32)css::drawing::DashStyle_ROUNDRELATIVE))
                     {
                         XDash aNewDash ((css::drawing::DashStyle) pStyle->GetValue (), (short) pDots->GetValue (), pDotLen->GetValue (),
                                         (short) pDashes->GetValue (), pDashLen->GetValue (), pDistance->GetValue ());
@@ -530,7 +530,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pStart = rReq.GetArg<SfxUInt32Item>(ID_VAL_STARTINTENS);
                     const SfxUInt32Item* pEnd = rReq.GetArg<SfxUInt32Item>(ID_VAL_ENDINTENS);
 
-                    if (CHECK_RANGE (css::awt::GradientStyle_LINEAR, (sal_Int32)pStyle->GetValue (), css::awt::GradientStyle_RECT) &&
+                    if (CHECK_RANGE ((sal_Int32)css::awt::GradientStyle_LINEAR, (sal_Int32)pStyle->GetValue(), (sal_Int32)css::awt::GradientStyle_RECT) &&
                         CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360) &&
                         CHECK_RANGE (0, (sal_Int32)pBorder->GetValue (), 100) &&
                         CHECK_RANGE (0, (sal_Int32)pCenterX->GetValue (), 100) &&
@@ -613,7 +613,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     const SfxUInt32Item* pDistance = rReq.GetArg<SfxUInt32Item>(ID_VAL_DISTANCE);
                     const SfxUInt32Item* pAngle = rReq.GetArg<SfxUInt32Item>(ID_VAL_ANGLE);
 
-                    if (CHECK_RANGE (css::drawing::HatchStyle_SINGLE, (sal_Int32)pStyle->GetValue (), css::drawing::HatchStyle_TRIPLE) &&
+                    if (CHECK_RANGE ((sal_Int32)css::drawing::HatchStyle_SINGLE, (sal_Int32)pStyle->GetValue(), (sal_Int32)css::drawing::HatchStyle_TRIPLE) &&
                         CHECK_RANGE (0, (sal_Int32)pAngle->GetValue (), 360))
                     {
                         pAttr->ClearItem (XATTR_FILLHATCH);

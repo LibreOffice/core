@@ -173,10 +173,10 @@ public:
     bool                IsDuplicated( long nDim );
     long                GetDimCount();
     void                GetHeaderPositionData(const ScAddress& rPos, css::sheet::DataPilotTableHeaderData& rData);
-    long                GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient );
+    long                GetHeaderDim( const ScAddress& rPos, css::sheet::DataPilotFieldOrientation& rOrient );
     bool                GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMouseTop,
                                        long nDragDim,
-                                       Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
+                                       Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, long& rDimPos );
     bool                IsFilterButton( const ScAddress& rPos );
 
     double GetPivotData(
@@ -241,14 +241,14 @@ public:
 
     static void ConvertOrientation(
         ScDPSaveData& rSaveData,
-        const ScPivotFieldVector& rFields, sal_uInt16 nOrient,
+        const ScPivotFieldVector& rFields, css::sheet::DataPilotFieldOrientation nOrient,
         const css::uno::Reference< css::sheet::XDimensionsSupplier>& xSource,
         const ScDPLabelDataVector& rLabels,
         const ScPivotFieldVector* pRefColFields = nullptr,
         const ScPivotFieldVector* pRefRowFields = nullptr,
         const ScPivotFieldVector* pRefPageFields = nullptr );
 
-    static bool         IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags );
+    static bool         IsOrientationAllowed( css::sheet::DataPilotFieldOrientation nOrient, sal_Int32 nDimFlags );
 
 #if DUMP_PIVOT_TABLE
     void Dump() const;

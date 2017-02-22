@@ -28,7 +28,6 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/text/WrapTextMode.hpp>
 
 using namespace ::com::sun::star::text;
 
@@ -662,6 +661,7 @@ void SvxSwFrameExample::Paint(vcl::RenderContext& rRenderContext, const Rectangl
                     case WrapTextMode_RIGHT:
                         aTxt.Left() = aFrmRect.Right();
                         break;
+                    default: break;
                 }
             }
             if (pOuterFrame->IsInside(aTxt))
