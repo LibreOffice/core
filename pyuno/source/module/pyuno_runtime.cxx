@@ -42,6 +42,7 @@
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <comphelper/sequence.hxx>
 
+#include <vector>
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
@@ -63,8 +64,6 @@ using com::sun::star::script::XTypeConverter;
 using com::sun::star::script::XInvocation;
 using com::sun::star::beans::XMaterialHolder;
 using com::sun::star::beans::theIntrospection;
-
-#include <vector>
 
 namespace pyuno
 {
@@ -366,17 +365,17 @@ PyRef Runtime::any2PyObject (const Any &a ) const
 
     switch (a.getValueTypeClass ())
     {
-    case typelib_TypeClass_VOID:
+    case css::uno::TypeClass_VOID:
     {
         Py_INCREF (Py_None);
         return PyRef(Py_None);
     }
-    case typelib_TypeClass_CHAR:
+    case css::uno::TypeClass_CHAR:
     {
         sal_Unicode c = *o3tl::forceAccess<sal_Unicode>(a);
         return PyRef( PyUNO_char_new( c , *this ), SAL_NO_ACQUIRE );
     }
-    case typelib_TypeClass_BOOLEAN:
+    case css::uno::TypeClass_BOOLEAN:
     {
         bool b;
         if ((a >>= b) && b)
@@ -384,52 +383,52 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         else
             return Py_False;
     }
-    case typelib_TypeClass_BYTE:
-    case typelib_TypeClass_SHORT:
-    case typelib_TypeClass_UNSIGNED_SHORT:
-    case typelib_TypeClass_LONG:
+    case css::uno::TypeClass_BYTE:
+    case css::uno::TypeClass_SHORT:
+    case css::uno::TypeClass_UNSIGNED_SHORT:
+    case css::uno::TypeClass_LONG:
     {
         sal_Int32 l = 0;
         a >>= l;
         return PyRef( PyLong_FromLong (l), SAL_NO_ACQUIRE );
     }
-    case typelib_TypeClass_UNSIGNED_LONG:
+    case css::uno::TypeClass_UNSIGNED_LONG:
     {
         sal_uInt32 l = 0;
         a >>= l;
         return PyRef( PyLong_FromUnsignedLong (l), SAL_NO_ACQUIRE );
     }
-    case typelib_TypeClass_HYPER:
+    case css::uno::TypeClass_HYPER:
     {
         sal_Int64 l = 0;
         a >>= l;
         return PyRef( PyLong_FromLongLong (l), SAL_NO_ACQUIRE);
     }
-    case typelib_TypeClass_UNSIGNED_HYPER:
+    case css::uno::TypeClass_UNSIGNED_HYPER:
     {
         sal_uInt64 l = 0;
         a >>= l;
         return PyRef( PyLong_FromUnsignedLongLong (l), SAL_NO_ACQUIRE);
     }
-    case typelib_TypeClass_FLOAT:
+    case css::uno::TypeClass_FLOAT:
     {
         float f = 0.0;
         a >>= f;
         return PyRef(PyFloat_FromDouble (f), SAL_NO_ACQUIRE);
     }
-    case typelib_TypeClass_DOUBLE:
+    case css::uno::TypeClass_DOUBLE:
     {
         double d = 0.0;
         a >>= d;
         return PyRef( PyFloat_FromDouble (d), SAL_NO_ACQUIRE);
     }
-    case typelib_TypeClass_STRING:
+    case css::uno::TypeClass_STRING:
     {
         OUString tmp_ostr;
         a >>= tmp_ostr;
         return ustring2PyUnicode( tmp_ostr );
     }
-    case typelib_TypeClass_TYPE:
+    case css::uno::TypeClass_TYPE:
     {
         Type t;
         a >>= t;
@@ -439,13 +438,13 @@ PyRef Runtime::any2PyObject (const Any &a ) const
                 o.getStr(),  (css::uno::TypeClass)t.getTypeClass(), *this),
             SAL_NO_ACQUIRE);
     }
-    case typelib_TypeClass_ANY:
+    case css::uno::TypeClass_ANY:
     {
         //I don't think this can happen.
         Py_INCREF (Py_None);
         return Py_None;
     }
-    case typelib_TypeClass_ENUM:
+    case css::uno::TypeClass_ENUM:
     {
         sal_Int32 l = *static_cast<sal_Int32 const *>(a.getValue());
         TypeDescription desc( a.getValueType() );
@@ -467,8 +466,8 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         throw RuntimeException( "Any carries enum " + a.getValueType().getTypeName() +
                 " with invalid value " + OUString::number(l) );
     }
-    case typelib_TypeClass_EXCEPTION:
-    case typelib_TypeClass_STRUCT:
+    case css::uno::TypeClass_EXCEPTION:
+    case css::uno::TypeClass_STRUCT:
     {
         PyRef excClass = getClass( a.getValueType().getTypeName(), *this );
         PyRef value = PyUNOStruct_new( a, getImpl()->cargo->xInvocation );
@@ -494,7 +493,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         }
         return ret;
     }
-    case typelib_TypeClass_SEQUENCE:
+    case css::uno::TypeClass_SEQUENCE:
     {
         Sequence<Any> s;
 
@@ -534,7 +533,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
             return tuple;
         }
     }
-    case typelib_TypeClass_INTERFACE:
+    case css::uno::TypeClass_INTERFACE:
     {
         Reference<XInterface> tmp_interface;
         a >>= tmp_interface;
@@ -545,7 +544,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
     }
     default:
     {
-        throw RuntimeException( "Unknown UNO type class " + OUString::number(a.getValueTypeClass()) );
+        throw RuntimeException( "Unknown UNO type class " + OUString::number((int)a.getValueTypeClass()) );
     }
     }
 }
