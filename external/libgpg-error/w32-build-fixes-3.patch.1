@@ -1,0 +1,57 @@
+diff -ru libgpg-error.orig/src/gpg-error.c libgpg-error/src/gpg-error.c
+--- libgpg-error.orig/src/gpg-error.c	2016-12-02 22:55:32.000000000 +0100
++++ libgpg-error/src/gpg-error.c	2017-09-13 22:25:10.040113800 +0200
+@@ -206,7 +206,7 @@
+   static const char src_prefix[] = "GPG_ERR_SOURCE_";
+   static const char code_prefix[] = "GPG_ERR_";
+ 
+-  if (!strncasecmp (src_prefix, str, sizeof (src_prefix) - 1))
++  if (!_strnicmp (src_prefix, str, sizeof (src_prefix) - 1))
+     {
+       gpg_err_source_t src;
+ 
+@@ -220,14 +220,14 @@
+ 	  const char *src_sym;
+ 
+ 	  src_sym = gpg_strsource_sym (src << GPG_ERR_SOURCE_SHIFT);
+-	  if (src_sym && !strcasecmp (str, src_sym + sizeof (src_prefix) - 1))
++	  if (src_sym && !_stricmp (str, src_sym + sizeof (src_prefix) - 1))
+ 	    {
+ 	      *err |= src << GPG_ERR_SOURCE_SHIFT;
+ 	      return 1;
+ 	    }
+ 	}
+     }
+-  else if (!strncasecmp (code_prefix, str, sizeof (code_prefix) - 1))
++  else if (!_strnicmp (code_prefix, str, sizeof (code_prefix) - 1))
+     {
+       gpg_err_code_t code;
+ 
+@@ -240,7 +240,7 @@
+ 	{
+ 	  const char *code_sym = gpg_strerror_sym (code);
+ 	  if (code_sym
+-	      && !strcasecmp (str, code_sym + sizeof (code_prefix) - 1))
++	      && !_stricmp (str, code_sym + sizeof (code_prefix) - 1))
+ 	    {
+ 	      *err |= code;
+ 	      return 1;
+@@ -296,7 +296,7 @@
+   for (src = 0; src < GPG_ERR_SOURCE_DIM; src++)
+     {
+       const char *src_str = gpg_strsource (src << GPG_ERR_SOURCE_SHIFT);
+-      if (src_str && !strcasecmp (str, src_str))
++      if (src_str && !_stricmp (str, src_str))
+ 	{
+ 	  if (*have_source)
+ 	    return 0;
+@@ -310,7 +310,7 @@
+   for (code = 0; code < GPG_ERR_CODE_DIM; code++)
+     {
+       const char *code_str = gpg_strerror (code);
+-      if (code_str && !strcasecmp (str, code_str))
++      if (code_str && !_stricmp (str, code_str))
+ 	{
+ 	  if (*have_code)
+ 	    return 0;
+Nur in libgpg-error/src: gpg-error.c~.

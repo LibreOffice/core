@@ -1,0 +1,31 @@
+diff -ru libgpg-error.orig/src/Makefile.in libgpg-error/src/Makefile.in
+--- libgpg-error.orig/src/Makefile.in	2017-09-12 08:18:29.376536700 +0200
++++ libgpg-error/src/Makefile.in	2017-09-12 08:57:11.648083800 +0200
+@@ -512,8 +512,7 @@
+ @HAVE_W32_SYSTEM_TRUE@arch_sources = w32-gettext.c w32-lock.c w32-lock-obj.h w32-thread.c \
+ @HAVE_W32_SYSTEM_TRUE@	       w32-iconv.c w32-estream.c
+ 
+-@HAVE_W32_SYSTEM_TRUE@RCCOMPILE = $(RC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
+-@HAVE_W32_SYSTEM_TRUE@            -DLOCALEDIR=\"$(localedir)\" $(AM_CPPFLAGS) $(CPPFLAGS)
++@HAVE_W32_SYSTEM_TRUE@RCCOMPILE = $(RC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) -DLOCALEDIR=$(localedir) $(AM_CPPFLAGS)
+ 
+ @HAVE_W32_SYSTEM_TRUE@LTRCCOMPILE = $(LIBTOOL) --mode=compile --tag=RC $(RCCOMPILE)
+ @HAVE_W32_SYSTEM_TRUE@SUFFIXES = .rc .lo
+@@ -1242,7 +1241,7 @@
+ 
+ 
+ @HAVE_W32_SYSTEM_TRUE@.rc.lo:
+-@HAVE_W32_SYSTEM_TRUE@	$(LTRCCOMPILE) -i "$<" -o "$@"
++@HAVE_W32_SYSTEM_TRUE@	$(LTRCCOMPILE) -i $< -o $@
+ 
+ @HAVE_W32_SYSTEM_TRUE@versioninfo.lo : gpg-error.w32-manifest
+ 
+@@ -1283,7 +1282,7 @@
+ # It is correct to use $(CPP).  We want the host's idea of the error codes.
+ mkerrcodes.h: Makefile mkerrcodes.awk $(gpg_extra_headers)
+ 	$(AWK) -f $(srcdir)/mkerrcodes1.awk $(srcdir)/errnos.in >_$@
+-	$(CPP) $(CPPFLAGS) $(extra_cppflags) -P _$@ | grep GPG_ERR_ | \
++	$(CPP) $(CPPFLAGS) $(extra_cppflags) _$@ | grep GPG_ERR_ | \
+                $(AWK) -f $(srcdir)/mkerrcodes.awk >$@
+ 	-rm _$@
+ 

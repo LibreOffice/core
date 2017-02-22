@@ -15,6 +15,24 @@ $(eval $(call gb_ExternalProject_register_targets,libgpg-error,\
 
 $(eval $(call gb_ExternalProject_use_autoconf,libgpg-error,build))
 
+ifeq ($(COM),MSC)
+$(call gb_ExternalProject_get_state_target,libgpg-error,build):
+	$(call gb_ExternalProject_run,build,\
+		MAKE=$(MAKE) ./configure \
+			--enable-static \
+			--disable-shared \
+			--disable-rpath \
+			--disable-languages \
+			--disable-doc \
+			--disable-tests \
+			$(if $(filter LINUX,$(OS)), \
+				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
+					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
+			--host=$(if $(filter INTEL,$(CPUNAME)),i686-mingw32,x86_64-w64-mingw32) \
+	  && $(MAKE) \
+	)
+
+else
 $(call gb_ExternalProject_get_state_target,libgpg-error,build):
 	$(call gb_ExternalProject_run,build,\
 		MAKE=$(MAKE) ./configure \
@@ -24,8 +42,11 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build):
 			$(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \
+			CPPFLAGS=" $(SOLARINC)" \
+			$(if $(filter MSC,$(COM)),--force_use_syscfg=true) \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)) \
 	  && $(MAKE) \
 	)
 
+endif
 # vim: set noet sw=4 ts=4:
