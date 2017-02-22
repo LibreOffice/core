@@ -1464,9 +1464,9 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                         for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
                                         {
                                             SAL_INFO( "ucb.ucp.webdav","      scope: "
-                                                      << ( aSupportedLocks[ n ].Scope ? "shared":"exclusive" )
+                                                      << ( aSupportedLocks[ n ].Scope == css::ucb::LockScope_SHARED ? "shared" : "exclusive" )
                                                       << ", type: "
-                                                      << ( aSupportedLocks[ n ].Type ? "" : "write" ) );
+                                                      << ( aSupportedLocks[ n ].Type != css::ucb::LockType_WRITE ? "" : "write" ) );
                                         }
                                     }
                                     ++it;
@@ -3836,9 +3836,9 @@ Content::ResourceType Content::getResourceType(
                                 for ( sal_Int32 n = 0; n < aSupportedLocks.getLength(); ++n )
                                 {
                                     SAL_INFO( "ucb.ucp.webdav","PROPFIND (getResourceType) -       supportedlock[" << n <<"]: scope: "
-                                              << ( aSupportedLocks[ n ].Scope ? "shared":"exclusive" )
+                                              << ( aSupportedLocks[ n ].Scope == css::ucb::LockScope_SHARED ? "shared" : "exclusive" )
                                               << ", type: "
-                                              << ( aSupportedLocks[ n ].Type ? "" : "write" ) );
+                                              << ( aSupportedLocks[ n ].Type != css::ucb::LockType_WRITE ? "" : "write" ) );
                                 }
                             }
                             ++it;

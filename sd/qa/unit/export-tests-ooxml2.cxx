@@ -768,12 +768,12 @@ void SdOOXMLExportTest2::testTdf105739()
         // Test fill type
         drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
         aXBackgroundPropSet->getPropertyValue("FillStyle") >>= aFillStyle;
-        CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT, aFillStyle);
+        CPPUNIT_ASSERT_EQUAL((int)drawing::FillStyle_GRADIENT, (int)aFillStyle);
 
         // Test gradient properties
         com::sun::star::awt::Gradient aFillGradient;
         aXBackgroundPropSet->getPropertyValue("FillGradient") >>= aFillGradient;
-        CPPUNIT_ASSERT_EQUAL(awt::GradientStyle_LINEAR, aFillGradient.Style);
+        CPPUNIT_ASSERT_EQUAL((int)awt::GradientStyle_LINEAR, (int)aFillGradient.Style);
         CPPUNIT_ASSERT_EQUAL(util::Color(0xff0000), aFillGradient.StartColor);
         CPPUNIT_ASSERT_EQUAL(util::Color(0x00b050), aFillGradient.EndColor);
     }

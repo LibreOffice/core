@@ -1078,7 +1078,7 @@ void PowerPointExport::WriteAnimationCondition( const FSHelperPtr& pFS, Any& rAn
     } else if( aEvent.Offset >>= eTiming ) {
         if( eTiming == Timing_INDEFINITE )
             pDelay = "indefinite";
-        SAL_INFO("sd.eppt", "event offset timing: " << eTiming);
+        SAL_INFO("sd.eppt", "event offset timing: " << (int)eTiming);
     }
     }
 

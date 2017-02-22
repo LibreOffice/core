@@ -356,7 +356,7 @@ ScVbaValidation::getType()
             case sheet::ValidationType_TEXT_LEN:
                 nExcelType = excel::XlDVType::xlValidateTextLength;
                 break;
-            case sheet::ValidationType_MAKE_FIXED_SIZE:
+            case sheet::ValidationType::ValidationType_MAKE_FIXED_SIZE:
             default:
                 break;
         };

@@ -80,6 +80,36 @@ protected:
     }
 };
 
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace style {
+
+std::ostream& operator<<(std::ostream& rStrm, BreakType n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace awt {
+
+std::ostream& operator<<(std::ostream& rStrm, FontSlant n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 DECLARE_OOXMLEXPORT_TEST(testfdo81381, "fdo81381.docx")
 {
     if (xmlDocPtr pXmlDoc = parseExport("word/document.xml"))

@@ -30,7 +30,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/rectenum.hxx>
 #include <sal/macros.h>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -772,11 +771,11 @@ const sal_uInt16* SvxSwPosSizeTabPage::GetRanges()
 bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
 {
     bool bAnchorChanged = false;
-    short nAnchor = GetAnchorType(&bAnchorChanged);
+    css::text::TextContentAnchorType nAnchor = GetAnchorType(&bAnchorChanged);
     bool bModified = false;
     if(bAnchorChanged)
     {
-        rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, nAnchor));
+        rSet->Put(SfxInt16Item(SID_ATTR_TRANSFORM_ANCHOR, (sal_Int16)nAnchor));
         bModified = true;
     }
     if ( m_pPositionCB->IsValueChangedFromSaved() )
@@ -928,10 +927,10 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
 {
     const SfxPoolItem* pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_ANCHOR );
     bool bInvalidateAnchor = false;
-    short nAnchorType = TextContentAnchorType_AT_PARAGRAPH;
+    TextContentAnchorType nAnchorType = TextContentAnchorType_AT_PARAGRAPH;
     if(pItem)
     {
-        nAnchorType = static_cast<const SfxInt16Item*>(pItem)->GetValue();
+        nAnchorType = (TextContentAnchorType) static_cast<const SfxInt16Item*>(pItem)->GetValue();
         switch(nAnchorType)
         {
             case  TextContentAnchorType_AT_PAGE:        m_pToPageRB->Check();  break;
@@ -1104,9 +1103,9 @@ void SvxSwPosSizeTabPage::EnableAnchorTypes(SvxAnchorIds nAnchorEnable)
         m_pToPageRB->Enable(false);
 }
 
-short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
+TextContentAnchorType SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
 {
-    short nRet = -1;
+    TextContentAnchorType nRet = (TextContentAnchorType)-1;
     RadioButton* pCheckedButton = nullptr;
     if(m_pToParaRB->IsEnabled())
     {
@@ -1236,7 +1235,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
     // type to-paragraph' and to-character
     m_pFollowCB->Enable( m_pToParaRB->IsChecked() || m_pToCharRB->IsChecked() );
 
-    short nId = GetAnchorType();
+    TextContentAnchorType nId = GetAnchorType();
 
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
     RangeModifyHdl(*m_pWidthMF);
@@ -1250,7 +1249,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl, Button*, void)
 
 IMPL_LINK_NOARG(SvxSwPosSizeTabPage, MirrorHdl, Button*, void)
 {
-    short nId = GetAnchorType();
+    TextContentAnchorType nId = GetAnchorType();
     InitPos( nId, USHRT_MAX, 0, USHRT_MAX, 0, LONG_MAX, LONG_MAX);
 }
 
@@ -1492,7 +1491,7 @@ sal_uInt16 SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
     return nMapPos;
 }
 
-void SvxSwPosSizeTabPage::InitPos(short nAnchor,
+void SvxSwPosSizeTabPage::InitPos(TextContentAnchorType nAnchor,
                                 sal_uInt16 nH,
                                 sal_uInt16 nHRel,
                                 sal_uInt16 nV,

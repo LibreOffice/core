@@ -84,7 +84,7 @@ const OUString ApplyLreOrRleEmbedding( const OUString &rText )
     bool bIsRtlText = false;
     for (sal_Int32 i = 0;  i < nLen && !bFound;  ++i)
     {
-        sal_Int16 nDirection = rCharClass.getCharacterDirection( rText, i );
+        i18n::DirectionProperty nDirection = rCharClass.getCharacterDirection( rText, i );
         switch (nDirection)
         {
             case i18n::DirectionProperty_LEFT_TO_RIGHT :

@@ -131,7 +131,7 @@ sal_Bool IdlClassImpl::isAssignableFrom( const Reference< XIdlClass > & xType )
         if (eAssign > TypeClass_VOID && eAssign < TypeClass_STRING &&
             eFrom > TypeClass_VOID && eFrom < TypeClass_STRING)
         {
-            return s_aAssignableFromTab[eAssign-1][eFrom-1];
+            return s_aAssignableFromTab[(int)eAssign-1][(int)eFrom-1];
         }
     }
     return false;

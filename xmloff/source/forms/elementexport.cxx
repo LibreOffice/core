@@ -663,7 +663,7 @@ namespace xmloff
                     OAttributeMetaData::getCommonControlAttributeName( CCAFlags::Orientation ),
                     PROPERTY_ORIENTATION,
                     aOrientationMap,
-                    (sal_uInt16)ScrollBarOrientation::HORIZONTAL
+                    ScrollBarOrientation::HORIZONTAL
                 );
         #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking

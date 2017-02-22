@@ -509,7 +509,7 @@ public:
 
     virtual VclPtr<AbstractScDPShowDetailDlg> CreateScDPShowDetailDlg( vcl::Window* pParent,
                                                                 ScDPObject& rDPObj,
-                                                                sal_uInt16 nOrient ) override;
+                                                                css::sheet::DataPilotFieldOrientation nOrient ) override;
 
     virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
                                                                 bool bEdit, bool bSheetProtected ) override;

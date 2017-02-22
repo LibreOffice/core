@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <oox/dllapi.h>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/tokens.hxx>
@@ -226,7 +227,7 @@ public:
 
     static sal_uInt32 ColorWithIntensity( sal_uInt32 nColor, sal_uInt32 nIntensity );
 
-    static const char* GetAlignment( sal_Int32 nAlignment );
+    static const char* GetAlignment( css::style::ParagraphAdjust nAlignment );
 
     sax_fastparser::FSHelperPtr     CreateOutputStream (
                                         const OUString& sFullStream,

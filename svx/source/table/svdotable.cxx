@@ -1964,7 +1964,7 @@ WritingMode SdrTableObj::GetWritingMode() const
     const SfxPoolItem *pItem;
 
     if ( rSet.GetItemState( SDRATTR_TEXTDIRECTION, false, &pItem ) == SfxItemState::SET )
-        eWritingMode = static_cast< WritingMode >( static_cast< const SvxWritingModeItem * >( pItem )->GetValue() );
+        eWritingMode = static_cast< const SvxWritingModeItem * >( pItem )->GetValue();
 
     if ( ( eWritingMode != WritingMode_TB_RL ) &&
          ( rSet.GetItemState( EE_PARA_WRITINGDIR, false, &pItem ) == SfxItemState::SET ) )

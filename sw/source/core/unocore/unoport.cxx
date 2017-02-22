@@ -607,7 +607,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
             try
             {
                 aResult.Name = pProp[i];
-                if(pPropertyStates[i] == beans::PropertyState_MAKE_FIXED_SIZE)     // property unknown?
+                if(pPropertyStates[i] == beans::PropertyState::PropertyState_MAKE_FIXED_SIZE)     // property unknown?
                 {
                     if( bDirectValuesOnly )
                         continue;

@@ -161,7 +161,7 @@ public:
                              enum ::xmloff::token::XMLTokenEnum eDefault =
                                          ::xmloff::token::XML_TOKEN_INVALID )
     {
-        return convertEnumImpl(rBuffer, nValue,
+        return convertEnumImpl(rBuffer, static_cast<sal_uInt16>(nValue),
                    reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(pMap), eDefault);
     }
 

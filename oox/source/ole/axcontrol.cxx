@@ -879,7 +879,7 @@ void AxFontDataModel::convertProperties( PropertyMap& rPropMap, const ControlCon
 
     // font effects
     rPropMap.setProperty( PROP_FontWeight, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_BOLD, awt::FontWeight::BOLD, awt::FontWeight::NORMAL ) );
-    rPropMap.setProperty( PROP_FontSlant, getFlagValue< sal_Int16 >( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, FontSlant_ITALIC, FontSlant_NONE ) );
+    rPropMap.setProperty( PROP_FontSlant, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, FontSlant_ITALIC, FontSlant_NONE ) );
     rPropMap.setProperty( PROP_FontUnderline, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_UNDERLINE, maFontData.mbDblUnderline ? awt::FontUnderline::DOUBLE : awt::FontUnderline::SINGLE, awt::FontUnderline::NONE ) );
     rPropMap.setProperty( PROP_FontStrikeout, getFlagValue( maFontData.mnFontEffects, AX_FONTDATA_STRIKEOUT, awt::FontStrikeout::SINGLE, awt::FontStrikeout::NONE ) );
     rPropMap.setProperty( PROP_FontHeight, maFontData.getHeightPoints() );
@@ -916,7 +916,7 @@ void AxFontDataModel::convertFromProperties( PropertySet& rPropSet, const Contro
     float fontWeight = (float)0;
     if ( rPropSet.getProperty(fontWeight, PROP_FontWeight ) )
         setFlag( maFontData.mnFontEffects, AX_FONTDATA_BOLD, ( fontWeight == awt::FontWeight::BOLD ) );
-    sal_Int16 nSlant = FontSlant_NONE;
+    FontSlant nSlant = FontSlant_NONE;
     if ( rPropSet.getProperty( nSlant, PROP_FontSlant ) )
         setFlag( maFontData.mnFontEffects, AX_FONTDATA_ITALIC, ( nSlant == FontSlant_ITALIC ) );
 

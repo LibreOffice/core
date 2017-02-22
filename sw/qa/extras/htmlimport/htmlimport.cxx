@@ -26,6 +26,21 @@ class HtmlImportTest : public SwModelTestBase
         HtmlImportTest() : SwModelTestBase("sw/qa/extras/htmlimport/data/", "HTML (StarWriter)") {}
 };
 
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, BitmapMode n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 #define DECLARE_HTMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, HtmlImportTest)
 
 DECLARE_HTMLIMPORT_TEST(testPictureImport, "picture.html")
