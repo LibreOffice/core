@@ -157,47 +157,47 @@ OUString CertificateChooser::UsageInClearText(int bits)
 
 void CertificateChooser::ImplInitialize()
 {
-    if ( !mbInitialized )
+    if ( mbInitialized )
+        return;
+
+    try
     {
-        try
-        {
-            maCerts = mxSecurityEnvironment->getPersonalCertificates();
-        }
-        catch (security::NoPasswordException&)
-        {
-        }
-
-        uno::Reference< css::security::XSerialNumberAdapter> xSerialNumberAdapter =
-            css::security::SerialNumberAdapter::create(mxCtx);
-
-        sal_Int32 nCertificates = maCerts.getLength();
-        for( sal_Int32 nCert = nCertificates; nCert; )
-        {
-            uno::Reference< security::XCertificate > xCert = maCerts[ --nCert ];
-            // Check if we have a private key for this...
-            long nCertificateCharacters = mxSecurityEnvironment->getCertificateCharacters(xCert);
-
-            if (!(nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY))
-            {
-                ::comphelper::removeElementAt( maCerts, nCert );
-                nCertificates = maCerts.getLength();
-            }
-        }
-
-        // fill list of certificates; the first entry will be selected
-        for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
-        {
-            SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() )
-                + "\t" + XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() )
-                + "\t" + UsageInClearText( maCerts[ nC ]->getCertificateUsage() )
-                + "\t" + XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
-            pEntry->SetUserData( reinterpret_cast<void*>(nC) ); // missuse user data as index
-        }
-
-        // enable/disable buttons
-        CertificateHighlightHdl( nullptr );
-        mbInitialized = true;
+        maCerts = mxSecurityEnvironment->getPersonalCertificates();
     }
+    catch (security::NoPasswordException&)
+    {
+    }
+
+    uno::Reference< css::security::XSerialNumberAdapter> xSerialNumberAdapter =
+        css::security::SerialNumberAdapter::create(mxCtx);
+
+    sal_Int32 nCertificates = maCerts.getLength();
+    for( sal_Int32 nCert = nCertificates; nCert; )
+    {
+        uno::Reference< security::XCertificate > xCert = maCerts[ --nCert ];
+        // Check if we have a private key for this...
+        long nCertificateCharacters = mxSecurityEnvironment->getCertificateCharacters(xCert);
+
+        if (!(nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY))
+        {
+            ::comphelper::removeElementAt( maCerts, nCert );
+            nCertificates = maCerts.getLength();
+        }
+    }
+
+    // fill list of certificates; the first entry will be selected
+    for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
+    {
+        SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() )
+            + "\t" + XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() )
+            + "\t" + UsageInClearText( maCerts[ nC ]->getCertificateUsage() )
+            + "\t" + XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
+        pEntry->SetUserData( reinterpret_cast<void*>(nC) ); // missuse user data as index
+    }
+
+    // enable/disable buttons
+    CertificateHighlightHdl( nullptr );
+    mbInitialized = true;
 }
 
 
