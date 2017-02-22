@@ -2253,19 +2253,19 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
     OString sAlign ( "center" );
     switch ( rRuby.GetAdjustment( ) )
     {
-        case 0:
+        case css::text::RubyAdjust_LEFT:
             sAlign = OString( "left" );
             break;
-        case 1:
+        case css::text::RubyAdjust_CENTER:
             // Defaults to center
             break;
-        case 2:
+        case css::text::RubyAdjust_RIGHT:
             sAlign = OString( "right" );
             break;
-        case 3:
+        case css::text::RubyAdjust_BLOCK:
             sAlign = OString( "distributeLetter" );
             break;
-        case 4:
+        case css::text::RubyAdjust_INDENT_BLOCK:
             sAlign = OString( "distributeSpace" );
             break;
         default:

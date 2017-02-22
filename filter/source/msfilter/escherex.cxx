@@ -405,7 +405,7 @@ void EscherPropertyContainer::CreateGradientProperties(
             bWriteFillTo = true;
         }
         break;
-        case css::awt::GradientStyle_MAKE_FIXED_SIZE : break;
+        case css::awt::GradientStyle::GradientStyle_MAKE_FIXED_SIZE : break;
     }
     AddOpt( ESCHER_Prop_fillType, nFillType );
     AddOpt( ESCHER_Prop_fillAngle, nAngle );

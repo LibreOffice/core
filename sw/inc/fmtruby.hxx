@@ -20,6 +20,7 @@
 #define INCLUDED_SW_INC_FMTRUBY_HXX
 
 #include <svl/poolitem.hxx>
+#include <com/sun/star/text/RubyAdjust.hpp>
 
 class SwTextRuby;
 
@@ -27,12 +28,12 @@ class SW_DLLPUBLIC SwFormatRuby : public SfxPoolItem
 {
     friend class SwTextRuby;
 
-    OUString sRubyText;                      ///< The ruby txt.
-    OUString sCharFormatName;                  ///< Name of the charformat.
-    SwTextRuby* pTextAttr;                    ///< The TextAttribute.
-    sal_uInt16 nCharFormatId;                  ///< PoolId of the charformat.
+    OUString sRubyText;                     ///< The ruby txt.
+    OUString sCharFormatName;               ///< Name of the charformat.
+    SwTextRuby* pTextAttr;                  ///< The TextAttribute.
+    sal_uInt16 nCharFormatId;               ///< PoolId of the charformat.
     sal_uInt16 nPosition;                   ///< Position of the Ruby-character.
-    sal_uInt16 nAdjustment;                 ///< Specific adjustment of the Ruby-ch.
+    css::text::RubyAdjust nAdjustment;      ///< Specific adjustment of the Ruby-ch.
 
 public:
     SwFormatRuby( const OUString& rRubyText );
@@ -68,8 +69,8 @@ public:
     sal_uInt16 GetPosition() const                  { return nPosition; }
     void SetPosition( sal_uInt16 nNew )             { nPosition = nNew; }
 
-    sal_uInt16 GetAdjustment() const                { return nAdjustment; }
-    void SetAdjustment( sal_uInt16 nNew )           { nAdjustment = nNew; }
+    css::text::RubyAdjust GetAdjustment() const       { return nAdjustment; }
+    void SetAdjustment( css::text::RubyAdjust nNew )  { nAdjustment = nNew; }
 };
 
 #endif

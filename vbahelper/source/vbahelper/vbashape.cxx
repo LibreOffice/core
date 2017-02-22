@@ -133,7 +133,7 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape >& xShape )
     // Art characters office::MsoShapeType::msoTextEffect, in OOo corresponding to "com.sun.star.drawing.CustomShape"
     else if( sShapeType == "com.sun.star.drawing.ConnectorShape" )
     {
-        enum drawing::ConnectorType connectorType;
+        drawing::ConnectorType connectorType;
         uno::Reference< beans::XPropertySet > xPropertySet( xShape, uno::UNO_QUERY_THROW );
         xPropertySet->getPropertyValue( "EdgeKind" ) >>= connectorType;
         if( connectorType == drawing::ConnectorType_CURVE )

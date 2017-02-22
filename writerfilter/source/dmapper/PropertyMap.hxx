@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/uno/Any.h>
 #include "PropertyIds.hxx"
 #include <memory>
@@ -354,7 +355,7 @@ class ParagraphProperties
     sal_Int32               m_nLines; //number of lines of the drop cap
     sal_Int32               m_w;    //width
     sal_Int32               m_h;    //height
-    sal_Int32               m_nWrap;   // from ST_Wrap around, auto, none, notBeside, through, tight
+    css::text::WrapTextMode m_nWrap;   // from ST_Wrap around, auto, none, notBeside, through, tight
     sal_Int32               m_hAnchor; // page, from ST_HAnchor  margin, page, text
     sal_Int32               m_vAnchor; // around from ST_VAnchor margin, page, text
     sal_Int32               m_x; //x-position
@@ -397,8 +398,8 @@ public:
     void Seth( sal_Int32 nSet ) { m_h = nSet; }
     sal_Int32 Geth() const { return m_h; }
 
-    void SetWrap( sal_Int32 nSet ) { m_nWrap = nSet; }
-    sal_Int32 GetWrap() const { return m_nWrap; }
+    void SetWrap( css::text::WrapTextMode nSet ) { m_nWrap = nSet; }
+    css::text::WrapTextMode GetWrap() const { return m_nWrap; }
 
     void SethAnchor( sal_Int32 nSet ) { m_hAnchor = nSet; }
     sal_Int32 GethAnchor() const { return m_hAnchor;}

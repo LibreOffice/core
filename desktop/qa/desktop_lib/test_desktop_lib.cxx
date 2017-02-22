@@ -37,11 +37,20 @@
 #include <comphelper/string.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <cairo.h>
+#include <ostream>
 
 #include <lib/init.hxx>
 
 using namespace com::sun::star;
 using namespace desktop;
+
+namespace com { namespace sun { namespace star { namespace text {
+std::ostream& operator<<(std::ostream& os, css::text::TextContentAnchorType const & n)
+{
+    os << (sal_Int32)n;
+    return os;
+}
+} } } };
 
 class DesktopLOKTest : public UnoApiTest
 {

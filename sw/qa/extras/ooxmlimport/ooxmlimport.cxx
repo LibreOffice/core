@@ -81,6 +81,32 @@ public:
     }
 };
 
+namespace com { namespace sun { namespace star { namespace text {
+
+std::ostream& operator<<(std::ostream& rStrm, TextContentAnchorType n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+std::ostream& operator<<(std::ostream& rStrm, WrapTextMode n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+
+namespace com { namespace sun { namespace star { namespace style {
+
+std::ostream& operator<<(std::ostream& rStrm, BreakType n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 #if !defined _WIN32
 class FailTest : public Test
 {

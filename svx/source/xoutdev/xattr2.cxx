@@ -120,27 +120,27 @@ bool XLineJointItem::GetPresentation( SfxItemPresentation /*ePres*/, MapUnit /*e
 
     switch( GetValue() )
     {
-        case( css::drawing::LineJoint_MAKE_FIXED_SIZE ):
-        case( css::drawing::LineJoint_NONE ):
+        case css::drawing::LineJoint::LineJoint_MAKE_FIXED_SIZE:
+        case css::drawing::LineJoint_NONE:
             nId = RID_SVXSTR_LINEJOINT_NONE;
         break;
 
-        case( css::drawing::LineJoint_MIDDLE ):
+        case css::drawing::LineJoint_MIDDLE:
             nId = RID_SVXSTR_LINEJOINT_MIDDLE;
         break;
 
 
-        case( css::drawing::LineJoint_BEVEL ):
+        case css::drawing::LineJoint_BEVEL:
             nId = RID_SVXSTR_LINEJOINT_BEVEL;
         break;
 
 
-        case( css::drawing::LineJoint_MITER ):
+        case css::drawing::LineJoint_MITER:
             nId = RID_SVXSTR_LINEJOINT_MITER;
         break;
 
 
-        case( css::drawing::LineJoint_ROUND ):
+        case css::drawing::LineJoint_ROUND:
             nId = RID_SVXSTR_LINEJOINT_ROUND;
         break;
     }

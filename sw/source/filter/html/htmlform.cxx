@@ -1064,10 +1064,10 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
         }
 
         uno::Reference< text::XTextRange >  xTextRg;
-        sal_Int16 nAnchorType = text::TextContentAnchorType_AS_CHARACTER;
+        text::TextContentAnchorType nAnchorType = text::TextContentAnchorType_AS_CHARACTER;
         bool bSetPos = false, bSetSurround = false;
         sal_Int32 nXPos = 0, nYPos = 0;
-        sal_Int16 nSurround = text::WrapTextMode_NONE;
+        text::WrapTextMode nSurround = text::WrapTextMode_NONE;
         if( SVX_CSS1_POS_ABSOLUTE == rCSS1PropInfo.m_ePosition &&
             SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.m_eLeftType &&
             SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.m_eTopType )

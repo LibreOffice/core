@@ -440,22 +440,22 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     sal_Char cDirective = 0;
     switch (rRuby.GetAdjustment())
     {
-    case 0:
+    case css::text::RubyAdjust_LEFT:
         nJC = 3;
         cDirective = 'l';
         break;
-    case 1:
+    case css::text::RubyAdjust_CENTER:
         //defaults to 0
         break;
-    case 2:
+    case css::text::RubyAdjust_RIGHT:
         nJC = 4;
         cDirective = 'r';
         break;
-    case 3:
+    case css::text::RubyAdjust_BLOCK:
         nJC = 1;
         cDirective = 'd';
         break;
-    case 4:
+    case css::text::RubyAdjust_INDENT_BLOCK:
         nJC = 2;
         cDirective = 'd';
         break;

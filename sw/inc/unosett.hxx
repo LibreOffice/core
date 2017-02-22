@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
@@ -257,7 +258,7 @@ class SwXTextColumns : public cppu::WeakAggImplHelper4
     sal_Int32                   nSepLineWidth;
     sal_Int32                   nSepLineColor;
     sal_Int8                    nSepLineHeightRelative;
-    sal_Int8                    nSepLineVertAlign;//style::VerticalAlignment
+    css::style::VerticalAlignment nSepLineVertAlign;
     bool                        bSepLineIsOn;
     sal_Int8                    nSepLineStyle;
 
@@ -296,7 +297,7 @@ public:
     sal_Int32   GetSepLineWidth() const {return nSepLineWidth;}
     sal_Int32   GetSepLineColor() const {return     nSepLineColor;}
     sal_Int8    GetSepLineHeightRelative() const {return    nSepLineHeightRelative;}
-    sal_Int8    GetSepLineVertAlign() const {return     nSepLineVertAlign;}
+    css::style::VerticalAlignment GetSepLineVertAlign() const {return nSepLineVertAlign;}
     bool        GetSepLineIsOn() const {return  bSepLineIsOn;}
     sal_Int8    GetSepLineStyle() const {return nSepLineStyle;}
 
