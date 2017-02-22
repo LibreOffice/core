@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Exit on errors
+set -e
+# Use of unset variable is an error
+set -u
+# If any part of a pipeline of commands fails, the whole pipeline fails
+set -o pipefail
+
 # Script to sign executables, dylibs and frameworks in an app bundle plus the bundle itself. Called
 # from installer::simplepackage::create_package() in solenv/bin/modules/installer/simplepackage.pm
 # and the test-install target in Makefile.in.
@@ -58,18 +65,10 @@ while read file; do
     codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" || exit 1
 done
 
-# Sign executables
-
-find "$APP_BUNDLE/Contents/MacOS" -type f |
-while read file; do
-    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
-    codesign --force --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file" || exit 1
-done
-
 # Sign included bundles. First .app ones (i.e. the Python.app inside
 # the LibreOfficePython.framework. Be generic for kicks...)
 
-find "$APP_BUNDLE" -name '*.app' -type d |
+find "$APP_BUNDLE"/Contents -name '*.app' -type d |
 while read app; do
     fn=`basename "$app"`
     fn=${fn%.*}
@@ -98,6 +97,20 @@ done
 find "$APP_BUNDLE" -name '*.mdimporter' -type d |
 while read bundle; do
     codesign --verbose --prefix=$MACOSX_BUNDLE_IDENTIFIER. --sign "$MACOSX_CODESIGNING_IDENTITY" "$bundle" || exit 1
+done
+
+# Sign executables
+
+find "$APP_BUNDLE/Contents/MacOS" -type f |
+while read file; do
+    case "$file" in
+	*/soffice)
+	    ;;
+	*)
+	    id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
+	    codesign --force --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" $entitlements "$file" || exit 1
+	    ;;
+    esac
 done
 
 # Sign the app bundle as a whole which means (re-)signing the
