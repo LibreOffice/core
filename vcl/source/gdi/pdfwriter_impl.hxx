@@ -197,10 +197,13 @@ public:
         sal_Int32   m_nObject;
         /// ID of the Form XObject, if any.
         sal_Int32 m_nFormObject;
+        /// ID of the embedded object, if m_nFormObject is used.
+        sal_Int32 m_nEmbeddedObject;
 
         BitmapEmit()
             : m_nObject(0),
-              m_nFormObject(0)
+              m_nFormObject(0),
+              m_nEmbeddedObject(0)
         {
         }
 

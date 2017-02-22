@@ -12011,7 +12011,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     }
 
     // Write the form XObject proxy for the image.
-    if (rObject.m_nFormObject > 0)
+    if (rObject.m_nFormObject > 0 && rObject.m_nEmbeddedObject > 0)
     {
         aLine.setLength(0);
         if (!updateObject(rObject.m_nFormObject))
@@ -12048,8 +12048,14 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         aLine.append(aSize.Width());
         aLine.append(" ");
         aLine.append(aSize.Height());
-        aLine.append(" ]");
-        aLine.append(" /Length ");
+        aLine.append(" ]\n");
+
+        // Write the reference dictionary.
+        aLine.append("/Ref<< /F << /Type /Filespec /F (<embedded file>) /EF << /F ");
+        aLine.append(rObject.m_nEmbeddedObject);
+        aLine.append(" 0 R >> >> /Page 0 >>\n");
+
+        aLine.append("/Length ");
 
         OStringBuffer aStream;
         aStream.append("q ");
@@ -12233,7 +12239,15 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         m_aBitmaps.front().m_aBitmap    = aBitmap;
         m_aBitmaps.front().m_nObject    = createObject();
         if (rGraphic.getPdfData().hasElements())
+        {
+            // Store the original PDF data as an embedded file.
+            m_aEmbeddedFiles.push_back(PDFEmbeddedFile());
+            m_aEmbeddedFiles.back().m_nObject = createObject();
+            m_aEmbeddedFiles.back().m_aData = rGraphic.getPdfData();
+
             m_aBitmaps.front().m_nFormObject = createObject();
+            m_aBitmaps.front().m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
+        }
         it = m_aBitmaps.begin();
     }
 
