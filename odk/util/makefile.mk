@@ -56,9 +56,6 @@ ODK_OO_FILES=\
     $(PRJ)$/docs$/sdk_styles.css \
     $(PRJ)$/docs$/images$/arrow-1.gif \
     $(PRJ)$/docs$/images$/arrow-3.gif \
-    $(PRJ)$/docs$/images$/bg_table.gif \
-    $(PRJ)$/docs$/images$/bg_table2.gif \
-    $(PRJ)$/docs$/images$/bg_table3.gif \
     $(PRJ)$/docs$/images$/nav_down.png \
     $(PRJ)$/docs$/images$/nav_home.png \
     $(PRJ)$/docs$/images$/nav_left.png \
