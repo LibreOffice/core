@@ -26,11 +26,11 @@ sal_uInt32 RotateTransliteration::getNextMode()
             nMode = TransliterationModulesExtra::TITLE_CASE;
             break;
         case 1:
-            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+            nMode = (sal_Int32)TransliterationModules_LOWERCASE_UPPERCASE;
             break;
         default:
         case 2:
-            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+            nMode = (sal_Int32)TransliterationModules_UPPERCASE_LOWERCASE;
             nF3ShiftCounter = -1;
             break;
     }

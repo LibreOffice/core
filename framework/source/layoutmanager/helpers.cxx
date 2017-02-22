@@ -181,7 +181,7 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< un
 }
 
 // convert alignment constant to vcl's WindowAlign type
-WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
+WindowAlign ImplConvertAlignment( ui::DockingArea aAlignment )
 {
     if ( aAlignment == ui::DockingArea_DOCKINGAREA_LEFT )
         return WindowAlign::Left;

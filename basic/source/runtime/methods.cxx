@@ -1667,9 +1667,10 @@ RTLFUNC(StrComp)
             uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
             pTransliterationWrapper = GetSbData()->pTransliterationWrapper =
                 new ::utl::TransliterationWrapper( xContext,
-                    i18n::TransliterationModules_IGNORE_CASE |
-                    i18n::TransliterationModules_IGNORE_KANA |
-                    i18n::TransliterationModules_IGNORE_WIDTH );
+                    i18n::TransliterationModules(
+                        (sal_Int32)i18n::TransliterationModules_IGNORE_CASE |
+                        (sal_Int32)i18n::TransliterationModules_IGNORE_KANA |
+                        (sal_Int32)i18n::TransliterationModules_IGNORE_WIDTH ) );
         }
 
         LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -4274,33 +4275,33 @@ RTLFUNC(StrConv)
     }
     else if ( (nConversion & 0x01) == 1 ) // vbUpperCase
     {
-        nType |= i18n::TransliterationModules_LOWERCASE_UPPERCASE;
+        nType |= (sal_Int32)i18n::TransliterationModules_LOWERCASE_UPPERCASE;
     }
     else if ( (nConversion & 0x02) == 2 ) // vbLowerCase
     {
-        nType |= i18n::TransliterationModules_UPPERCASE_LOWERCASE;
+        nType |= (sal_Int32)i18n::TransliterationModules_UPPERCASE_LOWERCASE;
     }
     if ( (nConversion & 0x04) == 4 ) // vbWide
     {
-        nType |= i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
+        nType |= (sal_Int32)i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
     }
     else if ( (nConversion & 0x08) == 8 ) // vbNarrow
     {
-        nType |= i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
+        nType |= (sal_Int32)i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
     }
     if ( (nConversion & 0x10) == 16) // vbKatakana
     {
-        nType |= i18n::TransliterationModules_HIRAGANA_KATAKANA;
+        nType |= (sal_Int32)i18n::TransliterationModules_HIRAGANA_KATAKANA;
     }
     else if ( (nConversion & 0x20) == 32 ) // vbHiragana
     {
-        nType |= i18n::TransliterationModules_KATAKANA_HIRAGANA;
+        nType |= (sal_Int32)i18n::TransliterationModules_KATAKANA_HIRAGANA;
     }
     OUString aNewStr( aOldStr );
     if( nType != 0 )
     {
         uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
-        ::utl::TransliterationWrapper aTransliterationWrapper( xContext, nType );
+        ::utl::TransliterationWrapper aTransliterationWrapper( xContext, (i18n::TransliterationModules)nType );
         uno::Sequence<sal_Int32> aOffsets;
         aTransliterationWrapper.loadModuleIfNeeded( nLanguage );
         aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );

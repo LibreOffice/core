@@ -60,9 +60,9 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
 {
     if ( !mpTransliterationWrapper )
     {
-        sal_Int32 nModules = i18n::TransliterationModules_IGNORE_WIDTH;
+        sal_Int32 nModules = (sal_Int32)i18n::TransliterationModules_IGNORE_WIDTH;
         if ( mbTransliterateIgnoreCase )
-            nModules |= i18n::TransliterationModules_IGNORE_CASE;
+            nModules |= (sal_Int32)i18n::TransliterationModules_IGNORE_CASE;
 
         const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper = new utl::TransliterationWrapper( m_xContext, (i18n::TransliterationModules)nModules );
         const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper->loadModuleIfNeeded( maLanguageTag.getLanguageType() );

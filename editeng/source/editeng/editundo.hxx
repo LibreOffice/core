@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_SOURCE_EDITENG_EDITUNDO_HXX
 #define INCLUDED_EDITENG_SOURCE_EDITENG_EDITUNDO_HXX
 
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <editdoc.hxx>
 #include <editeng/editund2.hxx>
 #include <editeng/editdata.hxx>
@@ -250,13 +251,14 @@ private:
     ESelection          aOldESel;
     ESelection          aNewESel;
 
-    sal_Int32           nMode;
+    css::i18n::TransliterationModules
+                        nMode;
     std::unique_ptr<EditTextObject>
                         pTxtObj;
     OUString            aText;
 
 public:
-    EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, sal_Int32 nMode);
+    EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, css::i18n::TransliterationModules nMode);
     virtual ~EditUndoTransliteration() override;
 
     void                SetText( const OUString& rText ) { aText = rText; }

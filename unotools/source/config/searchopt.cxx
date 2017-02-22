@@ -273,47 +273,47 @@ sal_Int32 SvtSearchOptions::GetTransliterationFlags() const
     sal_Int32 nRes = 0;
 
     if (!IsMatchCase()) // 'IsMatchCase' means act case sensitive
-        nRes |= TransliterationModules_IGNORE_CASE;
+        nRes |= (sal_Int32)TransliterationModules_IGNORE_CASE;
     if ( IsMatchFullHalfWidthForms())
-        nRes |= TransliterationModules_IGNORE_WIDTH;
+        nRes |= (sal_Int32)TransliterationModules_IGNORE_WIDTH;
     if ( IsMatchHiraganaKatakana())
-        nRes |= TransliterationModules_IGNORE_KANA;
+        nRes |= (sal_Int32)TransliterationModules_IGNORE_KANA;
     if ( IsMatchContractions())
-        nRes |= TransliterationModules_ignoreSize_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreSize_ja_JP;
     if ( IsMatchMinusDashChoon())
-        nRes |= TransliterationModules_ignoreMinusSign_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreMinusSign_ja_JP;
     if ( IsMatchRepeatCharMarks())
-        nRes |= TransliterationModules_ignoreIterationMark_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreIterationMark_ja_JP;
     if ( IsMatchVariantFormKanji())
-        nRes |= TransliterationModules_ignoreTraditionalKanji_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreTraditionalKanji_ja_JP;
     if ( IsMatchOldKanaForms())
-        nRes |= TransliterationModules_ignoreTraditionalKana_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreTraditionalKana_ja_JP;
     if ( IsMatchDiziDuzu())
-        nRes |= TransliterationModules_ignoreZiZu_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreZiZu_ja_JP;
     if ( IsMatchBavaHafa())
-        nRes |= TransliterationModules_ignoreBaFa_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreBaFa_ja_JP;
     if ( IsMatchTsithichiDhizi())
-        nRes |= TransliterationModules_ignoreTiJi_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreTiJi_ja_JP;
     if ( IsMatchHyuiyuByuvyu())
-        nRes |= TransliterationModules_ignoreHyuByu_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreHyuByu_ja_JP;
     if ( IsMatchSesheZeje())
-        nRes |= TransliterationModules_ignoreSeZe_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreSeZe_ja_JP;
     if ( IsMatchIaiya())
-        nRes |= TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
     if ( IsMatchKiku())
-        nRes |= TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
     if ( IsIgnorePunctuation())
-        nRes |= TransliterationModules_ignoreSeparator_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreSeparator_ja_JP;
     if ( IsIgnoreWhitespace())
-        nRes |= TransliterationModules_ignoreSpace_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreSpace_ja_JP;
     if ( IsIgnoreProlongedSoundMark())
-        nRes |= TransliterationModules_ignoreProlongedSoundMark_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreProlongedSoundMark_ja_JP;
     if ( IsIgnoreMiddleDot())
-        nRes |= TransliterationModules_ignoreMiddleDot_ja_JP;
+        nRes |= (sal_Int32)TransliterationModules_ignoreMiddleDot_ja_JP;
     if ( IsIgnoreDiacritics_CTL())
-        nRes |= TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
+        nRes |= (sal_Int32)TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
     if ( IsIgnoreKashida_CTL())
-        nRes |= TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
+        nRes |= (sal_Int32)TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
     return nRes;
 }
 

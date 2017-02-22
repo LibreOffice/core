@@ -472,12 +472,12 @@ LanguageType EditEngine::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
 }
 
 
-void EditEngine::TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode )
+void EditEngine::TransliterateText( const ESelection& rSelection, css::i18n::TransliterationModules nTransliterationMode )
 {
     pImpEditEngine->TransliterateText( pImpEditEngine->CreateSel( rSelection ), nTransliterationMode );
 }
 
-EditSelection EditEngine::TransliterateText(const EditSelection& rSelection, sal_Int32 nTransliterationMode)
+EditSelection EditEngine::TransliterateText(const EditSelection& rSelection, css::i18n::TransliterationModules nTransliterationMode)
 {
     return pImpEditEngine->TransliterateText(rSelection, nTransliterationMode);
 }

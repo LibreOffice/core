@@ -1070,7 +1070,7 @@ bool ImportContext::importButtonTypeProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!buttonType.isEmpty())
     {
-        sal_Int16 nButtonType;
+        awt::PushButtonType nButtonType;
         if ( buttonType == "standard" )
         {
             nButtonType = awt::PushButtonType_STANDARD;

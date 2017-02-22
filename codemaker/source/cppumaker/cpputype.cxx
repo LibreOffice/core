@@ -513,9 +513,13 @@ void CppuType::dumpInitializer(
                 out << "0";
                 break;
             case codemaker::UnoType::Sort::Enum:
-                out << codemaker::cpp::scopedCppName(u2b(n)) << "_"
+            {
+                OString ns,enumname;
+                codemaker::cpp::scopeAndNameCpp(u2b(n), ns, enumname);
+                out << ns << "::" << enumname << "_"
                     << (dynamic_cast< unoidl::EnumTypeEntity * >(ent.get())->
                         getMembers()[0].name);
+            }
                 break;
             case codemaker::UnoType::Sort::String:
             case codemaker::UnoType::Sort::Type:
@@ -656,7 +660,7 @@ OUString CppuType::getTypeClass(OUString const & name, bool cStyle) {
     case codemaker::UnoType::Sort::UnsignedShort:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_SHORT")
-            : OUString("::css::uno::TypeClass_UNSIGNED_SHORT");
+            : OUString("css::uno::TypeClass_UNSIGNED_SHORT");
     case codemaker::UnoType::Sort::Long:
         return cStyle
             ? OUString("typelib_TypeClass_LONG")
@@ -3139,7 +3143,11 @@ void EnumType::addComprehensiveGetCppuTypeIncludes(
 
 void EnumType::dumpDeclaration(FileStream& o)
 {
+    o << "\n#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_CONSTEXPR\n";
+    o << "\nenum class SAL_DLLPUBLIC_RTTI " << id_ << "\n{\n";
+    o << "\n#else\n";
     o << "\nenum SAL_DLLPUBLIC_RTTI " << id_ << "\n{\n";
+    o << "\n#endif\n";
     inc();
 
     for (const unoidl::EnumTypeEntity::Member& member : entity_->getMembers())
@@ -3152,6 +3160,17 @@ void EnumType::dumpDeclaration(FileStream& o)
 
     dec();
     o << "};\n\n";
+
+    // use constexpr to create a kind of type-alias so we don't have to modify existing code
+    o << "#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_CONSTEXPR\n";
+    for (const unoidl::EnumTypeEntity::Member& member : entity_->getMembers())
+    {
+        o << "constexpr auto " << id_ << "_" << u2b(member.name)
+          << " = "
+          << id_ << "::" << id_ << "_" << u2b(member.name)
+          << ";\n";
+    }
+    o << "#endif\n";
 }
 
 void EnumType::dumpHppFile(
@@ -3235,12 +3254,13 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
         o << indent() << "enumValues[" << n++ << "] = " << member.value << ";\n";
     }
 
+    OString ns,enumname;
+    codemaker::cpp::scopeAndNameCpp(u2b(name_), ns, enumname, false);
     o << "\n" << indent() << "typelib_typedescription_newEnum( &pTD,\n";
     inc();
     o << indent() << "sTypeName.pData,\n"
       << indent() << "(sal_Int32)"
-      << codemaker::cpp::scopedCppName(u2b(name_), false) << "_"
-      << u2b(entity_->getMembers()[0].name) << ",\n"
+      << ns << "::" << enumname << "_" << u2b(entity_->getMembers()[0].name) << ",\n"
       << indent() << entity_->getMembers().size()
       << ", enumValueNames, enumValues );\n\n";
     dec();

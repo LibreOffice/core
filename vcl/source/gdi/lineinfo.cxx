@@ -216,7 +216,7 @@ SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
     rOStm.WriteUInt16( static_cast<sal_uInt16>(rLineInfo.mpImplLineInfo->meLineJoin) );
 
     // since version4
-    rOStm.WriteUInt16( rLineInfo.mpImplLineInfo->meLineCap );
+    rOStm.WriteUInt16( (sal_uInt16)rLineInfo.mpImplLineInfo->meLineCap );
 
     return rOStm;
 }

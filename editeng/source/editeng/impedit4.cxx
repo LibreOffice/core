@@ -2710,7 +2710,7 @@ namespace
     };
 }
 
-EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode )
+EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection, css::i18n::TransliterationModules nTransliterationMode )
 {
     uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
     if (!_xBI.is())

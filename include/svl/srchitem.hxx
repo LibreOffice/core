@@ -227,7 +227,7 @@ bool SvxSearchItem::GetWordOnly() const
 
 bool SvxSearchItem::GetExact() const
 {
-    return 0 == (m_aSearchOpt.transliterateFlags & css::i18n::TransliterationModules_IGNORE_CASE);
+    return 0 == (m_aSearchOpt.transliterateFlags & (sal_Int32)css::i18n::TransliterationModules_IGNORE_CASE);
 }
 
 bool SvxSearchItem::GetSelection() const
@@ -315,7 +315,7 @@ sal_Int32 SvxSearchItem::GetTransliterationFlags() const
 
 bool SvxSearchItem::IsMatchFullHalfWidthForms() const
 {
-    return 0 != (m_aSearchOpt.transliterateFlags & css::i18n::TransliterationModules_IGNORE_WIDTH);
+    return 0 != (m_aSearchOpt.transliterateFlags & (sal_Int32)css::i18n::TransliterationModules_IGNORE_WIDTH);
 }
 
 #endif

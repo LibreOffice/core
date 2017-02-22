@@ -139,7 +139,7 @@ sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal
 
         sal_Unicode c;
 
-        if (moduleLoaded & TransliterationModules_IGNORE_CASE) {
+        if ((sal_Int32)moduleLoaded & (sal_Int32)TransliterationModules_IGNORE_CASE) {
             if( e.current >= e.element.nmap ) {
                 e.element = getValue(str, idx++, len, aLocale, nMappingType);
                 e.current = 0;
@@ -149,13 +149,13 @@ sal_Unicode casefolding::getNextChar(const sal_Unicode *str, sal_Int32& idx, sal
             c = *(str + idx++);
         }
 
-        if (moduleLoaded & TransliterationModules_IGNORE_KANA) {
+        if ((sal_Int32)moduleLoaded & (sal_Int32)TransliterationModules_IGNORE_KANA) {
             if ((0x3040 <= c && c <= 0x3094) || (0x309d <= c && c <= 0x309f))
                 c += 0x60;
         }
 
         // composition: KA + voice-mark --> GA. see halfwidthToFullwidth.cxx for detail
-        if (moduleLoaded & TransliterationModules_IGNORE_WIDTH) {
+        if ((sal_Int32)moduleLoaded & (sal_Int32)TransliterationModules_IGNORE_WIDTH) {
             static oneToOneMapping& half2fullTable = widthfolding::gethalf2fullTable();
             c = half2fullTable[c];
             if (0x3040 <= c && c <= 0x30ff && idx < len &&

@@ -201,7 +201,7 @@ void TextSearch::Init( const SearchParam & rParam,
     {
     case SearchParam::SearchType::Wildcard:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
-        aSOpt.algorithmType = SearchAlgorithms_MAKE_FIXED_SIZE;    // no old enum for that
+        aSOpt.algorithmType = (SearchAlgorithms) 0x7fffffff;    // no old enum for that
         aSOpt.WildcardEscapeCharacter = rParam.GetWildEscChar();
         if (rParam.IsWildMatchSel())
             aSOpt.searchFlag |= SearchFlags::WILD_MATCH_SELECTION;
@@ -232,7 +232,7 @@ void TextSearch::Init( const SearchParam & rParam,
     if( !rParam.IsCaseSensitive() )
     {
         aSOpt.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
-        aSOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
+        aSOpt.transliterateFlags |= (sal_Int32)css::i18n::TransliterationModules_IGNORE_CASE;
     }
 
     xTextSearch = getXTextSearch( aSOpt );

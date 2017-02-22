@@ -42,6 +42,17 @@ namespace codemaker { namespace cpp {
  */
 rtl::OString scopedCppName(rtl::OString const & type, bool ns_alias=true);
 
+/** Get the namespace-scope and name for a c++ type
+
+    @param type
+    Undecorated type
+
+    @param ns_alias
+    Use common namespace aliases instead of fully specified (nested)
+    namespace. currently replaces com::sun::star with css.
+ */
+void scopeAndNameCpp(rtl::OString const & type, rtl::OString& outScope, rtl::OString& outName, bool ns_alias=true);
+
 rtl::OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, rtl::OUString const & nucleus);
 

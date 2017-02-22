@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #include <rsc/rscsfx.hxx>
 #include <editeng/editdata.hxx>
@@ -253,8 +254,8 @@ public:
     LanguageType    GetLanguage(const EditPaM& rPaM) const;
     LanguageType    GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
 
-    void            TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode );
-    EditSelection   TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
+    void            TransliterateText( const ESelection& rSelection, css::i18n::TransliterationModules nTransliterationMode );
+    EditSelection   TransliterateText( const EditSelection& rSelection, css::i18n::TransliterationModules nTransliterationMode );
 
     void            SetAsianCompressionMode( CharCompressType nCompression );
 

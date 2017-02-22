@@ -331,7 +331,7 @@ namespace cppcanvas
                 if( rSubset.mnSubsetBegin > 0 )
                 {
                     ::basegfx::B2DHomMatrix aTranslation;
-                    if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical )
+                    if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical != css::util::TriState_NO )
                     {
                         // vertical text -> offset in y direction
                         aTranslation.translate( 0.0, nMinPos );

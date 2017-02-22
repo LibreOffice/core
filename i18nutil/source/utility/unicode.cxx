@@ -37,7 +37,13 @@
 
 using namespace ::com::sun::star::i18n;
 
-static const ScriptTypeList defaultTypeList[] = {
+struct DefaultScriptTypeList {
+    com::sun::star::i18n::UnicodeScript from;
+    com::sun::star::i18n::UnicodeScript to;
+    com::sun::star::i18n::UnicodeScript value;
+};
+
+static const DefaultScriptTypeList defaultTypeList[] = {
     { UnicodeScript_kBasicLatin,
       UnicodeScript_kBasicLatin,
       UnicodeScript_kBasicLatin },      // 0,
@@ -304,32 +310,39 @@ static const ScriptTypeList defaultTypeList[] = {
       UnicodeScript_kNoScript } // 87,
 };
 
-sal_Int16 SAL_CALL
-unicode::getUnicodeScriptType( const sal_Unicode ch, const ScriptTypeList* typeList, sal_Int16 unknownType ) {
+template<class L, typename T>
+T getScriptType( const sal_Unicode ch, const L* typeList, T unknownType ) {
 
-    if (!typeList) {
-        typeList = defaultTypeList;
-        unknownType = UnicodeScript_kNoScript;
-    }
-
-    sal_Int16 i = 0, type = typeList[0].to;
-    while (type < UnicodeScript_kScriptCount && ch > UnicodeScriptType[type][UnicodeScriptTypeTo]) {
+    sal_Int16 i = 0;
+    css::i18n::UnicodeScript type = typeList[0].to;
+    while (type < UnicodeScript_kScriptCount && ch > UnicodeScriptType[(int)type][UnicodeScriptTypeTo]) {
         type = typeList[++i].to;
     }
 
     return (type < UnicodeScript_kScriptCount &&
-            ch >= UnicodeScriptType[typeList[i].from][UnicodeScriptTypeFrom]) ?
+            ch >= UnicodeScriptType[static_cast<int>(typeList[i].from)][(int)UnicodeScriptTypeFrom]) ?
             typeList[i].value : unknownType;
+}
+
+sal_Int16 SAL_CALL
+unicode::getUnicodeScriptType( const sal_Unicode ch, const ScriptTypeList* typeList, sal_Int16 unknownType ) {
+
+    if (typeList) {
+        return getScriptType(ch, typeList, unknownType);
+    }
+    else {
+        return (sal_Int16) getScriptType(ch, defaultTypeList, UnicodeScript_kNoScript);
+    }
 }
 
 sal_Unicode SAL_CALL
 unicode::getUnicodeScriptStart( UnicodeScript type) {
-    return UnicodeScriptType[type][UnicodeScriptTypeFrom];
+    return UnicodeScriptType[(int)type][UnicodeScriptTypeFrom];
 }
 
 sal_Unicode SAL_CALL
 unicode::getUnicodeScriptEnd( UnicodeScript type) {
-    return UnicodeScriptType[type][UnicodeScriptTypeTo];
+    return UnicodeScriptType[(int)type][UnicodeScriptTypeTo];
 }
 
 sal_Int16 SAL_CALL

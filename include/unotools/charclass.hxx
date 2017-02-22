@@ -22,6 +22,7 @@
 
 #include <unotools/unotoolsdllapi.h>
 #include <i18nlangtag/languagetag.hxx>
+#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <com/sun/star/i18n/KCharacterType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
@@ -147,7 +148,7 @@ public:
     }
 
     sal_Int16 getType( const OUString& rStr, sal_Int32 nPos ) const;
-    sal_Int16 getCharacterDirection( const OUString& rStr, sal_Int32 nPos ) const;
+    css::i18n::DirectionProperty getCharacterDirection( const OUString& rStr, sal_Int32 nPos ) const;
     sal_Int16 getScript( const OUString& rStr, sal_Int32 nPos ) const;
     sal_Int32 getCharacterType( const OUString& rStr, sal_Int32 nPos ) const;
     sal_Int32 getStringType( const OUString& rStr, sal_Int32 nPos, sal_Int32 nCount ) const;

@@ -106,12 +106,12 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     ConfigItem( CFG_ROOT_NODE ),
 
     m_aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
-                        SearchFlags::LEV_RELAXED,
-                        OUString(),
-                        OUString(),
-                        lang::Locale(),
+                          SearchFlags::LEV_RELAXED,
+                          OUString(),
+                          OUString(),
+                          lang::Locale(),
                           2, 2, 2,
-                          TransliterationModules_IGNORE_CASE,
+                          (sal_Int32)TransliterationModules_IGNORE_CASE,
                           SearchAlgorithms2::ABSOLUTE, '\\' ),
     m_eFamily         ( SfxStyleFamily::Para ),
     m_nCommand        ( SvxSearchCmd::FIND ),
@@ -158,49 +158,49 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     sal_Int32 &rFlags = m_aSearchOpt.transliterateFlags;
 
     if (!aOpt.IsMatchCase())
-        rFlags |= TransliterationModules_IGNORE_CASE;
+        rFlags |= (sal_Int32)TransliterationModules_IGNORE_CASE;
     if ( aOpt.IsMatchFullHalfWidthForms())
-        rFlags |= TransliterationModules_IGNORE_WIDTH;
+        rFlags |= (sal_Int32)TransliterationModules_IGNORE_WIDTH;
     if ( aOpt.IsIgnoreDiacritics_CTL())
-        rFlags |= TransliterationModulesExtra::IGNORE_DIACRITICS_CTL ;
+        rFlags |= (sal_Int32)TransliterationModulesExtra::IGNORE_DIACRITICS_CTL ;
     if ( aOpt.IsIgnoreKashida_CTL())
-        rFlags |= TransliterationModulesExtra::IGNORE_KASHIDA_CTL ;
+        rFlags |= (sal_Int32)TransliterationModulesExtra::IGNORE_KASHIDA_CTL ;
     if ( m_bAsianOptions )
     {
         if ( aOpt.IsMatchHiraganaKatakana())
-            rFlags |= TransliterationModules_IGNORE_KANA;
+            rFlags |= (sal_Int32)TransliterationModules_IGNORE_KANA;
         if ( aOpt.IsMatchContractions())
-            rFlags |= TransliterationModules_ignoreSize_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreSize_ja_JP;
         if ( aOpt.IsMatchMinusDashChoon())
-            rFlags |= TransliterationModules_ignoreMinusSign_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreMinusSign_ja_JP;
         if ( aOpt.IsMatchRepeatCharMarks())
-            rFlags |= TransliterationModules_ignoreIterationMark_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreIterationMark_ja_JP;
         if ( aOpt.IsMatchVariantFormKanji())
-            rFlags |= TransliterationModules_ignoreTraditionalKanji_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreTraditionalKanji_ja_JP;
         if ( aOpt.IsMatchOldKanaForms())
-            rFlags |= TransliterationModules_ignoreTraditionalKana_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreTraditionalKana_ja_JP;
         if ( aOpt.IsMatchDiziDuzu())
-            rFlags |= TransliterationModules_ignoreZiZu_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreZiZu_ja_JP;
         if ( aOpt.IsMatchBavaHafa())
-            rFlags |= TransliterationModules_ignoreBaFa_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreBaFa_ja_JP;
         if ( aOpt.IsMatchTsithichiDhizi())
-            rFlags |= TransliterationModules_ignoreTiJi_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreTiJi_ja_JP;
         if ( aOpt.IsMatchHyuiyuByuvyu())
-            rFlags |= TransliterationModules_ignoreHyuByu_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreHyuByu_ja_JP;
         if ( aOpt.IsMatchSesheZeje())
-            rFlags |= TransliterationModules_ignoreSeZe_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreSeZe_ja_JP;
         if ( aOpt.IsMatchIaiya())
-            rFlags |= TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
         if ( aOpt.IsMatchKiku())
-            rFlags |= TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
         if ( aOpt.IsIgnorePunctuation())
-            rFlags |= TransliterationModules_ignoreSeparator_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreSeparator_ja_JP;
         if ( aOpt.IsIgnoreWhitespace())
-            rFlags |= TransliterationModules_ignoreSpace_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreSpace_ja_JP;
         if ( aOpt.IsIgnoreProlongedSoundMark())
-            rFlags |= TransliterationModules_ignoreProlongedSoundMark_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreProlongedSoundMark_ja_JP;
         if ( aOpt.IsIgnoreMiddleDot())
-            rFlags |= TransliterationModules_ignoreMiddleDot_ja_JP;
+            rFlags |= (sal_Int32)TransliterationModules_ignoreMiddleDot_ja_JP;
     }
 
 }
@@ -307,9 +307,9 @@ void SvxSearchItem::ImplCommit()
 void SvxSearchItem::SetMatchFullHalfWidthForms( bool bVal )
 {
     if (bVal)
-        m_aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_WIDTH;
+        m_aSearchOpt.transliterateFlags |= (sal_Int32)TransliterationModules_IGNORE_WIDTH;
     else
-        m_aSearchOpt.transliterateFlags &= ~TransliterationModules_IGNORE_WIDTH;
+        m_aSearchOpt.transliterateFlags &= ~(sal_Int32)TransliterationModules_IGNORE_WIDTH;
 }
 
 
@@ -325,9 +325,9 @@ void SvxSearchItem::SetWordOnly( bool bVal )
 void SvxSearchItem::SetExact( bool bVal )
 {
     if (!bVal)
-        m_aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_CASE;
+        m_aSearchOpt.transliterateFlags |= (sal_Int32)TransliterationModules_IGNORE_CASE;
     else
-        m_aSearchOpt.transliterateFlags &= ~TransliterationModules_IGNORE_CASE;
+        m_aSearchOpt.transliterateFlags &= ~(sal_Int32)TransliterationModules_IGNORE_CASE;
 }
 
 

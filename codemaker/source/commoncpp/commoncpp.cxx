@@ -63,6 +63,39 @@ OString scopedCppName(OString const & type, bool ns_alias)
     return s;
 }
 
+void scopeAndNameCpp(rtl::OString const & type, rtl::OString& outScope, rtl::OString& outName, bool ns_alias)
+{
+    char c('/');
+    sal_Int32 nPos = type.lastIndexOf( c );
+    if (nPos == -1) {
+        nPos = type.lastIndexOf( '.' );
+        if (nPos == -1) {
+            outScope = "";
+            outName = type;
+            return;
+        }
+
+        c = '.';
+    }
+
+    OStringBuffer tmpBuf(type.getLength()*2);
+    nPos = 0;
+    do
+    {
+        tmpBuf.append("::" + type.getToken(0, c, nPos));
+    } while( nPos != -1 );
+
+    OString s(tmpBuf.makeStringAndClear());
+    if (ns_alias && s.startsWith("::com::sun::star::", &s))
+    {
+        s = "::css::" + s; // nicer shorthand
+    }
+
+    sal_Int32 i = s.lastIndexOf("::");
+    outScope = s.copy(0, i);
+    outName = s.copy(i+2);
+}
+
 
 OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, OUString const & nucleus)

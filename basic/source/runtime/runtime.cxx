@@ -1518,7 +1518,7 @@ void SbiRuntime::StepLIKE()
     }
     if( bTextMode )
     {
-        aSearchOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
+        aSearchOpt.transliterateFlags |= (sal_Int32)css::i18n::TransliterationModules_IGNORE_CASE;
     }
     SbxVariable* pRes = new SbxVariable;
     utl::TextSearch aSearch( aSearchOpt);
