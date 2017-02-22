@@ -2680,23 +2680,24 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
     //Translate and apply
     if (!sRuby.isEmpty() && !sText.isEmpty() && !sFontName.isEmpty() && nFontSize)
     {
+        css::text::RubyAdjust eRubyAdjust;
         switch (nJustificationCode)
         {
             case 0:
-                nJustificationCode=1;
+                eRubyAdjust = css::text::RubyAdjust_CENTER;
                 break;
             case 1:
-                nJustificationCode=3;
+                eRubyAdjust = css::text::RubyAdjust_BLOCK;
                 break;
             case 2:
-                nJustificationCode=4;
+                eRubyAdjust = css::text::RubyAdjust_INDENT_BLOCK;
                 break;
             default:
             case 3:
-                nJustificationCode=0;
+                eRubyAdjust = css::text::RubyAdjust_LEFT;
                 break;
             case 4:
-                nJustificationCode=2;
+                eRubyAdjust = css::text::RubyAdjust_RIGHT;
                 break;
         }
 
@@ -2753,7 +2754,7 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
         //Set the charstyle and justification
         aRuby.SetCharFormatName(pCharFormat->GetName());
         aRuby.SetCharFormatId(pCharFormat->GetPoolFormatId());
-        aRuby.SetAdjustment(nJustificationCode);
+        aRuby.SetAdjustment(eRubyAdjust);
 
         NewAttr(aRuby);
         m_rDoc.getIDocumentContentOperations().InsertString( *m_pPaM, sText );

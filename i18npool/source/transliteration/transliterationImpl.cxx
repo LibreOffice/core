@@ -170,36 +170,45 @@ TransliterationImpl::getType()
     throw ERROR;
 }
 
+TransliterationModules operator&(TransliterationModules lhs, TransliterationModules rhs) {
+    return TransliterationModules(sal_Int32(lhs) & sal_Int32(rhs));
+}
+TransliterationModules operator|(TransliterationModules lhs, TransliterationModules rhs) {
+    return TransliterationModules(sal_Int32(lhs) | sal_Int32(rhs));
+}
+
 void SAL_CALL
 TransliterationImpl::loadModule( TransliterationModules modType, const Locale& rLocale )
 {
         clear();
-    if (modType&TransliterationModules_IGNORE_MASK && modType&TransliterationModules_NON_IGNORE_MASK) {
+    if (bool(modType & TransliterationModules_IGNORE_MASK) &&
+        bool(modType & TransliterationModules_NON_IGNORE_MASK))
+    {
         throw ERROR;
-    } else if (modType&TransliterationModules_IGNORE_MASK) {
+    } else if (bool(modType & TransliterationModules_IGNORE_MASK)) {
 #define TransliterationModules_IGNORE_CASE_MASK (TransliterationModules_IGNORE_CASE | \
                                                 TransliterationModules_IGNORE_WIDTH | \
                                                 TransliterationModules_IGNORE_KANA)
-        sal_Int32 mask = ((modType&TransliterationModules_IGNORE_CASE_MASK) == modType) ?
+        TransliterationModules mask = ((modType & TransliterationModules_IGNORE_CASE_MASK) == modType) ?
                 TransliterationModules_IGNORE_CASE_MASK : TransliterationModules_IGNORE_MASK;
-        for (sal_Int16 i = 0; TMlist[i].tm & mask; i++) {
-            if (modType & TMlist[i].tm)
+        for (sal_Int16 i = 0; bool(TMlist[i].tm & mask); i++) {
+            if (bool(modType & TMlist[i].tm))
                 if (loadModuleByName(OUString::createFromAscii(TMlist[i].implName),
                                                 bodyCascade[numCascade], rLocale))
                     numCascade++;
         }
         // additional transliterations from TranslationModuleExtra (we cannot extend TransliterationModule)
-        if (modType & TransliterationModulesExtra::IGNORE_DIACRITICS_CTL)
+        if (bool(modType & (TransliterationModules)TransliterationModulesExtra::IGNORE_DIACRITICS_CTL))
         {
             if (loadModuleByName("ignoreDiacritics_CTL", bodyCascade[numCascade], rLocale))
                 numCascade++;
         }
-        if (modType & TransliterationModulesExtra::IGNORE_KASHIDA_CTL)
+        if (bool(modType & (TransliterationModules)TransliterationModulesExtra::IGNORE_KASHIDA_CTL))
             if (loadModuleByName("ignoreKashida_CTL", bodyCascade[numCascade], rLocale))
                 numCascade++;
 
-    } else if (modType&TransliterationModules_NON_IGNORE_MASK) {
-        for (sal_Int16 i = 0; TMlist[i].tm; i++) {
+    } else if (bool(modType & TransliterationModules_NON_IGNORE_MASK)) {
+        for (sal_Int16 i = 0; bool(TMlist[i].tm); i++) {
             if (TMlist[i].tm == modType) {
                 if (loadModuleByName(OUString::createFromAscii(TMlist[i].implName), bodyCascade[numCascade], rLocale))
                     numCascade++;
@@ -213,17 +222,18 @@ void SAL_CALL
 TransliterationImpl::loadModuleNew( const Sequence < TransliterationModulesNew > & modType, const Locale& rLocale )
 {
     clear();
-    sal_Int32 mask = 0, count = modType.getLength();
+    TransliterationModules mask = TransliterationModules_END_OF_MODULE;
+    sal_Int32 count = modType.getLength();
     if (count > maxCascade)
         throw ERROR; // could not handle more than maxCascade
     for (sal_Int32 i = 0; i < count; i++) {
-        for (sal_Int16 j = 0; TMlist[j].tmn; j++) {
+        for (sal_Int16 j = 0; bool(TMlist[j].tmn); j++) {
             if (TMlist[j].tmn == modType[i]) {
-                if (mask == 0)
-                    mask = TMlist[i].tm && (TMlist[i].tm&TransliterationModules_IGNORE_MASK) ?
+                if (mask == TransliterationModules_END_OF_MODULE)
+                    mask = bool(TMlist[i].tm) && bool(TMlist[i].tm & TransliterationModules_IGNORE_MASK) ?
                         TransliterationModules_IGNORE_MASK : TransliterationModules_NON_IGNORE_MASK;
-                else if (mask == (sal_Int32) TransliterationModules_IGNORE_MASK &&
-                        (TMlist[i].tm&TransliterationModules_IGNORE_MASK) == 0)
+                else if (mask == TransliterationModules_IGNORE_MASK &&
+                        (TMlist[i].tm&TransliterationModules_IGNORE_MASK) == TransliterationModules_END_OF_MODULE)
                     throw ERROR; // could not mess up ignore trans. with non_ignore trans.
                 if (loadModuleByName(OUString::createFromAscii(TMlist[j].implName), bodyCascade[numCascade], rLocale))
                     numCascade++;

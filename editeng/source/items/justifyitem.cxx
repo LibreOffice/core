@@ -86,7 +86,7 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 //  ParagraphAdjust values, as in SvxAdjustItem
                 //  (same value for ParaAdjust and ParaLastLineAdjust)
 
-                sal_Int16 nAdjust = style::ParagraphAdjust_LEFT;
+                style::ParagraphAdjust nAdjust = style::ParagraphAdjust_LEFT;
                 switch ( (SvxCellHorJustify)GetValue() )
                 {
                     // ParagraphAdjust_LEFT is used for STANDARD and REPEAT
@@ -97,7 +97,7 @@ bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                     case SvxCellHorJustify::Right:  nAdjust = style::ParagraphAdjust_RIGHT;  break;
                     case SvxCellHorJustify::Block:  nAdjust = style::ParagraphAdjust_BLOCK;  break;
                 }
-                rVal <<= nAdjust;       // as sal_Int16
+                rVal <<= (sal_Int16)nAdjust;       // as sal_Int16
             }
             break;
     }
@@ -141,7 +141,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     return false;
 
                 SvxCellHorJustify eSvx = SvxCellHorJustify::Standard;
-                switch (nVal)
+                switch ((style::ParagraphAdjust)nVal)
                 {
                     //  STRETCH is treated as BLOCK
                     case style::ParagraphAdjust_LEFT:    eSvx = SvxCellHorJustify::Left;   break;
@@ -149,6 +149,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     case style::ParagraphAdjust_STRETCH:
                     case style::ParagraphAdjust_BLOCK:   eSvx = SvxCellHorJustify::Block;  break;
                     case style::ParagraphAdjust_CENTER:  eSvx = SvxCellHorJustify::Center; break;
+                    default: break;
                 }
                 SetValue( eSvx );
             }

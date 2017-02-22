@@ -494,7 +494,7 @@ public:
 
     virtual VclPtr<AbstractScDPShowDetailDlg> CreateScDPShowDetailDlg( vcl::Window* pParent,
                                                                 ScDPObject& rDPObj,
-                                                                sal_uInt16 nOrient ) = 0;
+                                                                css::sheet::DataPilotFieldOrientation nOrient ) = 0;
 
     virtual VclPtr<AbstractScNewScenarioDlg> CreateScNewScenarioDlg ( vcl::Window* pParent, const OUString& rName,
                                                                 bool bEdit, bool bSheetProtected ) = 0;

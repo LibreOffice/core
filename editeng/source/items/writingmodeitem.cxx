@@ -69,7 +69,7 @@ bool SvxWritingModeItem::GetPresentation( SfxItemPresentation /*ePres*/,
         OUString &rText,
         const IntlWrapper *  ) const
 {
-    rText = EditResId::GetString(RID_SVXITEMS_FRMDIR_BEGIN + GetValue());
+    rText = EditResId::GetString(RID_SVXITEMS_FRMDIR_BEGIN + (int)GetValue());
     return true;
 }
 
@@ -91,7 +91,7 @@ bool SvxWritingModeItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 
     if( bRet )
     {
-        switch( nVal )
+        switch( (WritingMode)nVal )
         {
             case WritingMode_LR_TB:
             case WritingMode_RL_TB:
@@ -117,7 +117,7 @@ bool SvxWritingModeItem::QueryValue( css::uno::Any& rVal,
 
 SvxWritingModeItem& SvxWritingModeItem::operator=( const SvxWritingModeItem& rItem )
 {
-    SetValue( rItem.GetValue() );
+    SetValue( (sal_uInt16)rItem.GetValue() );
     return *this;
 }
 

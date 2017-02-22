@@ -596,10 +596,10 @@ SwRubyPortion::SwRubyPortion( const SwMultiCreator& rCreate, const SwFont& rFnt,
     if ( rCreate.nLevel % 2 )
     {
         // switch right and left ruby adjustment in rtl environment
-        if ( 0 == nAdjustment )
-            nAdjustment = 2;
-        else if ( 2 == nAdjustment )
-            nAdjustment = 0;
+        if ( css::text::RubyAdjust_LEFT == nAdjustment )
+            nAdjustment = css::text::RubyAdjust_RIGHT;
+        else if ( css::text::RubyAdjust_RIGHT == nAdjustment )
+            nAdjustment = css::text::RubyAdjust_LEFT;
 
         SetDirection( DIR_RIGHT2LEFT );
     }
@@ -642,12 +642,12 @@ void SwRubyPortion::Adjust_( SwTextFormatInfo &rInf )
     sal_Int32 nSub = 0;
     switch ( nAdjustment )
     {
-        case 1: nRight = static_cast<sal_uInt16>(nLineDiff / 2);
+        case css::text::RubyAdjust_CENTER: nRight = static_cast<sal_uInt16>(nLineDiff / 2);
             SAL_FALLTHROUGH;
-        case 2: nLeft  = static_cast<sal_uInt16>(nLineDiff - nRight); break;
-        case 3: nSub   = 1;
+        case css::text::RubyAdjust_RIGHT: nLeft  = static_cast<sal_uInt16>(nLineDiff - nRight); break;
+        case css::text::RubyAdjust_BLOCK: nSub   = 1;
             SAL_FALLTHROUGH;
-        case 4:
+        case css::text::RubyAdjust_INDENT_BLOCK:
         {
             sal_Int32 nCharCnt = 0;
             SwLinePortion *pPor;

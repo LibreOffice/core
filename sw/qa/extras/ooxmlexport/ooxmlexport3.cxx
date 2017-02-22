@@ -76,6 +76,37 @@ protected:
     }
 };
 
+namespace com { namespace sun { namespace star { namespace style {
+
+std::ostream& operator<<(std::ostream& rStrm, BreakType n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+
+namespace com { namespace sun { namespace star { namespace table {
+
+std::ostream& operator<<(std::ostream& rStrm, ShadowLocation n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
 {
     // The problem was that in 'MSWordExportBase::SectionProperties' function in 'wrt8sty.cxx'

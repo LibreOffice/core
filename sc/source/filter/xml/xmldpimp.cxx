@@ -315,7 +315,7 @@ const ScDPSaveDimension* getDimension(
     return nullptr;
 }
 
-ScDPOutputGeometry::FieldType toFieldType(sal_uInt16 nOrient)
+ScDPOutputGeometry::FieldType toFieldType(sheet::DataPilotFieldOrientation nOrient)
 {
     switch (nOrient)
     {
@@ -951,7 +951,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
     nUsedHierarchy(1),
     nGroupPart(0),
     nFunction(ScGeneralFunction::NONE),
-    nOrientation(0),
+    nOrientation(sheet::DataPilotFieldOrientation_HIDDEN),
     bSelectedPage(false),
     bIsGroupField(false),
     bDateValue(false),
@@ -999,7 +999,7 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION :
             {
-                nOrientation = (sal_Int16) ScXMLConverter::GetOrientationFromString( sValue );
+                nOrientation = ScXMLConverter::GetOrientationFromString( sValue );
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE :

@@ -45,7 +45,7 @@ extern const SvXMLEnumMapEntry<sal_uInt16> aBorderTypeMap[];
 extern const SvXMLEnumMapEntry<sal_uInt16> aFontEmphasisMap[];
 extern const SvXMLEnumMapEntry<sal_uInt16> aFontReliefMap[];
 extern const SvXMLEnumMapEntry<sal_Int16>  aListLinkageMap[];
-extern const SvXMLEnumMapEntry<sal_uInt16> aOrientationMap[];
+extern const SvXMLEnumMapEntry<sal_Int32>  aOrientationMap[];
 extern const SvXMLEnumMapEntry<sal_Int16>  aVisualEffectMap[];
 extern const SvXMLEnumMapEntry<sal_Int16>  aImagePositionMap[];
 extern const SvXMLEnumMapEntry<sal_uInt16> aImageAlignMap[];

@@ -22,6 +22,8 @@
 
 #include "dptabdat.hxx"
 
+#include <com/sun/star/sheet/DataImportMode.hpp>
+
 #include <unordered_set>
 #include <vector>
 
@@ -34,11 +36,11 @@ struct ScImportSourceDesc
 {
     OUString aDBName;
     OUString aObject;
-    sal_uInt16  nType;          // enum DataImportMode
+    css::sheet::DataImportMode nType;
     bool    bNative;
     ScDocument* mpDoc;
 
-    ScImportSourceDesc(ScDocument* pDoc) : nType(0), bNative(false), mpDoc(pDoc) {}
+    ScImportSourceDesc(ScDocument* pDoc) : nType(css::sheet::DataImportMode_NONE), bNative(false), mpDoc(pDoc) {}
 
     bool operator== ( const ScImportSourceDesc& rOther ) const
         { return aDBName == rOther.aDBName &&

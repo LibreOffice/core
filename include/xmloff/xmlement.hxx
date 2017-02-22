@@ -37,7 +37,7 @@ private:
     sal_uInt16                      nValue;
 public:
     SvXMLEnumMapEntry(::xmloff::token::XMLTokenEnum eToken_, EnumT nValue_)
-        : eToken(eToken_), nValue(nValue_) {}
+        : eToken(eToken_), nValue(static_cast<sal_uInt16>(nValue_)) {}
     ::xmloff::token::XMLTokenEnum   GetToken() const { return eToken; }
     EnumT                           GetValue() const { return static_cast<EnumT>(nValue); }
 };

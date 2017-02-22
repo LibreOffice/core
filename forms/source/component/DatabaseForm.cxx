@@ -2373,7 +2373,7 @@ sal_Bool SAL_CALL ODatabaseForm::getGroupControl()
     {
         sal_Int32 nCycle = 0;
         ::cppu::enum2int(nCycle, m_aCycle);
-        return nCycle != TabulatorCycle_PAGE;
+        return (TabulatorCycle)nCycle != TabulatorCycle_PAGE;
     }
 
     if (isLoaded() && getConnection().is())
@@ -3812,13 +3812,13 @@ void SAL_CALL ODatabaseForm::write(const Reference<XObjectOutputStream>& _rxOutS
     _rxOutStream << m_aTargetFrame;
 
     // version 2 didn't know some options and the "default" state
-    sal_Int32 nCycle = TabulatorCycle_RECORDS;
+    sal_Int32 nCycle = (sal_Int32)TabulatorCycle_RECORDS;
     if (m_aCycle.hasValue())
     {
         ::cppu::enum2int(nCycle, m_aCycle);
         if (m_aCycle == TabulatorCycle_PAGE)
                 // unknown in earlier versions
-            nCycle = TabulatorCycle_RECORDS;
+            nCycle = (sal_Int32)TabulatorCycle_RECORDS;
     }
     _rxOutStream->writeShort((sal_Int16) nCycle);
 

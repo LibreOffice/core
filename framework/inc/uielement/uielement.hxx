@@ -37,9 +37,9 @@ struct DockedData
                    m_nDockedArea( css::ui::DockingArea_DOCKINGAREA_TOP ),
                    m_bLocked( false ) {}
 
-    css::awt::Point m_aPos;
-    sal_Int16 m_nDockedArea;
-    bool      m_bLocked;
+    css::awt::Point      m_aPos;
+    css::ui::DockingArea m_nDockedArea;
+    bool                 m_bLocked;
 };
 
 struct FloatingData

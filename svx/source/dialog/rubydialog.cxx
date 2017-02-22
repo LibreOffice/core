@@ -807,10 +807,10 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
     long nRubyWidth = rRenderContext.GetTextWidth(sRubyText);
     rRenderContext.SetFont(aSaveFont);
 
-    sal_Int32 nAdjust = m_pParentDlg->m_pAdjustLB->GetSelectEntryPos();
+    RubyAdjust nAdjust = (RubyAdjust)m_pParentDlg->m_pAdjustLB->GetSelectEntryPos();
     //use center if no adjustment is available
-    if (nAdjust > 4)
-        nAdjust = 1;
+    if (nAdjust > RubyAdjust_INDENT_BLOCK)
+        nAdjust = RubyAdjust_CENTER;
 
     //which part is stretched ?
     bool bRubyStretch = nBaseWidth >= nRubyWidth;
@@ -892,6 +892,7 @@ void RubyPreview::Paint(vcl::RenderContext& rRenderContext, const Rectangle& /*r
         case RubyAdjust_CENTER:
             rRenderContext.DrawText(Point(nCenter - nOutTextWidth / 2 , nYOutput),  sOutputText);
         break;
+        default: break;
     }
     rRenderContext.SetFont(aSaveFont);
     rRenderContext.Pop();

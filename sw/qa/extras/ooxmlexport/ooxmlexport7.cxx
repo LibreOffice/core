@@ -41,6 +41,16 @@ protected:
     }
 };
 
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, TextVerticalAdjust n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 DECLARE_OOXMLEXPORT_TEST( testChildNodesOfCubicBezierTo, "FDO74774.docx")
 {
     /* Number of children required by cubicBexTo is 3 of type "pt".

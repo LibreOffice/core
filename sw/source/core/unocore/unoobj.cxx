@@ -1879,7 +1879,7 @@ SwUnoCursorHelper::GetPropertyStates(
                         eCaller)
             {
                 //this values marks the element as unknown property
-                pStates[i] = beans::PropertyState_MAKE_FIXED_SIZE;
+                pStates[i] = beans::PropertyState::PropertyState_MAKE_FIXED_SIZE;
                 continue;
             }
             else

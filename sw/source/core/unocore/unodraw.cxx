@@ -1250,7 +1250,7 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     if(RES_ANCHOR == pEntry->nWID && MID_ANCHOR_ANCHORTYPE == pEntry->nMemberId)
                     {
                         bool bSetAttr = true;
-                        sal_Int32 eNewAnchor = SWUnoHelper::GetEnumAsInt32( aValue );
+                        text::TextContentAnchorType eNewAnchor = (text::TextContentAnchorType)SWUnoHelper::GetEnumAsInt32( aValue );
 
                         //if old anchor was in_cntnt the related text attribute has to be removed
                         const SwFormatAnchor& rOldAnchor = pFormat->GetAnchor();

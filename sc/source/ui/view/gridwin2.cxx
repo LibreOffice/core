@@ -61,7 +61,7 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
     if (!pDPObj)
         return DataPilotFieldOrientation_HIDDEN;
 
-    sal_uInt16 nOrient = DataPilotFieldOrientation_HIDDEN;
+    DataPilotFieldOrientation nOrient = DataPilotFieldOrientation_HIDDEN;
 
     // Check for page field first.
     if (nCol > 0)
@@ -86,7 +86,7 @@ DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW
         bool bIsDataLayout = false;
         OUString aFieldName = pDPObj->GetDimName(nField, bIsDataLayout);
         if (!aFieldName.isEmpty() && !bIsDataLayout)
-            return static_cast<DataPilotFieldOrientation>(nOrient);
+            return nOrient;
     }
 
     return DataPilotFieldOrientation_HIDDEN;
@@ -156,7 +156,7 @@ void ScGridWindow::DoPushPivotButton( SCCOL nCol, SCROW nRow, const MouseEvent& 
 
     if (pDPObj)
     {
-        sal_uInt16 nOrient = DataPilotFieldOrientation_HIDDEN;
+        DataPilotFieldOrientation nOrient = DataPilotFieldOrientation_HIDDEN;
         ScAddress aPos( nCol, nRow, nTab );
         ScAddress aDimPos = aPos;
         if (!bButton && bPopup && aDimPos.Col() > 0)
@@ -276,7 +276,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
     ScAddress aPos( nPosX, nPosY, pViewData->GetTabNo() );
 
     Rectangle aPosRect;
-    sal_uInt16 nOrient;
+    DataPilotFieldOrientation nOrient;
     long nDimPos;
     bool bHasRange = pDragDPObj->GetHeaderDrag( aPos, bMouseLeft, bMouseTop, nDPField,
                                                 aPosRect, nOrient, nDimPos );
@@ -299,6 +299,7 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, bool bMove )
                 case DataPilotFieldOrientation_ROW:    ePointer = PointerStyle::PivotRow; break;
                 case DataPilotFieldOrientation_PAGE:
                 case DataPilotFieldOrientation_DATA:   ePointer = PointerStyle::PivotField;   break;
+                default: break;
             }
         SetPointer( ePointer );
     }
@@ -439,7 +440,7 @@ private:
 void ScGridWindow::DPLaunchFieldPopupMenu(const Point& rScreenPosition, const Size& rScreenSize,
                                           const ScAddress& rAddress, ScDPObject* pDPObject)
 {
-    sal_uInt16 nOrient;
+    DataPilotFieldOrientation nOrient;
     long nDimIndex = pDPObject->GetHeaderDim(rAddress, nOrient);
 
     DPLaunchFieldPopupMenu(rScreenPosition, rScreenSize, nDimIndex, pDPObject);

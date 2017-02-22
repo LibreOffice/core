@@ -296,8 +296,7 @@ std::unique_ptr<ScDBData> ScXMLDatabaseRangeContext::ConvertToDBData(const OUStr
         aParam.bNative = bNative;
         aParam.aDBName = sDatabaseName.isEmpty() ? sConnectionResource : sDatabaseName;
         aParam.aStatement = sSourceObject;
-        sheet::DataImportMode eMode = static_cast<sheet::DataImportMode>(nSourceType);
-        switch (eMode)
+        switch (nSourceType)
         {
             case sheet::DataImportMode_NONE:
                 aParam.bImport = false;

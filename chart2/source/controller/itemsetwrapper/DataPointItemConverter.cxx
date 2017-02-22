@@ -86,7 +86,7 @@ sal_Int32 lcl_getSymbolStyleForSymbol( const chart2::Symbol & rSymbol )
 
         case chart2::SymbolStyle_POLYGON:
             // to avoid warning
-        case chart2::SymbolStyle_MAKE_FIXED_SIZE:
+        case chart2::SymbolStyle::SymbolStyle_MAKE_FIXED_SIZE:
             // nothing
             break;
     }

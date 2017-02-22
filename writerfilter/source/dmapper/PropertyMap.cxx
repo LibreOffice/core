@@ -1554,7 +1554,7 @@ ParagraphProperties::ParagraphProperties() :
     m_nLines(0),
     m_w(-1),
     m_h(-1),
-    m_nWrap(-1),
+    m_nWrap((text::WrapTextMode)-1),
     m_hAnchor(-1),
     m_vAnchor(-1),
     m_x(-1),
@@ -1634,7 +1634,7 @@ void ParagraphProperties::ResetFrameProperties()
     m_nLines = 0;
     m_w = -1;
     m_h = -1;
-    m_nWrap = -1;
+    m_nWrap = (text::WrapTextMode)-1;
     m_hAnchor = -1;
     m_vAnchor = -1;
     m_x = -1;

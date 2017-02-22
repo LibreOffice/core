@@ -92,6 +92,71 @@ protected:
     }
 };
 
+namespace com { namespace sun { namespace star { namespace style {
+
+std::ostream& operator<<(std::ostream& rStrm, ParagraphAdjust n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace text {
+
+std::ostream& operator<<(std::ostream& rStrm, WrapTextMode n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, LineStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace awt {
+
+std::ostream& operator<<(std::ostream& rStrm, GradientStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace table {
+
+std::ostream& operator<<(std::ostream& rStrm, ShadowLocation n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace style {
+
+std::ostream& operator<<(std::ostream& rStrm, TabAlign n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt")
 {
     // No idea how the graphic background should be exported (seems there is no

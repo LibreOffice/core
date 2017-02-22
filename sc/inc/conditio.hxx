@@ -31,6 +31,7 @@
 #include <svl/broadcast.hxx>
 
 #include <comphelper/stl_types.hxx>
+#include <com/sun/star/sheet/ConditionOperator.hpp>
 
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
@@ -270,7 +271,7 @@ public:
 
     virtual ScFormatEntry* Clone(ScDocument* pDoc) const override;
 
-    static ScConditionMode GetModeFromApi(sal_Int32 nOperator);
+    static ScConditionMode GetModeFromApi(css::sheet::ConditionOperator nOperator);
 
     virtual void endRendering() override;
     virtual void startRendering() override;

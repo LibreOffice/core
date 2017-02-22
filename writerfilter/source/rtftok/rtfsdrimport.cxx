@@ -958,7 +958,7 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             xPropertySet->setPropertyValue("HoriOrientRelation", uno::makeAny(rShape.nHoriOrientRelation));
         if (rShape.nVertOrientRelation != 0)
             xPropertySet->setPropertyValue("VertOrientRelation", uno::makeAny(rShape.nVertOrientRelation));
-        if (rShape.nWrap != -1)
+        if (rShape.nWrap != (text::WrapTextMode)-1)
             xPropertySet->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode(rShape.nWrap)));
         oox::ModelObjectHelper aModelObjectHelper(m_rImport.getModelFactory());
         if (aFillModel.moType.has())

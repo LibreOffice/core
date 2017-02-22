@@ -1073,7 +1073,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( pDPObj )
                 {
                     Sequence<sheet::DataPilotFieldFilter> aFilters;
-                    sal_uInt16 nOrientation;
+                    css::sheet::DataPilotFieldOrientation nOrientation;
                     if ( pTabViewShell->HasSelectionForDrillDown( nOrientation ) )
                     {
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();

@@ -275,7 +275,7 @@ void XSpreadsheets2::testImportCellStyle()
     sal_Int32 aVertJustify = 0;
     CPPUNIT_ASSERT(xCellStyleProp->getPropertyValue(aProperty) >>= aVertJustify);
 
-    CPPUNIT_ASSERT_MESSAGE("New style: VertJustify not set", aVertJustify == table::CellVertJustify_CENTER);
+    CPPUNIT_ASSERT_MESSAGE("New style: VertJustify not set", (table::CellVertJustify)aVertJustify == table::CellVertJustify_CENTER);
 }
 
 uno::Reference< sheet::XSpreadsheetDocument> XSpreadsheets2::getDoc(const OUString& aFileBase, uno::Reference< lang::XComponent >& xComp)

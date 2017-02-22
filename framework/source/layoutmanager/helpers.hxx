@@ -58,7 +58,7 @@ bool equalRectangles( const css::awt::Rectangle& rRect1, const css::awt::Rectang
 void setZeroRectangle( ::Rectangle& rRect );
 bool lcl_checkUIElement(const css::uno::Reference< css::ui::XUIElement >& xUIElement,css::awt::Rectangle& _rPosSize, css::uno::Reference< css::awt::XWindow >& _xWindow);
 css::uno::Reference< css::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference< css::awt::XWindowPeer >& rParent, const char* pService );
-WindowAlign ImplConvertAlignment( sal_Int16 aAlignment );
+WindowAlign ImplConvertAlignment( css::ui::DockingArea aAlignment );
 OUString getElementTypeFromResourceURL( const OUString& aResourceURL );
 void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUString& aElementName );
 ::Rectangle putAWTToRectangle( const css::awt::Rectangle& rRect );

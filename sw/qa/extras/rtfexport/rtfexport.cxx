@@ -93,6 +93,16 @@ public:
     }
 };
 
+namespace com { namespace sun { namespace star { namespace style {
+
+std::ostream& operator<<(std::ostream& rStrm, PageStyleLayout n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 DECLARE_RTFEXPORT_TEST(testZoom, "zoom.rtf")
 {
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);

@@ -339,7 +339,7 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
                     case drawing::FillStyle_BITMAP:
                         sFillStyleName = SVX_RESSTR(RID_SVXSTR_A11Y_FILLSTYLE_BITMAP);
                         break;
-                    case drawing::FillStyle_MAKE_FIXED_SIZE:
+                    default:
                         break;
                 }
             }
@@ -366,7 +366,7 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
                     AddProperty ("FillBitmapName", PropertyType::String, SIP_XA_FILLBITMAP,
                         XATTR_FILLBITMAP);
                     break;
-                case drawing::FillStyle_MAKE_FIXED_SIZE:
+                default:
                     break;
             }
         }

@@ -283,7 +283,7 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         nOffset = nSet;
         break;
     case FIELD_PROP_SUBTYPE:
-        switch( SWUnoHelper::GetEnumAsInt32( rAny ) )
+        switch( (text::PageNumberType) SWUnoHelper::GetEnumAsInt32( rAny ) )
         {
             case text::PageNumberType_CURRENT:
                 nSubType = PG_RANDOM;

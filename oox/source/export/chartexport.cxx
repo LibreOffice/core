@@ -984,7 +984,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
                 strPos = "b";
                 break;
             case css::chart::ChartLegendPosition_NONE:
-            case css::chart::ChartLegendPosition_MAKE_FIXED_SIZE:
+            case css::chart::ChartLegendPosition::ChartLegendPosition_MAKE_FIXED_SIZE:
                 // nothing
                 break;
         }
@@ -1019,7 +1019,7 @@ void ChartExport::exportLegend( const Reference< css::chart::XChartDocument >& x
             pFS->singleElement(FSNS(XML_c, XML_y),
                     XML_val, IS(y),
                     FSEND);
-            SAL_WARN_IF(aPos.Anchor != 0, "oox", "unsupported anchor position");
+            SAL_WARN_IF(aPos.Anchor != css::drawing::Alignment_TOP_LEFT, "oox", "unsupported anchor position");
 
             pFS->endElement(FSNS(XML_c, XML_manualLayout));
             pFS->endElement(FSNS(XML_c, XML_layout));

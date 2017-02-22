@@ -481,9 +481,9 @@ sal_Int16 SwVbaParagraphFormat::getCharHeight()
     return (sal_Int16)( Millimeter::getInHundredthsOfOneMillimeter( fCharHeight ) );
 }
 
-sal_Int32 SwVbaParagraphFormat::getOOoAlignment( sal_Int32 _alignment )
+style::ParagraphAdjust SwVbaParagraphFormat::getOOoAlignment( sal_Int32 _alignment )
 {
-    sal_Int32 nParaAjust = style::ParagraphAdjust_LEFT;
+    style::ParagraphAdjust nParaAjust = style::ParagraphAdjust_LEFT;
     switch( _alignment )
     {
         case word::WdParagraphAlignment::wdAlignParagraphCenter:
@@ -514,7 +514,7 @@ sal_Int32 SwVbaParagraphFormat::getOOoAlignment( sal_Int32 _alignment )
     return nParaAjust;
 }
 
-sal_Int32 SwVbaParagraphFormat::getMSWordAlignment( sal_Int32 _alignment )
+sal_Int32 SwVbaParagraphFormat::getMSWordAlignment( style::ParagraphAdjust _alignment )
 {
     sal_Int32 wdAlignment = word::WdParagraphAlignment::wdAlignParagraphLeft;
     switch( _alignment )

@@ -653,7 +653,7 @@ chart2::RelativePosition lcl_getDefaultPosition( LegendPosition ePos, const awt:
 
         case LegendPosition_CUSTOM:
             // to avoid warning
-        case LegendPosition_MAKE_FIXED_SIZE:
+        case LegendPosition::LegendPosition_MAKE_FIXED_SIZE:
             // nothing to be set
             break;
     }

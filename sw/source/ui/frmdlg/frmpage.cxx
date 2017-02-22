@@ -1814,7 +1814,7 @@ void SwFramePage::RangeModifyHdl()
     SwFlyFrameAttrMgr aMgr( m_bNew, pSh, static_cast<const SwAttrSet&>(GetItemSet()) );
     SvxSwFrameValidation        aVal;
 
-    aVal.nAnchorType = static_cast< sal_Int16 >(GetAnchor());
+    aVal.nAnchorType = (css::text::TextContentAnchorType)GetAnchor();
     aVal.bAutoHeight = m_pAutoHeightCB->IsChecked();
     aVal.bAutoWidth = m_pAutoWidthCB->IsChecked();
     aVal.bMirror = m_pMirrorPagesCB->IsChecked();
@@ -1911,9 +1911,9 @@ void SwFramePage::RangeModifyHdl()
     if ( aVal.nHPos != nAtHorzPosVal )
         m_pAtHorzPosED->SetValue(m_pAtHorzPosED->Normalize(aVal.nHPos), FUNIT_TWIP);
 
-    const SwTwips nUpperOffset = (aVal.nAnchorType == (sal_Int16)RndStdIds::FLY_AS_CHAR)
+    const SwTwips nUpperOffset = (aVal.nAnchorType == css::text::TextContentAnchorType_AS_CHARACTER)
         ? m_nUpperBorder : 0;
-    const SwTwips nLowerOffset = (aVal.nAnchorType == (sal_Int16)RndStdIds::FLY_AS_CHAR)
+    const SwTwips nLowerOffset = (aVal.nAnchorType == css::text::TextContentAnchorType_AS_CHARACTER)
         ? m_nLowerBorder : 0;
 
     m_pAtVertPosED->SetMin(m_pAtVertPosED->Normalize(aVal.nMinVPos + nLowerOffset + nUpperOffset), FUNIT_TWIP);
@@ -2144,7 +2144,7 @@ void SwFramePage::UpdateExample()
     long nYPos = static_cast< long >(m_pAtVertPosED->Denormalize(m_pAtVertPosED->GetValue(FUNIT_TWIP)));
     m_pExampleWN->SetRelPos(Point(nXPos, nYPos));
 
-    m_pExampleWN->SetAnchor( static_cast< sal_Int16 >(GetAnchor()) );
+    m_pExampleWN->SetAnchor( (css::text::TextContentAnchorType)GetAnchor() );
     m_pExampleWN->Invalidate();
 }
 
@@ -2309,7 +2309,7 @@ void SwFramePage::Init(const SfxItemSet& rSet, bool bReset)
     // transparent for example
     // circulation for example
     const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet.Get(RES_SURROUND));
-    m_pExampleWN->SetWrap ( static_cast< sal_uInt16 >(rSurround.GetSurround()) );
+    m_pExampleWN->SetWrap( rSurround.GetSurround() );
 
     if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGHT )
     {

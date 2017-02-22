@@ -86,7 +86,7 @@ OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString& rCo
 
 
 OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& rControlName, Reference< XActionListener >& xActionListener,
-    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, bool bEnabled, PPPOptimizerTokenEnum nResID, sal_Int16 nPushButtonType )
+    sal_Int32 nXPos, sal_Int32 nYPos, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nTabIndex, bool bEnabled, PPPOptimizerTokenEnum nResID, css::awt::PushButtonType nPushButtonType )
 {
     OUString pNames[] = {
         OUString("Enabled"),

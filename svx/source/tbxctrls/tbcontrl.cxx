@@ -745,7 +745,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
                 if ( (nullptr != pItem) && bIsNotSelected)
                     aFontCol = Color( static_cast< const SvxColorItem* >( pItem )->GetValue() );
 
-                sal_uInt16 style = drawing::FillStyle_NONE;
+                drawing::FillStyle style = drawing::FillStyle_NONE;
                 // which kind of Fill style is selected
                 pItem = pItemSet->GetItem( XATTR_FILLSTYLE );
                 // only when ok and not selected
@@ -769,6 +769,7 @@ void SvxStyleBox_Impl::SetupEntry(vcl::RenderContext& rRenderContext, vcl::Windo
                     }
                     break;
 
+                    default: break;
                     //TODO Draw the other background styles: gradient, hatching and bitmap
                 }
 

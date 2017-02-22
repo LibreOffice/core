@@ -21,6 +21,7 @@
 #define INCLUDED_WRITERFILTER_SOURCE_DMAPPER_GRAPHICHELPERS_HXX
 
 #include "LoggedResources.hxx"
+#include <com/sun/star/text/WrapTextMode.hpp>
 
 #include <memory>
 #include <map>
@@ -58,7 +59,7 @@ public:
     sal_Int32 m_nType;
     sal_Int32 m_nSide;
 
-    sal_Int32 getWrapMode( );
+    css::text::WrapTextMode getWrapMode( );
 
  private:
     virtual void lcl_attribute( Id aName, Value& rVal ) override;

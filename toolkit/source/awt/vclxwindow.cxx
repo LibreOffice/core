@@ -76,7 +76,6 @@ using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
 using ::com::sun::star::style::VerticalAlignment_BOTTOM;
-using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
@@ -1727,7 +1726,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
         break;
         case BASEPROPERTY_VERTICALALIGN:
         {
-            VerticalAlignment eAlign = VerticalAlignment_MAKE_FIXED_SIZE;
+            VerticalAlignment eAlign = css::style::VerticalAlignment::VerticalAlignment_MAKE_FIXED_SIZE;
             WinBits nStyle = pWindow->GetStyle();
             nStyle &= ~(WB_TOP|WB_VCENTER|WB_BOTTOM);
             if ( !bVoid )

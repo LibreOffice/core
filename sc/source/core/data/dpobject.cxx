@@ -258,9 +258,9 @@ void DBConnector::getValue(long nCol, ScDPItemData &rData, short& rNumType) cons
 
 }
 
-sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
+sheet::DataPilotFieldOrientation lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplier>& xSource )
 {
-    long nRet = sheet::DataPilotFieldOrientation_HIDDEN;
+    sheet::DataPilotFieldOrientation nRet = sheet::DataPilotFieldOrientation_HIDDEN;
     if ( xSource.is() )
     {
         uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
@@ -284,7 +284,7 @@ sal_uInt16 lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSup
             }
         }
     }
-    return static_cast< sal_uInt16 >( nRet );
+    return nRet;
 }
 
 ScDPServiceDesc::ScDPServiceDesc(
@@ -1422,7 +1422,7 @@ bool ScDPObject::IsFilterButton( const ScAddress& rPos )
     return pOutput->IsFilterButton( rPos );
 }
 
-long ScDPObject::GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient )
+long ScDPObject::GetHeaderDim( const ScAddress& rPos, sheet::DataPilotFieldOrientation& rOrient )
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
@@ -1430,7 +1430,7 @@ long ScDPObject::GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient )
 }
 
 bool ScDPObject::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, long nDragDim,
-                                Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos )
+                                Rectangle& rPosRect, sheet::DataPilotFieldOrientation& rOrient, long& rDimPos )
 {
     CreateOutput();             // create xSource and pOutput if not already done
 
@@ -1740,7 +1740,7 @@ bool ScDPObject::ParseFilters(
         uno::Reference<sheet::XHierarchiesSupplier> xDimSupp( xDim, uno::UNO_QUERY );
         bool bDataLayout = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
                             SC_UNO_DP_ISDATALAYOUT );
-        sal_Int32 nOrient = ScUnoHelpFunctions::GetEnumProperty(
+        sheet::DataPilotFieldOrientation nOrient = ScUnoHelpFunctions::GetEnumProperty(
                             xDimProp, SC_UNO_DP_ORIENTATION,
                             sheet::DataPilotFieldOrientation_HIDDEN );
         if ( !bDataLayout )
@@ -2160,7 +2160,7 @@ public:
 
 void lcl_FillOldFields( ScPivotFieldVector& rFields,
     const uno::Reference<sheet::XDimensionsSupplier>& xSource,
-    sal_uInt16 nOrient, bool bAddData )
+    sheet::DataPilotFieldOrientation nOrient, bool bAddData )
 {
     ScPivotFieldVector aFields;
 
@@ -2184,7 +2184,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
         uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
 
         // dimension orientation, hidden by default.
-        long nDimOrient = ScUnoHelpFunctions::GetEnumProperty(
+        sheet::DataPilotFieldOrientation nDimOrient = ScUnoHelpFunctions::GetEnumProperty(
                             xDimProp, SC_UNO_DP_ORIENTATION,
                             sheet::DataPilotFieldOrientation_HIDDEN );
 
@@ -2630,7 +2630,7 @@ public:
 }
 
 void ScDPObject::ConvertOrientation(
-    ScDPSaveData& rSaveData, const ScPivotFieldVector& rFields, sal_uInt16 nOrient,
+    ScDPSaveData& rSaveData, const ScPivotFieldVector& rFields, sheet::DataPilotFieldOrientation nOrient,
     const Reference<XDimensionsSupplier>& xSource,
     const ScDPLabelDataVector& rLabels,
     const ScPivotFieldVector* pRefColFields,
@@ -2730,7 +2730,7 @@ void ScDPObject::ConvertOrientation(
     }
 }
 
-bool ScDPObject::IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags )
+bool ScDPObject::IsOrientationAllowed( sheet::DataPilotFieldOrientation nOrient, sal_Int32 nDimFlags )
 {
     bool bAllowed = true;
     switch (nOrient)

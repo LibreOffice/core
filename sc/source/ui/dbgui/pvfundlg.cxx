@@ -814,7 +814,7 @@ IMPL_LINK( ScDPSubtotalOptDlg, SelectHdl, ListBox&, rLBox, void )
     }
 }
 
-ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, sal_uInt16 nOrient ) :
+ScDPShowDetailDlg::ScDPShowDetailDlg( vcl::Window* pParent, ScDPObject& rDPObj, css::sheet::DataPilotFieldOrientation nOrient ) :
     ModalDialog     ( pParent, "ShowDetail", "modules/scalc/ui/showdetaildialog.ui" ),
     mrDPObj(rDPObj)
 {

@@ -1011,7 +1011,7 @@ uno_Sequence* cloneSequence(const uno_Sequence* val, const Type& type)
     sal_Int8* pBufCur = buf.get();
 
     uno_Sequence* retSeq = nullptr;
-    switch (pTdElem->eTypeClass)
+    switch ((TypeClass)pTdElem->eTypeClass)
     {
     case TypeClass_SEQUENCE:
     {

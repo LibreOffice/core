@@ -551,7 +551,7 @@ namespace
         { css::awt::MessageBoxType_WARNINGBOX,      RTL_CONSTASCII_STRINGPARAM("warningbox") },
         { css::awt::MessageBoxType_ERRORBOX,        RTL_CONSTASCII_STRINGPARAM("errorbox") },
         { css::awt::MessageBoxType_QUERYBOX,        RTL_CONSTASCII_STRINGPARAM("querybox") },
-        { css::awt::MessageBoxType_MAKE_FIXED_SIZE, nullptr, 0 }
+        { css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE, nullptr, 0 }
     };
 
     bool lcl_convertMessageBoxType(
@@ -559,7 +559,7 @@ namespace
         css::awt::MessageBoxType eType )
     {
         const MessageBoxTypeInfo *pMap = aMessageBoxTypeInfo;
-        css::awt::MessageBoxType eVal = css::awt::MessageBoxType_MAKE_FIXED_SIZE;
+        css::awt::MessageBoxType eVal = css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE;
 
         while ( pMap->pName )
         {
@@ -572,7 +572,7 @@ namespace
             pMap++;
         }
 
-        return ( eVal != css::awt::MessageBoxType_MAKE_FIXED_SIZE );
+        return ( eVal != css::awt::MessageBoxType::MessageBoxType_MAKE_FIXED_SIZE );
     }
 }
 

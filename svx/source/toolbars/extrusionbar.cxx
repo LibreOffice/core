@@ -646,7 +646,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
             pAny = aGeometryItem.GetPropertyValueByName( sExtrusion, "ProjectionMode" );
             sal_Int16 nProjectionMode = sal_Int16();
             if( pAny && ( *pAny >>= nProjectionMode ) )
-                bParallel = nProjectionMode == ProjectionMode_PARALLEL;
+                bParallel = (ProjectionMode)nProjectionMode == ProjectionMode_PARALLEL;
 
             if( bParallel )
             {

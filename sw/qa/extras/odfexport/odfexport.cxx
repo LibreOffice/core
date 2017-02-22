@@ -97,6 +97,16 @@ public:
     }
 };
 
+namespace com { namespace sun { namespace star { namespace awt {
+
+std::ostream& operator<<(std::ostream& rStrm, FontSlant n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 DECLARE_ODFEXPORT_TEST(testMathObjectFlatExport, "2_MathType3.docx")
 {
     uno::Reference<util::XModifiable> xModifiable(mxComponent, uno::UNO_QUERY);

@@ -1253,12 +1253,12 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const OUString & Proper
                 ModuleRes aRes(RID_STR_VERTICAL_ALIGN_CONST);
                 ResStringArray aResList(aRes);
                 if (sal_uInt32(nParagraphVertAlign) < aResList.Count())
-                    aControlValue <<= aResList.GetString(nParagraphVertAlign);
+                    aControlValue <<= aResList.GetString((sal_uInt32)nParagraphVertAlign);
             }
             break;
         case PROPERTY_ID_PARAADJUST:
             {
-                sal_Int16 nParagraphAdjust = style::ParagraphAdjust_LEFT;
+                sal_Int16 nParagraphAdjust = (sal_Int16)style::ParagraphAdjust_LEFT;
                 aPropertyValue >>= nParagraphAdjust;
                 ModuleRes aRes(RID_STR_PARAADJUST_CONST);
                 ResStringArray aResList(aRes);

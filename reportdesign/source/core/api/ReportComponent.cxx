@@ -29,7 +29,6 @@
 #include "ReportControlModel.hxx"
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
-#include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <editeng/unolingu.hxx>
 #include <unotools/syslocale.hxx>

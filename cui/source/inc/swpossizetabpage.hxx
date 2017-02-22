@@ -26,6 +26,7 @@
 #include <vcl/lstbox.hxx>
 #include <svx/swframeposstrings.hxx>
 #include <svx/swframeexample.hxx>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 
 // SvxSwPosSizeTabPage - position and size page for Writer drawing objects
 struct FrmMap;
@@ -109,13 +110,13 @@ class SvxSwPosSizeTabPage : public SfxTabPage
     DECL_LINK( ModifyHdl, Edit&, void );
     DECL_LINK(ProtectHdl, Button*, void);
 
-    void            InitPos(short nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
+    void            InitPos(css::text::TextContentAnchorType nAnchorType, sal_uInt16 nH, sal_uInt16 nHRel,
                             sal_uInt16 nV,  sal_uInt16 nVRel,
                             long   nX,  long   nY);
     sal_uInt16          GetMapPos(FrmMap *pMap, ListBox &rAlignLB);
     static short        GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBox &rAlignLB, ListBox &rRelationLB);
     static short        GetRelation(FrmMap *pMap, ListBox &rRelationLB);
-    short               GetAnchorType(bool* pbHasChanged = nullptr);
+    css::text::TextContentAnchorType GetAnchorType(bool* pbHasChanged = nullptr);
     void                FillRelLB(FrmMap *pMap, sal_uInt16 nLBSelPos, sal_uInt16 nAlign, sal_uInt16 nRel, ListBox &rLB, FixedText &rFT);
     sal_uInt16          FillPosLB(FrmMap *pMap, sal_uInt16 nAlign, const sal_uInt16 _nRel, ListBox &rLB);
 

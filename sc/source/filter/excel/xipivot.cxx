@@ -963,7 +963,7 @@ void XclImpPTField::ConvertRowColField( ScDPSaveData& rSaveData ) const
     OSL_ENSURE( maFieldInfo.mnAxes & EXC_SXVD_AXIS_ROWCOL, "XclImpPTField::ConvertRowColField - no row/column field" );
     // special data orientation field?
     if( maFieldInfo.mnCacheIdx == EXC_SXIVD_DATA )
-        rSaveData.GetDataLayoutDimension()->SetOrientation( static_cast< sal_uInt16 >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOL ) ) );
+        rSaveData.GetDataLayoutDimension()->SetOrientation( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOL ) );
     else
         ConvertRCPField( rSaveData );
 }
@@ -1078,7 +1078,7 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     ScDPSaveDimension& rSaveDim = *pTest;
 
     // orientation
-    rSaveDim.SetOrientation( static_cast< sal_uInt16 >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) ) );
+    rSaveDim.SetOrientation( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) );
 
     // general field info
     ConvertFieldInfo( rSaveDim );

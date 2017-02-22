@@ -109,7 +109,7 @@ ScDPObject* createDPFromSourceDesc(
     {
         OUString aDimName = OUString::createFromAscii(aFields[i].pName);
         ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(aDimName);
-        pDim->SetOrientation(static_cast<sal_uInt16>(aFields[i].eOrient));
+        pDim->SetOrientation(aFields[i].eOrient);
         pDim->SetUsedHierarchy(0);
 
         if (aFields[i].eOrient == sheet::DataPilotFieldOrientation_DATA)

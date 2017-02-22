@@ -111,7 +111,7 @@ bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 
     rValue >>= nVal;
 
-    if( nVal != style::ParagraphAdjust_LEFT )
+    if( (style::ParagraphAdjust)nVal != style::ParagraphAdjust_LEFT )
         bRet = SvXMLUnitConverter::convertEnum( aOut, (style::ParagraphAdjust)nVal, pXML_Para_Align_Last_Enum, XML_START );
 
     rStrExpValue = aOut.makeStringAndClear();

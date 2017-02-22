@@ -116,11 +116,11 @@ class Printer;
 
 class SfxPrintingHint : public SfxViewEventHint
 {
-    sal_Int32 mnPrintableState;
+    css::view::PrintableState mnPrintableState;
     css::uno::Sequence < css::beans::PropertyValue > aOpts;
 public:
         SfxPrintingHint(
-                sal_Int32 nState,
+                css::view::PrintableState nState,
                 const css::uno::Sequence < css::beans::PropertyValue >& rOpts,
                 SfxObjectShell *pObj,
                 const css::uno::Reference< css::frame::XController2 >& xController )
@@ -133,12 +133,12 @@ public:
         , aOpts( rOpts )
         {}
 
-        SfxPrintingHint( sal_Int32 nState )
+        SfxPrintingHint( css::view::PrintableState nState )
         : SfxViewEventHint( SfxEventHintId::PrintDoc, rtl::OUString(), nullptr, css::uno::Reference< css::frame::XController >() )
         , mnPrintableState( nState )
         {}
 
-    sal_Int32 GetWhich() const { return mnPrintableState; }
+    css::view::PrintableState GetWhich() const { return mnPrintableState; }
     const css::uno::Sequence < css::beans::PropertyValue >& GetOptions() const { return aOpts; }
 };
 

@@ -378,10 +378,10 @@ namespace xmloff
         template<typename EnumT>
         void    addEnumProperty(
             const sal_Char* _pAttributeName, const OUString& _rPropertyName,
-            const sal_uInt16 _nAttributeDefault, const SvXMLEnumMapEntry<EnumT>* _pValueMap,
+            const EnumT _nAttributeDefault, const SvXMLEnumMapEntry<EnumT>* _pValueMap,
             const css::uno::Type* _pType = nullptr)
         {
-            addEnumPropertyImpl(_pAttributeName, _rPropertyName, _nAttributeDefault,
+            addEnumPropertyImpl(_pAttributeName, _rPropertyName, static_cast<sal_uInt16>(_nAttributeDefault),
                                 reinterpret_cast<const SvXMLEnumMapEntry<sal_uInt16>*>(_pValueMap), _pType);
         }
 

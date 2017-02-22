@@ -154,6 +154,26 @@ private:
 
 };
 
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace chart2 {
+
+std::ostream& operator<<(std::ostream& rStrm, CurveStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 // error bar import
 // split method up into smaller chunks for more detailed tests
 void Chart2ImportTest::Fdo60083()

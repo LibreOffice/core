@@ -177,6 +177,21 @@ protected:
 
 };
 
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+std::ostream& operator<<(std::ostream& rStrm, LineStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 namespace {
 
 struct CheckForChartName

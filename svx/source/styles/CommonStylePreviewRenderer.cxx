@@ -119,7 +119,7 @@ bool CommonStylePreviewRenderer::recalculate()
     {
         if ((pItem = pItemSet->GetItem(XATTR_FILLSTYLE)) != nullptr)
         {
-            sal_uInt16 aFillStyle = static_cast<const XFillStyleItem*>(pItem)->GetValue();
+            css::drawing::FillStyle aFillStyle = static_cast<const XFillStyleItem*>(pItem)->GetValue();
             if (aFillStyle == drawing::FillStyle_SOLID)
             {
                 if ((pItem = pItemSet->GetItem(XATTR_FILLCOLOR)) != nullptr)

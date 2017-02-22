@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #include <rsc/rscsfx.hxx>
 #include <editeng/editdata.hxx>

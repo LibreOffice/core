@@ -18,7 +18,6 @@
  */
 
 #include "pushbuttonnavigation.hxx"
-#include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include "formstrings.hxx"
 #include <comphelper/extract.hxx>
@@ -97,14 +96,14 @@ namespace pcr
     }
 
 
-    sal_Int32 PushButtonNavigation::implGetCurrentButtonType() const
+    FormButtonType PushButtonNavigation::implGetCurrentButtonType() const
     {
-        sal_Int32 nButtonType = FormButtonType_PUSH;
+        sal_Int32 nButtonType = (sal_Int32)FormButtonType_PUSH;
         if ( !m_xControlModel.is() )
-            return nButtonType;
+            return (FormButtonType)nButtonType;
         OSL_VERIFY( ::cppu::enum2int( nButtonType, m_xControlModel->getPropertyValue( PROPERTY_BUTTONTYPE ) ) );
 
-        if ( nButtonType == FormButtonType_URL )
+        if ( nButtonType == (sal_Int32)FormButtonType_URL )
         {
             // there's a chance that this is a "virtual" button type
             // (which are realized by special URLs)
@@ -116,7 +115,7 @@ namespace pcr
                 // it actually *is* a virtual button type
                 nButtonType = s_nFirstVirtualButtonType + nNavigationURLIndex;
         }
-        return nButtonType;
+        return (FormButtonType)nButtonType;
     }
 
 
@@ -145,7 +144,7 @@ namespace pcr
 
         try
         {
-            sal_Int32 nButtonType = FormButtonType_PUSH;
+            sal_Int32 nButtonType = (sal_Int32)FormButtonType_PUSH;
             OSL_VERIFY( ::cppu::enum2int( nButtonType, _rValue ) );
             OUString sTargetURL;
 
@@ -155,7 +154,7 @@ namespace pcr
                 const sal_Char* pURL = lcl_getNavigationURL( nButtonType - s_nFirstVirtualButtonType );
                 sTargetURL = OUString::createFromAscii( pURL );
 
-                nButtonType = FormButtonType_URL;
+                nButtonType = (sal_Int32)FormButtonType_URL;
             }
 
             m_xControlModel->setPropertyValue( PROPERTY_BUTTONTYPE, makeAny( static_cast< FormButtonType >( nButtonType ) ) );
@@ -182,10 +181,10 @@ namespace pcr
                 eState = xStateAccess->getPropertyState( PROPERTY_BUTTONTYPE );
                 if ( eState == PropertyState_DIRECT_VALUE )
                 {
-                    sal_Int32 nRealButtonType = FormButtonType_PUSH;
+                    sal_Int32 nRealButtonType = (sal_Int32)FormButtonType_PUSH;
                     OSL_VERIFY( ::cppu::enum2int( nRealButtonType, m_xControlModel->getPropertyValue( PROPERTY_BUTTONTYPE ) ) );
                     // perhaps it's one of the virtual button types?
-                    if ( FormButtonType_URL == nRealButtonType )
+                    if ( (sal_Int32)FormButtonType_URL == nRealButtonType )
                     {
                         // yes, it is -> rely on the state of the URL property
                         eState = xStateAccess->getPropertyState( PROPERTY_TARGET_URL );
@@ -213,8 +212,8 @@ namespace pcr
             aReturn = m_xControlModel->getPropertyValue( PROPERTY_TARGET_URL );
             if ( m_bIsPushButton )
             {
-                sal_Int32 nCurrentButtonType = implGetCurrentButtonType();
-                bool bIsVirtualButtonType = nCurrentButtonType >= s_nFirstVirtualButtonType;
+                FormButtonType nCurrentButtonType = implGetCurrentButtonType();
+                bool bIsVirtualButtonType = nCurrentButtonType >= (FormButtonType)s_nFirstVirtualButtonType;
                 if ( bIsVirtualButtonType )
                 {
                     // pretend (to the user) that there's no URL set - since
@@ -271,7 +270,7 @@ namespace pcr
 
     bool PushButtonNavigation::currentButtonTypeIsOpenURL() const
     {
-        sal_Int32 nButtonType( FormButtonType_PUSH );
+        FormButtonType nButtonType( FormButtonType_PUSH );
         try
         {
             nButtonType = implGetCurrentButtonType();

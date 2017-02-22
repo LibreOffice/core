@@ -2549,15 +2549,16 @@ namespace pcr
         // Auslesen des ListSourceTypes
         Any aListSourceType( m_xComponent->getPropertyValue( PROPERTY_LISTSOURCETYPE ) );
 
-        sal_Int32 nListSourceType = ListSourceType_VALUELIST;
+        sal_Int32 nListSourceType = (sal_Int32)ListSourceType_VALUELIST;
         ::cppu::enum2int( nListSourceType, aListSourceType );
+        ListSourceType eListSourceType = (ListSourceType)nListSourceType;
 
         _out_rDescriptor.DisplayName = m_pInfoService->getPropertyTranslation( PROPERTY_ID_LISTSOURCE );
         _out_rDescriptor.HelpURL = HelpIdUrl::getHelpURL( m_pInfoService->getPropertyHelpId( PROPERTY_ID_LISTSOURCE ) );
 
 
         // Enums setzen
-        switch( nListSourceType )
+        switch( eListSourceType )
         {
         case ListSourceType_VALUELIST:
             _out_rDescriptor.Control = _rxControlFactory->createPropertyControl( PropertyControlType::StringListField, false );
@@ -2570,7 +2571,7 @@ namespace pcr
             std::vector< OUString > aListEntries;
             if ( impl_ensureRowsetConnection_nothrow() )
             {
-                if ( nListSourceType == ListSourceType_QUERY )
+                if ( eListSourceType == ListSourceType_QUERY )
                     impl_fillQueryNames_throw( aListEntries );
                 else
                     impl_fillTableNames_throw( aListEntries );
@@ -2583,6 +2584,7 @@ namespace pcr
             impl_ensureRowsetConnection_nothrow();
             _out_rDescriptor.HasPrimaryButton = m_xRowSetConnection.is();
             break;
+        default: break;
         }
     }
 

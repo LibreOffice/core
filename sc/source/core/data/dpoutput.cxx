@@ -1571,7 +1571,7 @@ bool ScDPOutput::IsFilterButton( const ScAddress& rPos )
     return ( nCol == aStartPos.Col() && nRow == aStartPos.Row() );
 }
 
-long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient )
+long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sheet::DataPilotFieldOrientation& rOrient )
 {
     SCCOL nCol = rPos.Col();
     SCROW nRow = rPos.Row();
@@ -1619,7 +1619,7 @@ long ScDPOutput::GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient )
 
 bool ScDPOutput::GetHeaderDrag( const ScAddress& rPos, bool bMouseLeft, bool bMouseTop,
                                 long nDragDim,
-                                Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos )
+                                Rectangle& rPosRect, sheet::DataPilotFieldOrientation& rOrient, long& rDimPos )
 {
     //  Rectangle instead of ScRange for rPosRect to allow for negative values
 

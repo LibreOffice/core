@@ -202,7 +202,7 @@ void TextSearch::Init( const SearchParam & rParam,
     {
     case SearchParam::SearchType::Wildcard:
         aSOpt.AlgorithmType2 = SearchAlgorithms2::WILDCARD;
-        aSOpt.algorithmType = SearchAlgorithms_MAKE_FIXED_SIZE;    // no old enum for that
+        aSOpt.algorithmType = SearchAlgorithms::SearchAlgorithms_MAKE_FIXED_SIZE;    // no old enum for that
         aSOpt.WildcardEscapeCharacter = rParam.GetWildEscChar();
         if (rParam.IsWildMatchSel())
             aSOpt.searchFlag |= SearchFlags::WILD_MATCH_SELECTION;

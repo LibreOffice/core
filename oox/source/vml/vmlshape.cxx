@@ -539,7 +539,7 @@ void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, co
     if (nMarginTop < -35277) // Less than 1000 points.
         aWrapType.clear();
 
-    sal_Int32 nSurround = css::text::WrapTextMode_THROUGHT;
+    css::text::WrapTextMode nSurround = css::text::WrapTextMode_THROUGHT;
     if ( aWrapType == "square" || aWrapType == "tight" ||
          aWrapType == "through" )
     {
@@ -552,7 +552,7 @@ void lcl_setSurround(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, co
     else if ( aWrapType == "topAndBottom" )
         nSurround = css::text::WrapTextMode_NONE;
 
-    rPropSet.setProperty(PROP_Surround, nSurround);
+    rPropSet.setProperty(PROP_Surround, (sal_Int32)nSurround);
 }
 
 void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel, const GraphicHelper& rGraphicHelper)

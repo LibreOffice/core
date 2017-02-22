@@ -2035,7 +2035,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             if ( ( aData.Flags & sheet::MemberResultFlags::HASMEMBER ) &&
                  ! ( aData.Flags & sheet::MemberResultFlags::SUBTOTAL ) )
             {
-                sal_uInt16 nDummy;
+                css::sheet::DataPilotFieldOrientation nDummy;
                 if ( pView->HasSelectionForDrillDown( nDummy ) )
                 {
                     // execute slot to show dialog
@@ -3447,7 +3447,7 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
                     {
                         ScRange aOutRange = pDPObj->GetOutRange();
 
-                        sal_uInt16 nOrient = pDim->GetOrientation();
+                        sheet::DataPilotFieldOrientation nOrient = pDim->GetOrientation();
                         if ( nOrient == sheet::DataPilotFieldOrientation_COLUMN )
                         {
                             eDragInsertMode = INS_CELLSRIGHT;

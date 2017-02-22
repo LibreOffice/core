@@ -1109,9 +1109,9 @@ bool SwFormatCol::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     m_eAdj = COLADJ_NONE;
                 else switch(pSwColums->GetSepLineVertAlign())
                 {
-                    case 0: m_eAdj = COLADJ_TOP;  break;  //VerticalAlignment_TOP
-                    case 1: m_eAdj = COLADJ_CENTER;break; //VerticalAlignment_MIDDLE
-                    case 2: m_eAdj = COLADJ_BOTTOM;break; //VerticalAlignment_BOTTOM
+                    case style::VerticalAlignment_TOP: m_eAdj = COLADJ_TOP;  break;
+                    case style::VerticalAlignment_MIDDLE: m_eAdj = COLADJ_CENTER; break;
+                    case style::VerticalAlignment_BOTTOM: m_eAdj = COLADJ_BOTTOM; break;
                     default: OSL_ENSURE( false, "unknown alignment" ); break;
                 }
             }
@@ -1210,7 +1210,7 @@ bool SwFormatSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     {
         case MID_SURROUND_SURROUNDTYPE:
         {
-            sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
+            css::text::WrapTextMode eVal = (css::text::WrapTextMode) SWUnoHelper::GetEnumAsInt32( rVal );
             if( eVal >= css::text::WrapTextMode_NONE && eVal <= css::text::WrapTextMode_RIGHT )
                 SetValue( (css::text::WrapTextMode)eVal );
             else {
@@ -1240,7 +1240,7 @@ void SwFormatSurround::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatSurround"));
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(GetValue()).getStr()));
+    xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number((sal_Int32)GetValue()).getStr()));
 
     OUString aPresentation;
     GetPresentation(SfxItemPresentation::Nameless, MapUnit::Map100thMM, MapUnit::Map100thMM, aPresentation);
@@ -1620,7 +1620,7 @@ bool SwFormatAnchor::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_ANCHOR_ANCHORTYPE:
         {
             RndStdIds   eAnchor;
-            switch( SWUnoHelper::GetEnumAsInt32( rVal ) )
+            switch( (text::TextContentAnchorType) SWUnoHelper::GetEnumAsInt32( rVal ) )
             {
                 case  text::TextContentAnchorType_AS_CHARACTER:
                     eAnchor = RndStdIds::FLY_AS_CHAR;

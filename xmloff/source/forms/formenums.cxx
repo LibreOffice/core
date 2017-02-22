@@ -150,7 +150,7 @@ const SvXMLEnumMapEntry<sal_Int16> aListLinkageMap[] =
     { XML_SELECTION_INDEXES,    1 },
     { XML_TOKEN_INVALID, 0 }
 };
-const SvXMLEnumMapEntry<sal_uInt16> aOrientationMap[] =
+const SvXMLEnumMapEntry<sal_Int32> aOrientationMap[] =
 {
     { XML_HORIZONTAL,   ScrollBarOrientation::HORIZONTAL },
     { XML_VERTICAL,     ScrollBarOrientation::VERTICAL },

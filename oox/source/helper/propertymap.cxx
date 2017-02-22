@@ -413,7 +413,7 @@ static void lclDumpAnyValue( const Any& value)
             case TextVerticalAdjust_BLOCK:
                 s = "block";
                 break;
-            case TextVerticalAdjust_MAKE_FIXED_SIZE:
+            case TextVerticalAdjust::TextVerticalAdjust_MAKE_FIXED_SIZE:
                 s = "make_fixed_size";
                 break;
         }
@@ -433,7 +433,7 @@ static void lclDumpAnyValue( const Any& value)
             case TextHorizontalAdjust_BLOCK:
                 s = "block";
                 break;
-            case TextHorizontalAdjust_MAKE_FIXED_SIZE:
+            case TextHorizontalAdjust::TextHorizontalAdjust_MAKE_FIXED_SIZE:
                 s = "make_fixed_size";
                 break;
         }
@@ -839,7 +839,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
             case TextVerticalAdjust_BLOCK:
                 s = "block";
                 break;
-            case TextVerticalAdjust_MAKE_FIXED_SIZE:
+            case TextVerticalAdjust::TextVerticalAdjust_MAKE_FIXED_SIZE:
                 s = "make_fixed_size";
                 break;
         }
@@ -860,7 +860,7 @@ static const char* lclDumpAnyValueCode( const Any& value, int level)
             case TextHorizontalAdjust_BLOCK:
                 s = "block";
                 break;
-            case TextHorizontalAdjust_MAKE_FIXED_SIZE:
+            case TextHorizontalAdjust::TextHorizontalAdjust_MAKE_FIXED_SIZE:
                 s = "make_fixed_size";
                 break;
         }

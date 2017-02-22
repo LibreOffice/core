@@ -3702,7 +3702,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
     // special case for ruby auto styles:
     if ( IStyleAccess::AUTO_STYLE_RUBY == eFam )
     {
-        std::set< std::pair< sal_uInt16, sal_uInt16 > > aRubyMap;
+        std::set< std::pair< sal_uInt16, text::RubyAdjust > > aRubyMap;
         SwAttrPool& rAttrPool = pDoc->GetAttrPool();
         sal_uInt32 nCount = rAttrPool.GetItemCount2( RES_TXTATR_CJK_RUBY );
 
@@ -3711,7 +3711,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
             const SwFormatRuby* pItem = static_cast<const SwFormatRuby*>(rAttrPool.GetItem2( RES_TXTATR_CJK_RUBY, nI ));
             if ( pItem && pItem->GetTextRuby() )
             {
-                std::pair< sal_uInt16, sal_uInt16 > aPair( pItem->GetPosition(), pItem->GetAdjustment() );
+                std::pair< sal_uInt16, text::RubyAdjust > aPair( pItem->GetPosition(), pItem->GetAdjustment() );
                 if ( aRubyMap.find( aPair ) == aRubyMap.end() )
                 {
                     aRubyMap.insert( aPair );

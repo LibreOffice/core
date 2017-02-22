@@ -2915,7 +2915,7 @@ void Frame::implts_sendFrameActionEvent( const css::frame::FrameAction& aAction 
                    (aAction == css::frame::FrameAction_CONTEXT_CHANGED ? OUString("CONTEXT CHANGED") :
                     (aAction == css::frame::FrameAction_FRAME_UI_ACTIVATED ? OUString("FRAME UI ACTIVATED") :
                      (aAction == css::frame::FrameAction_FRAME_UI_DEACTIVATING ? OUString("FRAME UI DEACTIVATING") :
-                      (aAction == css::frame::FrameAction_MAKE_FIXED_SIZE ? OUString("MAKE_FIXED_SIZE") :
+                      (aAction == css::frame::FrameAction::FrameAction_MAKE_FIXED_SIZE ? OUString("MAKE_FIXED_SIZE") :
                        OUString("*invalid*")))))))))));
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */

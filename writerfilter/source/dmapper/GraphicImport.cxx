@@ -199,7 +199,7 @@ public:
     bool      bPageToggle;
     sal_Int16 nVertOrient;
     sal_Int16 nVertRelation;
-    sal_Int32 nWrap;
+    text::WrapTextMode nWrap;
     bool      bLayoutInCell;
     bool      bOpaque;
     bool      bContour;
@@ -269,7 +269,7 @@ public:
         ,bPageToggle( false )
         ,nVertOrient(  text::VertOrientation::NONE )
         ,nVertRelation( text::RelOrientation::FRAME )
-        ,nWrap(0)
+        ,nWrap(text::WrapTextMode_NONE)
         ,bLayoutInCell(false)
         ,bOpaque( true )
         ,bContour(false)

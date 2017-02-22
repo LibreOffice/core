@@ -395,7 +395,7 @@ IMPL_LINK_NOARG(DigitalSignaturesDialog, AddButtonHdl, Button*, void)
                 return;
             mbSignaturesChanged = true;
 
-            sal_Int32 nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
+            xml::crypto::SecurityOperationStatus nStatus = xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED;
 
             if (maSignatureManager.mxStore.is())
                 // In the PDF case the signature information is only available after parsing.
