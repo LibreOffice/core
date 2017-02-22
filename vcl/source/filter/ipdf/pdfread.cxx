@@ -62,8 +62,8 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
         return false;
 
     // Returned unit is points, convert that to pixel.
-    int nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage));
-    int nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage));
+    size_t nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage));
+    size_t nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage));
     FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
     if (!pPdfBitmap)
         return false;
@@ -76,7 +76,7 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
     Bitmap aBitmap(Size(nPageWidth, nPageHeight), 32);
     {
         Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
-        const char* pPdfBuffer = static_cast<const char*>(FPDFBitmap_GetBuffer(pPdfBitmap));
+        auto pPdfBuffer = static_cast<const char*>(FPDFBitmap_GetBuffer(pPdfBitmap));
 #ifndef MACOSX
         std::memcpy(pWriteAccess->GetBuffer(), pPdfBuffer, nPageWidth * nPageHeight * 4);
 #else
