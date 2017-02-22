@@ -49,7 +49,6 @@
 
 #include "swundo.hxx"
 #include "ribbar.hrc"
-#include "inputwin.hrc"
 #include "dbui.hrc"
 
 #include <IDocumentContentOperations.hxx>
@@ -63,7 +62,6 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     : ToolBox(pParent, WB_3DLOOK|WB_BORDER)
     , aPos(VclPtr<Edit>::Create(this, WB_3DLOOK|WB_CENTER|WB_BORDER|WB_READONLY))
     , aEdit(VclPtr<InputEdit>::Create(this, WB_3DLOOK|WB_TABSTOP|WB_BORDER|WB_NOHIDESELECTION))
-    , aPopMenu(SW_RES(MN_CALC_POPUP))
     , pMgr(nullptr)
     , pWrtShell(nullptr)
     , pView(nullptr)
@@ -129,8 +127,6 @@ SwInputWindow::SwInputWindow(vcl::Window* pParent, SfxDispatcher* pDispatcher)
     aEditPos.Y()   = (aSize.Height() - nMaxHeight)/2 + 1;
     aPos->SetPosSizePixel( aPosPos, aPosSize );
     aEdit->SetPosSizePixel( aEditPos, aEditSize );
-
-    aPopMenu->SetSelectHdl(LINK( this, SwInputWindow, MenuHdl ));
 }
 
 SwInputWindow::~SwInputWindow()
@@ -293,40 +289,11 @@ void SwInputWindow::ShowWin()
 
 IMPL_LINK( SwInputWindow, MenuHdl, Menu *, pMenu, bool )
 {
-static const char * const aStrArr[] = {
-    sCalc_Phd,
-    sCalc_Sqrt,
-    sCalc_Or,
-    sCalc_Xor,
-    sCalc_And,
-    sCalc_Not,
-    sCalc_Eq,
-    sCalc_Neq,
-    sCalc_Leq,
-    sCalc_Geq,
-    sCalc_L,
-    sCalc_G,
-    sCalc_Sum,
-    sCalc_Mean,
-    sCalc_Min,
-    sCalc_Max,
-    sCalc_Sin,
-    sCalc_Cos,
-    sCalc_Tan,
-    sCalc_Asin,
-    sCalc_Acos,
-    sCalc_Atan,
-    sCalc_Pow,
-    "|",
-    sCalc_Round
-};
-
-    sal_uInt16 nId = pMenu->GetCurItemId();
-    if ( nId <= MN_CALC_ROUND )
+    OString aCommand = pMenu->GetCurItemIdent();
+    if (!aCommand.isEmpty())
     {
-        OUString aTmp( OUString::createFromAscii(aStrArr[nId - 1]) );
-        aTmp += " ";
-        aEdit->ReplaceSelected( aTmp );
+        aCommand += " ";
+        aEdit->ReplaceSelected(OStringToOUString(aCommand, RTL_TEXTENCODING_ASCII_US));
     }
     return false;
 }
@@ -335,15 +302,12 @@ IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl, ToolBox *, void)
 {
     sal_uInt16 nCurID = GetCurItemId();
     EndSelection(); // reset back CurItemId !
-    switch ( nCurID )
+    if (nCurID == FN_FORMULA_CALC)
     {
-        case FN_FORMULA_CALC :
-        {
-            aPopMenu->Execute( this, GetItemRect( FN_FORMULA_CALC ), PopupMenuFlags::NoMouseUpClose );
-            break;
-        default:
-            break;
-        }
+        VclBuilder aBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/swriter/ui/inputwinmenu.ui", "");
+        VclPtr<PopupMenu> aPopMenu(aBuilder.get_menu("menu"));
+        aPopMenu->SetSelectHdl(LINK(this, SwInputWindow, MenuHdl));
+        aPopMenu->Execute(this, GetItemRect(FN_FORMULA_CALC), PopupMenuFlags::NoMouseUpClose);
     }
 }
 

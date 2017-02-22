@@ -49,7 +49,6 @@ friend class InputEdit;
 
     VclPtr<Edit>        aPos;
     VclPtr<InputEdit>   aEdit;
-    ScopedVclPtrInstance<PopupMenu> aPopMenu;
     SwFieldMgr*     pMgr;
     SwWrtShell*     pWrtShell;
     SwView*         pView;

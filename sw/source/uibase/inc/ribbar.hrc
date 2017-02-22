@@ -27,9 +27,6 @@
 #define RID_CNTRLR_WIN              (RC_RIBBAR_BEGIN + 10)
 #define RID_ALIGNMENT_WIN           (RC_RIBBAR_BEGIN + 11)
 
-//Resourcen fuer Inputwin (Rechenleiste)
-#define MN_CALC_POPUP               (RC_RIBBAR_BEGIN + 12)
-
 #define ST_TBL                      (RC_RIBBAR_BEGIN + 14)
 #define ST_FRM                      (RC_RIBBAR_BEGIN + 15)
 #define ST_PGE                      (RC_RIBBAR_BEGIN + 16)
