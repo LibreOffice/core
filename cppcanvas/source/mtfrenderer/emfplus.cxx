@@ -693,7 +693,12 @@ namespace cppcanvas
             case EmfPlusObjectTypeImage:
                 {
                     EMFPImage *image;
-                    aObjects [index] = image = new EMFPImage ();
+                    aObjects [index] = image = new EMFPImage;
+                    image->type = 0;
+                    image->width = 0;
+                    image->height = 0;
+                    image->stride = 0;
+                    image->pixelFormat = 0;
                     image->Read (rObjectStream, dataSize, bUseWholeStream);
 
                     break;
@@ -701,7 +706,10 @@ namespace cppcanvas
             case EmfPlusObjectTypeFont:
                 {
                     EMFPFont *font;
-                    aObjects [index] = font = new EMFPFont ();
+                    aObjects [index] = font = new EMFPFont;
+                    font->emSize = 0;
+                    font->sizeUnit = 0;
+                    font->fontFlags = 0;
                     font->Read (rObjectStream);
 
                     break;
