@@ -42,6 +42,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,staroffice,\
 	UnpackedTarball/libstaroffice/src/lib/STOFFDocument \
 	UnpackedTarball/libstaroffice/src/lib/STOFFEntry \
 	UnpackedTarball/libstaroffice/src/lib/STOFFFont \
+	UnpackedTarball/libstaroffice/src/lib/STOFFFrameStyle \
 	UnpackedTarball/libstaroffice/src/lib/STOFFGraphicDecoder \
 	UnpackedTarball/libstaroffice/src/lib/STOFFGraphicEncoder \
 	UnpackedTarball/libstaroffice/src/lib/STOFFGraphicListener \
@@ -80,6 +81,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,staroffice,\
 	UnpackedTarball/libstaroffice/src/lib/StarEncryption \
 	UnpackedTarball/libstaroffice/src/lib/StarFileManager \
 	UnpackedTarball/libstaroffice/src/lib/StarFormatManager \
+	UnpackedTarball/libstaroffice/src/lib/StarFrameAttribute \
 	UnpackedTarball/libstaroffice/src/lib/StarGraphicAttribute \
 	UnpackedTarball/libstaroffice/src/lib/StarGraphicStruct \
 	UnpackedTarball/libstaroffice/src/lib/StarItem \

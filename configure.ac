@@ -7750,7 +7750,7 @@ libo_CHECK_SYSTEM_MODULE([libpagemaker],[PAGEMAKER],[libpagemaker-0.0])
 libo_CHECK_SYSTEM_MODULE([libzmf],[ZMF],[libzmf-0.0])
 
 libo_CHECK_SYSTEM_MODULE([libstaroffice],[STAROFFICE],[libstaroffice-0.0])
-libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.2])
+libo_PKG_VERSION([STAROFFICE], [libstaroffice-0.0], [0.0.3])
 
 dnl ===================================================================
 dnl Check for system libcmis
