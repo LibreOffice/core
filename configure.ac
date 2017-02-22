@@ -168,7 +168,13 @@ dnl ===================================================================
 dnl Our version is defined by the AC_INIT() at the top of this script.
 dnl ===================================================================
 
-set `echo AC_PACKAGE_VERSION | sed "s/\./ /g"`
+AC_MSG_CHECKING([for package version])
+if test -n "$with_package_version" -a "$with_package_version" != no; then
+    PACKAGE_VERSION="$with_package_version"
+fi
+AC_MSG_RESULT([$PACKAGE_VERSION])
+
+set `echo "$PACKAGE_VERSION" | sed "s/\./ /g"`
 
 LIBO_VERSION_MAJOR=$1
 LIBO_VERSION_MINOR=$2
@@ -1446,6 +1452,11 @@ AC_ARG_WITH(product-name,
     AS_HELP_STRING([--with-product-name='My Own Office Suite'],
         [Define the product name. Default is AC_PACKAGE_NAME.]),
 ,with_product_name=$PRODUCTNAME)
+
+AC_ARG_WITH(package-version,
+    AS_HELP_STRING([--with-package-version='3.1.4.5'],
+        [Define the package version. Default is AC_PACKAGE_VERSION. Use only if you distribute an own build for macOS.]),
+,)
 
 AC_ARG_ENABLE(ios-simulator,
     AS_HELP_STRING([--enable-ios-simulator],
