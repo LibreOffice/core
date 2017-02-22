@@ -382,7 +382,7 @@ namespace toolkitform
                 OUString sVertAlignPropertyName( "VerticalAlign" );
                 if ( xPSI->hasPropertyByName( sVertAlignPropertyName ) )
                 {
-                    sal_Int16 nAlign = VerticalAlignment_MIDDLE;
+                    VerticalAlignment nAlign = VerticalAlignment_MIDDLE;
                     xModelProps->getPropertyValue( sVertAlignPropertyName ) >>= nAlign;
                     switch ( nAlign )
                     {

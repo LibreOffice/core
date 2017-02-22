@@ -192,7 +192,7 @@ css::awt::FontSlant vcl::unohelper::ConvertFontSlant(FontItalic eItalic)
             eRet = css::awt::FontSlant_DONTKNOW;
             break;
         case FontItalic_FORCE_EQUAL_SIZE:
-            eRet = css::awt::FontSlant_MAKE_FIXED_SIZE;
+            eRet = css::awt::FontSlant::FontSlant_MAKE_FIXED_SIZE;
             break;
     }
     return eRet;
@@ -223,7 +223,7 @@ FontItalic vcl::unohelper::ConvertFontSlant(css::awt::FontSlant eSlant)
             //there is no vcl reverse normal
             eRet = ITALIC_NORMAL;
             break;
-        case css::awt::FontSlant_MAKE_FIXED_SIZE:
+        case css::awt::FontSlant::FontSlant_MAKE_FIXED_SIZE:
             eRet = FontItalic_FORCE_EQUAL_SIZE;
             break;
     }

@@ -1586,7 +1586,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     {
                         rOStm.WriteInt16( GDI_LINECAP_ACTION );
                         rOStm.WriteInt32( 6 );
-                        rOStm.WriteInt16( rInfo.GetLineCap() );
+                        rOStm.WriteInt16( (sal_Int16)rInfo.GetLineCap() );
                     }
                 }
 
@@ -1742,7 +1742,7 @@ sal_uLong SVMConverter::ImplWriteActions( SvStream& rOStm, GDIMetaFile& rMtf,
                     {
                         rOStm.WriteInt16( GDI_LINECAP_ACTION );
                         rOStm.WriteInt32( 6 );
-                        rOStm.WriteInt16( rInfo.GetLineCap() );
+                        rOStm.WriteInt16( (sal_Int16)rInfo.GetLineCap() );
                     }
                 }
 

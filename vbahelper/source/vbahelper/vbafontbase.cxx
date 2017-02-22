@@ -228,10 +228,10 @@ VbaFontBase::setItalic( const uno::Any& aValue )
 {
     bool bValue = false;
     aValue >>= bValue;
-    short nValue = awt::FontSlant_NONE;
+    awt::FontSlant nValue = awt::FontSlant_NONE;
     if( bValue )
         nValue = awt::FontSlant_ITALIC;
-    mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharPosture", "FontSlant" ), uno::Any( nValue ) );
+    mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharPosture", "FontSlant" ), uno::Any( (short)nValue ) );
 }
 
 uno::Any SAL_CALL
