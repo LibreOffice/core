@@ -520,15 +520,14 @@ bool ZipPackageStream::saveChild(
 
     uno::Sequence < beans::PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
 
-    // if pTempEntry is necessary, it will be released and passed to the ZipOutputStream
-    // and be deleted in the ZipOutputStream destructor
-    std::unique_ptr < ZipEntry > pAutoTempEntry ( new ZipEntry );
-    ZipEntry* pTempEntry = pAutoTempEntry.get();
-
     // In case the entry we are reading is also the entry we are writing, we will
     // store the ZipEntry data in pTempEntry
 
-    ZipPackageFolder::copyZipEntry ( *pTempEntry, aEntry );
+    // if pTempEntry is necessary, it will be released and passed to the ZipOutputStream
+    // and be deleted in the ZipOutputStream destructor
+    std::unique_ptr < ZipEntry > pAutoTempEntry ( new ZipEntry(aEntry) );
+    ZipEntry* pTempEntry = pAutoTempEntry.get();
+
     pTempEntry->sPath = rPath;
     pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( pTempEntry->sPath, RTL_TEXTENCODING_UTF8 ).getLength() );
 
@@ -904,7 +903,7 @@ void ZipPackageStream::successfullyWritten( ZipEntry *pEntry )
     }
 
     // Then copy it back afterwards...
-    ZipPackageFolder::copyZipEntry( aEntry, *pEntry );
+    aEntry = *pEntry;
 
     // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
     if ( m_bIsEncrypted )

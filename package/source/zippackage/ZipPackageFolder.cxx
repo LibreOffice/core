@@ -159,21 +159,6 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
     }
 }
 
-void ZipPackageFolder::copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource)
-{
-      rDest.nVersion            = rSource.nVersion;
-    rDest.nFlag             = rSource.nFlag;
-    rDest.nMethod           = rSource.nMethod;
-    rDest.nTime             = rSource.nTime;
-    rDest.nCrc              = rSource.nCrc;
-    rDest.nCompressedSize   = rSource.nCompressedSize;
-    rDest.nSize             = rSource.nSize;
-    rDest.nOffset           = rSource.nOffset;
-    rDest.sPath             = rSource.sPath;
-    rDest.nPathLen          = rSource.nPathLen;
-    rDest.nExtraLen         = rSource.nExtraLen;
-}
-
 css::uno::Sequence < sal_Int8 > ZipPackageFolder::static_getImplementationId()
 {
     return lcl_CachedImplId::get().getImplementationId();
@@ -320,8 +305,7 @@ void ZipPackageFolder::saveContents(
     if ( maContents.empty() && !rPath.isEmpty() && m_nFormat != embed::StorageFormats::OFOPXML )
     {
         // it is an empty subfolder, use workaround to store it
-        ZipEntry* pTempEntry = new ZipEntry();
-        ZipPackageFolder::copyZipEntry ( *pTempEntry, aEntry );
+        ZipEntry* pTempEntry = new ZipEntry(aEntry);
         pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
         pTempEntry->nExtraLen = -1;
         pTempEntry->sPath = rPath;

@@ -64,7 +64,6 @@ public:
 
     ZipContentInfo& doGetByName( const OUString& aName );
 
-    static void copyZipEntry( ZipEntry &rDest, const ZipEntry &rSource);
     static css::uno::Sequence < sal_Int8 > static_getImplementationId();
 
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
