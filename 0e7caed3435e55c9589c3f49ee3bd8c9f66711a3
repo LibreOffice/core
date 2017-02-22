@@ -34,6 +34,23 @@
       "revId": "0e7caed3435e55c9589c3f49ee3bd8c9f66711a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_1df84ee5",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 3592,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-22T14:18:24Z",
+      "side": 1,
+      "message": "2105-\u003e2015",
+      "revId": "0e7caed3435e55c9589c3f49ee3bd8c9f66711a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
