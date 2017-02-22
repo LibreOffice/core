@@ -81,24 +81,25 @@ InputSequenceCheckerImpl::correctInputSequence(OUString& Text, sal_Int32 nStartP
 static ScriptTypeList typeList[] = {
     //{ UnicodeScript_kHebrew,              UnicodeScript_kHebrew },        // 10,
     //{ UnicodeScript_kArabic,              UnicodeScript_kArabic },        // 11,
-    { UnicodeScript_kDevanagari,UnicodeScript_kDevanagari,          UnicodeScript_kDevanagari },    // 14,
-    { UnicodeScript_kThai,  UnicodeScript_kThai,                  UnicodeScript_kThai },          // 24,
+    { UnicodeScript_kDevanagari,  UnicodeScript_kDevanagari,    (sal_Int16)UnicodeScript_kDevanagari },    // 14,
+    { UnicodeScript_kThai,        UnicodeScript_kThai,          (sal_Int16)UnicodeScript_kThai },          // 24,
 
-    { UnicodeScript_kScriptCount,   UnicodeScript_kScriptCount,           UnicodeScript_kScriptCount }    // 88
+    { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount,   (sal_Int16)UnicodeScript_kScriptCount }    // 88
 };
 
 sal_Char* SAL_CALL
 InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode nChar)
 {
-    sal_Int16 type = unicode::getUnicodeScriptType( cChar, typeList, UnicodeScript_kScriptCount );
+    css::i18n::UnicodeScript type = (css::i18n::UnicodeScript)unicode::getUnicodeScriptType( cChar, typeList, (sal_Int16)UnicodeScript_kScriptCount );
 
     if (type != UnicodeScript_kScriptCount &&
-            type == unicode::getUnicodeScriptType( nChar, typeList, UnicodeScript_kScriptCount )) {
+            type == (css::i18n::UnicodeScript)unicode::getUnicodeScriptType( nChar, typeList, (sal_Int16)UnicodeScript_kScriptCount )) {
         switch(type) {
             case UnicodeScript_kThai:           return const_cast<sal_Char*>("th");
                                                 //case UnicodeScript_kArabic:       return (sal_Char*)"ar";
                                                 //case UnicodeScript_kHebrew:       return (sal_Char*)"he";
             case UnicodeScript_kDevanagari:   return const_cast<sal_Char*>("hi");
+            default: break;
         }
     }
     return nullptr;

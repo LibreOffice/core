@@ -1725,11 +1725,11 @@ bool SVGFilter::implExportShape( const Reference< XShape >& rxShape, bool bMaste
 
                             mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "visibility", "hidden" );
 
-                            sal_uInt16 nTextAdjust = ParagraphAdjust_LEFT;
+                            sal_uInt16 nTextAdjust = (sal_uInt16)ParagraphAdjust_LEFT;
                             OUString sTextAdjust;
                             xShapePropSet->getPropertyValue( "ParaAdjust" ) >>= nTextAdjust;
 
-                            switch( nTextAdjust )
+                            switch( (ParagraphAdjust)nTextAdjust )
                             {
                                 case ParagraphAdjust_LEFT:
                                         sTextAdjust = "left";
