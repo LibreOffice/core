@@ -10159,6 +10159,8 @@ if test "$_os" = "Linux" -o "$_os" = "Darwin"; then
         LIBASSUAN_CFLAGS="-I${WORKDIR}/UnpackedTarball/libassuan/src"
         LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
     fi
+else
+    BUILD_TYPE="$BUILD_TYPE LIBGPGERROR"
 fi
 AC_SUBST(SYSTEM_GPGMEPP)
 AC_SUBST(GPG_ERROR_CFLAGS)
