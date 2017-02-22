@@ -295,7 +295,7 @@ void SlideBackground::SetPanelTitle( const OUString& rTitle )
         return;
 
     Reference<ui::XPanel> xPanel ( xPanels->getByName("SlideBackgroundPanel"), uno::UNO_QUERY);
-    if ( !xPanels.is() )
+    if ( !xPanel.is() )
         return;
 
     xPanel->setTitle( rTitle );
