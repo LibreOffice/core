@@ -1,13 +1,13 @@
 // aChartWallPosition.X
-3501
+465
 // aChartWallPosition.Y
-1421
+180
 // aChartWallSize.Height
-5892
+8062
 // aChartWallSize.Width
-9920
+17172
 // aChartWallTransformation
-9921;0;3501;0;5893;1421;0;0;1
+17173;0;465;0;8063;180;0;0;1
 // static_cast<sal_Int32>(aChartWallFillStyle)
 2
 // static_cast<sal_Int32>(aChartWallFillColor)

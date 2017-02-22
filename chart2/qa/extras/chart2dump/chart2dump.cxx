@@ -803,7 +803,7 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 {
-    const double fLocalEPS = 400.1;
+    const double fLocalEPS = 0.1;
     const std::vector<OUString> aTestFiles =
     {
         "chartwall_auto_adjust_with_titles.ods",
