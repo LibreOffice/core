@@ -248,13 +248,6 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
             else
                 m_rOuterFace.DrawBitmap( aPoint, aSize, aBitmapEx.GetBitmap(), i_Graphic );
-
-            if (i_Graphic.getPdfData().hasElements())
-            {
-                m_aEmbeddedFiles.push_back(PDFEmbeddedFile());
-                m_aEmbeddedFiles.back().m_nObject = createObject();
-                m_aEmbeddedFiles.back().m_aData = i_Graphic.getPdfData();
-            }
         }
     }
 }
