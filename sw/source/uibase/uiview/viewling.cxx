@@ -702,15 +702,9 @@ bool SwView::ExecSpellPopup(const Point& rPt)
 
                 bRet = true;
                 m_pWrtShell->SttSelect();
-                ScopedVclPtr< SwSpellPopup > pPopup;
-                if (bUseGrammarContext)
-                {
-                    sal_Int32 nPos = aPoint.nContent.GetIndex();
-                    (void) nPos;
-                    pPopup = VclPtr<SwSpellPopup>::Create( m_pWrtShell, aGrammarCheckRes, nErrorInResult, aSuggestions, aParaText ).get();
-                }
-                else
-                    pPopup = VclPtr<SwSpellPopup>::Create( m_pWrtShell, xAlt, aParaText ).get();
+                std::unique_ptr<SwSpellPopup> xPopup(bUseGrammarContext ?
+                    new SwSpellPopup(m_pWrtShell, aGrammarCheckRes, nErrorInResult, aSuggestions, aParaText) :
+                    new SwSpellPopup(m_pWrtShell, xAlt, aParaText));
                 ui::ContextMenuExecuteEvent aEvent;
                 const Point aPixPos = GetEditWin().LogicToPixel( rPt );
 
@@ -721,7 +715,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
 
                 OUString sMenuName  = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
-                if(TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
+                if (TryContextMenuInterception(xPopup->GetMenu(), sMenuName, pMenu, aEvent))
                 {
 
                     //! happy hacking for context menu modifying extensions of this
@@ -732,8 +726,8 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                         OUString aCommand = static_cast<PopupMenu*>(pMenu.get())->GetItemCommand(nId);
                         if (aCommand.isEmpty() )
                         {
-                            if(!ExecuteMenuCommand(dynamic_cast<PopupMenu&>(*pMenu), *GetViewFrame(), nId ))
-                                pPopup->Execute(nId);
+                            if (!ExecuteMenuCommand(dynamic_cast<PopupMenu&>(*pMenu), *GetViewFrame(), nId))
+                                xPopup->Execute(nId);
                         }
                         else
                         {
@@ -771,7 +765,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                     }
                     else
                     {
-                        pPopup->Execute( aToFill.SVRect(), m_pEditWin );
+                        xPopup->Execute(aToFill.SVRect(), m_pEditWin);
                     }
                 }
             }
