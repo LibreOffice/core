@@ -52,6 +52,9 @@ public:
     /// AutoCorrect tests
     void testAutocorrect();
 
+    /// Test Copy/Paste using Legacy Format
+    void testCopyPaste();
+
     /// Test hyperlinks
     void testHyperlinkSearch();
 
@@ -61,6 +64,7 @@ public:
     CPPUNIT_TEST(testConstruction);
     CPPUNIT_TEST(testUnoTextFields);
     CPPUNIT_TEST(testAutocorrect);
+    CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testHyperlinkSearch);
     CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST_SUITE_END();
@@ -361,6 +365,38 @@ void Test::testAutocorrect()
 
         CPPUNIT_ASSERT_EQUAL_MESSAGE("autocorrect", sExpected, aFoo.getResult());
     }
+}
+
+void Test::testCopyPaste()
+{
+    // Create EditEngine's instance
+    EditEngine aEditEngine( mpItemPool );
+
+    // Get EditDoc for current EditEngine's instance
+    EditDoc &rDoc = aEditEngine.GetEditDoc();
+
+    // Initially no text should be there
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(""), rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Set initial text
+    OUString aText = "This is custom initial text";
+    sal_Int32 aTextLen = aText.getLength();
+    aEditEngine.SetText( aText );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( aText, rDoc.GetParaAsString(sal_Int32(0)) );
+
+    // Copy initial text using legacy format
+    uno::Reference< datatransfer::XTransferable > xData = aEditEngine.CreateTransferable( ESelection(0,0,0,aTextLen) );
+
+    // Paste text at the end
+    aEditEngine.InsertText( xData, OUString(), rDoc.GetEndPaM(), true );
+
+    // Assert changes
+    CPPUNIT_ASSERT_EQUAL( sal_uLong(aTextLen + aTextLen), rDoc.GetTextLen() );
+    CPPUNIT_ASSERT_EQUAL( OUString(aText + aText), rDoc.GetParaAsString(sal_Int32(0)) );
 }
 
 namespace {
