@@ -683,6 +683,18 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 
 /// @endcond
 
+/** Make UNO enums look like scoped enums for internal code
+
+    @since LibreOffice 5.4
+*/
+#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_CONSTEXPR
+#define SAL_ENUM_CLASS class
+#define SAL_ENUM_CLASS_ENUMERATOR(ns,enumname,enumerator) ns::enumname::enumname##_##enumerator
+#else
+#define SAL_ENUM_CLASS
+#define SAL_ENUM_CLASS_ENUMERATOR(ns,enumname,enumerator) ns::enumname##_##enumerator
+#endif
+
 #endif // INCLUDED_SAL_TYPES_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -232,7 +232,7 @@ void TextSearch::Init( const SearchParam & rParam,
     if( !rParam.IsCaseSensitive() )
     {
         aSOpt.searchFlag |= SearchFlags::ALL_IGNORE_CASE;
-        aSOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
+        aSOpt.transliterateFlags |= (sal_Int32)css::i18n::TransliterationModules_IGNORE_CASE;
     }
 
     xTextSearch = getXTextSearch( aSOpt );

@@ -33,7 +33,7 @@ using namespace ::utl;
 
 TransliterationWrapper::TransliterationWrapper(
                     const Reference< XComponentContext > & rxContext,
-                    sal_uInt32 nTyp )
+                    css::i18n::TransliterationModules nTyp )
     : xTrans( Transliteration::create(rxContext) ),
       aLanguageTag( LANGUAGE_SYSTEM ), nType( nTyp ), bFirstCall( true )
 {

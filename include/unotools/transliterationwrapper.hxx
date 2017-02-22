@@ -38,7 +38,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 {
     css::uno::Reference< css::i18n::XExtendedTransliteration > xTrans;
     LanguageTag aLanguageTag;
-    sal_uInt32 nType;
+    css::i18n::TransliterationModules nType;
     mutable bool bFirstCall;
 
     TransliterationWrapper( const TransliterationWrapper& ) = delete;
@@ -49,11 +49,11 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 
 public:
     TransliterationWrapper( const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-                    sal_uInt32 nType );
+                    css::i18n::TransliterationModules nType );
 
     ~TransliterationWrapper();
 
-    sal_uInt32 getType() const { return nType; }
+    css::i18n::TransliterationModules getType() const { return nType; }
 
     bool needLanguageForTheMode() const;
 

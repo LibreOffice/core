@@ -55,14 +55,14 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
 
 const sal_Int32 COMPLEX_TRANS_MASK =
-    TransliterationModules_ignoreBaFa_ja_JP |
-    TransliterationModules_ignoreIterationMark_ja_JP |
-    TransliterationModules_ignoreTiJi_ja_JP |
-    TransliterationModules_ignoreHyuByu_ja_JP |
-    TransliterationModules_ignoreSeZe_ja_JP |
-    TransliterationModules_ignoreIandEfollowedByYa_ja_JP |
-    TransliterationModules_ignoreKiKuFollowedBySa_ja_JP |
-    TransliterationModules_ignoreProlongedSoundMark_ja_JP;
+    (salInt32)TransliterationModules_ignoreBaFa_ja_JP |
+    (salInt32)TransliterationModules_ignoreIterationMark_ja_JP |
+    (salInt32)TransliterationModules_ignoreTiJi_ja_JP |
+    (salInt32)TransliterationModules_ignoreHyuByu_ja_JP |
+    (salInt32)TransliterationModules_ignoreSeZe_ja_JP |
+    (salInt32)TransliterationModules_ignoreIandEfollowedByYa_ja_JP |
+    (salInt32)TransliterationModules_ignoreKiKuFollowedBySa_ja_JP |
+    (salInt32)TransliterationModules_ignoreProlongedSoundMark_ja_JP;
 
 namespace
 {

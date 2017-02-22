@@ -513,9 +513,15 @@ void CppuType::dumpInitializer(
                 out << "0";
                 break;
             case codemaker::UnoType::Sort::Enum:
-                out << codemaker::cpp::scopedCppName(u2b(n)) << "_"
+            {
+                OString ns,enumname;
+                codemaker::cpp::scopeAndNameCpp(u2b(n), ns, enumname);
+                out << "SAL_ENUM_CLASS_ENUMERATOR("
+                    << ns << "," << enumname << ","
                     << (dynamic_cast< unoidl::EnumTypeEntity * >(ent.get())->
-                        getMembers()[0].name);
+                        getMembers()[0].name)
+                    << ")";
+            }
                 break;
             case codemaker::UnoType::Sort::String:
             case codemaker::UnoType::Sort::Type:
@@ -640,85 +646,85 @@ OUString CppuType::getTypeClass(OUString const & name, bool cStyle) {
     case codemaker::UnoType::Sort::Void:
         return cStyle
             ? OUString("typelib_TypeClass_VOID")
-            : OUString("::css::uno::TypeClass_VOID");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,VOID)");
     case codemaker::UnoType::Sort::Boolean:
         return cStyle
             ? OUString("typelib_TypeClass_BOOLEAN")
-            : OUString("::css::uno::TypeClass_BOOLEAN");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,BOOLEAN)");
     case codemaker::UnoType::Sort::Byte:
         return cStyle
             ? OUString("typelib_TypeClass_BYTE")
-            : OUString("::css::uno::TypeClass_BYTE");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,BYTE)");
     case codemaker::UnoType::Sort::Short:
         return cStyle
             ? OUString("typelib_TypeClass_SHORT")
-            : OUString("::css::uno::TypeClass_SHORT");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,SHORT)");
     case codemaker::UnoType::Sort::UnsignedShort:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_SHORT")
-            : OUString("::css::uno::TypeClass_UNSIGNED_SHORT");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(css::uno,TypeClass,UNSIGNED_SHORT)");
     case codemaker::UnoType::Sort::Long:
         return cStyle
             ? OUString("typelib_TypeClass_LONG")
-            : OUString("::css::uno::TypeClass_LONG");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,LONG)");
     case codemaker::UnoType::Sort::UnsignedLong:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_LONG")
-            : OUString("::css::uno::TypeClass_UNSIGNED_LONG");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,UNSIGNED_LONG)");
     case codemaker::UnoType::Sort::Hyper:
         return cStyle
             ? OUString("typelib_TypeClass_HYPER")
-            : OUString("::css::uno::TypeClass_HYPER");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,HYPER)");
     case codemaker::UnoType::Sort::UnsignedHyper:
         return cStyle
             ? OUString("typelib_TypeClass_UNSIGNED_HYPER")
-            : OUString("::css::uno::TypeClass_UNSIGNED_HYPER");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,UNSIGNED_HYPER)");
     case codemaker::UnoType::Sort::Float:
         return cStyle
             ? OUString("typelib_TypeClass_FLOAT")
-            : OUString("::css::uno::TypeClass_FLOAT");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,FLOAT)");
     case codemaker::UnoType::Sort::Double:
         return cStyle
             ? OUString("typelib_TypeClass_DOUBLE")
-            : OUString("::css::uno::TypeClass_DOUBLE");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,DOUBLE)");
     case codemaker::UnoType::Sort::Char:
         return cStyle
             ? OUString("typelib_TypeClass_CHAR")
-            : OUString("::css::uno::TypeClass_CHAR");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,CHAR)");
     case codemaker::UnoType::Sort::String:
         return cStyle
             ? OUString("typelib_TypeClass_STRING")
-            : OUString("::css::uno::TypeClass_STRING");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,STRING)");
     case codemaker::UnoType::Sort::Type:
         return cStyle
             ? OUString("typelib_TypeClass_TYPE")
-            : OUString("::css::uno::TypeClass_TYPE");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,TYPE)");
     case codemaker::UnoType::Sort::Any:
         return cStyle
             ? OUString("typelib_TypeClass_ANY")
-            : OUString("::css::uno::TypeClass_ANY");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,ANY)");
     case codemaker::UnoType::Sort::Sequence:
         return cStyle
             ? OUString("typelib_TypeClass_SEQUENCE")
-            : OUString("::css::uno::TypeClass_SEQUENCE");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,SEQUENCE)");
     case codemaker::UnoType::Sort::Enum:
         return cStyle
             ? OUString("typelib_TypeClass_ENUM")
-            : OUString("::css::uno::TypeClass_ENUM");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,ENUM)");
     case codemaker::UnoType::Sort::PlainStruct:
     case codemaker::UnoType::Sort::PolymorphicStructTemplate:
     case codemaker::UnoType::Sort::InstantiatedPolymorphicStruct:
         return cStyle
             ? OUString("typelib_TypeClass_STRUCT")
-            : OUString("::css::uno::TypeClass_STRUCT");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,STRUCT)");
     case codemaker::UnoType::Sort::Exception:
         return cStyle
             ? OUString("typelib_TypeClass_EXCEPTION")
-            : OUString("::css::uno::TypeClass_EXCEPTION");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,EXCEPTION)");
     case codemaker::UnoType::Sort::Interface:
         return cStyle
             ? OUString("typelib_TypeClass_INTERFACE")
-            : OUString("::css::uno::TypeClass_INTERFACE");
+            : OUString("SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,INTERFACE)");
     case codemaker::UnoType::Sort::Typedef:
         return getTypeClass(
             dynamic_cast<unoidl::TypedefEntity&>(*ent.get()).getType(),
@@ -1380,7 +1386,7 @@ void InterfaceType::dumpCppuAttributeRefs(FileStream & out, sal_uInt32 & index)
             << "],\n";
         inc(38);
         out << indent()
-            << ("(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_ATTRIBUTE,\n")
+            << ("(typelib_TypeClass)SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,INTERFACE_ATTRIBUTE),\n")
             << indent() << "sAttributeName" << n << ".pData );\n";
         dec(38);
         ++n;
@@ -1397,7 +1403,7 @@ void InterfaceType::dumpCppuMethodRefs(FileStream & out, sal_uInt32 & index) {
             << "],\n";
         inc(38);
         out << indent()
-            << ("(typelib_TypeClass)::css::uno::TypeClass_INTERFACE_METHOD,\n")
+            << ("(typelib_TypeClass)SAL_ENUM_CLASS_ENUMERATOR(::css::uno,TypeClass,INTERFACE_METHOD),\n")
             << indent() << "sMethodName" << n << ".pData );\n";
         dec(38);
         ++n;
@@ -3139,7 +3145,7 @@ void EnumType::addComprehensiveGetCppuTypeIncludes(
 
 void EnumType::dumpDeclaration(FileStream& o)
 {
-    o << "\nenum SAL_DLLPUBLIC_RTTI " << id_ << "\n{\n";
+    o << "\nenum SAL_DLLPUBLIC_RTTI SAL_ENUM_CLASS " << id_ << "\n{\n";
     inc();
 
     for (const unoidl::EnumTypeEntity::Member& member : entity_->getMembers())
@@ -3152,6 +3158,22 @@ void EnumType::dumpDeclaration(FileStream& o)
 
     dec();
     o << "};\n\n";
+
+    // use constexpr to create a kind of type-alias so we don't have to modify existing code
+    o << "\n#if defined LIBO_INTERNAL_ONLY && HAVE_CXX11_CONSTEXPR\n";
+    for (const unoidl::EnumTypeEntity::Member& member : entity_->getMembers())
+    {
+        o << "constexpr auto " << id_ << "_" << u2b(member.name)
+          << " = "
+          << id_ << "::" << id_ << "_" << u2b(member.name)
+          << ";\n";
+    }
+    // yes, there is existing code which likes to treat this as an extra valid enumerator
+    o << "constexpr auto " << id_ << "_MAKE_FIXED_SIZE"
+      " = "
+      << id_ << "::" << id_ << "_MAKE_FIXED_SIZE"
+      ";\n";
+    o << "\n#endif\n";
 }
 
 void EnumType::dumpHppFile(
@@ -3235,12 +3257,14 @@ void EnumType::dumpComprehensiveGetCppuType(FileStream& o)
         o << indent() << "enumValues[" << n++ << "] = " << member.value << ";\n";
     }
 
+    OString ns,enumname;
+    codemaker::cpp::scopeAndNameCpp(u2b(name_), ns, enumname, false);
     o << "\n" << indent() << "typelib_typedescription_newEnum( &pTD,\n";
     inc();
     o << indent() << "sTypeName.pData,\n"
       << indent() << "(sal_Int32)"
-      << codemaker::cpp::scopedCppName(u2b(name_), false) << "_"
-      << u2b(entity_->getMembers()[0].name) << ",\n"
+      "SAL_ENUM_CLASS_ENUMERATOR(" << ns << "," << enumname << ","
+      << u2b(entity_->getMembers()[0].name) << "),\n"
       << indent() << entity_->getMembers().size()
       << ", enumValueNames, enumValues );\n\n";
     dec();

@@ -28,8 +28,8 @@
 class LanguageTag;
 
 struct ScriptTypeList {
-    sal_Int16 from;
-    sal_Int16 to;
+    css::i18n::UnicodeScript from;
+    css::i18n::UnicodeScript to;
     sal_Int16 value;
 };
 
