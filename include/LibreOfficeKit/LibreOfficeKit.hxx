@@ -524,6 +524,18 @@ public:
     }
 
     /**
+     * Run a macro.
+     *
+     * Same syntax as on command line is permissible (ie. the macro:// URI forms)
+     *
+     * @param pURL macro url to run
+     */
+    inline void runMacro( const char* pURL)
+    {
+        mpThis->pClass->runMacro( mpThis, pURL );
+    }
+
+    /**
      * Returns details of filter types.
      *
      * Example returned string:
