@@ -63,14 +63,7 @@
 
 #include <bordertest.hxx>
 
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace beans
-{
+namespace com { namespace sun { namespace star { namespace beans {
 
 std::ostream& operator<<(std::ostream& rStrm, PropertyState n)
 {
@@ -78,18 +71,8 @@ std::ostream& operator<<(std::ostream& rStrm, PropertyState n)
     return rStrm;
 }
 
-}
-}
-}
-}
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace style
-{
+} } } }
+namespace com { namespace sun { namespace star { namespace style {
 
 std::ostream& operator<<(std::ostream& rStrm, BreakType n)
 {
@@ -107,18 +90,8 @@ std::ostream& operator<<(std::ostream& rStrm, ParagraphAdjust n)
     return rStrm;
 }
 
-}
-}
-}
-}
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace drawing
-{
+} } } }
+namespace com { namespace sun { namespace star { namespace drawing {
 
 std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
 {
@@ -126,18 +99,8 @@ std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
     return rStrm;
 }
 
-}
-}
-}
-}
-namespace com
-{
-namespace sun
-{
-namespace star
-{
-namespace text
-{
+} } } }
+namespace com { namespace sun { namespace star { namespace text {
 
 std::ostream& operator<<(std::ostream& rStrm, TextContentAnchorType n)
 {
@@ -150,10 +113,7 @@ std::ostream& operator<<(std::ostream& rStrm, WrapTextMode n)
     return rStrm;
 }
 
-}
-}
-}
-}
+} } } }
 
 class Test : public SwModelTestBase
 {
