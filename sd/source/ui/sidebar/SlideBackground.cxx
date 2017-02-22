@@ -118,6 +118,9 @@ SlideBackground::SlideBackground(
     get(mpPaperSizeBox,"paperformat");
     get(mpPaperOrientation, "orientation");
     get(mpMasterSlide, "masterslide");
+    //let the listbox shrink to any size so the sidebar isn't forced to grow to
+    //the size of the longest master slide name in the document
+    mpMasterSlide->set_width_request(0);
     get(mpFillAttr, "fillattr1");
     get(mpFillGrad, "fillattr2");
     get(mpFillStyle, "fillstyle");
