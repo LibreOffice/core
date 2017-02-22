@@ -107,9 +107,10 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
     ModifierInfo* pModInfo = nullptr;
     if(fribtag & FRIB_TAG_MODIFIER)
     {
-        pModInfo  = new ModifierInfo();
+        pModInfo  = new ModifierInfo;
         pModInfo->CodePage = 0;
         pModInfo->FontID = 0;
+        pModInfo->RevisionType = 0;
         pModInfo->RevisionFlag = false;
         pModInfo->HasCharStyle = false;
         pModInfo->HasLangOverride = false;
