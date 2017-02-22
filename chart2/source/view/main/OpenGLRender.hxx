@@ -12,6 +12,7 @@
 
 #include <vcl/bitmapex.hxx>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <vcl/font.hxx>
 #include <vcl/opengl/OpenGLContext.hxx>
@@ -106,7 +107,7 @@ public:
     void renderDebug();
 #endif
 
-    void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, sal_uInt8 nAlpha);
+    void SetBackGroundColor(sal_uInt32 color1, sal_uInt32 color2, css::drawing::FillStyle fillstyle);
 
 private:
 #if 0

@@ -32,6 +32,30 @@
 typedef std::map<OUString, css::uno::Sequence< css::table::BorderLine> > AllBordersMap;
 typedef std::pair<OUString, css::uno::Sequence< css::table::BorderLine> > StringSequencePair;
 
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, BitmapMode n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+std::ostream& operator<<(std::ostream& rStrm, FillStyle n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+namespace com { namespace sun { namespace star { namespace style {
+
+std::ostream& operator<<(std::ostream& rStrm, PageStyleLayout n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 class Test : public SwModelTestBase
 {
     public:

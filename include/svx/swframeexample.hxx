@@ -24,6 +24,8 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <svx/svxdllapi.h>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 
 // class SwFrmPagePreview -------------------------------------------------------
 
@@ -55,8 +57,10 @@ class SVX_DLLPUBLIC SvxSwFrameExample : public vcl::Window
     short       nVAlign;
     short       nVRel;
 
-    short       nWrap;
-    short       nAnchor;
+    css::text::WrapTextMode
+                nWrap;
+    css::text::TextContentAnchorType
+                nAnchor;
     bool        bTrans;
 
     Point       aRelPos;
@@ -74,7 +78,7 @@ public:
 
     SvxSwFrameExample(vcl::Window* pParent, WinBits nStyle);
 
-    void SetWrap(sal_uInt16 nW)          { nWrap     = nW; }
+    void SetWrap(css::text::WrapTextMode nW) { nWrap     = nW; }
 
     void SetHAlign(short nH)          { nHAlign   = nH; }
     void SetHoriRel(short nR)         { nHRel     = nR; }
@@ -83,7 +87,7 @@ public:
     void SetVertRel(short nR)         { nVRel     = nR; }
 
     void SetTransparent(bool bT)      { bTrans    = bT; }
-    void SetAnchor(short nA)          { nAnchor   = nA; }
+    void SetAnchor(css::text::TextContentAnchorType nA) { nAnchor   = nA; }
 
     void SetRelPos(const Point& rP);
 };

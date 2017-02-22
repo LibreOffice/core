@@ -401,7 +401,7 @@ SwFormatRuby::SwFormatRuby( const OUString& rRubyText )
     pTextAttr( nullptr ),
     nCharFormatId( 0 ),
     nPosition( 0 ),
-    nAdjustment( 0 )
+    nAdjustment( css::text::RubyAdjust_LEFT )
 {
 }
 
@@ -490,8 +490,8 @@ bool SwFormatRuby::PutValue( const uno::Any& rVal,
         {
             sal_Int16 nSet = 0;
             rVal >>= nSet;
-            if(nSet >= 0 && nSet <= text::RubyAdjust_INDENT_BLOCK)
-                nAdjustment = nSet;
+            if(nSet >= (sal_Int16)text::RubyAdjust_LEFT && nSet <= (sal_Int16)text::RubyAdjust_INDENT_BLOCK)
+                nAdjustment = (text::RubyAdjust)nSet;
             else
                 bRet = false;
         }

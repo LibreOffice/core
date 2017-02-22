@@ -994,7 +994,7 @@ static OUString lcl_convertCalcSubtotalName(const OUString& rName)
 void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 {
     // orientation
-    DataPilotFieldOrientation eOrient = static_cast< DataPilotFieldOrientation >( rSaveDim.GetOrientation() );
+    DataPilotFieldOrientation eOrient = rSaveDim.GetOrientation();
     OSL_ENSURE( eOrient != DataPilotFieldOrientation_DATA, "XclExpPTField::SetPropertiesFromDim - called for data field" );
     maFieldInfo.AddApiOrient( eOrient );
 
@@ -1322,7 +1322,7 @@ void XclExpPivotTable::SetFieldPropertiesFromDim( const ScDPSaveDimension& rSave
         pField->SetPropertiesFromDim( rSaveDim );
 
         // update the corresponding field position list
-        DataPilotFieldOrientation eOrient = static_cast< DataPilotFieldOrientation >( rSaveDim.GetOrientation() );
+        DataPilotFieldOrientation eOrient = rSaveDim.GetOrientation();
         sal_uInt16 nFieldIdx = pField->GetFieldIndex();
         bool bDataLayout = nFieldIdx == EXC_SXIVD_DATA;
         bool bMultiData = maDataFields.size() > 1;

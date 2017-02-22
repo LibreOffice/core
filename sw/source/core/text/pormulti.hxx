@@ -21,6 +21,7 @@
 
 #include "porlay.hxx"
 #include "porexp.hxx"
+#include <com/sun/star/text/RubyAdjust.hpp>
 
 class SwTextFormatInfo;
 class SwFieldPortion;
@@ -180,7 +181,7 @@ public:
 class SwRubyPortion : public SwMultiPortion
 {
     sal_Int32 nRubyOffset;
-    sal_uInt16 nAdjustment;
+    css::text::RubyAdjust nAdjustment;
     void Adjust_( SwTextFormatInfo &rInf);
 public:
     SwRubyPortion( const SwRubyPortion& rRuby, sal_Int32 nEnd );
@@ -192,8 +193,8 @@ public:
 
     void CalcRubyOffset();
     void Adjust( SwTextFormatInfo &rInf )
-        { if(nAdjustment && GetRoot().GetNext()) Adjust_(rInf); }
-    sal_uInt16 GetAdjustment() const { return nAdjustment; }
+        { if(nAdjustment != css::text::RubyAdjust_LEFT && GetRoot().GetNext()) Adjust_(rInf); }
+    css::text::RubyAdjust GetAdjustment() const { return nAdjustment; }
     sal_Int32 GetRubyOffset() const { return nRubyOffset; }
 };
 

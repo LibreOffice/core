@@ -279,7 +279,7 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
             aInnerValue = chart2::CurveStyle_STEP_CENTER_Y;
             break;
         default:
-            SAL_WARN_IF(chart2::CurveStyle_LINES != 0, "chart2", "Unknown line style");
+            SAL_WARN_IF(nOuterValue != 0, "chart2", "Unknown line style");
             aInnerValue = chart2::CurveStyle_LINES;
     }
 

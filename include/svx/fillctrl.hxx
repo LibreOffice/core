@@ -55,7 +55,7 @@ private:
     VclPtr<ToolBox>            mpToolBoxColor;
     VclPtr<SvxFillAttrBox>     mpLbFillAttr;
 
-    sal_uInt16          meLastXFS;
+    css::drawing::FillStyle    meLastXFS;
     sal_Int32           mnLastPosGradient;
     sal_Int32           mnLastPosHatch;
     sal_Int32           mnLastPosBitmap;

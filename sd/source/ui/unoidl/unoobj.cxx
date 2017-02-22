@@ -1379,7 +1379,7 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                     bOk = true;
                 }
                 break;
-            case presentation::ClickAction_MAKE_FIXED_SIZE:
+            default:
                 break;
             }
         }

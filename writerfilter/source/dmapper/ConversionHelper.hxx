@@ -23,6 +23,8 @@
 #include <rtl/ustring.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/text/RubyAdjust.hpp>
+
 namespace com{ namespace sun{ namespace star{
     namespace lang{
         struct Locale;
@@ -47,7 +49,7 @@ namespace ConversionHelper{
     SAL_DLLPUBLIC_EXPORT sal_Int32 convertTwipToMM100(sal_Int32 _t);
     SAL_DLLPUBLIC_EXPORT sal_uInt32 convertTwipToMM100Unsigned(sal_Int32 _t);
     sal_Int16 convertTableJustification( sal_Int32 nIntValue );
-    sal_Int16 convertRubyAlign( sal_Int32 nIntValue );
+    css::text::RubyAdjust convertRubyAlign( sal_Int32 nIntValue );
     sal_Int16 ConvertNumberingType(sal_Int32 nFmt);
 
     css::util::DateTime ConvertDateStringToDateTime(const OUString& rDateTime);
