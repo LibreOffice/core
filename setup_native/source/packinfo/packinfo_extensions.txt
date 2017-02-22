@@ -80,21 +80,6 @@ packageversion = "%PACKAGEVERSION"
 End
 
 Start
-module = "gid_Module_Optional_Extensions_Google_Docs"
-solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-google-docs"
-solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
-packagename = "%BASISPACKAGEPREFIX%PRODUCTVERSION-extension-google-docs"
-requires = "%BASISPACKAGEPREFIX%PRODUCTVERSION-core %PACKAGEVERSION %PACKAGEVERSION-%PACKAGEREVISION"
-linuxpatchrequires = ""
-copyright = "2009 by Przemyslaw Rumik"
-solariscopyright = "solariscopyrightfile"
-vendor = "The Document Foundation"
-description = "Google Docs extension for %PRODUCTNAME %PRODUCTVERSION"
-destpath = "/opt"
-packageversion = "%PACKAGEVERSION"
-End
-
-Start
 module = "gid_Module_Optional_Extensions_NLPSolver"
 solarispackagename = "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-extension-nlpsolver"
 solarisrequires =  "%BASISPACKAGEPREFIX%WITHOUTDOTPRODUCTVERSION-core (Name="Core module for %PRODUCTNAME %PRODUCTVERSION")"
