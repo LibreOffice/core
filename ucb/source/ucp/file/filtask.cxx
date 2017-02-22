@@ -17,7 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <sal/config.h>
+
+#if HAVE_FEATURE_MACOSX_SANDBOX
+#include <sys/stat.h>
+#endif
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/NotRemoveableException.hpp>
@@ -35,7 +41,6 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/OpenCommandArgument.hpp>
 #include <com/sun/star/ucb/Store.hpp>
-#include <config_features.h>
 #include <rtl/uri.hxx>
 
 #include "filtask.hxx"
