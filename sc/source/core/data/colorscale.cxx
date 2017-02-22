@@ -20,6 +20,7 @@
 #include <o3tl/make_unique.hxx>
 
 #include <algorithm>
+#include <cassert>
 
 ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
     mbDirty(false),
@@ -770,7 +771,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
 
     double nValue = rCell.getValue();
 
-    ScDataBarInfo* pInfo = new ScDataBarInfo();
+    ScDataBarInfo* pInfo = new ScDataBarInfo;
     if(mpFormatData->meAxisPosition == databar::NONE)
     {
         if(nValue <= nMin)
@@ -849,6 +850,8 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
                 pInfo->mnLength = nMaxLength * (std::max(nValue, nMin)/nAbsMax);
         }
     }
+    else
+        assert(false);
 
     // set color
     if(mpFormatData->mbNeg && nValue < 0)
