@@ -544,8 +544,9 @@ EventList* Entity::getEventList()
         }
         if (!mpProducedEvents)
         {
-            mpProducedEvents = new EventList();
+            mpProducedEvents = new EventList;
             mpProducedEvents->maEvents.resize(mnEventListSize);
+            mpProducedEvents->mbIsAttributesEmpty = false;
             mnProducedEventsSize = 0;
         }
     }
