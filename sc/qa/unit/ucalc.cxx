@@ -5365,8 +5365,8 @@ void Test::testNoteLifeCycle()
         // There's no ScTransferObject involved in the "fake" clipboard copy
         // and ScDocument dtor asking IsClipboardSource() gets no, so emulate
         // the part that normally is reponsible for forgetting the caption
-        // objects. Ugly.
-        aClipDoc2.ForgetNoteCaptions( ScRangeList( ScRange( 0,0,0, MAXCOL, MAXROW, aClipDoc2.GetTableCount()-1)), true);
+        // objects.
+        aClipDoc2.ClosingClipboardSource();
 
         pDoc2->DeleteTab(0);
         closeDocShell(xDocSh2);

@@ -359,6 +359,14 @@ void ScDocument::StartTrackTimer()
         aTrackIdle.Start();
 }
 
+void ScDocument::ClosingClipboardSource()
+{
+    if (!bIsClip)
+        return;
+
+    ForgetNoteCaptions( ScRangeList( ScRange( 0,0,0, MAXCOL, MAXROW, GetTableCount()-1)), true);
+}
+
 ScDocument::~ScDocument()
 {
     OSL_PRECOND( !bInLinkUpdate, "bInLinkUpdate in dtor" );
@@ -383,8 +391,7 @@ ScDocument::~ScDocument()
         // attempt to access non-existing data. Preserve the text data though.
         ScDocument* pClipDoc = ScModule::GetClipDoc();
         if (pClipDoc)
-            pClipDoc->ForgetNoteCaptions(
-                    ScRangeList( ScRange( 0,0,0, MAXCOL, MAXROW, pClipDoc->GetTableCount()-1)), true);
+            pClipDoc->ClosingClipboardSource();
     }
 
     mxFormulaParserPool.reset();

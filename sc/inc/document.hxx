@@ -1479,6 +1479,13 @@ public:
     ScClipParam&    GetClipParam();
     void            SetClipParam(const ScClipParam& rParam);
 
+    /** To be called at the clipboard document when closing a document that is
+        the current clipboard source to decouple things from the originating
+        document. Done in ScDocument dtor after determining
+        IsClipboardSource().
+     */
+    void            ClosingClipboardSource();
+
     void            MixDocument( const ScRange& rRange, ScPasteFunc nFunction, bool bSkipEmpty,
                                     ScDocument* pSrcDoc );
 
