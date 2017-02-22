@@ -3224,7 +3224,7 @@ OUString SwXTextDocument::getPostIts()
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree);
 
-    return OUString::createFromAscii(aStream.str().c_str());
+    return OUString::fromUtf8(aStream.str().c_str());
 }
 
 int SwXTextDocument::getPart()
