@@ -518,7 +518,7 @@ bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& rElem
                     {
                         ui::DockingArea eDockingArea;
                         if ( aWindowState[n].Value >>= eDockingArea )
-                            rElementData.m_aDockedData.m_nDockedArea = sal_Int16( eDockingArea );
+                            rElementData.m_aDockedData.m_nDockedArea = eDockingArea;
                     }
                     else if ( aWindowState[n].Name == WINDOWSTATE_PROPERTY_DOCKPOS )
                     {

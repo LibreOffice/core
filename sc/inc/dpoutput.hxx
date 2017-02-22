@@ -24,6 +24,7 @@
 #include <com/sun/star/sheet/DataResult.hpp>
 #include <com/sun/star/sheet/MemberResult.hpp>
 #include <com/sun/star/sheet/DataPilotOutputRangeType.hpp>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
 #include "global.hxx"
 #include "address.hxx"
@@ -114,10 +115,10 @@ public:
         field region. */
     bool            GetDataResultPositionData(::std::vector< css::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
 
-    long            GetHeaderDim( const ScAddress& rPos, sal_uInt16& rOrient );
+    long            GetHeaderDim( const ScAddress& rPos, css::sheet::DataPilotFieldOrientation& rOrient );
     bool GetHeaderDrag(
         const ScAddress& rPos, bool bMouseLeft, bool bMouseTop, long nDragDim,
-        Rectangle& rPosRect, sal_uInt16& rOrient, long& rDimPos );
+        Rectangle& rPosRect, css::sheet::DataPilotFieldOrientation& rOrient, long& rDimPos );
     bool IsFilterButton( const ScAddress& rPos );
 
     void GetMemberResultNames(ScDPUniqueStringSet& rNames, long nDimension);

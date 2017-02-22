@@ -789,7 +789,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setPropertyValue( const OUString& aProp
                     ScImportParam aParam;
                     ScImportDescriptor::FillImportParam( aParam, aArgSeq );
 
-                    sal_uInt16 nNewType = sheet::DataImportMode_NONE;
+                    sheet::DataImportMode nNewType = sheet::DataImportMode_NONE;
                     if ( aParam.bImport )
                     {
                         if ( aParam.bSql )
@@ -2039,7 +2039,7 @@ DataPilotFieldOrientation ScDataPilotFieldObj::getOrientation() const
 {
     SolarMutexGuard aGuard;
     ScDPSaveDimension* pDim = GetDPDimension();
-    return pDim ? static_cast< DataPilotFieldOrientation >( pDim->GetOrientation() ) : DataPilotFieldOrientation_HIDDEN;
+    return pDim ? pDim->GetOrientation() : DataPilotFieldOrientation_HIDDEN;
 }
 
 void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
@@ -2088,7 +2088,7 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
             pDim = pNewDim;
         }
 
-        pDim->SetOrientation(sal::static_int_cast<sal_uInt16>(eNew));
+        pDim->SetOrientation(eNew);
 
         // move changed field behind all other fields (make it the last field in dimension)
         pSaveData->SetPosition( pDim, pSaveData->GetDimensions().size() );

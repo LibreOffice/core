@@ -38,7 +38,6 @@
 #include <com/sun/star/sheet/GeneralFunction2.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
-#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
@@ -348,7 +347,7 @@ void ScDPSaveDimension::SetName( const OUString& rNew )
     aName = rNew;
 }
 
-void ScDPSaveDimension::SetOrientation(sal_uInt16 nNew)
+void ScDPSaveDimension::SetOrientation(css::sheet::DataPilotFieldOrientation nNew)
 {
     nOrientation = nNew;
 }
@@ -722,8 +721,8 @@ void ScDPSaveDimension::Dump(int nIndent) const
     cout << aIndent << "* dimension name: '" << aName << "'" << endl;
 
     cout << aIndent << "    + orientation: ";
-    if (nOrientation <= 4)
-        cout << pOrientNames[nOrientation];
+    if (nOrientation <= DataPilotFieldOrientation_DATA)
+        cout << pOrientNames[(int)nOrientation];
     else
         cout << "(invalid)";
     cout << endl;
@@ -888,7 +887,7 @@ void ScDPSaveData::GetAllDimensionsByOrientation(
     for (auto const& it : m_DimList)
     {
         const ScDPSaveDimension& rDim = *it;
-        if (rDim.GetOrientation() != static_cast<sal_uInt16>(eOrientation))
+        if (rDim.GetOrientation() != eOrientation)
             continue;
 
         aDims.push_back(&rDim);
@@ -993,7 +992,7 @@ ScDPSaveDimension& ScDPSaveData::DuplicateDimension( const ScDPSaveDimension& rD
     return *pNew;
 }
 
-ScDPSaveDimension* ScDPSaveData::GetInnermostDimension(sal_uInt16 nOrientation)
+ScDPSaveDimension* ScDPSaveData::GetInnermostDimension(DataPilotFieldOrientation nOrientation)
 {
     // return the innermost dimension for the given orientation,
     // excluding data layout dimension
@@ -1034,7 +1033,7 @@ void ScDPSaveData::SetPosition( ScDPSaveDimension* pDim, long nNew )
 {
     // position (nNew) is counted within dimensions of the same orientation
 
-    sal_uInt16 nOrient = pDim->GetOrientation();
+    DataPilotFieldOrientation nOrient = pDim->GetOrientation();
 
     for (auto it = m_DimList.begin(); it != m_DimList.end(); ++it)
     {

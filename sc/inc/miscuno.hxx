@@ -134,8 +134,11 @@ public:
                                             const OUString& rName, sal_Int16 nDefault );
     static sal_Int32        GetLongProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
                                             const OUString& rName );
-    static sal_Int32        GetEnumProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
-                                            const OUString& rName, long nDefault );
+    template<typename EnumT>
+    static EnumT            GetEnumProperty( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+                                            const OUString& rName, EnumT nDefault )
+    { return static_cast<EnumT>(GetEnumPropertyImpl(xProp, rName, static_cast<sal_Int32>(nDefault))); }
+
     static OUString  GetStringProperty(
         const css::uno::Reference<css::beans::XPropertySet>& xProp,
         const OUString& rName, const OUString& rDefault );
@@ -167,6 +170,9 @@ public:
 
         return css::uno::Sequence<ValueType>(&rVector[0], static_cast<sal_Int32>(rVector.size()));
     }
+private:
+    static sal_Int32        GetEnumPropertyImpl( const css::uno::Reference< css::beans::XPropertySet>& xProp,
+                                            const OUString& rName, sal_Int32 nDefault );
 };
 
 #endif

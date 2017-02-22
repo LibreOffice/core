@@ -63,7 +63,6 @@ OString scopedCppName(OString const & type, bool ns_alias)
     return s;
 }
 
-
 OString translateUnoToCppType(
     codemaker::UnoType::Sort sort, OUString const & nucleus)
 {

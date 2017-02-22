@@ -2459,10 +2459,10 @@ void SwXTextColumns::setPropertyValue( const OUString& rPropertyName, const Any&
                 if (! ( aValue >>= nTmp ) )
                     throw IllegalArgumentException();
                 else
-                    nSepLineVertAlign = nTmp;
+                    nSepLineVertAlign = (style::VerticalAlignment)nTmp;
             }
             else
-                nSepLineVertAlign = static_cast< sal_Int8 >(eAlign);
+                nSepLineVertAlign = eAlign;
         }
         break;
         case WID_TXTCOL_LINE_IS_ON:

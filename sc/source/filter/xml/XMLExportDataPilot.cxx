@@ -880,6 +880,7 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                     rExport.CheckAttrList();
                 }
                 break;
+                default: break;
             }
         }
         else if ((*pDPs)[i].IsServiceData())

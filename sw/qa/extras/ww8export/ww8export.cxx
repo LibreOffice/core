@@ -137,6 +137,36 @@ protected:
     }
 };
 
+namespace com { namespace sun { namespace star { namespace drawing {
+
+std::ostream& operator<<(std::ostream& rStrm, TextVerticalAdjust n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace table {
+
+std::ostream& operator<<(std::ostream& rStrm, ShadowLocation n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
+namespace com { namespace sun { namespace star { namespace beans {
+
+std::ostream& operator<<(std::ostream& rStrm, PropertyState n)
+{
+    rStrm << (int) n;
+    return rStrm;
+}
+
+} } } }
+
 DECLARE_WW8EXPORT_TEST(testN757910, "n757910.doc")
 {
     // The internal margin was larger than 0.28cm

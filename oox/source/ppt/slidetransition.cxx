@@ -20,7 +20,6 @@
 #include "oox/ppt/slidetransition.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>

@@ -1773,7 +1773,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         /* 0 HoriLR 1 Vert TR 2 Vert TR 3 Vert TT 4 HoriLT
             only 0 and 1 can be imported correctly
           */
-        sal_Int16 nDirection = text::WritingMode_LR_TB;
+        text::WritingMode nDirection = text::WritingMode_LR_TB;
         switch( nIntValue )
         {
             case NS_ooxml::LN_Value_ST_TextDirection_lrTb:
@@ -3498,8 +3498,8 @@ void DomainMapper::handleUnderlineType(const Id nId, const ::std::shared_ptr<Pro
 
 void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::std::shared_ptr<PropertyMap>& rContext, const bool bExchangeLeftRight)
 {
-    sal_Int16 nAdjust = 0;
-    sal_Int16 nLastLineAdjust = 0;
+    style::ParagraphAdjust nAdjust = style::ParagraphAdjust_LEFT;
+    style::ParagraphAdjust nLastLineAdjust = style::ParagraphAdjust_LEFT;
     OUString aStringValue = "left";
     switch(nIntValue)
     {
@@ -3509,7 +3509,7 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::st
         break;
     case NS_ooxml::LN_Value_ST_Jc_right:
     case NS_ooxml::LN_Value_ST_Jc_end:
-        nAdjust = static_cast< sal_Int16 > (bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT);
+        nAdjust = bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT;
         aStringValue = "right";
         break;
     case 4:
@@ -3522,7 +3522,7 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::st
     case NS_ooxml::LN_Value_ST_Jc_left:
     case NS_ooxml::LN_Value_ST_Jc_start:
     default:
-        nAdjust = static_cast< sal_Int16 > (bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT);
+        nAdjust = bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT;
         break;
     }
     rContext->Insert( PROP_PARA_ADJUST, uno::makeAny( nAdjust ) );
