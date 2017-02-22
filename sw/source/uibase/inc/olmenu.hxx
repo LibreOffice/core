@@ -33,8 +33,9 @@
 
 class SwWrtShell;
 
-class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
+class SW_DLLPUBLIC SwSpellPopup
 {
+    ScopedVclPtrInstance<PopupMenu> m_xPopupMenu;
     SwWrtShell* m_pSh;
     css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary >  >     m_aDics;
     css::uno::Reference< css::linguistic2::XSpellAlternatives > m_xSpellAlt;
@@ -51,7 +52,6 @@ class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
 
     std::map< sal_Int16, OUString > m_aLangTable_Text;
     std::map< sal_Int16, OUString > m_aLangTable_Paragraph;
-//    std::map< sal_Int16, OUString > aLangTable_Document;
 
     OUString  m_aDicNameSingle;
     bool      m_bGrammarResults;    // show grammar results? Or show spellcheck results?
@@ -59,8 +59,6 @@ class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
     static void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
             const css::uno::Sequence< OUString >& aSeq, SwWrtShell* pWrtSh,
             std::map< sal_Int16, OUString > &rLangTable );
-
-    using PopupMenu::Execute;
 
     /// Checks if any of the redline menu items should be hidden.
     void checkRedline();
@@ -75,6 +73,11 @@ public:
             sal_Int32 nErrorInResult,
             const css::uno::Sequence< OUString > &rSuggestions,
             const OUString & rParaText );
+
+    Menu&   GetMenu()
+    {
+        return *m_xPopupMenu.get();
+    }
 
     void Execute( const Rectangle& rPopupPos, vcl::Window* pWin );
     void Execute( sal_uInt16 nId );
