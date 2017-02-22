@@ -157,6 +157,10 @@ class EDITENG_DLLPUBLIC EditEngine
 public:
     typedef std::vector<EditView*> ViewsType;
 
+    EDITENG_DLLPUBLIC EditSelection InsertText(
+        css::uno::Reference<css::datatransfer::XTransferable > const & rxDataObj,
+        const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
+
 private:
     std::unique_ptr<ImpEditEngine>  pImpEditEngine;
 
@@ -174,10 +178,6 @@ private:
     EDITENG_DLLPRIVATE css::uno::Reference<
         css::datatransfer::XTransferable>
             CreateTransferable(const EditSelection& rSelection);
-
-    EDITENG_DLLPRIVATE EditSelection InsertText(
-        css::uno::Reference<css::datatransfer::XTransferable > const & rxDataObj,
-        const OUString& rBaseURL, const EditPaM& rPaM, bool bUseSpecial);
 
     EDITENG_DLLPRIVATE EditPaM EndOfWord(const EditPaM& rPaM);
 
@@ -370,7 +370,7 @@ public:
     void            Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const Point& rStartDocPos, bool bClip );
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
 
-//  sal_uInt32: Error code of the stream.
+    //  sal_uInt32: Error code of the stream.
     sal_uLong       Read( SvStream& rInput, const OUString& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = nullptr );
     void            Write( SvStream& rOutput, EETextFormat );
 
