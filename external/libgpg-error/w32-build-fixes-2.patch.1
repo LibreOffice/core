@@ -1,0 +1,24 @@
+diff -ru libgpg-error.orig/src/Makefile.am libgpg-error/src/Makefile.am
+--- libgpg-error.orig/src/Makefile.am	2017-09-11 00:04:25.939597900 +0200
++++ libgpg-error/src/Makefile.am	2017-09-11 00:06:55.620369500 +0200
+@@ -222,7 +222,7 @@
+ # It is correct to use $(CPP).  We want the host's idea of the error codes.
+ mkerrcodes.h: Makefile mkerrcodes.awk $(gpg_extra_headers)
+ 	$(AWK) -f $(srcdir)/mkerrcodes1.awk $(srcdir)/errnos.in >_$@
+-	$(CPP) $(CPPFLAGS) $(extra_cppflags) -P _$@ | grep GPG_ERR_ | \
++	$(CPP) $(CPPFLAGS) _$@ | grep GPG_ERR_ | \
+                $(AWK) -f $(srcdir)/mkerrcodes.awk >$@
+ 	-rm _$@
+ 
+diff -ru libgpg-error.orig/src/Makefile.in libgpg-error/src/Makefile.in
+--- libgpg-error.orig/src/Makefile.in	2017-09-11 00:11:08.270004800 +0200
++++ libgpg-error/src/Makefile.in	2017-09-11 00:11:37.354491000 +0200
+@@ -1283,7 +1283,7 @@
+ # It is correct to use $(CPP).  We want the host's idea of the error codes.
+ mkerrcodes.h: Makefile mkerrcodes.awk $(gpg_extra_headers)
+ 	$(AWK) -f $(srcdir)/mkerrcodes1.awk $(srcdir)/errnos.in >_$@
+-	$(CPP) $(CPPFLAGS) $(extra_cppflags) -P _$@ | grep GPG_ERR_ | \
++	$(CPP) $(CPPFLAGS) _$@ | grep GPG_ERR_ | \
+                $(AWK) -f $(srcdir)/mkerrcodes.awk >$@
+ 	-rm _$@
+ 
