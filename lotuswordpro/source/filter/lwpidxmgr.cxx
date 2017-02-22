@@ -159,7 +159,7 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
     if (KeyCount)
     {
         //read object keys
-        LwpKey* akey = new LwpKey();
+        LwpKey* akey = new LwpKey;
         akey->id.Read(pObjStrm);
         m_RootObjs.push_back(akey);
 
@@ -167,7 +167,7 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
 
         for (k = 1; k < KeyCount; k++)
         {
-            akey = new LwpKey();
+            akey = new LwpKey;
             akey->id.ReadCompressed(pObjStrm, m_RootObjs[k-1]->id);
             m_RootObjs.push_back(akey);
         }
@@ -197,7 +197,7 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
 
     if(KeyCount)
     {
-        LwpKey* akey = new LwpKey();
+        LwpKey* akey = new LwpKey;
         akey->id.Read(pObjStrm);
         vObjIndexs.push_back(akey);
 
@@ -205,7 +205,7 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
 
         for (k = 1; k < KeyCount; k++)
         {
-            akey = new LwpKey();
+            akey = new LwpKey;
             akey->id.ReadCompressed(pObjStrm, vObjIndexs[k-1]->id);
             vObjIndexs.push_back(akey);
         }
@@ -281,14 +281,14 @@ void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
 
     if(KeyCount)
     {
-        LwpKey* akey = new LwpKey();
+        LwpKey* akey = new LwpKey;
         //read object keys: id & offset
         akey->id.Read(pObjStrm);
         m_ObjectKeys.push_back(akey);
 
         for (sal_uInt16 k = 1; k < KeyCount; k++)
         {
-            akey = new LwpKey();
+            akey = new LwpKey;
             akey->id.ReadCompressed(pObjStrm, m_ObjectKeys.at(m_nKeyCount+k-1)->id);
             m_ObjectKeys.push_back(akey);
         }

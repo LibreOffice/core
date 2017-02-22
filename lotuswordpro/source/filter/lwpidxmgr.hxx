@@ -71,7 +71,7 @@
 struct LwpKey
 {
     LwpObjectID id;
-    sal_uInt32 offset;
+    sal_uInt32 offset = 0;
 };
 /**
  * @brief   LwpIndexManager, to read all index records and maintain the index information
