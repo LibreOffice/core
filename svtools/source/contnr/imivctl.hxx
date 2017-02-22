@@ -271,7 +271,6 @@ class SvxIconChoiceCtrl_Impl
     Rectangle           CalcMaxTextRect( const SvxIconChoiceCtrlEntry* pEntry ) const;
 
     void                ClipAtVirtOutRect( Rectangle& rRect ) const;
-    void                AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& rRow );
     Point               AdjustAtGrid(
                             const Rectangle& rCenterRect, // balance point of object (typically Bmp-Rect)
                             const Rectangle& rBoundRect
@@ -533,12 +532,6 @@ public:
     SvxIconChoiceCtrlEntry* GoLeftRight( SvxIconChoiceCtrlEntry*, bool bRight );
     SvxIconChoiceCtrlEntry* GoUpDown( SvxIconChoiceCtrlEntry*, bool bDown );
     SvxIconChoiceCtrlEntry* GoPageUpDown( SvxIconChoiceCtrlEntry*, bool bDown );
-
-    // Creates a list of entries for every row (height = nGridDY) sorted by
-    // BoundRect.Left(). A list may be empty. The lists become the property of
-    // the caller and have to be deleted with DestroyGridAdjustData.
-    void                    CreateGridAjustData( IconChoiceMap& pLists );
-    static void             DestroyGridAdjustData( IconChoiceMap& rLists );
 };
 
 

@@ -531,11 +531,6 @@ FloatingWindow* SfxChildWindowContext::GetFloatingWindow(vcl::Window *pParent)
     return nullptr;
 }
 
-FloatingWindow* SfxChildWindowContext::GetFloatingWindow() const
-{
-    return SfxChildWindowContext::GetFloatingWindow(pWindow->GetParent());
-}
-
 void SfxChildWindow::SetFactory_Impl( SfxChildWinFactory *pF )
 {
     pImpl->pFact = pF;

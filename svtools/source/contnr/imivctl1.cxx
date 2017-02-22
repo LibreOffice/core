@@ -2691,39 +2691,6 @@ IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Timer *, void)
     }
 }
 
-// align a row, might expand width, doesn't break the line
-void SvxIconChoiceCtrl_Impl::AdjustAtGrid( const SvxIconChoiceCtrlEntryPtrVec& rRow )
-{
-    if( rRow.empty() )
-        return;
-
-    long nCurRight = 0;
-    for(SvxIconChoiceCtrlEntry* pCur : rRow)
-    {
-        // Decisive (for our eye) is the bitmap, else, the entry might jump too
-        // much within long texts.
-        const Rectangle& rBoundRect = GetEntryBoundRect( pCur );
-        Rectangle aCenterRect( CalcBmpRect( pCur ));
-        if( !pCur->IsPosLocked() )
-        {
-            long nWidth = aCenterRect.GetSize().Width();
-            Point aNewPos( AdjustAtGrid( aCenterRect, rBoundRect ) );
-            while( aNewPos.X() < nCurRight )
-                aNewPos.X() += nGridDX;
-            if( aNewPos != rBoundRect.TopLeft() )
-            {
-                SetEntryPos( pCur, aNewPos );
-                pCur->SetFlags( SvxIconViewFlags::POS_MOVED );
-            }
-            nCurRight = aNewPos.X() + nWidth;
-        }
-        else
-        {
-            nCurRight = rBoundRect.Right();
-        }
-    }
-}
-
 // Aligns a rectangle to the grid, but doesn't guarantee that the new position
 // is vacant. The position can be used for SetEntryPos. The CenterRect describes
 // a part of the bounding rectangle that is used for calculating the target
