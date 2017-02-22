@@ -36,14 +36,13 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL
 class ScTempDocCache
 {
 private:
-    ScDocument*     pDoc;
+    std::unique_ptr<ScDocument> xDoc;
     bool            bInUse;
 
 public:
-                ScTempDocCache();
-                ~ScTempDocCache();
+    ScTempDocCache();
 
-    ScDocument* GetDocument() const     { return pDoc; }
+    ScDocument* GetDocument() const     { return xDoc.get(); }
     bool        IsInUse() const         { return bInUse; }
     void        SetInUse( bool bSet )   { bInUse = bSet; }
 

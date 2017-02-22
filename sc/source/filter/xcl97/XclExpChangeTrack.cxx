@@ -1408,7 +1408,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     aActionStack(),
     pTabIdBuffer( nullptr ),
-    pTempDoc( nullptr ),
     pHeader( nullptr ),
     bValidGUID( false )
 {
@@ -1528,8 +1527,6 @@ XclExpChangeTrack::~XclExpChangeTrack()
         delete aActionStack.top();
         aActionStack.pop();
     }
-
-    delete pTempDoc;
 }
 
 ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
@@ -1540,30 +1537,30 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
     if( !pOrigChangeTrack )
         return nullptr;
 
-    assert(!pTempDoc);
+    assert(!xTempDoc);
     // create empty document
-    pTempDoc = new ScDocument;
+    xTempDoc.reset(new ScDocument);
 
     // adjust table count
     SCTAB nOrigCount = GetDoc().GetTableCount();
     OUString sTabName;
     for( sal_Int32 nIndex = 0; nIndex < nOrigCount; nIndex++ )
     {
-        pTempDoc->CreateValidTabName( sTabName );
-        pTempDoc->InsertTab( SC_TAB_APPEND, sTabName );
+        xTempDoc->CreateValidTabName(sTabName);
+        xTempDoc->InsertTab(SC_TAB_APPEND, sTabName);
     }
-    OSL_ENSURE( nOrigCount == pTempDoc->GetTableCount(),
-        "XclExpChangeTrack::CreateTempChangeTrack - table count mismatch" );
-    if( nOrigCount != pTempDoc->GetTableCount() )
+    OSL_ENSURE(nOrigCount == xTempDoc->GetTableCount(),
+        "XclExpChangeTrack::CreateTempChangeTrack - table count mismatch");
+    if(nOrigCount != xTempDoc->GetTableCount())
         return nullptr;
 
-    return pOrigChangeTrack->Clone(pTempDoc);
+    return pOrigChangeTrack->Clone(xTempDoc.get());
 }
 
 void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
 {
     XclExpChTrAction* pXclAction = nullptr;
-    ScChangeTrack* pTempChangeTrack = pTempDoc->GetChangeTrack();
+    ScChangeTrack* pTempChangeTrack = xTempDoc->GetChangeTrack();
     switch( rAction.GetType() )
     {
         case SC_CAT_CONTENT:

@@ -85,12 +85,11 @@ struct SotElement_Impl
     bool                    m_bIsInserted;
     bool                    m_bIsStorage;
 
-    OStorage_Impl*              m_pStorage;
-    OWriteStream_Impl*          m_pStream;
+    std::unique_ptr<OStorage_Impl> m_xStorage;
+    std::unique_ptr<OWriteStream_Impl> m_xStream;
 
 public:
-                                SotElement_Impl( const OUString& rName, bool bStor, bool bNew );
-                                ~SotElement_Impl();
+    SotElement_Impl(const OUString& rName, bool bStor, bool bNew);
 };
 
 typedef ::std::list< SotElement_Impl* > SotElementList_Impl;
