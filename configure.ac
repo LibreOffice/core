@@ -3502,6 +3502,7 @@ if test "$_os" = "WINNT"; then
         else
             AC_MSG_ERROR([No msbuild found, Visual Studio installation broken?])
         fi
+        AC_MSG_RESULT([found: $regvalue])
     fi
 
     # Find the version of devenv.exe
@@ -12418,6 +12419,23 @@ if test "$broken" = yes; then
     AC_MSG_ERROR([working support for static initializer_list needed])
 fi
 
+if test "$_os" = "WINNT"; then
+  AC_MSG_CHECKING([whether $CXX has broken static initialization])
+  save_CXXFLAGS=$CXXFLAGS
+  CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11 /WX /EHsc"
+  AC_LANG_PUSH([C++])
+  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([
+      #include <vector>
+      class t {static const std::vector<int> v;};
+      const std::vector<int> t::v = {1,2};
+      ])], [broken=no], [broken=yes])
+  AC_LANG_POP([C++])
+  CXXFLAGS=$save_CXXFLAGS
+  AC_MSG_RESULT([$broken])
+  if test "$broken" = yes; then
+      AC_MSG_ERROR([working support for constexpr static initialization needed])
+  fi
+fi
 
 # ===================================================================
 # Creating bigger shared library to link against
