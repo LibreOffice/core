@@ -62,8 +62,8 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
         return false;
 
     // Returned unit is points, convert that to pixel.
-    int nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage));
-    int nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage));
+    size_t nPageWidth = pointToPixel(FPDF_GetPageWidth(pPdfPage));
+    size_t nPageHeight = pointToPixel(FPDF_GetPageHeight(pPdfPage));
     FPDF_BITMAP pPdfBitmap = FPDFBitmap_Create(nPageWidth, nPageHeight, /*alpha=*/1);
     if (!pPdfBitmap)
         return false;
@@ -76,17 +76,17 @@ bool generatePreview(SvStream& rStream, Graphic& rGraphic)
     Bitmap aBitmap(Size(nPageWidth, nPageHeight), 32);
     {
         Bitmap::ScopedWriteAccess pWriteAccess(aBitmap);
-        const char* pPdfBuffer = static_cast<const char*>(FPDFBitmap_GetBuffer(pPdfBitmap));
+        auto pPdfBuffer = static_cast<const char*>(FPDFBitmap_GetBuffer(pPdfBitmap));
 #ifndef MACOSX
         std::memcpy(pWriteAccess->GetBuffer(), pPdfBuffer, nPageWidth * nPageHeight * 4);
 #else
         // ARGB -> BGRA
-        for (int nRow = 0; nRow < nPageHeight; ++nRow)
+        for (size_t nRow = 0; nRow < nPageHeight; ++nRow)
         {
             int nStride = FPDFBitmap_GetStride(pPdfBitmap);
             const char* pPdfLine = pPdfBuffer + (nStride * nRow);
             Scanline pRow = pWriteAccess->GetBuffer() + (nPageWidth * nRow * 4);
-            for (int nCol = 0; nCol < nPageWidth; ++nCol)
+            for (size_t nCol = 0; nCol < nPageWidth; ++nCol)
             {
                 pRow[nCol * 4] = pPdfLine[(nCol * 4) + 3];
                 pRow[(nCol * 4) + 1] = pPdfLine[(nCol * 4) + 2];
