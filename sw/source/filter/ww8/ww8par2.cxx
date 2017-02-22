@@ -488,8 +488,9 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     ApoTestResults aRet;
     // Frame in Style Definition (word appears to ignore them if inside an
     // text autoshape)
-    if (!m_bTxbxFlySection && m_nAktColl < m_vColl.size())
-        aRet.mpStyleApo = StyleExists(m_nAktColl) ? m_vColl[m_nAktColl].m_xWWFly.get() : nullptr;
+    sal_uInt16 const nStyle(m_pPlcxMan->GetColl());
+    if (!m_bTxbxFlySection && nStyle < m_vColl.size())
+        aRet.mpStyleApo = StyleExists(nStyle) ? m_vColl[nStyle].m_xWWFly.get() : nullptr;
 
     /*
     #i1140#
