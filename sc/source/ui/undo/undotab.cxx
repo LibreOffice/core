@@ -858,20 +858,18 @@ bool ScUndoMakeScenario::CanRepeat(SfxRepeatTarget& rTarget) const
     return dynamic_cast<const ScTabViewTarget*>( &rTarget) !=  nullptr;
 }
 
-ScUndoImportTab::ScUndoImportTab( ScDocShell* pShell,
-                        SCTAB nNewTab, SCTAB nNewCount ) :
-    ScSimpleUndo( pShell ),
-    nTab( nNewTab ),
-    nCount( nNewCount ),
-    pRedoDoc( nullptr ),
-    pDrawUndo( nullptr )
+ScUndoImportTab::ScUndoImportTab(ScDocShell* pShell,
+                                 SCTAB nNewTab, SCTAB nNewCount)
+    : ScSimpleUndo(pShell)
+    , nTab(nNewTab)
+    , nCount(nNewCount)
+    , pDrawUndo(nullptr)
 {
     pDrawUndo = GetSdrUndoAction( &pDocShell->GetDocument() );
 }
 
 ScUndoImportTab::~ScUndoImportTab()
 {
-    delete pRedoDoc;
     DeleteSdrUndoAction( pDrawUndo );
 }
 
@@ -908,38 +906,38 @@ void ScUndoImportTab::Undo()
 
     SCTAB i;
     ScDocument& rDoc = pDocShell->GetDocument();
-    bool bMakeRedo = !pRedoDoc;
+    bool bMakeRedo = !xRedoDoc;
     if (bMakeRedo)
     {
-        pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pRedoDoc->InitUndo( &rDoc, nTab,nTab+nCount-1, true,true );
+        xRedoDoc.reset(new ScDocument(SCDOCMODE_UNDO));
+        xRedoDoc->InitUndo(&rDoc, nTab,nTab+nCount-1, true, true);
 
         OUString aOldName;
         for (i=0; i<nCount; i++)
         {
             SCTAB nTabPos=nTab+i;
 
-            rDoc.CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, InsertDeleteFlags::ALL,false, *pRedoDoc);
+            rDoc.CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, InsertDeleteFlags::ALL,false, *xRedoDoc);
             rDoc.GetName( nTabPos, aOldName );
-            pRedoDoc->RenameTab( nTabPos, aOldName, false );
-            pRedoDoc->SetTabBgColor( nTabPos, rDoc.GetTabBgColor(nTabPos) );
+            xRedoDoc->RenameTab(nTabPos, aOldName, false);
+            xRedoDoc->SetTabBgColor(nTabPos, rDoc.GetTabBgColor(nTabPos));
 
             if ( rDoc.IsScenario(nTabPos) )
             {
-                pRedoDoc->SetScenario(nTabPos, true );
+                xRedoDoc->SetScenario(nTabPos, true);
                 OUString aComment;
                 Color  aColor;
                 ScScenarioFlags nScenFlags;
                 rDoc.GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
-                pRedoDoc->SetScenarioData(nTabPos, aComment, aColor, nScenFlags );
+                xRedoDoc->SetScenarioData(nTabPos, aComment, aColor, nScenFlags);
                 bool bActive = rDoc.IsActiveScenario(nTabPos);
-                pRedoDoc->SetActiveScenario(nTabPos, bActive );
+                xRedoDoc->SetActiveScenario(nTabPos, bActive);
                 bool bVisible = rDoc.IsVisible(nTabPos);
-                pRedoDoc->SetVisible(nTabPos,bVisible );
+                xRedoDoc->SetVisible(nTabPos, bVisible);
             }
 
             if ( rDoc.IsTabProtected( nTabPos ) )
-                pRedoDoc->SetTabProtection(nTabPos, rDoc.GetTabProtection(nTabPos));
+                xRedoDoc->SetTabProtection(nTabPos, rDoc.GetTabProtection(nTabPos));
         }
 
     }
@@ -956,7 +954,7 @@ void ScUndoImportTab::Undo()
 
 void ScUndoImportTab::Redo()
 {
-    if (!pRedoDoc)
+    if (!xRedoDoc)
     {
         OSL_FAIL("Where is my Redo Document?");
         return;
@@ -968,7 +966,7 @@ void ScUndoImportTab::Redo()
     for (i=0; i<nCount; i++)                // first insert all sheets (#63304#)
     {
         SCTAB nTabPos=nTab+i;
-        pRedoDoc->GetName(nTabPos,aName);
+        xRedoDoc->GetName(nTabPos, aName);
         bDrawIsInUndo = true;
         rDoc.InsertTab(nTabPos,aName);
         bDrawIsInUndo = false;
@@ -976,25 +974,25 @@ void ScUndoImportTab::Redo()
     for (i=0; i<nCount; i++)                // then copy into inserted sheets
     {
         SCTAB nTabPos=nTab+i;
-        pRedoDoc->CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, InsertDeleteFlags::ALL,false, rDoc);
-        rDoc.SetTabBgColor( nTabPos, pRedoDoc->GetTabBgColor(nTabPos) );
+        xRedoDoc->CopyToDocument(0,0,nTabPos, MAXCOL,MAXROW,nTabPos, InsertDeleteFlags::ALL,false, rDoc);
+        rDoc.SetTabBgColor(nTabPos, xRedoDoc->GetTabBgColor(nTabPos));
 
-        if ( pRedoDoc->IsScenario(nTabPos) )
+        if (xRedoDoc->IsScenario(nTabPos))
         {
             rDoc.SetScenario(nTabPos, true );
             OUString aComment;
             Color  aColor;
             ScScenarioFlags nScenFlags;
-            pRedoDoc->GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
+            xRedoDoc->GetScenarioData(nTabPos, aComment, aColor, nScenFlags );
             rDoc.SetScenarioData(nTabPos, aComment, aColor, nScenFlags );
-            bool bActive = pRedoDoc->IsActiveScenario(nTabPos);
+            bool bActive = xRedoDoc->IsActiveScenario(nTabPos);
             rDoc.SetActiveScenario(nTabPos, bActive );
-            bool bVisible=pRedoDoc->IsVisible(nTabPos);
+            bool bVisible = xRedoDoc->IsVisible(nTabPos);
             rDoc.SetVisible(nTabPos,bVisible );
         }
 
-        if ( pRedoDoc->IsTabProtected( nTabPos ) )
-            rDoc.SetTabProtection(nTabPos, pRedoDoc->GetTabProtection(nTabPos));
+        if (xRedoDoc->IsTabProtected(nTabPos))
+            rDoc.SetTabProtection(nTabPos, xRedoDoc->GetTabProtection(nTabPos));
     }
 
     RedoSdrUndoAction( pDrawUndo );     // after the sheets are inserted

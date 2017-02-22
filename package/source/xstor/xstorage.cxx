@@ -158,21 +158,13 @@ uno::Reference< io::XInputStream > GetSeekableTempCopy( const uno::Reference< io
     return xTempIn;
 }
 
-SotElement_Impl::SotElement_Impl( const OUString& rName, bool bStor, bool bNew )
-: m_aName( rName )
-, m_aOriginalName( rName )
-, m_bIsRemoved( false )
-, m_bIsInserted( bNew )
-, m_bIsStorage( bStor )
-, m_pStorage( nullptr )
-, m_pStream( nullptr )
+SotElement_Impl::SotElement_Impl(const OUString& rName, bool bStor, bool bNew)
+    : m_aName(rName)
+    , m_aOriginalName(rName)
+    , m_bIsRemoved(false)
+    , m_bIsInserted(bNew)
+    , m_bIsStorage(bStor)
 {
-}
-
-SotElement_Impl::~SotElement_Impl()
-{
-    delete m_pStorage;
-    delete m_pStream;
 }
 
 // most of properties are holt by the storage but are not used
@@ -779,31 +771,31 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
 
         SAL_WARN_IF( !xSubDest.is(), "package.xstor", "No destination substorage!" );
 
-        if ( !pElement->m_pStorage )
+        if (!pElement->m_xStorage)
         {
             OpenSubStorage( pElement, embed::ElementModes::READ );
-            if ( !pElement->m_pStorage )
+            if (!pElement->m_xStorage)
                 throw io::IOException( THROW_WHERE );
         }
 
-        pElement->m_pStorage->CopyToStorage( xSubDest, bDirect );
+        pElement->m_xStorage->CopyToStorage(xSubDest, bDirect);
     }
     else
     {
-        if ( !pElement->m_pStream )
+        if (!pElement->m_xStream)
         {
             OpenSubStream( pElement );
-            if ( !pElement->m_pStream )
+            if (!pElement->m_xStream)
                 throw io::IOException( THROW_WHERE );
         }
 
-        if ( !pElement->m_pStream->IsEncrypted() )
+        if (!pElement->m_xStream->IsEncrypted())
         {
             if ( bDirect )
             {
                 // fill in the properties for the stream
                 uno::Sequence< beans::PropertyValue > aStrProps(0);
-                uno::Sequence< beans::PropertyValue > aSrcPkgProps = pElement->m_pStream->GetStreamProperties();
+                uno::Sequence< beans::PropertyValue > aSrcPkgProps = pElement->m_xStream->GetStreamProperties();
                 sal_Int32 nNum = 0;
                 for ( int ind = 0; ind < aSrcPkgProps.getLength(); ind++ )
                 {
@@ -819,7 +811,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 {
                     aStrProps.realloc( ++nNum );
                     aStrProps[nNum-1].Name = "UseCommonStoragePasswordEncryption";
-                    aStrProps[nNum-1].Value <<= pElement->m_pStream->UsesCommonEncryption_Impl();
+                    aStrProps[nNum-1].Value <<= pElement->m_xStream->UsesCommonEncryption_Impl();
                 }
                 else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
                 {
@@ -842,19 +834,19 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 uno::Reference< embed::XOptimizedStorage > xOptDest( xDest, uno::UNO_QUERY_THROW );
                 uno::Reference < io::XInputStream > xInputToInsert;
 
-                if ( pElement->m_pStream->HasTempFile_Impl() || !pElement->m_pStream->m_xPackageStream.is() )
+                if (pElement->m_xStream->HasTempFile_Impl() || !pElement->m_xStream->m_xPackageStream.is())
                 {
-                    SAL_WARN_IF( !pElement->m_pStream->m_xPackageStream.is(), "package.xstor", "No package stream!" );
+                    SAL_WARN_IF(!pElement->m_xStream->m_xPackageStream.is(), "package.xstor", "No package stream!");
 
                     // if the stream is modified - the temporary file must be used for insertion
-                    xInputToInsert = pElement->m_pStream->GetTempFileAsInputStream();
+                    xInputToInsert = pElement->m_xStream->GetTempFileAsInputStream();
                 }
                 else
                 {
                     // for now get just nonseekable access to the stream
                     // TODO/LATER: the raw stream can be used
 
-                    xInputToInsert = pElement->m_pStream->m_xPackageStream->getDataStream();
+                    xInputToInsert = pElement->m_xStream->m_xPackageStream->getDataStream();
                 }
 
                 if ( !xInputToInsert.is() )
@@ -869,7 +861,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                                             embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
                 SAL_WARN_IF( !xSubStr.is(), "package.xstor", "No destination substream!" );
 
-                pElement->m_pStream->CopyInternallyTo_Impl( xSubStr );
+                pElement->m_xStream->CopyInternallyTo_Impl(xSubStr);
             }
         }
         else if ( m_nStorageType != embed::StorageFormats::PACKAGE )
@@ -877,8 +869,8 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
             SAL_WARN( "package.xstor", "Encryption is only supported in package storage!" );
             throw io::IOException( THROW_WHERE );
         }
-        else if ( pElement->m_pStream->HasCachedEncryptionData()
-             && ( pElement->m_pStream->IsModified() || pElement->m_pStream->HasWriteOwner_Impl() ) )
+        else if ( pElement->m_xStream->HasCachedEncryptionData()
+             && ( pElement->m_xStream->IsModified() || pElement->m_xStream->HasWriteOwner_Impl() ) )
         {
             ::comphelper::SequenceAsHashMap aCommonEncryptionData;
             bool bHasCommonEncryptionData = false;
@@ -893,7 +885,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 AddLog( THROW_WHERE "No Encryption" );
             }
 
-            if ( bHasCommonEncryptionData && ::package::PackageEncryptionDatasEqual( pElement->m_pStream->GetCachedEncryptionData(), aCommonEncryptionData ) )
+            if (bHasCommonEncryptionData && ::package::PackageEncryptionDatasEqual(pElement->m_xStream->GetCachedEncryptionData(), aCommonEncryptionData))
             {
                 // If the stream can be opened with the common storage password
                 // it must be stored with the common storage password as well
@@ -901,7 +893,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                                             xDest->openStreamElement( aName,
                                                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
 
-                pElement->m_pStream->CopyInternallyTo_Impl( xDestStream );
+                pElement->m_xStream->CopyInternallyTo_Impl( xDestStream );
 
                 uno::Reference< beans::XPropertySet > xProps( xDestStream, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
@@ -915,10 +907,10 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 uno::Reference< io::XStream > xSubStr =
                                             xDest2->openEncryptedStream( aName,
                                                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE,
-                                                pElement->m_pStream->GetCachedEncryptionData().getAsConstNamedValueList() );
+                                                pElement->m_xStream->GetCachedEncryptionData().getAsConstNamedValueList() );
                 SAL_WARN_IF( !xSubStr.is(), "package.xstor", "No destination substream!" );
 
-                pElement->m_pStream->CopyInternallyTo_Impl( xSubStr, pElement->m_pStream->GetCachedEncryptionData() );
+                pElement->m_xStream->CopyInternallyTo_Impl(xSubStr, pElement->m_xStream->GetCachedEncryptionData());
             }
         }
         else
@@ -929,8 +921,8 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 // If the stream can be opened with the common storage password
                 // it must be stored with the common storage password as well
 
-                uno::Reference< io::XStream > xOwnStream = pElement->m_pStream->GetStream( embed::ElementModes::READ,
-                                                                                            false );
+                uno::Reference< io::XStream > xOwnStream = pElement->m_xStream->GetStream(embed::ElementModes::READ,
+                                                                                          false);
                 uno::Reference< io::XStream > xDestStream =
                                             xDest->openStreamElement( aName,
                                                 embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
@@ -952,7 +944,7 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
                 // in the ODF1.2 package, so an invalid package could be produced if the stream
                 // is copied from ODF1.1 package, where it is allowed to have different StartKeys
                 uno::Reference< embed::XStorageRawAccess > xRawDest( xDest, uno::UNO_QUERY_THROW );
-                uno::Reference< io::XInputStream > xRawInStream = pElement->m_pStream->GetRawInStream();
+                uno::Reference< io::XInputStream > xRawInStream = pElement->m_xStream->GetRawInStream();
                 xRawDest->insertRawEncrStreamElement( aName, xRawInStream );
             }
         }
@@ -1098,13 +1090,13 @@ void OStorage_Impl::Commit()
             // following two steps are separated to allow easily implement transacted mode
             // for streams if we need it in future.
             // Only hierarchical access uses transacted streams currently
-            if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStream
-              && !(*pElementIter)->m_pStream->IsTransacted() )
-                (*pElementIter)->m_pStream->Commit();
+            if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_xStream
+              && !(*pElementIter)->m_xStream->IsTransacted() )
+                (*pElementIter)->m_xStream->Commit();
 
             // if the storage was not open, there is no need to commit it ???
             // the storage should be checked that it is committed
-            if ( (*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStorage && (*pElementIter)->m_pStorage->m_bCommited )
+            if ((*pElementIter)->m_bIsStorage && (*pElementIter)->m_xStorage && (*pElementIter)->m_xStorage->m_bCommited)
             {
                 // it's temporary PackageFolder should be inserted instead of current one
                 // also the new copy of PackageFolder should be used by the children storages
@@ -1113,9 +1105,9 @@ void OStorage_Impl::Commit()
                 if ( m_bCommited || m_bIsRoot )
                     xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
 
-                (*pElementIter)->m_pStorage->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
+                (*pElementIter)->m_xStorage->InsertIntoPackageFolder((*pElementIter)->m_aName, xNewPackageFolder);
             }
-            else if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStream && (*pElementIter)->m_pStream->m_bFlushed )
+            else if (!(*pElementIter)->m_bIsStorage && (*pElementIter)->m_xStream && (*pElementIter)->m_xStream->m_bFlushed)
             {
                 if ( m_nStorageType == embed::StorageFormats::OFOPXML )
                     CommitStreamRelInfo( *pElementIter );
@@ -1124,7 +1116,7 @@ void OStorage_Impl::Commit()
                 if ( m_bCommited || m_bIsRoot )
                     xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
 
-                (*pElementIter)->m_pStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
+                (*pElementIter)->m_xStream->InsertIntoPackageFolder((*pElementIter)->m_aName, xNewPackageFolder);
             }
             else if ( !m_bCommited && !m_bIsRoot )
             {
@@ -1145,10 +1137,10 @@ void OStorage_Impl::Commit()
 
                 if ( m_nStorageType == embed::StorageFormats::OFOPXML && !(*pElementIter)->m_bIsStorage )
                 {
-                    if ( !(*pElementIter)->m_pStream )
+                    if (!(*pElementIter)->m_xStream)
                     {
                         OpenSubStream( *pElementIter );
-                        if ( !(*pElementIter)->m_pStream )
+                        if (!(*pElementIter)->m_xStream)
                             throw uno::RuntimeException( THROW_WHERE );
                     }
 
@@ -1170,32 +1162,32 @@ void OStorage_Impl::Commit()
 
             if ( (*pElementIter)->m_bIsStorage )
             {
-                if ( (*pElementIter)->m_pStorage->m_bCommited )
+                if ((*pElementIter)->m_xStorage->m_bCommited)
                 {
-                    OSL_ENSURE( (*pElementIter)->m_pStorage, "An inserted storage is incomplete!\n" );
-                    if ( !(*pElementIter)->m_pStorage )
+                    OSL_ENSURE((*pElementIter)->m_xStorage, "An inserted storage is incomplete!\n");
+                    if (!(*pElementIter)->m_xStorage)
                         throw uno::RuntimeException( THROW_WHERE );
 
-                    (*pElementIter)->m_pStorage->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
+                    (*pElementIter)->m_xStorage->InsertIntoPackageFolder((*pElementIter)->m_aName, xNewPackageFolder);
 
                     (*pElementIter)->m_bIsInserted = false;
                 }
             }
             else
             {
-                OSL_ENSURE( (*pElementIter)->m_pStream, "An inserted stream is incomplete!\n" );
-                if ( !(*pElementIter)->m_pStream )
+                OSL_ENSURE((*pElementIter)->m_xStream, "An inserted stream is incomplete!\n");
+                if (!(*pElementIter)->m_xStream)
                     throw uno::RuntimeException( THROW_WHERE );
 
-                if ( !(*pElementIter)->m_pStream->IsTransacted() )
-                    (*pElementIter)->m_pStream->Commit();
+                if (!(*pElementIter)->m_xStream->IsTransacted())
+                    (*pElementIter)->m_xStream->Commit();
 
-                if ( (*pElementIter)->m_pStream->m_bFlushed )
+                if ((*pElementIter)->m_xStream->m_bFlushed)
                 {
                     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
                         CommitStreamRelInfo( *pElementIter );
 
-                    (*pElementIter)->m_pStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
+                    (*pElementIter)->m_xStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
 
                     (*pElementIter)->m_bIsInserted = false;
                 }
@@ -1372,7 +1364,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( const OUString& aName, bool bEncr 
 
     // the mode is not needed for storage stream internal implementation
     SotElement_Impl* pNewElement = InsertElement( aName, false );
-    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, bEncr, m_nStorageType, true );
+    pNewElement->m_xStream.reset(new OWriteStream_Impl(this, xPackageSubStream, m_xPackage, m_xContext, bEncr, m_nStorageType, true));
 
     m_aChildrenList.push_back( pNewElement );
     m_bIsModified = true;
@@ -1409,9 +1401,9 @@ void OStorage_Impl::InsertRawStream( const OUString& aName, const uno::Reference
 
     // the mode is not needed for storage stream internal implementation
     SotElement_Impl* pNewElement = InsertElement( aName, false );
-    pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, true, m_nStorageType, false );
+    pNewElement->m_xStream.reset(new OWriteStream_Impl(this, xPackageSubStream, m_xPackage, m_xContext, true, m_nStorageType, false));
     // the stream is inserted and must be treated as a committed one
-    pNewElement->m_pStream->SetToBeCommited();
+    pNewElement->m_xStream->SetToBeCommited();
 
     m_aChildrenList.push_back( pNewElement );
     m_bIsModified = true;
@@ -1445,7 +1437,7 @@ SotElement_Impl* OStorage_Impl::InsertStorage( const OUString& aName, sal_Int32 
 {
     SotElement_Impl* pNewElement = InsertElement( aName, true );
 
-    pNewElement->m_pStorage = CreateNewStorageImpl( nStorageMode );
+    pNewElement->m_xStorage.reset(CreateNewStorageImpl(nStorageMode));
 
     m_aChildrenList.push_back( pNewElement );
 
@@ -1497,7 +1489,7 @@ void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorag
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    if ( !pElement->m_pStorage )
+    if (!pElement->m_xStorage)
     {
         SAL_WARN_IF( pElement->m_bIsInserted, "package.xstor", "Inserted element must be created already!" );
 
@@ -1507,7 +1499,7 @@ void OStorage_Impl::OpenSubStorage( SotElement_Impl* pElement, sal_Int32 nStorag
             throw container::NoSuchElementException( THROW_WHERE );
 
         uno::Reference< container::XNameContainer > xPackageSubFolder( xTunnel, uno::UNO_QUERY_THROW );
-        pElement->m_pStorage = new OStorage_Impl( this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType );
+        pElement->m_xStorage.reset(new OStorage_Impl(this, nStorageMode, xPackageSubFolder, m_xPackage, m_xContext, m_nStorageType));
     }
 }
 
@@ -1518,7 +1510,7 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
 
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    if ( !pElement->m_pStream )
+    if (!pElement->m_xStream)
     {
         SAL_WARN_IF( pElement->m_bIsInserted, "package.xstor", "Inserted element must be created already!" );
 
@@ -1530,7 +1522,7 @@ void OStorage_Impl::OpenSubStream( SotElement_Impl* pElement )
         uno::Reference< packages::XDataSinkEncrSupport > xPackageSubStream( xTunnel, uno::UNO_QUERY_THROW );
 
         // the stream can never be inserted here, because inserted stream element holds the stream till commit or destruction
-        pElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xContext, false, m_nStorageType, false, GetRelInfoStreamForName( pElement->m_aOriginalName ) );
+        pElement->m_xStream.reset(new OWriteStream_Impl(this, xPackageSubStream, m_xPackage, m_xContext, false, m_nStorageType, false, GetRelInfoStreamForName(pElement->m_aOriginalName)));
     }
 }
 
@@ -1562,8 +1554,8 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
     if ( !pElement )
         return;
 
-    if ( (pElement->m_pStorage && ( pElement->m_pStorage->m_pAntiImpl || !pElement->m_pStorage->m_aReadOnlyWrapList.empty() ))
-      || (pElement->m_pStream && ( pElement->m_pStream->m_pAntiImpl || !pElement->m_pStream->m_aInputStreamsList.empty() )) )
+    if ( (pElement->m_xStorage && ( pElement->m_xStorage->m_pAntiImpl || !pElement->m_xStorage->m_aReadOnlyWrapList.empty() ))
+      || (pElement->m_xStream && ( pElement->m_xStream->m_pAntiImpl || !pElement->m_xStream->m_aInputStreamsList.empty() )) )
         throw io::IOException( THROW_WHERE ); // TODO: Access denied
 
     if ( pElement->m_bIsInserted )
@@ -1582,17 +1574,8 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
 
 void OStorage_Impl::ClearElement( SotElement_Impl* pElement )
 {
-    if ( pElement->m_pStorage )
-    {
-        delete pElement->m_pStorage;
-        pElement->m_pStorage = nullptr;
-    }
-
-    if ( pElement->m_pStream )
-    {
-        delete pElement->m_pStream;
-        pElement->m_pStream = nullptr;
-    }
+    pElement->m_xStorage.reset();
+    pElement->m_xStream.reset();
 }
 
 void OStorage_Impl::CloneStreamElement( const OUString& aStreamName,
@@ -1609,10 +1592,10 @@ void OStorage_Impl::CloneStreamElement( const OUString& aStreamName,
     else if ( pElement->m_bIsStorage )
         throw io::IOException( THROW_WHERE );
 
-    if ( !pElement->m_pStream )
+    if (!pElement->m_xStream)
         OpenSubStream( pElement );
 
-    if ( pElement->m_pStream && pElement->m_pStream->m_xPackageStream.is() )
+    if (pElement->m_xStream && pElement->m_xStream->m_xPackageStream.is())
     {
         // the existence of m_pAntiImpl of the child is not interesting,
         // the copy will be created internally
@@ -1623,10 +1606,10 @@ void OStorage_Impl::CloneStreamElement( const OUString& aStreamName,
         // storage. The only problem is that some package streams can be accessed from outside
         // at the same time (now solved by wrappers that remember own position).
 
-        if ( bEncryptionDataProvided )
-            pElement->m_pStream->GetCopyOfLastCommit( xTargetStream, aEncryptionData );
+        if (bEncryptionDataProvided)
+            pElement->m_xStream->GetCopyOfLastCommit(xTargetStream, aEncryptionData);
         else
-            pElement->m_pStream->GetCopyOfLastCommit( xTargetStream );
+            pElement->m_xStream->GetCopyOfLastCommit(xTargetStream);
     }
     else
         throw io::IOException( THROW_WHERE ); // TODO: general_error
@@ -1657,18 +1640,18 @@ void OStorage_Impl::CreateRelStorage()
         if ( !m_pRelStorElement )
         {
             m_pRelStorElement = new SotElement_Impl( "_rels", true, true );
-            m_pRelStorElement->m_pStorage = CreateNewStorageImpl( embed::ElementModes::WRITE );
-            if ( m_pRelStorElement->m_pStorage )
-                m_pRelStorElement->m_pStorage->m_pParent = nullptr; // the relation storage is completely controlled by parent
+            m_pRelStorElement->m_xStorage.reset(CreateNewStorageImpl(embed::ElementModes::WRITE));
+            if (m_pRelStorElement->m_xStorage)
+                m_pRelStorElement->m_xStorage->m_pParent = nullptr; // the relation storage is completely controlled by parent
         }
 
-        if ( !m_pRelStorElement->m_pStorage )
+        if (!m_pRelStorElement->m_xStorage)
             OpenSubStorage( m_pRelStorElement, embed::ElementModes::WRITE );
 
-        if ( !m_pRelStorElement->m_pStorage )
+        if (!m_pRelStorElement->m_xStorage)
             throw uno::RuntimeException( THROW_WHERE );
 
-        OStorage* pResultStorage = new OStorage( m_pRelStorElement->m_pStorage, false );
+        OStorage* pResultStorage = new OStorage(m_pRelStorElement->m_xStorage.get(), false);
         m_xRelStorage.set( static_cast<embed::XStorage*>(pResultStorage) );
     }
 }
@@ -1681,7 +1664,7 @@ void OStorage_Impl::CommitStreamRelInfo( SotElement_Impl* pStreamElement )
     if ( !pStreamElement )
         throw uno::RuntimeException( THROW_WHERE );
 
-    if ( m_nStorageType == embed::StorageFormats::OFOPXML && pStreamElement->m_pStream )
+    if (m_nStorageType == embed::StorageFormats::OFOPXML && pStreamElement->m_xStream)
     {
         SAL_WARN_IF( pStreamElement->m_aName.isEmpty(), "package.xstor", "The name must not be empty!" );
 
@@ -1691,7 +1674,7 @@ void OStorage_Impl::CommitStreamRelInfo( SotElement_Impl* pStreamElement )
             CreateRelStorage();
         }
 
-        pStreamElement->m_pStream->CommitStreamRelInfo( m_xRelStorage, pStreamElement->m_aOriginalName, pStreamElement->m_aName );
+        pStreamElement->m_xStream->CommitStreamRelInfo(m_xRelStorage, pStreamElement->m_aOriginalName, pStreamElement->m_aName);
     }
 }
 
@@ -1813,8 +1796,8 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
                 m_pRelStorElement = nullptr;
                 m_xRelStorage.clear();
             }
-            else if ( m_pRelStorElement && m_pRelStorElement->m_pStorage && xNewPackageFolder.is() )
-                m_pRelStorElement->m_pStorage->InsertIntoPackageFolder( aRelsStorName, xNewPackageFolder );
+            else if ( m_pRelStorElement && m_pRelStorElement->m_xStorage && xNewPackageFolder.is() )
+                m_pRelStorElement->m_xStorage->InsertIntoPackageFolder( aRelsStorName, xNewPackageFolder );
         }
     }
 }
@@ -2081,10 +2064,10 @@ SotElement_Impl* OStorage::OpenStreamElement_Impl( const OUString& aStreamName, 
 
     SAL_WARN_IF( !pElement, "package.xstor", "In case element can not be created an exception must be thrown!" );
 
-    if ( !pElement->m_pStream )
+    if (!pElement->m_xStream)
         m_pImpl->OpenSubStream( pElement );
 
-    if ( !pElement->m_pStream )
+    if (!pElement->m_xStream)
         throw io::IOException( THROW_WHERE );
 
     return pElement;
@@ -2335,9 +2318,9 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     try
     {
         SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, false );
-        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
+        OSL_ENSURE(pElement && pElement->m_xStream, "In case element can not be created an exception must be thrown!");
 
-        xResult = pElement->m_pStream->GetStream( nOpenMode, false );
+        xResult = pElement->m_xStream->GetStream(nOpenMode, false);
         SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
 
         if ( m_pData->m_bReadOnlyWrap )
@@ -2453,14 +2436,14 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
         {
             throw io::IOException( THROW_WHERE );
         }
-        else if ( pElement->m_pStorage )
+        else if (pElement->m_xStorage)
         {
             // storage has already been opened; it may be opened another time, if it the mode allows to do so
-            if ( pElement->m_pStorage->m_pAntiImpl )
+            if (pElement->m_xStorage->m_pAntiImpl)
             {
                 throw io::IOException( THROW_WHERE ); // TODO: access_denied
             }
-            else if ( !pElement->m_pStorage->m_aReadOnlyWrapList.empty()
+            else if ( !pElement->m_xStorage->m_aReadOnlyWrapList.empty()
                     && ( nStorageMode & embed::ElementModes::WRITE ) )
             {
                 throw io::IOException( THROW_WHERE ); // TODO: access_denied
@@ -2470,36 +2453,36 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
                 // in case parent storage allows writing the readonly mode of the child storage is
                 // virtual, that means that it is just enough to change the flag to let it be writable
                 // and since there is no AntiImpl nobody should be notified about it
-                pElement->m_pStorage->m_nStorageMode = nStorageMode | embed::ElementModes::READ;
+                pElement->m_xStorage->m_nStorageMode = nStorageMode | embed::ElementModes::READ;
 
                 if ( ( nStorageMode & embed::ElementModes::TRUNCATE ) )
                 {
-                    for ( SotElementList_Impl::iterator pElementIter = pElement->m_pStorage->m_aChildrenList.begin();
-                           pElementIter != pElement->m_pStorage->m_aChildrenList.end(); )
-                       {
+                    for ( SotElementList_Impl::iterator pElementIter = pElement->m_xStorage->m_aChildrenList.begin();
+                           pElementIter != pElement->m_xStorage->m_aChildrenList.end(); )
+                    {
                         SotElement_Impl* pElementToDel = (*pElementIter);
                         ++pElementIter;
 
                         m_pImpl->RemoveElement( pElementToDel );
-                       }
+                    }
                 }
             }
         }
 
-        if ( !pElement->m_pStorage )
-            m_pImpl->OpenSubStorage( pElement, nStorageMode );
+        if (!pElement->m_xStorage)
+            m_pImpl->OpenSubStorage(pElement, nStorageMode);
 
-        if ( !pElement->m_pStorage )
+        if (!pElement->m_xStorage)
             throw io::IOException( THROW_WHERE ); // TODO: general_error
 
         bool bReadOnlyWrap = ( ( nStorageMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE );
-        OStorage* pResultStorage = new OStorage( pElement->m_pStorage, bReadOnlyWrap );
+        OStorage* pResultStorage = new OStorage(pElement->m_xStorage.get(), bReadOnlyWrap);
         xResult.set( static_cast<embed::XStorage*>(pResultStorage) );
 
         if ( bReadOnlyWrap )
         {
             // Before this call is done the object must be refcounted already
-            pElement->m_pStorage->SetReadOnlyWrap( *pResultStorage );
+            pElement->m_xStorage->SetReadOnlyWrap(*pResultStorage);
 
             // before the storage disposes the stream it must deregister itself as listener
             uno::Reference< lang::XComponent > xStorageComponent( xResult, uno::UNO_QUERY_THROW );
@@ -2721,16 +2704,16 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
             throw io::IOException( THROW_WHERE );
         }
 
-        if ( !pElement->m_pStorage )
+        if (!pElement->m_xStorage)
             m_pImpl->OpenSubStorage( pElement, nStorageMode );
 
         uno::Reference< embed::XStorage > xResult;
-        if ( pElement->m_pStorage )
+        if (pElement->m_xStorage)
         {
             // the existence of m_pAntiImpl of the child is not interesting,
             // the copy will be created internally
 
-            pElement->m_pStorage->CopyLastCommitTo( xTargetStorage );
+            pElement->m_xStorage->CopyLastCommitTo(xTargetStorage);
         }
         else
             throw io::IOException( THROW_WHERE ); // TODO: general_error
@@ -3293,9 +3276,9 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
     try
     {
         SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamName, nOpenMode, true );
-        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
+        OSL_ENSURE(pElement && pElement->m_xStream, "In case element can not be created an exception must be thrown!");
 
-        xResult = pElement->m_pStream->GetStream( nOpenMode, aEncryptionData, false );
+        xResult = pElement->m_xStream->GetStream(nOpenMode, aEncryptionData, false);
         SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
 
         if ( m_pData->m_bReadOnlyWrap )
@@ -3470,14 +3453,14 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
         if ( !pElement )
             throw container::NoSuchElementException( THROW_WHERE );
 
-        if ( !pElement->m_pStream )
+        if (!pElement->m_xStream)
         {
             m_pImpl->OpenSubStream( pElement );
-            if ( !pElement->m_pStream )
+            if (!pElement->m_xStream)
                 throw io::IOException( THROW_WHERE );
         }
 
-        uno::Reference< io::XInputStream > xRawInStream = pElement->m_pStream->GetPlainRawInStream();
+        uno::Reference<io::XInputStream> xRawInStream = pElement->m_xStream->GetPlainRawInStream();
         if ( !xRawInStream.is() )
             throw io::IOException( THROW_WHERE );
 
@@ -3568,17 +3551,17 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         if ( !pElement )
             throw container::NoSuchElementException( THROW_WHERE );
 
-        if ( !pElement->m_pStream )
+        if (!pElement->m_xStream)
         {
             m_pImpl->OpenSubStream( pElement );
-            if ( !pElement->m_pStream )
+            if (!pElement->m_xStream)
                 throw io::IOException( THROW_WHERE );
         }
 
-        if ( !pElement->m_pStream->IsEncrypted() )
+        if (!pElement->m_xStream->IsEncrypted())
             throw packages::NoEncryptionException( THROW_WHERE );
 
-        uno::Reference< io::XInputStream > xRawInStream = pElement->m_pStream->GetRawInStream();
+        uno::Reference< io::XInputStream > xRawInStream = pElement->m_xStream->GetRawInStream();
         if ( !xRawInStream.is() )
             throw io::IOException( THROW_WHERE );
 
@@ -3815,10 +3798,10 @@ void SAL_CALL OStorage::revert()
     for ( SotElementList_Impl::iterator pElementIter = m_pImpl->m_aChildrenList.begin();
           pElementIter != m_pImpl->m_aChildrenList.end(); ++pElementIter )
     {
-        if ( ((*pElementIter)->m_pStorage
-                && ( (*pElementIter)->m_pStorage->m_pAntiImpl || !(*pElementIter)->m_pStorage->m_aReadOnlyWrapList.empty() ))
-          || ((*pElementIter)->m_pStream
-                  && ( (*pElementIter)->m_pStream->m_pAntiImpl || !(*pElementIter)->m_pStream->m_aInputStreamsList.empty()) ) )
+        if ( ((*pElementIter)->m_xStorage
+                && ( (*pElementIter)->m_xStorage->m_pAntiImpl || !(*pElementIter)->m_xStorage->m_aReadOnlyWrapList.empty() ))
+          || ((*pElementIter)->m_xStream
+                  && ( (*pElementIter)->m_xStream->m_pAntiImpl || !(*pElementIter)->m_xStream->m_aInputStreamsList.empty()) ) )
             throw io::IOException( THROW_WHERE ); // TODO: access denied
     }
 
@@ -5165,9 +5148,9 @@ void SAL_CALL OStorage::insertStreamElementDirect(
             throw container::ElementExistException( THROW_WHERE );
 
         pElement = OpenStreamElement_Impl( aStreamName, embed::ElementModes::READWRITE, false );
-        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
+        OSL_ENSURE(pElement && pElement->m_xStream, "In case element can not be created an exception must be thrown!");
 
-        pElement->m_pStream->InsertStreamDirectly( xInStream, aProps );
+        pElement->m_xStream->InsertStreamDirectly(xInStream, aProps);
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
@@ -5472,14 +5455,14 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
         if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != embed::StorageFormats::PACKAGE || aPropertyName != "MediaType" )
             throw beans::PropertyVetoException( THROW_WHERE );
 
-        if ( !pElement->m_pStorage )
+        if (!pElement->m_xStorage)
             m_pImpl->OpenSubStorage( pElement, embed::ElementModes::READ );
 
-        if ( !pElement->m_pStorage )
+        if (!pElement->m_xStorage)
             throw io::IOException( THROW_WHERE ); // TODO: general_error
 
-        pElement->m_pStorage->ReadContents();
-        return uno::makeAny( pElement->m_pStorage->m_aMediaType );
+        pElement->m_xStorage->ReadContents();
+        return uno::makeAny(pElement->m_xStorage->m_aMediaType);
     }
     catch( const embed::InvalidStorageException& rInvalidStorageException )
     {
@@ -5648,10 +5631,10 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
             // the transacted version of the stream should be opened
 
             SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, false );
-            assert(pElement && pElement->m_pStream && "In case element can not be created an exception must be thrown!");
+            assert(pElement && pElement->m_xStream && "In case element can not be created an exception must be thrown!");
 
-            xResult.set( pElement->m_pStream->GetStream( nOpenMode, true ),
-                         uno::UNO_QUERY_THROW );
+            xResult.set(pElement->m_xStream->GetStream(nOpenMode, true),
+                        uno::UNO_QUERY_THROW);
         }
         catch ( const container::NoSuchElementException & )
         {
@@ -5742,10 +5725,10 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
         // the transacted version of the stream should be opened
 
         SotElement_Impl *pElement = OpenStreamElement_Impl( aStreamPath, nOpenMode, true );
-        OSL_ENSURE( pElement && pElement->m_pStream, "In case element can not be created an exception must be thrown!" );
+        OSL_ENSURE(pElement && pElement->m_xStream, "In case element can not be created an exception must be thrown!");
 
-        xResult.set( pElement->m_pStream->GetStream( nOpenMode, aEncryptionData, true ),
-                     uno::UNO_QUERY_THROW );
+        xResult.set(pElement->m_xStream->GetStream(nOpenMode, aEncryptionData, true),
+                    uno::UNO_QUERY_THROW);
     }
     else
     {

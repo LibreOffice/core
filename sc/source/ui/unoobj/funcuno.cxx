@@ -109,29 +109,21 @@ ScDocument* ScTempDocSource::GetDocument()
         return rCache.GetDocument();
 }
 
-ScTempDocCache::ScTempDocCache() :
-    pDoc( nullptr ),
-    bInUse( false )
+ScTempDocCache::ScTempDocCache()
+    : bInUse(false)
 {
-}
-
-ScTempDocCache::~ScTempDocCache()
-{
-    OSL_ENSURE( !bInUse, "ScTempDocCache dtor: bInUse" );
-    delete pDoc;
 }
 
 void ScTempDocCache::SetDocument( ScDocument* pNew )
 {
-    OSL_ENSURE( !pDoc, "ScTempDocCache::SetDocument: already set" );
-    pDoc = pNew;
+    OSL_ENSURE(!xDoc, "ScTempDocCache::SetDocument: already set");
+    xDoc.reset(pNew);
 }
 
 void ScTempDocCache::Clear()
 {
     OSL_ENSURE( !bInUse, "ScTempDocCache::Clear: bInUse" );
-    delete pDoc;
-    pDoc = nullptr;
+    xDoc.reset();
 }
 
 //  copy results from one document into another

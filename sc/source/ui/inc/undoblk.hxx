@@ -439,7 +439,7 @@ public:
 private:
     ScCellMergeOption maOption;
     bool            mbMergeContents;        // Merge contents in Redo().
-    ScDocument*     mpUndoDoc;              // when data is merged
+    std::unique_ptr<ScDocument> mxUndoDoc;              // when data is merged
     SdrUndoAction*  mpDrawUndo;
 
     void            DoChange( bool bUndo ) const;
@@ -592,10 +592,9 @@ private:
 class ScUndoListNames: public ScBlockUndo
 {
 public:
-                    ScUndoListNames( ScDocShell* pNewDocShell,
-                                     const ScRange& rRange,
-                                     ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc );
-    virtual         ~ScUndoListNames() override;
+    ScUndoListNames(ScDocShell* pNewDocShell,
+                    const ScRange& rRange,
+                    ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc);
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -605,8 +604,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScDocument*     pUndoDoc;
-    ScDocument*     pRedoDoc;
+    std::unique_ptr<ScDocument> xUndoDoc;
+    std::unique_ptr<ScDocument> xRedoDoc;
 
     void            DoChange( ScDocument* pSrcDoc ) const;
 };
@@ -687,9 +686,8 @@ private:
 class ScUndoRefreshLink: public ScSimpleUndo
 {
 public:
-                    ScUndoRefreshLink( ScDocShell* pNewDocShell,
-                                       ScDocument* pNewUndoDoc );
-    virtual         ~ScUndoRefreshLink() override;
+    ScUndoRefreshLink(ScDocShell* pNewDocShell,
+                      ScDocument* pNewUndoDoc);
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -699,8 +697,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScDocument*     pUndoDoc;
-    ScDocument*     pRedoDoc;
+    std::unique_ptr<ScDocument> xUndoDoc;
+    std::unique_ptr<ScDocument> xRedoDoc;
 };
 
 class ScUndoEnterMatrix: public ScBlockUndo
@@ -784,18 +782,17 @@ private:
 class ScUndoUpdateAreaLink : public ScSimpleUndo        //! also change BlockUndo?
 {
 public:
-                    ScUndoUpdateAreaLink( ScDocShell* pShell,
-                                          const OUString& rOldD,
-                                          const OUString& rOldF, const OUString& rOldO,
-                                          const OUString& rOldA, const ScRange& rOldR,
-                                          sal_uLong nOldRD,
-                                          const OUString& rNewD,
-                                          const OUString& rNewF, const OUString& rNewO,
-                                          const OUString& rNewA, const ScRange& rNewR,
-                                          sal_uLong nNewRD,
-                                          ScDocument* pUndo, ScDocument* pRedo,
-                                          bool bDoInsert );
-    virtual         ~ScUndoUpdateAreaLink() override;
+    ScUndoUpdateAreaLink(ScDocShell* pShell,
+                         const OUString& rOldD,
+                         const OUString& rOldF, const OUString& rOldO,
+                         const OUString& rOldA, const ScRange& rOldR,
+                         sal_uLong nOldRD,
+                         const OUString& rNewD,
+                         const OUString& rNewF, const OUString& rNewO,
+                         const OUString& rNewA, const ScRange& rNewR,
+                         sal_uLong nNewRD,
+                         ScDocument* pUndo, ScDocument* pRedo,
+                         bool bDoInsert);
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -815,8 +812,8 @@ private:
     OUString        aNewOpt;
     OUString        aNewArea;
     ScRange         aNewRange;
-    ScDocument*     pUndoDoc;
-    ScDocument*     pRedoDoc;
+    std::unique_ptr<ScDocument> xUndoDoc;
+    std::unique_ptr<ScDocument> xRedoDoc;
     sal_uLong       nOldRefresh;
     sal_uLong       nNewRefresh;
     bool            bWithInsert;
@@ -937,12 +934,11 @@ private:
 class ScUndoBorder: public ScBlockUndo
 {
 public:
-                    ScUndoBorder( ScDocShell* pNewDocShell,
-                                    const ScRangeList& rRangeList,
-                                    ScDocument* pNewUndoDoc,
-                                    const SvxBoxItem& rNewOuter,
-                                    const SvxBoxInfoItem& rNewInner );
-    virtual         ~ScUndoBorder() override;
+    ScUndoBorder(ScDocShell* pNewDocShell,
+                 const ScRangeList& rRangeList,
+                 ScDocument* pNewUndoDoc,
+                 const SvxBoxItem& rNewOuter,
+                 const SvxBoxInfoItem& rNewInner);
 
     virtual void    Undo() override;
     virtual void    Redo() override;
@@ -952,10 +948,10 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScDocument*     pUndoDoc;
-    ScRangeList*    pRanges;
-    SvxBoxItem*     pOuter;
-    SvxBoxInfoItem* pInner;
+    std::unique_ptr<ScDocument> xUndoDoc;
+    std::unique_ptr<ScRangeList> xRanges;
+    std::unique_ptr<SvxBoxItem> xOuter;
+    std::unique_ptr<SvxBoxInfoItem> xInner;
 };
 
 #endif

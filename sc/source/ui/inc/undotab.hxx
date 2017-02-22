@@ -271,7 +271,7 @@ public:
 private:
     SCTAB       nTab;
     SCTAB       nCount;
-    ScDocument* pRedoDoc;
+    std::unique_ptr<ScDocument> xRedoDoc;
     SdrUndoAction*  pDrawUndo;
 
     void DoChange() const;

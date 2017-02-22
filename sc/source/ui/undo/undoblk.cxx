@@ -1432,20 +1432,14 @@ bool ScUndoDragDrop::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return false;           // not possible
 }
 
-//      Insert list containing range names
-//      (Insert|Name|Insert =>[List])
-ScUndoListNames::ScUndoListNames( ScDocShell* pNewDocShell, const ScRange& rRange,
-                ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc ) :
-    ScBlockUndo( pNewDocShell, rRange, SC_UNDO_AUTOHEIGHT ),
-    pUndoDoc( pNewUndoDoc ),
-    pRedoDoc( pNewRedoDoc )
+// Insert list containing range names
+// (Insert|Name|Insert =>[List])
+ScUndoListNames::ScUndoListNames(ScDocShell* pNewDocShell, const ScRange& rRange,
+                                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc)
+    : ScBlockUndo(pNewDocShell, rRange, SC_UNDO_AUTOHEIGHT)
+    , xUndoDoc(pNewUndoDoc)
+    , xRedoDoc(pNewRedoDoc)
 {
-}
-
-ScUndoListNames::~ScUndoListNames()
-{
-    delete pUndoDoc;
-    delete pRedoDoc;
 }
 
 OUString ScUndoListNames::GetComment() const
@@ -1469,14 +1463,14 @@ void ScUndoListNames::DoChange( ScDocument* pSrcDoc ) const
 void ScUndoListNames::Undo()
 {
     BeginUndo();
-    DoChange(pUndoDoc);
+    DoChange(xUndoDoc.get());
     EndUndo();
 }
 
 void ScUndoListNames::Redo()
 {
     BeginRedo();
-    DoChange(pRedoDoc);
+    DoChange(xRedoDoc.get());
     EndRedo();
 }
 
@@ -2258,23 +2252,15 @@ static ScRange lcl_TotalRange( const ScRangeList& rRanges )
     return aTotal;
 }
 
-ScUndoBorder::ScUndoBorder( ScDocShell* pNewDocShell,
-                            const ScRangeList& rRangeList, ScDocument* pNewUndoDoc,
-                            const SvxBoxItem& rNewOuter, const SvxBoxInfoItem& rNewInner ) :
-    ScBlockUndo( pNewDocShell, lcl_TotalRange(rRangeList), SC_UNDO_SIMPLE ),
-    pUndoDoc( pNewUndoDoc )
+ScUndoBorder::ScUndoBorder(ScDocShell* pNewDocShell,
+                           const ScRangeList& rRangeList, ScDocument* pNewUndoDoc,
+                           const SvxBoxItem& rNewOuter, const SvxBoxInfoItem& rNewInner)
+    : ScBlockUndo(pNewDocShell, lcl_TotalRange(rRangeList), SC_UNDO_SIMPLE)
+    , xUndoDoc(pNewUndoDoc)
 {
-    pRanges = new ScRangeList(rRangeList);
-    pOuter = new SvxBoxItem(rNewOuter);
-    pInner = new SvxBoxInfoItem(rNewInner);
-}
-
-ScUndoBorder::~ScUndoBorder()
-{
-    delete pUndoDoc;
-    delete pRanges;
-    delete pOuter;
-    delete pInner;
+    xRanges.reset(new ScRangeList(rRangeList));
+    xOuter.reset(new SvxBoxItem(rNewOuter));
+    xInner.reset(new SvxBoxInfoItem(rNewInner));
 }
 
 OUString ScUndoBorder::GetComment() const
@@ -2288,8 +2274,8 @@ void ScUndoBorder::Undo()
 
     ScDocument& rDoc = pDocShell->GetDocument();
     ScMarkData aMarkData;
-    aMarkData.MarkFromRangeList( *pRanges, false );
-    pUndoDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
+    aMarkData.MarkFromRangeList(*xRanges, false);
+    xUndoDoc->CopyToDocument(aBlockRange, InsertDeleteFlags::ATTRIB, true, rDoc, &aMarkData);
     pDocShell->PostPaint( aBlockRange, PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndUndo();
@@ -2300,20 +2286,20 @@ void ScUndoBorder::Redo()
     BeginRedo();
 
     ScDocument& rDoc = pDocShell->GetDocument();        // call function at docfunc
-    size_t nCount = pRanges->size();
+    size_t nCount = xRanges->size();
     for (size_t i = 0; i < nCount; ++i )
     {
-        ScRange aRange = *(*pRanges)[i];
+        ScRange aRange = *(*xRanges)[i];
         SCTAB nTab = aRange.aStart.Tab();
 
         ScMarkData aMark;
         aMark.SetMarkArea( aRange );
         aMark.SelectTable( nTab, true );
 
-        rDoc.ApplySelectionFrame( aMark, pOuter, pInner );
+        rDoc.ApplySelectionFrame(aMark, xOuter.get(), xInner.get());
     }
     for (size_t i = 0; i < nCount; ++i)
-        pDocShell->PostPaint( *(*pRanges)[i], PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
+        pDocShell->PostPaint( *(*xRanges)[i], PaintPartFlags::Grid, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndRedo();
 }

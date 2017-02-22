@@ -596,7 +596,7 @@ class XclExpChangeTrack : protected XclExpRoot
     XclExpChTrTabIdBuffer*        pTabIdBuffer;
     TabIdBufferType maBuffers;
 
-    ScDocument*                 pTempDoc;           // empty document
+    std::unique_ptr<ScDocument> xTempDoc;           // empty document
 
     XclExpChTrHeader*           pHeader;            // header record for last GUID
     sal_uInt8                   aGUID[ 16 ];        // GUID for action info records
