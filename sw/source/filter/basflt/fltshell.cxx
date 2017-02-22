@@ -148,7 +148,11 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
     // The content indices always apply to the node!
     rRegion.GetPoint()->nNode = rMkPos.m_nNode.GetIndex() + 1;
     SwContentNode* pCNd = GetContentNode(pDoc, rRegion.GetPoint()->nNode, true);
-    rRegion.GetPoint()->nContent.Assign(pCNd, rMkPos.m_nContent);
+
+    SAL_WARN_IF(pCNd->Len() < rMkPos.m_nContent, "sw.ww8",
+        "invalid content index " << rMkPos.m_nContent << " but text node has only " << pCNd->Len());
+    rRegion.GetPoint()->nContent.Assign(pCNd,
+            std::min<sal_Int32>(rMkPos.m_nContent, pCNd->Len()));
     rRegion.SetMark();
     if (rMkPos.m_nNode != rPtPos.m_nNode)
     {
@@ -159,7 +163,10 @@ bool SwFltStackEntry::MakeRegion(SwDoc* pDoc, SwPaM& rRegion, bool bCheck,
         rRegion.GetPoint()->nNode = n;
         pCNd = GetContentNode(pDoc, rRegion.GetPoint()->nNode, false);
     }
-    rRegion.GetPoint()->nContent.Assign(pCNd, rPtPos.m_nContent);
+    SAL_WARN_IF(pCNd->Len() < rPtPos.m_nContent, "sw.ww8",
+        "invalid content index " << rPtPos.m_nContent << " but text node has only " << pCNd->Len());
+    rRegion.GetPoint()->nContent.Assign(pCNd,
+            std::min<sal_Int32>(rPtPos.m_nContent, pCNd->Len()));
     OSL_ENSURE( CheckNodesRange( rRegion.Start()->nNode,
                              rRegion.End()->nNode, true ),
              "attribute or similar crosses section-boundaries" );
