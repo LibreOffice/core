@@ -513,7 +513,7 @@ public:
 
         long nItemSize;     // either 1 Byte or a complete BX
 
-        // Offset in Stream where last read of 52 bytes took place
+        // Offset in Stream where last read of 512 bytes took place
         long nFilePos;
         sal_uInt8 mnIdx;         // Pos marker
         ePLCFT ePLCF;
