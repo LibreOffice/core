@@ -2298,10 +2298,15 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         if ( pInputWin )
             pInputWin->SetTextString( aText );
 
-        ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
-        ScDocument& rDoc = pDocSh->GetDocument();
         if ( comphelper::LibreOfficeKit::isActive() )
-            rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
+        {
+            if (pActiveViewSh)
+            {
+                ScDocShell* pDocSh = pActiveViewSh->GetViewData().GetDocShell();
+                ScDocument& rDoc = pDocSh->GetDocument();
+                rDoc.GetDrawLayer()->libreOfficeKitCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
+            }
+        }
     }
 
     // If the cursor is before the end of a paragraph, parts are being pushed to
