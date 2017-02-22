@@ -13,7 +13,9 @@ $(eval $(call gb_ExternalPackage_use_external_project,libgpg-error,libgpg-error)
 
 ifneq ($(DISABLE_DYNLOADING),TRUE)
 
+ifneq ($(OS),WNT)
 $(eval $(call gb_ExternalPackage_add_file,libgpg-error,$(LIBO_LIB_FOLDER)/libgpg-error.so.0,src/.libs/libgpg-error.so.0.22.0))
+endif
 
 endif # $(DISABLE_DYNLOADING)
 
