@@ -191,9 +191,14 @@ bool DocumentDecryption::generateEncryptionKey(const OUString& rPassword)
 
 bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInputStream)
 {
-    AgileEngine* engine = new AgileEngine();
+    AgileEngine* engine = new AgileEngine;
     mEngine.reset(engine);
     AgileEncryptionInfo& info = engine->getInfo();
+    info.spinCount = 0;
+    info.saltSize = 0;
+    info.keyBits = 0;
+    info.hashSize = 0;
+    info.blockSize = 0;
 
     Reference<XFastDocumentHandler> xFastDocumentHandler( new AgileDocumentHandler(info) );
     Reference<XFastTokenHandler>    xFastTokenHandler   ( new AgileTokenHandler );
