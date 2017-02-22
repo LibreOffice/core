@@ -11184,6 +11184,19 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         if (!updateObject(rObject.m_nFormObject))
             return false;
 
+        // Count /Matrix and /BBox.
+        // vcl::ImportPDF() works with 96 DPI so use the same values here, too.
+        sal_Int32 nOldDPIX = getReferenceDevice()->GetDPIX();
+        getReferenceDevice()->SetDPIX(96);
+        sal_Int32 nOldDPIY = getReferenceDevice()->GetDPIY();
+        getReferenceDevice()->SetDPIY(96);
+        Size aSize = getReferenceDevice()->PixelToLogic(rObject.m_aBitmap.GetPrefSize(), MapMode(m_aMapMode.GetMapUnit()));
+        getReferenceDevice()->SetDPIX(nOldDPIX);
+        getReferenceDevice()->SetDPIY(nOldDPIY);
+        double fScaleX = 1.0 / aSize.Width();
+        double fScaleY = 1.0 / aSize.Height();
+
+        // Now have all the info to write the form XObject.
         aLine.append(rObject.m_nFormObject);
         aLine.append(" 0 obj\n");
         aLine.append("<< /Type /XObject");
@@ -11193,13 +11206,28 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         aLine.append(" ");
         aLine.append(rObject.m_nObject);
         aLine.append(" 0 R>> >>");
-        aLine.append(" /BBox [ 0 0 1 1 ]");
+        aLine.append(" /Matrix [ ");
+        appendDouble(fScaleX, aLine);
+        aLine.append(" 0 0 ");
+        appendDouble(fScaleY, aLine);
+        aLine.append(" 0 0 ]");
+        aLine.append(" /BBox [ 0 0 ");
+        aLine.append(aSize.Width());
+        aLine.append(" ");
+        aLine.append(aSize.Height());
+        aLine.append(" ]");
         aLine.append(" /Length ");
 
         OStringBuffer aStream;
+        aStream.append("q ");
+        aStream.append(aSize.Width());
+        aStream.append(" 0 0 ");
+        aStream.append(aSize.Height());
+        aStream.append(" 0 0 cm\n");
         aStream.append("/Im");
         aStream.append(rObject.m_nObject);
-        aStream.append(" Do");
+        aStream.append(" Do\n");
+        aStream.append("Q");
         aLine.append(aStream.getLength());
 
         aLine.append(">>\nstream\n");
