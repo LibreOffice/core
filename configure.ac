@@ -3581,6 +3581,18 @@ if test "$_os" = "WINNT"; then
         MSVC_CXX=`win_short_path_for_make "$MSVC_CXX"`
     fi
 
+    # TODO(davido): If you have a better idea how to implement
+    # a better check whether cl.exe version is outdated, be my guest
+    if test "$vcnum" = "140"; then
+        MSVC_VERSION=`$MSVC_CXX 2>&1 | grep Version | sed 's/.*Version //' | sed -s 's/\ .*//'`
+        AC_MSG_CHECKING([whether Visual C++ update level is 3 ($MSVC_VERSION)])
+        if test "$MSVC_VERSION" = "19.00.24215.1"; then
+            AC_MSG_RESULT([Yes, MSVC 2015 Update 3 detected])
+        else
+            AC_MSG_ERROR([MSVC 2105 version is outdated: $MSVC_VERSION. Please update to MSVC 2015 Update 3])
+        fi
+    fi
+
     if test -z "$CC"; then
         CC=$MSVC_CXX
     fi
