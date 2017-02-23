@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cassert>
+
 #include "osl/file.h"
 
 #include "osl/diagnose.h"
@@ -353,7 +357,7 @@ static rtl_uString* oslMakeUStrFromPsz(const sal_Char* pszStr, rtl_uString** ust
 oslFileError osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uString **pstrPath )
 {
     oslVolumeDeviceHandleImpl* pItem = static_cast<oslVolumeDeviceHandleImpl*>(Handle);
-    sal_Char Buffer[PATH_MAX];
+    sal_Char Buffer[RTL_CONSTASCII_LENGTH("file://") + PATH_MAX];
 
     Buffer[0] = '\0';
 
@@ -367,7 +371,8 @@ oslFileError osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uSt
         return osl_File_E_INVAL;
     }
 
-    snprintf(Buffer, sizeof(Buffer), "file://%s", pItem->pszMountPoint);
+    int n = snprintf(Buffer, sizeof(Buffer), "file://%s", pItem->pszMountPoint);
+    assert(n >= 0 && unsigned(n) < sizeof(Buffer)); (void) n;
 
 #ifdef DEBUG_OSL_FILE
     fprintf(stderr,"Mount Point is: '%s'\n",Buffer);
