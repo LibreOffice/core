@@ -248,8 +248,12 @@ int HStreamIODev::skipBlock(int size)
           else{
                 int remain = size;
                 while(remain){
-                     if( remain > BUFSIZE )
-                          remain -= GZREAD(rBuf, BUFSIZE);
+                     if( remain > BUFSIZE ) {
+                          int read = GZREAD(rBuf, BUFSIZE);
+                          remain -= read;
+                          if (read != BUFSIZE)
+                              break;
+                     }
                      else{
                           remain -= GZREAD(rBuf, remain);
                           break;
