@@ -586,7 +586,7 @@ void EditUndoSetAttribs::ImpSetSelection( EditView* /*pView*/ )
     pEE->GetActiveView()->GetImpEditView()->SetEditSelection(aSel);
 }
 
-EditUndoTransliteration::EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, sal_Int32 nM) :
+EditUndoTransliteration::EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, TransliterationFlags nM) :
     EditUndo(EDITUNDO_TRANSLITERATE, pEE),
     aOldESel(rESel), nMode(nM), pTxtObj(nullptr) {}
 

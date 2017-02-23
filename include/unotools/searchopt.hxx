@@ -24,6 +24,7 @@
 #include <memory>
 
 class SvtSearchOptions_Impl;
+enum class TransliterationFlags;
 
 class UNOTOOLS_DLLPUBLIC SvtSearchOptions
 {
@@ -38,7 +39,7 @@ public:
 
     void Commit();
 
-    sal_Int32   GetTransliterationFlags() const;
+    TransliterationFlags GetTransliterationFlags() const;
 
     // General Options
 

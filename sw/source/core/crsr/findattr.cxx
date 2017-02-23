@@ -18,10 +18,10 @@
  */
 
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nutil/searchopt.hxx>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -1056,12 +1056,12 @@ struct SwFindParaAttr : public SwFindParas
 {
     bool bValue;
     const SfxItemSet *pSet, *pReplSet;
-    const SearchOptions2 *pSearchOpt;
+    const i18nutil::SearchOptions2 *pSearchOpt;
     SwCursor& m_rCursor;
     std::unique_ptr<utl::TextSearch> pSText;
 
     SwFindParaAttr( const SfxItemSet& rSet, bool bNoCollection,
-                    const SearchOptions2* pOpt, const SfxItemSet* pRSet,
+                    const i18nutil::SearchOptions2* pOpt, const SfxItemSet* pRSet,
                     SwCursor& rCursor )
         : bValue( bNoCollection ), pSet( &rSet ), pReplSet( pRSet ),
           pSearchOpt( pOpt ), m_rCursor( rCursor ) {}
@@ -1109,7 +1109,7 @@ int SwFindParaAttr::Find( SwPaM* pCursor, SwMoveFnCollection const & fnMove, con
             // then search in text of it
             if( !pSText )
             {
-                SearchOptions2 aTmp( *pSearchOpt );
+                i18nutil::SearchOptions2 aTmp( *pSearchOpt );
 
                 // search in selection
                 aTmp.searchFlag |= (SearchFlags::REG_NOT_BEGINOFLINE |
@@ -1221,7 +1221,7 @@ bool SwFindParaAttr::IsReplaceMode() const
 sal_uLong SwCursor::Find( const SfxItemSet& rSet, bool bNoCollections,
                           SwDocPositions nStart, SwDocPositions nEnd,
                           bool& bCancel, FindRanges eFndRngs,
-                          const SearchOptions2* pSearchOpt,
+                          const i18nutil::SearchOptions2* pSearchOpt,
                           const SfxItemSet* pReplSet )
 {
     // switch off OLE-notifications

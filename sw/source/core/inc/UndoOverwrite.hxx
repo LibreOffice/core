@@ -26,7 +26,7 @@
 
 class SwRedlineSaveDatas;
 class SwTextNode;
-
+enum class TransliterationFlags;
 namespace utl {
     class TransliterationWrapper;
 }
@@ -69,7 +69,7 @@ struct UndoTransliterate_Data;
 class SwUndoTransliterate : public SwUndo, public SwUndRng
 {
     std::vector< UndoTransliterate_Data * >    aChanges;
-    sal_uInt32 nType;
+    TransliterationFlags nType;
 
     void DoTransliterate(SwDoc & rDoc, SwPaM & rPam);
 

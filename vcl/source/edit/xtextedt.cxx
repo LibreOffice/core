@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <i18nutil/searchopt.hxx>
 #include <vcl/xtextedt.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -133,7 +134,7 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
     return aSel;
 }
 
-bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSearchOptions, bool bForward )
+bool ExtTextEngine::Search( TextSelection& rSel, const i18nutil::SearchOptions& rSearchOptions, bool bForward )
 {
     TextSelection aSel( rSel );
     aSel.Justify();
@@ -156,9 +157,9 @@ bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
 
     const sal_uInt32 nStartNode = aStartPaM.GetPara();
 
-    util::SearchOptions aOptions( rSearchOptions );
+    i18nutil::SearchOptions aOptions( rSearchOptions );
     aOptions.Locale = Application::GetSettings().GetLanguageTag().getLocale();
-    utl::TextSearch aSearcher( utl::TextSearch::UpgradeToSearchOptions2( aOptions));
+    utl::TextSearch aSearcher( utl::TextSearch::UpgradeToSearchOptions2(aOptions) );
 
     // iterate over the paragraphs
     for ( sal_uInt32 nNode = nStartNode;

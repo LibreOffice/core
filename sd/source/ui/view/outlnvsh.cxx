@@ -51,8 +51,6 @@
 #include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <editeng/outlobj.hxx>
@@ -593,37 +591,36 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
             OutlinerView* pOLV = pOlView ? pOlView->GetViewByWindow( GetActiveWindow() ) : nullptr;
             if( pOLV )
             {
-                using namespace ::com::sun::star::i18n;
-                sal_Int32 nType = 0;
+                TransliterationFlags nType = TransliterationFlags::NONE;
 
                 switch( nSlot )
                 {
                     case SID_TRANSLITERATE_SENTENCE_CASE:
-                        nType = TransliterationModulesExtra::SENTENCE_CASE;
+                        nType = TransliterationFlags::SENTENCE_CASE;
                         break;
                     case SID_TRANSLITERATE_TITLE_CASE:
-                        nType = TransliterationModulesExtra::TITLE_CASE;
+                        nType = TransliterationFlags::TITLE_CASE;
                         break;
                     case SID_TRANSLITERATE_TOGGLE_CASE:
-                        nType = TransliterationModulesExtra::TOGGLE_CASE;
+                        nType = TransliterationFlags::TOGGLE_CASE;
                         break;
                     case SID_TRANSLITERATE_UPPER:
-                        nType = TransliterationModules_LOWERCASE_UPPERCASE;
+                        nType = TransliterationFlags::LOWERCASE_UPPERCASE;
                         break;
                     case SID_TRANSLITERATE_LOWER:
-                        nType = TransliterationModules_UPPERCASE_LOWERCASE;
+                        nType = TransliterationFlags::UPPERCASE_LOWERCASE;
                         break;
                     case SID_TRANSLITERATE_HALFWIDTH:
-                        nType = TransliterationModules_FULLWIDTH_HALFWIDTH;
+                        nType = TransliterationFlags::FULLWIDTH_HALFWIDTH;
                         break;
                     case SID_TRANSLITERATE_FULLWIDTH:
-                        nType = TransliterationModules_HALFWIDTH_FULLWIDTH;
+                        nType = TransliterationFlags::HALFWIDTH_FULLWIDTH;
                         break;
                     case SID_TRANSLITERATE_HIRAGANA:
-                        nType = TransliterationModules_KATAKANA_HIRAGANA;
+                        nType = TransliterationFlags::KATAKANA_HIRAGANA;
                         break;
                     case SID_TRANSLITERATE_KATAGANA:
-                        nType = TransliterationModules_HIRAGANA_KATAKANA;
+                        nType = TransliterationFlags::HIRAGANA_KATAKANA;
                         break;
                 }
 

@@ -29,12 +29,10 @@
 #include <svx/dialmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchResult.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
@@ -51,6 +49,7 @@
 
 #include <comphelper/numbers.hxx>
 #include <unotools/syslocale.hxx>
+#include <i18nutil/searchopt.hxx>
 
 #define EQUAL_BOOKMARKS(a, b) a == b
 
@@ -474,13 +473,13 @@ FmSearchEngine::SearchResult FmSearchEngine::SearchRegularApprox(const OUString&
     FieldCollection::const_iterator iterInitialField = iterFieldLoop;
 
     // Parameter sammeln
-    SearchOptions2 aParam;
+    i18nutil::SearchOptions2 aParam;
     aParam.AlgorithmType2 = m_bRegular ? SearchAlgorithms2::REGEXP : SearchAlgorithms2::APPROXIMATE;
     aParam.searchFlag = 0;
     aParam.transliterateFlags = GetTransliterationFlags();
     if ( !GetTransliteration() )
     {   // if transliteration is not enabled, the only flags which matter are IGNORE_CASE and IGNORE_WIDTH
-        aParam.transliterateFlags &= TransliterationModules_IGNORE_CASE | TransliterationModules_IGNORE_WIDTH;
+        aParam.transliterateFlags &= TransliterationFlags::IGNORE_CASE | TransliterationFlags::IGNORE_WIDTH;
     }
     if (m_bLevenshtein)
     {
@@ -605,7 +604,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_nLevShorter(0)
     ,m_nLevLonger(0)
     ,m_nPosition(MATCHING_ANYWHERE)
-    ,m_nTransliterationFlags(0)
+    ,m_nTransliterationFlags(TransliterationFlags::NONE)
 {
 
     fillControlTexts(arrFields);
@@ -623,30 +622,30 @@ FmSearchEngine::~FmSearchEngine()
 void FmSearchEngine::SetIgnoreWidthCJK(bool bSet)
 {
     if (bSet)
-        m_nTransliterationFlags |= TransliterationModules_IGNORE_WIDTH;
+        m_nTransliterationFlags |= TransliterationFlags::IGNORE_WIDTH;
     else
-        m_nTransliterationFlags &= ~TransliterationModules_IGNORE_WIDTH;
+        m_nTransliterationFlags &= ~TransliterationFlags::IGNORE_WIDTH;
 }
 
 
 bool FmSearchEngine::GetIgnoreWidthCJK() const
 {
-    return 0 != (m_nTransliterationFlags & TransliterationModules_IGNORE_WIDTH);
+    return bool(m_nTransliterationFlags & TransliterationFlags::IGNORE_WIDTH);
 }
 
 
 void FmSearchEngine::SetCaseSensitive(bool bSet)
 {
     if (bSet)
-        m_nTransliterationFlags &= ~TransliterationModules_IGNORE_CASE;
+        m_nTransliterationFlags &= ~TransliterationFlags::IGNORE_CASE;
     else
-        m_nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
+        m_nTransliterationFlags |= TransliterationFlags::IGNORE_CASE;
 }
 
 
 bool FmSearchEngine::GetCaseSensitive() const
 {
-    return 0 == (m_nTransliterationFlags & TransliterationModules_IGNORE_CASE);
+    return !(m_nTransliterationFlags & TransliterationFlags::IGNORE_CASE);
 }
 
 

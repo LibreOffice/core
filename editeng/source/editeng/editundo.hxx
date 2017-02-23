@@ -29,6 +29,7 @@
 class EditEngine;
 class EditView;
 enum class SetAttribsMode;
+enum class TransliterationFlags;
 
 // EditUndoDelContent
 
@@ -250,13 +251,14 @@ private:
     ESelection          aOldESel;
     ESelection          aNewESel;
 
-    sal_Int32           nMode;
+    TransliterationFlags
+                        nMode;
     std::unique_ptr<EditTextObject>
                         pTxtObj;
     OUString            aText;
 
 public:
-    EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, sal_Int32 nMode);
+    EditUndoTransliteration(EditEngine* pEE, const ESelection& rESel, TransliterationFlags nMode);
     virtual ~EditUndoTransliteration() override;
 
     void                SetText( const OUString& rText ) { aText = rText; }

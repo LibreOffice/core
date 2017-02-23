@@ -45,8 +45,6 @@
 #include <vcl/virdev.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-
 #include "inputopt.hxx"
 #include "global.hxx"
 #include "table.hxx"
@@ -1184,7 +1182,7 @@ SfxBindings* ScDocument::GetViewBindings()
         return nullptr;
 }
 
-void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType )
+void ScDocument::TransliterateText( const ScMarkData& rMultiMark, TransliterationFlags nType )
 {
     OSL_ENSURE( rMultiMark.IsMultiMarked(), "TransliterateText: no selection" );
 
@@ -1216,7 +1214,7 @@ void ScDocument::TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nTyp
                 // for performance reasons.
                 if (aCell.meType == CELLTYPE_EDIT ||
                     (aCell.meType == CELLTYPE_STRING &&
-                     ( nType == i18n::TransliterationModulesExtra::SENTENCE_CASE || nType == i18n::TransliterationModulesExtra::TITLE_CASE)))
+                     ( nType == TransliterationFlags::SENTENCE_CASE || nType == TransliterationFlags::TITLE_CASE)))
                 {
                     if (!pEngine)
                         pEngine.reset(new ScFieldEditEngine(this, GetEnginePool(), GetEditPool()));
