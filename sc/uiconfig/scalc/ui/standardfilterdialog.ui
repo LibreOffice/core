@@ -346,24 +346,6 @@
                       <object class="GtkComboBoxText" id="cond2">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <items>
-                          <item translatable="no">=</item>
-                          <item translatable="no">&lt;</item>
-                          <item translatable="no">&gt;</item>
-                          <item translatable="no">&lt;=</item>
-                          <item translatable="no">&gt;=</item>
-                          <item translatable="no">&lt;&gt;</item>
-                          <item translatable="yes">Largest</item>
-                          <item translatable="yes">Smallest</item>
-                          <item translatable="yes">Largest %</item>
-                          <item translatable="yes">Smallest %</item>
-                          <item translatable="yes">Contains</item>
-                          <item translatable="yes">Does not contain</item>
-                          <item translatable="yes">Begins with</item>
-                          <item translatable="yes">Does not begin with</item>
-                          <item translatable="yes">Ends with</item>
-                          <item translatable="yes">Does not end with</item>
-                        </items>
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
@@ -382,24 +364,6 @@
                       <object class="GtkComboBoxText" id="cond3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <items>
-                          <item translatable="no">=</item>
-                          <item translatable="no">&lt;</item>
-                          <item translatable="no">&gt;</item>
-                          <item translatable="no">&lt;=</item>
-                          <item translatable="no">&gt;=</item>
-                          <item translatable="no">&lt;&gt;</item>
-                          <item translatable="yes">Largest</item>
-                          <item translatable="yes">Smallest</item>
-                          <item translatable="yes">Largest %</item>
-                          <item translatable="yes">Smallest %</item>
-                          <item translatable="yes">Contains</item>
-                          <item translatable="yes">Does not contain</item>
-                          <item translatable="yes">Begins with</item>
-                          <item translatable="yes">Does not begin with</item>
-                          <item translatable="yes">Ends with</item>
-                          <item translatable="yes">Does not end with</item>
-                        </items>
                         <accessibility>
                           <relation type="labelled-by" target="label4"/>
                         </accessibility>
@@ -418,24 +382,6 @@
                       <object class="GtkComboBoxText" id="cond4">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <items>
-                          <item translatable="no">=</item>
-                          <item translatable="no">&lt;</item>
-                          <item translatable="no">&gt;</item>
-                          <item translatable="no">&lt;=</item>
-                          <item translatable="no">&gt;=</item>
-                          <item translatable="no">&lt;&gt;</item>
-                          <item translatable="yes">Largest</item>
-                          <item translatable="yes">Smallest</item>
-                          <item translatable="yes">Largest %</item>
-                          <item translatable="yes">Smallest %</item>
-                          <item translatable="yes">Contains</item>
-                          <item translatable="yes">Does not contain</item>
-                          <item translatable="yes">Begins with</item>
-                          <item translatable="yes">Does not begin with</item>
-                          <item translatable="yes">Ends with</item>
-                          <item translatable="yes">Does not end with</item>
-                        </items>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="cond4-atkobject">
                             <property name="AtkObject::accessible-name" translatable="yes">Condition 4</property>
