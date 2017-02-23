@@ -114,6 +114,17 @@ private:
     const OUString aStrNotEmpty;
     const OUString aStrColumn;
 
+    struct CondEntry
+    {
+        OUString  aStrEntry;            // display String
+        sal_Int32 nPos;                 // position (index) when all condition operatoren display, it is equal with the operator
+        CondEntry(const OUString &StrEntry, sal_Int32 npos) : aStrEntry(StrEntry), nPos(npos) {}
+    };
+
+    std::vector<CondEntry>  aStrCondAllEntries;    // all condtion entries
+    std::vector<CondEntry>  aStrCondRegEntries;    // when RegExp is active, in this case entries only possible with RegExp
+    std::vector<CondEntry> *paStrCondCurEntries;   // when RegExp is change this is the current condition entries for display
+
     ScFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
@@ -138,8 +149,14 @@ private:
     Timer*  pTimer;
 
 private:
-    void            Init            ( const SfxItemSet& rArgSet );
-    void            FillFieldLists  ();
+    void            Init             ( const SfxItemSet& rArgSet );
+    void            FillFieldLists   ();
+    void            FillSelCondLists (bool bSelect = true);      // depending on state of regular expression button
+    void            HandleRegExpBtn  ();                  // If = or <> condition is set, enable regular expression button
+
+    ScQueryOp       GetRealSelectCondPos(size_t nIndex, bool bRegExp);   // get the condition oerator in dependency of the index and regulare exp. checkbox
+    size_t          GetRealSelectCondIndex(ScQueryOp eOp);               // get the index in dependency of given opearator and regulare exp. checkbox
+
     void            UpdateValueList ( size_t nList );
     void            UpdateHdrInValueList( size_t nList );
     void            ClearValueList  ( size_t nList );
