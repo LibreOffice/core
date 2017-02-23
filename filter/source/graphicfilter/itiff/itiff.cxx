@@ -995,6 +995,12 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                 {
                     sal_uInt32 nByteCount = nImageWidth >> 3;
 
+                    sal_uInt32 nBytesNeeded = nByteCount;
+                    if (nImageWidth & 7)
+                        ++nBytesNeeded;
+                    if (pt + nBytesNeeded > ptend)
+                        return false;
+
                     if ( bByteSwap )
                     {
                         sal_Int32 nx = 0;
