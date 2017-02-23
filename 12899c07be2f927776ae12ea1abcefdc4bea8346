@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_21fed06b",
+        "filename": "sfx2/source/view/classificationhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-23T15:47:18Z",
+      "side": 0,
+      "message": "Please don\u0027t remove this, if the iterator points past the end (is equal to end()) and we continue here, we crash.",
+      "revId": "12899c07be2f927776ae12ea1abcefdc4bea8346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4103d473",
+        "filename": "sfx2/source/view/classificationhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 601,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-23T15:47:18Z",
+      "side": 0,
+      "message": "Same here.",
+      "revId": "12899c07be2f927776ae12ea1abcefdc4bea8346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_61f8d87d",
+        "filename": "sfx2/source/view/classificationhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 606,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-23T15:47:18Z",
+      "side": 0,
+      "message": "And here.",
+      "revId": "12899c07be2f927776ae12ea1abcefdc4bea8346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a1f2c098",
+        "filename": "sfx2/source/view/classificationhelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-23T15:47:18Z",
+      "side": 0,
+      "message": "Why remove this comment?",
+      "revId": "12899c07be2f927776ae12ea1abcefdc4bea8346",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
