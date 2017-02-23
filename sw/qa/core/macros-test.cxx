@@ -39,6 +39,7 @@
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 
+#include <i18nutil/searchopt.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -543,7 +544,7 @@ void SwMacrosTest::testFindReplace()
     pPaM->Move(fnMoveBackward, GoInDoc);
 
     bool bCancel(false);
-    util::SearchOptions2 opts(
+    i18nutil::SearchOptions2 opts(
             util::SearchAlgorithms_REGEXP,
             65536,
             "$",
@@ -552,7 +553,8 @@ void SwMacrosTest::testFindReplace()
             2,
             2,
             2,
-            1073745152,
+            TransliterationFlags::IGNORE_CASE | TransliterationFlags::IGNORE_WIDTH |
+            TransliterationFlags::IGNORE_KASHIDA_CTL | TransliterationFlags::IGNORE_DIACRITICS_CTL,
             util::SearchAlgorithms2::REGEXP,
             '\\');
 

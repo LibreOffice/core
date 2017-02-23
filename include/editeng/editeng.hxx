@@ -110,7 +110,7 @@ struct EPaM;
 class DeletedNodeInfo;
 class ParaPortionList;
 enum class CharCompressType;
-
+enum class TransliterationFlags;
 
 /** values for:
        SfxItemSet GetAttribs( const ESelection& rSel, EditEngineAttribs nOnlyHardAttrib = EditEngineAttribs::All );
@@ -253,8 +253,8 @@ public:
     LanguageType    GetLanguage(const EditPaM& rPaM) const;
     LanguageType    GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
 
-    void            TransliterateText( const ESelection& rSelection, sal_Int32 nTransliterationMode );
-    EditSelection   TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
+    void            TransliterateText( const ESelection& rSelection, TransliterationFlags nTransliterationMode );
+    EditSelection   TransliterateText( const EditSelection& rSelection, TransliterationFlags nTransliterationMode );
 
     void            SetAsianCompressionMode( CharCompressType nCompression );
 

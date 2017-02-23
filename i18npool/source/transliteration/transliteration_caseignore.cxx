@@ -22,6 +22,7 @@
 
 #include <i18nutil/oneToOneMapping.hxx>
 #include <i18nutil/casefolding.hxx>
+#include <i18nutil/transliteration.hxx>
 
 #include "transliteration_caseignore.hxx"
 
@@ -33,7 +34,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 Transliteration_caseignore::Transliteration_caseignore()
 {
     nMappingType = MappingType::FullFolding;
-    moduleLoaded = (TransliterationModules)0;
+    moduleLoaded = TransliterationFlags::NONE;
     transliterationName = "case ignore (generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_caseignore";
 }
@@ -41,7 +42,7 @@ Transliteration_caseignore::Transliteration_caseignore()
 void SAL_CALL
 Transliteration_caseignore::loadModule( TransliterationModules modName, const Locale& rLocale )
 {
-    moduleLoaded = (TransliterationModules) (moduleLoaded|modName);
+    moduleLoaded |= (TransliterationFlags)modName;
     aLocale = rLocale;
 }
 

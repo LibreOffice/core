@@ -67,14 +67,12 @@ class SwPostItField;
 class SwTextField;
 struct SwPosition;
 
-namespace com { namespace sun { namespace star { namespace util {
+namespace i18nutil {
     struct SearchOptions2;
-} } } }
-
+}
 namespace com { namespace sun { namespace star { namespace text {
     class XTextRange;
 }}}}
-
 namespace com { namespace sun { namespace star { namespace container {
     class XStringKeyMap;
 }}}}
@@ -140,7 +138,7 @@ const int CRSR_POSOLD = 0x01,   // cursor stays at old position
           CRSR_POSCHG = 0x02;   // position changed by the layout
 
 /// Helperfunction to resolve backward references in regular expressions
-OUString *ReplaceBackReferences( const css::util::SearchOptions2& rSearchOpt, SwPaM* pPam );
+OUString *ReplaceBackReferences( const i18nutil::SearchOptions2& rSearchOpt, SwPaM* pPam );
 
 class SW_DLLPUBLIC SwCursorShell
     : public SwViewShell
@@ -364,7 +362,7 @@ public:
     bool MoveColumn( SwWhichColumn, SwPosColumn );
     bool MoveRegion( SwWhichRegion, SwMoveFnCollection const & );
 
-    sal_uLong Find( const css::util::SearchOptions2& rSearchOpt,
+    sal_uLong Find( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
@@ -379,7 +377,7 @@ public:
                 SwDocPositions eStart, SwDocPositions eEnd,
                 bool& bCancel,
                 FindRanges eRng,
-                const css::util::SearchOptions2* pSearchOpt,
+                const i18nutil::SearchOptions2* pSearchOpt,
                 const SfxItemSet* rReplSet );
 
     //  Position the Cursor

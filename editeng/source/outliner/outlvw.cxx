@@ -1293,7 +1293,7 @@ sal_Int32 OutlinerView::StartSearchAndReplace( const SvxSearchItem& rSearchItem 
     return pEditView->StartSearchAndReplace( rSearchItem );
 }
 
-void OutlinerView::TransliterateText( sal_Int32 nTransliterationMode )
+void OutlinerView::TransliterateText( TransliterationFlags nTransliterationMode )
 {
     pEditView->TransliterateText( nTransliterationMode );
 }

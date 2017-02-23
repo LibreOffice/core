@@ -21,10 +21,9 @@
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
+#include <i18nutil/transliteration.hxx>
 #include <rtl/ustring.hxx>
 #include <unotools/syslocale.hxx>
-
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 
 using ::com::sun::star::uno::Sequence;
 using ::std::list;
@@ -171,7 +170,7 @@ void ScCellKeywordTranslator::transKeyword(OUString& rName, const lang::Locale* 
 
 ScCellKeywordTranslator::ScCellKeywordTranslator() :
     maTransWrapper( ::comphelper::getProcessComponentContext(),
-                    i18n::TransliterationModules_LOWERCASE_UPPERCASE )
+                    TransliterationFlags::LOWERCASE_UPPERCASE )
 {
     init();
 }

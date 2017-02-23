@@ -37,12 +37,10 @@ struct ScCalcConfig;
 enum class SvtScriptType;
 enum class FormulaError : sal_uInt16;
 
-#define SC_COLLATOR_IGNORES ( \
-    css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
+#define SC_COLLATOR_IGNORES css::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE
 
-#define SC_TRANSLITERATION_IGNORECASE ( \
-    css::i18n::TransliterationModules_IGNORE_CASE )
-#define SC_TRANSLITERATION_CASESENSE 0
+#define SC_TRANSLITERATION_IGNORECASE TransliterationFlags::IGNORE_CASE
+#define SC_TRANSLITERATION_CASESENSE  TransliterationFlags::NONE
 
 //  Calc has lots of names...
 //  Clipboard names are in so3/soapp.hxx now

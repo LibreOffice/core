@@ -102,18 +102,19 @@ struct SwConversionArgs;
 enum class SvtScriptType;
 enum class SfxClassificationPolicyType;
 enum class RedlineFlags;
+enum class TransliterationFlags;
 
 namespace com { namespace sun { namespace star { namespace uno {
     template < class > class Sequence;
 }}}}
 
 namespace svx{
-struct SpellPortion;
-typedef std::vector<SpellPortion> SpellPortions;
+    struct SpellPortion;
+    typedef std::vector<SpellPortion> SpellPortions;
 }
 
 namespace sfx2{
-class LinkManager;
+    class LinkManager;
 }
 
 namespace sw {
@@ -188,7 +189,7 @@ public:
     bool DelFullPara();
 
     /// Change text to Upper/Lower/Hiragana/Katagana/...
-    void TransliterateText( sal_uInt32 nType );
+    void TransliterateText( TransliterationFlags nType );
 
     /// Count words in current selection.
     void CountWords( SwDocStat& rStat ) const;

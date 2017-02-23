@@ -19,9 +19,7 @@
 
 #include <config_features.h>
 
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <o3tl/any.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
@@ -146,6 +144,7 @@
 #include <vcl/GraphicNativeTransform.hxx>
 #include <vcl/GraphicNativeMetadata.hxx>
 #include <vcl/settings.hxx>
+#include <i18nutil/searchopt.hxx>
 
 #include <memory>
 
@@ -1992,12 +1991,12 @@ bool SwView::JumpToSwMark( const OUString& rMark )
                 // normal text search
                 m_pWrtShell->EnterStdMode();
 
-                SearchOptions2 aSearchOpt(
+                i18nutil::SearchOptions2 aSearchOpt(
                                     SearchAlgorithms_ABSOLUTE, 0,
                                     sName, OUString(),
                                     SvtSysLocale().GetLanguageTag().getLocale(),
                                     0,0,0,
-                                    TransliterationModules_IGNORE_CASE,
+                                    TransliterationFlags::IGNORE_CASE,
                                     SearchAlgorithms2::ABSOLUTE,
                                     '\\' );
 

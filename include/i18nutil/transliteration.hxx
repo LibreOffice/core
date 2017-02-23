@@ -1,0 +1,130 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * This file incorporates work covered by the following license notice:
+ *
+ *   Licensed to the Apache Software Foundation (ASF) under one or more
+ *   contributor license agreements. See the NOTICE file distributed
+ *   with this work for additional information regarding copyright
+ *   ownership. The ASF licenses this file to you under the Apache
+ *   License, Version 2.0 (the "License"); you may not use this file
+ *   except in compliance with the License. You may obtain a copy of
+ *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ */
+#ifndef INCLUDED_I18NUTIL_TRANSLITERATION_HXX
+#define INCLUDED_I18NUTIL_TRANSLITERATION_HXX
+
+#include <sal/types.h>
+#include <o3tl/typed_flags_set.hxx>
+
+/**
+ * This is a superset type of the com::sun::star::i18nutil::TransliterationModules and TransliterationModulesExtra,
+ *  with some extra type checking
+ */
+enum class TransliterationFlags {
+    NONE                           = 0,
+    /// Transliterate a string from upper case to lower case
+    UPPERCASE_LOWERCASE            = 1,
+    /// Transliterate a string from lower case to upper case
+    LOWERCASE_UPPERCASE            = 2,
+    /// Transliterate a string from half width character to full width character
+    HALFWIDTH_FULLWIDTH            = 3,
+    /// Transliterate a string from full width character to half width character
+    FULLWIDTH_HALFWIDTH            = 4,
+    /// Transliterate a Japanese string from Katakana to Hiragana
+    KATAKANA_HIRAGANA              = 5,
+    /// Transliterate a Japanese string from Hiragana to Katakana
+    HIRAGANA_KATAKANA              = 6,
+    /// Transliterate an ASCII number string to Simplified Chinese lower case number string in spellout format
+    NumToTextLower_zh_CN           = 7,
+    /// Transliterate an ASCII number string to Simplified Chinese upper case number string in spellout format
+    NumToTextUpper_zh_CN           = 8,
+    /// Transliterate an ASCII number string to Traditional Chinese lower case number string in spellout format
+    NumToTextLower_zh_TW           = 9,
+    /// Transliterate an ASCII number string to Traditional Chinese upper case number string in spellout format
+    NumToTextUpper_zh_TW           = 10,
+    /// Transliterate an ASCII number string to formal Korean Hangul number string in spellout format
+    NumToTextFormalHangul_ko       = 11,
+    /// Transliterate an ASCII number string to formal Korean Hanja lower case number string in spellout format
+    NumToTextFormalLower_ko        = 12,
+    /// Transliterate an ASCII number string to formal Korean Hanja upper case number string in spellout format
+    NumToTextFormalUpper_ko        = 13,
+
+    /** The first character of the sentence is put in upper case
+     */
+    SENTENCE_CASE                  = 200,
+
+
+    /** The first character of the word is put in upper case.
+     * This one is part
+     */
+    TITLE_CASE                     = 201,
+
+
+    /** All characters of the word are to change their case from small letters
+     * to capital letters and vice versa.
+     */
+    TOGGLE_CASE                    = 202,
+
+    NON_IGNORE_MASK                = 0x000000ff,
+    IGNORE_MASK                    = 0x7fffff00,
+
+    /// Ignore case when comparing strings by transliteration service
+    IGNORE_CASE                    = 0x00000100,
+    /// Ignore Hiragana and Katakana when comparing strings by transliteration service
+    IGNORE_KANA                    = 0x00000200, // ja_JP
+    /// Ignore full width and half width character when comparing strings by transliteration service
+    IGNORE_WIDTH                   = 0x00000400, // ja_JP
+    /// Ignore Japanese traditional Kanji character in Japanese fuzzy search
+    ignoreTraditionalKanji_ja_JP   = 0x00001000,
+    /// Ignore Japanese traditional Katakana and Hiragana character in Japanese fuzzy search
+    ignoreTraditionalKana_ja_JP    = 0x00002000,
+    /// Ignore dash or minus sign in Japanese fuzzy search
+    ignoreMinusSign_ja_JP          = 0x00004000,
+    /// Ignore Hiragana and Katakana iteration mark in Japanese fuzzy search
+    ignoreIterationMark_ja_JP      = 0x00008000,
+    /// Ignore separator punctuations in Japanese fuzzy search
+    ignoreSeparator_ja_JP          = 0x00010000,
+    /// Ignore Katakana and Hiragana Zi/Zi and Zu/Zu  in Japanese fuzzy search
+    ignoreZiZu_ja_JP               = 0x00020000,
+    /// Ignore Katakana and Hiragana Ba/Gua and Ha/Fa in Japanese fuzzy search
+    ignoreBaFa_ja_JP               = 0x00040000,
+    /// Ignore Katakana and Hiragana Tsui/Tea/Ti and Dyi/Ji in Japanese fuzzy search
+    ignoreTiJi_ja_JP               = 0x00080000,
+    /// Ignore Katakana and Hiragana Hyu/Fyu and Byu/Gyu in Japanese fuzzy search
+    ignoreHyuByu_ja_JP             = 0x00100000,
+    /// Ignore Katakana and Hiragana Se/Sye and Ze/Je in Japanese fuzzy search
+    ignoreSeZe_ja_JP               = 0x00200000,
+    /// Ignore Katakana YA/A which follows the character in either I or E row in Japanese fuzzy search
+    ignoreIandEfollowedByYa_ja_JP  = 0x00400000,
+    /// Ignore Katakana KI/KU which follows the character in SA column in Japanese fuzzy search
+    ignoreKiKuFollowedBySa_ja_JP   = 0x00800000,
+    /// Ignore Japanese normal and small sized character in Japanese fuzzy search
+    ignoreSize_ja_JP               = 0x01000000,
+    /// Ignore Japanese prolonged sound mark in Japanese fuzzy search
+    ignoreProlongedSoundMark_ja_JP = 0x02000000,
+    /// Ignore middle dot in Japanese fuzzy search
+    ignoreMiddleDot_ja_JP          = 0x04000000,
+    /// Ignore white space characters, include space, TAB, return, etc. in Japanese fuzzy search
+    ignoreSpace_ja_JP              = 0x08000000,
+    /// transliterate Japanese small sized character to normal sized character
+    smallToLarge_ja_JP             = 0x10000000,
+    /// transliterate Japanese normal sized character to small sized character
+    largeToSmall_ja_JP             = 0x20000000,
+
+    IGNORE_DIACRITICS_CTL          = 0x40000000,
+    IGNORE_KASHIDA_CTL             = 0x00000800
+};
+namespace o3tl {
+    template<> struct typed_flags<TransliterationFlags> : is_typed_flags<TransliterationFlags, 0x7fffffff> {};
+}
+
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

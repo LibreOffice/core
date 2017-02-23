@@ -49,7 +49,7 @@ public:
         const OUString& s2) override;
 
 protected:
-    TransliterationModules moduleLoaded;
+    TransliterationFlags moduleLoaded;
 private:
     /// @throws css::uno::RuntimeException
     sal_Int32 SAL_CALL compare(

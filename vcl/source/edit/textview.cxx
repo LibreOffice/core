@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <i18nutil/searchopt.hxx>
 #include <vcl/textview.hxx>
 #include <vcl/texteng.hxx>
 #include <vcl/settings.hxx>
@@ -2248,7 +2249,7 @@ bool TextView::MatchGroup()
     return aMatchSel.HasRange();
 }
 
-bool TextView::Search( const css::util::SearchOptions& rSearchOptions, bool bForward )
+bool TextView::Search( const i18nutil::SearchOptions& rSearchOptions, bool bForward )
 {
     bool bFound = false;
     TextSelection aSel( GetSelection() );
@@ -2271,7 +2272,7 @@ bool TextView::Search( const css::util::SearchOptions& rSearchOptions, bool bFor
     return bFound;
 }
 
-sal_uInt16 TextView::Replace( const css::util::SearchOptions& rSearchOptions, bool bAll, bool bForward )
+sal_uInt16 TextView::Replace( const i18nutil::SearchOptions& rSearchOptions, bool bAll, bool bForward )
 {
     sal_uInt16 nFound = 0;
 

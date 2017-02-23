@@ -19,7 +19,6 @@
 
 #include <memory>
 
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
@@ -221,7 +220,7 @@ size_t GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
     return aIndex;
 }
 
-bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::TextSearch& rSText,
+bool SwPaM::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::TextSearch& rSText,
                   SwMoveFnCollection const & fnMove, const SwPaM * pRegion,
                   bool bInReadOnly )
 {
@@ -469,7 +468,7 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
     return bFound;
 }
 
-bool SwPaM::DoSearch( const SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
+bool SwPaM::DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
                       SwMoveFnCollection const & fnMove, bool bSrchForward, bool bRegSearch,
                       bool bChkEmptyPara, bool bChkParaEnd,
                       sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen,
@@ -632,13 +631,13 @@ bool SwPaM::DoSearch( const SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
 /// parameters for search and replace in text
 struct SwFindParaText : public SwFindParas
 {
-    const SearchOptions2& m_rSearchOpt;
+    const i18nutil::SearchOptions2& m_rSearchOpt;
     SwCursor& m_rCursor;
     utl::TextSearch m_aSText;
     bool m_bReplace;
     bool m_bSearchInNotes;
 
-    SwFindParaText( const SearchOptions2& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCursor )
+    SwFindParaText( const i18nutil::SearchOptions2& rOpt, bool bSearchInNotes, bool bRepl, SwCursor& rCursor )
         : m_rSearchOpt( rOpt ), m_rCursor( rCursor ), m_aSText( utl::TextSearch::UpgradeToSearchOptions2( rOpt) ),
         m_bReplace( bRepl ), m_bSearchInNotes( bSearchInNotes )
     {}
@@ -712,7 +711,7 @@ bool SwFindParaText::IsReplaceMode() const
     return m_bReplace;
 }
 
-sal_uLong SwCursor::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes,
+sal_uLong SwCursor::Find( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
                           SwDocPositions nStart, SwDocPositions nEnd,
                           bool& bCancel, FindRanges eFndRngs, bool bReplace )
 {
@@ -745,7 +744,7 @@ sal_uLong SwCursor::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes,
     return nRet;
 }
 
-OUString *ReplaceBackReferences( const SearchOptions2& rSearchOpt, SwPaM* pPam )
+OUString *ReplaceBackReferences( const i18nutil::SearchOptions2& rSearchOpt, SwPaM* pPam )
 {
     OUString *pRet = nullptr;
     if( pPam && pPam->HasMark() &&

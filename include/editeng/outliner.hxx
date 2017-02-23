@@ -47,7 +47,6 @@
 #include <editeng/paragraphdata.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
-
 #include <functional>
 #include <vector>
 
@@ -84,25 +83,24 @@ class OverflowingText;
 class NonOverflowingText;
 class OutlinerViewShell;
 enum class CharCompressType;
+enum class TransliterationFlags;
+class SvxFieldData;
 
 namespace svl
 {
     class IUndoManager;
 }
-
-class SvxFieldData;
-
-
 namespace com { namespace sun { namespace star { namespace linguistic2 {
     class XSpellChecker1;
     class XHyphenator;
 }}}}
 namespace svx{
-struct SpellPortion;
-typedef std::vector<SpellPortion> SpellPortions;
+    struct SpellPortion;
+    typedef std::vector<SpellPortion> SpellPortions;
 }
-
 namespace basegfx { class B2DPolyPolygon; }
+
+
 
 // internal use only!
 enum class ParaFlag
@@ -300,7 +298,7 @@ public:
     // for text conversion
     void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
 
-    void            TransliterateText( sal_Int32 nTransliterationMode );
+    void            TransliterateText( TransliterationFlags nTransliterationMode );
 
     ESelection      GetSelection();
 

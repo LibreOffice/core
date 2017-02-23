@@ -40,6 +40,8 @@ class SvxJSearchOptionsPage;
 class SvxSearchController;
 struct SearchDlg_Impl;
 enum class ModifyFlags;
+enum class TransliterationFlags;
+
 
 struct SearchAttrItem
 {
@@ -133,7 +135,7 @@ public:
     const SearchAttrItemList*   GetReplaceItemList() const
                                     { return pReplaceList; }
 
-    sal_Int32       GetTransliterationFlags() const;
+    TransliterationFlags        GetTransliterationFlags() const;
 
     void SetDocWin( vcl::Window* pDocWin ) { mpDocWin = pDocWin; }
     vcl::Window* GetDocWin() { return mpDocWin; }
@@ -231,7 +233,8 @@ private:
     SvxSearchController*    pSearchSetController;
     SvxSearchController*    pReplaceSetController;
 
-    mutable sal_Int32           nTransliterationFlags;
+    mutable TransliterationFlags
+                            nTransliterationFlags;
 
     DECL_LINK( ModifyHdl_Impl, Edit&, void );
     DECL_LINK( FlagHdl_Impl, Button*, void );
@@ -264,7 +267,7 @@ private:
     void            SetModifyFlag_Impl( const Control* pCtrl );
     void            SaveToModule_Impl();
 
-    void            ApplyTransliterationFlags_Impl( sal_Int32 nSettings );
+    void            ApplyTransliterationFlags_Impl( TransliterationFlags nSettings );
 };
 
 #endif
