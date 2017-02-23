@@ -47,6 +47,9 @@ namespace com { namespace sun { namespace star {
         struct SearchOptions;
     }
 }}}
+namespace i18nutil {
+    struct SearchOptions;
+}
 
 
 struct ImpTextView;
@@ -204,8 +207,8 @@ public:
 
     bool                MatchGroup();
 
-    bool                Search( const css::util::SearchOptions& rSearchOptions, bool bForward );
-    sal_uInt16          Replace( const css::util::SearchOptions& rSearchOptions, bool bAll, bool bForward );
+    bool                Search( const i18nutil::SearchOptions& rSearchOptions, bool bForward );
+    sal_uInt16          Replace( const i18nutil::SearchOptions& rSearchOptions, bool bAll, bool bForward );
 
     bool                IndentBlock();
     bool                UnindentBlock();

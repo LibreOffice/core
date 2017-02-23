@@ -18,7 +18,7 @@
  */
 
 #include <unotools/searchopt.hxx>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <i18nutil/transliteration.hxx>
 #include <cuires.hrc>
 #include <dialmgr.hxx>
 #include <optjsearch.hxx>
@@ -51,7 +51,7 @@ SvxJSearchOptionsPage::SvxJSearchOptionsPage( vcl::Window* pParent, const SfxIte
     get( m_pIgnoreMiddleDot, "ignoremiddledot");
 
     bSaveOptions = true;
-    nTransliterationFlags = 0x00000000;
+    nTransliterationFlags = TransliterationFlags::NONE;
 }
 
 SvxJSearchOptionsPage::~SvxJSearchOptionsPage()
@@ -89,92 +89,92 @@ VclPtr<SfxTabPage> SvxJSearchOptionsPage::Create( vcl::Window* pParent, const Sf
 }
 
 
-void SvxJSearchOptionsPage::SetTransliterationFlags( sal_Int32 nSettings )
+void SvxJSearchOptionsPage::SetTransliterationFlags( TransliterationFlags nSettings )
 {
-    bool  bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
+    bool  bVal(nSettings & TransliterationFlags::IGNORE_CASE);
     m_pMatchCase              ->Check( bVal );    //! treat as equal uppercase/lowercase
-    bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
+    bVal = bool(nSettings & TransliterationFlags::IGNORE_WIDTH);
     m_pMatchFullHalfWidth     ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_IGNORE_KANA);
+    bVal = bool(nSettings & TransliterationFlags::IGNORE_KANA);
     m_pMatchHiraganaKatakana  ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreSize_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreSize_ja_JP);
     m_pMatchContractions      ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreMinusSign_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreMinusSign_ja_JP);
     m_pMatchMinusDashChoon    ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreIterationMark_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreIterationMark_ja_JP);
     m_pMatchRepeatCharMarks   ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreTraditionalKanji_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreTraditionalKanji_ja_JP);
     m_pMatchVariantFormKanji  ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreTraditionalKana_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreTraditionalKana_ja_JP);
     m_pMatchOldKanaForms      ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreZiZu_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreZiZu_ja_JP);
     m_pMatchDiziDuzu          ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreBaFa_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreBaFa_ja_JP);
     m_pMatchBavaHafa          ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreTiJi_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreTiJi_ja_JP);
     m_pMatchTsithichiDhizi    ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreHyuByu_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreHyuByu_ja_JP);
     m_pMatchHyuiyuByuvyu      ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreSeZe_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreSeZe_ja_JP);
     m_pMatchSesheZeje         ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreIandEfollowedByYa_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreIandEfollowedByYa_ja_JP);
     m_pMatchIaiya             ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreKiKuFollowedBySa_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreKiKuFollowedBySa_ja_JP);
     m_pMatchKiku              ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreSeparator_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreSeparator_ja_JP);
     m_pIgnorePunctuation      ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreSpace_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreSpace_ja_JP);
     m_pIgnoreWhitespace       ->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreProlongedSoundMark_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreProlongedSoundMark_ja_JP);
     m_pMatchProlongedSoundMark->Check( bVal );
-    bVal = 0 != (nSettings & TransliterationModules_ignoreMiddleDot_ja_JP);
+    bVal = bool(nSettings & TransliterationFlags::ignoreMiddleDot_ja_JP);
     m_pIgnoreMiddleDot        ->Check( bVal );
 
     nTransliterationFlags = nSettings;
 }
 
 
-sal_Int32 SvxJSearchOptionsPage::GetTransliterationFlags_Impl()
+TransliterationFlags SvxJSearchOptionsPage::GetTransliterationFlags_Impl()
 {
-    sal_Int32 nTmp = 0;
+    TransliterationFlags nTmp = TransliterationFlags::NONE;
     if (m_pMatchCase->IsChecked()) //! treat as equal uppercase/lowercase
-        nTmp |= TransliterationModules_IGNORE_CASE;
+        nTmp |= TransliterationFlags::IGNORE_CASE;
     if (m_pMatchFullHalfWidth->IsChecked())
-        nTmp |= TransliterationModules_IGNORE_WIDTH;
+        nTmp |= TransliterationFlags::IGNORE_WIDTH;
     if (m_pMatchHiraganaKatakana->IsChecked())
-        nTmp |= TransliterationModules_IGNORE_KANA;
+        nTmp |= TransliterationFlags::IGNORE_KANA;
     if (m_pMatchContractions->IsChecked())
-        nTmp |= TransliterationModules_ignoreSize_ja_JP;
+        nTmp |= TransliterationFlags::ignoreSize_ja_JP;
     if (m_pMatchMinusDashChoon->IsChecked())
-        nTmp |= TransliterationModules_ignoreMinusSign_ja_JP;
+        nTmp |= TransliterationFlags::ignoreMinusSign_ja_JP;
     if (m_pMatchRepeatCharMarks->IsChecked())
-        nTmp |= TransliterationModules_ignoreIterationMark_ja_JP;
+        nTmp |= TransliterationFlags::ignoreIterationMark_ja_JP;
     if (m_pMatchVariantFormKanji->IsChecked())
-        nTmp |= TransliterationModules_ignoreTraditionalKanji_ja_JP;
+        nTmp |= TransliterationFlags::ignoreTraditionalKanji_ja_JP;
     if (m_pMatchOldKanaForms->IsChecked())
-        nTmp |= TransliterationModules_ignoreTraditionalKana_ja_JP;
+        nTmp |= TransliterationFlags::ignoreTraditionalKana_ja_JP;
     if (m_pMatchDiziDuzu->IsChecked())
-        nTmp |= TransliterationModules_ignoreZiZu_ja_JP;
+        nTmp |= TransliterationFlags::ignoreZiZu_ja_JP;
     if (m_pMatchBavaHafa->IsChecked())
-        nTmp |= TransliterationModules_ignoreBaFa_ja_JP;
+        nTmp |= TransliterationFlags::ignoreBaFa_ja_JP;
     if (m_pMatchTsithichiDhizi->IsChecked())
-        nTmp |= TransliterationModules_ignoreTiJi_ja_JP;
+        nTmp |= TransliterationFlags::ignoreTiJi_ja_JP;
     if (m_pMatchHyuiyuByuvyu->IsChecked())
-        nTmp |= TransliterationModules_ignoreHyuByu_ja_JP;
+        nTmp |= TransliterationFlags::ignoreHyuByu_ja_JP;
     if (m_pMatchSesheZeje->IsChecked())
-        nTmp |= TransliterationModules_ignoreSeZe_ja_JP;
+        nTmp |= TransliterationFlags::ignoreSeZe_ja_JP;
     if (m_pMatchIaiya->IsChecked())
-        nTmp |= TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
+        nTmp |= TransliterationFlags::ignoreIandEfollowedByYa_ja_JP;
     if (m_pMatchKiku->IsChecked())
-        nTmp |= TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
+        nTmp |= TransliterationFlags::ignoreKiKuFollowedBySa_ja_JP;
     if (m_pIgnorePunctuation->IsChecked())
-        nTmp |= TransliterationModules_ignoreSeparator_ja_JP;
+        nTmp |= TransliterationFlags::ignoreSeparator_ja_JP;
     if (m_pIgnoreWhitespace->IsChecked())
-        nTmp |= TransliterationModules_ignoreSpace_ja_JP;
+        nTmp |= TransliterationFlags::ignoreSpace_ja_JP;
     if (m_pMatchProlongedSoundMark->IsChecked())
-        nTmp |= TransliterationModules_ignoreProlongedSoundMark_ja_JP;
+        nTmp |= TransliterationFlags::ignoreProlongedSoundMark_ja_JP;
     if (m_pIgnoreMiddleDot->IsChecked())
-        nTmp |= TransliterationModules_ignoreMiddleDot_ja_JP;
+        nTmp |= TransliterationFlags::ignoreMiddleDot_ja_JP;
 
     nTransliterationFlags = nTmp;
     return nTransliterationFlags;
@@ -234,7 +234,7 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet* )
 
 bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet* )
 {
-    sal_Int32 nOldVal = nTransliterationFlags;
+    TransliterationFlags nOldVal = nTransliterationFlags;
     nTransliterationFlags = GetTransliterationFlags_Impl();
     bool bModified = nOldVal != nTransliterationFlags;
 

@@ -17,11 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/string.hxx>
+#include <i18nutil/transliteration.hxx>
+#include <i18nutil/searchopt.hxx>
 #include <svl/fstathelper.hxx>
 #include <osl/thread.h>
 #include <unotools/textsearch.hxx>
@@ -311,16 +311,15 @@ void SwEditShell::ApplyAutoMark()
         sal_Int32 nLEV_Other    = 2;    //  -> changedChars;
         sal_Int32 nLEV_Longer   = 3;    //! -> deletedChars;
         sal_Int32 nLEV_Shorter  = 1;    //! -> insertedChars;
-        sal_Int32 nTransliterationFlags = 0;
 
         sal_Int32 nSrchFlags = SearchFlags::LEV_RELAXED;
 
-        SearchOptions2 aSearchOpt(
+        i18nutil::SearchOptions2 aSearchOpt(
                             SearchAlgorithms_ABSOLUTE, nSrchFlags,
                             "", "",
                             SvtSysLocale().GetLanguageTag().getLocale(),
                             nLEV_Other, nLEV_Longer, nLEV_Shorter,
-                            nTransliterationFlags,
+                            TransliterationFlags::NONE,
                             SearchAlgorithms2::ABSOLUTE,
                             '\\' );
 
@@ -354,12 +353,12 @@ void SwEditShell::ApplyAutoMark()
                     if (!bCaseSensitive)
                     {
                         aSearchOpt.transliterateFlags |=
-                                     TransliterationModules_IGNORE_CASE;
+                                     TransliterationFlags::IGNORE_CASE;
                     }
                     else
                     {
                         aSearchOpt.transliterateFlags &=
-                                    ~TransliterationModules_IGNORE_CASE;
+                                    ~TransliterationFlags::IGNORE_CASE;
                     }
                     if ( bWordOnly)
                         aSearchOpt.searchFlag |=  SearchFlags::NORM_WORD_ONLY;

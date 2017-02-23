@@ -39,8 +39,6 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XStatusListener.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -123,11 +121,14 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
     lArgs[2].Value <<= (sal_Int32)0;
     lArgs[3].Name = "SearchItem.TransliterateFlags";
     SvtCTLOptions aCTLOptions;
-    sal_Int32 nFlags = 0;
-    nFlags |= (!aMatchCase ? static_cast<int>(css::i18n::TransliterationModules_IGNORE_CASE) : 0);
-    nFlags |= (aCTLOptions.IsCTLFontEnabled() ? css::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL:0 );
-    nFlags |= (aCTLOptions.IsCTLFontEnabled() ? css::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL:0 );
-    lArgs[3].Value <<= nFlags;
+    TransliterationFlags nFlags = TransliterationFlags::NONE;
+    if (!aMatchCase)
+        nFlags |= TransliterationFlags::IGNORE_CASE;
+    if (aCTLOptions.IsCTLFontEnabled())
+        nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
+    if (aCTLOptions.IsCTLFontEnabled())
+        nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
+    lArgs[3].Value <<= (sal_Int32)nFlags;
     lArgs[4].Name = "SearchItem.Command";
     lArgs[4].Value <<= (sal_Int16)(aFindAll ?
         SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND );

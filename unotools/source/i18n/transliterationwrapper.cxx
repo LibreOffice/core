@@ -22,6 +22,7 @@
 #include <sal/log.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nutil/transliteration.hxx>
 
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/Transliteration.hpp>
@@ -33,7 +34,7 @@ using namespace ::utl;
 
 TransliterationWrapper::TransliterationWrapper(
                     const Reference< XComponentContext > & rxContext,
-                    sal_uInt32 nTyp )
+                    TransliterationFlags nTyp )
     : xTrans( Transliteration::create(rxContext) ),
       aLanguageTag( LANGUAGE_SYSTEM ), nType( nTyp ), bFirstCall( true )
 {
@@ -87,12 +88,12 @@ OUString TransliterationWrapper::transliterate( const OUString& rStr,
 
 bool TransliterationWrapper::needLanguageForTheMode() const
 {
-    return TransliterationModules_UPPERCASE_LOWERCASE == nType ||
-           TransliterationModules_LOWERCASE_UPPERCASE == nType ||
-           TransliterationModules_IGNORE_CASE == nType ||
-           (sal_uInt32) TransliterationModulesExtra::SENTENCE_CASE == (sal_uInt32) nType ||
-           (sal_uInt32) TransliterationModulesExtra::TITLE_CASE    == (sal_uInt32) nType ||
-           (sal_uInt32) TransliterationModulesExtra::TOGGLE_CASE   == (sal_uInt32) nType;
+    return TransliterationFlags::UPPERCASE_LOWERCASE == nType ||
+           TransliterationFlags::LOWERCASE_UPPERCASE == nType ||
+           TransliterationFlags::IGNORE_CASE == nType ||
+           TransliterationFlags::SENTENCE_CASE == nType ||
+           TransliterationFlags::TITLE_CASE    == nType ||
+           TransliterationFlags::TOGGLE_CASE   == nType;
 }
 
 void TransliterationWrapper::setLanguageLocaleImpl( sal_uInt16 nLang )
@@ -107,17 +108,17 @@ void TransliterationWrapper::loadModuleIfNeeded( sal_uInt16 nLang )
     bool bLoad = bFirstCall;
     bFirstCall = false;
 
-    if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::SENTENCE_CASE )
+    if( nType == TransliterationFlags::SENTENCE_CASE )
     {
         if( bLoad )
             loadModuleByImplName("SENTENCE_CASE", nLang);
     }
-    else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TITLE_CASE )
+    else if( nType == TransliterationFlags::TITLE_CASE )
     {
         if( bLoad )
             loadModuleByImplName("TITLE_CASE", nLang);
     }
-    else if( static_cast< sal_Int32 >(nType) == TransliterationModulesExtra::TOGGLE_CASE )
+    else if( nType == TransliterationFlags::TOGGLE_CASE )
     {
         if( bLoad )
             loadModuleByImplName("TOGGLE_CASE", nLang);

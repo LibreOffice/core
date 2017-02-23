@@ -1667,9 +1667,9 @@ RTLFUNC(StrComp)
             uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
             pTransliterationWrapper = GetSbData()->pTransliterationWrapper =
                 new ::utl::TransliterationWrapper( xContext,
-                    i18n::TransliterationModules_IGNORE_CASE |
-                    i18n::TransliterationModules_IGNORE_KANA |
-                    i18n::TransliterationModules_IGNORE_WIDTH );
+                    TransliterationFlags::IGNORE_CASE |
+                    TransliterationFlags::IGNORE_KANA |
+                    TransliterationFlags::IGNORE_WIDTH );
         }
 
         LanguageType eLangType = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -4266,7 +4266,7 @@ RTLFUNC(StrConv)
         return;
     }
 
-    sal_Int32 nType = 0;
+    TransliterationFlags nType = TransliterationFlags::NONE;
     if ( (nConversion & 0x03) == 3 ) //  vbProperCase
     {
         const CharClass& rCharClass = GetCharClass();
@@ -4274,30 +4274,30 @@ RTLFUNC(StrConv)
     }
     else if ( (nConversion & 0x01) == 1 ) // vbUpperCase
     {
-        nType |= i18n::TransliterationModules_LOWERCASE_UPPERCASE;
+        nType |= TransliterationFlags::LOWERCASE_UPPERCASE;
     }
     else if ( (nConversion & 0x02) == 2 ) // vbLowerCase
     {
-        nType |= i18n::TransliterationModules_UPPERCASE_LOWERCASE;
+        nType |= TransliterationFlags::UPPERCASE_LOWERCASE;
     }
     if ( (nConversion & 0x04) == 4 ) // vbWide
     {
-        nType |= i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
+        nType |= TransliterationFlags::HALFWIDTH_FULLWIDTH;
     }
     else if ( (nConversion & 0x08) == 8 ) // vbNarrow
     {
-        nType |= i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
+        nType |= TransliterationFlags::FULLWIDTH_HALFWIDTH;
     }
     if ( (nConversion & 0x10) == 16) // vbKatakana
     {
-        nType |= i18n::TransliterationModules_HIRAGANA_KATAKANA;
+        nType |= TransliterationFlags::HIRAGANA_KATAKANA;
     }
     else if ( (nConversion & 0x20) == 32 ) // vbHiragana
     {
-        nType |= i18n::TransliterationModules_KATAKANA_HIRAGANA;
+        nType |= TransliterationFlags::KATAKANA_HIRAGANA;
     }
     OUString aNewStr( aOldStr );
-    if( nType != 0 )
+    if( nType != TransliterationFlags::NONE )
     {
         uno::Reference< uno::XComponentContext > xContext = getProcessComponentContext();
         ::utl::TransliterationWrapper aTransliterationWrapper( xContext, nType );

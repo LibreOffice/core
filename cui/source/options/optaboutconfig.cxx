@@ -25,7 +25,6 @@
 #include <com/sun/star/container/XHierarchicalName.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <unotools/textsearch.hxx>
@@ -175,7 +174,7 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( vcl::Window* pParent/*, const SfxI
     aTabs[4] = aTabs[3] + fWidth * 8;
 
     m_options.AlgorithmType2 = util::SearchAlgorithms2::ABSOLUTE;
-    m_options.transliterateFlags |= i18n::TransliterationModules_IGNORE_CASE;
+    m_options.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
     m_options.searchFlag |= (util::SearchFlags::REG_NOT_BEGINOFLINE |
                                         util::SearchFlags::REG_NOT_ENDOFLINE);
 
