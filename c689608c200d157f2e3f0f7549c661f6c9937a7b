@@ -16,6 +16,24 @@
       "revId": "c689608c200d157f2e3f0f7549c661f6c9937a7b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_5d8656ba",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 12434,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T06:54:12Z",
+      "side": 1,
+      "message": "Thanks. That\u0027s what you get when you don\u0027t have a way to test it.",
+      "parentUuid": "9a57fde8_1da4ce55",
+      "revId": "c689608c200d157f2e3f0f7549c661f6c9937a7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
