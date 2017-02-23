@@ -24,14 +24,13 @@
 #include <unobaseclass.hxx>
 #include <unomid.h>
 
+#include <i18nutil/searchopt.hxx>
 #include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/unolingu.hxx>
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -715,7 +714,7 @@ uno::Sequence< OUString > SwXTextSearch::getSupportedServiceNames()
     return aRet;
 }
 
-void SwXTextSearch::FillSearchOptions( util::SearchOptions2& rSearchOpt ) const
+void SwXTextSearch::FillSearchOptions( i18nutil::SearchOptions2& rSearchOpt ) const
 {
     if( m_bSimilarity )
     {
@@ -743,7 +742,7 @@ void SwXTextSearch::FillSearchOptions( util::SearchOptions2& rSearchOpt ) const
     rSearchOpt.replaceString = m_sReplaceText;
 
     if( !m_bCase )
-        rSearchOpt.transliterateFlags |= i18n::TransliterationModules_IGNORE_CASE;
+        rSearchOpt.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
     if( m_bWord )
         rSearchOpt.searchFlag |= util::SearchFlags::NORM_WORD_ONLY;
 

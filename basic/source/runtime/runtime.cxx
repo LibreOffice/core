@@ -28,7 +28,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
 #include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -48,6 +47,7 @@
 
 #include <svl/zforlist.hxx>
 
+#include <i18nutil/searchopt.hxx>
 #include <unotools/syslocale.hxx>
 #include <unotools/textsearch.hxx>
 
@@ -1503,7 +1503,7 @@ void SbiRuntime::StepLIKE()
     OUString pattern = VBALikeToRegexp(refVar1->GetOUString());
     OUString value = refVar2->GetOUString();
 
-    css::util::SearchOptions2 aSearchOpt;
+    i18nutil::SearchOptions2 aSearchOpt;
 
     aSearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::REGEXP;
 
@@ -1518,7 +1518,7 @@ void SbiRuntime::StepLIKE()
     }
     if( bTextMode )
     {
-        aSearchOpt.transliterateFlags |= css::i18n::TransliterationModules_IGNORE_CASE;
+        aSearchOpt.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
     }
     SbxVariable* pRes = new SbxVariable;
     utl::TextSearch aSearch( aSearchOpt);

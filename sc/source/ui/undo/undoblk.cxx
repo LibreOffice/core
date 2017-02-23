@@ -1913,7 +1913,7 @@ bool ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
 }
 
 ScUndoTransliterate::ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMarkData& rMark,
-                            ScDocument* pNewUndoDoc, sal_Int32 nType ) :
+                            ScDocument* pNewUndoDoc, TransliterationFlags nType ) :
     ScBlockUndo( pNewDocShell, lcl_GetMultiMarkRange(rMark), SC_UNDO_AUTOHEIGHT ),
     aMarkData( rMark ),
     pUndoDoc( pNewUndoDoc ),

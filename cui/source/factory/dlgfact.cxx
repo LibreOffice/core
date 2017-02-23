@@ -551,7 +551,7 @@ void AbstractSvxCaptionDialog_Impl::SetValidateFramePosLink( const Link<SvxSwFra
     pDlg->SetValidateFramePosLink( rLink );
 }
 
-sal_Int32 AbstractSvxJSearchOptionsDialog_Impl::GetTransliterationFlags() const
+TransliterationFlags AbstractSvxJSearchOptionsDialog_Impl::GetTransliterationFlags() const
 {
     return pDlg->GetTransliterationFlags();
 }
@@ -1089,7 +1089,7 @@ VclPtr<SfxAbstractTabDialog> AbstractDialogFactory_Impl::CreateSchTransformTabDi
 
 VclPtr<AbstractSvxJSearchOptionsDialog> AbstractDialogFactory_Impl::CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
-                                                            sal_Int32 nInitialFlags)
+                                                            TransliterationFlags nInitialFlags)
 {
     VclPtrInstance<SvxJSearchOptionsDialog> pDlg( pParent, rOptionsSet, nInitialFlags );
     return VclPtr<AbstractSvxJSearchOptionsDialog_Impl>::Create( pDlg );

@@ -231,7 +231,7 @@ public:
     void            FillCrossDblClick();
     void            ConvertFormulaToValue();
 
-    void            TransliterateText( sal_Int32 nType );
+    void            TransliterateText( TransliterationFlags nType );
 
     ScAutoFormatData* CreateAutoFormatData();
     void            AutoFormat( sal_uInt16 nFormatNo );

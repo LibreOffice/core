@@ -714,7 +714,7 @@ bool ScDocFunc::DeleteCell(
     return true;
 }
 
-bool ScDocFunc::TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
+bool ScDocFunc::TransliterateText( const ScMarkData& rMark, TransliterationFlags nType,
                                     bool bApi )
 {
     ScDocShellModificator aModificator( rDocShell );

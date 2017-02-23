@@ -25,6 +25,7 @@
 #include <com/sun/star/util/XTextSearch2.hpp>
 #include <com/sun/star/i18n/Transliteration.hpp>
 #include <unotest/bootstrapfixturebase.hxx>
+#include <i18nutil/transliteration.hxx>
 
 #include <unicode/regex.h>
 
@@ -127,8 +128,8 @@ void TestTextSearch::testSearches()
     CPPUNIT_ASSERT_EQUAL( bStartRes, aRes.startOffset[0] );
     CPPUNIT_ASSERT_EQUAL( bEndRes, aRes.endOffset[0] );
 
-    aOptions.transliterateFlags = ::css::i18n::TransliterationModules::TransliterationModules_IGNORE_CASE
-                                | ::css::i18n::TransliterationModules::TransliterationModules_IGNORE_WIDTH;
+    aOptions.transliterateFlags = (sal_Int32) (TransliterationFlags::IGNORE_CASE
+                                | TransliterationFlags::IGNORE_WIDTH);
     aOptions.searchString = "([^ ]*)[ ]*([^ ]*)";
     m_xSearch->setOptions(aOptions);
     aRes = m_xSearch->searchForward("11 22 33", 2, 7);

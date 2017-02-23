@@ -1608,7 +1608,7 @@ void ScViewFunc::ConvertFormulaToValue()
     pDocSh->PostPaint(aRange, PaintPartFlags::Grid);
 }
 
-void ScViewFunc::TransliterateText( sal_Int32 nType )
+void ScViewFunc::TransliterateText( TransliterationFlags nType )
 {
     ScMarkData aFuncMark = GetViewData().GetMarkData();
     if ( !aFuncMark.IsMarked() && !aFuncMark.IsMultiMarked() )
