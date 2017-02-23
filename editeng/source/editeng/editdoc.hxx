@@ -471,7 +471,7 @@ public:
 private:
     CharPosArrayType aPositions;
     long            nTxtWidth;
-    sal_uInt16          nStartPosX;
+    long            nStartPosX;
     sal_Int32          nStart;     // could be replaced by nStartPortion
     sal_Int32          nEnd;       // could be replaced by nEndPortion
     sal_Int32          nStartPortion;
@@ -525,7 +525,7 @@ public:
 
     sal_Int32       GetLen() const                  { return nEnd - nStart; }
 
-    sal_uInt16      GetStartPosX() const            { return nStartPosX; }
+    long            GetStartPosX() const            { return nStartPosX; }
     void            SetStartPosX( long start );
     Size            CalcTextSize( ParaPortion& rParaPortion );
 
@@ -585,7 +585,7 @@ private:
 
     sal_Int32              nInvalidPosStart;
     sal_Int32              nFirstLineOffset;   // For Writer-LineSpacing-Interpretation
-    sal_uInt16             nBulletX;
+    sal_Int32             nBulletX;
     sal_Int32              nInvalidDiff;
 
     bool                bInvalid            : 1;
@@ -611,8 +611,8 @@ public:
     bool                MustRepaint() const         { return bForceRepaint; }
     void                SetMustRepaint( bool bRP )  { bForceRepaint = bRP; }
 
-    sal_uInt16          GetBulletX() const          { return nBulletX; }
-    void                SetBulletX( sal_uInt16 n )      { nBulletX = n; }
+    sal_Int32           GetBulletX() const          { return nBulletX; }
+    void                SetBulletX( sal_Int32 n )   { nBulletX = n; }
 
     void                MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff);
     void                MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 nEnd );
