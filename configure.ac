@@ -6041,20 +6041,20 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             AC_MSG_RESULT([yes])])
     CXXFLAGS=$save_CXXFLAGS
     AC_LANG_POP([C++])
-fi
 
-AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
-AC_LANG_PUSH([C++])
-save_CXXFLAGS=$CXXFLAGS
-CXXFLAGS="$CXXFLAGS -Werror -Wunknown-pragmas"
-AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-        struct __attribute__((warn_unused)) dummy {};
-    ])], [
-        AC_DEFINE([HAVE_GCC_ATTRIBUTE_WARN_UNUSED],[1])
-        AC_MSG_RESULT([yes])
-    ], [AC_MSG_RESULT([no])])
-CXXFLAGS=$save_CXXFLAGS
+    AC_MSG_CHECKING([whether $CXX supports __attribute__((warn_unused))])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS -Werror -Wunknown-pragmas"
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+            struct __attribute__((warn_unused)) dummy {};
+        ])], [
+            AC_DEFINE([HAVE_GCC_ATTRIBUTE_WARN_UNUSED],[1])
+            AC_MSG_RESULT([yes])
+        ], [AC_MSG_RESULT([no])])
+    CXXFLAGS=$save_CXXFLAGS
 AC_LANG_POP([C++])
+fi
 
 AC_SUBST(HAVE_GCC_AVX)
 AC_SUBST(HAVE_GCC_STACK_PROTECTOR_STRONG)
