@@ -10,8 +10,9 @@
 #define INCLUDED_UNOTOOLS_CASEROTATE_HXX
 
 #include <sal/config.h>
-
 #include <unotools/unotoolsdllapi.h>
+
+enum class TransliterationFlags;
 
 //TODO Use XCharacterClassification::getStringType to determine the current
 //(possibly mixed) case type and rotate to the next one
@@ -24,7 +25,7 @@ public:
     RotateTransliteration() : nF3ShiftCounter(0)
     {
     }
-    sal_uInt32 getNextMode();
+    TransliterationFlags getNextMode();
 };
 
 #endif

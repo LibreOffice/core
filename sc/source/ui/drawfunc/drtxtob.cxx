@@ -1188,8 +1188,8 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
 void ScDrawTextObjectBar::ExecuteTrans( SfxRequest& rReq )
 {
-    sal_Int32 nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
-    if ( nType )
+    TransliterationFlags nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
+    if ( nType != TransliterationFlags::NONE )
     {
         ScDrawView* pView = pViewData->GetScDrawView();
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();

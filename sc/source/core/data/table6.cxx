@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-
 #include <unotools/textsearch.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/editobj.hxx>
@@ -800,7 +798,7 @@ bool ScTable::SearchAndReplace(
         else
         {
             //  SearchParam no longer needed - SearchOptions contains all settings
-            css::util::SearchOptions2 aSearchOptions = rSearchItem.GetSearchOptions();
+            i18nutil::SearchOptions2 aSearchOptions = rSearchItem.GetSearchOptions();
             aSearchOptions.Locale = *ScGlobal::GetLocale();
 
             if (aSearchOptions.searchString.isEmpty() || ( rSearchItem.GetRegExp() && aSearchOptions.searchString == "^$" ) )
@@ -814,8 +812,8 @@ bool ScTable::SearchAndReplace(
             //  This is also done in SvxSearchDialog CommandHdl, but not in API object.
             if ( !rSearchItem.IsUseAsianOptions() )
                 aSearchOptions.transliterateFlags &=
-                    ( css::i18n::TransliterationModules_IGNORE_CASE |
-                      css::i18n::TransliterationModules_IGNORE_WIDTH );
+                    ( TransliterationFlags::IGNORE_CASE |
+                      TransliterationFlags::IGNORE_WIDTH );
 
             pSearchText = new utl::TextSearch( aSearchOptions );
 

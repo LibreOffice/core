@@ -32,6 +32,7 @@
 #include "uistrings.hrc"
 #include "reportformula.hxx"
 
+#include <i18nutil/searchopt.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -58,7 +59,6 @@
 #include <com/sun/star/sdb/FilterDialog.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -1889,7 +1889,7 @@ bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< repo
     try
     {
         const OUString sFormula( _xFunction->getFormula() );
-        util::SearchOptions2 aSearchOptions;
+        i18nutil::SearchOptions2 aSearchOptions;
         aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
         aSearchOptions.searchFlag = 0x00000100;
         ::std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
@@ -2108,7 +2108,7 @@ bool GeometryHandler::impl_isCounterFunction_throw(const OUString& _sQuotedFunct
         if ( aInitalFormula.IsPresent )
         {
             const OUString sFormula( aFind.first->second.first->getFormula() );
-            util::SearchOptions2 aSearchOptions;
+            i18nutil::SearchOptions2 aSearchOptions;
             aSearchOptions.AlgorithmType2 = util::SearchAlgorithms2::REGEXP;
             aSearchOptions.searchFlag = 0x00000100;
             aSearchOptions.searchString = m_aCounterFunction.m_sSearchString;

@@ -84,7 +84,6 @@
 #include <globals.hrc>
 #include <unomid.h>
 #include <unotools/printwarningoptions.hxx>
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -135,6 +134,7 @@
 #include <editeng/langitem.hxx>
 #include <docary.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nutil/searchopt.hxx>
 
 #include <format.hxx>
 #include <charfmt.hxx>
@@ -749,7 +749,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
 
     int eRanges(FindRanges::InBody|FindRanges::InSelAll);
 
-    util::SearchOptions2 aSearchOpt;
+    i18nutil::SearchOptions2 aSearchOpt;
     pSearch->FillSearchOptions( aSearchOpt );
 
     SwDocPositions eStart = pSearch->m_bBack ? SwDocPositions::End : SwDocPositions::Start;
@@ -871,7 +871,7 @@ SwUnoCursor* SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor >
                             rRangeNode.FindFooterStartNode() ;
     }
 
-    util::SearchOptions2 aSearchOpt;
+    i18nutil::SearchOptions2 aSearchOpt;
     pSearch->FillSearchOptions( aSearchOpt );
 
 /**

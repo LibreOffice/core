@@ -209,7 +209,7 @@ long SwWrtShell::SelAll()
 
 // Description: Text search
 
-sal_uLong SwWrtShell::SearchPattern( const SearchOptions2& rSearchOpt, bool bSearchInNotes,
+sal_uLong SwWrtShell::SearchPattern( const i18nutil::SearchOptions2& rSearchOpt, bool bSearchInNotes,
                                 SwDocPositions eStt, SwDocPositions eEnd,
                                 FindRanges eFlags, bool bReplace )
 {
@@ -255,7 +255,7 @@ sal_uLong SwWrtShell::SearchTempl( const OUString &rTempl,
 
 sal_uLong SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, bool bNoColls,
                                 SwDocPositions eStart, SwDocPositions eEnd,
-                                FindRanges eFlags, const SearchOptions2* pSearchOpt,
+                                FindRanges eFlags, const i18nutil::SearchOptions2* pSearchOpt,
                                 const SfxItemSet* pReplaceSet )
 {
     // no enhancement of existing selections

@@ -254,7 +254,7 @@ class SvxJSearchOptionsDialog;
 class AbstractSvxJSearchOptionsDialog_Impl :public AbstractSvxJSearchOptionsDialog
 {
     DECL_ABSTDLG_BASE(AbstractSvxJSearchOptionsDialog_Impl,SvxJSearchOptionsDialog)
-    virtual sal_Int32           GetTransliterationFlags() const override;
+    virtual TransliterationFlags    GetTransliterationFlags() const override;
 };
 
 class AbstractSvxTransformTabDialog_Impl : public AbstractSvxTransformTabDialog
@@ -549,7 +549,7 @@ public:
                                                             sal_uInt16 nLonger) override;
     virtual VclPtr<AbstractSvxJSearchOptionsDialog> CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
-                                                            sal_Int32 nInitialFlags) override;
+                                                            TransliterationFlags nInitialFlags) override;
     virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog() override;
     virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog( vcl::Window* pParent ) override;
     virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog( vcl::Window* pParent,

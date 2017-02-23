@@ -58,6 +58,7 @@ class SfxStyleSheet;
 namespace vcl { class Font; }
 class FontList;
 class OutputDevice;
+enum class TransliterationFlags;
 
 namespace com {
 namespace sun {
@@ -224,7 +225,7 @@ public:
     // for text conversion
     void            StartTextConversion( LanguageType nSrcLang, LanguageType nDestLang, const vcl::Font *pDestFont, sal_Int32 nOptions, bool bIsInteractive, bool bMultipleDoc );
 
-    void            TransliterateText( sal_Int32 nTransliterationMode );
+    void            TransliterateText( TransliterationFlags nTransliterationMode );
 
     bool            IsCursorAtWrongSpelledWord();
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );

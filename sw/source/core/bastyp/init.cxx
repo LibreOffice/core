@@ -902,9 +902,9 @@ namespace
             uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
 
             xTransWrp.reset(new ::utl::TransliterationWrapper( xContext,
-                    i18n::TransliterationModules_IGNORE_CASE |
-                    i18n::TransliterationModules_IGNORE_KANA |
-                    i18n::TransliterationModules_IGNORE_WIDTH ));
+                    TransliterationFlags::IGNORE_CASE |
+                    TransliterationFlags::IGNORE_KANA |
+                    TransliterationFlags::IGNORE_WIDTH ));
 
             xTransWrp->loadModuleIfNeeded( static_cast<sal_uInt16>(GetAppLanguage()) );
         }

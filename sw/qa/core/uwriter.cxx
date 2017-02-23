@@ -13,10 +13,9 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
-
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
+#include <i18nutil/transliteration.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
@@ -1145,7 +1144,7 @@ void SwDocTest::randomTest()
 }
 
 static OUString
-translitTest(SwDoc & rDoc, SwPaM & rPaM, sal_uInt32 const nType)
+translitTest(SwDoc & rDoc, SwPaM & rPaM, TransliterationFlags const nType)
 {
     utl::TransliterationWrapper aTrans(
             ::comphelper::getProcessComponentContext(), nType);
@@ -1165,22 +1164,22 @@ void SwDocTest::testTransliterate()
 
     CPPUNIT_ASSERT_EQUAL(OUString("FOOBAR"),
             translitTest(*m_pDoc, aPaM,
-                i18n::TransliterationModules_LOWERCASE_UPPERCASE));
+                TransliterationFlags::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
             translitTest(*m_pDoc, aPaM,
-                i18n::TransliterationModulesExtra::TITLE_CASE));
+                TransliterationFlags::TITLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("fOOBAR"),
             translitTest(*m_pDoc, aPaM,
-                i18n::TransliterationModulesExtra::TOGGLE_CASE));
+                TransliterationFlags::TOGGLE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("foobar"),
             translitTest(*m_pDoc, aPaM,
-                i18n::TransliterationModules_UPPERCASE_LOWERCASE));
+                TransliterationFlags::UPPERCASE_LOWERCASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
             translitTest(*m_pDoc, aPaM,
-                i18n::TransliterationModulesExtra::SENTENCE_CASE));
+                TransliterationFlags::SENTENCE_CASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Foobar"),
             translitTest(*m_pDoc, aPaM,
-                i18n::TransliterationModules_HIRAGANA_KATAKANA));
+                TransliterationFlags::HIRAGANA_KATAKANA));
 }
 
 namespace

@@ -12,8 +12,8 @@
 
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/util/SearchOptions2.hpp>
 
+#include <i18nutil/searchopt.hxx>
 #include <sfx2/tabdlg.hxx>
 #include <svtools/simptabl.hxx>
 #include <vcl/edit.hxx>
@@ -52,7 +52,7 @@ private:
     VclPtr< SvSimpleTable > m_pPrefBox;
 
      //for search
-    css::util::SearchOptions2 m_options;
+    i18nutil::SearchOptions2 m_options;
     SvTreeListEntries m_prefBoxEntries;
 
     void AddToModifiedVector( const std::shared_ptr< Prop_Impl >& rProp );

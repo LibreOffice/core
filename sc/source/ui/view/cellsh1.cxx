@@ -98,8 +98,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/bootstrap.hxx>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <memory>
 
@@ -2593,8 +2591,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
 void ScCellShell::ExecuteTrans( SfxRequest& rReq )
 {
-    sal_Int32 nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
-    if ( nType )
+    TransliterationFlags nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
+    if ( nType != TransliterationFlags::NONE )
     {
         GetViewData()->GetView()->TransliterateText( nType );
         rReq.Done();
