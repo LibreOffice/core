@@ -1240,6 +1240,7 @@ VclPtr<PopupMenu> SwContentTree::CreateContextMenu()
         SwContentType* pType = static_cast<SwContentType*>(pEntry->GetUserData());
         if ( (pType->GetType() == ContentTypeId::POSTIT) &&  (!m_pActiveShell->GetView().GetDocShell()->IsReadOnly()) && ( pType->GetMemberCount() > 0) )
         {
+            bSubPop4 = true;
             pSubPop4->InsertItem(600, m_sPostItShow );
             pSubPop4->InsertItem(601, m_sPostItHide );
             pSubPop4->InsertItem(602, m_sPostItDelete );
