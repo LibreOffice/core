@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_e1d20834",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 12436,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-23T14:16:59Z",
+      "side": 1,
+      "message": "doesn\u0027t seem to be related to constexpr?",
+      "revId": "b9d633bd3f73dbaf6cc1f112c3507954db99a14c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
