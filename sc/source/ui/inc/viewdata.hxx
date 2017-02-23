@@ -118,6 +118,38 @@ class ScViewData;
 class ScMarkData;
 class ScGridWindow;
 
+class ScPositionHelper
+{
+public:
+    typedef SCCOLROW index_type;
+    typedef std::pair<index_type, long> value_type;
+    static_assert(std::numeric_limits<index_type>::is_signed, "ScPositionCache: index type is not signed");
+
+private:
+    static const index_type null = std::numeric_limits<index_type>::min();
+
+    class Comp
+    {
+    public:
+        bool operator() (const value_type& rValue1, const value_type& rValue2) const;
+    };
+
+    std::set<value_type, Comp> mData;
+
+public:
+    ScPositionHelper();
+
+    void insert(index_type nIndex, long nPos);
+    void removeByIndex(index_type nIndex);
+    void removeByPosition(long nPos);
+    void invalidateByIndex(index_type nIndex);
+    void invalidateByPosition(long nPos);
+    const value_type& getNearestByIndex(index_type nIndex) const;
+    const value_type& getNearestByPosition(long nPos) const;
+    long getPosition(index_type nIndex) const;
+    index_type getIndex(long nPos) const;
+};
+
 class ScViewDataTable                           // per-sheet data
 {
 friend class ScViewData;
@@ -148,6 +180,9 @@ private:
     SCROW           nCurY;
     SCCOL           nOldCurX;
     SCROW           nOldCurY;
+    ScPositionHelper aWidthHelper;
+    ScPositionHelper aHeightHelper;
+
     SCCOL           nPosX[2];                   ///< X position of the top left cell of the visible area.
     SCROW           nPosY[2];                   ///< Y position of the top left cell of the visible area.
     SCCOL           nMaxTiledCol;
@@ -302,6 +337,8 @@ public:
     SCROW           GetCurYForTab( SCTAB nTabIndex ) const;
     SCCOL           GetOldCurX() const;
     SCROW           GetOldCurY() const;
+    ScPositionHelper& GetLOKWidthHelper()                   { return pThisTab->aWidthHelper; }
+    ScPositionHelper& GetLOKHeightHelper()                  { return pThisTab->aHeightHelper; }
 
     ScSplitMode     GetHSplitMode() const                   { return pThisTab->eHSplitMode; }
     ScSplitMode     GetVSplitMode() const                   { return pThisTab->eVSplitMode; }
