@@ -1213,9 +1213,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
-                if ( m_xObjSh->IsReadOnly() &&
+                if ( m_xObjSh->IsOriginallyReadOnlyMedium() &&
                     ( m_xObjSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ||
-                        ( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode()))
+                        (( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode())))
                 {
                     bool bSignPDF = IsSignPDF(m_xObjSh);
 
