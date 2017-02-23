@@ -113,6 +113,20 @@ static void ImplSetMenuItemData( MenuItemData* pData )
         pData->eType = MenuItemType::STRINGIMAGE;
 }
 
+namespace {
+
+void ImplClosePopupToolBox( const VclPtr<vcl::Window>& pWin )
+{
+    if ( pWin->GetType() == WindowType::TOOLBOX && ImplGetDockingManager()->IsInPopupMode( pWin ) )
+    {
+        ImplDockingWindowWrapper* pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( pWin );
+        if ( pWrapper && pWrapper->GetFloatingWindow() )
+            pWrapper->GetFloatingWindow()->EndPopupMode( FloatWinPopupEndFlags::CloseAll );
+    }
+}
+
+}
+
 Menu::Menu()
     : mpFirstDel(nullptr),
       pItemList(new MenuItemList),
@@ -3022,6 +3036,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
             pWin->doShutdown();
             pWindow->doLazyDelete();
             pWindow = nullptr;
+            ImplClosePopupToolBox(pW);
             ImplFlushPendingSelect();
             return nSelectedId;
         }
@@ -3082,7 +3097,7 @@ sal_uInt16 PopupMenu::ImplExecute( const VclPtr<vcl::Window>& pW, const Rectangl
         pWin->doShutdown();
         pWindow->doLazyDelete();
         pWindow = nullptr;
-
+        ImplClosePopupToolBox(pW);
         ImplFlushPendingSelect();
     }
 
