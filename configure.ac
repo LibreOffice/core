@@ -1761,7 +1761,7 @@ AC_ARG_WITH(system-poppler,
 
 AC_ARG_WITH(system-gpgmepp,
     AS_HELP_STRING([--with-system-gpgmepp],
-        [Use gpgme already on system]),,
+        [Use gpgmepp already on system]),,
     [with_system_gpgmepp="$with_system_libs"])
 
 AC_ARG_WITH(system-apache-commons,
@@ -10463,7 +10463,7 @@ if test "$_os" = "Linux"; then
             [AC_MSG_ERROR(gpgmepp not found or not functional)], [])
     else
         AC_MSG_RESULT([internal])
-        BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGME"
+        BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGMEPP"
 
         GPG_ERROR_CFLAGS="-I${WORKDIR}/UnpackedTarball/libgpg-error/src"
         GPG_ERROR_LIBS="-L${WORKDIR}/UnpackedTarball/libgpg-error/src/.libs -lgpg-error"
@@ -10471,7 +10471,7 @@ if test "$_os" = "Linux"; then
         LIBASSUAN_LIBS="-L${WORKDIR}/UnpackedTarball/libassuan/src/.libs -lassuan"
     fi
 fi
-AC_SUBST(SYSTEM_GPGME)
+AC_SUBST(SYSTEM_GPGMEPP)
 AC_SUBST(GPG_ERROR_CFLAGS)
 AC_SUBST(GPG_ERROR_LIBS)
 AC_SUBST(LIBASSUAN_CFLAGS)
