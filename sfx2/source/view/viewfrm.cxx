@@ -1213,24 +1213,9 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
                 const SfxViewShell *pVSh;
                 const SfxShell *pFSh;
-                if ( !m_xObjSh->IsReadOnly() ||
-                     ( m_xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED &&
-                       (pVSh = m_xObjSh->GetViewShell()) &&
-                       (pFSh = pVSh->GetFormShell()) &&
-                       !pFSh->IsDesignMode()))
-                {
-                    // In contrast to above (TITLE_CHANGED) does the UI not
-                    // have to be updated because it was not obstructed
-
-                    // #i21560# InvalidateAll() causes the assertion
-                    // 'SfxBindings::Invalidate while in update" when
-                    // the sfx slot SID_BASICIDE_APPEAR is executed
-                    // via API from another thread (Java).
-                    // According to MBA this call is not necessary anymore,
-                    // because each document has its own SfxBindings.
-                    //GetDispatcher()->GetBindings()->InvalidateAll(true);
-                }
-                else
+                if ( m_xObjSh->IsReadOnly() &&
+                    ( m_xObjSh->GetCreateMode() != SfxObjectCreateMode::EMBEDDED ||
+                        ( pVSh = m_xObjSh->GetViewShell()) && (pFSh = pVSh->GetFormShell()) && pFSh->IsDesignMode()))
                 {
                     bool bSignPDF = IsSignPDF(m_xObjSh);
 
