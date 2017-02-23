@@ -90,6 +90,166 @@ void lcl_LOKRemoveWindow(ScTabViewShell* pTabViewShell, ScSplitPos eWhich)
 
 } // anonymous namespace
 
+const ScPositionHelper::index_type ScPositionHelper::null; // definition
+
+bool ScPositionHelper::Comp::operator() (const value_type& rValue1, const value_type& rValue2) const
+{
+    if (rValue1.first == null || rValue2.first == null)
+    {
+        return rValue1.second < rValue2.second;
+    }
+    else
+    {
+        return rValue1.first < rValue2.first;
+    }
+}
+
+ScPositionHelper::ScPositionHelper()
+{
+    mData.insert(std::make_pair(-1, 0));
+}
+
+void ScPositionHelper::insert(index_type nIndex, long nPos)
+{
+    if (nIndex < 0) return;
+    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::insert: nIndex: "
+            << nIndex << ", nPos: " << nPos << ", size: " << mData.size());
+    value_type aValue = std::make_pair(nIndex, nPos);
+    mData.erase(aValue);
+    mData.insert(aValue);
+    SAL_INFO("sc.lok.poshelper",
+            "ScPositionHelper::insert: after insert: size: " << mData.size());
+}
+
+void ScPositionHelper::removeByIndex(index_type nIndex)
+{
+    if (nIndex < 0)
+        return;
+    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::remove: nIndex: " << nIndex
+            << ", size: " << mData.size());
+    auto it = mData.find(std::make_pair(nIndex, 0));
+    if (it == mData.end()) return;
+    mData.erase(it);
+    SAL_INFO("sc.lok.poshelper",
+            "ScPositionHelper::remove: after erase: size: " << mData.size());
+}
+
+void ScPositionHelper::removeByPosition(long nPos)
+{
+    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::remove: nPos: " << nPos
+            << ", size: " << mData.size());
+    auto it = mData.find(std::make_pair(null, nPos));
+    if (it == mData.end() || it->first <= 0)
+        return;
+    mData.erase(it);
+    SAL_INFO("sc.lok.poshelper",
+            "ScPositionHelper::remove: after erase: size: " << mData.size());
+}
+
+void ScPositionHelper::invalidateByIndex(index_type nIndex)
+{
+    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::invalidate: nIndex: " << nIndex);
+    if (nIndex < 0)
+    {
+        mData.clear();
+        mData.insert(std::make_pair(-1, 0));
+    }
+    else
+    {
+        auto it = mData.lower_bound(std::make_pair(nIndex, 0));
+        mData.erase(it, mData.end());
+    }
+}
+
+void ScPositionHelper::invalidateByPosition(long nPos)
+{
+    SAL_INFO("sc.lok.poshelper", "ScPositionHelper::invalidate: nPos: " << nPos);
+    if (nPos <= 0)
+    {
+        mData.clear();
+        mData.insert(std::make_pair(-1, 0));
+    }
+    else
+    {
+        auto it = mData.lower_bound(std::make_pair(null, nPos));
+        mData.erase(it, mData.end());
+    }
+}
+
+const ScPositionHelper::value_type&
+ScPositionHelper::getNearestByIndex(index_type nIndex) const
+{
+    SAL_INFO("sc.lok.poshelper",
+            "ScPositionHelper::getNearest: nIndex: " << nIndex << ", size: " << mData.size());
+    auto posUB = mData.upper_bound(std::make_pair(nIndex, 0));
+    if (posUB == mData.begin())
+    {
+        return *posUB;
+    }
+
+    auto posLB = std::prev(posUB);
+    if (posUB == mData.end())
+    {
+        return *posLB;
+    }
+
+    long nDiffUB = posUB->first - nIndex;
+    long nDiffLB = posLB->first - nIndex;
+    if (nDiffUB < -nDiffLB)
+    {
+        return *posUB;
+    }
+    else
+    {
+        return *posLB;
+    }
+}
+
+const ScPositionHelper::value_type&
+ScPositionHelper::getNearestByPosition(long nPos) const
+{
+    SAL_INFO("sc.lok.poshelper",
+            "ScPositionHelper::getNearest: nPos: " << nPos << ", size: " << mData.size());
+    auto posUB = mData.upper_bound(std::make_pair(null, nPos));
+
+    if (posUB == mData.begin())
+    {
+        return *posUB;
+    }
+
+    auto posLB = std::prev(posUB);
+    if (posUB == mData.end())
+    {
+        return *posLB;
+    }
+
+    long nDiffUB = posUB->second - nPos;
+    long nDiffLB = posLB->second - nPos;
+
+    if (nDiffUB < -nDiffLB)
+    {
+        return *posUB;
+    }
+    else
+    {
+        return *posLB;
+    }
+}
+
+long ScPositionHelper::getPosition(index_type nIndex) const
+{
+    auto it = mData.find(std::make_pair(nIndex, 0));
+    if (it == mData.end()) return -1;
+    return it->second;
+}
+
+ScPositionHelper::index_type ScPositionHelper::getIndex(long nPos) const
+{
+    auto it = mData.find(std::make_pair(null, nPos));
+    if (it == mData.end()) return null;
+    return it->first;
+}
+
 ScViewDataTable::ScViewDataTable() :
                 eZoomType( SvxZoomType::PERCENT ),
                 aZoomX( 1,1 ),
