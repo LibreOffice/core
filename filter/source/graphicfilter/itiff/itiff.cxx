@@ -786,7 +786,7 @@ sal_uLong TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_u
 
 bool TIFFReader::ConvertScanline(sal_Int32 nY)
 {
-    sal_uInt32  nRed, nGreen, nBlue, ns, nVal, nByteCount;
+    sal_uInt32  nRed, nGreen, nBlue, ns, nVal;
     sal_uInt8   nByteVal;
 
     if ( nDstBitsPerPixel == 24 )
@@ -997,11 +997,18 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
 
                 case 1 :
                 {
+                    sal_uInt32 nByteCount = nImageWidth >> 3;
+
+                    sal_uInt32 nBytesNeeded = nByteCount;
+                    if (nImageWidth & 7)
+                        ++nBytesNeeded;
+                    if (pt + nBytesNeeded > ptend)
+                        return false;
+
                     if ( bByteSwap )
                     {
                         sal_Int32 nx = 0;
-                        nByteCount = ( nImageWidth >> 3 ) + 1;
-                        while ( --nByteCount )
+                        while (nByteCount--)
                         {
                             nByteVal = *pt++;
                             pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
@@ -1033,8 +1040,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     else
                     {
                         sal_Int32 nx = 7;
-                        nByteCount = ( nImageWidth >> 3 ) + 1;
-                        while ( --nByteCount )
+                        while (nByteCount--)
                         {
                             nByteVal = *pt++;
                             pAcc->SetPixelIndex( nY, nx, nByteVal & 1 );
