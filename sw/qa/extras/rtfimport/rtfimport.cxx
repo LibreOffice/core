@@ -1099,6 +1099,16 @@ DECLARE_RTFIMPORT_TEST(testFdo59419, "fdo59419.rtf")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
 }
 
+DECLARE_RTFIMPORT_TEST(testHexCRLF, "hexcrlf.rtf")
+{
+    // hex-escaped \r and \n should create a paragraph break
+    getParagraph(1, "foo");
+    getParagraph(2, "bar");
+    getParagraph(3, "baz");
+    getParagraph(4, "");
+    getParagraph(5, "quux");
+}
+
 DECLARE_RTFIMPORT_TEST(testFdo58076_2, "fdo58076-2.rtf")
 {
     // Position of the picture wasn't correct.

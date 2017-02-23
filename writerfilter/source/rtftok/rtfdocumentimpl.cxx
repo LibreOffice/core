@@ -1114,7 +1114,19 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
     if (m_aStates.top().nInternalState == RTFInternalState::HEX && m_aStates.top().eDestination != Destination::LEVELNUMBERS)
     {
         if (!bSkipped)
-            m_aHexBuffer.append(ch);
+        {
+            // note: apparently \'0d\'0a is interpreted as 2 breaks, not 1
+            if (m_aStates.top().eDestination != Destination::DOCCOMM
+                && (ch == '\r' || ch == '\n'))
+            {
+                checkUnicode(/*bUnicode =*/ false, /*bHex =*/ true);
+                dispatchSymbol(RTF_PAR);
+            }
+            else
+            {
+                m_aHexBuffer.append(ch);
+            }
+        }
         return RTFError::OK;
     }
 
