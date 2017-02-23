@@ -43,7 +43,9 @@ extern "C"
     #define SEPARATOR         '/'
 
 #ifndef __OBJC__
+#ifdef __cplusplus
     inline
+#endif
 #endif
     void *lok_loadlib(const char *pFN)
     {
@@ -55,7 +57,9 @@ extern "C"
     }
 
 #ifndef __OBJC__
+#ifdef __cplusplus
     inline
+#endif
 #endif
     char *lok_dlerror(void)
     {
@@ -63,7 +67,9 @@ extern "C"
     }
 
 #ifndef __OBJC__
+#ifdef __cplusplus
     inline
+#endif
 #endif
     void *lok_dlsym(void *Hnd, const char *pName)
     {
@@ -71,7 +77,9 @@ extern "C"
     }
 
 #ifndef __OBJC__
+#ifdef __cplusplus
     inline
+#endif
 #endif
     int lok_dlclose(void *Hnd)
     {
@@ -79,7 +87,9 @@ extern "C"
     }
 
 #ifndef __OBJC__
+#ifdef __cplusplus
     inline
+#endif
 #endif
     void extendUnoPath(const char *pPath)
     {
