@@ -74,9 +74,9 @@
 
 using namespace com::sun::star;
 
-//! Clipping-Markierungen
+//! Clipping Marks
 
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+//  no Which-ID here, Map only for PropertySetInfo
 
 static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
 {
@@ -190,7 +190,7 @@ sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleColumn()
 
         return rViewData.GetPosX( eWhichH );
     }
-    OSL_FAIL("keine View ?!?"); //! Exception?
+    OSL_FAIL("no View ?!?"); //! Exception?
     return 0;
 }
 
@@ -223,7 +223,7 @@ sal_Int32 SAL_CALL ScViewPaneBase::getFirstVisibleRow()
 
         return rViewData.GetPosY( eWhichV );
     }
-    OSL_FAIL("keine View ?!?"); //! Exception?
+    OSL_FAIL("no View ?!?"); //! Exception?
     return 0;
 }
 
@@ -256,13 +256,13 @@ table::CellRangeAddress SAL_CALL ScViewPaneBase::getVisibleRange()
         ScHSplitPos eWhichH = WhichH( eWhich );
         ScVSplitPos eWhichV = WhichV( eWhich );
 
-        //  VisibleCellsX gibt nur komplett sichtbare Zellen,
-        //  VisibleRange in Excel auch teilweise sichtbare.
-        //! anpassen ???
+        //  VisibleCellsX returns only completely visible cells
+        //  VisibleRange in Excel also partially visible ones
+        //! do the same ???
 
         SCCOL nVisX = rViewData.VisibleCellsX( eWhichH );
         SCROW nVisY = rViewData.VisibleCellsY( eWhichV );
-        if (!nVisX) nVisX = 1;  // irgendwas muss ja im Range sein
+        if (!nVisX) nVisX = 1;  // there has to be something in the range
         if (!nVisY) nVisY = 1;
         aAdr.Sheet       = rViewData.GetTabNo();
         aAdr.StartColumn = rViewData.GetPosX( eWhichH );
@@ -282,7 +282,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScViewPaneBase::getReferredCells()
     {
         ScDocShell* pDocSh = pViewShell->GetViewData().GetDocShell();
 
-        table::CellRangeAddress aAdr(getVisibleRange());        //! Hilfsfunktion mit ScRange?
+        table::CellRangeAddress aAdr(getVisibleRange());        //! helper function with ScRange?
         ScRange aRange( (SCCOL)aAdr.StartColumn, (SCROW)aAdr.StartRow, aAdr.Sheet,
                         (SCCOL)aAdr.EndColumn, (SCROW)aAdr.EndRow, aAdr.Sheet );
         if ( aRange.aStart == aRange.aEnd )
@@ -436,7 +436,7 @@ void SAL_CALL ScViewPaneObj::release() throw()
     OWeakObject::release();
 }
 
-//  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
+//  We need default ctor for SMART_REFLECTION_IMPLEMENTATION
 
 ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
     ScViewPaneBase( pViewSh, SC_VIEWPANE_ACTIVE ),
@@ -456,7 +456,7 @@ ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
 
 ScTabViewObj::~ScTabViewObj()
 {
-    //! Listening oder so
+    //! Listening or something along that line
     if (!aMouseClickHandlers.empty())
     {
         acquire();
@@ -707,13 +707,13 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
     uno::Reference<drawing::XShape> xShapeSel( xInterface, uno::UNO_QUERY );
     SvxShape* pShapeImp = SvxShape::getImplementation( xShapeSel );
 
-    if (pRangesImp)                                     // Zell-Ranges
+    if (pRangesImp)                                     // Cell ranges
     {
         ScViewData& rViewData = pViewSh->GetViewData();
         if ( rViewData.GetDocShell() == pRangesImp->GetDocShell() )
         {
-            //  Zuerst evtl. Drawing-Selektion aufheben
-            //  (MarkListHasChanged hebt Tabellen-Selektion auf)
+            //  perhaps remove drawing selection first
+            //  (MarkListHasChanged removes sheet selection)
 
             ScDrawView* pDrawView = pViewSh->GetScDrawView();
             if (pDrawView)
@@ -724,15 +724,15 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
             FuPoor* pFunc = pViewSh->GetDrawFuncPtr();
             if ( pFunc && pFunc->GetSlotID() != SID_OBJECT_SELECT )
             {
-                //  Slot der Zeichenfunktion nochmal ausfuehren -> abschalten
+                //  execute the slot of drawing function again -> switch off
                 SfxDispatcher* pDisp = pViewSh->GetDispatcher();
                 if (pDisp)
                     pDisp->Execute( pFunc->GetSlotID(), SfxCallMode::SYNCHRON );
             }
             pViewSh->SetDrawShell(false);
-            pViewSh->SetDrawSelMode(false); // nach dem Dispatcher-Execute
+            pViewSh->SetDrawSelMode(false); // after Dispatcher-Execute
 
-            //  Ranges selektieren
+            //  select ranges
 
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
             size_t nRangeCount = rRanges.size();
@@ -743,7 +743,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 pViewSh->MarkRange( *rRanges[ 0 ] );
             else
             {
-                //  Mehrfachselektion
+                // multiselection
 
                 const ScRange* pFirst = rRanges[ 0 ];
                 if ( pFirst && !lcl_TabInRanges( rViewData.GetTabNo(), rRanges ) )
@@ -752,7 +752,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                 pViewSh->InitOwnBlockMode();
                 rViewData.GetMarkData().MarkFromRangeList( rRanges, true );
                 pViewSh->MarkDataChanged();
-                rViewData.GetDocShell()->PostPaintGridAll();   // Markierung (alt&neu)
+                rViewData.GetDocShell()->PostPaintGridAll();   // Marks (old&new)
                 if ( pFirst )
                 {
                     pViewSh->AlignToCursor( pFirst->aStart.Col(), pFirst->aStart.Row(),
@@ -760,7 +760,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                     pViewSh->SetCursor( pFirst->aStart.Col(), pFirst->aStart.Row() );
                 }
 
-                //! Methode an der View, um RangeList zu selektieren
+                //! method of the view to select RangeList
             }
             bRet = true;
         }
@@ -773,7 +773,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
             pDrawView->ScEndTextEdit();
             pDrawView->UnmarkAll();
 
-            if (pShapeImp)      // einzelnes Shape
+            if (pShapeImp)      // single shape
             {
                 SdrObject *pObj = pShapeImp->GetSdrObject();
                 if (pObj)
@@ -787,11 +787,11 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                     }
                 }
             }
-            else                // Shape-Collection (xShapeColl ist nicht 0)
+            else                // Shape-Collection (xShapeColl is not 0)
             {
-                //  Es wird auf die Tabelle des ersten Objekts umgeschaltet,
-                //  und alle Objekte selektiert, die auf dieser Tabelle liegen
-                //! Exception, wenn Objekte auf verschiedenen Tabellen?
+                //  We'll switch to the sheet where the first object is
+                //  and select all objects on that sheet
+                //!?throw exception when objects are on different sheets?
 
                 long nCount = xShapeColl->getCount();
                 if (nCount)
@@ -815,7 +815,7 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
                                         pViewSh->UpdateLayerLocks();
                                         bDrawSelModeSet = true;
                                     }
-                                    if (!pPV)               // erstes Objekt
+                                    if (!pPV)               // first object
                                     {
                                         lcl_ShowObject( *pViewSh, *pDrawView, pObj );
                                         pPV = pDrawView->GetSdrPageView();
@@ -856,7 +856,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
     ScCellRangesBase* pObj = nullptr;
     if (pViewSh)
     {
-        //  Ist auf dem Drawing-Layer etwas selektiert?
+        //  is something selected in drawing layer?
 
         SdrView* pDrawView = pViewSh->GetSdrView();
         if (pDrawView)
@@ -865,8 +865,8 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
             const size_t nMarkCount = rMarkList.GetMarkCount();
             if (nMarkCount)
             {
-                //  ShapeCollection erzeugen (wie in SdXImpressView::getSelection im Draw)
-                //  Zurueckgegeben wird XInterfaceRef, das muss das UsrObject-XInterface sein
+                //  generate ShapeCollection (like in SdXImpressView::getSelection in Draw)
+                //  XInterfaceRef will be returned and it has to be UsrObject-XInterface
 
                 uno::Reference< drawing::XShapes > xShapes = drawing::ShapeCollection::create(
                         comphelper::getProcessComponentContext());
@@ -887,7 +887,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
             }
         }
 
-        //  sonst Tabellen-(Zellen-)Selektion
+        //  otherwise sheet (cell) selection
 
         ScViewData& rViewData = pViewSh->GetViewData();
         ScDocShell* pDocSh = rViewData.GetDocShell();
@@ -931,13 +931,13 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
                     pObj = new ScCellRangesObj( pDocSh, aRangeList );
             }
         }
-        else            //  Mehrfachselektion
+        else            //  multiselection
         {
             ScRangeListRef xRanges;
             rViewData.GetMultiArea( xRanges );
 
-            //  bei mehreren Tabellen Ranges kopieren
-            //! sollte eigentlich schon in ScMarkData::FillRangeListWithMarks passieren?
+            //  if there are more sheets, copy ranges
+            //! should this happen in ScMarkData::FillRangeListWithMarks already?
             if ( nTabs > 1 )
                 rMark.ExtendRangeListTables( xRanges.get() );
 
@@ -991,7 +991,6 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xPane);
     else
         throw lang::IndexOutOfBoundsException();
-//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTabViewObj::getElementType()
@@ -1016,14 +1015,14 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        ScSplitPos eWhich = SC_SPLIT_BOTTOMLEFT;    // default Position
+        ScSplitPos eWhich = SC_SPLIT_BOTTOMLEFT;    // default position
         bool bError = false;
         ScViewData& rViewData = pViewSh->GetViewData();
         bool bHor = ( rViewData.GetHSplitMode() != SC_SPLIT_NONE );
         bool bVer = ( rViewData.GetVSplitMode() != SC_SPLIT_NONE );
         if ( bHor && bVer )
         {
-            //  links oben, links unten, rechts oben, rechts unten - wie in Excel
+            //  bottom left, bottom right, top left, top right - like in Excel
             if ( nIndex < 4 )
                 eWhich = ePosHV[nIndex];
             else
@@ -1035,7 +1034,7 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
                 bError = true;
             else if ( nIndex == 1 )
                 eWhich = SC_SPLIT_BOTTOMRIGHT;
-            // sonst SC_SPLIT_BOTTOMLEFT
+            // otherwise SC_SPLIT_BOTTOMLEFT
         }
         else if ( bVer )
         {
@@ -1043,10 +1042,10 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(sal_uInt16 nIndex) const
                 bError = true;
             else if ( nIndex == 0 )
                 eWhich = SC_SPLIT_TOPLEFT;
-            // sonst SC_SPLIT_BOTTOMLEFT
+            // otherwise SC_SPLIT_BOTTOMLEFT
         }
         else if ( nIndex > 0 )
-            bError = true;          // nicht geteilt: nur 0 gueltig
+            bError = true;          // not split: only 0 is valid
 
         if (!bError)
             return new ScViewPaneObj( pViewSh, sal::static_int_cast<sal_uInt16>(eWhich) );
@@ -1076,7 +1075,7 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
     ScTabViewShell* pViewSh = GetViewShell();
     if ( pViewSh && xActiveSheet.is() )
     {
-        //  XSpreadsheet und ScCellRangesBase -> muss ein Sheet sein
+        //  XSpreadsheet and ScCellRangesBase -> has to be the same sheet
 
         ScCellRangesBase* pRangesImp = ScCellRangesBase::getImplementation( xActiveSheet );
         if ( pRangesImp && pViewSh->GetViewData().GetDocShell() == pRangesImp->GetDocShell() )
@@ -1404,7 +1403,7 @@ sal_Int16 ScTabViewObj::GetZoom() const
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        const Fraction& rZoomY = pViewSh->GetViewData().GetZoomY();    // Y wird angezeigt
+        const Fraction& rZoomY = pViewSh->GetViewData().GetZoomY();    // Y will be shown
         return (sal_Int16)(( rZoomY.GetNumerator() * 100 ) / rZoomY.GetDenominator());
     }
     return 0;
@@ -1522,7 +1521,7 @@ void ScTabViewObj::SetZoomType(sal_Int16 aZoomType)
 sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit()
 {
     SolarMutexGuard aGuard;
-    //  wie Menue-Slot SID_WINDOW_SPLIT
+    //  what menu slot SID_WINDOW_SPLIT does
 
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
@@ -1538,7 +1537,7 @@ sal_Bool SAL_CALL ScTabViewObj::getIsWindowSplit()
 sal_Bool SAL_CALL ScTabViewObj::hasFrozenPanes()
 {
     SolarMutexGuard aGuard;
-    //  wie Menue-Slot SID_WINDOW_FIX
+    //  what menu slot SID_WINDOW_FIX does
 
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
@@ -1613,7 +1612,7 @@ sal_Int32 SAL_CALL ScTabViewObj::getSplitRow()
         {
             long nSplit = rViewData.GetVSplitPos();
 
-            ScSplitPos ePos = SC_SPLIT_TOPLEFT;     // es ist vertikal geteilt
+            ScSplitPos ePos = SC_SPLIT_TOPLEFT;     // split vertically
             SCsCOL nCol;
             SCsROW nRow;
             rViewData.GetPosFromPixel( 0, nSplit, ePos, nCol, nRow, false );
@@ -1642,7 +1641,7 @@ void SAL_CALL ScTabViewObj::freezeAtPosition( sal_Int32 nColumns, sal_Int32 nRow
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        //  erst alles aufheben -> kein Stress mit Scrolling zwischendurch o.ae.
+        //  first, remove them all -> no stress with scrolling in the meantime
 
         pViewSh->RemoveSplit();
 
@@ -1675,7 +1674,7 @@ void SAL_CALL ScTabViewObj::removeSelectionChangeListener(
     for (XSelectionChangeListenerVector::iterator it = aSelectionChgListeners.begin();
          it != aSelectionChgListeners.end(); ++it )
     {
-        if ( *it == xListener ) //! wozu der Mumpitz mit queryInterface?
+        if ( *it == xListener ) //! why the hassle with queryInterface?
         {
             aSelectionChgListeners.erase(it);
             break;
@@ -1739,8 +1738,8 @@ void ScTabViewObj::SelectionChanged()
     }
 }
 
-//  XPropertySet (View-Optionen)
-//! auch an der Applikation anbieten?
+//  XPropertySet (view options)
+//! provide those also in application?
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTabViewObj::getPropertySetInfo()
 {
