@@ -973,7 +973,6 @@ void GtkSalFrame::InitCommon()
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
     m_bSendModChangeOnRelease = false;
     m_pIMHandler        = nullptr;
-    m_nExtStyle         = 0;
     m_pRegion           = nullptr;
     m_ePointerStyle     = static_cast<PointerStyle>(0xffff);
     m_bSetFocusOnMap    = false;
@@ -1357,13 +1356,8 @@ void GtkSalFrame::askForXEmbedFocus( sal_Int32 i_nTimeCode )
     GetGenericData()->ErrorTrapPop();
 }
 
-void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
+void GtkSalFrame::SetExtendedFrameStyle(SalExtStyle)
 {
-    if( nStyle != m_nExtStyle && ! isChild() )
-    {
-        m_nExtStyle = nStyle;
-        updateWMClass();
-    }
 }
 
 SalGraphics* GtkSalFrame::AcquireGraphics()

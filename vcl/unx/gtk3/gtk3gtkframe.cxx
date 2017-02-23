@@ -1077,7 +1077,6 @@ void GtkSalFrame::InitCommon()
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
     m_bSendModChangeOnRelease = false;
     m_pIMHandler        = nullptr;
-    m_nExtStyle         = 0;
     m_pRegion           = nullptr;
     m_pDropTarget       = nullptr;
     m_pDragSource       = nullptr;
@@ -1314,13 +1313,8 @@ void GtkSalFrame::Init( SystemParentData* pSysData )
     //FIXME: Handling embedded windows, is going to be fun ...
 }
 
-void GtkSalFrame::SetExtendedFrameStyle( SalExtStyle nStyle )
+void GtkSalFrame::SetExtendedFrameStyle(SalExtStyle)
 {
-    if( nStyle != m_nExtStyle && ! isChild() )
-    {
-        m_nExtStyle = nStyle;
-        updateWMClass();
-    }
 }
 
 SalGraphics* GtkSalFrame::AcquireGraphics()

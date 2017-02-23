@@ -179,7 +179,6 @@ class GtkSalFrame : public SalFrame
     GdkWindow*                      m_pForeignTopLevel;
     GdkNativeWindow                 m_aForeignTopLevelWindow;
     SalFrameStyleFlags              m_nStyle;
-    SalExtStyle                     m_nExtStyle;
     GtkSalFrame*                    m_pParent;
     std::list< GtkSalFrame* >       m_aChildren;
     GdkWindowState                  m_nState;
