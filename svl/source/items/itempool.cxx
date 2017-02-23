@@ -413,10 +413,11 @@ void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
                     break;
                 if (rSecArrayPtr)
                 {
-                    for (auto const& rItemPtr : *rSecArrayPtr)
-                        if (!rItemPtr)
+                    for (const SfxPoolItem* pItem : *rSecArrayPtr)
+                        if (pItem)
                         {
-                            OSL_FAIL( "old secondary pool must be empty" );
+                            SAL_WARN("svl.items", "old secondary pool: " << pImpl->mpSecondary->pImpl->aName
+                                            << " of pool: " << pImpl->aName << " must be empty.");
                             bOK = false;
                             break;
                         }
