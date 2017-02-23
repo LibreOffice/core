@@ -1,6 +1,4 @@
 libzmf is a library and a set of tools for reading and converting
 Zoner Draw and Zebra file formats.
 
-libzmf requires boost and librevenge to build.
-
-The library is available under MPL 2.0+ license.
+[https://wiki.documentfoundation.org/DLP/Libraries/libzmf]
