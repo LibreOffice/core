@@ -114,6 +114,18 @@ private:
     const OUString aStrNotEmpty;
     const OUString aStrColumn;
 
+    struct CondEntry
+    {
+        OUString  aStrEntry;            // display String
+        sal_Int32 nPos;                 // position (index) when all condition operatoren display, it is equal with the operator
+        CondEntry(const OUString &StrEntry, sal_Int32 npos) : aStrEntry(StrEntry), nPos(npos) {}
+    };
+
+    typedef std::vector<CondEntry> vtCondEntry;
+    vtCondEntry  vStrCondAllEntries;    // all condtion entries
+    vtCondEntry  vStrCondRegEntries;    // when RegExp is active, in this case entries only possible with RegExp
+    vtCondEntry *vStrCondCurEntries;    // when RegExp is change this is the current condition entries for display
+
     ScFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
@@ -140,6 +152,13 @@ private:
 private:
     void            Init            ( const SfxItemSet& rArgSet );
     void            FillFieldLists  ();
+    void            FillCondLists   ();   // fill the condition lists in dependencies of the regulare exp. button
+    void            HandleRegExpBtn ();   // is in the condition list is set "= or <>" set enable the regulare exp. button
+
+    bool            TestCondEntries (int eOp);                           // at the moment testing is "= or <>" define
+    ScQueryOp       GetRealSelectCondPos(size_t nIndex, bool isRegExp);  // get the condition oerator in dependency of the index and regulare exp. checkbox
+    size_t          GetRealSelectCondIndex(ScQueryOp eOp);               // get the index in dependency of given opearator and regulare exp. checkbox
+
     void            UpdateValueList ( size_t nList );
     void            UpdateHdrInValueList( size_t nList );
     void            ClearValueList  ( size_t nList );
