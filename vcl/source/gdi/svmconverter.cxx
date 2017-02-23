@@ -1355,23 +1355,21 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 sal_Int32   nValue;
                 sal_uInt32  nDataSize;
-                sal_uInt8*      pData;
+                std::vector<sal_uInt8> aData;
                 sal_Int32       nFollowingActionCount;
 
                 OString aComment = read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm);
                 rIStm.ReadInt32( nValue ).ReadUInt32( nDataSize );
 
-                if( nDataSize )
+                if (nDataSize)
                 {
-                    pData = new sal_uInt8[ nDataSize ];
-                    rIStm.ReadBytes( pData, nDataSize );
+                    aData.resize(nDataSize);
+                    nDataSize = rIStm.ReadBytes(aData.data(), nDataSize);
                 }
-                else
-                    pData = nullptr;
 
                 rIStm.ReadInt32( nFollowingActionCount );
                 ImplSkipActions( rIStm, nFollowingActionCount );
-                rMtf.AddAction( new MetaCommentAction( aComment, nValue, pData, nDataSize ) );
+                rMtf.AddAction(new MetaCommentAction(aComment, nValue, aData.data(), nDataSize));
 
                 i += nFollowingActionCount;
             }
