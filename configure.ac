@@ -10456,7 +10456,7 @@ if test "$_os" = "Linux"; then
 
         # C++ library doesn't come with fancy gpgmepp-config, check for headers the old-fashioned way
         AC_CHECK_HEADER(gpgme++/gpgmepp_version.h, [ GPGMEPP_CFLAGS=-I/usr/include/gpgme++ ],
-            [AC_MSG_ERROR(gpgmepp headers not found, install gpgmepp development package)], [])
+            [AC_MSG_ERROR([gpgmepp headers not found, install gpgmepp development package])], [])
         # progress_callback is the only func with plain C linkage
         # checking for it also filters out older, KDE-dependent libgpgmepp versions
         AC_CHECK_LIB(gpgmepp, progress_callback, [ GPGMEPP_LIBS=-lgpgmepp ],
