@@ -3393,11 +3393,11 @@ endif # ENABLE_BREAKPAD
 
 ifneq ($(SYSTEM_GPGMEPP),)
 
-gb_ExternalProject__use_gpgme:=
+gb_ExternalProject__use_gpgmepp:=
 gb_ExternalProject__use_libassuan:=
 gb_ExternalProject__use_libgpg-error:=
 
-define gb_LinkTarget__use_gpgme
+define gb_LinkTarget__use_gpgmepp
 $(call gb_LinkTarget_set_include,$(1),\
 	$$(INCLUDE) \
 	$$(GPGMEPP_CFLAGS) \
@@ -3411,7 +3411,7 @@ endef
 
 else # NON-SYSTEM_GPGME
 
-define gb_ExternalProject__use_gpgme
+define gb_ExternalProject__use_gpgmepp
 $(call gb_ExternalProject_use_external_project,$(1),gpgme)
 
 endef
@@ -3424,7 +3424,7 @@ $(call gb_ExternalProject_use_external_project,$(1),libgpg-error)
 
 endef
 
-define gb_LinkTarget__use_gpgme
+define gb_LinkTarget__use_gpgmepp
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,gpgme)/lang/cpp/src \
 	$$(INCLUDE) \

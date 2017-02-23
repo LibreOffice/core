@@ -1761,7 +1761,7 @@ AC_ARG_WITH(system-poppler,
 
 AC_ARG_WITH(system-gpgmepp,
     AS_HELP_STRING([--with-system-gpgmepp],
-        [Use gpgme already on system]),,
+        [Use gpgmepp already on system]),,
     [with_system_gpgmepp="$with_system_libs"])
 
 AC_ARG_WITH(system-apache-commons,
