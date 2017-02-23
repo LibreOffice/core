@@ -970,7 +970,7 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
     }
 }
 
-void SwEditShell::TransliterateText( sal_uInt32 nType )
+void SwEditShell::TransliterateText( TransliterationFlags nType )
 {
     utl::TransliterationWrapper aTrans( ::comphelper::getProcessComponentContext(), nType );
     StartAllAction();

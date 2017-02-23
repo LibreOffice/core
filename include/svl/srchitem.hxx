@@ -22,10 +22,10 @@
 #include <sal/config.h>
 #include <svl/svldllapi.h>
 #include <com/sun/star/util/XSearchDescriptor.hpp>
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <i18nutil/transliteration.hxx>
+#include <i18nutil/searchopt.hxx>
 #include <unotools/configitem.hxx>
 #include <rsc/rscsfx.hxx>
 #include <svl/poolitem.hxx>
@@ -63,7 +63,7 @@ class SVL_DLLPUBLIC SvxSearchItem :
         public SfxPoolItem,
         public utl::ConfigItem
 {
-    css::util::SearchOptions2 m_aSearchOpt;
+    i18nutil::SearchOptions2 m_aSearchOpt;
 
     SfxStyleFamily  m_eFamily;            // style family
 
@@ -180,12 +180,13 @@ public:
     inline  sal_uInt16      GetLEVLonger() const;
     inline  void            SetLEVLonger(sal_uInt16 nSet);
 
-    inline const css::util::SearchOptions2 &
+    inline const i18nutil::SearchOptions2 &
                             GetSearchOptions() const;
-    inline void             SetSearchOptions( const css::util::SearchOptions2 &rOpt );
+    inline void             SetSearchOptions( const i18nutil::SearchOptions2 &rOpt );
 
-    inline  sal_Int32       GetTransliterationFlags() const;
-            void            SetTransliterationFlags( sal_Int32 nFlags );
+    inline  TransliterationFlags
+                            GetTransliterationFlags() const;
+            void            SetTransliterationFlags( TransliterationFlags nFlags );
 
     inline  bool            IsMatchFullHalfWidthForms() const;
     void                    SetMatchFullHalfWidthForms( bool bVal );
@@ -227,7 +228,7 @@ bool SvxSearchItem::GetWordOnly() const
 
 bool SvxSearchItem::GetExact() const
 {
-    return 0 == (m_aSearchOpt.transliterateFlags & css::i18n::TransliterationModules_IGNORE_CASE);
+    return bool(m_aSearchOpt.transliterateFlags & TransliterationFlags::IGNORE_CASE);
 }
 
 bool SvxSearchItem::GetSelection() const
@@ -298,24 +299,24 @@ bool SvxSearchItem::IsLevenshtein() const
     return m_aSearchOpt.AlgorithmType2 == css::util::SearchAlgorithms2::APPROXIMATE;
 }
 
-const css::util::SearchOptions2 & SvxSearchItem::GetSearchOptions() const
+const i18nutil::SearchOptions2 & SvxSearchItem::GetSearchOptions() const
 {
     return m_aSearchOpt;
 }
 
-void SvxSearchItem::SetSearchOptions( const css::util::SearchOptions2 &rOpt )
+void SvxSearchItem::SetSearchOptions( const i18nutil::SearchOptions2 &rOpt )
 {
     m_aSearchOpt = rOpt;
 }
 
-sal_Int32 SvxSearchItem::GetTransliterationFlags() const
+TransliterationFlags SvxSearchItem::GetTransliterationFlags() const
 {
     return m_aSearchOpt.transliterateFlags;
 }
 
 bool SvxSearchItem::IsMatchFullHalfWidthForms() const
 {
-    return 0 != (m_aSearchOpt.transliterateFlags & css::i18n::TransliterationModules_IGNORE_WIDTH);
+    return bool(m_aSearchOpt.transliterateFlags & TransliterationFlags::IGNORE_WIDTH);
 }
 
 #endif

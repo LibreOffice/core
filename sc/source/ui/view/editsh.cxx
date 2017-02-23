@@ -1287,8 +1287,8 @@ void ScEditShell::GetUndoState(SfxItemSet &rSet)
 
 void ScEditShell::ExecuteTrans( SfxRequest& rReq )
 {
-    sal_Int32 nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
-    if ( nType )
+    TransliterationFlags nType = ScViewUtil::GetTransliterationType( rReq.GetSlot() );
+    if ( nType != TransliterationFlags::NONE )
     {
         ScInputHandler* pHdl = GetMyInputHdl();
         assert(pHdl && "no ScInputHandler");

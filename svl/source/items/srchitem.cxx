@@ -33,12 +33,10 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <svl/memberid.hrc>
 #include <i18nlangtag/languagetag.hxx>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 using namespace utl;
 using namespace com::sun::star;
 using namespace com::sun::star::beans;
-using namespace com::sun::star::i18n;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 
@@ -105,14 +103,14 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     SfxPoolItem( nId ),
     ConfigItem( CFG_ROOT_NODE ),
 
-    m_aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
+    m_aSearchOpt      ( SearchAlgorithms_ABSOLUTE,
                         SearchFlags::LEV_RELAXED,
                         OUString(),
                         OUString(),
                         lang::Locale(),
-                          2, 2, 2,
-                          TransliterationModules_IGNORE_CASE,
-                          SearchAlgorithms2::ABSOLUTE, '\\' ),
+                        2, 2, 2,
+                        TransliterationFlags::IGNORE_CASE,
+                        SearchAlgorithms2::ABSOLUTE, '\\' ),
     m_eFamily         ( SfxStyleFamily::Para ),
     m_nCommand        ( SvxSearchCmd::FIND ),
     m_nCellType       ( SvxSearchCellType::FORMULA ),
@@ -155,54 +153,53 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     if (aOpt.IsWholeWordsOnly())
         m_aSearchOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
 
-    sal_Int32 &rFlags = m_aSearchOpt.transliterateFlags;
+    TransliterationFlags& rFlags = m_aSearchOpt.transliterateFlags;
 
     if (!aOpt.IsMatchCase())
-        rFlags |= TransliterationModules_IGNORE_CASE;
+        rFlags |= TransliterationFlags::IGNORE_CASE;
     if ( aOpt.IsMatchFullHalfWidthForms())
-        rFlags |= TransliterationModules_IGNORE_WIDTH;
+        rFlags |= TransliterationFlags::IGNORE_WIDTH;
     if ( aOpt.IsIgnoreDiacritics_CTL())
-        rFlags |= TransliterationModulesExtra::IGNORE_DIACRITICS_CTL ;
+        rFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL ;
     if ( aOpt.IsIgnoreKashida_CTL())
-        rFlags |= TransliterationModulesExtra::IGNORE_KASHIDA_CTL ;
+        rFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL ;
     if ( m_bAsianOptions )
     {
         if ( aOpt.IsMatchHiraganaKatakana())
-            rFlags |= TransliterationModules_IGNORE_KANA;
+            rFlags |= TransliterationFlags::IGNORE_KANA;
         if ( aOpt.IsMatchContractions())
-            rFlags |= TransliterationModules_ignoreSize_ja_JP;
+            rFlags |= TransliterationFlags::ignoreSize_ja_JP;
         if ( aOpt.IsMatchMinusDashChoon())
-            rFlags |= TransliterationModules_ignoreMinusSign_ja_JP;
+            rFlags |= TransliterationFlags::ignoreMinusSign_ja_JP;
         if ( aOpt.IsMatchRepeatCharMarks())
-            rFlags |= TransliterationModules_ignoreIterationMark_ja_JP;
+            rFlags |= TransliterationFlags::ignoreIterationMark_ja_JP;
         if ( aOpt.IsMatchVariantFormKanji())
-            rFlags |= TransliterationModules_ignoreTraditionalKanji_ja_JP;
+            rFlags |= TransliterationFlags::ignoreTraditionalKanji_ja_JP;
         if ( aOpt.IsMatchOldKanaForms())
-            rFlags |= TransliterationModules_ignoreTraditionalKana_ja_JP;
+            rFlags |= TransliterationFlags::ignoreTraditionalKana_ja_JP;
         if ( aOpt.IsMatchDiziDuzu())
-            rFlags |= TransliterationModules_ignoreZiZu_ja_JP;
+            rFlags |= TransliterationFlags::ignoreZiZu_ja_JP;
         if ( aOpt.IsMatchBavaHafa())
-            rFlags |= TransliterationModules_ignoreBaFa_ja_JP;
+            rFlags |= TransliterationFlags::ignoreBaFa_ja_JP;
         if ( aOpt.IsMatchTsithichiDhizi())
-            rFlags |= TransliterationModules_ignoreTiJi_ja_JP;
+            rFlags |= TransliterationFlags::ignoreTiJi_ja_JP;
         if ( aOpt.IsMatchHyuiyuByuvyu())
-            rFlags |= TransliterationModules_ignoreHyuByu_ja_JP;
+            rFlags |= TransliterationFlags::ignoreHyuByu_ja_JP;
         if ( aOpt.IsMatchSesheZeje())
-            rFlags |= TransliterationModules_ignoreSeZe_ja_JP;
+            rFlags |= TransliterationFlags::ignoreSeZe_ja_JP;
         if ( aOpt.IsMatchIaiya())
-            rFlags |= TransliterationModules_ignoreIandEfollowedByYa_ja_JP;
+            rFlags |= TransliterationFlags::ignoreIandEfollowedByYa_ja_JP;
         if ( aOpt.IsMatchKiku())
-            rFlags |= TransliterationModules_ignoreKiKuFollowedBySa_ja_JP;
+            rFlags |= TransliterationFlags::ignoreKiKuFollowedBySa_ja_JP;
         if ( aOpt.IsIgnorePunctuation())
-            rFlags |= TransliterationModules_ignoreSeparator_ja_JP;
+            rFlags |= TransliterationFlags::ignoreSeparator_ja_JP;
         if ( aOpt.IsIgnoreWhitespace())
-            rFlags |= TransliterationModules_ignoreSpace_ja_JP;
+            rFlags |= TransliterationFlags::ignoreSpace_ja_JP;
         if ( aOpt.IsIgnoreProlongedSoundMark())
-            rFlags |= TransliterationModules_ignoreProlongedSoundMark_ja_JP;
+            rFlags |= TransliterationFlags::ignoreProlongedSoundMark_ja_JP;
         if ( aOpt.IsIgnoreMiddleDot())
-            rFlags |= TransliterationModules_ignoreMiddleDot_ja_JP;
+            rFlags |= TransliterationFlags::ignoreMiddleDot_ja_JP;
     }
-
 }
 
 
@@ -244,7 +241,7 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 
 
 //! used below
-static bool equalsWithoutLocale( const SearchOptions2& rItem1, const SearchOptions2& rItem2 )
+static bool equalsWithoutLocale( const i18nutil::SearchOptions2& rItem1, const i18nutil::SearchOptions2& rItem2 )
 {
     return rItem1.algorithmType         == rItem2.algorithmType &&
            rItem1.searchFlag            == rItem2.searchFlag    &&
@@ -307,9 +304,9 @@ void SvxSearchItem::ImplCommit()
 void SvxSearchItem::SetMatchFullHalfWidthForms( bool bVal )
 {
     if (bVal)
-        m_aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_WIDTH;
+        m_aSearchOpt.transliterateFlags |=  TransliterationFlags::IGNORE_WIDTH;
     else
-        m_aSearchOpt.transliterateFlags &= ~TransliterationModules_IGNORE_WIDTH;
+        m_aSearchOpt.transliterateFlags &= ~TransliterationFlags::IGNORE_WIDTH;
 }
 
 
@@ -325,9 +322,9 @@ void SvxSearchItem::SetWordOnly( bool bVal )
 void SvxSearchItem::SetExact( bool bVal )
 {
     if (!bVal)
-        m_aSearchOpt.transliterateFlags |=  TransliterationModules_IGNORE_CASE;
+        m_aSearchOpt.transliterateFlags |= TransliterationFlags::IGNORE_CASE;
     else
-        m_aSearchOpt.transliterateFlags &= ~TransliterationModules_IGNORE_CASE;
+        m_aSearchOpt.transliterateFlags &= ~TransliterationFlags::IGNORE_CASE;
 }
 
 
@@ -400,7 +397,7 @@ void SvxSearchItem::SetLevenshtein( bool bVal )
 }
 
 
-void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
+void SvxSearchItem::SetTransliterationFlags( TransliterationFlags nFlags )
 {
     m_aSearchOpt.transliterateFlags = nFlags;
 }
@@ -414,7 +411,7 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             Sequence< PropertyValue > aSeq( SRCH_PARAMS );
             aSeq[0].Name = SRCH_PARA_OPTIONS;
-            aSeq[0].Value <<= m_aSearchOpt;
+            aSeq[0].Value <<= m_aSearchOpt.toUnoSearchOptions2();
             aSeq[1].Name = SRCH_PARA_FAMILY;
             aSeq[1].Value <<= sal_Int16( m_eFamily );
             aSeq[2].Name = SRCH_PARA_COMMAND;
@@ -481,7 +478,7 @@ bool SvxSearchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_SEARCH_INSERTEDCHARS:
             rVal <<= m_aSearchOpt.insertedChars; break;
         case MID_SEARCH_TRANSLITERATEFLAGS:
-            rVal <<= m_aSearchOpt.transliterateFlags; break;
+            rVal <<= (sal_Int32)m_aSearchOpt.transliterateFlags; break;
         case MID_SEARCH_LOCALE:
         {
             sal_Int16 nLocale;
@@ -519,8 +516,12 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
                 {
                     if ( aSeq[i].Name == SRCH_PARA_OPTIONS )
                     {
-                        if ( aSeq[i].Value >>= m_aSearchOpt )
+                        css::util::SearchOptions2 nTmpSearchOpt2;
+                        if ( aSeq[i].Value >>= nTmpSearchOpt2 )
+                        {
+                            m_aSearchOpt = nTmpSearchOpt2;
                             ++nConvertedCount;
+                        }
                     }
                     else if ( aSeq[i].Name == SRCH_PARA_FAMILY )
                     {
@@ -643,7 +644,9 @@ bool SvxSearchItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_SEARCH_INSERTEDCHARS:
             bRet = (rVal >>= m_aSearchOpt.insertedChars); break;
         case MID_SEARCH_TRANSLITERATEFLAGS:
-            bRet = (rVal >>= m_aSearchOpt.transliterateFlags); break;
+            if ((bRet = (rVal >>= nInt)))
+                m_aSearchOpt.transliterateFlags = (TransliterationFlags)nInt;
+             break;
         case MID_SEARCH_LOCALE:
         {
             bRet = (rVal >>= nInt);

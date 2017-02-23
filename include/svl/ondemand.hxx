@@ -27,11 +27,11 @@
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/transliterationwrapper.hxx>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <unotools/nativenumberwrapper.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
+#include <i18nutil/transliteration.hxx>
 
 /*
     On demand instantiation and initialization of several i18n wrappers,
@@ -190,7 +190,7 @@ class OnDemandTransliterationWrapper
 {
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
             LanguageType        eLanguage;
-            css::i18n::TransliterationModules  nType;
+            TransliterationFlags  nType;
     mutable std::unique_ptr<::utl::TransliterationWrapper>
                                 pPtr;
     mutable bool                bValid;
@@ -199,7 +199,7 @@ class OnDemandTransliterationWrapper
 public:
                                 OnDemandTransliterationWrapper()
                                     : eLanguage( LANGUAGE_SYSTEM )
-                                    , nType(css::i18n::TransliterationModules_END_OF_MODULE)
+                                    , nType(TransliterationFlags::END_OF_MODULE)
                                     , pPtr(nullptr)
                                     , bValid(false)
                                     , bInitialized(false)
@@ -213,7 +213,7 @@ public:
                                     )
                                     {
                                         m_xContext = rxContext;
-                                        nType = css::i18n::TransliterationModules_IGNORE_CASE;
+                                        nType = TransliterationFlags::IGNORE_CASE;
                                         changeLocale( eLang );
                                         pPtr.reset();
                                         bInitialized = true;

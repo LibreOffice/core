@@ -94,8 +94,6 @@
 #include <utility>
 #include <vector>
 
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-
 struct TestImpl
 {
     ScDocShellRef m_xDocShell;
@@ -5912,7 +5910,7 @@ void Test::testTransliterateText()
     aMark.SetMarkArea(ScRange(0,0,0,0,2,0));
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     rFunc.TransliterateText(
-        aMark, i18n::TransliterationModules_LOWERCASE_UPPERCASE, true);
+        aMark, TransliterationFlags::LOWERCASE_UPPERCASE, true);
 
     CPPUNIT_ASSERT_EQUAL(OUString("MIKE"), m_pDoc->GetString(ScAddress(0,0,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("NOAH"), m_pDoc->GetString(ScAddress(0,1,0)));

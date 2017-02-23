@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svx/svxdllapi.h>
 
+enum class TransliterationFlags;
 
 #define MATCHING_ANYWHERE       0
 #define MATCHING_BEGINNING      1
@@ -46,7 +47,8 @@ namespace svxform
     struct SVX_DLLPUBLIC FmSearchParams
     {
     protected:
-        sal_Int32       nTransliterationFlags;
+        TransliterationFlags
+                    nTransliterationFlags;
             // they're way too sensitive for direct access ....
 
     public:
@@ -77,8 +79,9 @@ namespace svxform
 
         bool        isIgnoreWidthCJK( ) const;
 
-        sal_Int32   getTransliterationFlags( ) const { return nTransliterationFlags; }
-        void        setTransliterationFlags( sal_Int32 _nFlags ) { nTransliterationFlags = _nFlags; }
+        TransliterationFlags
+                    getTransliterationFlags( ) const { return nTransliterationFlags; }
+        void        setTransliterationFlags( TransliterationFlags _nFlags ) { nTransliterationFlags = _nFlags; }
 
         bool        isCaseSensitive( ) const;
         void        setCaseSensitive( bool _bCase );

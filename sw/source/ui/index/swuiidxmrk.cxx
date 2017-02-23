@@ -25,11 +25,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Bibliography.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/IndexEntrySupplier.hpp>
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
+#include <i18nutil/searchopt.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/layout.hxx>
 #include <sfx2/dispatch.hxx>
@@ -438,15 +437,15 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, bool bWordOnly, bool bCaseSen
 {
     rSh.Push();
 
-    SearchOptions2 aSearchOpt(
+    i18nutil::SearchOptions2 aSearchOpt(
                         SearchAlgorithms_ABSOLUTE,
                         ( bWordOnly ? SearchFlags::NORM_WORD_ONLY : 0 ),
                         rSh.GetSelText(), OUString(),
                         GetAppLanguageTag().getLocale(),
                         0, 0, 0,
                         (bCaseSensitive
-                            ? 0
-                            : static_cast<int>(TransliterationModules_IGNORE_CASE)),
+                            ? TransliterationFlags::NONE
+                            : TransliterationFlags::IGNORE_CASE),
                         SearchAlgorithms2::ABSOLUTE,
                         '\\' );
 

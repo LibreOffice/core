@@ -9,6 +9,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <i18nlangtag/lang.h>
+#include <i18nutil/transliteration.hxx>
 #include <rtl/instance.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <vcl/svapp.hxx>
@@ -26,7 +27,7 @@ namespace
         lclTransliterationWrapper()
             : m_aTransliteration(
                 comphelper::getProcessComponentContext(),
-                css::i18n::TransliterationModules_IGNORE_CASE )
+                TransliterationFlags::IGNORE_CASE )
         {
             const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
             m_aTransliteration.loadModuleIfNeeded( eOfficeLanguage );
