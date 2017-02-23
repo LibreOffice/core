@@ -58,6 +58,8 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/fpdfdoc \
     UnpackedTarball/pdfium/fpdfsdk/fpdfeditimg \
     UnpackedTarball/pdfium/fpdfsdk/fpdfeditpage \
+    UnpackedTarball/pdfium/fpdfsdk/fpdfeditpath \
+    UnpackedTarball/pdfium/fpdfsdk/fpdfedittext \
     UnpackedTarball/pdfium/fpdfsdk/fpdfformfill \
     UnpackedTarball/pdfium/fpdfsdk/fpdfppo \
     UnpackedTarball/pdfium/fpdfsdk/fpdfsave \
@@ -414,6 +416,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/fpdfsdk/pdfwindow/PWL_SpecialButton \
     UnpackedTarball/pdfium/fpdfsdk/pdfwindow/PWL_Utils \
     UnpackedTarball/pdfium/fpdfsdk/pdfwindow/PWL_Wnd \
+    UnpackedTarball/pdfium/fpdfsdk/pdfwindow/cpwl_pathdata \
 ))
 
 # third_party/bigint
