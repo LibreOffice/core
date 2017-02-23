@@ -782,7 +782,7 @@ sal_uLong TIFFReader::GetBits( const sal_uInt8 * pSrc, sal_uLong nBitsPos, sal_u
 
 bool TIFFReader::ConvertScanline(sal_Int32 nY)
 {
-    sal_uInt32  nRed, nGreen, nBlue, ns, nVal, nByteCount;
+    sal_uInt32  nRed, nGreen, nBlue, ns, nVal;
     sal_uInt8   nByteVal;
 
     if ( nDstBitsPerPixel == 24 )
@@ -993,10 +993,11 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
 
                 case 1 :
                 {
+                    sal_uInt32 nByteCount = ( nImageWidth >> 3 ) + 1;
+
                     if ( bByteSwap )
                     {
                         sal_Int32 nx = 0;
-                        nByteCount = ( nImageWidth >> 3 ) + 1;
                         while ( --nByteCount )
                         {
                             nByteVal = *pt++;
@@ -1029,7 +1030,6 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     else
                     {
                         sal_Int32 nx = 7;
-                        nByteCount = ( nImageWidth >> 3 ) + 1;
                         while ( --nByteCount )
                         {
                             nByteVal = *pt++;
