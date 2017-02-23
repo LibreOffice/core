@@ -581,7 +581,7 @@ namespace basegfx
                 else if((clip&0x0f) && (clip&0xf0)==0) { // curr is inside, next is outside
 
                     // direction vector from 'current' to 'next', *not* normalized
-                    // to bring 't' into the [0<=x<=1] intervall.
+                    // to bring 't' into the [0<=x<=1] interval.
                     ::basegfx::B2DPoint dir((*next)-(*curr));
 
                     double denominator = ( pPlane->nx*dir.getX() +
@@ -600,7 +600,7 @@ namespace basegfx
                 else if((clip&0x0f)==0 && (clip&0xf0)) { // curr is outside, next is inside
 
                     // direction vector from 'current' to 'next', *not* normalized
-                    // to bring 't' into the [0<=x<=1] intervall.
+                    // to bring 't' into the [0<=x<=1] interval.
                     ::basegfx::B2DPoint dir((*next)-(*curr));
 
                     double denominator = ( pPlane->nx*dir.getX() +

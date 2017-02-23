@@ -1140,7 +1140,7 @@ void PresenterSlideSorter::Layout::Update (
 
     // Determine column count, preview width, and horizontal gap (borders
     // are half the gap).  Try to use the preferred values.  Try more to
-    // stay in the valid intervalls.  This last constraint may be not
+    // stay in the valid intervals.  This last constraint may be not
     // fulfilled in some cases.
     const double nElementWidth = nWidth / gnPreferredColumnCount;
     if (nElementWidth < gnMinimalPreviewWidth + gnMinimalHorizontalPreviewGap)

@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-const static sal_Int64 CaretBlinkIntervall = 500 * 1000 * 1000;
+const static sal_Int64 CaretBlinkInterval = 500 * 1000 * 1000;
 
 //#define SHOW_CHARACTER_BOXES
 
@@ -1101,8 +1101,8 @@ void PresenterTextCaret::ShowCaret()
     {
         mnCaretBlinkTaskId = PresenterTimer::ScheduleRepeatedTask (
             [this] (TimeValue const&) { return this->InvertCaret(); },
-            CaretBlinkIntervall,
-            CaretBlinkIntervall);
+            CaretBlinkInterval,
+            CaretBlinkInterval);
     }
     mbIsCaretVisible = true;
 }

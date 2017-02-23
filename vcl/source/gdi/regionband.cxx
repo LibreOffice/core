@@ -386,7 +386,7 @@ void RegionBand::ImplAddMissingBands(const long nTop, const long nBottom)
 
     // We still have to cover two cases:
     // 1. The region does not yet contain any bands.
-    // 2. The intervall nTop->nBottom extends past the bottom most band.
+    // 2. The interval nTop->nBottom extends past the bottom most band.
     if (nCurrentTop <= nBottom
         && (pBand==nullptr || nBottom>pBand->mnYBottom))
     {

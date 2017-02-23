@@ -227,7 +227,7 @@ public:
         E_DONT_START_TIMER,
         /** timer (was/must be) started with normal AutoSaveTimeIntervall */
         E_NORMAL_AUTOSAVE_INTERVALL,
-        /** timer must be started with special short time intervall,
+        /** timer must be started with special short time interval,
             to poll for an user idle period */
         E_POLL_FOR_USER_IDLE,
         /** timer must be started with a very(!) short time interval,
@@ -370,7 +370,7 @@ private:
     bool m_bListenForDocEvents;
     bool m_bListenForConfigChanges;
 
-    /** @short  specify the time intervall between two save actions.
+    /** @short  specify the time interval between two save actions.
         @descr  tools::Time is measured in [min].
      */
     sal_Int32 m_nAutoSaveTimeIntervall;
@@ -543,7 +543,7 @@ private:
 
         @descr  After that we know the initial state - means:
                 - if AutoSave was enabled by the user
-                - which time intervall has to be used
+                - which time interval has to be used
                 - which recovery entries may already exists
 
         @throw  [com.sun.star.uno.RuntimeException]
@@ -556,7 +556,7 @@ private:
     /** @short  read the underlying configuration...
 
         @descr  ... but only keys related to the AutoSave mechanism.
-                Means: State and Timer intervall.
+                Means: State and Timer interval.
                 E.g. the recovery list is not addressed here.
 
         @throw  [com.sun.star.uno.RuntimeException]
