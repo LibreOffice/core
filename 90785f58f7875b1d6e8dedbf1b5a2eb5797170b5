@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_5d7496ce",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 12433,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T08:42:33Z",
+      "side": 1,
+      "message": "Oh, looks like tb73 isn\u0027t failing on this code snippet : [1] ;-( See follow up change and the most recent verification there...\n\n* [1] checking whether C:/PROGRA~2/MICROS~3.0/VC/bin/cl.exe -arch:SSE has broken constexpr static initialization... no",
+      "revId": "90785f58f7875b1d6e8dedbf1b5a2eb5797170b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
