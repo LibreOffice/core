@@ -243,7 +243,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 }
             }
             if ( bUseJPGCompression )
-                m_rOuterFace.DrawJPGBitmap( aStrm, bTrueColorJPG, aSizePixel, Rectangle( aPoint, aSize ), aMask );
+                m_rOuterFace.DrawJPGBitmap( aStrm, bTrueColorJPG, aSizePixel, Rectangle( aPoint, aSize ), aMask, i_Graphic );
             else if ( aBitmapEx.IsTransparent() )
                 m_rOuterFace.DrawBitmapEx( aPoint, aSize, aBitmapEx );
             else
