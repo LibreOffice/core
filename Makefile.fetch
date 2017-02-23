@@ -131,7 +131,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,FREETYPE,FREETYPE_TARBALL) \
 		$(call fetch_Optional,EPOXY,EPOXY_TARBALL) \
 		$(call fetch_Optional,GLM,GLM_TARBALL) \
-		$(call fetch_Optional,GPGME,GPGME_TARBALL) \
+		$(call fetch_Optional,GPGMEPP,GPGME_TARBALL) \
 		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
 		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
 		$(call fetch_Optional,HSQLDB,HSQLDB_TARBALL) \
