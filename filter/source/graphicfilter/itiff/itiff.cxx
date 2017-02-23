@@ -67,7 +67,7 @@ private:
     sal_uLong               nSubFile;
     sal_Int32               nImageWidth;                // picture width in pixels
     sal_Int32               nImageLength;               // picture height in pixels
-    sal_uLong               nBitsPerSample;             // bits per pixel per layer
+    sal_uInt32              nBitsPerSample;             // bits per pixel per layer
     sal_uLong               nCompression;               // kind of compression
     sal_uLong               nPhotometricInterpretation;
     sal_uLong               nThresholding;
@@ -77,7 +77,7 @@ private:
     sal_uLong*              pStripOffsets;              // field of offsets to the Bitmap-Data-"Strips"
     sal_uLong               nNumStripOffsets;           // size of the field above
     sal_uLong               nOrientation;
-    sal_uLong               nSamplesPerPixel;           // number of layers
+    sal_uInt32              nSamplesPerPixel;           // number of layers
     sal_uLong               nRowsPerStrip;              // if it's not compressed: number of rows per Strip
     sal_uLong*              pStripByteCounts;           // if compressed (in a certain way): size of the strips
     sal_uLong               nNumStripByteCounts;        // number of entries in the field above
@@ -93,9 +93,9 @@ private:
     sal_uLong*              pColorMap;                  // color palette
     sal_uLong               nNumColors;                 // number of colors within the color palette
 
-    sal_uLong               nPlanes;                    // number of layers within the Tiff file
+    sal_uInt32              nPlanes;                    // number of layers within the Tiff file
     sal_uLong               nStripsPerPlane;            // number of Strips per layer
-    sal_uLong               nBytesPerRow;               // Bytes per line per Layer in the Tiff file ( uncompressed )
+    sal_uInt32              nBytesPerRow;               // Bytes per line per Layer in the Tiff file ( uncompressed )
     sal_uInt8*              pMap[ 4 ];                  // temporary Scanline
 
 
@@ -1368,8 +1368,18 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
                     if (bStatus)
                     {
-                        nBytesPerRow = ( nImageWidth * nSamplesPerPixel / nPlanes * nBitsPerSample + 7 ) >> 3;
+                        sal_uInt64 nRowSize = (static_cast<sal_uInt64>(nImageWidth) * nSamplesPerPixel / nPlanes * nBitsPerSample + 7) >> 3;
+                        if (nRowSize > SAL_MAX_INT32 / SAL_N_ELEMENTS(pMap))
+                        {
+                            SAL_WARN("filter.tiff", "Ludicrous row size of: " << nRowSize << " required");
+                            bStatus = false;
+                        }
+                        else
+                            nBytesPerRow = nRowSize;
+                    }
 
+                    if (bStatus)
+                    {
                         for (sal_uInt8*& j : pMap)
                         {
                             try
