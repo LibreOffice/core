@@ -11069,7 +11069,7 @@ int main(int argc, char **argv) {
     # Sets also KDE4_GLIB_CFLAGS/KDE4_GLIB_LIBS if successful.
     PKG_CHECK_MODULES(KDE4_GLIB,[glib-2.0 >= 2.4],
         [
-            KDE4_HAVE_GLIB=1
+            KDE4_HAVE_GLIB=TRUE
             AC_DEFINE(KDE4_HAVE_GLIB,1)
             KDE4_GLIB_CFLAGS=$(printf '%s' "$KDE4_GLIB_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
             FilterLibs "${KDE4_GLIB_LIBS}"
