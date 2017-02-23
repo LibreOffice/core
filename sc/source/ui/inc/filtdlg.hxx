@@ -114,6 +114,19 @@ private:
     const OUString aStrNotEmpty;
     const OUString aStrColumn;
 
+    struct CondEntry
+    {
+        // display String
+        OUString  aStrEntry;
+        // index when RegExp true
+        sal_Int32 nIndex;
+        CondEntry(const OUString &StrEntry) : aStrEntry(StrEntry), nIndex(-1) {}
+        // only set the index = operator when regexp true
+        void SetIdx(sal_Int32 nindex)  { nIndex = nindex; }
+    };
+    // all condtion entries
+    std::vector<CondEntry>  aStrCondEntries;
+
     ScFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
@@ -138,8 +151,13 @@ private:
     Timer*  pTimer;
 
 private:
-    void            Init            ( const SfxItemSet& rArgSet );
-    void            FillFieldLists  ();
+    void            Init             ( const SfxItemSet& rArgSet );
+    void            FillFieldLists   ();
+
+    void            FillSelCondLists (bool bSelect = true);
+    void            HandleRegExpBtn  ();
+    size_t          GetCondIndex(ScQueryOp eOp);
+
     void            UpdateValueList ( size_t nList );
     void            UpdateHdrInValueList( size_t nList );
     void            ClearValueList  ( size_t nList );
