@@ -3502,6 +3502,7 @@ if test "$_os" = "WINNT"; then
         else
             AC_MSG_ERROR([No msbuild found, Visual Studio installation broken?])
         fi
+	AC_MSG_RESULT([$regvalue])
     fi
 
     # Find the version of devenv.exe
