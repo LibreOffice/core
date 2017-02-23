@@ -3,6 +3,8 @@ External package containing pdfium.
 "Insert -> Picture -> From File..." uses this library when a PDF file is
 selected.
 
+https://pdfium.googlesource.com/pdfium/
+
 How to update the tarball:
 
 version=$(git for-each-ref|grep chromium/|tail -n 1|sed 's|.*/||')
