@@ -3549,8 +3549,8 @@
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Image...</value>
         </prop>
-        <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Insert Image</value>
+        <prop oor:name="PopupLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Image...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
