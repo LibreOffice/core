@@ -208,25 +208,40 @@ public:
         }
     };
 
-    struct BitmapEmit
+    /// Contains information to emit a reference XObject.
+    struct ReferenceXObjectEmit
     {
-        BitmapID    m_aID;
-        BitmapEx    m_aBitmap;
-        sal_Int32   m_nObject;
         /// ID of the Form XObject, if any.
         sal_Int32 m_nFormObject;
-        /// ID of the embedded object, if m_nFormObject is used.
+        /// ID of the vector/embedded object, if m_nFormObject is used.
         sal_Int32 m_nEmbeddedObject;
+        /// ID of the bitmap object, if m_nFormObject is used.
+        sal_Int32 m_nBitmapObject;
+        /// Size of the bitmap replacement, in pixels.
+        Size m_aPixelSize;
 
-        BitmapEmit()
-            : m_nObject(0),
-              m_nFormObject(0),
-              m_nEmbeddedObject(0)
+        ReferenceXObjectEmit()
+            : m_nFormObject(0),
+              m_nEmbeddedObject(0),
+              m_nBitmapObject(0)
         {
         }
 
         /// Returns the ID one should use when referring to this bitmap.
         sal_Int32 getObject() const;
+    };
+
+    struct BitmapEmit
+    {
+        BitmapID    m_aID;
+        BitmapEx    m_aBitmap;
+        sal_Int32   m_nObject;
+        ReferenceXObjectEmit m_aReferenceXObject;
+
+        BitmapEmit()
+            : m_nObject(0)
+        {
+        }
     };
 
     struct JPGEmit
@@ -237,6 +252,7 @@ public:
         Bitmap              m_aMask;
         sal_Int32           m_nObject;
         bool                m_bTrueColor;
+        ReferenceXObjectEmit m_aReferenceXObject;
 
         JPGEmit()
             : m_pStream(nullptr)
@@ -827,6 +843,8 @@ i12626
     bool writeBitmapObject( BitmapEmit& rObject, bool bMask = false );
 
     void writeJPG( JPGEmit& rEmit );
+    /// Writes the form XObject proxy for the image.
+    void writeReferenceXObject(ReferenceXObjectEmit& rEmit);
 
     /* tries to find the bitmap by its id and returns its emit data if exists,
        else creates a new emit data block */
@@ -1194,7 +1212,9 @@ public:
 
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Graphic& rGraphic );
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap );
-    void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
+    void drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic );
+    /// Stores the original PDF data from rGraphic as an embedded file.
+    void createEmbeddedFile(const Graphic& rGraphic, ReferenceXObjectEmit& rEmit, sal_Int32 nBitmapObject);
 
     void drawGradient( const Rectangle& rRect, const Gradient& rGradient );
     void drawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& rHatch );

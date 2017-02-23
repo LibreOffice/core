@@ -4982,25 +4982,16 @@ bool PDFWriterImpl::emitEmbeddedFiles()
         if (!updateObject(rEmbeddedFile.m_nObject))
             continue;
 
-        SvMemoryStream aUncompressed;
-        aUncompressed.WriteBytes(rEmbeddedFile.m_aData.getArray(), rEmbeddedFile.m_aData.getLength());
-        aUncompressed.Seek(0);
-        SvMemoryStream aCompressed;
-        ZCodec aZCodec;
-        aZCodec.BeginCompression();
-        aZCodec.Compress(aUncompressed, aCompressed);
-        aZCodec.EndCompression();
-
         OStringBuffer aLine;
         aLine.append(rEmbeddedFile.m_nObject);
         aLine.append(" 0 obj\n");
-        aLine.append("<< /Type /EmbeddedFile /Filter /FlateDecode /Length ");
-        aLine.append(static_cast<sal_Int64>(aCompressed.GetSize()));
+        aLine.append("<< /Type /EmbeddedFile /Length ");
+        aLine.append(static_cast<sal_Int64>(rEmbeddedFile.m_aData.getLength()));
         aLine.append(" >>\nstream\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
         aLine.setLength(0);
 
-        CHECK_RETURN(writeBuffer(aCompressed.GetData(), aCompressed.GetSize()));
+        CHECK_RETURN(writeBuffer(rEmbeddedFile.m_aData.getArray(), rEmbeddedFile.m_aData.getLength()));
 
         aLine.append("\nendstream\nendobj\n\n");
         CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
@@ -10870,6 +10861,75 @@ void PDFWriterImpl::writeJPG( JPGEmit& rObject )
             aEmit.m_aBitmap = BitmapEx( rObject.m_aMask, AlphaMask( rObject.m_aMask ) );
         writeBitmapObject( aEmit, true );
     }
+
+    writeReferenceXObject(rObject.m_aReferenceXObject);
+}
+
+void PDFWriterImpl::writeReferenceXObject(ReferenceXObjectEmit& rEmit)
+{
+    if (rEmit.m_nFormObject <= 0 || rEmit.m_nEmbeddedObject <= 0)
+        return;
+
+    OStringBuffer aLine;
+    if (!updateObject(rEmit.m_nFormObject))
+        return;
+
+    // Count /Matrix and /BBox.
+    // vcl::ImportPDF() works with 96 DPI so use the same values here, too.
+    sal_Int32 nOldDPIX = getReferenceDevice()->GetDPIX();
+    getReferenceDevice()->SetDPIX(96);
+    sal_Int32 nOldDPIY = getReferenceDevice()->GetDPIY();
+    getReferenceDevice()->SetDPIY(96);
+    Size aSize = getReferenceDevice()->PixelToLogic(rEmit.m_aPixelSize, MapMode(m_aMapMode.GetMapUnit()));
+    getReferenceDevice()->SetDPIX(nOldDPIX);
+    getReferenceDevice()->SetDPIY(nOldDPIY);
+    double fScaleX = 1.0 / aSize.Width();
+    double fScaleY = 1.0 / aSize.Height();
+
+    // Now have all the info to write the form XObject.
+    aLine.append(rEmit.m_nFormObject);
+    aLine.append(" 0 obj\n");
+    aLine.append("<< /Type /XObject");
+    aLine.append(" /Subtype /Form");
+    aLine.append(" /Resources << /XObject<</Im");
+    aLine.append(rEmit.m_nBitmapObject);
+    aLine.append(" ");
+    aLine.append(rEmit.m_nBitmapObject);
+    aLine.append(" 0 R>> >>");
+    aLine.append(" /Matrix [ ");
+    appendDouble(fScaleX, aLine);
+    aLine.append(" 0 0 ");
+    appendDouble(fScaleY, aLine);
+    aLine.append(" 0 0 ]");
+    aLine.append(" /BBox [ 0 0 ");
+    aLine.append(aSize.Width());
+    aLine.append(" ");
+    aLine.append(aSize.Height());
+    aLine.append(" ]\n");
+
+    // Write the reference dictionary.
+    aLine.append("/Ref<< /F << /Type /Filespec /F (<embedded file>) /EF << /F ");
+    aLine.append(rEmit.m_nEmbeddedObject);
+    aLine.append(" 0 R >> >> /Page 0 >>\n");
+
+    aLine.append("/Length ");
+
+    OStringBuffer aStream;
+    aStream.append("q ");
+    aStream.append(aSize.Width());
+    aStream.append(" 0 0 ");
+    aStream.append(aSize.Height());
+    aStream.append(" 0 0 cm\n");
+    aStream.append("/Im");
+    aStream.append(rEmit.m_nBitmapObject);
+    aStream.append(" Do\n");
+    aStream.append("Q");
+    aLine.append(aStream.getLength());
+
+    aLine.append(">>\nstream\n");
+    aLine.append(aStream.getStr());
+    aLine.append("\nendstream\nendobj\n\n");
+    CHECK_RETURN2(writeBuffer(aLine.getStr(), aLine.getLength()));
 }
 
 namespace
@@ -11185,75 +11245,28 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         return writeBitmapObject( aEmit, true );
     }
 
-    // Write the form XObject proxy for the image.
-    if (rObject.m_nFormObject > 0 && rObject.m_nEmbeddedObject > 0)
-    {
-        aLine.setLength(0);
-        if (!updateObject(rObject.m_nFormObject))
-            return false;
-
-        // Count /Matrix and /BBox.
-        // vcl::ImportPDF() works with 96 DPI so use the same values here, too.
-        sal_Int32 nOldDPIX = getReferenceDevice()->GetDPIX();
-        getReferenceDevice()->SetDPIX(96);
-        sal_Int32 nOldDPIY = getReferenceDevice()->GetDPIY();
-        getReferenceDevice()->SetDPIY(96);
-        Size aSize = getReferenceDevice()->PixelToLogic(rObject.m_aBitmap.GetPrefSize(), MapMode(m_aMapMode.GetMapUnit()));
-        getReferenceDevice()->SetDPIX(nOldDPIX);
-        getReferenceDevice()->SetDPIY(nOldDPIY);
-        double fScaleX = 1.0 / aSize.Width();
-        double fScaleY = 1.0 / aSize.Height();
-
-        // Now have all the info to write the form XObject.
-        aLine.append(rObject.m_nFormObject);
-        aLine.append(" 0 obj\n");
-        aLine.append("<< /Type /XObject");
-        aLine.append(" /Subtype /Form");
-        aLine.append(" /Resources << /XObject<</Im");
-        aLine.append(rObject.m_nObject);
-        aLine.append(" ");
-        aLine.append(rObject.m_nObject);
-        aLine.append(" 0 R>> >>");
-        aLine.append(" /Matrix [ ");
-        appendDouble(fScaleX, aLine);
-        aLine.append(" 0 0 ");
-        appendDouble(fScaleY, aLine);
-        aLine.append(" 0 0 ]");
-        aLine.append(" /BBox [ 0 0 ");
-        aLine.append(aSize.Width());
-        aLine.append(" ");
-        aLine.append(aSize.Height());
-        aLine.append(" ]\n");
-
-        // Write the reference dictionary.
-        aLine.append("/Ref<< /F << /Type /Filespec /F (<embedded file>) /EF << /F ");
-        aLine.append(rObject.m_nEmbeddedObject);
-        aLine.append(" 0 R >> >> /Page 0 >>\n");
-
-        aLine.append("/Length ");
-
-        OStringBuffer aStream;
-        aStream.append("q ");
-        aStream.append(aSize.Width());
-        aStream.append(" 0 0 ");
-        aStream.append(aSize.Height());
-        aStream.append(" 0 0 cm\n");
-        aStream.append("/Im");
-        aStream.append(rObject.m_nObject);
-        aStream.append(" Do\n");
-        aStream.append("Q");
-        aLine.append(aStream.getLength());
-
-        aLine.append(">>\nstream\n");
-        aLine.append(aStream.getStr());
-        aLine.append("\nendstream\nendobj\n\n");
-        CHECK_RETURN(writeBuffer(aLine.getStr(), aLine.getLength()));
-    }
+    writeReferenceXObject(rObject.m_aReferenceXObject);
 
     return true;
 }
 
-void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
+void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObjectEmit& rEmit, sal_Int32 nBitmapObject)
+{
+    if (!rGraphic.getPdfData().hasElements())
+        return;
+
+    // Store the original PDF data as an embedded file.
+    m_aEmbeddedFiles.push_back(PDFEmbeddedFile());
+    m_aEmbeddedFiles.back().m_nObject = createObject();
+    m_aEmbeddedFiles.back().m_aData = rGraphic.getPdfData();
+
+    rEmit.m_nFormObject = createObject();
+    rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
+    rEmit.m_nBitmapObject = nBitmapObject;
+    rEmit.m_aPixelSize = rGraphic.GetBitmap().GetPrefSize();
+}
+
+void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask, const Graphic& rGraphic )
 {
     MARK( "drawJPGBitmap" );
 
@@ -11309,6 +11322,7 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
         rEmit.m_bTrueColor  = bIsTrueColor;
         if( !! rMask && rMask.GetSizePixel() == rSizePixel )
             rEmit.m_aMask   = rMask;
+        createEmbeddedFile(rGraphic, rEmit.m_aReferenceXObject, rEmit.m_nObject);
 
         it = m_aJPGs.begin();
     }
@@ -11324,7 +11338,8 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rTargetArea.BottomLeft(), aLine );
     aLine.append( " cm\n/Im" );
-    aLine.append( it->m_nObject );
+    sal_Int32 nObject = it->m_aReferenceXObject.getObject();
+    aLine.append(nObject);
     aLine.append( " Do Q\n" );
     if( nCheckWidth == 0 || nCheckHeight == 0 )
     {
@@ -11338,8 +11353,8 @@ void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, bool bIsTrueColor, const 
 
     OStringBuffer aObjName( 16 );
     aObjName.append( "Im" );
-    aObjName.append( it->m_nObject );
-    pushResource( ResXObject, aObjName.makeStringAndClear(), it->m_nObject );
+    aObjName.append(nObject);
+    pushResource( ResXObject, aObjName.makeStringAndClear(), nObject );
 
 }
 
@@ -11362,7 +11377,7 @@ void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, 
     aLine.append( ' ' );
     m_aPages.back().appendPoint( rDestPoint + Point( 0, rDestSize.Height()-1 ), aLine );
     aLine.append( " cm\n/Im" );
-    sal_Int32 nObject = rBitmap.getObject();
+    sal_Int32 nObject = rBitmap.m_aReferenceXObject.getObject();
     aLine.append(nObject);
     aLine.append( " Do Q\n" );
     if( nCheckWidth == 0 || nCheckHeight == 0 )
@@ -11413,22 +11428,13 @@ const PDFWriterImpl::BitmapEmit& PDFWriterImpl::createBitmapEmit( const BitmapEx
         m_aBitmaps.front().m_aID        = aID;
         m_aBitmaps.front().m_aBitmap    = aBitmap;
         m_aBitmaps.front().m_nObject    = createObject();
-        if (rGraphic.getPdfData().hasElements())
-        {
-            // Store the original PDF data as an embedded file.
-            m_aEmbeddedFiles.push_back(PDFEmbeddedFile());
-            m_aEmbeddedFiles.back().m_nObject = createObject();
-            m_aEmbeddedFiles.back().m_aData = rGraphic.getPdfData();
-
-            m_aBitmaps.front().m_nFormObject = createObject();
-            m_aBitmaps.front().m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
-        }
+        createEmbeddedFile(rGraphic, m_aBitmaps.front().m_aReferenceXObject, m_aBitmaps.front().m_nObject);
         it = m_aBitmaps.begin();
     }
 
     OStringBuffer aObjName( 16 );
     aObjName.append( "Im" );
-    sal_Int32 nObject = it->getObject();
+    sal_Int32 nObject = it->m_aReferenceXObject.getObject();
     aObjName.append(nObject);
     pushResource( ResXObject, aObjName.makeStringAndClear(), nObject );
 
@@ -13278,21 +13284,12 @@ void PDFWriterImpl::MARK( const char* pString )
         emitComment( pString );
 }
 
-PDFWriterImpl::JPGEmit::JPGEmit(PDFWriterImpl::JPGEmit&& rOther)
-{
-    m_aID = rOther.m_aID;
-    m_pStream = std::move(rOther.m_pStream);
-    m_aMask = std::move(rOther.m_aMask);
-    m_nObject = rOther.m_nObject;
-    m_bTrueColor = rOther.m_bTrueColor;
-}
-
-sal_Int32 PDFWriterImpl::BitmapEmit::getObject() const
+sal_Int32 PDFWriterImpl::ReferenceXObjectEmit::getObject() const
 {
     if (m_nFormObject > 0)
         return m_nFormObject;
     else
-        return m_nObject;
+        return m_nBitmapObject;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
