@@ -6319,7 +6319,6 @@ if test "$cxx11_utf16_string_literal" = yes; then
     AC_DEFINE([HAVE_CXX11_UTF16_STRING_LITERAL])
 fi
 
-HAVE_GCC_PRAGMA_OPERATOR=
 dnl _Pragma support (may require C++11)
 if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
     AC_MSG_CHECKING([whether $CXX supports _Pragma operator])
@@ -6330,13 +6329,11 @@ if test "$GCC" = "yes" -o "$COM_IS_CLANG" = TRUE; then
             _Pragma("GCC diagnostic ignored \"-Wformat\"")
         ])], [
             AC_DEFINE([HAVE_GCC_PRAGMA_OPERATOR],[1])
-            HAVE_GCC_PRAGMA_OPERATOR=1
             AC_MSG_RESULT([yes])
         ], [AC_MSG_RESULT([no])])
     AC_LANG_POP([C++])
     CXXFLAGS=$save_CXXFLAGS
 fi
-AC_SUBST(HAVE_GCC_PRAGMA_OPERATOR)
 
 HAVE_GCC_FNO_SIZED_DEALLOCATION=
 if test "$GCC" = yes; then
