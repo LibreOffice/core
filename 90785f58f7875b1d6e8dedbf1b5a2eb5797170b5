@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_0131cca2",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 12422,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T14:14:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a57fde8_3d5ef245",
+      "revId": "90785f58f7875b1d6e8dedbf1b5a2eb5797170b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_81377ce2",
         "filename": "configure.ac",
         "patchSetId": 4
@@ -54,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_2126d068",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 12424,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T14:14:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a57fde8_81377ce2",
+      "revId": "90785f58f7875b1d6e8dedbf1b5a2eb5797170b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_5d5bb654",
         "filename": "configure.ac",
         "patchSetId": 4
@@ -65,6 +101,24 @@
       "writtenOn": "2017-02-23T09:00:35Z",
       "side": 1,
       "message": "The LIBS+\u003dILIBS stuff should only be needed for AC_RUN_IFELSE, not for AC_COMPILE_IFELSE, see e83393a98ebc512fb261d52c903fb17827648d56 \"Make C++ AC_RUN_IFELSE check link on Windows\".",
+      "revId": "90785f58f7875b1d6e8dedbf1b5a2eb5797170b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_412bd430",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 12425,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T14:14:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a57fde8_5d5bb654",
       "revId": "90785f58f7875b1d6e8dedbf1b5a2eb5797170b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -99,6 +153,24 @@
       "writtenOn": "2017-02-23T09:00:35Z",
       "side": 1,
       "message": "three empty lines may be a bit much :)",
+      "revId": "90785f58f7875b1d6e8dedbf1b5a2eb5797170b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6120d84a",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 12442,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T14:14:29Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a57fde8_9d551e1f",
       "revId": "90785f58f7875b1d6e8dedbf1b5a2eb5797170b5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
