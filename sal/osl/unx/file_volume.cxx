@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <cassert>
-
 #include "osl/file.h"
 
 #include "osl/diagnose.h"
@@ -79,21 +77,8 @@
  *   ToDo
  *
  *   - Fix: check for corresponding struct sizes in exported functions
- *   - check size/use of oslVolumeDeviceHandle
  *   - check size/use of oslVolumeInfo
  ***********************************************************************/
-/******************************************************************************
- *
- *                  Data Type Definition
- *
- ******************************************************************************/
-
-struct oslVolumeDeviceHandleImpl
-{
-    sal_Char pszMountPoint[PATH_MAX];
-    sal_Char ident[4];
-    sal_uInt32   RefCount;
-};
 
 /******************************************************************************
  *
@@ -332,106 +317,19 @@ static oslFileError osl_psz_getVolumeInformation (
     return osl_File_E_None;
 }
 
-/******************************************************************************
- *
- *                  GENERIC FLOPPY FUNCTIONS
- *
- *****************************************************************************/
-
-/*****************************************
- * osl_getVolumeDeviceMountPath
- ****************************************/
-static rtl_uString* oslMakeUStrFromPsz(const sal_Char* pszStr, rtl_uString** ustrValid)
+oslFileError osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle, rtl_uString ** )
 {
-    rtl_string2UString(
-        ustrValid,
-        pszStr,
-        rtl_str_getLength( pszStr ),
-        osl_getThreadTextEncoding(),
-        OUSTRING_TO_OSTRING_CVTFLAGS );
-    OSL_ASSERT(*ustrValid != nullptr);
-
-    return *ustrValid;
+    return osl_File_E_INVAL;
 }
 
-oslFileError osl_getVolumeDeviceMountPath( oslVolumeDeviceHandle Handle, rtl_uString **pstrPath )
+oslFileError osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle )
 {
-    oslVolumeDeviceHandleImpl* pItem = static_cast<oslVolumeDeviceHandleImpl*>(Handle);
-    sal_Char Buffer[RTL_CONSTASCII_LENGTH("file://") + PATH_MAX];
-
-    Buffer[0] = '\0';
-
-    if ( pItem == nullptr || pstrPath == nullptr )
-    {
-        return osl_File_E_INVAL;
-    }
-
-    if ( pItem->ident[0] != 'O' || pItem->ident[1] != 'V' || pItem->ident[2] != 'D' || pItem->ident[3] != 'H' )
-    {
-        return osl_File_E_INVAL;
-    }
-
-    int n = snprintf(Buffer, sizeof(Buffer), "file://%s", pItem->pszMountPoint);
-    assert(n >= 0 && unsigned(n) < sizeof(Buffer)); (void) n;
-
-#ifdef DEBUG_OSL_FILE
-    fprintf(stderr,"Mount Point is: '%s'\n",Buffer);
-#endif
-
-    oslMakeUStrFromPsz(Buffer, pstrPath);
-
-    return osl_File_E_None;
+    return osl_File_E_INVAL;
 }
 
-/*****************************************
- * osl_acquireVolumeDeviceHandle
- ****************************************/
-
-oslFileError SAL_CALL osl_acquireVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
+oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle )
 {
-    oslVolumeDeviceHandleImpl* pItem =static_cast<oslVolumeDeviceHandleImpl*>(Handle);
-
-    if ( pItem == nullptr )
-    {
-        return osl_File_E_INVAL;
-    }
-
-    if ( pItem->ident[0] != 'O' || pItem->ident[1] != 'V' || pItem->ident[2] != 'D' || pItem->ident[3] != 'H' )
-    {
-        return osl_File_E_INVAL;
-    }
-
-    ++pItem->RefCount;
-
-    return osl_File_E_None;
-}
-
-/*****************************************
- * osl_releaseVolumeDeviceHandle
- ****************************************/
-
-oslFileError osl_releaseVolumeDeviceHandle( oslVolumeDeviceHandle Handle )
-{
-    oslVolumeDeviceHandleImpl* pItem =static_cast<oslVolumeDeviceHandleImpl*>(Handle);
-
-    if ( pItem == nullptr )
-    {
-        return osl_File_E_INVAL;
-    }
-
-    if ( pItem->ident[0] != 'O' || pItem->ident[1] != 'V' || pItem->ident[2] != 'D' || pItem->ident[3] != 'H' )
-    {
-        return osl_File_E_INVAL;
-    }
-
-    --pItem->RefCount;
-
-    if ( pItem->RefCount == 0 )
-    {
-        rtl_freeMemory(pItem);
-    }
-
-    return osl_File_E_None;
+    return osl_File_E_INVAL;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
