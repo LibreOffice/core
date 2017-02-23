@@ -26,7 +26,6 @@
 
 #include <hintids.hxx>
 
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svx/pageitem.hxx>
@@ -310,7 +309,7 @@ void SwView::ExecSearch(SfxRequest& rReq)
                         if (bBack)
                             m_pWrtShell->Push();
                         OUString aReplace( m_pSrchItem->GetReplaceString() );
-                        SearchOptions2 aTmp( m_pSrchItem->GetSearchOptions() );
+                        i18nutil::SearchOptions2 aTmp( m_pSrchItem->GetSearchOptions() );
                         OUString *pBackRef = ReplaceBackReferences( aTmp, m_pWrtShell->GetCursor() );
                         if( pBackRef )
                             m_pSrchItem->SetReplaceString( *pBackRef );
@@ -833,7 +832,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
 
     // build SearchOptions to be used
 
-    SearchOptions2 aSearchOpt( m_pSrchItem->GetSearchOptions() );
+    i18nutil::SearchOptions2 aSearchOpt( m_pSrchItem->GetSearchOptions() );
     aSearchOpt.Locale = GetAppLanguageTag().getLocale();
     if( !bDoReplace )
         aSearchOpt.replaceString.clear();

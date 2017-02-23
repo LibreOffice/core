@@ -25,6 +25,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/hangulhanja.hxx>
+#include <i18nutil/transliteration.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
 #include <officecfg/Office/Writer.hxx>
@@ -71,8 +72,6 @@
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <vector>
 #include <utility>
@@ -1712,7 +1711,7 @@ void SwTextNode::TransliterateText(
         std::vector< swTransliterationChgData >   aChanges;
         swTransliterationChgData                  aChgData;
 
-        if (rTrans.getType() == (sal_uInt32)TransliterationModulesExtra::TITLE_CASE)
+        if (rTrans.getType() == TransliterationFlags::TITLE_CASE)
         {
             // for 'capitalize every word' we need to iterate over each word
 
@@ -1776,7 +1775,7 @@ void SwTextNode::TransliterateText(
                         nWordType);
             }
         }
-        else if (rTrans.getType() == (sal_uInt32)TransliterationModulesExtra::SENTENCE_CASE)
+        else if (rTrans.getType() == TransliterationFlags::SENTENCE_CASE)
         {
             // for 'sentence case' we need to iterate sentence by sentence
 

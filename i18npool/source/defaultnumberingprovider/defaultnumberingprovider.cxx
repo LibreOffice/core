@@ -56,7 +56,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/i18n/XTransliteration.hpp>
 #include <com/sun/star/i18n/TransliterationType.hpp>
-#include <com/sun/star/i18n/TransliterationModulesNew.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
 
 #include <bullet.h>

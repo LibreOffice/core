@@ -734,7 +734,7 @@ EVAnchorMode EditView::GetAnchorMode() const
     return pImpEditView->GetAnchorMode();
 }
 
-void EditView::TransliterateText( sal_Int32 nTransliterationMode )
+void EditView::TransliterateText( TransliterationFlags nTransliterationMode )
 {
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
     EditSelection aNewSel = pImpEditView->pEditEngine->TransliterateText( pImpEditView->GetEditSelection(), nTransliterationMode );

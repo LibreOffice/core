@@ -67,8 +67,6 @@
 #include <com/sun/star/linguistic2/XMeaning.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
@@ -2603,7 +2601,7 @@ bool ImpEditEngine::Search( const SvxSearchItem& rSearchItem, EditView* pEditVie
 bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
     const EditSelection& rSearchSelection, const EditPaM& rStartPos, EditSelection& rFoundSel )
 {
-    util::SearchOptions2 aSearchOptions( rSearchItem.GetSearchOptions() );
+    i18nutil::SearchOptions2 aSearchOptions( rSearchItem.GetSearchOptions() );
     aSearchOptions.Locale = GetLocale( rStartPos );
 
     bool bBack = rSearchItem.GetBackward();
@@ -2710,7 +2708,7 @@ namespace
     };
 }
 
-EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode )
+EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection, TransliterationFlags nTransliterationMode )
 {
     uno::Reference < i18n::XBreakIterator > _xBI( ImplGetBreakIterator() );
     if (!_xBI.is())
@@ -2761,7 +2759,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
         std::vector< eeTransliterationChgData >   aChanges;
         eeTransliterationChgData                  aChgData;
 
-        if (nTransliterationMode == i18n::TransliterationModulesExtra::TITLE_CASE)
+        if (nTransliterationMode == TransliterationFlags::TITLE_CASE)
         {
             // for 'capitalize every word' we need to iterate over each word
 
@@ -2826,7 +2824,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             }
             DBG_ASSERT( nCurrentEnd >= aEndBndry.endPos, "failed to reach end of transliteration" );
         }
-        else if (nTransliterationMode == i18n::TransliterationModulesExtra::SENTENCE_CASE)
+        else if (nTransliterationMode == TransliterationFlags::SENTENCE_CASE)
         {
             // for 'sentence case' we need to iterate sentence by sentence
 
