@@ -23,7 +23,15 @@
 
 #include <math.h>
 #include <algorithm>
+
+#if defined __GNUC__ && __cplusplus > 201402L
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wregister"
+#endif
 #include <lcms2.h>
+#if defined __GNUC__ && __cplusplus > 201402L
+#pragma GCC diagnostic pop
+#endif
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
