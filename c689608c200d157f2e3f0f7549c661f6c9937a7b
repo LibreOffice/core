@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_1da4ce55",
+        "filename": "configure.ac",
+        "patchSetId": 3
+      },
+      "lineNbr": 12434,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-02-23T06:22:44Z",
+      "side": 1,
+      "message": "you have broken\u003dno on both paths?",
+      "revId": "c689608c200d157f2e3f0f7549c661f6c9937a7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
