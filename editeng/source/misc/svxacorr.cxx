@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <tools/urlobj.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nutil/transliteration.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sot/storinfo.hxx>
@@ -214,8 +215,8 @@ static TransliterationWrapper& GetIgnoreTranslWrapper()
 {
     static int bIsInit = 0;
     static TransliterationWrapper aWrp( ::comphelper::getProcessComponentContext(),
-                css::i18n::TransliterationModules_IGNORE_KANA |
-                css::i18n::TransliterationModules_IGNORE_WIDTH );
+                TransliterationFlags::IGNORE_KANA |
+                TransliterationFlags::IGNORE_WIDTH );
     if( !bIsInit )
     {
         aWrp.loadModuleIfNeeded( GetAppLang().getLanguageType() );

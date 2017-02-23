@@ -52,10 +52,12 @@ private:
     VclPtr<CheckBox>   m_pIgnoreWhitespace;
     VclPtr<CheckBox>   m_pIgnoreMiddleDot;
 
-    sal_Int32       nTransliterationFlags;
-    bool        bSaveOptions;
+    TransliterationFlags
+                       nTransliterationFlags;
+    bool               bSaveOptions;
 
-    sal_Int32               GetTransliterationFlags_Impl();
+    TransliterationFlags
+                        GetTransliterationFlags_Impl();
 
 public:
                         SvxJSearchOptionsPage( vcl::Window* pParent, const SfxItemSet& rSet );
@@ -68,8 +70,9 @@ public:
 
     void                EnableSaveOptions( bool bVal )  { bSaveOptions = bVal; }
 
-    sal_Int32               GetTransliterationFlags() const { return nTransliterationFlags; }
-    void                SetTransliterationFlags( sal_Int32 nSettings );
+    TransliterationFlags
+                        GetTransliterationFlags() const { return nTransliterationFlags; }
+    void                SetTransliterationFlags( TransliterationFlags nSettings );
 };
 
 

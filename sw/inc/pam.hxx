@@ -38,11 +38,9 @@ class SwNode;
 class SwContentNode;
 class SwPaM;
 class Point;
-
-namespace com { namespace sun { namespace star { namespace util {
+namespace i18nutil {
     struct SearchOptions2;
-} } } }
-
+}
 namespace utl {
     class TextSearch;
 }
@@ -187,7 +185,7 @@ public:
                 SwGoInDoc fnGo = GoInContent );
 
     /// Search.
-    bool Find(  const css::util::SearchOptions2& rSearchOpt,
+    bool Find(  const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 utl::TextSearch& rSText,
                 SwMoveFnCollection const & fnMove = fnMoveForward,
@@ -202,7 +200,7 @@ public:
                 SwMoveFnCollection const & fnMove,
                 const SwPaM *pPam, bool bInReadOnly, bool bMoveFirst );
 
-    bool DoSearch( const css::util::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
+    bool DoSearch( const i18nutil::SearchOptions2& rSearchOpt, utl::TextSearch& rSText,
                    SwMoveFnCollection const & fnMove, bool bSrchForward, bool bRegSearch, bool bChkEmptyPara, bool bChkParaEnd,
                    sal_Int32 &nStart, sal_Int32 &nEnd, sal_Int32 nTextLen, SwNode* pNode, SwPaM* pPam);
 

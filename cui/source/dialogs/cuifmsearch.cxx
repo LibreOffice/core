@@ -31,7 +31,6 @@
 #include "cuifmsearch.hxx"
 #include <svx/srchdlg.hxx>
 #include <svl/cjkoptions.hxx>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <svx/svxdlg.hxx>
@@ -382,7 +381,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton, void )
             aDlg->Execute();
 
 
-            sal_Int32 nFlags = aDlg->GetTransliterationFlags();
+            TransliterationFlags nFlags = aDlg->GetTransliterationFlags();
             m_pSearchEngine->SetTransliterationFlags(nFlags);
 
             m_pcbCase->Check(m_pSearchEngine->GetCaseSensitive());

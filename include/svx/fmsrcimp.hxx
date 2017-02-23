@@ -38,6 +38,8 @@
 #include <deque>
 #include <vector>
 
+enum class TransliterationFlags;
+
 /**
  * struct FmSearchProgress - the owner of SearchEngine receives this structure for status updates
  * (at the end of the search)
@@ -211,7 +213,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC FmSearchEngine final
 
     sal_uInt16  m_nPosition;            // if not regular or levenshtein, then one of the MATCHING_... values
 
-    sal_Int32   m_nTransliterationFlags;
+    TransliterationFlags m_nTransliterationFlags;
 
 
 // member access
@@ -253,8 +255,9 @@ public:
     sal_uInt16  GetLevLonger() const                { return m_nLevLonger; }
     // all Lev. values will only be considered in case of m_bLevenshtein==sal_True
 
-    void        SetTransliterationFlags(sal_Int32 _nFlags)  { m_nTransliterationFlags = _nFlags; }
-    sal_Int32   GetTransliterationFlags() const             { return m_nTransliterationFlags; }
+    void        SetTransliterationFlags(TransliterationFlags _nFlags)  { m_nTransliterationFlags = _nFlags; }
+    TransliterationFlags
+                GetTransliterationFlags() const             { return m_nTransliterationFlags; }
 
     void    SetPosition(sal_uInt16 nValue)      { m_nPosition = nValue; }
     sal_uInt16  GetPosition() const             { return m_nPosition; }

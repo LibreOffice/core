@@ -37,8 +37,6 @@
 #include <svl/ctloptions.hxx>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -270,7 +268,7 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     , pFamilyController(nullptr)
     , pSearchSetController(nullptr)
     , pReplaceSetController(nullptr)
-    , nTransliterationFlags(0x00000000)
+    , nTransliterationFlags(TransliterationFlags::NONE)
 {
     get(m_pSearchFrame, "searchframe");
     get(m_pSearchLB, "searchterm");
@@ -581,16 +579,16 @@ bool SvxSearchDialog::Close()
 }
 
 
-sal_Int32 SvxSearchDialog::GetTransliterationFlags() const
+TransliterationFlags SvxSearchDialog::GetTransliterationFlags() const
 {
     if (!m_pMatchCaseCB->IsChecked())
-        nTransliterationFlags |=  TransliterationModules_IGNORE_CASE;
+        nTransliterationFlags |=  TransliterationFlags::IGNORE_CASE;
     else
-        nTransliterationFlags &= ~TransliterationModules_IGNORE_CASE;
+        nTransliterationFlags &= ~TransliterationFlags::IGNORE_CASE;
     if ( !m_pJapMatchFullHalfWidthCB->IsChecked())
-        nTransliterationFlags |=  TransliterationModules_IGNORE_WIDTH;
+        nTransliterationFlags |=  TransliterationFlags::IGNORE_WIDTH;
     else
-        nTransliterationFlags &= ~TransliterationModules_IGNORE_WIDTH;
+        nTransliterationFlags &= ~TransliterationFlags::IGNORE_WIDTH;
     return nTransliterationFlags;
 }
 
@@ -600,12 +598,12 @@ void SvxSearchDialog::SetSaveToModule(bool b)
 }
 
 
-void SvxSearchDialog::ApplyTransliterationFlags_Impl( sal_Int32 nSettings )
+void SvxSearchDialog::ApplyTransliterationFlags_Impl( TransliterationFlags nSettings )
 {
     nTransliterationFlags = nSettings;
-    bool bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
-    m_pMatchCaseCB->Check(!bVal );
-    bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
+    bool bVal(nSettings & TransliterationFlags::IGNORE_CASE);
+    m_pMatchCaseCB->Check( !bVal );
+    bVal = bool(nSettings & TransliterationFlags::IGNORE_WIDTH);
     m_pJapMatchFullHalfWidthCB->Check( !bVal );
 }
 
@@ -1332,14 +1330,14 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
         pSearchItem->SetPattern(GetCheckBoxValue(m_pLayoutBtn));
         pSearchItem->SetSelection(GetCheckBoxValue(m_pSelectionBtn));
         pSearchItem->SetUseAsianOptions(GetCheckBoxValue(m_pJapOptionsCB));
-        sal_Int32 nFlags = GetTransliterationFlags();
+        TransliterationFlags nFlags = GetTransliterationFlags();
         if( !pSearchItem->IsUseAsianOptions())
-            nFlags &= (TransliterationModules_IGNORE_CASE |
-                       TransliterationModules_IGNORE_WIDTH );
+            nFlags &= (TransliterationFlags::IGNORE_CASE |
+                       TransliterationFlags::IGNORE_WIDTH );
         if (GetCheckBoxValue(m_pIgnoreDiacritics))
-            nFlags |= TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
+            nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
         if (GetCheckBoxValue(m_pIgnoreKashida))
-            nFlags |= TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
+            nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
         pSearchItem->SetTransliterationFlags( nFlags );
 
         if ( !bWriter )
@@ -1424,7 +1422,7 @@ IMPL_LINK( SvxSearchDialog, CommandHdl_Impl, Button *, pBtn, void )
             int nRet = aDlg->Execute();
             if (RET_OK == nRet) //! true only if FillItemSet of SvxJSearchOptionsPage returns true
             {
-                sal_Int32 nFlags = aDlg->GetTransliterationFlags();
+                TransliterationFlags nFlags = aDlg->GetTransliterationFlags();
                 pSearchItem->SetTransliterationFlags( nFlags );
                 ApplyTransliterationFlags_Impl( nFlags );
             }
@@ -2308,14 +2306,14 @@ void SvxSearchDialog::SaveToModule_Impl()
     aOpt.SetIgnoreKashida_CTL(GetCheckBoxValue(m_pIgnoreKashida));
     aOpt.Commit();
 
-    sal_Int32 nFlags = GetTransliterationFlags();
+    TransliterationFlags nFlags = GetTransliterationFlags();
     if( !pSearchItem->IsUseAsianOptions())
-        nFlags &= (TransliterationModules_IGNORE_CASE |
-                   TransliterationModules_IGNORE_WIDTH );
+        nFlags &= (TransliterationFlags::IGNORE_CASE |
+                   TransliterationFlags::IGNORE_WIDTH );
     if (GetCheckBoxValue(m_pIgnoreDiacritics))
-        nFlags |= TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
+        nFlags |= TransliterationFlags::IGNORE_DIACRITICS_CTL;
     if (GetCheckBoxValue(m_pIgnoreKashida))
-        nFlags |= TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
+        nFlags |= TransliterationFlags::IGNORE_KASHIDA_CTL;
     pSearchItem->SetTransliterationFlags( nFlags );
 
     if ( !bWriter )
