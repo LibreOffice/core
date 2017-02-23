@@ -7,28 +7,5 @@
 //
 
 
-// Global variable to reference LibreOffice functions
-var LOinterface = LOkit.init()
-
-
-
-class LOkit
-{
-    init()
-    {
-        LOkit_Init()
-    }
-
-
-
-    func Initialize()
-    {
-        
-    }
-    
-    func DeleteCurrentDocument()
-    {
-        
-    }
-}
-
+// Bridge functions to LibreOfficeKit
+int LOkit_Init();
