@@ -24,9 +24,6 @@
 #include <svx/zoom_def.hxx>
 #include <editeng/edtdlg.hxx>
 
-class SdrModel;
-class SdrView;
-
 #include <svx/dstribut_enum.hxx>
 #include <svx/rectenum.hxx>
 #include <com/sun/star/container/XIndexContainer.hpp>
@@ -42,11 +39,10 @@ namespace linguistic2{
     class XThesaurus;
     class XHyphenator;
 }}}}
-
+class SdrModel;
+class SdrView;
 class SvxSpellWrapper;
-typedef VclPtr<SfxTabPage> (*CreateSvxDistributePage)(vcl::Window *pParent, const SfxItemSet &rAttrSet, SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
-typedef const sal_uInt16*  (*DialogGetRanges)();
-
+enum class TransliterationFlags;
 struct ExchangeData;
 class INetURLObject;
 class GalleryTheme;
@@ -57,6 +53,9 @@ class Graphic;
 class SdrObject;
 class SvxSpellWrapper;
 struct FmSearchContext;
+
+typedef VclPtr<SfxTabPage> (*CreateSvxDistributePage)(vcl::Window *pParent, const SfxItemSet &rAttrSet, SvxDistributeHorizontal eHor, SvxDistributeVertical eVer);
+typedef const sal_uInt16*  (*DialogGetRanges)();
 
 typedef ::std::vector< OUString > TargetList;
 
@@ -163,7 +162,7 @@ class AbstractSvxJSearchOptionsDialog :public VclAbstractDialog
 protected:
     virtual ~AbstractSvxJSearchOptionsDialog() override = default;
 public:
-    virtual sal_Int32           GetTransliterationFlags() const = 0;
+    virtual TransliterationFlags GetTransliterationFlags() const = 0;
 };
 
 class AbstractFmInputRecordNoDialog :public VclAbstractDialog
@@ -396,7 +395,7 @@ public:
                                                                  )=0;
     virtual VclPtr<AbstractSvxJSearchOptionsDialog> CreateSvxJSearchOptionsDialog( vcl::Window* pParent,
                                                             const SfxItemSet& rOptionsSet,
-                                                            sal_Int32 nInitialFlags )=0;
+                                                            TransliterationFlags nInitialFlags )=0;
     virtual VclPtr<AbstractFmInputRecordNoDialog> CreateFmInputRecordNoDialog() = 0;
     virtual VclPtr<AbstractSvxNewDictionaryDialog> CreateSvxNewDictionaryDialog( vcl::Window* pParent ) = 0;
     virtual VclPtr<VclAbstractDialog>     CreateSvxEditDictionaryDialog( vcl::Window* pParent,

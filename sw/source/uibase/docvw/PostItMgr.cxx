@@ -2199,7 +2199,7 @@ sal_uInt16 SwPostItMgr::Replace(SvxSearchItem* pItem)
     return aResult;
 }
 
-sal_uInt16 SwPostItMgr::FinishSearchReplace(const css::util::SearchOptions2& rSearchOptions, bool bSrchForward)
+sal_uInt16 SwPostItMgr::FinishSearchReplace(const i18nutil::SearchOptions2& rSearchOptions, bool bSrchForward)
 {
     SwSidebarWin* pWin = GetActiveSidebarWin();
     SvxSearchItem aItem(SID_SEARCH_ITEM );
@@ -2211,7 +2211,7 @@ sal_uInt16 SwPostItMgr::FinishSearchReplace(const css::util::SearchOptions2& rSe
     return aResult;
 }
 
-sal_uInt16 SwPostItMgr::SearchReplace(const SwFormatField &pField, const css::util::SearchOptions2& rSearchOptions, bool bSrchForward)
+sal_uInt16 SwPostItMgr::SearchReplace(const SwFormatField &pField, const i18nutil::SearchOptions2& rSearchOptions, bool bSrchForward)
 {
     sal_uInt16 aResult = 0;
     SwSidebarWin* pWin = GetSidebarWin(&pField);

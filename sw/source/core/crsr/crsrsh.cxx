@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <hintids.hxx>
@@ -3169,7 +3168,7 @@ bool SwCursorShell::SelectHiddenRange()
     return bRet;
 }
 
-sal_uLong SwCursorShell::Find( const SearchOptions2& rSearchOpt,
+sal_uLong SwCursorShell::Find( const i18nutil::SearchOptions2& rSearchOpt,
                              bool bSearchInNotes,
                              SwDocPositions eStart, SwDocPositions eEnd,
                              bool& bCancel,
@@ -3211,7 +3210,7 @@ sal_uLong SwCursorShell::Find( const SfxItemSet& rSet,
                              SwDocPositions eStart, SwDocPositions eEnd,
                              bool& bCancel,
                              FindRanges eRng,
-                             const SearchOptions2* pSearchOpt,
+                             const i18nutil::SearchOptions2* pSearchOpt,
                              const SfxItemSet* rReplSet )
 {
     if( m_pTableCursor )

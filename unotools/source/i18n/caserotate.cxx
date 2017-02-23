@@ -8,29 +8,26 @@
  */
 
 #include <unotools/caserotate.hxx>
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <i18nutil/transliteration.hxx>
 
 //TODO Use XCharacterClassification::getStringType to determine the current
 //(possibly mixed) case type and rotate to the next one
 
-sal_uInt32 RotateTransliteration::getNextMode()
+TransliterationFlags RotateTransliteration::getNextMode()
 {
-    using namespace ::com::sun::star::i18n;
-
-    sal_uInt32 nMode = 0;
+    TransliterationFlags nMode = TransliterationFlags::NONE;
 
     switch (nF3ShiftCounter)
     {
         case 0:
-            nMode = TransliterationModulesExtra::TITLE_CASE;
+            nMode = TransliterationFlags::TITLE_CASE;
             break;
         case 1:
-            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+            nMode = TransliterationFlags::LOWERCASE_UPPERCASE;
             break;
         default:
         case 2:
-            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+            nMode = TransliterationFlags::UPPERCASE_LOWERCASE;
             nF3ShiftCounter = -1;
             break;
     }

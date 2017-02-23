@@ -1496,7 +1496,7 @@ public:
                                 InsertDeleteFlags nFlags, ScPasteFunc nFunction,
                                 bool bSkipEmpty, bool bAsLink );
 
-    void            TransliterateText( const ScMarkData& rMultiMark, sal_Int32 nType );
+    void            TransliterateText( const ScMarkData& rMultiMark, TransliterationFlags nType );
 
     SC_DLLPUBLIC void           InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
                                 bool bColInfo = false, bool bRowInfo = false );

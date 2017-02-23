@@ -22,13 +22,13 @@
 #include "unotools/transliterationwrapper.hxx"
 
 #include "i18nlangtag/languagetag.hxx"
+#include "i18nutil/transliteration.hxx"
 
 #include "rtl/ustrbuf.hxx"
 
 #include <vcl/i18nhelp.hxx>
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
-#include "com/sun/star/i18n/TransliterationModules.hpp"
 
 using namespace ::com::sun::star;
 
@@ -60,11 +60,11 @@ utl::TransliterationWrapper& vcl::I18nHelper::ImplGetTransliterationWrapper() co
 {
     if ( !mpTransliterationWrapper )
     {
-        sal_Int32 nModules = i18n::TransliterationModules_IGNORE_WIDTH;
+        TransliterationFlags nModules = TransliterationFlags::IGNORE_WIDTH;
         if ( mbTransliterateIgnoreCase )
-            nModules |= i18n::TransliterationModules_IGNORE_CASE;
+            nModules |= TransliterationFlags::IGNORE_CASE;
 
-        const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper = new utl::TransliterationWrapper( m_xContext, (i18n::TransliterationModules)nModules );
+        const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper = new utl::TransliterationWrapper( m_xContext, nModules );
         const_cast<vcl::I18nHelper*>(this)->mpTransliterationWrapper->loadModuleIfNeeded( maLanguageTag.getLanguageType() );
     }
     return *mpTransliterationWrapper;

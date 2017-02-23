@@ -46,11 +46,10 @@ struct ScCellMergeOption;
 class ScConditionalFormat;
 class ScConditionalFormatList;
 class ScUndoRemoveMerge;
+enum class TransliterationFlags;
 
 namespace sc {
-
-struct ColRowSpan;
-
+    struct ColRowSpan;
 }
 
 class ScDocFunc
@@ -92,7 +91,7 @@ public:
     bool DeleteCell(
         const ScAddress& rPos, const ScMarkData& rMark, InsertDeleteFlags nFlags, bool bRecord );
 
-    bool            TransliterateText( const ScMarkData& rMark, sal_Int32 nType,
+    bool            TransliterateText( const ScMarkData& rMark, TransliterationFlags nType,
                                                bool bApi );
 
     bool            SetNormalString( bool& o_rbNumFmtSet, const ScAddress& rPos, const OUString& rText, bool bApi );

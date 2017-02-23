@@ -19,13 +19,12 @@
 
 #include <hintids.hxx>
 
-#include <com/sun/star/i18n/TransliterationModules.hpp>
-#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nutil/transliteration.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -1427,43 +1426,43 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
 
     using namespace ::com::sun::star::i18n;
 
-    sal_uInt32 nMode = 0;
+    TransliterationFlags nMode = TransliterationFlags::NONE;
 
     switch( rReq.GetSlot() )
     {
         case SID_TRANSLITERATE_SENTENCE_CASE:
-            nMode = TransliterationModulesExtra::SENTENCE_CASE;
+            nMode = TransliterationFlags::SENTENCE_CASE;
             break;
         case SID_TRANSLITERATE_TITLE_CASE:
-            nMode = TransliterationModulesExtra::TITLE_CASE;
+            nMode = TransliterationFlags::TITLE_CASE;
             break;
         case SID_TRANSLITERATE_TOGGLE_CASE:
-            nMode = TransliterationModulesExtra::TOGGLE_CASE;
+            nMode = TransliterationFlags::TOGGLE_CASE;
             break;
         case SID_TRANSLITERATE_UPPER:
-            nMode = TransliterationModules_LOWERCASE_UPPERCASE;
+            nMode = TransliterationFlags::LOWERCASE_UPPERCASE;
             break;
         case SID_TRANSLITERATE_LOWER:
-            nMode = TransliterationModules_UPPERCASE_LOWERCASE;
+            nMode = TransliterationFlags::UPPERCASE_LOWERCASE;
             break;
         case SID_TRANSLITERATE_HALFWIDTH:
-            nMode = TransliterationModules_FULLWIDTH_HALFWIDTH;
+            nMode = TransliterationFlags::FULLWIDTH_HALFWIDTH;
             break;
         case SID_TRANSLITERATE_FULLWIDTH:
-            nMode = TransliterationModules_HALFWIDTH_FULLWIDTH;
+            nMode = TransliterationFlags::HALFWIDTH_FULLWIDTH;
             break;
         case SID_TRANSLITERATE_HIRAGANA:
-            nMode = TransliterationModules_KATAKANA_HIRAGANA;
+            nMode = TransliterationFlags::KATAKANA_HIRAGANA;
             break;
         case SID_TRANSLITERATE_KATAGANA:
-            nMode = TransliterationModules_HIRAGANA_KATAKANA;
+            nMode = TransliterationFlags::HIRAGANA_KATAKANA;
             break;
 
         default:
             OSL_ENSURE(false, "wrong dispatcher");
     }
 
-    if( nMode )
+    if( nMode != TransliterationFlags::NONE )
         pOLV->TransliterateText( nMode );
 }
 

@@ -846,7 +846,7 @@ class ScUndoTransliterate: public ScBlockUndo
 {
 public:
                     ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMarkData& rMark,
-                                        ScDocument* pNewUndoDoc, sal_Int32 nType );
+                                        ScDocument* pNewUndoDoc, TransliterationFlags nType );
     virtual         ~ScUndoTransliterate() override;
 
     virtual void    Undo() override;
@@ -860,7 +860,8 @@ private:
     ScMarkData      aMarkData;
     std::unique_ptr<ScDocument>
                     pUndoDoc;
-    sal_Int32       nTransliterationType;
+    TransliterationFlags
+                    nTransliterationType;
 };
 
 class ScUndoClearItems: public ScBlockUndo

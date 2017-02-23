@@ -26,10 +26,9 @@
 #include <cshtyp.hxx>
 
 struct SwCursor_SavePos;
-
-namespace com { namespace sun { namespace star { namespace util {
+namespace i18nutil {
     struct SearchOptions2;
-} } } }
+}
 
 // Base structure for parameters of the find-methods.
 // Returns values of found-call.
@@ -113,7 +112,7 @@ public:
     SwMoveFnCollection const & MakeFindRange( SwDocPositions, SwDocPositions,
                                         SwPaM* ) const;
 
-    sal_uLong Find( const css::util::SearchOptions2& rSearchOpt,
+    sal_uLong Find( const i18nutil::SearchOptions2& rSearchOpt,
                 bool bSearchInNotes,
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
@@ -128,7 +127,7 @@ public:
                 SwDocPositions nStart, SwDocPositions nEnde,
                 bool& bCancel,
                 FindRanges = FindRanges::InBody,
-                const css::util::SearchOptions2* pSearchOpt = nullptr,
+                const i18nutil::SearchOptions2* pSearchOpt = nullptr,
                 const SfxItemSet* rReplSet = nullptr );
 
     // UI versions

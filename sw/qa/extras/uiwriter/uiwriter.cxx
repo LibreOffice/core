@@ -54,6 +54,8 @@
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <i18nutil/transliteration.hxx>
+#include <i18nutil/searchopt.hxx>
 #include <reffld.hxx>
 #include <txatbase.hxx>
 #include <ftnidx.hxx>
@@ -71,11 +73,9 @@
 #include "com/sun/star/util/XNumberFormatTypes.hpp"
 #include "com/sun/star/util/NumberFormat.hpp"
 #include "com/sun/star/util/XNumberFormatsSupplier.hpp"
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include "com/sun/star/util/SearchAlgorithms.hpp"
-#include "com/sun/star/i18n/TransliterationModulesExtra.hpp"
 #include "com/sun/star/sdbcx/XTablesSupplier.hpp"
 #include "com/sun/star/text/XParagraphCursor.hpp"
 #include "com/sun/star/util/XPropertyReplace.hpp"
@@ -2005,7 +2005,7 @@ void SwUiWriterTest::testSearchWithTransliterate()
         SwPaM aPaM(aIdx);
         pDoc->getIDocumentContentOperations().InsertString(aPaM,"This is Other PARAGRAPH");
     }
-    css::util::SearchOptions2 SearchOpt;
+    i18nutil::SearchOptions2 SearchOpt;
     SearchOpt.algorithmType = css::util::SearchAlgorithms_ABSOLUTE;
     SearchOpt.searchFlag = css::util::SearchFlags::ALL_IGNORE_CASE;
     SearchOpt.searchString = "other";
@@ -2013,7 +2013,7 @@ void SwUiWriterTest::testSearchWithTransliterate()
     SearchOpt.changedChars = 0;
     SearchOpt.deletedChars = 0;
     SearchOpt.insertedChars = 0;
-    SearchOpt.transliterateFlags = css::i18n::TransliterationModulesExtra::IGNORE_DIACRITICS_CTL;
+    SearchOpt.transliterateFlags = TransliterationFlags::IGNORE_DIACRITICS_CTL;
     SearchOpt.AlgorithmType2 = css::util::SearchAlgorithms2::ABSOLUTE;
     SearchOpt.WildcardEscapeCharacter = 0;
     //transliteration option set so that at least one of the search strings is not found
@@ -2022,7 +2022,7 @@ void SwUiWriterTest::testSearchWithTransliterate()
     CPPUNIT_ASSERT_EQUAL(OUString(""),pShellCursor->GetText());
     CPPUNIT_ASSERT_EQUAL(0,(int)case1);
     SearchOpt.searchString = "paragraph";
-    SearchOpt.transliterateFlags = css::i18n::TransliterationModulesExtra::IGNORE_KASHIDA_CTL;
+    SearchOpt.transliterateFlags = TransliterationFlags::IGNORE_KASHIDA_CTL;
     //transliteration option set so that all search strings are found
     sal_uLong case2 = pWrtShell->SearchPattern(SearchOpt,true,SwDocPositions::Start,SwDocPositions::End);
     pShellCursor = pWrtShell->getShellCursor(true);
@@ -2047,7 +2047,7 @@ void SwUiWriterTest::testTdf73660()
     pWrtShell->Insert(aData5 + " ");
     pWrtShell->Insert("Now we have enough text let's test search for all the cases");
     //searching for all 5 strings entered with soft-hyphen, search string contains no soft-hyphen
-    css::util::SearchOptions2 searchOpt;
+    i18nutil::SearchOptions2 searchOpt;
     searchOpt.algorithmType = css::util::SearchAlgorithms_REGEXP;
     searchOpt.searchFlag = css::util::SearchFlags::NORM_WORD_ONLY;
     //case 1

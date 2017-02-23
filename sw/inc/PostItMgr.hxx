@@ -29,7 +29,6 @@
 #include <swrect.hxx>
 #include <unotools/configitem.hxx>
 #include <unotools/options.hxx>
-#include <com/sun/star/util/SearchOptions2.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <SidebarWindowsTypes.hxx>
 #include <svl/lstner.hxx>
@@ -63,6 +62,7 @@ class SwFrame;
 namespace vcl { class Window; }
 struct ImplSVEvent;
 class OutlinerSearchable;
+namespace i18nutil { struct SearchOptions2; }
 
 #define COL_NOTES_SIDEPANE_ARROW_ENABLED    RGB_COLORDATA(0,0,0)
 #define COL_NOTES_SIDEPANE_ARROW_DISABLED   RGB_COLORDATA(172,168,153)
@@ -273,8 +273,8 @@ class SwPostItMgr: public SfxListener
         void CheckMetaText();
 
         sal_uInt16 Replace(SvxSearchItem* pItem);
-        sal_uInt16 SearchReplace(const SwFormatField &pField, const css::util::SearchOptions2& rSearchOptions,bool bSrchForward);
-        sal_uInt16 FinishSearchReplace(const css::util::SearchOptions2& rSearchOptions,bool bSrchForward);
+        sal_uInt16 SearchReplace(const SwFormatField &pField, const i18nutil::SearchOptions2& rSearchOptions,bool bSrchForward);
+        sal_uInt16 FinishSearchReplace(const i18nutil::SearchOptions2& rSearchOptions,bool bSrchForward);
 
         void AssureStdModeAtShell();
 

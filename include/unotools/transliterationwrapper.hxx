@@ -30,6 +30,7 @@ namespace com { namespace sun { namespace star {
         class XComponentContext;
     }
 }}}
+enum class TransliterationFlags;
 
 namespace utl
 {
@@ -38,7 +39,7 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 {
     css::uno::Reference< css::i18n::XExtendedTransliteration > xTrans;
     LanguageTag aLanguageTag;
-    sal_uInt32 nType;
+    TransliterationFlags nType;
     mutable bool bFirstCall;
 
     TransliterationWrapper( const TransliterationWrapper& ) = delete;
@@ -49,11 +50,11 @@ class UNOTOOLS_DLLPUBLIC TransliterationWrapper
 
 public:
     TransliterationWrapper( const css::uno::Reference< css::uno::XComponentContext > & rxContext,
-                    sal_uInt32 nType );
+                    TransliterationFlags nType );
 
     ~TransliterationWrapper();
 
-    sal_uInt32 getType() const { return nType; }
+    TransliterationFlags getType() const { return nType; }
 
     bool needLanguageForTheMode() const;
 
