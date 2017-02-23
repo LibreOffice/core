@@ -163,6 +163,13 @@ void ScFilterDlg::dispose()
     ScAnyRefDlg::dispose();
 }
 
+// test of possible operators for the regexp, it is "= or <>"
+bool IsRegexConditionEntry(ScQueryOp eOp)
+{
+    return ((eOp == SC_EQUAL) || (eOp == SC_NOT_EQUAL));
+}
+
+
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
@@ -172,6 +179,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pBtnCancel->SetClickHdl  ( LINK( this, ScFilterDlg, EndDlgHdl ) );
     pBtnHeader->SetClickHdl  ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
     pBtnCase->SetClickHdl    ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
+    pBtnRegExp->SetClickHdl  ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
 
     pLbField1->SetSelectHdl  ( LINK( this, ScFilterDlg, LbSelectHdl ) );
     pLbField2->SetSelectHdl  ( LINK( this, ScFilterDlg, LbSelectHdl ) );
@@ -238,6 +246,26 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     FillFieldLists();
 
+    aStrCondEntries.clear();
+    // index when the regexp is true
+    sal_uInt32  nRegExpInx  = 0;
+    // we have 4 condition list boxes, the translateted strings only in condition list box 1, here save this strings in a vector
+    for (sal_uInt32 nLbIndex = 0, nCount = pLbCond1->GetEntryCount(); nLbIndex < nCount; ++nLbIndex)
+    {
+        // save the string
+        CondEntry ConditionEntry(pLbCond1->GetEntry(nLbIndex));
+
+        // if this operator using in case of regexp, too
+        if (IsRegexConditionEntry(static_cast<ScQueryOp> (nLbIndex)))
+            // set the regexp index
+            ConditionEntry.SetRegExpIndex(nRegExpInx++);
+
+       // save in the vector
+        aStrCondEntries.push_back(ConditionEntry);
+    }
+    // set the strings in dependency of the regexp to all condition listboxes
+    FillSelCondLists(false);
+
     for (size_t i = 0; i < QUERY_ENTRY_COUNT; ++i)
     {
         OUString aValStr;
@@ -248,7 +276,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         if ( rEntry.bDoQuery )
         {
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            nCondPos = static_cast<size_t>(rEntry.eOp);
+            nCondPos = GetCondIndex(rEntry.eOp);
             nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
             if (rEntry.IsQueryByEmpty())
             {
@@ -314,6 +342,8 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         maValueEdArr[i]->SetModifyHdl( LINK( this, ScFilterDlg, ValModifyHdl ) );
         UpdateValueList(i+1);
     }
+
+    HandleRegExpBtn();
 
     pScrollBar->SetEndScrollHdl( LINK( this, ScFilterDlg, ScrollHdl ) );
     pScrollBar->SetScrollHdl( LINK( this, ScFilterDlg, ScrollHdl ) );
@@ -458,6 +488,99 @@ void ScFilterDlg::FillFieldLists()
         }
     }
 }
+
+// depending on state of regular expression button
+void ScFilterDlg::FillSelCondLists(bool bSelect)
+{
+    bool bRegExp = pBtnRegExp->IsChecked();
+
+    for (const VclPtr<ListBox> &lb : maCondLbArr)
+    {
+        ScQueryOp   nCondPos    = SC_EQUAL;
+        size_t      nCurLbIndex = SC_EQUAL;
+
+        if (bSelect)
+        {
+            // what for a operator was selected
+            nCondPos    = static_cast<ScQueryOp> (reinterpret_cast<size_t> (lb->GetSelectEntryData()));
+            // then caculate the operator to current index, in case of regexp is that NOT equal
+            nCurLbIndex = GetCondIndex(nCondPos);
+        }
+
+        // clear condition list
+        lb->Clear();
+
+        // fill the condition list with the new entries
+        for (size_t nLbIndex = 0; nLbIndex < aStrCondEntries.size(); ++nLbIndex)
+        {
+            // in dependency of regexp
+            if (!bRegExp || (aStrCondEntries[nLbIndex].IsRegExpIndex()))
+            {
+                // set the string in the conditon listbox
+                sal_Int32 nPos = lb->InsertEntry(aStrCondEntries[nLbIndex].GetStringEntry());
+                // set the entry data to the operator => ScQueryOp
+                lb->SetEntryData(nPos, reinterpret_cast<void *> (static_cast<ScQueryOp> (nLbIndex)));
+            }
+        }
+
+        if (bSelect)
+        {
+            if (!IsRegexConditionEntry(nCondPos) && bRegExp)
+                // the old position is not possible, set to equal
+                lb->SelectEntryPos(SC_EQUAL);
+            else
+                // can use the current index
+                lb->SelectEntryPos(nCurLbIndex);
+        }
+    }
+}
+
+// If = or <> condition is set, enable regular expression button
+void ScFilterDlg::HandleRegExpBtn()
+{
+    bool   bDisable = false;
+    // make test over all entries
+    SCSIZE nCount   = theQueryData.GetEntryCount();
+
+    for (SCSIZE i = 0; i < nCount; ++i)
+    {
+        ScQueryEntry& rEntry = theQueryData.GetEntry(i);
+        // test only when entry is valid
+        bDisable |= rEntry.bDoQuery && !IsRegexConditionEntry(rEntry.eOp);
+    }
+
+    if (!bDisable)
+        pBtnRegExp->Enable();
+    else
+    {
+        // uncheck and disable the button
+        pBtnRegExp->Check(false);
+        pBtnRegExp->Disable();
+    }
+}
+
+// get the index in dependency of given opearator and regulare exp. checkbox
+size_t ScFilterDlg::GetCondIndex(ScQueryOp eOp)
+{
+    size_t eOpSize = static_cast<size_t> (eOp);
+
+    // when regexp unchecked then eOp = condition listbox index
+    if (!pBtnRegExp->IsChecked())
+        return eOpSize;
+
+    // set default listbox index 0
+    sal_Int32 nLbRegExIndex = 0;
+
+    // is in range
+    if (eOpSize < aStrCondEntries.size())
+        // get regexp listbox index
+        nLbRegExIndex = aStrCondEntries[eOpSize].GetRegExpIndex();
+
+    // default is equal
+    return static_cast<size_t> (nLbRegExIndex);
+}
+
+
 
 void ScFilterDlg::UpdateValueList( size_t nList )
 {
@@ -957,25 +1080,34 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
         }
 
     }
-    else if ( &rLb == pLbCond1)
-    {
-        theQueryData.GetEntry(nOffset).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
-    }
-    else if ( &rLb == pLbCond2)
-    {
-        sal_uInt16 nQ=1+nOffset;
-        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
-    }
-    else if ( &rLb == pLbCond3)
-    {
-        sal_uInt16 nQ=2+nOffset;
-        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
-    }
     else
     {
-        sal_uInt16 nQ=3+nOffset;
-        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
+        // index of the listboxes 0 -3
+        sal_uInt16 nLbIndex = 0;
+        // search the right condition list box
+        for (const VclPtr<ListBox> &lb : maCondLbArr)
+        {
+            // found the condition listbox
+            if (&rLb == lb)
+                break;
+            ++nLbIndex;
+        }
+
+        // was found okay
+        if (nLbIndex < maCondLbArr.size())
+        {
+            // calculate the right position in the data store
+            sal_uInt16 nQ = nOffset + nLbIndex;
+
+            // in the condition listbox the entry-data is the operator
+            ScQueryOp  eOp = static_cast<ScQueryOp> (reinterpret_cast<size_t> (rLb.GetSelectEntryData()));
+
+            // set in data store
+            theQueryData.GetEntry(nQ).eOp = eOp;
+        }
     }
+
+    HandleRegExpBtn();
 }
 
 IMPL_LINK( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
@@ -1011,6 +1143,11 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
         UpdateValueList( 2 );
         UpdateValueList( 3 );
         UpdateValueList( 4 );
+    }
+
+    if (pBox == pBtnRegExp)
+    {
+        FillSelCondLists();
     }
 }
 
@@ -1133,7 +1270,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
         ScQueryEntry& rEntry = theQueryData.GetEntry( nQE);
         if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
         {
-            nCondPos = static_cast<size_t>(rEntry.eOp);
+            nCondPos = GetCondIndex(rEntry.eOp);
             if(rEntry.bDoQuery)
                nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
@@ -1213,10 +1350,12 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             maValueEdArr[i]->Disable();
         }
         maFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
-        maCondLbArr [i]->SelectEntryPos( nCondPos );
+        maCondLbArr[i]->SelectEntryPos(nCondPos);
         maValueEdArr[i]->SetText( aValStr );
         UpdateValueList(i+1);
     }
+
+    HandleRegExpBtn();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
