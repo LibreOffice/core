@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "9a57fde8_e1a048a8",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 12431,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T14:43:48Z",
+      "side": 1,
+      "message": "Oh, now the tb78, that actually has MSVC 2013 is failing on this check as well: [1].\n\n* checking whether C:/PROGRA~2/MICROS~1.0/VC/bin/cl.exe -arch:SSE has broken static initialization... yes\n\n* [1] https://ci.libreoffice.org/job/lo_gerrit/7523/Config\u003dwindows_msc_dbgutil_32/console",
+      "range": {
+        "startLine": 12431,
+        "startChar": 25,
+        "endLine": 12431,
+        "endChar": 35
+      },
+      "revId": "b9d633bd3f73dbaf6cc1f112c3507954db99a14c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_e1d20834",
         "filename": "configure.ac",
         "patchSetId": 5
@@ -13,6 +36,24 @@
       "writtenOn": "2017-02-23T14:16:59Z",
       "side": 1,
       "message": "doesn\u0027t seem to be related to constexpr?",
+      "revId": "b9d633bd3f73dbaf6cc1f112c3507954db99a14c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_c1c5045c",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 12436,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T14:43:48Z",
+      "side": 1,
+      "message": "Forgot to adjust it.",
+      "parentUuid": "9a57fde8_e1d20834",
       "revId": "b9d633bd3f73dbaf6cc1f112c3507954db99a14c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
