@@ -114,6 +114,16 @@ private:
     const OUString aStrNotEmpty;
     const OUString aStrColumn;
 
+    struct CondEntry
+    {
+        OUString  aStrEntry;            // display String
+        sal_Int32 nIndex;               // index when RegExp true
+        CondEntry(const OUString &StrEntry) : aStrEntry(StrEntry), nIndex(-1) {}
+        void SetIdx(sal_Int32 nindex)  { nIndex = nindex; }
+    };
+
+    std::vector<CondEntry>  aStrCondEntries;    // all condtion entries
+
     ScFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
@@ -138,8 +148,13 @@ private:
     Timer*  pTimer;
 
 private:
-    void            Init            ( const SfxItemSet& rArgSet );
-    void            FillFieldLists  ();
+    void            Init             ( const SfxItemSet& rArgSet );
+    void            FillFieldLists   ();
+
+    void            FillSelCondLists (bool bSelect = true);      // depending on state of regular expression button
+    void            HandleRegExpBtn  ();                         // If = or <> condition is set, enable regular expression button
+    size_t          GetCondIndex(ScQueryOp eOp);       // get the index in dependency of given opearator and regulare exp. checkbox
+
     void            UpdateValueList ( size_t nList );
     void            UpdateHdrInValueList( size_t nList );
     void            ClearValueList  ( size_t nList );
