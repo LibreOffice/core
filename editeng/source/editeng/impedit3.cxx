@@ -732,7 +732,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
         if ( aBulletArea.Right() > 0 )
-            pParaPortion->SetBulletX( (sal_uInt16) GetXValue( aBulletArea.Right() ) );
+            pParaPortion->SetBulletX( (sal_Int32) GetXValue( aBulletArea.Right() ) );
         else
             pParaPortion->SetBulletX( 0 ); // if Bullet is set incorrectly
     }
@@ -1643,23 +1643,23 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
     sal_Int32 nSpaceBeforeAndMinLabelWidth = GetSpaceBeforeAndMinLabelWidth( pParaPortion->GetNode(), &nSpaceBefore );
     const SvxLRSpaceItem& rLRItem = GetLRSpaceItem( pParaPortion->GetNode() );
     const SvxLineSpacingItem& rLSItem = static_cast<const SvxLineSpacingItem&>(pParaPortion->GetNode()->GetContentAttribs().GetItem( EE_PARA_SBL ));
-    short nStartX = GetXValue( (short)(rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBefore));
+    long nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBefore );
 
     Rectangle aBulletArea = Rectangle( Point(), Point() );
     if ( bLineBreak )
     {
-        nStartX = (short)GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
+        nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
     }
     else
     {
         aBulletArea = GetEditEnginePtr()->GetBulletArea( GetParaPortions().GetPos( pParaPortion ) );
         if ( aBulletArea.Right() > 0 )
-            pParaPortion->SetBulletX( (sal_uInt16) GetXValue( aBulletArea.Right() ) );
+            pParaPortion->SetBulletX( (sal_Int32) GetXValue( aBulletArea.Right() ) );
         else
             pParaPortion->SetBulletX( 0 ); // If Bullet set incorrectly.
         if ( pParaPortion->GetBulletX() > nStartX )
         {
-            nStartX = (short)GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
+            nStartX = GetXValue( rLRItem.GetTextLeft() + rLRItem.GetTextFirstLineOfst() + nSpaceBeforeAndMinLabelWidth );
             if ( pParaPortion->GetBulletX() > nStartX )
                 nStartX = pParaPortion->GetBulletX();
         }
@@ -1692,11 +1692,11 @@ void ImpEditEngine::CreateAndInsertEmptyLine( ParaPortion* pParaPortion, sal_uIn
         if ( nMaxLineWidth < 0 )
             nMaxLineWidth = 1;
         if ( eJustification ==  SVX_ADJUST_CENTER )
-            nStartX = sal::static_int_cast< short >(nMaxLineWidth / 2);
+            nStartX = nMaxLineWidth / 2;
         else if ( eJustification ==  SVX_ADJUST_RIGHT )
-            nStartX = sal::static_int_cast< short >(nMaxLineWidth);
+            nStartX = nMaxLineWidth;
 
-        nStartX = sal::static_int_cast< short >(nStartX + nTextXOffset);
+        nStartX = nStartX + nTextXOffset;
     }
 
     pTmpLine->SetStartPosX( nStartX );
