@@ -6808,7 +6808,7 @@ you must use the "--with-jdk-home" configure option explicitly])
                 AC_MSG_ERROR([JDK is too old, you need at least 1.6])
             fi
             if test "$_jdk_ver" -gt 10600; then
-                JAVA_CLASSPATH_NOT_SET="1"
+                JAVA_CLASSPATH_NOT_SET=TRUE
             fi
             if test "$_jdk_ver" -ge 10900; then
                 HAVE_JAVA9=TRUE
