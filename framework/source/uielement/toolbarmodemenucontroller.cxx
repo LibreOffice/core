@@ -128,14 +128,7 @@ void ToolbarModeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         OUString aLabel = comphelper::getString( aModeNode.getNodeValue( "Label" ) );
         OUString aCommandArg = comphelper::getString( aModeNode.getNodeValue( "CommandArg" ) );
         long nPosition = comphelper::getINT32( aModeNode.getNodeValue( "MenuPosition" ) );
-
-        bool isExperimental = false;
-        if ( aModeNode.hasByName( "IsExperimental" ) )
-        {
-            Any aExperimentalNode = aModeNode.getNodeValue( "IsExperimental" );
-            if( aExperimentalNode.hasValue() )
-                isExperimental = comphelper::getBOOL( aExperimentalNode );
-        }
+        bool isExperimental = comphelper::getBOOL( aModeNode.getNodeValue( "IsExperimental" ) );
 
         // Allow Notebookbar only in experimental mode
         if ( isExperimental && !aMiscOptions.IsExperimentalMode() )
