@@ -85,18 +85,14 @@ Reference<ui::XAcceleratorConfiguration> const GetDocumentAcceleratorConfigurati
     Reference<frame::XController> xController = rxFrame->getController();
     if (xController.is())
     {
-        Reference<frame::XModel> xModel (xController->getModel());
-        if (xModel.is())
+        Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xController->getModel(), UNO_QUERY);
+        if (xSupplier.is())
         {
-            Reference<ui::XUIConfigurationManagerSupplier> xSupplier (xModel, UNO_QUERY);
-            if (xSupplier.is())
+            Reference<ui::XUIConfigurationManager> xConfigurationManager(
+                xSupplier->getUIConfigurationManager());
+            if (xConfigurationManager.is())
             {
-                Reference<ui::XUIConfigurationManager> xConfigurationManager(
-                    xSupplier->getUIConfigurationManager());
-                if (xConfigurationManager.is())
-                {
-                    return xConfigurationManager->getShortCutManager();
-                }
+                return xConfigurationManager->getShortCutManager();
             }
         }
     }
@@ -314,10 +310,8 @@ BitmapEx GetBitmapForCommand(const OUString& rsCommandName,
 
     try
     {
-        Reference<frame::XController> xController(rxFrame->getController());
-        Reference<frame::XModel> xModel(xController->getModel());
-
-        Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xModel, UNO_QUERY);
+        Reference<frame::XController> xController(rxFrame->getController(), UNO_SET_THROW);
+        Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xController->getModel(), UNO_QUERY);
         if (xSupplier.is())
         {
             Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager());
