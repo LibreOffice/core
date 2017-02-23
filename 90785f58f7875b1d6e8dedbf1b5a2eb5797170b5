@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_81377ce2",
+        "filename": "configure.ac",
+        "patchSetId": 4
+      },
+      "lineNbr": 12424,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-23T11:31:53Z",
+      "side": 1,
+      "message": "given you\u0027re chasing a warning, you also need to set the appropriate \"werror\" flag (-Werror for Clang/GCC, /WX for MSVC)",
+      "revId": "90785f58f7875b1d6e8dedbf1b5a2eb5797170b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_5d5bb654",
         "filename": "configure.ac",
         "patchSetId": 4
