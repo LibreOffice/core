@@ -3,4 +3,4 @@ N-Gram-Based Text Categorization library
 This guesses the language that input text is written in. Fundamentally
 an adaption of wiseguys libtextcat extended to be UTF-8 aware.
 
-It is hosted at: [http://cgit.freedesktop.org/libreoffice/libexttextcat/]
+It is hosted at: [https://wiki.documentfoundation.org/Libexttextcat]
