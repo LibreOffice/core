@@ -116,16 +116,15 @@ HwpReader::~HwpReader()
 {
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(const OUString &rURL)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(SvStream &rStream)
 {
-    SvFileStream aFileStream(rURL, StreamMode::READ);
     std::unique_ptr<HStream> stream(new HStream);
     byte aData[32768];
     std::size_t nRead, nBlock = 32768;
 
     while (true)
     {
-        nRead = aFileStream.ReadBytes(aData, nBlock);
+        nRead = rStream.ReadBytes(aData, nBlock);
         if (nRead == 0)
             break;
         stream->addData(aData, (int)nRead);

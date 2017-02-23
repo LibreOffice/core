@@ -125,6 +125,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Executable_rasfuzzer \
     Executable_tgafuzzer \
     Executable_tiffuzzer \
+    Executable_hwpfuzzer \
 ))
 endif
 
