@@ -993,12 +993,12 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
 
                 case 1 :
                 {
-                    sal_uInt32 nByteCount = ( nImageWidth >> 3 ) + 1;
+                    sal_uInt32 nByteCount = nImageWidth >> 3;
 
                     if ( bByteSwap )
                     {
                         sal_Int32 nx = 0;
-                        while ( --nByteCount )
+                        while (nByteCount--)
                         {
                             nByteVal = *pt++;
                             pAcc->SetPixelIndex( nY, nx++, nByteVal & 1 );
@@ -1030,7 +1030,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     else
                     {
                         sal_Int32 nx = 7;
-                        while ( --nByteCount )
+                        while (nByteCount--)
                         {
                             nByteVal = *pt++;
                             pAcc->SetPixelIndex( nY, nx, nByteVal & 1 );
