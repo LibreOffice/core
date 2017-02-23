@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_81ce9c58",
+        "filename": "configure.ac",
+        "patchSetId": 5
+      },
+      "lineNbr": 12431,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T15:43:00Z",
+      "side": 1,
+      "message": "Right! /EHsc was missing, Just found it out by myself, and wanted add it here, and see you have already fixed it, Thanks!",
+      "parentUuid": "9a57fde8_2199706f",
+      "range": {
+        "startLine": 12431,
+        "startChar": 25,
+        "endLine": 12431,
+        "endChar": 35
+      },
+      "revId": "b9d633bd3f73dbaf6cc1f112c3507954db99a14c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_e1d20834",
         "filename": "configure.ac",
         "patchSetId": 5
