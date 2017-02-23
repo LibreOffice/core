@@ -134,8 +134,8 @@ void maybeOutputTimestamp(std::ostringstream &s) {
                 tm.tm_mon = dateTime.Month - 1;
                 tm.tm_year = dateTime.Year - 1900;
                 strftime(ts, sizeof(ts), "%Y-%m-%d:%H:%M:%S", &tm);
-                char milliSecs[10];
-                sprintf(milliSecs, "%03d", static_cast<int>(dateTime.NanoSeconds/1000000));
+                char milliSecs[11];
+                sprintf(milliSecs, "%03u", static_cast<unsigned>(dateTime.NanoSeconds/1000000));
                 s << ts << '.' << milliSecs << ':';
             }
             if (outputRelativeTimer) {
