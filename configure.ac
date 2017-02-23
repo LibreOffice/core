@@ -12377,7 +12377,6 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
     ]])],
     [broken=no], [broken=yes])
 AC_LANG_POP([C++])
-LIBS=$save_LIBS
 CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$broken])
 if test "$broken" = yes; then
