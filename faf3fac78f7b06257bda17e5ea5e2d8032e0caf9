@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_c1d8a420",
+        "filename": "configure.ac",
+        "patchSetId": 6
+      },
+      "lineNbr": 12436,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-02-23T15:43:29Z",
+      "side": 1,
+      "message": "This should have been removed.",
+      "range": {
+        "startLine": 12436,
+        "startChar": 40,
+        "endLine": 12436,
+        "endChar": 49
+      },
+      "revId": "faf3fac78f7b06257bda17e5ea5e2d8032e0caf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
