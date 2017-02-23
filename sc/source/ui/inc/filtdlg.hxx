@@ -114,6 +114,26 @@ private:
     const OUString aStrNotEmpty;
     const OUString aStrColumn;
 
+    class ScCondEntry
+    {
+        OUString  aStrEntry;
+        sal_Int32 nRegExIndex;
+        enum {noRegExpEntry = -1};
+    public:
+        ScCondEntry(const OUString &StrEntry) : aStrEntry(StrEntry), nRegExIndex(noRegExpEntry) {}
+        void SetRegExpIndex(sal_Int32 nIndex)  { nRegExIndex = nIndex; }
+        sal_Int32 GetRegExpIndex()
+        {
+            if (nRegExIndex == noRegExpEntry)
+                return 0;
+            return nRegExIndex;
+        }
+        bool IsRegExpIndex()                   { return nRegExIndex != noRegExpEntry; }
+        const OUString &GetStringEntry()       { return aStrEntry; }
+    };
+
+    std::vector<ScCondEntry>  aStrCondEntries;
+
     ScFilterOptionsMgr* pOptionsMgr;
 
     const sal_uInt16        nWhichQuery;
@@ -138,8 +158,13 @@ private:
     Timer*  pTimer;
 
 private:
-    void            Init            ( const SfxItemSet& rArgSet );
-    void            FillFieldLists  ();
+    void            Init             ( const SfxItemSet& rArgSet );
+    void            FillFieldLists   ();
+
+    void            FillSelCondLists (bool bSelect = true);
+    void            HandleRegExpBtn  ();
+    size_t          GetCondIndex(ScQueryOp eOp);
+
     void            UpdateValueList ( size_t nList );
     void            UpdateHdrInValueList( size_t nList );
     void            ClearValueList  ( size_t nList );

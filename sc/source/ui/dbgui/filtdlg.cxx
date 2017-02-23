@@ -163,6 +163,15 @@ void ScFilterDlg::dispose()
     ScAnyRefDlg::dispose();
 }
 
+namespace
+{
+    bool IsRegexConditionEntry(ScQueryOp eOp)
+    {
+        return ((eOp == SC_EQUAL) || (eOp == SC_NOT_EQUAL));
+    }
+}
+
+
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
     const ScQueryItem& rQueryItem = static_cast<const ScQueryItem&>(
@@ -172,6 +181,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pBtnCancel->SetClickHdl  ( LINK( this, ScFilterDlg, EndDlgHdl ) );
     pBtnHeader->SetClickHdl  ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
     pBtnCase->SetClickHdl    ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
+    pBtnRegExp->SetClickHdl  ( LINK( this, ScFilterDlg, CheckBoxHdl ) );
 
     pLbField1->SetSelectHdl  ( LINK( this, ScFilterDlg, LbSelectHdl ) );
     pLbField2->SetSelectHdl  ( LINK( this, ScFilterDlg, LbSelectHdl ) );
@@ -238,6 +248,20 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     FillFieldLists();
 
+    aStrCondEntries.clear();
+    sal_uInt32  nRegExpInx  = 0;
+    // we have 4 condition list boxes, the translateted strings only in condition list box 1, here save this strings in a vector for the other list boxes
+    for (sal_uInt32 nLbIndex = 0, nCount = pLbCond1->GetEntryCount(); nLbIndex < nCount; ++nLbIndex)
+    {
+        ScCondEntry aConditionEntry(pLbCond1->GetEntry(nLbIndex));
+
+        if (IsRegexConditionEntry(static_cast<ScQueryOp> (nLbIndex)))
+            aConditionEntry.SetRegExpIndex(nRegExpInx++);
+
+        aStrCondEntries.push_back(aConditionEntry);
+    }
+    FillSelCondLists(false);
+
     for (size_t i = 0; i < QUERY_ENTRY_COUNT; ++i)
     {
         OUString aValStr;
@@ -248,7 +272,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         if ( rEntry.bDoQuery )
         {
             const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-            nCondPos = static_cast<size_t>(rEntry.eOp);
+            nCondPos = GetCondIndex(rEntry.eOp);
             nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
             if (rEntry.IsQueryByEmpty())
             {
@@ -314,6 +338,8 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
         maValueEdArr[i]->SetModifyHdl( LINK( this, ScFilterDlg, ValModifyHdl ) );
         UpdateValueList(i+1);
     }
+
+    HandleRegExpBtn();
 
     pScrollBar->SetEndScrollHdl( LINK( this, ScFilterDlg, ScrollHdl ) );
     pScrollBar->SetScrollHdl( LINK( this, ScFilterDlg, ScrollHdl ) );
@@ -458,6 +484,79 @@ void ScFilterDlg::FillFieldLists()
         }
     }
 }
+
+void ScFilterDlg::FillSelCondLists(bool bSelect)
+{
+    bool bRegExp = pBtnRegExp->IsChecked();
+
+    for (const VclPtr<ListBox> &lb : maCondLbArr)
+    {
+        ScQueryOp   nCondPos    = SC_EQUAL;
+        size_t      nCurLbIndex = SC_EQUAL;
+
+        if (bSelect)
+        {
+            nCondPos    = static_cast<ScQueryOp> (reinterpret_cast<size_t> (lb->GetSelectEntryData()));
+            nCurLbIndex = GetCondIndex(nCondPos);
+        }
+
+        lb->Clear();
+
+        for (size_t nLbIndex = 0; nLbIndex < aStrCondEntries.size(); ++nLbIndex)
+        {
+            if (!bRegExp || (aStrCondEntries[nLbIndex].IsRegExpIndex()))
+            {
+                sal_Int32 nPos = lb->InsertEntry(aStrCondEntries[nLbIndex].GetStringEntry());
+                lb->SetEntryData(nPos, reinterpret_cast<void *> (static_cast<ScQueryOp> (nLbIndex)));
+            }
+        }
+
+        if (bSelect)
+        {
+            if (!IsRegexConditionEntry(nCondPos) && bRegExp)
+                lb->SelectEntryPos(SC_EQUAL);
+            else
+                lb->SelectEntryPos(nCurLbIndex);
+        }
+    }
+}
+
+void ScFilterDlg::HandleRegExpBtn()
+{
+    bool   bDisable = false;
+    SCSIZE nCount   = theQueryData.GetEntryCount();
+
+    for (SCSIZE i = 0; i < nCount; ++i)
+    {
+        ScQueryEntry& rEntry = theQueryData.GetEntry(i);
+        bDisable |= rEntry.bDoQuery && !IsRegexConditionEntry(rEntry.eOp);
+    }
+
+    if (!bDisable)
+        pBtnRegExp->Enable();
+    else
+    {
+        pBtnRegExp->Check(false);
+        pBtnRegExp->Disable();
+    }
+}
+
+size_t ScFilterDlg::GetCondIndex(ScQueryOp eOp)
+{
+    size_t eOpSize = static_cast<size_t> (eOp);
+
+    if (!pBtnRegExp->IsChecked())
+        return eOpSize;
+
+    sal_Int32 nLbRegExIndex = 0;
+
+    if (eOpSize < aStrCondEntries.size())
+        nLbRegExIndex = aStrCondEntries[eOpSize].GetRegExpIndex();
+
+    return static_cast<size_t> (nLbRegExIndex);
+}
+
+
 
 void ScFilterDlg::UpdateValueList( size_t nList )
 {
@@ -957,25 +1056,27 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox&, rLb, void )
         }
 
     }
-    else if ( &rLb == pLbCond1)
-    {
-        theQueryData.GetEntry(nOffset).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
-    }
-    else if ( &rLb == pLbCond2)
-    {
-        sal_uInt16 nQ=1+nOffset;
-        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
-    }
-    else if ( &rLb == pLbCond3)
-    {
-        sal_uInt16 nQ=2+nOffset;
-        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
-    }
     else
     {
-        sal_uInt16 nQ=3+nOffset;
-        theQueryData.GetEntry(nQ).eOp=(ScQueryOp)rLb.GetSelectEntryPos();
+        sal_uInt16 nLbIndex = 0;
+        for (const VclPtr<ListBox> &lb : maCondLbArr)
+        {
+            if (&rLb == lb)
+                break;
+            ++nLbIndex;
+        }
+
+        if (nLbIndex < maCondLbArr.size())
+        {
+            sal_uInt16 nQ = nOffset + nLbIndex;
+
+            ScQueryOp  eOp = static_cast<ScQueryOp> (reinterpret_cast<size_t> (rLb.GetSelectEntryData()));
+
+            theQueryData.GetEntry(nQ).eOp = eOp;
+        }
     }
+
+    HandleRegExpBtn();
 }
 
 IMPL_LINK( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
@@ -1011,6 +1112,11 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, Button*, pBox, void )
         UpdateValueList( 2 );
         UpdateValueList( 3 );
         UpdateValueList( 4 );
+    }
+
+    if (pBox == pBtnRegExp)
+    {
+        FillSelCondLists();
     }
 }
 
@@ -1133,7 +1239,7 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
         ScQueryEntry& rEntry = theQueryData.GetEntry( nQE);
         if ( rEntry.bDoQuery || maRefreshExceptQuery[nQE] )
         {
-            nCondPos = static_cast<size_t>(rEntry.eOp);
+            nCondPos = GetCondIndex(rEntry.eOp);
             if(rEntry.bDoQuery)
                nFieldSelPos = GetFieldSelPos( static_cast<SCCOL>(rEntry.nField) );
 
@@ -1213,10 +1319,12 @@ void ScFilterDlg::RefreshEditRow( size_t nOffset )
             maValueEdArr[i]->Disable();
         }
         maFieldLbArr[i]->SelectEntryPos( nFieldSelPos );
-        maCondLbArr [i]->SelectEntryPos( nCondPos );
+        maCondLbArr[i]->SelectEntryPos(nCondPos);
         maValueEdArr[i]->SetText( aValStr );
         UpdateValueList(i+1);
     }
+
+    HandleRegExpBtn();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
