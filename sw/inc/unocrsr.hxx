@@ -111,7 +111,7 @@ namespace sw
             UnoCursorPointer()
                 : m_pCursor(nullptr)
            {}
-            UnoCursorPointer(std::shared_ptr<SwUnoCursor> pCursor)
+            UnoCursorPointer(std::shared_ptr<SwUnoCursor> const & pCursor)
                 : m_pCursor(pCursor)
             {
                 StartListening(m_pCursor->m_aNotifier);
