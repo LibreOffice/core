@@ -70,8 +70,8 @@
                                subtype: AquaSalInstance::AppExecuteSVMain
                                data1: 0
                                data2: 0 ];
-    if( pEvent )
-        [NSApp postEvent: pEvent atStart: NO];
+    assert( pEvent );
+    [NSApp postEvent: pEvent atStart: NO];
 }
 
 -(void)sendEvent:(NSEvent*)pEvent
