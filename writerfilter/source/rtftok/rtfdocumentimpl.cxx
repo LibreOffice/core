@@ -1117,7 +1117,7 @@ RTFError RTFDocumentImpl::resolveChars(char ch)
         {
             // note: apparently \'0d\'0a is interpreted as 2 breaks, not 1
             if (m_aStates.top().eDestination != Destination::DOCCOMM
-                && (ch == '\r' || ch == '\n'))
+                    && (ch == '\r' || ch == '\n'))
             {
                 checkUnicode(/*bUnicode =*/ false, /*bHex =*/ true);
                 dispatchSymbol(RTF_PAR);
