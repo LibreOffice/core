@@ -188,11 +188,13 @@ public:
 
     /** Returns an existing note caption object. returns null, if the note
         contains initial caption data needed to construct a caption object.
-        The SdrCaptionObj* returned is unmanaged and must not be stored elsewhere. */
+        The SdrCaptionObj* returned is still managed by the underlying
+        ScNoteData::ScCaptionPtr and must not be stored elsewhere. */
     SdrCaptionObj*      GetCaption() const { return maNoteData.mxCaption.get();}
     /** Returns the caption object of this note. Creates the caption object, if
         the note contains initial caption data instead of the caption.
-        The SdrCaptionObj* returned is unmanaged and must not be stored elsewhere. */
+        The SdrCaptionObj* returned is still managed by the underlying
+        ScNoteData::ScCaptionPtr and must not be stored elsewhere. */
     SdrCaptionObj*      GetOrCreateCaption( const ScAddress& rPos ) const;
 
     /** Forgets the pointer to the note caption object.
