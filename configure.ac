@@ -11878,6 +11878,37 @@ fi
 
 AC_SUBST(MD5SUM)
 
+#
+# check for sha256sum
+#
+SHA256SUM=
+
+for i in shasum /usr/local/bin/shasum /usr/sfw/bin/shasum /opt/sfw/bin/shasum /opt/local/bin/shasum; do
+    eval "$i -a 256 --version" > /dev/null 2>&1
+    ret=$?
+    if test $ret -eq 0; then
+        SHA256SUM="$i -a 256"
+        break
+    fi
+done
+
+if test -z "$SHA256SUM"; then
+    for i in sha256sum /usr/local/bin/sha256sum /usr/sfw/bin/sha256sum /opt/sfw/bin/sha256sum /opt/local/bin/sha256sum; do
+        eval "$i --version" > /dev/null 2>&1
+        ret=$?
+        if test $ret -eq 0; then
+            SHA256SUM=$i
+            break
+        fi
+    done
+fi
+
+if test -z "$SHA256SUM"; then
+    AC_MSG_ERROR([no sha256sum found!])
+fi
+
+AC_SUBST(SHA256SUM)
+
 dnl ===================================================================
 dnl Dealing with l10n options
 dnl ===================================================================
