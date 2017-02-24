@@ -36,9 +36,9 @@
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/XDialog.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
-#include <comphelper/oslfile2streamwrap.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/character.hxx>
+#include <unotools/streamwrap.hxx>
 
 using namespace ::cppu;
 using namespace ::osl;
@@ -1176,11 +1176,9 @@ Reference< XInterface > SAL_CALL T602ImportFilterDialog_createInstance( const Re
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImport602(const OUString &rURL)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImport602(SvStream &rStream)
 {
-    osl::File aInputFile(rURL);
-    aInputFile.open(osl_File_OpenFlag_Read);
-    css::uno::Reference<io::XInputStream> xStream(new comphelper::OSLInputStreamWrapper(aInputFile));
+    css::uno::Reference<io::XInputStream> xStream(new utl::OSeekableInputStreamWrapper(rStream));
     rtl::Reference<T602ImportFilter::T602ImportFilter> aImport(
         new T602ImportFilter::T602ImportFilter(xStream));
     return aImport->test();
