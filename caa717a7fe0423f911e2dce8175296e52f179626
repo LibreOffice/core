@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_64b0e68c",
+        "filename": "RepositoryExternal.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 3424,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-24T16:56:41Z",
+      "side": 1,
+      "message": "Pls use $$(GPG_ERROR_CFLAGS), it is set by configure and points to the same location",
+      "revId": "caa717a7fe0423f911e2dce8175296e52f179626",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
