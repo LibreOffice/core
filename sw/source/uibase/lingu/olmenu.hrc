@@ -22,7 +22,6 @@
 
 #include "rcid.hrc"
 
-#define MN_SPELL_POPUP                  (RC_LINGU_BEGIN + 1)
 #define STR_SPELL_OK                    (RC_LINGU_BEGIN + 2)
 #define STR_HYP_OK                      (RC_LINGU_BEGIN + 3)
 #define STR_WORD                        (RC_LINGU_BEGIN + 4)
@@ -36,17 +35,9 @@
 #define BMP_INFO_16                     (RC_LINGU_BEGIN + 100)
 
 //! Don't change these values. You may break context menu modifying extensions!
-#define MN_SPELLING_DLG                 200
 #define MN_IGNORE_SELECTION             201
-#define MN_IGNORE_WORD                  202
-#define MN_ADD_TO_DIC                   203
-#define MN_AUTOCORR                     204
-#define MN_SET_LANGUAGE_SELECTION       205
-#define MN_SET_LANGUAGE_PARAGRAPH       206
 #define MN_SHORT_COMMENT                208
 #define MN_EXPLANATION_LINK             209
-#define MN_ADD_TO_DIC_SINGLE            210
-#define MN_AUTO_CORRECT_DLG             211
 
 // id range for dictionaries sub menu
 #define MN_DICTIONARIES_START               300
