@@ -793,16 +793,16 @@ css::beans::PropertyValue ArtisticEffectProperties::getEffect()
     {
         css::uno::Sequence< css::beans::PropertyValue > aGraphicSeq( 2 );
         aGraphicSeq[0].Name = "Id";
-        aGraphicSeq[0].Value = uno::makeAny( mrOleObjectInfo.maProgId );
+        aGraphicSeq[0].Value <<= mrOleObjectInfo.maProgId;
         aGraphicSeq[1].Name = "Data";
-        aGraphicSeq[1].Value = uno::makeAny( mrOleObjectInfo.maEmbeddedData );
+        aGraphicSeq[1].Value <<= mrOleObjectInfo.maEmbeddedData;
 
         aSeq[i].Name = "OriginalGraphic";
-        aSeq[i].Value = uno::makeAny( aGraphicSeq );
+        aSeq[i].Value <<= aGraphicSeq;
     }
 
     aRet.Name = msName;
-    aRet.Value = css::uno::Any( aSeq );
+    aRet.Value <<= aSeq;
 
     return aRet;
 }

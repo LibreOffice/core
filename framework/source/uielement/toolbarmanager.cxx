@@ -720,7 +720,7 @@ void ToolBarManager::CreateControllers()
             aPropValue.Value    <<= xToolbarWindow;
             aPropertyVector.push_back( makeAny( aPropValue ));
             aPropValue.Name     = "Identifier";
-            aPropValue.Value    = uno::makeAny( nId );
+            aPropValue.Value    <<= nId;
             aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 
             Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
@@ -826,7 +826,7 @@ void ToolBarManager::CreateControllers()
                 aPropValue.Value <<= m_aModuleIdentifier;
                 aPropertyVector.push_back( makeAny( aPropValue ));
                 aPropValue.Name     = "Identifier";
-                aPropValue.Value    = uno::makeAny( nId );
+                aPropValue.Value    <<= nId;
                 aPropertyVector.push_back( uno::makeAny( aPropValue ) );
 
                 Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
@@ -1703,7 +1703,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                                     {
                                         // We have found the requested item, toggle the visible flag
                                         // and write back the configuration settings to the toolbar
-                                        aProp[nVisibleIndex].Value = makeAny( !bVisible );
+                                        aProp[nVisibleIndex].Value <<= !bVisible;
                                         try
                                         {
                                             xItemContainer->replaceByIndex( i, makeAny( aProp ));

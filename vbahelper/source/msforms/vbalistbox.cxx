@@ -65,7 +65,7 @@ ScVbaListBox::getValue()
         throw uno::RuntimeException( "Attribute use invalid." );
     uno::Any aRet;
     if ( sSelection.getLength() )
-        aRet = uno::makeAny( sItems[ sSelection[ 0 ] ] );
+        aRet <<= sItems[ sSelection[ 0 ] ];
     return aRet;
 }
 

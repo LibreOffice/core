@@ -650,7 +650,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
 
                 css::uno::Sequence< css::beans::PropertyValue > aArgs( 1 );
                 aArgs[0].Name  = "FilterName";
-                aArgs[0].Value = css::uno::makeAny( aFilterName );
+                aArgs[0].Value <<= aFilterName;
 
                 // Store document in the html format
                 try

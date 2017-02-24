@@ -298,7 +298,7 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
             // insert spacer
             uno::Sequence< beans::PropertyValue > sProps( 1 );
             sProps[ 0 ].Name = "Type";
-            sProps[ 0 ].Value = uno::makeAny( ui::ItemType::SEPARATOR_LINE );
+            sProps[ 0 ].Value <<= ui::ItemType::SEPARATOR_LINE;
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }
         toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( comphelper::containerToSequence(props) ) );

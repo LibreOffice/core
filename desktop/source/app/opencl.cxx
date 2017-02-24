@@ -58,7 +58,7 @@ bool testOpenCLCompute(const Reference< XDesktop2 > &xDesktop, const OUString &r
 
         css::uno::Sequence< css::beans::PropertyValue > aArgs(1);
         aArgs[0].Name = "Hidden";
-        aArgs[0].Value = makeAny(true);
+        aArgs[0].Value <<= true;
 
         xComponent.set(xLoader->loadComponentFromURL(rURL, "_blank", 0, aArgs));
 

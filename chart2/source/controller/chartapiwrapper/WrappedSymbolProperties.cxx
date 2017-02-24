@@ -248,14 +248,14 @@ Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XProper
         {
             if(bHasAmbiguousValue)
             {
-                m_aOuterValue = uno::Any( css::chart::ChartSymbolType::AUTO );
+                m_aOuterValue <<= css::chart::ChartSymbolType::AUTO;
             }
             else
             {
                 if( css::chart::ChartSymbolType::NONE == aValue )
-                    m_aOuterValue = uno::Any( css::chart::ChartSymbolType::NONE );
+                    m_aOuterValue <<= css::chart::ChartSymbolType::NONE;
                 else
-                    m_aOuterValue = uno::Any( css::chart::ChartSymbolType::AUTO );
+                    m_aOuterValue <<= css::chart::ChartSymbolType::AUTO;
             }
         }
         return m_aOuterValue;

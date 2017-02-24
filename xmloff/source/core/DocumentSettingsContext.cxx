@@ -391,13 +391,13 @@ void XMLDocumentSettingsContext::EndElement()
 
                 if ( sProp == "PrinterName" )
                 {
-                    aSeqConfigProps[i].Value = uno::makeAny( OUString() );
+                    aSeqConfigProps[i].Value <<= OUString();
                     nFound++;
                 }
                 else if ( sProp == "PrinterSetup" )
                 {
                     uno::Sequence< sal_Int8 > aEmpty;
-                    aSeqConfigProps[i].Value = uno::makeAny( aEmpty );
+                    aSeqConfigProps[i].Value <<= aEmpty;
                     nFound++;
                 }
 

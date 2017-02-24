@@ -719,7 +719,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                             sal_Int32 nIndex = lNewArgs.getLength();
                             lNewArgs.realloc( nIndex+1 );
                             lNewArgs[nIndex].Name   = OUString::createFromAscii( pSlot->pUnoName );
-                            lNewArgs[nIndex].Value  = makeAny( SfxDispatchController_Impl::getSlaveCommand( aDispatchURL ));
+                            lNewArgs[nIndex].Value  <<= SfxDispatchController_Impl::getSlaveCommand( aDispatchURL );
                         }
 
                         eMapUnit = GetCoreMetric( pShell->GetPool(), GetId() );
@@ -832,7 +832,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const css::uno::Refe
         // Use special uno struct to transport don't care state
         css::frame::status::ItemStatus aItemStatus;
         aItemStatus.State = css::frame::status::ItemState::DONT_CARE;
-        aState = makeAny( aItemStatus );
+        aState <<= aItemStatus;
     }
 
     css::frame::FeatureStateEvent  aEvent;
@@ -852,7 +852,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const css::uno::Refe
         // MBA: we might decide to *not* disable "invisible" slots, but this would be
         // a change that needs to adjust at least the testtool
         aEvent.IsEnabled           = false;
-        aEvent.State               = makeAny( aVisibilityStatus );
+        aEvent.State               <<= aVisibilityStatus;
     }
 
     aListener->statusChanged( aEvent );
@@ -939,7 +939,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             // Use special uno struct to transport don't care state
             css::frame::status::ItemStatus aItemStatus;
             aItemStatus.State = css::frame::status::ItemState::DONT_CARE;
-            aState = makeAny( aItemStatus );
+            aState <<= aItemStatus;
         }
 
         css::frame::FeatureStateEvent aEvent;

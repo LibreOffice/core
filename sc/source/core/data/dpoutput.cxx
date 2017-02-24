@@ -1346,7 +1346,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
                 aData[nRow-nDataStartRow].getLength() > nCol-nDataStartCol)
                 aResData.Result = aData[nRow-nDataStartRow][nCol-nDataStartCol];
 
-            rPosData.PositionData = makeAny(aResData);
+            rPosData.PositionData <<= aResData;
             return;
         }
         case DataPilotTablePositionType::COLUMN_HEADER:
@@ -1375,7 +1375,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
             aHeaderData.Hierarchy = static_cast<sal_Int32>(pColFields[nField].mnHier);
             aHeaderData.Level     = static_cast<sal_Int32>(pColFields[nField].mnLevel);
 
-            rPosData.PositionData = makeAny(aHeaderData);
+            rPosData.PositionData <<= aHeaderData;
             return;
         }
         case DataPilotTablePositionType::ROW_HEADER:
@@ -1404,7 +1404,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
             aHeaderData.Hierarchy = static_cast<sal_Int32>(pRowFields[nField].mnHier);
             aHeaderData.Level     = static_cast<sal_Int32>(pRowFields[nField].mnLevel);
 
-            rPosData.PositionData = makeAny(aHeaderData);
+            rPosData.PositionData <<= aHeaderData;
             return;
         }
     }

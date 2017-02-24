@@ -386,7 +386,7 @@ void SwTextBoxHelper::getProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_uI
             }
             break;
             case MID_CHAIN_NAME:
-                rValue = uno::makeAny(pFormat->GetName());
+                rValue <<= pFormat->GetName();
                 break;
             }
         }

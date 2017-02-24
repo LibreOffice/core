@@ -820,10 +820,10 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
 
         beans::PropertyValue aProperty;
         aProperty.Name  = "nodepath";
-        aProperty.Value = uno::makeAny( OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob") );
+        aProperty.Value <<= OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob");
 
         uno::Sequence< uno::Any > aArgumentList( 1 );
-        aArgumentList[0] = uno::makeAny( aProperty );
+        aArgumentList[0] <<= aProperty;
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xConfigProvider->createInstanceWithArguments(
@@ -847,10 +847,10 @@ void UpdateDialog::createNotifyJob( bool bPrepareOnly,
         {
             uno::Sequence< beans::PropertyValue > aPropList(2);
             aProperty.Name  = "updateList";
-            aProperty.Value = uno::makeAny( rItemList );
+            aProperty.Value <<= rItemList;
             aPropList[0] = aProperty;
             aProperty.Name  = "prepareOnly";
-            aProperty.Value = uno::makeAny( bPrepareOnly );
+            aProperty.Value <<= bPrepareOnly;
             aPropList[1] = aProperty;
 
             xDispatch->dispatch(aURL, aPropList );

@@ -568,7 +568,7 @@ sal_Bool BaseResultSet::convertFastPropertyValue(
     {
         OUString val;
         bRet = ( rValue >>= val );
-        m_props[nHandle] = makeAny( val );
+        m_props[nHandle] <<= val;
         break;
     }
     case BASERESULTSET_ESCAPE_PROCESSING:
@@ -576,7 +576,7 @@ sal_Bool BaseResultSet::convertFastPropertyValue(
     {
         bool val(false);
         bRet = ( rValue >>= val );
-        m_props[nHandle] = makeAny( val );
+        m_props[nHandle] <<= val;
         break;
     }
     case BASERESULTSET_FETCH_DIRECTION:
@@ -586,7 +586,7 @@ sal_Bool BaseResultSet::convertFastPropertyValue(
     {
         sal_Int32 val;
         bRet = ( rValue >>= val );
-        m_props[nHandle] = makeAny( val );
+        m_props[nHandle] <<= val;
         break;
     }
     default:

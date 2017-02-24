@@ -406,7 +406,7 @@ void ScriptProtocolHandler::createScriptProvider()
 
             Any aContext;
             if ( getScriptInvocation() )
-                aContext = makeAny( m_xScriptInvocation );
+                aContext <<= m_xScriptInvocation;
             m_xScriptProvider.set( xFac->createScriptProvider( aContext ), UNO_QUERY_THROW );
         }
     }

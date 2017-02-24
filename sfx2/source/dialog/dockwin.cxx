@@ -140,14 +140,14 @@ SfxDockingWrapper::SfxDockingWrapper( vcl::Window* pParentWnd ,
     uno::Sequence< uno::Any > aArgs(2);
     beans::PropertyValue      aPropValue;
     aPropValue.Name  = "Frame";
-    aPropValue.Value = uno::makeAny( xFrame );
+    aPropValue.Value <<= xFrame;
     aArgs[0] <<= aPropValue;
     aPropValue.Name  = "ResourceURL";
 
     // create a resource URL from the nId provided by the sfx2
     OUString aResourceURL( aDockWindowResourceURL );
     aResourceURL += OUString::number(nId);
-    aPropValue.Value = uno::makeAny( aResourceURL );
+    aPropValue.Value <<= aResourceURL;
     aArgs[1] <<= aPropValue;
 
     uno::Reference< awt::XWindow > xWindow;

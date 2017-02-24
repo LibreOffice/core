@@ -165,7 +165,7 @@ void SdrCustomShapeGeometryItem::SetPropertyValue( const OUString& rSequenceName
             css::uno::Sequence < beans::PropertyValue > aSeq;
             beans::PropertyValue aValue;
             aValue.Name = rSequenceName;
-            aValue.Value = css::uno::makeAny( aSeq );
+            aValue.Value <<= aSeq;
 
             assert(aPropSeq.end() == std::find_if(aPropSeq.begin(), aPropSeq.end(),
                 [&rSequenceName](beans::PropertyValue const& rV)

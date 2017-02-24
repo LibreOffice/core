@@ -149,7 +149,7 @@ void XSecController::createXSecComponent( )
         cssu::Reference< cssl::XInitialization > xInitialization(m_xSAXEventKeeper,  cssu::UNO_QUERY);
 
         cssu::Sequence <cssu::Any> arg(1);
-        arg[0] = cssu::makeAny(uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper.get()));
+        arg[0] <<= uno::Reference<xml::wrapper::XXMLDocumentWrapper>(m_xXMLDocumentWrapper.get());
         xInitialization->initialize(arg);
 
         cssu::Reference<cssxc::sax::XSAXEventKeeperStatusChangeBroadcaster>

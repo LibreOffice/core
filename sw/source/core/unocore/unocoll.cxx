@@ -253,8 +253,8 @@ public:
         if ( !hasByName( aName ) )
              throw container::NoSuchElementException();
         uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[0] = uno::Any( uno::Reference< uno::XInterface >() );
-        aArgs[1] = uno::Any( mpDocShell->GetModel() );
+        aArgs[0] <<= uno::Reference< uno::XInterface >();
+        aArgs[1] <<= mpDocShell->GetModel();
         uno::Reference< uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
         SAL_INFO("sw.uno",
             "Creating Object ( ooo.vba.word.Document ) 0x" << xDocObj.get());

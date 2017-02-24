@@ -169,7 +169,7 @@ uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
     }
     else
     {
-        aRet = uno::makeAny( uno::Reference< gallery::XGalleryTheme >( new ::unogallery::GalleryTheme( rName ) ) );
+        aRet <<= uno::Reference< gallery::XGalleryTheme >( new ::unogallery::GalleryTheme( rName ) );
     }
 
     return aRet;

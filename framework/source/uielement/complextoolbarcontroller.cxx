@@ -254,7 +254,7 @@ void ComplexToolbarController::addNotifyInfo(
         uno::Sequence< beans::NamedValue > aInfoSeq( rInfo );
         aInfoSeq.realloc( nCount+1 );
         aInfoSeq[nCount].Name  = "Source";
-        aInfoSeq[nCount].Value = uno::makeAny( getFrameInterface() );
+        aInfoSeq[nCount].Value <<= getFrameInterface();
         pNotifyInfo->aInfoSeq  = aInfoSeq;
 
         Application::PostUserEvent( LINK(nullptr, ComplexToolbarController, Notify_Impl), pNotifyInfo );

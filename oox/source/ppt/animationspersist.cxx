@@ -106,7 +106,7 @@ namespace oox { namespace ppt {
                     SAL_INFO("oox.ppt", "OOX: TODO what to do with more than one" );
                     break;
                 }
-                rTarget = makeAny( aParaTarget );
+                rTarget <<= aParaTarget;
             }
             break;
         }
@@ -130,7 +130,7 @@ namespace oox { namespace ppt {
             SAL_INFO("oox.ppt", "OOX: TODO sldTgt" );
             break;
         case XML_sndTgt:
-            aTarget = makeAny(msValue);
+            aTarget <<= msValue;
             break;
         case XML_spTgt:
         {

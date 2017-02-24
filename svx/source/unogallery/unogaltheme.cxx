@@ -141,7 +141,7 @@ uno::Any SAL_CALL GalleryTheme::getByIndex( ::sal_Int32 nIndex )
             const GalleryObject* pObj = mpTheme->ImplGetGalleryObject( nIndex );
 
             if( pObj )
-                aRet = uno::makeAny( uno::Reference< gallery::XGalleryItem >( new GalleryItem( *this, *pObj ) ) );
+                aRet <<= uno::Reference< gallery::XGalleryItem >( new GalleryItem( *this, *pObj ) );
         }
     }
 

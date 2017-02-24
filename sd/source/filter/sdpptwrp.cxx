@@ -167,7 +167,7 @@ bool SdPPTFilter::Export()
                 std::vector< PropertyValue > aProperties;
                 PropertyValue aProperty;
                 aProperty.Name = "BaseURI";
-                aProperty.Value = makeAny( mrMedium.GetBaseURL( true ) );
+                aProperty.Value <<= mrMedium.GetBaseURL( true );
                 aProperties.push_back( aProperty );
 
                 bRet = PPTExport( aProperties, xStorRef, mxModel, mxStatusIndicator, pBas, nCnvrtFlags );

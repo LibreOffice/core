@@ -108,7 +108,7 @@ void XMLIndexSimpleEntryContext::FillPropertyValues(
 
     // token type
     rValues[0].Name = "TokenType";
-    rValues[0].Value = css::uno::Any(rEntryType);
+    rValues[0].Value <<= rEntryType;
 
     // char style
     if (bCharStyleNameOK)

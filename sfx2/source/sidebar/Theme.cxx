@@ -128,7 +128,7 @@ void Theme::HandleDataChange()
     {
         // Do not modify mbIsHighContrastMode when it was manually set.
         GetCurrentTheme().mbIsHighContrastMode = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
-        rTheme.maRawValues[Bool_IsHighContrastModeActive] = Any(GetCurrentTheme().mbIsHighContrastMode);
+        rTheme.maRawValues[Bool_IsHighContrastModeActive] <<= GetCurrentTheme().mbIsHighContrastMode;
     }
 
     GetCurrentTheme().UpdateTheme();

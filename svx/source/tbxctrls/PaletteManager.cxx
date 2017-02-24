@@ -332,7 +332,7 @@ void PaletteManager::DispatchColorCommand(const OUString& aCommand, const NamedC
 
         Sequence<PropertyValue> aArgs(1);
         aArgs[0].Name = aObj.GetURLPath();
-        aArgs[0].Value = makeAny(sal_Int32(rColor.first.GetColor()));
+        aArgs[0].Value <<= sal_Int32(rColor.first.GetColor());
 
         URL aTargetURL;
         aTargetURL.Complete = aCommand;

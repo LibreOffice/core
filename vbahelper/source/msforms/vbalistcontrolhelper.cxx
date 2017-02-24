@@ -75,7 +75,7 @@ uno::Any ListPropListener::getValueEvent()
             sReturnArray[ i ].realloc( 10 );
             sReturnArray[ i ][ 0 ] = sList[ i ];
         }
-        aRet = uno::makeAny( sReturnArray );
+        aRet <<= sReturnArray;
     }
     return aRet;
 }

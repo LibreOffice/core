@@ -191,9 +191,9 @@ DomainMapper::~DomainMapper()
         // Grab-bag handling
         comphelper::SequenceAsHashMap aProperties;
         // Add the saved w:themeFontLang setting
-        aProperties["ThemeFontLangProps"] = uno::makeAny(m_pImpl->GetSettingsTable()->GetThemeFontLangProperties());
+        aProperties["ThemeFontLangProps"] <<= m_pImpl->GetSettingsTable()->GetThemeFontLangProperties();
         // Add the saved compat settings
-        aProperties["CompatSettings"] = uno::makeAny(m_pImpl->GetSettingsTable()->GetCompatSettings());
+        aProperties["CompatSettings"] <<= m_pImpl->GetSettingsTable()->GetCompatSettings();
         uno::Reference<beans::XPropertySet> xDocProps(m_pImpl->GetTextDocument(), uno::UNO_QUERY);
         if (xDocProps.is())
         {
@@ -1640,12 +1640,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 if (aInfo.nSprmId == NS_ooxml::LN_CT_Ruby_rt && aInfo.nHps > 0 )
                 {
                     fVal = double(aInfo.nHps) / 2.;
-                    aVal = uno::makeAny( fVal );
+                    aVal <<= fVal;
                 }
                 else if (aInfo.nSprmId  == NS_ooxml::LN_CT_Ruby_rubyBase && aInfo.nHpsBaseText > 0 )
                 {
                     fVal = double(aInfo.nHpsBaseText) / 2.;
-                    aVal = uno::makeAny( fVal );
+                    aVal <<= fVal;
                 }
                 else if (m_pImpl->m_bInTableStyleRunProps)
                 {
@@ -3718,7 +3718,7 @@ beans::PropertyValue DomainMapper::getInteropGrabBag()
 {
     beans::PropertyValue aRet;
     aRet.Name = m_pImpl->m_aInteropGrabBagName;
-    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_pImpl->m_aInteropGrabBag));
+    aRet.Value <<= comphelper::containerToSequence(m_pImpl->m_aInteropGrabBag);
 
     m_pImpl->m_aInteropGrabBag.clear();
     m_pImpl->m_aInteropGrabBagName.clear();

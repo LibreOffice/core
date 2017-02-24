@@ -76,7 +76,7 @@ namespace oox { namespace ppt {
                     sAttributes.append( iter->name );
                 }
                 OUString sTmp( sAttributes.makeStringAndClear() );
-                mpNode->getNodeProperties()[ NP_ATTRIBUTENAME ] = makeAny( sTmp );
+                mpNode->getNodeProperties()[ NP_ATTRIBUTENAME ] <<= sTmp;
             }
             break;
         }

@@ -434,7 +434,7 @@ namespace sw { namespace mark
     {
         if ( IsChecked() != checked )
         {
-            (*GetParameters())[OUString(ODF_FORMCHECKBOX_RESULT)] = makeAny(checked);
+            (*GetParameters())[OUString(ODF_FORMCHECKBOX_RESULT)] <<= checked;
             // mark document as modified
             SwDoc *const pDoc( GetMarkPos().GetDoc() );
             if ( pDoc )

@@ -84,14 +84,14 @@ uno::Any SAL_CALL OFSInputStreamContainer::queryInterface( const uno::Type& rTyp
 
     uno::Any aReturn;
     if ( m_bSeekable )
-        aReturn = uno::Any( ::cppu::queryInterface( rType,
+        aReturn = ::cppu::queryInterface( rType,
                                            static_cast< io::XStream* >( this ),
                                            static_cast< io::XInputStream* >( this ),
-                                           static_cast< io::XSeekable* >( this ) ) );
+                                           static_cast< io::XSeekable* >( this ) );
     else
-        aReturn = uno::Any( ::cppu::queryInterface( rType,
+        aReturn = ::cppu::queryInterface( rType,
                                            static_cast< io::XStream* >( this ),
-                                           static_cast< io::XInputStream* >( this ) ) );
+                                           static_cast< io::XInputStream* >( this ) );
 
     if ( aReturn.hasValue() )
         return aReturn ;

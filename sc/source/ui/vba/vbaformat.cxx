@@ -89,21 +89,21 @@ ScVbaFormat< Ifc... >::setVerticalAlignment( const uno::Any& _oAlignment)
         switch (nAlignment)
         {
             case excel::XlVAlign::xlVAlignBottom :
-                aVal =  uno::makeAny( table::CellVertJustify2::BOTTOM );
+                aVal <<= table::CellVertJustify2::BOTTOM;
                 break;
             case excel::XlVAlign::xlVAlignCenter :
-                aVal = uno::makeAny( table::CellVertJustify2::CENTER );
+                aVal <<= table::CellVertJustify2::CENTER;
                 break;
             case excel::XlVAlign::xlVAlignDistributed:
             case excel::XlVAlign::xlVAlignJustify:
-                aVal = uno::makeAny( table::CellVertJustify2::STANDARD );
+                aVal <<= table::CellVertJustify2::STANDARD;
                 break;
 
             case excel::XlVAlign::xlVAlignTop:
-                aVal = uno::makeAny( table::CellVertJustify2::TOP);
+                aVal <<= table::CellVertJustify2::TOP;
                 break;
             default:
-                aVal = uno::makeAny( table::CellVertJustify2::STANDARD );
+                aVal <<= table::CellVertJustify2::STANDARD;
                 break;
         }
         mxPropertySet->setPropertyValue( SC_UNONAME_CELLVJUS, aVal );
@@ -128,16 +128,16 @@ ScVbaFormat< Ifc... >::getVerticalAlignment(  )
             switch( aAPIAlignment )
             {
                 case table::CellVertJustify2::BOTTOM:
-                    aResult = uno::makeAny( excel::XlVAlign::xlVAlignBottom );
+                    aResult <<= excel::XlVAlign::xlVAlignBottom;
                     break;
                 case table::CellVertJustify2::CENTER:
-                    aResult = uno::makeAny( excel::XlVAlign::xlVAlignCenter );
+                    aResult <<= excel::XlVAlign::xlVAlignCenter;
                     break;
                 case table::CellVertJustify2::STANDARD:
-                    aResult = uno::makeAny( excel::XlVAlign::xlVAlignBottom );
+                    aResult <<= excel::XlVAlign::xlVAlignBottom;
                     break;
                 case table::CellVertJustify2::TOP:
-                    aResult = uno::makeAny( excel::XlVAlign::xlVAlignTop );
+                    aResult <<= excel::XlVAlign::xlVAlignTop;
                     break;
                 default:
                     break;
@@ -164,19 +164,19 @@ ScVbaFormat< Ifc... >::setHorizontalAlignment( const uno::Any& HorizontalAlignme
         switch ( nAlignment )
         {
             case excel::XlHAlign::xlHAlignJustify:
-                aVal = uno::makeAny( table::CellHoriJustify_BLOCK);
+                aVal <<= table::CellHoriJustify_BLOCK;
                 break;
             case excel::XlHAlign::xlHAlignCenter:
-                aVal = uno::makeAny( table::CellHoriJustify_CENTER );
+                aVal <<= table::CellHoriJustify_CENTER;
                 break;
             case excel::XlHAlign::xlHAlignDistributed:
-                aVal = uno::makeAny( table::CellHoriJustify_BLOCK);
+                aVal <<= table::CellHoriJustify_BLOCK;
                 break;
             case excel::XlHAlign::xlHAlignLeft:
-                aVal = uno::makeAny( table::CellHoriJustify_LEFT);
+                aVal <<= table::CellHoriJustify_LEFT;
                 break;
             case excel::XlHAlign::xlHAlignRight:
-                aVal = uno::makeAny( table::CellHoriJustify_RIGHT);
+                aVal <<= table::CellHoriJustify_RIGHT;
                 break;
         }
         // #FIXME what about the default case above?
@@ -208,16 +208,16 @@ ScVbaFormat< Ifc... >::getHorizontalAlignment(  )
                 switch( aAPIAlignment )
                 {
                     case table::CellHoriJustify_BLOCK:
-                        NRetAlignment = uno::makeAny( excel::XlHAlign::xlHAlignJustify );
+                        NRetAlignment <<= excel::XlHAlign::xlHAlignJustify;
                         break;
                     case table::CellHoriJustify_CENTER:
-                        NRetAlignment = uno::makeAny( excel::XlHAlign::xlHAlignCenter );
+                        NRetAlignment <<= excel::XlHAlign::xlHAlignCenter;
                         break;
                     case table::CellHoriJustify_LEFT:
-                        NRetAlignment = uno::makeAny( excel::XlHAlign::xlHAlignLeft );
+                        NRetAlignment <<= excel::XlHAlign::xlHAlignLeft;
                         break;
                     case table::CellHoriJustify_RIGHT:
-                        NRetAlignment =  uno::makeAny( excel::XlHAlign::xlHAlignRight );
+                        NRetAlignment <<= excel::XlHAlign::xlHAlignRight;
                         break;
                      default: // handle those other cases with a NULL return
                         break;
@@ -245,17 +245,17 @@ ScVbaFormat< Ifc... >::setOrientation( const uno::Any& _aOrientation )
         switch( nOrientation )
         {
             case excel::XlOrientation::xlDownward:
-                aVal = uno::makeAny( table::CellOrientation_TOPBOTTOM);
+                aVal <<= table::CellOrientation_TOPBOTTOM;
                 break;
             case excel::XlOrientation::xlHorizontal:
-                aVal = uno::makeAny( table::CellOrientation_STANDARD );
+                aVal <<= table::CellOrientation_STANDARD;
                 mxPropertySet->setPropertyValue( SC_UNONAME_ROTANG, uno::makeAny( sal_Int32(0) ) );
                 break;
             case excel::XlOrientation::xlUpward:
-                aVal = uno::makeAny( table::CellOrientation_BOTTOMTOP);
+                aVal <<= table::CellOrientation_BOTTOMTOP;
                 break;
             case excel::XlOrientation::xlVertical:
-                aVal = uno::makeAny( table::CellOrientation_STACKED);
+                aVal <<= table::CellOrientation_STACKED;
                 break;
         }
         // #FIXME what about the default case above?
@@ -285,19 +285,19 @@ ScVbaFormat< Ifc... >::getOrientation(  )
             switch(aOrientation)
             {
                 case table::CellOrientation_STANDARD:
-                    NRetOrientation = uno::makeAny( excel::XlOrientation::xlHorizontal );
+                    NRetOrientation <<= excel::XlOrientation::xlHorizontal;
                     break;
                 case table::CellOrientation_BOTTOMTOP:
-                    NRetOrientation = uno::makeAny( excel::XlOrientation::xlUpward );
+                    NRetOrientation <<= excel::XlOrientation::xlUpward;
                     break;
                 case table::CellOrientation_TOPBOTTOM:
-                    NRetOrientation = uno::makeAny( excel::XlOrientation::xlDownward );
+                    NRetOrientation <<= excel::XlOrientation::xlDownward;
                     break;
                 case table::CellOrientation_STACKED:
-                    NRetOrientation = uno::makeAny( excel::XlOrientation::xlVertical );
+                    NRetOrientation <<= excel::XlOrientation::xlVertical;
                     break;
                 default:
-                    NRetOrientation = uno::makeAny( excel::XlOrientation::xlHorizontal );
+                    NRetOrientation <<= excel::XlOrientation::xlHorizontal;
             }
         }
     }
@@ -390,7 +390,7 @@ ScVbaFormat< Ifc... >::getNumberFormatLocal(  )
 
             OUString sFormat;
             xNumberFormats->getByKey(nFormat)->getPropertyValue( FORMATSTRING ) >>= sFormat;
-            aRet = uno::makeAny( sFormat.toAsciiLowerCase() );
+            aRet <<= sFormat.toAsciiLowerCase();
 
         }
     }
@@ -498,9 +498,9 @@ ScVbaFormat< Ifc... >::getIndentLevel(  )
         {
             sal_Int16 IndentLevel = 0;
             if ( ( mxPropertySet->getPropertyValue(sParaIndent) >>= IndentLevel  ) )
-                NRetIndentLevel = uno::makeAny( sal_Int32( rtl::math::round(static_cast<double>( IndentLevel ) / 352.8)) );
+                NRetIndentLevel <<= sal_Int32( rtl::math::round(static_cast<double>( IndentLevel ) / 352.8));
             else
-                NRetIndentLevel = uno::makeAny( sal_Int32(0) );
+                NRetIndentLevel <<= sal_Int32(0);
         }
     }
     catch (const uno::Exception&)
@@ -568,13 +568,13 @@ ScVbaFormat< Ifc... >::getLocked(  )
                 const ScProtectionAttr& rProtAttr = static_cast<const ScProtectionAttr &>( pDataSet->Get(ATTR_PROTECTION) );
                 SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION);
                 if(eState != SfxItemState::DONTCARE)
-                    aCellProtection =  uno::makeAny(rProtAttr.GetProtection());
+                    aCellProtection <<= rProtAttr.GetProtection();
             }
             else // fallback to propertyset
             {
                 util::CellProtection cellProtection;
                 mxPropertySet->getPropertyValue(sCellProt) >>= cellProtection;
-                aCellProtection = uno::makeAny( cellProtection.IsLocked );
+                aCellProtection <<= cellProtection.IsLocked;
             }
         }
     }
@@ -601,13 +601,13 @@ ScVbaFormat< Ifc... >::getFormulaHidden(  )
                 const ScProtectionAttr& rProtAttr = static_cast<const ScProtectionAttr &>( pDataSet->Get(ATTR_PROTECTION) );
                 SfxItemState eState = pDataSet->GetItemState(ATTR_PROTECTION);
                 if(eState != SfxItemState::DONTCARE)
-                    aBoolRet = uno::makeAny(rProtAttr.GetHideFormula());
+                    aBoolRet <<= rProtAttr.GetHideFormula();
             }
             else
             {
                 util::CellProtection aCellProtection;
                 mxPropertySet->getPropertyValue(sCellProt) >>= aCellProtection;
-                aBoolRet = uno::makeAny( aCellProtection.IsFormulaHidden );
+                aBoolRet <<= aCellProtection.IsFormulaHidden;
             }
         }
     }
@@ -664,10 +664,10 @@ ScVbaFormat< Ifc... >::setReadingOrder( const uno::Any& ReadingOrder )
         switch(nReadingOrder)
         {
             case excel::Constants::xlLTR:
-                aVal = uno::makeAny( text::WritingMode_LR_TB );
+                aVal <<= text::WritingMode_LR_TB;
                 break;
             case excel::Constants::xlRTL:
-                aVal = uno::makeAny( text::WritingMode_RL_TB );
+                aVal <<= text::WritingMode_RL_TB;
                 break;
             case excel::Constants::xlContext:
                 DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
@@ -698,13 +698,13 @@ ScVbaFormat< Ifc... >::getReadingOrder(  )
             if ( ( mxPropertySet->getPropertyValue(sWritingMode) ) >>= aWritingMode )
             switch (aWritingMode){
                 case text::WritingMode_LR_TB:
-                    NRetReadingOrder = uno::makeAny(excel::Constants::xlLTR);
+                    NRetReadingOrder <<= excel::Constants::xlLTR;
                     break;
                 case text::WritingMode_RL_TB:
-                    NRetReadingOrder = uno::makeAny(excel::Constants::xlRTL);
+                    NRetReadingOrder <<= excel::Constants::xlRTL;
                     break;
                 default:
-                    NRetReadingOrder = uno::makeAny(excel::Constants::xlRTL);
+                    NRetReadingOrder <<= excel::Constants::xlRTL;
             }
         }
     }
@@ -733,7 +733,7 @@ ScVbaFormat< Ifc... >::getNumberFormat(  )
             sal_Int32 nNewFormat = xNumberFormatTypes->getFormatForLocale(nFormat, m_aDefaultLocale );
             OUString sFormat;
             xNumberFormats->getByKey(nNewFormat)->getPropertyValue( FORMATSTRING ) >>= sFormat;
-            aFormat = uno::makeAny( sFormat );
+            aFormat <<= sFormat;
         }
     }
     catch (const uno::Exception& )

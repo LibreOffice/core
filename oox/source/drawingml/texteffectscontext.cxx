@@ -304,7 +304,7 @@ void TextEffectsContext::onEndElement()
         Sequence<PropertyValue> aSeq;
         PropertyValue aPropertyValue = mpGrabBagStack->getRootProperty();
         aPropertyValue.Value >>= aSeq;
-        aPropertyValue.Value = makeAny(aSeq[0]);
+        aPropertyValue.Value <<= aSeq[0];
 
         mrTextEffectsProperties.push_back(aPropertyValue);
     }

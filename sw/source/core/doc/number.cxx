@@ -1024,7 +1024,7 @@ void SwNumRule::GetGrabBagItem(uno::Any& rVal) const
     else
     {
         uno::Sequence<beans::PropertyValue> aValue(0);
-        rVal = uno::makeAny(aValue);
+        rVal <<= aValue;
     }
 }
 

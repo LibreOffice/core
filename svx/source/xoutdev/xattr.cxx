@@ -765,10 +765,10 @@ bool XLineDashItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = "Name";
-            aPropSeq[0].Value   = uno::makeAny( aApiName );
+            aPropSeq[0].Value   <<= aApiName;
             aPropSeq[1].Name    = "LineDash";
-            aPropSeq[1].Value   = uno::makeAny( aLineDash );
-            rVal = uno::makeAny( aPropSeq );
+            aPropSeq[1].Value   <<= aLineDash;
+            rVal <<= aPropSeq;
             break;
         }
 
@@ -2535,10 +2535,10 @@ bool XFillGradientItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) c
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = "Name";
-            aPropSeq[0].Value   = uno::makeAny( aApiName );
+            aPropSeq[0].Value   <<= aApiName;
             aPropSeq[1].Name    = "FillGradient";
-            aPropSeq[1].Value   = uno::makeAny( aGradient2 );
-            rVal = uno::makeAny( aPropSeq );
+            aPropSeq[1].Value   <<= aGradient2;
+            rVal <<= aPropSeq;
             break;
         }
 
@@ -3000,10 +3000,10 @@ bool XFillHatchItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
 
             OUString aApiName = SvxUnogetApiNameForItem(Which(), GetName());
             aPropSeq[0].Name    = "Name";
-            aPropSeq[0].Value   = uno::makeAny( aApiName );
+            aPropSeq[0].Value   <<= aApiName;
             aPropSeq[1].Name    = "FillHatch";
-            aPropSeq[1].Value   = uno::makeAny( aUnoHatch );
-            rVal = uno::makeAny( aPropSeq );
+            aPropSeq[1].Value   <<= aUnoHatch;
+            rVal <<= aPropSeq;
             break;
         }
 

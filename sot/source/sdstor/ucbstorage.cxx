@@ -2014,7 +2014,7 @@ bool UCBStorage_Impl::Insert( ::ucbhelper::Content *pContent )
 
                 Sequence < OUString > aNames { "Title" };
                 Sequence < Any > aValues(1);
-                aValues[0] = makeAny( OUString( m_aName ) );
+                aValues[0] <<= m_aName;
 
                 Content aNewFolder;
                 if ( !pContent->insertNewContent( rCurr.Type, aNames, aValues, aNewFolder ) )

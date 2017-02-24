@@ -87,11 +87,11 @@ Sequence< PropertyValue > OldStylePrintAdaptor::getPageParameters( int i_nPage )
     Sequence< PropertyValue > aRet( 1 );
     aRet[0].Name = "PageSize";
     if( i_nPage < int(mpData->maPages.size() ) )
-        aRet[0].Value = makeAny( mpData->maPages[i_nPage].maPageSize );
+        aRet[0].Value <<= mpData->maPages[i_nPage].maPageSize;
     else
     {
         awt::Size aEmpty( 0, 0  );
-        aRet[0].Value = makeAny( aEmpty );
+        aRet[0].Value <<= aEmpty;
     }
     return aRet;
 }

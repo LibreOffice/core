@@ -297,7 +297,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     aPropValue.Value    <<= xToolbarWindow;
                     aArgs[3] <<= aPropValue;
                     aPropValue.Name     = "ItemId";
-                    aPropValue.Value    = makeAny( sal_Int32( nId ));
+                    aPropValue.Value    <<= sal_Int32( nId );
                     aArgs[4] <<= aPropValue;
 
                     try

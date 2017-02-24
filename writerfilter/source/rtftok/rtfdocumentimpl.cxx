@@ -2704,15 +2704,15 @@ RTFError RTFDocumentImpl::popState()
             OUString aStaticVal = m_aStates.top().pDestinationText->makeStringAndClear();
             uno::Any aAny;
             if (m_aStates.top().aPropType == cppu::UnoType<OUString>::get())
-                aAny = uno::makeAny(aStaticVal);
+                aAny <<= aStaticVal;
             else if (m_aStates.top().aPropType == cppu::UnoType<sal_Int32>::get())
-                aAny = uno::makeAny(aStaticVal.toInt32());
+                aAny <<= aStaticVal.toInt32();
             else if (m_aStates.top().aPropType == cppu::UnoType<bool>::get())
-                aAny = uno::makeAny(aStaticVal.toBoolean());
+                aAny <<= aStaticVal.toBoolean();
             else if (m_aStates.top().aPropType == cppu::UnoType<util::DateTime>::get())
-                aAny = uno::makeAny(getDateTimeFromUserProp(aStaticVal));
+                aAny <<= getDateTimeFromUserProp(aStaticVal);
             else if (m_aStates.top().aPropType == cppu::UnoType<double>::get())
-                aAny = uno::makeAny(aStaticVal.toDouble());
+                aAny <<= aStaticVal.toDouble();
 
             xPropertyContainer->addProperty(rKey, beans::PropertyAttribute::REMOVABLE, aAny);
         }

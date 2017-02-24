@@ -2993,14 +2993,14 @@ Any SAL_CALL SfxLibrary::queryInterface( const Type& rType )
 {
     Any aRet;
 
-    aRet = Any(
+    aRet =
         ::cppu::queryInterface(
             rType,
             static_cast< XContainer * >( this ),
             static_cast< XNameContainer * >( this ),
             static_cast< XNameAccess * >( this ),
             static_cast< XElementAccess * >( this ),
-            static_cast< XChangesNotifier * >( this ) ) );
+            static_cast< XChangesNotifier * >( this ) );
     if( !aRet.hasValue() )
     {
         aRet = OComponentHelper::queryInterface( rType );

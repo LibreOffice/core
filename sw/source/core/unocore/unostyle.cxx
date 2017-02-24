@@ -2190,7 +2190,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemP
     for(auto& rNV : aSeq)
     {
         rNV.Name = GetCommandContextByIndex(nIndex++);
-        rNV.Value = uno::makeAny(OUString());
+        rNV.Value <<= OUString();
     }
     SwFormat* pFormat = static_cast<SwDocStyleSheet*>(GetStyleSheetBase())->GetCollection();
     if(pFormat && RES_CONDTXTFMTCOLL == pFormat->Which())
@@ -2205,7 +2205,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemP
             // get programmatic style name from UI style name
             OUString aStyleName = pCond->GetTextFormatColl()->GetName();
             SwStyleNameMapper::FillProgName(aStyleName, aStyleName, lcl_GetSwEnumFromSfxEnum(GetFamily()), true);
-            pSeq[n].Value = uno::makeAny(aStyleName);
+            pSeq[n].Value <<= aStyleName;
         }
     }
     return uno::makeAny(aSeq);
@@ -2279,7 +2279,7 @@ uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertySimpleEntry
     //UUUU
     // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
     if(rEntry.aType == cppu::UnoType<sal_Int16>::get() && aResult.getValueType() == cppu::UnoType<sal_Int32>::get())
-        aResult = uno::makeAny<sal_Int16>(aResult.get<sal_Int32>());
+        aResult <<= (sal_Int16)(aResult.get<sal_Int32>());
     //UUUU check for needed metric translation
     if(rEntry.nMemberId & SFX_METRIC_ITEM && GetDoc())
     {
@@ -3207,7 +3207,7 @@ uno::Sequence<uno::Any> SwXPageStyle::GetPropertyValues_Impl(const uno::Sequence
                     pFrameFormat = &pDesc->GetMaster();
                 const uno::Reference<text::XText> xRet = lcl_makeHeaderFooter(nRes, nRes == RES_HEADER, pFrameFormat);
                 if (xRet.is())
-                    aRet[nProp] = uno::makeAny(xRet);
+                    aRet[nProp] <<= xRet;
             }
             break;
             case FN_PARAM_FTN_INFO:

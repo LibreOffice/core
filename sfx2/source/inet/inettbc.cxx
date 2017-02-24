@@ -108,17 +108,17 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, bool /*bNew*/ ) 
         {
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Name = "Referer";
-            aArgs[0].Value = makeAny( OUString( "private:user" ));
+            aArgs[0].Value <<= OUString( "private:user" );
             aArgs[1].Name = "FileName";
-            aArgs[1].Value = makeAny( OUString( aName ));
+            aArgs[1].Value <<= aName;
 
             if ( !aFilter.isEmpty() )
             {
                 aArgs.realloc( 4 );
                 aArgs[2].Name = "FilterOptions";
-                aArgs[2].Value = makeAny( OUString( aOptions ));
+                aArgs[2].Value <<= aOptions;
                 aArgs[3].Name = "FilterName";
-                aArgs[3].Value = makeAny( OUString( aFilter ));
+                aArgs[3].Value <<= aFilter;
             }
 
             SfxURLToolBoxControl_Impl::ExecuteInfo* pExecuteInfo = new SfxURLToolBoxControl_Impl::ExecuteInfo;

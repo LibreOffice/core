@@ -133,14 +133,14 @@ namespace oox { namespace ppt {
                 break;
             }
             maCond.mnType = aElementToken;
-            maCond.maValue = makeAny( nEnum );
+            maCond.maValue <<= nEnum;
             return this;
         }
         case PPT_TOKEN( tn ):
         {
             maCond.mnType = aElementToken;
             sal_uInt32 nId = rAttribs.getUnsigned( XML_val, 0 );
-            maCond.maValue = makeAny( nId );
+            maCond.maValue <<= nId;
             return this;
         }
         case PPT_TOKEN( tgtEl ):

@@ -61,7 +61,7 @@ void SvCommandList::FillSequence( css::uno::Sequence < css::beans::PropertyValue
     {
         aCommandSequence[nIndex].Name = aCommandList[ nIndex ].GetCommand();
         aCommandSequence[nIndex].Handle = -1;
-        aCommandSequence[nIndex].Value = uno::makeAny( aCommandList[ nIndex ].GetArgument() );
+        aCommandSequence[nIndex].Value <<= aCommandList[ nIndex ].GetArgument();
         aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
     }
 }

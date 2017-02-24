@@ -164,12 +164,12 @@ Statement::Statement( const ::rtl::Reference< RefCountedMutex > & refMutex,
     , m_multipleResultUpdateCount(0)
     , m_lastOidInserted(InvalidOid)
 {
-    m_props[STATEMENT_QUERY_TIME_OUT] = makeAny( (sal_Int32)0 );
-    m_props[STATEMENT_MAX_ROWS] = makeAny( (sal_Int32)0 );
-    m_props[STATEMENT_RESULT_SET_CONCURRENCY] = makeAny(
-        css::sdbc::ResultSetConcurrency::READ_ONLY );
-    m_props[STATEMENT_RESULT_SET_TYPE] = makeAny(
-        css::sdbc::ResultSetType::SCROLL_INSENSITIVE );
+    m_props[STATEMENT_QUERY_TIME_OUT] <<= (sal_Int32)0;
+    m_props[STATEMENT_MAX_ROWS] <<= (sal_Int32)0;
+    m_props[STATEMENT_RESULT_SET_CONCURRENCY] <<=
+        css::sdbc::ResultSetConcurrency::READ_ONLY;
+    m_props[STATEMENT_RESULT_SET_TYPE] <<=
+        css::sdbc::ResultSetType::SCROLL_INSENSITIVE;
 }
 
 Statement::~Statement()
@@ -891,14 +891,14 @@ sal_Bool Statement::convertFastPropertyValue(
     {
         OUString val;
         bRet = ( rValue >>= val );
-        rConvertedValue = makeAny( val );
+        rConvertedValue <<= val;
         break;
     }
     case STATEMENT_ESCAPE_PROCESSING:
     {
         bool val(false);
         bRet = ( rValue >>= val );
-        rConvertedValue = makeAny( val );
+        rConvertedValue <<= val;
         break;
     }
     case STATEMENT_FETCH_DIRECTION:
@@ -911,7 +911,7 @@ sal_Bool Statement::convertFastPropertyValue(
     {
         sal_Int32 val;
         bRet = ( rValue >>= val );
-        rConvertedValue = makeAny( val );
+        rConvertedValue <<= val;
         break;
     }
     default:

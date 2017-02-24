@@ -249,7 +249,7 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
         for ( sal_Int32 nInd = 0; nInd < nLen; nInd++ )
             if ( aSet[nInd].Name.equals( aName ) )
             {
-                aSet[nInd].Value = uno::makeAny( aChars.toInt32() );
+                aSet[nInd].Value <<= aChars.toInt32();
                 bFound = true;
                 break;
             }
@@ -258,7 +258,7 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
         {
             aSet.realloc( nLen + 1 );
             aSet[nLen].Name = aName;
-            aSet[nLen].Value = uno::makeAny( aChars.toInt32() );
+            aSet[nLen].Value <<= aChars.toInt32();
         }
 
         m_xDocProp->setDocumentStatistics( aSet );

@@ -339,14 +339,14 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
          ++i)
     {
         pValue[0].Name = i->first;
-        pValue[0].Value = uno::makeAny(i->second);
+        pValue[0].Value <<= i->second;
         ++pValue;
     }
 
     if ( 0 < maDataRelsMap.getLength() )
     {
         pValue[0].Name = "OOXDiagramDataRels";
-        pValue[0].Value = uno::makeAny ( maDataRelsMap );
+        pValue[0].Value <<= maDataRelsMap;
         ++pValue;
     }
 

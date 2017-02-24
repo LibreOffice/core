@@ -1456,7 +1456,7 @@ void SdTiledRenderingTest::testTdf104405()
     // trigger the clone-formatting/paintbrush command to copy formatting contents of cell
     uno::Sequence< beans::PropertyValue > aArgs(1);
     aArgs[0].Name  = "PersistentCopy";
-    aArgs[0].Value = uno::makeAny(true);
+    aArgs[0].Value <<= true;
     comphelper::dispatchCommand(".uno:FormatPaintbrush", aArgs);
 
     Scheduler::ProcessEventsToIdle();

@@ -471,7 +471,7 @@ bool SvxLRSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             break;
 
         case MID_FIRST_AUTO:
-            rVal = css::uno::makeAny<bool>(IsAutoFirst());
+            rVal <<= (bool) IsAutoFirst();
             break;
 
         default:
@@ -1200,7 +1200,7 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             return false;
     }
 
-    rVal = css::uno::makeAny<bool>( bValue );
+    rVal <<= (bool) bValue;
     return true;
 }
 
@@ -1696,16 +1696,16 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             // 4 Borders and 5 distances
             uno::Sequence< uno::Any > aSeq( 9 );
-            aSeq[0] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetLeft(), bConvert) );
-            aSeq[1] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetRight(), bConvert) );
-            aSeq[2] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetBottom(), bConvert) );
-            aSeq[3] = uno::makeAny( SvxBoxItem::SvxLineToLine(GetTop(), bConvert) );
-            aSeq[4] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance()));
-            aSeq[5] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist ));
-            aSeq[6] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist ));
-            aSeq[7] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist ));
-            aSeq[8] = uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist ));
-            rVal = uno::makeAny( aSeq );
+            aSeq[0] <<= SvxBoxItem::SvxLineToLine(GetLeft(), bConvert);
+            aSeq[1] <<= SvxBoxItem::SvxLineToLine(GetRight(), bConvert);
+            aSeq[2] <<= SvxBoxItem::SvxLineToLine(GetBottom(), bConvert);
+            aSeq[3] <<= SvxBoxItem::SvxLineToLine(GetTop(), bConvert);
+            aSeq[4] <<= (sal_Int32)(bConvert ? convertTwipToMm100( GetSmallestDistance()) : GetSmallestDistance());
+            aSeq[5] <<= (sal_Int32)(bConvert ? convertTwipToMm100( nTopDist ) : nTopDist );
+            aSeq[6] <<= (sal_Int32)(bConvert ? convertTwipToMm100( nBottomDist ) : nBottomDist );
+            aSeq[7] <<= (sal_Int32)(bConvert ? convertTwipToMm100( nLeftDist ) : nLeftDist );
+            aSeq[8] <<= (sal_Int32)(bConvert ? convertTwipToMm100( nRightDist ) : nRightDist );
+            rVal <<= aSeq;
             return true;
         }
         case MID_LEFT_BORDER:
@@ -2703,18 +2703,18 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         {
             // 2 BorderLines, flags, valid flags and distance
             css::uno::Sequence< css::uno::Any > aSeq( 5 );
-            aSeq[0] = css::uno::makeAny( SvxBoxItem::SvxLineToLine( pHori, bConvert) );
-            aSeq[1] = css::uno::makeAny( SvxBoxItem::SvxLineToLine( pVert, bConvert) );
+            aSeq[0] <<= SvxBoxItem::SvxLineToLine( pHori, bConvert);
+            aSeq[1] <<= SvxBoxItem::SvxLineToLine( pVert, bConvert);
             if ( IsTable() )
                 nVal |= 0x01;
             if ( IsDist() )
                 nVal |= 0x02;
             if ( IsMinDist() )
                 nVal |= 0x04;
-            aSeq[2] = css::uno::makeAny( nVal );
-            aSeq[3] = css::uno::makeAny( static_cast<sal_Int16>(nValidFlags) );
-            aSeq[4] = css::uno::makeAny( (sal_Int32)(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist()) );
-            rVal = css::uno::makeAny( aSeq );
+            aSeq[2] <<= nVal;
+            aSeq[3] <<= static_cast<sal_Int16>(nValidFlags);
+            aSeq[4] <<= (sal_Int32)(bConvert ? convertTwipToMm100(GetDefDist()) : GetDefDist());
+            rVal <<= aSeq;
             return true;
         }
 
@@ -3122,7 +3122,7 @@ bool SvxLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemId ) const
     nMemId &= ~CONVERT_TWIPS;
     if ( nMemId == 0 )
     {
-        rVal = uno::makeAny( SvxBoxItem::SvxLineToLine(pLine.get(), bConvert) );
+        rVal <<= SvxBoxItem::SvxLineToLine(pLine.get(), bConvert);
         return true;
     }
     else if ( pLine )
@@ -3496,7 +3496,7 @@ bool SvxBrushItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
 
         case MID_GRAPHIC_TRANSPARENT:
-            rVal = css::uno::makeAny<bool>( aColor.GetTransparency() == 0xff );
+            rVal <<= ( aColor.GetTransparency() == 0xff );
         break;
 
         case MID_GRAPHIC_URL:

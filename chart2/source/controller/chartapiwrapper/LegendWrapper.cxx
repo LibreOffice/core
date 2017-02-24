@@ -79,7 +79,7 @@ Any WrappedLegendAlignmentProperty::getPropertyValue( const Reference< beans::XP
         xInnerPropertySet->getPropertyValue( "Show" ) >>= bShowLegend;
         if(!bShowLegend)
         {
-            aRet = uno::Any( css::chart::ChartLegendPosition_NONE );
+            aRet <<= css::chart::ChartLegendPosition_NONE;
         }
         else
         {

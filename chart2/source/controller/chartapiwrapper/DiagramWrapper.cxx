@@ -1526,7 +1526,7 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
         }
     }
     if(bHasDetectableInnerValue)
-        rInnerValue = uno::Any(nNumberOfLines);
+        rInnerValue <<= nNumberOfLines;
     return bHasDetectableInnerValue;
 }
 

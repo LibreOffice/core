@@ -338,9 +338,9 @@ void ScAccessibleSpreadsheet::CompleteSelectionChanged(bool bNewState)
     AccessibleEventObject aEvent;
     aEvent.EventId = AccessibleEventId::STATE_CHANGED;
     if (bNewState)
-        aEvent.NewValue = uno::makeAny(AccessibleStateType::SELECTED);
+        aEvent.NewValue <<= AccessibleStateType::SELECTED;
     else
-        aEvent.OldValue = uno::makeAny(AccessibleStateType::SELECTED);
+        aEvent.OldValue <<= AccessibleStateType::SELECTED;
     aEvent.Source = uno::Reference< XAccessibleContext >(this);
 
     CommitChange(aEvent);

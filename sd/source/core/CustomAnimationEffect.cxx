@@ -941,7 +941,7 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     }
     else
     {
-        aTo = makeAny( false );
+        aTo <<= false;
         aAttributeName = "Visibility";
     }
 
