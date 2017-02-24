@@ -661,9 +661,9 @@ throw (css::uno::RuntimeException, std::exception) {
     {
         ::osl::MutexGuard aGuard( m_rMutex );
         OInterfaceMap::iterator i = m_aMap.find(::comphelper::getString(evt.OldValue));
-        if (i != m_aMap.end() && (*i).second != evt.Source)
+        if (i != m_aMap.end() && i->second == evt.Source)
         {
-            css::uno::Reference<css::uno::XInterface>  xCorrectType((*i).second);
+            css::uno::Reference<css::uno::XInterface>  xCorrectType(i->second);
             m_aMap.erase(i);
             m_aMap.insert(::std::pair<const OUString, css::uno::Reference<css::uno::XInterface> >(::comphelper::getString(evt.NewValue),xCorrectType));
         }
