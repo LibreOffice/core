@@ -26,6 +26,7 @@
 #define INCLUDED_HWPFILTER_SOURCE_HWPFILE_H
 
 #include <list>
+#include <vector>
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -282,13 +283,13 @@ class DLLEXPORT HWPFile
         std::list<EmPicture*> emblist;
         std::list<HyperText*> hyperlist;
         int currenthyper;
-        std::list<ParaShape*> pslist;             /* 스타오피스의 구조상 필요 */
-        std::list<CharShape*> cslist;
-        std::list<FBoxStyle*> fbslist;
-        std::list<DateCode*> datecodes;
-        std::list<HeaderFooter*> headerfooters;
-        std::list<ShowPageNum*> pagenumbers;
-        std::list<Table*> tables;
+        std::vector<ParaShape*> pslist;             /* 스타오피스의 구조상 필요 */
+        std::vector<CharShape*> cslist;
+        std::vector<FBoxStyle*> fbslist;
+        std::vector<DateCode*> datecodes;
+        std::vector<HeaderFooter*> headerfooters;
+        std::vector<ShowPageNum*> pagenumbers;
+        std::vector<Table*> tables;
 
 // for global document handling
         static HWPFile *cur_doc;
