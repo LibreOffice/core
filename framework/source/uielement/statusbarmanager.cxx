@@ -319,7 +319,7 @@ void StatusBarManager::CreateControllers()
 
         // TODO remove this
         aPropValue.Name     = "ServiceManager";
-        aPropValue.Value    = uno::makeAny( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW) );
+        aPropValue.Value    <<= uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
         aPropValue.Name     = "ParentWindow";

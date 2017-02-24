@@ -370,7 +370,7 @@ bool PowerPointExport::exportDocument()
     std::vector< PropertyValue > aProperties;
     PropertyValue aProperty;
     aProperty.Name = sBaseURI;
-    aProperty.Value = makeAny( getFileUrl() );
+    aProperty.Value <<= getFileUrl();
     aProperties.push_back( aProperty );
 
     exportPPT(aProperties);

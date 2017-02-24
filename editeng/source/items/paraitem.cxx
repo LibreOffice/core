@@ -638,7 +638,7 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
     switch(nMemberId)
     {
         case  MID_IS_HYPHEN:
-            rVal = css::uno::makeAny<bool>(bHyphen);
+            rVal <<= (bool)bHyphen;
         break;
         case MID_HYPHEN_MIN_LEAD:
             rVal <<= (sal_Int16)nMinLead;

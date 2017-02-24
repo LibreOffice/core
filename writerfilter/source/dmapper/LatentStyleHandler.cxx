@@ -56,7 +56,7 @@ void LatentStyleHandler::lcl_attribute(Id rName, Value& rVal)
     }
     if (bFound)
     {
-        aValue.Value = uno::makeAny(rVal.getString());
+        aValue.Value <<= rVal.getString();
         m_aAttributes.push_back(aValue);
     }
 }

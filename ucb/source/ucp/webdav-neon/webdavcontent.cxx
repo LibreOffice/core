@@ -752,7 +752,7 @@ uno::Any SAL_CALL Content::execute(
             // Unreachable
         }
 
-        aRet = uno::makeAny( createNewContent( aArg ) );
+        aRet <<= createNewContent( aArg );
     }
     else if ( aCommand.Name == "addProperty" )
     {
@@ -2144,8 +2144,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         aEvent.PropertyName = "Title";
-        aEvent.OldValue     = uno::makeAny( aOldTitle );
-        aEvent.NewValue     = uno::makeAny( aNewTitle );
+        aEvent.OldValue     <<= aOldTitle;
+        aEvent.NewValue     <<= aNewTitle;
 
         m_aEscapedTitle     = NeonUri::escapeSegment( aNewTitle );
 

@@ -201,7 +201,7 @@ beans::PropertyValue BorderHandler::getInteropGrabBag(const OUString& aName)
     else
         aRet.Name = aName;
 
-    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_aInteropGrabBag));
+    aRet.Value <<= comphelper::containerToSequence(m_aInteropGrabBag);
     return aRet;
 }
 
@@ -209,7 +209,7 @@ void BorderHandler::appendGrabBag(const OUString& aKey, const OUString& aValue)
 {
     beans::PropertyValue aProperty;
     aProperty.Name = aKey;
-    aProperty.Value = uno::makeAny(aValue);
+    aProperty.Value <<= aValue;
     m_aInteropGrabBag.push_back(aProperty);
 }
 

@@ -721,19 +721,19 @@ static void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno:
     if( rCell.eType == SCH_CELL_TYPE_STRING )
     {
         rComplexLabel.realloc(1);
-        rComplexLabel[0] = uno::makeAny( rCell.aString );
+        rComplexLabel[0] <<= rCell.aString;
     }
     else if( rCell.aComplexString.getLength() && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
     {
         sal_Int32 nCount = rCell.aComplexString.getLength();
         rComplexLabel.realloc( nCount );
         for( sal_Int32 nN=0; nN<nCount; nN++)
-            rComplexLabel[nN] = uno::makeAny((rCell.aComplexString)[nN]);
+            rComplexLabel[nN] <<= (rCell.aComplexString)[nN];
     }
     else if( rCell.eType == SCH_CELL_TYPE_FLOAT )
     {
         rComplexLabel.realloc(1);
-        rComplexLabel[0] = uno::makeAny( rCell.fValue );
+        rComplexLabel[0] <<= rCell.fValue;
     }
 }
 

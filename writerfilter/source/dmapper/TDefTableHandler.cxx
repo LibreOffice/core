@@ -458,7 +458,7 @@ beans::PropertyValue TDefTableHandler::getInteropGrabBag(const OUString& aName)
     else
         aRet.Name = aName;
 
-    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_aInteropGrabBag));
+    aRet.Value <<= comphelper::containerToSequence(m_aInteropGrabBag);
     m_aInteropGrabBag.clear();
     return aRet;
 }
@@ -467,7 +467,7 @@ void TDefTableHandler::appendGrabBag(const OUString& aKey, const OUString& aValu
 {
     beans::PropertyValue aProperty;
     aProperty.Name = aKey;
-    aProperty.Value = uno::makeAny(aValue);
+    aProperty.Value <<= aValue;
     m_aInteropGrabBag.push_back(aProperty);
 }
 

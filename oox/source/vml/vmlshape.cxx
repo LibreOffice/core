@@ -395,14 +395,14 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                         length = aGrabBag.getLength();
                         aGrabBag.realloc( length+1 );
                         aGrabBag[length].Name = "VML-Z-ORDER";
-                        aGrabBag[length].Value = uno::makeAny( maTypeModel.maZIndex.toInt32() );
+                        aGrabBag[length].Value <<= maTypeModel.maZIndex.toInt32();
 
                         if( !s_mso_next_textbox.isEmpty() )
                         {
                             length = aGrabBag.getLength();
                             aGrabBag.realloc( length+1 );
                             aGrabBag[length].Name = "mso-next-textbox";
-                            aGrabBag[length].Value = uno::makeAny( s_mso_next_textbox );
+                            aGrabBag[length].Value <<= s_mso_next_textbox;
                         }
 
                         if( !sLinkChainName.isEmpty() )
@@ -410,13 +410,13 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                             length = aGrabBag.getLength();
                             aGrabBag.realloc( length+4 );
                             aGrabBag[length].Name   = "TxbxHasLink";
-                            aGrabBag[length].Value   = uno::makeAny( true );
+                            aGrabBag[length].Value   <<= true;
                             aGrabBag[length+1].Name = "Txbx-Id";
-                            aGrabBag[length+1].Value = uno::makeAny( id );
+                            aGrabBag[length+1].Value <<= id;
                             aGrabBag[length+2].Name = "Txbx-Seq";
-                            aGrabBag[length+2].Value = uno::makeAny( seq );
+                            aGrabBag[length+2].Value <<= seq;
                             aGrabBag[length+3].Name = "LinkChainName";
-                            aGrabBag[length+3].Value = uno::makeAny( sLinkChainName );
+                            aGrabBag[length+3].Value <<= sLinkChainName;
                         }
                         propertySet->setPropertyValue( "InteropGrabBag", uno::makeAny(aGrabBag) );
                     }
@@ -704,7 +704,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
             beans::PropertyValue aPair;
             aPair.Name = "mso-layout-flow-alt";
-            aPair.Value = uno::makeAny(maTypeModel.maLayoutFlowAlt);
+            aPair.Value <<= maTypeModel.maLayoutFlowAlt;
             if (aGrabBag.hasElements())
             {
                 sal_Int32 nLength = aGrabBag.getLength();
@@ -806,13 +806,13 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             if (bFlipX)
             {
                 aPropSequence [nPropertyIndex].Name = "MirroredX";
-                aPropSequence [nPropertyIndex].Value = makeAny (bFlipX);
+                aPropSequence [nPropertyIndex].Value <<= bFlipX;
                 nPropertyIndex++;
             }
             if (bFlipY)
             {
                 aPropSequence [nPropertyIndex].Name = "MirroredY";
-                aPropSequence [nPropertyIndex].Value = makeAny (bFlipY);
+                aPropSequence [nPropertyIndex].Value <<= bFlipY;
             }
             aPropertySet.setAnyProperty(PROP_CustomShapeGeometry, makeAny( aPropSequence ) );
         }
@@ -1270,7 +1270,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
         xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
         beans::PropertyValue aPair;
         aPair.Name = "mso-edit-as";
-        aPair.Value = uno::makeAny(maTypeModel.maEditAs);
+        aPair.Value <<= maTypeModel.maEditAs;
        if (aGrabBag.hasElements())
        {
             sal_Int32 nLength = aGrabBag.getLength();

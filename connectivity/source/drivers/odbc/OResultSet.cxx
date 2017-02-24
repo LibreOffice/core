@@ -1483,7 +1483,7 @@ void OResultSet::getFastPropertyValue(
     switch(nHandle)
     {
         case PROPERTY_ID_ISBOOKMARKABLE:
-            rValue = css::uno::makeAny(isBookmarkable());
+            rValue <<= isBookmarkable();
             break;
         case PROPERTY_ID_CURSORNAME:
             rValue <<= getCursorName();

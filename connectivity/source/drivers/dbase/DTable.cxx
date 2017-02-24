@@ -2347,7 +2347,7 @@ namespace
             Sequence< PropertyValue > aProps( 1 );
             aProps[0].Name      = "Title";
             aProps[0].Handle    = -1; // n/a
-            aProps[0].Value     = makeAny( sNewName );
+            aProps[0].Value     <<= sNewName;
             Sequence< Any > aValues;
             aContent.executeCommand( "setPropertyValues",makeAny(aProps) ) >>= aValues;
             if(aValues.getLength() && aValues[0].hasValue())

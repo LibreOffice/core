@@ -113,10 +113,10 @@ void SaveInteropProperties(uno::Reference<frame::XModel> const& xModel,
             objectsList.erase(it);
     }
 
-    objectsList[rObjectName] = uno::Any( aGrabBagAttribute );
+    objectsList[rObjectName] <<= aGrabBagAttribute;
 
     // put objects list back into the grab bag
-    aGrabBag[sEmbeddingsPropName] = uno::Any(objectsList.getAsConstPropertyValueList());
+    aGrabBag[sEmbeddingsPropName] <<= objectsList.getAsConstPropertyValueList();
 
     // put grab bag back into the document
     xDocProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag.getAsConstPropertyValueList()));

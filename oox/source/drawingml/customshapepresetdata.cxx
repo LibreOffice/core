@@ -40,7 +40,7 @@ void lcl_parseAdjustmentValue(std::vector<drawing::EnhancedCustomShapeAdjustment
         else if (aToken.startsWith(aValuePrefix))
         {
             OString aValue = aToken.copy(strlen(aValuePrefix), aToken.getLength() - strlen(aValuePrefix) - strlen(" }"));
-            aAdjustmentValue.Value = uno::makeAny(aValue.toInt32());
+            aAdjustmentValue.Value <<= aValue.toInt32();
         }
         else if (!aToken.startsWith("State = "))
             SAL_WARN("oox", "lcl_parseAdjustmentValue: unexpected prefix: " << aToken);
@@ -81,7 +81,7 @@ drawing::EnhancedCustomShapeParameterPair lcl_parseEnhancedCustomShapeParameterP
     static const char aExpectedFVPrefix[] = "First = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
     assert(aToken.startsWith(aExpectedFVPrefix));
     sal_Int32 nIndex = strlen(aExpectedFVPrefix);
-    aPair.First.Value = uno::makeAny(static_cast<sal_uInt32>(aToken.getToken(0, '}', nIndex).toInt32()));
+    aPair.First.Value <<= static_cast<sal_uInt32>(aToken.getToken(0, '}', nIndex).toInt32());
 
     static const char aExpectedFTPrefix[] = ", Type = (short) ";
     aToken = aToken.copy(nIndex);
@@ -93,7 +93,7 @@ drawing::EnhancedCustomShapeParameterPair lcl_parseEnhancedCustomShapeParameterP
     aToken = aToken.copy(nIndex);
     assert(aToken.startsWith(aExpectedSVPrefix));
     nIndex = strlen(aExpectedSVPrefix);
-    aPair.Second.Value = uno::makeAny(static_cast<sal_uInt32>(aToken.getToken(0, '}', nIndex).toInt32()));
+    aPair.Second.Value <<= static_cast<sal_uInt32>(aToken.getToken(0, '}', nIndex).toInt32());
 
     static const char aExpectedSTPrefix[] = ", Type = (short) ";
     aToken = aToken.copy(nIndex);
@@ -250,7 +250,7 @@ void lcl_parseHandlePosition(std::vector<beans::PropertyValue>& rHandle, const O
 
                 beans::PropertyValue aPropertyValue;
                 aPropertyValue.Name = "Position";
-                aPropertyValue.Value = uno::makeAny(lcl_parseEnhancedCustomShapeParameterPair(aToken));
+                aPropertyValue.Value <<= lcl_parseEnhancedCustomShapeParameterPair(aToken);
                 rHandle.push_back(aPropertyValue);
             }
             else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
@@ -293,7 +293,7 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
                 static const char aExpectedVPrefix[] = "Value = (any) { (long) ";
                 assert(aToken.startsWith(aExpectedVPrefix));
                 sal_Int32 nIndex = strlen(aExpectedVPrefix);
-                aParameter.Value = uno::makeAny(aToken.getToken(0, '}', nIndex).toInt32());
+                aParameter.Value <<= aToken.getToken(0, '}', nIndex).toInt32();
 
                 static const char aExpectedTPrefix[] = ", Type = (short) ";
                 aToken = aToken.copy(nIndex);
@@ -303,7 +303,7 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
 
                 beans::PropertyValue aPropertyValue;
                 aPropertyValue.Name = rName;
-                aPropertyValue.Value = uno::makeAny(aParameter);
+                aPropertyValue.Value <<= aParameter;
                 rHandle.push_back(aPropertyValue);
 
             }
@@ -327,7 +327,7 @@ void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OStrin
         beans::PropertyValue aPropertyValue;
         aPropertyValue.Name = rName;
         // We only expect a Value here
-        aPropertyValue.Value = uno::makeAny(rValue.getToken(0, '}', nIndex).toInt32());
+        aPropertyValue.Value <<= rValue.getToken(0, '}', nIndex).toInt32();
         rHandle.push_back(aPropertyValue);
     }
     else
@@ -449,7 +449,7 @@ void lcl_parsePathCoordinateValues(std::vector<beans::PropertyValue>& rPath, con
 
     beans::PropertyValue aPropertyValue;
     aPropertyValue.Name = "Coordinates";
-    aPropertyValue.Value = uno::makeAny(comphelper::containerToSequence(aPairs));
+    aPropertyValue.Value <<= comphelper::containerToSequence(aPairs);
     rPath.push_back(aPropertyValue);
 }
 
@@ -513,7 +513,7 @@ void lcl_parsePathSegmentValues(std::vector<beans::PropertyValue>& rPath, const 
 
     beans::PropertyValue aPropertyValue;
     aPropertyValue.Name = "Segments";
-    aPropertyValue.Value = uno::makeAny(comphelper::containerToSequence(aSegments));
+    aPropertyValue.Value <<= comphelper::containerToSequence(aSegments);
     rPath.push_back(aPropertyValue);
 }
 
@@ -577,7 +577,7 @@ void lcl_parsePathTextFrameValues(std::vector<beans::PropertyValue>& rPath, cons
 
     beans::PropertyValue aPropertyValue;
     aPropertyValue.Name = "TextFrames";
-    aPropertyValue.Value = uno::makeAny(comphelper::containerToSequence(aTextFrames));
+    aPropertyValue.Value <<= comphelper::containerToSequence(aTextFrames);
     rPath.push_back(aPropertyValue);
 }
 
@@ -641,7 +641,7 @@ void lcl_parsePathSubViewSizeValues(std::vector<beans::PropertyValue>& rPath, co
 
     beans::PropertyValue aPropertyValue;
     aPropertyValue.Name = "SubViewSize";
-    aPropertyValue.Value = uno::makeAny(comphelper::containerToSequence(aSizes));
+    aPropertyValue.Value <<= comphelper::containerToSequence(aSizes);
     rPath.push_back(aPropertyValue);
 }
 

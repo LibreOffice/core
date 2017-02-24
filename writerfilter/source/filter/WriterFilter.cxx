@@ -219,22 +219,22 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
         comphelper::SequenceAsHashMap aGrabBagProperties;
 
         // Adding the saved Theme DOM
-        aGrabBagProperties["OOXTheme"] = uno::makeAny(pDocument->getThemeDom());
+        aGrabBagProperties["OOXTheme"] <<= pDocument->getThemeDom();
 
         // Adding the saved custom xml DOM
-        aGrabBagProperties["OOXCustomXml"] = uno::makeAny(pDocument->getCustomXmlDomList());
-        aGrabBagProperties["OOXCustomXmlProps"] = uno::makeAny(pDocument->getCustomXmlDomPropsList());
+        aGrabBagProperties["OOXCustomXml"] <<= pDocument->getCustomXmlDomList();
+        aGrabBagProperties["OOXCustomXmlProps"] <<= pDocument->getCustomXmlDomPropsList();
 
         // Adding the saved ActiveX DOM
-        aGrabBagProperties["OOXActiveX"] = uno::makeAny(pDocument->getActiveXDomList());
-        aGrabBagProperties["OOXActiveXBin"] = uno::makeAny(pDocument->getActiveXBinList());
+        aGrabBagProperties["OOXActiveX"] <<= pDocument->getActiveXDomList();
+        aGrabBagProperties["OOXActiveXBin"] <<= pDocument->getActiveXBinList();
 
         // Adding the saved Glossary Documnet DOM to the document's grab bag
-        aGrabBagProperties["OOXGlossary"] = uno::makeAny(pDocument->getGlossaryDocDom());
-        aGrabBagProperties["OOXGlossaryDom"] = uno::makeAny(pDocument->getGlossaryDomList());
+        aGrabBagProperties["OOXGlossary"] <<= pDocument->getGlossaryDocDom();
+        aGrabBagProperties["OOXGlossaryDom"] <<= pDocument->getGlossaryDomList();
 
         // Adding the saved embedding document to document's grab bag
-        aGrabBagProperties["OOXEmbeddings"] = uno::makeAny(pDocument->getEmbeddingsList());
+        aGrabBagProperties["OOXEmbeddings"] <<= pDocument->getEmbeddingsList();
 
         putPropertiesToDocumentGrabBag(aGrabBagProperties);
 

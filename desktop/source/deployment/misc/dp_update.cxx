@@ -75,7 +75,7 @@ getUpdateInformation( Reference<deployment::XUpdateInformationProvider > const &
         out_error = e.Reason;
     } catch (const ucb::CommandAbortedException &) {
     } catch (const uno::Exception & e) {
-        out_error = uno::makeAny(e);
+        out_error <<= e;
     }
     return
         Sequence<Reference< xml::dom::XElement > >();

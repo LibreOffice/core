@@ -294,13 +294,13 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
     {
         Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxContext );
         Sequence< Any > aCreationArguments( 2 );
-        aCreationArguments[0] = makeAny( PropertyValue(
+        aCreationArguments[0] <<= PropertyValue(
             "nodepath", 0,
             makeAny( GetPathToConfigurationRoot() ),
-            PropertyState_DIRECT_VALUE ) );
-        aCreationArguments[1] = makeAny(beans::PropertyValue(
+            PropertyState_DIRECT_VALUE );
+        aCreationArguments[1] <<= beans::PropertyValue(
             "lazywrite", 0, makeAny( true ),
-            PropertyState_DIRECT_VALUE ) );
+            PropertyState_DIRECT_VALUE );
         OUString sAccessService;
         if ( bReadOnly )
             sAccessService = "com.sun.star.configuration.ConfigurationAccess";
@@ -439,36 +439,36 @@ Sequence< PropertyValue > ConfigurationAccess::GetConfigurationSequence()
 {
     Sequence< PropertyValue > aRet( 15 );
     OptimizerSettings& rSettings( maSettings.front() );
-    aRet[ 0 ].Name = "JPEGCompression";
-    aRet[ 0 ].Value= Any( rSettings.mbJPEGCompression );
-    aRet[ 1 ].Name = "JPEGQuality";
-    aRet[ 1 ].Value= Any( rSettings.mnJPEGQuality );
-    aRet[ 2 ].Name = "RemoveCropArea";
-    aRet[ 2 ].Value= Any( rSettings.mbRemoveCropArea );
-    aRet[ 3 ].Name = "ImageResolution";
-    aRet[ 3 ].Value= Any( rSettings.mnImageResolution );
-    aRet[ 4 ].Name = "EmbedLinkedGraphics";
-    aRet[ 4 ].Value= Any( rSettings.mbEmbedLinkedGraphics );
-    aRet[ 5 ].Name = "OLEOptimization";
-    aRet[ 5 ].Value= Any( rSettings.mbOLEOptimization );
-    aRet[ 6 ].Name = "OLEOptimizationType";
-    aRet[ 6 ].Value= Any( rSettings.mnOLEOptimizationType );
-    aRet[ 7 ].Name = "DeleteUnusedMasterPages";
-    aRet[ 7 ].Value= Any( rSettings.mbDeleteUnusedMasterPages );
-    aRet[ 8 ].Name = "DeleteHiddenSlides";
-    aRet[ 8 ].Value= Any( rSettings.mbDeleteHiddenSlides );
-    aRet[ 9 ].Name = "DeleteNotesPages";
-    aRet[ 9 ].Value= Any( rSettings.mbDeleteNotesPages );
-    aRet[ 10].Name = "CustomShowName";
-    aRet[ 10].Value= Any( rSettings.maCustomShowName );
-    aRet[ 11].Name = "SaveAsURL";
-    aRet[ 11].Value= Any( rSettings.maSaveAsURL );
-    aRet[ 12].Name = "FilterName";
-    aRet[ 12].Value= Any( rSettings.maFilterName );
-    aRet[ 13].Name = "OpenNewDocument";
-    aRet[ 13].Value= Any( rSettings.mbOpenNewDocument );
-    aRet[ 14].Name = "EstimatedFileSize";
-    aRet[ 14].Value= Any( rSettings.mnEstimatedFileSize );
+    aRet[ 0 ].Name  = "JPEGCompression";
+    aRet[ 0 ].Value <<= rSettings.mbJPEGCompression;
+    aRet[ 1 ].Name  = "JPEGQuality";
+    aRet[ 1 ].Value <<= rSettings.mnJPEGQuality;
+    aRet[ 2 ].Name  = "RemoveCropArea";
+    aRet[ 2 ].Value <<= rSettings.mbRemoveCropArea;
+    aRet[ 3 ].Name  = "ImageResolution";
+    aRet[ 3 ].Value <<= rSettings.mnImageResolution;
+    aRet[ 4 ].Name  = "EmbedLinkedGraphics";
+    aRet[ 4 ].Value <<= rSettings.mbEmbedLinkedGraphics;
+    aRet[ 5 ].Name  = "OLEOptimization";
+    aRet[ 5 ].Value <<= rSettings.mbOLEOptimization;
+    aRet[ 6 ].Name  = "OLEOptimizationType";
+    aRet[ 6 ].Value <<= rSettings.mnOLEOptimizationType;
+    aRet[ 7 ].Name  = "DeleteUnusedMasterPages";
+    aRet[ 7 ].Value <<= rSettings.mbDeleteUnusedMasterPages;
+    aRet[ 8 ].Name  = "DeleteHiddenSlides";
+    aRet[ 8 ].Value <<= rSettings.mbDeleteHiddenSlides;
+    aRet[ 9 ].Name  = "DeleteNotesPages";
+    aRet[ 9 ].Value <<= rSettings.mbDeleteNotesPages;
+    aRet[ 10].Name  = "CustomShowName";
+    aRet[ 10].Value <<= rSettings.maCustomShowName;
+    aRet[ 11].Name  = "SaveAsURL";
+    aRet[ 11].Value <<= rSettings.maSaveAsURL;
+    aRet[ 12].Name  = "FilterName";
+    aRet[ 12].Value <<= rSettings.maFilterName;
+    aRet[ 13].Name  = "OpenNewDocument";
+    aRet[ 13].Value <<= rSettings.mbOpenNewDocument;
+    aRet[ 14].Name  = "EstimatedFileSize";
+    aRet[ 14].Value <<= rSettings.mnEstimatedFileSize;
     return aRet;
 }
 

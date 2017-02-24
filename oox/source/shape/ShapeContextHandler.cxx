@@ -452,13 +452,13 @@ ShapeContextHandler::getShape()
                     sal_Int32 length = aValue.getLength();
                     aValue.realloc(length+1);
 
-                    diagramDrawing[0] = uno::makeAny( mxFilterBase->importFragment( aFragmentPath ) );
-                    diagramDrawing[1] = uno::makeAny( pShapePtr->resolveRelationshipsOfTypeFromOfficeDoc(
-                                *mxFilterBase, aFragmentPath, "image" )  );
+                    diagramDrawing[0] <<= mxFilterBase->importFragment( aFragmentPath );
+                    diagramDrawing[1] <<= pShapePtr->resolveRelationshipsOfTypeFromOfficeDoc(
+                                *mxFilterBase, aFragmentPath, "image" );
 
                     beans::PropertyValue* pValue = aValue.getArray();
                     pValue[length].Name = "OOXDrawing";
-                    pValue[length].Value = uno::makeAny( diagramDrawing );
+                    pValue[length].Value <<= diagramDrawing;
 
                     pShapePtr->setDiagramDoms( aValue );
 

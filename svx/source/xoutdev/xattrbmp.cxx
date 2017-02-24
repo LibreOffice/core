@@ -381,11 +381,11 @@ bool XFillBitmapItem::QueryValue(css::uno::Any& rVal, sal_uInt8 nMemberId) const
         uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
         aPropSeq[0].Name  = "Name";
-        aPropSeq[0].Value = uno::makeAny( aInternalName );
+        aPropSeq[0].Value <<= aInternalName;
         aPropSeq[1].Name  = "FillBitmapURL";
-        aPropSeq[1].Value = uno::makeAny( aURL );
+        aPropSeq[1].Value <<= aURL;
         aPropSeq[2].Name  = "Bitmap";
-        aPropSeq[2].Value = uno::makeAny( xBmp );
+        aPropSeq[2].Value <<= xBmp;
 
         rVal <<= aPropSeq;
     }

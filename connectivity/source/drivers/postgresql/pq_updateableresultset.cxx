@@ -113,8 +113,8 @@ css::uno::Reference< css::sdbc::XCloseable > UpdateableResultSet::createFromPGRe
             {
                 char * val = PQgetvalue( result, row, col );
 
-                aRow[col] = makeAny(
-                    OUString( val, strlen( val ), ConnectionSettings::encoding ) );
+                aRow[col] <<=
+                    OUString( val, strlen( val ), ConnectionSettings::encoding );
             }
         }
         data[row] = aRow;

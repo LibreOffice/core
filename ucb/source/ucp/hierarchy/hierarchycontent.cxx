@@ -1184,10 +1184,8 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                             if ( aNewValue != m_aProps.getTargetURL() )
                             {
                                 aEvent.PropertyName = rValue.Name;
-                                aEvent.OldValue
-                                    = uno::makeAny( m_aProps.getTargetURL() );
-                                aEvent.NewValue
-                                    = uno::makeAny( aNewValue );
+                                aEvent.OldValue <<= m_aProps.getTargetURL();
+                                aEvent.NewValue <<= aNewValue;
 
                                 aChanges.getArray()[ nChanged ] = aEvent;
 
@@ -1309,8 +1307,8 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
     if ( !aOldTitle.isEmpty() )
     {
         aEvent.PropertyName = "Title";
-        aEvent.OldValue     = uno::makeAny( aOldTitle );
-        aEvent.NewValue     = uno::makeAny( m_aProps.getTitle() );
+        aEvent.OldValue     <<= aOldTitle;
+        aEvent.NewValue     <<= m_aProps.getTitle();
 
         aChanges.getArray()[ nChanged ] = aEvent;
         nChanged++;

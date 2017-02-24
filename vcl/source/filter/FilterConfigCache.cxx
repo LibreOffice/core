@@ -135,7 +135,7 @@ Reference< XInterface > openConfig(const char* sPackage)
             aParam.Value <<= OUString( "/org.openoffice.TypeDetection.Types/Types" );
         if (rtl_str_compareIgnoreAsciiCase(sPackage, "filters") == 0)
             aParam.Value <<= OUString( "/org.openoffice.TypeDetection.GraphicFilter/Filters" );
-        lParams[0] = makeAny(aParam);
+        lParams[0] <<= aParam;
 
         // get access to file
         xCfg = xConfigProvider->createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", lParams);

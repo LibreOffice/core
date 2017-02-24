@@ -98,7 +98,7 @@ namespace oox { namespace drawingml {
 
 #define PUT_PROP( aProperties, nPos, sPropName, aPropValue ) \
     aProperties[nPos].Name = sPropName; \
-    aProperties[nPos].Value = Any( aPropValue );
+    aProperties[nPos].Value <<= aPropValue;
 
 Shape::Shape( const sal_Char* pServiceName, bool bDefaultHeight )
 : mpLinePropertiesPtr( new LineProperties )
@@ -764,7 +764,7 @@ Reference< XShape > const & Shape::createAndInsert(
                         mpCustomShapePropertiesPtr->getShapePresetTypeName();
                     OUString sShapePresetTypeName(reinterpret_cast< const char* >(
                         aNameSeq.getConstArray()), aNameSeq.getLength(), RTL_TEXTENCODING_UTF8);
-                    aGrabBag[length].Value = uno::makeAny(sShapePresetTypeName);
+                    aGrabBag[length].Value <<= sShapePresetTypeName;
                     propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
                 }
                 //If the text box has links then save the link information so that
@@ -777,11 +777,11 @@ Reference< XShape > const & Shape::createAndInsert(
                     sal_Int32 length = aGrabBag.getLength();
                     aGrabBag.realloc( length + 3 );
                     aGrabBag[length].Name = "TxbxHasLink";
-                    aGrabBag[length].Value = uno::makeAny(this->isLinkedTxbx());
+                    aGrabBag[length].Value <<= this->isLinkedTxbx();
                     aGrabBag[length + 1 ].Name = "Txbx-Id";
-                    aGrabBag[length + 1 ].Value = uno::makeAny(this->getLinkedTxbxAttributes().id);
+                    aGrabBag[length + 1 ].Value <<= this->getLinkedTxbxAttributes().id;
                     aGrabBag[length + 2 ].Name = "Txbx-Seq";
-                    aGrabBag[length + 2 ].Value = uno::makeAny(this->getLinkedTxbxAttributes().seq);
+                    aGrabBag[length + 2 ].Value <<= this->getLinkedTxbxAttributes().seq;
                     propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
                 }
 
@@ -835,7 +835,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     xPropertySet->getPropertyValue(aGrabBagPropName) >>= aGrabBag;
                     beans::PropertyValue aPair;
                     aPair.Name = "mso-rotation-angle";
-                    aPair.Value = uno::makeAny(mnRotation);
+                    aPair.Value <<= mnRotation;
                     if (aGrabBag.hasElements())
                     {
                         sal_Int32 nLength = aGrabBag.getLength();
@@ -912,11 +912,11 @@ Reference< XShape > const & Shape::createAndInsert(
                 sal_Int32 length = aGrabBag.getLength();
                 aGrabBag.realloc( length + 3 );
                 aGrabBag[length].Name = "TxbxHasLink";
-                aGrabBag[length].Value = uno::makeAny(this->isLinkedTxbx());
+                aGrabBag[length].Value <<= isLinkedTxbx();
                 aGrabBag[length + 1 ].Name = "Txbx-Id";
-                aGrabBag[length + 1 ].Value = uno::makeAny(this->getLinkedTxbxAttributes().id);
+                aGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
                 aGrabBag[length + 2 ].Name = "Txbx-Seq";
-                aGrabBag[length + 2 ].Value = uno::makeAny(this->getLinkedTxbxAttributes().seq);
+                aGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
                 propertySet->setPropertyValue("InteropGrabBag",uno::makeAny(aGrabBag));
             }
 
@@ -935,8 +935,10 @@ Reference< XShape > const & Shape::createAndInsert(
             // Store original fill and line colors of the shape and the theme color name to InteropGrabBag
             Sequence< PropertyValue > aProperties( 6 );  //allocate the maximum possible number of slots
             sal_Int32 nSize = 2;
-            PUT_PROP( aProperties, 0, "OriginalSolidFillClr", aShapeProps.getProperty(PROP_FillColor) );
-            PUT_PROP( aProperties, 1, "OriginalLnSolidFillClr", aShapeProps.getProperty(PROP_LineColor) );
+            aProperties[0].Name = "OriginalSolidFillClr";
+            aProperties[0].Value = aShapeProps.getProperty(PROP_FillColor);
+            aProperties[1].Name = "OriginalLnSolidFillClr";
+            aProperties[1].Value = aShapeProps.getProperty(PROP_LineColor);
             OUString sColorFillScheme = aFillProperties.maFillColor.getSchemeName();
             if( !aFillProperties.maFillColor.isPlaceHolder() && !sColorFillScheme.isEmpty() )
             {
@@ -1013,7 +1015,8 @@ Reference< XShape > const & Shape::createAndInsert(
                     if( !aEffect.Name.isEmpty() )
                     {
                         Sequence< PropertyValue > aEffectsGrabBag( 3 );
-                        PUT_PROP( aEffectsGrabBag, 0, "Attribs", aEffect.Value );
+                        aEffectsGrabBag[0].Name = "Attribs";
+                        aEffectsGrabBag[0].Value = aEffect.Value;
 
                         Color& aColor( it->moColor );
                         OUString sColorScheme = aColor.getSchemeName();
@@ -1046,9 +1049,9 @@ Reference< XShape > const & Shape::createAndInsert(
             if( aCamera3DEffects.getLength() > 0 || aLightRig3DEffects.getLength() > 0 || aShape3DEffects.getLength() > 0 )
             {
                 Sequence< PropertyValue > a3DEffectsGrabBag( 3 );
-                PUT_PROP( a3DEffectsGrabBag, 0, "Camera", Any( aCamera3DEffects ) );
-                PUT_PROP( a3DEffectsGrabBag, 1, "LightRig", Any( aLightRig3DEffects ) );
-                PUT_PROP( a3DEffectsGrabBag, 2, "Shape3D", Any( aShape3DEffects ) );
+                PUT_PROP( a3DEffectsGrabBag, 0, "Camera", aCamera3DEffects );
+                PUT_PROP( a3DEffectsGrabBag, 1, "LightRig", aLightRig3DEffects );
+                PUT_PROP( a3DEffectsGrabBag, 2, "Shape3D", aShape3DEffects );
                 putPropertyToGrabBag( "3DEffectProperties", Any( a3DEffectsGrabBag ) );
             }
 
@@ -1539,17 +1542,17 @@ uno::Sequence< uno::Sequence< uno::Any > >  Shape::resolveRelationshipsOfTypeFro
                 // [0] => RID, [1] => InputStream [2] => extension
                 OUString sRelId = aIt->second.maId;
 
-                diagramRelTuple[0] = uno::makeAny ( sRelId );
+                diagramRelTuple[0] <<= sRelId;
                 OUString sTarget = xImageRels->getFragmentPathFromRelId( sRelId );
 
                 uno::Reference< io::XInputStream > xImageInputStrm( rFilter.openInputStream( sTarget ), uno::UNO_SET_THROW );
                 StreamDataSequence dataSeq;
                 if ( rFilter.importBinaryData( dataSeq, sTarget ) )
                 {
-                    diagramRelTuple[1] = uno::makeAny( dataSeq );
+                    diagramRelTuple[1] <<= dataSeq;
                 }
 
-                diagramRelTuple[2] = uno::makeAny( sTarget.copy( sTarget.lastIndexOf(".") ) );
+                diagramRelTuple[2] <<= sTarget.copy( sTarget.lastIndexOf(".") );
 
                 xRelListTemp[counter] = diagramRelTuple;
                 ++counter;

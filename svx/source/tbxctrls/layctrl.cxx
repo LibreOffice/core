@@ -322,9 +322,9 @@ void TableWindow::PopupModeEnd()
     {
         Sequence< PropertyValue > aArgs( 2 );
         aArgs[0].Name = "Columns";
-        aArgs[0].Value = makeAny( sal_Int16( nCol ));
+        aArgs[0].Value <<= sal_Int16( nCol );
         aArgs[1].Name = "Rows";
-        aArgs[1].Value = makeAny( sal_Int16( nLine ));
+        aArgs[1].Value <<= sal_Int16( nLine );
 
         TableDialog( aArgs );
     }
@@ -657,9 +657,9 @@ void ColumnsWindow::PopupModeEnd()
     {
         Sequence< PropertyValue > aArgs( 2 );
         aArgs[0].Name = "Columns";
-        aArgs[0].Value = makeAny( sal_Int16( nCol ));
+        aArgs[0].Value <<= sal_Int16( nCol );
         aArgs[1].Name = "Modifier";
-        aArgs[1].Value = makeAny( sal_Int16( m_bMod1 ? KEY_MOD1 : 0 ));
+        aArgs[1].Value <<= sal_Int16( m_bMod1 ? KEY_MOD1 : 0 );
 
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                         maCommand,

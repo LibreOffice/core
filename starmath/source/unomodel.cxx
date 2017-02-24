@@ -143,7 +143,7 @@ SmPrintUIOptions::SmPrintUIOptions()
 
     Sequence< PropertyValue > aHintNoLayoutPage( 1 );
     aHintNoLayoutPage[0].Name = "HintNoLayoutPage";
-    aHintNoLayoutPage[0].Value = makeAny( true );
+    aHintNoLayoutPage[0].Value <<= true;
     m_aUIProperties[nIdx++].Value <<= aHintNoLayoutPage;
 
     assert(nIdx == nNumProps);

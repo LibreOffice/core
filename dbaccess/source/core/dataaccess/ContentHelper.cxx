@@ -362,14 +362,14 @@ Sequence< Any > OContentHelper::setPropertyValues(const Sequence< PropertyValue 
                 if ( aNewValue != m_pImpl->m_aProps.aTitle )
                 {
                     aEvent.PropertyName = rValue.Name;
-                    aEvent.OldValue     = makeAny( m_pImpl->m_aProps.aTitle );
+                    aEvent.OldValue     <<= m_pImpl->m_aProps.aTitle;
 
                     try
                     {
                         impl_rename_throw( aNewValue ,false);
                         OSL_ENSURE( m_pImpl->m_aProps.aTitle == aNewValue, "OContentHelper::setPropertyValues('Title'): rename did not work!" );
 
-                        aEvent.NewValue     = makeAny( aNewValue );
+                        aEvent.NewValue     <<= aNewValue;
                         aChanges.getArray()[ nChanged ] = aEvent;
                         nChanged++;
                     }

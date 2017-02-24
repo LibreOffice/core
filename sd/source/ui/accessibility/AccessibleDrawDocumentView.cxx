@@ -841,7 +841,7 @@ css::uno::Sequence< css::uno::Any >
                             if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
                             {
                                 uno::Sequence<uno::Any> aRet( 1 );
-                                aRet[0] = uno::makeAny( xSel );
+                                aRet[0] <<= xSel;
                                 return aRet;
                             }
                         }
@@ -852,7 +852,7 @@ css::uno::Sequence< css::uno::Any >
             if ( xPara.is() )
             {
                 uno::Sequence<uno::Any> aRet( 1 );
-                aRet[0] = uno::makeAny( xPara );
+                aRet[0] <<= xPara;
                 return aRet;
             }
         }
@@ -882,7 +882,7 @@ css::uno::Sequence< css::uno::Any >
                                 xChildSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
                             {
                                 uno::Sequence<uno::Any> aRet( 1 );
-                                aRet[0] = uno::makeAny( xChildSel );
+                                aRet[0] <<= xChildSel;
                                 return aRet;
                             }
                         }
@@ -896,7 +896,7 @@ css::uno::Sequence< css::uno::Any >
             if ( xPara.is() )
             {
                 uno::Sequence<uno::Any> aRet( 1 );
-                aRet[0] = uno::makeAny( xPara );
+                aRet[0] <<= xPara;
                 return aRet;
             }
         }

@@ -313,8 +313,8 @@ void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
                 Any* pArray = aSequence.getArray();
                 PropertyValue aParam;
                 aParam.Name = "ParentWindow";
-                aParam.Value = makeAny(xDialogParentWindow);
-                pArray[0] = makeAny(aParam);
+                aParam.Value <<= xDialogParentWindow;
+                pArray[0] <<= aParam;
                 xInit->initialize( aSequence );
 
                 //execute dialog

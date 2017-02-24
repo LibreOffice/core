@@ -60,21 +60,21 @@ void ConfigurationAccess::Initialize (
     try
     {
         Sequence<Any> aCreationArguments(3);
-        aCreationArguments[0] = makeAny(beans::PropertyValue(
+        aCreationArguments[0] <<= beans::PropertyValue(
             "nodepath",
             0,
             makeAny(rsRootName),
-            beans::PropertyState_DIRECT_VALUE));
-        aCreationArguments[1] = makeAny(beans::PropertyValue(
+            beans::PropertyState_DIRECT_VALUE);
+        aCreationArguments[1] <<= beans::PropertyValue(
             "depth",
             0,
             makeAny((sal_Int32)-1),
-            beans::PropertyState_DIRECT_VALUE));
-        aCreationArguments[2] = makeAny(beans::PropertyValue(
+            beans::PropertyState_DIRECT_VALUE);
+        aCreationArguments[2] <<= beans::PropertyValue(
             "lazywrite",
             0,
             makeAny(true),
-            beans::PropertyState_DIRECT_VALUE));
+            beans::PropertyState_DIRECT_VALUE);
         OUString sAccessService;
         if (eMode == READ_ONLY)
             sAccessService = "com.sun.star.configuration.ConfigurationAccess";

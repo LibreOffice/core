@@ -3064,7 +3064,7 @@ css::uno::Any VCLXFixedHyperlink::getProperty( const OUString& PropertyName )
         {
             case BASEPROPERTY_URL:
             {
-                aProp = makeAny( OUString( pBase->GetURL() ) );
+                aProp <<= pBase->GetURL();
                 break;
             }
 

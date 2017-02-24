@@ -162,10 +162,10 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
         PropertyValue aProperty;
         aProperty.Name = "nodepath";
-        aProperty.Value = makeAny( aConfigRoot );
+        aProperty.Value <<= aConfigRoot;
 
         Sequence< Any > aArgumentList( 1 );
-        aArgumentList[0] = makeAny( aProperty );
+        aArgumentList[0] <<= aProperty;
 
         Reference< XNameAccess > xNameAccess =
             Reference< XNameAccess > (

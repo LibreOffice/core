@@ -39,9 +39,9 @@ SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Refere
     SAL_INFO("sw", "SwVbaGlobals::SwVbaGlobals()");
     uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
     aInitArgs[ 0 ].Name = "Application";
-    aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
+    aInitArgs[ 0 ].Value <<= getApplication();
     aInitArgs[ 1 ].Name = "WordDocumentContext";
-    aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
+    aInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );
 
     init( aInitArgs );
 }

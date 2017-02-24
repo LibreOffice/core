@@ -2799,7 +2799,7 @@ css::uno::Any SAL_CALL Frame::impl_getPropertyValue(const OUString& /*sProperty*
                 {
                     css::uno::Reference< css::task::XStatusIndicator > xProgress(m_xIndicatorInterception.get(),
                                                                                  css::uno::UNO_QUERY);
-                    aValue = css::uno::makeAny(xProgress);
+                    aValue <<= xProgress;
                 }
                 break;
 

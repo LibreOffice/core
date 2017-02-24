@@ -42,9 +42,9 @@ ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Referen
 {
     uno::Sequence< beans::PropertyValue > aInitArgs( 2 );
     aInitArgs[ 0 ].Name = "Application";
-    aInitArgs[ 0 ].Value = uno::makeAny( getApplication() );
+    aInitArgs[ 0 ].Value <<= getApplication();
     aInitArgs[ 1 ].Name = "ExcelDocumentContext";
-    aInitArgs[ 1 ].Value = uno::makeAny( getXSomethingFromArgs< frame::XModel >( aArgs, 0 ) );
+    aInitArgs[ 1 ].Value <<= getXSomethingFromArgs< frame::XModel >( aArgs, 0 );
 
     init( aInitArgs );
 }

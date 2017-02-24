@@ -747,10 +747,10 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
                     aDragSourceSN = "com.sun.star.datatransfer.dnd.X11DragSource";
                     aDropTargetSN = "com.sun.star.datatransfer.dnd.X11DropTarget";
 
-                    aDragSourceAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aDragSourceAL[ 1 ] = makeAny(static_cast<sal_IntPtr>(pEnvData->aShellWindow));
-                    aDropTargetAL[ 0 ] = makeAny( Application::GetDisplayConnection() );
-                    aDropTargetAL[ 1 ] = makeAny(static_cast<sal_IntPtr>(pEnvData->aShellWindow));
+                    aDragSourceAL[ 0 ] <<= Application::GetDisplayConnection();
+                    aDragSourceAL[ 1 ] <<= static_cast<sal_IntPtr>(pEnvData->aShellWindow);
+                    aDropTargetAL[ 0 ] <<= Application::GetDisplayConnection();
+                    aDropTargetAL[ 1 ] <<= static_cast<sal_IntPtr>(pEnvData->aShellWindow);
 #endif
                     if( !aDragSourceSN.isEmpty() )
                         mpWindowImpl->mpFrameData->mxDragSource.set(

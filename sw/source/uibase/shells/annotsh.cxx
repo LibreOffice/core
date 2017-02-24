@@ -1289,8 +1289,8 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
                             aParam.Name = "ParentWindow";
-                            aParam.Value = makeAny(xDialogParentWindow);
-                            pArray[0] = makeAny(aParam);
+                            aParam.Value <<= xDialogParentWindow;
+                            pArray[0] <<= aParam;
                             xInit->initialize( aSeq );
 
                             //execute dialog

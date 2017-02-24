@@ -10,18 +10,7 @@
 $(eval $(call gb_CompilerTest_CompilerTest,compilerplugins_clang))
 
 $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
-    compilerplugins/clang/test/datamembershadow \
-    compilerplugins/clang/test/externvar \
-    compilerplugins/clang/test/finalprotected \
-    compilerplugins/clang/test/passstuffbyref \
-    compilerplugins/clang/test/oslendian-1 \
-    compilerplugins/clang/test/oslendian-2 \
-    compilerplugins/clang/test/oslendian-3 \
-    compilerplugins/clang/test/redundantcast \
-    compilerplugins/clang/test/salbool \
-    compilerplugins/clang/test/stringconstant \
-    compilerplugins/clang/test/unnecessaryoverride-dtor \
-    compilerplugins/clang/test/vclwidgets \
+    compilerplugins/clang/test/unoany \
 ))
 
 $(eval $(call gb_CompilerTest_use_udk_api,compilerplugins_clang))

@@ -1601,12 +1601,12 @@ uno::Any SAL_CALL ChartController::getSelection()
         OUString aCID( m_aSelection.getSelectedCID() );
         if ( !aCID.isEmpty() )
         {
-            aReturn = uno::Any( aCID );
+            aReturn <<= aCID;
         }
         else
         {
             // #i12587# support for shapes in chart
-            aReturn = uno::Any( m_aSelection.getSelectedAdditionalShape() );
+            aReturn <<= m_aSelection.getSelectedAdditionalShape();
         }
     }
     return aReturn;

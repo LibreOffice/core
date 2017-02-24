@@ -166,9 +166,9 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
         uno::Any aValue;
 
         if ( aType == sheet::ConditionOperator_FORMULA)
-            aValue = uno::makeAny( sheet::ConditionOperator_FORMULA );
+            aValue <<= sheet::ConditionOperator_FORMULA;
         else
-            aValue = uno::makeAny( ScVbaFormatCondition::retrieveAPIOperator(_aOperator) );
+            aValue <<= ScVbaFormatCondition::retrieveAPIOperator(_aOperator);
 
         beans::PropertyValue aProperty( "Operator", 0, aValue, beans::PropertyState_DIRECT_VALUE );
         aPropertyValueVector.push_back( aProperty );
@@ -184,7 +184,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
             aPropertyValueVector.push_back( aProp );
         }
         aProperty.Name = "StyleName";
-        aProperty.Value = uno::makeAny( sStyleName );
+        aProperty.Value <<= sStyleName;
 
         mxSheetConditionalEntries->addNew(comphelper::containerToSequence(aPropertyValueVector));
         for (sal_Int32 i = mxSheetConditionalEntries->getCount()-1; i >= 0; i--)

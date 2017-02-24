@@ -277,7 +277,7 @@ bool CreateDir( const INetURLObject& rURL )
             uno::Sequence< uno::Any >               aValues( 1 );
 
             aProps[0] = "Title";
-            aValues[0] = uno::makeAny( OUString( rURL.GetName() ) );
+            aValues[0] <<= rURL.GetName();
 
         ::ucbhelper::Content aContent( rURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), aCmdEnv, comphelper::getProcessComponentContext() );
         bRet = aParent.insertNewContent( "application/vnd.sun.staroffice.fsys-folder", aProps, aValues, aContent );

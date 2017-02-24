@@ -505,7 +505,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId) const
         case SID_QUERY_LIMIT:
             aReturn.bEnabled = m_bGraphicalDesign;
             if( aReturn.bEnabled )
-                aReturn.aValue = makeAny( m_nLimit );
+                aReturn.aValue <<= m_nLimit;
             break;
         case SID_QUERY_PROP_DLG:
             aReturn.bEnabled = m_bGraphicalDesign;

@@ -241,7 +241,7 @@ bool SfxStringListItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 
     css::uno::Sequence< OUString > aStringList;
     pThis->GetStringList( aStringList );
-    rVal = css::uno::makeAny( aStringList );
+    rVal <<= aStringList;
     return true;
 }
 

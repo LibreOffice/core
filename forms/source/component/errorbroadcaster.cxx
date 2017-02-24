@@ -62,9 +62,9 @@ namespace frm
     {
         Any aError;
         if ( !_rContextDescription.isEmpty() )
-            aError = makeAny( prependErrorInfo( _rException, static_cast< XSQLErrorBroadcaster* >( this ), _rContextDescription ) );
+            aError <<= prependErrorInfo( _rException, static_cast< XSQLErrorBroadcaster* >( this ), _rContextDescription );
         else
-            aError = makeAny( _rException );
+            aError <<= _rException;
 
         onError( SQLErrorEvent( static_cast< XSQLErrorBroadcaster* >( this ), aError ) );
     }

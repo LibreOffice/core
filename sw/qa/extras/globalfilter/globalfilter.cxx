@@ -623,7 +623,7 @@ void Test::testMSCharBackgroundEditing()
                 if (rProp.Name == "CharShadingMarker")
                 {
                     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), true, rProp.Value.get<bool>());
-                    rProp.Value = uno::makeAny(false);
+                    rProp.Value <<= false;
                 }
             }
             xRun->setPropertyValue("CharInteropGrabBag", uno::makeAny(aGrabBag));

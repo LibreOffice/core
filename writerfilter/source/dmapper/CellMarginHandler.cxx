@@ -78,17 +78,17 @@ void CellMarginHandler::createGrabBag(const OUString& aName)
 
     uno::Sequence<beans::PropertyValue> aSeq(2);
     aSeq[0].Name = "w";
-    aSeq[0].Value = uno::makeAny(m_nWidth);
+    aSeq[0].Value <<= m_nWidth;
     aSeq[1].Name = "type";
     switch (m_nType)
     {
-        case NS_ooxml::LN_Value_ST_TblWidth_nil: aSeq[1].Value = uno::makeAny(OUString("nil")); break;
-        case NS_ooxml::LN_Value_ST_TblWidth_pct: aSeq[1].Value = uno::makeAny(OUString("pct")); break;
-        case NS_ooxml::LN_Value_ST_TblWidth_dxa: aSeq[1].Value = uno::makeAny(OUString("dxa")); break;
-        case NS_ooxml::LN_Value_ST_TblWidth_auto: aSeq[1].Value = uno::makeAny(OUString("auto")); break;
+        case NS_ooxml::LN_Value_ST_TblWidth_nil: aSeq[1].Value <<= OUString("nil"); break;
+        case NS_ooxml::LN_Value_ST_TblWidth_pct: aSeq[1].Value <<= OUString("pct"); break;
+        case NS_ooxml::LN_Value_ST_TblWidth_dxa: aSeq[1].Value <<= OUString("dxa"); break;
+        case NS_ooxml::LN_Value_ST_TblWidth_auto: aSeq[1].Value <<= OUString("auto"); break;
     }
 
-    aRet.Value = uno::makeAny(aSeq);
+    aRet.Value <<= aSeq;
     m_aInteropGrabBag.push_back(aRet);
 }
 
@@ -167,7 +167,7 @@ beans::PropertyValue CellMarginHandler::getInteropGrabBag()
 {
     beans::PropertyValue aRet;
     aRet.Name = m_aInteropGrabBagName;
-    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_aInteropGrabBag));
+    aRet.Value <<= comphelper::containerToSequence(m_aInteropGrabBag);
     return aRet;
 }
 

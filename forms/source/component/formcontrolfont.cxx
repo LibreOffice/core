@@ -96,7 +96,7 @@ namespace frm
                 break;
 
             case PROPERTY_ID_FONT_SLANT:
-                aValue = makeAny(_rFont.Slant);
+                aValue <<= _rFont.Slant;
                 break;
 
             case PROPERTY_ID_FONT_UNDERLINE:
@@ -108,7 +108,7 @@ namespace frm
                 break;
 
             case PROPERTY_ID_FONT_WORDLINEMODE:
-                aValue = makeAny( _rFont.WordLineMode );
+                aValue <<= _rFont.WordLineMode;
                 break;
 
             default:
@@ -238,7 +238,7 @@ namespace frm
             break;
 
         case PROPERTY_ID_FONT:
-            _rValue = makeAny( m_aFont );
+            _rValue <<= m_aFont;
             break;
 
         default:

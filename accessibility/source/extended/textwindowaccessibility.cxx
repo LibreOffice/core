@@ -951,21 +951,21 @@ Document::retrieveCharacterAttributes(
     //character font name
     aAttribs[i].Name = "CharFontName";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::Any( aFont.GetFamilyName() );
+    aAttribs[i].Value <<= aFont.GetFamilyName();
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character height
     aAttribs[i].Name = "CharHeight";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetFontHeight() );
+    aAttribs[i].Value <<= (sal_Int16)aFont.GetFontHeight();
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character posture
     aAttribs[i].Name = "CharPosture";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetItalic() );
+    aAttribs[i].Value <<= (sal_Int16)aFont.GetItalic();
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
@@ -981,28 +981,28 @@ Document::retrieveCharacterAttributes(
     //character strikeout
     aAttribs[i].Name = "CharStrikeout";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetStrikeout() );
+    aAttribs[i].Value <<= (sal_Int16)aFont.GetStrikeout();
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character underline
     aAttribs[i].Name = "CharUnderline";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::Any( (sal_Int16)aFont.GetUnderline() );
+    aAttribs[i].Value <<= (sal_Int16)aFont.GetUnderline();
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character weight
     aAttribs[i].Name = "CharWeight";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::Any( (float)aFont.GetWeight() );
+    aAttribs[i].Value <<= (float)aFont.GetWeight();
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 
     //character alignment
     aAttribs[i].Name = "ParaAdjust";
     aAttribs[i].Handle = -1;
-    aAttribs[i].Value = css::uno::Any( (sal_Int16)m_rEngine.GetTextAlign() );
+    aAttribs[i].Value <<= (sal_Int16)m_rEngine.GetTextAlign();
     aAttribs[i].State = css::beans::PropertyState_DIRECT_VALUE;
     i++;
 

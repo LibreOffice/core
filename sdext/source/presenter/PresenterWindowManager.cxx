@@ -539,15 +539,15 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
         {
             default:
             case VM_Standard:
-                aValue = Any(sal_Int32(0));
+                aValue <<= sal_Int32(0);
                 break;
 
             case VM_Notes:
-                aValue = Any(sal_Int32(1));
+                aValue <<= sal_Int32(1);
                 break;
 
             case VM_SlideOverview:
-                aValue = Any(sal_Int32(2));
+                aValue <<= sal_Int32(2);
                 break;
         }
 

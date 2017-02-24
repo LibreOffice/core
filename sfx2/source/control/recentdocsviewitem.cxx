@@ -198,11 +198,11 @@ void RecentDocsViewItem::OpenDocument()
     sal_Int32 nSize = 2;
     aArgsList.realloc(nSize);
     aArgsList[0].Name = "Referer";
-    aArgsList[0].Value = makeAny(OUString("private:user"));
+    aArgsList[0].Value <<= OUString("private:user");
 
     // documents will never be opened as templates
     aArgsList[1].Name = "AsTemplate";
-    aArgsList[1].Value = makeAny(false);
+    aArgsList[1].Value <<= false;
 
     xDispatch = xDispatchProvider->queryDispatch(aTargetURL, "_default", 0);
 

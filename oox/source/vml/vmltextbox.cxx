@@ -85,13 +85,13 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
         if (rFont.mobBold.has())
         {
             aPropertyValue.Name = "CharWeight";
-            aPropertyValue.Value = uno::makeAny(rFont.mobBold.get() ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL);
+            aPropertyValue.Value <<= rFont.mobBold.get() ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.monSize.has())
         {
             aPropertyValue.Name = "CharHeight";
-            aPropertyValue.Value = uno::makeAny(double(rFont.monSize.get()) / 2.);
+            aPropertyValue.Value <<= double(rFont.monSize.get()) / 2.;
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.monSpacing.has())
@@ -100,7 +100,7 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
             // Value is not converted to mm100: SvxKerningItem::PutValue() gets
             // called with nMemberId = 0, so no mm100 -> twips conversion will
             // be done there.
-            aPropertyValue.Value = uno::makeAny(sal_Int16(rFont.monSpacing.get()));
+            aPropertyValue.Value <<= sal_Int16(rFont.monSpacing.get());
             aPropVec.push_back(aPropertyValue);
         }
         if (rParagraph.moParaAdjust.has())
@@ -112,13 +112,13 @@ void TextBox::convert(const uno::Reference<drawing::XShape>& xShape) const
                 eAdjust = style::ParagraphAdjust_RIGHT;
 
             aPropertyValue.Name = "ParaAdjust";
-            aPropertyValue.Value = uno::makeAny(eAdjust);
+            aPropertyValue.Value <<= eAdjust;
             aPropVec.push_back(aPropertyValue);
         }
         if (rFont.moColor.has())
         {
             aPropertyValue.Name = "CharColor";
-            aPropertyValue.Value = uno::makeAny(rFont.moColor.get().toUInt32(16));
+            aPropertyValue.Value <<= rFont.moColor.get().toUInt32(16);
             aPropVec.push_back(aPropertyValue);
         }
         xTextAppend->appendTextPortion(aIt->maText, comphelper::containerToSequence(aPropVec));

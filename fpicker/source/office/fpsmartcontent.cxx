@@ -315,7 +315,7 @@ namespace svt
                 Sequence< OUString > aNames { "Title" };
                 Sequence< Any > aValues( 1 );
                 Any* pValues = aValues.getArray();
-                pValues[0] = makeAny( _rTitle );
+                pValues[0] <<= _rTitle;
                 m_pContent->insertNewContent( sFolderType, aNames, aValues, aCreated );
 
                 aCreatedUrl = aCreated.getURL();

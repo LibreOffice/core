@@ -97,16 +97,15 @@ protected:
         // Positioned update/delete not supported, so no cursor name
         // Fetch direction and size are cursor-specific things, so not used now.
         // Fetch size not set
-        m_props[ BASERESULTSET_FETCH_DIRECTION ] = css::uno::makeAny(
-            css::sdbc::FetchDirection::UNKNOWN);
+        m_props[ BASERESULTSET_FETCH_DIRECTION ] <<= css::sdbc::FetchDirection::UNKNOWN;
         // No escape processing for now
         m_props[ BASERESULTSET_ESCAPE_PROCESSING ] <<= false;
         // Bookmarks not implemented for now
         m_props[ BASERESULTSET_IS_BOOKMARKABLE ] <<= false;
-        m_props[ BASERESULTSET_RESULT_SET_CONCURRENCY ] = css::uno::makeAny(
-            css::sdbc::ResultSetConcurrency::UPDATABLE );
-        m_props[ BASERESULTSET_RESULT_SET_TYPE ] = css::uno::makeAny(
-            css::sdbc::ResultSetType::SCROLL_INSENSITIVE );
+        m_props[ BASERESULTSET_RESULT_SET_CONCURRENCY ] <<=
+            css::sdbc::ResultSetConcurrency::UPDATABLE;
+        m_props[ BASERESULTSET_RESULT_SET_TYPE ] <<=
+            css::sdbc::ResultSetType::SCROLL_INSENSITIVE;
     }
 
     OUString buildWhereClause();

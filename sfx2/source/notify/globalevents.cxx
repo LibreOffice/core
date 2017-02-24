@@ -320,7 +320,7 @@ uno::Reference< container::XEnumeration > SAL_CALL SfxGlobalEvents_Impl::createE
     uno::Sequence<uno::Any> models(m_lModels.size());
     for (size_t i = 0; i < m_lModels.size(); ++i)
     {
-        models[i] = uno::makeAny(m_lModels[i]);
+        models[i] <<= m_lModels[i];
     }
     uno::Reference< container::XEnumeration > xEnum(
         static_cast<container::XEnumeration*>(

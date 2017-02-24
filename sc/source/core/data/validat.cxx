@@ -206,13 +206,13 @@ bool ScValidationData::DoScript( const ScAddress& rPos, const OUString& rInput,
             aValStr = pCell->GetString().getString();
     }
     if ( bIsValue )
-        aParams[0] = css::uno::makeAny( nValue );
+        aParams[0] <<= nValue;
     else
-        aParams[0] = css::uno::makeAny( OUString( aValStr ) );
+        aParams[0] <<= aValStr;
 
     //  2) Position of the cell
     OUString aPosStr(rPos.Format(ScRefFlags::VALID | ScRefFlags::TAB_3D, pDocument, pDocument->GetAddressConvention()));
-    aParams[1] = css::uno::makeAny(aPosStr);
+    aParams[1] <<= aPosStr;
 
     //  use link-update flag to prevent closing the document
     //  while the macro is running

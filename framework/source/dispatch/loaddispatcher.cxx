@@ -141,7 +141,7 @@ css::uno::Any LoadDispatcher::impl_dispatch( const css::util::URL& rURL,
     // return the model - like loadComponentFromURL()
     css::uno::Any aRet;
     if ( xComponent.is () )
-        aRet = css::uno::makeAny( xComponent );
+        aRet <<= xComponent;
 
     return aRet;
 }

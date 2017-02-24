@@ -141,11 +141,11 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
                 Sequence<Any>( &propValue, 1 ) ),
             UNO_QUERY_THROW );
 
-        propValue = Any(
+        propValue <<=
             beans::PropertyValue(
                 "nodepath", -1,
                 Any( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ),
-                beans::PropertyState_DIRECT_VALUE ) );
+                beans::PropertyState_DIRECT_VALUE );
 
         Reference<container::XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(

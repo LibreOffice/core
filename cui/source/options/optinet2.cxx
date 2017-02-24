@@ -201,10 +201,10 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     beans::NamedValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value = Any( aConfigRoot );
+    aProperty.Value <<= aConfigRoot;
 
     Sequence< Any > aArgumentList( 1 );
-    aArgumentList[0] = Any( aProperty );
+    aArgumentList[0] <<= aProperty;
 
     m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
         "com.sun.star.configuration.ConfigurationUpdateAccess",

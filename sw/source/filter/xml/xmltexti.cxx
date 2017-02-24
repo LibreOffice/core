@@ -929,7 +929,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
             {
                 aCommandSequence[nIndex].Name = (*aIter).first;
                 aCommandSequence[nIndex].Handle = -1;
-                aCommandSequence[nIndex].Value = makeAny( OUString((*aIter).second) );
+                aCommandSequence[nIndex].Value <<= (*aIter).second;
                 aCommandSequence[nIndex].State = beans::PropertyState_DIRECT_VALUE;
                 ++aIter;
                 ++nIndex;

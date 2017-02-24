@@ -675,17 +675,17 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
     {
         case word::WdInformation::wdActiveEndPageNumber:
         {
-            result = uno::makeAny( SwVbaInformationHelper::handleWdActiveEndPageNumber( mxTextViewCursor ) );
+            result <<= SwVbaInformationHelper::handleWdActiveEndPageNumber( mxTextViewCursor );
             break;
         }
         case word::WdInformation::wdNumberOfPagesInDocument:
         {
-            result = uno::makeAny( SwVbaInformationHelper::handleWdNumberOfPagesInDocument( mxModel ) );
+            result <<= SwVbaInformationHelper::handleWdNumberOfPagesInDocument( mxModel );
             break;
         }
         case word::WdInformation::wdVerticalPositionRelativeToPage:
         {
-            result = uno::makeAny( SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( mxModel, mxTextViewCursor ) );
+            result <<= SwVbaInformationHelper::handleWdVerticalPositionRelativeToPage( mxModel, mxTextViewCursor );
             break;
         }
         case word::WdInformation::wdWithInTable:
@@ -693,10 +693,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
             uno::Reference< beans::XPropertySet > xCursorProps( mxTextViewCursor, uno::UNO_QUERY_THROW );
             uno::Reference< text::XTextTable > xTextTable;
             xCursorProps->getPropertyValue("TextTable") >>= xTextTable;
-            if( xTextTable.is() )
-                result = uno::makeAny( true );
-            else
-                result = uno::makeAny( false );
+            result <<= xTextTable.is();
             break;
         }
         case word::WdInformation::wdHeaderFooterType:
@@ -761,7 +758,7 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type )
                     nHeaderFooterType = -1;
                 }
             }
-            result = uno::makeAny( nHeaderFooterType );
+            result <<= nHeaderFooterType;
             break;
         }
         default:
