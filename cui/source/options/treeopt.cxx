@@ -124,7 +124,7 @@ static char const VIEWOPT_DATANAME[] = "page data";
 
 static inline void SetViewOptUserItem( SvtViewOptions& rOpt, const OUString& rData )
 {
-    rOpt.SetUserItem( VIEWOPT_DATANAME, makeAny( OUString( rData ) ) );
+    rOpt.SetUserItem( VIEWOPT_DATANAME, Any( OUString( rData ) ) );
 }
 
 static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
@@ -2194,7 +2194,7 @@ bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
     {
         try
         {
-            bRet = m_xEventHdl->callHandlerMethod( m_xPage, makeAny( rAction ), "external_event" );
+            bRet = m_xEventHdl->callHandlerMethod( m_xPage, Any( rAction ), "external_event" );
         }
         catch ( Exception& )
         {

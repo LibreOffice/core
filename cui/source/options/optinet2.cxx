@@ -201,10 +201,10 @@ SvxProxyTabPage::SvxProxyTabPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     beans::NamedValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value = makeAny( aConfigRoot );
+    aProperty.Value = Any( aConfigRoot );
 
     Sequence< Any > aArgumentList( 1 );
-    aArgumentList[0] = makeAny( aProperty );
+    aArgumentList[0] = Any( aProperty );
 
     m_xConfigurationUpdateAccess = xConfigurationProvider->createInstanceWithArguments(
         "com.sun.star.configuration.ConfigurationUpdateAccess",
@@ -422,49 +422,49 @@ bool SvxProxyTabPage::FillItemSet(SfxItemSet* )
             }
 
             xPropertySet->setPropertyValue(g_aProxyModePN,
-                makeAny((sal_Int32) nSelPos));
+                Any((sal_Int32) nSelPos));
             bModified = true;
         }
 
         if(m_pHttpProxyED->IsValueChangedFromSaved())
         {
-            xPropertySet->setPropertyValue( g_aHttpProxyPN, makeAny(m_pHttpProxyED->GetText()));
+            xPropertySet->setPropertyValue( g_aHttpProxyPN, Any(m_pHttpProxyED->GetText()));
             bModified = true;
         }
 
         if ( m_pHttpPortED->IsValueChangedFromSaved())
         {
-            xPropertySet->setPropertyValue( g_aHttpPortPN, makeAny(m_pHttpPortED->GetText().toInt32()));
+            xPropertySet->setPropertyValue( g_aHttpPortPN, Any(m_pHttpPortED->GetText().toInt32()));
             bModified = true;
         }
 
         if( m_pHttpsProxyED->IsValueChangedFromSaved() )
         {
-            xPropertySet->setPropertyValue( g_aHttpsProxyPN, makeAny(m_pHttpsProxyED->GetText()) );
+            xPropertySet->setPropertyValue( g_aHttpsProxyPN, Any(m_pHttpsProxyED->GetText()) );
             bModified = true;
         }
 
         if ( m_pHttpsPortED->IsValueChangedFromSaved() )
         {
-            xPropertySet->setPropertyValue( g_aHttpsPortPN, makeAny(m_pHttpsPortED->GetText().toInt32()) );
+            xPropertySet->setPropertyValue( g_aHttpsPortPN, Any(m_pHttpsPortED->GetText().toInt32()) );
             bModified = true;
         }
 
         if( m_pFtpProxyED->IsValueChangedFromSaved())
         {
-            xPropertySet->setPropertyValue( g_aFtpProxyPN, makeAny(m_pFtpProxyED->GetText()) );
+            xPropertySet->setPropertyValue( g_aFtpProxyPN, Any(m_pFtpProxyED->GetText()) );
             bModified = true;
         }
 
         if ( m_pFtpPortED->IsValueChangedFromSaved() )
         {
-            xPropertySet->setPropertyValue( g_aFtpPortPN, makeAny(m_pFtpPortED->GetText().toInt32()));
+            xPropertySet->setPropertyValue( g_aFtpPortPN, Any(m_pFtpPortED->GetText().toInt32()));
             bModified = true;
         }
 
         if ( m_pNoProxyForED->IsValueChangedFromSaved() )
         {
-            xPropertySet->setPropertyValue( g_aNoProxyDescPN, makeAny( m_pNoProxyForED->GetText()));
+            xPropertySet->setPropertyValue( g_aNoProxyDescPN, Any( m_pNoProxyForED->GetText()));
             bModified = true;
         }
 

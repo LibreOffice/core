@@ -722,23 +722,19 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton, void )
                         }
                         catch ( reflection::InvocationTargetException& ite )
                         {
-                            css::uno::Any a = makeAny(ite);
-                            ShowErrorDialog(a);
+                            ShowErrorDialog(css::uno::Any(ite));
                         }
                         catch ( provider::ScriptFrameworkErrorException& ite )
                         {
-                            css::uno::Any a = makeAny(ite);
-                            ShowErrorDialog(a);
+                            ShowErrorDialog(css::uno::Any(ite));
                         }
                         catch ( RuntimeException& re )
                         {
-                            css::uno::Any a = makeAny(re);
-                            ShowErrorDialog(a);
+                            ShowErrorDialog(css::uno::Any(re));
                         }
                         catch ( Exception& e )
                         {
-                            css::uno::Any a = makeAny(e);
-                            ShowErrorDialog(a);
+                            ShowErrorDialog(css::uno::Any(e));
                         }
                     }
                     StoreCurrentSelection();

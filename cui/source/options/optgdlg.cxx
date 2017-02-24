@@ -468,9 +468,9 @@ CanvasSettings::CanvasSettings() :
                 comphelper::getProcessComponentContext()));
 
         Any propValue(
-            makeAny( NamedValue(
+            Any( NamedValue(
                          "nodepath",
-                         makeAny( OUString("/org.openoffice.Office.Canvas") ) ) ) );
+                         Any( OUString("/org.openoffice.Office.Canvas") ) ) ) );
 
         mxForceFlagNameAccess.set(
             xConfigProvider->createInstanceWithArguments(
@@ -478,10 +478,10 @@ CanvasSettings::CanvasSettings() :
                 Sequence<Any>( &propValue, 1 ) ),
             UNO_QUERY_THROW );
 
-        propValue = makeAny(
+        propValue = Any(
             NamedValue(
                 "nodepath",
-                makeAny( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ) ) );
+                Any( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ) ) );
 
         Reference<XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
@@ -597,7 +597,7 @@ void CanvasSettings::EnabledHardwareAcceleration( bool _bEnabled ) const
     if( !xNameReplace.is() )
         return;
 
-    xNameReplace->replaceByName( "ForceSafeServiceImpl", makeAny(!_bEnabled) );
+    xNameReplace->replaceByName( "ForceSafeServiceImpl", Any(!_bEnabled) );
 
     Reference< XChangesBatch > xChangesBatch(
         mxForceFlagNameAccess, UNO_QUERY );
@@ -1170,7 +1170,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
         Reference< XNameAccess > theNameAccess;
 
         // find out which locales are currently installed and add them to the listbox
-        theArgs[0] = makeAny(NamedValue("nodepath", makeAny(OUString(sInstalledLocalesPath))));
+        theArgs[0] = Any(NamedValue("nodepath", Any(OUString(sInstalledLocalesPath))));
         theNameAccess.set(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
@@ -1189,7 +1189,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
 
         // find out whether the user has a specific locale specified
         Sequence< Any > theArgs2(1);
-        theArgs2[0] = makeAny(NamedValue("nodepath", makeAny(OUString(sUserLocalePath))));
+        theArgs2[0] = Any(NamedValue("nodepath", Any(OUString(sUserLocalePath))));
         theNameAccess.set(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
@@ -1370,14 +1370,14 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
         Sequence< Any > theArgs(1);
-        theArgs[0] = makeAny(NamedValue("nodepath", makeAny(OUString(sUserLocalePath))));
+        theArgs[0] = Any(NamedValue("nodepath", Any(OUString(sUserLocalePath))));
         Reference< XPropertySet >xProp(
             theConfigProvider->createInstanceWithArguments(sAccessUpdSrvc, theArgs ), UNO_QUERY_THROW );
         if ( !m_sUserLocaleValue.equals(aLangString))
         {
             // OSL_FAIL("UserInterface language was changed, restart.");
             // write new value
-            xProp->setPropertyValue(sUserLocaleKey, makeAny(aLangString));
+            xProp->setPropertyValue(sUserLocaleKey, Any(aLangString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
             // display info
             SolarMutexGuard aGuard;

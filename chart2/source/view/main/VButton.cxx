@@ -49,16 +49,16 @@ void VButton::createShapes(const awt::Point& rPosition,
     PropertyMapper::getTextLabelMultiPropertyLists(xTextProp, *pPropNames, *pPropValues);
 
     tPropertyNameValueMap aTextValueMap;
-    aTextValueMap["CharHeight"] = uno::makeAny<float>(10.0f);
-    aTextValueMap["FillColor"] = uno::makeAny<sal_Int32>(0xe6e6e6);
-    aTextValueMap["FillStyle"] = uno::makeAny(drawing::FillStyle_SOLID);
-    aTextValueMap["LineColor"] = uno::makeAny<sal_Int32>(0xcccccc);
-    aTextValueMap["LineStyle"] = uno::makeAny(drawing::LineStyle_SOLID);
-    aTextValueMap["ParaAdjust"] = uno::makeAny(style::ParagraphAdjust_CENTER);
-    aTextValueMap["TextHorizontalAdjust"] = uno::makeAny(drawing::TextHorizontalAdjust_CENTER);
-    aTextValueMap["TextVerticalAdjust"] = uno::makeAny(drawing::TextVerticalAdjust_CENTER);
+    aTextValueMap["CharHeight"] <<= (float)10.0f;
+    aTextValueMap["FillColor"] <<= (sal_Int32)0xe6e6e6;
+    aTextValueMap["FillStyle"] <<= drawing::FillStyle_SOLID;
+    aTextValueMap["LineColor"] <<= (sal_Int32)0xcccccc;
+    aTextValueMap["LineStyle"] <<= drawing::LineStyle_SOLID;
+    aTextValueMap["ParaAdjust"] <<= style::ParagraphAdjust_CENTER;
+    aTextValueMap["TextHorizontalAdjust"] <<= drawing::TextHorizontalAdjust_CENTER;
+    aTextValueMap["TextVerticalAdjust"] <<= drawing::TextVerticalAdjust_CENTER;
 
-    aTextValueMap["Name"] = uno::makeAny(OUString(m_sCID)); //CID OUString
+    aTextValueMap["Name"] <<= m_sCID; //CID OUString
 
     PropertyMapper::getMultiPropertyListsFromValueMap(*pPropNames, *pPropValues, aTextValueMap);
 

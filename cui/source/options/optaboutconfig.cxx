@@ -483,10 +483,10 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( const OUString&
 
     beans::NamedValue aProperty;
     aProperty.Name = "nodepath";
-    aProperty.Value = uno::makeAny( sNodePath );
+    aProperty.Value <<= sNodePath;
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] = uno::makeAny( aProperty );
+    aArgumentList[0] <<= aProperty;
 
     OUString sAccessString;
 
@@ -587,7 +587,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
         OUString sPropertyType = SvTabListBox::GetEntryText( pEntry, 2 );
         OUString sPropertyValue = SvTabListBox::GetEntryText( pEntry, 3 );
 
-        std::shared_ptr< Prop_Impl > pProperty (new Prop_Impl( pUserData->sPropertyPath, sPropertyName, makeAny( sPropertyValue ) ) );
+        std::shared_ptr< Prop_Impl > pProperty (new Prop_Impl( pUserData->sPropertyPath, sPropertyName, Any( sPropertyValue ) ) );
         bool bSaveChanges = false;
 
         bool bOpenDialog = true;
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                 bValue = true;
             }
 
-            pProperty->Value = uno::makeAny( bValue );
+            pProperty->Value <<= bValue;
             bOpenDialog = false;
             bSaveChanges = true;
         }
@@ -651,13 +651,13 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                             nShort = (sal_Int16) nNumb;
                         else
                             throw uno::Exception();
-                        pProperty->Value = uno::makeAny( nShort );
+                        pProperty->Value <<= nShort;
                     }
                     else if( sPropertyType == "long" )
                     {
                         sal_Int32 nLong = sNewValue.toInt32();
                         if( !( nLong==0 && sNewValue.getLength()!=1 ) && nLong < SAL_MAX_INT32 && nLong > SAL_MIN_INT32)
-                            pProperty->Value = uno::makeAny( nLong );
+                            pProperty->Value <<= nLong;
                         else
                             throw uno::Exception();
                     }
@@ -665,7 +665,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     {
                         sal_Int64 nHyper = sNewValue.toInt64();
                         if( !( nHyper==0 && sNewValue.getLength()!=1 ) && nHyper < SAL_MAX_INT32 && nHyper > SAL_MIN_INT32)
-                            pProperty->Value = uno::makeAny( nHyper );
+                            pProperty->Value <<= nHyper;
                         else
                             throw uno::Exception();
                     }
@@ -673,7 +673,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     {
                         double nDoub = sNewValue.toDouble();
                         if( !( nDoub ==0 && sNewValue.getLength()!=1 ) && nDoub < SAL_MAX_INT32 && nDoub > SAL_MIN_INT32)
-                            pProperty->Value = uno::makeAny( nDoub );
+                            pProperty->Value <<= nDoub;
                         else
                             throw uno::Exception();
                     }
@@ -681,13 +681,13 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                     {
                         float nFloat = sNewValue.toFloat();
                         if( !( nFloat ==0 && sNewValue.getLength()!=1 ) && nFloat < SAL_MAX_INT32 && nFloat > SAL_MIN_INT32)
-                            pProperty->Value = uno::makeAny( nFloat );
+                            pProperty->Value <<= nFloat;
                         else
                             throw uno::Exception();
                     }
                     else if( sPropertyType == "string" )
                     {
-                        pProperty->Value = uno::makeAny( sNewValue );
+                        pProperty->Value <<= sNewValue;
                     }
                     else if( sPropertyType == "[]short" )
                     {
@@ -703,7 +703,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                         {
                             seqShort[i] = (sal_Int16) seqStr[i].toInt32();
                         }
-                        pProperty->Value = uno::makeAny( seqShort );
+                        pProperty->Value <<= seqShort;
                     }
                     else if( sPropertyType == "[]long" )
                     {
@@ -715,7 +715,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                         {
                             seqLong[i] = seqStrLong[i].toInt32();
                         }
-                        pProperty->Value = uno::makeAny( seqLong );
+                        pProperty->Value <<= seqLong;
                     }
                     else if( sPropertyType == "[]hyper" )
                     {
@@ -726,7 +726,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                         {
                             seqHyper[i] = seqStrHyper[i].toInt64();
                         }
-                        pProperty->Value = uno::makeAny( seqHyper );
+                        pProperty->Value <<= seqHyper;
                     }
                     else if( sPropertyType == "[]double" )
                     {
@@ -737,7 +737,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                         {
                             seqDoub[i] = seqStrDoub[i].toDouble();
                         }
-                        pProperty->Value = uno::makeAny( seqDoub );
+                        pProperty->Value <<= seqDoub;
                     }
                     else if( sPropertyType == "[]float" )
                     {
@@ -748,11 +748,11 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, Button*, void )
                         {
                             seqFloat[i] = seqStrFloat[i].toFloat();
                         }
-                        pProperty->Value = uno::makeAny( seqFloat );
+                        pProperty->Value <<= seqFloat;
                     }
                     else if( sPropertyType == "[]string" )
                     {
-                        pProperty->Value = uno::makeAny( comphelper::containerToSequence( commaStringToSequence( sNewValue )));
+                        pProperty->Value <<= comphelper::containerToSequence( commaStringToSequence( sNewValue ));
                     }
                     else //unknown
                         throw uno::Exception();

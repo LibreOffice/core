@@ -297,7 +297,7 @@ Any SAL_CALL OFactoryComponentHelper::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XUnloadingPreference>::get() )
     {
-        return makeAny(
+        return Any(
             Reference< XUnloadingPreference >(
                 static_cast< XUnloadingPreference * >(this) ) );
     }

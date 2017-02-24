@@ -62,32 +62,32 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
     context_values.push_back(
         cppu::ContextEntry_Init(
             "/singletons/com.sun.star.lang.theServiceManager",
-            css::uno::makeAny(
+            css::uno::Any(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(smgr.get()))),
             false));
     context_values.push_back(
         cppu::ContextEntry_Init(
             "/singletons/com.sun.star.reflection.theTypeDescriptionManager",
-            css::uno::makeAny(
+            css::uno::Any(
                 css::uno::Reference< css::uno::XInterface >(
                     static_cast< cppu::OWeakObject * >(tmgr.get()))),
             false));
     context_values.push_back( //TODO: from services.rdb?
         cppu::ContextEntry_Init(
             "/singletons/com.sun.star.util.theMacroExpander",
-            css::uno::makeAny(
+            css::uno::Any(
                 cppuhelper::detail::create_bootstrap_macro_expander_factory()),
             true));
     smgr->addSingletonContextEntries(&context_values);
     context_values.push_back(
         cppu::ContextEntry_Init(
             "/services/com.sun.star.security.AccessController/mode",
-            css::uno::makeAny(rtl::OUString("off")), false));
+            css::uno::Any(rtl::OUString("off")), false));
     context_values.push_back(
         cppu::ContextEntry_Init(
             "/singletons/com.sun.star.security.theAccessController",
-            css::uno::makeAny(
+            css::uno::Any(
                 rtl::OUString("com.sun.star.security.AccessController")),
             true));
     assert(!context_values.empty());

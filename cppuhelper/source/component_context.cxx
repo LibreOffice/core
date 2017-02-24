@@ -378,7 +378,7 @@ Any ComponentContext::getValueByName( OUString const & rName )
         if (m_xDelegate.is())
             return m_xDelegate->getValueByName( rName );
         else
-            return makeAny( Reference<XComponentContext>(this) );
+            return Any( Reference<XComponentContext>(this) );
     }
 
     Any ret( lookupMap( rName ) );
@@ -538,7 +538,7 @@ ComponentContext::ComponentContext(
                 if (xProps.is())
                 {
                     Reference< XComponentContext > xThis( this );
-                    xProps->setPropertyValue( "DefaultContext", makeAny( xThis ) );
+                    xProps->setPropertyValue( "DefaultContext", Any( xThis ) );
                 }
             }
             catch (...)

@@ -817,12 +817,12 @@ void SvxPathTabPage::SetPathList(
         sal_Int32 nPos = 0;
         for ( sal_Int32 i = 0; i < nCount; ++i )
             pArray[i] = _rUserPath.getToken( 0, MULTIPATH_DELIMITER, nPos );
-        Any aValue = makeAny( aPathSeq );
+        Any aValue( aPathSeq );
         pImpl->m_xPathSettings->setPropertyValue(
             sCfgName + POSTFIX_USER, aValue);
 
         // then the writable path
-        aValue = makeAny( _rWritablePath );
+        aValue <<= _rWritablePath;
         pImpl->m_xPathSettings->setPropertyValue(
             sCfgName + POSTFIX_WRITABLE, aValue);
     }
