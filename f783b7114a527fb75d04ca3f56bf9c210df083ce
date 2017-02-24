@@ -1,0 +1,141 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_84ff8a33",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-24T16:28:12Z",
+      "side": 1,
+      "message": "Before calling deleteNumeric() that evaluates all elements, we could bail out early if neither numbers nor datetime are to be deleted and thus save quite some time. i.e.\n\n if (!mbNumeric \u0026\u0026 !mbDateTime)\n     return;\n deleteNumeric(...);",
+      "revId": "f783b7114a527fb75d04ca3f56bf9c210df083ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_04f39a74",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 595,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-24T16:28:12Z",
+      "side": 1,
+      "message": "Nitpick: this comment belongs on the next line as it is for the bool variable.",
+      "range": {
+        "startLine": 595,
+        "startChar": 48,
+        "endLine": 595,
+        "endChar": 84
+      },
+      "revId": "f783b7114a527fb75d04ca3f56bf9c210df083ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_24e89e7c",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 597,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-24T16:28:12Z",
+      "side": 1,
+      "message": "Nitpick: in general please stick with our prefixes, specifically dOffset and dSize looks odd, as if it was some delta value. Instead, use something like nStart and nElements (or whatever suits). lastTypeDate sould be bLastTypeDate.",
+      "revId": "f783b7114a527fb75d04ca3f56bf9c210df083ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_e4edb68f",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-24T16:28:12Z",
+      "side": 1,
+      "message": "Nitpick: we prefer opening block braces to be on the next line, aligned with the block. Eases reading code and jumping between braces in the editor.",
+      "range": {
+        "startLine": 599,
+        "startChar": 62,
+        "endLine": 599,
+        "endChar": 63
+      },
+      "revId": "f783b7114a527fb75d04ca3f56bf9c210df083ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_44eda28a",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-24T16:28:12Z",
+      "side": 1,
+      "message": "Calling isDateTime(i) twice is unnecessary, the underlying functions obtaining the attribute and type have quite some overhead.",
+      "revId": "f783b7114a527fb75d04ca3f56bf9c210df083ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6402a640",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-24T16:28:12Z",
+      "side": 1,
+      "message": "And calling it even 4 times ...",
+      "revId": "f783b7114a527fb75d04ca3f56bf9c210df083ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a4fc8e3f",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 640,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-24T16:28:12Z",
+      "side": 1,
+      "message": "Simply return one evaluation instead of the if() return true; return false;\n\n return (nType \u003d\u003d css::util::NumberFormat::DATE) || (nType \u003d\u003d css::util::NumberFormat::TIME) ||\n     (nType \u003d\u003d css::util::NumberFormat::DATETIME);",
+      "range": {
+        "startLine": 636,
+        "startChar": 8,
+        "endLine": 640,
+        "endChar": 21
+      },
+      "revId": "f783b7114a527fb75d04ca3f56bf9c210df083ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
