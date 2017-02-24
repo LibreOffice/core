@@ -73,8 +73,8 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                data1: 0
                                data2: 0 ];
 SAL_WNODEPRECATED_DECLARATIONS_POP
-    if( pEvent )
-        [NSApp postEvent: pEvent atStart: NO];
+    assert( pEvent );
+    [NSApp postEvent: pEvent atStart: NO];
 }
 
 -(void)sendEvent:(NSEvent*)pEvent

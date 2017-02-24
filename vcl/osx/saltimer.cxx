@@ -28,15 +28,42 @@
 #include "osx/salinst.h"
 
 NSTimer* AquaSalTimer::pRunningTimer = nil;
-bool AquaSalTimer::bDispatchTimer = false;
 
-void ImplSalStartTimer( sal_uLong nMS )
+static void ImplSalStopTimer();
+
+static inline void ImplPostEvent( short nEventId, bool bAtStart, int nUserData = 0 )
+{
+    SalData::ensureThreadAutoreleasePool();
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+// 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+SAL_WNODEPRECATED_DECLARATIONS_POP
+                               location: NSZeroPoint
+                               modifierFlags: 0
+                               timestamp: [NSDate timeIntervalSinceReferenceDate]
+                               windowNumber: 0
+                               context: nil
+                               subtype: nEventId
+                               data1: nUserData
+                               data2: 0 ];
+    assert( pEvent );
+    [NSApp postEvent: pEvent atStart: bAtStart];
+}
+
+static void ImplSalStartTimer( sal_uLong nMS )
 {
     SalData* pSalData = GetSalData();
-    if( !pSalData->mpFirstInstance->IsMainThread() )
+
+    if ( 0 == nMS )
     {
-        AquaSalTimer::bDispatchTimer = true;
-        NSTimeInterval aTI = double(nMS)/1000.0;
+        ImplSalStopTimer();
+        ImplPostEvent( AquaSalInstance::DispatchTimerEvent, false );
+        return;
+    }
+
+    if( pSalData->mpFirstInstance->IsMainThread() )
+    {
+        NSTimeInterval aTI = double(nMS) / 1000.0;
         if( AquaSalTimer::pRunningTimer != nil )
         {
             if (rtl::math::approxEqual(
@@ -46,18 +73,16 @@ void ImplSalStartTimer( sal_uLong nMS )
                 [AquaSalTimer::pRunningTimer setFireDate: [NSDate dateWithTimeIntervalSinceNow: aTI]];
             }
             else
-            {
-                [AquaSalTimer::pRunningTimer invalidate];
-                AquaSalTimer::pRunningTimer = nil;
-            }
+                ImplSalStopTimer();
         }
         if( AquaSalTimer::pRunningTimer == nil )
         {
-            AquaSalTimer::pRunningTimer = [NSTimer scheduledTimerWithTimeInterval: aTI
-                                                   target: [[[TimerCallbackCaller alloc] init] autorelease]
-                                                   selector: @selector(timerElapsed:)
-                                                   userInfo: nil
-                                                   repeats: YES];
+            AquaSalTimer::pRunningTimer = [[NSTimer scheduledTimerWithTimeInterval: aTI
+                                                    target: [[[TimerCallbackCaller alloc] init] autorelease]
+                                                    selector: @selector(timerElapsed:)
+                                                    userInfo: nil
+                                                    repeats: NO
+                                           ] retain];
             /* #i84055# add timer to tracking run loop mode,
                so they also elapse while e.g. life resize
             */
@@ -65,29 +90,25 @@ void ImplSalStartTimer( sal_uLong nMS )
         }
     }
     else
+        ImplPostEvent( AquaSalInstance::AppStartTimerEvent, true, nMS );
+}
+
+static void ImplSalStopTimer()
+{
+    if( AquaSalTimer::pRunningTimer != nil )
     {
-        SalData::ensureThreadAutoreleasePool();
-        // post an event so we can get into the main thread
-SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    // 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
-        NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                                   location: NSZeroPoint
-                                   modifierFlags: 0
-                                   timestamp: [NSDate timeIntervalSinceReferenceDate]
-                                   windowNumber: 0
-                                   context: nil
-                                   subtype: AquaSalInstance::AppStartTimerEvent
-                                   data1: (int)nMS
-                                   data2: 0 ];
-SAL_WNODEPRECATED_DECLARATIONS_POP
-        if( pEvent )
-            [NSApp postEvent: pEvent atStart: YES];
+        [AquaSalTimer::pRunningTimer invalidate];
+        [AquaSalTimer::pRunningTimer release];
+        AquaSalTimer::pRunningTimer = nil;
     }
 }
 
-void ImplSalStopTimer()
+void AquaSalTimer::handleDispatchTimerEvent()
 {
-    AquaSalTimer::bDispatchTimer = false;
+    ImplSVData* pSVData = ImplGetSVData();
+    SolarMutexGuard aGuard;
+    if( pSVData->maSchedCtx.mpSalTimer )
+        pSVData->maSchedCtx.mpSalTimer->CallCallback();
 }
 
 void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
@@ -98,14 +119,10 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
         NSTimeInterval posted = [pEvent timestamp] + NSTimeInterval([pEvent data1])/1000.0;
         NSTimeInterval current = [NSDate timeIntervalSinceReferenceDate];
         if( (posted - current) <= 0.0 )
-        {
-            SolarMutexGuard aGuard;
-            if( pSVData->maSchedCtx.mpSalTimer )
-                pSVData->maSchedCtx.mpSalTimer->CallCallback();
-        }
-        ImplSalStartTimer( sal_uLong( [pEvent data1] ) );
+            handleDispatchTimerEvent();
+        else
+            ImplSalStartTimer( sal_uLong( [pEvent data1] ) );
     }
-
 }
 
 AquaSalTimer::AquaSalTimer( )
