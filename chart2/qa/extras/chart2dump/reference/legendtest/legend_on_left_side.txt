@@ -3,7 +3,7 @@
 // aLegendPosition.Y
 6060
 // aLegendSize.Width
-1610
+1557
 // aLegendSize.Height
 1880
 // nLegendEntryCount
