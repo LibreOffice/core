@@ -37,8 +37,12 @@ int SfxLokHelper::createView()
 
 void SfxLokHelper::destroyView(int nId)
 {
+    SfxApplication* pApp = SfxApplication::Get();
+    if (!pApp)
+        return;
+
     unsigned nViewShellId = nId;
-    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
 
     for (SfxViewShell* pViewShell : rViewArr)
     {
@@ -54,8 +58,12 @@ void SfxLokHelper::destroyView(int nId)
 
 void SfxLokHelper::setView(int nId)
 {
+    SfxApplication* pApp = SfxApplication::Get();
+    if (!pApp)
+        return;
+
     unsigned nViewShellId = nId;
-    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
 
     for (SfxViewShell* pViewShell : rViewArr)
     {
@@ -90,13 +98,17 @@ int SfxLokHelper::getView(SfxViewShell* pViewShell)
 
 std::size_t SfxLokHelper::getViewsCount()
 {
-    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
-    return rViewArr.size();
+    SfxApplication* pApp = SfxApplication::Get();
+    return !pApp ? 0 : pApp->GetViewShells_Impl().size();
 }
 
 bool SfxLokHelper::getViewIds(int* pArray, size_t nSize)
 {
-    SfxViewShellArr_Impl& rViewArr = SfxGetpApp()->GetViewShells_Impl();
+    SfxApplication* pApp = SfxApplication::Get();
+    if (!pApp)
+        return false;
+
+    SfxViewShellArr_Impl& rViewArr = pApp->GetViewShells_Impl();
     if (rViewArr.size() > nSize)
         return false;
 
