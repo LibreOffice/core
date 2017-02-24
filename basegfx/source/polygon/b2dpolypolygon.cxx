@@ -137,34 +137,34 @@ public:
 
     const basegfx::B2DPolygon* begin() const
     {
-        if(maPolygons.empty())
+        if (maPolygons.empty())
             return nullptr;
         else
-            return &maPolygons.front();
+            return maPolygons.data();
     }
 
     const basegfx::B2DPolygon* end() const
     {
-        if(maPolygons.empty())
+        if (maPolygons.empty())
             return nullptr;
         else
-            return (&maPolygons.back())+1;
+            return maPolygons.data() + maPolygons.size();
     }
 
     basegfx::B2DPolygon* begin()
     {
-        if(maPolygons.empty())
+        if (maPolygons.empty())
             return nullptr;
         else
-            return &maPolygons.front();
+            return maPolygons.data();
     }
 
     basegfx::B2DPolygon* end()
     {
-        if(maPolygons.empty())
+        if (maPolygons.empty())
             return nullptr;
         else
-            return &(maPolygons.back())+1;
+            return maPolygons.data() + maPolygons.size();
     }
 };
 

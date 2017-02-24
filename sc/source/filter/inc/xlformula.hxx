@@ -387,7 +387,7 @@ public:
     /** Returns the size of the token array in bytes. */
     sal_uInt16          GetSize() const;
     /** Returns read-only access to the byte vector storing token data. */
-    inline const sal_uInt8* GetData() const { return maTokVec.empty() ? nullptr : &maTokVec.front(); }
+    inline const sal_uInt8* GetData() const { return maTokVec.empty() ? nullptr : maTokVec.data(); }
     /** Returns true, if the formula contains a volatile function. */
     inline bool         IsVolatile() const { return mbVolatile; }
 

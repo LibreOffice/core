@@ -352,7 +352,7 @@ void ImportExcel8::Feat()
         sal_uInt32 nCbSD = aIn.ReaduInt32();
         // TODO: could here be some sanity check applied to not allocate 4GB?
         aProt.maSecurityDescriptor.resize( nCbSD);
-        std::size_t nRead = aIn.Read( &aProt.maSecurityDescriptor.front(), nCbSD);
+        std::size_t nRead = aIn.Read(aProt.maSecurityDescriptor.data(), nCbSD);
         if (nRead < nCbSD)
             aProt.maSecurityDescriptor.resize( nRead);
     }

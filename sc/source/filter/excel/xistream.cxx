@@ -151,7 +151,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
             OSL_ENSURE( aDocId.getLength() == 16, "Unexpected length of the sequence!" );
 
             ::msfilter::MSCodec_Std97 aCodec97;
-            aCodec97.InitKey( &aPassVect.front(), reinterpret_cast<sal_uInt8 const *>(aDocId.getConstArray()) );
+            aCodec97.InitKey(aPassVect.data(), reinterpret_cast<sal_uInt8 const *>(aDocId.getConstArray()));
 
             // merge the EncryptionData, there should be no conflicts
             ::comphelper::SequenceAsHashMap aEncryptionHash( maEncryptionData );
@@ -254,8 +254,8 @@ uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const
             *aIt = static_cast< sal_uInt16 >( *pcChar );
 
         // init codec
-        mpCodec->InitKey( &aPassVect.front(), &maSalt.front() );
-        if ( mpCodec->VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
+        mpCodec->InitKey(aPassVect.data(), maSalt.data());
+        if (mpCodec->VerifyKey(maVerifier.data(), maVerifierHash.data()))
             maEncryptionData = mpCodec->GetEncryptionData();
     }
 
@@ -271,7 +271,7 @@ bool XclImpBiff8Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::N
         // init codec
         mpCodec->InitCodec( rEncryptionData );
 
-        if ( mpCodec->VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
+        if (mpCodec->VerifyKey(maVerifier.data(), maVerifierHash.data()))
             maEncryptionData = rEncryptionData;
     }
 
