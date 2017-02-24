@@ -1298,7 +1298,7 @@ void ScDocFunc::ReplaceNote( const ScAddress& rPos, const OUString& rNoteText, c
         }
 
         // create the undo action
-        if( pUndoMgr && (aOldData.mpCaption || aNewData.mpCaption) )
+        if( pUndoMgr && (aOldData.mxCaption || aNewData.mxCaption) )
             pUndoMgr->AddUndoAction( new ScUndoReplaceNote( rDocShell, rPos, aOldData, aNewData, pDrawLayer->GetCalcUndo() ) );
 
         // repaint cell (to make note marker visible)

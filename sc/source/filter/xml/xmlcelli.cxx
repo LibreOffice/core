@@ -865,7 +865,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             {
                 OSL_ENSURE( !pCaption->GetLogicRect().IsEmpty(), "ScXMLTableRowCellContext::SetAnnotation - invalid caption rectangle" );
                 // create the cell note with the caption object
-                pNote = ScNoteUtil::CreateNoteFromCaption( *pDoc, rPos, *pCaption, true );
+                pNote = ScNoteUtil::CreateNoteFromCaption( *pDoc, rPos, pCaption, true );
                 // forget pointer to object (do not create note again below)
                 pObject = nullptr;
             }
