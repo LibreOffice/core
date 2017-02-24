@@ -1289,7 +1289,7 @@ css::uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSet::getStates()
     for (sal_uInt16 nIndex=0; nIndex<sizeof(mnStateSet)*8; ++nIndex)
         if ((mnStateSet & GetStateMask(nIndex)) != 0)
             aStates.push_back(nIndex);
-    return Sequence<sal_Int16>(&aStates.front(), aStates.size());
+    return Sequence<sal_Int16>(aStates.data(), aStates.size());
 }
 
 //===== AccessibleRelationSet =================================================

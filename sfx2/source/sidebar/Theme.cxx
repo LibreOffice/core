@@ -568,7 +568,7 @@ css::uno::Sequence<css::beans::Property> SAL_CALL Theme::getProperties()
     }
 
     return css::uno::Sequence<css::beans::Property>(
-        &aProperties.front(),
+        aProperties.data(),
         aProperties.size());
 }
 

@@ -2720,7 +2720,7 @@ void XclImpListBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
         if( !aSelVec.empty() )
         {
-            Sequence< sal_Int16 > aSelSeq( &aSelVec.front(), static_cast< sal_Int32 >( aSelVec.size() ) );
+            Sequence<sal_Int16> aSelSeq(aSelVec.data(), static_cast<sal_Int32>(aSelVec.size()));
             rPropSet.SetProperty( "DefaultSelection", aSelSeq );
         }
     }
@@ -3669,7 +3669,7 @@ OUString XclImpDffConverter::ReadHlinkProperty( SvStream& rDffStrm ) const
 
         // copy from DFF stream to memory stream
         ::std::vector< sal_uInt8 > aBuffer( nBufferSize );
-        sal_uInt8* pnData = &aBuffer.front();
+        sal_uInt8* pnData = aBuffer.data();
         if (rDffStrm.ReadBytes(pnData, nBufferSize) == nBufferSize)
         {
             aMemStream.WriteBytes(pnData, nBufferSize);

@@ -1186,14 +1186,14 @@ void TabControl::ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& 
         // overlapped on the left side. Other toolkits ignore this option.
         if (bDrawTabsRTL)
         {
-            pFirstTab = &mpTabCtrlData->maItemList.front();
-            pLastTab = &mpTabCtrlData->maItemList.back();
+            pFirstTab = mpTabCtrlData->maItemList.data();
+            pLastTab = pFirstTab + mpTabCtrlData->maItemList.size();
             idx = mpTabCtrlData->maItemList.size() - 1;
         }
         else
         {
-            pLastTab = &mpTabCtrlData->maItemList.back();
-            pFirstTab = &mpTabCtrlData->maItemList.front();
+            pLastTab = mpTabCtrlData->maItemList.data();
+            pFirstTab = pLastTab + mpTabCtrlData->maItemList.size();
             idx = 0;
         }
 
@@ -2642,14 +2642,14 @@ void NotebookbarTabControl::ImplPaint(vcl::RenderContext& rRenderContext, const 
         // overlapped on the left side. Other toolkits ignore this option.
         if (bDrawTabsRTL)
         {
-            pFirstTab = &mpTabCtrlData->maItemList.front();
-            pLastTab = &mpTabCtrlData->maItemList.back();
+            pFirstTab = mpTabCtrlData->maItemList.data();
+            pLastTab = pFirstTab + mpTabCtrlData->maItemList.size();
             idx = mpTabCtrlData->maItemList.size() - 1;
         }
         else
         {
-            pLastTab = &mpTabCtrlData->maItemList.back();
-            pFirstTab = &mpTabCtrlData->maItemList.front();
+            pLastTab = mpTabCtrlData->maItemList.data();
+            pFirstTab = pLastTab + mpTabCtrlData->maItemList.size();
             idx = 0;
         }
 

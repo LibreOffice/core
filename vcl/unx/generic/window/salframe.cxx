@@ -743,7 +743,7 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
         if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
             XChangeProperty( GetXDisplay(), mhWindow,
                 GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
-                XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(&netwm_icon.front()), netwm_icon.size());
+                XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(netwm_icon.data()), netwm_icon.size());
     }
 
     m_nWorkArea = GetDisplay()->getWMAdaptor()->getCurrentWorkArea();
@@ -1078,7 +1078,7 @@ void X11SalFrame::SetIcon( sal_uInt16 nIcon )
             if( !netwm_icon.empty() && GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ))
                 XChangeProperty( GetXDisplay(), mhWindow,
                     GetDisplay()->getWMAdaptor()->getAtom( WMAdaptor::NET_WM_ICON ),
-                    XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(&netwm_icon.front()), netwm_icon.size());
+                    XA_CARDINAL, 32, PropModeReplace, reinterpret_cast<unsigned char*>(netwm_icon.data()), netwm_icon.size());
         }
     }
 }

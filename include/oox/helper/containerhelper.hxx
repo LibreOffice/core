@@ -293,7 +293,7 @@ template< typename VectorType >
     typedef typename VectorType::value_type ValueType;
     if( rVector.empty() )
         return css::uno::Sequence< ValueType >();
-    return css::uno::Sequence< ValueType >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );
+    return css::uno::Sequence<ValueType>(rVector.data(), static_cast<sal_Int32>(rVector.size()));
 }
 
 template< typename MatrixType >

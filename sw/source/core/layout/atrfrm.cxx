@@ -918,15 +918,15 @@ void SwFormatCol::SetGutterWidth( sal_uInt16 nNew, sal_uInt16 nAct )
     else
     {
         sal_uInt16 nHalf = nNew / 2;
-        for ( size_t i = 0; i < m_aColumns.size(); ++i )
+        for (size_t i = 0; i < m_aColumns.size(); ++i)
         {
-            SwColumn *pCol = &m_aColumns[i];
-            pCol->SetLeft ( nHalf );
-            pCol->SetRight( nHalf );
+            SwColumn &rCol = m_aColumns[i];
+            rCol.SetLeft(nHalf);
+            rCol.SetRight(nHalf);
             if ( i == 0 )
-                pCol->SetLeft( 0 );
+                rCol.SetLeft(0);
             else if ( i+1 == m_aColumns.size() )
-                pCol->SetRight( 0 );
+                rCol.SetRight(0);
         }
     }
 }
@@ -992,42 +992,41 @@ void SwFormatCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
                 (nAct - ((GetNumCols()-1) * nGutterWidth)) / GetNumCols();
     sal_uInt16 nAvail = nAct;
 
-    //The fist column is PrtWidth + (gap width / 2)
+    //The first column is PrtWidth + (gap width / 2)
     const sal_uInt16 nLeftWidth = nPrtWidth + nGutterHalf;
-    SwColumn *pCol = &m_aColumns.front();
-    pCol->SetWishWidth( nLeftWidth );
-    pCol->SetRight( nGutterHalf );
-    pCol->SetLeft ( 0 );
+    SwColumn &rFirstCol = m_aColumns.front();
+    rFirstCol.SetWishWidth(nLeftWidth);
+    rFirstCol.SetRight(nGutterHalf);
+    rFirstCol.SetLeft(0);
     nAvail = nAvail - nLeftWidth;
 
     //Column 2 to n-1 is PrtWidth + gap width
     const sal_uInt16 nMidWidth = nPrtWidth + nGutterWidth;
-    sal_uInt16 i;
 
-    for ( i = 1; i < GetNumCols()-1; ++i )
+    for (sal_uInt16 i = 1; i < GetNumCols()-1; ++i)
     {
-        pCol = &m_aColumns[i];
-        pCol->SetWishWidth( nMidWidth );
-        pCol->SetLeft ( nGutterHalf );
-        pCol->SetRight( nGutterHalf );
+        SwColumn &rCol = m_aColumns[i];
+        rCol.SetWishWidth(nMidWidth);
+        rCol.SetLeft(nGutterHalf);
+        rCol.SetRight(nGutterHalf);
         nAvail = nAvail - nMidWidth;
     }
 
     //The last column is equivalent to the first one - to compensate rounding
     //errors we add the remaining space of the other columns to the last one.
-    pCol = &m_aColumns.back();
-    pCol->SetWishWidth( nAvail );
-    pCol->SetLeft ( nGutterHalf );
-    pCol->SetRight( 0 );
+    SwColumn &rLastCol = m_aColumns.back();
+    rLastCol.SetWishWidth(nAvail);
+    rLastCol.SetLeft(nGutterHalf);
+    rLastCol.SetRight(0);
 
     //Convert the current width to the requested width.
-    for ( i = 0; i < m_aColumns.size(); ++i )
+    for (sal_uInt16 i = 0; i < m_aColumns.size(); ++i)
     {
-        pCol = &m_aColumns[i];
-        long nTmp = pCol->GetWishWidth();
+        SwColumn &rCol = m_aColumns[i];
+        long nTmp = rCol.GetWishWidth();
         nTmp *= GetWishWidth();
         nTmp /= nAct;
-        pCol->SetWishWidth( sal_uInt16(nTmp) );
+        rCol.SetWishWidth(sal_uInt16(nTmp));
     }
 }
 

@@ -89,7 +89,7 @@ template< typename Type >
 css::uno::Sequence< Type > ScfApiHelper::VectorToSequence( const ::std::vector< Type >& rVector )
 {
     OSL_ENSURE( !rVector.empty(), "ScfApiHelper::VectorToSequence - vector is empty" );
-    return css::uno::Sequence< Type >( &rVector.front(), static_cast< sal_Int32 >( rVector.size() ) );
+    return css::uno::Sequence<Type>(rVector.data(), static_cast< sal_Int32 >(rVector.size()));
 }
 
 // Property sets ==============================================================

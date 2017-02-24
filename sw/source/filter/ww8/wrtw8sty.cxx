@@ -387,9 +387,9 @@ void WW8AttributeOutput::EndStyle()
     impl_SkipOdd( m_rWW8Export.pO, m_rWW8Export.pTableStrm->Tell() );
 
     short nLen = m_rWW8Export.pO->size() - 2;            // length of the style
-    sal_uInt8* p = &m_rWW8Export.pO->front() + nPOPosStdLen1;
+    sal_uInt8* p = m_rWW8Export.pO->data() + nPOPosStdLen1;
     ShortToSVBT16( nLen, p );               // nachtragen
-    p = &m_rWW8Export.pO->front() + nPOPosStdLen2;
+    p = m_rWW8Export.pO->data() + nPOPosStdLen2;
     ShortToSVBT16( nLen, p );               // dito
 
     m_rWW8Export.pTableStrm->WriteBytes(m_rWW8Export.pO->data(), m_rWW8Export.pO->size());
@@ -538,7 +538,7 @@ void MSWordStyles::WriteProperties( const SwFormat* pFormat, bool bParProp, sal_
 void WW8AttributeOutput::EndStyleProperties( bool /*bParProp*/ )
 {
     sal_uInt16 nLen = m_rWW8Export.pO->size() - m_nStyleStartSize;
-    sal_uInt8* pUpxLen = &m_rWW8Export.pO->front() + m_nStyleLenPos; // Laenge zum Nachtragen
+    sal_uInt8* pUpxLen = m_rWW8Export.pO->data() + m_nStyleLenPos; // Laenge zum Nachtragen
     ShortToSVBT16( nLen, pUpxLen );                 // add default length
 }
 

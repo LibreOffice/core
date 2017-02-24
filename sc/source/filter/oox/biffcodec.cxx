@@ -127,8 +127,8 @@ Sequence< NamedValue > BiffDecoder_RCF::implVerifyPassword( const OUString& rPas
             *aIt = static_cast< sal_uInt16 >( *pcChar );
 
         // init codec
-        maCodec.initKey( &aPassVect.front(), &maSalt.front() );
-        if( maCodec.verifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
+        maCodec.initKey(aPassVect.data(), maSalt.data());
+        if (maCodec.verifyKey(maVerifier.data(), maVerifierHash.data()))
             maEncryptionData = maCodec.getEncryptionData();
     }
 
@@ -144,7 +144,7 @@ bool BiffDecoder_RCF::implVerifyEncryptionData( const Sequence< NamedValue >& rE
         // init codec
         maCodec.initCodec( rEncryptionData );
 
-        if( maCodec.verifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
+        if (maCodec.verifyKey(maVerifier.data(), maVerifierHash.data()))
             maEncryptionData = rEncryptionData;
     }
 

@@ -277,9 +277,9 @@ OUString SfxOleStringHelper::ImplLoadString8( SvStream& rStrm ) const
     {
         // load character buffer
         ::std::vector< sal_Char > aBuffer( static_cast< size_t >( nSize + 1 ), 0 );
-        rStrm.ReadBytes(&aBuffer.front(), static_cast<std::size_t>(nSize));
+        rStrm.ReadBytes(aBuffer.data(), static_cast<std::size_t>(nSize));
         // create string from encoded character array
-        aValue = OUString( &aBuffer.front(), strlen( &aBuffer.front() ), GetTextEncoding() );
+        aValue = OUString(aBuffer.data(), strlen(aBuffer.data()), GetTextEncoding());
     }
     return aValue;
 }
@@ -308,7 +308,7 @@ OUString SfxOleStringHelper::ImplLoadString16( SvStream& rStrm )
             rStrm.SeekRel( 2 );
         // create string from character array
         aBuffer.push_back( 0 );
-        aValue = OUString( &aBuffer.front() );
+        aValue = OUString(aBuffer.data());
     }
     return aValue;
 }

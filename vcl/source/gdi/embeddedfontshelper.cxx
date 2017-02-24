@@ -143,7 +143,7 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
     }
     if( !eot )
     {
-        sufficientFontRights = sufficientTTFRights( &fontData.front(), fontData.size(), FontRights::EditingAllowed );
+        sufficientFontRights = sufficientTTFRights(fontData.data(), fontData.size(), FontRights::EditingAllowed);
     }
     if( !sufficientFontRights )
     {

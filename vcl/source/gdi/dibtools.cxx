@@ -819,7 +819,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
                     const size_t nToRead(std::min<size_t>(nUncodedSize - nDataPos, aData.size() - nDataPos));
                     assert(nToRead > 0);
                     assert(!aData.empty());
-                    const long nRead = aCodec.Read(rIStm, &aData.front() + nDataPos, sal_uInt32(nToRead));
+                    const long nRead = aCodec.Read(rIStm, aData.data() + nDataPos, sal_uInt32(nToRead));
                     if (nRead > 0)
                     {
                         nDataPos += static_cast<unsigned long>(nRead);
@@ -853,7 +853,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
             pMemStm.reset( new SvMemoryStream);
             pIStm = pMemStm.get();
             assert(!aData.empty());
-            pMemStm->SetBuffer( &aData.front(), nUncodedSize, nUncodedSize );
+            pMemStm->SetBuffer(aData.data(), nUncodedSize, nUncodedSize);
             nOffset = 0;
         }
         else
