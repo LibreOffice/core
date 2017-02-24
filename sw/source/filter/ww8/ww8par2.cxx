@@ -960,7 +960,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
             else
             {
                 // this is ROW numbering ?
-                pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : 0xC63E); // sprmAnld
+                pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
                 if (pS12 && 0 != reinterpret_cast<WW8_ANLD const *>(pS12)->fNumberAcross)
                     sNumRule.clear();
             }
@@ -988,7 +988,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         if (m_pTableDesc)
         {
             if (!pS12)
-                pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : 0xC63E); // sprmAnld
+                pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld); // sprmAnld
             if (!pS12 || !reinterpret_cast<WW8_ANLD const *>(pS12)->fNumberAcross)
                 m_pTableDesc->SetNumRuleName(pNumRule->GetName());
         }
@@ -1024,7 +1024,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
         {
             // not defined yet
             // sprmAnld o. 0
-            const sal_uInt8* pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : 0xC63E);
+            const sal_uInt8* pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
             SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(pS12), m_nSwNumLevel, false);
         }
     }
@@ -1048,7 +1048,7 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
             else                                // no Olst -> use Anld
             {
                 // sprmAnld
-                const sal_uInt8* pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : 0xC63E);
+                const sal_uInt8* pS12 = m_pPlcxMan->HasParaSprm(m_bVer67 ? 12 : NS_sprm::LN_PAnld);
                 SetAnld(pNumRule, reinterpret_cast<WW8_ANLD const *>(pS12), m_nSwNumLevel, false);
             }
         }
@@ -1628,47 +1628,47 @@ wwTableSprm GetTableSprm(sal_uInt16 nId, ww::WordVersion eVer)
         case ww::eWW8:
             switch (nId)
             {
-                case NS_sprm::LN_TTableWidth:
+                case NS_sprm::sprmTTableWidth:
                     return sprmTTableWidth;
-                case NS_sprm::LN_TTextFlow:
+                case NS_sprm::sprmTTextFlow:
                     return sprmTTextFlow;
-                case NS_sprm::LN_TTableHeader:
+                case NS_sprm::sprmTTableHeader:
                     return sprmTTableHeader;
-                case NS_sprm::LN_TFCantSplit:
+                case NS_sprm::sprmTFCantSplit90:
                     return sprmTFCantSplit;
-                case NS_sprm::LN_TJc90:
+                case NS_sprm::sprmTJc90:
                     return sprmTJc;
-                case NS_sprm::LN_TFBiDi:
+                case NS_sprm::sprmTFBiDi:
                     return sprmTFBiDi;
-                case NS_sprm::LN_TDelete:
+                case NS_sprm::sprmTDelete:
                     return sprmTDelete;
-                case NS_sprm::LN_TInsert:
+                case NS_sprm::sprmTInsert:
                     return sprmTInsert;
-                case NS_sprm::LN_TDxaCol:
+                case NS_sprm::sprmTDxaCol:
                     return sprmTDxaCol;
-                case NS_sprm::LN_TDyaRowHeight:
+                case NS_sprm::sprmTDyaRowHeight:
                     return sprmTDyaRowHeight;
-                case NS_sprm::LN_TDxaLeft:
+                case NS_sprm::sprmTDxaLeft:
                     return sprmTDxaLeft;
-                case NS_sprm::LN_TDxaGapHalf:
+                case NS_sprm::sprmTDxaGapHalf:
                     return sprmTDxaGapHalf;
-                case NS_sprm::LN_TTableBorders80:
+                case NS_sprm::sprmTTableBorders80:
                     return sprmTTableBorders;
-                case NS_sprm::LN_TDefTable:
+                case NS_sprm::sprmTDefTable:
                     return sprmTDefTable;
-                case NS_sprm::LN_TDefTableShd80:
+                case NS_sprm::sprmTDefTableShd80:
                     return sprmTDefTableShd;
-                case NS_sprm::LN_TDefTableShd:
+                case NS_sprm::sprmTDefTableShd:
                     return sprmTDefTableNewShd;
-                case NS_sprm::LN_TTableBorders:
+                case NS_sprm::sprmTTableBorders:
                     return sprmTTableBorders90;
-                case NS_sprm::LN_TSetBrc80:
+                case NS_sprm::sprmTSetBrc80:
                     return sprmTSetBrc;
-                case NS_sprm::LN_TSetBrc:
+                case NS_sprm::sprmTSetBrc:
                     return sprmTSetBrc90;
-                case NS_sprm::LN_TCellPadding:
+                case NS_sprm::sprmTCellPadding:
                     return sprmTCellPadding;
-                case NS_sprm::LN_TCellPaddingDefault:
+                case NS_sprm::sprmTCellPaddingDefault:
                     return sprmTCellPaddingDefault;
             }
             break;

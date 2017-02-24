@@ -1324,7 +1324,7 @@ void WW8AttributeOutput::SectionFormProtection( bool bProtected )
     //is not protected, set the unlocked flag
     if ( m_rWW8Export.pSepx->DocumentIsProtected() && !bProtected )
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFProtected );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSFProtected );
         m_rWW8Export.pO->push_back( 1 );
     }
 }
@@ -1332,24 +1332,24 @@ void WW8AttributeOutput::SectionFormProtection( bool bProtected )
 void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
 {
     // sprmSNLnnMod - activate Line Numbering and define Modulo
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SNLnnMod );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSNLnnMod );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)rLnNumInfo.GetCountBy() );
 
     // sprmSDxaLnn - xPosition of Line Number
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SDxaLnn );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSDxaLnn );
     SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)rLnNumInfo.GetPosFromLeft() );
 
     // sprmSLnc - restart number: 0 per page, 1 per section, 2 never restart
     if ( nRestartNo || !rLnNumInfo.IsRestartEachPage() )
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SLnc );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSLnc );
         m_rWW8Export.pO->push_back( nRestartNo ? 1 : 2 );
     }
 
     // sprmSLnnMin - Restart the Line Number with given value
     if ( nRestartNo )
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SLnnMin );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSLnnMin );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, (sal_uInt16)nRestartNo - 1 );
     }
 }
@@ -1357,7 +1357,7 @@ void WW8AttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLin
 void WW8AttributeOutput::SectionTitlePage()
 {
     // sprmSFTitlePage
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFTitlePage );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSFTitlePage );
     m_rWW8Export.pO->push_back( 1 );
 }
 
@@ -1384,14 +1384,14 @@ void WW8AttributeOutput::SectionPageBorders( const SwFrameFormat* pPdFormat, con
     if ( USHRT_MAX != nPgBorder )
     {
         // write the Flag and Border Attribute
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SPgbProp );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSPgbProp );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, nPgBorder );
     }
 }
 
 void WW8AttributeOutput::SectionBiDi( bool bBiDi )
 {
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFBiDi );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSFBiDi );
     m_rWW8Export.pO->push_back( bBiDi? 1: 0 );
 }
 
@@ -1399,17 +1399,17 @@ void WW8AttributeOutput::SectionPageNumbering( sal_uInt16 nNumType, const ::boos
 {
     // sprmSNfcPgn
     sal_uInt8 nb = WW8Export::GetNumId( nNumType );
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SNfcPgn );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSNfcPgn );
     m_rWW8Export.pO->push_back( nb );
 
     if ( oPageRestartNumber )
     {
         // sprmSFPgnRestart
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SFPgnRestart );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSFPgnRestart );
         m_rWW8Export.pO->push_back( 1 );
 
         // sprmSPgnStart
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SPgnStart );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSPgnStart97 );
         SwWW8Writer::InsUInt16( *m_rWW8Export.pO, oPageRestartNumber.get() );
     }
 }
@@ -1418,7 +1418,7 @@ void WW8AttributeOutput::SectionType( sal_uInt8 nBreakCode )
 {
     if ( 2 != nBreakCode ) // new page is the default
     {
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SBkc );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSBkc );
         m_rWW8Export.pO->push_back( nBreakCode );
     }
 }
@@ -1462,7 +1462,7 @@ void WW8AttributeOutput::TextVerticalAdjustment( const drawing::TextVerticalAdju
             default:
                 break;
         }
-        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::LN_SVjc );
+        SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::sprmSVjc );
         m_rWW8Export.pO->push_back( nMSVA );
     }
 }
