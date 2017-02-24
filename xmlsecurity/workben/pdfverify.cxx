@@ -31,7 +31,9 @@
 #include <vcl/pngwrite.hxx>
 #include <vcl/svapp.hxx>
 
-#include <pdfio/pdfdocument.hxx>
+#include <xmlsecurity/pdfio/pdfdocument.hxx>
+
+#include <sigstruct.hxx>
 
 using namespace com::sun::star;
 

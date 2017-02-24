@@ -19,7 +19,7 @@
 #include <tools/stream.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
-#include <pdfio/pdfdocument.hxx>
+#include <xmlsecurity/pdfio/pdfdocument.hxx>
 
 using namespace ::com::sun::star;
 
