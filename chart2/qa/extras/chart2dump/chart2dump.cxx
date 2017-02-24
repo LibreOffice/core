@@ -403,7 +403,8 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
         "legend_on_top.odp",
         "many_legend_entries.odp",
         "custom_legend_position.odp",
-        "multiple_categories.odp"
+        "multiple_categories.odp",
+        "minimal_legend_test.odp"
     };
 
     for (const OUString& aTestFile : aTestFiles)
