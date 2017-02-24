@@ -5519,14 +5519,14 @@ else
     fi
 fi
 
-dnl At least MSVC 2015 SP1 is known to sporadically emit warning C4592
+dnl At least MSVC 2015 Update 1 is known to sporadically emit warning C4592
 dnl ("implementation limitation" when defining OUStringLiteral variables in
-dnl vcl/source/app/IconThemeInfo.cxx), while SP3 is known good, and it is
+dnl vcl/source/app/IconThemeInfo.cxx), while Update 3 is known good, and it is
 dnl probably a good idea to require that anyway.  A reliable way to check for
-dnl MSVC 2015 SP3 appears to be to check for support of C++17 nested namespace
-dnl definitions (which requires /std:c++latest to be enabled):
+dnl MSVC 2015 Update 3 appears to be to check for support of C++17 nested
+dnl namespace definitions (which requires /std:c++latest to be enabled):
 if test "$COM" = MSC -a "$VCVER" = 140; then
-    AC_MSG_CHECKING([whether MSVC 2015 compiler $MSVC_CXX is at least SP3])
+    AC_MSG_CHECKING([whether MSVC 2015 compiler $MSVC_CXX is at least Update 3])
     save_CXX=$CXX
     save_CXXFLAGS=$CXXFLAGS
     CXX=$MSVC_CXX
@@ -5540,7 +5540,7 @@ if test "$COM" = MSC -a "$VCVER" = 140; then
     CXXFLAGS=$save_CXXFLAGS
     AC_MSG_RESULT([$good])
     if test "$good" = no; then
-        AC_MSG_ERROR([When using MSVC 2015, at least SP3 must be installed])
+        AC_MSG_ERROR([When using MSVC 2015, at least Update 3 must be installed])
     fi
 fi
 
