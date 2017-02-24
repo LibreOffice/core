@@ -19,6 +19,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <xmlsecurity/pdfio/pdfdocument.hxx>
+#include <tools/zcodec.hxx>
 
 using namespace ::com::sun::star;
 
@@ -39,11 +40,14 @@ public:
 #if HAVE_FEATURE_PDFIUM
     /// Tests that a pdf image is roundtripped back to PDF as a vector format.
     void testTdf106059();
+    /// Tests that text highlight from Impress is not lost.
+    void testTdf105461();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testTdf106059);
+    CPPUNIT_TEST(testTdf105461);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -99,6 +103,52 @@ void PdfExportTest::testTdf106059()
     // The image is a reference XObject.
     // This dictionary key was missing, so the XObject wasn't a reference one.
     CPPUNIT_ASSERT(pReferenceXObject->Lookup("Ref"));
+}
+
+void PdfExportTest::testTdf105461()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105461.odp";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    xmlsecurity::pdfio::PDFDocument aDocument;
+    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // The page has a stream.
+    xmlsecurity::pdfio::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    CPPUNIT_ASSERT(pContents);
+    xmlsecurity::pdfio::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    // Make sure there is a filled rectangle inside.
+    OString aFilledRectangle("re f*");
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* pEnd = pStart + aUncompressed.GetSize();
+    auto it = std::search(pStart, pEnd, aFilledRectangle.getStr(), aFilledRectangle.getStr() + aFilledRectangle.getLength());
+    // This failed, stream contained no filled rectangle.
+    CPPUNIT_ASSERT(it != pEnd);
 }
 #endif
 
