@@ -37,7 +37,7 @@ double pointToPixel(double fPoint)
     return fPoint / 72 * 96;
 }
 
-/// Does PDF to PNG conversion using pdfium.
+/// Does PDF to bitmap conversion using pdfium.
 bool generatePreview(SvStream& rStream, Graphic& rGraphic)
 {
     FPDF_LIBRARY_CONFIG aConfig;

@@ -1071,7 +1071,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
     break;
     case RTF_HTMAUTSP:
         m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Compat_doNotUseHTMLParagraphAutoSpacing, std::make_shared<RTFValue>(0));
-    break;
+        break;
     default:
     {
         SAL_INFO("writerfilter", "TODO handle flag '" << keywordToString(nKeyword) << "'");
