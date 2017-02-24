@@ -153,6 +153,7 @@ public:
     static const short AppEndLoopEvent    = 1;
     static const short AppStartTimerEvent = 10;
     static const short YieldWakeupEvent   = 20;
+    static const short DispatchTimerEvent = 30;
 
     static NSMenu* GetDynamicDockMenu();
 };
