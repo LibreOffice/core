@@ -185,9 +185,9 @@ namespace offapp
                     aThisDriverSettings = aDriverSettings.createNode(aLoop->sName);
 
                 // set the values
-                aThisDriverSettings.setNodeValue(getDriverNameNodeName(), makeAny(sThisDriverName));
+                aThisDriverSettings.setNodeValue(getDriverNameNodeName(), Any(sThisDriverName));
                 aThisDriverSettings.setNodeValue(getEnableNodeName(), Any(aLoop->bEnabled));
-                aThisDriverSettings.setNodeValue(getTimeoutNodeName(), makeAny(aLoop->nTimeoutSeconds));
+                aThisDriverSettings.setNodeValue(getTimeoutNodeName(), Any(aLoop->nTimeoutSeconds));
             }
             bNeedCommit = true;
         }

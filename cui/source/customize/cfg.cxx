@@ -1233,7 +1233,7 @@ void MenuSaveInData::Apply(
         aPropValueSeq[nIndex].Name = m_aDescriptorContainer;
         aPropValueSeq[nIndex].Value <<= xSubMenuBar;
         rMenuBar->insertByIndex(
-            rMenuBar->getCount(), uno::makeAny( aPropValueSeq ));
+            rMenuBar->getCount(), uno::Any( aPropValueSeq ));
         ApplyMenu( xSubMenuBar, rFactory, pEntryData );
     }
 }
@@ -1267,7 +1267,7 @@ void SaveInData::ApplyMenu(
             aPropValueSeq[nIndex].Value <<= xSubMenuBar;
 
             rMenuBar->insertByIndex(
-                rMenuBar->getCount(), uno::makeAny( aPropValueSeq ));
+                rMenuBar->getCount(), uno::Any( aPropValueSeq ));
 
             ApplyMenu( xSubMenuBar, rFactory, pEntry );
             pEntry->SetModified( false );
@@ -1275,14 +1275,14 @@ void SaveInData::ApplyMenu(
         else if ( pEntry->IsSeparator() )
         {
             rMenuBar->insertByIndex(
-                rMenuBar->getCount(), uno::makeAny( m_aSeparatorSeq ));
+                rMenuBar->getCount(), uno::Any( m_aSeparatorSeq ));
         }
         else
         {
             uno::Sequence< beans::PropertyValue > aPropValueSeq =
                 ConvertSvxConfigEntry( m_xCommandToLabelMap, pEntry );
             rMenuBar->insertByIndex(
-                rMenuBar->getCount(), uno::makeAny( aPropValueSeq ));
+                rMenuBar->getCount(), uno::Any( aPropValueSeq ));
         }
     }
     pMenuData->SetModified( false );
@@ -3758,7 +3758,7 @@ void ToolbarSaveInData::SetSystemStyle(
                 {
                     if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
                     {
-                        aProps[ i ].Value = uno::makeAny( nStyle );
+                        aProps[ i ].Value = uno::Any( nStyle );
                         break;
                     }
                 }
@@ -3767,7 +3767,7 @@ void ToolbarSaveInData::SetSystemStyle(
             uno::Reference< container::XNameReplace >
                 xNameReplace( m_xPersistentWindowState, uno::UNO_QUERY );
 
-            xNameReplace->replaceByName( rResourceURL, uno::makeAny( aProps ) );
+            xNameReplace->replaceByName( rResourceURL, uno::Any( aProps ) );
         }
         catch ( uno::Exception& )
         {
@@ -4163,14 +4163,14 @@ void ToolbarSaveInData::ApplyToolbar(
             aPropValueSeq[nIndex].Name = m_aDescriptorContainer;
             aPropValueSeq[nIndex].Value <<= xSubMenuBar;
             rToolbarBar->insertByIndex(
-                rToolbarBar->getCount(), uno::makeAny( aPropValueSeq ));
+                rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
 
             ApplyToolbar( xSubMenuBar, rFactory, pEntry );
         }
         else if ( pEntry->IsSeparator() )
         {
             rToolbarBar->insertByIndex(
-                rToolbarBar->getCount(), uno::makeAny( m_aSeparatorSeq ));
+                rToolbarBar->getCount(), uno::Any( m_aSeparatorSeq ));
         }
         else
         {
@@ -4178,7 +4178,7 @@ void ToolbarSaveInData::ApplyToolbar(
                 ConvertToolbarEntry( m_xCommandToLabelMap, pEntry );
 
             rToolbarBar->insertByIndex(
-                rToolbarBar->getCount(), uno::makeAny( aPropValueSeq ));
+                rToolbarBar->getCount(), uno::Any( aPropValueSeq ));
         }
     }
 }
@@ -4204,7 +4204,7 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     {
         xProps->setPropertyValue(
             ITEM_DESCRIPTOR_UINAME,
-            uno::makeAny( OUString( pToolbar->GetName() ) ) );
+            uno::Any( pToolbar->GetName() ) );
     }
 
     try
@@ -4252,7 +4252,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
 
     xPropertySet->setPropertyValue(
             ITEM_DESCRIPTOR_UINAME,
-            uno::makeAny( pToolbar->GetName() ) );
+            uno::Any( pToolbar->GetName() ) );
 
     try
     {

@@ -1183,13 +1183,13 @@ cppuhelper::ServiceManager::createContentEnumeration(
             }
         }
         if (impl->factory1.is()) {
-            factories.push_back(css::uno::makeAny(impl->factory1));
+            factories.push_back(css::uno::Any(impl->factory1));
         } else if (impl->factory2.is()) {
-            factories.push_back(css::uno::makeAny(impl->factory2));
+            factories.push_back(css::uno::Any(impl->factory2));
         } else {
             css::uno::Reference< css::lang::XSingleComponentFactory > factory(
                     new ImplementationWrapper(this, *i));
-            factories.push_back(css::uno::makeAny(factory));
+            factories.push_back(css::uno::Any(factory));
         }
     }
     return new ContentEnumeration(factories);
@@ -1221,7 +1221,7 @@ css::uno::Any cppuhelper::ServiceManager::getPropertyValue(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
     assert(context_.is());
-    return css::uno::makeAny(context_);
+    return css::uno::Any(context_);
 }
 
 void cppuhelper::ServiceManager::addPropertyChangeListener(

@@ -450,7 +450,7 @@ SAL_IMPLEMENT_MAIN()
             Any * pInitParams = aInitParams.getArray();
             for ( sal_Int32 i = aParams.getLength(); i--; )
             {
-                pInitParams[i] = makeAny( p[i] );
+                pInitParams[i] = Any( p[i] );
             }
 
             // instance provider

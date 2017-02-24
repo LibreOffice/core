@@ -737,7 +737,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
                     wrapDefaulted, isDefaulted, wrapOptional));
             css::uno::Reference< css::reflection::XIdlField2 >(
                 type->getField("IsAmbiguous"), css::uno::UNO_QUERY_THROW)->set(
-                    strct, css::uno::makeAny(isAmbiguous));
+                    strct, css::uno::Any(isAmbiguous));
         } catch (css::lang::IllegalArgumentException & e) {
             throw css::uno::RuntimeException(
                 ("unexpected com.sun.star.lang.IllegalArgumentException: "
@@ -765,7 +765,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
                     false, false, wrapOptional));
             css::uno::Reference< css::reflection::XIdlField2 >(
                 type->getField("IsDefaulted"), css::uno::UNO_QUERY_THROW)->set(
-                    strct, css::uno::makeAny(isDefaulted));
+                    strct, css::uno::Any(isDefaulted));
         } catch (css::lang::IllegalArgumentException & e) {
             throw css::uno::RuntimeException(
                 ("unexpected com.sun.star.lang.IllegalArgumentException: "
@@ -787,7 +787,7 @@ css::uno::Any PropertySetMixinImpl::Impl::wrapValue(
         try {
             css::uno::Reference< css::reflection::XIdlField2 >(
                 type->getField("IsPresent"), css::uno::UNO_QUERY_THROW)->set(
-                    strct, css::uno::makeAny(present));
+                    strct, css::uno::Any(present));
             if (present) {
                 css::uno::Reference< css::reflection::XIdlField2 > field(
                     type->getField("Value"), css::uno::UNO_QUERY_THROW);

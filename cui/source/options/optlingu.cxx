@@ -132,7 +132,7 @@ bool KillFile_Impl( const OUString& rURL )
     try
     {
         Content aCnt( rURL, uno::Reference< css::ucb::XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-        aCnt.executeCommand( "delete", makeAny( true ) );
+        aCnt.executeCommand( "delete", Any( true ) );
     }
     catch( css::ucb::CommandAbortedException& )
     {

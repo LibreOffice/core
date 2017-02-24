@@ -567,17 +567,17 @@ short SfxInsertFloatingFrameDialog::Execute()
                 else
                     lMarginHeight = SIZE_NOT_SET;
 
-                xSet->setPropertyValue( "FrameURL", makeAny( aURL ) );
-                xSet->setPropertyValue( "FrameName", makeAny( aName ) );
+                xSet->setPropertyValue( "FrameURL", Any( aURL ) );
+                xSet->setPropertyValue( "FrameName", Any( aName ) );
 
                 if ( eScroll == ScrollingAuto )
-                    xSet->setPropertyValue( "FrameIsAutoScroll", makeAny( true ) );
+                    xSet->setPropertyValue( "FrameIsAutoScroll", Any( true ) );
                 else
-                    xSet->setPropertyValue( "FrameIsScrollingMode", makeAny( eScroll == ScrollingYes ) );
+                    xSet->setPropertyValue( "FrameIsScrollingMode", Any( eScroll == ScrollingYes ) );
 
-                xSet->setPropertyValue( "FrameIsBorder", makeAny( bHasBorder ) );
-                xSet->setPropertyValue( "FrameMarginWidth", makeAny( sal_Int32( lMarginWidth ) ) );
-                xSet->setPropertyValue( "FrameMarginHeight", makeAny( sal_Int32( lMarginHeight ) ) );
+                xSet->setPropertyValue( "FrameIsBorder", Any( bHasBorder ) );
+                xSet->setPropertyValue( "FrameMarginWidth", Any( sal_Int32( lMarginWidth ) ) );
+                xSet->setPropertyValue( "FrameMarginHeight", Any( sal_Int32( lMarginHeight ) ) );
 
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::INPLACE_ACTIVE );

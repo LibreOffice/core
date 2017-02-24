@@ -215,7 +215,7 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
     if( m_pAutoCheckCheckBox->IsValueChangedFromSaved() )
     {
         bValue = m_pAutoCheckCheckBox->IsChecked();
-        m_xUpdateAccess->replaceByName( "AutoCheckEnabled", uno::makeAny( bValue ) );
+        m_xUpdateAccess->replaceByName( "AutoCheckEnabled", uno::Any( bValue ) );
         bModified = true;
     }
 
@@ -238,14 +238,14 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
 
     if( nValue > 0 )
     {
-        m_xUpdateAccess->replaceByName( "CheckInterval", uno::makeAny( nValue ) );
+        m_xUpdateAccess->replaceByName( "CheckInterval", uno::Any( nValue ) );
         bModified = true;
     }
 
     if( m_pAutoDownloadCheckBox->IsValueChangedFromSaved() )
     {
         bValue = m_pAutoDownloadCheckBox->IsChecked();
-        m_xUpdateAccess->replaceByName( "AutoDownloadEnabled", uno::makeAny( bValue ) );
+        m_xUpdateAccess->replaceByName( "AutoDownloadEnabled", uno::Any( bValue ) );
         bModified = true;
     }
 
@@ -255,14 +255,14 @@ bool SvxOnlineUpdateTabPage::FillItemSet( SfxItemSet* )
     if( ( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(m_pDestPath->GetText(), aURL) ) &&
         ( ! aURL.equals( sValue ) ) )
     {
-        m_xUpdateAccess->replaceByName( "DownloadDestination", uno::makeAny( aURL ) );
+        m_xUpdateAccess->replaceByName( "DownloadDestination", uno::Any( aURL ) );
         bModified = true;
     }
 
     if( m_pExtrasCheckBox->IsValueChangedFromSaved() )
     {
         bValue = m_pExtrasCheckBox->IsChecked();
-        m_xUpdateAccess->replaceByName( "ExtendedUserAgent", uno::makeAny( bValue ) );
+        m_xUpdateAccess->replaceByName( "ExtendedUserAgent", uno::Any( bValue ) );
         bModified = true;
     }
 
@@ -381,10 +381,10 @@ IMPL_LINK_NOARG(SvxOnlineUpdateTabPage, CheckNowHdl_Impl, Button*, void)
 
         beans::NamedValue aProperty;
         aProperty.Name  = "nodepath";
-        aProperty.Value = uno::makeAny( OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob") );
+        aProperty.Value <<= OUString("org.openoffice.Office.Addons/AddonUI/OfficeHelp/UpdateCheckJob");
 
         uno::Sequence< uno::Any > aArgumentList( 1 );
-        aArgumentList[0] = uno::makeAny( aProperty );
+        aArgumentList[0] <<= aProperty;
 
         uno::Reference< container::XNameAccess > xNameAccess(
             xConfigProvider->createInstanceWithArguments(
