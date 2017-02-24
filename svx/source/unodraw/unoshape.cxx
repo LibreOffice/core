@@ -3071,51 +3071,49 @@ OUString SAL_CALL SvxShape::getImplementationName()
     return OUString("SvxShape");
 }
 
-#define STAR_NAMESPACE "com.sun.star."
+const char sUNO_service_style_ParagraphProperties[]          = "com.sun.star.style.ParagraphProperties";
+const char sUNO_service_style_ParagraphPropertiesComplex[]   = "com.sun.star.style.ParagraphPropertiesComplex";
+const char sUNO_service_style_ParagraphPropertiesAsian[]     = "com.sun.star.style.ParagraphPropertiesAsian";
+const char sUNO_service_style_CharacterProperties[]          = "com.sun.star.style.CharacterProperties";
+const char sUNO_service_style_CharacterPropertiesComplex[]   = "com.sun.star.style.CharacterPropertiesComplex";
+const char sUNO_service_style_CharacterPropertiesAsian[]     = "com.sun.star.style.CharacterPropertiesAsian";
 
-const char sUNO_service_style_ParagraphProperties[]          = STAR_NAMESPACE "style.ParagraphProperties";
-const char sUNO_service_style_ParagraphPropertiesComplex[]   = STAR_NAMESPACE "style.ParagraphPropertiesComplex";
-const char sUNO_service_style_ParagraphPropertiesAsian[]     = STAR_NAMESPACE "style.ParagraphPropertiesAsian";
-const char sUNO_service_style_CharacterProperties[]          = STAR_NAMESPACE "style.CharacterProperties";
-const char sUNO_service_style_CharacterPropertiesComplex[]   = STAR_NAMESPACE "style.CharacterPropertiesComplex";
-const char sUNO_service_style_CharacterPropertiesAsian[]     = STAR_NAMESPACE "style.CharacterPropertiesAsian";
+const char sUNO_service_drawing_FillProperties[]             = "com.sun.star.drawing.FillProperties";
+const char sUNO_service_drawing_TextProperties[]             = "com.sun.star.drawing.TextProperties";
+const char sUNO_service_drawing_LineProperties[]             = "com.sun.star.drawing.LineProperties";
+const char sUNO_service_drawing_ConnectorProperties[]        = "com.sun.star.drawing.ConnectorProperties";
+const char sUNO_service_drawing_MeasureProperties[]          = "com.sun.star.drawing.MeasureProperties";
+const char sUNO_service_drawing_ShadowProperties[]           = "com.sun.star.drawing.ShadowProperties";
 
-const char sUNO_service_drawing_FillProperties[]             = STAR_NAMESPACE "drawing.FillProperties";
-const char sUNO_service_drawing_TextProperties[]             = STAR_NAMESPACE "drawing.TextProperties";
-const char sUNO_service_drawing_LineProperties[]             = STAR_NAMESPACE "drawing.LineProperties";
-const char sUNO_service_drawing_ConnectorProperties[]        = STAR_NAMESPACE "drawing.ConnectorProperties";
-const char sUNO_service_drawing_MeasureProperties[]          = STAR_NAMESPACE "drawing.MeasureProperties";
-const char sUNO_service_drawing_ShadowProperties[]           = STAR_NAMESPACE "drawing.ShadowProperties";
+const char sUNO_service_drawing_RotationDescriptor[]         = "com.sun.star.drawing.RotationDescriptor";
 
-const char sUNO_service_drawing_RotationDescriptor[]         = STAR_NAMESPACE "drawing.RotationDescriptor";
+const char sUNO_service_drawing_Text[]                       = "com.sun.star.drawing.Text";
+const char sUNO_service_drawing_GroupShape[]                 = "com.sun.star.drawing.GroupShape";
 
-const char sUNO_service_drawing_Text[]                       = STAR_NAMESPACE "drawing.Text";
-const char sUNO_service_drawing_GroupShape[]                 = STAR_NAMESPACE "drawing.GroupShape";
+const char sUNO_service_drawing_CustomShapeProperties[]      = "com.sun.star.drawing.CustomShapeProperties";
+const char sUNO_service_drawing_CustomShape[]                = "com.sun.star.drawing.CustomShape";
 
-const char sUNO_service_drawing_CustomShapeProperties[]      = STAR_NAMESPACE "drawing.CustomShapeProperties";
-const char sUNO_service_drawing_CustomShape[]                    = STAR_NAMESPACE "drawing.CustomShape";
+const char sUNO_service_drawing_PolyPolygonDescriptor[]      = "com.sun.star.drawing.PolyPolygonDescriptor";
+const char sUNO_service_drawing_PolyPolygonBezierDescriptor[]= "com.sun.star.drawing.PolyPolygonBezierDescriptor";
 
-const char sUNO_service_drawing_PolyPolygonDescriptor[]      = STAR_NAMESPACE "drawing.PolyPolygonDescriptor";
-const char sUNO_service_drawing_PolyPolygonBezierDescriptor[]= STAR_NAMESPACE "drawing.PolyPolygonBezierDescriptor";
-
-const char sUNO_service_drawing_LineShape[]                  = STAR_NAMESPACE "drawing.LineShape";
-const char sUNO_service_drawing_Shape[]                      = STAR_NAMESPACE "drawing.Shape";
-const char sUNO_service_drawing_RectangleShape[]             = STAR_NAMESPACE "drawing.RectangleShape";
-const char sUNO_service_drawing_EllipseShape[]               = STAR_NAMESPACE "drawing.EllipseShape";
-const char sUNO_service_drawing_PolyPolygonShape[]           = STAR_NAMESPACE "drawing.PolyPolygonShape";
-const char sUNO_service_drawing_PolyLineShape[]              = STAR_NAMESPACE "drawing.PolyLineShape";
-const char sUNO_service_drawing_OpenBezierShape[]            = STAR_NAMESPACE "drawing.OpenBezierShape";
-const char sUNO_service_drawing_ClosedBezierShape[]          = STAR_NAMESPACE "drawing.ClosedBezierShape";
-const char sUNO_service_drawing_TextShape[]                  = STAR_NAMESPACE "drawing.TextShape";
-const char sUNO_service_drawing_GraphicObjectShape[]         = STAR_NAMESPACE "drawing.GraphicObjectShape";
-const char sUNO_service_drawing_OLE2Shape[]                  = STAR_NAMESPACE "drawing.OLE2Shape";
-const char sUNO_service_drawing_PageShape[]                  = STAR_NAMESPACE "drawing.PageShape";
-const char sUNO_service_drawing_CaptionShape[]               = STAR_NAMESPACE "drawing.CaptionShape";
-const char sUNO_service_drawing_MeasureShape[]               = STAR_NAMESPACE "drawing.MeasureShape";
-const char sUNO_service_drawing_FrameShape[]                 = STAR_NAMESPACE "drawing.FrameShape";
-const char sUNO_service_drawing_ControlShape[]               = STAR_NAMESPACE "drawing.ControlShape";
-const char sUNO_service_drawing_ConnectorShape[]             = STAR_NAMESPACE "drawing.ConnectorShape";
-const char sUNO_service_drawing_MediaShape[]                 = STAR_NAMESPACE "drawing.MediaShape";
+const char sUNO_service_drawing_LineShape[]                  = "com.sun.star.drawing.LineShape";
+const char sUNO_service_drawing_Shape[]                      = "com.sun.star.drawing.Shape";
+const char sUNO_service_drawing_RectangleShape[]             = "com.sun.star.drawing.RectangleShape";
+const char sUNO_service_drawing_EllipseShape[]               = "com.sun.star.drawing.EllipseShape";
+const char sUNO_service_drawing_PolyPolygonShape[]           = "com.sun.star.drawing.PolyPolygonShape";
+const char sUNO_service_drawing_PolyLineShape[]              = "com.sun.star.drawing.PolyLineShape";
+const char sUNO_service_drawing_OpenBezierShape[]            = "com.sun.star.drawing.OpenBezierShape";
+const char sUNO_service_drawing_ClosedBezierShape[]          = "com.sun.star.drawing.ClosedBezierShape";
+const char sUNO_service_drawing_TextShape[]                  = "com.sun.star.drawing.TextShape";
+const char sUNO_service_drawing_GraphicObjectShape[]         = "com.sun.star.drawing.GraphicObjectShape";
+const char sUNO_service_drawing_OLE2Shape[]                  = "com.sun.star.drawing.OLE2Shape";
+const char sUNO_service_drawing_PageShape[]                  = "com.sun.star.drawing.PageShape";
+const char sUNO_service_drawing_CaptionShape[]               = "com.sun.star.drawing.CaptionShape";
+const char sUNO_service_drawing_MeasureShape[]               = "com.sun.star.drawing.MeasureShape";
+const char sUNO_service_drawing_FrameShape[]                 = "com.sun.star.drawing.FrameShape";
+const char sUNO_service_drawing_ControlShape[]               = "com.sun.star.drawing.ControlShape";
+const char sUNO_service_drawing_ConnectorShape[]             = "com.sun.star.drawing.ConnectorShape";
+const char sUNO_service_drawing_MediaShape[]                 = "com.sun.star.drawing.MediaShape";
 
 
 uno::Sequence< OUString > SAL_CALL SvxShape::getSupportedServiceNames()
