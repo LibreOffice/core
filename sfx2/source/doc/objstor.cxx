@@ -2292,6 +2292,13 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                     e.Message, ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError ), "");
             }
         }
+        catch (const std::exception& e)
+        {
+            const char *msg = e.what();
+            OUString sError(msg, strlen(msg), RTL_TEXTENCODING_ASCII_US);
+            SetError(*new StringErrorInfo(ERRCODE_SFX_DOLOADFAILED,
+                sError, ErrorHandlerFlags::ButtonsOk | ErrorHandlerFlags::MessageError), "");
+        }
         catch (...)
         {
             std::abort(); // cannot happen
