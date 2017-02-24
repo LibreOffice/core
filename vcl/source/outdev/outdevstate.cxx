@@ -466,7 +466,6 @@ void OutputDevice::SetFont( const vcl::Font& rNewFont )
 {
 
     vcl::Font aFont( rNewFont );
-    aFont.SetLanguage(rNewFont.GetLanguage());
     if ( mnDrawMode & (DrawModeFlags::BlackText | DrawModeFlags::WhiteText | DrawModeFlags::GrayText | DrawModeFlags::GhostedText | DrawModeFlags::SettingsText |
                        DrawModeFlags::BlackFill | DrawModeFlags::WhiteFill | DrawModeFlags::GrayFill | DrawModeFlags::NoFill |
                        DrawModeFlags::GhostedFill | DrawModeFlags::SettingsFill ) )
