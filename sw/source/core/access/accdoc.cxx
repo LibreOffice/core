@@ -788,7 +788,7 @@ css::uno::Sequence< css::uno::Any >
                                     if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
                                     {
                                         uno::Sequence<uno::Any> aRet( 1 );
-                                        aRet[0] = uno::makeAny( xSel );
+                                        aRet[0] <<= xSel;
                                         return aRet;
                                     }
                                 }
@@ -810,7 +810,7 @@ css::uno::Sequence< css::uno::Any >
             if ( pAccImpl && pAccImpl->getAccessibleRole() == AccessibleRole::PARAGRAPH )
             {
                 uno::Sequence< uno::Any > aRet(1);
-                aRet[0] = uno::makeAny( xAcc );
+                aRet[0] <<= xAcc;
                 return aRet;
             }
         }
@@ -856,7 +856,7 @@ css::uno::Sequence< css::uno::Any >
                         SwAccessibleContext *pAccImpl = static_cast< SwAccessibleContext *>( xAcc.get() );
                         if ( pAccImpl && pAccImpl->getAccessibleRole() == AccessibleRole::PARAGRAPH )
                         {
-                            aRet[nIndex] = uno::makeAny( xAcc );
+                            aRet[nIndex] <<= xAcc;
                         }
                     }
                 }

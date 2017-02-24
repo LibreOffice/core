@@ -850,7 +850,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
             aEvent.FeatureDescriptor=m_xDatMan->getQueryField();
 
             uno::Sequence<OUString> aStringSeq=m_xDatMan->getQueryFields();
-            aEvent.State  = makeAny( aStringSeq );
+            aEvent.State <<= aStringSeq;
 
             pObj->xListener->statusChanged( aEvent );
             bMenuFilter=true;

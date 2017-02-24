@@ -127,7 +127,7 @@ void ScCellRangeObj::testSortOOB()
     aSort[0].SortAscending = true;
 
     aProps[0].Name = "SortFields";
-    aProps[0].Value = uno::makeAny(aSort);
+    aProps[0].Value <<= aSort;
 
     xSortable->sort(aProps);
 }

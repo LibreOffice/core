@@ -1125,8 +1125,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 if ( aNewValue != m_aProps.aMediaType )
                 {
                     aEvent.PropertyName = rValue.Name;
-                    aEvent.OldValue     = uno::makeAny( m_aProps.aMediaType );
-                    aEvent.NewValue     = uno::makeAny( aNewValue );
+                    aEvent.OldValue     <<= m_aProps.aMediaType;
+                    aEvent.NewValue     <<= aNewValue;
 
                     m_aProps.aMediaType = aNewValue;
                     nChanged++;
@@ -1159,8 +1159,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     if ( bNewValue != m_aProps.bCompressed )
                     {
                         aEvent.PropertyName = rValue.Name;
-                        aEvent.OldValue = uno::makeAny( m_aProps.bCompressed );
-                        aEvent.NewValue = uno::makeAny( bNewValue );
+                        aEvent.OldValue <<= m_aProps.bCompressed;
+                        aEvent.NewValue <<= bNewValue;
 
                         m_aProps.bCompressed = bNewValue;
                         nChanged++;
@@ -1193,8 +1193,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     if ( bNewValue != m_aProps.bEncrypted )
                     {
                         aEvent.PropertyName = rValue.Name;
-                        aEvent.OldValue = uno::makeAny( m_aProps.bEncrypted );
-                        aEvent.NewValue = uno::makeAny( bNewValue );
+                        aEvent.OldValue <<= m_aProps.bEncrypted;
+                        aEvent.NewValue <<= bNewValue;
 
                         m_aProps.bEncrypted = bNewValue;
                         nChanged++;
@@ -1238,9 +1238,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     if ( aNewValue != m_aProps.aEncryptionKey )
                     {
                         aEvent.PropertyName = rValue.Name;
-                        aEvent.OldValue     = uno::makeAny(
-                                                m_aProps.aEncryptionKey );
-                        aEvent.NewValue     = uno::makeAny( aNewValue );
+                        aEvent.OldValue     <<= m_aProps.aEncryptionKey;
+                        aEvent.NewValue     <<= aNewValue;
 
                         m_aProps.aEncryptionKey = aNewValue;
                         nChanged++;
@@ -1353,8 +1352,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     if ( !aNewTitle.isEmpty() )
     {
         aEvent.PropertyName = "Title";
-        aEvent.OldValue     = uno::makeAny( m_aProps.aTitle );
-        aEvent.NewValue     = uno::makeAny( aNewTitle );
+        aEvent.OldValue     <<= m_aProps.aTitle;
+        aEvent.NewValue     <<= aNewTitle;
 
         m_aProps.aTitle = aNewTitle;
 

@@ -887,7 +887,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getPropertyValue( const OUString& sPropertyN
         if ( nResId > 0 )
         {
             OUString sDisplayName( ScGlobal::GetRscString( static_cast< sal_uInt16 >( nResId ) ) );
-            aRet = uno::makeAny( sDisplayName );
+            aRet <<= sDisplayName;
         }
     }
     else
@@ -1294,9 +1294,9 @@ uno::Any ScStyleObj::getPropertyDefault_Impl( const OUString& aPropertyName )
                     {
                         const ScPageScaleToItem aItem(static_cast<const ScPageScaleToItem&>(pItemSet->Get(nWhich)));
                         if ( aPropertyName == SC_UNO_PAGE_SCALETOX )
-                            aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
+                            aAny <<= static_cast<sal_Int16>(aItem.GetWidth());
                         else
-                            aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
+                            aAny <<= static_cast<sal_Int16>(aItem.GetHeight());
                     }
                     break;
                 default:
@@ -1873,15 +1873,15 @@ uno::Any ScStyleObj::getPropertyValue_Impl( const OUString& aPropertyName )
                         {
                             ScPageScaleToItem aItem(static_cast<const ScPageScaleToItem&>(pItemSet->Get(ATTR_PAGE_SCALETO)));
                             if ( aPropertyName == SC_UNO_PAGE_SCALETOX )
-                                aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
+                                aAny <<= static_cast<sal_Int16>(aItem.GetWidth());
                             else
-                                aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
+                                aAny <<= static_cast<sal_Int16>(aItem.GetHeight());
                         }
                         break;
                     case ATTR_HIDDEN:
                         {
                             bool bHidden = pStyle && pStyle->IsHidden();
-                            aAny = uno::makeAny( bHidden );
+                            aAny <<= bHidden;
                         }
                         break;
                     default:

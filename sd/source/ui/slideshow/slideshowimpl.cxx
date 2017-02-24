@@ -815,12 +815,12 @@ bool SlideshowImpl::startPreview(
 
         Sequence< beans::PropertyValue > aProperties(nPropertyCount);
         aProperties[0].Name = "AutomaticAdvancement";
-        aProperties[0].Value = uno::makeAny( (double)1.0 ); // one second timeout
+        aProperties[0].Value <<= (double)1.0; // one second timeout
 
         if( mxPreviewAnimationNode.is() )
         {
             aProperties[1].Name = "NoSlideTransitions";
-            aProperties[1].Value = uno::makeAny( true );
+            aProperties[1].Value <<= true;
         }
 
         bRet = startShowImpl( aProperties );

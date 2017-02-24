@@ -75,7 +75,7 @@ css::uno::Any resolveTypedefs(css::uno::Any const & type) {
         if (!ind.is() || ind->getTypeClass() != css::uno::TypeClass_TYPEDEF) {
             return t;
         }
-        t = css::uno::makeAny(ind->getReferencedType());
+        t <<= ind->getReferencedType();
     }
 }
 

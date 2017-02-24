@@ -730,13 +730,13 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
             if( nId == SID_PRINTDOCDIRECT )
             {
                 aProps[nLen].Name = "PrintSelectionOnly";
-                aProps[nLen].Value = makeAny( bSelection );
+                aProps[nLen].Value <<= bSelection;
             }
             else // if nId == SID_PRINTDOC ; nothing to do with the previous HACK
             {
                 // should the printer selection and properties dialogue display an help button
                 aProps[nLen].Name = "HideHelpButton";
-                aProps[nLen].Value = makeAny( bPrintOnHelp );
+                aProps[nLen].Value <<= bPrintOnHelp;
             }
 
             ExecPrint( aProps, bIsAPI, (nId == SID_PRINTDOCDIRECT) );

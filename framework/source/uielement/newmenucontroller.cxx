@@ -417,7 +417,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
 
             Sequence< PropertyValue > aArgsList( 1 );
             aArgsList[0].Name = "Referer";
-            aArgsList[0].Value = makeAny( OUString( "private:user" ));
+            aArgsList[0].Value <<= OUString( "private:user" );
 
             dispatchCommand( aURL, aArgsList, aTargetFrame );
         }

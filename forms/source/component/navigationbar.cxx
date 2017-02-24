@@ -266,12 +266,12 @@ namespace frm
 
             // the maybeboid anys
             if ( nNonVoids & PERSIST_TABSTOP )
-                m_aTabStop = makeAny( _rxInStream->readBoolean() );
+                m_aTabStop <<= _rxInStream->readBoolean();
             else
                 m_aTabStop.clear();
 
             if ( nNonVoids & PERSIST_BACKGROUND )
-                m_aBackgroundColor = makeAny( _rxInStream->readLong() );
+                m_aBackgroundColor <<= _rxInStream->readLong();
             else
                 m_aBackgroundColor.clear();
 

@@ -2777,7 +2777,7 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertySimpl
     }
 
     case SDRATTR_OBJMOVEPROTECT:
-        rValue = uno::makeAny( mpObj->IsMoveProtect() );
+        rValue <<= mpObj->IsMoveProtect();
         break;
 
     case SDRATTR_OBJECTNAME:

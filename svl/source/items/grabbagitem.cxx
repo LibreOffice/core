@@ -67,7 +67,7 @@ bool SfxGrabBagItem::QueryValue(uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
         pValue[0].Value = i.second;
         ++pValue;
     }
-    rVal = uno::makeAny(aValue);
+    rVal <<= aValue;
     return true;
 }
 

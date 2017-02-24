@@ -486,12 +486,12 @@ namespace slideshow
 
                             if( mxPlayer.is() )
                             {
-                                aArgs[ 0 ] = uno::makeAny(
-                                    sal::static_int_cast< sal_IntPtr >( mpMediaWindow->GetParentWindowHandle() ) );
+                                aArgs[ 0 ] <<=
+                                    sal::static_int_cast< sal_IntPtr >( mpMediaWindow->GetParentWindowHandle() );
 
                                 aAWTRect.X = aAWTRect.Y = 0;
-                                aArgs[ 1 ] = uno::makeAny( aAWTRect );
-                                aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( mpMediaWindow.get() ) );
+                                aArgs[ 1 ] <<= aAWTRect;
+                                aArgs[ 2 ] <<= reinterpret_cast< sal_IntPtr >( mpMediaWindow.get() );
 
                                 mxPlayerWindow.set( mxPlayer->createPlayerWindow( aArgs ) );
 

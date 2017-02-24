@@ -1779,8 +1779,8 @@ void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell* i_pOb
     OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     Sequence< PropertyValue > lProps(1);
     lProps[0].Name = "ooSetupFactoryStyleFilter";
-    lProps[0].Value = makeAny(
-            i_nFilter | (m_bWantHierarchical ? SFXSTYLEBIT_HIERARCHY : 0));
+    lProps[0].Value <<=
+            i_nFilter | (m_bWantHierarchical ? SFXSTYLEBIT_HIERARCHY : 0);
     xModuleManager->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), makeAny( lProps ) );
 }
 

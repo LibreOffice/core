@@ -167,10 +167,10 @@ IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
 
     uno::Sequence<beans::PropertyValue> aArgs(2);
     aArgs[0].Name = OUString::fromUtf8("Symbols");
-    aArgs[0].Value = uno::makeAny(sHexText.toString());
+    aArgs[0].Value <<= sHexText.toString();
     //add font settings here
     aArgs[1].Name = OUString::fromUtf8("FontName");
-    aArgs[1].Value = uno::makeAny(sFontName);
+    aArgs[1].Value <<= sFontName;
 
     comphelper::dispatchCommand(".uno:InsertSymbol", aArgs);
 }

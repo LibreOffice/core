@@ -141,7 +141,7 @@ void IndexColumns::refresh()
             pIndexColumn->setPropertyValue_NoBroadcast_public(
                 st.IS_ASCENDING , makeAny( false ) );
 
-            m_values[ index ] = makeAny( prop );
+            m_values[ index ] <<= prop;
             m_name2index[ columnName ] = index;
         }
     }

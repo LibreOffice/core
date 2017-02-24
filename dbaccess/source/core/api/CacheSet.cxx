@@ -383,7 +383,7 @@ void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
 {
     Any aBookmark = getBookmark();
     if(!aBookmark.hasValue())
-        aBookmark = makeAny(_nPosition);
+        aBookmark <<= _nPosition;
 
     connectivity::ORowVector< ORowSetValue >::Vector::iterator aIter = _rRow->get().begin();
     connectivity::ORowVector< ORowSetValue >::Vector::iterator aEnd = _rRow->get().end();

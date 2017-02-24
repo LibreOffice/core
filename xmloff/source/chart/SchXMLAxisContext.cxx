@@ -349,7 +349,7 @@ bool lcl_divideBy100( uno::Any& rDoubleAny )
     if( (rDoubleAny>>=fValue) && (fValue!=0.0) )
     {
         fValue/=100.0;
-        rDoubleAny = uno::makeAny(fValue);
+        rDoubleAny <<= fValue;
         bChanged = true;
     }
     return bChanged;
@@ -945,7 +945,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
         {
             case XML_TOK_DATESCALE_BASE_TIME_UNIT:
                 {
-                    aIncrement.TimeResolution = uno::makeAny( lcl_getTimeUnit(aValue) );
+                    aIncrement.TimeResolution <<= lcl_getTimeUnit(aValue);
                     bSetNewIncrement = true;
                 }
                 break;
@@ -954,7 +954,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MajorTimeInterval >>= aInterval;
                     ::sax::Converter::convertNumber( aInterval.Number, aValue );
-                    aIncrement.MajorTimeInterval = uno::makeAny(aInterval);
+                    aIncrement.MajorTimeInterval <<= aInterval;
                     bSetNewIncrement = true;
                 }
                 break;
@@ -963,7 +963,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MajorTimeInterval >>= aInterval;
                     aInterval.TimeUnit = lcl_getTimeUnit(aValue);
-                    aIncrement.MajorTimeInterval = uno::makeAny(aInterval);
+                    aIncrement.MajorTimeInterval <<= aInterval;
                     bSetNewIncrement = true;
                 }
                 break;
@@ -972,7 +972,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MinorTimeInterval >>= aInterval;
                     ::sax::Converter::convertNumber( aInterval.Number, aValue );
-                    aIncrement.MinorTimeInterval = uno::makeAny(aInterval);
+                    aIncrement.MinorTimeInterval <<= aInterval;
                     bSetNewIncrement = true;
                 }
                 break;
@@ -981,7 +981,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
                     chart::TimeInterval aInterval(1,0);
                     aIncrement.MinorTimeInterval >>= aInterval;
                     aInterval.TimeUnit = lcl_getTimeUnit(aValue);
-                    aIncrement.MinorTimeInterval = uno::makeAny(aInterval);
+                    aIncrement.MinorTimeInterval <<= aInterval;
                     bSetNewIncrement = true;
                 }
                 break;

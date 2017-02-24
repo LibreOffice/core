@@ -81,15 +81,15 @@ void ScConditionalFormatTest::testCondFormat()
 
     uno::Sequence< beans::PropertyValue > aPropertyValueList(5);
     aPropertyValueList[0].Name = SC_UNONAME_STYLENAME;
-    aPropertyValueList[0].Value = uno::makeAny<OUString>("Result2");
+    aPropertyValueList[0].Value <<= OUString("Result2");
     aPropertyValueList[1].Name = SC_UNONAME_FORMULA1;
-    aPropertyValueList[1].Value = uno::makeAny<OUString>("$Sheet1.$B$2");
+    aPropertyValueList[1].Value <<= OUString("$Sheet1.$B$2");
     aPropertyValueList[2].Name = SC_UNONAME_FORMULA2;
-    aPropertyValueList[2].Value = uno::makeAny<OUString>("$Sheet1.$A$2");
+    aPropertyValueList[2].Value <<= OUString("$Sheet1.$A$2");
     aPropertyValueList[3].Name = SC_UNONAME_OPERATOR;
     aPropertyValueList[3].Value <<= sheet::ConditionOperator_EQUAL;
     aPropertyValueList[4].Name = SC_UNONAME_SOURCEPOS;
-    aPropertyValueList[4].Value = uno::makeAny(table::CellAddress(0, 0, 16));
+    aPropertyValueList[4].Value <<= table::CellAddress(0, 0, 16);
     xSheetConditionalEntries->addNew(aPropertyValueList);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xSheetConditionalEntries->getCount());
     xProps->setPropertyValue(SC_UNONAME_CONDFMT, uno::makeAny(xSheetConditionalEntries));

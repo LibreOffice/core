@@ -673,14 +673,14 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
         const SvtLinguOptions &rOpt = aOpt;
 
         OUString aTmp( lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage ) );
-        *pValue++ = uno::makeAny( aTmp );                               //   0
-        *pValue++ = uno::makeAny( rOpt.aActiveDics );                   //   1
+        *pValue++ <<= aTmp;                               //   0
+        *pValue++ <<= rOpt.aActiveDics;                   //   1
         *pValue++ <<= rOpt.bIsUseDictionaryList;        //   2
         *pValue++ <<= rOpt.bIsIgnoreControlCharacters;  //   3
         aTmp = lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage_CJK );
-        *pValue++ = uno::makeAny( aTmp );                               //   5
+        *pValue++ <<= aTmp;                               //   5
         aTmp = lcl_LanguageToCfgLocaleStr( rOpt.nDefaultLanguage_CTL );
-        *pValue++ = uno::makeAny( aTmp );                               //   6
+        *pValue++ <<= aTmp;                               //   6
 
         *pValue++ <<= rOpt.bIsSpellUpperCase;          //   7
         *pValue++ <<= rOpt.bIsSpellWithDigits;         //   8
@@ -695,7 +695,7 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
         *pValue++ <<= rOpt.bIsHyphSpecial;             //  18
         *pValue++ <<= rOpt.bIsHyphAuto;                //  19
 
-        *pValue++ = uno::makeAny( rOpt.aActiveConvDics );               //   20
+        *pValue++ <<= rOpt.aActiveConvDics;               //   20
 
         *pValue++ <<= rOpt.bIsIgnorePostPositionalWord; //  21
         *pValue++ <<= rOpt.bIsAutoCloseDialog;          //  22
@@ -1055,7 +1055,7 @@ uno::Reference< util::XChangesBatch > const & SvtLinguConfig::GetMainUpdateAcces
             // get configuration update access
             beans::PropertyValue aValue;
             aValue.Name  = "nodepath";
-            aValue.Value = uno::makeAny(OUString("org.openoffice.Office.Linguistic"));
+            aValue.Value <<= OUString("org.openoffice.Office.Linguistic");
             uno::Sequence< uno::Any > aProps(1);
             aProps[0] <<= aValue;
             m_xMainUpdateAccess.set(

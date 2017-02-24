@@ -244,11 +244,11 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
     {
         Sequence< PropertyValue > aArgsList(3);
         aArgsList[0].Name = "Referer";
-        aArgsList[0].Value = makeAny( OUString( "private:user" ) );
+        aArgsList[0].Value <<= OUString( "private:user" );
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = "AsTemplate";
-        aArgsList[1].Value = makeAny( false );
+        aArgsList[1].Value <<= false;
 
         // Type detection needs to know which app we are opening it from.
         aArgsList[2].Name = "DocumentService";

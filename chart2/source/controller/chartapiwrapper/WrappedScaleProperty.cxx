@@ -404,7 +404,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                 {
                     sal_Int32 nIntervalCount = 0;
                     rSubIncrements[ 0 ].IntervalCount >>= nIntervalCount;
-                    aRet = uno::Any( double(nIntervalCount) );
+                    aRet <<= double(nIntervalCount);
                     bNeedToCalculateExplicitValues = false;
                 }
             }
@@ -442,7 +442,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                         if( rSubIncrements.getLength() > 0 )
                         {
                             sal_Int32 nIntervalCount = aExplicitIncrement.SubIncrements[ 0 ].IntervalCount;
-                            aRet = uno::Any( double(nIntervalCount) );
+                            aRet <<= double(nIntervalCount);
                         }
                     }
                     else
@@ -476,7 +476,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                 if( !aExplicitIncrement.SubIncrements.empty() )
                     nIntervalCount = aExplicitIncrement.SubIncrements[ 0 ].IntervalCount;
             }
-            aRet = uno::Any( nIntervalCount );
+            aRet <<= nIntervalCount;
             break;
         }
         case SCALE_PROP_AUTO_MAX:
@@ -531,13 +531,13 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                 if( !aScaleData.AutoDateAxis )
                     nType = css::chart::ChartAxisType::CATEGORY;
             }
-            aRet = uno::Any( nType );
+            aRet <<= nType;
             break;
         }
         case SCALE_PROP_DATE_INCREMENT:
         {
             if( aScaleData.AxisType == AxisType::DATE || aScaleData.AutoDateAxis )
-                aRet = uno::Any( aScaleData.TimeIncrement );
+                aRet <<= aScaleData.TimeIncrement;
             break;
         }
         case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
@@ -548,15 +548,15 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                 if( aExplicitScale.AxisType == AxisType::DATE )
                 {
                     TimeIncrement aTimeIncrement;
-                    aTimeIncrement.MajorTimeInterval = uno::Any( aExplicitIncrement.MajorTimeInterval );
-                    aTimeIncrement.MinorTimeInterval = uno::Any( aExplicitIncrement.MinorTimeInterval );
-                    aTimeIncrement.TimeResolution = uno::Any( aExplicitScale.TimeResolution );
-                    aRet = uno::Any(aTimeIncrement);
+                    aTimeIncrement.MajorTimeInterval <<= aExplicitIncrement.MajorTimeInterval;
+                    aTimeIncrement.MinorTimeInterval <<= aExplicitIncrement.MinorTimeInterval;
+                    aTimeIncrement.TimeResolution <<= aExplicitScale.TimeResolution;
+                    aRet <<= aTimeIncrement;
                 }
             }
 
             if( aScaleData.AxisType == AxisType::DATE || aScaleData.AutoDateAxis )
-                aRet = uno::Any( aScaleData.TimeIncrement );
+                aRet <<= aScaleData.TimeIncrement;
             break;
         }
         case SCALE_PROP_LOGARITHMIC:

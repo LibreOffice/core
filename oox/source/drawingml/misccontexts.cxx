@@ -371,7 +371,7 @@ ContextHandlerRef ArtisticEffectContext::onCreateContext(
         {
             OUString sName = ArtisticEffectProperties::getEffectString( nAttrib );
             if( !sName.isEmpty() )
-                maEffect.maAttribs[sName] = uno::makeAny( rAttribs.getInteger( nAttrib, 0 ) );
+                maEffect.maAttribs[sName] <<= rAttribs.getInteger( nAttrib, 0 );
         }
     }
 

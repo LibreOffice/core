@@ -201,11 +201,11 @@ void GlobalSettings_Access::impl_initConfigAccess()
                  css::configuration::theDefaultProvider::get( m_xContext );
 
             aPropValue.Name  = "nodepath";
-            aPropValue.Value = css::uno::makeAny(OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars"));
-            aArgs[0] = css::uno::makeAny( aPropValue );
+            aPropValue.Value <<= OUString("/org.openoffice.Office.UI.GlobalSettings/Toolbars");
+            aArgs[0] <<= aPropValue;
             aPropValue.Name = "lazywrite";
-            aPropValue.Value = css::uno::makeAny( true );
-            aArgs[1] = css::uno::makeAny( aPropValue );
+            aPropValue.Value <<= true;
+            aArgs[1] <<= aPropValue;
 
             m_xConfigAccess.set(xConfigProvider->createInstanceWithArguments(
                                     SERVICENAME_CFGREADACCESS, aArgs ),

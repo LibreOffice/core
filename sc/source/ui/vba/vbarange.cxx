@@ -849,9 +849,9 @@ void CellValueGetter::visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference<
             uno::Reference< table::XCellRange > xRange( xCell, uno::UNO_QUERY_THROW );
             NumFormatHelper cellFormat( xRange );
             if ( cellFormat.isBooleanType() )
-                aValue = uno::makeAny( ( xCell->getValue() != 0.0 ) );
+                aValue <<= ( xCell->getValue() != 0.0 );
             else if ( cellFormat.isDateType() )
-                aValue = uno::makeAny( bridge::oleautomation::Date( xCell->getValue() ) );
+                aValue <<= bridge::oleautomation::Date( xCell->getValue() );
             else
                 aValue <<= xCell->getValue();
         }
@@ -2064,7 +2064,7 @@ ScVbaRange::Address(  const uno::Any& RowAbsolute, const uno::Any& ColumnAbsolut
                                 // force external to be false
                                 // only first address should have the
                                 // document and sheet specifications
-                                aExternalCopy = uno::makeAny(false);
+                                aExternalCopy <<= false;
             }
             sAddress += xRange->Address( RowAbsolute, ColumnAbsolute, ReferenceStyle, aExternalCopy, RelativeTo );
         }
@@ -5601,7 +5601,7 @@ ScVbaRange::hasError()
 
     uno::Sequence< uno::Any > Params(1);
     uno::Reference< excel::XRange > aRange( this );
-    Params[0] = uno::makeAny( aRange );
+    Params[0] <<= aRange;
     uno::Sequence< sal_Int16 > OutParamIndex;
     uno::Sequence< uno::Any > OutParam;
     xInvoc->invoke( "IsError", Params, OutParamIndex, OutParam ) >>= dResult;

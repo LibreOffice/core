@@ -410,9 +410,9 @@ IMPL_LINK( SvxStyleBox_Impl, MenuSelectHdl, Menu*, pMenu, bool)
         ToggleDropDown();
     Sequence< PropertyValue > aArgs( 2 );
     aArgs[0].Name   = "Param";
-    aArgs[0].Value  = makeAny( sEntry );
+    aArgs[0].Value  <<= sEntry;
     aArgs[1].Name   = "Family";
-    aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
+    aArgs[1].Value  <<= sal_Int16( eStyleFamily );
 
     switch(nMenuId) {
         case RID_SVX_UPDATE_STYLE:
@@ -497,9 +497,9 @@ void SvxStyleBox_Impl::Select()
             SaveValue();
 
             Sequence< PropertyValue > aArgs( 2 );
-            aArgs[0].Value  = makeAny( OUString( aSearchEntry ) );
+            aArgs[0].Value  <<= aSearchEntry;
             aArgs[1].Name   = "Family";
-            aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
+            aArgs[1].Value  <<= sal_Int16( eStyleFamily );
             if( bCreateNew )
             {
                 aArgs[0].Name   = "Param";
@@ -3106,7 +3106,7 @@ void SvxCurrencyToolBoxControl::Select( sal_uInt16 nSelectModifier )
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = "NumberFormatCurrency";
-        aArgs[0].Value = makeAny( nFormatKey );
+        aArgs[0].Value <<= nFormatKey;
         Dispatch( m_aCommandURL, aArgs );
         m_nFormatKey = nFormatKey;
     }

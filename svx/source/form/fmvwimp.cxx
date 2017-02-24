@@ -1556,7 +1556,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
     if ( _rxField.is() )
     {
         nDataType = ::comphelper::getINT32(_rxField->getPropertyValue(FM_PROP_FIELDTYPE));
-        aFieldName = Any(_rxField->getPropertyValue(FM_PROP_NAME));
+        aFieldName = _rxField->getPropertyValue(FM_PROP_NAME);
         aFieldName >>= sFieldName;
     }
 

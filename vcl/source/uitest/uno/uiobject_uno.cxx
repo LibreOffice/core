@@ -154,7 +154,7 @@ css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
     for (auto itr = aMap.begin(), itrEnd = aMap.end(); itr != itrEnd; ++itr, ++i)
     {
         aProps[i].Name = itr->first;
-        aProps[i].Value = css::uno::makeAny(itr->second);
+        aProps[i].Value <<= itr->second;
     }
 
     return aProps;

@@ -567,9 +567,9 @@ css::uno::Any X11SalGraphics::GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rS
 {
     cairo::X11Surface& rXlibSurface=dynamic_cast<cairo::X11Surface&>(*rSurface.get());
     css::uno::Sequence< css::uno::Any > args( 3 );
-    args[0] = css::uno::Any( false );  // do not call XFreePixmap on it
-    args[1] = css::uno::Any( rXlibSurface.getPixmap()->mhDrawable );
-    args[2] = css::uno::Any( sal_Int32( rXlibSurface.getDepth() ) );
+    args[0] <<= false;  // do not call XFreePixmap on it
+    args[1] <<= rXlibSurface.getPixmap()->mhDrawable;
+    args[2] <<= sal_Int32( rXlibSurface.getDepth() );
     return css::uno::Any(args);
 }
 

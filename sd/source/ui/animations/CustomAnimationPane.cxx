@@ -1199,7 +1199,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         }
         else if( pEffect->getCommand() == EffectCommands::STOPAUDIO )
         {
-            aSoundSource = makeAny( true );
+            aSoundSource <<= true;
         }
         addValue( pSet, nHandleSoundURL, aSoundSource );
 

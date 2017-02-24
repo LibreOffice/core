@@ -249,7 +249,7 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Nam
 
     if ( Name == "system.desktop-environment" )
     {
-        retVal = uno::makeAny( Application::GetDesktopEnvironment() );
+        retVal <<= Application::GetDesktopEnvironment();
     }
     else if( m_xNextContext.is() )
     {

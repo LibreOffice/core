@@ -350,7 +350,7 @@ ScVbaShape::TextFrame()
     {
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         uno::Sequence< uno::Any > aArgs(2);
-        aArgs[0] = uno::makeAny( getParent() );
+        aArgs[0] <<= getParent();
         aArgs[1] <<= m_xShape;
         uno::Reference< uno::XInterface > xTextFrame = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "ooo.vba.excel.TextFrame" , aArgs, xContext );
         return uno::makeAny( xTextFrame );
@@ -687,7 +687,7 @@ ScVbaShape::WrapFormat()
     {
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         uno::Sequence< uno::Any > aArgs(2);
-        aArgs[0] = uno::makeAny( getParent() );
+        aArgs[0] <<= getParent();
         aArgs[1] <<= m_xShape;
         uno::Reference< uno::XInterface > xWrapFormat = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "ooo.vba.word.WrapFormat" , aArgs, xContext );
         return uno::makeAny( xWrapFormat );

@@ -81,21 +81,21 @@ CacheConfiguration::CacheConfiguration()
 
         // Obtain access to Impress configuration.
         Sequence<Any> aCreationArguments(3);
-        aCreationArguments[0] = makeAny(beans::PropertyValue(
+        aCreationArguments[0] <<= beans::PropertyValue(
             "nodepath",
             0,
             makeAny(sPathToImpressConfigurationRoot),
-            beans::PropertyState_DIRECT_VALUE));
-        aCreationArguments[1] = makeAny(beans::PropertyValue(
+            beans::PropertyState_DIRECT_VALUE);
+        aCreationArguments[1] <<= beans::PropertyValue(
             "depth",
             0,
             makeAny((sal_Int32)-1),
-            beans::PropertyState_DIRECT_VALUE));
-        aCreationArguments[2] = makeAny(beans::PropertyValue(
+            beans::PropertyState_DIRECT_VALUE);
+        aCreationArguments[2] <<= beans::PropertyValue(
             "lazywrite",
             0,
             makeAny(true),
-            beans::PropertyState_DIRECT_VALUE));
+            beans::PropertyState_DIRECT_VALUE);
 
         Reference<XInterface> xRoot (xProvider->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess",

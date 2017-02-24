@@ -2016,12 +2016,12 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
                 bool bIsNum = const_cast< SvNumberFormatter& >( m_aNumberFormatter ).
                     IsNumberFormat( pLine->m_aValueEdit->GetText(), nIndex, nValue );
                 if ( bIsNum )
-                    aPropertiesSeq[i].Value = makeAny( nValue );
+                    aPropertiesSeq[i].Value <<= nValue;
             }
             else if ( CUSTOM_TYPE_BOOLEAN == nType )
             {
                 bool bValue = pLine->m_aYesNoButton->IsYesChecked();
-                aPropertiesSeq[i].Value = makeAny( bValue );
+                aPropertiesSeq[i].Value <<= bValue;
             }
             else if ( CUSTOM_TYPE_DATETIME == nType )
             {
@@ -2063,7 +2063,7 @@ Sequence< beans::PropertyValue > CustomPropertiesWindow::GetCustomProperties() c
             else
             {
                 OUString sValue( pLine->m_aValueEdit->GetText() );
-                aPropertiesSeq[i].Value = makeAny( sValue );
+                aPropertiesSeq[i].Value <<= sValue;
             }
         }
     }
@@ -2551,7 +2551,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     if ( bIsNum )
                         seqValue[k] = dValue;
                 }
-                aPropertiesSeq[i].Value = makeAny( seqValue );
+                aPropertiesSeq[i].Value <<= seqValue;
             }
             else if ( CMIS_TYPE_INTEGER == sType )
             {
@@ -2569,7 +2569,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     if ( bIsNum )
                         seqValue[k] = (sal_Int64) dValue;
                 }
-                aPropertiesSeq[i].Value = makeAny( seqValue );
+                aPropertiesSeq[i].Value <<= seqValue;
             }
             else if ( CMIS_TYPE_BOOL == sType )
             {
@@ -2581,7 +2581,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     bool bValue = (*it)->m_aYesButton->IsChecked();
                     seqValue[k] = bValue;
                 }
-                aPropertiesSeq[i].Value = makeAny( seqValue );
+                aPropertiesSeq[i].Value <<= seqValue;
 
             }
             else if ( CMIS_TYPE_DATETIME == sType )
@@ -2599,7 +2599,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                                               aTmpDate.GetYear(), true );
                     seqValue[k] = aDateTime;
                 }
-                aPropertiesSeq[i].Value = makeAny( seqValue );
+                aPropertiesSeq[i].Value <<= seqValue;
             }
             else
             {
@@ -2611,7 +2611,7 @@ Sequence< document::CmisProperty > CmisPropertiesWindow::GetCmisProperties() con
                     OUString sValue( (*it)->m_aValueEdit->GetText() );
                     seqValue[k] = sValue;
                 }
-                aPropertiesSeq[i].Value = makeAny( seqValue );
+                aPropertiesSeq[i].Value <<= seqValue;
             }
         }
     }

@@ -754,8 +754,8 @@ void Parser::readImage()
             aMaxRange[i] = aDataSequence[i+nMaskColors/2] / 255.0;
         }
 
-        aMaskRanges[0] = uno::makeAny(aMinRange);
-        aMaskRanges[1] = uno::makeAny(aMaxRange);
+        aMaskRanges[0] <<= aMinRange;
+        aMaskRanges[1] <<= aMaxRange;
 
         m_pSink->drawColorMaskedImage( aImg, aMaskRanges );
     }

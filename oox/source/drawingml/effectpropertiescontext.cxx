@@ -39,37 +39,37 @@ EffectPropertiesContext::~EffectPropertiesContext()
 void EffectPropertiesContext::saveUnsupportedAttribs( Effect& rEffect, const AttributeList& rAttribs )
 {
     if( rAttribs.hasAttribute( XML_algn ) )
-        rEffect.maAttribs["algn"] = makeAny( rAttribs.getString( XML_algn, "" ) );
+        rEffect.maAttribs["algn"] <<= rAttribs.getString( XML_algn, "" );
     if( rAttribs.hasAttribute( XML_blurRad ) )
-        rEffect.maAttribs["blurRad"] = makeAny( rAttribs.getInteger( XML_blurRad, 0 ) );
+        rEffect.maAttribs["blurRad"] <<= rAttribs.getInteger( XML_blurRad, 0 );
     if( rAttribs.hasAttribute( XML_dir ) )
-        rEffect.maAttribs["dir"] = makeAny( rAttribs.getInteger( XML_dir, 0 ) );
+        rEffect.maAttribs["dir"] <<= rAttribs.getInteger( XML_dir, 0 );
     if( rAttribs.hasAttribute( XML_dist ) )
-        rEffect.maAttribs["dist"] = makeAny( rAttribs.getInteger( XML_dist, 0 ) );
+        rEffect.maAttribs["dist"] <<= rAttribs.getInteger( XML_dist, 0 );
     if( rAttribs.hasAttribute( XML_kx ) )
-        rEffect.maAttribs["kx"] =  makeAny( rAttribs.getInteger( XML_kx, 0 ) );
+        rEffect.maAttribs["kx"] <<= rAttribs.getInteger( XML_kx, 0 );
     if( rAttribs.hasAttribute( XML_ky ) )
-        rEffect.maAttribs["ky"] = makeAny( rAttribs.getInteger( XML_ky, 0 ) );
+        rEffect.maAttribs["ky"] <<= rAttribs.getInteger( XML_ky, 0 );
     if( rAttribs.hasAttribute( XML_rotWithShape ) )
-        rEffect.maAttribs["rotWithShape"] = makeAny( rAttribs.getInteger( XML_rotWithShape, 0 ) );
+        rEffect.maAttribs["rotWithShape"] <<= rAttribs.getInteger( XML_rotWithShape, 0 );
     if( rAttribs.hasAttribute( XML_sx ) )
-        rEffect.maAttribs["sx"] = makeAny( rAttribs.getInteger( XML_sx, 0 ) );
+        rEffect.maAttribs["sx"] <<= rAttribs.getInteger( XML_sx, 0 );
     if( rAttribs.hasAttribute( XML_sy ) )
-        rEffect.maAttribs["sy"] = makeAny( rAttribs.getInteger( XML_sy, 0 ) );
+        rEffect.maAttribs["sy"] <<= rAttribs.getInteger( XML_sy, 0 );
     if( rAttribs.hasAttribute( XML_rad ) )
-        rEffect.maAttribs["rad"] = makeAny( rAttribs.getInteger( XML_rad, 0 ) );
+        rEffect.maAttribs["rad"] <<= rAttribs.getInteger( XML_rad, 0 );
     if( rAttribs.hasAttribute( XML_endA ) )
-        rEffect.maAttribs["endA"] = makeAny( rAttribs.getInteger( XML_endA, 0 ) );
+        rEffect.maAttribs["endA"] <<= rAttribs.getInteger( XML_endA, 0 );
     if( rAttribs.hasAttribute( XML_endPos ) )
-        rEffect.maAttribs["endPos"] = makeAny( rAttribs.getInteger( XML_endPos, 0 ) );
+        rEffect.maAttribs["endPos"] <<= rAttribs.getInteger( XML_endPos, 0 );
     if( rAttribs.hasAttribute( XML_fadeDir ) )
-        rEffect.maAttribs["fadeDir"] = makeAny( rAttribs.getInteger( XML_fadeDir, 0 ) );
+        rEffect.maAttribs["fadeDir"] <<= rAttribs.getInteger( XML_fadeDir, 0 );
     if( rAttribs.hasAttribute( XML_stA ) )
-        rEffect.maAttribs["stA"] = makeAny( rAttribs.getInteger( XML_stA, 0 ) );
+        rEffect.maAttribs["stA"] <<= rAttribs.getInteger( XML_stA, 0 );
     if( rAttribs.hasAttribute( XML_stPos ) )
-        rEffect.maAttribs["stPos"] = makeAny( rAttribs.getInteger( XML_stPos, 0 ) );
+        rEffect.maAttribs["stPos"] <<= rAttribs.getInteger( XML_stPos, 0 );
     if( rAttribs.hasAttribute( XML_grow ) )
-        rEffect.maAttribs["grow"] = makeAny( rAttribs.getInteger( XML_grow, 0 ) );
+        rEffect.maAttribs["grow"] <<= rAttribs.getInteger( XML_grow, 0 );
 }
 
 ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )

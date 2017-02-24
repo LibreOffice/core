@@ -1225,7 +1225,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         auto aIterator = rMap.find("CharShadingMarker");
                         if( aIterator != rMap.end() )
                         {
-                            aIterator->second = uno::makeAny(false);
+                            aIterator->second <<= false;
                         }
                         rWrtSh.SetAttrItem( aGrabBag );
                     }

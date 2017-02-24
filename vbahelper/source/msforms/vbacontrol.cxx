@@ -539,7 +539,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
             evt.ScriptCode = xNameQuery->getCodeNameForObject( xIf );
             // handle if we passed in our own arguments
             if ( !rEvt.Arguments.getLength() )
-                evt.Arguments[ 0 ] = uno::makeAny( aEvt );
+                evt.Arguments[ 0 ] <<= aEvt;
             xScriptListener->firing( evt );
         }
         else
@@ -553,7 +553,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
                 evt.Source = xThisControl;
                 aEvt.Source = xControl;
                 evt.ScriptCode = m_sLibraryAndCodeName;
-                evt.Arguments[ 0 ] = uno::makeAny( aEvt );
+                evt.Arguments[ 0 ] <<= aEvt;
                 xScriptListener->firing( evt );
             }
         }

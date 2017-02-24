@@ -107,7 +107,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     if (static_cast<long>(basegfx::rad2deg(fRotate)) != NormAngle360(static_cast<long>(nRotation) * 100) / 100)
                     {
                         comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
-                        aCustomShapeGeometry["TextPreRotateAngle"] = uno::makeAny(nRotation);
+                        aCustomShapeGeometry["TextPreRotateAngle"] <<= nRotation;
                         xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
                     }
                 }
@@ -181,7 +181,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             oox::OptValue<OUString> presetShapeName = rAttribs.getString(XML_prst);
             const OUString& preset = presetShapeName.get();
             comphelper::SequenceAsHashMap aCustomShapeGeometry(xPropertySet->getPropertyValue("CustomShapeGeometry"));
-            aCustomShapeGeometry["PresetTextWarp"] = uno::makeAny(preset);
+            aCustomShapeGeometry["PresetTextWarp"] <<= preset;
             xPropertySet->setPropertyValue("CustomShapeGeometry", uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
         }
         break;

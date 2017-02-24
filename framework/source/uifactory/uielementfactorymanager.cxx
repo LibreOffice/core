@@ -166,17 +166,17 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
 
             aSeqSeq.realloc( aSeqSeq.getLength() + 1 );
             aSeq[0].Name  = m_aPropType;
-            aSeq[0].Value = makeAny( aFactory.getToken( 0, '^', nToken ));
+            aSeq[0].Value <<= aFactory.getToken( 0, '^', nToken );
             if ( nToken > 0 )
             {
                 aSeq.realloc( 2 );
                 aSeq[1].Name  = m_aPropName;
-                aSeq[1].Value = makeAny( aFactory.getToken( 0, '^', nToken ));
+                aSeq[1].Value <<= aFactory.getToken( 0, '^', nToken );
                 if ( nToken > 0 )
                 {
                     aSeq.realloc( 3 );
                     aSeq[2].Name  = m_aPropModule;
-                    aSeq[2].Value = makeAny( aFactory.getToken( 0, '^', nToken ));
+                    aSeq[2].Value <<= aFactory.getToken( 0, '^', nToken );
                 }
             }
 

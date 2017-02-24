@@ -1246,7 +1246,7 @@ public:
 
         // FIXME: is this always true ?
         aProperties[2].Name = "PageIncludesNonprintableArea";
-        aProperties[2].Value = makeAny( true );
+        aProperties[2].Value <<= true;
 
         return aProperties;
     }

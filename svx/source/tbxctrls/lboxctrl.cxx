@@ -132,7 +132,7 @@ IMPL_LINK_NOARG(SvxUndoRedoControl, PopupModeEndHdl, FloatingWindow*, void)
 
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name   = aObj.GetURLPath();
-        aArgs[0].Value  = makeAny( sal_Int16( nCount ));
+        aArgs[0].Value  <<= sal_Int16( nCount );
         SfxToolBoxControl::Dispatch( m_aCommandURL, aArgs );
     }
 }

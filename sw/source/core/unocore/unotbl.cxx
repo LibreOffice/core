@@ -317,7 +317,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
             else if(FN_TABLE_RELATIVE_WIDTH == pEntry->nWID)
                 rSz.QueryValue(aRet, MID_FRMSIZE_REL_WIDTH);
             else
-                aRet = uno::makeAny<bool>(0 != rSz.GetWidthPercent());
+                aRet <<= (0 != rSz.GetWidthPercent());
             return aRet;
         }
 
@@ -1746,7 +1746,7 @@ uno::Any SwXTextTableCursor::getPropertyValue(const OUString& rPropertyName)
         {
             auto pFormat(SwUnoCursorHelper::GetCurTextFormatColl(rUnoCursor, false));
             if(pFormat)
-                aResult = uno::makeAny(pFormat->GetName());
+                aResult <<= pFormat->GetName();
         }
         break;
         default:

@@ -445,7 +445,7 @@ bool setTitle(
         uno::Sequence< beans::PropertyValue > aPropValues( 1 );
         aPropValues[ 0 ].Name = "Title";
         aPropValues[ 0 ].Handle = -1;
-        aPropValues[ 0 ].Value  = uno::makeAny( rNewTitle );
+        aPropValues[ 0 ].Value  <<= rNewTitle;
 
         ucb::Command aSetPropsCommand(
             "setPropertyValues",

@@ -374,7 +374,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
             Sequence<OUString> aNames { "Title" };
             Sequence< Any > aValues(1);
             Any* pValues = aValues.getArray();
-            pValues[0] = makeAny( OUString( aTitle ) );
+            pValues[0] <<= aTitle;
 
             ucbhelper::Content aNew;
             try
@@ -634,7 +634,7 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
             Sequence<OUString> aNames { "Title" };
             Sequence< Any > aValues(1);
             Any* pValues = aValues.getArray();
-            pValues[0] = makeAny( OUString( rTitle ) );
+            pValues[0] <<= rTitle;
 
             try
             {

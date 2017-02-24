@@ -383,7 +383,7 @@ void PresentationFragmentHandler::finalizeImport()
 
     // writing back the original PageCount of this document, it can be accessed from the XModel
     // via getArgs after the import.
-    rFilterData["OriginalPageCount"] = makeAny(nPageCount);
+    rFilterData["OriginalPageCount"] <<= nPageCount;
     bool bImportNotesPages = rFilterData.getUnpackedValueOrDefault("ImportNotesPages", true);
     OUString aPageRange = rFilterData.getUnpackedValueOrDefault("PageRange", OUString());
 

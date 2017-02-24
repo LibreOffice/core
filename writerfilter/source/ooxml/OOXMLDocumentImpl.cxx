@@ -696,11 +696,11 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
                   if (xDom.is())
                   {
                       uno::Sequence< uno::Any > glossaryTuple (5);
-                      glossaryTuple[0] = uno::makeAny(xDom);
-                      glossaryTuple[1] = uno::makeAny(gId);
-                      glossaryTuple[2] = uno::makeAny(gType);
-                      glossaryTuple[3] = uno::makeAny(gTarget);
-                      glossaryTuple[4] = uno::makeAny(contentType);
+                      glossaryTuple[0] <<= xDom;
+                      glossaryTuple[1] <<= gId;
+                      glossaryTuple[2] <<= gType;
+                      glossaryTuple[3] <<= gTarget;
+                      glossaryTuple[4] <<= contentType;
                       aGlossaryDomList.push_back(glossaryTuple);
                       counter++;
                   }
@@ -788,7 +788,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pS
                     if(mxEmbeddings.is())
                     {
                         embeddingsTemp.Name = embeddingsTarget;
-                        embeddingsTemp.Value = uno::makeAny(mxEmbeddings);
+                        embeddingsTemp.Value <<= mxEmbeddings;
                         aEmbeddings.push_back(embeddingsTemp);
                         mxEmbeddings.clear();
                     }

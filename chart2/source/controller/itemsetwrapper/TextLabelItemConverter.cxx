@@ -106,7 +106,7 @@ bool numberFormatFromItemToPropertySet(
             sal_Int32 nFmt = static_cast<sal_Int32>(
                 static_cast<const SfxUInt32Item&>(
                     rItemSet.Get(nWhichId)).GetValue());
-            aValue = uno::Any(nFmt);
+            aValue <<= nFmt;
         }
         else
             return bChanged;

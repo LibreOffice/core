@@ -183,9 +183,9 @@ const css::uno::Any SequenceAsHashMap::getAsConstAny(bool bAsPropertyValueList) 
 {
     css::uno::Any aDestination;
     if (bAsPropertyValueList)
-        aDestination = css::uno::Any(getAsConstPropertyValueList());
+        aDestination <<= getAsConstPropertyValueList();
     else
-        aDestination = css::uno::Any(getAsConstNamedValueList());
+        aDestination <<= getAsConstNamedValueList();
     return aDestination;
 }
 

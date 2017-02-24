@@ -3568,13 +3568,13 @@ Reference< css::rendering::XCanvas > Window::ImplGetCanvas( bool bSpriteCanvas )
     // Feed any with operating system's window handle
 
     // common: first any is VCL pointer to window (for VCL canvas)
-    aArg[ 0 ] = makeAny( reinterpret_cast<sal_Int64>(this) );
+    aArg[ 0 ] <<= reinterpret_cast<sal_Int64>(this);
     aArg[ 1 ] = GetSystemDataAny();
-    aArg[ 2 ] = makeAny( css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight ) );
-    aArg[ 3 ] = makeAny( mpWindowImpl->mbAlwaysOnTop );
-    aArg[ 4 ] = makeAny( Reference< css::awt::XWindow >(
+    aArg[ 2 ] <<= css::awt::Rectangle( mnOutOffX, mnOutOffY, mnOutWidth, mnOutHeight );
+    aArg[ 3 ] <<= mpWindowImpl->mbAlwaysOnTop;
+    aArg[ 4 ] <<= Reference< css::awt::XWindow >(
                              const_cast<vcl::Window*>(this)->GetComponentInterface(),
-                             UNO_QUERY ));
+                             UNO_QUERY );
     aArg[ 5 ] = GetSystemGfxDataAny();
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();

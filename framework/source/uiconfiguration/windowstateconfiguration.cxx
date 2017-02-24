@@ -532,37 +532,37 @@ Any ConfigurationAccess_WindowState::impl_getSequenceFromStruct( const WindowSta
             switch ( i )
             {
                 case PROPERTY_LOCKED:
-                    pv.Value = makeAny( rWinStateInfo.bLocked ); break;
+                    pv.Value <<= rWinStateInfo.bLocked; break;
                 case PROPERTY_DOCKED:
-                    pv.Value = makeAny( rWinStateInfo.bDocked ); break;
+                    pv.Value <<= rWinStateInfo.bDocked; break;
                 case PROPERTY_VISIBLE:
-                    pv.Value = makeAny( rWinStateInfo.bVisible ); break;
+                    pv.Value <<= rWinStateInfo.bVisible; break;
                 case PROPERTY_CONTEXT:
-                    pv.Value = makeAny( rWinStateInfo.bContext ); break;
+                    pv.Value <<= rWinStateInfo.bContext; break;
                 case PROPERTY_HIDEFROMMENU:
-                    pv.Value = makeAny( rWinStateInfo.bHideFromMenu ); break;
+                    pv.Value <<= rWinStateInfo.bHideFromMenu; break;
                 case PROPERTY_NOCLOSE:
-                    pv.Value = makeAny( rWinStateInfo.bNoClose ); break;
+                    pv.Value <<= rWinStateInfo.bNoClose; break;
                 case PROPERTY_SOFTCLOSE:
-                    pv.Value = makeAny( rWinStateInfo.bSoftClose ); break;
+                    pv.Value <<= rWinStateInfo.bSoftClose; break;
                 case PROPERTY_CONTEXTACTIVE:
-                    pv.Value = makeAny( rWinStateInfo.bContextActive ); break;
+                    pv.Value <<= rWinStateInfo.bContextActive; break;
                 case PROPERTY_DOCKINGAREA:
-                    pv.Value = makeAny( rWinStateInfo.aDockingArea ); break;
+                    pv.Value <<= rWinStateInfo.aDockingArea; break;
                 case PROPERTY_POS:
-                    pv.Value = makeAny( rWinStateInfo.aPos ); break;
+                    pv.Value <<= rWinStateInfo.aPos; break;
                 case PROPERTY_SIZE:
-                    pv.Value = makeAny( rWinStateInfo.aSize ); break;
+                    pv.Value <<= rWinStateInfo.aSize; break;
                 case PROPERTY_UINAME:
-                    pv.Value = makeAny( rWinStateInfo.aUIName ); break;
+                    pv.Value <<= rWinStateInfo.aUIName; break;
                 case PROPERTY_INTERNALSTATE:
-                    pv.Value = makeAny( sal_Int32( rWinStateInfo.nInternalState )); break;
+                    pv.Value <<= sal_Int32( rWinStateInfo.nInternalState ); break;
                 case PROPERTY_STYLE:
-                    pv.Value = makeAny( sal_Int16( rWinStateInfo.nStyle )); break;
+                    pv.Value <<= sal_Int16( rWinStateInfo.nStyle ); break;
                 case PROPERTY_DOCKPOS:
-                    pv.Value = makeAny( rWinStateInfo.aDockPos ); break;
+                    pv.Value <<= rWinStateInfo.aDockPos; break;
                 case PROPERTY_DOCKSIZE:
-                    pv.Value = makeAny( rWinStateInfo.aDockSize ); break;
+                    pv.Value <<= rWinStateInfo.aDockSize; break;
                 default:
                     assert( false && "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
             }
@@ -637,7 +637,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
                         {
                             aWindowStateInfo.aDockingArea = (DockingArea)nDockingArea;
                             nMask |= WINDOWSTATE_MASK_DOCKINGAREA;
-                            a = makeAny( aWindowStateInfo.aDockingArea );
+                            a <<= aWindowStateInfo.aDockingArea;
                             bAddToSeq = true;
                         }
                     }
@@ -1361,7 +1361,7 @@ Any SAL_CALL WindowStateConfiguration::getByName( const OUString& aModuleIdentif
         if ( pModuleIter != m_aModuleToWindowStateHashMap.end() )
         {
             if ( pModuleIter->second.is() )
-                a = makeAny( pModuleIter->second );
+                a <<= pModuleIter->second;
             else
             {
                 Reference< XNameAccess > xResourceURLWindowState;

@@ -544,7 +544,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScAccessibleCell::getCharacterAtt
         {
             if (sLeftMarginName == pAttribs[i].Name)
             {
-                pAttribs[i].Value = uno::makeAny( nParaIndent );
+                pAttribs[i].Value <<= nParaIndent;
                 break;
             }
         }

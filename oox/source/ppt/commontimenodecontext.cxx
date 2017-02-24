@@ -377,9 +377,9 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
         if( attribs.hasAttribute( XML_afterEffect ) )
         {
             aUserData[ "after-effect" ]
-                = makeAny( attribs.getBool( XML_afterEffect, false ) );
+                <<= attribs.getBool( XML_afterEffect, false );
         }
-        aProps[ NP_AUTOREVERSE ] = makeAny( attribs.getBool( XML_autoRev, false ) );
+        aProps[ NP_AUTOREVERSE ] <<= attribs.getBool( XML_autoRev, false );
 
         // TODO
         if( attribs.hasAttribute( XML_bldLvl ) )
@@ -528,7 +528,7 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
                 nEffectPresetClass = 0;
                 break;
             }
-            aUserData[ "preset-class" ] = makeAny( nEffectPresetClass );
+            aUserData[ "preset-class" ] <<= nEffectPresetClass;
             if( attribs.hasAttribute( XML_presetID ) )
             {
                 sal_Int32 nPresetId = attribs.getInteger( XML_presetID, 0 );
@@ -537,11 +537,11 @@ OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_I
                     p++;
 
                 aUserData[ "preset-id" ]
-                    = makeAny( OUString::createFromAscii( p->mpStrPresetId ) );
+                    <<= OUString::createFromAscii( p->mpStrPresetId );
                 sal_Int32 nPresetSubType = attribs.getInteger( XML_presetSubtype, 0 );
                 if( nPresetSubType )
                 {
-                    aUserData[ "preset-sub-type" ] = makeAny( getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType ) );
+                    aUserData[ "preset-sub-type" ] <<= getConvertedSubType( nEffectPresetClass, nPresetId, nPresetSubType );
                 }
             }
         }

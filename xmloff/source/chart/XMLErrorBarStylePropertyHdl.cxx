@@ -48,7 +48,7 @@ bool XMLErrorBarStylePropertyHdl::exportXML( OUString& rStrExpValue,
                 || nValue == css::chart::ErrorBarStyle::FROM_DATA )
             {
                 nValue = css::chart::ErrorBarStyle::NONE;
-                aValue = uno::makeAny(nValue);
+                aValue <<= nValue;
             }
         }
     }

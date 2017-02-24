@@ -201,7 +201,7 @@ String2Float( uno::Any& rAny, const gchar * value )
     if( 1 != sscanf( value, "%g", &fval ) )
         return false;
 
-    rAny = uno::makeAny( fval );
+    rAny <<= fval;
     return true;
 }
 
@@ -288,7 +288,7 @@ String2Color( uno::Any& rAny, const gchar * value )
         return false;
 
     sal_Int32 nColor = (sal_Int32) blue | ( (sal_Int32) green << 8 ) | ( ( sal_Int32 ) red << 16 );
-    rAny = uno::makeAny( nColor );
+    rAny <<= nColor;
     return true;
 }
 
@@ -353,7 +353,7 @@ Style2FontSlant( uno::Any& rAny, const gchar * value )
     else
         return false;
 
-    rAny = uno::makeAny( aFontSlant );
+    rAny <<= aFontSlant;
     return true;
 }
 
@@ -373,7 +373,7 @@ String2Weight( uno::Any& rAny, const gchar * value )
     if( 1 != sscanf( value, "%g", &weight ) )
         return false;
 
-    rAny = uno::makeAny( weight / 4 );
+    rAny <<= weight / 4;
     return true;
 }
 
@@ -429,7 +429,7 @@ Justification2Adjust( uno::Any& rAny, const gchar * value )
     else
         return false;
 
-    rAny = uno::makeAny( nParagraphAdjust );
+    rAny <<= nParagraphAdjust;
     return true;
 }
 
@@ -466,7 +466,7 @@ String2Strikeout( uno::Any& rAny, const gchar * value )
         if( ( nullptr != font_strikethrough[n] ) &&
             0 == strncmp( value, font_strikethrough[n], strlen( font_strikethrough[n] ) ) )
         {
-            rAny = uno::makeAny( n );
+            rAny <<= n;
             return true;
         }
     }
@@ -519,7 +519,7 @@ String2Underline( uno::Any& rAny, const gchar * value )
     else
         return false;
 
-    rAny = uno::makeAny( nUnderline );
+    rAny <<= nUnderline;
     return true;
 }
 
@@ -543,7 +543,7 @@ SetString( uno::Any& rAny, const gchar * value )
 
     if( !aFontName.isEmpty() )
     {
-        rAny = uno::makeAny( OStringToOUString( aFontName, RTL_TEXTENCODING_UTF8 ) );
+        rAny <<= OStringToOUString( aFontName, RTL_TEXTENCODING_UTF8 );
         return true;
     }
 
@@ -574,7 +574,7 @@ UnitString2CMM( uno::Any& rAny, const gchar * value )
 
     fValue = fValue * 100;
 
-    rAny = uno::makeAny( (sal_Int32) fValue);
+    rAny <<= (sal_Int32) fValue;
     return true;
 }
 
@@ -605,7 +605,7 @@ String2Bool( uno::Any& rAny, const gchar * value )
     else
         return false;
 
-    rAny = uno::makeAny(bValue);
+    rAny <<= bValue;
     return true;
 }
 
@@ -625,7 +625,7 @@ String2Scale( uno::Any& rAny, const gchar * value )
     if( 1 != sscanf( value, "%lg", &dval ) )
         return false;
 
-    rAny = uno::makeAny((sal_Int16) (dval * 100));
+    rAny <<= (sal_Int16) (dval * 100);
     return true;
 }
 
@@ -662,7 +662,7 @@ String2CaseMap( uno::Any& rAny, const gchar * value )
     else
         return false;
 
-    rAny = uno::makeAny( nCaseMap );
+    rAny <<= nCaseMap;
     return true;
 }
 
@@ -729,7 +729,7 @@ String2Locale( uno::Any& rAny, const gchar * value )
             g_free(country);
         }
 
-        rAny = uno::makeAny(aLocale);
+        rAny <<= aLocale;
     }
 
     g_strfreev(str_array);

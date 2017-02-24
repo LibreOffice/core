@@ -381,7 +381,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
                             aStatusbarItemProp[2].Value <<= nOffset;
                             aStatusbarItemProp[3].Value <<= nItemBits;
                             aStatusbarItemProp[4].Value <<= nWidth;
-                            aStatusbarItemProp[5].Value = makeAny( css::ui::ItemType::DEFAULT );
+                            aStatusbarItemProp[5].Value <<= css::ui::ItemType::DEFAULT;
 
                             m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
                        }

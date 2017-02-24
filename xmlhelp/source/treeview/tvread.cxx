@@ -626,7 +626,7 @@ ConfigData TVChildTarget::init( const Reference< XComponentContext >& xContext )
         beans::PropertyValue                       aParam ;
         aParam.Name    = "nodepath";
         aParam.Value <<= OUString("/org.openoffice.Setup/Product");
-        lParams[0] = uno::makeAny(aParam);
+        lParams[0] <<= aParam;
 
         // open it
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(

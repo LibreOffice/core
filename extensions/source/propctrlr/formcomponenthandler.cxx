@@ -2178,10 +2178,10 @@ namespace pcr
                 case ControlType::FORMATTEDFIELD:
                 case FormComponentType::CURRENCYFIELD:
                 case FormComponentType::PATTERNFIELD:
-                    _rValue = makeAny( true );
+                    _rValue <<= true;
                     break;
                 default:
-                    _rValue = makeAny( false );
+                    _rValue <<= false;
                     break;
                 }
             }

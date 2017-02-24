@@ -266,7 +266,7 @@ ScVbaUserForm::getValue( const OUString& aPropertyName )
             ScVbaControl* pControl  = dynamic_cast< ScVbaControl* >( xVBAControl.get() );
             if (pControl && !m_sLibName.isEmpty())
                 pControl->setLibraryAndCodeName( m_sLibName.concat( "." ).concat( getName() ) );
-            aResult = uno::makeAny( xVBAControl );
+            aResult <<= xVBAControl;
         }
     }
 

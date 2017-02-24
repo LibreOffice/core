@@ -148,10 +148,10 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, OUString& rStr )
         if (!aBookmarkName.isEmpty()) {
             m_aFieldStack.back().SetBookmarkName(aBookmarkName);
             m_aFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
-            m_aFieldStack.back().getParameters()["Description"] = uno::makeAny(OUString(aFormula.msToolTip));
-            m_aFieldStack.back().getParameters()["Name"] = uno::makeAny(OUString(aFormula.msTitle));
+            m_aFieldStack.back().getParameters()["Description"] <<= aFormula.msToolTip;
+            m_aFieldStack.back().getParameters()["Name"] <<= aFormula.msTitle;
             if (aFormula.mnMaxLen)
-                m_aFieldStack.back().getParameters()["MaxLength"] = uno::makeAny(OUString::number(aFormula.mnMaxLen));
+                m_aFieldStack.back().getParameters()["MaxLength"] <<= OUString::number(aFormula.mnMaxLen);
         }
         return eF_ResT::TEXT;
     }
@@ -205,8 +205,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, OUString& rStr )
         if (pFieldmark!=nullptr) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[ODF_FORMCHECKBOX_NAME] = uno::makeAny(OUString(aFormula.msTitle));
-            (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] = uno::makeAny(OUString(aFormula.msToolTip));
+            (*pParameters)[ODF_FORMCHECKBOX_NAME] <<= aFormula.msTitle;
+            (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] <<= aFormula.msToolTip;
 
             if(pCheckboxFm)
                 pCheckboxFm->SetChecked(aFormula.mnChecked);
@@ -278,9 +278,9 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, OUString& rStr)
             {
                 uno::Sequence< OUString > vListEntries(aFormula.maListEntries.size());
                 std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), vListEntries.begin());
-                (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
+                (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] <<= vListEntries;
                 sal_Int32 nIndex = aFormula.mfDropdownIndex  < aFormula.maListEntries.size() ? aFormula.mfDropdownIndex : 0;
-                (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(nIndex);
+                (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] <<= nIndex;
                 // set field data here...
             }
         }

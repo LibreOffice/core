@@ -62,10 +62,10 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
                 aValue.Name = "type";
                 switch (nIntValue)
                 {
-                    case NS_ooxml::LN_Value_ST_TblWidth_nil: aValue.Value = uno::makeAny(OUString("nil")); break;
-                    case NS_ooxml::LN_Value_ST_TblWidth_pct: aValue.Value = uno::makeAny(OUString("pct")); break;
-                    case NS_ooxml::LN_Value_ST_TblWidth_dxa: aValue.Value = uno::makeAny(OUString("dxa")); break;
-                    case NS_ooxml::LN_Value_ST_TblWidth_auto: aValue.Value = uno::makeAny(OUString("auto")); break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_nil: aValue.Value <<= OUString("nil"); break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_pct: aValue.Value <<= OUString("pct"); break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_dxa: aValue.Value <<= OUString("dxa"); break;
+                    case NS_ooxml::LN_Value_ST_TblWidth_auto: aValue.Value <<= OUString("auto"); break;
                 }
                 m_aInteropGrabBag.push_back(aValue);
             }
@@ -84,7 +84,7 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
             {
                 beans::PropertyValue aValue;
                 aValue.Name = "w";
-                aValue.Value = uno::makeAny(nIntValue);
+                aValue.Value <<= nIntValue;
                 m_aInteropGrabBag.push_back(aValue);
             }
         break;
@@ -133,7 +133,7 @@ beans::PropertyValue MeasureHandler::getInteropGrabBag()
 {
     beans::PropertyValue aRet;
     aRet.Name = m_aInteropGrabBagName;
-    aRet.Value = uno::makeAny( comphelper::containerToSequence(m_aInteropGrabBag) );
+    aRet.Value <<= comphelper::containerToSequence(m_aInteropGrabBag);
     return aRet;
 }
 

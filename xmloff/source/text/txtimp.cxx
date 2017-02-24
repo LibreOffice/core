@@ -846,12 +846,12 @@ namespace
             if(pCurrent->first == ODF_FORMDROPDOWN_RESULT)
             {
                 // sal_Int32
-                vOutParams[pCurrent->first] = makeAny(pCurrent->second.toInt32());
+                vOutParams[pCurrent->first] <<= pCurrent->second.toInt32();
             }
             else if(pCurrent->first == ODF_FORMCHECKBOX_RESULT)
             {
                 // bool
-                vOutParams[pCurrent->first] = makeAny(pCurrent->second.toBoolean());
+                vOutParams[pCurrent->first] <<= pCurrent->second.toBoolean();
             }
             else if(pCurrent->first == ODF_FORMDROPDOWN_LISTENTRY)
             {
@@ -859,13 +859,13 @@ namespace
                 vListEntries.push_back(pCurrent->second);
             }
             else
-                vOutParams[pCurrent->first] = makeAny(pCurrent->second);
+                vOutParams[pCurrent->first] <<= pCurrent->second;
         }
         if(!vListEntries.empty())
         {
             Sequence<OUString> vListEntriesSeq(vListEntries.size());
             copy(vListEntries.begin(), vListEntries.end(), vListEntriesSeq.begin());
-            vOutParams[OUString(ODF_FORMDROPDOWN_LISTENTRY)] = makeAny(vListEntriesSeq);
+            vOutParams[OUString(ODF_FORMDROPDOWN_LISTENTRY)] <<= vListEntriesSeq;
         }
         for(::std::map<OUString, Any>::const_iterator pCurrent = vOutParams.begin();
             pCurrent != vOutParams.end();

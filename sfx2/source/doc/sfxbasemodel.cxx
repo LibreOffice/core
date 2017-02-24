@@ -2466,11 +2466,11 @@ void SAL_CALL SfxBaseModel::checkIn( sal_Bool bIsMajor, const OUString& rMessage
         {
             Sequence< beans::PropertyValue > aProps( 3 );
             aProps[0].Name = "VersionMajor";
-            aProps[0].Value = makeAny( bIsMajor );
+            aProps[0].Value <<= bIsMajor;
             aProps[1].Name = "VersionComment";
-            aProps[1].Value = makeAny( rMessage );
+            aProps[1].Value <<= rMessage;
             aProps[2].Name = "CheckIn";
-            aProps[2].Value = makeAny( true );
+            aProps[2].Value <<= true;
 
             OUString sName( pMedium->GetName( ) );
             storeSelf( aProps );
@@ -3373,7 +3373,7 @@ void SfxBaseModel::getGrabBagItem(css::uno::Any& rVal) const
         m_pData->m_xGrabBagItem->QueryValue(rVal);
     else {
         uno::Sequence<beans::PropertyValue> aValue(0);
-        rVal = uno::makeAny(aValue);
+        rVal <<= aValue;
     }
 }
 

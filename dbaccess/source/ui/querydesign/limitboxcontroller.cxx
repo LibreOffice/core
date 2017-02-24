@@ -57,7 +57,7 @@ bool LimitBoxImpl::EventNotify( NotifyEvent& rNEvt )
             bHandled = LimitBox::EventNotify(rNEvt);
             uno::Sequence< beans::PropertyValue > aArgs( 1 );
             aArgs[0].Name  = "DBLimit.Value";
-            aArgs[0].Value = uno::makeAny( GetValue() );
+            aArgs[0].Value <<= GetValue();
             m_pControl->dispatchCommand( aArgs );
             break;
         }
