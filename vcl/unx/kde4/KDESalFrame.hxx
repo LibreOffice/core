@@ -23,6 +23,7 @@
 
 #include <unx/saldisp.hxx>
 #include <unx/salframe.h>
+#include <unx/salgdi.h>
 
 class KDESalFrame : public X11SalFrame
 {
@@ -31,18 +32,16 @@ class KDESalFrame : public X11SalFrame
 
         struct GraphicsHolder
         {
-            X11SalGraphics* pGraphics;
+            std::unique_ptr<X11SalGraphics> pGraphics;
             bool bInUse;
 
-            GraphicsHolder() : pGraphics(nullptr),bInUse( false ) {}
-            ~GraphicsHolder();
+            GraphicsHolder() : bInUse( false ) {}
         };
 
         GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
     public:
         KDESalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle );
-        virtual ~KDESalFrame() override;
 
         virtual SalGraphics* AcquireGraphics() override;
         virtual void ReleaseGraphics( SalGraphics *pGraphics ) override;

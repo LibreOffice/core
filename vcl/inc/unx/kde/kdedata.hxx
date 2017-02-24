@@ -23,6 +23,9 @@
 #include <unx/saldisp.hxx>
 #include <unx/saldata.hxx>
 #include <unx/salframe.h>
+#include <unx/salgdi.h>
+
+#include <memory>
 
 class KDEData : public X11SalData
 {
@@ -48,13 +51,9 @@ class KDESalFrame : public X11SalFrame
 
     struct GraphicsHolder
     {
-        X11SalGraphics*     pGraphics;
+        std::unique_ptr<X11SalGraphics> pGraphics;
         bool                bInUse;
-        GraphicsHolder()
-                : pGraphics( nullptr ),
-                  bInUse( false )
-        {}
-        ~GraphicsHolder();
+        GraphicsHolder() : bInUse( false ) {}
     };
     GraphicsHolder m_aGraphics[ nMaxGraphics ];
 
@@ -77,7 +76,6 @@ protected:
 public:
     KDESalInstance( SalYieldMutex* pMutex )
             : X11SalInstance( pMutex ) {}
-    virtual ~KDESalInstance() override {}
     virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
 
     virtual bool hasNativeFileSelection() const override { return true; }

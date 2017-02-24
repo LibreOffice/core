@@ -129,7 +129,6 @@ class KDEX11Pixmap : public X11Pixmap
 {
 public:
     KDEX11Pixmap( int nWidth, int nHeight );
-    virtual ~KDEX11Pixmap() override {};
 
     virtual int          GetDepth() const override;
     virtual SalX11Screen GetScreen() const override;
@@ -1238,7 +1237,6 @@ class KDESalGraphics : public X11SalGraphics
 {
   public:
     KDESalGraphics() {}
-    virtual ~KDESalGraphics() override {}
     virtual bool IsNativeControlSupported( ControlType nType, ControlPart nPart ) override;
     virtual bool hitTestNativeControl( ControlType nType, ControlPart nPart,
                                        const Rectangle& rControlRegion, const Point& aPos,
@@ -2017,10 +2015,10 @@ SalGraphics* KDESalFrame::AcquireGraphics()
                 m_aGraphics[i].bInUse = true;
                 if( ! m_aGraphics[i].pGraphics )
                 {
-                    m_aGraphics[i].pGraphics = new KDESalGraphics();
+                    m_aGraphics[i].pGraphics.reset (new KDESalGraphics() );
                     m_aGraphics[i].pGraphics->Init( this, GetWindow(), GetScreenNumber() );
                 }
-                return m_aGraphics[i].pGraphics;
+                return m_aGraphics[i].pGraphics.get();
             }
         }
     }
@@ -2032,7 +2030,7 @@ void KDESalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
     for( int i = 0; i < nMaxGraphics; i++ )
     {
-        if( m_aGraphics[i].pGraphics == pGraphics )
+        if( m_aGraphics[i].pGraphics.get() == pGraphics )
         {
             m_aGraphics[i].bInUse = false;
             break;
@@ -2052,11 +2050,6 @@ void KDESalFrame::updateGraphics( bool bClear )
 
 KDESalFrame::~KDESalFrame()
 {
-}
-
-KDESalFrame::GraphicsHolder::~GraphicsHolder()
-{
-    delete pGraphics;
 }
 
 // KDESalInstance implementation

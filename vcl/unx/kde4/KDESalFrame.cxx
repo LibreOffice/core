@@ -345,7 +345,7 @@ void KDESalFrame::ReleaseGraphics( SalGraphics *pGraphics )
 {
     for( int i = 0; i < nMaxGraphics; i++ )
     {
-        if( m_aGraphics[i].pGraphics == pGraphics )
+        if( m_aGraphics[i].pGraphics.get() == pGraphics )
         {
             m_aGraphics[i].bInUse = false;
             break;
@@ -363,14 +363,6 @@ void KDESalFrame::updateGraphics( bool bClear )
     }
 }
 
-KDESalFrame::~KDESalFrame()
-{
-}
-
-KDESalFrame::GraphicsHolder::~GraphicsHolder()
-{
-}
-
 SalGraphics* KDESalFrame::AcquireGraphics()
 {
     if( GetWindow() )
@@ -382,10 +374,10 @@ SalGraphics* KDESalFrame::AcquireGraphics()
                 m_aGraphics[i].bInUse = true;
                 if( ! m_aGraphics[i].pGraphics )
                 {
-                    m_aGraphics[i].pGraphics = new KDESalGraphics;
+                    m_aGraphics[i].pGraphics.reset( new KDESalGraphics );
                     m_aGraphics[i].pGraphics->Init( this, GetWindow(), GetScreenNumber() );
                 }
-                return m_aGraphics[i].pGraphics;
+                return m_aGraphics[i].pGraphics.get();
             }
         }
     }

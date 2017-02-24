@@ -274,9 +274,7 @@ bool KabImplModule::impl_doAllowNewKDEVersion()
         Reference< XMultiServiceFactory > xConfigProvider(
             css::configuration::theDefaultProvider::get( m_xContext ) );
         Sequence< Any > aCreationArgs(1);
-        aCreationArgs[0] <<= PropertyValue(
-                                OUString(  "nodepath"  ),
-                                0,
+        aCreationArgs[0] <<= PropertyValue( "nodepath", 0,
                                 makeAny( KabDriver::impl_getConfigurationSettingsPath() ),
                                 PropertyState_DIRECT_VALUE );
         Reference< XPropertySet > xSettings( xConfigProvider->createInstanceWithArguments(
