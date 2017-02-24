@@ -475,8 +475,11 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
             [pDockMenu release];
             pDockMenu = nil;
         }
+        break;
     }
-    break;
+    case DispatchTimerEvent:
+        AquaSalTimer::handleDispatchTimerEvent();
+        break;
 #if !HAVE_FEATURE_MACOSX_SANDBOX
     case AppleRemoteControlEvent: // Defined in <apple_remote/RemoteMainController.h>
     {
@@ -565,6 +568,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
 {
     (void) nReleased;
     assert(nReleased == 0); // not implemented
+    bool bHadEvent = false;
 
     // ensure that the per thread autorelease pool is top level and
     // will therefore not be destroyed by cocoa implicitly
@@ -589,6 +593,7 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
             {
                 aEvent = maUserEvents.front();
                 maUserEvents.pop_front();
+                bHadEvent = true;
             }
             else
                 bDispatchUser = false;
@@ -600,15 +605,15 @@ bool AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLon
         {
             aEvent.mpFrame->CallCallback( aEvent.mnType, aEvent.mpData );
             maWaitingYieldCond.set();
-            // return if only one event is asked for
-            if( ! bHandleAllCurrentEvents )
-                return true;
         }
+
+        // return if only one event is asked for
+        if( !bHandleAllCurrentEvents && bDispatchUser )
+            return true;
     }
 
     // handle cocoa event queue
     // cocoa events may be only handled in the thread the NSApp was created
-    bool bHadEvent = false;
     if( isNSAppThread() && mnActivePrintJobs == 0 )
     {
         // we need to be woken up by a cocoa-event
@@ -653,18 +658,6 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
             [NSApp updateWindows];
 
             AcquireYieldMutex( nCount );
-
-            // #i86581#
-            // FIXME: sometimes the NSTimer will never fire. Firing it by hand then
-            // fixes the problem even seems to set the correct next firing date
-            // Why oh why?
-            if( ! pEvent && AquaSalTimer::pRunningTimer )
-            {
-                // this cause crashes on MacOSX 10.4
-                // [AquaSalTimer::pRunningTimer fire];
-                if (ImplGetSVData()->maSchedCtx.mpSalTimer != nullptr)
-                    ImplGetSVData()->maSchedCtx.mpSalTimer->CallCallback();
-            }
         }
 
         mbWaitingYield = bOldWaitingYield;

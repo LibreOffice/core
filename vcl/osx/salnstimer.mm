@@ -29,19 +29,17 @@
 -(void)timerElapsed:(NSTimer*)pTimer
 {
     (void)pTimer;
-    if( AquaSalTimer::bDispatchTimer )
-    {
-        SolarMutexGuard aGuard;
-        ImplSVData* pSVData = ImplGetSVData();
-        if( pSVData->maSchedCtx.mpSalTimer )
-        {
-            pSVData->maSchedCtx.mpSalTimer->CallCallback();
-
-            // NSTimer does not end nextEventMatchingMask of NSApplication
-            // so we need to wakeup a waiting Yield to inform it something happened
-            GetSalData()->mpFirstInstance->wakeupYield();
-        }
-    }
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSEventTypeApplicationDefined
+                               location: NSZeroPoint
+                               modifierFlags: 0
+                               timestamp: [NSDate timeIntervalSinceReferenceDate]
+                               windowNumber: 0
+                               context: nil
+                               subtype: AquaSalInstance::DispatchTimerEvent
+                               data1: 0
+                               data2: 0 ];
+    assert( pEvent );
+    [NSApp postEvent: pEvent atStart: YES];
 }
 @end
 
