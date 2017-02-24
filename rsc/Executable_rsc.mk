@@ -31,6 +31,11 @@ $(eval $(call gb_Executable_use_libraries,rsc,\
 	$(gb_UWINAPI) \
 ))
 
+$(eval $(call gb_Executable_use_externals,rsc,\
+    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),liblangtag) \
+    $(if $(filter TRUE,$(DISABLE_DYNLOADING)),libxml2) \
+))
+
 $(eval $(call gb_Executable_add_grammars,rsc,\
 	rsc/source/parser/rscyacc \
 ))
