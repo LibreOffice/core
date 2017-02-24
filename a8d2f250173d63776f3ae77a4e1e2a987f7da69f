@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_640c6643",
+        "filename": "include/i18nutil/transliteration.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-24T18:48:57Z",
+      "side": 1,
+      "message": "that\u0027s i18n, not i18nutil ;-)",
+      "range": {
+        "startLine": 26,
+        "startChar": 50,
+        "endLine": 26,
+        "endChar": 58
+      },
+      "revId": "a8d2f250173d63776f3ae77a4e1e2a987f7da69f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_44176251",
+        "filename": "include/i18nutil/transliteration.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-02-24T18:48:57Z",
+      "side": 1,
+      "message": "Can we avoid redefining all values manually and instead include com/sun/star/i18n/TransliterationModules{,Extra}.hdl and use the enum names? Would be much preferrable to prevent errors and someone adding values here instead of in offapi.",
+      "revId": "a8d2f250173d63776f3ae77a4e1e2a987f7da69f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
