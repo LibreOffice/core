@@ -29,19 +29,20 @@
 -(void)timerElapsed:(NSTimer*)pTimer
 {
     (void)pTimer;
-    if( AquaSalTimer::bDispatchTimer )
-    {
-        SolarMutexGuard aGuard;
-        ImplSVData* pSVData = ImplGetSVData();
-        if( pSVData->maSchedCtx.mpSalTimer )
-        {
-            pSVData->maSchedCtx.mpSalTimer->CallCallback();
-
-            // NSTimer does not end nextEventMatchingMask of NSApplication
-            // so we need to wakeup a waiting Yield to inform it something happened
-            GetSalData()->mpFirstInstance->wakeupYield();
-        }
-    }
+SAL_WNODEPRECATED_DECLARATIONS_PUSH
+// 'NSApplicationDefined' is deprecated: first deprecated in macOS 10.12
+    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+SAL_WNODEPRECATED_DECLARATIONS_POP
+                               location: NSZeroPoint
+                               modifierFlags: 0
+                               timestamp: [NSDate timeIntervalSinceReferenceDate]
+                               windowNumber: 0
+                               context: nil
+                               subtype: AquaSalInstance::DispatchTimerEvent
+                               data1: 0
+                               data2: 0 ];
+    assert( pEvent );
+    [NSApp postEvent: pEvent atStart: YES];
 }
 @end
 
