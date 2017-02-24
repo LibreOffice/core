@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_c45272dd",
+        "filename": "sw/source/filter/ww8/wrtw8nds.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1154,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-02-24T08:44:47Z",
+      "side": 1,
+      "message": "This confusing NS_foo::LN_bar (namespace, local name) naming comes from writerfilter. It may be a good idea to fix that at some point (just drop the NS_ and LN_ prefixes or something).\n\nBut it would be good to do that in a separate commit, so if possible, could you keep the old naming for this commit? It would also make reviewing easier.",
+      "revId": "3f3bdbbd8b771ae5f346d1050132f04d7b9ccf40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
