@@ -391,10 +391,9 @@ DECLARE_DUMP_TEST(ChartDataTest, Chart2DumpTest, false)
     }
 }
 
-#if !defined(MACOSX)
-
 DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 {
+    const double fLocalEPS = 550.1;
     const std::vector<OUString> aTestFiles =
     {
         "legend_on_right_side.odp",
@@ -424,11 +423,11 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
         // Check legend position and size
         awt::Point aLegendPosition = xLegend->getPosition();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.X, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.Y, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.X, std::max(fLocalEPS, INT_EPS));
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendPosition.Y, std::max(fLocalEPS, INT_EPS));
         awt::Size aLegendSize = xLegend->getSize();
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Width, INT_EPS);
-        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Height, INT_EPS);
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Width, std::max(fLocalEPS, INT_EPS));
+        CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendSize.Height, std::max(fLocalEPS, INT_EPS));
 
         // Check legend entries
         uno::Reference< chart2::XChartDocument > xChartDoc2(xChartDoc, UNO_QUERY_THROW);
@@ -445,18 +444,18 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
 
             // Check position and size
             awt::Point aLegendEntryPosition = xLegendEntry->getPosition();
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.X, INT_EPS);
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.Y, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.X, std::max(fLocalEPS, INT_EPS));
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntryPosition.Y, std::max(fLocalEPS, INT_EPS));
             awt::Size aLegendEntrySize = xLegendEntry->getSize();
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Height, INT_EPS);
-            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Width, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Height, std::max(fLocalEPS, INT_EPS));
+            CPPUNIT_DUMP_ASSERT_DOUBLES_EQUAL(aLegendEntrySize.Width, std::max(fLocalEPS, INT_EPS));
 
             // Check transformation
             Reference< beans::XPropertySet > xLegendEntryPropSet(xLegendEntry, UNO_QUERY_THROW);
             CPPUNIT_ASSERT(xLegendEntryPropSet.is());
             drawing::HomogenMatrix3 aLegendEntryTransformation;
             xLegendEntryPropSet->getPropertyValue("Transformation") >>= aLegendEntryTransformation;
-            CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLegendEntryTransformation, INT_EPS);
+            CPPUNIT_DUMP_ASSERT_TRANSFORMATIONS_EQUAL(aLegendEntryTransformation, std::max(fLocalEPS, INT_EPS));
 
             uno::Reference<container::XIndexAccess> xLegendEntryContainer(xLegendEntry, UNO_QUERY_THROW);
             CPPUNIT_DUMP_ASSERT_NUMBERS_EQUAL(xLegendEntryContainer->getCount());
@@ -493,8 +492,6 @@ DECLARE_DUMP_TEST(LegendTest, Chart2DumpTest, false)
         }
     }
 }
-
-#endif
 
 DECLARE_DUMP_TEST(GridTest, Chart2DumpTest, false)
 {
@@ -646,7 +643,7 @@ DECLARE_DUMP_TEST(AxisGeometryTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST(AxisLabelTest, Chart2DumpTest, false)
 {
-    const double fLocalEPS = 300.1;
+    const double fLocalEPS = 250.1;
     const std::vector<OUString> aTestFiles =
     {
         "default_formated_axis.odp",
@@ -804,7 +801,7 @@ DECLARE_DUMP_TEST(ColumnBarChartTest, Chart2DumpTest, false)
 
 DECLARE_DUMP_TEST(ChartWallTest, Chart2DumpTest, false)
 {
-    const double fLocalEPS = 400.1;
+    const double fLocalEPS = 350.1;
     const std::vector<OUString> aTestFiles =
     {
         "chartwall_auto_adjust_with_titles.ods",
