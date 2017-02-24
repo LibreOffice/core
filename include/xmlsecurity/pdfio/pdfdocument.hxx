@@ -80,12 +80,29 @@ public:
     void SetDictionary(PDFDictionaryElement* pDictionaryElement);
     void SetArray(PDFArrayElement* pArrayElement);
     void SetStream(PDFStreamElement* pStreamElement);
+    /// Access to the stream of the object, if it has any.
+    PDFStreamElement* GetStream() const;
     PDFArrayElement* GetArray() const;
     /// Parse objects stored in this object stream.
     void ParseStoredObjects();
     std::vector< std::unique_ptr<PDFElement> >& GetStoredElements();
     SvMemoryStream* GetStreamBuffer() const;
     void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
+};
+
+/// Stream object: a byte array with a known length.
+class XMLSECURITY_DLLPUBLIC PDFStreamElement : public PDFElement
+{
+    size_t m_nLength;
+    sal_uInt64 m_nOffset;
+    /// The byte array itself.
+    SvMemoryStream m_aMemory;
+
+public:
+    explicit PDFStreamElement(size_t nLength);
+    bool Read(SvStream& rStream) override;
+    sal_uInt64 GetOffset() const;
+    SvMemoryStream& GetMemory();
 };
 
 /// Name object: a key string.
