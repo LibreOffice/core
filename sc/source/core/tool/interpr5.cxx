@@ -759,7 +759,7 @@ static void lcl_LUP_solve( const ScMatrix* mLU, const SCSIZE n,
             fSum -= mLU->GetDouble( j, i) * X[j];       // X[j] === x[j]
         X[i] = fSum / mLU->GetDouble( i, i);            // X[i] === x[i]
     }
-#if DEBUG_SC_LUP_DECOMPOSITION
+#ifdef DEBUG_SC_LUP_DECOMPOSITION
     fprintf( stderr, "\n%s\n", "lcl_LUP_solve():");
     for (SCSIZE i=0; i < n; ++i)
         fprintf( stderr, "%8.2g  ", X[i]);
