@@ -425,10 +425,10 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
         if( !aFoundArr.empty() )  // one was found
         {
             delete pGlossary;
-            if(1 == aFoundArr.size())
+            if (1 == aFoundArr.size())
             {
-                TextBlockInfo_Impl* pData = &aFoundArr.front();
-                pGlossary = pGlossaries->GetGroupDoc(pData->sGroupName);
+                TextBlockInfo_Impl& rData = aFoundArr.front();
+                pGlossary = pGlossaries->GetGroupDoc(rData.sGroupName);
                 nFound = pGlossary->GetIndex( aShortName );
             }
             else
@@ -447,10 +447,10 @@ bool SwGlossaryHdl::Expand( const OUString& rShortName,
                                         pDlg->GetSelectedIdx():
                                         LISTBOX_ENTRY_NOTFOUND;
                 pDlg.disposeAndClear();
-                if(LISTBOX_ENTRY_NOTFOUND != nRet)
+                if (LISTBOX_ENTRY_NOTFOUND != nRet)
                 {
-                    TextBlockInfo_Impl* pData = &aFoundArr[nRet];
-                    pGlossary = pGlossaries->GetGroupDoc(pData->sGroupName);
+                    TextBlockInfo_Impl& rData = aFoundArr[nRet];
+                    pGlossary = pGlossaries->GetGroupDoc(rData.sGroupName);
                     nFound = pGlossary->GetIndex( aShortName );
                 }
                 else
