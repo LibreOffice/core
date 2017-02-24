@@ -500,7 +500,7 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
             m_pPlcxMan->HasCharSprm( bIns ? 0x4804 : 0x4863, aResult);
             pSprmCIbstRMark = aResult.empty() ? nullptr : aResult.back();
             aResult.clear();
-            m_pPlcxMan->HasCharSprm( bIns ? 0x6805 : NS_sprm::LN_CDttmRMarkDel, aResult);
+            m_pPlcxMan->HasCharSprm( bIns ? 0x6805 : NS_sprm::sprmCDttmRMarkDel, aResult);
             pSprmCDttmRMark = aResult.empty() ? nullptr : aResult.back();
         }
     }
