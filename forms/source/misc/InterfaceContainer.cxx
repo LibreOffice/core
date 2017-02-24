@@ -661,13 +661,15 @@ void OInterfaceContainer::propertyChange(const PropertyChangeEvent& evt) {
     if (evt.PropertyName == PROPERTY_NAME)
     {
         ::osl::MutexGuard aGuard( m_rMutex );
-        OInterfaceMap::iterator i = m_aMap.find(::comphelper::getString(evt.OldValue));
-        if (i != m_aMap.end() && i->second == evt.Source)
-        {
-            css::uno::Reference<css::uno::XInterface>  xCorrectType(i->second);
-            m_aMap.erase(i);
-            m_aMap.insert(::std::pair<const OUString, css::uno::Reference<css::uno::XInterface> >(::comphelper::getString(evt.NewValue),xCorrectType));
-        }
+        auto range = m_aMap.equal_range(::comphelper::getString(evt.OldValue));
+        for (auto it = range.first; it != range.second; ++it)
+            if (it->second == evt.Source)
+            {
+                css::uno::Reference<css::uno::XInterface>  xCorrectType(it->second);
+                m_aMap.erase(it);
+                m_aMap.insert(::std::pair<const OUString, css::uno::Reference<css::uno::XInterface> >(::comphelper::getString(evt.NewValue),xCorrectType));
+                break;
+            }
     }
 }
 
