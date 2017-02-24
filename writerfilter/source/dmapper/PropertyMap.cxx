@@ -1005,8 +1005,8 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     }
 
     //now set the top/bottom margin for the follow page style
-    Insert(PROP_TOP_MARGIN, uno::makeAny( nTopMargin ));
-    Insert(PROP_BOTTOM_MARGIN, uno::makeAny( nBottomMargin ));
+    Insert(PROP_TOP_MARGIN, uno::makeAny( nTopMargin > 0 ? nTopMargin : 0 ));
+    Insert(PROP_BOTTOM_MARGIN, uno::makeAny( nBottomMargin > 0 ? nBottomMargin : 0 ));
 }
 
 uno::Reference<beans::XPropertySet> lcl_GetRangeProperties(bool bIsFirstSection,
