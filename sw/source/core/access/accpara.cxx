@@ -1904,7 +1904,7 @@ uno::Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
         const Size a100thMMSize( 1000, 1000 );
         const Size aPixelSize = GetMap()->LogicToPixel( a100thMMSize );
         const float fRatio = ((float)a100thMMSize.Width()/100)/aPixelSize.Width();
-        rPropVal.Value = uno::makeAny( fRatio );
+        rPropVal.Value <<= fRatio;
         rPropVal.Handle = -1;
         rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
         pValues[ aValues.getLength() - 1 ] = rPropVal;

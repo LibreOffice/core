@@ -862,10 +862,10 @@ void MigrationImpl::runServices()
 {
     // Build argument array
     uno::Sequence< uno::Any > seqArguments(3);
-    seqArguments[0] = uno::makeAny(NamedValue("Productname",
-                                   uno::makeAny(m_aInfo.productname)));
-    seqArguments[1] = uno::makeAny(NamedValue("UserData",
-                                   uno::makeAny(m_aInfo.userdata)));
+    seqArguments[0] <<= NamedValue("Productname",
+                                   uno::makeAny(m_aInfo.productname));
+    seqArguments[1] <<= NamedValue("UserData",
+                                   uno::makeAny(m_aInfo.userdata));
 
 
     // create an instance of every migration service
@@ -884,8 +884,8 @@ void MigrationImpl::runServices()
                 if ( nSize > 0 )
                     seqExtBlackList = comphelper::arrayToSequence< OUString >(
                                           &i_mig->excludeExtensions[0], nSize );
-                seqArguments[2] = uno::makeAny(NamedValue("ExtensionBlackList",
-                                               uno::makeAny( seqExtBlackList )));
+                seqArguments[2] <<= NamedValue("ExtensionBlackList",
+                                               uno::makeAny( seqExtBlackList ));
 
                 xMigrationJob.set(
                     xContext->getServiceManager()->createInstanceWithArgumentsAndContext(i_mig->service, seqArguments, xContext),

@@ -141,7 +141,7 @@ OUString SAL_CALL Content::getContentType()
 #define EXCEPT(aExcept) \
 do { \
     if (bThrow) throw aExcept;\
-    aRet = uno::makeAny( aExcept );\
+    aRet <<= aExcept;\
 } while(false)
 
 uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterface >& rContext, bool bThrow)
@@ -722,8 +722,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
                 aEvent.PropertyName = "Title";
                 if (oldName)
-                    aEvent.OldValue = uno::makeAny(OUString(oldName, strlen(oldName), RTL_TEXTENCODING_UTF8));
-                aEvent.NewValue = uno::makeAny(aNewTitle);
+                    aEvent.OldValue <<= OUString(oldName, strlen(oldName), RTL_TEXTENCODING_UTF8);
+                aEvent.NewValue <<= aNewTitle;
                 aChanges.getArray()[ nChanged ] = aEvent;
                 nTitlePos = nChanged++;
 

@@ -132,8 +132,8 @@ void SwView::ExecLingu(SfxRequest &rReq)
                         Any* pArray = aSeq.getArray();
                         PropertyValue aParam;
                         aParam.Name = "ParentWindow";
-                        aParam.Value = makeAny(xDialogParentWindow);
-                        pArray[0] = makeAny(aParam);
+                        aParam.Value <<= xDialogParentWindow;
+                        pArray[0] <<= aParam;
                         xInit->initialize( aSeq );
 
                         //execute dialog
@@ -898,7 +898,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox&, rBox, void )
         if ( selection >= 0 )
         {
             OUString sKey = ODF_FORMDROPDOWN_RESULT;
-            (*pFieldmark->GetParameters())[ sKey ] = makeAny(selection);
+            (*pFieldmark->GetParameters())[ sKey ] <<= selection;
             pFieldmark->Invalidate();
             SwView& rView = static_cast<SwEditWin*>( GetParent() )->GetView();
             rView.GetDocShell()->SetModified();

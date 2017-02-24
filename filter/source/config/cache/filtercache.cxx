@@ -1606,7 +1606,7 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     // this property set as result only. But the user of this CacheItem
     // should know, which value the key names has :-) ITS IMPORTANT!
     CacheItem aItem;
-    aItem[PROPNAME_NAME] = css::uno::makeAny(sItem);
+    aItem[PROPNAME_NAME] <<= sItem;
     switch(eType)
     {
         case E_TYPE :
@@ -2018,12 +2018,7 @@ void FilterCache::impl_interpretDataVal4Type(const OUString& sValue,
     switch(nProp)
     {
         // Preferred
-        case 0:     {
-                        if (sValue.toInt32() == 1)
-                            rItem[PROPNAME_PREFERRED] = css::uno::makeAny(true);
-                        else
-                            rItem[PROPNAME_PREFERRED] = css::uno::makeAny(false);
-                    }
+        case 0:     rItem[PROPNAME_PREFERRED] <<= (sValue.toInt32() == 1);
                     break;
         // MediaType
         case 1:     rItem[PROPNAME_MEDIATYPE] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);

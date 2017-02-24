@@ -195,7 +195,7 @@ namespace dmapper {
                     {
                         beans::PropertyValue aValue;
                         aValue.Name = "vAlign";
-                        aValue.Value = uno::makeAny(aVertOrient);
+                        aValue.Value <<= aVertOrient;
                         m_pCurrentInteropGrabBag->push_back(aValue);
                     }
                 }
@@ -369,7 +369,7 @@ namespace dmapper {
                     {
                         beans::PropertyValue aValue;
                         aValue.Name = (nSprmId == NS_ooxml::LN_CT_TblPrBase_tblStyleRowBandSize ? OUString("tblStyleRowBandSize") : OUString("tblStyleColBandSize"));
-                        aValue.Value = uno::makeAny(nIntValue);
+                        aValue.Value <<= nIntValue;
                         m_pCurrentInteropGrabBag->push_back(aValue);
                     }
                     break;

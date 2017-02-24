@@ -1040,7 +1040,7 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             if (!aName.isEmpty())
             {
-                aSeq[aName] = uno::makeAny(sal_Int32(nParam));
+                aSeq[aName] <<= sal_Int32(nParam);
                 m_xDocumentProperties->setDocumentStatistics(aSeq.getAsConstNamedValueList());
             }
         }

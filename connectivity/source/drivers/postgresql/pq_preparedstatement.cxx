@@ -172,12 +172,12 @@ PreparedStatement::PreparedStatement(
     , m_multipleResultUpdateCount(0)
     , m_lastOidInserted( InvalidOid )
 {
-    m_props[PREPARED_STATEMENT_QUERY_TIME_OUT] = makeAny( (sal_Int32)0 );
-    m_props[PREPARED_STATEMENT_MAX_ROWS] = makeAny( (sal_Int32)0 );
-    m_props[PREPARED_STATEMENT_RESULT_SET_CONCURRENCY] = makeAny(
-        css::sdbc::ResultSetConcurrency::READ_ONLY );
-    m_props[PREPARED_STATEMENT_RESULT_SET_TYPE] = makeAny(
-        css::sdbc::ResultSetType::SCROLL_INSENSITIVE );
+    m_props[PREPARED_STATEMENT_QUERY_TIME_OUT] <<= (sal_Int32)0;
+    m_props[PREPARED_STATEMENT_MAX_ROWS] <<= (sal_Int32)0;
+    m_props[PREPARED_STATEMENT_RESULT_SET_CONCURRENCY] <<=
+        css::sdbc::ResultSetConcurrency::READ_ONLY;
+    m_props[PREPARED_STATEMENT_RESULT_SET_TYPE] <<=
+        css::sdbc::ResultSetType::SCROLL_INSENSITIVE;
 
     splitSQL( m_stmt, m_splittedStatement );
     int elements = 0;
@@ -703,14 +703,14 @@ sal_Bool PreparedStatement::convertFastPropertyValue(
     {
         OUString val;
         bRet = ( rValue >>= val );
-        rConvertedValue = makeAny( val );
+        rConvertedValue <<= val;
         break;
     }
     case PREPARED_STATEMENT_ESCAPE_PROCESSING:
     {
         bool val(false);
         bRet = ( rValue >>= val );
-        rConvertedValue = makeAny( val );
+        rConvertedValue <<= val;
         break;
     }
     case PREPARED_STATEMENT_FETCH_DIRECTION:
@@ -723,7 +723,7 @@ sal_Bool PreparedStatement::convertFastPropertyValue(
     {
         sal_Int32 val;
         bRet = ( rValue >>= val );
-        rConvertedValue = makeAny( val );
+        rConvertedValue <<= val;
         break;
     }
     default:

@@ -790,7 +790,7 @@ void SdrObject::GetGrabBagItem(css::uno::Any& rVal) const
         pGrabBagItem->QueryValue(rVal);
     else {
         uno::Sequence<beans::PropertyValue> aValue(0);
-        rVal = uno::makeAny(aValue);
+        rVal <<= aValue;
     }
 }
 

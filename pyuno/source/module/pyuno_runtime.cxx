@@ -861,7 +861,7 @@ Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) con
             }
             if( mappedObject.is() )
             {
-                a = css::uno::makeAny( mappedObject );
+                a <<= mappedObject;
             }
             else
             {
@@ -967,7 +967,7 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
         fprintf( stderr, "Python exception: %s\n",
                  OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
 #endif
-        ret = css::uno::makeAny( e );
+        ret <<= e;
     }
     return ret;
 }

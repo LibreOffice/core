@@ -185,8 +185,7 @@ static void lcl_throwIndexOutOfBoundsException( )
     {
         if (( Index >= (sal_Int32)maRoadmapItems.size()) || (Index < 0))
             lcl_throwIndexOutOfBoundsException( );
-        Any aAny;
-        aAny = makeAny( maRoadmapItems.at( Index ));
+        Any aAny( maRoadmapItems.at( Index ) );
         return aAny;
     }
 
@@ -257,7 +256,7 @@ static void lcl_throwIndexOutOfBoundsException( )
         ContainerEvent aEvent;
         aEvent.Source = *this;
         aEvent.Element <<= xRoadmapItem;
-        aEvent.Accessor = makeAny(Index);
+        aEvent.Accessor <<= Index;
         return aEvent;
     }
 

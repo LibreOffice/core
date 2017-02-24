@@ -182,7 +182,7 @@ void ConvertAttrGenToChar(SfxItemSet& rSet, const SfxItemSet& rOrigSet, const sa
                 auto aIterator = rMap.find("CharShadingMarker");
                 if( aIterator != rMap.end() )
                 {
-                    aIterator->second = uno::makeAny(false);
+                    aIterator->second <<= false;
                 }
                 rSet.Put( aGrabBag );
             }

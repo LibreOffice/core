@@ -194,12 +194,12 @@ SvXMLImportContext *XMLIndexBibliographyConfigurationContext::CreateChildContext
 
             PropertyValue aNameValue;
             aNameValue.Name = sSortKey;
-            aNameValue.Value = Any((sal_Int16)nKey);
+            aNameValue.Value <<= (sal_Int16)nKey;
             aKey[0] = aNameValue;
 
             PropertyValue aSortValue;
             aSortValue.Name = sIsSortAscending;
-            aSortValue.Value = Any(bSort);
+            aSortValue.Value <<= bSort;
             aKey[1] = aSortValue;
 
             aSortKeys.push_back(aKey);

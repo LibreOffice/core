@@ -137,11 +137,11 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         {
             uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
             aPopupMenu[0].Name = "CommandURL";
-            aPopupMenu[0].Value = uno::makeAny( "vnd.openoffice.org:" + rName );
+            aPopupMenu[0].Value <<= "vnd.openoffice.org:" + rName;
             aPopupMenu[1].Name = "Label";
             aPopupMenu[1].Value <<= rName;
             aPopupMenu[2].Name = "ItemDescriptorContainer";
-            aPopupMenu[2].Value = uno::makeAny( xMenuDesc );
+            aPopupMenu[2].Value <<= xMenuDesc;
             aPopupMenu[3].Name = "Type";
             aPopupMenu[3].Value <<= sal_Int32( 0 );
 
@@ -273,7 +273,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     controlGeneralInfo.ImportToolBarControlData( helper, props );
     beans::PropertyValue aProp;
     aProp.Name = "Visible";
-    aProp.Value = uno::makeAny( rHeader.isVisible() ); // where is the visible attribute stored
+    aProp.Value <<= rHeader.isVisible(); // where is the visible attribute stored
     props.push_back( aProp );
     if ( rHeader.getTct() == 0x01
     || rHeader.getTct() == 0x10 )
@@ -327,7 +327,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
 
         TBCMenuSpecific* pMenu = getMenuSpecific();
         if ( pMenu )
-            aProp.Value = uno::makeAny( sMenuBar += pMenu->Name() ); // name of popup
+            aProp.Value <<= sMenuBar += pMenu->Name(); // name of popup
         nStyle |= ui::ItemStyle::DROP_DOWN;
         props.push_back( aProp );
     }
@@ -487,15 +487,15 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
         }
 
         aProp.Name = "Label";
-        aProp.Value = uno::makeAny( customText.getString().replace('&','~') );
+        aProp.Value <<= customText.getString().replace('&','~');
         sControlData.push_back( aProp );
 
         aProp.Name = "Type";
-        aProp.Value = uno::makeAny( ui::ItemType::DEFAULT );
+        aProp.Value <<= ui::ItemType::DEFAULT;
         sControlData.push_back( aProp );
 
         aProp.Name = "Tooltip";
-        aProp.Value = uno::makeAny( tooltip.getString() );
+        aProp.Value <<= tooltip.getString();
         sControlData.push_back( aProp );
 /*
 aToolbarItem(0).Name = "CommandURL" wstrOnAction

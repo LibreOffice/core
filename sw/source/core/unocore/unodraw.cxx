@@ -1580,7 +1580,7 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                             break;
                         }
                     }
-                    aRet = uno::makeAny(nRet);
+                    aRet <<= nRet;
                 }
                 else
                 {

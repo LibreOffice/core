@@ -2432,7 +2432,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
 
                         if( bHasValue )
                         {
-                            aValues[nKeyTime] = makeAny( ValuePair( aValue1, aValue2 ) );
+                            aValues[nKeyTime] <<= ValuePair( aValue1, aValue2 );
                         }
                         else
                         {
@@ -2797,7 +2797,7 @@ void AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rT
                             rTarget >>= aParaTarget.Shape;
                             /* FIXME: Paragraph should be sal_Int32 as well */
                             aParaTarget.Paragraph = static_cast<sal_Int16>(nPara);
-                            rTarget = makeAny( aParaTarget );
+                            rTarget <<= aParaTarget;
 
                             rSubType = ShapeAnimationSubType::ONLY_TEXT;
                             dump( " paragraph %d,", (sal_Int32)nPara);

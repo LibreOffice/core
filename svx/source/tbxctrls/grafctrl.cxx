@@ -141,10 +141,10 @@ IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl, Timer *, void)
          maCommand == ".uno:GrafBlue" ||
          maCommand == ".uno:GrafLuminance" ||
          maCommand == ".uno:GrafContrast" )
-        a = makeAny( sal_Int16( nVal ));
+        a <<= sal_Int16( nVal );
     else if ( maCommand == ".uno:GrafGamma" ||
               maCommand == ".uno:GrafTransparence" )
-        a = makeAny( sal_Int32( nVal ));
+        a <<= sal_Int32( nVal );
 
     if ( a.hasValue() )
     {
@@ -350,7 +350,7 @@ void ImplGrafModeControl::Select()
     {
         Sequence< PropertyValue > aArgs( 1 );
         aArgs[0].Name = "GrafMode";
-        aArgs[0].Value = makeAny( sal_Int16( GetSelectEntryPos() ));
+        aArgs[0].Value <<= sal_Int16( GetSelectEntryPos() );
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
             This instance may be deleted in the meantime (i.e. when a dialog is opened

@@ -3367,7 +3367,7 @@ void FmXFormShell::CreateExternalView()
 
                 // columns props are a dispatch argument
                 pDispatchArgs->Name = "ColumnProperties"; // TODO : fmurl.*
-                pDispatchArgs->Value = makeAny(aColumnProps);
+                pDispatchArgs->Value <<= aColumnProps;
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
                     "FmXFormShell::CreateExternalView : forgot to adjust nDispatchArgs ?");
@@ -3407,7 +3407,7 @@ void FmXFormShell::CreateExternalView()
                 // content type
                 pListBoxDescription->Name = FM_PROP_LISTSOURCETYPE;
                  ListSourceType eType = ListSourceType_VALUELIST;
-                 pListBoxDescription->Value = makeAny(eType);
+                 pListBoxDescription->Value <<= eType;
                 ++pListBoxDescription;
 
                 // list source
@@ -3415,7 +3415,7 @@ void FmXFormShell::CreateExternalView()
                 DBG_ASSERT(aCurrentListSource != aRadioListSources.end(),
                     "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 pListBoxDescription->Name = FM_PROP_LISTSOURCE;
-                pListBoxDescription->Value = makeAny((*aCurrentListSource).second);
+                pListBoxDescription->Value <<= (*aCurrentListSource).second;
                 ++pListBoxDescription;
 
                 // value list
@@ -3423,7 +3423,7 @@ void FmXFormShell::CreateExternalView()
                 DBG_ASSERT(aCurrentValueList != aRadioValueLists.end(),
                     "FmXFormShell::CreateExternalView : inconsistent radio descriptions !");
                 pListBoxDescription->Name = FM_PROP_STRINGITEMLIST;
-                pListBoxDescription->Value = makeAny(((*aCurrentValueList).second));
+                pListBoxDescription->Value <<= (*aCurrentValueList).second;
                 ++pListBoxDescription;
 
                 DBG_ASSERT(nListBoxDescription == (pListBoxDescription - aListBoxDescription.getConstArray()),
@@ -3454,7 +3454,7 @@ void FmXFormShell::CreateExternalView()
 
                 // the
                 pDispatchArgs->Name = "ColumnProperties"; // TODO : fmurl.*
-                pDispatchArgs->Value = makeAny(aListBoxDescription);
+                pDispatchArgs->Value <<= aListBoxDescription;
                 ++pDispatchArgs;
                 DBG_ASSERT(nDispatchArgs == (pDispatchArgs - aDispatchArgs.getConstArray()),
                     "FmXFormShell::CreateExternalView : forgot to adjust nDispatchArgs ?");

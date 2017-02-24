@@ -344,7 +344,7 @@ void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
 
             // Provide key modifier information to dispatch function
             aArgs[0].Name   = "KeyModifier";
-            aArgs[0].Value  = makeAny( KeyModifier );
+            aArgs[0].Value  <<= KeyModifier;
 
             aTargetURL.Complete = aCommandURL;
             if ( m_xUrlTransformer.is() )

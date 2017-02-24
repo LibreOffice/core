@@ -87,8 +87,8 @@ public:
     {
         uno::Sequence< uno::Any > aArgs(2);
         // access the application object ( parent for workbook )
-        aArgs[0] = uno::Any( ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", uno::Sequence< uno::Any >() ) );
-        aArgs[1] = uno::Any( mpDocShell->GetModel() );
+        aArgs[0] <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", uno::Sequence< uno::Any >() );
+        aArgs[1] <<= mpDocShell->GetModel();
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
     }
 
@@ -123,8 +123,8 @@ public:
                         uno::Reference< sheet::XSpreadsheet > xSheet( xIndexAccess->getByIndex( i ), uno::UNO_QUERY_THROW );
                         uno::Sequence< uno::Any > aArgs(3);
                         aArgs[0] = maWorkbook;
-                        aArgs[1] = uno::Any( xModel );
-                        aArgs[2] = uno::Any( OUString( sSheetName ) );
+                        aArgs[1] <<= xModel;
+                        aArgs[2] <<= sSheetName;
                         // use the convience function
                         maCachedObject <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Worksheet", aArgs );
                         break;

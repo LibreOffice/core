@@ -177,13 +177,13 @@ void XMLIndexChapterInfoEntryContext::FillPropertyValues(
     {
         // chapter info field
         rValues[nIndex].Name = "ChapterFormat";
-        rValues[nIndex].Value = css::uno::Any(nChapterInfo);
+        rValues[nIndex].Value <<= nChapterInfo;
         nIndex++;
     }
     if( bOutlineLevelOK )
     {
         rValues[nIndex].Name = "ChapterLevel";
-        rValues[nIndex].Value = css::uno::Any(nOutlineLevel);
+        rValues[nIndex].Value <<= nOutlineLevel;
     }
 }
 

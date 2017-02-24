@@ -69,7 +69,7 @@ Any SAL_CALL JavaContext::getValueByName( const OUString& Name)
             if (!m_xHandler.is())
                 m_xHandler.set( new JavaInteractionHandler );
         }
-        retVal = makeAny(m_xHandler);
+        retVal <<= m_xHandler;
 
     }
     else if( m_xNextContext.is() )

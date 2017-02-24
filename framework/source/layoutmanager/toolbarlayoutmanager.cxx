@@ -1593,11 +1593,11 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
             uno::Sequence< beans::PropertyValue > aWindowState( 9 );
 
             aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
-            aWindowState[0].Value = ::uno::makeAny( !rElementData.m_bFloating );
+            aWindowState[0].Value <<= !rElementData.m_bFloating;
             aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
-            aWindowState[1].Value = uno::makeAny( rElementData.m_bVisible );
+            aWindowState[1].Value <<= rElementData.m_bVisible;
             aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
-            aWindowState[2].Value = uno::makeAny( static_cast< ui::DockingArea >( rElementData.m_aDockedData.m_nDockedArea ) );
+            aWindowState[2].Value <<= static_cast< ui::DockingArea >( rElementData.m_aDockedData.m_nDockedArea );
 
             awt::Point aPos = rElementData.m_aDockedData.m_aPos;
             aWindowState[3].Name  = WINDOWSTATE_PROPERTY_DOCKPOS;
@@ -1610,11 +1610,11 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
             aWindowState[5].Name  = WINDOWSTATE_PROPERTY_SIZE;
             aWindowState[5].Value <<= rElementData.m_aFloatingData.m_aSize;
             aWindowState[6].Name  = WINDOWSTATE_PROPERTY_UINAME;
-            aWindowState[6].Value = uno::makeAny( rElementData.m_aUIName );
+            aWindowState[6].Value <<= rElementData.m_aUIName;
             aWindowState[7].Name  = WINDOWSTATE_PROPERTY_LOCKED;
-            aWindowState[7].Value = uno::makeAny( rElementData.m_aDockedData.m_bLocked );
+            aWindowState[7].Value <<= rElementData.m_aDockedData.m_bLocked;
             aWindowState[8].Name  = WINDOWSTATE_PROPERTY_STYLE;
-            aWindowState[8].Value = uno::makeAny( static_cast<sal_uInt16>(rElementData.m_nStyle) );
+            aWindowState[8].Value <<= static_cast<sal_uInt16>(rElementData.m_nStyle);
 
             OUString aName = rElementData.m_aName;
             if ( xPersistentWindowState->hasByName( aName ))

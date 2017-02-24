@@ -705,9 +705,9 @@ bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
         aNames[2] = TARGET_URL;
 
         Sequence< Any > aValues(3);
-        aValues[0] = makeAny( rTitle );
-        aValues[1] = makeAny( false );
-        aValues[2] = makeAny( rTargetURL );
+        aValues[0] <<= rTitle;
+        aValues[1] <<= false;
+        aValues[2] <<= rTargetURL;
 
         OUString aType( TYPE_LINK  );
         OUString aAdditionalProp( PROPERTY_TYPE  );
@@ -755,8 +755,8 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
             aNames[1] = IS_FOLDER;
 
             Sequence< Any > aValues(2);
-            aValues[0] = makeAny( aFolderName );
-            aValues[1] = makeAny( true );
+            aValues[0] <<= aFolderName;
+            aValues[1] <<= true;
 
             OUString aType;
 
@@ -820,8 +820,8 @@ bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString& aPa
                 aNames[1] = IS_FOLDER;
 
                 Sequence< Any > aValues(2);
-                aValues[0] = makeAny( aTryName );
-                aValues[1] = makeAny( true );
+                aValues[0] <<= aTryName;
+                aValues[1] <<= true;
 
                 OUString aType( TYPE_FSYS_FOLDER  );
 
@@ -886,8 +886,8 @@ OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& a
                 aNames[1] = IS_DOCUMENT;
 
                 Sequence< Any > aValues(2);
-                aValues[0] = makeAny( aTryName );
-                aValues[1] = makeAny( true );
+                aValues[0] <<= aTryName;
+                aValues[1] <<= true;
 
                 OUString aType( TYPE_FSYS_FILE  );
 
@@ -990,7 +990,7 @@ bool SfxDocTplService_Impl::setProperty( Content& rContent,
             if ( rPropValue >>= aValue )
             {
                 maRelocator.makeRelocatableURL( aValue );
-                aPropValue = makeAny( aValue );
+                aPropValue <<= aValue;
             }
             else
             {
@@ -1001,7 +1001,7 @@ bool SfxDocTplService_Impl::setProperty( Content& rContent,
                     {
                         maRelocator.makeRelocatableURL( aValues[ n ] );
                     }
-                    aPropValue = makeAny( aValues );
+                    aPropValue <<= aValues;
                 }
                 else
                 {
@@ -1049,7 +1049,7 @@ bool SfxDocTplService_Impl::getProperty(Content& rContent, const OUString& rProp
             if ( rPropValue >>= aValue )
             {
                 maRelocator.makeAbsoluteURL( aValue );
-                rPropValue = makeAny( aValue );
+                rPropValue <<= aValue;
             }
             else
             {
@@ -1060,7 +1060,7 @@ bool SfxDocTplService_Impl::getProperty(Content& rContent, const OUString& rProp
                     {
                         maRelocator.makeAbsoluteURL( aValues[ n ] );
                     }
-                    rPropValue = makeAny( aValues );
+                    rPropValue <<= aValues;
                 }
                 else
                 {

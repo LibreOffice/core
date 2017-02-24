@@ -148,7 +148,7 @@ void SvxFontSizeBox_Impl::Select()
 
         uno::Sequence< beans::PropertyValue > aArgs( 1 );
         aArgs[0].Name  = "FontHeight.Height";
-        aArgs[0].Value = uno::makeAny( fSelVal );
+        aArgs[0].Value <<= fSelVal;
 
         /*  #i33380# DR 2004-09-03 Moved the following line above the Dispatch() call.
             This instance may be deleted in the meantime (i.e. when a dialog is opened

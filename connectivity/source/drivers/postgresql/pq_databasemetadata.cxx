@@ -2471,14 +2471,14 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
             if( findIt != columns.end() && ( ! isNonUnique || !  unique ) )
             {
                 std::vector< Any > result( 13 );
-                result[R_TABLE_SCHEM] = makeAny(currentSchema);
-                result[R_TABLE_NAME] = makeAny(currentTable);
-                result[R_INDEX_NAME] = makeAny(currentIndexName);
+                result[R_TABLE_SCHEM] <<= currentSchema;
+                result[R_TABLE_NAME] <<= currentTable;
+                result[R_INDEX_NAME] <<= currentIndexName;
                 result[R_NON_UNIQUE] <<= isNonUnique;
-                result[R_TYPE] = makeAny( indexType );
-                result[R_COLUMN_NAME] = makeAny( rowColumn->getString(2) );
+                result[R_TYPE] <<= indexType;
+                result[R_COLUMN_NAME] <<= rowColumn->getString(2);
                 sal_Int32 nPos = (sal_Int32)(findIt - columns.begin() +1); // MSVC++ nonsense
-                result[R_ORDINAL_POSITION] = makeAny( nPos );
+                result[R_ORDINAL_POSITION] <<= nPos;
                 vec.push_back( result );
             }
         }

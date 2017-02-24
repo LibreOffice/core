@@ -1372,7 +1372,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         if( nPos == 1 )
         {
             Color aSelectedColor = mpCLBDimColor->GetSelectEntryColor();
-            aDimColor = makeAny( (sal_Int32)aSelectedColor.GetRGBColor() );
+            aDimColor <<= (sal_Int32)aSelectedColor.GetRGBColor();
         }
 
         if( (mpSet->getPropertyState( nHandleDimColor ) == STLPropertyState::Ambiguous) ||
@@ -1434,12 +1434,12 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
         else if( nPos == 1 )
         {
             // this means stop sound
-            aNewSoundURL = makeAny( true );
+            aNewSoundURL <<= true;
         }
         else
         {
             OUString aSoundURL( maSoundList[ nPos-2 ] );
-            aNewSoundURL = makeAny( aSoundURL );
+            aNewSoundURL <<= aSoundURL;
         }
 
         if( mpSet->getPropertyState( nHandleSoundURL ) != STLPropertyState::Ambiguous )

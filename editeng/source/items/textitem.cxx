@@ -521,7 +521,7 @@ bool SvxPostureItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch( nMemberId )
     {
         case MID_ITALIC:
-            rVal = css::uno::makeAny<bool>(GetBoolValue());
+            rVal <<= (bool)GetBoolValue();
             break;
         case MID_POSTURE:
             rVal <<= (awt::FontSlant)GetValue();    // values from awt::FontSlant and FontItalic are equal
@@ -660,7 +660,7 @@ bool SvxWeightItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch( nMemberId )
     {
         case MID_BOLD   :
-            rVal = css::uno::makeAny<bool>(GetBoolValue());
+            rVal <<= (bool)GetBoolValue();
         break;
         case MID_WEIGHT:
         {
@@ -1289,7 +1289,7 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch(nMemberId)
     {
     case MID_TEXTLINED:
-        rVal = css::uno::makeAny<bool>(GetBoolValue());
+        rVal <<= (bool)GetBoolValue();
         break;
     case MID_TL_STYLE:
         rVal <<= (sal_Int16)(GetValue());
@@ -1298,7 +1298,7 @@ bool SvxTextLineItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         rVal <<= (sal_Int32)( mColor.GetColor() );
         break;
     case MID_TL_HASCOLOR:
-        rVal = css::uno::makeAny<bool>( !mColor.GetTransparency() );
+        rVal <<= (bool) !mColor.GetTransparency();
         break;
     }
     return true;
@@ -1490,7 +1490,7 @@ bool SvxCrossedOutItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch(nMemberId)
     {
         case MID_CROSSED_OUT:
-            rVal = css::uno::makeAny<bool>(GetBoolValue());
+            rVal <<= (bool) GetBoolValue();
         break;
         case MID_CROSS_OUT:
             rVal <<= (sal_Int16)(GetValue());
@@ -1792,7 +1792,7 @@ bool SvxBackgroundColorItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) c
     {
         case MID_GRAPHIC_TRANSPARENT:
         {
-            rVal = css::uno::makeAny<bool>(aColor.GetTransparency() == 0xff);
+            rVal <<= aColor.GetTransparency() == 0xff;
             break;
         }
         default:
@@ -2302,7 +2302,7 @@ bool SvxEscapementItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int8)(nProp);
         break;
         case MID_AUTO_ESC:
-            rVal = css::uno::makeAny<bool>(DFLT_ESC_AUTO_SUB == nEsc || DFLT_ESC_AUTO_SUPER == nEsc);
+            rVal <<= (DFLT_ESC_AUTO_SUB == nEsc || DFLT_ESC_AUTO_SUPER == nEsc);
         break;
     }
     return true;
@@ -2779,7 +2779,7 @@ bool SvxTwoLinesItem::QueryValue( css::uno::Any& rVal,
     switch( nMemberId )
     {
     case MID_TWOLINES:
-        rVal = css::uno::makeAny<bool>( bOn );
+        rVal <<= (bool) bOn;
         break;
     case MID_START_BRACKET:
         {
@@ -2942,7 +2942,7 @@ bool SvxCharRotateItem::QueryValue( css::uno::Any& rVal,
         rVal <<= (sal_Int16)GetValue();
         break;
     case MID_FITTOLINE:
-        rVal = css::uno::makeAny<bool>( IsFitToLine() );
+        rVal <<= (bool) IsFitToLine();
         break;
     default:
         bRet = false;

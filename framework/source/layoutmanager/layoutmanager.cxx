@@ -655,12 +655,12 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
             Sequence< PropertyValue > aWindowState( 8 );
 
             aWindowState[0].Name  = WINDOWSTATE_PROPERTY_DOCKED;
-            aWindowState[0].Value = makeAny( !rElementData.m_bFloating );
+            aWindowState[0].Value <<= !rElementData.m_bFloating;
             aWindowState[1].Name  = WINDOWSTATE_PROPERTY_VISIBLE;
-            aWindowState[1].Value = makeAny( rElementData.m_bVisible );
+            aWindowState[1].Value <<= rElementData.m_bVisible;
 
             aWindowState[2].Name  = WINDOWSTATE_PROPERTY_DOCKINGAREA;
-            aWindowState[2].Value = makeAny( static_cast< DockingArea >( rElementData.m_aDockedData.m_nDockedArea ) );
+            aWindowState[2].Value <<= static_cast< DockingArea >( rElementData.m_aDockedData.m_nDockedArea );
 
             aWindowState[3].Name = WINDOWSTATE_PROPERTY_DOCKPOS;
             aWindowState[3].Value <<= rElementData.m_aDockedData.m_aPos;
@@ -671,9 +671,9 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
             aWindowState[5].Name  = WINDOWSTATE_PROPERTY_SIZE;
             aWindowState[5].Value <<= rElementData.m_aFloatingData.m_aSize;
             aWindowState[6].Name  = WINDOWSTATE_PROPERTY_UINAME;
-            aWindowState[6].Value = makeAny( rElementData.m_aUIName );
+            aWindowState[6].Value <<= rElementData.m_aUIName;
             aWindowState[7].Name  = WINDOWSTATE_PROPERTY_LOCKED;
-            aWindowState[7].Value = makeAny( rElementData.m_aDockedData.m_bLocked );
+            aWindowState[7].Value <<= rElementData.m_aDockedData.m_bLocked;
 
             if ( xPersistentWindowState->hasByName( aName ))
             {

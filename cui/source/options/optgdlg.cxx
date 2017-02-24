@@ -478,10 +478,10 @@ CanvasSettings::CanvasSettings() :
                 Sequence<Any>( &propValue, 1 ) ),
             UNO_QUERY_THROW );
 
-        propValue = Any(
+        propValue <<=
             NamedValue(
                 "nodepath",
-                Any( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ) ) );
+                Any( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ) );
 
         Reference<XNameAccess> xNameAccess(
             xConfigProvider->createInstanceWithArguments(
@@ -1170,7 +1170,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
         Reference< XNameAccess > theNameAccess;
 
         // find out which locales are currently installed and add them to the listbox
-        theArgs[0] = Any(NamedValue("nodepath", Any(OUString(sInstalledLocalesPath))));
+        theArgs[0] <<= NamedValue("nodepath", Any(OUString(sInstalledLocalesPath)));
         theNameAccess.set(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
@@ -1189,7 +1189,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(vcl::Window* pParent, const SfxItemSet&
 
         // find out whether the user has a specific locale specified
         Sequence< Any > theArgs2(1);
-        theArgs2[0] = Any(NamedValue("nodepath", Any(OUString(sUserLocalePath))));
+        theArgs2[0] <<= NamedValue("nodepath", Any(OUString(sUserLocalePath)));
         theNameAccess.set(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
@@ -1370,7 +1370,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             css::configuration::theDefaultProvider::get(
                 comphelper::getProcessComponentContext()));
         Sequence< Any > theArgs(1);
-        theArgs[0] = Any(NamedValue("nodepath", Any(OUString(sUserLocalePath))));
+        theArgs[0] <<= NamedValue("nodepath", Any(OUString(sUserLocalePath)));
         Reference< XPropertySet >xProp(
             theConfigProvider->createInstanceWithArguments(sAccessUpdSrvc, theArgs ), UNO_QUERY_THROW );
         if ( !m_sUserLocaleValue.equals(aLangString))

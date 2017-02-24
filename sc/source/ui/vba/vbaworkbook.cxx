@@ -87,10 +87,10 @@ ScVbaWorkbook::Colors( const ::uno::Any& Index )
     {
         sal_Int32 nIndex = 0;
         Index >>= nIndex;
-        aRet = uno::makeAny( XLRGBToOORGB( ColorData[ --nIndex ] ) );
+        aRet <<= XLRGBToOORGB( ColorData[ --nIndex ] );
     }
     else
-        aRet = uno::makeAny( ColorData );
+        aRet <<= ColorData;
     return aRet;
 }
 
@@ -104,29 +104,29 @@ bool ScVbaWorkbook::setFilterPropsFromFormat( sal_Int32 nFormat, uno::Sequence< 
             switch( nFormat )
             {
                 case excel::XlFileFormat::xlCSV:
-                    rProps[ index ].Value = uno::Any( OUString("Text - txt - csv (StarCalc)") );
+                    rProps[ index ].Value <<= OUString("Text - txt - csv (StarCalc)");
                     break;
                 case excel::XlFileFormat::xlDBF4:
-                    rProps[ index ].Value = uno::Any( OUString("DBF") );
+                    rProps[ index ].Value <<= OUString("DBF");
                     break;
                 case excel::XlFileFormat::xlDIF:
-                    rProps[ index ].Value = uno::Any( OUString("DIF") );
+                    rProps[ index ].Value <<= OUString("DIF");
                     break;
                 case excel::XlFileFormat::xlWK3:
-                    rProps[ index ].Value = uno::Any( OUString("Lotus") );
+                    rProps[ index ].Value <<= OUString("Lotus");
                     break;
                 case excel::XlFileFormat::xlExcel4Workbook:
-                    rProps[ index ].Value = uno::Any( OUString("MS Excel 4.0") );
+                    rProps[ index ].Value <<= OUString("MS Excel 4.0");
                     break;
                 case excel::XlFileFormat::xlExcel5:
-                    rProps[ index ].Value = uno::Any( OUString("MS Excel 5.0/95") );
+                    rProps[ index ].Value <<= OUString("MS Excel 5.0/95");
                     break;
                 case excel::XlFileFormat::xlHtml:
-                    rProps[ index ].Value = uno::Any( OUString("HTML (StarCalc)") );
+                    rProps[ index ].Value <<= OUString("HTML (StarCalc)");
                     break;
                 case excel::XlFileFormat::xlExcel9795:
                 default:
-                    rProps[ index ].Value = uno::Any( OUString("MS Excel 97") );
+                    rProps[ index ].Value <<= OUString("MS Excel 97");
                     break;
             }
             bRes = true;

@@ -155,7 +155,7 @@ namespace oox { namespace ppt {
     {
         if( isCurrentElement( mnElement ) && maColor.isUsed() )
         {
-            maValue = makeAny( maColor.getColor( getFilter().getGraphicHelper() ) );
+            maValue <<= maColor.getColor( getFilter().getGraphicHelper() );
         }
     }
 
@@ -166,7 +166,7 @@ namespace oox { namespace ppt {
         case PPT_TOKEN( boolVal ):
         {
             bool val = rAttribs.getBool( XML_val, false );
-            maValue = makeAny( val );
+            maValue <<= val;
             return this;
         }
         case PPT_TOKEN( clrVal ):
@@ -175,20 +175,20 @@ namespace oox { namespace ppt {
         case PPT_TOKEN( fltVal ):
         {
             double val = rAttribs.getDouble( XML_val, 0.0 );
-            maValue = makeAny( val );
+            maValue <<= val;
             return this;
         }
         case PPT_TOKEN( intVal ):
         {
             sal_Int32 val = rAttribs.getInteger( XML_val, 0 );
-            maValue = makeAny( val );
+            maValue <<= val;
             return this;
         }
         case PPT_TOKEN( strVal ):
         {
             OUString val = rAttribs.getString( XML_val, OUString() );
             convertMeasure( val ); // ignore success or failure if it fails, use as is
-            maValue = makeAny( val );
+            maValue <<= val;
             return this;
         }
         default:

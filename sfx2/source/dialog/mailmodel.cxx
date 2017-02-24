@@ -173,11 +173,11 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                                 //used in filter/source/pdf/impdialog.cxx
                                 uno::Sequence< beans::PropertyValue > aFilterDataValue(1);
                                 aFilterDataValue[0].Name = "_OkButtonString";
-                                aFilterDataValue[0].Value = css::uno::makeAny(SfxResId(STR_PDF_EXPORT_SEND ).toString());
+                                aFilterDataValue[0].Value <<= SfxResId(STR_PDF_EXPORT_SEND ).toString();
 
                                 //add to the filterdata property, the only one the PDF export filter dialog will care for
                                 aPropsForDialog[0].Name = "FilterData";
-                                aPropsForDialog[0].Value = css::uno::makeAny( aFilterDataValue );
+                                aPropsForDialog[0].Value <<= aFilterDataValue;
 
                                 //when executing the dialog will merge the persistent FilterData properties
                                 xFilterProperties->setPropertyValues( aPropsForDialog );
@@ -326,9 +326,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 // Retrieve filter from type
                 css::uno::Sequence< css::beans::NamedValue > aQuery( bSendAsPDF ? 3 : 2 );
                 aQuery[0].Name  = "Type";
-                aQuery[0].Value = css::uno::makeAny( aTypeName );
+                aQuery[0].Value <<= aTypeName;
                 aQuery[1].Name  = "DocumentService";
-                aQuery[1].Value = css::uno::makeAny( aModule );
+                aQuery[1].Value <<= aModule;
                 if( bSendAsPDF )
                 {
                     // #i91419#
@@ -337,7 +337,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     // this seems to be a bug
                     // without flags we get an import filter here, which is also unwanted
                     aQuery[2].Name  = "Flags";
-                    aQuery[2].Value = css::uno::makeAny( sal_Int32(0x80042) ); // EXPORT ALIEN 3RDPARTY
+                    aQuery[2].Value <<= sal_Int32(0x80042); // EXPORT ALIEN 3RDPARTY
                 }
 
                 css::uno::Reference< css::container::XEnumeration > xEnumeration =
@@ -483,7 +483,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             const OUString aPasswordPropName( "Password" );
             css::uno::Sequence< css::beans::PropertyValue > aArgs( ++nNumArgs );
             aArgs[nNumArgs-1].Name  = "FilterName";
-            aArgs[nNumArgs-1].Value = css::uno::makeAny( aFilterName );
+            aArgs[nNumArgs-1].Value <<= aFilterName;
 
             ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
             OUString aPassword = aMediaDescrPropsHM.getUnpackedValueOrDefault(
@@ -493,7 +493,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             {
                 aArgs.realloc( ++nNumArgs );
                 aArgs[nNumArgs-1].Name = aPasswordPropName;
-                aArgs[nNumArgs-1].Value = css::uno::makeAny( aPassword );
+                aArgs[nNumArgs-1].Value <<= aPassword;
             }
 
             bool bNeedsPreparation = false;
@@ -623,7 +623,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 // We need 1:1 copy of the document to preserve an added signature.
                 aArgs.realloc( ++nNumArgs );
                 aArgs[nNumArgs-1].Name = "CopyStreamIfPossible";
-                aArgs[nNumArgs-1].Value = css::uno::makeAny( true );
+                aArgs[nNumArgs-1].Value <<= true;
 
                 try
                 {

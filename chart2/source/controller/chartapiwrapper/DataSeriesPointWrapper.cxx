@@ -433,7 +433,7 @@ void WrappedLineStyleProperty::setPropertyValue( const Any& rOuterValue, const R
     if( m_pDataSeriesPointWrapper && m_pDataSeriesPointWrapper->isLinesForbidden() )
     {
         m_aOuterValue = rOuterValue;
-        aNewValue = uno::Any(drawing::LineStyle_NONE);
+        aNewValue <<= drawing::LineStyle_NONE;
     }
     WrappedSeriesAreaOrLineProperty::setPropertyValue( aNewValue, xInnerPropertySet );
 }

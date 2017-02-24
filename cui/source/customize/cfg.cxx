@@ -3758,7 +3758,7 @@ void ToolbarSaveInData::SetSystemStyle(
                 {
                     if ( aProps[ i ].Name == ITEM_DESCRIPTOR_STYLE )
                     {
-                        aProps[ i ].Value = uno::Any( nStyle );
+                        aProps[ i ].Value <<= nStyle;
                         break;
                     }
                 }

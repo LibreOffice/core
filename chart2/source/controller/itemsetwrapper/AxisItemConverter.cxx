@@ -809,7 +809,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                         if( xCrossingMainAxis.is() )
                         {
                             ScaleData aCrossingScale( xCrossingMainAxis->getScaleData() );
-                            aCrossingScale.Origin = uno::Any(fValue);
+                            aCrossingScale.Origin <<= fValue;
                             xCrossingMainAxis->setScaleData(aCrossingScale);
                         }
                     }

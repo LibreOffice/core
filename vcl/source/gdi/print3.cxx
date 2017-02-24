@@ -354,7 +354,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             // Argh ! That sure needs cleaning up
             if( pContentVal )
             {
-                pContentVal->Value = css::uno::makeAny( sal_Int32( 1 ) );
+                pContentVal->Value <<= sal_Int32( 1 );
                 xController->setValue("PageRange", pPagesVal->Value);
             }
         }
@@ -1824,7 +1824,7 @@ void PrinterOptionsHelper::appendPrintUIOptions( css::uno::Sequence< css::beans:
         io_rProps.realloc( nIndex+1 );
         css::beans::PropertyValue aVal;
         aVal.Name = "ExtraPrintUIOptions";
-        aVal.Value = css::uno::makeAny( comphelper::containerToSequence(m_aUIProperties) );
+        aVal.Value <<= comphelper::containerToSequence(m_aUIProperties);
         io_rProps[ nIndex ] = aVal;
     }
 }
@@ -1860,35 +1860,35 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
     if( !i_rTitle.isEmpty() )
     {
         aCtrl[nUsed  ].Name  = "Text";
-        aCtrl[nUsed++].Value = css::uno::makeAny( i_rTitle );
+        aCtrl[nUsed++].Value <<= i_rTitle;
     }
     if( i_rHelpIds.getLength() )
     {
         aCtrl[nUsed  ].Name = "HelpId";
-        aCtrl[nUsed++].Value = css::uno::makeAny( i_rHelpIds );
+        aCtrl[nUsed++].Value <<= i_rHelpIds;
     }
     aCtrl[nUsed  ].Name  = "ControlType";
-    aCtrl[nUsed++].Value = css::uno::makeAny( i_rType );
+    aCtrl[nUsed++].Value <<= i_rType;
     aCtrl[nUsed  ].Name  = "ID";
-    aCtrl[nUsed++].Value = css::uno::makeAny( i_rIDs );
+    aCtrl[nUsed++].Value <<= i_rIDs;
     if( i_pVal )
     {
         aCtrl[nUsed  ].Name  = "Property";
-        aCtrl[nUsed++].Value = css::uno::makeAny( *i_pVal );
+        aCtrl[nUsed++].Value <<= *i_pVal;
     }
     if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {
         aCtrl[nUsed  ].Name  = "DependsOnName";
-        aCtrl[nUsed++].Value = css::uno::makeAny( i_rControlOptions.maDependsOnName );
+        aCtrl[nUsed++].Value <<= i_rControlOptions.maDependsOnName;
         if( i_rControlOptions.mnDependsOnEntry != -1 )
         {
             aCtrl[nUsed  ].Name  = "DependsOnEntry";
-            aCtrl[nUsed++].Value = css::uno::makeAny( i_rControlOptions.mnDependsOnEntry );
+            aCtrl[nUsed++].Value <<= i_rControlOptions.mnDependsOnEntry;
         }
         if( i_rControlOptions.mbAttachToDependency )
         {
             aCtrl[nUsed  ].Name  = "AttachToDependency";
-            aCtrl[nUsed++].Value = css::uno::makeAny( i_rControlOptions.mbAttachToDependency );
+            aCtrl[nUsed++].Value <<= i_rControlOptions.mbAttachToDependency;
         }
     }
     if( !i_rControlOptions.maGroupHint.isEmpty() )
@@ -1960,7 +1960,7 @@ css::uno::Any PrinterOptionsHelper::setBoolControlOpt(const OUString& i_rID,
     }
     css::beans::PropertyValue aVal;
     aVal.Name = i_rProperty;
-    aVal.Value = css::uno::makeAny( i_bValue );
+    aVal.Value <<= i_bValue;
     css::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, "Bool", &aVal, i_rControlOptions);
 }
@@ -1978,16 +1978,16 @@ css::uno::Any PrinterOptionsHelper::setChoiceRadiosControlOpt(const css::uno::Se
     sal_Int32 nUsed = aOpt.maAddProps.size();
     aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
     aOpt.maAddProps[nUsed].Name = "Choices";
-    aOpt.maAddProps[nUsed].Value = css::uno::makeAny( i_rChoices );
+    aOpt.maAddProps[nUsed].Value <<= i_rChoices;
     if( i_rDisabledChoices.getLength() )
     {
         aOpt.maAddProps[nUsed+1].Name = "ChoicesDisabled";
-        aOpt.maAddProps[nUsed+1].Value = css::uno::makeAny( i_rDisabledChoices );
+        aOpt.maAddProps[nUsed+1].Value <<= i_rDisabledChoices;
     }
 
     css::beans::PropertyValue aVal;
     aVal.Name = i_rProperty;
-    aVal.Value = css::uno::makeAny( i_nValue );
+    aVal.Value <<= i_nValue;
     return setUIControlOpt(i_rIDs, i_rTitle, i_rHelpId, "Radio", &aVal, aOpt);
 }
 
@@ -2004,16 +2004,16 @@ css::uno::Any PrinterOptionsHelper::setChoiceListControlOpt(const OUString& i_rI
     sal_Int32 nUsed = aOpt.maAddProps.size();
     aOpt.maAddProps.resize( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
     aOpt.maAddProps[nUsed].Name = "Choices";
-    aOpt.maAddProps[nUsed].Value = css::uno::makeAny( i_rChoices );
+    aOpt.maAddProps[nUsed].Value <<= i_rChoices;
     if( i_rDisabledChoices.getLength() )
     {
         aOpt.maAddProps[nUsed+1].Name = "ChoicesDisabled";
-        aOpt.maAddProps[nUsed+1].Value = css::uno::makeAny( i_rDisabledChoices );
+        aOpt.maAddProps[nUsed+1].Value <<= i_rDisabledChoices;
     }
 
     css::beans::PropertyValue aVal;
     aVal.Name = i_rProperty;
-    aVal.Value = css::uno::makeAny( i_nValue );
+    aVal.Value <<= i_nValue;
     css::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, i_rHelpId, "List", &aVal, aOpt);
 }
@@ -2033,9 +2033,9 @@ css::uno::Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
         sal_Int32 nUsed = aOpt.maAddProps.size();
         aOpt.maAddProps.resize( nUsed + 2 );
         aOpt.maAddProps[nUsed  ].Name  = "MinValue";
-        aOpt.maAddProps[nUsed++].Value = css::uno::makeAny( i_nMinValue );
+        aOpt.maAddProps[nUsed++].Value <<= i_nMinValue;
         aOpt.maAddProps[nUsed  ].Name  = "MaxValue";
-        aOpt.maAddProps[nUsed++].Value = css::uno::makeAny( i_nMaxValue );
+        aOpt.maAddProps[nUsed++].Value <<= i_nMaxValue;
     }
 
     css::uno::Sequence< OUString > aHelpId;
@@ -2046,7 +2046,7 @@ css::uno::Any PrinterOptionsHelper::setRangeControlOpt(const OUString& i_rID,
     }
     css::beans::PropertyValue aVal;
     aVal.Name = i_rProperty;
-    aVal.Value = css::uno::makeAny( i_nValue );
+    aVal.Value <<= i_nValue;
     css::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, "Range", &aVal, aOpt);
 }
@@ -2066,7 +2066,7 @@ css::uno::Any PrinterOptionsHelper::setEditControlOpt(const OUString& i_rID,
     }
     css::beans::PropertyValue aVal;
     aVal.Name = i_rProperty;
-    aVal.Value = css::uno::makeAny( i_rValue );
+    aVal.Value <<= i_rValue;
     css::uno::Sequence< OUString > aIds { i_rID };
     return setUIControlOpt(aIds, i_rTitle, aHelpId, "Edit", &aVal, i_rControlOptions);
 }

@@ -874,7 +874,7 @@ lcl_TableData lcl_getDataForLocalTable(
             Sequence< Any >& rTarget = rComplexAnyLabels[nN];
             rTarget.realloc( rSource.getLength() );
             for( sal_Int32 i=0; i<rSource.getLength(); i++ )
-                rTarget[i] = uno::makeAny( rSource[i] );
+                rTarget[i] <<= rSource[i];
         }
     }
     catch( const uno::Exception & rEx )

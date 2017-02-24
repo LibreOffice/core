@@ -3107,7 +3107,7 @@ static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPa
         uno::Reference<table::XCellRange> xCellRange = ScCellRangeObj::CreateRangeFromDoc( pDok, aRange );
         uno::Sequence< uno::Any > aArgs(2);
         aArgs[0] = lcl_getSheetModule( xCellRange, pDok );
-        aArgs[1] = uno::Any( xCellRange );
+        aArgs[1] <<= xCellRange;
         xVBARange = ooo::vba::createVBAUnoAPIServiceWithArgs( pDok->GetDocumentShell(), "ooo.vba.excel.Range", aArgs );
         if ( xVBARange.is() )
         {

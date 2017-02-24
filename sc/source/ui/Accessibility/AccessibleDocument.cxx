@@ -485,7 +485,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::CHILD;
                 aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-                aEvent.OldValue = uno::makeAny(uno::Reference<XAccessible>(pCurrentChild));
+                aEvent.OldValue <<= uno::Reference<XAccessible>(pCurrentChild);
 
                 mpAccessibleDocument->CommitChange(aEvent); // child is gone - event
 
@@ -495,7 +495,7 @@ bool ScChildrenShapes::ReplaceChild (::accessibility::AccessibleShape* pCurrentC
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-            aEvent.NewValue = uno::makeAny(uno::Reference<XAccessible>(pReplacement.get()));
+            aEvent.NewValue <<= uno::Reference<XAccessible>(pReplacement.get());
 
             mpAccessibleDocument->CommitChange(aEvent); // child is new - event
             bResult = true;
@@ -1304,7 +1304,7 @@ void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape
             AccessibleEventObject aEvent;
             aEvent.EventId = AccessibleEventId::CHILD;
             aEvent.Source = uno::Reference< XAccessibleContext >(mpAccessibleDocument);
-            aEvent.OldValue = uno::makeAny(xOldAccessible);
+            aEvent.OldValue <<= xOldAccessible;
 
             mpAccessibleDocument->CommitChange(aEvent); // child is gone - event
         }
@@ -2335,7 +2335,7 @@ css::uno::Sequence< css::uno::Any > ScAccessibleDocument::GetScAccFlowToSequence
                                     {
                                         if ( xSelContext->getAccessibleRole() == AccessibleRole::TABLE_CELL )
                                         {
-                                            aSequence[nParaCount] = uno::makeAny( xSel );
+                                            aSequence[nParaCount] <<= xSel;
                                             nParaCount++;
                                         }
                                     }
@@ -2381,7 +2381,7 @@ css::uno::Sequence< css::uno::Any >
                             if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
                             {
                                 uno::Sequence<uno::Any> aRet( 1 );
-                                aRet[0] = uno::makeAny( xSel );
+                                aRet[0] <<= xSel;
                                 return aRet;
                             }
                         }
@@ -2412,7 +2412,7 @@ css::uno::Sequence< css::uno::Any >
                                         xChildSelContext->getAccessibleRole() == css::accessibility::AccessibleRole::PARAGRAPH )
                                     {
                                         uno::Sequence<uno::Any> aRet( 1 );
-                                        aRet[0] = uno::makeAny( xChildSel );
+                                        aRet[0] <<= xChildSel;
                                         return aRet;
                                     }
                                 }
@@ -2439,7 +2439,7 @@ css::uno::Sequence< css::uno::Any >
                 uno::Reference < XAccessible > xFindCellAcc = mpAccessibleSpreadsheet->GetActiveCell();
                 // add xFindCellAcc to the return the Sequence
                 uno::Sequence< uno::Any> aSeq2(1);
-                aSeq2[0] = uno::makeAny( xFindCellAcc );
+                aSeq2[0] <<= xFindCellAcc;
                 return aSeq2;
             }
         }

@@ -325,7 +325,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
             {
                 if (aValue.Name == "CharColor")
                 {
-                    aValue.Value = css::uno::Any(static_cast< sal_Int32 >(COLORDATA_RGB(pFontColor->GetColor().GetColor())));
+                    aValue.Value <<= static_cast< sal_Int32 >(COLORDATA_RGB(pFontColor->GetColor().GetColor()));
                     break;
                 }
             }
@@ -342,7 +342,7 @@ Sequence< PropertyValue > VCLXAccessibleEdit::getCharacterAttributes( sal_Int32 
                 OutputDevice* pDev = Application::GetDefaultDevice();
                 if ( pDev )
                 {
-                    aValue.Value = css::uno::Any(static_cast< sal_Int32 >(pDev->GetSettings().GetStyleSettings().GetFieldTextColor().GetColor()));
+                    aValue.Value <<= static_cast< sal_Int32 >(pDev->GetSettings().GetStyleSettings().GetFieldTextColor().GetColor());
                 }
             }
             break;

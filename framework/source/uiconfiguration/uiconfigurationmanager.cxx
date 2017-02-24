@@ -1142,11 +1142,11 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
         Sequence< Any > aPropSeq( 2 );
         PropertyValue aPropValue;
         aPropValue.Name  = "UserConfigStorage";
-        aPropValue.Value = makeAny( m_xDocConfigStorage );
-        aPropSeq[0] = makeAny( aPropValue );
+        aPropValue.Value <<= m_xDocConfigStorage;
+        aPropSeq[0] <<= aPropValue;
         aPropValue.Name  = "ModuleIdentifier";
-        aPropValue.Value = makeAny( m_aModuleIdentifier );
-        aPropSeq[1] = makeAny( aPropValue );
+        aPropValue.Value <<= m_aModuleIdentifier;
+        aPropSeq[1] <<= aPropValue;
 
         xInit->initialize( aPropSeq );
     }

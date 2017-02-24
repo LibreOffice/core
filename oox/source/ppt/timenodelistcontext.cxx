@@ -84,17 +84,17 @@ namespace oox { namespace ppt {
                     aHSL[ 0 ] = double(one) / 100000;
                     aHSL[ 1 ] = double(two) / 100000;
                     aHSL[ 2 ] = double(three) / 100000;
-                    aColor = Any(aHSL);
+                    aColor <<= aHSL;
                     break;
                 case AnimationColorSpace::RGB:
                     nColor = ( ( ( one * 128 ) / 1000 ) & 0xff ) << 16
                         | ( ( ( two * 128 ) / 1000 ) & 0xff ) << 8
                         | ( ( ( three * 128 ) / 1000 )  & 0xff );
-                    aColor = Any(nColor);
+                    aColor <<= nColor;
                     break;
                 default:
                     nColor = 0;
-                    aColor = Any( nColor );
+                    aColor <<= nColor;
                     break;
                 }
                 return  aColor;
@@ -188,7 +188,7 @@ namespace oox { namespace ppt {
                     OUString aString;
                     if( maTo >>= aString )
                     {
-                        maTo = makeAny( aString == "visible" );
+                        maTo <<= aString == "visible";
                         if( !maTo.has<sal_Bool>() )
                             SAL_WARN("oox.ppt", "conversion failed" );
                     }
@@ -291,7 +291,7 @@ namespace oox { namespace ppt {
                             }
                             break;
                         }
-                        mpNode->getNodeProperties()[ NP_COMMAND ] = makeAny((sal_Int16)nCommand);
+                        mpNode->getNodeProperties()[ NP_COMMAND ] <<= (sal_Int16)nCommand;
                         if( nCommand == EffectCommands::CUSTOM )
                         {
                             SAL_WARN("oox.ppt", "OOX: CmdTimeNodeContext::endFastElement(), unknown command!");
@@ -301,7 +301,7 @@ namespace oox { namespace ppt {
                         if( aParamValue.Value.hasValue() )
                         {
                             Sequence< NamedValue > aParamSeq( &aParamValue, 1 );
-                            mpNode->getNodeProperties()[ NP_PARAMETER ] = makeAny( aParamSeq );
+                            mpNode->getNodeProperties()[ NP_PARAMETER ] <<= aParamSeq;
                         }
                     }
                     catch( RuntimeException& )
@@ -424,8 +424,8 @@ namespace oox { namespace ppt {
                 if( isCurrentElement( mnElement ) )
                 {
                     NodePropertyMap & rProps(mpNode->getNodeProperties());
-                    rProps[ NP_DIRECTION ] = makeAny( mnDir == XML_cw );
-                    rProps[ NP_COLORINTERPOLATION ] = makeAny( mnColorSpace == XML_hsl ? AnimationColorSpace::HSL : AnimationColorSpace::RGB );
+                    rProps[ NP_DIRECTION ] <<= mnDir == XML_cw;
+                    rProps[ NP_COLORINTERPOLATION ] <<= mnColorSpace == XML_hsl ? AnimationColorSpace::HSL : AnimationColorSpace::RGB;
                     const GraphicHelper& rGraphicHelper = getFilter().getGraphicHelper();
                     if( maToClr.isUsed() )
                         mpNode->setTo( Any( maToClr.getColor( rGraphicHelper ) ) );
@@ -522,7 +522,7 @@ namespace oox { namespace ppt {
                         nEnum = AnimationCalcMode::DISCRETE;
                         break;
                     }
-                    aProps[ NP_CALCMODE ] = makeAny(nEnum);
+                    aProps[ NP_CALCMODE ] <<= nEnum;
                 }
                 OUString aStr;
                 aStr = xAttribs->getOptionalValue( XML_from );
@@ -612,7 +612,7 @@ namespace oox { namespace ppt {
                 // TODO what to do with mbZoomContents
                 mbZoomContents = attribs.getBool( XML_zoomContents, false );
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
-                    = makeAny((sal_Int16)AnimationTransformType::SCALE);
+                    <<= (sal_Int16)AnimationTransformType::SCALE;
             }
 
         virtual void onEndElement() override
@@ -690,7 +690,7 @@ namespace oox { namespace ppt {
                 AttributeList attribs( xAttribs );
 
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
-                    = makeAny((sal_Int16)AnimationTransformType::ROTATE);
+                    <<= (sal_Int16)AnimationTransformType::ROTATE;
                 // see also DFF_msofbtAnimateRotationData in
                 // sd/source/filter/ppt/pptinanimations.cxx
                 if(attribs.hasAttribute( XML_by ) )
@@ -735,7 +735,7 @@ namespace oox { namespace ppt {
             : TimeNodeContext( rParent, aElement, xAttribs, pNode )
             {
                 pNode->getNodeProperties()[ NP_TRANSFORMTYPE ]
-                    = makeAny((sal_Int16)AnimationTransformType::TRANSLATE);
+                    <<= (sal_Int16)AnimationTransformType::TRANSLATE;
 
                 AttributeList attribs( xAttribs );
                 sal_Int32 nOrigin = xAttribs->getOptionalValueToken( XML_origin, 0 );
@@ -756,7 +756,7 @@ namespace oox { namespace ppt {
                 if (aStr.endsWith("E"))
                     aStr = aStr.copy(0, aStr.getLength() - 1);
                 aStr = aStr.trim();
-                pNode->getNodeProperties()[ NP_PATH ] = makeAny(aStr);
+                pNode->getNodeProperties()[ NP_PATH ] <<= aStr;
                 mnPathEditMode = xAttribs->getOptionalValueToken( XML_pathEditMode, 0 );
                 msPtsTypes = xAttribs->getOptionalValue( XML_ptsTypes );
                 mnAngle = attribs.getInteger( XML_rAng, 0 );

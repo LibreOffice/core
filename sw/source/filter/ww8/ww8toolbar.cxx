@@ -371,7 +371,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     // create the popup menu
                     uno::Sequence< beans::PropertyValue > aPopupMenu( 4 );
                     aPopupMenu[0].Name = "CommandURL";
-                    aPopupMenu[0].Value = uno::makeAny( "vnd.openoffice.org:" + sMenuName );
+                    aPopupMenu[0].Value <<= "vnd.openoffice.org:" + sMenuName;
                     aPopupMenu[1].Name = "Label";
                     aPopupMenu[1].Value <<= sMenuName;
                     aPopupMenu[2].Name = "Type";
@@ -743,7 +743,7 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
             // insert spacer
             uno::Sequence< beans::PropertyValue > sProps( 1 );
             sProps[ 0 ].Name = "Type";
-            sProps[ 0 ].Value = uno::makeAny( ui::ItemType::SEPARATOR_LINE );
+            sProps[ 0 ].Value <<= ui::ItemType::SEPARATOR_LINE;
             toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
         }
 

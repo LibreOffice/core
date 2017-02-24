@@ -213,7 +213,7 @@ inline acc_CurrentContext::acc_CurrentContext(
 {
     if (xRestriction.is())
     {
-        m_restriction = makeAny( xRestriction );
+        m_restriction <<= xRestriction;
     }
     // return empty any otherwise on getValueByName(), not null interface
 }

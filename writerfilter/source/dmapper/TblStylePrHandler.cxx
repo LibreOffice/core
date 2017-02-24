@@ -194,7 +194,7 @@ void TblStylePrHandler::appendInteropGrabBag(const OUString& aKey, const OUStrin
 {
     beans::PropertyValue aProperty;
     aProperty.Name = aKey;
-    aProperty.Value = uno::makeAny(aValue);
+    aProperty.Value <<= aValue;
     m_aInteropGrabBag.push_back(aProperty);
 }
 
@@ -203,7 +203,7 @@ beans::PropertyValue TblStylePrHandler::getInteropGrabBag(const OUString& aName)
     beans::PropertyValue aRet;
     aRet.Name = aName;
 
-    aRet.Value = uno::makeAny(comphelper::containerToSequence(m_aInteropGrabBag));
+    aRet.Value <<= comphelper::containerToSequence(m_aInteropGrabBag);
     return aRet;
 }
 

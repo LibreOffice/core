@@ -126,8 +126,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TabWinFactory::createInstan
         css::uno::Sequence< css::uno::Any > aArgs( 1 );
 
         aPropValue.Name  = aTopWindowArgName;
-        aPropValue.Value = css::uno::makeAny( xTopWindow );
-        aArgs[0] = css::uno::makeAny( aPropValue );
+        aPropValue.Value <<= xTopWindow;
+        aArgs[0] <<= aPropValue;
         pTabWindow->initialize( aArgs );
 
         xReturn.set( static_cast< OWeakObject* >( pTabWindow ), css::uno::UNO_QUERY );

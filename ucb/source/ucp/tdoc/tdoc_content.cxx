@@ -1328,8 +1328,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     if ( !aOldTitle.isEmpty() )
     {
         aEvent.PropertyName = "Title";
-        aEvent.OldValue     = uno::makeAny( aOldTitle );
-        aEvent.NewValue     = uno::makeAny( m_aProps.getTitle() );
+        aEvent.OldValue     <<= aOldTitle;
+        aEvent.NewValue     <<= m_aProps.getTitle();
 
         aChanges.getArray()[ nChanged ] = aEvent;
         nChanged++;

@@ -424,10 +424,10 @@ UpdateInformationProvider::getConfigurationItemAny(uno::Reference<lang::XMultiSe
 {
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value = uno::makeAny(node);
+    aProperty.Value <<= node;
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] = uno::makeAny( aProperty );
+    aArgumentList[0] <<= aProperty;
 
     uno::Reference< container::XNameAccess > xNameAccess(
         configurationProvider->createInstanceWithArguments(
@@ -481,7 +481,7 @@ UpdateInformationProvider::load(const OUString& rURL)
 
     ucb::Command aCommand;
     aCommand.Name = "open";
-    aCommand.Argument = uno::makeAny(aOpenArgument);
+    aCommand.Argument <<= aOpenArgument;
 
     sal_Int32 nCommandId = xCommandProcessor->createCommandIdentifier();
 

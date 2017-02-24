@@ -265,7 +265,7 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
 
             beans::PropertyValue aValue;
             aValue.Name = "compatSetting";
-            aValue.Value = uno::makeAny(m_pImpl->m_pCurrentCompatSetting);
+            aValue.Value <<= m_pImpl->m_pCurrentCompatSetting;
             m_pImpl->m_aCompatSettings.push_back(aValue);
         }
     }

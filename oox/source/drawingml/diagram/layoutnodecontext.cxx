@@ -163,7 +163,7 @@ public:
             sal_Int32 nIdx =  LayoutNodeContext::tagToVarIdx( getBaseToken( aElement ) );
             if( nIdx != -1 )
             {
-                mVariables[ nIdx ] = makeAny( rAttribs.getString( XML_val ).get() );
+                mVariables[ nIdx ] <<= rAttribs.getString( XML_val ).get();
             }
 
             return this;

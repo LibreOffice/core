@@ -1854,7 +1854,7 @@ Any ODatabaseForm::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
             break;
 
         case PROPERTY_ID_NAVIGATION:
-            aReturn = makeAny(NavigationBarMode_CURRENT);
+            aReturn <<= NavigationBarMode_CURRENT;
             break;
 
         case PROPERTY_ID_CYCLE:

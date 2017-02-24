@@ -373,7 +373,7 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
                 {
                     if( maChartTypeServiceName == "com.sun.star.chart2.AreaChartType" || maChartTypeServiceName == "com.sun.star.chart2.LineChartType" )
                     {
-                        aDeepProperty = uno::makeAny( true );
+                        aDeepProperty <<= true;
                     }
                 }
             }

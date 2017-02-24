@@ -240,7 +240,7 @@ void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        m_aOuterValue = uno::Any( aNewValue );
+        m_aOuterValue <<= aNewValue;
         if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "NegativeError", m_aOuterValue );
@@ -290,7 +290,7 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        m_aOuterValue = uno::Any( aNewValue );
+        m_aOuterValue <<= aNewValue;
         if( css::chart::ErrorBarStyle::ABSOLUTE == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
@@ -473,7 +473,7 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        m_aOuterValue = uno::Any( aNewValue );
+        m_aOuterValue <<= aNewValue;
         if( css::chart::ErrorBarStyle::RELATIVE == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );
@@ -523,7 +523,7 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
     uno::Reference< beans::XPropertySet > xErrorBarProperties( getOrCreateErrorBarProperties(xSeriesPropertySet) );
     if( xErrorBarProperties.is() )
     {
-        m_aOuterValue = uno::Any( aNewValue );
+        m_aOuterValue <<= aNewValue;
         if( css::chart::ErrorBarStyle::ERROR_MARGIN == lcl_getErrorBarStyle( xErrorBarProperties ) )
         {
             xErrorBarProperties->setPropertyValue( "PositiveError" , m_aOuterValue );

@@ -1025,7 +1025,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
         aEvent.Requery    = false;
         aEvent.FeatureDescriptor = getActiveDataTable();
 
-        aEvent.State = makeAny( getDataSources() );
+        aEvent.State <<= getDataSources();
 
         if(pToolbar)
         {
