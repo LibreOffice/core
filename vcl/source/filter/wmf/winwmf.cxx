@@ -537,6 +537,7 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
             if( nLen )
             {
                 sal_Int32 nOriginalTextLen = nLen;
+                sal_Int32 nOriginalBlockLen = ( nOriginalTextLen + 1 ) &~ 1;
                 Rectangle aRect;
                 if( nOptions & ETO_CLIPPED )
                 {
@@ -544,11 +545,11 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     const Point aPt2( ReadPoint() );
                     aRect = Rectangle( aPt1, aPt2 );
                 }
-                std::unique_ptr<char[]> pChar(new char[ ( nOriginalTextLen + 1 ) &~ 1 ]);
-                pWMF->ReadBytes(pChar.get(), (nOriginalTextLen + 1) &~ 1);
-                OUString aText( pChar.get(), (sal_uInt16)nOriginalTextLen, pOut->GetCharSet() );// after this conversion the text may contain
-                sal_Int32 nNewTextLen = aText.getLength();                                      // less character (japanese version), so the
-                                                                                                // dxAry will not fit
+                std::unique_ptr<char[]> pChar(new char[nOriginalBlockLen]);
+                pWMF->ReadBytes(pChar.get(), nOriginalBlockLen);
+                OUString aText(pChar.get(), nOriginalTextLen, pOut->GetCharSet()); // after this conversion the text may contain
+                sal_Int32 nNewTextLen = aText.getLength();                         // less character (japanese version), so the
+                                                                                   // dxAry will not fit
                 if ( nNewTextLen )
                 {
                     std::unique_ptr<long[]> pDXAry, pDYAry;
