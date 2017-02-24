@@ -1020,9 +1020,8 @@ void SwFormatCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
     rLastCol.SetRight(0);
 
     //Convert the current width to the requested width.
-    for (sal_uInt16 i = 0; i < m_aColumns.size(); ++i)
+    for (SwColumn &rCol: m_aColumns)
     {
-        SwColumn &rCol = m_aColumns[i];
         long nTmp = rCol.GetWishWidth();
         nTmp *= GetWishWidth();
         nTmp /= nAct;
