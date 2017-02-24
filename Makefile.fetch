@@ -21,9 +21,9 @@ endef
 
 endif
 
-ifneq (,$(MD5SUM))
+ifneq (,$(SHA256SUM))
 define fetch_Download__checksum_command
-&& SUM=`$(MD5SUM) $1 | sed "s/ .*//"` \
+&& SUM=`$(SHA256SUM) $1 | sed "s/ .*//"` \
 && if test "$$SUM" != "$2"; then \
 	echo ERROR: expected checksum for $1 is $2 2>&1 | tee -a $(fetch_LOGFILE); \
 	false; \
@@ -35,7 +35,7 @@ fetch_Download__checksum_command :=
 
 endif
 
-# fetch__Download_item url tarball-name md5sum
+# fetch__Download_item url tarball-name sha256sum
 define fetch__Download_item
 $(if $(wildcard $(TARFILE_LOCATION)/$2),, \
 cd $(TARFILE_LOCATION)/tmp \
@@ -52,7 +52,7 @@ $(filter 32,$(words $(shell echo $(1) | sed -e 's/./& /g')))
 endef
 
 define fetch_Download__subst_var
-$(subst _DLL,_MD5SUM,$(subst _TARBALL,_MD5SUM,$(subst _PACK,_MD5SUM,$(subst _JAR,_MD5SUM,$(1)))))
+$(subst _DLL,_SHA256SUM,$(subst _TARBALL,_SHA256SUM,$(subst _PACK,_SHA256SUM,$(subst _JAR,_SHA256SUM,$(1)))))
 endef
 
 # fetch_Download_item url variable-name
