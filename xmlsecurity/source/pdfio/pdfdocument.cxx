@@ -1403,14 +1403,27 @@ size_t PDFDocument::FindStartXRef(SvStream& rStream)
     if (nSize != aBuf.size())
         aBuf.resize(nSize);
     OString aPrefix("startxref");
-    auto it = std::search(aBuf.begin(), aBuf.end(), aPrefix.getStr(), aPrefix.getStr() + aPrefix.getLength());
-    if (it == aBuf.end())
+    // Find the last startxref at the end of the document.
+    std::vector<char>::iterator itLastValid = aBuf.end();
+    std::vector<char>::iterator it = aBuf.begin();
+    while (true)
+    {
+        it = std::search(it, aBuf.end(), aPrefix.getStr(), aPrefix.getStr() + aPrefix.getLength());
+        if (it == aBuf.end())
+            break;
+        else
+        {
+            itLastValid = it;
+            ++it;
+        }
+    }
+    if (itLastValid == aBuf.end())
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::FindStartXRef: found no startxref");
         return 0;
     }
 
-    rStream.SeekRel(it - aBuf.begin() + aPrefix.getLength());
+    rStream.SeekRel(itLastValid - aBuf.begin() + aPrefix.getLength());
     if (rStream.IsEof())
     {
         SAL_WARN("xmlsecurity.pdfio", "PDFDocument::FindStartXRef: unexpected end of stream after startxref");
