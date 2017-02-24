@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
-#define INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
+#ifndef INCLUDED_XMLSECURITY_PDFIO_PDFDOCUMENT_HXX
+#define INCLUDED_XMLSECURITY_PDFIO_PDFDOCUMENT_HXX
 
 #include <map>
 #include <vector>
@@ -18,8 +18,9 @@
 
 #include <tools/stream.hxx>
 
-#include <xmlsecuritydllapi.h>
-#include <sigstruct.hxx>
+#include <xmlsecurity/xmlsecuritydllapi.h>
+
+struct SignatureInformation;
 
 namespace xmlsecurity
 {
@@ -101,6 +102,33 @@ public:
     const OString& GetValue() const;
     sal_uInt64 GetLocation() const;
     sal_uInt64 GetLength() const;
+};
+
+/// Dictionary object: a set key-value pairs.
+class XMLSECURITY_DLLPUBLIC PDFDictionaryElement : public PDFElement
+{
+    /// Key-value pairs when the dictionary is a nested value.
+    std::map<OString, PDFElement*> m_aItems;
+    /// Offset after the '<<' token.
+    sal_uInt64 m_nLocation = 0;
+    /// Position after the '/' token.
+    std::map<OString, sal_uInt64> m_aDictionaryKeyOffset;
+    /// Length of the dictionary key and value, till (before) the next token.
+    std::map<OString, sal_uInt64> m_aDictionaryKeyValueLength;
+
+public:
+    PDFDictionaryElement();
+    bool Read(SvStream& rStream) override;
+
+    static size_t Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary);
+    static PDFElement* Lookup(const std::map<OString, PDFElement*>& rDictionary, const OString& rKey);
+    void SetKeyOffset(const OString& rKey, sal_uInt64 nOffset);
+    sal_uInt64 GetKeyOffset(const OString& rKey) const;
+    void SetKeyValueLength(const OString& rKey, sal_uInt64 nLength);
+    sal_uInt64 GetKeyValueLength(const OString& rKey) const;
+    const std::map<OString, PDFElement*>& GetItems() const;
+    /// Looks up an object which is only referenced in this dictionary.
+    PDFObjectElement* LookupObject(const OString& rDictionaryKey);
 };
 
 enum class TokenizeMode
@@ -245,6 +273,6 @@ public:
 } // namespace pdfio
 } // namespace xmlsecurity
 
-#endif // INCLUDED_XMLSECURITY_INC_PDFIO_PDFDOCUMENT_HXX
+#endif // INCLUDED_XMLSECURITY_PDFIO_PDFDOCUMENT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

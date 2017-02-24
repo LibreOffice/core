@@ -20,7 +20,7 @@
 #ifndef INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX
 #define INCLUDED_XMLSECURITY_INC_DOCUMENTSIGNATUREMANAGER_HXX
 
-#include "xmlsecuritydllapi.h"
+#include "xmlsecurity/xmlsecuritydllapi.h"
 
 #include <memory>
 

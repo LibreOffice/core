@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <pdfio/pdfdocument.hxx>
+#include <xmlsecurity/pdfio/pdfdocument.hxx>
 
 #include <map>
 #include <memory>
@@ -30,6 +30,8 @@
 #include <vcl/pdfwriter.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <o3tl/make_unique.hxx>
+
+#include <sigstruct.hxx>
 
 #ifdef XMLSEC_CRYPTO_NSS
 #include <cert.h>
@@ -86,31 +88,6 @@ public:
 };
 
 class PDFReferenceElement;
-
-/// Dictionary object: a set key-value pairs.
-class PDFDictionaryElement : public PDFElement
-{
-    /// Key-value pairs when the dictionary is a nested value.
-    std::map<OString, PDFElement*> m_aItems;
-    /// Offset after the '<<' token.
-    sal_uInt64 m_nLocation = 0;
-    /// Position after the '/' token.
-    std::map<OString, sal_uInt64> m_aDictionaryKeyOffset;
-    /// Length of the dictionary key and value, till (before) the next token.
-    std::map<OString, sal_uInt64> m_aDictionaryKeyValueLength;
-
-public:
-    PDFDictionaryElement();
-    bool Read(SvStream& rStream) override;
-
-    static size_t Parse(const std::vector< std::unique_ptr<PDFElement> >& rElements, PDFElement* pThis, std::map<OString, PDFElement*>& rDictionary);
-    static PDFElement* Lookup(const std::map<OString, PDFElement*>& rDictionary, const OString& rKey);
-    void SetKeyOffset(const OString& rKey, sal_uInt64 nOffset);
-    sal_uInt64 GetKeyOffset(const OString& rKey) const;
-    void SetKeyValueLength(const OString& rKey, sal_uInt64 nLength);
-    sal_uInt64 GetKeyValueLength(const OString& rKey) const;
-    const std::map<OString, PDFElement*>& GetItems() const;
-};
 
 /// End of a dictionary: '>>'.
 class PDFEndDictionaryElement : public PDFElement
@@ -3180,6 +3157,18 @@ PDFElement* PDFDictionaryElement::Lookup(const std::map<OString, PDFElement*>& r
         return nullptr;
 
     return it->second;
+}
+
+PDFObjectElement* PDFDictionaryElement::LookupObject(const OString& rDictionaryKey)
+{
+    auto pKey = dynamic_cast<PDFReferenceElement*>(PDFDictionaryElement::Lookup(m_aItems, rDictionaryKey));
+    if (!pKey)
+    {
+        SAL_WARN("xmlsecurity.pdfio", "PDFDictionaryElement::LookupObject: no such key with reference value: " << rDictionaryKey);
+        return nullptr;
+    }
+
+    return pKey->LookupObject();
 }
 
 PDFElement* PDFObjectElement::Lookup(const OString& rDictionaryKey)

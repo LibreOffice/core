@@ -7,8 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_XMLSECURITY_INCDLLAPI_H
-#define INCLUDED_XMLSECURITY_INCDLLAPI_H
+#ifndef INCLUDED_XMLSECURITY_XMLSECURITYDLLAPI_H
+#define INCLUDED_XMLSECURITY_XMLSECURITYDLLAPI_H
 
 #include <sal/types.h>
 
@@ -18,6 +18,6 @@
 #define XMLSECURITY_DLLPUBLIC SAL_DLLPUBLIC_IMPORT
 #endif
 
-#endif // INCLUDED_XMLSECURITY_INCDLLAPI_H
+#endif // INCLUDED_XMLSECURITY_XMLSECURITYDLLAPI_H
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
