@@ -160,7 +160,7 @@ sal_Bool SAL_CALL SdLayer::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL SdLayer::getSupportedServiceNames()
 {
-    OUString aServiceName(UNO_PREFIX "drawing.Layer");
+    OUString aServiceName("com.sun.star.drawing.Layer");
     uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }
@@ -464,7 +464,7 @@ sal_Bool SAL_CALL SdLayerManager::supportsService( const OUString& ServiceName )
 
 uno::Sequence< OUString > SAL_CALL SdLayerManager::getSupportedServiceNames()
 {
-    uno::Sequence< OUString > aSeq { UNO_PREFIX "drawing.LayerManager" };
+    uno::Sequence< OUString > aSeq { "com.sun.star.drawing.LayerManager" };
     return aSeq;
 }
 

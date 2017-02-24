@@ -20,11 +20,9 @@
 #ifndef INCLUDED_SD_SOURCE_UI_INC_UNOKYWDS_HXX
 #define INCLUDED_SD_SOURCE_UI_INC_UNOKYWDS_HXX
 
-#define UNO_PREFIX "com.sun.star."
-
 // SdXImpressDocument
-const char sUNO_Service_DrawingDocument[] = UNO_PREFIX "drawing.DrawingDocument";
-const char sUNO_Service_PresentationDocument[] = UNO_PREFIX "drawing.PresentationDocument";
+const char sUNO_Service_DrawingDocument[] = "com.sun.star.drawing.DrawingDocument";
+const char sUNO_Service_PresentationDocument[] = "com.sun.star.drawing.PresentationDocument";
 
 // SdUnoStyleFamilies
 const char sUNO_SdUnoStyleFamilies[] = "SdUnoStyleFamilies";
@@ -84,23 +82,23 @@ const char sUNO_shape_layername[] = "LayerName";
 const char sUNO_shape_zorder[] = "ZOrder";
 
 // services
-const char sUNO_Service_StyleFamily[] = UNO_PREFIX "style.StyleFamily";
-const char sUNO_Service_StyleFamilies[] = UNO_PREFIX "style.StyleFamilies";
-const char sUNO_Service_Style[] = UNO_PREFIX "style.Style";
-const char sUNO_Service_FillProperties[] = UNO_PREFIX "drawing.FillProperties";
-const char sUNO_Service_LineProperties[] = UNO_PREFIX "drawing.LineProperties";
-const char sUNO_Service_ParagraphProperties[] = UNO_PREFIX "style.ParagraphProperties";
-const char sUNO_Service_CharacterProperties[] = UNO_PREFIX "style.CharacterProperties";
-const char sUNO_Service_Text[] = UNO_PREFIX "drawing.Text";
-const char sUNO_Service_TextProperties[] = UNO_PREFIX "drawing.TextProperties";
-const char sUNO_Service_ShadowProperties[] = UNO_PREFIX "drawing.ShadowProperties";
-const char sUNO_Service_ConnectorProperties[] = UNO_PREFIX "drawing.ConnectorProperties";
-const char sUNO_Service_MeasureProperties[] = UNO_PREFIX "drawing.MeasureProperties";
-const char sUNO_Service_PageBackground[] = UNO_PREFIX "drawing.PageBackground";
-const char sUNO_Service_GraphicObjectShape[] = UNO_PREFIX "drawing.GraphicObjectShape";
-const char sUNO_Service_ImageMapRectangleObject[] = UNO_PREFIX "image.ImageMapRectangleObject";
-const char sUNO_Service_ImageMapCircleObject[] = UNO_PREFIX "image.ImageMapCircleObject";
-const char sUNO_Service_ImageMapPolygonObject[] = UNO_PREFIX "image.ImageMapPolygonObject";
+const char sUNO_Service_StyleFamily[] = "com.sun.star.style.StyleFamily";
+const char sUNO_Service_StyleFamilies[] = "com.sun.star.style.StyleFamilies";
+const char sUNO_Service_Style[] = "com.sun.star.style.Style";
+const char sUNO_Service_FillProperties[] = "com.sun.star.drawing.FillProperties";
+const char sUNO_Service_LineProperties[] = "com.sun.star.drawing.LineProperties";
+const char sUNO_Service_ParagraphProperties[] = "com.sun.star.style.ParagraphProperties";
+const char sUNO_Service_CharacterProperties[] = "com.sun.star.style.CharacterProperties";
+const char sUNO_Service_Text[] = "com.sun.star.drawing.Text";
+const char sUNO_Service_TextProperties[] = "com.sun.star.drawing.TextProperties";
+const char sUNO_Service_ShadowProperties[] = "com.sun.star.drawing.ShadowProperties";
+const char sUNO_Service_ConnectorProperties[] = "com.sun.star.drawing.ConnectorProperties";
+const char sUNO_Service_MeasureProperties[] = "com.sun.star.drawing.MeasureProperties";
+const char sUNO_Service_PageBackground[] = "com.sun.star.drawing.PageBackground";
+const char sUNO_Service_GraphicObjectShape[] = "com.sun.star.drawing.GraphicObjectShape";
+const char sUNO_Service_ImageMapRectangleObject[] = "com.sun.star.image.ImageMapRectangleObject";
+const char sUNO_Service_ImageMapCircleObject[] = "com.sun.star.image.ImageMapCircleObject";
+const char sUNO_Service_ImageMapPolygonObject[] = "com.sun.star.image.ImageMapPolygonObject";
 
 // properties
 const char sUNO_Prop_Background[] = "Background";
