@@ -36,6 +36,69 @@ class ScDocument;
 class Rectangle;
 struct ScCaptionInitData;
 
+/** Some desperate attempt to fight against the caption object ownership mess,
+    to which none of shared/weak/plain pointer is a cure.
+ */
+class ScCaptionPtr
+{
+public:
+    ScCaptionPtr();
+    explicit ScCaptionPtr( SdrCaptionObj* p );
+    ScCaptionPtr( const ScCaptionPtr& r );
+    ~ScCaptionPtr();
+
+    ScCaptionPtr& operator=( const ScCaptionPtr& r );
+    inline explicit operator bool() const    { return mpCaption != nullptr; }
+    inline SdrCaptionObj* get() const        { return mpCaption; }
+    inline SdrCaptionObj* operator->() const { return mpCaption; }
+    inline SdrCaptionObj& operator*() const  { return *mpCaption; }
+
+    // Does not default to nullptr to make it visually obvious where such is used.
+    void reset( SdrCaptionObj* p );
+
+    /** Release all management of the SdrCaptionObj* in all instances of this
+        list and dissolve. The SdrCaptionObj pointer returned is ready to be
+        managed elsewhere.
+     */
+    SdrCaptionObj* release();
+
+    /** Forget the SdrCaptionObj pointer in this one instance.
+        Decrements a use count but does not destroy the object, it's up to the
+        caller to manage this mess..
+        @returns <TRUE/> if the last reference was decremented.
+     */
+    bool forget();
+
+    oslInterlockedCount getRefs() const;
+
+private:
+    ScCaptionPtr*               mpHead;     ///< points to the "master" entry
+    mutable ScCaptionPtr*       mpNext;     ///< next in list
+    SdrCaptionObj*              mpCaption;  ///< the caption object, managed by head master
+    mutable oslInterlockedCount mnRefs;     ///< use count, managed by head master
+
+    void incRef() const;
+    bool decRef() const;        //< @returns <TRUE/> if the last reference was decremented.
+    void decRefAndDestroy();    //< Destroys caption object if the last reference was decremented.
+
+    /** Operations common to ctor and assignment operator, maintaining the lists. */
+    void assign( const ScCaptionPtr& r, bool bAssignment );
+
+    /** Remove from current list and close gap.
+
+        Usually there are only very few instances, so maintaining a doubly
+        linked list isn't worth memory/performance wise and a simple walk does
+        it.
+     */
+    void removeFromList();
+
+    /** Dissolve list when the caption object is released or gone. */
+    void dissolve();
+
+    /** Just clear everything, while dissolving the list. */
+    void clear();
+};
+
 /** Internal data for a cell annotation. */
 struct SC_DLLPUBLIC ScNoteData
 {
@@ -44,7 +107,7 @@ struct SC_DLLPUBLIC ScNoteData
     OUString     maDate;             /// Creation date of the note.
     OUString     maAuthor;           /// Author of the note.
     ScCaptionInitDataRef mxInitData;        /// Initial data for invisible notes without SdrObject.
-    SdrCaptionObj*      mpCaption;          /// Drawing object representing the cell note.
+    ScCaptionPtr        mxCaption;          /// Drawing object representing the cell note.
     bool                mbShown;            /// True = note is visible.
 
     explicit            ScNoteData( bool bShown = false );
@@ -124,10 +187,12 @@ public:
     void                SetText( const ScAddress& rPos, const OUString& rText );
 
     /** Returns an existing note caption object. returns null, if the note
-        contains initial caption data needed to construct a caption object. */
-    SdrCaptionObj* GetCaption() const { return maNoteData.mpCaption;}
+        contains initial caption data needed to construct a caption object.
+        The SdrCaptionObj* returned is unmanaged and must not be stored elsewhere. */
+    SdrCaptionObj*      GetCaption() const { return maNoteData.mxCaption.get();}
     /** Returns the caption object of this note. Creates the caption object, if
-        the note contains initial caption data instead of the caption. */
+        the note contains initial caption data instead of the caption.
+        The SdrCaptionObj* returned is unmanaged and must not be stored elsewhere. */
     SdrCaptionObj*      GetOrCreateCaption( const ScAddress& rPos ) const;
 
     /** Forgets the pointer to the note caption object.
@@ -179,8 +244,10 @@ public:
         This function is used in import filters to reuse the imported drawing
         object as note caption object.
 
-        @param rCaption  The drawing object for the cell note. This object MUST
+        @param pCaption  The drawing object for the cell note. This object MUST
             be inserted into the document at the correct drawing page already.
+            The underlying ScPostIt::ScNoteData::ScCaptionPtr takes managing
+            ownership of the pointer.
 
         @return  Pointer to the new cell note object if insertion was
             successful (i.e. the passed cell position was valid), null
@@ -190,7 +257,7 @@ public:
      */
     static ScPostIt*    CreateNoteFromCaption(
                             ScDocument& rDoc, const ScAddress& rPos,
-                            SdrCaptionObj& rCaption, bool bShown );
+                            SdrCaptionObj* pCaption, bool bShown );
 
     /** Creates a cell note based on the passed caption object data.
 

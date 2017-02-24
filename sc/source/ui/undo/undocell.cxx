@@ -708,7 +708,7 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     maPos( rPos ),
     mpDrawUndo( pDrawUndo )
 {
-    OSL_ENSURE( rNoteData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note caption" );
+    OSL_ENSURE( rNoteData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note caption" );
     (bInsert ? maNewData : maOldData) = rNoteData;
 }
 
@@ -720,7 +720,7 @@ ScUndoReplaceNote::ScUndoReplaceNote( ScDocShell& rDocShell, const ScAddress& rP
     maNewData( rNewData ),
     mpDrawUndo( pDrawUndo )
 {
-    OSL_ENSURE( maOldData.mpCaption || maNewData.mpCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
+    OSL_ENSURE( maOldData.mxCaption || maNewData.mxCaption, "ScUndoReplaceNote::ScUndoReplaceNote - missing note captions" );
     OSL_ENSURE( !maOldData.mxInitData.get() && !maNewData.mxInitData.get(), "ScUndoReplaceNote::ScUndoReplaceNote - unexpected unitialized note" );
 }
 
@@ -766,13 +766,13 @@ bool ScUndoReplaceNote::CanRepeat( SfxRepeatTarget& /*rTarget*/ ) const
 
 OUString ScUndoReplaceNote::GetComment() const
 {
-    return ScGlobal::GetRscString( maNewData.mpCaption ?
-        (maOldData.mpCaption ? STR_UNDO_EDITNOTE : STR_UNDO_INSERTNOTE) : STR_UNDO_DELETENOTE );
+    return ScGlobal::GetRscString( maNewData.mxCaption ?
+        (maOldData.mxCaption ? STR_UNDO_EDITNOTE : STR_UNDO_INSERTNOTE) : STR_UNDO_DELETENOTE );
 }
 
 void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
 {
-    if( rNoteData.mpCaption )
+    if( rNoteData.mxCaption )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         OSL_ENSURE( !rDoc.GetNote(maPos), "ScUndoReplaceNote::DoInsertNote - unexpected cell note" );
@@ -784,7 +784,7 @@ void ScUndoReplaceNote::DoInsertNote( const ScNoteData& rNoteData )
 
 void ScUndoReplaceNote::DoRemoveNote( const ScNoteData& rNoteData )
 {
-    if( rNoteData.mpCaption )
+    if( rNoteData.mxCaption )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         OSL_ENSURE( rDoc.GetNote(maPos), "ScUndoReplaceNote::DoRemoveNote - missing cell note" );
