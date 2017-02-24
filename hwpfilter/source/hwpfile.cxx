@@ -70,7 +70,7 @@ HWPFile::~HWPFile()
     for (; it != plist.end(); ++it)
         delete *it;
 
-    std::list < Table* >::iterator tbl = tables.begin();
+    std::vector< Table* >::iterator tbl = tables.begin();
     for (; tbl != tables.end(); ++tbl)
         delete *tbl;
 
@@ -457,92 +457,53 @@ void HWPFile::AddBox(FBox * box)
     blist.push_back(box);
 }
 
-
 ParaShape *HWPFile::getParaShape(int index)
 {
-    std::list<ParaShape*>::iterator it = pslist.begin();
-
-    for( int i = 0; it != pslist.end(); ++it, i++ ){
-    if( i == index )
-      break;
-    }
-
-    return it != pslist.end() ? *it : nullptr;
+    if (index < 0 || static_cast<unsigned int>(index) >= pslist.size())
+        return nullptr;
+    return pslist[index];
 }
-
 
 CharShape *HWPFile::getCharShape(int index)
 {
-    std::list<CharShape*>::iterator it = cslist.begin();
-
-    for( int i = 0; it != cslist.end(); ++it, i++ ){
-        if( i == index )
-          break;
-    }
-
-    return it != cslist.end() ? *it : nullptr;
+    if (index < 0 || static_cast<unsigned int>(index) >= cslist.size())
+        return nullptr;
+    return cslist[index];
 }
-
 
 FBoxStyle *HWPFile::getFBoxStyle(int index)
 {
-    std::list<FBoxStyle*>::iterator it = fbslist.begin();
-
-    for( int i = 0; it != fbslist.end(); ++it, i++ ){
-        if( i == index )
-          break;
-    }
-
-    return it != fbslist.end() ? *it : nullptr;
+    if (index < 0 || static_cast<unsigned int>(index) >= fbslist.size())
+        return nullptr;
+    return fbslist[index];
 }
 
 DateCode *HWPFile::getDateCode(int index)
 {
-    std::list<DateCode*>::iterator it = datecodes.begin();
-
-    for( int i = 0; it != datecodes.end(); ++it, i++ ){
-        if( i == index )
-          break;
-    }
-
-    return it != datecodes.end() ? *it : nullptr;
+    if (index < 0 || static_cast<unsigned int>(index) >= datecodes.size())
+        return nullptr;
+    return datecodes[index];
 }
 
 HeaderFooter *HWPFile::getHeaderFooter(int index)
 {
-    std::list<HeaderFooter*>::iterator it = headerfooters.begin();
-
-    for( int i = 0; it != headerfooters.end(); ++it, i++ ){
-        if( i == index )
-          break;
-    }
-
-    return it != headerfooters.end() ? *it : nullptr;
+    if (index < 0 || static_cast<unsigned int>(index) >= headerfooters.size())
+        return nullptr;
+    return headerfooters[index];
 }
 
 ShowPageNum *HWPFile::getPageNumber(int index)
 {
-    std::list<ShowPageNum*>::iterator it = pagenumbers.begin();
-
-    for( int i = 0; it != pagenumbers.end(); ++it, i++ ){
-        if( i == index )
-          break;
-    }
-
-    return it != pagenumbers.end() ? *it : nullptr;
-
+    if (index < 0 || static_cast<unsigned int>(index) >= pagenumbers.size())
+        return nullptr;
+    return pagenumbers[index];
 }
 
 Table *HWPFile::getTable(int index)
 {
-    std::list<Table*>::iterator it = tables.begin();
-
-    for( int i = 0; it != tables.end(); ++it, i++ ){
-        if( i == index )
-          break;
-    }
-
-    return it != tables.end() ? *it : nullptr;
+    if (index < 0 || static_cast<unsigned int>(index) >= tables.size())
+        return nullptr;
+    return tables[index];
 }
 
 void HWPFile::AddParaShape(ParaShape * pshape)
