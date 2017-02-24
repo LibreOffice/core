@@ -990,7 +990,18 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         aScreenPos = pImpEditView->GetWindow()->OutputToScreenPixel( aScreenPos );
         aTempRect = pImpEditView->GetWindow()->LogicToPixel( Rectangle(aScreenPos, aTempRect.GetSize() ));
 
+        //tdf#106123 store and restore the EditPaM around the menu Execute
+        //because the loss of focus in the current editeng causes writer
+        //annotations to save their contents, making the pContent of the
+        //current EditPams invalid
+        EPaM aP = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM);
+        EPaM aP2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEPaM(aPaM2);
+
         sal_uInt16 nId = aPopupMenu.Execute( pImpEditView->GetWindow(), aTempRect, PopupMenuFlags::NoMouseUpClose );
+
+        aPaM2 = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP2);
+        aPaM = pImpEditView->pEditEngine->pImpEditEngine->CreateEditPaM(aP);
+
         if ( nId == MN_IGNORE )
         {
             OUString aWord = pImpEditView->SpellIgnoreWord();
