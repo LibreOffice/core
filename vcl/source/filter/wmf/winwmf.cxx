@@ -545,6 +545,14 @@ void WMFReader::ReadRecordParams( sal_uInt16 nFunc )
                     const Point aPt2( ReadPoint() );
                     aRect = Rectangle( aPt1, aPt2 );
                 }
+
+                auto nRemainingSize = pWMF->remainingSize();
+                if (nRemainingSize < static_cast<sal_uInt32>(nOriginalBlockLen))
+                {
+                    SAL_WARN("vcl.wmf", "exttextout record claimed more data than the stream can provide");
+                    nOriginalTextLen = nOriginalBlockLen = nRemainingSize;
+                }
+
                 std::unique_ptr<char[]> pChar(new char[nOriginalBlockLen]);
                 pWMF->ReadBytes(pChar.get(), nOriginalBlockLen);
                 OUString aText(pChar.get(), nOriginalTextLen, pOut->GetCharSet()); // after this conversion the text may contain
