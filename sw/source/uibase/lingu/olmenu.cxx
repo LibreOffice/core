@@ -594,6 +594,8 @@ SwSpellPopup::SwSpellPopup(
     m_xPopupMenu->RemoveDisabledEntries(true, true);
 }
 
+SwSpellPopup::~SwSpellPopup() {}
+
 void SwSpellPopup::checkRedline()
 {
     // Let SwView::GetState() already has the logic on when to disable the

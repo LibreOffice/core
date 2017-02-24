@@ -74,6 +74,8 @@ public:
             const css::uno::Sequence< OUString > &rSuggestions,
             const OUString & rParaText );
 
+    ~SwSpellPopup();
+
     Menu&   GetMenu()
     {
         return *m_xPopupMenu.get();
