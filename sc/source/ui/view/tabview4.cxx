@@ -91,8 +91,7 @@ void ScTabView::ShowRefTip()
 
                 Rectangle aRect( pWin->OutputToScreenPixel( aPos ), Size(1,1) );
 
-                //! Test, ob geaendert ??
-
+                // Test if changed.
                 if (!nTipVisible || nFlags != nTipAlign || aRect != aTipRectangle || sTipString != aHelp || sTopParent != pWin)
                 {
                     HideTip();
