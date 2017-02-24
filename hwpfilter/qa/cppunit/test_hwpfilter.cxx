@@ -24,7 +24,6 @@ namespace
         , public test::BootstrapFixture
     {
     public:
-        virtual void setUp() override;
 
         virtual bool load(const OUString &,
             const OUString &rURL, const OUString &,
@@ -35,26 +34,19 @@ namespace
         CPPUNIT_TEST_SUITE(HwpFilterTest);
         CPPUNIT_TEST(test);
         CPPUNIT_TEST_SUITE_END();
-    private:
-        uno::Reference<document::XFilter> m_xFilter;
     };
-
-    void HwpFilterTest::setUp()
-    {
-        test::BootstrapFixture::setUp();
-
-        m_xFilter.set(m_xSFactory->createInstance("com.sun.comp.hwpimport.HwpImportFilter"),
-                      uno::UNO_QUERY_THROW);
-    }
 
     bool HwpFilterTest::load(const OUString &,
         const OUString &rURL, const OUString &,
         SfxFilterFlags, SotClipboardFormatId, unsigned int)
     {
+        uno::Reference<document::XFilter> xFilter(m_xSFactory->createInstance("com.sun.comp.hwpimport.HwpImportFilter"),
+                                                  uno::UNO_QUERY_THROW);
+
         uno::Sequence< beans::PropertyValue > aDescriptor(1);
         aDescriptor[0].Name = "URL";
         aDescriptor[0].Value <<= rURL;
-        return m_xFilter->filter(aDescriptor);
+        return xFilter->filter(aDescriptor);
     }
 
     void HwpFilterTest::test()
