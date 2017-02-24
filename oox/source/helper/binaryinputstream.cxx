@@ -66,7 +66,7 @@ OString BinaryInputStream::readCharArray( sal_Int32 nChars, bool bAllowNulChars 
     if( !bAllowNulChars )
         ::std::replace( aBuffer.begin(), aBuffer.end(), '\0', '?' );
 
-    return OString( reinterpret_cast< sal_Char* >( &aBuffer.front() ), nCharsRead );
+    return OString(reinterpret_cast<sal_Char*>(aBuffer.data()), nCharsRead);
 }
 
 OUString BinaryInputStream::readCharArrayUC( sal_Int32 nChars, rtl_TextEncoding eTextEnc, bool bAllowNulChars )

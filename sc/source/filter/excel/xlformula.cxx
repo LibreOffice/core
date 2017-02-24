@@ -743,7 +743,7 @@ void XclTokenArray::ReadSize( XclImpStream& rStrm )
 void XclTokenArray::ReadArray( XclImpStream& rStrm )
 {
     if( !maTokVec.empty() )
-        rStrm.Read( &maTokVec.front(), GetSize() );
+        rStrm.Read(maTokVec.data(), GetSize());
 }
 
 void XclTokenArray::Read( XclImpStream& rStrm )
@@ -760,9 +760,9 @@ void XclTokenArray::WriteSize( XclExpStream& rStrm ) const
 void XclTokenArray::WriteArray( XclExpStream& rStrm ) const
 {
     if( !maTokVec.empty() )
-        rStrm.Write( &maTokVec.front(), GetSize() );
+        rStrm.Write(maTokVec.data(), GetSize());
     if( !maExtDataVec.empty() )
-        rStrm.Write( &maExtDataVec.front(), maExtDataVec.size() );
+        rStrm.Write(maExtDataVec.data(), maExtDataVec.size());
 }
 
 void XclTokenArray::Write( XclExpStream& rStrm ) const

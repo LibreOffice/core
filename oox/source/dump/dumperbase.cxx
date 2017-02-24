@@ -2144,9 +2144,9 @@ OUString InputObjectBase::dumpCharArray( const String& rName, sal_Int32 nLen, rt
     if( nDumpSize > 0 )
     {
         ::std::vector< sal_Char > aBuffer( static_cast< std::size_t >( nLen ) + 1 );
-        sal_Int32 nCharsRead = mxStrm->readMemory( &aBuffer.front(), nLen );
+        sal_Int32 nCharsRead = mxStrm->readMemory(aBuffer.data(), nLen);
         aBuffer[ nCharsRead ] = 0;
-        aString = OStringToOUString( OString( &aBuffer.front() ), eTextEnc );
+        aString = OStringToOUString(OString(aBuffer.data()), eTextEnc);
     }
     if( bHideTrailingNul )
         aString = StringHelper::trimTrailingNul( aString );
