@@ -2516,7 +2516,7 @@ void ScDocument::SetClipParam(const ScClipParam& rParam)
 bool ScDocument::IsClipboardSource() const
 {
     ScDocument* pClipDoc = ScModule::GetClipDoc();
-    return pClipDoc && pClipDoc->xPoolHelper.is() &&
+    return xPoolHelper.is() && pClipDoc && pClipDoc->xPoolHelper.is() &&
             xPoolHelper->GetDocPool() == pClipDoc->xPoolHelper->GetDocPool();
 }
 
