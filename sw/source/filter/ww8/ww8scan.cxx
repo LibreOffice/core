@@ -448,13 +448,13 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
                             // between istd of base PAP and istd of PAP to be
                             // produced
         {0x2403, { 1, L_FIX} }, // "sprmPJc" pap.jc;jc (justification);byte;
-        {0x2404, { 1, L_FIX} }, // "sprmPFSideBySide" pap.fSideBySide;0 or 1;byte;
+        {NS_sprm::LN_PFSideBySide, { 1, L_FIX} }, // "sprmPFSideBySide" pap.fSideBySide;0 or 1;byte;
         {0x2405, { 1, L_FIX} }, // "sprmPFKeep" pap.fKeep;0 or 1;byte;
         {0x2406, { 1, L_FIX} }, // "sprmPFKeepFollow" pap.fKeepFollow;0 or 1;byte;
         {0x2407, { 1, L_FIX} }, // "sprmPFPageBreakBefore" pap.fPageBreakBefore;
                             // 0 or 1
-        {0x2408, { 1, L_FIX} }, // "sprmPBrcl" pap.brcl;brcl;byte;
-        {0x2409, { 1, L_FIX} }, // "sprmPBrcp" pap.brcp;brcp;byte;
+        {NS_sprm::LN_PBrcl, { 1, L_FIX} }, // "sprmPBrcl" pap.brcl;brcl;byte;
+        {NS_sprm::LN_PBrcp, { 1, L_FIX} }, // "sprmPBrcp" pap.brcp;brcp;byte;
         {0x260A, { 1, L_FIX} }, // "sprmPIlvl" pap.ilvl;ilvl;byte;
         {0x460B, { 2, L_FIX} }, // "sprmPIlfo" pap.ilfo;ilfo (list index) ;short;
         {0x240C, { 1, L_FIX} }, // "sprmPFNoLineNumb" pap.fNoLnn;0 or 1;byte;
@@ -477,12 +477,12 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x8419, { 2, L_FIX} }, // "sprmPDyaAbs" pap.dyaAbs;dya;word;
         {0x841A, { 2, L_FIX} }, // "sprmPDxaWidth" pap.dxaWidth;dxa;word;
         {0x261B, { 1, L_FIX} }, // "sprmPPc" pap.pcHorz, pap.pcVert;complex
-        {0x461C, { 2, L_FIX} }, // "sprmPBrcTop10" pap.brcTop;BRC10;word;
-        {0x461D, { 2, L_FIX} }, // "sprmPBrcLeft10" pap.brcLeft;BRC10;word;
-        {0x461E, { 2, L_FIX} }, // "sprmPBrcBottom10" pap.brcBottom;BRC10;word;
-        {0x461F, { 2, L_FIX} }, // "sprmPBrcRight10" pap.brcRight;BRC10;word;
-        {0x4620, { 2, L_FIX} }, // "sprmPBrcBetween10" pap.brcBetween;BRC10;word;
-        {0x4621, { 2, L_FIX} }, // "sprmPBrcBar10" pap.brcBar;BRC10;word;
+        {NS_sprm::LN_PBrcTop10, { 2, L_FIX} }, // "sprmPBrcTop10" pap.brcTop;BRC10;word;
+        {NS_sprm::LN_PBrcLeft10, { 2, L_FIX} }, // "sprmPBrcLeft10" pap.brcLeft;BRC10;word;
+        {NS_sprm::LN_PBrcBottom10, { 2, L_FIX} }, // "sprmPBrcBottom10" pap.brcBottom;BRC10;word;
+        {NS_sprm::LN_PBrcRight10, { 2, L_FIX} }, // "sprmPBrcRight10" pap.brcRight;BRC10;word;
+        {NS_sprm::LN_PBrcBetween10, { 2, L_FIX} }, // "sprmPBrcBetween10" pap.brcBetween;BRC10;word;
+        {NS_sprm::LN_PBrcBar10, { 2, L_FIX} }, // "sprmPBrcBar10" pap.brcBar;BRC10;word;
         {0x4622, { 2, L_FIX} }, // "sprmPDxaFromText10" pap.dxaFromText;dxa;word;
         {0x2423, { 1, L_FIX} }, // "sprmPWr" pap.wr;wr
         {0x6424, { 4, L_FIX} }, // "sprmPBrcTop80" pap.brcTop;BRC;long;
@@ -499,27 +499,27 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x842F, { 2, L_FIX} }, // "sprmPDxaFromText" pap.dxaFromText;dxa;word;
         {0x2430, { 1, L_FIX} }, // "sprmPFLocked" pap.fLocked;0 or 1;byte;
         {0x2431, { 1, L_FIX} }, // "sprmPFWidowControl" pap.fWidowControl;0 or 1
-        {0xC632, { 0, L_VAR} }, // "sprmPRuler" ;;variable length;
+        {NS_sprm::LN_PRuler, { 0, L_VAR} }, // "sprmPRuler" ;;variable length;
         {0x2433, { 1, L_FIX} }, // "sprmPFKinsoku" pap.fKinsoku;0 or 1;byte;
         {0x2434, { 1, L_FIX} }, // "sprmPFWordWrap" pap.fWordWrap;0 or 1;byte;
         {0x2435, { 1, L_FIX} }, // "sprmPFOverflowPunct" pap.fOverflowPunct;0 or 1
         {0x2436, { 1, L_FIX} }, // "sprmPFTopLinePunct" pap.fTopLinePunct;0 or 1
         {0x2437, { 1, L_FIX} }, // "sprmPFAutoSpaceDE" pap.fAutoSpaceDE;0 or 1
         {0x2438, { 1, L_FIX} }, // "sprmPFAutoSpaceDN" pap.fAutoSpaceDN;0 or 1
-        {NS_sprm::LN_PWAlignFont, { 2, L_FIX} }, // "sprmPWAlignFont" pap.wAlignFont;iFa
+        {NS_sprm::sprmPWAlignFont, { 2, L_FIX} }, // "sprmPWAlignFont" pap.wAlignFont;iFa
         {0x443A, { 2, L_FIX} }, // "sprmPFrameTextFlow" pap.fVertical pap.fBackward
                             // pap.fRotateFont;complex
-        {0x243B, { 1, L_FIX} }, // "sprmPISnapBaseLine" obsolete: not applicable in
+        {NS_sprm::LN_PISnapBaseLine, { 1, L_FIX} }, // "sprmPISnapBaseLine" obsolete: not applicable in
                             // Word97 and later versions;
-        {0xC63E, { 0, L_VAR} }, // "sprmPAnld" pap.anld;;variable length;
-        {0xC63F, { 0, L_VAR} }, // "sprmPPropRMark" pap.fPropRMark;complex
+        {NS_sprm::LN_PAnld, { 0, L_VAR} }, // "sprmPAnld" pap.anld;;variable length;
+        {NS_sprm::LN_PPropRMark, { 0, L_VAR} }, // "sprmPPropRMark" pap.fPropRMark;complex
         {0x2640, { 1, L_FIX} }, // "sprmPOutLvl" pap.lvl;has no effect if pap.istd
                             // is < 1 or is > 9
         {0x2441, { 1, L_FIX} }, // "sprmPFBiDi" ;;byte;
         {0x2443, { 1, L_FIX} }, // "sprmPFNumRMIns" pap.fNumRMIns;1 or 0;bit;
-        {0x2444, { 1, L_FIX} }, // "sprmPCrLf" ;;byte;
+        {NS_sprm::LN_PCrLf, { 1, L_FIX} }, // "sprmPCrLf" ;;byte;
         {0xC645, { 0, L_VAR} }, // "sprmPNumRM" pap.numrm;;variable length;
-        {0x6645, { 4, L_FIX} }, // "sprmPHugePapx" fc in the data stream to locate
+        {NS_sprm::LN_PHugePapx, { 4, L_FIX} }, // "sprmPHugePapx" fc in the data stream to locate
                             // the huge grpprl
         {0x6646, { 4, L_FIX} }, // "sprmPHugePapx" fc in the data stream to locate
                             // the huge grpprl
@@ -537,20 +537,20 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x4807, { 2, L_FIX} }, // "sprmCIdslRMark" chp.idslRMReason;an index to a
                             // table of strings defined in Word 6.0
                             // executables;short;
-        {0xEA08, { 1, L_FIX} }, // "sprmCChs" chp.fChsDiff and chp.chse;
+        {NS_sprm::LN_CChs, { 1, L_FIX} }, // "sprmCChs" chp.fChsDiff and chp.chse;
         {0x6A09, { 4, L_FIX} }, // "sprmCSymbol" chp.fSpec, chp.xchSym and
                             // chp.ftcSym
         {0x080A, { 1, L_FIX} }, // "sprmCFOle2" chp.fOle2;1 or 0;bit;
-        {0x480B, { 0, L_FIX} }, // "sprmCIdCharType" obsolete: not applicable in
+        {NS_sprm::LN_CIdCharType, { 0, L_FIX} }, // "sprmCIdCharType" obsolete: not applicable in
                             // Word97 and later versions;;;
         {0x2A0C, { 1, L_FIX} }, // "sprmCHighlight" chp.fHighlight,
                             // chp.icoHighlight;ico (fHighlight is set to 1 iff
                             // ico is not 0)
-        {0x680E, { 4, L_FIX} }, // "sprmCObjLocation" chp.fcObj;FC;long;
-        {0x2A10, { 0, L_FIX} }, // "sprmCFFtcAsciSymb" ;;;
+        {NS_sprm::LN_CObjLocation, { 4, L_FIX} }, // "sprmCObjLocation" chp.fcObj;FC;long;
+        {NS_sprm::LN_CFFtcAsciSymb, { 0, L_FIX} }, // "sprmCFFtcAsciSymb" ;;;
         {0x4A30, { 2, L_FIX} }, // "sprmCIstd" chp.istd;istd, see stylesheet def
         {0xCA31, { 0, L_VAR} }, // "sprmCIstdPermute" chp.istd;permutation vector
-        {0x2A32, { 0, L_VAR} }, // "sprmCDefault" whole CHP;none;variable length;
+        {NS_sprm::LN_CDefault, { 0, L_VAR} }, // "sprmCDefault" whole CHP;none;variable length;
         {0x2A33, { 0, L_FIX} }, // "sprmCPlain" whole CHP;none;0;
         {0x2A34, { 1, L_FIX} }, // "sprmCKcd" ;;;
         {0x0835, { 1, L_FIX} }, // "sprmCFBold" chp.fBold;0,1, 128, or 129
@@ -561,16 +561,16 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x083A, { 1, L_FIX} }, // "sprmCFSmallCaps" chp.fSmallCaps;0,1, 128, or 129
         {0x083B, { 1, L_FIX} }, // "sprmCFCaps" chp.fCaps;0,1, 128, or 129
         {0x083C, { 1, L_FIX} }, // "sprmCFVanish" chp.fVanish;0,1, 128, or 129
-        {0x4A3D, { 2, L_FIX} }, // "sprmCFtcDefault" ;ftc, only used internally
+        {NS_sprm::LN_CFtcDefault, { 2, L_FIX} }, // "sprmCFtcDefault" ;ftc, only used internally
         {0x2A3E, { 1, L_FIX} }, // "sprmCKul" chp.kul;kul;byte;
-        {0xEA3F, { 3, L_FIX} }, // "sprmCSizePos" chp.hps, chp.hpsPos;3 bytes;
+        {NS_sprm::LN_CSizePos, { 3, L_FIX} }, // "sprmCSizePos" chp.hps, chp.hpsPos;3 bytes;
         {0x8840, { 2, L_FIX} }, // "sprmCDxaSpace" chp.dxaSpace;dxa;word;
-        {0x4A41, { 2, L_FIX} }, // "sprmCLid" ;only used internally never stored
+        {NS_sprm::LN_CLid, { 2, L_FIX} }, // "sprmCLid" ;only used internally never stored
         {0x2A42, { 1, L_FIX} }, // "sprmCIco" chp.ico;ico;byte;
         {0x4A43, { 2, L_FIX} }, // "sprmCHps" chp.hps;hps
-        {0x2A44, { 1, L_FIX} }, // "sprmCHpsInc" chp.hps;
+        {NS_sprm::LN_CHpsInc, { 1, L_FIX} }, // "sprmCHpsInc" chp.hps;
         {0x4845, { 2, L_FIX} }, // "sprmCHpsPos" chp.hpsPos;hps;short; (doc wrong)
-        {0x2A46, { 1, L_FIX} }, // "sprmCHpsPosAdj" chp.hpsPos;hps
+        {NS_sprm::LN_CHpsPosAdj, { 1, L_FIX} }, // "sprmCHpsPosAdj" chp.hpsPos;hps
         {0xCA47, { 0, L_VAR} }, // "sprmCMajority" chp.fBold, chp.fItalic,
                             // chp.fSmallCaps, chp.fVanish, chp.fStrike,
                             // chp.fCaps, chp.rgftc, chp.hps, chp.hpsPos,
@@ -578,14 +578,14 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
                             // chp.rglid;complex;variable length, length byte
                             // plus size of following grpprl;
         {0x2A48, { 1, L_FIX} }, // "sprmCIss" chp.iss;iss;byte;
-        {0xCA49, { 0, L_VAR} }, // "sprmCHpsNew50" chp.hps;hps;variable width
-        {0xCA4A, { 0, L_VAR} }, // "sprmCHpsInc1" chp.hps;complex
+        {NS_sprm::LN_CHpsNew50, { 0, L_VAR} }, // "sprmCHpsNew50" chp.hps;hps;variable width
+        {NS_sprm::LN_CHpsInc1, { 0, L_VAR} }, // "sprmCHpsInc1" chp.hps;complex
         {0x484B, { 2, L_FIX} }, // "sprmCHpsKern" chp.hpsKern;hps;short;
-        {0xCA4C, { 2, L_FIX} }, // "sprmCMajority50" chp.fBold, chp.fItalic,
+        {NS_sprm::LN_CMajority50, { 2, L_FIX} }, // "sprmCMajority50" chp.fBold, chp.fItalic,
                             // chp.fSmallCaps, chp.fVanish, chp.fStrike,
                             // chp.fCaps, chp.ftc, chp.hps, chp.hpsPos, chp.kul,
                             // chp.dxaSpace, chp.ico,;complex
-        {0x4A4D, { 2, L_FIX} }, // "sprmCHpsMul" chp.hps;percentage to grow hps
+        {NS_sprm::LN_CHpsMul, { 2, L_FIX} }, // "sprmCHpsMul" chp.hps;percentage to grow hps
         {0x484E, { 2, L_FIX} }, // "sprmCYsri" chp.ysri;ysri;short;
         {0x4A4F, { 2, L_FIX} }, // "sprmCRgFtc0" chp.rgftc[0];ftc for ASCII text
         {0x4A50, { 2, L_FIX} }, // "sprmCRgFtc1" chp.rgftc[1];ftc for Far East text
@@ -600,7 +600,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x0858, { 1, L_FIX} }, // "sprmCFEmboss" chp.fEmboss;1 or 0;bit;
         {0x2859, { 1, L_FIX} }, // "sprmCSfxText" chp.sfxtText;text animation;byte;
         {0x085A, { 1, L_FIX} }, // "sprmCFBiDi" ;;;
-        {0x085B, { 1, L_FIX} }, // "sprmCFDiacColor" ;;;
+        {NS_sprm::LN_CFDiacColor, { 1, L_FIX} }, // "sprmCFDiacColor" ;;;
         {0x085C, { 1, L_FIX} }, // "sprmCFBoldBi" ;;;
         {0x085D, { 1, L_FIX} }, // "sprmCFItalicBi" ;;;
         {0x4A5E, { 2, L_FIX} },
@@ -611,7 +611,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
                             // chp.ibstDispFieldRMark, chp.dttmDispFieldRMark ;
         {0x4863, { 2, L_FIX} }, // "sprmCIbstRMarkDel" chp.ibstRMarkDel;index into
                             // sttbRMark;short;
-        {NS_sprm::LN_CDttmRMarkDel, { 4, L_FIX} }, // chp.dttmRMarkDel;DTTM;long;
+        {NS_sprm::sprmCDttmRMarkDel, { 4, L_FIX} }, // chp.dttmRMarkDel;DTTM;long;
         {0x6865, { 4, L_FIX} }, // "sprmCBrc80" chp.brc;BRC;long;
         {0x4866, { 2, L_FIX} }, // "sprmCShd80" chp.shd;SHD;short;
         {0x4867, { 2, L_FIX} }, // "sprmCIdslRMarkDel" chp.idslRMReasonDel;an index
@@ -619,12 +619,12 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
                             // executables;short;
         {0x0868, { 1, L_FIX} }, // "sprmCFUsePgsuSettings"
                             // chp.fUsePgsuSettings;1 or 0
-        {0x486B, { 2, L_FIX} }, // "sprmCCpg" ;;word;
+        {NS_sprm::LN_CCpg, { 2, L_FIX} }, // "sprmCCpg" ;;word;
         {0x486D, { 2, L_FIX} }, // "sprmCRgLid0_80" chp.rglid[0];LID: for non-FE text
         {0x486E, { 2, L_FIX} }, // "sprmCRgLid1_80" chp.rglid[1];LID: for Far East text
         {0x286F, { 1, L_FIX} }, // "sprmCIdctHint" chp.idctHint;IDCT:
-        {0x2E00, { 1, L_FIX} }, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)
-        {0xCE01, { 0, L_VAR} }, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
+        {NS_sprm::LN_PicBrcl, { 1, L_FIX} }, // "sprmPicBrcl" pic.brcl;brcl (see PIC definition)
+        {NS_sprm::LN_PicScale, { 0, L_VAR} }, // "sprmPicScale" pic.mx, pic.my, pic.dxaCropleft,
                             // pic.dyaCropTop pic.dxaCropRight,
                             // pic.dyaCropBottom;Complex
         {0x6C02, { 4, L_FIX} }, // "sprmPicBrcTop80" pic.brcTop;BRC;long;
@@ -634,7 +634,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x3000, { 1, L_FIX} }, // "sprmScnsPgn" sep.cnsPgn;cns;byte;
         {0x3001, { 1, L_FIX} }, // "sprmSiHeadingPgn" sep.iHeadingPgn;heading number
                             // level;byte;
-        {0xD202, { 0, L_VAR} }, // "sprmSOlstAnm" sep.olstAnm;OLST;variable length;
+        {NS_sprm::LN_SOlstAnm, { 0, L_VAR} }, // "sprmSOlstAnm" sep.olstAnm;OLST;variable length;
         {0xF203, { 3, L_FIX} }, // "sprmSDxaColWidth" sep.rgdxaColWidthSpacing;
         {0xF204, { 3, L_FIX} }, // "sprmSDxaColSpacing" sep.rgdxaColWidthSpacing;
                             // complex
@@ -646,14 +646,14 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x300A, { 1, L_FIX} }, // "sprmSFTitlePage" sep.fTitlePage;0 or 1;byte;
         {0x500B, { 2, L_FIX} }, // "sprmSCcolumns" sep.ccolM1;# of cols - 1;word;
         {0x900C, { 2, L_FIX} }, // "sprmSDxaColumns" sep.dxaColumns;dxa;word;
-        {0x300D, { 1, L_FIX} }, // "sprmSFAutoPgn" sep.fAutoPgn;obsolete;byte;
+        {NS_sprm::LN_SFAutoPgn, { 1, L_FIX} }, // "sprmSFAutoPgn" sep.fAutoPgn;obsolete;byte;
         {0x300E, { 1, L_FIX} }, // "sprmSNfcPgn" sep.nfcPgn;nfc;byte;
-        {0xB00F, { 2, L_FIX} }, // "sprmSDyaPgn" sep.dyaPgn;dya;short;
-        {0xB010, { 2, L_FIX} }, // "sprmSDxaPgn" sep.dxaPgn;dya;short;
+        {NS_sprm::LN_SDyaPgn, { 2, L_FIX} }, // "sprmSDyaPgn" sep.dyaPgn;dya;short;
+        {NS_sprm::LN_SDxaPgn, { 2, L_FIX} }, // "sprmSDxaPgn" sep.dxaPgn;dya;short;
         {0x3011, { 1, L_FIX} }, // "sprmSFPgnRestart" sep.fPgnRestart;0 or 1;byte;
         {0x3012, { 1, L_FIX} }, // "sprmSFEndnote" sep.fEndnote;0 or 1;byte;
         {0x3013, { 1, L_FIX} }, // "sprmSLnc" sep.lnc;lnc;byte;
-        {0x3014, { 1, L_FIX} }, // "sprmSGprfIhdt" sep.grpfIhdt;grpfihdt
+        {NS_sprm::LN_SGprfIhdt, { 1, L_FIX} }, // "sprmSGprfIhdt" sep.grpfIhdt;grpfihdt
         {0x5015, { 2, L_FIX} }, // "sprmSNLnnMod" sep.nLnnMod;non-neg int.;word;
         {0x9016, { 2, L_FIX} }, // "sprmSDxaLnn" sep.dxaLnn;dxa;word;
         {0xB017, { 2, L_FIX} }, // "sprmSDyaHdrTop" sep.dyaHdrTop;dya;word;
@@ -663,7 +663,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x501B, { 2, L_FIX} }, // "sprmSLnnMin" sep.lnnMin;lnn;word;
         {0x501C, { 2, L_FIX} }, // "sprmSPgnStart" sep.pgnStart;pgn;word;
         {0x301D, { 1, L_FIX} }, // "sprmSBOrientation" sep.dmOrientPage;dm;byte;
-        {0x301E, { 1, L_FIX} }, // "sprmSBCustomize" ;;;
+        {NS_sprm::LN_SBCustomize, { 1, L_FIX} }, // "sprmSBCustomize" ;;;
         {0xB01F, { 2, L_FIX} }, // "sprmSXaPage" sep.xaPage;xa;word;
         {0xB020, { 2, L_FIX} }, // "sprmSYaPage" sep.yaPage;ya;word;
         {0xB021, { 2, L_FIX} }, // "sprmSDxaLeft" sep.dxaLeft;dxa;word;
@@ -672,10 +672,10 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x9024, { 2, L_FIX} }, // "sprmSDyaBottom" sep.dyaBottom;dya;word;
         {0xB025, { 2, L_FIX} }, // "sprmSDzaGutter" sep.dzaGutter;dza;word;
         {0x5026, { 2, L_FIX} }, // "sprmSDmPaperReq" sep.dmPaperReq;dm;word;
-        {0xD227, { 0, L_VAR} }, // "sprmSPropRMark" sep.fPropRMark,
+        {NS_sprm::LN_SPropRMark, { 0, L_VAR} }, // "sprmSPropRMark" sep.fPropRMark,
                             // sep.ibstPropRMark, sep.dttmPropRMark ;complex
         {0x3228, { 1, L_FIX} }, // "sprmSFBiDi" ;;;
-        {0x3229, { 1, L_FIX} }, // "sprmSFFacingCol" ;;;
+        {NS_sprm::LN_SFFacingCol, { 1, L_FIX} }, // "sprmSFFacingCol" ;;;
         {0x322A, { 1, L_FIX} }, // "sprmSFRTLGutter", set to one if gutter is on
                             // right
         {0x702B, { 4, L_FIX} }, // "sprmSBrcTop80" sep.brcTop;BRC;long;
@@ -697,30 +697,30 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x3404, { 1, L_FIX} }, // "sprmTTableHeader" tap.fTableHeader;1 or 0;byte;
         {0x3466, { 1, L_FIX} }, // "sprmTFCantSplit90" tap.fCantSplit90;1 or 0;byte;
         {0xD605, { 0, L_VAR} }, // "sprmTTableBorders80" tap.rgbrcTable;complex
-        {0xD606, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter,
+        {NS_sprm::LN_TDefTable10, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter,
                             // tap.rgtc;complex
         {0x9407, { 2, L_FIX} }, // "sprmTDyaRowHeight" tap.dyaRowHeight;dya;word;
         {0xD608, { 0, L_VAR} }, // "sprmTDefTable" tap.rgtc;complex
         {0xD609, { 0, L_VAR} }, // "sprmTDefTableShd80" tap.rgshd;complex
         {0x740A, { 4, L_FIX} }, // "sprmTTlp" tap.tlp;TLP;4 bytes;
         {0x560B, { 2, L_FIX} }, // "sprmTFBiDi" ;;;
-        {0x740C, { 1, L_FIX} }, // "sprmTHTMLProps" ;;;
+        {NS_sprm::LN_THTMLProps, { 1, L_FIX} }, // "sprmTHTMLProps" ;;;
         {0xD620, { 0, L_VAR} }, // "sprmTSetBrc80" tap.rgtc[].rgbrc;complex
         {0x7621, { 4, L_FIX} }, // "sprmTInsert" tap.rgdxaCenter, tap.rgtc;complex
         {0x5622, { 2, L_FIX} }, // "sprmTDelete" tap.rgdxaCenter, tap.rgtc;complex
         {0x7623, { 4, L_FIX} }, // "sprmTDxaCol" tap.rgdxaCenter;complex
         {0x5624, { 0, L_VAR} }, // "sprmTMerge" tap.fFirstMerged, tap.fMerged;
         {0x5625, { 0, L_VAR} }, // "sprmTSplit" tap.fFirstMerged, tap.fMerged;
-        {0xD626, { 0, L_VAR} }, // "sprmTSetBrc10" tap.rgtc[].rgbrc;complex
-        {0x7627, { 0, L_VAR} }, // "sprmTSetShd80" tap.rgshd;complex
-        {0x7628, { 0, L_VAR} }, // "sprmTSetShdOdd80" tap.rgshd;complex
+        {NS_sprm::LN_TSetBrc10, { 0, L_VAR} }, // "sprmTSetBrc10" tap.rgtc[].rgbrc;complex
+        {NS_sprm::LN_TSetShd80, { 0, L_VAR} }, // "sprmTSetShd80" tap.rgshd;complex
+        {NS_sprm::LN_TSetShdOdd80, { 0, L_VAR} }, // "sprmTSetShdOdd80" tap.rgshd;complex
         {0x7629, { 4, L_FIX} }, // "sprmTTextFlow" tap.rgtc[].fVerticaltap,
                             // rgtc[].fBackwardtap, rgtc[].fRotateFont;0 or 10
                             // or 10 or 1;word;
-        {0xD62A, { 1, L_FIX} }, // "sprmTDiagLine" ;;;
+        {NS_sprm::LN_TDiagLine, { 1, L_FIX} }, // "sprmTDiagLine" ;;;
         {0xD62B, { 0, L_VAR} }, // "sprmTVertMerge" tap.rgtc[].vertMerge
         {0xD62C, { 0, L_VAR} }, // "sprmTVertAlign" tap.rgtc[].vertAlign
-        {NS_sprm::LN_CFELayout, { 0, L_VAR} },
+        {NS_sprm::sprmCFELayout, { 0, L_VAR} },
         {0x6649, { 4, L_FIX} }, // undocumented
         {0xF614, { 3, L_FIX} }, // undocumented
         {0xD612, { 0, L_VAR} }, // "sprmTDefTableShd"
@@ -756,7 +756,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x9410, { 2, L_FIX} }, // undocumented
         {0x6815, { 4, L_FIX} }, // undocumented
         {0x6816, { 4, L_FIX} }, // undocumented
-        {NS_sprm::LN_CCv, { 4, L_FIX} }, // text colour
+        {NS_sprm::sprmCCv, { 4, L_FIX} }, // text colour
         {0xC64D, { 0, L_VAR} }, // undocumented, para back colour
         {0x6467, { 4, L_FIX} }, // undocumented
         {0x646B, { 4, L_FIX} }, // undocumented
@@ -1031,10 +1031,10 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                     // sprmNoop, sprmNoop, sprmNoop, sprmNoop
                     0x0000,0x0000,0x0000,0x0000,
                     // sprmPIncLvl, sprmPJc, sprmPFSideBySide, sprmPFKeep
-                    0x2402,0x2403,0x2404,0x2405,
+                    0x2402,0x2403,NS_sprm::LN_PFSideBySide,0x2405,
                     // sprmPFKeepFollow, sprmPFPageBreakBefore, sprmPBrcl,
                     // sprmPBrcp
-                    0x2406,0x2407,0x2408,0x2409,
+                    0x2406,0x2407,NS_sprm::LN_PBrcl,NS_sprm::LN_PBrcp,
                     // sprmPIlvl, sprmNoop, sprmPFNoLineNumb, sprmNoop
                     0x260A,0x0000,0x240C,0x0000,
                     // sprmNoop, sprmNoop, sprmNoop, sprmNoop
@@ -1062,7 +1062,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                     // sprmPFAutoSpaceDN, sprmNoop
                     0x2436,0x2437,0x2438,0x0000,
                     // sprmNoop, sprmPISnapBaseLine, sprmNoop, sprmNoop
-                    0x0000,0x243B,0x000,0x0000,
+                    0x0000,NS_sprm::LN_PISnapBaseLine,0x000,0x0000,
                     // sprmNoop, sprmCFStrikeRM, sprmCFRMark, sprmCFFieldVanish
                     0x0000,0x0800,0x0801,0x0802,
                     // sprmNoop, sprmNoop, sprmNoop, sprmCFData
@@ -1082,7 +1082,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                     // sprmNoop, sprmNoop, sprmCIco, sprmNoop,
                     0x0000,0x0000,0x2A42,0x0000,
                     // sprmCHpsInc, sprmNoop, sprmCHpsPosAdj, sprmNoop,
-                    0x2A44,0x0000,0x2A46,0x0000,
+                    NS_sprm::LN_CHpsInc,0x0000,NS_sprm::LN_CHpsPosAdj,0x0000,
                     // sprmCIss, sprmNoop, sprmNoop, sprmNoop,
                     0x2A48,0x0000,0x0000,0x0000,
                     // sprmNoop, sprmNoop, sprmNoop, sprmNoop,
@@ -1090,7 +1090,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                     // sprmNoop, sprmNoop, sprmNoop, sprmCFDStrike,
                     0x0000,0x0000,0x0000,0x2A53,
                     // sprmCFImprint, sprmCFSpec, sprmCFObj, sprmPicBrcl,
-                    0x0854,0x0855,0x0856,0x2E00,
+                    0x0854,0x0855,0x0856,NS_sprm::LN_PicBrcl,
                     // sprmPOutLvl, sprmPFBiDi, sprmNoop, sprmNoop,
                     0x2640,0x2441,0x0000,0x0000,
                     // sprmNoop, sprmNoop, sprmPPnbrRMarkNot
@@ -2368,7 +2368,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator<
 
 bool IsReplaceAllSprm(sal_uInt16 nSpId)
 {
-    return (0x6645 == nSpId || 0x6646 == nSpId);
+    return (NS_sprm::LN_PHugePapx == nSpId || 0x6646 == nSpId);
 }
 
 bool IsExpandableSprm(sal_uInt16 nSpId)

@@ -336,16 +336,16 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 
             // Ouput the cPicLocation attribute
             std::unique_ptr<ww::bytes> pBuf( new ww::bytes );
-            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::LN_CPicLocation );
+            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::sprmCPicLocation );
             SwWW8Writer::InsUInt32( *pBuf, rOleId.copy( 1 ).toInt32() );
 
-            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::LN_CFOle2 );
+            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::sprmCFOle2 );
             pBuf->push_back( 1 );
 
-            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::LN_CFSpec );
+            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::sprmCFSpec );
             pBuf->push_back( 1 );
 
-            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::LN_CFObj );
+            SwWW8Writer::InsUInt16( *pBuf, NS_sprm::sprmCFObj );
             pBuf->push_back( 1 );
 
             m_pChpPlc->AppendFkpEntry( Strm().Tell(), pBuf->size(), pBuf->data() );
@@ -423,7 +423,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
                     GetItem(RES_CHRATR_FONTSIZE)).GetHeight();
                 nHeight-=nFontHeight/20;
 
-                Set_UInt16( pArr, NS_sprm::LN_CHpsPos );
+                Set_UInt16( pArr, NS_sprm::sprmCHpsPos );
                 Set_UInt16( pArr, -((sal_Int16)nHeight));
             }
         }
@@ -434,7 +434,7 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
     Set_UInt8( pArr, 1 );
 
     // sprmCPicLocation
-    Set_UInt16( pArr, NS_sprm::LN_CPicLocation );
+    Set_UInt16( pArr, NS_sprm::sprmCPicLocation );
     Set_UInt32( pArr, GRF_MAGIC_321 );
 
     // vary Magic, so that different graphic attributes will not be merged

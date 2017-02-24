@@ -1254,8 +1254,8 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
             sal_uInt8* pSprm[4];
 
             if( pSep->Find4Sprms(
-                    NS_sprm::LN_SBrcTop80, NS_sprm::LN_SBrcLeft80,
-                    NS_sprm::LN_SBrcBottom80, NS_sprm::LN_SBrcRight80,
+                    NS_sprm::sprmSBrcTop80, NS_sprm::sprmSBrcLeft80,
+                    NS_sprm::sprmSBrcBottom80, NS_sprm::sprmSBrcRight80,
                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
             {
                 for( int i = 0; i < 4; ++i )
@@ -1263,8 +1263,8 @@ static sal_uInt8 lcl_ReadBorders(bool bVer67, WW8_BRCVer9* brc, WW8PLCFx_Cp_FKP*
             }
             // Version 9 BRCs if present will override version 8
             if( pSep->Find4Sprms(
-                    NS_sprm::LN_SBrcTop, NS_sprm::LN_SBrcLeft,
-                    NS_sprm::LN_SBrcBottom, NS_sprm::LN_SBrcRight,
+                    NS_sprm::sprmSBrcTop, NS_sprm::sprmSBrcLeft,
+                    NS_sprm::sprmSBrcBottom, NS_sprm::sprmSBrcRight,
                     pSprm[0], pSprm[1], pSprm[2], pSprm[3] ) )
             {
                 for( int i = 0; i < 4; ++i )
@@ -1579,17 +1579,17 @@ void WW8FlyPara::Read(sal_uInt8 nOrigSp29, WW8PLCFx_Cp_FKP* pPap)
     }
     else
     {
-        SetValSprm( &nSp26, pPap, NS_sprm::LN_PDxaAbs ); // X-position
+        SetValSprm( &nSp26, pPap, NS_sprm::sprmPDxaAbs ); // X-position
         //set in me or in parent style
-        mbVertSet |= SetValSprm( &nSp27, pPap, NS_sprm::LN_PDyaAbs );    // Y-position
-        SetValSprm( &nSp45, pPap, NS_sprm::LN_PWHeightAbs ); // height
-        SetValSprm( &nSp28, pPap, NS_sprm::LN_PDxaWidth ); // width
-        SetValSprm( &nLeMgn, pPap, NS_sprm::LN_PDxaFromText );    // L-border
-        SetValSprm( &nRiMgn, pPap, NS_sprm::LN_PDxaFromText );    // R-border
-        SetValSprm( &nUpMgn, pPap, NS_sprm::LN_PDyaFromText );    // U-border
-        SetValSprm( &nLoMgn, pPap, NS_sprm::LN_PDyaFromText );    // D-border
+        mbVertSet |= SetValSprm( &nSp27, pPap, NS_sprm::sprmPDyaAbs );    // Y-position
+        SetValSprm( &nSp45, pPap, NS_sprm::sprmPWHeightAbs ); // height
+        SetValSprm( &nSp28, pPap, NS_sprm::sprmPDxaWidth ); // width
+        SetValSprm( &nLeMgn, pPap, NS_sprm::sprmPDxaFromText );    // L-border
+        SetValSprm( &nRiMgn, pPap, NS_sprm::sprmPDxaFromText );    // R-border
+        SetValSprm( &nUpMgn, pPap, NS_sprm::sprmPDyaFromText );    // U-border
+        SetValSprm( &nLoMgn, pPap, NS_sprm::sprmPDyaFromText );    // D-border
 
-        pS = pPap->HasSprm( NS_sprm::LN_PWr );                               // wrapping
+        pS = pPap->HasSprm( NS_sprm::sprmPWr );                               // wrapping
         if( pS )
             nSp37 = *pS;
     }
@@ -3411,7 +3411,7 @@ void SwWW8ImplReader::Read_DoubleLine_Rotate( sal_uInt16, const sal_uInt8* pData
 void SwWW8ImplReader::Read_TextColor( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     //Has newer colour variant, ignore this old variant
-    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::LN_CCv))
+    if (!m_bVer67 && m_pPlcxMan && m_pPlcxMan->GetChpPLCF()->HasSprm(NS_sprm::sprmCCv))
         return;
 
     if( nLen < 0 )
@@ -4885,7 +4885,7 @@ void SwWW8ImplReader::Read_CharBorder(sal_uInt16 nId, const sal_uInt8* pData, sh
             SvxBoxItem aBoxItem(RES_CHRATR_BOX);
             aBoxItem = *pBox;
             WW8_BRCVer9 aBrc;
-            int nBrcVer = (nId == NS_sprm::LN_CBrc) ? 9 : (m_bVer67 ? 6 : 8);
+            int nBrcVer = (nId == NS_sprm::sprmCBrc) ? 9 : (m_bVer67 ? 6 : 8);
 
             SetWW8_BRC(nBrcVer, aBrc, pData);
 
@@ -5061,7 +5061,7 @@ bool SwWW8ImplReader::ParseTabPos(WW8_TablePos *pTabPos, WW8PLCFx_Cp_FKP* pPap)
             pTabPos->nLoMgn = SVBT16ToShort(pRes);
         bRet = true;
     }
-    if (nullptr != (pRes = pPap->HasSprm(NS_sprm::LN_TDefTable)))
+    if (nullptr != (pRes = pPap->HasSprm(NS_sprm::sprmTDefTable)))
     {
         WW8TabBandDesc aDesc;
         aDesc.ReadDef(false, pRes);
@@ -5680,7 +5680,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //PAP to be produced; byte;
         {0x2403, &SwWW8ImplReader::Read_Justify},    //"sprmPJc" pap.jc;jc
                                                      //(justification);byte;
-        {0x2404, nullptr},                                 //"sprmPFSideBySide"
+        {NS_sprm::LN_PFSideBySide, nullptr},                                 //"sprmPFSideBySide"
                                                      //pap.fSideBySide;0 or 1;byte;
         {0x2405, &SwWW8ImplReader::Read_KeepLines},  //"sprmPFKeep" pap.fKeep;0 or
                                                      //1;byte;
@@ -5689,9 +5689,9 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x2407, &SwWW8ImplReader::Read_BreakBefore},//"sprmPFPageBreakBefore"
                                                      //pap.fPageBreakBefore;0 or 1;
                                                      //byte;
-        {0x2408, nullptr},                                 //"sprmPBrcl" pap.brcl;brcl;
+        {NS_sprm::LN_PBrcl, nullptr},                                 //"sprmPBrcl" pap.brcl;brcl;
                                                      //byte;
-        {0x2409, nullptr},                                 //"sprmPBrcp" pap.brcp;brcp;
+        {NS_sprm::LN_PBrcp, nullptr},                                 //"sprmPBrcp" pap.brcp;brcp;
                                                      //byte;
         {0x260A, &SwWW8ImplReader::Read_ListLevel},  //"sprmPIlvl" pap.ilvl;ilvl;
                                                      //byte;
@@ -5736,17 +5736,17 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //dxa;word;
         {0x261B, &SwWW8ImplReader::Read_ApoPPC},     //"sprmPPc" pap.pcHorz,
                                                      //pap.pcVert;complex;byte;
-        {0x461C, nullptr},                                 //"sprmPBrcTop10" pap.brcTop;
+        {NS_sprm::LN_PBrcTop10, nullptr},                                 //"sprmPBrcTop10" pap.brcTop;
                                                      //BRC10;word;
-        {0x461D, nullptr},                                 //"sprmPBrcLeft10" pap.brcLeft;
+        {NS_sprm::LN_PBrcLeft10, nullptr},                                 //"sprmPBrcLeft10" pap.brcLeft;
                                                      //BRC10;word;
-        {0x461E, nullptr},                                 //"sprmPBrcBottom10"
+        {NS_sprm::LN_PBrcBottom10, nullptr},                                 //"sprmPBrcBottom10"
                                                      //pap.brcBottom;BRC10;word;
-        {0x461F, nullptr},                                 //"sprmPBrcRight10"
+        {NS_sprm::LN_PBrcRight10, nullptr},                                 //"sprmPBrcRight10"
                                                      //pap.brcRight;BRC10;word;
-        {0x4620, nullptr},                                 //"sprmPBrcBetween10"
+        {NS_sprm::LN_PBrcBetween10, nullptr},                                 //"sprmPBrcBetween10"
                                                      //pap.brcBetween;BRC10;word;
-        {0x4621, nullptr},                                 //"sprmPBrcBar10" pap.brcBar;
+        {NS_sprm::LN_PBrcBar10, nullptr},                                 //"sprmPBrcBar10" pap.brcBar;
                                                      //BRC10;word;
         {0x4622, nullptr},                                 //"sprmPDxaFromText10"
                                                      //pap.dxaFromText;dxa;word;
@@ -5777,7 +5777,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //0 or 1;byte;
         {0x2431, &SwWW8ImplReader::Read_WidowControl},//"sprmPFWidowControl"
                                                      //pap.fWidowControl;0 or 1;byte
-        {0xC632, nullptr},                                 //"sprmPRuler" variable length;
+        {NS_sprm::LN_PRuler, nullptr},                                 //"sprmPRuler" variable length;
         {0x2433, &SwWW8ImplReader::Read_BoolItem},   //"sprmPFKinsoku" pap.fKinsoku;
                                                      //0 or 1;byte;
         {0x2434, nullptr},                                 //"sprmPFWordWrap"
@@ -5791,17 +5791,17 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //pap.fAutoSpaceDE;0 or 1;byte;
         {0x2438, nullptr},                                 //"sprmPFAutoSpaceDN"
                                                      //pap.fAutoSpaceDN;0 or 1;byte;
-        {NS_sprm::LN_PWAlignFont, &SwWW8ImplReader::Read_AlignFont},  //"sprmPWAlignFont"
+        {NS_sprm::sprmPWAlignFont, &SwWW8ImplReader::Read_AlignFont},  //"sprmPWAlignFont"
                                                      //pap.wAlignFont;iFa; word;
         {0x443A, nullptr},                                 //"sprmPFrameTextFlow"
                                                      //pap.fVertical pap.fBackward
                                                      //pap.fRotateFont;complex; word
-        {0x243B, nullptr},                                 //"sprmPISnapBaseLine" obsolete
+        {NS_sprm::LN_PISnapBaseLine, nullptr},                                 //"sprmPISnapBaseLine" obsolete
                                                      //not applicable in Word97
                                                      //and later versions;;byte;
-        {0xC63E, &SwWW8ImplReader::Read_ANLevelDesc},//"sprmPAnld" pap.anld;;
+        {NS_sprm::LN_PAnld, &SwWW8ImplReader::Read_ANLevelDesc},//"sprmPAnld" pap.anld;;
                                                      //variable length;
-        {0xC63F, nullptr},                                 //"sprmPPropRMark"
+        {NS_sprm::LN_PPropRMark, nullptr},                                 //"sprmPPropRMark"
                                                      //pap.fPropRMark;complex;
                                                      //variable length;
         {0x2640,  &SwWW8ImplReader::Read_POutLvl},   //"sprmPOutLvl" pap.lvl;has no
@@ -5810,10 +5810,10 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x2441, &SwWW8ImplReader::Read_ParaBiDi},   //"sprmPFBiDi" ;;byte;
         {0x2443, nullptr},                                 //"sprmPFNumRMIns"
                                                      //pap.fNumRMIns;1 or 0;bit;
-        {0x2444, nullptr},                                 //"sprmPCrLf" ;;byte;
+        {NS_sprm::LN_PCrLf, nullptr},                                 //"sprmPCrLf" ;;byte;
         {0xC645, nullptr},                                 //"sprmPNumRM" pap.numrm;;
                                                      //variable length;
-        {0x6645, nullptr},                                 //"sprmPHugePapx" ;fc in the
+        {NS_sprm::LN_PHugePapx, nullptr},                                 //"sprmPHugePapx" ;fc in the
                                                      //data stream to locate the
                                                      //huge grpprl; long;
         {0x6646, nullptr},                                 //"sprmPHugePapx" ;fc in the
@@ -5845,7 +5845,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //chp.idslRMReason;an index to
                                                      //a table of strings defined in
                                                      //Word 6.0 executables;short;
-        {0xEA08, &SwWW8ImplReader::Read_CharSet},    //"sprmCChs" chp.fChsDiff and
+        {NS_sprm::LN_CChs, &SwWW8ImplReader::Read_CharSet},    //"sprmCChs" chp.fChsDiff and
                                                      //chp.chse;3 bytes;
         {0x6A09, &SwWW8ImplReader::Read_Symbol},     //"sprmCSymbol" chp.fSpec,
                                                      //chp.xchSym and chp.ftcSym;
@@ -5853,7 +5853,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //recorded is always 4;
         {0x080A, &SwWW8ImplReader::Read_Obj},        //"sprmCFOle2" chp.fOle2;1 or
                                                      //0;bit;
-      //0x480B,                                      //"sprmCIdCharType", obsolete:
+      //NS_sprm::LN_CIdCharType,                                      //"sprmCIdCharType", obsolete:
                                                      //not applicable in Word97
                                                      //and later versions
         {0x2A0C, &SwWW8ImplReader::Read_CharHighlight},//"sprmCHighlight"
@@ -5861,15 +5861,15 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //chp.icoHighlight;ico
                                                      //(fHighlight is set to 1 iff
                                                      //ico is not 0);byte;
-        {0x680E, &SwWW8ImplReader::Read_PicLoc},     //"sprmCObjLocation" chp.fcObj;
+        {NS_sprm::LN_CObjLocation, &SwWW8ImplReader::Read_PicLoc},     //"sprmCObjLocation" chp.fcObj;
                                                      //FC;long;
-      //0x2A10, ? ? ?,                               //"sprmCFFtcAsciSymb"
+      //NS_sprm::LN_CFFtcAsciSymb, ? ? ?,                               //"sprmCFFtcAsciSymb"
         {0x4A30, &SwWW8ImplReader::Read_CColl},      //"sprmCIstd" chp.istd;istd,
                                                      //short;
         {0xCA31, nullptr},                                 //"sprmCIstdPermute" chp.istd;
                                                      //permutation vector; variable
                                                      //length;
-        {0x2A32, nullptr},                                 //"sprmCDefault" whole CHP;none
+        {NS_sprm::LN_CDefault, nullptr},                                 //"sprmCDefault" whole CHP;none
                                                      //;variable length;
         {0x2A33, nullptr},                                 //"sprmCPlain" whole CHP;none;
                                                      //Laenge: 0;
@@ -5891,22 +5891,22 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //128, or 129; byte;
         {0x083C, &SwWW8ImplReader::Read_BoldUsw},    //"sprmCFVanish" chp.fVanish;0,
                                                      //1, 128, or 129; byte;
-      //0x4A3D, 0,                                   //"sprmCFtcDefault" ftc, only
+      //NS_sprm::LN_CFtcDefault, 0,                                   //"sprmCFtcDefault" ftc, only
                                                      //used internally, never
                                                      //stored in file;word;
         {0x2A3E, &SwWW8ImplReader::Read_Underline},  //"sprmCKul" chp.kul;kul;byte;
-        {0xEA3F, nullptr},                                 //"sprmCSizePos" chp.hps,
+        {NS_sprm::LN_CSizePos, nullptr},                                 //"sprmCSizePos" chp.hps,
                                                      //chp.hpsPos;3 bytes;
         {0x8840, &SwWW8ImplReader::Read_Kern},       //"sprmCDxaSpace" chp.dxaSpace;
                                                      //dxa;word;
-        {0x4A41, &SwWW8ImplReader::Read_Language},   //"sprmCLid" ;only used
+        {NS_sprm::LN_CLid, &SwWW8ImplReader::Read_Language},   //"sprmCLid" ;only used
                                                      //internally never stored;word;
         {0x2A42, &SwWW8ImplReader::Read_TextColor},   //"sprmCIco" chp.ico;ico;byte;
         {0x4A43, &SwWW8ImplReader::Read_FontSize},   //"sprmCHps" chp.hps;hps;byte;
-        {0x2A44, nullptr},                                 //"sprmCHpsInc" chp.hps;byte;
+        {NS_sprm::LN_CHpsInc, nullptr},                                 //"sprmCHpsInc" chp.hps;byte;
         {0x4845, &SwWW8ImplReader::Read_SubSuperProp},//"sprmCHpsPos" chp.hpsPos;
                                                      //hps; byte;
-        {0x2A46, nullptr},                                 //"sprmCHpsPosAdj" chp.hpsPos;
+        {NS_sprm::LN_CHpsPosAdj, nullptr},                                 //"sprmCHpsPosAdj" chp.hpsPos;
                                                      //hps; byte;
         {0xCA47, &SwWW8ImplReader::Read_Majority},   //"sprmCMajority" chp.fBold,
                                                      //chp.fItalic, chp.fSmallCaps,
@@ -5918,22 +5918,22 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //length, length byte plus
                                                      //size of following grpprl;
         {0x2A48, &SwWW8ImplReader::Read_SubSuper},   //"sprmCIss" chp.iss;iss;byte;
-        {0xCA49, nullptr},                                 //"sprmCHpsNew50" chp.hps;hps;
+        {NS_sprm::LN_CHpsNew50, nullptr},                                 //"sprmCHpsNew50" chp.hps;hps;
                                                      //variable width, length
                                                      //always recorded as 2;
-        {0xCA4A, nullptr},                                 //"sprmCHpsInc1" chp.hps;
+        {NS_sprm::LN_CHpsInc1, nullptr},                                 //"sprmCHpsInc1" chp.hps;
                                                      //complex; variable width,
                                                      //length always recorded as 2;
         {0x484B, &SwWW8ImplReader::Read_FontKern},   //"sprmCHpsKern" chp.hpsKern;
                                                      //hps;short;
-        {0xCA4C, &SwWW8ImplReader::Read_Majority},   //"sprmCMajority50" chp.fBold,
+        {NS_sprm::LN_CMajority50, &SwWW8ImplReader::Read_Majority},   //"sprmCMajority50" chp.fBold,
                                                      //chp.fItalic, chp.fSmallCaps,
                                                      //chp.fVanish, chp.fStrike,
                                                      //chp.fCaps, chp.ftc, chp.hps,
                                                      //chp.hpsPos, chp.kul,
                                                      //chp.dxaSpace, chp.ico;
                                                      //complex; variable length;
-        {0x4A4D, nullptr},                                 //"sprmCHpsMul" chp.hps;
+        {NS_sprm::LN_CHpsMul, nullptr},                                 //"sprmCHpsMul" chp.hps;
                                                      //percentage to grow hps;short;
         {0x484E, nullptr},                                 //"sprmCYsri" chp.ysri;ysri;
                                                      //short;
@@ -5964,7 +5964,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x2859, &SwWW8ImplReader::Read_TextAnim},    //"sprmCSfxText" chp.sfxtText;
                                                      //text animation;byte;
         {0x085A, &SwWW8ImplReader::Read_Bidi},                                 //"sprmCFBiDi"
-        {0x085B, nullptr},                                 //"sprmCFDiacColor"
+        {NS_sprm::LN_CFDiacColor, nullptr},                                 //"sprmCFDiacColor"
         {0x085C, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFBoldBi"
         {0x085D, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFItalicBi"
         {0x4A5E, &SwWW8ImplReader::Read_FontCode},   //"sprmCFtcBi"
@@ -5980,7 +5980,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x4863, nullptr},                                 //"sprmCIbstRMarkDel"
                                                      //chp.ibstRMarkDel;index into
                                                      //sttbRMark;short;
-        {NS_sprm::LN_CDttmRMarkDel, nullptr},
+        {NS_sprm::sprmCDttmRMarkDel, nullptr},
                                                      //chp.dttmRMarkDel;DTTM;long;
         {0x6865, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc80" chp.brc;BRC;long;
         {0xca72, &SwWW8ImplReader::Read_CharBorder}, //"sprmCBrc" chp.brc;BRC;long;
@@ -5993,7 +5993,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x0868, nullptr},                                 //"sprmCFUsePgsuSettings"
                                                      //chp.fUsePgsuSettings; 1 or 0;
                                                      //bit;
-        {0x486B, nullptr},                                 //"sprmCCpg" ;;word;
+        {NS_sprm::LN_CCpg, nullptr},                                 //"sprmCCpg" ;;word;
         {0x486D, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid0_80" chp.rglid[0];
                                                      //LID: for non-Far East text;
                                                      //word;
@@ -6001,10 +6001,10 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //LID: for Far East text;word;
         {0x286F, &SwWW8ImplReader::Read_IdctHint},   //"sprmCIdctHint" chp.idctHint;
                                                      //IDCT: byte;
-        {0x2E00, nullptr},                                 //"sprmPicBrcl" pic.brcl;brcl
+        {NS_sprm::LN_PicBrcl, nullptr},                                 //"sprmPicBrcl" pic.brcl;brcl
                                                      //(see PIC structure
                                                      //definition);byte;
-        {0xCE01, nullptr},                                 //"sprmPicScale" pic.mx,
+        {NS_sprm::LN_PicScale, nullptr},                                 //"sprmPicScale" pic.mx,
                                                      //pic.my, pic.dxaCropleft,
                                                      //pic.dyaCropTop
                                                      //pic.dxaCropRight,
@@ -6023,7 +6023,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x3001, nullptr},                                 //"sprmSiHeadingPgn"
                                                      //sep.iHeadingPgn;heading
                                                      //number level;byte;
-        {0xD202, &SwWW8ImplReader::Read_OLST},       //"sprmSOlstAnm" sep.olstAnm;
+        {NS_sprm::LN_SOlstAnm, &SwWW8ImplReader::Read_OLST},       //"sprmSOlstAnm" sep.olstAnm;
                                                      //OLST;variable length;
         {0xF203, nullptr},                                 //"sprmSDxaColWidth"
                                                      //sep.rgdxaColWidthSpacing;
@@ -6047,20 +6047,20 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //# of cols - 1;word;
         {0x900C, nullptr},                                 //"sprmSDxaColumns"
                                                      //sep.dxaColumns;dxa;word;
-        {0x300D, nullptr},                                 //"sprmSFAutoPgn" sep.fAutoPgn;
+        {NS_sprm::LN_SFAutoPgn, nullptr},                                 //"sprmSFAutoPgn" sep.fAutoPgn;
                                                      //obsolete;byte;
         {0x300E, nullptr},                                 //"sprmSNfcPgn" sep.nfcPgn;nfc;
                                                      //byte;
-        {0xB00F, nullptr},                                 //"sprmSDyaPgn" sep.dyaPgn;dya;
+        {NS_sprm::LN_SDyaPgn, nullptr},                                 //"sprmSDyaPgn" sep.dyaPgn;dya;
                                                      //short;
-        {0xB010, nullptr},                                 //"sprmSDxaPgn" sep.dxaPgn;dya;
+        {NS_sprm::LN_SDxaPgn, nullptr},                                 //"sprmSDxaPgn" sep.dxaPgn;dya;
                                                      //short;
         {0x3011, nullptr},                                 //"sprmSFPgnRestart"
                                                      //sep.fPgnRestart;0 or 1;byte;
         {0x3012, nullptr},                                 //"sprmSFEndnote" sep.fEndnote;
                                                      //0 or 1;byte;
         {0x3013, nullptr},                                 //"sprmSLnc" sep.lnc;lnc;byte;
-        {0x3014, nullptr},                                 //"sprmSGprfIhdt" sep.grpfIhdt;
+        {NS_sprm::LN_SGprfIhdt, nullptr},                                 //"sprmSGprfIhdt" sep.grpfIhdt;
                                                      //grpfihdt; byte;
         {0x5015, nullptr},                                 //"sprmSNLnnMod" sep.nLnnMod;
                                                      //non-neg int.;word;
@@ -6079,7 +6079,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //pgn;word;
         {0x301D, nullptr},                                 //"sprmSBOrientation"
                                                      //sep.dmOrientPage;dm;byte;
-      //0x301E, ? ? ?,                               //"sprmSBCustomize"
+      //NS_sprm::LN_SBCustomize, ? ? ?,                               //"sprmSBCustomize"
         {0xB01F, nullptr},                                 //"sprmSXaPage" sep.xaPage;xa;
                                                      //word;
         {0xB020, nullptr},                                 //"sprmSYaPage" sep.yaPage;ya;
@@ -6096,14 +6096,14 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //sep.dzaGutter;dza;word;
         {0x5026, nullptr},                                 //"sprmSDmPaperReq"
                                                      //sep.dmPaperReq;dm;word;
-        {0xD227, nullptr},                                 //"sprmSPropRMark"
+        {NS_sprm::LN_SPropRMark, nullptr},                                 //"sprmSPropRMark"
                                                      //sep.fPropRMark,
                                                      //sep.ibstPropRMark,
                                                      //sep.dttmPropRMark ;complex;
                                                      //variable length always
                                                      //recorded as 7 bytes;
       //0x3228, ? ? ?,                               //"sprmSFBiDi",
-      //0x3229, ? ? ?,                               //"sprmSFFacingCol"
+      //NS_sprm::LN_SFFacingCol, ? ? ?,                               //"sprmSFFacingCol"
         {0x322A, nullptr},                                 //"sprmSFRTLGutter", set to 1
                                                      //if gutter is on the right.
         {0x702B, nullptr},                                 //"sprmSBrcTop80" sep.brcTop;BRC;
@@ -6140,7 +6140,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0xD605, nullptr},                                 //"sprmTTableBorders80"
                                                      //tap.rgbrcTable;complex;
                                                      //24 bytes;
-        {0xD606, nullptr},                                 //"sprmTDefTable10"
+        {NS_sprm::LN_TDefTable10, nullptr},                                 //"sprmTDefTable10"
                                                      //tap.rgdxaCenter,
                                                      //tap.rgtc;complex; variable
                                                      //length;
@@ -6153,7 +6153,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x740A, nullptr},                                 //"sprmTTlp" tap.tlp;TLP;
                                                      //4 bytes;
       //0x560B, ? ? ?,                               //"sprmTFBiDi"
-      //0x740C, ? ? ?,                               //"sprmTHTMLProps"
+      //NS_sprm::LN_THTMLProps, ? ? ?,                               //"sprmTHTMLProps"
         {0xD620, nullptr},                                 //"sprmTSetBrc80"
                                                      //tap.rgtc[].rgbrc;complex;
                                                      //5 bytes;
@@ -6172,19 +6172,19 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x5625, nullptr},                                 //"sprmTSplit"
                                                      //tap.fFirstMerged,
                                                      //tap.fMerged;complex ;word;
-        {0xD626, nullptr},                                 //"sprmTSetBrc10"
+        {NS_sprm::LN_TSetBrc10, nullptr},                                 //"sprmTSetBrc10"
                                                      //tap.rgtc[].rgbrc;complex;
                                                      //5 bytes;
-        {0x7627, nullptr},                                 //"sprmTSetShd80" tap.rgshd;
+        {NS_sprm::LN_TSetShd80, nullptr},                                 //"sprmTSetShd80" tap.rgshd;
                                                      //complex; 4 bytes;
-        {0x7628, nullptr},                                 //"sprmTSetShdOdd80"
+        {NS_sprm::LN_TSetShdOdd80, nullptr},                                 //"sprmTSetShdOdd80"
                                                      //tap.rgshd;complex;4 bytes;
         {0x7629, nullptr},                                 //"sprmTTextFlow"
                                                      //tap.rgtc[].fVertical
                                                      //tap.rgtc[].fBackward
                                                      //tap.rgtc[].fRotateFont
                                                      //0 or 10 or 10 or 1;word;
-      //0xD62A, ? ? ?  ,                             //"sprmTDiagLine"
+      //NS_sprm::LN_TDiagLine, ? ? ?  ,                             //"sprmTDiagLine"
         {0xD62B, nullptr},                                 //"sprmTVertMerge"
                                                      //tap.rgtc[].vertMerge;complex;
                                                      //variable length always
@@ -6193,7 +6193,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //tap.rgtc[].vertAlign;complex
                                                      //variable length always
                                                      //recorded as 3 byte;
-        {NS_sprm::LN_CFELayout, &SwWW8ImplReader::Read_DoubleLine_Rotate},
+        {NS_sprm::sprmCFELayout, &SwWW8ImplReader::Read_DoubleLine_Rotate},
         {0x6649, nullptr},                                 //undocumented
         {0xF614, nullptr},                                 //"sprmTTableWidth"
                                                      //recorded as 3 bytes;
@@ -6237,8 +6237,8 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      // subtable "sprmPFTtp"
         {0x6815, nullptr},                                 //undocumented
         {0x6816, nullptr},                                 //undocumented
-        {NS_sprm::LN_CCv, &SwWW8ImplReader::Read_TextForeColor},
-        {NS_sprm::LN_CCvUl, &SwWW8ImplReader::Read_UnderlineColor},
+        {NS_sprm::sprmCCv, &SwWW8ImplReader::Read_TextForeColor},
+        {NS_sprm::sprmCCvUl, &SwWW8ImplReader::Read_UnderlineColor},
         {0xC64D, &SwWW8ImplReader::Read_ParaBackColor},
         {0x6467, nullptr},                                 //undocumented
         {0xF617, nullptr},                                 //undocumented
