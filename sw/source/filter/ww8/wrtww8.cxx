@@ -1799,7 +1799,7 @@ void WW8Export::WriteStringAsPara( const OUString& rText )
     if( m_bOutTable )
     {                                               // Tab-Attr
         // sprmPFInTable
-        SwWW8Writer::InsUInt16( aArr, NS_sprm::LN_PFInTable );
+        SwWW8Writer::InsUInt16( aArr, NS_sprm::sprmPFInTable );
         aArr.push_back( 1 );
     }
 
@@ -1991,14 +1991,14 @@ void WW8AttributeOutput::TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pT
     if ( nDepth > 0 )
     {
         /* Cell */
-        m_rWW8Export.InsUInt16( NS_sprm::LN_PFInTable );
+        m_rWW8Export.InsUInt16( NS_sprm::sprmPFInTable );
         m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
-        m_rWW8Export.InsUInt16( NS_sprm::LN_PTableDepth );
+        m_rWW8Export.InsUInt16( NS_sprm::sprmPItap );
         m_rWW8Export.InsUInt32( nDepth );
 
         if ( nDepth > 1 && pTableTextNodeInfoInner->isEndOfCell() )
         {
-            m_rWW8Export.InsUInt16( NS_sprm::LN_PCell );
+            m_rWW8Export.InsUInt16( NS_sprm::sprmPFInnerTableCell );
             m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
         }
     }
@@ -2013,23 +2013,23 @@ void WW8AttributeOutput::TableInfoRow( ww8::WW8TableNodeInfoInner::Pointer_t pTa
         /* Row */
         if ( pTableTextNodeInfoInner->isEndOfLine() )
         {
-            m_rWW8Export.InsUInt16( NS_sprm::LN_PFInTable );
+            m_rWW8Export.InsUInt16( NS_sprm::sprmPFInTable );
             m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
 
             if ( nDepth == 1 )
             {
-                m_rWW8Export.InsUInt16( NS_sprm::LN_PFTtp );
+                m_rWW8Export.InsUInt16( NS_sprm::sprmPFTtp );
                 m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
             }
 
-            m_rWW8Export.InsUInt16( NS_sprm::LN_PTableDepth );
+            m_rWW8Export.InsUInt16( NS_sprm::sprmPItap );
             m_rWW8Export.InsUInt32( nDepth );
 
             if ( nDepth > 1 )
             {
-                m_rWW8Export.InsUInt16( NS_sprm::LN_PCell );
+                m_rWW8Export.InsUInt16( NS_sprm::sprmPFInnerTableCell );
                 m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
-                m_rWW8Export.InsUInt16( NS_sprm::LN_PRow );
+                m_rWW8Export.InsUInt16( NS_sprm::sprmPFInnerTtp );
                 m_rWW8Export.pO->push_back( (sal_uInt8)0x1 );
             }
 
@@ -2113,7 +2113,7 @@ void WW8AttributeOutput::TableVerticalCell( ww8::WW8TableNodeInfoInner::Pointer_
 
         if ( FRMDIR_VERT_TOP_RIGHT == m_rWW8Export.TrueFrameDirection( *pFrameFormat ) )
         {
-            m_rWW8Export.InsUInt16( NS_sprm::LN_TTextFlow );
+            m_rWW8Export.InsUInt16( NS_sprm::sprmTTextFlow );
             m_rWW8Export.pO->push_back( sal_uInt8(n) );        //start range
             m_rWW8Export.pO->push_back( sal_uInt8(n + 1) );    //end range
             m_rWW8Export.InsUInt16( 5 ); //Equals vertical writing
@@ -2135,9 +2135,9 @@ void WW8AttributeOutput::TableCanSplit( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
     const SwFormatRowSplit& rSplittable = pLineFormat->GetRowSplit();
     sal_uInt8 nCantSplit = (!rSplittable.GetValue()) ? 1 : 0;
-    m_rWW8Export.InsUInt16( NS_sprm::LN_TFCantSplit );
+    m_rWW8Export.InsUInt16( NS_sprm::sprmTFCantSplit90 );
     m_rWW8Export.pO->push_back( nCantSplit );
-    m_rWW8Export.InsUInt16( NS_sprm::LN_TFCantSplit90 ); // also write fCantSplit90
+    m_rWW8Export.InsUInt16( NS_sprm::sprmTFCantSplit ); // also write fCantSplit90
     m_rWW8Export.pO->push_back( nCantSplit );
 }
 
@@ -2148,7 +2148,7 @@ void WW8AttributeOutput::TableBidi( ww8::WW8TableNodeInfoInner::Pointer_t pTable
 
     if ( m_rWW8Export.TrueFrameDirection(*pFrameFormat) == FRMDIR_HORI_RIGHT_TOP )
     {
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TFBiDi );
+        m_rWW8Export.InsUInt16( NS_sprm::sprmTFBiDi );
         m_rWW8Export.InsUInt16( 1 );
     }
 }
@@ -2180,7 +2180,7 @@ void WW8AttributeOutput::TableHeight( ww8::WW8TableNodeInfoInner::Pointer_t pTab
 
     if ( nHeight )
     {
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TDyaRowHeight );
+        m_rWW8Export.InsUInt16( NS_sprm::sprmTDyaRowHeight );
         m_rWW8Export.InsUInt16( (sal_uInt16)nHeight );
     }
 
@@ -2213,7 +2213,7 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
         {
             case text::HoriOrientation::CENTER:
             case text::HoriOrientation::RIGHT:
-                m_rWW8Export.InsUInt16( NS_sprm::LN_TJc90 );
+                m_rWW8Export.InsUInt16( NS_sprm::sprmTJc90 );
                 m_rWW8Export.InsUInt16( text::HoriOrientation::RIGHT == eHOri ? 2 : 1 );
                 break;
             default:
@@ -2242,19 +2242,19 @@ void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTab
 
             sal_uInt8 nTPc = (nPadding << 4) | (nPcVert << 2) | nPcHorz;
 
-            m_rWW8Export.InsUInt16(NS_sprm::LN_TPc);
+            m_rWW8Export.InsUInt16(NS_sprm::sprmTPc);
             m_rWW8Export.pO->push_back( nTPc );
 
-            m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaAbs);
+            m_rWW8Export.InsUInt16(NS_sprm::sprmTDyaAbs);
             m_rWW8Export.InsUInt16(rUL.GetUpper());
 
-            m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaFromText);
+            m_rWW8Export.InsUInt16(NS_sprm::sprmTDyaFromText);
             m_rWW8Export.InsUInt16(rUL.GetUpper());
         }
 
         if (rUL.GetLower() > 0)
         {
-            m_rWW8Export.InsUInt16(NS_sprm::LN_TDyaFromTextBottom);
+            m_rWW8Export.InsUInt16(NS_sprm::sprmTDyaFromTextBottom);
             m_rWW8Export.InsUInt16(rUL.GetLower());
         }
     }
@@ -2266,7 +2266,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
 
     if ( pTable->GetRowsToRepeat() > pTableTextNodeInfoInner->getRow() )
     {
-        m_rWW8Export.InsUInt16( NS_sprm::LN_TTableHeader );
+        m_rWW8Export.InsUInt16( NS_sprm::sprmTTableHeader );
         m_rWW8Export.pO->push_back( 1 );
     }
 
@@ -2277,7 +2277,7 @@ void WW8AttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t 
     assert(nBoxes <= ww8::MAXTABLECELLS);
 
     // sprm header
-    m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTable );
+    m_rWW8Export.InsUInt16( NS_sprm::sprmTDefTable );
     sal_uInt16 nSprmSize = 2 + (nBoxes + 1) * 2 + nBoxes * 20;
     m_rWW8Export.InsUInt16( nSprmSize ); // length
 
@@ -2521,7 +2521,7 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
     const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
 
     sal_uInt8 nBoxes = rTabBoxes.size();
-    m_rWW8Export.InsUInt16( NS_sprm::LN_TDefTableShd80 );
+    m_rWW8Export.InsUInt16( NS_sprm::sprmTDefTableShd80 );
     m_rWW8Export.pO->push_back( (sal_uInt8)(nBoxes * 2) );  // Len
 
     for ( sal_uInt8 n = 0; n < nBoxes; n++ )
@@ -2543,8 +2543,8 @@ void WW8AttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_t
         m_rWW8Export.InsUInt16( aShd.GetValue() );
     }
 
-    sal_uInt32 aSprmIds[] = { NS_sprm::LN_TDefTableShd,
-                              NS_sprm::LN_TDefTableShdRaw };
+    sal_uInt32 aSprmIds[] = { NS_sprm::sprmTDefTableShd,
+                              NS_sprm::sprmTDefTableShdRaw };
     sal_uInt8 nBoxes0 = rTabBoxes.size();
     if (nBoxes0 > 21)
         nBoxes0 = 21;

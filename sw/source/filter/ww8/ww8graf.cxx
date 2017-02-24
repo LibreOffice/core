@@ -95,6 +95,7 @@
 #include <o3tl/enumrange.hxx>
 #include <memory>
 #include <filter/msfilter/escherex.hxx>
+#include <sprmids.hxx>
 
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
@@ -1051,7 +1052,7 @@ void SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                         break;
                                     case     68:  // Read_Pic()
                                     case 0x6A03:
-                                    case 0x680E:
+                                    case NS_sprm::LN_CObjLocation:
                                             Read_PicLoc(nAktId, pParams, 1);
                                         break;
                                 }

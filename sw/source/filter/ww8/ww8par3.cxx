@@ -665,8 +665,8 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
             return false;
 
         //For i120928,parse the graphic info of bullets
-        sal_uInt8 *pSprmWhichPis = GrpprlHasSprm(NS_sprm::LN_CPbiIBullet, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
-        sal_uInt8 *pSprmIsPicBullet = GrpprlHasSprm(NS_sprm::LN_CPbiGrf, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+        sal_uInt8 *pSprmWhichPis = GrpprlHasSprm(NS_sprm::sprmCPbiIBullet, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
+        sal_uInt8 *pSprmIsPicBullet = GrpprlHasSprm(NS_sprm::sprmCPbiGrf, aGrpprlChpx[0],aLVL.nLenGrpprlChpx);
         if (pSprmWhichPis)
         {
             nWitchPicIsBullet = *pSprmWhichPis;
@@ -2065,7 +2065,7 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                         m_nListLevel = WW8ListManager::nMaxLevel;
                     }
                 }
-                else if (m_pPlcxMan && m_pPlcxMan->HasParaSprm(0xC63E))
+                else if (m_pPlcxMan && m_pPlcxMan->HasParaSprm(NS_sprm::LN_PAnld))
                 {
                     /*
                      #i8114# Horrific backwards compatible ww7- lists in ww8+
