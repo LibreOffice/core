@@ -118,18 +118,6 @@ public:
     int GetGenerationValue() const;
 };
 
-/// Stream object: a byte array with a known length.
-class PDFStreamElement : public PDFElement
-{
-    size_t m_nLength;
-    sal_uInt64 m_nOffset;
-
-public:
-    explicit PDFStreamElement(size_t nLength);
-    bool Read(SvStream& rStream) override;
-    sal_uInt64 GetOffset() const;
-};
-
 /// End of a stream: 'endstream' keyword.
 class PDFEndStreamElement : public PDFElement
 {
@@ -3282,6 +3270,11 @@ void PDFObjectElement::SetStream(PDFStreamElement* pStreamElement)
     m_pStreamElement = pStreamElement;
 }
 
+PDFStreamElement* PDFObjectElement::GetStream() const
+{
+    return m_pStreamElement;
+}
+
 PDFArrayElement* PDFObjectElement::GetArray() const
 {
     return m_pArrayElement;
@@ -3668,9 +3661,16 @@ bool PDFStreamElement::Read(SvStream& rStream)
 {
     SAL_INFO("xmlsecurity.pdfio", "PDFStreamElement::Read: length is " << m_nLength);
     m_nOffset = rStream.Tell();
-    rStream.SeekRel(m_nLength);
+    std::vector<unsigned char> aBytes(m_nLength);
+    rStream.ReadBytes(aBytes.data(), aBytes.size());
+    m_aMemory.WriteBytes(aBytes.data(), aBytes.size());
 
     return rStream.good();
+}
+
+SvMemoryStream& PDFStreamElement::GetMemory()
+{
+    return m_aMemory;
 }
 
 sal_uInt64 PDFStreamElement::GetOffset() const
