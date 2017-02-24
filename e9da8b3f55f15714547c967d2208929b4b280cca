@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_84ceaa58",
+        "filename": "include/editeng/editeng.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-02-24T13:51:53Z",
+      "side": 1,
+      "message": "C:cygwinhometdflodejenkinsworkspacelo_gerritConfigwindows_msc_dbgutil_32includeediteng/editeng.hxx(162) : error C2487: \u0027InsertText\u0027 : member of dll interface class may not be declared with dll interface\n\n\u003d\u003e remove the EDITENG_DLLPUBLIC, it\u0027s already set on the class",
+      "revId": "e9da8b3f55f15714547c967d2208929b4b280cca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
