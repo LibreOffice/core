@@ -5573,6 +5573,8 @@ void SwFootnoteContFrame::PaintLine( const SwRect& rRect,
     SwTwips nX = aRectFnSet.GetPrtLeft(*this);
     switch ( rInf.GetAdj() )
     {
+        case css::text::HorizontalAdjust_CENTER:
+            nX += nPrtWidth/2 - nWidth/2; break;
         case css::text::HorizontalAdjust_RIGHT:
             nX += nPrtWidth - nWidth; break;
         case css::text::HorizontalAdjust_LEFT:
