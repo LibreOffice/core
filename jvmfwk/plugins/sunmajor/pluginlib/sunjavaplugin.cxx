@@ -670,6 +670,16 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     osl::Module moduleRt;
 #if defined(LINUX)
     if (!moduleRt.load(sRuntimeLib, SAL_LOADMODULE_GLOBAL | SAL_LOADMODULE_NOW))
+#elif defined MACOSX
+    // Must be SAL_LOADMODULE_GLOBAL when e.g. specifying a
+    // -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000 option to
+    // JDK 1.8.0_121 at least, as JNI_CreateJavaVM -> Threads::create_vm ->
+    // JvmtiExport::post_vm_initialized -> cbEarlyVMInit -> initialize ->
+    // util_initialize -> sun.misc.VMSupport.getAgentProperties ->
+    // Java_sun_misc_VMSupport_initAgentProperties ->
+    // JDK_FindJvmEntry("JVM_INitAgentProperties") ->
+    // dlsym(RTLD_DEFAULT, "JVM_INitAgentProperties"):
+    if (!moduleRt.load(sRuntimeLib, SAL_LOADMODULE_GLOBAL))
 #else
 #if defined(_WIN32)
     do_msvcr_magic(sRuntimeLib.pData);
