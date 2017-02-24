@@ -1142,7 +1142,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
     }
 
     sal_uInt32 nBufferSize = GetPropertyValue( DFF_Prop_pihlShape, 0 );
-     if( (0 < nBufferSize) && (nBufferSize <= 0xFFFF) && SeekToContent( DFF_Prop_pihlShape, rSt ) )
+    if( (0 < nBufferSize) && (nBufferSize <= 0xFFFF) && SeekToContent( DFF_Prop_pihlShape, rSt ) )
     {
         SvMemoryStream aMemStream;
         struct HyperLinksTable hlStr;
@@ -1151,15 +1151,13 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
 
         // copy from DFF stream to memory stream
         std::vector< sal_uInt8 > aBuffer( nBufferSize );
-        sal_uInt8* pnData = &aBuffer.front();
-        sal_uInt8 nStreamSize;
-        if (pnData && rSt.ReadBytes(pnData, nBufferSize) == nBufferSize)
+        if (rSt.ReadBytes(aBuffer.data(), nBufferSize) == nBufferSize)
         {
-            aMemStream.WriteBytes(pnData, nBufferSize);
+            aMemStream.WriteBytes(aBuffer.data(), nBufferSize);
             aMemStream.Seek( STREAM_SEEK_TO_END );
-            nStreamSize = aMemStream.Tell();
+            sal_uInt8 nStreamSize = aMemStream.Tell();
             aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
-            bool bRet =  4 <= nStreamSize;
+            bool bRet = 4 <= nStreamSize;
             if( bRet )
                 aMemStream.ReadUInt16( nRawRecId ).ReadUInt16( nRawRecSize );
             SwDocShell* pDocShell = rReader.m_pDocShell;
