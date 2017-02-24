@@ -67,6 +67,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPad
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
 
+DECLARE_OOXMLEXPORT_TEST(tdf105490_negativeMargins, "tdf105490_negativeMargins.docx")
+{
+    // negative margins should change to minimal margins, not default margins.
+    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf104061_tableSectionColumns,"tdf104061_tableSectionColumns.docx")
 {
     CPPUNIT_ASSERT_MESSAGE("There should be two or three pages", getPages() <= 3 );
