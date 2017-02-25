@@ -1174,13 +1174,12 @@ static sal_uInt32 checkTypeReaders(RegistryTypeReader& reader1,
                                    std::set< OUString >& nameSet)
 {
     sal_uInt32 count=0;
-    sal_uInt16 i;
-    for (i=0 ; i < reader1.getFieldCount(); i++)
+    for (sal_uInt32 i=0 ; i < reader1.getFieldCount(); i++)
     {
         nameSet.insert(reader1.getFieldName(i));
         count++;
     }
-    for (i=0 ; i < reader2.getFieldCount(); i++)
+    for (sal_uInt32 i=0 ; i < reader2.getFieldCount(); i++)
     {
         if (nameSet.find(reader2.getFieldName(i)) == nameSet.end())
         {
