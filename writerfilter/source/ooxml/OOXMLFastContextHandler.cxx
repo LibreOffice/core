@@ -904,6 +904,7 @@ void OOXMLFastContextHandlerStream::handleHyperlink()
 {
     OOXMLHyperlinkHandler aHyperlinkHandler(this);
     getPropertySetAttrs()->resolve(aHyperlinkHandler);
+    aHyperlinkHandler.writetext();
 }
 
 /*

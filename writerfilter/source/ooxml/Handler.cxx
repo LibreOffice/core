@@ -324,6 +324,10 @@ OOXMLHyperlinkHandler::OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext)
 
 OOXMLHyperlinkHandler::~OOXMLHyperlinkHandler()
 {
+}
+
+void OOXMLHyperlinkHandler::writetext()
+{
     OUString sReturn(" HYPERLINK \"");
 
     sReturn += mURL;

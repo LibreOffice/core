@@ -139,6 +139,7 @@ class OOXMLHyperlinkHandler : public Properties
 public:
     explicit OOXMLHyperlinkHandler(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLHyperlinkHandler();
+    void writetext();
 
     virtual void attribute(Id name, Value & val) override;
     virtual void sprm(Sprm & sprm) override;
