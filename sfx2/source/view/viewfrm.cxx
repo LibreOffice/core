@@ -1461,7 +1461,8 @@ void SfxViewFrame::KillDispatcher_Impl()
 
 SfxViewFrame* SfxViewFrame::Current()
 {
-    return SfxApplication::Get() ? SfxGetpApp()->Get_Impl()->pViewFrame : nullptr;
+    SfxApplication* pApp = SfxApplication::Get();
+    return pApp ? pApp->Get_Impl()->pViewFrame : nullptr;
 }
 
 // returns the first window of spec. type viewing the specified doc.

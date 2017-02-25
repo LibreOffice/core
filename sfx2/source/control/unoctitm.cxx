@@ -771,9 +771,9 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
                     pItem = pDispatcher->Execute( GetId(), nCall, nullptr, &aInternalSet, nModifier );
 
                 // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
-                if ( SfxApplication::Get() )
+                if (SfxApplication* pApp = SfxApplication::Get())
                 {
-                    SfxDispatcher* pAppDispat = SfxGetpApp()->GetAppDispatcher_Impl();
+                    SfxDispatcher* pAppDispat = pApp->GetAppDispatcher_Impl();
                     if ( pAppDispat )
                     {
                         const SfxPoolItem* pState=nullptr;
