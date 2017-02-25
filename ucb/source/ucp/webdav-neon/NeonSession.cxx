@@ -872,8 +872,8 @@ void NeonSession::OPTIONS( const OUString & inPath,
         while ( ( cursor = ne_response_header_iterate(
                       req, cursor, &name, &value ) ) != nullptr )
         {
-            OUString aHeaderName( OUString::createFromAscii( name ).toAsciiLowerCase() );
-            OUString aHeaderValue( OUString::createFromAscii( value ) );
+            OUString aHeaderName(OUString(name, strlen(name), RTL_TEXTENCODING_ASCII_US).toAsciiLowerCase());
+            OUString aHeaderValue(value, strlen(value), RTL_TEXTENCODING_ASCII_US);
 
             // display the single header
             SAL_INFO( "ucb.ucp.webdav", "OPTIONS - received header: " << aHeaderName << ":" << aHeaderValue );
