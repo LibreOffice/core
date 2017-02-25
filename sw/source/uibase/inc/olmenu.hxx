@@ -25,7 +25,6 @@
 #include <com/sun/star/uno/Sequence.h>
 
 #include <rtl/ustring.hxx>
-#include <vcl/builder.hxx>
 #include <vcl/image.hxx>
 #include <vcl/menu.hxx>
 
@@ -36,20 +35,7 @@ class SwWrtShell;
 
 class SW_DLLPUBLIC SwSpellPopup
 {
-    VclBuilder m_aBuilder;
-    VclPtr<PopupMenu> m_xPopupMenu;
-    sal_uInt16 m_nIgnoreWordId;
-    sal_uInt16 m_nAddMenuId;
-    sal_uInt16 m_nAddId;
-    sal_uInt16 m_nSpellDialogId;
-    sal_uInt16 m_nCorrectMenuId;
-    sal_uInt16 m_nCorrectDialogId;
-    sal_uInt16 m_nLangSelectionMenuId;
-    sal_uInt16 m_nLangParaMenuId;
-    sal_uInt16 m_nRedlineAcceptId;
-    sal_uInt16 m_nRedlineRejectId;
-    sal_uInt16 m_nRedlineNextId;
-    sal_uInt16 m_nRedlinePrevId;
+    ScopedVclPtrInstance<PopupMenu> m_xPopupMenu;
     SwWrtShell* m_pSh;
     css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionary >  >     m_aDics;
     css::uno::Reference< css::linguistic2::XSpellAlternatives > m_xSpellAlt;

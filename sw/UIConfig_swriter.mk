@@ -242,9 +242,8 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/pagefooterpanel \
 	sw/uiconfig/swriter/ui/sidebarwrap \
 	sw/uiconfig/swriter/ui/sidebarstylepresets \
-	sw/uiconfig/swriter/ui/sidebartheme \
+    sw/uiconfig/swriter/ui/sidebartheme \
 	sw/uiconfig/swriter/ui/sortdialog \
-	sw/uiconfig/swriter/ui/spellmenu \
 	sw/uiconfig/swriter/ui/splittable \
 	sw/uiconfig/swriter/ui/statisticsinfopage \
 	sw/uiconfig/swriter/ui/stringinput \

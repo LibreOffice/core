@@ -99,6 +99,9 @@
 #define HID_MN_READONLY_LOADGRAPHIC                             "SW_HID_MN_READONLY_LOADGRAPHIC"
 #define HID_MN_READONLY_GRAPHICOFF                              "SW_HID_MN_READONLY_GRAPHICOFF"
 
+#define HID_LINGU_ADD_WORD                                      "SW_HID_LINGU_ADD_WORD"
+#define HID_LINGU_IGNORE_WORD                                   "SW_HID_LINGU_IGNORE_WORD"
+#define HID_LINGU_SPELLING_DLG                                  "SW_HID_LINGU_SPELLING_DLG"
 #define HID_LINGU_AUTOCORR                                      "SW_HID_LINGU_AUTOCORR"
 #define HID_LINGU_REPLACE                                       "SW_HID_LINGU_REPLACE"
 #define HID_SMARTTAG_MAIN                                       "SW_HID_SMARTTAG_MAIN"    // SMARTTAGS

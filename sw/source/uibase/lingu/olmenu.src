@@ -22,6 +22,96 @@
 #include "cmdid.h"
 #include "helpid.h"
 
+#define SEPARATOR   MenuItem { Separator = TRUE; };
+
+Menu MN_SPELL_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_IGNORE_WORD ;
+            HelpID = HID_LINGU_IGNORE_WORD ;
+            Text [ en-US ] = "I~gnore All" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_ADD_TO_DIC ;
+            HelpID = HID_LINGU_ADD_WORD ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "~Add to Dictionary" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_ADD_TO_DIC_SINGLE ;
+            HelpID = HID_LINGU_ADD_WORD ;
+            Text [ en-US ] = "~Add to Dictionary" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_SPELLING_DLG ;
+            HelpID = HID_LINGU_SPELLING_DLG ;
+        };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = MN_AUTOCORR ;
+            HelpID = HID_LINGU_AUTOCORR ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Always correct ~to" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_AUTO_CORRECT_DLG ;
+        };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = MN_SET_LANGUAGE_SELECTION ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Set Language for Selection" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_SET_LANGUAGE_PARAGRAPH ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Set Language for Paragraph" ;
+        };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = FN_REDLINE_ACCEPT_DIRECT;
+            HelpId = CMD_FN_REDLINE_ACCEPT_DIRECT ;
+            Text [ en-US ] = "Accept Change" ;
+        };
+        MenuItem
+        {
+            Identifier = FN_REDLINE_REJECT_DIRECT ;
+            HelpId = CMD_FN_REDLINE_REJECT_DIRECT ;
+            Text [ en-US ] = "Reject Change" ;
+        };
+        MenuItem
+        {
+            Identifier = FN_REDLINE_NEXT_CHANGE;
+            HelpId = CMD_FN_REDLINE_NEXT_CHANGE ;
+            Text [ en-US ] = "Next Change" ;
+        };
+        MenuItem
+        {
+            Identifier = FN_REDLINE_PREV_CHANGE;
+            HelpId = CMD_FN_REDLINE_PREV_CHANGE ;
+            Text [ en-US ] = "Previous Change" ;
+        };
+    };
+};
 String STR_WORD
 {
     Text [ en-US ] = "Word is " ;
