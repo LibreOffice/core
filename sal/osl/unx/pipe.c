@@ -163,11 +163,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
 {
     int    Flags;
     size_t     len;
-    union
-    {
-        struct sockaddr addr;
-        struct sockaddr_un addr_un;
-    } s;
+    struct sockaddr_un addr;
 
     sal_Char     name[PATH_MAX + 1];
     const sal_Char   *pPath;
@@ -222,16 +218,16 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         }
     }
 
-    memset(&s.addr_un, 0, sizeof(s.addr_un));
+    memset(&addr, 0, sizeof(addr));
 
     OSL_TRACE("osl_createPipe : Pipe Name '%s'",name);
 
-    s.addr_un.sun_family = AF_UNIX;
-    strncpy(s.addr_un.sun_path, name, sizeof(s.addr_un.sun_path));
+    addr.sun_family = AF_UNIX;
+    strncpy(addr.sun_path, name, sizeof(addr.sun_path));
 #if defined(FREEBSD)
-    len = SUN_LEN(&s.addr_un);
+    len = SUN_LEN(&addr);
 #else
-    len = sizeof(s.addr_un);
+    len = sizeof(addr);
 #endif
 
     if ( Options & osl_Pipe_CREATE )
@@ -242,7 +238,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         if ( ( stat(name, &status) == 0) &&
              ( S_ISSOCK(status.st_mode) || S_ISFIFO(status.st_mode) ) )
         {
-            if ( connect(pPipe->m_Socket,&s.addr,len) >= 0 )
+            if ( connect(pPipe->m_Socket,(struct sockaddr *)&addr,len) >= 0 )
             {
                 OSL_TRACE("osl_createPipe : Pipe already in use. Errno: %d; %s\n",errno,strerror(errno));
                 close (pPipe->m_Socket);
@@ -254,7 +250,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
         }
 
         /* ok, fs clean */
-        if ( bind(pPipe->m_Socket, &s.addr, len) < 0 )
+        if ( bind(pPipe->m_Socket, (struct sockaddr *)&addr, len) < 0 )
         {
             OSL_TRACE("osl_createPipe : failed to bind socket. Errno: %d; %s\n",errno,strerror(errno));
             close (pPipe->m_Socket);
@@ -286,7 +282,7 @@ oslPipe SAL_CALL osl_psz_createPipe(const sal_Char *pszPipeName, oslPipeOptions 
     {   /* osl_pipe_OPEN */
         if ( access(name, F_OK) != -1 )
         {
-            if ( connect( pPipe->m_Socket, &s.addr, len) >= 0 )
+            if ( connect( pPipe->m_Socket, (struct sockaddr *)&addr, len) >= 0 )
             {
                 return (pPipe);
             }
@@ -325,11 +321,7 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
     int nRet;
 #if CLOSESOCKET_DOESNT_WAKE_UP_ACCEPT
     size_t     len;
-    union
-    {
-        struct sockaddr_un addr_un;
-        struct sockaddr addr;
-    } s;
+    struct sockaddr_un addr;
     int fd;
 #endif
     int ConnFD;
@@ -356,19 +348,19 @@ void SAL_CALL osl_closePipe( oslPipe pPipe )
         pPipe->m_bIsInShutdown = sal_True;
         pPipe->m_Socket = -1;
         fd = socket(AF_UNIX, SOCK_STREAM, 0);
-        memset(&s.addr_un, 0, sizeof(s.addr_un));
+        memset(&addr, 0, sizeof(addr));
 
         OSL_TRACE("osl_destroyPipe : Pipe Name '%s'",pPipe->m_Name);
 
-        s.addr_un.sun_family = AF_UNIX;
-        strncpy(s.addr_un.sun_path, pPipe->m_Name, sizeof(s.addr_un.sun_path));
+        addr.sun_family = AF_UNIX;
+        strncpy(addr.sun_path, pPipe->m_Name, sizeof(addr.sun_path));
 #if defined(FREEBSD)
-        len = SUN_LEN(&s.addr_un);
+        len = SUN_LEN(&addr);
 #else
-        len = sizeof(s.addr_un);
+        len = sizeof(addr);
 #endif
 
-        nRet = connect( fd, &s.addr, len);
+        nRet = connect( fd, (struct sockaddr *)&addr, len);
 #if OSL_DEBUG_LEVEL > 1
         if ( nRet < 0 )
         {
