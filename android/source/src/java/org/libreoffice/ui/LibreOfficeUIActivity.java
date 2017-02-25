@@ -526,25 +526,36 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.view_menu, menu);
 
-        MenuItem item = menu.findItem(R.id.menu_sort_size);
-        if (sortMode == FileUtilities.SORT_LARGEST) {
-            item.setTitle(R.string.sort_smallest);
-        } else {
-            item.setTitle(R.string.sort_largest);
-        }
+        switch (sortMode) {
+            case FileUtilities.SORT_SMALLEST: {
+                menu.findItem(R.id.menu_sort_size_asc).setChecked(true);
+            }
+            break;
 
-        item = menu.findItem(R.id.menu_sort_az);
-        if (sortMode == FileUtilities.SORT_AZ) {
-            item.setTitle(R.string.sort_za);
-        } else {
-            item.setTitle(R.string.sort_az);
-        }
+            case FileUtilities.SORT_LARGEST: {
+                menu.findItem(R.id.menu_sort_size_desc).setChecked(true);
+            }
+            break;
 
-        item = menu.findItem(R.id.menu_sort_modified);
-        if (sortMode == FileUtilities.SORT_NEWEST) {
-            item.setTitle(R.string.sort_oldest);
-        } else {
-            item.setTitle(R.string.sort_newest);
+            case FileUtilities.SORT_AZ: {
+                menu.findItem(R.id.menu_sort_az).setChecked(true);
+            }
+            break;
+
+            case FileUtilities.SORT_ZA: {
+                menu.findItem(R.id.menu_sort_za).setChecked(true);
+            }
+            break;
+
+            case FileUtilities.SORT_NEWEST: {
+                menu.findItem(R.id.menu_sort_modified_newest).setChecked(true);
+            }
+            break;
+
+            case FileUtilities.SORT_OLDEST: {
+                menu.findItem(R.id.menu_sort_modified_oldest).setChecked(true);
+            }
+            break;
         }
 
         switch (filterMode) {
@@ -616,11 +627,42 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 openDirectory(currentDirectory);
                 break;
 
-            case R.id.menu_sort_size:
-            case R.id.menu_sort_az:
-            case R.id.menu_sort_modified:
-                sortFiles(item);
-                break;
+            case R.id.menu_sort_size_asc: {
+                sortMode = FileUtilities.SORT_SMALLEST;
+                this.onResume();
+            }
+            break;
+
+            case R.id.menu_sort_size_desc: {
+                sortMode = FileUtilities.SORT_LARGEST;
+                this.onResume();
+            }
+            break;
+
+            case R.id.menu_sort_az: {
+                sortMode = FileUtilities.SORT_AZ;
+                this.onResume();
+            }
+            break;
+
+            case R.id.menu_sort_za: {
+                sortMode = FileUtilities.SORT_ZA;
+                this.onResume();
+            }
+            break;
+
+            case R.id.menu_sort_modified_newest: {
+                sortMode = FileUtilities.SORT_NEWEST;
+                this.onResume();
+            }
+            break;
+
+            case R.id.menu_sort_modified_oldest: {
+                sortMode = FileUtilities.SORT_OLDEST;
+                this.onResume();
+            }
+            break;
+
             case R.id.action_about: {
                 AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
                 aboutDialogFragment.show(getSupportFragmentManager(), "AboutDialogFragment");
@@ -634,41 +676,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 return super.onOptionsItemSelected(item);
         }
         return true;
-    }
-
-    public void sortFiles(MenuItem item){
-        switch (item.getItemId()) {
-            case R.id.menu_sort_az:
-                if (sortMode == FileUtilities.SORT_AZ){
-                    sortMode = FileUtilities.SORT_ZA;
-                    item.setTitle(R.string.sort_az);
-                } else {
-                    sortMode = FileUtilities.SORT_AZ;
-                    item.setTitle(R.string.sort_za);
-                }
-                break;
-            case R.id.menu_sort_modified:
-                if (sortMode == FileUtilities.SORT_NEWEST){
-                    sortMode = FileUtilities.SORT_OLDEST;
-                    item.setTitle(R.string.sort_newest);
-                } else {
-                    sortMode = FileUtilities.SORT_NEWEST;
-                    item.setTitle(R.string.sort_oldest);
-                }
-                break;
-            case R.id.menu_sort_size:
-                if (sortMode == FileUtilities.SORT_LARGEST){
-                    sortMode = FileUtilities.SORT_SMALLEST;
-                    item.setTitle(R.string.sort_largest);
-                } else {
-                    sortMode = FileUtilities.SORT_LARGEST;
-                    item.setTitle(R.string.sort_smallest);
-                }
-                break;
-            default:
-                break;
-        }
-        this.onResume();
     }
 
     public void readPreferences(){

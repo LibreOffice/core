@@ -35,12 +35,25 @@
         android:icon="@drawable/ic_sort_black_24dp"
         app:showAsAction="ifRoom">
         <menu>
-            <item android:id="@+id/menu_sort_size"
-                android:title="@string/menu_sort_size" />
-            <item android:id="@+id/menu_sort_az"
-                android:title="@string/menu_sort_az"/>
-            <item android:id="@+id/menu_sort_modified"
-                android:title="@string/menu_sort_modified"/>
+            <group android:checkableBehavior="single">
+                <item android:id="@+id/menu_sort_size_asc"
+                    android:title="@string/sort_smallest" />
+
+                <item android:id="@+id/menu_sort_size_desc"
+                    android:title="@string/sort_largest" />
+
+                <item android:id="@+id/menu_sort_az"
+                    android:title="@string/sort_az"/>
+
+                <item android:id="@+id/menu_sort_za"
+                    android:title="@string/sort_za"/>
+
+                <item android:id="@+id/menu_sort_modified_newest"
+                    android:title="@string/sort_newest"/>
+
+                <item android:id="@+id/menu_sort_modified_oldest"
+                    android:title="@string/sort_oldest"/>
+            </group>
         </menu>
     </item>
     <item android:id="@+id/action_settings"
