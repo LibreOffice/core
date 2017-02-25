@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <config_features.h>
+
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
@@ -34,11 +36,15 @@ class PdfExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 public:
     virtual void setUp() override;
     virtual void tearDown() override;
+#if HAVE_FEATURE_PDFIUM
     /// Tests that a pdf image is roundtripped back to PDF as a vector format.
     void testTdf106059();
+#endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
+#if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testTdf106059);
+#endif
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -58,6 +64,7 @@ void PdfExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+#if HAVE_FEATURE_PDFIUM
 void PdfExportTest::testTdf106059()
 {
     // Import the bugdoc and export as PDF.
@@ -93,6 +100,7 @@ void PdfExportTest::testTdf106059()
     // This dictionary key was missing, so the XObject wasn't a reference one.
     CPPUNIT_ASSERT(pReferenceXObject->Lookup("Ref"));
 }
+#endif
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
 
