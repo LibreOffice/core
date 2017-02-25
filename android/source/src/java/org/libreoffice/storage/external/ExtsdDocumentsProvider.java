@@ -148,6 +148,11 @@ public class ExtsdDocumentsProvider implements IExternalDocumentProvider,
     }
 
     @Override
+    public boolean checkProviderAvailability() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) && Environment.isExternalStorageRemovable();
+    }
+
+    @Override
     public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
         if (key.equals(DocumentProviderSettingsActivity.KEY_PREF_EXTERNAL_SD_PATH_URI)) {
             rootPathURI = preferences.getString(key, "");

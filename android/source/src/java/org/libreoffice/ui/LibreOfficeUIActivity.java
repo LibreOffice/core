@@ -10,13 +10,16 @@
 package org.libreoffice.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
+import android.hardware.usb.UsbManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -65,6 +68,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -116,6 +120,11 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         PreferenceManager.setDefaultValues(this, R.xml.documentprovider_preferences, false);
         readPreferences();
         SettingsListenerModel.getInstance().setListener(this);
+        // Registering the USB detect broadcast receiver
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED);
+        filter.addAction(UsbManager.ACTION_USB_DEVICE_DETACHED);
+        registerReceiver(mUSBReceiver, filter);
         // init UI and populate with contents from the provider
         switchToDocumentProvider(documentProviderFactory.getDefaultProvider());
         createUI();
@@ -160,6 +169,19 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         //Setting up navigation drawer
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationDrawer = (NavigationView) findViewById(R.id.navigation_drawer);
+
+        final ArrayList<CharSequence> providerNames = new ArrayList<CharSequence>(
+                Arrays.asList(documentProviderFactory.getNames())
+        );
+
+        // Loop through the document providers menu items and check if they are available or not
+        for (int index = 0; index < providerNames.size(); index++) {
+            MenuItem item = navigationDrawer.getMenu().getItem(index);
+            boolean isDocumentProviderAvailable = checkDocumentProviderAvailability(documentProviderFactory.getProvider(index));
+            if (!isDocumentProviderAvailable){
+                item.setEnabled(false);
+            }
+        }
 
         final Context context = this; //needed for anonymous method below
         navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -223,6 +245,10 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         drawerToggle.setDrawerIndicatorEnabled(true);
         drawerLayout.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
+    }
+
+    private boolean checkDocumentProviderAvailability(IDocumentProvider provider) {
+        return provider.checkProviderAvailability();
     }
 
     @Override
@@ -326,6 +352,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                                     Toast.LENGTH_SHORT).show();
                         }
                     });
+                    startActivity(new Intent(activity, DocumentProviderSettingsActivity.class));
                     Log.e(LOGTAG, e.getMessage(), e.getCause());
                 }
                 return null;
@@ -719,6 +746,18 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         Log.d(LOGTAG, currentDirectory.toString() + Integer.toString(filterMode) + Integer.toString(viewMode));
     }
 
+    private final BroadcastReceiver mUSBReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (UsbManager.ACTION_USB_DEVICE_ATTACHED.equals(action)) {
+                Toast.makeText(context, R.string.usb_connected_configure, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(context, DocumentProviderSettingsActivity.class));
+                Log.d(LOGTAG, "USB device attached");
+            } else if (UsbManager.ACTION_USB_DEVICE_DETACHED.equals(action)) {
+                Log.d(LOGTAG, "USB device detached");
+            }
+        }
+    };
     @Override
     protected void onPause() {
         super.onPause();
