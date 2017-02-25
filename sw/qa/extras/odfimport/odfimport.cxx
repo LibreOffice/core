@@ -663,8 +663,8 @@ DECLARE_ODFIMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt")
     // Make sure that if we show the spellcheck popup menu (for the current
     // document, which contains redlines), then the last two entries will be
     // always 'go to next/previous change'.
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_NEXT_CHANGE), rMenu.GetItemId(rMenu.GetItemCount() - 2));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_PREV_CHANGE), rMenu.GetItemId(rMenu.GetItemCount() - 1));
+    CPPUNIT_ASSERT_EQUAL(OString("next"), rMenu.GetItemIdent(rMenu.GetItemId(rMenu.GetItemCount() - 2)));
+    CPPUNIT_ASSERT_EQUAL(OString("prev"), rMenu.GetItemIdent(rMenu.GetItemId(rMenu.GetItemCount() - 1)));
 }
 
 DECLARE_ODFIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.odt")

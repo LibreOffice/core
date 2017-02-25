@@ -85,6 +85,6 @@ $(eval $(call gb_CppunitTest_use_components,sw_odfimport,\
     xmloff/util/xo \
 ))
 
-$(eval $(call gb_CppunitTest_use_configuration,sw_odfimport))
+$(eval $(call gb_CppunitTest_use_instdir_configuration,sw_odfimport))
 
 # vim: set noet sw=4 ts=4:
