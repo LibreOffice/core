@@ -99,7 +99,7 @@ inline SvToken::SvToken()
 class SvTokenStream
 {
     sal_uLong       nLine, nColumn;
-    int             nBufPos;
+    sal_Int32       nBufPos;
     int             c;          // next character
     static const sal_uInt16 nTabSize = 4;   // length of tabulator
     OString         aStrTrue;
@@ -138,7 +138,7 @@ class SvTokenStream
                         // if end of line spare calculation
                         if( 0 != c )
                         {
-                            sal_uInt16 n = 0;
+                            sal_Int32 n = 0;
                             nColumn = 0;
                             while( n < nBufPos )
                                 nColumn += aBufStr[n++] == '\t' ? nTabSize : 1;
