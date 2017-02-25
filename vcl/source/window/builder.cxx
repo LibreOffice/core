@@ -2594,8 +2594,6 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
     if (!sCustomProperty.isEmpty())
         aProperties[OString("customproperty")] = sCustomProperty;
 
-    bool bInserted = false;
-
     while(true)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -2631,9 +2629,6 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
         if (!nLevel)
             break;
     }
-
-    if (bInserted)
-        return;
 
     insertMenuObject(pParent, pSubMenu, sClass, sID, aProperties, aAccelerators);
 }
