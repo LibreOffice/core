@@ -48,4 +48,9 @@ public class LocalDocumentsProvider implements IDocumentProvider {
     public int getId() {
         return id;
     }
+
+    @Override
+    public boolean checkProviderAvailability() {
+        return true;
+    }
 }
