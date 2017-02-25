@@ -33,7 +33,7 @@
 bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
 {
     bool    ret = true;
-    sal_uInt16  i=0;
+    int i=0;
 
     if (!bCmdFile)
     {
