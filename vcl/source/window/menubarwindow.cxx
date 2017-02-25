@@ -825,7 +825,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
         sal_Unicode nCharCode = rKEvent.GetCharCode();
         if ( nCharCode )
         {
-            sal_uInt16 nEntry, nDuplicates;
+            size_t nEntry, nDuplicates;
             MenuItemData* pData = pMenu->GetItemList()->SearchItem( nCharCode, rKEvent.GetKeyCode(), nEntry, nDuplicates, nHighlightedItem );
             if ( pData && (nEntry != ITEMPOS_INVALID) )
             {

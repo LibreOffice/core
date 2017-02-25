@@ -1124,8 +1124,8 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
         default:
         {
             sal_Unicode nCharCode = rKEvent.GetCharCode();
-            sal_uInt16 nPos = 0;
-            sal_uInt16 nDuplicates = 0;
+            size_t nPos = 0;
+            size_t nDuplicates = 0;
             MenuItemData* pData = (nCharCode && pMenu && accel) ?
                 pMenu->GetItemList()->SearchItem(nCharCode, rKEvent.GetKeyCode(), nPos, nDuplicates, nHighlightedItem) : nullptr;
             if (pData)

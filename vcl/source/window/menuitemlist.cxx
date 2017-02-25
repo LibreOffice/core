@@ -151,9 +151,9 @@ MenuItemData* MenuItemList::GetData( sal_uInt16 nSVId, size_t& rPos ) const
 MenuItemData* MenuItemList::SearchItem(
     sal_Unicode cSelectChar,
     KeyCode aKeyCode,
-    sal_uInt16& rPos,
-    sal_uInt16& nDuplicates,
-    sal_uInt16 nCurrentPos
+    size_t& rPos,
+    size_t& nDuplicates,
+    size_t nCurrentPos
 ) const
 {
     const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetUILocaleI18nHelper();

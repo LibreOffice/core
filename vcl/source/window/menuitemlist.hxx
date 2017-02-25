@@ -131,9 +131,9 @@ public:
     MenuItemData*   SearchItem(
                         sal_Unicode cSelectChar,
                         vcl::KeyCode aKeyCode,
-                        sal_uInt16& rPos,
-                        sal_uInt16& nDuplicates,
-                        sal_uInt16 nCurrentPos
+                        size_t& rPos,
+                        size_t& nDuplicates,
+                        size_t nCurrentPos
                     ) const;
     size_t          GetItemCount( sal_Unicode cSelectChar ) const;
     size_t          GetItemCount( vcl::KeyCode aKeyCode ) const;
