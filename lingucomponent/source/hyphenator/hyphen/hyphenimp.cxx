@@ -50,6 +50,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <cassert>
 #include <list>
 #include <set>
 #include <memory>
@@ -617,7 +618,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         // now convert word to needed encoding
         OString encWord(OU2ENC(nTerm,eEnc));
 
-        int wordlen = encWord.getLength();
+        sal_Int32 wordlen = encWord.getLength();
         std::unique_ptr<char[]> lcword(new char[wordlen+1]);
         std::unique_ptr<char[]> hyphens(new char[wordlen+5]);
         char ** rep = nullptr; // replacements of discretionary hyphenation
@@ -628,7 +629,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         strcpy(lcword.get(),encWord.getStr());
 
         // first remove any trailing periods
-        int n = wordlen-1;
+        sal_Int32 n = wordlen-1;
         while((n >=0) && (lcword[n] == '.'))
             n--;
         n++;
@@ -655,14 +656,13 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             }
         }
         // now backfill hyphens[] for any removed periods
-        for (int c = n; c < wordlen; c++)
+        for (sal_Int32 c = n; c < wordlen; c++)
             hyphens[c] = '0';
         hyphens[wordlen] = '\0';
 
-        sal_Int16 nHyphCount = 0;
-        sal_Int16 i;
+        sal_Int32 nHyphCount = 0;
 
-        for ( i = 0; i < encWord.getLength(); i++)
+        for ( sal_Int32 i = 0; i < encWord.getLength(); i++)
         {
             if (hyphens[i]&1)
                 nHyphCount++;
@@ -673,12 +673,25 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         OUStringBuffer hyphenatedWordBuffer;
         nHyphCount = 0;
 
-        for (i = 0; i < nWord.getLength(); i++)
+        for (sal_Int32 i = 0; i < nWord.getLength(); i++)
         {
             hyphenatedWordBuffer.append(aWord[i]);
             // hyphenation position
             if (hyphens[i]&1)
             {
+                // linguistic::PossibleHyphens is stuck with
+                // css::uno::Sequence<sal_Int16> because of
+                // css.linguistic2.XPossibleHpyhens.getHyphenationPositions, so
+                // any further positions need to be ignored:
+                assert(i >= SAL_MIN_INT16);
+                if (i > SAL_MAX_INT16)
+                {
+                    SAL_WARN(
+                        "lingucomponent",
+                        "hyphen pos " << i << " > SAL_MAX_INT16 in \"" << aWord
+                            << "\"");
+                    continue;
+                }
                 pPos[nHyphCount] = i;
                 hyphenatedWordBuffer.append('=');
                 nHyphCount++;
