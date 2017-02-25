@@ -119,7 +119,10 @@ class SwAccessibleMap : public ::accessibility::IAccessibleViewForwarder,
 
     //mpSelectedFrameMap contains the old selected objects.
     SwAccessibleContextMap_Impl *mpSeletedFrameMap;
-    //IvalidateShapeInParaSelection() method is responsible for the updating the selected states of the objects.
+
+    OUString maDocName;
+
+    //InvalidateShapeInParaSelection() method is responsible for the updating the selected states of the objects.
     void InvalidateShapeInParaSelection();
 
     void InvalidateRelationSet_( const SwFrame* pFrame, bool bFrom );
@@ -260,6 +263,8 @@ public:
     bool IsPageSelected( const SwPageFrame *pPageFrame ) const;
 
     void FireEvents();
+
+    const OUString& GetDocName() const { return maDocName; }
 
     // IAccessibleViewForwarder
 

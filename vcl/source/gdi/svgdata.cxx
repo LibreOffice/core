@@ -44,10 +44,9 @@ BitmapEx convertPrimitive2DSequenceToBitmapEx(
     {
         // create replacement graphic from maSequence
         // create XPrimitive2DRenderer
-        uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-
         try
         {
+            uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
             const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer = graphic::Primitive2DTools::create(xContext);
 
             uno::Sequence< beans::PropertyValue > aViewParameters;
@@ -125,10 +124,9 @@ void SvgData::ensureSequenceAndRange()
         if(myInputStream.is())
         {
             // create SVG interpreter
-            uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-
             try
             {
+                uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
                 const uno::Reference< graphic::XSvgParser > xSvgParser = graphic::SvgTools::create(xContext);
 
                 maSequence = comphelper::sequenceToContainer<std::deque<css::uno::Reference< css::graphic::XPrimitive2D >>>(xSvgParser->getDecomposition(myInputStream, maPath));

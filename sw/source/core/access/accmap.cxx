@@ -30,6 +30,7 @@
 #include <accmap.hxx>
 #include <acccontext.hxx>
 #include <accdoc.hxx>
+#include <access.hrc>
 #include <accpreview.hxx>
 #include <accpage.hxx>
 #include <accpara.hxx>
@@ -1641,7 +1642,8 @@ SwAccessibleMap::SwAccessibleMap( SwViewShell *pSh ) :
     mpVSh( pSh ),
     mpPreview( nullptr ),
     mbShapeSelected( false ),
-    mpSeletedFrameMap(nullptr)
+    mpSeletedFrameMap(nullptr),
+    maDocName(SwAccessibleContext::GetResource(STR_ACCESS_DOC_NAME))
 {
     pSh->GetLayout()->AddAccessibleShell();
 }

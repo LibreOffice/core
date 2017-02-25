@@ -80,6 +80,7 @@ namespace SwGlobals
 }
 
 SwDLL::SwDLL()
+    : m_pAutoCorrCfg(nullptr)
 {
     if ( SfxApplication::GetModule(SfxToolsModule::Writer) )    // Module already active
         return;
@@ -146,16 +147,16 @@ SwDLL::SwDLL()
         SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
         const SvxAutoCorrect* pOld = rACfg.GetAutoCorrect();
         rACfg.SetAutoCorrect(new SwAutoCorrect( *pOld ));
+        m_pAutoCorrCfg = &rACfg;
     }
 }
 
 SwDLL::~SwDLL()
 {
-    if (!utl::ConfigManager::IsAvoidConfig())
+    if (m_pAutoCorrCfg)
     {
         // fdo#86494 SwAutoCorrect must be deleted before FinitCore
-        SvxAutoCorrCfg& rACfg = SvxAutoCorrCfg::Get();
-        rACfg.SetAutoCorrect(nullptr); // delete SwAutoCorrect before exit handlers
+        m_pAutoCorrCfg->SetAutoCorrect(nullptr); // delete SwAutoCorrect before exit handlers
     }
 
     // Pool has to be deleted before statics are

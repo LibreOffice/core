@@ -37,12 +37,11 @@ XInputStream_impl::XInputStream_impl( const OUString& aUncPath )
     m_bIsOpen = ( osl::FileBase::E_None == m_aFile.open( osl_File_OpenFlag_Read ) );
 }
 
-
 XInputStream_impl::~XInputStream_impl()
 {
-    closeInput();
+    if (m_bIsOpen)
+        m_aFile.close();
 }
-
 
 uno::Any SAL_CALL
 XInputStream_impl::queryInterface( const uno::Type& rType )

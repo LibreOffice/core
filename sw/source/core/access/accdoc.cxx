@@ -338,7 +338,7 @@ SwAccessibleDocument::SwAccessibleDocument ( SwAccessibleMap* pInitMap ) :
     SwAccessibleDocumentBase( pInitMap ),
     maSelectionHelper( *this )
 {
-    SetName( GetResource( STR_ACCESS_DOC_NAME ) );
+    SetName(pInitMap->GetDocName());
     vcl::Window *pWin = pInitMap->GetShell()->GetWin();
     if( pWin )
     {
