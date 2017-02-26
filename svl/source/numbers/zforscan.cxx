@@ -1079,6 +1079,7 @@ void ImpSvNumberformatScan::Reset()
     nCntExp = 0;
     bFrac = false;
     bBlank = false;
+    bDenomin = false;
     nNatNumModifier = 0;
 }
 
@@ -1666,6 +1667,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                     else if ( sStrArray[i][0] == ' ' )
                         nTypeArray[i] = NF_SYMBOLTYPE_FRACBLANK;
+                    else if ( bFrac )
+                        bDenomin = true; // following elements are no more part of denominator
                 }
                 else if (nTypeArray[i] == NF_KEY_THAI_T)
                 {
@@ -1673,7 +1676,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     sStrArray[i] = sKeyword[nTypeArray[i]];
                 }
                 else if (sStrArray[i][0] >= '0' &&
-                         sStrArray[i][0] <= '9')
+                         sStrArray[i][0] <= '9' && !bDenomin) // denominator was not yet found
                 {
                     OUString sDiv;
                     sal_uInt16 j = i;
@@ -1702,10 +1705,14 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         {
                             nCntPre++;
                         }
+                        if ( bFrac )
+                            bDenomin = true; // next content should be treated as outside denominator
                     }
                 }
                 else
                 {
+                    if ( bFrac )
+                        bDenomin = true;    // next content should be treated as outside denominator
                     nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                 }
                 nPos = nPos + sStrArray[i].getLength();
@@ -1741,19 +1748,27 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     {
                         return nPos;                    // Error
                     }
-                    nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
-                    nPos = nPos + rStr.getLength();
-                    i++;
-                    nCounter++;
-                    while (i < nAnzStrings &&
-                           (sStrArray[i][0] == '#' ||
-                            sStrArray[i][0] == '0' ||
-                            sStrArray[i][0] == '?'))
+                    if ( !bDenomin )
                     {
                         nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
-                        nPos = nPos + sStrArray[i].getLength();
-                        nCounter++;
+                        nPos = nPos + rStr.getLength();
                         i++;
+                        nCounter++;
+                        while (i < nAnzStrings &&
+                              (sStrArray[i][0] == '#' ||
+                               sStrArray[i][0] == '0' ||
+                               sStrArray[i][0] == '?'))
+                        {
+                            nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
+                            nPos = nPos + sStrArray[i].getLength();
+                            nCounter++;
+                            i++;
+                        }
+                    }
+                    else // after denominator, treat any character as text
+                    {
+                        nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                        nPos = nPos + sStrArray[i].getLength();
                     }
                     break;
                 case '-':
@@ -1816,6 +1831,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             else
                             {
                                 nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                                if ( bFrac )
+                                    bDenomin = true; // end of denominator
                             }
                         }
                         else if (i > 0 && i < nAnzStrings-1   &&
@@ -1982,12 +1999,16 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 nCntPre = nCounter;
                                 nCounter = 0;
                             }
+                            if ( bFrac )
+                                bDenomin = true; // next content is not part of denominator
                             nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                             nPos = nPos + sStrArray[i].getLength();
                         }
                         else
                         {
                             nTypeArray[i] = NF_SYMBOLTYPE_STRING;
+                            if ( bFrac )
+                                bDenomin = true; // next content is not part of denominator
                             nPos = nPos + rStr.getLength();
                             i++;
                             while (i < nAnzStrings && StringEqualsChar( sStrArray[i], cSaved ) )
