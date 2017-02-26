@@ -89,7 +89,6 @@ XML_NAMESPACE_EXT( LO,          42U )
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )
 XML_OLD_NAMESPACE( XLINK,   1U )
-
 XML_OLD_NAMESPACE( OFFICE,  2U )
 XML_OLD_NAMESPACE( STYLE,   3U )
 XML_OLD_NAMESPACE( TEXT,    4U )

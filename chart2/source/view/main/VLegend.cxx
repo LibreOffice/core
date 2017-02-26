@@ -37,8 +37,11 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
+#include <com/sun/star/chart2/data/PivotTableFieldEntry.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <svl/languageoptions.hxx>
+
 
 #include <vector>
 #include <algorithm>
@@ -766,33 +769,31 @@ std::vector<std::shared_ptr<VButton>> lcl_createButtons(
                        const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory,
                        ChartModel& rModel, long& nUsedHeight)
 {
-// TODO: get this info from the Pivot Table
-    std::vector<OUString> aRowFields {
-//        "Service Months"
-    };
-
     std::vector<std::shared_ptr<VButton>> aButtons;
 
-    if (aRowFields.empty())
+    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(rModel.getDataProvider(), uno::UNO_QUERY);
+    if (!xPivotTableDataProvider.is())
+        return aButtons;
+
+    if (!xPivotTableDataProvider->getColumnFields().hasElements())
         return aButtons;
 
     uno::Reference<beans::XPropertySet> xModelPage(rModel.getPageBackground());
 
-    int nCIDIndex = 0;
     awt::Size aSize(2000, 700);
-
-    for (OUString const & sRowField : aRowFields)
+    int y = 100;
+    for (chart2::data::PivotTableFieldEntry const & sColumnFieldEntry : xPivotTableDataProvider->getColumnFields())
     {
         std::shared_ptr<VButton> pButton(new VButton);
         aButtons.push_back(pButton);
         pButton->init(xLegendContainer, xShapeFactory);
-        awt::Point aNewPosition = awt::Point(100, 100);
-        pButton->setLabel(sRowField);
-        pButton->setCID("RowFieldButton." + OUString::number(nCIDIndex));
+        awt::Point aNewPosition = awt::Point(100, y);
+        pButton->setLabel(sColumnFieldEntry.Name);
+        pButton->setCID("FieldButton.Column." + OUString::number(sColumnFieldEntry.DimensionIndex));
         pButton->createShapes(aNewPosition, aSize, xModelPage);
-        nCIDIndex += 1;
+        y += aSize.Height + 100;;
     }
-    nUsedHeight += aSize.Height + 100;
+    nUsedHeight += y + 100;
 
     return aButtons;
 }
