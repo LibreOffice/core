@@ -31,6 +31,7 @@
 #include <svl/listener.hxx>
 #include <svl/itemprop.hxx>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
+#include <com/sun/star/table/XTablePivotChartsSupplier.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -771,6 +772,7 @@ class ScTableSheetObj : public ScCellRangeObj,
                         public css::sheet::XSheetPageBreak,
                         public css::sheet::XCellRangeMovement,
                         public css::table::XTableChartsSupplier,
+                        public css::table::XTablePivotChartsSupplier,
                         public css::sheet::XDataPilotTablesSupplier,
                         public css::sheet::XScenariosSupplier,
                         public css::sheet::XSheetAnnotationsSupplier,
@@ -855,6 +857,10 @@ public:
                             // XTableChartsSupplier
     virtual css::uno::Reference< css::table::XTableCharts > SAL_CALL
                             getCharts() override;
+
+                            // XTablePivotChartsSupplier
+    virtual css::uno::Reference<css::table::XTablePivotCharts> SAL_CALL
+                            getPivotCharts() override;
 
                             // XDataPilotTablesSupplier
     virtual css::uno::Reference< css::sheet::XDataPilotTables > SAL_CALL

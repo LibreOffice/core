@@ -471,6 +471,7 @@ data-cell-range-address
 data-label-number
 data-label-symbol
 data-label-text
+data-pilot-source
 data-pilot-field
 data-pilot-grand-total
 data-pilot-level

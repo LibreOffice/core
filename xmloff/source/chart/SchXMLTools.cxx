@@ -36,6 +36,7 @@
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
+#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -488,11 +489,21 @@ void CreateCategories(
                                             bRangeConverted = true;
                                         }
                                     }
-                                    Reference< chart2::data::XDataSequence > xSeq(
-                                        xDataProvider->createDataSequenceByRangeRepresentation( aConvertedRange ));
-                                    xLabeledSeq->setValues( xSeq );
-                                    if( bRangeConverted )
-                                        setXMLRangePropertyAtDataSequence( xSeq, rRangeAddress );
+
+                                    Reference<chart2::data::XDataSequence> xSequence;
+                                    Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xDataProvider, uno::UNO_QUERY);
+                                    if (xPivotTableDataProvider.is())
+                                    {
+                                        xSequence.set(xPivotTableDataProvider->createDataSequenceOfCategories());
+                                    }
+                                    else
+                                    {
+                                        xSequence.set(xDataProvider->createDataSequenceByRangeRepresentation(aConvertedRange));
+                                        if (bRangeConverted)
+                                            setXMLRangePropertyAtDataSequence(xSequence, rRangeAddress);
+                                    }
+                                    xLabeledSeq->setValues(xSequence);
+
                                 }
                                 catch( const lang::IllegalArgumentException & ex )
                                 {

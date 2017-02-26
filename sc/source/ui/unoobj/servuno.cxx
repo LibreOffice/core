@@ -44,6 +44,7 @@
 #include "addruno.hxx"
 #include "chart2uno.hxx"
 #include "tokenuno.hxx"
+#include "PivotTableDataProvider.hxx"
 
 // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #include <svx/xmleohlp.hxx>
@@ -292,6 +293,7 @@ const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.sheet.DocumentSettings",Type::SHEETDOCSET },
 
     { SC_SERVICENAME_CHDATAPROV,            Type::CHDATAPROV },
+    { SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER, Type::CHART_PIVOTTABLE_DATAPROVIDER },
     { SC_SERVICENAME_FORMULAPARS,           Type::FORMULAPARS },
     { SC_SERVICENAME_OPCODEMAPPER,          Type::OPCODEMAPPER },
     { "ooo.vba.VBAObjectModuleObjectProvider", Type::VBAOBJECTPROVIDER },
@@ -388,6 +390,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                                     Type nType, ScDocShell* pDocShell )
 {
     uno::Reference<uno::XInterface> xRet;
+
     switch (nType)
     {
         case Type::SHEET:
@@ -522,6 +525,10 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case Type::CHDATAPROV:
             if (pDocShell)
                 xRet = *new ScChart2DataProvider( &pDocShell->GetDocument() );
+            break;
+        case Type::CHART_PIVOTTABLE_DATAPROVIDER:
+            if (pDocShell)
+                xRet = *new sc::PivotTableDataProvider(&pDocShell->GetDocument());
             break;
         case Type::FORMULAPARS:
             if (pDocShell)
