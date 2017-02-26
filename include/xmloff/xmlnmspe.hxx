@@ -23,11 +23,11 @@
 #include <sal/types.h>
 
 #define XML_NAMESPACE( prefix, key ) \
-const sal_uInt16 XML_NAMESPACE_##prefix         = key; \
-const sal_uInt16 XML_NAMESPACE_##prefix##_IDX   = key;
+constexpr sal_uInt16 XML_NAMESPACE_##prefix         = key; \
+constexpr sal_uInt16 XML_NAMESPACE_##prefix##_IDX   = key;
 
 #define XML_OLD_NAMESPACE( prefix, index ) \
-const sal_uInt16 XML_OLD_NAMESPACE_##prefix##_IDX = \
+constexpr sal_uInt16 XML_OLD_NAMESPACE_##prefix##_IDX = \
     (XML_OLD_NAMESPACE_BASE+index);
 
 // current namespaces
@@ -89,7 +89,6 @@ XML_NAMESPACE_EXT( LO,          42U )
 // namespaces used in the technical preview (SO 5.2)
 XML_OLD_NAMESPACE( FO,      0U )
 XML_OLD_NAMESPACE( XLINK,   1U )
-
 XML_OLD_NAMESPACE( OFFICE,  2U )
 XML_OLD_NAMESPACE( STYLE,   3U )
 XML_OLD_NAMESPACE( TEXT,    4U )
