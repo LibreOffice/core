@@ -989,42 +989,55 @@ bool BitmapScaleSuper::filter(Bitmap& rBitmap)
         // We work hard when there is a large destination image, or
         // A large source image.
         bool bHorizontalWork = pReadAccess->Width() > 512 || pWriteAccess->Width() > 512;
+        bool bUseThreads = true;
 
         static bool bDisableThreadedScaling = getenv ("VCL_NO_THREAD_SCALE");
         if ( bDisableThreadedScaling || !bHorizontalWork ||
              nEndY - nStartY < SCALE_THREAD_STRIP )
         {
             SAL_INFO("vcl.gdi", "Scale in main thread");
-            pScaleRangeFn( aContext, nStartY, nEndY );
+            bUseThreads = false;
         }
-        else
-        {
-            // partition and queue work
-            comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
-            std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
-            sal_uInt32 nThreads = rShared.getWorkerCount();
-            assert( nThreads > 0 );
-            sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
-            sal_uInt32 nStripsPerThread = nStrips / nThreads;
-            SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread we have " << nThreads << " CPU threads ");
-            long nStripY = nStartY;
-            for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
-            {
-                ScaleTask *pTask = new ScaleTask( pTag, pScaleRangeFn );
-                for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
-                {
-                    ScaleRangeContext aRC( &aContext, nStripY );
-                    pTask->push( aRC );
-                    nStripY += SCALE_THREAD_STRIP;
-                }
-                rShared.pushTask( pTask );
-            }
-            // finish any remaining bits here
-            pScaleRangeFn( aContext, nStripY, nEndY );
 
-            rShared.waitUntilDone(pTag);
-            SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
+        if (bUseThreads)
+        {
+            try
+            {
+                // partition and queue work
+                comphelper::ThreadPool &rShared = comphelper::ThreadPool::getSharedOptimalPool();
+                std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
+                sal_uInt32 nThreads = rShared.getWorkerCount();
+                assert( nThreads > 0 );
+                sal_uInt32 nStrips = ((nEndY - nStartY) + SCALE_THREAD_STRIP - 1) / SCALE_THREAD_STRIP;
+                sal_uInt32 nStripsPerThread = nStrips / nThreads;
+                SAL_INFO("vcl.gdi", "Scale in " << nStrips << " strips " << nStripsPerThread << " per thread we have " << nThreads << " CPU threads ");
+                long nStripY = nStartY;
+                for ( sal_uInt32 t = 0; t < nThreads - 1; t++ )
+                {
+                    ScaleTask *pTask = new ScaleTask( pTag, pScaleRangeFn );
+                    for ( sal_uInt32 j = 0; j < nStripsPerThread; j++ )
+                    {
+                        ScaleRangeContext aRC( &aContext, nStripY );
+                        pTask->push( aRC );
+                        nStripY += SCALE_THREAD_STRIP;
+                    }
+                    rShared.pushTask( pTask );
+                }
+                // finish any remaining bits here
+                pScaleRangeFn( aContext, nStripY, nEndY );
+
+                rShared.waitUntilDone(pTag);
+                SAL_INFO("vcl.gdi", "All threaded scaling tasks complete");
+            }
+            catch (...)
+            {
+                SAL_WARN("vcl.gdi", "threaded bitmap scaling failed");
+                bUseThreads = false;
+            }
         }
+
+        if (!bUseThreads)
+            pScaleRangeFn( aContext, nStartY, nEndY );
 
         bRet = true;
     }
