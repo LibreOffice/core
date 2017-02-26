@@ -130,6 +130,7 @@
 #include "dputil.hxx"
 #include <sortparam.hxx>
 #include "condformatuno.hxx"
+#include "TablePivotCharts.hxx"
 
 #include <list>
 #include <memory>
@@ -6726,6 +6727,7 @@ uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( sheet::XSheetLinkable )
     SC_QUERYINTERFACE( sheet::XExternalSheetName )
     SC_QUERYINTERFACE( document::XEventsSupplier )
+    SC_QUERYINTERFACE( table::XTablePivotChartsSupplier )
 
     return ScCellRangeObj::queryInterface( rType );
 }
@@ -6749,7 +6751,8 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes()
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 18 );
+        aTypes.realloc(nParentLen + 19);
+
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = cppu::UnoType<sheet::XSpreadsheet>::get();
         pPtr[nParentLen + 1] = cppu::UnoType<container::XNamed>::get();
@@ -6769,6 +6772,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes()
         pPtr[nParentLen +15] = cppu::UnoType<sheet::XSheetLinkable>::get();
         pPtr[nParentLen +16] = cppu::UnoType<sheet::XExternalSheetName>::get();
         pPtr[nParentLen +17] = cppu::UnoType<document::XEventsSupplier>::get();
+        pPtr[nParentLen +18] = cppu::UnoType<table::XTablePivotChartsSupplier>::get();
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -6805,6 +6809,17 @@ uno::Reference<table::XTableCharts> SAL_CALL ScTableSheetObj::getCharts()
         return new ScChartsObj( pDocSh, GetTab_Impl() );
 
     OSL_FAIL("no Dokument");
+    return nullptr;
+}
+
+uno::Reference<table::XTablePivotCharts> SAL_CALL ScTableSheetObj::getPivotCharts()
+{
+    SolarMutexGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if (pDocSh)
+        return new sc::TablePivotCharts(pDocSh, GetTab_Impl());
+
+    OSL_FAIL("no Document");
     return nullptr;
 }
 

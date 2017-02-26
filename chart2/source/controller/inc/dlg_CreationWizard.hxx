@@ -24,57 +24,56 @@
 #include "TabPageNotifiable.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <svtools/roadmapwizard.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <svtools/roadmapwizard.hxx>
 
 #include <memory>
 
 namespace chart
 {
 
-class RangeChooserTabPage;
-class DataSourceTabPage;
 class DialogModel;
 class ChartTypeTemplateProvider;
 
 class CreationWizard : public svt::RoadmapWizard, public TabPageNotifiable
 {
 public:
-    CreationWizard( vcl::Window* pParent,
-        const css::uno::Reference< css::frame::XModel >& xChartModel
-        , const css::uno::Reference< css::uno::XComponentContext >& xContext );
+    CreationWizard(vcl::Window* pParent,
+        const css::uno::Reference<css::frame::XModel>& xChartModel,
+        const css::uno::Reference<css::uno::XComponentContext>& xContext);
 
     CreationWizard() = delete;
     virtual ~CreationWizard() override;
 
     // TabPageNotifiable
-    virtual void setInvalidPage( TabPage * pTabPage ) override;
-    virtual void setValidPage( TabPage * pTabPage ) override;
+    virtual void setInvalidPage(TabPage * pTabPage) override;
+    virtual void setValidPage(TabPage * pTabPage) override;
 
 protected:
-    virtual bool            leaveState( WizardState _nState ) override;
-    virtual WizardState     determineNextState(WizardState nCurrentState) const override;
-    virtual void            enterState(WizardState nState) override;
+    virtual bool leaveState( WizardState _nState ) override;
+    virtual WizardState determineNextState(WizardState nCurrentState) const override;
+    virtual void enterState(WizardState nState) override;
 
-    virtual OUString        getStateDisplayName( WizardState nState ) const override;
+    virtual OUString getStateDisplayName(WizardState nState) const override;
 
 private:
     virtual VclPtr<TabPage> createPage(WizardState nState) override;
 
-    css::uno::Reference< css::chart2::XChartDocument >   m_xChartModel;
-    css::uno::Reference< css::uno::XComponentContext>    m_xCC;
-    ChartTypeTemplateProvider*   m_pTemplateProvider;
+    css::uno::Reference<css::chart2::XChartDocument> m_xChartModel;
+    css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
+    ChartTypeTemplateProvider* m_pTemplateProvider;
     std::unique_ptr<DialogModel> m_pDialogModel;
 
     WizardState m_nLastState;
 
-    TimerTriggeredControllerLock   m_aTimerTriggeredControllerLock;
+    TimerTriggeredControllerLock m_aTimerTriggeredControllerLock;
 
-//     RangeChooserTabPage * m_pRangeChooserTabPage;
-//     DataSourceTabPage *   m_pDataSourceTabPage;
-    bool                  m_bCanTravel;
+    bool m_bCanTravel;
 };
+
 } //namespace chart
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
