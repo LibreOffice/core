@@ -146,6 +146,8 @@ public:
     // relative ordering, to get e.g. x-values and y-values in the right order
     static sal_Int32 GetRoleIndexForSorting( const OUString & rInternalRoleString );
 
+    ChartModel& getModel() const;
+
 private:
     css::uno::Reference< css::chart2::XChartDocument >
         m_xChartDocument;
@@ -168,7 +170,6 @@ private:
 
     sal_Int32 countSeries() const;
 
-    ChartModel& getModel() const;
     mutable DialogModelTimeBasedInfo maTimeBasedInfo;
 };
 

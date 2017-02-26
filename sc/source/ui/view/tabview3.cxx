@@ -2469,27 +2469,23 @@ void ScTabView::DoChartSelection(
     }
 }
 
-void ScTabView::DoDPFieldPopup(Point aPoint, Size /*aSize*/)
+void ScTabView::DoDPFieldPopup(OUString const & rPivotTableName, sal_Int32 nDimensionIndex, Point aPoint, Size aSize)
 {
     ScDocument& rDocument = aViewData.GetDocShell()->GetDocument();
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()].get();
+
     if (!pWin)
         return;
 
-    ScDPCollection* pDPs = rDocument.GetDPCollection();
-    // TODO - DP name should be a parameter
-    ScDPObject* pDPObj = pDPs->GetByName("DataPilot1");
+    ScDPCollection* pDPCollection = rDocument.GetDPCollection();
+    ScDPObject* pDPObject = pDPCollection->GetByName(rPivotTableName);
 
-    pDPObj->BuildAllDimensionMembers();
-
-    //const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
-    //bool bIsDataLayout;
-    //OUString aDimName = pDPObj->GetDimName(0, bIsDataLayout);
+    pDPObject->BuildAllDimensionMembers();
 
     Point aScreenPoint = pWin->OutputToScreenPixel(pWin->LogicToPixel(aPoint));
-    //Size aScreenSize = pWin->LogicToPixel(aSize);
+    Size aScreenSize = pWin->LogicToPixel(aSize);
 
-    pWin->DPLaunchFieldPopupMenu(aScreenPoint, Size(1, 1), 1, pDPObj);
+    pWin->DPLaunchFieldPopupMenu(aScreenPoint, aScreenSize, nDimensionIndex, pDPObject);
 }
 
 //  PaintGrid - repaint data range
