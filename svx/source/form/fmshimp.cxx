@@ -311,14 +311,14 @@ namespace
     }
 
 
-    sal_Int16 GridView2ModelPos(const Reference< XIndexAccess>& rColumns, sal_Int16 nViewPos)
+    sal_Int32 GridView2ModelPos(const Reference< XIndexAccess>& rColumns, sal_Int16 nViewPos)
     {
         try
         {
             if (rColumns.is())
             {
                 // loop through all columns
-                sal_Int16 i;
+                sal_Int32 i;
                 Reference< XPropertySet> xCur;
                 for (i=0; i<rColumns->getCount(); ++i)
                 {
@@ -341,7 +341,7 @@ namespace
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        return (sal_Int16)-1;
+        return -1;
     }
 
 
@@ -1518,7 +1518,7 @@ void FmXFormShell::ExecuteSearch()
                     xColumns.set(xGridPeer->getColumns(),UNO_QUERY);
 
                 sal_Int16 nViewCol = xGrid->getCurrentColumnPosition();
-                sal_Int16 nModelCol = GridView2ModelPos(xColumns, nViewCol);
+                sal_Int32 nModelCol = GridView2ModelPos(xColumns, nViewCol);
                 Reference< XPropertySet> xCurrentCol;
                 if(xColumns.is())
                     xColumns->getByIndex(nModelCol) >>= xCurrentCol;
@@ -2394,7 +2394,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscContextIn
                         if (!IsSearchableControl(xCurrentColumn))
                             continue;
 
-                        sal_Int16 nModelPos = GridView2ModelPos(xModelColumns, nViewPos);
+                        sal_Int32 nModelPos = GridView2ModelPos(xModelColumns, nViewPos);
                         Reference< XPropertySet> xCurrentColModel;
                         xModelColumns->getByIndex(nModelPos) >>= xCurrentColModel;
                         aName = ::comphelper::getString(xCurrentColModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
