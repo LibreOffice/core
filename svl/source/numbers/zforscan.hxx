@@ -174,6 +174,7 @@ private: // Private section
     bool bExp;                                  // Set when reading E
     bool bFrac;                                 // Set when reading /
     bool bBlank;                                // Set when reading ' ' (Fraction)
+    bool bDenomin;                              // Set when reading end of denominator
     bool bDecSep;                               // Set on first ,
     mutable bool bKeywordsNeedInit;             // Locale dependent keywords need to be initialized
     mutable bool bCompatCurNeedInit;            // Locale dependent compatibility currency need to be initialized
