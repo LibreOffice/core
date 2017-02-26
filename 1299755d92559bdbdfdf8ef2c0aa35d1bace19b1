@@ -50,6 +50,29 @@
       "revId": "1299755d92559bdbdfdf8ef2c0aa35d1bace19b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_a74e50bf",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-02-26T08:32:00Z",
+      "side": 1,
+      "message": "Personally I am not that sure that it is worth it to have those \"prose\" messages in assert() statements. When an assert() fails, the file name and line number will tell the developer where the problems is. Any textual message is likely to be fairly useless, outdated, or even wrong. Also remember that the assertion message is prefixed with the string \"Assertion failed:\".\n\nFor instance here, is \"not the same\" the problem, or how it should be, but isn\u0027t? After all, the assertion wants to verify that nId equals nNewId, so isn\u0027t it then wrong, semantically, to say \"Assertion failed: not the same\" ? Shouldn\u0027t it be \"Assertion failed: identical\"? And by then if we start changing it to be like that, we notice that actually the logical expression (which also is output when the assertion fails) tells that much.\n\nSorry for the long rant.",
+      "range": {
+        "startLine": 488,
+        "startChar": 49,
+        "endLine": 488,
+        "endChar": 52
+      },
+      "revId": "1299755d92559bdbdfdf8ef2c0aa35d1bace19b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
