@@ -25,6 +25,7 @@
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <list>
+#include <memory>
 
 #include "calbck.hxx"
 #include <anchoreddrawobject.hxx>
@@ -189,7 +190,7 @@ public:
 class SW_DLLPUBLIC SwFlyDrawContact final : public SwContact
 {
 private:
-    SwFlyDrawObj* mpMasterObj;
+    std::unique_ptr<SwFlyDrawObj> mpMasterObj;
     void SwClientNotify(const SwModify&, const SfxHint& rHint) override;
 
 

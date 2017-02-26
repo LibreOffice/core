@@ -442,12 +442,12 @@ void SwContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 }
 
 
-SwFlyDrawContact::SwFlyDrawContact( SwFlyFrameFormat *pToRegisterIn, SdrModel * ) :
-    SwContact( pToRegisterIn )
+SwFlyDrawContact::SwFlyDrawContact( SwFlyFrameFormat *pToRegisterIn, SdrModel * )
+    : SwContact( pToRegisterIn )
+    , mpMasterObj(new SwFlyDrawObj)
 {
     // #i26791# - class <SwFlyDrawContact> contains the 'master'
     // drawing object of type <SwFlyDrawObj> on its own.
-    mpMasterObj = new SwFlyDrawObj;
     mpMasterObj->SetOrdNum( 0xFFFFFFFE );
     mpMasterObj->SetUserCall( this );
 }
@@ -459,7 +459,6 @@ SwFlyDrawContact::~SwFlyDrawContact()
         mpMasterObj->SetUserCall( nullptr );
         if ( mpMasterObj->GetPage() )
             mpMasterObj->GetPage()->RemoveObject( mpMasterObj->GetOrdNum() );
-        delete mpMasterObj;
     }
 }
 
@@ -484,18 +483,17 @@ SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj(SdrObject *const pSdrObj)
 
 const SdrObject* SwFlyDrawContact::GetMaster() const
 {
-    return mpMasterObj;
+    return mpMasterObj.get();
 }
 
 SdrObject* SwFlyDrawContact::GetMaster()
 {
-    return mpMasterObj;
+    return mpMasterObj.get();
 }
 
 void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
 {
-    assert(dynamic_cast<const SwFlyDrawObj*>(_pNewMaster) != nullptr);
-    mpMasterObj = static_cast<SwFlyDrawObj *>(_pNewMaster);
+    std::abort(); // this should never be called SwFlyDrawContact is owning its "Master"
 }
 
 /**
