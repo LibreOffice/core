@@ -156,7 +156,7 @@ SwXMLConditionParser_Impl::SwXMLConditionParser_Impl( const OUString& rInp ) :
         else if( IsXMLToken( sFunc, XML_FOOTER ) && !bHasSub )
             nCondition = Master_CollCondition::PARA_IN_FOOTER;
         else if( IsXMLToken( sFunc, XML_FOOTNOTE ) && !bHasSub )
-            nCondition = Master_CollCondition::PARA_IN_FOOTENOTE;
+            nCondition = Master_CollCondition::PARA_IN_FOOTNOTE;
         else if( IsXMLToken( sFunc, XML_HEADER ) && !bHasSub )
             nCondition = Master_CollCondition::PARA_IN_HEADER;
         else if( IsXMLToken( sFunc, XML_LIST_LEVEL) &&
