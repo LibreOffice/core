@@ -1047,16 +1047,17 @@ namespace basegfx
                         const B2DRange aCandidateRange(aCandidate.getB2DRange());
                         bool bCouldMergeSimple(false);
 
-                        for(sal_uInt32 b(0); !bCouldMergeSimple && b < aResult.size(); b++)
+                        for(auto & b: aResult)
                         {
-                            basegfx::B2DPolyPolygon aTarget(aResult[b]);
+                            basegfx::B2DPolyPolygon aTarget(b);
                             const B2DRange aTargetRange(aTarget.getB2DRange());
 
                             if(!aCandidateRange.overlaps(aTargetRange))
                             {
                                 aTarget.append(aCandidate);
-                                aResult[b] = aTarget;
+                                b = aTarget;
                                 bCouldMergeSimple = true;
+                                break;
                             }
                         }
 
