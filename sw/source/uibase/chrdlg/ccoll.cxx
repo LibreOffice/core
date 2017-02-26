@@ -103,7 +103,7 @@ const CommandStruct SwCondCollItem::aCmds[] =
     { Master_CollCondition::PARA_IN_TABLEBODY,    0 },
     { Master_CollCondition::PARA_IN_FRAME,        0 },
     { Master_CollCondition::PARA_IN_SECTION,      0 },
-    { Master_CollCondition::PARA_IN_FOOTENOTE,    0 },
+    { Master_CollCondition::PARA_IN_FOOTNOTE,     0 },
     { Master_CollCondition::PARA_IN_ENDNOTE,      0 },
     { Master_CollCondition::PARA_IN_HEADER,       0 },
     { Master_CollCondition::PARA_IN_FOOTER,       0 },
