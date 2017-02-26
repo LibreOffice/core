@@ -36,9 +36,6 @@ public:
 
 void VclComplexTextTest::testArabic()
 {
-#if !defined (LINUX)
-    return;
-#else // only tested on Linux so far
     const unsigned char pOneTwoThreeUTF8[] = {
         0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
         0xd8, 0xaf, 0xd9, 0x92, 0x20, 0xd8, 0xa5, 0xd8,
@@ -52,13 +49,19 @@ void VclComplexTextTest::testArabic()
     ScopedVclPtrInstance<WorkWindow> pWin(static_cast<vcl::Window *>(nullptr));
     CPPUNIT_ASSERT( pWin );
 
-    OutputDevice *pOutDev = pWin.get();
+    vcl::Font aFont("DejaVu Sans", "Book", Size(0, 2048));
 
-    vcl::Font aFont = OutputDevice::GetDefaultFont(
-                        DefaultFontType::CTL_SPREADSHEET,
-                        LANGUAGE_ARABIC_SAUDI_ARABIA,
-                        GetDefaultFontFlags::OnlyOne );
+    OutputDevice *pOutDev = pWin.get();
     pOutDev->SetFont( aFont );
+
+    // text advance width and line height
+    CPPUNIT_ASSERT_EQUAL(12595L, pOutDev->GetTextWidth(aOneTwoThree));
+    CPPUNIT_ASSERT_EQUAL(2384L, pOutDev->GetTextHeight());
+
+    // exact bounding rectangle, not essentially the same as text width/height
+    Rectangle aBoundRect;
+    pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
+    CPPUNIT_ASSERT_EQUAL(Rectangle(145, 212, 12438, 2491), aBoundRect);
 
     // normal orientation
     Rectangle aInput;
@@ -72,6 +75,8 @@ void VclComplexTextTest::testArabic()
 
     // Check that we did do the rotation ...
 #if 0
+    // FIXME: This seems to be wisthful thinking, GetTextRect() does not take
+    // rotation into account.
     fprintf( stderr, "%ld %ld %ld %ld\n",
              aRect.GetWidth(), aRect.GetHeight(),
              aRectRot.GetWidth(), aRectRot.GetHeight() );
@@ -79,7 +84,6 @@ void VclComplexTextTest::testArabic()
     CPPUNIT_ASSERT( aRectRot.GetHeight() == aRect.GetWidth() );
 #else
     (void)aRect; (void)aRectRot;
-#endif
 #endif
 }
 
