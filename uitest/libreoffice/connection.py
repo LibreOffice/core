@@ -32,6 +32,11 @@ class OfficeConnection:
         self.pro = None
 
     def setUp(self):
+        """  Create a new connection to a LibreOffice process
+
+        If the connection method is path the instance will be created as a
+        new subprocess. If the connection method is connect the instance tries
+        to connect to an existing instance with the specified socket string """
         (method, sep, rest) = self.args["--soffice"].partition(":")
         if sep != ":":
             raise Exception("soffice parameter does not specify method")
@@ -48,9 +53,18 @@ class OfficeConnection:
                 socket = rest
         else:
             raise Exception("unsupported connection method: " + method)
+
+        # connect to the soffice instance
         self.xContext = self.connect(socket)
 
     def bootstrap(self, soffice, userdir, socket):
+        """ Creates a new LibreOffice process
+
+        @param soffice Path to the soffice installation
+        @param userdir Directory of the user profile, only one process per user
+                         profile is possible
+        @param socket The socket string used for the PyUNO connection """
+
         argv = [soffice, "--accept=" + socket + ";urp",
                 "-env:UserInstallation=" + userdir,
                 "--quickstart=no", "--nofirststartwizard",
@@ -69,6 +83,7 @@ class OfficeConnection:
         return self.pro
 
     def connect(self, socket):
+        """ Tries to connect to the LibreOffice instance through the specified socket"""
         xLocalContext = uno.getComponentContext()
         xUnoResolver = xLocalContext.ServiceManager.createInstanceWithContext(
                 "com.sun.star.bridge.UnoUrlResolver", xLocalContext)
@@ -86,6 +101,13 @@ class OfficeConnection:
                 time.sleep(1)
 
     def tearDown(self):
+        """Terminate a LibreOffice instance created with the path connection method.
+
+        First tries to terminate the soffice instance through the normal
+        XDesktop::terminate method and waits for about 30 seconds before
+        considering this attempt failed. After the 30 seconds the subprocess
+        is terminated """
+
         if self.soffice:
             if self.xContext:
                 try:
@@ -97,10 +119,10 @@ class OfficeConnection:
                     print("...done")
                 except pyuno.getClass("com.sun.star.beans.UnknownPropertyException"):
                     print("caught UnknownPropertyException while TearDown")
-                    pass # ignore, also means disposed
+                    pass  # ignore, also means disposed
                 except pyuno.getClass("com.sun.star.lang.DisposedException"):
                     print("caught DisposedException while TearDown")
-                    pass # ignore
+                    pass  # ignore
             else:
                 self.soffice.terminate()
 
@@ -145,10 +167,17 @@ class PersistentConnection:
         self.connection = None
 
     def getContext(self):
+        """ Returns the XContext corresponding to the LibreOffice instance
+
+        This is the starting point for any PyUNO access to the LibreOffice
+        instance."""
         return self.connection.xContext
 
     def setUp(self):
-        assert(not self.connection)
+        # don't create two connections
+        if self.connection:
+            return
+
         conn = OfficeConnection(self.args)
         conn.setUp()
         self.connection = conn
@@ -161,6 +190,9 @@ class PersistentConnection:
                 self.connection = None
 
     def kill(self):
+        """ Kills the LibreOffice instance if it was created through the connection
+
+        Only works with the connection method path"""
         if self.connection and self.connection.soffice:
             self.connection.soffice.kill()
 
