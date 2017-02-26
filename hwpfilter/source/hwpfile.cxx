@@ -74,11 +74,13 @@ HWPFile::~HWPFile()
     for (; tbl != tables.end(); ++tbl)
         delete *tbl;
 
-    std::list < HyperText* >::iterator hyp = hyperlist.begin();
+    std::list<EmPicture*>::iterator emb = emblist.begin();
+    for (; emb != emblist.end(); ++emb)
+        delete *emb;
+
+    std::list<HyperText*>::iterator hyp = hyperlist.begin();
     for (; hyp != hyperlist.end(); ++hyp)
-    {
         delete *hyp;
-    }
 }
 
 int HWPFile::ReadHwpFile(HStream * stream)
