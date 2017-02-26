@@ -812,7 +812,6 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             {
                 aPropSequence [nPropertyIndex].Name = "MirroredY";
                 aPropSequence [nPropertyIndex].Value = makeAny (bFlipY);
-                nPropertyIndex++;
             }
             aPropertySet.setAnyProperty(PROP_CustomShapeGeometry, makeAny( aPropSequence ) );
         }
