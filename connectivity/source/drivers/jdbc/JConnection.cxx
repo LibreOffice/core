@@ -659,11 +659,6 @@ namespace
 void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClass, const OUString& _sDriverClassPath,
     const Sequence< NamedValue >& _rSystemProperties )
 {
-    // contains the statement which should be used when query for automatically generated values
-    OUString     sGeneratedValueStatement;
-    // set to <TRUE/> when we should allow to query for generated values
-    bool            bAutoRetrievingEnabled = false;
-
     // first try if the jdbc driver is already registered at the driver manager
     SDBThreadAttach t;
     try
@@ -751,9 +746,6 @@ void java_sql_Connection::loadDriverFromProperties( const OUString& _sDriverClas
             *this
         );
     }
-
-    enableAutoRetrievingEnabled( bAutoRetrievingEnabled );
-    setAutoRetrievingStatement( sGeneratedValueStatement );
 }
 
 OUString java_sql_Connection::impl_getJavaDriverClassPath_nothrow(const OUString& _sDriverClass)
