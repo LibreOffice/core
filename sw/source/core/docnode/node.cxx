@@ -1836,7 +1836,7 @@ bool SwContentNode::IsAnyCondition( SwCollCondition& rTmp ) const
                 case SwFlyStartNode:        nCond = Master_CollCondition::PARA_IN_FRAME; break;
                 case SwFootnoteStartNode:
                     {
-                        nCond = Master_CollCondition::PARA_IN_FOOTENOTE;
+                        nCond = Master_CollCondition::PARA_IN_FOOTNOTE;
                         const SwFootnoteIdxs& rFootnoteArr = rNds.GetDoc()->GetFootnoteIdxs();
                         const SwTextFootnote* pTextFootnote;
                         const SwNode* pSrchNd = pSttNd;
