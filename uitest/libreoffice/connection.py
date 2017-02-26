@@ -153,12 +153,6 @@ class PersistentConnection:
         conn.setUp()
         self.connection = conn
 
-    def preTest(self):
-        assert(self.connection)
-
-    def postTest(self):
-        assert(self.connection)
-
     def tearDown(self):
         if self.connection:
             try:
