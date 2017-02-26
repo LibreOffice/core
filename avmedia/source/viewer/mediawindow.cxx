@@ -224,8 +224,7 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window*,
 
     getMediaFilters( aFilters );
 
-    unsigned int i;
-    for( i = 0; i < aFilters.size(); ++i )
+    for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
         {
@@ -239,7 +238,7 @@ bool MediaWindow::executeMediaURLDialog(vcl::Window*,
     // add filter for all media types
     aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
 
-    for( i = 0; i < aFilters.size(); ++i )
+    for( FilterNameVector::size_type i = 0; i < aFilters.size(); ++i )
     {
         OUString aTypes;
 
@@ -344,8 +343,7 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
 
             getMediaFilters( aFilters );
 
-            unsigned int i;
-            for( i = 0; ( i < aFilters.size() ) && !bRet; ++i )
+            for( FilterNameVector::size_type i = 0; ( i < aFilters.size() ) && !bRet; ++i )
             {
                 for( sal_Int32 nIndex = 0; nIndex >= 0 && !bRet; )
                 {
