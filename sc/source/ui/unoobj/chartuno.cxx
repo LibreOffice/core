@@ -38,6 +38,7 @@
 #include <svx/charthelper.hxx>
 #include <svtools/embedhlp.hxx>
 
+#include "ChartTools.hxx"
 #include "chartuno.hxx"
 #include "miscuno.hxx"
 #include "docsh.hxx"
@@ -48,46 +49,12 @@
 #include "chart2uno.hxx"
 #include "convuno.hxx"
 
-using namespace com::sun::star;
+using namespace css;
 
 #define PROP_HANDLE_RELATED_CELLRANGES  1
 
 SC_SIMPLE_SERVICE_INFO( ScChartObj, "ScChartObj", "com.sun.star.table.TableChart" )
 SC_SIMPLE_SERVICE_INFO( ScChartsObj, "ScChartsObj", "com.sun.star.table.TableCharts" )
-
-static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
-{
-    if (pDocShell)
-    {
-        ScDocument& rDoc = pDocShell->GetDocument();
-        ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        if (pDrawLayer)
-        {
-            SdrPage* pPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
-            OSL_ENSURE(pPage, "Page nicht gefunden");
-            if (pPage)
-            {
-                SdrObjListIter aIter( *pPage, SdrIterMode::DeepNoGroups );
-                SdrObject* pObject = aIter.Next();
-                while (pObject)
-                {
-                    if ( pObject->GetObjIdentifier() == OBJ_OLE2 && ScDocument::IsChart(pObject) )
-                    {
-                        uno::Reference < embed::XEmbeddedObject > xObj = static_cast<SdrOle2Obj*>(pObject)->GetObjRef();
-                        if ( xObj.is() )
-                        {
-                            OUString aObjName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
-                            if ( aObjName == rName )
-                                return static_cast<SdrOle2Obj*>(pObject);
-                        }
-                    }
-                    pObject = aIter.Next();
-                }
-            }
-        }
-    }
-    return nullptr;
-}
 
 ScChartsObj::ScChartsObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
@@ -156,7 +123,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
 
 ScChartObj* ScChartsObj::GetObjectByName_Impl(const OUString& aName) const
 {
-    if ( lcl_FindChartObj( pDocShell, nTab, aName ) )
+    if (sc::tools::findChartsByName(pDocShell, nTab, aName, sc::tools::ChartSourceType::CELL_RANGE))
         return new ScChartObj( pDocShell, nTab, aName );
     return nullptr;
 }
@@ -297,7 +264,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
 void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    SdrOle2Obj* pObj = lcl_FindChartObj( pDocShell, nTab, aName );
+    SdrOle2Obj* pObj = sc::tools::findChartsByName(pDocShell, nTab, aName, sc::tools::ChartSourceType::CELL_RANGE);
     if (pObj)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -429,7 +396,9 @@ uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames()
 sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
-    return ( lcl_FindChartObj( pDocShell, nTab, aName ) != nullptr );
+    SdrOle2Obj* aOle2Obj = sc::tools::findChartsByName(pDocShell, nTab, aName,
+                                                       sc::tools::ChartSourceType::CELL_RANGE);
+    return aOle2Obj != nullptr;
 }
 
 ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN)
@@ -742,7 +711,8 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
 uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject()
 {
     SolarMutexGuard aGuard;
-    SdrOle2Obj* pObject = lcl_FindChartObj( pDocShell, nTab, aChartName );
+    SdrOle2Obj* pObject = sc::tools::findChartsByName(pDocShell, nTab, aChartName,
+                                                      sc::tools::ChartSourceType::CELL_RANGE);
     if ( pObject && svt::EmbeddedObjectRef::TryRunningState( pObject->GetObjRef() ) )
     {
         //TODO/LATER: is it OK that something is returned for *all* objects, not only own objects?

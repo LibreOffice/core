@@ -32,6 +32,7 @@
 
 #define SC_SERVICENAME_CHDATAPROV       "com.sun.star.chart2.data.DataProvider"
 #define SC_SERVICENAME_CHRANGEHILIGHT   "com.sun.star.chart2.data.RangeHighlightListener"
+#define SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER "com.sun.star.chart2.data.PivotTableDataProvider"
 
 //  document
 #define SC_UNO_AREALINKS            "AreaLinks"

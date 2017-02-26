@@ -573,6 +573,12 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/unoobj/notesuno \
     sc/source/ui/unoobj/optuno \
     sc/source/ui/unoobj/pageuno \
+    sc/source/ui/unoobj/PivotTableDataProvider \
+    sc/source/ui/unoobj/PivotTableDataSource \
+    sc/source/ui/unoobj/PivotTableDataSequence \
+    sc/source/ui/unoobj/TablePivotCharts \
+    sc/source/ui/unoobj/TablePivotChart \
+    sc/source/ui/unoobj/ChartTools \
     sc/source/ui/unoobj/servuno \
     sc/source/ui/unoobj/shapeuno \
     sc/source/ui/unoobj/srchuno \
