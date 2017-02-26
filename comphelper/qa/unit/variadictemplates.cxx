@@ -125,7 +125,7 @@ void VariadicTemplatesTest::testUnwrapArgs() {
         ::com::sun::star::uno::Any* p1 = seq1.getArray();
         ::com::sun::star::uno::Any* p2 = seq2.getArray();
 
-        for( sal_Int16 i = 0; i < seq1.getLength() && i < seq2.getLength(); ++i ) {
+        for( sal_Int32 i = 0; i < seq1.getLength() && i < seq2.getLength(); ++i ) {
             CPPUNIT_ASSERT_EQUAL_MESSAGE( "seq1 and seq2 are equal",
                                     p1[i], p2[i] );
         }
