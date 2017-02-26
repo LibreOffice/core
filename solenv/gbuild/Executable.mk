@@ -1,3 +1,9 @@
+#+ @file
+#+ @brief PackagePart class
+#+
+#+ Some more detailed descriptions about rules applied ...
+
+
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
@@ -17,11 +23,10 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# Executable class
 
 # defined by platform
 #  gb_Executable_Executable_platform
-
+#+ @cond
 gb_Executable_LAYER_DIRS := \
 	UREBIN:$(INSTROOT)/$(LIBO_URE_BIN_FOLDER) \
 	OOO:$(INSTROOT)/$(LIBO_BIN_FOLDER) \
@@ -156,3 +161,4 @@ $(call gb_Executable_get_runtime_target,$(1)) : $(2)
 endef
 
 # vim: set noet sw=4:
+#+ @endcond

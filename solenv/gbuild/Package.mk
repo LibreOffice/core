@@ -1,3 +1,8 @@
+#+ @file
+#+ @brief PackagePart class
+#+
+#+ Some more detailed descriptions about rules applied ...
+
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
@@ -18,11 +23,10 @@
 #
 
 
-# PackagePart class
-
 # a pattern rule with multiple targets is actually executed only once for each
 # match, so define only pattern rules with one target here
 # the .dir is for make 3.81, which ignores trailing /
+#+ cond
 define gb_PackagePart__rule
 $(1)/.dir :
 	$$(if $$(wildcard $$(dir $$@)),,mkdir -p $$(dir $$@))
@@ -203,3 +207,4 @@ $(call gb_Package_get_preparation_target,$(1)) :| $(call gb_ExternalProject_get_
 endef
 
 # vim: set noet sw=4:
+#+ endcond

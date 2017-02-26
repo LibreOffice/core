@@ -1,3 +1,9 @@
+#+ @file
+#+ @brief SdiTarget class
+#+
+#+ Some more detailed descriptions about rules applied ...
+
+#+ @cond
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
@@ -17,7 +23,7 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-# SdiTarget class
+
 gb_SdiTarget_SVIDLDEPS := $(call gb_Executable_get_runtime_dependencies,svidl)
 gb_SdiTarget_SVIDLCOMMAND := $(call gb_Executable_get_command,svidl)
 
@@ -77,3 +83,4 @@ $(call gb_SdiTarget_get_target,$(1)) : INCLUDE := $(2)
 endef
 
 # vim: set noet sw=4:
+#+ @endcond

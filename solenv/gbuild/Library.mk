@@ -1,3 +1,9 @@
+#+ @file
+#+ @brief Library class
+#+
+#+ Some more detailed descriptions about rules applied ...
+#+ @cond
+
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
@@ -230,3 +236,4 @@ $(eval $(foreach method,\
 ))
 
 # vim: set noet sw=4:
+#+ @endcond

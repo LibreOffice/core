@@ -1,3 +1,8 @@
+#+ @file
+#+ @brief Static Library class, defined globally in gbuild.mk
+#+
+#+ Some more detailed descriptions about rules applied ...
+#+ @cond
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
@@ -18,7 +23,6 @@
 #
 
 
-# Static Library class
 
 # defined globally in gbuild.mk
 # defined by platform
@@ -117,3 +121,4 @@ $(eval $(foreach method,\
 ))
 
 # vim: set noet sw=4:
+#+ @endcond

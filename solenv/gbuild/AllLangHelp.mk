@@ -1,3 +1,9 @@
+#+ @file
+#+ @brief AllLangelp class, Creates an deliers all language versions of a module.
+#+
+#+ Some more detailed descriptions about rules applied ...
+#+ @param GENERIC_PARAM1-y Parameter1 description ...
+
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
@@ -7,10 +13,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-# class AllLangHelp
-
-# Creates and delivers all language versions of a module.
-
+#+ @cond
 gb_AllLangHelp_HELPDIRNAME := helpcontent2
 gb_AllLangHelp_AUXDIRNAME := auxiliary
 gb_AllLangHelp_HELPDIR := $(gb_AllLangHelp_HELPDIRNAME)/source
@@ -170,3 +173,4 @@ $(foreach module,$(2),$(call gb_AllLangHelp_use_linked_module,$(1),$(module)))
 endef
 
 # vim: set noet sw=4 ts=4:
+#+ @endcond
