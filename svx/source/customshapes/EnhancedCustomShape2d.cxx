@@ -1440,7 +1440,7 @@ static basegfx::B2DPolygon CreateArc( const Rectangle& rRect, const Point& rStar
     return aRetval;
 }
 
-void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
+void EnhancedCustomShape2d::CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
                                            const bool bLineGeometryNeededOnly,
                                            const bool bSortFilledObjectsToBack,
                                            sal_Int32 nIndex )
@@ -2219,14 +2219,13 @@ SdrObject* EnhancedCustomShape2d::CreatePathObj( bool bLineGeometryNeededOnly )
     if ( !nCoordSize )
         return nullptr;
 
-    sal_uInt16 nSrcPt = 0;
-    sal_uInt16 nSegmentInd = 0;
-
     std::vector< SdrPathObj* > vObjectList;
     bool bSortFilledObjectsToBack = SortFilledObjectsToBackByDefault( eSpType );
 
     sal_Int32 nSubPathIndex = 0;
 
+    sal_Int32 nSrcPt = 0;
+    sal_Int32 nSegmentInd = 0;
     while( nSegmentInd <= seqSegments.getLength() )
     {
         CreateSubPath( nSrcPt, nSegmentInd, vObjectList, bLineGeometryNeededOnly, bSortFilledObjectsToBack, nSubPathIndex );

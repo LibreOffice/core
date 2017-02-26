@@ -132,7 +132,7 @@ class SVX_DLLPUBLIC EnhancedCustomShape2d : public SfxItemSet
         SAL_DLLPRIVATE Point    GetPoint( const css::drawing::EnhancedCustomShapeParameterPair&,
                                                     const bool bScale = true, const bool bReplaceGeoSize = false ) const;
 
-        SAL_DLLPRIVATE void     CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
+        SAL_DLLPRIVATE void     CreateSubPath( sal_Int32& rSrcPt, sal_Int32& rSegmentInd, std::vector< SdrPathObj* >& rObjectList,
                                                    bool bLineGeometryNeededOnly, bool bSortFilledObjectsToBack,
                                                    sal_Int32 nIndex );
         SAL_DLLPRIVATE SdrObject* CreatePathObj( bool bLineGeometryNeededOnly );
