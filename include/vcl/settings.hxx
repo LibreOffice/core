@@ -431,6 +431,7 @@ public:
     bool                            GetContextMenuShortcuts() const;
 
     void                            SetPreferredContextMenuShortcuts( bool bContextMenuShortcuts );
+    bool                            GetPreferredContextMenuShortcuts() const;
 
     void                            SetPrimaryButtonWarpsSlider( bool bPrimaryButtonWarpsSlider );
     bool                            GetPrimaryButtonWarpsSlider() const;

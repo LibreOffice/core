@@ -1527,7 +1527,7 @@ StyleSettings::GetContextMenuShortcuts() const
     case TRISTATE_TRUE:
         return true;
     default: // TRISTATE_INDET:
-        return GetPreferredUseImagesInMenus();
+        return GetPreferredContextMenuShortcuts();
     }
 }
 
@@ -1536,6 +1536,12 @@ StyleSettings::SetPreferredContextMenuShortcuts( bool bContextMenuShortcuts )
 {
     CopyData();
     mxData->mbPreferredContextMenuShortcuts = bContextMenuShortcuts;
+}
+
+bool
+StyleSettings::GetPreferredContextMenuShortcuts() const
+{
+    return mxData->mbPreferredContextMenuShortcuts;
 }
 
 void
