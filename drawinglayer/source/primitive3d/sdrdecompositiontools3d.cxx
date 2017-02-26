@@ -92,8 +92,6 @@ namespace drawinglayer
             const basegfx::B3DRange& rRange,
             const basegfx::B2DVector& rTextureSize)
         {
-            sal_uInt32 a;
-
             // handle texture coordinates X
             const bool bParallelX(css::drawing::TextureProjectionMode_PARALLEL == eModeX);
             const bool bSphereX(!bParallelX && (css::drawing::TextureProjectionMode_SPHERE == eModeX));
@@ -105,9 +103,9 @@ namespace drawinglayer
             if(bParallelX || bParallelY)
             {
                 // apply parallel texture coordinates in X and/or Y
-                for(a = 0; a < rFill.size(); a++)
+                for(auto & a: rFill)
                 {
-                    rFill[a] = basegfx::tools::applyDefaultTextureCoordinatesParallel(rFill[a], rRange, bParallelX, bParallelY);
+                    a = basegfx::tools::applyDefaultTextureCoordinatesParallel(a, rRange, bParallelX, bParallelY);
                 }
             }
 
@@ -116,9 +114,9 @@ namespace drawinglayer
                 // apply spherical texture coordinates in X and/or Y
                 const basegfx::B3DPoint aCenter(rRange.getCenter());
 
-                for(a = 0; a < rFill.size(); a++)
+                for(auto & a: rFill)
                 {
-                    rFill[a] = basegfx::tools::applyDefaultTextureCoordinatesSphere(rFill[a], aCenter, bSphereX, bSphereY);
+                    a = basegfx::tools::applyDefaultTextureCoordinatesSphere(a, aCenter, bSphereX, bSphereY);
                 }
             }
 
@@ -126,9 +124,9 @@ namespace drawinglayer
             basegfx::B2DHomMatrix aTexMatrix;
             aTexMatrix.scale(rTextureSize.getX(), rTextureSize.getY());
 
-            for(a = 0; a < rFill.size(); a++)
+            for(auto & a: rFill)
             {
-                rFill[a].transformTextureCoordinates(aTexMatrix);
+                a.transformTextureCoordinates(aTexMatrix);
             }
         }
 

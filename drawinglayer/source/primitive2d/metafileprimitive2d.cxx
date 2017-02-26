@@ -3085,7 +3085,7 @@ namespace
                         // better to use this info
                         const MetaGradientExAction* pMetaGradientExAction = nullptr;
                         bool bDone(false);
-                        sal_uInt32 b(nAction + 1);
+                        size_t b(nAction + 1);
 
                         for(; !bDone && b < nCount; b++)
                         {

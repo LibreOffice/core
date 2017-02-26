@@ -181,9 +181,13 @@ namespace drawinglayer
                             // check if buffering is complete
                             bool bBufferingComplete(true);
 
-                            for (sal_uInt32 a(0); bBufferingComplete && a < maBufferedPrimitives.size(); a++)
+                            for (auto const & a: maBufferedPrimitives)
                             {
-                                bBufferingComplete = maBufferedPrimitives[a].is();
+                                if (!a.is())
+                                {
+                                    bBufferingComplete = false;
+                                    break;
+                                }
                             }
 
                             if (bBufferingComplete)
