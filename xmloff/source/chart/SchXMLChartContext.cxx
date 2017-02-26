@@ -52,10 +52,14 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
+#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
+
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -237,10 +241,67 @@ SchXMLChartContext::SchXMLChartContext( SchXMLImportHelper& rImpHelper,
 SchXMLChartContext::~SchXMLChartContext()
 {}
 
+void lcl_setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDoc, OUString const & sDataPilotSource)
+{
+    if (!xChartDoc.is())
+        return;
+
+    try
+    {
+        uno::Reference<container::XChild> xChild(xChartDoc, uno::UNO_QUERY);
+        uno::Reference<chart2::data::XDataReceiver> xDataReceiver(xChartDoc, uno::UNO_QUERY);
+        if (xChild.is() && xDataReceiver.is())
+        {
+            bool bHasOwnData = true;
+
+            Reference<lang::XMultiServiceFactory> xFact(xChild->getParent(), uno::UNO_QUERY);
+            if (xFact.is())
+            {
+                if (!xChartDoc->getDataProvider().is())
+                {
+                    bool bHasDataPilotSource = !sDataPilotSource.isEmpty();
+                    OUString aDataProviderServiceName("com.sun.star.chart2.data.DataProvider");
+                    if (bHasDataPilotSource)
+                        aDataProviderServiceName = "com.sun.star.chart2.data.PivotTableDataProvider";
+
+                    const uno::Sequence<OUString> aServiceNames(xFact->getAvailableServiceNames());
+
+                    if (std::find(aServiceNames.begin(), aServiceNames.end(), aDataProviderServiceName) != aServiceNames.end())
+                    {
+                        Reference<chart2::data::XDataProvider> xProvider(xFact->createInstance(aDataProviderServiceName), uno::UNO_QUERY);
+
+                        if (xProvider.is())
+                        {
+                            xDataReceiver->attachDataProvider(xProvider);
+                            if (bHasDataPilotSource)
+                            {
+                                Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xProvider, uno::UNO_QUERY);
+                                xPivotTableDataProvider->setPivotTableName(sDataPilotSource);
+                            }
+                            bHasOwnData = false;
+                        }
+                    }
+                }
+                else
+                    bHasOwnData = false;
+            }
+            // else we have no parent => we have our own data
+
+            if (bHasOwnData && ! xChartDoc->hasInternalDataProvider())
+                xChartDoc->createInternalDataProvider(false);
+        }
+    }
+    catch (const uno::Exception & rEx)
+    {
+        OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
+        SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught: " << aBStr);
+    }
+}
+
 void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     // parse attributes
-    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetChartAttrTokenMap();
 
     uno::Reference< embed::XVisualObject > xVisualObject( mrImportHelper.GetChartDocument(), uno::UNO_QUERY);
@@ -264,10 +325,12 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
 
         switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
         {
+            case XML_TOK_CHART_DATA_PILOT_SOURCE:
+                msDataPilotSource = aValue;
+                break;
             case XML_TOK_CHART_HREF:
                 m_aXLinkHRefAttributeToIndicateDataProvider = aValue;
                 break;
-
             case XML_TOK_CHART_CLASS:
                 {
                     OUString sClassName;
@@ -327,6 +390,11 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                 break;
         }
     }
+
+    uno::Reference<chart::XChartDocument> xDoc = mrImportHelper.GetChartDocument();
+    uno::Reference<chart2::XChartDocument> xNewDoc(xDoc, uno::UNO_QUERY);
+
+    lcl_setDataProvider(xNewDoc, msDataPilotSource);
 
     if( aOldChartTypeName.isEmpty() )
     {
