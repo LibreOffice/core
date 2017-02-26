@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_47404457",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-02-26T21:53:36Z",
+      "side": 1,
+      "message": "Nope.",
+      "revId": "74510a62718d112ab369b818d0369622f769079a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
