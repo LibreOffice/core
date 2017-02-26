@@ -691,7 +691,7 @@
           <value oor:separator=";">
             Calc,         Graphic,     visible   ;
             DrawImpress,  Graphic,     visible   ;
-            WriterVariants, Graphic,     visible   ;
+            WriterVariants, Graphic,     visible, .uno:GraphicDialog   ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
