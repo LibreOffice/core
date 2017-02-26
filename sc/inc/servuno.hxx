@@ -50,7 +50,7 @@ public:
         SHEETDOCSET ,
 
         // BM
-        CHDATAPROV ,
+        CHDATAPROV , CHART_PIVOTTABLE_DATAPROVIDER,
         // formula parser
         FORMULAPARS , OPCODEMAPPER ,
         // VBA specific

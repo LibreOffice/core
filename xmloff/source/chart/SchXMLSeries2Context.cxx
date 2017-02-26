@@ -30,6 +30,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartSymbolType.hpp>
@@ -407,20 +408,31 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                                                uno::makeAny( true ));
         }
 
-        // values
-        Reference< chart2::data::XDataSequence > xSeq;
-        if( bHasRange && !m_aSeriesRange.isEmpty() )
-            xSeq = SchXMLTools::CreateDataSequence( m_aSeriesRange, mxNewDoc );
+        Reference<chart2::data::XDataProvider> xDataProvider(mxNewDoc->getDataProvider());
+        Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider(xDataProvider, uno::UNO_QUERY);
 
-        Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
-        if( xSeqProp.is())
+        Reference<chart2::data::XDataSequence> xSequenceValues;
+
+        // values
+        if (xPivotTableDataProvider.is()) // is pivot chart
+        {
+            xSequenceValues.set(xPivotTableDataProvider->createDataSequenceOfValuesByIndex(mnSeriesIndex));
+        }
+        else
+        {
+            if (bHasRange && !m_aSeriesRange.isEmpty())
+                xSequenceValues = SchXMLTools::CreateDataSequence(m_aSeriesRange, mxNewDoc);
+        }
+
+        Reference<beans::XPropertySet> xSeqProp(xSequenceValues, uno::UNO_QUERY);
+        if (xSeqProp.is())
         {
             OUString aMainRole("values-y");
-            if ( maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType" )
+            if (maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType")
                 aMainRole = "values-size";
-            xSeqProp->setPropertyValue("Role", uno::makeAny( aMainRole ));
+            xSeqProp->setPropertyValue("Role", uno::makeAny(aMainRole));
         }
-        xLabeledSeq->setValues( xSeq );
+        xLabeledSeq->setValues(xSequenceValues);
 
         // register for setting local data if external data provider is not present
         maPostponedSequences.insert(
@@ -428,18 +440,24 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                 tSchXMLIndexWithPart( m_rGlobalSeriesImportInfo.nCurrentDataIndex, SCH_XML_PART_VALUES ), xLabeledSeq ));
 
         // label
-        if( !aSeriesLabelRange.isEmpty() )
+        Reference<chart2::data::XDataSequence> xSequenceLabel;
+
+        if (xPivotTableDataProvider.is())
         {
-            Reference< chart2::data::XDataSequence > xLabelSequence =
-                SchXMLTools::CreateDataSequence( aSeriesLabelRange, mxNewDoc );
-            xLabeledSeq->setLabel( xLabelSequence );
+            xSequenceLabel.set(xPivotTableDataProvider->createDataSequenceOfLabelsByIndex(mnSeriesIndex));
         }
-        else if( !aSeriesLabelString.isEmpty() )
+        else
         {
-            Reference< chart2::data::XDataSequence > xLabelSequence =
-                SchXMLTools::CreateDataSequenceWithoutConvert( aSeriesLabelString, mxNewDoc );
-            xLabeledSeq->setLabel( xLabelSequence );
+            if (!aSeriesLabelRange.isEmpty())
+            {
+                xSequenceLabel.set(SchXMLTools::CreateDataSequence(aSeriesLabelRange, mxNewDoc));
+            }
+            else if (!aSeriesLabelString.isEmpty())
+            {
+                xSequenceLabel.set(SchXMLTools::CreateDataSequenceWithoutConvert(aSeriesLabelString, mxNewDoc));
+            }
         }
+        xLabeledSeq->setLabel(xSequenceLabel);
 
         // Note: Even if we have no label, we have to register the label
         // for creation, because internal data always has labels. If

@@ -92,7 +92,7 @@ interface XDataReceiver : ::com::sun::star::uno::XInterface
 
         @since LibreOffice 5.4
     */
-    XPopupRequest getPopupRequest();
+    com::sun::star::awt::XRequestCallback getPopupRequest();
 };
 
 } ; // data

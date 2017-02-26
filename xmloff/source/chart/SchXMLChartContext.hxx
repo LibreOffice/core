@@ -104,6 +104,8 @@ private:
     OUString msCategoriesAddress;
     OUString msChartAddress;
 
+    OUString msDataPilotSource;
+
     SeriesDefaultsAndStyles maSeriesDefaultsAndStyles;
     tSchXMLLSequencesPerIndex maLSequencesPerIndex;
 

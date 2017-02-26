@@ -88,6 +88,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/chart2,\
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/chart2/data,\
 	DatabaseDataProvider \
     LabeledDataSequence \
+    PivotTableFieldEntry \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/configuration,\
     ReadOnlyAccess \
@@ -658,7 +659,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/chart2/data,\
 	DataSequence \
 	DataSink \
 	DataSource \
-	PopupRequest \
 	RangeHighlighter \
 	RangeHighlightListener \
 	TabularDataProviderArguments \
@@ -2058,7 +2058,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2/data,\
 	XLabeledDataSequence \
 	XLabeledDataSequence2 \
 	XNumericalDataSequence \
-	XPopupRequest \
+	XPivotTableDataProvider \
 	XRangeHighlighter \
 	XRangeXMLConversion \
 	XSheetDataProvider \
@@ -3639,6 +3639,9 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/table,\
 	XTableChart \
 	XTableCharts \
 	XTableChartsSupplier \
+	XTablePivotChart \
+	XTablePivotCharts \
+	XTablePivotChartsSupplier \
 	XTableColumns \
 	XTableRows \
 ))
