@@ -265,7 +265,7 @@ void StdTabController::autoTabOrder(  )
         pE->aPos.X() = aPosSize.X;
         pE->aPos.Y() = aPosSize.Y;
 
-        sal_uInt16 nPos;
+        ComponentEntryList::size_type nPos;
         for ( nPos = 0; nPos < aCtrls.size(); nPos++ )
         {
             ComponentEntry* pEntry = aCtrls[ nPos ];
