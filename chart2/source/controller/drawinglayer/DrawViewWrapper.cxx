@@ -182,8 +182,13 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 
     if( pRet )
     {
-        //ignore some special shapes
+        // ignore some special shapes
         OUString aShapeName = pRet->GetName();
+
+        // return right away if it is a field button
+        if (aShapeName.startsWith("FieldButton"))
+            return pRet;
+
         if( aShapeName.match("PlotAreaIncludingAxes") || aShapeName.match("PlotAreaExcludingAxes") )
         {
             pRet->SetMarkProtect( true );

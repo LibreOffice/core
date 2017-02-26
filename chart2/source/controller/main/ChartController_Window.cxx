@@ -45,18 +45,23 @@
 #include "LegendHelper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "DrawCommandDispatch.hxx"
+#include "PopupRequest.hxx"
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
+
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <toolkit/awt/vclxmenu.hxx>
 
@@ -556,7 +561,16 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
     if(!pChartWindow || !pDrawViewWrapper )
         return;
 
-    Point   aMPos   = pChartWindow->PixelToLogic(rMEvt.GetPosPixel());
+    Point aMPos = pChartWindow->PixelToLogic(rMEvt.GetPosPixel());
+
+    // Check if button was clicked
+    SdrObject* pObject = pDrawViewWrapper->getHitObject(aMPos);
+    if (pObject)
+    {
+        OUString aCID = pObject->GetName();
+        if (aCID.startsWith("FieldButton"))
+            return; // Don't take any action if button was clicked
+    }
 
     if ( MOUSE_LEFT == rMEvt.GetButtons() )
     {
@@ -722,7 +736,19 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if(!pChartWindow || !pDrawViewWrapper)
             return;
 
-        Point   aMPos   = pChartWindow->PixelToLogic(rMEvt.GetPosPixel());
+        Point aMPos = pChartWindow->PixelToLogic(rMEvt.GetPosPixel());
+
+        // Check if button was clicked
+        SdrObject* pObject = pDrawViewWrapper->getHitObject(aMPos);
+        if (pObject)
+        {
+            OUString aCID = pObject->GetName();
+            if (aCID.startsWith("FieldButton"))
+            {
+                sendPopupRequest(aCID, pObject->GetCurrentBoundRect());
+                return;
+            }
+        }
 
         if(pDrawViewWrapper->IsTextEdit())
         {
@@ -1956,6 +1982,47 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
 css::uno::Reference<css::uno::XInterface> const & ChartController::getChartView()
 {
     return m_xChartView;
+}
+
+void ChartController::sendPopupRequest(OUString const & rCID, tools::Rectangle aRectangle)
+{
+    ChartModel* pChartModel = dynamic_cast<ChartModel*>(m_aModel->getModel().get());
+    if (!pChartModel)
+        return;
+
+    uno::Reference<chart2::data::XPivotTableDataProvider> xPivotTableDataProvider;
+    xPivotTableDataProvider.set(pChartModel->getDataProvider(), uno::UNO_QUERY);
+    if (!xPivotTableDataProvider.is())
+        return;
+
+    OUString sPivotTableName = xPivotTableDataProvider->getPivotTableName();
+
+    PopupRequest* pPopupRequest = dynamic_cast<PopupRequest*>(pChartModel->getPopupRequest().get());
+    if (!pPopupRequest)
+        return;
+
+    // Get dimension index from CID
+    sal_Int32 nStartPos = rCID.lastIndexOf('.');
+    nStartPos++;
+    sal_Int32 nEndPos = rCID.getLength();
+    OUString sDimensionIndex = rCID.copy(nStartPos, nEndPos - nStartPos);
+    sal_Int32 nDimensionIndex = sDimensionIndex.toInt32();
+
+    awt::Rectangle xRectangle {
+        sal_Int32(aRectangle.Left()),
+        sal_Int32(aRectangle.Top()),
+        sal_Int32(aRectangle.GetWidth()),
+        sal_Int32(aRectangle.GetHeight())
+    };
+
+    uno::Sequence<beans::PropertyValue> aCallbackData = comphelper::InitPropertySequence(
+    {
+        {"Rectangle",      uno::makeAny<awt::Rectangle>(xRectangle)},
+        {"DimensionIndex", uno::makeAny<sal_Int32>(nDimensionIndex)},
+        {"PivotTableName", uno::makeAny<OUString>(sPivotTableName)},
+    });
+
+    pPopupRequest->getCallback()->notify(uno::makeAny(aCallbackData));
 }
 
 } //namespace chart
