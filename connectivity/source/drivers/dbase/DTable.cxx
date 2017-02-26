@@ -54,6 +54,7 @@
 #include <rtl/strbuf.hxx>
 
 #include <algorithm>
+#include <cassert>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -1679,7 +1680,6 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
     // Update fields:
     Reference<XPropertySet> xCol;
     Reference<XPropertySet> xIndex;
-    sal_uInt16 i;
     OUString aColName;
     const sal_Int32 nColumnCount = m_pColumns->getCount();
     std::vector< Reference<XPropertySet> > aIndexedCols(nColumnCount);
@@ -1688,7 +1688,7 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
 
     Reference<XIndexAccess> xColumns = m_pColumns;
     // first search a key that exist already in the table
-    for (i = 0; i < nColumnCount; ++i)
+    for (sal_Int32 i = 0; i < nColumnCount; ++i)
     {
         sal_Int32 nPos = i;
         if(_xCols != xColumns)
@@ -1746,14 +1746,15 @@ bool ODbaseTable::UpdateBuffer(OValueRefVector& rRow, const OValueRefRow& pOrgRo
 
     // when we are here there is no double key in the table
 
-    for (i = 0; i < nColumnCount && nByteOffset <= m_nBufferSize ; ++i)
+    for (sal_Int32 i = 0; i < nColumnCount && nByteOffset <= m_nBufferSize ; ++i)
     {
         // Lengths for each data type:
-        OSL_ENSURE(i < m_aPrecisions.size(),"Illegal index!");
+        assert(i >= 0);
+        OSL_ENSURE(sal_uInt32(i) < m_aPrecisions.size(),"Illegal index!");
         sal_Int32 nLen = 0;
         sal_Int32 nType = 0;
         sal_Int32 nScale = 0;
-        if ( i < m_aPrecisions.size() )
+        if ( sal_uInt32(i) < m_aPrecisions.size() )
         {
             nLen    = m_aPrecisions[i];
             nType   = m_aTypes[i];
