@@ -166,10 +166,11 @@ bool CoreTextStyle::GetGlyphBoundRect(const GlyphItem& rGlyph, Rectangle& rRect 
     if (mfFontRotation && !rGlyph.IsVertical())
         aCGRect = CGRectApplyAffineTransform(aCGRect, CGAffineTransformMakeRotation(mfFontRotation));
 
-    rRect.Left()   = lrint( aCGRect.origin.x );
-    rRect.Top()    = lrint(-aCGRect.origin.y - aCGRect.size.height );
-    rRect.Right()  = lrint( aCGRect.origin.x + aCGRect.size.width );
-    rRect.Bottom() = lrint(-aCGRect.origin.y );
+    long xMin = floor(aCGRect.origin.x);
+    long yMin = floor(aCGRect.origin.y);
+    long xMax = ceil(aCGRect.origin.x + aCGRect.size.width);
+    long yMax = ceil(aCGRect.origin.y + aCGRect.size.height);
+    rRect = Rectangle(xMin, -yMax, xMax, -yMin);
     return true;
 }
 

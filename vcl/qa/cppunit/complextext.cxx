@@ -59,12 +59,9 @@ void VclComplexTextTest::testArabic()
     CPPUNIT_ASSERT_EQUAL(13L, pOutDev->GetTextHeight());
 
     // exact bounding rectangle, not essentially the same as text width/height
-#ifndef MACOSX
-    // FIXME: fails on mac, probably different rounding strategy.
     Rectangle aBoundRect;
     pOutDev->GetTextBoundRect(aBoundRect, aOneTwoThree);
     CPPUNIT_ASSERT_EQUAL(Rectangle(0, 1, 71, 15), aBoundRect);
-#endif
 
     // normal orientation
     Rectangle aInput;
