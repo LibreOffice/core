@@ -35,7 +35,7 @@ module com { module sun { module star { module accessibility {
     actual information that is needed to make it accessible.</p>
 
     <p>Service <code>Accessible</code> is just a wrapper for the interface
-    <code>XAccessible</code>.  See the interface's documention for more
+    <code>XAccessible</code>.  See the interface's documentation for more
     information.</p>
 
     @see XAccessible

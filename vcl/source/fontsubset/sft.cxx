@@ -1573,7 +1573,7 @@ static void KernGlyphsPrim2(TrueTypeFont *ttf, sal_uInt16 *glyphs, int nglyphs, 
         /* All fonts with MS kern table that I've seen so far contain just one kern subtable.
          * MS kern documentation is very poor and I doubt that font developers will be using
          * several subtables. I expect them to be using OpenType tables instead.
-         * According to MS documention, format 2 subtables are not supported by Windows and OS/2.
+         * According to MS documentation, format 2 subtables are not supported by Windows and OS/2.
          */
         if (ttf->nkern > 1) {
             fprintf(stderr, "KernGlyphsPrim2: %d kern tables found.\n", ttf->nkern);
