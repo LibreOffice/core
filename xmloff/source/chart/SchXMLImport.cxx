@@ -249,6 +249,7 @@ const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
     { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_CHART_STYLE_NAME    },
     { XML_NAMESPACE_CHART,  XML_COLUMN_MAPPING,         XML_TOK_CHART_COL_MAPPING   },
     { XML_NAMESPACE_CHART,  XML_ROW_MAPPING,            XML_TOK_CHART_ROW_MAPPING   },
+    { XML_NAMESPACE_LO_EXT, XML_DATA_PILOT_SOURCE,      XML_TOK_CHART_DATA_PILOT_SOURCE },
     XML_TOKEN_MAP_END
 };
 
@@ -574,65 +575,37 @@ SvXMLImportContext* SchXMLImport::CreateStylesContext(
     return pStylesCtxt;
 }
 
-void SAL_CALL SchXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
+void SAL_CALL SchXMLImport::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
-    uno::Reference< chart2::XChartDocument > xOldDoc( GetModel(), uno::UNO_QUERY );
-    if( xOldDoc.is() && xOldDoc->hasControllersLocked() )
+    uno::Reference<chart2::XChartDocument> xOldDoc(GetModel(), uno::UNO_QUERY);
+    if (xOldDoc.is() && xOldDoc->hasControllersLocked())
         xOldDoc->unlockControllers();
 
-    SvXMLImport::setTargetDocument( xDoc );
+    SvXMLImport::setTargetDocument(xDoc);
 
-    //set data provider and number formatter
-    // try to get an XDataProvider and set it
-    // @todo: if we have our own data, we must not use the parent as data provider
-    uno::Reference< chart2::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
+    uno::Reference<chart2::XChartDocument> xChartDoc(GetModel(), uno::UNO_QUERY);
 
-    if( xChartDoc.is() )
+    if (xChartDoc.is())
     try
     {
-        //prevent rebuild of view during load ( necesarry especially if loaded not via load api, which is the case for example if binary files are loaded )
+        // prevent rebuild of view during load (necesarry especially if loaded not
+        // via load api, which is the case for example if binary files are loaded)
         xChartDoc->lockControllers();
 
-        uno::Reference< container::XChild > xChild( xChartDoc, uno::UNO_QUERY );
-        uno::Reference< chart2::data::XDataReceiver > xDataReceiver( xChartDoc, uno::UNO_QUERY );
-        if( xChild.is() && xDataReceiver.is())
+        uno::Reference<container::XChild> xChild(xChartDoc, uno::UNO_QUERY);
+        uno::Reference<chart2::data::XDataReceiver> xDataReceiver(xChartDoc, uno::UNO_QUERY);
+        if (xChild.is() && xDataReceiver.is())
         {
-            bool bHasOwnData = true;
-
-            Reference< lang::XMultiServiceFactory > xFact( xChild->getParent(), uno::UNO_QUERY );
-            if( xFact.is() )
+            Reference<lang::XMultiServiceFactory> xFact(xChild->getParent(), uno::UNO_QUERY);
+            if (xFact.is())
             {
                 //if the parent has a number formatter we will use the numberformatter of the parent
-                Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xFact, uno::UNO_QUERY );
-                xDataReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
-
-                if ( !xChartDoc->getDataProvider().is() )
-                {
-                    const OUString aDataProviderServiceName( "com.sun.star.chart2.data.DataProvider");
-                    const uno::Sequence< OUString > aServiceNames( xFact->getAvailableServiceNames());
-                    const OUString * pBegin = aServiceNames.getConstArray();
-                    const OUString * pEnd = pBegin + aServiceNames.getLength();
-                    if( ::std::find( pBegin, pEnd, aDataProviderServiceName ) != pEnd )
-                    {
-                        Reference< chart2::data::XDataProvider > xProvider(
-                            xFact->createInstance( aDataProviderServiceName ), uno::UNO_QUERY );
-                        if( xProvider.is())
-                        {
-                            xDataReceiver->attachDataProvider( xProvider );
-                            bHasOwnData = false;
-                        }
-                    }
-                }
-                else
-                    bHasOwnData = false;
+                Reference<util::XNumberFormatsSupplier> xNumberFormatsSupplier(xFact, uno::UNO_QUERY);
+                xDataReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
             }
-//             else we have no parent => we have our own data
-
-            if( bHasOwnData && ! xChartDoc->hasInternalDataProvider() )
-                xChartDoc->createInternalDataProvider( false );
         }
     }
-    catch( const uno::Exception & rEx )
+    catch (const uno::Exception & rEx)
     {
         OString aBStr(OUStringToOString(rEx.Message, RTL_TEXTENCODING_ASCII_US));
         SAL_INFO("xmloff.chart", "SchXMLChartContext::StartElement(): Exception caught: " << aBStr);
