@@ -1,0 +1,63 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_table_XTablePivotCharts_idl__
+#define __com_sun_star_table_XTablePivotCharts_idl__
+
+#include <com/sun/star/container/XNameAccess.idl>
+#include <com/sun/star/awt/Rectangle.idl>
+
+
+module com {  module sun {  module star {  module table {
+
+
+/** provides methods to access pivot charts via name and to insert
+    and remove pivot charts.
+
+    @since LibreOffice 5.4
+ */
+interface XTablePivotCharts: com::sun::star::container::XNameAccess
+{
+
+    /** creates a pivot chart and adds it to the collection.
+
+        @param aName
+            is the name of the chart. This name is used to reference the
+            chart in the collection.
+
+        @param aRect
+            contains the rectangular location of the chart within the table
+            (in 1/100th mm).
+
+        @param aPivotTableName
+            the name of the pivot table (data pilot) to associate the pivot chart with
+
+        @since LibreOffice 5.4
+     */
+    void addNewByName(
+            [in] string aName,
+            [in] com::sun::star::awt::Rectangle aRect,
+            [in] string aPivotTableName);
+
+
+    /** removes a pivot chart from the collection.
+
+        @param aName
+            is the name of the chart to remove.
+
+        @since LibreOffice 5.4
+     */
+    void removeByName([in] string aName);
+};
+
+}; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
