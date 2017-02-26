@@ -8,34 +8,23 @@
  *
  */
 
-#ifndef com_sun_star_chart2_data_XPopupRequest_idl
-#define com_sun_star_chart2_data_XPopupRequest_idl
+#ifndef __com_sun_star_table_XTablePivotChart_idl__
+#define __com_sun_star_table_XTablePivotChart_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
 
-module com
-{
-module sun
-{
-module star
-{
-module chart2
-{
-module data
-{
+module com {  module sun {  module star {  module table {
 
-/**
-    @since LibreOffice 5.4
+
+/** provides access to the settings of a pivot chart object in a
+    table or spreadsheet.
  */
-interface XPopupRequest : com::sun::star::awt::XRequestCallback
+interface XTablePivotChart: com::sun::star::uno::XInterface
 {
+    string getPivotTableName();
 };
 
-} ; // data
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+}; }; }; };
 
 #endif
 

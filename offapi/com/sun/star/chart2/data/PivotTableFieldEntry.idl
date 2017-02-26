@@ -7,11 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
  */
-
-#ifndef com_sun_star_chart2_data_PopupRequest_idl
-#define com_sun_star_chart2_data_PopupRequest_idl
-
-#include <com/sun/star/chart2/data/XPopupRequest.idl>
+#ifndef com_sun_star_chart2_data_PivotTableFieldEntry_idl
+#define com_sun_star_chart2_data_PivotTableFieldEntry_idl
 
 module com
 {
@@ -24,20 +21,22 @@ module chart2
 module data
 {
 
-/** @since LibreOffice 5.4
+/**
+ *
+ * @since LibreOffice 5.3
  */
-service PopupRequest
+struct PivotTableFieldEntry
 {
-    /**
-     */
-    interface XPopupRequest;
+    string Name;
+
+    long DimensionIndex;
 };
 
-} ; // data
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+}; // data
+}; // chart2
+}; // com
+}; // sun
+}; // star
 
 #endif
 
