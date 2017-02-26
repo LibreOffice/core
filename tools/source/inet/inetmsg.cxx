@@ -54,9 +54,9 @@ static const sal_Char *months[12] =
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 };
 
-static sal_uInt16 ParseNumber(const OString& rStr, sal_uInt16& nIndex)
+static sal_uInt16 ParseNumber(const OString& rStr, sal_Int32& nIndex)
 {
-    sal_uInt16 n = nIndex;
+    sal_Int32 n = nIndex;
     while ((n < rStr.getLength()) && rtl::isAsciiDigit(rStr[n])) n++;
 
     OString aNum(rStr.copy(nIndex, (n - nIndex)));
@@ -65,9 +65,9 @@ static sal_uInt16 ParseNumber(const OString& rStr, sal_uInt16& nIndex)
     return (sal_uInt16)(aNum.toInt32());
 }
 
-static sal_uInt16 ParseMonth(const OString& rStr, sal_uInt16& nIndex)
+static sal_uInt16 ParseMonth(const OString& rStr, sal_Int32& nIndex)
 {
-    sal_uInt16 n = nIndex;
+    sal_Int32 n = nIndex;
     while ((n < rStr.getLength()) && rtl::isAsciiAlpha(rStr[n])) n++;
 
     OString aMonth(rStr.copy(nIndex, 3));
@@ -90,7 +90,7 @@ bool INetMIMEMessage::ParseDateField (
     if (aDateField.indexOf(':') != -1)
     {
         // Some DateTime format.
-        sal_uInt16 nIndex = 0;
+        sal_Int32 nIndex = 0;
 
         // Skip over <Wkd> or <Weekday>, leading and trailing space.
         while ((nIndex < aDateField.getLength()) &&
