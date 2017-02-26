@@ -152,13 +152,13 @@ namespace vclcanvas
         sal_Int8* pRes = aRes.getArray();
 
         int nCurrPos(0);
-        for( int y=rect.Y1;
+        for( long y=rect.Y1;
              y<aBmpSize.Height() && y<rect.Y2;
              ++y )
         {
             if( pAlphaReadAccess.get() != nullptr )
             {
-                for( int x=rect.X1;
+                for( long x=rect.X1;
                      x<aBmpSize.Width() && x<rect.X2;
                      ++x )
                 {
@@ -170,7 +170,7 @@ namespace vclcanvas
             }
             else
             {
-                for( int x=rect.X1;
+                for( long x=rect.X1;
                      x<aBmpSize.Width() && x<rect.X2;
                      ++x )
                 {
@@ -230,8 +230,8 @@ namespace vclcanvas
             const Size aBmpSize( aBitmap.GetSizePixel() );
 
             // for the time being, always read as BGRA
-            int x, y, nCurrPos(0);
-            for( y=rect.Y1;
+            int nCurrPos(0);
+            for( long y=rect.Y1;
                  y<aBmpSize.Height() && y<rect.Y2;
                  ++y )
             {
@@ -244,7 +244,7 @@ namespace vclcanvas
                             Scanline pScan  = pWriteAccess->GetScanline( y );
                             Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
 
-                            for( x=rect.X1;
+                            for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
@@ -267,7 +267,7 @@ namespace vclcanvas
                             Scanline pScan  = pWriteAccess->GetScanline( y );
                             Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
 
-                            for( x=rect.X1;
+                            for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
@@ -289,7 +289,7 @@ namespace vclcanvas
                             Scanline pScan  = pWriteAccess->GetScanline( y );
                             Scanline pAScan = pAlphaWriteAccess->GetScanline( y );
 
-                            for( x=rect.X1;
+                            for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
@@ -308,7 +308,7 @@ namespace vclcanvas
 
                         default:
                         {
-                            for( x=rect.X1;
+                            for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
@@ -337,7 +337,7 @@ namespace vclcanvas
                         {
                             Scanline pScan = pWriteAccess->GetScanline( y );
 
-                            for( x=rect.X1;
+                            for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
@@ -355,7 +355,7 @@ namespace vclcanvas
                         {
                             Scanline pScan = pWriteAccess->GetScanline( y );
 
-                            for( x=rect.X1;
+                            for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
@@ -372,7 +372,7 @@ namespace vclcanvas
                         {
                             Scanline pScan = pWriteAccess->GetScanline( y );
 
-                            for( x=rect.X1;
+                            for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
@@ -387,7 +387,7 @@ namespace vclcanvas
 
                         default:
                         {
-                            for( x=rect.X1;
+                            for( long x=rect.X1;
                                  x<aBmpSize.Width() && x<rect.X2;
                                  ++x )
                             {
