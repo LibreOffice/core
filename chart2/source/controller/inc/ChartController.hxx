@@ -487,6 +487,8 @@ private:
     void executeDispatch_ToggleGridHorizontal();
     void executeDispatch_ToggleGridVertical();
 
+    void sendPopupRequest(OUString const & rCID, tools::Rectangle aRectangle);
+
     void impl_ShapeControllerDispatch( const css::util::URL& rURL,
         const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
 
