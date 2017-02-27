@@ -365,7 +365,6 @@ class SwDrawContact final : public SwContact
             bool operator() ( const SwDrawVirtObj* _pDrawVirtObj );
         };
 
-        void SetMaster( SdrObject* _pNewMaster );
         /// method for adding/removing 'virtual' drawing object.
         SwDrawVirtObj* CreateVirtObj();
         static void DestroyVirtObj( SwDrawVirtObj* pVirtObj );
