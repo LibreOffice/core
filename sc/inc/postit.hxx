@@ -72,11 +72,18 @@ public:
     oslInterlockedCount getRefs() const;
 
 private:
-    ScCaptionPtr*               mpHead;     ///< points to the "master" entry
-    mutable ScCaptionPtr*       mpNext;     ///< next in list
-    SdrCaptionObj*              mpCaption;  ///< the caption object, managed by head master
-    mutable oslInterlockedCount mnRefs;     ///< use count, managed by head master
 
+    struct Head
+    {
+        ScCaptionPtr*       mpFirst;    ///< first in list
+        oslInterlockedCount mnRefs;     ///< use count
+    };
+
+    Head*                 mpHead;       ///< points to the "master" entry
+    mutable ScCaptionPtr* mpNext;       ///< next in list
+    SdrCaptionObj*        mpCaption;    ///< the caption object, managed by head master
+
+    void newHead();             //< Allocate a new Head and init.
     void incRef() const;
     bool decRef() const;        //< @returns <TRUE/> if the last reference was decremented.
     void decRefAndDestroy();    //< Destroys caption object if the last reference was decremented.
