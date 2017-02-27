@@ -97,9 +97,8 @@ bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin,
     sal_Unicode multiChar = (multiChar_index == -1 ? 0 : number->multiplierChar[multiChar_index]);
     if ( len <= number->multiplierExponent[number->exponentCount-1] ) {
         if (number->multiplierExponent[number->exponentCount-1] > 1) {
-            sal_Int16 i;
             bool bNotZero = false;
-            for (i = 0; i < len; i++, begin++) {
+            for (sal_Int32 i = 0; i < len; i++, begin++) {
                 if (bNotZero || str[begin] != NUMBER_ZERO) {
                     dst[count] = numberChar[str[begin] - NUMBER_ZERO];
                     if (useOffset)

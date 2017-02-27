@@ -1349,9 +1349,8 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     }
     sal_Int16 nbOfCollations = 0;
     sal_Int16 nbOfCollationOptions = 0;
-    sal_Int16 j;
 
-    for ( j = 0; j < getNumberOfChildren(); j++ ) {
+    for ( sal_Int32 j = 0; j < getNumberOfChildren(); j++ ) {
         LocaleNode * currNode = getChildAt (j);
         if( currNode->getName() == "Collator" )
         {
@@ -1385,7 +1384,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString(";\n\n");
 
     of.writeAsciiString("\nstatic const sal_Unicode* LCCollatorArray[] = {\n");
-    for(j = 0; j < nbOfCollations; j++) {
+    for(sal_Int16 j = 0; j < nbOfCollations; j++) {
         of.writeAsciiString("\tCollatorID");
         of.writeInt(j);
         of.writeAsciiString(",\n");
@@ -1401,7 +1400,7 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString("};\n\n");
 
     of.writeAsciiString("static const sal_Unicode* collationOptions[] = {");
-    for( j=0; j<nbOfCollationOptions; j++ )
+    for( sal_Int16 j=0; j<nbOfCollationOptions; j++ )
     {
         of.writeAsciiString( "collationOption" );
         of.writeInt( j );
@@ -1464,8 +1463,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     sal_Int16 nbOfIndexs = 0;
     sal_Int16 nbOfUnicodeScripts = 0;
     sal_Int16 nbOfPageWords = 0;
-    sal_Int16 i;
-    for (i = 0; i< getNumberOfChildren();i++) {
+    for (sal_Int32 i = 0; i< getNumberOfChildren();i++) {
         LocaleNode * currNode = getChildAt (i);
         if( currNode->getName() == "IndexKey" )
         {
@@ -1501,7 +1499,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString(";\n\n");
 
     of.writeAsciiString("\nstatic const sal_Unicode* IndexArray[] = {\n");
-    for(i = 0; i < nbOfIndexs; i++) {
+    for(sal_Int16 i = 0; i < nbOfIndexs; i++) {
         of.writeAsciiString("\tIndexID");
         of.writeInt(i);
         of.writeAsciiString(",\n");
@@ -1529,7 +1527,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString(";\n\n");
 
     of.writeAsciiString("static const sal_Unicode* UnicodeScriptArray[] = {");
-    for( i=0; i<nbOfUnicodeScripts; i++ )
+    for( sal_Int16 i=0; i<nbOfUnicodeScripts; i++ )
     {
         of.writeAsciiString( "unicodeScript" );
         of.writeInt( i );
@@ -1542,7 +1540,7 @@ void LCIndexNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString(";\n\n");
 
     of.writeAsciiString("static const sal_Unicode* FollowPageWordArray[] = {\n");
-    for(i = 0; i < nbOfPageWords; i++) {
+    for(sal_Int16 i = 0; i < nbOfPageWords; i++) {
         of.writeAsciiString("\tfollowPageWord");
         of.writeInt(i);
         of.writeAsciiString(",\n");
@@ -1937,11 +1935,10 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
     }
     sal_Int16 nbOfCurrencies = 0;
     OUString str;
-    sal_Int16 i;
 
     bool bTheDefault= false;
     bool bTheCompatible = false;
-    for ( i = 0; i < getNumberOfChildren(); i++,nbOfCurrencies++) {
+    for ( sal_Int32 i = 0; i < getNumberOfChildren(); i++,nbOfCurrencies++) {
         LocaleNode * currencyNode = getChildAt (i);
         str = currencyNode->getAttr().getValueByName("default");
         bool bDefault = of.writeDefaultParameter("Currency", str, nbOfCurrencies);
@@ -1999,7 +1996,7 @@ void LCCurrencyNode::generateCode (const OFileWriter &of) const
     of.writeInt(nbOfCurrencies);
     of.writeAsciiString(";\n\n");
     of.writeAsciiString("static const sal_Unicode* currencies[] = {\n");
-    for(i = 0; i < nbOfCurrencies; i++) {
+    for(sal_Int16 i = 0; i < nbOfCurrencies; i++) {
         of.writeAsciiString("\tcurrencyID");
         of.writeInt(i);
         of.writeAsciiString(",\n");
@@ -2039,9 +2036,8 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) const
     }
     sal_Int16 nbOfModules = 0;
     OUString str;
-    sal_Int16 i;
 
-    for ( i = 0; i < getNumberOfChildren(); i++,nbOfModules++) {
+    for ( sal_Int32 i = 0; i < getNumberOfChildren(); i++,nbOfModules++) {
         LocaleNode * transNode = getChildAt (i);
         str = transNode->getAttr().getValueByIndex(0);
         of.writeParameter("Transliteration", str, nbOfModules);
@@ -2051,7 +2047,7 @@ void LCTransliterationNode::generateCode (const OFileWriter &of) const
     of.writeAsciiString(";\n\n");
 
     of.writeAsciiString("\nstatic const sal_Unicode* LCTransliterationsArray[] = {\n");
-    for( i = 0; i < nbOfModules; i++) {
+    for( sal_Int16 i = 0; i < nbOfModules; i++) {
         of.writeAsciiString("\tTransliteration");
         of.writeInt(i);
         of.writeAsciiString(",\n");
