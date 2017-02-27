@@ -66,7 +66,7 @@ class UITest(object):
 
     def execute_dialog_through_command(self, command):
         with EventListener(self._xContext, "DialogExecute") as event:
-            self._xUITest.executeCommand(command)
+            self._xUITest.executeDialog(command)
             time_ = 0
             while time_ < 30:
                 if event.executed:
@@ -138,13 +138,13 @@ class UITest(object):
 
     def close_doc(self):
         with EventListener(self._xContext, ["DialogExecute", "OnViewClosed"] ) as event:
-            self._xUITest.executeCommand(".uno:CloseDoc")
+            self._xUITest.executeDialog(".uno:CloseDoc")
             time_ = 0
             while time_ < 30:
                 if event.hasExecuted("DialogExecute"):
                     xCloseDlg = self._xUITest.getTopFocusWindow()
                     xNoBtn = xCloseDlg.getChild("discard")
-                    self.close_dialog_through_button(xNoBtn);
+                    xNoBtn.executeAction("CLICK", tuple())
                     return
                 elif event.hasExecuted("OnViewClosed"):
                     return
