@@ -919,23 +919,21 @@ void LwpFooterLayout::Read()
 
 void LwpFooterLayout::RegisterStyle(XFPageMaster* pm1)
 {
-    XFFooterStyle* pFooterStyle = new XFFooterStyle();
+    std::unique_ptr<XFFooterStyle> xFooterStyle(new XFFooterStyle());
 
     //Modify page bottom margin
     //page bottom margin: from bottom of footer to the bottom edge
     double bottom = GetMarginsValue(MARGIN_BOTTOM);
     pm1->SetMargins(-1, -1, -1, bottom);
 
-    ParseMargins(pFooterStyle);
-    ParseBorder(pFooterStyle);
-    ParseShadow(pFooterStyle);
-    ParseBackGround(pFooterStyle);
-//  ParseBackColor(pFooterStyle);
+    ParseMargins(xFooterStyle.get());
+    ParseBorder(xFooterStyle.get());
+    ParseShadow(xFooterStyle.get());
+    ParseBackGround(xFooterStyle.get());
 
-    ParseWaterMark(pFooterStyle);
-    //End by
+    ParseWaterMark(xFooterStyle.get());
 
-    pm1->SetFooterStyle(pFooterStyle);
+    pm1->SetFooterStyle(xFooterStyle.release());
 }
 
 void LwpFooterLayout::ParseMargins(XFFooterStyle* pFooterStyle)
