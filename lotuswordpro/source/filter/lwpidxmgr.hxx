@@ -73,6 +73,7 @@ struct LwpKey
     LwpObjectID id;
     sal_uInt32 offset = 0;
 };
+
 /**
  * @brief   LwpIndexManager, to read all index records and maintain the index information
 */
@@ -80,12 +81,11 @@ class LwpIndexManager
 {
 public:
     LwpIndexManager();
-    ~LwpIndexManager();
 protected:
     static const sal_uInt8 MAXOBJECTIDS;
-    std::vector<LwpKey*> m_ObjectKeys;  //the <id, offset> ordered vector
-    std::vector<LwpKey*> m_RootObjs;        //For those object ids in RootObjIndex
-    std::vector<sal_uInt32> m_TimeTable;    //Time table for object low id compression
+    std::vector<LwpKey> m_ObjectKeys;      //the <id, offset> ordered vector
+    std::vector<LwpKey> m_RootObjs;        //For those object ids in RootObjIndex
+    std::vector<sal_uInt32> m_TimeTable;   //Time table for object low id compression
 
     //sal_uInt16 m_nKeyCount;
     sal_uInt32 m_nKeyCount;     //the count of all object

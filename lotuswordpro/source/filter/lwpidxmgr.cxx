@@ -73,28 +73,11 @@
 const sal_uInt8 LwpIndexManager::MAXOBJECTIDS = 255;
 
 LwpIndexManager::LwpIndexManager()
-    :m_nKeyCount(0), m_nLeafCount(0)
+    : m_nKeyCount(0)
+    , m_nLeafCount(0)
 {
-
     m_TempVec.resize( LwpIndexManager::MAXOBJECTIDS );
 
-}
-
-LwpIndexManager::~LwpIndexManager()
-{
-    //Clear m_ObjectKeys
-    std::vector<LwpKey*>::iterator it;
-
-    for( it = m_ObjectKeys.begin(); it != m_ObjectKeys.end(); ++it )
-    {
-        LwpKey* pKey = *it;
-        if( pKey )
-        {
-            delete pKey;
-            pKey = nullptr;
-        }
-    }
-    m_ObjectKeys.clear();
 }
 
 /**
@@ -159,21 +142,20 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
     if (KeyCount)
     {
         //read object keys
-        LwpKey* akey = new LwpKey;
-        akey->id.Read(pObjStrm);
+        LwpKey akey;
+        akey.id.Read(pObjStrm);
         m_RootObjs.push_back(akey);
 
         sal_uInt16 k = 0;
 
         for (k = 1; k < KeyCount; k++)
         {
-            akey = new LwpKey;
-            akey->id.ReadCompressed(pObjStrm, m_RootObjs[k-1]->id);
+            akey.id.ReadCompressed(pObjStrm, m_RootObjs[k-1].id);
             m_RootObjs.push_back(akey);
         }
 
         for (k = 0; k < KeyCount; k++)
-            m_RootObjs[k]->offset = pObjStrm->QuickReaduInt32();
+            m_RootObjs[k].offset = pObjStrm->QuickReaduInt32();
 
         //read leaf index offset
         for (k = 0; k < m_nLeafCount; k++)
@@ -193,25 +175,24 @@ void LwpIndexManager::ReadObjIndexData(LwpObjectStream* pObjStrm)
     sal_uInt16 KeyCount = pObjStrm->QuickReaduInt16();
     sal_uInt16 LeafCount = KeyCount + 1;
 
-    std::vector<LwpKey*> vObjIndexs;
+    std::vector<LwpKey> vObjIndexs;
 
     if(KeyCount)
     {
-        LwpKey* akey = new LwpKey;
-        akey->id.Read(pObjStrm);
+        LwpKey akey;
+        akey.id.Read(pObjStrm);
         vObjIndexs.push_back(akey);
 
         sal_uInt16 k = 0;
 
         for (k = 1; k < KeyCount; k++)
         {
-            akey = new LwpKey;
-            akey->id.ReadCompressed(pObjStrm, vObjIndexs[k-1]->id);
+            akey.id.ReadCompressed(pObjStrm, vObjIndexs[k-1].id);
             vObjIndexs.push_back(akey);
         }
 
         for (k = 0; k < KeyCount; k++)
-            vObjIndexs[k]->offset = pObjStrm->QuickReaduInt32();
+            vObjIndexs[k].offset = pObjStrm->QuickReaduInt32();
 
         for (k = 0; k < LeafCount; k++)
             m_TempVec.at(k) = pObjStrm->QuickReaduInt32();
@@ -281,20 +262,19 @@ void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
 
     if(KeyCount)
     {
-        LwpKey* akey = new LwpKey;
+        LwpKey akey;
         //read object keys: id & offset
-        akey->id.Read(pObjStrm);
+        akey.id.Read(pObjStrm);
         m_ObjectKeys.push_back(akey);
 
         for (sal_uInt16 k = 1; k < KeyCount; k++)
         {
-            akey = new LwpKey;
-            akey->id.ReadCompressed(pObjStrm, m_ObjectKeys.at(m_nKeyCount+k-1)->id);
+            akey.id.ReadCompressed(pObjStrm, m_ObjectKeys.at(m_nKeyCount+k-1).id);
             m_ObjectKeys.push_back(akey);
         }
 
         for (sal_uInt16 j = 0; j < KeyCount; j++)
-            m_ObjectKeys.at(m_nKeyCount+j)->offset = pObjStrm->QuickReaduInt32();
+            m_ObjectKeys.at(m_nKeyCount+j).offset = pObjStrm->QuickReaduInt32();
     }
     m_nKeyCount += KeyCount;
 }
@@ -326,17 +306,17 @@ sal_uInt32 LwpIndexManager::GetObjOffset( LwpObjectID objid )
     {
         M = (L + U) >> 1;
 
-        if (objid.GetLow() > m_ObjectKeys[M]->id.GetLow())
+        if (objid.GetLow() > m_ObjectKeys[M].id.GetLow())
             L = M + 1;
-        else if (objid.GetLow() < m_ObjectKeys[M]->id.GetLow())
+        else if (objid.GetLow() < m_ObjectKeys[M].id.GetLow())
             U = M;
-        else if (objid.GetHigh() > m_ObjectKeys[M]->id.GetHigh())
+        else if (objid.GetHigh() > m_ObjectKeys[M].id.GetHigh())
             L = M + 1;
-        else if (objid.GetHigh() < m_ObjectKeys[M]->id.GetHigh())
+        else if (objid.GetHigh() < m_ObjectKeys[M].id.GetHigh())
             U = M;
         else
         {
-            return(m_ObjectKeys[M]->offset);
+            return(m_ObjectKeys[M].offset);
         }
     }
     return BAD_OFFSET;
