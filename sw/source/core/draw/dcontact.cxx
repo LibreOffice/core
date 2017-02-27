@@ -491,11 +491,6 @@ SdrObject* SwFlyDrawContact::GetMaster()
     return mpMasterObj.get();
 }
 
-void SwFlyDrawContact::SetMaster( SdrObject* )
-{
-    std::abort(); // this should never be called SwFlyDrawContact is owning its "Master"
-}
-
 /**
  * @note Overriding method to control Writer fly frames, which are linked, and
  *       to assure that all objects anchored at/inside the Writer fly frame are
@@ -743,10 +738,10 @@ SdrObject* SwDrawContact::GetMaster()
 }
 
 /**
- * @note Override <SwContact::SetMaster(..)> in order to assert, if the
- *       'master' drawing object is replaced. The latter is correctly handled,
- *       if handled by method <SwDrawContact::ChangeMasterObject(..)>. Thus,
- *       assert only, if a debug level is given.
+ * @note checks if the 'master' drawing object is replaced. The latter is
+ * correctly handled, if handled by method
+ * <SwDrawContact::ChangeMasterObject(..)>. Thus, assert only, if a debug level
+ * is given.
  */
 void SwDrawContact::SetMaster( SdrObject* _pNewMaster )
 {
