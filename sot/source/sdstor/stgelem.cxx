@@ -323,7 +323,7 @@ bool StgEntry::SetName( const OUString& rName )
         m_aName = m_aName.copy(0, nMaxLegalStr);
     }
 
-    sal_uInt16 i;
+    sal_Int32 i;
     for( i = 0; i < rName.getLength() && i <= nMaxLegalStr; i++ )
     {
         m_nName[ i ] = rName[ i ];
