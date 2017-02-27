@@ -2302,8 +2302,10 @@ void ScInterpreter::ScEffect()
     {
         double fPeriods = GetDouble();
         double fNominal = GetDouble();
-        if (fPeriods < 1.0 || fNominal <= 0.0)
+        if (fPeriods < 1.0 || fNominal < 0.0)
             PushIllegalArgument();
+        else if ( fNominal == 0.0 )
+            PushDouble( 0.0 );
         else
         {
             fPeriods = ::rtl::math::approxFloor(fPeriods);
