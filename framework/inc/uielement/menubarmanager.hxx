@@ -51,7 +51,7 @@
 #include <vcl/accel.hxx>
 #include <vcl/timer.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
-#include <cppuhelper/weak.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <framework/addonsoptions.hxx>
@@ -68,12 +68,13 @@ typedef std::unordered_map< OUString, PopupControllerEntry, OUStringHash > Popup
 
 class AddonMenu;
 class AddonPopupMenu;
-class MenuBarManager : public css::frame::XStatusListener                ,
-                       public css::frame::XFrameActionListener           ,
-                       public css::ui::XUIConfigurationListener          ,
-                       public css::lang::XComponent                      ,
-                       public css::awt::XSystemDependentMenuPeer         ,
-                       public ::cppu::OWeakObject
+class MenuBarManager:
+    public cppu::WeakImplHelper<
+        css::frame::XStatusListener,
+        css::frame::XFrameActionListener,
+        css::ui::XUIConfigurationListener,
+        css::lang::XComponent,
+        css::awt::XSystemDependentMenuPeer>
 {
     protected:
         MenuBarManager(
@@ -95,11 +96,6 @@ class MenuBarManager : public css::frame::XStatusListener                ,
             bool bHasMenuBar = true );
 
         virtual ~MenuBarManager() override;
-
-        // XInterface
-        virtual void SAL_CALL acquire() throw() override;
-        virtual void SAL_CALL release() throw() override;
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
         // XComponent
         virtual void SAL_CALL dispose() override;

@@ -126,8 +126,7 @@ MenuBarManager::MenuBarManager(
     const Reference< XDispatchProvider >& rDispatchProvider,
     const OUString& rModuleIdentifier,
     Menu* pMenu, bool bDelete, bool bHasMenuBar ):
-    OWeakObject()
-    , m_bDisposed( false )
+    m_bDisposed( false )
     , m_bRetrieveImages( false )
     , m_bAcceleratorCfg( false )
     , m_bModuleIdentified( false )
@@ -148,8 +147,7 @@ MenuBarManager::MenuBarManager(
     const Reference< XURLTransformer >& _xURLTransformer,
     Menu* pAddonMenu,
     bool popup):
-    OWeakObject()
-    , m_bDisposed( false )
+    m_bDisposed( false )
     , m_bRetrieveImages( true )
     , m_bAcceleratorCfg( false )
     , m_bModuleIdentified( false )
@@ -161,33 +159,6 @@ MenuBarManager::MenuBarManager(
 {
     m_aAsyncSettingsTimer.SetDebugName( "framework::MenuBarManager::Deactivate m_aAsyncSettingsTimer" );
     Init(rFrame,pAddonMenu, popup);
-}
-
-Any SAL_CALL MenuBarManager::queryInterface( const Type & rType )
-{
-    Any a = ::cppu::queryInterface(
-                rType ,
-                (static_cast< css::frame::XStatusListener* >(this)),
-                (static_cast< css::frame::XFrameActionListener* >(this)),
-                (static_cast< css::ui::XUIConfigurationListener* >(this)),
-                (static_cast< XEventListener* >(static_cast<XStatusListener *>(this))),
-                (static_cast< XComponent* >(this)),
-                (static_cast< css::awt::XSystemDependentMenuPeer* >(this)));
-
-    if ( a.hasValue() )
-        return a;
-
-    return OWeakObject::queryInterface( rType );
-}
-
-void SAL_CALL MenuBarManager::acquire() throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL MenuBarManager::release() throw()
-{
-    OWeakObject::release();
 }
 
 Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
