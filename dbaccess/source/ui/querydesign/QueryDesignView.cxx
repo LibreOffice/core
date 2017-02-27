@@ -2371,7 +2371,7 @@ namespace
                     if ( eOk == (eErrorCode = FillDragInfo(_pView,pArgument,aDragInfo)) )
                     {
                         aDragInfo->SetGroupBy(true);
-                        _pSelectionBrw->AddGroupBy(aDragInfo,i);
+                        _pSelectionBrw->AddGroupBy(aDragInfo);
                     }
                 }
                 else if(SQL_ISRULE(pArgument, general_set_fct ) &&
@@ -2379,7 +2379,7 @@ namespace
                         eOk == FillDragInfo(_pView,pParamRef,aDragInfo))
                 {
                     aDragInfo->SetGroupBy(true);
-                    _pSelectionBrw->AddGroupBy( aDragInfo, i );
+                    _pSelectionBrw->AddGroupBy( aDragInfo );
                 }
                 else if( SQL_ISRULE(pArgument, set_fct_spec ) )
                 {
@@ -2395,7 +2395,7 @@ namespace
                         aDragInfo->SetFunctionType(FKT_OTHER);
                         aDragInfo->SetGroupBy(true);
                         aDragInfo->SetVisible(false);
-                        _pSelectionBrw->AddGroupBy( aDragInfo, i );
+                        _pSelectionBrw->AddGroupBy( aDragInfo );
                     }
                     else
                         eErrorCode = eColumnNotFound;

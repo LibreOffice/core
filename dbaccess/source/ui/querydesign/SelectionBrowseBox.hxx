@@ -92,7 +92,7 @@ namespace dbaui
 
         // AddGroupBy:: inserts a field with function == grouping. If the fields already exists and uses an aggregate function,
         // the flag is not set
-        void                        AddGroupBy( const OTableFieldDescRef& rInfo,sal_uInt32 _nCurrentPos);
+        void                        AddGroupBy( const OTableFieldDescRef& rInfo );
         void                        AddCondition( const OTableFieldDescRef& rInfo,
                                                   const OUString& rValue,
                                                   const sal_uInt16 nLevel,
