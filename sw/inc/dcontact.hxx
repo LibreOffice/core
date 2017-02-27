@@ -317,9 +317,8 @@ class SwDrawContact final : public SwContact
             'master' drawing object */
         SwAnchoredDrawObject maAnchoredDrawObj;
 
-        /** data structure for collecting 'virtual'
-         drawing object supporting drawing objects in headers/footers. */
-        std::list<SwDrawVirtObj*> maDrawVirtObjs;
+        /** container for 'virtual' drawing object supporting drawing objects in headers/footers. */
+        std::vector<std::unique_ptr<SwDrawVirtObj>> maDrawVirtObjs;
 
         /** boolean indicating set 'master' drawing
          object has been cleared. */
@@ -344,7 +343,7 @@ class SwDrawContact final : public SwContact
         {
             bool mbUsedPred;
             UsedOrUnusedVirtObjPred( bool _bUsed ) : mbUsedPred( _bUsed ) {};
-            bool operator() ( const SwDrawVirtObj* _pDrawVirtObj )
+            bool operator() ( const std::unique_ptr<SwDrawVirtObj>& _pDrawVirtObj )
             {
                 if ( mbUsedPred )
                 {
@@ -357,13 +356,12 @@ class SwDrawContact final : public SwContact
             }
         };
 
-        /** unary function used by <list> iterator to find a 'virtual' drawing
-         object anchored at a given frame */
+        /** unary function used to find a 'virtual' drawing object anchored at a given frame */
         struct VirtObjAnchoredAtFramePred
         {
             const SwFrame* mpAnchorFrame;
             VirtObjAnchoredAtFramePred( const SwFrame& _rAnchorFrame );
-            bool operator() ( const SwDrawVirtObj* _pDrawVirtObj );
+            bool operator() ( const std::unique_ptr<SwDrawVirtObj>& _pDrawVirtObj );
         };
 
         /// method for adding/removing 'virtual' drawing object.

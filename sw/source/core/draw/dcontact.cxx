@@ -626,9 +626,6 @@ SwDrawContact::SwDrawContact( SwFrameFormat* pToRegisterIn, SdrObject* pObj ) :
     //       <mbUserCallActive> is false.
     meEventTypeOfCurrentUserCall( SdrUserCallType::MoveOnly )
 {
-    // clear list containing 'virtual' drawing objects.
-    maDrawVirtObjs.clear();
-
     // --> #i33909# - assure, that drawing object is inserted
     // in the drawing page.
     if ( !pObj->IsInserted() )
@@ -752,16 +749,8 @@ SwFrame* SwDrawContact::GetAnchorFrame(SdrObject *const pDrawObj)
 /// create a new 'virtual' drawing object.
 SwDrawVirtObj* SwDrawContact::CreateVirtObj()
 {
-    // determine 'master'
-    SdrObject* pOrgMasterSdrObj = GetMaster();
-
-    // create 'virtual' drawing object
-    SwDrawVirtObj* pNewDrawVirtObj = new SwDrawVirtObj ( *(pOrgMasterSdrObj), *(this) );
-
-    // add new 'virtual' drawing object managing data structure
-    maDrawVirtObjs.push_back( pNewDrawVirtObj );
-
-    return pNewDrawVirtObj;
+    maDrawVirtObjs.push_back(std::unique_ptr<SwDrawVirtObj>(new SwDrawVirtObj(*GetMaster(), *this)));
+    return maDrawVirtObjs.back().get();
 }
 
 /** add a 'virtual' drawing object to drawing page.
@@ -770,37 +759,19 @@ SwDrawVirtObj* SwDrawContact::CreateVirtObj()
  */
 SwDrawVirtObj* SwDrawContact::AddVirtObj()
 {
-    SwDrawVirtObj* pAddedDrawVirtObj = nullptr;
-
-    // check, if a disconnected 'virtual' drawing object exist and use it
-    std::list<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
-            std::find_if( maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
-                          UsedOrUnusedVirtObjPred( false ) );
-
-    if ( aFoundVirtObjIter != maDrawVirtObjs.end() )
-    {
-        // use already created, disconnected 'virtual' drawing object
-        pAddedDrawVirtObj = (*aFoundVirtObjIter);
-    }
-    else
-    {
-        // create new 'virtual' drawing object.
-        pAddedDrawVirtObj = CreateVirtObj();
-    }
+    auto pAddedDrawVirtObj(CreateVirtObj());
     pAddedDrawVirtObj->AddToDrawingPage();
-
     return pAddedDrawVirtObj;
 }
 
 /// remove 'virtual' drawing objects and destroy them.
 void SwDrawContact::RemoveAllVirtObjs()
 {
-    for(auto& pDrawVirtObj : maDrawVirtObjs)
+    for(auto& rpDrawVirtObj : maDrawVirtObjs)
     {
         // remove and destroy 'virtual object'
-        pDrawVirtObj->RemoveFromWriterLayout();
-        pDrawVirtObj->RemoveFromDrawingPage();
-        delete pDrawVirtObj;
+        rpDrawVirtObj->RemoveFromWriterLayout();
+        rpDrawVirtObj->RemoveFromDrawingPage();
     }
     maDrawVirtObjs.clear();
 }
@@ -822,7 +793,7 @@ SwDrawContact::VirtObjAnchoredAtFramePred::VirtObjAnchoredAtFramePred(
 }
 
 // #i26791# - compare with master frame
-bool SwDrawContact::VirtObjAnchoredAtFramePred::operator() ( const SwDrawVirtObj* _pDrawVirtObj )
+bool SwDrawContact::VirtObjAnchoredAtFramePred::operator() ( const std::unique_ptr<SwDrawVirtObj>& _pDrawVirtObj )
 {
     const SwFrame* pObjAnchorFrame = _pDrawVirtObj->GetAnchorFrame();
     if ( pObjAnchorFrame && pObjAnchorFrame->IsContentFrame() )
@@ -875,26 +846,20 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrame( const SwFrame& _rAnchorFra
     }
     else
     {
-        std::list<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
-                std::find_if( maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
-                              VirtObjAnchoredAtFramePred( *pProposedAnchorFrame ) );
-
-        if ( aFoundVirtObjIter != maDrawVirtObjs.end() )
-        {
-            pRetDrawObj = (*aFoundVirtObjIter);
-        }
+        const auto ppFoundVirtObj(std::find_if(maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
+                VirtObjAnchoredAtFramePred(*pProposedAnchorFrame)));
+        if(ppFoundVirtObj != maDrawVirtObjs.end())
+            pRetDrawObj = ppFoundVirtObj->get();
     }
 
     return pRetDrawObj;
 }
 
-void SwDrawContact::NotifyBackgrdOfAllVirtObjs( const Rectangle* pOldBoundRect )
+void SwDrawContact::NotifyBackgrdOfAllVirtObjs(const Rectangle* pOldBoundRect)
 {
-    for ( std::list<SwDrawVirtObj*>::iterator aDrawVirtObjIter = maDrawVirtObjs.begin();
-          aDrawVirtObjIter != maDrawVirtObjs.end();
-          ++aDrawVirtObjIter )
+    for(auto& rpDrawVirtObj : maDrawVirtObjs)
     {
-        SwDrawVirtObj* pDrawVirtObj = (*aDrawVirtObjIter);
+        SwDrawVirtObj* pDrawVirtObj(rpDrawVirtObj.get());
         if ( pDrawVirtObj->GetAnchorFrame() )
         {
             // #i34640# - determine correct page frame
@@ -1578,12 +1543,10 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 // #i28701# - added parameter <_bUpdateSortedObjsList>
 void SwDrawContact::InvalidateObjs_( const bool _bUpdateSortedObjsList )
 {
+    for(auto& rpDrawVirtObj : maDrawVirtObjs)
     // invalidate position of existing 'virtual' drawing objects
-    for ( std::list<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
-          aDisconnectIter != maDrawVirtObjs.end();
-          ++aDisconnectIter )
     {
-        SwDrawVirtObj* pDrawVirtObj = (*aDisconnectIter);
+        SwDrawVirtObj* pDrawVirtObj(rpDrawVirtObj.get());
         // #i33313# - invalidation only for connected
         // 'virtual' drawing objects
         if ( pDrawVirtObj->IsConnected() )
@@ -1623,13 +1586,10 @@ void SwDrawContact::DisconnectFromLayout( bool _bMoveMasterToInvisibleLayer )
 
     // remove 'virtual' drawing objects from writer
     // layout and from drawing page
-    for ( std::list<SwDrawVirtObj*>::iterator aDisconnectIter = maDrawVirtObjs.begin();
-          aDisconnectIter != maDrawVirtObjs.end();
-          ++aDisconnectIter )
+    for(auto& rpVirtDrawObj : maDrawVirtObjs)
     {
-        SwDrawVirtObj* pDrawVirtObj = (*aDisconnectIter);
-        pDrawVirtObj->RemoveFromWriterLayout();
-        pDrawVirtObj->RemoveFromDrawingPage();
+        rpVirtDrawObj->RemoveFromWriterLayout();
+        rpVirtDrawObj->RemoveFromDrawingPage();
     }
 
     if ( maAnchoredDrawObj.GetAnchorFrame() )
@@ -1690,14 +1650,13 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
     }
     else
     {
-        std::list<SwDrawVirtObj*>::const_iterator aFoundVirtObjIter =
-                std::find_if( maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
-                              UsedOrUnusedVirtObjPred( true ) );
-        if ( aFoundVirtObjIter != maDrawVirtObjs.end() )
+        const auto ppVirtDrawObj(std::find_if(maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
+                UsedOrUnusedVirtObjPred(true)));
+        if(ppVirtDrawObj != maDrawVirtObjs.end())
         {
             // replace found 'virtual' drawing object by 'master' drawing
             // object and disconnect the 'virtual' one
-            SwDrawVirtObj* pDrawVirtObj = (*aFoundVirtObjIter);
+            SwDrawVirtObj* pDrawVirtObj(ppVirtDrawObj->get());
             SwFrame* pNewAnchorFrameOfMaster = pDrawVirtObj->AnchorFrame();
             // disconnect 'virtual' drawing object
             pDrawVirtObj->RemoveFromWriterLayout();
@@ -1989,16 +1948,12 @@ void SwDrawContact::ChangeMasterObject(SdrObject* pNewMaster)
 }
 
 /// get data collection of anchored objects, handled by with contact
-void SwDrawContact::GetAnchoredObjs( std::list<SwAnchoredObject*>& _roAnchoredObjs ) const
+void SwDrawContact::GetAnchoredObjs(std::list<SwAnchoredObject*>& o_rAnchoredObjs) const
 {
-    _roAnchoredObjs.push_back( const_cast<SwAnchoredDrawObject*>(&maAnchoredDrawObj) );
+    o_rAnchoredObjs.push_back(const_cast<SwAnchoredDrawObject*>(&maAnchoredDrawObj));
 
-    for ( std::list<SwDrawVirtObj*>::const_iterator aDrawVirtObjsIter = maDrawVirtObjs.begin();
-          aDrawVirtObjsIter != maDrawVirtObjs.end();
-          ++aDrawVirtObjsIter )
-    {
-        _roAnchoredObjs.push_back( &(*aDrawVirtObjsIter)->AnchoredObj() );
-    }
+    for(auto& rpDrawVirtObj : maDrawVirtObjs)
+        o_rAnchoredObjs.push_back(&rpDrawVirtObj->AnchoredObj());
 }
 
 // AW: own sdr::contact::ViewContact (VC) sdr::contact::ViewObjectContact (VOC) needed
