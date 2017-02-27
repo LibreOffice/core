@@ -9,25 +9,35 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="32"
-   height="32"
-   id="svg5453"
+   width="16"
+   height="16"
+   id="svg3049"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="browseview.svg"
-   viewBox="0 0 32 32">
+   sodipodi:docname="sc_signature.svg"
+   inkscape:export-filename="/home/uri/.kde/share/icons/NITRUX-KDE/16x16/actions/view-right-new.png"
+   inkscape:export-xdpi="30"
+   inkscape:export-ydpi="30">
   <defs
-     id="defs5455" />
+     id="defs3051">
+    <style
+       id="current-color-scheme"
+       type="text/css">
+      .ColorScheme-Text {
+        color:#4d4d4d;
+      }
+      </style>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1.0"
-     inkscape:pageopacity="0"
+     inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="16.33333"
-     inkscape:cx="13.12832"
-     inkscape:cy="14.027362"
+     inkscape:zoom="34.5228"
+     inkscape:cx="19.968665"
+     inkscape:cy="2.0883679"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -42,32 +52,30 @@
      inkscape:window-maximized="1"
      inkscape:showpageshadow="false"
      borderlayer="true"
-     showguides="true"
-     inkscape:guide-bbox="true"
-     inkscape:object-nodes="true"
-     inkscape:snap-bbox="true">
+     inkscape:snap-bbox="true"
+     inkscape:object-nodes="true">
     <inkscape:grid
        type="xygrid"
-       id="grid4063" />
+       id="grid4085" />
     <sodipodi:guide
-       position="4,24"
-       orientation="28,0"
-       id="guide4280" />
+       position="2.0000044,14.00003"
+       orientation="12,0"
+       id="guide4075" />
     <sodipodi:guide
-       position="13,4"
-       orientation="0,28"
-       id="guide4282" />
+       position="2.0000044,2.0000296"
+       orientation="0,12"
+       id="guide4077" />
     <sodipodi:guide
-       position="28,25"
-       orientation="-28,0"
-       id="guide4284" />
+       position="14.000004,2.0000296"
+       orientation="-12,0"
+       id="guide4079" />
     <sodipodi:guide
-       position="15,28"
-       orientation="0,-28"
-       id="guide4286" />
+       position="14.000004,14.00003"
+       orientation="0,-12"
+       id="guide4081" />
   </sodipodi:namedview>
   <metadata
-     id="metadata5458">
+     id="metadata3054">
     <rdf:RDF>
       <cc:Work
          rdf:about="">
@@ -82,11 +90,12 @@
      inkscape:label="Capa 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-384.57143,-515.798)">
+     transform="translate(-421.71429,-531.79074)">
     <path
-       style="fill:#4d4d4d;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none"
-       d="m 412.57143,521.798 -24,0 0,20 16,0 1,0 7,-7 0,-1 0,-12 z m -1,1 0,11 -7,0 0,7 -15,0 0,-18 22,0 z"
-       id="rect4140"
+       id="path3363"
+       class="ColorScheme-Text"
+       d="m 424.71429,533.79071 0,12 5,0 0,-1 -4,0 0,-10 8,0 0,4 1,0 0,-5 -10,0 z m 8.5,6 a 1.5,1.5 0 0 0 -1.5,1.5 l 0,1.5 -1,0 0,3 5,0 0,-3 -1,0 0,-1.5 a 1.5,1.5 0 0 0 -1.5,-1.5 z m 0,1 a 0.5,0.5 0 0 1 0.5,0.5 l 0,1.5 -1,0 0,-1.5 a 0.5,0.5 0 0 1 0.5,-0.5 z"
+       style="color:#4d4d4d;fill:currentColor;fill-opacity:1;stroke:none"
        inkscape:connector-curvature="0" />
   </g>
 </svg>
