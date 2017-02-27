@@ -56,13 +56,13 @@ SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
     : m_xContext(rxContext)
     , aForbiddenLang(LANGUAGE_DONTKNOW)
 {
-    OSL_ENSURE( m_xContext.is(), "SwBreakIt: no MultiServiceFactory" );
+    assert(m_xContext.is() && "SwBreakIt: no MultiServiceFactory");
 }
 
 void SwBreakIt::createBreakIterator() const
 {
-    if ( m_xContext.is() && !xBreak.is() )
-        xBreak.set( i18n::BreakIterator::create(m_xContext) );
+    if (!xBreak.is())
+        xBreak.set(i18n::BreakIterator::create(m_xContext));
 }
 
 void SwBreakIt::GetLocale_( const LanguageType aLang )
@@ -83,7 +83,7 @@ void SwBreakIt::GetLocale_( const LanguageTag& rLanguageTag )
 
 void SwBreakIt::GetForbidden_( const LanguageType aLang )
 {
-    LocaleDataWrapper aWrap( m_xContext, GetLanguageTag( aLang ) );
+    LocaleDataWrapper aWrap(m_xContext, GetLanguageTag(aLang));
 
     aForbiddenLang = aLang;
     m_xForbidden.reset(new i18n::ForbiddenCharacters(aWrap.getForbiddenCharacters()));
