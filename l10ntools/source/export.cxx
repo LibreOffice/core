@@ -347,8 +347,7 @@ void Export::Execute( int nToken, const char * pToken )
         sal_uInt16 nOpen = 0;
         sal_uInt16 nClose = 0;
         bool bReadOver1 = false;
-        sal_uInt16 i = 0;
-        for ( i = 0; i < sToken.getLength(); i++ ) {
+        for ( sal_Int32 i = 0; i < sToken.getLength(); i++ ) {
             if ( sToken[i] == '"' )
                 bReadOver1 = !bReadOver1;
             if ( !bReadOver1 && ( sToken[i] == '{' ))
@@ -356,7 +355,7 @@ void Export::Execute( int nToken, const char * pToken )
         }
 
         bReadOver1 = false;
-        for ( i = 0; i < sToken.getLength(); i++ ) {
+        for ( sal_Int32 i = 0; i < sToken.getLength(); i++ ) {
             if ( sToken[i] == '"' )
                 bReadOver1 = !bReadOver1;
             if ( !bReadOver1 && ( sToken[i] == '}' ))
