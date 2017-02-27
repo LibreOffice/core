@@ -263,14 +263,12 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
                     getFragmentPathFromRelId( msLo ),
                     getFragmentPathFromRelId( msQs ),
                     getFragmentPathFromRelId( msCs ));
-        SAL_INFO("oox.drawingml", OSL_THIS_FUNC
-                 << "diagram added shape " << mpShapePtr->getName()
+        SAL_INFO("oox.drawingml", "DiagramGraphicDataContext::onCreateContext: added shape " << mpShapePtr->getName()
                  << " of type " << mpShapePtr->getServiceName()
-                 << ", size (" << mpShapePtr->getPosition().X
+                 << ", position: " << mpShapePtr->getPosition().X
                  << "," << mpShapePtr->getPosition().Y
-                 << "," << mpShapePtr->getSize().Width
-                 << "," << mpShapePtr->getSize().Height
-                 <<")");
+                 << ", size: " << mpShapePtr->getSize().Width
+                 << "x" << mpShapePtr->getSize().Height);
 
         // No DrawingML fallback, need to warn the user at the end.
         if (mpShapePtr->getExtDrawings().empty())

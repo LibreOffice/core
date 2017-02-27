@@ -390,6 +390,8 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap.setProperty( PROP_Handles, aHandles);
 
 #ifdef DEBUG
+        // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
+        // for these ==cscode== and ==csdata== markers, so don't "clean up" these SAL_INFOs.
         SAL_INFO("oox.cscode", "==cscode== begin");
         aPropertyMap.dumpCode( aPropertyMap.makePropertySet() );
         SAL_INFO("oox.cscode", "==cscode== end");

@@ -246,7 +246,7 @@ void Shape::addShape(
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
 {
-    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << " id: " << msId);
+    SAL_INFO("oox.drawingml", "Shape::getShapeStyleRef: id='" << msId << "'");
 
     try
     {
@@ -275,7 +275,7 @@ void Shape::addShape(
     }
     catch( const Exception& e )
     {
-        SAL_WARN( "oox.drawingml", OSL_THIS_FUNC << "Exception: " << e.Message );
+        SAL_WARN( "oox.drawingml", "Shape::addShape: Exception: " << e.Message );
     }
 }
 
@@ -296,7 +296,7 @@ void Shape::setTextBox(bool bTextBox)
 
 void Shape::applyShapeReference( const Shape& rReferencedShape, bool bUseText )
 {
-    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "apply shape reference: " << rReferencedShape.msId << " to shape id: " << msId);
+    SAL_INFO("oox.drawingml", "Shape::applyShapeReference: apply '" << rReferencedShape.msId << "' to '" << msId << "'");
 
     if ( rReferencedShape.mpTextBody.get() && bUseText )
         mpTextBody = std::make_shared<TextBody>( *rReferencedShape.mpTextBody.get() );
@@ -379,7 +379,7 @@ void Shape::addChildren(
         aChildTransformation.translate(aTranslate.getX(), aTranslate.getY());
     }
 
-    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "parent matrix:\n"
+    SAL_INFO("oox.drawingml", "Shape::addChildren: parent matrix:\n"
              << aChildTransformation.get(0, 0) << " "
              << aChildTransformation.get(0, 1) << " "
              << aChildTransformation.get(0, 2) << "\n"
@@ -409,7 +409,7 @@ Reference< XShape > const & Shape::createAndInsert(
         FillProperties& rShapeOrParentShapeFillProps )
 {
     bool bIsEmbMedia = false;
-    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << " id: " << msId);
+    SAL_INFO("oox.drawingml", "Shape::createAndInsert: id='" << msId << "' service='" << rServiceName << "'");
 
     formulaimport::XmlStreamBuilder * pMathXml(nullptr);
     if (mpTextBody.get())
@@ -619,7 +619,7 @@ Reference< XShape > const & Shape::createAndInsert(
 
         if ( mbHidden || mbHiddenMasterShape )
         {
-            SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "invisible shape with id: " << msId);
+            SAL_INFO("oox.drawingml", "Shape::createAndInsert: invisible shape with id='" << msId << "'");
             const OUString sVisible( "Visible" );
             xSet->setPropertyValue( sVisible, Any( false ) );
         }
@@ -1085,6 +1085,8 @@ Reference< XShape > const & Shape::createAndInsert(
                 mpCustomShapePropertiesPtr->setTextRotateAngle( -1 * nTextRotateAngle / 60000 );
             }
 
+            // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
+            // for these ==cscode== and ==csdata== markers, so don't "clean up" these SAL_INFOs
             SAL_INFO("oox.cscode", "==cscode== shape name: '" << msName << "'");
             SAL_INFO("oox.csdata", "==csdata== shape name: '" << msName << "'");
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape, maSize );
@@ -1115,7 +1117,7 @@ Reference< XShape > const & Shape::createAndInsert(
                         if( pTheme )
                             if( const TextCharacterProperties* pCharProps = pTheme->getFontStyle( pFontRef->mnThemedIdx ) )
                                 aCharStyleProperties.assignUsed( *pCharProps );
-                        SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "use font color");
+                        SAL_INFO("oox.drawingml", "Shape::createAndInsert: use font color");
                         if ( pFontRef->maPhClr.isUsed() )
                         {
                             aCharStyleProperties.maFillProperties.maFillColor = pFontRef->maPhClr;
@@ -1191,7 +1193,7 @@ void Shape::keepDiagramCompatibilityInfo( XmlFilterBase& rFilterBase )
     }
     catch( const Exception& e )
     {
-        SAL_WARN( "oox.drawingml", OSL_THIS_FUNC << "Exception: " << e.Message );
+        SAL_WARN( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo: Exception: " << e.Message );
     }
 }
 
@@ -1248,8 +1250,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
         GraphicFilter aFilter( false );
         if ( aFilter.ImportGraphic( aGraphic, "", aTempStream, GRFILTER_FORMAT_NOTFOUND, nullptr, GraphicFilterImportFlags::NONE, static_cast < Sequence < PropertyValue >* > ( nullptr ) ) != GRFILTER_OK )
         {
-            SAL_WARN( "oox.drawingml", OSL_THIS_FUNC
-                      << "Unable to import rendered stream into graphic object" );
+            SAL_WARN( "oox.drawingml", "Shape::renderDiagramToGraphic: Unable to import rendered stream into graphic object" );
             return xShape;
         }
 
@@ -1264,7 +1265,7 @@ Reference < XShape > Shape::renderDiagramToGraphic( XmlFilterBase& rFilterBase )
     }
     catch( const Exception& e )
     {
-        SAL_WARN( "oox.drawingml", OSL_THIS_FUNC << "Exception: " << e.Message );
+        SAL_WARN( "oox.drawingml", "Shape::renderDiagramToGraphic: Exception: " << e.Message );
     }
 
     return xShape;
@@ -1277,7 +1278,7 @@ void Shape::setTextBody(const TextBodyPtr & pTextBody)
 
 void Shape::setMasterTextListStyle( const TextListStylePtr& pMasterTextListStyle )
 {
-    SAL_INFO("oox.drawingml", OSL_THIS_FUNC << "set master text list style to shape id: " << msId);
+    SAL_INFO("oox.drawingml", "Shape::setMasterTextListStyle: Set master text list style to shape id='" << msId << "'");
 
     mpMasterTextListStyle = pMasterTextListStyle;
 }
