@@ -90,6 +90,37 @@ public:
     void SetStreamBuffer(std::unique_ptr<SvMemoryStream>& pStreamBuffer);
 };
 
+/// Array object: a list.
+class XMLSECURITY_DLLPUBLIC PDFArrayElement : public PDFElement
+{
+    /// Location after the '[' token.
+    sal_uInt64 m_nOffset = 0;
+    std::vector<PDFElement*> m_aElements;
+public:
+    PDFArrayElement();
+    bool Read(SvStream& rStream) override;
+    void PushBack(PDFElement* pElement);
+    const std::vector<PDFElement*>& GetElements();
+};
+
+/// Reference object: something with a unique ID.
+class XMLSECURITY_DLLPUBLIC PDFReferenceElement : public PDFElement
+{
+    PDFDocument& m_rDoc;
+    int m_fObjectValue;
+    int m_fGenerationValue;
+
+public:
+    PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue);
+    bool Read(SvStream& rStream) override;
+    /// Assuming the reference points to a number object, return its value.
+    double LookupNumber(SvStream& rStream) const;
+    /// Lookup referenced object, without assuming anything about its contents.
+    PDFObjectElement* LookupObject();
+    int GetObjectValue() const;
+    int GetGenerationValue() const;
+};
+
 /// Stream object: a byte array with a known length.
 class XMLSECURITY_DLLPUBLIC PDFStreamElement : public PDFElement
 {
@@ -146,6 +177,8 @@ public:
     const std::map<OString, PDFElement*>& GetItems() const;
     /// Looks up an object which is only referenced in this dictionary.
     PDFObjectElement* LookupObject(const OString& rDictionaryKey);
+    /// Looks up an element which is contained in this dictionary.
+    PDFElement* LookupElement(const OString& rDictionaryKey);
 };
 
 enum class TokenizeMode
