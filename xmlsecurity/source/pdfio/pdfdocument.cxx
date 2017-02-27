@@ -2974,7 +2974,7 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
             else
             {
                 // Nested dictionary.
-                nIndex = PDFDictionaryElement::Parse(rElements, pDictionary, pDictionary->m_aItems);
+                i = PDFDictionaryElement::Parse(rElements, pDictionary, pDictionary->m_aItems);
                 rDictionary[aName] = pDictionary;
                 aName.clear();
             }
@@ -2987,7 +2987,7 @@ size_t PDFDictionaryElement::Parse(const std::vector< std::unique_ptr<PDFElement
                 // Last dictionary end, track length and stop parsing.
                 if (pThisObject)
                     pThisObject->SetDictionaryLength(pEndDictionary->GetLocation() - nDictionaryOffset);
-                nRet = nIndex;
+                nRet = i;
                 break;
             }
         }
