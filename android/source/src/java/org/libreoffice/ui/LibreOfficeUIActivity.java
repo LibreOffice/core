@@ -268,13 +268,8 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         FileUtilities.sortFiles(filePaths, sortMode);
         // refresh view
-        if (viewMode == GRID_VIEW) {
-            fileRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
-            fileRecyclerView.setAdapter(new GridItemAdapter(this, filePaths));
-        } else {
-            fileRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            fileRecyclerView.setAdapter(new ListItemAdapter(this, filePaths));
-        }
+        fileRecyclerView.setLayoutManager(isViewModeList() ? new LinearLayoutManager(this) : new GridLayoutManager(this, 3));
+        fileRecyclerView.setAdapter(new ExplorerItemAdapter(this, filePaths));
         // close drawer if it was open
         drawerLayout.closeDrawer(navigationDrawer);
     }
@@ -326,6 +321,10 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private boolean isViewModeList(){
+        return viewMode == LIST_VIEW;
     }
 
     private void switchToDocumentProvider(IDocumentProvider provider) {
@@ -875,15 +874,14 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         }
     }
 
-
-    class ListItemAdapter extends RecyclerView.Adapter<ListItemAdapter.ViewHolder> {
+    class ExplorerItemAdapter extends RecyclerView.Adapter<ExplorerItemAdapter.ViewHolder> {
 
         private Activity mActivity;
         private List<IFile> filePaths;
         private final long KB = 1024;
         private final long MB = 1048576;
 
-        ListItemAdapter(Activity activity, List<IFile> filePaths) {
+        ExplorerItemAdapter(Activity activity, List<IFile> filePaths) {
             this.mActivity = activity;
             this.filePaths = filePaths;
         }
@@ -891,7 +889,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View item = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.file_list_item, parent, false);
+                    .inflate(isViewModeList() ? R.layout.file_list_item : R.layout.file_explorer_grid_item, parent, false);
             return new ViewHolder(item);
         }
 
@@ -917,24 +915,6 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             });
 
             holder.filenameView.setText(file.getName());
-
-            if (!file.isDirectory()) {
-                String size;
-                long length = filePaths.get(position).getSize();
-                if (length < KB){
-                    size = Long.toString(length) + "B";
-                } else if (length < MB){
-                    size = Long.toString(length/KB) + "KB";
-                } else {
-                    size = Long.toString(length/MB) + "MB";
-                }
-                holder.fileSizeView.setText(size);
-            }
-            SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy hh:ss");
-            Date date = file.getLastModified();
-            //TODO format date
-            holder.fileDateView.setText(df.format(date));
-
             switch (FileUtilities.getType(file.getName())) {
                 case FileUtilities.DOC:
                     holder.iconView.setImageResource(R.drawable.writer);
@@ -954,7 +934,27 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
                 //Eventually have thumbnails of each sub file on a black circle
                 //For now just a folder icon
                 holder.iconView.setImageResource(R.drawable.ic_folder_black_24dp);
-                holder.iconView.setColorFilter(ContextCompat.getColor(mActivity,R.color.text_color_secondary));
+                holder.iconView.setColorFilter(ContextCompat.getColor(mActivity, R.color.text_color_secondary));
+            }
+
+            // Date and Size field only exist when we are displaying items in a list.
+            if(isViewModeList()) {
+                if (!file.isDirectory()) {
+                    String size;
+                    long length = filePaths.get(position).getSize();
+                    if (length < KB) {
+                        size = Long.toString(length) + "B";
+                    } else if (length < MB) {
+                        size = Long.toString(length / KB) + "KB";
+                    } else {
+                        size = Long.toString(length / MB) + "MB";
+                    }
+                    holder.fileSizeView.setText(size);
+                }
+                SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy hh:ss");
+                Date date = file.getLastModified();
+                //TODO format date
+                holder.fileDateView.setText(df.format(date));
             }
         }
 
@@ -972,96 +972,13 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             ViewHolder(View itemView) {
                 super(itemView);
                 this.itemView = itemView;
-                filenameView = (TextView) itemView.findViewById(R.id.file_list_item_name);
-                fileSizeView = (TextView) itemView.findViewById(R.id.file_list_item_size);
-                fileDateView = (TextView) itemView.findViewById(R.id.file_list_item_date);
-                iconView = (ImageView) itemView.findViewById(R.id.file_list_item_icon);
-            }
-        }
-    }
-
-    class GridItemAdapter extends RecyclerView.Adapter<GridItemAdapter.ViewHolder> {
-
-        private Activity mActivity;
-        private List<IFile> filePaths;
-
-        GridItemAdapter(Activity mActivity, List<IFile> filePaths) {
-            this.mActivity = mActivity;
-            this.filePaths = filePaths;
-        }
-
-        @Override
-        public GridItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View item = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.file_explorer_grid_item, parent, false);
-            return new ViewHolder(item);
-        }
-
-        @Override
-        public void onBindViewHolder(final GridItemAdapter.ViewHolder holder, final int position) {
-            final IFile file = filePaths.get(position);
-
-            holder.itemView.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    open(position);
+                filenameView = (TextView) itemView.findViewById(R.id.file_item_name);
+                iconView = (ImageView) itemView.findViewById(R.id.file_item_icon);
+                // Check if view mode is List, only then initialise Size and Date field
+                if (isViewModeList()) {
+                    fileSizeView = (TextView) itemView.findViewById(R.id.file_item_size);
+                    fileDateView = (TextView) itemView.findViewById(R.id.file_item_date);
                 }
-            });
-
-            holder.itemView.setOnLongClickListener(new OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    //to be picked out by floating context menu (workaround-ish)
-                    currentlySelectedFile = position;
-                    //must return false so the click is not consumed
-                    return false;
-                }
-            });
-
-            String filename = file.getName();
-
-            holder.filenameView.setText(filename);
-
-            switch (FileUtilities.getType(filename)) {
-                case FileUtilities.DOC:
-                    holder.iconView.setImageResource(R.drawable.writer);
-                    break;
-                case FileUtilities.CALC:
-                    holder.iconView.setImageResource(R.drawable.calc);
-                    break;
-                case FileUtilities.DRAWING:
-                    holder.iconView.setImageResource(R.drawable.draw);
-                    break;
-                case FileUtilities.IMPRESS:
-                    holder.iconView.setImageResource(R.drawable.impress);
-                    break;
-            }
-
-            if (file.isDirectory()) {
-                //Eventually have thumbnails of each sub file on a black circle
-                //For now just a folder icon
-                holder.iconView.setImageResource(R.drawable.ic_folder_black_24dp);
-                holder.iconView.setColorFilter(ContextCompat.getColor(mActivity,R.color.text_color_secondary));
-            }
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return filePaths.size();
-        }
-
-        class ViewHolder extends RecyclerView.ViewHolder {
-
-            View itemView;
-            TextView filenameView;
-            ImageView iconView;
-
-            ViewHolder(View itemView) {
-                super(itemView);
-                this.itemView = itemView;
-                this.filenameView = (TextView) itemView.findViewById(R.id.grid_item_label);
-                this.iconView = (ImageView) itemView.findViewById(R.id.grid_item_image);
             }
         }
     }
