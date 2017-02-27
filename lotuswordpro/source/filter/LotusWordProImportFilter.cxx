@@ -77,11 +77,10 @@ bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< css::beans::
 
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportLWP(const OUString &rURL)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportLWP(SvStream &rStream)
 {
-    SvFileStream aFileStream(rURL, StreamMode::READ);
     uno::Reference< XDocumentHandler > xHandler;
-    return ( ReadWordproFile(aFileStream, xHandler) == 0 );
+    return ReadWordproFile(rStream, xHandler) == 0;
 }
 
 sal_Bool SAL_CALL LotusWordProImportFilter::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )

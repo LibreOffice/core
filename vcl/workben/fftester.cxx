@@ -433,16 +433,17 @@ try_again:
             }
             else if (strcmp(argv[2], "lwp") == 0)
             {
-                static HFilterCall pfnImport(nullptr);
+                static FFilterCall pfnImport(nullptr);
                 if (!pfnImport)
                 {
                     osl::Module aLibrary;
                     aLibrary.loadRelative(&thisModule, "liblwpftlo.so", SAL_LOADMODULE_LAZY);
-                    pfnImport = reinterpret_cast<HFilterCall>(
+                    pfnImport = reinterpret_cast<FFilterCall>(
                         aLibrary.getFunctionSymbol("TestImportLWP"));
                     aLibrary.release();
                 }
-                ret = (int) (*pfnImport)(out);
+                SvFileStream aFileStream(out, StreamMode::READ);
+                ret = (int) (*pfnImport)(aFileStream);
             }
             else if (strcmp(argv[2], "ppt") == 0)
             {
