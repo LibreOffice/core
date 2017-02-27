@@ -19,6 +19,40 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_ca7439ff",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-27T13:47:15Z",
+      "side": 1,
+      "message": "from looking at the (few) uses of SvClassManager across the code base, it looks like such clashing registration would mean a programming error (so should use assert)",
+      "revId": "74510a62718d112ab369b818d0369622f769079a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0a656144",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-27T13:47:15Z",
+      "side": 1,
+      "message": "note that pStm is unconditionally dereferenced on the following line",
+      "revId": "74510a62718d112ab369b818d0369622f769079a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_8a6a3119",
         "filename": "tools/source/ref/pstm.cxx",
         "patchSetId": 6
@@ -30,6 +64,23 @@
       "writtenOn": "2017-02-27T13:31:06Z",
       "side": 1,
       "message": "note that I have removed that odd checking code completely now from SvPersistStream::WriteDummyLen with b100342d42a15a3aed79d6f23ecfd0b56e4a86bf \"Remove odd check that writeUInt32 indeed writes four bytes\"",
+      "revId": "74510a62718d112ab369b818d0369622f769079a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2a5a2584",
+        "filename": "tools/source/ref/pstm.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-27T13:47:15Z",
+      "side": 1,
+      "message": "why not use SAL_WARN_IF?",
       "revId": "74510a62718d112ab369b818d0369622f769079a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
