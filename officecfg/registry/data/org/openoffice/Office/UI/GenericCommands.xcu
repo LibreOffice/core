@@ -4894,6 +4894,11 @@
           <value xml:lang="en-US">~User Guides...</value>
         </prop>
       </node>
+      <node oor:name=".uno:Donation" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Donate to LibreOffice</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ShowLicense" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">License Information...</value>
