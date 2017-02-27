@@ -11252,6 +11252,10 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 
 void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObjectEmit& rEmit, sal_Int32 nBitmapObject)
 {
+    // The bitmap object is always a valid identifier, even if the graphic has
+    // no pdf data.
+    rEmit.m_nBitmapObject = nBitmapObject;
+
     if (!rGraphic.getPdfData().hasElements())
         return;
 
@@ -11262,7 +11266,6 @@ void PDFWriterImpl::createEmbeddedFile(const Graphic& rGraphic, ReferenceXObject
 
     rEmit.m_nFormObject = createObject();
     rEmit.m_nEmbeddedObject = m_aEmbeddedFiles.back().m_nObject;
-    rEmit.m_nBitmapObject = nBitmapObject;
     rEmit.m_aPixelSize = rGraphic.GetBitmap().GetPrefSize();
 }
 
