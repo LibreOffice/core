@@ -395,13 +395,15 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
     assert(nDPI > 0);
-    if (nMapNum == 0)
+    long nDenom = nDPI * nMapNum;
+    if (nDenom == 0)
     {
         return 0;
     }
+
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
-        n = (2 * n * nMapDenom) / (nDPI * nMapNum);
+        n = (2 * n * nMapDenom) / nDenom;
     else
 #else
     (void) nThres;
@@ -409,7 +411,6 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
     {
         sal_Int64 n64 = n;
         n64 *= nMapDenom;
-        long nDenom  = nDPI * nMapNum;
         n = (long)(2 * n64 / nDenom);
     }
     if( n < 0 ) --n; else ++n;
