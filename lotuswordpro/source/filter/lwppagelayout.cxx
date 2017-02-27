@@ -312,30 +312,30 @@ void LwpPageLayout::ParseFootNoteSeparator(XFPageMaster * pm1)
 */
 void LwpPageLayout::RegisterStyle()
 {
-    XFPageMaster* pm1 = new XFPageMaster();
-    m_pXFPageMaster = pm1;
+    std::unique_ptr<XFPageMaster> xpm1(new XFPageMaster());
+    m_pXFPageMaster = xpm1.get();
 
-    ParseGeometry( pm1 );
+    ParseGeometry(xpm1.get());
     //Does not process LayoutScale, for watermark is not supported in SODC.
-    ParseWaterMark( pm1);
-    ParseMargins( pm1);
-    ParseColumns(pm1);
-    ParseBorders(pm1);
-    ParseShadow(pm1);
-//  ParseBackColor(pm1);
-    ParseBackGround(pm1);
-    ParseFootNoteSeparator(pm1);
-    pm1->SetTextDir(GetTextDirection());
+    ParseWaterMark(xpm1.get());
+    ParseMargins(xpm1.get());
+    ParseColumns(xpm1.get());
+    ParseBorders(xpm1.get());
+    ParseShadow(xpm1.get());
+    ParseBackGround(xpm1.get());
+    ParseFootNoteSeparator(xpm1.get());
+    xpm1->SetTextDir(GetTextDirection());
 
     LwpUseWhen* pUseWhen = GetUseWhen();
     if(IsComplex() ||( pUseWhen && pUseWhen->IsUseOnAllOddPages()))
     {
-        pm1->SetPageUsage(enumXFPageUsageMirror);
+        xpm1->SetPageUsage(enumXFPageUsageMirror);
     }
 
     //Add the page master to stylemanager
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_pXFPageMaster = pm1 = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(pm1).m_pStyle);
+    XFPageMaster* pm1 = static_cast<XFPageMaster*>(pXFStyleManager->AddStyle(xpm1.release()).m_pStyle);
+    m_pXFPageMaster = pm1;
     OUString pmname = pm1->GetStyleName();
 
     //Add master page
