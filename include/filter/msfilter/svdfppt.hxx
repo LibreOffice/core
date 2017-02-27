@@ -535,7 +535,7 @@ protected:
     PptColorSchemeAtom      aPageColors;
     ::std::vector< SdHyperlinkEntry* > aHyperList;
     sal_uInt32*             pPersistPtr;
-    sal_uLong               nPersistPtrAnz;
+    sal_uInt32              nPersistPtrAnz;
 
     const PPTStyleSheet*    pPPTStyleSheet; // this is the current stylesheet;
     const PPTStyleSheet*    pDefaultSheet;  // this is a sheet we are using if no masterpage can be found, but that should
