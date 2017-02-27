@@ -37,6 +37,8 @@
     <string name="title_browser">All files</string>
     <!-- Pref keys as resources ; Not currently used -->
     <string name="EXPLORER_VIEW_TYPE_KEY">EXPLORER_VIEW_TYPE</string>
+    <string name="explorer_view_type_summary_off">Check to display files as List</string>
+    <string name="explorer_view_type_summary_on">Uncheck to display files as Grid</string>
     <string name="CURRENT_DIRECTORY_KEY">CURRENT_DIRECTORY</string>
     <string name="pref_category_explorer">File Explorer Settings</string>
     <string name="pref_category_general">General</string>
@@ -117,6 +119,5 @@
     <string name="save_document">SAVE</string>
     <string name="cancel_save_document">CANCEL</string>
     <string name="no_save_document">NO</string>
-
 
 </resources>
