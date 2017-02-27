@@ -888,7 +888,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
     }
 
     pFormatDescriptor.reset();
-    SfxItemPool::Free(pPool);
+    delete pPool;
     for (SfxPoolItem* pDefault : pDefaults)
         delete pDefault;
 

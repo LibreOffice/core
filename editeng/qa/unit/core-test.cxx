@@ -84,7 +84,7 @@ void Test::setUp()
 
 void Test::tearDown()
 {
-    SfxItemPool::Free(mpItemPool);
+    delete mpItemPool;
     test::BootstrapFixture::tearDown();
 }
 

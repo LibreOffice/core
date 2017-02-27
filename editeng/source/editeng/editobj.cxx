@@ -229,7 +229,7 @@ EditTextObject::EditTextObject( SfxItemPool* pPool ) :
 }
 
 EditTextObject::EditTextObject( const EditTextObject& r ) :
-    SfxItemPoolUser(),
+    SfxListener(),
     mpImpl(new EditTextObjectImpl(this, *r.mpImpl))
 {
 }
@@ -434,9 +434,9 @@ bool EditTextObject::isWrongListEqual(const EditTextObject& rCompare) const
     return mpImpl->isWrongListEqual(*rCompare.mpImpl);
 }
 
-void EditTextObject::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
+void EditTextObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    mpImpl->ObjectInDestruction(rSfxItemPool);
+    mpImpl->Notify(rBC, rHint);
 }
 
 #if DEBUG_EDIT_ENGINE
@@ -473,13 +473,13 @@ void EditTextObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     }
 }
 
-// from SfxItemPoolUser
-void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
+// from SfxListener
+void EditTextObjectImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
-    if(!bOwnerOfPool && pPool == &rSfxItemPool)
+    if (!bOwnerOfPool && (&pPool->BC() == &rBC)
+        && (rHint.GetId() == SfxHintId::Dying))
     {
         // The pool we are based on gets destructed; get owner of pool by creating own one.
-        // No need to call RemoveSfxItemPoolUser(), this is done from the pool's destructor
         // Base new pool on EditEnginePool; it would also be possible to clone the used
         // pool if needed, but only text attributes should be used.
         SfxItemPool* pNewPool = EditEngine::CreatePool();
@@ -497,6 +497,8 @@ void EditTextObjectImpl::ObjectInDestruction(const SfxItemPool& rSfxItemPool)
         pPool = pNewPool;
         bOwnerOfPool = true;
     }
+    if (rHint.GetId() == SfxHintId::Dying)
+        mpFront->EndListening(rBC);
 }
 
 #if DEBUG_EDIT_ENGINE
@@ -555,7 +557,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, SfxItemPool* pP 
     if(!bOwnerOfPool && pPool)
     {
         // it is sure now that the pool is an EditEngineItemPool
-        pPool->AddSfxItemPoolUser(*mpFront);
+        mpFront->StartListening(pPool->BC());
     }
 
     bVertical = false;
@@ -593,7 +595,7 @@ EditTextObjectImpl::EditTextObjectImpl( EditTextObject* pFront, const EditTextOb
     if (!bOwnerOfPool)
     {
         // it is sure now that the pool is an EditEngineItemPool
-        pPool->AddSfxItemPoolUser(*mpFront);
+        mpFront->StartListening(pPool->BC());
     }
 
     if (bOwnerOfPool && r.pPool)
@@ -609,7 +611,7 @@ EditTextObjectImpl::~EditTextObjectImpl()
 {
     if(!bOwnerOfPool && pPool)
     {
-        pPool->RemoveSfxItemPoolUser(*mpFront);
+        mpFront->EndListeningAll();
     }
 
     ClearPortionInfo();
@@ -619,7 +621,7 @@ EditTextObjectImpl::~EditTextObjectImpl()
     aContents.clear();
     if ( bOwnerOfPool )
     {
-        SfxItemPool::Free(pPool);
+        delete pPool;
     }
 }
 
