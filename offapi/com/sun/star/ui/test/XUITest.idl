@@ -18,6 +18,8 @@ interface XUITest
 {
     void executeCommand([in] string command);
 
+    void executeDialog([in] string command);
+
     XUIObject getTopFocusWindow();
 };
 

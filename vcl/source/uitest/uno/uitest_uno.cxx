@@ -40,6 +40,8 @@ public:
 
     void SAL_CALL executeCommand(const OUString& rCommand) override;
 
+    void SAL_CALL executeDialog(const OUString& rCommand) override;
+
     css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getTopFocusWindow() override;
 
     OUString SAL_CALL getImplementationName() override;
@@ -59,6 +61,12 @@ void SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
 {
     SolarMutexGuard aGuard;
     UITest::executeCommand(rCommand);
+}
+
+void SAL_CALL UITestUnoObj::executeDialog(const OUString& rCommand)
+{
+    SolarMutexGuard aGuard;
+    UITest::executeDialog(rCommand);
 }
 
 css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocusWindow()

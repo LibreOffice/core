@@ -21,6 +21,8 @@ public:
 
     static void executeCommand(const OUString& rCommand);
 
+    static void executeDialog(const OUString& rCommand);
+
     static std::unique_ptr<UIObject> getFocusTopWindow();
 };
 
