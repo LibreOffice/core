@@ -364,8 +364,6 @@ class SwDrawContact final : public SwContact
             bool operator() ( const std::unique_ptr<SwDrawVirtObj>& _pDrawVirtObj );
         };
 
-        /// method for adding/removing 'virtual' drawing object.
-        SwDrawVirtObj* CreateVirtObj();
         void RemoveAllVirtObjs();
 
         void InvalidateObjs_( const bool _bUpdateSortedObjsList = false );
