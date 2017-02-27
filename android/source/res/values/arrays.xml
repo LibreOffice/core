@@ -29,7 +29,6 @@
         <item >0</item>
         <item >1</item>
     </string-array>
-
     <string-array name="FilterTypeNames">
         <item>Everything</item>
         <item>Documents</item>
