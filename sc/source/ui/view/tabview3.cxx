@@ -179,12 +179,13 @@ void ScTabView::UpdateAutoFillMark()
     ScRange aMarkRange;
     bool bMarked = (aViewData.GetSimpleArea( aMarkRange ) == SC_MARK_SIMPLE);
 
-    sal_uInt16 i;
-    for (i=0; i<4; i++)
+    for (sal_uInt16 i = 0; i < 4; i++)
+    {
         if (pGridWin[i] && pGridWin[i]->IsVisible())
             pGridWin[i]->UpdateAutoFillMark( bMarked, aMarkRange );
+    }
 
-    for (i=0; i<2; i++)
+    for (sal_uInt16 i = 0; i < 2; i++)
     {
         if (pColBar[i] && pColBar[i]->IsVisible())
             pColBar[i]->SetMark( bMarked, aMarkRange.aStart.Col(), aMarkRange.aEnd.Col() );
@@ -206,33 +207,32 @@ void ScTabView::FakeButtonUp( ScSplitPos eWhich )
 void ScTabView::HideAllCursors()
 {
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
-        if (pWin)
-            if (pWin->IsVisible())
-            {
-                vcl::Cursor* pCur = pWin->GetCursor();
-                if (pCur)
-                    if (pCur->IsVisible())
-                        pCur->Hide();
-                pWin->HideCursor();
-            }
+    {
+        if (pWin && pWin->IsVisible())
+        {
+            vcl::Cursor* pCur = pWin->GetCursor();
+            if (pCur && pCur->IsVisible())
+                pCur->Hide();
+            pWin->HideCursor();
+        }
+    }
 }
 
 void ScTabView::ShowAllCursors()
 {
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
-        if (pWin)
-            if (pWin->IsVisible())
-            {
-                pWin->ShowCursor();
-
-                pWin->CursorChanged();
-            }
+    {
+        if (pWin && pWin->IsVisible())
+        {
+            pWin->ShowCursor();
+            pWin->CursorChanged();
+        }
+    }
 }
 
 void ScTabView::ShowCursor()
 {
     pGridWin[aViewData.GetActivePart()]->ShowCursor();
-
     pGridWin[aViewData.GetActivePart()]->CursorChanged();
 }
 
@@ -788,9 +788,11 @@ void ScTabView::TestHintWindow()
         }
     }
 
-    for (VclPtr<ScGridWindow> & pWin : pGridWin)
-        if ( pWin && pWin->IsVisible() )
-            pWin->UpdateListValPos( bListValButton, aListValPos );
+    for (VclPtr<ScGridWindow> const & pWin : pGridWin)
+    {
+        if (pWin && pWin->IsVisible())
+            pWin->UpdateListValPos(bListValButton, aListValPos);
+    }
 }
 
 bool ScTabView::HasHintWindow() const
@@ -847,18 +849,16 @@ void ScTabView::AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
     ScVSplitPos eActiveY = WhichV(eActive);
     bool bHFix = (aViewData.GetHSplitMode() == SC_SPLIT_FIX);
     bool bVFix = (aViewData.GetVSplitMode() == SC_SPLIT_FIX);
-    if (bHFix)
-        if (eActiveX == SC_SPLIT_LEFT && nCurX >= (SCsCOL)aViewData.GetFixPosX())
-        {
-            ActivatePart( (eActiveY==SC_SPLIT_TOP) ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT );
-            eActiveX = SC_SPLIT_RIGHT;
-        }
-    if (bVFix)
-        if (eActiveY == SC_SPLIT_TOP && nCurY >= (SCsROW)aViewData.GetFixPosY())
-        {
-            ActivatePart( (eActiveX==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT );
-            eActiveY = SC_SPLIT_BOTTOM;
-        }
+    if (bHFix && eActiveX == SC_SPLIT_LEFT && nCurX >= (SCsCOL)aViewData.GetFixPosX())
+    {
+        ActivatePart( (eActiveY==SC_SPLIT_TOP) ? SC_SPLIT_TOPRIGHT : SC_SPLIT_BOTTOMRIGHT );
+        eActiveX = SC_SPLIT_RIGHT;
+    }
+    if (bVFix && eActiveY == SC_SPLIT_TOP && nCurY >= (SCsROW)aViewData.GetFixPosY())
+    {
+        ActivatePart( (eActiveX==SC_SPLIT_LEFT) ? SC_SPLIT_BOTTOMLEFT : SC_SPLIT_BOTTOMRIGHT );
+        eActiveY = SC_SPLIT_BOTTOM;
+    }
 
     // actual align
 
@@ -1853,8 +1853,10 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         if ( bRefMode )     // hide EditView if necessary (after aViewData.SetTabNo !)
         {
             for (VclPtr<ScGridWindow> & pWin : pGridWin)
+            {
                 if (pWin && pWin->IsVisible())
                     pWin->UpdateEditViewPos();
+            }
         }
 
         TabChanged(bSameTabButMoved);                                       // DrawView
@@ -1917,8 +1919,10 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         // Form Layer must know the visible area of the new sheet
         // that is why MapMode must already be correct here
         for (VclPtr<ScGridWindow> & pWin : pGridWin)
+        {
             if (pWin)
-                pWin->SetMapMode( pWin->GetDrawMapMode() );
+                pWin->SetMapMode(pWin->GetDrawMapMode());
+        }
         SetNewVisArea();
 
         PaintGrid();
@@ -1938,7 +1942,7 @@ void ScTabView::SetTabNo( SCTAB nTab, bool bNew, bool bExtendSelection, bool bSa
         rBindings.Invalidate( SID_STYLE_FAMILY4 );      // Designer
         rBindings.Invalidate( SID_TABLES_COUNT );
 
-        if(pScMod->IsRefDialogOpen())
+        if (pScMod->IsRefDialogOpen())
         {
             sal_uInt16 nCurRefDlgId=pScMod->GetCurRefDlgId();
             SfxViewFrame* pViewFrm = aViewData.GetViewShell()->GetViewFrame();
@@ -1970,32 +1974,31 @@ void ScTabView::OnLibreOfficeKitTabChanged()
     {
         ScTabViewShell* pThisViewShell = aViewData.GetViewShell();
         SCTAB nThisTabNo = pThisViewShell->GetViewData().GetTabNo();
-        auto lTabSwitch =
-                [pThisViewShell, nThisTabNo] (ScTabViewShell* pOtherViewShell)
+        auto lTabSwitch = [pThisViewShell, nThisTabNo] (ScTabViewShell* pOtherViewShell)
+        {
+            ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
+            SCTAB nOtherTabNo = rOtherViewData.GetTabNo();
+            if (nThisTabNo == nOtherTabNo)
+            {
+                for (int i = 0; i < 4; ++i)
                 {
-                    ScViewData& rOtherViewData = pOtherViewShell->GetViewData();
-                    SCTAB nOtherTabNo = rOtherViewData.GetTabNo();
-                    if (nThisTabNo == nOtherTabNo)
+                    if (rOtherViewData.HasEditView(ScSplitPos(i)))
                     {
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            if (rOtherViewData.HasEditView( (ScSplitPos)(i)))
-                            {
-                                pThisViewShell->AddWindowToForeignEditView(pOtherViewShell, (ScSplitPos)(i));
-                            }
-                        }
+                        pThisViewShell->AddWindowToForeignEditView(pOtherViewShell, ScSplitPos(i));
                     }
-                    else
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    if (rOtherViewData.HasEditView(ScSplitPos(i)))
                     {
-                        for (int i = 0; i < 4; ++i)
-                        {
-                            if (rOtherViewData.HasEditView( (ScSplitPos)(i)))
-                            {
-                                pThisViewShell->RemoveWindowFromForeignEditView(pOtherViewShell, (ScSplitPos)(i));
-                            }
-                        }
+                        pThisViewShell->RemoveWindowFromForeignEditView(pOtherViewShell, ScSplitPos(i));
                     }
-                };
+                }
+            }
+        };
 
         SfxLokHelper::forEachOtherView(pThisViewShell, lTabSwitch);
     }
@@ -2012,48 +2015,49 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
 
     EditView* pSpellingView = aViewData.GetSpellingView();
 
-    for (sal_uInt16 i=0; i<4; i++)
-        if (pGridWin[i])
-            if ( pGridWin[i]->IsVisible() && !aViewData.HasEditView((ScSplitPos)i) )
+    for (sal_uInt16 i = 0; i < 4; i++)
+    {
+        if (pGridWin[i] && pGridWin[i]->IsVisible() && !aViewData.HasEditView(ScSplitPos(i)))
+        {
+            ScHSplitPos eHWhich = WhichH( (ScSplitPos) i );
+            ScVSplitPos eVWhich = WhichV( (ScSplitPos) i );
+            SCCOL nScrX = aViewData.GetPosX( eHWhich );
+            SCROW nScrY = aViewData.GetPosY( eVWhich );
+
+            bool bPosVisible =
+                 ( nCol >= nScrX && nCol <= nScrX + aViewData.VisibleCellsX(eHWhich) + 1 &&
+                   nRow >= nScrY && nRow <= nScrY + aViewData.VisibleCellsY(eVWhich) + 1 );
+
+            //  for the active part, create edit view even if outside the visible area,
+            //  so input isn't lost (and the edit view may be scrolled into the visible area)
+
+            //  #i26433# during spelling, the spelling view must be active
+            if ( bPosVisible || aViewData.GetActivePart() == (ScSplitPos) i ||
+                 ( pSpellingView && aViewData.GetEditView((ScSplitPos) i) == pSpellingView ) )
             {
-                ScHSplitPos eHWhich = WhichH( (ScSplitPos) i );
-                ScVSplitPos eVWhich = WhichV( (ScSplitPos) i );
-                SCCOL nScrX = aViewData.GetPosX( eHWhich );
-                SCROW nScrY = aViewData.GetPosY( eVWhich );
+                pGridWin[i]->HideCursor();
 
-                bool bPosVisible =
-                     ( nCol >= nScrX && nCol <= nScrX + aViewData.VisibleCellsX(eHWhich) + 1 &&
-                       nRow >= nScrY && nRow <= nScrY + aViewData.VisibleCellsY(eVWhich) + 1 );
+                pGridWin[i]->DeleteCursorOverlay();
+                pGridWin[i]->DeleteAutoFillOverlay();
+                pGridWin[i]->DeleteCopySourceOverlay();
 
-                //  for the active part, create edit view even if outside the visible area,
-                //  so input isn't lost (and the edit view may be scrolled into the visible area)
+                // flush OverlayManager before changing MapMode to text edit
+                pGridWin[i]->flushOverlayManager();
 
-                //  #i26433# during spelling, the spelling view must be active
-                if ( bPosVisible || aViewData.GetActivePart() == (ScSplitPos) i ||
-                     ( pSpellingView && aViewData.GetEditView((ScSplitPos) i) == pSpellingView ) )
+                // MapMode must be set after HideCursor
+                pGridWin[i]->SetMapMode(aViewData.GetLogicMode());
+
+                aViewData.SetEditEngine( (ScSplitPos) i, pEngine, pGridWin[i], nCol, nRow );
+
+                if ( !bPosVisible )
                 {
-                    pGridWin[i]->HideCursor();
-
-                    pGridWin[i]->DeleteCursorOverlay();
-                    pGridWin[i]->DeleteAutoFillOverlay();
-                    pGridWin[i]->DeleteCopySourceOverlay();
-
-                    // flush OverlayManager before changing MapMode to text edit
-                    pGridWin[i]->flushOverlayManager();
-
-                    // MapMode must be set after HideCursor
-                    pGridWin[i]->SetMapMode(aViewData.GetLogicMode());
-
-                    aViewData.SetEditEngine( (ScSplitPos) i, pEngine, pGridWin[i], nCol, nRow );
-
-                    if ( !bPosVisible )
-                    {
-                        //  move the edit view area to the real (possibly negative) position,
-                        //  or hide if completely above or left of the window
-                        pGridWin[i]->UpdateEditViewPos();
-                    }
+                    //  move the edit view area to the real (possibly negative) position,
+                    //  or hide if completely above or left of the window
+                    pGridWin[i]->UpdateEditViewPos();
                 }
             }
+        }
+    }
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccEnterEditMode));
@@ -2062,21 +2066,23 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter* pEngine, SCCOL nCol, SCROW 
 void ScTabView::UpdateEditView()
 {
     ScSplitPos eActive = aViewData.GetActivePart();
-    for (sal_uInt16 i=0; i<4; i++)
-        if (aViewData.HasEditView( (ScSplitPos) i ))
+    for (sal_uInt16 i = 0; i < 4; i++)
+    {
+        ScSplitPos eCurrent = ScSplitPos(i);
+        if (aViewData.HasEditView(eCurrent))
         {
-            EditView* pEditView = aViewData.GetEditView( (ScSplitPos) i );
-            aViewData.SetEditEngine( (ScSplitPos) i,
+            EditView* pEditView = aViewData.GetEditView(eCurrent);
+            aViewData.SetEditEngine(eCurrent,
                 static_cast<ScEditEngineDefaulter*>(pEditView->GetEditEngine()),
                 pGridWin[i], GetViewData().GetCurX(), GetViewData().GetCurY() );
-            if ( (ScSplitPos)i == eActive )
+            if (eCurrent == eActive)
                 pEditView->ShowCursor( false );
         }
+    }
 }
 
 void ScTabView::KillEditView( bool bNoPaint )
 {
-    sal_uInt16 i;
     SCCOL nCol1 = aViewData.GetEditStartCol();
     SCROW nRow1 = aViewData.GetEditStartRow();
     SCCOL nCol2 = aViewData.GetEditEndCol();
@@ -2090,7 +2096,7 @@ void ScTabView::KillEditView( bool bNoPaint )
     bool bAtCursor = nCol1 <= aViewData.GetCurX() &&
                      nCol2 >= aViewData.GetCurX() &&
                      nRow1 == aViewData.GetCurY();
-    for (i=0; i<4; i++)
+    for (sal_uInt16 i = 0; i < 4; i++)
     {
         bPaint[i] = aViewData.HasEditView( (ScSplitPos) i );
         if (bPaint[i])
@@ -2107,39 +2113,40 @@ void ScTabView::KillEditView( bool bNoPaint )
         aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccLeaveEditMode));
 
     aViewData.ResetEditView();
-    for (i=0; i<4; i++)
-        if (pGridWin[i] && bPaint[i])
-            if (pGridWin[i]->IsVisible())
+    for (sal_uInt16 i = 0; i < 4; i++)
+    {
+        if (pGridWin[i] && bPaint[i] && pGridWin[i]->IsVisible())
+        {
+            pGridWin[i]->ShowCursor();
+
+            pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
+
+            if (comphelper::LibreOfficeKit::isActive())
             {
-                pGridWin[i]->ShowCursor();
+                const Rectangle& rInvRect = aRectangle[i];
+                pGridWin[i]->Invalidate(rInvRect);
 
-                pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
-
-                if (comphelper::LibreOfficeKit::isActive())
-                {
-                    const Rectangle& rInvRect = aRectangle[i];
-                    pGridWin[i]->Invalidate(rInvRect);
-
-                    // invalidate other views
-                    auto lInvalidateWindows =
-                            [&rInvRect] (ScTabView* pTabView)
+                // invalidate other views
+                auto lInvalidateWindows =
+                        [&rInvRect] (ScTabView* pTabView)
+                        {
+                            for (VclPtr<ScGridWindow> const & pWin: pTabView->pGridWin)
                             {
-                                for (VclPtr<ScGridWindow> const & pWin: pTabView->pGridWin)
-                                {
-                                    if (pWin)
-                                        pWin->Invalidate(rInvRect);
-                                }
-                            };
+                                if (pWin)
+                                    pWin->Invalidate(rInvRect);
+                            }
+                        };
 
-                    SfxLokHelper::forEachOtherView(GetViewData().GetViewShell(), lInvalidateWindows);
-                }
-                // #i73567# the cell still has to be repainted
-                else if (bExtended || ( bAtCursor && !bNoPaint ))
-                {
-                    pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2, ScUpdateMode::All );
-                    pGridWin[i]->UpdateSelectionOverlay();
-                }
+                SfxLokHelper::forEachOtherView(GetViewData().GetViewShell(), lInvalidateWindows);
             }
+            // #i73567# the cell still has to be repainted
+            else if (bExtended || ( bAtCursor && !bNoPaint ))
+            {
+                pGridWin[i]->Draw( nCol1, nRow1, nCol2, nRow2, ScUpdateMode::All );
+                pGridWin[i]->UpdateSelectionOverlay();
+            }
+        }
+    }
 
     if (pDrawView)
         DrawEnableAnim( true );
@@ -2169,31 +2176,33 @@ void ScTabView::KillEditView( bool bNoPaint )
 
     // cursor query only after GrabFocus
 
-    for (i=0; i<4; i++)
+    for (sal_uInt16 i = 0; i < 4; i++)
+    {
         if (pGridWin[i] && pGridWin[i]->IsVisible())
         {
             vcl::Cursor* pCur = pGridWin[i]->GetCursor();
             if (pCur && pCur->IsVisible())
                 pCur->Hide();
 
-            if(bPaint[i])
+            if (bPaint[i])
             {
                 pGridWin[i]->UpdateCursorOverlay();
                 pGridWin[i]->UpdateAutoFillOverlay();
             }
         }
+    }
 }
 
 void ScTabView::UpdateFormulas()
 {
     if ( aViewData.GetDocument()->IsAutoCalcShellDisabled() )
-        return ;
+        return;
 
-    sal_uInt16 i;
-    for (i=0; i<4; i++)
-        if (pGridWin[i])
-            if (pGridWin[i]->IsVisible())
-                pGridWin[i]->UpdateFormulas();
+    for (sal_uInt16 i = 0; i < 4; i++)
+    {
+        if (pGridWin[i] && pGridWin[i]->IsVisible())
+            pGridWin[i]->UpdateFormulas();
+    }
 
     if ( aViewData.IsPagebreakMode() )
         UpdatePageBreakData();              //! asynchronous
@@ -2421,10 +2430,9 @@ void ScTabView::AddHighlightRange( const ScRange& rRange, const Color& rColor )
 void ScTabView::ClearHighlightRanges()
 {
     SCTAB nTab = aViewData.GetTabNo();
-    std::vector<ScHighlightEntry>::const_iterator pIter;
-    for ( pIter = maHighlightRanges.begin(); pIter != maHighlightRanges.end(); ++pIter)
+    for (ScHighlightEntry const & rEntry : maHighlightRanges)
     {
-        ScRange aRange = pIter->aRef;
+        ScRange aRange = rEntry.aRef;
         if ( nTab >= aRange.aStart.Tab() && nTab <= aRange.aEnd.Tab() )
             PaintArea( aRange.aStart.Col(), aRange.aStart.Row(),
                        aRange.aEnd.Col(), aRange.aEnd.Row(), ScUpdateMode::Marks );
@@ -2439,22 +2447,22 @@ void ScTabView::DoChartSelection(
     ClearHighlightRanges();
     const sal_Unicode sep = ::formula::FormulaCompiler::GetNativeSymbolChar(ocSep);
 
-    for( sal_Int32 i=0; i<rHilightRanges.getLength(); ++i )
+    for (chart2::data::HighlightedRange const & rHighlightedRange : rHilightRanges)
     {
-        Color aSelColor( rHilightRanges[i].PreferredColor );
+        Color aSelColor(rHighlightedRange.PreferredColor);
         ScRangeList aRangeList;
         ScDocument& rDoc = aViewData.GetDocShell()->GetDocument();
         if( ScRangeStringConverter::GetRangeListFromString(
-                aRangeList, rHilightRanges[i].RangeRepresentation, &rDoc, rDoc.GetAddressConvention(), sep ))
+                aRangeList, rHighlightedRange.RangeRepresentation, &rDoc, rDoc.GetAddressConvention(), sep ))
         {
             size_t nListSize = aRangeList.size();
             for ( size_t j = 0; j < nListSize; ++j )
             {
                 ScRange* p = aRangeList[j];
-                if( rHilightRanges[i].Index == - 1 )
+                if( rHighlightedRange.Index == - 1 )
                     AddHighlightRange( *p, aSelColor );
                 else
-                    AddHighlightRange( lcl_getSubRangeByIndex( *p, rHilightRanges[i].Index ), aSelColor );
+                    AddHighlightRange( lcl_getSubRangeByIndex( *p, rHighlightedRange.Index ), aSelColor );
             }
         }
     }
@@ -2487,19 +2495,18 @@ void ScTabView::DoDPFieldPopup(Point aPoint, Size /*aSize*/)
 
 void ScTabView::PaintGrid()
 {
-    sal_uInt16 i;
-    for (i=0; i<4; i++)
-        if (pGridWin[i])
-            if (pGridWin[i]->IsVisible())
-                pGridWin[i]->Invalidate();
+    for (sal_uInt16 i = 0; i < 4; i++)
+    {
+        if (pGridWin[i] && pGridWin[i]->IsVisible())
+            pGridWin[i]->Invalidate();
+    }
 }
 
 //  PaintTop - repaint top control elements
 
 void ScTabView::PaintTop()
 {
-    sal_uInt16 i;
-    for (i=0; i<2; i++)
+    for (sal_uInt16 i = 0; i < 2; i++)
     {
         if (pColBar[i])
             pColBar[i]->Invalidate();
@@ -2510,17 +2517,10 @@ void ScTabView::PaintTop()
 
 void ScTabView::CreateAnchorHandles(SdrHdlList& rHdl, const ScAddress& rAddress)
 {
-    sal_uInt16 i;
-
-    for(i=0; i<4; i++)
+    for (sal_uInt16 i = 0; i < 4; i++)
     {
-        if(pGridWin[i])
-        {
-            if(pGridWin[i]->IsVisible())
-            {
-                pGridWin[i]->CreateAnchorHandle(rHdl, rAddress);
-            }
-        }
+        if(pGridWin[i] && pGridWin[i]->IsVisible())
+            pGridWin[i]->CreateAnchorHandle(rHdl, rAddress);
     }
 }
 
@@ -2546,9 +2546,9 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
     bool bLayoutRTL = aViewData.GetDocument()->IsLayoutRTL( aViewData.GetTabNo() );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    for (sal_uInt16 i=0; i<2; i++)
+    for (sal_uInt16 i = 0; i < 2; i++)
     {
-        ScHSplitPos eWhich = (ScHSplitPos) i;
+        ScHSplitPos eWhich = ScHSplitPos(i);
         if (pColBar[eWhich])
         {
             Size aWinSize = pColBar[eWhich]->GetSizePixel();
@@ -2570,8 +2570,7 @@ void ScTabView::PaintTopArea( SCCOL nStartCol, SCCOL nEndCol )
 
 void ScTabView::PaintLeft()
 {
-    sal_uInt16 i;
-    for (i=0; i<2; i++)
+    for (sal_uInt16 i = 0; i < 2; i++)
     {
         if (pRowBar[i])
             pRowBar[i]->Invalidate();
@@ -2599,9 +2598,9 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
     if (nStartRow>0)
         --nStartRow;
 
-    for (sal_uInt16 i=0; i<2; i++)
+    for (sal_uInt16 i = 0; i < 2; i++)
     {
-        ScVSplitPos eWhich = (ScVSplitPos) i;
+        ScVSplitPos eWhich = ScVSplitPos(i);
         if (pRowBar[eWhich])
         {
             Size aWinSize = pRowBar[eWhich]->GetSizePixel();
@@ -2832,8 +2831,10 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
 void ScTabView::HideListBox()
 {
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
+    {
         if (pWin)
             pWin->ClickExtern();
+    }
 }
 
 void ScTabView::UpdateInputContext()
@@ -2888,14 +2889,11 @@ void ScTabView::ZoomChanged()
     // but is not. Setting only on one window causes the first repaint to have the old mapMode
     // in three of four views, so the overlay will save the wrong content e.g. when zooming out.
     // Changing to setting map mode at all windows.
-    sal_uInt32 a;
 
-    for(a = 0L; a < 4L; a++)
+    for (sal_uInt32 i = 0; i < 4; i++)
     {
-        if(pGridWin[a])
-        {
-            pGridWin[a]->SetMapMode(pGridWin[a]->GetDrawMapMode());
-        }
+        if (pGridWin[i])
+            pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
     }
 
     SetNewVisArea();
@@ -2925,17 +2923,20 @@ void ScTabView::ZoomChanged()
 
 void ScTabView::CheckNeedsRepaint()
 {
-    sal_uInt16 i;
-    for (i=0; i<4; i++)
-        if ( pGridWin[i] && pGridWin[i]->IsVisible() )
+    for (sal_uInt16 i = 0; i < 4; i++)
+    {
+        if (pGridWin[i] && pGridWin[i]->IsVisible())
             pGridWin[i]->CheckNeedsRepaint();
+    }
 }
 
 bool ScTabView::NeedsRepaint()
 {
     for (VclPtr<ScGridWindow> & pWin : pGridWin)
+    {
         if (pWin && pWin->IsVisible() && pWin->NeedsRepaint())
             return true;
+    }
     return false;
 }
 
