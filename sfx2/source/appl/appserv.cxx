@@ -498,7 +498,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SEND_FEEDBACK:
         {
             OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
+            OUString sURL("https://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
                 "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
             sfx2::openUriExternally(sURL, false);
             break;
@@ -515,14 +515,28 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             else
                 aLang = utl::ConfigManager::getLocale().copy(0,ix);
 
-            OUString sURL("http://hub.libreoffice.org/forum/?LOlang=" + aLang);
+            OUString sURL("https://hub.libreoffice.org/forum/?LOlang=" + aLang);
             sfx2::openUriExternally(sURL, false);
             break;
         }
         case SID_DOCUMENTATION:
         {
             // Open documentation page based on locales
-            OUString sURL("http://hub.libreoffice.org/documentation/?LOlocale=" + utl::ConfigManager::getLocale());
+            OUString sURL("https://hub.libreoffice.org/documentation/?LOlocale=" + utl::ConfigManager::getLocale());
+            sfx2::openUriExternally(sURL, false);
+            break;
+        }
+        case SID_DONATION:
+        {
+            // Open donation page based on language
+            sal_Int32 ix = utl::ConfigManager::getLocale().indexOf("-",0);
+            OUString aLang;
+            if (ix == -1)
+                aLang = utl::ConfigManager::getLocale();
+            else
+                aLang = utl::ConfigManager::getLocale().copy(0,ix);
+
+            OUString sURL("https://hub.libreoffice.org/donation/?LOlang=" + aLang);
             sfx2::openUriExternally(sURL, false);
             break;
         }
