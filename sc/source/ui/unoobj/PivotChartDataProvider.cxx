@@ -36,8 +36,6 @@
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 
 #include "dpobject.hxx"
-#include "dpsave.hxx"
-#include "pivot.hxx"
 
 #include "hints.hxx"
 
@@ -244,10 +242,129 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
     return xDataSource;
 }
 
+void PivotChartDataProvider::collectPivotTableData(ScDPObject* pDPObject)
+{
+    uno::Reference<sheet::XDimensionsSupplier> xDimensionsSupplier(pDPObject->GetSource());
+    uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess(xDimensionsSupplier->getDimensions());
+
+    for (long nDim = 0; nDim < xDims->getCount(); nDim++)
+    {
+        uno::Reference<uno::XInterface> xDim = ScUnoHelpFunctions::AnyToInterface(xDims->getByIndex(nDim));
+        uno::Reference<beans::XPropertySet> xDimProp(xDim, uno::UNO_QUERY);
+        uno::Reference<container::XNamed> xDimName(xDim, uno::UNO_QUERY);
+        uno::Reference<sheet::XHierarchiesSupplier> xDimSupp(xDim, uno::UNO_QUERY);
+
+        if (!xDimProp.is() || !xDimSupp.is())
+            continue;
+
+        sheet::DataPilotFieldOrientation eDimOrient = sheet::DataPilotFieldOrientation(
+            ScUnoHelpFunctions::GetEnumProperty(xDimProp, SC_UNO_DP_ORIENTATION,
+                                                sheet::DataPilotFieldOrientation_HIDDEN));
+
+        long nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
+        sal_Int32 nNumberFormat = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_NUMBERFO);
+
+        if (eDimOrient == sheet::DataPilotFieldOrientation_HIDDEN)
+            continue;
+        uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess(xDimSupp->getHierarchies());
+        long nHierarchy = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_USEDHIERARCHY);
+        if (nHierarchy >= xHiers->getCount())
+            nHierarchy = 0;
+
+        uno::Reference<uno::XInterface> xHier = ScUnoHelpFunctions::AnyToInterface(xHiers->getByIndex(nHierarchy));
+
+        uno::Reference<sheet::XLevelsSupplier> xHierSupp(xHier, uno::UNO_QUERY);
+
+        if (!xHierSupp.is())
+            continue;
+
+        uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess(xHierSupp->getLevels());
+
+        for (long nLev = 0; nLev < xLevels->getCount(); nLev++)
+        {
+            uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface(xLevels->getByIndex(nLev));
+            uno::Reference<container::XNamed> xLevName(xLevel, uno::UNO_QUERY);
+            uno::Reference<sheet::XDataPilotMemberResults> xLevRes(xLevel, uno::UNO_QUERY );
+
+            if (xLevName.is() && xLevRes.is())
+            {
+                switch (eDimOrient)
+                {
+                    case sheet::DataPilotFieldOrientation_COLUMN:
+                    {
+                        uno::Sequence<sheet::MemberResult> aSeq = xLevRes->getResults();
+                        size_t i = 0;
+                        OUString sValue;
+                        m_aLabels.resize(aSeq.getLength());
+                        for (sheet::MemberResult & rMember : aSeq)
+                        {
+                            if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
+                                rMember.Flags & sheet::MemberResultFlags::CONTINUE)
+                            {
+                                if (!(rMember.Flags & sheet::MemberResultFlags::CONTINUE))
+                                    sValue = rMember.Caption;
+
+                                if (size_t(nDimPos) >= m_aLabels[i].size())
+                                    m_aLabels[i].resize(nDimPos + 1);
+                                m_aLabels[i][nDimPos] = PivotChartItem(sValue);
+
+                                i++;
+                            }
+                        }
+                        break;
+                    }
+                    case sheet::DataPilotFieldOrientation_ROW:
+                    {
+                        uno::Sequence<sheet::MemberResult> aSeq = xLevRes->getResults();
+                        m_aCategoriesRowOrientation.resize(aSeq.getLength());
+                        size_t i = 0;
+                        for (sheet::MemberResult & rMember : aSeq)
+                        {
+                            if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
+                                rMember.Flags & sheet::MemberResultFlags::CONTINUE)
+                            {
+                                std::unique_ptr<PivotChartItem> pItem;
+
+                                double fValue = rMember.Value;
+
+                                if (rtl::math::isNan(fValue))
+                                {
+                                    OUString sValue;
+                                    if (!(rMember.Flags & sheet::MemberResultFlags::CONTINUE))
+                                        sValue = rMember.Caption;
+                                    pItem.reset(new PivotChartItem(sValue));
+                                }
+                                else
+                                {
+                                    pItem.reset(new PivotChartItem(fValue, nNumberFormat));
+                                }
+
+                                if (size_t(nDimPos) >= m_aCategoriesColumnOrientation.size())
+                                    m_aCategoriesColumnOrientation.resize(nDimPos + 1);
+                                m_aCategoriesColumnOrientation[nDimPos].push_back(*pItem);
+
+                                if (size_t(nDimPos) >= m_aCategoriesRowOrientation[i].size())
+                                    m_aCategoriesRowOrientation[i].resize(nDimPos + 1);
+                                m_aCategoriesRowOrientation[i][nDimPos] = *pItem;
+
+                                i++;
+                            }
+                        }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+}
+
 uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotChartDataSource(OUString const & aRangeRepresentation)
 {
     m_aCategoriesColumnOrientation.clear();
     m_aCategoriesRowOrientation.clear();
+    m_aLabels.clear();
 
     uno::Reference<chart2::data::XDataSource> xDataSource;
     std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aLabeledSequences;
@@ -259,123 +376,9 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
     ScDPCollection* pDPCollection = m_pDocument->GetDPCollection();
     ScDPObject* pDPObject = pDPCollection->GetByName(m_sPivotTableName);
 
-    uno::Reference<sheet::XDimensionsSupplier> xDimensionsSupplier(pDPObject->GetSource());
-    uno::Reference<sheet::XDataPilotResults> xDPResults(xDimensionsSupplier, uno::UNO_QUERY);
-    uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess(xDimensionsSupplier->getDimensions());
+    collectPivotTableData(pDPObject);
 
-    std::vector<std::vector<PivotChartItem>> m_aLabels;
-
-    for (long nDim = 0; nDim < xDims->getCount(); nDim++)
-    {
-        uno::Reference<uno::XInterface> xDim = ScUnoHelpFunctions::AnyToInterface(xDims->getByIndex(nDim));
-        uno::Reference<beans::XPropertySet> xDimProp(xDim, uno::UNO_QUERY);
-        uno::Reference<container::XNamed> xDimName(xDim, uno::UNO_QUERY);
-        uno::Reference<sheet::XHierarchiesSupplier> xDimSupp(xDim, uno::UNO_QUERY);
-
-        if (xDimProp.is() && xDimSupp.is())
-        {
-            sheet::DataPilotFieldOrientation eDimOrient = sheet::DataPilotFieldOrientation(
-                ScUnoHelpFunctions::GetEnumProperty(xDimProp, SC_UNO_DP_ORIENTATION,
-                                                    sheet::DataPilotFieldOrientation_HIDDEN));
-
-            long nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
-            sal_Int32 nNumberFormat = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_NUMBERFO);
-
-            if (eDimOrient != sheet::DataPilotFieldOrientation_HIDDEN)
-            {
-                uno::Reference<container::XIndexAccess> xHiers = new ScNameToIndexAccess(xDimSupp->getHierarchies());
-                long nHierarchy = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_USEDHIERARCHY);
-                if (nHierarchy >= xHiers->getCount())
-                    nHierarchy = 0;
-
-                uno::Reference<uno::XInterface> xHier = ScUnoHelpFunctions::AnyToInterface(xHiers->getByIndex(nHierarchy));
-
-                uno::Reference<sheet::XLevelsSupplier> xHierSupp(xHier, uno::UNO_QUERY);
-                if (xHierSupp.is())
-                {
-                    uno::Reference<container::XIndexAccess> xLevels = new ScNameToIndexAccess(xHierSupp->getLevels());
-                    long nLevCount = xLevels->getCount();
-                    for (long nLev = 0; nLev < nLevCount; nLev++)
-                    {
-
-                        uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface(xLevels->getByIndex(nLev));
-                        uno::Reference<container::XNamed> xLevName(xLevel, uno::UNO_QUERY);
-                        uno::Reference<sheet::XDataPilotMemberResults> xLevRes(xLevel, uno::UNO_QUERY );
-                        if (xLevName.is() && xLevRes.is())
-                        {
-                            switch (eDimOrient)
-                            {
-                                case sheet::DataPilotFieldOrientation_COLUMN:
-                                {
-                                    uno::Sequence<sheet::MemberResult> aSeq = xLevRes->getResults();
-                                    size_t i = 0;
-                                    OUString sValue;
-                                    m_aLabels.resize(aSeq.getLength());
-                                    for (sheet::MemberResult & rMember : aSeq)
-                                    {
-                                        if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
-                                            rMember.Flags & sheet::MemberResultFlags::CONTINUE)
-                                        {
-                                            if (!(rMember.Flags & sheet::MemberResultFlags::CONTINUE))
-                                                sValue = rMember.Caption;
-
-                                            if (size_t(nDimPos) >= m_aLabels[i].size())
-                                                m_aLabels[i].resize(nDimPos + 1);
-                                            m_aLabels[i][nDimPos] = PivotChartItem(sValue);
-
-                                            i++;
-                                        }
-                                    }
-                                    break;
-                                }
-                                case sheet::DataPilotFieldOrientation_ROW:
-                                {
-                                    uno::Sequence<sheet::MemberResult> aSeq = xLevRes->getResults();
-                                    m_aCategoriesRowOrientation.resize(aSeq.getLength());
-                                    size_t i = 0;
-                                    for (sheet::MemberResult & rMember : aSeq)
-                                    {
-                                        if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
-                                            rMember.Flags & sheet::MemberResultFlags::CONTINUE)
-                                        {
-                                            std::unique_ptr<PivotChartItem> pItem;
-
-                                            double fValue = rMember.Value;
-
-                                            if (rtl::math::isNan(fValue))
-                                            {
-                                                OUString sValue;
-                                                if (!(rMember.Flags & sheet::MemberResultFlags::CONTINUE))
-                                                    sValue = rMember.Caption;
-                                                pItem.reset(new PivotChartItem(sValue));
-                                            }
-                                            else
-                                            {
-                                                pItem.reset(new PivotChartItem(fValue, nNumberFormat));
-                                            }
-
-                                            if (size_t(nDimPos) >= m_aCategoriesColumnOrientation.size())
-                                                m_aCategoriesColumnOrientation.resize(nDimPos + 1);
-                                            m_aCategoriesColumnOrientation[nDimPos].push_back(*pItem);
-
-                                            if (size_t(nDimPos) >= m_aCategoriesRowOrientation[i].size())
-                                                m_aCategoriesRowOrientation[i].resize(nDimPos + 1);
-                                            m_aCategoriesRowOrientation[i][nDimPos] = *pItem;
-
-                                            i++;
-                                        }
-                                    }
-                                    break;
-                                }
-                                default:
-                                    break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    uno::Reference<sheet::XDataPilotResults> xDPResults(pDPObject->GetSource(), uno::UNO_QUERY);
 
     {
         std::vector<PivotChartItem> aFirstCategories;

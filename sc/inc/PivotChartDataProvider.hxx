@@ -29,7 +29,7 @@
 #include <rtl/ustring.hxx>
 #include <svl/itemprop.hxx>
 
-#include "dpsave.hxx"
+#include "dpobject.hxx"
 
 #include <memory>
 #include <vector>
@@ -140,6 +140,8 @@ private:
         css::uno::Reference<css::uno::XComponentContext>& rContext,
         std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence>>& rOutLabeledSequences);
 
+    void collectPivotTableData(ScDPObject* pDPObject);
+
     ScDocument*        m_pDocument;
     OUString           m_sPivotTableName;
     SfxItemPropertySet m_aPropSet;
@@ -147,6 +149,7 @@ private:
 
     std::vector<std::vector<PivotChartItem>> m_aCategoriesColumnOrientation;
     std::vector<std::vector<PivotChartItem>> m_aCategoriesRowOrientation;
+    std::vector<std::vector<PivotChartItem>> m_aLabels;
 
     std::vector<css::uno::Reference<css::util::XModifyListener>> m_aValueListeners;
 };
