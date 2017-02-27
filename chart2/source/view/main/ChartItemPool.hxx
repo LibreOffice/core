@@ -32,7 +32,6 @@ private:
 public:
     ChartItemPool();
     ChartItemPool(const ChartItemPool& rPool);
-protected:
     virtual ~ChartItemPool() override;
 public:
 

@@ -61,8 +61,8 @@ SvxUnoDrawPool::~SvxUnoDrawPool() throw()
     if (mpDefaultsPool)
     {
         SfxItemPool* pOutlPool = mpDefaultsPool->GetSecondaryPool();
-        SfxItemPool::Free(mpDefaultsPool);
-        SfxItemPool::Free(pOutlPool);
+        delete mpDefaultsPool;
+        delete pOutlPool;
     }
 }
 

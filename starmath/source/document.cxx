@@ -658,7 +658,7 @@ SmDocShell::~SmDocShell()
 
     mpCursor.reset();
     delete mpEditEngine;
-    SfxItemPool::Free(mpEditEngineItemPool);
+    delete mpEditEngineItemPool;
     delete mpTree;
     mpPrinter.disposeAndClear();
 }

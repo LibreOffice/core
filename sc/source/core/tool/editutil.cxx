@@ -453,7 +453,7 @@ ScEnginePoolHelper::~ScEnginePoolHelper()
     if ( bDeleteDefaults )
         delete pDefaults;
     if ( bDeleteEnginePool )
-        SfxItemPool::Free(pEnginePool);
+        delete pEnginePool;
 }
 
 ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,

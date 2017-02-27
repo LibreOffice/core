@@ -585,7 +585,7 @@ SwDoc::~SwDoc()
     delete mpDfltFrameFormat;
     delete mpLayoutCache;
 
-    SfxItemPool::Free(mpAttrPool);
+    delete mpAttrPool;
 }
 
 void SwDoc::SetDocShell( SwDocShell* pDSh )

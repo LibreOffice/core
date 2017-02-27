@@ -257,7 +257,7 @@ PresenterTextView::Implementation::Implementation()
 PresenterTextView::Implementation::~Implementation()
 {
     delete mpEditEngine;
-    SfxItemPool::Free(mpEditEngineItemPool);
+    delete mpEditEngineItemPool;
     mpOutputDevice.disposeAndClear();
 }
 

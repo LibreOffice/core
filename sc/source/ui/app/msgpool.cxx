@@ -88,7 +88,7 @@ ScMessagePool::~ScMessagePool()
 
     delete mpPoolDefaults;
 
-    SfxItemPool::Free(pDocPool);
+    delete pDocPool;
 }
 
 MapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const

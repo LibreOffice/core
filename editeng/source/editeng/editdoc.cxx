@@ -1991,7 +1991,7 @@ EditDoc::~EditDoc()
 {
     ImplDestroyContents();
     if ( bOwnerOfPool )
-        SfxItemPool::Free(pItemPool);
+        delete pItemPool;
 }
 
 namespace {

@@ -84,21 +84,6 @@ do { \
 #endif
 
 
-void SfxItemPool::AddSfxItemPoolUser(SfxItemPoolUser& rNewUser)
-{
-    pImpl->maSfxItemPoolUsers.push_back(&rNewUser);
-}
-
-void SfxItemPool::RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser)
-{
-    const std::vector<SfxItemPoolUser*>::iterator aFindResult = ::std::find(
-        pImpl->maSfxItemPoolUsers.begin(), pImpl->maSfxItemPoolUsers.end(), &rOldUser);
-    if(aFindResult != pImpl->maSfxItemPoolUsers.end())
-    {
-        pImpl->maSfxItemPoolUsers.erase(aFindResult);
-    }
-}
-
 const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 {
     const SfxPoolItem* pRet;
@@ -366,29 +351,6 @@ SfxItemPool::~SfxItemPool()
             pImpl->mpMaster->pImpl->mpSecondary = nullptr;
     }
 }
-
-void SfxItemPool::Free(SfxItemPool* pPool)
-{
-    if(pPool)
-    {
-        // tell all the registered SfxItemPoolUsers that the pool is in destruction
-        std::vector<SfxItemPoolUser*> aListCopy(pPool->pImpl->maSfxItemPoolUsers.begin(), pPool->pImpl->maSfxItemPoolUsers.end());
-        for(std::vector<SfxItemPoolUser*>::const_iterator aIterator = aListCopy.begin(); aIterator != aListCopy.end(); ++aIterator)
-        {
-            SfxItemPoolUser* pSfxItemPoolUser = *aIterator;
-            DBG_ASSERT(pSfxItemPoolUser, "corrupt SfxItemPoolUser list (!)");
-            pSfxItemPoolUser->ObjectInDestruction(*pPool);
-        }
-
-        // Clear the vector. This means that user do not need to call RemoveSfxItemPoolUser()
-        // when they get called from ObjectInDestruction().
-        pPool->pImpl->maSfxItemPoolUsers.clear();
-
-        // delete pool
-        delete pPool;
-    }
-}
-
 
 void SfxItemPool::SetSecondaryPool( SfxItemPool *pPool )
 {

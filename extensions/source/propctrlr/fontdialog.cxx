@@ -564,7 +564,7 @@ namespace pcr
         // delete the pool
         _rpPool->ReleaseDefaults(true);
             // the "true" means delete the items, too
-        SfxItemPool::Free(_rpPool);
+        delete _rpPool;
         _rpPool = nullptr;
 
         // reset the defaults ptr
