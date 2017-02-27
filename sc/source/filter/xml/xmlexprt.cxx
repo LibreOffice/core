@@ -787,7 +787,7 @@ void ScXMLExport::CloseHeaderColumn()
     EndElement(XML_NAMESPACE_TABLE, XML_TABLE_HEADER_COLUMNS, true);
 }
 
-void ScXMLExport::ExportColumns(const sal_Int32 nTable, const table::CellRangeAddress& aColumnHeaderRange, const bool bHasColumnHeader)
+void ScXMLExport::ExportColumns(const sal_Int32 nTable, const ScRange& aColumnHeaderRange, const bool bHasColumnHeader)
 {
     sal_Int32 nColsRepeated (1);
     sal_Int32 nIndex;
@@ -803,7 +803,7 @@ void ScXMLExport::ExportColumns(const sal_Int32 nTable, const table::CellRangeAd
         bool bIsVisible(true);
         nIndex = pColumnStyles->GetStyleNameIndex(nTable, nColumn, bIsVisible);
 
-        const bool bIsHeader = bHasColumnHeader && (aColumnHeaderRange.StartColumn <= nColumn) && (nColumn <= aColumnHeaderRange.EndColumn);
+        const bool bIsHeader = bHasColumnHeader && (aColumnHeaderRange.aStart.Col() <= nColumn) && (nColumn <= aColumnHeaderRange.aEnd.Col());
         if (bIsHeader != bWasHeader)
         {
             if (bIsHeader)
@@ -1394,13 +1394,13 @@ void ScXMLExport::OpenNewRow(
         if (bHasRowHeader && bRowHeaderOpen)
             OpenHeaderRows();
     }
-    if (bHasRowHeader && !bRowHeaderOpen && nStartRow >= aRowHeaderRange.StartRow && nStartRow <= aRowHeaderRange.EndRow)
+    if (bHasRowHeader && !bRowHeaderOpen && nStartRow >= aRowHeaderRange.aStart.Row() && nStartRow <= aRowHeaderRange.aEnd.Row())
     {
-        if (nStartRow == aRowHeaderRange.StartRow)
+        if (nStartRow == aRowHeaderRange.aStart.Row())
             OpenHeaderRows();
         sal_Int32 nEquals;
-        if (aRowHeaderRange.EndRow < nStartRow + nEqualRows - 1)
-            nEquals = aRowHeaderRange.EndRow - nStartRow + 1;
+        if (aRowHeaderRange.aEnd.Row() < nStartRow + nEqualRows - 1)
+            nEquals = aRowHeaderRange.aEnd.Row() - nStartRow + 1;
         else
             nEquals = nEqualRows;
         WriteRowStartTag(nIndex, nEquals, bHidden, bFiltered);
@@ -1471,7 +1471,7 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                         bFiltered = rRowAttr.rowFiltered(nTable, nRow, nEndRowFiltered);
                 }
                 if (nIndex == nPrevIndex && bHidden == bPrevHidden && bFiltered == bPrevFiltered &&
-                    !(bHasRowHeader && ((nRow == aRowHeaderRange.StartRow) || (nRow - 1 == aRowHeaderRange.EndRow))) &&
+                    !(bHasRowHeader && ((nRow == aRowHeaderRange.aStart.Row()) || (nRow - 1 == aRowHeaderRange.aEnd.Row()))) &&
                     !(pGroupRows->IsGroupStart(nRow)) &&
                     !(pGroupRows->IsGroupEnd(nRow - 1)))
                     ++nEqualRows;
@@ -1517,7 +1517,7 @@ void ScXMLExport::CloseRow(const sal_Int32 nRow)
     if (nOpenRow > -1)
     {
         EndElement(sElemRow, true);
-        if (bHasRowHeader && nRow == aRowHeaderRange.EndRow)
+        if (bHasRowHeader && nRow == aRowHeaderRange.aEnd.Row())
         {
             CloseHeaderRows();
             bRowHeaderOpen = false;
@@ -1615,8 +1615,8 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
     }
 }
 
-void ScXMLExport::GetColumnRowHeader(bool& rHasColumnHeader, table::CellRangeAddress& rColumnHeaderRange,
-                                     bool& rHasRowHeader, table::CellRangeAddress& rRowHeaderRange,
+void ScXMLExport::GetColumnRowHeader(bool& rHasColumnHeader, ScRange& rColumnHeaderRange,
+                                     bool& rHasRowHeader, ScRange& rRowHeaderRange,
                                      OUString& rPrintRanges) const
 {
     uno::Reference <sheet::XPrintAreas> xPrintAreas (xCurrentTable, uno::UNO_QUERY);
@@ -1624,8 +1624,20 @@ void ScXMLExport::GetColumnRowHeader(bool& rHasColumnHeader, table::CellRangeAdd
     {
         rHasRowHeader = xPrintAreas->getPrintTitleRows();
         rHasColumnHeader = xPrintAreas->getPrintTitleColumns();
-        rRowHeaderRange = xPrintAreas->getTitleRows();
-        rColumnHeaderRange = xPrintAreas->getTitleColumns();
+        table::CellRangeAddress rTempRowHeaderRange = xPrintAreas->getTitleRows();
+        rRowHeaderRange = ScRange(rTempRowHeaderRange.StartColumn,
+                                  rTempRowHeaderRange.StartRow,
+                                  rTempRowHeaderRange.Sheet,
+                                  rTempRowHeaderRange.EndColumn,
+                                  rTempRowHeaderRange.EndRow,
+                                  rTempRowHeaderRange.Sheet);
+        table::CellRangeAddress rTempColumnHeaderRange = xPrintAreas->getTitleColumns();
+        rColumnHeaderRange = ScRange(rTempColumnHeaderRange.StartColumn,
+                                  rTempColumnHeaderRange.StartRow,
+                                  rTempColumnHeaderRange.Sheet,
+                                  rTempColumnHeaderRange.EndColumn,
+                                  rTempColumnHeaderRange.EndRow,
+                                  rTempColumnHeaderRange.Sheet);
         uno::Sequence< table::CellRangeAddress > aRangeList( xPrintAreas->getPrintAreas() );
         ScRangeStringConverter::GetStringFromRangeList( rPrintRanges, aRangeList, pDoc, FormulaGrammar::CONV_OOO );
     }
@@ -2871,7 +2883,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
         }
     }
     OUString sPrintRanges;
-    table::CellRangeAddress aColumnHeaderRange;
+    ScRange aColumnHeaderRange;
     bool bHasColumnHeader;
     GetColumnRowHeader(bHasColumnHeader, aColumnHeaderRange, bHasRowHeader, aRowHeaderRange, sPrintRanges);
     if( !sPrintRanges.isEmpty() )
@@ -2928,10 +2940,10 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const Reference<sheet::XSpreadshe
     pGroupRows->NewTable();
     FillColumnRowGroups();
     if (bHasColumnHeader)
-        pSharedData->SetLastColumn(nTable, aColumnHeaderRange.EndColumn);
+        pSharedData->SetLastColumn(nTable, aColumnHeaderRange.aEnd.Col());
     bRowHeaderOpen = false;
     if (bHasRowHeader)
-        pSharedData->SetLastRow(nTable, aRowHeaderRange.EndRow);
+        pSharedData->SetLastRow(nTable, aRowHeaderRange.aEnd.Row());
     pDefaults->FillDefaultStyles(nTable, pSharedData->GetLastRow(nTable),
         pSharedData->GetLastColumn(nTable), pCellStyles, pDoc);
     pRowFormatRanges->SetColDefaults(&pDefaults->GetColDefaults());

@@ -99,7 +99,7 @@ class ScXMLExport : public SvXMLExport
     ScFormatRangeStyles*                pCellStyles;
     ScRowFormatRanges*                  pRowFormatRanges;
     std::vector<OUString>               aTableStyles;
-    css::table::CellRangeAddress        aRowHeaderRange;
+    ScRange                             aRowHeaderRange;
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
     ScMyDefaultStyles*                  pDefaults;
@@ -153,7 +153,7 @@ class ScXMLExport : public SvXMLExport
         const sal_Int32 nStyleIndex, const bool bIsVisible);
     void OpenHeaderColumn();
     void CloseHeaderColumn();
-    void ExportColumns(const sal_Int32 nTable, const css::table::CellRangeAddress& aColumnHeaderRange, const bool bHasColumnHeader);
+    void ExportColumns(const sal_Int32 nTable, const ScRange& aColumnHeaderRange, const bool bHasColumnHeader);
     void ExportExternalRefCacheStyles();
     void ExportCellTextAutoStyles(sal_Int32 nTable);
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
@@ -168,9 +168,8 @@ class ScXMLExport : public SvXMLExport
                          bool bHidden, bool bFiltered);
     void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLCachedRowAttrAccess& rRowAttr);
     void CloseRow(const sal_Int32 nRow);
-    void GetColumnRowHeader(bool& bHasColumnHeader, css::table::CellRangeAddress& aColumnHeaderRange,
-        bool& bHasRowHeader, css::table::CellRangeAddress& aRowHeaderRange,
-        OUString& rPrintRanges) const;
+    void GetColumnRowHeader(bool& bHasColumnHeader, ScRange& aColumnHeaderRange,
+        bool& bHasRowHeader, ScRange& aRowHeaderRange, OUString& rPrintRanges) const;
     static void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
