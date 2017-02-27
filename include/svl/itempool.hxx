@@ -64,10 +64,6 @@ class SVL_DLLPUBLIC SfxItemPool
     const SfxItemInfo*              pItemInfos;
     std::unique_ptr<SfxItemPool_Impl>               pImpl;
 
-public:
-    void AddSfxItemPoolUser(SfxItemPoolUser& rNewUser);
-    void RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser);
-
 private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
     sal_uInt16                      GetSize_Impl() const;
@@ -93,13 +89,9 @@ public:
                                                  const SfxItemInfo *pItemInfos,
                                                  std::vector<SfxPoolItem*> *pDefaults = nullptr,
                                                  bool bLoadRefCounts = true );
-
-protected:
     virtual                         ~SfxItemPool();
 
 public:
-    static void Free(SfxItemPool* pPool);
-
     SfxBroadcaster&                 BC();
 
     void                            SetPoolDefaultItem( const SfxPoolItem& );

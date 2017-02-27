@@ -52,9 +52,7 @@ class ScMessagePool: public SfxItemPool
 
 public:
     ScMessagePool();
-protected:
     virtual ~ScMessagePool() override;
-public:
 
     virtual MapUnit GetMetric( sal_uInt16 nWhich ) const override;
 };

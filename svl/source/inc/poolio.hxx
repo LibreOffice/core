@@ -27,7 +27,6 @@
 #include <vector>
 
 class SfxPoolItem;
-class SfxItemPoolUser;
 
 #ifndef DELETEZ
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
@@ -96,7 +95,6 @@ struct SfxItemPool_Impl
 {
     SfxBroadcaster                  aBC;
     std::vector<SfxPoolItemArray_Impl*> maPoolItems;
-    std::vector<SfxItemPoolUser*>   maSfxItemPoolUsers; /// ObjectUser section
     OUString                        aName;
     std::vector<SfxPoolItem*>       maPoolDefaults;
     std::vector<SfxPoolItem*>*      mpStaticDefaults;

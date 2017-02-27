@@ -21,19 +21,19 @@
 #define INCLUDED_EDITENG_EDITOBJ_HXX
 
 #include <rsc/rscsfx.hxx>
-#include <svl/itemset.hxx>
-#include <svl/itempool.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/macros.hxx>
 #include <svl/languageoptions.hxx>
+#include <svl/lstner.hxx>
 
 #include <com/sun/star/text/textfield/Type.hpp>
 
 #include <vector>
 #include <memory>
 
+class SfxItemSet;
 class SfxItemPool;
 class SfxStyleSheetPool;
 class SvxFieldItem;
@@ -58,7 +58,7 @@ class SharedStringPool;
 
 class EditTextObjectImpl;
 
-class EDITENG_DLLPUBLIC EditTextObject : public SfxItemPoolUser
+class EDITENG_DLLPUBLIC EditTextObject : public SfxListener
 {
     friend class EditTextObjectImpl;
     friend class editeng::FieldUpdaterImpl;
@@ -137,7 +137,7 @@ public:
     // #i102062#
     bool isWrongListEqual(const EditTextObject& rCompare) const;
 
-    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) override;
+    virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
 #if DEBUG_EDIT_ENGINE
     void Dump() const;

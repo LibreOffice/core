@@ -393,7 +393,7 @@ void    SwModule::InitAttrPool()
 void    SwModule::RemoveAttrPool()
 {
     SetPool(nullptr);
-    SfxItemPool::Free(m_pAttrPool);
+    delete m_pAttrPool;
 }
 
 SfxStyleFamilies* SwModule::CreateStyleFamilies()

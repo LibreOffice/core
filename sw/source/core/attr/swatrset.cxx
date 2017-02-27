@@ -140,8 +140,8 @@ void SwAttrPool::removeAndDeleteSecondaryPools()
     pSdrPool->SetSecondaryPool(nullptr);
 
     // final cleanup of secondary pool(s)
-    SfxItemPool::Free(pSdrPool);
-    SfxItemPool::Free(pEEgPool);
+    delete pSdrPool;
+    delete pEEgPool;
 }
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )

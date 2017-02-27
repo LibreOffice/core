@@ -741,7 +741,7 @@ namespace svx
         xDialog.reset();
         xCurrentItems.reset();
         xPureItems.reset();
-        SfxItemPool::Free(pPool);
+        delete pPool;
     }
 
 
