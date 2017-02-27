@@ -44,6 +44,8 @@ public:
     void testTdf105461();
     /// Tests that embedded video from Impress is not exported as a linked one.
     void testTdf105093();
+    /// Tests export of non-PDF images.
+    void testTdf106206();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -51,6 +53,7 @@ public:
     CPPUNIT_TEST(testTdf106059);
     CPPUNIT_TEST(testTdf105461);
     CPPUNIT_TEST(testTdf105093);
+    CPPUNIT_TEST(testTdf106206);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -199,6 +202,57 @@ void PdfExportTest::testTdf105093()
     // Make sure the filespec refers to an embedded file.
     // This key was missing, the embedded video was handled as a linked one.
     CPPUNIT_ASSERT(pFileSpec->LookupElement("EF"));
+}
+
+void PdfExportTest::testTdf106206()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf106206.odt";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    xmlsecurity::pdfio::PDFDocument aDocument;
+    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // The page has a stream.
+    xmlsecurity::pdfio::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents");
+    CPPUNIT_ASSERT(pContents);
+    xmlsecurity::pdfio::PDFStreamElement* pStream = pContents->GetStream();
+    CPPUNIT_ASSERT(pStream);
+    SvMemoryStream& rObjectStream = pStream->GetMemory();
+    // Uncompress it.
+    SvMemoryStream aUncompressed;
+    ZCodec aZCodec;
+    aZCodec.BeginCompression();
+    rObjectStream.Seek(0);
+    aZCodec.Decompress(rObjectStream, aUncompressed);
+    CPPUNIT_ASSERT(aZCodec.EndCompression());
+
+    // Make sure there is an image reference there.
+    OString aImage("/Im");
+    auto pStart = static_cast<const char*>(aUncompressed.GetData());
+    const char* pEnd = pStart + aUncompressed.GetSize();
+    auto it = std::search(pStart, pEnd, aImage.getStr(), aImage.getStr() + aImage.getLength());
+    CPPUNIT_ASSERT(it != pEnd);
+
+    // And also that it's not an invalid one.
+    OString aInvalidImage("/Im0");
+    it = std::search(pStart, pEnd, aInvalidImage.getStr(), aInvalidImage.getStr() + aInvalidImage.getLength());
+    // This failed, object #0 was referenced.
+    CPPUNIT_ASSERT(bool(it == pEnd));
 }
 #endif
 
