@@ -114,7 +114,6 @@ public:
 
     virtual const SdrObject *GetMaster() const = 0;
     virtual SdrObject *GetMaster() = 0;
-    virtual void SetMaster( SdrObject* _pNewMaster ) = 0;
 
           SwFrameFormat  *GetFormat() { return static_cast<SwFrameFormat*>(GetRegisteredIn()); }
     const SwFrameFormat  *GetFormat() const
@@ -205,7 +204,6 @@ public:
 
     virtual const SdrObject* GetMaster() const override;
     virtual SdrObject* GetMaster() override;
-    virtual void SetMaster( SdrObject* _pNewMaster ) override;
 
     /** override methods to control Writer fly frames,
      which are linked, and to assure that all objects anchored at/inside the
@@ -311,7 +309,7 @@ bool CheckControlLayer( const SdrObject *pObj );
  in SwClient and the objects themselves in Drawing (SDrObjUserCall). */
 class NestedUserCallHdl;
 
-class SwDrawContact : public SwContact
+class SwDrawContact final : public SwContact
 {
     private:
         /** anchored drawing object instance for the
@@ -390,7 +388,7 @@ class SwDrawContact : public SwContact
 
         virtual const SdrObject* GetMaster() const override;
         virtual SdrObject* GetMaster() override;
-        virtual void SetMaster( SdrObject* _pNewMaster ) override;
+        void SetMaster( SdrObject* _pNewMaster );
 
         const SwFrame* GetAnchorFrame( const SdrObject* _pDrawObj = nullptr ) const;
         SwFrame* GetAnchorFrame( SdrObject* _pDrawObj = nullptr );
