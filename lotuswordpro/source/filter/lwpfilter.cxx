@@ -101,7 +101,7 @@ using namespace ::com::sun::star;
 #include "bento.hxx"
 using namespace OpenStormBento;
 #include "explode.hxx"
- bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
+bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
 {
     pCompressed->Seek(0);
     std::unique_ptr<SvStream> aDecompressed(new SvMemoryStream(4096, 4096));
@@ -110,10 +110,14 @@ using namespace OpenStormBento;
     aDecompressed->WriteBytes(buffer, 16);
 
     std::unique_ptr<LwpSvStream> aLwpStream(new LwpSvStream(pCompressed));
-    LtcBenContainer* pBentoContainer;
-    sal_uLong ulRet = BenOpenContainer(aLwpStream.get(), &pBentoContainer);
-    if (ulRet != BenErr_OK)
-        return false;
+    std::unique_ptr<OpenStormBento::LtcBenContainer> pBentoContainer;
+    {
+        OpenStormBento::LtcBenContainer* pTmp(nullptr);
+        sal_uLong ulRet = BenOpenContainer(aLwpStream.get(), &pTmp);
+        pBentoContainer.reset(pTmp);
+        if (ulRet != BenErr_OK)
+            return false;
+    }
 
     std::unique_ptr<LtcUtBenValueStream> aWordProData(pBentoContainer->FindValueStreamWithPropertyName("WordProData"));
 
