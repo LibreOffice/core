@@ -408,7 +408,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     }
 
     const sal_uInt16 nSdPageCount = GetSdPageCount(PageKind::Standard);
-    const sal_uInt32 nBMSdPageCount = pBookmarkDoc->GetSdPageCount(PageKind::Standard);
+    const sal_uInt16 nBMSdPageCount = pBookmarkDoc->GetSdPageCount(PageKind::Standard);
     const sal_uInt16 nMPageCount = GetMasterPageCount();
 
     if (nSdPageCount==0 || nBMSdPageCount==0 || nMPageCount==0)
@@ -932,7 +932,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
     {
         try
         {
-            for(sal_uInt32 p = nInsertPos; p < (nInsertPos + nBMSdPageCount); p++)
+            for(sal_uInt32 p = nInsertPos; p < sal_uInt32(nInsertPos) + sal_uInt32(nBMSdPageCount); p++)
             {
                 SdPage *pPg = static_cast<SdPage *>( GetPage(p) );
                 for(size_t i = 0; pPg && (i < pPg->GetObjCount()); ++i)
