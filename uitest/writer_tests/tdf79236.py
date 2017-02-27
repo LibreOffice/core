@@ -93,7 +93,7 @@ class tdf79236(UITestCase):
             xTopSpnBtn.executeAction("DOWN", tuple())
 
         xOkBtn = xParagraphDlg.getChild("ok")
-        xOkBtn.executeAction("CLICK", tuple())
+        self.ui_test.close_dialog_through_button(xOkBtn)
 
         self.assertEqual(document.CurrentSelection.getByIndex(0).ParaLeftMargin, 0)
         self.assertEqual(document.CurrentSelection.getByIndex(0).ParaRightMargin, 0)
