@@ -30,8 +30,6 @@ class ImpressDrawinglayerTest(UITestCase):
         print(get_state_as_dict(xDrawinglayerObject))
         xDrawinglayerObject.executeAction("MOVE", mkPropertyValues({"X": "1000", "Y":"1000"}))
 
-        time.sleep(10)
-
         self.ui_test.close_doc()
 
     def test_resize_object(self):
@@ -48,8 +46,6 @@ class ImpressDrawinglayerTest(UITestCase):
         xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
         print(get_state_as_dict(xDrawinglayerObject))
         xDrawinglayerObject.executeAction("RESIZE", mkPropertyValues({"X": "500", "Y":"4000", "FRAC_X": "0.5", "FRAC_Y": "0.5"}))
-
-        time.sleep(5)
 
         self.ui_test.close_doc()
 
