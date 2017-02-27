@@ -90,7 +90,7 @@ bool CmpAttr( const SfxPoolItem& rItem1, const SfxPoolItem& rItem2 )
     return rItem1 == rItem2;
 }
 
-const SwTextAttr* GetFrwrdTextHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
+const SwTextAttr* GetFrwrdTextHint( const SwpHints& rHtsArr, size_t& rPos,
                                     sal_Int32 nContentPos )
 {
     while( rPos < rHtsArr.Count() )
@@ -103,7 +103,7 @@ const SwTextAttr* GetFrwrdTextHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
     return nullptr; // invalid text attribute
 }
 
-const SwTextAttr* GetBkwrdTextHint( const SwpHints& rHtsArr, sal_uInt16& rPos,
+const SwTextAttr* GetBkwrdTextHint( const SwpHints& rHtsArr, size_t& rPos,
                                   sal_Int32 nContentPos )
 {
     while( rPos > 0 )
@@ -163,7 +163,7 @@ static bool lcl_Search( const SwTextNode& rTextNd, SwPaM& rPam,
 
     const SwTextAttr *pTextHt = nullptr;
     bool bForward = &fnMove == &fnMoveForward;
-    sal_uInt16 nPos = bForward ? 0 : rTextNd.GetSwpHints().Count();
+    size_t nPos = bForward ? 0 : rTextNd.GetSwpHints().Count();
     sal_Int32 nContentPos = rPam.GetPoint()->nContent.GetIndex();
 
     while( nullptr != ( pTextHt=(*fnMove.fnGetHint)(rTextNd.GetSwpHints(),nPos,nContentPos)))

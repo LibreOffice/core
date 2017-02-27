@@ -34,8 +34,8 @@ void GoStartDoc( SwPosition*);
 void GoEndDoc( SwPosition*);
 void GoStartSection( SwPosition*);
 void GoEndSection( SwPosition*);
-const SwTextAttr* GetFrwrdTextHint( const SwpHints&, sal_uInt16&, sal_Int32 );
-const SwTextAttr* GetBkwrdTextHint( const SwpHints&, sal_uInt16&, sal_Int32 );
+const SwTextAttr* GetFrwrdTextHint( const SwpHints&, size_t&, sal_Int32 );
+const SwTextAttr* GetBkwrdTextHint( const SwpHints&, size_t&, sal_Int32 );
 
 bool GoNext(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
 bool GoPrevious(SwNode* pNd, SwIndex * pIdx, sal_uInt16 nMode );
@@ -48,7 +48,7 @@ typedef SwContentNode* (*GoNds)( SwNodeIndex*, bool );
 typedef void (*GoDoc)( SwPosition* );
 typedef void (*GoSection)( SwPosition* );
 typedef bool (SwPosition:: *CmpOp)( const SwPosition& ) const;
-typedef const SwTextAttr* (*GetHint)( const SwpHints&, sal_uInt16&, sal_Int32 );
+typedef const SwTextAttr* (*GetHint)( const SwpHints&, size_t&, sal_Int32 );
 typedef bool (utl::TextSearch:: *SearchText)( const OUString&, sal_Int32*,
                     sal_Int32*, css::util::SearchResult* );
 typedef void (*MvSection)( SwNodeIndex * );
