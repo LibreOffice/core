@@ -33,7 +33,7 @@ enum class SvtScriptType;
 class SW_DLLPUBLIC SwBreakIt
 {
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    mutable css::uno::Reference< css::i18n::XBreakIterator > xBreak;
+    css::uno::Reference<css::i18n::XBreakIterator> m_xBreak;
 
     std::unique_ptr<LanguageTag> m_xLanguageTag;   ///< language tag of the current locale
     std::unique_ptr<css::i18n::ForbiddenCharacters> m_xForbidden;
@@ -43,8 +43,6 @@ class SW_DLLPUBLIC SwBreakIt
     void GetLocale_( const LanguageType aLang );
     void GetLocale_( const LanguageTag& rLanguageTag );
     void GetForbidden_( const LanguageType  aLang );
-
-    void createBreakIterator() const;
 
     SwBreakIt(SwBreakIt const&) = delete;
     SwBreakIt& operator=(SwBreakIt const&) = delete;
@@ -63,8 +61,7 @@ public:
 
     css::uno::Reference< css::i18n::XBreakIterator > const & GetBreakIter()
     {
-        createBreakIterator();
-        return xBreak;
+        return m_xBreak;
     }
 
     const css::lang::Locale& GetLocale( const LanguageType aLang )

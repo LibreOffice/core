@@ -54,15 +54,9 @@ SwBreakIt * SwBreakIt::Get()
 
 SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
     : m_xContext(rxContext)
+    , m_xBreak(i18n::BreakIterator::create(m_xContext))
     , aForbiddenLang(LANGUAGE_DONTKNOW)
 {
-    assert(m_xContext.is() && "SwBreakIt: no MultiServiceFactory");
-}
-
-void SwBreakIt::createBreakIterator() const
-{
-    if (!xBreak.is())
-        xBreak.set(i18n::BreakIterator::create(m_xContext));
 }
 
 void SwBreakIt::GetLocale_( const LanguageType aLang )
@@ -91,16 +85,15 @@ void SwBreakIt::GetForbidden_( const LanguageType aLang )
 
 sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rText, sal_Int32 nPos ) const
 {
-    createBreakIterator();
     sal_uInt16 nScript = i18n::ScriptType::WEAK;
-    if( xBreak.is() && !rText.isEmpty() )
+    if (!rText.isEmpty())
     {
         if( nPos && nPos == rText.getLength() )
             --nPos;
         else if( nPos < 0)
             nPos = 0;
 
-        nScript = xBreak->getScriptType( rText, nPos );
+        nScript = m_xBreak->getScriptType(rText, nPos);
         sal_Int32 nChgPos = 0;
         if (i18n::ScriptType::WEAK == nScript && nPos >= 0 && nPos + 1 < rText.getLength())
         {
@@ -111,22 +104,22 @@ sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rText, sal_Int32 nPos
                 case U_NON_SPACING_MARK:
                 case U_ENCLOSING_MARK:
                 case U_COMBINING_SPACING_MARK:
-                    nScript = xBreak->getScriptType( rText, nPos+1 );
+                    nScript = m_xBreak->getScriptType(rText, nPos+1);
                     break;
             }
         }
         if( i18n::ScriptType::WEAK == nScript &&
             nPos &&
-            0 < ( nChgPos = xBreak->beginOfScript( rText, nPos, nScript ) ) )
+            0 < ( nChgPos = m_xBreak->beginOfScript(rText, nPos, nScript) ) )
         {
-            nScript = xBreak->getScriptType( rText, nChgPos-1 );
+            nScript = m_xBreak->getScriptType(rText, nChgPos-1);
         }
 
         if( i18n::ScriptType::WEAK == nScript &&
-            rText.getLength() > ( nChgPos = xBreak->endOfScript( rText, nPos, nScript ) ) &&
+            rText.getLength() > ( nChgPos = m_xBreak->endOfScript(rText, nPos, nScript) ) &&
             0 <= nChgPos )
         {
-            nScript = xBreak->getScriptType( rText, nChgPos );
+            nScript = m_xBreak->getScriptType(rText, nChgPos);
         }
     }
     if( i18n::ScriptType::WEAK == nScript )
@@ -139,19 +132,14 @@ SvtScriptType SwBreakIt::GetAllScriptsOfText( const OUString& rText ) const
     const SvtScriptType coAllScripts = ( SvtScriptType::LATIN |
                                       SvtScriptType::ASIAN |
                                       SvtScriptType::COMPLEX );
-    createBreakIterator();
     SvtScriptType nRet = SvtScriptType::NONE;
     sal_uInt16 nScript = 0;
-    if( !xBreak.is() )
-    {
-        nRet = coAllScripts;
-    }
-    else if( !rText.isEmpty() )
+    if (!rText.isEmpty())
     {
         for( sal_Int32 n = 0, nEnd = rText.getLength(); n < nEnd;
-                n = xBreak->endOfScript(rText, n, nScript) )
+                n = m_xBreak->endOfScript(rText, n, nScript) )
         {
-            switch( nScript = xBreak->getScriptType( rText, n ) )
+            switch( nScript = m_xBreak->getScriptType(rText, n) )
             {
             case i18n::ScriptType::LATIN:   nRet |= SvtScriptType::LATIN;   break;
             case i18n::ScriptType::ASIAN:   nRet |= SvtScriptType::ASIAN;   break;
@@ -185,7 +173,7 @@ sal_Int32 SwBreakIt::getGraphemeCount(const OUString& rText,
         else
         {
             sal_Int32 nCount2 = 1;
-            nCurPos = xBreak->nextCharacters(rText, nCurPos, lang::Locale(),
+            nCurPos = m_xBreak->nextCharacters(rText, nCurPos, lang::Locale(),
                 i18n::CharacterIteratorMode::SKIPCELL, nCount2, nCount2);
         }
         ++nGraphemeCount;
