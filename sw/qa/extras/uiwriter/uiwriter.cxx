@@ -89,6 +89,8 @@
 #include <paratr.hxx>
 #include <drawfont.hxx>
 #include <txtfrm.hxx>
+#include <txttypes.hxx>
+#include <SwPortionHandler.hxx>
 #include <hyp.hxx>
 #include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -3454,49 +3456,210 @@ void SwUiWriterTest::testTdf87922()
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, aFont.GetColor().GetColor());
 }
 
+struct PortionItem
+{
+    PortionItem(OUString const & sItemType, sal_Int32 nLength = 0,
+                sal_uInt16 nTextType = 0, OUString const & sText = OUString(""))
+        : msItemType(sItemType)
+        , mnLength(nLength)
+        , mnTextType(nTextType)
+        , msText(sText)
+    {}
+
+    OUString msItemType;
+    sal_Int32 mnLength;
+    sal_uInt16 mnTextType;
+    OUString msText;
+};
+
+class PortionHandler : public SwPortionHandler
+{
+  public:
+
+    std::vector<PortionItem> mPortionItems;
+    explicit PortionHandler()
+        : SwPortionHandler()
+    {}
+
+    void clear()
+    {
+        mPortionItems.clear();
+    }
+
+    virtual void Text(sal_Int32 nLength, sal_uInt16 nType,
+                      sal_Int32 /*nHeight*/, sal_Int32 /*nWidth*/) override
+    {
+        mPortionItems.push_back(PortionItem("text", nLength, nType));
+    }
+
+    virtual void Special(sal_Int32 nLength, const OUString & rText,
+                         sal_uInt16 nType, sal_Int32 /*nHeight*/,
+                         sal_Int32 /*nWidth*/, const SwFont* /*pFont*/) override
+    {
+        mPortionItems.push_back(PortionItem("special", nLength, nType, rText));
+    }
+
+    virtual void LineBreak(sal_Int32 /*nWidth*/) override
+    {
+        mPortionItems.push_back(PortionItem("line_break"));
+    }
+
+    virtual void Skip(sal_Int32 nLength) override
+    {
+        mPortionItems.push_back(PortionItem("skip", nLength));
+    }
+
+    virtual void Finish() override
+    {
+        mPortionItems.push_back(PortionItem("finish"));
+    }
+};
+
 void SwUiWriterTest::testTdf77014()
 {
     // The problem described in the bug tdf#77014 is that the input
     // field text ("ThisIsAllOneWord") is broken up on linebreak, but
     // it should be in one piece (like normal text).
 
-    // This test checks that the input field is in one piece.
+    // This test checks that the input field is in one piece and if the
+    // input field has more words, it is broken up at the correct place.
 
-    load(DATA_DIRECTORY, "tdf77014.odt");
+    SwDoc* pDoc = createDoc("tdf77014.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
-    // First paragraph
-    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[4]/Text[1]", "nType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("91"),      parseDump("/root/page/body/txt[4]/Text[1]", "nLength"));
+    SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pWrtShell->GetLayout()->GetLower()->GetLower()->GetLower());
 
-    // The "Unknown" is the input field:
-    // which is 16 chars + 2 hidden chars (start & end input field) = 18 chars
-    // If this is correct then the input field is in one piece
-    CPPUNIT_ASSERT_EQUAL(OUString("Unknown"), parseDump("/root/page/body/txt[4]/Text[2]", "nType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("18"),      parseDump("/root/page/body/txt[4]/Text[2]", "nLength"));
+    PortionHandler aHandler;
+    pTextFrame->VisitPortions(aHandler);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[4]/Text[3]", "nType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("1"),       parseDump("/root/page/body/txt[4]/Text[3]", "nLength"));
+    {
+        // Input Field - "One Two Three Four Five" = 25 chars
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),          aHandler.mPortionItems[0].msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(25),             aHandler.mPortionItems[0].mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD),  aHandler.mPortionItems[0].mnTextType);
 
-    // Second paragraph
-    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[5]/Text[1]", "nType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("91"),      parseDump("/root/page/body/txt[5]/Text[1]", "nLength"));
+        CPPUNIT_ASSERT_EQUAL(OUString("line_break"), aHandler.mPortionItems[1].msItemType);
 
-    // The input field here has more words ("One Two Three Four Five")
-    // and it should break after "Two".
-    // "One Two" = 7 chars + 1 start input field hidden character = 8 chars
-    CPPUNIT_ASSERT_EQUAL(OUString("Unknown"), parseDump("/root/page/body/txt[5]/Text[2]", "nType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("8"),       parseDump("/root/page/body/txt[5]/Text[2]", "nLength"));
+        CPPUNIT_ASSERT_EQUAL(OUString("finish"), aHandler.mPortionItems[2].msItemType);
+    }
 
-    CPPUNIT_ASSERT_EQUAL(OUString("POR_HOLE"), parseDump("/root/page/body/txt[5]/Text[3]", "nType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("1"),        parseDump("/root/page/body/txt[5]/Text[3]", "nLength"));
+    aHandler.clear();
 
-    // In new line..
-    // "Three Four Five" = 16 chars + 1 end input field hidden character = 16 chars
-    CPPUNIT_ASSERT_EQUAL(OUString("Unknown"), parseDump("/root/page/body/txt[5]/Text[4]", "nType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("16"),      parseDump("/root/page/body/txt[5]/Text[4]", "nLength"));
+    pTextFrame = static_cast<SwTextFrame*>(pTextFrame->GetNext());
+    pTextFrame->VisitPortions(aHandler);
 
-    CPPUNIT_ASSERT_EQUAL(OUString("POR_TXT"), parseDump("/root/page/body/txt[5]/Text[5]", "nType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("1"),       parseDump("/root/page/body/txt[5]/Text[5]", "nLength"));
+    {
+        // Input Field - "ThisIsAllOneWord" = 18 chars
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),         aHandler.mPortionItems[0].msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(18),            aHandler.mPortionItems[0].mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD), aHandler.mPortionItems[0].mnTextType);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("line_break"), aHandler.mPortionItems[1].msItemType);
+
+        CPPUNIT_ASSERT_EQUAL(OUString("finish"), aHandler.mPortionItems[2].msItemType);
+    }
+
+    aHandler.clear();
+
+    // skip empty paragraph
+    pTextFrame = static_cast<SwTextFrame*>(pTextFrame->GetNext());
+
+    pTextFrame = static_cast<SwTextFrame*>(pTextFrame->GetNext());
+    pTextFrame->VisitPortions(aHandler);
+
+    {
+        // Text "The purpose of this report is to summarize the results of the existing bug in the LO suite"
+        // = 91 chars
+        auto& rPortionItem = aHandler.mPortionItems[0];
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),    rPortionItem.msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(91),       rPortionItem.mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_TXT), rPortionItem.mnTextType);
+
+        // NEW LINE
+        rPortionItem = aHandler.mPortionItems[1];
+        CPPUNIT_ASSERT_EQUAL(OUString("line_break"), rPortionItem.msItemType);
+
+        // Input Field: "ThisIsAllOneWord" = 18 chars
+        // which is 16 chars + 2 hidden chars (start & end input field) = 18 chars
+        // If this is correct then the input field is in one piece
+        rPortionItem = aHandler.mPortionItems[2];
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),         rPortionItem.msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(18),            rPortionItem.mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD), rPortionItem.mnTextType);
+
+        // Text "."
+        rPortionItem = aHandler.mPortionItems[3];
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),    rPortionItem.msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1),        rPortionItem.mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_TXT), rPortionItem.mnTextType);
+
+        // NEW LINE
+        rPortionItem = aHandler.mPortionItems[4];
+        CPPUNIT_ASSERT_EQUAL(OUString("line_break"), rPortionItem.msItemType);
+
+        rPortionItem = aHandler.mPortionItems[5];
+        CPPUNIT_ASSERT_EQUAL(OUString("finish"), rPortionItem.msItemType);
+
+    }
+
+    aHandler.clear();
+
+    pTextFrame = static_cast<SwTextFrame*>(pTextFrame->GetNext());
+    pTextFrame->VisitPortions(aHandler);
+    {
+        printf ("Portions:\n");
+
+        for (auto& rPortionItem : aHandler.mPortionItems)
+        {
+            printf ("-- Type: %s length: %d text type: %d\n",
+                        rPortionItem.msItemType.toUtf8().getStr(),
+                        rPortionItem.mnLength,
+                        rPortionItem.mnTextType);
+        }
+
+        // Text "The purpose of this report is to summarize the results of the existing bug in the LO suite"
+        // 91 chars
+        auto& rPortionItem = aHandler.mPortionItems[0];
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),    rPortionItem.msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(91),       rPortionItem.mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_TXT), rPortionItem.mnTextType);
+
+        // The input field here has more words ("One Two Three Four Five")
+        // and it should break after "Two".
+        // Input Field: "One Two" = 7 chars + 1 start input field hidden character = 8 chars
+        rPortionItem = aHandler.mPortionItems[1];
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),         rPortionItem.msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(8),             rPortionItem.mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD), rPortionItem.mnTextType);
+
+        rPortionItem = aHandler.mPortionItems[2];
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),     rPortionItem.msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1),         rPortionItem.mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_HOLE), rPortionItem.mnTextType);
+
+        // NEW LINE
+        rPortionItem = aHandler.mPortionItems[3];
+        CPPUNIT_ASSERT_EQUAL(OUString("line_break"), rPortionItem.msItemType);
+
+        // Input Field:  "Three Four Five" = 16 chars + 1 end input field hidden character = 16 chars
+        rPortionItem = aHandler.mPortionItems[4];
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),         rPortionItem.msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(16),            rPortionItem.mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_INPUTFLD), rPortionItem.mnTextType);
+
+        // Text "."
+        rPortionItem = aHandler.mPortionItems[5];
+        CPPUNIT_ASSERT_EQUAL(OUString("text"),    rPortionItem.msItemType);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1),        rPortionItem.mnLength);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt16(POR_TXT), rPortionItem.mnTextType);
+
+        // NEW LINE
+        rPortionItem = aHandler.mPortionItems[6];
+        CPPUNIT_ASSERT_EQUAL(OUString("line_break"), rPortionItem.msItemType);
+
+        rPortionItem = aHandler.mPortionItems[7];
+        CPPUNIT_ASSERT_EQUAL(OUString("finish"), rPortionItem.msItemType);
+    }
 }
 
 void SwUiWriterTest::testTdf92648()

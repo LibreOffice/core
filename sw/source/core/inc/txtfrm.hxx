@@ -46,7 +46,7 @@ class SwScriptInfo;
 #define NON_PRINTING_CHARACTER_COLOR RGB_COLORDATA(0x26, 0x8b, 0xd2)
 
 /// Represents the visualization of a paragraph.
-class SwTextFrame: public SwContentFrame
+class SW_DLLPUBLIC SwTextFrame: public SwContentFrame
 {
     friend class SwTextIter;
     friend class SwTestFormat;
