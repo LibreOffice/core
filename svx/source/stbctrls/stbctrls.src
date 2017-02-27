@@ -119,8 +119,7 @@ String RID_SVXSTR_DOC_LOAD
 String RID_SVXSTR_FIT_SLIDE
 {
     Text [ en-US ] = "Fit slide to current window.";
-}
-;
+};
 
 String RID_SVXSTR_WARN_MISSING_SMARTART
 {
