@@ -455,7 +455,7 @@ namespace pcr
             m_aVScroll->SetPosSizePixel( aVScrollPos, aVScrollSize );
         }
 
-        for ( size_t i = 0; i < m_aLines.size(); ++i )
+        for ( ListBoxLines::size_type i = 0; i < m_aLines.size(); ++i )
             m_aOutOfDateLines.insert( i );
 
         // repaint
@@ -548,7 +548,7 @@ namespace pcr
     }
 
 
-    void OBrowserListBox::PositionLine( sal_uInt16 _nIndex )
+    void OBrowserListBox::PositionLine( ListBoxLines::size_type _nIndex )
     {
         Size aSize(m_aLinesPlayground->GetOutputSizePixel());
         Point aPos(0, m_nYOffset);
@@ -573,14 +573,11 @@ namespace pcr
 
     void OBrowserListBox::UpdatePosNSize()
     {
-        for  (  std::set< sal_uInt16 >::const_iterator aLoop = m_aOutOfDateLines.begin();
-                aLoop != m_aOutOfDateLines.end();
-                ++aLoop
-             )
+        for ( auto const & aLoop: m_aOutOfDateLines )
         {
-            DBG_ASSERT( *aLoop < m_aLines.size(), "OBrowserListBox::UpdatePosNSize: invalid line index!" );
-            if ( *aLoop < m_aLines.size() )
-                PositionLine( *aLoop );
+            DBG_ASSERT( aLoop < m_aLines.size(), "OBrowserListBox::UpdatePosNSize: invalid line index!" );
+            if ( aLoop < m_aLines.size() )
+                PositionLine( aLoop );
         }
         m_aOutOfDateLines.clear();
     }
@@ -591,13 +588,13 @@ namespace pcr
         sal_Int32 nThumbPos = m_aVScroll->GetThumbPos();
         sal_Int32 nLines = CalcVisibleLines();
 
-        sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + nLines);
+        ListBoxLines::size_type nEnd = nThumbPos + nLines;
         if (nEnd >= m_aLines.size())
-            nEnd = (sal_uInt16)m_aLines.size()-1;
+            nEnd = m_aLines.size()-1;
 
         if ( !m_aLines.empty() )
         {
-            for ( sal_uInt16 i = (sal_uInt16)nThumbPos; i <= nEnd; ++i )
+            for ( ListBoxLines::size_type i = nThumbPos; i <= nEnd; ++i )
                 m_aOutOfDateLines.insert( i );
             UpdatePosNSize();
         }
@@ -708,10 +705,10 @@ namespace pcr
         OSL_ENSURE( it == m_aLines.end(), "OBrowserListBox::InsertEntry: already have another line for this name!" );
 
         ListBoxLine aNewLine( _rPropertyData.sName, pBrowserLine, _rPropertyData.xPropertyHandler );
-        sal_uInt16 nInsertPos = _nPos;
+        ListBoxLines::size_type nInsertPos = _nPos;
         if ( _nPos >= m_aLines.size() )
         {
-            nInsertPos = static_cast< sal_uInt16 >( m_aLines.size() );
+            nInsertPos = m_aLines.size();
             m_aLines.push_back( aNewLine );
         }
         else
@@ -728,7 +725,7 @@ namespace pcr
         ChangeEntry(_rPropertyData, nInsertPos);
 
         // update the positions of possibly affected lines
-        sal_uInt16 nUpdatePos = nInsertPos;
+        ListBoxLines::size_type nUpdatePos = nInsertPos;
         while ( nUpdatePos < m_aLines.size() )
             m_aOutOfDateLines.insert( nUpdatePos++ );
         UpdatePosNSize( );
@@ -790,7 +787,7 @@ namespace pcr
         m_nYOffset = -m_aVScroll->GetThumbPos() * m_nRowHeight;
 
         sal_Int32 nLines = CalcVisibleLines();
-        sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + nLines);
+        ListBoxLines::size_type nEnd = nThumbPos + nLines;
 
         m_aLinesPlayground->Scroll(0, -nDelta * m_nRowHeight, ScrollFlags::Children);
 
@@ -802,7 +799,7 @@ namespace pcr
         }
         else if (-1 == nDelta)
         {
-            PositionLine((sal_uInt16)nThumbPos);
+            PositionLine(nThumbPos);
         }
         else if (0 != nDelta)
         {
@@ -827,7 +824,7 @@ namespace pcr
         sal_Int32 nDelta = m_aVScroll->GetDelta();
         m_nYOffset = -nThumbPos * m_nRowHeight;
 
-        sal_uInt16 nEnd = (sal_uInt16)(nThumbPos + CalcVisibleLines());
+        ListBoxLines::size_type nEnd = nThumbPos + CalcVisibleLines();
 
         m_aLinesPlayground->Scroll(0, -nDelta * m_nRowHeight, ScrollFlags::Children);
 
@@ -838,7 +835,7 @@ namespace pcr
         }
         else if (nDelta==-1)
         {
-            PositionLine((sal_uInt16)nThumbPos);
+            PositionLine(nThumbPos);
         }
         else if (nDelta!=0 || m_aVScroll->GetType() == ScrollType::DontKnow)
         {
@@ -1032,7 +1029,7 @@ namespace pcr
 
     bool OBrowserListBox::RemoveEntry( const OUString& _rName )
     {
-        sal_uInt16 nPos = 0;
+        ListBoxLines::size_type nPos = 0;
         ListBoxLines::iterator it = m_aLines.begin();
         for ( ; it != m_aLines.end() && ( it->aName != _rName ); ++it, ++nPos )
             ;
@@ -1041,7 +1038,7 @@ namespace pcr
             return false;
 
         m_aLines.erase( it );
-        m_aOutOfDateLines.erase( (sal_uInt16)m_aLines.size() );
+        m_aOutOfDateLines.erase( m_aLines.size() );
 
         // update the positions of possibly affected lines
         while ( nPos < m_aLines.size() )
@@ -1052,7 +1049,7 @@ namespace pcr
     }
 
 
-    void OBrowserListBox::ChangeEntry( const OLineDescriptor& _rPropertyData, sal_uInt16 nPos )
+    void OBrowserListBox::ChangeEntry( const OLineDescriptor& _rPropertyData, ListBoxLines::size_type nPos )
     {
         OSL_PRECOND( _rPropertyData.Control.is(), "OBrowserListBox::ChangeEntry: invalid control!" );
         if ( !_rPropertyData.Control.is() )

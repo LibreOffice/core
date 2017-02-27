@@ -32,11 +32,14 @@
 #include <tools/link.hxx>
 #include <rtl/ref.hxx>
 
+#include <limits>
 #include <memory>
 #include <set>
 #include <unordered_map>
 #include <vector>
 
+#define EDITOR_LIST_REPLACE_EXISTING \
+    std::numeric_limits<ListBoxLines::size_type>::max()
 
 namespace pcr
 {
@@ -86,14 +89,14 @@ namespace pcr
                                     m_xActiveControl;
         sal_uInt16                  m_nTheNameSize;
         long                        m_nRowHeight;
-        std::set< sal_uInt16 >    m_aOutOfDateLines;
+        std::set<ListBoxLines::size_type> m_aOutOfDateLines;
         bool                    m_bIsActive : 1;
         bool                    m_bUpdate : 1;
         ::rtl::Reference< PropertyControlContext_Impl >
                                     m_pControlContextImpl;
 
     protected:
-        void    PositionLine( sal_uInt16 _nIndex );
+        void    PositionLine( ListBoxLines::size_type _nIndex );
         void    UpdatePosNSize();
         void    UpdatePlayGround();
         void    UpdateVScroll();
@@ -127,7 +130,7 @@ namespace pcr
 
         void                        InsertEntry( const OLineDescriptor&, sal_uInt16 nPos );
         bool                        RemoveEntry( const OUString& _rName );
-        void                        ChangeEntry( const OLineDescriptor&, sal_uInt16 nPos );
+        void                        ChangeEntry( const OLineDescriptor&, ListBoxLines::size_type nPos );
 
         void                        SetPropertyValue( const OUString& rEntryName, const css::uno::Any& rValue, bool _bUnknownValue );
         sal_uInt16                  GetPropertyPos( const OUString& rEntryName ) const;
