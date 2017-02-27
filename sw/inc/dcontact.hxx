@@ -365,6 +365,7 @@ class SwDrawContact final : public SwContact
             bool operator() ( const SwDrawVirtObj* _pDrawVirtObj );
         };
 
+        void SetMaster( SdrObject* _pNewMaster );
         /// method for adding/removing 'virtual' drawing object.
         SwDrawVirtObj* CreateVirtObj();
         static void DestroyVirtObj( SwDrawVirtObj* pVirtObj );
@@ -387,7 +388,6 @@ class SwDrawContact final : public SwContact
 
         virtual const SdrObject* GetMaster() const override;
         virtual SdrObject* GetMaster() override;
-        void SetMaster( SdrObject* _pNewMaster );
 
         const SwFrame* GetAnchorFrame( const SdrObject* _pDrawObj = nullptr ) const;
         SwFrame* GetAnchorFrame( SdrObject* _pDrawObj = nullptr );
