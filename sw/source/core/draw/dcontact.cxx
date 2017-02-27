@@ -737,25 +737,6 @@ SdrObject* SwDrawContact::GetMaster()
            : nullptr;
 }
 
-/**
- * @note checks if the 'master' drawing object is replaced. The latter is
- * correctly handled, if handled by method
- * <SwDrawContact::ChangeMasterObject(..)>. Thus, assert only, if a debug level
- * is given.
- */
-void SwDrawContact::SetMaster( SdrObject* _pNewMaster )
-{
-    if ( _pNewMaster )
-    {
-        OSL_FAIL( "debug notification - master replaced!" );
-        maAnchoredDrawObj.SetDrawObj( *_pNewMaster );
-    }
-    else
-    {
-        mbMasterObjCleared = true;
-    }
-}
-
 const SwFrame* SwDrawContact::GetAnchorFrame( const SdrObject* _pDrawObj ) const
 {
     const SwFrame* pAnchorFrame = nullptr;
@@ -1171,7 +1152,7 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     NotifyBackgrdOfAllVirtObjs( pOldBoundRect );
                 }
                 DisconnectFromLayout( false );
-                SetMaster( nullptr );
+                mbMasterObjCleared = true;
                 delete this;
                 // --> #i65784# Prevent memory corruption
                 aNestedUserCallHdl.DrawContactDeleted();
@@ -2020,14 +2001,17 @@ void SwDrawContact::ChkPage()
 // corresponding superclass method <FmFormPage::ReplaceObject(..)>.
 // Note: 'master' drawing object *has* to be connected to layout triggered
 //       by the caller of this, if method is called.
-void SwDrawContact::ChangeMasterObject( SdrObject *pNewMaster )
+void SwDrawContact::ChangeMasterObject(SdrObject* pNewMaster)
 {
     DisconnectFromLayout( false );
     // consider 'virtual' drawing objects
     RemoveAllVirtObjs();
 
     GetMaster()->SetUserCall( nullptr );
-    SetMaster( pNewMaster );
+    if(pNewMaster)
+        maAnchoredDrawObj.SetDrawObj(*pNewMaster);
+    else
+        mbMasterObjCleared = true;
     GetMaster()->SetUserCall( this );
 
     InvalidateObjs_();
