@@ -44,8 +44,12 @@ public:
     static sal_uInt64 CalculateMinimumTimeout( bool &bHasActiveIdles );
     /// Process one pending task ahead of time with highest priority.
     static bool       ProcessTaskScheduling( bool bIdle );
-    /// Process all events until we are idle
+    /**
+     * Process events until the parameter turns true,
+     * allows processing until a specific event has been processed
+     */
     static void       ProcessEventsToIdle();
+    static void       ProcessEventsToSignal(bool& bSignal);
 
     /// Control the deterministic mode.  In this mode, two subsequent runs of
     /// LibreOffice fire about the same amount idles.
