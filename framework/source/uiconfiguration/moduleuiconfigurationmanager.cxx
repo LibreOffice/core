@@ -1067,11 +1067,10 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
             aGuard.clear();
 
             // Notify our listeners
-            sal_uInt32 k = 0;
-            for ( k = 0; k < aRemoveEventNotifyContainer.size(); k++ )
-                implts_notifyContainerListener( aRemoveEventNotifyContainer[k], NotifyOp_Remove );
-            for ( k = 0; k < aReplaceEventNotifyContainer.size(); k++ )
-                implts_notifyContainerListener( aReplaceEventNotifyContainer[k], NotifyOp_Replace );
+            for ( auto const & k: aRemoveEventNotifyContainer )
+                implts_notifyContainerListener( k, NotifyOp_Remove );
+            for ( auto const & k: aReplaceEventNotifyContainer )
+                implts_notifyContainerListener( k, NotifyOp_Replace );
         }
         catch ( const css::lang::IllegalArgumentException& )
         {
