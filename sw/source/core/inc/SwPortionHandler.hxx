@@ -39,7 +39,7 @@ class SwFont;
  * The SwPortionHandler can be used with the
  * SwTextFrame::VisitPortions(...) method.
  */
-class SwPortionHandler
+class SW_DLLPUBLIC SwPortionHandler
 {
 public:
 
