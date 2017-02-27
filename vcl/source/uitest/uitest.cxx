@@ -20,7 +20,7 @@ void UITest::executeCommand(const OUString& rCommand)
 {
     bool bSuccess = comphelper::dispatchCommand(
         rCommand,
-        {{"SynchronMode", -1, css::uno::Any(false),
+        {{"SynchronMode", -1, css::uno::Any(true),
           css::beans::PropertyState_DIRECT_VALUE}});
 
     SAL_WARN_IF(!bSuccess, "vcl.uitest", "failed to execute command: " << rCommand);
