@@ -22,7 +22,6 @@
 
 #include <hash.hxx>
 
-class SvClassManager;
 struct SvGlobalHashNames
 {
     SvStringHashEntry* MM_module;
