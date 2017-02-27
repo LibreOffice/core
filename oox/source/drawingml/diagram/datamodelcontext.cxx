@@ -19,7 +19,7 @@
 
 #include "datamodelcontext.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/misccontexts.hxx"
 #include "drawingml/shapepropertiescontext.hxx"
 #include "drawingml/textbodycontext.hxx"
 #include <oox/token/namespaces.hxx>

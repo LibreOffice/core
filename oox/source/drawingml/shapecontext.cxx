@@ -27,7 +27,7 @@
 #include "oox/drawingml/shapecontext.hxx"
 #include <drawingml/shapepropertiescontext.hxx>
 #include "drawingml/shapestylecontext.hxx"
-#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/misccontexts.hxx"
 #include "drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "drawingml/customshapegeometry.hxx"

@@ -163,7 +163,7 @@
 #include <drawingml/customshapegeometry.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/fillproperties.hxx>
-#include <drawingml/fillpropertiesgroupcontext.hxx>
+#include <drawingml/misccontexts.hxx>
 #include <drawingml/lineproperties.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
 #include <drawingml/shapestylecontext.hxx>

@@ -23,7 +23,7 @@
 #include <osl/diagnose.h>
 
 #include <drawingml/embeddedwavaudiofile.hxx>
-#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/misccontexts.hxx"
 #include "drawingml/graphicproperties.hxx"
 #include "drawingml/customshapeproperties.hxx"
 #include "drawingml/diagram/diagram.hxx"

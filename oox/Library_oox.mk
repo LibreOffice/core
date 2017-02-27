@@ -151,7 +151,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/effectpropertiescontext \
     oox/source/drawingml/embeddedwavaudiofile \
     oox/source/drawingml/fillproperties \
-    oox/source/drawingml/fillpropertiesgroupcontext \
+    oox/source/drawingml/misccontexts \
     oox/source/drawingml/graphicshapecontext \
     oox/source/drawingml/guidcontext \
     oox/source/drawingml/hyperlinkcontext \

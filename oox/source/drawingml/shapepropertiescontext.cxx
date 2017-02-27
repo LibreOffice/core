@@ -27,7 +27,7 @@
 
 #include "drawingml/scene3dcontext.hxx"
 #include "drawingml/linepropertiescontext.hxx"
-#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/misccontexts.hxx"
 #include "drawingml/transform2dcontext.hxx"
 #include "drawingml/customshapegeometry.hxx"
 #include "effectpropertiescontext.hxx"

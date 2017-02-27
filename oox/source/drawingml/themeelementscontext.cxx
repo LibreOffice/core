@@ -22,7 +22,7 @@
 #include "drawingml/lineproperties.hxx"
 #include "drawingml/linepropertiescontext.hxx"
 #include "drawingml/fillproperties.hxx"
-#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/misccontexts.hxx"
 #include "drawingml/textcharacterproperties.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/helper/attributelist.hxx"

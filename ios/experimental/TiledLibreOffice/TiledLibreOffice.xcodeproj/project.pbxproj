@@ -312,7 +312,7 @@
 		BE55B11C18DB67A900950228 /* effectpropertiescontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = effectpropertiescontext.cxx; path = ../../../oox/source/drawingml/effectpropertiescontext.cxx; sourceTree = SOURCE_ROOT; };
 		BE55B11D18DB67A900950228 /* embeddedwavaudiofile.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = embeddedwavaudiofile.cxx; path = ../../../oox/source/drawingml/embeddedwavaudiofile.cxx; sourceTree = SOURCE_ROOT; };
 		BE55B11E18DB67A900950228 /* fillproperties.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fillproperties.cxx; path = ../../../oox/source/drawingml/fillproperties.cxx; sourceTree = SOURCE_ROOT; };
-		BE55B11F18DB67A900950228 /* fillpropertiesgroupcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fillpropertiesgroupcontext.cxx; path = ../../../oox/source/drawingml/fillpropertiesgroupcontext.cxx; sourceTree = SOURCE_ROOT; };
+		BE55B11F18DB67A900950228 /* misccontexts.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = misccontexts.cxx; path = ../../../oox/source/drawingml/misccontexts.cxx; sourceTree = SOURCE_ROOT; };
 		BE55B12018DB67A900950228 /* graphicshapecontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = graphicshapecontext.cxx; path = ../../../oox/source/drawingml/graphicshapecontext.cxx; sourceTree = SOURCE_ROOT; };
 		BE55B12118DB67A900950228 /* guidcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = guidcontext.cxx; path = ../../../oox/source/drawingml/guidcontext.cxx; sourceTree = SOURCE_ROOT; };
 		BE55B12218DB67A900950228 /* hyperlinkcontext.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = hyperlinkcontext.cxx; path = ../../../oox/source/drawingml/hyperlinkcontext.cxx; sourceTree = SOURCE_ROOT; };
@@ -1316,7 +1316,7 @@
 				BE55B11C18DB67A900950228 /* effectpropertiescontext.cxx */,
 				BE55B11D18DB67A900950228 /* embeddedwavaudiofile.cxx */,
 				BE55B11E18DB67A900950228 /* fillproperties.cxx */,
-				BE55B11F18DB67A900950228 /* fillpropertiesgroupcontext.cxx */,
+				BE55B11F18DB67A900950228 /* misccontexts.cxx */,
 				BE55B12018DB67A900950228 /* graphicshapecontext.cxx */,
 				BE55B12118DB67A900950228 /* guidcontext.cxx */,
 				BE55B12218DB67A900950228 /* hyperlinkcontext.cxx */,

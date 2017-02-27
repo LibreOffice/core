@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "drawingml/fillpropertiesgroupcontext.hxx"
+#include "drawingml/misccontexts.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
