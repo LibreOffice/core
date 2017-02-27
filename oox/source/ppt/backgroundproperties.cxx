@@ -44,7 +44,6 @@ BackgroundPropertiesContext::BackgroundPropertiesContext( FragmentHandler2& rPar
         return this;
     }
 
-    // FillPropertiesGroupContext
     return dynamic_cast <ContextHandler *> (::oox::drawingml::FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrFillProperties ).get());
 }
 

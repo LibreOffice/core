@@ -104,7 +104,6 @@ ContextHandlerRef ShapePropertiesContext::onCreateContext( sal_Int32 aElementTok
         break;
     }
 
-    // FillPropertiesGroupContext
     return FillPropertiesContext::createFillContext( *this, aElementToken, rAttribs, mrShape.getFillProperties() );
 }
 
