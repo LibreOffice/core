@@ -202,7 +202,8 @@ public:
     virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const override;
     virtual SwAnchoredObject* GetAnchoredObj( SdrObject* _pSdrObj ) override;
 
-    virtual const SdrObject* GetMaster() const override;
+    virtual const SdrObject* GetMaster() const override
+            { return const_cast<SwFlyDrawContact*>(this)->GetMaster(); };
     virtual SdrObject* GetMaster() override;
 
     /** override methods to control Writer fly frames,
@@ -385,7 +386,8 @@ class SwDrawContact final : public SwContact
         virtual const SwAnchoredObject* GetAnchoredObj( const SdrObject* _pSdrObj ) const override;
         virtual SwAnchoredObject* GetAnchoredObj( SdrObject* _pSdrObj ) override;
 
-        virtual const SdrObject* GetMaster() const override;
+        virtual const SdrObject* GetMaster() const override
+            { return const_cast<SwDrawContact*>(this)->GetMaster(); };
         virtual SdrObject* GetMaster() override;
 
         const SwFrame* GetAnchorFrame( const SdrObject* _pDrawObj = nullptr ) const;
