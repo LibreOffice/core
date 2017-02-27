@@ -281,6 +281,10 @@ cmd/sc_openfromwriter.png cmd/sc_open.png
 cmd/sc_openfromcalc.png cmd/sc_open.png
 cmd/sc_filecontrol.png cmd/sc_open.png
 
+# Merge
+cmd/lc_mergedocument.png cmd/lc_mergedocuments.png
+cmd/sc_mergedocument.png cmd/sc_mergedocuments.png
+
 # Print
 cmd/lc_printpagepreview.png cmd/lc_printpreview.png
 cmd/lc_printlayout.png cmd/lc_printpreview.png
@@ -491,10 +495,12 @@ cmd/sc_navigateback.png cmd/sc_prevrecord.png
 cmd/sc_browsebackward.png cmd/sc_prevrecord.png
 # >
 cmd/lc_nexttrackedchange.png cmd/lc_nextrecord.png
+cmd/lc_gotopage.png cmd/lc_nextrecord.png
 cmd/lc_nextpage.png cmd/lc_nextrecord.png
 cmd/lc_navigateforward.png cmd/lc_nextrecord.png
 cmd/lc_pagedown.png cmd/lc_nextrecord.png
 cmd/sc_nexttrackedchange.png cmd/sc_nextrecord.png
+cmd/sc_gotopage.png cmd/sc_nextrecord.png
 cmd/sc_nextpage.png cmd/sc_nextrecord.png
 cmd/sc_navigateforward.png cmd/sc_nextrecord.png
 cmd/sc_pagedown.png cmd/sc_nextrecord.png
@@ -733,15 +739,21 @@ cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
 cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
 
+# Bibliography
+cmd/lc_insertauthoritiesentry.png cmd/lc_bibliographycomponent.png
+cmd/sc_insertauthoritiesentry.png cmd/sc_bibliographycomponent.png
+
 # Reload
 cmd/lc_refresh.png cmd/lc_reload.png
 cmd/lc_refreshformcontrol.png cmd/lc_reload.png
 cmd/lc_draw.png cmd/lc_reload.png
+cmd/lc_updateallindexes.png cmd/lc_reload.png
 cmd/sc_refresh.png cmd/sc_reload.png
 cmd/sc_refreshformcontrol.png cmd/sc_reload.png
 cmd/sc_styleupdatebyexample.png cmd/sc_reload.png
 cmd/sc_draw.png cmd/sc_reload.png
 cmd/sc_updatecurindex.png cmd/sc_reload.png
+cmd/sc_updateallindexes.png cmd/sc_reload.png
 
 # Select
 cmd/lc_selectmode.png cmd/lc_selectobject.png

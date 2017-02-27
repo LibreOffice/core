@@ -171,6 +171,7 @@ cmd/lc_optionstreedialog.png cmd/lc_controlproperties.png
 cmd/sc_optionstreedialog.png cmd/sc_controlproperties.png
 
 # Formatmenu
+cmd/lc_anchormenu.png cmd/lc_toggleanchortype.png
 cmd/lc_conditionalformatmenu.png cmd/lc_conditionalformatdialog.png
 cmd/sc_conditionalformatmenu.png cmd/sc_conditionalformatdialog.png
 
@@ -194,10 +195,8 @@ cmd/lc_insertannotation.png cmd/lc_showannotations.png
 cmd/sc_templatemenu.png cmd/sc_adddirect.png
 
 # Animation
-cmd/lc_customanimation.png cmd/lc_animationeffects.png
-cmd/lc_animationobjects.png cmd/lc_animationeffects.png
-cmd/sc_customanimation.png cmd/sc_animationeffects.png
-cmd/sc_animationobjects.png cmd/sc_animationeffects.png
+cmd/lc_customanimation.png cmd/lc_animationobjects.png
+cmd/sc_customanimation.png cmd/sc_animationobjects.png
 
 # Media
 cmd/lc_datastreamsplay.png cmd/lc_runbasic.png
@@ -277,25 +276,25 @@ cmd/sc_flowchartshapes.flowchart-magnetic-disk.png cmd/sc_basicshapes.can.png
 # Open
 cmd/lc_openfromwriter.png cmd/lc_open.png
 cmd/lc_openfromcalc.png cmd/lc_open.png
-cmd/lc_openremote.png cmd/lc_open.png
 cmd/lc_filecontrol.png cmd/lc_open.png
 cmd/sc_openfromwriter.png cmd/sc_open.png
 cmd/sc_openfromcalc.png cmd/sc_open.png
-cmd/sc_openremote.png cmd/sc_open.png
 cmd/sc_filecontrol.png cmd/sc_open.png
+
+# Merge
+cmd/lc_mergedocument.png cmd/lc_mergedocuments.png
+cmd/sc_mergedocument.png cmd/sc_mergedocuments.png
 
 # Print
 cmd/lc_printpagepreview.png cmd/lc_printpreview.png
 cmd/lc_printlayout.png cmd/lc_printpreview.png
 cmd/lc_previewprintoptions.png cmd/lc_printpreview.png
-cmd/lc_printersetup.png cmd/lc_print.png
 cmd/lc_sendfax.png cmd/lc_print.png
 cmd/lc_editprintarea.png cmd/lc_editdoc.png
 cmd/sc_printpagepreview.png cmd/sc_printpreview.png
 cmd/sc_printlayout.png cmd/sc_printpreview.png
 cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
 cmd/sc_defineprintarea.png cmd/sc_printpreview.png
-cmd/sc_printersetup.png cmd/sc_print.png
 cmd/sc_sendfax.png cmd/sc_print.png
 cmd/sc_editprintarea.png cmd/sc_editdoc.png
 
@@ -303,7 +302,6 @@ cmd/sc_editprintarea.png cmd/sc_editdoc.png
 cmd/lc_deleteprintarea.png cmd/lc_delete.png
 cmd/lc_deleteprintarea.png cmd/lc_delete.png
 cmd/lc_deleterecord.png cmd/lc_delete.png
-cmd/lc_deletemasterpage.png cmd/lc_delete.png
 cmd/lc_dbtabledelete.png cmd/lc_delete.png
 cmd/lc_dbreportdelete.png cmd/lc_delete.png
 cmd/lc_dbquerydelete.png cmd/lc_delete.png
@@ -311,8 +309,6 @@ cmd/lc_dbformdelete.png cmd/lc_delete.png
 cmd/lc_dbclearquery.png cmd/lc_delete.png
 cmd/sc_deleteprintarea.png cmd/sc_delete.png
 cmd/sc_deleterecord.png cmd/sc_delete.png
-cmd/sc_deletetable.png cmd/sc_delete.png
-cmd/sc_deletemasterpage.png cmd/sc_delete.png
 cmd/sc_dbtabledelete.png cmd/sc_delete.png
 cmd/sc_dbreportdelete.png cmd/sc_delete.png
 cmd/sc_dbquerydelete.png cmd/sc_delete.png
@@ -413,12 +409,12 @@ cmd/sc_dbformrename.png cmd/sc_addfield.png
 
 # Edit
 cmd/lc_switchcontroldesignmode.png cmd/lc_editdoc.png
-cmd/lc_renamemasterpage.png cmd/lc_editdoc.png
 cmd/lc_quickedit.png cmd/lc_editdoc.png
+cmd/lc_renamemasterpage.png cmd/lc_slidemasterpage.png
 cmd/lc_dsbeditdoc.png cmd/lc_editdoc.png
 cmd/sc_switchcontroldesignmode.png cmd/sc_editdoc.png
 cmd/sc_solidcreate.png cmd/sc_editdoc.png
-cmd/sc_renamemasterpage.png cmd/sc_editdoc.png
+cmd/sc_renamemasterpage.png cmd/sc_slidemasterpage.png
 cmd/sc_quickedit.png cmd/sc_editdoc.png
 cmd/sc_dsbeditdoc.png cmd/sc_editdoc.png
 
@@ -471,6 +467,18 @@ cmd/lc_hfixedline.png cmd/lc_line.png
 cmd/sc_xlinestyle.png cmd/sc_linestyle.png
 cmd/sc_hfixedline.png cmd/sc_line.png
 
+# Mail merge
+cmd/lc_mailmergewizard.png cmd/lc_dsbformletter.png
+cmd/sc_mailmergewizard.png cmd/sc_dsbformletter.png
+cmd/lc_mailmergefirstentry.png cmd/lc_firstrecord.png
+cmd/sc_mailmergefirstentry.png cmd/sc_firstrecord.png
+cmd/lc_mailmergelastentry.png cmd/lc_lastrecord.png
+cmd/sc_mailmergelastentry.png cmd/sc_lastrecord.png
+cmd/lc_mailmergenextentry.png cmd/lc_nextrecord.png
+cmd/sc_mailmergenextentry.png cmd/sc_nextrecord.png
+cmd/lc_mailmergepreventry.png cmd/lc_prevrecord.png
+cmd/sc_mailmergepreventry.png cmd/sc_prevrecord.png
+
 # Arrows
 cmd/lc_arrowstoolbox.png cmd/lc_linearrowend.png
 cmd/sc_arrowstoolbox.png cmd/sc_linearrowend.png
@@ -487,10 +495,12 @@ cmd/sc_navigateback.png cmd/sc_prevrecord.png
 cmd/sc_browsebackward.png cmd/sc_prevrecord.png
 # >
 cmd/lc_nexttrackedchange.png cmd/lc_nextrecord.png
+cmd/lc_gotopage.png cmd/lc_nextrecord.png
 cmd/lc_nextpage.png cmd/lc_nextrecord.png
 cmd/lc_navigateforward.png cmd/lc_nextrecord.png
 cmd/lc_pagedown.png cmd/lc_nextrecord.png
 cmd/sc_nexttrackedchange.png cmd/sc_nextrecord.png
+cmd/sc_gotopage.png cmd/sc_nextrecord.png
 cmd/sc_nextpage.png cmd/sc_nextrecord.png
 cmd/sc_navigateforward.png cmd/sc_nextrecord.png
 cmd/sc_pagedown.png cmd/sc_nextrecord.png
@@ -645,6 +655,8 @@ cmd/lc_currencyfield.png cmd/lc_formattedfield.png
 cmd/sc_currencyfield.png cmd/sc_formattedfield.png
 cmd/lc_numberformatcurrency.png cmd/lc_formattedfield.png
 cmd/sc_numberformatcurrency.png cmd/sc_formattedfield.png
+cmd/lc_numberformatcurrencysimple.png cmd/lc_formattedfield.png
+cmd/sc_numberformatcurrencysimple.png cmd/sc_formattedfield.png
 
 # Fontwork
 cmd/lc_fontworkshapetype.png cmd/lc_fontwork.png
@@ -727,15 +739,21 @@ cmd/sc_arrangeframemenu.png cmd/sc_bringtofront.png
 cmd/lc_setobjecttobackground.png cmd/lc_sendtoback.png
 cmd/sc_setobjecttobackground.png cmd/sc_sendtoback.png
 
+# Bibliography
+cmd/lc_insertauthoritiesentry.png cmd/lc_bibliographycomponent.png
+cmd/sc_insertauthoritiesentry.png cmd/sc_bibliographycomponent.png
+
 # Reload
 cmd/lc_refresh.png cmd/lc_reload.png
 cmd/lc_refreshformcontrol.png cmd/lc_reload.png
 cmd/lc_draw.png cmd/lc_reload.png
+cmd/lc_updateallindexes.png cmd/lc_reload.png
 cmd/sc_refresh.png cmd/sc_reload.png
 cmd/sc_refreshformcontrol.png cmd/sc_reload.png
 cmd/sc_styleupdatebyexample.png cmd/sc_reload.png
 cmd/sc_draw.png cmd/sc_reload.png
 cmd/sc_updatecurindex.png cmd/sc_reload.png
+cmd/sc_updateallindexes.png cmd/sc_reload.png
 
 # Select
 cmd/lc_selectmode.png cmd/lc_selectobject.png
@@ -821,6 +839,38 @@ cmd/sc_showgraphics.png cmd/sc_graphic.png
 # navigator
 cmd/lc_dsbrowserexplorer.png cmd/lc_showfmexplorer.png
 cmd/sc_dsbrowserexplorer.png cmd/sc_showfmexplorer.png
+
+cmd/lc_savesimple.png cmd/lc_save.png
+cmd/sc_savesimple.png cmd/sc_save.png
+cmd/lc_underlinesimple.png cmd/lc_underline.png
+cmd/sc_underlinesimple.png cmd/sc_underline.png
+
+# Slide command aliases
+cmd/lc_insertslide.png cmd/lc_insertpage.png
+cmd/lc_duplicateslide.png cmd/lc_duplicatepage.png
+cmd/lc_deleteslide.png cmd/lc_deletepage.png
+cmd/lc_moveslidefirst.png cmd/lc_movepagefirst.png
+cmd/lc_moveslidelast.png cmd/lc_movepagelast.png
+cmd/lc_moveslideup.png cmd/lc_upsearch.png
+cmd/lc_moveslidedown.png cmd/lc_downsearch.png
+cmd/lc_firstslide.png cmd/lc_firstpage.png
+cmd/lc_lastslide.png cmd/lc_lastrecord.png
+cmd/lc_previousslide.png cmd/lc_prevrecord.png
+cmd/lc_nextslide.png cmd/lc_nextrecord.png
+cmd/lc_slidesetup.png cmd/lc_pagesetup.png
+
+cmd/sc_insertslide.png cmd/sc_insertpage.png
+cmd/sc_duplicateslide.png cmd/sc_duplicatepage.png
+cmd/sc_deleteslide.png cmd/sc_deletepage.png
+cmd/sc_moveslidefirst.png cmd/sc_movepagefirst.png
+cmd/sc_moveslidelast.png cmd/sc_movepagelast.png
+cmd/sc_moveslideup.png cmd/sc_upsearch.png
+cmd/sc_moveslidedown.png cmd/sc_downsearch.png
+cmd/sc_firstslide.png cmd/sc_firstpage.png
+cmd/sc_lastslide.png cmd/sc_lastrecord.png
+cmd/sc_previousslide.png cmd/sc_prevrecord.png
+cmd/sc_nextslide.png cmd/sc_nextrecord.png
+cmd/sc_slidesetup.png cmd/sc_pagesetup.png
 
 # database
 # ==============================================
@@ -1076,7 +1126,7 @@ sfx2/res/actionview028.png cmd/lc_save.png
 sfx2/res/actionview030.png cmd/lc_open.png
 
 sfx2/res/closedoc.png vcl/res/closedoc.png
-sfx2/res/deleterow.png cmd/sc_deleterows.png
+sfx2/res/deleterow.png cmd/sc_cancel.png
 sfx2/res/favourite.png cmd/sc_insertbookmark.png
 sfx2/res/favourite_big.png cmd/lc_insertbookmark.png
 sfx2/res/hlpdoc.png cmd/sc_helpindex.png
@@ -1094,8 +1144,8 @@ sfx2/res/plus.png res/plus.png
 sfx2/res/symphony/open_more.png cmd/lc_controlproperties.png
 sfx2/res/symphony/sidebar-3d-large.png cmd/lc_cube.png
 sfx2/res/symphony/sidebar-3d-small.png cmd/sc_cube.png
-sfx2/res/symphony/sidebar-animation-large.png cmd/lc_animationeffects.png
-sfx2/res/symphony/sidebar-animation-small.png cmd/sc_animationeffects.png
+sfx2/res/symphony/sidebar-animation-large.png cmd/lc_animationobjects.png
+sfx2/res/symphony/sidebar-animation-small.png cmd/sc_animationobjects.png
 sfx2/res/symphony/sidebar-colors-large.png cmd/lc_bmpmask.png
 sfx2/res/symphony/sidebar-colors-small.png cmd/sc_bmpmask.png
 sfx2/res/symphony/sidebar-functions-large.png cmd/lc_dbviewfunctions.png
@@ -1303,3 +1353,8 @@ vcl/res/index.png cmd/sc_insertmultiindex.png
 # ==============================================
 xmlsecurity/res/key_12.png dbaccess/res/pkey.png
 xmlsecurity/res/signet_11x16.png xmlsecurity/res/notcertificate_16.png
+
+cmd/lc_columnoperations.png cmd/lc_entirecolumn.png
+cmd/sc_columnoperations.png cmd/sc_entirecolumn.png 
+cmd/lc_rowoperations.png cmd/lc_entirerow.png 
+cmd/sc_rowoperations.png cmd/sc_entirerow.png
