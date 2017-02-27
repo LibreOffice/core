@@ -2302,7 +2302,7 @@ void ScInterpreter::ScEffect()
     {
         double fPeriods = GetDouble();
         double fNominal = GetDouble();
-        if (fPeriods < 1.0 || fNominal <= 0.0)
+        if (fPeriods < 1.0 || fNominal < 0.0)
             PushIllegalArgument();
         else
         {
