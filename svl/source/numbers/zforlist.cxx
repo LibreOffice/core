@@ -2800,7 +2800,6 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         eLnge = IniLnge;
     }
     short eType = GetType(nIndex);
-    sal_uInt16 i;
     ImpGenerateCL(eLnge);           // create new standard formats if necessary
 
     utl::DigitGroupingIterator aGrouping( xLocaleData->getDigitGrouping());
@@ -2833,7 +2832,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
     }
     else
     {
-        for (i = 0; i < nLeadingZeros; i++)
+        for (sal_uInt16 i = 0; i < nLeadingZeros; i++)
         {
             if (bThousand && i > 0 && i == aGrouping.getPos())
             {
@@ -2845,7 +2844,7 @@ OUString SvNumberFormatter::GenerateFormat(sal_uInt32 nIndex,
         if ( bThousand )
         {
             sal_Int32 nDigits = (eType == css::util::NumberFormat::SCIENTIFIC) ?  3*((nLeadingZeros-1)/3 + 1) : nDigitsInFirstGroup + 1;
-            for (i = nLeadingZeros; i < nDigits; i++)
+            for (sal_Int32 i = nLeadingZeros; i < nDigits; i++)
             {
                 if ( i % nDigitsInFirstGroup == 0 )
                     sString.insert(0, rThSep);
