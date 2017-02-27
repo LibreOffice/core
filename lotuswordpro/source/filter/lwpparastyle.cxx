@@ -666,23 +666,23 @@ void LwpParaStyle::RegisterStyle()
     if (!m_pFoundry)
         throw std::runtime_error("missing Foundry");
 
-    XFParaStyle* pStyle = new XFParaStyle();
+    std::unique_ptr<XFParaStyle> xStyle(new XFParaStyle());
 
     //Set name
     OUString styleName = GetName().str();
-    pStyle->SetStyleName(styleName);
+    xStyle->SetStyleName(styleName);
 
     //Create font
     LwpFontManager& rFontMgr = m_pFoundry->GetFontManger();
     rtl::Reference<XFFont> pFont = rFontMgr.CreateFont(m_nFinalFontID);
-    pStyle->SetFont(pFont);
+    xStyle->SetFont(pFont);
 
     //Set other paragraph properties...
 
-    Apply(pStyle);
+    Apply(xStyle.get());
     //Add style
     LwpStyleManager* pStyleMgr = m_pFoundry->GetStyleManager();
-    pStyleMgr->AddStyle(GetObjectID(), pStyle);
+    pStyleMgr->AddStyle(GetObjectID(), xStyle.release());
 }
 
 LwpAlignmentOverride* LwpParaStyle::GetAlignment()
