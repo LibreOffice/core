@@ -53,6 +53,23 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_2a3b05ed",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 495,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T18:02:57Z",
+      "side": 1,
+      "message": "I don\u0027t think you need to do this complicated dance with indices here ...",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_4ab049f5",
         "filename": "sc/source/ui/dbgui/filtdlg.cxx",
         "patchSetId": 5
@@ -70,6 +87,40 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_4a404957",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T18:02:57Z",
+      "side": 1,
+      "message": "If regex is active and entry is not found in the list, you select 1st SC_EQUAL entry always anyway ...",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6a250dc1",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 505,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T18:02:57Z",
+      "side": 1,
+      "message": "and if regex is not selected, then this maps to the original nIdx again",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_0a8d6131",
         "filename": "sc/source/ui/dbgui/filtdlg.cxx",
         "patchSetId": 5
@@ -81,6 +132,23 @@
       "writtenOn": "2017-02-27T10:50:56Z",
       "side": 1,
       "message": "bDisable",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_ca55191e",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1060,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T18:02:57Z",
+      "side": 1,
+      "message": "Please keep the existent semantics, which modifies theQueryData *only* for 1 listbox in one call.\n\nThere\u0027s no need to rewrite the other entries in a loop if the other listboxes haven\u0027t changed",
       "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
