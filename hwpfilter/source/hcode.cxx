@@ -1304,7 +1304,7 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 ::std::string urltounix(const char *src)
 {
     ::std::string ret;
-    unsigned int i = 0;
+    std::size_t i = 0;
     if( src[0] == 'C' && src[1] == ':' && src[2] == '\\' ) // Home Dir
     {
         ret.append("file://");
