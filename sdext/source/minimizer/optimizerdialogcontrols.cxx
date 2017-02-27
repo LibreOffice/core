@@ -377,14 +377,13 @@ void OptimizerDialog::InitNavigationBar()
 
 void OptimizerDialog::UpdateControlStatesPage0()
 {
-    sal_uInt32 i;
     short nSelectedItem = -1;
     Sequence< OUString > aItemList;
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
     if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
     {
         aItemList.realloc( rList.size() - 1 );
-        for ( i = 1; i < rList.size(); i++ )
+        for ( std::vector<OptimizerSettings>::size_type i = 1; i < rList.size(); i++ )
         {
             aItemList[ i - 1 ] = rList[ i ].maName;
             if ( nSelectedItem < 0 )
@@ -598,13 +597,12 @@ void OptimizerDialog::UpdateControlStatesPage4()
     }
     setControlProperty( "ComboBox0Pg4", "Enabled", Any( false ) );
 
-    sal_uInt32 w;
     Sequence< OUString > aItemList;
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
     if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
     {
         aItemList.realloc( rList.size() - 1 );
-        for ( w = 1; w < rList.size(); w++ )
+        for ( std::vector<OptimizerSettings>::size_type w = 1; w < rList.size(); w++ )
             aItemList[ w - 1 ] = rList[ w ].maName;
     }
     setControlProperty( "ComboBox0Pg4", "StringItemList", Any( aItemList ) );
@@ -613,7 +611,7 @@ void OptimizerDialog::UpdateControlStatesPage4()
     bool bSaveSettingsEnabled = true;
     if ( rList.size() > 1 ) // the first session in the list is the actual one -> skipping first one
     {
-        for ( w = 1; w < rList.size(); w++ )
+        for ( std::vector<OptimizerSettings>::size_type w = 1; w < rList.size(); w++ )
         {
             if ( rList[ w ] == rList[ 0 ] )
             {
@@ -877,7 +875,7 @@ void OptimizerDialog::InitPage4()
     OUString aSettingsName;
     OUString aDefault( getString( STR_MY_SETTINGS ) );
     sal_Int32 nSession = 1;
-    sal_uInt32 i;
+    std::vector<OptimizerSettings>::size_type i;
     const std::vector< OptimizerSettings >& rList( GetOptimizerSettings() );
     do
     {

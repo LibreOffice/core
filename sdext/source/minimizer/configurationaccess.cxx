@@ -251,7 +251,6 @@ void ConfigurationAccess::SaveConfiguration()
         do
         {
             int i;
-            unsigned int k;
             Reference<util::XChangesBatch> xRoot( OpenConfiguration( false ), UNO_QUERY_THROW );
 
             // storing the last used settings
@@ -267,7 +266,7 @@ void ConfigurationAccess::SaveConfiguration()
             for( i = 0; i < aElements.getLength(); i++ )
                 xNameContainer->removeByName( aElements[ i ] );
 
-            for( k = 1; k < maSettings.size(); k++ )
+            for( std::vector<OptimizerSettings>::size_type k = 1; k < maSettings.size(); k++ )
             {
                 OptimizerSettings& rSettings( maSettings[ k ] );
                 OUString aElementName( "Template" + OUString::number( k ) );
