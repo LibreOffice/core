@@ -95,8 +95,8 @@ public:
 private:
     sal_uInt8 m_nType;
     LwpObjectID m_objMarker;
-    XFBookmarkStart* m_pStart;
-    XFBookmarkEnd* m_pEnd;
+    rtl::Reference<XFBookmarkStart> m_xStart;
+    rtl::Reference<XFBookmarkEnd> m_xEnd;
 };
 
 class LwpFribField : public LwpFrib

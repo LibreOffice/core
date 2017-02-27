@@ -146,27 +146,25 @@ void  LwpFribBookMark::RegisterStyle(LwpFoundry* pFoundry)
     LwpBookmarkMgr* pMarkMgr = pGlobal->GetLwpBookmarkMgr();
     if (type == MARKER_START)
     {
-        XFBookmarkStart* pMarkStart = new XFBookmarkStart;
-        pMarkStart->SetDivision(sDivision);
-        pMarkStart->SetName(name);
-        pMarkMgr->AddXFBookmarkStart(name,pMarkStart);//add to map
-        m_pStart = pMarkStart;
+        rtl::Reference<XFBookmarkStart> xMarkStart(new XFBookmarkStart);
+        xMarkStart->SetDivision(sDivision);
+        xMarkStart->SetName(name);
+        pMarkMgr->AddXFBookmarkStart(name, xMarkStart.get());//add to map
+        m_xStart = xMarkStart;
     }
     else if(type == MARKER_END)
     {
-        XFBookmarkEnd* pMarkEnd = new XFBookmarkEnd;
-        pMarkEnd->SetDivision(sDivision);
-        pMarkEnd->SetName(name);
-        pMarkMgr->AddXFBookmarkEnd(name,pMarkEnd);  //add to map
-        m_pEnd = pMarkEnd;
+        rtl::Reference<XFBookmarkEnd> xMarkEnd(new XFBookmarkEnd);
+        xMarkEnd->SetDivision(sDivision);
+        xMarkEnd->SetName(name);
+        pMarkMgr->AddXFBookmarkEnd(name, xMarkEnd.get());  //add to map
+        m_xEnd = xMarkEnd;
     }
 }
 
 LwpFribBookMark::LwpFribBookMark(LwpPara* pPara )
     : LwpFrib(pPara)
     , m_nType(0)
-    , m_pStart(nullptr)
-    , m_pEnd(nullptr)
 {
 }
 
@@ -185,13 +183,13 @@ void LwpFribBookMark::XFConvert(XFContentContainer* pXFPara)
 {
     sal_uInt8 type = GetType();
 
-    if (type == MARKER_START && m_pStart)
+    if (type == MARKER_START && m_xStart)
     {
-        pXFPara->Add(m_pStart);
+        pXFPara->Add(m_xStart.get());
     }
-    else if(type == MARKER_END && m_pEnd)
+    else if(type == MARKER_END && m_xEnd)
     {
-        pXFPara->Add(m_pEnd);
+        pXFPara->Add(m_xEnd.get());
     }
 }
 
