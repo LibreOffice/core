@@ -209,78 +209,25 @@ void PivotChartDataProvider::setLabeledDataSequence(uno::Reference<chart2::data:
     xResult->setLabel(uno::Reference<chart2::data::XDataSequence>(pLabelSequence.release()));
 }
 
-
-enum class ArrangeDirection
+uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotChartCategoriesDataSource(
+                                                    OUString const & rRangeRepresentation,
+                                                    bool bOrientCol)
 {
-    COLUMNS,
-    ROWS
-};
+    uno::Reference<chart2::data::XDataSource> xDataSource;
+    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
 
-void lclArrange(std::vector<std::vector<PivotChartItem>>& rResult,
-                std::vector<std::vector<OUString>>& rInput,
-                std::vector<OUString>& rPath,
-                size_t index, ArrangeDirection eDirection)
-{
-    if (index >= rInput.size() - 1)
-    {
-        if (eDirection == ArrangeDirection::COLUMNS)
-        {
-            for (OUString const & rLabel : rInput[index])
-            {
-                rPath[index] = rLabel;
+    if (!xContext.is())
+        return xDataSource;
 
-                size_t i = 0;
-                rResult.resize(rPath.size());
-                for (auto it = rPath.begin(); it != rPath.end(); ++it)
-                {
-                    OUString const & rEach = *it;
-                    rResult[i].push_back(PivotChartItem(rEach));
-                    i++;
-                }
-            }
-        }
-        else if (eDirection == ArrangeDirection::ROWS)
-        {
-            size_t i = 0;
-            for (OUString const & rLabel : rInput[index])
-            {
-                rResult.resize(rInput[index].size());
+    std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aLabeledSequences;
 
-                rPath[index] = rLabel;
-
-                for (auto it = rPath.begin(); it != rPath.end(); ++it)
-                {
-                    OUString const & rEach = *it;
-                    rResult[i].push_back(PivotChartItem(rEach));
-                }
-                i++;
-            }
-        }
-    }
-    else
-    {
-        for (OUString const & rLabel : rInput[index])
-        {
-            rPath[index] = rLabel;
-            lclArrange(rResult, rInput, rPath, index + 1, eDirection);
-        }
-    }
-}
-
-void PivotChartDataProvider::createCategories(
-                    ScDPSaveData* pSaveData, bool bOrientCol,
-                    uno::Reference<uno::XComponentContext>& xContext,
-                    std::vector<uno::Reference<chart2::data::XLabeledDataSequence>>& rOutLabeledSequences)
-{
-    ArrangeDirection eDirection = bOrientCol ? ArrangeDirection::COLUMNS
-                                             : ArrangeDirection::ROWS;
     if (bOrientCol)
     {
         for (std::vector<PivotChartItem> const & rCategories : m_aCategoriesColumnOrientation)
         {
             uno::Reference<chart2::data::XLabeledDataSequence> xResult = createLabeledDataSequence(xContext);
             setLabeledDataSequenceValues(xResult, "categories", "Categories", rCategories);
-            rOutLabeledSequences.push_back(xResult);
+            aLabeledSequences.push_back(xResult);
         }
     }
     else
@@ -289,27 +236,11 @@ void PivotChartDataProvider::createCategories(
         {
             uno::Reference<chart2::data::XLabeledDataSequence> xResult = createLabeledDataSequence(xContext);
             setLabeledDataSequenceValues(xResult, "categories", "Categories", rCategories);
-            rOutLabeledSequences.push_back(xResult);
+            aLabeledSequences.push_back(xResult);
         }
     }
-}
 
-uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotChartCategoriesDataSource(OUString const & aRangeRepresentation, bool bOrientCol)
-{
-    uno::Reference<chart2::data::XDataSource> xDataSource;
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    if (!xContext.is())
-        return xDataSource;
-
-    std::vector<uno::Reference<chart2::data::XLabeledDataSequence>> aLabeledSequences;
-
-    ScDPCollection* pDPs = m_pDocument->GetDPCollection();
-    ScDPObject* pDPObject = pDPs->GetByName(m_sPivotTableName);
-    ScDPSaveData* pSaveData = pDPObject->GetSaveData();
-
-    createCategories(pSaveData, bOrientCol, xContext, aLabeledSequences);
-
-    xDataSource.set(new PivotChartDataSource(aRangeRepresentation, aLabeledSequences));
+    xDataSource.set(new PivotChartDataSource(rRangeRepresentation, aLabeledSequences));
     return xDataSource;
 }
 
@@ -348,9 +279,6 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
                                                     sheet::DataPilotFieldOrientation_HIDDEN));
 
             long nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
-            bool bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_ISDATALAYOUT);
-            bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(xDimProp, SC_UNO_DP_HAS_HIDDEN_MEMBER);
-            sal_Int32 nNumberFormat = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_NUMBERFO);
 
             if (eDimOrient != sheet::DataPilotFieldOrientation_HIDDEN)
             {
@@ -370,12 +298,10 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
                     {
 
                         uno::Reference<uno::XInterface> xLevel = ScUnoHelpFunctions::AnyToInterface(xLevels->getByIndex(nLev));
-                        uno::Reference<container::XNamed> xLevNam(xLevel, uno::UNO_QUERY);
+                        uno::Reference<container::XNamed> xLevName(xLevel, uno::UNO_QUERY);
                         uno::Reference<sheet::XDataPilotMemberResults> xLevRes(xLevel, uno::UNO_QUERY );
-                        if (xLevNam.is() && xLevRes.is())
+                        if (xLevName.is() && xLevRes.is())
                         {
-                            OUString aName = xLevNam->getName();
-
                             switch (eDimOrient)
                             {
                                 case sheet::DataPilotFieldOrientation_COLUMN:
@@ -392,7 +318,7 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
                                             if (!(rMember.Flags & sheet::MemberResultFlags::CONTINUE))
                                                 sValue = rMember.Caption;
 
-                                            if (nDimPos >= m_aLabels[i].size())
+                                            if (size_t(nDimPos) >= m_aLabels[i].size())
                                                 m_aLabels[i].resize(nDimPos + 1);
                                             m_aLabels[i][nDimPos] = PivotChartItem(sValue);
 
@@ -415,11 +341,11 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
                                             if (!(rMember.Flags & sheet::MemberResultFlags::CONTINUE))
                                                 sValue = rMember.Caption;
 
-                                            if (nDimPos >= m_aCategoriesColumnOrientation.size())
+                                            if (size_t(nDimPos) >= m_aCategoriesColumnOrientation.size())
                                                 m_aCategoriesColumnOrientation.resize(nDimPos + 1);
                                             m_aCategoriesColumnOrientation[nDimPos].push_back(PivotChartItem(sValue));
 
-                                            if (nDimPos >= m_aCategoriesRowOrientation[i].size())
+                                            if (size_t(nDimPos) >= m_aCategoriesRowOrientation[i].size())
                                                 m_aCategoriesRowOrientation[i].resize(nDimPos + 1);
                                             m_aCategoriesRowOrientation[i][nDimPos] = PivotChartItem(sValue);
 
@@ -459,7 +385,6 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
 
         for (uno::Sequence<sheet::DataResult> const & xDataResults : xDataResultsSequence)
         {
-
             size_t nIndex = 0;
             for (sheet::DataResult const & rDataResult : xDataResults)
             {
@@ -536,26 +461,23 @@ uno::Sequence<beans::PropertyValue> SAL_CALL PivotChartDataProvider::detectArgum
     return aArguments;
 }
 
-sal_Bool SAL_CALL PivotChartDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString& aRangeRepresentation)
+sal_Bool SAL_CALL PivotChartDataProvider::createDataSequenceByRangeRepresentationPossible(const OUString& /*aRangeRepresentation*/)
 {
     SolarMutexGuard aGuard;
-    if (!m_pDocument)
-        return false;
-    return true;
+    return false;
 }
 
 uno::Reference< chart2::data::XDataSequence > SAL_CALL
-    PivotChartDataProvider::createDataSequenceByRangeRepresentation(const OUString& aRangeRepresentation)
+    PivotChartDataProvider::createDataSequenceByRangeRepresentation(const OUString& /*aRangeRepresentation*/)
 {
     SolarMutexGuard aGuard;
     uno::Reference<chart2::data::XDataSequence> xResult;
-
     return xResult;
 }
 
 uno::Reference<chart2::data::XDataSequence> SAL_CALL
-    PivotChartDataProvider::createDataSequenceByValueArray(const OUString& aRole,
-                                                           const OUString& aRangeRepresentation)
+    PivotChartDataProvider::createDataSequenceByValueArray(const OUString& /*aRole*/,
+                                                           const OUString& /*aRangeRepresentation*/)
 {
     return uno::Reference<chart2::data::XDataSequence>();
 }

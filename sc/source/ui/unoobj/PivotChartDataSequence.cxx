@@ -38,11 +38,12 @@ const SfxItemPropertyMapEntry* lcl_GetDataSequencePropertyMap()
     return aDataSequencePropertyMap_Impl;
 }
 
-PivotChartDataSequence::PivotChartDataSequence(ScDocument* pDocument, OUString const & sPivotTableName, OUString const & sID, std::vector<PivotChartItem> const & rColumnData)
+PivotChartDataSequence::PivotChartDataSequence(ScDocument* pDocument, OUString const & sPivotTableName, OUString const & sID,
+                                               std::vector<PivotChartItem> const & rData)
     : m_pDocument(pDocument)
     , m_sPivotTableName(sPivotTableName)
     , m_aID(sID)
-    , m_aColumnData(rColumnData)
+    , m_aData(rData)
     , m_aShortSideLabels()
     , m_aLongSideLabels()
     , m_aPropSet(lcl_GetDataSequencePropertyMap())
@@ -74,10 +75,10 @@ uno::Sequence<uno::Any> SAL_CALL PivotChartDataSequence::getData()
     if (!m_pDocument)
         throw uno::RuntimeException();
 
-    uno::Sequence<uno::Any> aSeq(m_aColumnData.size());
+    uno::Sequence<uno::Any> aSeq(m_aData.size());
 
     size_t i = 0;
-    for (PivotChartItem const & rItem : m_aColumnData)
+    for (PivotChartItem const & rItem : m_aData)
     {
         if (rItem.m_bIsValue)
             aSeq[i] = uno::makeAny<double>(rItem.m_fValue);
@@ -96,10 +97,10 @@ uno::Sequence<double> SAL_CALL PivotChartDataSequence::getNumericalData()
     if (!m_pDocument)
         throw uno::RuntimeException();
 
-    uno::Sequence<double> aSeq(m_aColumnData.size());
+    uno::Sequence<double> aSeq(m_aData.size());
 
     size_t i = 0;
-    for (PivotChartItem const & rItem : m_aColumnData)
+    for (PivotChartItem const & rItem : m_aData)
     {
         aSeq[i] = rItem.m_fValue;
         i++;
@@ -115,10 +116,10 @@ uno::Sequence<OUString> SAL_CALL PivotChartDataSequence::getTextualData()
     if (!m_pDocument)
         throw uno::RuntimeException();
 
-    uno::Sequence<OUString> aSeq(m_aColumnData.size());
+    uno::Sequence<OUString> aSeq(m_aData.size());
 
     size_t i = 0;
-    for (PivotChartItem const & rItem : m_aColumnData)
+    for (PivotChartItem const & rItem : m_aData)
     {
         if (!rItem.m_bIsValue)
             aSeq[i] = rItem.m_aString;
@@ -162,7 +163,7 @@ uno::Reference<util::XCloneable> SAL_CALL PivotChartDataSequence::createClone()
     SolarMutexGuard aGuard;
 
     std::unique_ptr<PivotChartDataSequence> pClone;
-    pClone.reset(new PivotChartDataSequence(m_pDocument, m_sPivotTableName, m_aID, m_aColumnData));
+    pClone.reset(new PivotChartDataSequence(m_pDocument, m_sPivotTableName, m_aID, m_aData));
     pClone->setRole(m_aRole);
     pClone->setShortSideLabels(m_aShortSideLabels);
     pClone->setLongSideLabels(m_aLongSideLabels);

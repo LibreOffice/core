@@ -78,7 +78,8 @@ struct PivotChartItem
 class PivotChartDataSequence : public PivotChartDataSequence_Base, public SfxListener
 {
 public:
-    explicit PivotChartDataSequence(ScDocument* pDocument, OUString const & sPivotTableName, OUString const & sID, std::vector<PivotChartItem> const & rColumnData);
+    explicit PivotChartDataSequence(ScDocument* pDocument, OUString const & sPivotTableName, OUString const & sID,
+                                    std::vector<PivotChartItem> const & rData);
 
     virtual ~PivotChartDataSequence() override;
     PivotChartDataSequence(const PivotChartDataSequence&) = delete;
@@ -163,7 +164,7 @@ private:
     ScDocument* m_pDocument;
     OUString m_sPivotTableName;
     OUString m_aID;
-    std::vector<PivotChartItem> m_aColumnData;
+    std::vector<PivotChartItem> m_aData;
     css::uno::Sequence<OUString> m_aShortSideLabels;
     css::uno::Sequence<OUString> m_aLongSideLabels;
     SfxItemPropertySet m_aPropSet;
