@@ -88,9 +88,6 @@ private:
     bool decRef() const;        //< @returns <TRUE/> if the last reference was decremented.
     void decRefAndDestroy();    //< Destroys caption object if the last reference was decremented.
 
-    /** Operations common to ctor and assignment operator, maintaining the lists. */
-    void assign( const ScCaptionPtr& r, bool bAssignment );
-
     /** Remove from current list and close gap.
 
         Usually there are only very few instances, so maintaining a doubly
