@@ -100,24 +100,6 @@ public:
     sal_uInt64 GetLocation() const;
 };
 
-/// Reference object: something with a unique ID.
-class PDFReferenceElement : public PDFElement
-{
-    PDFDocument& m_rDoc;
-    int m_fObjectValue;
-    int m_fGenerationValue;
-
-public:
-    PDFReferenceElement(PDFDocument& rDoc, int fObjectValue, int fGenerationValue);
-    bool Read(SvStream& rStream) override;
-    /// Assuming the reference points to a number object, return its value.
-    double LookupNumber(SvStream& rStream) const;
-    /// Lookup referenced object, without assuming anything about its contents.
-    PDFObjectElement* LookupObject();
-    int GetObjectValue() const;
-    int GetGenerationValue() const;
-};
-
 /// End of a stream: 'endstream' keyword.
 class PDFEndStreamElement : public PDFElement
 {
@@ -130,19 +112,6 @@ class PDFEndObjectElement : public PDFElement
 {
 public:
     bool Read(SvStream& rStream) override;
-};
-
-/// Array object: a list.
-class PDFArrayElement : public PDFElement
-{
-    /// Location after the '[' token.
-    sal_uInt64 m_nOffset = 0;
-    std::vector<PDFElement*> m_aElements;
-public:
-    PDFArrayElement();
-    bool Read(SvStream& rStream) override;
-    void PushBack(PDFElement* pElement);
-    const std::vector<PDFElement*>& GetElements();
 };
 
 /// End of an array: ']'.
@@ -3157,6 +3126,11 @@ PDFObjectElement* PDFDictionaryElement::LookupObject(const OString& rDictionaryK
     }
 
     return pKey->LookupObject();
+}
+
+PDFElement* PDFDictionaryElement::LookupElement(const OString& rDictionaryKey)
+{
+    return PDFDictionaryElement::Lookup(m_aItems, rDictionaryKey);
 }
 
 PDFElement* PDFObjectElement::Lookup(const OString& rDictionaryKey)

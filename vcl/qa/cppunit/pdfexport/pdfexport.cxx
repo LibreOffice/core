@@ -42,12 +42,15 @@ public:
     void testTdf106059();
     /// Tests that text highlight from Impress is not lost.
     void testTdf105461();
+    /// Tests that embedded video from Impress is not exported as a linked one.
+    void testTdf105093();
 #endif
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
 #if HAVE_FEATURE_PDFIUM
     CPPUNIT_TEST(testTdf106059);
     CPPUNIT_TEST(testTdf105461);
+    CPPUNIT_TEST(testTdf105093);
 #endif
     CPPUNIT_TEST_SUITE_END();
 };
@@ -149,6 +152,53 @@ void PdfExportTest::testTdf105461()
     auto it = std::search(pStart, pEnd, aFilledRectangle.getStr(), aFilledRectangle.getStr() + aFilledRectangle.getLength());
     // This failed, stream contained no filled rectangle.
     CPPUNIT_ASSERT(it != pEnd);
+}
+
+void PdfExportTest::testTdf105093()
+{
+    // Import the bugdoc and export as PDF.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf105093.odp";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Parse the export result.
+    xmlsecurity::pdfio::PDFDocument aDocument;
+    SvFileStream aStream(aTempFile.GetURL(), StreamMode::READ);
+    CPPUNIT_ASSERT(aDocument.Read(aStream));
+
+    // The document has one page.
+    std::vector<xmlsecurity::pdfio::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    // Get page annotations.
+    auto pAnnots = dynamic_cast<xmlsecurity::pdfio::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pAnnots->GetElements().size());
+    auto pAnnotReference = dynamic_cast<xmlsecurity::pdfio::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+    CPPUNIT_ASSERT(pAnnotReference);
+    xmlsecurity::pdfio::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+    CPPUNIT_ASSERT(pAnnot);
+    CPPUNIT_ASSERT_EQUAL(OString("Annot"), static_cast<xmlsecurity::pdfio::PDFNameElement*>(pAnnot->Lookup("Type"))->GetValue());
+
+    // Get the Action -> Rendition -> MediaClip -> FileSpec.
+    auto pAction = dynamic_cast<xmlsecurity::pdfio::PDFDictionaryElement*>(pAnnot->Lookup("A"));
+    CPPUNIT_ASSERT(pAction);
+    auto pRendition = dynamic_cast<xmlsecurity::pdfio::PDFDictionaryElement*>(pAction->LookupElement("R"));
+    CPPUNIT_ASSERT(pRendition);
+    auto pMediaClip = dynamic_cast<xmlsecurity::pdfio::PDFDictionaryElement*>(pRendition->LookupElement("C"));
+    CPPUNIT_ASSERT(pMediaClip);
+    auto pFileSpec = dynamic_cast<xmlsecurity::pdfio::PDFDictionaryElement*>(pMediaClip->LookupElement("D"));
+    CPPUNIT_ASSERT(pFileSpec);
+    // Make sure the filespec refers to an embedded file.
+    // This key was missing, the embedded video was handled as a linked one.
+    CPPUNIT_ASSERT(pFileSpec->LookupElement("EF"));
 }
 #endif
 
