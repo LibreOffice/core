@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_eaa01da8",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "Please put this into a separate anonymous namespace. You can also give it some different name, IsRegexConditionEntry or sth like that",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_2aab058b",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "Please keep this func as simple as possible. Let it only insert entries, do not select them",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0aa641c1",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 488,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "bIsRegExp",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4ab049f5",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "You can loop over all entries here, and insert them depending on whether bIsRegexp is true or false",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_0a8d6131",
+        "filename": "sc/source/ui/dbgui/filtdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "bDisable",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_caeef9eb",
+        "filename": "sc/source/ui/inc/filtdlg.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "I find this code readable even without typedef, but if you really insist, get rid of this \u0027vt\u0027 prefix, it is not consistent style w/ the rest of the code",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_eab9fded",
+        "filename": "sc/source/ui/inc/filtdlg.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "We use \u0027a\u0027 prefix to refer to vector/array-like variables (not \u0027v\u0027)",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_8ae4f10d",
+        "filename": "sc/source/ui/inc/filtdlg.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this vector. You\u0027re using it to store the data you can obtain by simple filtering of the previous vector",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_aaf1b5cf",
+        "filename": "sc/source/ui/inc/filtdlg.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "you don\u0027t need this one either",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_4ab929e9",
+        "filename": "sc/source/ui/inc/filtdlg.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "\"depending on state of regular expression button\"",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_6aceed84",
+        "filename": "sc/source/ui/inc/filtdlg.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-02-27T10:50:56Z",
+      "side": 1,
+      "message": "\"If \u003d or \u003c\u003e condition is set, enable regular expression button\"",
+      "revId": "bd832f5dcb9c05408736ab19e5c8fcb3ce103cfb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
