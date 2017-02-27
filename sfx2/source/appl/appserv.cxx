@@ -493,7 +493,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SEND_FEEDBACK:
         {
             OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
+            OUString sURL("https://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
                 "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
             sfx2::openUriExternally(sURL, false);
             break;
@@ -503,21 +503,24 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         {
             // Askbot has URL's normalized to languages, not locales
             // Get language from locale: ll or lll or ll-CC or lll-CC
-            sal_Int32 ix = utl::ConfigManager::getLocale().indexOf("-",0);
-            OUString aLang;
-            if (ix == -1)
-                aLang = utl::ConfigManager::getLocale();
-            else
-                aLang = utl::ConfigManager::getLocale().copy(0,ix);
-
-            OUString sURL("http://hub.libreoffice.org/forum/?LOlang=" + aLang);
+            OUString aLang = LanguageTag(utl::ConfigManager::getLocale()).getLanguage();
+            OUString sURL("https://hub.libreoffice.org/forum/?LOlang=" + aLang);
             sfx2::openUriExternally(sURL, false);
             break;
         }
         case SID_DOCUMENTATION:
         {
             // Open documentation page based on locales
-            OUString sURL("http://hub.libreoffice.org/documentation/?LOlocale=" + utl::ConfigManager::getLocale());
+            OUString sURL("https://hub.libreoffice.org/documentation/?LOlocale=" + utl::ConfigManager::getLocale());
+            sfx2::openUriExternally(sURL, false);
+            break;
+        }
+        case SID_DONATION:
+        {
+            // Open donation page based on language + script (BCP47) with language as fall back.
+            OUString aLang = LanguageTag(utl::ConfigManager::getLocale()).getLanguage();
+            OUString aBcp47 = LanguageTag(utl::ConfigManager::getLocale()).getBcp47();
+            OUString sURL("https://hub.libreoffice.org/donation/?BCP47=" + aBcp47 + "&LOlang=" + aLang );
             sfx2::openUriExternally(sURL, false);
             break;
         }

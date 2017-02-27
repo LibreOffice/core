@@ -4844,6 +4844,21 @@ SfxVoidItem Documentation SID_DOCUMENTATION
     MenuConfig = TRUE,
     GroupId = GID_APPLICATION;
 ]
+SfxVoidItem Donation SID_DONATION
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    GroupId = GID_APPLICATION;
+]
 
 SfxVoidItem ShowLicense SID_SHOW_LICENSE
 ()
