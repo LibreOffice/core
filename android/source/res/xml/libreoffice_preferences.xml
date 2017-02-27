@@ -13,13 +13,12 @@
             android:summary="Select how to order files: A-Z, by size or by date."
             android:key="SORT_MODE"
             android:title="File Order" android:entries="@array/SortModeNames" android:entryValues="@array/SortModeStringValues"/>
-        <ListPreference
-            android:entries="@array/ViewModeNames"
-            android:entryValues="@array/ViewModeStringValues"
-            android:defaultValue="@integer/grid_view_integer"
-            android:title="File explorer layout"
+        <CheckBoxPreference
+            android:title="Explorer View Preference"
+            android:summaryOff="@string/explorer_view_type_summary_off"
+            android:summaryOn="@string/explorer_view_type_summary_on"
             android:key="EXPLORER_VIEW_TYPE"
-            android:summary="View files as a grid or in a list." />
+            android:defaultValue="false"/>
     </PreferenceCategory>
     <PreferenceCategory
         android:title="@string/pref_category_general"
