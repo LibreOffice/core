@@ -99,7 +99,7 @@ class ScXMLExport : public SvXMLExport
     ScFormatRangeStyles*                pCellStyles;
     ScRowFormatRanges*                  pRowFormatRanges;
     std::vector<OUString>               aTableStyles;
-    css::table::CellRangeAddress        aRowHeaderRange;
+    ScRange                             aRowHeaderRange;
     ScMyOpenCloseColumnRowGroup*        pGroupColumns;
     ScMyOpenCloseColumnRowGroup*        pGroupRows;
     ScMyDefaultStyles*                  pDefaults;
@@ -169,8 +169,7 @@ class ScXMLExport : public SvXMLExport
     void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLCachedRowAttrAccess& rRowAttr);
     void CloseRow(const sal_Int32 nRow);
     void GetColumnRowHeader(bool& bHasColumnHeader, css::table::CellRangeAddress& aColumnHeaderRange,
-        bool& bHasRowHeader, css::table::CellRangeAddress& aRowHeaderRange,
-        OUString& rPrintRanges) const;
+        bool& bHasRowHeader, ScRange& aRowHeaderRange, OUString& rPrintRanges) const;
     static void FillFieldGroup(ScOutlineArray* pFields, ScMyOpenCloseColumnRowGroup* pGroups);
     void FillColumnRowGroups();
 
