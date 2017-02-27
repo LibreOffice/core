@@ -445,34 +445,50 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 
 
 ScCaptionPtr::ScCaptionPtr() :
-    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr), mnRefs(0)
+    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr)
 {
 }
 
 ScCaptionPtr::ScCaptionPtr( SdrCaptionObj* p ) :
-    mpHead( p ? this : nullptr ), mpNext(nullptr), mpCaption(p), mnRefs( p ? 1 : 0 )
+    mpHead(nullptr), mpNext(nullptr), mpCaption(p)
 {
+    if (p)
+    {
+        newHead();
+    }
 }
 
 ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
-    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr), mnRefs(0)
+    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr)
 {
     assign( r, false);
+}
+
+void ScCaptionPtr::newHead()
+{
+    assert(!mpHead);
+    mpHead = new Head;
+    mpHead->mpFirst = this;
+    mpHead->mnRefs = 1;
 }
 
 void ScCaptionPtr::assign( const ScCaptionPtr& r, bool bAssignment )
 {
     if (mpCaption == r.mpCaption)
+    {
+        // Two lists for the same caption is bad.
+        assert(!mpCaption || mpHead == r.mpHead);
+        assert(!mpCaption);     // assigning same caption pointer within same list is weird
+        // Nullptr captions are not inserted to the list, so nothing to do here
+        // if both are.
         return;
+    }
 
     // Let's find some weird usage.
-    // Though assigning some other of the same list to head may syntactically
-    // be valid, why would we do that?
-    assert(r.mpHead != this);
-    // Same for assigning head to some other.
-    assert(mpHead != &r);
-    // And any other of the same list.
-    assert(mpHead != r.mpHead);
+    // Assigning without head doesn't make sense unless it is a nullptr caption.
+    assert(r.mpHead || !r.mpCaption);
+    // Same captions were caught above, so here different heads must be present.
+    assert(r.mpHead != mpHead);
 
     r.incRef();
     if (bAssignment)
@@ -483,7 +499,6 @@ void ScCaptionPtr::assign( const ScCaptionPtr& r, bool bAssignment )
     mpCaption = r.mpCaption;
     // That head is this' master.
     mpHead = r.mpHead;
-    mnRefs = 0;
     // Insert into list.
     mpNext = r.mpNext;
     r.mpNext = this;
@@ -491,54 +506,62 @@ void ScCaptionPtr::assign( const ScCaptionPtr& r, bool bAssignment )
 
 void ScCaptionPtr::removeFromList()
 {
-    if (!mpHead && !mpNext && !mpCaption && !mnRefs)
+    if (!mpHead && !mpNext && !mpCaption)
         return;
 
-    ScCaptionPtr* pNewHead = (mpHead == this ? mpNext : nullptr);
-    ScCaptionPtr* pThat = (mpHead == this ? mpNext : mpHead);   // do not replace on self if head
-    while (pThat && pThat->mpNext != this)
+#if OSL_DEBUG_LEVEL > 0
+    oslInterlockedCount nCount = 0;
+#endif
+    ScCaptionPtr* pThat = (mpHead ? mpHead->mpFirst : nullptr);
+    while (pThat && pThat != this && pThat->mpNext != this)
     {
         // Use the walk to check consistency on the fly.
+        assert(pThat->mpHead == mpHead);            // all belong to the same
+        assert(pThat->mpHead || !pThat->mpNext);    // next without head is bad
         assert(pThat->mpCaption == nullptr || pThat->mpCaption == mpCaption);
-        assert(pThat->mnRefs == 0 || pThat == mpHead);
-        if (pNewHead)
-        {
-            assert(pThat->mpHead == mpHead);
-            pThat->mpHead = pNewHead;
-        }
         pThat = pThat->mpNext;
+#if OSL_DEBUG_LEVEL > 0
+        ++nCount;
+#endif
     }
-    assert(pThat || mpHead == this);  // not found only if this was head
+    assert(pThat || !mpHead);   // not found only if this was standalone
     if (pThat)
     {
-        pThat->mpNext = mpNext;
-        if (pNewHead)
-        {
-            do
-            {
-                assert(pThat->mpCaption == nullptr || pThat->mpCaption == mpCaption);
-                assert(pThat->mnRefs == 0 || pThat == mpHead);
-                assert(pThat->mpHead == mpHead);
-                pThat->mpHead = pNewHead;
-            }
-            while ((pThat = pThat->mpNext) != nullptr);
-        }
-        else
+        if (pThat != this)
         {
 #if OSL_DEBUG_LEVEL > 0
-            // XXX exactly as for the if() branch but without replacing head.
-            do
-            {
-                assert(pThat->mpCaption == nullptr || pThat->mpCaption == mpCaption);
-                assert(pThat->mnRefs == 0 || pThat == mpHead);
-                assert(pThat->mpHead == mpHead);
-            }
-            while ((pThat = pThat->mpNext) != nullptr);
+            // The while loop above was not executed, and for this
+            // (pThat->mpNext) the loop below won't either.
+            ++nCount;
 #endif
+            pThat->mpNext = mpNext;
+        }
+#if OSL_DEBUG_LEVEL > 0
+        do
+        {
+            assert(pThat->mpHead == mpHead);            // all belong to the same
+            assert(pThat->mpHead || !pThat->mpNext);    // next without head is bad
+            assert(pThat->mpCaption == nullptr || pThat->mpCaption == mpCaption);
+            ++nCount;
+        }
+        while ((pThat = pThat->mpNext) != nullptr);
+#endif
+    }
+#if OSL_DEBUG_LEVEL > 0
+    // If part of a list then refs were already decremented.
+    assert(nCount == (mpHead ? mpHead->mnRefs + 1 : 0));
+#endif
+    if (mpHead && mpHead->mpFirst == this)
+    {
+        if (mpNext)
+            mpHead->mpFirst = mpNext;
+        else
+        {
+            // The only one destroys also head.
+            assert(mpHead->mnRefs == 0);    // cough
+            delete mpHead;                  // DEAD now
         }
     }
-    if (pNewHead)
-        pNewHead->mnRefs = mnRefs;
     mpHead = nullptr;
     mpNext = nullptr;
 }
@@ -550,7 +573,7 @@ void ScCaptionPtr::reset( SdrCaptionObj* p )
     if (p)
     {
         // Check if we end up with a duplicated management in this list.
-        ScCaptionPtr* pThat = mpHead;
+        ScCaptionPtr* pThat = (mpHead ? mpHead->mpFirst : nullptr);
         while (pThat)
         {
             assert(pThat->mpCaption != p);
@@ -563,13 +586,7 @@ void ScCaptionPtr::reset( SdrCaptionObj* p )
     mpCaption = p;
     if (p)
     {
-        mpHead = this;
-        mnRefs = 1;
-    }
-    else
-    {
-        mpHead = nullptr;
-        mnRefs = 0;
+        newHead();
     }
 }
 
@@ -581,8 +598,7 @@ ScCaptionPtr::~ScCaptionPtr()
 
 oslInterlockedCount ScCaptionPtr::getRefs() const
 {
-    assert(!mnRefs || mpHead == this);
-    return mpHead ? mpHead->mnRefs : mnRefs;
+    return mpHead ? mpHead->mnRefs : 0;
 }
 
 void ScCaptionPtr::incRef() const
@@ -604,16 +620,14 @@ void ScCaptionPtr::decRefAndDestroy()
          * foo and call SdrObject::Free(), likely with mpHead->mpCaption, see
          * ScPostIt::RemoveCaption(). Further work needed to be able to do so.
          * */
-        ScCaptionPtr* pThat = mpHead;
+        ScCaptionPtr* pThat = (mpHead ? mpHead->mpFirst : this);
         do
         {
             pThat->mpCaption = nullptr;
-            assert(pThat->mnRefs == 0);
-            pThat->mnRefs = 0;
             pThat = pThat->mpNext;
         }
         while (pThat);
-        assert(!mpCaption); // this ought to be in list and nulled
+        assert(!mpCaption);     // this ought to be in list and nulled
     }
 }
 
@@ -629,15 +643,15 @@ bool ScCaptionPtr::forget()
     bool bRet = decRef();
     removeFromList();
     mpCaption = nullptr;
-    mnRefs = 0;
     return bRet;
 }
 
 void ScCaptionPtr::dissolve()
 {
-    ScCaptionPtr* pThat = mpHead;
+    ScCaptionPtr* pThat = (mpHead ? mpHead->mpFirst : this);
     while (pThat)
     {
+        assert(!pThat->mpNext || mpHead);   // next without head is bad
         ScCaptionPtr* p = pThat->mpNext;
         pThat->clear();
         pThat = p;
@@ -650,7 +664,6 @@ void ScCaptionPtr::clear()
     mpHead = nullptr;
     mpNext = nullptr;
     mpCaption = nullptr;
-    mnRefs = 0;
 }
 
 ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
