@@ -8,6 +8,9 @@
 import time
 import threading
 from uitest.config import DEFAULT_SLEEP
+from uitest.uihelper.common import get_state_as_dict
+
+from com.sun.star.uno import RuntimeException
 
 from libreoffice.uno.eventlistener import EventListener
 
@@ -105,9 +108,27 @@ class UITest(object):
                 time.sleep(DEFAULT_SLEEP)
         raise DialogNotExecutedException(action)
 
+    def _handle_crash_reporter(self):
+        xCrashReportDlg = self._xUITest.getTopFocusWindow()
+        state = get_state_as_dict(xCrashReportDlg)
+        print(state)
+        if state['ID'] == "CrashReportDialog":
+            print("found a crash reporter")
+            xCancelBtn = xCrashReportDlg.getChild("btn_cancel")
+            self.close_dialog_through_button(xCancelBtn)
+        else:
+            raise RuntimeException("not a crashreporter")
+
     def create_doc_in_start_center(self, app):
         xStartCenter = self._xUITest.getTopFocusWindow()
-        xBtn = xStartCenter.getChild(app + "_all")
+        try:
+            xBtn = xStartCenter.getChild(app + "_all")
+        except RuntimeException:
+            print("Handled crash reporter")
+            self._handle_crash_reporter()
+            xStartCenter = self._xUITest.getTopFocusWindow()
+            xBtn = xStartCenter.getChild(app + "_all")
+
         with EventListener(self._xContext, "OnNew") as event:
             xBtn.executeAction("CLICK", tuple())
             time_ = 0
