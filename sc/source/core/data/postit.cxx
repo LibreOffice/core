@@ -459,21 +459,28 @@ ScCaptionPtr::ScCaptionPtr( SdrCaptionObj* p ) :
 }
 
 ScCaptionPtr::ScCaptionPtr( const ScCaptionPtr& r ) :
-    mpHead(nullptr), mpNext(nullptr), mpCaption(nullptr)
+    mpHead(r.mpHead), mpCaption(r.mpCaption)
 {
-    assign( r, false);
+    if (r.mpCaption)
+    {
+        assert(r.mpHead);
+        r.incRef();
+        // Insert into list.
+        mpNext = r.mpNext;
+        r.mpNext = this;
+    }
+    else
+    {
+        assert(!r.mpHead);
+        mpNext = nullptr;
+    }
 }
 
-void ScCaptionPtr::newHead()
+ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
 {
-    assert(!mpHead);
-    mpHead = new Head;
-    mpHead->mpFirst = this;
-    mpHead->mnRefs = 1;
-}
+    if (this == &r)
+        return *this;
 
-void ScCaptionPtr::assign( const ScCaptionPtr& r, bool bAssignment )
-{
     if (mpCaption == r.mpCaption)
     {
         // Two lists for the same caption is bad.
@@ -481,7 +488,7 @@ void ScCaptionPtr::assign( const ScCaptionPtr& r, bool bAssignment )
         assert(!mpCaption);     // assigning same caption pointer within same list is weird
         // Nullptr captions are not inserted to the list, so nothing to do here
         // if both are.
-        return;
+        return *this;
     }
 
     // Let's find some weird usage.
@@ -491,17 +498,25 @@ void ScCaptionPtr::assign( const ScCaptionPtr& r, bool bAssignment )
     assert(r.mpHead != mpHead);
 
     r.incRef();
-    if (bAssignment)
-    {
-        decRefAndDestroy();
-        removeFromList();
-    }
+    decRefAndDestroy();
+    removeFromList();
+
     mpCaption = r.mpCaption;
     // That head is this' master.
     mpHead = r.mpHead;
     // Insert into list.
     mpNext = r.mpNext;
     r.mpNext = this;
+
+    return *this;
+}
+
+void ScCaptionPtr::newHead()
+{
+    assert(!mpHead);
+    mpHead = new Head;
+    mpHead->mpFirst = this;
+    mpHead->mnRefs = 1;
 }
 
 void ScCaptionPtr::removeFromList()
@@ -664,15 +679,6 @@ void ScCaptionPtr::clear()
     mpHead = nullptr;
     mpNext = nullptr;
     mpCaption = nullptr;
-}
-
-ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
-{
-    if (this == &r)
-        return *this;
-
-    assign( r, true);
-    return *this;
 }
 
 
