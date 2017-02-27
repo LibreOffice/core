@@ -56,6 +56,11 @@ void VBATest::testMiscVBAFunctions()
         "replace.vb",
         "stringplusdouble.vb",
         "chr.vb",
+        "abs.vb",
+        "array.vb",
+        "asc.vb",
+        "atn.vb",
+        "cbool.vb",
 #ifndef WIN32 // missing 64bit Currency marshalling.
         "win32compat.vb", // windows compatibility hooks.
 #endif
