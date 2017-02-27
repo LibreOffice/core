@@ -10,6 +10,7 @@
 #include "sdmodeltestbase.hxx"
 #include "Outliner.hxx"
 #include <comphelper/propertysequence.hxx>
+#include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>

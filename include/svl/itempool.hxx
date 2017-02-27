@@ -41,15 +41,6 @@ class SfxStyleSheetIterator;
 struct SfxPoolItemArray_Impl;
 class SfxItemPool;
 
-class SVL_DLLPUBLIC SfxItemPoolUser
-{
-public:
-    virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) = 0;
-
-protected:
-    ~SfxItemPoolUser() {}
-};
-
 /** Base class for providers of defaults of SfxPoolItems.
  *
  * The derived classes hold the concrete (const) instances which are referenced in several places
@@ -63,10 +54,6 @@ class SVL_DLLPUBLIC SfxItemPool
 
     const SfxItemInfo*              pItemInfos;
     std::unique_ptr<SfxItemPool_Impl>               pImpl;
-
-public:
-    void AddSfxItemPoolUser(SfxItemPoolUser& rNewUser);
-    void RemoveSfxItemPoolUser(SfxItemPoolUser& rOldUser);
 
 private:
     sal_uInt16                      GetIndex_Impl(sal_uInt16 nWhich) const;
@@ -93,13 +80,9 @@ public:
                                                  const SfxItemInfo *pItemInfos,
                                                  std::vector<SfxPoolItem*> *pDefaults = nullptr,
                                                  bool bLoadRefCounts = true );
-
-protected:
     virtual                         ~SfxItemPool();
 
 public:
-    static void Free(SfxItemPool* pPool);
-
     SfxBroadcaster&                 BC();
 
     void                            SetPoolDefaultItem( const SfxPoolItem& );

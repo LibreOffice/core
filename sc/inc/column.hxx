@@ -28,6 +28,7 @@
 #include "types.hxx"
 #include "mtvelements.hxx"
 #include <formula/types.hxx>
+#include <svl/hint.hxx>
 #include <svl/zforlist.hxx>
 
 #include <set>

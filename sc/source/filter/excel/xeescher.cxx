@@ -35,6 +35,7 @@
 #include <set>
 #include <rtl/ustrbuf.h>
 #include <vcl/bitmapaccess.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdocapt.hxx>
 #include <editeng/outlobj.hxx>
