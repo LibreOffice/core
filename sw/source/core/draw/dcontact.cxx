@@ -764,20 +764,6 @@ SwDrawVirtObj* SwDrawContact::CreateVirtObj()
     return pNewDrawVirtObj;
 }
 
-/** destroys a given 'virtual' drawing object.
- *
- * side effect: 'virtual' drawing object is removed from data structure
- *              <maDrawVirtObjs>.
- */
-void SwDrawContact::DestroyVirtObj( SwDrawVirtObj* _pVirtObj )
-{
-    if ( _pVirtObj )
-    {
-        delete _pVirtObj;
-        _pVirtObj = nullptr;
-    }
-}
-
 /** add a 'virtual' drawing object to drawing page.
  *
  * Use an already created one, which isn't used, or create a new one.
@@ -809,15 +795,12 @@ SwDrawVirtObj* SwDrawContact::AddVirtObj()
 /// remove 'virtual' drawing objects and destroy them.
 void SwDrawContact::RemoveAllVirtObjs()
 {
-    for ( std::list<SwDrawVirtObj*>::iterator aDrawVirtObjsIter = maDrawVirtObjs.begin();
-          aDrawVirtObjsIter != maDrawVirtObjs.end();
-          ++aDrawVirtObjsIter )
+    for(auto& pDrawVirtObj : maDrawVirtObjs)
     {
         // remove and destroy 'virtual object'
-        SwDrawVirtObj* pDrawVirtObj = (*aDrawVirtObjsIter);
         pDrawVirtObj->RemoveFromWriterLayout();
         pDrawVirtObj->RemoveFromDrawingPage();
-        DestroyVirtObj( pDrawVirtObj );
+        delete pDrawVirtObj;
     }
     maDrawVirtObjs.clear();
 }
