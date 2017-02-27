@@ -481,11 +481,6 @@ SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj(SdrObject *const pSdrObj)
     return const_cast<SwAnchoredObject *>(const_cast<SwFlyDrawContact const*>(this)->GetAnchoredObj(pSdrObj));
 }
 
-const SdrObject* SwFlyDrawContact::GetMaster() const
-{
-    return mpMasterObj.get();
-}
-
 SdrObject* SwFlyDrawContact::GetMaster()
 {
     return mpMasterObj.get();
@@ -721,13 +716,6 @@ const SwAnchoredObject* SwDrawContact::GetAnchoredObj(const SdrObject* pSdrObj )
 SwAnchoredObject* SwDrawContact::GetAnchoredObj(SdrObject *const pSdrObj)
 {
     return const_cast<SwAnchoredObject*>(const_cast<SwDrawContact const*>(this)->GetAnchoredObj(pSdrObj));
-}
-
-const SdrObject* SwDrawContact::GetMaster() const
-{
-    return !mbMasterObjCleared
-           ? maAnchoredDrawObj.GetDrawObj()
-           : nullptr;
 }
 
 SdrObject* SwDrawContact::GetMaster()
