@@ -35,13 +35,13 @@ class UITestCase(unittest.TestCase):
             t = time.time() - self.startTime
             print("Execution time for %s: %.3f" % (self.id(), t))
             if self.xContext is not None:
-                desktop = self.ui_test.get_desktop()
-                components = desktop.getComponents()
-                for component in components:
-                    try:
-                        component.close(False)
-                    except Exception as e:
-                        print(e)
+                try:
+                    desktop = self.ui_test.get_desktop()
+                    components = desktop.getComponents()
+                    for component in components:
+                            component.close(False)
+                except Exception as e:
+                    print(e)
 
             self.connection.tearDown()
         finally:
