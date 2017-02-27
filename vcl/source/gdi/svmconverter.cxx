@@ -33,6 +33,7 @@
 #include "svmconverter.hxx"
 
 #include <memory>
+#include <o3tl/make_unique.hxx>
 
 // Inlines
 void ImplReadRect( SvStream& rIStm, Rectangle& rRect )
@@ -505,7 +506,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     }
 
     LineInfo            aLineInfo( LineStyle::NONE, 0 );
-    ::std::stack< LineInfo* >    aLIStack;
+    std::stack<std::unique_ptr<LineInfo>> aLIStack;
     ScopedVclPtrInstance< VirtualDevice > aFontVDev;
     rtl_TextEncoding    eActualCharSet = osl_getThreadTextEncoding();
     bool                bFatLine = false;
@@ -1163,7 +1164,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_PUSH_ACTION:
             {
-                aLIStack.push( new LineInfo( aLineInfo ) );
+                aLIStack.push(o3tl::make_unique<LineInfo>(aLineInfo));
                 rMtf.AddAction( new MetaPushAction( PushFlags::ALL ) );
 
                 // #106172# Track font relevant data in shadow VDev
@@ -1174,20 +1175,18 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_POP_ACTION:
             {
 
-                LineInfo* pLineInfo;
-                if (aLIStack.empty())
-                    pLineInfo = nullptr;
-                else
+                std::unique_ptr<LineInfo> xLineInfo;
+                if (!aLIStack.empty())
                 {
-                    pLineInfo = aLIStack.top();
+                    xLineInfo = std::move(aLIStack.top());
                     aLIStack.pop();
                 }
 
                 // restore line info
-                if( pLineInfo )
+                if (xLineInfo)
                 {
-                    aLineInfo = *pLineInfo;
-                    delete pLineInfo;
+                    aLineInfo = *xLineInfo;
+                    xLineInfo.reset();
                     bFatLine = ( LineStyle::NONE != aLineInfo.GetStyle() ) && !aLineInfo.IsDefault();
                 }
 
@@ -1387,13 +1386,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 rIStm.SeekRel( nActionSize - 4 );
             break;
         }
-    }
-
-    // cleanup push-pop stack if necessary
-    while( !aLIStack.empty() )
-    {
-        delete aLIStack.top();
-        aLIStack.pop();
     }
 
     rIStm.SetEndian( nOldFormat );
