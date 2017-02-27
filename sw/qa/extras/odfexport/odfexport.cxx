@@ -548,6 +548,37 @@ DECLARE_ODFEXPORT_TEST(testFdo58949, "fdo58949.docx")
     CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("Obj102")));
 }
 
+DECLARE_ODFEXPORT_TEST(testStylePageNumber, "ooo321_stylepagenumber.odt")
+{
+    uno::Reference<text::XTextContent> xTable1(getParagraphOrTable(1));
+// actually no break attribute is written in this case
+//    CPPUNIT_ASSERT_EQUAL(style::BreakType_PAGE_BEFORE, getProperty<style::BreakType>(xTable1, "BreakType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Left Page"), getProperty<OUString>(xTable1, "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xTable1, "PageNumberOffset"));
+
+    uno::Reference<text::XTextContent> xPara1(getParagraphOrTable(2));
+    CPPUNIT_ASSERT_EQUAL(OUString("Right Page"), getProperty<OUString>(xPara1, "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xPara1, "PageNumberOffset"));
+
+    // i#114163 tdf#77111: OOo < 3.3 bug, it wrote "auto" as "0" for tables
+    uno::Reference<beans::XPropertySet> xTable0(getParagraphOrTable(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Left Page"), getProperty<OUString>(xTable0, "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), xTable0->getPropertyValue("PageNumberOffset"));
+
+    uno::Reference<beans::XPropertySet> xPara0(getParagraphOrTable(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Right Page"), getProperty<OUString>(xPara0, "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), xPara0->getPropertyValue("PageNumberOffset"));
+
+    uno::Reference<container::XNameAccess> xParaStyles(getStyles("ParagraphStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle1(xParaStyles->getByName("stylewithbreak1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Right Page"), getProperty<OUString>(xStyle1, "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), getProperty<sal_Int16>(xStyle1, "PageNumberOffset"));
+
+    uno::Reference<beans::XPropertySet> xStyle0(xParaStyles->getByName("stylewithbreak0"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("First Page"), getProperty<OUString>(xStyle0, "PageDescName"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(), xStyle0->getPropertyValue("PageNumberOffset"));
+}
+
 DECLARE_ODFEXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
     // Make sure paragraph and character attributes don't interfere

@@ -786,6 +786,9 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 sal_Int32 nVal;
                 bOk = ::sax::Converter::convertNumber(
                         nVal, rValue, 0, USHRT_MAX);
+                // i#114163 tdf#77111: OOo < 3.3 had a bug where it wrote
+                // "auto" as "0" for tables - now that we support a real offset
+                //  0, this fake "0" MUST NOT be imported as offset 0!
                 if( bOk && nVal > 0 )
                     rPageDesc.SetNumOffset( (sal_uInt16)nVal );
             }

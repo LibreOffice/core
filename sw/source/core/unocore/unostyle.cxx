@@ -3989,8 +3989,10 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
             {
                 // since the sfx uint16 item now exports a sal_Int32, we may have to fix this here
                 sal_Int32 nValue = 0;
-                aTarget >>= nValue;
-                aTarget <<= (sal_Int16)nValue;
+                if (aTarget >>= nValue)
+                {
+                    aTarget <<= static_cast<sal_Int16>(nValue);
+                }
             }
 
             // check for needed metric translation
