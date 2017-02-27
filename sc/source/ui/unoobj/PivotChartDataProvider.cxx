@@ -279,6 +279,7 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
                                                     sheet::DataPilotFieldOrientation_HIDDEN));
 
             long nDimPos = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_POSITION);
+            sal_Int32 nNumberFormat = ScUnoHelpFunctions::GetLongProperty(xDimProp, SC_UNO_DP_NUMBERFO);
 
             if (eDimOrient != sheet::DataPilotFieldOrientation_HIDDEN)
             {
@@ -337,17 +338,29 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
                                         if (rMember.Flags & sheet::MemberResultFlags::HASMEMBER ||
                                             rMember.Flags & sheet::MemberResultFlags::CONTINUE)
                                         {
-                                            OUString sValue;
-                                            if (!(rMember.Flags & sheet::MemberResultFlags::CONTINUE))
-                                                sValue = rMember.Caption;
+                                            std::unique_ptr<PivotChartItem> pItem;
+
+                                            double fValue = rMember.Value;
+
+                                            if (rtl::math::isNan(fValue))
+                                            {
+                                                OUString sValue;
+                                                if (!(rMember.Flags & sheet::MemberResultFlags::CONTINUE))
+                                                    sValue = rMember.Caption;
+                                                pItem.reset(new PivotChartItem(sValue));
+                                            }
+                                            else
+                                            {
+                                                pItem.reset(new PivotChartItem(fValue, nNumberFormat));
+                                            }
 
                                             if (size_t(nDimPos) >= m_aCategoriesColumnOrientation.size())
                                                 m_aCategoriesColumnOrientation.resize(nDimPos + 1);
-                                            m_aCategoriesColumnOrientation[nDimPos].push_back(PivotChartItem(sValue));
+                                            m_aCategoriesColumnOrientation[nDimPos].push_back(*pItem);
 
                                             if (size_t(nDimPos) >= m_aCategoriesRowOrientation[i].size())
                                                 m_aCategoriesRowOrientation[i].resize(nDimPos + 1);
-                                            m_aCategoriesRowOrientation[i][nDimPos] = PivotChartItem(sValue);
+                                            m_aCategoriesRowOrientation[i][nDimPos] = *pItem;
 
                                             i++;
                                         }
@@ -393,7 +406,7 @@ uno::Reference<chart2::data::XDataSource> PivotChartDataProvider::createPivotCha
 
                     if (nIndex >= aDataRowVector.size())
                         aDataRowVector.resize(nIndex + 1);
-                    aDataRowVector[nIndex].push_back(PivotChartItem(rDataResult.Flags ? rDataResult.Value : fNan));
+                    aDataRowVector[nIndex].push_back(PivotChartItem(rDataResult.Flags ? rDataResult.Value : fNan, 0));
                 }
                 nIndex++;
             }

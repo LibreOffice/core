@@ -51,25 +51,29 @@ struct PivotChartItem
     double m_fValue;
     OUString m_aString;
     bool m_bIsValue;
+    sal_uInt32 m_nNumberFormat;
 
     explicit PivotChartItem()
         : m_fValue(0.0)
         , m_aString()
         , m_bIsValue(true)
+        , m_nNumberFormat(0)
     {
         rtl::math::setNan(&m_fValue);
     }
 
-    explicit PivotChartItem(double fValue)
+    explicit PivotChartItem(double fValue, sal_uInt32 nNumberFormat)
         : m_fValue(fValue)
         , m_aString()
         , m_bIsValue(true)
+        , m_nNumberFormat(nNumberFormat)
     {}
 
     explicit PivotChartItem(OUString const & rString)
         : m_fValue(0.0)
         , m_aString(rString)
         , m_bIsValue(false)
+        , m_nNumberFormat(0)
     {
         rtl::math::setNan(&m_fValue);
     }

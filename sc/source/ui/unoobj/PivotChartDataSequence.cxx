@@ -150,10 +150,19 @@ uno::Sequence<OUString> SAL_CALL PivotChartDataSequence::generateLabel(chart2::d
     return aSeq;
 }
 
-sal_Int32 SAL_CALL PivotChartDataSequence::getNumberFormatKeyByIndex(sal_Int32 /*nIndex*/)
+sal_Int32 SAL_CALL PivotChartDataSequence::getNumberFormatKeyByIndex(sal_Int32 nIndex)
 {
     SolarMutexGuard aGuard;
-    return 0;
+    if (nIndex == -1 && !m_aData.empty())
+    {
+        return m_aData[0].m_nNumberFormat;
+    }
+    else if (nIndex < 0 && size_t(nIndex) >= m_aData.size())
+    {
+        SAL_WARN("sc.ui", "Passed invalid index to getNumberFormatKeyByIndex(). Will return default value '0'.");
+        return 0;
+    }
+    return m_aData[size_t(nIndex)].m_nNumberFormat;
 }
 
 // XCloneable ================================================================
