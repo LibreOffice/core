@@ -530,6 +530,14 @@ void Application::Reschedule( bool i_bAllEvents )
     ImplYield(false, i_bAllEvents, 0);
 }
 
+void Scheduler::ProcessEventsToSignal(bool& bSignal)
+{
+    while(!bSignal && (Scheduler::ProcessTaskScheduling( true ) ||
+          ImplYield(false, false, 0)))
+    {
+    }
+}
+
 void Scheduler::ProcessEventsToIdle()
 {
     int nSanity = 1000;
