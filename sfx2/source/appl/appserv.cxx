@@ -526,6 +526,20 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             sfx2::openUriExternally(sURL, false);
             break;
         }
+        case SID_DONATION:
+        {
+            // Open donation page based on language
+            sal_Int32 ix = utl::ConfigManager::getLocale().indexOf("-",0);
+            OUString aLang;
+            if (ix == -1)
+                aLang = utl::ConfigManager::getLocale();
+            else
+                aLang = utl::ConfigManager::getLocale().copy(0,ix);
+
+            OUString sURL("http://hub.libreoffice.org/donation/?LOlang=" + aLang);
+            sfx2::openUriExternally(sURL, false);
+            break;
+        }
         case SID_SHOW_LICENSE:
         {
             ScopedVclPtrInstance< LicenseDialog > aDialog;
