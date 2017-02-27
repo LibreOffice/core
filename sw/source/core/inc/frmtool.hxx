@@ -188,14 +188,14 @@ public:
 
 class SwLayNotify : public SwFrameNotify
 {
-    bool bLowersComplete;
+    bool m_bLowersComplete;
 
 public:
     SwLayNotify( SwLayoutFrame *pLayFrame );
     ~SwLayNotify();
 
-    void SetLowersComplete( bool b ) { bLowersComplete = b; }
-    bool IsLowersComplete()          { return bLowersComplete; }
+    void SetLowersComplete( bool b ) { m_bLowersComplete = b; }
+    bool IsLowersComplete()          { return m_bLowersComplete; }
 };
 
 class SwFlyNotify : public SwLayNotify

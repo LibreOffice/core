@@ -409,7 +409,7 @@ SwFrameNotify::~SwFrameNotify()
 
 SwLayNotify::SwLayNotify( SwLayoutFrame *pLayFrame ) :
     SwFrameNotify( pLayFrame ),
-    bLowersComplete( false )
+    m_bLowersComplete( false )
 {
 }
 
