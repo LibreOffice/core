@@ -53,18 +53,10 @@ SwBreakIt * SwBreakIt::Get()
 }
 
 SwBreakIt::SwBreakIt( const uno::Reference<uno::XComponentContext> & rxContext )
-    : m_xContext( rxContext ),
-      m_pLanguageTag( nullptr ),
-      m_pForbidden( nullptr ),
-      aForbiddenLang( LANGUAGE_DONTKNOW )
+    : m_xContext(rxContext)
+    , aForbiddenLang(LANGUAGE_DONTKNOW)
 {
     OSL_ENSURE( m_xContext.is(), "SwBreakIt: no MultiServiceFactory" );
-}
-
-SwBreakIt::~SwBreakIt()
-{
-    delete m_pLanguageTag;
-    delete m_pForbidden;
 }
 
 void SwBreakIt::createBreakIterator() const
@@ -75,18 +67,18 @@ void SwBreakIt::createBreakIterator() const
 
 void SwBreakIt::GetLocale_( const LanguageType aLang )
 {
-    if (m_pLanguageTag)
-        m_pLanguageTag->reset( aLang );
+    if (m_xLanguageTag)
+        m_xLanguageTag->reset(aLang);
     else
-        m_pLanguageTag = new LanguageTag( aLang );
+        m_xLanguageTag.reset(new LanguageTag(aLang));
 }
 
 void SwBreakIt::GetLocale_( const LanguageTag& rLanguageTag )
 {
-    if (m_pLanguageTag)
-        *m_pLanguageTag = rLanguageTag;
+    if (m_xLanguageTag)
+        *m_xLanguageTag = rLanguageTag;
     else
-        m_pLanguageTag = new LanguageTag( rLanguageTag );
+        m_xLanguageTag.reset(new LanguageTag(rLanguageTag));
 }
 
 void SwBreakIt::GetForbidden_( const LanguageType aLang )
@@ -94,8 +86,7 @@ void SwBreakIt::GetForbidden_( const LanguageType aLang )
     LocaleDataWrapper aWrap( m_xContext, GetLanguageTag( aLang ) );
 
     aForbiddenLang = aLang;
-    delete m_pForbidden;
-    m_pForbidden = new i18n::ForbiddenCharacters( aWrap.getForbiddenCharacters() );
+    m_xForbidden.reset(new i18n::ForbiddenCharacters(aWrap.getForbiddenCharacters()));
 }
 
 sal_uInt16 SwBreakIt::GetRealScriptOfText( const OUString& rText, sal_Int32 nPos ) const
