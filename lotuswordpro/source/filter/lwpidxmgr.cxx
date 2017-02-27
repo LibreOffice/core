@@ -88,19 +88,19 @@ void LwpIndexManager::Read(LwpSvStream* pStrm)
     //Read index obj
     LwpObjectHeader ObjHdr;
     ObjHdr.Read(*pStrm);
-    LwpObjectStream* pObjStrm = new LwpObjectStream(pStrm, ObjHdr.IsCompressed(),
-            static_cast<sal_uInt16>(ObjHdr.GetSize()) );
+    std::unique_ptr<LwpObjectStream> xObjStrm(new LwpObjectStream(pStrm, ObjHdr.IsCompressed(),
+            static_cast<sal_uInt16>(ObjHdr.GetSize())));
 
     if( ObjHdr.GetTag() == VO_ROOTLEAFOBJINDEX )
     {
-        ReadLeafData(pObjStrm);
-        ReadTimeTable(pObjStrm);
-        delete pObjStrm;
+        ReadLeafData(xObjStrm.get());
+        ReadTimeTable(xObjStrm.get());
+        xObjStrm.reset();
     }
     else
     {
-        ReadRootData(pObjStrm);
-        delete pObjStrm;
+        ReadRootData(xObjStrm.get());
+        xObjStrm.reset();
 
         for (sal_uInt16 k = 0; k < m_nLeafCount; k++)
         {
