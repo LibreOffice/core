@@ -800,7 +800,8 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         // The associated properties "PROP_MirroredX" and "PROP_MirroredY" have to be set here so that direction change will occur internally.
         if (bFlipX || bFlipY)
         {
-            css::uno::Sequence< css::beans::PropertyValue > aPropSequence (2);
+            css::uno::Sequence< css::beans::PropertyValue > aPropSequence (
+                bFlipX && bFlipY ? 2 : 1);
             int nPropertyIndex = 0;
             if (bFlipX)
             {
