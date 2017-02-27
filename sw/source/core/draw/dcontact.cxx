@@ -746,22 +746,13 @@ SwFrame* SwDrawContact::GetAnchorFrame(SdrObject *const pDrawObj)
     return const_cast<SwFrame *>(const_cast<SwDrawContact const*>(this)->GetAnchorFrame(pDrawObj));
 }
 
-/// create a new 'virtual' drawing object.
-SwDrawVirtObj* SwDrawContact::CreateVirtObj()
-{
-    maDrawVirtObjs.push_back(std::unique_ptr<SwDrawVirtObj>(new SwDrawVirtObj(*GetMaster(), *this)));
-    return maDrawVirtObjs.back().get();
-}
-
 /** add a 'virtual' drawing object to drawing page.
- *
- * Use an already created one, which isn't used, or create a new one.
  */
 SwDrawVirtObj* SwDrawContact::AddVirtObj()
 {
-    auto pAddedDrawVirtObj(CreateVirtObj());
-    pAddedDrawVirtObj->AddToDrawingPage();
-    return pAddedDrawVirtObj;
+    maDrawVirtObjs.push_back(std::unique_ptr<SwDrawVirtObj>(new SwDrawVirtObj(*GetMaster(), *this)));
+    maDrawVirtObjs.back()->AddToDrawingPage();
+    return maDrawVirtObjs.back().get();
 }
 
 /// remove 'virtual' drawing objects and destroy them.
