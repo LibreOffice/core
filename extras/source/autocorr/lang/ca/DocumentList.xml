@@ -646,9 +646,6 @@
   <block-list:block block-list:abbreviated-name=":clip:" block-list:name="📎"/>
   <block-list:block block-list:abbreviated-name=":cloïssa:" block-list:name="🐚"/>
   <block-list:block block-list:abbreviated-name=":coala:" block-list:name="🐨"/>
-  <block-list:block block-list:abbreviated-name=":coche2:" block-list:name="🚘"/>
-  <block-list:block block-list:abbreviated-name=":coche3:" block-list:name="🚙"/>
-  <block-list:block block-list:abbreviated-name=":coche:" block-list:name="🚗"/>
   <block-list:block block-list:abbreviated-name=":cocodril:" block-list:name="🐊"/>
   <block-list:block block-list:abbreviated-name=":còctel:" block-list:name="🍸"/>
   <block-list:block block-list:abbreviated-name=":coet:" block-list:name="🚀"/>
@@ -674,6 +671,9 @@
   <block-list:block block-list:abbreviated-name=":cors:" block-list:name="♥"/>
   <block-list:block block-list:abbreviated-name=":cor trencat:" block-list:name="💔"/>
   <block-list:block block-list:abbreviated-name=":corxera:" block-list:name="𝅘𝅥𝅮"/>
+  <block-list:block block-list:abbreviated-name=":cotxe2:" block-list:name="🚘"/>
+  <block-list:block block-list:abbreviated-name=":cotxe3:" block-list:name="🚙"/>
+  <block-list:block block-list:abbreviated-name=":cotxe:" block-list:name="🚗"/>
   <block-list:block block-list:abbreviated-name=":cotxe de policia2:" block-list:name="🚔"/>
   <block-list:block block-list:abbreviated-name=":cotxe de polícia:" block-list:name="🚓"/>
   <block-list:block block-list:abbreviated-name=":cranc:" block-list:name="♋"/>
