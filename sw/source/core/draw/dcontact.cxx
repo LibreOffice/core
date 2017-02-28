@@ -73,6 +73,36 @@
 
 using namespace ::com::sun::star;
 
+namespace
+{
+    /** unary function used to find a disconnected 'virtual' drawing object */
+    struct UsedOrUnusedVirtObjPred
+    {
+        bool m_bUsedPred;
+        UsedOrUnusedVirtObjPred(bool bUsed) : m_bUsedPred(bUsed) {};
+        bool operator()(const std::unique_ptr<SwDrawVirtObj>& pDrawVirtObj)
+                { return pDrawVirtObj->IsConnected() == m_bUsedPred; };
+    };
+
+    /** unary function used to find a 'virtual' drawing object anchored at a given frame */
+    struct VirtObjAnchoredAtFramePred
+    {
+        const SwFrame* m_pAnchorFrame;
+        // #i26791# - compare with master frame
+        static const SwFrame* FindFrame(const SwFrame* pFrame)
+        {
+            if(!pFrame || !pFrame->IsContentFrame())
+                return pFrame;
+            auto pContentFrame = static_cast<const SwContentFrame*>(pFrame);
+            while(pContentFrame->IsFollow())
+                pContentFrame = pContentFrame->FindMaster();
+            return pContentFrame;
+        };
+        VirtObjAnchoredAtFramePred(const SwFrame* pAnchorFrame) : m_pAnchorFrame(FindFrame(pAnchorFrame)) {};
+        bool operator()(const std::unique_ptr<SwDrawVirtObj>& rpDrawVirtObj)
+            { return FindFrame(rpDrawVirtObj->GetAnchorFrame()) == m_pAnchorFrame; };
+    };
+}
 
 void setContextWritingMode(SdrObject* pObj, SwFrame* pAnchor)
 {
@@ -763,39 +793,6 @@ void SwDrawContact::RemoveAllVirtObjs()
     maDrawVirtObjs.clear();
 }
 
-SwDrawContact::VirtObjAnchoredAtFramePred::VirtObjAnchoredAtFramePred(
-                                                const SwFrame& _rAnchorFrame )
-    : mpAnchorFrame( &_rAnchorFrame )
-{
-    if ( mpAnchorFrame->IsContentFrame() )
-    {
-        const SwContentFrame* pTmpFrame =
-                            static_cast<const SwContentFrame*>( mpAnchorFrame );
-        while ( pTmpFrame->IsFollow() )
-        {
-            pTmpFrame = pTmpFrame->FindMaster();
-        }
-        mpAnchorFrame = pTmpFrame;
-    }
-}
-
-// #i26791# - compare with master frame
-bool SwDrawContact::VirtObjAnchoredAtFramePred::operator() ( const std::unique_ptr<SwDrawVirtObj>& _pDrawVirtObj )
-{
-    const SwFrame* pObjAnchorFrame = _pDrawVirtObj->GetAnchorFrame();
-    if ( pObjAnchorFrame && pObjAnchorFrame->IsContentFrame() )
-    {
-        const SwContentFrame* pTmpFrame =
-                            static_cast<const SwContentFrame*>( pObjAnchorFrame );
-        while ( pTmpFrame->IsFollow() )
-        {
-            pTmpFrame = pTmpFrame->FindMaster();
-        }
-        pObjAnchorFrame = pTmpFrame;
-    }
-
-    return ( pObjAnchorFrame == mpAnchorFrame );
-}
 
 /// get drawing object ('master' or 'virtual') by frame.
 SdrObject* SwDrawContact::GetDrawObjectByAnchorFrame( const SwFrame& _rAnchorFrame )
@@ -834,7 +831,7 @@ SdrObject* SwDrawContact::GetDrawObjectByAnchorFrame( const SwFrame& _rAnchorFra
     else
     {
         const auto ppFoundVirtObj(std::find_if(maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
-                VirtObjAnchoredAtFramePred(*pProposedAnchorFrame)));
+                VirtObjAnchoredAtFramePred(pProposedAnchorFrame)));
         if(ppFoundVirtObj != maDrawVirtObjs.end())
             pRetDrawObj = ppFoundVirtObj->get();
     }
