@@ -1433,10 +1433,13 @@ SfxViewFrame::~SfxViewFrame()
         GetFrame().SetCurrentViewFrame_Impl( nullptr );
 
     // Unregister from the Frame List.
-    SfxApplication *pSfxApp = SfxGetpApp();
-    SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
-    SfxViewFrameArr_Impl::iterator it = std::find( rFrames.begin(), rFrames.end(), this );
-    rFrames.erase( it );
+    SfxApplication *pSfxApp = SfxApplication::Get();
+    if (pSfxApp)
+    {
+        SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
+        SfxViewFrameArr_Impl::iterator it = std::find( rFrames.begin(), rFrames.end(), this );
+        rFrames.erase( it );
+    }
 
     // Delete Member
     KillDispatcher_Impl();
@@ -1472,7 +1475,10 @@ SfxViewFrame* SfxViewFrame::GetFirst
     bool                    bOnlyIfVisible
 )
 {
-    SfxApplication *pSfxApp = SfxGetpApp();
+    SfxApplication *pSfxApp = SfxApplication::Get();
+    if (!pSfxApp)
+        return nullptr;
+
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
 
     // search for a SfxDocument of the specified type
@@ -1495,7 +1501,10 @@ SfxViewFrame* SfxViewFrame::GetNext
     bool                    bOnlyIfVisible
 )
 {
-    SfxApplication *pSfxApp = SfxGetpApp();
+    SfxApplication *pSfxApp = SfxApplication::Get();
+    if (!pSfxApp)
+        return nullptr;
+
     SfxViewFrameArr_Impl &rFrames = pSfxApp->GetViewFrames_Impl();
 
     // refind the specified predecessor
