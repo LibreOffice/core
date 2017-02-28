@@ -1024,7 +1024,7 @@ void LwpFooterLayout::ParseBackColor(XFFooterStyle* pFooterStyle)
 
 void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
 {
-    XFFooter* pFooter = new XFFooter();
+    std::unique_ptr<XFFooter> xFooter(new XFFooter());
     rtl::Reference<LwpObject> pStory = m_Content.obj(VO_STORY);
     //Call the RegisterStyle first to register the styles in footer paras, and then XFConvert()
     if(pStory.is())
@@ -1038,13 +1038,13 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
         //register child layout style for framelayout,
         RegisterChildStyle();
 
-        pChangeMgr->SetHeadFootChange(pFooter);
+        pChangeMgr->SetHeadFootChange(xFooter.get());
 
-        pStory->DoXFConvert(pFooter);
+        pStory->DoXFConvert(xFooter.get());
 
         pChangeMgr->SetHeadFootFribMap(false);
     }
-    mp1->SetFooter(pFooter);
+    mp1->SetFooter(xFooter.release());
 }
 
 void LwpFooterLayout::ParseWaterMark(XFFooterStyle * pFooterStyle)
