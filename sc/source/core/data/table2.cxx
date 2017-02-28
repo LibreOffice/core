@@ -2527,12 +2527,12 @@ void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
                 nEndCol = aCol.size() - 1;
                 for (SCCOL i = nStartCol; i <= nEndCol; i++)
                     aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
-                aNextColAttrArray.ApplyStyleArea(nStartRow, nEndRow, const_cast<ScStyleSheet*>( &rStyle ) );
+                aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, const_cast<ScStyleSheet*>( &rStyle ) );
             }
             else
             {
                 CreateColumnIfNotExists( nStartCol - 1 );
-                aNextColAttrArray.ApplyStyleArea(nStartRow, nEndRow, const_cast<ScStyleSheet*>( &rStyle ) );
+                aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, const_cast<ScStyleSheet*>( &rStyle ) );
             }
         }
         else
@@ -2567,7 +2567,7 @@ const ScStyleSheet* ScTable::GetStyle( SCCOL nCol, SCROW nRow ) const
     if ( nCol < aCol.size() )
         return aCol[nCol].GetStyle( nRow );
     else
-        return aNextColAttrArray.GetPattern( nRow )->GetStyleSheet();
+        return aDefaultColAttrArray.GetPattern( nRow )->GetStyleSheet();
 }
 
 const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const

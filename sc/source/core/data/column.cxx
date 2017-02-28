@@ -108,10 +108,10 @@ void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, bool bEmptyA
     nCol = nNewCol;
     nTab = nNewTab;
     pDocument = pDoc;
-    if ( !bEmptyAttrArray )
-        pAttrArray = new ScAttrArray( nCol, nTab, pDocument, &pDocument->maTabs[nTab]->aNextColAttrArray, bEmptyAttrArray );
+    if ( bEmptyAttrArray )
+        pAttrArray = new ScAttrArray( nCol, nTab, pDocument, nullptr );
     else
-        pAttrArray = new ScAttrArray( nCol, nTab, pDocument, nullptr, true );
+        pAttrArray = new ScAttrArray( nCol, nTab, pDocument, &pDocument->maTabs[nTab]->aDefaultColAttrArray );
 }
 
 SCsROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
