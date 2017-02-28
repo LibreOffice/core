@@ -63,8 +63,7 @@
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <cppuhelper/bootstrap.hxx>
 
-using namespace ::com::sun::star;
-
+#include "PivotChartDataProvider.hxx"
 #include "chart2uno.hxx"
 #include "fuinsert.hxx"
 #include "tabvwsh.hxx"
@@ -81,16 +80,20 @@ using namespace ::com::sun::star;
 #include "gridwin.hxx"
 #include <memory>
 
-namespace {
+using namespace css;
 
-void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScViewData* pViewData,
-                    const OUString& rRangeParam )
+namespace
+{
+
+void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewData* pViewData,
+                   const OUString& rRangeParam, bool bRangeIsPivotTable)
 {
     ScDocShell* pDocShell = pViewData->GetDocShell();
     ScDocument& rScDoc = pDocShell->GetDocument();
 
-    OUString aRangeString( rRangeParam );
-    if ( aRangeString.isEmpty() )
+    OUString aRangeString(rRangeParam);
+
+    if (aRangeString.isEmpty() && !bRangeIsPivotTable)
     {
         SCCOL nCol1 = 0;
         SCROW nRow1 = 0;
@@ -118,7 +121,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
         }
     }
 
-    if ( !aRangeString.isEmpty() )
+    if (!aRangeString.isEmpty())
     {
         // connect to Calc data (if no range string, leave chart alone, with its own data)
 
@@ -129,8 +132,13 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
         OSL_ASSERT( xReceiver.is());
         if( xReceiver.is() )
         {
-            uno::Reference< chart2::data::XDataProvider > xDataProvider = new ScChart2DataProvider( &rScDoc );
-            xReceiver->attachDataProvider( xDataProvider );
+            uno::Reference<chart2::data::XDataProvider> xDataProvider;
+            if (bRangeIsPivotTable)
+                xDataProvider.set(new sc::PivotChartDataProvider(&rScDoc, aRangeString));
+            else
+                xDataProvider.set(new ScChart2DataProvider(&rScDoc));
+
+            xReceiver->attachDataProvider(xDataProvider);
 
             uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
             xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
@@ -329,7 +337,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView*
 
             //  Chart initialisieren ?
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
-                lcl_ChartInit( xObj, &pViewSh->GetViewData(), OUString() );
+                lcl_ChartInit(xObj, &pViewSh->GetViewData(), OUString(), false);
 
             ScViewData& rData = pViewSh->GetViewData();
 
@@ -393,7 +401,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
            SdrModel* pDoc, SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
-    const SfxItemSet*   pReqArgs    = rReq.GetArgs();
+    const SfxItemSet* pReqArgs = rReq.GetArgs();
 
     if( ! rReq.IsAPI() )
         rReq.Done();
@@ -405,6 +413,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
 
     // get range
     OUString aRangeString;
+    bool bRangeIsPivotTable = false;
     ScRange aPositionRange;             // cell range for chart positioning
     ScMarkData aMark = pViewSh->GetViewData().GetMarkData();
     if( pReqArgs )
@@ -417,35 +426,46 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     }
     else
     {
-        bool bAutomaticMark = false;
-        if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
-        {
-            pViewSh->GetViewData().GetView()->MarkDataArea();
-            bAutomaticMark = true;
-        }
-
-        ScMarkData aMultiMark( aMark );
-        aMultiMark.MarkToMulti();
-
-        ScRangeList aRanges;
-        aMultiMark.FillRangeListWithMarks( &aRanges, false );
-        OUString aStr;
         ScDocument* pDocument = pViewSh->GetViewData().GetDocument();
-        aRanges.Format( aStr, ScRefFlags::RANGE_ABS_3D, pDocument, pDocument->GetAddressConvention() );
-        aRangeString = aStr;
-
-        // get "total" range for positioning
-        if ( !aRanges.empty() )
+        ScDPObject* pObject = pDocument->GetDPAtCursor(pViewSh->GetViewData().GetCurX(),
+                                                       pViewSh->GetViewData().GetCurY(),
+                                                       pViewSh->GetViewData().GetTabNo());
+        if (pObject)
         {
-            aPositionRange = *aRanges[ 0 ];
-            for ( size_t i = 1, nCount = aRanges.size(); i < nCount; ++i )
-            {
-                aPositionRange.ExtendTo( *aRanges[ i ] );
-            }
+            aRangeString = pObject->GetName();
+            bRangeIsPivotTable = true;
         }
+        else
+        {
+            bool bAutomaticMark = false;
+            if ( !aMark.IsMarked() && !aMark.IsMultiMarked() )
+            {
+                pViewSh->GetViewData().GetView()->MarkDataArea();
+                bAutomaticMark = true;
+            }
 
-        if(bAutomaticMark)
-            pViewSh->GetViewData().GetView()->Unmark();
+            ScMarkData aMultiMark( aMark );
+            aMultiMark.MarkToMulti();
+
+            ScRangeList aRanges;
+            aMultiMark.FillRangeListWithMarks( &aRanges, false );
+            OUString aStr;
+            aRanges.Format( aStr, ScRefFlags::RANGE_ABS_3D, pDocument, pDocument->GetAddressConvention() );
+            aRangeString = aStr;
+
+            // get "total" range for positioning
+            if ( !aRanges.empty() )
+            {
+                aPositionRange = *aRanges[ 0 ];
+                for ( size_t i = 1, nCount = aRanges.size(); i < nCount; ++i )
+                {
+                    aPositionRange.ExtendTo( *aRanges[ i ] );
+                }
+            }
+
+            if(bAutomaticMark)
+                pViewSh->GetViewData().GetView()->Unmark();
+        }
     }
 
     // adapted old code
@@ -568,7 +588,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
         }
     }
 
-    lcl_ChartInit( xObj, &rData, aRangeString );         // set source range, auto-detect column/row headers
+    lcl_ChartInit(xObj, &rData, aRangeString, bRangeIsPivotTable);         // set source range, auto-detect column/row headers
 
     //  Objekt-Position
 
