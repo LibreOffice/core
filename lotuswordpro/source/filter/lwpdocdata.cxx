@@ -169,126 +169,127 @@ void LwpDocData::Read()
 
     for (i = 0;i<numeditors;i++)
     {
-        LwpEditorAttr* pEditorAttr = new LwpEditorAttr;
+        std::unique_ptr<LwpEditorAttr> xEditorAttr(new LwpEditorAttr);
         //cName
-        pEditorAttr->cName.Read(m_pObjStrm.get());
+        xEditorAttr->cName.Read(m_pObjStrm.get());
         //cInitials
-        pEditorAttr->cInitials.Read(m_pObjStrm.get());
+        xEditorAttr->cInitials.Read(m_pObjStrm.get());
         //cHiLite
-        pEditorAttr->cHiLiteColor.Read(m_pObjStrm.get());
+        xEditorAttr->cHiLiteColor.Read(m_pObjStrm.get());
 
         //cID
-        pEditorAttr->nID = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->nID = m_pObjStrm->QuickReaduInt16();
 
         //cInsFontOver
         //CFontAttributeOverride --cAttrBits
-        pEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrBits = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrBits = m_pObjStrm->QuickReaduInt16();
         //CFontAttributeOverride --cAttrOverrideBits
-        pEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrOverrideBits = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrOverrideBits = m_pObjStrm->QuickReaduInt16();
         //CFontAttributeOverride --cAttrApplyBits
-        pEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrApplyBits = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrApplyBits = m_pObjStrm->QuickReaduInt16();
         //CFontAttributeOverride --cAttrOverrideBits2
-        pEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrOverrideBits2 = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrOverrideBits2 = m_pObjStrm->QuickReaduInt8();
         //CFontAttributeOverride --cAttrApplyBits2
-        pEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrApplyBits2 = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cInsFontOver.cFontAttributeOverride.cAttrApplyBits2 = m_pObjStrm->QuickReaduInt8();
         //CFontAttributeOverride --cCase
-        pEditorAttr->cInsFontOver.cFontAttributeOverride.cCase = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cInsFontOver.cFontAttributeOverride.cCase = m_pObjStrm->QuickReaduInt8();
         //CFontAttributeOverride --cUnder
-        pEditorAttr->cInsFontOver.cFontAttributeOverride.cUnder = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cInsFontOver.cFontAttributeOverride.cUnder = m_pObjStrm->QuickReaduInt8();
         m_pObjStrm->SkipExtra();
         //CFontDescriptionOverrideBase--cOverrideBits
-        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cOverrideBits = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cOverrideBits = m_pObjStrm->QuickReaduInt8();
         //CFontDescriptionOverrideBase--cApplyBits
-        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cApplyBits = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cApplyBits = m_pObjStrm->QuickReaduInt8();
         //CFontDescriptionOverrideBase--cPointSize
-        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cPointSize = m_pObjStrm->QuickReadInt32();
+        xEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cPointSize = m_pObjStrm->QuickReadInt32();
         //CFontDescriptionOverrideBase--cOverstrike
-        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cOverstrike = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cOverstrike = m_pObjStrm->QuickReaduInt8();
         //CFontDescriptionOverrideBase--cTightness
-        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cTightness = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cTightness = m_pObjStrm->QuickReaduInt16();
         //CFontDescriptionOverrideBase--cColor
-        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cColor.Read(m_pObjStrm.get());
+        xEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cColor.Read(m_pObjStrm.get());
 
         //CFontDescriptionOverrideBase--cBackgroundColor
-        pEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cBackgroundColor.Read(m_pObjStrm.get());
+        xEditorAttr->cInsFontOver.cFontDescriptionOverrideBase.cBackgroundColor.Read(m_pObjStrm.get());
 
         m_pObjStrm->SkipExtra();
         //cFaceName
-        pEditorAttr->cInsFontOver.cFaceName.Read(m_pObjStrm.get());
+        xEditorAttr->cInsFontOver.cFaceName.Read(m_pObjStrm.get());
         //cAltFaceName
-        pEditorAttr->cInsFontOver.cAltFaceName.Read(m_pObjStrm.get());
+        xEditorAttr->cInsFontOver.cAltFaceName.Read(m_pObjStrm.get());
         m_pObjStrm->SkipExtra();
 
         //cDelFontOver
         //CFontAttributeOverride --cAttrBits
-        pEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrBits = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrBits = m_pObjStrm->QuickReaduInt16();
         //CFontAttributeOverride --cAttrOverrideBits
-        pEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrOverrideBits = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrOverrideBits = m_pObjStrm->QuickReaduInt16();
         //CFontAttributeOverride --cAttrApplyBits
-        pEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrApplyBits = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrApplyBits = m_pObjStrm->QuickReaduInt16();
         //CFontAttributeOverride --cAttrOverrideBits2
-        pEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrOverrideBits2 = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrOverrideBits2 = m_pObjStrm->QuickReaduInt8();
         //CFontAttributeOverride --cAttrApplyBits2
-        pEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrApplyBits2 = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cDelFontOver.cFontAttributeOverride.cAttrApplyBits2 = m_pObjStrm->QuickReaduInt8();
         //CFontAttributeOverride --cCase
-        pEditorAttr->cDelFontOver.cFontAttributeOverride.cCase = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cDelFontOver.cFontAttributeOverride.cCase = m_pObjStrm->QuickReaduInt8();
         //CFontAttributeOverride --cUnder
-        pEditorAttr->cDelFontOver.cFontAttributeOverride.cUnder = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cDelFontOver.cFontAttributeOverride.cUnder = m_pObjStrm->QuickReaduInt8();
         m_pObjStrm->SkipExtra();
         //CFontDescriptionOverrideBase--cOverrideBits
-        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cOverrideBits = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cOverrideBits = m_pObjStrm->QuickReaduInt8();
         //CFontDescriptionOverrideBase--cApplyBits
-        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cApplyBits = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cApplyBits = m_pObjStrm->QuickReaduInt8();
         //CFontDescriptionOverrideBase--cPointSize
-        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cPointSize = m_pObjStrm->QuickReadInt32();
+        xEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cPointSize = m_pObjStrm->QuickReadInt32();
         //CFontDescriptionOverrideBase--cOverstrike
-        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cOverstrike = m_pObjStrm->QuickReaduInt8();
+        xEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cOverstrike = m_pObjStrm->QuickReaduInt8();
         //CFontDescriptionOverrideBase--cTightness
-        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cTightness = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cTightness = m_pObjStrm->QuickReaduInt16();
         //CFontDescriptionOverrideBase--cColor
-        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cColor.Read(m_pObjStrm.get());
+        xEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cColor.Read(m_pObjStrm.get());
 
         //CFontDescriptionOverrideBase--cBackgroundColor
-        pEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cBackgroundColor.Read(m_pObjStrm.get());
+        xEditorAttr->cDelFontOver.cFontDescriptionOverrideBase.cBackgroundColor.Read(m_pObjStrm.get());
 
         m_pObjStrm->SkipExtra();
         //cFaceName
-        pEditorAttr->cDelFontOver.cFaceName.Read(m_pObjStrm.get());
+        xEditorAttr->cDelFontOver.cFaceName.Read(m_pObjStrm.get());
         //cAltFaceName
-        pEditorAttr->cDelFontOver.cAltFaceName.Read(m_pObjStrm.get());
+        xEditorAttr->cDelFontOver.cAltFaceName.Read(m_pObjStrm.get());
         m_pObjStrm->SkipExtra();
 
         //cAbilities
-        pEditorAttr->nAbilities = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->nAbilities = m_pObjStrm->QuickReaduInt16();
         //cLocks
-        pEditorAttr->nLocks = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->nLocks = m_pObjStrm->QuickReaduInt16();
         //cSuggestions
-        pEditorAttr->nSuggestions = m_pObjStrm->QuickReaduInt16();
+        xEditorAttr->nSuggestions = m_pObjStrm->QuickReaduInt16();
 
         //cDelTextAttr
         //m_pEditorAttrList[i].cDelTextAttr.Read(m_pObjStrm);
         if (m_pObjStrm->QuickReadBool())
         {
-            pEditorAttr->cDelTextAttr.cOverride.cValues = m_pObjStrm->QuickReaduInt16();
-            pEditorAttr->cDelTextAttr.cOverride.cOverride = m_pObjStrm->QuickReaduInt16();
-            pEditorAttr->cDelTextAttr.cOverride.cApply = m_pObjStrm->QuickReaduInt16();
+            xEditorAttr->cDelTextAttr.cOverride.cValues = m_pObjStrm->QuickReaduInt16();
+            xEditorAttr->cDelTextAttr.cOverride.cOverride = m_pObjStrm->QuickReaduInt16();
+            xEditorAttr->cDelTextAttr.cOverride.cApply = m_pObjStrm->QuickReaduInt16();
             m_pObjStrm->SkipExtra();
-            pEditorAttr->cDelTextAttr.cHideLevels = m_pObjStrm->QuickReaduInt16();
+            xEditorAttr->cDelTextAttr.cHideLevels = m_pObjStrm->QuickReaduInt16();
 
             if (LwpFileHeader::m_nFileRevision>= 0x000b)
             {
-                pEditorAttr->cDelTextAttr.cBaselineOffset = m_pObjStrm->QuickReadInt32();
+                xEditorAttr->cDelTextAttr.cBaselineOffset = m_pObjStrm->QuickReadInt32();
             }
             else
             {
-                pEditorAttr->cDelTextAttr.cBaselineOffset = 0;
+                xEditorAttr->cDelTextAttr.cBaselineOffset = 0;
             }
         }
         m_pObjStrm->SkipExtra();
 
         m_pObjStrm->SkipExtra();
 
-        pGlobal->SetEditorAttrMap(pEditorAttr->nID, pEditorAttr);
+        sal_uInt16 nID = xEditorAttr->nID;
+        pGlobal->SetEditorAttrMap(nID, xEditorAttr.release());
     }
 }
 OUString   LwpDocData::DateTimeToOUString(LtTm& dt)

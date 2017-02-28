@@ -95,7 +95,7 @@ private:
     LwpChangeMgr* m_pChangeMgr;
     XFFontFactory* m_pXFFontFactory;
     XFStyleManager* m_pXFStyleManager;
-    std::map< sal_uInt16,LwpEditorAttr* > m_EditorAttrMap;
+    std::map<sal_uInt16, std::unique_ptr<LwpEditorAttr>> m_EditorAttrMap;
 };
 
 #endif
