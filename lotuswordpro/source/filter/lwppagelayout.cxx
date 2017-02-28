@@ -872,7 +872,7 @@ void LwpHeaderLayout::ParseWaterMark(XFHeaderStyle * pHeaderStyle)
 
 void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
 {
-    XFHeader* pHeader = new XFHeader();
+    std::unique_ptr<XFHeader> xHeader(new XFHeader());
     rtl::Reference<LwpObject> pStory = m_Content.obj();
     if(pStory.is())
     {
@@ -887,12 +887,12 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
         //register child layout style for framelayout,
         RegisterChildStyle();
         //End
-        pChangeMgr->SetHeadFootChange(pHeader);
-        pStory->DoXFConvert(pHeader);
+        pChangeMgr->SetHeadFootChange(xHeader.get());
+        pStory->DoXFConvert(xHeader.get());
 
         pChangeMgr->SetHeadFootFribMap(false);
     }
-    mp1->SetHeader(pHeader);
+    mp1->SetHeader(xHeader.release());
 }
 
 LwpFooterLayout::LwpFooterLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
