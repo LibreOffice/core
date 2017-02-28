@@ -754,23 +754,22 @@ void LwpHeaderLayout::Read()
 
 void LwpHeaderLayout::RegisterStyle(XFPageMaster* pm1)
 {
-    XFHeaderStyle* pHeaderStyle = new XFHeaderStyle();
+    std::unique_ptr<XFHeaderStyle> xHeaderStyle(new XFHeaderStyle());
 
     //Modify page top margin
     //page top marging: from top of header to the top edge
     double top = GetMarginsValue(MARGIN_TOP);
     pm1->SetMargins(-1, -1, top, -1);
 
-    ParseMargins(pHeaderStyle);
-    ParseBorder(pHeaderStyle);
-    ParseShadow(pHeaderStyle);
-//  ParseBackColor(pHeaderStyle);
-    ParseBackGround(pHeaderStyle);
+    ParseMargins(xHeaderStyle.get());
+    ParseBorder(xHeaderStyle.get());
+    ParseShadow(xHeaderStyle.get());
+    ParseBackGround(xHeaderStyle.get());
 
-    ParseWaterMark(pHeaderStyle);
+    ParseWaterMark(xHeaderStyle.get());
     //End by
 
-    pm1->SetHeaderStyle(pHeaderStyle);
+    pm1->SetHeaderStyle(xHeaderStyle.release());
 }
 
 void LwpHeaderLayout::ParseMargins(XFHeaderStyle* ph1)
