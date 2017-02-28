@@ -49,7 +49,7 @@
 
 using ::editeng::SvxBorderLine;
 
-ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttrArray* pNextColAttrArray, bool bCreateEmpty ) :
+ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttrArray* pDefaultColAttrArray ) :
     nCol( nNewCol ),
     nTab( nNewTab ),
     pDocument( pDoc ),
@@ -57,10 +57,10 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttr
     nLimit(0),
     pData(nullptr)
 {
-    if ( nCol != -1 && !bCreateEmpty && pNextColAttrArray )
+    if ( nCol != -1 && pDefaultColAttrArray )
     {
-        nCount = pNextColAttrArray->nCount;
-        nLimit = pNextColAttrArray->nCount;
+        nCount = pDefaultColAttrArray->nCount;
+        nLimit = pDefaultColAttrArray->nCount;
         if ( nCount )
         {
             bool bNumFormatChanged;
@@ -69,8 +69,8 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttr
             pData = new ScAttrEntry[nCount];
             for ( size_t nIdx = 0; nIdx < nCount; ++nIdx )
             {
-                pData[nIdx].nRow = pNextColAttrArray->pData[nIdx].nRow;
-                ScPatternAttr aNewPattern( *(pNextColAttrArray->pData[nIdx].pPattern) );
+                pData[nIdx].nRow = pDefaultColAttrArray->pData[nIdx].nRow;
+                ScPatternAttr aNewPattern( *(pDefaultColAttrArray->pData[nIdx].pPattern) );
                 pData[nIdx].pPattern = static_cast<const ScPatternAttr*>( &pDocument->GetPool()->Put( aNewPattern ) );
                 bNumFormatChanged = false;
                 if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
