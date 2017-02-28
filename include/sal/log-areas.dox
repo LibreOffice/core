@@ -273,6 +273,7 @@ certain functionality.
 
 @section io
 
+@li @c io.connector
 @li @c io.streams
 
 @section jvmfwk
