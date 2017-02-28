@@ -27,7 +27,6 @@ class CalcChartEditUIDemo(UITestCase):
 
         xGridWindow.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:C2"}))
 
-    @unittest.skip("deadlock in the chart/embbedobj code")
     def test_select_secondary_axis(self):
 
         self.ui_test.create_doc_in_start_center("calc")
