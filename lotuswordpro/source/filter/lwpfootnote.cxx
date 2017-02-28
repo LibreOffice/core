@@ -103,28 +103,28 @@ void LwpFribFootnote::XFConvert(XFContentContainer* pCont)
     LwpFootnote* pFootnote = GetFootnote();
     if(pFootnote)
     {
-        XFContentContainer* pContent = nullptr;
+        rtl::Reference<XFContentContainer> xContent;
         if(pFootnote->GetType() == FN_FOOTNOTE)
         {
-            pContent = new XFFootNote();
+            xContent.set(new XFFootNote);
         }
         else
         {
-            pContent = new XFEndNote();
+            xContent.set(new XFEndNote);
         }
-        pFootnote->XFConvert(pContent);
-        if(m_ModFlag)
+        pFootnote->XFConvert(xContent.get());
+        if (m_ModFlag)
         {
             //set footnote number font style
-            XFTextSpan *pSpan = new XFTextSpan();
+            XFTextSpan *pSpan = new XFTextSpan;
             pSpan->SetStyleName(GetStyleName());
             //add the xffootnote into the content container
-            pSpan->Add(pContent);
+            pSpan->Add(xContent.get());
             pCont->Add(pSpan);
         }
         else
         {
-            pCont->Add(pContent);
+            pCont->Add(xContent.get());
         }
     }
 }
