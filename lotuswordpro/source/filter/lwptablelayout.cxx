@@ -712,7 +712,7 @@ void LwpTableLayout::RegisterStyle()
     RegisterColumns();
 
     // register style of whole table
-    XFTableStyle * pTableStyle = new XFTableStyle();
+    std::unique_ptr<XFTableStyle> xTableStyle(new XFTableStyle);
 
     sal_uInt8 nType = pSuper->GetRelativeType();
     // If the table is not "with paragraph above" placement, create an frame style
@@ -721,21 +721,20 @@ void LwpTableLayout::RegisterStyle()
         && (!pSuper->GetContainerLayout().is() || !pSuper->GetContainerLayout()->IsCell()) )
     {
         //with para above
-//      pSuper->ApplyBackColor(pTableStyle);
-        pSuper->ApplyBackGround(pTableStyle);
-        pSuper->ApplyWatermark(pTableStyle);
-        pSuper->ApplyShadow(pTableStyle);
-        pSuper->ApplyAlignment(pTableStyle);
-        pTableStyle->SetWidth(pSuper->GetTableWidth());
+        pSuper->ApplyBackGround(xTableStyle.get());
+        pSuper->ApplyWatermark(xTableStyle.get());
+        pSuper->ApplyShadow(xTableStyle.get());
+        pSuper->ApplyAlignment(xTableStyle.get());
+        xTableStyle->SetWidth(pSuper->GetTableWidth());
     }
     else
     {
         pSuper->RegisterFrameStyle();
-        pTableStyle->SetAlign(enumXFAlignCenter);
-        pTableStyle->SetWidth(pSuper->GetTableWidth());
+        xTableStyle->SetAlign(enumXFAlignCenter);
+        xTableStyle->SetWidth(pSuper->GetTableWidth());
     }
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pTableStyle).m_pStyle->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(xTableStyle.release()).m_pStyle->GetStyleName();
 
     //convert to OO table now and register row style
     // traverse
