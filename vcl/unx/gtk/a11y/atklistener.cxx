@@ -121,9 +121,6 @@ void AtkListener::updateChildList(
     css::uno::Reference<css::accessibility::XAccessibleContext> const &
         pContext)
 {
-    if (!pContext.is())
-        return;
-
      m_aChildList.clear();
 
      uno::Reference< accessibility::XAccessibleStateSet > xStateSet = pContext->getAccessibleStateSet();
@@ -258,19 +255,6 @@ void AtkListener::handleInvalidateChildren(
     }
 }
 
-void AtkListener::stopListening()
-{
-    uno::Reference<accessibility::XAccessibleEventBroadcaster> xBroadcaster(
-        mpWrapper->mpContext.get(), uno::UNO_QUERY);
-
-    if (xBroadcaster.is())
-    {
-        uno::Reference<accessibility::XAccessibleEventListener> xListener(this);
-        if (xListener.is())
-            xBroadcaster->removeAccessibleEventListener(xListener);
-    }
-}
-
 /*****************************************************************************/
 
 static uno::Reference< accessibility::XAccessibleContext >
@@ -361,10 +345,6 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
             gboolean bState = eNewState != ATK_STATE_INVALID;
             AtkStateType eRealState = bState ? eNewState : eOldState;
-
-            if (eOldState == ATK_STATE_FOCUSED)
-                // Stop listening to object going out-of-focus.
-                stopListening();
 
             atk_object_notify_state_change( atk_obj, eRealState, bState );
             break;
