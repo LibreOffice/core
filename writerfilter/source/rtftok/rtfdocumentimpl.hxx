@@ -274,11 +274,11 @@ public:
     bool isRightToLeft;
 
     // Info group.
-    int nYear;
-    int nMonth;
-    int nDay;
-    int nHour;
-    int nMinute;
+    sal_Int16 nYear;
+    sal_uInt16 nMonth;
+    sal_uInt16 nDay;
+    sal_uInt16 nHour;
+    sal_uInt16 nMinute;
 
     /// Text from special destinations.
     OUStringBuffer aDestinationText;
