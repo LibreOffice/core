@@ -210,8 +210,8 @@ const char* keywordToString(RTFKeyword nKeyword)
 
 static util::DateTime lcl_getDateTime(RTFParserState& aState)
 {
-    return util::DateTime(0 /*100sec*/, 0 /*sec*/, aState.nMinute, aState.nHour,
-                          aState.nDay, aState.nMonth, aState.nYear, false);
+    return {0 /*100sec*/, 0 /*sec*/, aState.nMinute, aState.nHour,
+                          aState.nDay, aState.nMonth, aState.nYear, false};
 }
 
 static void lcl_DestinationToMath(OUStringBuffer* pDestinationText, oox::formulaimport::XmlStreamBuilder& rMathBuffer, bool& rMathNor)

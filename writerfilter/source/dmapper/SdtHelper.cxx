@@ -59,7 +59,7 @@ awt::Size lcl_getOptimalWidth(const StyleSheetTablePtr& pStyleSheet, OUString& r
     sal_Int32 nBorder = nHeight / 2;
 
     // Width: space for the text + the square having the dropdown arrow.
-    return awt::Size(nWidth + nBorder + nHeight, nHeight + nBorder);
+    return {nWidth + nBorder + nHeight, nHeight + nBorder};
 }
 
 SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl)
