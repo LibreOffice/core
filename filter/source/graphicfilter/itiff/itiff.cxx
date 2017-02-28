@@ -91,7 +91,7 @@ private:
     sal_uLong               nGroup4Options;
     sal_uLong               nResolutionUnit;            // unit of fX/YResolution: 1=unknown, 2(default)=inch, 3=cm
     sal_uLong               nPredictor;
-    sal_uLong*              pColorMap;                  // color palette
+    sal_uInt32*             pColorMap;                  // color palette
     sal_uLong               nNumColors;                 // number of colors within the color palette
 
     sal_uLong               nPlanes;                    // number of layers within the Tiff file
@@ -493,23 +493,23 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
             nNumColors= ( (sal_uLong)1 << nBitsPerSample );
             if ( nDataType == 3 && nNumColors <= 256)
             {
-                pColorMap = new sal_uLong[ 256 ];
+                pColorMap = new sal_uInt32[256];
                 for ( i = 0; i < nNumColors; i++ )
                     pColorMap[ i ] = 0;
                 for ( i = 0; i < nNumColors; i++ )
                 {
                     pTIFF->ReadUInt16( nVal );
-                    pColorMap[ i ] |= ( ( (sal_uLong)nVal ) << 8 ) & 0x00ff0000;
+                    pColorMap[ i ] |= ( ( (sal_uInt32)nVal ) << 8 ) & 0x00ff0000;
                 }
                 for ( i = 0; i < nNumColors; i++ )
                 {
                     pTIFF->ReadUInt16( nVal );
-                    pColorMap[ i ] |= ( (sal_uLong)nVal ) & 0x0000ff00;
+                    pColorMap[ i ] |= ( (sal_uInt32)nVal ) & 0x0000ff00;
                 }
                 for ( i = 0; i < nNumColors; i++ )
                 {
                     pTIFF->ReadUInt16( nVal );
-                    pColorMap[ i ] |= ( ( (sal_uLong)nVal ) >> 8 ) & 0x000000ff;
+                    pColorMap[ i ] |= ( ( (sal_uInt32)nVal ) >> 8 ) & 0x000000ff;
                 }
             }
             else
@@ -1098,9 +1098,9 @@ void TIFFReader::MakePalCol()
 {
     if ( nDstBitsPerPixel <= 8 )
     {
-        sal_uLong i, nVal, n0RGB;
+        sal_uLong i, nVal;
         if  ( pColorMap == nullptr )
-            pColorMap = new sal_uLong[ 256 ];
+            pColorMap = new sal_uInt32[256];
         if ( nPhotometricInterpretation <= 1 )
         {
             nNumColors = (sal_uLong)1 << nBitsPerSample;
@@ -1110,7 +1110,7 @@ void TIFFReader::MakePalCol()
             for ( i = 0; i < nNumColors; i++ )
             {
                 nVal = ( i * 255 / ( nNumColors - 1 ) ) & 0xff;
-                n0RGB = nVal | ( nVal << 8 ) | ( nVal << 16 );
+                sal_uInt32 n0RGB = nVal | ( nVal << 8 ) | ( nVal << 16 );
                 if ( nPhotometricInterpretation == 1 )
                     pColorMap[ i ] = n0RGB;
                 else
