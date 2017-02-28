@@ -240,7 +240,7 @@ private: //file members
 
     LwpContentManager m_ContentMgr;
     LwpFontManager m_FontMgr;
-    LwpPieceManager* m_pPieceMgr;
+    std::unique_ptr<LwpPieceManager> m_xPieceMgr;
 
     LwpObjectID m_DftDropCapStyle;
     LwpObjectID m_DftHeaderStyle;
@@ -259,16 +259,16 @@ public:
     inline LwpNumberManager& GetNumberManager() { return m_NumMgr;}
     LwpObjectID * GetDefaultTextStyle() ;
 private:
-    LwpStyleManager* m_pStyleMgr;
-    LwpDropcapMgr* m_pDropcapMgr;
-    LwpBulletStyleMgr* m_pBulletStyleMgr;
+    std::unique_ptr<LwpStyleManager> m_xStyleMgr;
+    std::unique_ptr<LwpDropcapMgr> m_xDropcapMgr;
+    std::unique_ptr<LwpBulletStyleMgr> m_xBulletStyleMgr;
 public:
-    inline LwpStyleManager* GetStyleManager() { return m_pStyleMgr;}
+    LwpStyleManager* GetStyleManager() { return m_xStyleMgr.get(); }
     LwpBookMark* GetBookMark(LwpObjectID objMarker);
-    LwpDropcapMgr* GetDropcapMgr(){return m_pDropcapMgr;}
+    LwpDropcapMgr* GetDropcapMgr() { return m_xDropcapMgr.get(); }
     LwpContent* EnumContents(LwpContent* pContent);
     LwpSection* EnumSections(LwpSection* pSection);
-    LwpBulletStyleMgr* GetBulletStyleMgr(){return m_pBulletStyleMgr;}
+    LwpBulletStyleMgr* GetBulletStyleMgr() { return m_xBulletStyleMgr.get(); }
 
     LwpObjectID* FindParaStyleByName(const OUString& name);
     OUString FindActuralStyleName(const OUString& name);
