@@ -123,17 +123,11 @@ LwpPara::LwpPara(LwpObjectHeader& objHdr, LwpSvStream* pStrm)
 
 LwpPara::~LwpPara()
 {
-
     if (m_pBreaks)
     {
         delete m_pBreaks;
         m_pBreaks = nullptr;
     }
-/*  if (m_pParaNumbering)
-    {
-        delete m_pParaNumbering;
-        m_pParaNumbering = NULL;
-    }*/
 
     if (m_pBullOver)
     {
@@ -240,7 +234,7 @@ void LwpPara::Read()
     m_Fribs.SetPara(this);// for silver bullet
     m_Fribs.ReadPara(m_pObjStrm.get());
 
-    m_pProps = LwpParaProperty::ReadPropertyList(m_pObjStrm.get(),this);
+    ReadPropertyList(m_pObjStrm.get());
 }
 
 void LwpPara::Parse(IXFStream* pOutputStream)

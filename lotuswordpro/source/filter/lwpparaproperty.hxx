@@ -89,9 +89,6 @@ public:
     LwpParaProperty(){}
     virtual sal_uInt32  GetType() = 0;
     inline  LwpParaProperty* GetNext();
-
-    static LwpParaProperty* ReadPropertyList(LwpObjectStream* pFile,rtl::Reference<LwpObject> const & Whole);
-
 };
 
 inline LwpParaProperty* LwpParaProperty::GetNext()

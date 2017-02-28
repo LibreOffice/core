@@ -62,9 +62,8 @@
 #include "lwpobjtags.hxx"
 #include "lwppara.hxx"
 
-LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,rtl::Reference<LwpObject> const & Whole)
+void LwpPara::ReadPropertyList(LwpObjectStream* pFile)
 {
-    LwpParaProperty* Prop= nullptr;
     LwpParaProperty* NewProp= nullptr;
 
     for(;;)
@@ -112,7 +111,7 @@ LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,rtl::R
 
             case TAG_PARA_BULLET:
                 NewProp = new LwpParaBulletProperty(pFile);
-                static_cast<LwpPara*>(Whole.get())->SetBulletFlag(true);
+                SetBulletFlag(true);
                 break;
 
             case TAG_PARA_NUMBERING:
@@ -131,11 +130,10 @@ LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,rtl::R
         // Stick it at the beginning of the list
         if (NewProp)
         {
-            NewProp->insert(Prop, nullptr);
-            Prop = NewProp;
+            NewProp->insert(m_pProps, nullptr);
+            m_pProps = NewProp;
         }
     }
-    return Prop;
 }
 
 LwpParaAlignProperty::LwpParaAlignProperty(LwpObjectStream* pFile)

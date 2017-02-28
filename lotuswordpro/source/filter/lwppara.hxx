@@ -276,6 +276,8 @@ private:
     void AddBreakAfter(XFContentContainer* pCont);
     void AddBreakBefore(XFContentContainer* pCont);
     XFSection* CreateXFSection();
+
+    void ReadPropertyList(LwpObjectStream* pFile);
 };
 
 inline LwpSilverBullet* LwpPara::GetSilverBullet()
