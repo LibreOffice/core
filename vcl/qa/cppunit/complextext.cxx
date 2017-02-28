@@ -54,6 +54,16 @@ void VclComplexTextTest::testArabic()
     OutputDevice *pOutDev = pWin.get();
     pOutDev->SetFont( aFont );
 
+    // absolute character widths AKA text array.
+    std::vector<long> aCharWidths(aOneTwoThree.getLength(), 0);
+    long nTextWidth = pOutDev->GetTextArray(aOneTwoThree, aCharWidths.data());
+    CPPUNIT_ASSERT_EQUAL(72L, nTextWidth);
+    CPPUNIT_ASSERT_EQUAL(nTextWidth, aCharWidths.back());
+    std::vector<long> aRefCharWidths {6,  9,  16, 16, 22, 22, 26, 29, 32, 32,
+                                      36, 40, 49, 53, 56, 63, 63, 66, 72, 72};
+    for (size_t i = 0; i < aCharWidths.size(); i++)
+        CPPUNIT_ASSERT_EQUAL(aRefCharWidths[i], aCharWidths[i]);
+
     // text advance width and line height
     CPPUNIT_ASSERT_EQUAL(72L, pOutDev->GetTextWidth(aOneTwoThree));
     CPPUNIT_ASSERT_EQUAL(13L, pOutDev->GetTextHeight());
