@@ -104,21 +104,17 @@ namespace
     };
 }
 
-void setContextWritingMode( SdrObject* pObj, SwFrame* pAnchor )
+void setContextWritingMode(SdrObject* pObj, SwFrame* pAnchor)
 {
-    if( pObj && pAnchor )
-    {
-        short nWritingDirection = text::WritingMode2::LR_TB;
-        if( pAnchor->IsVertical() )
-        {
-            nWritingDirection = text::WritingMode2::TB_RL;
-        } else if( pAnchor->IsRightToLeft() )
-        {
-            nWritingDirection = text::WritingMode2::RL_TB;
-        }
-        pObj->SetContextWritingMode( nWritingDirection );
-    }
+    if(!pObj || !pAnchor)
+        return;
+    short nWritingDirection =
+            pAnchor->IsVertical()    ? text::WritingMode2::TB_RL :
+            pAnchor->IsRightToLeft() ? text::WritingMode2::RL_TB :
+                    text::WritingMode2::LR_TB;
+    pObj->SetContextWritingMode(nWritingDirection);
 }
+
 
 /** The Get reverse way: seeks the format to the specified object.
  * If the object is a SwVirtFlyDrawObj then the format of this
