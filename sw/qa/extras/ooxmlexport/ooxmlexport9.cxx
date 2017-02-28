@@ -231,6 +231,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf106001, "tdf106001.docx")
     CPPUNIT_ASSERT_EQUAL( static_cast<sal_Int16>( 100 ), getProperty<sal_Int16>(getRun(getParagraph(1), 1), "CharScaleWidth" ));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf106001_2, "tdf106001-2.odt")
+{
+    // In test ODT CharScaleWidth = 900, this was not changed upon OOXML export to stay in [1..600], now it's clamped to 600
+    // Note: we disregard what's set in pPr / rPr and only care about r / rPr
+    xmlDocPtr pXmlDoc = parseExport("word/document.xml");
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:rPr/w:w","val","600");
+
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf103931, "tdf103931.docx")
 {
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
@@ -238,7 +247,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf103931, "tdf103931.docx")
     // This was 2, the last (empty) section of the document was lost on import.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), xTextSections->getCount());
 }
-
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
