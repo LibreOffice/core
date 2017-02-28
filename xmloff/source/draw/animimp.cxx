@@ -48,7 +48,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::presentation;
 using namespace ::xmloff::token;
 
-SvXMLEnumMapEntry aXML_AnimationEffect_EnumMap[] =
+const SvXMLEnumMapEntry aXML_AnimationEffect_EnumMap[] =
 {
     { XML_NONE,         EK_none },
     { XML_FADE,         EK_fade },
@@ -70,7 +70,7 @@ SvXMLEnumMapEntry aXML_AnimationEffect_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_AnimationDirection_EnumMap[] =
+const SvXMLEnumMapEntry aXML_AnimationDirection_EnumMap[] =
 {
     { XML_NONE,             ED_none },
     { XML_FROM_LEFT,        ED_from_left },
@@ -103,7 +103,7 @@ SvXMLEnumMapEntry aXML_AnimationDirection_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-SvXMLEnumMapEntry aXML_AnimationSpeed_EnumMap[] =
+const SvXMLEnumMapEntry aXML_AnimationSpeed_EnumMap[] =
 {
     { XML_SLOW,     AnimationSpeed_SLOW },
     { XML_MEDIUM,   AnimationSpeed_MEDIUM },
