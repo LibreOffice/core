@@ -741,8 +741,8 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
              * Using Windows based dnd as a temporary solution        */
                     aDragSourceSN = "com.sun.star.datatransfer.dnd.OleDragSource";
                     aDropTargetSN = "com.sun.star.datatransfer.dnd.OleDropTarget";
-                    aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) ) );
-                    aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) ) );
+                    aDragSourceAL[ 1 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) );
+                    aDropTargetAL[ 0 ] <<= static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->mpNSView) );
 #elif HAVE_FEATURE_X11
                     aDragSourceSN = "com.sun.star.datatransfer.dnd.X11DragSource";
                     aDropTargetSN = "com.sun.star.datatransfer.dnd.X11DropTarget";

@@ -216,9 +216,9 @@ Any UniDataProvider::getOOoData()
 
   if (mSystemData)
     {
-      oOOData = makeAny(OUString(static_cast<const sal_Char*>([mSystemData bytes]),
+      oOOData <<= OUString(static_cast<const sal_Char*>([mSystemData bytes]),
                                  [mSystemData length],
-                                 RTL_TEXTENCODING_UTF8));
+                                 RTL_TEXTENCODING_UTF8);
     }
   else
     {
@@ -268,7 +268,7 @@ Any ByteSequenceDataProvider::getOOoData()
       Sequence<sal_Int8> byteSequence;
       byteSequence.realloc(flavorDataLength);
       memcpy(byteSequence.getArray(), [mSystemData bytes], flavorDataLength);
-      oOOData = makeAny(byteSequence);
+      oOOData <<= byteSequence;
     }
   else
     {
@@ -324,7 +324,7 @@ Any HTMLFormatDataProvider::getOOoData()
           pPlainHtml = &plainHtml;
         }
 
-      oOOData = makeAny(*pPlainHtml);
+      oOOData <<= *pPlainHtml;
     }
   else
     {
@@ -388,7 +388,7 @@ Any PNGDataProvider::getOOoData()
 
         Sequence<sal_Int8> pngData;
         if( ImageToPNG( imgData, pngData, meImageType))
-            oOOData = makeAny( pngData);
+            oOOData <<= pngData;
     }
     else
     {
@@ -450,7 +450,7 @@ Any FileListDataProvider::getOOoData()
           pBuffer += l + 1;
         }
 
-      oOOData = makeAny(oOOFileList);
+      oOOData <<= oOOFileList;
     }
   else
     {
