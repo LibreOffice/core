@@ -335,30 +335,24 @@ wrapper_get_name( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
 
-    if (obj)
+    if( obj->mpContext.is() )
     {
-        uno::Reference<accessibility::XAccessibleContext> xContext(
-            obj->mpContext.get(), uno::UNO_QUERY);
+        try {
+            OString aName =
+                OUStringToOString(
+                    obj->mpContext->getAccessibleName(),
+                    RTL_TEXTENCODING_UTF8);
 
-        if (xContext.is())
-        {
-            try {
-                OString aName =
-                    OUStringToOString(
-                        xContext->getAccessibleName(),
-                        RTL_TEXTENCODING_UTF8);
-
-                int nCmp = atk_obj->name ? rtl_str_compare( atk_obj->name, aName.getStr() ) : -1;
-                if( nCmp != 0 )
-                {
-                    if( atk_obj->name )
-                        g_free(atk_obj->name);
-                    atk_obj->name = g_strdup(aName.getStr());
-                }
+            int nCmp = atk_obj->name ? rtl_str_compare( atk_obj->name, aName.getStr() ) : -1;
+            if( nCmp != 0 )
+            {
+                if( atk_obj->name )
+                    g_free(atk_obj->name);
+                atk_obj->name = g_strdup(aName.getStr());
             }
-            catch(const uno::Exception&) {
-                g_warning( "Exception in getAccessibleName()" );
-            }
+        }
+        catch(const uno::Exception&) {
+            g_warning( "Exception in getAccessibleName()" );
         }
     }
 
@@ -372,23 +366,19 @@ wrapper_get_description( AtkObject *atk_obj )
 {
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
 
-    if (obj)
+    if( obj->mpContext.is() )
     {
-        uno::Reference<accessibility::XAccessibleContext> xContext(obj->mpContext.get(), uno::UNO_QUERY);
-        if (xContext.is())
-        {
-            try {
-                OString aDescription =
-                    OUStringToOString(
-                        xContext->getAccessibleDescription(),
-                        RTL_TEXTENCODING_UTF8);
+        try {
+            OString aDescription =
+                OUStringToOString(
+                    obj->mpContext->getAccessibleDescription(),
+                    RTL_TEXTENCODING_UTF8);
 
-                g_free(atk_obj->description);
-                atk_obj->description = g_strdup(aDescription.getStr());
-            }
-            catch(const uno::Exception&) {
-                g_warning( "Exception in getAccessibleDescription()" );
-            }
+            g_free(atk_obj->description);
+            atk_obj->description = g_strdup(aDescription.getStr());
+        }
+        catch(const uno::Exception&) {
+            g_warning( "Exception in getAccessibleDescription()" );
         }
     }
 
@@ -407,7 +397,7 @@ wrapper_get_attributes( AtkObject *atk_obj )
     try
     {
         uno::Reference< accessibility::XAccessibleExtendedAttributes >
-            xExtendedAttrs(obj->mpContext.get(), uno::UNO_QUERY);
+            xExtendedAttrs( obj->mpContext, uno::UNO_QUERY );
         if( xExtendedAttrs.is() )
             pSet = attribute_set_new_from_extended_attributes( xExtendedAttrs );
     }
@@ -427,20 +417,14 @@ wrapper_get_n_children( AtkObject *atk_obj )
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
     gint n = 0;
 
-    if (!obj)
-        return n;
-
-    uno::Reference<accessibility::XAccessibleContext> xContext(obj->mpContext.get(), uno::UNO_QUERY);
-    if (!xContext.is())
-        return n;
-
-    try
+    if( obj->mpContext.is() )
     {
-        n = xContext->getAccessibleChildCount();
-    }
-    catch(const uno::Exception&)
-    {
-        OSL_FAIL("Exception in getAccessibleChildCount()" );
+        try {
+            n = obj->mpContext->getAccessibleChildCount();
+        }
+        catch(const uno::Exception&) {
+            OSL_FAIL("Exception in getAccessibleChildCount()" );
+        }
     }
 
     return n;
@@ -462,22 +446,17 @@ wrapper_ref_child( AtkObject *atk_obj,
         return obj->child_about_to_be_removed;
     }
 
-    if (!obj)
-        return child;
-
-    uno::Reference<accessibility::XAccessibleContext> xContext(obj->mpContext.get(), uno::UNO_QUERY);
-    if (!xContext.is())
-        return child;
-
-    try
+    if( obj->mpContext.is() )
     {
-        uno::Reference< accessibility::XAccessible > xAccessible =
-            xContext->getAccessibleChild( i );
+        try {
+            uno::Reference< accessibility::XAccessible > xAccessible =
+                obj->mpContext->getAccessibleChild( i );
 
-        child = atk_object_wrapper_ref( xAccessible );
-    }
-    catch(const uno::Exception&) {
-        OSL_FAIL("Exception in getAccessibleChild");
+            child = atk_object_wrapper_ref( xAccessible );
+        }
+        catch(const uno::Exception&) {
+            OSL_FAIL("Exception in getAccessibleChild");
+        }
     }
 
     return child;
@@ -491,17 +470,13 @@ wrapper_get_index_in_parent( AtkObject *atk_obj )
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
     gint i = -1;
 
-    if (obj)
+    if( obj->mpContext.is() )
     {
-        uno::Reference<accessibility::XAccessibleContext> xContext(obj->mpContext.get(), uno::UNO_QUERY);
-        if (xContext.is())
-        {
-            try {
-                i = xContext->getAccessibleIndexInParent();
-            }
-            catch(const uno::Exception&) {
-                g_warning( "Exception in getAccessibleIndexInParent()" );
-            }
+        try {
+            i = obj->mpContext->getAccessibleIndexInParent();
+        }
+        catch(const uno::Exception&) {
+            g_warning( "Exception in getAccessibleIndexInParent()" );
         }
     }
     return i;
@@ -515,44 +490,40 @@ wrapper_ref_relation_set( AtkObject *atk_obj )
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
     AtkRelationSet *pSet = atk_relation_set_new();
 
-    if (obj)
+    if( obj->mpContext.is() )
     {
-        uno::Reference<accessibility::XAccessibleContext> xContext(obj->mpContext.get(), uno::UNO_QUERY);
-        if (xContext.is())
-        {
-            try {
-                uno::Reference< accessibility::XAccessibleRelationSet > xRelationSet(
-                        xContext->getAccessibleRelationSet()
-                );
+        try {
+            uno::Reference< accessibility::XAccessibleRelationSet > xRelationSet(
+                    obj->mpContext->getAccessibleRelationSet()
+            );
 
-                sal_Int32 nRelations = xRelationSet.is() ? xRelationSet->getRelationCount() : 0;
-                for( sal_Int32 n = 0; n < nRelations; n++ )
+            sal_Int32 nRelations = xRelationSet.is() ? xRelationSet->getRelationCount() : 0;
+            for( sal_Int32 n = 0; n < nRelations; n++ )
+            {
+                accessibility::AccessibleRelation aRelation = xRelationSet->getRelation( n );
+                sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
+
+                std::vector<AtkObject*> aTargets;
+
+                for (sal_uInt32 i = 0; i < nTargetCount; ++i)
                 {
-                    accessibility::AccessibleRelation aRelation = xRelationSet->getRelation( n );
-                    sal_uInt32 nTargetCount = aRelation.TargetSet.getLength();
-
-                    std::vector<AtkObject*> aTargets;
-
-                    for (sal_uInt32 i = 0; i < nTargetCount; ++i)
-                    {
-                        uno::Reference< accessibility::XAccessible > xAccessible(
-                                aRelation.TargetSet[i], uno::UNO_QUERY );
-                        aTargets.push_back(atk_object_wrapper_ref(xAccessible));
-                    }
-
-                    AtkRelation *pRel =
-                        atk_relation_new(
-                            aTargets.data(), nTargetCount,
-                            mapRelationType( aRelation.RelationType )
-                        );
-                    atk_relation_set_add( pSet, pRel );
-                    g_object_unref( G_OBJECT( pRel ) );
+                    uno::Reference< accessibility::XAccessible > xAccessible(
+                            aRelation.TargetSet[i], uno::UNO_QUERY );
+                    aTargets.push_back(atk_object_wrapper_ref(xAccessible));
                 }
+
+                AtkRelation *pRel =
+                    atk_relation_new(
+                        aTargets.data(), nTargetCount,
+                        mapRelationType( aRelation.RelationType )
+                    );
+                atk_relation_set_add( pSet, pRel );
+                g_object_unref( G_OBJECT( pRel ) );
             }
-            catch(const uno::Exception &) {
-                g_object_unref( G_OBJECT( pSet ) );
-                pSet = nullptr;
-            }
+        }
+        catch(const uno::Exception &) {
+            g_object_unref( G_OBJECT( pSet ) );
+            pSet = nullptr;
         }
     }
 
@@ -565,43 +536,37 @@ wrapper_ref_state_set( AtkObject *atk_obj )
     AtkObjectWrapper *obj = ATK_OBJECT_WRAPPER (atk_obj);
     AtkStateSet *pSet = atk_state_set_new();
 
-    if (obj)
+    if( obj->mpContext.is() )
     {
-        uno::Reference<accessibility::XAccessibleContext> xContext(obj->mpContext.get(), uno::UNO_QUERY);
-        if (xContext.is())
-        {
-            try
-            {
-                uno::Reference< accessibility::XAccessibleStateSet > xStateSet(
-                    xContext->getAccessibleStateSet());
+        try {
+            uno::Reference< accessibility::XAccessibleStateSet > xStateSet(
+                obj->mpContext->getAccessibleStateSet());
 
-                if( xStateSet.is() )
+            if( xStateSet.is() )
+            {
+                uno::Sequence< sal_Int16 > aStates = xStateSet->getStates();
+
+                for( sal_Int32 n = 0; n < aStates.getLength(); n++ )
                 {
-                    uno::Sequence< sal_Int16 > aStates = xStateSet->getStates();
-
-                    for( sal_Int32 n = 0; n < aStates.getLength(); n++ )
-                    {
-                        // ATK_STATE_LAST_DEFINED is used to check if the state
-                        // is unmapped, do not report it to Atk
-                        if ( mapAtkState( aStates[n] ) != ATK_STATE_LAST_DEFINED )
-                            atk_state_set_add_state( pSet, mapAtkState( aStates[n] ) );
-                    }
-
-                    // We need to emulate FOCUS state for menus, menu-items etc.
-                    if( atk_obj == atk_get_focus_object() )
-                        atk_state_set_add_state( pSet, ATK_STATE_FOCUSED );
-/* FIXME - should we do this ?
-                    else
-                        atk_state_set_remove_state( pSet, ATK_STATE_FOCUSED );
-*/
+                    // ATK_STATE_LAST_DEFINED is used to check if the state
+                    // is unmapped, do not report it to Atk
+                    if ( mapAtkState( aStates[n] ) != ATK_STATE_LAST_DEFINED )
+                        atk_state_set_add_state( pSet, mapAtkState( aStates[n] ) );
                 }
-            }
 
-            catch(const uno::Exception &)
-            {
-                g_warning( "Exception in wrapper_ref_state_set" );
-                atk_state_set_add_state( pSet, ATK_STATE_DEFUNCT );
+                // We need to emulate FOCUS state for menus, menu-items etc.
+                if( atk_obj == atk_get_focus_object() )
+                    atk_state_set_add_state( pSet, ATK_STATE_FOCUSED );
+/* FIXME - should we do this ?
+                else
+                    atk_state_set_remove_state( pSet, ATK_STATE_FOCUSED );
+*/
             }
+        }
+
+        catch(const uno::Exception &) {
+            g_warning( "Exception in wrapper_ref_state_set" );
+            atk_state_set_add_state( pSet, ATK_STATE_DEFUNCT );
         }
     }
     else
@@ -651,9 +616,18 @@ atk_object_wrapper_class_init (AtkObjectWrapperClass *klass)
 }
 
 static void
-atk_object_wrapper_init (AtkObjectWrapper* wrapper, AtkObjectWrapperClass*)
+atk_object_wrapper_init (AtkObjectWrapper      *wrapper,
+                         AtkObjectWrapperClass*)
 {
-    wrapper->mpContext = nullptr;
+   wrapper->mpAction = nullptr;
+   wrapper->mpComponent = nullptr;
+   wrapper->mpEditableText = nullptr;
+   wrapper->mpHypertext = nullptr;
+   wrapper->mpImage = nullptr;
+   wrapper->mpSelection = nullptr;
+   wrapper->mpTable = nullptr;
+   wrapper->mpText = nullptr;
+   wrapper->mpValue = nullptr;
 }
 
 } // extern "C"
@@ -931,6 +905,18 @@ void atk_object_wrapper_set_role(AtkObjectWrapper* wrapper, sal_Int16 role)
 void atk_object_wrapper_dispose(AtkObjectWrapper* wrapper)
 {
     wrapper->mpContext.clear();
+    wrapper->mpAction.clear();
+    wrapper->mpComponent.clear();
+    wrapper->mpEditableText.clear();
+    wrapper->mpHypertext.clear();
+    wrapper->mpImage.clear();
+    wrapper->mpSelection.clear();
+    wrapper->mpMultiLineText.clear();
+    wrapper->mpTable.clear();
+    wrapper->mpText.clear();
+    wrapper->mpTextMarkup.clear();
+    wrapper->mpTextAttributes.clear();
+    wrapper->mpValue.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

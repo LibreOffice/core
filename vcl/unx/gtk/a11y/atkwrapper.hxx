@@ -22,19 +22,49 @@
 
 #include <atk/atk.h>
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#include <cppuhelper/weakref.hxx>
 
 extern "C" {
+
+namespace com { namespace sun { namespace star { namespace accessibility {
+    class XAccessibleAction;
+    class XAccessibleComponent;
+    class XAccessibleEditableText;
+    class XAccessibleHypertext;
+    class XAccessibleImage;
+    class XAccessibleMultiLineText;
+    class XAccessibleSelection;
+    class XAccessibleTable;
+    class XAccessibleText;
+    class XAccessibleTextMarkup;
+    class XAccessibleTextAttributes;
+    class XAccessibleValue;
+} } } }
 
 struct AtkObjectWrapper
 {
     AtkObject aParent;
 
     css::uno::Reference<css::accessibility::XAccessible> mpAccessible;
-    css::uno::WeakReference<css::accessibility::XAccessibleContext> mpContext;
+    css::uno::Reference<css::accessibility::XAccessibleContext> mpContext;
+    css::uno::Reference<css::accessibility::XAccessibleAction> mpAction;
+    css::uno::Reference<css::accessibility::XAccessibleComponent> mpComponent;
+    css::uno::Reference<css::accessibility::XAccessibleEditableText>
+        mpEditableText;
+    css::uno::Reference<css::accessibility::XAccessibleHypertext> mpHypertext;
+    css::uno::Reference<css::accessibility::XAccessibleImage> mpImage;
+    css::uno::Reference<css::accessibility::XAccessibleMultiLineText>
+        mpMultiLineText;
+    css::uno::Reference<css::accessibility::XAccessibleSelection> mpSelection;
+    css::uno::Reference<css::accessibility::XAccessibleTable> mpTable;
+    css::uno::Reference<css::accessibility::XAccessibleText> mpText;
+    css::uno::Reference<css::accessibility::XAccessibleTextMarkup> mpTextMarkup;
+    css::uno::Reference<css::accessibility::XAccessibleTextAttributes>
+        mpTextAttributes;
+    css::uno::Reference<css::accessibility::XAccessibleValue> mpValue;
 
     AtkObject *child_about_to_be_removed;
     gint       index_of_child_about_to_be_removed;
+//    OString * m_pKeyBindings
 };
 
 struct AtkObjectWrapperClass

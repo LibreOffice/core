@@ -194,11 +194,14 @@ static css::uno::Reference<css::accessibility::XAccessibleHypertext>
     getHypertext( AtkHypertext *pHypertext )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pHypertext );
-    if (pWrap)
+    if( pWrap )
     {
-        uno::Reference<accessibility::XAccessibleHypertext> xAH(
-            pWrap->mpContext.get(), uno::UNO_QUERY);
-        return xAH;
+        if( !pWrap->mpHypertext.is() )
+        {
+            pWrap->mpHypertext.set(pWrap->mpContext, css::uno::UNO_QUERY);
+        }
+
+        return pWrap->mpHypertext;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleHypertext>();
