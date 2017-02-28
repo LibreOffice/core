@@ -246,7 +246,7 @@ void Shape::addShape(
         const awt::Rectangle* pShapeRect,
         ShapeIdMap* pShapeMap )
 {
-    SAL_INFO("oox.drawingml", "Shape::getShapeStyleRef: id='" << msId << "'");
+    SAL_INFO("oox.drawingml", "Shape::addShape: id='" << msId << "'");
 
     try
     {
