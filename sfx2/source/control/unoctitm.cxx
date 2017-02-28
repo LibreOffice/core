@@ -496,7 +496,10 @@ public:
     {
         mbIsCollecting = bIsCollecting;
         if (mbIsCollecting)
+        {
             msConfigPath = SvtPathOptions().GetConfigPath();
+            msConfigPath += "usage/";
+        }
     }
 };
 
@@ -515,9 +518,7 @@ void UsageInfo::save()
     if (!mbIsCollecting)
         return;
 
-    OUString path(msConfigPath);
-    path += "usage/";
-    osl::Directory::createPath(path);
+    osl::Directory::createPath(msConfigPath);
 
     //get system time information.
     TimeValue systemTime;
