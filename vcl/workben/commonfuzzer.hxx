@@ -18,6 +18,7 @@
 #include <unotools/configmgr.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
+#include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wmf.hxx>
 #include <unistd.h>
@@ -88,8 +89,11 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
     utl::ConfigManager::EnableAvoidConfig();
     InitVCL();
 
-    //we don't have a de-init, so get the font info here inside the leak disabled code
+    //we don't have a de-init, so inside this leak disabled region...
+    //get the font info
     psp::PrintFontManager::get();
+    //get the printer info
+    Printer::GetPrinterQueues();
 
     if (__lsan_enable)
         __lsan_enable();
