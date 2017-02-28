@@ -637,14 +637,11 @@ void ScCaptionPtr::decRefAndDestroy()
          * foo and call SdrObject::Free(), likely with mpHead->mpCaption, see
          * ScPostIt::RemoveCaption(). Further work needed to be able to do so.
          * */
-        ScCaptionPtr* pThat = (mpHead ? mpHead->mpFirst : this);
-        do
-        {
-            pThat->mpCaption = nullptr;
-            pThat = pThat->mpNext;
-        }
-        while (pThat);
-        assert(!mpCaption);     // this ought to be in list and nulled
+        assert(mpHead->mpFirst == this);    // this must be one and only one
+        mpCaption = nullptr;
+        assert(!mpNext);                    // this must be one and only one
+        delete mpHead;
+        mpHead = nullptr;
     }
 }
 
