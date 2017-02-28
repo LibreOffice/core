@@ -66,8 +66,6 @@ private:
     // Process INVALIDATE_ALL_CHILDREN notification
     void handleInvalidateChildren(
         const css::uno::Reference< css::accessibility::XAccessibleContext >& rxParent);
-
-    void stopListening();
 };
 
 #endif // INCLUDED_VCL_UNX_GTK_A11Y_ATKLISTENER_HXX

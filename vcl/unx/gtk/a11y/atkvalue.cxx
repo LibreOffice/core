@@ -29,11 +29,14 @@ static css::uno::Reference<css::accessibility::XAccessibleValue>
     getValue( AtkValue *pValue ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pValue );
-    if (pWrap)
+    if( pWrap )
     {
-        uno::Reference<accessibility::XAccessibleValue> xAV(
-            pWrap->mpContext.get(), uno::UNO_QUERY);
-        return xAV;
+        if( !pWrap->mpValue.is() )
+        {
+            pWrap->mpValue.set(pWrap->mpContext, css::uno::UNO_QUERY);
+        }
+
+        return pWrap->mpValue;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleValue>();

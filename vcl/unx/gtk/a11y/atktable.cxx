@@ -52,11 +52,14 @@ static css::uno::Reference<css::accessibility::XAccessibleTable>
     getTable( AtkTable *pTable ) throw (uno::RuntimeException)
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pTable );
-    if (pWrap)
+    if( pWrap )
     {
-        uno::Reference<accessibility::XAccessibleTable> xAT(
-            pWrap->mpContext.get(), uno::UNO_QUERY);
-        return xAT;
+        if( !pWrap->mpTable.is() )
+        {
+            pWrap->mpTable.set(pWrap->mpContext, css::uno::UNO_QUERY);
+        }
+
+        return pWrap->mpTable;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleTable>();
