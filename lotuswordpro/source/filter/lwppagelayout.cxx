@@ -872,7 +872,7 @@ void LwpHeaderLayout::ParseWaterMark(XFHeaderStyle * pHeaderStyle)
 
 void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
 {
-    std::unique_ptr<XFHeader> xHeader(new XFHeader());
+    rtl::Reference<XFHeader> xHeader(new XFHeader());
     rtl::Reference<LwpObject> pStory = m_Content.obj();
     if(pStory.is())
     {
@@ -892,7 +892,7 @@ void LwpHeaderLayout::RegisterStyle(XFMasterPage* mp1)
 
         pChangeMgr->SetHeadFootFribMap(false);
     }
-    mp1->SetHeader(xHeader.release());
+    mp1->SetHeader(xHeader);
 }
 
 LwpFooterLayout::LwpFooterLayout( LwpObjectHeader &objHdr, LwpSvStream* pStrm )
@@ -1023,7 +1023,7 @@ void LwpFooterLayout::ParseBackColor(XFFooterStyle* pFooterStyle)
 
 void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
 {
-    std::unique_ptr<XFFooter> xFooter(new XFFooter());
+    rtl::Reference<XFFooter> xFooter(new XFFooter());
     rtl::Reference<LwpObject> pStory = m_Content.obj(VO_STORY);
     //Call the RegisterStyle first to register the styles in footer paras, and then XFConvert()
     if(pStory.is())
@@ -1043,7 +1043,7 @@ void LwpFooterLayout::RegisterStyle(XFMasterPage* mp1)
 
         pChangeMgr->SetHeadFootFribMap(false);
     }
-    mp1->SetFooter(xFooter.release());
+    mp1->SetFooter(xFooter);
 }
 
 void LwpFooterLayout::ParseWaterMark(XFFooterStyle * pFooterStyle)

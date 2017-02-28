@@ -63,28 +63,15 @@
 #include "xffooter.hxx"
 #include "xfheader.hxx"
 #include "../lwpglobalmgr.hxx"
-XFMasterPage::XFMasterPage()
+
+void XFMasterPage::SetHeader(rtl::Reference<XFHeader>& rHeader)
 {
-    m_pHeader = nullptr;
-    m_pFooter = nullptr;
+    m_xHeader = rHeader;
 }
 
-XFMasterPage::~XFMasterPage()
+void XFMasterPage::SetFooter(rtl::Reference<XFFooter>& rFooter)
 {
-    delete m_pHeader;
-    delete m_pFooter;
-}
-
-void    XFMasterPage::SetHeader(XFHeader *pHeader)
-{
-    delete m_pHeader;
-    m_pHeader = pHeader;
-}
-
-void    XFMasterPage::SetFooter(XFFooter *pFooter)
-{
-    delete m_pFooter;
-    m_pFooter = pFooter;
+    m_xFooter = rFooter;
 }
 
 enumXFStyle XFMasterPage::GetStyleFamily()
@@ -105,10 +92,10 @@ void    XFMasterPage::ToXml(IXFStream *pStrm)
     pAttrList->AddAttribute( "style:name", m_strStyleName );
     pAttrList->AddAttribute( "style:page-master-name", m_strPageMaster );
     pStrm->StartElement( "style:master-page" );
-    if( m_pHeader )
-        m_pHeader->ToXml(pStrm);
-    if( m_pFooter )
-        m_pFooter->ToXml(pStrm);
+    if (m_xHeader)
+        m_xHeader->ToXml(pStrm);
+    if (m_xFooter)
+        m_xFooter->ToXml(pStrm);
     pStrm->EndElement( "style:master-page" );
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
