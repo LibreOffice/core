@@ -296,19 +296,18 @@ void DXF2GDIMetaFile::DrawCircleEntity(const DXFCircleEntity & rE, const DXFTran
     }
 }
 
-
 void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform & rTransform)
 {
-    double frx,fry,fA1,fdA;
+    double frx,fry;
     sal_uInt16 nPoints,i;
     DXFVector aC;
     Point aPS,aPE;
 
     if (!SetLineAttribute(rE)) return;
-    fA1=rE.fStart;
-    fdA=rE.fEnd-fA1;
-    while (fdA>=360.0) fdA-=360.0;
-    while (fdA<=0) fdA+=360.0;
+    double fA1=rE.fStart;
+    double fdA=rE.fEnd-fA1;
+    fdA = fmod(fdA, 360.0);
+    if (fdA<=0) fdA+=360.0;
     rTransform.Transform(rE.aP0,aC);
     if (rE.fThickness==0 && fdA>5.0 && rTransform.TransCircleToEllipse(rE.fRadius,frx,fry)) {
         DXFVector aVS(cos(fA1/180.0*3.14159265359),sin(fA1/180.0*3.14159265359),0.0);
@@ -358,7 +357,6 @@ void DXF2GDIMetaFile::DrawArcEntity(const DXFArcEntity & rE, const DXFTransform 
         }
     }
 }
-
 
 void DXF2GDIMetaFile::DrawTraceEntity(const DXFTraceEntity & rE, const DXFTransform & rTransform)
 {
