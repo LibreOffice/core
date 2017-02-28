@@ -1738,7 +1738,7 @@ void HwpReader::makePageStyle()
              if( hwpinfo.back_info.type == 2 ){
                  rstartEl("office:binary-data", mxList.get());
                  mxList->clear();
-                 std::shared_ptr<char> pStr(base64_encode_string(reinterpret_cast<unsigned char *>(hwpinfo.back_info.data), hwpinfo.back_info.size ), Free<char>());
+                 std::shared_ptr<char> pStr(base64_encode_string(reinterpret_cast<unsigned char *>(hwpinfo.back_info.data.data()), hwpinfo.back_info.size ), Free<char>());
                  rchars(ascii(pStr.get()));
                  rendEl("office:binary-data");
              }
