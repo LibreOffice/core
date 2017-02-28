@@ -995,10 +995,14 @@ void CCIDecompressor::Read1DScanlineData(sal_uInt8 * pTarget, sal_uInt16 nTarget
                 nDataBits = nDataBits - nTgtFreeByteBits;
                 pTarget++;
                 nTgtFreeByteBits=8;
-                while (nDataBits>=8) {
-                    *(pTarget++)=nBlackOrWhite;
-                    nDataBits-=8;
+                if (nDataBits >= 8)
+                {
+                    const sal_uInt16 nDataBytes = nDataBits / 8;
+                    memset(pTarget, nBlackOrWhite, nDataBytes);
+                    pTarget += nDataBytes;
+                    nDataBits -= nDataBytes * 8;
                 }
+
                 if (nDataBits>0) {
                     *pTarget=nBlackOrWhite;
                     nTgtFreeByteBits = nTgtFreeByteBits - nDataBits;
