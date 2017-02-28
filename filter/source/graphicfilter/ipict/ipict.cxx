@@ -461,6 +461,12 @@ sal_uLong PictReader::ReadPolygon(tools::Polygon & rPoly)
     pPict->SeekRel(8);
     sal_uLong nDataSize = (sal_uLong)nSize;
     nSize=(nSize-10)/4;
+    const size_t nMaxPossiblePoints = pPict->remainingSize() / 2 * sizeof(sal_uInt16);
+    if (nSize > nMaxPossiblePoints)
+    {
+        SAL_WARN("filter.pict", "pict record claims to have: " << nSize << " points, but only " << nMaxPossiblePoints << " possible, clamping");
+        nSize = nMaxPossiblePoints;
+    }
     rPoly.SetSize(nSize);
     for (sal_uInt16 i = 0; i < nSize; ++i)
         rPoly.SetPoint(ReadPoint(), i);
