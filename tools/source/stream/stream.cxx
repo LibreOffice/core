@@ -1217,7 +1217,8 @@ std::size_t SvStream::ReadBytes( void* pData, std::size_t nCount )
         if (nCount <= static_cast<std::size_t>(m_nBufActualLen - m_nBufActualPos))
         {
             // => yes
-            memcpy(pData, m_pBufPos, (size_t) nCount);
+            if (nCount != 0)
+                memcpy(pData, m_pBufPos, (size_t) nCount);
             m_nBufActualPos = m_nBufActualPos + (sal_uInt16)nCount;
             m_pBufPos += nCount;
             m_nBufFree = m_nBufFree - (sal_uInt16)nCount;
