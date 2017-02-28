@@ -106,7 +106,7 @@ friend class ScHorizontalAttrIterator;
     ScAttrArray& operator=(const ScAttrArray&) = delete;
 
 public:
-            ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttrArray* pNextColAttrArray = nullptr, bool bCreateEmpty = false );
+            ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc, ScAttrArray* pNextColAttrArray = nullptr );
             ~ScAttrArray();
 
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
