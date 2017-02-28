@@ -228,16 +228,14 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dropActionChanged( const Dro
 
 
 DropTargetHelper::DropTargetHelper( vcl::Window* pWindow ) :
-    mxDropTarget( pWindow->GetDropTarget() ),
-    mpFormats( new DataFlavorExVector )
+    mxDropTarget( pWindow->GetDropTarget() )
 {
     ImplConstruct();
 }
 
 
 DropTargetHelper::DropTargetHelper( const Reference< XDropTarget >& rxDropTarget ) :
-    mxDropTarget( rxDropTarget ),
-    mpFormats( new DataFlavorExVector )
+    mxDropTarget( rxDropTarget )
 {
     ImplConstruct();
 }
@@ -258,7 +256,6 @@ void DropTargetHelper::dispose()
 DropTargetHelper::~DropTargetHelper()
 {
     dispose();
-    delete mpFormats;
 }
 
 
@@ -275,14 +272,14 @@ void DropTargetHelper::ImplConstruct()
 
 void DropTargetHelper::ImplBeginDrag( const Sequence< DataFlavor >& rSupportedDataFlavors )
 {
-    mpFormats->clear();
-    TransferableDataHelper::FillDataFlavorExVector( rSupportedDataFlavors, *mpFormats );
+    maFormats.clear();
+    TransferableDataHelper::FillDataFlavorExVector( rSupportedDataFlavors, maFormats );
 }
 
 
 void DropTargetHelper::ImplEndDrag()
 {
-    mpFormats->clear();
+    maFormats.clear();
 }
 
 
@@ -300,7 +297,7 @@ sal_Int8 DropTargetHelper::ExecuteDrop( const ExecuteDropEvent& )
 
 bool DropTargetHelper::IsDropFormatSupported( SotClipboardFormatId nFormat )
 {
-    DataFlavorExVector::iterator    aIter( mpFormats->begin() ), aEnd( mpFormats->end() );
+    DataFlavorExVector::iterator    aIter( maFormats.begin() ), aEnd( maFormats.end() );
     bool                            bRet = false;
 
     while( aIter != aEnd )

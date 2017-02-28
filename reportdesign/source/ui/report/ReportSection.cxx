@@ -742,7 +742,7 @@ sal_Int8 OReportSection::ExecuteDrop( const ExecuteDropEvent& _rEvt )
 
     sal_Int8 nDropOption = DND_ACTION_NONE;
     const TransferableDataHelper aDropped(_rEvt.maDropEvent.Transferable);
-    DataFlavorExVector& rFlavors = aDropped.GetDataFlavorExVector();
+    const DataFlavorExVector& rFlavors = aDropped.GetDataFlavorExVector();
     bool bMultipleFormat = svx::OMultiColumnTransferable::canExtractDescriptor(rFlavors);
     if ( OReportExchange::canExtract(rFlavors) )
     {

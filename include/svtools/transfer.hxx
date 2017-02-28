@@ -158,7 +158,7 @@ private:
     OUString                                                                  maLastFormat;
     mutable css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
     css::uno::Reference< css::frame::XTerminateListener >                     mxTerminateListener;
-    std::unique_ptr<DataFlavorExVector>                                       mxFormats;
+    DataFlavorExVector                                                        maFormats;
     std::unique_ptr<TransferableObjectDescriptor>                             mxObjDesc;
 
 protected:
@@ -238,8 +238,6 @@ protected:
 
 public:
 
-                        TransferableHelper();
-
     void                PrepareOLE( const TransferableObjectDescriptor& rObjDesc );
 
     void                CopyToClipboard( vcl::Window *pWindow ) const;
@@ -267,7 +265,7 @@ private:
 
     css::uno::Reference< css::datatransfer::XTransferable >           mxTransfer;
     css::uno::Reference< css::datatransfer::clipboard::XClipboard >   mxClipboard;
-    std::unique_ptr<DataFlavorExVector>                               mxFormats;
+    DataFlavorExVector                                                maFormats;
     std::unique_ptr<TransferableObjectDescriptor>                     mxObjDesc;
     std::unique_ptr<TransferableDataHelper_Impl>                      mxImpl;
 
@@ -299,7 +297,7 @@ public:
     SotClipboardFormatId           GetFormat( sal_uInt32 nFormat ) const;
     css::datatransfer::DataFlavor  GetFormatDataFlavor( sal_uInt32 nFormat ) const;
 
-    DataFlavorExVector&         GetDataFlavorExVector() const {return *mxFormats; }
+    const DataFlavorExVector&   GetDataFlavorExVector() const {return maFormats; }
 
     bool                        StartClipboardListening( );
     void                        StopClipboardListening( );
@@ -444,7 +442,7 @@ private:
     css::uno::Reference< css::datatransfer::dnd::XDropTarget >            mxDropTarget;
 
     css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >    mxDropTargetListener;
-    DataFlavorExVector*                                                   mpFormats;
+    DataFlavorExVector                                                    maFormats;
 
                         DropTargetHelper() = delete;
     DropTargetHelper&   operator=( const DropTargetHelper& rDropTargetHelper ) = delete;
@@ -471,7 +469,7 @@ public:
                         // typically called by the application in ::AcceptDrop and ::ExecuteDrop and (see above)
     bool                IsDropFormatSupported( SotClipboardFormatId nFormat );
 
-    DataFlavorExVector& GetDataFlavorExVector() const {return *mpFormats; }
+    const DataFlavorExVector& GetDataFlavorExVector() const {return maFormats; }
 
 };
 
