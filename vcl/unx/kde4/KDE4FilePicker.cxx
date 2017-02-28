@@ -454,7 +454,7 @@ uno::Any SAL_CALL KDE4FilePicker::getValue( sal_Int16 controlId, sal_Int16 nCont
     if (_customWidgets.contains( controlId )) {
         QCheckBox* cb = dynamic_cast<QCheckBox*>( _customWidgets.value( controlId ));
         if (cb)
-            res = uno::Any(cb->isChecked());
+            res <<= cb->isChecked();
     }
     else
         SAL_WARN( "vcl", "get value on unknown control " << controlId );
