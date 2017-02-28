@@ -436,17 +436,17 @@ uno::Any UpdateCheckUI::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
 
     if( rPropertyName == PROPERTY_TITLE )
-        aRet = uno::makeAny( maBubbleTitle );
+        aRet <<= maBubbleTitle;
     else if( rPropertyName == PROPERTY_TEXT )
-        aRet = uno::makeAny( maBubbleText );
+        aRet <<= maBubbleText;
     else if( rPropertyName == PROPERTY_SHOW_BUBBLE )
-        aRet = uno::makeAny( mbShowBubble );
+        aRet <<= mbShowBubble;
     else if( rPropertyName == PROPERTY_IMAGE )
-        aRet = uno::makeAny( maBubbleImageURL );
+        aRet <<= maBubbleImageURL;
     else if( rPropertyName == PROPERTY_CLICK_HDL )
-        aRet = uno::makeAny( mrJob );
+        aRet <<= mrJob;
     else if( rPropertyName == PROPERTY_SHOW_MENUICON )
-        aRet = uno::makeAny( mbShowMenuIcon );
+        aRet <<= mbShowMenuIcon;
     else
         throw beans::UnknownPropertyException();
 
