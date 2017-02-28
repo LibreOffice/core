@@ -665,15 +665,18 @@ bool ScCaptionPtr::forget()
 
 void ScCaptionPtr::dissolve()
 {
+    ScCaptionPtr::Head* pHead = mpHead;
     ScCaptionPtr* pThat = (mpHead ? mpHead->mpFirst : this);
     while (pThat)
     {
-        assert(!pThat->mpNext || mpHead);   // next without head is bad
+        assert(!pThat->mpNext || pThat->mpHead);    // next without head is bad
+        assert(pThat->mpHead == pHead);             // same head required within one list
         ScCaptionPtr* p = pThat->mpNext;
         pThat->clear();
         pThat = p;
     }
-    clear();
+    assert(!mpHead && !mpNext && !mpCaption);       // should had been cleared during list walk
+    delete pHead;
 }
 
 void ScCaptionPtr::clear()
