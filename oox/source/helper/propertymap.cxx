@@ -369,17 +369,17 @@ static void lclDumpAnyValue( const Any& value)
         } else if( value >>= aMatrix ) {
             fprintf (stderr,"Matrix\n%f %f %f\n%f %f %f\n%f %f %f\n", aMatrix.Line1.Column1, aMatrix.Line1.Column2, aMatrix.Line1.Column3, aMatrix.Line2.Column1, aMatrix.Line2.Column2, aMatrix.Line2.Column3, aMatrix.Line3.Column1, aMatrix.Line3.Column2, aMatrix.Line3.Column3);
         } else if( value >>= intValue )
-            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
+            fprintf (stderr,"%-10" SAL_PRIdINT32 "  (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
         else if( value >>= uintValue )
-            fprintf (stderr,"%" SAL_PRIuUINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", uintValue, uintValue);
+            fprintf (stderr,"%-10" SAL_PRIuUINT32 "  (hex: %" SAL_PRIxUINT32 ")\n", uintValue, uintValue);
         else if( value >>= int16Value )
-            fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
+            fprintf (stderr,"%-10d  (hex: %x)\n", int16Value, int16Value);
         else if( value >>= uint16Value )
-            fprintf (stderr,"%d            (hex: %x)\n", uint16Value, uint16Value);
+            fprintf (stderr,"%-10d  (hex: %x)\n", uint16Value, uint16Value);
         else if( value >>= floatValue )
             fprintf (stderr,"%f\n", floatValue);
         else if( value >>= boolValue )
-            fprintf (stderr,"%d            (bool)\n", boolValue);
+            fprintf (stderr,"%-10d  (bool)\n", boolValue);
         else if( value >>= xNumRule ) {
             fprintf (stderr, "XIndexReplace\n");
             if (xNumRule.is()) {
