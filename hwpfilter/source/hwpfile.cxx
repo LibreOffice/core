@@ -19,6 +19,7 @@
 
 #include "precompile.h"
 
+#include <algorithm>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -124,7 +125,7 @@ int HWPFile::Open(HStream * stream)
 
     char idstr[HWPIDLen];
 
-    if (ReadBlock(idstr, HWPIDLen) <= 0
+    if (ReadBlock(idstr, HWPIDLen) < HWPIDLen
         || HWP_V30 != (version = detect_hwp_version(idstr)))
     {
         return SetState(HWP_UNSUPPORTED_VERSION);
@@ -261,9 +262,9 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
                      spNode->reuse_shape = 0;
                 }
         }
-          spNode->pshape.pagebreak = spNode->etcflag;
-          if( spNode->nch )
-                AddParaShape( &spNode->pshape );
+        spNode->pshape->pagebreak = spNode->etcflag;
+        if (spNode->nch)
+            AddParaShape(spNode->pshape);
 
         if (!aplist.empty())
             aplist.back()->SetNext(spNode.get());
@@ -347,8 +348,30 @@ void HWPFile::TagsRead()
                      if (!Read4b(_hwpInfo.back_info.size))
                         return;
 
-                     _hwpInfo.back_info.data = new char[(unsigned int)_hwpInfo.back_info.size];
-                     ReadBlock(_hwpInfo.back_info.data, _hwpInfo.back_info.size);
+                     if (_hwpInfo.back_info.size < 0)
+                     {
+                        _hwpInfo.back_info.size = 0;
+                        return;
+                     }
+
+                     _hwpInfo.back_info.data.clear();
+
+                     //read potentially compressed data in blocks as its more
+                     //likely large values are simply broken and we'll run out
+                     //of data before we need to realloc
+                     for (int i = 0; i < _hwpInfo.back_info.size; i+= SAL_MAX_UINT16)
+                     {
+                        int nOldSize = _hwpInfo.back_info.data.size();
+                        size_t nBlock = std::min<int>(SAL_MAX_UINT16, _hwpInfo.back_info.size - nOldSize);
+                        _hwpInfo.back_info.data.resize(nOldSize + nBlock);
+                        size_t nReadBlock = ReadBlock(_hwpInfo.back_info.data.data() + nOldSize, nBlock);
+                        if (nBlock != nReadBlock)
+                        {
+                            _hwpInfo.back_info.data.resize(nOldSize + nReadBlock);
+                            break;
+                        }
+                     }
+                     _hwpInfo.back_info.size = _hwpInfo.back_info.data.size();
 
                      if( _hwpInfo.back_info.size > 0 )
                           _hwpInfo.back_info.type = 2;
@@ -450,7 +473,7 @@ ParaShape *HWPFile::getParaShape(int index)
 {
     if (index < 0 || static_cast<unsigned int>(index) >= pslist.size())
         return nullptr;
-    return pslist[index];
+    return pslist[index].get();
 }
 
 CharShape *HWPFile::getCharShape(int index)
@@ -495,7 +518,7 @@ Table *HWPFile::getTable(int index)
     return tables[index];
 }
 
-void HWPFile::AddParaShape(ParaShape * pshape)
+void HWPFile::AddParaShape(std::shared_ptr<ParaShape>& pshape)
 {
     int nscount = 0;
     for(int j = 0 ; j < MAXTABS-1 ; j++)
@@ -516,7 +539,7 @@ void HWPFile::AddParaShape(ParaShape * pshape)
     if( nscount )
         pshape->tabs[MAXTABS-1].type = sal::static_int_cast<char>(nscount);
 
-    int value = compareParaShape(pshape);
+    int value = compareParaShape(pshape.get());
 
     if( value == 0 || nscount )
     {
