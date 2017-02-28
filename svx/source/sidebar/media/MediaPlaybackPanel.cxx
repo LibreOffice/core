@@ -118,10 +118,13 @@ void MediaPlaybackPanel::UpdateToolBoxes(MediaItem aMediaItem)
 
 void MediaPlaybackPanel::Update()
 {
-    UpdateToolBoxes( *mpMediaItem );
-    UpdateTimeSlider( *mpMediaItem );
-    UpdateVolumeSlider( *mpMediaItem );
-    UpdateTimeField( *mpMediaItem, mpMediaItem->getTime() );
+    if (mpMediaItem)
+    {
+        UpdateToolBoxes( *mpMediaItem );
+        UpdateTimeSlider( *mpMediaItem );
+        UpdateVolumeSlider( *mpMediaItem );
+        UpdateTimeField( *mpMediaItem, mpMediaItem->getTime() );
+    }
 }
 
 IMPL_LINK_NOARG( MediaPlaybackPanel, VolumeSlideHdl, Slider*, void)
@@ -135,7 +138,10 @@ IMPL_LINK_NOARG( MediaPlaybackPanel, SeekHdl, Slider*, void)
 {
     MediaItem aItem(SID_AVMEDIA_TOOLBOX);
     aItem.setState( MediaState::Pause );
-    aItem.setTime( mpTimeSlider->GetThumbPos() * mpMediaItem->getDuration() / AVMEDIA_TIME_RANGE);
+    double nTime = 0;
+    if (mpMediaItem)
+        nTime = mpTimeSlider->GetThumbPos() * mpMediaItem->getDuration() / AVMEDIA_TIME_RANGE;
+    aItem.setTime(nTime);
     mpBindings->GetDispatcher()->ExecuteList(SID_AVMEDIA_TOOLBOX, SfxCallMode::RECORD, { &aItem });
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);
 }
@@ -154,7 +160,7 @@ IMPL_LINK( MediaPlaybackPanel, PlayToolBoxSelectHdl, ToolBox*, pControl, void)
         {
             aItem.setState( MediaState::Play );
 
-            if( mpMediaItem->getTime() == mpMediaItem->getDuration() )
+            if( !mpMediaItem || (mpMediaItem->getTime() == mpMediaItem->getDuration() ))
                 aItem.setTime( 0.0 );
             else
                 aItem.setTime( mpMediaItem->getTime());
