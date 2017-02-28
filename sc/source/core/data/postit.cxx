@@ -494,6 +494,8 @@ ScCaptionPtr& ScCaptionPtr::operator=( const ScCaptionPtr& r )
     // Let's find some weird usage.
     // Assigning without head doesn't make sense unless it is a nullptr caption.
     assert(r.mpHead || !r.mpCaption);
+    // A nullptr caption must not be in a list and thus not have a head.
+    assert(!r.mpHead || r.mpCaption);
     // Same captions were caught above, so here different heads must be present.
     assert(r.mpHead != mpHead);
 
@@ -533,7 +535,7 @@ void ScCaptionPtr::removeFromList()
         // Use the walk to check consistency on the fly.
         assert(pThat->mpHead == mpHead);            // all belong to the same
         assert(pThat->mpHead || !pThat->mpNext);    // next without head is bad
-        assert(pThat->mpCaption == nullptr || pThat->mpCaption == mpCaption);
+        assert(pThat->mpCaption == mpCaption);
         pThat = pThat->mpNext;
 #if OSL_DEBUG_LEVEL > 0
         ++nCount;
@@ -556,7 +558,7 @@ void ScCaptionPtr::removeFromList()
         {
             assert(pThat->mpHead == mpHead);            // all belong to the same
             assert(pThat->mpHead || !pThat->mpNext);    // next without head is bad
-            assert(pThat->mpCaption == nullptr || pThat->mpCaption == mpCaption);
+            assert(pThat->mpCaption == mpCaption);
             ++nCount;
         }
         while ((pThat = pThat->mpNext) != nullptr);
