@@ -378,7 +378,7 @@ protected:
     bool            IsDropFormatSupported( SotClipboardFormatId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
 
 private:
-    void*           implGetDataFlavors() const;
+    const DataFlavorExVector& implGetDataFlavors() const;
         // with this we can make GetDataFlavors() inline, which is strongly needed as SVTOOLS does not export
         // any sysmbol containing an "_STL", so a non-inlined method would not be exported ....
 
@@ -787,7 +787,7 @@ private:
 
 inline const DataFlavorExVector& BrowseBox::GetDataFlavors() const
 {
-    return *static_cast<DataFlavorExVector*>(implGetDataFlavors());
+    return implGetDataFlavors();
 }
 
 #endif // INCLUDED_SVTOOLS_BRWBOX_HXX

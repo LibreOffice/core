@@ -2643,7 +2643,7 @@ bool SwTransferable::PasteDBData( TransferableDataHelper& rData,
                                 : (bLink
                                     ? 0
                                     : FN_QRY_INSERT_FIELD );
-        DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
+        const DataFlavorExVector& rVector = rData.GetDataFlavorExVector();
         bool bHaveColumnDescriptor = OColumnTransferable::canExtractColumnDescriptor(rVector, ColumnTransferFormatFlags::COLUMN_DESCRIPTOR | ColumnTransferFormatFlags::CONTROL_EXCHANGE);
         if ( SotClipboardFormatId::XFORMS == nFormat )
         {

@@ -254,11 +254,6 @@ void SAL_CALL TransferableHelper::TerminateListener::notifyTermination( const Ev
 }
 
 
-TransferableHelper::TransferableHelper()
-    : mxFormats(new DataFlavorExVector)
-{
-}
-
 Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor )
 {
     return getTransferData2(rFlavor, OUString());
@@ -266,7 +261,7 @@ Any SAL_CALL TransferableHelper::getTransferData( const DataFlavor& rFlavor )
 
 Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, const OUString& rDestDoc )
 {
-    if( !maAny.hasValue() || mxFormats->empty() || ( maLastFormat != rFlavor.MimeType ) )
+    if( !maAny.hasValue() || maFormats.empty() || ( maLastFormat != rFlavor.MimeType ) )
     {
         const SolarMutexGuard aGuard;
 
@@ -279,7 +274,7 @@ Any SAL_CALL TransferableHelper::getTransferData2( const DataFlavor& rFlavor, co
             bool        bDone = false;
 
             // add formats if not already done
-            if (mxFormats->empty())
+            if (maFormats.empty())
                 AddSupportedFormats();
 
             // check alien formats first and try to get a substitution format
@@ -383,14 +378,14 @@ Sequence< DataFlavor > SAL_CALL TransferableHelper::getTransferDataFlavors()
 
     try
     {
-        if(mxFormats->empty())
+        if(maFormats.empty())
             AddSupportedFormats();
     }
     catch( const css::uno::Exception& )
     {
     }
 
-    return comphelper::containerToSequence<DataFlavor>(*mxFormats);
+    return comphelper::containerToSequence<DataFlavor>(maFormats);
 }
 
 
@@ -401,14 +396,14 @@ sal_Bool SAL_CALL TransferableHelper::isDataFlavorSupported( const DataFlavor& r
 
     try
     {
-        if (mxFormats->empty())
+        if (maFormats.empty())
             AddSupportedFormats();
     }
     catch( const css::uno::Exception& )
     {
     }
 
-    for (DataFlavorExVector::const_iterator aIter(mxFormats->begin() ), aEnd(mxFormats->end()); aIter != aEnd ; ++aIter)
+    for (DataFlavorExVector::const_iterator aIter(maFormats.begin() ), aEnd(maFormats.end()); aIter != aEnd ; ++aIter)
     {
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
         {
@@ -532,7 +527,7 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
 {
     bool bAdd = true;
 
-    for (DataFlavorExVector::iterator aIter(mxFormats->begin()), aEnd(mxFormats->end()); aIter != aEnd ; ++aIter)
+    for (DataFlavorExVector::iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd ; ++aIter)
     {
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
         {
@@ -563,7 +558,7 @@ void TransferableHelper::AddFormat( const DataFlavor& rFlavor )
         if ((SotClipboardFormatId::OBJECTDESCRIPTOR == aFlavorEx.mnSotId) && mxObjDesc)
             aFlavorEx.MimeType += ::ImplGetParameterString(*mxObjDesc);
 
-        mxFormats->push_back(aFlavorEx);
+        maFormats.push_back(aFlavorEx);
 
         if( SotClipboardFormatId::BITMAP == aFlavorEx.mnSotId )
         {
@@ -590,12 +585,12 @@ void TransferableHelper::RemoveFormat( SotClipboardFormatId nFormat )
 
 void TransferableHelper::RemoveFormat( const DataFlavor& rFlavor )
 {
-    DataFlavorExVector::iterator aIter(mxFormats->begin());
+    DataFlavorExVector::iterator aIter(maFormats.begin());
 
-    while (aIter != mxFormats->end())
+    while (aIter != maFormats.end())
     {
         if( TransferableDataHelper::IsEqual( *aIter, rFlavor ) )
-            aIter = mxFormats->erase(aIter);
+            aIter = maFormats.erase(aIter);
         else
             ++aIter;
     }
@@ -606,7 +601,7 @@ bool TransferableHelper::HasFormat( SotClipboardFormatId nFormat )
 {
     bool bRet = false;
 
-    for (DataFlavorExVector::const_iterator aIter(mxFormats->begin()), aEnd(mxFormats->end()); aIter != aEnd; ++aIter)
+    for (DataFlavorExVector::const_iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd; ++aIter)
     {
         if( nFormat == (*aIter).mnSotId )
         {
@@ -621,7 +616,7 @@ bool TransferableHelper::HasFormat( SotClipboardFormatId nFormat )
 
 void TransferableHelper::ClearFormats()
 {
-    mxFormats->clear();
+    maFormats.clear();
     maAny.clear();
 }
 
@@ -1111,15 +1106,13 @@ struct TransferableDataHelper_Impl
 };
 
 TransferableDataHelper::TransferableDataHelper()
-    : mxFormats(new DataFlavorExVector)
-    , mxObjDesc(new TransferableObjectDescriptor)
+    : mxObjDesc(new TransferableObjectDescriptor)
     , mxImpl(new TransferableDataHelper_Impl)
 {
 }
 
 TransferableDataHelper::TransferableDataHelper(const Reference< css::datatransfer::XTransferable >& rxTransferable)
     : mxTransfer(rxTransferable)
-    , mxFormats(new DataFlavorExVector)
     , mxObjDesc(new TransferableObjectDescriptor)
     , mxImpl(new TransferableDataHelper_Impl)
 {
@@ -1129,7 +1122,7 @@ TransferableDataHelper::TransferableDataHelper(const Reference< css::datatransfe
 TransferableDataHelper::TransferableDataHelper(const TransferableDataHelper& rDataHelper)
     : mxTransfer(rDataHelper.mxTransfer)
     , mxClipboard(rDataHelper.mxClipboard)
-    , mxFormats(new DataFlavorExVector(*rDataHelper.mxFormats))
+    , maFormats(rDataHelper.maFormats)
     , mxObjDesc(new TransferableObjectDescriptor(*rDataHelper.mxObjDesc))
     , mxImpl(new TransferableDataHelper_Impl)
 {
@@ -1138,7 +1131,7 @@ TransferableDataHelper::TransferableDataHelper(const TransferableDataHelper& rDa
 TransferableDataHelper::TransferableDataHelper(TransferableDataHelper&& rDataHelper)
     : mxTransfer(std::move(rDataHelper.mxTransfer))
     , mxClipboard(std::move(rDataHelper.mxClipboard))
-    , mxFormats(std::move(rDataHelper.mxFormats))
+    , maFormats(std::move(rDataHelper.maFormats))
     , mxObjDesc(std::move(rDataHelper.mxObjDesc))
     , mxImpl(new TransferableDataHelper_Impl)
 {
@@ -1156,7 +1149,7 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
             StopClipboardListening();
 
         mxTransfer = rDataHelper.mxTransfer;
-        mxFormats.reset(new DataFlavorExVector(*rDataHelper.mxFormats));
+        maFormats = rDataHelper.maFormats;
         mxObjDesc.reset(new TransferableObjectDescriptor(*rDataHelper.mxObjDesc));
         mxClipboard = rDataHelper.mxClipboard;
 
@@ -1177,7 +1170,7 @@ TransferableDataHelper& TransferableDataHelper::operator=(TransferableDataHelper
         StopClipboardListening();
 
     mxTransfer = std::move(rDataHelper.mxTransfer);
-    mxFormats = std::move(rDataHelper.mxFormats);
+    maFormats = std::move(rDataHelper.maFormats);
     mxObjDesc = std::move(rDataHelper.mxObjDesc);
     mxClipboard = std::move(rDataHelper.mxClipboard);
 
@@ -1192,7 +1185,7 @@ TransferableDataHelper::~TransferableDataHelper()
     StopClipboardListening( );
     {
         ::osl::MutexGuard aGuard(mxImpl->maMutex);
-        mxFormats.reset();
+        maFormats.clear();
         mxObjDesc.reset();
     }
 }
@@ -1298,14 +1291,14 @@ void TransferableDataHelper::InitFormats()
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
 
-    mxFormats->clear();
+    maFormats.clear();
     mxObjDesc.reset(new TransferableObjectDescriptor);
 
     if( mxTransfer.is() )
     {
-        TransferableDataHelper::FillDataFlavorExVector(mxTransfer->getTransferDataFlavors(), *mxFormats);
+        TransferableDataHelper::FillDataFlavorExVector(mxTransfer->getTransferDataFlavors(), maFormats);
 
-        for (DataFlavorExVector::const_iterator aIter(mxFormats->begin()), aEnd(mxFormats->end()); aIter != aEnd; ++aIter)
+        for (DataFlavorExVector::const_iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd; ++aIter)
         {
             if( SotClipboardFormatId::OBJECTDESCRIPTOR == aIter->mnSotId )
             {
@@ -1321,7 +1314,7 @@ bool TransferableDataHelper::HasFormat( SotClipboardFormatId nFormat ) const
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
 
-    DataFlavorExVector::iterator    aIter(mxFormats->begin()), aEnd(mxFormats->end());
+    DataFlavorExVector::const_iterator aIter(maFormats.cbegin()), aEnd(maFormats.cend());
     bool                            bRet = false;
 
     while( aIter != aEnd )
@@ -1340,7 +1333,7 @@ bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
 
-    DataFlavorExVector::iterator aIter(mxFormats->begin()), aEnd(mxFormats->end());
+    DataFlavorExVector::const_iterator aIter(maFormats.cbegin()), aEnd(maFormats.cend());
     bool                            bRet = false;
 
     while( aIter != aEnd )
@@ -1358,25 +1351,25 @@ bool TransferableDataHelper::HasFormat( const DataFlavor& rFlavor ) const
 sal_uInt32 TransferableDataHelper::GetFormatCount() const
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
-    return mxFormats->size();
+    return maFormats.size();
 }
 
 SotClipboardFormatId TransferableDataHelper::GetFormat( sal_uInt32 nFormat ) const
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
-    DBG_ASSERT(nFormat < mxFormats->size(), "TransferableDataHelper::GetFormat: invalid format index");
-    return( ( nFormat < mxFormats->size() ) ? (*mxFormats)[ nFormat ].mnSotId : SotClipboardFormatId::NONE );
+    DBG_ASSERT(nFormat < maFormats.size(), "TransferableDataHelper::GetFormat: invalid format index");
+    return( ( nFormat < maFormats.size() ) ? (maFormats)[ nFormat ].mnSotId : SotClipboardFormatId::NONE );
 }
 
 DataFlavor TransferableDataHelper::GetFormatDataFlavor( sal_uInt32 nFormat ) const
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
-    DBG_ASSERT(nFormat < mxFormats->size(), "TransferableDataHelper::GetFormat: invalid format index");
+    DBG_ASSERT(nFormat < maFormats.size(), "TransferableDataHelper::GetFormat: invalid format index");
 
     DataFlavor aRet;
 
-    if (nFormat < mxFormats->size())
-        aRet = (*mxFormats)[nFormat];
+    if (nFormat < maFormats.size())
+        aRet = maFormats[nFormat];
 
     return aRet;
 }
@@ -1433,7 +1426,7 @@ Any TransferableDataHelper::GetAny( const DataFlavor& rFlavor, const OUString& r
             if( nRequestFormat != SotClipboardFormatId::NONE )
             {
                 // try to get alien format first
-                for (DataFlavorExVector::const_iterator aIter(mxFormats->begin()), aEnd(mxFormats->end()); aIter != aEnd; ++aIter)
+                for (DataFlavorExVector::const_iterator aIter(maFormats.begin()), aEnd(maFormats.end()); aIter != aEnd; ++aIter)
                 {
                     if( ( nRequestFormat == (*aIter).mnSotId ) && !rFlavor.MimeType.equalsIgnoreAsciiCase( (*aIter).MimeType ) )
                     {
