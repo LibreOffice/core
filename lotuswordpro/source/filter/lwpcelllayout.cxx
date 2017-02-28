@@ -510,13 +510,13 @@ void LwpCellLayout::RegisterDefaultCell()
     for (sal_uInt16 eLoop = enumWholeBorder; eLoop < enumCellBorderTopLimit; eLoop++)
     {
         // register cell style
-        XFCellStyle *pCellStyle = new XFCellStyle();
+        std::unique_ptr<XFCellStyle> xCellStyle(new XFCellStyle());
 
-        ApplyPadding(pCellStyle);
-        ApplyBackColor(pCellStyle);
-        ApplyWatermark(pCellStyle);
-        ApplyFmtStyle(pCellStyle);
-        pCellStyle->SetAlignType(enumXFAlignNone, GetVerticalAlignmentType());
+        ApplyPadding(xCellStyle.get());
+        ApplyBackColor(xCellStyle.get());
+        ApplyWatermark(xCellStyle.get());
+        ApplyFmtStyle(xCellStyle.get());
+        xCellStyle->SetAlignType(enumXFAlignNone, GetVerticalAlignmentType());
 
         XFBorders * pBorders = GetXFBorders();
         if (pBorders)
@@ -554,9 +554,9 @@ void LwpCellLayout::RegisterDefaultCell()
             default:
                 assert(false);
             }
-            pCellStyle->SetBorders(pBorders);
+            xCellStyle->SetBorders(pBorders);
         }
-        m_CellStyleNames[eLoop] = (pXFStyleManager->AddStyle(pCellStyle)).m_pStyle->GetStyleName();
+        m_CellStyleNames[eLoop] = (pXFStyleManager->AddStyle(xCellStyle.release())).m_pStyle->GetStyleName();
     }
 }
 /**
