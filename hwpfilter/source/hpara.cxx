@@ -57,10 +57,10 @@ void LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
 
     if( pex >> 15 & 0x01 )
     {
-          if( pex & 0x01 )
-                hwpf.AddPage();
-        pPara->pshape.reserved[0] = sal::static_int_cast<unsigned char>(pex & 0x01);
-        pPara->pshape.reserved[1] = sal::static_int_cast<unsigned char>(pex & 0x02);
+        if (pex & 0x01)
+            hwpf.AddPage();
+        pPara->pshape->reserved[0] = sal::static_int_cast<unsigned char>(pex & 0x01);
+        pPara->pshape->reserved[1] = sal::static_int_cast<unsigned char>(pex & 0x02);
     }
 }
 
@@ -76,10 +76,11 @@ HWPPara::HWPPara()
     , ctrlflag(0)
     , pstyno(0)
     , cshape(new CharShape)
+    , pshape(new ParaShape)
     , linfo(nullptr)
 {
     memset(cshape.get(), 0, sizeof(CharShape));
-    memset(&pshape, 0, sizeof(pshape));
+    memset(pshape.get(), 0, sizeof(ParaShape));
 }
 
 HWPPara::~HWPPara()
@@ -109,9 +110,9 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
 /* Paragraph paragraphs shape  */
     if (nch && !reuse_shape)
     {
-        pshape.Read(hwpf);
-        pshape.cshape = cshape.get();
-        pshape.pagebreak = etcflag;
+        pshape->Read(hwpf);
+        pshape->cshape = cshape.get();
+        pshape->pagebreak = etcflag;
     }
 
     linfo = ::comphelper::newArray_null<LineInfo>(nline);
@@ -125,8 +126,8 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
      }
 
     if (nch && !reuse_shape){
-         if( pshape.coldef.ncols > 1 ){
-             hwpf.SetColumnDef( &pshape.coldef );
+         if( pshape->coldef.ncols > 1 ) {
+             hwpf.SetColumnDef(&(pshape->coldef));
          }
      }
 
@@ -173,7 +174,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
         if (hhstr[ii]->hh == CH_END_PARA)
             break;
           if( hhstr[ii]->hh < CH_END_PARA )
-                pshape.reserved[0] = 0;
+                pshape->reserved[0] = 0;
         ii += hhstr[ii]->WSize();
     }
     return nch && !hwpf.State();
