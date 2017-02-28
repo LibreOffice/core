@@ -119,7 +119,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
     }
 
     //Read frib data
-    LwpFrib* newFrib = nullptr;
+    std::unique_ptr<LwpFrib> newFrib;
     sal_uInt16 friblen = pObjStrm->QuickReaduInt16();
     sal_uInt8 fribtype = fribtag&~FRIB_TAG_TYPEMASK;
     switch(fribtype)
@@ -127,74 +127,74 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         case FRIB_TAG_INVALID:  //fall through
         case FRIB_TAG_EOP:      //fall through
         default:
-            newFrib = new LwpFrib(pPara);
+            newFrib.reset(new LwpFrib(pPara));
             break;
         case FRIB_TAG_TEXT:
         {
-            newFrib = new LwpFribText (pPara, (fribtag & FRIB_TAG_NOUNICODE) != 0);
+            newFrib.reset(new LwpFribText(pPara, (fribtag & FRIB_TAG_NOUNICODE) != 0));
             break;
         }
         case FRIB_TAG_TABLE:
-            newFrib = new LwpFribTable(pPara);
+            newFrib.reset(new LwpFribTable(pPara));
             break;
         case FRIB_TAG_TAB:
-            newFrib = new LwpFribTab(pPara);
+            newFrib.reset(new LwpFribTab(pPara));
             break;
         case FRIB_TAG_PAGEBREAK:
-            newFrib = new LwpFribPageBreak(pPara);
+            newFrib.reset(new LwpFribPageBreak(pPara));
             break;
         case FRIB_TAG_FRAME:
-            newFrib = new LwpFribFrame(pPara);
+            newFrib.reset(new LwpFribFrame(pPara));
             break;
         case FRIB_TAG_FOOTNOTE:
-            newFrib = new LwpFribFootnote(pPara);
+            newFrib.reset(new LwpFribFootnote(pPara));
             break;
         case FRIB_TAG_COLBREAK:
-            newFrib = new LwpFribColumnBreak(pPara);
+            newFrib.reset(new LwpFribColumnBreak(pPara));
             break;
         case FRIB_TAG_LINEBREAK:
-            newFrib = new LwpFribLineBreak(pPara);
+            newFrib.reset(new LwpFribLineBreak(pPara));
             break;
         case FRIB_TAG_HARDSPACE:
-            newFrib = new LwpFribHardSpace(pPara);
+            newFrib.reset(new LwpFribHardSpace(pPara));
             break;
         case FRIB_TAG_SOFTHYPHEN:
-            newFrib = new LwpFribSoftHyphen(pPara);
+            newFrib.reset(new LwpFribSoftHyphen(pPara));
             break;
         case FRIB_TAG_PARANUMBER:
-            newFrib = new LwpFribParaNumber(pPara);
+            newFrib.reset(new LwpFribParaNumber(pPara));
             break;
         case FRIB_TAG_UNICODE: //fall through
         case FRIB_TAG_UNICODE2: //fall through
         case FRIB_TAG_UNICODE3: //fall through
-            newFrib = new LwpFribUnicode(pPara);
+            newFrib.reset(new LwpFribUnicode(pPara));
             break;
         case FRIB_TAG_NOTE:
-            newFrib = new  LwpFribNote(pPara);
+            newFrib.reset(new LwpFribNote(pPara));
             break;
         case FRIB_TAG_SECTION:
-            newFrib = new LwpFribSection(pPara);
+            newFrib.reset(new LwpFribSection(pPara));
             break;
         case FRIB_TAG_PAGENUMBER:
-            newFrib = new LwpFribPageNumber(pPara);
+            newFrib.reset(new LwpFribPageNumber(pPara));
             break;
         case FRIB_TAG_DOCVAR:
-            newFrib = new LwpFribDocVar(pPara);
+            newFrib.reset(new LwpFribDocVar(pPara));
             break;
         case FRIB_TAG_BOOKMARK:
-            newFrib = new LwpFribBookMark(pPara);
+            newFrib.reset(new LwpFribBookMark(pPara));
             break;
         case FRIB_TAG_FIELD:
-            newFrib = new LwpFribField(pPara);
+            newFrib.reset(new LwpFribField(pPara));
             break;
         case FRIB_TAG_CHBLOCK:
-            newFrib = new LwpFribCHBlock(pPara);
+            newFrib.reset(new LwpFribCHBlock(pPara));
             break;
         case FRIB_TAG_RUBYMARKER:
-            newFrib = new LwpFribRubyMarker(pPara);
+            newFrib.reset(new LwpFribRubyMarker(pPara));
             break;
         case FRIB_TAG_RUBYFRAME:
-            newFrib = new LwpFribRubyFrame(pPara);
+            newFrib.reset(new LwpFribRubyFrame(pPara));
             break;
     }
 
@@ -207,7 +207,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
     newFrib->m_nFribType = fribtype;
     newFrib->m_nEditor = editID;
     newFrib->Read(pObjStrm, friblen);
-    return newFrib;
+    return newFrib.release();
 }
 
 void LwpFrib::Read(LwpObjectStream* pObjStrm, sal_uInt16 len)
