@@ -89,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9a57fde8_7586ceba",
+        "filename": "cppu/qa/test_unotype.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-28T10:06:04Z",
+      "side": 1,
+      "message": "so define one locally here in this file?",
+      "parentUuid": "9a57fde8_75ffae34",
+      "revId": "a508160a25963bcccf68cc442a166488a948540a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a57fde8_35d606c6",
         "filename": "unotools/source/i18n/textsearch.cxx",
         "patchSetId": 2
@@ -118,6 +136,24 @@
       "side": 1,
       "message": "sure, I can do that. I\u0027d have to write it as \n  SearchAlgorithms::SearchAlgorithms_MAKE_FIXED_SIZE\nbecause you asked me to get rid of the \"auto constexpr\" declaration that exposed MAKE_FIXED_SIZE",
       "parentUuid": "9a57fde8_35d606c6",
+      "revId": "a508160a25963bcccf68cc442a166488a948540a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_959332fa",
+        "filename": "unotools/source/i18n/textsearch.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-02-28T10:06:04Z",
+      "side": 1,
+      "message": "I guess ugly SearchAlgorithms::SearchAlgorithms_MAKE_FIXED_SIZE would be OK here for this kludge-anyway",
+      "parentUuid": "9a57fde8_5502aa3f",
       "revId": "a508160a25963bcccf68cc442a166488a948540a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
