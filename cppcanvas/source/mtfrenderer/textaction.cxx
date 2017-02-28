@@ -39,7 +39,6 @@
 
 #include <basegfx/tools/canvastools.hxx>
 #include <canvas/canvastools.hxx>
-
 #include <memory>
 
 #include "textaction.hxx"
@@ -331,7 +330,7 @@ namespace cppcanvas
                 if( rSubset.mnSubsetBegin > 0 )
                 {
                     ::basegfx::B2DHomMatrix aTranslation;
-                    if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical )
+                    if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical == css::util::TriState_YES )
                     {
                         // vertical text -> offset in y direction
                         aTranslation.translate( 0.0, nMinPos );
