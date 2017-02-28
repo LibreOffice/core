@@ -72,6 +72,7 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 
     setenv("SAL_USE_VCLPLUGIN", "svp", 1);
     setenv("SAL_WMF_COMPLEXCLIP_VIA_REGION", "1", 1);
+    setenv("SAL_DISABLE_PRINTERLIST", "1", 1);
 
     osl_setCommandArgs(*argc, *argv);
 
