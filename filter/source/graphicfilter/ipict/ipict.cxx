@@ -454,18 +454,16 @@ void PictReader::ReadRectangle(Rectangle & rRect)
     SAL_INFO("filter.pict", "ReadRectangle: " << rRect);
 }
 
-
 sal_uLong PictReader::ReadPolygon(tools::Polygon & rPoly)
 {
-    sal_uInt16 nSize,i;
-    sal_uLong nDataSize;
-
-    pPict->ReadUInt16( nSize );
+    sal_uInt16 nSize(0);
+    pPict->ReadUInt16(nSize);
     pPict->SeekRel(8);
-    nDataSize=(sal_uLong)nSize;
+    sal_uLong nDataSize = (sal_uLong)nSize;
     nSize=(nSize-10)/4;
     rPoly.SetSize(nSize);
-    for (i=0; i<nSize; i++) rPoly.SetPoint(ReadPoint(),i);
+    for (sal_uInt16 i = 0; i < nSize; ++i)
+        rPoly.SetPoint(ReadPoint(), i);
     return nDataSize;
 }
 
