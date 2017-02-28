@@ -1056,7 +1056,6 @@ static void doc_destroy(LibreOfficeKitDocument *pThis)
 static void                    lo_destroy       (LibreOfficeKit* pThis);
 static int                     lo_initialize    (LibreOfficeKit* pThis, const char* pInstallPath, const char* pUserProfilePath);
 static LibreOfficeKitDocument* lo_documentLoad  (LibreOfficeKit* pThis, const char* pURL);
-static bool                    lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
 static char *                  lo_getError      (LibreOfficeKit* pThis);
 static void                    lo_freeError     (char* pFree);
 static LibreOfficeKitDocument* lo_documentLoadWithOptions  (LibreOfficeKit* pThis,
@@ -1071,6 +1070,7 @@ static void                    lo_setDocumentPassword(LibreOfficeKit* pThis,
                                                        const char* pURL,
                                                        const char* pPassword);
 static char*                   lo_getVersionInfo(LibreOfficeKit* pThis);
+static bool                    lo_runMacro      (LibreOfficeKit* pThis, const char* pURL);
 
 LibLibreOffice_Impl::LibLibreOffice_Impl()
     : m_pOfficeClass( gOfficeClass.lock() )
@@ -1085,7 +1085,6 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
 
         m_pOfficeClass->destroy = lo_destroy;
         m_pOfficeClass->documentLoad = lo_documentLoad;
-        m_pOfficeClass->runMacro = lo_runMacro;
         m_pOfficeClass->getError = lo_getError;
         m_pOfficeClass->freeError = lo_freeError;
         m_pOfficeClass->documentLoadWithOptions = lo_documentLoadWithOptions;
@@ -1094,6 +1093,7 @@ LibLibreOffice_Impl::LibLibreOffice_Impl()
         m_pOfficeClass->setOptionalFeatures = lo_setOptionalFeatures;
         m_pOfficeClass->setDocumentPassword = lo_setDocumentPassword;
         m_pOfficeClass->getVersionInfo = lo_getVersionInfo;
+        m_pOfficeClass->runMacro = lo_runMacro;
 
         gOfficeClass = m_pOfficeClass;
     }
