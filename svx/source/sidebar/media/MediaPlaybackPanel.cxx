@@ -97,9 +97,8 @@ void MediaPlaybackPanel::NotifyItemUpdate(
     const sal_uInt16 nSID,
     const SfxItemState eState,
     const SfxPoolItem* pState,
-    const bool bIsEnabled)
+    const bool /*bIsEnabled*/)
 {
-    (void)bIsEnabled;
     if( nSID == SID_AVMEDIA_TOOLBOX )
     {
         if(eState >= SfxItemState::DEFAULT)
