@@ -350,6 +350,12 @@ void HWPFile::TagsRead()
                      if (!Read4b(_hwpInfo.back_info.size))
                         return;
 
+                     if (_hwpInfo.back_info.size < 0)
+                     {
+                        _hwpInfo.back_info.size = 0;
+                        return;
+                     }
+
                      _hwpInfo.back_info.data = new char[(unsigned int)_hwpInfo.back_info.size];
                      ReadBlock(_hwpInfo.back_info.data, _hwpInfo.back_info.size);
 
