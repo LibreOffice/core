@@ -129,14 +129,14 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
 
     if (pValue == pAry + nLen )
     {
-        SAL_WARN("pdfimport", "InputSequence not found");
+        SAL_WARN("sdext.pdfimport", "InputSequence not found");
         return;
     }
 
     uno::Sequence<sal_Int8> aData;
     if( !(pValue->Value >>= aData) )
     {
-        SAL_WARN("pdfimport", "Wrong data type");
+        SAL_WARN("sdext.pdfimport", "Wrong data type");
         return;
     }
 
