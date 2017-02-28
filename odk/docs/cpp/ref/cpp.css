@@ -22,12 +22,11 @@
 /*      Autodoc css file for C++ documentation      */
 
 
-body   { background-color:#ffffff; }
+body   { color:#333333; background-color:#ffffff; }
 
-#adc-cppref a { text-decoration: none; }
-#adc-cppref a:link { color: #0e85cd; }
-#adc-cppref a:visited { color: #638093; }
-#adc-cppref a:active { color: #4dadea; }
+#adc-cppref a:link { color: #107EC0; text-decoration: none; }
+#adc-cppref a:visited { color: #638093; text-decoration: none; }
+#adc-cppref a:hover { color: #107EC0; text-decoration: underline; }
 
 #adc-cppref h1     { font-size:20pt; margin-top:3pt; margin-bottom:7pt; }
 #adc-cppref h2     { font-family:Arial; font-size:16pt; margin-top:3pt; margin-bottom:5pt; }

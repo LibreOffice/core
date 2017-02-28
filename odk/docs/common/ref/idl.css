@@ -24,12 +24,11 @@
 
 /*See bottom of file for explanations.*/
 
-body { background-color:#ffffff; }
+body { color:#333333; background-color:#ffffff; }
 
-#adc-idlref a { text-decoration: none; }
-#adc-idlref a:link { color: #0e85cd; }
-#adc-idlref a:visited { color: #638093; }
-#adc-idlref a:active { color: #4dadea; }
+#adc-idlref a:link { color: #107EC0; text-decoration: none; }
+#adc-idlref a:visited { color: #638093; text-decoration: none; }
+#adc-idlref a:hover { color: #107EC0; text-decoration: underline; }
 
 #adc-idlref h3
 	    { font-size:13pt; font-weight:bold;
