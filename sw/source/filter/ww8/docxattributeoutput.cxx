@@ -6566,8 +6566,11 @@ void DocxAttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
 
 void DocxAttributeOutput::CharScaleWidth( const SvxCharScaleWidthItem& rScaleWidth )
 {
+    // Clamp CharScaleWidth to OOXML limits ([1..600])
+    const sal_Int16 nScaleWidth( std::max<sal_Int16>( 1,
+        std::min<sal_Int16>( rScaleWidth.GetValue(), 600 ) ) );
     m_pSerializer->singleElementNS( XML_w, XML_w,
-            FSNS( XML_w, XML_val ), OString::number( rScaleWidth.GetValue() ).getStr(), FSEND );
+        FSNS( XML_w, XML_val ), OString::number( nScaleWidth ).getStr(), FSEND );
 }
 
 void DocxAttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
