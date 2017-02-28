@@ -207,7 +207,8 @@ private:
     bool            mbPageBreaksValid:1;
     bool            mbForceBreaks:1;
 
-    ScAttrArray     aNextColAttrArray;
+    // Default attributes for the unallocated columns.
+    ScAttrArray     aDefaultColAttrArray;
 
 friend class ScDocument;                    // for FillInfo
 friend class ScColumn;
