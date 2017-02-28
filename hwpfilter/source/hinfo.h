@@ -23,6 +23,8 @@
 #include "hwplib.h"
 #include "string.h"
 
+#include <vector>
+
 #define CHAIN_MAX_PATH  40
 #define ANNOTATION_LEN  24
 
@@ -77,7 +79,7 @@ struct PaperBackInfo
     int range; /* 0-????, 1-????????, 3-??????, 4-?????? */
     char reserved3[27];
     int size;
-    char *data;        // image data
+    std::vector<char> data;        // image data
     bool isset;
     PaperBackInfo()
         : type(0)
@@ -87,7 +89,6 @@ struct PaperBackInfo
         , flag(0)
         , range(0)
         , size(0)
-        , data(nullptr)
         , isset(false)
     {
         memset(reserved1, 0, sizeof(reserved1));
