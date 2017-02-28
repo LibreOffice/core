@@ -252,11 +252,11 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
         css::uno::Sequence< css::beans::PropertyValue > aArgsList( NUM_OF_PICKLIST_ARGS );
 
         aArgsList[0].Name = "Referer";
-        aArgsList[0].Value = css::uno::makeAny( OUString( "private:user" ) );
+        aArgsList[0].Value <<= OUString( "private:user" );
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = "AsTemplate";
-        aArgsList[1].Value = css::uno::makeAny( false );
+        aArgsList[1].Value <<= false;
 
         ::rtl::OUString  aFilter( rRecentFile.aFilter );
         sal_Int32 nPos = aFilter.indexOf( '|' );
@@ -268,14 +268,14 @@ class RecentFilesStringLength : public ::cppu::WeakImplHelper< css::util::XStrin
                 aFilterOptions = aFilter.copy( nPos+1 );
 
             aArgsList[2].Name = "FilterOptions";
-            aArgsList[2].Value = css::uno::makeAny( aFilterOptions );
+            aArgsList[2].Value <<= aFilterOptions;
 
             aFilter = aFilter.copy( 0, nPos-1 );
             aArgsList.realloc( ++NUM_OF_PICKLIST_ARGS );
         }
 
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = "FilterName";
-        aArgsList[NUM_OF_PICKLIST_ARGS-1].Value = css::uno::makeAny( aFilter );
+        aArgsList[NUM_OF_PICKLIST_ARGS-1].Value <<= aFilter;
 
         ShutdownIcon::OpenURL( rRecentFile.aURL, "_default", aArgsList );
     }
