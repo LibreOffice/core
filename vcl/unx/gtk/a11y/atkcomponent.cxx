@@ -28,11 +28,14 @@ static css::uno::Reference<css::accessibility::XAccessibleComponent>
     getComponent( AtkComponent *pComponent )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pComponent );
-    if (pWrap)
+    if( pWrap )
     {
-        uno::Reference<accessibility::XAccessibleComponent> xComp(
-            pWrap->mpContext.get(), uno::UNO_QUERY);
-        return xComp;
+        if( !pWrap->mpComponent.is() )
+        {
+            pWrap->mpComponent.set(pWrap->mpContext, css::uno::UNO_QUERY);
+        }
+
+        return pWrap->mpComponent;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleComponent>();

@@ -28,11 +28,14 @@ static css::uno::Reference<css::accessibility::XAccessibleSelection>
     getSelection( AtkSelection *pSelection )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pSelection );
-    if (pWrap)
+    if( pWrap )
     {
-        uno::Reference<accessibility::XAccessibleSelection> xAS(
-            pWrap->mpContext.get(), uno::UNO_QUERY);
-        return xAS;
+        if( !pWrap->mpSelection.is() )
+        {
+            pWrap->mpSelection.set(pWrap->mpContext, css::uno::UNO_QUERY);
+        }
+
+        return pWrap->mpSelection;
     }
 
     return css::uno::Reference<css::accessibility::XAccessibleSelection>();
