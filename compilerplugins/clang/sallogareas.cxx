@@ -51,7 +51,7 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
         return true;
     if( const FunctionDecl* func = call->getDirectCallee())
         {
-        if( func->getNumParams() == 4 && func->getIdentifier() != NULL
+        if( func->getNumParams() == 5 && func->getIdentifier() != NULL
             && ( func->getName() == "sal_detail_log" || func->getName() == "log" ))
             {
             auto tc = loplugin::DeclCheck(func);
@@ -73,8 +73,9 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
                             area->getLocStart());
                     return true;
                     }
-                if( loplugin::DeclCheck(inFunction).Function("log").Namespace("detail").Namespace("sal").GlobalNamespace() )
-                    return true; // This function only forwards to sal_detail_log, so ok.
+                if( loplugin::DeclCheck(inFunction).Function("log").Namespace("detail").Namespace("sal").GlobalNamespace()
+                    || loplugin::DeclCheck(inFunction).Function("sal_detail_logFormat").GlobalNamespace() )
+                    return true; // These functions only forward to sal_detail_log, so ok.
                 if( call->getArg( 1 )->isNullPointerConstant( compiler.getASTContext(),
                     Expr::NPC_ValueDependentIsNotNull ) != Expr::NPCK_NotNull )
                     { // If the area argument is a null pointer, that is allowed only for SAL_DEBUG.
