@@ -337,32 +337,6 @@ class SwDrawContact final : public SwContact
 
         friend class NestedUserCallHdl;
 
-        /** unary function used by <list> iterator to find a disconnected 'virtual'
-         drawing object */
-        struct UsedOrUnusedVirtObjPred
-        {
-            bool mbUsedPred;
-            UsedOrUnusedVirtObjPred( bool _bUsed ) : mbUsedPred( _bUsed ) {};
-            bool operator() ( const std::unique_ptr<SwDrawVirtObj>& _pDrawVirtObj )
-            {
-                if ( mbUsedPred )
-                {
-                    return _pDrawVirtObj->IsConnected();
-                }
-                else
-                {
-                    return !_pDrawVirtObj->IsConnected();
-                }
-            }
-        };
-
-        /** unary function used to find a 'virtual' drawing object anchored at a given frame */
-        struct VirtObjAnchoredAtFramePred
-        {
-            const SwFrame* mpAnchorFrame;
-            VirtObjAnchoredAtFramePred( const SwFrame& _rAnchorFrame );
-            bool operator() ( const std::unique_ptr<SwDrawVirtObj>& _pDrawVirtObj );
-        };
 
         void RemoveAllVirtObjs();
 
