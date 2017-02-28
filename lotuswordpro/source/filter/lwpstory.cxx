@@ -132,6 +132,8 @@ void LwpStory::RegisterStyle()
     rtl::Reference<LwpPara> xPara(dynamic_cast<LwpPara*>(GetFirstPara().obj().get()));
     while (xPara.is())
     {
+        if (xPara->GetFoundry())
+            throw std::runtime_error("loop in register style");
         xPara->SetFoundry(m_pFoundry);
         xPara->DoRegisterStyle();
         xPara.set(dynamic_cast<LwpPara*>(xPara->GetNext().obj().get()));
