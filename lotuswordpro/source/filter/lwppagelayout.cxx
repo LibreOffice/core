@@ -339,7 +339,7 @@ void LwpPageLayout::RegisterStyle()
     OUString pmname = pm1->GetStyleName();
 
     //Add master page
-    XFMasterPage* p1 = new XFMasterPage();
+    XFMasterPage* p1 = new XFMasterPage;
     p1->SetStyleName(GetName().str());
     p1->SetPageMaster(pmname);
     p1 = static_cast<XFMasterPage*>(pXFStyleManager->AddStyle(p1).m_pStyle);
@@ -398,7 +398,7 @@ OUString LwpPageLayout::RegisterEndnoteStyle()
     OUString pmname = pm1->GetStyleName();
 
     //Add master page
-    XFMasterPage* p1 = new XFMasterPage();
+    XFMasterPage* p1 = new XFMasterPage;
     p1->SetStyleName("Endnote");
     p1->SetPageMaster(pmname);
 
