@@ -90,7 +90,7 @@ private:
     std::unique_ptr<LwpHyperlinkMgr> m_pHyperlinkMgr;
     OUString m_CurrSectionName;
 
-    XFContentContainer* m_pXFContainer;
+    rtl::Reference<XFContentContainer> m_xXFContainer;
 
 protected:
     void Read() override;

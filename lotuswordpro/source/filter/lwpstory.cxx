@@ -75,7 +75,6 @@ LwpStory::LwpStory(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     , m_pTabLayout(nullptr)
     , m_bDropcap(false)
     , m_pHyperlinkMgr(new LwpHyperlinkMgr)
-    , m_pXFContainer(nullptr)
 {
 }
 
@@ -141,11 +140,10 @@ void LwpStory::RegisterStyle()
 
 void LwpStory::Parse(IXFStream* pOutputStream)
 {
-    m_pXFContainer = new XFContentContainer;
-    XFConvert(m_pXFContainer);
-    m_pXFContainer->ToXml(pOutputStream);
-    delete m_pXFContainer;
-    m_pXFContainer = nullptr;
+    m_xXFContainer.set(new XFContentContainer);
+    XFConvert(m_xXFContainer.get());
+    m_xXFContainer->ToXml(pOutputStream);
+    m_xXFContainer.clear();
 }
 
 /**************************************************************************
@@ -392,16 +390,13 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
 
 void LwpStory::AddXFContent(XFContent* pContent)
 {
-    if(m_pXFContainer)
-        m_pXFContainer->Add(pContent);
+    if (m_xXFContainer)
+        m_xXFContainer->Add(pContent);
 }
 
 XFContentContainer* LwpStory::GetXFContent()
 {
-    if(m_pXFContainer)
-        return m_pXFContainer;
-    else
-        return nullptr;
+    return m_xXFContainer.get();
 }
 
 LwpPara* LwpStory::GetLastParaOfPreviousStory()
