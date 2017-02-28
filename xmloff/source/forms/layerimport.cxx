@@ -179,46 +179,46 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     // the enum attributes
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName( CCAFlags::VisualEffect ), PROPERTY_VISUAL_EFFECT,
-        VisualEffect::LOOK3D, OEnumMapper::getEnumMap( OEnumMapper::epVisualEffect ),
+        VisualEffect::LOOK3D, aVisualEffectMap,
         &::cppu::UnoType<sal_Int16>::get() );
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName( CCAFlags::Orientation ), PROPERTY_ORIENTATION,
-        ScrollBarOrientation::HORIZONTAL, OEnumMapper::getEnumMap( OEnumMapper::epOrientation ),
+        ScrollBarOrientation::HORIZONTAL, aOrientationMap,
         &::cppu::UnoType<sal_Int32>::get() );
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ButtonType), PROPERTY_BUTTONTYPE,
-        FormButtonType_PUSH, OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
+        FormButtonType_PUSH, aFormButtonTypeMap,
         &::cppu::UnoType<FormButtonType>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource_TYPE), PROPERTY_LISTSOURCETYPE,
-        ListSourceType_VALUELIST, OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
+        ListSourceType_VALUELIST, aListSourceTypeMap,
         &::cppu::UnoType<ListSourceType>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getSpecialAttributeName(SCAFlags::State), PROPERTY_DEFAULT_STATE, TRISTATE_FALSE,
-        OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
+        aCheckStateMap,
         &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getSpecialAttributeName(SCAFlags::CurrentState), PROPERTY_STATE, TRISTATE_FALSE,
-        OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
+        aCheckStateMap,
         &::cppu::UnoType<sal_Int16>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faEnctype), PROPERTY_SUBMIT_ENCODING,
-        FormSubmitEncoding_URL, OEnumMapper::getEnumMap(OEnumMapper::epSubmitEncoding),
+        FormSubmitEncoding_URL, aSubmitEncodingMap,
         &::cppu::UnoType<FormSubmitEncoding>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faMethod), PROPERTY_SUBMIT_METHOD,
-        FormSubmitMethod_GET, OEnumMapper::getEnumMap(OEnumMapper::epSubmitMethod),
+        FormSubmitMethod_GET, aSubmitMethodMap,
         &::cppu::UnoType<FormSubmitMethod>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faCommandType), PROPERTY_COMMAND_TYPE,
-        CommandType::COMMAND, OEnumMapper::getEnumMap(OEnumMapper::epCommandType));
+        CommandType::COMMAND, aCommandTypeMap);
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faNavigationMode), PROPERTY_NAVIGATION,
-        NavigationBarMode_NONE, OEnumMapper::getEnumMap(OEnumMapper::epNavigationType),
+        NavigationBarMode_NONE, aNavigationTypeMap,
         &::cppu::UnoType<NavigationBarMode>::get());
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getFormAttributeName(faTabbingCycle), PROPERTY_CYCLE,
-        TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
+        TabulatorCycle_RECORDS, aTabulatorCycleMap,
         &::cppu::UnoType<TabulatorCycle>::get());
 
     // 'initialize'

@@ -25,40 +25,24 @@
 namespace xmloff
 {
 
-    //= OEnumMapper
-    class OEnumMapper
-    {
-    public:
-        enum EnumProperties
-        {
-            epSubmitEncoding = 0,
-            epSubmitMethod,
-            epCommandType,
-            epNavigationType,
-            epTabCyle,
-            epButtonType,
-            epListSourceType,
-            epCheckState,
-            epTextAlign,
-            epBorderWidth,
-            epFontEmphasis,
-            epFontRelief,
-            epListLinkageType,
-            epOrientation,
-            epVisualEffect,
-            epImagePosition,
-            epImageAlign,
-            epImageScaleMode,
-
-            KNOWN_ENUM_PROPERTIES
-        };
-
-    private:
-        static const SvXMLEnumMapEntry* s_pEnumMap[KNOWN_ENUM_PROPERTIES];
-
-    public:
-        static const SvXMLEnumMapEntry* getEnumMap(EnumProperties _eProperty);
-    };
+extern const SvXMLEnumMapEntry aSubmitEncodingMap[];
+extern const SvXMLEnumMapEntry aSubmitMethodMap[];
+extern const SvXMLEnumMapEntry aCommandTypeMap[];
+extern const SvXMLEnumMapEntry aNavigationTypeMap[];
+extern const SvXMLEnumMapEntry aTabulatorCycleMap[];
+extern const SvXMLEnumMapEntry aFormButtonTypeMap[];
+extern const SvXMLEnumMapEntry aListSourceTypeMap[];
+extern const SvXMLEnumMapEntry aCheckStateMap[];
+extern const SvXMLEnumMapEntry aTextAlignMap[];
+extern const SvXMLEnumMapEntry aBorderTypeMap[];
+extern const SvXMLEnumMapEntry aFontEmphasisMap[];
+extern const SvXMLEnumMapEntry aFontReliefMap[];
+extern const SvXMLEnumMapEntry aListLinkageMap[];
+extern const SvXMLEnumMapEntry aOrientationMap[];
+extern const SvXMLEnumMapEntry aVisualEffectMap[];
+extern const SvXMLEnumMapEntry aImagePositionMap[];
+extern const SvXMLEnumMapEntry aImageAlignMap[];
+extern const SvXMLEnumMapEntry aScaleModeMap[];
 
 }   // namespace xmloff
 

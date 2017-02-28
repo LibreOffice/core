@@ -45,103 +45,48 @@ namespace xmloff
     using namespace ::com::sun::star;
     using namespace ::xmloff::token;
 
-    const SvXMLEnumMapEntry*    OEnumMapper::s_pEnumMap[OEnumMapper::KNOWN_ENUM_PROPERTIES] =
-    {
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr,
-        nullptr
-    };
-
-    const SvXMLEnumMapEntry*    OEnumMapper::getEnumMap(EnumProperties _eProperty)
-    {
-        OSL_ENSURE(_eProperty < KNOWN_ENUM_PROPERTIES, "OEnumMapper::getEnumMap: invalid index (this will crash)!");
-
-        const SvXMLEnumMapEntry*& rReturn = s_pEnumMap[_eProperty];
-        if (!rReturn)
-        {
-            // the map for this property is not initialized yet
-             switch (_eProperty)
-            {
                 // FormSubmitEncoding
-                case epSubmitEncoding:
-                {
-                    static const SvXMLEnumMapEntry aSubmitEncodingMap[] =
+                    const SvXMLEnumMapEntry aSubmitEncodingMap[] =
                     {
                         { XML_APPLICATION_X_WWW_FORM_URLENCODED, FormSubmitEncoding_URL },
                         { XML_MULTIPART_FORMDATA, FormSubmitEncoding_MULTIPART },
                         { XML_APPLICATION_TEXT, FormSubmitEncoding_TEXT },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aSubmitEncodingMap;
-                }
-                break;
-                // FormSubmitMethod
-                case epSubmitMethod:
-                {
-                    static const SvXMLEnumMapEntry aSubmitMethodMap[] =
+                    // FormSubmitMethod
+                    const SvXMLEnumMapEntry aSubmitMethodMap[] =
                     {
                         { XML_GET, FormSubmitMethod_GET },
                         { XML_POST, FormSubmitMethod_POST },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aSubmitMethodMap;
-                }
-                break;
+
                 // CommandType
-                case epCommandType:
-                {
-                    static const SvXMLEnumMapEntry aCommandTypeMap[] =
+                    const SvXMLEnumMapEntry aCommandTypeMap[] =
                     {
                         { XML_TABLE, CommandType::TABLE },
                         { XML_QUERY, CommandType::QUERY },
                         { XML_COMMAND, CommandType::COMMAND },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aCommandTypeMap;
-                }
-                break;
                 // NavigationBarMode
-                case epNavigationType:
-                {
-                    static const SvXMLEnumMapEntry aNavigationTypeMap[] =
+                    const SvXMLEnumMapEntry aNavigationTypeMap[] =
                     {
                         { XML_NONE, NavigationBarMode_NONE },
                         { XML_CURRENT, NavigationBarMode_CURRENT },
                         { XML_PARENT, NavigationBarMode_PARENT },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aNavigationTypeMap;
-                };
-                break;
                 // TabulatorCycle
-                case epTabCyle:
-                {
-                    static const SvXMLEnumMapEntry aTabulytorCycleMap[] =
+                    const SvXMLEnumMapEntry aTabulatorCycleMap[] =
                     {
                         { XML_RECORDS, TabulatorCycle_RECORDS },
                         { XML_CURRENT, TabulatorCycle_CURRENT },
                         { XML_PAGE, TabulatorCycle_PAGE },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aTabulytorCycleMap;
-                };
-                break;
                 // FormButtonType
-                case epButtonType:
-                {
-                    static const SvXMLEnumMapEntry aFormButtonTypeMap[] =
+                    const SvXMLEnumMapEntry aFormButtonTypeMap[] =
                     {
                         { XML_PUSH, FormButtonType_PUSH },
                         { XML_SUBMIT, FormButtonType_SUBMIT },
@@ -149,13 +94,8 @@ namespace xmloff
                         { XML_URL, FormButtonType_URL },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aFormButtonTypeMap;
-                };
-                break;
                 // ListSourceType
-                case epListSourceType:
-                {
-                    static const SvXMLEnumMapEntry aListSourceTypeMap[] =
+                    const SvXMLEnumMapEntry aListSourceTypeMap[] =
                     {
                         { XML_VALUE_LIST, ListSourceType_VALUELIST },
                         { XML_TABLE, ListSourceType_TABLE },
@@ -165,25 +105,15 @@ namespace xmloff
                         { XML_TABLE_FIELDS, ListSourceType_TABLEFIELDS },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aListSourceTypeMap;
-                };
-                break;
                 // check state of a checkbox
-                case epCheckState:
-                {
-                    static const SvXMLEnumMapEntry aCheckStateMap[] =
+                    const SvXMLEnumMapEntry aCheckStateMap[] =
                     {
                         { XML_UNCHECKED, TRISTATE_FALSE },
                         { XML_CHECKED, TRISTATE_TRUE },
                         { XML_UNKNOWN, TRISTATE_INDET },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aCheckStateMap;
-                };
-                break;
-                case epTextAlign:
-                {
-                    static const SvXMLEnumMapEntry aTextAlignMap[] =
+                    const SvXMLEnumMapEntry aTextAlignMap[] =
                     {
                         { XML_START,        awt::TextAlign::LEFT },
                         { XML_CENTER,       awt::TextAlign::CENTER },
@@ -192,12 +122,7 @@ namespace xmloff
                         { XML_JUSTIFIED,    (sal_uInt16)-1 },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aTextAlignMap;
-                };
-                break;
-                case epBorderWidth:
-                {
-                    static const SvXMLEnumMapEntry aBorderTypeMap[] =
+                    const SvXMLEnumMapEntry aBorderTypeMap[] =
                     {
                         { XML_NONE,     0 },
                         { XML_HIDDEN,   0 },
@@ -211,13 +136,7 @@ namespace xmloff
                         { XML_OUTSET,   1 },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aBorderTypeMap;
-                };
-                break;
-
-                case epFontEmphasis:
-                {
-                    static const SvXMLEnumMapEntry aFontEmphasisMap[] =
+                    const SvXMLEnumMapEntry aFontEmphasisMap[] =
                     {
                         { XML_NONE,     awt::FontEmphasisMark::NONE },
                         { XML_DOT,      awt::FontEmphasisMark::DOT },
@@ -226,63 +145,33 @@ namespace xmloff
                         { XML_ACCENT,   awt::FontEmphasisMark::ACCENT },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aFontEmphasisMap;
-                }
-                break;
-
-                case epFontRelief:
-                {
-                    static const SvXMLEnumMapEntry aFontReliefMap[] =
+                    const SvXMLEnumMapEntry aFontReliefMap[] =
                     {
                         { XML_NONE,     FontRelief::NONE },
                         { XML_ENGRAVED, FontRelief::ENGRAVED },
                         { XML_EMBOSSED, FontRelief::EMBOSSED },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aFontReliefMap;
-                }
-                break;
-
-                case epListLinkageType:
-                {
-                    static const SvXMLEnumMapEntry aListLinkageMap[] =
+                    const SvXMLEnumMapEntry aListLinkageMap[] =
                     {
                         { XML_SELECTION,            0 },
                         { XML_SELECTION_INDEXES,    1 },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aListLinkageMap;
-                }
-                break;
-
-                case epOrientation:
-                {
-                    static const SvXMLEnumMapEntry aOrientationMap[] =
+                    const SvXMLEnumMapEntry aOrientationMap[] =
                     {
                         { XML_HORIZONTAL,   ScrollBarOrientation::HORIZONTAL },
                         { XML_VERTICAL,     ScrollBarOrientation::VERTICAL },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aOrientationMap;
-                }
-                break;
-
-                case epVisualEffect:
-                {
-                    static const SvXMLEnumMapEntry aVisualEffectMap[] =
+                    const SvXMLEnumMapEntry aVisualEffectMap[] =
                     {
                         { XML_NONE, VisualEffect::NONE },
                         { XML_3D,   VisualEffect::LOOK3D },
                         { XML_FLAT, VisualEffect::FLAT },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aVisualEffectMap;
-                }
-                break;
-
-                case epImagePosition:
-                {
-                    static const SvXMLEnumMapEntry aImagePositionMap[] =
+                    const SvXMLEnumMapEntry aImagePositionMap[] =
                     {
                         { XML_START,  0 },
                         { XML_END,    1 },
@@ -291,26 +180,14 @@ namespace xmloff
                         { XML_CENTER, (sal_uInt16)-1 },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aImagePositionMap;
-                }
-                break;
-
-                case epImageAlign:
-                {
-                    static const SvXMLEnumMapEntry aImageAlignMap[] =
+                    const SvXMLEnumMapEntry aImageAlignMap[] =
                     {
                         { XML_START,  0 },
                         { XML_CENTER, 1 },
                         { XML_END, 2 },
                         { XML_TOKEN_INVALID, 0 }
                     };
-                    rReturn = aImageAlignMap;
-                }
-                break;
-
-                case epImageScaleMode:
-                {
-                    static const SvXMLEnumMapEntry aScaleModeMap[] =
+                    const SvXMLEnumMapEntry aScaleModeMap[] =
                     {
                         { XML_BACKGROUND_NO_REPEAT, ImageScaleMode::NONE },
                         { XML_REPEAT,               ImageScaleMode::NONE },  // repeating the image is not supported
@@ -318,17 +195,6 @@ namespace xmloff
                         { XML_SCALE,                ImageScaleMode::ISOTROPIC },
                         { XML_TOKEN_INVALID,        ImageScaleMode::NONE }
                     };
-                    rReturn = aScaleModeMap;
-                }
-                break;
-
-                case KNOWN_ENUM_PROPERTIES:
-                    break;
-            }
-        }
-
-        return rReturn;
-    }
 
 }   // namespace xmloff
 

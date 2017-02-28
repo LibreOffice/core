@@ -649,7 +649,7 @@ namespace xmloff
                     OAttributeMetaData::getCommonControlAttributeNamespace(CCAFlags::ButtonType),
                     OAttributeMetaData::getCommonControlAttributeName(CCAFlags::ButtonType),
                     PROPERTY_BUTTONTYPE,
-                    OEnumMapper::getEnumMap(OEnumMapper::epButtonType),
+                    aFormButtonTypeMap,
                     FormButtonType_PUSH);
         #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
@@ -662,7 +662,7 @@ namespace xmloff
                     OAttributeMetaData::getCommonControlAttributeNamespace( CCAFlags::Orientation ),
                     OAttributeMetaData::getCommonControlAttributeName( CCAFlags::Orientation ),
                     PROPERTY_ORIENTATION,
-                    OEnumMapper::getEnumMap( OEnumMapper::epOrientation ),
+                    aOrientationMap,
                     ScrollBarOrientation::HORIZONTAL
                 );
         #if OSL_DEBUG_LEVEL > 0
@@ -677,7 +677,7 @@ namespace xmloff
                     OAttributeMetaData::getCommonControlAttributeNamespace( CCAFlags::VisualEffect ),
                     OAttributeMetaData::getCommonControlAttributeName( CCAFlags::VisualEffect ),
                     PROPERTY_VISUAL_EFFECT,
-                    OEnumMapper::getEnumMap( OEnumMapper::epVisualEffect ),
+                    aVisualEffectMap,
                     VisualEffect::LOOK3D
                 );
             #if OSL_DEBUG_LEVEL > 0
@@ -876,7 +876,7 @@ namespace xmloff
                 OAttributeMetaData::getDatabaseAttributeNamespace(DAFlags::ListSource_TYPE),
                 OAttributeMetaData::getDatabaseAttributeName(DAFlags::ListSource_TYPE),
                 PROPERTY_LISTSOURCETYPE,
-                OEnumMapper::getEnumMap(OEnumMapper::epListSourceType),
+                aListSourceTypeMap,
                 ListSourceType_VALUELIST
                 );
             RESET_BIT( nIncludeDatabase, DAFlags::ListSource_TYPE );
@@ -1072,7 +1072,7 @@ namespace xmloff
                     OAttributeMetaData::getSpecialAttributeNamespace(SCAFlags::State),
                     OAttributeMetaData::getSpecialAttributeName(SCAFlags::State),
                     PROPERTY_DEFAULT_STATE,
-                    OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
+                    aCheckStateMap,
                     TRISTATE_FALSE);
             #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
@@ -1086,7 +1086,7 @@ namespace xmloff
                     OAttributeMetaData::getSpecialAttributeNamespace(SCAFlags::CurrentState),
                     OAttributeMetaData::getSpecialAttributeName(SCAFlags::CurrentState),
                     PROPERTY_STATE,
-                    OEnumMapper::getEnumMap(OEnumMapper::epCheckState),
+                    aCheckStateMap,
                     TRISTATE_FALSE);
             #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
@@ -1785,7 +1785,7 @@ namespace xmloff
                     SvXMLUnitConverter::convertEnum(
                         sBuffer,
                         (sal_uInt16)nLinkageType,
-                        OEnumMapper::getEnumMap( OEnumMapper::epListLinkageType )
+                        aListLinkageMap
                     );
 
                     AddAttribute(
@@ -2158,44 +2158,46 @@ namespace xmloff
 
         // the enum properties
         {
-            static const FormAttributes eEnumPropertyIds[] =
-            {
-                faEnctype, faMethod, faCommandType, faNavigationMode, faTabbingCycle
-            };
-            static const char * pEnumPropertyNames[] =
-            {
-                PROPERTY_SUBMIT_ENCODING, PROPERTY_SUBMIT_METHOD, PROPERTY_COMMAND_TYPE, PROPERTY_NAVIGATION, PROPERTY_CYCLE
-            };
-            static const OEnumMapper::EnumProperties eEnumPropertyMaps[] =
-            {
-                OEnumMapper::epSubmitEncoding, OEnumMapper::epSubmitMethod, OEnumMapper::epCommandType, OEnumMapper::epNavigationType, OEnumMapper::epTabCyle
-            };
-            static const sal_Int32 nEnumPropertyAttrDefaults[] =
-            {
-                FormSubmitEncoding_URL, FormSubmitMethod_GET, CommandType::COMMAND, NavigationBarMode_CURRENT, TabulatorCycle_RECORDS
-            };
-            static const bool nEnumPropertyAttrDefaultFlags[] =
-            {
-                false, false, false, false, true
-            };
-            static const sal_Int32 nIdCount = SAL_N_ELEMENTS(eEnumPropertyIds);
-        #if OSL_DEBUG_LEVEL > 0
-            static const sal_Int32 nNameCount = SAL_N_ELEMENTS(pEnumPropertyNames);
-            static const sal_Int32 nDefaultCount = SAL_N_ELEMENTS(nEnumPropertyAttrDefaults);
-            static const sal_Int32 nDefaultFlagCount = SAL_N_ELEMENTS(nEnumPropertyAttrDefaultFlags);
-            static const sal_Int32 nMapCount = SAL_N_ELEMENTS(eEnumPropertyMaps);
-            OSL_ENSURE((nIdCount == nNameCount) && (nNameCount == nDefaultCount) && (nDefaultCount == nDefaultFlagCount) && (nDefaultFlagCount == nMapCount),
-                "OFormExport::exportAttributes: somebody tampered with the maps (3)!");
-        #endif
-            for (i=0; i<nIdCount; ++i)
-                exportEnumPropertyAttribute(
-                    OAttributeMetaData::getFormAttributeNamespace(eEnumPropertyIds[i]),
-                    OAttributeMetaData::getFormAttributeName(eEnumPropertyIds[i]),
-                    OUString::createFromAscii(pEnumPropertyNames[i]),
-                    OEnumMapper::getEnumMap(eEnumPropertyMaps[i]),
-                    nEnumPropertyAttrDefaults[i],
-                    nEnumPropertyAttrDefaultFlags[i]
-                );
+            exportEnumPropertyAttribute(
+                OAttributeMetaData::getFormAttributeNamespace(faEnctype),
+                OAttributeMetaData::getFormAttributeName(faEnctype),
+                PROPERTY_SUBMIT_ENCODING,
+                aSubmitEncodingMap,
+                FormSubmitEncoding_URL,
+                false
+            );
+            exportEnumPropertyAttribute(
+                OAttributeMetaData::getFormAttributeNamespace(faMethod),
+                OAttributeMetaData::getFormAttributeName(faMethod),
+                PROPERTY_SUBMIT_METHOD,
+                aSubmitMethodMap,
+                FormSubmitMethod_GET,
+                false
+            );
+            exportEnumPropertyAttribute(
+                OAttributeMetaData::getFormAttributeNamespace(faCommandType),
+                OAttributeMetaData::getFormAttributeName(faCommandType),
+                PROPERTY_COMMAND_TYPE,
+                aCommandTypeMap,
+                CommandType::COMMAND,
+                false
+            );
+            exportEnumPropertyAttribute(
+                OAttributeMetaData::getFormAttributeNamespace(faNavigationMode),
+                OAttributeMetaData::getFormAttributeName(faNavigationMode),
+                PROPERTY_NAVIGATION,
+                aNavigationTypeMap,
+                NavigationBarMode_CURRENT,
+                false
+            );
+            exportEnumPropertyAttribute(
+                OAttributeMetaData::getFormAttributeNamespace(faTabbingCycle),
+                OAttributeMetaData::getFormAttributeName(faTabbingCycle),
+                PROPERTY_CYCLE,
+                aTabulatorCycleMap,
+                TabulatorCycle_RECORDS,
+                true
+            );
         }
 
         // the service name

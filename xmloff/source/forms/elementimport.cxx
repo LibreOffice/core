@@ -1133,7 +1133,7 @@ namespace xmloff
         {
             OSL_VERIFY( PropertyConversion::convertString(
                 cppu::UnoType<decltype(m_nImagePosition)>::get(),
-                _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImagePosition )
+                _rValue, aImagePositionMap
             ) >>= m_nImagePosition );
             m_bHaveImagePosition = true;
             return true;
@@ -1143,7 +1143,7 @@ namespace xmloff
         {
             OSL_VERIFY( PropertyConversion::convertString(
                 cppu::UnoType<decltype(m_nImageAlign)>::get(),
-                _rValue, OEnumMapper::getEnumMap( OEnumMapper::epImageAlign )
+                _rValue, aImageAlignMap
             ) >>= m_nImageAlign );
             return true;
         }
@@ -1679,7 +1679,7 @@ namespace xmloff
             PropertyConversion::convertString(
                 ::cppu::UnoType<sal_Int16>::get(),
                 _rValue,
-                OEnumMapper::getEnumMap( OEnumMapper::epListLinkageType )
+                aListLinkageMap
             ) >>= nLinkageType;
 
             m_bLinkWithIndexes = ( nLinkageType != 0 );
