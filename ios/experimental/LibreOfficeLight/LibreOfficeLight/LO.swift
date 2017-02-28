@@ -23,7 +23,7 @@ class LOkit
 
     func Initialize()
     {
-        
+        LOkit_ClientCommand()
     }
     
     func DeleteCurrentDocument()

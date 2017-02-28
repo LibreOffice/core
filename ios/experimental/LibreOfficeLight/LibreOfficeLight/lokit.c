@@ -117,7 +117,7 @@ extern "C" void lo_initialize(NSString *documentPath)
 
 
 // CLIENT COMMAND INTERFACE
-static bool client_canceltiles(char *input, int argc, char *args[])
+static bool client_canceltiles(char *input, char *args[])
 {
     // command:   canceltiles
     // arguments: NONE
@@ -130,7 +130,7 @@ static bool client_canceltiles(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_clientvisiblearea(char *input, int argc, char *args[])
+static bool client_clientvisiblearea(char *input, char *args[])
 {
     // command:   clientvisiblearea
     // arguments: x=<x>
@@ -140,7 +140,7 @@ static bool client_clientvisiblearea(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_closedocument(char *input, int argc, char *args[])
+static bool client_closedocument(char *input, char *args[])
 {
     // command:   closedocument
     // arguments: None
@@ -152,14 +152,14 @@ static bool client_closedocument(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_commandvalues(char *input, int argc, char *args[])
+static bool client_commandvalues(char *input, char *args[])
 {
     // command:   commandvalues
     // arguments: None
     return true;
 }
 
-static bool client_downloadas(char *input, int argc, char *args[])
+static bool client_downloadas(char *input, char *args[])
 {
     // command:   downloadas
     // arguments: name=<fileName>
@@ -176,7 +176,7 @@ static bool client_downloadas(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_getchildid(char *input, int argc, char *args[])
+static bool client_getchildid(char *input, char *args[])
 {
     // command:   getchildid
     // arguments: None
@@ -186,7 +186,7 @@ static bool client_getchildid(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_gettextselection(char *input, int argc, char *args[])
+static bool client_gettextselection(char *input, char *args[])
 {
     // command:   gettextselection
     // arguments: None
@@ -195,7 +195,7 @@ static bool client_gettextselection(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_insertfile(char *input, int argc, char *args[])
+static bool client_insertfile(char *input, char *args[])
 {
     // command:   insertfile
     // arguments: name=<name>
@@ -206,7 +206,7 @@ static bool client_insertfile(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_key(char *input, int argc, char *args[])
+static bool client_key(char *input, char *args[])
 {
     // command:   key
     // arguments: type=<type>
@@ -217,7 +217,7 @@ static bool client_key(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_load(char *input, int argc, char *args[])
+static bool client_load(char *input, char *args[])
 {
     // command:   load
     // arguments: [part=<partNumber>]
@@ -233,7 +233,7 @@ static bool client_load(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_loolclient(char *input, int argc, char *args[])
+static bool client_loolclient(char *input, char *args[])
 {
     // command:   loolclient
     // arguments: <major.minor[-patch]>
@@ -248,7 +248,7 @@ static bool client_loolclient(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_mouse(char *input, int argc, char *args[])
+static bool client_mouse(char *input, char *args[])
 {
     // command:   mouse
     // arguments: type=<type>
@@ -260,7 +260,7 @@ static bool client_mouse(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_paste(char *input, int argc, char *args[])
+static bool client_paste(char *input, char *args[])
 {
     // command:   paste
     // arguments: mimetype=<mimeType>
@@ -270,7 +270,7 @@ static bool client_paste(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_ping(char *input, int argc, char *args[])
+static bool client_ping(char *input, char *args[])
 {
     // command:  ping
     // argument: None
@@ -279,7 +279,7 @@ static bool client_ping(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_renderfont(char *input, int argc, char *args[])
+static bool client_renderfont(char *input, char *args[])
 {
     // command:   renderfont
     // arguments: font=<font>
@@ -291,7 +291,7 @@ static bool client_renderfont(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_requestloksession(char *input, int argc, char *args[])
+static bool client_requestloksession(char *input, char *args[])
 {
     // command:   requestloksession
     // arguments: None
@@ -301,14 +301,14 @@ static bool client_requestloksession(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_resetselection(char *input, int argc, char *args[])
+static bool client_resetselection(char *input, char *args[])
 {
     // command:   resetselection
     // arguments: None
     return true;
 }
 
-static bool client_saveas(char *input, int argc, char *args[])
+static bool client_saveas(char *input, char *args[])
 {
     // command:   saveas
     // arguments: url=<url>
@@ -321,7 +321,7 @@ static bool client_saveas(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_selectgraphic(char *input, int argc, char *args[])
+static bool client_selectgraphic(char *input, char *args[])
 {
     // command:   selectgraphic
     // arguments: type=<type>
@@ -332,7 +332,7 @@ static bool client_selectgraphic(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_selecttext(char *input, int argc, char *args[])
+static bool client_selecttext(char *input, char *args[])
 {
     // command:   selecttext
     // arguments: type=<type>
@@ -343,7 +343,7 @@ static bool client_selecttext(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_setclientpart(char *input, int argc, char *args[])
+static bool client_setclientpart(char *input, char *args[])
 {
     // command:   setclientpart
     // arguments: part=<partNumber>
@@ -352,21 +352,21 @@ static bool client_setclientpart(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_status(char *input, int argc, char *args[])
+static bool client_status(char *input, char *args[])
 {
     // command:   status
     // arguments: None
     return true;
 }
 
-static bool client_styles(char *input, int argc, char *args[])
+static bool client_styles(char *input, char *args[])
 {
     // command:   styles
     // arguments: None
     return true;
 }
 
-static bool client_tile(char *input, int argc, char *args[])
+static bool client_tile(char *input, char *args[])
 {
     // command:   tile
     // arguments: part=<partNumber>
@@ -392,7 +392,7 @@ static bool client_tile(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_tilecombine(char *input, int argc, char *args[])
+static bool client_tilecombine(char *input, char *args[])
 {
     // command:   tilecombine
     // arguments: <parameters>
@@ -404,7 +404,7 @@ static bool client_tilecombine(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_uno(char *input, int argc, char *args[])
+static bool client_uno(char *input, char *args[])
 {
     // command:   uno
     // arguments: <command>
@@ -413,7 +413,7 @@ static bool client_uno(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_useractive(char *input, int argc, char *args[])
+static bool client_useractive(char *input, char *args[])
 {
     // command:   useractive
     // arguments: None
@@ -425,7 +425,7 @@ static bool client_useractive(char *input, int argc, char *args[])
     return true;
 }
 
-static bool client_userinactive(char *input, int argc, char *args[])
+static bool client_userinactive(char *input, char *args[])
 {
     // command:   userinactive
     // arguments: None
@@ -438,7 +438,7 @@ static bool client_userinactive(char *input, int argc, char *args[])
 
 
 
-typedef struct {const char *command; bool (*funcCmd)(char *, int, char *[]);} CLIENTCOMMAND;
+typedef struct {const char *command; bool (*funcCmd)(char *, char *[]);} CLIENTCOMMAND;
 static CLIENTCOMMAND clientcommands[] = {{"canceltiles",       client_canceltiles},
                                          {"clientvisiblearea", client_clientvisiblearea},
                                          {"closedocument",     client_closedocument},
@@ -473,19 +473,27 @@ static CLIENTCOMMAND clientcommands[] = {{"canceltiles",       client_canceltile
 
 
 
-bool ClientCommand(char *input)
+int LOkit_ClientCommand()
 {
-    CLIENTCOMMAND *cmd = clientcommands;
+    char *args[10];
+    char *sep = " ";
+    char *cmd, *token;
+    char *input = "unknown command jan var her";
+    int   j = 0;
 
     // Split input into cmd + args
+    token = cmd = strtok(input, sep);
+    while (token && j < 10 && token - input < 2048)
+      args[j++] = token = strtok(token, sep);
 
     // Locate correct command
-    for (; cmd->command; ++cmd)
-        if (!strcmp(cmd->command,"mycommand"))
-            return cmd->funcCmd(input, 0, NULL);
+    CLIENTCOMMAND *client_cmd = clientcommands;
+    for (; client_cmd->command; ++cmd)
+        if (!strcmp(client_cmd->command,"mycommand"))
+            return client_cmd->funcCmd(input, NULL);
 
     // Call/Return from command
-    return false;
+    return 0;
 }
 
 
