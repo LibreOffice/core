@@ -101,6 +101,26 @@ namespace sax_fastparser {
         write( sOutput.getStr(), sOutput.getLength(), bEscape );
     }
 
+#if OSL_DEBUG_LEVEL > 0
+    /** Characters not allowed in XML 1.0
+        XML 1.1 would exclude only U+0000
+     */
+    bool invalidChar( char c )
+    {
+        if (static_cast<unsigned char>(c) >= 0x20)
+            return false;
+
+        switch (c)
+        {
+            case 0x09:
+            case 0x0a:
+            case 0x0d:
+                return false;
+        }
+        return true;
+    }
+#endif
+
     void FastSaxSerializer::write( const char* pStr, sal_Int32 nLen, bool bEscape )
     {
         if (nLen == -1)
@@ -112,6 +132,7 @@ namespace sax_fastparser {
             return;
         }
 
+        bool bGood = true;
         for (sal_Int32 i = 0; i < nLen; ++i)
         {
             char c = pStr[ i ];
@@ -124,9 +145,26 @@ namespace sax_fastparser {
                 case '"':   writeBytes( "&quot;", 6 );   break;
                 case '\n':  writeBytes( "&#10;", 5 );    break;
                 case '\r':  writeBytes( "&#13;", 5 );    break;
-                default:    writeBytes( &c, 1 );          break;
+                default:
+#if OSL_DEBUG_LEVEL > 0
+                            /* FIXME: we should escape such invalid characters
+                             * in the _xHHHH_ form OOXML uses. Note that also a
+                             * literal "_x0008_" would have to be escaped then
+                             * as _x005F_x0008_ (where only the leading '_' is
+                             * escaped as _x005F_). */
+                            if (invalidChar(pStr[i]))
+                            {
+                                bGood = false;
+                                // The SAL_WARN() for the single character is
+                                // issued in writeBytes(), just gather for the
+                                // SAL_WARN_IF() below.
+                            }
+#endif
+                            writeBytes( &c, 1 );         break;
             }
         }
+        SAL_WARN_IF( !bGood && nLen > 1, "sax", "in '" << OString(pStr,std::min<sal_Int32>(nLen,42)) << "'");
+        (void)bGood;
     }
 
     void FastSaxSerializer::endDocument()
@@ -496,6 +534,21 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::writeBytes( const char* pStr, size_t nLen )
     {
+#if OSL_DEBUG_LEVEL > 0
+        {
+            bool bGood = true;
+            for (size_t i=0; i < nLen; ++i)
+            {
+                if (invalidChar(pStr[i]))
+                {
+                    bGood = false;
+                    SAL_WARN("sax", "FastSaxSerializer::writeBytes - illegal XML character 0x" <<
+                            std::hex << int(static_cast<unsigned char>(pStr[i])));
+                }
+            }
+            SAL_WARN_IF( !bGood && nLen > 1, "sax", "in '" << OString(pStr,std::min<sal_Int32>(nLen,42)) << "'");
+        }
+#endif
         maCachedOutputStream.writeBytes( reinterpret_cast<const sal_Int8*>(pStr), nLen );
     }
 
