@@ -229,22 +229,22 @@ UpdateCheckConfig::get(
 
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value = uno::makeAny( OUString("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments") );
+    aProperty.Value <<= OUString("org.openoffice.Office.Jobs/Jobs/UpdateCheck/Arguments");
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] = uno::makeAny( aProperty );
+    aArgumentList[0] <<= aProperty;
 
     uno::Reference< container::XNameContainer > xContainer(
         xConfigProvider->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ),
         uno::UNO_QUERY_THROW );
 
-    aProperty.Value = uno::makeAny( OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates") );
-    aArgumentList[0] = uno::makeAny( aProperty );
+    aProperty.Value <<= OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/IgnoredUpdates");
+    aArgumentList[0] <<= aProperty;
     uno::Reference< container::XNameContainer > xIgnoredExt( xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ), uno::UNO_QUERY_THROW );
 
-    aProperty.Value = uno::makeAny( OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/AvailableUpdates") );
-    aArgumentList[0] = uno::makeAny( aProperty );
+    aProperty.Value <<= OUString("/org.openoffice.Office.ExtensionManager/ExtensionUpdateData/AvailableUpdates");
+    aArgumentList[0] <<= aProperty;
     uno::Reference< container::XNameContainer > xUpdateAvail( xConfigProvider->createInstanceWithArguments( "com.sun.star.configuration.ConfigurationUpdateAccess", aArgumentList ), uno::UNO_QUERY_THROW );
 
     return new UpdateCheckConfig( xContainer, xUpdateAvail, xIgnoredExt, rListener );
@@ -472,7 +472,7 @@ UpdateCheckConfig::getByName( const OUString& aName )
         aValue >>= aStr;
 
         if( aStr.isEmpty() )
-            aValue = uno::makeAny(getDesktopDirectory());
+            aValue <<= getDesktopDirectory();
     }
     return aValue;
 }

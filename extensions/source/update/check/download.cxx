@@ -181,10 +181,10 @@ Download::getProxyForURL(const OUString& rURL, OString& rHost, sal_Int32& rPort)
 
     beans::PropertyValue aProperty;
     aProperty.Name  = "nodepath";
-    aProperty.Value = uno::makeAny( OUString("org.openoffice.Inet/Settings") );
+    aProperty.Value <<= OUString("org.openoffice.Inet/Settings");
 
     uno::Sequence< uno::Any > aArgumentList( 1 );
-    aArgumentList[0] = uno::makeAny( aProperty );
+    aArgumentList[0] <<= aProperty;
 
     uno::Reference< container::XNameAccess > xNameAccess(
         xConfigProvider->createInstanceWithArguments(
