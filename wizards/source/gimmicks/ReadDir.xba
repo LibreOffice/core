@@ -263,7 +263,7 @@ Dim MaxFileIndex as Integer
 				End If
 			Next i
 		End If
-	Loop Until m &gt; Ubound(DirList()
+	Loop Until m &gt; Ubound(DirList())
 	ReDim Preserve FileNameList(n-1,1) as String
 	ReadSourceDirectory() = FileNameList()
 End Function
