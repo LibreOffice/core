@@ -17822,6 +17822,7 @@
     </resource>
     <resource name="CT_SectPrBase" resource="Properties"/>
     <resource name="CT_SectPr" resource="Properties">
+      <action name="start" action="handleLastParagraphInSection"/>
       <element name="sectPrChange" tokenid="ooxml:CT_SectPr_sectPrChange"/>
       <action name="start" action="setLastParagraphInSection"/>
     </resource>
