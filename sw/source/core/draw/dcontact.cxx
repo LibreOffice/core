@@ -75,15 +75,6 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    /** unary function used to find a disconnected 'virtual' drawing object */
-    struct UsedOrUnusedVirtObjPred
-    {
-        bool m_bUsedPred;
-        UsedOrUnusedVirtObjPred(bool bUsed) : m_bUsedPred(bUsed) {};
-        bool operator()(const std::unique_ptr<SwDrawVirtObj>& pDrawVirtObj)
-                { return pDrawVirtObj->IsConnected() == m_bUsedPred; };
-    };
-
     /** unary function used to find a 'virtual' drawing object anchored at a given frame */
     struct VirtObjAnchoredAtFramePred
     {
@@ -1687,7 +1678,7 @@ void SwDrawContact::DisconnectObjFromLayout( SdrObject* _pDrawObj )
     else
     {
         const auto ppVirtDrawObj(std::find_if(maDrawVirtObjs.begin(), maDrawVirtObjs.end(),
-                UsedOrUnusedVirtObjPred(true)));
+                [] (const std::unique_ptr<SwDrawVirtObj>& pObj) { return pObj->IsConnected(); }));
         if(ppVirtDrawObj != maDrawVirtObjs.end())
         {
             // replace found 'virtual' drawing object by 'master' drawing
