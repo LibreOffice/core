@@ -6660,6 +6660,109 @@ void Test::setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown)
     pDoc->SetDocOptions(aOpt);
 }
 
+void Test::checkPrecisionAsShown( OUString& rCode, double fValue, double fExpectedRoundVal )
+{
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    sal_uInt32 nFormat = pFormatter->GetEntryKey( rCode );
+    if ( nFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
+    {
+        sal_Int32 nCheckPos = 0;
+        short nType;
+        pFormatter->PutEntry( rCode, nCheckPos, nType, nFormat );
+        CPPUNIT_ASSERT_EQUAL( nCheckPos, sal_Int32(0) );
+    }
+    double fRoundValue = m_pDoc->RoundValueAsShown( fValue, nFormat );
+    rtl::OString aMessage = "Format \"";
+    aMessage += rtl::OUStringToOString( rCode, RTL_TEXTENCODING_ASCII_US );
+    aMessage += "\" is not correctly rounded";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( aMessage.getStr(), fExpectedRoundVal, fRoundValue );
+}
+
+void Test::testPrecisionAsShown()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    // Turn on "precision as shown" option.
+    setCalcAsShown( m_pDoc, true);
+
+    OUString aCode;
+    double fValue, fExpectedRoundVal;
+    {   // decimal rounding
+        aCode = "0.00";
+        fValue = 1.0/3.0;
+        fExpectedRoundVal = 0.33;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fValue = -10.001;
+        fExpectedRoundVal = -10.0;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+    }
+    {   // thousand rounding buguous!!!! tdf#106253
+        aCode = "0,,";
+        fValue = 4.0e9 / 7.0;
+        fExpectedRoundVal = 571e6; // actual is 571428571
+        //checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fValue = -4.0e8 / 7.0;
+        fExpectedRoundVal = -57e6; // actual is 57142857
+        //checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+    }
+    {   // percent rounding
+        aCode = "0.00%";
+        fValue = 4.0 / 7.0;
+        fExpectedRoundVal = 0.5714;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fValue = -4.0 / 7.0;
+        fExpectedRoundVal = -0.5714;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+    }
+    {   // scientific rounding
+        aCode = "0.00E0";
+        fValue = 400000.0 / 7.0;
+        fExpectedRoundVal = 57100.0;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fValue = 4.0 / 70000.0;
+        fExpectedRoundVal = 5.71e-5;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        // engineering rounding bugous!!! tdf#106252
+        aCode = "##0.000E0";
+        fValue = 400000.0 / 7.0;
+        fExpectedRoundVal = 57143.0; // actual is 57140
+        //checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fValue = 4.0 / 70000.0;
+        fExpectedRoundVal = 5.7143e-5; // actual is 5.714e-05
+        //checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+    }
+    {   // fraction rounding tdf#105657
+        aCode = "# ?/?";
+        fValue = 0.35;
+        fExpectedRoundVal = 1.0/3.0;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fValue = -0.35;
+        fExpectedRoundVal = -1.0/3.0;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+    }
+    {   // exact fraction
+        aCode = "# ?/??";
+        fValue = 0.35;
+        fExpectedRoundVal = 0.35;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fValue = -0.35;
+        fExpectedRoundVal = -0.35;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+    }
+    {   // several sub-formats tdf#106052
+        aCode = "0.00;-0.000";
+        fValue = 1.0/3.0;
+        fExpectedRoundVal = 0.33;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+        fValue = -1.0/3.0;
+        fExpectedRoundVal = -0.333;
+        checkPrecisionAsShown( aCode, fValue, fExpectedRoundVal );
+    }
+
+    setCalcAsShown( m_pDoc, false);
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
