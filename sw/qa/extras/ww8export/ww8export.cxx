@@ -1198,7 +1198,7 @@ DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
         SwNode* pNode = pDoc->GetNodes()[ n ];
         if (SwGrfNode *pGrfNode = pNode->GetGrfNode())
         {
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(3), pGrfNode->GetSwAttrSet().GetMirrorGrf().GetValue());
+            CPPUNIT_ASSERT_EQUAL(RES_MIRROR_GRAPH_BOTH, pGrfNode->GetSwAttrSet().GetMirrorGrf().GetValue());
             break;
         }
     }

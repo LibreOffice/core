@@ -2933,7 +2933,7 @@ bool SvxFormatBreakItem::GetPresentation
     OUString&           rText, const IntlWrapper *
 )   const
 {
-    rText = GetValueTextByPos( GetValue() );
+    rText = GetValueTextByPos( GetEnumValue() );
     return true;
 }
 
@@ -3000,7 +3000,7 @@ SfxPoolItem* SvxFormatBreakItem::Clone( SfxItemPool* ) const
 
 SvStream& SvxFormatBreakItem::Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const
 {
-    rStrm.WriteSChar( GetValue() );
+    rStrm.WriteSChar( GetEnumValue() );
     if( FMTBREAK_NOAUTO > nItemVersion )
         rStrm.WriteSChar( 0x01 );
     return rStrm;
