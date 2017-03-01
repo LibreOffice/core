@@ -150,6 +150,7 @@ private:
     std::vector<std::vector<PivotChartItem>> m_aCategoriesColumnOrientation;
     std::vector<std::vector<PivotChartItem>> m_aCategoriesRowOrientation;
     std::vector<std::vector<PivotChartItem>> m_aLabels;
+    std::vector<std::vector<PivotChartItem>> m_aDataRowVector;
 
     std::vector<css::uno::Reference<css::util::XModifyListener>> m_aValueListeners;
 };
