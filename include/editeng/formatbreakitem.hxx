@@ -33,7 +33,7 @@
 */
 #define FMTBREAK_NOAUTO ((sal_uInt16)0x0001)
 
-class EDITENG_DLLPUBLIC SvxFormatBreakItem : public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxFormatBreakItem : public SfxEnumItem<SvxBreak>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -52,7 +52,7 @@ public:
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
-    virtual OUString    GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual OUString         GetValueTextByPos( sal_uInt16 nPos ) const override;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SvStream&        Store( SvStream& , sal_uInt16 nItemVersion ) const override;
@@ -60,15 +60,13 @@ public:
     virtual SfxPoolItem*     Create( SvStream&, sal_uInt16 ) const override;
     virtual sal_uInt16       GetValueCount() const override;
 
-    void                     SetValue( SvxBreak nNewVal )
-                                {SfxEnumItem::SetValue((sal_uInt16) nNewVal); }
-    SvxBreak                 GetBreak() const { return (SvxBreak) GetValue(); }
+    SvxBreak                 GetBreak() const { return GetValue(); }
 };
 
 
 inline SvxFormatBreakItem::SvxFormatBreakItem( const SvxBreak eBreak,
                                          const sal_uInt16 _nWhich ) :
-    SfxEnumItem( _nWhich, (sal_uInt16)eBreak )
+    SfxEnumItem( _nWhich, eBreak )
 {}
 
 inline SvxFormatBreakItem::SvxFormatBreakItem( const SvxFormatBreakItem& rBreak ) :

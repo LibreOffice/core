@@ -34,7 +34,7 @@ enum SvxRotateMode
     SVX_ROTATE_MODE_BOTTOM
 };
 
-class SVX_DLLPUBLIC SvxRotateModeItem: public SfxEnumItem
+class SVX_DLLPUBLIC SvxRotateModeItem: public SfxEnumItem<SvxRotateMode>
 {
 public:
                 static SfxPoolItem* CreateDefault();

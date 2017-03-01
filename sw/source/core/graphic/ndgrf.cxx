@@ -1028,6 +1028,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
         case RES_MIRROR_GRAPH_HOR:
             nMirror = BmpMirrorFlags::Vertical;
             break;
+        default: break;
         }
 
     rGA.SetMirrorFlags( nMirror );

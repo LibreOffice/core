@@ -4351,7 +4351,7 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
 
     if ( pGrfNode && SfxItemState::SET == pGrfNode->GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE, true, &pItem))
     {
-        nMode = static_cast<const SfxEnumItem*>(pItem)->GetValue();
+        nMode = static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
         if (nMode == GRAPHICDRAWMODE_GREYS)
             m_pSerializer->singleElementNS (XML_a, XML_grayscl, FSEND);
         else if (nMode == GRAPHICDRAWMODE_MONO) //black/white has a 0,5 threshold in LibreOffice
