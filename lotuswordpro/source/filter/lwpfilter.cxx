@@ -104,7 +104,7 @@ using namespace OpenStormBento;
  bool Decompress(SvStream *pCompressed, SvStream * & pOutDecompressed)
 {
     pCompressed->Seek(0);
-    std::unique_ptr<SvStream> aDecompressed(new SvMemoryStream(4096, 4096));
+    std::unique_ptr<SvMemoryStream> aDecompressed(new SvMemoryStream(4096, 4096));
     unsigned char buffer[512];
     pCompressed->ReadBytes(buffer, 16);
     aDecompressed->WriteBytes(buffer, 16);
@@ -131,6 +131,9 @@ using namespace OpenStormBento;
     pCompressed->Seek(nPos);
     while (sal_uInt32 iRead = pCompressed->ReadBytes(buffer, 512))
         aDecompressed->WriteBytes(buffer, iRead);
+
+    // disable stream growing past its current size
+    aDecompressed->SetResizeOffset(0);
 
     //transfer ownership of aDecompressed's ptr
     pOutDecompressed = aDecompressed.release();
