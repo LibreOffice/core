@@ -996,7 +996,9 @@ static void InterceptLOKStateChangeEvent(const SfxViewFrame* pViewFrame, const c
         aEvent.FeatureURL.Path == "Underline" ||
         aEvent.FeatureURL.Path == "ModifiedStatus" ||
         aEvent.FeatureURL.Path == "TrackChanges" ||
-        aEvent.FeatureURL.Path == "AcceptTrackedChange" ||
+        aEvent.FeatureURL.Path == "ShowTrackedChanges" ||
+        aEvent.FeatureURL.Path == "NextTrackedChange" ||
+        aEvent.FeatureURL.Path == "PreviousTrackedChange" ||
         aEvent.FeatureURL.Path == "AlignLeft" ||
         aEvent.FeatureURL.Path == "AlignHorizontalCenter" ||
         aEvent.FeatureURL.Path == "AlignRight")
