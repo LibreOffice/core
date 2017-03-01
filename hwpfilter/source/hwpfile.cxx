@@ -356,8 +356,8 @@ void HWPFile::TagsRead()
                         return;
                      }
 
-                     _hwpInfo.back_info.data = new char[(unsigned int)_hwpInfo.back_info.size];
-                     ReadBlock(_hwpInfo.back_info.data, _hwpInfo.back_info.size);
+                     _hwpInfo.back_info.data.resize(_hwpInfo.back_info.size);
+                     ReadBlock(_hwpInfo.back_info.data.data(), _hwpInfo.back_info.size);
 
                      if( _hwpInfo.back_info.size > 0 )
                           _hwpInfo.back_info.type = 2;
