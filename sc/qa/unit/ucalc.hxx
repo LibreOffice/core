@@ -60,6 +60,7 @@ public:
 
     static void setCalcAsShown(ScDocument* pDoc, bool bCalcAsShown);
 
+    void checkPrecisionAsShown( OUString& rCode, double fValue, double fExpectedRoundVal );
 
     template<size_t Size>
     static ScRange insertRangeData(
@@ -508,6 +509,8 @@ public:
 
     void testEmptyCalcDocDefaults();
 
+    void testPrecisionAsShown();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testSharedStringPool);
@@ -761,6 +764,7 @@ public:
     CPPUNIT_TEST(testTdf97369);
     CPPUNIT_TEST(testTdf97587);
     CPPUNIT_TEST(testEmptyCalcDocDefaults);
+    CPPUNIT_TEST(testPrecisionAsShown);
     CPPUNIT_TEST_SUITE_END();
 
 private:
