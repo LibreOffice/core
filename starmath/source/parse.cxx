@@ -1678,7 +1678,7 @@ void SmParser::DoUnOper()
             break;
 
         default :
-            Error(SmParseError::UnoperExpected);
+            assert(false);
     }
 
     // get argument
@@ -2346,7 +2346,6 @@ void SmParser::AddError(SmParseError Type, SmNode *pNode)
         case SmParseError::LbraceExpected: nRID = RID_ERR_LBRACEEXPECTED;      break;
         case SmParseError::RbraceExpected: nRID = RID_ERR_RBRACEEXPECTED;      break;
         case SmParseError::FuncExpected:   nRID = RID_ERR_FUNCEXPECTED;        break;
-        case SmParseError::UnoperExpected: nRID = RID_ERR_UNOPEREXPECTED;      break;
         case SmParseError::PoundExpected:  nRID = RID_ERR_POUNDEXPECTED;       break;
         case SmParseError::ColorExpected:  nRID = RID_ERR_COLOREXPECTED;       break;
         case SmParseError::RightExpected:  nRID = RID_ERR_RIGHTEXPECTED;       break;

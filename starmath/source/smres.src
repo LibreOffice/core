@@ -201,11 +201,6 @@ String RID_ERR_FUNCEXPECTED
     Text [ en-US ] = "Function expected" ;
 };
 
-String RID_ERR_UNOPEREXPECTED
-{
-    Text [ en-US ] = "Unary operator expected" ;
-};
-
 String RID_ERR_POUNDEXPECTED
 {
     Text [ en-US ] = "'#' expected" ;
