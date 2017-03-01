@@ -33,7 +33,7 @@ namespace i18nutil
  * This is a wrapper around com::sun::star::util::SearchOptions
  * but using the more type-safe TransliterationFlags enum.
  */
-struct I18NUTIL_DLLPUBLIC SAL_WARN_UNUSED SearchOptions {
+struct SAL_WARN_UNUSED SearchOptions {
     css::util::SearchAlgorithms algorithmType;
     sal_Int32 searchFlag;
     OUString searchString;
@@ -93,7 +93,7 @@ struct I18NUTIL_DLLPUBLIC SAL_WARN_UNUSED SearchOptions {
  * This is a wrapper around com::sun::star::util::SearchOptions and SearchOptions2,
  * but using the more type-safe TransliterationFlags enum.
  */
-struct I18NUTIL_DLLPUBLIC SAL_WARN_UNUSED SearchOptions2 : public SearchOptions {
+struct SAL_WARN_UNUSED SearchOptions2 : public SearchOptions {
 
     sal_Int16 AlgorithmType2;
     sal_Int32 WildcardEscapeCharacter;
