@@ -30,14 +30,13 @@ enum class SdrCaptionEscDir { Horizontal, Vertical, BestFit };
 
 // class SdrCaptionEscDirItem
 
-class SVX_DLLPUBLIC SdrCaptionEscDirItem: public SfxEnumItem {
+class SVX_DLLPUBLIC SdrCaptionEscDirItem: public SfxEnumItem<SdrCaptionEscDir> {
 public:
-    SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SdrCaptionEscDir::Horizontal): SfxEnumItem(SDRATTR_CAPTIONESCDIR,sal::static_int_cast< sal_uInt16 >(eDir)) {}
+    SdrCaptionEscDirItem(SdrCaptionEscDir eDir=SdrCaptionEscDir::Horizontal): SfxEnumItem(SDRATTR_CAPTIONESCDIR, eDir) {}
     SdrCaptionEscDirItem(SvStream& rIn)                              : SfxEnumItem(SDRATTR_CAPTIONESCDIR,rIn)  {}
     virtual SfxPoolItem*     Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*     Create(SvStream& rIn, sal_uInt16 nVer) const override;
-    virtual sal_uInt16           GetValueCount() const override; // { return 3; }
-    SdrCaptionEscDir GetValue() const      { return (SdrCaptionEscDir)SfxEnumItem::GetValue(); }
+    virtual sal_uInt16       GetValueCount() const override; // { return 3; }
 
     virtual OUString GetValueTextByPos(sal_uInt16 nPos) const override;
 

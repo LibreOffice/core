@@ -34,7 +34,7 @@ enum SwFootnoteEndPosEnum
     FTNEND_ATTXTEND_END
 };
 
-class SW_DLLPUBLIC SwFormatFootnoteEndAtTextEnd : public SfxEnumItem
+class SW_DLLPUBLIC SwFormatFootnoteEndAtTextEnd : public SfxEnumItem<SwFootnoteEndPosEnum>
 {
     OUString sPrefix;
     OUString sSuffix;
@@ -43,7 +43,7 @@ class SW_DLLPUBLIC SwFormatFootnoteEndAtTextEnd : public SfxEnumItem
 
 protected:
     SwFormatFootnoteEndAtTextEnd( sal_uInt16 nWhichL, SwFootnoteEndPosEnum ePos )
-        : SfxEnumItem( nWhichL, sal::static_int_cast< sal_uInt16 >(ePos) ), nOffset( 0 )
+        : SfxEnumItem( nWhichL, ePos ), nOffset( 0 )
     {}
     SwFormatFootnoteEndAtTextEnd( const SwFormatFootnoteEndAtTextEnd& rAttr )
         : SfxEnumItem( rAttr ), sPrefix( rAttr.sPrefix ),
@@ -52,7 +52,7 @@ protected:
     {}
 
 public:
-    virtual sal_uInt16          GetValueCount() const override;
+    virtual sal_uInt16       GetValueCount() const override;
 
     virtual bool             operator==( const SfxPoolItem& ) const override;
 

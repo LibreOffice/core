@@ -424,7 +424,7 @@ void SwFormatFrameSize::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // Partially implemented inline in hxx
 SwFormatFillOrder::SwFormatFillOrder( SwFillOrder nFO )
-    : SfxEnumItem( RES_FILL_ORDER, sal_uInt16(nFO) )
+    : SfxEnumItem( RES_FILL_ORDER, nFO )
 {}
 SfxPoolItem*  SwFormatFillOrder::Clone( SfxItemPool* ) const
 {
@@ -1143,7 +1143,7 @@ void SwFormatCol::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 // Partially implemented inline in hxx
 SwFormatSurround::SwFormatSurround( css::text::WrapTextMode eFly ) :
-    SfxEnumItem( RES_SURROUND, sal_uInt16( eFly ) )
+    SfxEnumItem( RES_SURROUND, eFly )
 {
     bAnchorOnly = bContour = bOutside = false;
 }
@@ -1212,7 +1212,7 @@ bool SwFormatSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         {
             sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
             if( eVal >= css::text::WrapTextMode_NONE && eVal <= css::text::WrapTextMode_RIGHT )
-                SetValue( static_cast<sal_uInt16>(eVal) );
+                SetValue( (css::text::WrapTextMode)eVal );
             else {
                 //exception
                 ;

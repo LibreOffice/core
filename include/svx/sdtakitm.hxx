@@ -76,14 +76,13 @@ enum SdrTextAniKind {
 //   of the text depends on the anchor of the drawing object.  This
 //   corresponds to the position of the text in normal Paint (without scrolling).
 
-class SVX_DLLPUBLIC SdrTextAniKindItem: public SfxEnumItem {
+class SVX_DLLPUBLIC SdrTextAniKindItem: public SfxEnumItem<SdrTextAniKind> {
 public:
-    SdrTextAniKindItem(SdrTextAniKind eKind=SDRTEXTANI_NONE): SfxEnumItem(SDRATTR_TEXT_ANIKIND,(sal_uInt16)eKind) {}
-    SdrTextAniKindItem(SvStream& rIn)                       : SfxEnumItem(SDRATTR_TEXT_ANIKIND,rIn)  {}
+    SdrTextAniKindItem(SdrTextAniKind eKind=SDRTEXTANI_NONE): SfxEnumItem(SDRATTR_TEXT_ANIKIND, eKind) {}
+    SdrTextAniKindItem(SvStream& rIn)                       : SfxEnumItem(SDRATTR_TEXT_ANIKIND, rIn)  {}
     virtual SfxPoolItem*      Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem*      Create(SvStream& rIn, sal_uInt16 nVer) const override;
-    virtual sal_uInt16            GetValueCount() const override; // { return 5; }
-            SdrTextAniKind GetValue() const      { return (SdrTextAniKind)SfxEnumItem::GetValue(); }
+    virtual sal_uInt16        GetValueCount() const override; // { return 5; }
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

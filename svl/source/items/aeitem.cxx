@@ -35,7 +35,7 @@ class SfxAllEnumValueArr : public std::vector<SfxAllEnumValue_Impl> {};
 
 
 SfxAllEnumItem::SfxAllEnumItem() :
-    SfxEnumItem(),
+    SfxEnumItem<sal_uInt16>(0, 0),
     pValues( nullptr ),
     pDisabledValues( nullptr )
 {

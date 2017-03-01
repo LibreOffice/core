@@ -67,34 +67,34 @@ inline SfxBoolItem makeSdAttrLayerThisPage()
     return SfxBoolItem( ATTR_LAYER_THISPAGE, false );
 }
 
-class DiaEffectItem : public SfxEnumItem
+class DiaEffectItem : public SfxEnumItem<sal_uInt16>
 {
 public:
             DiaEffectItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
-            sal_uInt16          GetValueCount() const override { return FADE_EFFECT_COUNT; }
+            sal_uInt16      GetValueCount() const override { return FADE_EFFECT_COUNT; }
 };
 
-class DiaSpeedItem : public SfxEnumItem
+class DiaSpeedItem : public SfxEnumItem<sal_uInt16>
 {
 public:
             DiaSpeedItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
-            sal_uInt16          GetValueCount() const override { return FADE_SPEED_COUNT; }
+            sal_uInt16      GetValueCount() const override { return FADE_SPEED_COUNT; }
 };
 
-class DiaAutoItem : public SfxEnumItem
+class DiaAutoItem : public SfxEnumItem<PresChange>
 {
 public:
             DiaAutoItem( SvStream& rIn );
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
-            sal_uInt16          GetValueCount() const override { return PRESCHANGE_COUNT; }
+            sal_uInt16      GetValueCount() const override { return PRESCHANGE_COUNT; }
 };
 
 #endif // INCLUDED_SD_INC_SDATTR_HXX
