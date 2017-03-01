@@ -1287,7 +1287,7 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
 
     get(m_pPageCollCB, "pagestyle");
     get(m_pPageCollLB, "pagestylelb");
-    get(m_pPageNoFT, "pagenoft");
+    get(m_pPageNoCB, "pagenoft");
     get(m_pPageNoNF, "pagenonf");
 
     get(m_pSplitCB, "split");
@@ -1318,6 +1318,8 @@ SwTextFlowPage::SwTextFlowPage(vcl::Window* pParent, const SfxItemSet& rSet)
         LINK( this, SwTextFlowPage, PageBreakTypeHdl_Impl ) );
     m_pPgBrkRB->SetClickHdl(
         LINK( this, SwTextFlowPage, PageBreakTypeHdl_Impl ) );
+    m_pPageNoCB->SetClickHdl(
+        LINK(this, SwTextFlowPage, PageNoClickHdl_Impl));
     m_pSplitCB->SetClickHdl(
         LINK( this, SwTextFlowPage, SplitHdl_Impl));
     m_pSplitRowCB->SetClickHdl(
@@ -1352,7 +1354,7 @@ void SwTextFlowPage::dispose()
     m_pPgBrkAfterRB.clear();
     m_pPageCollCB.clear();
     m_pPageCollLB.clear();
-    m_pPageNoFT.clear();
+    m_pPageNoCB.clear();
     m_pPageNoNF.clear();
     m_pSplitCB.clear();
     m_pSplitRowCB.clear();
@@ -1398,10 +1400,10 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
 
     //If we have a page style, then there's no break
     bool bPageItemPut = false;
-    if ( bState != (m_pPageCollCB->GetSavedValue() == 1) ||
-         ( bState &&
-           m_pPageCollLB->IsValueChangedFromSaved() )
-           || (m_pPageNoNF->IsEnabled() && m_pPageNoNF->IsValueModified()) )
+    if (   bState != (m_pPageCollCB->GetSavedValue() == TRISTATE_TRUE)
+        || (bState && m_pPageCollLB->IsValueChangedFromSaved())
+        || (m_pPageNoCB->IsEnabled() && m_pPageNoCB->IsValueChangedFromSaved())
+        || (m_pPageNoNF->IsEnabled() && m_pPageNoNF->IsValueModified()))
     {
         OUString sPage;
 
@@ -1410,12 +1412,15 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
             sPage = m_pPageCollLB->GetSelectEntry();
         }
         sal_uInt16 nPgNum = static_cast< sal_uInt16 >(m_pPageNoNF->GetValue());
-        if ( !pDesc || !pDesc->GetPageDesc() ||
-            ( pDesc->GetPageDesc() && ((pDesc->GetPageDesc()->GetName() != sPage) ||
-                    !comphelper::string::equals(m_pPageNoNF->GetSavedValue(), nPgNum))))
+        bool const usePageNo(bState && m_pPageNoCB->IsChecked());
+        boost::optional<sal_uInt16> const oPageNum(
+                (usePageNo) ? nPgNum : boost::optional<sal_Int16>());
+        if (!pDesc || !pDesc->GetPageDesc()
+            || (pDesc->GetPageDesc()->GetName() != sPage)
+            || (pDesc->GetNumOffset() != oPageNum))
         {
             SwFormatPageDesc aFormat( pShell->FindPageDescByName( sPage, true ) );
-            aFormat.SetNumOffset(bState ? nPgNum : 0);
+            aFormat.SetNumOffset(oPageNum);
             bModified |= nullptr != rSet->Put( aFormat );
             bPageItemPut = bState;
         }
@@ -1537,12 +1542,18 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                 OUString sPageDesc;
                 const SwPageDesc* pDesc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
 
-                //m_pPageNoNF->SetValue(static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset());
                 ::boost::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc*>(pItem)->GetNumOffset();
                 if (oNumOffset)
+                {
+                    m_pPageNoCB->Check();
+                    m_pPageNoNF->Enable(true);
                     m_pPageNoNF->SetValue(oNumOffset.get());
+                }
                 else
+                {
+                    m_pPageNoCB->Check(false);
                     m_pPageNoNF->Enable(false);
+                }
 
                 if(pDesc)
                     sPageDesc = pDesc->GetName();
@@ -1582,7 +1593,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
                     m_pPgBrkCB->Check();
                     m_pPageCollCB->Enable(false);
                     m_pPageCollLB->Enable(false);
-                    m_pPageNoFT->Enable(false);
+                    m_pPageNoCB->Enable(false);
                     m_pPageNoNF->Enable(false);
                 }
                 switch ( eBreak )
@@ -1670,6 +1681,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
     m_pColBrkRB->SaveValue();
     m_pPgBrkBeforeRB->SaveValue();
     m_pPgBrkAfterRB->SaveValue();
+    m_pPageNoCB->SaveValue();
     m_pPageNoNF->SaveValue();
     m_pTextDirectionLB->SaveValue();
     m_pVertOrientLB->SaveValue();
@@ -1684,7 +1696,7 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     if(bHtmlMode)
     {
         m_pPageNoNF->Enable(false);
-        m_pPageNoFT->Enable(false);
+        m_pPageNoCB->Enable(false);
     }
 }
 
@@ -1706,8 +1718,8 @@ IMPL_LINK_NOARG_TYPED(SwTextFlowPage, PageBreakHdl_Impl, Button*, void)
                 m_pPageCollLB->Enable(bEnable);
                 if(!bHtmlMode)
                 {
-                    m_pPageNoFT->Enable(bEnable);
-                    m_pPageNoNF->Enable(bEnable);
+                    m_pPageNoCB->Enable(bEnable);
+                    m_pPageNoNF->Enable(bEnable && m_pPageNoCB->IsChecked());
                 }
             }
     }
@@ -1716,7 +1728,7 @@ IMPL_LINK_NOARG_TYPED(SwTextFlowPage, PageBreakHdl_Impl, Button*, void)
             m_pPageCollCB->Check( false );
             m_pPageCollCB->Enable(false);
             m_pPageCollLB->Enable(false);
-            m_pPageNoFT->Enable(false);
+            m_pPageNoCB->Enable(false);
             m_pPageNoNF->Enable(false);
             m_pPgBrkRB->       Enable(false);
             m_pColBrkRB->      Enable(false);
@@ -1741,8 +1753,8 @@ IMPL_LINK_NOARG_TYPED(SwTextFlowPage, ApplyCollClickHdl_Impl, Button*, void)
     m_pPageCollLB->Enable(bEnable);
     if(!bHtmlMode)
     {
-        m_pPageNoFT->Enable(bEnable);
-        m_pPageNoNF->Enable(bEnable);
+        m_pPageNoCB->Enable(bEnable);
+        m_pPageNoNF->Enable(bEnable && m_pPageNoCB->IsChecked());
     }
 }
 
@@ -1760,8 +1772,8 @@ IMPL_LINK_TYPED( SwTextFlowPage, PageBreakPosHdl_Impl, Button*, pBtn, void )
             m_pPageCollLB->Enable(bEnable);
             if(!bHtmlMode)
             {
-                m_pPageNoFT->Enable(bEnable);
-                m_pPageNoNF->Enable(bEnable);
+                m_pPageNoCB->Enable(bEnable);
+                m_pPageNoNF->Enable(bEnable && m_pPageNoCB->IsChecked());
             }
         }
         else if (pBtn == m_pPgBrkAfterRB)
@@ -1769,7 +1781,7 @@ IMPL_LINK_TYPED( SwTextFlowPage, PageBreakPosHdl_Impl, Button*, pBtn, void )
             m_pPageCollCB->Check( false );
             m_pPageCollCB->Enable(false);
             m_pPageCollLB->Enable(false);
-            m_pPageNoFT->Enable(false);
+            m_pPageNoCB->Enable(false);
             m_pPageNoNF->Enable(false);
         }
     }
@@ -1782,11 +1794,16 @@ IMPL_LINK_TYPED( SwTextFlowPage, PageBreakTypeHdl_Impl, Button*, pBtn, void )
         m_pPageCollCB->Check(false);
         m_pPageCollCB->Enable(false);
         m_pPageCollLB->Enable(false);
-        m_pPageNoFT->Enable(false);
+        m_pPageNoCB->Enable(false);
         m_pPageNoNF->Enable(false);
     }
     else if ( m_pPgBrkBeforeRB->IsChecked() )
         PageBreakPosHdl_Impl(m_pPgBrkBeforeRB);
+}
+
+IMPL_LINK_NOARG_TYPED(SwTextFlowPage, PageNoClickHdl_Impl, Button*, void)
+{
+    m_pPageNoNF->Enable(m_pPageNoCB->IsChecked());
 }
 
 IMPL_LINK_TYPED( SwTextFlowPage, SplitHdl_Impl, Button*, pBox, void )
@@ -1815,7 +1832,7 @@ void SwTextFlowPage::DisablePageBreak()
     m_pPgBrkAfterRB->Disable();
     m_pPageCollCB->Disable();
     m_pPageCollLB->Disable();
-    m_pPageNoFT->Disable();
+    m_pPageNoCB->Disable();
     m_pPageNoNF->Disable();
 }
 

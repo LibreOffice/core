@@ -155,7 +155,7 @@ class SwTextFlowPage : public SfxTabPage
 
     VclPtr<CheckBox>       m_pPageCollCB;
     VclPtr<ListBox>        m_pPageCollLB;
-    VclPtr<FixedText>      m_pPageNoFT;
+    VclPtr<CheckBox>       m_pPageNoCB;
     VclPtr<NumericField>   m_pPageNoNF;
     VclPtr<CheckBox>       m_pSplitCB;
     VclPtr<TriStateBox>    m_pSplitRowCB;
@@ -176,6 +176,7 @@ class SwTextFlowPage : public SfxTabPage
     DECL_LINK_TYPED(ApplyCollClickHdl_Impl, Button*, void);
     DECL_LINK_TYPED( PageBreakPosHdl_Impl, Button*, void );
     DECL_LINK_TYPED( PageBreakTypeHdl_Impl, Button*, void );
+    DECL_LINK_TYPED(PageNoClickHdl_Impl, Button*, void);
     DECL_LINK_TYPED( SplitHdl_Impl, Button*, void );
     DECL_STATIC_LINK_TYPED( SwTextFlowPage, SplitRowHdl_Impl, Button*, void );
     DECL_LINK_TYPED( HeadLineCBClickHdl, Button* = nullptr, void );
