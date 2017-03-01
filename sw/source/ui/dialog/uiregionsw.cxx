@@ -1894,7 +1894,8 @@ bool SwSectionFootnoteEndTabPage::FillItemSet( SfxItemSet* rSet )
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         aFootnote.SetOffset( static_cast< sal_uInt16 >( m_pFootnoteOffsetField->GetValue()-1 ) );
-        // no break;
+        break;
+    default: break;
     }
 
     SwFormatEndAtTextEnd aEnd( m_pEndNtAtTextEndCB->IsChecked()
@@ -1915,7 +1916,8 @@ bool SwSectionFootnoteEndTabPage::FillItemSet( SfxItemSet* rSet )
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         aEnd.SetOffset( static_cast< sal_uInt16 >( m_pEndOffsetField->GetValue()-1 ) );
-        // no break;
+        break;
+    default: break;
     }
 
     rSet->Put( aFootnote );

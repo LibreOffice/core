@@ -32,7 +32,7 @@ class SvXMLUnitConverter;
     This item describes the font weight.
 */
 
-class EDITENG_DLLPUBLIC SvxWeightItem : public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxWeightItem : public SfxEnumItem<FontWeight>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -65,8 +65,7 @@ public:
         }
 
     // enum cast
-    FontWeight              GetWeight() const
-                                { return (FontWeight)GetValue(); }
+    FontWeight              GetWeight() const { return GetValue(); }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

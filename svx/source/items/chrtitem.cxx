@@ -34,7 +34,7 @@ SfxPoolItem* SvxDoubleItem::CreateDefault() { return new  SvxDoubleItem(0.0, 0);
 
 SvxChartTextOrderItem::SvxChartTextOrderItem(SvxChartTextOrder eOrder,
                                              sal_uInt16 nId) :
-    SfxEnumItem(nId, (sal_uInt16)eOrder)
+    SfxEnumItem(nId, eOrder)
 {
 }
 
@@ -110,7 +110,7 @@ bool SvxChartTextOrderItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMe
             return false;
     }
 
-    SetValue( (sal_uInt16)eOrder );
+    SetValue( eOrder );
 
     return true;
 }
@@ -201,7 +201,7 @@ bool SvxDoubleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 
 SvxChartKindErrorItem::SvxChartKindErrorItem(SvxChartKindError eOrient,
                                                sal_uInt16 nId) :
-    SfxEnumItem(nId, (sal_uInt16)eOrient)
+    SfxEnumItem(nId, eOrient)
 {
 }
 
@@ -233,7 +233,7 @@ sal_uInt16 SvxChartKindErrorItem::GetVersion (sal_uInt16 nFileFormatVersion) con
 
 SvxChartIndicateItem::SvxChartIndicateItem(SvxChartIndicate eOrient,
                                                sal_uInt16 nId) :
-    SfxEnumItem(nId, (sal_uInt16)eOrient)
+    SfxEnumItem(nId, eOrient)
 {
 }
 
@@ -265,7 +265,7 @@ sal_uInt16 SvxChartIndicateItem::GetVersion (sal_uInt16 nFileFormatVersion) cons
 
 SvxChartRegressItem::SvxChartRegressItem(SvxChartRegress eOrient,
                                                sal_uInt16 nId) :
-    SfxEnumItem(nId, (sal_uInt16)eOrient)
+    SfxEnumItem(nId, eOrient)
 {
 }
 

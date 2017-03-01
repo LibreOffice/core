@@ -101,38 +101,8 @@ bool SfxEnumItemInterface::GetBoolValue() const
 void SfxEnumItemInterface::SetBoolValue(bool)
 {}
 
-SfxEnumItem::SfxEnumItem(sal_uInt16 const nWhich, SvStream & rStream)
-    : SfxEnumItemInterface(nWhich)
-{
-    m_nValue = 0;
-    rStream.ReadUInt16( m_nValue );
-}
 
-
-// virtual
-SvStream & SfxEnumItem::Store(SvStream & rStream, sal_uInt16) const
-{
-    rStream.WriteUInt16( m_nValue );
-    return rStream;
-}
-
-// virtual
-sal_uInt16 SfxEnumItem::GetEnumValue() const
-{
-    return GetValue();
-}
-
-// virtual
-void SfxEnumItem::SetEnumValue(sal_uInt16 const nTheValue)
-{
-    SetValue(nTheValue);
-}
-
-void SfxEnumItem::SetValue(sal_uInt16 const nTheValue)
-{
-    assert(GetRefCount() == 0 && "SfxEnumItem::SetValue(): Pooled item");
-    m_nValue = nTheValue;
-}
+template class SfxEnumItem<sal_uInt16>;
 
 SfxPoolItem* SfxBoolItem::CreateDefault()
 {

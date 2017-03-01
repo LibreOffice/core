@@ -260,7 +260,7 @@ public:
 
 // page format item: contents of header and footer
 
-class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem
+class SC_DLLPUBLIC ScViewObjectModeItem: public SfxEnumItem<ScVObjMode>
 {
 public:
                 static SfxPoolItem* CreateDefault();

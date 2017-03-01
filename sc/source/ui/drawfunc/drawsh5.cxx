@@ -248,7 +248,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     // wer weiss, wie lange das funktioniert? (->vom Abreisscontrol funktioniert es)
 
     if (nSlotId == SID_OBJECT_ALIGN && pArgs)
-        nSlotId = SID_OBJECT_ALIGN + static_cast<const SfxEnumItem&>(pArgs->Get(SID_OBJECT_ALIGN)).GetValue() + 1;
+        nSlotId = SID_OBJECT_ALIGN + static_cast<const SfxEnumItemInterface&>(pArgs->Get(SID_OBJECT_ALIGN)).GetEnumValue() + 1;
 
     switch (nSlotId)
     {

@@ -84,7 +84,7 @@ bool XLineTransparenceItem::GetPresentation
 SfxPoolItem* XLineJointItem::CreateDefault() { return new XLineJointItem; }
 
 XLineJointItem::XLineJointItem( css::drawing::LineJoint eLineJoint ) :
-    SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< sal_uInt16 >(eLineJoint))
+    SfxEnumItem(XATTR_LINEJOINT, eLineJoint)
 {
 }
 
@@ -173,7 +173,7 @@ bool XLineJointItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
         eUnoJoint = (css::drawing::LineJoint)nLJ;
     }
 
-    SetValue( sal::static_int_cast< sal_uInt16 >( eUnoJoint ) );
+    SetValue( eUnoJoint );
 
     return true;
 }
@@ -288,7 +288,7 @@ bool AffineMatrixItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberI
 SfxPoolItem* XLineCapItem::CreateDefault() { return new XLineCapItem; }
 
 XLineCapItem::XLineCapItem(css::drawing::LineCap eLineCap)
-:   SfxEnumItem(XATTR_LINECAP, sal::static_int_cast< sal_uInt16 >(eLineCap))
+:   SfxEnumItem(XATTR_LINECAP, eLineCap)
 {
 }
 
@@ -373,7 +373,7 @@ bool XLineCapItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
         || css::drawing::LineCap_ROUND == eUnoCap
         || css::drawing::LineCap_SQUARE == eUnoCap, "Unknown enum value in XATTR_LINECAP (!)");
 
-    SetValue(sal::static_int_cast< sal_uInt16 >(eUnoCap));
+    SetValue(eUnoCap);
 
     return true;
 }
@@ -558,7 +558,7 @@ void XFillBmpTileItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 SfxPoolItem* XFillBmpPosItem::CreateDefault() {return new XFillBmpPosItem;}
 
 XFillBmpPosItem::XFillBmpPosItem( RectPoint eRP ) :
-    SfxEnumItem( XATTR_FILLBMP_POS, sal::static_int_cast< sal_uInt16 >( eRP ) )
+    SfxEnumItem( XATTR_FILLBMP_POS, eRP )
 {
 }
 

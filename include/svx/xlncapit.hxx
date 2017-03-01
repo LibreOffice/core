@@ -29,7 +29,7 @@
 // class XLineCapItem
 
 
-class SVX_DLLPUBLIC XLineCapItem : public SfxEnumItem
+class SVX_DLLPUBLIC XLineCapItem : public SfxEnumItem<css::drawing::LineCap>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -46,8 +46,8 @@ public:
                                   MapUnit eCoreMetric, MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    virtual sal_uInt16          GetValueCount() const override;
-    css::drawing::LineCap GetValue() const;
+    css::drawing::LineCap   GetValue() const;
+    virtual sal_uInt16      GetValueCount() const override;
 };
 
 #endif // INCLUDED_SVX_XLNCAPIT_HXX

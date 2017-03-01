@@ -24,7 +24,7 @@
 #include <svx/rectenum.hxx>
 #include <svx/svxdllapi.h>
 
-class SVX_DLLPUBLIC XFillBmpPosItem : public SfxEnumItem
+class SVX_DLLPUBLIC XFillBmpPosItem : public SfxEnumItem<RectPoint>
 {
 public:
                             static SfxPoolItem* CreateDefault();
@@ -39,8 +39,7 @@ public:
                                                  MapUnit ePresMetric,
                                                  OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    SVX_DLLPRIVATE virtual sal_uInt16           GetValueCount() const override;
-    SVX_DLLPRIVATE RectPoint               GetValue() const { return (RectPoint) SfxEnumItem::GetValue(); }
+    SVX_DLLPRIVATE virtual sal_uInt16      GetValueCount() const override;
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };
 
