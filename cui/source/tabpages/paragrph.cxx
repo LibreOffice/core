@@ -1397,16 +1397,25 @@ bool SvxExtParagraphTabPage::FillItemSet( SfxItemSet* rOutSet )
         }
     }
 
-    if (m_pPagenumEdit->IsEnabled() && m_pPagenumEdit->IsValueModified())
+    if (m_pPageNumBox->IsEnabled()
+        && (m_pPageNumBox->IsValueChangedFromSaved() || m_pPagenumEdit->IsValueModified()))
     {
-        SfxUInt16Item aPageNum( SID_ATTR_PARA_PAGENUM,
-                                (sal_uInt16)m_pPagenumEdit->GetValue() );
-
         pOld = GetOldItem( *rOutSet, SID_ATTR_PARA_PAGENUM );
 
-        if ( !pOld || static_cast<const SfxUInt16Item*>(pOld)->GetValue() != aPageNum.GetValue() )
+        if (TRISTATE_TRUE == m_pPageNumBox->GetState()
+            && (!pOld || IsInvalidItem(pOld)
+                || static_cast<const SfxUInt16Item*>(pOld)->GetValue() != m_pPagenumEdit->GetValue()))
         {
+            SfxUInt16Item aPageNum(SID_ATTR_PARA_PAGENUM,
+                    static_cast<sal_uInt16>(m_pPagenumEdit->GetValue()));
             rOutSet->Put( aPageNum );
+            bModified = true;
+        }
+        else if (TRISTATE_FALSE == m_pPageNumBox->GetState()
+                && (pOld || IsInvalidItem(pOld)))
+        {
+            // need to tell sw to remove the item
+            rOutSet->DisableItem(SID_ATTR_PARA_PAGENUM);
             bModified = true;
         }
     }
@@ -1600,11 +1609,34 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
 
     _nWhich = GetWhich( SID_ATTR_PARA_PAGENUM );
 
-    if (rSet->GetItemState(_nWhich) >= SfxItemState::SET)
+    switch (rSet->GetItemState(_nWhich))
     {
-        const sal_uInt16 nPageNum =
-            static_cast<const SfxUInt16Item&>(rSet->Get( _nWhich ) ).GetValue();
-        m_pPagenumEdit->SetValue( nPageNum );
+        case SfxItemState::SET:
+        {
+            m_pPageNumBox->EnableTriState(false);
+            m_pPageNumBox->SetState(TRISTATE_TRUE);
+            SfxUInt16Item const*const pItem(static_cast<const SfxUInt16Item*>(rSet->GetItem(_nWhich)));
+            const sal_uInt16 nPageNum(pItem->GetValue());
+            m_pPagenumEdit->SetValue( nPageNum );
+            break;
+        }
+        case SfxItemState::DONTCARE:
+        {
+            m_pPageNumBox->EnableTriState();
+            m_pPageNumBox->SetState(TRISTATE_INDET);
+            break;
+        }
+        case SfxItemState::UNKNOWN:
+        case SfxItemState::DEFAULT:
+        case SfxItemState::DISABLED:
+        {
+            m_pPageNumBox->EnableTriState(false);
+            m_pPageNumBox->SetState(TRISTATE_FALSE);
+            break;
+        }
+        default:
+            assert(false); // unexpected
+            break;
     }
 
     if ( bPageBreak )
@@ -1660,7 +1692,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
             m_pApplyCollBtn->Enable(false);
             m_pApplyCollBox->Enable(false);
             m_pPagenumEdit->Enable(false);
-            m_pPagenumText->Enable(false);
+            m_pPageNumBox->Enable(false);
         }
 
         if ( !bIsPageModel )
@@ -1693,6 +1725,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
                 if(!_bEnable)
                 {
                     m_pApplyCollBox->Enable(_bEnable);
+                    m_pPageNumBox->Enable(false);
                     m_pPagenumEdit->Enable(_bEnable);
                 }
 
@@ -1840,6 +1873,7 @@ void SvxExtParagraphTabPage::ChangesApplied()
     m_pBreakTypeLB->SaveValue();
     m_pApplyCollBtn->SaveValue();
     m_pApplyCollBox->SaveValue();
+    m_pPageNumBox->SaveValue();
     m_pPagenumEdit->SaveValue();
     m_pKeepTogetherBox->SaveValue();
     m_pKeepParaBox->SaveValue();
@@ -1865,6 +1899,7 @@ void SvxExtParagraphTabPage::DisablePageBreak()
     m_pBreakPositionLB->Enable(false);
     m_pApplyCollBtn->Enable(false);
     m_pApplyCollBox->Enable(false);
+    m_pPageNumBox->Enable(false);
     m_pPagenumEdit->Enable(false);
 }
 
@@ -1893,7 +1928,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( vcl::Window* pParent, const SfxI
     get(m_pPagenumEdit,"spinPageNumber");
     get(m_pBreakTypeFT,"labelType");
     get(m_pBreakPositionFT,"labelPosition");
-    get(m_pPagenumText,"labelPageNum");
+    get(m_pPageNumBox,"labelPageNum");
 
     // Options
     get(m_pKeepTogetherBox,"checkSplitPara");
@@ -1924,6 +1959,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( vcl::Window* pParent, const SfxI
     m_pApplyCollBtn->SetClickHdl(      LINK( this, SvxExtParagraphTabPage, ApplyCollClickHdl_Impl ) );
     m_pBreakTypeLB->SetSelectHdl(      LINK( this, SvxExtParagraphTabPage, PageBreakTypeHdl_Impl ) );
     m_pBreakPositionLB->SetSelectHdl(  LINK( this, SvxExtParagraphTabPage, PageBreakPosHdl_Impl ) );
+    m_pPageNumBox->SetClickHdl(        LINK( this, SvxExtParagraphTabPage, PageNumBoxClickHdl_Impl ) );
 
     SfxObjectShell* pSh = SfxObjectShell::Current();
     if ( pSh )
@@ -1955,7 +1991,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( vcl::Window* pParent, const SfxI
         m_pExtHyphenAfterBox   ->Enable(false);
         m_pMaxHyphenLabel      ->Enable(false);
         m_pMaxHyphenEdit       ->Enable(false);
-        m_pPagenumText         ->Enable(false);
+        m_pPageNumBox          ->Enable(false);
         m_pPagenumEdit         ->Enable(false);
         // no column break in HTML
         m_pBreakTypeLB->RemoveEntry(1);
@@ -1983,7 +2019,7 @@ void SvxExtParagraphTabPage::dispose()
     m_pBreakPositionLB.clear();
     m_pApplyCollBtn.clear();
     m_pApplyCollBox.clear();
-    m_pPagenumText.clear();
+    m_pPageNumBox.clear();
     m_pPagenumEdit.clear();
     m_pKeepTogetherBox.clear();
     m_pKeepParaBox.clear();
@@ -2016,8 +2052,8 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, PageBreakHdl_Impl, Button*, void)
                 m_pApplyCollBox->Enable(bEnable);
                 if(!bHtmlMode)
                 {
-                    m_pPagenumText->Enable(bEnable);
-                    m_pPagenumEdit->Enable(bEnable);
+                    m_pPageNumBox->Enable(bEnable);
+                    m_pPagenumEdit->Enable(bEnable && m_pPageNumBox->GetState() == TRISTATE_TRUE);
                 }
             }
             break;
@@ -2027,7 +2063,7 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, PageBreakHdl_Impl, Button*, void)
             m_pApplyCollBtn->SetState( TRISTATE_FALSE );
             m_pApplyCollBtn->Enable(false);
             m_pApplyCollBox->Enable(false);
-            m_pPagenumText->Enable(false);
+            m_pPageNumBox->Enable(false);
             m_pPagenumEdit->Enable(false);
             m_pBreakTypeFT->Enable(false);
             m_pBreakTypeLB->Enable(false);
@@ -2117,8 +2153,8 @@ IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, Button*, v
     m_pApplyCollBox->Enable(bEnable);
     if(!bHtmlMode)
     {
-        m_pPagenumText->Enable(bEnable);
-        m_pPagenumEdit->Enable(bEnable);
+        m_pPageNumBox->Enable(bEnable);
+        m_pPagenumEdit->Enable(bEnable && m_pPageNumBox->GetState() == TRISTATE_TRUE);
     }
 }
 
@@ -2134,8 +2170,8 @@ IMPL_LINK_TYPED( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox&, rListBo
         m_pApplyCollBox->Enable(bEnable);
         if(!bHtmlMode)
         {
-            m_pPagenumText->Enable(bEnable);
-            m_pPagenumEdit->Enable(bEnable);
+            m_pPageNumBox->Enable(bEnable);
+            m_pPagenumEdit->Enable(bEnable && m_pPageNumBox->GetState() == TRISTATE_TRUE);
         }
     }
     else if ( 1 == rListBox.GetSelectEntryPos() )
@@ -2143,7 +2179,7 @@ IMPL_LINK_TYPED( SvxExtParagraphTabPage, PageBreakPosHdl_Impl, ListBox&, rListBo
         m_pApplyCollBtn->SetState( TRISTATE_FALSE );
         m_pApplyCollBtn->Enable(false);
         m_pApplyCollBox->Enable(false);
-        m_pPagenumText->Enable(false);
+        m_pPageNumBox->Enable(false);
         m_pPagenumEdit->Enable(false);
     }
 }
@@ -2157,11 +2193,16 @@ IMPL_LINK_TYPED( SvxExtParagraphTabPage, PageBreakTypeHdl_Impl, ListBox&, rListB
         m_pApplyCollBtn->SetState( TRISTATE_FALSE );
         m_pApplyCollBtn->Enable(false);
         m_pApplyCollBox->Enable(false);
-        m_pPagenumText->Enable(false);
+        m_pPageNumBox->Enable(false);
         m_pPagenumEdit->Enable(false);
     }
     else
         PageBreakPosHdl_Impl( *m_pBreakPositionLB );
+}
+
+IMPL_LINK_NOARG_TYPED(SvxExtParagraphTabPage, PageNumBoxClickHdl_Impl, Button*, void)
+{
+    m_pPagenumEdit->Enable(m_pPageNumBox->GetState() == TRISTATE_TRUE);
 }
 
 void SvxExtParagraphTabPage::PageCreated(const SfxAllItemSet& aSet)

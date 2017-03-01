@@ -601,10 +601,25 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
 
     bool bChanged = false;
     // Page number
-    if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_PARA_PAGENUM, false, &pItem))
+    switch (rSet.GetItemState(SID_ATTR_PARA_PAGENUM, false, &pItem))
     {
-        aPgDesc.SetNumOffset(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
-        bChanged = true;
+        case SfxItemState::SET:
+        {
+            aPgDesc.SetNumOffset(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
+            bChanged = true;
+            break;
+        }
+        case SfxItemState::DISABLED:
+        {
+            bChanged = true; // default initialised aPgDesc clears the number
+            break;
+        }
+        case SfxItemState::UNKNOWN:
+        case SfxItemState::DEFAULT:
+            break;
+        default:
+            assert(false); // unexpected
+            break;
     }
     if( SfxItemState::SET == rSet.GetItemState( SID_ATTR_PARA_MODEL, false, &pItem ))
     {

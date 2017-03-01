@@ -236,7 +236,7 @@ private:
     VclPtr<ListBox>            m_pBreakPositionLB;
     VclPtr<TriStateBox>        m_pApplyCollBtn;
     VclPtr<ListBox>            m_pApplyCollBox;
-    VclPtr<FixedText>          m_pPagenumText;
+    VclPtr<TriStateBox>        m_pPageNumBox;
     VclPtr<NumericField>       m_pPagenumEdit;
 
     // paragraph division
@@ -264,6 +264,7 @@ private:
     DECL_LINK_TYPED(ApplyCollClickHdl_Impl, Button*, void);
     DECL_LINK_TYPED( PageBreakPosHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( PageBreakTypeHdl_Impl, ListBox&, void );
+    DECL_LINK_TYPED(PageNumBoxClickHdl_Impl, Button*, void);
 
     virtual void            PageCreated(const SfxAllItemSet& aSet) override;
 };
