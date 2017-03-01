@@ -509,9 +509,41 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 */
 
                 const SwRangeRedline *pRedline = rSh.GetCurrRedline();
+                SwDoc *pDoc = rSh.GetDoc();
+                SwRedlineTable::size_type nRedline = SwRedlineTable::npos;
+                if (pArgs && pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
+                {
+                    //TODO: SfxUInt16Item vs. SwRedlineTable::size_type mismatch:
+                    nRedline = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                    if (nRedline == USHRT_MAX)
+                        nRedline = SwRedlineTable::npos;
+
+                    if (nRedline != SwRedlineTable::npos)
+                    {
+                        // If index is specified, goto and select the appropriate redline
+                        const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
+                        if (nRedline < rTable.size())
+                            pRedline = rSh.GotoRedline(nRedline, true);
+                    }
+                }
+
+                OUString sCommentText;
+                const SfxStringItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+                if (pTextItem)
+                    sCommentText = pTextItem->GetValue();
 
                 if (pRedline)
                 {
+                    // In case of LOK and comment text is already provided, skip
+                    // dialog creation and just change the redline comment directly
+                    if (comphelper::LibreOfficeKit::isActive() && !sCommentText.isEmpty())
+                    {
+                        rSh.SetRedlineComment(sCommentText);
+                        GetView().AttrChangedNotify(GetShellPtr());
+                        const_cast<SwRangeRedline*>(pRedline)->MaybeNotifyModification();
+                        break;
+                    }
+
                     OUString sComment = convertLineEnd(pRedline->GetComment(), GetSystemLineEnd());
 
                     bool bTravel = false;
@@ -811,7 +843,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
             break;
 
         case FN_REDLINE_COMMENT:
-            if (!rSh.GetCurrRedline())
+            if (!comphelper::LibreOfficeKit::isActive() && !rSh.GetCurrRedline())
                 rSet.DisableItem(nWhich);
             break;
 
