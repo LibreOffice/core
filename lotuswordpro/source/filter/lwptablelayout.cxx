@@ -918,49 +918,48 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     pXFRow->SetStyleName(pXFStyleManager->AddStyle(pRowStyle).m_pStyle->GetStyleName());
 
     //construct heading row
-    XFCell* pXFCell1 = new XFCell;
-    XFCell* pXFCell2 = new XFCell;
+    rtl::Reference<XFCell> xXFCell1(new XFCell);
+    rtl::Reference<XFCell> xXFCell2(new XFCell);
     XFTable* pSubTable1 = new XFTable;
     XFTable* pSubTable2 = new XFTable;
-    XFRow* pNewRow;
     XFRow* pOldRow;
-    XFCell* pNewCell;
+    rtl::Reference<XFCell> xNewCell;
 
     for (i=1;i<=nRowNum;i++)
     {
         pOldRow = pTmpTable->GetRow(i);
-        pNewRow = new XFRow;
-        pNewRow->SetStyleName(pOldRow->GetStyleName());
+        rtl::Reference<XFRow> xNewRow(new XFRow);
+        xNewRow->SetStyleName(pOldRow->GetStyleName());
         for (j=1;j<=pCellMark[i];j++)
         {
-            pNewCell = pOldRow->GetCell(j);
-            pNewRow->AddCell(pNewCell);
+            xNewCell = pOldRow->GetCell(j);
+            xNewRow->AddCell(xNewCell);
         }
-        pSubTable1->AddRow(pNewRow);
+        pSubTable1->AddRow(xNewRow);
     }
     ConvertColumn(pSubTable1,0,nFirstColSpann);//add column info
 
-    pXFCell1->Add(pSubTable1);
-    pXFCell1->SetColumnSpaned(nFirstColSpann);
-    pXFRow->AddCell(pXFCell1);
+    xXFCell1->Add(pSubTable1);
+    xXFCell1->SetColumnSpaned(nFirstColSpann);
+    pXFRow->AddCell(xXFCell1);
 
     for (i=1;i<=nRowNum;i++)
     {
         pOldRow = pTmpTable->GetRow(i);
-        pNewRow = new XFRow;
-        pNewRow->SetStyleName(pOldRow->GetStyleName());
+        rtl::Reference<XFRow> xNewRow(new XFRow);
+        xNewRow->SetStyleName(pOldRow->GetStyleName());
         for(j=pCellMark[i]+1;j<=pOldRow->GetCellCount();j++)
         {
-            pNewCell = pOldRow->GetCell(j);
-            pNewRow->AddCell(pNewCell);
+            xNewCell = pOldRow->GetCell(j);
+            xNewRow->AddCell(xNewCell);
         }
-        pSubTable2->AddRow(pNewRow);
+        pSubTable2->AddRow(xNewRow);
 
     }
     ConvertColumn(pSubTable2,nFirstColSpann,nCol);//add column info
-    pXFCell2->Add(pSubTable2);
-    pXFCell2->SetColumnSpaned(nCol-nFirstColSpann);
-    pXFRow->AddCell(pXFCell2);
+    xXFCell2->Add(pSubTable2);
+    xXFCell2->SetColumnSpaned(nCol-nFirstColSpann);
+    pXFRow->AddCell(xXFCell2);
 
     pXFTable->AddHeaderRow(pXFRow);
 
@@ -1341,27 +1340,27 @@ void LwpTableLayout::ConvertDefaultRow(rtl::Reference<XFTable> const & pXFTable,
          sal_uInt8 nEndCol, sal_uInt16 nRowID)
 {
     // current row doesn't exist in the file
-    XFRow * pRow = new XFRow();
-    pRow->SetStyleName(m_DefaultRowStyleName);
+    rtl::Reference<XFRow> xRow(new XFRow);
+    xRow->SetStyleName(m_DefaultRowStyleName);
 
     for (sal_uInt16 j =0;j < nEndCol-nStartCol; j++)
     {
         // if table has default cell layout, use it to ConvertCell
         // otherwise use blank cell
-        XFCell * pCell = nullptr;
+        rtl::Reference<XFCell> xCell;
         if (m_pDefaultCellLayout)
         {
-            pCell = m_pDefaultCellLayout->ConvertCell(
+            xCell = m_pDefaultCellLayout->ConvertCell(
                 GetTable()->GetObjectID(),nRowID,j+nStartCol);
         }
         else
         {
-            pCell = new XFCell();
+            xCell.set(new XFCell);
         }
-        pRow->AddCell(pCell);
+        xRow->AddCell(xCell);
     }
 
-    pXFTable->AddRow(pRow);
+    pXFTable->AddRow(xRow);
 }
 /**
  * @short   set cell map info

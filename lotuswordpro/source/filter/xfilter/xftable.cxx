@@ -72,12 +72,6 @@ XFTable::XFTable()
 
 XFTable::~XFTable()
 {
-    std::map<sal_uInt16, XFRow*>::iterator it;
-    for( it=m_aRows.begin(); it!=m_aRows.end(); ++it )
-    {
-        XFRow *pRow = (*it).second;
-        delete pRow;
-    }
     m_aRows.clear();
     m_aColumns.clear();
 }
@@ -87,28 +81,26 @@ void    XFTable::SetColumnStyle(sal_Int32 col, const OUString& style)
     m_aColumns[col] = style;
 }
 
-void XFTable::AddRow(XFRow *pRow)
+void XFTable::AddRow(rtl::Reference<XFRow>& rRow)
 {
-    assert(pRow);
+    assert(rRow.get());
 
-    for (sal_Int32 i = 0; i < pRow->GetCellCount(); ++i)
+    for (sal_Int32 i = 0; i < rRow->GetCellCount(); ++i)
     {
-        XFCell* pFirstCell = pRow->GetCell(i + 1); //starts at 1, not 0
+        XFCell* pFirstCell = rRow->GetCell(i + 1); //starts at 1, not 0
         if (pFirstCell->GetSubTable() == this)
             throw std::runtime_error("table is a subtable of itself");
     }
 
-    int row = pRow->GetRow();
+    int row = rRow->GetRow();
 
     if( row<1 )
-        pRow->SetRow(m_aRows.size()+1);
+        rRow->SetRow(m_aRows.size()+1);
 
-    row = pRow->GetRow();
-    if( m_aRows.find(row) != m_aRows.end() )
-        delete m_aRows[row];
+    row = rRow->GetRow();
 
-    pRow->SetOwnerTable(this);
-    m_aRows[row] = pRow;
+    rRow->SetOwnerTable(this);
+    m_aRows[row] = rRow;
 }
 
 void XFTable::AddHeaderRow(XFRow *pRow)
@@ -133,8 +125,7 @@ OUString XFTable::GetTableName()
 sal_uInt16 XFTable::GetRowCount()
 {
     sal_uInt16 rowMax = 0;
-    std::map<sal_uInt16, XFRow*>::iterator it;
-    for( it=m_aRows.begin(); it!=m_aRows.end(); ++it )
+    for(auto it=m_aRows.begin(); it!=m_aRows.end(); ++it )
     {
         if (it->first > rowMax)
             rowMax = it->first;
@@ -145,7 +136,7 @@ sal_uInt16 XFTable::GetRowCount()
 
 XFRow*  XFTable::GetRow(sal_Int32 row)
 {
-    return m_aRows[row];
+    return m_aRows[row].get();
 }
 
 sal_Int32   XFTable::GetColumnCount()
@@ -226,11 +217,11 @@ void    XFTable::ToXml(IXFStream *pStrm)
     {
         int     lastRow = 0;
 
-        std::map<sal_uInt16, XFRow* >::iterator it = m_aRows.begin();
+        auto it = m_aRows.begin();
         for( ; it!=m_aRows.end(); ++it )
         {
             int row = (*it).first;
-            XFRow *pRow = (*it).second;
+            XFRow *pRow = (*it).second.get();
 
             //null row repeated:
             if( row>lastRow+1 )
@@ -239,9 +230,9 @@ void    XFTable::ToXml(IXFStream *pStrm)
                 pNullRow->SetStyleName(m_strDefRowStyle);
                 if( row>lastRow+2)
                     pNullRow->SetRepeated(row-lastRow-1);
-                XFCell *pCell = new XFCell();
-                pCell->SetStyleName(m_strDefCellStyle);
-                pNullRow->AddCell(pCell);
+                rtl::Reference<XFCell> xCell(new XFCell);
+                xCell->SetStyleName(m_strDefCellStyle);
+                pNullRow->AddCell(xCell);
                 pNullRow->ToXml(pStrm);
             }
             pRow->ToXml(pStrm);
