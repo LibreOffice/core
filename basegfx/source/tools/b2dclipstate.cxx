@@ -173,6 +173,13 @@ namespace tools
             addPolyPolygon(rPolyPoly,XOR);
         }
 
+        void transform(const basegfx::B2DHomMatrix& rTranslate)
+        {
+            maPendingRanges.transform(rTranslate);
+            maPendingPolygons.transform(rTranslate);
+            maClipPoly.transform(rTranslate);
+        }
+
         B2DPolyPolygon const & getClipPoly() const
         {
             commitPendingRanges();
@@ -480,6 +487,12 @@ namespace tools
     {
         return mpImpl->getClipPoly();
     }
+
+    void B2DClipState::transform(const basegfx::B2DHomMatrix& rTranslate)
+    {
+        return mpImpl->transform(rTranslate);
+    }
+
 
 } // end of namespace tools
 } // end of namespace basegfx
