@@ -1416,8 +1416,8 @@ bool  SwTextFlowPage::FillItemSet( SfxItemSet* rSet )
     }
     bool bIsChecked = m_pPgBrkCB->IsChecked();
     if ( !bPageItemPut &&
-        (   bState != (m_pPageCollCB->GetSavedValue() == 1) ||
-            bIsChecked != (m_pPgBrkCB->GetSavedValue() ==1) ||
+        (   bState != (m_pPageCollCB->GetSavedValue() == TRISTATE_TRUE) ||
+            bIsChecked != (m_pPgBrkCB->GetSavedValue() == TRISTATE_TRUE) ||
             m_pPgBrkBeforeRB->IsValueChangedFromSaved()    ||
             m_pPgBrkRB->IsValueChangedFromSaved() ))
     {
