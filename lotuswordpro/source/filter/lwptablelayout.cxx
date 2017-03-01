@@ -410,8 +410,8 @@ void  LwpSuperTableLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 n
  */
 void  LwpSuperTableLayout::RegisterFrameStyle()
 {
-    XFFrameStyle* pFrameStyle = new XFFrameStyle();
-    m_pFrame->RegisterStyle(pFrameStyle);
+    std::unique_ptr<XFFrameStyle> xFrameStyle(new XFFrameStyle);
+    m_pFrame->RegisterStyle(xFrameStyle);
 }
 
 LwpTableLayout::LwpTableLayout(LwpObjectHeader &objHdr, LwpSvStream* pStrm)

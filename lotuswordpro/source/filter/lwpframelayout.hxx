@@ -74,7 +74,7 @@ class LwpFrame
 public:
     explicit LwpFrame(LwpPlacableLayout* pLayout);
     ~LwpFrame();
-    void RegisterStyle(XFFrameStyle* pFrameStyle);
+    void RegisterStyle(std::unique_ptr<XFFrameStyle>& rFrameStyle);
     void Parse(XFFrame* pXFFrame, sal_Int32 nPageNo);
     void XFConvert(XFContentContainer* pCont);
 private:

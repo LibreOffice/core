@@ -83,26 +83,26 @@ LwpFrame::~LwpFrame()
 * @param:  pFrameStyle - Frame Style object
 *
 */
-void  LwpFrame::RegisterStyle(XFFrameStyle* pFrameStyle)
+void LwpFrame::RegisterStyle(std::unique_ptr<XFFrameStyle>& rFrameStyle)
 {
-    ApplyWrapType(pFrameStyle);
-    ApplyMargins(pFrameStyle);
-    ApplyPadding(pFrameStyle);
-    ApplyBorders(pFrameStyle);
-    ApplyColumns(pFrameStyle);
-    ApplyShadow(pFrameStyle);
-    ApplyBackGround(pFrameStyle);
-    ApplyWatermark(pFrameStyle);
-//  ApplyBackColor(pFrameStyle);
-    ApplyProtect(pFrameStyle);
-    ApplyTextDir(pFrameStyle);
-    ApplyPosType(pFrameStyle);
+    ApplyWrapType(rFrameStyle.get());
+    ApplyMargins(rFrameStyle.get());
+    ApplyPadding(rFrameStyle.get());
+    ApplyBorders(rFrameStyle.get());
+    ApplyColumns(rFrameStyle.get());
+    ApplyShadow(rFrameStyle.get());
+    ApplyBackGround(rFrameStyle.get());
+    ApplyWatermark(rFrameStyle.get());
+    ApplyProtect(rFrameStyle.get());
+    ApplyTextDir(rFrameStyle.get());
+    ApplyPosType(rFrameStyle.get());
 
-    pFrameStyle->SetStyleName(m_pLayout->GetName().str());
+    rFrameStyle->SetStyleName(m_pLayout->GetName().str());
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
-    m_StyleName = pXFStyleManager->AddStyle(pFrameStyle).m_pStyle->GetStyleName();
+    m_StyleName = pXFStyleManager->AddStyle(rFrameStyle.release()).m_pStyle->GetStyleName();
     m_pLayout->SetStyleName(m_StyleName);
 }
+
 /**
 * @descr:  parse frame and set frame properties
 * @param:   pXFFrame - XFFrame object
@@ -856,9 +856,9 @@ void  LwpFrameLayout::RegisterStyle()
         return;
 
     //register frame style
-    XFFrameStyle* pFrameStyle = new XFFrameStyle();
-    m_pFrame.reset( new LwpFrame(this) );
-    m_pFrame->RegisterStyle(pFrameStyle);
+    std::unique_ptr<XFFrameStyle> xFrameStyle(new XFFrameStyle);
+    m_pFrame.reset(new LwpFrame(this));
+    m_pFrame->RegisterStyle(xFrameStyle);
 
     //register content style
     rtl::Reference<LwpObject> content = m_Content.obj();
@@ -1046,9 +1046,9 @@ void LwpGroupLayout::RegisterStyle()
         return;
 
     //register frame style
-    XFFrameStyle* pFrameStyle = new XFFrameStyle();
-    m_pFrame.reset( new LwpFrame(this) );
-    m_pFrame->RegisterStyle(pFrameStyle);
+    std::unique_ptr<XFFrameStyle> xFrameStyle(new XFFrameStyle);
+    m_pFrame.reset(new LwpFrame(this));
+    m_pFrame->RegisterStyle(xFrameStyle);
 
     //register child frame style
     RegisterChildStyle();
