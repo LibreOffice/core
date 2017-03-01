@@ -330,67 +330,6 @@ void SwFlyFrame::DeleteCnt()
     InvalidatePage();
 }
 
-sal_uInt32 SwFlyFrame::GetOrdNumForNewRef( const SwFlyDrawContact* pContact )
-{
-    sal_uInt32 nOrdNum( 0L );
-
-    // search for another Writer fly frame registered at same frame format
-    SwIterator<SwFlyFrame,SwFormat> aIter( *pContact->GetFormat() );
-    const SwFlyFrame* pFlyFrame( nullptr );
-    for ( pFlyFrame = aIter.First(); pFlyFrame; pFlyFrame = aIter.Next() )
-    {
-        if ( pFlyFrame != this )
-        {
-            break;
-        }
-    }
-
-    if ( pFlyFrame )
-    {
-        // another Writer fly frame found. Take its order number
-        nOrdNum = pFlyFrame->GetVirtDrawObj()->GetOrdNum();
-    }
-    else
-    {
-        // no other Writer fly frame found. Take order number of 'master' object
-        // #i35748# - use method <GetOrdNumDirect()> instead
-        // of method <GetOrdNum()> to avoid a recalculation of the order number,
-        // which isn't intended.
-        nOrdNum = pContact->GetMaster()->GetOrdNumDirect();
-    }
-
-    return nOrdNum;
-}
-
-SwVirtFlyDrawObj* SwFlyFrame::CreateNewRef( SwFlyDrawContact *pContact )
-{
-    SwVirtFlyDrawObj *pDrawObj = new SwVirtFlyDrawObj( *pContact->GetMaster(), this );
-    pDrawObj->SetModel( pContact->GetMaster()->GetModel() );
-    pDrawObj->SetUserCall( pContact );
-
-    // The Reader creates the Masters and inserts them into the Page in
-    // order to transport the z-order.
-    // After creating the first Reference the Masters are removed from the
-    // List and are not important anymore.
-    SdrPage* pPg( nullptr );
-    if ( nullptr != ( pPg = pContact->GetMaster()->GetPage() ) )
-    {
-        const size_t nOrdNum = pContact->GetMaster()->GetOrdNum();
-        pPg->ReplaceObject( pDrawObj, nOrdNum );
-    }
-    // #i27030# - insert new <SwVirtFlyDrawObj> instance
-    // into drawing page with correct order number
-    else
-    {
-        pContact->GetFormat()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage( 0 )->
-                        InsertObject( pDrawObj, GetOrdNumForNewRef( pContact ) );
-    }
-    // #i38889# - assure, that new <SwVirtFlyDrawObj> instance
-    // is in a visible layer.
-    pContact->MoveObjToVisibleLayer( pDrawObj );
-    return pDrawObj;
-}
-
 void SwFlyFrame::InitDrawObj()
 {
     // Find ContactObject from the Format. If there's already one, we just
@@ -404,9 +343,8 @@ void SwFlyFrame::InitDrawObj()
         pContact = new SwFlyDrawContact( GetFormat(),
                                           rIDDMA.GetOrCreateDrawModel() );
     }
-    OSL_ENSURE( pContact, "InitDrawObj failed" );
     // OD 2004-03-22 #i26791#
-    SetDrawObj( *(CreateNewRef( pContact )) );
+    SetDrawObj(*pContact->CreateNewRef(this));
 
     // Set the right Layer
     // OD 2004-01-19 #110582#

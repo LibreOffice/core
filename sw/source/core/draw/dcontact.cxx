@@ -488,6 +488,58 @@ SwFlyDrawContact::~SwFlyDrawContact()
     }
 }
 
+sal_uInt32 SwFlyDrawContact::GetOrdNumForNewRef(const SwFlyFrame* pFly)
+{
+    // search for another Writer fly frame registered at same frame format
+    SwIterator<SwFlyFrame,SwFormat> aIter(*GetFormat());
+    const SwFlyFrame* pFlyFrame(nullptr);
+    for(pFlyFrame = aIter.First(); pFlyFrame; pFlyFrame = aIter.Next())
+    {
+        if(pFlyFrame != pFly)
+            break;
+    }
+
+    if(pFlyFrame)
+    {
+        // another Writer fly frame found. Take its order number
+        return pFlyFrame->GetVirtDrawObj()->GetOrdNum();
+    }
+    // no other Writer fly frame found. Take order number of 'master' object
+    // #i35748# - use method <GetOrdNumDirect()> instead
+    // of method <GetOrdNum()> to avoid a recalculation of the order number,
+    // which isn't intended.
+    return GetMaster()->GetOrdNumDirect();
+}
+
+SwVirtFlyDrawObj* SwFlyDrawContact::CreateNewRef(SwFlyFrame* pFly)
+{
+    SwVirtFlyDrawObj* pDrawObj(new SwVirtFlyDrawObj(*GetMaster(), pFly));
+    pDrawObj->SetModel(GetMaster()->GetModel());
+    pDrawObj->SetUserCall(this);
+
+    // The Reader creates the Masters and inserts them into the Page in
+    // order to transport the z-order.
+    // After creating the first Reference the Masters are removed from the
+    // List and are not important anymore.
+    SdrPage* pPg(nullptr);
+    if(nullptr != (pPg = GetMaster()->GetPage()))
+    {
+        const size_t nOrdNum = GetMaster()->GetOrdNum();
+        pPg->ReplaceObject(pDrawObj, nOrdNum);
+    }
+    // #i27030# - insert new <SwVirtFlyDrawObj> instance
+    // into drawing page with correct order number
+    else
+    {
+        GetFormat()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0)->
+                InsertObject(pDrawObj, GetOrdNumForNewRef(pFly));
+    }
+    // #i38889# - assure, that new <SwVirtFlyDrawObj> instance
+    // is in a visible layer.
+    MoveObjToVisibleLayer(pDrawObj);
+    return pDrawObj;
+}
+
 // #i26791#
 const SwAnchoredObject* SwFlyDrawContact::GetAnchoredObj(const SdrObject* pSdrObj) const
 {
