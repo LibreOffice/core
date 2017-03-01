@@ -853,7 +853,8 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
                 // Seek behind the encoded block. There might have been bytes left or the codec might have read more than necessary.
                 rIStm.Seek(nCodedSize + nCodedPos);
             }
-            else
+
+            if (aData.empty())
             {
                 // add something so we can take address of the first element
                 aData.resize(1);
@@ -862,7 +863,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
 
             // set decoded bytes to memory stream,
             // from which we will read the bitmap data
-            pMemStm.reset( new SvMemoryStream);
+            pMemStm.reset(new SvMemoryStream);
             pIStm = pMemStm.get();
             assert(!aData.empty());
             pMemStm->SetBuffer( &aData.front(), nUncodedSize, nUncodedSize );
