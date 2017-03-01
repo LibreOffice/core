@@ -221,7 +221,7 @@ long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
 
         }
         err = mbStatus ? inflate(PZSTREAM, Z_NO_FLUSH) : Z_ERRNO;
-        if ( err < 0 )
+        if (err < 0 || err == Z_NEED_DICT)
         {
             // Accept Z_BUF_ERROR as EAGAIN or EWOULDBLOCK.
             mbStatus = (err == Z_BUF_ERROR);
