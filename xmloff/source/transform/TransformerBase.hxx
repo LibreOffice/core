@@ -76,7 +76,7 @@ class XMLTransformerBase : public XMLTransformer
     XMLTransformerTokenMap      *m_pTokenMap;
 
     //for feeding FastDocumentHandler
-    sal_Int32 nElement;
+    sal_Int32 m_nElement;
     rtl::Reference< sax_fastparser::FastAttributeList > m_xFastAttributes;
 
 protected:

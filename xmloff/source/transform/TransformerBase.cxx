@@ -179,7 +179,7 @@ XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit *pInit,
     m_pReplaceNamespaceMap( new SvXMLNamespaceMap ),
     m_pElemActions( new XMLTransformerActions( pInit ) ),
     m_pTokenMap( new XMLTransformerTokenMap( pTKMapInit ) ),
-    nElement(0),
+    m_nElement(0),
     m_xFastAttributes( new sax_fastparser::FastAttributeList( m_xTokenHandler.get(),
         dynamic_cast< sax_fastparser::FastTokenHandlerBase *>( m_xTokenHandler.get() ) ) )
 {
@@ -1449,7 +1449,7 @@ void XMLTransformerBase::startFastElement( const OUString& rName,
     {
         OUString aLocalName;
         sal_uInt16 nPrefix = m_pNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
-        nElement = NAMESPACE_TOKEN( nPrefix ) | m_xTokenHandler->getTokenDirect(
+        m_nElement = NAMESPACE_TOKEN( nPrefix ) | m_xTokenHandler->getTokenDirect(
                         OUStringToOString( aLocalName, RTL_TEXTENCODING_ASCII_US ).getStr(), aLocalName.getLength() ) ;
         m_xFastAttributes->clear();
 
@@ -1472,7 +1472,7 @@ void XMLTransformerBase::startFastElement( const OUString& rName,
                 m_xFastAttributes->add( nAttr, OUStringToOString( rAttrValue, RTL_TEXTENCODING_ASCII_US ).getStr() );
             }
         }
-        m_xFastHandler->startFastElement( nElement, m_xFastAttributes.get() );
+        m_xFastHandler->startFastElement( m_nElement, m_xFastAttributes.get() );
     }
     else
         m_xHandler->startElement( rName, xAttrList );
@@ -1481,7 +1481,7 @@ void XMLTransformerBase::startFastElement( const OUString& rName,
 void XMLTransformerBase::endFastElement( const OUString& rName )
 {
     if( m_xFastHandler.is() )
-       m_xFastHandler->endFastElement( nElement );
+       m_xFastHandler->endFastElement( m_nElement );
     else
         m_xHandler->endElement( rName );
 }
