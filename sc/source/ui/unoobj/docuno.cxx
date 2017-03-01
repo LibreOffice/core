@@ -1029,10 +1029,14 @@ OUString ScModelObj::getPostIts()
 
     return OUString::fromUtf8(aStream.str().c_str());
 }
-
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;
+
+    // disable word autocompletion
+    ScAppOptions aAppOptions( SC_MOD()->GetAppOptions() );
+    aAppOptions.SetAutoComplete(false);
+    SC_MOD()->SetAppOptions(aAppOptions);
 
     // show us the text exactly
     ScInputOptions aInputOptions(SC_MOD()->GetInputOptions());
