@@ -25,7 +25,7 @@
 # file:// URLs are interpreted relative to the solver/340/<platform>/bin/ directory to which 
 # built extensions are delivered by default.
 
-# http:// URLs can be prefixed by an MD5 checksum.  If that is present then it is an error if
+# https:// URLs can be prefixed by an MD5 checksum.  If that is present then it is an error if
 # the file pointed to by the URL has a different MD5 checksum.
 # When the downloaded file name is not the last part of the URL (everything after the final /) then
 # the name has to be specified after the URL enclosed in double quotes.
@@ -63,7 +63,7 @@
 
 # Spanish dictionary.
 [ language=es || language=ca || language=ca_XV ]
-    59dd45e6785ed644adbbd73f4f126182 https://sourceforge.net/projects/aoo-extensions/files/1657/3/es_es.oxt/download "es_es.oxt"
+    1b999fcef948148e269161a08e7acf20 https://sourceforge.net/projects/aoo-extensions/files/1657/4/es_es.oxt/download "es_es.oxt"
 
 # Danish dictionary.
 [ language=da ]
@@ -80,7 +80,7 @@
 
 # Russian dictionary.
 [ language=ru ]
-    93921f14809a22770f1bd89af65015bc https://sourceforge.net/projects/aoo-extensions/files/3233/3/dict_ru_ru-0.3.7.oxt/download "dict-ru.oxt"
+    93921f14809a22770f1bd89af65015bc https://sourceforge.net/projects/aoo-extensions/files/3233/3/dict_ru_ru-0.3.7.oxt/download "dict_ru_ru-0.3.7.oxt"
 
 # Slovak dictionary.
 [ language=sk ]
@@ -92,7 +92,7 @@
 
 # German (Austria) dictionary.
 [ language=de || language=de_AT || language=de_DE ]
-  0cf6783cb0f1355ef3869aa9699700b3 https://sourceforge.net/projects/aoo-extensions/files/1697/12/dict-de_at-frami_2017-01-28.oxt/download "dict-de_at-frami_2017-01-12.oxt"
+    0cf6783cb0f1355ef3869aa9699700b3 https://sourceforge.net/projects/aoo-extensions/files/1697/12/dict-de_at-frami_2017-01-28.oxt/download "dict-de_at-frami_2017-01-12.oxt"
 
 # German (Switzerland) dictionary.
 [ language=de || language=de_CH || language=de_DE ]
@@ -117,7 +117,7 @@
 
 # Asturian.
 [ language=ast ]
-    ed5702f25c8f5e36f97cafc606470c42 https://sourceforge.net/projects/aoo-extensions/files/3932/1/asturianu.oxt/download "asturianu.oxt"
+    931373dea3bed9621dd55713b53b38ae https://sourceforge.net/projects/aoo-extensions/files/3932/2/ort_ast_20150417_2259.oxt/download "ort_ast_20150417_2259.oxt"
 
 # Norwegian.
 [ language=nb ]
@@ -133,7 +133,7 @@
 
 # Polish.
 [ language=pl ]
-    a69f9221864b1360e38ff3f0b0cc9222 https://sourceforge.net/projects/aoo-extensions/files/806/4/pl-dict.oxt/download "pl-dict.oxt"
+    6218d6999038aaab574e05b1b891078e https://sourceforge.net/projects/aoo-extensions/files/806/7/pl-dict.oxt/download "pl-dict.oxt"
 
 # Portuguese (European).
 [ language=pt || language=pt_PT ]
@@ -141,13 +141,13 @@
 
 # Catalan.
 [ language=ca ]
-    ed1c612a462490b541297a8522f667d0 https://sourceforge.net/projects/aoo-extensions/files/1205/3/catalan.oxt/download "dict-ca.oxt"
+    4cf4e4a9d85f14761d38943b7e1fd76d https://sourceforge.net/projects/aoo-extensions/files/1205/5/ca.3.0.0.oxt/download "ca.3.0.0.oxt"
 
 # Valencian AVL (this is incompatible with Catalan).
 [ language=ca_XV ]
-    3b87a28bf1ff2a8beb76a5b501f40d1c https://sourceforge.net/projects/aoo-extensions/files/1475/0/avl.oxt/download "dict-ca-xv.oxt"
+    d425579a9a2e26663abaecdd661be419 https://sourceforge.net/projects/aoo-extensions/files/1475/1/ca-valencia.3.0.0.oxt/download "ca-valencia.3.0.0.oxt"
 
 # Valencian RACV (this is incompatible with Catalan).
 [ language=ca_XR ]
-    6112a73444a1ad3cf70736649e228f0f https://sourceforge.net/projects/aoo-extensions/files/1395/0/dict_valencian_llit.oxt/download "dict-ca-xr.oxt"
+    6112a73444a1ad3cf70736649e228f0f https://sourceforge.net/projects/aoo-extensions/files/1395/0/dict_valencian_llit.oxt/download "dict_valencian_llit.oxt"
 
