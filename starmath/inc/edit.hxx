@@ -82,6 +82,8 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     void InvalidateSlots();
     void UpdateStatus(bool bSetDocModified);
 
+    SfxItemPool* GetEditEngineItemPool();
+
 public:
     explicit SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
     virtual ~SmEditWindow() override;
@@ -91,7 +93,6 @@ public:
     SmViewShell* GetView();
     EditView* GetEditView();
     EditEngine* GetEditEngine();
-    SfxItemPool* GetEditEngineItemPool();
 
     // Window
     virtual void SetText(const OUString& rText) override;
