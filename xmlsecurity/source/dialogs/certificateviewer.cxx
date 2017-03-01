@@ -400,9 +400,9 @@ void CertificateViewerCertPathTP::ActivatePage()
 
         sal_Int32 i, nCnt = aCertPath.getLength();
         SvTreeListEntry* pParent = nullptr;
-        for( i = nCnt; i; )
+        for (i = nCnt-1; i >= 0; i--)
         {
-            const Reference< security::XCertificate > rCert = pCertPath[ --i ];
+            const Reference< security::XCertificate > rCert = pCertPath[ i ];
             OUString sName = XmlSec::GetContentPart( rCert->getSubjectName() );
             //Verify the certificate
             sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
@@ -411,7 +411,8 @@ void CertificateViewerCertPathTP::ActivatePage()
             pParent = InsertCert( pParent, sName, rCert, bCertValid);
         }
 
-        mpCertPathLB->Select( pParent );
+        if (pParent)
+            mpCertPathLB->Select( pParent );
         mpViewCertPB->Disable(); // Own certificate selected
 
         while( pParent )
