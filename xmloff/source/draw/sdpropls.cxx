@@ -1130,10 +1130,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLDateTimeFormatHdl( mpExport );
                 break;
             case XML_SD_TYPE_TRANSITION_TYPE:
-                pHdl = new XMLEnumPropertyHdl( xmloff::getAnimationsEnumMap(xmloff::Animations_EnumMap_TransitionType) , ::cppu::UnoType<sal_Int16>::get());
+                pHdl = new XMLEnumPropertyHdl( xmloff::aAnimations_EnumMap_TransitionType, ::cppu::UnoType<sal_Int16>::get());
                 break;
             case XML_SD_TYPE_TRANSTIION_SUBTYPE:
-                pHdl = new XMLEnumPropertyHdl( xmloff::getAnimationsEnumMap(xmloff::Animations_EnumMap_TransitionSubType) , ::cppu::UnoType<sal_Int16>::get());
+                pHdl = new XMLEnumPropertyHdl( xmloff::aAnimations_EnumMap_TransitionSubType, ::cppu::UnoType<sal_Int16>::get());
                 break;
             case XML_SD_TYPE_TRANSTIION_DIRECTION:
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_FORWARD), GetXMLToken(XML_REVERSE) );

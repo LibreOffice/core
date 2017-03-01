@@ -96,381 +96,306 @@ using ::com::sun::star::container::XEnumeration;
 namespace xmloff
 {
 
-const SvXMLEnumMapEntry* getAnimationsEnumMap( sal_uInt16 nMap )
+const SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
 {
-    switch( nMap )
-    {
-    case Animations_EnumMap_Fill:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
-            {
-                { XML_DEFAULT,      AnimationFill::DEFAULT },
-                { XML_REMOVE,       AnimationFill::REMOVE },
-                { XML_FREEZE,       AnimationFill::FREEZE },
-                { XML_HOLD,         AnimationFill::HOLD },
-                { XML_TRANSITION,   AnimationFill::TRANSITION },
-                { XML_AUTO,         AnimationFill::AUTO },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_Fill;
-        }
-    case Animations_EnumMap_FillDefault:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_Fill[] =
-            {
-                { XML_INHERIT,      AnimationFill::INHERIT },
-                { XML_REMOVE,       AnimationFill::REMOVE },
-                { XML_FREEZE,       AnimationFill::FREEZE },
-                { XML_HOLD,         AnimationFill::HOLD },
-                { XML_TRANSITION,   AnimationFill::TRANSITION },
-                { XML_AUTO,         AnimationFill::AUTO },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_Fill;
-        }
-    case Animations_EnumMap_Restart:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_Restart[] =
-            {
-                { XML_DEFAULT,      AnimationRestart::DEFAULT },
-                { XML_ALWAYS,       AnimationRestart::ALWAYS },
-                { XML_WHENNOTACTIVE,AnimationRestart::WHEN_NOT_ACTIVE },
-                { XML_NEVER,        AnimationRestart::NEVER },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_Restart;
-        }
-    case Animations_EnumMap_RestartDefault:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_RestartDefault[] =
-            {
-                { XML_INHERIT,      AnimationRestart::INHERIT },
-                { XML_ALWAYS,       AnimationRestart::ALWAYS },
-                { XML_WHENNOTACTIVE,AnimationRestart::WHEN_NOT_ACTIVE },
-                { XML_NEVER,        AnimationRestart::NEVER },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_RestartDefault;
-        }
-    case Animations_EnumMap_Endsync:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_Endsync[] =
-            {
-                { XML_FIRST,        AnimationEndSync::FIRST },
-                { XML_LAST,         AnimationEndSync::LAST },
-                { XML_ALL,          AnimationEndSync::ALL },
-                { XML_MEDIA,        AnimationEndSync::MEDIA },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_Endsync;
-        }
-    case Animations_EnumMap_CalcMode:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_CalcMode[] =
-            {
-                { XML_DISCRETE,     AnimationCalcMode::DISCRETE },
-                { XML_LINEAR,       AnimationCalcMode::LINEAR },
-                { XML_PACED,        AnimationCalcMode::PACED },
-                { XML_SPLINE,       AnimationCalcMode::SPLINE },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_CalcMode;
-        }
-    case Animations_EnumMap_AdditiveMode:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_AdditiveMode[] =
-            {
-                { XML_BASE,         AnimationAdditiveMode::BASE },
-                { XML_SUM,          AnimationAdditiveMode::SUM },
-                { XML_REPLACE,      AnimationAdditiveMode::REPLACE },
-                { XML_MULTIPLY,     AnimationAdditiveMode::MULTIPLY },
-                { XML_NONE,         AnimationAdditiveMode::NONE },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_AdditiveMode;
-        }
-    case Animations_EnumMap_TransformType:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_TransformType[] =
-            {
-                { XML_TRANSLATE,    AnimationTransformType::TRANSLATE },
-                { XML_SCALE,        AnimationTransformType::SCALE },
-                { XML_ROTATE,       AnimationTransformType::ROTATE },
-                { XML_SKEWX,        AnimationTransformType::SKEWX },
-                { XML_SKEWY,        AnimationTransformType::SKEWY },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_TransformType;
-        }
-    case Animations_EnumMap_TransitionType:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionType[] =
-            {
-                { XML_BARWIPE,          TransitionType::BARWIPE },
-                { XML_BOXWIPE,          TransitionType::BOXWIPE },
-                { XML_FOURBOXWIPE,      TransitionType::FOURBOXWIPE },
-                { XML_BARNDOORWIPE,     TransitionType::BARNDOORWIPE },
-                { XML_DIAGONALWIPE,     TransitionType::DIAGONALWIPE },
-                { XML_BOWTIEWIPE,       TransitionType::BOWTIEWIPE },
-                { XML_MISCDIAGONALWIPE, TransitionType::MISCDIAGONALWIPE },
-                { XML_VEEWIPE,          TransitionType::VEEWIPE },
-                { XML_BARNVEEWIPE,      TransitionType::BARNVEEWIPE },
-                { XML_ZIGZAGWIPE,       TransitionType::ZIGZAGWIPE },
-                { XML_BARNZIGZAGWIPE,   TransitionType::BARNZIGZAGWIPE },
-                { XML_IRISWIPE,         TransitionType::IRISWIPE },
-                { XML_TRIANGLEWIPE,     TransitionType::TRIANGLEWIPE },
-                { XML_ARROWHEADWIPE,    TransitionType::ARROWHEADWIPE },
-                { XML_PENTAGONWIPE,     TransitionType::PENTAGONWIPE },
-                { XML_HEXAGONWIPE,      TransitionType::HEXAGONWIPE },
-                { XML_ELLIPSEWIPE,      TransitionType::ELLIPSEWIPE },
-                { XML_EYEWIPE,          TransitionType::EYEWIPE },
-                { XML_ROUNDRECTWIPE,    TransitionType::ROUNDRECTWIPE },
-                { XML_STARWIPE,         TransitionType::STARWIPE },
-                { XML_MISCSHAPEWIPE,    TransitionType::MISCSHAPEWIPE },
-                { XML_CLOCKWIPE,        TransitionType::CLOCKWIPE },
-                { XML_PINWHEELWIPE,     TransitionType::PINWHEELWIPE },
-                { XML_SINGLESWEEPWIPE,  TransitionType::SINGLESWEEPWIPE },
-                { XML_FANWIPE,          TransitionType::FANWIPE },
-                { XML_DOUBLEFANWIPE,    TransitionType::DOUBLEFANWIPE },
-                { XML_DOUBLESWEEPWIPE,  TransitionType::DOUBLESWEEPWIPE },
-                { XML_SALOONDOORWIPE,   TransitionType::SALOONDOORWIPE },
-                { XML_WINDSHIELDWIPE,   TransitionType::WINDSHIELDWIPE },
-                { XML_SNAKEWIPE,        TransitionType::SNAKEWIPE },
-                { XML_SPIRALWIPE,       TransitionType::SPIRALWIPE },
-                { XML_PARALLELSNAKESWIPE,TransitionType::PARALLELSNAKESWIPE },
-                { XML_BOXSNAKESWIPE,    TransitionType::BOXSNAKESWIPE },
-                { XML_WATERFALLWIPE,    TransitionType::WATERFALLWIPE },
-                { XML_PUSHWIPE,         TransitionType::PUSHWIPE },
-                { XML_SLIDEWIPE,        TransitionType::SLIDEWIPE },
-                { XML_FADE,             TransitionType::FADE },
-                { XML_RANDOMBARWIPE,    TransitionType::RANDOMBARWIPE },
-                { XML_CHECKERBOARDWIPE, TransitionType::CHECKERBOARDWIPE },
-                { XML_DISSOLVE,         TransitionType::DISSOLVE },
-                { XML_BLINDSWIPE,       TransitionType::BLINDSWIPE },
-                { XML_RANDOM,           TransitionType::RANDOM },
-                { XML_ZOOM,             TransitionType::ZOOM },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_TransitionType;
-        }
-    case Animations_EnumMap_TransitionSubType:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionSubType[] =
-            {
-                { XML_DEFAULT,              TransitionSubType::DEFAULT },
-                { XML_LEFTTORIGHT,          TransitionSubType::LEFTTORIGHT },
-                { XML_TOPTOBOTTOM,          TransitionSubType::TOPTOBOTTOM },
-                { XML_TOPLEFT,              TransitionSubType::TOPLEFT },
-                { XML_TOPRIGHT,             TransitionSubType::TOPRIGHT },
-                { XML_BOTTOMRIGHT,          TransitionSubType::BOTTOMRIGHT },
-                { XML_BOTTOMLEFT,           TransitionSubType::BOTTOMLEFT },
-                { XML_TOPCENTER,            TransitionSubType::TOPCENTER },
-                { XML_RIGHTCENTER,          TransitionSubType::RIGHTCENTER },
-                { XML_BOTTOMCENTER,         TransitionSubType::BOTTOMCENTER },
-                { XML_LEFTCENTER,           TransitionSubType::LEFTCENTER },
-                { XML_CORNERSIN,            TransitionSubType::CORNERSIN },
-                { XML_CORNERSOUT,           TransitionSubType::CORNERSOUT },
-                { XML_VERTICAL,             TransitionSubType::VERTICAL },
-                { XML_HORIZONTAL,           TransitionSubType::HORIZONTAL },
-                { XML_DIAGONALBOTTOMLEFT,   TransitionSubType::DIAGONALBOTTOMLEFT },
-                { XML_DIAGONALTOPLEFT,      TransitionSubType::DIAGONALTOPLEFT },
-                { XML_DOUBLEBARNDOOR,       TransitionSubType::DOUBLEBARNDOOR },
-                { XML_DOUBLEDIAMOND,        TransitionSubType::DOUBLEDIAMOND },
-                { XML_DOWN,                 TransitionSubType::DOWN },
-                { XML_LEFT,                 TransitionSubType::LEFT },
-                { XML_UP,                   TransitionSubType::UP },
-                { XML_RIGHT,                TransitionSubType::RIGHT },
-                { XML_RECTANGLE,            TransitionSubType::RECTANGLE },
-                { XML_DIAMOND,              TransitionSubType::DIAMOND },
-                { XML_CIRCLE,               TransitionSubType::CIRCLE },
-                { XML_FOURPOINT,            TransitionSubType::FOURPOINT },
-                { XML_FIVEPOINT,            TransitionSubType::FIVEPOINT },
-                { XML_SIXPOINT,             TransitionSubType::SIXPOINT },
-                { XML_HEART,                TransitionSubType::HEART },
-                { XML_KEYHOLE,              TransitionSubType::KEYHOLE },
-                { XML_CLOCKWISETWELVE,      TransitionSubType::CLOCKWISETWELVE },
-                { XML_CLOCKWISETHREE,       TransitionSubType::CLOCKWISETHREE },
-                { XML_CLOCKWISESIX,         TransitionSubType::CLOCKWISESIX },
-                { XML_CLOCKWISENINE,        TransitionSubType::CLOCKWISENINE },
-                { XML_TWOBLADEVERTICAL,     TransitionSubType::TWOBLADEVERTICAL },
-                { XML_TWOBLADEHORIZONTAL,   TransitionSubType::TWOBLADEHORIZONTAL },
-                { XML_FOURBLADE,            TransitionSubType::FOURBLADE },
-                { XML_CLOCKWISETOP,         TransitionSubType::CLOCKWISETOP },
-                { XML_CLOCKWISERIGHT,       TransitionSubType::CLOCKWISERIGHT },
-                { XML_CLOCKWISEBOTTOM,      TransitionSubType::CLOCKWISEBOTTOM },
-                { XML_CLOCKWISELEFT,        TransitionSubType::CLOCKWISELEFT },
-                { XML_CLOCKWISETOPLEFT,     TransitionSubType::CLOCKWISETOPLEFT },
-                { XML_COUNTERCLOCKWISEBOTTOMLEFT,TransitionSubType::COUNTERCLOCKWISEBOTTOMLEFT },
-                { XML_CLOCKWISEBOTTOMRIGHT, TransitionSubType::CLOCKWISEBOTTOMRIGHT },
-                { XML_COUNTERCLOCKWISETOPRIGHT,TransitionSubType::COUNTERCLOCKWISETOPRIGHT },
-                { XML_CENTERTOP,            TransitionSubType::CENTERTOP },
-                { XML_CENTERRIGHT,          TransitionSubType::CENTERRIGHT },
-                { XML_TOP,                  TransitionSubType::TOP },
-                { XML_BOTTOM,               TransitionSubType::BOTTOM },
-                { XML_FANOUTVERTICAL,       TransitionSubType::FANOUTVERTICAL },
-                { XML_FANOUTHORIZONTAL,     TransitionSubType::FANOUTHORIZONTAL },
-                { XML_FANINVERTICAL,        TransitionSubType::FANINVERTICAL },
-                { XML_FANINHORIZONTAL,      TransitionSubType::FANINHORIZONTAL },
-                { XML_PARALLELVERTICAL,     TransitionSubType::PARALLELVERTICAL },
-                { XML_PARALLELDIAGONAL,     TransitionSubType::PARALLELDIAGONAL },
-                { XML_OPPOSITEVERTICAL,     TransitionSubType::OPPOSITEVERTICAL },
-                { XML_OPPOSITEHORIZONTAL,   TransitionSubType::OPPOSITEHORIZONTAL },
-                { XML_PARALLELDIAGONALTOPLEFT,TransitionSubType::PARALLELDIAGONALTOPLEFT },
-                { XML_PARALLELDIAGONALBOTTOMLEFT,TransitionSubType::PARALLELDIAGONALBOTTOMLEFT },
-                { XML_TOPLEFTHORIZONTAL,    TransitionSubType::TOPLEFTHORIZONTAL },
-                { XML_TOPLEFTDIAGONAL,      TransitionSubType::TOPLEFTDIAGONAL },
-                { XML_TOPRIGHTDIAGONAL,     TransitionSubType::TOPRIGHTDIAGONAL },
-                { XML_BOTTOMRIGHTDIAGONAL,  TransitionSubType::BOTTOMRIGHTDIAGONAL },
-                { XML_BOTTOMLEFTDIAGONAL,   TransitionSubType::BOTTOMLEFTDIAGONAL },
-                { XML_TOPLEFTCLOCKWISE,     TransitionSubType::TOPLEFTCLOCKWISE },
-                { XML_TOPRIGHTCLOCKWISE,    TransitionSubType::TOPRIGHTCLOCKWISE },
-                { XML_BOTTOMRIGHTCLOCKWISE, TransitionSubType::BOTTOMRIGHTCLOCKWISE },
-                { XML_BOTTOMLEFTCLOCKWISE,  TransitionSubType::BOTTOMLEFTCLOCKWISE },
-                { XML_TOPLEFTCOUNTERCLOCKWISE,TransitionSubType::TOPLEFTCOUNTERCLOCKWISE },
-                { XML_TOPRIGHTCOUNTERCLOCKWISE,TransitionSubType::TOPRIGHTCOUNTERCLOCKWISE },
-                { XML_BOTTOMRIGHTCOUNTERCLOCKWISE,TransitionSubType::BOTTOMRIGHTCOUNTERCLOCKWISE },
-                { XML_BOTTOMLEFTCOUNTERCLOCKWISE,TransitionSubType::BOTTOMLEFTCOUNTERCLOCKWISE },
-                { XML_VERTICALTOPSAME,      TransitionSubType::VERTICALTOPSAME },
-                { XML_VERTICALBOTTOMSAME,   TransitionSubType::VERTICALBOTTOMSAME },
-                { XML_VERTICALTOPLEFTOPPOSITE,TransitionSubType::VERTICALTOPLEFTOPPOSITE },
-                { XML_VERTICALBOTTOMLEFTOPPOSITE,TransitionSubType::VERTICALBOTTOMLEFTOPPOSITE },
-                { XML_HORIZONTALLEFTSAME,   TransitionSubType::HORIZONTALLEFTSAME },
-                { XML_HORIZONTALRIGHTSAME,  TransitionSubType::HORIZONTALRIGHTSAME },
-                { XML_HORIZONTALTOPLEFTOPPOSITE,TransitionSubType::HORIZONTALTOPLEFTOPPOSITE },
-                { XML_HORIZONTALTOPRIGHTOPPOSITE,TransitionSubType::HORIZONTALTOPRIGHTOPPOSITE },
-                { XML_DIAGONALBOTTOMLEFTOPPOSITE,TransitionSubType::DIAGONALBOTTOMLEFTOPPOSITE },
-                { XML_DIAGONALTOPLEFTOPPOSITE,TransitionSubType::DIAGONALTOPLEFTOPPOSITE },
-                { XML_TWOBOXTOP,            TransitionSubType::TWOBOXTOP },
-                { XML_TWOBOXBOTTOM,         TransitionSubType::TWOBOXBOTTOM },
-                { XML_TWOBOXLEFT,           TransitionSubType::TWOBOXLEFT },
-                { XML_TWOBOXRIGHT,          TransitionSubType::TWOBOXRIGHT },
-                { XML_FOURBOXVERTICAL,      TransitionSubType::FOURBOXVERTICAL },
-                { XML_FOURBOXHORIZONTAL,    TransitionSubType::FOURBOXHORIZONTAL },
-                { XML_VERTICALLEFT,         TransitionSubType::VERTICALLEFT },
-                { XML_VERTICALRIGHT,        TransitionSubType::VERTICALRIGHT },
-                { XML_HORIZONTALLEFT,       TransitionSubType::HORIZONTALLEFT },
-                { XML_HORIZONTALRIGHT,      TransitionSubType::HORIZONTALRIGHT },
-                { XML_FROMLEFT,             TransitionSubType::FROMLEFT },
-                { XML_FROMTOP,              TransitionSubType::FROMTOP },
-                { XML_FROMRIGHT,            TransitionSubType::FROMRIGHT },
-                { XML_FROMBOTTOM,           TransitionSubType::FROMBOTTOM },
-                { XML_CROSSFADE,            TransitionSubType::CROSSFADE },
-                { XML_FADETOCOLOR,          TransitionSubType::FADETOCOLOR },
-                { XML_FADEFROMCOLOR,        TransitionSubType::FADEFROMCOLOR },
-                { XML_FADEOVERCOLOR,        TransitionSubType::FADEOVERCOLOR },
-                { XML_THREEBLADE,           TransitionSubType::THREEBLADE },
-                { XML_EIGHTBLADE,           TransitionSubType::EIGHTBLADE },
-                { XML_ONEBLADE,             TransitionSubType::ONEBLADE },
-                { XML_ACROSS,               TransitionSubType::ACROSS },
-                { XML_TOPLEFTVERTICAL,      TransitionSubType::TOPLEFTVERTICAL },
-                { XML_COMBHORIZONTAL,       TransitionSubType::COMBHORIZONTAL },
-                { XML_COMBVERTICAL,         TransitionSubType::COMBVERTICAL },
-                { XML_IN,                   TransitionSubType::IN },
-                { XML_OUT,                  TransitionSubType::OUT },
-                { XML_ROTATEIN,             TransitionSubType::ROTATEIN },
-                { XML_ROTATEOUT,            TransitionSubType::ROTATEOUT },
-                { XML_FROMTOPLEFT,          TransitionSubType::FROMTOPLEFT },
-                { XML_FROMTOPRIGHT,         TransitionSubType::FROMTOPRIGHT },
-                { XML_FROMBOTTOMLEFT,       TransitionSubType::FROMBOTTOMLEFT },
-                { XML_FROMBOTTOMRIGHT,      TransitionSubType::FROMBOTTOMRIGHT },
+    { XML_DEFAULT,      AnimationFill::DEFAULT },
+    { XML_REMOVE,       AnimationFill::REMOVE },
+    { XML_FREEZE,       AnimationFill::FREEZE },
+    { XML_HOLD,         AnimationFill::HOLD },
+    { XML_TRANSITION,   AnimationFill::TRANSITION },
+    { XML_AUTO,         AnimationFill::AUTO },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_FillDefault[] =
+{
+    { XML_INHERIT,      AnimationFill::INHERIT },
+    { XML_REMOVE,       AnimationFill::REMOVE },
+    { XML_FREEZE,       AnimationFill::FREEZE },
+    { XML_HOLD,         AnimationFill::HOLD },
+    { XML_TRANSITION,   AnimationFill::TRANSITION },
+    { XML_AUTO,         AnimationFill::AUTO },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_Restart[] =
+{
+    { XML_DEFAULT,      AnimationRestart::DEFAULT },
+    { XML_ALWAYS,       AnimationRestart::ALWAYS },
+    { XML_WHENNOTACTIVE,AnimationRestart::WHEN_NOT_ACTIVE },
+    { XML_NEVER,        AnimationRestart::NEVER },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_RestartDefault[] =
+{
+    { XML_INHERIT,      AnimationRestart::INHERIT },
+    { XML_ALWAYS,       AnimationRestart::ALWAYS },
+    { XML_WHENNOTACTIVE,AnimationRestart::WHEN_NOT_ACTIVE },
+    { XML_NEVER,        AnimationRestart::NEVER },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_Endsync[] =
+{
+    { XML_FIRST,        AnimationEndSync::FIRST },
+    { XML_LAST,         AnimationEndSync::LAST },
+    { XML_ALL,          AnimationEndSync::ALL },
+    { XML_MEDIA,        AnimationEndSync::MEDIA },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_CalcMode[] =
+{
+    { XML_DISCRETE,     AnimationCalcMode::DISCRETE },
+    { XML_LINEAR,       AnimationCalcMode::LINEAR },
+    { XML_PACED,        AnimationCalcMode::PACED },
+    { XML_SPLINE,       AnimationCalcMode::SPLINE },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_AdditiveMode[] =
+{
+    { XML_BASE,         AnimationAdditiveMode::BASE },
+    { XML_SUM,          AnimationAdditiveMode::SUM },
+    { XML_REPLACE,      AnimationAdditiveMode::REPLACE },
+    { XML_MULTIPLY,     AnimationAdditiveMode::MULTIPLY },
+    { XML_NONE,         AnimationAdditiveMode::NONE },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_TransformType[] =
+{
+    { XML_TRANSLATE,    AnimationTransformType::TRANSLATE },
+    { XML_SCALE,        AnimationTransformType::SCALE },
+    { XML_ROTATE,       AnimationTransformType::ROTATE },
+    { XML_SKEWX,        AnimationTransformType::SKEWX },
+    { XML_SKEWY,        AnimationTransformType::SKEWY },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionType[] =
+{
+    { XML_BARWIPE,          TransitionType::BARWIPE },
+    { XML_BOXWIPE,          TransitionType::BOXWIPE },
+    { XML_FOURBOXWIPE,      TransitionType::FOURBOXWIPE },
+    { XML_BARNDOORWIPE,     TransitionType::BARNDOORWIPE },
+    { XML_DIAGONALWIPE,     TransitionType::DIAGONALWIPE },
+    { XML_BOWTIEWIPE,       TransitionType::BOWTIEWIPE },
+    { XML_MISCDIAGONALWIPE, TransitionType::MISCDIAGONALWIPE },
+    { XML_VEEWIPE,          TransitionType::VEEWIPE },
+    { XML_BARNVEEWIPE,      TransitionType::BARNVEEWIPE },
+    { XML_ZIGZAGWIPE,       TransitionType::ZIGZAGWIPE },
+    { XML_BARNZIGZAGWIPE,   TransitionType::BARNZIGZAGWIPE },
+    { XML_IRISWIPE,         TransitionType::IRISWIPE },
+    { XML_TRIANGLEWIPE,     TransitionType::TRIANGLEWIPE },
+    { XML_ARROWHEADWIPE,    TransitionType::ARROWHEADWIPE },
+    { XML_PENTAGONWIPE,     TransitionType::PENTAGONWIPE },
+    { XML_HEXAGONWIPE,      TransitionType::HEXAGONWIPE },
+    { XML_ELLIPSEWIPE,      TransitionType::ELLIPSEWIPE },
+    { XML_EYEWIPE,          TransitionType::EYEWIPE },
+    { XML_ROUNDRECTWIPE,    TransitionType::ROUNDRECTWIPE },
+    { XML_STARWIPE,         TransitionType::STARWIPE },
+    { XML_MISCSHAPEWIPE,    TransitionType::MISCSHAPEWIPE },
+    { XML_CLOCKWIPE,        TransitionType::CLOCKWIPE },
+    { XML_PINWHEELWIPE,     TransitionType::PINWHEELWIPE },
+    { XML_SINGLESWEEPWIPE,  TransitionType::SINGLESWEEPWIPE },
+    { XML_FANWIPE,          TransitionType::FANWIPE },
+    { XML_DOUBLEFANWIPE,    TransitionType::DOUBLEFANWIPE },
+    { XML_DOUBLESWEEPWIPE,  TransitionType::DOUBLESWEEPWIPE },
+    { XML_SALOONDOORWIPE,   TransitionType::SALOONDOORWIPE },
+    { XML_WINDSHIELDWIPE,   TransitionType::WINDSHIELDWIPE },
+    { XML_SNAKEWIPE,        TransitionType::SNAKEWIPE },
+    { XML_SPIRALWIPE,       TransitionType::SPIRALWIPE },
+    { XML_PARALLELSNAKESWIPE,TransitionType::PARALLELSNAKESWIPE },
+    { XML_BOXSNAKESWIPE,    TransitionType::BOXSNAKESWIPE },
+    { XML_WATERFALLWIPE,    TransitionType::WATERFALLWIPE },
+    { XML_PUSHWIPE,         TransitionType::PUSHWIPE },
+    { XML_SLIDEWIPE,        TransitionType::SLIDEWIPE },
+    { XML_FADE,             TransitionType::FADE },
+    { XML_RANDOMBARWIPE,    TransitionType::RANDOMBARWIPE },
+    { XML_CHECKERBOARDWIPE, TransitionType::CHECKERBOARDWIPE },
+    { XML_DISSOLVE,         TransitionType::DISSOLVE },
+    { XML_BLINDSWIPE,       TransitionType::BLINDSWIPE },
+    { XML_RANDOM,           TransitionType::RANDOM },
+    { XML_ZOOM,             TransitionType::ZOOM },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_TransitionSubType[] =
+{
+    { XML_DEFAULT,              TransitionSubType::DEFAULT },
+    { XML_LEFTTORIGHT,          TransitionSubType::LEFTTORIGHT },
+    { XML_TOPTOBOTTOM,          TransitionSubType::TOPTOBOTTOM },
+    { XML_TOPLEFT,              TransitionSubType::TOPLEFT },
+    { XML_TOPRIGHT,             TransitionSubType::TOPRIGHT },
+    { XML_BOTTOMRIGHT,          TransitionSubType::BOTTOMRIGHT },
+    { XML_BOTTOMLEFT,           TransitionSubType::BOTTOMLEFT },
+    { XML_TOPCENTER,            TransitionSubType::TOPCENTER },
+    { XML_RIGHTCENTER,          TransitionSubType::RIGHTCENTER },
+    { XML_BOTTOMCENTER,         TransitionSubType::BOTTOMCENTER },
+    { XML_LEFTCENTER,           TransitionSubType::LEFTCENTER },
+    { XML_CORNERSIN,            TransitionSubType::CORNERSIN },
+    { XML_CORNERSOUT,           TransitionSubType::CORNERSOUT },
+    { XML_VERTICAL,             TransitionSubType::VERTICAL },
+    { XML_HORIZONTAL,           TransitionSubType::HORIZONTAL },
+    { XML_DIAGONALBOTTOMLEFT,   TransitionSubType::DIAGONALBOTTOMLEFT },
+    { XML_DIAGONALTOPLEFT,      TransitionSubType::DIAGONALTOPLEFT },
+    { XML_DOUBLEBARNDOOR,       TransitionSubType::DOUBLEBARNDOOR },
+    { XML_DOUBLEDIAMOND,        TransitionSubType::DOUBLEDIAMOND },
+    { XML_DOWN,                 TransitionSubType::DOWN },
+    { XML_LEFT,                 TransitionSubType::LEFT },
+    { XML_UP,                   TransitionSubType::UP },
+    { XML_RIGHT,                TransitionSubType::RIGHT },
+    { XML_RECTANGLE,            TransitionSubType::RECTANGLE },
+    { XML_DIAMOND,              TransitionSubType::DIAMOND },
+    { XML_CIRCLE,               TransitionSubType::CIRCLE },
+    { XML_FOURPOINT,            TransitionSubType::FOURPOINT },
+    { XML_FIVEPOINT,            TransitionSubType::FIVEPOINT },
+    { XML_SIXPOINT,             TransitionSubType::SIXPOINT },
+    { XML_HEART,                TransitionSubType::HEART },
+    { XML_KEYHOLE,              TransitionSubType::KEYHOLE },
+    { XML_CLOCKWISETWELVE,      TransitionSubType::CLOCKWISETWELVE },
+    { XML_CLOCKWISETHREE,       TransitionSubType::CLOCKWISETHREE },
+    { XML_CLOCKWISESIX,         TransitionSubType::CLOCKWISESIX },
+    { XML_CLOCKWISENINE,        TransitionSubType::CLOCKWISENINE },
+    { XML_TWOBLADEVERTICAL,     TransitionSubType::TWOBLADEVERTICAL },
+    { XML_TWOBLADEHORIZONTAL,   TransitionSubType::TWOBLADEHORIZONTAL },
+    { XML_FOURBLADE,            TransitionSubType::FOURBLADE },
+    { XML_CLOCKWISETOP,         TransitionSubType::CLOCKWISETOP },
+    { XML_CLOCKWISERIGHT,       TransitionSubType::CLOCKWISERIGHT },
+    { XML_CLOCKWISEBOTTOM,      TransitionSubType::CLOCKWISEBOTTOM },
+    { XML_CLOCKWISELEFT,        TransitionSubType::CLOCKWISELEFT },
+    { XML_CLOCKWISETOPLEFT,     TransitionSubType::CLOCKWISETOPLEFT },
+    { XML_COUNTERCLOCKWISEBOTTOMLEFT,TransitionSubType::COUNTERCLOCKWISEBOTTOMLEFT },
+    { XML_CLOCKWISEBOTTOMRIGHT, TransitionSubType::CLOCKWISEBOTTOMRIGHT },
+    { XML_COUNTERCLOCKWISETOPRIGHT,TransitionSubType::COUNTERCLOCKWISETOPRIGHT },
+    { XML_CENTERTOP,            TransitionSubType::CENTERTOP },
+    { XML_CENTERRIGHT,          TransitionSubType::CENTERRIGHT },
+    { XML_TOP,                  TransitionSubType::TOP },
+    { XML_BOTTOM,               TransitionSubType::BOTTOM },
+    { XML_FANOUTVERTICAL,       TransitionSubType::FANOUTVERTICAL },
+    { XML_FANOUTHORIZONTAL,     TransitionSubType::FANOUTHORIZONTAL },
+    { XML_FANINVERTICAL,        TransitionSubType::FANINVERTICAL },
+    { XML_FANINHORIZONTAL,      TransitionSubType::FANINHORIZONTAL },
+    { XML_PARALLELVERTICAL,     TransitionSubType::PARALLELVERTICAL },
+    { XML_PARALLELDIAGONAL,     TransitionSubType::PARALLELDIAGONAL },
+    { XML_OPPOSITEVERTICAL,     TransitionSubType::OPPOSITEVERTICAL },
+    { XML_OPPOSITEHORIZONTAL,   TransitionSubType::OPPOSITEHORIZONTAL },
+    { XML_PARALLELDIAGONALTOPLEFT,TransitionSubType::PARALLELDIAGONALTOPLEFT },
+    { XML_PARALLELDIAGONALBOTTOMLEFT,TransitionSubType::PARALLELDIAGONALBOTTOMLEFT },
+    { XML_TOPLEFTHORIZONTAL,    TransitionSubType::TOPLEFTHORIZONTAL },
+    { XML_TOPLEFTDIAGONAL,      TransitionSubType::TOPLEFTDIAGONAL },
+    { XML_TOPRIGHTDIAGONAL,     TransitionSubType::TOPRIGHTDIAGONAL },
+    { XML_BOTTOMRIGHTDIAGONAL,  TransitionSubType::BOTTOMRIGHTDIAGONAL },
+    { XML_BOTTOMLEFTDIAGONAL,   TransitionSubType::BOTTOMLEFTDIAGONAL },
+    { XML_TOPLEFTCLOCKWISE,     TransitionSubType::TOPLEFTCLOCKWISE },
+    { XML_TOPRIGHTCLOCKWISE,    TransitionSubType::TOPRIGHTCLOCKWISE },
+    { XML_BOTTOMRIGHTCLOCKWISE, TransitionSubType::BOTTOMRIGHTCLOCKWISE },
+    { XML_BOTTOMLEFTCLOCKWISE,  TransitionSubType::BOTTOMLEFTCLOCKWISE },
+    { XML_TOPLEFTCOUNTERCLOCKWISE,TransitionSubType::TOPLEFTCOUNTERCLOCKWISE },
+    { XML_TOPRIGHTCOUNTERCLOCKWISE,TransitionSubType::TOPRIGHTCOUNTERCLOCKWISE },
+    { XML_BOTTOMRIGHTCOUNTERCLOCKWISE,TransitionSubType::BOTTOMRIGHTCOUNTERCLOCKWISE },
+    { XML_BOTTOMLEFTCOUNTERCLOCKWISE,TransitionSubType::BOTTOMLEFTCOUNTERCLOCKWISE },
+    { XML_VERTICALTOPSAME,      TransitionSubType::VERTICALTOPSAME },
+    { XML_VERTICALBOTTOMSAME,   TransitionSubType::VERTICALBOTTOMSAME },
+    { XML_VERTICALTOPLEFTOPPOSITE,TransitionSubType::VERTICALTOPLEFTOPPOSITE },
+    { XML_VERTICALBOTTOMLEFTOPPOSITE,TransitionSubType::VERTICALBOTTOMLEFTOPPOSITE },
+    { XML_HORIZONTALLEFTSAME,   TransitionSubType::HORIZONTALLEFTSAME },
+    { XML_HORIZONTALRIGHTSAME,  TransitionSubType::HORIZONTALRIGHTSAME },
+    { XML_HORIZONTALTOPLEFTOPPOSITE,TransitionSubType::HORIZONTALTOPLEFTOPPOSITE },
+    { XML_HORIZONTALTOPRIGHTOPPOSITE,TransitionSubType::HORIZONTALTOPRIGHTOPPOSITE },
+    { XML_DIAGONALBOTTOMLEFTOPPOSITE,TransitionSubType::DIAGONALBOTTOMLEFTOPPOSITE },
+    { XML_DIAGONALTOPLEFTOPPOSITE,TransitionSubType::DIAGONALTOPLEFTOPPOSITE },
+    { XML_TWOBOXTOP,            TransitionSubType::TWOBOXTOP },
+    { XML_TWOBOXBOTTOM,         TransitionSubType::TWOBOXBOTTOM },
+    { XML_TWOBOXLEFT,           TransitionSubType::TWOBOXLEFT },
+    { XML_TWOBOXRIGHT,          TransitionSubType::TWOBOXRIGHT },
+    { XML_FOURBOXVERTICAL,      TransitionSubType::FOURBOXVERTICAL },
+    { XML_FOURBOXHORIZONTAL,    TransitionSubType::FOURBOXHORIZONTAL },
+    { XML_VERTICALLEFT,         TransitionSubType::VERTICALLEFT },
+    { XML_VERTICALRIGHT,        TransitionSubType::VERTICALRIGHT },
+    { XML_HORIZONTALLEFT,       TransitionSubType::HORIZONTALLEFT },
+    { XML_HORIZONTALRIGHT,      TransitionSubType::HORIZONTALRIGHT },
+    { XML_FROMLEFT,             TransitionSubType::FROMLEFT },
+    { XML_FROMTOP,              TransitionSubType::FROMTOP },
+    { XML_FROMRIGHT,            TransitionSubType::FROMRIGHT },
+    { XML_FROMBOTTOM,           TransitionSubType::FROMBOTTOM },
+    { XML_CROSSFADE,            TransitionSubType::CROSSFADE },
+    { XML_FADETOCOLOR,          TransitionSubType::FADETOCOLOR },
+    { XML_FADEFROMCOLOR,        TransitionSubType::FADEFROMCOLOR },
+    { XML_FADEOVERCOLOR,        TransitionSubType::FADEOVERCOLOR },
+    { XML_THREEBLADE,           TransitionSubType::THREEBLADE },
+    { XML_EIGHTBLADE,           TransitionSubType::EIGHTBLADE },
+    { XML_ONEBLADE,             TransitionSubType::ONEBLADE },
+    { XML_ACROSS,               TransitionSubType::ACROSS },
+    { XML_TOPLEFTVERTICAL,      TransitionSubType::TOPLEFTVERTICAL },
+    { XML_COMBHORIZONTAL,       TransitionSubType::COMBHORIZONTAL },
+    { XML_COMBVERTICAL,         TransitionSubType::COMBVERTICAL },
+    { XML_IN,                   TransitionSubType::IN },
+    { XML_OUT,                  TransitionSubType::OUT },
+    { XML_ROTATEIN,             TransitionSubType::ROTATEIN },
+    { XML_ROTATEOUT,            TransitionSubType::ROTATEOUT },
+    { XML_FROMTOPLEFT,          TransitionSubType::FROMTOPLEFT },
+    { XML_FROMTOPRIGHT,         TransitionSubType::FROMTOPRIGHT },
+    { XML_FROMBOTTOMLEFT,       TransitionSubType::FROMBOTTOMLEFT },
+    { XML_FROMBOTTOMRIGHT,      TransitionSubType::FROMBOTTOMRIGHT },
 
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_TransitionSubType;
-        }
-    case Animations_EnumMap_EventTrigger:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_EventTrigger[] =
-            {
-                { XML_ONBEGIN,          EventTrigger::ON_BEGIN },
-                { XML_ONEND,            EventTrigger::ON_END },
-                { XML_BEGIN,            EventTrigger::BEGIN_EVENT },
-                { XML_END,              EventTrigger::END_EVENT },
-                { XML_CLICK,            EventTrigger::ON_CLICK },
-                { XML_DOUBLECLICK,      EventTrigger::ON_DBL_CLICK },
-                { XML_MOUSEOVER,        EventTrigger::ON_MOUSE_ENTER },
-                { XML_MOUSEOUT,         EventTrigger::ON_MOUSE_LEAVE },
-                { XML_NEXT,             EventTrigger::ON_NEXT },
-                { XML_PREVIOUS,         EventTrigger::ON_PREV },
-                { XML_STOP_AUDIO,       EventTrigger::ON_STOP_AUDIO },
-                { XML_REPEAT,           EventTrigger::REPEAT },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_EventTrigger;
-        }
-
-    case Animations_EnumMap_EffectPresetClass:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_EffectPresetClass[] =
-            {
-                { XML_CUSTOM,       EffectPresetClass::CUSTOM },
-                { XML_ENTRANCE,     EffectPresetClass::ENTRANCE },
-                { XML_EXIT,         EffectPresetClass::EXIT },
-                { XML_EMPHASIS,     EffectPresetClass::EMPHASIS },
-                { XML_MOTION_PATH,  EffectPresetClass::MOTIONPATH },
-                { XML_OLE_ACTION,   EffectPresetClass::OLEACTION },
-                { XML_MEDIA_CALL,   EffectPresetClass::MEDIACALL },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_EffectPresetClass;
-        }
-
-    case Animations_EnumMap_EffectNodeType:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_EffectNodeType[] =
-            {
-                { XML_DEFAULT,                  EffectNodeType::DEFAULT },
-                { XML_ON_CLICK,                 EffectNodeType::ON_CLICK },
-                { XML_WITH_PREVIOUS,            EffectNodeType::WITH_PREVIOUS },
-                { XML_AFTER_PREVIOUS,           EffectNodeType::AFTER_PREVIOUS },
-                { XML_MAIN_SEQUENCE,            EffectNodeType::MAIN_SEQUENCE },
-                { XML_TIMING_ROOT,              EffectNodeType::TIMING_ROOT },
-                { XML_INTERACTIVE_SEQUENCE,     EffectNodeType::INTERACTIVE_SEQUENCE },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_EffectNodeType;
-        }
-    case Animations_EnumMap_SubItem:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_SubItem[] =
-            {
-                { XML_WHOLE,                    ShapeAnimationSubType::AS_WHOLE },
-                { XML_BACKGROUND,               ShapeAnimationSubType::ONLY_BACKGROUND },
-                { XML_TEXT,                     ShapeAnimationSubType::ONLY_TEXT },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_SubItem;
-        }
-    case Animations_EnumMap_IterateType:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_IterateType[] =
-            {
-                { XML_BY_PARAGRAPH,             TextAnimationType::BY_PARAGRAPH },
-                { XML_BY_WORD,                  TextAnimationType::BY_WORD },
-                { XML_BY_LETTER,                TextAnimationType::BY_LETTER },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_IterateType;
-        }
-    case Animations_EnumMap_Command:
-        {
-            static const SvXMLEnumMapEntry aAnimations_EnumMap_Command[] =
-            {
-                { XML_CUSTOM,                   EffectCommands::CUSTOM },
-                { XML_VERB,                     EffectCommands::VERB },
-                { XML_PLAY,                     EffectCommands::PLAY },
-                { XML_TOGGLE_PAUSE,             EffectCommands::TOGGLEPAUSE },
-                { XML_STOP,                     EffectCommands::STOP },
-                { XML_STOP_AUDIO,               EffectCommands::STOPAUDIO },
-                { XML_TOKEN_INVALID, 0 }
-            };
-            return aAnimations_EnumMap_Command;
-        }
-    }
-
-    OSL_FAIL( "xmloff::getAnimationsEnumMap(), invalid map!" );
-    return nullptr;
-}
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_EventTrigger[] =
+{
+    { XML_ONBEGIN,          EventTrigger::ON_BEGIN },
+    { XML_ONEND,            EventTrigger::ON_END },
+    { XML_BEGIN,            EventTrigger::BEGIN_EVENT },
+    { XML_END,              EventTrigger::END_EVENT },
+    { XML_CLICK,            EventTrigger::ON_CLICK },
+    { XML_DOUBLECLICK,      EventTrigger::ON_DBL_CLICK },
+    { XML_MOUSEOVER,        EventTrigger::ON_MOUSE_ENTER },
+    { XML_MOUSEOUT,         EventTrigger::ON_MOUSE_LEAVE },
+    { XML_NEXT,             EventTrigger::ON_NEXT },
+    { XML_PREVIOUS,         EventTrigger::ON_PREV },
+    { XML_STOP_AUDIO,       EventTrigger::ON_STOP_AUDIO },
+    { XML_REPEAT,           EventTrigger::REPEAT },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_EffectPresetClass[] =
+{
+    { XML_CUSTOM,       EffectPresetClass::CUSTOM },
+    { XML_ENTRANCE,     EffectPresetClass::ENTRANCE },
+    { XML_EXIT,         EffectPresetClass::EXIT },
+    { XML_EMPHASIS,     EffectPresetClass::EMPHASIS },
+    { XML_MOTION_PATH,  EffectPresetClass::MOTIONPATH },
+    { XML_OLE_ACTION,   EffectPresetClass::OLEACTION },
+    { XML_MEDIA_CALL,   EffectPresetClass::MEDIACALL },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_EffectNodeType[] =
+{
+    { XML_DEFAULT,                  EffectNodeType::DEFAULT },
+    { XML_ON_CLICK,                 EffectNodeType::ON_CLICK },
+    { XML_WITH_PREVIOUS,            EffectNodeType::WITH_PREVIOUS },
+    { XML_AFTER_PREVIOUS,           EffectNodeType::AFTER_PREVIOUS },
+    { XML_MAIN_SEQUENCE,            EffectNodeType::MAIN_SEQUENCE },
+    { XML_TIMING_ROOT,              EffectNodeType::TIMING_ROOT },
+    { XML_INTERACTIVE_SEQUENCE,     EffectNodeType::INTERACTIVE_SEQUENCE },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_SubItem[] =
+{
+    { XML_WHOLE,                    ShapeAnimationSubType::AS_WHOLE },
+    { XML_BACKGROUND,               ShapeAnimationSubType::ONLY_BACKGROUND },
+    { XML_TEXT,                     ShapeAnimationSubType::ONLY_TEXT },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_IterateType[] =
+{
+    { XML_BY_PARAGRAPH,             TextAnimationType::BY_PARAGRAPH },
+    { XML_BY_WORD,                  TextAnimationType::BY_WORD },
+    { XML_BY_LETTER,                TextAnimationType::BY_LETTER },
+    { XML_TOKEN_INVALID, 0 }
+};
+const SvXMLEnumMapEntry aAnimations_EnumMap_Command[] =
+{
+    { XML_CUSTOM,                   EffectCommands::CUSTOM },
+    { XML_VERB,                     EffectCommands::VERB },
+    { XML_PLAY,                     EffectCommands::PLAY },
+    { XML_TOGGLE_PAUSE,             EffectCommands::TOGGLEPAUSE },
+    { XML_STOP,                     EffectCommands::STOP },
+    { XML_STOP_AUDIO,               EffectCommands::STOPAUDIO },
+    { XML_TOKEN_INVALID, 0 }
+};
 
 const struct ImplAttributeNameConversion* getAnimationAttributeNamesConversionList()
 {
@@ -676,12 +601,12 @@ void AnimationsExporterImpl::exportTransitionNode()
             sTmp.append( 's');
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_DUR, sTmp.makeStringAndClear() );
 
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTransition, getAnimationsEnumMap(Animations_EnumMap_TransitionType) );
+            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTransition, aAnimations_EnumMap_TransitionType );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TYPE, sTmp.makeStringAndClear() );
 
             if( nSubtype != TransitionSubType::DEFAULT )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nSubtype, getAnimationsEnumMap(Animations_EnumMap_TransitionSubType) );
+                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nSubtype, aAnimations_EnumMap_TransitionSubType );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
             }
 
@@ -879,28 +804,28 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         nTemp = xNode->getFill();
         if( nTemp != AnimationFill::DEFAULT )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_Fill) );
+            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_Fill );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FILL, sTmp.makeStringAndClear() );
         }
 
         nTemp = xNode->getFillDefault();
         if( nTemp != AnimationFill::INHERIT )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_FillDefault) );
+            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_FillDefault );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_FILLDEFAULT, sTmp.makeStringAndClear() );
         }
 
         nTemp = xNode->getRestart();
         if( nTemp != AnimationRestart::DEFAULT )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_Restart) );
+            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_Restart );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_RESTART, sTmp.makeStringAndClear() );
         }
 
         nTemp = xNode->getRestartDefault();
         if( nTemp != AnimationRestart::INHERIT )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_RestartDefault) );
+            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_RestartDefault );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_RESTARTDEFAULT, sTmp.makeStringAndClear() );
         }
 
@@ -958,7 +883,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         {
             if( aTemp >>= nTemp )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_Endsync) );
+                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_Endsync );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ENDSYNC, sTmp.makeStringAndClear() );
             }
         }
@@ -977,7 +902,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
                 {
                     if( (pValue->Value >>= nContainerNodeType) && (nContainerNodeType != EffectNodeType::DEFAULT) )
                     {
-                        SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nContainerNodeType, getAnimationsEnumMap(Animations_EnumMap_EffectNodeType) );
+                        SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nContainerNodeType, aAnimations_EnumMap_EffectNodeType );
                         mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_NODE_TYPE, sTmp.makeStringAndClear() );
                     }
                 }
@@ -1001,7 +926,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
                     sal_Int16 nEffectPresetClass = sal_Int16();
                     if( pValue->Value >>= nEffectPresetClass )
                     {
-                        SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nEffectPresetClass, getAnimationsEnumMap(Animations_EnumMap_EffectPresetClass) );
+                        SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nEffectPresetClass, aAnimations_EnumMap_EffectPresetClass );
                         mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_PRESET_CLASS, sTmp.makeStringAndClear() );
                     }
                 }
@@ -1100,14 +1025,14 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             sal_Int16 nTemp = xIter->getSubItem();
             if( nTemp )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_SubItem) );
+                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_SubItem );
                 mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_SUB_ITEM, sTmp.makeStringAndClear() );
             }
 
             nTemp = xIter->getIterateType();
             if( nTemp )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_IterateType) );
+                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_IterateType );
                 mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_TYPE, sTmp.makeStringAndClear() );
             }
 
@@ -1180,7 +1105,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
         nTemp = xAnimate->getSubItem();
         if( nTemp )
         {
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_SubItem) );
+            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_SubItem );
             mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_SUB_ITEM, sTmp.makeStringAndClear() );
         }
 
@@ -1286,7 +1211,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                 if( ((nNodeType == AnimationNodeType::ANIMATEMOTION ) && (nTemp != AnimationCalcMode::PACED)) ||
                     ((nNodeType != AnimationNodeType::ANIMATEMOTION ) && (nTemp != AnimationCalcMode::LINEAR)) )
                 {
-                    SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_CalcMode) );
+                    SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_CalcMode );
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_CALCMODE, sTmp.makeStringAndClear() );
                 }
 
@@ -1297,7 +1222,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                 nTemp = xAnimate->getAdditive();
                 if( nTemp != AnimationAdditiveMode::REPLACE )
                 {
-                    SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_AdditiveMode) );
+                    SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_AdditiveMode );
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ADDITIVE, sTmp.makeStringAndClear() );
                 }
             }
@@ -1374,7 +1299,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
 
             Reference< XAnimateTransform > xTransform( xAnimate, UNO_QUERY_THROW );
             nTemp = xTransform->getTransformType();
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, getAnimationsEnumMap(Animations_EnumMap_TransformType) );
+            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTemp, aAnimations_EnumMap_TransformType );
             mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_TYPE, sTmp.makeStringAndClear() );
         }
         break;
@@ -1385,13 +1310,13 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             eElementToken = XML_TRANSITIONFILTER;
 
             sal_Int16 nTransition = xTransitionFilter->getTransition();
-            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTransition, getAnimationsEnumMap(Animations_EnumMap_TransitionType) );
+            SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nTransition, aAnimations_EnumMap_TransitionType );
             mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_TYPE, sTmp.makeStringAndClear() );
 
             sal_Int16 nSubtype = xTransitionFilter->getSubtype();
             if( nSubtype != TransitionSubType::DEFAULT )
             {
-                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nSubtype, getAnimationsEnumMap(Animations_EnumMap_TransitionSubType) );
+                SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nSubtype, aAnimations_EnumMap_TransitionSubType );
                 mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_SUBTYPE, sTmp.makeStringAndClear() );
             }
 
@@ -1467,7 +1392,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         }
 
         sal_Int16 nCommand = xCommand->getCommand();
-        SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nCommand, getAnimationsEnumMap(Animations_EnumMap_Command) );
+        SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nCommand, aAnimations_EnumMap_Command );
         mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, sTmp.makeStringAndClear() );
 
 // todo virtual css::uno::Any SAL_CALL getParameter() throw (css::uno::RuntimeException) = 0;
@@ -1645,7 +1570,7 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
                 sTmp.append( '.' );
             }
 
-            SvXMLUnitConverter::convertEnum( sTmp2, (sal_uInt16)pEvent->Trigger, getAnimationsEnumMap(Animations_EnumMap_EventTrigger) );
+            SvXMLUnitConverter::convertEnum( sTmp2, (sal_uInt16)pEvent->Trigger, aAnimations_EnumMap_EventTrigger );
 
             sTmp.append( sTmp2.makeStringAndClear() );
         }
