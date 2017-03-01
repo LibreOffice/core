@@ -719,23 +719,21 @@ sal_uInt16 LwpDocument::GetNumberOfPagesBefore()
         pDivision = pDivision->GetNextDivision();
     }
 }
-  /**
+
+ /**
  * @descr    Parse the frame which anchor is to page before parse other contents,
- *          This method is called when the document is root document.
+ *           This method is called when the document is root document.
  */
 void LwpDocument::ParseFrameInPage(IXFStream * pOutputStream)
 {
-    if(IsChildDoc())
+    if (IsChildDoc())
         return;
 
-    XFContentContainer* pXFContainer = new XFContentContainer;
-
-    XFConvertFrameInPage(pXFContainer);
-
-    pXFContainer->ToXml(pOutputStream);
-    delete pXFContainer;
-    pXFContainer = nullptr;
+    rtl::Reference<XFContentContainer> xXFContainer(new XFContentContainer);
+    XFConvertFrameInPage(xXFContainer.get());
+    xXFContainer->ToXml(pOutputStream);
 }
+
  /**
  * @descr    Parse the frame which anchor is to page in the entire document
  */
