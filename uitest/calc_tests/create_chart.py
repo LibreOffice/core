@@ -103,7 +103,6 @@ class CalcChartUIDemo(UITestCase):
 
         self.ui_test.close_doc()
 
-    @unittest.skip("linux deadlock")
     def test_activate_chart(self):
 
         self.ui_test.create_doc_in_start_center("calc")
@@ -129,7 +128,6 @@ class CalcChartUIDemo(UITestCase):
 
         self.ui_test.close_doc()
 
-    @unittest.skip("linux deadlock")
     def select_chart_element(self):
 
         self.ui_test.create_doc_in_start_center("calc")
