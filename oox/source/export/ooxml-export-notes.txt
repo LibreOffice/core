@@ -16,12 +16,6 @@
 #   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 #
 
-How to install this
--------------------
-
-> cd instsetoo_native/util
-> LOCALINSTALLDIR=/where/you/want dmake openoffice_en-US PKGFORMAT=installed
-
 OOXML generally
 ---------------
 
