@@ -11,6 +11,6 @@ $(eval $(call gb_GeneratedPackage_GeneratedPackage,desktop_unopackages_install,$
 
 $(eval $(call gb_GeneratedPackage_use_customtarget,desktop_unopackages_install,desktop/unopackages_install))
 
-$(eval $(call gb_GeneratedPackage_add_dir,desktop_unopackages_install,$(INSTROOT)/share/uno_packages,uno_packages))
+$(eval $(call gb_GeneratedPackage_add_dir,desktop_unopackages_install,$(INSTROOT)/$(LIBO_SHARE_FOLDER)/uno_packages,uno_packages))
 
 # vim: set noet sw=4 ts=4:
