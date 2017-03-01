@@ -970,10 +970,14 @@ void ScModelObj::setClientVisibleArea(const Rectangle& rRectangle)
     pViewData->ForcePageUpDownOffset(rRectangle.GetHeight());
 }
 
-
 void ScModelObj::initializeForTiledRendering(const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
 {
     SolarMutexGuard aGuard;
+
+    // disable word autocompletion
+    ScAppOptions aAppOptions( SC_MOD()->GetAppOptions() );
+    aAppOptions.SetAutoComplete(false);
+    SC_MOD()->SetAppOptions(aAppOptions);
 
     // show us the text exactly
     ScInputOptions aInputOptions(SC_MOD()->GetInputOptions());
