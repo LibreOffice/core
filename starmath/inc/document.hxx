@@ -29,6 +29,7 @@
 #include <vcl/jobset.hxx>
 #include <vcl/virdev.hxx>
 #include <sax/fshelper.hxx>
+#include <unotools/lingucfg.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/mathml/import.hxx>
 #include <oox/export/utils.hxx>
@@ -65,7 +66,6 @@ class SmCursor;
 class SmDocShell;
 class EditEngine;
 
-
 class SmPrinterAccess
 {
     VclPtr<Printer> pPrinter;
@@ -77,9 +77,7 @@ public:
     OutputDevice* GetRefDev()  { return pRefDev.get(); }
 };
 
-
-void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool);
-
+void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool, const SvtLinguOptions &rOpt);
 
 class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
 {
@@ -90,6 +88,7 @@ class SM_DLLPUBLIC SmDocShell : public SfxObjectShell, public SfxListener
     SmFormat            maFormat;
     SmParser            maParser;
     OUString            maAccText;
+    SvtLinguOptions     maLinguOptions;
     SmTableNode        *mpTree;
     SfxItemPool        *mpEditEngineItemPool;
     EditEngine         *mpEditEngine;
@@ -188,6 +187,7 @@ public:
 
     EditEngine &    GetEditEngine();
     SfxItemPool &   GetEditEngineItemPool();
+    const SvtLinguOptions & GetLinguOptions() const { return maLinguOptions; }
 
     void        DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSelection = false);
     Size        GetSize();

@@ -46,7 +46,6 @@
 #include <svl/fstathelper.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
-#include <unotools/lingucfg.hxx>
 #include <unotools/linguprops.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/ptitem.hxx>
@@ -287,12 +286,9 @@ void SmDocShell::ArrangeFormula()
     maAccText.clear();
 }
 
-void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
+void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool, const SvtLinguOptions &rOpt)
 {
     // set fonts to be used
-    SvtLinguOptions aOpt;
-    SvtLinguConfig().GetOptions( aOpt );
-
     struct FontDta {
         sal_Int16       nFallbackLang;
         sal_Int16       nLang;
@@ -310,9 +306,9 @@ void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
         {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
             DefaultFontType::CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
     };
-    aTable[0].nLang = aOpt.nDefaultLanguage;
-    aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
-    aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
+    aTable[0].nLang = rOpt.nDefaultLanguage;
+    aTable[1].nLang = rOpt.nDefaultLanguage_CJK;
+    aTable[2].nLang = rOpt.nDefaultLanguage_CTL;
 
     for (FontDta & rFntDta : aTable)
     {
@@ -348,7 +344,7 @@ EditEngine& SmDocShell::GetEditEngine()
 
         mpEditEngineItemPool = EditEngine::CreatePool();
 
-        SetEditEngineDefaultFonts(*mpEditEngineItemPool);
+        SetEditEngineDefaultFonts(*mpEditEngineItemPool, maLinguOptions);
 
         mpEditEngine = new EditEngine( mpEditEngineItemPool );
 
@@ -640,6 +636,8 @@ SmDocShell::SmDocShell( SfxModelFlags i_nSfxCreationFlags )
     , mnModifyCount(0)
     , mbFormulaArranged(false)
 {
+    SvtLinguConfig().GetOptions(maLinguOptions);
+
     SetPool(&SfxGetpApp()->GetPool());
 
     SmModule *pp = SM_MOD();
