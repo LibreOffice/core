@@ -20,6 +20,7 @@
 #include "celllistsource.hxx"
 #include <tools/debug.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
@@ -130,8 +131,7 @@ namespace calc
     void OCellListSource::checkInitialized()
     {
         if ( !m_bInitialized )
-            throw RuntimeException();
-            // TODO: error message
+            throw NotInitializedException("CellListSource is not initialized", static_cast<cppu::OWeakObject*>(this));
     }
 
     OUString SAL_CALL OCellListSource::getImplementationName(  )
@@ -345,8 +345,7 @@ namespace calc
     void SAL_CALL OCellListSource::initialize( const Sequence< Any >& _rArguments )
     {
         if ( m_bInitialized )
-            throw Exception();
-            // TODO: error message
+            throw RuntimeException("CellListSource is already initialized", static_cast<cppu::OWeakObject*>(this));
 
         // get the cell address
         CellRangeAddress aRangeAddress;
@@ -368,8 +367,7 @@ namespace calc
         }
 
         if ( !bFoundAddress )
-            // TODO: error message
-            throw Exception();
+            throw RuntimeException("Cell not found", static_cast<cppu::OWeakObject*>(this));
 
         // determine the range we're bound to
         try
@@ -403,8 +401,7 @@ namespace calc
         }
 
         if ( !m_xRange.is() )
-            throw Exception();
-            // TODO error message
+            throw RuntimeException("Failed to retrieve cell range", static_cast<cppu::OWeakObject*>(this));
 
         Reference<XModifyBroadcaster> xBroadcaster( m_xRange, UNO_QUERY );
         if ( xBroadcaster.is() )

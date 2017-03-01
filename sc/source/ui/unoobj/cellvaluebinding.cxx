@@ -21,6 +21,7 @@
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/form/binding/IncompatibleTypesException.hpp>
+#include <com/sun/star/lang/NotInitializedException.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #include <com/sun/star/sheet/XCellRangeData.hpp>
@@ -395,8 +396,7 @@ namespace calc
     void OCellValueBinding::checkInitialized()
     {
         if ( !m_bInitialized )
-            throw RuntimeException();
-            // TODO: error message
+            throw NotInitializedException("CellValueBinding is not initialized", static_cast<cppu::OWeakObject*>(this));
     }
 
     void OCellValueBinding::checkValueType( const Type& _rType ) const
@@ -488,8 +488,7 @@ namespace calc
     void SAL_CALL OCellValueBinding::initialize( const Sequence< Any >& _rArguments )
     {
         if ( m_bInitialized )
-            throw Exception();
-            // TODO: error message
+            throw RuntimeException("CellValueBinding is already initialized", static_cast<cppu::OWeakObject*>(this));
 
         // get the cell address
         CellAddress aAddress;
@@ -511,8 +510,7 @@ namespace calc
         }
 
         if ( !bFoundAddress )
-            // TODO: error message
-            throw Exception();
+            throw RuntimeException("Cell not found", static_cast<cppu::OWeakObject*>(this));
 
         // get the cell object
         try
@@ -544,8 +542,7 @@ namespace calc
         }
 
         if ( !m_xCell.is() )
-            throw Exception();
-            // TODO error message
+            throw RuntimeException("Failed to retrieve cell object", static_cast<cppu::OWeakObject*>(this));
 
         m_xCellText.set(m_xCell, css::uno::UNO_QUERY);
 

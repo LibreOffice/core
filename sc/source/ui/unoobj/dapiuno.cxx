@@ -42,6 +42,8 @@
 #include "globstr.hrc"
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
 #include <com/sun/star/sheet/XMembersSupplier.hpp>
@@ -84,6 +86,7 @@ using ::com::sun::star::beans::XVetoableChangeListener;
 
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::lang::IndexOutOfBoundsException;
+using ::com::sun::star::lang::NullPointerException;
 using ::com::sun::star::lang::WrappedTargetException;
 
 using ::com::sun::star::table::CellAddress;
@@ -402,37 +405,35 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const OUString& aNewName,
     SolarMutexGuard aGuard;
     if (!xDescriptor.is()) return;
 
-    // inserting with already existing name?
     if ( !aNewName.isEmpty() && hasByName( aNewName ) )
-        throw RuntimeException();       // no other exceptions specified
+        throw IllegalArgumentException("Name \"" + aNewName + "\" already exists", static_cast<cppu::OWeakObject*>(this), 0);
 
-    bool bDone = false;
+    if (!pDocShell)
+        throw RuntimeException("DocShell is null", static_cast<cppu::OWeakObject*>(this));
+
     ScDataPilotDescriptorBase* pImp = ScDataPilotDescriptorBase::getImplementation( xDescriptor );
-    if ( pDocShell && pImp )
-    {
-        ScDPObject* pNewObj = pImp->GetDPObject();
+    if (!pImp)
+        throw RuntimeException("Failed to get ScDataPilotDescriptor", static_cast<cppu::OWeakObject*>(this));
 
-        if (pNewObj)
-        {
-            ScRange aOutputRange((SCCOL)aOutputAddress.Column, (SCROW)aOutputAddress.Row, (SCTAB)aOutputAddress.Sheet,
-                                (SCCOL)aOutputAddress.Column, (SCROW)aOutputAddress.Row, (SCTAB)aOutputAddress.Sheet);
-            pNewObj->SetOutRange(aOutputRange);
-            OUString aName = aNewName;
-            if (aName.isEmpty())
-                aName = lcl_CreatePivotName( pDocShell );
-            pNewObj->SetName(aName);
-            OUString aTag = xDescriptor->getTag();
-            pNewObj->SetTag(aTag);
+    ScDPObject* pNewObj = pImp->GetDPObject();
+    if (!pNewObj)
+        throw RuntimeException("Failed to get DPObject", static_cast<cppu::OWeakObject*>(this));
 
-    // todo: handle double fields (for more information see ScDPObject
+    ScRange aOutputRange((SCCOL)aOutputAddress.Column, (SCROW)aOutputAddress.Row, (SCTAB)aOutputAddress.Sheet,
+                        (SCCOL)aOutputAddress.Column, (SCROW)aOutputAddress.Row, (SCTAB)aOutputAddress.Sheet);
+    pNewObj->SetOutRange(aOutputRange);
+    OUString aName = aNewName;
+    if (aName.isEmpty())
+        aName = lcl_CreatePivotName( pDocShell );
+    pNewObj->SetName(aName);
+    OUString aTag = xDescriptor->getTag();
+    pNewObj->SetTag(aTag);
 
-            ScDBDocFunc aFunc(*pDocShell);
-            bDone = aFunc.CreatePivotTable(*pNewObj, true, true);
-        }
-    }
+    // todo: handle double fields (for more information see ScDPObject)
 
-    if (!bDone)
-        throw RuntimeException();       // no other exceptions specified
+    ScDBDocFunc aFunc(*pDocShell);
+    if (!aFunc.CreatePivotTable(*pNewObj, true, true))
+        throw RuntimeException("Failed to create pivot table", static_cast<cppu::OWeakObject*>(this));
 }
 
 void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
@@ -653,7 +654,7 @@ CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
 
     ScDPObject* pDPObject(GetDPObject());
     if (!pDPObject)
-        throw RuntimeException();
+        throw RuntimeException("Failed to get DPObject", static_cast<cppu::OWeakObject*>(this));
 
     CellRangeAddress aRet;
     if (pDPObject->IsSheetData())
@@ -667,7 +668,7 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress&
 
     ScDPObject* pDPObject = GetDPObject();
     if (!pDPObject)
-        throw RuntimeException();
+        throw RuntimeException("Failed to get DPObject", static_cast<cppu::OWeakObject*>(this));
 
     ScSheetSourceDesc aSheetDesc(&pDocShell->GetDocument());
     if (pDPObject->IsSheetData())
@@ -1215,7 +1216,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDataPilotTableObj::getDrillDownData(const C
     ScAddress aAddr2(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet);
     ScDPObject* pObj = GetDPObject();
     if (!pObj)
-        throw RuntimeException();
+        throw RuntimeException("Failed to get DPObject", static_cast<cppu::OWeakObject*>(this));
 
     pObj->GetDrillDownData(aAddr2, aTabData);
     return aTabData;
@@ -1228,7 +1229,7 @@ DataPilotTablePositionData SAL_CALL ScDataPilotTableObj::getPositionData(const C
     ScAddress aAddr2(static_cast<SCCOL>(aAddr.Column), static_cast<SCROW>(aAddr.Row), aAddr.Sheet);
     ScDPObject* pObj = GetDPObject();
     if (!pObj)
-        throw RuntimeException();
+        throw RuntimeException("Failed to get DPObject", static_cast<cppu::OWeakObject*>(this));
 
     pObj->GetPositionData(aAddr2, aPosData);
     return aPosData;
@@ -1239,10 +1240,10 @@ void SAL_CALL ScDataPilotTableObj::insertDrillDownSheet(const CellAddress& aAddr
     SolarMutexGuard aGuard;
     ScDPObject* pDPObj = GetDPObject();
     if (!pDPObj)
-        throw RuntimeException();
+        throw RuntimeException("Failed to get DPObject", static_cast<cppu::OWeakObject*>(this));
     ScTabViewShell* pViewSh = GetDocShell()->GetBestViewShell();
     if (!pViewSh)
-        throw RuntimeException();
+        throw RuntimeException("Failed to get ViewShell", static_cast<cppu::OWeakObject*>(this));
 
     Sequence<DataPilotFieldFilter> aFilters;
     pDPObj->GetDataFieldPositionData(
@@ -1254,7 +1255,9 @@ CellRangeAddress SAL_CALL ScDataPilotTableObj::getOutputRangeByType( sal_Int32 n
 {
     SolarMutexGuard aGuard;
     if (nType < 0 || nType > DataPilotOutputRangeType::RESULT)
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("nType must be between 0 and " +
+                OUString::number(DataPilotOutputRangeType::RESULT) + ", got " + OUString::number(nType),
+                static_cast<cppu::OWeakObject*>(this), 0);
 
     CellRangeAddress aRet;
     if (ScDPObject* pDPObj = lcl_GetDPObject(GetDocShell(), nTab, aName))
@@ -1505,7 +1508,7 @@ ScDataPilotFieldsObj::~ScDataPilotFieldsObj()
 static sal_Int32 lcl_GetFieldCount( const Reference<XDimensionsSupplier>& rSource, const Any& rOrient )
 {
     if (!rSource.is())
-        throw RuntimeException();
+        throw NullPointerException();
 
     sal_Int32 nRet = 0;
 
@@ -1543,7 +1546,7 @@ static bool lcl_GetFieldDataByIndex( const Reference<XDimensionsSupplier>& rSour
                                 const Any& rOrient, SCSIZE nIndex, ScFieldIdentifier& rFieldId )
 {
     if (!rSource.is())
-        throw RuntimeException();
+        throw NullPointerException();
 
     bool bOk = false;
     SCSIZE nPos = 0;
@@ -2514,13 +2517,13 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     SolarMutexGuard aGuard;
 
     if( !rItems.hasElements() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("rItems is empty", static_cast<cppu::OWeakObject*>(this), 0);
 
     Reference< XMembersAccess > xMembers = GetMembers();
     if (!xMembers.is())
     {
         SAL_WARN("sc.ui", "Cannot access members of the field object.");
-        throw RuntimeException();
+        throw RuntimeException("Cannot access members of the field object", static_cast<cppu::OWeakObject*>(this));
     }
 
     for (const OUString& aEntryName : rItems)
@@ -2528,7 +2531,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         if (!xMembers->hasByName(aEntryName))
         {
             SAL_WARN("sc.ui", "There is no member with that name: " + aEntryName + ".");
-            throw IllegalArgumentException();
+            throw IllegalArgumentException("There is no member with name \"" + aEntryName + "\"", static_cast<cppu::OWeakObject*>(this), 0);
         }
     }
 
@@ -2670,7 +2673,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
             {
                 SAL_WARN("sc.ui", "Cannot find field with that name: " + sNewDim + ".");
                 // Avoid throwing exception that's not specified in the method signature.
-                throw RuntimeException();
+                throw RuntimeException("Cannot find field with name \"" + sNewDim + "\"", static_cast<cppu::OWeakObject*>(this));
             }
         }
     }
@@ -2682,15 +2685,18 @@ Reference < XDataPilotField > SAL_CALL ScDataPilotFieldObj::createDateGroup( con
     SolarMutexGuard aGuard;
     using namespace ::com::sun::star::sheet::DataPilotFieldGroupBy;
 
-    // check min/max/step, HasDateValues must be set always
-    if( !rInfo.HasDateValues || !lclCheckMinMaxStep( rInfo ) )
-        throw IllegalArgumentException();
+    if( !rInfo.HasDateValues )
+        throw IllegalArgumentException("HasDateValues is not set", static_cast<cppu::OWeakObject*>(this), 0);
+    if( !lclCheckMinMaxStep( rInfo ) )
+        throw IllegalArgumentException("min/max/step", static_cast<cppu::OWeakObject*>(this), 0);
+
     // only a single date flag is allowed
     if( (rInfo.GroupBy == 0) || (rInfo.GroupBy > YEARS) || ((rInfo.GroupBy & (rInfo.GroupBy - 1)) != 0) )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Invalid GroupBy value: " + OUString::number(rInfo.GroupBy), static_cast<cppu::OWeakObject*>(this), 0);
+
     // step must be zero, if something else than DAYS is specified
     if( rInfo.Step >= ((rInfo.GroupBy == DAYS) ? 32768.0 : 1.0) )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Invalid step value: " + OUString::number(rInfo.Step), static_cast<cppu::OWeakObject*>(this), 0);
 
     OUString aGroupDimName;
     ScDPObject* pDPObj = nullptr;
@@ -2877,16 +2883,16 @@ void SAL_CALL ScDataPilotFieldGroupsObj::replaceByName( const OUString& rName, c
     SolarMutexGuard aGuard;
 
     if( rName.isEmpty() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Name is empty", static_cast<cppu::OWeakObject*>(this), 0);
 
     ScFieldGroups::iterator aIt = implFindByName( rName );
     if( aIt == maGroups.end() )
-        throw NoSuchElementException();
+        throw NoSuchElementException("Name \"" + rName + "\" not found", static_cast<cppu::OWeakObject*>(this));
 
     // read all item names provided by the passed object
     ScFieldGroupMembers aMembers;
     if( !lclExtractGroupMembers( aMembers, rElement ) )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Invalid element object", static_cast<cppu::OWeakObject*>(this), 0);
 
     // copy and forget, faster than vector assignment
     aIt->maMembers.swap( aMembers );
@@ -2899,16 +2905,16 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
     SolarMutexGuard aGuard;
 
     if( rName.isEmpty() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Name is empty", static_cast<cppu::OWeakObject*>(this), 0);
 
     ScFieldGroups::iterator aIt = implFindByName( rName );
     if( aIt != maGroups.end() )
-        throw ElementExistException();
+        throw ElementExistException("Name \"" + rName + "\" already exists", static_cast<cppu::OWeakObject*>(this));
 
     // read all item names provided by the passed object
     ScFieldGroupMembers aMembers;
     if( !lclExtractGroupMembers( aMembers, rElement ) )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Invalid element object", static_cast<cppu::OWeakObject*>(this), 0);
 
     // create the new entry if no error has been occurred
     maGroups.resize( maGroups.size() + 1 );
@@ -2922,11 +2928,11 @@ void SAL_CALL ScDataPilotFieldGroupsObj::removeByName( const OUString& rName )
     SolarMutexGuard aGuard;
 
     if( rName.isEmpty() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Name is empty", static_cast<cppu::OWeakObject*>(this), 0);
 
     ScFieldGroups::iterator aIt = implFindByName( rName );
     if( aIt == maGroups.end() )
-        throw NoSuchElementException();
+        throw NoSuchElementException("Name \"" + rName + "\" not found", static_cast<cppu::OWeakObject*>(this));
 
     maGroups.erase( aIt );
 }
@@ -2976,7 +2982,7 @@ ScFieldGroup& ScDataPilotFieldGroupsObj::getFieldGroup( const OUString& rName )
     SolarMutexGuard aGuard;
     ScFieldGroups::iterator aIt = implFindByName( rName );
     if( aIt == maGroups.end() )
-        throw RuntimeException();
+        throw RuntimeException("Field Group with name \"" + rName + "\" not found", static_cast<cppu::OWeakObject*>(this));
      return *aIt;
 }
 
@@ -2985,9 +2991,11 @@ void ScDataPilotFieldGroupsObj::renameFieldGroup( const OUString& rOldName, cons
     SolarMutexGuard aGuard;
     ScFieldGroups::iterator aOldIt = implFindByName( rOldName );
     ScFieldGroups::iterator aNewIt = implFindByName( rNewName );
+    if( aOldIt == maGroups.end() )
+        throw RuntimeException("Field Group with name \"" + rOldName + "\" not found", static_cast<cppu::OWeakObject*>(this));
     // new name must not exist yet
-    if( (aOldIt == maGroups.end()) || ((aNewIt != maGroups.end()) && (aNewIt != aOldIt)) )
-        throw RuntimeException();
+    if( ((aNewIt != maGroups.end()) && (aNewIt != aOldIt)) )
+        throw RuntimeException("Field Group with name \"" + rOldName + "\" already exists", static_cast<cppu::OWeakObject*>(this));
     aOldIt->maName = rNewName;
 }
 
@@ -3035,7 +3043,7 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByName( const OUString& rName )
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     if( aIt == rMembers.end() )
-        throw NoSuchElementException();
+        throw NoSuchElementException("Name \"" + rName + "\" not found", static_cast<cppu::OWeakObject*>(this));
     return Any( Reference< XNamed >( new ScDataPilotFieldGroupItemObj( *this, *aIt ) ) );
 }
 
@@ -3061,19 +3069,17 @@ void SAL_CALL ScDataPilotFieldGroupObj::replaceByName( const OUString& rName, co
     // it should be possible to quickly rename an item -> accept string or XNamed
     OUString aNewName = lclExtractMember( rElement );
     if( rName.isEmpty() || aNewName.isEmpty() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Name is empty", static_cast<cppu::OWeakObject*>(this), 0);
     if( rName == aNewName )
         return;
 
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aOldIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
     ScFieldGroupMembers::iterator aNewIt = ::std::find( rMembers.begin(), rMembers.end(), aNewName );
-    // throw if passed member name does not exist
     if( aOldIt == rMembers.end() )
-        throw NoSuchElementException();
-    // throw if new name already exists
+        throw NoSuchElementException("Name \"" + rName + "\" not found", static_cast<cppu::OWeakObject*>(this));
     if( aNewIt != rMembers.end() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Name \"" + rName + "\" already exists", static_cast<cppu::OWeakObject*>(this), 0);
     *aOldIt = aNewName;
 }
 
@@ -3085,13 +3091,12 @@ void SAL_CALL ScDataPilotFieldGroupObj::insertByName( const OUString& rName, con
 
     // we will ignore the passed element and just try to insert the name
     if( rName.isEmpty() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Name is empty", static_cast<cppu::OWeakObject*>(this), 0);
 
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
-    // throw if passed name already exists
     if( aIt != rMembers.end() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Name \"" + rName + "\" already exists", static_cast<cppu::OWeakObject*>(this), 0);
     rMembers.push_back( rName );
 }
 
@@ -3100,12 +3105,11 @@ void SAL_CALL ScDataPilotFieldGroupObj::removeByName( const OUString& rName )
     SolarMutexGuard aGuard;
 
     if( rName.isEmpty() )
-        throw IllegalArgumentException();
+        throw IllegalArgumentException("Name is empty", static_cast<cppu::OWeakObject*>(this), 0);
     ScFieldGroupMembers& rMembers = mrParent.getFieldGroup( maGroupName ).maMembers;
     ScFieldGroupMembers::iterator aIt = ::std::find( rMembers.begin(), rMembers.end(), rName );
-    // throw if passed name does not exist
     if( aIt == rMembers.end() )
-        throw NoSuchElementException();
+        throw NoSuchElementException("Name \"" + rName + "\" not found", static_cast<cppu::OWeakObject*>(this));
     rMembers.erase( aIt );
 }
 
@@ -3229,7 +3233,7 @@ Any SAL_CALL ScDataPilotItemsObj::getByName( const OUString& aName )
             }
             ++nItem;
         }
-        throw NoSuchElementException();
+        throw NoSuchElementException("Name \"" + aName + "\" not found", static_cast<cppu::OWeakObject*>(this));
     }
     return Any();
 }
