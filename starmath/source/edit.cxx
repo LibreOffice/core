@@ -199,13 +199,6 @@ EditEngine * SmEditWindow::GetEditEngine()
     return pEditEng;
 }
 
-
-SfxItemPool * SmEditWindow::GetEditEngineItemPool()
-{
-    SmDocShell *pDoc = GetDoc();
-    return pDoc ? &pDoc->GetEditEngineItemPool() : nullptr;
-}
-
 void SmEditWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 {
     // Note: SetBackground still done in SmEditWindow::DataChanged
@@ -226,10 +219,10 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
     // the application font thus we use this one too
     SetPointFont(*this, aSettings.GetFieldFont() /*aSettings.GetAppFont()*/);
 
-    EditEngine  *pEditEngine = GetEditEngine();
-    SfxItemPool *pEditEngineItemPool = GetEditEngineItemPool();
+    EditEngine *pEditEngine = GetEditEngine();
+    SmDocShell *pDoc = GetDoc();
 
-    if (pEditEngine && pEditEngineItemPool)
+    if (pEditEngine && pDoc)
     {
         //!
         //! see also SmDocShell::GetEditEngine() !
@@ -237,7 +230,7 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
         pEditEngine->SetDefTab(sal_uInt16(GetTextWidth("XXXX")));
 
-        SetEditEngineDefaultFonts(*pEditEngineItemPool);
+        SetEditEngineDefaultFonts(pDoc->GetEditEngineItemPool());
 
         // forces new settings to be used
         // unfortunately this resets the whole edit engine

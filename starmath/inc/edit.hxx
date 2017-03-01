@@ -82,8 +82,6 @@ class SmEditWindow : public vcl::Window, public DropTargetHelper
     void InvalidateSlots();
     void UpdateStatus(bool bSetDocModified);
 
-    SfxItemPool* GetEditEngineItemPool();
-
 public:
     explicit SmEditWindow(SmCmdBoxWindow& rMyCmdBoxWin);
     virtual ~SmEditWindow() override;
