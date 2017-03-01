@@ -70,7 +70,6 @@ class SwFlyFrame : public SwLayoutFrame, public SwAnchoredObject
 
     using SwLayoutFrame::CalcRel;
 
-    sal_uInt32 GetOrdNumForNewRef( const SwFlyDrawContact* );
     SwVirtFlyDrawObj* CreateNewRef( SwFlyDrawContact* );
 
 protected:
