@@ -18,6 +18,8 @@
  */
 
 #include <algorithm>
+#include <cassert>
+
 #include <boost/optional.hpp>
 
 #include "oox/vml/vmlshape.hxx"
@@ -800,19 +802,17 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         // The associated properties "PROP_MirroredX" and "PROP_MirroredY" have to be set here so that direction change will occur internally.
         if (bFlipX || bFlipY)
         {
-            css::uno::Sequence< css::beans::PropertyValue > aPropSequence (
-                bFlipX && bFlipY ? 2 : 1);
-            int nPropertyIndex = 0;
+            assert(!(bFlipX && bFlipY));
+            css::uno::Sequence< css::beans::PropertyValue > aPropSequence (1);
             if (bFlipX)
             {
-                aPropSequence [nPropertyIndex].Name = "MirroredX";
-                aPropSequence [nPropertyIndex].Value <<= bFlipX;
-                nPropertyIndex++;
+                aPropSequence [0].Name = "MirroredX";
+                aPropSequence [0].Value <<= bFlipX;
             }
-            if (bFlipY)
+            else
             {
-                aPropSequence [nPropertyIndex].Name = "MirroredY";
-                aPropSequence [nPropertyIndex].Value <<= bFlipY;
+                aPropSequence [0].Name = "MirroredY";
+                aPropSequence [0].Value <<= bFlipY;
             }
             aPropertySet.setAnyProperty(PROP_CustomShapeGeometry, makeAny( aPropSequence ) );
         }
