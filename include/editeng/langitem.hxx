@@ -32,7 +32,7 @@ class SvXMLUnitConverter;
     This item describes a Language.
 */
 
-class EDITENG_DLLPUBLIC SvxLanguageItem : public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxLanguageItem : public SfxEnumItem<LanguageType>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -49,7 +49,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const override;
-    virtual sal_uInt16          GetValueCount() const override;
+    virtual sal_uInt16      GetValueCount() const override;
 
     inline SvxLanguageItem& operator=(const SvxLanguageItem& rLang)
         {
@@ -57,9 +57,8 @@ public:
             return *this;
         }
 
-    // enum cast
     LanguageType            GetLanguage() const
-                                { return (LanguageType)GetValue(); }
+                                { return GetValue(); }
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };

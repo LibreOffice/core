@@ -26,17 +26,16 @@
 
 // specification of the unit if measurement. The numerical quantity value is converted in this unity.
 // (based on the facts of the MapUnit of the model). This unity is displayed if necessary.
-class SVX_DLLPUBLIC SdrMeasureUnitItem: public SfxEnumItem {
+class SVX_DLLPUBLIC SdrMeasureUnitItem: public SfxEnumItem<FieldUnit> {
 public:
-    SdrMeasureUnitItem(FieldUnit eUnit=FUNIT_NONE): SfxEnumItem(SDRATTR_MEASUREUNIT,sal::static_int_cast< sal_uInt16 >(eUnit)) {}
+    SdrMeasureUnitItem(FieldUnit eUnit=FUNIT_NONE): SfxEnumItem(SDRATTR_MEASUREUNIT, eUnit) {}
     SdrMeasureUnitItem(SvStream& rIn)             : SfxEnumItem(SDRATTR_MEASUREUNIT,rIn)   {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
-    virtual sal_uInt16       GetValueCount() const override; // { return 14; }
-            FieldUnit    GetValue() const { return (FieldUnit)SfxEnumItem::GetValue(); }
+    virtual sal_uInt16   GetValueCount() const override; // { return 14; }
 
-    virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
-    virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
+    virtual bool         QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
+    virtual bool         PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
     virtual OUString GetValueTextByPos(sal_uInt16 nPos) const override;
     virtual bool GetPresentation(SfxItemPresentation ePres, MapUnit eCoreMetric, MapUnit ePresMetric, OUString& rText, const IntlWrapper * = nullptr) const override;

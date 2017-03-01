@@ -30,7 +30,7 @@ class SvXMLUnitConverter;
 
 /* Value container for underline and overline font effects */
 
-class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxTextLineItem : public SfxEnumItem<FontLineStyle>
 {
     Color mColor;
 public:
@@ -70,9 +70,9 @@ public:
 
     // enum cast
     FontLineStyle           GetLineStyle() const
-                                { return (FontLineStyle)GetValue(); }
+                                { return GetValue(); }
     void                    SetLineStyle( FontLineStyle eNew )
-                                { SetValue((sal_uInt16) eNew); }
+                                { SetValue(eNew); }
 
     const Color&            GetColor() const                { return mColor; }
     void                    SetColor( const Color& rCol )   { mColor = rCol; }

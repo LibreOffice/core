@@ -31,7 +31,7 @@
     emboss, relief.
 */
 
-class EDITENG_DLLPUBLIC SvxCharReliefItem : public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxCharReliefItem : public SfxEnumItem<FontRelief>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -46,8 +46,6 @@ public:
 
     virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual sal_uInt16      GetValueCount() const override;
-    FontRelief              GetValue() const { return (FontRelief)SfxEnumItem::GetValue(); }
-    void                    SetValue(FontRelief f) { SfxEnumItem::SetValue((sal_uInt16)f); }
 
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,

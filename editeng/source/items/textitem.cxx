@@ -452,7 +452,7 @@ void SvxFontItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 // class SvxPostureItem --------------------------------------------------
 
 SvxPostureItem::SvxPostureItem( const FontItalic ePosture, const sal_uInt16 nId ) :
-    SfxEnumItem( nId, (sal_uInt16)ePosture )
+    SfxEnumItem( nId, ePosture )
 {
 }
 
@@ -549,7 +549,7 @@ bool SvxPostureItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 
                 eSlant = (awt::FontSlant)nValue;
             }
-            SetValue((sal_uInt16)eSlant);
+            SetValue((FontItalic)eSlant);
         }
     }
     return true;
@@ -564,13 +564,13 @@ bool SvxPostureItem::HasBoolValue() const
 
 bool SvxPostureItem::GetBoolValue() const
 {
-    return ( (FontItalic)GetValue() >= ITALIC_OBLIQUE );
+    return ( GetValue() >= ITALIC_OBLIQUE );
 }
 
 
 void SvxPostureItem::SetBoolValue( bool bVal )
 {
-    SetValue( (sal_uInt16)(bVal ? ITALIC_NORMAL : ITALIC_NONE) );
+    SetValue( bVal ? ITALIC_NORMAL : ITALIC_NONE );
 }
 
 void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -585,7 +585,7 @@ void SvxPostureItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 // class SvxWeightItem ---------------------------------------------------
 
 SvxWeightItem::SvxWeightItem( const FontWeight eWght, const sal_uInt16 nId ) :
-    SfxEnumItem( nId, (sal_uInt16)eWght )
+    SfxEnumItem( nId, eWght )
 {
 }
 
@@ -598,13 +598,13 @@ bool SvxWeightItem::HasBoolValue() const
 
 bool SvxWeightItem::GetBoolValue() const
 {
-    return  (FontWeight)GetValue() >= WEIGHT_BOLD;
+    return GetValue() >= WEIGHT_BOLD;
 }
 
 
 void SvxWeightItem::SetBoolValue( bool bVal )
 {
-    SetValue( (sal_uInt16)(bVal ? WEIGHT_BOLD : WEIGHT_NORMAL) );
+    SetValue( bVal ? WEIGHT_BOLD : WEIGHT_NORMAL );
 }
 
 
@@ -689,7 +689,7 @@ bool SvxWeightItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     return false;
                 fValue = (float)nValue;
             }
-            SetValue( (sal_uInt16)VCLUnoHelper::ConvertFontWeight((float)fValue) );
+            SetValue( VCLUnoHelper::ConvertFontWeight((float)fValue) );
         }
         break;
     }
@@ -1210,7 +1210,7 @@ bool SvxFontWidthItem::GetPresentation
 // class SvxTextLineItem ------------------------------------------------
 
 SvxTextLineItem::SvxTextLineItem( const FontLineStyle eSt, const sal_uInt16 nId )
-    : SfxEnumItem( nId, (sal_uInt16)eSt ), mColor( COL_TRANSPARENT )
+    : SfxEnumItem( nId, eSt ), mColor( COL_TRANSPARENT )
 {
 }
 
@@ -1229,7 +1229,7 @@ bool SvxTextLineItem::GetBoolValue() const
 
 void SvxTextLineItem::SetBoolValue( bool bVal )
 {
-    SetValue( (sal_uInt16)(bVal ? LINESTYLE_SINGLE : LINESTYLE_NONE) );
+    SetValue( bVal ? LINESTYLE_SINGLE : LINESTYLE_NONE );
 }
 
 
@@ -1320,7 +1320,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         if(!(rVal >>= nValue))
             bRet = false;
         else
-            SetValue((sal_Int16)nValue);
+            SetValue((FontLineStyle)nValue);
     }
     break;
     case MID_TL_COLOR:
@@ -1348,7 +1348,7 @@ bool SvxTextLineItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 bool SvxTextLineItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
-    return SfxEnumItem::operator==( rItem ) &&
+    return SfxEnumItem::operator==( static_cast<const SfxEnumItem<FontLineStyle>&>(rItem) ) &&
            GetColor() == static_cast<const SvxTextLineItem&>(rItem).GetColor();
 }
 
@@ -1415,7 +1415,7 @@ OUString SvxOverlineItem::GetValueTextByPos( sal_uInt16 nPos ) const
 // class SvxCrossedOutItem -----------------------------------------------
 
 SvxCrossedOutItem::SvxCrossedOutItem( const FontStrikeout eSt, const sal_uInt16 nId )
-    : SfxEnumItem( nId, (sal_uInt16)eSt )
+    : SfxEnumItem( nId, eSt )
 {
 }
 
@@ -1428,13 +1428,13 @@ bool SvxCrossedOutItem::HasBoolValue() const
 
 bool SvxCrossedOutItem::GetBoolValue() const
 {
-    return (FontStrikeout)GetValue() != STRIKEOUT_NONE;
+    return GetValue() != STRIKEOUT_NONE;
 }
 
 
 void SvxCrossedOutItem::SetBoolValue( bool bVal )
 {
-    SetValue( (sal_uInt16)(bVal ? STRIKEOUT_SINGLE : STRIKEOUT_NONE) );
+    SetValue( bVal ? STRIKEOUT_SINGLE : STRIKEOUT_NONE );
 }
 
 
@@ -1512,7 +1512,7 @@ bool SvxCrossedOutItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             sal_Int32 nValue = 0;
             if(!(rVal >>= nValue))
                 return false;
-            SetValue((sal_Int16)nValue);
+            SetValue((FontStrikeout)nValue);
         }
         break;
     }
@@ -2086,7 +2086,7 @@ bool SvxKerningItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId)
 // class SvxCaseMapItem --------------------------------------------------
 
 SvxCaseMapItem::SvxCaseMapItem( const SvxCaseMap eMap, const sal_uInt16 nId ) :
-    SfxEnumItem( nId, (sal_uInt16)eMap )
+    SfxEnumItem( nId, eMap )
 {
 }
 
@@ -2146,6 +2146,7 @@ bool SvxCaseMapItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
         case SVX_CASEMAP_GEMEINE     :      nRet = style::CaseMap::LOWERCASE; break;
         case SVX_CASEMAP_TITEL       :      nRet = style::CaseMap::TITLE    ; break;
         case SVX_CASEMAP_KAPITAELCHEN:      nRet = style::CaseMap::SMALLCAPS; break;
+        default: break;
     }
     rVal <<= (sal_Int16)(nRet);
     return true;
@@ -2165,7 +2166,7 @@ bool SvxCaseMapItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
     case style::CaseMap::TITLE    :  nVal = SVX_CASEMAP_TITEL       ; break;
     case style::CaseMap::SMALLCAPS:  nVal = SVX_CASEMAP_KAPITAELCHEN; break;
     }
-    SetValue(nVal);
+    SetValue((SvxCaseMap)nVal);
     return true;
 }
 
@@ -3097,7 +3098,7 @@ bool SvxCharScaleWidthItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
 
 SvxCharReliefItem::SvxCharReliefItem( FontRelief eValue,
                                          const sal_uInt16 nId )
-    : SfxEnumItem( nId, (sal_uInt16)eValue )
+    : SfxEnumItem( nId, eValue )
 {
 }
 

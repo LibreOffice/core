@@ -29,7 +29,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextAdjustItem : public SfxEnumItem
+class SVX_DLLPUBLIC XFormTextAdjustItem : public SfxEnumItem<XFormTextAdjust>
 {
 public:
                             static SfxPoolItem* CreateDefault();
@@ -38,8 +38,7 @@ public:
                             XFormTextAdjustItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
-    virtual sal_uInt16          GetValueCount() const override;
-    XFormTextAdjust         GetValue() const { return (XFormTextAdjust) SfxEnumItem::GetValue(); }
+    virtual sal_uInt16      GetValueCount() const override;
     // #FontWork#
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

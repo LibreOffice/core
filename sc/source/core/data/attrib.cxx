@@ -818,7 +818,7 @@ ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP )
 }
 
 ScViewObjectModeItem::ScViewObjectModeItem( sal_uInt16 nWhichP, ScVObjMode eMode )
-    : SfxEnumItem( nWhichP, sal::static_int_cast<sal_uInt16>(eMode) )
+    : SfxEnumItem( nWhichP, eMode )
 {
 }
 

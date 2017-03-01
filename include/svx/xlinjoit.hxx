@@ -29,14 +29,14 @@
 // class XLineJointItem
 
 
-class SVX_DLLPUBLIC XLineJointItem : public SfxEnumItem
+class SVX_DLLPUBLIC XLineJointItem : public SfxEnumItem<css::drawing::LineJoint>
 {
 public:
                             static SfxPoolItem* CreateDefault();
                             XLineJointItem( css::drawing::LineJoint eLineJoint = css::drawing::LineJoint_ROUND );
                             XLineJointItem( SvStream& rIn );
 
-    virtual sal_uInt16           GetVersion( sal_uInt16 nFileFormatVersion ) const override;
+    virtual sal_uInt16      GetVersion( sal_uInt16 nFileFormatVersion ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
 
@@ -46,8 +46,7 @@ public:
                                   MapUnit eCoreMetric, MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
 
-    virtual sal_uInt16                 GetValueCount() const override;
-    css::drawing::LineJoint GetValue() const { return (css::drawing::LineJoint) SfxEnumItem::GetValue(); }
+    virtual sal_uInt16       GetValueCount() const override;
 };
 
 #endif // INCLUDED_SVX_XLINJOIT_HXX

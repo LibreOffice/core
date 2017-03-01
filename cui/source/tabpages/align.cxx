@@ -49,7 +49,7 @@ namespace svx {
 
 // horizontal alignment -------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify, sal_uInt16 > HorJustItemWrapper;
+typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify > HorJustItemWrapper;
 typedef sfx::ListBoxConnection< HorJustItemWrapper > HorJustConnection;
 
 static const HorJustConnection::MapEntryType s_pHorJustMap[] =
@@ -66,7 +66,7 @@ static const HorJustConnection::MapEntryType s_pHorJustMap[] =
 
 // vertical alignment ---------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify, sal_uInt16 > VerJustItemWrapper;
+typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify > VerJustItemWrapper;
 typedef sfx::ListBoxConnection< VerJustItemWrapper > VerJustConnection;
 
 static const VerJustConnection::MapEntryType s_pVerJustMap[] =
@@ -82,7 +82,7 @@ static const VerJustConnection::MapEntryType s_pVerJustMap[] =
 
 // cell rotate mode -----------------------------------------------------------
 
-typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode, sal_uInt16 > RotateModeItemWrapper;
+typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode > RotateModeItemWrapper;
 typedef sfx::ValueSetConnection< RotateModeItemWrapper > RotateModeConnection;
 
 static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
@@ -120,7 +120,7 @@ void lcl_MaybeResetAlignToDistro(
         // alignment not set.
         return;
 
-    const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
+    const SfxEnumItemInterface* p = static_cast<const SfxEnumItemInterface*>(pItem);
     JustContainerType eVal = static_cast<JustContainerType>(p->GetEnumValue());
     if (eVal != eBlock)
         // alignment is not 'justify'.  No need to go further.
@@ -130,7 +130,7 @@ void lcl_MaybeResetAlignToDistro(
         // justification method is not set.
         return;
 
-    p = static_cast<const SfxEnumItem*>(pItem);
+    p = static_cast<const SfxEnumItemInterface*>(pItem);
     SvxCellJustifyMethod eMethod = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
     if (eMethod == SvxCellJustifyMethod::Distribute)
         // Select the 'distribute' entry in the specified list box.
@@ -404,13 +404,13 @@ bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 n
     SvxCellJustifyMethod eMethodNew = SvxCellJustifyMethod::Auto;
     if (rOld.GetItemState(nWhich, true, &pItem) == SfxItemState::SET)
     {
-        const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
+        const SfxEnumItemInterface* p = static_cast<const SfxEnumItemInterface*>(pItem);
         eMethodOld = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
     }
 
     if (rNew.GetItemState(nWhich, true, &pItem) == SfxItemState::SET)
     {
-        const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
+        const SfxEnumItemInterface* p = static_cast<const SfxEnumItemInterface*>(pItem);
         eMethodNew = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
     }
 

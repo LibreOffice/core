@@ -25,7 +25,7 @@
 #include <svl/eitem.hxx>
 #include <sal/types.h>
 
-class EDITENG_DLLPUBLIC SvxHorJustifyItem: public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxHorJustifyItem: public SfxEnumItem<SvxCellHorJustify>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -57,7 +57,7 @@ public:
 };
 
 
-class EDITENG_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxVerJustifyItem: public SfxEnumItem<SvxCellVerJustify>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -89,7 +89,7 @@ public:
 };
 
 
-class EDITENG_DLLPUBLIC SvxJustifyMethodItem: public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxJustifyMethodItem: public SfxEnumItem<SvxCellJustifyMethod>
 {
 public:
     SvxJustifyMethodItem(

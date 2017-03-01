@@ -1790,6 +1790,7 @@ static Writer& OutHTML_FrameFormatGrfNode( Writer& rWrt, const SwFrameFormat& rF
             case RES_MIRROR_GRAPH_BOTH:
                 nFlags = XOutFlags::MirrorVert | XOutFlags::MirrorHorz;
                 break;
+            default: break;
             }
 
             Size aMM100Size;
