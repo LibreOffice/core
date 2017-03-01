@@ -287,60 +287,56 @@ void SmDocShell::ArrangeFormula()
     maAccText.clear();
 }
 
-
 void SetEditEngineDefaultFonts(SfxItemPool &rEditEngineItemPool)
 {
+    // set fonts to be used
+    SvtLinguOptions aOpt;
+    SvtLinguConfig().GetOptions( aOpt );
 
-        // set fonts to be used
+    struct FontDta {
+        sal_Int16       nFallbackLang;
+        sal_Int16       nLang;
+        DefaultFontType nFontType;
+        sal_uInt16      nFontInfoId;
+        } aTable[3] =
+    {
+        // info to get western font to be used
+        {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
+            DefaultFontType::FIXED,      EE_CHAR_FONTINFO },
+        // info to get CJK font to be used
+        {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
+            DefaultFontType::CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
+        // info to get CTL font to be used
+        {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
+            DefaultFontType::CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
+    };
+    aTable[0].nLang = aOpt.nDefaultLanguage;
+    aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
+    aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
 
-        SvtLinguOptions aOpt;
-        SvtLinguConfig().GetOptions( aOpt );
+    for (FontDta & rFntDta : aTable)
+    {
+        LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
+                rFntDta.nFallbackLang : rFntDta.nLang;
+        vcl::Font aFont = OutputDevice::GetDefaultFont(
+                    rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne );
+        rEditEngineItemPool.SetPoolDefaultItem(
+                SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
+                    aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
+                    rFntDta.nFontInfoId ) );
+    }
 
-        struct FontDta {
-            sal_Int16       nFallbackLang;
-            sal_Int16       nLang;
-            DefaultFontType nFontType;
-            sal_uInt16      nFontInfoId;
-            } aTable[3] =
-        {
-            // info to get western font to be used
-            {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
-                DefaultFontType::FIXED,      EE_CHAR_FONTINFO },
-            // info to get CJK font to be used
-            {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
-                DefaultFontType::CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
-            // info to get CTL font to be used
-            {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
-                DefaultFontType::CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
-        };
-        aTable[0].nLang = aOpt.nDefaultLanguage;
-        aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
-        aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
-
-        for (FontDta & rFntDta : aTable)
-        {
-            LanguageType nLang = (LANGUAGE_NONE == rFntDta.nLang) ?
-                    rFntDta.nFallbackLang : rFntDta.nLang;
-            vcl::Font aFont = OutputDevice::GetDefaultFont(
-                        rFntDta.nFontType, nLang, GetDefaultFontFlags::OnlyOne );
-            rEditEngineItemPool.SetPoolDefaultItem(
-                    SvxFontItem( aFont.GetFamilyType(), aFont.GetFamilyName(),
-                        aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
-                        rFntDta.nFontInfoId ) );
-        }
-
-        // set font heights
-        SvxFontHeightItem aFontHeigt(
-                        Application::GetDefaultDevice()->LogicToPixel(
-                        Size( 0, 11 ), MapMode( MapUnit::MapPoint ) ).Height(), 100,
-                        EE_CHAR_FONTHEIGHT );
-        rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
-        aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
-        rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
-        aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CTL );
-        rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
+    // set font heights
+    SvxFontHeightItem aFontHeigt(
+                    Application::GetDefaultDevice()->LogicToPixel(
+                    Size( 0, 11 ), MapMode( MapUnit::MapPoint ) ).Height(), 100,
+                    EE_CHAR_FONTHEIGHT );
+    rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
+    aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CJK );
+    rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
+    aFontHeigt.SetWhich( EE_CHAR_FONTHEIGHT_CTL );
+    rEditEngineItemPool.SetPoolDefaultItem( aFontHeigt );
 }
-
 
 EditEngine& SmDocShell::GetEditEngine()
 {
