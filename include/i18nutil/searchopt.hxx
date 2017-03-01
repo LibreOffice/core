@@ -34,16 +34,17 @@ namespace i18nutil
  * but using the more type-safe TransliterationFlags enum.
  */
 struct SAL_WARN_UNUSED SearchOptions {
-    css::util::SearchAlgorithms algorithmType;
-    sal_Int32 searchFlag;
+    css::util::SearchAlgorithms algorithmType = ::css::util::SearchAlgorithms_ABSOLUTE;
+    sal_Int32 searchFlag = 0;
     OUString searchString;
     OUString replaceString;
     css::lang::Locale Locale;
-    sal_Int32 changedChars;
-    sal_Int32 deletedChars;
-    sal_Int32 insertedChars;
-    TransliterationFlags transliterateFlags;
+    sal_Int32 changedChars = 0;
+    sal_Int32 deletedChars = 0;
+    sal_Int32 insertedChars = 0;
+    TransliterationFlags transliterateFlags = TransliterationFlags::NONE;
 
+    /** assign from the UNO version of this type */
     SearchOptions& operator=(css::util::SearchOptions const & other)
     {
         algorithmType = other.algorithmType;
@@ -57,36 +58,6 @@ struct SAL_WARN_UNUSED SearchOptions {
         transliterateFlags = (TransliterationFlags)other.transliterateFlags;
         return *this;
     }
-
-    SearchOptions()
-        : algorithmType(::css::util::SearchAlgorithms_ABSOLUTE)
-        , searchFlag(0)
-        , searchString()
-        , replaceString()
-        , Locale()
-        , changedChars(0)
-        , deletedChars(0)
-        , insertedChars(0)
-        , transliterateFlags(TransliterationFlags::NONE)
-    {
-    }
-
-    SearchOptions(const css::util::SearchAlgorithms& algorithmType_, const sal_Int32 searchFlag_,
-                   const OUString& searchString_, const OUString& replaceString_,
-                   const css::lang::Locale& Locale_,
-                   const sal_Int32 changedChars_, const sal_Int32 deletedChars_, const sal_Int32 insertedChars_,
-                   const TransliterationFlags& transliterateFlags_)
-        : algorithmType(algorithmType_)
-        , searchFlag(searchFlag_)
-        , searchString(searchString_)
-        , replaceString(replaceString_)
-        , Locale(Locale_)
-        , changedChars(changedChars_)
-        , deletedChars(deletedChars_)
-        , insertedChars(insertedChars_)
-        , transliterateFlags(transliterateFlags_)
-    {
-    }
 };
 
 /**
@@ -95,9 +66,10 @@ struct SAL_WARN_UNUSED SearchOptions {
  */
 struct SAL_WARN_UNUSED SearchOptions2 : public SearchOptions {
 
-    sal_Int16 AlgorithmType2;
-    sal_Int32 WildcardEscapeCharacter;
+    sal_Int16 AlgorithmType2 = 0;
+    sal_Int32 WildcardEscapeCharacter = 0;
 
+    /** assign from the UNO version of this type */
     SearchOptions2& operator=(css::util::SearchOptions2 const & other)
     {
         SearchOptions::operator=(other);
@@ -117,11 +89,7 @@ struct SAL_WARN_UNUSED SearchOptions2 : public SearchOptions {
                        AlgorithmType2, WildcardEscapeCharacter);
     }
 
-    SearchOptions2()
-        : SearchOptions()
-        , AlgorithmType2(0)
-        , WildcardEscapeCharacter(0)
-    {}
+    SearchOptions2() {}
 
     SearchOptions2(const css::util::SearchAlgorithms& algorithmType_, const sal_Int32 searchFlag_,
                    const OUString& searchString_, const OUString& replaceString_,
@@ -129,7 +97,7 @@ struct SAL_WARN_UNUSED SearchOptions2 : public SearchOptions {
                    const sal_Int32 changedChars_, const sal_Int32 deletedChars_, const sal_Int32 insertedChars_,
                    const TransliterationFlags& transliterateFlags_,
                    const sal_Int16 AlgorithmType2_, const sal_Int32 WildcardEscapeCharacter_)
-        : SearchOptions(algorithmType_, searchFlag_, searchString_, replaceString_, Locale_, changedChars_, deletedChars_, insertedChars_, transliterateFlags_)
+        : SearchOptions { algorithmType_, searchFlag_, searchString_, replaceString_, Locale_, changedChars_, deletedChars_, insertedChars_, transliterateFlags_}
         , AlgorithmType2(AlgorithmType2_)
         , WildcardEscapeCharacter(WildcardEscapeCharacter_)
     {}
