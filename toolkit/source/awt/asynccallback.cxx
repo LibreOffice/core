@@ -88,7 +88,8 @@ void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XC
 {
     if ( Application::IsInMain() )
     {
-        // NOTE: We don't need SolarMutexGuard here as Application::PostUserEvent is thread-safe
+        SolarMutexGuard aSolarGuard;
+
         CallbackData* pCallbackData = new CallbackData( xCallback, aData );
         Application::PostUserEvent( LINK( this, AsyncCallback, Notify_Impl ), pCallbackData );
     }
