@@ -28,7 +28,7 @@
 class IntlWrapper;
 
 // SwFormatSurround: How document content under the frame shall behave.
-class SW_DLLPUBLIC SwFormatSurround: public SfxEnumItem
+class SW_DLLPUBLIC SwFormatSurround: public SfxEnumItem<SwSurround>
 {
     bool    bAnchorOnly :1;
     bool    bContour    :1;
@@ -41,7 +41,7 @@ public:
     // "Pure virtual Methods" of SfxPoolItem.
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
-    virtual sal_uInt16          GetValueCount() const override;
+    virtual sal_uInt16      GetValueCount() const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
@@ -50,11 +50,11 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    SwSurround GetSurround()const { return SwSurround( GetValue() ); }
+    SwSurround GetSurround()const { return GetValue(); }
     bool    IsAnchorOnly()  const { return bAnchorOnly; }
     bool    IsContour()     const { return bContour; }
     bool    IsOutside()     const { return bOutside; }
-    void    SetSurround  ( SwSurround eNew ){ SfxEnumItem::SetValue( sal_uInt16( eNew ) ); }
+    void    SetSurround  ( SwSurround eNew ){ SfxEnumItem::SetValue( eNew ); }
     void    SetAnchorOnly( bool bNew )      { bAnchorOnly = bNew; }
     void    SetContour( bool bNew )         { bContour = bNew; }
     void    SetOutside( bool bNew )         { bOutside = bNew; }

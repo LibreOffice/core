@@ -27,7 +27,7 @@
 
 class SvStream;
 
-class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem
+class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxOrientationItem: public SfxEnumItem<SvxCellOrientation>
 {
 public:
     static SfxPoolItem* CreateDefault();

@@ -23,6 +23,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xflbmpit.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlinjoit.hxx>
@@ -699,11 +700,10 @@ namespace drawinglayer
                 aSize,
                 aOffset,
                 aOffsetPosition,
-                RectPointToB2DVector(
-                    (RectPoint)static_cast<const SfxEnumItem&>(rSet.Get(XATTR_FILLBMP_POS)).GetValue()),
-                    static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_TILE)).GetValue(),
-                    static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_STRETCH)).GetValue(),
-                    static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_SIZELOG)).GetValue());
+                RectPointToB2DVector(rSet.GetItem<XFillBmpPosItem>(XATTR_FILLBMP_POS)->GetValue()),
+                static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_TILE)).GetValue(),
+                static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_STRETCH)).GetValue(),
+                static_cast<const SfxBoolItem&>(rSet.Get(XATTR_FILLBMP_SIZELOG)).GetValue());
         }
 
         attribute::SdrShadowTextAttribute createNewSdrShadowTextAttribute(

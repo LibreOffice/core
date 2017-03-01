@@ -31,7 +31,7 @@ class SvXMLUnitConverter;
     This item describes, whether and how it is striked out.
 */
 
-class EDITENG_DLLPUBLIC SvxCrossedOutItem : public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxCrossedOutItem : public SfxEnumItem<FontStrikeout>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -67,7 +67,7 @@ public:
 
     // enum cast
     FontStrikeout           GetStrikeout() const
-                                { return (FontStrikeout)GetValue(); }
+                                { return GetValue(); }
 };
 
 #endif // INCLUDED_EDITENG_CROSSEDOUTITEM_HXX
