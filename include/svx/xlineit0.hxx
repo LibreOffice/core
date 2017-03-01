@@ -28,7 +28,7 @@
 #include <svx/svxdllapi.h>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
-class SVX_DLLPUBLIC XLineStyleItem : public SfxEnumItem
+class SVX_DLLPUBLIC XLineStyleItem : public SfxEnumItem<css::drawing::LineStyle>
 {
 public:
                             static SfxPoolItem* CreateDefault();
@@ -45,7 +45,6 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
     virtual sal_uInt16          GetValueCount() const override;
-    css::drawing::LineStyle     GetValue() const { return (css::drawing::LineStyle) SfxEnumItem::GetValue(); }
 };
 
 #endif

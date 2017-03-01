@@ -32,7 +32,7 @@ class SvXMLUnitConverter;
     This item describes the font setting (Italic)
 */
 
-class EDITENG_DLLPUBLIC SvxPostureItem : public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxPostureItem : public SfxEnumItem<FontItalic>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -66,7 +66,7 @@ public:
 
     // enum cast
     FontItalic              GetPosture() const
-                                { return (FontItalic)GetValue(); }
+                                { return GetValue(); }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

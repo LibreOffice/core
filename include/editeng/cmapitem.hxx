@@ -32,7 +32,7 @@ class SvXMLUnitConverter;
     This item describe the font type (uppercase, small caps ,...).
 */
 
-class EDITENG_DLLPUBLIC SvxCaseMapItem : public SfxEnumItem
+class EDITENG_DLLPUBLIC SvxCaseMapItem : public SfxEnumItem<SvxCaseMap>
 {
 public:
     static SfxPoolItem* CreateDefault();
@@ -49,10 +49,8 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16) const override;
     virtual SvStream&       Store(SvStream &, sal_uInt16 nItemVersion) const override;
-    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual sal_uInt16      GetValueCount() const override;
-
-    using SfxEnumItem::SetValue;
 
     inline SvxCaseMapItem& operator=(const SvxCaseMapItem& rMap)
         {
@@ -61,8 +59,7 @@ public:
         }
 
     // enum cast
-    SvxCaseMap              GetCaseMap() const
-                                { return (SvxCaseMap)GetValue(); }
+    SvxCaseMap              GetCaseMap() const { return GetValue(); }
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 };

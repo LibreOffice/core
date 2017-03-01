@@ -38,13 +38,13 @@ RES_MIRROR_GRAPH_BEGIN,
 RES_MIRROR_GRAPH_END
 };
 
-class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem
+class SW_DLLPUBLIC SwMirrorGrf : public SfxEnumItem<MirrorGraph>
 {
     bool bGrfToggle; // Flip graphics on even pages.
 
 public:
     SwMirrorGrf( MirrorGraph eMiro = RES_MIRROR_GRAPH_DONT )
-        : SfxEnumItem( RES_GRFATR_MIRRORGRF, static_cast< sal_uInt16 >(eMiro) ), bGrfToggle( false )
+        : SfxEnumItem( RES_GRFATR_MIRRORGRF, eMiro ), bGrfToggle( false )
     {}
     SwMirrorGrf( const SwMirrorGrf &rMirrorGrf )
         : SfxEnumItem( RES_GRFATR_MIRRORGRF, rMirrorGrf.GetValue()),
@@ -55,7 +55,7 @@ public:
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     // pure virtual methods of SfxEnumItem
-    virtual sal_uInt16          GetValueCount() const override;
+    virtual sal_uInt16      GetValueCount() const override;
     virtual bool            operator==( const SfxPoolItem& ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
@@ -260,7 +260,7 @@ public:
                                         sal_uInt8 nMemberId ) override;
 };
 
-class SW_DLLPUBLIC SwDrawModeGrf : public SfxEnumItem
+class SW_DLLPUBLIC SwDrawModeGrf : public SfxEnumItem<sal_uInt16>
 {
 public:
     SwDrawModeGrf( sal_uInt16 nMode = 0 )
@@ -271,7 +271,7 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     // pure virtual methods of SfxEnumItem
-    virtual sal_uInt16          GetValueCount() const override;
+    virtual sal_uInt16      GetValueCount() const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,

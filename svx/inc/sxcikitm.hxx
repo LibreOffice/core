@@ -27,14 +27,13 @@ enum SdrCircKind {SDRCIRC_FULL,
                   SDRCIRC_CUT,
                   SDRCIRC_ARC};
 
-class SdrCircKindItem: public SfxEnumItem {
+class SdrCircKindItem: public SfxEnumItem<SdrCircKind> {
 public:
-    SdrCircKindItem(SdrCircKind eKind=SDRCIRC_FULL): SfxEnumItem(SDRATTR_CIRCKIND,sal::static_int_cast< sal_uInt16 >(eKind)) {}
+    SdrCircKindItem(SdrCircKind eKind=SDRCIRC_FULL): SfxEnumItem(SDRATTR_CIRCKIND, eKind) {}
     SdrCircKindItem(SvStream& rIn)                 : SfxEnumItem(SDRATTR_CIRCKIND,rIn)   {}
     virtual SfxPoolItem* Clone(SfxItemPool* pPool=nullptr) const override;
     virtual SfxPoolItem* Create(SvStream& rIn, sal_uInt16 nVer) const override;
-    virtual sal_uInt16       GetValueCount() const override; // { return 4; }
-            SdrCircKind  GetValue() const      { return (SdrCircKind)SfxEnumItem::GetValue(); }
+    virtual sal_uInt16   GetValueCount() const override; // { return 4; }
 
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
