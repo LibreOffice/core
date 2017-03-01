@@ -219,7 +219,7 @@ void SAL_CALL XMLTransformerBase::startElement( const OUString& rName,
     (void)bRect;
 
     // Process namespace attributes. This must happen before creating the
-    // context, because namespace decaration apply to the element name itself.
+    // context, because namespace declaration apply to the element name itself.
     XMLMutableAttributeList *pMutableAttrList = nullptr;
     Reference< XAttributeList > xAttrList( rAttrList );
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;

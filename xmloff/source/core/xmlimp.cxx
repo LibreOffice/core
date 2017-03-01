@@ -655,7 +655,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 {
     //    SAL_INFO("svg", "startElement " << rName);
     // Process namespace attributes. This must happen before creating the
-    // context, because namespace decaration apply to the element name itself.
+    // context, because namespace declaration apply to the element name itself.
     std::unique_ptr<SvXMLNamespaceMap> pRewindMap(processNSAttributes(xAttrList));
 
     // Get element's namespace and local name.
