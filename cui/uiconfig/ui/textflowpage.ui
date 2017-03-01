@@ -244,6 +244,9 @@
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment3</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelPageNum"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
