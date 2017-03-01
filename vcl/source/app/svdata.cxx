@@ -141,18 +141,26 @@ vcl::Window *ImplGetDefaultContextWindow()
     {
         SolarMutexGuard aGuard;
 
-        if ( !pSVData->mpDefaultWin && !pSVData->mbDeInit )
+        if (!pSVData->mpDefaultWin && !pSVData->mbDeInit)
         {
-            SAL_INFO( "vcl", "ImplGetDefaultWindow(): No AppWindow" );
-            pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create( nullptr, WB_DEFAULTWIN );
-            pSVData->mpDefaultWin->SetText( "VCL ImplGetDefaultWindow" );
+            try
+            {
+                SAL_INFO( "vcl", "ImplGetDefaultWindow(): No AppWindow" );
+
+                pSVData->mpDefaultWin = VclPtr<WorkWindow>::Create( nullptr, WB_DEFAULTWIN );
+                pSVData->mpDefaultWin->SetText( "VCL ImplGetDefaultWindow" );
 
 #if HAVE_FEATURE_OPENGL
-            // Add a reference to the default context so it never gets deleted
-            rtl::Reference<OpenGLContext> pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
-            if( pContext.is() )
-                pContext->acquire();
+                // Add a reference to the default context so it never gets deleted
+                rtl::Reference<OpenGLContext> pContext = pSVData->mpDefaultWin->GetGraphics()->GetOpenGLContext();
+                if( pContext.is() )
+                    pContext->acquire();
 #endif
+            }
+            catch (const css::uno::Exception& e)
+            {
+                 SAL_WARN("vcl", "unable to create Default Window: " << e.Message);
+            }
         }
     }
 
