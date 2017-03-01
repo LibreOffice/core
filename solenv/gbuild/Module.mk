@@ -471,7 +471,7 @@ screenshot : $$(firstword $$(gb_Module_SCREENSHOTTARGETSTACK))
 subsequentcheck : $$(firstword $$(gb_Module_SUBSEQUENTCHECKTARGETSTACK))
 stagingcheck : $$(firstword $$(gb_Module_STAGINGCHECKTARGETSTACK))
 perfcheck : $$(firstword $$(gb_Module_PERFCHECKTARGETSTACK))
-uicheck : $$(firstword $$(gb_Module_UICHECKTARGETSTACK))
+uicheck : build $$(firstword $$(gb_Module_UICHECKTARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 
 ifneq ($$(words $$(gb_Module_TARGETSTACK)),1)
