@@ -627,7 +627,9 @@ void CCIDecompressor::StartDecompression( SvStream & rIStream )
 
 bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTargetBits, bool bLastLine )
 {
-    bool b2D;
+    //Read[1|2]DScanlineData take a sal_uInt16, so its either limit here or expand there
+    if (nTargetBits > SAL_MAX_UINT16)
+        return false;
 
     if ( nEOLCount >= 5 )   // RTC (Return To Controller)
         return true;
@@ -682,6 +684,7 @@ bool CCIDecompressor::DecompressScanline( sal_uInt8 * pTarget, sal_uLong nTarget
     if ( nOptions & CCI_OPTION_BYTEALIGNROW )
         nInputBitsBufSize &= 0xfff8;
 
+    bool b2D;
     // is it a 2D row?
     if ( nOptions & CCI_OPTION_2D )
     {
