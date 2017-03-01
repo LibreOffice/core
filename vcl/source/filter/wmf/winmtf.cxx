@@ -78,14 +78,9 @@ void WinMtfClipPath::setClipPath( const tools::PolyPolygon& rPolyPolygon, sal_In
 
 void WinMtfClipPath::moveClipRegion( const Size& rSize )
 {
-    // what a weird concept. emulate, don't want this in B2DClipState
-    // API
-    basegfx::B2DPolyPolygon aCurrClip=maClip.getClipPoly();
     basegfx::B2DHomMatrix aTranslate;
     aTranslate.translate(rSize.Width(), rSize.Height());
-
-    aCurrClip.transform(aTranslate);
-    maClip = basegfx::tools::B2DClipState( aCurrClip );
+    maClip.transform(aTranslate);
 }
 
 void WinMtfClipPath::setDefaultClipPath()
@@ -902,7 +897,7 @@ void WinMtfOutput::UpdateClipRegion()
             {
                 //this makes cases like tdf#45820 work in reasonable time, and I feel in theory should
                 //be just fine. In practice I see the output is different so needs work before its the
-                //default, but for file fuzzing it should good enough
+                //default, but for file fuzzing it should be good enough
                 if (mbComplexClip)
                 {
                     mpGDIMetaFile->AddAction(

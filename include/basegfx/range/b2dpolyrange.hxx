@@ -30,6 +30,7 @@ namespace basegfx
     class B2DTuple;
     class B2DRange;
     class B2DPolyPolygon;
+    class B2DHomMatrix;
     class ImplB2DPolyRange;
 
     /** Multiple ranges in one object.
@@ -83,6 +84,8 @@ namespace basegfx
         /** Request a poly-polygon with solved cross-overs
          */
         B2DPolyPolygon solveCrossovers() const;
+
+        void transform(const B2DHomMatrix& rTranslate);
 
     private:
         o3tl::cow_wrapper< ImplB2DPolyRange > mpImpl;
