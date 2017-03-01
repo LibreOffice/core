@@ -126,7 +126,7 @@ int HWPFile::Open(HStream * stream)
 
     char idstr[HWPIDLen];
 
-    if (ReadBlock(idstr, HWPIDLen) <= 0
+    if (ReadBlock(idstr, HWPIDLen) < HWPIDLen
         || HWP_V30 != (version = detect_hwp_version(idstr)))
     {
         return SetState(HWP_UNSUPPORTED_VERSION);
