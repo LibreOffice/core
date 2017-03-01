@@ -775,7 +775,7 @@ void SwDocTest::testSwScanner()
         const SwRedlineTable& rTable = m_pDoc->getIDocumentRedlineAccess().GetRedlineTable();
 
         SwNodes& rNds = m_pDoc->GetNodes();
-        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rTable.size());
+        CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
 
         SwNodeIndex* pNodeIdx = rTable[0]->GetContentIdx();
         CPPUNIT_ASSERT(pNodeIdx);

@@ -839,7 +839,7 @@ void SwUiWriterTest::testCp1000071()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
 
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-    CPPUNIT_ASSERT_EQUAL( size_t( 2 ), rTable.size());
+    CPPUNIT_ASSERT_EQUAL( SwRedlineTable::size_type( 2 ), rTable.size());
     sal_uLong redlineStart0NodeIndex = rTable[ 0 ]->Start()->nNode.GetIndex();
     sal_Int32 redlineStart0Index = rTable[ 0 ]->Start()->nContent.GetIndex();
     sal_uLong redlineEnd0NodeIndex = rTable[ 0 ]->End()->nNode.GetIndex();
@@ -861,7 +861,7 @@ void SwUiWriterTest::testCp1000071()
     rUndoManager.Undo();
 
     // Check that redlines are the same like at the beginning.
-    CPPUNIT_ASSERT_EQUAL( size_t( 2 ), rTable.size());
+    CPPUNIT_ASSERT_EQUAL( SwRedlineTable::size_type( 2 ), rTable.size());
     CPPUNIT_ASSERT_EQUAL( redlineStart0NodeIndex, rTable[ 0 ]->Start()->nNode.GetIndex());
     CPPUNIT_ASSERT_EQUAL( redlineStart0Index, rTable[ 0 ]->Start()->nContent.GetIndex());
     CPPUNIT_ASSERT_EQUAL( redlineEnd0NodeIndex, rTable[ 0 ]->End()->nNode.GetIndex());
@@ -4012,7 +4012,7 @@ void SwUiWriterTest::testRedlineViewAuthor()
 
     // Now assert that SwView::SetRedlineAuthor() had an effect.
     const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rTable.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(1), rTable.size());
     SwRangeRedline* pRedline = rTable[0];
     // This was 'Unknown Author' instead of 'A U. Thor'.
     CPPUNIT_ASSERT_EQUAL(aAuthor, pRedline->GetAuthorString());
@@ -4067,7 +4067,7 @@ void SwUiWriterTest::testRedlineTimestamp()
         // The relatively rare case when waiting for a second also changes the minute.
         return;
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rTable.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), rTable.size());
     sal_uInt16 nSec1 = rTable[0]->GetRedlineData().GetTimeStamp().GetSec();
     sal_uInt16 nSec2 = rTable[1]->GetRedlineData().GetTimeStamp().GetSec();
     // This failed, seconds was always 0.

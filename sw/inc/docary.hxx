@@ -318,7 +318,10 @@ class SwRedlineTable
 public:
     typedef o3tl::sorted_vector<SwRangeRedline*, CompareSwRedlineTable,
                 o3tl::find_partialorder_ptrequals> vector_type;
-    typedef vector_type::size_type size_type;
+    typedef sal_uInt16 size_type;
+        //TOOD: should be vector_type::size_type, but then all the uses of
+        // sal_uInt16 in this class that represent positions in maVector need to
+        // be changed, too
 private:
     vector_type maVector;
 public:
