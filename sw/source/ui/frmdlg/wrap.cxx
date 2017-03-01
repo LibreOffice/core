@@ -385,7 +385,7 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     if ( m_bDrawMode )
     {
         bool bChecked = m_pWrapTransparentCB->IsChecked() && m_pWrapTransparentCB->IsEnabled();
-        if ((m_pWrapTransparentCB->GetSavedValue() == 1) != bChecked)
+        if ((m_pWrapTransparentCB->GetSavedValue() == TRISTATE_TRUE) != bChecked)
             bModified |= nullptr != rSet->Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
     }
 
