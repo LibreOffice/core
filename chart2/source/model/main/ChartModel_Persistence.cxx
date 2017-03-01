@@ -22,8 +22,10 @@
 #include "macros.hxx"
 #include "ChartViewHelper.hxx"
 #include "ChartModelHelper.hxx"
+#include "DataSourceHelper.hxx"
 #include "AxisHelper.hxx"
 #include "ThreeDHelper.hxx"
+#include "DiagramHelper.hxx"
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -49,6 +51,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/sequence.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -704,10 +707,35 @@ void SAL_CALL ChartModel::removeModifyListener(
 }
 
 // util::XModifyListener
-void SAL_CALL ChartModel::modified( const lang::EventObject& )
+void SAL_CALL ChartModel::modified( const lang::EventObject& rEvenObject)
 {
-    if( m_nInLoad == 0 )
-        setModified( true );
+    uno::Reference<chart2::data::XDataProvider> xDataProvider(rEvenObject.Source, uno::UNO_QUERY);
+    if (xDataProvider.is())
+    {
+        lockControllers();
+        Reference<frame::XModel> xModel(this);
+        try
+        {
+            uno::Sequence<beans::PropertyValue> aArguments =
+                DataSourceHelper::createArguments("PivotChart", uno::Sequence<sal_Int32>(), true, true, true);
+
+            Reference<chart2::data::XDataSource> xDataSource(xDataProvider->createDataSource(aArguments));
+            Reference<lang::XMultiServiceFactory> xFactory(getChartTypeManager(), uno::UNO_QUERY);
+            Reference<chart2::XDiagram> xDiagram(getFirstDiagram());
+
+            DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram(xDiagram, xFactory);
+            css::uno::Reference<css::chart2::XChartTypeTemplate> xChartTypeTemplate(aTemplateAndService.first);
+            xChartTypeTemplate->changeDiagramData(xDiagram, xDataSource, aArguments);
+        }
+        catch (const uno::Exception & ex)
+        {
+            ASSERT_EXCEPTION(ex);
+        }
+        unlockControllers();
+    }
+
+    if (m_nInLoad == 0)
+        setModified(true);
 }
 
 // lang::XEventListener (base of util::XModifyListener)

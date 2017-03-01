@@ -63,6 +63,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/document/DocumentProperties.hpp>
 #include <com/sun/star/chart2/XTimeBased.hpp>
+#include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <svl/zforlist.hxx>
 
@@ -744,7 +745,7 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
                 xIni->initialize(aArgs);
             }
             //create data
-            uno::Sequence< beans::PropertyValue > aArgs( 4 );
+            uno::Sequence<beans::PropertyValue> aArgs(4);
             aArgs[0] = beans::PropertyValue(
                 "CellRangeRepresentation", -1,
                 uno::Any( OUString("all") ), beans::PropertyState_DIRECT_VALUE );
@@ -814,6 +815,12 @@ void SAL_CALL ChartModel::attachDataProvider( const uno::Reference< chart2::data
             catch (const beans::UnknownPropertyException&)
             {
             }
+        }
+
+        uno::Reference<util::XModifyBroadcaster> xModifyBroadcaster(xDataProvider, uno::UNO_QUERY);
+        if (xModifyBroadcaster.is())
+        {
+            xModifyBroadcaster->addModifyListener(this);
         }
 
         m_xDataProvider.set( xDataProvider );
