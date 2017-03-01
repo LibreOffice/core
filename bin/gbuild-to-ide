@@ -32,6 +32,7 @@ class GbuildParser:
                                                                     os.environ['INSTDIR'], os.environ['WORKDIR'])
         self.modules = collections.OrderedDict()
 
+
     _includepattern = re.compile('-I(\S+)')
     _isystempattern = re.compile('-isystem\s*(\S+)')
     _warningpattern = re.compile('-W\S+')
@@ -39,7 +40,9 @@ class GbuildParser:
                      'Executable': re.compile('Executable_(.*)\.mk'),
                      'CppunitTest': re.compile('CppunitTest_(.*)\.mk')}
     _allheaders=[]
-
+    _jsonsrcdir=''
+    def get_json_srcdir(self):
+        return self._jsonsrcdir
     def __split_includes(json_srcdir,includes):
         foundisystem = GbuildParser._isystempattern.findall(includes)
         foundincludes=[]
@@ -106,6 +109,7 @@ class GbuildParser:
 
         moduleDict = {}
         self.find_all_headers()
+
         for jsontype in ['Library', 'Executable', 'CppunitTest']:
             for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', jsontype)):
                 with open(os.path.join(self.workdir, 'GbuildToJson', jsontype, jsonfilename), 'r') as f:
@@ -135,7 +139,7 @@ class GbuildParser:
                         moduleDict[module] = {'targets': [],'headers':{}}
                     moduleDict[module]['targets'].append(jsondata)
                     moduleDict[module]['headers'] =self.headers_of(module)
-
+        self._jsonsrcdir=json_srcdir
         moduleDict['include']={ 'targets': [], 'headers':self.headers_of('include')}
 
         for i in sorted(moduleDict):
@@ -209,6 +213,12 @@ class testVS2013Ide(IdeIntegrationGenerator):
                 'rebuild': self.module_make_command('clean unitcheck slowcheck screenshot subsequentcheck')
             }
         }
+        srcdir=self.gbuildparser.get_json_srcdir()
+        self.env_variables={
+            'SRCDIR': srcdir,'BUILDDIR':os.path.dirname(srcdir),'INSTDIR':os.path.join(srcdir,'instdir'),'WORKDIR':os.path.join(srcdir,'workdir')
+        }
+    def tmp_json_env_var(self):
+        pass
 
     def retrieve_toolset(self):
         return {'vs2013': 'v120', 'vs2015': 'v140'}.get(self.ide, None)
@@ -225,6 +235,8 @@ class testVS2013Ide(IdeIntegrationGenerator):
 
     def emit(self):
         all_projects = []
+        props_path=os.path.join(self.solution_directory,'PropertySheet.props')
+        self.write_props(props_path)
         for module in self.gbuildparser.modules:
             projects = []
             module_directory = os.path.join(self.solution_directory, module)
@@ -252,6 +264,23 @@ class testVS2013Ide(IdeIntegrationGenerator):
                 if library_project.target['name'] == linked_lib:
                     dependency_libs[library_project.guid] = library_project
         return dependency_libs
+    def write_props(self,props_path):
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        ET.register_namespace('', ns)
+        proj_node = ET.Element('{%s}Project' % ns, DefaultTargets='Build', ToolsVersion='4.0')
+        imp_grp_node=ET.SubElement(proj_node,'{%s}ImportGroup' % ns, Label='PropertySheets')
+        prop_grp_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
+        for key,value in self.env_variables.items():
+            vsrcdir=ET.SubElement(prop_grp_node,key)
+            vsrcdir.text=value
+        prop_grp_node2 = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns)
+        itm_def_node = ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns)
+        itm_grp = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        for key, value in self.env_variables.items():
+            build_macro_node = ET.SubElement(itm_grp, '{%s}BuildMacro' % ns, Include=key)
+            value_node = ET.SubElement(build_macro_node, '{%s}Value' % ns)
+            value_node.text='$(%s)' % key
+        self.write_pretty_xml(proj_node,props_path)
 
     def write_solution(self, solution_path, projects):
         library_projects = [project for project in projects if project.target['build_type'] == 'Library']
@@ -393,6 +422,7 @@ class testVS2013Ide(IdeIntegrationGenerator):
 
         return project_guid
 
+
     def twrite_project(self, project_path, target):
         folder = os.path.dirname(project_path)
         if not os.path.exists(folder):
@@ -438,6 +468,7 @@ class testVS2013Ide(IdeIntegrationGenerator):
         for configuration in self.configurations:
             prop_sheets=ET.SubElement(proj_node,'{%s}ImportGroup' % ns, Label='PropertySheets',Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration,platform))
             ET.SubElement(prop_sheets,'{%s}Import' % ns,Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props",Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",Label="LocalAppDataPlatform")
+            ET.SubElement(prop_sheets, '{%s}Import' % ns, Project="../PropertySheet.props")
         ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
         for configuration in self.configurations:
             item_def_group=ET.SubElement(proj_node,'{%s}ItemDefinitionGroup' % ns,Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (configuration,platform))
