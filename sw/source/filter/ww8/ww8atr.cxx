@@ -3446,7 +3446,7 @@ void AttributeOutputBase::FormatBreak( const SvxFormatBreakItem& rBreak )
             case SvxBreak::NONE:
             case SvxBreak::PageBefore:
             case SvxBreak::PageBoth:
-                PageBreakBefore( rBreak.GetValue() );
+                PageBreakBefore( rBreak.GetValue() != SvxBreak::NONE );
                 break;
             default:
                 break;

@@ -33,7 +33,7 @@ enum SwFillOrder
     SW_FILL_ORDER_END
 };
 
-class SwFormatFillOrder: public SfxEnumItem
+class SwFormatFillOrder: public SfxEnumItem<SwFillOrder>
 {
 public:
     SwFormatFillOrder( SwFillOrder = ATT_TOP_DOWN );
@@ -41,7 +41,7 @@ public:
 
     /// "Pure virtual methods" of SfxPoolItem.
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
-    virtual sal_uInt16          GetValueCount() const override;
+    virtual sal_uInt16      GetValueCount() const override;
 };
 
 inline SwFormatFillOrder &SwFormatFillOrder::operator=( const SwFormatFillOrder &rCpy )

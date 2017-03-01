@@ -46,12 +46,12 @@ SfxPoolItem* SvxMarginItem::CreateDefault() { return new  SvxMarginItem(0) ;}
 
 SvxOrientationItem::SvxOrientationItem( const SvxCellOrientation eOrientation,
                                         const sal_uInt16 nId):
-    SfxEnumItem( nId, (sal_uInt16)eOrientation )
+    SfxEnumItem( nId, eOrientation )
 {
 }
 
 SvxOrientationItem::SvxOrientationItem( sal_Int32 nRotation, bool bStacked, const sal_uInt16 nId ) :
-    SfxEnumItem( nId )
+    SfxEnumItem( nId, SvxCellOrientation::SVX_ORIENTATION_STANDARD )
 {
     if( bStacked )
     {
@@ -111,7 +111,7 @@ bool SvxOrientationItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
         case table::CellOrientation_STACKED:    eSvx = SVX_ORIENTATION_STACKED;   break;
         default: ; //prevent warning
     }
-    SetValue( (sal_uInt16)eSvx );
+    SetValue( eSvx );
     return true;
 }
 

@@ -359,7 +359,7 @@ bool XColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 SfxPoolItem* XLineStyleItem::CreateDefault() { return new XLineStyleItem; }
 
 XLineStyleItem::XLineStyleItem(css::drawing::LineStyle eTheLineStyle) :
-    SfxEnumItem(XATTR_LINESTYLE, sal::static_int_cast< sal_uInt16 >(eTheLineStyle))
+    SfxEnumItem(XATTR_LINESTYLE, eTheLineStyle)
 {
 }
 
@@ -424,7 +424,7 @@ bool XLineStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
         eLS = (css::drawing::LineStyle)nLS;
     }
 
-    SetValue( sal::static_int_cast< sal_uInt16 >( eLS ) );
+    SetValue( eLS );
     return true;
 }
 
@@ -2115,7 +2115,7 @@ bool XLineEndCenterItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMembe
 SfxPoolItem* XFillStyleItem::CreateDefault() { return new XFillStyleItem; }
 
 XFillStyleItem::XFillStyleItem(drawing::FillStyle eFillStyle) :
-    SfxEnumItem(XATTR_FILLSTYLE, sal::static_int_cast< sal_uInt16 >(eFillStyle))
+    SfxEnumItem(XATTR_FILLSTYLE, eFillStyle)
 {
 }
 
@@ -2196,7 +2196,7 @@ bool XFillStyleItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*
         eFS = (css::drawing::FillStyle)nFS;
     }
 
-    SetValue( sal::static_int_cast< sal_uInt16 >( eFS ) );
+    SetValue( eFS );
 
     return true;
 }
@@ -3164,7 +3164,7 @@ XFillHatchItem* XFillHatchItem::checkForUniqueItem( SdrModel* pModel ) const
 SfxPoolItem* XFormTextStyleItem::CreateDefault() { return new XFormTextStyleItem; }
 
 XFormTextStyleItem::XFormTextStyleItem(XFormTextStyle eTheStyle) :
-    SfxEnumItem(XATTR_FORMTXTSTYLE, sal::static_int_cast< sal_uInt16 >(eTheStyle))
+    SfxEnumItem(XATTR_FORMTXTSTYLE, eTheStyle)
 {
 }
 
@@ -3198,7 +3198,7 @@ bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue(sal::static_int_cast< sal_uInt16 >(nValue));
+    SetValue((XFormTextStyle)nValue);
 
     return true;
 }
@@ -3207,7 +3207,7 @@ bool XFormTextStyleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
 SfxPoolItem* XFormTextAdjustItem::CreateDefault() { return new XFormTextAdjustItem; }
 
 XFormTextAdjustItem::XFormTextAdjustItem(XFormTextAdjust eTheAdjust) :
-    SfxEnumItem(XATTR_FORMTXTADJUST, sal::static_int_cast< sal_uInt16 >(eTheAdjust))
+    SfxEnumItem(XATTR_FORMTXTADJUST, eTheAdjust)
 {
 }
 
@@ -3241,7 +3241,7 @@ bool XFormTextAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue(sal::static_int_cast< sal_uInt16 >(nValue));
+    SetValue((XFormTextAdjust)nValue);
 
     return true;
 }
@@ -3341,8 +3341,7 @@ SfxPoolItem* XFormTextOutlineItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) co
 SfxPoolItem* XFormTextShadowItem::CreateDefault() { return new XFormTextShadowItem; }
 
 XFormTextShadowItem::XFormTextShadowItem(XFormTextShadow eFormTextShadow) :
-    SfxEnumItem(
-        XATTR_FORMTXTSHADOW, sal::static_int_cast< sal_uInt16 >(eFormTextShadow))
+    SfxEnumItem(XATTR_FORMTXTSHADOW, eFormTextShadow)
 {
 }
 
@@ -3376,7 +3375,7 @@ bool XFormTextShadowItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
 {
     sal_Int32 nValue = 0;
     rVal >>= nValue;
-    SetValue(sal::static_int_cast< sal_uInt16 >(nValue));
+    SetValue((XFormTextShadow)nValue);
 
     return true;
 }

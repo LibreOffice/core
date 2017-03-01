@@ -29,20 +29,17 @@
 // SdrGrafModeItem -
 
 
-class SVX_DLLPUBLIC SdrGrafModeItem : public SfxEnumItem
+class SVX_DLLPUBLIC SdrGrafModeItem : public SfxEnumItem<GraphicDrawMode>
 {
 public:
-
-
-                            SdrGrafModeItem( GraphicDrawMode eMode = GRAPHICDRAWMODE_STANDARD ) : SfxEnumItem( SDRATTR_GRAFMODE, (sal_uInt16)eMode ) {}
+                            SdrGrafModeItem( GraphicDrawMode eMode = GRAPHICDRAWMODE_STANDARD ) : SfxEnumItem( SDRATTR_GRAFMODE, eMode ) {}
                             SdrGrafModeItem( SvStream& rIn ) : SfxEnumItem( SDRATTR_GRAFMODE, rIn ) {}
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create( SvStream& rIn, sal_uInt16 nVer ) const override;
-    virtual sal_uInt16          GetValueCount() const override;
-    GraphicDrawMode         GetValue() const { return (GraphicDrawMode) SfxEnumItem::GetValue(); }
+    virtual sal_uInt16      GetValueCount() const override;
 
-    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual bool GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
