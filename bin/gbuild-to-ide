@@ -197,20 +197,15 @@ class testVS2013Ide(IdeIntegrationGenerator):
         self.toolset = self.retrieve_toolset()
         self.solution_directory = './windows'
         self.configurations = {
-            'Build': {
+            'Release': {
                 'build': self.module_make_command('%(target)s'),
                 'clean': self.module_make_command('%(target)s.clean'),
                 'rebuild': self.module_make_command('%(target)s.clean %(target)s')
             },
-            'Unit Tests': {
+            'Debug': {
                 'build': self.module_make_command('unitcheck'),
                 'clean': self.module_make_command('clean'),
                 'rebuild': self.module_make_command('clean unitcheck'),
-            },
-            'Integration tests': {
-                'build': self.module_make_command('unitcheck slowcheck screenshot subsequentcheck'),
-                'clean': self.module_make_command('clean'),
-                'rebuild': self.module_make_command('clean unitcheck slowcheck screenshot subsequentcheck')
             }
         }
         srcdir=self.gbuildparser.get_json_srcdir()
@@ -221,7 +216,7 @@ class testVS2013Ide(IdeIntegrationGenerator):
         pass
 
     def retrieve_toolset(self):
-        return {'vs2013': 'v120', 'vs2015': 'v140'}.get(self.ide, None)
+        return {'vs2013': 'v120', 'vs2015': 'v140', 'testIde':'v120'}.get(self.ide, None)
 
     def module_make_command(self, targets):
         return '%(sh)s -c "PATH=\\"/bin:$PATH\\";BUILDDIR=\\"%(builddir)s\\" %(makecmd)s -rsC %(location)s ' + targets + '"'
@@ -442,12 +437,12 @@ class testVS2013Ide(IdeIntegrationGenerator):
             conf_node.text = configuration
             platform_node = ET.SubElement(proj_conf_node, '{%s}Platform' % ns)
             platform_node.text = platform
-            #globals
-            globals_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='Globals')
-            proj_guid_node = ET.SubElement(globals_node, '{%s}ProjectGuid' % ns)
-            proj_guid_node.text = '{%s}' % project_guid
-            proj_root_namespace=ET.SubElement(globals_node, '{%s}RootNamespace' % ns)
-            proj_root_namespace.text = target['target_name']
+        #globals
+        globals_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='Globals')
+        proj_guid_node = ET.SubElement(globals_node, '{%s}ProjectGuid' % ns)
+        proj_guid_node.text = '{%s}' % project_guid
+        proj_root_namespace=ET.SubElement(globals_node, '{%s}RootNamespace' % ns)
+        proj_root_namespace.text = target['target_name']
 
 
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
@@ -475,7 +470,7 @@ class testVS2013Ide(IdeIntegrationGenerator):
             #compiler options
             cl_compile=ET.SubElement(item_def_group,'{%s}ClCompile' % ns)
             warn_lvl=ET.SubElement(cl_compile,'{%s}WarningLevel' % ns)
-            warn_lvl.text='Level 4'
+            warn_lvl.text='Level4'
             opt_node=ET.SubElement(cl_compile,'{%s}Optimization' % ns)
             opt_node.text='Disabled'
             sdl_check=ET.SubElement(cl_compile,'{%s}SDLCheck' % ns)
@@ -510,7 +505,8 @@ class testVS2013Ide(IdeIntegrationGenerator):
         #cxx files
         cxx_node=ET.SubElement(proj_node,'{%s}ItemGroup' % ns)
         for cxx_elem in target['CXXOBJECTS']:
-            cxx_cl_node=ET.SubElement(cxx_node,'{%s}ClCompile' % ns,Include='../../' + cxx_elem)
+            modulename=target['module']
+            cxx_cl_node=ET.SubElement(cxx_node,'{%s}ClCompile' % ns,Include=os.path.join('../..', modulename, cxx_elem))
         #miss headers
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
