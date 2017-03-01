@@ -38,13 +38,13 @@ using namespace ::com::sun::star;
 
 
 SvxHorJustifyItem::SvxHorJustifyItem( const sal_uInt16 nId ) :
-    SfxEnumItem( nId, (sal_uInt16)SVX_HOR_JUSTIFY_STANDARD )
+    SfxEnumItem( nId, SVX_HOR_JUSTIFY_STANDARD )
 {
 }
 
 SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
                                       const sal_uInt16 nId ) :
-    SfxEnumItem( nId, (sal_uInt16)eJustify )
+    SfxEnumItem( nId, eJustify )
 {
 }
 
@@ -130,7 +130,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     case table::CellHoriJustify_REPEAT:   eSvx = SVX_HOR_JUSTIFY_REPEAT;   break;
                     default: ; //prevent warning
                 }
-                SetValue( (sal_uInt16)eSvx );
+                SetValue( eSvx );
             }
             break;
         case MID_HORJUST_ADJUST:
@@ -150,7 +150,7 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     case style::ParagraphAdjust_BLOCK:   eSvx = SVX_HOR_JUSTIFY_BLOCK;  break;
                     case style::ParagraphAdjust_CENTER:  eSvx = SVX_HOR_JUSTIFY_CENTER; break;
                 }
-                SetValue( (sal_uInt16)eSvx );
+                SetValue( eSvx );
             }
     }
     return true;
@@ -185,13 +185,13 @@ sal_uInt16 SvxHorJustifyItem::GetValueCount() const
 
 
 SvxVerJustifyItem::SvxVerJustifyItem( const sal_uInt16 nId ) :
-    SfxEnumItem( nId, (sal_uInt16)SVX_VER_JUSTIFY_STANDARD )
+    SfxEnumItem( nId, SVX_VER_JUSTIFY_STANDARD )
 {
 }
 
 SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
                                       const sal_uInt16 nId ) :
-    SfxEnumItem( nId, (sal_uInt16)eJustify )
+    SfxEnumItem( nId, eJustify )
 {
 }
 
@@ -266,7 +266,7 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     case style::VerticalAlignment_BOTTOM:   eSvx = SVX_VER_JUSTIFY_BOTTOM;  break;
                     default:;
                 }
-                SetValue( (sal_uInt16)eSvx );
+                SetValue( eSvx );
                 break;
             }
         default:
@@ -284,7 +284,7 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     case table::CellVertJustify2::BLOCK:    eSvx = SVX_VER_JUSTIFY_BLOCK;     break;
                     default: ; //prevent warning
                 }
-                SetValue( (sal_uInt16)eSvx );
+                SetValue( eSvx );
                 break;
             }
     }
@@ -322,7 +322,7 @@ sal_uInt16 SvxVerJustifyItem::GetValueCount() const
 
 SvxJustifyMethodItem::SvxJustifyMethodItem( const SvxCellJustifyMethod eJustify,
                                       const sal_uInt16 nId ) :
-    SfxEnumItem( nId, (sal_uInt16)eJustify )
+    SfxEnumItem( nId, eJustify )
 {
 }
 
@@ -335,7 +335,7 @@ bool SvxJustifyMethodItem::GetPresentation
     OUString&           rText,
     const IntlWrapper * )    const
 {
-    rText = GetValueText( GetValue() );
+    rText = GetValueText( GetEnumValue() );
     return true;
 }
 
@@ -343,7 +343,7 @@ bool SvxJustifyMethodItem::GetPresentation
 bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     sal_Int32 nUno = table::CellJustifyMethod::AUTO;
-    switch (static_cast<SvxCellJustifyMethod>(GetValue()))
+    switch (GetValue())
     {
         case SvxCellJustifyMethod::Auto:       nUno = table::CellJustifyMethod::AUTO;       break;
         case SvxCellJustifyMethod::Distribute: nUno = table::CellJustifyMethod::DISTRIBUTE; break;
@@ -370,7 +370,7 @@ bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId
         break;
         default:;
     }
-    SetValue(static_cast<sal_uInt16>(eSvx));
+    SetValue(eSvx);
     return true;
 }
 

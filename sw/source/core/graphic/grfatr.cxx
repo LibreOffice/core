@@ -42,7 +42,7 @@ sal_uInt16 SwMirrorGrf::GetValueCount() const
 
 bool SwMirrorGrf::operator==( const SfxPoolItem& rItem) const
 {
-    return SfxEnumItem::operator==(rItem) &&
+    return SfxEnumItem::operator==(static_cast<const SfxEnumItem<MirrorGraph>&>(rItem)) &&
             static_cast<const SwMirrorGrf&>(rItem).IsGrfToggle() == IsGrfToggle();
 }
 
@@ -107,7 +107,7 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                     bIsVert ? RES_MIRROR_GRAPH_BOTH : RES_MIRROR_GRAPH_VERT :
                         bIsVert ? RES_MIRROR_GRAPH_HOR : RES_MIRROR_GRAPH_DONT;
             bool bToggle = bOnOddPages != bOnEvenPages;
-            SetValue(static_cast<sal_uInt16>(nEnum));
+            SetValue(nEnum);
             SetGrfToggle( bToggle );
         }
         break;

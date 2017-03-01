@@ -1543,16 +1543,16 @@ bool XclExpCellAlign::FillFromItemSet(
         // Adjust for distributed alignments.
         if (eHorAlign == SVX_HOR_JUSTIFY_BLOCK)
         {
-            SvxCellJustifyMethod eHorJustMethod = GETITEMVALUE(
-                rItemSet, SvxJustifyMethodItem, ATTR_HOR_JUSTIFY_METHOD, SvxCellJustifyMethod);
+            SvxCellJustifyMethod eHorJustMethod =
+                rItemSet.GetItem<SvxJustifyMethodItem>(ATTR_HOR_JUSTIFY_METHOD)->GetValue();
             if (eHorJustMethod == SvxCellJustifyMethod::Distribute)
                 mnHorAlign = EXC_XF_HOR_DISTRIB;
         }
 
         if (eVerAlign == SVX_VER_JUSTIFY_BLOCK)
         {
-            SvxCellJustifyMethod eVerJustMethod = GETITEMVALUE(
-                rItemSet, SvxJustifyMethodItem, ATTR_VER_JUSTIFY_METHOD, SvxCellJustifyMethod);
+            SvxCellJustifyMethod eVerJustMethod =
+                rItemSet.GetItem<SvxJustifyMethodItem>(ATTR_VER_JUSTIFY_METHOD)->GetValue();
             if (eVerJustMethod == SvxCellJustifyMethod::Distribute)
                 mnVerAlign = EXC_XF_VER_DISTRIB;
         }

@@ -30,7 +30,7 @@
 |*
 \************************************************************************/
 
-class SVX_DLLPUBLIC XFormTextStyleItem : public SfxEnumItem
+class SVX_DLLPUBLIC XFormTextStyleItem : public SfxEnumItem<XFormTextStyle>
 {
 public:
                             static SfxPoolItem* CreateDefault();
@@ -38,8 +38,7 @@ public:
                             XFormTextStyleItem(SvStream& rIn);
     virtual SfxPoolItem*    Clone(SfxItemPool* pPool = nullptr) const override;
     virtual SfxPoolItem*    Create(SvStream& rIn, sal_uInt16 nVer) const override;
-    virtual sal_uInt16          GetValueCount() const override;
-    XFormTextStyle          GetValue() const { return (XFormTextStyle) SfxEnumItem::GetValue(); }
+    virtual sal_uInt16      GetValueCount() const override;
     // #FontWork#
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;

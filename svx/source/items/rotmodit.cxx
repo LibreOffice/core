@@ -44,7 +44,7 @@ SfxPoolItem* SvxRotateModeItem::CreateDefault() { return new  SvxRotateModeItem(
 
 
 SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, sal_uInt16 _nWhich )
-    : SfxEnumItem( _nWhich, (sal_uInt16)eMode )
+    : SfxEnumItem( _nWhich, eMode )
 {
 }
 
@@ -133,7 +133,7 @@ bool SvxRotateModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
         case table::CellVertJustify2::BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;   break;
         default: ;//prevent warning
     }
-    SetValue( (sal_uInt16)eSvx );
+    SetValue( eSvx );
     return true;
 }
 

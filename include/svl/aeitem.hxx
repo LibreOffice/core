@@ -26,7 +26,7 @@
 
 class SfxAllEnumValueArr;
 
-class SVL_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem
+class SVL_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem<sal_uInt16>
 {
     SfxAllEnumValueArr*      pValues;
     std::vector<sal_uInt16>* pDisabledValues;

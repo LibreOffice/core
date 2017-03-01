@@ -1762,7 +1762,7 @@ void SwBasicEscherEx::WriteGrfAttr(const SwNoTextNode& rNd, const SwFrameFormat&
     if (SfxItemState::SET == rNd.GetSwAttrSet().GetItemState(RES_GRFATR_DRAWMODE,
         true, &pItem))
     {
-        nMode = static_cast<const SfxEnumItem*>(pItem)->GetValue();
+        nMode = static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
         if (nMode == GRAPHICDRAWMODE_WATERMARK)
         {
             /*

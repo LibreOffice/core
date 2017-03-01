@@ -110,8 +110,8 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     //Special case align by menu
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
-        OSL_ENSURE(dynamic_cast<const SfxEnumItem*>( pItem),"SfxEnumItem expected" );
-        nSlotId = nSlotId + static_cast<const SfxEnumItem*>(pItem)->GetValue();
+        OSL_ENSURE(dynamic_cast<const SfxEnumItemInterface*>( pItem),"SfxEnumItem expected" );
+        nSlotId = nSlotId + static_cast<const SfxEnumItemInterface*>(pItem)->GetEnumValue();
         nSlotId++;
     }
 

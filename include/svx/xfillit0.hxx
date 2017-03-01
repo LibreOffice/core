@@ -31,7 +31,7 @@
 // class XFillStyleItem
 
 
-class SVX_DLLPUBLIC XFillStyleItem : public SfxEnumItem
+class SVX_DLLPUBLIC XFillStyleItem : public SfxEnumItem<css::drawing::FillStyle>
 {
 public:
                             static SfxPoolItem* CreateDefault();
@@ -50,7 +50,6 @@ public:
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper * = nullptr ) const override;
     virtual sal_uInt16          GetValueCount() const override;
-    css::drawing::FillStyle GetValue() const { return (css::drawing::FillStyle) SfxEnumItem::GetValue(); }
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const override;
 };

@@ -531,7 +531,7 @@ namespace
         if ( SfxItemState::SET == _rItemSet.GetItemState( ITEMID_CASEMAP,true,&pItem) && dynamic_cast< const SvxCaseMapItem *>( pItem ) !=  nullptr)
         {
             const SvxCaseMapItem* pFontItem = static_cast<const SvxCaseMapItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::makeAny( pFontItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::makeAny( pFontItem->GetEnumValue() ) );
         }
         struct Items {
                 sal_uInt16 nWhich;

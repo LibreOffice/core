@@ -3029,14 +3029,14 @@ void ScFiltersTest::testOrcusODSStyleInterface()
         pStyleSheet->GetItemSet().HasItem(ATTR_HOR_JUSTIFY, &pItem));
 
     const SvxHorJustifyItem* pHorJustify = static_cast<const SvxHorJustifyItem*>(pItem);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with hor justify", static_cast<sal_uInt16>(SVX_HOR_JUSTIFY_RIGHT), pHorJustify->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with hor justify", SVX_HOR_JUSTIFY_RIGHT, pHorJustify->GetValue());
 
     pStyleSheet = pStyleSheetPool->FindCaseIns("Name10", SfxStyleFamily::Para);
     CPPUNIT_ASSERT_MESSAGE("Style Name10 : Doesn't have Attribute ver justify, but it should have.",
         pStyleSheet->GetItemSet().HasItem(ATTR_VER_JUSTIFY, &pItem));
 
     const SvxVerJustifyItem* pVerJustify = static_cast<const SvxVerJustifyItem*>(pItem);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with ver justify", static_cast<sal_uInt16>(SVX_VER_JUSTIFY_CENTER), pVerJustify->GetValue());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Style Name10 :Error with ver justify", SVX_VER_JUSTIFY_CENTER, pVerJustify->GetValue());
 
 }
 
