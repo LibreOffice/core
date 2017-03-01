@@ -460,10 +460,7 @@ void LwpTableLayout::TraverseTable()
     sal_uInt32 nCount = m_nRows*m_nCols;
 
     // new cell map nRow*nCOl and initialize
-    for (sal_uInt32 iLoop = 0; iLoop < nCount; ++iLoop)
-    {
-        m_WordProCellsMap.push_back(GetDefaultCellLayout());
-    }
+    m_WordProCellsMap.insert(m_WordProCellsMap.end(), nCount, m_pDefaultCellLayout);
 
     // set value
     LwpObjectID& rRowID = GetChildHead();
