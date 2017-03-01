@@ -53,29 +53,47 @@ void ImplWriteRect( SvStream& rOStm, const Rectangle& rRect )
     WritePair( rOStm, rRect.BottomRight() );
 }
 
-void ImplReadPoly( SvStream& rIStm, tools::Polygon& rPoly )
+bool ImplReadPoly(SvStream& rIStm, tools::Polygon& rPoly)
 {
-    sal_Int32   nSize;
+    sal_Int32 nSize32(0);
+    rIStm.ReadInt32(nSize32);
+    sal_uInt16 nSize = nSize32;
 
-    rIStm.ReadInt32( nSize );
-    rPoly = tools::Polygon( (sal_uInt16) nSize );
+    const size_t nMaxPossiblePoints = rIStm.remainingSize() / 2 * sizeof(sal_Int32);
+    if (nSize > nMaxPossiblePoints)
+    {
+        SAL_WARN("vcl.gdi", "svm record claims to have: " << nSize << " points, but only " << nMaxPossiblePoints << " possible");
+        return false;
+    }
 
-    for( sal_uInt16 i = 0; i < (sal_uInt16) nSize; i++ )
-        ReadPair( rIStm, rPoly[ i ] );
+    rPoly = tools::Polygon(nSize);
+
+    for (sal_uInt16 i = 0; i < nSize && rIStm.good(); ++i)
+        ReadPair(rIStm, rPoly[i]);
+
+    return rIStm.good();
 }
 
-void ImplReadPolyPoly( SvStream& rIStm, tools::PolyPolygon& rPolyPoly )
+bool ImplReadPolyPoly(SvStream& rIStm, tools::PolyPolygon& rPolyPoly)
 {
+    bool bSuccess = true;
+
     tools::Polygon aPoly;
-    sal_Int32   nPolyCount;
+    sal_Int32 nPolyCount32(0);
+    rIStm.ReadInt32(nPolyCount32);
+    sal_uInt16 nPolyCount = (sal_uInt16)nPolyCount32;
 
-    rIStm.ReadInt32( nPolyCount );
-
-    for( sal_uInt16 i = 0; i < (sal_uInt16) nPolyCount; i++ )
+    for (sal_uInt16 i = 0; i < nPolyCount && rIStm.good(); ++i)
     {
-        ImplReadPoly( rIStm, aPoly );
-        rPolyPoly.Insert( aPoly );
+        if (!ImplReadPoly(rIStm, aPoly))
+        {
+            bSuccess = false;
+            break;
+        }
+        rPolyPoly.Insert(aPoly);
     }
+
+    return bSuccess && rIStm.good();
 }
 
 void ImplWritePolyPolyAction( SvStream& rOStm, const tools::PolyPolygon& rPolyPoly )
@@ -109,7 +127,7 @@ void ImplWritePolyPolyAction( SvStream& rOStm, const tools::PolyPolygon& rPolyPo
 
 void ImplReadColor( SvStream& rIStm, Color& rColor )
 {
-    sal_Int16 nVal;
+    sal_Int16 nVal(0);
 
     rIStm.ReadInt16( nVal ); rColor.SetRed( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
     rIStm.ReadInt16( nVal ); rColor.SetGreen( sal::static_int_cast<sal_uInt8>((sal_uInt16)nVal >> 8) );
@@ -775,32 +793,35 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_POLYLINE_ACTION:
             {
-                ImplReadPoly( rIStm, aActionPoly );
-                nLastPolygonAction = rMtf.GetActionSize();
+                if (ImplReadPoly(rIStm, aActionPoly))
+                {
+                    nLastPolygonAction = rMtf.GetActionSize();
 
-                if( bFatLine )
-                    rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
-                else
-                    rMtf.AddAction( new MetaPolyLineAction( aActionPoly ) );
+                    if( bFatLine )
+                        rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
+                    else
+                        rMtf.AddAction( new MetaPolyLineAction( aActionPoly ) );
+                }
             }
             break;
 
             case GDI_POLYGON_ACTION:
             {
-                ImplReadPoly( rIStm, aActionPoly );
-
-                if( bFatLine )
+                if (ImplReadPoly(rIStm, aActionPoly))
                 {
-                    rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
-                    rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
-                    rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
-                    rMtf.AddAction( new MetaPopAction() );
-                    rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
-                }
-                else
-                {
-                    nLastPolygonAction = rMtf.GetActionSize();
-                    rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
+                    if( bFatLine )
+                    {
+                        rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
+                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
+                        rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
+                        rMtf.AddAction( new MetaPopAction() );
+                        rMtf.AddAction( new MetaPolyLineAction( aActionPoly, aLineInfo ) );
+                    }
+                    else
+                    {
+                        nLastPolygonAction = rMtf.GetActionSize();
+                        rMtf.AddAction( new MetaPolygonAction( aActionPoly ) );
+                    }
                 }
             }
             break;
@@ -809,22 +830,23 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             {
                 tools::PolyPolygon aPolyPoly;
 
-                ImplReadPolyPoly( rIStm, aPolyPoly );
-
-                if( bFatLine )
+                if (ImplReadPolyPoly(rIStm, aPolyPoly))
                 {
-                    rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
-                    rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
-                    rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
-                    rMtf.AddAction( new MetaPopAction() );
+                    if( bFatLine )
+                    {
+                        rMtf.AddAction( new MetaPushAction( PushFlags::LINECOLOR ) );
+                        rMtf.AddAction( new MetaLineColorAction( COL_TRANSPARENT, false ) );
+                        rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
+                        rMtf.AddAction( new MetaPopAction() );
 
-                    for( sal_uInt16 nPoly = 0, nCount = aPolyPoly.Count(); nPoly < nCount; nPoly++ )
-                        rMtf.AddAction( new MetaPolyLineAction( aPolyPoly[ nPoly ], aLineInfo ) );
-                }
-                else
-                {
-                    nLastPolygonAction = rMtf.GetActionSize();
-                    rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
+                        for( sal_uInt16 nPoly = 0, nCount = aPolyPoly.Count(); nPoly < nCount; nPoly++ )
+                            rMtf.AddAction( new MetaPolyLineAction( aPolyPoly[ nPoly ], aLineInfo ) );
+                    }
+                    else
+                    {
+                        nLastPolygonAction = rMtf.GetActionSize();
+                        rMtf.AddAction( new MetaPolyPolygonAction( aPolyPoly ) );
+                    }
                 }
             }
             break;
@@ -1088,27 +1110,37 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                     case 2:
                     {
-                        ImplReadPoly( rIStm, aActionPoly );
-                        aRegion = vcl::Region( aActionPoly );
-                        bClip = true;
+                        if (ImplReadPoly(rIStm, aActionPoly))
+                        {
+                            aRegion = vcl::Region( aActionPoly );
+                            bClip = true;
+                        }
                     }
                     break;
 
                     case 3:
                     {
+                        bool bSuccess = true;
                         tools::PolyPolygon aPolyPoly;
-                        sal_Int32       nPolyCount;
+                        sal_Int32 nPolyCount32(0);
+                        rIStm.ReadInt32(nPolyCount32);
+                        sal_uInt16 nPolyCount(nPolyCount32);
 
-                        rIStm.ReadInt32( nPolyCount );
-
-                        for( sal_uInt16 j = 0; j < (sal_uInt16) nPolyCount; j++ )
+                        for (sal_uInt16 j = 0; j < nPolyCount && rIStm.good(); ++j)
                         {
-                            ImplReadPoly( rIStm, aActionPoly );
-                            aPolyPoly.Insert( aActionPoly );
+                            if (!ImplReadPoly(rIStm, aActionPoly))
+                            {
+                                bSuccess = false;
+                                break;
+                            }
+                            aPolyPoly.Insert(aActionPoly);
                         }
 
-                        aRegion = vcl::Region( aPolyPoly );
-                        bClip = true;
+                        if (bSuccess)
+                        {
+                            aRegion = vcl::Region( aPolyPoly );
+                            bClip = true;
+                        }
                     }
                     break;
                 }
