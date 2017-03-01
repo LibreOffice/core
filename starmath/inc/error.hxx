@@ -29,7 +29,6 @@ enum class SmParseError
     UnexpectedChar,
     UnexpectedToken,
     FuncExpected,
-    UnoperExpected,
     PoundExpected,
     ColorExpected,
     LgroupExpected,
