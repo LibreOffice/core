@@ -663,7 +663,7 @@ SfxVoidItem ClosePreview FN_CLOSE_PAGEPREVIEW
 ]
 
 SfxVoidItem CommentChangeTracking FN_REDLINE_COMMENT
-()
+(SfxUInt16Item ChangeTrackingId FN_REDLINE_COMMENT,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
