@@ -1839,7 +1839,15 @@ void MSWordExportBase::WriteSpecialText( sal_uLong nStart, sal_uLong nEnd, sal_u
     // clear linked textboxes since old ones can't be linked to frames in this section
     m_aLinkedTextboxesHelper.clear();
 
+    // tdf#106261 Reset table infos, otherwise the depth of the cells will be
+    // incorrect, in case the header/footer had table(s) and we try to export
+    // the same table second time.
+    ww8::WW8TableInfo::Pointer_t pOldTableInfo = m_pTableInfo;
+    m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
+
     WriteText();
+
+    m_pTableInfo = pOldTableInfo;
 
     m_bOutPageDescs = bOldPageDescs;
     delete m_pCurPam;                    // delete Pam
