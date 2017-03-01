@@ -18,6 +18,7 @@
     <property name="upper">9999</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
+    <property name="value">1</property>
   </object>
   <object class="GtkGrid" id="TextFlowPage">
     <property name="visible">True</property>
@@ -243,6 +244,9 @@
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
                     <property name="adjustment">adjustment3</property>
+                    <accessibility>
+                      <relation type="labelled-by" target="labelPageNum"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left_attach">4</property>
@@ -250,13 +254,13 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="labelPageNum">
+                  <object class="GtkCheckButton" id="labelPageNum">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="label" translatable="yes">Page _number:</property>
                     <property name="use_underline">True</property>
+                    <property name="inconsistent">True</property>
                     <property name="justify">right</property>
-                    <property name="mnemonic_widget">spinPageNumber</property>
                     <property name="xalign">1</property>
                   </object>
                   <packing>
