@@ -2200,84 +2200,85 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
     if ( xLoader.is() )
     {
         // it happens that xLoader does not support xImporter!
-        try{
-        uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
-        uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
-        xImporter->setTargetDocument( xComp );
-
-        uno::Sequence < beans::PropertyValue > lDescriptor;
-        rMedium.GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, rMedium.GetName() ) );
-        TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
-
-        css::uno::Sequence < css::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
-        css::beans::PropertyValue * pNewValue = aArgs.getArray();
-        const css::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
-        const OUString sInputStream ( "InputStream"  );
-
-        bool bHasInputStream = false;
-        bool bHasBaseURL = false;
-        sal_Int32 i;
-        sal_Int32 nEnd = lDescriptor.getLength();
-
-        for ( i = 0; i < nEnd; i++ )
+        try
         {
-            pNewValue[i] = pOldValue[i];
-            if ( pOldValue [i].Name == sInputStream )
-                bHasInputStream = true;
-            else if ( pOldValue[i].Name == "DocumentBaseURL" )
-                bHasBaseURL = true;
-        }
+            uno::Reference< lang::XComponent >  xComp( GetModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< document::XImporter > xImporter( xLoader, uno::UNO_QUERY_THROW );
+            xImporter->setTargetDocument( xComp );
 
-        if ( !bHasInputStream )
-        {
-            aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = sInputStream;
-            aArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
-        }
+            uno::Sequence < beans::PropertyValue > lDescriptor;
+            rMedium.GetItemSet()->Put( SfxStringItem( SID_FILE_NAME, rMedium.GetName() ) );
+            TransformItems( SID_OPENDOC, *rMedium.GetItemSet(), lDescriptor );
 
-        if ( !bHasBaseURL )
-        {
-            aArgs.realloc ( ++nEnd );
-            aArgs[nEnd-1].Name = "DocumentBaseURL";
-            aArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
-        }
+            css::uno::Sequence < css::beans::PropertyValue > aArgs ( lDescriptor.getLength() );
+            css::beans::PropertyValue * pNewValue = aArgs.getArray();
+            const css::beans::PropertyValue * pOldValue = lDescriptor.getConstArray();
+            const OUString sInputStream ( "InputStream"  );
 
-        if (xInsertPosition.is()) {
-            aArgs.realloc( ++nEnd );
-            aArgs[nEnd-1].Name = "InsertMode";
-            aArgs[nEnd-1].Value <<= true;
-            aArgs.realloc( ++nEnd );
-            aArgs[nEnd-1].Name = "TextInsertModeRange";
-            aArgs[nEnd-1].Value <<= xInsertPosition;
-        }
+            bool bHasInputStream = false;
+            bool bHasBaseURL = false;
+            sal_Int32 i;
+            sal_Int32 nEnd = lDescriptor.getLength();
 
-        // #i119492# During loading, some OLE objects like chart will be set
-        // modified flag, so needs to reset the flag to false after loading
-        bool bRtn = xLoader->filter( aArgs );
-        uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
-        for ( sal_Int32 n = 0; n < aNames.getLength(); ++n )
-        {
-            OUString aName = aNames[n];
-            uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
-            OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
-            if ( xObj.is() )
+            for ( i = 0; i < nEnd; i++ )
             {
-                sal_Int32 nState = xObj->getCurrentState();
-                if ( nState == embed::EmbedStates::LOADED || nState == embed::EmbedStates::RUNNING )    // means that the object is not active
+                pNewValue[i] = pOldValue[i];
+                if ( pOldValue [i].Name == sInputStream )
+                    bHasInputStream = true;
+                else if ( pOldValue[i].Name == "DocumentBaseURL" )
+                    bHasBaseURL = true;
+            }
+
+            if ( !bHasInputStream )
+            {
+                aArgs.realloc ( ++nEnd );
+                aArgs[nEnd-1].Name = sInputStream;
+                aArgs[nEnd-1].Value <<= css::uno::Reference < css::io::XInputStream > ( new utl::OSeekableInputStreamWrapper ( *rMedium.GetInStream() ) );
+            }
+
+            if ( !bHasBaseURL )
+            {
+                aArgs.realloc ( ++nEnd );
+                aArgs[nEnd-1].Name = "DocumentBaseURL";
+                aArgs[nEnd-1].Value <<= rMedium.GetBaseURL();
+            }
+
+            if (xInsertPosition.is()) {
+                aArgs.realloc( ++nEnd );
+                aArgs[nEnd-1].Name = "InsertMode";
+                aArgs[nEnd-1].Value <<= true;
+                aArgs.realloc( ++nEnd );
+                aArgs[nEnd-1].Name = "TextInsertModeRange";
+                aArgs[nEnd-1].Value <<= xInsertPosition;
+            }
+
+            // #i119492# During loading, some OLE objects like chart will be set
+            // modified flag, so needs to reset the flag to false after loading
+            bool bRtn = xLoader->filter( aArgs );
+            uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
+            for ( sal_Int32 n = 0; n < aNames.getLength(); ++n )
+            {
+                OUString aName = aNames[n];
+                uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObjectContainer().GetEmbeddedObject( aName );
+                OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
+                if ( xObj.is() )
                 {
-                    uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
-                    if (xModifiable.is() && xModifiable->isModified())
+                    sal_Int32 nState = xObj->getCurrentState();
+                    if ( nState == embed::EmbedStates::LOADED || nState == embed::EmbedStates::RUNNING )    // means that the object is not active
                     {
-                        uno::Reference<embed::XEmbedPersist> const xPers(xObj, uno::UNO_QUERY);
-                        assert(xPers.is() && "Modified object without persistence!");
-                        // store it before resetting modified!
-                        xPers->storeOwn();
-                        xModifiable->setModified(false);
+                        uno::Reference< util::XModifiable > xModifiable( xObj->getComponent(), uno::UNO_QUERY );
+                        if (xModifiable.is() && xModifiable->isModified())
+                        {
+                            uno::Reference<embed::XEmbedPersist> const xPers(xObj, uno::UNO_QUERY);
+                            assert(xPers.is() && "Modified object without persistence!");
+                            // store it before resetting modified!
+                            xPers->storeOwn();
+                            xModifiable->setModified(false);
+                        }
                     }
                 }
             }
-        }
-        return bRtn;
+            return bRtn;
         }
         catch (const packages::zip::ZipIOException&)
         {
