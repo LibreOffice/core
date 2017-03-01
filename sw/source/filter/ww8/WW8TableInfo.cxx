@@ -617,6 +617,8 @@ WW8TableInfo::processSwTableByLayout(const SwTable * pTable, RowEndInners_t &rLa
 
 void WW8TableInfo::processSwTable(const SwTable * pTable)
 {
+    mMap.clear();
+
     SAL_INFO( "sw.ww8", "<processSwTable>" );
 
     WW8TableNodeInfo * pPrev = nullptr;
