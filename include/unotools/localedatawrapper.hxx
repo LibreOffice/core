@@ -326,7 +326,7 @@ public:
         A string similar to "de_DE requested\n en_US loaded" is appended. */
     OUString appendLocaleInfo(const OUString& rDebugMsg) const;
 
-    /** Ouput a message during locale data checking. The (UTF-8) string is
+    /** Output a message during locale data checking. The (UTF-8) string is
         written to stderr and in a non-product build or if DBG_UTIL is enabled
         also raised as an assertion message box. */
     static  void                outputCheckMessage( const OUString& rMsg );

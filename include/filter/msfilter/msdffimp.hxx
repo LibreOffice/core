@@ -422,7 +422,7 @@ protected:
     /** When importing Excel files, cell anchor computations for non-page-anchored
         groups must be done after all nested groups have been processed; for each open
         group, the pending data is stored here. The storage also holds a shared_ptr to
-        the DffObjData ow DffRecordHeader to avoid it going out of scope except whe needed
+        the DffObjData ow DffRecordHeader to avoid it going out of scope except when needed
      */
     std::vector< std::pair<DffObjData, std::shared_ptr<DffRecordHeader> > > maPendingGroupData;
 

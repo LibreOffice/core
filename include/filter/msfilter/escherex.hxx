@@ -974,7 +974,7 @@ public:
     /** Called if a picture shall be written and no picture stream is set at
         class ImplEESdrWriter.
 
-        On first invokation, this function calls the virtual member function
+        On first invocation, this function calls the virtual member function
         ImplQueryPictureStream(). The return value will be cached internally
         for subsequent calls and for the GetPictureStream() function.
      */

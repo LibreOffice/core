@@ -75,7 +75,7 @@ namespace utl
         /// move ctor
         OConfigurationNode(OConfigurationNode&& _rSource);
 
-        /// assigment
+        /// assignment
         OConfigurationNode& operator=(const OConfigurationNode& _rSource);
         OConfigurationNode& operator=(OConfigurationNode&& _rSource);
 

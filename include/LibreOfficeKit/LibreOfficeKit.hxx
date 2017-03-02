@@ -560,12 +560,12 @@ public:
      * @param pURL      the URL of the document, as sent to the callback
      * @param pPassword the password, nullptr indicates no password
      *
-     * In response to LOK_CALLBACK_DOCUMENT_PASSWORD, a vaild password
+     * In response to LOK_CALLBACK_DOCUMENT_PASSWORD, a valid password
      * will continue loading the document, an invalid password will
      * result in another LOK_CALLBACK_DOCUMENT_PASSWORD request,
      * and a NULL password will abort loading the document.
      *
-     * In response to LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY, a vaild
+     * In response to LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY, a valid
      * password will continue loading the document, an invalid password will
      * result in another LOK_CALLBACK_DOCUMENT_PASSWORD_TO_MODIFY request,
      * and a NULL password will continue loading the document in read-only

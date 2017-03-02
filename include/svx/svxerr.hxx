@@ -62,7 +62,7 @@
 /** Error message: "Read error. Passwort encrypted Powerpoint documents..." */
 #define ERRCODE_SVX_READ_FILTER_PPOINT      (17UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_READ)
 
-/** Error message: "Warning. Passwort protection is not suppported when ..." */
+/** Error message: "Warning. Passwort protection is not supported when..." */
 #define ERRCODE_SVX_EXPORT_FILTER_CRYPT      (18UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_EXPORT | ERRCODE_WARNING_MASK)
 
 

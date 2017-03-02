@@ -47,7 +47,7 @@ namespace xmloff
 
     //= OFormLayerXMLExport
 
-    /** provides functionallity for exporting a complete form layer.
+    /** provides functionality for exporting a complete form layer.
     */
     class XMLOFF_DLLPUBLIC OFormLayerXMLExport
                 :public ::salhelper::SimpleReferenceObject

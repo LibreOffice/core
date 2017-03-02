@@ -72,7 +72,7 @@ protected:
     /// Destructor, try to unload the library.
     virtual ~ORealDynamicLoader();
 
-    /// points to  the structure with the initialzed API function pointers.
+    /// points to  the structure with the initialized API function pointers.
     void*                   m_pApi;
     /// stores the reference count.
     sal_uInt32              m_refCount;

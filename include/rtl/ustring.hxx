@@ -3553,7 +3553,7 @@ public:
 };
 
 #if defined LIBO_INTERNAL_ONLY
-// Prevent the operator ==/!= overloads with 'sal_Unicode const *' paramter from
+// Prevent the operator ==/!= overloads with 'sal_Unicode const *' parameter from
 // being selected for nonsensical code like
 //
 //   if (ouIdAttr == nullptr)
