@@ -447,7 +447,7 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
                                 false,
                                 ::dbtools::EComposeRule::InDataManipulation);
 
-    // if there is no alias for the table name assign the orignal name to it
+    // if there is no alias for the table name assign the original name to it
     if ( aTableRange.isEmpty() )
         aTableRange = aComposedName;
 

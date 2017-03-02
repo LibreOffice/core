@@ -1697,7 +1697,7 @@ namespace {
  * <p>For each X value, we calculate separate Y value ranges for each data
  * series in the first pass.  In the second pass, we calculate the minimum Y
  * value by taking the absolute minimum value of all data series, whereas
- * the maxium Y value is the sum of all the series maximum Y values.</p>
+ * the maximum Y value is the sum of all the series maximum Y values.</p>
  *
  * <p>Once that's done for all X values, the final min / max Y values get
  * calculated by taking the absolute min / max Y values across all the X

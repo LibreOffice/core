@@ -6409,7 +6409,7 @@ istringstream strm( "test" ); return 0;
         # Ugh, surely bad to assume an error message will contain
         # the word "unresolvable", a problem with
         # -fvisibility-inlines-hidden and STL headers might cause
-        # some more obscure message on some platform, and anway,
+        # some more obscure message on some platform, and anyway,
         # the error message could be localised.
         [$EGREP -q unresolvable conftest.err;
         if test $? -eq 0; then gccvisok=no; else gccvisok=yes; fi],[gccvisok=no

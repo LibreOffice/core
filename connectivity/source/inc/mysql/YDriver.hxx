@@ -55,7 +55,7 @@ namespace connectivity
         typedef std::vector< TWeakPair > TWeakPairVector;
         typedef std::map< OUString, css::uno::Reference< css::sdbc::XDriver > > TJDBCDrivers;
 
-        /** delegates all calls to the orignal driver and extend the existing one with the SDBCX layer.
+        /** delegates all calls to the original driver and extend the existing one with the SDBCX layer.
 
         */
         class ODriverDelegator : public ::cppu::BaseMutex

@@ -197,7 +197,7 @@ for d in definitionSet:
         continue
     if isOtherConstness(d, callSet):
         continue
-    # include assigment operators, if we remove them, the compiler creates a default one, which can have odd consequences
+    # include assignment operators, if we remove them, the compiler creates a default one, which can have odd consequences
     if "::operator=(" in d[1]:
         continue
     # these are only invoked implicitly, so the plugin does not see the calls
