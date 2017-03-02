@@ -876,6 +876,7 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
             case RLE_4:
                 if (aHeader.nBitCount != 4)
                     return false;
+                break;
             case BITFIELDS:
                 break;
             case ZCOMPRESS:
