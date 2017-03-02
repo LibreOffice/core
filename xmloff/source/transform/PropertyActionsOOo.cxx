@@ -761,7 +761,7 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_STYLE, XML_FONT_INDEPENDENT_LINE_SPACING, XML_ATACTION_COPY,
           NO_PARAMS },
     { XML_NAMESPACE_STYLE, XML_DEFAULT_OUTLINE_LEVEL, XML_ATACTION_REMOVE,
-          NO_PARAMS }, /* i41811: style-default-outline was exported as propery */
+          NO_PARAMS }, /* i41811: style-default-outline was exported as property */
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
 

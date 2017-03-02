@@ -1263,7 +1263,7 @@ bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
         switch( rURL[nPos] )
         {
         case '/':
-            // a relative path segement
+            // a relative path segment
             return true;
         case ':':
             // a schema

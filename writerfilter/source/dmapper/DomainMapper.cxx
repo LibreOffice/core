@@ -1239,7 +1239,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
         break;
     case NS_ooxml::LN_CT_NumPr_numId:
         {
-            //convert the ListTable entry to a NumberingRules propery and apply it
+            //convert the ListTable entry to a NumberingRules property and apply it
             ListsManager::Pointer pListTable = m_pImpl->GetListTable();
             ListDef::Pointer pList = pListTable->GetList( nIntValue );
             if( IsStyleSheetImport() )

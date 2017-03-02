@@ -1284,7 +1284,7 @@ bool XMLTransformerBase::ConvertURIToOASIS( OUString& rURI,
                     switch( rURI[nPos] )
                     {
                     case '/':
-                        // a relative path segement
+                        // a relative path segment
                         nPos = nLen;    // leave loop
                         break;
                     case ':':
@@ -1349,7 +1349,7 @@ bool XMLTransformerBase::ConvertURIToOOo( OUString& rURI,
                     switch( rURI[nPos] )
                     {
                     case '/':
-                        // a relative path segement within the package
+                        // a relative path segment within the package
                         nPos = nLen;    // leave loop
                         break;
                     case ':':
