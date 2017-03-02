@@ -739,12 +739,13 @@ void lcl_ReorderInternalSequencesAccordingToTheirRangeName(
         if( aIt->first < 0 )
             continue;
         // fill empty columns
-        for( ; nIndex < aIt->first; ++nIndex )
-            rInOutSequences.push_back(
+        rInOutSequences.insert(
+                rInOutSequences.end(),
+                aIt->first - nIndex,
                 SchXMLExportHelper_Impl::tDataSequenceCont::value_type(
                     uno::Reference< chart2::data::XDataSequence >(),
                     uno::Reference< chart2::data::XDataSequence >() ));
-        OSL_ASSERT( nIndex == aIt->first );
+        nIndex = aIt->first;
         rInOutSequences.push_back( aIt->second );
     }
 }

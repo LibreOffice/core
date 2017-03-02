@@ -104,8 +104,7 @@ void OTableFieldDesc::SetCriteria( sal_uInt16 nIdx, const OUString& rCrit)
         m_aCriteria[nIdx] = rCrit;
     else
     {
-        for(sal_Int32 i=m_aCriteria.size();i<nIdx;++i)
-            m_aCriteria.push_back( OUString());
+        m_aCriteria.insert(m_aCriteria.end(), nIdx - m_aCriteria.size(), OUString());
         m_aCriteria.push_back(rCrit);
     }
 }

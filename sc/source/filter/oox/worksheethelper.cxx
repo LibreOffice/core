@@ -1248,8 +1248,7 @@ void WorksheetGlobals::convertOutlines( OutlineLevelVec& orLevels,
     if( nSize < nLevel )
     {
         // Outline level increased. Push the begin column position.
-        for( sal_Int32 nIndex = nSize; nIndex < nLevel; ++nIndex )
-            orLevels.push_back( nColRow );
+        orLevels.insert(orLevels.end(), nLevel - nSize, nColRow);
     }
     else if( nLevel < nSize )
     {

@@ -140,8 +140,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
     for (sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
         m_pOrderCell->InsertEntry(aTxt.getToken(nIdx, ';'));
 
-    for(long i=0;i < BROW_ROW_CNT;i++)
-        m_bVisibleRow.push_back(true);
+    m_bVisibleRow.insert(m_bVisibleRow.end(), BROW_ROW_CNT, true);
 
     m_bVisibleRow[BROW_FUNCTION_ROW] = false;   // first hide
 

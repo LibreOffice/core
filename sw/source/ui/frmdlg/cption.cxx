@@ -366,10 +366,8 @@ void SwCaptionDialog::DrawSample()
                                             RES_SETEXPFLD, sFieldTypeName ));
             if( pFieldType && pFieldType->GetOutlineLvl() < MAXLEVEL )
             {
-                sal_Int8 nLvl = pFieldType->GetOutlineLvl();
                 SwNumberTree::tNumberVector aNumVector;
-                for( sal_Int8 i = 0; i <= nLvl; ++i )
-                    aNumVector.push_back(1);
+                aNumVector.insert(aNumVector.end(), pFieldType->GetOutlineLvl(), 1);
 
                 OUString sNumber( rSh.GetOutlineNumRule()->
                                 MakeNumString(aNumVector, false ));
