@@ -223,7 +223,7 @@ ImplFontMetricData::ImplFontMetricData( const FontSelectPattern& rFontSelData )
     , mnDStrikeoutOffset1( 0 )
     , mnDStrikeoutOffset2( 0 )
 {
-    // intialize the used font name
+    // initialize the used font name
     if( rFontSelData.mpFontData )
     {
         SetFamilyName( rFontSelData.mpFontData->GetFamilyName() );

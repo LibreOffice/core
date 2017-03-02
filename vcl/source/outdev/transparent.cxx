@@ -341,7 +341,7 @@ bool OutputDevice::DrawTransparentNatively ( const tools::PolyPolygon& rPolyPoly
             // should be used when printing. Normally this is avoided by the printer being
             // non-AAed and thus e.g. on WIN GdiPlus calls are not used. It may be necessary
             // to figure out a way of moving this code to its own function that is
-            // overriden by the Print class, which will mean we deliberately override the
+            // overridden by the Print class, which will mean we deliberately override the
             // functionality and we use the fallback some lines below (which is not very good,
             // though. For now, WinSalGraphics::drawPolyPolygon will detect printer usage and
             // correct the wrong mapping (see there for details)

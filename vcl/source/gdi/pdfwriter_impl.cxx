@@ -10303,7 +10303,7 @@ void PDFWriterImpl::drawPolyLine( const tools::Polygon& rPoly, const PDFWriter::
     aLine.append( "q " );
     m_aPages.back().appendMappedLength( rInfo.m_fLineWidth, aLine );
     aLine.append( " w" );
-    if( rInfo.m_aDashArray.size() < 10 ) // implmentation limit of acrobat reader
+    if( rInfo.m_aDashArray.size() < 10 ) // implementation limit of acrobat reader
     {
         switch( rInfo.m_eCap )
         {

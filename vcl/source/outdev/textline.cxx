@@ -96,7 +96,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
     long nStartX = nBaseX + nDistX;
     long nStartY = nBaseY + nDistY;
 
-    // If the height is 1 pixel, it's enough ouput a line
+    // If the height is 1 pixel, it's enough output a line
     if ( (nLineWidth == 1) && (nHeight == 1) )
     {
         mpGraphics->SetLineColor( ImplColorToSal( rColor ) );
@@ -123,7 +123,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
         long    nPixWidth;
         long    nPixHeight;
         bool    bDrawPixAsRect;
-        // On printers that ouput pixel via DrawRect()
+        // On printers that output pixel via DrawRect()
         if ( (GetOutDevType() == OUTDEV_PRINTER) || (nLineWidth > 1) )
         {
             if ( mbLineColor || mbInitLineColor )
