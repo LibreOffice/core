@@ -44,10 +44,10 @@
 struct TimeValue {
     TimeValue() = default;
 
-    SAL_CONSTEXPR TimeValue(sal_uInt32 seconds, sal_uInt32 nanoseconds):
+    constexpr TimeValue(sal_uInt32 seconds, sal_uInt32 nanoseconds):
         Seconds(seconds), Nanosec(nanoseconds) {}
 
-    template<typename Rep, typename Period> SAL_CONSTEXPR
+    template<typename Rep, typename Period> constexpr
     TimeValue(std::chrono::duration<Rep, Period> const & duration):
         Seconds(
             std::chrono::duration_cast<std::chrono::nanoseconds>(

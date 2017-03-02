@@ -34,7 +34,7 @@
 namespace
 {
 
-SAL_CONSTEXPR GLenum constInternalFormat = GL_RGBA8;
+constexpr GLenum constInternalFormat = GL_RGBA8;
 
 } // end anonymous namespace
 
