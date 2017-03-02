@@ -25,6 +25,8 @@
 
 using namespace ::com::sun::star::uno ;
 
+namespace xmlsecurity
+{
 Sequence< sal_Int8 > numericStringToBigInteger ( const OUString& numeral )
 {
     if( numeral.getStr() != nullptr )
@@ -105,6 +107,7 @@ OUString bigIntegerToNumericString ( const Sequence< sal_Int8 >& integer )
     }
 
     return aRet ;
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,6 @@
 #include <vcl/layout.hxx>
 #include <unotools/securityoptions.hxx>
 #include <com/sun/star/security/CertificateValidity.hpp>
-#include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <comphelper/documentconstants.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -316,9 +315,6 @@ DocumentDigitalSignatures::ImplVerifySignatures(
 
     if ( nInfos )
     {
-       Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
-            css::security::SerialNumberAdapter::create(mxCtx);
-
         for( int n = 0; n < nInfos; ++n )
         {
             DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
@@ -333,7 +329,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             if (!rInfo.ouX509Certificate.isEmpty())
                rSigInfo.Signer = xSecEnv->createCertificateFromAscii( rInfo.ouX509Certificate ) ;
             if (!rSigInfo.Signer.is())
-                rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
+                rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
             // Time support again (#i38744#)
             Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
@@ -431,10 +427,7 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
 {
     bool bFound = false;
 
-    Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
-        css::security::SerialNumberAdapter::create(mxCtx);
-
-    OUString sSerialNum = xSerialNumberAdapter->toString( Author->getSerialNumber() );
+    OUString sSerialNum = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
 
     Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
     const SvtSecurityOptions::Certificate* pAuthors = aTrustedAuthors.getConstArray();
@@ -486,12 +479,9 @@ void DocumentDigitalSignatures::addAuthorToTrustedSources(
 {
     SvtSecurityOptions aSecOpts;
 
-    Reference<security::XSerialNumberAdapter> xSerialNumberAdapter =
-        css::security::SerialNumberAdapter::create(mxCtx);
-
     SvtSecurityOptions::Certificate aNewCert( 3 );
     aNewCert[ 0 ] = Author->getIssuerName();
-    aNewCert[ 1 ] = xSerialNumberAdapter->toString( Author->getSerialNumber() );
+    aNewCert[ 1 ] = xmlsecurity::bigIntegerToNumericString( Author->getSerialNumber() );
 
     OUStringBuffer aStrBuffer;
     ::sax::Converter::encodeBase64(aStrBuffer, Author->getEncoded());

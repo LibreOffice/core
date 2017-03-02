@@ -27,7 +27,6 @@
 
 #include <com/sun/star/security/NoPasswordException.hpp>
 #include <com/sun/star/security/CertificateCharacters.hpp>
-#include <com/sun/star/security/SerialNumberAdapter.hpp>
 
 #include "resourcemanager.hxx"
 #include <vcl/msgbox.hxx>
@@ -167,9 +166,6 @@ void CertificateChooser::ImplInitialize()
     catch (security::NoPasswordException&)
     {
     }
-
-    uno::Reference< css::security::XSerialNumberAdapter> xSerialNumberAdapter =
-        css::security::SerialNumberAdapter::create(mxCtx);
 
     sal_Int32 nCertificates = maCerts.getLength();
     for( sal_Int32 nCert = nCertificates; nCert; )
