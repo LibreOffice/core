@@ -1141,12 +1141,9 @@ void DocxAttributeOutput::EndRun()
                 continue;
             }
 
-            if (m_startedHyperlink)
-                ++m_nFieldsInHyperlink;
-
-            if ( m_pHyperlinkAttrList.is() )
+            if (m_startedHyperlink || m_pHyperlinkAttrList.is())
             {
-                m_nFieldsInHyperlink++;
+                ++m_nFieldsInHyperlink;
             }
         }
         ++pIt;
