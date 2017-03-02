@@ -18,7 +18,7 @@ module freedesktop
 module PackageKit
 {
 /**
- *  The interface used for quering the package database.
+ *  The interface used for querying the package database.
  *
  * @sa
  * https://git.gnome.org/browse/gnome-software/tree/src/org.freedesktop.PackageKit.xml

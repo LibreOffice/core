@@ -1728,7 +1728,7 @@ def __compil__(s):
 
     if len(subnames) > 0:
         globs = "global %s" % ", ".join(subnames)
-        # search user functions (function calls with two or more arguments need explicite Python parentheses)
+        # search user functions (function calls with two or more arguments need explicit Python parentheses)
         ends = __l12n__(_.lng)["END"] # support multiple names of "END"
         firstend = ends.split("|")[0]
         s = re.sub(r"(?<!:)\b(?:%s)\b" % ends, firstend, s)

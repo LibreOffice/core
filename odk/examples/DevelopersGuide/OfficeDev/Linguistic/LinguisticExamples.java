@@ -323,7 +323,7 @@ public class LinguisticExamples
             }
         }
 
-        //! remove listener before programm termination.
+        //! remove listener before program termination.
         //! should not be omitted.
         mxLinguSvcMgr.removeLinguServiceManagerListener(aClient);
 

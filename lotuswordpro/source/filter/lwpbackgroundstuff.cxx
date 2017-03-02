@@ -56,7 +56,7 @@
 /**
  * @file
  * For LWP filter architecture prototype
- *  Implemention of class LwpBackgroundStuff.
+ *  Implementation of class LwpBackgroundStuff.
  */
 
 #include "lwpbackgroundstuff.hxx"
