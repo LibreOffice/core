@@ -671,6 +671,11 @@ DECLARE_OOXMLEXPORT_TEST(testFixedDateFields, "fixed-date-field.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testToxmarkHyperlink, "toxmarkhyperlink.fodt")
+{
+    // test that export doesn't assert with overlapping fields / hyperlink attr
+}
+
 DECLARE_OOXMLEXPORT_TEST(testOO34469, "ooo34469-1.odt")
 {
     if (xmlDocPtr pXmlDoc = parseExport())

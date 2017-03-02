@@ -1214,8 +1214,31 @@ void DocxAttributeOutput::EndRun()
     }
 
     // Start the hyperlink after the fields separators or we would generate invalid file
+    bool newStartedHyperlink(false);
     if ( m_pHyperlinkAttrList.is() )
     {
+        // if we are ending a hyperlink and there's another one starting here,
+        // don't do this, so that the fields are closed further down when
+        // the end hyperlink is handled, which is more likely to put the end in
+        // the right place, as far as i can tell (not very far in this muck)
+        if (!m_closeHyperlinkInThisRun)
+        {
+            // end ToX fields that want to end _before_ starting the hyperlink
+            for (auto it = m_Fields.rbegin(); it != m_Fields.rend(); )
+            {
+                if (it->bClose && !it->pField)
+                {
+                    EndField_Impl(*it);
+                    it = decltype(m_Fields)::reverse_iterator(m_Fields.erase(it.base() - 1));
+                }
+                else
+                {
+                    ++it;
+                }
+            }
+        }
+        newStartedHyperlink = true;
+
         XFastAttributeListRef xAttrList ( m_pHyperlinkAttrList.get() );
         m_pHyperlinkAttrList.clear();
 
@@ -1350,7 +1373,7 @@ void DocxAttributeOutput::EndRun()
         m_closeHyperlinkInThisRun = false;
     }
 
-    if (!m_startedHyperlink)
+    if (!newStartedHyperlink)
     {
         while ( m_Fields.begin() != m_Fields.end() )
         {
