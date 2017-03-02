@@ -125,7 +125,7 @@ bool RequestFilterSelect_Impl::isAbort() const
 }
 
 // return user selected filter
-// Return value valid for non aborted interaction only. Please check "isAbort()" before you call these ony!
+// Return value valid for non aborted interaction only. Please check "isAbort()" before you call these only!
 
 OUString RequestFilterSelect_Impl::getFilter() const
 {
@@ -168,7 +168,7 @@ bool RequestFilterSelect::isAbort() const
 }
 
 // return user selected filter
-// Return value valid for non aborted interaction only. Please check "isAbort()" before you call these ony!
+// Return value valid for non aborted interaction only. Please check "isAbort()" before you call these only!
 
 OUString RequestFilterSelect::getFilter() const
 {

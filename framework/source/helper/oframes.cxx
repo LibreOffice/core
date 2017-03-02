@@ -132,7 +132,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
             // We think about right implementation.
             SAL_WARN_IF( (nSearchFlags & FrameSearchFlag::AUTO), "fwk", "OFrames::queryFrames(): Search with AUTO-flag is not supported yet!" );
 
-            // Search for ALL and GLOBAL is superflous!
+            // Search for ALL and GLOBAL is superfluous!
             // We support all necessary flags, from which these two flags are derived.
             //      ALL     = PARENT + SELF  + CHILDREN + SIBLINGS
             //      GLOBAL  = ALL    + TASKS
@@ -345,7 +345,7 @@ void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFram
 -----------------------------------------------------------------------------------------------------------------*/
 
 // A search for frames must initiate with right flags.
-// Some one are superflous and not supported yet. But here we control only the range of incoming parameter!
+// Some one are superfluous and not supported yet. But here we control only the range of incoming parameter!
 bool OFrames::impldbg_checkParameter_queryFrames( sal_Int32 nSearchFlags )
 {
     // Set default return value.

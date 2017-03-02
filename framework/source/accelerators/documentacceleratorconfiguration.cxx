@@ -163,7 +163,7 @@ void DocumentAcceleratorConfiguration::fillCache()
 
     // get current office locale ... but don't cache it.
     // Otherwise we must be listener on the configuration layer
-    // which seems to superflous for this small implementation .-)
+    // which seems to superfluous for this small implementation .-)
     LanguageTag aLanguageTag( impl_ts_getLocale());
 
     // May be the current document does not contain any

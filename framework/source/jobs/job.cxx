@@ -92,7 +92,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 }
 
 /**
-    @short  superflous!
+    @short  superfluous!
     @descr  Releasing of memory and reference must be done inside die() call.
             Otherwhise it's a bug.
 */

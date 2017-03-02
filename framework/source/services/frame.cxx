@@ -801,7 +801,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     // <- SAFE ----------------------------------
 
     // Start listening for events after setting it on helper class ...
-    // So superflous messages are filtered to NULL :-)
+    // So superfluous messages are filtered to NULL :-)
     implts_startWindowListening();
 
     m_pWindowCommandDispatch = new WindowCommandDispatch(m_xContext, this);
@@ -1143,7 +1143,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Frame::findFrame( const OUStr
 
             // II.III.II) PARENT
             //  Forward search to our parent (if he exists.)
-            //  To prevent us against recursive and superflous calls (which can occur if we allow him
+            //  To prevent us against recursive and superfluous calls (which can occur if we allow him
             //  to search on his children too) we must change used search flags.
 
             if (
@@ -2072,7 +2072,7 @@ void SAL_CALL Frame::disposing()
     SAL_INFO("fwk.frame", "[Frame] " << m_sName << " send dispose event to listener");
 
     // First operation should be ... "stopp all listening for window events on our container window".
-    // These events are superflous but can make trouble!
+    // These events are superfluous but can make trouble!
     // We will die, die and die ...
     implts_stopWindowListening();
 

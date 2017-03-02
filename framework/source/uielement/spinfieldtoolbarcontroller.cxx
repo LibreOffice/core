@@ -50,7 +50,7 @@ namespace framework
 {
 
 // Wrapper class to notify controller about events from combobox.
-// Unfortunaltly the events are notifed through virtual methods instead
+// Unfortunaltly the events are notified through virtual methods instead
 // of Listeners.
 
 class SpinfieldControl : public SpinField

@@ -106,7 +106,7 @@ public class CheckContextMenuInterceptor
     {
         System.out.println(" **** Context Menu Interceptor *** ");
 
-        // intialize the test document
+        // initialize the test document
         xDrawDoc = DrawTools.createDrawDoc(xMSF);
 
         SOfficeFactory SOF = SOfficeFactory.getFactory(xMSF);

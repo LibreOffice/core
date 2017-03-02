@@ -68,7 +68,7 @@ struct ImageListItemDescriptor
     ImageMaskMode               nMaskMode;            // an enum to describe the current mask mode
     std::unique_ptr<ImageItemListDescriptor>
                                 pImageItemList;       // an array of ImageItemDescriptors that describes every image
-    OUString                    aHighContrastURL;       // an URL to an optional high contrast bitmap with serveral images inside
+    OUString                    aHighContrastURL;       // an URL to an optional high contrast bitmap with several images inside
     OUString                    aHighContrastMaskURL;   // an URL to an optional high contrast bitmap as a mask
 };
 

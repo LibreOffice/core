@@ -2249,7 +2249,7 @@ void AutoRecovery::implts_updateTimer()
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     if (
-        (m_eJob       == AutoRecovery::E_NO_JOB          ) || // TODO may be superflous - E_DONT_START_TIMER should be used only
+        (m_eJob       == AutoRecovery::E_NO_JOB          ) || // TODO may be superfluous - E_DONT_START_TIMER should be used only
         (m_eTimerType == AutoRecovery::E_DONT_START_TIMER)
        )
         return;
