@@ -183,7 +183,7 @@ public:
     void BegUndo(const OUString& rComment, const OUString& rObjDescr, SdrRepeatFunc eFunc=SdrRepeatFunc::NONE) { mpModel->BegUndo(rComment,rObjDescr,eFunc); } // open undo-grouping
     void EndUndo();                                                   // close undo-grouping  (incl. BroadcastEdges)
     void AddUndo(SdrUndoAction* pUndo)   { mpModel->AddUndo(pUndo);    } // add action
-    // only after first BegUndo or befor last EndUndo:
+    // only after first BegUndo or before last EndUndo:
     void SetUndoComment(const OUString& rComment, const OUString& rObjDescr) { mpModel->SetUndoComment(rComment,rObjDescr); }
     bool IsUndoEnabled() const;
 
@@ -400,7 +400,7 @@ public:
     // If the mode VirtualObjectBundling is switched on, all ToTop/ToBtm
     // virtual objects which reference the same object, are contained
     // in their Z-order (Writer).
-    // Default setting is sal_False=swithed off.
+    // Default setting is sal_False=switched off.
     void SetVirtualObjectBundling(bool bOn) { bBundleVirtObj=bOn; }
 
     // override SdrMarkView, for internal use

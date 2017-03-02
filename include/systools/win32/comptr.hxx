@@ -60,7 +60,7 @@ class ComPtr
         }
 
 
-        /** initialize object by quering external object for the right interface.
+        /** initialize object by querying external object for the right interface.
          */
         ComPtr(IUnknown* pIUnknown)
         {

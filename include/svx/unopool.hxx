@@ -52,7 +52,7 @@ public:
     */
     virtual SfxItemPool* getModelPool( bool bReadOnly ) throw();
 
-    // overriden helpers from comphelper::PropertySetHelper
+    // overridden helpers from comphelper::PropertySetHelper
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) override;
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) override;
 

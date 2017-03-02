@@ -339,7 +339,7 @@ public:
 
         If this is set to true (which is the default), then GetDate will always return a valid
         date, no matter whether the current text can really be interpreted as date. (Note: this
-        is the compatible bahavior).
+        is the compatible behavior).
 
         If this is set to false, the GetDate will return GetInvalidDate, in case the current text
         cannot be interpreted as date.
@@ -412,7 +412,7 @@ public:
 
         If this is set to true (which is the default), then GetTime will always return a valid
         time, no matter whether the current text can really be interpreted as time. (Note: this
-        is the compatible bahavior).
+        is the compatible behavior).
 
         If this is set to false, the GetTime will return GetInvalidTime, in case the current text
         cannot be interpreted as time.

@@ -178,8 +178,8 @@ public:
 //    Default=8mm
 // 3. The distance from the dimension line to the reference edge (= to the dimensioned object)
 // 4. dimension line below the reference edge (default=no))
-// 5. excess lenth of the auxiliary dimension lines beyond the reference edge (2x, default=0)
-// 6. excess lenth of the auxiliary dimension lines past the dimension line (default=2mm)
+// 5. excess length of the auxiliary dimension lines beyond the reference edge (2x, default=0)
+// 6. excess length of the auxiliary dimension lines past the dimension line (default=2mm)
 // 7. distance between the auxiliary dimension line and the reference edge
 //
 // Dragging:                    Handle          Shift

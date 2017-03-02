@@ -48,7 +48,7 @@ namespace canvas
         actually is, that you cannot do it the plain way, since
         deriving from a common base subclass always introduces the
         whole set of pure virtuals, that your baseclass helper just
-        overrided) and your implementation class. You then only have
+        overridden) and your implementation class. You then only have
         to implement the functionality <em>besides</em>
         XGraphicDevice. If you want to support the optional debug
         XUpdatable interface, also add that to the base classes

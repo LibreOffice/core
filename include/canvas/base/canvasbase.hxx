@@ -41,7 +41,7 @@ namespace canvas
         problem with UNO partial interface implementation actually is,
         that you cannot do it the plain way, since deriving from a
         common base subclass always introduces the whole set of pure
-        virtuals, that your baseclass helper just overrided) and your
+        virtuals, that your baseclass helper just overridden) and your
         implementation class. You then only have to implement the
         functionality <em>besides</em> XCanvas.
 
