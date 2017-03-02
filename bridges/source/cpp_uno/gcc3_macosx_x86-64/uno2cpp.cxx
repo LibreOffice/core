@@ -104,7 +104,7 @@ static void cpp_call(
     sal_Int32 nParams, typelib_MethodParameter * pParams,
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
 {
-    // Maxium space for [complex ret ptr], values | ptr ...
+    // Maximum space for [complex ret ptr], values | ptr ...
     // (but will be used less - some of the values will be in pGPR and pFPR)
       sal_uInt64 *pStack = static_cast<sal_uInt64 *>(__builtin_alloca( (nParams + 3) * sizeof(sal_uInt64) ));
       sal_uInt64 *pStackStart = pStack;

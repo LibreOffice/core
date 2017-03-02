@@ -1626,7 +1626,7 @@ bool StarBASIC::CError( SbError code, const OUString& rMsg,
 {
     SolarMutexGuard aSolarGuard;
 
-    // compiler error during runtime -> stop programm
+    // compiler error during runtime -> stop program
     if( IsRunning() )
     {
         // #109018 Check if running Basic is affected

@@ -121,7 +121,7 @@ class AnimationNodeBase :   public XAnimateMotion,
                             public OWeakObject
 {
 public:
-    // our first, last and only protection from mutli-threads!
+    // our first, last and only protection from multi-threads!
     Mutex maMutex;
 };
 
@@ -364,7 +364,7 @@ private:
     /** current iteration position */
     ChildList_t::iterator   maIter;
 
-    /** our first, last and only protection from mutli-threads! */
+    /** our first, last and only protection from multi-threads! */
     Mutex                   maMutex;
 };
 

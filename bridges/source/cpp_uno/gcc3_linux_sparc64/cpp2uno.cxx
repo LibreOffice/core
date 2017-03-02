@@ -540,7 +540,7 @@ static void cpp_vtable_call(int nFunctionIndex, void** pCallStack, int vTableOff
     //if( bComplex )
     //{
     //    __asm__( "add %i7, 4, %i7\n\t" );
-    //    // after call to complex return valued funcion there is an unimp instruction
+    //    // after call to complex return valued function there is an unimp instruction
     //}
 
 }

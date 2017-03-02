@@ -23,7 +23,7 @@ End If
 cn.CommandTimeout = origTimeout ' restore timeout
 Rem Double check objCmd.ActiveConnection is pointing to objCmd.ActiveConnection
 If objCmd.ActiveConnection.CommandTimeout <> origTimeout Then
-    doUnitTest = "FAIL expected orignal timeout " & origTimeout & " but got " &  objCmd.ActiveConnection.CommandTimeout
+    doUnitTest = "FAIL expected original timeout " & origTimeout & " but got " &  objCmd.ActiveConnection.CommandTimeout
     Exit Function
 End If
 doUnitTest = "OK" ' no error

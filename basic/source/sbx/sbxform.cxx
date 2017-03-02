@@ -115,7 +115,7 @@ SbxBasicFormater::SbxBasicFormater( sal_Unicode _cDecPoint, sal_Unicode _cThousa
 {
 }
 
-// function for ouput of a error-text (for debugging)
+// function for output of a error-text (for debugging)
 // displaces all characters of the string, starting from nStartPos
 // for one position to larger indexes, i. e. place for a new
 // character (which is to be inserted) is created.
