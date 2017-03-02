@@ -206,7 +206,7 @@ public:
 
         if ( S_OK == m_hResult )
             OSL_FAIL(
-            "com was not yet initialzed, the thread was not created using osl_createThread" );
+            "com was not yet initialized, the thread was not created using osl_createThread" );
         else if ( FAILED( m_hResult ) && !( RPC_E_CHANGED_MODE == m_hResult ) )
             OSL_FAIL(
             "com could not be initialized, maybe the thread was not created using osl_createThread" );

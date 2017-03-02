@@ -180,7 +180,7 @@ CommandLineArgs::Supplier::Exception::operator =(Exception const &)
 
 CommandLineArgs::Supplier::~Supplier() {}
 
-// intialize class with command line parameters from process environment
+// initialize class with command line parameters from process environment
 CommandLineArgs::CommandLineArgs()
 {
     InitParamValues();
