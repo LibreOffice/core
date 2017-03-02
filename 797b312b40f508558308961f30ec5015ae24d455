@@ -1,0 +1,205 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_d61140b1",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-02T19:57:26Z",
+      "side": 1,
+      "message": "Initializing nElements with -1 here looks odd, I\u0027d rather init with 1 as there is always at least one element and then ...(1)...",
+      "range": {
+        "startLine": 599,
+        "startChar": 12,
+        "endLine": 599,
+        "endChar": 26
+      },
+      "revId": "797b312b40f508558308961f30ec5015ae24d455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_76f5f481",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-02T19:57:26Z",
+      "side": 1,
+      "message": "Oops.. this is wrong, I should had noticed already earlier in the previous patch. As nStart is shifted up below (nStart +\u003d nELements + 1) it means the loop will be executed more times than the initial nStart+nDataSize value. That needs to be calculated beforehand and used.",
+      "range": {
+        "startLine": 602,
+        "startChar": 36,
+        "endLine": 602,
+        "endChar": 54
+      },
+      "revId": "797b312b40f508558308961f30ec5015ae24d455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_76233406",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 602,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-02T19:57:26Z",
+      "side": 1,
+      "message": "...(1)... init i\u003dnStart+1 here and then ...(2)...",
+      "range": {
+        "startLine": 602,
+        "startChar": 20,
+        "endLine": 602,
+        "endChar": 30
+      },
+      "revId": "797b312b40f508558308961f30ec5015ae24d455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_36ec4cc7",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 608,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-02T19:57:26Z",
+      "side": 1,
+      "message": "Which is the same as\n\n if (bIsDateTime \u003d\u003d bLastTypeDate)\n\n;-)",
+      "range": {
+        "startLine": 607,
+        "startChar": 12,
+        "endLine": 608,
+        "endChar": 49
+      },
+      "revId": "797b312b40f508558308961f30ec5015ae24d455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_76ced45b",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-02T19:57:26Z",
+      "side": 1,
+      "message": "Which is the same as\n\n else if (bIsDateTime !\u003d bLastTypeDate)\n\nand as we already checked (bIsDateTime \u003d\u003d bLastTypeDate) above, it is a simple\n\n else\n\n;-)",
+      "range": {
+        "startLine": 613,
+        "startChar": 12,
+        "endLine": 614,
+        "endChar": 53
+      },
+      "revId": "797b312b40f508558308961f30ec5015ae24d455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_b61d9cbf",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 616,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-02T19:57:26Z",
+      "side": 1,
+      "message": "...(2)... make the argument nStart+nElements-1 and ...(3)...",
+      "range": {
+        "startLine": 616,
+        "startChar": 47,
+        "endLine": 616,
+        "endChar": 65
+      },
+      "revId": "797b312b40f508558308961f30ec5015ae24d455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_f67d64e8",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 617,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-02T19:57:26Z",
+      "side": 1,
+      "message": "...(3)... have nStart+\u003dnElements here.",
+      "revId": "797b312b40f508558308961f30ec5015ae24d455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_d6dce01a",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-02T19:57:26Z",
+      "side": 1,
+      "message": "We already have that as bIsDateTime.",
+      "range": {
+        "startLine": 621,
+        "startChar": 28,
+        "endLine": 621,
+        "endChar": 41
+      },
+      "revId": "797b312b40f508558308961f30ec5015ae24d455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a57fde8_3688cce7",
+        "filename": "sc/source/core/data/column3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 625,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-03-02T19:57:26Z",
+      "side": 1,
+      "message": "...(2)... make the argument nStart+nElements-1",
+      "range": {
+        "startLine": 625,
+        "startChar": 39,
+        "endLine": 625,
+        "endChar": 57
+      },
+      "revId": "797b312b40f508558308961f30ec5015ae24d455",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
