@@ -697,7 +697,7 @@ namespace svgio
                             }
 
                             // convert svg:stroke-miterlimit to LineAttrute:mfMiterMinimumAngle
-                            // The default needs to be set explicitely, because svg default <> Draw default
+                            // The default needs to be set explicitly, because svg default <> Draw default
                             double fMiterMinimumAngle;
                             if (getStrokeMiterLimit().isSet())
                             {

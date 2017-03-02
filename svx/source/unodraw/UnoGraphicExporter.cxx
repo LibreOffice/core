@@ -197,7 +197,7 @@ namespace {
 
                 aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
 
-                // when explicitely pixels are requested from the GraphicExporter, use a *very* high limit
+                // when explicitly pixels are requested from the GraphicExporter, use a *very* high limit
                 // of 16gb (4096x4096 pixels), else use the default for the converters
                 nMaximumQuadraticPixels = std::min(sal_uInt32(4096 * 4096), sal_uInt32(pSize->Width() * pSize->Height()));
             }

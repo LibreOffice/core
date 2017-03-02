@@ -65,7 +65,7 @@ sub read_packagemap
     {
         my $packagemapref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$onepackagemapname, $includepatharrayref, 0);
 
-        if ( $$packagemapref eq "" ) { installer::exiter::exit_program("ERROR: Could not find package map file \"$onepackagemapname\" (propery PACKAGEMAP)!", "read_packagemap"); }
+        if ( $$packagemapref eq "" ) { installer::exiter::exit_program("ERROR: Could not find package map file \"$onepackagemapname\" (property PACKAGEMAP)!", "read_packagemap"); }
 
         my $packagemapcontent = installer::files::read_file($$packagemapref);
 

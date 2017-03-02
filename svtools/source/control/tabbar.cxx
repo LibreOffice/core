@@ -1866,7 +1866,7 @@ void TabBar::SetCurPageId(sal_uInt16 nPageId)
         if (nPageId == mnCurPageId)
             return;
 
-        // make invalide
+        // make invalid
         bool bUpdate = false;
         if (IsReallyVisible() && IsUpdateMode())
             bUpdate = true;

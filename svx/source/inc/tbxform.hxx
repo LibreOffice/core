@@ -29,7 +29,7 @@
 class SvxFmAbsRecWin : public NumericField
 {
     SfxToolBoxControl*  m_pController;
-        // for invalidating our content whe losing the focus
+        // for invalidating our content when losing the focus
 public:
     SvxFmAbsRecWin( vcl::Window* _pParent, SfxToolBoxControl* _pController );
 
