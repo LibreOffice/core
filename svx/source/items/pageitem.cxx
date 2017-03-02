@@ -37,7 +37,7 @@ SfxPoolItem* SvxPageItem::CreateDefault() { return new   SvxPageItem(0);}
 
 SvxPageItem::SvxPageItem( const sal_uInt16 nId ) : SfxPoolItem( nId ),
 
-    eNumType    ( css::style::NumberingType::ARABIC ),
+    eNumType    ( SVX_NUM_ARABIC ),
     bLandscape  ( false ),
     eUse        ( SvxPageUsage::All )
 {

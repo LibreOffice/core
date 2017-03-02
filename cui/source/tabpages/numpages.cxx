@@ -114,7 +114,7 @@ static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValu
         {
             sal_Int16 nTmp;
             if (pValues[j].Value >>= nTmp)
-                pNew->nNumberType = (SvxExtNumType)nTmp;
+                pNew->nNumberType = (SvxNumType)nTmp;
         }
         else if ( pValues[j].Name == "Prefix" )
             pValues[j].Value >>= pNew->sPrefix;
@@ -330,7 +330,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         if(aNumSettingsArr.size() <= nIdx)
             return;
         SvxNumSettings_Impl* _pSet = aNumSettingsArr[nIdx].get();
-        SvxExtNumType eNewType = _pSet->nNumberType;
+        SvxNumType eNewType = _pSet->nNumberType;
         const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix[0] : 0;
         const sal_Unicode cLocalSuffix = !_pSet->sSuffix.isEmpty() ? _pSet->sSuffix[0] : 0;
 
@@ -949,7 +949,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         sal_uInt16 nIdx = m_pExamplesVS->GetSelectItemId() - 1;
 
         sal_uInt16 nMask = 1;
-        SvxExtNumType nSetNumberingType = SVX_NUM_BITMAP;
+        SvxNumType nSetNumberingType = SVX_NUM_BITMAP;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
@@ -1784,7 +1784,7 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox, void 
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             // PAGEDESC does not exist
-            SvxExtNumType nNumType = (SvxExtNumType)reinterpret_cast<sal_uLong>(rBox.GetSelectEntryData());
+            SvxNumType nNumType = (SvxNumType)reinterpret_cast<sal_uLong>(rBox.GetSelectEntryData());
             aNumFmt.SetNumberingType(nNumType);
             sal_uInt16 nNumberingType = aNumFmt.GetNumberingType();
             if(SVX_NUM_BITMAP == (nNumberingType&(~LINK_TOKEN)))

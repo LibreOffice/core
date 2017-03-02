@@ -55,19 +55,19 @@ class EDITENG_DLLPUBLIC SvxNumberType
     static sal_Int32 nRefCount;
     static css::uno::Reference<css::text::XNumberingFormatter> xFormatter;
 
-    SvxExtNumType   nNumType;
+    SvxNumType      nNumType;
     bool            bShowSymbol;        // Also show Symbol ?
 
 public:
-    explicit SvxNumberType(SvxExtNumType nType = SVX_NUM_ARABIC);
+    explicit SvxNumberType(SvxNumType nType = SVX_NUM_ARABIC);
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
     OUString        GetNumStr( sal_uLong nNo ) const;
     OUString        GetNumStr( sal_uLong nNo, const css::lang::Locale& rLocale ) const;
 
-    void            SetNumberingType(SvxExtNumType nSet) {nNumType = nSet;}
-    SvxExtNumType   GetNumberingType() const {return nNumType;}
+    void            SetNumberingType(SvxNumType nSet) {nNumType = nSet;}
+    SvxNumType      GetNumberingType() const {return nNumType;}
 
     void            SetShowSymbol(bool bSet) {bShowSymbol = bSet;}
     bool            IsShowSymbol()const{return bShowSymbol;}
@@ -142,7 +142,7 @@ private:
     OUString            sCharStyleName;     // Character Style
 
 public:
-    explicit SvxNumberFormat( SvxExtNumType nNumberingType,
+    explicit SvxNumberFormat( SvxNumType nNumberingType,
                      SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
     SvxNumberFormat(const SvxNumberFormat& rFormat);
     SvxNumberFormat( SvStream & rStream );

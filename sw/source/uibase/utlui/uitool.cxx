@@ -281,7 +281,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             rPageDesc.SetUseOn( lcl_convertUseFromSvx(nUse) );
         rPageDesc.SetLandscape(rPageItem.IsLandscape());
         SvxNumberType aNumType;
-        aNumType.SetNumberingType( (SvxExtNumType)rPageItem.GetNumType() );
+        aNumType.SetNumberingType( rPageItem.GetNumType() );
         rPageDesc.SetNumType(aNumType);
     }
     // Size

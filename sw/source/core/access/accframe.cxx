@@ -433,7 +433,7 @@ const SwFrame* SwAccessibleFrame::GetParent( const SwAccessibleChild& rFrameOrOb
 OUString SwAccessibleFrame::GetFormattedPageNumber() const
 {
     sal_uInt16 nPageNum = GetFrame()->GetVirtPageNum();
-    SvxExtNumType nFormat = GetFrame()->FindPageFrame()->GetPageDesc()
+    SvxNumType nFormat = GetFrame()->FindPageFrame()->GetPageDesc()
                               ->GetNumType().GetNumberingType();
     if( SVX_NUM_NUMBER_NONE == nFormat )
         nFormat = SVX_NUM_ARABIC;

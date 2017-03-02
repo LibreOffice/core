@@ -125,16 +125,16 @@ enum SwJumpEditFormat
 
 class SwPageNumberFieldType : public SwFieldType
 {
-    SvxExtNumType   nNumberingType;
+    SvxNumType      nNumberingType;
     bool            bVirtuell;
 
 public:
     SwPageNumberFieldType();
 
-    OUString Expand( SvxExtNumType nFormat, short nOff, sal_uInt16 const nPageNumber,
+    OUString Expand( SvxNumType nFormat, short nOff, sal_uInt16 const nPageNumber,
                      sal_uInt16 const nMaxPage, const OUString& ) const;
     void ChangeExpansion( SwDoc* pDoc,
-                          bool bVirtPageNum, const SvxExtNumType* pNumFormat );
+                          bool bVirtPageNum, const SvxNumType* pNumFormat );
     virtual SwFieldType* Copy() const override;
 };
 
@@ -247,14 +247,14 @@ public:
 class SwDocStatFieldType : public SwFieldType
 {
     SwDoc*          pDoc;
-    SvxExtNumType   nNumberingType;
+    SvxNumType      nNumberingType;
 
 public:
     SwDocStatFieldType(SwDoc*);
-    OUString                Expand(sal_uInt16 nSubType, SvxExtNumType nFormat) const;
+    OUString                Expand(sal_uInt16 nSubType, SvxNumType nFormat) const;
     virtual SwFieldType*    Copy() const override;
 
-    inline void             SetNumFormat( SvxExtNumType eFormat )  { nNumberingType = eFormat; }
+    inline void             SetNumFormat( SvxNumType eFormat )  { nNumberingType = eFormat; }
 };
 
 class SW_DLLPUBLIC SwDocStatField : public SwField

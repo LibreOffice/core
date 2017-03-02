@@ -1984,7 +1984,7 @@ bool SwFormatFootnoteEndAtTextEnd::PutValue( const uno::Any& rVal, sal_uInt8 nMe
                 (nVal <= SVX_NUM_ARABIC ||
                     SVX_NUM_CHARS_UPPER_LETTER_N == nVal ||
                         SVX_NUM_CHARS_LOWER_LETTER_N == nVal ))
-                aFormat.SetNumberingType((SvxExtNumType)nVal);
+                aFormat.SetNumberingType((SvxNumType)nVal);
             else
                 bRet = false;
         }
