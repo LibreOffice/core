@@ -25,7 +25,7 @@
 module com { module sun { module star { module script {
 /**
     An object supporting this interface indicates to interested
-    parties or clients the name of the default propery for
+    parties or clients the name of the default property for
     this object.
     <p>For example where ExampleObject is an instance of an Object that
     supports this interface which returns the default property name

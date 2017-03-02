@@ -122,7 +122,7 @@ public class GridControl
         // TODO: check all those generic properties for equality
 
         // the data model and the column model should have been cloned, too
-        // in particular, the clone should not share the sub models with the orignal
+        // in particular, the clone should not share the sub models with the original
         final XMutableGridDataModel originalDataModel = UnoRuntime.queryInterface( XMutableGridDataModel.class,
             m_gridControlModel.getPropertyValue( "GridDataModel" ) );
         final XMutableGridDataModel clonedDataModel = UnoRuntime.queryInterface( XMutableGridDataModel.class,

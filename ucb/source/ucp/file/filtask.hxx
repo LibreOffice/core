@@ -637,7 +637,7 @@ namespace fileaccess
         // Helper function for mkfil,mkdir and write
         // Creates whole path
         // returns success of the operation
-        // The calle determines the errorCode, which should be used to install
+        // The call determines the errorCode, which should be used to install
         // any error
 
         bool SAL_CALL

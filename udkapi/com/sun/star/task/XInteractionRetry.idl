@@ -25,7 +25,7 @@
 
  module com {  module sun {  module star {  module task {
 
-/** An interaction continuation specifing to try to re-execute the process
+/** An interaction continuation specifying to try to re-execute the process
     that issued the request.
  */
 published interface XInteractionRetry: com::sun::star::task::XInteractionContinuation

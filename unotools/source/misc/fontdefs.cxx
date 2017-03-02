@@ -421,7 +421,7 @@ OUString GetEnglishSearchFontName(const OUString& rInName)
     {
         typedef std::unordered_map<OUString, const char*, OUStringHash> FontNameDictionary;
         static FontNameDictionary aDictionary( SAL_N_ELEMENTS(aImplLocalizedNamesList) );
-        // the font name dictionary needs to be intialized once
+        // the font name dictionary needs to be initialized once
         if( aDictionary.empty() )
         {
             // TODO: check if all dictionary entries are already normalized?
