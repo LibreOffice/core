@@ -111,7 +111,6 @@ namespace bib
         // TODO:
         // this is _strange_: Why not updating the existent general page?
         // I consider the current behaviour a HACK.
-        // frank.schoenheit@sun.com
         if ( m_pGeneralPage )
         {
             m_pGeneralPage->Hide();
