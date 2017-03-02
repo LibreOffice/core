@@ -221,7 +221,7 @@ void ScRandomNumberGeneratorDialog::SelectGeneratorAndGenerateNumbers()
         }
         case DIST_UNIFORM_INTEGER:
         {
-            std::uniform_int_distribution<> distribution(parameterInteger1, parameterInteger2);
+            std::uniform_int_distribution<sal_Int64> distribution(parameterInteger1, parameterInteger2);
             auto rng = std::bind(distribution, seed);
             GenerateNumbers(rng, STR_DISTRIBUTION_UNIFORM_INTEGER, aDecimalPlaces);
             break;
