@@ -274,7 +274,7 @@ RTFError RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nPara
 {
     if (m_rImport.getDestination() == Destination::SKIP)
     {
-        // skip binary data explicitely, to not trip over rtf markup
+        // skip binary data explicitly, to not trip over rtf markup
         // control characters
         if (rKeyword.equals("bin") && nParam > 0)
             Strm().SeekRel(nParam);

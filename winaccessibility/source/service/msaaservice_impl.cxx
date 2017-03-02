@@ -84,7 +84,7 @@ public:
 };
 
 /**
-   * Implemention of getAccObjectPtr.
+   * Implementation of getAccObjectPtr.
    * @param
    * @return Com interface.
    */
@@ -101,7 +101,7 @@ sal_Int64 MSAAServiceImpl::getAccObjectPtr(
 }
 
 /**
-   * Implemention of handleWindowOpened, the method will be invoked when a
+   * Implementation of handleWindowOpened, the method will be invoked when a
    * top window is opened and AT starts up.
    * @param
    * @return
@@ -126,7 +126,7 @@ OUString MSAAServiceImpl::getImplementationName()
 }
 
 /**
-   * Implemention of XServiceInfo,return support service name.
+   * Implementation of XServiceInfo, return support service name.
    * @param Service name.
    * @return If the service name is supported.
    */
@@ -136,7 +136,7 @@ sal_Bool MSAAServiceImpl::supportsService( OUString const & serviceName )
 }
 
 /**
-   * Implemention of XServiceInfo,return all service names.
+   * Implementation of XServiceInfo, return all service names.
    * @param.
    * @return service name sequence.
    */

@@ -67,7 +67,7 @@ namespace xmloff
     public:
         /** retrieves the tag name to be used to describe a control of the given type
 
-            <p>The retuned string is the pure element name, without any namespace.</p>
+            <p>The returned string is the pure element name, without any namespace.</p>
 
             @param  _eType
                 the element type

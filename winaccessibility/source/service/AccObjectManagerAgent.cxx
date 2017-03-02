@@ -81,8 +81,8 @@ void  AccObjectManagerAgent::UpdateValue( XAccessible* pXAcc, Any pAny )
 }
 
 /**
-   * Interface of updating MSAA value when UNO value_changed event occurs.If we can not
-   * find new value,we'll get new value from pXAcc to update com value.
+   * Interface of updating MSAA value when UNO value_changed event occurs. If we can not
+   * find new value, we'll get new value from pXAcc to update com value.
    * @param pXAcc Uno XAccessible interface of control.
    * @return
    */
@@ -135,7 +135,7 @@ void  AccObjectManagerAgent::UpdateDescription( XAccessible* pXAcc, Any newDesc 
 }
 
 /**
-   * When a new UNO XAccessible object is found by listener,we'll create a corresponding
+   * When a new UNO XAccessible object is found by listener, we create a corresponding
    * com object and insert it to our manager list.
    * @param pXAcc Uno XAccessible interface of control.
    * @param pWnd The top window handle containing control.
@@ -167,7 +167,7 @@ AccObjectManagerAgent::SaveTopWindowHandle(sal_Int64 hWnd, XAccessible* pXAcc)
 
 
 /**
-   * When a UNO XAccessible object's new children are found by listener,we'll create
+   * When a UNO XAccessible object's new children are found by listener, we create
    * corresponding com objects and insert them to our manager list.
    * @param pXAcc Uno XAccessible interface of control.
    * @param pWnd The top window handle containing control.
@@ -183,7 +183,7 @@ AccObjectManagerAgent::InsertChildrenAccObj(XAccessible* pXAcc, sal_Int64 pWnd)
 }
 
 /**
-   * When a new UNO XAccessible object is destroied,we'll delete its corresponding
+   * When a new UNO XAccessible object is destroyed, we delete its corresponding
    * com object and remove it from our manager list.
    * @param pXAcc Uno XAccessible interface of control.
    * @return
@@ -195,7 +195,7 @@ void AccObjectManagerAgent::DeleteAccObj( XAccessible* pXAcc )
 }
 
 /**
-   * When new UNO children XAccessible objects are destroyed,we'll delete their
+   * When new UNO children XAccessible objects are destroyed, we delete their
    * corresponding com objects and remove them from our manager list.
    * @param pXAcc Uno XAccessible interface of control.
    * @return

@@ -26,7 +26,7 @@ You can also instanciate the class, to encapsulate
 some functionality of SimpleFileAccess. The instance
 keeps a reference to an XSimpleFileAccess and an
 XFileIdentifierConverter, saves the permanent
-overhead of quering for those interfaces, and delivers
+overhead of querying for those interfaces, and delivers
 convenience methods for using them.
 These Convenince methods include mainly Exception-handling.
 '''
