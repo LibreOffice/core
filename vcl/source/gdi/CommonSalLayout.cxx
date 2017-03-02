@@ -112,7 +112,7 @@ void CommonSalLayout::getScale(double* nXScale, double* nYScale)
     double nHeight(mrFontSelData.mnHeight);
 #if defined(_WIN32)
     // On Windows, mnWidth is relative to average char width not font height,
-    // and wee need to keep it that way for GDI to correctly scale the glyphs.
+    // and we need to keep it that way for GDI to correctly scale the glyphs.
     // Here we compensate for this so that HarfBuzz gives us the correct glyph
     // positions.
     double nWidth(mrFontSelData.mnWidth ? mrFontSelData.mnWidth * mnAveWidthFactor : nHeight);
