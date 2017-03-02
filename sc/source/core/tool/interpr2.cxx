@@ -1880,10 +1880,13 @@ void ScInterpreter::ScPDuration()
 {
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
-        double nFuture = GetDouble();
-        double nPresent = GetDouble();
-        double nInterest = GetDouble();
-        PushDouble(log(nFuture / nPresent) / rtl::math::log1p(nInterest));
+        double fFuture = GetDouble();
+        double fPresent = GetDouble();
+        double fInterest = GetDouble();
+        if ( fFuture <= 0.0 || fPresent <= 0.0 || fInterest <= 0.0 )
+            PushIllegalArgument();
+        else
+            PushDouble( ( log( fFuture / fPresent ) / rtl::math::log1p( fInterest ) ) );
     }
 }
 
