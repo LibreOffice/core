@@ -51,7 +51,7 @@ const sal_Int32 MAX_ENTITY_LEN( 8L );
 // Tables to convert option values into strings
 
 // <INPUT TYPE=xxx>
-static HTMLOptionEnum const aInputTypeOptEnums[] =
+static HTMLOptionEnum<HTMLInputType> const aInputTypeOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_IT_text,      HTML_IT_TEXT        },
     { OOO_STRING_SVTOOLS_HTML_IT_password,  HTML_IT_PASSWORD    },
@@ -65,67 +65,35 @@ static HTMLOptionEnum const aInputTypeOptEnums[] =
     { OOO_STRING_SVTOOLS_HTML_IT_image,     HTML_IT_IMAGE       },
     { OOO_STRING_SVTOOLS_HTML_IT_reset,     HTML_IT_RESET       },
     { OOO_STRING_SVTOOLS_HTML_IT_button,    HTML_IT_BUTTON      },
-    { nullptr,                    0                   }
+    { nullptr,                              (HTMLInputType)0    }
 };
 
 // <TABLE FRAME=xxx>
-static HTMLOptionEnum const aTableFrameOptEnums[] =
+static HTMLOptionEnum<HTMLTableFrame> const aTableFrameOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_TF_void,  HTML_TF_VOID    },
-    { OOO_STRING_SVTOOLS_HTML_TF_above, HTML_TF_ABOVE   },
-    { OOO_STRING_SVTOOLS_HTML_TF_below, HTML_TF_BELOW   },
-    { OOO_STRING_SVTOOLS_HTML_TF_hsides,    HTML_TF_HSIDES  },
-    { OOO_STRING_SVTOOLS_HTML_TF_lhs,       HTML_TF_LHS     },
-    { OOO_STRING_SVTOOLS_HTML_TF_rhs,       HTML_TF_RHS     },
-    { OOO_STRING_SVTOOLS_HTML_TF_vsides,    HTML_TF_VSIDES  },
-    { OOO_STRING_SVTOOLS_HTML_TF_box,       HTML_TF_BOX     },
-    { OOO_STRING_SVTOOLS_HTML_TF_border,    HTML_TF_BOX     },
-    { nullptr,                0               }
+    { OOO_STRING_SVTOOLS_HTML_TF_void,    HTML_TF_VOID    },
+    { OOO_STRING_SVTOOLS_HTML_TF_above,   HTML_TF_ABOVE   },
+    { OOO_STRING_SVTOOLS_HTML_TF_below,   HTML_TF_BELOW   },
+    { OOO_STRING_SVTOOLS_HTML_TF_hsides,  HTML_TF_HSIDES  },
+    { OOO_STRING_SVTOOLS_HTML_TF_lhs,     HTML_TF_LHS     },
+    { OOO_STRING_SVTOOLS_HTML_TF_rhs,     HTML_TF_RHS     },
+    { OOO_STRING_SVTOOLS_HTML_TF_vsides,  HTML_TF_VSIDES  },
+    { OOO_STRING_SVTOOLS_HTML_TF_box,     HTML_TF_BOX     },
+    { OOO_STRING_SVTOOLS_HTML_TF_border,  HTML_TF_BOX     },
+    { nullptr,                            (HTMLTableFrame)0 }
 };
 
 // <TABLE RULES=xxx>
-static HTMLOptionEnum const aTableRulesOptEnums[] =
+static HTMLOptionEnum<HTMLTableRules> const aTableRulesOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_TR_none,  HTML_TR_NONE    },
-    { OOO_STRING_SVTOOLS_HTML_TR_groups,    HTML_TR_GROUPS  },
-    { OOO_STRING_SVTOOLS_HTML_TR_rows,  HTML_TR_ROWS    },
-    { OOO_STRING_SVTOOLS_HTML_TR_cols,  HTML_TR_COLS    },
-    { OOO_STRING_SVTOOLS_HTML_TR_all,       HTML_TR_ALL     },
-    { nullptr,                0               }
+    { OOO_STRING_SVTOOLS_HTML_TR_none,   HTML_TR_NONE      },
+    { OOO_STRING_SVTOOLS_HTML_TR_groups, HTML_TR_GROUPS    },
+    { OOO_STRING_SVTOOLS_HTML_TR_rows,   HTML_TR_ROWS      },
+    { OOO_STRING_SVTOOLS_HTML_TR_cols,   HTML_TR_COLS      },
+    { OOO_STRING_SVTOOLS_HTML_TR_all,    HTML_TR_ALL       },
+    { nullptr,                           (HTMLTableRules)0 }
 };
 
-sal_uInt16 HTMLOption::GetEnum( const HTMLOptionEnum *pOptEnums, sal_uInt16 nDflt ) const
-{
-    sal_uInt16 nValue = nDflt;
-
-    while( pOptEnums->pName )
-        if( aValue.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
-            break;
-        else
-            pOptEnums++;
-
-    if( pOptEnums->pName )
-        nValue = pOptEnums->nValue;
-
-    return nValue;
-}
-
-bool HTMLOption::GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const
-{
-    while( pOptEnums->pName )
-    {
-        if( aValue.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
-            break;
-        else
-            pOptEnums++;
-    }
-
-    const sal_Char *pName = pOptEnums->pName;
-    if( pName )
-        rEnum = pOptEnums->nValue;
-
-    return (pName != nullptr);
-}
 
 HTMLOption::HTMLOption( sal_uInt16 nTok, const OUString& rToken,
                         const OUString& rValue )
@@ -1876,7 +1844,7 @@ enum eHtmlMetas {
 };
 
 // <META NAME=xxx>
-static HTMLOptionEnum const aHTMLMetaNameTable[] =
+static HTMLOptionEnum<eHtmlMetas> const aHTMLMetaNameTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_META_author,        HTML_META_AUTHOR        },
     { OOO_STRING_SVTOOLS_HTML_META_changed,       HTML_META_CHANGED       },
@@ -1890,7 +1858,7 @@ static HTMLOptionEnum const aHTMLMetaNameTable[] =
     { OOO_STRING_SVTOOLS_HTML_META_refresh,       HTML_META_REFRESH       },
     { OOO_STRING_SVTOOLS_HTML_META_sdendnote,     HTML_META_SDENDNOTE     },
     { OOO_STRING_SVTOOLS_HTML_META_sdfootnote,    HTML_META_SDFOOTNOTE    },
-    { nullptr,                                          0                       }
+    { nullptr,                                    (eHtmlMetas)0           }
 };
 
 
@@ -1905,7 +1873,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
         rtl_TextEncoding& o_rEnc )
 {
     OUString aName, aContent;
-    sal_uInt16 nAction = HTML_META_NONE;
+    eHtmlMetas nAction = HTML_META_NONE;
     bool bHTTPEquiv = false, bChanged = false;
 
     for ( size_t i = aOptions.size(); i; )

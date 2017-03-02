@@ -126,24 +126,24 @@ using editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
 // <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> usw.
-HTMLOptionEnum aHTMLPAlignTable[] =
+HTMLOptionEnum<SvxAdjust> aHTMLPAlignTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_AL_left,  SVX_ADJUST_LEFT     },
-    { OOO_STRING_SVTOOLS_HTML_AL_center,    SVX_ADJUST_CENTER   },
-    { OOO_STRING_SVTOOLS_HTML_AL_middle,    SVX_ADJUST_CENTER   }, // Netscape
-    { OOO_STRING_SVTOOLS_HTML_AL_right, SVX_ADJUST_RIGHT    },
-    { OOO_STRING_SVTOOLS_HTML_AL_justify,   SVX_ADJUST_BLOCK    },
-    { OOO_STRING_SVTOOLS_HTML_AL_char,  SVX_ADJUST_LEFT     },
-    { nullptr,                0                   }
+    { OOO_STRING_SVTOOLS_HTML_AL_left,    SVX_ADJUST_LEFT     },
+    { OOO_STRING_SVTOOLS_HTML_AL_center,  SVX_ADJUST_CENTER   },
+    { OOO_STRING_SVTOOLS_HTML_AL_middle,  SVX_ADJUST_CENTER   }, // Netscape
+    { OOO_STRING_SVTOOLS_HTML_AL_right,   SVX_ADJUST_RIGHT    },
+    { OOO_STRING_SVTOOLS_HTML_AL_justify, SVX_ADJUST_BLOCK    },
+    { OOO_STRING_SVTOOLS_HTML_AL_char,    SVX_ADJUST_LEFT     },
+    { nullptr,                            (SvxAdjust)0        }
 };
 
 // <SPACER TYPE=...>
-static HTMLOptionEnum aHTMLSpacerTypeTable[] =
+static HTMLOptionEnum<sal_uInt16> aHTMLSpacerTypeTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_SPTYPE_block,     HTML_SPTYPE_BLOCK       },
-    { OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal,    HTML_SPTYPE_HORI        },
-    { OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical,  HTML_SPTYPE_VERT        },
-    { nullptr,                    0                       }
+    { OOO_STRING_SVTOOLS_HTML_SPTYPE_block,      HTML_SPTYPE_BLOCK       },
+    { OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal, HTML_SPTYPE_HORI        },
+    { OOO_STRING_SVTOOLS_HTML_SPTYPE_vertical,   HTML_SPTYPE_VERT        },
+    { nullptr,                                   0                       }
 };
 
 HTMLReader::HTMLReader()
@@ -3866,7 +3866,7 @@ void SwHTMLParser::NewPara()
                 aId = rOption.GetString();
                 break;
             case HTML_O_ALIGN:
-                m_eParaAdjust = (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(m_eParaAdjust) );
+                m_eParaAdjust = rOption.GetEnum( aHTMLPAlignTable, m_eParaAdjust );
                 break;
             case HTML_O_STYLE:
                 aStyle = rOption.GetString();
@@ -3985,7 +3985,7 @@ void SwHTMLParser::NewHeading( int nToken )
                 aId = rOption.GetString();
                 break;
             case HTML_O_ALIGN:
-                m_eParaAdjust = (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(m_eParaAdjust) );
+                m_eParaAdjust = rOption.GetEnum( aHTMLPAlignTable, m_eParaAdjust );
                 break;
             case HTML_O_STYLE:
                 aStyle = rOption.GetString();
@@ -5214,8 +5214,7 @@ void SwHTMLParser::InsertHorzRule()
             }
             break;
         case HTML_O_ALIGN:
-            eAdjust =
-                (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable, static_cast< sal_uInt16 >(eAdjust) );
+            eAdjust = rOption.GetEnum( aHTMLPAlignTable, eAdjust );
             break;
         case HTML_O_NOSHADE:
             bNoShade = true;

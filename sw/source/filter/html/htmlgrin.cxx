@@ -71,14 +71,14 @@
 
 using namespace ::com::sun::star;
 
-HTMLOptionEnum aHTMLImgHAlignTable[] =
+HTMLOptionEnum<sal_Int16> aHTMLImgHAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,    text::HoriOrientation::LEFT       },
     { OOO_STRING_SVTOOLS_HTML_AL_right,   text::HoriOrientation::RIGHT      },
-    { nullptr,                0               }
+    { nullptr,                            0               }
 };
 
-HTMLOptionEnum aHTMLImgVAlignTable[] =
+HTMLOptionEnum<sal_Int16> aHTMLImgVAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::LINE_TOP       },
     { OOO_STRING_SVTOOLS_HTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },
@@ -88,7 +88,7 @@ HTMLOptionEnum aHTMLImgVAlignTable[] =
     { OOO_STRING_SVTOOLS_HTML_VA_bottom,      text::VertOrientation::TOP            },
     { OOO_STRING_SVTOOLS_HTML_VA_baseline,    text::VertOrientation::TOP            },
     { OOO_STRING_SVTOOLS_HTML_VA_absbottom,   text::VertOrientation::LINE_BOTTOM    },
-    { nullptr,                    0                   }
+    { nullptr,                                0                   }
 };
 
 ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const

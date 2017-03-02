@@ -55,19 +55,19 @@
 
 using namespace css;
 
-static HTMLOptionEnum aHTMLMarqBehaviorTable[] =
+static HTMLOptionEnum<SdrTextAniKind> aHTMLMarqBehaviorTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,     SDRTEXTANI_SCROLL       },
-    { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate,  SDRTEXTANI_ALTERNATE    },
-    { OOO_STRING_SVTOOLS_HTML_BEHAV_slide,      SDRTEXTANI_SLIDE        },
-    { nullptr,                                        0                       }
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,    SDRTEXTANI_SCROLL       },
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate, SDRTEXTANI_ALTERNATE    },
+    { OOO_STRING_SVTOOLS_HTML_BEHAV_slide,     SDRTEXTANI_SLIDE        },
+    { nullptr,                                 (SdrTextAniKind)0       }
 };
 
-static HTMLOptionEnum aHTMLMarqDirectionTable[] =
+static HTMLOptionEnum<SdrTextAniDirection> aHTMLMarqDirectionTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_AL_left,          (sal_uInt16)SdrTextAniDirection::Left   },
-    { OOO_STRING_SVTOOLS_HTML_AL_right,         (sal_uInt16)SdrTextAniDirection::Right  },
-    { nullptr,                                  0                       }
+    { OOO_STRING_SVTOOLS_HTML_AL_left,  SdrTextAniDirection::Left   },
+    { OOO_STRING_SVTOOLS_HTML_AL_right, SdrTextAniDirection::Right  },
+    { nullptr,                          (SdrTextAniDirection)0      }
 };
 
 void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
@@ -281,9 +281,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 break;
 
             case HTML_O_BEHAVIOR:
-                eAniKind =
-                    (SdrTextAniKind)rOption.GetEnum( aHTMLMarqBehaviorTable,
-                                                      static_cast< sal_uInt16 >(eAniKind) );
+                eAniKind = rOption.GetEnum( aHTMLMarqBehaviorTable, eAniKind );
                 break;
 
             case HTML_O_BGCOLOR:
@@ -292,9 +290,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
                 break;
 
             case HTML_O_DIRECTION:
-                eAniDir =
-                    (SdrTextAniDirection)rOption.GetEnum( aHTMLMarqDirectionTable,
-                                                      static_cast< sal_uInt16 >(eAniDir) );
+                eAniDir = rOption.GetEnum( aHTMLMarqDirectionTable, eAniDir );
                 bDirection = true;
                 break;
 

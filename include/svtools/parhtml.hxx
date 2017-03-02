@@ -72,10 +72,11 @@ enum HTMLScriptLanguage
     HTML_SL_UNKNOWN
 };
 
+template<typename EnumT>
 struct HTMLOptionEnum
 {
     const sal_Char *pName;  // value of an HTML option
-    sal_uInt16 nValue;      // and corresponding value of an enum
+    EnumT           nValue; // and corresponding value of an enum
 };
 
 /** Representation of an HTML option (=attribute in a start tag).
@@ -105,10 +106,33 @@ public:
     void GetNumbers( std::vector<sal_uInt32> &rNumbers ) const; // ... as numbers
     void GetColor( Color& ) const;                      // ... as color
 
-    // ... as enum; pOptEnums is an HTMLOptionEnum array
-    sal_uInt16 GetEnum( const HTMLOptionEnum *pOptEnums,
-                        sal_uInt16 nDflt=0 ) const;
-    bool GetEnum( sal_uInt16 &rEnum, const HTMLOptionEnum *pOptEnums ) const;
+    template<typename EnumT>
+    EnumT GetEnum( const HTMLOptionEnum<EnumT> *pOptEnums,
+                        EnumT nDflt = static_cast<EnumT>(0) ) const
+    {
+        while( pOptEnums->pName )
+        {
+            if( aValue.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
+                return pOptEnums->nValue;
+            pOptEnums++;
+        }
+        return nDflt;
+    }
+
+    template<typename EnumT>
+    bool GetEnum( EnumT &rEnum, const HTMLOptionEnum<EnumT> *pOptEnums ) const
+    {
+        while( pOptEnums->pName )
+        {
+            if( aValue.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
+            {
+                rEnum = pOptEnums->nValue;
+                return true;
+            }
+            pOptEnums++;
+        }
+        return false;
+    }
 
     // ... and as a few special enums
     HTMLInputType GetInputType() const;                 // <INPUT TYPE=...>

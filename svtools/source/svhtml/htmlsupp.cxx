@@ -26,13 +26,13 @@
 #include <tools/urlobj.hxx>
 
 // Table for converting option values into strings
-static HTMLOptionEnum const aScriptLangOptEnums[] =
+static HTMLOptionEnum<HTMLScriptLanguage> const aScriptLangOptEnums[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_LG_starbasic, HTML_SL_STARBASIC   },
-    { OOO_STRING_SVTOOLS_HTML_LG_javascript,    HTML_SL_JAVASCRIPT  },
-    { OOO_STRING_SVTOOLS_HTML_LG_javascript11,HTML_SL_JAVASCRIPT    },
-    { OOO_STRING_SVTOOLS_HTML_LG_livescript,    HTML_SL_JAVASCRIPT  },
-    { nullptr,                    0                   }
+    { OOO_STRING_SVTOOLS_HTML_LG_starbasic,    HTML_SL_STARBASIC     },
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript,   HTML_SL_JAVASCRIPT    },
+    { OOO_STRING_SVTOOLS_HTML_LG_javascript11, HTML_SL_JAVASCRIPT    },
+    { OOO_STRING_SVTOOLS_HTML_LG_livescript,   HTML_SL_JAVASCRIPT    },
+    { nullptr,                                 (HTMLScriptLanguage)0 }
 };
 
 void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBaseURL,
@@ -57,7 +57,7 @@ void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBas
         case HTML_O_LANGUAGE:
             {
                 rLangString = aOption.GetString();
-                sal_uInt16 nLang;
+                HTMLScriptLanguage nLang;
                 if( aOption.GetEnum( nLang, aScriptLangOptEnums ) )
                     rLang = (HTMLScriptLanguage)nLang;
                 else

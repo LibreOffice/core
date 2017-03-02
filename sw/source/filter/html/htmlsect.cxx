@@ -75,8 +75,7 @@ void SwHTMLParser::NewDivision( int nToken )
             break;
         case HTML_O_ALIGN:
             if( HTML_DIVISION_ON==nToken )
-                eAdjust = (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable,
-                                                       static_cast< sal_uInt16 >(eAdjust) );
+                eAdjust = rOption.GetEnum( aHTMLPAlignTable, eAdjust );
             break;
         case HTML_O_STYLE:
             aStyle = rOption.GetString();
