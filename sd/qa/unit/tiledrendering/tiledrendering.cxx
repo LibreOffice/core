@@ -1481,7 +1481,7 @@ void SdTiledRenderingTest::testTdf104405()
     xmlDocPtr pXmlDoc = parseXmlDump();
     OString aPrefix = "/SdDrawDocument/SdrModel/SdPage/SdrObjList/SdrTableObj/SdrTableObjImpl"
                       "/TableModel/Cell[1]/DefaultProperties/SfxItemSet/SdrTextVertAdjustItem";
-    // the following name has a compiler-dependant part
+    // the following name has a compiler-dependent part
     CPPUNIT_ASSERT_EQUAL(getXPath(pXmlDoc, aPrefix, "value"), OUString("2"));
     xmlFreeDoc(pXmlDoc);
 
@@ -1575,7 +1575,7 @@ void SdTiledRenderingTest::testCommentCallbacks()
 {
     // Load the document.
     comphelper::LibreOfficeKit::setActive();
-    // Set the tield annotations off
+    // Set the tiled annotations off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
 
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp", comphelper::InitPropertySequence(

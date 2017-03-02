@@ -113,7 +113,7 @@ namespace {
 
     void lcl_CommentNotification(CommentNotificationType nType, const SfxViewShell* pViewShell, Reference<XAnnotation>& rxAnnotation)
     {
-        // callbacks only if tiled annotations are explicltly turned off by LOK client
+        // callbacks only if tiled annotations are explicitly turned off by LOK client
         if (!comphelper::LibreOfficeKit::isActive() || comphelper::LibreOfficeKit::isTiledAnnotations())
             return;
 

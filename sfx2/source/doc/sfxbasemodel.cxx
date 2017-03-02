@@ -4368,7 +4368,7 @@ SfxBaseModel::loadMetadataFromStorage(
     } catch (lang::IllegalArgumentException &) {
         throw; // not initialized
     } catch (Exception &) {
-        // UGLY: if it's a RuntimeException, we can't be sure DMA is initialzed
+        // UGLY: if it's a RuntimeException, we can't be sure DMA is initialized
         m_pData->m_xDocumentMetadata = xDMA;
         throw;
     }
@@ -4407,7 +4407,7 @@ SfxBaseModel::loadMetadataFromMedium(
     } catch (lang::IllegalArgumentException &) {
         throw; // not initialized
     } catch (Exception &) {
-        // UGLY: if it's a RuntimeException, we can't be sure DMA is initialzed
+        // UGLY: if it's a RuntimeException, we can't be sure DMA is initialized
         m_pData->m_xDocumentMetadata = xDMA;
         throw;
     }

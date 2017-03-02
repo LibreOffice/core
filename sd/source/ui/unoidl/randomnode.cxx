@@ -136,7 +136,7 @@ public:
     Reference< XAnimationNode > SAL_CALL appendChild( const Reference< XAnimationNode >& newChild ) override;
 
 private:
-    // our first, last and only protection from mutli-threads!
+    // our first, last and only protection from multi-threads!
     Mutex maMutex;
 
     sal_Int16 mnPresetClass;

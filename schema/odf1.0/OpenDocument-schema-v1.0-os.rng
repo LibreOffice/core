@@ -14009,7 +14009,7 @@
 <define name="shadowType">
     <choice>
         <value>none</value>
-        <!-- The follwing string must match an XSL shadow decl -->
+        <!-- The following string must match an XSL shadow decl -->
         <ref name="string"/>
     </choice>
 </define>

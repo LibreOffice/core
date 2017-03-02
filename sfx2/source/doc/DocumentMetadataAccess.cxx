@@ -439,7 +439,7 @@ mkException( OUString const & i_rMessage,
     <ul><li>(default:) cancel import, raise exception</li>
         <li>ignore the error and continue</li>
         <li>retry the action that led to the error</li></ul></p>
-    N.B.: must not be called before DMA is fully initalized!
+    N.B.: must not be called before DMA is fully initialized!
     @returns true iff caller should retry
  */
 static bool

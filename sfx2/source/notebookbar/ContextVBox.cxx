@@ -24,7 +24,7 @@
 #include <sfx2/notebookbar/NotebookbarContextControl.hxx>
 
 /*
- * ContextVBox is a VclVBox which shows own childs depending on current context.
+ * ContextVBox is a VclVBox which shows own children depending on current context.
  * This control can be used in the notebookbar .ui files
  */
 

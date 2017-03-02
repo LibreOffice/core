@@ -423,7 +423,7 @@ module addin
         double getPrice(
                     [in] com::sun::star::beans::XPropertySet xOptions,
                     [in] long Settlement, [in] long Maturity, [in] double Rate, [in] double Yield,
-                    [in] double Redemption, [in] long Frequncy, [in] any Base )
+                    [in] double Redemption, [in] long Frequency, [in] any Base )
             raises( com::sun::star::lang::IllegalArgumentException );
 
         /// pricedisc.
