@@ -553,6 +553,15 @@ DECLARE_WW8IMPORT_TEST(testTdf99120, "tdf99120.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("Section 2, even."),  parseDump("/root/page[4]/header/txt/text()"));
 }
 
+DECLARE_WW8IMPORT_TEST(testTdf106291, "tdf106291.doc")
+{
+    // Table cell was merged vertically instead of horizontally -> had incorrect dimensions
+    OUString cellWidth = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds", "width");
+    OUString cellHeight = parseDump("/root/page[1]/body/tab/row/cell[1]/infos/bounds", "height");
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(8660), cellWidth.toInt32());
+    CPPUNIT_ASSERT(cellHeight.toInt32() > 200); // height might depend on font size
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
