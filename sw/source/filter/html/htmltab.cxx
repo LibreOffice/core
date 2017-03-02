@@ -63,12 +63,12 @@
 using ::editeng::SvxBorderLine;
 using namespace ::com::sun::star;
 
-static HTMLOptionEnum aHTMLTableVAlignTable[] =
+static HTMLOptionEnum<sal_Int16> aHTMLTableVAlignTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::NONE       },
-    { OOO_STRING_SVTOOLS_HTML_VA_middle,      text::VertOrientation::CENTER     },
-    { OOO_STRING_SVTOOLS_HTML_VA_bottom,      text::VertOrientation::BOTTOM     },
-    { nullptr,                    0               }
+    { OOO_STRING_SVTOOLS_HTML_VA_top,     text::VertOrientation::NONE       },
+    { OOO_STRING_SVTOOLS_HTML_VA_middle,  text::VertOrientation::CENTER     },
+    { OOO_STRING_SVTOOLS_HTML_VA_bottom,  text::VertOrientation::BOTTOM     },
+    { nullptr,                            0               }
 };
 
 // table tags options
@@ -3043,12 +3043,10 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
                 m_nRowSpan = (sal_uInt16)rOption.GetNumber();
                 break;
             case HTML_O_ALIGN:
-                m_eAdjust = (SvxAdjust)rOption.GetEnum(
-                                        aHTMLPAlignTable, static_cast< sal_uInt16 >(m_eAdjust) );
+                m_eAdjust = rOption.GetEnum( aHTMLPAlignTable, m_eAdjust );
                 break;
             case HTML_O_VALIGN:
-                m_eVertOri = rOption.GetEnum(
-                                        aHTMLTableVAlignTable, m_eVertOri );
+                m_eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, m_eVertOri );
                 break;
             case HTML_O_WIDTH:
                 m_nWidth = (sal_uInt16)rOption.GetNumber();   // Just for Netscape
@@ -3761,9 +3759,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                         {
                             if( HTML_O_ALIGN==rOption.GetToken() )
                             {
-                                SvxAdjust eAdjust =
-                                    (SvxAdjust)rOption.GetEnum(
-                                            aHTMLPAlignTable, SVX_ADJUST_END );
+                                SvxAdjust eAdjust = rOption.GetEnum( aHTMLPAlignTable, SVX_ADJUST_END );
                                 bNeedsSection = SVX_ADJUST_LEFT == eAdjust ||
                                                 SVX_ADJUST_RIGHT == eAdjust;
                                 break;
@@ -4050,12 +4046,10 @@ void SwHTMLParser::BuildTableRow( HTMLTable *pCurTable, bool bReadOptions,
                     aId = rOption.GetString();
                     break;
                 case HTML_O_ALIGN:
-                    eAdjust = (SvxAdjust)rOption.GetEnum(
-                                    aHTMLPAlignTable, static_cast< sal_uInt16 >(eAdjust) );
+                    eAdjust = rOption.GetEnum( aHTMLPAlignTable, eAdjust );
                     break;
                 case HTML_O_VALIGN:
-                    eVertOri = rOption.GetEnum(
-                                    aHTMLTableVAlignTable, eVertOri );
+                    eVertOri = rOption.GetEnum( aHTMLTableVAlignTable, eVertOri );
                     break;
                 case HTML_O_BGCOLOR:
                     // Ignore empty BGCOLOR on <TABLE>, <TR> and <TD>/>TH> like Netscape
@@ -4248,8 +4242,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
                     break;
                 case HTML_O_ALIGN:
                     pSaveStruct->eAdjust =
-                        (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable,
-                                                     static_cast< sal_uInt16 >(pSaveStruct->eAdjust) );
+                        rOption.GetEnum( aHTMLPAlignTable, pSaveStruct->eAdjust );
                     break;
                 case HTML_O_VALIGN:
                     pSaveStruct->eVertOri =
@@ -4442,8 +4435,7 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                     break;
                 case HTML_O_ALIGN:
                     pSaveStruct->eColGrpAdjust =
-                        (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable,
-                                                static_cast< sal_uInt16 >(pSaveStruct->eColGrpAdjust) );
+                        rOption.GetEnum( aHTMLPAlignTable, pSaveStruct->eColGrpAdjust );
                     break;
                 case HTML_O_VALIGN:
                     pSaveStruct->eColGrpVertOri =
@@ -4523,14 +4515,11 @@ void SwHTMLParser::BuildTableColGroup( HTMLTable *pCurTable,
                             (rOption.GetString().indexOf('*') != -1);
                         break;
                     case HTML_O_ALIGN:
-                        eColAdjust =
-                            (SvxAdjust)rOption.GetEnum( aHTMLPAlignTable,
-                                                            static_cast< sal_uInt16 >(eColAdjust) );
+                        eColAdjust = rOption.GetEnum( aHTMLPAlignTable, eColAdjust );
                         break;
                     case HTML_O_VALIGN:
                         eColVertOri =
-                            rOption.GetEnum( aHTMLTableVAlignTable,
-                                                        eColVertOri );
+                            rOption.GetEnum( aHTMLTableVAlignTable, eColVertOri );
                         break;
                     }
                 }
@@ -4892,10 +4881,8 @@ HTMLTableOptions::HTMLTableOptions( const HTMLOptions& rOptions,
             break;
         case HTML_O_ALIGN:
             {
-                sal_uInt16 nAdjust = static_cast< sal_uInt16 >(eAdjust);
-                if( rOption.GetEnum( nAdjust, aHTMLPAlignTable ) )
+                if( rOption.GetEnum( eAdjust, aHTMLPAlignTable ) )
                 {
-                    eAdjust = (SvxAdjust)nAdjust;
                     bTableAdjust = true;
                 }
             }

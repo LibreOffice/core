@@ -61,9 +61,9 @@ struct ImplSVEvent;
 #define HTML_DFLT_IMG_HEIGHT (MM50*2)
 
 // ein par Sachen, die man oefter mal braucht
-extern HTMLOptionEnum aHTMLPAlignTable[];
-extern HTMLOptionEnum aHTMLImgHAlignTable[];
-extern HTMLOptionEnum aHTMLImgVAlignTable[];
+extern HTMLOptionEnum<SvxAdjust> aHTMLPAlignTable[];
+extern HTMLOptionEnum<sal_Int16> aHTMLImgHAlignTable[];
+extern HTMLOptionEnum<sal_Int16> aHTMLImgVAlignTable[];
 
 // der Attribut Stack:
 

@@ -47,15 +47,15 @@ using namespace ::com::sun::star;
 
 
 // <INPUT TYPE=xxx>
-static HTMLOptionEnum const aAreaShapeOptEnums[] =
+static HTMLOptionEnum<sal_uInt16> const aAreaShapeOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_SH_rect,      IMAP_OBJ_RECTANGLE  },
     { OOO_STRING_SVTOOLS_HTML_SH_rectangle, IMAP_OBJ_RECTANGLE  },
     { OOO_STRING_SVTOOLS_HTML_SH_circ,      IMAP_OBJ_CIRCLE     },
     { OOO_STRING_SVTOOLS_HTML_SH_circle,    IMAP_OBJ_CIRCLE     },
-    { OOO_STRING_SVTOOLS_HTML_SH_poly,          IMAP_OBJ_POLYGON    },
-    { OOO_STRING_SVTOOLS_HTML_SH_polygon,       IMAP_OBJ_POLYGON    },
-    { nullptr,                    0                   }
+    { OOO_STRING_SVTOOLS_HTML_SH_poly,      IMAP_OBJ_POLYGON    },
+    { OOO_STRING_SVTOOLS_HTML_SH_polygon,   IMAP_OBJ_POLYGON    },
+    { nullptr,                              0                   }
 };
 
 SfxHTMLParser::SfxHTMLParser( SvStream& rStream, bool bIsNewDoc,

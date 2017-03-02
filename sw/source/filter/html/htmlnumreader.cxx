@@ -43,12 +43,12 @@
 using namespace css;
 
 // <UL TYPE=...>
-static HTMLOptionEnum aHTMLULTypeTable[] =
+static HTMLOptionEnum<sal_Unicode> aHTMLULTypeTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,      HTML_BULLETCHAR_DISC   },
-    { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,    HTML_BULLETCHAR_CIRCLE },
-    { OOO_STRING_SVTOOLS_HTML_ULTYPE_square,    HTML_BULLETCHAR_SQUARE },
-    { nullptr,                                        0                      }
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,    HTML_BULLETCHAR_DISC   },
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,  HTML_BULLETCHAR_CIRCLE },
+    { OOO_STRING_SVTOOLS_HTML_ULTYPE_square,  HTML_BULLETCHAR_SQUARE },
+    { nullptr,                                0                      }
 };
 
 
@@ -157,7 +157,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
                     break;
 
                 case HTML_UNORDERLIST_ON:
-                    aNumFormat.SetBulletChar( (sal_Unicode)rOption.GetEnum(
+                    aNumFormat.SetBulletChar( rOption.GetEnum(
                                     aHTMLULTypeTable,aNumFormat.GetBulletChar() ) );
                     bChangeNumFormat = true;
                     break;
@@ -205,9 +205,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             nHeight = (sal_uInt16)rOption.GetNumber();
             break;
         case HTML_O_ALIGN:
-            eVertOri =
-                (sal_Int16)rOption.GetEnum( aHTMLImgVAlignTable,
-                                                static_cast< sal_uInt16 >(eVertOri) );
+            eVertOri = rOption.GetEnum( aHTMLImgVAlignTable, eVertOri );
             break;
         }
     }

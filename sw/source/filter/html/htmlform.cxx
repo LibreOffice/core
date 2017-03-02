@@ -85,31 +85,31 @@ using namespace ::com::sun::star::form;
 const sal_uInt16 TABINDEX_MIN = 0;
 const sal_uInt16 TABINDEX_MAX = 32767;
 
-static HTMLOptionEnum aHTMLFormMethodTable[] =
+static HTMLOptionEnum<FormSubmitMethod> aHTMLFormMethodTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_METHOD_get,       FormSubmitMethod_GET    },
+    { OOO_STRING_SVTOOLS_HTML_METHOD_get,   FormSubmitMethod_GET    },
     { OOO_STRING_SVTOOLS_HTML_METHOD_post,  FormSubmitMethod_POST   },
-    { nullptr,                    0                       }
+    { nullptr,                              (FormSubmitMethod)0     }
 };
 
-static HTMLOptionEnum aHTMLFormEncTypeTable[] =
+static HTMLOptionEnum<FormSubmitEncoding> aHTMLFormEncTypeTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_ET_url,           FormSubmitEncoding_URL          },
+    { OOO_STRING_SVTOOLS_HTML_ET_url,       FormSubmitEncoding_URL          },
     { OOO_STRING_SVTOOLS_HTML_ET_multipart, FormSubmitEncoding_MULTIPART    },
     { OOO_STRING_SVTOOLS_HTML_ET_text,      FormSubmitEncoding_TEXT         },
-    { nullptr,                    0                               }
+    { nullptr,                              (FormSubmitEncoding)0           }
 };
 
 enum HTMLWordWrapMode { HTML_WM_OFF, HTML_WM_HARD, HTML_WM_SOFT };
 
-static HTMLOptionEnum aHTMLTextAreaWrapTable[] =
+static HTMLOptionEnum<HTMLWordWrapMode> aHTMLTextAreaWrapTable[] =
 {
-    { OOO_STRING_SVTOOLS_HTML_WW_off,       HTML_WM_OFF },
-    { OOO_STRING_SVTOOLS_HTML_WW_hard,  HTML_WM_HARD    },
-    { OOO_STRING_SVTOOLS_HTML_WW_soft,  HTML_WM_SOFT    },
-    { OOO_STRING_SVTOOLS_HTML_WW_physical,HTML_WM_HARD  },
-    { OOO_STRING_SVTOOLS_HTML_WW_virtual,   HTML_WM_SOFT    },
-    { nullptr,                0               }
+    { OOO_STRING_SVTOOLS_HTML_WW_off,      HTML_WM_OFF     },
+    { OOO_STRING_SVTOOLS_HTML_WW_hard,     HTML_WM_HARD    },
+    { OOO_STRING_SVTOOLS_HTML_WW_soft,     HTML_WM_SOFT    },
+    { OOO_STRING_SVTOOLS_HTML_WW_physical, HTML_WM_HARD    },
+    { OOO_STRING_SVTOOLS_HTML_WW_virtual,  HTML_WM_SOFT    },
+    { nullptr,                             (HTMLWordWrapMode)0 }
 };
 
 HTMLEventType aEventTypeTable[] =
@@ -1230,8 +1230,8 @@ void SwHTMLParser::NewForm( bool bAppend )
 
     OUString aAction( m_sBaseURL );
     OUString sName, sTarget;
-    sal_uInt16 nEncType = FormSubmitEncoding_URL;
-    sal_uInt16 nMethod = FormSubmitMethod_GET;
+    FormSubmitEncoding nEncType = FormSubmitEncoding_URL;
+    FormSubmitMethod nMethod = FormSubmitMethod_GET;
     SvxMacroTableDtor aMacroTable;
     std::vector<OUString> aUnoMacroTable;
     std::vector<OUString> aUnoMacroParamTable;
@@ -1878,7 +1878,7 @@ void SwHTMLParser::NewTextArea()
     std::vector<OUString> aUnoMacroTable;
     std::vector<OUString> aUnoMacroParamTable;
     sal_uInt16 nRows = 0, nCols = 0;
-    sal_uInt16 nWrap = HTML_WM_OFF;
+    HTMLWordWrapMode nWrap = HTML_WM_OFF;
     bool bDisabled = false;
     SvKeyValueIterator *pHeaderAttrs = m_pFormImpl->GetHeaderAttrs();
     ScriptType eDfltScriptType = GetScriptType( pHeaderAttrs );
