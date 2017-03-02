@@ -6370,31 +6370,6 @@ if test "$_os" != "WINNT"; then
         fi
     fi
 
-    sharedlink_ldflags_save=$LDFLAGS
-    LDFLAGS="$LDFLAGS -fvisibility-inlines-hidden $PICSWITCH $LINKFLAGSSHL"
-
-    AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe with STL headers])
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
-#include <sstream>
-using namespace std;
-        ]], [[
-istringstream strm( "test" ); return 0;
-        ]])],
-        # Ugh, surely bad to assume an error message will contain
-        # the word "unresolvable", a problem with
-        # -fvisibility-inlines-hidden and STL headers might cause
-        # some more obscure message on some platform, and anway,
-        # the error message could be localised.
-        [$EGREP -q unresolvable conftest.err;
-        if test $? -eq 0; then gccvisok=no; else gccvisok=yes; fi],[gccvisok=no
-    ])
-    AC_MSG_RESULT([$gccvisok])
-    if test "$gccvisok" = "no"; then
-        AC_MSG_ERROR([Your gcc is not -fvisibility-inlines-hidden safe. This is no longer supported.])
-    fi
-
-    LDFLAGS=$sharedlink_ldflags_save
-
     # As the below test checks things when linking self-compiled dynamic libraries, it presumably is irrelevant
     # when we don't make any dynamic libraries?
     if test "$DISABLE_DYNLOADING" = ""; then
