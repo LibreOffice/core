@@ -103,8 +103,54 @@
 #include <svx/AffineMatrixItem.hxx>
 #include <svx/galleryitem.hxx>
 
+#ifdef DISABLE_DYNLOADING
+/* Avoid clash with the ones from svx/source/form/typemap.cxx */
+#define aSfxInt16Item_Impl sd_source_core_typemap_aSfxInt16Item_Impl
+#define aSfxInt32Item_Impl sd_source_core_typemap_aSfxInt32Item_Impl
+#define aSfxUnoFrameItem_Impl sd_source_core_typemap_aSfxUnoFrameItem_Impl
+#define aSvxClipboardFormatItem_Impl sd_source_core_typemap_aSvxClipboardFormatItem_Impl
+#define aSvxColorItem_Impl sd_source_core_typemap_aSvxColorItem_Impl
+#define aSvxContourItem_Impl sd_source_core_typemap_aSvxContourItem_Impl
+#define aSvxCrossedOutItem_Impl sd_source_core_typemap_aSvxCrossedOutItem_Impl
+#define aSvxFontHeightItem_Impl sd_source_core_typemap_aSvxFontHeightItem_Impl
+#define aSvxFontItem_Impl sd_source_core_typemap_aSvxFontItem_Impl
+#define aSvxKerningItem_Impl sd_source_core_typemap_aSvxKerningItem_Impl
+#define aSvxLRSpaceItem_Impl sd_source_core_typemap_aSvxLRSpaceItem_Impl
+#define aSvxLanguageItem_Impl sd_source_core_typemap_aSvxLanguageItem_Impl
+#define aSvxLineSpacingItem_Impl sd_source_core_typemap_aSvxLineSpacingItem_Impl
+#define aSvxPostureItem_Impl sd_source_core_typemap_aSvxPostureItem_Impl
+#define aSvxShadowedItem_Impl sd_source_core_typemap_aSvxShadowedItem_Impl
+#define aSvxTextLineItem_Impl sd_source_core_typemap_aSvxTextLineItem_Impl
+#define aSvxULSpaceItem_Impl sd_source_core_typemap_aSvxULSpaceItem_Impl
+#define aSvxWeightItem_Impl sd_source_core_typemap_aSvxWeightItem_Impl
+#define aSvxSearchItem_Impl sd_source_core_typemap_aSvxSearchItem_Impl
+#define aSvxSizeItem_Impl sd_source_core_typemap_aSvxSizeItem_Impl
+#endif
+
 #define SFX_TYPEMAP
 #include "sdslots.hxx"
 
+#ifdef DISABLE_DYNLOADING
+#undef aSfxInt16Item_Impl
+#undef aSfxInt32Item_Impl
+#undef aSfxUnoFrameItem_Impl
+#undef aSvxClipboardFormatItem_Impl
+#undef aSvxColorItem_Impl
+#undef aSvxContourItem_Impl
+#undef aSvxCrossedOutItem_Impl
+#undef aSvxFontHeightItem_Impl
+#undef aSvxFontItem_Impl
+#undef aSvxKerningItem_Impl
+#undef aSvxLRSpaceItem_Impl
+#undef aSvxLanguageItem_Impl
+#undef aSvxLineSpacingItem_Impl
+#undef aSvxPostureItem_Impl
+#undef aSvxShadowedItem_Impl
+#undef aSvxTextLineItem_Impl
+#undef aSvxULSpaceItem_Impl
+#undef aSvxWeightItem_Impl
+#undef aSvxSearchItem_Impl
+#undef aSvxSizeItem_Impl
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
