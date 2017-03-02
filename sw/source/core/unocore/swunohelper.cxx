@@ -28,7 +28,7 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/types.hxx>
+#include <comphelper/extract.hxx>
 #include <o3tl/any.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/datetime.hxx>
@@ -50,17 +50,10 @@ namespace SWUnoHelper
 
 sal_Int32 GetEnumAsInt32( const css::uno::Any& rVal )
 {
-    sal_Int32 eVal;
-    try
-    {
-        eVal = comphelper::getEnumAsINT32( rVal );
-    }
-    catch( css::uno::Exception & )
-    {
-        eVal = 0;
-        OSL_FAIL( "can't get EnumAsInt32" );
-    }
-    return eVal;
+    sal_Int32 nReturn = 0;
+    if (! ::cppu::enum2int(nReturn,rVal) )
+         OSL_FAIL( "can't get EnumAsInt32" );
+    return nReturn;
 }
 
 // methods for UCB actions
