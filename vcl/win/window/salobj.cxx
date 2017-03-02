@@ -509,7 +509,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
         HWND hWndChild = nullptr;
         if ( hWnd )
         {
-            // #135235# Explicitely stack SystemChildWindows in
+            // #135235# Explicitly stack SystemChildWindows in
             // the order they're created - since there's no notion
             // of zorder.
             SetWindowPos(hWnd,HWND_TOP,0,0,0,0,

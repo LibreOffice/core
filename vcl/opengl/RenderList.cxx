@@ -40,7 +40,7 @@ void appendPolyLine(vcl::LineBuilder& rBuilder, const basegfx::B2DPolygon& rPoly
     if (nPoints == 2 || eLineJoin == basegfx::B2DLineJoin::NONE)
     {
         // If line joint is NONE or a simple line with 2 points, draw the polyline
-        // each line segment separatly.
+        // each line segment separately.
 
         for (sal_uInt32 i = 0; i < (bClosed ? nPoints : nPoints - 1); ++i)
         {
@@ -74,7 +74,7 @@ void appendPolyLine(vcl::LineBuilder& rBuilder, const basegfx::B2DPolygon& rPoly
             rBuilder.appendAndConnectLinePoint(p1, normal, 1.0f);
 
             i++; // first point done already
-            lastPoint--; // last point will be calculated separatly from the loop
+            lastPoint--; // last point will be calculated separately from the loop
 
             p0 = p1;
             previousLineVector = nextLineVector;
