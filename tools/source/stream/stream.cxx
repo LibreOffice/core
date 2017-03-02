@@ -1830,7 +1830,7 @@ bool SvMemoryStream::AllocateMemory( std::size_t nNewSize )
 // (using Bozo algorithm)
 bool SvMemoryStream::ReAllocateMemory( long nDiff )
 {
-    if (!bOwnsData)
+    if (!m_isWritable || !bOwnsData)
         return false;
 
     bool bRetVal    = false;
@@ -1916,6 +1916,12 @@ void* SvMemoryStream::SwitchBuffer()
 
 void SvMemoryStream::SetSize(sal_uInt64 const nNewSize)
 {
+    if (!m_isWritable)
+    {
+        SetError(SVSTREAM_INVALID_HANDLE);
+        return;
+    }
+
     long nDiff = (long)nNewSize - (long)nSize;
     ReAllocateMemory( nDiff );
 }
