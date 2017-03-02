@@ -196,11 +196,6 @@ String RID_ERR_RBRACEEXPECTED
     Text [ en-US ] = "')' expected" ;
 };
 
-String RID_ERR_FUNCEXPECTED
-{
-    Text [ en-US ] = "Function expected" ;
-};
-
 String RID_ERR_POUNDEXPECTED
 {
     Text [ en-US ] = "'#' expected" ;
