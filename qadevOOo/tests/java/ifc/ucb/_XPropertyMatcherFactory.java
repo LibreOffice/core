@@ -41,7 +41,7 @@ public class _XPropertyMatcherFactory extends MultiMethodTest {
 
     /**
     * Tries to create <code>XPropertyMatcher</code> implementation. <p>
-    * Has <b>OK</b> status if not null alue returned.
+    * Has <b>OK</b> status if not null value returned.
     */
     public void _createPropertyMatcher() {
         RuleTerm term = new RuleTerm() ;

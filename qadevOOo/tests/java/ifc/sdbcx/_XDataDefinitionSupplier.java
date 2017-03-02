@@ -134,7 +134,7 @@ public class _XDataDefinitionSupplier extends MultiMethodTest {
     /**
      * Calls the method with url and info obtained from the relations
      * <code>XDriver.URL</code> and <code>XDriver.INFO</code>.
-     * Checks that retuned value isn't null.
+     * Checks that returned value isn't null.
      * Then calls the method with the unsuitable url obtained from the relation
      * <code>XDriver.UNSUITABLE_URL</code> and checks that SQLException
      * exception was thrown.

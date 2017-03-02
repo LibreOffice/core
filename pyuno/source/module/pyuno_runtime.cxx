@@ -501,7 +501,7 @@ PyRef Runtime::any2PyObject (const Any &a ) const
         Sequence< sal_Int8 > byteSequence;
         if( a >>= byteSequence )
         {
-            // byte sequence is treated in a special way because of peformance reasons
+            // byte sequence is treated in a special way because of performance reasons
             // @since 0.9.2
             return PyRef( PyUNO_ByteSequence_new( byteSequence, *this ), SAL_NO_ACQUIRE );
         }

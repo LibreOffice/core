@@ -49,7 +49,7 @@ public class SwAccessibleDocumentPageView extends TestCase {
     /**
     * Called to create an instance of <code>TestEnvironment</code>
     * with an object to test and related objects.
-    * Switchs the document to Print Preview mode.
+    * Switch the document to Print Preview mode.
     * Obtains accissible object for the document page view.
     *
     * @param Param test parameters

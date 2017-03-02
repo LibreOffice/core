@@ -179,7 +179,7 @@ public:
                     // sets all default values
     virtual void    SetToDefault( const RSCINST & rInst );
 
-                    // wether input is equal to default
+                    // whether input is equal to default
     virtual bool    IsDefault( const RSCINST & rInst );
 
                     // sets value to default
