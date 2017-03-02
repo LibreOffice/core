@@ -33,7 +33,7 @@ namespace svgio
             maSvgStyleAttributes(*this),
             mpaTransform(nullptr)
         {
-            OSL_ENSURE(aType == SVGTokenDefs || aType == SVGTokenG, "SvgGNode should ony be used for Group and Defs (!)");
+            OSL_ENSURE(aType == SVGTokenDefs || aType == SVGTokenG, "SvgGNode should only be used for Group and Defs (!)");
         }
 
         SvgGNode::~SvgGNode()

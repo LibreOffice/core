@@ -390,7 +390,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
             return;
 
         // Check if we are already initialized. Implementation starts adding itself as status listener when
-        // intialize is called.
+        // initialize is called.
         if ( !m_bInitialized )
         {
             // Put into the unordered_map of status listener. Will be activated when initialized is called
@@ -399,7 +399,7 @@ void ToolboxController::addStatusListener( const OUString& aCommandURL )
         }
         else
         {
-            // Add status listener directly as intialize has already been called.
+            // Add status listener directly as initialize has already been called.
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( m_xContext.is() && xDispatchProvider.is() )
             {
