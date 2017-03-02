@@ -1656,7 +1656,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun )
         mpFS->endElementNS( XML_a, XML_r );
 }
 
-OUString GetAutoNumType(sal_Int16 nNumberingType, bool bSDot, bool bPBehind, bool bPBoth)
+OUString GetAutoNumType(SvxExtNumType nNumberingType, bool bSDot, bool bPBehind, bool bPBoth)
 {
     OUString sPrefixSuffix;
 
@@ -1667,7 +1667,7 @@ OUString GetAutoNumType(sal_Int16 nNumberingType, bool bSDot, bool bPBehind, boo
     else if (bSDot)
         sPrefixSuffix = "Period";
 
-    switch( (SvxExtNumType)nNumberingType )
+    switch( nNumberingType )
     {
         case SVX_NUM_CHARS_UPPER_LETTER_N :
         case SVX_NUM_CHARS_UPPER_LETTER :
@@ -1719,7 +1719,7 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
 
     const PropertyValue* pPropValue = aPropertySequence.getArray();
 
-    sal_Int16 nNumberingType = SVX_NUM_NUMBER_NONE;
+    SvxExtNumType nNumberingType = SVX_NUM_NUMBER_NONE;
     bool bSDot = false;
     bool bPBehind = false;
     bool bPBoth = false;
@@ -1738,7 +1738,7 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
         SAL_INFO("oox.shape", "pro name: " << aPropName);
         if ( aPropName == "NumberingType" )
         {
-            nNumberingType = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+            nNumberingType = (SvxExtNumType)*o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
         }
         else if ( aPropName == "Prefix" )
         {

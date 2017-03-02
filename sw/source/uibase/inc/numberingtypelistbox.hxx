@@ -22,6 +22,7 @@
 #include <vcl/lstbox.hxx>
 #include "swdllapi.h"
 #include <o3tl/typed_flags_set.hxx>
+#include <editeng/svxenum.hxx>
 
 enum class SwInsertNumTypes
 {
@@ -49,10 +50,10 @@ public:
 
     virtual bool set_property(const OString &rKey, const OString &rValue) override;
 
-    void        Reload(SwInsertNumTypes nTypeFlags);
+    void          Reload(SwInsertNumTypes nTypeFlags);
 
-    sal_Int16   GetSelectedNumberingType();
-    bool    SelectNumberingType(sal_Int16 nType);
+    SvxExtNumType GetSelectedNumberingType();
+    bool          SelectNumberingType(SvxExtNumType nType);
 };
 
 #endif

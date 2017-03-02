@@ -69,8 +69,8 @@ public:
 
     SwFormatFootnoteEndAtTextEnd & operator=( const SwFormatFootnoteEndAtTextEnd & rAttr );
 
-    sal_Int16 GetNumType() const        { return aFormat.GetNumberingType(); }
-    void SetNumType( sal_Int16 eType )  { aFormat.SetNumberingType(eType); }
+    SvxExtNumType GetNumType() const        { return aFormat.GetNumberingType(); }
+    void SetNumType( SvxExtNumType eType )  { aFormat.SetNumberingType(eType); }
 
     const SvxNumberType& GetSwNumType() const   { return aFormat; }
 

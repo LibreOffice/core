@@ -25,14 +25,15 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <editeng/svxenum.hxx>
 #include <vector>
 #include <toxe.hxx>
+
 class SwDoc;
 class SvNumberFormatter;
 
-enum RES_FIELDS
-{
- /// For old documents the Field-Which IDs must be preserved !!!
+enum RES_FIELDS {
+/// For old documents the Field-Which IDs must be preserved !!!
     RES_FIELDS_BEGIN,
     RES_DBFLD = RES_FIELDS_BEGIN,
     RES_USERFLD,
@@ -77,9 +78,8 @@ enum RES_FIELDS
     RES_FIELDS_END
 };
 
- /// List of FieldTypes at UI.
-enum SwFieldTypesEnum
-{
+/// List of FieldTypes at UI.
+enum SwFieldTypesEnum {
     TYP_BEGIN,
     TYP_DATEFLD = TYP_BEGIN,    // 0
     TYP_TIMEFLD,
@@ -126,8 +126,7 @@ enum SwFieldTypesEnum
     TYP_DROPDOWN,
     TYP_END
 };
-enum SwAttrFieldTYpe
-{
+enum SwAttrFieldTYpe {
     ATTR_NONE,
     ATTR_DATEFLD,
     ATTR_TIMEFLD,
@@ -136,8 +135,7 @@ enum SwAttrFieldTYpe
     ATTR_BOOKMARKFLD,
     ATTR_SETREFATTRFLD
 };
-enum SwFileNameFormat
-{
+enum SwFileNameFormat {
     FF_BEGIN,
     FF_NAME = FF_BEGIN,
     FF_PATHNAME,
@@ -149,8 +147,7 @@ enum SwFileNameFormat
     FF_FIXED = 0x8000
 };
 
-enum SwVarFormat
-{
+enum SwVarFormat {
     VVF_CMD         = 0x0010,   ///< Show command.
     VVF_INVISIBLE   = 0x0040,   ///< Invisible.
     VVF_XXP         = 0x0400,   ///< 1234%
@@ -188,43 +185,40 @@ enum SwVarFormat
 typedef sal_uInt16 SwGetSetExpType;
 namespace nsSwGetSetExpType
 {
-    const SwGetSetExpType GSE_STRING  = 0x0001; ///< String
-    const SwGetSetExpType GSE_EXPR    = 0x0002; ///< Expression
-    const SwGetSetExpType GSE_INP     = 0x0004; ///< InputField
-    const SwGetSetExpType GSE_SEQ     = 0x0008; ///< Sequence
-    const SwGetSetExpType GSE_FORMULA = 0x0010; ///< Formula
+const SwGetSetExpType GSE_STRING  = 0x0001; ///< String
+const SwGetSetExpType GSE_EXPR    = 0x0002; ///< Expression
+const SwGetSetExpType GSE_INP     = 0x0004; ///< InputField
+const SwGetSetExpType GSE_SEQ     = 0x0008; ///< Sequence
+const SwGetSetExpType GSE_FORMULA = 0x0010; ///< Formula
 }
 
 typedef sal_uInt16 SwExtendedSubType;
 namespace nsSwExtendedSubType
 {
-    const SwExtendedSubType SUB_CMD         = 0x0100;   ///< Show command.
-    const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   ///< Invisible.
-    const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   ///< SwDBField: Don't accept formatting from database.
+const SwExtendedSubType SUB_CMD         = 0x0100;   ///< Show command.
+const SwExtendedSubType SUB_INVISIBLE   = 0x0200;   ///< Invisible.
+const SwExtendedSubType SUB_OWN_FMT     = 0x0400;   ///< SwDBField: Don't accept formatting from database.
 }
 
-enum SwInputFieldSubType
-{
+enum SwInputFieldSubType {
     INP_TXT     = 0x01,
     INP_USR     = 0x02,
     INP_VAR     = 0x03
 };
 
-enum SwUserType
-{
+enum SwUserType {
     UF_STRING   = 0x01,
     UF_EXPR     = 0x02
 };
 
-enum SwDateTimeSubType
-{
+enum SwDateTimeSubType {
     FIXEDFLD = 1,
     DATEFLD  = 2,
     TIMEFLD  = 4
 };
 
 /// General tools.
-OUString  FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat);
+OUString  FormatNumber(sal_uInt32 nNum, SvxExtNumType nFormat);
 
 /** Instances of SwFields and those derived from it occur 0 to n times.
  For each class there is one instance of the associated type class.
@@ -247,10 +241,12 @@ protected:
 
 public:
 
-    SAL_DLLPRIVATE css::uno::WeakReference<css::beans::XPropertySet> const& GetXObject() const
-            { return m_wXFieldMaster; }
-    SAL_DLLPRIVATE void SetXObject(css::uno::Reference<css::beans::XPropertySet> const& xFieldMaster)
-            { m_wXFieldMaster = xFieldMaster; }
+    SAL_DLLPRIVATE css::uno::WeakReference<css::beans::XPropertySet> const& GetXObject() const {
+        return m_wXFieldMaster;
+    }
+    SAL_DLLPRIVATE void SetXObject(css::uno::Reference<css::beans::XPropertySet> const& xFieldMaster) {
+        m_wXFieldMaster = xFieldMaster;
+    }
 
     static OUString    GetTypeStr( sal_uInt16 nTypeId );
 
@@ -260,7 +256,9 @@ public:
     virtual bool QueryValue( css::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool PutValue( const css::uno::Any& rVal, sal_uInt16 nWhich );
 
-            sal_uInt16          Which() const { return m_nWhich; }
+    sal_uInt16          Which() const {
+        return m_nWhich;
+    }
 
     inline  void            UpdateFields() const;
 };
@@ -276,20 +274,20 @@ inline void SwFieldType::UpdateFields() const
 class SW_DLLPUBLIC SwField
 {
 private:
-    mutable OUString    m_Cache;     ///< Cached expansion (for clipboard).
-    bool m_bUseFieldValueCache; /// control the usage of the cached field value
-
-    sal_uInt16          m_nLang;   ///< Always change via SetLanguage!
+    mutable OUString    m_Cache;                ///< Cached expansion (for clipboard).
+    bool                m_bUseFieldValueCache;  /// control the usage of the cached field value
+    sal_uInt16          m_nLang;                ///< Always change via SetLanguage!
     bool                m_bIsAutomaticLanguage;
-    sal_uInt32          m_nFormat;
-
+    sal_uInt32          m_nFormat;              /// this can be either SvxExtNumType or SwChapterFormat depending on the subtype
     SwFieldType*        m_pType;
 
     virtual OUString    Expand() const = 0;
     virtual SwField*    Copy() const = 0;
 
 protected:
-    void                SetFormat(sal_uInt32 const nSet) { m_nFormat = nSet; }
+    void                SetFormat(sal_uInt32 const nSet) {
+        m_nFormat = nSet;
+    }
 
     SwField( SwFieldType* pTyp,
              sal_uInt32 nFormat = 0,
@@ -322,13 +320,15 @@ public:
     /// ResId
     sal_uInt16              Which() const
 #ifdef DBG_UTIL
-        ;       // implemented in fldbas.cxx
+    ;       // implemented in fldbas.cxx
 #else
-        { return m_pType->Which(); }
+    {
+        return m_pType->Which();
+    }
 #endif
 
     // TYP_ID
-            sal_uInt16      GetTypeId() const;
+    sal_uInt16      GetTypeId() const;
     virtual sal_uInt16      GetSubType() const;
     virtual void        SetSubType(sal_uInt16);
 
@@ -354,8 +354,12 @@ public:
     bool            HasClickHdl() const;
     bool            IsFixed() const;
 
-    bool IsAutomaticLanguage() const { return m_bIsAutomaticLanguage;}
-    void SetAutomaticLanguage(bool const bSet) {m_bIsAutomaticLanguage = bSet;}
+    bool IsAutomaticLanguage() const {
+        return m_bIsAutomaticLanguage;
+    }
+    void SetAutomaticLanguage(bool const bSet) {
+        m_bIsAutomaticLanguage = bSet;
+    }
 
     virtual OUString    GetDescription() const;
     /// Is this field clickable?
@@ -364,15 +368,21 @@ public:
 };
 
 inline SwFieldType* SwField::GetTyp() const
-    { return m_pType; }
+{
+    return m_pType;
+}
 
 inline sal_uInt32 SwField::GetFormat() const
-    { return m_nFormat; }
+{
+    return m_nFormat;
+}
 
 inline sal_uInt16 SwField::GetLanguage() const
-    { return m_nLang; }
+{
+    return m_nLang;
+}
 
- /// Fields containing values that have to be formatted via number formatter.
+/// Fields containing values that have to be formatted via number formatter.
 class SwValueFieldType : public SwFieldType
 {
 private:
@@ -384,11 +394,19 @@ protected:
     SwValueFieldType( const SwValueFieldType& rTyp );
 
 public:
-    inline SwDoc*   GetDoc() const                      { return m_pDoc; }
-    inline void     SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
+    inline SwDoc*   GetDoc() const                      {
+        return m_pDoc;
+    }
+    inline void     SetDoc(SwDoc* pNewDoc)              {
+        m_pDoc = pNewDoc;
+    }
 
-    inline bool     UseFormat() const                   { return m_bUseFormat; }
-    inline void     EnableFormat(bool bFormat = true)   { m_bUseFormat = bFormat; }
+    inline bool     UseFormat() const                   {
+        return m_bUseFormat;
+    }
+    inline void     EnableFormat(bool bFormat = true)   {
+        m_bUseFormat = bFormat;
+    }
 
     OUString        ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng) const;
     OUString        DoubleToString(const double &rVal, LanguageType eLng) const;
@@ -410,13 +428,16 @@ public:
     virtual SwFieldType*    ChgTyp( SwFieldType* ) override;
     virtual void            SetLanguage(sal_uInt16 nLng) override;
 
-    inline SwDoc*           GetDoc() const          { return static_cast<const SwValueFieldType*>(GetTyp())->GetDoc(); }
+    inline SwDoc*           GetDoc() const          {
+        return static_cast<const SwValueFieldType*>(GetTyp())->GetDoc();
+    }
 
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
 
-    inline OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng) const
-        { return static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, nFormat, nLng); }
+    inline OUString ExpandValue(const double& rVal, sal_uInt32 nFormat, sal_uInt16 nLng) const {
+        return static_cast<SwValueFieldType*>(GetTyp())->ExpandValue(rVal, nFormat, nLng);
+    }
 
     static sal_uInt32       GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFormat);
 };

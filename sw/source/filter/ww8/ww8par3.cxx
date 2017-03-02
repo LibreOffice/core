@@ -510,7 +510,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
 {
     sal_uInt8       aBits1(0);
     sal_uInt16      nStartNo(0);        // Start-Nr. fuer den Writer
-    sal_uInt16      nType(style::NumberingType::ARABIC); // NumberintType
+    SvxExtNumType   nType(SVX_NUM_ARABIC);
     SvxAdjust       eAdj;               // Ausrichtung (Links/rechts/zent.)
     sal_Unicode     cBullet(0x2190);    // default safe bullet
 
@@ -723,66 +723,64 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
     switch( aLVL.nNFC )
     {
         case 0:
-            nType = style::NumberingType::ARABIC;
+            nType = SVX_NUM_ARABIC;
             break;
         case 1:
-            nType = style::NumberingType::ROMAN_UPPER;
+            nType = SVX_NUM_ROMAN_UPPER;
             break;
         case 2:
-            nType = style::NumberingType::ROMAN_LOWER;
+            nType = SVX_NUM_ROMAN_LOWER;
             break;
         case 3:
-            nType = style::NumberingType::CHARS_UPPER_LETTER_N;
+            nType = SVX_NUM_CHARS_UPPER_LETTER_N;
             break;
         case 4:
-            nType = style::NumberingType::CHARS_LOWER_LETTER_N;
+            nType = SVX_NUM_CHARS_LOWER_LETTER_N;
             break;
         case 5:
             // eigentlich: ORDINAL
-            nType = style::NumberingType::ARABIC;
+            nType = SVX_NUM_ARABIC;
             break;
         case 23:
-            nType = style::NumberingType::CHAR_SPECIAL;
+            nType = SVX_NUM_CHAR_SPECIAL;
             //For i120928,type info
             if (bIsPicBullet)
             {
-                nType = style::NumberingType::BITMAP;
+                nType = SVX_NUM_BITMAP;
             }
 
             break;
         case 255:
-            nType = style::NumberingType::NUMBER_NONE;
+            nType = SVX_NUM_NUMBER_NONE;
             break;
         case 14:
-        case 19:nType = style::NumberingType::FULLWIDTH_ARABIC;        break;
-        case 30:nType = style::NumberingType::TIAN_GAN_ZH;        break;
-        case 31:nType = style::NumberingType::DI_ZI_ZH;        break;
+        case 19:nType = SVX_NUM_FULL_WIDTH_ARABIC; break;
+        case 30:nType = SVX_NUM_TIAN_GAN_ZH; break;
+        case 31:nType = SVX_NUM_DI_ZI_ZH; break;
         case 35:
         case 36:
         case 37:
-        case 39:
-                nType = style::NumberingType::NUMBER_LOWER_ZH;        break;
-        case 34:nType = style::NumberingType::NUMBER_UPPER_ZH_TW;break;
-        case 38:nType = style::NumberingType::NUMBER_UPPER_ZH;        break;
+        case 39:nType = SVX_NUM_NUMBER_LOWER_ZH; break;
+        case 34:nType = SVX_NUM_NUMBER_UPPER_ZH_TW; break;
+        case 38:nType = SVX_NUM_NUMBER_UPPER_ZH; break;
         case 10:
-        case 11:
-                nType = style::NumberingType::NUMBER_TRADITIONAL_JA;break;
-        case 20:nType = style::NumberingType::AIU_FULLWIDTH_JA;break;
-        case 12:nType = style::NumberingType::AIU_HALFWIDTH_JA;break;
-        case 21:nType = style::NumberingType::IROHA_FULLWIDTH_JA;break;
-        case 13:nType = style::NumberingType::IROHA_HALFWIDTH_JA;break;
-        case 24:nType = style::NumberingType::HANGUL_SYLLABLE_KO;break;
-        case 25:nType = style::NumberingType::HANGUL_JAMO_KO;break;
-        case 41:nType = style::NumberingType::NUMBER_HANGUL_KO;break;
+        case 11:nType = SVX_NUM_NUMBER_TRADITIONAL_JA; break;
+        case 20:nType = SVX_NUM_AIU_FULLWIDTH_JA; break;
+        case 12:nType = SVX_NUM_AIU_HALFWIDTH_JA; break;
+        case 21:nType = SVX_NUM_IROHA_FULLWIDTH_JA; break;
+        case 13:nType = SVX_NUM_IROHA_HALFWIDTH_JA; break;
+        case 24:nType = SVX_NUM_HANGUL_SYLLABLE_KO; break;
+        case 25:nType = SVX_NUM_HANGUL_JAMO_KO; break;
+        case 41:nType = SVX_NUM_NUMBER_HANGUL_KO; break;
         //case 42:
         //case 43:
-        case 44:nType = style::NumberingType::NUMBER_UPPER_KO; break;
+        case 44:nType = SVX_NUM_NUMBER_UPPER_KO; break;
         default:
-                nType= style::NumberingType::ARABIC;break;
+                nType= SVX_NUM_ARABIC; break;
     }
 
     //If a number level is not going to be used, then record this fact
-    if (style::NumberingType::NUMBER_NONE == nType)
+    if (SVX_NUM_NUMBER_NONE == nType)
         rNotReallyThere[nLevel] = true;
 
     /*

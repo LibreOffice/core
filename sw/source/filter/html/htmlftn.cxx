@@ -98,7 +98,7 @@ sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
         switch( nPart )
         {
         case 0:
-            rInfo.aFormat.SetNumberingType( static_cast< sal_Int16 >(bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC));
+            rInfo.aFormat.SetNumberingType( bEndNote ? SVX_NUM_ROMAN_LOWER : SVX_NUM_ARABIC );
             if( !aPart.isEmpty() )
                 rInfo.aFormat.SetNumberingType(SwHTMLParser::GetNumType( aPart,
                                                              rInfo.aFormat.GetNumberingType() ));

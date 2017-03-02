@@ -111,7 +111,11 @@ static SvxNumSettings_Impl* lcl_CreateNumSettingsPtr(const Sequence<PropertyValu
     for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
     {
         if ( pValues[j].Name == "NumberingType" )
-            pValues[j].Value >>= pNew->nNumberType;
+        {
+            sal_Int16 nTmp;
+            if (pValues[j].Value >>= nTmp)
+                pNew->nNumberType = (SvxExtNumType)nTmp;
+        }
         else if ( pValues[j].Name == "Prefix" )
             pValues[j].Value >>= pNew->sPrefix;
         else if ( pValues[j].Name == "Suffix" )
@@ -326,7 +330,7 @@ IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         if(aNumSettingsArr.size() <= nIdx)
             return;
         SvxNumSettings_Impl* _pSet = aNumSettingsArr[nIdx].get();
-        sal_Int16 eNewType = _pSet->nNumberType;
+        SvxExtNumType eNewType = _pSet->nNumberType;
         const sal_Unicode cLocalPrefix = !_pSet->sPrefix.isEmpty() ? _pSet->sPrefix[0] : 0;
         const sal_Unicode cLocalSuffix = !_pSet->sSuffix.isEmpty() ? _pSet->sSuffix[0] : 0;
 
@@ -945,7 +949,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, void)
         sal_uInt16 nIdx = m_pExamplesVS->GetSelectItemId() - 1;
 
         sal_uInt16 nMask = 1;
-        sal_uInt16 nSetNumberingType = SVX_NUM_BITMAP;
+        SvxExtNumType nSetNumberingType = SVX_NUM_BITMAP;
         for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
         {
             if(nActNumLvl & nMask)
@@ -1780,8 +1784,8 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox&, rBox, void 
         {
             SvxNumberFormat aNumFmt(pActNum->GetLevel(i));
             // PAGEDESC does not exist
-            sal_uInt16 nNumType = (sal_uInt16)reinterpret_cast<sal_uLong>(rBox.GetSelectEntryData());
-            aNumFmt.SetNumberingType((sal_Int16)nNumType);
+            SvxExtNumType nNumType = (SvxExtNumType)reinterpret_cast<sal_uLong>(rBox.GetSelectEntryData());
+            aNumFmt.SetNumberingType(nNumType);
             sal_uInt16 nNumberingType = aNumFmt.GetNumberingType();
             if(SVX_NUM_BITMAP == (nNumberingType&(~LINK_TOKEN)))
             {

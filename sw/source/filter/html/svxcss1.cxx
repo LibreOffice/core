@@ -433,7 +433,7 @@ void SvxCSS1PropertyInfo::Clear()
     m_nTopBorderDistance = m_nBottomBorderDistance =
     m_nLeftBorderDistance = m_nRightBorderDistance = USHRT_MAX;
 
-    m_nNumberingType = 0;
+    m_nNumberingType = SVX_NUM_CHARS_UPPER_LETTER;
     m_cBulletChar = ' ';
 
     m_nColumnCount = 0;
@@ -1718,7 +1718,7 @@ static void ParseCSS1_list_style_type( const CSS1Expression *pExpr,
         if( SvxCSS1Parser::GetEnum( aNumberStyleTable, rValue, nEnum ) )
         {
             rPropInfo.m_bNumbering = true;
-            rPropInfo.m_nNumberingType = nEnum;
+            rPropInfo.m_nNumberingType = (SvxExtNumType)nEnum;
         }
         if( SvxCSS1Parser::GetEnum( aBulletStyleTable, rValue, nEnum ) )
         {

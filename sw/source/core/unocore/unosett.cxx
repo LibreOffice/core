@@ -326,7 +326,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                     if(nTmp >= 0 &&
                         (nTmp <= SVX_NUM_ARABIC ||
                             nTmp > SVX_NUM_BITMAP))
-                        aFootnoteInfo.aFormat.SetNumberingType(nTmp);
+                        aFootnoteInfo.aFormat.SetNumberingType((SvxExtNumType)nTmp);
                     else
                         throw lang::IllegalArgumentException();
                 }
@@ -437,7 +437,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 break;
                 case  WID_NUMBERING_TYPE :
                 {
-                    aRet <<= rFootnoteInfo.aFormat.GetNumberingType();
+                    aRet <<= (sal_Int16)rFootnoteInfo.aFormat.GetNumberingType();
                 }
                 break;
                 case  WID_START_AT:
@@ -617,7 +617,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
                 {
                     sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
-                    aEndInfo.aFormat.SetNumberingType(nTmp);
+                    aEndInfo.aFormat.SetNumberingType((SvxExtNumType)nTmp);
                 }
                 break;
                 case  WID_START_AT:
@@ -681,7 +681,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                     aRet <<= rEndInfo.GetSuffix();
                 break;
                 case  WID_NUMBERING_TYPE :
-                    aRet <<= rEndInfo.aFormat.GetNumberingType();
+                    aRet <<= (sal_Int16)rEndInfo.aFormat.GetNumberingType();
                 break;
                 case  WID_START_AT:
                     aRet <<= (sal_Int16)rEndInfo.nFootnoteOffset;
@@ -836,7 +836,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                     SvxNumberType aNumType(aFontMetric.GetNumType());
                     sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
-                    aNumType.SetNumberingType(nTmp);
+                    aNumType.SetNumberingType((SvxExtNumType)nTmp);
                     aFontMetric.SetNumType(aNumType);
                 }
                 break;
@@ -954,7 +954,7 @@ Any SwXLineNumberingProperties::getPropertyValue(const OUString& rPropertyName)
                 }
                 break;
                 case WID_NUMBERING_TYPE  :
-                    aRet <<= rInfo.GetNumType().GetNumberingType();
+                    aRet <<= (sal_Int16)rInfo.GetNumType().GetNumberingType();
                 break;
                 case WID_NUMBER_POSITION :
                 {
@@ -1848,7 +1848,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     sal_Int16 nSet = 0;
                     pProp->Value >>= nSet;
                     if(nSet >= 0)
-                        aFormat.SetNumberingType(nSet);
+                        aFormat.SetNumberingType((SvxExtNumType)nSet);
                     else
                         bWrongArg = true;
                 }

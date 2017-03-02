@@ -377,7 +377,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
                 {
                     SwNumFormat aNumFormat( rInfo.GetNumRule()->Get(i) );
                     aNumFormat.SetNumberingType(pRefNumFormat->GetNumberingType() != SVX_NUM_BITMAP
-                                        ? pRefNumFormat->GetNumberingType() : style::NumberingType::CHAR_SPECIAL);
+                                                ? pRefNumFormat->GetNumberingType() : SVX_NUM_CHAR_SPECIAL);
                     if( SVX_NUM_CHAR_SPECIAL == aNumFormat.GetNumberingType() )
                     {
                         // #i63395# - Only apply user defined default bullet font

@@ -3663,6 +3663,7 @@ void PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
             }
         }
         break;
+        default: break;
     }
 }
 
@@ -3723,6 +3724,7 @@ bool PPTNumberFormatCreator::GetNumberFormat( SdrPowerPointImport& rManager, Svx
                 }
             }
             break;
+            default: break;
         }
     }
     return nHardCount != 0;

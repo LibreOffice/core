@@ -78,7 +78,7 @@ static void lcl_getFormatter(css::uno::Reference<css::text::XNumberingFormatter>
     }
 }
 
-SvxNumberType::SvxNumberType(sal_Int16 nType) :
+SvxNumberType::SvxNumberType(SvxExtNumType nType) :
     nNumType(nType),
     bShowSymbol(true)
 {
@@ -129,7 +129,7 @@ OUString SvxNumberType::GetNumStr( sal_uLong nNo, const css::lang::Locale& rLoca
                         Sequence< PropertyValue > aProperties(2);
                         PropertyValue* pValues = aProperties.getArray();
                         pValues[0].Name = "NumberingType";
-                        pValues[0].Value <<= nNumType;
+                        pValues[0].Value <<= (sal_uInt16)nNumType;
                         pValues[1].Name = "Value";
                         pValues[1].Value <<= (sal_Int32)nNo;
 
@@ -147,7 +147,7 @@ OUString SvxNumberType::GetNumStr( sal_uLong nNo, const css::lang::Locale& rLoca
     return OUString();
 }
 
-SvxNumberFormat::SvxNumberFormat( sal_Int16 eType,
+SvxNumberFormat::SvxNumberFormat( SvxExtNumType eType,
                                   SvxNumPositionAndSpaceMode ePositionAndSpaceMode )
     : SvxNumberType(eType),
       eNumAdjust(SVX_ADJUST_LEFT),
@@ -190,7 +190,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     sal_Int32  nTmp32(0);
     rStream.ReadUInt16( nTmp16 ); // Version number
 
-    rStream.ReadUInt16( nTmp16 ); SetNumberingType( nTmp16 );
+    rStream.ReadUInt16( nTmp16 ); SetNumberingType( (SvxExtNumType)nTmp16 );
     rStream.ReadUInt16( nTmp16 ); eNumAdjust = ( SvxAdjust )nTmp16;
     rStream.ReadUInt16( nTmp16 ); nInclUpperLevels = nTmp16;
     rStream.ReadUInt16( nStart );
@@ -891,7 +891,7 @@ void SvxNumRule::UnLinkGraphics()
                 aFmt.SetGraphicBrush( &aTempItem, &aFmt.GetGraphicSize(), &eOrient );
             }
         }
-        else if((SVX_NUM_BITMAP|LINK_TOKEN) == aFmt.GetNumberingType())
+        else if((SVX_NUM_BITMAP|LINK_TOKEN) == (int)aFmt.GetNumberingType())
             aFmt.SetNumberingType(SVX_NUM_BITMAP);
         SetLevel(i, aFmt);
     }

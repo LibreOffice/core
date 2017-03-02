@@ -178,7 +178,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
 
     Any aVal;
     {
-        aVal <<= rFmt.GetNumberingType();
+        aVal <<= (sal_uInt16)rFmt.GetNumberingType();
         beans::PropertyValue aAlignProp( UNO_NAME_NRULE_NUMBERINGTYPE, -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aAlignProp;
     }
@@ -282,7 +282,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             // There is no reason to limit numbering types.
             if ( nSet>=0 )
             {
-                aFmt.SetNumberingType(nSet);
+                aFmt.SetNumberingType((SvxExtNumType)nSet);
                 continue;
             }
         }

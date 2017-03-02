@@ -43,11 +43,11 @@ enum class NBType
 class  SVX_DLLPUBLIC NumSettings_Impl
 {
     public:
-        short       nNumberType;
-        short       nParentNumbering;
+        SvxExtNumType   nNumberType;
+        short           nParentNumbering;
         SvxNumberFormat::LabelFollowedBy eLabelFollowedBy;
-        long        nTabValue;
-        SvxAdjust   eNumAlign;
+        long            nTabValue;
+        SvxAdjust       eNumAlign;
         long            nNumAlignAt;
         long            nNumIndentAt;
         rtl::OUString   sPrefix;
@@ -59,7 +59,7 @@ class  SVX_DLLPUBLIC NumSettings_Impl
 
     public:
         NumSettings_Impl()
-            : nNumberType(0)
+            : nNumberType(SVX_NUM_CHARS_UPPER_LETTER)
             , nParentNumbering(0)
             , eLabelFollowedBy(SvxNumberFormat::NOTHING)
             , nTabValue (0)

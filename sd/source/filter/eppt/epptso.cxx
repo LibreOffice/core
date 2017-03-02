@@ -1363,7 +1363,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                             case SVX_NUM_BITMAP :
                                 nNumberingType = 0;
                             break;
-
+                            default: break;
                         }
                         rExtBuStr.WriteUInt32( nNumberingType );
                     }

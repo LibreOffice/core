@@ -595,36 +595,34 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
     static const SvxAdjust eAdjA[4] = { SVX_ADJUST_LEFT,
         SVX_ADJUST_RIGHT, SVX_ADJUST_LEFT, SVX_ADJUST_LEFT };
     if (rAV.nfc < 8) {
-        rNum.SetNumberingType( static_cast< sal_Int16 >(eNumA[ rAV.nfc ] ));
+        rNum.SetNumberingType( eNumA[ rAV.nfc ] );
     } else {
-        sal_Int16 nType= style::NumberingType::ARABIC;
+        SvxExtNumType nType = SVX_NUM_ARABIC;
         switch( rAV.nfc ) {
         case 14:
-        case 19:nType = style::NumberingType::FULLWIDTH_ARABIC;    break;
-        case 30:nType = style::NumberingType::TIAN_GAN_ZH;    break;
-        case 31:nType = style::NumberingType::DI_ZI_ZH;    break;
+        case 19:nType = SVX_NUM_FULL_WIDTH_ARABIC; break;
+        case 30:nType = SVX_NUM_TIAN_GAN_ZH; break;
+        case 31:nType = SVX_NUM_DI_ZI_ZH; break;
         case 35:
         case 36:
         case 37:
-        case 39:
-            nType = style::NumberingType::NUMBER_LOWER_ZH;    break;
-        case 34:nType = style::NumberingType::NUMBER_UPPER_ZH_TW;break;
-        case 38:nType = style::NumberingType::NUMBER_UPPER_ZH;    break;
+        case 39:nType = SVX_NUM_NUMBER_LOWER_ZH; break;
+        case 34:nType = SVX_NUM_NUMBER_UPPER_ZH_TW; break;
+        case 38:nType = SVX_NUM_NUMBER_UPPER_ZH; break;
         case 10:
-        case 11:
-            nType = style::NumberingType::NUMBER_TRADITIONAL_JA;break;
-        case 20:nType = style::NumberingType::AIU_FULLWIDTH_JA;break;
-        case 12:nType = style::NumberingType::AIU_HALFWIDTH_JA;break;
-        case 21:nType = style::NumberingType::IROHA_FULLWIDTH_JA;break;
-        case 13:nType = style::NumberingType::IROHA_HALFWIDTH_JA;break;
-        case 24:nType = style::NumberingType::HANGUL_SYLLABLE_KO;break;
-        case 25:nType = style::NumberingType::HANGUL_JAMO_KO;break;
-        case 41:nType = style::NumberingType::NUMBER_HANGUL_KO;break;
+        case 11:nType = SVX_NUM_NUMBER_TRADITIONAL_JA; break;
+        case 20:nType = SVX_NUM_AIU_FULLWIDTH_JA; break;
+        case 12:nType = SVX_NUM_AIU_HALFWIDTH_JA; break;
+        case 21:nType = SVX_NUM_IROHA_FULLWIDTH_JA; break;
+        case 13:nType = SVX_NUM_IROHA_HALFWIDTH_JA; break;
+        case 24:nType = SVX_NUM_HANGUL_SYLLABLE_KO; break;
+        case 25:nType = SVX_NUM_HANGUL_JAMO_KO; break;
+        case 41:nType = SVX_NUM_NUMBER_HANGUL_KO; break;
         //case 42:
         //case 43:
-        case 44:nType = style::NumberingType::NUMBER_UPPER_KO; break;
+        case 44:nType = SVX_NUM_NUMBER_UPPER_KO; break;
         default:
-            nType= style::NumberingType::ARABIC;break;
+            nType= SVX_NUM_ARABIC;break;
         }
         rNum.SetNumberingType( nType );
     }

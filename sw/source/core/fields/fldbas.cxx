@@ -431,7 +431,7 @@ SwField * SwField::CopyField() const
 }
 
 /// expand numbering
-OUString FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
+OUString FormatNumber(sal_uInt32 nNum, SvxExtNumType nFormat)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
         return  OUString::number( nNum );
@@ -439,7 +439,7 @@ OUString FormatNumber(sal_uInt32 nNum, sal_uInt32 nFormat)
 
     OSL_ENSURE(nFormat != SVX_NUM_NUMBER_NONE, "wrong number format" );
 
-    aNumber.SetNumberingType((sal_Int16)nFormat);
+    aNumber.SetNumberingType(nFormat);
     return aNumber.GetNumStr(nNum);
 }
 

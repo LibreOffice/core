@@ -175,7 +175,11 @@ enum SvxExtNumType
     SVX_NUM_AIU_FULLWIDTH_JA      = css::style::NumberingType::AIU_FULLWIDTH_JA,
     SVX_NUM_AIU_HALFWIDTH_JA      = css::style::NumberingType::AIU_HALFWIDTH_JA,
     SVX_NUM_IROHA_FULLWIDTH_JA    = css::style::NumberingType::IROHA_FULLWIDTH_JA,
-    SVX_NUM_IROHA_HALFWIDTH_JA    = css::style::NumberingType::IROHA_HALFWIDTH_JA
+    SVX_NUM_IROHA_HALFWIDTH_JA    = css::style::NumberingType::IROHA_HALFWIDTH_JA,
+    SVX_NUM_HANGUL_SYLLABLE_KO    = css::style::NumberingType::HANGUL_SYLLABLE_KO,
+    SVX_NUM_HANGUL_JAMO_KO        = css::style::NumberingType::HANGUL_JAMO_KO,
+    SVX_NUM_NUMBER_HANGUL_KO      = css::style::NumberingType::NUMBER_HANGUL_KO,
+    SVX_NUM_NUMBER_UPPER_KO       = css::style::NumberingType::NUMBER_UPPER_KO,
 };
 
 #endif

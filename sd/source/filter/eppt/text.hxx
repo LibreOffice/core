@@ -46,7 +46,7 @@ struct SOParagraph
     OUString                sSuffix;
     OUString                sGraphicUrl;            // String to a graphic
     Size                    aBuGraSize;
-    sal_uInt32              nNumberingType;         // this is actually a SvxEnum
+    SvxExtNumType           nNumberingType;
     sal_uInt32              nHorzAdjust;
     sal_uInt32              nBulletColor;
     sal_Int32               nBulletOfs;
