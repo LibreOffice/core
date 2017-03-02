@@ -23,8 +23,14 @@ class LOkit
 
     func Initialize()
     {
-        LOkit_ClientCommand()
-    }
+        let myInput = "ping command jan var her"
+        
+        LOkit_ClientCommand(myInput)
+
+        let my2Input = "mouse command jan var her"
+        
+        LOkit_ClientCommand(my2Input)
+}
     
     func DeleteCurrentDocument()
     {
