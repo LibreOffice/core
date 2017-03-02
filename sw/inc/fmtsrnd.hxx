@@ -20,11 +20,11 @@
 #define INCLUDED_SW_INC_FMTSRND_HXX
 
 #include "swdllapi.h"
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <hintids.hxx>
 #include <format.hxx>
 #include <svl/eitem.hxx>
 
-#include <fmtsrndenum.hxx>
 class IntlWrapper;
 
 // SwFormatSurround: How document content under the frame shall behave.
@@ -34,7 +34,7 @@ class SW_DLLPUBLIC SwFormatSurround: public SfxEnumItem
     bool    bContour    :1;
     bool    bOutside    :1;
 public:
-    SwFormatSurround( SwSurround eNew = SURROUND_PARALLEL );
+    SwFormatSurround( css::text::WrapTextMode eNew = css::text::WrapTextMode_PARALLEL );
     SwFormatSurround( const SwFormatSurround & );
     inline SwFormatSurround &operator=( const SwFormatSurround &rCpy );
 
@@ -50,11 +50,11 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    SwSurround GetSurround()const { return SwSurround( GetValue() ); }
+    css::text::WrapTextMode GetSurround()const { return css::text::WrapTextMode( GetValue() ); }
     bool    IsAnchorOnly()  const { return bAnchorOnly; }
     bool    IsContour()     const { return bContour; }
     bool    IsOutside()     const { return bOutside; }
-    void    SetSurround  ( SwSurround eNew ){ SfxEnumItem::SetValue( sal_uInt16( eNew ) ); }
+    void    SetSurround  ( css::text::WrapTextMode eNew ){ SfxEnumItem::SetValue( sal_uInt16( eNew ) ); }
     void    SetAnchorOnly( bool bNew )      { bAnchorOnly = bNew; }
     void    SetContour( bool bNew )         { bContour = bNew; }
     void    SetOutside( bool bNew )         { bOutside = bNew; }

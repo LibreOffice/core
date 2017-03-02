@@ -396,16 +396,16 @@ void DocxAttributeOutput::PopulateFrameProperties(const SwFrameFormat* pFrameFor
 
     switch (pFrameFormat->GetSurround().GetValue())
     {
-    case SURROUND_NONE:
+    case css::text::WrapTextMode_NONE:
         attrList->add( FSNS( XML_w, XML_wrap), "none");
         break;
-    case SURROUND_THROUGHT:
+    case css::text::WrapTextMode_THROUGHT:
         attrList->add( FSNS( XML_w, XML_wrap), "through");
         break;
-    case SURROUND_PARALLEL:
+    case css::text::WrapTextMode_PARALLEL:
         attrList->add( FSNS( XML_w, XML_wrap), "notBeside");
         break;
-    case SURROUND_IDEAL:
+    case css::text::WrapTextMode_DYNAMIC:
     default:
         attrList->add( FSNS( XML_w, XML_wrap), "auto");
         break;
@@ -7475,25 +7475,25 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
         OString sType, sSide;
         switch (rSurround.GetSurround())
         {
-            case SURROUND_NONE:
+            case css::text::WrapTextMode_NONE:
                 sType = "topAndBottom";
                 break;
-            case SURROUND_PARALLEL:
+            case css::text::WrapTextMode_PARALLEL:
                 sType = "square";
                 break;
-            case SURROUND_IDEAL:
+            case css::text::WrapTextMode_DYNAMIC:
                 sType = "square";
                 sSide = "largest";
                 break;
-            case SURROUND_LEFT:
+            case css::text::WrapTextMode_LEFT:
                 sType = "square";
                 sSide = "left";
                 break;
-            case SURROUND_RIGHT:
+            case css::text::WrapTextMode_RIGHT:
                 sType = "square";
                 sSide = "right";
                 break;
-            case SURROUND_THROUGHT:
+            case css::text::WrapTextMode_THROUGHT:
                 /* empty type and side means throught */
             default:
                 break;
@@ -7515,16 +7515,16 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
         OString sWrap( "auto" );
         switch ( rSurround.GetSurround( ) )
         {
-            case SURROUND_NONE:
+            case css::text::WrapTextMode_NONE:
                 sWrap = OString( "none" );
                 break;
-            case SURROUND_THROUGHT:
+            case css::text::WrapTextMode_THROUGHT:
                 sWrap = OString( "through" );
                 break;
-            case SURROUND_IDEAL:
-            case SURROUND_PARALLEL:
-            case SURROUND_LEFT:
-            case SURROUND_RIGHT:
+            case css::text::WrapTextMode_DYNAMIC:
+            case css::text::WrapTextMode_PARALLEL:
+            case css::text::WrapTextMode_LEFT:
+            case css::text::WrapTextMode_RIGHT:
             default:
                 sWrap = OString( "around" );
         }

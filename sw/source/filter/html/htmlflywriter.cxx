@@ -744,7 +744,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
         const SwFormatSurround* pSurround = static_cast<const SwFormatSurround*>(pItem);
         sal_Int16 eHoriOri =    rFrameFormat.GetHoriOrient().GetHoriOrient();
         pStr = nullptr;
-        SwSurround eSurround = pSurround->GetSurround();
+        css::text::WrapTextMode eSurround = pSurround->GetSurround();
         bool bAnchorOnly = pSurround->IsAnchorOnly();
         switch( eHoriOri )
         {
@@ -752,12 +752,12 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
             {
                 switch( eSurround )
                 {
-                case SURROUND_NONE:
-                case SURROUND_RIGHT:
+                case css::text::WrapTextMode_NONE:
+                case css::text::WrapTextMode_RIGHT:
                     pStr = OOO_STRING_SVTOOLS_HTML_AL_right;
                     break;
-                case SURROUND_LEFT:
-                case SURROUND_PARALLEL:
+                case css::text::WrapTextMode_LEFT:
+                case css::text::WrapTextMode_PARALLEL:
                     if( bAnchorOnly )
                         m_bClearRight = true;
                     break;
@@ -773,12 +773,12 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
             {
                 switch( eSurround )
                 {
-                case SURROUND_NONE:
-                case SURROUND_LEFT:
+                case css::text::WrapTextMode_NONE:
+                case css::text::WrapTextMode_LEFT:
                     pStr = OOO_STRING_SVTOOLS_HTML_AL_left;
                     break;
-                case SURROUND_RIGHT:
-                case SURROUND_PARALLEL:
+                case css::text::WrapTextMode_RIGHT:
+                case css::text::WrapTextMode_PARALLEL:
                     if( bAnchorOnly )
                         m_bClearLeft = true;
                     break;
@@ -1006,7 +1006,7 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
 
         const SwFormatSurround* pSurround = static_cast<const SwFormatSurround*>(pItem);
         sal_Int16 eHoriOri = rFrameFormat.GetHoriOrient().GetHoriOrient();
-        SwSurround eSurround = pSurround->GetSurround();
+        css::text::WrapTextMode eSurround = pSurround->GetSurround();
         bool bAnchorOnly = pSurround->IsAnchorOnly();
         switch( eHoriOri )
         {
@@ -1014,12 +1014,12 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
             {
                 switch( eSurround )
                 {
-                case SURROUND_NONE:
-                case SURROUND_RIGHT:
+                case css::text::WrapTextMode_NONE:
+                case css::text::WrapTextMode_RIGHT:
                     pSurroundString = OOO_STRING_SVTOOLS_HTML_AL_right;
                     break;
-                case SURROUND_LEFT:
-                case SURROUND_PARALLEL:
+                case css::text::WrapTextMode_LEFT:
+                case css::text::WrapTextMode_PARALLEL:
                     if( bAnchorOnly )
                         m_bClearRight = true;
                     break;
@@ -1035,12 +1035,12 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
             {
                 switch( eSurround )
                 {
-                case SURROUND_NONE:
-                case SURROUND_LEFT:
+                case css::text::WrapTextMode_NONE:
+                case css::text::WrapTextMode_LEFT:
                     pSurroundString = OOO_STRING_SVTOOLS_HTML_AL_left;
                     break;
-                case SURROUND_RIGHT:
-                case SURROUND_PARALLEL:
+                case css::text::WrapTextMode_RIGHT:
+                case css::text::WrapTextMode_PARALLEL:
                     if( bAnchorOnly )
                         m_bClearLeft = true;
                     break;

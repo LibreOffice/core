@@ -229,7 +229,7 @@ void SwTextBoxHelper::getShapeWrapThrough(const SwFrameFormat* pTextBox, bool& r
 {
     SwFrameFormat* pShape = SwTextBoxHelper::getOtherTextBoxFormat(pTextBox, RES_FLYFRMFMT);
     if (pShape)
-        rWrapThrough = pShape->GetSurround().GetSurround() == SURROUND_THROUGHT;
+        rWrapThrough = pShape->GetSurround().GetSurround() == css::text::WrapTextMode_THROUGHT;
 }
 
 SwFrameFormat* SwTextBoxHelper::getOtherTextBoxFormat(const SwFrameFormat* pFormat, sal_uInt16 nType)

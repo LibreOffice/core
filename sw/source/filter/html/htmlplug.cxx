@@ -446,7 +446,7 @@ void SwHTMLParser::InsertEmbed()
         aAnchor.SetAnchor( m_pPam->GetPoint() );
         aFrameSet.Put( aAnchor );
         aFrameSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME) );
-        aFrameSet.Put( SwFormatSurround( SURROUND_THROUGHT ) );
+        aFrameSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGHT ) );
         aFrameSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
     }
 
@@ -1048,7 +1048,7 @@ Writer& OutHTML_FrameFormatOLENode( Writer& rWrt, const SwFrameFormat& rFrameFor
         }
 
         if ((FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) &&
-            SURROUND_THROUGHT == rFrameFormat.GetSurround().GetSurround() )
+            css::text::WrapTextMode_THROUGHT == rFrameFormat.GetSurround().GetSurround() )
         {
             // Das Plugin ist HIDDEN
             sOut.append(' ').append(OOO_STRING_SW_HTML_O_Hidden);

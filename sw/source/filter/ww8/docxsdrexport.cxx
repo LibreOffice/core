@@ -717,17 +717,17 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
     {
         switch (pFrameFormat->GetSurround().GetValue())
         {
-        case SURROUND_NONE:
+        case css::text::WrapTextMode_NONE:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapTopAndBottom, FSEND);
             break;
-        case SURROUND_THROUGHT:
+        case css::text::WrapTextMode_THROUGHT:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapNone, FSEND);
             break;
-        case SURROUND_PARALLEL:
+        case css::text::WrapTextMode_PARALLEL:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapSquare,
                                                     XML_wrapText, "bothSides", FSEND);
             break;
-        case SURROUND_IDEAL:
+        case css::text::WrapTextMode_DYNAMIC:
         default:
             m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_wrapSquare,
                                                     XML_wrapText, "largest", FSEND);

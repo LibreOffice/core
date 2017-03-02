@@ -1947,7 +1947,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
     sal_Int16 eHoriRel = text::RelOrientation::FRAME;
     sal_Int16 eVertRel = text::RelOrientation::FRAME;
     SwTwips nHoriPos = 0, nVertPos = 0;
-    SwSurround eSurround = SURROUND_THROUGHT;
+    css::text::WrapTextMode eSurround = css::text::WrapTextMode_THROUGHT;
     if( SVX_CSS1_POS_ABSOLUTE == rPropInfo.m_ePosition )
     {
         if( SVX_CSS1_LTYPE_TWIP == rPropInfo.m_eLeftType &&
@@ -2025,13 +2025,13 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
         {
             eHoriOri = text::HoriOrientation::RIGHT;
             eHoriRel = nRightSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
-            eSurround = SURROUND_LEFT;
+            eSurround = css::text::WrapTextMode_LEFT;
         }
         else
         {
             eHoriOri = text::HoriOrientation::LEFT;
             eHoriRel = nLeftSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
-            eSurround = SURROUND_RIGHT;
+            eSurround = css::text::WrapTextMode_RIGHT;
         }
     }
     rFrameItemSet.Put( aAnchor );

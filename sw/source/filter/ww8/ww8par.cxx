@@ -2251,7 +2251,7 @@ void SwWW8ImplReader::Read_HdFtTextAsHackedFrame(WW8_CP nStart, WW8_CP nLen,
     if( eFrameSize != aSz.GetWidthSizeType() )
         aSz.SetWidthSizeType( eFrameSize );
     pFrame->SetFormatAttr(aSz);
-    pFrame->SetFormatAttr(SwFormatSurround(SURROUND_THROUGHT));
+    pFrame->SetFormatAttr(SwFormatSurround(css::text::WrapTextMode_THROUGHT));
     pFrame->SetFormatAttr(SwFormatHoriOrient(0, text::HoriOrientation::LEFT)); //iFOO
 
     // #i43427# - send frame for header/footer into background.

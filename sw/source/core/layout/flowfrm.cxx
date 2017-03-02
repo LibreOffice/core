@@ -303,7 +303,7 @@ sal_uInt8 SwFlowFrame::BwdMoveNecessary( const SwPageFrame *pPage, const SwRect 
             const SwFrameFormat& rFormat = pObj->GetFrameFormat();
             const SwRect aRect( pObj->GetObjRect() );
             if ( aRect.IsOver( rRect ) &&
-                 rFormat.GetSurround().GetSurround() != SURROUND_THROUGHT )
+                 rFormat.GetSurround().GetSurround() != css::text::WrapTextMode_THROUGHT )
             {
                 if( m_rThis.IsLayoutFrame() && //Fly Lower of This?
                     Is_Lower_Of( &m_rThis, pObj->GetDrawObj() ) )

@@ -64,7 +64,7 @@ namespace {
             const SwAnchoredObject* pAnchoredObj = GetUserCall( aIter() )->GetAnchoredObj( aIter() );
             const SwFormatSurround& rSurround = pAnchoredObj->GetFrameFormat().GetSurround();
             const SvxOpaqueItem& rOpaque = pAnchoredObj->GetFrameFormat().GetOpaque();
-            bool bInBackground = ( rSurround.GetSurround() == SURROUND_THROUGHT ) && !rOpaque.GetValue();
+            bool bInBackground = ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGHT ) && !rOpaque.GetValue();
 
             bool bBackgroundMatches = ( bInBackground && bSearchBackground ) ||
                                       ( !bInBackground && !bSearchBackground );
@@ -2570,7 +2570,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
                 if( inSelection )
                         Add( aRegion, pFly->Frame() );
                 else if ( !pFly->IsAnLower( pStartFrame ) &&
-                    (rSur.GetSurround() != SURROUND_THROUGHT &&
+                    (rSur.GetSurround() != css::text::WrapTextMode_THROUGHT &&
                     !rSur.IsContour()) )
                 {
                     if ( aSortObjs.Contains( *pAnchoredObj ) )

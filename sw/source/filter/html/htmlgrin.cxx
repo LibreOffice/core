@@ -197,24 +197,24 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
 
         // Horizonale Ausrichtung und Umlauf bestimmen.
         sal_Int16 eHoriRel;
-        SwSurround eSurround;
+        css::text::WrapTextMode eSurround;
         switch( eHoriOri )
         {
         case text::HoriOrientation::LEFT:
             eHoriRel = nLeftSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
-            eSurround = SURROUND_RIGHT;
+            eSurround = css::text::WrapTextMode_RIGHT;
             break;
         case text::HoriOrientation::RIGHT:
             eHoriRel = nRightSpace ? text::RelOrientation::PRINT_AREA : text::RelOrientation::FRAME;
-            eSurround = SURROUND_LEFT;
+            eSurround = css::text::WrapTextMode_LEFT;
             break;
         case text::HoriOrientation::CENTER:   // fuer Tabellen
             eHoriRel = text::RelOrientation::FRAME;
-            eSurround = SURROUND_NONE;
+            eSurround = css::text::WrapTextMode_NONE;
             break;
         default:
             eHoriRel = text::RelOrientation::FRAME;
-            eSurround = SURROUND_PARALLEL;
+            eSurround = css::text::WrapTextMode_PARALLEL;
             break;
         }
 
@@ -279,7 +279,7 @@ void SwHTMLParser::RegisterFlyFrame( SwFrameFormat *pFlyFormat )
     // nach vorne verschoben werden.
     if( RES_DRAWFRMFMT != pFlyFormat->Which() &&
         (FLY_AT_PARA == pFlyFormat->GetAnchor().GetAnchorId()) &&
-        SURROUND_THROUGHT == pFlyFormat->GetSurround().GetSurround() )
+        css::text::WrapTextMode_THROUGHT == pFlyFormat->GetSurround().GetSurround() )
     {
         m_aMoveFlyFrames.push_back( pFlyFormat );
         m_aMoveFlyCnts.push_back( m_pPam->GetPoint()->nContent.GetIndex() );

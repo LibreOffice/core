@@ -814,7 +814,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 // Also, the width should be 100% and it should also adjust the hight, if changed.
                 pNewSet->ClearItem();
 
-                pNewSet->Put( SwFormatSurround( SURROUND_NONE ) );
+                pNewSet->Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );
                 pNewSet->Put( SvxOpaqueItem( RES_OPAQUE, true ) );
 
                 sal_Int16 eVert = bBefore ? text::VertOrientation::BOTTOM : text::VertOrientation::TOP;
@@ -1131,7 +1131,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     // and it should be adjusted to above and middle.
     pNewSet->ClearItem();
 
-    pNewSet->Put( SwFormatSurround( SURROUND_NONE ) );
+    pNewSet->Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );
     if (nLayerId == rDoc.getIDocumentDrawModelAccess().GetHellId())
     {
     // Consider drawing objects in the 'invisible' hell layer

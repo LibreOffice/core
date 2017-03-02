@@ -202,12 +202,12 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
 
     const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet->Get(RES_SURROUND));
 
-    SwSurround nSur = rSurround.GetSurround();
+    css::text::WrapTextMode nSur = rSurround.GetSurround();
     const SwFormatAnchor &rAnch = static_cast<const SwFormatAnchor&>(rSet->Get(RES_ANCHOR));
     m_nAnchorId = rAnch.GetAnchorId();
 
     if (((m_nAnchorId == FLY_AT_PARA) || (m_nAnchorId == FLY_AT_CHAR))
-        && (nSur != SURROUND_NONE))
+        && (nSur != css::text::WrapTextMode_NONE))
     {
         m_pWrapAnchorOnlyCB->Check( rSurround.IsAnchorOnly() );
     }
@@ -226,13 +226,13 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
 
     switch (nSur)
     {
-        case SURROUND_NONE:
+        case css::text::WrapTextMode_NONE:
         {
             pBtn = m_pNoWrapRB;
             break;
         }
 
-        case SURROUND_THROUGHT:
+        case css::text::WrapTextMode_THROUGHT:
         {
             // transparent ?
             pBtn = m_pWrapThroughRB;
@@ -245,13 +245,13 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
             break;
         }
 
-        case SURROUND_PARALLEL:
+        case css::text::WrapTextMode_PARALLEL:
         {
             pBtn = m_pWrapParallelRB;
             break;
         }
 
-        case SURROUND_IDEAL:
+        case css::text::WrapTextMode_DYNAMIC:
         {
             pBtn = m_pIdealWrapRB;
             break;
@@ -259,9 +259,9 @@ void SwWrapTabPage::Reset(const SfxItemSet *rSet)
 
         default:
         {
-            if (nSur == SURROUND_LEFT)
+            if (nSur == css::text::WrapTextMode_LEFT)
                 pBtn = m_pWrapLeftRB;
-            else if (nSur == SURROUND_RIGHT)
+            else if (nSur == css::text::WrapTextMode_RIGHT)
                 pBtn = m_pWrapRightRB;
         }
     }
@@ -308,21 +308,21 @@ bool SwWrapTabPage::FillItemSet(SfxItemSet *rSet)
     }
 
     if (m_pNoWrapRB->IsChecked())
-        aSur.SetSurround(SURROUND_NONE);
+        aSur.SetSurround(css::text::WrapTextMode_NONE);
     else if (m_pWrapLeftRB->IsChecked())
-        aSur.SetSurround(SURROUND_LEFT);
+        aSur.SetSurround(css::text::WrapTextMode_LEFT);
     else if (m_pWrapRightRB->IsChecked())
-        aSur.SetSurround(SURROUND_RIGHT);
+        aSur.SetSurround(css::text::WrapTextMode_RIGHT);
     else if (m_pWrapParallelRB->IsChecked())
-        aSur.SetSurround(SURROUND_PARALLEL);
+        aSur.SetSurround(css::text::WrapTextMode_PARALLEL);
     else if (m_pWrapThroughRB->IsChecked())
     {
-        aSur.SetSurround(SURROUND_THROUGHT);
+        aSur.SetSurround(css::text::WrapTextMode_THROUGHT);
         if (m_pWrapTransparentCB->IsChecked() && !m_bDrawMode)
             aOp.SetValue(false);
     }
     else if (m_pIdealWrapRB->IsChecked())
-        aSur.SetSurround(SURROUND_IDEAL);
+        aSur.SetSurround(css::text::WrapTextMode_DYNAMIC);
 
     aSur.SetAnchorOnly( m_pWrapAnchorOnlyCB->IsChecked() );
     bool bContour = m_pWrapOutlineCB->IsChecked() && m_pWrapOutlineCB->IsEnabled();
@@ -496,9 +496,9 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     }
 
     const SwFormatSurround& rSurround = static_cast<const SwFormatSurround&>(rSet.Get(RES_SURROUND));
-    SwSurround nSur = rSurround.GetSurround();
+    css::text::WrapTextMode nSur = rSurround.GetSurround();
 
-    m_pWrapTransparentCB->Enable( bEnable && !m_bHtmlMode && nSur == SURROUND_THROUGHT );
+    m_pWrapTransparentCB->Enable( bEnable && !m_bHtmlMode && nSur == css::text::WrapTextMode_THROUGHT );
     if(m_bHtmlMode)
     {
         const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(rSet.Get(RES_HORI_ORIENT));
@@ -508,7 +508,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         const bool bAllHtmlModes =
             ((m_nAnchorId == FLY_AT_PARA) || (m_nAnchorId == FLY_AT_CHAR)) &&
                             (eHOrient == text::HoriOrientation::RIGHT || eHOrient == text::HoriOrientation::LEFT);
-        m_pWrapAnchorOnlyCB->Enable( bAllHtmlModes && nSur != SURROUND_NONE );
+        m_pWrapAnchorOnlyCB->Enable( bAllHtmlModes && nSur != css::text::WrapTextMode_NONE );
         m_pWrapOutsideCB->Hide();
         m_pIdealWrapRB->Enable( false );
 
@@ -573,7 +573,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         m_pWrapParallelRB->Enable( bEnable );
         m_pWrapAnchorOnlyCB->Enable(
                 ((m_nAnchorId == FLY_AT_PARA) || (m_nAnchorId == FLY_AT_CHAR))
-                && nSur != SURROUND_NONE );
+                && nSur != css::text::WrapTextMode_NONE );
     }
     ContourHdl(nullptr);
 }

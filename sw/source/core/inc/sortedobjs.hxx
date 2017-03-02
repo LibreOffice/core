@@ -34,8 +34,8 @@ class SwAnchoredObject;
       - order 1: to-page, 2: to-fly, 3: to-paragraph|to-character|as-character
     - anchor node
     - wrapping style (inclusive layer)
-      - order 1: wrapping style != SURROUND_THROUGHT and not in hell layer,
-        2: wrapping style = SURROUND_THROUGHT or in hell layer
+      - order 1: wrapping style != css::text::WrapTextMode_THROUGHT and not in hell layer,
+        2: wrapping style = css::text::WrapTextMode_THROUGHT or in hell layer
     - wrapping style influence
       - order 1: NONE_SUCCESSIVE_POSITIONED, 2: NONE_CONCURRENT_POSITIONED
     - again anchor type

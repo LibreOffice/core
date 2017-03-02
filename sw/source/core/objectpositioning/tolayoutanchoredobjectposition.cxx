@@ -74,7 +74,7 @@ void SwToLayoutAnchoredObjectPosition::CalcPosition()
         if ( ( bFlyAtFly &&
                ( eVertOrient == text::VertOrientation::CENTER ||
                  eVertOrient == text::VertOrientation::BOTTOM ) &&
-             SURROUND_THROUGHT != rFrameFormat.GetSurround().GetSurround() &&
+             css::text::WrapTextMode_THROUGHT != rFrameFormat.GetSurround().GetSurround() &&
              !GetAnchorFrame().HasFixSize() ) )
         {
             eVertOrient = text::VertOrientation::TOP;

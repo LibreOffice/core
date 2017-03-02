@@ -4471,10 +4471,10 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
                 // auch keine mit Durchlauf beachten. Dabei handelt es
                 // sich (noch) um HIDDEN-Controls, und denen weicht man
                 // besser auch nicht aus.
-                SwSurround eSurround = pFormat->GetSurround().GetSurround();
+                css::text::WrapTextMode eSurround = pFormat->GetSurround().GetSurround();
                 if( bNoSurroundOnly )
                 {
-                    if( SURROUND_NONE==eSurround )
+                    if( css::text::WrapTextMode_NONE==eSurround )
                     {
                         bFound = true;
                         break;
@@ -4482,12 +4482,12 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
                 }
                 if( bSurroundOnly )
                 {
-                    if( SURROUND_NONE==eSurround )
+                    if( css::text::WrapTextMode_NONE==eSurround )
                     {
                         bFound = false;
                         break;
                     }
-                    else if( SURROUND_THROUGHT!=eSurround )
+                    else if( css::text::WrapTextMode_THROUGHT!=eSurround )
                     {
                         bFound = true;
                         // weitersuchen: Es koennten ja noch welche ohne
@@ -5094,30 +5094,30 @@ void SwHTMLParser::InsertLineBreak()
                     ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
                      (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     pAPos->nNode == rNodeIdx &&
-                    pFormat->GetSurround().GetSurround() != SURROUND_NONE )
+                    pFormat->GetSurround().GetSurround() != css::text::WrapTextMode_NONE )
                 {
                     sal_Int16 eHori = RES_DRAWFRMFMT == pFormat->Which()
                         ? text::HoriOrientation::LEFT
                         : pFormat->GetHoriOrient().GetHoriOrient();
 
-                    SwSurround eSurround = SURROUND_PARALLEL;
+                    css::text::WrapTextMode eSurround = css::text::WrapTextMode_PARALLEL;
                     if( m_pPam->GetPoint()->nContent.GetIndex() )
                     {
                         if( bClearLeft && text::HoriOrientation::LEFT==eHori )
-                            eSurround = SURROUND_RIGHT;
+                            eSurround = css::text::WrapTextMode_RIGHT;
                         else if( bClearRight && text::HoriOrientation::RIGHT==eHori )
-                            eSurround = SURROUND_LEFT;
+                            eSurround = css::text::WrapTextMode_LEFT;
                     }
                     else if( (bClearLeft && text::HoriOrientation::LEFT==eHori) ||
                              (bClearRight && text::HoriOrientation::RIGHT==eHori) )
                     {
-                        eSurround = SURROUND_NONE;
+                        eSurround = css::text::WrapTextMode_NONE;
                     }
 
-                    if( SURROUND_PARALLEL != eSurround )
+                    if( css::text::WrapTextMode_PARALLEL != eSurround )
                     {
                         SwFormatSurround aSurround( eSurround );
-                        if( SURROUND_NONE != eSurround )
+                        if( css::text::WrapTextMode_NONE != eSurround )
                             aSurround.SetAnchorOnly( true );
                         pFormat->SetFormatAttr( aSurround );
                         bCleared = true;

@@ -1142,7 +1142,7 @@ void SwFormatCol::dumpAsXml(xmlTextWriterPtr pWriter) const
 }
 
 // Partially implemented inline in hxx
-SwFormatSurround::SwFormatSurround( SwSurround eFly ) :
+SwFormatSurround::SwFormatSurround( css::text::WrapTextMode eFly ) :
     SfxEnumItem( RES_SURROUND, sal_uInt16( eFly ) )
 {
     bAnchorOnly = bContour = bOutside = false;
@@ -1172,37 +1172,7 @@ SfxPoolItem*  SwFormatSurround::Clone( SfxItemPool* ) const
 
 sal_uInt16  SwFormatSurround::GetValueCount() const
 {
-    return SURROUND_END - SURROUND_BEGIN;
-}
-
-namespace
-{
-    text::WrapTextMode SwSurroundToWrapMode(SwSurround eSurround)
-    {
-        text::WrapTextMode eRet;
-        switch(eSurround)
-        {
-            case SURROUND_THROUGHT:
-                eRet = css::text::WrapTextMode_THROUGHT;
-                break;
-            case SURROUND_PARALLEL:
-                eRet = css::text::WrapTextMode_PARALLEL;
-                break;
-            case SURROUND_IDEAL:
-                eRet = css::text::WrapTextMode_DYNAMIC;
-                break;
-            case SURROUND_LEFT:
-                eRet = css::text::WrapTextMode_LEFT;
-                break;
-            case SURROUND_RIGHT:
-                eRet = css::text::WrapTextMode_RIGHT;
-                break;
-            default:
-                eRet = css::text::WrapTextMode_NONE;
-                break;
-        }
-        return eRet;
-    }
+    return 6;
 }
 
 bool SwFormatSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
@@ -1213,7 +1183,7 @@ bool SwFormatSurround::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
     switch ( nMemberId )
     {
         case MID_SURROUND_SURROUNDTYPE:
-            rVal <<= SwSurroundToWrapMode(GetSurround());
+            rVal <<= GetSurround();
             break;
         case MID_SURROUND_ANCHORONLY:
             rVal <<= IsAnchorOnly();
@@ -1241,7 +1211,7 @@ bool SwFormatSurround::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_SURROUND_SURROUNDTYPE:
         {
             sal_Int32 eVal = SWUnoHelper::GetEnumAsInt32( rVal );
-            if( eVal >= 0 && eVal < SURROUND_END )
+            if( eVal >= css::text::WrapTextMode_NONE && eVal <= css::text::WrapTextMode_RIGHT )
                 SetValue( static_cast<sal_uInt16>(eVal) );
             else {
                 //exception

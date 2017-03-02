@@ -160,11 +160,11 @@ struct ObjAnchorOrder
         const SdrLayerID nHellId = rIDDMA.GetHellId();
         const SdrLayerID nInvisibleHellId = rIDDMA.GetInvisibleHellId();
         const bool bWrapThroughOrHellListed =
-                    rFormatListed.GetSurround().GetSurround() == SURROUND_THROUGHT ||
+                    rFormatListed.GetSurround().GetSurround() == css::text::WrapTextMode_THROUGHT ||
                     _pListedAnchoredObj->GetDrawObj()->GetLayer() == nHellId ||
                     _pListedAnchoredObj->GetDrawObj()->GetLayer() == nInvisibleHellId;
         const bool bWrapThroughOrHellNew =
-                    rFormatNew.GetSurround().GetSurround() == SURROUND_THROUGHT ||
+                    rFormatNew.GetSurround().GetSurround() == css::text::WrapTextMode_THROUGHT ||
                     _pNewAnchoredObj->GetDrawObj()->GetLayer() == nHellId ||
                     _pNewAnchoredObj->GetDrawObj()->GetLayer() == nInvisibleHellId;
         if ( bWrapThroughOrHellListed != bWrapThroughOrHellNew )

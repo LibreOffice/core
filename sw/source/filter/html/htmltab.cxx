@@ -3538,20 +3538,20 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     if( !pCurTable->IsNewDoc() )
                         Reader::ResetFrameFormatAttrs( aFrameSet );
 
-                    SwSurround eSurround = SURROUND_NONE;
+                    css::text::WrapTextMode eSurround = css::text::WrapTextMode_NONE;
                     sal_Int16 eHori;
 
                     switch( pCurTable->GetTableAdjust(true) )
                     {
                     case SVX_ADJUST_RIGHT:
                         eHori = text::HoriOrientation::RIGHT;
-                        eSurround = SURROUND_LEFT;
+                        eSurround = css::text::WrapTextMode_LEFT;
                         break;
                     case SVX_ADJUST_CENTER:
                         eHori = text::HoriOrientation::CENTER;
                         break;
                     case SVX_ADJUST_LEFT:
-                        eSurround = SURROUND_RIGHT;
+                        eSurround = css::text::WrapTextMode_RIGHT;
                         SAL_FALLTHROUGH;
                     default:
                         eHori = text::HoriOrientation::LEFT;

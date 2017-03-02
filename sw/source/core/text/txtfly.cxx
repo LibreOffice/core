@@ -508,7 +508,7 @@ bool SwTextFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
                     // Only the ones who are opaque and more to the top
                     if( ! rFly.IsBackgroundTransparent() &&
-                        SURROUND_THROUGHT == rSur.GetSurround() &&
+                        css::text::WrapTextMode_THROUGHT == rSur.GetSurround() &&
                         ( !rSur.IsAnchorOnly() ||
                           // #i68520#
                           GetMaster() == rFly.GetAnchorFrame() ||
@@ -599,7 +599,7 @@ void SwTextFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect )
                 // #i47804# - consider transparent graphics
                 // and OLE objects.
                 bool bClipFlyArea =
-                        ( ( SURROUND_THROUGHT == rSur.GetSurround() )
+                        ( ( css::text::WrapTextMode_THROUGHT == rSur.GetSurround() )
                           // #i68520#
                           ? (pAnchoredObjTmp->GetDrawObj()->GetLayer() != nHellId)
                           : !rSur.IsContour() ) &&
@@ -1026,7 +1026,7 @@ bool SwTextFly::ForEach( const SwRect &rRect, SwRect* pRect, bool bAvoid ) const
                     // formatting. In LineIter::DrawText() it is "just"
                     // necessary to cleverly set the ClippingRegions
                     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
-                    if( ( SURROUND_THROUGHT == rSur.GetSurround() &&
+                    if( ( css::text::WrapTextMode_THROUGHT == rSur.GetSurround() &&
                           ( !rSur.IsAnchorOnly() ||
                             // #i68520#
                             GetMaster() == pAnchoredObj->GetAnchorFrame() ||
@@ -1109,7 +1109,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
     // are ignored for computing the margins of other Flys.
     // 3301: pNext->Frame().IsOver( rLine ) is necessary
     // #i68520#
-    SwSurround eSurroundForTextWrap;
+    css::text::WrapTextMode eSurroundForTextWrap;
 
     bool bStop = false;
     // #i68520#
@@ -1128,7 +1128,7 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
         if ( pNext == mpCurrAnchoredObj )
             continue;
         eSurroundForTextWrap = GetSurroundForTextWrap( pNext );
-        if( SURROUND_THROUGHT == eSurroundForTextWrap )
+        if( css::text::WrapTextMode_THROUGHT == eSurroundForTextWrap )
             continue;
 
         const SwRect aTmp( SwContourCache::CalcBoundRect
@@ -1163,8 +1163,8 @@ void SwTextFly::CalcRightMargin( SwRect &rFly,
         if( aTmp.IsOver( aLine ) && nTmpRight > nFlyRight )
         {
             nFlyRight = nTmpRight;
-            if( SURROUND_RIGHT == eSurroundForTextWrap ||
-                SURROUND_PARALLEL == eSurroundForTextWrap )
+            if( css::text::WrapTextMode_RIGHT == eSurroundForTextWrap ||
+                css::text::WrapTextMode_PARALLEL == eSurroundForTextWrap )
             {
                 // overrule the FlyFrame
                 if( nRight > nFlyRight )
@@ -1219,8 +1219,8 @@ void SwTextFly::CalcLeftMargin( SwRect &rFly,
         const SwAnchoredObject* pNext = (*mpAnchoredObjList)[ nFlyPos ];
         if( pNext == mpCurrAnchoredObj )
             continue;
-        SwSurround eSurroundForTextWrap = GetSurroundForTextWrap( pNext );
-        if( SURROUND_THROUGHT == eSurroundForTextWrap )
+        css::text::WrapTextMode eSurroundForTextWrap = GetSurroundForTextWrap( pNext );
+        if( css::text::WrapTextMode_THROUGHT == eSurroundForTextWrap )
             continue;
 
         const SwRect aTmp( SwContourCache::CalcBoundRect
@@ -1273,17 +1273,17 @@ SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
     // added up.
     switch( GetSurroundForTextWrap( pAnchoredObj ) )
     {
-        case SURROUND_LEFT :
+        case css::text::WrapTextMode_LEFT :
         {
             CalcRightMargin( aFly, nFlyPos, rLine );
             break;
         }
-        case SURROUND_RIGHT :
+        case css::text::WrapTextMode_RIGHT :
         {
             CalcLeftMargin( aFly, nFlyPos, rLine );
             break;
         }
-        case SURROUND_NONE :
+        case css::text::WrapTextMode_NONE :
         {
             CalcRightMargin( aFly, nFlyPos, rLine );
             CalcLeftMargin( aFly, nFlyPos, rLine );
@@ -1306,11 +1306,11 @@ SwRect SwTextFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 // Wrap on both sides up to a frame width of 1.5cm
 #define FRAME_MAX 850
 
-SwSurround SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const
+css::text::WrapTextMode SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const
 {
     const SwFrameFormat* pFormat = &(pAnchoredObj->GetFrameFormat());
     const SwFormatSurround &rFlyFormat = pFormat->GetSurround();
-    SwSurround eSurroundForTextWrap = rFlyFormat.GetSurround();
+    css::text::WrapTextMode eSurroundForTextWrap = rFlyFormat.GetSurround();
 
     if( rFlyFormat.IsAnchorOnly() && pAnchoredObj->GetAnchorFrame() != GetMaster() )
     {
@@ -1318,26 +1318,26 @@ SwSurround SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
         if ((FLY_AT_PARA == rAnchor.GetAnchorId()) ||
             (FLY_AT_CHAR == rAnchor.GetAnchorId()))
         {
-            return SURROUND_NONE;
+            return css::text::WrapTextMode_NONE;
         }
     }
 
     // in cause of run-through and nowrap ignore smartly
-    if( SURROUND_THROUGHT == eSurroundForTextWrap ||
-        SURROUND_NONE == eSurroundForTextWrap )
+    if( css::text::WrapTextMode_THROUGHT == eSurroundForTextWrap ||
+        css::text::WrapTextMode_NONE == eSurroundForTextWrap )
         return eSurroundForTextWrap;
 
     // left is left and right is right
     if ( pCurrFrame->IsRightToLeft() )
     {
-        if ( SURROUND_LEFT == eSurroundForTextWrap )
-            eSurroundForTextWrap = SURROUND_RIGHT;
-        else if ( SURROUND_RIGHT == eSurroundForTextWrap )
-            eSurroundForTextWrap = SURROUND_LEFT;
+        if ( css::text::WrapTextMode_LEFT == eSurroundForTextWrap )
+            eSurroundForTextWrap = css::text::WrapTextMode_RIGHT;
+        else if ( css::text::WrapTextMode_RIGHT == eSurroundForTextWrap )
+            eSurroundForTextWrap = css::text::WrapTextMode_LEFT;
     }
 
     // "ideal page wrap":
-    if ( SURROUND_IDEAL == eSurroundForTextWrap )
+    if ( css::text::WrapTextMode_DYNAMIC == eSurroundForTextWrap )
     {
         SwRectFnSet aRectFnSet(pCurrFrame);
         const long nCurrLeft = aRectFnSet.GetPrtLeft(*pCurrFrame);
@@ -1347,7 +1347,7 @@ SwSurround SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
         long nFlyRight = aRectFnSet.GetRight(aRect);
 
         if ( nFlyRight < nCurrLeft || nFlyLeft > nCurrRight )
-            eSurroundForTextWrap = SURROUND_PARALLEL;
+            eSurroundForTextWrap = css::text::WrapTextMode_PARALLEL;
         else
         {
             long nLeft = nFlyLeft - nCurrLeft;
@@ -1363,20 +1363,20 @@ SwSurround SwTextFly::GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
                 ->getIDocumentSettingAccess()->get(DocumentSettingId::SURROUND_TEXT_WRAP_SMALL )
                 ? TEXT_MIN_SMALL : TEXT_MIN;
 
-            // In case there is no space on either side, then SURROUND_PARALLEL
+            // In case there is no space on either side, then css::text::WrapTextMode_PARALLEL
             // gives the same result when doing the initial layout or a layout
-            // update after editing, so prefer that over SURROUND_NONE.
+            // update after editing, so prefer that over css::text::WrapTextMode_NONE.
             if (nLeft == 0 && nRight == 0)
-                return SURROUND_PARALLEL;
+                return css::text::WrapTextMode_PARALLEL;
 
             if( nLeft < textMin )
                 nLeft = 0;
             if( nRight < textMin )
                 nRight = 0;
             if( nLeft )
-                eSurroundForTextWrap = nRight ? SURROUND_PARALLEL : SURROUND_LEFT;
+                eSurroundForTextWrap = nRight ? css::text::WrapTextMode_PARALLEL : css::text::WrapTextMode_LEFT;
             else
-                eSurroundForTextWrap = nRight ? SURROUND_RIGHT: SURROUND_NONE;
+                eSurroundForTextWrap = nRight ? css::text::WrapTextMode_RIGHT: css::text::WrapTextMode_NONE;
         }
     }
 

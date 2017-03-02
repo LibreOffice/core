@@ -501,7 +501,7 @@ static void lcl_MinMaxNode( SwFrameFormat* pNd, SwMinMaxNodeArgs* pIn )
     nMax += rLR.GetLeft();
     nMax += rLR.GetRight();
 
-    if( SURROUND_THROUGHT == pNd->GetSurround().GetSurround() )
+    if( css::text::WrapTextMode_THROUGHT == pNd->GetSurround().GetSurround() )
     {
         pIn->Minimum( nMin );
         return;

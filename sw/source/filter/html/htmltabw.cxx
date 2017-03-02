@@ -876,7 +876,7 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     // Prioritaet. NONE bedeutet, dass keine horizontale
     // Ausrichtung geschrieben wird.
     sal_Int16 eFlyHoriOri = text::HoriOrientation::NONE;
-    SwSurround eSurround = SURROUND_NONE;
+    css::text::WrapTextMode eSurround = css::text::WrapTextMode_NONE;
     sal_uInt8 nFlyPrcWidth = 0;
     long nFlyWidth = 0;
     sal_uInt16 nFlyHSpace = 0;
@@ -1038,13 +1038,13 @@ Writer& OutHTML_SwTableNode( Writer& rWrt, SwTableNode & rNode,
     case text::HoriOrientation::LEFT:
         // Wenn eine linksbuendigeTabelle keinen rechtsseiigen Durchlauf
         // hat, brauchen wir auch kein ALIGN=LEFT in der Tabelle.
-        if( eSurround==SURROUND_NONE || eSurround==SURROUND_LEFT )
+        if( eSurround==css::text::WrapTextMode_NONE || eSurround==css::text::WrapTextMode_LEFT )
             eTabHoriOri = text::HoriOrientation::NONE;
         break;
     case text::HoriOrientation::RIGHT:
         // Aehnliches gilt fuer rechtsbuendigeTabelle, hier nehmen wir
         // stattdessen ein <DIV ALIGN=RIGHT>.
-        if( eSurround==SURROUND_NONE || eSurround==SURROUND_RIGHT )
+        if( eSurround==css::text::WrapTextMode_NONE || eSurround==css::text::WrapTextMode_RIGHT )
         {
             eDivHoriOri = text::HoriOrientation::RIGHT;
             eTabHoriOri = text::HoriOrientation::NONE;

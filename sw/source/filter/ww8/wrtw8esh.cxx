@@ -834,7 +834,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
 
             const SwFormatSurround& rSurr = rFormat.GetSurround();
             sal_uInt16 nContour = rSurr.IsContour() ? 0x0080 : 0x0040;
-            SwSurround eSurround = rSurr.GetSurround();
+            css::text::WrapTextMode eSurround = rSurr.GetSurround();
 
             /*
              #i3958#
@@ -843,26 +843,26 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
              over the following dummy 0x01 graphic
             */
             if (rFrameFormat.IsInline())
-                eSurround = SURROUND_THROUGHT;
+                eSurround = css::text::WrapTextMode_THROUGHT;
 
             switch (eSurround)
             {
-                case SURROUND_NONE:
+                case css::text::WrapTextMode_NONE:
                     nFlags |= 0x0020;
                     break;
-                case SURROUND_THROUGHT:
+                case css::text::WrapTextMode_THROUGHT:
                     nFlags |= 0x0060;
                     break;
-                case SURROUND_PARALLEL:
+                case css::text::WrapTextMode_PARALLEL:
                     nFlags |= 0x0000 | nContour;
                     break;
-                case SURROUND_IDEAL:
+                case css::text::WrapTextMode_DYNAMIC:
                     nFlags |= 0x0600 | nContour;
                     break;
-                case SURROUND_LEFT:
+                case css::text::WrapTextMode_LEFT:
                     nFlags |= 0x0200 | nContour;
                     break;
-                case SURROUND_RIGHT:
+                case css::text::WrapTextMode_RIGHT:
                     nFlags |= 0x0400 | nContour;
                     break;
                 default:
@@ -2123,7 +2123,7 @@ sal_Int32 SwBasicEscherEx::WriteFlyFrameAttr(const SwFrameFormat& rFormat,
     // SwWW8ImplReader::Read_GrafLayer() imports these as opaque
     // unconditionally, so if both are true, don't export the property.
     bool bIsInHeader = sw::IsFlyFrameFormatInHeader(rFormat);
-    bool bIsThrought = rFormat.GetSurround().GetValue() == SURROUND_THROUGHT;
+    bool bIsThrought = rFormat.GetSurround().GetValue() == css::text::WrapTextMode_THROUGHT;
 
     if (bIsInHeader)
     {

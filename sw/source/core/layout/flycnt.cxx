@@ -345,9 +345,9 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 {
                     pFormat->LockModify();
                     SwFormatSurround aMain( pFormat->GetSurround() );
-                    if ( aMain.GetSurround() == SURROUND_NONE )
+                    if ( aMain.GetSurround() == css::text::WrapTextMode_NONE )
                     {
-                        aMain.SetSurround( SURROUND_THROUGHT );
+                        aMain.SetSurround( css::text::WrapTextMode_THROUGHT );
                         pFormat->SetFormatAttr( aMain );
                     }
                     pFormat->UnlockModify();
@@ -463,10 +463,10 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                              rFrameSz.GetHeightPercent() == SwFormatFrameSize::SYNCED )
                         {
                             SwFormatSurround aSurround( pFormat->GetSurround() );
-                            if ( aSurround.GetSurround() == SURROUND_NONE )
+                            if ( aSurround.GetSurround() == css::text::WrapTextMode_NONE )
                             {
                                 pFormat->LockModify();
-                                aSurround.SetSurround( SURROUND_THROUGHT );
+                                aSurround.SetSurround( css::text::WrapTextMode_THROUGHT );
                                 pFormat->SetFormatAttr( aSurround );
                                 pFormat->UnlockModify();
                                 bOsz = false;

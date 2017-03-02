@@ -2886,7 +2886,7 @@ void Notify_Background( const SdrObject* pObj,
                     && pFlyFrame // TODO: do it for draw objects too?
                     && pTab->IsFollow() // table starts on previous page?
                     // "through" means they will actually overlap anyway
-                    && SURROUND_THROUGHT != pFlyFrame->GetFormat()->GetSurround().GetSurround()
+                    && css::text::WrapTextMode_THROUGHT != pFlyFrame->GetFormat()->GetSurround().GetSurround()
                     // if it's anchored in footer it can't move to other page
                     && !pAnchor->FindFooterOrHeader())
                 {
