@@ -374,7 +374,7 @@ UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
     return c;
 }
 
-  // HardSpace and HardTrenn should be converted explicitely ! }
+  // HardSpace and HardTrenn should be converted explicitly ! }
   // if AktAtr.Schnitt and TextKaptBit =TextKaptBit then c:=UpCase(c);(explizit) }
 
   // The separationmethod SoftTrennAdd assumes, the separating consonant }

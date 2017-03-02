@@ -693,7 +693,7 @@ gboolean GtkSalMenu::SignalKey(GdkEventKey* pEvent)
         mbReturnFocusToDocument = false;
         gtk_menu_shell_cancel(GTK_MENU_SHELL(mpMenuBarWidget));
         //because we return false here, the keypress will continue
-        //to propogate and in the case that vcl focus is in
+        //to propagate and in the case that vcl focus is in
         //the vcl menubar then that will also process F6 and move
         //to the next pane
     }

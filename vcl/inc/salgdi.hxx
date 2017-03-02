@@ -156,7 +156,7 @@ public:
     //             pFont: describes from which font to create a subset
     //             pGlyphIDs: the glyph ids to be extracted
     //             pEncoding: the character code corresponding to each glyph
-    //             pWidths: the advance widths of the correspoding glyphs (in PS font units)
+    //             pWidths: the advance widths of the corresponding glyphs (in PS font units)
     //             nGlyphs: the number of glyphs
     //             rInfo: additional outgoing information
     // implementation note: encoding 0 with glyph id 0 should be added implicitly

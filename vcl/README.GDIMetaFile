@@ -3,7 +3,7 @@ GDIMetaFile class
 
 The GDIMetaFile class reads, writes, manipulates and replays metafiles via the VCL module.
 
-A typical use case is to intialize a new GDIMetaFile, open the actual stored metafile and
+A typical use case is to initialize a new GDIMetaFile, open the actual stored metafile and
 read it in via GDIMetaFile::Read( aIStream ). This reads in the metafile into the GDIMetafile
 object - it can read in an old-style VCLMTF metafile (back in the days that Microsoft didn't
 document the metafile format this was used), as well as EMF+ files - and adds them to a list

@@ -1014,7 +1014,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
                 {
                     // do NOT use erase; for e.g. 8bit Bitmaps, the nearest color to the given
                     // erase color is determined and used -> this may be different from what is
-                    // wanted here. Better create a new bitmap with the needed color explicitely
+                    // wanted here. Better create a new bitmap with the needed color explicitly
                     Bitmap::ScopedReadAccess xReadAccess(aChangedBitmap);
                     OSL_ENSURE(xReadAccess, "Got no Bitmap ReadAccess ?!?");
 

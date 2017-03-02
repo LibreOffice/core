@@ -1944,7 +1944,7 @@ bool ToolBox::ImplCalcItem()
     {
         // make sure all vertical toolbars have the same width and horizontal have the same height
         // this depends on the used button sizes
-        // as this is used for alignement of multiple toolbars
+        // as this is used for alignment of multiple toolbars
         // it is only required for docked toolbars
 
         long nFixedWidth = nDefWidth+nDropDownArrowWidth;

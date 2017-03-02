@@ -379,7 +379,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
         }
     }
 
-    // If we're ought to ouput again and we have been triggered
+    // If we're ought to output again and we have been triggered
     // a Paint event via an Action, we don't output directly,
     // but invalidate everything
     if ( bUpdate && HasPaintEvent() )

@@ -25,7 +25,7 @@
         LD_LIBRARY_PATH=`pwd`/instdir/program SAL_USE_VCLPLUGIN=svp AFL_PERSISTENT=1 afl-fuzz -t 50 -i ~/fuzz/in.png -o ~/fuzz/out.png -d -T png -m 50000000 instdir/program/fftester @@ png
 
         On slower file formats like .doc you can probably drop the -t and rely on the
-        estimations, on faster file formats ironically not specifing a timeout will
+        estimations, on faster file formats ironically not specifying a timeout will
         result in a hilarious dramatic falloff in performance from thousands per second
         to teens per second as tiny variations from the initial calculated
         timeout will trigger a shutdown of the fftester and a restart and the

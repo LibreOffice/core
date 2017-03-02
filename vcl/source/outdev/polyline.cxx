@@ -359,7 +359,7 @@ bool OutputDevice::DrawPolyLineDirect( const basegfx::B2DPolygon& rB2DPolygon,
                 LineInfo aLineInfo;
                 if( fLineWidth != 0.0 )
                     aLineInfo.SetWidth( static_cast<long>(fLineWidth+0.5) );
-                // Transport known informations, might be needed
+                // Transport known information, might be needed
                 aLineInfo.SetLineJoin(eLineJoin);
                 aLineInfo.SetLineCap(eLineCap);
                 // MiterMinimumAngle does not exist yet in LineInfo

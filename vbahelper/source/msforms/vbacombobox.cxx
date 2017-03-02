@@ -54,7 +54,7 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
 // Attributes
 
 
-// Value, [read] e.g. getValue returns the value of ooo Text propery e.g. the value in
+// Value, [read] e.g. getValue returns the value of ooo Text property e.g. the value in
 // the drop down
 uno::Any SAL_CALL
 ScVbaComboBox::getValue()
