@@ -41,7 +41,6 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -498,8 +497,11 @@ static bool lo_runMacro( LibreOfficeKit* pThis, const char *pURL)
 
         if (aErr.Name == "ErrorCode")
         {
-            pLib->maLastExceptionMsg = "An error occured running macro";
-            SAL_INFO("lok", "Macro execution terminated with errors");
+            sal_uInt32 nErrCode = ERRCODE_NONE;
+            aErr.Value >>= nErrCode;
+
+            pLib->maLastExceptionMsg = "An error occured running macro (error code: " + OUString::number( nErrCode ) + ")";
+            SAL_INFO("lok", "Macro execution terminated with error (error code: " + OUString::number( nErrCode ) + ")");
             return false;
         }
 
