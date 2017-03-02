@@ -578,7 +578,7 @@ static bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
         {
             // We use IDispatchEx because its GetDispID function causes the creation
             // of a property if it does not exist already. This is convenient for
-            // out parameters in JScript. Then the user must not specify propery "0"
+            // out parameters in JScript. Then the user must not specify property "0"
             // explicitly
             CComQIPtr<IDispatchEx> spDispEx( spDispDest);
             if( spDispEx)

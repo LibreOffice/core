@@ -1549,7 +1549,7 @@ uno::Any SAL_CALL OleComponent::getTransferData( const datatransfer::DataFlavor&
             }
         }
 
-        // If the replacement could not be retrieved, the cached representaion should be used
+        // If the replacement could not be retrieved, the cached representation should be used
         // currently it is not necessary to retrieve it here, so it is implemented in the object itself
     }
     // TODO: Investigate if there is already the format name

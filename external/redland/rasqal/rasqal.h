@@ -2010,7 +2010,7 @@ typedef enum {
  * @version: API version - only V1 is defined for now
  * @query: Source for this query.
  * @user_data: Context user data passed into the factory methods.
- * @init_triples_match: Factory method to initalise a new #rasqal_triples_match.
+ * @init_triples_match: Factory method to initialize a new #rasqal_triples_match.
  * @triple_present: Factory method to return presence or absence of a complete triple.
  * @free_triples_source: Factory method to deallocate resources.
  * @support_feature: Factory method to test support for a feature, returning non-0 if supported

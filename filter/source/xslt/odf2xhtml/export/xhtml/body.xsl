@@ -481,7 +481,7 @@
 		<xsl:param name="parentMarginLeft" />
 		<xsl:param name="pageMarginLeft" />
 
-<!-- 2DO: EXCHANGE FOLLOING SIBLING BY VARIABLE -->
+<!-- 2DO: EXCHANGE FOLLOWING SIBLING BY VARIABLE -->
 		<xsl:variable name="followingSiblingNode" select="following-sibling::node()[1]"/>
 
 

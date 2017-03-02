@@ -38,7 +38,7 @@
 
 
 /*
-    A simple popup window similary to the one the
+    A simple popup window similarly to the one the
     windows help (using WinHelp) creates when called
     with the option HELP_CONTEXTPOPUP.
 

@@ -127,7 +127,7 @@ bool EditSpellWrapper::SpellMore()
         SetCurTextObj( nullptr );
         if ( bMore )
         {
-            // The text has been entered into the engine, when backwords then
+            // The text has been entered into the engine, when backwards then
             // it must be behind the selection.
             pEditView->GetImpEditView()->SetEditSelection(
                         pEE->GetEditDoc().GetStartPaM() );

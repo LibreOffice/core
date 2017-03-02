@@ -300,11 +300,11 @@ namespace pcr
 
     void SQLCommandDesigner::impl_closeDesigner_nothrow()
     {
-        OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_closeDesigner_nothrow: invalid calle!" );
+        OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_closeDesigner_nothrow: invalid call!" );
         // close it
         try
         {
-            // do not listen anymore ....
+            // do not listen anymore...
             Reference< XPropertySet > xProps( m_xDesigner, UNO_QUERY );
             if ( xProps.is() )
                 xProps->removePropertyChangeListener( PROPERTY_ACTIVECOMMAND, this );

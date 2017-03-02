@@ -739,7 +739,7 @@ bool SVGFilter::implExportDocument()
         mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "height", aAttr );
     }
 
-    // #i124608# set viewBox explicitely to the exported content
+    // #i124608# set viewBox explicitly to the exported content
     if (mbExportShapeSelection)
     {
         aAttr = OUString::number(nDocX) + " " + OUString::number(nDocY) + " ";
@@ -910,7 +910,7 @@ void SVGFilter::implGenerateMetaData()
 
         // Add a (global) Page Numbering Type attribute for the document
         // NOTE: at present pSdrModel->GetPageNumType() returns always css::style::NumberingType::ARABIC
-        // so the following code fragment is pretty unuseful
+        // so the following code fragment is pretty useless
         sal_Int32 nPageNumberingType = css::style::NumberingType::ARABIC;
         SvxDrawPage* pSvxDrawPage = SvxDrawPage::getImplementation( mSelectedPages[0] );
         if( pSvxDrawPage )
@@ -1508,7 +1508,7 @@ void SVGFilter::implExportDrawPages( const std::vector< Reference< XDrawPage > >
             {
                 // Insert a further inner the <g> open tag for handling elements
                 // inserted before or after a slide: that is used for some
-                // when swithing from the last to the first slide.
+                // when switching from the last to the first slide.
                 const OUString & sPageId = implGetValidIDFromInterface( rxPages[i] );
                 OUString sContainerId = "container-";
                 sContainerId += sPageId;

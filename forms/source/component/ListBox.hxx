@@ -76,7 +76,7 @@
     ListBox as a sequence of *indices* in the value list, and do the
     lookup on demand:
 
-     - ListBox's content propery (or value property, sorry the
+     - ListBox's content property (or value property, sorry the
        terminology is not always consistent) is SelectedItems which is
        a sequence of *indices* in the value list.
 
