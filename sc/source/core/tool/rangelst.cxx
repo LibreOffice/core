@@ -751,7 +751,7 @@ bool handleTwoRanges( const ScRange& rDeleteRange, ScRange* p, std::vector<ScRan
 }
 
 /**
- * Check if any of the followings applies:
+ * Check if any of the following applies:
  *
  * X = column; Y = row
  * +----------+           +----------+

@@ -5362,14 +5362,14 @@ void Test::testNoteLifeCycle()
 
         // There's no ScTransferObject involved in the "fake" clipboard copy
         // and ScDocument dtor asking IsClipboardSource() gets no, so emulate
-        // the part that normally is reponsible for forgetting the caption
+        // the part that normally is responsible for forgetting the caption
         // objects.
         aClipDoc2.ClosingClipboardSource();
 
         pDoc2->DeleteTab(0);
         closeDocShell(xDocSh2);
 
-        pasteFromClip( m_pDoc, aPosB5, &aClipDoc2); // should not crash ... tdf#104967
+        pasteFromClip( m_pDoc, aPosB5, &aClipDoc2); // should not crash... tdf#104967
         ScPostIt* pNoteB5 = m_pDoc->GetNote(aPosB5);
         CPPUNIT_ASSERT_MESSAGE("Failed to paste cell comment at B5.", pNoteB5);
         const SdrCaptionObj* pCaptionB5 = pNoteB5->GetOrCreateCaption(aPosB5);

@@ -872,7 +872,7 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
             // we need to save the old anchor ( for persisting ) and also track any resize or repositions that happen.
 
             // This is an evil hack, having a anchor that is one minute in terms of untransformed object and then later
-            // in terms of the transformed object is not ideal, similary having 2 anchors per object is wasteful, can't
+            // in terms of the transformed object is not ideal, similarly having 2 anchors per object is wasteful, can't
             // see another way out of this at the moment though.
             rNoRotatedAnchor.maStart = rData.maStart;
             rNoRotatedAnchor.maEnd = rData.maEnd;

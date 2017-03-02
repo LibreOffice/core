@@ -2061,7 +2061,7 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
         return;
     }
 
-    //  nRotMaxCol is initalized to SC_ROTMAX_NONE, nRowNo is already set
+    //  nRotMaxCol is initialized to SC_ROTMAX_NONE, nRowNo is already set
 
     SCROW nY1 = pRowInfo[0].nRowNo;
     SCROW nY2 = pRowInfo[nArrCount-1].nRowNo;

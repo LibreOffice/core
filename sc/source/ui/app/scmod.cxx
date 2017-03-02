@@ -163,7 +163,7 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     mbIsInSharedDocLoading( false ),
     mbIsInSharedDocSaving( false )
 {
-    // The ResManager (DLL data) is not yet initalized in the ctor!
+    // The ResManager (DLL data) is not yet initialized in the ctor!
     SetName("StarCalc"); // for Basic
 
     ResetDragObject();

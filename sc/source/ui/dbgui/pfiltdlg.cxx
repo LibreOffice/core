@@ -378,7 +378,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
             OUString aStrVal = aValueEdArr[i]->GetText();
 
             /*
-             * The dialog returns the specifc field values "empty"/"non empty"
+             * The dialog returns the specific field values "empty"/"non empty"
              * as constant in nVal in connection with the bQueryByString switch
              * set to false
              */

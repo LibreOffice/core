@@ -3718,7 +3718,7 @@
      <table:covered-table-cell table:style-name="ce36"/>
      <table:table-cell table:style-name="ce38"/>
      <table:table-cell table:style-name="ce36" office:value-type="string" calcext:value-type="string" table:number-columns-spanned="2" table:number-rows-spanned="1">
-      <text:p>Independant functions</text:p>
+      <text:p>Independent functions</text:p>
      </table:table-cell>
      <table:covered-table-cell table:style-name="ce36"/>
      <table:table-cell table:number-columns-repeated="12"/>

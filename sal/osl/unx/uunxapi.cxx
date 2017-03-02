@@ -335,7 +335,7 @@ int utime_c(const char *cpPath, struct utimbuf *times)
 int ftruncate_with_name(int fd, sal_uInt64 uSize, rtl_String* path)
 {
     /* When sandboxed on OS X, ftruncate(), even if it takes an
-     * already open file descriptor which was retuned from an open()
+     * already open file descriptor which was returned from an open()
      * call already checked by the sandbox, still requires a security
      * scope bookmark for the file to be active in case the file is
      * one that the sandbox doesn't otherwise allow access to. Luckily
