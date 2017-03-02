@@ -43,7 +43,7 @@
     bridging code involved when those types are being used.
     </p>
 
-    <p>Sometimes a bridge cannot be created, depending on whether a programm uses
+    <p>Sometimes a bridge cannot be created, depending on whether a program uses
     the XBridgeSupplier2 interface remotely. Assuming one wants to bridge an
     OLE Automation object to UNO by calling createBridge on a proxy, then the UNO remote
     bridge would not recognise that the Any argument contains an IDispatch interface.

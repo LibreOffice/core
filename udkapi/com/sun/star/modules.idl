@@ -67,7 +67,7 @@ module registry {};
 /// Scripting language bindings.
 module script {};
 
-/// Interface for authorisation and authentification.
+/// Interface for authorisation and authentication.
 module security {};
 
 /// Basic UNO interfaces.

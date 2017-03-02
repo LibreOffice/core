@@ -4232,7 +4232,7 @@ bool Content::isResourceAvailable( const css::uno::Reference< css::ucb::XCommand
     {
         // To check for the physical URL resource availability, first
         // try using a simple HEAD command
-        // if HEAD is successfull, set element found,
+        // if HEAD is successful, set element found,
         rResAccess->HEAD( aHeaderNames, aResource, xEnv );
         rDAVOptions.setHttpResponseStatusCode( 0 );
         OUString aNoText;

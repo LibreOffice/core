@@ -306,7 +306,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser("Help utilities for testing LibreOffice")
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-v", "--verbose", help="increase output verbosity", action="store_true")
-    #parser.add_argument("p", type=str, help="programm name")
+    #parser.add_argument("p", type=str, help="program name")
     args = parser.parse_args()
     if args.verbose:
         verbose = True
