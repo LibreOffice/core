@@ -103,11 +103,11 @@ SwPageNumberFieldType::SwPageNumberFieldType()
 {
 }
 
-OUString SwPageNumberFieldType::Expand( SvxExtNumType nFormat, short nOff,
+OUString SwPageNumberFieldType::Expand( SvxNumType nFormat, short nOff,
          sal_uInt16 const nPageNumber, sal_uInt16 const nMaxPage,
          const OUString& rUserStr ) const
 {
-    SvxExtNumType nTmpFormat = (SVX_NUM_PAGEDESC == nFormat) ? nNumberingType : nFormat;
+    SvxNumType nTmpFormat = (SVX_NUM_PAGEDESC == nFormat) ? nNumberingType : nFormat;
     int const nTmp = nPageNumber + nOff;
 
     if (0 > nTmp || SVX_NUM_NUMBER_NONE == nTmpFormat || (!bVirtuell && nTmp > nMaxPage))
@@ -131,7 +131,7 @@ SwFieldType* SwPageNumberFieldType::Copy() const
 
 void SwPageNumberFieldType::ChangeExpansion( SwDoc* pDoc,
                                             bool bVirt,
-                                            const SvxExtNumType* pNumFormat )
+                                            const SvxNumType* pNumFormat )
 {
     if( pNumFormat )
         nNumberingType = *pNumFormat;
@@ -188,22 +188,22 @@ OUString SwPageNumberField::Expand() const
 
     if( PG_NEXT == nSubType && 1 != nOffset )
     {
-        sRet = pFieldType->Expand((SvxExtNumType)GetFormat(), 1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand((SvxNumType)GetFormat(), 1, m_nPageNumber, m_nMaxPage, sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand((SvxExtNumType)GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand((SvxNumType)GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
         }
     }
     else if( PG_PREV == nSubType && -1 != nOffset )
     {
-        sRet = pFieldType->Expand((SvxExtNumType)GetFormat(), -1, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand((SvxNumType)GetFormat(), -1, m_nPageNumber, m_nMaxPage, sUserStr);
         if (!sRet.isEmpty())
         {
-            sRet = pFieldType->Expand((SvxExtNumType)GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+            sRet = pFieldType->Expand((SvxNumType)GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
         }
     }
     else
-        sRet = pFieldType->Expand((SvxExtNumType)GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
+        sRet = pFieldType->Expand((SvxNumType)GetFormat(), nOffset, m_nPageNumber, m_nMaxPage, sUserStr);
     return sRet;
 }
 
@@ -720,7 +720,7 @@ SwDocStatFieldType::SwDocStatFieldType(SwDoc* pDocument)
     pDoc = pDocument;
 }
 
-OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxExtNumType nFormat) const
+OUString SwDocStatFieldType::Expand(sal_uInt16 nSubType, SvxNumType nFormat) const
 {
     sal_uInt32 nVal = 0;
     const SwDocStat& rDStat = pDoc->getIDocumentStatistics().GetDocStat();
@@ -767,7 +767,7 @@ SwDocStatField::SwDocStatField(SwDocStatFieldType* pTyp, sal_uInt16 nSub, sal_uI
 
 OUString SwDocStatField::Expand() const
 {
-    return static_cast<SwDocStatFieldType*>(GetTyp())->Expand(nSubType, (SvxExtNumType)GetFormat());
+    return static_cast<SwDocStatFieldType*>(GetTyp())->Expand(nSubType, (SvxNumType)GetFormat());
 }
 
 SwField* SwDocStatField::Copy() const
@@ -2165,11 +2165,11 @@ void SwRefPageGetFieldType::UpdateField( SwTextField* pTextField,
                             pRefFrame->FindPageFrame()->GetPhyPageNum() + 1
                         : 1;
 
-                SvxExtNumType nTmpFormat = SVX_NUM_PAGEDESC == (SvxExtNumType)pGetField->GetFormat()
+                SvxNumType nTmpFormat = SVX_NUM_PAGEDESC == (SvxNumType)pGetField->GetFormat()
                         ? ( !pPgFrame
                                 ? SVX_NUM_ARABIC
                                 : pPgFrame->GetPageDesc()->GetNumType().GetNumberingType() )
-                        : (SvxExtNumType)pGetField->GetFormat();
+                        : (SvxNumType)pGetField->GetFormat();
                 const short nPageNum = std::max<short>(0, pSetField->GetOffset() + nDiff);
                 pGetField->SetText( FormatNumber( nPageNum, nTmpFormat ) );
             }
@@ -2249,9 +2249,9 @@ void SwRefPageGetField::ChangeExpansion( const SwFrame* pFrame,
                             pRefFrame->FindPageFrame()->GetPhyPageNum() + 1;
 
         SwRefPageGetField* pGetField = const_cast<SwRefPageGetField*>(static_cast<const SwRefPageGetField*>(pField->GetFormatField().GetField()));
-        SvxExtNumType nTmpFormat = SVX_NUM_PAGEDESC == pGetField->GetFormat()
+        SvxNumType nTmpFormat = SVX_NUM_PAGEDESC == pGetField->GetFormat()
                             ? pPgFrame->GetPageDesc()->GetNumType().GetNumberingType()
-                            : (SvxExtNumType)pGetField->GetFormat();
+                            : (SvxNumType)pGetField->GetFormat();
         const short nPageNum = std::max<short>(0, pSetField->GetOffset() + nDiff);
         pGetField->SetText( FormatNumber( nPageNum, nTmpFormat ) );
     }

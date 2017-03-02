@@ -39,14 +39,14 @@ namespace style { struct TabStop; }
 
 struct SOParagraph
 {
-    bool                bExtendedParameters;
+    bool                    bExtendedParameters;
     sal_uInt32              nParaFlags;
     sal_Int16               nBulletFlags;
     OUString                sPrefix;
     OUString                sSuffix;
     OUString                sGraphicUrl;            // String to a graphic
     Size                    aBuGraSize;
-    SvxExtNumType           nNumberingType;
+    SvxNumType              nNumberingType;
     sal_uInt32              nHorzAdjust;
     sal_uInt32              nBulletColor;
     sal_Int32               nBulletOfs;
@@ -55,7 +55,7 @@ struct SOParagraph
     sal_Int16               nBulletRealSize;        // scale in percent
     sal_Int16               nDepth;                 // actual depth
     sal_Unicode             cBulletId;              // if Numbering Type == CharSpecial
-    css::awt::FontDescriptor       aFontDesc;
+    css::awt::FontDescriptor aFontDesc;
 
     bool                    bExtendedBulletsUsed;
     sal_uInt16              nBulletId;

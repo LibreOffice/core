@@ -43,7 +43,7 @@ enum class NBType
 class  SVX_DLLPUBLIC NumSettings_Impl
 {
     public:
-        SvxExtNumType   nNumberType;
+        SvxNumType      nNumberType;
         short           nParentNumbering;
         SvxNumberFormat::LabelFollowedBy eLabelFollowedBy;
         long            nTabValue;

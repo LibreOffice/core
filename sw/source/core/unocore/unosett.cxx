@@ -326,7 +326,7 @@ void SwXFootnoteProperties::setPropertyValue(const OUString& rPropertyName, cons
                     if(nTmp >= 0 &&
                         (nTmp <= SVX_NUM_ARABIC ||
                             nTmp > SVX_NUM_BITMAP))
-                        aFootnoteInfo.aFormat.SetNumberingType((SvxExtNumType)nTmp);
+                        aFootnoteInfo.aFormat.SetNumberingType((SvxNumType)nTmp);
                     else
                         throw lang::IllegalArgumentException();
                 }
@@ -617,7 +617,7 @@ void SwXEndnoteProperties::setPropertyValue(const OUString& rPropertyName, const
                 {
                     sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
-                    aEndInfo.aFormat.SetNumberingType((SvxExtNumType)nTmp);
+                    aEndInfo.aFormat.SetNumberingType((SvxNumType)nTmp);
                 }
                 break;
                 case  WID_START_AT:
@@ -836,7 +836,7 @@ void SwXLineNumberingProperties::setPropertyValue(
                     SvxNumberType aNumType(aFontMetric.GetNumType());
                     sal_Int16 nTmp = 0;
                     aValue >>= nTmp;
-                    aNumType.SetNumberingType((SvxExtNumType)nTmp);
+                    aNumType.SetNumberingType((SvxNumType)nTmp);
                     aFontMetric.SetNumType(aNumType);
                 }
                 break;
@@ -1848,7 +1848,7 @@ void SwXNumberingRules::SetPropertiesToNumFormat(
                     sal_Int16 nSet = 0;
                     pProp->Value >>= nSet;
                     if(nSet >= 0)
-                        aFormat.SetNumberingType((SvxExtNumType)nSet);
+                        aFormat.SetNumberingType((SvxNumType)nSet);
                     else
                         bWrongArg = true;
                 }

@@ -69,8 +69,8 @@ public:
 
     SwFormatFootnoteEndAtTextEnd & operator=( const SwFormatFootnoteEndAtTextEnd & rAttr );
 
-    SvxExtNumType GetNumType() const        { return aFormat.GetNumberingType(); }
-    void SetNumType( SvxExtNumType eType )  { aFormat.SetNumberingType(eType); }
+    SvxNumType GetNumType() const        { return aFormat.GetNumberingType(); }
+    void SetNumType( SvxNumType eType )  { aFormat.SetNumberingType(eType); }
 
     const SvxNumberType& GetSwNumType() const   { return aFormat; }
 

@@ -52,8 +52,8 @@ public:
 
     void          Reload(SwInsertNumTypes nTypeFlags);
 
-    SvxExtNumType GetSelectedNumberingType();
-    bool          SelectNumberingType(SvxExtNumType nType);
+    SvxNumType    GetSelectedNumberingType();
+    bool          SelectNumberingType(SvxNumType nType);
 };
 
 #endif

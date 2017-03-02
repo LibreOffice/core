@@ -588,7 +588,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
 
 static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLevel )
 {
-    static const SvxExtNumType eNumA[8] = { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
+    static const SvxNumType eNumA[8] = { SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
         SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N, SVX_NUM_ARABIC,
         SVX_NUM_ARABIC, SVX_NUM_ARABIC };
 
@@ -597,7 +597,7 @@ static void SetBaseAnlv(SwNumFormat &rNum, WW8_ANLV const &rAV, sal_uInt8 nSwLev
     if (rAV.nfc < 8) {
         rNum.SetNumberingType( eNumA[ rAV.nfc ] );
     } else {
-        SvxExtNumType nType = SVX_NUM_ARABIC;
+        SvxNumType nType = SVX_NUM_ARABIC;
         switch( rAV.nfc ) {
         case 14:
         case 19:nType = SVX_NUM_FULL_WIDTH_ARABIC; break;

@@ -190,13 +190,13 @@ static HTMLOptionEnum aHTMLFileNameFieldFormatTable[] =
     { nullptr,                    0 }
 };
 
-SvxExtNumType SwHTMLParser::GetNumType( const OUString& rStr, SvxExtNumType nDfltType )
+SvxNumType SwHTMLParser::GetNumType( const OUString& rStr, SvxNumType nDfltType )
 {
     const HTMLOptionEnum *pOptEnums = aHTMLPageNumFieldFormatTable;
     while( pOptEnums->pName )
     {
         if( rStr.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
-            return (SvxExtNumType)pOptEnums->nValue;
+            return (SvxNumType)pOptEnums->nValue;
         pOptEnums++;
     }
     return nDfltType;
@@ -411,19 +411,19 @@ void SwHTMLParser::NewField()
 
                 short nOff = 0;
 
-                if( (SvxExtNumType)nFormat!=SVX_NUM_CHAR_SPECIAL && !aValue.isEmpty() )
+                if( (SvxNumType)nFormat!=SVX_NUM_CHAR_SPECIAL && !aValue.isEmpty() )
                     nOff = (short)aValue.toInt32();
                 else if( (SwPageNumSubType)nSub == PG_NEXT  )
                     nOff = 1;
                 else if( (SwPageNumSubType)nSub == PG_PREV  )
                     nOff = -1;
 
-                if( (SvxExtNumType)nFormat==SVX_NUM_CHAR_SPECIAL &&
+                if( (SvxNumType)nFormat==SVX_NUM_CHAR_SPECIAL &&
                     (SwPageNumSubType)nSub==PG_RANDOM )
                     nFormat = SVX_NUM_PAGEDESC;
 
                 pNewField = new SwPageNumberField(static_cast<SwPageNumberFieldType*>(pType), nSub, nFormat, nOff);
-                if ((SvxExtNumType)nFormat == SVX_NUM_CHAR_SPECIAL)
+                if ((SvxNumType)nFormat == SVX_NUM_CHAR_SPECIAL)
                     static_cast<SwPageNumberField *>(pNewField)->SetUserString(aValue);
             }
         }

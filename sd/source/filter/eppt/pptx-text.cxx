@@ -821,7 +821,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                 {
                     OUString aPropName( pPropValue[ i ].Name );
                     if ( aPropName == "NumberingType" )
-                        nNumberingType = (SvxExtNumType)*o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                        nNumberingType = (SvxNumType)*o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
                     else if ( aPropName == "Adjust" )
                         nHorzAdjust = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
                     else if ( aPropName == "BulletChar" )

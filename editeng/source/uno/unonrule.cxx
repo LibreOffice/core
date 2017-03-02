@@ -282,7 +282,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
             // There is no reason to limit numbering types.
             if ( nSet>=0 )
             {
-                aFmt.SetNumberingType((SvxExtNumType)nSet);
+                aFmt.SetNumberingType((SvxNumType)nSet);
                 continue;
             }
         }

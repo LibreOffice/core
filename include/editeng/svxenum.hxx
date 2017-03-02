@@ -149,7 +149,7 @@ enum class SvxSpellArea
 /**
  * these must match the values in css::style::NumberingType
  */
-enum SvxExtNumType
+enum SvxNumType
 {
     SVX_NUM_CHARS_UPPER_LETTER    = css::style::NumberingType::CHARS_UPPER_LETTER,    // Counts from a-z, aa - az, ba - bz, ...
     SVX_NUM_CHARS_LOWER_LETTER    = css::style::NumberingType::CHARS_LOWER_LETTER,

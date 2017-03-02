@@ -128,7 +128,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 {
                     const SvxBrushItem* pBrush = aFormat.GetBrush();
                     if(pBrush && !pBrush->GetGraphicLink().isEmpty())
-                        aFormat.SetNumberingType(SvxExtNumType(SVX_NUM_BITMAP|LINK_TOKEN));
+                        aFormat.SetNumberingType(SvxNumType(SVX_NUM_BITMAP|LINK_TOKEN));
                     aRule.SetLevel(i, aFormat, aRule.Get(i) != nullptr);
                 }
             }

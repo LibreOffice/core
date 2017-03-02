@@ -817,7 +817,7 @@ OUString SwDBSetNumberField::Expand() const
 {
     if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || nNumber == 0)
         return OUString();
-    return FormatNumber(nNumber, (SvxExtNumType)GetFormat());
+    return FormatNumber(nNumber, (SvxNumType)GetFormat());
 }
 
 void SwDBSetNumberField::Evaluate(SwDoc* pDoc)

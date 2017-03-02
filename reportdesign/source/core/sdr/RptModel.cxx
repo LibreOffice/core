@@ -121,8 +121,8 @@ SvxNumType OReportModel::GetPageNumType() const
 {
     uno::Reference< report::XReportDefinition > xReportDefinition( getReportDefinition() );
     if ( xReportDefinition.is() )
-        return getStyleProperty<sal_Int16>(xReportDefinition,PROPERTY_NUMBERINGTYPE);
-    return css::style::NumberingType::ARABIC;
+        return (SvxNumType) getStyleProperty<sal_Int16>(xReportDefinition,PROPERTY_NUMBERINGTYPE);
+    return SVX_NUM_ARABIC;
 }
 
 

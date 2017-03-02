@@ -431,7 +431,7 @@ SwField * SwField::CopyField() const
 }
 
 /// expand numbering
-OUString FormatNumber(sal_uInt32 nNum, SvxExtNumType nFormat)
+OUString FormatNumber(sal_uInt32 nNum, SvxNumType nFormat)
 {
     if(SVX_NUM_PAGEDESC == nFormat)
         return  OUString::number( nNum );

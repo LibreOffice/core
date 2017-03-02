@@ -121,7 +121,7 @@ public:
     sal_uInt16 m_nLeftBorderDistance;
     sal_uInt16 m_nRightBorderDistance;
 
-    SvxExtNumType m_nNumberingType;
+    SvxNumType m_nNumberingType;
     sal_Unicode m_cBulletChar;
 
     sal_uInt16 m_nColumnCount;

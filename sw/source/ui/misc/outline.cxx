@@ -650,7 +650,7 @@ IMPL_LINK_NOARG(SwOutlineSettingsTabPage, CollSelectGetFocus, Control&, void)
 IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, ListBox&, rBox, void )
 {
     sal_uInt16 nMask = 1;
-    SvxExtNumType nNumberType = static_cast<SwNumberingTypeListBox&>(rBox).GetSelectedNumberingType();
+    SvxNumType nNumberType = static_cast<SwNumberingTypeListBox&>(rBox).GetSelectedNumberingType();
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
     {
         if(nActLevel & nMask)
