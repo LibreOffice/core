@@ -92,7 +92,7 @@
 
 # German (Austria) dictionary.
 [ language=de || language=de_AT || language=de_DE ]
-    0cf6783cb0f1355ef3869aa9699700b3 https://sourceforge.net/projects/aoo-extensions/files/1697/12/dict-de_at-frami_2017-01-28.oxt/download "dict-de_at-frami_2017-01-12.oxt"
+    0cf6783cb0f1355ef3869aa9699700b3 https://sourceforge.net/projects/aoo-extensions/files/1697/12/dict-de_at-frami_2017-01-12.oxt/download "dict-de_at-frami_2017-01-12.oxt"
 
 # German (Switzerland) dictionary.
 [ language=de || language=de_CH || language=de_DE ]
