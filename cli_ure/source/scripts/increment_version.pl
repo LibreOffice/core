@@ -30,7 +30,7 @@ sub incrementPolicyVersion($);
 my $usage =
 "The tool increments the minor version of assemblies and the major version of ".
 "the respective policy files. This is only done if new uno types have been added since".
-"the last product upate. This information is obtained from the file which is passed as ".
+"the last product update. This information is obtained from the file which is passed as ".
 "argument changedTypes. The names in the version file must have a particular form. ".
 "They must end on one of folling terms: NEW_VERSION, OLD_VERSION, POLICY_VERSION\n".
 "If no new published types have been added then no output, argument  newVersions, is written".

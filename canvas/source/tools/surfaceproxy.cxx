@@ -114,7 +114,7 @@ namespace canvas
             ::basegfx::triangulator::triangulate(rClipPoly));
 
         // dump polygons
-        SAL_INFO("canvas", "Orignal clip polygon: " <<  basegfx::tools::exportToSvgD( rClipPoly, true, true, false ));
+        SAL_INFO("canvas", "Original clip polygon: " <<  basegfx::tools::exportToSvgD( rClipPoly, true, true, false ));
         SAL_INFO("canvas", "Triangulated polygon: " <<  basegfx::tools::exportToSvgD(basegfx::B2DPolyPolygon(rTriangulatedPolygon), true, true, false ));
 
         for( const auto& rSurfacePtr : maSurfaceList )

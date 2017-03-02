@@ -1763,7 +1763,7 @@ namespace comphelper
 
         if (mbActive)
         {
-            // ensure existance
+            // ensure existence
             getInitialBaseURL();
 
             // if not found, we are out of business (maExt may be empty)
@@ -1809,7 +1809,7 @@ namespace comphelper
 
     void BackupFileHelper::reactOnSafeMode(bool bSafeMode)
     {
-        // ensure existance of needed paths
+        // ensure existence of needed paths
         getInitialBaseURL();
 
         if (!maUserConfigBaseURL.isEmpty())
@@ -2719,7 +2719,7 @@ namespace comphelper
         case 2:
         {
             // whole directory. To do so, scan directory and exclude some dirs
-            // from which we know they do not need to be secured explicitely. This
+            // from which we know they do not need to be secured explicitly. This
             // should already include registrymodifications, too.
             scanDirsAndFiles(
                 maUserConfigWorkURL,

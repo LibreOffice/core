@@ -15,7 +15,7 @@
 #include "check.hxx"
 
 /*
-  Find overriden methods that :
+  Find overridden methods that :
   (a) declare default params in different palces to their super-method(s)
 
   Still TODO

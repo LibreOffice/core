@@ -474,7 +474,7 @@ bool RefCounting::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     if (ignoreLocation(functionDecl)) {
         return true;
     }
-    // only consider base declarations, not overriden ones, or we warn on methods that
+    // only consider base declarations, not overridden ones, or we warn on methods that
     // are overriding stuff from external libraries
     const CXXMethodDecl * methodDecl = dyn_cast<CXXMethodDecl>(functionDecl);
     if (methodDecl && methodDecl->size_overridden_methods() > 0) {
