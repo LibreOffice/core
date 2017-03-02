@@ -59,6 +59,7 @@ namespace sax_fastparser {
         , mbMarkStackEmpty(true)
         , mpDoubleStr(nullptr)
         , mnDoubleStrCapacity(RTL_STR_MAX_VALUEOFDOUBLE)
+        , mbXescape(true)
     {
         rtl_string_new_WithLength(&mpDoubleStr, mnDoubleStrCapacity);
         mxFastTokenHandler = css::xml::sax::FastTokenHandler::create(
@@ -101,7 +102,6 @@ namespace sax_fastparser {
         write( sOutput.getStr(), sOutput.getLength(), bEscape );
     }
 
-#if OSL_DEBUG_LEVEL > 0
     /** Characters not allowed in XML 1.0
         XML 1.1 would exclude only U+0000
      */
@@ -119,7 +119,11 @@ namespace sax_fastparser {
         }
         return true;
     }
-#endif
+
+    bool isHexDigit( char c )
+    {
+        return ('0' <= c && c <= '9') || ('A' <= c && c <= 'F') || ('a' <= c && c <= 'f');
+    }
 
     void FastSaxSerializer::write( const char* pStr, sal_Int32 nLen, bool bEscape )
     {
@@ -133,6 +137,9 @@ namespace sax_fastparser {
         }
 
         bool bGood = true;
+        const sal_Int32 kXescapeLen = 7;
+        char bufXescape[kXescapeLen+1];
+        sal_Int32 nNextXescape = 0;
         for (sal_Int32 i = 0; i < nLen; ++i)
         {
             char c = pStr[ i ];
@@ -143,24 +150,114 @@ namespace sax_fastparser {
                 case '&':   writeBytes( "&amp;", 5 );    break;
                 case '\'':  writeBytes( "&apos;", 6 );   break;
                 case '"':   writeBytes( "&quot;", 6 );   break;
-                case '\n':  writeBytes( "&#10;", 5 );    break;
-                case '\r':  writeBytes( "&#13;", 5 );    break;
-                default:
-#if OSL_DEBUG_LEVEL > 0
-                            /* FIXME: we should escape such invalid characters
-                             * in the _xHHHH_ form OOXML uses. Note that also a
-                             * literal "_x0008_" would have to be escaped then
-                             * as _x005F_x0008_ (where only the leading '_' is
-                             * escaped as _x005F_). */
-                            if (invalidChar(pStr[i]))
+#if 0
+                case '\t':
+                            // Seems OOXML prefers the _xHHHH_ escape over the
+                            // entity in *some* cases, apparently in attribute
+                            // values but not in element data.
+                            // Would need to distinguish at a higher level.
+                            if (mbXescape)
                             {
-                                bGood = false;
-                                // The SAL_WARN() for the single character is
-                                // issued in writeBytes(), just gather for the
-                                // SAL_WARN_IF() below.
+                                snprintf( bufXescape, kXescapeLen+1, "_x%04x_",
+                                        static_cast<unsigned int>(static_cast<unsigned char>(c)));
+                                writeBytes( bufXescape, kXescapeLen);
+                            }
+                            else
+                            {
+                                // We did never write this, but literal tab
+                                // instead. Should we?
+                                writeBytes( "&#9;", 4 );
+                            }
+                break;
+#endif
+                case '\n':
+#if 0
+                            if (mbXescape)
+                            {
+                                snprintf( bufXescape, kXescapeLen+1, "_x%04x_",
+                                        static_cast<unsigned int>(static_cast<unsigned char>(c)));
+                                writeBytes( bufXescape, kXescapeLen);
+                            }
+                            else
+#endif
+                            {
+                                writeBytes( "&#10;", 5 );
+                            }
+                break;
+                case '\r':
+#if 0
+                            if (mbXescape)
+                            {
+                                snprintf( bufXescape, kXescapeLen+1, "_x%04x_",
+                                        static_cast<unsigned int>(static_cast<unsigned char>(c)));
+                                writeBytes( bufXescape, kXescapeLen);
+                            }
+                            else
+#endif
+                            {
+                                writeBytes( "&#13;", 5 );
+                            }
+                break;
+                default:
+                            if (mbXescape)
+                            {
+                                // Escape characters not valid in XML 1.0 as
+                                // _xHHHH_. A literal "_xHHHH_" has to be
+                                // escaped as _x005F_xHHHH_ (effectively
+                                // escaping the leading '_').
+                                // See ECMA-376-1:2016 page 3736,
+                                // 22.4.2.4 bstr (Basic String)
+                                // for reference.
+                                if (c == '_' && i >= nNextXescape && i <= nLen - kXescapeLen &&
+                                        pStr[i+6] == '_' &&
+                                        ((pStr[i+1] | 0x20) == 'x') &&
+                                        isHexDigit( pStr[i+2] ) &&
+                                        isHexDigit( pStr[i+3] ) &&
+                                        isHexDigit( pStr[i+4] ) &&
+                                        isHexDigit( pStr[i+5] ))
+                                {
+                                    // OOXML has the odd habit to write some
+                                    // names using this that when re-saving
+                                    // should *not* be escaped, specifically
+                                    // _x0020_ for blanks in w:xpath values.
+                                    if (strncmp( pStr+i+2, "0020", 4) != 0)
+                                    {
+                                        writeBytes( "_x005F_", kXescapeLen);
+                                        // Remember this escapement so in
+                                        // _xHHHH_xHHHH_ only the first '_' is
+                                        // escaped.
+                                        nNextXescape = i + kXescapeLen;
+                                        break;
+                                    }
+                                }
+                                if (invalidChar(c))
+                                {
+                                    snprintf( bufXescape, kXescapeLen+1, "_x%04x_",
+                                            static_cast<unsigned int>(static_cast<unsigned char>(c)));
+                                    writeBytes( bufXescape, kXescapeLen);
+                                    break;
+                                }
+                                /* TODO: also U+FFFE and U+FFFF are not allowed
+                                 * in XML 1.0, assuming we're writing UTF-8
+                                 * those should be escaped as well to be
+                                 * conformant. Likely that would involve
+                                 * scanning for both encoded sequences and
+                                 * write as _xHHHH_? */
+                            }
+#if OSL_DEBUG_LEVEL > 0
+                            else
+                            {
+                                if (bGood && invalidChar(pStr[i]))
+                                {
+                                    bGood = false;
+                                    // The SAL_WARN() for the single character is
+                                    // issued in writeBytes(), just gather for the
+                                    // SAL_WARN_IF() below.
+                                }
                             }
 #endif
-                            writeBytes( &c, 1 );         break;
+                            writeBytes( &c, 1 );
+                break;
             }
         }
         SAL_WARN_IF( !bGood && nLen > 1, "sax", "in '" << OString(pStr,std::min<sal_Int32>(nLen,42)) << "'");
