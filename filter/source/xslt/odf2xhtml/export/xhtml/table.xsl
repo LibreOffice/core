@@ -117,7 +117,7 @@
 
 				The cell-style depends on two attributes:
 
-				1) table:style-name - the style properties of cell. When they exist, a default alignement (cp. below) will be added for the
+				1) table:style-name - the style properties of cell. When they exist, a default alignment (cp. below) will be added for the
 									  case of no alignment in the style exist.
 
 				2) office:value-type - the value type of the table-cell giving the default alignments.

@@ -229,7 +229,7 @@ protected:
     sal_uInt32 SAL_CALL onWMNotify(HWND hwndChild, LPOFNOTIFYW lpOfNotify);
 
     // we use non-virtual functions to do necessary work before
-    // calling the virtual funtions (see Gamma: Template method)
+    // calling the virtual functions (see Gamma: Template method)
     void SAL_CALL handleInitDialog(HWND hwndDlg, HWND hwndChild);
 
 protected:

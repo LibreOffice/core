@@ -834,7 +834,7 @@
     <glade-widget-class title="Button with small padding" name="vcllo-SmallButton"
                         generic-name="SmallButton" parent="GtkButton"
                         icon-name="widget-gtk-button"/>
-    <glade-widget-class title="Horizontal box hiding childs depending on its priorities" name="sfxlo-PriorityHBox"
+    <glade-widget-class title="Horizontal box hiding children depending on its priorities" name="sfxlo-PriorityHBox"
                         generic-name="PriorityHBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
     <glade-widget-class title="Table Design Control" name="sdlo-TableDesignBox"
@@ -849,7 +849,7 @@
     <glade-widget-class title="Notebookbar ToolBox" name="sfxlo-NotebookbarToolBox"
                         generic-name="Notebookbar ToolBox" parent="sfxlo-SidebarToolBox"
                         icon-name="widget-gtk-toolbar"/>
-    <glade-widget-class title="Vertical box hiding childs depending on context" name="sfxlo-ContextVBox"
+    <glade-widget-class title="Vertical box hiding children depending on context" name="sfxlo-ContextVBox"
                         generic-name="ContextVBox" parent="GtkBox"
                         icon-name="widget-gtk-box"/>
     <glade-widget-class title="Managed Menu Button" name="svtlo-ManagedMenuButton"

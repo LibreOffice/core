@@ -186,7 +186,7 @@ public class FinalizedMandatoryTest
             // 1a.) try to change the filter in the container
             xNR.replaceByName(filterName, instance);
 
-            // 1b.) try to wirte the changed filter to the configuration.
+            // 1b.) try to write the changed filter to the configuration.
             // This must result in a exception if the filter is finalized.
             boolean flushError = false;
             try
@@ -205,7 +205,7 @@ public class FinalizedMandatoryTest
 
             // 2a.) try to remove the filter from the container
             xNC.removeByName(filterName);
-            // 1b.) try to wirte the changed filter to the configuration.
+            // 1b.) try to write the changed filter to the configuration.
             // This must result in a exception if the filter is mandatory
             flushError = false;
             try

@@ -840,7 +840,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link<SpellCallbackInfo
         // Note: That could of course be done by clipping the
         // resulting sequence but the current third party
         // implementations result differs greatly if the number of
-        // suggestions to be retuned gets changed. Statistically
+        // suggestions to be returned gets changed. Statistically
         // it gets much better if told to return e.g. only 7 strings
         // than returning e.g. 16 suggestions and using only the
         // first 7. Thus we hand down the value to use to that
