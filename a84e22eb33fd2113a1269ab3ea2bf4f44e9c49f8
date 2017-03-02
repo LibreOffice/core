@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_96db381b",
+        "filename": "sc/inc/docsh.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2017-03-02T19:25:27Z",
+      "side": 1,
+      "message": "No, it should be INCLUDED_SC_INC_DOCSH_HXX, where did you get that \"VIEWDATA\" from?",
+      "range": {
+        "startLine": 20,
+        "startChar": 8,
+        "endLine": 20,
+        "endChar": 27
+      },
+      "revId": "a84e22eb33fd2113a1269ab3ea2bf4f44e9c49f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
