@@ -160,7 +160,7 @@ namespace rptui
     *
     * \param pControl           the control which should place in the section without overlapping
     * \param _pReportSection    the section
-    * \param _bInsert           sal_True whe the control should be inserted, otherwise not.
+    * \param _bInsert           sal_True when the control should be inserted, otherwise not.
     */
     void correctOverlapping(SdrObject* pControl,OReportSection& _aReportSection,bool _bInsert = true);
 
