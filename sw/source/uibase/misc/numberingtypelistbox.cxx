@@ -165,12 +165,12 @@ void SwNumberingTypeListBox::Reload(SwInsertNumTypes nTypeFlags)
     }
 }
 
-SvxExtNumType   SwNumberingTypeListBox::GetSelectedNumberingType()
+SvxNumType   SwNumberingTypeListBox::GetSelectedNumberingType()
 {
-    SvxExtNumType nRet = SVX_NUM_CHARS_UPPER_LETTER;
+    SvxNumType nRet = SVX_NUM_CHARS_UPPER_LETTER;
     sal_Int32 nSelPos = GetSelectEntryPos();
     if(LISTBOX_ENTRY_NOTFOUND != nSelPos)
-        nRet = (SvxExtNumType)reinterpret_cast<sal_uLong>(GetEntryData(nSelPos));
+        nRet = (SvxNumType)reinterpret_cast<sal_uLong>(GetEntryData(nSelPos));
 #if OSL_DEBUG_LEVEL > 0
     else
         OSL_FAIL("SwNumberingTypeListBox not selected");
@@ -178,7 +178,7 @@ SvxExtNumType   SwNumberingTypeListBox::GetSelectedNumberingType()
     return nRet;
 }
 
-bool    SwNumberingTypeListBox::SelectNumberingType(SvxExtNumType nType)
+bool    SwNumberingTypeListBox::SelectNumberingType(SvxNumType nType)
 {
     sal_Int32 nPos = GetEntryPos(reinterpret_cast<void*>((sal_uLong)nType));
     SelectEntryPos( nPos );

@@ -41,7 +41,7 @@ const sal_Char *SwHTMLWriter::GetNumFormat( sal_uInt16 nFormat )
 {
     const sal_Char *pFormatStr = nullptr;
 
-    switch( (SvxExtNumType)nFormat )
+    switch( (SvxNumType)nFormat )
     {
     case SVX_NUM_CHARS_UPPER_LETTER:    pFormatStr = OOO_STRING_SW_HTML_FF_uletter;    break;
     case SVX_NUM_CHARS_LOWER_LETTER:    pFormatStr = OOO_STRING_SW_HTML_FF_lletter;    break;
@@ -141,7 +141,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 OSL_ENSURE( pSubStr, "ubekannter Subtyp fuer SwPageNumberField" );
                 pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFormat) );
 
-                if( (SvxExtNumType)nFormat==SVX_NUM_CHAR_SPECIAL )
+                if( (SvxNumType)nFormat==SVX_NUM_CHAR_SPECIAL )
                 {
                     aValue = static_cast<const SwPageNumberField *>(pField)->GetUserString();
                 }

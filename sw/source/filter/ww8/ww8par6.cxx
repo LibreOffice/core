@@ -771,7 +771,7 @@ void wwSectionManager::SetNumberingType(const wwSection &rNewSection,
     SwPageDesc &rPageDesc)
 {
     // save page number format
-    static const SvxExtNumType aNumTyp[5] =
+    static const SvxNumType aNumTyp[5] =
     {
         SVX_NUM_ARABIC, SVX_NUM_ROMAN_UPPER, SVX_NUM_ROMAN_LOWER,
         SVX_NUM_CHARS_UPPER_LETTER_N, SVX_NUM_CHARS_LOWER_LETTER_N

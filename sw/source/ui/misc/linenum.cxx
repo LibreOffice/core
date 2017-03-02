@@ -116,7 +116,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw)
     }
 
     // format
-    SvxExtNumType nSelFormat = rInf.GetNumType().GetNumberingType();
+    SvxNumType nSelFormat = rInf.GetNumType().GetNumberingType();
 
     m_pFormatLB->SelectNumberingType(nSelFormat);
 

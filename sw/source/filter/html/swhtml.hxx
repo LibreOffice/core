@@ -647,7 +647,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
 
     // <SDFIELD>
 public:
-    static SvxExtNumType GetNumType( const OUString& rStr, SvxExtNumType eDfltType );
+    static SvxNumType GetNumType( const OUString& rStr, SvxNumType eDfltType );
 private:
     void NewField();
     void EndField();

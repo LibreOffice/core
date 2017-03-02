@@ -1718,7 +1718,7 @@ static void ParseCSS1_list_style_type( const CSS1Expression *pExpr,
         if( SvxCSS1Parser::GetEnum( aNumberStyleTable, rValue, nEnum ) )
         {
             rPropInfo.m_bNumbering = true;
-            rPropInfo.m_nNumberingType = (SvxExtNumType)nEnum;
+            rPropInfo.m_nNumberingType = (SvxNumType)nEnum;
         }
         if( SvxCSS1Parser::GetEnum( aBulletStyleTable, rValue, nEnum ) )
         {
