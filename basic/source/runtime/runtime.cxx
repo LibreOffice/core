@@ -1974,7 +1974,7 @@ void SbiRuntime::StepSET()
 {
     SbxVariableRef refVal = PopVar();
     SbxVariableRef refVar = PopVar();
-    StepSET_Impl( refVal, refVar, bVBAEnabled ); // this is really assigment
+    StepSET_Impl( refVal, refVar, bVBAEnabled ); // this is really assignment
 }
 
 void SbiRuntime::StepVBASET()
