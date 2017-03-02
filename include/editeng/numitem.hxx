@@ -55,19 +55,19 @@ class EDITENG_DLLPUBLIC SvxNumberType
     static sal_Int32 nRefCount;
     static css::uno::Reference<css::text::XNumberingFormatter> xFormatter;
 
-    sal_Int16       nNumType;
+    SvxExtNumType   nNumType;
     bool            bShowSymbol;        // Also show Symbol ?
 
 public:
-    explicit SvxNumberType(sal_Int16 nType = css::style::NumberingType::ARABIC);
+    explicit SvxNumberType(SvxExtNumType nType = SVX_NUM_ARABIC);
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
     OUString        GetNumStr( sal_uLong nNo ) const;
     OUString        GetNumStr( sal_uLong nNo, const css::lang::Locale& rLocale ) const;
 
-    void            SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
-    sal_Int16       GetNumberingType() const {return nNumType;}
+    void            SetNumberingType(SvxExtNumType nSet) {nNumType = nSet;}
+    SvxExtNumType   GetNumberingType() const {return nNumType;}
 
     void            SetShowSymbol(bool bSet) {bShowSymbol = bSet;}
     bool            IsShowSymbol()const{return bShowSymbol;}
@@ -96,8 +96,8 @@ public:
     };
 
 private:
-    OUString       sPrefix;
-    OUString       sSuffix;
+    OUString            sPrefix;
+    OUString            sSuffix;
 
     SvxAdjust           eNumAdjust;
 
@@ -125,13 +125,13 @@ private:
 
     // specifies what follows the list label before the text of the first line
     // of the list item starts
-    LabelFollowedBy       meLabelFollowedBy;
+    LabelFollowedBy     meLabelFollowedBy;
     // specifies an additional list tab stop position for meLabelFollowedBy = LISTTAB
-    long                        mnListtabPos;
+    long                mnListtabPos;
     // specifies the first line indent
-    long                        mnFirstLineIndent;
+    long                mnFirstLineIndent;
     // specifies the indent before the text, e.g. in L2R-layout the left margin
-    long                        mnIndentAt;
+    long                mnIndentAt;
 
     SvxBrushItem*       pGraphicBrush;
     sal_Int16           eVertOrient;        // vertical alignment of a bitmap
@@ -142,7 +142,7 @@ private:
     OUString            sCharStyleName;     // Character Style
 
 public:
-    explicit SvxNumberFormat( sal_Int16 nNumberingType,
+    explicit SvxNumberFormat( SvxExtNumType nNumberingType,
                      SvxNumPositionAndSpaceMode ePositionAndSpaceMode = LABEL_WIDTH_AND_POSITION );
     SvxNumberFormat(const SvxNumberFormat& rFormat);
     SvxNumberFormat( SvStream & rStream );
@@ -158,9 +158,9 @@ public:
     void            SetNumAdjust(SvxAdjust eSet) {eNumAdjust = eSet;}
     SvxAdjust       GetNumAdjust() const {return eNumAdjust;}
     void            SetPrefix(const OUString& rSet) { sPrefix = rSet;}
-    const OUString&   GetPrefix() const { return sPrefix;}
+    const OUString& GetPrefix() const { return sPrefix;}
     void            SetSuffix(const OUString& rSet) { sSuffix = rSet;}
-    const OUString&   GetSuffix() const { return sSuffix;}
+    const OUString& GetSuffix() const { return sSuffix;}
 
     void                    SetCharFormatName(const OUString& rSet){ sCharStyleName = rSet; }
     virtual OUString        GetCharFormatName()const;
@@ -170,14 +170,14 @@ public:
     void            SetBulletChar(sal_Unicode cSet){cBullet = cSet;}
     sal_Unicode     GetBulletChar()const {return cBullet;}
     void            SetBulletRelSize(sal_uInt16 nSet) {nBulletRelSize = nSet;}
-    sal_uInt16          GetBulletRelSize() const { return nBulletRelSize;}
+    sal_uInt16      GetBulletRelSize() const { return nBulletRelSize;}
     void            SetBulletColor(Color nSet){nBulletColor = nSet;}
     const Color&    GetBulletColor()const {return nBulletColor;}
 
     void            SetIncludeUpperLevels( sal_uInt8 nSet ) { nInclUpperLevels = nSet;}
-    sal_uInt8           GetIncludeUpperLevels()const  { return nInclUpperLevels;}
+    sal_uInt8       GetIncludeUpperLevels()const  { return nInclUpperLevels;}
     void            SetStart(sal_uInt16 nSet) {nStart = nSet;}
-    sal_uInt16          GetStart() const {return nStart;}
+    sal_uInt16      GetStart() const {return nStart;}
 
     virtual void    SetGraphicBrush( const SvxBrushItem* pBrushItem, const Size* pSize = nullptr, const sal_Int16* pOrient = nullptr);
     const SvxBrushItem*         GetBrush() const {return pGraphicBrush;}

@@ -190,20 +190,16 @@ static HTMLOptionEnum aHTMLFileNameFieldFormatTable[] =
     { nullptr,                    0 }
 };
 
-sal_uInt16 SwHTMLParser::GetNumType( const OUString& rStr, sal_uInt16 nDfltType )
+SvxExtNumType SwHTMLParser::GetNumType( const OUString& rStr, SvxExtNumType nDfltType )
 {
-    sal_uInt16 nType = nDfltType;
     const HTMLOptionEnum *pOptEnums = aHTMLPageNumFieldFormatTable;
     while( pOptEnums->pName )
-        if( !rStr.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
-            pOptEnums++;
-        else
-            break;
-
-    if( pOptEnums->pName )
-        nType = pOptEnums->nValue;
-
-    return nType;
+    {
+        if( rStr.equalsIgnoreAsciiCaseAscii( pOptEnums->pName ) )
+            return (SvxExtNumType)pOptEnums->nValue;
+        pOptEnums++;
+    }
+    return nDfltType;
 }
 
 void SwHTMLParser::NewField()

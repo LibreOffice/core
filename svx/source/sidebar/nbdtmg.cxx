@@ -98,7 +98,11 @@ NumSettings_Impl* lcl_CreateNumberingSettingsPtr(const Sequence<PropertyValue>& 
     for(sal_Int32 j = 0; j < rLevelProps.getLength(); j++)
     {
         if(pValues[j].Name == "NumberingType")
-            pValues[j].Value >>= pNew->nNumberType;
+        {
+            sal_Int16 nTmp;
+            if (pValues[j].Value >>= nTmp)
+                pNew->nNumberType = (SvxExtNumType)nTmp;
+        }
         else if(pValues[j].Name == "Prefix")
             pValues[j].Value >>= pNew->sPrefix;
         else if(pValues[j].Name == "Suffix")
@@ -543,7 +547,7 @@ void NumberingTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_
         return;
 
     SvxNumberFormat aFmt(aNum.GetLevel(nActLv));
-    sal_Int16 eNumType = aFmt.GetNumberingType();
+    SvxExtNumType eNumType = aFmt.GetNumberingType();
 
     sal_uInt16 nCount = pNumberSettingsArr->size();
     if ( nIndex >= nCount )
@@ -579,7 +583,7 @@ void NumberingTypeMgr::ApplyNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uIn
     NumberSettingsArr_Impl*     pCurrentNumberSettingsArr=pNumberSettingsArr;
     if (isDefault) pCurrentNumberSettingsArr=pDefaultNumberSettingsArr;
     NumberSettings_Impl* _pSet = (*pCurrentNumberSettingsArr)[nIndex].get();
-    sal_Int16 eNewType = _pSet->pNumSetting->nNumberType;
+    SvxExtNumType eNewType = _pSet->pNumSetting->nNumberType;
 
     sal_uInt16 nMask = 1;
     OUString sNumCharFmtName = GetBulCharFmtName();
@@ -781,7 +785,7 @@ void OutlineTypeMgr::RelplaceNumRule(SvxNumRule& aNum, sal_uInt16 nIndex, sal_uI
     for (sal_uInt16 iLevel=0;iLevel < nCount;iLevel++)
     {
         SvxNumberFormat aFmt(aNum.GetLevel(iLevel));
-        sal_Int16 eNumType = aFmt.GetNumberingType();
+        SvxExtNumType eNumType = aFmt.GetNumberingType();
 
         NumSettings_Impl* _pSet = (*pItemArr->pNumSettingsArr)[iLevel].get();
 

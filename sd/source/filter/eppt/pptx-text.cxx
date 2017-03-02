@@ -765,7 +765,7 @@ void ParagraphObj::ImplClear()
 
 void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
 {
-    if ( ( (SvxExtNumType)nNumberingType == SVX_NUM_BITMAP ) && ( nBulletId != 0xffff ) )
+    if ( ( nNumberingType == SVX_NUM_BITMAP ) && ( nBulletId != 0xffff ) )
     {
         // calculate the bulletrealsize for this grafik
         if ( aBuGraSize.Width() && aBuGraSize.Height() )
@@ -821,7 +821,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                 {
                     OUString aPropName( pPropValue[ i ].Name );
                     if ( aPropName == "NumberingType" )
-                        nNumberingType = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+                        nNumberingType = (SvxExtNumType)*o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
                     else if ( aPropName == "Adjust" )
                         nHorzAdjust = *o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
                     else if ( aPropName == "BulletChar" )
@@ -959,7 +959,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                             else
                                 cBulletId = 0x2022;
 
-                            switch( (SvxExtNumType)nNumberingType )
+                            switch( nNumberingType )
                             {
                                 case SVX_NUM_CHARS_UPPER_LETTER :
                                 case SVX_NUM_CHARS_UPPER_LETTER_N :
@@ -1075,6 +1075,8 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider* pBuProv, sal_Int1
                                 default:
                                     break;
                             }
+                            break;
+                            default: break;
                         }
                         nParaFlags |= 0x2f;
                         nBulletFlags |= 6;

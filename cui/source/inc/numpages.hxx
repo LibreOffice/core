@@ -31,6 +31,7 @@
 #include <vcl/edit.hxx>
 #include <vcl/field.hxx>
 #include <editeng/numdef.hxx>
+#include <editeng/svxenum.hxx>
 #include <svtools/ctrlbox.hxx>
 #include <vcl/dialog.hxx>
 
@@ -65,14 +66,14 @@ class SvxNumberingPreview : public vcl::Window
 
 struct SvxNumSettings_Impl
 {
-    short           nNumberType;
+    SvxExtNumType   nNumberType;
     short           nParentNumbering;
     OUString   sPrefix;
     OUString   sSuffix;
     OUString   sBulletChar;
     OUString   sBulletFont;
     SvxNumSettings_Impl() :
-        nNumberType(0),
+        nNumberType(SVX_NUM_CHARS_UPPER_LETTER),
         nParentNumbering(0)
         {}
 };

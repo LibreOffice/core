@@ -778,7 +778,7 @@ void wwSectionManager::SetNumberingType(const wwSection &rNewSection,
     };
 
     SvxNumberType aType;
-    aType.SetNumberingType( static_cast< sal_Int16 >(aNumTyp[rNewSection.maSep.nfcPgn]) );
+    aType.SetNumberingType( aNumTyp[rNewSection.maSep.nfcPgn] );
     rPageDesc.SetNumType(aType);
 }
 
