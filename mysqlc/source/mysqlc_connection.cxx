@@ -495,7 +495,7 @@ void SAL_CALL OConnection::clearWarnings()
 
 void OConnection::disposing()
 {
-    // we noticed that we should be destroied in near future so we have to dispose our statements
+    // we noticed that we should be destroyed in near future so we have to dispose our statements
     MutexGuard aGuard(m_aMutex);
 
     for (OWeakRefArray::iterator i = m_aStatements.begin(); i != m_aStatements.end() ; ++i) {

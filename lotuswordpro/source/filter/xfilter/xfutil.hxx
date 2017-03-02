@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Tool funtions for xml filter.
+ * Tool functions for xml filter.
  * Don't use any template for the ***TOOUString function list for easy.
  ************************************************************************/
 #ifndef INCLUDED_LOTUSWORDPRO_SOURCE_FILTER_XFILTER_XFUTIL_HXX

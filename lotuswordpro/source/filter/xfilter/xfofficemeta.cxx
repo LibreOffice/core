@@ -55,7 +55,7 @@
  ************************************************************************/
 /*************************************************************************
  * @file
- * Implemention file for Meta data,pls reference to the header file.
+ * Implementation file for Meta data,pls reference to the header file.
  ************************************************************************/
 #include "xfofficemeta.hxx"
 #include "ixfstream.hxx"

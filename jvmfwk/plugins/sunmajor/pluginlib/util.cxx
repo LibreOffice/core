@@ -1297,7 +1297,7 @@ void addJavaInfosDirScan(
                 {
                     //usr/java
                     //When we look directly into a dir like /usr, /usr/lib, etc. then we only
-                    //look for certain java directories, such as jre, jdk, etc. Whe do not want
+                    //look for certain java directories, such as jre, jdk, etc. We do not want
                     //to examine the whole directory because of performance reasons.
                     DirectoryItem item2;
                     if(DirectoryItem::get(usDir2, item2) == File::E_None)

@@ -742,7 +742,7 @@ void LwpPara::RegisterStyle()
     //register master page;
     RegisterMasterPage(GetXFParaStyle());
 
-    // reg auto style,lay here for pagebreak need overrided para style
+    // reg auto style,lay here for pagebreak need overridden para style
     m_Fribs.SetPara(this);
     m_Fribs.RegisterStyle();
 

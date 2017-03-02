@@ -77,7 +77,7 @@ drawing::EnhancedCustomShapeParameterPair lcl_parseEnhancedCustomShapeParameterP
 {
     drawing::EnhancedCustomShapeParameterPair aPair;
     OString aToken = rValue;
-    // We expect the followings here: First.Value, First.Type, Second.Value, Second.Type
+    // We expect the following here: First.Value, First.Type, Second.Value, Second.Type
     static const char aExpectedFVPrefix[] = "First = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
     assert(aToken.startsWith(aExpectedFVPrefix));
     sal_Int32 nIndex = strlen(aExpectedFVPrefix);
@@ -107,7 +107,7 @@ drawing::EnhancedCustomShapeSegment lcl_parseEnhancedCustomShapeSegment(const OS
 {
     drawing::EnhancedCustomShapeSegment aSegment;
     OString aToken = rValue;
-    // We expect the followings here: Command, Count
+    // We expect the following here: Command, Count
     static const char aExpectedCommandPrefix[] = "Command = (short) ";
     assert(aToken.startsWith(aExpectedCommandPrefix));
     sal_Int32 nIndex = strlen(aExpectedCommandPrefix);
@@ -125,7 +125,7 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
 {
     awt::Rectangle aRectangle;
     OString aToken = rValue;
-    // We expect the followings here: X, Y, Width, Height
+    // We expect the following here: X, Y, Width, Height
     static const char aExpectedXPrefix[] = "X = (long) ";
     assert(aToken.startsWith(aExpectedXPrefix));
     sal_Int32 nIndex = strlen(aExpectedXPrefix);
@@ -156,7 +156,7 @@ awt::Size lcl_parseSize(const OString& rValue)
 {
     awt::Size aSize;
     OString aToken = rValue;
-    // We expect the followings here: Width, Height
+    // We expect the following here: Width, Height
     static const char aExpectedWidthPrefix[] = "Width = (long) ";
     assert(aToken.startsWith(aExpectedWidthPrefix));
     sal_Int32 nIndex = strlen(aExpectedWidthPrefix);
@@ -289,7 +289,7 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
             {
                 drawing::EnhancedCustomShapeParameter aParameter;
                 aToken = aToken.copy(strlen(aExpectedPrefix), aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
-                // We expect the followings here: Value and Type
+                // We expect the following here: Value and Type
                 static const char aExpectedVPrefix[] = "Value = (any) { (long) ";
                 assert(aToken.startsWith(aExpectedVPrefix));
                 sal_Int32 nIndex = strlen(aExpectedVPrefix);

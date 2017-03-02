@@ -105,7 +105,7 @@
 
 05/15/06 (JSC, TL): TaskID=i54823,i62825
   adapt the documentation because of specification errors which have never matched
-  the existing implmentation.
+  the existing implementation.
   Style -> FollowStyle property is now of type string instead of boolean
   TextTableRow -> TableColumnSeparators is now a sequence instead of the single return
 
