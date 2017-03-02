@@ -54,7 +54,7 @@ namespace svgio
             maXLink(),
             mpXLink(nullptr)
         {
-            OSL_ENSURE(aType == SVGTokenLinearGradient || aType == SVGTokenRadialGradient, "SvgGradientNode should ony be used for Linear and Radial gradient (!)");
+            OSL_ENSURE(aType == SVGTokenLinearGradient || aType == SVGTokenRadialGradient, "SvgGradientNode should only be used for Linear and Radial gradient (!)");
         }
 
         SvgGradientNode::~SvgGradientNode()

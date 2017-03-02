@@ -70,7 +70,7 @@ ColorNameMap::ColorNameMap() {
     }
     catch (css::uno::RuntimeException const&)
     {
-        // When an exception occurred then whe have an empty name sequence
+        // When an exception occurred then we have an empty name sequence
         // and the loop below is not entered.
     }
 

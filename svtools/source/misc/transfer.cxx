@@ -667,7 +667,7 @@ bool TransferableHelper::SetBitmapEx( const BitmapEx& rBitmapEx, const DataFlavo
         {
             const Bitmap aBitmap(rBitmapEx.GetBitmap());
 
-            // explicitely use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
+            // explicitly use Bitmap::Write with bCompressed = sal_False and bFileHeader = sal_True
             WriteDIB(aBitmap, aMemStm, false, true);
         }
 
@@ -1573,7 +1573,7 @@ bool TransferableDataHelper::GetBitmapEx( const DataFlavor& rFlavor, BitmapEx& r
             Bitmap aBitmap;
             AlphaMask aMask;
 
-            // explicitely use Bitmap::Read with bFileHeader = sal_True
+            // explicitly use Bitmap::Read with bFileHeader = sal_True
             // #i124085# keep DIBV5 for read from clipboard, but should not happen
             ReadDIBV5(aBitmap, aMask, *xStm);
 

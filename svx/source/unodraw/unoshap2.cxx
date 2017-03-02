@@ -1705,7 +1705,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
         {
             // Luckily, the object causing problems in tdf#93994 is not the
             // UNO API object, but the XCustomShapeEngine involved. This
-            // object is on-demand replacable and can be reset here. This
+            // object is on-demand replaceable and can be reset here. This
             // will free the involved EditEngine and VirtualDevice.
             pTarget->mxCustomShapeEngine.set(nullptr);
         }

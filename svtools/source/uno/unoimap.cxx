@@ -82,7 +82,7 @@ public:
 
     rtl::Reference<SvMacroTableEventDescriptor> mxEvents;
 
-    // overriden helpers from PropertySetHelper
+    // overridden helpers from PropertySetHelper
     virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues ) override;
     virtual void _getPropertyValues( const PropertyMapEntry** ppEntries, Any* pValue ) override;
 
@@ -397,7 +397,7 @@ OUString SAL_CALL SvUnoImageMapObject::getImplementationName()
     }
 }
 
-// overriden helpers from PropertySetHelper
+// overridden helpers from PropertySetHelper
 void SvUnoImageMapObject::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues )
 {
     bool bOk = false;

@@ -145,7 +145,7 @@ void Test::testNumberFormat()
         nullptr
     };
 
-// Followings aren't in range of NF_FRACTION_START and NF_FRACTION_END
+// Following aren't in range of NF_FRACTION_START and NF_FRACTION_END
 // see enum NfIndexTableOffset in svl/inc/svl/zforlist.hxx
     const char* pFractionExt[] = {
         "# \?\?\?/\?\?\?",

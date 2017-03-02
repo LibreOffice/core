@@ -151,7 +151,7 @@ struct pool
     int      primary;    /**< primary allocation in bytes */
     int      secondary;  /**< secondary allocation in bytes */
 };
-#define POOL_ALIGN_INCREMENT 8 /**< Alignement, must be a power of 2 and of size > to sizeof(void*) */
+#define POOL_ALIGN_INCREMENT 8 /**< alignment, must be a power of 2 and of size > to sizeof(void*) */
 
 
 static void* pool_take_extent(struct pool* pool, int allocate)
