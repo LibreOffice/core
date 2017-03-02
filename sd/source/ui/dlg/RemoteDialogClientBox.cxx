@@ -214,7 +214,7 @@ long ClientBox::GetActiveEntryIndex()
 //This function may be called with nPos < 0
 void ClientBox::selectEntry( const long nPos )
 {
-    //ToDo whe should not use the guard at such a big scope here.
+    //ToDo we should not use the guard at such a big scope here.
     //Currently it is used to guard m_vEntries and m_nActive. m_nActive will be
     //modified in this function.
     //It would be probably best to always use a copy of m_vEntries

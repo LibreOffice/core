@@ -31,7 +31,7 @@ bool lcl_comparePriority(const vcl::IPrioritable* a, const vcl::IPrioritable* b)
 }
 
 /*
- * PriorityHBox is a VclHBox which hides own childs if there is no sufficient space.
+ * PriorityHBox is a VclHBox which hides its own children if there is no sufficient space.
  * Hiding order can be modified using child's priorities. If a control have default
  * priority assigned (VCL_PRIORITY_DEFAULT), it is always shown.
  */

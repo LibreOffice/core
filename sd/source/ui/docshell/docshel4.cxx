@@ -270,7 +270,7 @@ bool DrawDocShell::Load( SfxMedium& rMedium )
     mbNewDocument = false;
 
     // If this is an ODF file being loaded, then by default, use legacy processing
-    // for tdf#99729 (if required, it will be overriden in *::ReadUserDataSequence())
+    // for tdf#99729 (if required, it will be overridden in *::ReadUserDataSequence())
     if (IsOwnStorageFormat(rMedium))
     {
         mpDoc->SetAnchoredTextOverflowLegacy(true);

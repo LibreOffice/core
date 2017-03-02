@@ -847,7 +847,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     bool bDisableCollapseAll = true;
     bool bDisableExpandAll   = true;
 
-    // does the selection contain something collapsable/expandable?
+    // does the selection contain something collapsible/expandable?
     if (!bDisableCollapse)
         bDisableCollapseAll = false;
     if (!bDisableExpand)

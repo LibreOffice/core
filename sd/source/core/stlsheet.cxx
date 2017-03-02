@@ -526,7 +526,7 @@ void SdStyleSheet::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         return;
 
     /* if the dummy gets a notify about a changed attribute, he takes care that
-       the actual ment style sheet sends broadcasts. */
+       the actual meant style sheet sends broadcasts. */
     if (rHint.GetId() == SfxHintId::DataChanged)
     {
         SdStyleSheet* pRealStyle = GetRealStyleSheet();
