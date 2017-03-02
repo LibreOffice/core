@@ -10,6 +10,9 @@
 
 fuzzer_externals = \
     boost_headers \
+    orcus \
+    orcus-parser \
+    boost_filesystem \
     curl \
     harfbuzz \
     graphite \

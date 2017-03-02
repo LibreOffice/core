@@ -2757,10 +2757,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL ImportPPT(
     return bRet;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPT(const OUString &rURL)
+extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPT(SvStream &rStream)
 {
-    SvFileStream aFileStream(rURL, StreamMode::READ);
-    tools::SvRef<SotStorage> xStorage(new SotStorage(aFileStream));
+    tools::SvRef<SotStorage> xStorage(new SotStorage(rStream));
     if (xStorage->GetError())
         return false;
 
@@ -2770,7 +2769,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPT(const OUString &rURL
 
     SdDLL::Init();
 
-    SfxMedium aSrcMed(rURL, StreamMode::STD_READ);
+    SfxMedium aSrcMed("", StreamMode::STD_READ);
 
     xDocStream->SetVersion(xStorage->GetVersion());
     xDocStream->SetCryptMaskKey(xStorage->GetKey());
