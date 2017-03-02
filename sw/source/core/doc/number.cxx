@@ -700,7 +700,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
 OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                                     const bool bInclSuperiorNumLabels,
-                                    const sal_uInt8 nRestrictInclToThisLevel ) const
+                                    const int nRestrictInclToThisLevel ) const
 {
     OUString aRefNumStr;
 
@@ -782,7 +782,7 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
             }
         } while ( pWorkingNodeNum &&
                   pWorkingNodeNum->GetLevelInListTree() >= 0 &&
-                  static_cast<sal_uInt8>(pWorkingNodeNum->GetLevelInListTree()) >= nRestrictInclToThisLevel );
+                  pWorkingNodeNum->GetLevelInListTree() >= nRestrictInclToThisLevel );
     }
 
     return aRefNumStr;

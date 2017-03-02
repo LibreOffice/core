@@ -59,6 +59,7 @@
 
 #include <sfx2/childwin.hxx>
 
+#include <cstddef>
 #include <memory>
 #include <vector>
 #include <set>
@@ -509,7 +510,7 @@ OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
 
         // Determine, up to which level the superior list labels have to be
         // included - default is to include all superior list labels.
-        sal_uInt8 nRestrictInclToThisLevel( 0 );
+        int nRestrictInclToThisLevel( 0 );
         // Determine for format REF_NUMBER the level, up to which the superior
         // list labels have to be restricted, if the text node of the reference
         // field and the text node of the referenced item are in the same
@@ -539,7 +540,7 @@ OUString SwGetRefField::MakeRefNumStr( const SwTextNode& rTextNodeOfField,
             {
                 const SwNumberTree::tNumberVector rFieldNumVec = pNodeNumForTextNodeOfField->GetNumberVector();
                 const SwNumberTree::tNumberVector rRefItemNumVec = rTextNodeOfReferencedItem.GetNum()->GetNumberVector();
-                sal_uInt8 nLevel( 0 );
+                std::size_t nLevel( 0 );
                 while ( nLevel < rFieldNumVec.size() && nLevel < rRefItemNumVec.size() )
                 {
                     if ( rRefItemNumVec[nLevel] == rFieldNumVec[nLevel] )

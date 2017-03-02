@@ -172,7 +172,7 @@ public:
                           Extremities* pExtremities = nullptr ) const;
     OUString MakeRefNumString( const SwNodeNum& rNodeNum,
                              const bool bInclSuperiorNumLabels,
-                             const sal_uInt8 nRestrictInclToThisLevel ) const;
+                             const int nRestrictInclToThisLevel ) const;
 
     /**
 
