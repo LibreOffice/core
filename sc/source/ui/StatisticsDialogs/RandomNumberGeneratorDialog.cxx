@@ -420,6 +420,10 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
     sal_Int16 aSelectedIndex = mpDistributionCombo-> GetSelectEntryPos();
     sal_Int64 aSelectedId = reinterpret_cast<sal_Int64>( mpDistributionCombo->GetEntryData(aSelectedIndex) );
 
+    // To retain the original values which may change when changing the decimal digits etc.
+    sal_Int64 nParam1Value = mpParameter1Value->GetValue();
+    sal_Int64 nParam2Value = mpParameter2Value->GetValue();
+
     mpParameter1Value->SetMin(SAL_MIN_INT64);
     mpParameter1Value->SetMax(SAL_MAX_INT64);
     mpParameter2Value->SetMin(SAL_MIN_INT64);
@@ -443,6 +447,13 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
         }
         case DIST_UNIFORM_INTEGER:
         {
+            // tdf#104117: uniform int distribution may crash with 64 bit
+            // integer range when generating values.
+            mpParameter1Value->SetMin(SAL_MIN_INT32);
+            mpParameter1Value->SetMax(SAL_MAX_INT32);
+            mpParameter2Value->SetMin(SAL_MIN_INT32);
+            mpParameter2Value->SetMax(SAL_MAX_INT32);
+
             mpParameter1Text->SetText(SC_RESSTR(STR_RNG_PARAMETER_MINIMUM));
             mpParameter1Value->SetDecimalDigits(0);
             mpParameter1Value->SetSpinSize(1);
@@ -509,6 +520,9 @@ IMPL_LINK_NOARG(ScRandomNumberGeneratorDialog, DistributionChanged, ListBox&, vo
             break;
         }
     }
+
+    mpParameter1Value->SetValue(nParam1Value);
+    mpParameter2Value->SetValue(nParam2Value);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
