@@ -279,17 +279,17 @@ bool PSDReader::ImplReadHeader()
     // this is a loop over the resource entries to get the resolution info
     while( m_rPSD.Tell() < nLayerPos )
     {
-        sal_uInt8 n8;
-        sal_uInt32 nType, nPStringLen, nResEntryLen;
-        sal_uInt16 nUniqueID;
-
-        m_rPSD.ReadUInt32( nType ).ReadUInt16( nUniqueID ).ReadUChar( n8 );
-        nPStringLen = n8;
-        if ( nType != 0x3842494d )
+        sal_uInt32 nType(0);
+        sal_uInt16 nUniqueID(0);
+        sal_uInt8 n8(0);
+        m_rPSD.ReadUInt32(nType).ReadUInt16(nUniqueID).ReadUChar(n8);
+        if (nType != 0x3842494d)
             break;
+        sal_uInt32 nPStringLen = n8;
         if ( ! ( nPStringLen & 1 ) )
             nPStringLen++;
         m_rPSD.SeekRel( nPStringLen );  // skipping the pstring
+        sal_uInt32 nResEntryLen(0);
         m_rPSD.ReadUInt32( nResEntryLen );
         if ( nResEntryLen & 1 )
             nResEntryLen++;             // the resource entries are padded
