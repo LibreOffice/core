@@ -1271,28 +1271,6 @@
                                 <property name="top_attach">1</property>
                               </packing>
                             </child>
-                            <child>
-                              <object class="GtkSeparator" id="separator33">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSeparator" id="separator34">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="orientation">vertical</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">1</property>
-                              </packing>
-                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1512,7 +1490,6 @@
                       <object class="GtkBox" id="box9">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">center</property>
                         <child>
                           <object class="GtkSeparator" id="separator35">
                             <property name="visible">True</property>
@@ -1530,6 +1507,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
+                            <property name="valign">center</property>
                             <child>
                               <object class="sfxlo-NotebookbarToolBox" id="style">
                                 <property name="visible">True</property>
@@ -2451,7 +2429,6 @@
                       <object class="GtkBox" id="box109">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">center</property>
                         <child>
                           <object class="GtkSeparator" id="separator9">
                             <property name="visible">True</property>
@@ -2503,6 +2480,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
+                            <property name="valign">center</property>
                             <child>
                               <object class="GtkButton" id="InsertFrame">
                                 <property name="visible">True</property>
@@ -2569,7 +2547,6 @@
                       <object class="GtkBox" id="box82">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="valign">center</property>
                         <child>
                           <object class="GtkSeparator" id="separator10">
                             <property name="visible">True</property>
@@ -2587,6 +2564,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
+                            <property name="valign">center</property>
                             <child>
                               <object class="GtkButton" id="InsertPageNumberField">
                                 <property name="visible">True</property>
@@ -4055,7 +4033,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="tooltip_text" translatable="yes">Zoom</property>
-                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box">
                         <property name="visible">True</property>
@@ -4103,6 +4080,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="orientation">vertical</property>
+                                <property name="valign">center</property>
                                 <child>
                                   <object class="GtkButton" id="ZoomPage">
                                     <property name="visible">True</property>
@@ -4204,6 +4182,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box90">
                         <property name="visible">True</property>
@@ -4303,6 +4282,7 @@
                   <object class="sfxlo-DropdownBox" id="box96">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box97">
                         <property name="visible">True</property>
@@ -4359,6 +4339,7 @@
                   <object class="sfxlo-DropdownBox" id="box35">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box20">
                         <property name="visible">True</property>
@@ -4513,6 +4494,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box91">
                         <property name="visible">True</property>
@@ -4570,6 +4552,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box92">
                         <property name="visible">True</property>
@@ -4665,6 +4648,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="orientation">vertical</property>
+                            <property name="valign">center</property>
                             <child>
                               <object class="GtkButton" id="AutoSum">
                                 <property name="visible">True</property>
@@ -4737,6 +4721,7 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <property name="homogeneous">True</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box94">
                         <property name="visible">True</property>
@@ -4940,6 +4925,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box99">
                         <property name="visible">True</property>
@@ -5021,6 +5007,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box100">
                         <property name="visible">True</property>
@@ -5114,6 +5101,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box101">
                         <property name="visible">True</property>
@@ -5195,6 +5183,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box102">
                         <property name="visible">True</property>
@@ -5288,6 +5277,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box103">
                         <property name="visible">True</property>
@@ -5367,6 +5357,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box104">
                         <property name="visible">True</property>
@@ -5446,6 +5437,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
+                    <property name="valign">center</property>
                     <child>
                       <object class="GtkBox" id="box105">
                         <property name="visible">True</property>
