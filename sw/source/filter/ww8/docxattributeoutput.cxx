@@ -472,7 +472,7 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
             {
                 if (m_bStartedCharSdt)
                 {
-                    // Run-level SDT still open? Close it befor AlternateContent.
+                    // Run-level SDT still open? Close it before AlternateContent.
                     EndSdtBlock();
                     m_bStartedCharSdt = false;
                 }
@@ -3386,7 +3386,7 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
             SAL_WARN("sw.ww8", "DocxAttributeOutput::TableDefinition: unhandled property: " << aGrabBagElement->first);
     }
 
-    // Output the table alignement
+    // Output the table alignment
     const char* pJcVal;
     sal_Int32 nIndent = 0;
     switch ( pTableFormat->GetHoriOrient( ).GetHoriOrient( ) )

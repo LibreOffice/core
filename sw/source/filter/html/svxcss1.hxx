@@ -37,8 +37,8 @@ enum SvxCSS1Position
 {
     SVX_CSS1_POS_NONE,          // nichts angegeben
     SVX_CSS1_POS_STATIC,        // normal
-    SVX_CSS1_POS_ABSOLUTE,      // absolut
-    SVX_CSS1_POS_RELATIVE,      // relativ
+    SVX_CSS1_POS_ABSOLUTE,      // absolute
+    SVX_CSS1_POS_RELATIVE,      // relative
 };
 
 enum SvxCSS1LengthType

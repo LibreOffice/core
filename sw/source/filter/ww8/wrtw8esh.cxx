@@ -447,7 +447,7 @@ void WW8Export::DoComboBox(const OUString &rName,
 {
     OutputField(nullptr, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
              FieldFlags::Start | FieldFlags::CmdStart);
-    // write the refence to the "picture" structure
+    // write the reference to the "picture" structure
     sal_uLong nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
@@ -494,7 +494,7 @@ void WW8Export::DoCheckBox(uno::Reference<beans::XPropertySet> const & xPropSet)
 
     OutputField(nullptr, ww::eFORMCHECKBOX, FieldString(ww::eFORMCHECKBOX),
         FieldFlags::Start | FieldFlags::CmdStart);
-    // write the refence to the "picture" structure
+    // write the reference to the "picture" structure
     sal_uLong nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
@@ -554,7 +554,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
 {
     OutputField(nullptr, ww::eFORMTEXT, FieldString(ww::eFORMTEXT),
         FieldFlags::Start | FieldFlags::CmdStart);
-    // write the refence to the "picture" structure
+    // write the reference to the "picture" structure
     sal_uLong nDataStt = pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 

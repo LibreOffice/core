@@ -334,7 +334,7 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
         {
             xOleDst->Commit();
 
-            // Ouput the cPicLocation attribute
+            // Output the cPicLocation attribute
             std::unique_ptr<ww::bytes> pBuf( new ww::bytes );
             SwWW8Writer::InsUInt16( *pBuf, NS_sprm::sprmCPicLocation );
             SwWW8Writer::InsUInt32( *pBuf, rOleId.copy( 1 ).toInt32() );

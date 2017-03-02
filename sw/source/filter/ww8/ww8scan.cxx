@@ -1327,7 +1327,7 @@ short WW8_BRCVer9::DetermineBorderProperties(short *pSpace) const
         case 20:
             /*
             wave, the dimensions appear to be created by the drawing of
-            the wave, so we have only two possibilites in the menus, 3/4
+            the wave, so we have only two possibilities in the menus, 3/4
             point is equal to solid 3 point. This calculation seems to
             match well to results.
             */
@@ -1336,7 +1336,7 @@ short WW8_BRCVer9::DetermineBorderProperties(short *pSpace) const
         case 21:
             /*
             double wave, the dimensions appear to be created by the
-            drawing of the wave, so we have only one possibilites in the
+            drawing of the wave, so we have only one possibilities in the
             menus, that of 3/4 point is equal to solid 3 point. This
             calculation seems to match well to results.
             */
@@ -5486,7 +5486,7 @@ WW8Fib::WW8Fib(SvStream& rSt, sal_uInt8 nWantedVersion, sal_uInt32 nOffset)
                 nFibMax = 0x00c1;   // to 193 WinWord 97 (?)
                 break;
             default:
-                nFibMin = 0;            // programm error!
+                nFibMin = 0;            // program error!
                 nFibMax = 0;
                 m_nFib    = 1;
                 OSL_ENSURE( false, "nVersion not implemented!" );

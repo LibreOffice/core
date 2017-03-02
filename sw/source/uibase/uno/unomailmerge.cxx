@@ -342,7 +342,7 @@ static bool DeleteTmpFile_Impl(
             // somebody vetoed the closing, and took the ownership of the document
             // -> ensure that the temporary file is deleted later on
             Reference< XEventListener > xEnsureDelete( new DelayedFileDeletion( rxModel, rTmpFileURL ) );
-                // note: as soon as #106931# is fixed, the whole DelayedFileDeletion is to be superseeded by
+                // note: as soon as #106931# is fixed, the whole DelayedFileDeletion is to be superseded by
                 // a better solution
             bDelete = false;
         }

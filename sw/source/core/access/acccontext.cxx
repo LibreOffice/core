@@ -658,7 +658,7 @@ sal_Int16 SAL_CALL SwAccessibleContext::getAccessibleRole()
 
 OUString SAL_CALL SwAccessibleContext::getAccessibleDescription()
 {
-    OSL_ENSURE(false, "description needs to be overriden");
+    OSL_ENSURE(false, "description needs to be overridden");
     THROW_RUNTIME_EXCEPTION( XAccessibleContext, "internal error (method must be overridden)" );
 }
 

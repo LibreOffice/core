@@ -1278,7 +1278,7 @@ void DocxExport::WriteEmbeddings()
         embeddingsList[j].Value >>= embeddingsStream;
 
         OUString contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        // FIXME: this .xlsm hack is silly - if anything the mime-type for an existing embedded object shoud be read from [Content_Types].xml
+        // FIXME: this .xlsm hack is silly - if anything the mime-type for an existing embedded object should be read from [Content_Types].xml
         if (embeddingPath.endsWith(".xlsm"))
             contentType = "application/vnd.ms-excel.sheet.macroEnabled.12";
         else if (embeddingPath.endsWith(".bin"))

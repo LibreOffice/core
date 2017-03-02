@@ -63,7 +63,7 @@ protected:
     SwDoc* pDoc;                        // Document to be switched
     sal_uInt16 nCur;                    // Current Index
     bool bReadOnly : 1;
-    bool bInPutMuchBlocks : 1;          // Put serveral block entries
+    bool bInPutMuchBlocks : 1;          // Put several block entries
     bool bInfoChanged : 1;              // Whether any info of TextBlock changed
 
     explicit SwImpBlocks( const OUString& );

@@ -1915,7 +1915,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             if( pContext )
             {
                 HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
-                pContext = nullptr; // one time ony
+                pContext = nullptr; // one time only
             }
             Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
             rHWrt.m_nCSS1Script = nCSS1Script;

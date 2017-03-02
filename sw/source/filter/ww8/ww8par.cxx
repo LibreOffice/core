@@ -5625,7 +5625,7 @@ namespace
 //stream thing
 static bool lclReadCryptoAPIHeader(msfilter::RC4EncryptionInfo &info, SvStream &rStream)
 {
-    //Its possible there are other variants in existance but these
+    //It is possible there are other variants in existence but these
     //are the defaults I get with Word 2013
 
     rStream.ReadUInt32(info.header.flags);

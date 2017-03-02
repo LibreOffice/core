@@ -33,7 +33,7 @@ namespace /* private */
 {
     /* Generic event notifier for started,
        stopped, and idle events which are
-       very similary */
+       very similarly */
     class GenericEventNotifier
     {
     public:

@@ -838,7 +838,7 @@ bool SwTabFrame::RemoveFollowFlowLine()
             pLastLine, "There should be a flowline in the follow" );
 
     // We have to reset the flag here, because lcl_MoveRowContent
-    // calls a GrowFrame(), which has a different bahavior if
+    // calls a GrowFrame(), which has a different behavior if
     // this flag is set.
     SetFollowFlowLine( false );
 

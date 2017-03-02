@@ -493,7 +493,7 @@ bool  SwDocShell::Load( SfxMedium& rMedium )
     bool bRet = false;
 
     // If this is an ODF file being loaded, then by default, use legacy processing
-    // for tdf#99729 (if required, it will be overriden in *::ReadUserDataSequence())
+    // for tdf#99729 (if required, it will be overridden in *::ReadUserDataSequence())
     if (IsOwnStorageFormat(rMedium))
     {
         if (m_pDoc && m_pDoc->getIDocumentDrawModelAccess().GetDrawModel())

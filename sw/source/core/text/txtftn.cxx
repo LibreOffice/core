@@ -1438,7 +1438,7 @@ void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
 
 void SwQuoVadisPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
-    // We _always_ want to ouput per DrawStretchText, because nErgo
+    // We _always_ want to output per DrawStretchText, because nErgo
     // can quickly switch
     if( PrtWidth() )
     {

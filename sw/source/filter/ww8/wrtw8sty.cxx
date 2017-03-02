@@ -1042,7 +1042,7 @@ bool WW8_WrPlcSepx::HeaderFooterWritten()
 
 sal_uInt16 MSWordSections::CurrentNumberOfColumns( const SwDoc &rDoc ) const
 {
-    OSL_ENSURE( !aSects.empty(), "no segement inserted yet" );
+    OSL_ENSURE( !aSects.empty(), "no segment inserted yet" );
     if ( aSects.empty() )
         return 1;
 
