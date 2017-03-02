@@ -700,6 +700,14 @@ void LwpTableLayout::RegisterStyle()
     // get row/column number of this table
     m_nRows = pTable->GetRow();
     m_nCols = pTable->GetColumn();
+    //http://www.danielsays.com/ss-gallery-win1x2x3x-lotus-word-pro-96.html
+    //tables with up to 255 rows and 8192 columns
+    //the row limit tallies with the casting of m_nCols to an unsigned char
+    //elsewhere
+    if (m_nRows > MAX_NUM_ROWS)
+        throw std::runtime_error("max legal row exceeded");
+    if (m_nCols > MAX_NUM_COLS)
+        throw std::runtime_error("max legal column exceeded");
 
     // get default cell layout of current table
     LwpObjectID& rID= pTable->GetDefaultCellStyle();

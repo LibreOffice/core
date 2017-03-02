@@ -170,7 +170,10 @@ protected:
     LwpObjectID     cDefaultLeftColumnStyle;
     LwpObjectID cDefaultRightColumnStyle;
 };
+
 #define MAX_NUM_ROWS 8192
+#define MAX_NUM_COLS 255
+
 class LwpGlossary : public LwpParallelColumns
 {
 public:
