@@ -867,13 +867,29 @@ bool ImplReadDIBBody( SvStream& rIStm, Bitmap& rBmp, AlphaMask* pBmpAlpha, sal_u
             return false;
         const sal_uInt64 nAlignedWidth(AlignedWidth4Bytes(static_cast<sal_uLong>(nBitsPerLine)));
 
-        // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
-        if (aHeader.nCompression == ZCOMPRESS || aHeader.nCompression == COMPRESS_NONE)
+        switch (aHeader.nCompression)
         {
-            sal_uInt64 nMaxWidth = pIStm->remainingSize();
-            if (aHeader.nHeight != 0)
-                nMaxWidth /= aHeader.nHeight;
-            if (nMaxWidth < nAlignedWidth)
+            case RLE_8:
+                if (aHeader.nBitCount != 8)
+                    return false;
+                break;
+            case RLE_4:
+                if (aHeader.nBitCount != 4)
+                    return false;
+            case BITFIELDS:
+                break;
+            case ZCOMPRESS:
+            case COMPRESS_NONE:
+            {
+                // (partially) check the image dimensions to avoid potential large bitmap allocation if the input is damaged
+                sal_uInt64 nMaxWidth = pIStm->remainingSize();
+                if (aHeader.nHeight != 0)
+                    nMaxWidth /= aHeader.nHeight;
+                if (nMaxWidth < nAlignedWidth)
+                    return false;
+                break;
+            }
+            default:
                 return false;
         }
 
