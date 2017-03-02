@@ -39,7 +39,6 @@ class BrowserColumn;
 class BrowserDataWin;
 class MultiSelection;
 class BrowserHeader;
-
 typedef ::std::vector< BrowserColumn* > BrowserColumns;
 
 namespace svt {
@@ -372,15 +371,10 @@ protected:
 
     long            CalcReverseZoom(long nVal);
 
-    inline const DataFlavorExVector&
+    const DataFlavorExVector&
                     GetDataFlavors() const;
 
     bool            IsDropFormatSupported( SotClipboardFormatId nFormat );     // need this because the base class' IsDropFormatSupported is not const ...
-
-private:
-    const DataFlavorExVector& implGetDataFlavors() const;
-        // with this we can make GetDataFlavors() inline, which is strongly needed as SVTOOLS does not export
-        // any sysmbol containing an "_STL", so a non-inlined method would not be exported ....
 
 protected:
     // callbacks for the data window
@@ -784,11 +778,6 @@ private:
     using Window::ToTop;
 };
 
-
-inline const DataFlavorExVector& BrowseBox::GetDataFlavors() const
-{
-    return implGetDataFlavors();
-}
 
 #endif // INCLUDED_SVTOOLS_BRWBOX_HXX
 

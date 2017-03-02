@@ -67,7 +67,7 @@ sal_Int8 BrowseBox::ExecuteDrop( const BrowserExecuteDropEvent& )
 }
 
 
-const DataFlavorExVector& BrowseBox::implGetDataFlavors() const
+const DataFlavorExVector& BrowseBox::GetDataFlavors() const
 {
     if (pDataWin->bCallingDropCallback)
         return pDataWin->GetDataFlavorExVector();
