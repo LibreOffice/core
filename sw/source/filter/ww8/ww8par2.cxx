@@ -75,10 +75,12 @@
 
 using namespace ::com::sun::star;
 
+// Gets filled in WW8TabDesc::MergeCells().
+// Algorithm must ensure proper row and column order in WW8SelBoxInfo!
 class WW8SelBoxInfo
 {
 private:
-    std::vector<SwTableBox*> m_vBoxes;
+    std::vector<std::vector<SwTableBox*> > m_vRows;
 
     WW8SelBoxInfo(WW8SelBoxInfo const&) = delete;
     WW8SelBoxInfo& operator=(WW8SelBoxInfo const&) = delete;
@@ -92,11 +94,35 @@ public:
         : nGroupXStart( nXCenter ), nGroupWidth( nWidth ), bGroupLocked(false)
     {}
 
-    size_t size() const { return m_vBoxes.size(); }
+    size_t size() const
+    {
+        size_t nResult = 0;
+        for (auto& it : m_vRows)
+            nResult += it.size();
+        return nResult;
+    }
 
-    SwTableBox* operator[]( size_t nIndex ) { return m_vBoxes[nIndex]; }
+    size_t rowsCount() const { return m_vRows.size(); }
 
-    void push_back( SwTableBox* pBox ) { m_vBoxes.push_back(pBox); }
+    const std::vector<SwTableBox*>& row( size_t nIndex ) { return m_vRows[nIndex]; }
+
+    void push_back( SwTableBox* pBox )
+    {
+        bool bDone = false;
+        for (auto& iRow : m_vRows)
+            if (iRow[0]->GetUpper() == pBox->GetUpper())
+            {
+                iRow.push_back(pBox);
+                bDone = true;
+                break;
+            }
+        if (!bDone)
+        {
+            const size_t sz = m_vRows.size();
+            m_vRows.resize(sz+1);
+            m_vRows[sz].push_back(pBox);
+        }
+    }
 };
 
 WW8TabBandDesc::WW8TabBandDesc()
@@ -2120,6 +2146,15 @@ void WW8TabDesc::CalcDefaults()
         if( pR->nCenter[0] < m_nMinLeft )
             m_nMinLeft = pR->nCenter[0];
 
+        // Following adjustment moves a border and then uses it to find width
+        // of next cell, so collect current widths, to avoid situation when width
+        // adjustment to too narrow cell makes next cell have negative width
+        short nOrigWidth[MAX_COL + 1];
+        for( short i = 0; i < pR->nWwCols; i++ )
+        {
+            nOrigWidth[i] = pR->nCenter[i+1] - pR->nCenter[i];
+        }
+
         for( short i = 0; i < pR->nWwCols; i++ )
         {
            /*
@@ -2132,10 +2167,20 @@ void WW8TabDesc::CalcDefaults()
             #i28333# If the nGapHalf is greater than the cell width best to ignore it
             */
             int nCellWidth = pR->nCenter[i+1] - pR->nCenter[i];
+            if (nCellWidth != nOrigWidth[i])
+            {
+                if (nOrigWidth[i] == 0)
+                    nCellWidth = 0; // restore zero-width "cell"
+                else if ((pR->nGapHalf >= nCellWidth) && (pR->nGapHalf < nOrigWidth[i]))
+                    nCellWidth = pR->nGapHalf + 1; // avoid false ignore
+                else if ((nCellWidth <= 0) && (nOrigWidth[i] > 0))
+                    nCellWidth = 1; // minimal non-zero width to minimize distortion
+            }
             if (nCellWidth && ((nCellWidth - pR->nGapHalf*2) < MINLAY) && pR->nGapHalf < nCellWidth)
             {
-                pR->nCenter[i+1] = pR->nCenter[i]+MINLAY+pR->nGapHalf * 2;
+                nCellWidth = MINLAY + pR->nGapHalf * 2;
             }
+            pR->nCenter[i + 1] = pR->nCenter[i] + nCellWidth;
         }
 
         if( pR->nCenter[pR->nWwCols] > m_nMaxRight )
@@ -2531,7 +2576,8 @@ void WW8TabDesc::MergeCells()
 
     for (m_pActBand=m_pFirstBand, nRow=0; m_pActBand; m_pActBand=m_pActBand->pNextBand)
     {
-        // insert current box into merge group if appropriate
+        // insert current box into merge group if appropriate.
+        // The algorithm must ensure proper row and column order in WW8SelBoxInfo!
         if( m_pActBand->pTCs )
         {
             for( short j = 0; j < m_pActBand->nRows; j++, nRow++ )
@@ -2731,18 +2777,30 @@ void WW8TabDesc::FinishSwTable()
         // process all merge groups one by one
         for (auto const& groupIt : m_MergeGroups)
         {
-            sal_uInt16 nActBoxCount = groupIt->size();
-
-            if( ( 1 < nActBoxCount ) && (*groupIt)[0] )
+            if((1 < groupIt->size()) && groupIt->row(0)[0])
             {
-                const sal_uInt16 nRowSpan = groupIt->size();
+                SwFrameFormat* pNewFormat = groupIt->row(0)[0]->ClaimFrameFormat();
+                pNewFormat->SetFormatAttr(SwFormatFrameSize(ATT_VAR_SIZE, groupIt->nGroupWidth, 0));
+                const sal_uInt16 nRowSpan = groupIt->rowsCount();
                 for (sal_uInt16 n = 0; n < nRowSpan; ++n)
                 {
-                    SwTableBox* pCurrentBox = (*groupIt)[n];
-                    const long nRowSpanSet = n == 0 ?
-                                               nRowSpan :
-                                             ((-1) * (nRowSpan - n));
-                    pCurrentBox->setRowSpan( nRowSpanSet );
+                    auto& rRow = groupIt->row(n);
+                    for (size_t i = 0; i<rRow.size(); ++i)
+                    {
+                        const long nRowSpanSet = (n == 0) && (i == 0) ?
+                            nRowSpan :
+                            ((-1) * (nRowSpan - n));
+                        SwTableBox* pCurrentBox = rRow[i];
+                        pCurrentBox->setRowSpan(nRowSpanSet);
+
+                        if (i == 0)
+                            pCurrentBox->ChgFrameFormat(static_cast<SwTableBoxFormat*>(pNewFormat));
+                        else
+                        {
+                            SwFrameFormat* pFormat = pCurrentBox->ClaimFrameFormat();
+                            pFormat->SetFormatAttr(SwFormatFrameSize(ATT_VAR_SIZE, 0, 0));
+                        }
+                    }
                 }
             }
         }
