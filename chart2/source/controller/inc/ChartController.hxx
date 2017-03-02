@@ -50,6 +50,7 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XLayoutManagerListener.hpp>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
 
 #include <memory>
 #include <set>
@@ -99,6 +100,7 @@ class ChartController   : public ::cppu::WeakImplHelper <
         ,css::util::XModifyListener
         ,css::util::XModeChangeListener
         ,css::frame::XLayoutManagerListener
+        ,css::frame::XTerminateListener
         >
 {
     friend class DrawCommandDispatch;
@@ -281,6 +283,12 @@ public:
         const css::lang::EventObject& aSource,
         ::sal_Int16 eLayoutEvent,
         const css::uno::Any& aInfo ) override;
+
+    // XTerminateListener
+    virtual void SAL_CALL queryTermination(const css::lang::EventObject&) override
+        {};
+    virtual void SAL_CALL notifyTermination(const css::lang::EventObject&) override
+        { dispose(); };
 
     // WindowController stuff
     void PrePaint(vcl::RenderContext& rRenderContext);

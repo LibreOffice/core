@@ -79,6 +79,10 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XDesktop2.hpp>
+#include <com/sun/star/frame/XTerminateListener.hpp>
+
 // this is needed to properly destroy the unique_ptr to the AcceleratorExecute
 // object in the DTOR
 #include <svtools/acceleratorexecute.hxx>
@@ -123,6 +127,8 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
                 this, vcl::EnumContext::Context::Cell))
 {
     m_aDoubleClickTimer.SetInvokeHandler( LINK( this, ChartController, DoubleClickWaitingHdl ) );
+    Reference<frame::XDesktop2> xDesktop = frame::Desktop::create(m_xCC);
+    xDesktop->addTerminateListener(uno::Reference<frame::XTerminateListener>(*this, uno::UNO_QUERY));
 }
 
 ChartController::~ChartController()
@@ -441,15 +447,15 @@ void SAL_CALL ChartController::attachFrame(
         pParent = VCLUnoHelper::GetWindow( xContainerWindow ).get();
     }
 
-    if(m_pChartWindow)
-    {
-        //@todo delete ...
-        m_pChartWindow->clear();
-        m_apDropTargetHelper.reset();
-    }
     {
         // calls to VCL
         SolarMutexGuard aSolarGuard;
+        if(m_pChartWindow)
+        {
+            //@todo delete ...
+            m_pChartWindow.disposeAndClear();
+            m_apDropTargetHelper.reset();
+        }
         m_pChartWindow = VclPtr<ChartWindow>::Create(this,pParent,pParent?pParent->GetStyle():0);
         m_pChartWindow->SetBackground();//no Background
         m_xViewWindow.set( m_pChartWindow->GetComponentInterface(), uno::UNO_QUERY );
@@ -764,7 +770,9 @@ void ChartController::impl_deleteDrawViewController()
 
 void SAL_CALL ChartController::dispose()
 {
+    SolarMutexGuard aSolarGuard;
     m_bDisposed = true;
+    m_pChartWindow.disposeAndClear();
 
     if (getModel().is())
     {
@@ -818,15 +826,12 @@ void SAL_CALL ChartController::dispose()
                 xViewBroadcaster->removeModeChangeListener(this);
 
             impl_invalidateAccessible();
-            SolarMutexGuard aSolarGuard;
             impl_deleteDrawViewController();
             m_pDrawModelWrapper.reset();
 
             m_apDropTargetHelper.reset();
 
             //the accessible view is disposed within window destructor of m_pChartWindow
-            m_pChartWindow->clear();
-            m_pChartWindow = nullptr;//m_pChartWindow is deleted via UNO due to dispose of m_xViewWindow (triggered by Framework (Controller pretends to be XWindow also))
             m_xViewWindow->dispose();
             m_xChartView.clear();
         }
