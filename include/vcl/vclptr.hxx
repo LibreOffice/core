@@ -65,8 +65,7 @@ public:
     typedef typename C< value, void *, void >::t t;
 };
 
-#if HAVE_CXX11_CONSTEXPR \
-    && !(defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__)
+#if !(defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__)
 
 template<typename>
 constexpr bool isIncompleteOrDerivedFromVclReferenceBase(...) { return true; }
@@ -93,8 +92,7 @@ namespace detail {
 template <class reference_type>
 class VclPtr
 {
-#if HAVE_CXX11_CONSTEXPR \
-    && !(defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__)
+#if !(defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__)
     static_assert(
         vcl::detail::isIncompleteOrDerivedFromVclReferenceBase<reference_type>(
             nullptr),

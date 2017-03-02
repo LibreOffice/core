@@ -422,7 +422,7 @@ namespace css = ::com::sun::star;
 
     @since LibreOffice 5.0
 */
-#if HAVE_CXX11_CONSTEXPR
+#if defined LIBO_INTERNAL_ONLY
 #define SAL_CONSTEXPR constexpr
 #else
 #define SAL_CONSTEXPR
