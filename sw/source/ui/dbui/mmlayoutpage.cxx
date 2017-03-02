@@ -300,7 +300,7 @@ SwFrameFormat* SwMailMergeLayoutPage::InsertAddressFrame(
     // the example gets a border around the frame, the real document doesn't get one
     if(!bExample)
         aSet.Put(SvxBoxItem( RES_BOX ));
-    aSet.Put(SwFormatSurround( SURROUND_NONE ));
+    aSet.Put(SwFormatSurround( css::text::WrapTextMode_NONE ));
 
     rShell.NewFlyFrame(aSet, true );
     SwFrameFormat* pRet = rShell.GetFlyFrameFormat();

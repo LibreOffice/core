@@ -26,7 +26,6 @@
 #include <paratr.hxx>
 #include <poolfmt.hxx>
 #include <fmtornt.hxx>
-#include <fmtsrndenum.hxx>
 #include <charfmt.hxx>
 #include <fmtsrnd.hxx>
 #include <docary.hxx>
@@ -1274,12 +1273,12 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             {
                 aSet.Put( SwFormatAnchor( FLY_AS_CHAR ));
                 aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::LINE_CENTER, text::RelOrientation::PRINT_AREA ) );
-                aSet.Put( SwFormatSurround( SURROUND_NONE ) );
+                aSet.Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );
             }
             else
             {
                 aSet.Put( SwFormatAnchor( FLY_AT_PARA ));
-                aSet.Put( SwFormatSurround( SURROUND_PARALLEL ) );
+                aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ) );
                 aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::PRINT_AREA ) );
                 aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::PRINT_AREA ) );
                 Color aCol( COL_BLACK );
@@ -1305,7 +1304,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aSet.Put( SwFormatAnchor( FLY_AT_PARA ));
             aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
-            aSet.Put( SwFormatSurround( SURROUND_IDEAL ));
+            aSet.Put( SwFormatSurround( css::text::WrapTextMode_DYNAMIC ));
         }
         break;
     case RES_POOLFRM_FORMEL:
@@ -1320,7 +1319,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aSet.Put( SwFormatAnchor( FLY_AT_PARA ));
             aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
-            aSet.Put( SwFormatSurround( SURROUND_PARALLEL ));
+            aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ));
             // Set the default width to 3.5 cm, use the minimum value for the height
             aSet.Put( SwFormatFrameSize( ATT_MIN_SIZE,
                     GetMetricVal( CM_1 ) * 3 + GetMetricVal( CM_05 ),
@@ -1333,7 +1332,7 @@ SwFormat* DocumentStylePoolManager::GetFormatFromPool( sal_uInt16 nId )
             aSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SwFormatVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ));
             aSet.Put( SvxOpaqueItem( RES_OPAQUE, false ));
-            aSet.Put( SwFormatSurround( SURROUND_THROUGHT ));
+            aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGHT ));
         }
         break;
     case RES_POOLFRM_LABEL:

@@ -1759,11 +1759,11 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     memset( this, 0, sizeof( WW8SwFlyPara ) );  // initialize
     nNewNetWidth = MINFLY;                    // minimum
 
-    eSurround = ( rWW.nSp37 > 1 ) ? SURROUND_IDEAL : SURROUND_NONE;
+    eSurround = ( rWW.nSp37 > 1 ) ? css::text::WrapTextMode_DYNAMIC : css::text::WrapTextMode_NONE;
     //#i119466 mapping "Around" wrap setting to "Parallel" for table
     const bool bIsTable = rIo.m_pPlcxMan->HasParaSprm(0x2416);
     if (  bIsTable && rWW.nSp37 == 2 )
-        eSurround = SURROUND_PARALLEL;
+        eSurround = css::text::WrapTextMode_PARALLEL;
 
     /*
      #95905#, #83307# seems to have gone away now, so reenable parallel
@@ -2036,7 +2036,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 
     //we no longer need to hack around the header/footer problems
     SwFormatSurround aSurround(pFS->eSurround);
-    if ( pFS->eSurround == SURROUND_IDEAL )
+    if ( pFS->eSurround == css::text::WrapTextMode_DYNAMIC )
         aSurround.SetAnchorOnly( true );
     Put( aSurround );
 

@@ -1371,7 +1371,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject(SwFlyFrameFormat &rFormat)
 
         const ::SwFormatSurround& rSurround = rFormat.GetSurround();
         pObject->SetLayer(
-            ( SURROUND_THROUGHT == rSurround.GetSurround() &&
+            ( css::text::WrapTextMode_THROUGHT == rSurround.GetSurround() &&
               !rFormat.GetOpaque().GetValue() ) ? pDoc->getIDocumentDrawModelAccess().GetHellId()
                                              : pDoc->getIDocumentDrawModelAccess().GetHeavenId() );
         pDrawModel->GetPage(0)->InsertObject( pObject );

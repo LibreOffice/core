@@ -1314,7 +1314,7 @@ bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                     const SwAnchoredObject* pAnchoredObj = ::GetUserCall( pObj )->GetAnchoredObj( pObj );
                     const SwFrameFormat& rFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround& rSurround = rFormat.GetSurround();
-                    if ( rSurround.GetSurround() == SURROUND_THROUGHT )
+                    if ( rSurround.GetSurround() == css::text::WrapTextMode_THROUGHT )
                     {
                         bObjInBackground = true;
                     }
@@ -1928,7 +1928,7 @@ bool SwFEShell::ImpEndCreate()
 
         SwFormatHoriOrient aHori( nXOffset, text::HoriOrientation::NONE, text::RelOrientation::FRAME );
         SwFormatVertOrient aVert( nYOffset, text::VertOrientation::NONE, text::RelOrientation::FRAME );
-        aSet.Put( SwFormatSurround( SURROUND_PARALLEL ) );
+        aSet.Put( SwFormatSurround( css::text::WrapTextMode_PARALLEL ) );
         aSet.Put( aHori );
         aSet.Put( aVert );
 
@@ -1991,7 +1991,7 @@ bool SwFEShell::ImpEndCreate()
             aRelNullPt = rBound.TopLeft();
 
         aSet.Put( aAnch );
-        aSet.Put( SwFormatSurround( SURROUND_THROUGHT ) );
+        aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGHT ) );
         // OD 2004-03-30 #i26791# - set horizontal position
         SwFormatHoriOrient aHori( nXOffset, text::HoriOrientation::NONE, text::RelOrientation::FRAME );
         aSet.Put( aHori );
@@ -2719,7 +2719,7 @@ void SwFEShell::CheckUnboundObjects()
                 aRelNullPt = rBound.TopLeft();
 
             aSet.Put( aAnch );
-            aSet.Put( SwFormatSurround( SURROUND_THROUGHT ) );
+            aSet.Put( SwFormatSurround( css::text::WrapTextMode_THROUGHT ) );
             SwFrameFormat* pFormat = getIDocumentLayoutAccess().MakeLayoutFormat( RND_DRAW_OBJECT, &aSet );
 
             SwDrawContact *pContact = new SwDrawContact(

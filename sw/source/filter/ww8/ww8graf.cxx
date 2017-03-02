@@ -1346,7 +1346,7 @@ SdrObject* SwWW8ImplReader::ReadGrafPrimitive(short& rLeft, SfxAllItemSet &rSet)
 
     if( rLeft >= SVBT16ToShort(aHd.cb) )    // Vorsichtsmassmahme
     {
-        rSet.Put(SwFormatSurround(SURROUND_THROUGHT));
+        rSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGHT));
         switch (SVBT16ToShort(aHd.dpk) & 0xff )
         {
             case 0:
@@ -2528,23 +2528,23 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     // Umfluss-Modus ermitteln
     SfxItemSet aFlySet(m_rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
-    SwSurround eSurround = SURROUND_PARALLEL;
+    css::text::WrapTextMode eSurround = css::text::WrapTextMode_PARALLEL;
     bool bContour = false;
     switch (pF->nwr)
     {
         case 0: // 0 like 2, but doesn't require absolute object
         case 2: // 2 wrap around absolute object
-            eSurround = SURROUND_PARALLEL;
+            eSurround = css::text::WrapTextMode_PARALLEL;
             break;
         case 1: // 1 no text next to shape
-            eSurround = SURROUND_NONE;
+            eSurround = css::text::WrapTextMode_NONE;
             break;
         case 3: // 3 wrap as if no object present
-            eSurround = SURROUND_THROUGHT;
+            eSurround = css::text::WrapTextMode_THROUGHT;
             break;
         case 4: // 4 wrap tightly around object
         case 5: // 5 wrap tightly, but allow holes
-            eSurround = SURROUND_PARALLEL;
+            eSurround = css::text::WrapTextMode_PARALLEL;
             bContour = true;
             break;
     }
@@ -2556,19 +2556,19 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         {
             // 0 wrap both sides
             case 0:
-                eSurround = SURROUND_PARALLEL;
+                eSurround = css::text::WrapTextMode_PARALLEL;
                 break;
             // 1 wrap only on left
             case 1:
-                eSurround = SURROUND_LEFT;
+                eSurround = css::text::WrapTextMode_LEFT;
                 break;
             // 2 wrap only on right
             case 2:
-                eSurround = SURROUND_RIGHT;
+                eSurround = css::text::WrapTextMode_RIGHT;
                 break;
             // 3 wrap only on largest side
             case 3:
-                eSurround = SURROUND_IDEAL;
+                eSurround = css::text::WrapTextMode_DYNAMIC;
                 break;
         }
     }
@@ -2611,7 +2611,7 @@ SwFrameFormat* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     // #i18732# - Switch on 'follow text flow', if object is laid out
     // inside table cell and its wrapping isn't 'SURROUND_THROUGH'
-    if (bLayoutInTableCell && eSurround != SURROUND_THROUGHT)
+    if (bLayoutInTableCell && eSurround != css::text::WrapTextMode_THROUGHT)
     {
         SwFormatFollowTextFlow aFollowTextFlow( true );
         aFlySet.Put( aFollowTextFlow );

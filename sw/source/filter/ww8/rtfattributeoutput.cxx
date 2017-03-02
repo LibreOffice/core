@@ -3040,10 +3040,10 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
 {
     if (m_rExport.m_bOutFlyFrameAttrs && !m_rExport.m_bRTFFlySyntax)
     {
-        SwSurround eSurround = rSurround.GetSurround();
-        bool bGold = SURROUND_IDEAL == eSurround;
+        css::text::WrapTextMode eSurround = rSurround.GetSurround();
+        bool bGold = css::text::WrapTextMode_DYNAMIC == eSurround;
         if (bGold)
-            eSurround = SURROUND_PARALLEL;
+            eSurround = css::text::WrapTextMode_PARALLEL;
         RTFSurround aMC(bGold, static_cast< sal_uInt8 >(eSurround));
         m_aRunText->append(OOO_STRING_SVTOOLS_RTF_FLYMAINCNT);
         m_aRunText->append((sal_Int32) aMC.GetValue());
@@ -3055,17 +3055,17 @@ void RtfAttributeOutput::FormatSurround(const SwFormatSurround& rSurround)
         boost::optional<sal_Int32> oWrk;
         switch (rSurround.GetValue())
         {
-        case SURROUND_NONE:
+        case css::text::WrapTextMode_NONE:
             nWr = 1; // top and bottom
             break;
-        case SURROUND_THROUGHT:
+        case css::text::WrapTextMode_THROUGHT:
             nWr = 3; // none
             break;
-        case SURROUND_PARALLEL:
+        case css::text::WrapTextMode_PARALLEL:
             nWr = 2; // around
             oWrk = 0; // both sides
             break;
-        case SURROUND_IDEAL:
+        case css::text::WrapTextMode_DYNAMIC:
         default:
             nWr = 2; // around
             oWrk = 3; // largest

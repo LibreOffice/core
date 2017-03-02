@@ -3446,7 +3446,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 SwFormatHoriOrient aHori =
                             m_pTableDesc->m_pTable->GetFrameFormat()->GetHoriOrient();
                 m_pTableDesc->m_pFlyFormat->SetFormatAttr(aHori);
-                m_pTableDesc->m_pFlyFormat->SetFormatAttr( SwFormatSurround( SURROUND_NONE ) );
+                m_pTableDesc->m_pFlyFormat->SetFormatAttr( SwFormatSurround( css::text::WrapTextMode_NONE ) );
             }
             // #i33818# - The nested table doesn't have to leave
             // the table cell. Thus, the Writer fly frame has to follow the text flow.

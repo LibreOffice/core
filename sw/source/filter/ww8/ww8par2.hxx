@@ -54,13 +54,14 @@ struct WW8SwFlyPara
     sal_Int16 nWidth, nHeight;      // size
     sal_Int16 nNetWidth;
 
-    SwFrameSize eHeightFix;       // height fixed or min
-    RndStdIds eAnchor;          // binding
-    short eHRel;     // page or page border
-    short eVRel;     // page or page border
-    sal_Int16 eVAlign;       // up, down, centered
-    sal_Int16 eHAlign;       // left, right, centered
-    SwSurround eSurround;       // wrap mode
+    SwFrameSize eHeightFix;         // height fixed or min
+    RndStdIds   eAnchor;            // binding
+    short       eHRel;              // page or page border
+    short       eVRel;              // page or page border
+    sal_Int16   eVAlign;            // up, down, centered
+    sal_Int16   eHAlign;            // left, right, centered
+    css::text::WrapTextMode
+                eSurround;          // wrap mode
 
     sal_uInt8 nXBind, nYBind;        // bound relative to what
 

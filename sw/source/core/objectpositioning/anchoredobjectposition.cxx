@@ -175,7 +175,7 @@ SwTwips SwAnchoredObjectPosition::GetTopForObjPos( const SwFrame& _rFrame,
                 rTextFrame.GetUpperSpaceAmountConsideredForPrevFrameAndPageGrid();
 
             const SwFormatSurround& rSurround = mpFrameFormat->GetSurround();
-            bool bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
+            bool bWrapThrough = rSurround.GetSurround() == css::text::WrapTextMode_THROUGHT;
             // If the frame format is a TextBox of a draw shape, then use the
             // surround of the original shape.
             SwTextBoxHelper::getShapeWrapThrough(mpFrameFormat, bWrapThrough);

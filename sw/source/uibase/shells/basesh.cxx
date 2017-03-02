@@ -1022,8 +1022,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     if ( !aSur.IsContour() )
                     {
                         aSur.SetContour( true );
-                        if ( aSur.GetSurround() == SURROUND_NONE )
-                            aSur.SetSurround( SURROUND_PARALLEL );
+                        if ( aSur.GetSurround() == css::text::WrapTextMode_NONE )
+                            aSur.SetSurround( css::text::WrapTextMode_PARALLEL );
                         aSet.Put( aSur );
                         rSh.SetFlyFrameAttr( aSet );
                     }
@@ -1088,15 +1088,15 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 const SwFormatHoriOrient& rHori = static_cast<const SwFormatHoriOrient&>(aSet.Get(RES_HORI_ORIENT));
                 sal_Int16 eVOrient = rVert.GetVertOrient();
                 sal_Int16 eHOrient = rHori.GetHoriOrient();
-                SwSurround eSurround = rSurround.GetSurround();
+                css::text::WrapTextMode eSurround = rSurround.GetSurround();
 
                 switch( eSet )
                 {
                 case FLY_AT_FLY:
                 case FLY_AT_PAGE:
                     //Wrap through, left or from left, top, from top
-                    if(eSurround != SURROUND_THROUGHT)
-                        aSet.Put(SwFormatSurround(SURROUND_THROUGHT));
+                    if(eSurround != css::text::WrapTextMode_THROUGHT)
+                        aSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGHT));
 
                     if( eVOrient != text::VertOrientation::TOP && eVOrient != text::VertOrientation::NONE)
                         aSet.Put(SwFormatVertOrient(0, text::VertOrientation::TOP));
@@ -1107,8 +1107,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                 case FLY_AT_PARA:
                     // left, from left, right, top, no wrap, wrap left and right
-                    if (eSurround != SURROUND_LEFT && eSurround != SURROUND_RIGHT)
-                        aSet.Put(SwFormatSurround(SURROUND_LEFT));
+                    if (eSurround != css::text::WrapTextMode_LEFT && eSurround != css::text::WrapTextMode_RIGHT)
+                        aSet.Put(SwFormatSurround(css::text::WrapTextMode_LEFT));
 
                     if( eVOrient != text::VertOrientation::TOP)
                         aSet.Put(SwFormatVertOrient(0, text::VertOrientation::TOP));
@@ -1119,8 +1119,8 @@ void SwBaseShell::Execute(SfxRequest &rReq)
 
                 case FLY_AT_CHAR:
                     // left, from left, right, top, wrap through
-                    if(eSurround != SURROUND_THROUGHT)
-                        aSet.Put(SwFormatSurround(SURROUND_THROUGHT));
+                    if(eSurround != css::text::WrapTextMode_THROUGHT)
+                        aSet.Put(SwFormatSurround(css::text::WrapTextMode_THROUGHT));
 
                     if( eVOrient != text::VertOrientation::TOP)
                         aSet.Put(SwFormatVertOrient(0, text::VertOrientation::TOP));
@@ -1703,7 +1703,7 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
                     const SvxOpaqueItem& rOpaque = static_cast<const SvxOpaqueItem&>(aSet.Get(RES_OPAQUE));
                     bool bOpaque = rOpaque.GetValue();
-                    SwSurround nSurround = rWrap.GetSurround();
+                    css::text::WrapTextMode nSurround = rWrap.GetSurround();
                     bool bSet = false;
 
                     bool bDisable =
@@ -1718,15 +1718,15 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                 (   (nAnchorType != FLY_AT_PARA)
                                  && (nAnchorType != FLY_AT_CHAR)
                                  && (nAnchorType != FLY_AT_PAGE));
-                            bSet = nSurround == SURROUND_NONE;
+                            bSet = nSurround == css::text::WrapTextMode_NONE;
                         break;
                         case FN_FRAME_WRAP:
                             bDisable |= bHtmlMode;
-                            bSet = nSurround == SURROUND_PARALLEL;
+                            bSet = nSurround == css::text::WrapTextMode_PARALLEL;
                         break;
                         case FN_FRAME_WRAP_IDEAL:
                             bDisable |= bHtmlMode;
-                            bSet = nSurround == SURROUND_IDEAL;
+                            bSet = nSurround == css::text::WrapTextMode_DYNAMIC;
                         break;
                         case FN_FRAME_WRAPTHRU:
                             bDisable |= (bHtmlMode ||
@@ -1734,21 +1734,21 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                  && (nAnchorType != FLY_AT_CHAR)
                                  && (nAnchorType != FLY_AT_PAGE)));
                             if(bObj)
-                                bSet = nSurround == SURROUND_THROUGHT && rSh.GetLayerId();
+                                bSet = nSurround == css::text::WrapTextMode_THROUGHT && rSh.GetLayerId();
                             else
-                                bSet = nSurround == SURROUND_THROUGHT && bOpaque;
+                                bSet = nSurround == css::text::WrapTextMode_THROUGHT && bOpaque;
                         break;
                         case FN_FRAME_WRAPTHRU_TRANSP:
                             bDisable |= bHtmlMode;
                             if(bObj)
-                                bSet = nSurround == SURROUND_THROUGHT && !rSh.GetLayerId();
+                                bSet = nSurround == css::text::WrapTextMode_THROUGHT && !rSh.GetLayerId();
                             else
-                                bSet = nSurround == SURROUND_THROUGHT && !bOpaque;
+                                bSet = nSurround == css::text::WrapTextMode_THROUGHT && !bOpaque;
                         break;
                         case FN_FRAME_WRAP_CONTOUR:
                             bDisable |= bHtmlMode;
                             //no contour available whenn no wrap or wrap through is set
-                            bDisable |= (nSurround == SURROUND_NONE || nSurround == SURROUND_THROUGHT);
+                            bDisable |= (nSurround == css::text::WrapTextMode_NONE || nSurround == css::text::WrapTextMode_THROUGHT);
                             if( !bDisable )
                             {
                                 int nSel = rSh.GetSelectionType();
@@ -1775,10 +1775,10 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                             bSet = rWrap.IsAnchorOnly();
                         break;
                         case FN_FRAME_WRAP_LEFT:
-                            bSet = nSurround == SURROUND_LEFT;
+                            bSet = nSurround == css::text::WrapTextMode_LEFT;
                         break;
                         case FN_FRAME_WRAP_RIGHT:
-                            bSet = nSurround == SURROUND_RIGHT;
+                            bSet = nSurround == css::text::WrapTextMode_RIGHT;
                         break;
                     }
 
@@ -1867,26 +1867,26 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
         else
             rSh.GetFlyFrameAttr(aSet);
         SwFormatSurround aWrap( static_cast<const SwFormatSurround&>(aSet.Get(RES_SURROUND)) );
-        SwSurround nOldSurround(aWrap.GetSurround());
-        SwSurround nSurround = SURROUND_PARALLEL;
+        css::text::WrapTextMode nOldSurround(aWrap.GetSurround());
+        css::text::WrapTextMode nSurround = css::text::WrapTextMode_PARALLEL;
 
         switch (nSlot)
         {
             case FN_FRAME_NOWRAP:
-                nSurround = SURROUND_NONE;
+                nSurround = css::text::WrapTextMode_NONE;
                 if (aWrap.IsContour())
                     aWrap.SetContour(false);
                 break;
             case FN_FRAME_WRAP_IDEAL:
-                nSurround = SURROUND_IDEAL;
+                nSurround = css::text::WrapTextMode_DYNAMIC;
                 break;
             case FN_WRAP_ANCHOR_ONLY:
                 aWrap.SetAnchorOnly(!aWrap.IsAnchorOnly());
 
                 // keep previous wrapping
 
-                // switch to wrap SURROUND_PARALLEL, if previous wrap is SURROUND_NONE
-                if ( nOldSurround != SURROUND_NONE )
+                // switch to wrap css::text::WrapTextMode_PARALLEL, if previous wrap is css::text::WrapTextMode_NONE
+                if ( nOldSurround != css::text::WrapTextMode_NONE )
                 {
                     nSurround = nOldSurround;
                 }
@@ -1899,15 +1899,15 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
                     aWrap.SetContour(false);
                 SAL_FALLTHROUGH;
             case FN_FRAME_WRAPTHRU:
-                nSurround = SURROUND_THROUGHT;
+                nSurround = css::text::WrapTextMode_THROUGHT;
                 break;
 
             case FN_FRAME_WRAP_LEFT:
-                nSurround = SURROUND_LEFT;
+                nSurround = css::text::WrapTextMode_LEFT;
                 break;
 
             case FN_FRAME_WRAP_RIGHT:
-                nSurround = SURROUND_RIGHT;
+                nSurround = css::text::WrapTextMode_RIGHT;
                 break;
 
             default:
@@ -1919,7 +1919,7 @@ void SwBaseShell::SetWrapMode( sal_uInt16 nSlot )
         {
             // Defaulting the contour wrap on draw objects.
             if (bObj && nOldSurround != nSurround &&
-                (nOldSurround == SURROUND_NONE || nOldSurround == SURROUND_THROUGHT))
+                (nOldSurround == css::text::WrapTextMode_NONE || nOldSurround == css::text::WrapTextMode_THROUGHT))
             {
                 aWrap.SetContour(true);
             }

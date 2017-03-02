@@ -161,8 +161,8 @@ void SwToContentAnchoredObjectPosition::CalcPosition()
 
     // determine, if object has no surrounding.
     const SwFormatSurround& rSurround = rFrameFormat.GetSurround();
-    const bool bNoSurround = rSurround.GetSurround() == SURROUND_NONE;
-    const bool bWrapThrough = rSurround.GetSurround() == SURROUND_THROUGHT;
+    const bool bNoSurround = rSurround.GetSurround() == css::text::WrapTextMode_NONE;
+    const bool bWrapThrough = rSurround.GetSurround() == css::text::WrapTextMode_THROUGHT;
 
     // new class <SwEnvironmentOfAnchoredObject>
     SwEnvironmentOfAnchoredObject aEnvOfObj( DoesObjFollowsTextFlow() );

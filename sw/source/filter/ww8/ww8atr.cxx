@@ -801,7 +801,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                 }
 
                 if (SfxItemState::SET != aSet.GetItemState(RES_SURROUND))
-                    aSet.Put(SwFormatSurround(SURROUND_NONE));
+                    aSet.Put(SwFormatSurround(css::text::WrapTextMode_NONE));
 
                 const XFillStyleItem* pXFillStyleItem(static_cast< const XFillStyleItem*  >(rFrameFormat.GetAttrSet().GetItem(XATTR_FILLSTYLE)));
                 if (pXFillStyleItem)
@@ -3734,7 +3734,7 @@ void WW8AttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
         m_rWW8Export.InsUInt16( NS_sprm::sprmPWr );
 
         m_rWW8Export.pO->push_back(
-                ( SURROUND_NONE != rSurround.GetSurround() ) ? 2 : 1 );
+                ( css::text::WrapTextMode_NONE != rSurround.GetSurround() ) ? 2 : 1 );
     }
 }
 

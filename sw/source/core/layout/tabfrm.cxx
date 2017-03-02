@@ -2660,15 +2660,15 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                 {
                     const SwFormatSurround   &rSur = pFly->GetFormat()->GetSurround();
                     const SwFormatHoriOrient &rHori= pFly->GetFormat()->GetHoriOrient();
-                    if ( SURROUND_NONE == rSur.GetSurround() )
+                    if ( css::text::WrapTextMode_NONE == rSur.GetSurround() )
                     {
                         long nBottom = aRectFnSet.GetBottom(aFlyRect);
                         if( aRectFnSet.YDiff( nPrtPos, nBottom ) < 0 )
                             nPrtPos = nBottom;
                         bInvalidatePrtArea = true;
                     }
-                    if ( (SURROUND_RIGHT    == rSur.GetSurround() ||
-                          SURROUND_PARALLEL == rSur.GetSurround())&&
+                    if ( (css::text::WrapTextMode_RIGHT    == rSur.GetSurround() ||
+                          css::text::WrapTextMode_PARALLEL == rSur.GetSurround())&&
                          text::HoriOrientation::LEFT == rHori.GetHoriOrient() )
                     {
                         const long nWidth = aRectFnSet.XDiff(
@@ -2677,8 +2677,8 @@ bool SwTabFrame::CalcFlyOffsets( SwTwips& rUpper,
                         rLeftOffset = std::max( rLeftOffset, nWidth );
                         bInvalidatePrtArea = true;
                     }
-                    if ( (SURROUND_LEFT     == rSur.GetSurround() ||
-                          SURROUND_PARALLEL == rSur.GetSurround())&&
+                    if ( (css::text::WrapTextMode_LEFT     == rSur.GetSurround() ||
+                          css::text::WrapTextMode_PARALLEL == rSur.GetSurround())&&
                          text::HoriOrientation::RIGHT == rHori.GetHoriOrient() )
                     {
                         const long nWidth = aRectFnSet.XDiff(
@@ -4935,7 +4935,7 @@ void SwCellFrame::Format( vcl::RenderContext* /*pRenderContext*/, const SwBorder
                     const SwFrameFormat& rAnchoredObjFrameFormat = pAnchoredObj->GetFrameFormat();
                     const SwFormatSurround &rSur = rAnchoredObjFrameFormat.GetSurround();
 
-                    if ( SURROUND_THROUGHT != rSur.GetSurround() )
+                    if ( css::text::WrapTextMode_THROUGHT != rSur.GetSurround() )
                     {
                         // frames, which the cell is a lower of, aren't relevant
                         if ( dynamic_cast< const SwFlyFrame *>( pAnchoredObj ) !=  nullptr )

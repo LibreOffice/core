@@ -303,24 +303,24 @@ bool SwFormatSurround::GetPresentation
 )   const
 {
     sal_uInt16 nId = 0;
-    switch ( (SwSurround)GetValue() )
+    switch ( (css::text::WrapTextMode)GetValue() )
     {
-        case SURROUND_NONE:
+        case css::text::WrapTextMode_NONE:
             nId = STR_SURROUND_NONE;
         break;
-        case SURROUND_THROUGHT:
+        case css::text::WrapTextMode_THROUGHT:
             nId = STR_SURROUND_THROUGHT;
         break;
-        case SURROUND_PARALLEL:
+        case css::text::WrapTextMode_PARALLEL:
             nId = STR_SURROUND_PARALLEL;
         break;
-        case SURROUND_IDEAL:
+        case css::text::WrapTextMode_DYNAMIC:
             nId = STR_SURROUND_IDEAL;
         break;
-        case SURROUND_LEFT:
+        case css::text::WrapTextMode_LEFT:
             nId = STR_SURROUND_LEFT;
         break;
-        case SURROUND_RIGHT:
+        case css::text::WrapTextMode_RIGHT:
             nId = STR_SURROUND_RIGHT;
         break;
         default:;//prevent warning
