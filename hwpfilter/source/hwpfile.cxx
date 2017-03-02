@@ -356,8 +356,22 @@ void HWPFile::TagsRead()
                         return;
                      }
 
-                     _hwpInfo.back_info.data.resize(_hwpInfo.back_info.size);
-                     ReadBlock(_hwpInfo.back_info.data.data(), _hwpInfo.back_info.size);
+                     //read potentially compressed data in blocks as its more
+                     //likely large values are simply broken and we'll run out
+                     //of data before we need to realloc
+                     for (int i = 0; i < _hwpInfo.back_info.size; i+= SAL_MAX_UINT16)
+                     {
+                        int nOldSize = _hwpInfo.back_info.data.size();
+                        size_t nBlock = std::min<int>(SAL_MAX_UINT16, _hwpInfo.back_info.size - nOldSize);
+                        _hwpInfo.back_info.data.resize(nOldSize + nBlock);
+                        size_t nReadBlock = ReadBlock(_hwpInfo.back_info.data.data() + nOldSize, nBlock);
+                        if (nBlock != nReadBlock)
+                        {
+                            _hwpInfo.back_info.data.resize(nOldSize + nReadBlock);
+                            break;
+                        }
+                     }
+                     _hwpInfo.back_info.size = _hwpInfo.back_info.data.size();
 
                      if( _hwpInfo.back_info.size > 0 )
                           _hwpInfo.back_info.type = 2;
