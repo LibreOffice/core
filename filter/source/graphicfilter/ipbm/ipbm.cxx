@@ -85,7 +85,13 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
     // 0->PBM, 1->PGM, 2->PPM
     switch ( mnMode )
     {
-        case 0 :
+        case 0:
+        {
+            const size_t nRemainingSize = mrPBM.remainingSize();
+            const size_t nDataRequired = mnWidth * (mnHeight / 8);
+            if (nRemainingSize < nDataRequired)
+                return false;
+
             maBmp = Bitmap( Size( mnWidth, mnHeight ), 1 );
             mpAcc = maBmp.AcquireWriteAccess();
             if (!mpAcc || mpAcc->Width() != mnWidth || mpAcc->Height() != mnHeight)
@@ -94,7 +100,7 @@ bool PBMReader::ReadPBM(Graphic & rGraphic )
             mpAcc->SetPaletteColor( 0, BitmapColor( 0xff, 0xff, 0xff ) );
             mpAcc->SetPaletteColor( 1, BitmapColor( 0x00, 0x00, 0x00 ) );
             break;
-
+        }
         case 1 :
             if ( mnMaxVal <= 1 )
                 maBmp = Bitmap( Size( mnWidth, mnHeight ), 1);
