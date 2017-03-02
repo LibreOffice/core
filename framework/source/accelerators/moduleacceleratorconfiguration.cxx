@@ -125,7 +125,7 @@ void ModuleAcceleratorConfiguration::fillCache()
 #if 0
     // get current office locale ... but don't cache it.
     // Otherwise we must be listener on the configuration layer
-    // which seems to superflous for this small implementation .-)
+    // which seems to superfluous for this small implementation .-)
     // XXX: what is this good for? it was a comphelper::Locale but unused
     LanguageTag aLanguageTag(m_sLocale);
 #endif

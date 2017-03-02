@@ -198,7 +198,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryDeskt
 
     // I.III) "_self", "", "_top"
     //  The desktop can't load any document - but he can handle some special protocols like "uno", "slot" ...
-    //  Why is "top" here handled too? Because the desktop is the topest frame. Normally it's superflous
+    //  Why is "top" here handled too? Because the desktop is the topest frame. Normally it's superfluous
     //  to use this target - but we can handle it in the same manner then "_self".
 
     else if (
