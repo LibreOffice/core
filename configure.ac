@@ -6244,8 +6244,8 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$cxx11_constexpr])
-if test "$cxx11_constexpr" = yes; then
-    AC_DEFINE([HAVE_CXX11_CONSTEXPR])
+if test "$cxx11_constexpr" = no; then
+    AC_MSG_ERROR([Your $CXX does not support 'constexpr'. This is no longer supported.])
 fi
 
 AC_MSG_CHECKING([whether $CXX supports C++14 constexpr])
