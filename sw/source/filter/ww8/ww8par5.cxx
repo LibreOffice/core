@@ -361,10 +361,10 @@ OUString FindPara( const OUString& rStr, sal_Unicode cToken, sal_Unicode cToken2
     return rStr.copy( n, n2-n );
 }
 
-static SvxExtNumType GetNumTypeFromName(const OUString& rStr,
+static SvxNumType GetNumTypeFromName(const OUString& rStr,
     bool bAllowPageDesc = false)
 {
-    SvxExtNumType eTyp = bAllowPageDesc ? SVX_NUM_PAGEDESC : SVX_NUM_ARABIC;
+    SvxNumType eTyp = bAllowPageDesc ? SVX_NUM_PAGEDESC : SVX_NUM_ARABIC;
     if( rStr.startsWithIgnoreAsciiCase( "Arabi" ) )  // Arabisch, Arabic
         eTyp = SVX_NUM_ARABIC;
     else if( rStr.startsWith( "misch" ) )    // r"omisch
@@ -382,10 +382,10 @@ static SvxExtNumType GetNumTypeFromName(const OUString& rStr,
     return eTyp;
 }
 
-static SvxExtNumType GetNumberPara(const OUString& rStr, bool bAllowPageDesc = false)
+static SvxNumType GetNumberPara(const OUString& rStr, bool bAllowPageDesc = false)
 {
     OUString s( FindPara( rStr, '*', '*' ) );     // Ziffernart
-    SvxExtNumType aType = GetNumTypeFromName( s, bAllowPageDesc );
+    SvxNumType aType = GetNumTypeFromName( s, bAllowPageDesc );
     return aType;
 }
 
@@ -1391,7 +1391,7 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, OUString& rStr )
     bool bFormat    = false;
     bool bCountOn   = true;
     OUString sStart;
-    SvxExtNumType eNumFormat = SVX_NUM_ARABIC;
+    SvxNumType eNumFormat = SVX_NUM_ARABIC;
     WW8ReadFieldParams aReadParam( rStr );
     for (;;)
     {

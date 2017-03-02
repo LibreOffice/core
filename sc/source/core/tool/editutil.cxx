@@ -787,7 +787,7 @@ ScHeaderFieldData::ScHeaderFieldData()
         aTime( tools::Time::EMPTY )
 {
     nPageNo = nTotalPages = 0;
-    eNumType = css::style::NumberingType::ARABIC;
+    eNumType = SVX_NUM_ARABIC;
 }
 
 ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP )

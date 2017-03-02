@@ -218,7 +218,7 @@ enum SwDateTimeSubType {
 };
 
 /// General tools.
-OUString  FormatNumber(sal_uInt32 nNum, SvxExtNumType nFormat);
+OUString  FormatNumber(sal_uInt32 nNum, SvxNumType nFormat);
 
 /** Instances of SwFields and those derived from it occur 0 to n times.
  For each class there is one instance of the associated type class.
@@ -278,7 +278,7 @@ private:
     bool                m_bUseFieldValueCache;  /// control the usage of the cached field value
     sal_uInt16          m_nLang;                ///< Always change via SetLanguage!
     bool                m_bIsAutomaticLanguage;
-    sal_uInt32          m_nFormat;              /// this can be either SvxExtNumType or SwChapterFormat depending on the subtype
+    sal_uInt32          m_nFormat;              /// this can be either SvxNumType or SwChapterFormat depending on the subtype
     SwFieldType*        m_pType;
 
     virtual OUString    Expand() const = 0;

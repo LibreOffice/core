@@ -2445,7 +2445,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 uno::Reference<beans::XPropertySet> xProp(xPageStyle,uno::UNO_QUERY_THROW);
                 aPageItem.PutValue(xProp->getPropertyValue(PROPERTY_PAGESTYLELAYOUT),MID_PAGE_LAYOUT);
                 aPageItem.SetLandscape(getStyleProperty<bool>(m_xReportDefinition,PROPERTY_ISLANDSCAPE));
-                aPageItem.SetNumType(getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE));
+                aPageItem.SetNumType((SvxNumType)getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE));
                 pDescriptor->Put(aPageItem);
                 pDescriptor->Put(SvxBrushItem(::Color(getStyleProperty<sal_Int32>(m_xReportDefinition,PROPERTY_BACKCOLOR)),RPTUI_ID_BRUSH));
             }

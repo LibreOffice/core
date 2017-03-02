@@ -466,7 +466,7 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
     }
 
     // general page data
-    SvxNumType eNumType = css::style::NumberingType::ARABIC;
+    SvxNumType eNumType = SVX_NUM_ARABIC;
     bLandscape = ( mpDefPrinter->GetOrientation() == Orientation::Landscape );
     SvxPageUsage nUse = SvxPageUsage::All;
     pItem = GetItem( *rSet, SID_ATTR_PAGE );

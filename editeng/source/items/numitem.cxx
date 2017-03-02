@@ -78,7 +78,7 @@ static void lcl_getFormatter(css::uno::Reference<css::text::XNumberingFormatter>
     }
 }
 
-SvxNumberType::SvxNumberType(SvxExtNumType nType) :
+SvxNumberType::SvxNumberType(SvxNumType nType) :
     nNumType(nType),
     bShowSymbol(true)
 {
@@ -147,7 +147,7 @@ OUString SvxNumberType::GetNumStr( sal_uLong nNo, const css::lang::Locale& rLoca
     return OUString();
 }
 
-SvxNumberFormat::SvxNumberFormat( SvxExtNumType eType,
+SvxNumberFormat::SvxNumberFormat( SvxNumType eType,
                                   SvxNumPositionAndSpaceMode ePositionAndSpaceMode )
     : SvxNumberType(eType),
       eNumAdjust(SVX_ADJUST_LEFT),
@@ -190,7 +190,7 @@ SvxNumberFormat::SvxNumberFormat( SvStream &rStream )
     sal_Int32  nTmp32(0);
     rStream.ReadUInt16( nTmp16 ); // Version number
 
-    rStream.ReadUInt16( nTmp16 ); SetNumberingType( (SvxExtNumType)nTmp16 );
+    rStream.ReadUInt16( nTmp16 ); SetNumberingType( (SvxNumType)nTmp16 );
     rStream.ReadUInt16( nTmp16 ); eNumAdjust = ( SvxAdjust )nTmp16;
     rStream.ReadUInt16( nTmp16 ); nInclUpperLevels = nTmp16;
     rStream.ReadUInt16( nStart );

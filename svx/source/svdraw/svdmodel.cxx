@@ -1942,7 +1942,7 @@ void SdrModel::disposeOutliner( SdrOutliner* pOutliner )
 
 SvxNumType SdrModel::GetPageNumType() const
 {
-    return css::style::NumberingType::ARABIC;
+    return SVX_NUM_ARABIC;
 }
 
 void SdrModel::ReadUserDataSequenceValue(const css::beans::PropertyValue* pValue)

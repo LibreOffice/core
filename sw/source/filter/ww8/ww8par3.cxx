@@ -510,7 +510,7 @@ bool WW8ListManager::ReadLVL(SwNumFormat& rNumFormat, SfxItemSet*& rpItemSet,
 {
     sal_uInt8       aBits1(0);
     sal_uInt16      nStartNo(0);        // Start-Nr. fuer den Writer
-    SvxExtNumType   nType(SVX_NUM_ARABIC);
+    SvxNumType      nType(SVX_NUM_ARABIC);
     SvxAdjust       eAdj;               // Ausrichtung (Links/rechts/zent.)
     sal_Unicode     cBullet(0x2190);    // default safe bullet
 

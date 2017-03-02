@@ -1656,7 +1656,7 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun )
         mpFS->endElementNS( XML_a, XML_r );
 }
 
-OUString GetAutoNumType(SvxExtNumType nNumberingType, bool bSDot, bool bPBehind, bool bPBoth)
+OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBehind, bool bPBoth)
 {
     OUString sPrefixSuffix;
 
@@ -1719,7 +1719,7 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
 
     const PropertyValue* pPropValue = aPropertySequence.getArray();
 
-    SvxExtNumType nNumberingType = SVX_NUM_NUMBER_NONE;
+    SvxNumType nNumberingType = SVX_NUM_NUMBER_NONE;
     bool bSDot = false;
     bool bPBehind = false;
     bool bPBoth = false;
@@ -1738,7 +1738,7 @@ void DrawingML::WriteParagraphNumbering( const Reference< XPropertySet >& rXProp
         SAL_INFO("oox.shape", "pro name: " << aPropName);
         if ( aPropName == "NumberingType" )
         {
-            nNumberingType = (SvxExtNumType)*o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
+            nNumberingType = (SvxNumType)*o3tl::doAccess<sal_Int16>(pPropValue[i].Value);
         }
         else if ( aPropName == "Prefix" )
         {

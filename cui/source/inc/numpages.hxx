@@ -66,8 +66,8 @@ class SvxNumberingPreview : public vcl::Window
 
 struct SvxNumSettings_Impl
 {
-    SvxExtNumType   nNumberType;
-    short           nParentNumbering;
+    SvxNumType nNumberType;
+    short      nParentNumbering;
     OUString   sPrefix;
     OUString   sSuffix;
     OUString   sBulletChar;

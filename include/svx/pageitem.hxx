@@ -21,8 +21,7 @@
 
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
-
-using SvxNumType = sal_Int16; // css::style::NumberingType constants
+#include <editeng/svxenum.hxx>
 
 /*--------------------------------------------------------------------
   usage of the page
@@ -50,7 +49,7 @@ class SVX_DLLPUBLIC SvxPageItem: public SfxPoolItem
 {
 private:
     OUString            aDescName;          // name of the template
-    SvxNumType          eNumType;           // enumeration
+    SvxNumType          eNumType;
     bool                bLandscape;         // Portrait / Landscape
     SvxPageUsage        eUse;               // Layout
 
