@@ -1830,6 +1830,9 @@ bool SvMemoryStream::AllocateMemory( std::size_t nNewSize )
 // (using Bozo algorithm)
 bool SvMemoryStream::ReAllocateMemory( long nDiff )
 {
+    if (!bOwnsData)
+        return false;
+
     bool bRetVal    = false;
     long nTemp      = (long)nSize;
     nTemp           += nDiff;
