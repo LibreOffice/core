@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_3b17d552",
+        "filename": "svx/source/unodraw/unoshap2.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1708,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-03-02T12:28:22Z",
+      "side": 1,
+      "message": "replicable-\u003ereplaceable",
+      "revId": "63382f1bf1a74162457d2d06ab00512da3f1ed93",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
