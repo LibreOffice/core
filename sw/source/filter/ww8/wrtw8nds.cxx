@@ -975,7 +975,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
 
     m_rWW8Export.OutputField( nullptr, ww::eHYPERLINK, sURL, FieldFlags::Start | FieldFlags::CmdStart );
 
-    // write the refence to the "picture" structure
+    // write the reference to the "picture" structure
     sal_uLong nDataStt = m_rWW8Export.pDataStrm->Tell();
     m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() );
 
