@@ -104,18 +104,18 @@ LwpFrib::~LwpFrib()
 LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag,sal_uInt8 editID)
 {
     //Read Modifier
-    ModifierInfo* pModInfo = nullptr;
+    std::unique_ptr<ModifierInfo> xModInfo;
     if(fribtag & FRIB_TAG_MODIFIER)
     {
-        pModInfo  = new ModifierInfo;
-        pModInfo->CodePage = 0;
-        pModInfo->FontID = 0;
-        pModInfo->RevisionType = 0;
-        pModInfo->RevisionFlag = false;
-        pModInfo->HasCharStyle = false;
-        pModInfo->HasLangOverride = false;
-        pModInfo->HasHighlight = false;
-        ReadModifiers( pObjStrm, pModInfo );
+        xModInfo.reset(new ModifierInfo);
+        xModInfo->CodePage = 0;
+        xModInfo->FontID = 0;
+        xModInfo->RevisionType = 0;
+        xModInfo->RevisionFlag = false;
+        xModInfo->HasCharStyle = false;
+        xModInfo->HasLangOverride = false;
+        xModInfo->HasHighlight = false;
+        ReadModifiers(pObjStrm, xModInfo.get());
     }
 
     //Read frib data
@@ -199,9 +199,9 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
     }
 
     //Do not know why the fribTag judgement is necessary, to be checked with
-    if ( fribtag & FRIB_TAG_MODIFIER )
+    if (fribtag & FRIB_TAG_MODIFIER)
     {
-        newFrib->SetModifiers(pModInfo);
+        newFrib->SetModifiers(xModInfo.release());
     }
 
     newFrib->m_nFribType = fribtype;
