@@ -218,7 +218,7 @@ public class _XCharacterClassification extends MultiMethodTest {
                 if (!res) {
                     log.println("FAILED for: language=" + languages[j] +
                         " ; country=" + countries[j]);
-                    log.println("Sysmbol :" + toCheck.toCharArray()[i]);
+                    log.println("Symbol :" + toCheck.toCharArray()[i]);
                     log.println("Gained: " + get);
                     log.println("Expected : " + expected[i]);
                 }

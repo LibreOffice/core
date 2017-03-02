@@ -26,7 +26,7 @@
 
 namespace basegfx
 {
-    /** Explicitely different from BasicRange, handling the inside predicates
+    /** Explicitly different from BasicRange, handling the inside predicates
         differently.
 
         This is modelled after how polygon fill algorithms set pixel -
