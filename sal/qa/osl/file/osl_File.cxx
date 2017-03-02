@@ -2225,7 +2225,7 @@ namespace osl_File
             nError1 = testFile.open( osl_File_OpenFlag_Create );
             bool bOK = ( File::E_ACCES == nError1 );
 #ifdef _WIN32
-            bOK = true;  /// in Windows, you can create file in c:/ any way.
+            bOK = true;  /// in Windows, you can create file in c:\ any way.
             testFile.close();
             deleteTestFile( aTestFile);
 #endif
@@ -3032,10 +3032,10 @@ namespace osl_File
             //copy $TEMP/tmpdir/tmpname to $ROOT/tmpname.
             nError1 = ::osl::File::copy( aTmpName4, aTmpName7 );
 #if defined(_WIN32)
-            nError1 = ::osl::FileBase::E_ACCES;  /// for Windows, c:/ is writtenable any way.
+            nError1 = ::osl::FileBase::E_ACCES;  /// for Windows, c:\ is writable anyway.
             deleteTestFile( aTmpName7);
 #endif
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "test for copy function: copy to an illigal place",
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "test for copy function: copy to an illegal place",
                                      nError1, ::osl::FileBase::E_ACCES );
         }
 
@@ -3162,11 +3162,11 @@ namespace osl_File
             //move $TEMP/tmpdir/tmpname to $ROOT/tmpname.
             nError1 = ::osl::File::move( aTmpName4, aTmpName7 );
 #if defined(_WIN32)
-            nError1 = ::osl::FileBase::E_ACCES;  /// for Windows, c:/ is writtenable any way.
+            nError1 = ::osl::FileBase::E_ACCES;  /// for Windows, c:\ is writable any way.
             deleteTestFile( aTmpName7);
 #endif
 
-            CPPUNIT_ASSERT_EQUAL_MESSAGE( "test for move function: move to an illigal place",
+            CPPUNIT_ASSERT_EQUAL_MESSAGE( "test for move function: move to an illegal place",
                                      nError1, ::osl::FileBase::E_ACCES );
         }
 

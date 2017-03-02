@@ -2220,7 +2220,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
     SfxItemState eState;
 
-    // own control on radio button functionallity:
+    // own control on radio button functionality:
 
     // underline
 

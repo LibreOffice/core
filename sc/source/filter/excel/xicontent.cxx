@@ -1124,7 +1124,7 @@ XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
 
 XclImpDecrypterRef lclReadFilepass8_Strong(XclImpStream& rStream)
 {
-    //Its possible there are other variants in existance but these
+    //It is possible there are other variants in existence but these
     //are the defaults I get with Excel 2013
     XclImpDecrypterRef xDecr;
 

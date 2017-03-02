@@ -65,7 +65,7 @@ class XclExpPaletteImpl;
     Supports color reduction to the maximum count of the current BIFF version.
     An instance of this class collects all colors in the conversion phase of
     the export, using the InsertColor() function. It returns a unique
-    identidier for each passed color.
+    identifier for each passed color.
 
     After the entire document is converted, the Finalize() function will reduce
     the palette to the  number of colors supported by the current BIFF version.
@@ -561,7 +561,7 @@ private:
 
     An instance of this class collects all XF records in the conversion phase
     of the export, using the Insert() and InsertStyle() functions. It returns a
-    unique identidier for each XF record.
+    unique identifier for each XF record.
 
     After the entire document is converted, the Finalize() function will reduce
     the list to the number of XF records supported by the current BIFF version.

@@ -32,7 +32,7 @@ class ScfProgressBar;
 /** The main progress bar for the export filter.
 
     This class encapsulates creation and initialization of sub progress
-    segments. The Activate***Segment() functions activate a specific segement
+    segments. The Activate***Segment() functions activate a specific segment
     of the main progress bar. The implementation of these functions contain the
     calculation of the needed size of the segment. Following calls of the
     Progress() function increase the currently activated sub segment.

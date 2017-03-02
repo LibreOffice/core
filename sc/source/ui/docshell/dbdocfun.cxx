@@ -1387,7 +1387,7 @@ bool ScDBDocFunc::CreatePivotTable(const ScDPObject& rDPObj, bool bRecord, bool 
     if (rDoc.GetDPCollection()->GetByName(rDestObj.GetName()))
         rDestObj.SetName(OUString());      // ignore the invalid name, create a new name below
 
-    // Syncronize groups between linked tables
+    // Synchronize groups between linked tables
     {
         bool bRefFound = false;
         const ScDPDimensionSaveData* pGroups = nullptr;

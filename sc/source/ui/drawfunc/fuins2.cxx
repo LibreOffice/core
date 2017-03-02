@@ -589,7 +589,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawV
     // Add here again if this is wanted (see task description for details)
     // ChartHelper::AdaptDefaultsForChart( xObj );
 
-//        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immidiate redraw and asks the chart for a visual representation
+//        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immediate redraw and asks the chart for a visual representation
 
     // use the page instead of the view to insert, so no undo action is created yet
     SdrPage* pInsPage = pPV->GetPage();

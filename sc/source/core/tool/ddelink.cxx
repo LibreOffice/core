@@ -199,12 +199,12 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     if (HasListeners())
     {
         Broadcast(ScHint(SfxHintId::ScDataChanged, ScAddress()));
-        pDoc->TrackFormulas();      // must happen immediatelly
+        pDoc->TrackFormulas();      // must happen immediately
         pDoc->StartTrackTimer();
 
         //  StartTrackTimer asynchronously calls TrackFormulas, Broadcast(FID_DATACHANGED),
         //  ResetChanged, SetModified and Invalidate(SID_SAVEDOC/SID_DOC_MODIFIED)
-        //  TrackFormulas additionally once again immediatelly, so that, e.g., a formula still
+        //  TrackFormulas additionally once again immediately, so that, e.g., a formula still
         //  located in the FormulaTrack doesn't get calculated by IdleCalc (#61676#)
 
         //  notify Uno objects (for XRefreshListener)

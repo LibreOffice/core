@@ -1947,7 +1947,7 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
             {
                 bool bNumber = false;
                 if (cTyped)                                     // Restarted
-                    bNumber = (cTyped>='0' && cTyped<='9');     // Ony ciphers are numbers
+                    bNumber = (cTyped>='0' && cTyped<='9');     // Only ciphers are numbers
                 else if ( pActiveViewSh )
                 {
                     ScDocument& rDoc = pActiveViewSh->GetViewData().GetDocShell()->GetDocument();
@@ -1991,7 +1991,7 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
 
 void ScInputHandler::RemoveAdjust()
 {
-    // Delete hard alignement attributes
+    // Delete hard alignment attributes
     bool bUndo = mpEditEngine->IsUndoEnabled();
     if ( bUndo )
         mpEditEngine->EnableUndo( false );
@@ -2136,7 +2136,7 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 if ( eAttrAdjust == SVX_HOR_JUSTIFY_REPEAT &&
                      static_cast<const SfxBoolItem&>(pPattern->GetItem(ATTR_LINEBREAK)).GetValue() )
                 {
-                    // #i31843# "repeat" with "line breaks" is treated as default alignement
+                    // #i31843# "repeat" with "line breaks" is treated as default alignment
                     eAttrAdjust = SVX_HOR_JUSTIFY_STANDARD;
                 }
             }
