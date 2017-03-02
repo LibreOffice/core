@@ -166,7 +166,7 @@ void OTableCopyHelper::pasteTable( const svx::ODataAccessDescriptor& _rPasteData
     {
         OSL_VERIFY( _rPasteData[ DataAccessDescriptorProperty::BookmarkSelection ] >>= bBookmarkSelection );
     }
-    OSL_ENSURE( bBookmarkSelection, "OTableCopyHelper::pasteTable: working with selection-indicies (instead of bookmarks) is error-prone, and thus deprecated!" );
+    OSL_ENSURE( bBookmarkSelection, "OTableCopyHelper::pasteTable: working with selection-indices (instead of bookmarks) is error-prone, and thus deprecated!" );
 
     sal_Int32 nCommandType = CommandType::COMMAND;
     if ( _rPasteData.has(DataAccessDescriptorProperty::CommandType) )

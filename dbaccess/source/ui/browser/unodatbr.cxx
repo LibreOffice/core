@@ -518,7 +518,7 @@ bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > & i_f
     if(!m_pCurrentlyDisplayed)
         return true;
 
-    // this method set all format settings from the orignal table or query
+    // this method set all format settings from the original table or query
     try
     {
         DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());

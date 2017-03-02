@@ -145,7 +145,7 @@ namespace dbaui
         TTableWindowData::value_type createTableWindowData(const OUString& _sComposedName,const OUString& _sTableName,const OUString& _sWindowName);
         // ask the user if the design should be saved when it is modified
         virtual short saveModified() = 0;
-        // called when the orignal state should be reseted (first time load)
+        // called when the original state should be reseted (first time load)
         virtual void reset()         = 0;
         virtual void describeSupportedFeatures() override;
 

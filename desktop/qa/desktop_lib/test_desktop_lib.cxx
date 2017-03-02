@@ -990,7 +990,7 @@ namespace {
             // type is omnipresent
             CPPUNIT_ASSERT( aType );
 
-            // seperator doesn't have any other attribs
+            // separator doesn't have any other attribs
             if ( aType.get().data() == "separator" )
             {
                 CPPUNIT_ASSERT( !aText && !aCommand && !aSubmenu && !aEnabled && !aChecktype && !aChecked );
@@ -1345,11 +1345,11 @@ void DesktopLOKTest::testNotificationCompression()
     std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
 
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // 0
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Superseeded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Superseded.
     handler->queue(LOK_CALLBACK_INVALIDATE_VISIBLE_CURSOR, ""); // Should be dropped.
     handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"); // 1
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // Superseeded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION, ""); // Superseded.
     handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 2
     handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:Bold"); // 3
     handler->queue(LOK_CALLBACK_STATE_CHANGED, ""); // 4
@@ -1357,8 +1357,8 @@ void DesktopLOKTest::testNotificationCompression()
     handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "15, 25, 15, 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_MOUSE_POINTER, "text"); // Should be dropped.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"); // Superseeded.
-    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"); // Superseeded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"); // Superseded.
+    handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"); // Superseded.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION, "15, 25, 15, 10"); // Superseedd.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_START, "15, 25, 15, 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_TEXT_SELECTION_END, "15, 25, 15, 10"); // Should be dropped.
@@ -1370,7 +1370,7 @@ void DesktopLOKTest::testNotificationCompression()
     handler->queue(LOK_CALLBACK_CELL_CURSOR, "15, 25, 15, 10"); // Should be dropped.
     handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // 12
     handler->queue(LOK_CALLBACK_SET_PART, "1"); // 13
-    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:AssignLayout=20"); // Superseeded
+    handler->queue(LOK_CALLBACK_STATE_CHANGED, ".uno:AssignLayout=20"); // Superseded
     handler->queue(LOK_CALLBACK_CURSOR_VISIBLE, ""); // Should be dropped.
     handler->queue(LOK_CALLBACK_CELL_FORMULA, "blah"); // Should be dropped.
     handler->queue(LOK_CALLBACK_SET_PART, "1"); // Should be dropped.
