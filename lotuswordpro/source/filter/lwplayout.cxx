@@ -338,7 +338,7 @@ void LwpVirtualLayout::RegisterChildStyle()
     while (xLayout.is())
     {
         xLayout->SetFoundry(m_pFoundry);
-        xLayout->RegisterStyle();
+        xLayout->DoRegisterStyle();
         xLayout.set(dynamic_cast<LwpVirtualLayout*>(xLayout->GetNext().obj().get()));
     }
 }
