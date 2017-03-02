@@ -151,7 +151,7 @@ void LineBuilder::appendRoundJoint(glm::vec2 const & point, glm::vec2 prevLineVe
 
 void LineBuilder::appendRoundLineCapVertices(const glm::vec2& rPoint1, const glm::vec2& rPoint2)
 {
-    SAL_CONSTEXPR const int nRoundCapIteration = 12;
+    constexpr int nRoundCapIteration = 12;
 
     glm::vec2 lineVector = vcl::vertex::normalize(rPoint2 - rPoint1);
     glm::vec2 normal = glm::vec2(-lineVector.y, lineVector.x);

@@ -377,11 +377,11 @@ public:
     inline void  SetDivisionY( short n ){ m_nDivisionY = n; }
 
     // Default margin left and above document: 284 twips == 5.0 mm.
-    static SAL_CONSTEXPR sal_uInt16 GetDefDocumentBorder() { return 284; }
+    static constexpr sal_uInt16 GetDefDocumentBorder() { return 284; }
     // Default gap between pages: 284 twips == 5.0 mm.
-    static SAL_CONSTEXPR sal_uInt16 GetDefGapBetweenPages() { return 284; }
+    static constexpr sal_uInt16 GetDefGapBetweenPages() { return 284; }
     // Minimum edge-to-text distance: 22 twips == 0.4 mm.
-    static SAL_CONSTEXPR sal_uInt16 GetMinGapBetweenPages() { return 22; }
+    static constexpr sal_uInt16 GetMinGapBetweenPages() { return 22; }
 
     inline sal_uInt16 GetDocumentBorder() const { return IsWhitespaceHidden() ? GetMinGapBetweenPages() : GetDefDocumentBorder(); }
     inline sal_uInt16 GetGapBetweenPages() const { return IsWhitespaceHidden() ? GetMinGapBetweenPages() : GetDefGapBetweenPages(); }

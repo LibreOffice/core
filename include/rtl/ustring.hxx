@@ -70,7 +70,7 @@ This class is not part of public API and is meant to be used only in LibreOffice
 */
 struct SAL_WARN_UNUSED OUStringLiteral
 {
-    template<typename T> SAL_CONSTEXPR OUStringLiteral(
+    template<typename T> constexpr OUStringLiteral(
         T & literal,
         typename libreoffice_internal::ConstCharArrayDetector<
                 T, libreoffice_internal::Dummy>::Type

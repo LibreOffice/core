@@ -72,7 +72,7 @@ namespace rtl
     @since LibreOffice 5.0
 */
 struct SAL_WARN_UNUSED OUStringLiteral1_ {
-    SAL_CONSTEXPR OUStringLiteral1_(sal_Unicode theC): c(theC) {}
+    constexpr OUStringLiteral1_(sal_Unicode theC): c(theC) {}
     sal_Unicode const c;
 };
 #if defined _MSC_VER && _MSC_VER <= 1900 && !defined __clang__
@@ -173,9 +173,9 @@ struct ConstCharArrayDetector< const char[ N ], T >
 template<std::size_t N, typename T>
 struct ConstCharArrayDetector<sal_Unicode const [N], T> {
     using TypeUtf16 = T;
-    static SAL_CONSTEXPR bool const ok = true;
-    static SAL_CONSTEXPR std::size_t const length = N - 1;
-    static SAL_CONSTEXPR sal_Unicode const * toPointer(
+    static constexpr bool const ok = true;
+    static constexpr std::size_t const length = N - 1;
+    static constexpr sal_Unicode const * toPointer(
         sal_Unicode const (& literal)[N])
     { return literal; }
 };
@@ -189,9 +189,9 @@ template<typename T> struct ConstCharArrayDetector<
     T>
 {
     using TypeUtf16 = T;
-    static SAL_CONSTEXPR bool const ok = true;
-    static SAL_CONSTEXPR std::size_t const length = 1;
-    static SAL_CONSTEXPR sal_Unicode const * toPointer(
+    static constexpr bool const ok = true;
+    static constexpr std::size_t const length = 1;
+    static constexpr sal_Unicode const * toPointer(
         OUStringLiteral1_ const & literal)
     { return &literal.c; }
 };

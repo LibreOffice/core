@@ -33,8 +33,8 @@ protected:
     static void ImplStartTimer ( sal_uInt64 nMS, bool bForce = false );
 
 public:
-    static const SAL_CONSTEXPR sal_uInt64 ImmediateTimeoutMs = 1;
-    static const SAL_CONSTEXPR sal_uInt64 InfiniteTimeoutMs = 1000 * 60 * 60 * 24; // 1 day
+    static constexpr sal_uInt64 ImmediateTimeoutMs = 1;
+    static constexpr sal_uInt64 InfiniteTimeoutMs = 1000 * 60 * 60 * 24; // 1 day
 
     static void       ImplDeInitScheduler();
 

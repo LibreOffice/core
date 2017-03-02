@@ -32,14 +32,14 @@ namespace o3tl {
 
 namespace detail {
 
-template<typename T> inline SAL_CONSTEXPR
+template<typename T> constexpr
 typename std::enable_if<std::is_signed<T>::value, bool>::type isNonNegative(
     T value)
 {
     return value >= 0;
 }
 
-template<typename T> inline SAL_CONSTEXPR
+template<typename T> constexpr
 typename std::enable_if<std::is_unsigned<T>::value, bool>::type isNonNegative(T)
 {
     return true;
@@ -73,8 +73,7 @@ struct is_typed_flags {
     public:
         typedef is_typed_flags Unwrapped;
 
-        explicit SAL_CONSTEXPR Wrap(
-            typename std::underlying_type<E>::type value):
+        explicit constexpr Wrap(typename std::underlying_type<E>::type value):
             value_(value)
         {
 #if HAVE_CXX14_CONSTEXPR
@@ -87,13 +86,13 @@ struct is_typed_flags {
 #endif
         }
 
-        SAL_CONSTEXPR operator E() const { return static_cast<E>(value_); }
+        constexpr operator E() const { return static_cast<E>(value_); }
 
-        explicit SAL_CONSTEXPR operator typename std::underlying_type<E>::type()
+        explicit constexpr operator typename std::underlying_type<E>::type()
             const
         { return value_; }
 
-        explicit SAL_CONSTEXPR operator bool() const { return value_ != 0; }
+        explicit constexpr operator bool() const { return value_ != 0; }
 
     private:
         typename std::underlying_type<E>::type value_;
@@ -105,7 +104,7 @@ struct is_typed_flags {
 }
 
 template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ~(E rhs) {
+constexpr typename o3tl::typed_flags<E>::Wrap operator ~(E rhs) {
 #if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
@@ -116,8 +115,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ~(E rhs) {
         & ~static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ~(
+template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ~(
     typename o3tl::typed_flags<E>::Wrap rhs)
 {
     return static_cast<typename o3tl::typed_flags<E>::Wrap>(
@@ -125,8 +123,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ~(
         & ~static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ^(
+template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
     E lhs, E rhs)
 {
 #if HAVE_CXX14_CONSTEXPR
@@ -142,8 +139,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ^(
         ^ static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ^(
+template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
     E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
 #if HAVE_CXX14_CONSTEXPR
@@ -156,8 +152,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ^(
         ^ static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ^(
+template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator ^(
     typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
 {
 #if HAVE_CXX14_CONSTEXPR
@@ -170,8 +165,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator ^(
         ^ static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename W>
-inline SAL_CONSTEXPR
+template<typename W> constexpr
 typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator ^(
     W lhs, W rhs)
 {
@@ -185,9 +179,7 @@ typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator ^(
 }
 
 template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator &(
-    E lhs, E rhs)
-{
+constexpr typename o3tl::typed_flags<E>::Wrap operator &(E lhs, E rhs) {
 #if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
@@ -201,8 +193,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator &(
         & static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator &(
+template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator &(
     E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
 #if HAVE_CXX14_CONSTEXPR
@@ -215,8 +206,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator &(
         & static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator &(
+template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator &(
     typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
 {
 #if HAVE_CXX14_CONSTEXPR
@@ -229,8 +219,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator &(
         & static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename W>
-inline SAL_CONSTEXPR
+template<typename W> constexpr
 typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator &(
     W lhs, W rhs)
 {
@@ -244,7 +233,7 @@ typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator &(
 }
 
 template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator |(E lhs, E rhs) {
+constexpr typename o3tl::typed_flags<E>::Wrap operator |(E lhs, E rhs) {
 #if HAVE_CXX14_CONSTEXPR
     assert(
         o3tl::detail::isNonNegative(
@@ -258,8 +247,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator |(E lhs, E rhs
         | static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator |(
+template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator |(
     E lhs, typename o3tl::typed_flags<E>::Wrap rhs)
 {
 #if HAVE_CXX14_CONSTEXPR
@@ -272,8 +260,7 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator |(
         | static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename E>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator |(
+template<typename E> constexpr typename o3tl::typed_flags<E>::Wrap operator |(
     typename o3tl::typed_flags<E>::Wrap lhs, E rhs)
 {
 #if HAVE_CXX14_CONSTEXPR
@@ -286,8 +273,8 @@ inline SAL_CONSTEXPR typename o3tl::typed_flags<E>::Wrap operator |(
         | static_cast<typename std::underlying_type<E>::type>(rhs));
 }
 
-template<typename W>
-inline SAL_CONSTEXPR typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator |(
+template<typename W> constexpr
+typename o3tl::typed_flags<typename W::Unwrapped::Self>::Wrap operator |(
     W lhs, W rhs)
 {
     return static_cast<W>(
