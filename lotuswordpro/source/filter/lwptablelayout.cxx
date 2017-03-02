@@ -381,25 +381,25 @@ void  LwpSuperTableLayout::XFConvertFrame(XFContentContainer* pCont, sal_Int32 n
 {
     if(m_pFrame)
     {
-        XFFrame* pXFFrame = nullptr;
+        rtl::Reference<XFFrame> xXFFrame;
         if(nEnd < nStart)
         {
-            pXFFrame = new XFFrame();
+            xXFFrame.set(new XFFrame);
         }
         else
         {
-            pXFFrame = new XFFloatFrame(nStart, nEnd, bAll);
+            xXFFrame.set(new XFFloatFrame(nStart, nEnd, bAll));
         }
 
-        m_pFrame->Parse(pXFFrame, static_cast<sal_uInt16>(nStart));
+        m_pFrame->Parse(xXFFrame.get(), static_cast<sal_uInt16>(nStart));
         //parse table, and add table to frame
         LwpTableLayout * pTableLayout = GetTableLayout();
         if (pTableLayout)
         {
-            pTableLayout->XFConvert(pXFFrame);
+            pTableLayout->XFConvert(xXFFrame.get());
         }
         //add frame to the container
-        pCont ->Add(pXFFrame);
+        pCont->Add(xXFFrame.get());
     }
 
 }
