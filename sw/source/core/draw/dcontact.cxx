@@ -422,7 +422,7 @@ namespace
 }
 void SwContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    // this does not call SwClient::SwClientNotify and thus doesnt handle RES_OBJECTDYING as usual. Is this intentional?
+    // this does not call SwClient::SwClientNotify and thus doesn't handle RES_OBJECTDYING as usual. Is this intentional?
     if (auto pFindSdrObjectHint = dynamic_cast<const sw::FindSdrObjectHint*>(&rHint))
     {
         if(!pFindSdrObjectHint->m_rpObject)
@@ -1355,7 +1355,7 @@ namespace
 
 void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
 {
-    SwClient::SwClientNotify(rMod, rHint); // needed as SwContact::SwClientNotify doesnt explicitly call SwClient::SwClientNotify
+    SwClient::SwClientNotify(rMod, rHint); // needed as SwContact::SwClientNotify doesn't explicitly call SwClient::SwClientNotify
     SwContact::SwClientNotify(rMod, rHint);
     if (auto pLegacyHint = dynamic_cast<const sw::LegacyModifyHint*>(&rHint))
     {
@@ -1522,7 +1522,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
     {
         if(*pCreatePortionHint->m_ppContact)
             return;
-        *pCreatePortionHint->m_ppContact = this; // This is kind of ridiculous: the FrameFormat doesnt even hold a pointer to the contact itself,  but here we are leaking it out randomly
+        *pCreatePortionHint->m_ppContact = this; // This is kind of ridiculous: the FrameFormat doesn't even hold a pointer to the contact itself,  but here we are leaking it out randomly
         if(!GetAnchorFrame())
         {
             // No direct positioning needed any more

@@ -262,7 +262,7 @@ void SwFltControlStack::NewAttr(const SwPosition& rPos, const SfxPoolItem& rAttr
     SwFltStackEntry *pExtendCandidate = SetAttr(rPos, nWhich);
     if (couldExtendEntry(pExtendCandidate, rAttr))
     {
-        //Here we optimize by seeing if there is an attribute uncommited
+        //Here we optimize by seeing if there is an attribute uncommitted
         //to the document which
 
         //a) has the same value as this attribute

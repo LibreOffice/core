@@ -1266,7 +1266,7 @@ bool SwDoc::NoNum( const SwPaM& rPam )
     // Do we actually use Numbering at all?
     if( bRet )
     {
-        // Set NoNum and Upate
+        // Set NoNum and Update
         const SwNodeIndex& rIdx = rPam.GetPoint()->nNode;
         SwTextNode* pNd = rIdx.GetNode().GetTextNode();
         const SwNumRule* pRule = pNd->GetNumRule();

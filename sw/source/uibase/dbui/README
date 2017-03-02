@@ -10,11 +10,11 @@ There is one property, which changes the overall behaviour of these modes:
 *bCreateSingleFile*. This is the primary controller of the mail merge source
 code workflow, as it affects all modes!
 
-This also has timing contraints: for individual files the result can be
+This also has timing constraints: for individual files the result can be
 defined in advance, while further processing of the single result can just
 be done after the merging. It mainly affects printing and the generation
 of huge (1000+ datasets) combined non-PRINT merge results. A valid
-combined document has to follow contraints, which are already met by
+combined document has to follow constraints, which are already met by
 individual documents, as these are just modified copies.
 
 LO currently has six working combinations of mode and *bCreateSingleFile*
@@ -28,7 +28,7 @@ implemented. But the list contains implementation proposals for both.
    with a new / reset page style. Depending on the page style this inserts
    hidden blank pages
 * Mode: PRINTER
-** false: Generates indivividual print jobs, which may be grouped on some
+** false: Generates individual print jobs, which may be grouped on some
    platforms for easier abortion (needs verification!). All print options
    affect only the individual document! Printing starts after the first
    document is generated.

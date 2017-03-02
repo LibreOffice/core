@@ -44,7 +44,7 @@ class SW_DLLPUBLIC SwFormatURL: public SfxPoolItem
 public:
     SwFormatURL();
 
-    /// @@@ copy construction allowed, but assigment is not? @@@
+    /// @@@ copy construction allowed, but assignment is not? @@@
     SwFormatURL( const SwFormatURL& );
 
     virtual ~SwFormatURL() override;

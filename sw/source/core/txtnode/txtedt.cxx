@@ -1947,7 +1947,7 @@ void SwTextNode::ReplaceTextOnly( sal_Int32 nPos, sal_Int32 nLen,
 
     sal_Int32 nTLen = rText.getLength();
     const sal_Int32* pOffsets = rOffsets.getConstArray();
-    // now look for no 1-1 mapping -> move the indizies!
+    // now look for no 1-1 mapping -> move the indices!
     sal_Int32 nMyOff = nPos;
     for( sal_Int32 nI = 0; nI < nTLen; ++nI )
     {

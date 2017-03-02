@@ -1310,7 +1310,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
         sal_Int32 nRecordCount = 1;
         lcl_getCountFromResultSet( nRecordCount, pImpl->pMergeData );
 
-        // syncronized docs don't auto-advance the record set, but there is a
+        // Synchronized docs don't auto-advance the record set, but there is a
         // "security" check, which will always advance the record set, if there
         // is no "next record" field in a synchronized doc => nRecordPerDoc > 0
         sal_Int32 nRecordPerDoc = pSourceShell->GetDoc()

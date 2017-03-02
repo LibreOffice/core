@@ -1975,7 +1975,7 @@ void SwRootFrame::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* p
     long nWidthRemain = nVisWidth;
 
     // after one row has been processed, these variables contain
-    // the width of the row and the maxium of the page heights
+    // the width of the row and the maximum of the page heights
     long nCurrentRowHeight = 0;
     long nCurrentRowWidth = 0;
 

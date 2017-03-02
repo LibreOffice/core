@@ -389,7 +389,7 @@ bool WidowsAndOrphans::FindWidows( SwTextFrame *pFrame, SwTextMargin &rLine )
 
     const SwTwips nChg = aRectFnSet.YDiff( nTmpY, nDocPrtTop + nOldHeight );
 
-    // below the Widows-treshold...
+    // below the Widows-threshold...
     if( rLine.GetLineNr() >= nWidLines )
     {
         // Follow to Master I
