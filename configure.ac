@@ -6309,8 +6309,8 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 AC_LANG_POP([C++])
 CXXFLAGS=$save_CXXFLAGS
 AC_MSG_RESULT([$cxx11_utf16_string_literal])
-if test "$cxx11_utf16_string_literal" = yes; then
-    AC_DEFINE([HAVE_CXX11_UTF16_STRING_LITERAL])
+if test "$cxx11_utf16_string_literal" = no; then
+    AC_MSG_ERROR([Your $CXX does not support UTF-16 string literals. This is no longer supported.])
 fi
 
 dnl _Pragma support (may require C++11)
