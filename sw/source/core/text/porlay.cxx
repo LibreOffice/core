@@ -2162,7 +2162,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTextNode& rNode, MultiSelection 
     const IDocumentRedlineAccess& rIDRA = rNode.getIDocumentRedlineAccess();
     if ( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
     {
-        sal_uInt16 nAct = rIDRA.GetRedlinePos( rNode, USHRT_MAX );
+        SwRedlineTable::size_type nAct = rIDRA.GetRedlinePos( rNode, USHRT_MAX );
 
         for ( ; nAct < rIDRA.GetRedlineTable().size(); nAct++ )
         {

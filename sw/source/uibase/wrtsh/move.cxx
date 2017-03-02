@@ -667,7 +667,7 @@ bool SwWrtShell::GotoFormatField( const SwFormatField& rField ) {
     return bRet;
 }
 
-const SwRangeRedline* SwWrtShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect ) {
+const SwRangeRedline* SwWrtShell::GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect ) {
     SwPosition aPos = *GetCursor()->GetPoint();
     const SwRangeRedline *pRedline = SwCursorShell::GotoRedline(nArrPos, bSelect);
     if (pRedline)

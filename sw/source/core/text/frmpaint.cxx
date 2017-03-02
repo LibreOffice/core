@@ -387,7 +387,7 @@ void SwTextFrame::PaintExtraData( const SwRect &rRect ) const
         }
         else
         {
-            if ( USHRT_MAX == rIDRA.GetRedlinePos(rTextNode, USHRT_MAX) )
+            if ( SwRedlineTable::npos == rIDRA.GetRedlinePos(rTextNode, USHRT_MAX) )
                 bRedLine = false;
 
             if( bLineNum && rLineInf.IsCountBlankLines() &&
@@ -484,8 +484,8 @@ bool SwTextFrame::PaintEmpty( const SwRect &rRect, bool bCheck ) const
             const IDocumentRedlineAccess& rIDRA = rTextNode.getIDocumentRedlineAccess();
             if( IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() ) )
             {
-                const sal_uInt16 nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
-                if( USHRT_MAX != nRedlPos )
+                const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
+                if( SwRedlineTable::npos != nRedlPos )
                 {
                     SwAttrHandler aAttrHandler;
                     aAttrHandler.Init(  rTextNode.GetSwAttrSet(),

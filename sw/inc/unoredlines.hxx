@@ -19,6 +19,9 @@
 #ifndef INCLUDED_SW_INC_UNOREDLINES_HXX
 #define INCLUDED_SW_INC_UNOREDLINES_HXX
 
+#include <sal/config.h>
+
+#include <docary.hxx>
 #include <unocoll.hxx>
 #include <unobaseclass.hxx>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
@@ -69,7 +72,7 @@ class SwXRedlineEnumeration
     , public SwClient
 {
     SwDoc* pDoc;
-    sal_uInt16 nCurrentIndex;
+    SwRedlineTable::size_type nCurrentIndex;
 protected:
     virtual ~SwXRedlineEnumeration() override;
 public:

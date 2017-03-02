@@ -1950,7 +1950,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
         // If there already is a deleted or inserted one at the same position, we have to split it!
         SwPosition* pDStt = pDestRedl->GetMark(),
                   * pDEnd = pDestRedl->GetPoint();
-        sal_uInt16 n = 0;
+        SwRedlineTable::size_type n = 0;
 
             // find the first redline for StartPos
         if( !pDoc->getIDocumentRedlineAccess().GetRedline( *pDStt, &n ) && n )
@@ -2008,7 +2008,7 @@ sal_uInt16 SaveMergeRedline::InsertRedline(SwPaM* pLastDestRedline)
                         *pDStt = *pREnd;
 
                         // we should start over now
-                        n = USHRT_MAX;
+                        n = SwRedlineTable::npos;
                     }
                     break;
 

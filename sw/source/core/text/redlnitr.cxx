@@ -134,8 +134,8 @@ void SwAttrIter::CtorInitAttrIter( SwTextNode& rTextNode, SwScriptInfo& rScrInf,
     const bool bShow = IDocumentRedlineAccess::IsShowChanges( rIDRA.GetRedlineFlags() );
     if( pExtInp || bShow )
     {
-        const sal_uInt16 nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
-        if( pExtInp || USHRT_MAX != nRedlPos )
+        const SwRedlineTable::size_type nRedlPos = rIDRA.GetRedlinePos( rTextNode, USHRT_MAX );
+        if( pExtInp || SwRedlineTable::npos != nRedlPos )
         {
             const std::vector<ExtTextInputAttr> *pArr = nullptr;
             sal_Int32 nInputStt = 0;

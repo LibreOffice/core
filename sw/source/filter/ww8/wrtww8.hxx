@@ -1462,7 +1462,7 @@ private:
 
     const SwRangeRedline* pCurRedline;
     sal_Int32 nAktSwPos;
-    sal_uInt16 nCurRedlinePos;
+    SwRedlineTable::size_type nCurRedlinePos;
 
     bool mbParaIsRTL;
 

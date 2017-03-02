@@ -28,6 +28,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <docary.hxx>
+
 class SwRangeRedline;
 class SwTableRowRedline;
 class SwTableCellRedline;
@@ -163,7 +165,7 @@ public:
         /*[in]*/bool bSaveInUndo,
         /*[in]*/sal_uInt16 nDelType) = 0;
 
-    virtual sal_uInt16 GetRedlinePos(
+    virtual SwRedlineTable::size_type GetRedlinePos(
         /*[in]*/const SwNode& rNode,
         /*[in]*/sal_uInt16 nType) const = 0;
 
@@ -171,17 +173,17 @@ public:
 
     virtual const SwRangeRedline* GetRedline(
         /*[in]*/const SwPosition& rPos,
-        /*[in]*/sal_uInt16* pFndPos) const = 0;
+        /*[in]*/SwRedlineTable::size_type* pFndPos) const = 0;
 
     virtual bool IsRedlineMove() const = 0;
 
     virtual void SetRedlineMove(/*[in]*/bool bFlag) = 0;
 
-    virtual bool AcceptRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) = 0;
+    virtual bool AcceptRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) = 0;
 
     virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) = 0;
 
-    virtual bool RejectRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) = 0;
+    virtual bool RejectRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) = 0;
 
     virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) = 0;
 

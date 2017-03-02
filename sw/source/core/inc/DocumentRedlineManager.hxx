@@ -67,7 +67,7 @@ public:
         /*[in]*/bool bSaveInUndo,
         /*[in]*/sal_uInt16 nDelType) override;
 
-    virtual sal_uInt16 GetRedlinePos(
+    virtual SwRedlineTable::size_type GetRedlinePos(
         /*[in]*/const SwNode& rNode,
         /*[in]*/sal_uInt16 nType) const override;
 
@@ -75,17 +75,17 @@ public:
 
     virtual const SwRangeRedline* GetRedline(
         /*[in]*/const SwPosition& rPos,
-        /*[in]*/sal_uInt16* pFndPos) const override;
+        /*[in]*/SwRedlineTable::size_type* pFndPos) const override;
 
     virtual bool IsRedlineMove() const override;
 
     virtual void SetRedlineMove(/*[in]*/bool bFlag) override;
 
-    virtual bool AcceptRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) override;
+    virtual bool AcceptRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) override;
 
     virtual bool AcceptRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) override;
 
-    virtual bool RejectRedline(/*[in]*/sal_uInt16 nPos, /*[in]*/bool bCallDelete) override;
+    virtual bool RejectRedline(/*[in]*/SwRedlineTable::size_type nPos, /*[in]*/bool bCallDelete) override;
 
     virtual bool RejectRedline(/*[in]*/const SwPaM& rPam, /*[in]*/bool bCallDelete) override;
 

@@ -28,6 +28,7 @@
 
 #include <IShellCursorSupplier.hxx>
 #include "swdllapi.h"
+#include <docary.hxx>
 #include <swtypes.hxx>
 #include <viewsh.hxx>
 #include <calbck.hxx>
@@ -267,7 +268,7 @@ private:
 typedef bool (SwCursor:: *FNCursor)();
     SAL_DLLPRIVATE bool CallCursorFN( FNCursor );
 
-    SAL_DLLPRIVATE const SwRangeRedline* GotoRedline_( sal_uInt16 nArrPos, bool bSelect );
+    SAL_DLLPRIVATE const SwRangeRedline* GotoRedline_( SwRedlineTable::size_type nArrPos, bool bSelect );
 
 protected:
 
@@ -797,7 +798,7 @@ public:
 
     const SwRangeRedline* SelNextRedline();
     const SwRangeRedline* SelPrevRedline();
-    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, bool bSelect );
+    const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect );
 
     // is cursor or the point in/over a vertical formatted text?
     bool IsInVerticalText( const Point* pPt = nullptr ) const;

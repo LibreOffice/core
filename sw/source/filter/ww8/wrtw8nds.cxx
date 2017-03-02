@@ -182,7 +182,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     maCharRuns(GetPseudoCharRuns(rTextNd)),
     pCurRedline(nullptr),
     nAktSwPos(0),
-    nCurRedlinePos(USHRT_MAX),
+    nCurRedlinePos(SwRedlineTable::npos),
     mrSwFormatDrop(rTextNd.GetSwAttrSet().GetDrop())
 {
 
@@ -267,7 +267,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     if ( nCurRedlinePos < m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size() )
     {
         // nCurRedlinePos point to the next redline
-        sal_uInt16 nRedLinePos = nCurRedlinePos;
+        SwRedlineTable::size_type nRedLinePos = nCurRedlinePos;
         if( pCurRedline )
             ++nRedLinePos;
 
@@ -1330,7 +1330,7 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
 bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) const
 {
     // search next Redline
-    for( size_t nPos = nCurRedlinePos;
+    for( SwRedlineTable::size_type nPos = nCurRedlinePos;
         nPos < m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size(); ++nPos )
     {
         const SwRangeRedline *pRange = m_rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[nPos];
@@ -1699,8 +1699,8 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nAktPos,
 */
 static SwTextFormatColl& lcl_getFormatCollection( MSWordExportBase& rExport, const SwTextNode* pTextNode )
 {
-    sal_uInt16 nPos = 0;
-    sal_uInt16 nMax = rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size();
+    SwRedlineTable::size_type nPos = 0;
+    SwRedlineTable::size_type nMax = rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable().size();
     while( nPos < nMax )
     {
         const SwRangeRedline* pRedl = rExport.m_pDoc->getIDocumentRedlineAccess().GetRedlineTable()[ nPos++ ];

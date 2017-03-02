@@ -121,7 +121,7 @@ namespace
                rPos1.nContent.GetIndex() == pCNd->Len();
     }
 
-    bool lcl_AcceptRedline( SwRedlineTable& rArr, sal_uInt16& rPos,
+    bool lcl_AcceptRedline( SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
                             bool bCallDelete,
                             const SwPosition* pSttRng = nullptr,
                             const SwPosition* pEndRng = nullptr )
@@ -284,7 +284,7 @@ namespace
         return bRet;
     }
 
-    bool lcl_RejectRedline( SwRedlineTable& rArr, sal_uInt16& rPos,
+    bool lcl_RejectRedline( SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
                             bool bCallDelete,
                             const SwPosition* pSttRng = nullptr,
                             const SwPosition* pEndRng = nullptr )
@@ -488,7 +488,7 @@ namespace
         return bRet;
     }
 
-    typedef bool (*Fn_AcceptReject)( SwRedlineTable& rArr, sal_uInt16& rPos,
+    typedef bool (*Fn_AcceptReject)( SwRedlineTable& rArr, SwRedlineTable::size_type& rPos,
                             bool bCallDelete,
                             const SwPosition* pSttRng,
                             const SwPosition* pEndRng);
@@ -498,7 +498,7 @@ namespace
                                 SwRedlineTable& rArr, bool bCallDelete,
                                 const SwPaM& rPam)
     {
-        sal_uInt16 n = 0;
+        SwRedlineTable::size_type n = 0;
         int nCount = 0;
 
         const SwPosition* pStt = rPam.Start(),
@@ -794,7 +794,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
             return false;
         }
         bool bCompress = false;
-        sal_uInt16 n = 0;
+        SwRedlineTable::size_type n = 0;
         // look up the first Redline for the starting position
         if( !GetRedline( *pStt, &n ) && n )
             --n;
@@ -835,7 +835,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                              ( POS_COLLIDE_START == eCmpPos ) ||
                              ( POS_OVERLAP_BEHIND == eCmpPos ) ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
-                            ( n+1 >= (sal_uInt16)mpRedlineTable->size() ||
+                            ( n+1 >= mpRedlineTable->size() ||
                              ( *(*mpRedlineTable)[ n+1 ]->Start() >= *pEnd &&
                              *(*mpRedlineTable)[ n+1 ]->Start() != *pREnd ) ) )
                         {
@@ -1144,7 +1144,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
 
                             // delete current (below), and restart process with
                             // previous
-                            sal_uInt16 nToBeDeleted = n;
+                            SwRedlineTable::size_type nToBeDeleted = n;
                             bDec = true;
 
                             if( *(pNewRedl->Start()) <= *pREnd )
@@ -1623,7 +1623,7 @@ bool DocumentRedlineManager::AppendRedline( SwRangeRedline* pNewRedl, bool bCall
                     case POS_COLLIDE_START:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
                             pRedl->CanCombine( *pNewRedl ) &&
-                            n+1 < (sal_uInt16)mpRedlineTable->size() &&
+                            n+1 < mpRedlineTable->size() &&
                             *(*mpRedlineTable)[ n+1 ]->Start() < *pEnd )
                         {
                             // If that's the case we can merge it, meaning
@@ -1787,7 +1787,7 @@ void DocumentRedlineManager::CompressRedlines()
         pFnc = &SwRangeRedline::Hide;
 
     // Try to merge identical ones
-    for( size_t n = 1; n < mpRedlineTable->size(); ++n )
+    for( SwRedlineTable::size_type n = 1; n < mpRedlineTable->size(); ++n )
     {
         SwRangeRedline* pPrev = (*mpRedlineTable)[ n-1 ],
                     * pCur = (*mpRedlineTable)[ n ];
@@ -1803,7 +1803,7 @@ void DocumentRedlineManager::CompressRedlines()
             !pCurEnd->nNode.GetNode().StartOfSectionNode()->IsTableNode() )
         {
             // we then can merge them
-            size_t nPrevIndex = n-1;
+            SwRedlineTable::size_type nPrevIndex = n-1;
             pPrev->Show(0, nPrevIndex);
             pCur->Show(0, n);
 
@@ -1822,7 +1822,7 @@ void DocumentRedlineManager::CompressRedlines()
 bool DocumentRedlineManager::SplitRedline( const SwPaM& rRange )
 {
     bool bChg = false;
-    sal_uInt16 n = 0;
+    SwRedlineTable::size_type n = 0;
     const SwPosition* pStt = rRange.Start();
     const SwPosition* pEnd = rRange.End();
     GetRedline( *pStt, &n );
@@ -1904,7 +1904,7 @@ bool DocumentRedlineManager::DeleteRedline( const SwPaM& rRange, bool bSaveInUnd
     const SwPosition* pStt = rRange.Start(),
                     * pEnd = pStt == rRange.GetPoint() ? rRange.GetMark()
                                                        : rRange.GetPoint();
-    sal_uInt16 n = 0;
+    SwRedlineTable::size_type n = 0;
     GetRedline( *pStt, &n );
     for( ; n < mpRedlineTable->size() ; ++n )
     {
@@ -2005,10 +2005,10 @@ bool DocumentRedlineManager::DeleteRedline( const SwStartNode& rNode, bool bSave
     return DeleteRedline(aTemp, bSaveInUndo, nDelType);
 }
 
-sal_uInt16 DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, sal_uInt16 nType ) const
+SwRedlineTable::size_type DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, sal_uInt16 nType ) const
 {
     const sal_uLong nNdIdx = rNd.GetIndex();
-    for( size_t n = 0; n < mpRedlineTable->size() ; ++n )
+    for( SwRedlineTable::size_type n = 0; n < mpRedlineTable->size() ; ++n )
     {
         const SwRangeRedline* pTmp = (*mpRedlineTable)[ n ];
         sal_uLong nPt = pTmp->GetPoint()->nNode.GetIndex(),
@@ -2022,15 +2022,15 @@ sal_uInt16 DocumentRedlineManager::GetRedlinePos( const SwNode& rNd, sal_uInt16 
         if( nMk > nNdIdx )
             break;
     }
-    return USHRT_MAX;
+    return SwRedlineTable::npos;
 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
 const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos,
-                                    sal_uInt16* pFndPos ) const
+                                    SwRedlineTable::size_type* pFndPos ) const
 {
-    sal_uInt16 nO = mpRedlineTable->size(), nM, nU = 0;
+    SwRedlineTable::size_type nO = mpRedlineTable->size(), nM, nU = 0;
     if( nO > 0 )
     {
         nO--;
@@ -2097,7 +2097,7 @@ const SwRangeRedline* DocumentRedlineManager::GetRedline( const SwPosition& rPos
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
-bool DocumentRedlineManager::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
+bool DocumentRedlineManager::AcceptRedline( SwRedlineTable::size_type nPos, bool bCallDelete )
 {
     bool bRet = false;
 
@@ -2132,13 +2132,13 @@ bool DocumentRedlineManager::AcceptRedline( sal_uInt16 nPos, bool bCallDelete )
 
             if( nSeqNo )
             {
-                if( USHRT_MAX == nPos )
+                if( SwRedlineTable::npos == nPos )
                     nPos = 0;
-                sal_uInt16 nFndPos = 2 == nLoopCnt
+                SwRedlineTable::size_type nFndPos = 2 == nLoopCnt
                                     ? mpRedlineTable->FindNextSeqNo( nSeqNo, nPos )
                                     : mpRedlineTable->FindPrevSeqNo( nSeqNo, nPos );
-                if( USHRT_MAX != nFndPos || ( 0 != ( --nLoopCnt ) &&
-                    USHRT_MAX != ( nFndPos =
+                if( SwRedlineTable::npos != nFndPos || ( 0 != ( --nLoopCnt ) &&
+                    SwRedlineTable::npos != ( nFndPos =
                         mpRedlineTable->FindPrevSeqNo( nSeqNo, nPos ))) )
                     pTmp = (*mpRedlineTable)[ nPos = nFndPos ];
                 else
@@ -2211,7 +2211,7 @@ bool DocumentRedlineManager::AcceptRedline( const SwPaM& rPam, bool bCallDelete 
     // #TODO - add 'SwExtraRedlineTable' also ?
 }
 
-bool DocumentRedlineManager::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
+bool DocumentRedlineManager::RejectRedline( SwRedlineTable::size_type nPos, bool bCallDelete )
 {
     bool bRet = false;
 
@@ -2246,13 +2246,13 @@ bool DocumentRedlineManager::RejectRedline( sal_uInt16 nPos, bool bCallDelete )
 
             if( nSeqNo )
             {
-                if( USHRT_MAX == nPos )
+                if( SwRedlineTable::npos == nPos )
                     nPos = 0;
-                sal_uInt16 nFndPos = 2 == nLoopCnt
+                SwRedlineTable::size_type nFndPos = 2 == nLoopCnt
                                     ? mpRedlineTable->FindNextSeqNo( nSeqNo, nPos )
                                     : mpRedlineTable->FindPrevSeqNo( nSeqNo, nPos );
-                if( USHRT_MAX != nFndPos || ( 0 != ( --nLoopCnt ) &&
-                    USHRT_MAX != ( nFndPos =
+                if( SwRedlineTable::npos != nFndPos || ( 0 != ( --nLoopCnt ) &&
+                    SwRedlineTable::npos != ( nFndPos =
                             mpRedlineTable->FindPrevSeqNo( nSeqNo, nPos ))) )
                     pTmp = (*mpRedlineTable)[ nPos = nFndPos ];
                 else
@@ -2337,7 +2337,7 @@ const SwRangeRedline* DocumentRedlineManager::SelNextRedline( SwPaM& rPam ) cons
 
     // If the starting position points to the last valid ContentNode,
     // we take the next Redline in any case.
-    sal_uInt16 n = 0;
+    SwRedlineTable::size_type n = 0;
     const SwRangeRedline* pFnd = GetRedlineTable().FindAtPosition( rSttPos, n );
     if( pFnd )
     {
@@ -2456,7 +2456,7 @@ const SwRangeRedline* DocumentRedlineManager::SelPrevRedline( SwPaM& rPam ) cons
 
     // If the starting position points to the last valid ContentNode,
     // we take the previous Redline in any case.
-    sal_uInt16 n = 0;
+    SwRedlineTable::size_type n = 0;
     const SwRangeRedline* pFnd = GetRedlineTable().FindAtPosition( rSttPos, n, false );
     if( pFnd )
     {
@@ -2573,7 +2573,7 @@ bool DocumentRedlineManager::SetRedlineComment( const SwPaM& rPaM, const OUStrin
     const SwPosition* pStt = rPaM.Start(),
                     * pEnd = pStt == rPaM.GetPoint() ? rPaM.GetMark()
                                                      : rPaM.GetPoint();
-    sal_uInt16 n = 0;
+    SwRedlineTable::size_type n = 0;
     if( GetRedlineTable().FindAtPosition( *pStt, n ) )
     {
         for( ; n < mpRedlineTable->size(); ++n )

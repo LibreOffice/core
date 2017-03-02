@@ -135,7 +135,7 @@ lcl_MaskRedlines( const SwTextNode& rNode, OUStringBuffer& rText,
 
     const SwDoc& rDoc = *rNode.GetDoc();
 
-    for ( size_t nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( rNode, USHRT_MAX ); nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++nAct )
+    for ( SwRedlineTable::size_type nAct = rDoc.getIDocumentRedlineAccess().GetRedlinePos( rNode, USHRT_MAX ); nAct < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++nAct )
     {
         const SwRangeRedline* pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
 

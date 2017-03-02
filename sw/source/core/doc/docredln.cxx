@@ -301,7 +301,7 @@ bool SwExtraRedlineTable::DeleteTableCellRedline( SwDoc* pDoc, const SwTableBox&
 }
 
 /// Emits LOK notification about one addition / removal of a redline item.
-static void lcl_RedlineNotification(RedlineNotification nType, size_t nPos, SwRangeRedline* pRedline)
+static void lcl_RedlineNotification(RedlineNotification nType, SwRedlineTable::size_type nPos, SwRangeRedline* pRedline)
 {
     if (!comphelper::LibreOfficeKit::isActive())
         return;
@@ -336,7 +336,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p )
     if( p->HasValidRange() )
     {
         std::pair<vector_type::const_iterator, bool> rv = maVector.insert( p );
-        size_t nP = rv.first - begin();
+        size_type nP = rv.first - begin();
         lcl_RedlineNotification(RedlineNotification::Add, nP, p);
         p->CallDisplayFunc(nP);
         return rv.second;
@@ -344,7 +344,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p )
     return InsertWithValidRanges( p );
 }
 
-bool SwRedlineTable::Insert( SwRangeRedline* p, sal_uInt16& rP )
+bool SwRedlineTable::Insert( SwRangeRedline* p, size_type& rP )
 {
     if( p->HasValidRange() )
     {
@@ -356,7 +356,7 @@ bool SwRedlineTable::Insert( SwRangeRedline* p, sal_uInt16& rP )
     return InsertWithValidRanges( p, &rP );
 }
 
-bool SwRedlineTable::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos )
+bool SwRedlineTable::InsertWithValidRanges( SwRangeRedline* p, size_type* pInsPos )
 {
     // Create valid "sub-ranges" from the Selection
     bool bAnyIns = false;
@@ -376,7 +376,7 @@ bool SwRedlineTable::InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsP
     }
 
     SwRangeRedline* pNew = nullptr;
-    sal_uInt16 nInsPos;
+    size_type nInsPos;
 
     if( aNewStt < *pEnd )
         do {
@@ -478,24 +478,24 @@ SwRedlineTable::~SwRedlineTable()
    maVector.DeleteAndDestroyAll();
 }
 
-sal_uInt16 SwRedlineTable::GetPos(const SwRangeRedline* p) const
+SwRedlineTable::size_type SwRedlineTable::GetPos(const SwRangeRedline* p) const
 {
     vector_type::const_iterator it = maVector.find(const_cast<SwRangeRedline* const>(p));
     if( it == maVector.end() )
-        return USHRT_MAX;
+        return npos;
     return it - maVector.begin();
 }
 
 bool SwRedlineTable::Remove( const SwRangeRedline* p )
 {
-    const sal_uInt16 nPos = GetPos(p);
-    if (nPos == USHRT_MAX)
+    const size_type nPos = GetPos(p);
+    if (nPos == npos)
         return false;
     Remove(nPos);
     return true;
 }
 
-void SwRedlineTable::Remove( sal_uInt16 nP )
+void SwRedlineTable::Remove( size_type nP )
 {
     lcl_RedlineNotification(RedlineNotification::Remove, nP, maVector[nP]);
     SwDoc* pDoc = nullptr;
@@ -515,7 +515,7 @@ void SwRedlineTable::DeleteAndDestroyAll()
     DeleteAndDestroy(0, size());
 }
 
-void SwRedlineTable::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
+void SwRedlineTable::DeleteAndDestroy( size_type nP, size_type nL )
 {
     SwDoc* pDoc = nullptr;
     if( !nP && nL && nL == size() )
@@ -536,29 +536,29 @@ void SwRedlineTable::DeleteAndDestroy( sal_uInt16 nP, sal_uInt16 nL )
         pSh->InvalidateWindows( SwRect( 0, 0, SAL_MAX_INT32, SAL_MAX_INT32 ) );
 }
 
-sal_uInt16 SwRedlineTable::FindNextOfSeqNo( sal_uInt16 nSttPos ) const
+SwRedlineTable::size_type SwRedlineTable::FindNextOfSeqNo( size_type nSttPos ) const
 {
-    return static_cast<size_t>(nSttPos) + 1 < size()
+    return nSttPos + 1 < size()
                 ? FindNextSeqNo( operator[]( nSttPos )->GetSeqNo(), nSttPos+1 )
-                : USHRT_MAX;
+                : npos;
 }
 
-sal_uInt16 SwRedlineTable::FindPrevOfSeqNo( sal_uInt16 nSttPos ) const
+SwRedlineTable::size_type SwRedlineTable::FindPrevOfSeqNo( size_type nSttPos ) const
 {
     return nSttPos ? FindPrevSeqNo( operator[]( nSttPos )->GetSeqNo(), nSttPos-1 )
-                   : USHRT_MAX;
+                   : npos;
 }
 
 /// Find the next or preceding Redline with the same seq.no.
 /// We can limit the search using look ahead (0 searches the whole array).
-sal_uInt16 SwRedlineTable::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos ) const
+SwRedlineTable::size_type SwRedlineTable::FindNextSeqNo( sal_uInt16 nSeqNo, size_type nSttPos ) const
 {
-    sal_uInt16 nLookahead = 20;
-    sal_uInt16 nRet = USHRT_MAX;
+    auto const nLookahead = 20;
+    size_type nRet = npos;
     if( nSeqNo && nSttPos < size() )
     {
-        size_t nEnd = size();
-        const size_t nTmp = static_cast<size_t>(nSttPos)+ static_cast<size_t>(nLookahead);
+        size_type nEnd = size();
+        const size_type nTmp = nSttPos + nLookahead;
         if (nTmp < nEnd)
         {
             nEnd = nTmp;
@@ -574,13 +574,13 @@ sal_uInt16 SwRedlineTable::FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos 
     return nRet;
 }
 
-sal_uInt16 SwRedlineTable::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos ) const
+SwRedlineTable::size_type SwRedlineTable::FindPrevSeqNo( sal_uInt16 nSeqNo, size_type nSttPos ) const
 {
-    sal_uInt16 nLookahead = 20;
-    sal_uInt16 nRet = USHRT_MAX;
+    auto const nLookahead = 20;
+    size_type nRet = npos;
     if( nSeqNo && nSttPos < size() )
     {
-        size_t nEnd = 0;
+        size_type nEnd = 0;
         if( nSttPos > nLookahead )
             nEnd = nSttPos - nLookahead;
 
@@ -596,7 +596,7 @@ sal_uInt16 SwRedlineTable::FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos 
 }
 
 const SwRangeRedline* SwRedlineTable::FindAtPosition( const SwPosition& rSttPos,
-                                        sal_uInt16& rPos,
+                                        size_type& rPos,
                                         bool bNext ) const
 {
     const SwRangeRedline* pFnd = nullptr;

@@ -238,10 +238,10 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
         // Search both Redline objects and make them visible to make the nodes
         // consistent again. The 'delete' one is hidden, thus search for the
         // 'insert' Redline object. The former is located directly after the latter.
-        sal_uInt16 nFnd = rDoc.getIDocumentRedlineAccess().GetRedlinePos(
+        SwRedlineTable::size_type nFnd = rDoc.getIDocumentRedlineAccess().GetRedlinePos(
                             *rDoc.GetNodes()[ nSttNode + 1 ],
                             nsRedlineType_t::REDLINE_INSERT );
-        OSL_ENSURE( USHRT_MAX != nFnd && nFnd+1 < (sal_uInt16)rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(),
+        OSL_ENSURE( SwRedlineTable::npos != nFnd && nFnd+1 < rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(),
                     "could not find an Insert object" );
         ++nFnd;
         rDoc.getIDocumentRedlineAccess().GetRedlineTable()[nFnd]->Show(1, nFnd);

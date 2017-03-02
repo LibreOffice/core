@@ -889,16 +889,16 @@ public:
     RedlineFlags GetRedlineFlags() const;
     void SetRedlineFlags( RedlineFlags eMode );
     bool IsRedlineOn() const;
-    sal_uInt16 GetRedlineCount() const;
-    const SwRangeRedline& GetRedline( sal_uInt16 nPos ) const;
-    bool AcceptRedline( sal_uInt16 nPos );
-    bool RejectRedline( sal_uInt16 nPos );
+    SwRedlineTable::size_type GetRedlineCount() const;
+    const SwRangeRedline& GetRedline( SwRedlineTable::size_type nPos ) const;
+    bool AcceptRedline( SwRedlineTable::size_type nPos );
+    bool RejectRedline( SwRedlineTable::size_type nPos );
     bool AcceptRedlinesInSelection();
     bool RejectRedlinesInSelection();
 
     /** Search Redline for this Data and @return position in array.
-     If not found, return USHRT_MAX. */
-    sal_uInt16 FindRedlineOfData( const SwRedlineData& ) const;
+     If not found, return SwRedlineTable::npos. */
+    SwRedlineTable::size_type FindRedlineOfData( const SwRedlineData& ) const;
 
     /// Set comment to Redline at position.
     bool SetRedlineComment( const OUString& rS );

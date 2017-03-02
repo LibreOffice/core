@@ -335,7 +335,7 @@ namespace
             sal_uLong nDelCount;
             SwNodeIndex aCorrIdx(InitDelCount(rPam, nDelCount));
 
-            sal_uInt16 n = 0;
+            SwRedlineTable::size_type n = 0;
             pSrcDoc->getIDocumentRedlineAccess().GetRedline( *pStt, &n );
             for( ; n < rTable.size(); ++n )
             {
@@ -663,7 +663,7 @@ namespace
         const SwPosition* pEnd = aPam.End();
 
         // get first relevant redline
-        sal_uInt16 nCurrentRedline;
+        SwRedlineTable::size_type nCurrentRedline;
         pDoc->getIDocumentRedlineAccess().GetRedline( *pStart, &nCurrentRedline );
         if( nCurrentRedline > 0)
             nCurrentRedline--;
@@ -738,7 +738,7 @@ namespace
     void lcl_SaveRedlines(const SwNodeRange& rRg, SaveRedlines_t& rArr)
     {
         SwDoc* pDoc = rRg.aStart.GetNode().GetDoc();
-        sal_uInt16 nRedlPos;
+        SwRedlineTable::size_type nRedlPos;
         SwPosition aSrchPos( rRg.aStart ); aSrchPos.nNode--;
         aSrchPos.nContent.Assign( aSrchPos.nNode.GetNode().GetContentNode(), 0 );
         if( pDoc->getIDocumentRedlineAccess().GetRedline( aSrchPos, &nRedlPos ) && nRedlPos )
@@ -2222,8 +2222,8 @@ bool DocumentContentOperationsManager::MoveNodeRange( SwNodeRange& rRange, SwNod
 
         // Find all RedLines that end at the InsPos.
         // These have to be moved back to the "old" position after the Move.
-        sal_uInt16 nRedlPos = m_rDoc.getIDocumentRedlineAccess().GetRedlinePos( rPos.GetNode(), USHRT_MAX );
-        if( USHRT_MAX != nRedlPos )
+        SwRedlineTable::size_type nRedlPos = m_rDoc.getIDocumentRedlineAccess().GetRedlinePos( rPos.GetNode(), USHRT_MAX );
+        if( SwRedlineTable::npos != nRedlPos )
         {
             const SwPosition *pRStt, *pREnd;
             do {
