@@ -2097,7 +2097,7 @@ void SmParser::DoFunction()
             break;
 
         default:
-            Error(SmParseError::FuncExpected);
+            assert(false);
     }
 }
 
@@ -2345,7 +2345,6 @@ void SmParser::AddError(SmParseError Type, SmNode *pNode)
         case SmParseError::RgroupExpected: nRID = RID_ERR_RGROUPEXPECTED;      break;
         case SmParseError::LbraceExpected: nRID = RID_ERR_LBRACEEXPECTED;      break;
         case SmParseError::RbraceExpected: nRID = RID_ERR_RBRACEEXPECTED;      break;
-        case SmParseError::FuncExpected:   nRID = RID_ERR_FUNCEXPECTED;        break;
         case SmParseError::PoundExpected:  nRID = RID_ERR_POUNDEXPECTED;       break;
         case SmParseError::ColorExpected:  nRID = RID_ERR_COLOREXPECTED;       break;
         case SmParseError::RightExpected:  nRID = RID_ERR_RIGHTEXPECTED;       break;
