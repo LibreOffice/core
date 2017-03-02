@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a57fde8_761df40e",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-03-02T16:48:15Z",
+      "side": 1,
+      "message": "This chunk of code is now duplicated in SID_Q_AND_A. erAck says it can be replaced with something like this: \n\nOUString aLang \u003d LanguageTag(utl::ConfigManager::getLocale()).getLanguage(), getLanguageAndScript respectively ...\n\nso if you could pls do that ...",
+      "revId": "5554090c5a5864324bc9fff521129f25ce2f1f85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
