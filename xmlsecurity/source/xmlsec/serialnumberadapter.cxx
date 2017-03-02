@@ -60,11 +60,11 @@ private:
 
     virtual OUString SAL_CALL toString(
         css::uno::Sequence< sal_Int8 > const & SerialNumber) override
-    { return bigIntegerToNumericString(SerialNumber); }
+    { return xmlsecurity::bigIntegerToNumericString(SerialNumber); }
 
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL toSequence(
         OUString const & SerialNumber) override
-    { return numericStringToBigInteger(SerialNumber); }
+    { return xmlsecurity::numericStringToBigInteger(SerialNumber); }
 };
 
 }

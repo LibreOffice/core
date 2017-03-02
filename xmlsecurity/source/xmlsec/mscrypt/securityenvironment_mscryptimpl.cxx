@@ -618,7 +618,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const
 }
 
 Reference< XCertificate > SecurityEnvironment_MSCryptImpl::getCertificate( const OUString& issuerName, const OUString& serialNumber ) {
-    Sequence< sal_Int8 > serial = numericStringToBigInteger( serialNumber ) ;
+    Sequence< sal_Int8 > serial = xmlsecurity::numericStringToBigInteger( serialNumber ) ;
     return getCertificate( issuerName, serial ) ;
 }
 

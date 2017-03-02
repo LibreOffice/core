@@ -29,7 +29,6 @@
 
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
-#include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <comphelper/sequence.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -221,10 +220,7 @@ IMPL_LINK_NOARG(MacroSecurityTrustedSourcesTP, ViewCertPBHdl, Button*, void)
     {
         sal_uInt16 nSelected = sal_uInt16( sal_uIntPtr( m_pTrustCertLB->FirstSelected()->GetUserData() ) );
 
-        uno::Reference< css::security::XSerialNumberAdapter > xSerialNumberAdapter =
-            css::security::SerialNumberAdapter::create(mpDlg->mxCtx);
-
-        uno::Reference< css::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], xSerialNumberAdapter->toSequence( maTrustedAuthors[nSelected][1] ) );
+        uno::Reference< css::security::XCertificate > xCert = mpDlg->mxSecurityEnvironment->getCertificate( maTrustedAuthors[nSelected][0], xmlsecurity::numericStringToBigInteger( maTrustedAuthors[nSelected][1] ) );
 
         // If we don't get it, create it from signature data:
         if ( !xCert.is() )

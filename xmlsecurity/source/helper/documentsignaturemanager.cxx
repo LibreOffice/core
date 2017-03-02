@@ -23,7 +23,6 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 #include <com/sun/star/io/XTruncate.hpp>
-#include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
@@ -35,6 +34,7 @@
 #include <o3tl/make_unique.hxx>
 
 #include <certificate.hxx>
+#include <biginteger.hxx>
 
 using namespace com::sun::star;
 
@@ -239,8 +239,7 @@ bool DocumentSignatureManager::add(const uno::Reference<security::XCertificate>&
         return false;
     }
 
-    uno::Reference<security::XSerialNumberAdapter> xSerialNumberAdapter = security::SerialNumberAdapter::create(mxContext);
-    OUString aCertSerial = xSerialNumberAdapter->toString(xCert->getSerialNumber());
+    OUString aCertSerial = xmlsecurity::bigIntegerToNumericString(xCert->getSerialNumber());
     if (aCertSerial.isEmpty())
     {
         SAL_WARN("xmlsecurity.helper", "Error in Certificate, problem with serial number!");

@@ -32,7 +32,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
-#include <com/sun/star/security/SerialNumberAdapter.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/packages/manifest/ManifestReader.hpp>
@@ -458,8 +457,6 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     m_pSignaturesLB->Clear();
 
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
-    uno::Reference<css::security::XSerialNumberAdapter> xSerialNumberAdapter =
-        css::security::SerialNumberAdapter::create(mxCtx);
 
     uno::Reference< css::security::XCertificate > xCert;
 
@@ -494,7 +491,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             //In case there is no embedded certificate we try to get it from a local store
             //Todo: This probably could be removed, see above.
             if (!xCert.is())
-                xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
+                xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
             SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Certificate not found and can't be created!" );
 
@@ -639,15 +636,13 @@ void DigitalSignaturesDialog::ImplShowSignaturesDetails()
         sal_uInt16 nSelected = (sal_uInt16) reinterpret_cast<sal_uIntPtr>( m_pSignaturesLB->FirstSelected()->GetUserData() );
         const SignatureInformation& rInfo = maSignatureManager.maCurrentSignatureInformations[ nSelected ];
         uno::Reference<xml::crypto::XSecurityEnvironment> xSecEnv = maSignatureManager.getSecurityEnvironment();
-        css::uno::Reference<com::sun::star::security::XSerialNumberAdapter> xSerialNumberAdapter =
-            css::security::SerialNumberAdapter::create(mxCtx);
         // Use Certificate from doc, not from key store
         uno::Reference< css::security::XCertificate > xCert;
         if (!rInfo.ouX509Certificate.isEmpty())
             xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
         //fallback if no certificate is embedded, get if from store
         if (!xCert.is())
-            xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
+            xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xmlsecurity::numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
         SAL_WARN_IF( !xCert.is(), "xmlsecurity.dialogs", "Error getting Certificate!" );
         if ( xCert.is() )
