@@ -46,6 +46,8 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 
+#include <config_test.h>
+
 #include <bordertest.hxx>
 
 #define convertTwipToMm100(TWIP) ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
@@ -597,6 +599,7 @@ DECLARE_WW8EXPORT_TEST(testLayoutHanging, "fdo68967.doc")
     // This must not hang in layout
 }
 
+#if !TEST_FONTS_MISSING
 DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
 {
     // The problem was that the text was not displayed.
@@ -605,6 +608,7 @@ DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
     // all crossreference bookmarks should have a target.  Shouldn't be any "Reference source not found" in the xml
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), parseDump("/root/page/body/txt[24]/Special[2]","rText").indexOf("Reference source not found"));
 }
+#endif
 
 DECLARE_WW8EXPORT_TEST(testTdf99100, "tdf99100.doc")
 {
