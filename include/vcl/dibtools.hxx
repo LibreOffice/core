@@ -33,12 +33,11 @@ class Bitmap;
 
 // - Compression defines
 
-#define COMPRESS_OWN                ('S'|('D'<<8UL))
 #define COMPRESS_NONE               ( 0UL )
 #define RLE_8                       ( 1UL )
 #define RLE_4                       ( 2UL )
 #define BITFIELDS                   ( 3UL )
-#define ZCOMPRESS                   ( COMPRESS_OWN | 0x01000000UL ) /* == 'SD01' (binary) */
+#define ZCOMPRESS                   ( ('S'|('D'<<8UL)) | 0x01000000UL ) /* == 'SD01' (binary) */
 
 bool VCL_DLLPUBLIC ReadDIB( // ReadDIB(rBitmap, rIStm, true);
     Bitmap& rTarget,
