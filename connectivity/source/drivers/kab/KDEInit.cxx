@@ -130,7 +130,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL shutdownKApplication()
             <li>a positive value if the version is too new to know whether it works with this driver</li>
         </ul>
 
-    #i60062# / 2006-01-06 / frank.schoenheit@sun.com
+    #i60062#
 */
 extern "C" SAL_DLLPUBLIC_EXPORT int SAL_CALL matchKDEVersion()
 {
