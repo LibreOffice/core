@@ -2009,7 +2009,7 @@ const SwRangeRedline* SwCursorShell::SelPrevRedline()
     return pFnd;
 }
 
-const SwRangeRedline* SwCursorShell::GotoRedline_( sal_uInt16 nArrPos, bool bSelect )
+const SwRangeRedline* SwCursorShell::GotoRedline_( SwRedlineTable::size_type nArrPos, bool bSelect )
 {
     const SwRangeRedline* pFnd = nullptr;
     SwCallLink aLk( *this ); // watch Cursor-Moves
@@ -2077,7 +2077,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline_( sal_uInt16 nArrPos, bool bSel
     return pFnd;
 }
 
-const SwRangeRedline* SwCursorShell::GotoRedline( sal_uInt16 nArrPos, bool bSelect )
+const SwRangeRedline* SwCursorShell::GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect )
 {
     const SwRangeRedline* pFnd = nullptr;
     if( !IsTableMode() )
@@ -2091,7 +2091,7 @@ const SwRangeRedline* SwCursorShell::GotoRedline( sal_uInt16 nArrPos, bool bSele
         {
             bool bCheck = false;
             int nLoopCnt = 2;
-            sal_uInt16 nArrSavPos = nArrPos;
+            SwRedlineTable::size_type nArrSavPos = nArrPos;
 
             do {
                 pTmp = GotoRedline_( nArrPos, true );
@@ -2160,11 +2160,11 @@ const SwRangeRedline* SwCursorShell::GotoRedline( sal_uInt16 nArrPos, bool bSele
                     }
                 }
 
-                sal_uInt16 nFndPos = 2 == nLoopCnt
+                SwRedlineTable::size_type nFndPos = 2 == nLoopCnt
                                     ? rTable.FindNextOfSeqNo( nArrPos )
                                     : rTable.FindPrevOfSeqNo( nArrPos );
-                if( USHRT_MAX != nFndPos ||
-                    ( 0 != ( --nLoopCnt ) && USHRT_MAX != (
+                if( SwRedlineTable::npos != nFndPos ||
+                    ( 0 != ( --nLoopCnt ) && SwRedlineTable::npos != (
                             nFndPos = rTable.FindPrevOfSeqNo( nArrSavPos ))) )
                 {
                     if( pTmp )

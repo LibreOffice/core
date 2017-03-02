@@ -663,11 +663,16 @@ void SwView::Execute(SfxRequest &rReq)
         {
             SwDoc *pDoc = m_pWrtShell->GetDoc();
             SwPaM *pCursor = m_pWrtShell->GetCursor();
-            sal_uInt16 nRedline = USHRT_MAX;
+            SwRedlineTable::size_type nRedline = SwRedlineTable::npos;
             if (pArgs && pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
+            {
+                //TODO: SfxUInt16Item vs. SwRedlineTable::size_type mismatch:
                 nRedline = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                if (nRedline == USHRT_MAX)
+                    nRedline = SwRedlineTable::npos;
+            }
 
-            if( pCursor->HasMark() && nRedline == USHRT_MAX)
+            if( pCursor->HasMark() && nRedline == SwRedlineTable::npos)
             {
                 if (FN_REDLINE_ACCEPT_DIRECT == nSlot)
                     m_pWrtShell->AcceptRedlinesInSelection();
@@ -681,7 +686,7 @@ void SwView::Execute(SfxRequest &rReq)
                 // point at the *end* of the redline and the mark at the start (so GetRedline
                 // would return NULL if called on the point)
                 const SwRangeRedline* pRedline = nullptr;
-                if (nRedline < USHRT_MAX)
+                if (nRedline != SwRedlineTable::npos)
                 {
                     // A redline was explicitly requested by specifying an
                     // index, don't guess based on the cursor position.
@@ -708,9 +713,14 @@ void SwView::Execute(SfxRequest &rReq)
         {
             // If a parameter is provided, try going to the nth change, not to
             // the next one.
-            sal_uInt16 nRedline = USHRT_MAX;
+            SwRedlineTable::size_type nRedline = SwRedlineTable::npos;
             if (pArgs && pArgs->GetItemState(nSlot, false, &pItem) == SfxItemState::SET)
+            {
+                //TODO: SfxUInt16Item vs. SwRedlineTable::size_type mismatch:
                 nRedline = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+                if (nRedline == USHRT_MAX)
+                    nRedline = SwRedlineTable::npos;
+            }
 
             const SwRangeRedline *pCurrent = m_pWrtShell->GetCurrRedline();
             SwDoc* pDoc = m_pWrtShell->GetDoc();
@@ -727,7 +737,7 @@ void SwView::Execute(SfxRequest &rReq)
 
             // This behavior means that PREV_CHANGE followed by NEXT_CHANGE would not change
             // the current redline, so we detect it and select the next redline again.
-            if (pCurrent && pCurrent == pNext && nRedline == USHRT_MAX)
+            if (pCurrent && pCurrent == pNext && nRedline == SwRedlineTable::npos)
                 pNext = m_pWrtShell->SelNextRedline();
 
             if (pNext)

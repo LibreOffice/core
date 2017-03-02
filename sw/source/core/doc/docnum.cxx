@@ -1796,8 +1796,8 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
     // Test for Redlining - Can the Selection be moved at all, actually?
     if( !getIDocumentRedlineAccess().IsIgnoreRedline() )
     {
-        sal_uInt16 nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_DELETE );
-        if( USHRT_MAX != nRedlPos )
+        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_DELETE );
+        if( SwRedlineTable::npos != nRedlPos )
         {
             SwPosition aStPos( *pStt ), aEndPos( *pEnd );
             aStPos.nContent = 0;
@@ -1853,8 +1853,8 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
     if( getIDocumentRedlineAccess().IsRedlineOn() )
     {
         // If the range is completely in the own Redline, we can move it!
-        sal_uInt16 nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
-        if( USHRT_MAX != nRedlPos )
+        SwRedlineTable::size_type nRedlPos = getIDocumentRedlineAccess().GetRedlinePos( pStt->nNode.GetNode(), nsRedlineType_t::REDLINE_INSERT );
+        if( SwRedlineTable::npos != nRedlPos )
         {
             SwRangeRedline* pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos ];
             const SwPosition *pRStt = pTmp->Start(), *pREnd = pTmp->End();
@@ -1870,7 +1870,7 @@ bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, bool bIsOutlMv )
                          : !pREnd->nContent.GetIndex() )) )
             {
                 pOwnRedl = pTmp;
-                if( nRedlPos + 1 < (sal_uInt16)getIDocumentRedlineAccess().GetRedlineTable().size() )
+                if( nRedlPos + 1 < getIDocumentRedlineAccess().GetRedlineTable().size() )
                 {
                     pTmp = getIDocumentRedlineAccess().GetRedlineTable()[ nRedlPos+1 ];
                     if( *pTmp->Start() == *pREnd )

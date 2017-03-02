@@ -47,12 +47,12 @@ bool SwEditShell::IsRedlineOn() const
     return GetDoc()->getIDocumentRedlineAccess().IsRedlineOn();
 }
 
-sal_uInt16 SwEditShell::GetRedlineCount() const
+SwRedlineTable::size_type SwEditShell::GetRedlineCount() const
 {
     return GetDoc()->getIDocumentRedlineAccess().GetRedlineTable().size();
 }
 
-const SwRangeRedline& SwEditShell::GetRedline( sal_uInt16 nPos ) const
+const SwRangeRedline& SwEditShell::GetRedline( SwRedlineTable::size_type nPos ) const
 {
     return *GetDoc()->getIDocumentRedlineAccess().GetRedlineTable()[ nPos ];
 }
@@ -66,7 +66,7 @@ static void lcl_InvalidateAll( SwViewShell* pSh )
     }
 }
 
-bool SwEditShell::AcceptRedline( sal_uInt16 nPos )
+bool SwEditShell::AcceptRedline( SwRedlineTable::size_type nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -77,7 +77,7 @@ bool SwEditShell::AcceptRedline( sal_uInt16 nPos )
     return bRet;
 }
 
-bool SwEditShell::RejectRedline( sal_uInt16 nPos )
+bool SwEditShell::RejectRedline( SwRedlineTable::size_type nPos )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -138,16 +138,16 @@ void SwEditShell::UpdateRedlineAttr()
 
 /** Search the Redline of the data given
  *
- * @return Returns the Pos of the Array, or USHRT_MAX if not present
+ * @return Returns the Pos of the Array, or SwRedlineTable::npos if not present
  */
-sal_uInt16 SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
+SwRedlineTable::size_type SwEditShell::FindRedlineOfData( const SwRedlineData& rData ) const
 {
     const SwRedlineTable& rTable = GetDoc()->getIDocumentRedlineAccess().GetRedlineTable();
 
-    for( sal_uInt16 i = 0, nCnt = rTable.size(); i < nCnt; ++i )
+    for( SwRedlineTable::size_type i = 0, nCnt = rTable.size(); i < nCnt; ++i )
         if( &rTable[ i ]->GetRedlineData() == &rData )
             return i;
-    return USHRT_MAX;
+    return SwRedlineTable::npos;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

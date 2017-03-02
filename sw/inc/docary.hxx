@@ -318,35 +318,34 @@ class SwRedlineTable
 public:
     typedef o3tl::sorted_vector<SwRangeRedline*, CompareSwRedlineTable,
                 o3tl::find_partialorder_ptrequals> vector_type;
-    typedef sal_uInt16 size_type;
-        //TOOD: should be vector_type::size_type, but then all the uses of
-        // sal_uInt16 in this class that represent positions in maVector need to
-        // be changed, too
+    typedef vector_type::size_type size_type;
+    static SAL_CONSTEXPR size_type const npos = USHRT_MAX;
+        //TODO: std::numeric_limits<size_type>::max()
 private:
     vector_type maVector;
 public:
     ~SwRedlineTable();
     bool Contains(const SwRangeRedline* p) const { return maVector.find(const_cast<SwRangeRedline* const>(p)) != maVector.end(); }
-    sal_uInt16 GetPos(const SwRangeRedline* p) const;
+    size_type GetPos(const SwRangeRedline* p) const;
 
     bool Insert( SwRangeRedline* p );
-    bool Insert( SwRangeRedline* p, sal_uInt16& rInsPos );
-    bool InsertWithValidRanges( SwRangeRedline* p, sal_uInt16* pInsPos = nullptr );
+    bool Insert( SwRangeRedline* p, size_type& rInsPos );
+    bool InsertWithValidRanges( SwRangeRedline* p, size_type* pInsPos = nullptr );
 
-    void Remove( sal_uInt16 nPos );
+    void Remove( size_type nPos );
     bool Remove( const SwRangeRedline* p );
-    void DeleteAndDestroy( sal_uInt16 nPos, sal_uInt16 nLen = 1 );
+    void DeleteAndDestroy( size_type nPos, size_type nLen = 1 );
     void DeleteAndDestroyAll();
 
     void dumpAsXml(struct _xmlTextWriter* pWriter) const;
 
-    sal_uInt16 FindNextOfSeqNo( sal_uInt16 nSttPos ) const;
-    sal_uInt16 FindPrevOfSeqNo( sal_uInt16 nSttPos ) const;
+    size_type FindNextOfSeqNo( size_type nSttPos ) const;
+    size_type FindPrevOfSeqNo( size_type nSttPos ) const;
     /** Search next or previous Redline with the same Seq. No.
        Search can be restricted via Lookahead.
        Using 0 makes search the whole array. */
-    sal_uInt16 FindNextSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos ) const;
-    sal_uInt16 FindPrevSeqNo( sal_uInt16 nSeqNo, sal_uInt16 nSttPos ) const;
+    size_type FindNextSeqNo( sal_uInt16 nSeqNo, size_type nSttPos ) const;
+    size_type FindPrevSeqNo( sal_uInt16 nSeqNo, size_type nSttPos ) const;
 
     /**
      Find the redline at the given position.
@@ -355,7 +354,7 @@ public:
                        redline (or the next redline after the given position if not found)
      @param next true: redline starts at position and ends after, false: redline starts before position and ends at or after
     */
-    const SwRangeRedline* FindAtPosition( const SwPosition& startPosition, sal_uInt16& tableIndex, bool next = true ) const;
+    const SwRangeRedline* FindAtPosition( const SwPosition& startPosition, size_type& tableIndex, bool next = true ) const;
 
     bool                        empty() const { return maVector.empty(); }
     size_type                   size() const { return maVector.size(); }

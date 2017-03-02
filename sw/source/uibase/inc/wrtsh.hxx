@@ -464,7 +464,7 @@ typedef bool (SwWrtShell:: *FNSimpleMove)();
     bool GotoNextTOXBase( const OUString* pName = nullptr);
     bool GotoTable( const OUString& rName );
     bool GotoFormatField( const SwFormatField& rField );
-    const SwRangeRedline* GotoRedline( sal_uInt16 nArrPos, bool bSelect);
+    const SwRangeRedline* GotoRedline( SwRedlineTable::size_type nArrPos, bool bSelect);
 
     void ChangeHeaderOrFooter(const OUString& rStyleName, bool bHeader, bool bOn, bool bShowWarning);
     virtual void SetShowHeaderFooterSeparator( FrameControlType eControl, bool bShow ) override;

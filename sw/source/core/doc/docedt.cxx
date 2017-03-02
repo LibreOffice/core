@@ -246,7 +246,7 @@ SaveRedlEndPosForRestore::SaveRedlEndPosForRestore( const SwNodeIndex& rInsIdx, 
     SwDoc* pDest = rNd.GetDoc();
     if( !pDest->getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
-        sal_uInt16 nFndPos;
+        SwRedlineTable::size_type nFndPos;
         const SwPosition* pEnd;
         SwPosition aSrcPos( rInsIdx, SwIndex( rNd.GetContentNode(), nCnt ));
         pDest->getIDocumentRedlineAccess().GetRedline( aSrcPos, &nFndPos );

@@ -227,7 +227,7 @@ SwRedlineAcceptDlg::~SwRedlineAcceptDlg()
     m_aTabPagesCTRL.disposeAndClear();
 }
 
-void SwRedlineAcceptDlg::Init(sal_uInt16 nStart)
+void SwRedlineAcceptDlg::Init(SwRedlineTable::size_type nStart)
 {
     SwWait aWait( *::GetActiveView()->GetDocShell(), false );
     m_pTable->SetUpdateMode(false);
@@ -266,14 +266,13 @@ void SwRedlineAcceptDlg::InitAuthors()
     OUString sOldAuthor(pFilterPage->GetSelectedAuthor());
     pFilterPage->ClearAuthors();
 
-    sal_uInt16 nCount = pSh->GetRedlineCount();
+    SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
 
     m_bOnlyFormatedRedlines = true;
     bool bIsNotFormated = false;
-    sal_uInt16 i;
 
     // determine authors
-    for ( i = 0; i < nCount; i++)
+    for ( SwRedlineTable::size_type i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
 
@@ -291,8 +290,8 @@ void SwRedlineAcceptDlg::InitAuthors()
     std::sort(aStrings.begin(), aStrings.end());
     aStrings.erase(std::unique(aStrings.begin(), aStrings.end()), aStrings.end());
 
-    for (i = 0; i < aStrings.size(); i++)
-        pFilterPage->InsertAuthor(aStrings[i]);
+    for (auto const & i: aStrings)
+        pFilterPage->InsertAuthor(i);
 
     if (pFilterPage->SelectAuthor(sOldAuthor) == LISTBOX_ENTRY_NOTFOUND && !aStrings.empty())
         pFilterPage->SelectAuthor(aStrings[0]);
@@ -305,8 +304,8 @@ void SwRedlineAcceptDlg::InitAuthors()
     {
         // find the selected redline
         // (fdo#57874: ignore, if the redline is already gone)
-        sal_uInt16 nPos = GetRedlinePos(*pSelEntry);
-        if( nPos != USHRT_MAX )
+        SwRedlineTable::size_type nPos = GetRedlinePos(*pSelEntry);
+        if( nPos != SwRedlineTable::npos )
         {
             const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
 
@@ -392,12 +391,10 @@ void SwRedlineAcceptDlg::Activate()
 
     // did something change?
     SwWrtShell* pSh = pView->GetWrtShellPtr();
-    sal_uInt16 nCount = pSh->GetRedlineCount();
+    SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
 
     // check the number of pointers
-    sal_uInt16 i;
-
-    for ( i = 0; i < nCount; i++)
+    for ( SwRedlineTable::size_type i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
 
@@ -412,7 +409,7 @@ void SwRedlineAcceptDlg::Activate()
         if (&rRedln.GetRedlineData() != pParent->pData)
         {
             // Redline-Parents were inserted, changed or deleted
-            if ((i = CalcDiff(i, false)) == USHRT_MAX)
+            if ((i = CalcDiff(i, false)) == SwRedlineTable::npos)
                 return;
             continue;
         }
@@ -423,7 +420,7 @@ void SwRedlineAcceptDlg::Activate()
         if (!pRedlineData && pBackupData)
         {
             // Redline-Children were deleted
-            if ((i = CalcDiff(i, true)) == USHRT_MAX)
+            if ((i = CalcDiff(i, true)) == SwRedlineTable::npos)
                 return;
             continue;
         }
@@ -434,7 +431,7 @@ void SwRedlineAcceptDlg::Activate()
                 if (pRedlineData != pBackupData->pChild)
                 {
                     // Redline-Children were inserted, changed or deleted
-                    if ((i = CalcDiff(i, true)) == USHRT_MAX)
+                    if ((i = CalcDiff(i, true)) == SwRedlineTable::npos)
                         return;
                     continue;
                 }
@@ -452,7 +449,7 @@ void SwRedlineAcceptDlg::Activate()
     }
 
     // check comment
-    for (i = 0; i < nCount; i++)
+    for (SwRedlineTable::size_type i = 0; i < nCount; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
         SwRedlineDataParent *const pParent = m_RedlineParents[i].get();
@@ -472,12 +469,12 @@ void SwRedlineAcceptDlg::Activate()
     InitAuthors();
 }
 
-sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
+SwRedlineTable::size_type SwRedlineAcceptDlg::CalcDiff(SwRedlineTable::size_type nStart, bool bChild)
 {
     if (!nStart)
     {
         Init();
-        return USHRT_MAX;
+        return SwRedlineTable::npos;
     }
 
     m_pTable->SetUpdateMode(false);
@@ -521,7 +518,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
 
     // have entries been deleted?
     const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
-    for (size_t i = nStart + 1; i < m_RedlineParents.size(); i++)
+    for (SwRedlineTable::size_type i = nStart + 1; i < m_RedlineParents.size(); i++)
     {
         if (m_RedlineParents[i]->pData == pRedlineData)
         {
@@ -533,10 +530,10 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
     }
 
     // entries been inserted?
-    sal_uInt16 nCount = pSh->GetRedlineCount();
+    SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
     pRedlineData = m_RedlineParents[nStart]->pData;
 
-    for (sal_uInt16 i = nStart + 1; i < nCount; i++)
+    for (SwRedlineTable::size_type i = nStart + 1; i < nCount; i++)
     {
         if (&pSh->GetRedline(i).GetRedlineData() == pRedlineData)
         {
@@ -549,7 +546,7 @@ sal_uInt16 SwRedlineAcceptDlg::CalcDiff(sal_uInt16 nStart, bool bChild)
 
     m_pTable->SetUpdateMode(true);
     Init(nStart);   // adjust all entries until the end
-    return USHRT_MAX;
+    return SwRedlineTable::npos;
 }
 
 void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRangeRedline& rRedln, const sal_uInt16 nAutoFormat)
@@ -637,10 +634,10 @@ void SwRedlineAcceptDlg::InsertChildren(SwRedlineDataParent *pParent, const SwRa
     }
 }
 
-void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
+void SwRedlineAcceptDlg::RemoveParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd)
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
-    sal_uInt16 nCount = pSh->GetRedlineCount();
+    SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
 
     std::vector<SvTreeListEntry*> aLBoxArr;
 
@@ -652,7 +649,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     // set the cursor after the last entry because otherwise performance problem in TLB.
     // TLB would otherwise reset the cursor at every Remove (expensive)
-    sal_uInt16 nPos = std::min((sal_uInt16)nCount, (sal_uInt16)m_RedlineParents.size());
+    SwRedlineTable::size_type nPos = std::min(nCount, m_RedlineParents.size());
     SvTreeListEntry *pCurEntry = nullptr;
     while( ( pCurEntry == nullptr ) && ( nPos > 0 ) )
     {
@@ -665,7 +662,7 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
 
     SvTreeList* pModel = m_pTable->GetModel();
 
-    for (sal_uInt16 i = nStart; i <= nEnd; i++)
+    for (SwRedlineTable::size_type i = nStart; i <= nEnd; i++)
     {
         if (!bChildrenRemoved && m_RedlineParents[i]->pNext)
         {
@@ -714,17 +711,17 @@ void SwRedlineAcceptDlg::RemoveParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     m_RedlineParents.erase(m_RedlineParents.begin() + nStart, m_RedlineParents.begin() + nEnd + 1);
 }
 
-void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
+void SwRedlineAcceptDlg::InsertParents(SwRedlineTable::size_type nStart, SwRedlineTable::size_type nEnd)
 {
     SwView *pView   = ::GetActiveView();
     SwWrtShell* pSh = pView->GetWrtShellPtr();
     sal_uInt16 nAutoFormat = HasRedlineAutoFormat() ? nsRedlineType_t::REDLINE_FORM_AUTOFMT : 0;
 
     OUString sParent;
-    sal_uInt16 nCount = pSh->GetRedlineCount();
-    nEnd = std::min((sal_uInt16)nEnd, (sal_uInt16)(nCount - 1)); // also treats nEnd=USHRT_MAX (until the end)
+    SwRedlineTable::size_type nCount = pSh->GetRedlineCount();
+    nEnd = std::min(nEnd, (nCount - 1)); // also treats nEnd=SwRedlineTable::npos (until the end)
 
-    if (nEnd == USHRT_MAX)
+    if (nEnd == SwRedlineTable::npos)
         return;     // no redlines in the document
 
     SvTreeListEntry *pParent;
@@ -744,7 +741,7 @@ void SwRedlineAcceptDlg::InsertParents(sal_uInt16 nStart, sal_uInt16 nEnd)
     else
         pCurrRedline = nullptr;
 
-    for (sal_uInt16 i = nStart; i <= nEnd; i++)
+    for (SwRedlineTable::size_type i = nStart; i <= nEnd; i++)
     {
         const SwRangeRedline& rRedln = pSh->GetRedline(i);
         const SwRedlineData *pRedlineData = &rRedln.GetRedlineData();
@@ -807,7 +804,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
         pEntry = bSelect ? m_pTable->NextSelected(pEntry) : m_pTable->Next(pEntry);
     }
 
-    bool (SwEditShell:: *FnAccRej)( sal_uInt16 ) = &SwEditShell::AcceptRedline;
+    bool (SwEditShell:: *FnAccRej)( SwRedlineTable::size_type ) = &SwEditShell::AcceptRedline;
     if( !bAccept )
         FnAccRej = &SwEditShell::RejectRedline;
 
@@ -841,8 +838,8 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
          aIter != aEnd;
          ++aIter )
     {
-        sal_uInt16 nPosition = GetRedlinePos( **aIter );
-        if( nPosition != USHRT_MAX )
+        SwRedlineTable::size_type nPosition = GetRedlinePos( **aIter );
+        if( nPosition != SwRedlineTable::npos )
             (pSh->*FnAccRej)( nPosition );
     }
 
@@ -873,7 +870,7 @@ void SwRedlineAcceptDlg::CallAcceptReject( bool bSelect, bool bAccept )
     m_pTPView->EnableUndo();
 }
 
-sal_uInt16 SwRedlineAcceptDlg::GetRedlinePos( const SvTreeListEntry& rEntry )
+SwRedlineTable::size_type SwRedlineAcceptDlg::GetRedlinePos( const SvTreeListEntry& rEntry )
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     return pSh->FindRedlineOfData( *static_cast<SwRedlineDataParent*>(static_cast<RedlinData *>(
@@ -979,8 +976,8 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
                 bSel = true;
 
             // #98864# find the selected redline (ignore, if the redline is already gone)
-            sal_uInt16 nPos = GetRedlinePos(*pActEntry);
-            if( nPos != USHRT_MAX )
+            SwRedlineTable::size_type nPos = GetRedlinePos(*pActEntry);
+            if( nPos != SwRedlineTable::npos )
             {
 
                 const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
@@ -1024,10 +1021,10 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
         if (m_pTable->GetParent(pEntry))
             pTopEntry = m_pTable->GetParent(pEntry);
 
-        sal_uInt16 nPos = GetRedlinePos(*pTopEntry);
+        SwRedlineTable::size_type nPos = GetRedlinePos(*pTopEntry);
 
         // disable commenting for protected areas
-        if (nPos != USHRT_MAX && (pRed = pSh->GotoRedline(nPos, true)) != nullptr)
+        if (nPos != SwRedlineTable::npos && (pRed = pSh->GotoRedline(nPos, true)) != nullptr)
         {
             if( pSh->IsCursorPtAtEnd() )
                 pSh->SwapPam();
@@ -1062,9 +1059,9 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl, SvSimpleTable*, void)
             if (m_pTable->GetParent(pEntry))
                 pEntry = m_pTable->GetParent(pEntry);
 
-            sal_uInt16 nPos = GetRedlinePos(*pEntry);
+            SwRedlineTable::size_type nPos = GetRedlinePos(*pEntry);
 
-            if (nPos == USHRT_MAX)
+            if (nPos == SwRedlineTable::npos)
                 return;
 
             const SwRangeRedline &rRedline = pSh->GetRedline(nPos);

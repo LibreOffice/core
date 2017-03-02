@@ -291,7 +291,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 else if (pCursor->HasMark())
                 {
                     // If the selection does not contain redlines, disable accepting/rejecting changes.
-                    sal_uInt16 index = 0;
+                    SwRedlineTable::size_type index = 0;
                     const SwRedlineTable& table = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
                     const SwRangeRedline* redline = table.FindAtPosition( *pCursor->Start(), index );
                     if( redline != nullptr && *redline->Start() == *pCursor->End())
@@ -327,7 +327,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 if (comphelper::LibreOfficeKit::isActive())
                 {
                     OString aPayload(".uno:TrackedChangeIndex=");
-                    sal_uInt16 nRedline = 0;
+                    SwRedlineTable::size_type nRedline = 0;
                     if (pDoc->getIDocumentRedlineAccess().GetRedline(*pCursor->Start(), &nRedline))
                         aPayload += OString::number(nRedline);
                     libreOfficeKitViewCallback(LOK_CALLBACK_STATE_CHANGED, aPayload.getStr());

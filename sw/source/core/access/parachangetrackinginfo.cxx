@@ -56,9 +56,9 @@ namespace {
             return;
         }
 
-        const sal_uInt16 nIdxOfFirstRedlineForTextNode =
+        const SwRedlineTable::size_type nIdxOfFirstRedlineForTextNode =
                     rIDocChangeTrack.GetRedlinePos( rTextNode, USHRT_MAX );
-        if ( nIdxOfFirstRedlineForTextNode == USHRT_MAX )
+        if ( nIdxOfFirstRedlineForTextNode == SwRedlineTable::npos )
         {
             // nothing to do --> empty change track text markup lists.
             return;
@@ -73,8 +73,8 @@ namespace {
 
         // iteration over the redlines which overlap with the text node.
         const SwRedlineTable& rRedlineTable = rIDocChangeTrack.GetRedlineTable();
-        const sal_uInt16 nRedlineCount( rRedlineTable.size() );
-        for ( sal_uInt16 nActRedline = nIdxOfFirstRedlineForTextNode;
+        const SwRedlineTable::size_type nRedlineCount( rRedlineTable.size() );
+        for ( SwRedlineTable::size_type nActRedline = nIdxOfFirstRedlineForTextNode;
               nActRedline < nRedlineCount;
               ++nActRedline)
         {
